@@ -28,14 +28,14 @@ Numbered takes under `audio/albums/drive-through/afterparty/`. Queue one track, 
 ```text
 ## 01-brake-fade
 
-US-safe EDM **366 s** take: **brake fade**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[build-up]`, `[breakdown]`, `[outro]`) so ACE does not sing production notes. Form **drv-c624fedc42**. Short build, then the drop. Later stanzas switch layers. No section is a long loop. No brass and no high leads. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** — draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
+US-safe EDM **431 s** take: **brake fade**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[build-up]`, `[breakdown]`, `[outro]`) so ACE does not sing production notes. Form **drv-16d4ac69be**. Short build, then the drop. Later stanzas switch layers. No section is a long loop. No brass and no high leads. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** — draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and `[drop]` / `[inst]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.
 3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing. Encoder language is `unknown`. Free-text lines under a marker are lyrics — keep cues inside the brackets.
 4. Original arrangements only. No “in the style of <living artist>”. No living-DJ names. No famous-hook paraphrases.
 5. ACE-Step timbre is **invented**, not a cloned act.
-6. Sampler: 8 steps, cfg 1, euler, simple. Duration 366 s, bpm 168, language unknown, timesignature 4, key E minor, form drv-c624fedc42, generate_audio_codes true. Seed 457.
+6. Sampler: 8 steps, cfg 1, euler, simple. Duration 431 s, bpm 168, language unknown, timesignature 4, key E minor, form drv-16d4ac69be, generate_audio_codes true. Seed 457.
 7. Saves: `01 - Brake Fade` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.
 8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.
 9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).
@@ -131,14 +131,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `366.0` |
+| 0 | `431.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `366.0` |
+| 0 | `431.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -147,93 +147,317 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rav…` |
-| 2 | `[build-up - snare roll, octave sub stack, kick pattern flip, growl answer, wide…` |
+| 2 | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/01-brake-fade` |
 
 ```text
-dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
+dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, octave sub stack, kick pattern flip, growl answer, wide mids, rolling hats, chest-sub 808 warp, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, growl answer, wide mids, rolling hats, chest-sub 808 warp, 2 bars]
 
-[drop - full send warped drop, body bass, formant bass melody, snare roll, side hats, late snare, dirty bass, heavy dirty drop, 10 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, body bass, formant bass melody, snare roll, side hats, late snare, dirty bass, heavy dirty drop, 2 bars]
 
-[inst - rapid hi-hats, octave sub stack, wide mid reese counterline, wide low-mid, early kick, brake wreck, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, wide mid reese counterline, wide low-mid, early kick, brake wreck, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side percussion, body bass, syncopated hats, rapid hi-hats roll, 8 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, formant answer, side percussion, syncopated hats, rapid hi-hats roll, 2 bars]
 
-[build-up - snare roll, octave sub stack, trap drums denser, wide mid growl, wide mids, open hat, 808 slide, 4 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, octave sub stack, wide mid growl, trap drums denser, wide mids, open hat, 808 slide, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side hats, body bass, closed hat, stacked 808 wall, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, call-response reese, side hats, closed hat, stacked 808 wall, 2 bars]
 
-[build-up - snare roll, octave sub stack, kick pattern flip, growl answer, wide low-mid, room snare, formant grind, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, growl answer, wide low-mid, room snare, formant grind, 2 bars]
 
-[inst - snare roll, body bass, formant bass melody, side percussion, tight kick, 10 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, formant bass melody, side percussion, tight kick, 2 bars]
 
-[build-up - snare roll, octave sub stack, rapid hi-hats, wide mid reese counterline, wide mids, loose hats, chest-sub 808 punch, 4 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, octave sub stack, wide mid reese counterline, rapid hi-hats, wide mids, loose hats, harder growl drop, 2 bars]
 
-[drop - heavy growl warped drop, body bass, formant answer, offbeat hats, side hats, pushed snare, harder growl drop, 12 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, formant answer, side hats, pushed snare, chest-sub 808 punch, 2 bars]
 
-[inst - trap drums denser, octave sub stack, wide mid growl, wide low-mid, chopped hats, low rumble wreck, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, wide mid growl, wide low-mid, chopped hats, low rumble wreck, 2 bars]
 
-[build-up - snare roll, body bass, ghost snare, call-response reese, side percussion, hat density up, warped dirty, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, body bass, call-response reese, ghost snare, side percussion, hat density up, full send drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, octave sub stack, kick opens, kick holds, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, growl answer, wide mids, kick opens, warped dirty, 2 bars]
 
-[inst - snare roll, body bass, formant bass melody, side hats, kick tightens, 808 ride, 6 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, formant bass melody, side hats, kick tightens, kick holds, 2 bars]
 
-[build-up - snare roll, octave sub stack, rapid hi-hats, wide mid reese counterline, wide low-mid, snare answers, 4 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, octave sub stack, wide mid reese counterline, rapid hi-hats, wide low-mid, snare answers, 808 ride, 2 bars]
 
-[drop - harder wobble warped drop, body bass, formant answer, offbeat hats, side percussion, offbeat push, full send drop, 8 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, formant answer, side percussion, offbeat push, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, octave sub stack, straight hats, 6 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, octave sub stack, wide mid growl, trap drums denser, wide mids, straight hats, 2 bars]
 
-[build-up - snare roll, body bass, ghost snare, call-response reese, side hats, triplet hats, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, call-response reese, side hats, triplet hats, 2 bars]
 
-[drop - stacked reese warped drop, octave sub stack, growl answer, kick pattern flip, wide low-mid, backbeat shove, 10 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, octave sub stack, growl answer, kick pattern flip, wide low-mid, backbeat shove, 2 bars]
 
-[build-up - snare roll, body bass, snare roll, formant bass melody, side percussion, ghost notes, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, formant bass melody, side percussion, ghost notes, 2 bars]
 
-[inst - rapid hi-hats, octave sub stack, wide mid reese counterline, wide mids, dry hats, 12 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, octave sub stack, wide mid reese counterline, rapid hi-hats, wide mids, dry hats, 2 bars]
 
-[drop - full send warped drop, body bass, formant answer, offbeat hats, side hats, wide hat bed, 8 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, formant answer, side hats, wide hat bed, 2 bars]
 
-[build-up - snare roll, octave sub stack, trap drums denser, wide mid growl, wide low-mid, mono kick, 6 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, octave sub stack, wide mid growl, trap drums denser, wide low-mid, mono kick, 2 bars]
 
-[inst - ghost snare, body bass, call-response reese, side percussion, side snare, 12 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, call-response reese, side percussion, side snare, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, octave sub stack, rolling hats, 6 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, octave sub stack, growl answer, kick pattern flip, wide mids, rolling hats, 2 bars]
 
-[build-up - snare roll, body bass, snare roll, formant bass melody, side hats, late snare, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, formant bass melody, side hats, late snare, 2 bars]
 
-[drop - full send warped drop, octave sub stack, wide mid reese counterline, rapid hi-hats, wide low-mid, early kick, 10 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, octave sub stack, wide mid reese counterline, rapid hi-hats, wide low-mid, early kick, 2 bars]
 
-[inst - offbeat hats, body bass, formant answer, side percussion, syncopated hats, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, wide mid reese counterline, wide low-mid, open hat, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, octave sub stack, open hat, 8 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, octave sub stack, wide mid growl, trap drums denser, wide mids, open hat, 2 bars]
 
-[build-up - snare roll, body bass, ghost snare, call-response reese, side hats, closed hat, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, call-response reese, side hats, closed hat, 2 bars]
 
-[drop - harder wobble warped drop, octave sub stack, growl answer, kick pattern flip, wide low-mid, room snare, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, octave sub stack, growl answer, kick pattern flip, wide low-mid, room snare, 2 bars]
 
-[build-up - snare roll, body bass, snare roll, formant bass melody, side percussion, tight kick, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, growl answer, wide low-mid, loose hats, 2 bars]
 
-[inst - rapid hi-hats, octave sub stack, wide mid reese counterline, wide mids, loose hats, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, wide mid reese counterline, wide mids, loose hats, 2 bars]
 
-[drop - stacked reese warped drop, body bass, formant answer, offbeat hats, side hats, pushed snare, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, body bass, formant answer, offbeat hats, side hats, pushed snare, 2 bars]
 
-[build-up - snare roll, octave sub stack, trap drums denser, wide mid growl, wide low-mid, chopped hats, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, wide mid growl, wide low-mid, chopped hats, 2 bars]
 
-[inst - ghost snare, body bass, call-response reese, side percussion, hat density up, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, call-response reese, side percussion, hat density up, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side percussion, stacked 808, kick tightens, 8 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, octave sub stack, growl answer, kick pattern flip, wide mids, kick opens, 2 bars]
 
-[build-up - snare roll, body bass, snare roll, formant bass melody, side hats, kick tightens, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, formant bass melody, side hats, kick tightens, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side percussion, tight kick, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, wide mid reese counterline, wide low-mid, snare answers, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, body bass, formant answer, offbeat hats, side percussion, offbeat push, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, wide mid growl, wide mids, straight hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, call-response reese, side hats, triplet hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, octave sub stack, growl answer, kick pattern flip, wide low-mid, backbeat shove, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, formant bass melody, side percussion, ghost notes, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, wide mid reese counterline, wide mids, dry hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, body bass, formant answer, offbeat hats, side hats, wide hat bed, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, wide mid growl, wide low-mid, mono kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, body bass, call-response reese, ghost snare, side percussion, side snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, growl answer, wide mids, rolling hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, body bass, formant bass melody, snare roll, side hats, late snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, formant bass melody, side hats, syncopated hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, formant bass melody, side hats, closed hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, octave sub stack, wide mid growl, trap drums denser, wide mids, open hat, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, wide mid growl, wide mids, room snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, octave sub stack, growl answer, kick pattern flip, wide low-mid, room snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, call-response reese, side hats, pushed snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, formant bass melody, side percussion, pushed snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, body bass, formant answer, offbeat hats, side hats, pushed snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, formant answer, side hats, hat density up, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, body bass, call-response reese, ghost snare, side percussion, hat density up, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, call-response reese, side percussion, kick tightens, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, growl answer, wide mids, snare answers, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, wide mid reese counterline, wide low-mid, snare answers, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, body bass, formant answer, offbeat hats, side percussion, offbeat push, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, wide mid growl, wide mids, straight hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, wide mid growl, wide mids, backbeat shove, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, octave sub stack, growl answer, kick pattern flip, wide low-mid, backbeat shove, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, growl answer, wide low-mid, dry hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, octave sub stack, wide mid reese counterline, rapid hi-hats, wide mids, dry hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, wide mid reese counterline, wide mids, mono kick, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, octave sub stack, wide mid growl, trap drums denser, wide low-mid, mono kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, call-response reese, side percussion, side snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, octave sub stack, growl answer, kick pattern flip, wide mids, rolling hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, formant bass melody, side hats, late snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, wide mid reese counterline, wide low-mid, early kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, body bass, formant answer, offbeat hats, side percussion, syncopated hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, wide mid growl, wide mids, open hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, body bass, call-response reese, ghost snare, side hats, closed hat, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, growl answer, wide low-mid, room snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, formant bass melody, side percussion, tight kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, wide mid reese counterline, wide mids, loose hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, formant answer, side hats, pushed snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, wide mid reese counterline, wide mids, kick opens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, wide mid growl, wide low-mid, kick opens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, octave sub stack, growl answer, kick pattern flip, wide mids, kick opens, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, growl answer, wide mids, snare answers, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, octave sub stack, wide mid reese counterline, rapid hi-hats, wide low-mid, snare answers, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, formant answer, side percussion, offbeat push, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, formant answer, side percussion, triplet hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, wide mid growl, wide mids, backbeat shove, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, growl answer, wide low-mid, backbeat shove, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, body bass, formant bass melody, snare roll, side percussion, ghost notes, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, wide mid reese counterline, wide mids, dry hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, body bass, formant answer, offbeat hats, side hats, wide hat bed, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, formant answer, side hats, side snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, wide mid growl, wide low-mid, rolling hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, octave sub stack, growl answer, kick pattern flip, wide mids, rolling hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, growl answer, wide mids, early kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, formant bass melody, side hats, syncopated hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, formant answer, side percussion, syncopated hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, formant answer, side percussion, closed hat, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, formant answer, side percussion, tight kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, call-response reese, side hats, tight kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, wide mid growl, wide mids, chopped hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, growl answer, wide low-mid, chopped hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, body bass, formant answer, offbeat hats, side hats, pushed snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, formant bass melody, side percussion, kick tightens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, body bass, call-response reese, ghost snare, side percussion, hat density up, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, growl answer, wide mids, kick opens, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, body bass, formant bass melody, snare roll, side hats, kick tightens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, formant bass melody, side hats, offbeat push, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, body bass, formant answer, offbeat hats, side percussion, offbeat push, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, formant answer, side percussion, triplet hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, formant answer, side percussion, ghost notes, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, octave sub stack, growl answer, kick pattern flip, wide low-mid, backbeat shove, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, growl answer, wide low-mid, dry hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, formant bass melody, side percussion, wide hat bed, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, formant answer, side hats, wide hat bed, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, octave sub stack, wide mid growl, trap drums denser, wide low-mid, mono kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, wide mid growl, wide low-mid, rolling hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, call-response reese, side percussion, late snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, fold bass, growl answer, rapid hi-hats, wide mids, early kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, growl answer, wide mids, open hat, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, body bass, formant answer, offbeat hats, side percussion, syncopated hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, wide mid growl, wide mids, open hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, body bass, call-response reese, ghost snare, side hats, closed hat, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, call-response reese, side hats, tight kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, growl answer, wide low-mid, loose hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, formant bass melody, side percussion, pushed snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, wide mid reese counterline, wide mids, chopped hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, octave sub stack, wide mid growl, trap drums denser, wide low-mid, chopped hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, call-response reese, side percussion, hat density up, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, octave sub stack, growl answer, kick pattern flip, wide mids, kick opens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, call-response reese, side percussion, offbeat push, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, formant bass melody, side hats, offbeat push, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, wide mid reese counterline, wide low-mid, straight hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, stacked 808, formant answer, ghost snare, side percussion, triplet hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, formant answer, side percussion, ghost notes, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, stacked 808, call-response reese, snare roll, side hats, ghost notes, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, call-response reese, side hats, wide hat bed, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, stacked 808, formant bass melody, offbeat hats, side percussion, wide hat bed, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, wide mid reese counterline, wide mids, mono kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, wide mid reese counterline, wide mids, rolling hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, formant answer, side hats, late snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, stacked 808, call-response reese, snare roll, side percussion, late snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, growl answer, wide mids, early kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, stacked 808, formant bass melody, offbeat hats, side hats, syncopated hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, wide mid reese counterline, wide low-mid, open hat, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, wide mid reese counterline, wide low-mid, room snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, wide mid reese counterline, wide low-mid, loose hats, 2 bars]
+
+[outro - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side percussion, tight kick, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -241,11 +465,11 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave
 | Slot | Value |
 | --- | --- |
 | 0 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rav…` |
-| 1 | `[build-up - snare roll, octave sub stack, kick pattern flip, growl answer, wide…` |
+| 1 | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
 | 2 | `457` |
 | 3 | `fixed` |
 | 4 | `168` |
-| 5 | `366.0` |
+| 5 | `431.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `E minor` |
@@ -257,87 +481,311 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave
 | 14 | `0.0` |
 
 ```text
-dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
+dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, octave sub stack, kick pattern flip, growl answer, wide mids, rolling hats, chest-sub 808 warp, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, growl answer, wide mids, rolling hats, chest-sub 808 warp, 2 bars]
 
-[drop - full send warped drop, body bass, formant bass melody, snare roll, side hats, late snare, dirty bass, heavy dirty drop, 10 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, body bass, formant bass melody, snare roll, side hats, late snare, dirty bass, heavy dirty drop, 2 bars]
 
-[inst - rapid hi-hats, octave sub stack, wide mid reese counterline, wide low-mid, early kick, brake wreck, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, wide mid reese counterline, wide low-mid, early kick, brake wreck, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side percussion, body bass, syncopated hats, rapid hi-hats roll, 8 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, formant answer, side percussion, syncopated hats, rapid hi-hats roll, 2 bars]
 
-[build-up - snare roll, octave sub stack, trap drums denser, wide mid growl, wide mids, open hat, 808 slide, 4 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, octave sub stack, wide mid growl, trap drums denser, wide mids, open hat, 808 slide, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side hats, body bass, closed hat, stacked 808 wall, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, call-response reese, side hats, closed hat, stacked 808 wall, 2 bars]
 
-[build-up - snare roll, octave sub stack, kick pattern flip, growl answer, wide low-mid, room snare, formant grind, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, growl answer, wide low-mid, room snare, formant grind, 2 bars]
 
-[inst - snare roll, body bass, formant bass melody, side percussion, tight kick, 10 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, formant bass melody, side percussion, tight kick, 2 bars]
 
-[build-up - snare roll, octave sub stack, rapid hi-hats, wide mid reese counterline, wide mids, loose hats, chest-sub 808 punch, 4 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, octave sub stack, wide mid reese counterline, rapid hi-hats, wide mids, loose hats, harder growl drop, 2 bars]
 
-[drop - heavy growl warped drop, body bass, formant answer, offbeat hats, side hats, pushed snare, harder growl drop, 12 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, formant answer, side hats, pushed snare, chest-sub 808 punch, 2 bars]
 
-[inst - trap drums denser, octave sub stack, wide mid growl, wide low-mid, chopped hats, low rumble wreck, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, wide mid growl, wide low-mid, chopped hats, low rumble wreck, 2 bars]
 
-[build-up - snare roll, body bass, ghost snare, call-response reese, side percussion, hat density up, warped dirty, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, body bass, call-response reese, ghost snare, side percussion, hat density up, full send drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, octave sub stack, kick opens, kick holds, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, growl answer, wide mids, kick opens, warped dirty, 2 bars]
 
-[inst - snare roll, body bass, formant bass melody, side hats, kick tightens, 808 ride, 6 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, formant bass melody, side hats, kick tightens, kick holds, 2 bars]
 
-[build-up - snare roll, octave sub stack, rapid hi-hats, wide mid reese counterline, wide low-mid, snare answers, 4 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, octave sub stack, wide mid reese counterline, rapid hi-hats, wide low-mid, snare answers, 808 ride, 2 bars]
 
-[drop - harder wobble warped drop, body bass, formant answer, offbeat hats, side percussion, offbeat push, full send drop, 8 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, formant answer, side percussion, offbeat push, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, octave sub stack, straight hats, 6 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, octave sub stack, wide mid growl, trap drums denser, wide mids, straight hats, 2 bars]
 
-[build-up - snare roll, body bass, ghost snare, call-response reese, side hats, triplet hats, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, call-response reese, side hats, triplet hats, 2 bars]
 
-[drop - stacked reese warped drop, octave sub stack, growl answer, kick pattern flip, wide low-mid, backbeat shove, 10 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, octave sub stack, growl answer, kick pattern flip, wide low-mid, backbeat shove, 2 bars]
 
-[build-up - snare roll, body bass, snare roll, formant bass melody, side percussion, ghost notes, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, formant bass melody, side percussion, ghost notes, 2 bars]
 
-[inst - rapid hi-hats, octave sub stack, wide mid reese counterline, wide mids, dry hats, 12 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, octave sub stack, wide mid reese counterline, rapid hi-hats, wide mids, dry hats, 2 bars]
 
-[drop - full send warped drop, body bass, formant answer, offbeat hats, side hats, wide hat bed, 8 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, formant answer, side hats, wide hat bed, 2 bars]
 
-[build-up - snare roll, octave sub stack, trap drums denser, wide mid growl, wide low-mid, mono kick, 6 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, octave sub stack, wide mid growl, trap drums denser, wide low-mid, mono kick, 2 bars]
 
-[inst - ghost snare, body bass, call-response reese, side percussion, side snare, 12 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, call-response reese, side percussion, side snare, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, octave sub stack, rolling hats, 6 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, octave sub stack, growl answer, kick pattern flip, wide mids, rolling hats, 2 bars]
 
-[build-up - snare roll, body bass, snare roll, formant bass melody, side hats, late snare, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, formant bass melody, side hats, late snare, 2 bars]
 
-[drop - full send warped drop, octave sub stack, wide mid reese counterline, rapid hi-hats, wide low-mid, early kick, 10 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, octave sub stack, wide mid reese counterline, rapid hi-hats, wide low-mid, early kick, 2 bars]
 
-[inst - offbeat hats, body bass, formant answer, side percussion, syncopated hats, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, wide mid reese counterline, wide low-mid, open hat, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, octave sub stack, open hat, 8 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, octave sub stack, wide mid growl, trap drums denser, wide mids, open hat, 2 bars]
 
-[build-up - snare roll, body bass, ghost snare, call-response reese, side hats, closed hat, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, call-response reese, side hats, closed hat, 2 bars]
 
-[drop - harder wobble warped drop, octave sub stack, growl answer, kick pattern flip, wide low-mid, room snare, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, octave sub stack, growl answer, kick pattern flip, wide low-mid, room snare, 2 bars]
 
-[build-up - snare roll, body bass, snare roll, formant bass melody, side percussion, tight kick, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, growl answer, wide low-mid, loose hats, 2 bars]
 
-[inst - rapid hi-hats, octave sub stack, wide mid reese counterline, wide mids, loose hats, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, wide mid reese counterline, wide mids, loose hats, 2 bars]
 
-[drop - stacked reese warped drop, body bass, formant answer, offbeat hats, side hats, pushed snare, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, body bass, formant answer, offbeat hats, side hats, pushed snare, 2 bars]
 
-[build-up - snare roll, octave sub stack, trap drums denser, wide mid growl, wide low-mid, chopped hats, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, wide mid growl, wide low-mid, chopped hats, 2 bars]
 
-[inst - ghost snare, body bass, call-response reese, side percussion, hat density up, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, call-response reese, side percussion, hat density up, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side percussion, stacked 808, kick tightens, 8 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, octave sub stack, growl answer, kick pattern flip, wide mids, kick opens, 2 bars]
 
-[build-up - snare roll, body bass, snare roll, formant bass melody, side hats, kick tightens, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, formant bass melody, side hats, kick tightens, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side percussion, tight kick, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, wide mid reese counterline, wide low-mid, snare answers, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, body bass, formant answer, offbeat hats, side percussion, offbeat push, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, wide mid growl, wide mids, straight hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, call-response reese, side hats, triplet hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, octave sub stack, growl answer, kick pattern flip, wide low-mid, backbeat shove, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, formant bass melody, side percussion, ghost notes, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, wide mid reese counterline, wide mids, dry hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, body bass, formant answer, offbeat hats, side hats, wide hat bed, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, wide mid growl, wide low-mid, mono kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, body bass, call-response reese, ghost snare, side percussion, side snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, growl answer, wide mids, rolling hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, body bass, formant bass melody, snare roll, side hats, late snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, formant bass melody, side hats, syncopated hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, formant bass melody, side hats, closed hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, octave sub stack, wide mid growl, trap drums denser, wide mids, open hat, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, wide mid growl, wide mids, room snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, octave sub stack, growl answer, kick pattern flip, wide low-mid, room snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, call-response reese, side hats, pushed snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, formant bass melody, side percussion, pushed snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, body bass, formant answer, offbeat hats, side hats, pushed snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, formant answer, side hats, hat density up, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, body bass, call-response reese, ghost snare, side percussion, hat density up, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, call-response reese, side percussion, kick tightens, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, growl answer, wide mids, snare answers, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, wide mid reese counterline, wide low-mid, snare answers, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, body bass, formant answer, offbeat hats, side percussion, offbeat push, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, wide mid growl, wide mids, straight hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, wide mid growl, wide mids, backbeat shove, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, octave sub stack, growl answer, kick pattern flip, wide low-mid, backbeat shove, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, growl answer, wide low-mid, dry hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, octave sub stack, wide mid reese counterline, rapid hi-hats, wide mids, dry hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, wide mid reese counterline, wide mids, mono kick, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, octave sub stack, wide mid growl, trap drums denser, wide low-mid, mono kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, call-response reese, side percussion, side snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, octave sub stack, growl answer, kick pattern flip, wide mids, rolling hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, formant bass melody, side hats, late snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, wide mid reese counterline, wide low-mid, early kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, body bass, formant answer, offbeat hats, side percussion, syncopated hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, wide mid growl, wide mids, open hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, body bass, call-response reese, ghost snare, side hats, closed hat, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, growl answer, wide low-mid, room snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, formant bass melody, side percussion, tight kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, wide mid reese counterline, wide mids, loose hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, formant answer, side hats, pushed snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, wide mid reese counterline, wide mids, kick opens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, wide mid growl, wide low-mid, kick opens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, octave sub stack, growl answer, kick pattern flip, wide mids, kick opens, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, growl answer, wide mids, snare answers, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, octave sub stack, wide mid reese counterline, rapid hi-hats, wide low-mid, snare answers, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, formant answer, side percussion, offbeat push, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, formant answer, side percussion, triplet hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, wide mid growl, wide mids, backbeat shove, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, growl answer, wide low-mid, backbeat shove, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, body bass, formant bass melody, snare roll, side percussion, ghost notes, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, wide mid reese counterline, wide mids, dry hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, body bass, formant answer, offbeat hats, side hats, wide hat bed, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, formant answer, side hats, side snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, wide mid growl, wide low-mid, rolling hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, octave sub stack, growl answer, kick pattern flip, wide mids, rolling hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, growl answer, wide mids, early kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, formant bass melody, side hats, syncopated hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, formant answer, side percussion, syncopated hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, formant answer, side percussion, closed hat, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, formant answer, side percussion, tight kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, call-response reese, side hats, tight kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, wide mid growl, wide mids, chopped hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, growl answer, wide low-mid, chopped hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, body bass, formant answer, offbeat hats, side hats, pushed snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, formant bass melody, side percussion, kick tightens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, body bass, call-response reese, ghost snare, side percussion, hat density up, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, growl answer, wide mids, kick opens, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, body bass, formant bass melody, snare roll, side hats, kick tightens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, formant bass melody, side hats, offbeat push, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, body bass, formant answer, offbeat hats, side percussion, offbeat push, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, formant answer, side percussion, triplet hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, formant answer, side percussion, ghost notes, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, octave sub stack, growl answer, kick pattern flip, wide low-mid, backbeat shove, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, growl answer, wide low-mid, dry hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, formant bass melody, side percussion, wide hat bed, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, formant answer, side hats, wide hat bed, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, octave sub stack, wide mid growl, trap drums denser, wide low-mid, mono kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, wide mid growl, wide low-mid, rolling hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, call-response reese, side percussion, late snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, fold bass, growl answer, rapid hi-hats, wide mids, early kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, growl answer, wide mids, open hat, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, body bass, formant answer, offbeat hats, side percussion, syncopated hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, wide mid growl, wide mids, open hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, body bass, call-response reese, ghost snare, side hats, closed hat, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, call-response reese, side hats, tight kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, growl answer, wide low-mid, loose hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, formant bass melody, side percussion, pushed snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, wide mid reese counterline, wide mids, chopped hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, octave sub stack, wide mid growl, trap drums denser, wide low-mid, chopped hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, call-response reese, side percussion, hat density up, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, octave sub stack, growl answer, kick pattern flip, wide mids, kick opens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, call-response reese, side percussion, offbeat push, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, formant bass melody, side hats, offbeat push, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, wide mid reese counterline, wide low-mid, straight hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, stacked 808, formant answer, ghost snare, side percussion, triplet hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, formant answer, side percussion, ghost notes, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, stacked 808, call-response reese, snare roll, side hats, ghost notes, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, call-response reese, side hats, wide hat bed, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, stacked 808, formant bass melody, offbeat hats, side percussion, wide hat bed, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, wide mid reese counterline, wide mids, mono kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, wide mid reese counterline, wide mids, rolling hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, formant answer, side hats, late snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, stacked 808, call-response reese, snare roll, side percussion, late snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, growl answer, wide mids, early kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, stacked 808, formant bass melody, offbeat hats, side hats, syncopated hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, wide mid reese counterline, wide low-mid, open hat, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, wide mid reese counterline, wide low-mid, room snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, wide mid reese counterline, wide low-mid, loose hats, 2 bars]
+
+[outro - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side percussion, tight kick, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -420,14 +868,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `474.0` |
+| 0 | `460.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `474.0` |
+| 0 | `460.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -436,101 +884,341 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-su…` |
-| 2 | `[build-up - snare roll, mono chest-sub, trap drums denser, call-response reese,…` |
+| 2 | `[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, …` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/02-diesel-hum` |
 
 ```text
-warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 170 bpm, instrumental, no vocals
+warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 170 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, mono chest-sub, trap drums denser, call-response reese, side percussion, ghost notes, dual-action pedal bass, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, trap drums denser, call-response reese, side percussion, ghost notes, dual-action pedal bass, 2 bars]
 
-[drop - wreck formant warped drop, low chest-sub, growl answer, ghost snare, wide mids, dry hats, warped hybrid-trap, dual-action pedal bass, heavy warped drop, 10 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, low chest-sub, growl answer, ghost snare, wide mids, dry hats, warped hybrid-trap, dual-action pedal bass, heavy warped drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side hats, mono chest-sub, wide hat bed, chest-sub 808 wreck, 4 bars]
+[breakdown - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, low chest-sub, open hat, 2 bars]
 
-[inst - snare roll, low chest-sub, wide mid reese counterline, wide low-mid, mono kick, pedal 808 hold, 12 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, low chest-sub, wide mid reese counterline, snare roll, wide low-mid, mono kick, pedal 808 hold, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side percussion, mono chest-sub, side snare, rapid hi-hats roll, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, formant answer, side percussion, side snare, rapid hi-hats roll, 2 bars]
 
-[build-up - snare roll, low chest-sub, offbeat hats, wide mid growl, wide mids, rolling hats, stacked 808 wall, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, wide mid growl, wide mids, rolling hats, stacked 808 wall, 2 bars]
 
-[drop - wreck formant warped drop, mono chest-sub, call-response reese, trap drums denser, side hats, late snare, harder growl drop, 10 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, mono chest-sub, call-response reese, trap drums denser, side hats, late snare, harder growl drop, 2 bars]
 
-[build-up - snare roll, low chest-sub, ghost snare, growl answer, wide low-mid, early kick, hybrid formant, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, growl answer, wide low-mid, early kick, hybrid formant, 2 bars]
 
-[inst - kick pattern flip, mono chest-sub, formant bass melody, side percussion, syncopated hats, chest-sub wreck, 12 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant bass melody, side percussion, syncopated hats, chest-sub wreck, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, low chest-sub, open hat, pedal warp, 6 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, snare roll, wide mid reese counterline, wide mids, open hat, pedal warp, 2 bars]
 
-[build-up - snare roll, mono chest-sub, rapid hi-hats, formant answer, side hats, closed hat, kick holds, 4 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, mono chest-sub, formant answer, rapid hi-hats, side hats, closed hat, full send drop, 2 bars]
 
-[inst - offbeat hats, low chest-sub, wide mid growl, wide low-mid, room snare, hats denser, 10 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, offbeat hats, wide mid growl, wide low-mid, room snare, kick holds, 2 bars]
 
-[build-up - snare roll, mono chest-sub, trap drums denser, call-response reese, side percussion, tight kick, pedal ride, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, call-response reese, side percussion, tight kick, hats denser, 2 bars]
 
-[inst - ghost snare, low chest-sub, growl answer, wide mids, loose hats, 10 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, growl answer, wide mids, loose hats, pedal ride, 2 bars]
 
-[drop - harder wobble warped drop, mono chest-sub, formant bass melody, kick pattern flip, side hats, pushed snare, full send drop, 12 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant bass melody, side hats, pushed snare, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide low-mid, low chest-sub, chopped hats, 6 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, low chest-sub, wide mid reese counterline, snare roll, wide low-mid, chopped hats, 2 bars]
 
-[inst - rapid hi-hats, mono chest-sub, formant answer, side percussion, hat density up, 12 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, mono chest-sub, formant answer, side percussion, hat density up, 2 bars]
 
-[drop - stacked reese warped drop, low chest-sub, wide mid growl, offbeat hats, wide mids, kick opens, 8 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, offbeat hats, wide mid growl, wide mids, kick opens, 2 bars]
 
-[build-up - snare roll, mono chest-sub, trap drums denser, call-response reese, side hats, kick tightens, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, call-response reese, side hats, kick tightens, 2 bars]
 
-[drop - harder wobble warped drop, low chest-sub, growl answer, ghost snare, wide low-mid, snare answers, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, low chest-sub, growl answer, ghost snare, wide low-mid, snare answers, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, mono chest-sub, offbeat push, 4 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant bass melody, side percussion, offbeat push, 2 bars]
 
-[drop - wreck formant warped drop, low chest-sub, wide mid reese counterline, snare roll, wide mids, straight hats, 12 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, low chest-sub, wide mid reese counterline, snare roll, wide mids, straight hats, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side hats, mono chest-sub, triplet hats, 8 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, formant answer, side hats, triplet hats, 2 bars]
 
-[build-up - snare roll, low chest-sub, offbeat hats, wide mid growl, wide low-mid, backbeat shove, 6 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, wide mid growl, wide low-mid, backbeat shove, 2 bars]
 
-[drop - harder wobble warped drop, mono chest-sub, call-response reese, trap drums denser, side percussion, ghost notes, 12 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, mono chest-sub, call-response reese, trap drums denser, side percussion, ghost notes, 2 bars]
 
-[inst - ghost snare, low chest-sub, growl answer, wide mids, dry hats, 8 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, growl answer, wide mids, dry hats, 2 bars]
 
-[drop - wreck formant warped drop, mono chest-sub, formant bass melody, kick pattern flip, side hats, wide hat bed, 12 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, mono chest-sub, formant bass melody, kick pattern flip, side hats, wide hat bed, 2 bars]
 
-[inst - rapid hi-hats, body bass, formant bass melody, side hats, side snare, 10 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, snare roll, wide mid reese counterline, wide low-mid, mono kick, 2 bars]
 
-[drop - heavy growl warped drop, mono chest-sub, formant answer, rapid hi-hats, side percussion, side snare, 8 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, mono chest-sub, formant answer, side percussion, side snare, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, low chest-sub, rolling hats, 6 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, offbeat hats, wide mid growl, wide mids, rolling hats, 2 bars]
 
-[build-up - snare roll, mono chest-sub, trap drums denser, call-response reese, side hats, late snare, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, call-response reese, side hats, late snare, 2 bars]
 
-[drop - wreck formant warped drop, low chest-sub, growl answer, ghost snare, wide low-mid, early kick, 10 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, low chest-sub, growl answer, ghost snare, wide low-mid, early kick, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, mono chest-sub, syncopated hats, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, growl answer, wide low-mid, open hat, 2 bars]
 
-[drop - heavy growl warped drop, low chest-sub, wide mid reese counterline, snare roll, wide mids, open hat, 10 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, formant bass melody, side percussion, closed hat, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side hats, mono chest-sub, closed hat, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, mono chest-sub, formant answer, rapid hi-hats, side hats, closed hat, 2 bars]
 
-[build-up - snare roll, low chest-sub, offbeat hats, wide mid growl, wide low-mid, room snare, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, formant answer, side hats, tight kick, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side percussion, mono chest-sub, tight kick, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, wide mid growl, wide low-mid, loose hats, 2 bars]
 
-[drop - stacked reese warped drop, low chest-sub, growl answer, ghost snare, wide mids, loose hats, 10 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, low chest-sub, growl answer, ghost snare, wide mids, loose hats, 2 bars]
 
-[inst - kick pattern flip, mono chest-sub, formant bass melody, side hats, pushed snare, 12 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, kick pattern flip, formant bass melody, side hats, pushed snare, 2 bars]
 
-[build-up - snare roll, low chest-sub, snare roll, wide mid reese counterline, wide low-mid, chopped hats, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid reese counterline, wide low-mid, chopped hats, 2 bars]
 
-[drop - full send warped drop, mono chest-sub, formant answer, rapid hi-hats, side percussion, hat density up, 10 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, mono chest-sub, formant answer, rapid hi-hats, side percussion, hat density up, 2 bars]
 
-[build-up - snare roll, low chest-sub, offbeat hats, wide mid growl, wide mids, kick opens, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, wide mid growl, wide mids, kick opens, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant answer, side hats, closed hat, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, trap drums denser, call-response reese, side hats, kick tightens, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, growl answer, wide low-mid, snare answers, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, kick pattern flip, formant bass melody, side percussion, offbeat push, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, low chest-sub, wide mid reese counterline, snare roll, wide mids, straight hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, mono chest-sub, formant answer, side hats, triplet hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, low chest-sub, wide mid growl, offbeat hats, wide low-mid, backbeat shove, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, wide mid growl, wide low-mid, dry hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, call-response reese, side percussion, wide hat bed, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, mono chest-sub, formant bass melody, kick pattern flip, side hats, wide hat bed, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid reese counterline, wide low-mid, mono kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, mono chest-sub, formant answer, rapid hi-hats, side percussion, side snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, formant answer, side percussion, late snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, wide mid growl, wide mids, early kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, call-response reese, side hats, syncopated hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, call-response reese, side hats, closed hat, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, growl answer, wide low-mid, room snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, mono chest-sub, formant answer, side hats, closed hat, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, low chest-sub, wide mid growl, offbeat hats, wide low-mid, room snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, trap drums denser, call-response reese, side percussion, tight kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, growl answer, wide mids, loose hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, growl answer, wide mids, chopped hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, formant bass melody, side hats, hat density up, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, formant answer, side percussion, hat density up, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, formant answer, side percussion, kick tightens, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, mono chest-sub, call-response reese, trap drums denser, side hats, kick tightens, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, growl answer, wide low-mid, snare answers, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, growl answer, wide low-mid, straight hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, low chest-sub, wide mid reese counterline, snare roll, wide mids, straight hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, wide mid reese counterline, wide mids, backbeat shove, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, formant answer, side hats, ghost notes, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, formant answer, side hats, wide hat bed, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, wide mid growl, wide low-mid, mono kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, mono chest-sub, formant bass melody, kick pattern flip, side hats, wide hat bed, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, formant bass melody, side hats, side snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, wide mid reese counterline, wide low-mid, rolling hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid reese counterline, wide low-mid, early kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, mono chest-sub, call-response reese, trap drums denser, side hats, late snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, wide mid growl, wide mids, open hat, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, wide mid growl, wide mids, room snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, low chest-sub, wide mid reese counterline, snare roll, wide mids, open hat, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, formant answer, side hats, closed hat, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, wide mid growl, wide low-mid, room snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, wide mid growl, wide low-mid, loose hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, call-response reese, side percussion, pushed snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, mono chest-sub, formant bass melody, kick pattern flip, side hats, pushed snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, snare roll, wide mid reese counterline, wide low-mid, chopped hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, wide mid reese counterline, wide low-mid, kick opens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, low chest-sub, wide mid growl, offbeat hats, wide mids, kick opens, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, wide mid growl, wide mids, snare answers, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, call-response reese, side hats, offbeat push, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, mono chest-sub, formant bass melody, kick pattern flip, side percussion, offbeat push, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid reese counterline, wide mids, straight hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant bass melody, side percussion, ghost notes, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, wide mid reese counterline, wide mids, dry hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, mono chest-sub, call-response reese, trap drums denser, side percussion, ghost notes, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, growl answer, wide mids, dry hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, growl answer, wide mids, mono kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, growl answer, wide mids, rolling hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, formant bass melody, side hats, late snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, kick pattern flip, formant bass melody, side hats, syncopated hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, mono chest-sub, call-response reese, trap drums denser, side hats, late snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, formant answer, side percussion, closed hat, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, mono chest-sub, formant bass melody, kick pattern flip, side percussion, syncopated hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid reese counterline, wide mids, open hat, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, wide mid reese counterline, wide mids, room snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, formant answer, side hats, tight kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, mono chest-sub, call-response reese, trap drums denser, side percussion, tight kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, call-response reese, side percussion, pushed snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, growl answer, wide mids, chopped hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, formant bass melody, side hats, hat density up, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, mono chest-sub, formant answer, rapid hi-hats, side percussion, hat density up, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, wide mid reese counterline, wide low-mid, snare answers, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, mono chest-sub, call-response reese, trap drums denser, side hats, kick tightens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, call-response reese, side hats, offbeat push, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, call-response reese, side hats, triplet hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, low chest-sub, wide mid reese counterline, snare roll, wide mids, straight hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, wide mid reese counterline, wide mids, backbeat shove, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, low chest-sub, wide mid growl, offbeat hats, wide low-mid, backbeat shove, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, snare roll, wide mid reese counterline, wide mids, mono kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, mono chest-sub, formant answer, side hats, side snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, mono chest-sub, formant bass melody, kick pattern flip, side hats, wide hat bed, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, formant bass melody, side hats, side snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, wide mid reese counterline, wide low-mid, rolling hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, formant answer, side percussion, late snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, octave sub stack, wide mid growl, ghost snare, wide mids, early kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, growl answer, wide low-mid, early kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, kick pattern flip, formant bass melody, side percussion, syncopated hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, formant bass melody, side percussion, closed hat, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant bass melody, side percussion, tight kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, wide mid reese counterline, wide mids, loose hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, mono chest-sub, call-response reese, trap drums denser, side percussion, tight kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, wide mid growl, wide low-mid, chopped hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, call-response reese, side percussion, hat density up, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, growl answer, wide mids, kick opens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, mono chest-sub, formant answer, rapid hi-hats, side percussion, hat density up, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, formant answer, side percussion, kick tightens, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, wide mid growl, wide mids, snare answers, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, body bass, call-response reese, kick pattern flip, side hats, offbeat push, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, growl answer, wide low-mid, straight hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, formant bass melody, side percussion, triplet hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, growl answer, wide low-mid, dry hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, low chest-sub, wide mid growl, offbeat hats, wide low-mid, backbeat shove, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, formant bass melody, side percussion, side snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, wide mid reese counterline, wide mids, rolling hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, octave sub stack, growl answer, snare roll, wide mids, mono kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, trap drums denser, call-response reese, side percussion, late snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, mono chest-sub, formant answer, rapid hi-hats, side percussion, side snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, growl answer, wide mids, open hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, mono chest-sub, call-response reese, trap drums denser, side hats, late snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, wide mid reese counterline, wide low-mid, room snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, formant answer, side percussion, tight kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, low chest-sub, wide mid reese counterline, snare roll, wide mids, open hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, growl answer, wide low-mid, loose hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant bass melody, side percussion, pushed snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, formant answer, side hats, pushed snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, body bass, call-response reese, kick pattern flip, side percussion, pushed snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, call-response reese, side percussion, hat density up, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, growl answer, wide mids, kick opens, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, wide mid reese counterline, wide low-mid, kick opens, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant bass melody, side hats, offbeat push, 2 bars]
+
+[outro - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant answer, side hats, closed hat, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -538,11 +1226,11 @@ warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub
 | Slot | Value |
 | --- | --- |
 | 0 | `warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-su…` |
-| 1 | `[build-up - snare roll, mono chest-sub, trap drums denser, call-response reese,…` |
+| 1 | `[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, …` |
 | 2 | `461` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `474.0` |
+| 5 | `460.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `G major` |
@@ -554,95 +1242,335 @@ warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub
 | 14 | `0.0` |
 
 ```text
-warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 170 bpm, instrumental, no vocals
+warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 170 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, mono chest-sub, trap drums denser, call-response reese, side percussion, ghost notes, dual-action pedal bass, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, trap drums denser, call-response reese, side percussion, ghost notes, dual-action pedal bass, 2 bars]
 
-[drop - wreck formant warped drop, low chest-sub, growl answer, ghost snare, wide mids, dry hats, warped hybrid-trap, dual-action pedal bass, heavy warped drop, 10 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, low chest-sub, growl answer, ghost snare, wide mids, dry hats, warped hybrid-trap, dual-action pedal bass, heavy warped drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side hats, mono chest-sub, wide hat bed, chest-sub 808 wreck, 4 bars]
+[breakdown - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, low chest-sub, open hat, 2 bars]
 
-[inst - snare roll, low chest-sub, wide mid reese counterline, wide low-mid, mono kick, pedal 808 hold, 12 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, low chest-sub, wide mid reese counterline, snare roll, wide low-mid, mono kick, pedal 808 hold, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side percussion, mono chest-sub, side snare, rapid hi-hats roll, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, formant answer, side percussion, side snare, rapid hi-hats roll, 2 bars]
 
-[build-up - snare roll, low chest-sub, offbeat hats, wide mid growl, wide mids, rolling hats, stacked 808 wall, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, wide mid growl, wide mids, rolling hats, stacked 808 wall, 2 bars]
 
-[drop - wreck formant warped drop, mono chest-sub, call-response reese, trap drums denser, side hats, late snare, harder growl drop, 10 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, mono chest-sub, call-response reese, trap drums denser, side hats, late snare, harder growl drop, 2 bars]
 
-[build-up - snare roll, low chest-sub, ghost snare, growl answer, wide low-mid, early kick, hybrid formant, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, growl answer, wide low-mid, early kick, hybrid formant, 2 bars]
 
-[inst - kick pattern flip, mono chest-sub, formant bass melody, side percussion, syncopated hats, chest-sub wreck, 12 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant bass melody, side percussion, syncopated hats, chest-sub wreck, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, low chest-sub, open hat, pedal warp, 6 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, snare roll, wide mid reese counterline, wide mids, open hat, pedal warp, 2 bars]
 
-[build-up - snare roll, mono chest-sub, rapid hi-hats, formant answer, side hats, closed hat, kick holds, 4 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, mono chest-sub, formant answer, rapid hi-hats, side hats, closed hat, full send drop, 2 bars]
 
-[inst - offbeat hats, low chest-sub, wide mid growl, wide low-mid, room snare, hats denser, 10 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, offbeat hats, wide mid growl, wide low-mid, room snare, kick holds, 2 bars]
 
-[build-up - snare roll, mono chest-sub, trap drums denser, call-response reese, side percussion, tight kick, pedal ride, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, call-response reese, side percussion, tight kick, hats denser, 2 bars]
 
-[inst - ghost snare, low chest-sub, growl answer, wide mids, loose hats, 10 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, growl answer, wide mids, loose hats, pedal ride, 2 bars]
 
-[drop - harder wobble warped drop, mono chest-sub, formant bass melody, kick pattern flip, side hats, pushed snare, full send drop, 12 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant bass melody, side hats, pushed snare, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide low-mid, low chest-sub, chopped hats, 6 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, low chest-sub, wide mid reese counterline, snare roll, wide low-mid, chopped hats, 2 bars]
 
-[inst - rapid hi-hats, mono chest-sub, formant answer, side percussion, hat density up, 12 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, mono chest-sub, formant answer, side percussion, hat density up, 2 bars]
 
-[drop - stacked reese warped drop, low chest-sub, wide mid growl, offbeat hats, wide mids, kick opens, 8 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, offbeat hats, wide mid growl, wide mids, kick opens, 2 bars]
 
-[build-up - snare roll, mono chest-sub, trap drums denser, call-response reese, side hats, kick tightens, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, call-response reese, side hats, kick tightens, 2 bars]
 
-[drop - harder wobble warped drop, low chest-sub, growl answer, ghost snare, wide low-mid, snare answers, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, low chest-sub, growl answer, ghost snare, wide low-mid, snare answers, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, mono chest-sub, offbeat push, 4 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant bass melody, side percussion, offbeat push, 2 bars]
 
-[drop - wreck formant warped drop, low chest-sub, wide mid reese counterline, snare roll, wide mids, straight hats, 12 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, low chest-sub, wide mid reese counterline, snare roll, wide mids, straight hats, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side hats, mono chest-sub, triplet hats, 8 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, formant answer, side hats, triplet hats, 2 bars]
 
-[build-up - snare roll, low chest-sub, offbeat hats, wide mid growl, wide low-mid, backbeat shove, 6 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, wide mid growl, wide low-mid, backbeat shove, 2 bars]
 
-[drop - harder wobble warped drop, mono chest-sub, call-response reese, trap drums denser, side percussion, ghost notes, 12 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, mono chest-sub, call-response reese, trap drums denser, side percussion, ghost notes, 2 bars]
 
-[inst - ghost snare, low chest-sub, growl answer, wide mids, dry hats, 8 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, growl answer, wide mids, dry hats, 2 bars]
 
-[drop - wreck formant warped drop, mono chest-sub, formant bass melody, kick pattern flip, side hats, wide hat bed, 12 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, mono chest-sub, formant bass melody, kick pattern flip, side hats, wide hat bed, 2 bars]
 
-[inst - rapid hi-hats, body bass, formant bass melody, side hats, side snare, 10 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, snare roll, wide mid reese counterline, wide low-mid, mono kick, 2 bars]
 
-[drop - heavy growl warped drop, mono chest-sub, formant answer, rapid hi-hats, side percussion, side snare, 8 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, mono chest-sub, formant answer, side percussion, side snare, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, low chest-sub, rolling hats, 6 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, offbeat hats, wide mid growl, wide mids, rolling hats, 2 bars]
 
-[build-up - snare roll, mono chest-sub, trap drums denser, call-response reese, side hats, late snare, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, call-response reese, side hats, late snare, 2 bars]
 
-[drop - wreck formant warped drop, low chest-sub, growl answer, ghost snare, wide low-mid, early kick, 10 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, low chest-sub, growl answer, ghost snare, wide low-mid, early kick, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, mono chest-sub, syncopated hats, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, growl answer, wide low-mid, open hat, 2 bars]
 
-[drop - heavy growl warped drop, low chest-sub, wide mid reese counterline, snare roll, wide mids, open hat, 10 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, formant bass melody, side percussion, closed hat, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side hats, mono chest-sub, closed hat, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, mono chest-sub, formant answer, rapid hi-hats, side hats, closed hat, 2 bars]
 
-[build-up - snare roll, low chest-sub, offbeat hats, wide mid growl, wide low-mid, room snare, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, formant answer, side hats, tight kick, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side percussion, mono chest-sub, tight kick, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, wide mid growl, wide low-mid, loose hats, 2 bars]
 
-[drop - stacked reese warped drop, low chest-sub, growl answer, ghost snare, wide mids, loose hats, 10 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, low chest-sub, growl answer, ghost snare, wide mids, loose hats, 2 bars]
 
-[inst - kick pattern flip, mono chest-sub, formant bass melody, side hats, pushed snare, 12 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, kick pattern flip, formant bass melody, side hats, pushed snare, 2 bars]
 
-[build-up - snare roll, low chest-sub, snare roll, wide mid reese counterline, wide low-mid, chopped hats, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid reese counterline, wide low-mid, chopped hats, 2 bars]
 
-[drop - full send warped drop, mono chest-sub, formant answer, rapid hi-hats, side percussion, hat density up, 10 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, mono chest-sub, formant answer, rapid hi-hats, side percussion, hat density up, 2 bars]
 
-[build-up - snare roll, low chest-sub, offbeat hats, wide mid growl, wide mids, kick opens, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, wide mid growl, wide mids, kick opens, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant answer, side hats, closed hat, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, trap drums denser, call-response reese, side hats, kick tightens, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, growl answer, wide low-mid, snare answers, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, kick pattern flip, formant bass melody, side percussion, offbeat push, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, low chest-sub, wide mid reese counterline, snare roll, wide mids, straight hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, mono chest-sub, formant answer, side hats, triplet hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, low chest-sub, wide mid growl, offbeat hats, wide low-mid, backbeat shove, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, wide mid growl, wide low-mid, dry hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, call-response reese, side percussion, wide hat bed, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, mono chest-sub, formant bass melody, kick pattern flip, side hats, wide hat bed, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid reese counterline, wide low-mid, mono kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, mono chest-sub, formant answer, rapid hi-hats, side percussion, side snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, formant answer, side percussion, late snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, wide mid growl, wide mids, early kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, call-response reese, side hats, syncopated hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, call-response reese, side hats, closed hat, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, growl answer, wide low-mid, room snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, mono chest-sub, formant answer, side hats, closed hat, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, low chest-sub, wide mid growl, offbeat hats, wide low-mid, room snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, trap drums denser, call-response reese, side percussion, tight kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, growl answer, wide mids, loose hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, growl answer, wide mids, chopped hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, formant bass melody, side hats, hat density up, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, formant answer, side percussion, hat density up, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, formant answer, side percussion, kick tightens, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, mono chest-sub, call-response reese, trap drums denser, side hats, kick tightens, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, growl answer, wide low-mid, snare answers, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, growl answer, wide low-mid, straight hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, low chest-sub, wide mid reese counterline, snare roll, wide mids, straight hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, wide mid reese counterline, wide mids, backbeat shove, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, formant answer, side hats, ghost notes, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, formant answer, side hats, wide hat bed, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, wide mid growl, wide low-mid, mono kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, mono chest-sub, formant bass melody, kick pattern flip, side hats, wide hat bed, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, formant bass melody, side hats, side snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, wide mid reese counterline, wide low-mid, rolling hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid reese counterline, wide low-mid, early kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, mono chest-sub, call-response reese, trap drums denser, side hats, late snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, wide mid growl, wide mids, open hat, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, wide mid growl, wide mids, room snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, low chest-sub, wide mid reese counterline, snare roll, wide mids, open hat, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, formant answer, side hats, closed hat, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, wide mid growl, wide low-mid, room snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, wide mid growl, wide low-mid, loose hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, call-response reese, side percussion, pushed snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, mono chest-sub, formant bass melody, kick pattern flip, side hats, pushed snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, snare roll, wide mid reese counterline, wide low-mid, chopped hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, wide mid reese counterline, wide low-mid, kick opens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, low chest-sub, wide mid growl, offbeat hats, wide mids, kick opens, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, wide mid growl, wide mids, snare answers, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, call-response reese, side hats, offbeat push, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, mono chest-sub, formant bass melody, kick pattern flip, side percussion, offbeat push, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid reese counterline, wide mids, straight hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant bass melody, side percussion, ghost notes, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, wide mid reese counterline, wide mids, dry hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, mono chest-sub, call-response reese, trap drums denser, side percussion, ghost notes, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, growl answer, wide mids, dry hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, growl answer, wide mids, mono kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, growl answer, wide mids, rolling hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, formant bass melody, side hats, late snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, kick pattern flip, formant bass melody, side hats, syncopated hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, mono chest-sub, call-response reese, trap drums denser, side hats, late snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, formant answer, side percussion, closed hat, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, mono chest-sub, formant bass melody, kick pattern flip, side percussion, syncopated hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid reese counterline, wide mids, open hat, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, wide mid reese counterline, wide mids, room snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, formant answer, side hats, tight kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, mono chest-sub, call-response reese, trap drums denser, side percussion, tight kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, call-response reese, side percussion, pushed snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, growl answer, wide mids, chopped hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, formant bass melody, side hats, hat density up, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, mono chest-sub, formant answer, rapid hi-hats, side percussion, hat density up, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, wide mid reese counterline, wide low-mid, snare answers, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, mono chest-sub, call-response reese, trap drums denser, side hats, kick tightens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, call-response reese, side hats, offbeat push, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, call-response reese, side hats, triplet hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, low chest-sub, wide mid reese counterline, snare roll, wide mids, straight hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, wide mid reese counterline, wide mids, backbeat shove, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, low chest-sub, wide mid growl, offbeat hats, wide low-mid, backbeat shove, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, snare roll, wide mid reese counterline, wide mids, mono kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, mono chest-sub, formant answer, side hats, side snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, mono chest-sub, formant bass melody, kick pattern flip, side hats, wide hat bed, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, formant bass melody, side hats, side snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, wide mid reese counterline, wide low-mid, rolling hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, formant answer, side percussion, late snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, octave sub stack, wide mid growl, ghost snare, wide mids, early kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, growl answer, wide low-mid, early kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, kick pattern flip, formant bass melody, side percussion, syncopated hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, formant bass melody, side percussion, closed hat, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant bass melody, side percussion, tight kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, wide mid reese counterline, wide mids, loose hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, mono chest-sub, call-response reese, trap drums denser, side percussion, tight kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, wide mid growl, wide low-mid, chopped hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, call-response reese, side percussion, hat density up, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, growl answer, wide mids, kick opens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, mono chest-sub, formant answer, rapid hi-hats, side percussion, hat density up, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, formant answer, side percussion, kick tightens, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, wide mid growl, wide mids, snare answers, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, body bass, call-response reese, kick pattern flip, side hats, offbeat push, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, growl answer, wide low-mid, straight hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, formant bass melody, side percussion, triplet hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, growl answer, wide low-mid, dry hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, low chest-sub, wide mid growl, offbeat hats, wide low-mid, backbeat shove, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, formant bass melody, side percussion, side snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, wide mid reese counterline, wide mids, rolling hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, octave sub stack, growl answer, snare roll, wide mids, mono kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, trap drums denser, call-response reese, side percussion, late snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, mono chest-sub, formant answer, rapid hi-hats, side percussion, side snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, growl answer, wide mids, open hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, mono chest-sub, call-response reese, trap drums denser, side hats, late snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, wide mid reese counterline, wide low-mid, room snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, formant answer, side percussion, tight kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, low chest-sub, wide mid reese counterline, snare roll, wide mids, open hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, growl answer, wide low-mid, loose hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant bass melody, side percussion, pushed snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, formant answer, side hats, pushed snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, body bass, call-response reese, kick pattern flip, side percussion, pushed snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, call-response reese, side percussion, hat density up, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, growl answer, wide mids, kick opens, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, wide mid reese counterline, wide low-mid, kick opens, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant bass melody, side hats, offbeat push, 2 bars]
+
+[outro - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant answer, side hats, closed hat, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -741,45 +1669,121 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ra…` |
-| 2 | `[build-up - snare roll, fold bass, snare roll, growl answer, side hats, room sn…` |
+| 2 | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/03-axle-grind` |
 
 ```text
-tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 170 bpm, instrumental, no vocals
+tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 170 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, fold bass, snare roll, growl answer, side hats, room snare, growl wreck, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, growl answer, side hats, room snare, growl wreck, 2 bars]
 
-[drop - heavy growl warped drop, stacked 808, formant bass melody, rapid hi-hats, wide low-mid, tight kick, tearout, heavy tearout drop, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, stacked 808, formant bass melody, rapid hi-hats, wide low-mid, tight kick, tearout, heavy tearout drop, 2 bars]
 
-[inst - offbeat hats, fold bass, wide mid reese counterline, side percussion, loose hats, warped axle, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, wide mid reese counterline, side percussion, loose hats, warped axle, 2 bars]
 
-[drop - full send warped drop, stacked 808, formant answer, trap drums denser, wide mids, pushed snare, metal hats roll, 10 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, formant answer, wide mids, pushed snare, metal hats roll, 2 bars]
 
-[build-up - snare roll, fold bass, ghost snare, wide mid growl, side hats, chopped hats, growl sustain, 6 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid growl, side hats, chopped hats, growl sustain, 2 bars]
 
-[inst - kick pattern flip, stacked 808, call-response reese, wide low-mid, hat density up, sub crush, 12 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, call-response reese, wide low-mid, hat density up, sub crush, 2 bars]
 
-[drop - heavy growl warped drop, fold bass, growl answer, snare roll, side percussion, kick opens, harder formant drop, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, fold bass, growl answer, snare roll, side percussion, kick opens, harder formant drop, 2 bars]
 
-[build-up - snare roll, stacked 808, rapid hi-hats, formant bass melody, wide mids, kick tightens, chest-sub 808, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, formant bass melody, wide mids, kick tightens, chest-sub 808, 2 bars]
 
-[inst - offbeat hats, fold bass, wide mid reese counterline, side hats, snare answers, rapid hi-hats denser, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, wide mid reese counterline, side hats, snare answers, rapid hi-hats denser, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide low-mid, stacked 808, offbeat push, growl hold, 6 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, formant answer, wide low-mid, offbeat push, growl hold, 2 bars]
 
-[inst - ghost snare, fold bass, wide mid growl, side percussion, straight hats, stacked growl wreck, 12 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid growl, side percussion, straight hats, stacked growl wreck, 2 bars]
 
-[build-up - snare roll, stacked 808, kick pattern flip, call-response reese, wide mids, triplet hats, tearout warp, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, call-response reese, wide mids, triplet hats, tearout warp, 2 bars]
 
-[drop - wreck formant warped drop, fold bass, growl answer, snare roll, side percussion, kick opens, 8 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, fold bass, growl answer, snare roll, side hats, backbeat shove, full send drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide mids, stacked 808, late snare, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, formant bass melody, wide low-mid, ghost notes, low 808 wreck, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant answer, wide low-mid, offbeat push, 4 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, fold bass, wide mid reese counterline, offbeat hats, side percussion, dry hats, harder growl drop, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, formant answer, wide mids, wide hat bed, axle grind, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, fold bass, wide mid growl, ghost snare, side hats, mono kick, kick holds, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, call-response reese, wide low-mid, side snare, hats denser, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, growl answer, side percussion, rolling hats, growl ride, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, stacked 808, formant bass melody, rapid hi-hats, wide mids, late snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, wide mid reese counterline, side hats, early kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, stacked 808, formant answer, trap drums denser, wide low-mid, syncopated hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid growl, side percussion, open hat, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, call-response reese, wide mids, closed hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, fold bass, growl answer, snare roll, side hats, room snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, formant bass melody, wide low-mid, tight kick, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, fold bass, wide mid reese counterline, offbeat hats, side percussion, loose hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, wide mid reese counterline, side percussion, chopped hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, fold bass, wide mid growl, ghost snare, side hats, chopped hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, call-response reese, wide low-mid, hat density up, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, fold bass, growl answer, snare roll, side percussion, kick opens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, formant bass melody, wide mids, late snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, wide mid reese counterline, wide mids, snare answers, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, stacked 808, wide mid reese counterline, kick pattern flip, side hats, syncopated hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, formant answer, side hats, triplet hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, formant answer, side hats, room snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, fold bass, wide mid growl, trap drums denser, wide low-mid, ghost notes, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, call-response reese, wide low-mid, loose hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, call-response reese, side percussion, mono kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, stacked 808, growl answer, offbeat hats, side percussion, hat density up, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, growl answer, wide mids, rolling hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, formant bass melody, wide mids, kick tightens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, wide mid reese counterline, wide mids, syncopated hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, stacked 808, wide mid reese counterline, offbeat hats, side hats, straight hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, formant answer, side hats, closed hat, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, wide mid growl, wide low-mid, backbeat shove, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, fold bass, wide mid growl, rapid hi-hats, wide low-mid, loose hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, call-response reese, side percussion, wide hat bed, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, call-response reese, side percussion, chopped hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, stacked 808, growl answer, snare roll, side percussion, side snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, formant bass melody, wide mids, kick tightens, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant bass melody, wide mids, early kick, 2 bars]
+
+[outro - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant answer, wide low-mid, offbeat push, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -787,7 +1791,7 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rav
 | Slot | Value |
 | --- | --- |
 | 0 | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ra…` |
-| 1 | `[build-up - snare roll, fold bass, snare roll, growl answer, side hats, room sn…` |
+| 1 | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
 | 2 | `463` |
 | 3 | `fixed` |
 | 4 | `170` |
@@ -803,39 +1807,115 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rav
 | 14 | `0.0` |
 
 ```text
-tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 170 bpm, instrumental, no vocals
+tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 170 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, fold bass, snare roll, growl answer, side hats, room snare, growl wreck, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, growl answer, side hats, room snare, growl wreck, 2 bars]
 
-[drop - heavy growl warped drop, stacked 808, formant bass melody, rapid hi-hats, wide low-mid, tight kick, tearout, heavy tearout drop, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, stacked 808, formant bass melody, rapid hi-hats, wide low-mid, tight kick, tearout, heavy tearout drop, 2 bars]
 
-[inst - offbeat hats, fold bass, wide mid reese counterline, side percussion, loose hats, warped axle, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, wide mid reese counterline, side percussion, loose hats, warped axle, 2 bars]
 
-[drop - full send warped drop, stacked 808, formant answer, trap drums denser, wide mids, pushed snare, metal hats roll, 10 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, formant answer, wide mids, pushed snare, metal hats roll, 2 bars]
 
-[build-up - snare roll, fold bass, ghost snare, wide mid growl, side hats, chopped hats, growl sustain, 6 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid growl, side hats, chopped hats, growl sustain, 2 bars]
 
-[inst - kick pattern flip, stacked 808, call-response reese, wide low-mid, hat density up, sub crush, 12 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, call-response reese, wide low-mid, hat density up, sub crush, 2 bars]
 
-[drop - heavy growl warped drop, fold bass, growl answer, snare roll, side percussion, kick opens, harder formant drop, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, fold bass, growl answer, snare roll, side percussion, kick opens, harder formant drop, 2 bars]
 
-[build-up - snare roll, stacked 808, rapid hi-hats, formant bass melody, wide mids, kick tightens, chest-sub 808, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, formant bass melody, wide mids, kick tightens, chest-sub 808, 2 bars]
 
-[inst - offbeat hats, fold bass, wide mid reese counterline, side hats, snare answers, rapid hi-hats denser, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, wide mid reese counterline, side hats, snare answers, rapid hi-hats denser, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide low-mid, stacked 808, offbeat push, growl hold, 6 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, formant answer, wide low-mid, offbeat push, growl hold, 2 bars]
 
-[inst - ghost snare, fold bass, wide mid growl, side percussion, straight hats, stacked growl wreck, 12 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid growl, side percussion, straight hats, stacked growl wreck, 2 bars]
 
-[build-up - snare roll, stacked 808, kick pattern flip, call-response reese, wide mids, triplet hats, tearout warp, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, call-response reese, wide mids, triplet hats, tearout warp, 2 bars]
 
-[drop - wreck formant warped drop, fold bass, growl answer, snare roll, side percussion, kick opens, 8 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, fold bass, growl answer, snare roll, side hats, backbeat shove, full send drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide mids, stacked 808, late snare, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, formant bass melody, wide low-mid, ghost notes, low 808 wreck, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant answer, wide low-mid, offbeat push, 4 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, fold bass, wide mid reese counterline, offbeat hats, side percussion, dry hats, harder growl drop, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, formant answer, wide mids, wide hat bed, axle grind, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, fold bass, wide mid growl, ghost snare, side hats, mono kick, kick holds, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, call-response reese, wide low-mid, side snare, hats denser, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, growl answer, side percussion, rolling hats, growl ride, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, stacked 808, formant bass melody, rapid hi-hats, wide mids, late snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, wide mid reese counterline, side hats, early kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, stacked 808, formant answer, trap drums denser, wide low-mid, syncopated hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid growl, side percussion, open hat, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, call-response reese, wide mids, closed hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, fold bass, growl answer, snare roll, side hats, room snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, formant bass melody, wide low-mid, tight kick, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, fold bass, wide mid reese counterline, offbeat hats, side percussion, loose hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, wide mid reese counterline, side percussion, chopped hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, fold bass, wide mid growl, ghost snare, side hats, chopped hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, call-response reese, wide low-mid, hat density up, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, fold bass, growl answer, snare roll, side percussion, kick opens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, formant bass melody, wide mids, late snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, wide mid reese counterline, wide mids, snare answers, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, stacked 808, wide mid reese counterline, kick pattern flip, side hats, syncopated hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, formant answer, side hats, triplet hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, formant answer, side hats, room snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, fold bass, wide mid growl, trap drums denser, wide low-mid, ghost notes, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, call-response reese, wide low-mid, loose hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, call-response reese, side percussion, mono kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, stacked 808, growl answer, offbeat hats, side percussion, hat density up, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, growl answer, wide mids, rolling hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, formant bass melody, wide mids, kick tightens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, wide mid reese counterline, wide mids, syncopated hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, stacked 808, wide mid reese counterline, offbeat hats, side hats, straight hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, formant answer, side hats, closed hat, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, wide mid growl, wide low-mid, backbeat shove, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, fold bass, wide mid growl, rapid hi-hats, wide low-mid, loose hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, call-response reese, side percussion, wide hat bed, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, call-response reese, side percussion, chopped hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, stacked 808, growl answer, snare roll, side percussion, side snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, formant bass melody, wide mids, kick tightens, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant bass melody, wide mids, early kick, 2 bars]
+
+[outro - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant answer, wide low-mid, offbeat push, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -918,14 +1998,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `153.0` |
+| 0 | `151.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `153.0` |
+| 0 | `151.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -934,47 +2014,123 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped …` |
-| 2 | `[build-up - snare roll, mono chest-sub, ghost snare, growl answer, side percuss…` |
+| 2 | `[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, …` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/04-weigh-station` |
 
 ```text
-brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
+brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, mono chest-sub, ghost snare, growl answer, side percussion, wide hat bed, stacked 808 warp, 4 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, growl answer, side percussion, wide hat bed, stacked 808 warp, 2 bars]
 
-[drop - full send growl warped drop, low chest-sub, formant bass melody, kick pattern flip, wide mids, mono kick, brostep, heavy brostep drop, 10 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, low chest-sub, formant bass melody, kick pattern flip, wide mids, mono kick, brostep, heavy brostep drop, 2 bars]
 
-[build-up - snare roll, mono chest-sub, snare roll, wide mid reese counterline, side hats, side snare, weigh wreck, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, wide mid reese counterline, side hats, side snare, weigh wreck, 2 bars]
 
-[drop - stacked warped drop, low chest-sub, formant answer, rapid hi-hats, wide low-mid, rolling hats, rapid hi-hats roll, 10 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant answer, wide low-mid, rolling hats, rapid hi-hats roll, 2 bars]
 
-[build-up - snare roll, mono chest-sub, offbeat hats, wide mid growl, side percussion, late snare, growl hold, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, wide mid growl, side percussion, late snare, growl hold, 2 bars]
 
-[inst - trap drums denser, low chest-sub, call-response reese, wide mids, early kick, chest-sub wall, 8 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, low chest-sub, call-response reese, trap drums denser, wide mids, early kick, harder growl drop, 2 bars]
 
-[build-up - snare roll, mono chest-sub, ghost snare, growl answer, side hats, syncopated hats, formant 808, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, growl answer, side hats, syncopated hats, chest-sub wall, 2 bars]
 
-[inst - kick pattern flip, low chest-sub, formant bass melody, wide low-mid, open hat, snare roll, 8 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, formant bass melody, wide low-mid, open hat, formant 808, 2 bars]
 
-[drop - stacked warped drop, mono chest-sub, wide mid reese counterline, snare roll, side percussion, closed hat, harder growl drop, 10 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, wide mid reese counterline, side percussion, closed hat, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide mids, low chest-sub, room snare, 808 punch, 8 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant answer, wide mids, room snare, 808 punch, 2 bars]
 
-[inst - offbeat hats, mono chest-sub, wide mid growl, side hats, tight kick, body bass wreck, 4 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, mono chest-sub, wide mid growl, offbeat hats, side hats, tight kick, full send drop, 2 bars]
 
-[build-up - snare roll, low chest-sub, trap drums denser, call-response reese, wide low-mid, loose hats, warped brostep, 6 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, call-response reese, wide low-mid, loose hats, body bass wreck, 2 bars]
 
-[inst - ghost snare, mono chest-sub, growl answer, side percussion, pushed snare, kick holds, 4 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, mono chest-sub, growl answer, ghost snare, side percussion, pushed snare, warped brostep, 2 bars]
 
-[drop - stacked warped drop, low chest-sub, formant bass melody, kick pattern flip, wide mids, chopped hats, full send drop, 10 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, formant bass melody, wide mids, chopped hats, kick holds, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, side percussion, mono chest-sub, kick tightens, 8 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, wide mid reese counterline, side hats, hat density up, 808 ride, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, wide low-mid, straight hats, 4 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, low chest-sub, formant answer, rapid hi-hats, wide low-mid, kick opens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, wide mid growl, side percussion, kick tightens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, call-response reese, wide mids, snare answers, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, mono chest-sub, growl answer, ghost snare, side hats, offbeat push, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, formant bass melody, wide low-mid, straight hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, mono chest-sub, wide mid reese counterline, snare roll, side percussion, triplet hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant answer, wide mids, backbeat shove, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, mono chest-sub, wide mid growl, offbeat hats, side hats, ghost notes, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, call-response reese, wide low-mid, dry hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, call-response reese, wide low-mid, mono kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, low chest-sub, formant bass melody, kick pattern flip, wide mids, mono kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, formant bass melody, wide mids, rolling hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, wide mid reese counterline, side hats, late snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, mono chest-sub, wide mid growl, offbeat hats, side percussion, late snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, call-response reese, wide mids, early kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, mono chest-sub, growl answer, ghost snare, side hats, syncopated hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, growl answer, side hats, closed hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, formant bass melody, wide low-mid, room snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, wide mid reese counterline, side percussion, tight kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, mono chest-sub, wide mid growl, offbeat hats, side hats, tight kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, call-response reese, wide low-mid, loose hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, growl answer, side percussion, pushed snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, formant bass melody, wide mids, chopped hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, wide mid reese counterline, side hats, hat density up, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, low chest-sub, formant answer, rapid hi-hats, wide low-mid, kick opens, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, wide mid growl, side percussion, kick tightens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, low chest-sub, call-response reese, trap drums denser, wide mids, snare answers, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, formant answer, wide low-mid, snare answers, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, call-response reese, side percussion, early kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, call-response reese, wide mids, straight hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, low chest-sub, growl answer, rapid hi-hats, wide mids, closed hat, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, growl answer, side hats, backbeat shove, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, formant bass melody, side hats, tight kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, mono chest-sub, wide mid reese counterline, kick pattern flip, wide low-mid, wide hat bed, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, wide mid reese counterline, wide low-mid, chopped hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, formant answer, wide low-mid, side snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, low chest-sub, formant answer, ghost snare, side percussion, kick opens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, wide mid growl, side percussion, late snare, 2 bars]
+
+[outro - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, wide low-mid, straight hats, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -982,11 +2138,11 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped b
 | Slot | Value |
 | --- | --- |
 | 0 | `brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped …` |
-| 1 | `[build-up - snare roll, mono chest-sub, ghost snare, growl answer, side percuss…` |
+| 1 | `[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, …` |
 | 2 | `467` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `153.0` |
+| 5 | `151.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `D major` |
@@ -998,41 +2154,117 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped b
 | 14 | `0.0` |
 
 ```text
-brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
+brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, mono chest-sub, ghost snare, growl answer, side percussion, wide hat bed, stacked 808 warp, 4 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, growl answer, side percussion, wide hat bed, stacked 808 warp, 2 bars]
 
-[drop - full send growl warped drop, low chest-sub, formant bass melody, kick pattern flip, wide mids, mono kick, brostep, heavy brostep drop, 10 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, low chest-sub, formant bass melody, kick pattern flip, wide mids, mono kick, brostep, heavy brostep drop, 2 bars]
 
-[build-up - snare roll, mono chest-sub, snare roll, wide mid reese counterline, side hats, side snare, weigh wreck, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, wide mid reese counterline, side hats, side snare, weigh wreck, 2 bars]
 
-[drop - stacked warped drop, low chest-sub, formant answer, rapid hi-hats, wide low-mid, rolling hats, rapid hi-hats roll, 10 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant answer, wide low-mid, rolling hats, rapid hi-hats roll, 2 bars]
 
-[build-up - snare roll, mono chest-sub, offbeat hats, wide mid growl, side percussion, late snare, growl hold, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, wide mid growl, side percussion, late snare, growl hold, 2 bars]
 
-[inst - trap drums denser, low chest-sub, call-response reese, wide mids, early kick, chest-sub wall, 8 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, low chest-sub, call-response reese, trap drums denser, wide mids, early kick, harder growl drop, 2 bars]
 
-[build-up - snare roll, mono chest-sub, ghost snare, growl answer, side hats, syncopated hats, formant 808, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, growl answer, side hats, syncopated hats, chest-sub wall, 2 bars]
 
-[inst - kick pattern flip, low chest-sub, formant bass melody, wide low-mid, open hat, snare roll, 8 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, formant bass melody, wide low-mid, open hat, formant 808, 2 bars]
 
-[drop - stacked warped drop, mono chest-sub, wide mid reese counterline, snare roll, side percussion, closed hat, harder growl drop, 10 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, wide mid reese counterline, side percussion, closed hat, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide mids, low chest-sub, room snare, 808 punch, 8 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant answer, wide mids, room snare, 808 punch, 2 bars]
 
-[inst - offbeat hats, mono chest-sub, wide mid growl, side hats, tight kick, body bass wreck, 4 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, mono chest-sub, wide mid growl, offbeat hats, side hats, tight kick, full send drop, 2 bars]
 
-[build-up - snare roll, low chest-sub, trap drums denser, call-response reese, wide low-mid, loose hats, warped brostep, 6 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, call-response reese, wide low-mid, loose hats, body bass wreck, 2 bars]
 
-[inst - ghost snare, mono chest-sub, growl answer, side percussion, pushed snare, kick holds, 4 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, mono chest-sub, growl answer, ghost snare, side percussion, pushed snare, warped brostep, 2 bars]
 
-[drop - stacked warped drop, low chest-sub, formant bass melody, kick pattern flip, wide mids, chopped hats, full send drop, 10 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, formant bass melody, wide mids, chopped hats, kick holds, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, side percussion, mono chest-sub, kick tightens, 8 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, wide mid reese counterline, side hats, hat density up, 808 ride, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, wide low-mid, straight hats, 4 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, low chest-sub, formant answer, rapid hi-hats, wide low-mid, kick opens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, wide mid growl, side percussion, kick tightens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, call-response reese, wide mids, snare answers, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, mono chest-sub, growl answer, ghost snare, side hats, offbeat push, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, formant bass melody, wide low-mid, straight hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, mono chest-sub, wide mid reese counterline, snare roll, side percussion, triplet hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant answer, wide mids, backbeat shove, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, mono chest-sub, wide mid growl, offbeat hats, side hats, ghost notes, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, call-response reese, wide low-mid, dry hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, call-response reese, wide low-mid, mono kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, low chest-sub, formant bass melody, kick pattern flip, wide mids, mono kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, formant bass melody, wide mids, rolling hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, wide mid reese counterline, side hats, late snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, mono chest-sub, wide mid growl, offbeat hats, side percussion, late snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, call-response reese, wide mids, early kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, mono chest-sub, growl answer, ghost snare, side hats, syncopated hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, growl answer, side hats, closed hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, formant bass melody, wide low-mid, room snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, wide mid reese counterline, side percussion, tight kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, mono chest-sub, wide mid growl, offbeat hats, side hats, tight kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, call-response reese, wide low-mid, loose hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, growl answer, side percussion, pushed snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, formant bass melody, wide mids, chopped hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, wide mid reese counterline, side hats, hat density up, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, low chest-sub, formant answer, rapid hi-hats, wide low-mid, kick opens, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, wide mid growl, side percussion, kick tightens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, low chest-sub, call-response reese, trap drums denser, wide mids, snare answers, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, formant answer, wide low-mid, snare answers, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, call-response reese, side percussion, early kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, call-response reese, wide mids, straight hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, low chest-sub, growl answer, rapid hi-hats, wide mids, closed hat, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, growl answer, side hats, backbeat shove, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, formant bass melody, side hats, tight kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, mono chest-sub, wide mid reese counterline, kick pattern flip, wide low-mid, wide hat bed, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, wide mid reese counterline, wide low-mid, chopped hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, formant answer, wide low-mid, side snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, low chest-sub, formant answer, ghost snare, side percussion, kick opens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, wide mid growl, side percussion, late snare, 2 bars]
+
+[outro - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, wide low-mid, straight hats, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1131,49 +2363,125 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 8…` |
-| 2 | `[build-up - snare roll, stacked 808, rapid hi-hats, wide mid growl, side hats, …` |
+| 2 | `[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/05-black-ice` |
 
 ```text
-riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
+riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, stacked 808, rapid hi-hats, wide mid growl, side hats, kick tightens, wobble wreck, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, wide mid growl, side hats, kick tightens, wobble wreck, 2 bars]
 
-[drop - full send formant warped drop, fold bass, call-response reese, offbeat hats, wide low-mid, snare answers, wobble bass, heavy riddim drop, 10 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, fold bass, call-response reese, offbeat hats, wide low-mid, snare answers, wobble bass, heavy riddim drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, side percussion, stacked 808, offbeat push, warped ice, 4 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, growl answer, side percussion, offbeat push, warped ice, 2 bars]
 
-[drop - stacked growl warped drop, fold bass, formant bass melody, ghost snare, wide mids, straight hats, metal hats roll, 12 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, formant bass melody, wide mids, straight hats, metal hats roll, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, side hats, stacked 808, triplet hats, wobble sustain, 4 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, stacked 808, wide mid reese counterline, kick pattern flip, side hats, triplet hats, wobble sustain, 2 bars]
 
-[inst - snare roll, fold bass, formant answer, wide low-mid, backbeat shove, chest growl wreck, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, formant answer, wide low-mid, backbeat shove, chest growl wreck, 2 bars]
 
-[build-up - snare roll, stacked 808, rapid hi-hats, wide mid growl, side percussion, ghost notes, 808 crush, 4 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, wide mid growl, side percussion, ghost notes, 808 crush, 2 bars]
 
-[inst - offbeat hats, fold bass, call-response reese, wide mids, dry hats, rapid hi-hats denser, 10 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, fold bass, call-response reese, offbeat hats, wide mids, dry hats, harder growl drop, 2 bars]
 
-[build-up - snare roll, stacked 808, trap drums denser, growl answer, side hats, wide hat bed, wobble hold, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, growl answer, side hats, wide hat bed, rapid hi-hats denser, 2 bars]
 
-[inst - ghost snare, fold bass, formant bass melody, wide low-mid, mono kick, sub crush wreck, 6 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, fold bass, formant bass melody, ghost snare, wide low-mid, mono kick, wobble hold, 2 bars]
 
-[build-up - snare roll, stacked 808, kick pattern flip, wide mid reese counterline, side percussion, side snare, chest formant, 4 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, wide mid reese counterline, side percussion, side snare, sub crush wreck, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide mids, fold bass, rolling hats, snare roll, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, formant answer, wide mids, rolling hats, chest formant, 2 bars]
 
-[inst - rapid hi-hats, stacked 808, wide mid growl, side hats, late snare, growl bass hold, 4 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, stacked 808, wide mid growl, rapid hi-hats, side hats, late snare, full send drop, 2 bars]
 
-[drop - stacked growl warped drop, fold bass, call-response reese, offbeat hats, wide low-mid, early kick, harder growl drop, 12 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, call-response reese, wide low-mid, early kick, snare roll, 2 bars]
 
-[build-up - snare roll, stacked 808, trap drums denser, growl answer, side percussion, syncopated hats, low rumble wreck, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, stacked 808, growl answer, trap drums denser, side percussion, syncopated hats, growl bass hold, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide mids, fold bass, open hat, riddim 808, 8 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, formant bass melody, wide mids, open hat, low rumble wreck, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, wide mid reese counterline, side hats, triplet hats, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, wide mid reese counterline, side hats, closed hat, riddim 808, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, fold bass, formant answer, snare roll, wide low-mid, room snare, harder warped drop, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, wide mid growl, side percussion, tight kick, kick holds, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, call-response reese, wide mids, loose hats, hats denser, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, stacked 808, growl answer, trap drums denser, side hats, pushed snare, wobble ride, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, formant bass melody, wide low-mid, chopped hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, stacked 808, wide mid reese counterline, kick pattern flip, side percussion, hat density up, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, formant answer, wide mids, kick opens, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, wide mid growl, side hats, kick tightens, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, fold bass, call-response reese, offbeat hats, wide low-mid, snare answers, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, call-response reese, wide low-mid, straight hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, growl answer, side percussion, triplet hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, stacked 808, wide mid reese counterline, kick pattern flip, side hats, triplet hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, formant answer, wide low-mid, backbeat shove, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, stacked 808, wide mid growl, rapid hi-hats, side percussion, ghost notes, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, call-response reese, wide mids, dry hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, stacked 808, growl answer, trap drums denser, side hats, wide hat bed, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, formant bass melody, wide low-mid, mono kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, stacked 808, wide mid reese counterline, kick pattern flip, side percussion, side snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, formant answer, wide mids, rolling hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, stacked 808, wide mid growl, rapid hi-hats, side hats, late snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, wide mid growl, side hats, syncopated hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, growl answer, side percussion, syncopated hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, formant bass melody, wide mids, open hat, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, wide mid reese counterline, side hats, closed hat, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, formant answer, wide low-mid, room snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, stacked 808, wide mid growl, rapid hi-hats, side percussion, tight kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, call-response reese, wide mids, loose hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, stacked 808, growl answer, trap drums denser, side hats, pushed snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, growl answer, side hats, hat density up, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, stacked 808, wide mid reese counterline, kick pattern flip, side percussion, hat density up, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, wide mid reese counterline, side percussion, kick tightens, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, stacked 808, wide mid growl, rapid hi-hats, side hats, kick tightens, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, call-response reese, wide low-mid, snare answers, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, stacked 808, growl answer, trap drums denser, side percussion, offbeat push, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, formant bass melody, wide mids, straight hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, wide mid reese counterline, side hats, triplet hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, fold bass, formant answer, snare roll, wide low-mid, backbeat shove, 2 bars]
+
+[outro - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, wide mid reese counterline, side hats, triplet hats, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -1181,7 +2489,7 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 80
 | Slot | Value |
 | --- | --- |
 | 0 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 8…` |
-| 1 | `[build-up - snare roll, stacked 808, rapid hi-hats, wide mid growl, side hats, …` |
+| 1 | `[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays…` |
 | 2 | `479` |
 | 3 | `fixed` |
 | 4 | `172` |
@@ -1197,43 +2505,119 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 80
 | 14 | `0.0` |
 
 ```text
-riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
+riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, stacked 808, rapid hi-hats, wide mid growl, side hats, kick tightens, wobble wreck, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, wide mid growl, side hats, kick tightens, wobble wreck, 2 bars]
 
-[drop - full send formant warped drop, fold bass, call-response reese, offbeat hats, wide low-mid, snare answers, wobble bass, heavy riddim drop, 10 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, fold bass, call-response reese, offbeat hats, wide low-mid, snare answers, wobble bass, heavy riddim drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, side percussion, stacked 808, offbeat push, warped ice, 4 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, growl answer, side percussion, offbeat push, warped ice, 2 bars]
 
-[drop - stacked growl warped drop, fold bass, formant bass melody, ghost snare, wide mids, straight hats, metal hats roll, 12 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, formant bass melody, wide mids, straight hats, metal hats roll, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, side hats, stacked 808, triplet hats, wobble sustain, 4 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, stacked 808, wide mid reese counterline, kick pattern flip, side hats, triplet hats, wobble sustain, 2 bars]
 
-[inst - snare roll, fold bass, formant answer, wide low-mid, backbeat shove, chest growl wreck, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, formant answer, wide low-mid, backbeat shove, chest growl wreck, 2 bars]
 
-[build-up - snare roll, stacked 808, rapid hi-hats, wide mid growl, side percussion, ghost notes, 808 crush, 4 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, wide mid growl, side percussion, ghost notes, 808 crush, 2 bars]
 
-[inst - offbeat hats, fold bass, call-response reese, wide mids, dry hats, rapid hi-hats denser, 10 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, fold bass, call-response reese, offbeat hats, wide mids, dry hats, harder growl drop, 2 bars]
 
-[build-up - snare roll, stacked 808, trap drums denser, growl answer, side hats, wide hat bed, wobble hold, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, growl answer, side hats, wide hat bed, rapid hi-hats denser, 2 bars]
 
-[inst - ghost snare, fold bass, formant bass melody, wide low-mid, mono kick, sub crush wreck, 6 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, fold bass, formant bass melody, ghost snare, wide low-mid, mono kick, wobble hold, 2 bars]
 
-[build-up - snare roll, stacked 808, kick pattern flip, wide mid reese counterline, side percussion, side snare, chest formant, 4 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, wide mid reese counterline, side percussion, side snare, sub crush wreck, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide mids, fold bass, rolling hats, snare roll, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, formant answer, wide mids, rolling hats, chest formant, 2 bars]
 
-[inst - rapid hi-hats, stacked 808, wide mid growl, side hats, late snare, growl bass hold, 4 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, stacked 808, wide mid growl, rapid hi-hats, side hats, late snare, full send drop, 2 bars]
 
-[drop - stacked growl warped drop, fold bass, call-response reese, offbeat hats, wide low-mid, early kick, harder growl drop, 12 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, call-response reese, wide low-mid, early kick, snare roll, 2 bars]
 
-[build-up - snare roll, stacked 808, trap drums denser, growl answer, side percussion, syncopated hats, low rumble wreck, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, stacked 808, growl answer, trap drums denser, side percussion, syncopated hats, growl bass hold, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide mids, fold bass, open hat, riddim 808, 8 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, formant bass melody, wide mids, open hat, low rumble wreck, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, wide mid reese counterline, side hats, triplet hats, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, wide mid reese counterline, side hats, closed hat, riddim 808, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, fold bass, formant answer, snare roll, wide low-mid, room snare, harder warped drop, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, wide mid growl, side percussion, tight kick, kick holds, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, call-response reese, wide mids, loose hats, hats denser, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, stacked 808, growl answer, trap drums denser, side hats, pushed snare, wobble ride, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, formant bass melody, wide low-mid, chopped hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, stacked 808, wide mid reese counterline, kick pattern flip, side percussion, hat density up, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, formant answer, wide mids, kick opens, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, wide mid growl, side hats, kick tightens, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, fold bass, call-response reese, offbeat hats, wide low-mid, snare answers, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, call-response reese, wide low-mid, straight hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, growl answer, side percussion, triplet hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, stacked 808, wide mid reese counterline, kick pattern flip, side hats, triplet hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, formant answer, wide low-mid, backbeat shove, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, stacked 808, wide mid growl, rapid hi-hats, side percussion, ghost notes, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, call-response reese, wide mids, dry hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, stacked 808, growl answer, trap drums denser, side hats, wide hat bed, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, formant bass melody, wide low-mid, mono kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, stacked 808, wide mid reese counterline, kick pattern flip, side percussion, side snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, formant answer, wide mids, rolling hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, stacked 808, wide mid growl, rapid hi-hats, side hats, late snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, wide mid growl, side hats, syncopated hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, growl answer, side percussion, syncopated hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, formant bass melody, wide mids, open hat, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, wide mid reese counterline, side hats, closed hat, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, formant answer, wide low-mid, room snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, stacked 808, wide mid growl, rapid hi-hats, side percussion, tight kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, call-response reese, wide mids, loose hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, stacked 808, growl answer, trap drums denser, side hats, pushed snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, growl answer, side hats, hat density up, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, stacked 808, wide mid reese counterline, kick pattern flip, side percussion, hat density up, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, wide mid reese counterline, side percussion, kick tightens, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, stacked 808, wide mid growl, rapid hi-hats, side hats, kick tightens, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, call-response reese, wide low-mid, snare answers, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, stacked 808, growl answer, trap drums denser, side percussion, offbeat push, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, formant bass melody, wide mids, straight hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, wide mid reese counterline, side hats, triplet hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, fold bass, formant answer, snare roll, wide low-mid, backbeat shove, 2 bars]
+
+[outro - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, wide mid reese counterline, side hats, triplet hats, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1316,14 +2700,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `170.0` |
+| 0 | `187.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `170.0` |
+| 0 | `187.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -1332,53 +2716,149 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `color bass, formant bass, chest-sub, rapid hi-hats, trap drums, dual-action ped…` |
-| 2 | `[build-up - snare roll, low chest-sub, snare roll, wide mid growl, wide mids, s…` |
+| 2 | `[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/06-high-beams` |
 
 ```text
-color bass, formant bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
+color bass, formant bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, low chest-sub, snare roll, wide mid growl, wide mids, straight hats, dual-action pedal bass, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, snare roll, wide mid growl, wide mids, straight hats, dual-action pedal bass, 2 bars]
 
-[drop - harder growl warped drop, mono chest-sub, call-response reese, rapid hi-hats, side hats, triplet hats, color bass, dual-action pedal bass, heavy color drop, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, mono chest-sub, call-response reese, rapid hi-hats, side hats, triplet hats, color bass, dual-action pedal bass, heavy color drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide low-mid, low chest-sub, backbeat shove, chest-sub 808 warp, 6 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, offbeat hats, growl answer, wide low-mid, backbeat shove, chest-sub 808 warp, 2 bars]
 
-[inst - trap drums denser, mono chest-sub, formant bass melody, side percussion, ghost notes, pedal 808 hold, 4 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, mono chest-sub, formant bass melody, trap drums denser, side percussion, ghost notes, pedal 808 hold, 2 bars]
 
-[build-up - snare roll, low chest-sub, ghost snare, wide mid reese counterline, wide mids, dry hats, rapid hi-hats roll, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, wide mid reese counterline, wide mids, dry hats, rapid hi-hats roll, 2 bars]
 
-[drop - heavy reese warped drop, mono chest-sub, formant answer, kick pattern flip, side hats, wide hat bed, harder stacked drop, 10 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant answer, side hats, wide hat bed, hybrid 808 wall, 2 bars]
 
-[inst - snare roll, low chest-sub, wide mid growl, wide low-mid, mono kick, hybrid 808 wall, 4 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, low chest-sub, wide mid growl, snare roll, wide low-mid, mono kick, harder stacked drop, 2 bars]
 
-[build-up - snare roll, mono chest-sub, rapid hi-hats, call-response reese, side percussion, side snare, color formant, 6 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, mono chest-sub, call-response reese, side percussion, side snare, color formant, 2 bars]
 
-[inst - offbeat hats, low chest-sub, growl answer, wide mids, rolling hats, snare roll, 4 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, low chest-sub, growl answer, offbeat hats, wide mids, rolling hats, snare roll, 2 bars]
 
-[drop - stacked formant warped drop, mono chest-sub, formant bass melody, trap drums denser, side hats, late snare, chest-sub 808, 8 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, trap drums denser, formant bass melody, side hats, late snare, chest-sub 808, 2 bars]
 
-[inst - ghost snare, low chest-sub, wide mid reese counterline, wide low-mid, early kick, body sub wreck, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, wide mid reese counterline, wide low-mid, early kick, body sub wreck, 2 bars]
 
-[drop - harder growl warped drop, mono chest-sub, formant answer, kick pattern flip, side percussion, syncopated hats, full send drop, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, mono chest-sub, formant answer, kick pattern flip, side percussion, syncopated hats, full send drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, low chest-sub, open hat, warped color, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid growl, wide mids, open hat, warped color, 2 bars]
 
-[drop - wreck warped drop, mono chest-sub, call-response reese, rapid hi-hats, side hats, closed hat, harder growl drop, 8 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, call-response reese, side hats, closed hat, stacked 808 wreck, 2 bars]
 
-[inst - offbeat hats, low chest-sub, growl answer, wide low-mid, room snare, stacked 808 wreck, 10 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, growl answer, wide low-mid, room snare, pedal warp, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, mono chest-sub, tight kick, pedal warp, 8 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, trap drums denser, formant bass melody, side percussion, tight kick, kick holds, 2 bars]
 
-[inst - ghost snare, low chest-sub, wide mid reese counterline, wide mids, loose hats, kick holds, 6 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, wide mid reese counterline, wide mids, loose hats, hats denser, 2 bars]
 
-[build-up - snare roll, mono chest-sub, kick pattern flip, formant answer, side hats, pushed snare, hats denser, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, mono chest-sub, formant answer, kick pattern flip, side hats, pushed snare, harder growl drop, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, wide mid growl, wide mids, straight hats, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid growl, wide low-mid, chopped hats, color ride, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, mono chest-sub, call-response reese, rapid hi-hats, side percussion, hat density up, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, growl answer, wide mids, kick opens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, mono chest-sub, formant bass melody, trap drums denser, side hats, kick tightens, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, wide mid reese counterline, wide low-mid, snare answers, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant answer, side percussion, offbeat push, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, low chest-sub, wide mid growl, snare roll, wide mids, straight hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, call-response reese, side hats, triplet hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, low chest-sub, growl answer, offbeat hats, wide low-mid, backbeat shove, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, trap drums denser, formant bass melody, side percussion, ghost notes, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, low chest-sub, wide mid reese counterline, ghost snare, wide mids, dry hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, wide mid reese counterline, wide mids, mono kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, snare roll, wide mid growl, wide low-mid, mono kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, wide mid growl, wide low-mid, rolling hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, low chest-sub, growl answer, offbeat hats, wide mids, rolling hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, formant bass melody, side hats, late snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, low chest-sub, wide mid reese counterline, ghost snare, wide low-mid, early kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, kick pattern flip, formant answer, side percussion, syncopated hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, formant answer, side percussion, closed hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, wide mid growl, wide mids, room snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, low chest-sub, growl answer, offbeat hats, wide low-mid, room snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, growl answer, wide low-mid, loose hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, low chest-sub, wide mid reese counterline, ghost snare, wide mids, loose hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, kick pattern flip, formant answer, side hats, pushed snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, formant answer, side hats, hat density up, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, call-response reese, side percussion, hat density up, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, call-response reese, side percussion, kick tightens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, mono chest-sub, formant bass melody, trap drums denser, side hats, kick tightens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, wide mid reese counterline, wide low-mid, snare answers, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, kick pattern flip, formant answer, side percussion, offbeat push, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid growl, wide mids, straight hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, wide mid growl, wide mids, backbeat shove, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, growl answer, wide low-mid, backbeat shove, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, growl answer, wide low-mid, dry hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, wide mid reese counterline, wide mids, dry hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, mono chest-sub, formant answer, kick pattern flip, side hats, wide hat bed, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid growl, wide low-mid, mono kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, call-response reese, side percussion, side snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, growl answer, wide mids, rolling hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, mono chest-sub, formant bass melody, trap drums denser, side hats, late snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, formant bass melody, side hats, syncopated hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, mono chest-sub, formant answer, kick pattern flip, side percussion, syncopated hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, snare roll, wide mid growl, wide mids, open hat, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, mono chest-sub, call-response reese, side hats, closed hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, offbeat hats, growl answer, wide low-mid, room snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, formant bass melody, side percussion, tight kick, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, low chest-sub, wide mid reese counterline, ghost snare, wide mids, loose hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, wide mid reese counterline, wide mids, chopped hats, 2 bars]
+
+[outro - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, wide mid growl, wide mids, straight hats, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -1386,11 +2866,11 @@ color bass, formant bass, chest-sub, rapid hi-hats, trap drums, dual-action peda
 | Slot | Value |
 | --- | --- |
 | 0 | `color bass, formant bass, chest-sub, rapid hi-hats, trap drums, dual-action ped…` |
-| 1 | `[build-up - snare roll, low chest-sub, snare roll, wide mid growl, wide mids, s…` |
+| 1 | `[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no…` |
 | 2 | `487` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `170.0` |
+| 5 | `187.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A major` |
@@ -1402,47 +2882,143 @@ color bass, formant bass, chest-sub, rapid hi-hats, trap drums, dual-action peda
 | 14 | `0.0` |
 
 ```text
-color bass, formant bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
+color bass, formant bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, low chest-sub, snare roll, wide mid growl, wide mids, straight hats, dual-action pedal bass, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, snare roll, wide mid growl, wide mids, straight hats, dual-action pedal bass, 2 bars]
 
-[drop - harder growl warped drop, mono chest-sub, call-response reese, rapid hi-hats, side hats, triplet hats, color bass, dual-action pedal bass, heavy color drop, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, mono chest-sub, call-response reese, rapid hi-hats, side hats, triplet hats, color bass, dual-action pedal bass, heavy color drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide low-mid, low chest-sub, backbeat shove, chest-sub 808 warp, 6 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, offbeat hats, growl answer, wide low-mid, backbeat shove, chest-sub 808 warp, 2 bars]
 
-[inst - trap drums denser, mono chest-sub, formant bass melody, side percussion, ghost notes, pedal 808 hold, 4 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, mono chest-sub, formant bass melody, trap drums denser, side percussion, ghost notes, pedal 808 hold, 2 bars]
 
-[build-up - snare roll, low chest-sub, ghost snare, wide mid reese counterline, wide mids, dry hats, rapid hi-hats roll, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, wide mid reese counterline, wide mids, dry hats, rapid hi-hats roll, 2 bars]
 
-[drop - heavy reese warped drop, mono chest-sub, formant answer, kick pattern flip, side hats, wide hat bed, harder stacked drop, 10 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant answer, side hats, wide hat bed, hybrid 808 wall, 2 bars]
 
-[inst - snare roll, low chest-sub, wide mid growl, wide low-mid, mono kick, hybrid 808 wall, 4 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, low chest-sub, wide mid growl, snare roll, wide low-mid, mono kick, harder stacked drop, 2 bars]
 
-[build-up - snare roll, mono chest-sub, rapid hi-hats, call-response reese, side percussion, side snare, color formant, 6 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, mono chest-sub, call-response reese, side percussion, side snare, color formant, 2 bars]
 
-[inst - offbeat hats, low chest-sub, growl answer, wide mids, rolling hats, snare roll, 4 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, low chest-sub, growl answer, offbeat hats, wide mids, rolling hats, snare roll, 2 bars]
 
-[drop - stacked formant warped drop, mono chest-sub, formant bass melody, trap drums denser, side hats, late snare, chest-sub 808, 8 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, trap drums denser, formant bass melody, side hats, late snare, chest-sub 808, 2 bars]
 
-[inst - ghost snare, low chest-sub, wide mid reese counterline, wide low-mid, early kick, body sub wreck, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, wide mid reese counterline, wide low-mid, early kick, body sub wreck, 2 bars]
 
-[drop - harder growl warped drop, mono chest-sub, formant answer, kick pattern flip, side percussion, syncopated hats, full send drop, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, mono chest-sub, formant answer, kick pattern flip, side percussion, syncopated hats, full send drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, low chest-sub, open hat, warped color, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid growl, wide mids, open hat, warped color, 2 bars]
 
-[drop - wreck warped drop, mono chest-sub, call-response reese, rapid hi-hats, side hats, closed hat, harder growl drop, 8 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, call-response reese, side hats, closed hat, stacked 808 wreck, 2 bars]
 
-[inst - offbeat hats, low chest-sub, growl answer, wide low-mid, room snare, stacked 808 wreck, 10 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, growl answer, wide low-mid, room snare, pedal warp, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, mono chest-sub, tight kick, pedal warp, 8 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, trap drums denser, formant bass melody, side percussion, tight kick, kick holds, 2 bars]
 
-[inst - ghost snare, low chest-sub, wide mid reese counterline, wide mids, loose hats, kick holds, 6 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, wide mid reese counterline, wide mids, loose hats, hats denser, 2 bars]
 
-[build-up - snare roll, mono chest-sub, kick pattern flip, formant answer, side hats, pushed snare, hats denser, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, mono chest-sub, formant answer, kick pattern flip, side hats, pushed snare, harder growl drop, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, wide mid growl, wide mids, straight hats, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid growl, wide low-mid, chopped hats, color ride, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, mono chest-sub, call-response reese, rapid hi-hats, side percussion, hat density up, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, growl answer, wide mids, kick opens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, mono chest-sub, formant bass melody, trap drums denser, side hats, kick tightens, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, wide mid reese counterline, wide low-mid, snare answers, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant answer, side percussion, offbeat push, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, low chest-sub, wide mid growl, snare roll, wide mids, straight hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, call-response reese, side hats, triplet hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, low chest-sub, growl answer, offbeat hats, wide low-mid, backbeat shove, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, trap drums denser, formant bass melody, side percussion, ghost notes, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, low chest-sub, wide mid reese counterline, ghost snare, wide mids, dry hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, wide mid reese counterline, wide mids, mono kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, snare roll, wide mid growl, wide low-mid, mono kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, wide mid growl, wide low-mid, rolling hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, low chest-sub, growl answer, offbeat hats, wide mids, rolling hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, formant bass melody, side hats, late snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, low chest-sub, wide mid reese counterline, ghost snare, wide low-mid, early kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, kick pattern flip, formant answer, side percussion, syncopated hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, formant answer, side percussion, closed hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, wide mid growl, wide mids, room snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, low chest-sub, growl answer, offbeat hats, wide low-mid, room snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, growl answer, wide low-mid, loose hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, low chest-sub, wide mid reese counterline, ghost snare, wide mids, loose hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, kick pattern flip, formant answer, side hats, pushed snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, formant answer, side hats, hat density up, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, call-response reese, side percussion, hat density up, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, call-response reese, side percussion, kick tightens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, mono chest-sub, formant bass melody, trap drums denser, side hats, kick tightens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, wide mid reese counterline, wide low-mid, snare answers, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, kick pattern flip, formant answer, side percussion, offbeat push, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid growl, wide mids, straight hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, wide mid growl, wide mids, backbeat shove, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, growl answer, wide low-mid, backbeat shove, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, growl answer, wide low-mid, dry hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, wide mid reese counterline, wide mids, dry hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, mono chest-sub, formant answer, kick pattern flip, side hats, wide hat bed, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid growl, wide low-mid, mono kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, call-response reese, side percussion, side snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, growl answer, wide mids, rolling hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, mono chest-sub, formant bass melody, trap drums denser, side hats, late snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, formant bass melody, side hats, syncopated hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, mono chest-sub, formant answer, kick pattern flip, side percussion, syncopated hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, snare roll, wide mid growl, wide mids, open hat, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, mono chest-sub, call-response reese, side hats, closed hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, offbeat hats, growl answer, wide low-mid, room snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, formant bass melody, side percussion, tight kick, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, low chest-sub, wide mid reese counterline, ghost snare, wide mids, loose hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, wide mid reese counterline, wide mids, chopped hats, 2 bars]
+
+[outro - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, wide mid growl, wide mids, straight hats, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1525,14 +3101,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `212.0` |
+| 0 | `218.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `212.0` |
+| 0 | `218.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -1541,57 +3117,173 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8…` |
-| 2 | `[build-up - snare roll, low chest-sub, kick pattern flip, growl answer, wide mi…` |
+| 2 | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/07-chain-hook` |
 
 ```text
-dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 174 bpm, instrumental, no vocals
+dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 174 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, low chest-sub, kick pattern flip, growl answer, wide mids, tight kick, growl wreck, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, growl answer, wide mids, tight kick, growl wreck, 2 bars]
 
-[drop - heavy warped drop, mono chest-sub, formant bass melody, snare roll, side hats, loose hats, brostep, heavy brostep drop, 10 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, mono chest-sub, formant bass melody, snare roll, side hats, loose hats, brostep, heavy brostep drop, 2 bars]
 
-[build-up - snare roll, low chest-sub, rapid hi-hats, wide mid reese counterline, wide low-mid, pushed snare, warped chain, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, wide mid reese counterline, wide low-mid, pushed snare, warped chain, 2 bars]
 
-[inst - offbeat hats, mono chest-sub, formant answer, side percussion, chopped hats, dubstep wreck, 10 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, formant answer, side percussion, chopped hats, dubstep wreck, 2 bars]
 
-[drop - wreck growl warped drop, low chest-sub, wide mid growl, trap drums denser, wide mids, hat density up, harder dirty drop, 8 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, low chest-sub, wide mid growl, trap drums denser, wide mids, hat density up, harder dirty drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side hats, mono chest-sub, kick opens, chest-sub 808 formant, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, call-response reese, side hats, kick opens, chest-sub 808 formant, 2 bars]
 
-[build-up - snare roll, low chest-sub, kick pattern flip, growl answer, wide low-mid, kick tightens, stacked 808 wreck, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, growl answer, wide low-mid, kick tightens, stacked 808 wreck, 2 bars]
 
-[inst - snare roll, mono chest-sub, formant bass melody, side percussion, snare answers, trap growl, 10 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, mono chest-sub, formant bass melody, snare roll, side percussion, snare answers, full send drop, 2 bars]
 
-[drop - full send reese warped drop, low chest-sub, wide mid reese counterline, rapid hi-hats, wide mids, offbeat push, full send drop, 8 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, wide mid reese counterline, wide mids, offbeat push, trap growl, 2 bars]
 
-[build-up - snare roll, mono chest-sub, offbeat hats, formant answer, side hats, straight hats, kick holds, 6 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, mono chest-sub, formant answer, offbeat hats, side hats, straight hats, kick holds, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, low chest-sub, triplet hats, rapid hi-hats roll, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, wide mid growl, wide low-mid, triplet hats, rapid hi-hats roll, 2 bars]
 
-[build-up - snare roll, mono chest-sub, ghost snare, call-response reese, side percussion, backbeat shove, growl ride, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, call-response reese, side percussion, backbeat shove, growl ride, 2 bars]
 
-[drop - harder formant warped drop, low chest-sub, growl answer, kick pattern flip, wide mids, ghost notes, 12 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, low chest-sub, growl answer, kick pattern flip, wide mids, ghost notes, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side hats, mono chest-sub, dry hats, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, formant bass melody, side hats, dry hats, 2 bars]
 
-[build-up - snare roll, low chest-sub, rapid hi-hats, wide mid reese counterline, wide low-mid, wide hat bed, 6 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, wide mid reese counterline, wide low-mid, wide hat bed, 2 bars]
 
-[inst - offbeat hats, mono chest-sub, formant answer, side percussion, mono kick, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, mono chest-sub, formant answer, offbeat hats, side percussion, mono kick, 2 bars]
 
-[drop - heavy warped drop, low chest-sub, wide mid growl, trap drums denser, wide mids, side snare, 12 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, wide mid growl, wide mids, side snare, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side hats, mono chest-sub, rolling hats, 6 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, call-response reese, side hats, rolling hats, 2 bars]
 
-[inst - kick pattern flip, low chest-sub, growl answer, wide low-mid, late snare, 12 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, growl answer, wide low-mid, late snare, 2 bars]
 
-[drop - wreck growl warped drop, mono chest-sub, formant bass melody, snare roll, side percussion, early kick, 10 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, mono chest-sub, formant bass melody, snare roll, side percussion, early kick, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side percussion, snare answers, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, wide mid reese counterline, wide mids, syncopated hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, mono chest-sub, formant answer, offbeat hats, side hats, open hat, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, wide mid growl, wide low-mid, closed hat, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, call-response reese, side percussion, room snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, call-response reese, side percussion, loose hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, mono chest-sub, formant bass melody, snare roll, side hats, loose hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, formant bass melody, side hats, chopped hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, wide mid reese counterline, wide low-mid, hat density up, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, low chest-sub, wide mid growl, trap drums denser, wide mids, hat density up, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, wide mid growl, wide mids, kick tightens, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, low chest-sub, growl answer, kick pattern flip, wide low-mid, kick tightens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, formant bass melody, side percussion, snare answers, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, formant bass melody, side percussion, straight hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, formant answer, side hats, straight hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, wide mid growl, wide low-mid, triplet hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, mono chest-sub, call-response reese, ghost snare, side percussion, backbeat shove, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, growl answer, wide mids, ghost notes, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, formant bass melody, side hats, dry hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, low chest-sub, wide mid reese counterline, rapid hi-hats, wide low-mid, wide hat bed, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, formant answer, side percussion, mono kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, low chest-sub, wide mid growl, trap drums denser, wide mids, side snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, call-response reese, side hats, rolling hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, growl answer, wide low-mid, late snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, formant bass melody, side percussion, early kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, formant bass melody, side percussion, open hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, mono chest-sub, formant answer, offbeat hats, side hats, open hat, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, wide mid growl, wide low-mid, closed hat, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, call-response reese, side percussion, room snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, growl answer, wide mids, tight kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, mono chest-sub, formant bass melody, snare roll, side hats, loose hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, growl answer, wide mids, hat density up, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, formant bass melody, side hats, kick opens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, low chest-sub, wide mid growl, trap drums denser, wide mids, hat density up, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, formant answer, side percussion, snare answers, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, low chest-sub, growl answer, kick pattern flip, wide low-mid, kick tightens, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, growl answer, wide low-mid, offbeat push, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, growl answer, wide low-mid, triplet hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, mono chest-sub, formant answer, offbeat hats, side hats, straight hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, formant answer, side hats, backbeat shove, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, mono chest-sub, call-response reese, ghost snare, side percussion, backbeat shove, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, call-response reese, side percussion, dry hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, growl answer, wide mids, wide hat bed, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, low chest-sub, wide mid reese counterline, rapid hi-hats, wide low-mid, wide hat bed, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, wide mid reese counterline, wide low-mid, side snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, wide mid growl, wide mids, side snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, mono chest-sub, call-response reese, ghost snare, side hats, rolling hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, call-response reese, side hats, early kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, formant bass melody, side percussion, early kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, wide mid reese counterline, wide mids, syncopated hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, mono chest-sub, formant answer, offbeat hats, side hats, open hat, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, formant answer, side hats, room snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, wide mid growl, wide low-mid, tight kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, low chest-sub, growl answer, kick pattern flip, wide mids, tight kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, formant bass melody, side hats, loose hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, wide mid reese counterline, wide low-mid, pushed snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, formant answer, side percussion, chopped hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, low chest-sub, wide mid growl, trap drums denser, wide mids, hat density up, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, wide mid reese counterline, wide low-mid, offbeat push, 2 bars]
+
+[outro - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side percussion, snare answers, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -1599,11 +3291,11 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 | Slot | Value |
 | --- | --- |
 | 0 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8…` |
-| 1 | `[build-up - snare roll, low chest-sub, kick pattern flip, growl answer, wide mi…` |
+| 1 | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
 | 2 | `491` |
 | 3 | `fixed` |
 | 4 | `174` |
-| 5 | `212.0` |
+| 5 | `218.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A minor` |
@@ -1615,51 +3307,167 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 | 14 | `0.0` |
 
 ```text
-dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 174 bpm, instrumental, no vocals
+dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 174 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, low chest-sub, kick pattern flip, growl answer, wide mids, tight kick, growl wreck, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, growl answer, wide mids, tight kick, growl wreck, 2 bars]
 
-[drop - heavy warped drop, mono chest-sub, formant bass melody, snare roll, side hats, loose hats, brostep, heavy brostep drop, 10 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, mono chest-sub, formant bass melody, snare roll, side hats, loose hats, brostep, heavy brostep drop, 2 bars]
 
-[build-up - snare roll, low chest-sub, rapid hi-hats, wide mid reese counterline, wide low-mid, pushed snare, warped chain, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, wide mid reese counterline, wide low-mid, pushed snare, warped chain, 2 bars]
 
-[inst - offbeat hats, mono chest-sub, formant answer, side percussion, chopped hats, dubstep wreck, 10 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, formant answer, side percussion, chopped hats, dubstep wreck, 2 bars]
 
-[drop - wreck growl warped drop, low chest-sub, wide mid growl, trap drums denser, wide mids, hat density up, harder dirty drop, 8 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, low chest-sub, wide mid growl, trap drums denser, wide mids, hat density up, harder dirty drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side hats, mono chest-sub, kick opens, chest-sub 808 formant, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, call-response reese, side hats, kick opens, chest-sub 808 formant, 2 bars]
 
-[build-up - snare roll, low chest-sub, kick pattern flip, growl answer, wide low-mid, kick tightens, stacked 808 wreck, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, growl answer, wide low-mid, kick tightens, stacked 808 wreck, 2 bars]
 
-[inst - snare roll, mono chest-sub, formant bass melody, side percussion, snare answers, trap growl, 10 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, mono chest-sub, formant bass melody, snare roll, side percussion, snare answers, full send drop, 2 bars]
 
-[drop - full send reese warped drop, low chest-sub, wide mid reese counterline, rapid hi-hats, wide mids, offbeat push, full send drop, 8 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, wide mid reese counterline, wide mids, offbeat push, trap growl, 2 bars]
 
-[build-up - snare roll, mono chest-sub, offbeat hats, formant answer, side hats, straight hats, kick holds, 6 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, mono chest-sub, formant answer, offbeat hats, side hats, straight hats, kick holds, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, low chest-sub, triplet hats, rapid hi-hats roll, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, wide mid growl, wide low-mid, triplet hats, rapid hi-hats roll, 2 bars]
 
-[build-up - snare roll, mono chest-sub, ghost snare, call-response reese, side percussion, backbeat shove, growl ride, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, call-response reese, side percussion, backbeat shove, growl ride, 2 bars]
 
-[drop - harder formant warped drop, low chest-sub, growl answer, kick pattern flip, wide mids, ghost notes, 12 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, low chest-sub, growl answer, kick pattern flip, wide mids, ghost notes, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side hats, mono chest-sub, dry hats, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, formant bass melody, side hats, dry hats, 2 bars]
 
-[build-up - snare roll, low chest-sub, rapid hi-hats, wide mid reese counterline, wide low-mid, wide hat bed, 6 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, wide mid reese counterline, wide low-mid, wide hat bed, 2 bars]
 
-[inst - offbeat hats, mono chest-sub, formant answer, side percussion, mono kick, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, mono chest-sub, formant answer, offbeat hats, side percussion, mono kick, 2 bars]
 
-[drop - heavy warped drop, low chest-sub, wide mid growl, trap drums denser, wide mids, side snare, 12 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, wide mid growl, wide mids, side snare, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side hats, mono chest-sub, rolling hats, 6 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, call-response reese, side hats, rolling hats, 2 bars]
 
-[inst - kick pattern flip, low chest-sub, growl answer, wide low-mid, late snare, 12 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, growl answer, wide low-mid, late snare, 2 bars]
 
-[drop - wreck growl warped drop, mono chest-sub, formant bass melody, snare roll, side percussion, early kick, 10 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, mono chest-sub, formant bass melody, snare roll, side percussion, early kick, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side percussion, snare answers, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, wide mid reese counterline, wide mids, syncopated hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, mono chest-sub, formant answer, offbeat hats, side hats, open hat, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, wide mid growl, wide low-mid, closed hat, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, call-response reese, side percussion, room snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, call-response reese, side percussion, loose hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, mono chest-sub, formant bass melody, snare roll, side hats, loose hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, formant bass melody, side hats, chopped hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, wide mid reese counterline, wide low-mid, hat density up, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, low chest-sub, wide mid growl, trap drums denser, wide mids, hat density up, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, wide mid growl, wide mids, kick tightens, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, low chest-sub, growl answer, kick pattern flip, wide low-mid, kick tightens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, formant bass melody, side percussion, snare answers, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, formant bass melody, side percussion, straight hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, formant answer, side hats, straight hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, wide mid growl, wide low-mid, triplet hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, mono chest-sub, call-response reese, ghost snare, side percussion, backbeat shove, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, growl answer, wide mids, ghost notes, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, formant bass melody, side hats, dry hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, low chest-sub, wide mid reese counterline, rapid hi-hats, wide low-mid, wide hat bed, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, formant answer, side percussion, mono kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, low chest-sub, wide mid growl, trap drums denser, wide mids, side snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, call-response reese, side hats, rolling hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, growl answer, wide low-mid, late snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, formant bass melody, side percussion, early kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, formant bass melody, side percussion, open hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, mono chest-sub, formant answer, offbeat hats, side hats, open hat, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, wide mid growl, wide low-mid, closed hat, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, call-response reese, side percussion, room snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, growl answer, wide mids, tight kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, mono chest-sub, formant bass melody, snare roll, side hats, loose hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, growl answer, wide mids, hat density up, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, formant bass melody, side hats, kick opens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, low chest-sub, wide mid growl, trap drums denser, wide mids, hat density up, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, formant answer, side percussion, snare answers, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, low chest-sub, growl answer, kick pattern flip, wide low-mid, kick tightens, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, growl answer, wide low-mid, offbeat push, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, growl answer, wide low-mid, triplet hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, mono chest-sub, formant answer, offbeat hats, side hats, straight hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, formant answer, side hats, backbeat shove, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, mono chest-sub, call-response reese, ghost snare, side percussion, backbeat shove, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, call-response reese, side percussion, dry hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, growl answer, wide mids, wide hat bed, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, low chest-sub, wide mid reese counterline, rapid hi-hats, wide low-mid, wide hat bed, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, wide mid reese counterline, wide low-mid, side snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, wide mid growl, wide mids, side snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, mono chest-sub, call-response reese, ghost snare, side hats, rolling hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, call-response reese, side hats, early kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, formant bass melody, side percussion, early kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, wide mid reese counterline, wide mids, syncopated hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, mono chest-sub, formant answer, offbeat hats, side hats, open hat, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, formant answer, side hats, room snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, wide mid growl, wide low-mid, tight kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, low chest-sub, growl answer, kick pattern flip, wide mids, tight kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, formant bass melody, side hats, loose hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, wide mid reese counterline, wide low-mid, pushed snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, formant answer, side percussion, chopped hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, low chest-sub, wide mid growl, trap drums denser, wide mids, hat density up, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, wide mid reese counterline, wide low-mid, offbeat push, 2 bars]
+
+[outro - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side percussion, snare answers, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1742,14 +3550,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `231.0` |
+| 0 | `260.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `231.0` |
+| 0 | `260.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -1758,61 +3566,197 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, r…` |
-| 2 | `[build-up - snare roll, mono chest-sub, snare roll, formant answer, wide low-mi…` |
+| 2 | `[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, …` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/08-grit-plate` |
 
 ```text
-wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
+wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, mono chest-sub, snare roll, formant answer, wide low-mid, straight hats, warped 808 wreck, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, formant answer, wide low-mid, straight hats, warped 808 wreck, 2 bars]
 
-[drop - stacked growl warped drop, low chest-sub, wide mid growl, rapid hi-hats, side percussion, triplet hats, wave bass, heavy wave drop, 8 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, low chest-sub, wide mid growl, rapid hi-hats, side percussion, triplet hats, wave bass, heavy wave drop, 2 bars]
 
-[inst - offbeat hats, mono chest-sub, call-response reese, wide mids, backbeat shove, grit fold, 12 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, call-response reese, wide mids, backbeat shove, grit fold, 2 bars]
 
-[drop - harder warped drop, low chest-sub, growl answer, trap drums denser, side hats, ghost notes, rapid hi-hats denser, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, low chest-sub, growl answer, trap drums denser, side hats, ghost notes, rapid hi-hats denser, 2 bars]
 
-[inst - ghost snare, mono chest-sub, formant bass melody, wide low-mid, dry hats, wave 808 hold grit, 12 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, formant bass melody, wide low-mid, dry hats, wave 808 hold grit, 2 bars]
 
-[build-up - snare roll, low chest-sub, kick pattern flip, wide mid reese counterline, side percussion, wide hat bed, stacked 808 wall, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, wide mid reese counterline, side percussion, wide hat bed, stacked 808 wall, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide mids, mono chest-sub, mono kick, chest formant, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, mono chest-sub, formant answer, snare roll, wide mids, mono kick, harder growl drop, 2 bars]
 
-[inst - rapid hi-hats, low chest-sub, wide mid growl, side hats, side snare, body bass wreck, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, wide mid growl, side hats, side snare, chest formant, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, wide low-mid, mono chest-sub, rolling hats, wave warp, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, mono chest-sub, call-response reese, offbeat hats, wide low-mid, rolling hats, full send drop, 2 bars]
 
-[drop - full send formant warped drop, low chest-sub, growl answer, trap drums denser, side percussion, late snare, harder growl drop, 12 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, growl answer, side percussion, late snare, body bass wreck, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide mids, mono chest-sub, early kick, kick holds, 6 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, mono chest-sub, formant bass melody, ghost snare, wide mids, early kick, wave warp, 2 bars]
 
-[build-up - snare roll, low chest-sub, kick pattern flip, wide mid reese counterline, side hats, syncopated hats, hats denser, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, wide mid reese counterline, side hats, syncopated hats, kick holds, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide low-mid, mono chest-sub, open hat, wave ride, 8 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, formant answer, wide low-mid, open hat, hats denser, 2 bars]
 
-[build-up - snare roll, low chest-sub, rapid hi-hats, wide mid growl, side percussion, closed hat, 4 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, low chest-sub, wide mid growl, rapid hi-hats, side percussion, closed hat, wave ride, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, wide mids, mono chest-sub, room snare, 8 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, call-response reese, wide mids, room snare, 2 bars]
 
-[build-up - snare roll, low chest-sub, trap drums denser, growl answer, side hats, tight kick, 4 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, low chest-sub, growl answer, trap drums denser, side hats, tight kick, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide low-mid, mono chest-sub, loose hats, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, formant bass melody, wide low-mid, loose hats, 2 bars]
 
-[build-up - snare roll, low chest-sub, kick pattern flip, wide mid reese counterline, side percussion, pushed snare, 4 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, low chest-sub, wide mid reese counterline, kick pattern flip, side percussion, pushed snare, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide mids, mono chest-sub, chopped hats, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, formant answer, wide mids, chopped hats, 2 bars]
 
-[build-up - snare roll, low chest-sub, rapid hi-hats, wide mid growl, side hats, hat density up, 4 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, low chest-sub, wide mid growl, rapid hi-hats, side hats, hat density up, 2 bars]
 
-[inst - offbeat hats, mono chest-sub, call-response reese, wide low-mid, kick opens, 8 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, call-response reese, wide low-mid, kick opens, 2 bars]
 
-[drop - stacked growl warped drop, low chest-sub, growl answer, trap drums denser, side percussion, kick tightens, full send drop, 12 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, low chest-sub, growl answer, trap drums denser, side percussion, kick tightens, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant answer, wide low-mid, straight hats, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, formant bass melody, wide mids, snare answers, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, wide mid reese counterline, side hats, offbeat push, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, mono chest-sub, formant answer, snare roll, wide low-mid, straight hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, wide mid growl, side percussion, triplet hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, wide mid growl, side percussion, ghost notes, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, growl answer, side hats, ghost notes, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, formant bass melody, wide low-mid, dry hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, wide mid reese counterline, side percussion, wide hat bed, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, mono chest-sub, formant answer, snare roll, wide mids, mono kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, formant answer, wide mids, rolling hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, call-response reese, wide low-mid, rolling hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, low chest-sub, growl answer, trap drums denser, side percussion, late snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, formant bass melody, wide mids, early kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, wide mid reese counterline, side hats, syncopated hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, formant answer, wide low-mid, open hat, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, wide mid growl, side percussion, closed hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, mono chest-sub, call-response reese, offbeat hats, wide mids, room snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, growl answer, side hats, tight kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, formant bass melody, wide low-mid, loose hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, low chest-sub, wide mid reese counterline, kick pattern flip, side percussion, pushed snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, wide mid reese counterline, side percussion, hat density up, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, wide mid growl, side hats, hat density up, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, call-response reese, wide low-mid, kick opens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, low chest-sub, growl answer, trap drums denser, side percussion, kick tightens, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, formant bass melody, wide mids, snare answers, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, low chest-sub, wide mid reese counterline, kick pattern flip, side hats, offbeat push, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, formant answer, wide low-mid, straight hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, low chest-sub, wide mid growl, rapid hi-hats, side percussion, triplet hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, call-response reese, wide mids, backbeat shove, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, growl answer, side hats, ghost notes, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, growl answer, side hats, wide hat bed, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, formant bass melody, wide low-mid, mono kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, mono chest-sub, formant answer, snare roll, wide mids, mono kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, wide mid reese counterline, side percussion, late snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, wide mid growl, side hats, late snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, growl answer, side percussion, late snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, formant bass melody, wide mids, early kick, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, low chest-sub, wide mid reese counterline, kick pattern flip, side hats, syncopated hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, wide mid reese counterline, side hats, closed hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, low chest-sub, wide mid growl, rapid hi-hats, side percussion, closed hat, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, call-response reese, wide mids, room snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, call-response reese, wide mids, loose hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, mono chest-sub, formant bass melody, ghost snare, wide low-mid, loose hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, wide mid reese counterline, side percussion, pushed snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, formant bass melody, wide low-mid, kick opens, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, low chest-sub, wide mid growl, rapid hi-hats, side hats, hat density up, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, wide mid growl, side hats, kick tightens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, low chest-sub, growl answer, trap drums denser, side percussion, kick tightens, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, growl answer, side percussion, offbeat push, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, formant bass melody, wide mids, straight hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, mono chest-sub, formant answer, snare roll, wide low-mid, straight hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, formant answer, wide low-mid, backbeat shove, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, formant answer, wide low-mid, dry hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, call-response reese, wide mids, dry hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, growl answer, side hats, wide hat bed, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, formant bass melody, wide low-mid, mono kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, mono chest-sub, formant answer, snare roll, wide mids, mono kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, formant bass melody, wide low-mid, early kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, mono chest-sub, call-response reese, offbeat hats, wide low-mid, rolling hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, call-response reese, wide low-mid, early kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, mono chest-sub, formant bass melody, ghost snare, wide mids, early kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, formant bass melody, wide mids, open hat, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, mono chest-sub, formant answer, snare roll, wide low-mid, open hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, wide mid growl, side percussion, closed hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, mono chest-sub, call-response reese, offbeat hats, wide mids, room snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, growl answer, side hats, tight kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, mono chest-sub, formant bass melody, ghost snare, wide low-mid, loose hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, formant bass melody, wide low-mid, chopped hats, 2 bars]
+
+[outro - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant answer, wide low-mid, straight hats, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -1820,11 +3764,11 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, ra
 | Slot | Value |
 | --- | --- |
 | 0 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, r…` |
-| 1 | `[build-up - snare roll, mono chest-sub, snare roll, formant answer, wide low-mi…` |
+| 1 | `[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, …` |
 | 2 | `499` |
 | 3 | `fixed` |
 | 4 | `168` |
-| 5 | `231.0` |
+| 5 | `260.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `C major` |
@@ -1836,55 +3780,191 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, ra
 | 14 | `0.0` |
 
 ```text
-wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
+wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, mono chest-sub, snare roll, formant answer, wide low-mid, straight hats, warped 808 wreck, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, formant answer, wide low-mid, straight hats, warped 808 wreck, 2 bars]
 
-[drop - stacked growl warped drop, low chest-sub, wide mid growl, rapid hi-hats, side percussion, triplet hats, wave bass, heavy wave drop, 8 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, low chest-sub, wide mid growl, rapid hi-hats, side percussion, triplet hats, wave bass, heavy wave drop, 2 bars]
 
-[inst - offbeat hats, mono chest-sub, call-response reese, wide mids, backbeat shove, grit fold, 12 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, call-response reese, wide mids, backbeat shove, grit fold, 2 bars]
 
-[drop - harder warped drop, low chest-sub, growl answer, trap drums denser, side hats, ghost notes, rapid hi-hats denser, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, low chest-sub, growl answer, trap drums denser, side hats, ghost notes, rapid hi-hats denser, 2 bars]
 
-[inst - ghost snare, mono chest-sub, formant bass melody, wide low-mid, dry hats, wave 808 hold grit, 12 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, formant bass melody, wide low-mid, dry hats, wave 808 hold grit, 2 bars]
 
-[build-up - snare roll, low chest-sub, kick pattern flip, wide mid reese counterline, side percussion, wide hat bed, stacked 808 wall, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, wide mid reese counterline, side percussion, wide hat bed, stacked 808 wall, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide mids, mono chest-sub, mono kick, chest formant, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, mono chest-sub, formant answer, snare roll, wide mids, mono kick, harder growl drop, 2 bars]
 
-[inst - rapid hi-hats, low chest-sub, wide mid growl, side hats, side snare, body bass wreck, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, wide mid growl, side hats, side snare, chest formant, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, wide low-mid, mono chest-sub, rolling hats, wave warp, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, mono chest-sub, call-response reese, offbeat hats, wide low-mid, rolling hats, full send drop, 2 bars]
 
-[drop - full send formant warped drop, low chest-sub, growl answer, trap drums denser, side percussion, late snare, harder growl drop, 12 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, growl answer, side percussion, late snare, body bass wreck, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide mids, mono chest-sub, early kick, kick holds, 6 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, mono chest-sub, formant bass melody, ghost snare, wide mids, early kick, wave warp, 2 bars]
 
-[build-up - snare roll, low chest-sub, kick pattern flip, wide mid reese counterline, side hats, syncopated hats, hats denser, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, wide mid reese counterline, side hats, syncopated hats, kick holds, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide low-mid, mono chest-sub, open hat, wave ride, 8 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, formant answer, wide low-mid, open hat, hats denser, 2 bars]
 
-[build-up - snare roll, low chest-sub, rapid hi-hats, wide mid growl, side percussion, closed hat, 4 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, low chest-sub, wide mid growl, rapid hi-hats, side percussion, closed hat, wave ride, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, wide mids, mono chest-sub, room snare, 8 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, call-response reese, wide mids, room snare, 2 bars]
 
-[build-up - snare roll, low chest-sub, trap drums denser, growl answer, side hats, tight kick, 4 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, low chest-sub, growl answer, trap drums denser, side hats, tight kick, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide low-mid, mono chest-sub, loose hats, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, formant bass melody, wide low-mid, loose hats, 2 bars]
 
-[build-up - snare roll, low chest-sub, kick pattern flip, wide mid reese counterline, side percussion, pushed snare, 4 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, low chest-sub, wide mid reese counterline, kick pattern flip, side percussion, pushed snare, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide mids, mono chest-sub, chopped hats, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, formant answer, wide mids, chopped hats, 2 bars]
 
-[build-up - snare roll, low chest-sub, rapid hi-hats, wide mid growl, side hats, hat density up, 4 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, low chest-sub, wide mid growl, rapid hi-hats, side hats, hat density up, 2 bars]
 
-[inst - offbeat hats, mono chest-sub, call-response reese, wide low-mid, kick opens, 8 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, call-response reese, wide low-mid, kick opens, 2 bars]
 
-[drop - stacked growl warped drop, low chest-sub, growl answer, trap drums denser, side percussion, kick tightens, full send drop, 12 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, low chest-sub, growl answer, trap drums denser, side percussion, kick tightens, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant answer, wide low-mid, straight hats, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, formant bass melody, wide mids, snare answers, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, wide mid reese counterline, side hats, offbeat push, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, mono chest-sub, formant answer, snare roll, wide low-mid, straight hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, wide mid growl, side percussion, triplet hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, wide mid growl, side percussion, ghost notes, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, growl answer, side hats, ghost notes, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, formant bass melody, wide low-mid, dry hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, wide mid reese counterline, side percussion, wide hat bed, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, mono chest-sub, formant answer, snare roll, wide mids, mono kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, formant answer, wide mids, rolling hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, call-response reese, wide low-mid, rolling hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, low chest-sub, growl answer, trap drums denser, side percussion, late snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, formant bass melody, wide mids, early kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, wide mid reese counterline, side hats, syncopated hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, formant answer, wide low-mid, open hat, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, wide mid growl, side percussion, closed hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, mono chest-sub, call-response reese, offbeat hats, wide mids, room snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, growl answer, side hats, tight kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, formant bass melody, wide low-mid, loose hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, low chest-sub, wide mid reese counterline, kick pattern flip, side percussion, pushed snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, wide mid reese counterline, side percussion, hat density up, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, wide mid growl, side hats, hat density up, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, call-response reese, wide low-mid, kick opens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, low chest-sub, growl answer, trap drums denser, side percussion, kick tightens, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, formant bass melody, wide mids, snare answers, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, low chest-sub, wide mid reese counterline, kick pattern flip, side hats, offbeat push, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, formant answer, wide low-mid, straight hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, low chest-sub, wide mid growl, rapid hi-hats, side percussion, triplet hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, call-response reese, wide mids, backbeat shove, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, growl answer, side hats, ghost notes, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, growl answer, side hats, wide hat bed, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, formant bass melody, wide low-mid, mono kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, mono chest-sub, formant answer, snare roll, wide mids, mono kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, wide mid reese counterline, side percussion, late snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, wide mid growl, side hats, late snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, growl answer, side percussion, late snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, formant bass melody, wide mids, early kick, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, low chest-sub, wide mid reese counterline, kick pattern flip, side hats, syncopated hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, wide mid reese counterline, side hats, closed hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, low chest-sub, wide mid growl, rapid hi-hats, side percussion, closed hat, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, call-response reese, wide mids, room snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, call-response reese, wide mids, loose hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, mono chest-sub, formant bass melody, ghost snare, wide low-mid, loose hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, wide mid reese counterline, side percussion, pushed snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, formant bass melody, wide low-mid, kick opens, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, low chest-sub, wide mid growl, rapid hi-hats, side hats, hat density up, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, wide mid growl, side hats, kick tightens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, low chest-sub, growl answer, trap drums denser, side percussion, kick tightens, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, growl answer, side percussion, offbeat push, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, formant bass melody, wide mids, straight hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, mono chest-sub, formant answer, snare roll, wide low-mid, straight hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, formant answer, wide low-mid, backbeat shove, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, formant answer, wide low-mid, dry hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, call-response reese, wide mids, dry hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, growl answer, side hats, wide hat bed, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, formant bass melody, wide low-mid, mono kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, mono chest-sub, formant answer, snare roll, wide mids, mono kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, formant bass melody, wide low-mid, early kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, mono chest-sub, call-response reese, offbeat hats, wide low-mid, rolling hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, call-response reese, wide low-mid, early kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, mono chest-sub, formant bass melody, ghost snare, wide mids, early kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, formant bass melody, wide mids, open hat, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, mono chest-sub, formant answer, snare roll, wide low-mid, open hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, wide mid growl, side percussion, closed hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, mono chest-sub, call-response reese, offbeat hats, wide mids, room snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, growl answer, side hats, tight kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, mono chest-sub, formant bass melody, ghost snare, wide low-mid, loose hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, formant bass melody, wide low-mid, chopped hats, 2 bars]
+
+[outro - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant answer, wide low-mid, straight hats, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1967,14 +4047,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `221.0` |
+| 0 | `284.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `221.0` |
+| 0 | `284.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -1983,65 +4063,221 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808…` |
-| 2 | `[build-up - snare roll, octave sub stack, trap drums denser, formant bass melod…` |
+| 2 | `[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/09-steel-grate` |
 
 ```text
-drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 174 bpm, instrumental, no vocals
+drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 174 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, octave sub stack, trap drums denser, formant bass melody, wide low-mid, tight kick, reese wreck, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, formant bass melody, wide low-mid, tight kick, reese wreck, 2 bars]
 
-[drop - harder reese warped drop, body bass, wide mid reese counterline, ghost snare, side percussion, loose hats, amen break, heavy amen drop, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, body bass, wide mid reese counterline, ghost snare, side percussion, loose hats, amen break, heavy amen drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide mids, octave sub stack, pushed snare, warped grate, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, formant answer, wide mids, pushed snare, warped grate, 2 bars]
 
-[drop - wreck wobble warped drop, body bass, wide mid growl, snare roll, side hats, chopped hats, amen break, 10 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, body bass, wide mid growl, snare roll, side hats, chopped hats, amen break, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, wide low-mid, octave sub stack, hat density up, rapid hi-hats 808 grate, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, call-response reese, wide low-mid, hat density up, rapid hi-hats 808 grate, 2 bars]
 
-[build-up - snare roll, body bass, offbeat hats, growl answer, side percussion, kick opens, reese stack, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, growl answer, side percussion, kick opens, reese stack, 2 bars]
 
-[inst - trap drums denser, octave sub stack, formant bass melody, wide mids, kick tightens, chest-sub 808, 8 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, formant bass melody, wide mids, kick tightens, chest-sub 808, 2 bars]
 
-[build-up - snare roll, body bass, ghost snare, wide mid reese counterline, side hats, snare answers, hats denser, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, wide mid reese counterline, side hats, snare answers, hats denser, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide low-mid, octave sub stack, offbeat push, reese hold, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, octave sub stack, formant answer, kick pattern flip, wide low-mid, offbeat push, harder growl drop, 2 bars]
 
-[build-up - snare roll, body bass, snare roll, wide mid growl, side percussion, straight hats, stacked amen wreck, 4 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, wide mid growl, side percussion, straight hats, reese hold, 2 bars]
 
-[inst - rapid hi-hats, octave sub stack, call-response reese, wide mids, triplet hats, formant 808, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, call-response reese, wide mids, triplet hats, stacked amen wreck, 2 bars]
 
-[drop - harder reese warped drop, body bass, growl answer, offbeat hats, side hats, backbeat shove, harder growl drop, 12 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, body bass, growl answer, offbeat hats, side hats, backbeat shove, full send drop, 2 bars]
 
-[build-up - snare roll, octave sub stack, trap drums denser, formant bass melody, wide low-mid, ghost notes, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, formant bass melody, wide low-mid, ghost notes, formant 808, 2 bars]
 
-[inst - ghost snare, body bass, wide mid reese counterline, side percussion, dry hats, chest-sub 808 punch, 8 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, wide mid reese counterline, side percussion, dry hats, snare roll, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide mids, octave sub stack, wide hat bed, chest-sub 808 wreck, 4 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, octave sub stack, formant answer, kick pattern flip, wide mids, wide hat bed, chest-sub 808 punch, 2 bars]
 
-[build-up - snare roll, body bass, snare roll, wide mid growl, side hats, mono kick, drumstep grind, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, wide mid growl, side hats, mono kick, chest-sub 808 wreck, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, wide low-mid, octave sub stack, side snare, low rumble wreck, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, call-response reese, wide low-mid, side snare, drumstep grind, 2 bars]
 
-[inst - offbeat hats, body bass, growl answer, side percussion, rolling hats, reese wall, 12 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, body bass, growl answer, offbeat hats, side percussion, rolling hats, harder warped drop, 2 bars]
 
-[drop - wreck wobble warped drop, octave sub stack, formant bass melody, trap drums denser, wide mids, late snare, full send drop, 8 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, formant bass melody, wide mids, late snare, low rumble wreck, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, side hats, body bass, early kick, kick holds, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, wide mid reese counterline, side hats, early kick, reese wall, 2 bars]
 
-[inst - kick pattern flip, octave sub stack, formant answer, wide low-mid, syncopated hats, reese ride, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, octave sub stack, formant answer, kick pattern flip, wide low-mid, syncopated hats, kick holds, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, side percussion, body bass, open hat, 4 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, wide mid growl, side percussion, open hat, reese ride, 2 bars]
 
-[build-up - snare roll, octave sub stack, rapid hi-hats, call-response reese, wide mids, closed hat, 6 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, octave sub stack, call-response reese, rapid hi-hats, wide mids, closed hat, 2 bars]
 
-[drop - wreck wobble warped drop, body bass, growl answer, offbeat hats, side hats, room snare, harder warped drop, 8 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, growl answer, side hats, room snare, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, wide mid growl, side hats, mono kick, 4 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, octave sub stack, formant bass melody, trap drums denser, wide low-mid, tight kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, wide mid reese counterline, side percussion, loose hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, octave sub stack, formant answer, kick pattern flip, wide mids, pushed snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, wide mid growl, side hats, chopped hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, octave sub stack, call-response reese, rapid hi-hats, wide low-mid, hat density up, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, growl answer, side percussion, kick opens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, formant bass melody, wide mids, kick tightens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, wide mid reese counterline, side hats, snare answers, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, formant answer, wide low-mid, offbeat push, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, formant answer, wide low-mid, triplet hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, wide mid growl, side percussion, backbeat shove, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, body bass, growl answer, offbeat hats, side hats, backbeat shove, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, growl answer, side hats, dry hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, formant bass melody, wide low-mid, wide hat bed, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, octave sub stack, formant answer, kick pattern flip, wide mids, wide hat bed, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, formant answer, wide mids, side snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, wide mid growl, side hats, rolling hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, body bass, growl answer, offbeat hats, side percussion, rolling hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, formant bass melody, wide mids, late snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, wide mid reese counterline, side hats, early kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, formant answer, wide low-mid, syncopated hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, body bass, wide mid growl, snare roll, side percussion, open hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, call-response reese, wide mids, closed hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, body bass, growl answer, offbeat hats, side hats, room snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, growl answer, side hats, loose hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, body bass, wide mid reese counterline, ghost snare, side percussion, loose hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, wide mid reese counterline, side percussion, chopped hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, body bass, wide mid growl, snare roll, side hats, chopped hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, call-response reese, wide low-mid, hat density up, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, body bass, growl answer, offbeat hats, side percussion, kick opens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, growl answer, side percussion, snare answers, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, formant bass melody, wide mids, offbeat push, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, octave sub stack, formant answer, kick pattern flip, wide low-mid, offbeat push, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, wide mid growl, side percussion, straight hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, octave sub stack, call-response reese, rapid hi-hats, wide mids, triplet hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, growl answer, side hats, backbeat shove, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, octave sub stack, formant bass melody, trap drums denser, wide low-mid, ghost notes, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, growl answer, side hats, mono kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, octave sub stack, formant answer, kick pattern flip, wide mids, wide hat bed, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, wide mid growl, side hats, mono kick, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, octave sub stack, call-response reese, rapid hi-hats, wide low-mid, side snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, growl answer, side percussion, rolling hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, growl answer, side percussion, early kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, formant bass melody, wide mids, syncopated hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, wide mid reese counterline, side hats, open hat, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, body bass, wide mid growl, snare roll, side percussion, open hat, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, call-response reese, wide mids, closed hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, body bass, growl answer, offbeat hats, side hats, room snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, formant bass melody, wide low-mid, tight kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, body bass, wide mid reese counterline, ghost snare, side percussion, loose hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant bass melody, wide low-mid, hat density up, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, body bass, wide mid growl, snare roll, side hats, chopped hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, wide mid growl, side hats, kick opens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, body bass, growl answer, offbeat hats, side percussion, kick opens, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, call-response reese, wide low-mid, offbeat push, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, growl answer, side percussion, straight hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, octave sub stack, formant answer, kick pattern flip, wide low-mid, offbeat push, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, wide mid reese counterline, side hats, backbeat shove, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, octave sub stack, call-response reese, rapid hi-hats, wide mids, triplet hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, call-response reese, wide mids, ghost notes, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, call-response reese, wide mids, wide hat bed, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, body bass, wide mid reese counterline, ghost snare, side percussion, dry hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, formant answer, wide mids, wide hat bed, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, body bass, wide mid growl, snare roll, side hats, mono kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, call-response reese, wide low-mid, side snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, growl answer, side percussion, rolling hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, growl answer, side percussion, early kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, body bass, wide mid reese counterline, ghost snare, side hats, early kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, formant answer, wide low-mid, syncopated hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, wide mid growl, side percussion, open hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, octave sub stack, call-response reese, rapid hi-hats, wide mids, closed hat, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, growl answer, side hats, room snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, octave sub stack, formant bass melody, trap drums denser, wide low-mid, tight kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, wide mid reese counterline, side percussion, loose hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, octave sub stack, formant answer, kick pattern flip, wide mids, pushed snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, wide mid growl, side hats, chopped hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, formant answer, wide mids, kick tightens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, call-response reese, wide low-mid, kick tightens, 2 bars]
+
+[outro - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, wide mid growl, side hats, mono kick, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -2049,11 +4285,11 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808,
 | Slot | Value |
 | --- | --- |
 | 0 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808…` |
-| 1 | `[build-up - snare roll, octave sub stack, trap drums denser, formant bass melod…` |
+| 1 | `[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no…` |
 | 2 | `503` |
 | 3 | `fixed` |
 | 4 | `174` |
-| 5 | `221.0` |
+| 5 | `284.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `E minor` |
@@ -2065,59 +4301,215 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808,
 | 14 | `0.0` |
 
 ```text
-drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 174 bpm, instrumental, no vocals
+drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 174 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, octave sub stack, trap drums denser, formant bass melody, wide low-mid, tight kick, reese wreck, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, formant bass melody, wide low-mid, tight kick, reese wreck, 2 bars]
 
-[drop - harder reese warped drop, body bass, wide mid reese counterline, ghost snare, side percussion, loose hats, amen break, heavy amen drop, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, body bass, wide mid reese counterline, ghost snare, side percussion, loose hats, amen break, heavy amen drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide mids, octave sub stack, pushed snare, warped grate, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, formant answer, wide mids, pushed snare, warped grate, 2 bars]
 
-[drop - wreck wobble warped drop, body bass, wide mid growl, snare roll, side hats, chopped hats, amen break, 10 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, body bass, wide mid growl, snare roll, side hats, chopped hats, amen break, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, wide low-mid, octave sub stack, hat density up, rapid hi-hats 808 grate, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, call-response reese, wide low-mid, hat density up, rapid hi-hats 808 grate, 2 bars]
 
-[build-up - snare roll, body bass, offbeat hats, growl answer, side percussion, kick opens, reese stack, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, growl answer, side percussion, kick opens, reese stack, 2 bars]
 
-[inst - trap drums denser, octave sub stack, formant bass melody, wide mids, kick tightens, chest-sub 808, 8 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, formant bass melody, wide mids, kick tightens, chest-sub 808, 2 bars]
 
-[build-up - snare roll, body bass, ghost snare, wide mid reese counterline, side hats, snare answers, hats denser, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, wide mid reese counterline, side hats, snare answers, hats denser, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide low-mid, octave sub stack, offbeat push, reese hold, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, octave sub stack, formant answer, kick pattern flip, wide low-mid, offbeat push, harder growl drop, 2 bars]
 
-[build-up - snare roll, body bass, snare roll, wide mid growl, side percussion, straight hats, stacked amen wreck, 4 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, wide mid growl, side percussion, straight hats, reese hold, 2 bars]
 
-[inst - rapid hi-hats, octave sub stack, call-response reese, wide mids, triplet hats, formant 808, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, call-response reese, wide mids, triplet hats, stacked amen wreck, 2 bars]
 
-[drop - harder reese warped drop, body bass, growl answer, offbeat hats, side hats, backbeat shove, harder growl drop, 12 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, body bass, growl answer, offbeat hats, side hats, backbeat shove, full send drop, 2 bars]
 
-[build-up - snare roll, octave sub stack, trap drums denser, formant bass melody, wide low-mid, ghost notes, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, formant bass melody, wide low-mid, ghost notes, formant 808, 2 bars]
 
-[inst - ghost snare, body bass, wide mid reese counterline, side percussion, dry hats, chest-sub 808 punch, 8 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, wide mid reese counterline, side percussion, dry hats, snare roll, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide mids, octave sub stack, wide hat bed, chest-sub 808 wreck, 4 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, octave sub stack, formant answer, kick pattern flip, wide mids, wide hat bed, chest-sub 808 punch, 2 bars]
 
-[build-up - snare roll, body bass, snare roll, wide mid growl, side hats, mono kick, drumstep grind, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, wide mid growl, side hats, mono kick, chest-sub 808 wreck, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, wide low-mid, octave sub stack, side snare, low rumble wreck, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, call-response reese, wide low-mid, side snare, drumstep grind, 2 bars]
 
-[inst - offbeat hats, body bass, growl answer, side percussion, rolling hats, reese wall, 12 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, body bass, growl answer, offbeat hats, side percussion, rolling hats, harder warped drop, 2 bars]
 
-[drop - wreck wobble warped drop, octave sub stack, formant bass melody, trap drums denser, wide mids, late snare, full send drop, 8 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, formant bass melody, wide mids, late snare, low rumble wreck, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, side hats, body bass, early kick, kick holds, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, wide mid reese counterline, side hats, early kick, reese wall, 2 bars]
 
-[inst - kick pattern flip, octave sub stack, formant answer, wide low-mid, syncopated hats, reese ride, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, octave sub stack, formant answer, kick pattern flip, wide low-mid, syncopated hats, kick holds, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, side percussion, body bass, open hat, 4 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, wide mid growl, side percussion, open hat, reese ride, 2 bars]
 
-[build-up - snare roll, octave sub stack, rapid hi-hats, call-response reese, wide mids, closed hat, 6 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, octave sub stack, call-response reese, rapid hi-hats, wide mids, closed hat, 2 bars]
 
-[drop - wreck wobble warped drop, body bass, growl answer, offbeat hats, side hats, room snare, harder warped drop, 8 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, growl answer, side hats, room snare, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, wide mid growl, side hats, mono kick, 4 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, octave sub stack, formant bass melody, trap drums denser, wide low-mid, tight kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, wide mid reese counterline, side percussion, loose hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, octave sub stack, formant answer, kick pattern flip, wide mids, pushed snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, wide mid growl, side hats, chopped hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, octave sub stack, call-response reese, rapid hi-hats, wide low-mid, hat density up, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, growl answer, side percussion, kick opens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, formant bass melody, wide mids, kick tightens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, wide mid reese counterline, side hats, snare answers, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, formant answer, wide low-mid, offbeat push, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, formant answer, wide low-mid, triplet hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, wide mid growl, side percussion, backbeat shove, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, body bass, growl answer, offbeat hats, side hats, backbeat shove, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, growl answer, side hats, dry hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, formant bass melody, wide low-mid, wide hat bed, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, octave sub stack, formant answer, kick pattern flip, wide mids, wide hat bed, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, formant answer, wide mids, side snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, wide mid growl, side hats, rolling hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, body bass, growl answer, offbeat hats, side percussion, rolling hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, formant bass melody, wide mids, late snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, wide mid reese counterline, side hats, early kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, formant answer, wide low-mid, syncopated hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, body bass, wide mid growl, snare roll, side percussion, open hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, call-response reese, wide mids, closed hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, body bass, growl answer, offbeat hats, side hats, room snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, growl answer, side hats, loose hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, body bass, wide mid reese counterline, ghost snare, side percussion, loose hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, wide mid reese counterline, side percussion, chopped hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, body bass, wide mid growl, snare roll, side hats, chopped hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, call-response reese, wide low-mid, hat density up, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, body bass, growl answer, offbeat hats, side percussion, kick opens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, growl answer, side percussion, snare answers, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, formant bass melody, wide mids, offbeat push, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, octave sub stack, formant answer, kick pattern flip, wide low-mid, offbeat push, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, wide mid growl, side percussion, straight hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, octave sub stack, call-response reese, rapid hi-hats, wide mids, triplet hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, growl answer, side hats, backbeat shove, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, octave sub stack, formant bass melody, trap drums denser, wide low-mid, ghost notes, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, growl answer, side hats, mono kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, octave sub stack, formant answer, kick pattern flip, wide mids, wide hat bed, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, wide mid growl, side hats, mono kick, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, octave sub stack, call-response reese, rapid hi-hats, wide low-mid, side snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, growl answer, side percussion, rolling hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, growl answer, side percussion, early kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, formant bass melody, wide mids, syncopated hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, wide mid reese counterline, side hats, open hat, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, body bass, wide mid growl, snare roll, side percussion, open hat, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, call-response reese, wide mids, closed hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, body bass, growl answer, offbeat hats, side hats, room snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, formant bass melody, wide low-mid, tight kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, body bass, wide mid reese counterline, ghost snare, side percussion, loose hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant bass melody, wide low-mid, hat density up, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, body bass, wide mid growl, snare roll, side hats, chopped hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, wide mid growl, side hats, kick opens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, body bass, growl answer, offbeat hats, side percussion, kick opens, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, call-response reese, wide low-mid, offbeat push, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, growl answer, side percussion, straight hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, octave sub stack, formant answer, kick pattern flip, wide low-mid, offbeat push, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, wide mid reese counterline, side hats, backbeat shove, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, octave sub stack, call-response reese, rapid hi-hats, wide mids, triplet hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, call-response reese, wide mids, ghost notes, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, call-response reese, wide mids, wide hat bed, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, body bass, wide mid reese counterline, ghost snare, side percussion, dry hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, formant answer, wide mids, wide hat bed, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, body bass, wide mid growl, snare roll, side hats, mono kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, call-response reese, wide low-mid, side snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, growl answer, side percussion, rolling hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, growl answer, side percussion, early kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, body bass, wide mid reese counterline, ghost snare, side hats, early kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, formant answer, wide low-mid, syncopated hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, wide mid growl, side percussion, open hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, octave sub stack, call-response reese, rapid hi-hats, wide mids, closed hat, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, growl answer, side hats, room snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, octave sub stack, formant bass melody, trap drums denser, wide low-mid, tight kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, wide mid reese counterline, side percussion, loose hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, octave sub stack, formant answer, kick pattern flip, wide mids, pushed snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, wide mid growl, side hats, chopped hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, formant answer, wide mids, kick tightens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, call-response reese, wide low-mid, kick tightens, 2 bars]
+
+[outro - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, wide mid growl, side hats, mono kick, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -2200,14 +4592,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `251.0` |
+| 0 | `325.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `251.0` |
+| 0 | `325.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -2216,69 +4608,245 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, …` |
-| 2 | `[build-up - snare roll, stacked 808, rapid hi-hats, call-response reese, side h…` |
+| 2 | `[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/10-rest-bay` |
 
 ```text
-chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 170 bpm, instrumental, no vocals
+chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 170 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, stacked 808, rapid hi-hats, call-response reese, side hats, open hat, dual-action pedal bass, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, call-response reese, side hats, open hat, dual-action pedal bass, 2 bars]
 
-[drop - wreck reese warped drop, fold bass, growl answer, offbeat hats, wide low-mid, closed hat, chest-sub, dual-action pedal bass, heavy chest drop, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, fold bass, growl answer, offbeat hats, wide low-mid, closed hat, chest-sub, dual-action pedal bass, heavy chest drop, 2 bars]
 
-[build-up - snare roll, stacked 808, trap drums denser, formant bass melody, side percussion, room snare, sub warp wreck, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant bass melody, side percussion, room snare, sub warp wreck, 2 bars]
 
-[drop - heavy wobble warped drop, fold bass, wide mid reese counterline, ghost snare, wide mids, tight kick, pedal 808 hold, 12 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, fold bass, wide mid reese counterline, ghost snare, wide mids, tight kick, pedal 808 hold, 2 bars]
 
-[inst - kick pattern flip, stacked 808, formant answer, side hats, loose hats, rapid hi-hats roll, 8 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, formant answer, side hats, loose hats, rapid hi-hats roll, 2 bars]
 
-[drop - full send formant warped drop, fold bass, wide mid growl, snare roll, wide low-mid, pushed snare, harder growl drop, 10 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, wide mid growl, wide low-mid, pushed snare, stacked 808 wall, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side percussion, stacked 808, chopped hats, stacked 808 wall, 6 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, stacked 808, call-response reese, rapid hi-hats, side percussion, chopped hats, harder growl drop, 2 bars]
 
-[build-up - snare roll, fold bass, offbeat hats, growl answer, wide mids, hat density up, chest formant, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, growl answer, wide mids, hat density up, chest formant, 2 bars]
 
-[inst - trap drums denser, stacked 808, formant bass melody, side hats, kick opens, snare roll, 12 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, formant bass melody, side hats, kick opens, snare roll, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide low-mid, fold bass, kick tightens, chest-sub 808, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, fold bass, wide mid reese counterline, ghost snare, wide low-mid, kick tightens, chest-sub 808, 2 bars]
 
-[build-up - snare roll, stacked 808, kick pattern flip, formant answer, side percussion, snare answers, body chest wreck, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, formant answer, side percussion, snare answers, body chest wreck, 2 bars]
 
-[inst - snare roll, fold bass, wide mid growl, wide mids, offbeat push, pedal warp, 6 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, fold bass, wide mid growl, snare roll, wide mids, offbeat push, full send drop, 2 bars]
 
-[build-up - snare roll, stacked 808, rapid hi-hats, call-response reese, side hats, straight hats, low 808 wreck, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, call-response reese, side hats, straight hats, pedal warp, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide low-mid, fold bass, triplet hats, trap growl, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, fold bass, growl answer, offbeat hats, wide low-mid, triplet hats, harder stacked drop, 2 bars]
 
-[build-up - snare roll, stacked 808, trap drums denser, formant bass melody, side percussion, backbeat shove, kick holds, 6 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant bass melody, side percussion, backbeat shove, low 808 wreck, 2 bars]
 
-[drop - full send formant warped drop, fold bass, wide mid reese counterline, ghost snare, wide mids, ghost notes, full send drop, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, fold bass, wide mid reese counterline, ghost snare, wide mids, ghost notes, trap growl, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side hats, stacked 808, dry hats, hats denser, 6 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, formant answer, side hats, dry hats, kick holds, 2 bars]
 
-[build-up - snare roll, fold bass, snare roll, wide mid growl, wide low-mid, wide hat bed, pedal ride, 4 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, fold bass, wide mid growl, snare roll, wide low-mid, wide hat bed, hats denser, 2 bars]
 
-[drop - heavy wobble warped drop, stacked 808, call-response reese, rapid hi-hats, side percussion, mono kick, harder stacked drop, 8 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, call-response reese, side percussion, mono kick, pedal ride, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, fold bass, side snare, 4 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, fold bass, growl answer, offbeat hats, wide mids, side snare, 2 bars]
 
-[build-up - snare roll, stacked 808, trap drums denser, formant bass melody, side hats, rolling hats, 6 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, formant bass melody, side hats, rolling hats, 2 bars]
 
-[inst - ghost snare, fold bass, wide mid reese counterline, wide low-mid, late snare, 8 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid reese counterline, wide low-mid, late snare, 2 bars]
 
-[build-up - snare roll, stacked 808, kick pattern flip, formant answer, side percussion, early kick, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, formant answer, side percussion, early kick, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, fold bass, syncopated hats, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, fold bass, wide mid growl, snare roll, wide mids, syncopated hats, 2 bars]
 
-[inst - rapid hi-hats, stacked 808, call-response reese, side hats, open hat, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, offbeat hats, wide mid growl, wide mids, closed hat, 2 bars]
 
-[drop - full send formant warped drop, fold bass, growl answer, offbeat hats, wide low-mid, closed hat, 10 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, growl answer, wide low-mid, closed hat, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, wide mid reese counterline, wide low-mid, kick tightens, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, growl answer, wide low-mid, tight kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, wide mid reese counterline, wide mids, tight kick, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, stacked 808, formant answer, kick pattern flip, side hats, loose hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, wide mid growl, wide low-mid, pushed snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, stacked 808, call-response reese, rapid hi-hats, side percussion, chopped hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, trap drums denser, call-response reese, side percussion, kick opens, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, stacked 808, formant bass melody, trap drums denser, side hats, kick opens, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, wide mid reese counterline, wide low-mid, kick tightens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, stacked 808, formant answer, kick pattern flip, side percussion, snare answers, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, wide mid growl, wide mids, offbeat push, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, call-response reese, side hats, straight hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, fold bass, growl answer, offbeat hats, wide low-mid, triplet hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, growl answer, wide low-mid, ghost notes, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, wide mid reese counterline, wide mids, ghost notes, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, stacked 808, formant answer, kick pattern flip, side hats, dry hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, wide mid growl, wide low-mid, wide hat bed, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, stacked 808, call-response reese, rapid hi-hats, side percussion, mono kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, growl answer, wide mids, side snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, stacked 808, formant bass melody, trap drums denser, side hats, rolling hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, kick pattern flip, formant bass melody, side hats, early kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid reese counterline, wide low-mid, syncopated hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, wide mid growl, wide mids, syncopated hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, call-response reese, side hats, open hat, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, growl answer, wide low-mid, closed hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, stacked 808, formant bass melody, trap drums denser, side percussion, room snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant bass melody, side percussion, loose hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, stacked 808, formant answer, kick pattern flip, side hats, loose hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, formant answer, side hats, chopped hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, stacked 808, call-response reese, rapid hi-hats, side percussion, chopped hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, growl answer, wide mids, hat density up, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, stacked 808, formant bass melody, trap drums denser, side hats, kick opens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid reese counterline, wide low-mid, kick tightens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, formant answer, side percussion, snare answers, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, fold bass, wide mid growl, snare roll, wide mids, offbeat push, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, offbeat hats, wide mid growl, wide mids, triplet hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, fold bass, growl answer, offbeat hats, wide low-mid, triplet hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, formant bass melody, side percussion, backbeat shove, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, fold bass, wide mid reese counterline, ghost snare, wide mids, ghost notes, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, formant answer, side hats, dry hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, fold bass, wide mid growl, snare roll, wide low-mid, wide hat bed, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, call-response reese, side percussion, mono kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, call-response reese, side percussion, rolling hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, stacked 808, formant bass melody, trap drums denser, side hats, rolling hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, wide mid reese counterline, wide low-mid, late snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, stacked 808, formant answer, kick pattern flip, side percussion, early kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, formant answer, side percussion, open hat, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, wide mid growl, wide mids, closed hat, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, fold bass, growl answer, offbeat hats, wide low-mid, closed hat, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, call-response reese, side hats, loose hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, growl answer, wide low-mid, pushed snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, snare roll, wide mid reese counterline, wide mids, pushed snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, fold bass, wide mid growl, snare roll, wide low-mid, pushed snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, call-response reese, side percussion, chopped hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, call-response reese, side percussion, kick opens, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant bass melody, side hats, kick opens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, fold bass, wide mid reese counterline, ghost snare, wide low-mid, kick tightens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, snare roll, wide mid reese counterline, wide low-mid, offbeat push, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, fold bass, wide mid growl, snare roll, wide mids, offbeat push, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, formant answer, side percussion, backbeat shove, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, fold bass, growl answer, offbeat hats, wide low-mid, triplet hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, call-response reese, side hats, dry hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant bass melody, side percussion, dry hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, stacked 808, formant answer, kick pattern flip, side hats, dry hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, wide mid growl, wide low-mid, wide hat bed, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, wide mid growl, wide low-mid, side snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, growl answer, wide mids, side snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, growl answer, wide mids, late snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, fold bass, wide mid reese counterline, ghost snare, wide low-mid, late snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, formant answer, side percussion, early kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, wide mid growl, wide mids, syncopated hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, stacked 808, call-response reese, rapid hi-hats, side hats, open hat, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, call-response reese, side hats, room snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, stacked 808, formant bass melody, trap drums denser, side percussion, room snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid reese counterline, wide mids, tight kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, formant answer, side hats, loose hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, fold bass, wide mid growl, snare roll, wide low-mid, pushed snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, offbeat hats, wide mid growl, wide low-mid, hat density up, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, wide mid growl, wide low-mid, kick tightens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, growl answer, wide mids, kick tightens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, fold bass, wide mid reese counterline, ghost snare, wide low-mid, kick tightens, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, formant bass melody, side hats, straight hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, wide mid growl, wide mids, offbeat push, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, stacked 808, call-response reese, rapid hi-hats, side hats, straight hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, growl answer, wide low-mid, triplet hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, growl answer, wide low-mid, ghost notes, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, fold bass, wide mid reese counterline, ghost snare, wide mids, ghost notes, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid reese counterline, wide mids, wide hat bed, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, formant answer, side hats, mono kick, 2 bars]
+
+[outro - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, wide mid reese counterline, wide low-mid, kick tightens, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -2286,11 +4854,11 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, w
 | Slot | Value |
 | --- | --- |
 | 0 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, …` |
-| 1 | `[build-up - snare roll, stacked 808, rapid hi-hats, call-response reese, side h…` |
+| 1 | `[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no…` |
 | 2 | `509` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `251.0` |
+| 5 | `325.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `G major` |
@@ -2302,63 +4870,239 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, w
 | 14 | `0.0` |
 
 ```text
-chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 170 bpm, instrumental, no vocals
+chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 170 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, stacked 808, rapid hi-hats, call-response reese, side hats, open hat, dual-action pedal bass, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, call-response reese, side hats, open hat, dual-action pedal bass, 2 bars]
 
-[drop - wreck reese warped drop, fold bass, growl answer, offbeat hats, wide low-mid, closed hat, chest-sub, dual-action pedal bass, heavy chest drop, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, fold bass, growl answer, offbeat hats, wide low-mid, closed hat, chest-sub, dual-action pedal bass, heavy chest drop, 2 bars]
 
-[build-up - snare roll, stacked 808, trap drums denser, formant bass melody, side percussion, room snare, sub warp wreck, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant bass melody, side percussion, room snare, sub warp wreck, 2 bars]
 
-[drop - heavy wobble warped drop, fold bass, wide mid reese counterline, ghost snare, wide mids, tight kick, pedal 808 hold, 12 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, fold bass, wide mid reese counterline, ghost snare, wide mids, tight kick, pedal 808 hold, 2 bars]
 
-[inst - kick pattern flip, stacked 808, formant answer, side hats, loose hats, rapid hi-hats roll, 8 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, formant answer, side hats, loose hats, rapid hi-hats roll, 2 bars]
 
-[drop - full send formant warped drop, fold bass, wide mid growl, snare roll, wide low-mid, pushed snare, harder growl drop, 10 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, wide mid growl, wide low-mid, pushed snare, stacked 808 wall, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side percussion, stacked 808, chopped hats, stacked 808 wall, 6 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, stacked 808, call-response reese, rapid hi-hats, side percussion, chopped hats, harder growl drop, 2 bars]
 
-[build-up - snare roll, fold bass, offbeat hats, growl answer, wide mids, hat density up, chest formant, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, growl answer, wide mids, hat density up, chest formant, 2 bars]
 
-[inst - trap drums denser, stacked 808, formant bass melody, side hats, kick opens, snare roll, 12 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, formant bass melody, side hats, kick opens, snare roll, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide low-mid, fold bass, kick tightens, chest-sub 808, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, fold bass, wide mid reese counterline, ghost snare, wide low-mid, kick tightens, chest-sub 808, 2 bars]
 
-[build-up - snare roll, stacked 808, kick pattern flip, formant answer, side percussion, snare answers, body chest wreck, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, formant answer, side percussion, snare answers, body chest wreck, 2 bars]
 
-[inst - snare roll, fold bass, wide mid growl, wide mids, offbeat push, pedal warp, 6 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, fold bass, wide mid growl, snare roll, wide mids, offbeat push, full send drop, 2 bars]
 
-[build-up - snare roll, stacked 808, rapid hi-hats, call-response reese, side hats, straight hats, low 808 wreck, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, call-response reese, side hats, straight hats, pedal warp, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide low-mid, fold bass, triplet hats, trap growl, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, fold bass, growl answer, offbeat hats, wide low-mid, triplet hats, harder stacked drop, 2 bars]
 
-[build-up - snare roll, stacked 808, trap drums denser, formant bass melody, side percussion, backbeat shove, kick holds, 6 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant bass melody, side percussion, backbeat shove, low 808 wreck, 2 bars]
 
-[drop - full send formant warped drop, fold bass, wide mid reese counterline, ghost snare, wide mids, ghost notes, full send drop, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, fold bass, wide mid reese counterline, ghost snare, wide mids, ghost notes, trap growl, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side hats, stacked 808, dry hats, hats denser, 6 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, formant answer, side hats, dry hats, kick holds, 2 bars]
 
-[build-up - snare roll, fold bass, snare roll, wide mid growl, wide low-mid, wide hat bed, pedal ride, 4 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, fold bass, wide mid growl, snare roll, wide low-mid, wide hat bed, hats denser, 2 bars]
 
-[drop - heavy wobble warped drop, stacked 808, call-response reese, rapid hi-hats, side percussion, mono kick, harder stacked drop, 8 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, call-response reese, side percussion, mono kick, pedal ride, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, fold bass, side snare, 4 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, fold bass, growl answer, offbeat hats, wide mids, side snare, 2 bars]
 
-[build-up - snare roll, stacked 808, trap drums denser, formant bass melody, side hats, rolling hats, 6 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, formant bass melody, side hats, rolling hats, 2 bars]
 
-[inst - ghost snare, fold bass, wide mid reese counterline, wide low-mid, late snare, 8 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid reese counterline, wide low-mid, late snare, 2 bars]
 
-[build-up - snare roll, stacked 808, kick pattern flip, formant answer, side percussion, early kick, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, formant answer, side percussion, early kick, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, fold bass, syncopated hats, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, fold bass, wide mid growl, snare roll, wide mids, syncopated hats, 2 bars]
 
-[inst - rapid hi-hats, stacked 808, call-response reese, side hats, open hat, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, offbeat hats, wide mid growl, wide mids, closed hat, 2 bars]
 
-[drop - full send formant warped drop, fold bass, growl answer, offbeat hats, wide low-mid, closed hat, 10 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, growl answer, wide low-mid, closed hat, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, wide mid reese counterline, wide low-mid, kick tightens, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, growl answer, wide low-mid, tight kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, wide mid reese counterline, wide mids, tight kick, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, stacked 808, formant answer, kick pattern flip, side hats, loose hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, wide mid growl, wide low-mid, pushed snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, stacked 808, call-response reese, rapid hi-hats, side percussion, chopped hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, trap drums denser, call-response reese, side percussion, kick opens, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, stacked 808, formant bass melody, trap drums denser, side hats, kick opens, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, wide mid reese counterline, wide low-mid, kick tightens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, stacked 808, formant answer, kick pattern flip, side percussion, snare answers, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, wide mid growl, wide mids, offbeat push, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, call-response reese, side hats, straight hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, fold bass, growl answer, offbeat hats, wide low-mid, triplet hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, growl answer, wide low-mid, ghost notes, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, wide mid reese counterline, wide mids, ghost notes, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, stacked 808, formant answer, kick pattern flip, side hats, dry hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, wide mid growl, wide low-mid, wide hat bed, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, stacked 808, call-response reese, rapid hi-hats, side percussion, mono kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, growl answer, wide mids, side snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, stacked 808, formant bass melody, trap drums denser, side hats, rolling hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, kick pattern flip, formant bass melody, side hats, early kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid reese counterline, wide low-mid, syncopated hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, wide mid growl, wide mids, syncopated hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, call-response reese, side hats, open hat, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, growl answer, wide low-mid, closed hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, stacked 808, formant bass melody, trap drums denser, side percussion, room snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant bass melody, side percussion, loose hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, stacked 808, formant answer, kick pattern flip, side hats, loose hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, formant answer, side hats, chopped hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, stacked 808, call-response reese, rapid hi-hats, side percussion, chopped hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, growl answer, wide mids, hat density up, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, stacked 808, formant bass melody, trap drums denser, side hats, kick opens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid reese counterline, wide low-mid, kick tightens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, formant answer, side percussion, snare answers, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, fold bass, wide mid growl, snare roll, wide mids, offbeat push, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, offbeat hats, wide mid growl, wide mids, triplet hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, fold bass, growl answer, offbeat hats, wide low-mid, triplet hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, formant bass melody, side percussion, backbeat shove, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, fold bass, wide mid reese counterline, ghost snare, wide mids, ghost notes, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, formant answer, side hats, dry hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, fold bass, wide mid growl, snare roll, wide low-mid, wide hat bed, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, call-response reese, side percussion, mono kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, call-response reese, side percussion, rolling hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, stacked 808, formant bass melody, trap drums denser, side hats, rolling hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, wide mid reese counterline, wide low-mid, late snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, stacked 808, formant answer, kick pattern flip, side percussion, early kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, formant answer, side percussion, open hat, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, wide mid growl, wide mids, closed hat, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, fold bass, growl answer, offbeat hats, wide low-mid, closed hat, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, call-response reese, side hats, loose hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, growl answer, wide low-mid, pushed snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, snare roll, wide mid reese counterline, wide mids, pushed snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, fold bass, wide mid growl, snare roll, wide low-mid, pushed snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, call-response reese, side percussion, chopped hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, call-response reese, side percussion, kick opens, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant bass melody, side hats, kick opens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, fold bass, wide mid reese counterline, ghost snare, wide low-mid, kick tightens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, snare roll, wide mid reese counterline, wide low-mid, offbeat push, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, fold bass, wide mid growl, snare roll, wide mids, offbeat push, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, formant answer, side percussion, backbeat shove, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, fold bass, growl answer, offbeat hats, wide low-mid, triplet hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, call-response reese, side hats, dry hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant bass melody, side percussion, dry hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, stacked 808, formant answer, kick pattern flip, side hats, dry hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, wide mid growl, wide low-mid, wide hat bed, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, wide mid growl, wide low-mid, side snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, growl answer, wide mids, side snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, growl answer, wide mids, late snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, fold bass, wide mid reese counterline, ghost snare, wide low-mid, late snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, formant answer, side percussion, early kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, wide mid growl, wide mids, syncopated hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, stacked 808, call-response reese, rapid hi-hats, side hats, open hat, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, call-response reese, side hats, room snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, stacked 808, formant bass melody, trap drums denser, side percussion, room snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid reese counterline, wide mids, tight kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, formant answer, side hats, loose hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, fold bass, wide mid growl, snare roll, wide low-mid, pushed snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, offbeat hats, wide mid growl, wide low-mid, hat density up, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, wide mid growl, wide low-mid, kick tightens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, growl answer, wide mids, kick tightens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, fold bass, wide mid reese counterline, ghost snare, wide low-mid, kick tightens, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, formant bass melody, side hats, straight hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, wide mid growl, wide mids, offbeat push, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, stacked 808, call-response reese, rapid hi-hats, side hats, straight hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, growl answer, wide low-mid, triplet hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, growl answer, wide low-mid, ghost notes, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, fold bass, wide mid reese counterline, ghost snare, wide mids, ghost notes, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid reese counterline, wide mids, wide hat bed, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, formant answer, side hats, mono kick, 2 bars]
+
+[outro - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, wide mid reese counterline, wide low-mid, kick tightens, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -2441,14 +5185,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `312.0` |
+| 0 | `350.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `312.0` |
+| 0 | `350.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -2457,77 +5201,269 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, …` |
-| 2 | `[build-up - snare roll, low chest-sub, rapid hi-hats, formant answer, side hats…` |
+| 2 | `[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/11-haul-crate` |
 
 ```text
-dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 174 bpm, instrumental, no vocals
+dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 174 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, low chest-sub, rapid hi-hats, formant answer, side hats, closed hat, trap drums 808 wreck, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, formant answer, side hats, closed hat, trap drums 808 wreck, 2 bars]
 
-[drop - harder reese warped drop, mono chest-sub, wide mid growl, offbeat hats, wide low-mid, room snare, warped hybrid-trap, heavy hybrid drop, 10 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, mono chest-sub, wide mid growl, offbeat hats, wide low-mid, room snare, warped hybrid-trap, heavy hybrid drop, 2 bars]
 
-[inst - trap drums denser, low chest-sub, call-response reese, side percussion, tight kick, warped crate, 12 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, call-response reese, side percussion, tight kick, warped crate, 2 bars]
 
-[build-up - snare roll, mono chest-sub, ghost snare, growl answer, wide mids, loose hats, rapid hi-hats roll, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, growl answer, wide mids, loose hats, rapid hi-hats roll, 2 bars]
 
-[inst - kick pattern flip, low chest-sub, formant bass melody, side hats, pushed snare, 808 slide, 10 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, low chest-sub, formant bass melody, kick pattern flip, side hats, pushed snare, 808 slide, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide low-mid, mono chest-sub, chopped hats, stacked trap bass, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, wide mid reese counterline, wide low-mid, chopped hats, stacked trap bass, 2 bars]
 
-[build-up - snare roll, low chest-sub, rapid hi-hats, formant answer, side percussion, hat density up, chest formant, 4 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, low chest-sub, formant answer, rapid hi-hats, side percussion, hat density up, harder growl drop, 2 bars]
 
-[inst - offbeat hats, mono chest-sub, wide mid growl, wide mids, kick opens, snare roll, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, wide mid growl, wide mids, kick opens, chest formant, 2 bars]
 
-[build-up - snare roll, low chest-sub, trap drums denser, call-response reese, side hats, kick tightens, chest-sub 808 punch, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, call-response reese, side hats, kick tightens, snare roll, 2 bars]
 
-[inst - ghost snare, mono chest-sub, growl answer, wide low-mid, snare answers, chest-sub 808 wall, 10 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, growl answer, wide low-mid, snare answers, chest-sub 808 punch, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, low chest-sub, offbeat push, hybrid warp, 8 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, low chest-sub, formant bass melody, kick pattern flip, side percussion, offbeat push, full send drop, 2 bars]
 
-[build-up - snare roll, mono chest-sub, snare roll, wide mid reese counterline, wide mids, straight hats, kick holds, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, wide mid reese counterline, wide mids, straight hats, chest-sub 808 wall, 2 bars]
 
-[inst - rapid hi-hats, low chest-sub, formant answer, side hats, triplet hats, 808 ride, 10 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, low chest-sub, formant answer, rapid hi-hats, side hats, triplet hats, hybrid warp, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, mono chest-sub, backbeat shove, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, wide mid growl, wide low-mid, backbeat shove, kick holds, 2 bars]
 
-[drop - stacked warped drop, low chest-sub, call-response reese, trap drums denser, side percussion, ghost notes, harder growl drop, 10 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, call-response reese, side percussion, ghost notes, 808 ride, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, mono chest-sub, dry hats, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, growl answer, wide mids, dry hats, 2 bars]
 
-[drop - harder reese warped drop, low chest-sub, formant bass melody, kick pattern flip, side hats, wide hat bed, full send drop, 12 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, low chest-sub, formant bass melody, kick pattern flip, side hats, wide hat bed, 2 bars]
 
-[inst - snare roll, mono chest-sub, wide mid reese counterline, wide low-mid, mono kick, 4 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, wide mid reese counterline, wide low-mid, mono kick, 2 bars]
 
-[drop - wreck wobble warped drop, low chest-sub, formant answer, rapid hi-hats, side percussion, side snare, 8 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, formant answer, side percussion, side snare, 2 bars]
 
-[build-up - snare roll, mono chest-sub, offbeat hats, wide mid growl, wide mids, rolling hats, 6 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, wide mid growl, wide mids, rolling hats, 2 bars]
 
-[inst - trap drums denser, low chest-sub, call-response reese, side hats, late snare, 12 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, call-response reese, side hats, late snare, 2 bars]
 
-[drop - harder reese warped drop, mono chest-sub, growl answer, ghost snare, wide low-mid, early kick, 10 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, mono chest-sub, growl answer, ghost snare, wide low-mid, early kick, 2 bars]
 
-[build-up - snare roll, low chest-sub, kick pattern flip, formant bass melody, side percussion, syncopated hats, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, formant bass melody, side percussion, syncopated hats, 2 bars]
 
-[inst - snare roll, mono chest-sub, wide mid reese counterline, wide mids, open hat, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, mono chest-sub, wide mid reese counterline, snare roll, wide mids, open hat, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side hats, low chest-sub, closed hat, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant answer, side hats, closed hat, 2 bars]
 
-[build-up - snare roll, mono chest-sub, offbeat hats, wide mid growl, wide low-mid, room snare, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, mono chest-sub, wide mid growl, offbeat hats, wide low-mid, room snare, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side percussion, low chest-sub, tight kick, 8 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, wide mid growl, wide low-mid, loose hats, 2 bars]
 
-[build-up - snare roll, octave sub stack, kick pattern flip, call-response reese, side percussion, pushed snare, 4 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, mono chest-sub, growl answer, ghost snare, wide mids, loose hats, 2 bars]
 
-[inst - snare roll, body bass, growl answer, wide mids, chopped hats, 12 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, formant bass melody, side hats, pushed snare, 2 bars]
 
-[build-up - snare roll, mono chest-sub, snare roll, wide mid reese counterline, wide low-mid, chopped hats, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, mono chest-sub, wide mid reese counterline, snare roll, wide low-mid, chopped hats, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side percussion, offbeat push, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant answer, side percussion, hat density up, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, formant answer, side percussion, kick tightens, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, low chest-sub, call-response reese, trap drums denser, side hats, kick tightens, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, growl answer, wide low-mid, snare answers, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, low chest-sub, formant bass melody, kick pattern flip, side percussion, offbeat push, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, formant bass melody, side percussion, triplet hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, low chest-sub, formant answer, rapid hi-hats, side hats, triplet hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, wide mid growl, wide low-mid, backbeat shove, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, call-response reese, side percussion, ghost notes, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, growl answer, wide mids, dry hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, low chest-sub, formant bass melody, kick pattern flip, side hats, wide hat bed, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, wide mid reese counterline, wide low-mid, mono kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant answer, side percussion, side snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, mono chest-sub, wide mid growl, offbeat hats, wide mids, rolling hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, wide mid growl, wide mids, early kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, mono chest-sub, growl answer, ghost snare, wide low-mid, early kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, formant bass melody, side percussion, syncopated hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, wide mid reese counterline, wide mids, open hat, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, low chest-sub, formant answer, rapid hi-hats, side hats, closed hat, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, wide mid growl, wide low-mid, room snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, low chest-sub, call-response reese, trap drums denser, side percussion, tight kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, call-response reese, side percussion, pushed snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, growl answer, wide mids, chopped hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, wide mid reese counterline, wide low-mid, chopped hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, formant answer, side percussion, hat density up, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, wide mid growl, wide mids, kick opens, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, call-response reese, side hats, kick tightens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, call-response reese, side hats, offbeat push, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, low chest-sub, formant bass melody, kick pattern flip, side percussion, offbeat push, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, growl answer, wide low-mid, backbeat shove, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant answer, side hats, triplet hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, mono chest-sub, wide mid growl, offbeat hats, wide low-mid, backbeat shove, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, wide mid growl, wide low-mid, dry hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, mono chest-sub, growl answer, ghost snare, wide mids, dry hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, formant bass melody, side hats, wide hat bed, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, mono chest-sub, wide mid reese counterline, snare roll, wide low-mid, mono kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, wide mid reese counterline, wide low-mid, rolling hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, wide mid growl, wide mids, rolling hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, low chest-sub, call-response reese, trap drums denser, side hats, late snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, growl answer, wide low-mid, early kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, growl answer, wide low-mid, open hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, mono chest-sub, wide mid reese counterline, snare roll, wide mids, open hat, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, wide mid reese counterline, wide mids, room snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, mono chest-sub, wide mid growl, offbeat hats, wide low-mid, room snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, formant answer, side hats, pushed snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, mono chest-sub, growl answer, ghost snare, wide mids, loose hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, formant bass melody, side hats, pushed snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, mono chest-sub, wide mid reese counterline, snare roll, wide low-mid, chopped hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, wide mid reese counterline, wide low-mid, kick opens, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, mono chest-sub, wide mid growl, offbeat hats, wide mids, kick opens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, wide mid growl, wide mids, snare answers, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, wide mid growl, wide mids, straight hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, low chest-sub, formant bass melody, kick pattern flip, side percussion, offbeat push, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, call-response reese, side hats, ghost notes, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, wide mid reese counterline, wide mids, backbeat shove, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, mono chest-sub, wide mid growl, offbeat hats, wide low-mid, backbeat shove, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, wide mid growl, wide low-mid, dry hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, call-response reese, side percussion, wide hat bed, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, low chest-sub, formant bass melody, kick pattern flip, side hats, wide hat bed, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, formant bass melody, side hats, side snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, low chest-sub, formant answer, rapid hi-hats, side percussion, side snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, formant answer, side percussion, late snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, call-response reese, side hats, late snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, mono chest-sub, growl answer, ghost snare, wide low-mid, early kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, growl answer, wide low-mid, open hat, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, formant bass melody, side percussion, closed hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, formant bass melody, side percussion, tight kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, formant answer, side hats, tight kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, low chest-sub, call-response reese, trap drums denser, side percussion, tight kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, growl answer, wide mids, loose hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, growl answer, wide mids, chopped hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, mono chest-sub, wide mid reese counterline, snare roll, wide low-mid, chopped hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, formant bass melody, side hats, kick tightens, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, mono chest-sub, wide mid growl, offbeat hats, wide mids, kick opens, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, formant answer, side percussion, offbeat push, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, mono chest-sub, growl answer, ghost snare, wide low-mid, snare answers, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, formant bass melody, side percussion, offbeat push, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, wide mid reese counterline, wide mids, straight hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, low chest-sub, formant answer, rapid hi-hats, side hats, triplet hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, formant answer, side hats, ghost notes, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, formant answer, side hats, wide hat bed, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, mono chest-sub, growl answer, ghost snare, wide mids, dry hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, growl answer, wide mids, mono kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, mono chest-sub, wide mid reese counterline, snare roll, wide low-mid, mono kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, wide mid reese counterline, wide low-mid, rolling hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, formant answer, side percussion, late snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, low chest-sub, call-response reese, trap drums denser, side hats, late snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, call-response reese, side hats, syncopated hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, call-response reese, side hats, closed hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, mono chest-sub, wide mid reese counterline, snare roll, wide mids, open hat, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, growl answer, wide low-mid, loose hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, wide mid reese counterline, wide mids, loose hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, low chest-sub, call-response reese, trap drums denser, side percussion, tight kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, call-response reese, side percussion, pushed snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, call-response reese, side percussion, hat density up, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, formant bass melody, side hats, hat density up, 2 bars]
+
+[outro - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side percussion, offbeat push, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -2535,11 +5471,11 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, r
 | Slot | Value |
 | --- | --- |
 | 0 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, …` |
-| 1 | `[build-up - snare roll, low chest-sub, rapid hi-hats, formant answer, side hats…` |
+| 1 | `[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no…` |
 | 2 | `521` |
 | 3 | `fixed` |
 | 4 | `174` |
-| 5 | `312.0` |
+| 5 | `350.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `B minor` |
@@ -2551,71 +5487,263 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, r
 | 14 | `0.0` |
 
 ```text
-dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 174 bpm, instrumental, no vocals
+dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 174 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, low chest-sub, rapid hi-hats, formant answer, side hats, closed hat, trap drums 808 wreck, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, formant answer, side hats, closed hat, trap drums 808 wreck, 2 bars]
 
-[drop - harder reese warped drop, mono chest-sub, wide mid growl, offbeat hats, wide low-mid, room snare, warped hybrid-trap, heavy hybrid drop, 10 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, mono chest-sub, wide mid growl, offbeat hats, wide low-mid, room snare, warped hybrid-trap, heavy hybrid drop, 2 bars]
 
-[inst - trap drums denser, low chest-sub, call-response reese, side percussion, tight kick, warped crate, 12 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, call-response reese, side percussion, tight kick, warped crate, 2 bars]
 
-[build-up - snare roll, mono chest-sub, ghost snare, growl answer, wide mids, loose hats, rapid hi-hats roll, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, growl answer, wide mids, loose hats, rapid hi-hats roll, 2 bars]
 
-[inst - kick pattern flip, low chest-sub, formant bass melody, side hats, pushed snare, 808 slide, 10 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, low chest-sub, formant bass melody, kick pattern flip, side hats, pushed snare, 808 slide, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide low-mid, mono chest-sub, chopped hats, stacked trap bass, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, wide mid reese counterline, wide low-mid, chopped hats, stacked trap bass, 2 bars]
 
-[build-up - snare roll, low chest-sub, rapid hi-hats, formant answer, side percussion, hat density up, chest formant, 4 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, low chest-sub, formant answer, rapid hi-hats, side percussion, hat density up, harder growl drop, 2 bars]
 
-[inst - offbeat hats, mono chest-sub, wide mid growl, wide mids, kick opens, snare roll, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, wide mid growl, wide mids, kick opens, chest formant, 2 bars]
 
-[build-up - snare roll, low chest-sub, trap drums denser, call-response reese, side hats, kick tightens, chest-sub 808 punch, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, call-response reese, side hats, kick tightens, snare roll, 2 bars]
 
-[inst - ghost snare, mono chest-sub, growl answer, wide low-mid, snare answers, chest-sub 808 wall, 10 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, growl answer, wide low-mid, snare answers, chest-sub 808 punch, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, low chest-sub, offbeat push, hybrid warp, 8 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, low chest-sub, formant bass melody, kick pattern flip, side percussion, offbeat push, full send drop, 2 bars]
 
-[build-up - snare roll, mono chest-sub, snare roll, wide mid reese counterline, wide mids, straight hats, kick holds, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, wide mid reese counterline, wide mids, straight hats, chest-sub 808 wall, 2 bars]
 
-[inst - rapid hi-hats, low chest-sub, formant answer, side hats, triplet hats, 808 ride, 10 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, low chest-sub, formant answer, rapid hi-hats, side hats, triplet hats, hybrid warp, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, mono chest-sub, backbeat shove, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, wide mid growl, wide low-mid, backbeat shove, kick holds, 2 bars]
 
-[drop - stacked warped drop, low chest-sub, call-response reese, trap drums denser, side percussion, ghost notes, harder growl drop, 10 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, call-response reese, side percussion, ghost notes, 808 ride, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, mono chest-sub, dry hats, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, growl answer, wide mids, dry hats, 2 bars]
 
-[drop - harder reese warped drop, low chest-sub, formant bass melody, kick pattern flip, side hats, wide hat bed, full send drop, 12 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, low chest-sub, formant bass melody, kick pattern flip, side hats, wide hat bed, 2 bars]
 
-[inst - snare roll, mono chest-sub, wide mid reese counterline, wide low-mid, mono kick, 4 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, wide mid reese counterline, wide low-mid, mono kick, 2 bars]
 
-[drop - wreck wobble warped drop, low chest-sub, formant answer, rapid hi-hats, side percussion, side snare, 8 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, formant answer, side percussion, side snare, 2 bars]
 
-[build-up - snare roll, mono chest-sub, offbeat hats, wide mid growl, wide mids, rolling hats, 6 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, wide mid growl, wide mids, rolling hats, 2 bars]
 
-[inst - trap drums denser, low chest-sub, call-response reese, side hats, late snare, 12 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, call-response reese, side hats, late snare, 2 bars]
 
-[drop - harder reese warped drop, mono chest-sub, growl answer, ghost snare, wide low-mid, early kick, 10 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, mono chest-sub, growl answer, ghost snare, wide low-mid, early kick, 2 bars]
 
-[build-up - snare roll, low chest-sub, kick pattern flip, formant bass melody, side percussion, syncopated hats, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, formant bass melody, side percussion, syncopated hats, 2 bars]
 
-[inst - snare roll, mono chest-sub, wide mid reese counterline, wide mids, open hat, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, mono chest-sub, wide mid reese counterline, snare roll, wide mids, open hat, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side hats, low chest-sub, closed hat, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant answer, side hats, closed hat, 2 bars]
 
-[build-up - snare roll, mono chest-sub, offbeat hats, wide mid growl, wide low-mid, room snare, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, mono chest-sub, wide mid growl, offbeat hats, wide low-mid, room snare, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side percussion, low chest-sub, tight kick, 8 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, wide mid growl, wide low-mid, loose hats, 2 bars]
 
-[build-up - snare roll, octave sub stack, kick pattern flip, call-response reese, side percussion, pushed snare, 4 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, mono chest-sub, growl answer, ghost snare, wide mids, loose hats, 2 bars]
 
-[inst - snare roll, body bass, growl answer, wide mids, chopped hats, 12 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, formant bass melody, side hats, pushed snare, 2 bars]
 
-[build-up - snare roll, mono chest-sub, snare roll, wide mid reese counterline, wide low-mid, chopped hats, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, mono chest-sub, wide mid reese counterline, snare roll, wide low-mid, chopped hats, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side percussion, offbeat push, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant answer, side percussion, hat density up, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, formant answer, side percussion, kick tightens, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, low chest-sub, call-response reese, trap drums denser, side hats, kick tightens, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, growl answer, wide low-mid, snare answers, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, low chest-sub, formant bass melody, kick pattern flip, side percussion, offbeat push, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, formant bass melody, side percussion, triplet hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, low chest-sub, formant answer, rapid hi-hats, side hats, triplet hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, wide mid growl, wide low-mid, backbeat shove, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, call-response reese, side percussion, ghost notes, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, growl answer, wide mids, dry hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, low chest-sub, formant bass melody, kick pattern flip, side hats, wide hat bed, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, wide mid reese counterline, wide low-mid, mono kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant answer, side percussion, side snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, mono chest-sub, wide mid growl, offbeat hats, wide mids, rolling hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, wide mid growl, wide mids, early kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, mono chest-sub, growl answer, ghost snare, wide low-mid, early kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, formant bass melody, side percussion, syncopated hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, wide mid reese counterline, wide mids, open hat, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, low chest-sub, formant answer, rapid hi-hats, side hats, closed hat, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, wide mid growl, wide low-mid, room snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, low chest-sub, call-response reese, trap drums denser, side percussion, tight kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, call-response reese, side percussion, pushed snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, growl answer, wide mids, chopped hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, wide mid reese counterline, wide low-mid, chopped hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, formant answer, side percussion, hat density up, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, wide mid growl, wide mids, kick opens, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, call-response reese, side hats, kick tightens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, call-response reese, side hats, offbeat push, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, low chest-sub, formant bass melody, kick pattern flip, side percussion, offbeat push, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, growl answer, wide low-mid, backbeat shove, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant answer, side hats, triplet hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, mono chest-sub, wide mid growl, offbeat hats, wide low-mid, backbeat shove, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, wide mid growl, wide low-mid, dry hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, mono chest-sub, growl answer, ghost snare, wide mids, dry hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, formant bass melody, side hats, wide hat bed, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, mono chest-sub, wide mid reese counterline, snare roll, wide low-mid, mono kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, wide mid reese counterline, wide low-mid, rolling hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, wide mid growl, wide mids, rolling hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, low chest-sub, call-response reese, trap drums denser, side hats, late snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, growl answer, wide low-mid, early kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, growl answer, wide low-mid, open hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, mono chest-sub, wide mid reese counterline, snare roll, wide mids, open hat, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, wide mid reese counterline, wide mids, room snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, mono chest-sub, wide mid growl, offbeat hats, wide low-mid, room snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, formant answer, side hats, pushed snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, mono chest-sub, growl answer, ghost snare, wide mids, loose hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, formant bass melody, side hats, pushed snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, mono chest-sub, wide mid reese counterline, snare roll, wide low-mid, chopped hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, wide mid reese counterline, wide low-mid, kick opens, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, mono chest-sub, wide mid growl, offbeat hats, wide mids, kick opens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, wide mid growl, wide mids, snare answers, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, wide mid growl, wide mids, straight hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, low chest-sub, formant bass melody, kick pattern flip, side percussion, offbeat push, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, call-response reese, side hats, ghost notes, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, wide mid reese counterline, wide mids, backbeat shove, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, mono chest-sub, wide mid growl, offbeat hats, wide low-mid, backbeat shove, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, wide mid growl, wide low-mid, dry hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, call-response reese, side percussion, wide hat bed, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, low chest-sub, formant bass melody, kick pattern flip, side hats, wide hat bed, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, formant bass melody, side hats, side snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, low chest-sub, formant answer, rapid hi-hats, side percussion, side snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, formant answer, side percussion, late snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, call-response reese, side hats, late snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, mono chest-sub, growl answer, ghost snare, wide low-mid, early kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, growl answer, wide low-mid, open hat, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, formant bass melody, side percussion, closed hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, formant bass melody, side percussion, tight kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, formant answer, side hats, tight kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, low chest-sub, call-response reese, trap drums denser, side percussion, tight kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, growl answer, wide mids, loose hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, growl answer, wide mids, chopped hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, mono chest-sub, wide mid reese counterline, snare roll, wide low-mid, chopped hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, formant bass melody, side hats, kick tightens, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, mono chest-sub, wide mid growl, offbeat hats, wide mids, kick opens, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, formant answer, side percussion, offbeat push, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, mono chest-sub, growl answer, ghost snare, wide low-mid, snare answers, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, formant bass melody, side percussion, offbeat push, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, wide mid reese counterline, wide mids, straight hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, low chest-sub, formant answer, rapid hi-hats, side hats, triplet hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, formant answer, side hats, ghost notes, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, formant answer, side hats, wide hat bed, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, mono chest-sub, growl answer, ghost snare, wide mids, dry hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, growl answer, wide mids, mono kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, mono chest-sub, wide mid reese counterline, snare roll, wide low-mid, mono kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, wide mid reese counterline, wide low-mid, rolling hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, formant answer, side percussion, late snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, low chest-sub, call-response reese, trap drums denser, side hats, late snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, call-response reese, side hats, syncopated hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, call-response reese, side hats, closed hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, mono chest-sub, wide mid reese counterline, snare roll, wide mids, open hat, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, growl answer, wide low-mid, loose hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, wide mid reese counterline, wide mids, loose hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, low chest-sub, call-response reese, trap drums denser, side percussion, tight kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, call-response reese, side percussion, pushed snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, call-response reese, side percussion, hat density up, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, formant bass melody, side hats, hat density up, 2 bars]
+
+[outro - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side percussion, offbeat push, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -2698,14 +5826,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `359.0` |
+| 0 | `392.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `359.0` |
+| 0 | `392.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -2714,85 +5842,293 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, r…` |
-| 2 | `[build-up - snare roll, octave sub stack, snare roll, formant answer, side hats…` |
+| 2 | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/12-night-splice` |
 
 ```text
-wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 170 bpm, instrumental, no vocals
+wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 170 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, octave sub stack, snare roll, formant answer, side hats, dry hats, warped bass wreck, 6 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, formant answer, side hats, dry hats, warped bass wreck, 2 bars]
 
-[drop - full send formant warped drop, body bass, wide mid growl, rapid hi-hats, wide low-mid, wide hat bed, wave bass, heavy wave drop, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, body bass, wide mid growl, rapid hi-hats, wide low-mid, wide hat bed, wave bass, heavy wave drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side percussion, octave sub stack, mono kick, splice 808, 6 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, call-response reese, side percussion, mono kick, splice 808, 2 bars]
 
-[drop - stacked growl warped drop, body bass, growl answer, trap drums denser, wide mids, side snare, rapid hi-hats denser, 12 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, body bass, growl answer, trap drums denser, wide mids, side snare, rapid hi-hats denser, 2 bars]
 
-[build-up - snare roll, octave sub stack, ghost snare, formant bass melody, side hats, rolling hats, wave 808 sustain splice, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, formant bass melody, side hats, rolling hats, wave 808 sustain splice, 2 bars]
 
-[inst - kick pattern flip, body bass, wide mid reese counterline, wide low-mid, late snare, chest-sub 808 wall, 8 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, wide mid reese counterline, wide low-mid, late snare, chest-sub 808 wall, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side percussion, octave sub stack, early kick, formant fold, 6 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, octave sub stack, formant answer, snare roll, side percussion, early kick, harder growl drop, 2 bars]
 
-[build-up - snare roll, body bass, rapid hi-hats, wide mid growl, wide mids, syncopated hats, low swell wreck, 4 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, wide mid growl, wide mids, syncopated hats, formant fold, 2 bars]
 
-[drop - stacked growl warped drop, octave sub stack, call-response reese, offbeat hats, side hats, open hat, harder growl drop, 8 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, octave sub stack, call-response reese, offbeat hats, side hats, open hat, full send drop, 2 bars]
 
-[inst - trap drums denser, body bass, growl answer, wide low-mid, closed hat, wave warp, 10 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, growl answer, wide low-mid, closed hat, low swell wreck, 2 bars]
 
-[drop - harder warped drop, octave sub stack, formant bass melody, ghost snare, side percussion, room snare, full send drop, 12 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, formant bass melody, side percussion, room snare, wave warp, 2 bars]
 
-[build-up - snare roll, body bass, kick pattern flip, wide mid reese counterline, wide mids, tight kick, kick holds, 4 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, wide mid reese counterline, wide mids, tight kick, kick holds, 2 bars]
 
-[drop - wreck reese warped drop, octave sub stack, formant answer, snare roll, side hats, loose hats, hats denser, 8 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, formant answer, side hats, loose hats, hats denser, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, body bass, pushed snare, wave ride, 6 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, body bass, wide mid growl, rapid hi-hats, wide low-mid, pushed snare, wave ride, 2 bars]
 
-[build-up - snare roll, octave sub stack, offbeat hats, call-response reese, side percussion, chopped hats, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, call-response reese, side percussion, chopped hats, 2 bars]
 
-[drop - harder warped drop, body bass, growl answer, trap drums denser, wide mids, hat density up, 10 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, growl answer, wide mids, hat density up, 2 bars]
 
-[inst - ghost snare, octave sub stack, formant bass melody, side hats, kick opens, 6 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, octave sub stack, formant bass melody, ghost snare, side hats, kick opens, 2 bars]
 
-[build-up - snare roll, body bass, kick pattern flip, wide mid reese counterline, wide low-mid, kick tightens, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, wide mid reese counterline, wide low-mid, kick tightens, 2 bars]
 
-[drop - stacked growl warped drop, octave sub stack, formant answer, snare roll, side percussion, snare answers, 12 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, formant answer, side percussion, snare answers, 2 bars]
 
-[inst - rapid hi-hats, body bass, wide mid growl, wide mids, offbeat push, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, body bass, wide mid growl, rapid hi-hats, wide mids, offbeat push, 2 bars]
 
-[drop - harder warped drop, octave sub stack, call-response reese, offbeat hats, side hats, straight hats, 12 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, call-response reese, side hats, straight hats, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide low-mid, body bass, triplet hats, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, growl answer, wide low-mid, triplet hats, 2 bars]
 
-[build-up - snare roll, octave sub stack, ghost snare, formant bass melody, side percussion, backbeat shove, 6 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, octave sub stack, formant bass melody, ghost snare, side percussion, backbeat shove, 2 bars]
 
-[inst - kick pattern flip, body bass, wide mid reese counterline, wide mids, ghost notes, 12 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, wide mid reese counterline, wide mids, ghost notes, 2 bars]
 
-[drop - heavy wobble warped drop, octave sub stack, formant answer, snare roll, side hats, dry hats, 8 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, formant answer, side hats, dry hats, 2 bars]
 
-[inst - rapid hi-hats, body bass, wide mid growl, wide low-mid, wide hat bed, 4 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, body bass, wide mid growl, rapid hi-hats, wide low-mid, wide hat bed, 2 bars]
 
-[drop - full send formant warped drop, octave sub stack, call-response reese, offbeat hats, side percussion, mono kick, 10 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, call-response reese, side percussion, mono kick, 2 bars]
 
-[inst - trap drums denser, body bass, growl answer, wide mids, side snare, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, growl answer, wide mids, side snare, 2 bars]
 
-[drop - stacked growl warped drop, octave sub stack, formant bass melody, ghost snare, side hats, rolling hats, 12 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, growl answer, wide mids, late snare, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide low-mid, body bass, late snare, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, formant bass melody, side hats, early kick, 2 bars]
 
-[drop - harder warped drop, octave sub stack, formant answer, snare roll, side percussion, early kick, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, octave sub stack, formant answer, snare roll, side percussion, early kick, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, body bass, syncopated hats, 4 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, wide mid growl, wide mids, syncopated hats, 2 bars]
 
-[build-up - snare roll, octave sub stack, offbeat hats, call-response reese, side hats, open hat, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, call-response reese, side hats, open hat, 2 bars]
 
-[inst - ghost snare, fold bass, call-response reese, side hats, room snare, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, body bass, growl answer, trap drums denser, wide low-mid, closed hat, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant answer, side hats, dry hats, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, formant bass melody, side percussion, room snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, wide mid reese counterline, wide mids, tight kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, octave sub stack, formant answer, snare roll, side hats, loose hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, wide mid growl, wide low-mid, pushed snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, octave sub stack, call-response reese, offbeat hats, side percussion, chopped hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, growl answer, wide mids, hat density up, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, octave sub stack, formant bass melody, ghost snare, side hats, kick opens, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, wide mid reese counterline, wide low-mid, kick tightens, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, octave sub stack, formant answer, snare roll, side percussion, snare answers, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, wide mid growl, wide mids, offbeat push, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, octave sub stack, call-response reese, offbeat hats, side hats, straight hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, growl answer, wide low-mid, triplet hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, formant bass melody, side percussion, backbeat shove, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, body bass, wide mid reese counterline, kick pattern flip, wide mids, ghost notes, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, wide mid reese counterline, wide mids, wide hat bed, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, wide mid growl, wide low-mid, wide hat bed, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, octave sub stack, call-response reese, offbeat hats, side percussion, mono kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, growl answer, wide mids, side snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, formant bass melody, side hats, rolling hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, wide mid reese counterline, wide low-mid, late snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, formant answer, side percussion, early kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, formant answer, side percussion, open hat, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, wide mid growl, wide mids, closed hat, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, call-response reese, side hats, room snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, growl answer, wide low-mid, tight kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, formant bass melody, side percussion, loose hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, wide mid reese counterline, wide mids, pushed snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, body bass, wide mid growl, rapid hi-hats, wide low-mid, pushed snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, wide mid growl, wide low-mid, hat density up, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, call-response reese, side percussion, kick opens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, octave sub stack, formant bass melody, ghost snare, side hats, kick opens, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, formant bass melody, side hats, snare answers, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, octave sub stack, formant answer, snare roll, side percussion, snare answers, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, formant answer, side percussion, straight hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, octave sub stack, call-response reese, offbeat hats, side hats, straight hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, call-response reese, side hats, backbeat shove, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, octave sub stack, formant bass melody, ghost snare, side percussion, backbeat shove, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, formant bass melody, side percussion, dry hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, octave sub stack, formant answer, snare roll, side hats, dry hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, wide mid growl, wide low-mid, wide hat bed, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, wide mid growl, wide low-mid, side snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, body bass, growl answer, trap drums denser, wide mids, side snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, snare roll, call-response reese, side percussion, early kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, mono chest-sub, growl answer, wide mids, syncopated hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, formant answer, side percussion, early kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, formant answer, side percussion, open hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, call-response reese, side hats, open hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, body bass, growl answer, trap drums denser, wide low-mid, closed hat, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, call-response reese, side hats, loose hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, body bass, wide mid reese counterline, kick pattern flip, wide mids, tight kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, formant answer, side hats, loose hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, body bass, wide mid growl, rapid hi-hats, wide low-mid, pushed snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, formant answer, side hats, kick opens, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, wide mid growl, wide low-mid, kick tightens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, octave sub stack, formant bass melody, ghost snare, side hats, kick opens, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, mono chest-sub, growl answer, wide mids, offbeat push, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, octave sub stack, formant answer, snare roll, side percussion, snare answers, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, trap drums denser, wide mid reese counterline, wide low-mid, triplet hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, octave sub stack, call-response reese, offbeat hats, side hats, straight hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, call-response reese, side hats, backbeat shove, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, growl answer, wide low-mid, ghost notes, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, growl answer, wide low-mid, wide hat bed, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, wide mid reese counterline, wide mids, wide hat bed, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, body bass, wide mid growl, rapid hi-hats, wide low-mid, wide hat bed, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, wide mid growl, wide low-mid, side snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, body bass, growl answer, trap drums denser, wide mids, side snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, wide mid growl, wide low-mid, syncopated hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, body bass, wide mid reese counterline, kick pattern flip, wide low-mid, late snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, wide mid reese counterline, wide low-mid, syncopated hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, wide mid reese counterline, wide low-mid, closed hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, octave sub stack, call-response reese, offbeat hats, side hats, open hat, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, kick pattern flip, wide mid growl, wide mids, tight kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, wide mid growl, wide mids, pushed snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, body bass, wide mid reese counterline, kick pattern flip, wide mids, tight kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, wide mid reese counterline, wide mids, pushed snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, formant answer, side hats, chopped hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, octave sub stack, call-response reese, offbeat hats, side percussion, chopped hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, call-response reese, side percussion, kick opens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, formant bass melody, side hats, kick opens, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, body bass, wide mid reese counterline, kick pattern flip, wide low-mid, kick tightens, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, wide mid reese counterline, wide low-mid, offbeat push, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, formant bass melody, side hats, backbeat shove, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, octave sub stack, call-response reese, offbeat hats, side hats, straight hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, kick pattern flip, wide mid growl, wide mids, ghost notes, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, call-response reese, side hats, dry hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, call-response reese, side hats, mono kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, formant bass melody, side percussion, mono kick, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, fold bass, formant answer, offbeat hats, side hats, mono kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, formant answer, side hats, rolling hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, fold bass, call-response reese, ghost snare, side percussion, rolling hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, growl answer, wide mids, late snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, body bass, wide mid reese counterline, kick pattern flip, wide low-mid, late snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, offbeat hats, formant bass melody, side hats, open hat, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, formant bass melody, side hats, room snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, wide mid growl, wide mids, closed hat, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, growl answer, wide low-mid, closed hat, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, octave sub stack, formant bass melody, ghost snare, side percussion, room snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, growl answer, wide low-mid, pushed snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, formant bass melody, side percussion, chopped hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, wide mid growl, wide low-mid, pushed snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, call-response reese, side percussion, chopped hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, body bass, growl answer, trap drums denser, wide mids, hat density up, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, formant bass melody, side hats, kick opens, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, body bass, wide mid reese counterline, kick pattern flip, wide low-mid, kick tightens, 2 bars]
+
+[outro - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant answer, side hats, dry hats, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -2800,11 +6136,11 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, ra
 | Slot | Value |
 | --- | --- |
 | 0 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, r…` |
-| 1 | `[build-up - snare roll, octave sub stack, snare roll, formant answer, side hats…` |
+| 1 | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
 | 2 | `523` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `359.0` |
+| 5 | `392.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `D major` |
@@ -2816,79 +6152,287 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, ra
 | 14 | `0.0` |
 
 ```text
-wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 170 bpm, instrumental, no vocals
+wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 170 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, octave sub stack, snare roll, formant answer, side hats, dry hats, warped bass wreck, 6 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, formant answer, side hats, dry hats, warped bass wreck, 2 bars]
 
-[drop - full send formant warped drop, body bass, wide mid growl, rapid hi-hats, wide low-mid, wide hat bed, wave bass, heavy wave drop, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, body bass, wide mid growl, rapid hi-hats, wide low-mid, wide hat bed, wave bass, heavy wave drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side percussion, octave sub stack, mono kick, splice 808, 6 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, call-response reese, side percussion, mono kick, splice 808, 2 bars]
 
-[drop - stacked growl warped drop, body bass, growl answer, trap drums denser, wide mids, side snare, rapid hi-hats denser, 12 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, body bass, growl answer, trap drums denser, wide mids, side snare, rapid hi-hats denser, 2 bars]
 
-[build-up - snare roll, octave sub stack, ghost snare, formant bass melody, side hats, rolling hats, wave 808 sustain splice, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, formant bass melody, side hats, rolling hats, wave 808 sustain splice, 2 bars]
 
-[inst - kick pattern flip, body bass, wide mid reese counterline, wide low-mid, late snare, chest-sub 808 wall, 8 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, wide mid reese counterline, wide low-mid, late snare, chest-sub 808 wall, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side percussion, octave sub stack, early kick, formant fold, 6 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, octave sub stack, formant answer, snare roll, side percussion, early kick, harder growl drop, 2 bars]
 
-[build-up - snare roll, body bass, rapid hi-hats, wide mid growl, wide mids, syncopated hats, low swell wreck, 4 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, wide mid growl, wide mids, syncopated hats, formant fold, 2 bars]
 
-[drop - stacked growl warped drop, octave sub stack, call-response reese, offbeat hats, side hats, open hat, harder growl drop, 8 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, octave sub stack, call-response reese, offbeat hats, side hats, open hat, full send drop, 2 bars]
 
-[inst - trap drums denser, body bass, growl answer, wide low-mid, closed hat, wave warp, 10 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, growl answer, wide low-mid, closed hat, low swell wreck, 2 bars]
 
-[drop - harder warped drop, octave sub stack, formant bass melody, ghost snare, side percussion, room snare, full send drop, 12 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, formant bass melody, side percussion, room snare, wave warp, 2 bars]
 
-[build-up - snare roll, body bass, kick pattern flip, wide mid reese counterline, wide mids, tight kick, kick holds, 4 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, wide mid reese counterline, wide mids, tight kick, kick holds, 2 bars]
 
-[drop - wreck reese warped drop, octave sub stack, formant answer, snare roll, side hats, loose hats, hats denser, 8 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, formant answer, side hats, loose hats, hats denser, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, body bass, pushed snare, wave ride, 6 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, body bass, wide mid growl, rapid hi-hats, wide low-mid, pushed snare, wave ride, 2 bars]
 
-[build-up - snare roll, octave sub stack, offbeat hats, call-response reese, side percussion, chopped hats, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, call-response reese, side percussion, chopped hats, 2 bars]
 
-[drop - harder warped drop, body bass, growl answer, trap drums denser, wide mids, hat density up, 10 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, growl answer, wide mids, hat density up, 2 bars]
 
-[inst - ghost snare, octave sub stack, formant bass melody, side hats, kick opens, 6 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, octave sub stack, formant bass melody, ghost snare, side hats, kick opens, 2 bars]
 
-[build-up - snare roll, body bass, kick pattern flip, wide mid reese counterline, wide low-mid, kick tightens, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, wide mid reese counterline, wide low-mid, kick tightens, 2 bars]
 
-[drop - stacked growl warped drop, octave sub stack, formant answer, snare roll, side percussion, snare answers, 12 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, formant answer, side percussion, snare answers, 2 bars]
 
-[inst - rapid hi-hats, body bass, wide mid growl, wide mids, offbeat push, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, body bass, wide mid growl, rapid hi-hats, wide mids, offbeat push, 2 bars]
 
-[drop - harder warped drop, octave sub stack, call-response reese, offbeat hats, side hats, straight hats, 12 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, call-response reese, side hats, straight hats, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide low-mid, body bass, triplet hats, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, growl answer, wide low-mid, triplet hats, 2 bars]
 
-[build-up - snare roll, octave sub stack, ghost snare, formant bass melody, side percussion, backbeat shove, 6 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, octave sub stack, formant bass melody, ghost snare, side percussion, backbeat shove, 2 bars]
 
-[inst - kick pattern flip, body bass, wide mid reese counterline, wide mids, ghost notes, 12 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, wide mid reese counterline, wide mids, ghost notes, 2 bars]
 
-[drop - heavy wobble warped drop, octave sub stack, formant answer, snare roll, side hats, dry hats, 8 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, formant answer, side hats, dry hats, 2 bars]
 
-[inst - rapid hi-hats, body bass, wide mid growl, wide low-mid, wide hat bed, 4 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, body bass, wide mid growl, rapid hi-hats, wide low-mid, wide hat bed, 2 bars]
 
-[drop - full send formant warped drop, octave sub stack, call-response reese, offbeat hats, side percussion, mono kick, 10 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, call-response reese, side percussion, mono kick, 2 bars]
 
-[inst - trap drums denser, body bass, growl answer, wide mids, side snare, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, growl answer, wide mids, side snare, 2 bars]
 
-[drop - stacked growl warped drop, octave sub stack, formant bass melody, ghost snare, side hats, rolling hats, 12 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, growl answer, wide mids, late snare, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide low-mid, body bass, late snare, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, formant bass melody, side hats, early kick, 2 bars]
 
-[drop - harder warped drop, octave sub stack, formant answer, snare roll, side percussion, early kick, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, octave sub stack, formant answer, snare roll, side percussion, early kick, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, body bass, syncopated hats, 4 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, wide mid growl, wide mids, syncopated hats, 2 bars]
 
-[build-up - snare roll, octave sub stack, offbeat hats, call-response reese, side hats, open hat, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, call-response reese, side hats, open hat, 2 bars]
 
-[inst - ghost snare, fold bass, call-response reese, side hats, room snare, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, body bass, growl answer, trap drums denser, wide low-mid, closed hat, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant answer, side hats, dry hats, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, formant bass melody, side percussion, room snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, wide mid reese counterline, wide mids, tight kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, octave sub stack, formant answer, snare roll, side hats, loose hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, wide mid growl, wide low-mid, pushed snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, octave sub stack, call-response reese, offbeat hats, side percussion, chopped hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, growl answer, wide mids, hat density up, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, octave sub stack, formant bass melody, ghost snare, side hats, kick opens, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, wide mid reese counterline, wide low-mid, kick tightens, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, octave sub stack, formant answer, snare roll, side percussion, snare answers, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, wide mid growl, wide mids, offbeat push, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, octave sub stack, call-response reese, offbeat hats, side hats, straight hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, growl answer, wide low-mid, triplet hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, formant bass melody, side percussion, backbeat shove, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, body bass, wide mid reese counterline, kick pattern flip, wide mids, ghost notes, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, wide mid reese counterline, wide mids, wide hat bed, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, wide mid growl, wide low-mid, wide hat bed, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, octave sub stack, call-response reese, offbeat hats, side percussion, mono kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, growl answer, wide mids, side snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, formant bass melody, side hats, rolling hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, wide mid reese counterline, wide low-mid, late snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, formant answer, side percussion, early kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, formant answer, side percussion, open hat, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, wide mid growl, wide mids, closed hat, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, call-response reese, side hats, room snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, growl answer, wide low-mid, tight kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, formant bass melody, side percussion, loose hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, wide mid reese counterline, wide mids, pushed snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, body bass, wide mid growl, rapid hi-hats, wide low-mid, pushed snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, wide mid growl, wide low-mid, hat density up, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, call-response reese, side percussion, kick opens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, octave sub stack, formant bass melody, ghost snare, side hats, kick opens, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, formant bass melody, side hats, snare answers, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, octave sub stack, formant answer, snare roll, side percussion, snare answers, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, formant answer, side percussion, straight hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, octave sub stack, call-response reese, offbeat hats, side hats, straight hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, call-response reese, side hats, backbeat shove, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, octave sub stack, formant bass melody, ghost snare, side percussion, backbeat shove, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, formant bass melody, side percussion, dry hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, octave sub stack, formant answer, snare roll, side hats, dry hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, wide mid growl, wide low-mid, wide hat bed, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, wide mid growl, wide low-mid, side snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, body bass, growl answer, trap drums denser, wide mids, side snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, snare roll, call-response reese, side percussion, early kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, mono chest-sub, growl answer, wide mids, syncopated hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, formant answer, side percussion, early kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, formant answer, side percussion, open hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, call-response reese, side hats, open hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, body bass, growl answer, trap drums denser, wide low-mid, closed hat, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, call-response reese, side hats, loose hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, body bass, wide mid reese counterline, kick pattern flip, wide mids, tight kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, formant answer, side hats, loose hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, body bass, wide mid growl, rapid hi-hats, wide low-mid, pushed snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, ghost snare, formant answer, side hats, kick opens, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, wide mid growl, wide low-mid, kick tightens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, octave sub stack, formant bass melody, ghost snare, side hats, kick opens, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, mono chest-sub, growl answer, wide mids, offbeat push, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, octave sub stack, formant answer, snare roll, side percussion, snare answers, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, trap drums denser, wide mid reese counterline, wide low-mid, triplet hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, octave sub stack, call-response reese, offbeat hats, side hats, straight hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, call-response reese, side hats, backbeat shove, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, growl answer, wide low-mid, ghost notes, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, growl answer, wide low-mid, wide hat bed, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, wide mid reese counterline, wide mids, wide hat bed, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, body bass, wide mid growl, rapid hi-hats, wide low-mid, wide hat bed, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, wide mid growl, wide low-mid, side snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, body bass, growl answer, trap drums denser, wide mids, side snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, wide mid growl, wide low-mid, syncopated hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, body bass, wide mid reese counterline, kick pattern flip, wide low-mid, late snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, wide mid reese counterline, wide low-mid, syncopated hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, wide mid reese counterline, wide low-mid, closed hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy wobble warped drop, octave sub stack, call-response reese, offbeat hats, side hats, open hat, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, kick pattern flip, wide mid growl, wide mids, tight kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, wide mid growl, wide mids, pushed snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, body bass, wide mid reese counterline, kick pattern flip, wide mids, tight kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, wide mid reese counterline, wide mids, pushed snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, formant answer, side hats, chopped hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, octave sub stack, call-response reese, offbeat hats, side percussion, chopped hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, call-response reese, side percussion, kick opens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, formant bass melody, side hats, kick opens, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked growl warped drop, body bass, wide mid reese counterline, kick pattern flip, wide low-mid, kick tightens, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, wide mid reese counterline, wide low-mid, offbeat push, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, formant bass melody, side hats, backbeat shove, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send formant warped drop, octave sub stack, call-response reese, offbeat hats, side hats, straight hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, kick pattern flip, wide mid growl, wide mids, ghost notes, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, call-response reese, side hats, dry hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, call-response reese, side hats, mono kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, formant bass melody, side percussion, mono kick, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, fold bass, formant answer, offbeat hats, side hats, mono kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, formant answer, side hats, rolling hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, fold bass, call-response reese, ghost snare, side percussion, rolling hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, growl answer, wide mids, late snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, body bass, wide mid reese counterline, kick pattern flip, wide low-mid, late snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, offbeat hats, formant bass melody, side hats, open hat, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, formant bass melody, side hats, room snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, wide mid growl, wide mids, closed hat, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, growl answer, wide low-mid, closed hat, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, octave sub stack, formant bass melody, ghost snare, side percussion, room snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, growl answer, wide low-mid, pushed snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, formant bass melody, side percussion, chopped hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, wide mid growl, wide low-mid, pushed snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, call-response reese, side percussion, chopped hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder warped drop, body bass, growl answer, trap drums denser, wide mids, hat density up, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, formant bass melody, side hats, kick opens, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck reese warped drop, body bass, wide mid reese counterline, kick pattern flip, wide low-mid, kick tightens, 2 bars]
+
+[outro - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant answer, side hats, dry hats, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -2971,14 +6515,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `401.0` |
+| 0 | `412.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `401.0` |
+| 0 | `412.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -2987,93 +6531,317 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped …` |
-| 2 | `[build-up - snare roll, body bass, snare roll, wide mid reese counterline, wide…` |
+| 2 | `[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/13-torque-bay` |
 
 ```text
-drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 176 bpm, instrumental, no vocals
+drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 176 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, body bass, snare roll, wide mid reese counterline, wide low-mid, hat density up, reese 808 wreck, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, wide mid reese counterline, wide low-mid, hat density up, reese 808 wreck, 2 bars]
 
-[drop - heavy reese warped drop, octave sub stack, formant answer, rapid hi-hats, side percussion, kick opens, reese bass, heavy neuro drop, 10 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, octave sub stack, formant answer, rapid hi-hats, side percussion, kick opens, reese bass, heavy neuro drop, 2 bars]
 
-[inst - offbeat hats, body bass, wide mid growl, wide mids, kick tightens, warped torque, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, wide mid growl, wide mids, kick tightens, warped torque, 2 bars]
 
-[build-up - snare roll, octave sub stack, trap drums denser, call-response reese, side hats, snare answers, hats denser, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, call-response reese, side hats, snare answers, hats denser, 2 bars]
 
-[inst - ghost snare, body bass, growl answer, wide low-mid, offbeat push, reese hold, 12 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, growl answer, wide low-mid, offbeat push, reese hold, 2 bars]
 
-[drop - stacked formant warped drop, octave sub stack, formant bass melody, kick pattern flip, side percussion, straight hats, harder stacked drop, 10 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, formant bass melody, side percussion, straight hats, chest reese wreck, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, body bass, triplet hats, chest reese wreck, 4 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, body bass, wide mid reese counterline, snare roll, wide mids, triplet hats, harder stacked drop, 2 bars]
 
-[drop - harder growl warped drop, octave sub stack, formant answer, rapid hi-hats, side hats, backbeat shove, formant coil, 8 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, formant answer, side hats, backbeat shove, formant coil, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, body bass, ghost notes, rapid hi-hats roll, 6 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, wide mid growl, wide low-mid, ghost notes, rapid hi-hats roll, 2 bars]
 
-[inst - trap drums denser, octave sub stack, call-response reese, side percussion, dry hats, 808 punch, 12 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, octave sub stack, call-response reese, trap drums denser, side percussion, dry hats, 808 punch, 2 bars]
 
-[drop - stacked formant warped drop, body bass, growl answer, ghost snare, wide mids, wide hat bed, full send drop, 10 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, growl answer, wide mids, wide hat bed, neuro 808 wreck, 2 bars]
 
-[inst - kick pattern flip, octave sub stack, formant bass melody, side hats, mono kick, neuro 808 wreck, 4 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, octave sub stack, formant bass melody, kick pattern flip, side hats, mono kick, full send drop, 2 bars]
 
-[build-up - snare roll, body bass, snare roll, wide mid reese counterline, wide low-mid, side snare, chest warp, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, wide mid reese counterline, wide low-mid, side snare, chest warp, 2 bars]
 
-[inst - rapid hi-hats, octave sub stack, formant answer, side percussion, rolling hats, stacked reese wreck, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, formant answer, side percussion, rolling hats, stacked reese wreck, 2 bars]
 
-[build-up - snare roll, body bass, offbeat hats, wide mid growl, wide mids, late snare, torque grind, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, body bass, wide mid growl, offbeat hats, wide mids, late snare, harder growl drop, 2 bars]
 
-[inst - trap drums denser, octave sub stack, call-response reese, side hats, early kick, kick holds, 10 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, call-response reese, side hats, early kick, torque grind, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide low-mid, body bass, syncopated hats, reese ride, 6 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, body bass, growl answer, ghost snare, wide low-mid, syncopated hats, kick holds, 2 bars]
 
-[drop - harder growl warped drop, octave sub stack, formant bass melody, kick pattern flip, side percussion, open hat, harder growl drop, 12 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, formant bass melody, side percussion, open hat, reese ride, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, body bass, closed hat, 4 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, body bass, wide mid reese counterline, snare roll, wide mids, closed hat, 2 bars]
 
-[inst - rapid hi-hats, octave sub stack, formant answer, side hats, room snare, 10 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, formant answer, side hats, room snare, 2 bars]
 
-[build-up - snare roll, body bass, offbeat hats, wide mid growl, wide low-mid, tight kick, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, wide mid growl, wide low-mid, tight kick, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side percussion, octave sub stack, loose hats, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, call-response reese, side percussion, loose hats, 2 bars]
 
-[drop - harder growl warped drop, body bass, growl answer, ghost snare, wide mids, pushed snare, 10 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, body bass, growl answer, ghost snare, wide mids, pushed snare, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side hats, octave sub stack, chopped hats, 6 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, formant bass melody, side hats, chopped hats, 2 bars]
 
-[build-up - snare roll, fold bass, rapid hi-hats, formant bass melody, side hats, kick opens, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, wide mid reese counterline, wide low-mid, hat density up, 2 bars]
 
-[inst - rapid hi-hats, octave sub stack, formant answer, side percussion, kick opens, 12 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, octave sub stack, formant answer, rapid hi-hats, side percussion, kick opens, 2 bars]
 
-[drop - heavy reese warped drop, body bass, wide mid growl, offbeat hats, wide mids, kick tightens, 10 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, wide mid growl, wide mids, kick tightens, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side hats, octave sub stack, snare answers, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, call-response reese, side hats, snare answers, 2 bars]
 
-[inst - kick pattern flip, fold bass, call-response reese, side hats, straight hats, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, body bass, growl answer, ghost snare, wide low-mid, offbeat push, 2 bars]
 
-[drop - wreck warped drop, octave sub stack, formant bass melody, kick pattern flip, side percussion, straight hats, 12 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, growl answer, wide low-mid, triplet hats, 2 bars]
 
-[inst - snare roll, body bass, wide mid reese counterline, wide mids, triplet hats, 10 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, body bass, wide mid reese counterline, snare roll, wide mids, triplet hats, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side hats, octave sub stack, backbeat shove, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, formant answer, side hats, backbeat shove, 2 bars]
 
-[inst - offbeat hats, body bass, wide mid growl, wide low-mid, ghost notes, 10 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, body bass, wide mid growl, offbeat hats, wide low-mid, ghost notes, 2 bars]
 
-[drop - full send wobble warped drop, octave sub stack, call-response reese, trap drums denser, side percussion, dry hats, 12 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, call-response reese, side percussion, dry hats, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, body bass, wide hat bed, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, call-response reese, side percussion, mono kick, 2 bars]
 
-[drop - stacked formant warped drop, octave sub stack, formant bass melody, kick pattern flip, side hats, mono kick, 8 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, octave sub stack, formant bass melody, kick pattern flip, side hats, mono kick, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide low-mid, body bass, side snare, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, formant bass melody, side hats, rolling hats, 2 bars]
 
-[inst - offbeat hats, stacked 808, wide mid reese counterline, wide low-mid, late snare, 10 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, wide mid reese counterline, wide low-mid, late snare, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, growl answer, wide low-mid, offbeat push, 4 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, body bass, wide mid growl, offbeat hats, wide mids, late snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, call-response reese, side hats, early kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, growl answer, wide low-mid, syncopated hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, octave sub stack, formant bass melody, kick pattern flip, side percussion, open hat, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, wide mid reese counterline, wide mids, closed hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, octave sub stack, formant answer, rapid hi-hats, side hats, room snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, wide mid growl, wide low-mid, tight kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, call-response reese, side percussion, loose hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, body bass, growl answer, ghost snare, wide mids, pushed snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, formant bass melody, side hats, chopped hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, body bass, wide mid reese counterline, snare roll, wide low-mid, hat density up, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, formant answer, side percussion, kick opens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, formant answer, side percussion, snare answers, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, octave sub stack, call-response reese, trap drums denser, side hats, snare answers, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, growl answer, wide low-mid, offbeat push, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, formant bass melody, side percussion, straight hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, wide mid reese counterline, wide mids, triplet hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, wide mid reese counterline, wide mids, ghost notes, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, body bass, wide mid growl, offbeat hats, wide low-mid, ghost notes, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, call-response reese, side percussion, dry hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, body bass, growl answer, ghost snare, wide mids, wide hat bed, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, formant bass melody, side hats, mono kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, body bass, wide mid reese counterline, snare roll, wide low-mid, side snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, formant bass melody, side hats, early kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, wide mid growl, wide mids, late snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, octave sub stack, call-response reese, trap drums denser, side hats, early kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, call-response reese, side hats, open hat, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, octave sub stack, formant bass melody, kick pattern flip, side percussion, open hat, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, wide mid reese counterline, wide mids, closed hat, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, wide mid reese counterline, wide mids, tight kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, body bass, wide mid growl, offbeat hats, wide low-mid, tight kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, wide mid growl, wide low-mid, pushed snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, body bass, growl answer, ghost snare, wide mids, pushed snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, growl answer, wide mids, hat density up, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, formant bass melody, side hats, kick opens, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, octave sub stack, formant answer, rapid hi-hats, side percussion, kick opens, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, formant answer, side percussion, snare answers, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, wide mid growl, wide mids, offbeat push, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, call-response reese, side hats, straight hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, growl answer, wide low-mid, triplet hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, formant bass melody, side percussion, backbeat shove, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, octave sub stack, formant answer, rapid hi-hats, side hats, backbeat shove, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, wide mid growl, wide low-mid, ghost notes, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, octave sub stack, call-response reese, trap drums denser, side percussion, dry hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, wide mid growl, wide low-mid, side snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, octave sub stack, formant bass melody, kick pattern flip, side hats, mono kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, growl answer, wide mids, late snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, growl answer, wide mids, syncopated hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, body bass, wide mid growl, offbeat hats, wide mids, late snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, wide mid growl, wide mids, syncopated hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, wide mid growl, wide mids, closed hat, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, octave sub stack, formant bass melody, kick pattern flip, side percussion, open hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, formant bass melody, side percussion, room snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, octave sub stack, formant answer, rapid hi-hats, side hats, room snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, formant answer, side hats, loose hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, wide mid growl, wide low-mid, pushed snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, body bass, growl answer, ghost snare, wide mids, pushed snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, growl answer, wide mids, hat density up, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, formant bass melody, side hats, kick opens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, wide mid reese counterline, wide low-mid, kick tightens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, body bass, wide mid growl, offbeat hats, wide mids, kick tightens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, wide mid growl, wide mids, offbeat push, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, call-response reese, side hats, straight hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, octave sub stack, formant bass melody, kick pattern flip, side percussion, straight hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, growl answer, wide low-mid, ghost notes, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, octave sub stack, formant answer, rapid hi-hats, side hats, backbeat shove, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, formant answer, side hats, dry hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, wide mid growl, wide low-mid, wide hat bed, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, formant answer, side hats, rolling hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, formant bass melody, side hats, mono kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, call-response reese, side percussion, early kick, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, octave sub stack, formant answer, rapid hi-hats, side percussion, rolling hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, wide mid growl, wide mids, late snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, octave sub stack, call-response reese, trap drums denser, side hats, early kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, growl answer, wide low-mid, syncopated hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, formant bass melody, side percussion, open hat, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, body bass, wide mid reese counterline, snare roll, wide mids, closed hat, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, formant bass melody, side percussion, loose hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, body bass, wide mid growl, offbeat hats, wide low-mid, tight kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, formant answer, side hats, chopped hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, body bass, growl answer, ghost snare, wide mids, pushed snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, call-response reese, side percussion, kick opens, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, growl answer, wide mids, kick tightens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, stacked 808, wide mid reese counterline, offbeat hats, wide low-mid, kick tightens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, wide mid reese counterline, wide low-mid, offbeat push, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, formant answer, side percussion, straight hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, body bass, growl answer, ghost snare, wide low-mid, offbeat push, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, call-response reese, side hats, backbeat shove, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, wide mid reese counterline, wide mids, triplet hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, octave sub stack, formant answer, rapid hi-hats, side hats, backbeat shove, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, formant answer, side hats, dry hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, stacked 808, wide mid growl, ghost snare, wide low-mid, wide hat bed, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, wide mid reese counterline, wide mids, late snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, stacked 808, growl answer, snare roll, wide mids, side snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, wide mid reese counterline, wide low-mid, side snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, octave sub stack, formant answer, rapid hi-hats, side percussion, rolling hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, formant answer, side percussion, early kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, wide mid growl, wide mids, syncopated hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, call-response reese, side hats, open hat, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, growl answer, wide low-mid, closed hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, fold bass, formant bass melody, rapid hi-hats, side percussion, room snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, growl answer, wide low-mid, pushed snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, formant answer, side hats, loose hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, octave sub stack, call-response reese, trap drums denser, side percussion, loose hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, growl answer, wide mids, pushed snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, call-response reese, side percussion, kick opens, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, body bass, wide mid reese counterline, snare roll, wide low-mid, hat density up, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, formant bass melody, side hats, snare answers, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, wide mid reese counterline, wide low-mid, offbeat push, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, formant answer, side percussion, straight hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, wide mid growl, wide mids, triplet hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, wide mid growl, wide mids, ghost notes, 2 bars]
+
+[outro - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, growl answer, wide low-mid, offbeat push, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -3081,11 +6849,11 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 | Slot | Value |
 | --- | --- |
 | 0 | `drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped …` |
-| 1 | `[build-up - snare roll, body bass, snare roll, wide mid reese counterline, wide…` |
+| 1 | `[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays…` |
 | 2 | `541` |
 | 3 | `fixed` |
 | 4 | `176` |
-| 5 | `401.0` |
+| 5 | `412.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `F# minor` |
@@ -3097,87 +6865,311 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 | 14 | `0.0` |
 
 ```text
-drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 176 bpm, instrumental, no vocals
+drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 176 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, body bass, snare roll, wide mid reese counterline, wide low-mid, hat density up, reese 808 wreck, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, wide mid reese counterline, wide low-mid, hat density up, reese 808 wreck, 2 bars]
 
-[drop - heavy reese warped drop, octave sub stack, formant answer, rapid hi-hats, side percussion, kick opens, reese bass, heavy neuro drop, 10 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, octave sub stack, formant answer, rapid hi-hats, side percussion, kick opens, reese bass, heavy neuro drop, 2 bars]
 
-[inst - offbeat hats, body bass, wide mid growl, wide mids, kick tightens, warped torque, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, wide mid growl, wide mids, kick tightens, warped torque, 2 bars]
 
-[build-up - snare roll, octave sub stack, trap drums denser, call-response reese, side hats, snare answers, hats denser, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, call-response reese, side hats, snare answers, hats denser, 2 bars]
 
-[inst - ghost snare, body bass, growl answer, wide low-mid, offbeat push, reese hold, 12 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, growl answer, wide low-mid, offbeat push, reese hold, 2 bars]
 
-[drop - stacked formant warped drop, octave sub stack, formant bass melody, kick pattern flip, side percussion, straight hats, harder stacked drop, 10 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, formant bass melody, side percussion, straight hats, chest reese wreck, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, body bass, triplet hats, chest reese wreck, 4 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, body bass, wide mid reese counterline, snare roll, wide mids, triplet hats, harder stacked drop, 2 bars]
 
-[drop - harder growl warped drop, octave sub stack, formant answer, rapid hi-hats, side hats, backbeat shove, formant coil, 8 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, formant answer, side hats, backbeat shove, formant coil, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, body bass, ghost notes, rapid hi-hats roll, 6 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, wide mid growl, wide low-mid, ghost notes, rapid hi-hats roll, 2 bars]
 
-[inst - trap drums denser, octave sub stack, call-response reese, side percussion, dry hats, 808 punch, 12 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, octave sub stack, call-response reese, trap drums denser, side percussion, dry hats, 808 punch, 2 bars]
 
-[drop - stacked formant warped drop, body bass, growl answer, ghost snare, wide mids, wide hat bed, full send drop, 10 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, growl answer, wide mids, wide hat bed, neuro 808 wreck, 2 bars]
 
-[inst - kick pattern flip, octave sub stack, formant bass melody, side hats, mono kick, neuro 808 wreck, 4 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, octave sub stack, formant bass melody, kick pattern flip, side hats, mono kick, full send drop, 2 bars]
 
-[build-up - snare roll, body bass, snare roll, wide mid reese counterline, wide low-mid, side snare, chest warp, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, wide mid reese counterline, wide low-mid, side snare, chest warp, 2 bars]
 
-[inst - rapid hi-hats, octave sub stack, formant answer, side percussion, rolling hats, stacked reese wreck, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, formant answer, side percussion, rolling hats, stacked reese wreck, 2 bars]
 
-[build-up - snare roll, body bass, offbeat hats, wide mid growl, wide mids, late snare, torque grind, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, body bass, wide mid growl, offbeat hats, wide mids, late snare, harder growl drop, 2 bars]
 
-[inst - trap drums denser, octave sub stack, call-response reese, side hats, early kick, kick holds, 10 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, call-response reese, side hats, early kick, torque grind, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide low-mid, body bass, syncopated hats, reese ride, 6 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, body bass, growl answer, ghost snare, wide low-mid, syncopated hats, kick holds, 2 bars]
 
-[drop - harder growl warped drop, octave sub stack, formant bass melody, kick pattern flip, side percussion, open hat, harder growl drop, 12 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, formant bass melody, side percussion, open hat, reese ride, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, body bass, closed hat, 4 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, body bass, wide mid reese counterline, snare roll, wide mids, closed hat, 2 bars]
 
-[inst - rapid hi-hats, octave sub stack, formant answer, side hats, room snare, 10 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, formant answer, side hats, room snare, 2 bars]
 
-[build-up - snare roll, body bass, offbeat hats, wide mid growl, wide low-mid, tight kick, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, wide mid growl, wide low-mid, tight kick, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side percussion, octave sub stack, loose hats, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, call-response reese, side percussion, loose hats, 2 bars]
 
-[drop - harder growl warped drop, body bass, growl answer, ghost snare, wide mids, pushed snare, 10 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, body bass, growl answer, ghost snare, wide mids, pushed snare, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side hats, octave sub stack, chopped hats, 6 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, formant bass melody, side hats, chopped hats, 2 bars]
 
-[build-up - snare roll, fold bass, rapid hi-hats, formant bass melody, side hats, kick opens, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, wide mid reese counterline, wide low-mid, hat density up, 2 bars]
 
-[inst - rapid hi-hats, octave sub stack, formant answer, side percussion, kick opens, 12 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, octave sub stack, formant answer, rapid hi-hats, side percussion, kick opens, 2 bars]
 
-[drop - heavy reese warped drop, body bass, wide mid growl, offbeat hats, wide mids, kick tightens, 10 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, wide mid growl, wide mids, kick tightens, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side hats, octave sub stack, snare answers, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, call-response reese, side hats, snare answers, 2 bars]
 
-[inst - kick pattern flip, fold bass, call-response reese, side hats, straight hats, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, body bass, growl answer, ghost snare, wide low-mid, offbeat push, 2 bars]
 
-[drop - wreck warped drop, octave sub stack, formant bass melody, kick pattern flip, side percussion, straight hats, 12 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, growl answer, wide low-mid, triplet hats, 2 bars]
 
-[inst - snare roll, body bass, wide mid reese counterline, wide mids, triplet hats, 10 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, body bass, wide mid reese counterline, snare roll, wide mids, triplet hats, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side hats, octave sub stack, backbeat shove, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, formant answer, side hats, backbeat shove, 2 bars]
 
-[inst - offbeat hats, body bass, wide mid growl, wide low-mid, ghost notes, 10 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, body bass, wide mid growl, offbeat hats, wide low-mid, ghost notes, 2 bars]
 
-[drop - full send wobble warped drop, octave sub stack, call-response reese, trap drums denser, side percussion, dry hats, 12 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, call-response reese, side percussion, dry hats, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, body bass, wide hat bed, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, call-response reese, side percussion, mono kick, 2 bars]
 
-[drop - stacked formant warped drop, octave sub stack, formant bass melody, kick pattern flip, side hats, mono kick, 8 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, octave sub stack, formant bass melody, kick pattern flip, side hats, mono kick, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide low-mid, body bass, side snare, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, formant bass melody, side hats, rolling hats, 2 bars]
 
-[inst - offbeat hats, stacked 808, wide mid reese counterline, wide low-mid, late snare, 10 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, wide mid reese counterline, wide low-mid, late snare, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, growl answer, wide low-mid, offbeat push, 4 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, body bass, wide mid growl, offbeat hats, wide mids, late snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, call-response reese, side hats, early kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, growl answer, wide low-mid, syncopated hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, octave sub stack, formant bass melody, kick pattern flip, side percussion, open hat, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, wide mid reese counterline, wide mids, closed hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, octave sub stack, formant answer, rapid hi-hats, side hats, room snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, wide mid growl, wide low-mid, tight kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, call-response reese, side percussion, loose hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, body bass, growl answer, ghost snare, wide mids, pushed snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, formant bass melody, side hats, chopped hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, body bass, wide mid reese counterline, snare roll, wide low-mid, hat density up, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, formant answer, side percussion, kick opens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, formant answer, side percussion, snare answers, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, octave sub stack, call-response reese, trap drums denser, side hats, snare answers, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, growl answer, wide low-mid, offbeat push, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, formant bass melody, side percussion, straight hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, wide mid reese counterline, wide mids, triplet hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, wide mid reese counterline, wide mids, ghost notes, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, body bass, wide mid growl, offbeat hats, wide low-mid, ghost notes, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, call-response reese, side percussion, dry hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, body bass, growl answer, ghost snare, wide mids, wide hat bed, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, formant bass melody, side hats, mono kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, body bass, wide mid reese counterline, snare roll, wide low-mid, side snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, formant bass melody, side hats, early kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, wide mid growl, wide mids, late snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, octave sub stack, call-response reese, trap drums denser, side hats, early kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, call-response reese, side hats, open hat, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, octave sub stack, formant bass melody, kick pattern flip, side percussion, open hat, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, wide mid reese counterline, wide mids, closed hat, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, wide mid reese counterline, wide mids, tight kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, body bass, wide mid growl, offbeat hats, wide low-mid, tight kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, wide mid growl, wide low-mid, pushed snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, body bass, growl answer, ghost snare, wide mids, pushed snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, growl answer, wide mids, hat density up, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, formant bass melody, side hats, kick opens, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, octave sub stack, formant answer, rapid hi-hats, side percussion, kick opens, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, formant answer, side percussion, snare answers, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, wide mid growl, wide mids, offbeat push, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, call-response reese, side hats, straight hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, growl answer, wide low-mid, triplet hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, formant bass melody, side percussion, backbeat shove, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, octave sub stack, formant answer, rapid hi-hats, side hats, backbeat shove, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, wide mid growl, wide low-mid, ghost notes, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, octave sub stack, call-response reese, trap drums denser, side percussion, dry hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, wide mid growl, wide low-mid, side snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, octave sub stack, formant bass melody, kick pattern flip, side hats, mono kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, growl answer, wide mids, late snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, growl answer, wide mids, syncopated hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, body bass, wide mid growl, offbeat hats, wide mids, late snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, wide mid growl, wide mids, syncopated hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, wide mid growl, wide mids, closed hat, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, octave sub stack, formant bass melody, kick pattern flip, side percussion, open hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, formant bass melody, side percussion, room snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, octave sub stack, formant answer, rapid hi-hats, side hats, room snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, formant answer, side hats, loose hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, wide mid growl, wide low-mid, pushed snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, body bass, growl answer, ghost snare, wide mids, pushed snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, growl answer, wide mids, hat density up, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, formant bass melody, side hats, kick opens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, wide mid reese counterline, wide low-mid, kick tightens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, body bass, wide mid growl, offbeat hats, wide mids, kick tightens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, wide mid growl, wide mids, offbeat push, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, call-response reese, side hats, straight hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, octave sub stack, formant bass melody, kick pattern flip, side percussion, straight hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, growl answer, wide low-mid, ghost notes, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, octave sub stack, formant answer, rapid hi-hats, side hats, backbeat shove, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, formant answer, side hats, dry hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, wide mid growl, wide low-mid, wide hat bed, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, formant answer, side hats, rolling hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, formant bass melody, side hats, mono kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, call-response reese, side percussion, early kick, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, octave sub stack, formant answer, rapid hi-hats, side percussion, rolling hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, wide mid growl, wide mids, late snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, octave sub stack, call-response reese, trap drums denser, side hats, early kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, growl answer, wide low-mid, syncopated hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, formant bass melody, side percussion, open hat, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, body bass, wide mid reese counterline, snare roll, wide mids, closed hat, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, formant bass melody, side percussion, loose hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, body bass, wide mid growl, offbeat hats, wide low-mid, tight kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, formant answer, side hats, chopped hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, body bass, growl answer, ghost snare, wide mids, pushed snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, call-response reese, side percussion, kick opens, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, growl answer, wide mids, kick tightens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, stacked 808, wide mid reese counterline, offbeat hats, wide low-mid, kick tightens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, wide mid reese counterline, wide low-mid, offbeat push, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, formant answer, side percussion, straight hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, body bass, growl answer, ghost snare, wide low-mid, offbeat push, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, call-response reese, side hats, backbeat shove, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, wide mid reese counterline, wide mids, triplet hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, octave sub stack, formant answer, rapid hi-hats, side hats, backbeat shove, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, formant answer, side hats, dry hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, stacked 808, wide mid growl, ghost snare, wide low-mid, wide hat bed, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, wide mid reese counterline, wide mids, late snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, stacked 808, growl answer, snare roll, wide mids, side snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, wide mid reese counterline, wide low-mid, side snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, octave sub stack, formant answer, rapid hi-hats, side percussion, rolling hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, formant answer, side percussion, early kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, wide mid growl, wide mids, syncopated hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, call-response reese, side hats, open hat, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, growl answer, wide low-mid, closed hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, fold bass, formant bass melody, rapid hi-hats, side percussion, room snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, growl answer, wide low-mid, pushed snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, formant answer, side hats, loose hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, octave sub stack, call-response reese, trap drums denser, side percussion, loose hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, growl answer, wide mids, pushed snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, call-response reese, side percussion, kick opens, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, body bass, wide mid reese counterline, snare roll, wide low-mid, hat density up, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, formant bass melody, side hats, snare answers, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, wide mid reese counterline, wide low-mid, offbeat push, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, formant answer, side percussion, straight hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, wide mid growl, wide mids, triplet hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, wide mid growl, wide mids, ghost notes, 2 bars]
+
+[outro - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, growl answer, wide low-mid, offbeat push, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -3260,14 +7252,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `427.0` |
+| 0 | `455.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `427.0` |
+| 0 | `455.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -3276,101 +7268,341 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `brostep, growl bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal ba…` |
-| 2 | `[build-up - snare roll, stacked 808, offbeat hats, call-response reese, side ha…` |
+| 2 | `[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/14-spare-drum` |
 
 ```text
-brostep, growl bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
+brostep, growl bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, stacked 808, offbeat hats, call-response reese, side hats, triplet hats, dual-action pedal bass, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, call-response reese, side hats, triplet hats, dual-action pedal bass, 2 bars]
 
-[drop - wreck warped drop, fold bass, growl answer, trap drums denser, wide low-mid, backbeat shove, brostep, dual-action pedal bass, heavy brostep drop, 12 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, fold bass, growl answer, trap drums denser, wide low-mid, backbeat shove, brostep, dual-action pedal bass, heavy brostep drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, stacked 808, ghost notes, chest-sub 808 warp, 6 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, formant bass melody, side percussion, ghost notes, chest-sub 808 warp, 2 bars]
 
-[inst - kick pattern flip, fold bass, wide mid reese counterline, wide mids, dry hats, pedal 808 hold, 10 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, fold bass, wide mid reese counterline, kick pattern flip, wide mids, dry hats, pedal 808 hold, 2 bars]
 
-[build-up - snare roll, stacked 808, snare roll, formant answer, side hats, wide hat bed, rapid hi-hats roll, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, formant answer, side hats, wide hat bed, rapid hi-hats roll, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, fold bass, mono kick, 808 wall wreck, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, fold bass, wide mid growl, rapid hi-hats, wide low-mid, mono kick, harder stacked drop, 2 bars]
 
-[build-up - snare roll, stacked 808, offbeat hats, call-response reese, side percussion, side snare, formant growl, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, call-response reese, side percussion, side snare, 808 wall wreck, 2 bars]
 
-[inst - trap drums denser, fold bass, growl answer, wide mids, rolling hats, snare roll, 10 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, fold bass, growl answer, trap drums denser, wide mids, rolling hats, formant growl, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side hats, stacked 808, late snare, chest-sub 808, 8 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, formant bass melody, side hats, late snare, 2 bars]
 
-[build-up - snare roll, fold bass, kick pattern flip, wide mid reese counterline, wide low-mid, early kick, body bass wreck, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, fold bass, wide mid reese counterline, kick pattern flip, wide low-mid, early kick, chest-sub 808, 2 bars]
 
-[drop - full send wobble warped drop, stacked 808, formant answer, snare roll, side percussion, syncopated hats, harder stacked drop, 12 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, formant answer, side percussion, syncopated hats, body bass wreck, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, fold bass, open hat, pedal warp, 6 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, wide mid growl, wide mids, open hat, pedal warp, 2 bars]
 
-[build-up - snare roll, stacked 808, offbeat hats, call-response reese, side hats, closed hat, kick holds, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, call-response reese, side hats, closed hat, kick holds, 2 bars]
 
-[drop - heavy reese warped drop, fold bass, growl answer, trap drums denser, wide low-mid, room snare, full send drop, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, fold bass, growl answer, trap drums denser, wide low-mid, room snare, full send drop, 2 bars]
 
-[inst - ghost snare, stacked 808, formant bass melody, side percussion, tight kick, hats denser, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, formant bass melody, side percussion, tight kick, hats denser, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, fold bass, loose hats, brostep ride, 6 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, wide mid reese counterline, wide mids, loose hats, brostep ride, 2 bars]
 
-[build-up - snare roll, stacked 808, snare roll, formant answer, side hats, pushed snare, 4 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, stacked 808, formant answer, snare roll, side hats, pushed snare, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, fold bass, chopped hats, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, wide mid growl, wide low-mid, chopped hats, 2 bars]
 
-[inst - offbeat hats, stacked 808, call-response reese, side percussion, hat density up, 8 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, call-response reese, side percussion, hat density up, 2 bars]
 
-[drop - harder growl warped drop, fold bass, growl answer, trap drums denser, wide mids, kick opens, 12 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, fold bass, growl answer, trap drums denser, wide mids, kick opens, 2 bars]
 
-[inst - ghost snare, stacked 808, formant bass melody, side hats, kick tightens, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, formant bass melody, side hats, kick tightens, 2 bars]
 
-[drop - wreck warped drop, fold bass, wide mid reese counterline, kick pattern flip, wide low-mid, snare answers, 8 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, wide mid reese counterline, wide low-mid, snare answers, 2 bars]
 
-[inst - snare roll, stacked 808, formant answer, side percussion, offbeat push, 6 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, formant answer, side percussion, offbeat push, 2 bars]
 
-[drop - heavy reese warped drop, fold bass, wide mid growl, rapid hi-hats, wide mids, straight hats, 8 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, wide mid growl, wide mids, straight hats, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side hats, stacked 808, triplet hats, 6 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, stacked 808, call-response reese, offbeat hats, side hats, triplet hats, 2 bars]
 
-[build-up - snare roll, fold bass, trap drums denser, growl answer, wide low-mid, backbeat shove, 4 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, growl answer, wide low-mid, backbeat shove, 2 bars]
 
-[drop - wreck warped drop, stacked 808, formant bass melody, ghost snare, side percussion, ghost notes, 10 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, stacked 808, formant bass melody, ghost snare, side percussion, ghost notes, 2 bars]
 
-[build-up - snare roll, fold bass, kick pattern flip, wide mid reese counterline, wide mids, dry hats, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, wide mid reese counterline, wide mids, dry hats, 2 bars]
 
-[inst - snare roll, stacked 808, formant answer, side hats, wide hat bed, 8 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, wide mid reese counterline, wide mids, mono kick, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side hats, mono chest-sub, side snare, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, fold bass, wide mid growl, rapid hi-hats, wide low-mid, mono kick, 2 bars]
 
-[build-up - snare roll, low chest-sub, trap drums denser, wide mid growl, wide low-mid, rolling hats, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, wide mid growl, wide low-mid, rolling hats, 2 bars]
 
-[inst - ghost snare, mono chest-sub, call-response reese, side percussion, late snare, 12 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, growl answer, wide mids, rolling hats, 2 bars]
 
-[drop - stacked formant warped drop, stacked 808, formant bass melody, ghost snare, side hats, late snare, 8 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, formant bass melody, side hats, late snare, 2 bars]
 
-[build-up - snare roll, mono chest-sub, snare roll, formant bass melody, side hats, syncopated hats, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, fold bass, wide mid reese counterline, kick pattern flip, wide low-mid, early kick, 2 bars]
 
-[inst - snare roll, stacked 808, formant answer, side percussion, syncopated hats, 8 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, formant answer, side percussion, syncopated hats, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side percussion, mono chest-sub, closed hat, 4 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, fold bass, wide mid growl, rapid hi-hats, wide mids, open hat, 2 bars]
 
-[build-up - snare roll, low chest-sub, trap drums denser, wide mid growl, wide mids, room snare, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, wide mid growl, wide mids, room snare, 2 bars]
 
-[inst - trap drums denser, fold bass, growl answer, wide low-mid, room snare, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, fold bass, growl answer, trap drums denser, wide low-mid, room snare, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, stacked 808, tight kick, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, growl answer, wide low-mid, loose hats, 2 bars]
 
-[inst - kick pattern flip, fold bass, wide mid reese counterline, wide mids, loose hats, 10 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, formant bass melody, side percussion, pushed snare, 2 bars]
 
-[drop - full send wobble warped drop, stacked 808, formant answer, snare roll, side hats, pushed snare, 8 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, formant answer, side hats, pushed snare, 2 bars]
 
-[inst - rapid hi-hats, fold bass, wide mid growl, wide low-mid, chopped hats, 12 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, wide mid growl, wide low-mid, chopped hats, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side percussion, ghost notes, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, call-response reese, side percussion, hat density up, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, fold bass, growl answer, trap drums denser, wide mids, kick opens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, growl answer, wide mids, snare answers, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, fold bass, wide mid reese counterline, kick pattern flip, wide low-mid, snare answers, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, formant answer, side percussion, offbeat push, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, fold bass, wide mid growl, rapid hi-hats, wide mids, straight hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, wide mid growl, wide mids, backbeat shove, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, growl answer, wide low-mid, backbeat shove, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, stacked 808, formant bass melody, ghost snare, side percussion, ghost notes, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, wide mid reese counterline, wide mids, dry hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, stacked 808, formant answer, snare roll, side hats, wide hat bed, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, wide mid growl, wide low-mid, mono kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, call-response reese, side percussion, side snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, growl answer, wide mids, rolling hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, stacked 808, formant bass melody, ghost snare, side hats, late snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, wide mid reese counterline, wide low-mid, early kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, wide mid reese counterline, wide low-mid, open hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, fold bass, wide mid growl, rapid hi-hats, wide mids, open hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, formant answer, side percussion, tight kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, growl answer, wide low-mid, room snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, call-response reese, side hats, pushed snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, growl answer, wide low-mid, chopped hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, stacked 808, formant answer, snare roll, side hats, pushed snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, formant answer, side hats, hat density up, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, wide mid growl, wide low-mid, kick opens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, growl answer, wide mids, kick opens, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, formant bass melody, side hats, kick tightens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, wide mid reese counterline, wide low-mid, snare answers, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, wide mid reese counterline, wide low-mid, straight hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, fold bass, wide mid growl, rapid hi-hats, wide mids, straight hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, formant answer, side percussion, ghost notes, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, call-response reese, side hats, ghost notes, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, stacked 808, formant bass melody, ghost snare, side percussion, ghost notes, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, formant bass melody, side percussion, wide hat bed, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, stacked 808, formant answer, snare roll, side hats, wide hat bed, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, formant answer, side hats, side snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, stacked 808, call-response reese, offbeat hats, side percussion, side snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, call-response reese, side percussion, late snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, growl answer, wide mids, early kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, wide mid reese counterline, wide low-mid, early kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, stacked 808, formant answer, snare roll, side percussion, syncopated hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, wide mid growl, wide mids, open hat, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, call-response reese, side hats, closed hat, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, fold bass, growl answer, trap drums denser, wide low-mid, room snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, formant bass melody, side percussion, tight kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, fold bass, wide mid reese counterline, kick pattern flip, wide mids, loose hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, wide mid reese counterline, wide mids, chopped hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, fold bass, wide mid growl, rapid hi-hats, wide low-mid, chopped hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, wide mid growl, wide low-mid, kick opens, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, growl answer, wide mids, kick opens, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, stacked 808, formant bass melody, ghost snare, side hats, kick tightens, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, formant bass melody, side hats, offbeat push, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, formant bass melody, side hats, triplet hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, fold bass, wide mid growl, rapid hi-hats, wide mids, straight hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, call-response reese, side hats, triplet hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, fold bass, growl answer, trap drums denser, wide low-mid, backbeat shove, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, formant bass melody, side percussion, ghost notes, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, fold bass, wide mid reese counterline, kick pattern flip, wide mids, dry hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, formant bass melody, side percussion, side snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, wide mid growl, wide low-mid, mono kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, stacked 808, call-response reese, offbeat hats, side percussion, side snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, wide mid growl, wide low-mid, early kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, call-response reese, side percussion, syncopated hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, fold bass, wide mid reese counterline, kick pattern flip, wide low-mid, early kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, wide mid reese counterline, wide low-mid, open hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, fold bass, wide mid growl, rapid hi-hats, wide mids, open hat, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, wide mid growl, wide mids, room snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, fold bass, growl answer, trap drums denser, wide low-mid, room snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, growl answer, wide low-mid, loose hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, fold bass, wide mid reese counterline, kick pattern flip, wide mids, loose hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, formant answer, side hats, pushed snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, wide mid reese counterline, wide mids, kick opens, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, formant answer, side hats, kick tightens, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, fold bass, growl answer, trap drums denser, wide mids, kick opens, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, call-response reese, side percussion, offbeat push, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, formant bass melody, side hats, offbeat push, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, wide mid reese counterline, wide low-mid, straight hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, formant answer, side percussion, triplet hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, wide mid reese counterline, wide low-mid, dry hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, mono chest-sub, call-response reese, ghost snare, side hats, ghost notes, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, growl answer, wide low-mid, dry hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, growl answer, wide low-mid, mono kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, growl answer, wide low-mid, rolling hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, mono chest-sub, formant answer, offbeat hats, side hats, side snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, wide mid growl, wide low-mid, rolling hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, mono chest-sub, call-response reese, ghost snare, side percussion, late snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, growl answer, wide mids, early kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, mono chest-sub, formant bass melody, snare roll, side hats, syncopated hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, formant bass melody, side hats, closed hat, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, formant answer, side percussion, closed hat, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, wide mid reese counterline, wide low-mid, loose hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, call-response reese, side hats, tight kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, wide mid growl, wide mids, chopped hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, call-response reese, side hats, hat density up, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, low chest-sub, wide mid reese counterline, rapid hi-hats, wide mids, chopped hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, formant bass melody, side percussion, kick tightens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, stacked 808, call-response reese, offbeat hats, side percussion, hat density up, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, call-response reese, side percussion, kick tightens, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, stacked 808, formant bass melody, ghost snare, side hats, kick tightens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, growl answer, wide mids, straight hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, stacked 808, formant answer, snare roll, side percussion, offbeat push, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, wide mid growl, wide mids, straight hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, low chest-sub, wide mid growl, trap drums denser, wide mids, backbeat shove, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, call-response reese, side hats, ghost notes, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, call-response reese, side hats, wide hat bed, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, fold bass, wide mid reese counterline, kick pattern flip, wide mids, dry hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, formant answer, side hats, wide hat bed, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, mono chest-sub, formant answer, offbeat hats, side hats, side snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, formant answer, side hats, late snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, fold bass, growl answer, trap drums denser, wide mids, rolling hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, call-response reese, side percussion, syncopated hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, formant bass melody, side hats, syncopated hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, stacked 808, formant answer, snare roll, side percussion, syncopated hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, formant answer, side percussion, closed hat, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, formant answer, side percussion, tight kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, mono chest-sub, call-response reese, ghost snare, side hats, tight kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, formant answer, side percussion, hat density up, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, wide mid growl, wide mids, kick opens, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, stacked 808, formant answer, snare roll, side hats, pushed snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, growl answer, wide low-mid, snare answers, 2 bars]
+
+[outro - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side percussion, ghost notes, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -3378,11 +7610,11 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bas
 | Slot | Value |
 | --- | --- |
 | 0 | `brostep, growl bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal ba…` |
-| 1 | `[build-up - snare roll, stacked 808, offbeat hats, call-response reese, side ha…` |
+| 1 | `[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no…` |
 | 2 | `547` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `427.0` |
+| 5 | `455.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A major` |
@@ -3394,95 +7626,335 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bas
 | 14 | `0.0` |
 
 ```text
-brostep, growl bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
+brostep, growl bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, stacked 808, offbeat hats, call-response reese, side hats, triplet hats, dual-action pedal bass, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, call-response reese, side hats, triplet hats, dual-action pedal bass, 2 bars]
 
-[drop - wreck warped drop, fold bass, growl answer, trap drums denser, wide low-mid, backbeat shove, brostep, dual-action pedal bass, heavy brostep drop, 12 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, fold bass, growl answer, trap drums denser, wide low-mid, backbeat shove, brostep, dual-action pedal bass, heavy brostep drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, stacked 808, ghost notes, chest-sub 808 warp, 6 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, formant bass melody, side percussion, ghost notes, chest-sub 808 warp, 2 bars]
 
-[inst - kick pattern flip, fold bass, wide mid reese counterline, wide mids, dry hats, pedal 808 hold, 10 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, fold bass, wide mid reese counterline, kick pattern flip, wide mids, dry hats, pedal 808 hold, 2 bars]
 
-[build-up - snare roll, stacked 808, snare roll, formant answer, side hats, wide hat bed, rapid hi-hats roll, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, formant answer, side hats, wide hat bed, rapid hi-hats roll, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, fold bass, mono kick, 808 wall wreck, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, fold bass, wide mid growl, rapid hi-hats, wide low-mid, mono kick, harder stacked drop, 2 bars]
 
-[build-up - snare roll, stacked 808, offbeat hats, call-response reese, side percussion, side snare, formant growl, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, call-response reese, side percussion, side snare, 808 wall wreck, 2 bars]
 
-[inst - trap drums denser, fold bass, growl answer, wide mids, rolling hats, snare roll, 10 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, fold bass, growl answer, trap drums denser, wide mids, rolling hats, formant growl, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side hats, stacked 808, late snare, chest-sub 808, 8 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, formant bass melody, side hats, late snare, 2 bars]
 
-[build-up - snare roll, fold bass, kick pattern flip, wide mid reese counterline, wide low-mid, early kick, body bass wreck, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, fold bass, wide mid reese counterline, kick pattern flip, wide low-mid, early kick, chest-sub 808, 2 bars]
 
-[drop - full send wobble warped drop, stacked 808, formant answer, snare roll, side percussion, syncopated hats, harder stacked drop, 12 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, formant answer, side percussion, syncopated hats, body bass wreck, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, fold bass, open hat, pedal warp, 6 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, wide mid growl, wide mids, open hat, pedal warp, 2 bars]
 
-[build-up - snare roll, stacked 808, offbeat hats, call-response reese, side hats, closed hat, kick holds, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, call-response reese, side hats, closed hat, kick holds, 2 bars]
 
-[drop - heavy reese warped drop, fold bass, growl answer, trap drums denser, wide low-mid, room snare, full send drop, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, fold bass, growl answer, trap drums denser, wide low-mid, room snare, full send drop, 2 bars]
 
-[inst - ghost snare, stacked 808, formant bass melody, side percussion, tight kick, hats denser, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, formant bass melody, side percussion, tight kick, hats denser, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, fold bass, loose hats, brostep ride, 6 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, wide mid reese counterline, wide mids, loose hats, brostep ride, 2 bars]
 
-[build-up - snare roll, stacked 808, snare roll, formant answer, side hats, pushed snare, 4 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, stacked 808, formant answer, snare roll, side hats, pushed snare, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, fold bass, chopped hats, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, wide mid growl, wide low-mid, chopped hats, 2 bars]
 
-[inst - offbeat hats, stacked 808, call-response reese, side percussion, hat density up, 8 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, call-response reese, side percussion, hat density up, 2 bars]
 
-[drop - harder growl warped drop, fold bass, growl answer, trap drums denser, wide mids, kick opens, 12 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, fold bass, growl answer, trap drums denser, wide mids, kick opens, 2 bars]
 
-[inst - ghost snare, stacked 808, formant bass melody, side hats, kick tightens, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, formant bass melody, side hats, kick tightens, 2 bars]
 
-[drop - wreck warped drop, fold bass, wide mid reese counterline, kick pattern flip, wide low-mid, snare answers, 8 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, wide mid reese counterline, wide low-mid, snare answers, 2 bars]
 
-[inst - snare roll, stacked 808, formant answer, side percussion, offbeat push, 6 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, formant answer, side percussion, offbeat push, 2 bars]
 
-[drop - heavy reese warped drop, fold bass, wide mid growl, rapid hi-hats, wide mids, straight hats, 8 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, wide mid growl, wide mids, straight hats, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side hats, stacked 808, triplet hats, 6 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, stacked 808, call-response reese, offbeat hats, side hats, triplet hats, 2 bars]
 
-[build-up - snare roll, fold bass, trap drums denser, growl answer, wide low-mid, backbeat shove, 4 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, growl answer, wide low-mid, backbeat shove, 2 bars]
 
-[drop - wreck warped drop, stacked 808, formant bass melody, ghost snare, side percussion, ghost notes, 10 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, stacked 808, formant bass melody, ghost snare, side percussion, ghost notes, 2 bars]
 
-[build-up - snare roll, fold bass, kick pattern flip, wide mid reese counterline, wide mids, dry hats, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, wide mid reese counterline, wide mids, dry hats, 2 bars]
 
-[inst - snare roll, stacked 808, formant answer, side hats, wide hat bed, 8 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, wide mid reese counterline, wide mids, mono kick, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side hats, mono chest-sub, side snare, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, fold bass, wide mid growl, rapid hi-hats, wide low-mid, mono kick, 2 bars]
 
-[build-up - snare roll, low chest-sub, trap drums denser, wide mid growl, wide low-mid, rolling hats, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, wide mid growl, wide low-mid, rolling hats, 2 bars]
 
-[inst - ghost snare, mono chest-sub, call-response reese, side percussion, late snare, 12 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, growl answer, wide mids, rolling hats, 2 bars]
 
-[drop - stacked formant warped drop, stacked 808, formant bass melody, ghost snare, side hats, late snare, 8 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, formant bass melody, side hats, late snare, 2 bars]
 
-[build-up - snare roll, mono chest-sub, snare roll, formant bass melody, side hats, syncopated hats, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, fold bass, wide mid reese counterline, kick pattern flip, wide low-mid, early kick, 2 bars]
 
-[inst - snare roll, stacked 808, formant answer, side percussion, syncopated hats, 8 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, formant answer, side percussion, syncopated hats, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side percussion, mono chest-sub, closed hat, 4 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, fold bass, wide mid growl, rapid hi-hats, wide mids, open hat, 2 bars]
 
-[build-up - snare roll, low chest-sub, trap drums denser, wide mid growl, wide mids, room snare, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, wide mid growl, wide mids, room snare, 2 bars]
 
-[inst - trap drums denser, fold bass, growl answer, wide low-mid, room snare, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, fold bass, growl answer, trap drums denser, wide low-mid, room snare, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, stacked 808, tight kick, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, growl answer, wide low-mid, loose hats, 2 bars]
 
-[inst - kick pattern flip, fold bass, wide mid reese counterline, wide mids, loose hats, 10 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, formant bass melody, side percussion, pushed snare, 2 bars]
 
-[drop - full send wobble warped drop, stacked 808, formant answer, snare roll, side hats, pushed snare, 8 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, formant answer, side hats, pushed snare, 2 bars]
 
-[inst - rapid hi-hats, fold bass, wide mid growl, wide low-mid, chopped hats, 12 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, wide mid growl, wide low-mid, chopped hats, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side percussion, ghost notes, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, call-response reese, side percussion, hat density up, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, fold bass, growl answer, trap drums denser, wide mids, kick opens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, growl answer, wide mids, snare answers, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, fold bass, wide mid reese counterline, kick pattern flip, wide low-mid, snare answers, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, formant answer, side percussion, offbeat push, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, fold bass, wide mid growl, rapid hi-hats, wide mids, straight hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, wide mid growl, wide mids, backbeat shove, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, growl answer, wide low-mid, backbeat shove, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, stacked 808, formant bass melody, ghost snare, side percussion, ghost notes, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, wide mid reese counterline, wide mids, dry hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, stacked 808, formant answer, snare roll, side hats, wide hat bed, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, wide mid growl, wide low-mid, mono kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, call-response reese, side percussion, side snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, growl answer, wide mids, rolling hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, stacked 808, formant bass melody, ghost snare, side hats, late snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, wide mid reese counterline, wide low-mid, early kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, wide mid reese counterline, wide low-mid, open hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, fold bass, wide mid growl, rapid hi-hats, wide mids, open hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, formant answer, side percussion, tight kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, growl answer, wide low-mid, room snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, call-response reese, side hats, pushed snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, growl answer, wide low-mid, chopped hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, stacked 808, formant answer, snare roll, side hats, pushed snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, formant answer, side hats, hat density up, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, wide mid growl, wide low-mid, kick opens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, growl answer, wide mids, kick opens, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, formant bass melody, side hats, kick tightens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, wide mid reese counterline, wide low-mid, snare answers, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, wide mid reese counterline, wide low-mid, straight hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, fold bass, wide mid growl, rapid hi-hats, wide mids, straight hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, formant answer, side percussion, ghost notes, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, call-response reese, side hats, ghost notes, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, stacked 808, formant bass melody, ghost snare, side percussion, ghost notes, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, formant bass melody, side percussion, wide hat bed, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, stacked 808, formant answer, snare roll, side hats, wide hat bed, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, formant answer, side hats, side snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, stacked 808, call-response reese, offbeat hats, side percussion, side snare, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, call-response reese, side percussion, late snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, growl answer, wide mids, early kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, wide mid reese counterline, wide low-mid, early kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, stacked 808, formant answer, snare roll, side percussion, syncopated hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, wide mid growl, wide mids, open hat, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, call-response reese, side hats, closed hat, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, fold bass, growl answer, trap drums denser, wide low-mid, room snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, formant bass melody, side percussion, tight kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, fold bass, wide mid reese counterline, kick pattern flip, wide mids, loose hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, wide mid reese counterline, wide mids, chopped hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, fold bass, wide mid growl, rapid hi-hats, wide low-mid, chopped hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, wide mid growl, wide low-mid, kick opens, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, growl answer, wide mids, kick opens, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, stacked 808, formant bass melody, ghost snare, side hats, kick tightens, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, formant bass melody, side hats, offbeat push, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, formant bass melody, side hats, triplet hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, fold bass, wide mid growl, rapid hi-hats, wide mids, straight hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, call-response reese, side hats, triplet hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, fold bass, growl answer, trap drums denser, wide low-mid, backbeat shove, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, formant bass melody, side percussion, ghost notes, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, fold bass, wide mid reese counterline, kick pattern flip, wide mids, dry hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, formant bass melody, side percussion, side snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, wide mid growl, wide low-mid, mono kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, stacked 808, call-response reese, offbeat hats, side percussion, side snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, wide mid growl, wide low-mid, early kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, call-response reese, side percussion, syncopated hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, fold bass, wide mid reese counterline, kick pattern flip, wide low-mid, early kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, wide mid reese counterline, wide low-mid, open hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, fold bass, wide mid growl, rapid hi-hats, wide mids, open hat, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, wide mid growl, wide mids, room snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, fold bass, growl answer, trap drums denser, wide low-mid, room snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, growl answer, wide low-mid, loose hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, fold bass, wide mid reese counterline, kick pattern flip, wide mids, loose hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, formant answer, side hats, pushed snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, wide mid reese counterline, wide mids, kick opens, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, formant answer, side hats, kick tightens, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, fold bass, growl answer, trap drums denser, wide mids, kick opens, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, call-response reese, side percussion, offbeat push, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, formant bass melody, side hats, offbeat push, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, wide mid reese counterline, wide low-mid, straight hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, formant answer, side percussion, triplet hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, wide mid reese counterline, wide low-mid, dry hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, mono chest-sub, call-response reese, ghost snare, side hats, ghost notes, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, growl answer, wide low-mid, dry hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, growl answer, wide low-mid, mono kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, growl answer, wide low-mid, rolling hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, mono chest-sub, formant answer, offbeat hats, side hats, side snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, wide mid growl, wide low-mid, rolling hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, mono chest-sub, call-response reese, ghost snare, side percussion, late snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, growl answer, wide mids, early kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, mono chest-sub, formant bass melody, snare roll, side hats, syncopated hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, formant bass melody, side hats, closed hat, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, formant answer, side percussion, closed hat, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, wide mid reese counterline, wide low-mid, loose hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, call-response reese, side hats, tight kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, wide mid growl, wide mids, chopped hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, call-response reese, side hats, hat density up, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, low chest-sub, wide mid reese counterline, rapid hi-hats, wide mids, chopped hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, formant bass melody, side percussion, kick tightens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, stacked 808, call-response reese, offbeat hats, side percussion, hat density up, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, call-response reese, side percussion, kick tightens, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, stacked 808, formant bass melody, ghost snare, side hats, kick tightens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, growl answer, wide mids, straight hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, stacked 808, formant answer, snare roll, side percussion, offbeat push, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, wide mid growl, wide mids, straight hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, low chest-sub, wide mid growl, trap drums denser, wide mids, backbeat shove, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, call-response reese, side hats, ghost notes, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, call-response reese, side hats, wide hat bed, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, fold bass, wide mid reese counterline, kick pattern flip, wide mids, dry hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, formant answer, side hats, wide hat bed, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, mono chest-sub, formant answer, offbeat hats, side hats, side snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, formant answer, side hats, late snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, fold bass, growl answer, trap drums denser, wide mids, rolling hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, snare roll, call-response reese, side percussion, syncopated hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, formant bass melody, side hats, syncopated hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder growl warped drop, stacked 808, formant answer, snare roll, side percussion, syncopated hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, formant answer, side percussion, closed hat, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, formant answer, side percussion, tight kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, mono chest-sub, call-response reese, ghost snare, side hats, tight kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, formant answer, side percussion, hat density up, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, wide mid growl, wide mids, kick opens, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, stacked 808, formant answer, snare roll, side hats, pushed snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, growl answer, wide low-mid, snare answers, 2 bars]
+
+[outro - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side percussion, ghost notes, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -3565,14 +8037,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `157.0` |
+| 0 | `151.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `157.0` |
+| 0 | `151.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -3581,45 +8053,121 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `color bass, formant bass, chest-sub, rapid hi-hats, trap drums, 808, warped bas…` |
-| 2 | `[build-up - snare roll, body bass, kick pattern flip, wide mid reese counterlin…` |
+| 2 | `[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, …` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/15-oil-pan` |
 
 ```text
-color bass, formant bass, chest-sub, rapid hi-hats, trap drums, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
+color bass, formant bass, chest-sub, rapid hi-hats, trap drums, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, body bass, kick pattern flip, wide mid reese counterline, wide mids, late snare, warped 808 wreck, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, wide mid reese counterline, wide mids, late snare, warped 808 wreck, 2 bars]
 
-[drop - heavy warped drop, octave sub stack, formant answer, snare roll, side hats, early kick, color bass, heavy color drop, 10 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, octave sub stack, formant answer, snare roll, side hats, early kick, color bass, heavy color drop, 2 bars]
 
-[build-up - snare roll, body bass, rapid hi-hats, wide mid growl, wide low-mid, syncopated hats, pan grind, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, wide mid growl, wide low-mid, syncopated hats, pan grind, 2 bars]
 
-[drop - harder formant warped drop, body bass, growl answer, trap drums denser, wide low-mid, side snare, 10 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, octave sub stack, call-response reese, offbeat hats, side percussion, open hat, rapid hi-hats roll, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, body bass, closed hat, 808 punch hold, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, growl answer, wide mids, closed hat, 808 punch hold, 2 bars]
 
-[build-up - snare roll, octave sub stack, ghost snare, formant bass melody, side hats, room snare, stacked color 808, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, formant bass melody, side hats, room snare, stacked color 808, 2 bars]
 
-[inst - kick pattern flip, body bass, wide mid reese counterline, wide low-mid, tight kick, chest formant, 6 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, body bass, wide mid reese counterline, kick pattern flip, wide low-mid, tight kick, harder growl drop, 2 bars]
 
-[drop - harder formant warped drop, octave sub stack, formant answer, snare roll, side percussion, loose hats, harder growl drop, 10 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, formant answer, side percussion, loose hats, chest formant, 2 bars]
 
-[inst - rapid hi-hats, body bass, wide mid growl, wide mids, pushed snare, snare roll, 8 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, wide mid growl, wide mids, pushed snare, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side hats, octave sub stack, chopped hats, chest-sub 808, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, call-response reese, side hats, chopped hats, chest-sub 808, 2 bars]
 
-[build-up - snare roll, body bass, trap drums denser, growl answer, wide low-mid, hat density up, body bass wreck, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, growl answer, wide low-mid, hat density up, body bass wreck, 2 bars]
 
-[inst - ghost snare, octave sub stack, formant bass melody, side percussion, kick opens, color warp, 12 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, formant bass melody, side percussion, kick opens, color warp, 2 bars]
 
-[build-up - snare roll, octave sub stack, snare roll, formant answer, side percussion, dry hats, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, body bass, wide mid reese counterline, kick pattern flip, wide mids, kick tightens, full send drop, 2 bars]
 
-[inst - rapid hi-hats, body bass, wide mid growl, side percussion, pushed snare, 12 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, formant answer, side hats, snare answers, chest-sub wreck, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, growl answer, wide low-mid, side snare, 4 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, body bass, wide mid growl, rapid hi-hats, wide low-mid, offbeat push, harder stacked drop, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, call-response reese, side percussion, straight hats, warped 808 wall, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, body bass, growl answer, trap drums denser, wide mids, triplet hats, kick holds, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, formant bass melody, side hats, backbeat shove, hats denser, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, wide mid reese counterline, wide low-mid, ghost notes, color ride, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, formant answer, side percussion, dry hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, wide mid growl, wide mids, wide hat bed, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, octave sub stack, call-response reese, offbeat hats, side hats, mono kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, growl answer, wide low-mid, side snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, octave sub stack, formant bass melody, ghost snare, side percussion, rolling hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, formant bass melody, side percussion, early kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, formant answer, side hats, early kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, body bass, wide mid growl, rapid hi-hats, wide low-mid, syncopated hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, call-response reese, side percussion, open hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, call-response reese, side percussion, room snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, growl answer, wide mids, tight kick, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, octave sub stack, formant answer, snare roll, side percussion, dry hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, wide mid growl, side percussion, pushed snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, octave sub stack, call-response reese, trap drums denser, side percussion, mono kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, call-response reese, wide mids, kick opens, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, octave sub stack, growl answer, snare roll, wide mids, late snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, formant bass melody, side hats, snare answers, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, octave sub stack, formant bass melody, trap drums denser, side hats, syncopated hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, wide mid reese counterline, wide low-mid, triplet hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, octave sub stack, wide mid reese counterline, snare roll, wide low-mid, room snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, formant answer, wide low-mid, ghost notes, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, wide mid growl, side percussion, loose hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, wide mid growl, side percussion, mono kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, call-response reese, wide mids, hat density up, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, body bass, call-response reese, offbeat hats, wide mids, rolling hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, growl answer, side hats, kick tightens, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, formant bass melody, side hats, syncopated hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, formant bass melody, side hats, straight hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, wide mid reese counterline, wide low-mid, closed hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, formant answer, wide low-mid, backbeat shove, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, body bass, formant answer, kick pattern flip, side percussion, tight kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, wide mid growl, side percussion, wide hat bed, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, wide mid growl, side percussion, chopped hats, 2 bars]
+
+[outro - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, growl answer, wide low-mid, side snare, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -3627,11 +8175,11 @@ color bass, formant bass, chest-sub, rapid hi-hats, trap drums, 808, warped bass
 | Slot | Value |
 | --- | --- |
 | 0 | `color bass, formant bass, chest-sub, rapid hi-hats, trap drums, 808, warped bas…` |
-| 1 | `[build-up - snare roll, body bass, kick pattern flip, wide mid reese counterlin…` |
+| 1 | `[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, …` |
 | 2 | `557` |
 | 3 | `fixed` |
 | 4 | `168` |
-| 5 | `157.0` |
+| 5 | `151.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A minor` |
@@ -3643,39 +8191,115 @@ color bass, formant bass, chest-sub, rapid hi-hats, trap drums, 808, warped bass
 | 14 | `0.0` |
 
 ```text
-color bass, formant bass, chest-sub, rapid hi-hats, trap drums, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
+color bass, formant bass, chest-sub, rapid hi-hats, trap drums, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, body bass, kick pattern flip, wide mid reese counterline, wide mids, late snare, warped 808 wreck, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, wide mid reese counterline, wide mids, late snare, warped 808 wreck, 2 bars]
 
-[drop - heavy warped drop, octave sub stack, formant answer, snare roll, side hats, early kick, color bass, heavy color drop, 10 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, octave sub stack, formant answer, snare roll, side hats, early kick, color bass, heavy color drop, 2 bars]
 
-[build-up - snare roll, body bass, rapid hi-hats, wide mid growl, wide low-mid, syncopated hats, pan grind, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, wide mid growl, wide low-mid, syncopated hats, pan grind, 2 bars]
 
-[drop - harder formant warped drop, body bass, growl answer, trap drums denser, wide low-mid, side snare, 10 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, octave sub stack, call-response reese, offbeat hats, side percussion, open hat, rapid hi-hats roll, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, body bass, closed hat, 808 punch hold, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, growl answer, wide mids, closed hat, 808 punch hold, 2 bars]
 
-[build-up - snare roll, octave sub stack, ghost snare, formant bass melody, side hats, room snare, stacked color 808, 4 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, formant bass melody, side hats, room snare, stacked color 808, 2 bars]
 
-[inst - kick pattern flip, body bass, wide mid reese counterline, wide low-mid, tight kick, chest formant, 6 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, body bass, wide mid reese counterline, kick pattern flip, wide low-mid, tight kick, harder growl drop, 2 bars]
 
-[drop - harder formant warped drop, octave sub stack, formant answer, snare roll, side percussion, loose hats, harder growl drop, 10 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, formant answer, side percussion, loose hats, chest formant, 2 bars]
 
-[inst - rapid hi-hats, body bass, wide mid growl, wide mids, pushed snare, snare roll, 8 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, wide mid growl, wide mids, pushed snare, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side hats, octave sub stack, chopped hats, chest-sub 808, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, call-response reese, side hats, chopped hats, chest-sub 808, 2 bars]
 
-[build-up - snare roll, body bass, trap drums denser, growl answer, wide low-mid, hat density up, body bass wreck, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, growl answer, wide low-mid, hat density up, body bass wreck, 2 bars]
 
-[inst - ghost snare, octave sub stack, formant bass melody, side percussion, kick opens, color warp, 12 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, formant bass melody, side percussion, kick opens, color warp, 2 bars]
 
-[build-up - snare roll, octave sub stack, snare roll, formant answer, side percussion, dry hats, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, body bass, wide mid reese counterline, kick pattern flip, wide mids, kick tightens, full send drop, 2 bars]
 
-[inst - rapid hi-hats, body bass, wide mid growl, side percussion, pushed snare, 12 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, formant answer, side hats, snare answers, chest-sub wreck, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, growl answer, wide low-mid, side snare, 4 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, body bass, wide mid growl, rapid hi-hats, wide low-mid, offbeat push, harder stacked drop, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, call-response reese, side percussion, straight hats, warped 808 wall, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, body bass, growl answer, trap drums denser, wide mids, triplet hats, kick holds, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, formant bass melody, side hats, backbeat shove, hats denser, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, wide mid reese counterline, wide low-mid, ghost notes, color ride, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, formant answer, side percussion, dry hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, wide mid growl, wide mids, wide hat bed, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, octave sub stack, call-response reese, offbeat hats, side hats, mono kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, growl answer, wide low-mid, side snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, octave sub stack, formant bass melody, ghost snare, side percussion, rolling hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, formant bass melody, side percussion, early kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, formant answer, side hats, early kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, body bass, wide mid growl, rapid hi-hats, wide low-mid, syncopated hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, call-response reese, side percussion, open hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, call-response reese, side percussion, room snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, growl answer, wide mids, tight kick, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, octave sub stack, formant answer, snare roll, side percussion, dry hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, wide mid growl, side percussion, pushed snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, octave sub stack, call-response reese, trap drums denser, side percussion, mono kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, call-response reese, wide mids, kick opens, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, octave sub stack, growl answer, snare roll, wide mids, late snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, formant bass melody, side hats, snare answers, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, octave sub stack, formant bass melody, trap drums denser, side hats, syncopated hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, wide mid reese counterline, wide low-mid, triplet hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, octave sub stack, wide mid reese counterline, snare roll, wide low-mid, room snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, formant answer, wide low-mid, ghost notes, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, wide mid growl, side percussion, loose hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, wide mid growl, side percussion, mono kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, call-response reese, wide mids, hat density up, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, body bass, call-response reese, offbeat hats, wide mids, rolling hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, growl answer, side hats, kick tightens, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, formant bass melody, side hats, syncopated hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, formant bass melody, side hats, straight hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, wide mid reese counterline, wide low-mid, closed hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, formant answer, wide low-mid, backbeat shove, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck warped drop, body bass, formant answer, kick pattern flip, side percussion, tight kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, wide mid growl, side percussion, wide hat bed, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, wide mid growl, side percussion, chopped hats, 2 bars]
+
+[outro - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, growl answer, wide low-mid, side snare, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -3758,14 +8382,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `158.0` |
+| 0 | `150.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `158.0` |
+| 0 | `150.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -3774,49 +8398,125 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808…` |
-| 2 | `[build-up - snare roll, stacked 808, snare roll, formant bass melody, side hats…` |
+| 2 | `[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/16-curb-check` |
 
 ```text
-drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 176 bpm, instrumental, no vocals
+drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 176 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, stacked 808, snare roll, formant bass melody, side hats, early kick, 808 warp wreck, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, formant bass melody, side hats, early kick, 808 warp wreck, 2 bars]
 
-[drop - heavy formant warped drop, fold bass, wide mid reese counterline, rapid hi-hats, wide low-mid, syncopated hats, amen break, heavy amen drop, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, fold bass, wide mid reese counterline, rapid hi-hats, wide low-mid, syncopated hats, amen break, heavy amen drop, 2 bars]
 
-[build-up - snare roll, stacked 808, offbeat hats, formant answer, side percussion, open hat, curb grind, 4 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, formant answer, side percussion, open hat, curb grind, 2 bars]
 
-[inst - trap drums denser, fold bass, wide mid growl, wide mids, closed hat, amen break, 12 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, wide mid growl, wide mids, closed hat, amen break, 2 bars]
 
-[drop - wreck wobble warped drop, stacked 808, call-response reese, ghost snare, side hats, room snare, rapid hi-hats 808 curb, 8 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, call-response reese, side hats, room snare, rapid hi-hats 808 curb, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide low-mid, fold bass, tight kick, reese 808 wreck, 6 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, fold bass, growl answer, kick pattern flip, wide low-mid, tight kick, harder stacked drop, 2 bars]
 
-[drop - heavy formant warped drop, stacked 808, formant bass melody, snare roll, side percussion, loose hats, harder stacked drop, 12 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, formant bass melody, side percussion, loose hats, reese 808 wreck, 2 bars]
 
-[inst - rapid hi-hats, fold bass, wide mid reese counterline, wide mids, pushed snare, chest formant, 10 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, wide mid reese counterline, wide mids, pushed snare, chest formant, 2 bars]
 
-[build-up - snare roll, stacked 808, offbeat hats, formant answer, side hats, chopped hats, hats denser, 6 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, stacked 808, formant answer, offbeat hats, side hats, chopped hats, hats denser, 2 bars]
 
-[inst - trap drums denser, fold bass, wide mid growl, wide low-mid, hat density up, reese hold, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, wide mid growl, wide low-mid, hat density up, reese hold, 2 bars]
 
-[build-up - snare roll, stacked 808, ghost snare, call-response reese, side percussion, kick opens, stacked amen wreck, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, stacked 808, call-response reese, ghost snare, side percussion, kick opens, full send drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, fold bass, kick tightens, warped 808, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, growl answer, wide mids, kick tightens, stacked amen wreck, 2 bars]
 
-[build-up - snare roll, stacked 808, snare roll, formant bass melody, side hats, snare answers, 6 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, stacked 808, formant bass melody, snare roll, side hats, snare answers, warped 808, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide low-mid, fold bass, offbeat push, curb 808 punch, 8 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, wide mid reese counterline, wide low-mid, offbeat push, snare roll, 2 bars]
 
-[build-up - snare roll, stacked 808, snare roll, formant bass melody, side percussion, loose hats, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, stacked 808, formant answer, offbeat hats, side percussion, straight hats, curb 808 punch, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, side percussion, fold bass, wide hat bed, 8 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, wide mid growl, wide mids, triplet hats, chest trap wreck, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, wide mid growl, wide low-mid, hat density up, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, call-response reese, side hats, backbeat shove, drumstep grind, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, growl answer, wide low-mid, ghost notes, kick holds, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, formant bass melody, side percussion, dry hats, reese ride, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, fold bass, wide mid reese counterline, rapid hi-hats, wide mids, wide hat bed, harder growl drop, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, formant answer, side hats, mono kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, wide mid growl, wide low-mid, side snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, call-response reese, side percussion, rolling hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, growl answer, wide mids, late snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, stacked 808, formant bass melody, snare roll, side hats, early kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, wide mid reese counterline, wide low-mid, syncopated hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, stacked 808, formant answer, offbeat hats, side percussion, open hat, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, wide mid growl, wide mids, closed hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, stacked 808, call-response reese, ghost snare, side hats, room snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, growl answer, wide low-mid, tight kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, growl answer, wide low-mid, pushed snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, formant bass melody, side percussion, chopped hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, stacked 808, formant answer, offbeat hats, side hats, chopped hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, formant answer, side hats, kick opens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, stacked 808, call-response reese, ghost snare, side percussion, kick opens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, call-response reese, side percussion, snare answers, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, formant bass melody, side hats, snare answers, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, fold bass, wide mid reese counterline, rapid hi-hats, wide low-mid, offbeat push, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, formant answer, side percussion, straight hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, fold bass, wide mid growl, trap drums denser, wide mids, triplet hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, wide mid growl, wide mids, ghost notes, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, fold bass, growl answer, kick pattern flip, wide low-mid, ghost notes, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, formant bass melody, side percussion, loose hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, fold bass, wide mid reese counterline, offbeat hats, side percussion, wide hat bed, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant answer, wide mids, chopped hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, formant answer, wide mids, rolling hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, stacked 808, wide mid growl, snare roll, side hats, kick tightens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, wide mid growl, side hats, early kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, stacked 808, call-response reese, trap drums denser, side hats, offbeat push, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, growl answer, wide low-mid, closed hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, stacked 808, growl answer, rapid hi-hats, wide low-mid, backbeat shove, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, formant bass melody, side percussion, tight kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, formant bass melody, side percussion, dry hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, wide mid reese counterline, side percussion, chopped hats, 2 bars]
+
+[outro - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, wide mid growl, wide low-mid, hat density up, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -3824,11 +8524,11 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808,
 | Slot | Value |
 | --- | --- |
 | 0 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808…` |
-| 1 | `[build-up - snare roll, stacked 808, snare roll, formant bass melody, side hats…` |
+| 1 | `[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays…` |
 | 2 | `563` |
 | 3 | `fixed` |
 | 4 | `176` |
-| 5 | `158.0` |
+| 5 | `150.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `C major` |
@@ -3840,43 +8540,119 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808,
 | 14 | `0.0` |
 
 ```text
-drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 176 bpm, instrumental, no vocals
+drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 176 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, stacked 808, snare roll, formant bass melody, side hats, early kick, 808 warp wreck, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, formant bass melody, side hats, early kick, 808 warp wreck, 2 bars]
 
-[drop - heavy formant warped drop, fold bass, wide mid reese counterline, rapid hi-hats, wide low-mid, syncopated hats, amen break, heavy amen drop, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, fold bass, wide mid reese counterline, rapid hi-hats, wide low-mid, syncopated hats, amen break, heavy amen drop, 2 bars]
 
-[build-up - snare roll, stacked 808, offbeat hats, formant answer, side percussion, open hat, curb grind, 4 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, formant answer, side percussion, open hat, curb grind, 2 bars]
 
-[inst - trap drums denser, fold bass, wide mid growl, wide mids, closed hat, amen break, 12 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, wide mid growl, wide mids, closed hat, amen break, 2 bars]
 
-[drop - wreck wobble warped drop, stacked 808, call-response reese, ghost snare, side hats, room snare, rapid hi-hats 808 curb, 8 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, call-response reese, side hats, room snare, rapid hi-hats 808 curb, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide low-mid, fold bass, tight kick, reese 808 wreck, 6 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, fold bass, growl answer, kick pattern flip, wide low-mid, tight kick, harder stacked drop, 2 bars]
 
-[drop - heavy formant warped drop, stacked 808, formant bass melody, snare roll, side percussion, loose hats, harder stacked drop, 12 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, formant bass melody, side percussion, loose hats, reese 808 wreck, 2 bars]
 
-[inst - rapid hi-hats, fold bass, wide mid reese counterline, wide mids, pushed snare, chest formant, 10 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, wide mid reese counterline, wide mids, pushed snare, chest formant, 2 bars]
 
-[build-up - snare roll, stacked 808, offbeat hats, formant answer, side hats, chopped hats, hats denser, 6 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, stacked 808, formant answer, offbeat hats, side hats, chopped hats, hats denser, 2 bars]
 
-[inst - trap drums denser, fold bass, wide mid growl, wide low-mid, hat density up, reese hold, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, wide mid growl, wide low-mid, hat density up, reese hold, 2 bars]
 
-[build-up - snare roll, stacked 808, ghost snare, call-response reese, side percussion, kick opens, stacked amen wreck, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked warped drop, stacked 808, call-response reese, ghost snare, side percussion, kick opens, full send drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, fold bass, kick tightens, warped 808, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, growl answer, wide mids, kick tightens, stacked amen wreck, 2 bars]
 
-[build-up - snare roll, stacked 808, snare roll, formant bass melody, side hats, snare answers, 6 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, stacked 808, formant bass melody, snare roll, side hats, snare answers, warped 808, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide low-mid, fold bass, offbeat push, curb 808 punch, 8 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, wide mid reese counterline, wide low-mid, offbeat push, snare roll, 2 bars]
 
-[build-up - snare roll, stacked 808, snare roll, formant bass melody, side percussion, loose hats, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, stacked 808, formant answer, offbeat hats, side percussion, straight hats, curb 808 punch, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, side percussion, fold bass, wide hat bed, 8 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, wide mid growl, wide mids, triplet hats, chest trap wreck, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, wide mid growl, wide low-mid, hat density up, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, call-response reese, side hats, backbeat shove, drumstep grind, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, growl answer, wide low-mid, ghost notes, kick holds, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, formant bass melody, side percussion, dry hats, reese ride, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, fold bass, wide mid reese counterline, rapid hi-hats, wide mids, wide hat bed, harder growl drop, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, formant answer, side hats, mono kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, wide mid growl, wide low-mid, side snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, ghost snare, call-response reese, side percussion, rolling hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, growl answer, wide mids, late snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, stacked 808, formant bass melody, snare roll, side hats, early kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, rapid hi-hats, wide mid reese counterline, wide low-mid, syncopated hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, stacked 808, formant answer, offbeat hats, side percussion, open hat, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, wide mid growl, wide mids, closed hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send growl warped drop, stacked 808, call-response reese, ghost snare, side hats, room snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, growl answer, wide low-mid, tight kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, growl answer, wide low-mid, pushed snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, formant bass melody, side percussion, chopped hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, stacked 808, formant answer, offbeat hats, side hats, chopped hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, formant answer, side hats, kick opens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, stacked 808, call-response reese, ghost snare, side percussion, kick opens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, call-response reese, side percussion, snare answers, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, formant bass melody, side hats, snare answers, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder reese warped drop, fold bass, wide mid reese counterline, rapid hi-hats, wide low-mid, offbeat push, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, stacked 808, formant answer, side percussion, straight hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck wobble warped drop, fold bass, wide mid growl, trap drums denser, wide mids, triplet hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, wide mid growl, wide mids, ghost notes, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, fold bass, growl answer, kick pattern flip, wide low-mid, ghost notes, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, formant bass melody, side percussion, loose hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked formant warped drop, fold bass, wide mid reese counterline, offbeat hats, side percussion, wide hat bed, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant answer, wide mids, chopped hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, formant answer, wide mids, rolling hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send wobble warped drop, stacked 808, wide mid growl, snare roll, side hats, kick tightens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, wide mid growl, side hats, early kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy formant warped drop, stacked 808, call-response reese, trap drums denser, side hats, offbeat push, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, growl answer, wide low-mid, closed hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy reese warped drop, stacked 808, growl answer, rapid hi-hats, wide low-mid, backbeat shove, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, formant bass melody, side percussion, tight kick, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, stacked 808, formant bass melody, side percussion, dry hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, wide mid reese counterline, side percussion, chopped hats, 2 bars]
+
+[outro - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, wide mid growl, wide low-mid, hat density up, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -3959,14 +8735,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `176.0` |
+| 0 | `153.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `176.0` |
+| 0 | `153.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -3975,49 +8751,125 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action peda…` |
-| 2 | `[build-up - snare roll, body bass, kick pattern flip, formant answer, side perc…` |
+| 2 | `[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, …` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/17-last-exit` |
 
 ```text
-dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
+dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, body bass, kick pattern flip, formant answer, side percussion, closed hat, dual-action pedal bass, 4 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, formant answer, side percussion, closed hat, dual-action pedal bass, 2 bars]
 
-[drop - harder wobble warped drop, octave sub stack, wide mid growl, snare roll, wide mids, room snare, dirty bass, dual-action pedal bass, heavy dirty drop, 8 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, octave sub stack, wide mid growl, snare roll, wide mids, room snare, dirty bass, dual-action pedal bass, heavy dirty drop, 2 bars]
 
-[inst - rapid hi-hats, body bass, call-response reese, side hats, tight kick, warped exit, 12 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, call-response reese, side hats, tight kick, warped exit, 2 bars]
 
-[drop - wreck formant warped drop, octave sub stack, growl answer, offbeat hats, wide low-mid, loose hats, pedal 808 hold, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, octave sub stack, growl answer, offbeat hats, wide low-mid, loose hats, pedal 808 hold, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, body bass, pushed snare, rapid hi-hats roll, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, formant bass melody, side percussion, pushed snare, rapid hi-hats roll, 2 bars]
 
-[inst - ghost snare, octave sub stack, wide mid reese counterline, wide mids, chopped hats, chest-sub 808 wall, 8 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, wide mid reese counterline, wide mids, chopped hats, chest-sub 808 wall, 2 bars]
 
-[drop - harder wobble warped drop, body bass, formant answer, kick pattern flip, side hats, hat density up, harder growl drop, 10 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, body bass, formant answer, kick pattern flip, side hats, hat density up, harder growl drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, octave sub stack, kick opens, formant crush, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, wide mid growl, wide low-mid, kick opens, formant crush, 2 bars]
 
-[build-up - snare roll, body bass, rapid hi-hats, call-response reese, side percussion, kick tightens, low rumble wreck, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, body bass, call-response reese, rapid hi-hats, side percussion, kick tightens, full send drop, 2 bars]
 
-[inst - offbeat hats, octave sub stack, growl answer, wide mids, snare answers, pedal warp, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, growl answer, wide mids, snare answers, low rumble wreck, 2 bars]
 
-[drop - heavy growl warped drop, body bass, formant bass melody, trap drums denser, side hats, offbeat push, full send drop, 12 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, formant bass melody, side hats, offbeat push, pedal warp, 2 bars]
 
-[build-up - snare roll, octave sub stack, ghost snare, wide mid reese counterline, wide low-mid, straight hats, kick holds, 4 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, octave sub stack, wide mid reese counterline, ghost snare, wide low-mid, straight hats, kick holds, 2 bars]
 
-[inst - kick pattern flip, body bass, formant answer, side percussion, triplet hats, hats denser, 12 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, formant answer, side percussion, triplet hats, hats denser, 2 bars]
 
-[drop - wreck formant warped drop, octave sub stack, wide mid growl, snare roll, wide mids, backbeat shove, pedal ride, 10 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, octave sub stack, wide mid growl, snare roll, wide mids, backbeat shove, pedal ride, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side hats, body bass, ghost notes, 8 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, call-response reese, side hats, ghost notes, 2 bars]
 
-[inst - offbeat hats, octave sub stack, growl answer, wide low-mid, dry hats, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, growl answer, wide low-mid, dry hats, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, growl answer, wide mids, snare answers, 4 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, formant bass melody, side percussion, wide hat bed, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, octave sub stack, wide mid reese counterline, ghost snare, wide mids, mono kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, formant answer, side hats, side snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, octave sub stack, wide mid growl, snare roll, wide low-mid, rolling hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, call-response reese, side percussion, late snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, growl answer, wide mids, early kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, formant bass melody, side hats, syncopated hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, wide mid reese counterline, wide low-mid, open hat, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, body bass, formant answer, kick pattern flip, side percussion, closed hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, wide mid growl, wide mids, room snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, wide mid growl, wide mids, loose hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, octave sub stack, growl answer, offbeat hats, wide low-mid, loose hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, formant bass melody, side percussion, pushed snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, octave sub stack, wide mid reese counterline, ghost snare, wide mids, chopped hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, formant answer, side hats, hat density up, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, octave sub stack, wide mid growl, snare roll, wide low-mid, kick opens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, call-response reese, side percussion, kick tightens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, growl answer, wide mids, snare answers, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, body bass, formant bass melody, trap drums denser, side hats, offbeat push, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, wide mid reese counterline, wide low-mid, straight hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, body bass, formant answer, kick pattern flip, side percussion, triplet hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, wide mid growl, wide mids, backbeat shove, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, call-response reese, side hats, ghost notes, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, octave sub stack, growl answer, offbeat hats, wide low-mid, dry hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, growl answer, wide low-mid, mono kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, wide mid reese counterline, wide mids, mono kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, body bass, formant answer, kick pattern flip, side hats, side snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, wide mid growl, wide low-mid, rolling hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, body bass, call-response reese, rapid hi-hats, side percussion, late snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, growl answer, wide mids, early kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, formant bass melody, side hats, syncopated hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, octave sub stack, wide mid reese counterline, ghost snare, wide low-mid, open hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, wide mid reese counterline, wide low-mid, room snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, wide mid growl, wide mids, room snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, body bass, call-response reese, rapid hi-hats, side hats, tight kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, growl answer, wide low-mid, loose hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, body bass, formant bass melody, trap drums denser, side percussion, pushed snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, wide mid reese counterline, wide mids, chopped hats, 2 bars]
+
+[outro - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, growl answer, wide mids, snare answers, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -4025,11 +8877,11 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal
 | Slot | Value |
 | --- | --- |
 | 0 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action peda…` |
-| 1 | `[build-up - snare roll, body bass, kick pattern flip, formant answer, side perc…` |
+| 1 | `[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, …` |
 | 2 | `569` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `176.0` |
+| 5 | `153.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `E minor` |
@@ -4041,43 +8893,119 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal
 | 14 | `0.0` |
 
 ```text
-dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
+dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, body bass, kick pattern flip, formant answer, side percussion, closed hat, dual-action pedal bass, 4 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, formant answer, side percussion, closed hat, dual-action pedal bass, 2 bars]
 
-[drop - harder wobble warped drop, octave sub stack, wide mid growl, snare roll, wide mids, room snare, dirty bass, dual-action pedal bass, heavy dirty drop, 8 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, octave sub stack, wide mid growl, snare roll, wide mids, room snare, dirty bass, dual-action pedal bass, heavy dirty drop, 2 bars]
 
-[inst - rapid hi-hats, body bass, call-response reese, side hats, tight kick, warped exit, 12 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, call-response reese, side hats, tight kick, warped exit, 2 bars]
 
-[drop - wreck formant warped drop, octave sub stack, growl answer, offbeat hats, wide low-mid, loose hats, pedal 808 hold, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, octave sub stack, growl answer, offbeat hats, wide low-mid, loose hats, pedal 808 hold, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, body bass, pushed snare, rapid hi-hats roll, 6 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, formant bass melody, side percussion, pushed snare, rapid hi-hats roll, 2 bars]
 
-[inst - ghost snare, octave sub stack, wide mid reese counterline, wide mids, chopped hats, chest-sub 808 wall, 8 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, wide mid reese counterline, wide mids, chopped hats, chest-sub 808 wall, 2 bars]
 
-[drop - harder wobble warped drop, body bass, formant answer, kick pattern flip, side hats, hat density up, harder growl drop, 10 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, body bass, formant answer, kick pattern flip, side hats, hat density up, harder growl drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, octave sub stack, kick opens, formant crush, 4 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, wide mid growl, wide low-mid, kick opens, formant crush, 2 bars]
 
-[build-up - snare roll, body bass, rapid hi-hats, call-response reese, side percussion, kick tightens, low rumble wreck, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, body bass, call-response reese, rapid hi-hats, side percussion, kick tightens, full send drop, 2 bars]
 
-[inst - offbeat hats, octave sub stack, growl answer, wide mids, snare answers, pedal warp, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, growl answer, wide mids, snare answers, low rumble wreck, 2 bars]
 
-[drop - heavy growl warped drop, body bass, formant bass melody, trap drums denser, side hats, offbeat push, full send drop, 12 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, formant bass melody, side hats, offbeat push, pedal warp, 2 bars]
 
-[build-up - snare roll, octave sub stack, ghost snare, wide mid reese counterline, wide low-mid, straight hats, kick holds, 4 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, octave sub stack, wide mid reese counterline, ghost snare, wide low-mid, straight hats, kick holds, 2 bars]
 
-[inst - kick pattern flip, body bass, formant answer, side percussion, triplet hats, hats denser, 12 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, formant answer, side percussion, triplet hats, hats denser, 2 bars]
 
-[drop - wreck formant warped drop, octave sub stack, wide mid growl, snare roll, wide mids, backbeat shove, pedal ride, 10 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, octave sub stack, wide mid growl, snare roll, wide mids, backbeat shove, pedal ride, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side hats, body bass, ghost notes, 8 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, call-response reese, side hats, ghost notes, 2 bars]
 
-[inst - offbeat hats, octave sub stack, growl answer, wide low-mid, dry hats, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, growl answer, wide low-mid, dry hats, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, growl answer, wide mids, snare answers, 4 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, formant bass melody, side percussion, wide hat bed, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, octave sub stack, wide mid reese counterline, ghost snare, wide mids, mono kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, formant answer, side hats, side snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, octave sub stack, wide mid growl, snare roll, wide low-mid, rolling hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, call-response reese, side percussion, late snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, growl answer, wide mids, early kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, formant bass melody, side hats, syncopated hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, wide mid reese counterline, wide low-mid, open hat, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, body bass, formant answer, kick pattern flip, side percussion, closed hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, wide mid growl, wide mids, room snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, wide mid growl, wide mids, loose hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, octave sub stack, growl answer, offbeat hats, wide low-mid, loose hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, formant bass melody, side percussion, pushed snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, octave sub stack, wide mid reese counterline, ghost snare, wide mids, chopped hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, formant answer, side hats, hat density up, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, octave sub stack, wide mid growl, snare roll, wide low-mid, kick opens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, call-response reese, side percussion, kick tightens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, growl answer, wide mids, snare answers, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, body bass, formant bass melody, trap drums denser, side hats, offbeat push, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, wide mid reese counterline, wide low-mid, straight hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, body bass, formant answer, kick pattern flip, side percussion, triplet hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, wide mid growl, wide mids, backbeat shove, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, call-response reese, side hats, ghost notes, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, octave sub stack, growl answer, offbeat hats, wide low-mid, dry hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, growl answer, wide low-mid, mono kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, wide mid reese counterline, wide mids, mono kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, body bass, formant answer, kick pattern flip, side hats, side snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, wide mid growl, wide low-mid, rolling hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, body bass, call-response reese, rapid hi-hats, side percussion, late snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, growl answer, wide mids, early kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, formant bass melody, side hats, syncopated hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, octave sub stack, wide mid reese counterline, ghost snare, wide low-mid, open hat, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, wide mid reese counterline, wide low-mid, room snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, wide mid growl, wide mids, room snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, body bass, call-response reese, rapid hi-hats, side hats, tight kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, growl answer, wide low-mid, loose hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, body bass, formant bass melody, trap drums denser, side percussion, pushed snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, wide mid reese counterline, wide mids, chopped hats, 2 bars]
+
+[outro - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, growl answer, wide mids, snare answers, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -4160,14 +9088,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `181.0` |
+| 0 | `189.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `181.0` |
+| 0 | `189.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -4176,53 +9104,149 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass…` |
-| 2 | `[build-up - snare roll, fold bass, snare roll, wide mid growl, side percussion,…` |
+| 2 | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/18-asphalt-heart` |
 
 ```text
-chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 170 bpm, instrumental, no vocals
+chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 170 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, fold bass, snare roll, wide mid growl, side percussion, late snare, sub warp wreck, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, wide mid growl, side percussion, late snare, sub warp wreck, 2 bars]
 
-[drop - wreck formant warped drop, stacked 808, call-response reese, rapid hi-hats, wide mids, early kick, chest-sub, heavy chest drop, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, stacked 808, call-response reese, rapid hi-hats, wide mids, early kick, chest-sub, heavy chest drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, side hats, fold bass, syncopated hats, asphalt 808, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, growl answer, side hats, syncopated hats, asphalt 808, 2 bars]
 
-[drop - heavy growl warped drop, stacked 808, formant bass melody, trap drums denser, wide low-mid, open hat, rapid hi-hats denser, 8 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, formant bass melody, wide low-mid, open hat, rapid hi-hats denser, 2 bars]
 
-[build-up - snare roll, fold bass, ghost snare, wide mid reese counterline, side percussion, closed hat, chest-sub 808 hold, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid reese counterline, side percussion, closed hat, chest-sub 808 hold, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide mids, stacked 808, room snare, body chest wreck, 6 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, formant answer, wide mids, room snare, body chest wreck, 2 bars]
 
-[inst - snare roll, fold bass, wide mid growl, side hats, tight kick, warped 808, 10 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, wide mid growl, side hats, tight kick, warped 808, 2 bars]
 
-[build-up - snare roll, stacked 808, rapid hi-hats, call-response reese, wide low-mid, loose hats, kick holds, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, stacked 808, call-response reese, rapid hi-hats, wide low-mid, loose hats, full send drop, 2 bars]
 
-[inst - offbeat hats, fold bass, growl answer, side percussion, pushed snare, rapid hi-hats roll, 12 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, growl answer, side percussion, pushed snare, kick holds, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide mids, stacked 808, chopped hats, chest ride, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant bass melody, wide mids, chopped hats, rapid hi-hats roll, 2 bars]
 
-[inst - ghost snare, fold bass, wide mid reese counterline, side hats, hat density up, 10 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, wide mid reese counterline, side hats, hat density up, chest ride, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide low-mid, stacked 808, kick opens, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, stacked 808, formant answer, kick pattern flip, wide low-mid, kick opens, 2 bars]
 
-[build-up - snare roll, fold bass, snare roll, wide mid growl, side percussion, kick tightens, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, wide mid growl, side percussion, kick tightens, 2 bars]
 
-[inst - rapid hi-hats, stacked 808, call-response reese, wide mids, snare answers, 8 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, call-response reese, wide mids, snare answers, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, side hats, fold bass, offbeat push, 4 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, fold bass, growl answer, offbeat hats, side hats, offbeat push, 2 bars]
 
-[build-up - snare roll, stacked 808, trap drums denser, formant bass melody, wide low-mid, straight hats, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, formant bass melody, wide low-mid, straight hats, 2 bars]
 
-[drop - wreck formant warped drop, fold bass, wide mid reese counterline, ghost snare, side percussion, triplet hats, full send drop, 12 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, fold bass, wide mid reese counterline, ghost snare, side percussion, triplet hats, 2 bars]
 
-[build-up - snare roll, stacked 808, kick pattern flip, formant answer, wide mids, backbeat shove, 6 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, formant answer, wide mids, backbeat shove, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, wide mids, mono kick, 4 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, fold bass, wide mid growl, snare roll, side hats, ghost notes, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, call-response reese, wide low-mid, dry hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, growl answer, side percussion, wide hat bed, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant bass melody, wide mids, mono kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, wide mid reese counterline, side hats, side snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, stacked 808, formant answer, kick pattern flip, wide low-mid, rolling hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, wide mid growl, side percussion, late snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, stacked 808, call-response reese, rapid hi-hats, wide mids, early kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, trap drums denser, call-response reese, wide mids, open hat, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, growl answer, side hats, closed hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, fold bass, wide mid reese counterline, ghost snare, side percussion, closed hat, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, formant answer, wide mids, room snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, fold bass, wide mid growl, snare roll, side hats, tight kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, call-response reese, wide low-mid, loose hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, call-response reese, wide low-mid, chopped hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, stacked 808, formant bass melody, trap drums denser, wide mids, chopped hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid reese counterline, side hats, hat density up, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, formant answer, wide low-mid, kick opens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, fold bass, wide mid growl, snare roll, side percussion, kick tightens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, call-response reese, wide mids, snare answers, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, growl answer, side hats, offbeat push, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, stacked 808, formant bass melody, trap drums denser, wide low-mid, straight hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid reese counterline, side percussion, triplet hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid reese counterline, side percussion, ghost notes, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, fold bass, wide mid growl, snare roll, side hats, ghost notes, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, offbeat hats, wide mid growl, side hats, wide hat bed, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, call-response reese, wide low-mid, mono kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, stacked 808, formant bass melody, trap drums denser, wide mids, mono kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant bass melody, wide mids, rolling hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, formant answer, wide low-mid, rolling hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, fold bass, wide mid growl, snare roll, side percussion, late snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, call-response reese, wide mids, early kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, growl answer, side hats, syncopated hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant bass melody, wide low-mid, open hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, fold bass, wide mid reese counterline, ghost snare, side percussion, closed hat, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, snare roll, wide mid reese counterline, side percussion, tight kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, wide mid growl, side hats, tight kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, stacked 808, call-response reese, rapid hi-hats, wide low-mid, loose hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, growl answer, side percussion, pushed snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, stacked 808, formant bass melody, trap drums denser, wide mids, chopped hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant bass melody, wide mids, kick opens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, stacked 808, formant answer, kick pattern flip, wide low-mid, kick opens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, formant answer, wide low-mid, snare answers, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, stacked 808, call-response reese, rapid hi-hats, wide mids, snare answers, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, call-response reese, wide mids, straight hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, stacked 808, formant bass melody, trap drums denser, wide low-mid, straight hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, kick pattern flip, formant bass melody, wide low-mid, backbeat shove, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, formant bass melody, wide low-mid, dry hats, 2 bars]
+
+[outro - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, wide mids, mono kick, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -4230,11 +9254,11 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass,
 | Slot | Value |
 | --- | --- |
 | 0 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass…` |
-| 1 | `[build-up - snare roll, fold bass, snare roll, wide mid growl, side percussion,…` |
+| 1 | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
 | 2 | `571` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `181.0` |
+| 5 | `189.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `G major` |
@@ -4246,47 +9270,143 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass,
 | 14 | `0.0` |
 
 ```text
-chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 170 bpm, instrumental, no vocals
+chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 170 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, fold bass, snare roll, wide mid growl, side percussion, late snare, sub warp wreck, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, wide mid growl, side percussion, late snare, sub warp wreck, 2 bars]
 
-[drop - wreck formant warped drop, stacked 808, call-response reese, rapid hi-hats, wide mids, early kick, chest-sub, heavy chest drop, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, stacked 808, call-response reese, rapid hi-hats, wide mids, early kick, chest-sub, heavy chest drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, side hats, fold bass, syncopated hats, asphalt 808, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, growl answer, side hats, syncopated hats, asphalt 808, 2 bars]
 
-[drop - heavy growl warped drop, stacked 808, formant bass melody, trap drums denser, wide low-mid, open hat, rapid hi-hats denser, 8 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, formant bass melody, wide low-mid, open hat, rapid hi-hats denser, 2 bars]
 
-[build-up - snare roll, fold bass, ghost snare, wide mid reese counterline, side percussion, closed hat, chest-sub 808 hold, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid reese counterline, side percussion, closed hat, chest-sub 808 hold, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide mids, stacked 808, room snare, body chest wreck, 6 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, formant answer, wide mids, room snare, body chest wreck, 2 bars]
 
-[inst - snare roll, fold bass, wide mid growl, side hats, tight kick, warped 808, 10 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, wide mid growl, side hats, tight kick, warped 808, 2 bars]
 
-[build-up - snare roll, stacked 808, rapid hi-hats, call-response reese, wide low-mid, loose hats, kick holds, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, stacked 808, call-response reese, rapid hi-hats, wide low-mid, loose hats, full send drop, 2 bars]
 
-[inst - offbeat hats, fold bass, growl answer, side percussion, pushed snare, rapid hi-hats roll, 12 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, growl answer, side percussion, pushed snare, kick holds, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide mids, stacked 808, chopped hats, chest ride, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant bass melody, wide mids, chopped hats, rapid hi-hats roll, 2 bars]
 
-[inst - ghost snare, fold bass, wide mid reese counterline, side hats, hat density up, 10 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, wide mid reese counterline, side hats, hat density up, chest ride, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide low-mid, stacked 808, kick opens, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, stacked 808, formant answer, kick pattern flip, wide low-mid, kick opens, 2 bars]
 
-[build-up - snare roll, fold bass, snare roll, wide mid growl, side percussion, kick tightens, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, wide mid growl, side percussion, kick tightens, 2 bars]
 
-[inst - rapid hi-hats, stacked 808, call-response reese, wide mids, snare answers, 8 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, call-response reese, wide mids, snare answers, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, side hats, fold bass, offbeat push, 4 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, fold bass, growl answer, offbeat hats, side hats, offbeat push, 2 bars]
 
-[build-up - snare roll, stacked 808, trap drums denser, formant bass melody, wide low-mid, straight hats, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, formant bass melody, wide low-mid, straight hats, 2 bars]
 
-[drop - wreck formant warped drop, fold bass, wide mid reese counterline, ghost snare, side percussion, triplet hats, full send drop, 12 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, fold bass, wide mid reese counterline, ghost snare, side percussion, triplet hats, 2 bars]
 
-[build-up - snare roll, stacked 808, kick pattern flip, formant answer, wide mids, backbeat shove, 6 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, formant answer, wide mids, backbeat shove, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, wide mids, mono kick, 4 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, fold bass, wide mid growl, snare roll, side hats, ghost notes, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, call-response reese, wide low-mid, dry hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, growl answer, side percussion, wide hat bed, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant bass melody, wide mids, mono kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, wide mid reese counterline, side hats, side snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, stacked 808, formant answer, kick pattern flip, wide low-mid, rolling hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, wide mid growl, side percussion, late snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, stacked 808, call-response reese, rapid hi-hats, wide mids, early kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, trap drums denser, call-response reese, wide mids, open hat, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, low chest-sub, growl answer, side hats, closed hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, fold bass, wide mid reese counterline, ghost snare, side percussion, closed hat, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, formant answer, wide mids, room snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, fold bass, wide mid growl, snare roll, side hats, tight kick, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, call-response reese, wide low-mid, loose hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, call-response reese, wide low-mid, chopped hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, stacked 808, formant bass melody, trap drums denser, wide mids, chopped hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid reese counterline, side hats, hat density up, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, formant answer, wide low-mid, kick opens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, fold bass, wide mid growl, snare roll, side percussion, kick tightens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, call-response reese, wide mids, snare answers, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, growl answer, side hats, offbeat push, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, stacked 808, formant bass melody, trap drums denser, wide low-mid, straight hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid reese counterline, side percussion, triplet hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid reese counterline, side percussion, ghost notes, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, fold bass, wide mid growl, snare roll, side hats, ghost notes, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, offbeat hats, wide mid growl, side hats, wide hat bed, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, call-response reese, wide low-mid, mono kick, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, stacked 808, formant bass melody, trap drums denser, wide mids, mono kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant bass melody, wide mids, rolling hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, formant answer, wide low-mid, rolling hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, fold bass, wide mid growl, snare roll, side percussion, late snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, call-response reese, wide mids, early kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, growl answer, side hats, syncopated hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant bass melody, wide low-mid, open hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, fold bass, wide mid reese counterline, ghost snare, side percussion, closed hat, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, snare roll, wide mid reese counterline, side percussion, tight kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, wide mid growl, side hats, tight kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send warped drop, stacked 808, call-response reese, rapid hi-hats, wide low-mid, loose hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, offbeat hats, growl answer, side percussion, pushed snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked reese warped drop, stacked 808, formant bass melody, trap drums denser, wide mids, chopped hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant bass melody, wide mids, kick opens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder wobble warped drop, stacked 808, formant answer, kick pattern flip, wide low-mid, kick opens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, rapid hi-hats, formant answer, wide low-mid, snare answers, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck formant warped drop, stacked 808, call-response reese, rapid hi-hats, wide mids, snare answers, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, mono chest-sub, call-response reese, wide mids, straight hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy growl warped drop, stacked 808, formant bass melody, trap drums denser, wide low-mid, straight hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, kick pattern flip, formant bass melody, wide low-mid, backbeat shove, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, formant bass melody, wide low-mid, dry hats, 2 bars]
+
+[outro - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, wide mids, mono kick, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -4369,14 +9489,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `201.0` |
+| 0 | `218.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `201.0` |
+| 0 | `218.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -4385,57 +9505,173 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action p…` |
-| 2 | `[build-up - snare roll, octave sub stack, snare roll, wide mid reese counterlin…` |
+| 2 | `[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/19-clutch-slam` |
 
 ```text
-dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 174 bpm, instrumental, no vocals
+dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 174 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, octave sub stack, snare roll, wide mid reese counterline, wide mids, mono kick, dual-action pedal bass, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, wide mid reese counterline, wide mids, mono kick, dual-action pedal bass, 2 bars]
 
-[drop - harder formant warped drop, body bass, formant answer, rapid hi-hats, side hats, side snare, tearout, dual-action pedal bass, heavy tearout drop, 10 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, body bass, formant answer, rapid hi-hats, side hats, side snare, tearout, dual-action pedal bass, heavy tearout drop, 2 bars]
 
-[build-up - snare roll, octave sub stack, offbeat hats, wide mid growl, wide low-mid, rolling hats, growl wreck, 4 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, wide mid growl, wide low-mid, rolling hats, growl wreck, 2 bars]
 
-[inst - trap drums denser, body bass, call-response reese, side percussion, late snare, metal hats roll, 6 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, call-response reese, side percussion, late snare, metal hats roll, 2 bars]
 
-[build-up - snare roll, octave sub stack, ghost snare, growl answer, wide mids, early kick, growl sustain, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, growl answer, wide mids, early kick, growl sustain, 2 bars]
 
-[inst - kick pattern flip, body bass, formant bass melody, side hats, syncopated hats, sub crush, 12 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, body bass, formant bass melody, kick pattern flip, side hats, syncopated hats, harder formant drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide low-mid, octave sub stack, open hat, chest-sub 808, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, wide mid reese counterline, wide low-mid, open hat, sub crush, 2 bars]
 
-[build-up - snare roll, body bass, rapid hi-hats, formant answer, side percussion, closed hat, pedal 808 hold, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, formant answer, side percussion, closed hat, chest-sub 808, 2 bars]
 
-[inst - offbeat hats, octave sub stack, wide mid growl, wide mids, room snare, rapid hi-hats roll, 10 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, wide mid growl, wide mids, room snare, pedal 808 hold, 2 bars]
 
-[drop - stacked wobble warped drop, body bass, call-response reese, trap drums denser, side hats, tight kick, harder formant drop, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, body bass, call-response reese, trap drums denser, side hats, tight kick, rapid hi-hats roll, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide low-mid, octave sub stack, loose hats, stacked growl wreck, 4 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, growl answer, wide low-mid, loose hats, stacked growl wreck, 2 bars]
 
-[build-up - snare roll, body bass, kick pattern flip, formant bass melody, side percussion, pushed snare, warped clutch, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, formant bass melody, side percussion, pushed snare, warped clutch, 2 bars]
 
-[inst - snare roll, octave sub stack, wide mid reese counterline, wide mids, chopped hats, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, octave sub stack, wide mid reese counterline, snare roll, wide mids, chopped hats, full send drop, 2 bars]
 
-[drop - wreck growl warped drop, body bass, formant answer, rapid hi-hats, side hats, hat density up, full send drop, 10 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, formant answer, side hats, hat density up, snare roll, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, octave sub stack, kick opens, 808 punch, 4 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, wide mid growl, wide low-mid, kick opens, 808 punch, 2 bars]
 
-[inst - trap drums denser, body bass, call-response reese, side percussion, kick tightens, chest-sub 808 wreck, 12 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, body bass, call-response reese, trap drums denser, side percussion, kick tightens, harder stacked drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, octave sub stack, snare answers, tearout warp, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, growl answer, wide mids, snare answers, chest-sub 808 wreck, 2 bars]
 
-[inst - kick pattern flip, body bass, formant bass melody, side hats, offbeat push, low rumble wreck, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, body bass, formant bass melody, kick pattern flip, side hats, offbeat push, tearout warp, 2 bars]
 
-[drop - wreck growl warped drop, octave sub stack, wide mid reese counterline, snare roll, wide low-mid, straight hats, harder stacked drop, 10 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, wide mid reese counterline, wide low-mid, straight hats, low rumble wreck, 2 bars]
 
-[build-up - snare roll, body bass, rapid hi-hats, formant answer, side percussion, triplet hats, pedal growl, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, formant answer, side percussion, triplet hats, pedal growl, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant answer, side percussion, closed hat, 4 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, octave sub stack, wide mid growl, offbeat hats, wide mids, backbeat shove, kick holds, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, call-response reese, side hats, ghost notes, hats denser, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, growl answer, wide low-mid, dry hats, growl ride, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, formant bass melody, side percussion, wide hat bed, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, formant bass melody, side percussion, side snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, body bass, formant answer, rapid hi-hats, side hats, side snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, wide mid growl, wide low-mid, rolling hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, call-response reese, side percussion, late snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, octave sub stack, growl answer, ghost snare, wide mids, early kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, formant bass melody, side hats, syncopated hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, formant bass melody, side hats, closed hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, body bass, formant answer, rapid hi-hats, side percussion, closed hat, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, wide mid growl, wide mids, room snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, call-response reese, side hats, tight kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, call-response reese, side hats, pushed snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, body bass, formant bass melody, kick pattern flip, side percussion, pushed snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, wide mid reese counterline, wide mids, chopped hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, formant answer, side hats, hat density up, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, octave sub stack, wide mid growl, offbeat hats, wide low-mid, kick opens, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, call-response reese, side percussion, kick tightens, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, growl answer, wide mids, snare answers, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, body bass, formant bass melody, kick pattern flip, side hats, offbeat push, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, formant bass melody, side hats, triplet hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, wide mid reese counterline, wide low-mid, backbeat shove, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, wide mid growl, wide mids, backbeat shove, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, wide mid growl, wide mids, dry hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, octave sub stack, growl answer, ghost snare, wide low-mid, dry hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, formant bass melody, side percussion, wide hat bed, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, octave sub stack, wide mid reese counterline, snare roll, wide mids, mono kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, formant answer, side hats, side snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, octave sub stack, wide mid growl, offbeat hats, wide low-mid, rolling hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid growl, wide low-mid, early kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, call-response reese, side percussion, syncopated hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, growl answer, wide mids, open hat, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, growl answer, wide mids, room snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, body bass, formant answer, rapid hi-hats, side percussion, closed hat, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant answer, side percussion, tight kick, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, body bass, call-response reese, trap drums denser, side hats, tight kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, growl answer, wide low-mid, loose hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, formant bass melody, side percussion, pushed snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, octave sub stack, wide mid reese counterline, snare roll, wide mids, chopped hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, wide mid reese counterline, wide mids, kick opens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, octave sub stack, wide mid growl, offbeat hats, wide low-mid, kick opens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid growl, wide low-mid, snare answers, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, call-response reese, side percussion, offbeat push, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, body bass, formant bass melody, kick pattern flip, side hats, offbeat push, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, wide mid reese counterline, wide low-mid, straight hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, body bass, formant answer, rapid hi-hats, side percussion, triplet hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant answer, side percussion, ghost notes, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant answer, side percussion, wide hat bed, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, call-response reese, side hats, wide hat bed, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, body bass, formant bass melody, kick pattern flip, side percussion, wide hat bed, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, offbeat hats, growl answer, wide low-mid, rolling hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, body bass, formant answer, rapid hi-hats, side hats, side snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, formant answer, side hats, late snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, body bass, call-response reese, trap drums denser, side percussion, late snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid growl, wide low-mid, open hat, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, body bass, formant bass melody, kick pattern flip, side hats, syncopated hats, 2 bars]
+
+[outro - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant answer, side percussion, closed hat, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -4443,11 +9679,11 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action pe
 | Slot | Value |
 | --- | --- |
 | 0 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action p…` |
-| 1 | `[build-up - snare roll, octave sub stack, snare roll, wide mid reese counterlin…` |
+| 1 | `[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays…` |
 | 2 | `577` |
 | 3 | `fixed` |
 | 4 | `174` |
-| 5 | `201.0` |
+| 5 | `218.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `B minor` |
@@ -4459,51 +9695,167 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action pe
 | 14 | `0.0` |
 
 ```text
-dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 174 bpm, instrumental, no vocals
+dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 174 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, octave sub stack, snare roll, wide mid reese counterline, wide mids, mono kick, dual-action pedal bass, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, wide mid reese counterline, wide mids, mono kick, dual-action pedal bass, 2 bars]
 
-[drop - harder formant warped drop, body bass, formant answer, rapid hi-hats, side hats, side snare, tearout, dual-action pedal bass, heavy tearout drop, 10 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, body bass, formant answer, rapid hi-hats, side hats, side snare, tearout, dual-action pedal bass, heavy tearout drop, 2 bars]
 
-[build-up - snare roll, octave sub stack, offbeat hats, wide mid growl, wide low-mid, rolling hats, growl wreck, 4 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, wide mid growl, wide low-mid, rolling hats, growl wreck, 2 bars]
 
-[inst - trap drums denser, body bass, call-response reese, side percussion, late snare, metal hats roll, 6 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, call-response reese, side percussion, late snare, metal hats roll, 2 bars]
 
-[build-up - snare roll, octave sub stack, ghost snare, growl answer, wide mids, early kick, growl sustain, 4 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, growl answer, wide mids, early kick, growl sustain, 2 bars]
 
-[inst - kick pattern flip, body bass, formant bass melody, side hats, syncopated hats, sub crush, 12 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, body bass, formant bass melody, kick pattern flip, side hats, syncopated hats, harder formant drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide low-mid, octave sub stack, open hat, chest-sub 808, 6 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, wide mid reese counterline, wide low-mid, open hat, sub crush, 2 bars]
 
-[build-up - snare roll, body bass, rapid hi-hats, formant answer, side percussion, closed hat, pedal 808 hold, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, formant answer, side percussion, closed hat, chest-sub 808, 2 bars]
 
-[inst - offbeat hats, octave sub stack, wide mid growl, wide mids, room snare, rapid hi-hats roll, 10 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, octave sub stack, wide mid growl, wide mids, room snare, pedal 808 hold, 2 bars]
 
-[drop - stacked wobble warped drop, body bass, call-response reese, trap drums denser, side hats, tight kick, harder formant drop, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, body bass, call-response reese, trap drums denser, side hats, tight kick, rapid hi-hats roll, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide low-mid, octave sub stack, loose hats, stacked growl wreck, 4 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, growl answer, wide low-mid, loose hats, stacked growl wreck, 2 bars]
 
-[build-up - snare roll, body bass, kick pattern flip, formant bass melody, side percussion, pushed snare, warped clutch, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, formant bass melody, side percussion, pushed snare, warped clutch, 2 bars]
 
-[inst - snare roll, octave sub stack, wide mid reese counterline, wide mids, chopped hats, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, octave sub stack, wide mid reese counterline, snare roll, wide mids, chopped hats, full send drop, 2 bars]
 
-[drop - wreck growl warped drop, body bass, formant answer, rapid hi-hats, side hats, hat density up, full send drop, 10 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, formant answer, side hats, hat density up, snare roll, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, octave sub stack, kick opens, 808 punch, 4 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, wide mid growl, wide low-mid, kick opens, 808 punch, 2 bars]
 
-[inst - trap drums denser, body bass, call-response reese, side percussion, kick tightens, chest-sub 808 wreck, 12 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, body bass, call-response reese, trap drums denser, side percussion, kick tightens, harder stacked drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, octave sub stack, snare answers, tearout warp, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, growl answer, wide mids, snare answers, chest-sub 808 wreck, 2 bars]
 
-[inst - kick pattern flip, body bass, formant bass melody, side hats, offbeat push, low rumble wreck, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, body bass, formant bass melody, kick pattern flip, side hats, offbeat push, tearout warp, 2 bars]
 
-[drop - wreck growl warped drop, octave sub stack, wide mid reese counterline, snare roll, wide low-mid, straight hats, harder stacked drop, 10 bars]
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, snare roll, wide mid reese counterline, wide low-mid, straight hats, low rumble wreck, 2 bars]
 
-[build-up - snare roll, body bass, rapid hi-hats, formant answer, side percussion, triplet hats, pedal growl, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, body bass, formant answer, side percussion, triplet hats, pedal growl, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant answer, side percussion, closed hat, 4 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, octave sub stack, wide mid growl, offbeat hats, wide mids, backbeat shove, kick holds, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, call-response reese, side hats, ghost notes, hats denser, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, ghost snare, growl answer, wide low-mid, dry hats, growl ride, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, body bass, formant bass melody, side percussion, wide hat bed, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, formant bass melody, side percussion, side snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, body bass, formant answer, rapid hi-hats, side hats, side snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, wide mid growl, wide low-mid, rolling hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, call-response reese, side percussion, late snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, octave sub stack, growl answer, ghost snare, wide mids, early kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, formant bass melody, side hats, syncopated hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, stacked 808, formant bass melody, side hats, closed hat, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, body bass, formant answer, rapid hi-hats, side percussion, closed hat, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, wide mid growl, wide mids, room snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, body bass, call-response reese, side hats, tight kick, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, call-response reese, side hats, pushed snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, body bass, formant bass melody, kick pattern flip, side percussion, pushed snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, wide mid reese counterline, wide mids, chopped hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, formant answer, side hats, hat density up, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, octave sub stack, wide mid growl, offbeat hats, wide low-mid, kick opens, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, trap drums denser, call-response reese, side percussion, kick tightens, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, growl answer, wide mids, snare answers, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, body bass, formant bass melody, kick pattern flip, side hats, offbeat push, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, rapid hi-hats, formant bass melody, side hats, triplet hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, wide mid reese counterline, wide low-mid, backbeat shove, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, offbeat hats, wide mid growl, wide mids, backbeat shove, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, fold bass, wide mid growl, wide mids, dry hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, octave sub stack, growl answer, ghost snare, wide low-mid, dry hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, formant bass melody, side percussion, wide hat bed, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, octave sub stack, wide mid reese counterline, snare roll, wide mids, mono kick, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, rapid hi-hats, formant answer, side hats, side snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, octave sub stack, wide mid growl, offbeat hats, wide low-mid, rolling hats, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid growl, wide low-mid, early kick, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, call-response reese, side percussion, syncopated hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, snare roll, growl answer, wide mids, open hat, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, low chest-sub, growl answer, wide mids, room snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, body bass, formant answer, rapid hi-hats, side percussion, closed hat, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant answer, side percussion, tight kick, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, body bass, call-response reese, trap drums denser, side hats, tight kick, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, ghost snare, octave sub stack, growl answer, wide low-mid, loose hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, kick pattern flip, formant bass melody, side percussion, pushed snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, octave sub stack, wide mid reese counterline, snare roll, wide mids, chopped hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, fold bass, wide mid reese counterline, wide mids, kick opens, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, octave sub stack, wide mid growl, offbeat hats, wide low-mid, kick opens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, ghost snare, wide mid growl, wide low-mid, snare answers, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, stacked 808, call-response reese, side percussion, offbeat push, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, body bass, formant bass melody, kick pattern flip, side hats, offbeat push, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, wide mid reese counterline, wide low-mid, straight hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, body bass, formant answer, rapid hi-hats, side percussion, triplet hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, trap drums denser, formant answer, side percussion, ghost notes, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, mono chest-sub, formant answer, side percussion, wide hat bed, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, kick pattern flip, call-response reese, side hats, wide hat bed, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, body bass, formant bass melody, kick pattern flip, side percussion, wide hat bed, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, offbeat hats, growl answer, wide low-mid, rolling hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, body bass, formant answer, rapid hi-hats, side hats, side snare, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, stacked 808, formant answer, side hats, late snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, body bass, call-response reese, trap drums denser, side percussion, late snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, wide mid growl, wide low-mid, open hat, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, body bass, formant bass melody, kick pattern flip, side hats, syncopated hats, 2 bars]
+
+[outro - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant answer, side percussion, closed hat, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -4586,14 +9938,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `223.0` |
+| 0 | `254.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `223.0` |
+| 0 | `254.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -4602,61 +9954,197 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped b…` |
-| 2 | `[build-up - snare roll, mono chest-sub, snare roll, growl answer, side percussi…` |
+| 2 | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/20-trailer-hitch` |
 
 ```text
-warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
+warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, mono chest-sub, snare roll, growl answer, side percussion, mono kick, chest-sub 808 wreck, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, growl answer, side percussion, mono kick, chest-sub 808 wreck, 2 bars]
 
-[drop - heavy warped drop, low chest-sub, formant bass melody, rapid hi-hats, wide mids, side snare, warped hybrid-trap, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, low chest-sub, formant bass melody, rapid hi-hats, wide mids, side snare, warped hybrid-trap, 2 bars]
 
-[inst - offbeat hats, mono chest-sub, wide mid reese counterline, side hats, rolling hats, hitch grind, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, wide mid reese counterline, side hats, rolling hats, hitch grind, 2 bars]
 
-[drop - full send reese warped drop, low chest-sub, formant answer, trap drums denser, wide low-mid, late snare, rapid hi-hats roll, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, low chest-sub, formant answer, trap drums denser, wide low-mid, late snare, rapid hi-hats roll, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, side percussion, mono chest-sub, early kick, 808 slide, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, wide mid growl, side percussion, early kick, 808 slide, 2 bars]
 
-[build-up - snare roll, low chest-sub, kick pattern flip, call-response reese, wide mids, syncopated hats, stacked 808 wall, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, call-response reese, wide mids, syncopated hats, stacked 808 wall, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, side hats, mono chest-sub, open hat, hybrid formant, 6 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, mono chest-sub, growl answer, snare roll, side hats, open hat, harder stacked drop, 2 bars]
 
-[build-up - snare roll, low chest-sub, rapid hi-hats, formant bass melody, wide low-mid, closed hat, 4 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant bass melody, wide low-mid, closed hat, hybrid formant, 2 bars]
 
-[inst - offbeat hats, mono chest-sub, wide mid reese counterline, side percussion, room snare, chest-sub 808 punch, 6 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, mono chest-sub, wide mid reese counterline, offbeat hats, side percussion, room snare, snare roll, 2 bars]
 
-[drop - wreck growl warped drop, low chest-sub, formant answer, trap drums denser, wide mids, tight kick, harder stacked drop, 12 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, formant answer, wide mids, tight kick, chest-sub 808 punch, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, side hats, mono chest-sub, loose hats, body bass wreck, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, wide mid growl, side hats, loose hats, body bass wreck, 2 bars]
 
-[drop - heavy warped drop, low chest-sub, call-response reese, kick pattern flip, wide low-mid, pushed snare, full send drop, 12 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, call-response reese, wide low-mid, pushed snare, trap warp, 2 bars]
 
-[inst - snare roll, mono chest-sub, growl answer, side percussion, chopped hats, trap warp, 10 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, mono chest-sub, growl answer, snare roll, side percussion, chopped hats, full send drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide mids, low chest-sub, hat density up, stacked 808 wreck, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, formant bass melody, wide mids, hat density up, stacked 808 wreck, 2 bars]
 
-[drop - wreck growl warped drop, mono chest-sub, wide mid reese counterline, offbeat hats, side hats, kick opens, harder growl drop, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, mono chest-sub, wide mid reese counterline, offbeat hats, side hats, kick opens, harder growl drop, 2 bars]
 
-[inst - trap drums denser, low chest-sub, formant answer, wide low-mid, kick tightens, chest formant, 12 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, formant answer, wide low-mid, kick tightens, chest formant, 2 bars]
 
-[drop - heavy warped drop, mono chest-sub, wide mid growl, ghost snare, side percussion, snare answers, chest-sub wreck, 8 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, mono chest-sub, wide mid growl, ghost snare, side percussion, snare answers, chest-sub wreck, 2 bars]
 
-[build-up - snare roll, low chest-sub, kick pattern flip, call-response reese, wide mids, offbeat push, warped hitch, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, call-response reese, wide mids, offbeat push, warped hitch, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, side hats, mono chest-sub, straight hats, kick holds, 8 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, growl answer, side hats, straight hats, kick holds, 2 bars]
 
-[inst - rapid hi-hats, low chest-sub, formant bass melody, wide low-mid, triplet hats, 808 ride, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, low chest-sub, formant bass melody, rapid hi-hats, wide low-mid, triplet hats, 808 ride, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, side percussion, mono chest-sub, backbeat shove, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, wide mid reese counterline, side percussion, backbeat shove, 2 bars]
 
-[drop - heavy warped drop, low chest-sub, formant answer, trap drums denser, wide mids, ghost notes, 8 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, formant answer, wide mids, ghost notes, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant answer, wide low-mid, kick tightens, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, wide mid growl, side hats, dry hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, call-response reese, wide low-mid, wide hat bed, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, mono chest-sub, growl answer, snare roll, side percussion, mono kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant bass melody, wide mids, side snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, formant bass melody, wide mids, late snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, low chest-sub, formant answer, trap drums denser, wide low-mid, late snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, formant answer, wide low-mid, syncopated hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, low chest-sub, call-response reese, kick pattern flip, wide mids, syncopated hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, growl answer, side hats, open hat, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, growl answer, side hats, room snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, mono chest-sub, wide mid reese counterline, offbeat hats, side percussion, room snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, wide mid reese counterline, side percussion, loose hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, mono chest-sub, wide mid growl, ghost snare, side hats, loose hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, wide mid growl, side hats, chopped hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, mono chest-sub, growl answer, snare roll, side percussion, chopped hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, growl answer, side percussion, kick opens, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, wide mid reese counterline, side hats, kick opens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, formant answer, wide low-mid, kick tightens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, wide mid growl, side percussion, snare answers, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, low chest-sub, call-response reese, kick pattern flip, wide mids, offbeat push, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, call-response reese, wide mids, triplet hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, formant bass melody, wide low-mid, triplet hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, wide mid reese counterline, side percussion, backbeat shove, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, low chest-sub, formant answer, trap drums denser, wide mids, ghost notes, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, formant answer, wide mids, wide hat bed, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, wide mid growl, side hats, mono kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, mono chest-sub, growl answer, snare roll, side percussion, mono kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, formant bass melody, wide mids, side snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, wide mid reese counterline, side hats, rolling hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, low chest-sub, formant answer, trap drums denser, wide low-mid, late snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, wide mid growl, side percussion, early kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, call-response reese, wide mids, syncopated hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, call-response reese, wide mids, closed hat, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, call-response reese, wide mids, tight kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, mono chest-sub, wide mid reese counterline, offbeat hats, side percussion, room snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, formant answer, wide mids, tight kick, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, mono chest-sub, wide mid growl, ghost snare, side hats, loose hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, formant answer, wide mids, hat density up, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, mono chest-sub, growl answer, snare roll, side percussion, chopped hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant bass melody, wide mids, hat density up, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, mono chest-sub, wide mid reese counterline, offbeat hats, side hats, kick opens, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, wide mid reese counterline, side hats, snare answers, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, formant answer, wide low-mid, offbeat push, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, low chest-sub, call-response reese, kick pattern flip, wide mids, offbeat push, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, growl answer, side hats, straight hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant bass melody, wide low-mid, triplet hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, mono chest-sub, wide mid reese counterline, offbeat hats, side percussion, backbeat shove, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, wide mid reese counterline, side percussion, dry hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, wide mid reese counterline, side percussion, mono kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, low chest-sub, call-response reese, kick pattern flip, wide low-mid, wide hat bed, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, call-response reese, wide low-mid, side snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, low chest-sub, formant bass melody, rapid hi-hats, wide mids, side snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, formant bass melody, wide mids, late snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, low chest-sub, formant answer, trap drums denser, wide low-mid, late snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, wide mid reese counterline, side hats, open hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, low chest-sub, call-response reese, kick pattern flip, wide mids, syncopated hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, wide mid growl, side percussion, room snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, wide mid growl, side percussion, loose hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, mono chest-sub, wide mid reese counterline, offbeat hats, side percussion, room snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, formant bass melody, wide low-mid, pushed snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, mono chest-sub, wide mid growl, ghost snare, side hats, loose hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, wide mid reese counterline, side percussion, kick opens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, mono chest-sub, growl answer, snare roll, side percussion, chopped hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, call-response reese, wide low-mid, kick tightens, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, formant bass melody, wide mids, kick tightens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, formant bass melody, wide mids, offbeat push, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, wide mid reese counterline, side hats, straight hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, low chest-sub, call-response reese, kick pattern flip, wide mids, offbeat push, 2 bars]
+
+[outro - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant answer, wide low-mid, kick tightens, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -4664,11 +10152,11 @@ warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped ba
 | Slot | Value |
 | --- | --- |
 | 0 | `warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped b…` |
-| 1 | `[build-up - snare roll, mono chest-sub, snare roll, growl answer, side percussi…` |
+| 1 | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
 | 2 | `587` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `223.0` |
+| 5 | `254.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `D major` |
@@ -4680,55 +10168,191 @@ warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped ba
 | 14 | `0.0` |
 
 ```text
-warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
+warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, riser, drop first, 172 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - snare roll, mono chest-sub, snare roll, growl answer, side percussion, mono kick, chest-sub 808 wreck, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, growl answer, side percussion, mono kick, chest-sub 808 wreck, 2 bars]
 
-[drop - heavy warped drop, low chest-sub, formant bass melody, rapid hi-hats, wide mids, side snare, warped hybrid-trap, 8 bars]
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, low chest-sub, formant bass melody, rapid hi-hats, wide mids, side snare, warped hybrid-trap, 2 bars]
 
-[inst - offbeat hats, mono chest-sub, wide mid reese counterline, side hats, rolling hats, hitch grind, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, wide mid reese counterline, side hats, rolling hats, hitch grind, 2 bars]
 
-[drop - full send reese warped drop, low chest-sub, formant answer, trap drums denser, wide low-mid, late snare, rapid hi-hats roll, 8 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, low chest-sub, formant answer, trap drums denser, wide low-mid, late snare, rapid hi-hats roll, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, side percussion, mono chest-sub, early kick, 808 slide, 6 bars]
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, wide mid growl, side percussion, early kick, 808 slide, 2 bars]
 
-[build-up - snare roll, low chest-sub, kick pattern flip, call-response reese, wide mids, syncopated hats, stacked 808 wall, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, call-response reese, wide mids, syncopated hats, stacked 808 wall, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, side hats, mono chest-sub, open hat, hybrid formant, 6 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, mono chest-sub, growl answer, snare roll, side hats, open hat, harder stacked drop, 2 bars]
 
-[build-up - snare roll, low chest-sub, rapid hi-hats, formant bass melody, wide low-mid, closed hat, 4 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant bass melody, wide low-mid, closed hat, hybrid formant, 2 bars]
 
-[inst - offbeat hats, mono chest-sub, wide mid reese counterline, side percussion, room snare, chest-sub 808 punch, 6 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, mono chest-sub, wide mid reese counterline, offbeat hats, side percussion, room snare, snare roll, 2 bars]
 
-[drop - wreck growl warped drop, low chest-sub, formant answer, trap drums denser, wide mids, tight kick, harder stacked drop, 12 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, formant answer, wide mids, tight kick, chest-sub 808 punch, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, side hats, mono chest-sub, loose hats, body bass wreck, 6 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, wide mid growl, side hats, loose hats, body bass wreck, 2 bars]
 
-[drop - heavy warped drop, low chest-sub, call-response reese, kick pattern flip, wide low-mid, pushed snare, full send drop, 12 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, call-response reese, wide low-mid, pushed snare, trap warp, 2 bars]
 
-[inst - snare roll, mono chest-sub, growl answer, side percussion, chopped hats, trap warp, 10 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, mono chest-sub, growl answer, snare roll, side percussion, chopped hats, full send drop, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide mids, low chest-sub, hat density up, stacked 808 wreck, 4 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, formant bass melody, wide mids, hat density up, stacked 808 wreck, 2 bars]
 
-[drop - wreck growl warped drop, mono chest-sub, wide mid reese counterline, offbeat hats, side hats, kick opens, harder growl drop, 8 bars]
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, mono chest-sub, wide mid reese counterline, offbeat hats, side hats, kick opens, harder growl drop, 2 bars]
 
-[inst - trap drums denser, low chest-sub, formant answer, wide low-mid, kick tightens, chest formant, 12 bars]
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, formant answer, wide low-mid, kick tightens, chest formant, 2 bars]
 
-[drop - heavy warped drop, mono chest-sub, wide mid growl, ghost snare, side percussion, snare answers, chest-sub wreck, 8 bars]
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, mono chest-sub, wide mid growl, ghost snare, side percussion, snare answers, chest-sub wreck, 2 bars]
 
-[build-up - snare roll, low chest-sub, kick pattern flip, call-response reese, wide mids, offbeat push, warped hitch, 6 bars]
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, kick pattern flip, call-response reese, wide mids, offbeat push, warped hitch, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, growl answer, side hats, mono chest-sub, straight hats, kick holds, 8 bars]
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, growl answer, side hats, straight hats, kick holds, 2 bars]
 
-[inst - rapid hi-hats, low chest-sub, formant bass melody, wide low-mid, triplet hats, 808 ride, 6 bars]
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, low chest-sub, formant bass melody, rapid hi-hats, wide low-mid, triplet hats, 808 ride, 2 bars]
 
-[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, side percussion, mono chest-sub, backbeat shove, 4 bars]
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, offbeat hats, wide mid reese counterline, side percussion, backbeat shove, 2 bars]
 
-[drop - heavy warped drop, low chest-sub, formant answer, trap drums denser, wide mids, ghost notes, 8 bars]
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, low chest-sub, formant answer, wide mids, ghost notes, 2 bars]
 
-[outro - kick pattern flip, chest-sub, rapid hi-hats, formant answer, wide low-mid, kick tightens, 4 bars]
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, wide mid growl, side hats, dry hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, call-response reese, wide low-mid, wide hat bed, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, mono chest-sub, growl answer, snare roll, side percussion, mono kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant bass melody, wide mids, side snare, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, trap drums denser, formant bass melody, wide mids, late snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, low chest-sub, formant answer, trap drums denser, wide low-mid, late snare, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, formant answer, wide low-mid, syncopated hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, low chest-sub, call-response reese, kick pattern flip, wide mids, syncopated hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, growl answer, side hats, open hat, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, body bass, growl answer, side hats, room snare, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, mono chest-sub, wide mid reese counterline, offbeat hats, side percussion, room snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, wide mid reese counterline, side percussion, loose hats, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, mono chest-sub, wide mid growl, ghost snare, side hats, loose hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, wide mid growl, side hats, chopped hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, mono chest-sub, growl answer, snare roll, side percussion, chopped hats, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, offbeat hats, growl answer, side percussion, kick opens, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, wide mid reese counterline, side hats, kick opens, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, formant answer, wide low-mid, kick tightens, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, wide mid growl, side percussion, snare answers, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, low chest-sub, call-response reese, kick pattern flip, wide mids, offbeat push, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, octave sub stack, call-response reese, wide mids, triplet hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, formant bass melody, wide low-mid, triplet hats, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, wide mid reese counterline, side percussion, backbeat shove, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, low chest-sub, formant answer, trap drums denser, wide mids, ghost notes, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, kick pattern flip, formant answer, wide mids, wide hat bed, 2 bars]
+
+[inst - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, wide mid growl, side hats, mono kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, mono chest-sub, growl answer, snare roll, side percussion, mono kick, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, rapid hi-hats, formant bass melody, wide mids, side snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, wide mid reese counterline, side hats, rolling hats, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, low chest-sub, formant answer, trap drums denser, wide low-mid, late snare, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, ghost snare, wide mid growl, side percussion, early kick, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, low chest-sub, call-response reese, wide mids, syncopated hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, call-response reese, wide mids, closed hat, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, fold bass, call-response reese, wide mids, tight kick, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, mono chest-sub, wide mid reese counterline, offbeat hats, side percussion, room snare, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, low chest-sub, trap drums denser, formant answer, wide mids, tight kick, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, mono chest-sub, wide mid growl, ghost snare, side hats, loose hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, fold bass, formant answer, wide mids, hat density up, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, mono chest-sub, growl answer, snare roll, side percussion, chopped hats, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant bass melody, wide mids, hat density up, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, mono chest-sub, wide mid reese counterline, offbeat hats, side hats, kick opens, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, body bass, ghost snare, wide mid reese counterline, side hats, snare answers, 2 bars]
+
+[inst - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, octave sub stack, formant answer, wide low-mid, offbeat push, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, low chest-sub, call-response reese, kick pattern flip, wide mids, offbeat push, 2 bars]
+
+[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, mono chest-sub, snare roll, growl answer, side hats, straight hats, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, rapid hi-hats, low chest-sub, formant bass melody, wide low-mid, triplet hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, mono chest-sub, wide mid reese counterline, offbeat hats, side percussion, backbeat shove, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, body bass, wide mid reese counterline, side percussion, dry hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, snare roll, wide mid reese counterline, side percussion, mono kick, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, heavy warped drop, low chest-sub, call-response reese, kick pattern flip, wide low-mid, wide hat bed, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, octave sub stack, rapid hi-hats, call-response reese, wide low-mid, side snare, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, full send reese warped drop, low chest-sub, formant bass melody, rapid hi-hats, wide mids, side snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, formant bass melody, wide mids, late snare, 2 bars]
+
+[drop - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, low chest-sub, formant answer, trap drums denser, wide low-mid, late snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, wide mid reese counterline, side hats, open hat, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, low chest-sub, call-response reese, kick pattern flip, wide mids, syncopated hats, 2 bars]
+
+[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, offbeat hats, wide mid growl, side percussion, room snare, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, ghost snare, mono chest-sub, wide mid growl, side percussion, loose hats, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, stacked wobble warped drop, mono chest-sub, wide mid reese counterline, offbeat hats, side percussion, room snare, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, fold bass, formant bass melody, wide low-mid, pushed snare, 2 bars]
+
+[drop - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, harder formant warped drop, mono chest-sub, wide mid growl, ghost snare, side hats, loose hats, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, offbeat hats, mono chest-sub, wide mid reese counterline, side percussion, kick opens, 2 bars]
+
+[drop - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, mono chest-sub, growl answer, snare roll, side percussion, chopped hats, 2 bars]
+
+[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, trap drums denser, call-response reese, wide low-mid, kick tightens, 2 bars]
+
+[inst - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, trap drums denser, octave sub stack, formant bass melody, wide mids, kick tightens, 2 bars]
+
+[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, snare roll, fold bass, kick pattern flip, formant bass melody, wide mids, offbeat push, 2 bars]
+
+[inst - bass boosted, sub center mids move wide, layers stay, sub stays, no gap, one-shot phrase, snare roll, stacked 808, wide mid reese counterline, side hats, straight hats, 2 bars]
+
+[drop - bass boosted, bass circles the stereo field, layers stay, sub stays, no gap, one-shot phrase, wreck growl warped drop, low chest-sub, call-response reese, kick pattern flip, wide mids, offbeat push, 2 bars]
+
+[outro - bass boosted, hats sweep across the image, layers stay, sub stays, no gap, one-shot phrase, kick pattern flip, chest-sub, rapid hi-hats, formant answer, wide low-mid, kick tightens, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -5007,26 +10631,26 @@ The constant.
 
 | Instance | Value |
 | --- | --- |
-| Song Duration | `366.0` |
-| Song Duration | `474.0` |
+| Song Duration | `431.0` |
+| Song Duration | `460.0` |
+| Song Duration | `150.0` |
+| Song Duration | `151.0` |
+| Song Duration | `153.0` |
+| Song Duration | `187.0` |
+| Song Duration | `218.0` |
+| Song Duration | `260.0` |
+| Song Duration | `284.0` |
+| Song Duration | `325.0` |
+| Song Duration | `350.0` |
+| Song Duration | `392.0` |
+| Song Duration | `412.0` |
+| Song Duration | `455.0` |
+| Song Duration | `151.0` |
 | Song Duration | `150.0` |
 | Song Duration | `153.0` |
-| Song Duration | `153.0` |
-| Song Duration | `170.0` |
-| Song Duration | `212.0` |
-| Song Duration | `231.0` |
-| Song Duration | `221.0` |
-| Song Duration | `251.0` |
-| Song Duration | `312.0` |
-| Song Duration | `359.0` |
-| Song Duration | `401.0` |
-| Song Duration | `427.0` |
-| Song Duration | `157.0` |
-| Song Duration | `158.0` |
-| Song Duration | `176.0` |
-| Song Duration | `181.0` |
-| Song Duration | `201.0` |
-| Song Duration | `223.0` |
+| Song Duration | `189.0` |
+| Song Duration | `218.0` |
+| Song Duration | `254.0` |
 
 #### `control_after_generate`
 
@@ -5070,26 +10694,26 @@ Duration in seconds.
 
 | Instance | Value |
 | --- | --- |
-| Latent length (seconds) | `366.0` |
-| Latent length (seconds) | `474.0` |
+| Latent length (seconds) | `431.0` |
+| Latent length (seconds) | `460.0` |
+| Latent length (seconds) | `150.0` |
+| Latent length (seconds) | `151.0` |
+| Latent length (seconds) | `153.0` |
+| Latent length (seconds) | `187.0` |
+| Latent length (seconds) | `218.0` |
+| Latent length (seconds) | `260.0` |
+| Latent length (seconds) | `284.0` |
+| Latent length (seconds) | `325.0` |
+| Latent length (seconds) | `350.0` |
+| Latent length (seconds) | `392.0` |
+| Latent length (seconds) | `412.0` |
+| Latent length (seconds) | `455.0` |
+| Latent length (seconds) | `151.0` |
 | Latent length (seconds) | `150.0` |
 | Latent length (seconds) | `153.0` |
-| Latent length (seconds) | `153.0` |
-| Latent length (seconds) | `170.0` |
-| Latent length (seconds) | `212.0` |
-| Latent length (seconds) | `231.0` |
-| Latent length (seconds) | `221.0` |
-| Latent length (seconds) | `251.0` |
-| Latent length (seconds) | `312.0` |
-| Latent length (seconds) | `359.0` |
-| Latent length (seconds) | `401.0` |
-| Latent length (seconds) | `427.0` |
-| Latent length (seconds) | `157.0` |
-| Latent length (seconds) | `158.0` |
-| Latent length (seconds) | `176.0` |
-| Latent length (seconds) | `181.0` |
-| Latent length (seconds) | `201.0` |
-| Latent length (seconds) | `223.0` |
+| Latent length (seconds) | `189.0` |
+| Latent length (seconds) | `218.0` |
+| Latent length (seconds) | `254.0` |
 
 #### `batch_size`
 
@@ -5166,26 +10790,26 @@ Sectioned lyrics.
 
 | Instance | Value |
 | --- | --- |
-| ez_edm_prompt | `[build-up - snare roll, octave sub stack, kick pattern flip, growl answer, wide…` |
-| ez_edm_prompt | `[build-up - snare roll, mono chest-sub, trap drums denser, call-response reese,…` |
-| ez_edm_prompt | `[build-up - snare roll, fold bass, snare roll, growl answer, side hats, room sn…` |
-| ez_edm_prompt | `[build-up - snare roll, mono chest-sub, ghost snare, growl answer, side percuss…` |
-| ez_edm_prompt | `[build-up - snare roll, stacked 808, rapid hi-hats, wide mid growl, side hats, …` |
-| ez_edm_prompt | `[build-up - snare roll, low chest-sub, snare roll, wide mid growl, wide mids, s…` |
-| ez_edm_prompt | `[build-up - snare roll, low chest-sub, kick pattern flip, growl answer, wide mi…` |
-| ez_edm_prompt | `[build-up - snare roll, mono chest-sub, snare roll, formant answer, wide low-mi…` |
-| ez_edm_prompt | `[build-up - snare roll, octave sub stack, trap drums denser, formant bass melod…` |
-| ez_edm_prompt | `[build-up - snare roll, stacked 808, rapid hi-hats, call-response reese, side h…` |
-| ez_edm_prompt | `[build-up - snare roll, low chest-sub, rapid hi-hats, formant answer, side hats…` |
-| ez_edm_prompt | `[build-up - snare roll, octave sub stack, snare roll, formant answer, side hats…` |
-| ez_edm_prompt | `[build-up - snare roll, body bass, snare roll, wide mid reese counterline, wide…` |
-| ez_edm_prompt | `[build-up - snare roll, stacked 808, offbeat hats, call-response reese, side ha…` |
-| ez_edm_prompt | `[build-up - snare roll, body bass, kick pattern flip, wide mid reese counterlin…` |
-| ez_edm_prompt | `[build-up - snare roll, stacked 808, snare roll, formant bass melody, side hats…` |
-| ez_edm_prompt | `[build-up - snare roll, body bass, kick pattern flip, formant answer, side perc…` |
-| ez_edm_prompt | `[build-up - snare roll, fold bass, snare roll, wide mid growl, side percussion,…` |
-| ez_edm_prompt | `[build-up - snare roll, octave sub stack, snare roll, wide mid reese counterlin…` |
-| ez_edm_prompt | `[build-up - snare roll, mono chest-sub, snare roll, growl answer, side percussi…` |
+| ez_edm_prompt | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
+| ez_edm_prompt | `[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, …` |
+| ez_edm_prompt | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
+| ez_edm_prompt | `[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, …` |
+| ez_edm_prompt | `[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays…` |
+| ez_edm_prompt | `[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no…` |
+| ez_edm_prompt | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
+| ez_edm_prompt | `[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, …` |
+| ez_edm_prompt | `[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no…` |
+| ez_edm_prompt | `[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no…` |
+| ez_edm_prompt | `[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no…` |
+| ez_edm_prompt | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
+| ez_edm_prompt | `[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays…` |
+| ez_edm_prompt | `[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no…` |
+| ez_edm_prompt | `[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, …` |
+| ez_edm_prompt | `[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays…` |
+| ez_edm_prompt | `[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, …` |
+| ez_edm_prompt | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
+| ez_edm_prompt | `[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays…` |
+| ez_edm_prompt | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
 
 #### `enhance`
 
@@ -5302,26 +10926,26 @@ Sectioned lyrics or [inst] cues.
 
 | Instance | Value |
 | --- | --- |
-| ACE tags + lyrics | `[build-up - snare roll, octave sub stack, kick pattern flip, growl answer, wide…` |
-| ACE tags + lyrics | `[build-up - snare roll, mono chest-sub, trap drums denser, call-response reese,…` |
-| ACE tags + lyrics | `[build-up - snare roll, fold bass, snare roll, growl answer, side hats, room sn…` |
-| ACE tags + lyrics | `[build-up - snare roll, mono chest-sub, ghost snare, growl answer, side percuss…` |
-| ACE tags + lyrics | `[build-up - snare roll, stacked 808, rapid hi-hats, wide mid growl, side hats, …` |
-| ACE tags + lyrics | `[build-up - snare roll, low chest-sub, snare roll, wide mid growl, wide mids, s…` |
-| ACE tags + lyrics | `[build-up - snare roll, low chest-sub, kick pattern flip, growl answer, wide mi…` |
-| ACE tags + lyrics | `[build-up - snare roll, mono chest-sub, snare roll, formant answer, wide low-mi…` |
-| ACE tags + lyrics | `[build-up - snare roll, octave sub stack, trap drums denser, formant bass melod…` |
-| ACE tags + lyrics | `[build-up - snare roll, stacked 808, rapid hi-hats, call-response reese, side h…` |
-| ACE tags + lyrics | `[build-up - snare roll, low chest-sub, rapid hi-hats, formant answer, side hats…` |
-| ACE tags + lyrics | `[build-up - snare roll, octave sub stack, snare roll, formant answer, side hats…` |
-| ACE tags + lyrics | `[build-up - snare roll, body bass, snare roll, wide mid reese counterline, wide…` |
-| ACE tags + lyrics | `[build-up - snare roll, stacked 808, offbeat hats, call-response reese, side ha…` |
-| ACE tags + lyrics | `[build-up - snare roll, body bass, kick pattern flip, wide mid reese counterlin…` |
-| ACE tags + lyrics | `[build-up - snare roll, stacked 808, snare roll, formant bass melody, side hats…` |
-| ACE tags + lyrics | `[build-up - snare roll, body bass, kick pattern flip, formant answer, side perc…` |
-| ACE tags + lyrics | `[build-up - snare roll, fold bass, snare roll, wide mid growl, side percussion,…` |
-| ACE tags + lyrics | `[build-up - snare roll, octave sub stack, snare roll, wide mid reese counterlin…` |
-| ACE tags + lyrics | `[build-up - snare roll, mono chest-sub, snare roll, growl answer, side percussi…` |
+| ACE tags + lyrics | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
+| ACE tags + lyrics | `[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, …` |
+| ACE tags + lyrics | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
+| ACE tags + lyrics | `[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, …` |
+| ACE tags + lyrics | `[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays…` |
+| ACE tags + lyrics | `[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no…` |
+| ACE tags + lyrics | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
+| ACE tags + lyrics | `[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, …` |
+| ACE tags + lyrics | `[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no…` |
+| ACE tags + lyrics | `[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no…` |
+| ACE tags + lyrics | `[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no…` |
+| ACE tags + lyrics | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
+| ACE tags + lyrics | `[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays…` |
+| ACE tags + lyrics | `[build-up - bass boosted, sub center mids move wide, layers stay, sub stays, no…` |
+| ACE tags + lyrics | `[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, …` |
+| ACE tags + lyrics | `[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays…` |
+| ACE tags + lyrics | `[build-up - bass boosted, hats sweep across the image, layers stay, sub stays, …` |
+| ACE tags + lyrics | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
+| ACE tags + lyrics | `[build-up - bass boosted, bass circles the stereo field, layers stay, sub stays…` |
+| ACE tags + lyrics | `[build-up - bass boosted, 3D low-mid orbit, layers stay, sub stays, no gap, one…` |
 
 #### `seed`
 
@@ -5414,26 +11038,26 @@ Seconds (duplicated on the latent).
 
 | Instance | Value |
 | --- | --- |
-| ACE tags + lyrics | `366.0` |
-| ACE tags + lyrics | `474.0` |
+| ACE tags + lyrics | `431.0` |
+| ACE tags + lyrics | `460.0` |
+| ACE tags + lyrics | `150.0` |
+| ACE tags + lyrics | `151.0` |
+| ACE tags + lyrics | `153.0` |
+| ACE tags + lyrics | `187.0` |
+| ACE tags + lyrics | `218.0` |
+| ACE tags + lyrics | `260.0` |
+| ACE tags + lyrics | `284.0` |
+| ACE tags + lyrics | `325.0` |
+| ACE tags + lyrics | `350.0` |
+| ACE tags + lyrics | `392.0` |
+| ACE tags + lyrics | `412.0` |
+| ACE tags + lyrics | `455.0` |
+| ACE tags + lyrics | `151.0` |
 | ACE tags + lyrics | `150.0` |
 | ACE tags + lyrics | `153.0` |
-| ACE tags + lyrics | `153.0` |
-| ACE tags + lyrics | `170.0` |
-| ACE tags + lyrics | `212.0` |
-| ACE tags + lyrics | `231.0` |
-| ACE tags + lyrics | `221.0` |
-| ACE tags + lyrics | `251.0` |
-| ACE tags + lyrics | `312.0` |
-| ACE tags + lyrics | `359.0` |
-| ACE tags + lyrics | `401.0` |
-| ACE tags + lyrics | `427.0` |
-| ACE tags + lyrics | `157.0` |
-| ACE tags + lyrics | `158.0` |
-| ACE tags + lyrics | `176.0` |
-| ACE tags + lyrics | `181.0` |
-| ACE tags + lyrics | `201.0` |
-| ACE tags + lyrics | `223.0` |
+| ACE tags + lyrics | `189.0` |
+| ACE tags + lyrics | `218.0` |
+| ACE tags + lyrics | `254.0` |
 
 #### `timesignature`
 
@@ -5976,26 +11600,26 @@ Markdown-ish operator note.
 
 | Instance | Value |
 | --- | --- |
-| Operator note | `## 01-brake-fade US-safe EDM **366 s** take: **brake fade**. Fictional act **Dr…` |
-| Operator note | `## 02-diesel-hum US-safe EDM **474 s** take: **diesel hum**. Fictional act **Dr…` |
+| Operator note | `## 01-brake-fade US-safe EDM **431 s** take: **brake fade**. Fictional act **Dr…` |
+| Operator note | `## 02-diesel-hum US-safe EDM **460 s** take: **diesel hum**. Fictional act **Dr…` |
 | Operator note | `## 03-axle-grind US-safe EDM **150 s** take: **axle grind**. Fictional act **Dr…` |
-| Operator note | `## 04-weigh-station US-safe EDM **153 s** take: **weigh station**. Fictional ac…` |
+| Operator note | `## 04-weigh-station US-safe EDM **151 s** take: **weigh station**. Fictional ac…` |
 | Operator note | `## 05-black-ice US-safe EDM **153 s** take: **black ice**. Fictional act **Driv…` |
-| Operator note | `## 06-high-beams US-safe EDM **170 s** take: **high beams**. Fictional act **Dr…` |
-| Operator note | `## 07-chain-hook US-safe EDM **212 s** take: **chain hook**. Fictional act **Dr…` |
-| Operator note | `## 08-grit-plate US-safe EDM **231 s** take: **grit plate**. Fictional act **Dr…` |
-| Operator note | `## 09-steel-grate US-safe EDM **221 s** take: **steel grate**. Fictional act **…` |
-| Operator note | `## 10-rest-bay US-safe EDM **251 s** take: **rest bay**. Fictional act **Drive-…` |
-| Operator note | `## 11-haul-crate US-safe EDM **312 s** take: **haul crate**. Fictional act **Dr…` |
-| Operator note | `## 12-night-splice US-safe EDM **359 s** take: **night splice**. Fictional act …` |
-| Operator note | `## 13-torque-bay US-safe EDM **401 s** take: **torque bay**. Fictional act **Dr…` |
-| Operator note | `## 14-spare-drum US-safe EDM **427 s** take: **spare drum**. Fictional act **Dr…` |
-| Operator note | `## 15-oil-pan US-safe EDM **157 s** take: **oil pan**. Fictional act **Drive-th…` |
-| Operator note | `## 16-curb-check US-safe EDM **158 s** take: **curb check**. Fictional act **Dr…` |
-| Operator note | `## 17-last-exit US-safe EDM **176 s** take: **last exit**. Fictional act **Driv…` |
-| Operator note | `## 18-asphalt-heart US-safe EDM **181 s** take: **asphalt heart**. Fictional ac…` |
-| Operator note | `## 19-clutch-slam US-safe EDM **201 s** take: **clutch slam**. Fictional act **…` |
-| Operator note | `## 20-trailer-hitch US-safe EDM **223 s** take: **trailer hitch**. Fictional ac…` |
+| Operator note | `## 06-high-beams US-safe EDM **187 s** take: **high beams**. Fictional act **Dr…` |
+| Operator note | `## 07-chain-hook US-safe EDM **218 s** take: **chain hook**. Fictional act **Dr…` |
+| Operator note | `## 08-grit-plate US-safe EDM **260 s** take: **grit plate**. Fictional act **Dr…` |
+| Operator note | `## 09-steel-grate US-safe EDM **284 s** take: **steel grate**. Fictional act **…` |
+| Operator note | `## 10-rest-bay US-safe EDM **325 s** take: **rest bay**. Fictional act **Drive-…` |
+| Operator note | `## 11-haul-crate US-safe EDM **350 s** take: **haul crate**. Fictional act **Dr…` |
+| Operator note | `## 12-night-splice US-safe EDM **392 s** take: **night splice**. Fictional act …` |
+| Operator note | `## 13-torque-bay US-safe EDM **412 s** take: **torque bay**. Fictional act **Dr…` |
+| Operator note | `## 14-spare-drum US-safe EDM **455 s** take: **spare drum**. Fictional act **Dr…` |
+| Operator note | `## 15-oil-pan US-safe EDM **151 s** take: **oil pan**. Fictional act **Drive-th…` |
+| Operator note | `## 16-curb-check US-safe EDM **150 s** take: **curb check**. Fictional act **Dr…` |
+| Operator note | `## 17-last-exit US-safe EDM **153 s** take: **last exit**. Fictional act **Driv…` |
+| Operator note | `## 18-asphalt-heart US-safe EDM **189 s** take: **asphalt heart**. Fictional ac…` |
+| Operator note | `## 19-clutch-slam US-safe EDM **218 s** take: **clutch slam**. Fictional act **…` |
+| Operator note | `## 20-trailer-hitch US-safe EDM **254 s** take: **trailer hitch**. Fictional ac…` |
 | Operator note | `## audio/albums/drive-through/afterparty/album Album **Afterparty** by **Drive-…` |
 | Operator note | `## audio/albums/drive-through/afterparty/cover Album cover for **Drive-through …` |
 
