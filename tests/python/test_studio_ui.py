@@ -340,3 +340,95 @@ def test_film_board_links_watch_when_mp4_exists(
     html = server._page().decode("utf-8")
     assert "/watch/gosee" in html
     assert "/media/gosee?dl=1" in html
+
+
+def _write_board(
+    tmp_path: Path,
+    *,
+    film: str = "go-see",
+    slug: str = "gosee",
+    shots: list[object] | None = None,
+) -> None:
+    dest = tmp_path / "films" / slug
+    dest.mkdir(parents=True)
+    (dest / "state.json").write_text(
+        json.dumps(
+            {
+                "slug": slug,
+                "film": film,
+                "audio_policy": "world-only",
+                "shots": shots if shots is not None else [{"id": "01", "status": "ok"}],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+def test_rows_prefer_film_id_guide_pack(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _write_board(tmp_path)
+    film_pack = tmp_path / "guides" / "go-see" / "01"
+    legacy = tmp_path / "guides" / "gosee" / "01"
+    film_pack.mkdir(parents=True)
+    legacy.mkdir(parents=True)
+    (film_pack / "first.png").write_bytes(b"clay-film")
+    (legacy / "overlay.png").write_bytes(b"legacy-only")
+    server = _load_server()
+    monkeypatch.setattr(server, "FILMS", tmp_path / "films")
+    monkeypatch.setattr(server, "GUIDES", tmp_path / "guides")
+    assert server.guide_shot_id("go-see", "gosee", "01") == "go-see"
+    row = server._rows()[0]
+    assert row["slug"] == "gosee"
+    shot = row["shots"][0]
+    assert shot["clay"] == "on"
+    assert shot["look"] == "off"
+    assert "slug=go-see" in shot["thumb"]
+
+    handler, captured = _bind_handler(server, "/thumb?slug=go-see&shot=01&kind=clay")
+    server.Handler.do_GET(handler)
+    assert captured["status"] == 200
+    assert handler.wfile.getvalue() == b"clay-film"
+
+
+def test_rows_fall_back_to_output_prefix(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _write_board(tmp_path)
+    legacy = tmp_path / "guides" / "gosee" / "01"
+    legacy.mkdir(parents=True)
+    (legacy / "first.png").write_bytes(b"legacy-clay")
+    server = _load_server()
+    monkeypatch.setattr(server, "FILMS", tmp_path / "films")
+    monkeypatch.setattr(server, "GUIDES", tmp_path / "guides")
+    assert server.guide_shot_id("go-see", "gosee", "01") == "gosee"
+    assert server.guide_shot_id("go-see", "gosee", "02") == "go-see"
+    assert server.guide_shot_id("switchyard", "switchyard", "01") == "switchyard"
+    assert server.guide_shot_id("../x", "gosee", "01") == "gosee"
+    assert server.guide_shot_id("../x", "../y", "01") == ""
+    assert server.guide_shot_id("go-see", "gosee", "../01") == "go-see"
+    shot = server._rows()[0]["shots"][0]
+    assert shot["clay"] == "on"
+    assert "slug=gosee" in shot["thumb"]
+
+
+def test_rows_skip_non_dict_shot_and_refuse_bad_guide_id(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _write_board(tmp_path, shots=["nope", {"id": "01", "status": "ok"}])
+    server = _load_server()
+    monkeypatch.setattr(server, "FILMS", tmp_path / "films")
+    monkeypatch.setattr(server, "GUIDES", tmp_path / "guides")
+    row = server._rows()[0]
+    assert row["total"] == "2"
+    assert row["ok"] == "1"
+    assert len(row["shots"]) == 1
+    lights = server._shot_lights(tmp_path / "films" / "gosee", "../x", "01", {})
+    assert lights["clay"] == "off"
+    assert lights["thumb"] == ""
+    lights = server._shot_lights(tmp_path / "films" / "gosee", "gosee", "ab", {"status": "ok"})
+    assert lights["print"] == "on"
+    assert lights["audio"] == "off"
+    assert server._safe_thumb("go-see", "01", "clay") is None
+    assert server._safe_thumb("go/see", "01", "clay") is None
+    assert server._safe_thumb("go-see", "1a", "clay") is None

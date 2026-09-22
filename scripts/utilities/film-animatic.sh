@@ -3,7 +3,9 @@
 # ## film-animatic
 #
 # Cheap 90s animatic from clay.mp4 or held stills. Host ffmpeg, no GPU.
-# May run while compose is up.
+# May run while compose is up. Reads guides/<film-id>/ (go-see), the same
+# directory blender-guide writes. Uses guides/<output-prefix>/ (gosee) only
+# when the film-id directory is absent. films/<prefix>/ is unchanged.
 #
 # Usage:
 #   ./scripts/utilities/film-animatic.sh --film SLUG [--yaml PATH] [--guides DIR]
@@ -36,12 +38,39 @@ animatic_film_slug() {
 }
 
 #######################################
+# Guide-pack root. The film-id directory wins when it exists.
+# Globals:
+#   None
+# Arguments:
+#   $1  output root (COMFY_OUTPUT_DIR)
+#   $2  film id (go-see)
+#   $3  output prefix (gosee)
+# Outputs:
+#   Guide-pack directory on stdout
+# Returns:
+#   0
+#######################################
+animatic_guides_dir() {
+  local root="${1:?}" film="${2:?}" slug="${3:-}"
+  if [[ -d "${root}/guides/${film}" ]]; then
+    printf '%s\n' "${root}/guides/${film}"
+    return 0
+  fi
+  if [[ -n ${slug} && ${slug} != "${film}" && -d "${root}/guides/${slug}" ]]; then
+    printf '%s\n' "${root}/guides/${slug}"
+    return 0
+  fi
+  printf '%s\n' "${root}/guides/${film}"
+}
+
+#######################################
 # Print usage.
 #######################################
 cmd_help() {
   echo "Usage: film-animatic.sh --film SLUG [--yaml PATH] [--guides DIR]" >&2
   echo "  Concat clay.mp4 or 5.00s still holds. Cap 90s. Host ffmpeg." >&2
-  echo "  Writes films/<slug>/publish/animatic.mp4. Compose may stay up." >&2
+  echo "  Reads guides/<film-id>/ (go-see), same directory as blender-guide." >&2
+  echo "  Writes films/<prefix>/publish/animatic.mp4. Compose may stay up." >&2
   return 0
 }
 
@@ -103,7 +132,7 @@ cmd_run() {
     fi
   fi
   if [[ -z ${GUIDES} ]]; then
-    GUIDES="${out_root}/guides/${slug}"
+    GUIDES="$(animatic_guides_dir "${out_root}" "${FILM}" "${slug}")"
   fi
   PYTHONPATH="${REPO_ROOT}/custom_nodes${PYTHONPATH:+:${PYTHONPATH}}" \
     python3 -m ez_film.animatic --yaml "${YAML}" --dest "${dest}" --guides "${GUIDES}"

@@ -5,11 +5,15 @@ from __future__ import annotations
 
 import html
 import json
+import re
 import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any, TypedDict
 from urllib.parse import parse_qs, urlparse
+
+# Film ids and output prefixes used as a single path segment under guides/.
+_GUIDE_ID = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*\Z")
 
 # Jobstore films directory (``/films/films`` when present, else ``/films``).
 FILMS = Path("/films/films")
@@ -91,6 +95,55 @@ def publish_mp4(slug: str) -> Path | None:
     return None
 
 
+def _guide_id(value: str) -> str | None:
+    """Return a single safe guides directory name, or None.
+
+    Accepts a film id (``go-see``) or an output prefix (``gosee``).
+    Rejects empty strings, slashes, and ``..``.
+
+    Args:
+        value: Candidate directory name.
+
+    Returns:
+        The name when it is one safe segment, else ``None``.
+    """
+    text = str(value or "")
+    if _GUIDE_ID.fullmatch(text):
+        return text
+    return None
+
+
+def guide_shot_id(film: str, slug: str, shot: str) -> str:
+    """Choose the guides directory name for one shot.
+
+    ``guides/<film-id>/<shot>`` wins when that directory exists. Otherwise
+    ``guides/<prefix>/<shot>`` is used when it exists. When neither exists,
+    the film id is returned so a later dump matches ``blender-guide``.
+
+    Args:
+        film: Film id from ``state.json`` (``go-see``).
+        slug: Output prefix (``gosee``).
+        shot: Shot directory name.
+
+    Returns:
+        A safe directory name, or ``""`` when neither name is safe.
+    """
+    film_id = _guide_id(film)
+    slug_id = _guide_id(slug)
+    if film_id is not None and shot.isdigit() and (GUIDES / film_id / shot).is_dir():
+        return film_id
+    if (
+        slug_id is not None
+        and slug_id != film_id
+        and shot.isdigit()
+        and (GUIDES / slug_id / shot).is_dir()
+    ):
+        return slug_id
+    if film_id is not None:
+        return film_id
+    return slug_id or ""
+
+
 def _light(on: bool) -> str:
     """CSS class for a board light.
 
@@ -110,25 +163,34 @@ def _shot_lights(
 
     Args:
         dest: Film jobstore directory (contains ``stems/``).
-        slug: Film slug.
+        slug: Resolved guide directory name (film id or output prefix).
         sid: Shot id (directory name under the guide pack).
         row: Shot object from ``state.json``.
 
     Returns:
         Light dict consumed by :func:`_page`.
     """
-    pack = GUIDES / slug / sid
-    stems = dest / "stems" / sid
-    clay = (pack / "first.png").is_file() or (pack / "clay.mp4").is_file()
-    look = (pack / "overlay.png").is_file()
-    overlay = (pack / "score.json").is_file()
-    printed = str(row.get("status") or "") == "ok"
-    mixed = any((stems / name).is_file() for name in ("mix.mp4", "mix.m4a", "mix.wav"))
+    guide = _guide_id(slug)
+    pack = GUIDES / guide / sid if guide is not None and sid.isdigit() else None
+    stems = dest / "stems" / sid if sid.isdigit() else None
+    clay = False
+    look = False
+    overlay = False
     thumb = ""
-    if (pack / "first.png").is_file():
-        thumb = f"/thumb?slug={html.escape(slug)}&shot={html.escape(sid)}&kind=clay"
-    elif (pack / "overlay.png").is_file():
-        thumb = f"/thumb?slug={html.escape(slug)}&shot={html.escape(sid)}&kind=overlay"
+    if pack is not None:
+        clay = (pack / "first.png").is_file() or (pack / "clay.mp4").is_file()
+        look = (pack / "overlay.png").is_file()
+        overlay = (pack / "score.json").is_file()
+        if (pack / "first.png").is_file():
+            thumb = f"/thumb?slug={html.escape(guide or '')}&shot={html.escape(sid)}&kind=clay"
+        elif (pack / "overlay.png").is_file():
+            thumb = f"/thumb?slug={html.escape(guide or '')}&shot={html.escape(sid)}&kind=overlay"
+    printed = str(row.get("status") or "") == "ok"
+    mixed = False
+    if stems is not None:
+        mixed = any(
+            (stems / name).is_file() for name in ("mix.mp4", "mix.m4a", "mix.wav")
+        )
     return {
         "id": sid,
         "clay": _light(clay),
@@ -156,12 +218,16 @@ def _rows() -> list[FilmRow]:
             continue
         dest = state.parent
         slug = str(data.get("slug") or dest.name)
+        film = str(data.get("film") or "")
         shots = data.get("shots") or []
-        ok = sum(1 for s in shots if s.get("status") == "ok")
-        lights = [
-            _shot_lights(dest, slug, str(s.get("id") or f"{i:02d}"), s)
-            for i, s in enumerate(shots, start=1)
-        ]
+        ok = sum(1 for s in shots if isinstance(s, dict) and s.get("status") == "ok")
+        lights = []
+        for index, shot in enumerate(shots, start=1):
+            if not isinstance(shot, dict):
+                continue
+            sid = str(shot.get("id") or f"{index:02d}")
+            guide = guide_shot_id(film, slug, sid)
+            lights.append(_shot_lights(dest, guide, sid, shot))
         rows.append(
             {
                 "slug": slug,
@@ -284,14 +350,14 @@ def _safe_thumb(slug: str, shot: str, kind: str) -> Path | None:
     """Resolve a clay/overlay PNG under ``GUIDES``, or ``None``.
 
     Args:
-        slug: Alphanumeric film slug.
+        slug: Film id (``go-see``) or output prefix (``gosee``).
         shot: Digit-only shot id.
         kind: ``clay`` (``first.png``) or ``overlay``.
 
     Returns:
         File path when it exists under ``GUIDES``, else ``None``.
     """
-    if not slug.isalnum() or not shot.isdigit() or kind not in {"clay", "overlay"}:
+    if _guide_id(slug) is None or not shot.isdigit() or kind not in {"clay", "overlay"}:
         return None
     pack = GUIDES / slug / shot
     if kind == "clay":

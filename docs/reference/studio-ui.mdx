@@ -69,10 +69,10 @@ Empty films dir is a **page**, not a crash: “No films yet. Run `./scripts/util
 
 | Path | What |
 | --- | --- |
-| **`/`** | Jobstore lights: clay / look / overlay / print / audio per shot from `films/<slug>/state.json` |
+| **`/`** | Jobstore lights: clay / look / overlay / print / audio per shot from `films/<slug>/state.json`. Clay, look, and overlay read `guides/<film-id>/<shot>/` (`go-see`). `guides/<prefix>/` (`gosee`) is used only when that shot directory is absent |
 | **`/watch/<slug>`** | HTML5 player for an **allowlisted** 90s master |
 | **`/media/<slug>`** | MP4 bytes. `?dl=1` sets `Content-Disposition` attachment |
-| **`/thumb?slug=&shot=&kind=`** | PNG thumb. `kind` is `clay` (`first.png`) or `overlay` (`overlay.png`). Slug must be alphanumeric; shot digits |
+| **`/thumb?slug=&shot=&kind=`** | PNG thumb. `kind` is `clay` (`first.png`) or `overlay` (`overlay.png`). `slug` is a film id (`go-see`) or output prefix (`gosee`); shot digits. `..` and slashes 404 |
 
 Unknown / missing allowlist → **404**.
 
