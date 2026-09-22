@@ -24,7 +24,7 @@ from ez_music.diss_examples import (  # noqa: E402
     nill_output_prefix,
     nill_tags,
 )
-from ez_music.drive_arrange import DRIVE_BPM_CHOICES, lift_drive_bpm  # noqa: E402
+from ez_music.drive_arrange import DRIVE_BPM_CHOICES, _SPATIAL, lift_drive_bpm  # noqa: E402
 from ez_music.edm_examples import (  # noqa: E402
     BANNED_STYLE_NEEDLES,
     BASS_NEEDLES,
@@ -729,6 +729,7 @@ def test_drive_tags_lock_instrumental_bed() -> None:
     assert "148 bpm" not in tags_low
     assert "rave" in tags_low
     assert "warped hybrid-trap" in tags_low
+    assert "bass boosted" in tags_low
     assert "no brass" in tags_low
     assert "no horns" in tags_low
     assert "wide low-mid" in tags_low
@@ -743,6 +744,7 @@ def test_drive_tags_lock_vocal_treat() -> None:
     assert "no vocals" not in tags_low
     assert "no singing" not in tags_low
     assert f"{lifted} bpm" in tags_low
+    assert "bass boosted" in tags_low
     assert "no brass" in tags_low
     assert "no trumpets" in tags_low
 
@@ -870,6 +872,7 @@ def test_drive_through_edm_examples_are_varied_lengths() -> None:
     signatures: list[tuple[str, ...]] = []
     phase4_core = 0
     pedal_rows = 0
+    breakdown_takes = 0
     treat_titles: list[str] = []
     shapes: list[tuple[tuple[str, int], ...]] = []
     for ex in EDM_EXAMPLES:
@@ -932,14 +935,30 @@ def test_drive_through_edm_examples_are_varied_lengths() -> None:
         assert len(set(labels)) >= 2, (ex["stem"], labels)
         signatures.append(labels)
         shape = _drive_shape(lyrics)
-        assert shape[0][0] == "build-up" and shape[0][1] <= 6
-        assert shape[1][0] == "drop"
-        assert shape[-1] == ("outro", 4)
+        assert shape[0] == ("build-up", 2)
+        assert shape[1][0] == "drop" and shape[1][1] == 2
+        assert shape[-1] == ("outro", 2)
         bar_counts = [bars for _role, bars in shape]
-        assert all(count in {4, 6, 8, 10, 12} for count in bar_counts), ex["stem"]
-        assert all(left != right for left, right in zip(bar_counts, bar_counts[1:])), ex["stem"]
-        assert len(set(bar_counts)) >= 3, ex["stem"]
+        assert all(count == 2 for count in bar_counts), ex["stem"]
+        assert all(count * 4 * 60 / int(ex["bpm"]) < 5 for count in bar_counts), ex["stem"]
+        breakdowns = sum(role == "breakdown" for role, _bars in shape)
+        assert breakdowns <= 1, ex["stem"]
+        breakdown_takes += breakdowns
         assert sum(role == "drop" for role, _bars in shape) >= 3, ex["stem"]
+        for line in lyrics.splitlines():
+            stripped = line.strip()
+            if not stripped.startswith("[") or stripped.startswith("[chorus"):
+                continue
+            low = stripped.lower()
+            assert "bass boosted" in low, (ex["stem"], stripped)
+            assert "layers stay" in low, (ex["stem"], stripped)
+            assert "sub stays" in low, (ex["stem"], stripped)
+            assert "no gap" in low, (ex["stem"], stripped)
+            assert "one-shot phrase" in low, (ex["stem"], stripped)
+            assert any(phrase.lower() in low for phrase in _SPATIAL), (
+                ex["stem"],
+                stripped,
+            )
         assert int(ex["duration"]) == duration_seconds(
             bars=sum(bar_counts),
             meter="4",
@@ -1058,6 +1077,7 @@ def test_drive_through_edm_examples_are_varied_lengths() -> None:
     assert len(set(signatures)) == 85
     assert len(shapes) == 85
     assert len(set(shapes)) == 85
+    assert 8 <= breakdown_takes <= 16
     for left, right in zip(shapes, shapes[1:]):
         assert left != right
     assert len({ex["lyrics"] for ex in EDM_EXAMPLES}) == 85

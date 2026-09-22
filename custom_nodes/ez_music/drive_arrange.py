@@ -1,8 +1,8 @@
-"""Drive-through arrangement: short stanzas, an early drop, 150–480 s.
+"""Drive-through arrangement: two-bar cells, an early drop, 150–480 s.
 
-Each stanza picks its own bar count. Duration is that sum at the take's
-BPM. A shortfall adds whole stanzas. An overrun drops whole stanzas.
-Bars already chosen are not stretched or squeezed to hit a clock time.
+Each stanza is 2 bars, under 3 seconds at 165–176. Duration is that sum
+at the take's BPM. A shortfall adds whole stanzas. An overrun drops
+whole stanzas. Bars are not stretched or squeezed to hit a clock time.
 
 Tempos snap onto Audio Rack ids that already exist (165–176). The
 authored BPM stays the rank; the encoder and the tags use the snapped
@@ -31,9 +31,9 @@ DRIVE_CAP_S = 480
 DRIVE_BPM_CHOICES: tuple[int, ...] = (165, 168, 170, 172, 174, 176)
 _BPM_LO = 140
 _BPM_HI = 176
-_BAR_PALETTE = frozenset({4, 6, 8, 10, 12})
-_MENU = (10, 12, 14, 16, 18, 20, 22, 24, 28, 32, 36, 40)
-_BODY_ROLES = ("inst", "drop", "breakdown", "build-up")
+_BAR_PALETTE = frozenset({2})
+_MENU = (28, 40, 52, 64, 76, 88, 100, 112, 124, 136, 148, 160)
+_BODY_ROLES = ("inst", "drop", "build-up")
 _BRASS = (
     "brass",
     "horn",
@@ -75,6 +75,12 @@ _WIDTHS = (
 )
 _WEIGHTS = ("heavy", "wreck", "harder", "stacked", "full send")
 _WARPS = ("warped", "wobble", "growl", "reese", "formant")
+_SPATIAL = (
+    "3D low-mid orbit",
+    "bass circles the stereo field",
+    "sub center mids move wide",
+    "hats sweep across the image",
+)
 _MOTIONS = (
     "hat density up",
     "kick opens",
@@ -360,8 +366,29 @@ def _slot(pool: tuple[str, ...], n: int, salt: int, attempt: int, step: int) -> 
     return pool[mixed % len(pool)]
 
 
+def _bed(n: int, salt: int, attempt: int) -> str:
+    """Front of every cue: bass, a 3D move, and a bed that does not stop.
+
+    Args:
+        n: Section index.
+        salt: Take salt.
+        attempt: Retry counter.
+
+    Returns:
+        The shared prefix.
+    """
+    spatial = _slot(_SPATIAL, n, salt, attempt, 13)
+    return (
+        "bass boosted, "
+        f"{spatial}, layers stay, sub stays, no gap, one-shot phrase"
+    )
+
+
 def _cue_for(role: str, n: int, salt: int, attempt: int = 0) -> str:
     """One layered cue. Drops name a weight and a warp. Beds do not say drop.
+
+    The bass, the spatial move, and the keep-playing words sit at the
+    front so a long tail cannot hide them.
 
     Args:
         role: Section role.
@@ -372,6 +399,7 @@ def _cue_for(role: str, n: int, salt: int, attempt: int = 0) -> str:
     Returns:
         Comma-separated production cue.
     """
+    bed = _bed(n, salt, attempt)
     sub = _slot(_SUBS, n, salt, attempt, 3)
     mid = _slot(_MIDS, n, salt, attempt, 5)
     drum = _slot(_DRUMS, n, salt, attempt, 7)
@@ -382,15 +410,21 @@ def _cue_for(role: str, n: int, salt: int, attempt: int = 0) -> str:
         warp = _slot(_WARPS, n, salt, attempt, 4)
         warp_bit = "" if warp == "warped" else f"{warp} "
         return (
-            f"{weight} {warp_bit}warped drop, {sub}, {mid}, {drum}, {width}, {motion}"
+            f"{bed}, {weight} {warp_bit}warped drop, {sub}, {mid}, {drum}, "
+            f"{width}, {motion}"
         )
     if role == "build-up":
-        return f"snare roll, {sub}, {drum}, {mid}, {width}, {motion}"
+        return f"{bed}, snare roll, {sub}, {drum}, {mid}, {width}, {motion}"
     if role == "breakdown":
-        return f"rapid hi-hats, chest-sub pulse, {mid}, {width}, {sub}, {motion}"
+        return (
+            f"{bed}, rapid hi-hats, chest-sub pulse, {mid}, {width}, {sub}, {motion}"
+        )
     if role == "outro":
-        return f"kick pattern flip, chest-sub, rapid hi-hats, {mid}, {width}, {motion}"
-    return f"{drum}, {sub}, {mid}, {width}, {motion}"
+        return (
+            f"{bed}, kick pattern flip, chest-sub, rapid hi-hats, {mid}, "
+            f"{width}, {motion}"
+        )
+    return f"{bed}, {drum}, {sub}, {mid}, {width}, {motion}"
 
 
 def _unique_cue(role: str, n: int, salt: int, used: set[str]) -> str:
@@ -455,34 +489,20 @@ def _pick_role(salt: int, index: int, prev: str) -> str:
 
 
 def _pick_bars(role: str, prev: int, salt: int, index: int, *, before_outro: bool) -> int:
-    """Bar count for one stanza. Neighbors do not share a count.
+    """Bar count for one stanza. Every cell is 2 bars.
 
     Args:
-        role: Section role.
-        prev: Previous stanza's bars.
-        salt: Take salt.
-        index: Section index.
-        before_outro: When True, also avoid 4 so the outro can be 4 bars.
+        role: Section role. Ignored. Kept so callers stay stable.
+        prev: Previous stanza's bars. Ignored.
+        salt: Take salt. Ignored.
+        index: Section index. Ignored.
+        before_outro: Ignored.
 
     Returns:
-        A count in 4–12.
+        2. Under 3 seconds at 165–176.
     """
-    if role == "drop":
-        pool: tuple[int, ...] = (8, 10, 12)
-    elif role == "build-up":
-        pool = (4, 6)
-    elif role == "breakdown":
-        pool = (4, 6, 8)
-    else:
-        pool = (4, 6, 8, 10, 12)
-    banned = {int(prev)}
-    if before_outro:
-        banned.add(4)
-    options = [bars for bars in pool if bars not in banned]
-    if not options:
-        options = [bars for bars in (6, 8, 10, 12) if bars not in banned]
-    mixed = _mix_int(salt, index, 2)
-    return options[mixed % len(options)]
+    del role, prev, salt, index, before_outro
+    return 2
 
 
 def _make(role: str, bars: int, cue: str) -> SongSection:
@@ -617,7 +637,10 @@ def _cue_with_donor(
 
 
 def _drop_tail(out: list[SongSection]) -> None:
-    """Remove the stanza in front of the outro, then any new 4-bar neighbor.
+    """Remove the stanza in front of the outro.
+
+    One stanza only. Every cell is 2 bars, so deleting while the
+    neighbor shares the outro's length would eat the take.
 
     Args:
         out: Stanza list ending in the outro. Mutated.
@@ -625,8 +648,6 @@ def _drop_tail(out: list[SongSection]) -> None:
     if len(out) <= 3:
         return
     del out[-2]
-    while len(out) > 3 and out[-2]["bars"] == out[-1]["bars"]:
-        del out[-2]
 
 
 def _insert(out: list[SongSection], *, salt: int, used: set[str]) -> None:
@@ -649,7 +670,7 @@ def _ensure_drops(out: list[SongSection], salt: int, used: set[str]) -> None:
     """Turn early fills into drops until the take has three drops.
 
     New drops sit in the first dozen stanzas so a later trim cannot
-    delete the only ones. Neighbors keep different bar counts.
+    delete the only ones. The promoted cell stays 2 bars.
 
     Args:
         out: Stanza list ending in the outro. Mutated.
@@ -669,40 +690,42 @@ def _ensure_drops(out: list[SongSection], salt: int, used: set[str]) -> None:
                 continue
             if out[index - 1]["role"] == "drop" or out[index + 1]["role"] == "drop":
                 continue
-            before_outro = index == len(out) - 2
-            banned = {int(out[index - 1]["bars"]), int(out[index + 1]["bars"])}
-            if before_outro:
-                banned.add(4)
-            options = [bars for bars in (8, 10, 12) if bars not in banned]
-            bars = options[_mix_int(salt, index, 3) % len(options)]
             cue = _unique_cue("drop", salt + index, salt, used)
-            out[index] = _make("drop", bars, cue)
+            out[index] = _make("drop", 2, cue)
             placed = True
             break
         if not placed:
             raise ValueError("could not place a third drop")
 
 
-def _ensure_variety(out: list[SongSection], salt: int, used: set[str]) -> None:
-    """Insert a missing bar length when a take has fewer than three.
+def _place_rare_breakdown(
+    out: list[SongSection],
+    salt: int,
+    used: set[str],
+    *,
+    gate: int,
+) -> None:
+    """Turn one inst into a 2-bar breakdown on about one take in seven.
+
+    The cue is the same keep-playing bed as every other cell. The role
+    is the dip. Two bars keeps that dip under 3 seconds. ``gate`` ignores
+    the collision retry so a retry cannot drop the dip.
 
     Args:
         out: Stanza list ending in the outro. Mutated.
-        salt: Cue salt.
-        used: Musical cues. Updated.
+        salt: Take salt, including the collision retry. Chooses the cue.
+        used: Musical cues. Updated when a breakdown is placed.
+        gate: Identity salt for this take. A breakdown is placed only
+            when ``gate % 7 == 0``.
     """
-    have = {int(section["bars"]) for section in out}
-    if len(have) >= 3:
+    if gate % 7 != 0:
         return
-    for bars in (6, 10, 12, 8):
-        if bars in have or bars == int(out[-2]["bars"]) or bars == 4:
+    for index in range(2, len(out) - 1):
+        if out[index]["role"] != "inst":
             continue
-        role = _pick_role(salt, bars, out[-2]["role"])
-        cue = _unique_cue(role, salt + bars, salt, used)
-        out.insert(-1, _make(role, bars, cue))
-        have.add(bars)
-        if len(have) >= 3:
-            return
+        cue = _unique_cue("breakdown", salt + index, salt, used)
+        out[index] = _make("breakdown", 2, cue)
+        return
 
 
 def _compose(
@@ -734,17 +757,15 @@ def _compose(
     queue = _donor_queue(lyrics)
     pedal = "dual-action pedal" in lyrics.lower()
     identity = RECIPE_LINES.get(recipe, "")
-    build_bars = 4 if salt % 2 == 0 else 6
-    drop_bars = (8, 10, 12)[salt % 3]
     sections = [
         _make(
             "build-up",
-            build_bars,
+            2,
             _cue_with_donor("build-up", 0, salt, used, queue),
         ),
         _make(
             "drop",
-            drop_bars,
+            2,
             _cue_with_donor(
                 "drop",
                 1,
@@ -757,7 +778,7 @@ def _compose(
         ),
     ]
     prev_role = "drop"
-    prev_bars = drop_bars
+    prev_bars = 2
     menu = _menu_count(album_slug, track_number)
     for index in range(menu):
         role = _pick_role(salt, index, prev_role)
@@ -767,14 +788,19 @@ def _compose(
         sections.append(_make(role, bars, cue))
         prev_role = role
         prev_bars = bars
-    sections.append(_make("outro", 4, _unique_cue("outro", salt + 99, salt, used)))
+    sections.append(_make("outro", 2, _unique_cue("outro", salt + 99, salt, used)))
     _ensure_drops(sections, salt, used)
-    _ensure_variety(sections, salt, used)
+    _place_rare_breakdown(
+        sections,
+        salt,
+        used,
+        gate=_salt(album_slug, track_number, seed),
+    )
     return fit_drive_sections(sections, bpm=bpm, salt=salt)
 
 
 def _check(sections: list[SongSection]) -> None:
-    """Reject a take that loops, starts late, or names brass.
+    """Reject a take that runs long, starts late, or names brass.
 
     Args:
         sections: Fitted stanzas.
@@ -782,21 +808,19 @@ def _check(sections: list[SongSection]) -> None:
     Raises:
         ValueError: an arrangement invariant failed.
     """
-    if sections[0]["role"] != "build-up" or int(sections[0]["bars"]) > 6:
+    if sections[0]["role"] != "build-up" or int(sections[0]["bars"]) != 2:
         raise ValueError("opening build is missing or long")
     if sections[1]["role"] != "drop":
         raise ValueError("first drop is not the second stanza")
-    if sections[-1]["role"] != "outro" or int(sections[-1]["bars"]) != 4:
-        raise ValueError("outro must be the last stanza and 4 bars")
+    if sections[-1]["role"] != "outro" or int(sections[-1]["bars"]) != 2:
+        raise ValueError("outro must be the last stanza and 2 bars")
     bars = [int(section["bars"]) for section in sections]
     if any(count not in _BAR_PALETTE for count in bars):
-        raise ValueError("bar count left the 4–12 palette")
-    if any(left == right for left, right in zip(bars, bars[1:])):
-        raise ValueError("adjacent stanzas share a bar count")
-    if len(set(bars)) < 3:
-        raise ValueError("bar lengths do not vary")
+        raise ValueError("bar count left the 2-bar palette")
     if sum(section["role"] == "drop" for section in sections) < 3:
         raise ValueError("need at least three drops")
+    if sum(section["role"] == "breakdown" for section in sections) > 1:
+        raise ValueError("more than one breakdown")
     musics = [_music(section["pattern"]) for section in sections]
     if len(musics) != len(set(musics)):
         raise ValueError("a cue repeats inside the take")

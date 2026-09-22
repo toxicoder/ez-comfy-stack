@@ -72,7 +72,7 @@ The rack emits at most one BPM token. Match `TextEncodeAceStepAudio1.5` BPM to t
 
 ## Drive-through recipes
 
-Shipped Drive-through takes under `_lab/audio/albums/drive-through/` splice these starters. The arranger then snaps tempo onto 165–176 and replaces the form with a per-take sequence of short stanzas (150–480 s). Bass identity stays with the recipe:
+Shipped Drive-through takes under `_lab/audio/albums/drive-through/` splice these starters. The arranger then snaps tempo onto 165–176 and replaces the form with a per-take sequence of 2-bar stanzas (150–480 s, each cell under 3 seconds). Bass identity stays with the recipe:
 
 | Recipe | Genre |
 | --- | --- |
@@ -90,7 +90,7 @@ Shipped Drive-through takes under `_lab/audio/albums/drive-through/` splice thes
 | `rec_drive_festival_trap` | Festival trap |
 | `rec_drive_dj_shout` | Hybrid trap + `voc_dj_shout` |
 
-Instrumental takes use `mix_drive_lock` (no brass, no horns, no trumpets, heavy chest bass). DJ-shout treats use `mix_drive_treat` with the same brass lock. Do not pick `ins_warped_saw` on a Drive-through graph (supersaw is a high-pitch needle). Playbook: [Drive-through EDM](music-edm.md).
+Instrumental takes use `mix_drive_lock` (no brass, no horns, no trumpets, heavy chest bass, bass boosted). DJ-shout treats use `mix_drive_treat` with the same brass lock. Do not pick `ins_warped_saw` on a Drive-through graph (supersaw is a high-pitch needle). Playbook: [Drive-through EDM](music-edm.md).
 
 ## Handoff
 

@@ -149,7 +149,7 @@ def test_arrange_drive_places_one_chop_after_the_first_drop() -> None:
 
 
 def test_pick_helpers_and_cue_filters() -> None:
-    assert arrange._pick_bars("build-up", 6, salt=1, index=3, before_outro=True) in {8, 10, 12}
+    assert arrange._pick_bars("build-up", 6, salt=1, index=3, before_outro=True) == 2
     saw_same = False
     saw_other = False
     for index in range(40):
@@ -171,6 +171,12 @@ def test_pick_helpers_and_cue_filters() -> None:
     for role in ("drop", "build-up", "breakdown", "inst", "outro"):
         cue = arrange._cue_for(role, 2, 5, 0)
         assert not arrange._blocked(cue)
+        assert "bass boosted" in cue
+        assert "layers stay" in cue
+        assert "sub stays" in cue
+        assert "no gap" in cue
+        assert "one-shot phrase" in cue
+        assert any(phrase in cue for phrase in arrange._SPATIAL)
         if role != "drop":
             assert "drop" not in cue
 
@@ -250,93 +256,114 @@ def test_with_extras_keeps_rejects_and_appends() -> None:
     assert duplicate == "rapid hi-hats, mono chest-sub"
 
 
-def test_drop_tail_removes_a_four_bar_neighbor() -> None:
+def test_drop_tail_removes_one_stanza() -> None:
     short = _opening()
     arrange._drop_tail(short)
     assert len(short) == 3
     long = [
-        _section("build-up", 4, "snare roll, mono chest-sub, rapid hi-hats, a"),
-        _section("drop", 8, "heavy warped drop, mono chest-sub, b"),
-        _section("inst", 4, "rapid hi-hats, mono chest-sub, c"),
-        _section("breakdown", 4, "rapid hi-hats, chest-sub pulse, d"),
-        _section("outro", 4, "kick pattern flip, chest-sub, rapid hi-hats, e"),
+        _section("build-up", 2, "snare roll, mono chest-sub, rapid hi-hats, a"),
+        _section("drop", 2, "heavy warped drop, mono chest-sub, b"),
+        _section("inst", 2, "rapid hi-hats, mono chest-sub, c"),
+        _section("breakdown", 2, "rapid hi-hats, chest-sub pulse, d"),
+        _section("outro", 2, "kick pattern flip, chest-sub, rapid hi-hats, e"),
     ]
     arrange._drop_tail(long)
-    assert [section["role"] for section in long] == ["build-up", "drop", "outro"]
+    assert [section["role"] for section in long] == [
+        "build-up",
+        "drop",
+        "inst",
+        "outro",
+    ]
 
 
-def test_ensure_drops_and_variety() -> None:
+def test_ensure_drops_promotes_one_fill_then_stops() -> None:
     sections = [
-        _section("build-up", 4, "snare roll, mono chest-sub, rapid hi-hats, a"),
-        _section("drop", 8, "heavy warped drop, mono chest-sub, b"),
-        _section("inst", 6, "rapid hi-hats, mono chest-sub, wide mids, c"),
-        _section("inst", 10, "offbeat hats, stacked 808, wide mids, d"),
-        _section("outro", 4, "kick pattern flip, chest-sub, rapid hi-hats, e"),
+        _section("build-up", 2, "snare roll, mono chest-sub, rapid hi-hats, a"),
+        _section("drop", 2, "heavy warped drop, mono chest-sub, b"),
+        _section("inst", 2, "rapid hi-hats, mono chest-sub, wide mids, c"),
+        _section("inst", 2, "offbeat hats, stacked 808, wide mids, d"),
+        _section("outro", 2, "kick pattern flip, chest-sub, rapid hi-hats, e"),
     ]
     with pytest.raises(ValueError, match="third drop"):
         arrange._ensure_drops(sections, salt=4, used=set())
     assert sections[3]["role"] == "drop"
-    varied = _opening()
-    arrange._ensure_variety(varied, salt=2, used=set())
-    assert len({int(section["bars"]) for section in varied}) >= 3
-    already = [
-        *_opening()[:2],
-        _section("inst", 6, "rapid hi-hats, mono chest-sub, wide mids, mid"),
-        _opening()[2],
+    assert sections[3]["bars"] == 2
+
+
+def _two_bar_bed() -> list[SongSection]:
+    return [
+        _section("build-up", 2, "snare roll, mono chest-sub, rapid hi-hats, a"),
+        _section("drop", 2, "heavy warped drop, mono chest-sub, b"),
+        _section("inst", 2, "rapid hi-hats, mono chest-sub, wide mids, c"),
+        _section("outro", 2, "kick pattern flip, chest-sub, rapid hi-hats, e"),
     ]
-    before = len(already)
-    arrange._ensure_variety(already, salt=2, used=set())
-    assert len(already) == before
-    narrow = [
-        _section("build-up", 4, "snare roll, mono chest-sub, rapid hi-hats, n1"),
-        _section("drop", 6, "heavy warped drop, mono chest-sub, n2"),
-        _section("outro", 4, "kick pattern flip, chest-sub, rapid hi-hats, n3"),
+
+
+def test_rare_breakdown_is_one_two_bar_cell() -> None:
+    sections = _two_bar_bed()
+    skipped = _two_bar_bed()
+    arrange._place_rare_breakdown(skipped, salt=1, used=set(), gate=1)
+    assert [section["role"] for section in skipped] == [
+        "build-up",
+        "drop",
+        "inst",
+        "outro",
     ]
-    arrange._ensure_variety(narrow, salt=2, used=set())
-    assert len({int(section["bars"]) for section in narrow}) >= 3
+    empty = [
+        _section("build-up", 2, "snare roll, a"),
+        _section("drop", 2, "heavy warped drop, b"),
+        _section("drop", 2, "harder warped drop, c"),
+        _section("outro", 2, "kick pattern flip, d"),
+    ]
+    arrange._place_rare_breakdown(empty, salt=7, used=set(), gate=7)
+    assert [section["role"] for section in empty].count("breakdown") == 0
+    arrange._place_rare_breakdown(sections, salt=7, used=set(), gate=7)
+    breakdowns = [section for section in sections if section["role"] == "breakdown"]
+    assert len(breakdowns) == 1
+    assert breakdowns[0]["bars"] == 2
+    assert "bass boosted" in breakdowns[0]["pattern"]
+    assert "no gap" in breakdowns[0]["pattern"]
 
 
 def test_check_rejects_broken_shapes() -> None:
-    good_tail = [
-        ("inst", 6, "rapid hi-hats, mono chest-sub, one"),
-        ("drop", 10, "harder warped drop, stacked 808, two"),
-        ("inst", 12, "offbeat hats, body bass, three"),
-        ("drop", 8, "wreck growl warped drop, low chest-sub, four"),
-        ("outro", 4, "kick pattern flip, chest-sub, rapid hi-hats, five"),
-    ]
-
     def build(rows: list[tuple[str, int, str]]) -> list[SongSection]:
         return [_section(role, bars, cue) for role, bars, cue in rows]
 
     cases = [
-        ([("inst", 4, "bed"), ("drop", 8, "heavy warped drop"), ("outro", 4, "end")], "opening build"),
-        ([("build-up", 8, "snare roll"), ("drop", 8, "heavy warped drop"), ("outro", 4, "end")], "opening build"),
-        ([("build-up", 4, "snare roll"), ("inst", 6, "rapid hi-hats"), ("outro", 4, "end")], "first drop"),
-        ([("build-up", 4, "snare roll"), ("drop", 8, "heavy warped drop"), ("inst", 6, "end")], "outro must"),
+        ([("inst", 2, "bed"), ("drop", 2, "heavy warped drop"), ("outro", 2, "end")], "opening build"),
+        ([("build-up", 4, "snare roll"), ("drop", 2, "heavy warped drop"), ("outro", 2, "end")], "opening build"),
+        ([("build-up", 2, "snare roll"), ("inst", 2, "rapid hi-hats"), ("outro", 2, "end")], "first drop"),
+        ([("build-up", 2, "snare roll"), ("drop", 2, "heavy warped drop"), ("inst", 2, "end")], "outro must"),
         (
-            [("build-up", 4, "snare roll"), ("drop", 8, "heavy warped drop"), ("outro", 8, "end")],
+            [("build-up", 2, "snare roll"), ("drop", 2, "heavy warped drop"), ("outro", 4, "end")],
             "outro must",
         ),
         (
-            [("build-up", 4, "snare roll"), ("drop", 3, "heavy warped drop"), ("outro", 4, "end")],
+            [("build-up", 2, "snare roll"), ("drop", 4, "heavy warped drop"), ("outro", 2, "end")],
             "palette",
         ),
         (
-            [("build-up", 4, "snare roll"), ("drop", 8, "heavy warped drop"), ("inst", 8, "rapid hi-hats, mono chest-sub"), ("outro", 4, "end")],
-            "adjacent",
-        ),
-        (
-            [("build-up", 4, "snare roll"), ("drop", 8, "heavy warped drop"), ("outro", 4, "end")],
-            "bar lengths",
+            [
+                ("build-up", 2, "snare roll, mono chest-sub"),
+                ("drop", 2, "heavy warped drop"),
+                ("inst", 2, "rapid hi-hats, body bass, one"),
+                ("drop", 2, "harder warped drop, two"),
+                ("inst", 2, "offbeat hats, fold bass, three"),
+                ("outro", 2, "kick pattern flip, chest-sub"),
+            ],
+            "three drops",
         ),
         (
             [
-                ("build-up", 4, "snare roll, mono chest-sub"),
-                ("drop", 8, "heavy warped drop"),
-                *[(role, bars, cue) for role, bars, cue in good_tail[:3]],
-                ("outro", 4, "kick pattern flip, chest-sub"),
+                ("build-up", 2, "snare roll, mono chest-sub"),
+                ("drop", 2, "heavy warped drop"),
+                ("breakdown", 2, "rapid hi-hats, one"),
+                ("drop", 2, "harder warped drop"),
+                ("breakdown", 2, "offbeat hats, two"),
+                ("drop", 2, "wreck warped drop"),
+                ("outro", 2, "kick pattern flip, chest-sub"),
             ],
-            "three drops",
+            "more than one breakdown",
         ),
     ]
     for rows, match in cases:
@@ -344,39 +371,39 @@ def test_check_rejects_broken_shapes() -> None:
             arrange._check(build(rows))
     repeated = build(
         [
-            ("build-up", 4, "snare roll, mono chest-sub"),
-            ("drop", 8, "same phrase"),
-            ("inst", 6, "rapid hi-hats, body bass"),
-            ("drop", 10, "same phrase"),
-            ("inst", 12, "offbeat hats, fold bass"),
-            ("drop", 8, "wreck warped drop, low chest-sub"),
-            ("outro", 4, "kick pattern flip, chest-sub"),
+            ("build-up", 2, "snare roll, mono chest-sub"),
+            ("drop", 2, "same phrase"),
+            ("inst", 2, "rapid hi-hats, body bass"),
+            ("drop", 2, "same phrase"),
+            ("inst", 2, "offbeat hats, fold bass"),
+            ("drop", 2, "wreck warped drop, low chest-sub"),
+            ("outro", 2, "kick pattern flip, chest-sub"),
         ]
     )
     with pytest.raises(ValueError, match="repeats"):
         arrange._check(repeated)
     banned = build(
         [
-            ("build-up", 4, "pluck"),
-            ("drop", 8, "heavy warped drop"),
-            ("inst", 6, "rapid hi-hats, body bass"),
-            ("drop", 10, "harder wobble warped drop"),
-            ("inst", 12, "offbeat hats, fold bass"),
-            ("drop", 8, "wreck warped drop, low chest-sub"),
-            ("outro", 4, "kick pattern flip, chest-sub"),
+            ("build-up", 2, "pluck"),
+            ("drop", 2, "heavy warped drop"),
+            ("inst", 2, "rapid hi-hats, body bass"),
+            ("drop", 2, "harder wobble warped drop"),
+            ("inst", 2, "offbeat hats, fold bass"),
+            ("drop", 2, "wreck warped drop, low chest-sub"),
+            ("outro", 2, "kick pattern flip, chest-sub"),
         ]
     )
     with pytest.raises(ValueError, match="banned cue"):
         arrange._check(banned)
     spilled = build(
         [
-            ("build-up", 4, "snare roll, mono chest-sub"),
-            ("drop", 8, "heavy warped drop"),
-            ("inst", 6, "chest-sub drop"),
-            ("drop", 10, "harder wobble warped drop"),
-            ("inst", 12, "offbeat hats, fold bass"),
-            ("drop", 8, "wreck warped drop, low chest-sub"),
-            ("outro", 4, "kick pattern flip, chest-sub"),
+            ("build-up", 2, "snare roll, mono chest-sub"),
+            ("drop", 2, "heavy warped drop"),
+            ("inst", 2, "chest-sub drop"),
+            ("drop", 2, "harder wobble warped drop"),
+            ("inst", 2, "offbeat hats, fold bass"),
+            ("drop", 2, "wreck warped drop, low chest-sub"),
+            ("outro", 2, "kick pattern flip, chest-sub"),
         ]
     )
     with pytest.raises(ValueError, match="drop language"):
