@@ -1,6 +1,6 @@
 {
   "id": "11-inspector-purge",
-  "revision": 2,
+  "revision": 3,
   "last_node_id": 17,
   "last_link_id": 17,
   "nodes": [
@@ -97,7 +97,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40,
-        1060
+        1076
       ],
       "size": [
         280,
@@ -855,9 +855,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         480,
-        600
+        616
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -868,9 +868,9 @@
       "title": "QUALITY",
       "bounding": [
         508,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -881,9 +881,9 @@
       "title": "MODEL",
       "bounding": [
         20,
-        672,
+        656,
         400,
-        332
+        348
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -896,7 +896,7 @@
         20,
         1004,
         320,
-        182
+        198
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -907,9 +907,9 @@
       "title": "PROMPT",
       "bounding": [
         480,
-        672,
+        656,
         818,
-        1504
+        1520
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -920,9 +920,9 @@
       "title": "OUTPUT",
       "bounding": [
         1320,
-        672,
+        656,
         400,
-        1136
+        1152
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -933,9 +933,9 @@
       "title": "INPUT",
       "bounding": [
         2588,
-        672,
+        656,
         360,
-        414
+        430
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -946,9 +946,9 @@
       "title": "SETTINGS",
       "bounding": [
         2956,
-        672,
+        656,
         360,
-        182
+        198
       ],
       "color": "#3f789e",
       "font_size": 24,

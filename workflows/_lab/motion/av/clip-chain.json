@@ -1,6 +1,6 @@
 {
   "id": "clip-chain",
-  "revision": 3,
+  "revision": 4,
   "last_node_id": 234,
   "last_link_id": 141,
   "nodes": [
@@ -1541,7 +1541,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         1480,
-        1760
+        1776
       ],
       "size": [
         420,
@@ -1612,7 +1612,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         1948,
-        1760
+        1776
       ],
       "size": [
         420,
@@ -1659,7 +1659,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         1480,
-        2252
+        2268
       ],
       "size": [
         420,
@@ -1700,7 +1700,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         1948,
-        2348
+        2364
       ],
       "size": [
         420,
@@ -1747,7 +1747,7 @@
       "type": "LTXVImgToVideo",
       "pos": [
         2416,
-        1760
+        1776
       ],
       "size": [
         320,
@@ -1836,7 +1836,7 @@
       "type": "LTXVConditioning",
       "pos": [
         2400,
-        2056
+        2072
       ],
       "size": [
         280,
@@ -1888,7 +1888,7 @@
       "type": "LTXVConcatAVLatent",
       "pos": [
         2400,
-        2210
+        2226
       ],
       "size": [
         280,
@@ -1930,7 +1930,7 @@
       "type": "KSampler",
       "pos": [
         2784,
-        1760
+        1776
       ],
       "size": [
         320,
@@ -1998,7 +1998,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         2760,
-        2094
+        2110
       ],
       "size": [
         280,
@@ -2043,7 +2043,7 @@
       "type": "VAEDecode",
       "pos": [
         3152,
-        1760
+        1776
       ],
       "size": [
         240,
@@ -2086,7 +2086,7 @@
       "type": "LTXVAudioVAEDecode",
       "pos": [
         3152,
-        2252
+        2268
       ],
       "size": [
         320,
@@ -2128,7 +2128,7 @@
       "type": "VHS_VideoCombine",
       "pos": [
         3440,
-        1760
+        1776
       ],
       "size": [
         320,
@@ -2194,7 +2194,7 @@
       "type": "EZClipLastFrame",
       "pos": [
         3152,
-        2390
+        2406
       ],
       "size": [
         280,
@@ -2232,7 +2232,7 @@
       "type": "SaveImage",
       "pos": [
         3520,
-        2292
+        2308
       ],
       "size": [
         280,
@@ -2262,7 +2262,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         1480,
-        2772
+        2804
       ],
       "size": [
         420,
@@ -2333,7 +2333,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         1948,
-        2772
+        2804
       ],
       "size": [
         420,
@@ -2380,7 +2380,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         1480,
-        3264
+        3296
       ],
       "size": [
         420,
@@ -2421,7 +2421,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         1948,
-        3360
+        3392
       ],
       "size": [
         420,
@@ -2468,7 +2468,7 @@
       "type": "LTXVImgToVideo",
       "pos": [
         2416,
-        2772
+        2804
       ],
       "size": [
         320,
@@ -2557,7 +2557,7 @@
       "type": "LTXVConditioning",
       "pos": [
         2400,
-        3068
+        3100
       ],
       "size": [
         280,
@@ -2609,7 +2609,7 @@
       "type": "LTXVConcatAVLatent",
       "pos": [
         2400,
-        3222
+        3254
       ],
       "size": [
         280,
@@ -2651,7 +2651,7 @@
       "type": "KSampler",
       "pos": [
         2784,
-        2772
+        2804
       ],
       "size": [
         320,
@@ -2719,7 +2719,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         2760,
-        3106
+        3138
       ],
       "size": [
         280,
@@ -2764,7 +2764,7 @@
       "type": "VAEDecode",
       "pos": [
         3152,
-        2772
+        2804
       ],
       "size": [
         240,
@@ -2807,7 +2807,7 @@
       "type": "LTXVAudioVAEDecode",
       "pos": [
         3152,
-        3264
+        3296
       ],
       "size": [
         320,
@@ -2849,7 +2849,7 @@
       "type": "VHS_VideoCombine",
       "pos": [
         3440,
-        2772
+        2804
       ],
       "size": [
         320,
@@ -2915,7 +2915,7 @@
       "type": "EZClipLastFrame",
       "pos": [
         3152,
-        3402
+        3434
       ],
       "size": [
         280,
@@ -2953,7 +2953,7 @@
       "type": "SaveImage",
       "pos": [
         3520,
-        3304
+        3336
       ],
       "size": [
         280,
@@ -2983,7 +2983,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         1480,
-        3784
+        3832
       ],
       "size": [
         420,
@@ -3054,7 +3054,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         1948,
-        3784
+        3832
       ],
       "size": [
         420,
@@ -3101,7 +3101,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         1480,
-        4276
+        4324
       ],
       "size": [
         420,
@@ -3142,7 +3142,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         1948,
-        4372
+        4420
       ],
       "size": [
         420,
@@ -3189,7 +3189,7 @@
       "type": "LTXVImgToVideo",
       "pos": [
         2416,
-        3784
+        3832
       ],
       "size": [
         320,
@@ -3278,7 +3278,7 @@
       "type": "LTXVConditioning",
       "pos": [
         2400,
-        4080
+        4128
       ],
       "size": [
         280,
@@ -3330,7 +3330,7 @@
       "type": "LTXVConcatAVLatent",
       "pos": [
         2400,
-        4234
+        4282
       ],
       "size": [
         280,
@@ -3372,7 +3372,7 @@
       "type": "KSampler",
       "pos": [
         2784,
-        3784
+        3832
       ],
       "size": [
         320,
@@ -3440,7 +3440,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         2760,
-        4118
+        4166
       ],
       "size": [
         280,
@@ -3485,7 +3485,7 @@
       "type": "VAEDecode",
       "pos": [
         3152,
-        3784
+        3832
       ],
       "size": [
         240,
@@ -3528,7 +3528,7 @@
       "type": "LTXVAudioVAEDecode",
       "pos": [
         3152,
-        4276
+        4324
       ],
       "size": [
         320,
@@ -3570,7 +3570,7 @@
       "type": "VHS_VideoCombine",
       "pos": [
         3440,
-        3784
+        3832
       ],
       "size": [
         320,
@@ -3636,7 +3636,7 @@
       "type": "EZClipLastFrame",
       "pos": [
         3152,
-        4414
+        4462
       ],
       "size": [
         280,
@@ -3673,7 +3673,7 @@
       "type": "SaveImage",
       "pos": [
         3520,
-        4316
+        4364
       ],
       "size": [
         280,
@@ -4859,9 +4859,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         1000,
-        620
+        636
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -4872,9 +4872,9 @@
       "title": "QUALITY",
       "bounding": [
         1028,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -4885,9 +4885,9 @@
       "title": "1. LTX models",
       "bounding": [
         20,
-        692,
+        676,
         560,
-        852
+        868
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -4898,9 +4898,9 @@
       "title": "2. Start / occupancy / format",
       "bounding": [
         600,
-        692,
+        676,
         688,
-        1654
+        1670
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -4911,9 +4911,9 @@
       "title": "3. Beat 1 (8.00s LTX)",
       "bounding": [
         1460,
-        692,
+        676,
         2360,
-        1012
+        1028
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -4926,7 +4926,7 @@
         1460,
         1704,
         2360,
-        1012
+        1028
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -4937,9 +4937,9 @@
       "title": "5. Beat 3 (8.00s LTX)",
       "bounding": [
         1460,
-        2716,
+        2732,
         2360,
-        1012
+        1028
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -4950,9 +4950,9 @@
       "title": "6. Beat 4 (8.00s LTX)",
       "bounding": [
         1460,
-        3728,
+        3760,
         2360,
-        1012
+        1028
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -4963,9 +4963,9 @@
       "title": "7. Publish clip chain",
       "bounding": [
         20,
-        4712,
+        4696,
         928,
-        380
+        396
       ],
       "color": "#3f789e",
       "font_size": 24,

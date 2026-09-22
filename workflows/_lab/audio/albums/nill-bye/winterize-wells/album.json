@@ -1,6 +1,6 @@
 {
   "id": "album",
-  "revision": 2,
+  "revision": 3,
   "last_node_id": 4,
   "last_link_id": 0,
   "nodes": [
@@ -123,9 +123,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         680,
-        520
+        536
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -136,9 +136,9 @@
       "title": "QUALITY",
       "bounding": [
         708,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -149,9 +149,9 @@
       "title": "PACK",
       "bounding": [
         708,
-        592,
+        576,
         400,
-        220
+        236
       ],
       "color": "#3f789e",
       "font_size": 24,

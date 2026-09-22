@@ -1,6 +1,6 @@
 {
   "id": "trellis2",
-  "revision": 2,
+  "revision": 3,
   "last_node_id": 23,
   "last_link_id": 39,
   "nodes": [
@@ -1347,9 +1347,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         760,
-        460
+        476
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1360,9 +1360,9 @@
       "title": "QUALITY",
       "bounding": [
         788,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1373,9 +1373,9 @@
       "title": "MODEL",
       "bounding": [
         20,
-        532,
+        516,
         400,
-        626
+        642
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1386,9 +1386,9 @@
       "title": "INPUT",
       "bounding": [
         428,
-        532,
+        516,
         360,
-        414
+        430
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1399,9 +1399,9 @@
       "title": "PROMPT",
       "bounding": [
         796,
-        532,
+        516,
         300,
-        180
+        196
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1412,9 +1412,9 @@
       "title": "SETTINGS",
       "bounding": [
         1104,
-        532,
+        516,
         320,
-        1700
+        1716
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1425,9 +1425,9 @@
       "title": "OUTPUT",
       "bounding": [
         1432,
-        532,
+        516,
         340,
-        1324
+        1340
       ],
       "color": "#a1309b",
       "font_size": 24,

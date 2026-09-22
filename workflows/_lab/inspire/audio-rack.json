@@ -1,6 +1,6 @@
 {
   "id": "audio-rack",
-  "revision": 2,
+  "revision": 3,
   "last_node_id": 7,
   "last_link_id": 4,
   "nodes": [
@@ -97,7 +97,7 @@
       "type": "EZAceStepPromptEnhance",
       "pos": [
         40,
-        1188
+        1204
       ],
       "size": [
         640,
@@ -156,7 +156,7 @@
       "type": "EZAceStepPromptEnhance",
       "pos": [
         728,
-        1188
+        1204
       ],
       "size": [
         640,
@@ -306,9 +306,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         1380,
-        500
+        516
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -319,9 +319,9 @@
       "title": "QUALITY",
       "bounding": [
         1408,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -332,9 +332,9 @@
       "title": "RACK",
       "bounding": [
         20,
-        572,
+        556,
         1380,
-        560
+        576
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -347,7 +347,7 @@
         20,
         1132,
         680,
-        520
+        536
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -360,7 +360,7 @@
         708,
         1132,
         680,
-        520
+        536
       ],
       "color": "#3f789e",
       "font_size": 24,

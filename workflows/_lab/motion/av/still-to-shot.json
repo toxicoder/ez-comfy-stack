@@ -1,6 +1,6 @@
 {
   "id": "still-to-shot",
-  "revision": 13,
+  "revision": 14,
   "last_node_id": 27,
   "last_link_id": 43,
   "nodes": [
@@ -1412,9 +1412,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         1000,
-        520
+        536
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1425,9 +1425,9 @@
       "title": "QUALITY",
       "bounding": [
         1028,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1438,9 +1438,9 @@
       "title": "MODEL",
       "bounding": [
         20,
-        592,
+        576,
         560,
-        624
+        640
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1451,9 +1451,9 @@
       "title": "INPUT",
       "bounding": [
         588,
-        592,
+        576,
         360,
-        576
+        592
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1464,9 +1464,9 @@
       "title": "PROMPT",
       "bounding": [
         956,
-        592,
+        576,
         460,
-        1476
+        1492
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1477,9 +1477,9 @@
       "title": "SETTINGS",
       "bounding": [
         1424,
-        592,
+        576,
         400,
-        1518
+        1534
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1490,9 +1490,9 @@
       "title": "OUTPUT",
       "bounding": [
         1832,
-        592,
+        576,
         360,
-        1612
+        1628
       ],
       "color": "#a1309b",
       "font_size": 24,

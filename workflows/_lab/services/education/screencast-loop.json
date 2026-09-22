@@ -1,6 +1,6 @@
 {
   "id": "screencast-loop",
-  "revision": 2,
+  "revision": 3,
   "last_node_id": 20,
   "last_link_id": 27,
   "nodes": [
@@ -116,7 +116,7 @@
       "type": "LoadImage",
       "pos": [
         40,
-        1042
+        1058
       ],
       "size": [
         320,
@@ -993,9 +993,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         1000,
-        420
+        436
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1006,9 +1006,9 @@
       "title": "QUALITY",
       "bounding": [
         1028,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1019,9 +1019,9 @@
       "title": "Load models",
       "bounding": [
         20,
-        492,
+        476,
         400,
-        494
+        510
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1034,7 +1034,7 @@
         20,
         986,
         360,
-        414
+        430
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1045,9 +1045,9 @@
       "title": "SETTINGS",
       "bounding": [
         1400,
-        492,
+        476,
         640,
-        836
+        852
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1058,9 +1058,9 @@
       "title": "OUTPUT",
       "bounding": [
         2400,
-        492,
+        476,
         360,
-        980
+        996
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1071,9 +1071,9 @@
       "title": "INPUT",
       "bounding": [
         2768,
-        492,
+        476,
         320,
-        190
+        206
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1084,9 +1084,9 @@
       "title": "PROMPT",
       "bounding": [
         3096,
-        492,
+        476,
         460,
-        1476
+        1492
       ],
       "color": "#3f789e",
       "font_size": 24,

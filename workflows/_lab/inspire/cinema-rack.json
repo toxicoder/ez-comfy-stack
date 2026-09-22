@@ -1,6 +1,6 @@
 {
   "id": "cinema-rack",
-  "revision": 2,
+  "revision": 3,
   "last_node_id": 7,
   "last_link_id": 4,
   "nodes": [
@@ -89,7 +89,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         40,
-        1108
+        1124
       ],
       "size": [
         420,
@@ -137,7 +137,7 @@
       "type": "EZWanPromptEnhance",
       "pos": [
         508,
-        1108
+        1124
       ],
       "size": [
         420,
@@ -183,7 +183,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         976,
-        1108
+        1124
       ],
       "size": [
         420,
@@ -326,9 +326,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         1380,
-        460
+        476
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -339,9 +339,9 @@
       "title": "QUALITY",
       "bounding": [
         1408,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -352,9 +352,9 @@
       "title": "RACK",
       "bounding": [
         20,
-        532,
+        516,
         1380,
-        520
+        536
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -367,7 +367,7 @@
         20,
         1052,
         460,
-        520
+        536
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -380,7 +380,7 @@
         488,
         1052,
         460,
-        520
+        536
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -393,7 +393,7 @@
         956,
         1052,
         460,
-        520
+        536
       ],
       "color": "#3f789e",
       "font_size": 24,

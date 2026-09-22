@@ -1,6 +1,6 @@
 {
   "id": "prompt-forge",
-  "revision": 2,
+  "revision": 3,
   "last_node_id": 11,
   "last_link_id": 12,
   "nodes": [
@@ -115,7 +115,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         40,
-        1108
+        1124
       ],
       "size": [
         420,
@@ -166,7 +166,7 @@
       "type": "EZWanPromptEnhance",
       "pos": [
         508,
-        1108
+        1124
       ],
       "size": [
         420,
@@ -269,7 +269,7 @@
       "type": "EZZimagePromptEnhance",
       "pos": [
         40,
-        1628
+        1660
       ],
       "size": [
         420,
@@ -319,7 +319,7 @@
       "type": "EZLongCatPromptEnhance",
       "pos": [
         508,
-        1628
+        1660
       ],
       "size": [
         420,
@@ -370,7 +370,7 @@
       "type": "EZDreamXPromptEnhance",
       "pos": [
         976,
-        1572
+        1588
       ],
       "size": [
         420,
@@ -576,9 +576,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         1380,
-        460
+        476
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -589,9 +589,9 @@
       "title": "QUALITY",
       "bounding": [
         1408,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -602,9 +602,9 @@
       "title": "DESK",
       "bounding": [
         20,
-        532,
+        516,
         928,
-        520
+        536
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -617,7 +617,7 @@
         20,
         1052,
         460,
-        520
+        536
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -630,7 +630,7 @@
         488,
         1052,
         460,
-        520
+        536
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -641,9 +641,9 @@
       "title": "LTX",
       "bounding": [
         956,
-        996,
+        980,
         460,
-        520
+        536
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -654,9 +654,9 @@
       "title": "Z-IMAGE",
       "bounding": [
         20,
-        1572,
+        1588,
         460,
-        520
+        536
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -667,9 +667,9 @@
       "title": "LONGCAT",
       "bounding": [
         488,
-        1572,
+        1588,
         460,
-        520
+        536
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -682,7 +682,7 @@
         956,
         1516,
         460,
-        520
+        536
       ],
       "color": "#3f789e",
       "font_size": 24,

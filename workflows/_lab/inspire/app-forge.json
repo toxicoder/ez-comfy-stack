@@ -1,6 +1,6 @@
 {
   "id": "app-forge",
-  "revision": 2,
+  "revision": 3,
   "last_node_id": 4,
   "last_link_id": 0,
   "nodes": [
@@ -128,9 +128,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         760,
-        480
+        496
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -141,9 +141,9 @@
       "title": "QUALITY",
       "bounding": [
         788,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -154,9 +154,9 @@
       "title": "FORGE",
       "bounding": [
         20,
-        552,
+        536,
         760,
-        560
+        576
       ],
       "color": "#3f789e",
       "font_size": 24,

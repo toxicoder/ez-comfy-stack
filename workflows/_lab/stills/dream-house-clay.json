@@ -1,6 +1,6 @@
 {
   "id": "dream-house-clay",
-  "revision": 5,
+  "revision": 6,
   "last_node_id": 149,
   "last_link_id": 213,
   "nodes": [
@@ -158,7 +158,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         40,
-        1340
+        1356
       ],
       "size": [
         420,
@@ -695,7 +695,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1170
+        1186
       ],
       "size": [
         400,
@@ -737,7 +737,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         980,
-        1170
+        1186
       ],
       "size": [
         340,
@@ -784,7 +784,7 @@
       "type": "LoadImage",
       "pos": [
         1368,
-        1170
+        1186
       ],
       "size": [
         280,
@@ -818,7 +818,7 @@
       "type": "VAEEncode",
       "pos": [
         1696,
-        1170
+        1186
       ],
       "size": [
         220,
@@ -860,7 +860,7 @@
       "type": "ReferenceLatent",
       "pos": [
         1964,
-        1170
+        1186
       ],
       "size": [
         260,
@@ -903,7 +903,7 @@
       "type": "KSampler",
       "pos": [
         2272,
-        1170
+        1186
       ],
       "size": [
         300,
@@ -963,7 +963,7 @@
       "type": "VAEDecode",
       "pos": [
         2620,
-        1170
+        1186
       ],
       "size": [
         220,
@@ -1005,7 +1005,7 @@
       "type": "SaveImage",
       "pos": [
         2888,
-        1170
+        1186
       ],
       "size": [
         280,
@@ -1035,7 +1035,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1692
+        1724
       ],
       "size": [
         400,
@@ -1077,7 +1077,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         980,
-        1692
+        1724
       ],
       "size": [
         340,
@@ -1124,7 +1124,7 @@
       "type": "LoadImage",
       "pos": [
         1368,
-        1692
+        1724
       ],
       "size": [
         280,
@@ -1158,7 +1158,7 @@
       "type": "VAEEncode",
       "pos": [
         1696,
-        1692
+        1724
       ],
       "size": [
         220,
@@ -1200,7 +1200,7 @@
       "type": "ReferenceLatent",
       "pos": [
         1964,
-        1692
+        1724
       ],
       "size": [
         260,
@@ -1243,7 +1243,7 @@
       "type": "KSampler",
       "pos": [
         2272,
-        1692
+        1724
       ],
       "size": [
         300,
@@ -1303,7 +1303,7 @@
       "type": "VAEDecode",
       "pos": [
         2620,
-        1692
+        1724
       ],
       "size": [
         220,
@@ -1345,7 +1345,7 @@
       "type": "SaveImage",
       "pos": [
         2888,
-        1692
+        1724
       ],
       "size": [
         280,
@@ -1375,7 +1375,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        2252
+        2262
       ],
       "size": [
         400,
@@ -1417,7 +1417,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         980,
-        2252
+        2262
       ],
       "size": [
         340,
@@ -1464,7 +1464,7 @@
       "type": "LoadImage",
       "pos": [
         1368,
-        2252
+        2262
       ],
       "size": [
         280,
@@ -1498,7 +1498,7 @@
       "type": "VAEEncode",
       "pos": [
         1696,
-        2252
+        2262
       ],
       "size": [
         220,
@@ -1540,7 +1540,7 @@
       "type": "ReferenceLatent",
       "pos": [
         1964,
-        2252
+        2262
       ],
       "size": [
         260,
@@ -1583,7 +1583,7 @@
       "type": "KSampler",
       "pos": [
         2272,
-        2252
+        2262
       ],
       "size": [
         300,
@@ -1643,7 +1643,7 @@
       "type": "VAEDecode",
       "pos": [
         2620,
-        2252
+        2262
       ],
       "size": [
         220,
@@ -1685,7 +1685,7 @@
       "type": "SaveImage",
       "pos": [
         2888,
-        2252
+        2262
       ],
       "size": [
         280,
@@ -1715,7 +1715,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        2774
+        2800
       ],
       "size": [
         400,
@@ -1757,7 +1757,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         980,
-        2774
+        2800
       ],
       "size": [
         340,
@@ -1804,7 +1804,7 @@
       "type": "LoadImage",
       "pos": [
         1368,
-        2774
+        2800
       ],
       "size": [
         280,
@@ -1838,7 +1838,7 @@
       "type": "VAEEncode",
       "pos": [
         1696,
-        2774
+        2800
       ],
       "size": [
         220,
@@ -1880,7 +1880,7 @@
       "type": "ReferenceLatent",
       "pos": [
         1964,
-        2774
+        2800
       ],
       "size": [
         260,
@@ -1923,7 +1923,7 @@
       "type": "KSampler",
       "pos": [
         2272,
-        2774
+        2800
       ],
       "size": [
         300,
@@ -1983,7 +1983,7 @@
       "type": "VAEDecode",
       "pos": [
         2620,
-        2774
+        2800
       ],
       "size": [
         220,
@@ -2025,7 +2025,7 @@
       "type": "SaveImage",
       "pos": [
         2888,
-        2774
+        2800
       ],
       "size": [
         280,
@@ -2055,7 +2055,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        3296
+        3338
       ],
       "size": [
         400,
@@ -2097,7 +2097,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         980,
-        3296
+        3338
       ],
       "size": [
         340,
@@ -2144,7 +2144,7 @@
       "type": "LoadImage",
       "pos": [
         1368,
-        3296
+        3338
       ],
       "size": [
         280,
@@ -2178,7 +2178,7 @@
       "type": "VAEEncode",
       "pos": [
         1696,
-        3296
+        3338
       ],
       "size": [
         220,
@@ -2220,7 +2220,7 @@
       "type": "ReferenceLatent",
       "pos": [
         1964,
-        3296
+        3338
       ],
       "size": [
         260,
@@ -2263,7 +2263,7 @@
       "type": "KSampler",
       "pos": [
         2272,
-        3296
+        3338
       ],
       "size": [
         300,
@@ -2323,7 +2323,7 @@
       "type": "VAEDecode",
       "pos": [
         2620,
-        3296
+        3338
       ],
       "size": [
         220,
@@ -2365,7 +2365,7 @@
       "type": "SaveImage",
       "pos": [
         2888,
-        3296
+        3338
       ],
       "size": [
         280,
@@ -2395,7 +2395,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        3818
+        3876
       ],
       "size": [
         400,
@@ -2437,7 +2437,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         980,
-        3818
+        3876
       ],
       "size": [
         340,
@@ -2484,7 +2484,7 @@
       "type": "LoadImage",
       "pos": [
         1368,
-        3818
+        3876
       ],
       "size": [
         280,
@@ -2518,7 +2518,7 @@
       "type": "VAEEncode",
       "pos": [
         1696,
-        3818
+        3876
       ],
       "size": [
         220,
@@ -2560,7 +2560,7 @@
       "type": "ReferenceLatent",
       "pos": [
         1964,
-        3818
+        3876
       ],
       "size": [
         260,
@@ -2603,7 +2603,7 @@
       "type": "KSampler",
       "pos": [
         2272,
-        3818
+        3876
       ],
       "size": [
         300,
@@ -2663,7 +2663,7 @@
       "type": "VAEDecode",
       "pos": [
         2620,
-        3818
+        3876
       ],
       "size": [
         220,
@@ -2705,7 +2705,7 @@
       "type": "SaveImage",
       "pos": [
         2888,
-        3818
+        3876
       ],
       "size": [
         280,
@@ -2735,7 +2735,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        4340
+        4414
       ],
       "size": [
         400,
@@ -2777,7 +2777,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         980,
-        4340
+        4414
       ],
       "size": [
         340,
@@ -2824,7 +2824,7 @@
       "type": "LoadImage",
       "pos": [
         1368,
-        4340
+        4414
       ],
       "size": [
         280,
@@ -2858,7 +2858,7 @@
       "type": "VAEEncode",
       "pos": [
         1696,
-        4340
+        4414
       ],
       "size": [
         220,
@@ -2900,7 +2900,7 @@
       "type": "ReferenceLatent",
       "pos": [
         1964,
-        4340
+        4414
       ],
       "size": [
         260,
@@ -2943,7 +2943,7 @@
       "type": "KSampler",
       "pos": [
         2272,
-        4340
+        4414
       ],
       "size": [
         300,
@@ -3003,7 +3003,7 @@
       "type": "VAEDecode",
       "pos": [
         2620,
-        4340
+        4414
       ],
       "size": [
         220,
@@ -3045,7 +3045,7 @@
       "type": "SaveImage",
       "pos": [
         2888,
-        4340
+        4414
       ],
       "size": [
         280,
@@ -3075,7 +3075,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        4862
+        4952
       ],
       "size": [
         400,
@@ -3117,7 +3117,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         980,
-        4862
+        4952
       ],
       "size": [
         340,
@@ -3164,7 +3164,7 @@
       "type": "LoadImage",
       "pos": [
         1368,
-        4862
+        4952
       ],
       "size": [
         280,
@@ -3198,7 +3198,7 @@
       "type": "VAEEncode",
       "pos": [
         1696,
-        4862
+        4952
       ],
       "size": [
         220,
@@ -3240,7 +3240,7 @@
       "type": "ReferenceLatent",
       "pos": [
         1964,
-        4862
+        4952
       ],
       "size": [
         260,
@@ -3283,7 +3283,7 @@
       "type": "KSampler",
       "pos": [
         2272,
-        4862
+        4952
       ],
       "size": [
         300,
@@ -3343,7 +3343,7 @@
       "type": "VAEDecode",
       "pos": [
         2620,
-        4862
+        4952
       ],
       "size": [
         220,
@@ -3385,7 +3385,7 @@
       "type": "SaveImage",
       "pos": [
         2888,
-        4862
+        4952
       ],
       "size": [
         280,
@@ -3415,7 +3415,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        5876
+        5982
       ],
       "size": [
         400,
@@ -3457,7 +3457,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         980,
-        5384
+        5490
       ],
       "size": [
         340,
@@ -3504,7 +3504,7 @@
       "type": "LoadImage",
       "pos": [
         1368,
-        5384
+        5490
       ],
       "size": [
         280,
@@ -3538,7 +3538,7 @@
       "type": "VAEEncode",
       "pos": [
         1696,
-        5384
+        5490
       ],
       "size": [
         220,
@@ -3580,7 +3580,7 @@
       "type": "ReferenceLatent",
       "pos": [
         1964,
-        5384
+        5490
       ],
       "size": [
         260,
@@ -3623,7 +3623,7 @@
       "type": "KSampler",
       "pos": [
         2272,
-        5384
+        5490
       ],
       "size": [
         300,
@@ -3683,7 +3683,7 @@
       "type": "VAEDecode",
       "pos": [
         2620,
-        5384
+        5490
       ],
       "size": [
         220,
@@ -3725,7 +3725,7 @@
       "type": "SaveImage",
       "pos": [
         2888,
-        5384
+        5490
       ],
       "size": [
         280,
@@ -3755,7 +3755,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         480,
-        5384
+        5490
       ],
       "size": [
         420,
@@ -3882,7 +3882,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2848,
-        1512
+        1528
       ],
       "size": [
         280,
@@ -3935,7 +3935,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2848,
-        2034
+        2066
       ],
       "size": [
         280,
@@ -3988,7 +3988,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2848,
-        2594
+        2604
       ],
       "size": [
         280,
@@ -4041,7 +4041,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2848,
-        3116
+        3142
       ],
       "size": [
         280,
@@ -4094,7 +4094,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2848,
-        3638
+        3680
       ],
       "size": [
         280,
@@ -4147,7 +4147,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2848,
-        4160
+        4218
       ],
       "size": [
         280,
@@ -4200,7 +4200,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2848,
-        4682
+        4756
       ],
       "size": [
         280,
@@ -4253,7 +4253,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2848,
-        5204
+        5294
       ],
       "size": [
         280,
@@ -4306,7 +4306,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2848,
-        5726
+        5832
       ],
       "size": [
         280,
@@ -6691,9 +6691,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         460,
-        520
+        536
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -6704,9 +6704,9 @@
       "title": "QUALITY",
       "bounding": [
         488,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -6717,9 +6717,9 @@
       "title": "MODEL",
       "bounding": [
         20,
-        592,
+        576,
         400,
-        692
+        708
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -6732,7 +6732,7 @@
         20,
         1284,
         460,
-        520
+        536
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -6743,9 +6743,9 @@
       "title": "SHOT 01 tower",
       "bounding": [
         500,
-        592,
+        576,
         2688,
-        522
+        538
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -6758,7 +6758,7 @@
         500,
         1114,
         2688,
-        522
+        538
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -6769,9 +6769,9 @@
       "title": "SHOT 03 lounge",
       "bounding": [
         500,
-        1636,
+        1652,
         2688,
-        522
+        538
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -6782,9 +6782,9 @@
       "title": "SHOT 04 kitchen",
       "bounding": [
         500,
-        2196,
+        2190,
         2688,
-        522
+        538
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -6795,9 +6795,9 @@
       "title": "SHOT 05 dining",
       "bounding": [
         500,
-        2718,
+        2728,
         2688,
-        522
+        538
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -6808,9 +6808,9 @@
       "title": "SHOT 06 bedroom",
       "bounding": [
         500,
-        3240,
+        3266,
         2688,
-        522
+        538
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -6821,9 +6821,9 @@
       "title": "SHOT 07 bath",
       "bounding": [
         500,
-        3762,
+        3804,
         2688,
-        522
+        538
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -6834,9 +6834,9 @@
       "title": "SHOT 08 terrace",
       "bounding": [
         500,
-        4284,
+        4342,
         2688,
-        522
+        538
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -6847,9 +6847,9 @@
       "title": "SHOT 09 drone",
       "bounding": [
         500,
-        4806,
+        4880,
         2688,
-        522
+        538
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -6860,9 +6860,9 @@
       "title": "SHOT 10 study",
       "bounding": [
         460,
-        5328,
+        5418,
         2728,
-        772
+        788
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -6873,9 +6873,9 @@
       "title": "PROMPT",
       "bounding": [
         3196,
-        592,
+        576,
         460,
-        260
+        276
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -6886,9 +6886,9 @@
       "title": "SETTINGS",
       "bounding": [
         3664,
-        592,
+        576,
         320,
-        206
+        222
       ],
       "color": "#3f789e",
       "font_size": 24,

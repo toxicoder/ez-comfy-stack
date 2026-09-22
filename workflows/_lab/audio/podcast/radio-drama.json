@@ -1,6 +1,6 @@
 {
   "id": "radio-drama",
-  "revision": 3,
+  "revision": 4,
   "last_node_id": 37,
   "last_link_id": 30,
   "nodes": [
@@ -922,7 +922,7 @@
       "type": "UNETLoader",
       "pos": [
         2720,
-        1310
+        1326
       ],
       "size": [
         360,
@@ -954,7 +954,7 @@
       "type": "VHS_VideoCombine",
       "pos": [
         2720,
-        1550
+        1566
       ],
       "size": [
         320,
@@ -1386,9 +1386,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         440,
-        520
+        536
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1399,9 +1399,9 @@
       "title": "QUALITY",
       "bounding": [
         468,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1412,9 +1412,9 @@
       "title": "MODEL",
       "bounding": [
         20,
-        592,
+        576,
         448,
-        1626
+        1642
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1425,9 +1425,9 @@
       "title": "PROMPT",
       "bounding": [
         480,
-        592,
+        576,
         460,
-        2182
+        2198
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1438,9 +1438,9 @@
       "title": "SETTINGS",
       "bounding": [
         1420,
-        592,
+        576,
         360,
-        1256
+        1272
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1451,9 +1451,9 @@
       "title": "OUTPUT",
       "bounding": [
         1840,
-        592,
+        576,
         720,
-        998
+        1014
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1464,9 +1464,9 @@
       "title": "WAN BUMPER (off)",
       "bounding": [
         2700,
-        592,
+        576,
         400,
-        662
+        678
       ],
       "color": "#232",
       "font_size": 24,
@@ -1479,7 +1479,7 @@
         2700,
         1254,
         400,
-        540
+        556
       ],
       "color": "#232",
       "font_size": 24,

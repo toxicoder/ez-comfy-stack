@@ -1,6 +1,6 @@
 {
   "id": "interior-detail",
-  "revision": 4,
+  "revision": 5,
   "last_node_id": 20,
   "last_link_id": 30,
   "nodes": [
@@ -1073,9 +1073,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         1000,
-        380
+        396
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1086,9 +1086,9 @@
       "title": "QUALITY",
       "bounding": [
         1028,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1099,9 +1099,9 @@
       "title": "MODEL",
       "bounding": [
         20,
-        452,
+        436,
         400,
-        490
+        506
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1112,9 +1112,9 @@
       "title": "PROMPT",
       "bounding": [
         460,
-        452,
+        436,
         928,
-        1244
+        1260
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1125,9 +1125,9 @@
       "title": "SETTINGS",
       "bounding": [
         1420,
-        452,
+        436,
         400,
-        958
+        974
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1138,9 +1138,9 @@
       "title": "OUTPUT",
       "bounding": [
         1820,
-        452,
+        436,
         328,
-        640
+        656
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1151,9 +1151,9 @@
       "title": "INPUT",
       "bounding": [
         2528,
-        452,
+        436,
         400,
-        980
+        996
       ],
       "color": "#a1309b",
       "font_size": 24,

@@ -1,6 +1,6 @@
 {
   "id": "time-of-day",
-  "revision": 6,
+  "revision": 7,
   "last_node_id": 50,
   "last_link_id": 87,
   "nodes": [
@@ -622,7 +622,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1110
+        1126
       ],
       "size": [
         420,
@@ -664,7 +664,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        1110
+        1126
       ],
       "size": [
         360,
@@ -711,7 +711,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        1110
+        1126
       ],
       "size": [
         320,
@@ -771,7 +771,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        1110
+        1126
       ],
       "size": [
         240,
@@ -813,7 +813,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        1110
+        1126
       ],
       "size": [
         280,
@@ -843,7 +843,7 @@
       "type": "ReferenceLatent",
       "pos": [
         988,
-        1342
+        1358
       ],
       "size": [
         240,
@@ -886,7 +886,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1632
+        1664
       ],
       "size": [
         420,
@@ -928,7 +928,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        1632
+        1664
       ],
       "size": [
         360,
@@ -975,7 +975,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        1632
+        1664
       ],
       "size": [
         320,
@@ -1035,7 +1035,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        1632
+        1664
       ],
       "size": [
         240,
@@ -1077,7 +1077,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        1632
+        1664
       ],
       "size": [
         280,
@@ -1107,7 +1107,7 @@
       "type": "ReferenceLatent",
       "pos": [
         988,
-        1864
+        1896
       ],
       "size": [
         240,
@@ -1150,7 +1150,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        2154
+        2202
       ],
       "size": [
         420,
@@ -1192,7 +1192,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        2154
+        2202
       ],
       "size": [
         360,
@@ -1239,7 +1239,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        2154
+        2202
       ],
       "size": [
         320,
@@ -1299,7 +1299,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        2154
+        2202
       ],
       "size": [
         240,
@@ -1341,7 +1341,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        2154
+        2202
       ],
       "size": [
         280,
@@ -1371,7 +1371,7 @@
       "type": "ReferenceLatent",
       "pos": [
         988,
-        2404
+        2452
       ],
       "size": [
         240,
@@ -1414,7 +1414,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         508,
-        2406
+        2454
       ],
       "size": [
         420,
@@ -1609,7 +1609,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        1452
+        1468
       ],
       "size": [
         280,
@@ -1662,7 +1662,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        1974
+        2006
       ],
       "size": [
         280,
@@ -1715,7 +1715,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        2496
+        2544
       ],
       "size": [
         280,
@@ -2821,9 +2821,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         460,
-        460
+        476
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2834,9 +2834,9 @@
       "title": "QUALITY",
       "bounding": [
         488,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -2847,9 +2847,9 @@
       "title": "MODEL",
       "bounding": [
         20,
-        532,
+        516,
         400,
-        692
+        708
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2860,9 +2860,9 @@
       "title": "IDENTITY",
       "bounding": [
         20,
-        1338,
+        1322,
         460,
-        520
+        536
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -2873,9 +2873,9 @@
       "title": "SHOT GOLDEN",
       "bounding": [
         500,
-        532,
+        516,
         1852,
-        522
+        538
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2888,7 +2888,7 @@
         500,
         1054,
         1852,
-        522
+        538
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2899,9 +2899,9 @@
       "title": "SHOT NOON",
       "bounding": [
         500,
-        1576,
+        1592,
         1852,
-        522
+        538
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2912,9 +2912,9 @@
       "title": "SHOT NIGHT",
       "bounding": [
         488,
-        2098,
+        2130,
         1864,
-        772
+        788
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2925,9 +2925,9 @@
       "title": "PROMPT",
       "bounding": [
         2360,
-        532,
+        516,
         460,
-        260
+        276
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -2938,9 +2938,9 @@
       "title": "SETTINGS",
       "bounding": [
         2828,
-        532,
+        516,
         400,
-        650
+        666
       ],
       "color": "#3f789e",
       "font_size": 24,
