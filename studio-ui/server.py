@@ -4,12 +4,13 @@
 from __future__ import annotations
 
 import html
+import io
 import json
 import re
 import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from typing import Any, TypedDict
+from typing import Any, BinaryIO, TypedDict
 from urllib.parse import parse_qs, urlparse
 
 # Film ids and output prefixes used as a single path segment under guides/.
@@ -373,6 +374,87 @@ def _safe_thumb(slug: str, shot: str, kind: str) -> Path | None:
     return None
 
 
+def parse_byte_range(header: str, size: int) -> tuple[int, int] | None:
+    """Parse one ``bytes=`` range into an inclusive span.
+
+    Accepts ``START-END``, open ``START-``, and a suffix ``-N``. A comma
+    means more than one range, which this board does not serve.
+
+    Args:
+        header: Raw ``Range`` header value.
+        size: File size in bytes.
+
+    Returns:
+        ``(start, end)`` inclusive, or ``None`` when the range cannot be
+        satisfied.
+    """
+    text = header.strip()
+    if not text.lower().startswith("bytes="):
+        return None
+    spec = text[6:].strip()
+    if not spec or "," in spec or size < 1:
+        return None
+    if spec.startswith("-"):
+        try:
+            tail = int(spec[1:])
+        except ValueError:
+            return None
+        if tail < 1:
+            return None
+        start = size - tail
+        if start < 0:
+            start = 0
+        return start, size - 1
+    if "-" not in spec:
+        return None
+    start_text, end_text = spec.split("-", 1)
+    try:
+        start = int(start_text)
+    except ValueError:
+        return None
+    if start >= size:
+        return None
+    if end_text == "":
+        return start, size - 1
+    try:
+        end = int(end_text)
+    except ValueError:
+        return None
+    if end < start:
+        return None
+    if end >= size:
+        end = size - 1
+    return start, end
+
+
+def write_file_span(
+    src: BinaryIO,
+    dest: io.BufferedIOBase,
+    start: int,
+    length: int,
+    *,
+    chunk: int = 65536,
+) -> None:
+    """Copy ``length`` bytes from ``src`` at ``start`` into ``dest``.
+
+    Args:
+        src: Opened binary file.
+        dest: Socket or buffer (``BaseHTTPRequestHandler.wfile``).
+        start: First byte offset.
+        length: Number of bytes to copy.
+        chunk: Read size. Kept small so a 512m studio-ui process does not
+            hold the master.
+    """
+    src.seek(start)
+    remaining = length
+    while remaining > 0:
+        data = src.read(min(chunk, remaining))
+        if not data:
+            break
+        dest.write(data)
+        remaining -= len(data)
+
+
 class Handler(BaseHTTPRequestHandler):
     """Stdlib HTTP handler for the board, thumbs, and allowlisted MP4s."""
 
@@ -413,6 +495,70 @@ class Handler(BaseHTTPRequestHandler):
             return
         self._send(watch_page(slug) or b"", "text/html; charset=utf-8")
 
+    def _header(self, name: str) -> str:
+        """Read one request header.
+
+        Args:
+            name: Header name.
+
+        Returns:
+            The value, or ``""`` when the test double has no headers.
+        """
+        headers = getattr(self, "headers", None)
+        if headers is None:
+            return ""
+        return str(headers.get(name) or "")
+
+    def _stream_file(
+        self,
+        path: Path,
+        content_type: str,
+        *,
+        download_name: str | None,
+        honor_range: bool,
+    ) -> None:
+        """Stream a file in chunks, honoring one byte range.
+
+        Args:
+            path: File that exists.
+            content_type: ``Content-Type`` value.
+            download_name: Attachment filename. When set, ``Range`` is ignored
+                so the download is the whole file.
+            honor_range: When True, a ``Range`` header selects a slice.
+        """
+        size = path.stat().st_size
+        start = 0
+        end = size - 1 if size else 0
+        status = 200
+        if honor_range:
+            requested = self._header("Range")
+            if requested:
+                span = parse_byte_range(requested, size)
+                if span is None:
+                    self.send_response(416)
+                    self.send_header("Content-Range", f"bytes */{size}")
+                    self.send_header("Content-Length", "0")
+                    self.end_headers()
+                    return
+                start, end = span
+                status = 206
+        length = 0 if status == 200 and size == 0 else end - start + 1
+        self.send_response(status)
+        self.send_header("Accept-Ranges", "bytes")
+        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Length", str(length))
+        if status == 206:
+            self.send_header("Content-Range", f"bytes {start}-{end}/{size}")
+        if download_name:
+            self.send_header(
+                "Content-Disposition", f'attachment; filename="{download_name}"'
+            )
+        self.end_headers()
+        if length == 0:
+            return
+        with path.open("rb") as src:
+            write_file_span(src, self.wfile, start, length)
+
     def _serve_media(self, slug: str, query: dict[str, list[str]]) -> None:
         """Serve the published MP4, optionally as a download.
 
@@ -424,12 +570,14 @@ class Handler(BaseHTTPRequestHandler):
         if path is None:
             self._send_404()
             return
-        extra: list[tuple[str, str]] = []
-        if (query.get("dl") or [""])[0] == "1":
-            extra.append(
-                ("Content-Disposition", f'attachment; filename="{path.name}"')
-            )
-        self._send(path.read_bytes(), "video/mp4", extra)
+        download = (query.get("dl") or [""])[0] == "1"
+        name = path.name if download else None
+        self._stream_file(
+            path,
+            "video/mp4",
+            download_name=name,
+            honor_range=not download,
+        )
 
     def _serve_thumb(self, query: dict[str, list[str]]) -> None:
         """Serve an allowlisted clay/look PNG.
@@ -444,7 +592,7 @@ class Handler(BaseHTTPRequestHandler):
         if path is None:
             self._send_404()
             return
-        self._send(path.read_bytes(), "image/png")
+        self._stream_file(path, "image/png", download_name=None, honor_range=True)
 
     def _serve_board(self) -> None:
         """Serve the film board HTML."""
