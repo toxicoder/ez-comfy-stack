@@ -10,7 +10,7 @@ tags: [comfyui, workflows, audio, rap, edm, catalog]
 
 - **Podcast, dub, and RAP-FIRST** graphs (occupancy **audio**)
 - **Nine Nill Bye albums** (all track tables)
-- **Five Drive-through albums** (all track tables)
+- **Six Drive-through albums** (all track tables)
 
 **What this enables**
 
@@ -46,7 +46,7 @@ Nine Nill Bye albums under `_lab/audio/albums/nill-bye/<album>/`. Queue a number
 | **audio/albums/nill-bye/winterize-wells** | Fifteen tracks. Progress variety — methods and statutes, no roast target. `album-render --album nill-bye/winterize-wells` |
 | **audio/albums/nill-bye/duty-switch** | Fifteen tracks. Progress club beds, same builder rule. `album-render --album nill-bye/duty-switch` |
 
-Five Drive-through albums under `_lab/audio/albums/drive-through/<album>/`. Warped hybrid-trap bass set spliced from [Audio Rack](audio-rack.md) (not rap over a club bed). 2-bar build, then a heavy drop, then switch-ups. 150–480 s, each cell under 3 seconds, tempos 165–176, bass boosted chest-sub, no brass or high leads. Headliner / Afterparty / Secret Homage vary Comfy node placement. EDM playbook: [Drive-through EDM](music-edm.md).
+Six Drive-through albums under `_lab/audio/albums/drive-through/<album>/`. Warped hybrid-trap bass set spliced from [Audio Rack](audio-rack.md) (not rap over a club bed). 2-bar build, then a heavy drop, then switch-ups. 150–480 s, each cell under 3 seconds, tempos 165–176, bass boosted chest-sub, no brass or high leads. Headliner / Afterparty / Secret Homage / My Coder vary Comfy node placement. EDM playbook: [Drive-through EDM](music-edm.md).
 
 | Album | What it does |
 | --- | --- |
@@ -55,6 +55,7 @@ Five Drive-through albums under `_lab/audio/albums/drive-through/<album>/`. Warp
 | **audio/albums/drive-through/headliner** | Fifteen tracks. Headliner. `album-render --album drive-through/headliner` |
 | **audio/albums/drive-through/afterparty** | Twenty tracks. Afterparty. `album-render --album drive-through/afterparty` |
 | **audio/albums/drive-through/secret-homage** | Twenty tracks. Secret Homage. `album-render --album drive-through/secret-homage` |
+| **audio/albums/drive-through/my-coder** | Sixteen tracks. My Coder: the Drive-through coder read as music. `album-render --album drive-through/my-coder` |
 
 Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
 
@@ -274,9 +275,9 @@ Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
 
 ### Drive-through EDM examples
 
-Eighty-five extra full-track graphs under **`_lab/audio/albums/drive-through/<album>/`**. Same AIO, sampler, occupancy **audio**. App **Duration (seconds)** is the sum of that take's stanzas (150–480 s), not a clock the arranger stretches bars to hit. Queue a numbered track **on its own**, or `album-render --album drive-through/<album-slug>`. SaveAudio stem is **`NN - Song Title`**.
+One hundred one extra full-track graphs under **`_lab/audio/albums/drive-through/<album>/`**. Same AIO, sampler, occupancy **audio**. App **Duration (seconds)** is the sum of that take's stanzas (150–480 s), not a clock the arranger stretches bars to hit. Queue a numbered track **on its own**, or `album-render --album drive-through/<album-slug>`. SaveAudio stem is **`NN - Song Title`**.
 
-Fictional act only: **Drive-through** (hardcore, pure of heart) playing a **live bass DJ set**. Original **warped hybrid-trap EDM** spliced from [Audio Rack](audio-rack.md) catalogs (hybrid trap, riddim, tearout, brostep, wave bass, color bass, drumstep, dirty dubstep, neuro bass, chest/dirty bass, festival trap — not techno, not big room, not progressive house). Named recipes fill empty axes; each take overrides tempo and bass. No living-DJ names. No famous-hook paraphrases. Eighty-three takes lock `instrumental, no vocals, no singing, no choir, no vocal chops` via `mix_drive_lock` (App **Vocal / instrumental** = instrumental). Two takes are sparse DJ-shout treats (`wide open`, `second wave`): App mode **vocal**, `voc_dj_shout`, one 1–2 word `[chorus]` chop, no `[verse]`. Arrangement scores are production cues inside brackets. Every take opens with a 2-bar build, then a heavy warped drop, then switch-ups. Stanzas are 2 bars (under 3 seconds), bass boosted, with the layers kept up. A five-second gap is not in the score. Tempos are 165–176. No brass and no high leads. Trap drums, chest-sub / 808. Not a Nill Bye verse/chorus loop. Some takes add dual-action pedal bass under rolling hats. Phase2, phase3, and phase4 graphs keep that ACE topology but vary Comfy node placement across five layouts (`column`, `wide-stage`, `stacked-tower`, `prompt-left`, `output-rail`). ACE-Step timbre is invented. Human selection and edit required before any release. Longer Queues cost RAM and time linearly.
+Fictional act only: **Drive-through** (hardcore, pure of heart) playing a **live bass DJ set**. Original **warped hybrid-trap EDM** spliced from [Audio Rack](audio-rack.md) catalogs (hybrid trap, riddim, tearout, brostep, wave bass, color bass, drumstep, dirty dubstep, neuro bass, chest/dirty bass, festival trap — not techno, not big room, not progressive house). Named recipes fill empty axes; each take overrides tempo and bass. No living-DJ names. No famous-hook paraphrases. Ninety-nine takes lock `instrumental, no vocals, no singing, no choir, no vocal chops` via `mix_drive_lock` (App **Vocal / instrumental** = instrumental). Two takes are sparse DJ-shout treats (`wide open`, `second wave`): App mode **vocal**, `voc_dj_shout`, one 1–2 word `[chorus]` chop, no `[verse]`. Arrangement scores are production cues inside brackets. Every take opens with a 2-bar build, then a heavy warped drop, then switch-ups. Stanzas are 2 bars (under 3 seconds), bass boosted, with the layers kept up. A five-second gap is not in the score. Tempos are 165–176. No brass and no high leads. Trap drums, chest-sub / 808. Not a Nill Bye verse/chorus loop. Some takes add dual-action pedal bass under rolling hats. Phase2, phase3, phase4, and phase5 graphs keep that ACE topology but vary Comfy node placement across five layouts (`column`, `wide-stage`, `stacked-tower`, `prompt-left`, `output-rail`). ACE-Step timbre is invented. Human selection and edit required before any release. Longer Queues cost RAM and time linearly.
 
 This is **not** the Nill Bye trap/EDM pack. Those graphs are rap **over** club beds with a dry booth. Drive-through is dance EDM (mostly instrumental).
 
@@ -401,6 +402,29 @@ Secret Homage. Node placement varies across five layouts. Full album: `./scripts
 | **[audio/albums/drive-through/secret-homage/18-blind-stamp](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | riddim **168**, seed **691** | `18 - Blind Stamp` | Riddim warp |
 | **[audio/albums/drive-through/secret-homage/19-cold-cache](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | warped hybrid-trap **165**, seed **701** | `19 - Cold Cache` | Hybrid trap warp |
 | **[audio/albums/drive-through/secret-homage/20-secret-homage](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | dirty dubstep **165**, seed **709** | `20 - Secret Homage` | Dirty dubstep warp |
+
+#### My Coder (`audio/albums/drive-through/my-coder/`)
+
+The coder that writes Drive-through, read as music. Sixteen instrumental takes walk `drive_arrange.py` then `edm_examples.py` in source order. Each take's cues are palette phrases chosen by that slice of the source. Regenerate this album when either file changes. Node placement varies across five layouts. Full album: `./scripts/manage.sh album-render --album drive-through/my-coder`.
+
+| Graph | Tags / bpm | Prefix | Take |
+| --- | --- | --- | --- |
+| **[audio/albums/drive-through/my-coder/01-lift-tempo](../generated/workflows/audio/albums/drive-through/my-coder.md)** | wave bass **165**, seed **719** | `01 - Lift Tempo` | Wave bass warp |
+| **[audio/albums/drive-through/my-coder/02-fit-window](../generated/workflows/audio/albums/drive-through/my-coder.md)** | dirty bass **170**, seed **727** | `02 - Fit Window` | Dirty bass warp |
+| **[audio/albums/drive-through/my-coder/03-plan-album](../generated/workflows/audio/albums/drive-through/my-coder.md)** | festival trap **176**, seed **733** | `03 - Plan Album` | Festival trap warp |
+| **[audio/albums/drive-through/my-coder/04-arrange-score](../generated/workflows/audio/albums/drive-through/my-coder.md)** | chest-sub **174**, seed **739** | `04 - Arrange Score` | Chest bass warp |
+| **[audio/albums/drive-through/my-coder/05-salt-menu](../generated/workflows/audio/albums/drive-through/my-coder.md)** | warped hybrid-trap **168**, seed **743** | `05 - Salt Menu` | Hybrid trap warp |
+| **[audio/albums/drive-through/my-coder/06-ban-list](../generated/workflows/audio/albums/drive-through/my-coder.md)** | dirty bass **165**, seed **751** | `06 - Ban List` | Dirty bass warp |
+| **[audio/albums/drive-through/my-coder/07-cue-bed](../generated/workflows/audio/albums/drive-through/my-coder.md)** | dirty dubstep **168**, seed **757** | `07 - Cue Bed` | Dirty dubstep warp |
+| **[audio/albums/drive-through/my-coder/08-pick-role](../generated/workflows/audio/albums/drive-through/my-coder.md)** | reese bass **165**, seed **761** | `08 - Pick Role` | Neuro bass warp |
+| **[audio/albums/drive-through/my-coder/09-donor-lane](../generated/workflows/audio/albums/drive-through/my-coder.md)** | tearout **172**, seed **769** | `09 - Donor Lane` | Tearout warp |
+| **[audio/albums/drive-through/my-coder/10-fit-edits](../generated/workflows/audio/albums/drive-through/my-coder.md)** | festival trap **174**, seed **773** | `10 - Fit Edits` | Festival trap warp |
+| **[audio/albums/drive-through/my-coder/11-compose](../generated/workflows/audio/albums/drive-through/my-coder.md)** | wobble bass **174**, seed **787** | `11 - Compose` | Riddim warp |
+| **[audio/albums/drive-through/my-coder/12-check-form](../generated/workflows/audio/albums/drive-through/my-coder.md)** | brostep **170**, seed **797** | `12 - Check Form` | Brostep warp |
+| **[audio/albums/drive-through/my-coder/13-splice-tags](../generated/workflows/audio/albums/drive-through/my-coder.md)** | brostep **172**, seed **809** | `13 - Splice Tags` | Brostep warp |
+| **[audio/albums/drive-through/my-coder/14-catalog-row](../generated/workflows/audio/albums/drive-through/my-coder.md)** | color bass **174**, seed **811** | `14 - Catalog Row` | Color bass warp |
+| **[audio/albums/drive-through/my-coder/15-score-format](../generated/workflows/audio/albums/drive-through/my-coder.md)** | amen break **174**, seed **821** | `15 - Score Format` | Drumstep warp |
+| **[audio/albums/drive-through/my-coder/16-finalize-album](../generated/workflows/audio/albums/drive-through/my-coder.md)** | dirty dubstep **168**, seed **823** | `16 - Finalize Album` | Dirty dubstep warp |
 
 Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
 

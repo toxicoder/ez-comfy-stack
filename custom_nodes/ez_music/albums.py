@@ -256,6 +256,20 @@ DRIVE_THROUGH_ALBUMS: dict[int, AlbumInfo] = {
             "hidden alley stencil, sealed ramp, fog vault, no faces",
         ),
     },
+    5: {
+        "artist": DRIVE_THROUGH_ARTIST,
+        "artist_slug": "drive-through",
+        "title": "My Coder",
+        "slug": "my-coder",
+        "series": "drive-through",
+        "phase": 5,
+        "year": ALBUM_YEAR,
+        "cover_prompt": _cover(
+            DRIVE_THROUGH_ARTIST,
+            "My Coder",
+            "indigo terminal glow, stacked punch cards, circuit-thread seams, night highway",
+        ),
+    },
 }
 
 
