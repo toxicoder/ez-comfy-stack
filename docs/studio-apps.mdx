@@ -12,7 +12,7 @@ tags: [comfyui, app-mode, workflows, occupancy, klein, wan, ltx]
 - Apps sidebar (`.app.json`) vs Workflows
 - Where operator Apps persist (`_user/`; explicit lab Save or duplicate only)
 - Creator widgets: Quality (Lab / Draft / High / Free Commercial Use), Prompt, Style, Rewrite prompt, Rewrite negative (stays on so the negative cannot fight the final positive; one toggle per family), Seed (unique labels, wired LoadImage / LoadAudio)
-- Occupancy (one GB10 job) — chip at the top of the widget list, plus App summary and Quality caption
+- Occupancy (one GB10 job) — chip at the top of the widget list, plus App summary and Quality caption. Minimize it to a corner pill or close it; a closed chip returns as a pill on the next run or App load. The choice is remembered in this browser.
 - Lane A (Inspire) vs Lane B (Produce)
 - Handoff chains (still → motion → AV)
 
@@ -25,7 +25,7 @@ tags: [comfyui, app-mode, workflows, occupancy, klein, wan, ltx]
 
 **Who this is for:** studio users after `stills/still-draft` has been loaded once.
 
-Lab graphs are the host `_lab/<lane>/*.json` files (folder-scoped ids). On `start` they seed into Comfy as `*.app.json` when App Mode is the default view, so they appear under **Apps** as well as **Workflows**. [App Mode](learn/comfyui.md#graph-and-app) is a widget surface on that JSON (ComfyUI frontend **1.41.13+**). It is **not** a second frontend and not [`studio-ui`](reference/studio-ui.md). A small occupancy chip sits at the top of the App widget list (under the menu if you are in graph view) and shows which family is running, a one-line summary of what the App does (`extra.lab_description`), the active Quality overlay, still N of M on multi-plate Apps, and the next handoff. Widget help text wraps so the full description stays readable. It does not cover Run. Restart the container after a pull so `custom_nodes/ez_studio_app` is copied.
+Lab graphs are the host `_lab/<lane>/*.json` files (folder-scoped ids). On `start` they seed into Comfy as `*.app.json` when App Mode is the default view, so they appear under **Apps** as well as **Workflows**. [App Mode](learn/comfyui.md#graph-and-app) is a widget surface on that JSON (ComfyUI frontend **1.41.13+**). It is **not** a second frontend and not [`studio-ui`](reference/studio-ui.md). A small occupancy chip sits at the top of the App widget list (under the menu if you are in graph view) and shows which family is running, a one-line summary of what the App does (`extra.lab_description`), the active Quality overlay, still N of M on multi-plate Apps, and the next handoff. Widget help text wraps so the full description stays readable. It does not cover Run. **Minimize** collapses the chip to an **App · family** pill (click the pill to expand). **Close** hides it until the next run or App load, when it returns as that pill. The choice is stored in this browser. Restart the container after a pull so `custom_nodes/ez_studio_app` is copied.
 
 ```mermaid
 flowchart LR
