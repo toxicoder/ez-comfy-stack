@@ -96,6 +96,19 @@ article pre > code {
   line-height: 1.55;
 }
 
+/*
+ * Untitled fence copy control is `absolute` on the figure (`top-3`), which sits
+ * in the padding above a one-line `pre`. Pin it inside the shaded figure.
+ */
+article figure.shiki {
+  min-height: 2.75rem;
+}
+
+article figure.shiki > div.absolute {
+  top: 0.85rem;
+  right: 0.5rem;
+}
+
 article :not(pre) > code {
   border-radius: 0.2rem;
   padding: 0.05em 0.35em;
@@ -340,9 +353,32 @@ article table:not([class]) {
   position: relative;
 }
 
+/*
+ * Prose paints a bare `code` as an inline chip. `not-prose` on the wrapper
+ * opts out; the `pre` is the shaded block so a one-line command still
+ * contains the copy icon.
+ */
 .ez-cmd-builder__code pre {
+  position: relative;
   margin: 0;
-  padding-right: 2.25rem;
+  min-height: 2.75rem;
+  padding: 0.65rem 2.6rem 0.65rem 0.9rem;
+  border: 1px solid var(--color-fd-border);
+  border-radius: 0.25rem;
+  background: var(--color-fd-background);
+  overflow: auto;
+}
+
+.ez-cmd-builder__code pre > code {
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
 }
 
 .ez-cmd-builder__copy {

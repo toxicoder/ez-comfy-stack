@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
 import { Provider } from "@/components/provider";
-import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
+import { searchIndexPath, SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
 
 import "./global.css";
 
@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="flex flex-col min-h-screen" suppressHydrationWarning>
-        <Provider>{children}</Provider>
+        <Provider searchFrom={searchIndexPath()}>{children}</Provider>
       </body>
     </html>
   );

@@ -282,11 +282,11 @@ export function EzCommand({ id }: { id: string }) {
           ))}
         </div>
       ) : null}
-      <div className="ez-cmd-builder__code">
+      <div className="ez-cmd-builder__code not-prose">
         <pre>
           <code>{line}</code>
+          <CopyCommandButton line={line} />
         </pre>
-        <CopyCommandButton line={line} />
       </div>
     </div>
   );

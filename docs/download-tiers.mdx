@@ -1,6 +1,6 @@
 ---
 title: Download tiers
-description: What --tier actually selects on each download command — pack ids, not a global quality ladder.
+description: One table of every pack — what it is, rough size on disk, and the command that downloads it.
 tags: [download, tier, models, klein, wan, ltx, podcast, dub, music]
 ---
 
@@ -8,310 +8,99 @@ tags: [download, tier, models, klein, wan, ltx, podcast, dub, music]
 
 **What's on this page**
 
-- **Chooser** — which command to run for the graph you will Queue
+- **One table** — pack, what you get, rough size, download command
 - **`--tier` vs `--limit`** — pack id versus Mbps
-- **Default pack** — `download-models` (no `--tier`)
-- **Per-family packs** — image, Wan, LTX, audio, 3D, extras
-- **Banned names** — `quality` as an image `--tier` alias, Nunchaku, DA3-LARGE, DreamX-World, MiniMax H3. Klein 9B / FLUX.2-dev are **opt-in NC**, not defaults.
+- **What `all` skips** — Wan VACE / S2V, LTX IC-LoRA, Klein 9B / FLUX.2-dev
+- **Banned names** — image `quality`, Nunchaku, DA3-LARGE, DreamX-World, MiniMax H3
 
 **What this enables**
 
-- **Picking** the flag that matches the graph you will Queue
+- **Seeing** every pack the stack can pull without opening a page per family
+- **Copying** the command that actually downloads that pack
 - **Avoiding** a ~47 GB Fun InP pull when you wanted Wan 2.2 5B
-- **Copying** a command with **your** `--tier` and `--limit` already filled in
 
-The **Your Spark** panel at the top of every docs page stores `SPARK_HOST` and friends in this browser. Highlighted chips in copyable commands are the same fields — click to edit. Copy buttons use those values. `--limit` defaults follow `DOWNLOAD_LIMIT` unless you override it on the widget.
+`--tier` names a pack id. It is which **pack** that one command pulls, not a quality ladder. `--limit` is Hugging Face bandwidth in Mbps (`auto`, a number, or `off`), not a smaller weight. `download-models` has **no** `--tier`.
 
-Basenames on disk: [Download packs](operate/models-packs.md). Mbps throttle: [Download limit](download-limit.md).
+Basenames on disk and the container image pin: [Download packs](operate/models-packs.md). Throttle: [Download limit](download-limit.md).
 
----
+`./scripts/manage.sh download-podcast`, `download-dub`, `download-music`, and `download-llm` already run the pull. 3D, LongCat, DreamX, and SeedVR2 forward to a utility that defaults to a status check, so those commands include the word `run`.
 
-## Choose a pack
-
-<Cards>
-  <Card title="First install">
-    ---
-
-    Klein 4B + Wan 5B + LTX-2.5 + prompt-enhance GGUF. No `--tier`.
-
-    [Default pack](#default-pack-download-models)
-  </Card>
-  <Card title="A different still">
-    ---
-
-    Klein NVFP4 / base, or Z-Image Turbo. Not “better video”.
-
-    [Image](#image-still-unet)
-  </Card>
-  <Card title="A different Wan graph">
-    ---
-
-    A14B, Fun InP, VACE, or S2V. `--tier all` skips VACE and S2V.
-
-    [Wan](#wan-different-graphs)
-  </Card>
-  <Card title="LTX or IC-LoRA">
-    ---
-
-    Lab default is 2.5. `balanced` / `quality` are 2.3 aliases.
-
-    [LTX](#ltx-generation-not-better)
-  </Card>
-  <Card title="Podcast, dub, music">
-    ---
-
-    Opt-in audio. ACE-Step turbo is shared. Occupancy audio.
-
-    [Audio](#audio-podcast-dub-music)
-  </Card>
-  <Card title="3D or extras">
-    ---
-
-    TRELLIS.2, LongCat, DreamX-Creator, SeedVR2, 35B llm-desk.
-
-    [Opt-in extras](#opt-in-extras)
-  </Card>
-</Cards>
+Wan `--tier all` is `5b` + `a14b` + `fun-inp`. It does not include `vace` or `s2v`. LTX `--tier all` is `2.5` + `2.3` + `gemma` and does not include `iclora`. Image `--tier all` is the Apache stills (`fast`, `nvfp4`, `base`, `zimage`) and does not include `9b` or `flux2-dev`. `balanced` is a `2.3` alias, not a 2.5 quality knob. `quality` on LTX is the 2.3 BF16 alias.
 
 ---
 
-## `--tier` vs `--limit`
+## Packs
 
-| Flag | Means | Does not mean |
-| --- | --- | --- |
-| **`--tier NAME`** | Which **pack** that one utility pulls | A studio-wide quality ladder |
-| **`--limit auto\|N\|off`** | Hugging Face **bandwidth** cap (Mbps) | Smaller / faster weights |
-| **`download-models`** | Klein 4B + Wan 5B + LTX-2.5 + GGUF | Podcast, music, 3D, LongCat, DreamX, SeedVR2 |
-
-`download-models` has **no** `--tier`. Image `fast`, Wan `5b`, and LTX `2.5` are three different pack ids that happen to be the lab defaults.
-
-`--tier all` is **per utility**:
-
-| Utility | `--tier all` includes | Does not include |
-| --- | --- | --- |
-| Image | `fast` + `nvfp4` + `base` + `zimage` (and TE/VAE companions) | `9b`, `9b-base`, `9b-nvfp4`, `flux2-dev` (FLUX Non-Commercial; pick those flags on purpose) |
-| Wan | `5b` + `a14b` + `fun-inp` | `vace`, `s2v` |
-| LTX | `2.5` + `2.3` + `gemma` | `iclora` (and not `quality`; quality is a 2.3 alias you pick on purpose) |
-| Podcast | `analog` + `acestep` + `chatterbox` + `qwen3tts` | — |
-| Dub | `asr` + `clone` | — |
-| Music | `turbo` + `xl` | — |
-| 3D | `trellis2` + `da3-base` | `da3-large` (refused) |
-| LongCat | `video` + `avatar` | NCCL |
-| LLM | `enhance` + `qwen36-35b-a3b` + `describe` | putting 35B or the describe VLM into `download-models` |
-| DreamX | same as `creator` | DreamX-World (refused) |
-
-Banned names (`quality` as an image `--tier` alias, Nunchaku, DA3-LARGE, DreamX-World, MiniMax H3) stay refused. Klein 9B and FLUX.2-dev are gated **opt-in** packs (`--tier 9b` / `flux2-dev`), not lab defaults — [Model licenses](licenses.md).
-
-Occupancy: one heavy GPU job. `occupancy enter trellis` (unload LTX/Wan, stop Blender) before TRELLIS. Same rule for Fun InP / VACE / S2V / ACE-Step / llm-desk.
-
----
-
-## Queue this → pull this
-
-| You will Queue | Pull |
-| --- | --- |
-| `_lab/stills/still-draft` (and most Klein stills) | `download-models` or `download-image --tier fast` |
-| Klein daily UNET swap NVFP4 / base | `download-image --tier nvfp4` or `base` |
-| Z-Image Turbo graph | `download-image --tier zimage` |
-| `_lab/motion/silent/still-to-video-5s`, `text-to-video-5s`, shot / GIF / bumper | `download-models` or `download-wan --tier 5b` |
-| Wan A14B silent hero | `download-wan --tier a14b` |
-| `motion/silent/first-last-5s` first-last-frame | `download-wan --tier fun-inp` (~47 GB, floor 40) |
-| VACE join | `download-wan --tier vace` (not in Wan `all`) |
-| Wan S2V talking-head | `download-wan --tier s2v` (not in Wan `all`) |
-| `_lab/motion/av/*` lab AV printers | `download-models` or `download-ltx --tier 2.5` |
-| LTX IC-LoRA control graphs | `download-ltx --tier iclora` (not in LTX `all`) |
-| Retired LTX-2.3 DualCLIP fallback | `download-ltx --tier 2.3` (auto-includes `gemma`) |
-| Podcast Kokoro | `download-podcast --tier analog` |
-| Podcast beds / rap ACE-Step | `download-podcast --tier acestep` **or** `download-music --tier turbo` (same file) |
-| `audio/dub/clone-translate` | `download-dub --tier asr` then `--tier clone` (or `all`) |
-| TRELLIS.2 / DA3-BASE | `download-3d --tier trellis2` / `da3-base` |
-| Occupancy `llm-desk` 35B | `download-llm --tier qwen36-35b-a3b` (not `download-models`) |
-| Prompt Enhance 4B GGUF | already in `download-models` (`download-llm --tier enhance`) |
-
----
-
-## Default pack (`download-models`)
-
-Use this unless you know you need an opt-in pack. Four steps: Klein → Wan → LTX → prompt-enhance GGUF. `--limit` is Mbps.
-
-**Does not pull:** podcast, dub, music, 3D, LongCat, DreamX, SeedVR2, Wan A14B / Fun InP / VACE / S2V, LTX 2.3 / IC-LoRA, Klein NVFP4 / Z-Image, or the 35B llm-desk GGUF.
-
-<EzCommand id="download-models" />
-
-Stuck resume (`0 MiB/s`, `*.incomplete`): check **Delete stuck \*.incomplete** on the widget, or pass `--drop-incomplete`.
-
----
-
-## Image — still UNET
-
-`--tier fast` is Klein 4B distilled FP8 **and** the Qwen TE + flux2-vae companions. `nvfp4` / `base` also pull those companions. `zimage` is a different still runner (no Klein TE/VAE). None of these are “better Wan”.
-
-| Pack | Default? | In `download-models`? | ~size | Occupancy | Notes |
-| --- | --- | --- | --- | --- | --- |
-| `fast` | yes | yes | 3–4 GB + companions (floors 3 / 2 / 0) | klein | Distilled FP8 daily still |
-| `nvfp4` | no | no | ~2 GB + companions | klein | Optional Klein 4B NVFP4 |
-| `base` | no | no | ~3 GB + companions | klein | Optional Klein 4B base FP8 |
-| `zimage` | no | no | ~4 GB | klein | Z-Image Turbo; no TE/VAE companions |
-| `all` | no | no | sum of the four | klein | `fast` + `nvfp4` + `base` + `zimage` (Apache only; not 9B/dev) |
-| `9b` | no | no | ~8 GB + 8B TE + small VAE | klein | FLUX Non-Commercial Klein 9B distilled. Gated. Not YouTube-ok |
-| `9b-base` | no | no | ~8 GB + companions | klein | FLUX Non-Commercial 9B base |
-| `9b-nvfp4` | no | no | ~5 GB + companions | klein | FLUX Non-Commercial 9B NVFP4 |
-| `small-vae` | no | no | small | klein | Apache `full_encoder_small_decoder.safetensors` (official 9B Comfy VAE) |
-| `flux2-dev` | no | no | ~20 GB+ | klein | FLUX Non-Commercial 32B FP8 + Mistral TE. Gated. Not YouTube-ok |
-| `te` / `vae` | companions | with `fast` | — | — | Not a public first-run flag; `fast`/`nvfp4`/`base` pull them |
-
-<EzCommand id="download-image" />
-
-The manage.sh default pack calls `download-image.sh run --tier fast`. There is no `quality` image `--tier` alias. FLUX.2-dev is the opt-in `--tier flux2-dev` (FLUX Non-Commercial).
-
----
-
-## Wan — different graphs
-
-`5b` is the silent daily driver (in `download-models`). `a14b`, Fun InP, VACE, and S2V are other models. **`--tier all` does not include `vace` or `s2v`.**
-
-| Pack | Default? | In `download-models`? | ~size | Occupancy | Notes |
-| --- | --- | --- | --- | --- | --- |
-| `5b` | yes | yes | ~12 GB (floor 12) | wan | TI2V-5B silent smoke + shots |
-| `a14b` | no | no | ~20 GB (floor 20) | wan | I2V 14B FP8; unload 5B first |
-| `fun-inp` | no | no | **~47 GB** (status floor 40) | wan; unload LTX | First-last-frame; `motion/silent/first-last-5s` |
-| `vace` | no | no | ~6 GB (floor 6) | wan; unload LTX | **Not in `all`**. 17-frame join |
-| `s2v` | no | no | ~20 GB (floor 20) | wan; unload LTX | **Not in `all`**. Talking-head opt-in |
-| `all` | no | no | 5b+a14b+fun-inp | — | Explicitly **not** vace/s2v |
-
-<EzCommand id="download-wan" />
-
-Unload LTX before Fun InP / VACE / S2V.
-
----
-
-## LTX — generation, not “better”
-
-`2.5` is the lab AV default. `2.3` is a retired fallback you should [reap](models-and-cache.md) after moving up. `balanced` / `quality` on this utility are **2.3 aliases**, not a 2.5 quality knob. `2.3` / `balanced` / `quality` auto-include `gemma` (Gemma 3 DualCLIP). **`--tier all` is `2.5` + `2.3` + `gemma` and does not include `iclora`.**
-
-| Pack | Default? | In `download-models`? | ~size | Occupancy | Notes |
-| --- | --- | --- | --- | --- | --- |
-| `2.5` | yes | yes | ~30 GB (floor 30) | ltx | Distilled INT8-convrot + Gemma4 + VAEs. Gated |
-| `2.3` / `balanced` | no | no | floor 20; ~28–30 GB + TE | ltx | Retired FP8 fallback; auto-includes `gemma` |
-| `quality` | no | no | floor 35; ~45–48 GB + TE | ltx | 2.3 **BF16** alias, not 2.5. Auto-includes `gemma` |
-| `gemma` | companion | with 2.3 | ~8–9.5 GB (floor 8) | — | Gemma 3 DualCLIP; lab 2.5 uses Gemma 4 instead |
-| `iclora` | no | no | ~1 GB (floor 1) | ltx | Union Control LoRA. **Not in `all`** |
-| `all` | no | no | 2.5+2.3+gemma | — | **Does not include `iclora`** |
-
-<EzCommand id="download-ltx" />
-
-LTX-2.5 needs the Hugging Face license click plus `HF_TOKEN` as the **same** user. A token is not that click.
-
----
-
-## Audio — podcast, dub, music
-
-Opt-in. Missing packs are **not** doctor failures. Occupancy **audio**: stop Klein / Wan / LTX first.
-
-### Podcast
-
-`analog` is Kokoro only (tiny). `acestep` is the same ~10 GB AIO as music `turbo`. Chatterbox / Qwen3-TTS are optional. `qwen3tts` keeps `model.safetensors`, `config.json`, text tokenizer files, and nested `speech_tokenizer/` (~3 GB).
-
-| Pack | Default? | ~size | What you get |
+| Pack | What you get | ~size on disk | Command |
 | --- | --- | --- | --- |
-| `analog` | yes | tiny | Kokoro-82M ONNX + voices |
-| `acestep` | no | ~10 GB | ACE-Step 1.5 turbo AIO (shared dest with music `turbo`) |
-| `chatterbox` | no | small | Optional MIT GPU TTS (PerTh on) |
-| `qwen3tts` | no | ~3 GB | Optional Qwen3-TTS 0.6B Base snapshot |
-| `all` | no | sum | analog + acestep + chatterbox + qwen3tts |
+| Default studio | Klein 4B + Wan 2.2 5B + LTX-2.5 + prompt-enhance GGUF. Not podcast, dub, music, 3D, LongCat, DreamX, or SeedVR2 | ~50 GB | `./scripts/manage.sh download-models` |
+| `fast` | Klein 4B distilled FP8 still, plus the Qwen text encoder and flux2 VAE. Already in the default pack | 3–4 GB + companions | `./scripts/utilities/download-image.sh run --tier fast` |
+| `nvfp4` | Optional Klein 4B NVFP4, plus companions | ~2 GB + companions | `./scripts/utilities/download-image.sh run --tier nvfp4` |
+| `base` | Optional Klein 4B base FP8, plus companions | ~3 GB + companions | `./scripts/utilities/download-image.sh run --tier base` |
+| `zimage` | Z-Image Turbo. No Klein text encoder or VAE | ~4 GB | `./scripts/utilities/download-image.sh run --tier zimage` |
+| image `all` | `fast` + `nvfp4` + `base` + `zimage`. Not Klein 9B or FLUX.2-dev | sum of those four | `./scripts/utilities/download-image.sh run --tier all` |
+| `9b` | FLUX Non-Commercial Klein 9B distilled. Gated. Not YouTube-ok | ~8 GB + 8B text encoder + small VAE | `./scripts/utilities/download-image.sh run --tier 9b` |
+| `9b-base` | FLUX Non-Commercial Klein 9B base. Gated. Not YouTube-ok | ~8 GB + companions | `./scripts/utilities/download-image.sh run --tier 9b-base` |
+| `9b-nvfp4` | FLUX Non-Commercial Klein 9B NVFP4. Gated. Not YouTube-ok | ~5 GB + companions | `./scripts/utilities/download-image.sh run --tier 9b-nvfp4` |
+| `small-vae` | Apache `full_encoder_small_decoder.safetensors` used with Klein 9B | small | `./scripts/utilities/download-image.sh run --tier small-vae` |
+| `flux2-dev` | FLUX Non-Commercial FLUX.2 [dev] FP8. Gated. Not YouTube-ok | ~20 GB+ | `./scripts/utilities/download-image.sh run --tier flux2-dev` |
+| `5b` | Wan 2.2 TI2V-5B silent shots. Already in the default pack | ~12 GB | `./scripts/utilities/download-wan.sh run --tier 5b` |
+| `a14b` | Wan 2.2 I2V 14B FP8 silent hero. Unload 5B first | ~20 GB | `./scripts/utilities/download-wan.sh run --tier a14b` |
+| `fun-inp` | Wan 2.2 Fun InP first-last-frame. Unload LTX first | ~47 GB | `./scripts/utilities/download-wan.sh run --tier fun-inp` |
+| `vace` | Wan 2.1 VACE join. Not in Wan `--tier all`. Unload LTX first | ~6 GB | `./scripts/utilities/download-wan.sh run --tier vace` |
+| `s2v` | Wan S2V talking-head. Not in Wan `--tier all`. Unload LTX first | ~20 GB | `./scripts/utilities/download-wan.sh run --tier s2v` |
+| Wan `all` | `5b` + `a14b` + `fun-inp`. Does not include `vace` or `s2v` | sum of those three | `./scripts/utilities/download-wan.sh run --tier all` |
+| `2.5` | LTX-2.5 distilled AV (Gemma 4). Gated. Already in the default pack | ~30 GB | `./scripts/utilities/download-ltx.sh run --tier 2.5` |
+| `2.3` | Retired LTX-2.3 FP8 fallback. Auto-includes `gemma` | ~28–30 GB | `./scripts/utilities/download-ltx.sh run --tier 2.3` |
+| `balanced` | Alias of `2.3`, not a 2.5 quality knob. Auto-includes `gemma` | ~28–30 GB | `./scripts/utilities/download-ltx.sh run --tier balanced` |
+| `quality` | LTX 2.3 BF16 alias, not 2.5. Auto-includes `gemma` | ~45–48 GB | `./scripts/utilities/download-ltx.sh run --tier quality` |
+| `gemma` | Gemma 3 DualCLIP companion for LTX 2.3. Lab 2.5 uses Gemma 4 instead | ~8–9.5 GB | `./scripts/utilities/download-ltx.sh run --tier gemma` |
+| `iclora` | LTX Union Control LoRA. Not in LTX `--tier all` | ~1 GB | `./scripts/utilities/download-ltx.sh run --tier iclora` |
+| LTX `all` | `2.5` + `2.3` + `gemma`. Does not include `iclora` | sum of those three | `./scripts/utilities/download-ltx.sh run --tier all` |
+| `analog` | Podcast Kokoro-82M ONNX and voices. Not in `download-models` | tiny | `./scripts/manage.sh download-podcast --tier analog` |
+| `acestep` | ACE-Step 1.5 turbo AIO for podcast beds. Same file as music `turbo` | ~10 GB | `./scripts/manage.sh download-podcast --tier acestep` |
+| `chatterbox` | Optional Chatterbox Turbo TTS for podcast | small | `./scripts/manage.sh download-podcast --tier chatterbox` |
+| `qwen3tts` | Optional Qwen3-TTS 0.6B Base snapshot | ~3 GB | `./scripts/manage.sh download-podcast --tier qwen3tts` |
+| podcast `all` | `analog` + `acestep` + `chatterbox` + `qwen3tts` | sum | `./scripts/manage.sh download-podcast --tier all` |
+| `asr` | Dub Silero VAD + faster-whisper large-v3 | ~3 GB | `./scripts/manage.sh download-dub --tier asr` |
+| `clone` | Chatterbox Multilingual V3 plus pkuseg. Stack should be up so wheels install | ~4 GB | `./scripts/manage.sh download-dub --tier clone` |
+| dub `all` | `asr` + `clone` | sum | `./scripts/manage.sh download-dub --tier all` |
+| `turbo` | ACE-Step 1.5 turbo AIO for rap. Same file as podcast `acestep`. Do not pull it twice | ~10 GB | `./scripts/manage.sh download-music --tier turbo` |
+| `xl` | Optional ACE-Step XL split weights. Not the default rap bed | larger split files | `./scripts/manage.sh download-music --tier xl` |
+| music `all` | `turbo` + `xl` | sum | `./scripts/manage.sh download-music --tier all` |
+| `trellis2` | Comfy-Org TRELLIS.2 INT8 + DINOv3. No nvdiffrast. `occupancy enter trellis` first | ~12 GB | `./scripts/manage.sh download-3d run --tier trellis2` |
+| `da3-base` | DA3-BASE Apache depth. DA3-LARGE is refused | ~1 GB | `./scripts/manage.sh download-3d run --tier da3-base` |
+| 3D `all` | `trellis2` + `da3-base` | sum | `./scripts/manage.sh download-3d run --tier all` |
+| `video` | LongCat-Video (MIT). No NCCL in this stack | opt-in | `./scripts/manage.sh download-longcat run --tier video` |
+| `avatar` | LongCat-Video-Avatar. No NCCL | opt-in | `./scripts/manage.sh download-longcat run --tier avatar` |
+| LongCat `all` | `video` + `avatar` | opt-in | `./scripts/manage.sh download-longcat run --tier all` |
+| `creator` | DreamX-Creator selective payload. Not DreamX-World. Unload LTX first. The full hub repo is ~54 GB — this command does not pull that | ~8 GB selective | `./scripts/manage.sh download-dreamx run --tier creator` |
+| `seedvr2-3b` | SeedVR2-3B still polish or post-concat restore. Stop Comfy first if it runs on GPU | ~15 GB | `./scripts/manage.sh download-restore run --tier seedvr2-3b` |
+| `enhance` | Qwen3-4B prompt-enhance GGUF. Already in `download-models` | ~3 GB | `./scripts/manage.sh download-llm --tier enhance` |
+| `qwen36-35b-a3b` | Occupancy `llm-desk` GGUF. Not part of `download-models` | ~23 GB | `./scripts/manage.sh download-llm --tier qwen36-35b-a3b` |
+| `describe` | Qwen2.5-VL-3B caption GGUF + mmproj for Describe image | ~4 GB | `./scripts/manage.sh download-llm --tier describe` |
+| LLM `all` | `enhance` + `qwen36-35b-a3b` + `describe` | sum | `./scripts/manage.sh download-llm --tier all` |
 
-<EzCommand id="download-podcast" />
+Scroll sideways on a narrow window. The header stays pinned.
 
-### Dub
-
-`asr` is Silero VAD + faster-whisper large-v3 (`model.bin`, `config.json`, **and** `tokenizer.json`). `clone` is Chatterbox Multilingual V3 plus `MODELS_DIR/pkuseg`. Playbook: [Local dub](dub.md).
-
-| Pack | Default? | ~size | What you get |
-| --- | --- | --- | --- |
-| `asr` | yes | ~3 GB | Silero VAD + faster-whisper large-v3 |
-| `clone` | no | ~4 GB + small pkuseg zip | Chatterbox Multilingual V3 (MIT, PerTh on) |
-| `all` | no | asr + clone | Both packs |
-
-<EzCommand id="download-dub" />
-
-??? tip "Wheels when Compose is up (clone)"
-
-    `download-dub` pip-installs `faster-whisper`, the `llama-cpp-python` CPU wheel, `setuptools<82` (PerTh / `pkg_resources`), then the Chatterbox GitHub zip at `CHATTERBOX_TTS_REF` with `--upgrade --force-reinstall --no-deps` (does not pin torch 2.6; PyPI 0.1.7 has no `t3_model=v3`). Restart also heals PerTh when `PerthImplicitWatermarker` is not callable. Queue also self-heals a missing llama.cpp wheel. A llama.cpp / GGUF miss is a **blocking** Dub status when Rewrite translation is on.
-
-### Music — the one size ladder
-
-`turbo` vs `xl` is the closest thing this repo has to a quality/size flag. `turbo` **reuses** the podcast acestep snapshot — do not pull the AIO twice.
-
-| Pack | Default? | ~size | Notes |
-| --- | --- | --- | --- |
-| `turbo` | yes | ~10 GB AIO | Shared dest with `download-podcast --tier acestep` |
-| `xl` | no | larger split files | Optional; not the default rap/podcast bed |
-| `all` | no | turbo + xl | — |
+The widget below is the same music row with `--tier` and `--limit` filled in. Podcast `acestep` is that same file.
 
 <EzCommand id="download-music" />
 
 ---
 
-## Opt-in extras
-
-Not part of `download-models`. Each `--tier` is still a pack id.
-
-### 3D
-
-Native Comfy-Org TRELLIS.2 INT8 + DINOv3. `da3-base` is Apache depth. `da3-large` is refused. SuperSplat is a host viewer, not this downloader. Occupancy: `occupancy enter trellis` first.
-
-| Pack | Default? | ~size | Notes |
-| --- | --- | --- | --- |
-| `trellis2` | yes | ~12 GB | No nvdiffrast |
-| `da3-base` | no | ~1 GB | Apache. DA3-LARGE refused |
-| `all` | no | both | — |
-
-<EzCommand id="download-3d" />
-
-### LongCat (MIT, no NCCL)
-
-Independent Sparks still share `MODELS_DIR`. This sample stack does not ship in-tree NCCL.
-
-| Pack | Default? | Notes |
-| --- | --- | --- |
-| `video` | yes | LongCat-Video |
-| `avatar` | no | LongCat-Video-Avatar |
-| `all` | no | video + avatar |
-
-<EzCommand id="download-longcat" />
-
-### DreamX-Creator
-
-Apache Creator only. DreamX-World is refused. Unload LTX first. Selective payload is `cross_attn_weights.safetensors` (~**8 GB**, `min_gb` 8). The **full** hub repo is ~**54 GB** — do not pull the whole tree.
-
-<EzCommand id="download-dreamx" />
-
-### SeedVR2 restore (still polish or after concat)
-
-Opt-in Apache. `--tier seedvr2-3b` (~15 GB). Optional polish on a Klein 4B PNG for **Free Commercial Use (\<$10M)** quality (add detail, do not jump to 4K) or post-concat restore on a film master (conservative 1.3–1.5×). Occupancy: stop Comfy first if you restore on GPU. Not part of `download-models`.
-
-<EzCommand id="download-restore" />
-
-### Prompt-enhance GGUF (already in `download-models`)
-
-Default `--tier enhance` is the 4B Q4_K_M already pulled by `download-models`. `--tier qwen36-35b-a3b` is opt-in (~23 GB) for `occupancy enter llm-desk`. `--tier describe` is the opt-in Qwen2.5-VL-3B caption GGUF + mmproj for **Describe image**. `--tier all` is enhance + 35B + describe. Do not add the 35B or describe packs to `download-models`.
-
-<EzCommand id="download-llm" />
-
----
-
-## Banned names
+## Do not pull
 
 | Name | What happens |
 | --- | --- |
-| Image `quality` as a `--tier` | Refused (use `flux2-dev` for the NC 32B pack) |
-| Klein 9B as a lab default / pinned UNET | Not the default. Opt-in `--tier 9b` (FLUX Non-Commercial) |
+| Image `quality` as a `--tier` | Refused. LTX `quality` is a different flag (2.3 BF16) |
+| Klein 9B or `flux2-dev` as a lab default | Not the default. Opt-in rows above. FLUX Non-Commercial. Not YouTube-ok |
 | Nunchaku 9B | Refused |
 | `--tier da3-large` | Refused |
 | DreamX-World | Refused |
 | MiniMax H3 / `download-h3` | Refused |
 
-Read [Model licenses](licenses.md) before a 30 GB pull.
+Read [Model licenses](licenses.md) before a 30 GB pull. One heavy GPU job at a time — do not Queue Klein next to Wan, LTX, TRELLIS, or `llm-desk`.
 
 ---
 
@@ -320,9 +109,8 @@ Read [Model licenses](licenses.md) before a 30 GB pull.
 | Need | Page |
 | --- | --- |
 | First install | [Getting Started](getting-started.md) |
+| Copy-paste operator commands | [Quick reference](operate/quick-reference.md) |
 | Cache layout / reap | [Models and cache](models-and-cache.md) |
-| Basenames on disk | [Download packs](operate/models-packs.md) |
+| Basenames on disk and GHCR pins | [Download packs](operate/models-packs.md) |
 | Mbps throttle | [Download limit](download-limit.md) |
-| Verb catalog | [manage.sh reference](manage-cli.md) |
-| Host leftovers | [Disk wizard](disk-wizard.md) |
-| Hung resume / HTB | [Downloads troubleshooting](operate/troubleshooting-downloads.md) |
+| Hung resume | [Downloads troubleshooting](operate/troubleshooting-downloads.md) |

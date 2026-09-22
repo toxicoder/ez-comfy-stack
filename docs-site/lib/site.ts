@@ -57,6 +57,37 @@ export function isDevelopmentAlias(): boolean {
   return docsVersion() === "development";
 }
 
+/** Which published docs tree this build is, or `local` for `next dev`. */
+export type DocsAlias = "latest" | "development" | "local";
+
+/**
+ * Alias label stamped into docs-bug reports.
+ *
+ * `development` builds set `EZ_DOCS_VERSION`. `latest` builds set `DOCS_ALIAS`
+ * and leave the version empty. Anything else is a local preview.
+ */
+export function docsAlias(): DocsAlias {
+  const version = docsVersion();
+  if (version === "development" || version === "latest") return version;
+  const alias = (process.env.DOCS_ALIAS ?? "").trim().toLowerCase();
+  if (alias === "latest" || alias === "development") return alias;
+  return "local";
+}
+
+/**
+ * URL path of the static search index for a published base path.
+ *
+ * The Orama client otherwise fetches `/api/search` from the host root. On GitHub
+ * project Pages that 404s; the file lives under `/<repo>/<alias>/api/search`.
+ *
+ * @param prefix Site base path (`""` locally). Defaults to {@link basePath}.
+ * @returns Root-relative path the browser should fetch.
+ */
+export function searchIndexPath(prefix?: string): string {
+  const base = (prefix ?? basePath()).trim().replace(/\/+$/, "");
+  return `${base}/api/search`;
+}
+
 /**
  * Public base path of the deployed site, e.g. `/ez-comfy-stack/latest`.
  *

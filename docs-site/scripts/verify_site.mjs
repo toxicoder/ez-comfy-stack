@@ -443,6 +443,111 @@ check(
   JSON.stringify(okCopy ? copyChrome.copyLabel : copyChrome)
 );
 
+/** Doctor command and a one-line fence: the copy control is inside the shaded block. */
+async function copyInsideBlocks(page) {
+  await goto(page, "/manage-cli/", 1800);
+  const doctor = await page.evaluate(() => {
+    const root = document.querySelector('[data-ez-cmd="doctor"]');
+    const button = root?.querySelector(".ez-cmd-builder__copy");
+    const pre = root?.querySelector("pre");
+    const code = root?.querySelector("pre > code");
+    if (!button || !pre || !code) return null;
+    const buttonBox = button.getBoundingClientRect();
+    const preBox = pre.getBoundingClientRect();
+    return {
+      button: { top: buttonBox.top, right: buttonBox.right, bottom: buttonBox.bottom, left: buttonBox.left },
+      pre: { top: preBox.top, right: preBox.right, bottom: preBox.bottom, left: preBox.left, width: preBox.width },
+      codeDisplay: getComputedStyle(code).display,
+      insidePre:
+        buttonBox.top >= preBox.top - 1 &&
+        buttonBox.bottom <= preBox.bottom + 1 &&
+        buttonBox.left >= preBox.left - 1 &&
+        buttonBox.right <= preBox.right + 1
+    };
+  });
+  await goto(page, "/occupancy/", 1800);
+  const fence = await page.evaluate(() => {
+    const figures = Array.from(document.querySelectorAll("figure.shiki"));
+    const figure = figures.find((node) =>
+      (node.querySelector("pre")?.innerText ?? "").includes("download-llm --tier qwen36-35b-a3b")
+    );
+    const button = figure?.querySelector('button[aria-label="Copy Text"], button[aria-label="Copy text"]');
+    if (!figure || !button) return { found: false };
+    const buttonBox = button.getBoundingClientRect();
+    const figureBox = figure.getBoundingClientRect();
+    return {
+      found: true,
+      inside:
+        buttonBox.top >= figureBox.top - 1 &&
+        buttonBox.bottom <= figureBox.bottom + 1 &&
+        buttonBox.left >= figureBox.left - 1 &&
+        buttonBox.right <= figureBox.right + 1
+    };
+  });
+  return { doctor, fence };
+}
+
+for (const viewport of [
+  { width: 1440, height: 950, label: "desktop" },
+  { width: 390, height: 844, label: "mobile" }
+]) {
+  const placed = await withPage((page) => copyInsideBlocks(page), "light", viewport);
+  const okPlaced = placed !== PROBE_FAILED;
+  check(
+    `one-line command copy is inside the code block (${viewport.label})`,
+    okPlaced && placed.doctor?.insidePre === true && placed.doctor.codeDisplay === "block",
+    JSON.stringify(okPlaced ? placed.doctor : placed)
+  );
+  check(
+    `one-line fence copy is inside the code block (${viewport.label})`,
+    okPlaced && placed.fence?.found === true && placed.fence.inside === true,
+    JSON.stringify(okPlaced ? placed.fence : placed)
+  );
+}
+
+const bugButton = await withPage(async (page) => {
+  await goto(page, "/operate/update/", 2500);
+  await page
+    .waitForFunction(
+      () => {
+        const link = document.querySelector("[data-docs-bug]");
+        return Boolean(link && (link.getAttribute("href") ?? "").includes("/issues/new"));
+      },
+      undefined,
+      { timeout: 15000 }
+    )
+    .catch(() => undefined);
+  return page.evaluate(() => {
+    const bug = document.querySelector("#nd-page [data-docs-bug]");
+    const heading = bug?.closest("h1, h2, h3, h4, h5, h6") ?? null;
+    if (!heading || !bug) return null;
+    const copy = heading.querySelector('button[aria-label="Copy anchor link"], button[aria-label="Copy Anchor Link"]');
+    const href = decodeURIComponent(bug.getAttribute("href") ?? "");
+    return {
+      copy: Boolean(copy),
+      bug: Boolean(bug),
+      label: bug?.getAttribute("aria-label") ?? "",
+      target: bug?.getAttribute("target") ?? "",
+      hrefHasIssue: href.includes("/issues/new"),
+      hrefHasPath: href.includes("operate/update"),
+      sameHeading: Boolean(copy && bug && copy.parentElement === bug.parentElement)
+    };
+  });
+});
+const okBug = bugButton !== PROBE_FAILED;
+check(
+  "heading bug button sits next to copy-anchor and opens a prefilled issue",
+  okBug &&
+    bugButton?.copy === true &&
+    bugButton.bug === true &&
+    bugButton.label === "File a documentation bug" &&
+    bugButton.target === "_blank" &&
+    bugButton.hrefHasIssue === true &&
+    bugButton.hrefHasPath === true &&
+    bugButton.sameHeading === true,
+  JSON.stringify(bugButton)
+);
+
 const okPanel = panel !== PROBE_FAILED;
 check("command-vars panel renders with editable tokens", okPanel && panel.present && panel.inputs > 0, JSON.stringify(panel));
 check("token stays user-editable (not frozen)", okPanel && panel.after === "10.0.0.99" && panel.before !== panel.after, `${okPanel ? panel.before : "?"} -> ${okPanel ? panel.after : "?"}`);
