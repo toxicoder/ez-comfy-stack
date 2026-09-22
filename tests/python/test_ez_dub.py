@@ -1554,6 +1554,102 @@ def test_load_chatterbox_inner_typeerror_is_not_t3_status(
     assert "NoneType" in err
 
 
+def test_install_lab_tts_compat_uses_sitecustomize_hook(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The pack asks ``sitecustomize`` to re-apply the TTS shims when present."""
+    calls: list[int] = []
+    fake = types.ModuleType("sitecustomize")
+
+    def _ensure() -> None:
+        calls.append(1)
+
+    setattr(fake, "ensure_lab_tts_compat_hooks", _ensure)
+    monkeypatch.setitem(sys.modules, "sitecustomize", fake)
+    pipeline._install_lab_tts_compat()
+    assert calls == [1]
+
+
+def test_install_lab_tts_compat_swallows_hook_failure(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """A raising shim helper must never block a Chatterbox load."""
+    fake = types.ModuleType("sitecustomize")
+
+    def _ensure() -> None:
+        raise RuntimeError("no sdpa_kernel here")
+
+    setattr(fake, "ensure_lab_tts_compat_hooks", _ensure)
+    monkeypatch.setitem(sys.modules, "sitecustomize", fake)
+    pipeline._install_lab_tts_compat()
+    captured = capsys.readouterr().err
+    assert "lab tts compat hook failed" in captured
+    assert "no sdpa_kernel here" in captured
+
+
+def test_install_lab_tts_compat_missing_module_is_quiet(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """No ``sitecustomize`` on the path is a silent no-op, not an error."""
+    import importlib
+
+    def _raise(name: str, *args: Any, **kwargs: Any) -> Any:
+        if name == "sitecustomize":
+            raise ModuleNotFoundError(name)
+        return importlib.import_module(name, *args, **kwargs)
+
+    monkeypatch.setattr(importlib, "import_module", _raise)
+    pipeline._install_lab_tts_compat()
+    assert "lab tts compat hook failed" not in capsys.readouterr().err
+
+
+def test_install_lab_tts_compat_without_the_helper_is_quiet(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """A sitecustomize predating the lab hook must not be reported as a fault."""
+    fake = types.ModuleType("sitecustomize")
+    monkeypatch.setitem(sys.modules, "sitecustomize", fake)
+    pipeline._install_lab_tts_compat()
+    assert "lab tts compat hook failed" not in capsys.readouterr().err
+
+
+def test_load_chatterbox_installs_tts_compat_before_import(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The shim must be applied before ``chatterbox`` pulls in ``torch``."""
+    order: list[str] = []
+
+    snap = tmp_path / "ResembleAI__chatterbox_clone"
+    snap.mkdir()
+    for name in pipeline.CLONE_REQUIRED_FILES:
+        (snap / name).write_bytes(b"x")
+    monkeypatch.setattr(pipeline, "_model_roots", lambda: [str(tmp_path)])
+
+    class _Loader:
+        @staticmethod
+        def from_local(ckpt_dir: str, device: str, t3_model: str = "v3") -> object:
+            del ckpt_dir, device, t3_model
+            return object()
+
+    mtl = types.ModuleType("chatterbox.mtl_tts")
+    setattr(mtl, "ChatterboxMultilingualTTS", _Loader)
+    chatterbox = types.ModuleType("chatterbox")
+    monkeypatch.setitem(sys.modules, "chatterbox", chatterbox)
+    monkeypatch.setitem(sys.modules, "chatterbox.mtl_tts", mtl)
+    monkeypatch.setattr(
+        pipeline,
+        "_install_lab_tts_compat",
+        lambda: order.append("shim"),
+    )
+    model, err = pipeline._load_chatterbox_model()
+    assert model is not None
+    assert err == ""
+    assert order == ["shim"]
+
+
 def test_preflight_clone_names_perth_miss(monkeypatch: pytest.MonkeyPatch) -> None:
     class _Loader:
         @staticmethod

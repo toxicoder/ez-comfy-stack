@@ -182,6 +182,93 @@ def apply_lab_lora_linear_shim(lora_mod: Any | None = None) -> None:
     setattr(lora_mod, "LoRACompatibleLinear", linear)
 
 
+def _add_unique(items: list[Any], candidate: Any) -> None:
+    """Append ``candidate`` when it is a new object.
+
+    Args:
+        items: Accumulator, mutated in place.
+        candidate: Object to record. ``None`` is never recorded.
+
+    Returns:
+        None
+    """
+    if candidate is None:
+        return
+    for item in items:
+        if item is candidate:
+            return
+    items.append(candidate)
+
+
+def _attribute_chain(dotted: str) -> Any:
+    """Follow ``dotted`` as an attribute chain starting at an imported root.
+
+    ``torch.backends`` is a proxy in recent torch releases, so attribute
+    lookup can reach an object that the ``sys.modules`` entry for the same
+    name is not.
+
+    Args:
+        dotted: Fully-qualified name such as ``torch.backends.cuda``.
+
+    Returns:
+        The resolved object, or ``None`` when a hop is missing.
+    """
+    parts = dotted.split(".")
+    root = sys.modules.get(parts[0])
+    if root is None:
+        return None
+    for part in parts[1:]:
+        root = getattr(root, part, None)
+        if root is None:
+            return None
+    return root
+
+
+def _proxy_inner(candidate: Any) -> Any:
+    """Return the module that a ``PropModule``-style proxy delegates to.
+
+    Args:
+        candidate: Module, or proxy wrapping one, that may expose the proxy's
+            stored inner module as ``m``.
+
+    Returns:
+        The inner module, or ``None`` for a plain module object.
+    """
+    plain = type(sys)
+    if type(candidate) is plain:
+        return None
+    inner = getattr(candidate, "m", None)
+    return inner if isinstance(inner, plain) else None
+
+
+def _patch_targets(module_name: str) -> list[Any]:
+    """Every object ``module_name`` currently resolves to.
+
+    A shim installed on the ``sys.modules`` entry alone stays invisible when
+    ``torch.backends.cuda`` resolves through a proxy, which is how the
+    ``sdp_kernel`` ``FutureWarning`` survives an otherwise successful install.
+    Enumerating each route lets the shim be applied to all of them.
+
+    Args:
+        module_name: Dotted fully-qualified module name.
+
+    Returns:
+        Deduplicated objects, ``sys.modules`` first.
+    """
+    targets: list[Any] = []
+    _add_unique(targets, sys.modules.get(module_name))
+    parts = module_name.split(".")
+    parent_name = ".".join(parts[:-1])
+    parents: list[Any] = []
+    _add_unique(parents, sys.modules.get(parent_name))
+    _add_unique(parents, _attribute_chain(parent_name))
+    for parent in parents:
+        _add_unique(targets, getattr(parent, parts[-1], None))
+    for target in list(targets):
+        _add_unique(targets, _proxy_inner(target))
+    return targets
+
+
 def _apply_named_shim(fullname: str, module: Any) -> None:
     """Dispatch a post-import shim by module name.
 
@@ -199,13 +286,48 @@ def _apply_named_shim(fullname: str, module: Any) -> None:
 
 
 def _apply_if_already_imported() -> None:
-    """Shim targets that landed in ``sys.modules`` before the finder ran."""
-    cuda_mod = sys.modules.get("torch.backends.cuda")
-    if cuda_mod is not None:
-        apply_lab_sdp_kernel_shim(cuda_mod)
-    lora_mod = sys.modules.get("diffusers.models.lora")
-    if lora_mod is not None:
-        apply_lab_lora_linear_shim(lora_mod)
+    """Shim targets that landed in ``sys.modules`` before the finder ran.
+
+    Returns:
+        None
+    """
+    ensure_lab_tts_compat_hooks()
+
+
+def _sdp_patch_targets() -> list[Any]:
+    """Objects that ``torch.backends.cuda`` can currently resolve to.
+
+    Returns:
+        Deduplicated candidate modules (possibly empty).
+    """
+    return _patch_targets("torch.backends.cuda")
+
+
+def _lora_patch_targets() -> list[Any]:
+    """Objects that ``diffusers.models.lora`` can currently resolve to.
+
+    Returns:
+        Deduplicated candidate modules (possibly empty).
+    """
+    return _patch_targets("diffusers.models.lora")
+
+
+def ensure_lab_tts_compat_hooks() -> None:
+    """Apply the TTS shims to every object the target names resolve to.
+
+    ``torch.backends`` is a proxy in recent torch releases, so patching only
+    the ``sys.modules`` entry leaves ``torch.backends.cuda.sdp_kernel`` stock
+    and the ``FutureWarning`` still fires. Call this once the optional
+    dependencies are fully imported, such as before loading Chatterbox.
+
+    Returns:
+        None
+    """
+    for module in _sdp_patch_targets():
+        apply_lab_sdp_kernel_shim(module)
+    for module in _lora_patch_targets():
+        apply_lab_lora_linear_shim(module)
+
 
 
 class _LabCompatFinder:
@@ -278,7 +400,6 @@ class _LabCompatFinder:
                         module: Module object to populate.
                     """
                     orig_loader.exec_module(module)
-                    finder_self._armed.discard(fullname)
                     _apply_named_shim(fullname, module)
 
             spec.loader = _Loader()

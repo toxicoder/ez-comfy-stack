@@ -518,6 +518,167 @@ def test_finder_create_module_uses_origin_loader(
         ]
 
 
+class _BackendsProxy(types.ModuleType):
+    """Stand-in for ``torch.backends`` ``GenericModule``/``PropModule``.
+
+    Torch ≥ 2.9 replaces ``sys.modules["torch.backends"]`` with a proxy whose
+    attribute lookup delegates to a stored inner module, so the object reached
+    by ``torch.backends.cuda`` can differ from the ``sys.modules`` entry.
+    """
+
+    def __init__(self, wrapped: types.ModuleType) -> None:
+        types.ModuleType.__init__(self, "torch.backends")
+        self.m = wrapped  # type: ignore[attr-defined]
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self.m, name)
+
+
+def _deprecated_marker() -> Any:
+    """Fresh unshimmed ``sdp_kernel`` stand-in.
+
+    Returns:
+        Callable that raises so a test can prove the shim replaced it.
+    """
+
+    def _sdp_kernel(**_kwargs: object) -> None:
+        raise AssertionError("stock sdp_kernel reached")
+
+    return _sdp_kernel
+
+
+def test_ensure_hooks_patches_proxy_visible_objects(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """``ensure_lab_tts_compat_hooks`` reaches every object the name resolves to.
+
+    The regression: a shim on the ``sys.modules`` entry alone leaves the proxy's
+    inner module stock, so ``with torch.backends.cuda.sdp_kernel(...)`` still
+    warns. Both must be patched.
+    """
+    _install_fake_attention(monkeypatch)
+    inner = types.ModuleType("torch.backends.cuda")
+    inner.sdp_kernel = _deprecated_marker()  # type: ignore[attr-defined]
+    proxy = _BackendsProxy(inner)
+    monkeypatch.setitem(sys.modules, "torch.backends.cuda", proxy)
+
+    backends_mod = types.ModuleType("torch.backends")
+    backends_mod.cuda = inner  # type: ignore[attr-defined]
+    monkeypatch.setitem(sys.modules, "torch.backends", backends_mod)
+
+    torch_mod = sys.modules.get("torch")
+    assert torch_mod is not None
+    monkeypatch.setattr(torch_mod, "backends", backends_mod, raising=False)
+
+    mod = _load_sitecustomize(monkeypatch)
+    mod.ensure_lab_tts_compat_hooks()
+
+    assert getattr(proxy.sdp_kernel, "_lab_sdpa_shim", False)
+    assert getattr(inner.sdp_kernel, "_lab_sdpa_shim", False)
+
+
+def test_ensure_hooks_repairs_repopulated_proxy(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A second call re-shims after the proxy hands back a stock attribute."""
+    _install_fake_attention(monkeypatch)
+    inner = types.ModuleType("torch.backends.cuda")
+    inner.sdp_kernel = _deprecated_marker()  # type: ignore[attr-defined]
+    proxy = _BackendsProxy(inner)
+    monkeypatch.setitem(sys.modules, "torch.backends.cuda", proxy)
+    torch_mod = sys.modules.get("torch")
+    assert torch_mod is not None
+    backends_mod = types.ModuleType("torch.backends")
+    backends_mod.cuda = inner  # type: ignore[attr-defined]
+    monkeypatch.setattr(torch_mod, "backends", backends_mod, raising=False)
+
+    mod = _load_sitecustomize(monkeypatch)
+    mod.ensure_lab_tts_compat_hooks()
+    assert getattr(inner.sdp_kernel, "_lab_sdpa_shim", False)
+
+    inner.sdp_kernel = _deprecated_marker()  # type: ignore[attr-defined]
+    mod.ensure_lab_tts_compat_hooks()
+    assert getattr(inner.sdp_kernel, "_lab_sdpa_shim", False)
+
+
+def test_ensure_hooks_without_torch_is_noop(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """No ``torch`` in ``sys.modules`` means nothing to patch and no raise."""
+    for name in list(sys.modules):
+        if name == "torch" or name.startswith("torch."):
+            sys.modules.pop(name, None)
+    mod = _load_sitecustomize(monkeypatch)
+    assert mod.ensure_lab_tts_compat_hooks() is None
+
+
+def test_ensure_hooks_deduplicates_shared_targets(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """One module reachable through several routes is shimmed once."""
+    _install_fake_attention(monkeypatch)
+    single = types.ModuleType("torch.backends.cuda")
+    single.sdp_kernel = _deprecated_marker()  # type: ignore[attr-defined]
+    monkeypatch.setitem(sys.modules, "torch.backends.cuda", single)
+
+    torch_mod = sys.modules.get("torch")
+    assert torch_mod is not None
+    backends_mod = types.ModuleType("torch.backends")
+    backends_mod.cuda = single  # type: ignore[attr-defined]
+    monkeypatch.setattr(torch_mod, "backends", backends_mod, raising=False)
+    monkeypatch.setitem(sys.modules, "torch.backends", backends_mod)
+
+    mod = _load_sitecustomize(monkeypatch)
+    targets = mod._sdp_patch_targets()
+    assert sum(1 for item in targets if item is single) == 1
+    mod.ensure_lab_tts_compat_hooks()
+    assert getattr(single.sdp_kernel, "_lab_sdpa_shim", False)
+
+
+def test_finder_rearms_after_a_hit(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The finder stays armed after ``exec_module``, so a re-import is shimmed.
+
+    The regression: ``_armed.discard`` on a hit meant the second load of the
+    same module name in a process skipped the shim entirely.
+    """
+    import importlib.machinery
+
+    _install_fake_attention(monkeypatch)
+    mod = _load_sitecustomize(monkeypatch)
+    finder = mod._LAB_COMPAT_FINDER
+    assert finder is not None
+    finder._armed = set(finder._TARGETS)
+
+    class _DummyLoader:
+        def exec_module(self, module: Any) -> None:
+            del module
+
+    class _DummyFinder:
+        def find_spec(
+            self,
+            fullname: str,
+            path: object | None = None,
+            target: object | None = None,
+        ) -> Any:
+            del path, target
+            if fullname not in finder._TARGETS:
+                return None
+            return importlib.machinery.ModuleSpec(
+                fullname, _DummyLoader()  # type: ignore[arg-type]
+            )
+
+    sys.meta_path.append(_DummyFinder())
+    try:
+        spec = finder.find_spec("torch.backends.cuda")
+        assert spec is not None and spec.loader is not None
+        spec.loader.exec_module(types.ModuleType("torch.backends.cuda"))
+        assert finder.find_spec("torch.backends.cuda") is not None
+    finally:
+        sys.meta_path[:] = [
+            item for item in sys.meta_path if not isinstance(item, _DummyFinder)
+        ]
+
+
 def test_apply_named_shim_dispatches(monkeypatch: pytest.MonkeyPatch) -> None:
     _install_fake_attention(monkeypatch)
     mod = _load_sitecustomize(monkeypatch)
