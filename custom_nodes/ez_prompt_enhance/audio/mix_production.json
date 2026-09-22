@@ -324,8 +324,8 @@
   {
     "id": "mix_drive_lock",
     "label": "Drive-through instrumental lock",
-    "clause": "Lock a live bass-set mix so the take stays instrumental, original, and chest-heavy.",
-    "tags": "rave, 808, no singing, no choir, no vocal chops, original composition",
+    "clause": "Lock a live bass-set mix so the take stays instrumental, chest-heavy, and free of brass.",
+    "tags": "rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups",
     "lyrics_form": "",
     "lyrics_form_inst": "",
     "bpm": "",
@@ -340,8 +340,8 @@
   {
     "id": "mix_drive_treat",
     "label": "Drive-through DJ-shout lock",
-    "clause": "Lock a live bass-set mix so a sparse DJ shout can sit without a rap verse.",
-    "tags": "rave, 808, original composition",
+    "clause": "Lock a live bass-set mix so a sparse DJ shout can sit without a rap verse or brass.",
+    "tags": "rave, 808, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups",
     "lyrics_form": "",
     "lyrics_form_inst": "",
     "bpm": "",

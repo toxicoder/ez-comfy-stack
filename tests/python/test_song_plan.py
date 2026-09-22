@@ -316,6 +316,26 @@ def test_edm_arc_is_not_always_drop_first() -> None:
     assert any(_roles(arrange_edm(source, plan))[0] != "drop" for plan in plans)
 
 
+def test_edm_inst_without_bass_borrows_chest_sub() -> None:
+    source = "[inst - rapid hi-hats]\n\n[outro - kick holds]"
+    plan = _as_plan(
+        assign_album_plans(
+            family="drive-through",
+            album_slug="fills",
+            bpms=[150],
+            tags=["warped hybrid-trap"],
+            lyrics=[source],
+            kind="edm",
+        )[0],
+        sections=[
+            {"role": "inst", "bars": 4, "pattern": "rapid hi-hats"},
+            {"role": "outro", "bars": 4, "pattern": "kick holds"},
+        ],
+    )
+    built = arrange_edm(source, plan)
+    assert "[inst - rapid hi-hats, chest-sub]" in built
+
+
 def test_edm_treat_breakdown_and_fallbacks() -> None:
     source = "[inst - rapid hi-hats]\n\n[chorus]\nhey"
     plan = assign_album_plans(

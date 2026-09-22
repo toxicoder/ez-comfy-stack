@@ -10,8 +10,8 @@ import re
 from typing import Literal, TypedDict
 
 from .albums import album_rel, drive_album_for_phase
+from .drive_arrange import arrange_drive, lift_drive_bpm, plan_drive_album
 from .naming import music_output_prefix
-from .song_plan import arrange_edm, assign_album_plans
 
 # Take length and Drive-through vocal locks.
 EDM_DURATION_S = 180.0
@@ -291,6 +291,7 @@ def _splice_drive(
         splice,
     )
 
+    bpm = lift_drive_bpm(bpm)
     merged = {str(key): str(value) for key, value in dict(picks or {}).items()}
     merged["tempo_groove"] = _tempo_id(bpm)
     if treat:
@@ -566,14 +567,7 @@ def finalize_drive_album(rows: tuple[EdmExample, ...]) -> tuple[EdmExample, ...]
     if not rows:
         return ()
     info = drive_album_for_phase(int(rows[0]["phase"]))
-    plans = assign_album_plans(
-        family="drive-through",
-        album_slug=str(info["slug"]),
-        bpms=[int(row["bpm"]) for row in rows],
-        tags=[str(row["tags"]) for row in rows],
-        lyrics=[str(row["lyrics"]) for row in rows],
-        kind="edm",
-    )
+    plans = plan_drive_album(str(info["slug"]), rows)
     total = len(rows)
     out: list[EdmExample] = []
     for index, row in enumerate(rows, 1):
@@ -595,11 +589,10 @@ def finalize_drive_album(rows: tuple[EdmExample, ...]) -> tuple[EdmExample, ...]
                 "year": info["year"],
                 "cover_prompt": info["cover_prompt"],
                 "prefix": music_output_prefix(row["title"], index),
-                "lyrics": arrange_edm(
+                "lyrics": arrange_drive(
                     str(row["lyrics"]),
                     plan,
                     treat=row["ace_mode"] == "vocal",
-                    bounce=int(row["phase"]) == 2,
                 ),
                 "duration": float(plan["duration_s"]),
                 "form_id": plan["form_id"],
