@@ -82,7 +82,54 @@ const SAVE_TYPES = new Set([
 const BANNER_ID = "ez-studio-app-banner";
 const DESC_STYLE_ID = "ez-studio-app-desc-wrap";
 const CHECK_STYLE_ID = "ez-studio-app-check-models";
+const CHIP_STATE_KEY = "ez-comfy.studio-app-chip";
+const CHIP_STATES = new Set(["open", "min", "closed"]);
 let modelCheckText = "";
+let lastStatus = "";
+
+/**
+ * Occupancy chip visibility stored for this browser.
+ * @returns {"open"|"min"|"closed"}
+ */
+function readChipState() {
+  try {
+    const stored = localStorage.getItem(CHIP_STATE_KEY);
+    if (stored && CHIP_STATES.has(stored)) {
+      return stored;
+    }
+  } catch {
+    // Private mode or a blocked storage API.
+  }
+  return "open";
+}
+
+let chipState = readChipState();
+
+/**
+ * Remember occupancy chip visibility for this browser.
+ * @param {"open"|"min"|"closed"} next
+ * @returns {void}
+ */
+function setChipState(next) {
+  chipState = next;
+  try {
+    localStorage.setItem(CHIP_STATE_KEY, next);
+  } catch {
+    // Quota or private mode: keep the in-memory choice.
+  }
+}
+
+/**
+ * A closed chip comes back as a pill on the next run or App load.
+ * Idle setup leaves a stored "closed" hidden.
+ * @returns {void}
+ */
+function revealClosedChip() {
+  if (chipState === "closed") {
+    setChipState("min");
+  }
+}
+
 const CHIP = [
   "padding:10px 12px",
   "border-radius:10px",
@@ -191,6 +238,8 @@ function ensureBanner() {
  * @returns {void}
  */
 function mountBanner(el) {
+  const compact =
+    el.dataset.state === "min" ? "padding:4px 10px;width:max-content;cursor:pointer" : "";
   const host = document.querySelector("[data-testid=linear-widgets]");
   if (host) {
     el.style.cssText = [
@@ -199,7 +248,10 @@ function mountBanner(el) {
       "z-index:5",
       "margin:8px 8px 4px",
       CHIP,
-    ].join(";");
+      compact,
+    ]
+      .filter(Boolean)
+      .join(";");
     if (el.parentElement !== host) {
       host.insertBefore(el, host.firstChild);
     }
@@ -212,7 +264,10 @@ function mountBanner(el) {
     "z-index:40",
     "max-width:min(420px,calc(100vw - 24px))",
     CHIP,
-  ].join(";");
+    compact,
+  ]
+    .filter(Boolean)
+    .join(";");
   if (el.parentElement !== document.body) {
     document.body.appendChild(el);
   }
@@ -281,39 +336,95 @@ function ensureCheckCss() {
   margin-top: 6px;
   white-space: pre-wrap;
 }
+#${BANNER_ID} [data-ez-chip-bar] {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin: -2px -2px 6px;
+}
+#${BANNER_ID} [data-ez-chip-min],
+#${BANNER_ID} [data-ez-chip-close],
+#${BANNER_ID} [data-ez-chip-pill] {
+  border: 1px solid transparent;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  pointer-events: auto;
+}
+#${BANNER_ID} [data-ez-chip-min],
+#${BANNER_ID} [data-ez-chip-close] {
+  padding: 0 6px;
+  border-radius: 4px;
+  line-height: 1.4;
+}
+#${BANNER_ID} [data-ez-chip-pill] {
+  padding: 0;
+  border: 0;
+}
+#${BANNER_ID}[data-state="min"] {
+  width: max-content;
+  cursor: pointer;
+}
 `;
   document.head.appendChild(style);
 }
 
 /**
- * Wire the occupancy-chip Check models button after innerHTML.
+ * Wire Check models plus minimize, close, and the collapsed pill.
  * @param {HTMLElement} el
  * @returns {void}
  */
-function bindCheckButton(el) {
+function bindChipControls(el) {
   const btn = el.querySelector("[data-ez-check-models]");
-  if (!btn) {
-    return;
-  }
-  btn.addEventListener("click", async (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    btn.disabled = true;
-    modelCheckText = "Checking models…";
-    renderBanner("");
-    try {
-      const api = window.ezComfyModelCheck;
-      if (!api || typeof api.postCheck !== "function") {
-        modelCheckText = "Check models is unavailable (reload Comfy).";
-      } else {
-        const payload = await api.postCheck(app.graph);
-        modelCheckText = String(payload.message || (payload.ok ? "Ready." : "Missing models."));
+  if (btn) {
+    btn.addEventListener("click", async (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      btn.disabled = true;
+      modelCheckText = "Checking models…";
+      renderBanner(lastStatus);
+      try {
+        const api = window.ezComfyModelCheck;
+        if (!api || typeof api.postCheck !== "function") {
+          modelCheckText = "Check models is unavailable (reload Comfy).";
+        } else {
+          const payload = await api.postCheck(app.graph);
+          modelCheckText = String(payload.message || (payload.ok ? "Ready." : "Missing models."));
+        }
+      } catch (err) {
+        modelCheckText = `Check failed: ${err && err.message ? err.message : err}`;
       }
-    } catch (err) {
-      modelCheckText = `Check failed: ${err && err.message ? err.message : err}`;
-    }
-    renderBanner("");
-  });
+      renderBanner(lastStatus);
+    });
+  }
+  const minimize = el.querySelector("[data-ez-chip-min]");
+  if (minimize) {
+    minimize.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      setChipState("min");
+      renderBanner(lastStatus);
+    });
+  }
+  const close = el.querySelector("[data-ez-chip-close]");
+  if (close) {
+    close.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      setChipState("closed");
+      renderBanner(lastStatus);
+    });
+  }
+  const pill = el.querySelector("[data-ez-chip-pill]");
+  if (pill) {
+    pill.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      setChipState("open");
+      renderBanner(lastStatus);
+    });
+  }
 }
 
 /**
@@ -322,9 +433,15 @@ function bindCheckButton(el) {
  * @returns {void}
  */
 function renderBanner(status) {
+  lastStatus = status || "";
   const mode = labAppMode();
   const el = ensureBanner();
   if (!mode?.enabled) {
+    el.style.display = "none";
+    return;
+  }
+  el.dataset.state = chipState;
+  if (chipState === "closed") {
     el.style.display = "none";
     return;
   }
@@ -332,6 +449,13 @@ function renderBanner(status) {
   ensureCheckCss();
   mountBanner(el);
   const occupancy = mode.occupancy || "none";
+  if (chipState === "min") {
+    el.title = "Show occupancy";
+    el.innerHTML =
+      `<button type="button" data-ez-chip-pill title="Show occupancy">App · ${escapeHtml(occupancy)}</button>`;
+    bindChipControls(el);
+    return;
+  }
   const stop = OCCUPANCY_STOP[occupancy] || "check the Note";
   const handoff = (mode.handoff || []).slice(0, 3).join(" · ");
   const extra = app.graph?.extra || {};
@@ -362,8 +486,16 @@ function renderBanner(status) {
   const checkResult = modelCheckText
     ? `<div data-ez-check-result>${escapeHtml(modelCheckText).replaceAll("\n", "<br>")}</div>`
     : "";
-  el.innerHTML = `${lines.join("<br>")}${checkResult}<div><button type="button" data-ez-check-models>Check models</button></div>`;
-  bindCheckButton(el);
+  el.innerHTML = [
+    '<div data-ez-chip-bar>',
+    '<button type="button" data-ez-chip-min title="Minimize" aria-label="Minimize">−</button>',
+    '<button type="button" data-ez-chip-close title="Close" aria-label="Close">×</button>',
+    "</div>",
+    lines.join("<br>"),
+    checkResult,
+    '<div><button type="button" data-ez-check-models>Check models</button></div>',
+  ].join("");
+  bindChipControls(el);
 }
 
 app.registerExtension({
@@ -389,6 +521,7 @@ app.registerExtension({
     if (graph?.addEventListener) {
       graph.addEventListener("configured", () => {
         relabelGraph();
+        revealClosedChip();
         renderBanner("");
       });
     }
@@ -406,6 +539,7 @@ app.registerExtension({
     api.addEventListener("execution_start", () => {
       done = 0;
       const total = countSaveNodes();
+      revealClosedChip();
       renderBanner(total ? `Running — 0 of ${total} outputs` : "Running…");
     });
     api.addEventListener("executed", ({ detail }) => {
@@ -415,14 +549,17 @@ app.registerExtension({
       }
       const total = countSaveNodes();
       if (total) {
+        revealClosedChip();
         renderBanner(`Still ${Math.min(done, total)} of ${total}`);
       }
     });
     api.addEventListener("execution_success", () => {
       const total = countSaveNodes();
+      revealClosedChip();
       renderBanner(total ? `Done — ${total} of ${total}` : "Done");
     });
     api.addEventListener("execution_error", () => {
+      revealClosedChip();
       renderBanner("Run failed — open the graph Note for occupancy and next steps.");
     });
     relabelGraph();

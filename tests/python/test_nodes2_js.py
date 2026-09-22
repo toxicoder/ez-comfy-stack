@@ -196,3 +196,16 @@ def test_studio_app_banner_shows_description_and_wraps_help() -> None:
     assert "overflow: visible" in body
     assert "height: auto" in body
     assert "ez-studio-app-desc-wrap" in body
+
+
+def test_studio_app_banner_is_dismissable_and_minimizable() -> None:
+    """Occupancy chip can collapse to a pill or close, and remembers that."""
+    body = STUDIO_APP_JS.read_text(encoding="utf-8")
+    assert "data-ez-chip-min" in body
+    assert "data-ez-chip-close" in body
+    assert "data-ez-chip-pill" in body
+    assert "ez-comfy.studio-app-chip" in body
+    assert "localStorage.setItem" in body
+    assert "localStorage.getItem" in body
+    assert 'data-state="min"' in body
+    assert 'chipState === "closed"' in body
