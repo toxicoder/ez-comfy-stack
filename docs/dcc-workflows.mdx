@@ -8,7 +8,7 @@ tags: [dcc, blender, guide-pack, klein, ltx, occupancy, ic-lora]
 
 **What's on this page**
 
-- The DCC ↔ Comfy **print** handshake (`guides/<slug>/<shot>/`)
+- The DCC ↔ Comfy **print** handshake (`guides/<film-id>/<shot>/`, for example `guides/go-see/12/`)
 - Single-frame still packs (`guides/<slug>/stills/<plate>/`)
 - Occupancy: stop Comfy before a dump
 - Instagram clay stills are a different pack (`house-views`, 1024×1280)
@@ -66,6 +66,8 @@ rsync -a guides/go-see/12/ spark-0:/mnt/comfy-output/guides/go-see/12/
 ## Pack contract
 
 `${COMFY_OUTPUT_DIR}/guides/<slug>/<shot_id>/`
+
+`<slug>` here is the film id you pass to `--film` (`go-see`), not the output prefix (`gosee`). `blender-guide`, `film-animatic`, and `overlay-qc` use that directory. `films/<prefix>/` and `ez_<prefix>_*.mp4` keep the prefix. An existing `guides/<prefix>/` pack is read only when `guides/<film-id>/` is absent.
 
 | File | Rule |
 | --- | --- |

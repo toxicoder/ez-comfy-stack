@@ -11,13 +11,13 @@ tags: [studio-ui, compose, shorts, jobstore]
 - **Optional profile** `studio-ui` — default `start` does **not** launch it
 - **No GPU** — 512m, `restart: "no"`, port `${STUDIO_UI_PORT:-8190}`
 - **Routes** — `/`, `/watch/<slug>`, `/media`, `/thumb`
-- **Allowlisted 90s masters** — `gosee` / `stillhere` / `switchyard`
+- **Allowlisted masters** — 90s `gosee` / `stillhere` / `switchyard`, and 450s `tidetable` / `nightoven` / `glasshouse` / `lastlane` / `breakwater`
 - **Not App Mode** — Lane A / Lane B live on [ComfyUI Apps](../studio-apps.md)
 
 **What this enables**
 
 - **A lights board** for clay / look / overlay / print / audio after `compile-film` / `print-shot`
-- **Watch / download** of an allowlisted 90s MP4 without opening Comfy
+- **Watch / download** of an allowlisted MP4 without opening Comfy. Playback is streamed and seekable; the 512m cap stays
 - **Leaving** the widget catalog on App Mode (this page does not duplicate it)
 
 ```bash
@@ -69,14 +69,14 @@ Empty films dir is a **page**, not a crash: “No films yet. Run `./scripts/util
 
 | Path | What |
 | --- | --- |
-| **`/`** | Jobstore lights: clay / look / overlay / print / audio per shot from `films/<slug>/state.json` |
-| **`/watch/<slug>`** | HTML5 player for an **allowlisted** 90s master |
-| **`/media/<slug>`** | MP4 bytes. `?dl=1` sets `Content-Disposition` attachment |
-| **`/thumb?slug=&shot=&kind=`** | PNG thumb. `kind` is `clay` (`first.png`) or `overlay` (`overlay.png`). Slug must be alphanumeric; shot digits |
+| **`/`** | Jobstore lights: clay / look / overlay / print / audio per shot from `films/<slug>/state.json`. Clay, look, and overlay read `guides/<film-id>/<shot>/` (`go-see`). `guides/<prefix>/` (`gosee`) is used only when that shot directory is absent |
+| **`/watch/<slug>`** | HTML5 player for an **allowlisted** master |
+| **`/media/<slug>`** | Streamed MP4. One `Range: bytes=` request is **206**; a bad range is **416** and the file is not loaded into memory. `?dl=1` is the whole file (`Content-Disposition` attachment) and ignores `Range`. `Accept-Ranges: bytes`. The container stays `mem_limit: 512m` and `restart: "no"` |
+| **`/thumb?slug=&shot=&kind=`** | PNG thumb. `kind` is `clay` (`first.png`) or `overlay` (`overlay.png`). `slug` is a film id (`go-see`) or output prefix (`gosee`); shot digits. `..` and slashes 404 |
 
 Unknown / missing allowlist → **404**.
 
-### Allowlisted 90s masters
+### Allowlisted masters
 
 Resolved under the Comfy output root (`/films` bind = `${COMFY_OUTPUT_DIR}`):
 
@@ -85,6 +85,11 @@ Resolved under the Comfy output root (`/films` bind = `${COMFY_OUTPUT_DIR}`):
 | `gosee` | `ez_gosee_90s.mp4` |
 | `stillhere` | `ez_stillhere_90s.mp4` |
 | `switchyard` | `ez_switchyard_90s.mp4` |
+| `tidetable` | `ez_tidetable_450s.mp4` |
+| `nightoven` | `ez_nightoven_450s.mp4` |
+| `glasshouse` | `ez_glasshouse_450s.mp4` |
+| `lastlane` | `ez_lastlane_450s.mp4` |
+| `breakwater` | `ez_breakwater_450s.mp4` |
 
 Path is `realpath`-jailed to that root. Stitch still writes those names via `EZFilmConcat` / `concat-shots.sh`. 90s playbook: [90s shorts](../shorts.md).
 

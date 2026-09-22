@@ -4,12 +4,17 @@
 from __future__ import annotations
 
 import html
+import io
 import json
+import re
 import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from typing import Any, TypedDict
+from typing import Any, BinaryIO, TypedDict
 from urllib.parse import parse_qs, urlparse
+
+# Film ids and output prefixes used as a single path segment under guides/.
+_GUIDE_ID = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*\Z")
 
 # Jobstore films directory (``/films/films`` when present, else ``/films``).
 FILMS = Path("/films/films")
@@ -91,6 +96,55 @@ def publish_mp4(slug: str) -> Path | None:
     return None
 
 
+def _guide_id(value: str) -> str | None:
+    """Return a single safe guides directory name, or None.
+
+    Accepts a film id (``go-see``) or an output prefix (``gosee``).
+    Rejects empty strings, slashes, and ``..``.
+
+    Args:
+        value: Candidate directory name.
+
+    Returns:
+        The name when it is one safe segment, else ``None``.
+    """
+    text = str(value or "")
+    if _GUIDE_ID.fullmatch(text):
+        return text
+    return None
+
+
+def guide_shot_id(film: str, slug: str, shot: str) -> str:
+    """Choose the guides directory name for one shot.
+
+    ``guides/<film-id>/<shot>`` wins when that directory exists. Otherwise
+    ``guides/<prefix>/<shot>`` is used when it exists. When neither exists,
+    the film id is returned so a later dump matches ``blender-guide``.
+
+    Args:
+        film: Film id from ``state.json`` (``go-see``).
+        slug: Output prefix (``gosee``).
+        shot: Shot directory name.
+
+    Returns:
+        A safe directory name, or ``""`` when neither name is safe.
+    """
+    film_id = _guide_id(film)
+    slug_id = _guide_id(slug)
+    if film_id is not None and shot.isdigit() and (GUIDES / film_id / shot).is_dir():
+        return film_id
+    if (
+        slug_id is not None
+        and slug_id != film_id
+        and shot.isdigit()
+        and (GUIDES / slug_id / shot).is_dir()
+    ):
+        return slug_id
+    if film_id is not None:
+        return film_id
+    return slug_id or ""
+
+
 def _light(on: bool) -> str:
     """CSS class for a board light.
 
@@ -110,25 +164,34 @@ def _shot_lights(
 
     Args:
         dest: Film jobstore directory (contains ``stems/``).
-        slug: Film slug.
+        slug: Resolved guide directory name (film id or output prefix).
         sid: Shot id (directory name under the guide pack).
         row: Shot object from ``state.json``.
 
     Returns:
         Light dict consumed by :func:`_page`.
     """
-    pack = GUIDES / slug / sid
-    stems = dest / "stems" / sid
-    clay = (pack / "first.png").is_file() or (pack / "clay.mp4").is_file()
-    look = (pack / "overlay.png").is_file()
-    overlay = (pack / "score.json").is_file()
-    printed = str(row.get("status") or "") == "ok"
-    mixed = any((stems / name).is_file() for name in ("mix.mp4", "mix.m4a", "mix.wav"))
+    guide = _guide_id(slug)
+    pack = GUIDES / guide / sid if guide is not None and sid.isdigit() else None
+    stems = dest / "stems" / sid if sid.isdigit() else None
+    clay = False
+    look = False
+    overlay = False
     thumb = ""
-    if (pack / "first.png").is_file():
-        thumb = f"/thumb?slug={html.escape(slug)}&shot={html.escape(sid)}&kind=clay"
-    elif (pack / "overlay.png").is_file():
-        thumb = f"/thumb?slug={html.escape(slug)}&shot={html.escape(sid)}&kind=overlay"
+    if pack is not None:
+        clay = (pack / "first.png").is_file() or (pack / "clay.mp4").is_file()
+        look = (pack / "overlay.png").is_file()
+        overlay = (pack / "score.json").is_file()
+        if (pack / "first.png").is_file():
+            thumb = f"/thumb?slug={html.escape(guide or '')}&shot={html.escape(sid)}&kind=clay"
+        elif (pack / "overlay.png").is_file():
+            thumb = f"/thumb?slug={html.escape(guide or '')}&shot={html.escape(sid)}&kind=overlay"
+    printed = str(row.get("status") or "") == "ok"
+    mixed = False
+    if stems is not None:
+        mixed = any(
+            (stems / name).is_file() for name in ("mix.mp4", "mix.m4a", "mix.wav")
+        )
     return {
         "id": sid,
         "clay": _light(clay),
@@ -156,12 +219,16 @@ def _rows() -> list[FilmRow]:
             continue
         dest = state.parent
         slug = str(data.get("slug") or dest.name)
+        film = str(data.get("film") or "")
         shots = data.get("shots") or []
-        ok = sum(1 for s in shots if s.get("status") == "ok")
-        lights = [
-            _shot_lights(dest, slug, str(s.get("id") or f"{i:02d}"), s)
-            for i, s in enumerate(shots, start=1)
-        ]
+        ok = sum(1 for s in shots if isinstance(s, dict) and s.get("status") == "ok")
+        lights = []
+        for index, shot in enumerate(shots, start=1):
+            if not isinstance(shot, dict):
+                continue
+            sid = str(shot.get("id") or f"{index:02d}")
+            guide = guide_shot_id(film, slug, sid)
+            lights.append(_shot_lights(dest, guide, sid, shot))
         rows.append(
             {
                 "slug": slug,
@@ -284,14 +351,14 @@ def _safe_thumb(slug: str, shot: str, kind: str) -> Path | None:
     """Resolve a clay/overlay PNG under ``GUIDES``, or ``None``.
 
     Args:
-        slug: Alphanumeric film slug.
+        slug: Film id (``go-see``) or output prefix (``gosee``).
         shot: Digit-only shot id.
         kind: ``clay`` (``first.png``) or ``overlay``.
 
     Returns:
         File path when it exists under ``GUIDES``, else ``None``.
     """
-    if not slug.isalnum() or not shot.isdigit() or kind not in {"clay", "overlay"}:
+    if _guide_id(slug) is None or not shot.isdigit() or kind not in {"clay", "overlay"}:
         return None
     pack = GUIDES / slug / shot
     if kind == "clay":
@@ -305,6 +372,87 @@ def _safe_thumb(slug: str, shot: str, kind: str) -> Path | None:
     if path.is_file():
         return path
     return None
+
+
+def parse_byte_range(header: str, size: int) -> tuple[int, int] | None:
+    """Parse one ``bytes=`` range into an inclusive span.
+
+    Accepts ``START-END``, open ``START-``, and a suffix ``-N``. A comma
+    means more than one range, which this board does not serve.
+
+    Args:
+        header: Raw ``Range`` header value.
+        size: File size in bytes.
+
+    Returns:
+        ``(start, end)`` inclusive, or ``None`` when the range cannot be
+        satisfied.
+    """
+    text = header.strip()
+    if not text.lower().startswith("bytes="):
+        return None
+    spec = text[6:].strip()
+    if not spec or "," in spec or size < 1:
+        return None
+    if spec.startswith("-"):
+        try:
+            tail = int(spec[1:])
+        except ValueError:
+            return None
+        if tail < 1:
+            return None
+        start = size - tail
+        if start < 0:
+            start = 0
+        return start, size - 1
+    if "-" not in spec:
+        return None
+    start_text, end_text = spec.split("-", 1)
+    try:
+        start = int(start_text)
+    except ValueError:
+        return None
+    if start >= size:
+        return None
+    if end_text == "":
+        return start, size - 1
+    try:
+        end = int(end_text)
+    except ValueError:
+        return None
+    if end < start:
+        return None
+    if end >= size:
+        end = size - 1
+    return start, end
+
+
+def write_file_span(
+    src: BinaryIO,
+    dest: io.BufferedIOBase,
+    start: int,
+    length: int,
+    *,
+    chunk: int = 65536,
+) -> None:
+    """Copy ``length`` bytes from ``src`` at ``start`` into ``dest``.
+
+    Args:
+        src: Opened binary file.
+        dest: Socket or buffer (``BaseHTTPRequestHandler.wfile``).
+        start: First byte offset.
+        length: Number of bytes to copy.
+        chunk: Read size. Kept small so a 512m studio-ui process does not
+            hold the master.
+    """
+    src.seek(start)
+    remaining = length
+    while remaining > 0:
+        data = src.read(min(chunk, remaining))
+        if not data:
+            break
+        dest.write(data)
+        remaining -= len(data)
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -347,6 +495,70 @@ class Handler(BaseHTTPRequestHandler):
             return
         self._send(watch_page(slug) or b"", "text/html; charset=utf-8")
 
+    def _header(self, name: str) -> str:
+        """Read one request header.
+
+        Args:
+            name: Header name.
+
+        Returns:
+            The value, or ``""`` when the test double has no headers.
+        """
+        headers = getattr(self, "headers", None)
+        if headers is None:
+            return ""
+        return str(headers.get(name) or "")
+
+    def _stream_file(
+        self,
+        path: Path,
+        content_type: str,
+        *,
+        download_name: str | None,
+        honor_range: bool,
+    ) -> None:
+        """Stream a file in chunks, honoring one byte range.
+
+        Args:
+            path: File that exists.
+            content_type: ``Content-Type`` value.
+            download_name: Attachment filename. When set, ``Range`` is ignored
+                so the download is the whole file.
+            honor_range: When True, a ``Range`` header selects a slice.
+        """
+        size = path.stat().st_size
+        start = 0
+        end = size - 1 if size else 0
+        status = 200
+        if honor_range:
+            requested = self._header("Range")
+            if requested:
+                span = parse_byte_range(requested, size)
+                if span is None:
+                    self.send_response(416)
+                    self.send_header("Content-Range", f"bytes */{size}")
+                    self.send_header("Content-Length", "0")
+                    self.end_headers()
+                    return
+                start, end = span
+                status = 206
+        length = 0 if status == 200 and size == 0 else end - start + 1
+        self.send_response(status)
+        self.send_header("Accept-Ranges", "bytes")
+        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Length", str(length))
+        if status == 206:
+            self.send_header("Content-Range", f"bytes {start}-{end}/{size}")
+        if download_name:
+            self.send_header(
+                "Content-Disposition", f'attachment; filename="{download_name}"'
+            )
+        self.end_headers()
+        if length == 0:
+            return
+        with path.open("rb") as src:
+            write_file_span(src, self.wfile, start, length)
+
     def _serve_media(self, slug: str, query: dict[str, list[str]]) -> None:
         """Serve the published MP4, optionally as a download.
 
@@ -358,12 +570,14 @@ class Handler(BaseHTTPRequestHandler):
         if path is None:
             self._send_404()
             return
-        extra: list[tuple[str, str]] = []
-        if (query.get("dl") or [""])[0] == "1":
-            extra.append(
-                ("Content-Disposition", f'attachment; filename="{path.name}"')
-            )
-        self._send(path.read_bytes(), "video/mp4", extra)
+        download = (query.get("dl") or [""])[0] == "1"
+        name = path.name if download else None
+        self._stream_file(
+            path,
+            "video/mp4",
+            download_name=name,
+            honor_range=not download,
+        )
 
     def _serve_thumb(self, query: dict[str, list[str]]) -> None:
         """Serve an allowlisted clay/look PNG.
@@ -378,7 +592,7 @@ class Handler(BaseHTTPRequestHandler):
         if path is None:
             self._send_404()
             return
-        self._send(path.read_bytes(), "image/png")
+        self._stream_file(path, "image/png", download_name=None, honor_range=True)
 
     def _serve_board(self) -> None:
         """Serve the film board HTML."""

@@ -90,7 +90,7 @@ tags: [troubleshooting, comfyui, occupancy, studio-ui, dub]
 | Guide pack QC refuses 1280×720 | LTX VAE grid is **1280×704** (or 768×1280 portrait) | Re-export at 704. `ez_ltx_spatial` is a backstop, not the plan |
 | Guide pack QC missing canny | Dump predates outline pass | Re-run `export-guides`. Canny is Workbench outline, always dumped |
 | `overlay-qc` size mismatch | Look plate not 1280×704 | Re-Queue **klein-from-clay** at 1280×704. Do not stretch. [Clay to finish](../learn/clay-to-finish.md) |
-| `film-animatic` missing sources | No clay.mp4 and no first.png | Dump a guide pack or hold Klein stills under `stills/NN.png` |
+| `film-animatic` missing sources / film board clay stays off | Pack is missing, or it was expected under `guides/gosee/` after `blender-guide --film go-see` | Dump writes `guides/go-see/<shot>/` (the film id). Pull latest so animatic, overlay QC, and the :8190 board read that directory. A pack already at `guides/gosee/` is still used when `guides/go-see/` is absent. [DCC workflows](../dcc-workflows.md) |
 | `stem-mix` / `film-accept` stem loudness | Missing mix or not −14 ± 2 LUFS | Pass `--bg` from the LTX print; stop LTX first. Occupancy **audio** |
 | YouTube wants a video, I only have FLAC | Audio graphs save FLAC + MP3 on purpose | `./scripts/manage.sh audio-still-video --audio FILE --image FILE`. Cover from **klein-thumbnail** (16:9) or **klein-podcast-cover** (letterboxed). [Local music](../music.md) |
 | Union Control missing LoRA | IC-LoRA is opt-in, not `download-models` | `./scripts/manage.sh download-ltx --tier iclora`. Distilled-only; refuse 19B |

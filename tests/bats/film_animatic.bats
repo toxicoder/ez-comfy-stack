@@ -33,3 +33,26 @@ teardown() {
   ! grep -q 'compose up' "${FA}"
   ! grep -q 'docker compose' "${FA}"
 }
+
+@test "animatic_guides_dir prefers the film id and falls back to the prefix" {
+  local root="${TEST_TMP_DIR}/out"
+  mkdir -p "${root}/guides/go-see" "${root}/guides/gosee"
+  run animatic_guides_dir "${root}" go-see gosee
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "${root}/guides/go-see" ]
+
+  rm -rf "${root}/guides/go-see"
+  run animatic_guides_dir "${root}" go-see gosee
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "${root}/guides/gosee" ]
+
+  rm -rf "${root}/guides/gosee"
+  run animatic_guides_dir "${root}" go-see gosee
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "${root}/guides/go-see" ]
+
+  mkdir -p "${root}/guides/switchyard"
+  run animatic_guides_dir "${root}" switchyard switchyard
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "${root}/guides/switchyard" ]
+}

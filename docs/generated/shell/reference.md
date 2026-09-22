@@ -1504,7 +1504,9 @@ Environment:
 ## film-animatic
 
 Cheap 90s animatic from clay.mp4 or held stills. Host ffmpeg, no GPU.
-May run while compose is up.
+May run while compose is up. Reads guides/<film-id>/ (go-see), the same
+directory blender-guide writes. Uses guides/<output-prefix>/ (gosee) only
+when the film-id directory is absent. films/<prefix>/ is unchanged.
 
 ```bash
 Usage:
@@ -1668,6 +1670,9 @@ Usage:
 
 50% blend of clay first.png vs Klein look plate. Host ffmpeg, no GPU.
 May run while compose is up (unlike export-guides).
+Pack directory is guides/<film-id>/<shot>/ (go-see), the same directory
+blender-guide writes. Uses guides/<output-prefix>/ only when the film-id
+directory is absent.
 
 ```bash
 Usage:

@@ -4,6 +4,7 @@ from __future__ import annotations
 import pytest
 
 import importlib.util
+import io
 import json
 from pathlib import Path
 from types import ModuleType
@@ -77,6 +78,7 @@ def _bind_handler(server: ModuleType, path: str) -> tuple[Any, dict[str, object]
     handler.send_response = send_response  # type: ignore[method-assign]
     handler.send_header = send_header  # type: ignore[method-assign]
     handler.end_headers = lambda: None  # type: ignore[method-assign]
+    handler.headers = {}  # type: ignore[method-assign]
     return handler, captured
 
 
@@ -340,3 +342,182 @@ def test_film_board_links_watch_when_mp4_exists(
     html = server._page().decode("utf-8")
     assert "/watch/gosee" in html
     assert "/media/gosee?dl=1" in html
+
+
+def _write_board(
+    tmp_path: Path,
+    *,
+    film: str = "go-see",
+    slug: str = "gosee",
+    shots: list[object] | None = None,
+) -> None:
+    dest = tmp_path / "films" / slug
+    dest.mkdir(parents=True)
+    (dest / "state.json").write_text(
+        json.dumps(
+            {
+                "slug": slug,
+                "film": film,
+                "audio_policy": "world-only",
+                "shots": shots if shots is not None else [{"id": "01", "status": "ok"}],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+def test_rows_prefer_film_id_guide_pack(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _write_board(tmp_path)
+    film_pack = tmp_path / "guides" / "go-see" / "01"
+    legacy = tmp_path / "guides" / "gosee" / "01"
+    film_pack.mkdir(parents=True)
+    legacy.mkdir(parents=True)
+    (film_pack / "first.png").write_bytes(b"clay-film")
+    (legacy / "overlay.png").write_bytes(b"legacy-only")
+    server = _load_server()
+    monkeypatch.setattr(server, "FILMS", tmp_path / "films")
+    monkeypatch.setattr(server, "GUIDES", tmp_path / "guides")
+    assert server.guide_shot_id("go-see", "gosee", "01") == "go-see"
+    row = server._rows()[0]
+    assert row["slug"] == "gosee"
+    shot = row["shots"][0]
+    assert shot["clay"] == "on"
+    assert shot["look"] == "off"
+    assert "slug=go-see" in shot["thumb"]
+
+    handler, captured = _bind_handler(server, "/thumb?slug=go-see&shot=01&kind=clay")
+    server.Handler.do_GET(handler)
+    assert captured["status"] == 200
+    assert handler.wfile.getvalue() == b"clay-film"
+
+
+def test_rows_fall_back_to_output_prefix(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _write_board(tmp_path)
+    legacy = tmp_path / "guides" / "gosee" / "01"
+    legacy.mkdir(parents=True)
+    (legacy / "first.png").write_bytes(b"legacy-clay")
+    server = _load_server()
+    monkeypatch.setattr(server, "FILMS", tmp_path / "films")
+    monkeypatch.setattr(server, "GUIDES", tmp_path / "guides")
+    assert server.guide_shot_id("go-see", "gosee", "01") == "gosee"
+    assert server.guide_shot_id("go-see", "gosee", "02") == "go-see"
+    assert server.guide_shot_id("switchyard", "switchyard", "01") == "switchyard"
+    assert server.guide_shot_id("../x", "gosee", "01") == "gosee"
+    assert server.guide_shot_id("../x", "../y", "01") == ""
+    assert server.guide_shot_id("go-see", "gosee", "../01") == "go-see"
+    shot = server._rows()[0]["shots"][0]
+    assert shot["clay"] == "on"
+    assert "slug=gosee" in shot["thumb"]
+
+
+def test_rows_skip_non_dict_shot_and_refuse_bad_guide_id(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _write_board(tmp_path, shots=["nope", {"id": "01", "status": "ok"}])
+    server = _load_server()
+    monkeypatch.setattr(server, "FILMS", tmp_path / "films")
+    monkeypatch.setattr(server, "GUIDES", tmp_path / "guides")
+    row = server._rows()[0]
+    assert row["total"] == "2"
+    assert row["ok"] == "1"
+    assert len(row["shots"]) == 1
+    lights = server._shot_lights(tmp_path / "films" / "gosee", "../x", "01", {})
+    assert lights["clay"] == "off"
+    assert lights["thumb"] == ""
+    lights = server._shot_lights(tmp_path / "films" / "gosee", "gosee", "ab", {"status": "ok"})
+    assert lights["print"] == "on"
+    assert lights["audio"] == "off"
+    assert server._safe_thumb("go-see", "01", "clay") is None
+    assert server._safe_thumb("go/see", "01", "clay") is None
+    assert server._safe_thumb("go-see", "1a", "clay") is None
+
+
+def _header_value(captured: dict[str, object], name: str) -> str:
+    headers = captured["headers"]
+    assert isinstance(headers, list)
+    for key, value in headers:
+        if key == name:
+            assert isinstance(value, str)
+            return value
+    raise AssertionError(name)
+
+
+def test_parse_byte_range_and_short_read() -> None:
+    server = _load_server()
+    assert server.parse_byte_range("bytes=2-5", 10) == (2, 5)
+    assert server.parse_byte_range("bytes=8-", 10) == (8, 9)
+    assert server.parse_byte_range("bytes=0-99", 10) == (0, 9)
+    assert server.parse_byte_range("bytes=-3", 10) == (7, 9)
+    assert server.parse_byte_range("bytes=-30", 10) == (0, 9)
+    assert server.parse_byte_range("bytes=0-1,2-3", 10) is None
+    assert server.parse_byte_range("nope", 10) is None
+    assert server.parse_byte_range("bytes=", 10) is None
+    assert server.parse_byte_range("bytes=abc", 10) is None
+    assert server.parse_byte_range("bytes=1-x", 10) is None
+    assert server.parse_byte_range("bytes=1a-2", 10) is None
+    assert server.parse_byte_range("bytes=5-2", 10) is None
+    assert server.parse_byte_range("bytes=10-10", 10) is None
+    assert server.parse_byte_range("bytes=-0", 10) is None
+    assert server.parse_byte_range("bytes=-x", 10) is None
+    assert server.parse_byte_range("bytes=0-1", 0) is None
+    src = io.BytesIO(b"0123456789")
+    dest = io.BytesIO()
+    server.write_file_span(src, dest, 2, 5, chunk=2)
+    assert dest.getvalue() == b"23456"
+    short = io.BytesIO(b"ab")
+    out = io.BytesIO()
+    server.write_file_span(short, out, 0, 10, chunk=4)
+    assert out.getvalue() == b"ab"
+
+
+def test_media_range_is_partial_and_download_ignores_range(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    films = tmp_path / "films" / "gosee"
+    films.mkdir(parents=True)
+    (films / "state.json").write_text("{}", encoding="utf-8")
+    mp4 = tmp_path / "ez_gosee_90s.mp4"
+    mp4.write_bytes(b"0123456789")
+    server = _load_server()
+    monkeypatch.setattr(server, "FILMS", tmp_path / "films")
+    bare = server.Handler.__new__(server.Handler)
+    assert bare._header("Range") == ""
+
+    handler, captured = _bind_handler(server, "/media/gosee")
+    handler.headers = {"Range": "bytes=2-5"}
+    server.Handler.do_GET(handler)
+    assert captured["status"] == 206
+    assert handler.wfile.getvalue() == b"2345"
+    assert _header_value(captured, "Content-Range") == "bytes 2-5/10"
+    assert _header_value(captured, "Content-Length") == "4"
+    assert _header_value(captured, "Accept-Ranges") == "bytes"
+
+    handler, captured = _bind_handler(server, "/media/gosee")
+    handler.headers = {"Range": "bytes=50-60"}
+    server.Handler.do_GET(handler)
+    assert captured["status"] == 416
+    assert handler.wfile.getvalue() == b""
+    assert _header_value(captured, "Content-Range") == "bytes */10"
+
+    handler, captured = _bind_handler(server, "/media/gosee?dl=1")
+    handler.headers = {"Range": "bytes=2-5"}
+    server.Handler.do_GET(handler)
+    assert captured["status"] == 200
+    assert handler.wfile.getvalue() == b"0123456789"
+    assert _header_value(captured, "Content-Disposition").startswith("attachment;")
+
+    mp4.write_bytes(b"")
+    handler, captured = _bind_handler(server, "/media/gosee")
+    server.Handler.do_GET(handler)
+    assert captured["status"] == 200
+    assert handler.wfile.getvalue() == b""
+    assert _header_value(captured, "Content-Length") == "0"
+
+    handler, captured = _bind_handler(server, "/")
+    server.Handler._send(handler, b"hi", "text/plain", [("X-Test", "1")])
+    assert handler.wfile.getvalue() == b"hi"
+    assert _header_value(captured, "X-Test") == "1"

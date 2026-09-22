@@ -4,6 +4,9 @@
 #
 # 50% blend of clay first.png vs Klein look plate. Host ffmpeg, no GPU.
 # May run while compose is up (unlike export-guides).
+# Pack directory is guides/<film-id>/<shot>/ (go-see), the same directory
+# blender-guide writes. Uses guides/<output-prefix>/ only when the film-id
+# directory is absent.
 #
 # Usage:
 #   ./scripts/utilities/overlay-qc.sh --film SLUG --shot ID --look PATH [--guides DIR]
@@ -46,12 +49,39 @@ overlay_film_slug() {
 }
 
 #######################################
+# Guide-pack root. The film-id directory wins when it exists.
+# Globals:
+#   None
+# Arguments:
+#   $1  output root (COMFY_OUTPUT_DIR)
+#   $2  film id (go-see)
+#   $3  output prefix (gosee)
+# Outputs:
+#   Guide-pack directory on stdout
+# Returns:
+#   0
+#######################################
+overlay_guides_dir() {
+  local root="${1:?}" film="${2:?}" slug="${3:-}"
+  if [[ -d "${root}/guides/${film}" ]]; then
+    printf '%s\n' "${root}/guides/${film}"
+    return 0
+  fi
+  if [[ -n ${slug} && ${slug} != "${film}" && -d "${root}/guides/${slug}" ]]; then
+    printf '%s\n' "${root}/guides/${slug}"
+    return 0
+  fi
+  printf '%s\n' "${root}/guides/${film}"
+}
+
+#######################################
 # Print usage.
 #######################################
 cmd_help() {
   echo "Usage: overlay-qc.sh --film SLUG --shot ID --look PATH [--guides DIR]" >&2
   echo "  50% clay/look overlay at 1280x704. Host ffmpeg. Compose may stay up." >&2
-  echo "  Writes guides/<slug>/<shot>/overlay.png and score.json." >&2
+  echo "  Writes guides/<film-id>/<shot>/overlay.png and score.json." >&2
+  echo "  That is the blender-guide directory (go-see, not the gosee prefix)." >&2
   return 0
 }
 
@@ -113,7 +143,7 @@ cmd_run() {
     return 1
   }
   if [[ -z ${GUIDES} ]]; then
-    GUIDES="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/guides/${slug}"
+    GUIDES="$(overlay_guides_dir "${COMFY_OUTPUT_DIR:-/mnt/comfy-output}" "${FILM}" "${slug}")"
   fi
   dest="${GUIDES}/${SHOT_ID}"
   clay="${dest}/first.png"
