@@ -122,7 +122,14 @@ def test_drive_through_graphs_live_under_audio_albums() -> None:
     ]
     assert hits
     slugs = {path.parent.name for path in hits}
-    assert slugs == {"hour-1", "hour-2", "headliner", "afterparty", "secret-homage"}
+    assert slugs == {
+        "hour-1",
+        "hour-2",
+        "headliner",
+        "afterparty",
+        "secret-homage",
+        "my-coder",
+    }
     for path in hits:
         assert path.parent.parent == albums, path
         assert (path.parent / "album.json").is_file()

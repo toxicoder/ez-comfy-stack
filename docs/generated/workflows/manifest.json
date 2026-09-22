@@ -2515,6 +2515,12 @@
       "kind": "album"
     },
     {
+      "id": "audio/albums/drive-through/my-coder",
+      "path": "generated/workflows/audio/albums/drive-through/my-coder.md",
+      "lane": "audio-albums",
+      "kind": "album"
+    },
+    {
       "id": "audio/albums/drive-through/secret-homage",
       "path": "generated/workflows/audio/albums/drive-through/secret-homage.md",
       "lane": "audio-albums",
@@ -2575,6 +2581,6 @@
       "kind": "album"
     }
   ],
-  "graph_count": 662,
-  "page_count": 430
+  "graph_count": 680,
+  "page_count": 431
 }

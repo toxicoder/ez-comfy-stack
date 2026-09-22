@@ -7,7 +7,7 @@ No living-artist names.
 from __future__ import annotations
 
 import re
-from typing import Literal, TypedDict
+from typing import Literal, NotRequired, TypedDict
 
 from .albums import album_rel, drive_album_for_phase
 from .drive_arrange import arrange_drive, lift_drive_bpm, plan_drive_album
@@ -223,6 +223,9 @@ class EdmExample(TypedDict):
         form_id: Song-plan arc (``e_build``, ``e_drop_first``, …).
         meter: ACE time signature. Dance takes stay ``4``.
         keyscale: Key on the album's fifths path.
+        code_tokens: Present on My Coder. Words of that take's coder
+            span. Other albums omit it, and their cues stay on the
+            shared arranger.
     """
 
     stem: str
@@ -253,6 +256,7 @@ class EdmExample(TypedDict):
     form_id: str
     meter: str
     keyscale: str
+    code_tokens: NotRequired[tuple[str, ...]]
 
 
 def _tempo_id(bpm: int) -> str:
@@ -572,6 +576,11 @@ def finalize_drive_album(rows: tuple[EdmExample, ...]) -> tuple[EdmExample, ...]
     out: list[EdmExample] = []
     for index, row in enumerate(rows, 1):
         plan = plans[index - 1]
+        code_tokens = row.get("code_tokens")
+        if code_tokens:
+            from .code_score import apply_code_cues
+
+            apply_code_cues(plan["sections"], code_tokens)
         slug = drive_slug_from_stem(str(row.get("slug") or row["stem"]))
         stem = f"{index:02d}-{slug}"
         out.append(
@@ -613,6 +622,7 @@ def _catalog() -> tuple[EdmExample, ...]:
     from .edm_drive_through_afterparty import EDM_DRIVE_THROUGH_AFTERPARTY
     from .edm_drive_through_bass import EDM_DRIVE_THROUGH_BASS
     from .edm_drive_through_headliner import EDM_DRIVE_THROUGH_HEADLINER
+    from .edm_drive_through_my_coder import EDM_DRIVE_THROUGH_MY_CODER
     from .edm_drive_through_secret_homage import EDM_DRIVE_THROUGH_SECRET_HOMAGE
 
     groups = (
@@ -621,6 +631,7 @@ def _catalog() -> tuple[EdmExample, ...]:
         EDM_DRIVE_THROUGH_HEADLINER,
         EDM_DRIVE_THROUGH_AFTERPARTY,
         EDM_DRIVE_THROUGH_SECRET_HOMAGE,
+        EDM_DRIVE_THROUGH_MY_CODER,
     )
     out: list[EdmExample] = []
     for group in groups:

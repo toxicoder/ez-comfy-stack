@@ -1,0 +1,248 @@
+{
+  "id": "album",
+  "revision": 1,
+  "last_node_id": 4,
+  "last_link_id": 0,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Note",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        640,
+        420
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## audio/albums/drive-through/my-coder/album\n\nAlbum **My Coder** by **Drive-through** (16 tracks).\n\nQueue this graph to zip whatever is already in `${COMFY_OUTPUT_DIR}/albums/Drive-through/My Coder/`.\nGenerate the full album in one go:\n\n`./scripts/manage.sh album-render --album drive-through/my-coder --art skip|upload|generate`\n\nOccupancy: audio for tracks, klein first when --art generate. Do not co-resident Klein + ACE-Step.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
+      ],
+      "title": "Operator note"
+    },
+    {
+      "id": 2,
+      "type": "EZAlbumPack",
+      "pos": [
+        720,
+        664
+      ],
+      "size": [
+        360,
+        120
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "zip_path",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZAlbumPack"
+      },
+      "widgets_values": [
+        "Drive-through",
+        "My Coder"
+      ],
+      "title": "Pack album zip"
+    },
+    {
+      "id": 3,
+      "type": "EZQuality",
+      "pos": [
+        1096,
+        80
+      ],
+      "size": [
+        320.0,
+        82.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "quality",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZQuality"
+      },
+      "widgets_values": [
+        "lab"
+      ],
+      "title": "Quality"
+    },
+    {
+      "id": 4,
+      "type": "EZModelCheck",
+      "pos": [
+        728,
+        80
+      ],
+      "size": [
+        320.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "EZModelCheck"
+      },
+      "widgets_values": [
+        "Click Check models. Queue does not run this node."
+      ],
+      "title": "Check models"
+    }
+  ],
+  "links": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "NOTE",
+      "bounding": [
+        20,
+        8,
+        680,
+        536
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        708,
+        8,
+        728,
+        256
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "PACK",
+      "bounding": [
+        700,
+        592,
+        400,
+        236
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "lab_profile": "us-safe-music-album",
+    "lab_note": "## audio/albums/drive-through/my-coder/album\n\nAlbum **My Coder** by **Drive-through** (16 tracks).\n\nQueue this graph to zip whatever is already in `${COMFY_OUTPUT_DIR}/albums/Drive-through/My Coder/`.\nGenerate the full album in one go:\n\n`./scripts/manage.sh album-render --album drive-through/my-coder --art skip|upload|generate`\n\nOccupancy: audio for tracks, klein first when --art generate. Do not co-resident Klein + ACE-Step.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "lab_description": "Pack My Coder zip + m3u\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "lab_album": {
+      "artist": "Drive-through",
+      "album": "My Coder",
+      "album_slug": "my-coder",
+      "artist_slug": "drive-through",
+      "role": "album",
+      "year": 2026,
+      "tracks": [
+        "01-lift-tempo",
+        "02-fit-window",
+        "03-plan-album",
+        "04-arrange-score",
+        "05-salt-menu",
+        "06-ban-list",
+        "07-cue-bed",
+        "08-pick-role",
+        "09-donor-lane",
+        "10-fit-edits",
+        "11-compose",
+        "12-check-form",
+        "13-splice-tags",
+        "14-catalog-row",
+        "15-score-format",
+        "16-finalize-album"
+      ],
+      "cover_graph": "audio/albums/drive-through/my-coder/cover"
+    },
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    "lab_rel": "audio/albums/drive-through/my-coder/album",
+    "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "audio",
+      "occupancy": "none",
+      "enhance_off_identity": false,
+      "handoff": []
+    },
+    "linearData": {
+      "inputs": [
+        [
+          3,
+          "quality",
+          {
+            "label": "Quality",
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
+          }
+        ],
+        [
+          2,
+          "artist",
+          {
+            "description": "Album artist written into FLAC/MP3 tags.",
+            "label": "Artist"
+          }
+        ],
+        [
+          2,
+          "album",
+          {
+            "description": "Album title written into FLAC/MP3 tags.",
+            "label": "Album"
+          }
+        ]
+      ],
+      "outputs": [
+        2
+      ]
+    },
+    "linearMode": true
+  },
+  "version": 0.4
+}

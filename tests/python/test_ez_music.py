@@ -629,6 +629,22 @@ EXPECTED_DRIVE_THROUGH_TITLES = (
     "blind stamp",
     "cold cache",
     "secret homage",
+    "lift tempo",
+    "fit window",
+    "plan album",
+    "arrange score",
+    "salt menu",
+    "ban list",
+    "cue bed",
+    "pick role",
+    "donor lane",
+    "fit edits",
+    "compose",
+    "check form",
+    "splice tags",
+    "catalog row",
+    "score format",
+    "finalize album",
 )
 DRIVE_TREAT_TITLES = frozenset({"wide open", "second wave"})
 
@@ -864,7 +880,7 @@ def test_format_edm_score_rejects_multiline_chorus() -> None:
 
 def test_drive_through_edm_examples_are_varied_lengths() -> None:
     assert EDM_DURATION_S == 180.0
-    assert len(EDM_EXAMPLES) == 85
+    assert len(EDM_EXAMPLES) == 101
     prefixes: list[str] = []
     stems: list[str] = []
     seeds: list[int] = []
@@ -1007,12 +1023,16 @@ def test_drive_through_edm_examples_are_varied_lengths() -> None:
         elif ex["phase"] == 3:
             assert int(ex["bpm"]) >= 150, ex["stem"]
             assert ex["ace_mode"] == "instrumental", ex["stem"]
-        else:
-            assert ex["phase"] == 4, ex["stem"]
+        elif ex["phase"] == 4:
             assert int(ex["bpm"]) >= 140, ex["stem"]
             assert ex["ace_mode"] == "instrumental", ex["stem"]
             if _hits_needles(ex["tags"], SECRET_HOMAGE_NEEDLES):
                 phase4_core += 1
+        elif ex["phase"] == 5:
+            assert ex["ace_mode"] == "instrumental", ex["stem"]
+            assert ex["album_slug"] == "my-coder", ex["stem"]
+        else:
+            raise AssertionError(ex["phase"])
         treat = ex["title"] in DRIVE_TREAT_TITLES
         if treat:
             assert "[chorus]" in lyrics
@@ -1050,11 +1070,11 @@ def test_drive_through_edm_examples_are_varied_lengths() -> None:
         stems.append(ex["stem"])
         seeds.append(int(ex["seed"]))
         bpms.append(int(ex["bpm"]))
-    assert len(set(prefixes)) == 85
-    assert len(set(stems)) == 85
-    assert len(set(seeds)) == 85
+    assert len(set(prefixes)) == 101
+    assert len(set(stems)) == 101
+    assert len(set(seeds)) == 101
     assert [ex["phase"] for ex in EDM_EXAMPLES] == (
-        [0] * 15 + [1] * 15 + [2] * 15 + [3] * 20 + [4] * 20
+        [0] * 15 + [1] * 15 + [2] * 15 + [3] * 20 + [4] * 20 + [5] * 16
     )
     phase2 = [ex for ex in EDM_EXAMPLES if ex["phase"] == 2]
     assert len(phase2) == 15
@@ -1074,14 +1094,14 @@ def test_drive_through_edm_examples_are_varied_lengths() -> None:
     assert min(bpms) >= 140
     assert max(bpms) >= 170
     assert sum(1 for bpm in bpms if bpm >= 145) >= 12
-    assert len(set(signatures)) == 85
-    assert len(shapes) == 85
-    assert len(set(shapes)) == 85
-    assert 8 <= breakdown_takes <= 16
+    assert len(set(signatures)) == 101
+    assert len(shapes) == 101
+    assert len(set(shapes)) == 101
+    assert 8 <= breakdown_takes <= len(EDM_EXAMPLES) // 5
     for left, right in zip(shapes, shapes[1:]):
         assert left != right
-    assert len({ex["lyrics"] for ex in EDM_EXAMPLES}) == 85
-    for phase in (0, 1, 2, 3, 4):
+    assert len({ex["lyrics"] for ex in EDM_EXAMPLES}) == 101
+    for phase in (0, 1, 2, 3, 4, 5):
         rows = [ex for ex in EDM_EXAMPLES if ex["phase"] == phase]
         assert len({ex["form_id"] for ex in rows}) >= 8, phase
         assert len({ex["duration"] for ex in rows}) >= 8, phase
@@ -1220,12 +1240,13 @@ def test_ensure_lab_custom_nodes_path_inserts_parent(
 
 def test_shipped_albums_and_output_dir() -> None:
     albums = shipped_albums()
-    assert len(albums) == 14
+    assert len(albums) == 15
     assert albums[0]["title"] == "Peer Review"
     assert albums[0]["slug"] == "peer-review"
     assert albums[8]["title"] == "Duty Switch"
     assert albums[9]["title"] == "Hour 1"
-    assert albums[-1]["title"] == "Secret Homage"
+    assert albums[-2]["title"] == "Secret Homage"
+    assert albums[-1]["title"] == "My Coder"
     assert album_output_dir(NILL_BYE_ARTIST, "Peer Review") == (
         "albums/Nill Bye/Peer Review"
     )
@@ -1238,6 +1259,8 @@ def test_shipped_albums_and_output_dir() -> None:
     with pytest.raises(KeyError):
         nill_album_for_series("missing")
     assert drive_album_for_phase(4)["slug"] == "secret-homage"
+    assert drive_album_for_phase(5)["slug"] == "my-coder"
+    assert drive_album_for_phase(5)["title"] == "My Coder"
     with pytest.raises(KeyError):
         drive_album_for_phase(99)
 

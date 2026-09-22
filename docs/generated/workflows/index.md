@@ -37,6 +37,7 @@ tags: [workflows, generated, comfyui]
 | `audio/albums/drive-through/headliner` | [audio/albums/drive-through/headliner.md](audio/albums/drive-through/headliner.md) |
 | `audio/albums/drive-through/hour-1` | [audio/albums/drive-through/hour-1.md](audio/albums/drive-through/hour-1.md) |
 | `audio/albums/drive-through/hour-2` | [audio/albums/drive-through/hour-2.md](audio/albums/drive-through/hour-2.md) |
+| `audio/albums/drive-through/my-coder` | [audio/albums/drive-through/my-coder.md](audio/albums/drive-through/my-coder.md) |
 | `audio/albums/drive-through/secret-homage` | [audio/albums/drive-through/secret-homage.md](audio/albums/drive-through/secret-homage.md) |
 | `audio/albums/nill-bye/citation-needed` | [audio/albums/nill-bye/citation-needed.md](audio/albums/nill-bye/citation-needed.md) |
 | `audio/albums/nill-bye/duty-switch` | [audio/albums/nill-bye/duty-switch.md](audio/albums/nill-bye/duty-switch.md) |
