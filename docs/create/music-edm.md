@@ -24,7 +24,7 @@ Do **not** load Klein + Wan + LTX + ACE-Step in one session. Cover art is a late
 
 One hundred one extra full-track graphs under **`_lab/audio/albums/drive-through/<album>/`**. Same AIO, sampler, occupancy **audio**. App **Duration (seconds)** is the sum of that take's stanzas (150–480 s). The arranger does not stretch bars to hit a clock time: a short piece gains whole stanzas, a long piece loses whole stanzas. Every take opens with a 2-bar build, then a drop. Later stanzas change role and layer every 2 bars (under 3 seconds at 165–176) so one loop does not sit. A five-second gap is not in the score. About one take in seven has a single 2-bar breakdown, and that cell keeps the bass and the hats. Tempos snap to **165, 168, 170, 172, 174, or 176**. Keys walk fifths so the set still mixes. Meter stays 4/4. Queue a numbered track **on its own**, or `album-render --album drive-through/<album-slug>`. SaveAudio stem is **`NN - Song Title`**. The graph note names the form and key.
 
-Fictional act only: **Drive-through** (hardcore, pure of heart) playing a **live bass DJ set**. Original **warped hybrid-trap EDM** spliced from [Audio Rack](audio-rack.md) catalogs (hybrid trap, riddim, tearout, brostep, wave bass, color bass, drumstep, dirty dubstep, neuro bass, chest/dirty bass, festival trap — not techno, not big room, not progressive house). Named recipes (`rec_drive_through_drop`, `rec_drive_riddim`, …) fill empty axes; each take overrides tempo, bass, and form. No living-DJ names. No famous-hook paraphrases. Ninety-nine takes lock `instrumental, no vocals, no singing, no choir, no vocal chops` via `mix_drive_lock` (App **Vocal / instrumental** = instrumental; encoder language `unknown`). The lock is bass boosted next to the heavy chest bass. Two takes are sparse DJ-shout treats (`wide open`, `second wave`): App mode **vocal**, `voc_dj_shout`, one 1–2 word `[chorus]` chop, no `[verse]`. Arrangement scores are empty-body ACE markers (`[build-up - …]`, `[drop - warped bass, rapid hi-hats]`, `[inst - …]`, `[breakdown - …]`, `[outro]`) so ACE does not sing production notes. Every cell is bass boosted and names a sub, a low-mid bass melody, drums, and a 3D move. No brass, horns, trumpets, or high leads. Not a Nill Bye verse/chorus loop. Cover **LoadImage** stays unwired; App **Album art** defaults to skip. Some takes add dual-action pedal bass under rolling hats. Phase2, phase3, phase4, and phase5 graphs keep that ACE topology but vary Comfy node placement across five layouts (`column`, `wide-stage`, `stacked-tower`, `prompt-left`, `output-rail`). ACE-Step timbre is invented. Human selection and edit required before any release. A longer Queue is expected: 2.5–8 min latents cost RAM and time linearly.
+Fictional act only: **Drive-through** (hardcore, pure of heart) playing a **live bass DJ set**. Original **warped hybrid-trap EDM** spliced from [Audio Rack](audio-rack.md) catalogs (hybrid trap, riddim, tearout, brostep, wave bass, color bass, drumstep, dirty dubstep, neuro bass, chest/dirty bass, festival trap — not techno, not big room, not progressive house). Named recipes (`rec_drive_through_drop`, `rec_drive_riddim`, …) fill empty axes; each take overrides tempo, bass, and form. No living-DJ names. No famous-hook paraphrases. Ninety-nine takes lock `instrumental, no vocals, no singing, no choir, no vocal chops` via `mix_drive_lock` (App **Vocal / instrumental** = instrumental; encoder language `unknown`). The lock is bass boosted next to the heavy chest bass. It does not ask for a rave tag, a noise riser, formant, or one-shot hits. Those words render as static and screech. Each cell names a chest-sub, a low-mid bass melody, trap drums, and a low-mid move. Two takes are sparse DJ-shout treats (`wide open`, `second wave`): App mode **vocal**, `voc_dj_shout`, one 1–2 word `[chorus]` chop, no `[verse]`. Arrangement scores are empty-body ACE markers (`[build-up - …]`, `[drop - warped bass, rapid hi-hats]`, `[inst - …]`, `[breakdown - …]`, `[outro]`) so ACE does not sing production notes. Every cell is bass boosted and names a sub, a low-mid bass melody, drums, and a 3D move. No brass, horns, trumpets, or high leads. Not a Nill Bye verse/chorus loop. Cover **LoadImage** stays unwired; App **Album art** defaults to skip. Some takes add dual-action pedal bass under rolling hats. Phase2, phase3, phase4, and phase5 graphs keep that ACE topology but vary Comfy node placement across five layouts (`column`, `wide-stage`, `stacked-tower`, `prompt-left`, `output-rail`). ACE-Step timbre is invented. Human selection and edit required before any release. A longer Queue is expected: 2.5–8 min latents cost RAM and time linearly.
 
 This is **not** the Nill Bye trap/EDM pack. Those graphs are rap **over** club beds with a dry booth. Drive-through is dance EDM (mostly instrumental).
 
@@ -156,21 +156,21 @@ The coder that writes Drive-through, read as music. Sixteen instrumental takes w
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
-| **01-lift-tempo** | wave bass **165**, seed **719** | `01 - Lift Tempo` | Wave bass warp |
+| **01-lift-tempo** | festival trap **176**, seed **719** | `01 - Lift Tempo` | Festival trap warp |
 | **02-fit-window** | dirty bass **170**, seed **727** | `02 - Fit Window` | Dirty bass warp |
 | **03-plan-album** | festival trap **176**, seed **733** | `03 - Plan Album` | Festival trap warp |
 | **04-arrange-score** | chest-sub **174**, seed **739** | `04 - Arrange Score` | Chest bass warp |
 | **05-salt-menu** | warped hybrid-trap **168**, seed **743** | `05 - Salt Menu` | Hybrid trap warp |
 | **06-ban-list** | dirty bass **165**, seed **751** | `06 - Ban List` | Dirty bass warp |
-| **07-cue-bed** | dirty dubstep **168**, seed **757** | `07 - Cue Bed` | Dirty dubstep warp |
-| **08-pick-role** | reese bass **165**, seed **761** | `08 - Pick Role` | Neuro bass warp |
+| **07-cue-bed** | warped hybrid-trap **165**, seed **757** | `07 - Cue Bed` | Hybrid trap warp |
+| **08-pick-role** | neuro bass **165**, seed **761** | `08 - Pick Role` | Neuro bass warp |
 | **09-donor-lane** | tearout **172**, seed **769** | `09 - Donor Lane` | Tearout warp |
 | **10-fit-edits** | festival trap **174**, seed **773** | `10 - Fit Edits` | Festival trap warp |
-| **11-compose** | wobble bass **174**, seed **787** | `11 - Compose` | Riddim warp |
+| **11-compose** | riddim **174**, seed **787** | `11 - Compose` | Riddim warp |
 | **12-check-form** | brostep **170**, seed **797** | `12 - Check Form` | Brostep warp |
-| **13-splice-tags** | brostep **172**, seed **809** | `13 - Splice Tags` | Brostep warp |
+| **13-splice-tags** | riddim **172**, seed **809** | `13 - Splice Tags` | Riddim warp |
 | **14-catalog-row** | color bass **174**, seed **811** | `14 - Catalog Row` | Color bass warp |
-| **15-score-format** | amen break **174**, seed **821** | `15 - Score Format` | Drumstep warp |
+| **15-score-format** | drumstep **174**, seed **821** | `15 - Score Format` | Drumstep warp |
 | **16-finalize-album** | dirty dubstep **168**, seed **823** | `16 - Finalize Album` | Dirty dubstep warp |
 
 Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.

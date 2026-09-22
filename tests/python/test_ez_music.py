@@ -24,7 +24,13 @@ from ez_music.diss_examples import (  # noqa: E402
     nill_output_prefix,
     nill_tags,
 )
-from ez_music.drive_arrange import DRIVE_BPM_CHOICES, _SPATIAL, lift_drive_bpm  # noqa: E402
+from ez_music.drive_arrange import (  # noqa: E402
+    DRIVE_BPM_CHOICES,
+    _MIDS,
+    _SPATIAL,
+    _SUBS,
+    lift_drive_bpm,
+)
 from ez_music.edm_examples import (  # noqa: E402
     BANNED_STYLE_NEEDLES,
     BASS_NEEDLES,
@@ -743,7 +749,7 @@ def test_drive_tags_lock_instrumental_bed() -> None:
         assert token in tags_low
     assert f"{lifted} bpm" in tags_low
     assert "148 bpm" not in tags_low
-    assert "rave" in tags_low
+    assert "rave" not in tags_low
     assert "warped hybrid-trap" in tags_low
     assert "bass boosted" in tags_low
     assert "no brass" in tags_low
@@ -970,8 +976,16 @@ def test_drive_through_edm_examples_are_varied_lengths() -> None:
             assert "layers stay" in low, (ex["stem"], stripped)
             assert "sub stays" in low, (ex["stem"], stripped)
             assert "no gap" in low, (ex["stem"], stripped)
-            assert "one-shot phrase" in low, (ex["stem"], stripped)
+            assert "one-shot phrase" not in low, (ex["stem"], stripped)
             assert any(phrase.lower() in low for phrase in _SPATIAL), (
+                ex["stem"],
+                stripped,
+            )
+            assert any(phrase.lower() in low for phrase in _MIDS), (
+                ex["stem"],
+                stripped,
+            )
+            assert any(phrase.lower() in low for phrase in _SUBS) or "chest-sub" in low, (
                 ex["stem"],
                 stripped,
             )
@@ -1054,7 +1068,7 @@ def test_drive_through_edm_examples_are_varied_lengths() -> None:
             assert ex["ace_mode"] == "instrumental"
             for token in DRIVE_LOCK.split(", "):
                 assert token in ex["tags"], (ex["stem"], token)
-        assert "rave" in ex["tags"]
+        assert "rave" not in ex["tags"]
         assert str(ex["bpm"]) in ex["tags"]
         assert ex["stem"] == f"{ex['track']:02d}-{ex['slug']}"
         assert not ex["stem"].endswith("-lab-example")
@@ -1157,7 +1171,7 @@ def test_drive_through_score_cues_use_catalog_language() -> None:
         "warped bass",
         "wobble bass",
         "reese bass",
-        "formant bass",
+        "low-mid bass melody",
         "dual-action pedal bass",
         "stacked 808",
         "body bass",

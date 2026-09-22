@@ -13,18 +13,18 @@ from .edm_examples import EdmExample, _ex, format_edm_score
 RUMBLE_STRIP_LYRICS = format_edm_score(
     ("inst", "heavy warped drop\nhybrid trap 808 wreck\nrumble grind"),
     ("inst", "trap hats roll\n808 slide"),
-    ("inst", "harder growl drop\ndual-action pedal bass\nstacked warp"),
+    ("inst", "harder warped drop\ndual-action pedal bass\nstacked warp"),
     ("inst", "pedal 808 hold\nhats denser"),
-    ("inst", "full send drop\nlow rumble wreck\nchest formant"),
+    ("inst", "full send drop\nlow rumble wreck\nchest warped"),
     ("outro", "kick holds\ntrap hats roll\npedal ride"),
 )
 
 LOW_LANE_LYRICS = format_edm_score(
     ("inst", "heavy riddim drop\nchest sub wobble\nwarped wreck"),
-    ("inst", "harder growl drop\nrolling 808 wall\nformant crush"),
+    ("inst", "harder warped drop\nrolling 808 wall\nchest-sub crush"),
     ("inst", "trap hats denser\nwobble sustain"),
-    ("inst", "snare roll\nchest 808"),
-    ("inst", "808 triplets\nriddim growl hold"),
+    ("inst", "kick tightens\nchest 808"),
+    ("inst", "808 triplets\nriddim warped hold"),
     ("inst", "full send drop\nwarped sub stack\nriddim wreck"),
     ("outro", "kick holds\nhats denser\nwobble ride"),
 )
@@ -32,25 +32,25 @@ LOW_LANE_LYRICS = format_edm_score(
 WARM_MERGE_LYRICS = format_edm_score(
     ("inst", "heavy wave drop\nwarped 808 wreck\nfold grind"),
     ("inst", "trap hats roll\nwave 808 hold merge"),
-    ("inst", "harder formant drop\nstacked wave bass\nchest 808"),
-    ("inst", "snare roll\n808 slide"),
+    ("inst", "harder warped drop\nstacked wave bass\nchest 808"),
+    ("inst", "kick tightens\n808 slide"),
     ("inst", "full send drop\nlow 808 wall\nwarped fold"),
     ("outro", "kick holds\ntrap hats roll\nwave ride"),
 )
 
 COLOUR_SPAN_LYRICS = format_edm_score(
-    ("inst", "heavy color drop\nchest 808 warp\nformant wreck"),
-    ("inst", "harder growl drop\nanalog 808 stack\nwarped color"),
+    ("inst", "heavy color drop\nchest 808 warp\nchest-sub wreck"),
+    ("inst", "harder warped drop\nanalog 808 stack\nwarped color"),
     ("inst", "trap hats denser\ncolor 808 sustain span"),
     ("inst", "full send drop\nstacked color wreck\nwarped sub"),
     ("outro", "kick holds\nhats denser\ncolor ride"),
 )
 
 GARAGE_TICKET_LYRICS = format_edm_score(
-    ("inst", "heavy trap drop\nwarped 808 wreck\nformant stamp"),
+    ("inst", "heavy trap drop\nwarped 808 wreck\nchest-sub stamp"),
     ("inst", "trap hats roll\n808 slide"),
-    ("inst", "harder growl drop\nstacked trap bass\nchest warp"),
-    ("inst", "snare roll\nchest 808 punch"),
+    ("inst", "harder warped drop\nstacked trap bass\nchest warp"),
+    ("inst", "kick tightens\nchest 808 punch"),
     ("inst", "full send drop\nchest 808 wall\nwarped trap"),
     ("outro", "kick holds\ntrap hats roll\n808 ride"),
 )
@@ -58,7 +58,7 @@ GARAGE_TICKET_LYRICS = format_edm_score(
 LIQUID_GRADE_LYRICS = format_edm_score(
     ("inst", "heavy drumstep drop\nreese wreck\nwarped amen"),
     ("inst", "amen chops\ntrap hats 808 liquid"),
-    ("inst", "harder growl drop\nreese stack\nchest formant"),
+    ("inst", "harder reese drop\nreese stack\nchest-sub"),
     ("inst", "hats denser\nreese hold"),
     ("inst", "full send drop\nstacked amen wreck\nwarped 808 punch"),
     ("inst", "harder warped drop\nchest 808 wreck\ndrumstep grind"),
@@ -67,19 +67,19 @@ LIQUID_GRADE_LYRICS = format_edm_score(
 
 JUMP_BAY_LYRICS = format_edm_score(
     ("inst", "heavy brostep drop\ngrowl wreck\nwarped 808"),
-    ("inst", "metal hats roll\ngrowl sustain"),
-    ("inst", "harder formant drop\nsub crush\nchest 808"),
+    ("inst", "rapid hi-hats roll\ngrowl sustain"),
+    ("inst", "harder warped drop\nsub crush\nchest 808"),
     ("inst", "trap hats denser\nwobble hold"),
     ("inst", "full send drop\nbrostep wreck\nstacked growl"),
-    ("inst", "snare roll\nbass growl hold"),
-    ("inst", "harder warped drop\nstacked 808 wreck\nmid growl"),
+    ("inst", "kick tightens\nbass growl hold"),
+    ("inst", "harder warped drop\nstacked 808 wreck\nchest-sub"),
     ("outro", "kick holds\nhats denser\ngrowl ride"),
 )
 
 PSY_MEDIAN_LYRICS = format_edm_score(
     ("inst", "heavy neuro drop\nreese 808 wreck\nwarped coil"),
     ("inst", "trap hats roll\nreese sustain"),
-    ("inst", "harder stacked drop\nformant 808 wall\nchest sub"),
+    ("inst", "harder stacked drop\nwarped 808 wall\nchest sub"),
     ("inst", "full send drop\nchest sub wreck\nneuro warp"),
     ("outro", "kick holds\ntrap hats roll\nreese ride"),
 )
@@ -87,14 +87,14 @@ PSY_MEDIAN_LYRICS = format_edm_score(
 GROOVE_MILE_LYRICS = format_edm_score(
     ("inst", "heavy warped drop\nhybrid trap 808 wreck\nmile grind"),
     ("inst", "trap hats roll\n808 bounce hold"),
-    ("inst", "harder growl drop\nstacked 808 warp\nchest punch"),
-    ("inst", "snare roll\nchest 808"),
+    ("inst", "harder warped drop\nstacked 808 warp\nchest punch"),
+    ("inst", "kick tightens\nchest 808"),
     ("inst", "full send drop\nbody bass wreck\nwarped trap"),
     ("outro", "kick holds\nhats denser\n808 ride"),
 )
 
 DONK_RAMP_LYRICS = format_edm_score(
-    ("inst", "heavy tearout drop\ngrowl 808 wreck\nformant ramp"),
+    ("inst", "heavy tearout drop\ngrowl 808 wreck\nchest-sub ramp"),
     ("inst", "harder warped drop\nchest 808 stack\ntearout grind"),
     ("inst", "trap hats denser\ngrowl sustain"),
     ("inst", "full send drop\ndirty analog wreck\nwarped 808"),
@@ -104,27 +104,27 @@ DONK_RAMP_LYRICS = format_edm_score(
 BOUNCE_BOOTH_LYRICS = format_edm_score(
     ("inst", "heavy chest drop\nwarped 808 wreck\nbooth grind"),
     ("inst", "trap hats roll\n808 punch hold"),
-    ("inst", "harder growl drop\nstacked chest 808\nformant wall"),
-    ("inst", "snare roll\nchest sub hold"),
+    ("inst", "harder warped drop\nstacked chest 808\nchest-sub wall"),
+    ("inst", "kick tightens\nchest sub hold"),
     ("inst", "full send drop\nlow 808 wreck\nwarped chest"),
     ("outro", "kick holds\nhats denser\nchest ride"),
 )
 
 TOLL_GROWL_LYRICS = format_edm_score(
-    ("inst", "heavy riddim drop\ntearout growl wreck\nwarped toll"),
-    ("inst", "metal hats roll\ngrowl sustain"),
-    ("inst", "harder formant drop\nsub crush\nchest 808"),
-    ("inst", "trap hats denser\ngrowl hold"),
-    ("inst", "full send drop\nstacked growl wreck\nwobble wall"),
-    ("inst", "snare roll\nbass growl hold"),
-    ("inst", "harder warped drop\nstacked growl wreck\nlow rumble"),
-    ("outro", "kick holds\nhats denser\ngrowl ride"),
+    ("inst", "heavy riddim drop\ntearout wobble wreck\nwarped toll"),
+    ("inst", "rapid hi-hats roll\nwarped sustain"),
+    ("inst", "harder warped drop\nsub crush\nchest 808"),
+    ("inst", "trap hats denser\nwarped hold"),
+    ("inst", "full send drop\nstacked wobble wreck\nwobble wall"),
+    ("inst", "kick tightens\nbass warped hold"),
+    ("inst", "harder warped drop\nstacked wobble wreck\nlow rumble"),
+    ("outro", "kick holds\nhats denser\nwarped ride"),
 )
 
 NIGHT_OIL_LYRICS = format_edm_score(
     ("inst", "heavy hybrid drop\nwarped 808 wreck\noil grind"),
     ("inst", "trap hats roll\n808 slide"),
-    ("inst", "harder growl drop\ntrap bass wall\nformant crush"),
+    ("inst", "harder warped drop\ntrap bass wall\nchest-sub crush"),
     ("inst", "full send drop\nchest sub wreck\nhybrid warp"),
     ("outro", "kick holds\ntrap hats roll\n808 ride"),
 )
@@ -132,7 +132,7 @@ NIGHT_OIL_LYRICS = format_edm_score(
 CHEST_PASS_LYRICS = format_edm_score(
     ("inst", "heavy chest drop\nsub warp wreck\npass grind"),
     ("inst", "trap hats denser\n808 hold"),
-    ("inst", "harder growl drop\ndual-action pedal bass\nstacked 808 wall"),
+    ("inst", "harder warped drop\ndual-action pedal bass\nstacked 808 wall"),
     ("inst", "pedal 808 hold\nhats roll"),
     ("inst", "full send drop\nbody bass wreck\nwarped chest"),
     ("outro", "kick holds\nhats denser\npedal ride"),
@@ -141,7 +141,7 @@ CHEST_PASS_LYRICS = format_edm_score(
 SUNRISE_SUB_LYRICS = format_edm_score(
     ("inst", "heavy wave drop\nwarped sub wreck\nfold 808"),
     ("inst", "trap hats roll\nwave 808 sustain dawn"),
-    ("inst", "harder formant drop\nchest gold wreck\n808 punch"),
+    ("inst", "harder warped drop\nchest gold wreck\n808 punch"),
     ("inst", "full send drop\nlow 808 wreck\nwave warp"),
     ("outro", "kick holds\ntrap hats roll\nwave ride"),
 )
@@ -275,7 +275,6 @@ EDM_DRIVE_THROUGH_BASS: tuple[EdmExample, ...] = (
         "toll-growl riddim warp",
         TOLL_GROWL_LYRICS,
         recipe="rec_drive_riddim",
-        picks={"bass_low_end": "bass_growl"},
     ),
     _ex(
         "night-oil",

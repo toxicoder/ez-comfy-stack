@@ -49,7 +49,6 @@ DROP_SHOW_NEEDLES = (
     "wobble",
     "growl",
     "reese",
-    "formant",
 )
 WARP_NEEDLES = (
     "warp",
@@ -57,7 +56,6 @@ WARP_NEEDLES = (
     "wobble",
     "growl",
     "reese",
-    "formant",
 )
 HIPHOP_DRUM_NEEDLES = (
     "trap hats",
@@ -182,12 +180,28 @@ ACT_NEEDLES = (
     "drive-through",
     "drive through",
 )
+# Words ACE-Step renders as static or a midrange scream. Growl stays:
+# brostep, tearout, and neuro keep it as chest texture, not a shared bed.
+SCREECH_NEEDLES = (
+    "formant",
+    "rave",
+    "riser",
+    "one-shot",
+    "snare roll",
+    "scrape",
+    "metal hat",
+    "wide mid",
+    "scream",
+    "screech",
+    "hoover",
+)
 FORBIDDEN_SCORE_NEEDLES = (
     *HIGH_PITCH_NEEDLES,
     *BANNED_STYLE_NEEDLES,
     *QUIET_NEEDLES,
     *BED_CUT_NEEDLES,
     *ACT_NEEDLES,
+    *SCREECH_NEEDLES,
 )
 
 

@@ -941,8 +941,8 @@ def genre_style() -> list[dict[str, Any]]:
         (
             "gen_color_bass",
             "Color bass",
-            "Formant-stacked bass color that stays low and wet, never a pluck or a sparkle lead",
-            "color bass, formant bass, chest-sub",
+            "Low-mid bass color that stays low and wet, never a pluck or a sparkle lead",
+            "color bass, low-mid bass, chest-sub",
             {"podcast_ok": False, "conflicts": ("gen_boom_bap",)},
         ),
         (
@@ -3383,13 +3383,13 @@ def mix_production() -> list[dict[str, Any]]:
         (
             "drive_lock",
             "Drive-through instrumental lock",
-            "rave, 808, no singing, no choir, no vocal chops, original composition",
+            "808, no singing, no choir, no vocal chops, original composition",
             "Lock a live bass-set mix so the take stays instrumental, original, and chest-heavy",
         ),
         (
             "drive_treat",
             "Drive-through DJ-shout lock",
-            "rave, 808, original composition",
+            "808, original composition",
             "Lock a live bass-set mix so a sparse DJ shout can sit without a rap verse",
         ),
     ]
@@ -4370,7 +4370,6 @@ def _drive_recipe(
         "instruments_texture": "ins_warped_bass",
         "arrangement_form": form,
         "mix_production": mix,
-        "sound_design_fx": "sfx_riser",
         "use_case": "use_drop_first",
     }
     if extra:
@@ -4483,7 +4482,7 @@ def recipes() -> list[dict[str, Any]]:
             "rec_drive_color",
             "Drive-through color bass",
             "gen_color_bass",
-            bass="bass_formant",
+            bass="bass_chest_sub",
         ),
         _drive_recipe(
             "rec_drive_dirty",
