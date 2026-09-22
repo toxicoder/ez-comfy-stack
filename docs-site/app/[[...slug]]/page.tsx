@@ -14,13 +14,14 @@ import {
 import { Banner } from "fumadocs-ui/components/banner";
 
 import { CommandVarsProvider } from "@/components/command-vars";
+import { DocsPageProvider } from "@/components/docs-heading";
 import { mdxComponentsFor } from "@/components/mdx-components";
 import { PublishedChip } from "@/components/published-chip";
 import { TableChrome } from "@/components/table-chrome";
 import { Wordmark } from "@/components/wordmark";
 import { buildPageTree, neighborsOf } from "@/lib/nav";
 import { formatPublishedLabel, publishedAt } from "@/lib/published";
-import { isDevelopmentAlias, REPO_URL, repoFileUrl } from "@/lib/site";
+import { docsAlias, gitRef, isDevelopmentAlias, REPO_URL, repoFileUrl } from "@/lib/site";
 import { source } from "@/lib/source";
 
 /**
@@ -101,10 +102,20 @@ export default async function DocsRoute({ params }: PageProps) {
           ) : null}
           <DocsTitle>{title}</DocsTitle>
           {data.description && <DocsDescription>{data.description}</DocsDescription>}
-          <CommandVarsProvider>
-            <TableChrome />
-            <Body components={mdxComponentsFor(page)} />
-          </CommandVarsProvider>
+          <DocsPageProvider
+            facts={{
+              title,
+              sourcePath: `docs/${page.path}`,
+              sourceUrl: editUrl(page.path),
+              gitRef: gitRef(),
+              docsAlias: docsAlias()
+            }}
+          >
+            <CommandVarsProvider>
+              <TableChrome />
+              <Body components={mdxComponentsFor(page)} />
+            </CommandVarsProvider>
+          </DocsPageProvider>
         </DocsBody>
       </DocsPage>
     </DocsLayout>

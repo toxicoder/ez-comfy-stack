@@ -11,6 +11,7 @@ import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import type { Page } from "fumadocs-core/source";
 
 import { EzCommand, EzCmd } from "@/components/command-vars";
+import { DocsH1, DocsH2, DocsH3, DocsH4, DocsH5, DocsH6 } from "@/components/docs-heading";
 import { EzTerm } from "@/components/ez-term";
 import { GlossaryBody } from "@/components/glossary-body";
 import { Mermaid } from "@/components/mermaid";
@@ -35,6 +36,12 @@ export function mdxComponentsFor(page: Page) {
 
   return {
     ...defaultMdxComponents,
+    h1: DocsH1,
+    h2: DocsH2,
+    h3: DocsH3,
+    h4: DocsH4,
+    h5: DocsH5,
+    h6: DocsH6,
     a: ContentLink,
     Banner,
     Callout,

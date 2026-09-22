@@ -240,6 +240,29 @@ class LayoutChromeTests(unittest.TestCase):
         self.assertNotIn("RepoIcon", wordmark)
         self.assertIn("export function Wordmark", wordmark)
 
+    def test_search_fetches_under_the_published_base_path(self) -> None:
+        """Published search must not request host-root /api/search."""
+        layout = (SITE_DIR / "app" / "layout.tsx").read_text(encoding="utf-8")
+        dialog = (SITE_DIR / "components" / "search-dialog.tsx").read_text(encoding="utf-8")
+        site = (SITE_DIR / "lib" / "site.ts").read_text(encoding="utf-8")
+        self.assertIn("searchIndexPath()", layout)
+        self.assertIn("searchFrom={searchIndexPath()}", layout)
+        self.assertIn("useSearchFrom()", dialog)
+        self.assertIn("staticClient({ locale, from })", dialog)
+        self.assertIn("export function searchIndexPath", site)
+
+    def test_headings_file_a_docs_bug_beside_the_anchor_copy(self) -> None:
+        """Each id'd heading offers a GitHub issue link next to copy-anchor."""
+        heading = (SITE_DIR / "components" / "docs-heading.tsx").read_text(encoding="utf-8")
+        page = (SITE_DIR / "app" / "[[...slug]]" / "page.tsx").read_text(encoding="utf-8")
+        mdx = (SITE_DIR / "components" / "mdx-components.ts").read_text(encoding="utf-8")
+        self.assertIn('aria-label="File a documentation bug"', heading)
+        self.assertIn("docsBugHref", heading)
+        self.assertIn("Copy anchor link", heading)
+        self.assertIn("DocsPageProvider", page)
+        self.assertIn("h2: DocsH2", mdx)
+        self.assertIn("docsAlias()", page)
+
 
 class ThemeTests(unittest.TestCase):
     """Voltage tokens, no Material indigo."""

@@ -9,9 +9,9 @@
 
 import { afterEach, describe, expect, it } from "vitest";
 
-import { basePath, REPO } from "../../lib/site";
+import { basePath, docsAlias, REPO, searchIndexPath } from "../../lib/site";
 
-const ENV_KEYS = ["NEXT_BASE_PATH", "DOCS_ALIAS"] as const;
+const ENV_KEYS = ["NEXT_BASE_PATH", "DOCS_ALIAS", "EZ_DOCS_VERSION", "MIKE_DOCS_VERSION", "DGX_DOCS_VERSION"] as const;
 
 const originalEnv: Record<string, string | undefined> = {};
 
@@ -55,5 +55,44 @@ describe("basePath", () => {
     process.env.NEXT_BASE_PATH = "/";
     process.env.DOCS_ALIAS = "latest";
     expect(basePath()).toBe("");
+  });
+});
+
+describe("docsAlias", () => {
+  it("is local when no publish env is set", () => {
+    delete process.env.EZ_DOCS_VERSION;
+    delete process.env.MIKE_DOCS_VERSION;
+    delete process.env.DGX_DOCS_VERSION;
+    delete process.env.DOCS_ALIAS;
+    expect(docsAlias()).toBe("local");
+  });
+
+  it("follows EZ_DOCS_VERSION for the development banner build", () => {
+    process.env.EZ_DOCS_VERSION = "development";
+    expect(docsAlias()).toBe("development");
+  });
+
+  it("follows DOCS_ALIAS=latest when the version env is empty", () => {
+    delete process.env.EZ_DOCS_VERSION;
+    delete process.env.MIKE_DOCS_VERSION;
+    delete process.env.DGX_DOCS_VERSION;
+    process.env.DOCS_ALIAS = "latest";
+    expect(docsAlias()).toBe("latest");
+  });
+});
+
+describe("searchIndexPath", () => {
+  it("stays at the host root for a local preview", () => {
+    delete process.env.DOCS_ALIAS;
+    delete process.env.NEXT_BASE_PATH;
+    expect(searchIndexPath("")).toBe("/api/search");
+    expect(searchIndexPath()).toBe("/api/search");
+  });
+
+  it("prefixes the GitHub Pages alias so the static index is not a root 404", () => {
+    expect(searchIndexPath(`/${REPO.repo}/development`)).toBe(
+      `/${REPO.repo}/development/api/search`
+    );
+    expect(searchIndexPath(`/${REPO.repo}/latest/`)).toBe(`/${REPO.repo}/latest/api/search`);
   });
 });

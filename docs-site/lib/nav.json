@@ -203,6 +203,14 @@
     "title": "Operate",
     "pages": [
       {
+        "title": "Quick reference",
+        "path": "operate/quick-reference.md"
+      },
+      {
+        "title": "Update the stack",
+        "path": "operate/update.md"
+      },
+      {
         "title": "Daily loop",
         "path": "operate/daily.md"
       },
