@@ -2020,8 +2020,8 @@
   {
     "id": "gen_color_bass",
     "label": "Color bass",
-    "clause": "Formant-stacked bass color that stays low and wet, never a pluck or a sparkle lead.",
-    "tags": "color bass, formant bass, chest-sub",
+    "clause": "Low-mid bass color that stays low and wet, never a pluck or a sparkle lead.",
+    "tags": "color bass, low-mid bass, chest-sub",
     "lyrics_form": "",
     "lyrics_form_inst": "",
     "bpm": "",

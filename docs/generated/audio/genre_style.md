@@ -147,7 +147,7 @@ Operator playbook: [Audio Rack](../../create/audio-rack.md).
 | `gen_tearout` | Tearout | tearout, warped bass, chest-sub | vocal, instrumental | gen_boom_bap |
 | `gen_brostep` | Brostep | brostep, growl bass, chest-sub | vocal, instrumental | gen_boom_bap |
 | `gen_wave_bass` | Wave bass | wave bass, warped bass, 808 | vocal, instrumental | gen_boom_bap |
-| `gen_color_bass` | Color bass | color bass, formant bass, chest-sub | vocal, instrumental | gen_boom_bap |
+| `gen_color_bass` | Color bass | color bass, low-mid bass, chest-sub | vocal, instrumental | gen_boom_bap |
 | `gen_dirty_bass` | Dirty bass | dirty bass, warped bass, chest-sub | vocal, instrumental | gen_dirty_south, gen_boom_bap |
 | `gen_dirty_dubstep` | Dirty dubstep | dirty dubstep, wobble bass, chest-sub | vocal, instrumental | gen_boom_bap |
 | `gen_drumstep` | Drumstep | drumstep, amen break, chest-sub | vocal, instrumental | gen_liquid_dnb, gen_boom_bap |

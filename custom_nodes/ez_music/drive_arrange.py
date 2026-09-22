@@ -52,12 +52,12 @@ _SUBS = (
     "fold bass",
 )
 _MIDS = (
-    "wide mid reese counterline",
-    "formant bass melody",
-    "growl answer",
-    "call-response reese",
-    "wide mid growl",
-    "formant answer",
+    "low-mid bass melody",
+    "chest-sub melody",
+    "low wobble answer",
+    "body bass answer",
+    "low reese counterline",
+    "fold bass melody",
 )
 _DRUMS = (
     "rapid hi-hats",
@@ -65,21 +65,20 @@ _DRUMS = (
     "trap drums denser",
     "ghost snare",
     "kick pattern flip",
-    "snare roll",
 )
 _WIDTHS = (
-    "wide mids",
-    "side percussion",
     "wide low-mid",
-    "side hats",
+    "low-mid spread",
+    "chest width",
+    "sub center",
 )
 _WEIGHTS = ("heavy", "wreck", "harder", "stacked", "full send")
-_WARPS = ("warped", "wobble", "growl", "reese", "formant")
+_WARPS = ("warped", "wobble", "reese")
 _SPATIAL = (
     "3D low-mid orbit",
-    "bass circles the stereo field",
-    "sub center mids move wide",
-    "hats sweep across the image",
+    "bass circles the low-mid",
+    "sub center, low-mid moves wide",
+    "low-mid orbits the sub",
 )
 _MOTIONS = (
     "hat density up",
@@ -380,7 +379,7 @@ def _bed(n: int, salt: int, attempt: int) -> str:
     spatial = _slot(_SPATIAL, n, salt, attempt, 13)
     return (
         "bass boosted, "
-        f"{spatial}, layers stay, sub stays, no gap, one-shot phrase"
+        f"{spatial}, layers stay, sub stays, no gap"
     )
 
 
@@ -414,7 +413,7 @@ def _cue_for(role: str, n: int, salt: int, attempt: int = 0) -> str:
             f"{width}, {motion}"
         )
     if role == "build-up":
-        return f"{bed}, snare roll, {sub}, {drum}, {mid}, {width}, {motion}"
+        return f"{bed}, kick tightens, {sub}, {drum}, {mid}, {width}, {motion}"
     if role == "breakdown":
         return (
             f"{bed}, rapid hi-hats, chest-sub pulse, {mid}, {width}, {sub}, {motion}"

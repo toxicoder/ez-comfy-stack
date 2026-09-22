@@ -16,15 +16,15 @@ SECRET_HOMAGE_PHASE = 4
 HUSH_LANE_LYRICS = format_edm_score(
     ("inst", "heavy wobble drop\ndirty dubstep wreck\nwarped 808"),
     ("inst", "trap hats denser\nwobble sustain"),
-    ("inst", "harder growl drop\nlow rumble wreck\nchest formant"),
+    ("inst", "harder warped drop\nlow rumble wreck\nchest-sub"),
     ("inst", "full send drop\nchest sub wreck\ndubstep warp"),
     ("outro", "kick holds\ntrap hats roll\nwobble ride"),
 )
 
 CIPHER_LOCK_LYRICS = format_edm_score(
     ("inst", "heavy growl drop\nbrostep wreck\nwarped lock"),
-    ("inst", "metal hats roll\ngrowl sustain"),
-    ("inst", "harder dirty drop\nsub crush\nchest 808 formant"),
+    ("inst", "rapid hi-hats roll\ngrowl sustain"),
+    ("inst", "harder dirty drop\nsub crush\nchest 808 warped"),
     ("inst", "trap hats denser\ngrowl hold"),
     ("inst", "full send drop\nstacked growl wreck\nbrostep warp"),
     ("outro", "kick holds\nhats denser\ngrowl ride"),
@@ -32,7 +32,7 @@ CIPHER_LOCK_LYRICS = format_edm_score(
 
 GHOST_DOCK_LYRICS = format_edm_score(
     ("inst", "heavy riddim drop\nwobble wreck\nwarped dock"),
-    ("inst", "harder growl drop\nchest growl wreck\n808 crush"),
+    ("inst", "harder warped drop\nchest warped wreck\n808 crush"),
     ("inst", "trap hats roll\nwobble hold"),
     ("inst", "full send drop\nlow rumble wreck\nriddim warp"),
     ("outro", "kick holds\ntrap hats roll\nwobble ride"),
@@ -40,10 +40,10 @@ GHOST_DOCK_LYRICS = format_edm_score(
 
 SEALED_RAMP_LYRICS = format_edm_score(
     ("inst", "heavy tearout drop\ngrowl wreck\nwarped seal"),
-    ("inst", "metal hats roll\ngrowl sustain"),
+    ("inst", "rapid hi-hats roll\ngrowl sustain"),
     ("inst", "harder dirty drop\nsub crush\nchest 808 warp"),
     ("inst", "trap hats denser\ngrowl hold"),
-    ("inst", "full send drop\nstacked tearout wreck\nformant grind"),
+    ("inst", "full send drop\nstacked tearout wreck\nwarped grind"),
     ("inst", "harder stacked drop\nlow rumble wreck\n808 warp"),
     ("outro", "kick holds\nhats denser\ngrowl ride"),
 )
@@ -51,8 +51,8 @@ SEALED_RAMP_LYRICS = format_edm_score(
 FOG_VAULT_LYRICS = format_edm_score(
     ("inst", "heavy color drop\nwarped 808 wreck\nvault grind"),
     ("inst", "trap hats roll\ncolor 808 hold vault"),
-    ("inst", "harder growl drop\nchest analog wreck\nformant 808"),
-    ("inst", "snare roll\nchest 808 punch"),
+    ("inst", "harder warped drop\nchest analog wreck\nchest-sub 808"),
+    ("inst", "kick tightens\nchest 808 punch"),
     ("inst", "full send drop\nstacked color wreck\nwarped sub"),
     ("outro", "kick holds\nhats denser\ncolor ride"),
 )
@@ -60,7 +60,7 @@ FOG_VAULT_LYRICS = format_edm_score(
 DUMMY_LIGHT_LYRICS = format_edm_score(
     ("inst", "heavy warped drop\nstacked 808 wreck\nlight grind"),
     ("inst", "trap hats denser\n808 hold"),
-    ("inst", "harder stacked drop\nchest sub wall\nhybrid formant"),
+    ("inst", "harder stacked drop\nchest sub wall\nhybrid warped"),
     ("inst", "full send drop\nlow 808 wreck\ntrap warp"),
     ("outro", "kick holds\ntrap hats roll\n808 ride"),
 )
@@ -68,8 +68,8 @@ DUMMY_LIGHT_LYRICS = format_edm_score(
 QUIET_WRECK_LYRICS = format_edm_score(
     ("inst", "heavy dirty drop\nwarped bass wreck\nslam 808"),
     ("inst", "trap hats roll\n808 slide"),
-    ("inst", "harder growl drop\nlow rumble wreck\nchest formant"),
-    ("inst", "snare roll\nchest 808 punch"),
+    ("inst", "harder warped drop\nlow rumble wreck\nchest-sub"),
+    ("inst", "kick tightens\nchest 808 punch"),
     ("inst", "full send drop\nchest sub wreck\ndirty warp"),
     ("inst", "hats denser\n808 punch hold"),
     ("inst", "harder stacked drop\nslam wreck\nwarped 808"),
@@ -79,20 +79,20 @@ QUIET_WRECK_LYRICS = format_edm_score(
 OFF_LEDGER_LYRICS = format_edm_score(
     ("inst", "heavy amen drop\nreese wreck\nwarped ledger"),
     ("inst", "amen chops\ntrap hats 808 ledger"),
-    ("inst", "harder dirty drop\nreese stack\nchest formant"),
+    ("inst", "harder dirty drop\nreese stack\nchest-sub"),
     ("inst", "hats denser\nreese hold"),
     ("inst", "full send drop\nstacked amen wreck\n808 warp"),
-    ("inst", "harder growl drop\nchest 808 wreck\ndrumstep grind"),
+    ("inst", "harder warped drop\nchest 808 wreck\ndrumstep grind"),
     ("outro", "kick holds\namen keep\nreese ride"),
 )
 
 BACK_ALLEY_LYRICS = format_edm_score(
     ("inst", "heavy neuro drop\nreese 808 wreck\nwarped alley"),
     ("inst", "hats denser\nreese hold"),
-    ("inst", "harder stacked drop\nchest reese wreck\nformant coil"),
+    ("inst", "harder stacked drop\nchest reese wreck\nchest-sub coil"),
     ("inst", "trap hats roll\n808 punch"),
     ("inst", "full send drop\nneuro 808 wreck\nchest warp"),
-    ("inst", "snare roll\nalley 808 punch"),
+    ("inst", "kick tightens\nalley 808 punch"),
     ("inst", "harder growl drop\nstacked reese wreck\nalley grind"),
     ("outro", "kick holds\nhats denser\nreese ride"),
 )
@@ -100,7 +100,7 @@ BACK_ALLEY_LYRICS = format_edm_score(
 CELLAR_KICK_LYRICS = format_edm_score(
     ("inst", "heavy wobble drop\ndirty dubstep wreck\nwarped cellar"),
     ("inst", "trap hats denser\nwobble sustain"),
-    ("inst", "harder growl drop\nlow rumble wreck\nchest 808"),
+    ("inst", "harder warped drop\nlow rumble wreck\nchest 808"),
     ("inst", "full send drop\nchest sub wreck\ndubstep warp"),
     ("outro", "kick holds\ntrap hats roll\nwobble ride"),
 )
@@ -108,8 +108,8 @@ CELLAR_KICK_LYRICS = format_edm_score(
 HIDDEN_BOOTH_LYRICS = format_edm_score(
     ("inst", "heavy hybrid drop\ntrap 808 wreck\nwarped booth"),
     ("inst", "trap hats roll\n808 slide"),
-    ("inst", "harder growl drop\nstacked trap bass\nchest formant"),
-    ("inst", "snare roll\nchest 808 punch"),
+    ("inst", "harder warped drop\nstacked trap bass\nchest-sub"),
+    ("inst", "kick tightens\nchest 808 punch"),
     ("inst", "full send drop\nchest 808 wall\nhybrid warp"),
     ("outro", "kick holds\nhats denser\n808 ride"),
 )
@@ -117,8 +117,8 @@ HIDDEN_BOOTH_LYRICS = format_edm_score(
 CODED_SUB_LYRICS = format_edm_score(
     ("inst", "heavy chest drop\ndual-action pedal bass\n808 warp wreck"),
     ("inst", "pedal 808 hold\ntrap hats roll"),
-    ("inst", "harder growl drop\nrolling 808 wall\nchest formant"),
-    ("inst", "snare roll\nchest 808"),
+    ("inst", "harder warped drop\nrolling 808 wall\nchest-sub"),
+    ("inst", "kick tightens\nchest 808"),
     ("inst", "hats denser\ncoded 808 hold"),
     ("inst", "full send drop\nchest sub wreck\npedal warp"),
     ("outro", "kick holds\nhats denser\npedal ride"),
@@ -127,17 +127,17 @@ CODED_SUB_LYRICS = format_edm_score(
 SHADOW_COIL_LYRICS = format_edm_score(
     ("inst", "heavy neuro drop\nreese coil wreck\nwarped shadow"),
     ("inst", "hats denser\nreese hold"),
-    ("inst", "harder stacked drop\nchest reese wreck\nformant coil"),
+    ("inst", "harder stacked drop\nchest reese wreck\nchest-sub coil"),
     ("inst", "trap hats roll\n808 punch"),
     ("inst", "full send drop\ncoiled 808 wreck\nchest warp"),
-    ("inst", "snare roll\nshadow 808 punch"),
+    ("inst", "kick tightens\nshadow 808 punch"),
     ("inst", "harder growl drop\nstacked reese wreck\nshadow grind"),
     ("outro", "kick holds\nhats denser\nreese ride"),
 )
 
 MUTE_PYRO_LYRICS = format_edm_score(
     ("inst", "heavy wave drop\nwarped 808 wreck\nfold grind"),
-    ("inst", "harder growl drop\nchest analog wreck\nformant 808"),
+    ("inst", "harder warped drop\nchest analog wreck\nchest-sub 808"),
     ("inst", "trap hats roll\nwave 808 hold analog"),
     ("inst", "full send drop\nstacked wave wreck\nwarped sub"),
     ("outro", "kick holds\ntrap hats roll\nwave ride"),
@@ -146,18 +146,18 @@ MUTE_PYRO_LYRICS = format_edm_score(
 UNLISTED_ROW_LYRICS = format_edm_score(
     ("inst", "heavy amen drop\nreese wreck\nwarped row"),
     ("inst", "amen chops\ntrap hats 808 row"),
-    ("inst", "harder stacked drop\nchest reese wreck\nformant 808"),
+    ("inst", "harder stacked drop\nchest reese wreck\nchest-sub 808"),
     ("inst", "hats denser\nreese hold"),
     ("inst", "full send drop\nstacked amen wreck\n808 warp"),
-    ("inst", "snare roll\nchest 808 punch"),
-    ("inst", "harder growl drop\nchest 808 wreck\ndrumstep grind"),
+    ("inst", "kick tightens\nchest 808 punch"),
+    ("inst", "harder warped drop\nchest 808 wreck\ndrumstep grind"),
     ("outro", "kick holds\namen keep\nreese ride"),
 )
 
 NIGHT_CIPHER_LYRICS = format_edm_score(
     ("inst", "heavy wave drop\nwarped bass wreck\ncipher 808"),
     ("inst", "trap hats denser\nwave 808 sustain cipher"),
-    ("inst", "harder growl drop\nchest 808 wall\nformant fold"),
+    ("inst", "harder warped drop\nchest 808 wall\nchest-sub fold"),
     ("inst", "full send drop\nlow swell wreck\nwave warp"),
     ("outro", "kick holds\nhats denser\nwave ride"),
 )
@@ -165,8 +165,8 @@ NIGHT_CIPHER_LYRICS = format_edm_score(
 BLANK_STENCIL_LYRICS = format_edm_score(
     ("inst", "heavy trap drop\nstencil 808 wreck\nwarped stamp"),
     ("inst", "trap hats roll\n808 slide"),
-    ("inst", "harder stacked drop\ntrap wall wreck\nchest formant"),
-    ("inst", "snare roll\nstencil 808 punch"),
+    ("inst", "harder stacked drop\ntrap wall wreck\nchest warped"),
+    ("inst", "kick tightens\nstencil 808 punch"),
     ("inst", "hats denser\ntrap 808 hold"),
     ("inst", "full send drop\nlow 808 wreck\nstencil warp"),
     ("outro", "kick holds\ntrap hats roll\n808 ride"),
@@ -174,8 +174,8 @@ BLANK_STENCIL_LYRICS = format_edm_score(
 
 BLIND_STAMP_LYRICS = format_edm_score(
     ("inst", "heavy riddim drop\nwobble wreck\nwarped stamp"),
-    ("inst", "metal hats roll\nwobble sustain"),
-    ("inst", "harder growl drop\nchest growl wreck\n808 crush"),
+    ("inst", "rapid hi-hats roll\nwobble sustain"),
+    ("inst", "harder warped drop\nchest warped wreck\n808 crush"),
     ("inst", "trap hats denser\nwobble hold"),
     ("inst", "full send drop\nsub crush wreck\nriddim warp"),
     ("outro", "kick holds\nhats denser\nwobble ride"),
@@ -184,10 +184,10 @@ BLIND_STAMP_LYRICS = format_edm_score(
 COLD_CACHE_LYRICS = format_edm_score(
     ("inst", "heavy hybrid drop\nwarped 808 wreck\ncache grind"),
     ("inst", "trap hats roll\n808 slide"),
-    ("inst", "harder growl drop\ntrap bass wall\nchest formant"),
-    ("inst", "snare roll\nchest 808 punch"),
+    ("inst", "harder warped drop\ntrap bass wall\nchest-sub"),
+    ("inst", "kick tightens\nchest 808 punch"),
     ("inst", "hats denser\ncache 808 hold"),
-    ("inst", "808 triplets\nhybrid growl sustain"),
+    ("inst", "808 triplets\nhybrid warped sustain"),
     ("inst", "full send drop\nchest sub wreck\nhybrid warp"),
     ("outro", "kick holds\nhats denser\n808 ride"),
 )
@@ -195,7 +195,7 @@ COLD_CACHE_LYRICS = format_edm_score(
 SECRET_HOMAGE_LYRICS = format_edm_score(
     ("inst", "heavy wobble drop\ndirty dubstep wreck\nwarped homage"),
     ("inst", "trap hats denser\nwobble sustain"),
-    ("inst", "harder stacked drop\nchest sub wall\n808 formant"),
+    ("inst", "harder stacked drop\nchest sub wall\n808 warped"),
     ("inst", "full send drop\nlow rumble wreck\ndubstep warp"),
     ("outro", "kick holds\ntrap hats roll\nwobble ride"),
 )

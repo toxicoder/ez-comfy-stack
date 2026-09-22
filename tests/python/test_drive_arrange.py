@@ -175,7 +175,7 @@ def test_pick_helpers_and_cue_filters() -> None:
         assert "layers stay" in cue
         assert "sub stays" in cue
         assert "no gap" in cue
-        assert "one-shot phrase" in cue
+        assert "one-shot phrase" not in cue
         assert any(phrase in cue for phrase in arrange._SPATIAL)
         if role != "drop":
             assert "drop" not in cue
@@ -188,10 +188,10 @@ def test_unique_cue_skips_drop_words_on_a_fill(monkeypatch: pytest.MonkeyPatch) 
         calls["n"] += 1
         if calls["n"] == 1:
             return "chest-sub drop"
-        return "rapid hi-hats, mono chest-sub, wide mids"
+        return "rapid hi-hats, mono chest-sub, wide low-mid"
 
     monkeypatch.setattr(arrange, "_cue_for", fake)
-    assert arrange._unique_cue("inst", 0, 1, set()) == "rapid hi-hats, mono chest-sub, wide mids"
+    assert arrange._unique_cue("inst", 0, 1, set()) == "rapid hi-hats, mono chest-sub, wide low-mid"
 
 
 def test_unique_cue_exhausts(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -227,14 +227,14 @@ def test_with_extras_keeps_rejects_and_appends() -> None:
     merged = arrange._with_extras(
         "drop",
         base,
-        ["formant grind"],
+        ["low-mid bass"],
         identity="wobble bass",
         pedal=True,
         used=set(),
     )
     assert "wobble bass" in merged
     assert "dual-action pedal bass" in merged
-    assert "formant grind" in merged
+    assert "low-mid bass" in merged
     again = arrange._with_extras(
         "drop",
         base,
@@ -397,7 +397,7 @@ def test_check_rejects_broken_shapes() -> None:
         arrange._check(banned)
     spilled = build(
         [
-            ("build-up", 2, "snare roll, mono chest-sub"),
+            ("build-up", 2, "kick tightens, mono chest-sub"),
             ("drop", 2, "heavy warped drop"),
             ("inst", 2, "chest-sub drop"),
             ("drop", 2, "harder wobble warped drop"),
