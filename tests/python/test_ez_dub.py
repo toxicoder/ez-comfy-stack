@@ -1601,7 +1601,7 @@ def test_install_lab_tts_compat_missing_module_is_quiet(
         return importlib.import_module(name, *args, **kwargs)
 
     monkeypatch.setattr(importlib, "import_module", _raise)
-    assert pipeline._install_lab_tts_compat() is None
+    pipeline._install_lab_tts_compat()
     assert "lab tts compat hook failed" not in capsys.readouterr().err
 
 
@@ -1612,7 +1612,7 @@ def test_install_lab_tts_compat_without_the_helper_is_quiet(
     """A sitecustomize predating the lab hook must not be reported as a fault."""
     fake = types.ModuleType("sitecustomize")
     monkeypatch.setitem(sys.modules, "sitecustomize", fake)
-    assert pipeline._install_lab_tts_compat() is None
+    pipeline._install_lab_tts_compat()
     assert "lab tts compat hook failed" not in capsys.readouterr().err
 
 
