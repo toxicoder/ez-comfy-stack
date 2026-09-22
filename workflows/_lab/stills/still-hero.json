@@ -1,6 +1,6 @@
 {
   "id": "still-hero",
-  "revision": 10,
+  "revision": 11,
   "last_node_id": 20,
   "last_link_id": 30,
   "nodes": [
@@ -1073,9 +1073,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         1000,
-        380
+        396
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1086,9 +1086,9 @@
       "title": "QUALITY",
       "bounding": [
         1028,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1099,9 +1099,9 @@
       "title": "MODEL",
       "bounding": [
         20,
-        452,
+        436,
         400,
-        490
+        506
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1112,9 +1112,9 @@
       "title": "INPUT",
       "bounding": [
         428,
-        452,
+        436,
         400,
-        980
+        996
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1125,9 +1125,9 @@
       "title": "PROMPT",
       "bounding": [
         836,
-        452,
+        436,
         460,
-        1476
+        1492
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1138,9 +1138,9 @@
       "title": "SETTINGS",
       "bounding": [
         1304,
-        452,
+        436,
         400,
-        832
+        848
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1151,9 +1151,9 @@
       "title": "OUTPUT",
       "bounding": [
         1712,
-        452,
+        436,
         320,
-        640
+        656
       ],
       "color": "#a1309b",
       "font_size": 24,

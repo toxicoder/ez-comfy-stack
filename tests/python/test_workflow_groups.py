@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-import json
 import sys
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -24,6 +24,7 @@ from _lab_layout import (  # noqa: E402
     group_overlap_hits,
     node_overlap_hits,
     node_pos,
+    open_group_title_gap,
     operator_note,
     title_inset_hits,
 )
@@ -32,7 +33,92 @@ from _lab_paths import lab_graph_paths, load_lab_graph  # noqa: E402
 
 def test_lab_group_y0_clears_default_node_row() -> None:
     assert LAB_NODE_Y0 - LAB_GROUP_Y0 == GROUP_TITLE_INSET
-    assert GROUP_TITLE_INSET >= 56
+    # Group header 30 + Vue title above pos 30 + air under the bar.
+    assert GROUP_TITLE_INSET >= 72
+
+
+def test_open_group_title_gap_lifts_top_header_and_keeps_node() -> None:
+    graph: dict[str, Any] = {
+        "revision": 3,
+        "nodes": [
+            {"id": 1, "type": "UNETLoader", "pos": [40, 80], "size": [360, 82]},
+        ],
+        "groups": [group(1, "MODEL", 20, 24, 400, 200, "#3f789e")],
+    }
+    delta = GROUP_TITLE_INSET - (80 - 24)
+    assert open_group_title_gap(graph) is True
+    assert graph["nodes"][0]["pos"] == [40, 80]
+    box = graph["groups"][0]["bounding"]
+    assert box[1] == 24 - delta
+    assert box[3] == 200 + delta
+    assert title_inset_hits(graph) == []
+    assert graph["revision"] == 4
+    assert open_group_title_gap(graph) is False
+    assert graph["revision"] == 4
+
+
+def test_open_group_title_gap_drops_stacked_group() -> None:
+    graph: dict[str, Any] = {
+        "revision": 1,
+        "nodes": [
+            {"id": 1, "type": "UNETLoader", "pos": [40, 80], "size": [300, 82]},
+            {"id": 2, "type": "LoadImage", "pos": [40, 280], "size": [300, 100]},
+        ],
+        "groups": [
+            group(1, "MODEL", 20, 24, 400, 200, "#3f789e"),
+            group(2, "INPUT", 20, 224, 400, 200, "#a1309b"),
+        ],
+    }
+    delta = GROUP_TITLE_INSET - 56
+    assert open_group_title_gap(graph) is True
+    assert graph["nodes"][0]["pos"][1] == 80
+    assert graph["nodes"][1]["pos"][1] == 280 + delta
+    assert graph["groups"][0]["bounding"][1] == 24 - delta
+    assert graph["groups"][1]["bounding"][1] == 224
+    assert title_inset_hits(graph) == []
+    assert group_overlap_hits(graph) == []
+    assert open_group_title_gap(graph) is False
+
+
+def test_open_group_title_gap_lifts_side_by_side_headers() -> None:
+    graph: dict[str, Any] = {
+        "revision": 1,
+        "nodes": [
+            {"id": 1, "type": "UNETLoader", "pos": [40, 80], "size": [300, 82]},
+            {"id": 2, "type": "CLIPTextEncode", "pos": [480, 80], "size": [300, 120]},
+        ],
+        "groups": [
+            group(1, "MODEL", 20, 24, 400, 200, "#3f789e"),
+            group(2, "PROMPT", 460, 24, 400, 200, "#a1309b"),
+        ],
+    }
+    delta = GROUP_TITLE_INSET - 56
+    open_group_title_gap(graph)
+    assert graph["groups"][0]["bounding"][1] == 24 - delta
+    assert graph["groups"][1]["bounding"][1] == 24 - delta
+    assert graph["nodes"][0]["pos"][1] == 80
+    assert graph["nodes"][1]["pos"][1] == 80
+    assert group_overlap_hits(graph) == []
+
+
+def test_open_group_title_gap_follows_pushed_group() -> None:
+    graph: dict[str, Any] = {
+        "revision": 1,
+        "nodes": [
+            {"id": 1, "type": "UNETLoader", "pos": [40, 80], "size": [300, 82]},
+            {"id": 2, "type": "UNETLoader", "pos": [40, 280], "size": [300, 100]},
+            {"id": 3, "type": "MarkdownNote", "pos": [40, 456], "size": [300, 80]},
+        ],
+        "groups": [
+            group(1, "MODEL", 20, 24, 400, 200, "#3f789e"),
+            group(2, "INPUT", 20, 224, 400, 200, "#a1309b"),
+        ],
+    }
+    delta = GROUP_TITLE_INSET - 56
+    assert node_overlap_hits(graph) == []
+    open_group_title_gap(graph)
+    assert graph["nodes"][2]["pos"][1] == 456 + delta
+    assert node_overlap_hits(graph) == []
 
 
 def test_ensure_group_title_inset_shifts_box_up_without_moving_nodes() -> None:

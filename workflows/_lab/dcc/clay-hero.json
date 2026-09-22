@@ -1,6 +1,6 @@
 {
   "id": "clay-hero",
-  "revision": 9,
+  "revision": 10,
   "last_node_id": 19,
   "last_link_id": 25,
   "nodes": [
@@ -914,9 +914,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         1000,
-        380
+        396
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -927,9 +927,9 @@
       "title": "QUALITY",
       "bounding": [
         1028,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -940,9 +940,9 @@
       "title": "MODEL",
       "bounding": [
         20,
-        452,
+        436,
         400,
-        490
+        506
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -953,9 +953,9 @@
       "title": "INPUT",
       "bounding": [
         428,
-        452,
+        436,
         360,
-        576
+        592
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -966,9 +966,9 @@
       "title": "PROMPT",
       "bounding": [
         796,
-        452,
+        436,
         460,
-        1476
+        1492
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -979,9 +979,9 @@
       "title": "SETTINGS",
       "bounding": [
         1264,
-        452,
+        436,
         360,
-        844
+        860
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -992,9 +992,9 @@
       "title": "OUTPUT",
       "bounding": [
         1632,
-        452,
+        436,
         320,
-        640
+        656
       ],
       "color": "#a1309b",
       "font_size": 24,

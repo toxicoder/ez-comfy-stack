@@ -1,6 +1,6 @@
 {
   "id": "still-studio",
-  "revision": 4,
+  "revision": 5,
   "last_node_id": 19,
   "last_link_id": 32,
   "nodes": [
@@ -327,7 +327,7 @@
       "type": "VAEDecode",
       "pos": [
         1840,
-        1580
+        1596
       ],
       "size": [
         240,
@@ -369,7 +369,7 @@
       "type": "SaveImage",
       "pos": [
         1840,
-        1698
+        1714
       ],
       "size": [
         280,
@@ -748,7 +748,7 @@
       "type": "EZImageUpscale",
       "pos": [
         1800,
-        2040
+        2056
       ],
       "size": [
         280,
@@ -1068,9 +1068,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         1000,
-        380
+        396
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1081,9 +1081,9 @@
       "title": "QUALITY",
       "bounding": [
         1028,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1094,9 +1094,9 @@
       "title": "MODEL",
       "bounding": [
         20,
-        452,
+        436,
         400,
-        490
+        506
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1107,9 +1107,9 @@
       "title": "PROMPT",
       "bounding": [
         460,
-        452,
+        436,
         928,
-        1454
+        1470
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1120,9 +1120,9 @@
       "title": "FORMAT",
       "bounding": [
         1420,
-        452,
+        436,
         400,
-        1072
+        1088
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1135,7 +1135,7 @@
         1780,
         1524,
         360,
-        640
+        656
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1146,9 +1146,9 @@
       "title": "INPUT",
       "bounding": [
         2148,
-        452,
+        436,
         400,
-        432
+        448
       ],
       "color": "#a1309b",
       "font_size": 24,

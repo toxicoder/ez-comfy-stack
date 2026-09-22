@@ -1,6 +1,6 @@
 {
   "id": "dream-house",
-  "revision": 6,
+  "revision": 7,
   "last_node_id": 91,
   "last_link_id": 173,
   "nodes": [
@@ -787,7 +787,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1682
+        1698
       ],
       "size": [
         420,
@@ -829,7 +829,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        1682
+        1698
       ],
       "size": [
         360,
@@ -876,7 +876,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        1682
+        1698
       ],
       "size": [
         320,
@@ -936,7 +936,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        1682
+        1698
       ],
       "size": [
         240,
@@ -978,7 +978,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        1682
+        1698
       ],
       "size": [
         280,
@@ -1008,7 +1008,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        2216
+        2236
       ],
       "size": [
         420,
@@ -1050,7 +1050,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        2216
+        2236
       ],
       "size": [
         360,
@@ -1097,7 +1097,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        2216
+        2236
       ],
       "size": [
         320,
@@ -1157,7 +1157,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        2216
+        2236
       ],
       "size": [
         240,
@@ -1199,7 +1199,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        2216
+        2236
       ],
       "size": [
         280,
@@ -1229,7 +1229,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        2738
+        2774
       ],
       "size": [
         420,
@@ -1271,7 +1271,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        2738
+        2774
       ],
       "size": [
         360,
@@ -1318,7 +1318,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        2738
+        2774
       ],
       "size": [
         320,
@@ -1378,7 +1378,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        2738
+        2774
       ],
       "size": [
         240,
@@ -1420,7 +1420,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        2738
+        2774
       ],
       "size": [
         280,
@@ -1450,7 +1450,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        3260
+        3312
       ],
       "size": [
         420,
@@ -1492,7 +1492,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        3260
+        3312
       ],
       "size": [
         360,
@@ -1539,7 +1539,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        3260
+        3312
       ],
       "size": [
         320,
@@ -1599,7 +1599,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        3260
+        3312
       ],
       "size": [
         240,
@@ -1641,7 +1641,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        3260
+        3312
       ],
       "size": [
         280,
@@ -1671,7 +1671,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        3782
+        3850
       ],
       "size": [
         420,
@@ -1713,7 +1713,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        3782
+        3850
       ],
       "size": [
         360,
@@ -1760,7 +1760,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        3782
+        3850
       ],
       "size": [
         320,
@@ -1820,7 +1820,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        3782
+        3850
       ],
       "size": [
         240,
@@ -1862,7 +1862,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        3782
+        3850
       ],
       "size": [
         280,
@@ -1892,7 +1892,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        4304
+        4388
       ],
       "size": [
         420,
@@ -1934,7 +1934,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        4304
+        4388
       ],
       "size": [
         360,
@@ -1981,7 +1981,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        4304
+        4388
       ],
       "size": [
         320,
@@ -2041,7 +2041,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        4304
+        4388
       ],
       "size": [
         240,
@@ -2083,7 +2083,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        4304
+        4388
       ],
       "size": [
         280,
@@ -2113,7 +2113,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        4826
+        4926
       ],
       "size": [
         420,
@@ -2155,7 +2155,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        4826
+        4926
       ],
       "size": [
         360,
@@ -2202,7 +2202,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        4826
+        4926
       ],
       "size": [
         320,
@@ -2262,7 +2262,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        4826
+        4926
       ],
       "size": [
         240,
@@ -2304,7 +2304,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        4826
+        4926
       ],
       "size": [
         280,
@@ -2334,7 +2334,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        5348
+        5464
       ],
       "size": [
         420,
@@ -2376,7 +2376,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        5348
+        5464
       ],
       "size": [
         360,
@@ -2423,7 +2423,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        5348
+        5464
       ],
       "size": [
         320,
@@ -2483,7 +2483,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        5348
+        5464
       ],
       "size": [
         240,
@@ -2525,7 +2525,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        5348
+        5464
       ],
       "size": [
         280,
@@ -2555,7 +2555,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         480,
-        5600
+        5716
       ],
       "size": [
         420,
@@ -2809,7 +2809,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        2024
+        2040
       ],
       "size": [
         280,
@@ -2862,7 +2862,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        2558
+        2578
       ],
       "size": [
         280,
@@ -2915,7 +2915,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        3080
+        3116
       ],
       "size": [
         280,
@@ -2968,7 +2968,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        3602
+        3654
       ],
       "size": [
         280,
@@ -3021,7 +3021,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        4124
+        4192
       ],
       "size": [
         280,
@@ -3074,7 +3074,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        4646
+        4730
       ],
       "size": [
         280,
@@ -3127,7 +3127,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        5168
+        5268
       ],
       "size": [
         280,
@@ -3180,7 +3180,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        5690
+        5806
       ],
       "size": [
         280,
@@ -5277,9 +5277,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         460,
-        460
+        476
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -5290,9 +5290,9 @@
       "title": "QUALITY",
       "bounding": [
         488,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -5303,9 +5303,9 @@
       "title": "MODEL",
       "bounding": [
         20,
-        532,
+        516,
         400,
-        692
+        708
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -5316,9 +5316,9 @@
       "title": "HOUSE IDENTITY",
       "bounding": [
         20,
-        1426,
+        1410,
         460,
-        520
+        536
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -5329,9 +5329,9 @@
       "title": "SHOT 01 tower",
       "bounding": [
         500,
-        532,
+        516,
         1852,
-        522
+        538
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -5342,9 +5342,9 @@
       "title": "SHOT 02 foyer",
       "bounding": [
         500,
-        1104,
+        1088,
         1852,
-        522
+        538
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -5357,7 +5357,7 @@
         500,
         1626,
         1852,
-        522
+        538
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -5368,9 +5368,9 @@
       "title": "SHOT 04 kitchen",
       "bounding": [
         500,
-        2160,
+        2164,
         1852,
-        522
+        538
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -5381,9 +5381,9 @@
       "title": "SHOT 05 dining",
       "bounding": [
         500,
-        2682,
+        2702,
         1852,
-        522
+        538
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -5394,9 +5394,9 @@
       "title": "SHOT 06 bedroom",
       "bounding": [
         500,
-        3204,
+        3240,
         1852,
-        522
+        538
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -5407,9 +5407,9 @@
       "title": "SHOT 07 bath",
       "bounding": [
         500,
-        3726,
+        3778,
         1852,
-        522
+        538
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -5420,9 +5420,9 @@
       "title": "SHOT 08 terrace",
       "bounding": [
         500,
-        4248,
+        4316,
         1852,
-        522
+        538
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -5433,9 +5433,9 @@
       "title": "SHOT 09 drone",
       "bounding": [
         500,
-        4770,
+        4854,
         1852,
-        522
+        538
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -5446,9 +5446,9 @@
       "title": "SHOT 10 study",
       "bounding": [
         460,
-        5292,
+        5392,
         1892,
-        772
+        788
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -5459,9 +5459,9 @@
       "title": "PROMPT",
       "bounding": [
         2360,
-        532,
+        516,
         460,
-        260
+        276
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -5472,9 +5472,9 @@
       "title": "SETTINGS",
       "bounding": [
         2828,
-        532,
+        516,
         400,
-        498
+        514
       ],
       "color": "#3f789e",
       "font_size": 24,

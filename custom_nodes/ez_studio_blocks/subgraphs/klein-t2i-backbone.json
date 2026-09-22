@@ -1,6 +1,6 @@
 {
   "id": "ez-studio-blocks-klein-t2i-backbone",
-  "revision": 3,
+  "revision": 4,
   "last_node_id": 1,
   "last_link_id": 0,
   "nodes": [
@@ -76,9 +76,9 @@
       "title": "SETTINGS",
       "bounding": [
         20,
-        148,
+        132,
         320,
-        260
+        276
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -103,9 +103,9 @@
             "title": "NOTE",
             "bounding": [
               20,
-              24,
+              8,
               1000,
-              380
+              396
             ],
             "color": "#3f789e",
             "font_size": 24,
@@ -116,9 +116,9 @@
             "title": "MODEL",
             "bounding": [
               20,
-              452,
+              436,
               400,
-              490
+              506
             ],
             "color": "#3f789e",
             "font_size": 24,
@@ -129,9 +129,9 @@
             "title": "PROMPT",
             "bounding": [
               428,
-              452,
+              436,
               460,
-              1476
+              1492
             ],
             "color": "#a1309b",
             "font_size": 24,
@@ -142,9 +142,9 @@
             "title": "SETTINGS",
             "bounding": [
               896,
-              452,
+              436,
               360,
-              540
+              556
             ],
             "color": "#3f789e",
             "font_size": 24,
@@ -155,9 +155,9 @@
             "title": "OUTPUT",
             "bounding": [
               1264,
-              452,
+              436,
               320,
-              488
+              504
             ],
             "color": "#a1309b",
             "font_size": 24,

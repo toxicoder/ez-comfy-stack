@@ -1,6 +1,6 @@
 {
   "id": "canny-control-8s",
-  "revision": 12,
+  "revision": 13,
   "last_node_id": 27,
   "last_link_id": 39,
   "nodes": [
@@ -1335,9 +1335,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         1000,
-        520
+        536
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1348,9 +1348,9 @@
       "title": "QUALITY",
       "bounding": [
         1028,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1361,9 +1361,9 @@
       "title": "MODEL",
       "bounding": [
         20,
-        592,
+        576,
         560,
-        624
+        640
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1374,9 +1374,9 @@
       "title": "INPUT",
       "bounding": [
         588,
-        592,
+        576,
         360,
-        576
+        592
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1387,9 +1387,9 @@
       "title": "PROMPT",
       "bounding": [
         956,
-        592,
+        576,
         460,
-        1476
+        1492
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1400,9 +1400,9 @@
       "title": "SETTINGS",
       "bounding": [
         1424,
-        592,
+        576,
         360,
-        1266
+        1282
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1413,9 +1413,9 @@
       "title": "OUTPUT",
       "bounding": [
         1792,
-        592,
+        576,
         460,
-        1804
+        1820
       ],
       "color": "#a1309b",
       "font_size": 24,

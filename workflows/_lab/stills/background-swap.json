@@ -1,6 +1,6 @@
 {
   "id": "background-swap",
-  "revision": 5,
+  "revision": 6,
   "last_node_id": 27,
   "last_link_id": 52,
   "nodes": [
@@ -1215,9 +1215,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         1000,
-        380
+        396
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1228,9 +1228,9 @@
       "title": "QUALITY",
       "bounding": [
         1028,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1241,9 +1241,9 @@
       "title": "MODEL",
       "bounding": [
         20,
-        452,
+        436,
         400,
-        622
+        638
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1254,9 +1254,9 @@
       "title": "INPUT",
       "bounding": [
         428,
-        452,
+        436,
         360,
-        576
+        592
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1267,9 +1267,9 @@
       "title": "PROMPT",
       "bounding": [
         796,
-        452,
+        436,
         460,
-        1526
+        1542
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1280,9 +1280,9 @@
       "title": "SETTINGS",
       "bounding": [
         1264,
-        452,
+        436,
         360,
-        1476
+        1492
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1293,9 +1293,9 @@
       "title": "OUTPUT",
       "bounding": [
         1632,
-        452,
+        436,
         320,
-        702
+        718
       ],
       "color": "#a1309b",
       "font_size": 24,

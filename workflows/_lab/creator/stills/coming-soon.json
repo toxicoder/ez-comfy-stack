@@ -1,6 +1,6 @@
 {
   "id": "coming-soon",
-  "revision": 7,
+  "revision": 8,
   "last_node_id": 18,
   "last_link_id": 23,
   "nodes": [
@@ -326,7 +326,7 @@
       "type": "VAEDecode",
       "pos": [
         1840,
-        1758
+        1774
       ],
       "size": [
         240,
@@ -368,7 +368,7 @@
       "type": "SaveImage",
       "pos": [
         1840,
-        1876
+        1892
       ],
       "size": [
         280,
@@ -670,7 +670,7 @@
       "type": "EZImageUpscale",
       "pos": [
         1800,
-        2218
+        2234
       ],
       "size": [
         280,
@@ -942,9 +942,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         1000,
-        380
+        396
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -955,9 +955,9 @@
       "title": "QUALITY",
       "bounding": [
         1028,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -968,9 +968,9 @@
       "title": "MODEL",
       "bounding": [
         20,
-        452,
+        436,
         400,
-        490
+        506
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -981,9 +981,9 @@
       "title": "PROMPT",
       "bounding": [
         460,
-        452,
+        436,
         928,
-        1276
+        1292
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -994,9 +994,9 @@
       "title": "SETTINGS",
       "bounding": [
         1420,
-        452,
+        436,
         400,
-        1250
+        1266
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1009,7 +1009,7 @@
         1780,
         1702,
         360,
-        640
+        656
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1020,9 +1020,9 @@
       "title": "INPUT",
       "bounding": [
         2528,
-        452,
+        436,
         360,
-        414
+        430
       ],
       "color": "#a1309b",
       "font_size": 24,

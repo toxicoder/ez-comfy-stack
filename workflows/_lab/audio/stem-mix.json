@@ -1,6 +1,6 @@
 {
   "id": "stem-mix",
-  "revision": 2,
+  "revision": 3,
   "last_node_id": 9,
   "last_link_id": 0,
   "nodes": [
@@ -296,9 +296,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         1380,
-        520
+        536
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -309,9 +309,9 @@
       "title": "QUALITY",
       "bounding": [
         1408,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -322,9 +322,9 @@
       "title": "STEMS",
       "bounding": [
         20,
-        592,
+        576,
         1732,
-        220
+        236
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -335,9 +335,9 @@
       "title": "OUTPUT",
       "bounding": [
         1760,
-        592,
+        576,
         360,
-        370
+        386
       ],
       "color": "#3f789e",
       "font_size": 24,

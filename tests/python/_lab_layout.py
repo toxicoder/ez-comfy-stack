@@ -8,8 +8,8 @@ in MODEL → INPUT → PROMPT → SETTINGS → OUTPUT columns (or existing named
 SHOT/Beat groups, shifted as blocks under the header).
 
 ComfyUI draws the group title in the top LiteGraph.NODE_TITLE_HEIGHT (30px) of
-``group.bounding``. Native ``LGraphGroup.resizeTo`` uses that plus 10px pad.
-Lab graphs add a small extra gap so the first node is not flush with the header.
+``group.bounding``. Nodes 2.0 draws each node title 30px above ``pos``.
+``GROUP_TITLE_INSET`` clears both bars plus a small air gap.
 
 Node spacing uses an estimated Nodes 2.0 (Vue) AABB so serialized LiteGraph
 ``size`` values do not pack widgets on top of each other. Estimates are never
@@ -23,8 +23,9 @@ from collections import defaultdict, deque
 from pathlib import Path
 from typing import Any
 
-# LiteGraph.NODE_TITLE_HEIGHT (30) + native resizeTo pad (10) + 16px gap.
-GROUP_TITLE_INSET = 56
+# Group header (30) + Nodes 2.0 title drawn above pos (30) + 12px of air.
+# Measured to pos, 56 left the Vue title covering about 4px of the header.
+GROUP_TITLE_INSET = 72
 GROUP_FONT_SIZE = 24
 # Operator note origin; pipeline columns start at the same x below the header.
 LAB_X0 = 40
@@ -382,6 +383,141 @@ def ensure_group_title_inset(graph: dict[str, Any], inset: float = GROUP_TITLE_I
         if applied <= 0:
             continue
         box[1] = new_y
+
+
+def _title_shortfall(
+    grp: dict[str, Any], members: list[dict[str, Any]], inset: float
+) -> float:
+    """Pixels of header clearance still missing above the first member."""
+    if not members:
+        return 0.0
+    min_y = min(node_pos(node)[1] for node in members)
+    extra = inset - (min_y - float(grp["bounding"][1]))
+    if extra <= _MOVE_EPS:
+        return 0.0
+    return extra
+
+
+def _rects_h_overlap(
+    left_x: float, left_w: float, right_x: float, right_w: float
+) -> bool:
+    return left_x < right_x + right_w and left_x + left_w > right_x
+
+
+def _open_one_graph(graph: dict[str, Any], inset: float) -> bool:
+    """Clear group headers without moving the top row.
+
+    Each short group lifts its top and grows by the same amount, so its
+    bottom stays and the first node clears ``inset``. A lower box that then
+    overlaps the one above is pushed down with its members. An ungrouped
+    node under a pushed group follows that shift.
+
+    Does not recurse and does not bump ``revision``.
+    """
+    nodes = list(graph.get("nodes") or [])
+    groups = list(graph.get("groups") or [])
+    if not groups or not nodes:
+        return False
+    membership: list[tuple[dict[str, Any], list[dict[str, Any]]]] = [
+        (grp, group_members(graph, grp)) for grp in groups
+    ]
+    original_box: list[tuple[float, float, float, float]] = []
+    shortfall: list[float] = []
+    for grp, members in membership:
+        box = grp.get("bounding") or [0.0, 0.0, 0.0, 0.0]
+        original_box.append(
+            (float(box[0]), float(box[1]), float(box[2]), float(box[3]))
+        )
+        shortfall.append(_title_shortfall(grp, members, inset))
+    orig_pos = {int(node["id"]): node_pos(node) for node in nodes}
+    moved = False
+    for index, (grp, _members) in enumerate(membership):
+        extra = shortfall[index]
+        if extra <= _MOVE_EPS:
+            continue
+        box = grp["bounding"]
+        box[1] = _coord(float(box[1]) - extra)
+        box[3] = _coord(float(box[3]) + extra)
+        moved = True
+    node_dy = [0.0] * len(membership)
+    order = sorted(range(len(membership)), key=lambda index: original_box[index][1])
+    for place, index in enumerate(order):
+        grp, members = membership[index]
+        box = grp["bounding"]
+        push = 0.0
+        for upper in order[:place]:
+            upper_box = membership[upper][0]["bounding"]
+            if not _h_overlap(box, upper_box):
+                continue
+            overlap = (float(upper_box[1]) + float(upper_box[3])) - float(box[1])
+            if overlap > push:
+                push = overlap
+        if push <= _MOVE_EPS:
+            continue
+        box[1] = _coord(float(box[1]) + push)
+        node_dy[index] += push
+        for node in members:
+            x, y = node_pos(node)
+            set_node_pos(node, x, y + push)
+            moved = True
+    grouped = {int(node["id"]) for _grp, members in membership for node in members}
+    for node in nodes:
+        nid = int(node["id"])
+        if nid in grouped:
+            continue
+        origin_x, origin_y = orig_pos[nid]
+        width, _height = node_size(node)
+        follow = 0.0
+        for origin_box, dy in zip(original_box, node_dy):
+            if dy <= _MOVE_EPS:
+                continue
+            if not _rects_h_overlap(origin_x, width, origin_box[0], origin_box[2]):
+                continue
+            if origin_box[1] + origin_box[3] <= origin_y + _MOVE_EPS:
+                follow = max(follow, dy)
+        if follow <= _MOVE_EPS:
+            continue
+        x, y = node_pos(node)
+        set_node_pos(node, x, y + follow)
+        moved = True
+    return moved
+
+
+def _open_group_tree(graph: dict[str, Any], inset: float) -> bool:
+    """Open title gaps on ``graph`` and nested subgraphs. No revision bump."""
+    moved = _open_one_graph(graph, inset)
+    defs = graph.get("definitions")
+    if isinstance(defs, dict):
+        for sub in defs.get("subgraphs") or []:
+            if isinstance(sub, dict) and sub.get("nodes"):
+                if _open_group_tree(sub, inset):
+                    moved = True
+    return moved
+
+
+def open_group_title_gap(
+    graph: dict[str, Any], inset: float = GROUP_TITLE_INSET
+) -> bool:
+    """Clear ``inset`` px under each group header.
+
+    The top row keeps its nodes and the group top moves up. A lower group
+    that would overlap is pushed down with its members. An ungrouped node
+    under a pushed group follows that shift.
+
+    Recurses into ``definitions.subgraphs``. Bumps ``revision`` on this graph
+    when it or a subgraph moves. Does not run stage organize.
+
+    Args:
+        graph: Serialized Comfy graph (mutated).
+        inset: Pixels from the group top to the first member ``pos``.
+
+    Returns:
+        True when any node ``pos`` or group ``bounding`` changed.
+    """
+    moved = _open_group_tree(graph, inset)
+    if moved:
+        graph["revision"] = int(graph.get("revision") or 0) + 1
+    return moved
 
 
 def _estimated_rect(node: dict[str, Any]) -> tuple[float, float, float, float]:
@@ -1122,6 +1258,44 @@ def organize_stages(graph: dict[str, Any]) -> None:
         for sub in defs.get("subgraphs") or []:
             if isinstance(sub, dict) and sub.get("nodes"):
                 organize_stages(sub)
+
+
+def _write_opened_graphs(paths: list[Path]) -> int:
+    """Open title gaps on ``paths``. Returns files whose JSON changed."""
+    written = 0
+    for path in paths:
+        graph = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(graph, dict):
+            continue
+        before = json.dumps(graph, sort_keys=True)
+        open_group_title_gap(graph)
+        after = json.dumps(graph, sort_keys=True)
+        if before == after:
+            continue
+        path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
+        written += 1
+    return written
+
+
+def stamp_open_group_title_gaps(root: Path | None = None) -> int:
+    """Drop lab nodes clear of group headers. Returns files written.
+
+    Uses ``open_group_title_gap`` rather than ``finalize_layout``. Stage
+    organize is not idempotent on every shipped graph.
+
+    Args:
+        root: Repository root. Defaults to the tests package root.
+
+    Returns:
+        Count of JSON files rewritten.
+    """
+    from _lab_paths import ROOT, lab_graph_paths
+
+    written = _write_opened_graphs(list(lab_graph_paths(root)))
+    blocks = ROOT / "custom_nodes" / "ez_studio_blocks" / "subgraphs"
+    if blocks.is_dir():
+        written += _write_opened_graphs(sorted(blocks.glob("*.json")))
+    return written
 
 
 def relayout_lab_graphs(root: Path | None = None) -> int:

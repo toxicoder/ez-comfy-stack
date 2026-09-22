@@ -1,6 +1,6 @@
 {
   "id": "longcat-video",
-  "revision": 2,
+  "revision": 3,
   "last_node_id": 6,
   "last_link_id": 2,
   "nodes": [
@@ -230,9 +230,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         1380,
-        460
+        476
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -243,9 +243,9 @@
       "title": "QUALITY",
       "bounding": [
         1408,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -256,9 +256,9 @@
       "title": "PROMPT",
       "bounding": [
         20,
-        532,
+        516,
         460,
-        1504
+        1520
       ],
       "color": "#a1309b",
       "font_size": 24,

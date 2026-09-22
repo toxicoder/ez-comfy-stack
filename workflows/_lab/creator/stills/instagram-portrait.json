@@ -1,6 +1,6 @@
 {
   "id": "instagram-portrait",
-  "revision": 7,
+  "revision": 8,
   "last_node_id": 16,
   "last_link_id": 19,
   "nodes": [
@@ -326,7 +326,7 @@
       "type": "VAEDecode",
       "pos": [
         1840,
-        1668
+        1684
       ],
       "size": [
         240,
@@ -368,7 +368,7 @@
       "type": "SaveImage",
       "pos": [
         1840,
-        1786
+        1802
       ],
       "size": [
         280,
@@ -627,7 +627,7 @@
       "type": "EZImageUpscale",
       "pos": [
         1800,
-        2128
+        2144
       ],
       "size": [
         280,
@@ -844,9 +844,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         1000,
-        380
+        396
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -857,9 +857,9 @@
       "title": "QUALITY",
       "bounding": [
         1028,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -870,9 +870,9 @@
       "title": "MODEL",
       "bounding": [
         20,
-        452,
+        436,
         400,
-        490
+        506
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -883,9 +883,9 @@
       "title": "PROMPT",
       "bounding": [
         460,
-        452,
+        436,
         928,
-        1186
+        1202
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -896,9 +896,9 @@
       "title": "SETTINGS",
       "bounding": [
         1420,
-        452,
+        436,
         400,
-        1160
+        1176
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -911,7 +911,7 @@
         1780,
         1612,
         360,
-        640
+        656
       ],
       "color": "#3f789e",
       "font_size": 24,

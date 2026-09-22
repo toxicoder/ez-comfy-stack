@@ -1,6 +1,6 @@
 {
   "id": "two-host-episode",
-  "revision": 2,
+  "revision": 3,
   "last_node_id": 17,
   "last_link_id": 18,
   "nodes": [
@@ -862,9 +862,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         440,
-        520
+        536
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -875,9 +875,9 @@
       "title": "QUALITY",
       "bounding": [
         468,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -888,9 +888,9 @@
       "title": "MODEL",
       "bounding": [
         20,
-        592,
+        576,
         448,
-        1408
+        1424
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -901,9 +901,9 @@
       "title": "PROMPT",
       "bounding": [
         480,
-        592,
+        576,
         460,
-        1788
+        1804
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -914,9 +914,9 @@
       "title": "SETTINGS",
       "bounding": [
         1420,
-        592,
+        576,
         360,
-        1198
+        1214
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -927,9 +927,9 @@
       "title": "OUTPUT",
       "bounding": [
         1840,
-        592,
+        576,
         360,
-        904
+        920
       ],
       "color": "#3f789e",
       "font_size": 24,

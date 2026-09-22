@@ -1,6 +1,6 @@
 {
   "id": "still-to-shot",
-  "revision": 8,
+  "revision": 9,
   "last_node_id": 22,
   "last_link_id": 30,
   "nodes": [
@@ -1099,9 +1099,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         1000,
-        520
+        536
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1112,9 +1112,9 @@
       "title": "QUALITY",
       "bounding": [
         1028,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1125,9 +1125,9 @@
       "title": "DRAFT Wan 5s",
       "bounding": [
         20,
-        592,
+        576,
         2740,
-        1090
+        1106
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1138,9 +1138,9 @@
       "title": "PROMPT",
       "bounding": [
         2768,
-        592,
+        576,
         460,
-        520
+        536
       ],
       "color": "#3f789e",
       "font_size": 24,

@@ -1,6 +1,6 @@
 {
   "id": "learn-episode",
-  "revision": 2,
+  "revision": 3,
   "last_node_id": 18,
   "last_link_id": 20,
   "nodes": [
@@ -930,9 +930,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         440,
-        560
+        576
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -943,9 +943,9 @@
       "title": "QUALITY",
       "bounding": [
         468,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -956,9 +956,9 @@
       "title": "MODEL",
       "bounding": [
         20,
-        632,
+        616,
         448,
-        1238
+        1254
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -969,9 +969,9 @@
       "title": "PROMPT",
       "bounding": [
         480,
-        632,
+        616,
         460,
-        1750
+        1766
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -982,9 +982,9 @@
       "title": "SETTINGS",
       "bounding": [
         1420,
-        632,
+        616,
         360,
-        1028
+        1044
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -995,9 +995,9 @@
       "title": "OUTPUT",
       "bounding": [
         1840,
-        632,
+        616,
         360,
-        1056
+        1072
       ],
       "color": "#3f789e",
       "font_size": 24,

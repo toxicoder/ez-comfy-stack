@@ -1,6 +1,6 @@
 {
   "id": "beat-sheet",
-  "revision": 2,
+  "revision": 3,
   "last_node_id": 44,
   "last_link_id": 58,
   "nodes": [
@@ -271,7 +271,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40,
-        1464
+        1480
       ],
       "size": [
         420.0,
@@ -308,7 +308,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         40,
-        1696
+        1712
       ],
       "size": [
         420.0,
@@ -368,7 +368,7 @@
       "type": "PrimitiveNode",
       "pos": [
         508,
-        1464
+        1480
       ],
       "size": [
         420.0,
@@ -405,7 +405,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         508,
-        1696
+        1712
       ],
       "size": [
         420.0,
@@ -465,7 +465,7 @@
       "type": "PrimitiveNode",
       "pos": [
         976,
-        1464
+        1480
       ],
       "size": [
         420.0,
@@ -502,7 +502,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         976,
-        1696
+        1712
       ],
       "size": [
         420.0,
@@ -562,7 +562,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40,
-        2216
+        2248
       ],
       "size": [
         420.0,
@@ -599,7 +599,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         40,
-        2448
+        2480
       ],
       "size": [
         420.0,
@@ -659,7 +659,7 @@
       "type": "PrimitiveNode",
       "pos": [
         508,
-        2216
+        2248
       ],
       "size": [
         420.0,
@@ -696,7 +696,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         508,
-        2448
+        2480
       ],
       "size": [
         420.0,
@@ -756,7 +756,7 @@
       "type": "PrimitiveNode",
       "pos": [
         976,
-        2216
+        2248
       ],
       "size": [
         420.0,
@@ -793,7 +793,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         976,
-        2448
+        2480
       ],
       "size": [
         420.0,
@@ -853,7 +853,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40,
-        2968
+        3016
       ],
       "size": [
         420.0,
@@ -890,7 +890,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         40,
-        3200
+        3248
       ],
       "size": [
         420.0,
@@ -950,7 +950,7 @@
       "type": "PrimitiveNode",
       "pos": [
         508,
-        2968
+        3016
       ],
       "size": [
         420.0,
@@ -987,7 +987,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         508,
-        3200
+        3248
       ],
       "size": [
         420.0,
@@ -1047,7 +1047,7 @@
       "type": "PrimitiveNode",
       "pos": [
         976,
-        2968
+        3016
       ],
       "size": [
         420.0,
@@ -1084,7 +1084,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         976,
-        3200
+        3248
       ],
       "size": [
         420.0,
@@ -1144,7 +1144,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40,
-        3720
+        3784
       ],
       "size": [
         420.0,
@@ -1181,7 +1181,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         40,
-        3952
+        4016
       ],
       "size": [
         420.0,
@@ -1241,7 +1241,7 @@
       "type": "PrimitiveNode",
       "pos": [
         508,
-        3720
+        3784
       ],
       "size": [
         420.0,
@@ -1278,7 +1278,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         508,
-        3952
+        4016
       ],
       "size": [
         420.0,
@@ -1338,7 +1338,7 @@
       "type": "PrimitiveNode",
       "pos": [
         976,
-        3720
+        3784
       ],
       "size": [
         420.0,
@@ -1375,7 +1375,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         976,
-        3952
+        4016
       ],
       "size": [
         420.0,
@@ -1435,7 +1435,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40,
-        4472
+        4552
       ],
       "size": [
         420.0,
@@ -1472,7 +1472,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         40,
-        4704
+        4784
       ],
       "size": [
         420.0,
@@ -1532,7 +1532,7 @@
       "type": "PrimitiveNode",
       "pos": [
         508,
-        4472
+        4552
       ],
       "size": [
         420.0,
@@ -1569,7 +1569,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         508,
-        4704
+        4784
       ],
       "size": [
         420.0,
@@ -1629,7 +1629,7 @@
       "type": "PrimitiveNode",
       "pos": [
         976,
-        4472
+        4552
       ],
       "size": [
         420.0,
@@ -1666,7 +1666,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         976,
-        4704
+        4784
       ],
       "size": [
         420.0,
@@ -1726,7 +1726,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40,
-        5224
+        5320
       ],
       "size": [
         420.0,
@@ -1763,7 +1763,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         40,
-        5456
+        5552
       ],
       "size": [
         420.0,
@@ -1823,7 +1823,7 @@
       "type": "PrimitiveNode",
       "pos": [
         508,
-        5224
+        5320
       ],
       "size": [
         420.0,
@@ -1860,7 +1860,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         508,
-        5456
+        5552
       ],
       "size": [
         420.0,
@@ -1920,7 +1920,7 @@
       "type": "PrimitiveNode",
       "pos": [
         976,
-        5224
+        5320
       ],
       "size": [
         420.0,
@@ -1957,7 +1957,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         976,
-        5456
+        5552
       ],
       "size": [
         420.0,
@@ -2540,9 +2540,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         1380,
-        560
+        576
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2553,9 +2553,9 @@
       "title": "QUALITY",
       "bounding": [
         1408,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -2566,9 +2566,9 @@
       "title": "DESK",
       "bounding": [
         20,
-        656,
+        640,
         1396,
-        752
+        768
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2581,7 +2581,7 @@
         20,
         1408,
         1396,
-        752
+        768
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2592,9 +2592,9 @@
       "title": "BEAT 2",
       "bounding": [
         20,
-        2160,
+        2176,
         1396,
-        752
+        768
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2605,9 +2605,9 @@
       "title": "BEAT 3",
       "bounding": [
         20,
-        2912,
+        2944,
         1396,
-        752
+        768
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2618,9 +2618,9 @@
       "title": "BEAT 4",
       "bounding": [
         20,
-        3664,
+        3712,
         1396,
-        752
+        768
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2631,9 +2631,9 @@
       "title": "BEAT 5",
       "bounding": [
         20,
-        4416,
+        4480,
         1396,
-        752
+        768
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2644,9 +2644,9 @@
       "title": "BEAT 6",
       "bounding": [
         20,
-        5168,
+        5248,
         1396,
-        752
+        768
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2657,9 +2657,9 @@
       "title": "SETTINGS",
       "bounding": [
         1892,
-        632,
+        616,
         460,
-        300
+        316
       ],
       "color": "#3f789e",
       "font_size": 24,

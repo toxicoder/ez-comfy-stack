@@ -1,6 +1,6 @@
 {
   "id": "clone-translate",
-  "revision": 2,
+  "revision": 3,
   "last_node_id": 8,
   "last_link_id": 5,
   "nodes": [
@@ -330,9 +330,9 @@
       "title": "NOTE",
       "bounding": [
         20,
-        24,
+        8,
         460,
-        580
+        596
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -343,9 +343,9 @@
       "title": "QUALITY",
       "bounding": [
         488,
-        24,
+        8,
         728,
-        240
+        256
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -356,9 +356,9 @@
       "title": "INPUT",
       "bounding": [
         20,
-        652,
+        636,
         460,
-        360
+        376
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -369,9 +369,9 @@
       "title": "PROMPT",
       "bounding": [
         480,
-        652,
+        636,
         488,
-        832
+        848
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -382,9 +382,9 @@
       "title": "OUTPUT",
       "bounding": [
         980,
-        652,
+        636,
         360,
-        712
+        728
       ],
       "color": "#3f789e",
       "font_size": 24,
