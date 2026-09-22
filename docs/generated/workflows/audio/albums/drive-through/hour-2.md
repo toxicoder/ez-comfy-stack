@@ -28,14 +28,14 @@ Numbered takes under `audio/albums/drive-through/hour-2/`. Queue one track, or `
 ```text
 ## 01-rumble-strip
 
-US-safe EDM **72 s** take: **rumble strip**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[build-up]`, `[breakdown]`, `[outro]`) so ACE does not sing production notes. Form **e_build**. Warped hybrid-trap, trap drums. Intros, builds, and breakdowns are part of the arc. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** — draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
+US-safe EDM **175 s** take: **rumble strip**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[build-up]`, `[breakdown]`, `[outro]`) so ACE does not sing production notes. Form **drv-70dce9e24d**. Short build, then the drop. Later stanzas switch layers. No section is a long loop. No brass and no high leads. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** — draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and `[drop]` / `[inst]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.
 3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing. Encoder language is `unknown`. Free-text lines under a marker are lyrics — keep cues inside the brackets.
 4. Original arrangements only. No “in the style of <living artist>”. No living-DJ names. No famous-hook paraphrases.
 5. ACE-Step timbre is **invented**, not a cloned act.
-6. Sampler: 8 steps, cfg 1, euler, simple. Duration 72 s, bpm 140, language unknown, timesignature 4, key D major, form e_build, generate_audio_codes true. Seed 271.
+6. Sampler: 8 steps, cfg 1, euler, simple. Duration 175 s, bpm 165, language unknown, timesignature 4, key D major, form drv-70dce9e24d, generate_audio_codes true. Seed 271.
 7. Saves: `01 - Rumble Strip` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.
 8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.
 9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).
@@ -126,14 +126,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `72.0` |
+| 0 | `175.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `72.0` |
+| 0 | `175.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -142,25 +142,45 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-su…` |
-| 2 | `[build-up - rumble grind, dual-action pedal bass, chest formant, pedal ride, sn…` |
+| 2 | `[build-up - snare roll, body bass, kick pattern flip, formant bass melody, wide…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/01-rumble-strip` |
 
 ```text
-warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 140 bpm, instrumental, no vocals
+warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - rumble grind, dual-action pedal bass, chest formant, pedal ride, snare roll]
+[build-up - snare roll, body bass, kick pattern flip, formant bass melody, wide mids, dry hats, warped hybrid-trap drums 808 wreck, 4 bars]
 
-[drop - heavy warped drop, harder growl drop, full send drop, warped wall]
+[drop - wreck wobble warped drop, octave sub stack, wide mid reese counterline, snare roll, side hats, wide hat bed, warped hybrid-trap, dual-action pedal bass, heavy warped drop, 12 bars]
 
-[breakdown - rapid hi-hats roll, pedal 808 hold, kick holds, muted stab]
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide low-mid, body bass, mono kick, rumble grind, 6 bars]
 
-[drop - warped hybrid-trap drums 808 wreck, stacked warp, low rumble wreck, stacked wreck]
+[inst - offbeat hats, octave sub stack, wide mid growl, side percussion, side snare, rapid hi-hats roll, 12 bars]
 
-[outro - 808 slide, hats denser, rapid hi-hats roll, filter down]
+[drop - harder reese warped drop, body bass, call-response reese, trap drums denser, wide mids, rolling hats, 808 slide, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, side hats, octave sub stack, late snare, dual-action pedal bass, 4 bars]
+
+[drop - wreck wobble warped drop, body bass, formant bass melody, kick pattern flip, wide low-mid, early kick, harder growl drop, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, side percussion, octave sub stack, syncopated hats, stacked warp, 8 bars]
+
+[drop - heavy formant warped drop, body bass, formant answer, rapid hi-hats, wide mids, open hat, pedal 808 hold, 10 bars]
+
+[build-up - snare roll, octave sub stack, offbeat hats, wide mid growl, side hats, closed hat, hats denser, 4 bars]
+
+[inst - trap drums denser, body bass, call-response reese, wide low-mid, room snare, low rumble wreck, 6 bars]
+
+[drop - wreck wobble warped drop, octave sub stack, growl answer, ghost snare, side percussion, tight kick, full send drop, 12 bars]
+
+[build-up - snare roll, body bass, kick pattern flip, formant bass melody, wide mids, loose hats, chest formant, 6 bars]
+
+[drop - heavy formant warped drop, octave sub stack, wide mid reese counterline, snare roll, side hats, pushed snare, kick holds, 12 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, growl answer, side hats, late snare, 4 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -168,11 +188,11 @@ warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub
 | Slot | Value |
 | --- | --- |
 | 0 | `warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-su…` |
-| 1 | `[build-up - rumble grind, dual-action pedal bass, chest formant, pedal ride, sn…` |
+| 1 | `[build-up - snare roll, body bass, kick pattern flip, formant bass melody, wide…` |
 | 2 | `271` |
 | 3 | `fixed` |
-| 4 | `140` |
-| 5 | `72.0` |
+| 4 | `165` |
+| 5 | `175.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `D major` |
@@ -184,19 +204,39 @@ warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub
 | 14 | `0.0` |
 
 ```text
-warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 140 bpm, instrumental, no vocals
+warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - rumble grind, dual-action pedal bass, chest formant, pedal ride, snare roll]
+[build-up - snare roll, body bass, kick pattern flip, formant bass melody, wide mids, dry hats, warped hybrid-trap drums 808 wreck, 4 bars]
 
-[drop - heavy warped drop, harder growl drop, full send drop, warped wall]
+[drop - wreck wobble warped drop, octave sub stack, wide mid reese counterline, snare roll, side hats, wide hat bed, warped hybrid-trap, dual-action pedal bass, heavy warped drop, 12 bars]
 
-[breakdown - rapid hi-hats roll, pedal 808 hold, kick holds, muted stab]
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide low-mid, body bass, mono kick, rumble grind, 6 bars]
 
-[drop - warped hybrid-trap drums 808 wreck, stacked warp, low rumble wreck, stacked wreck]
+[inst - offbeat hats, octave sub stack, wide mid growl, side percussion, side snare, rapid hi-hats roll, 12 bars]
 
-[outro - 808 slide, hats denser, rapid hi-hats roll, filter down]
+[drop - harder reese warped drop, body bass, call-response reese, trap drums denser, wide mids, rolling hats, 808 slide, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, side hats, octave sub stack, late snare, dual-action pedal bass, 4 bars]
+
+[drop - wreck wobble warped drop, body bass, formant bass melody, kick pattern flip, wide low-mid, early kick, harder growl drop, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, side percussion, octave sub stack, syncopated hats, stacked warp, 8 bars]
+
+[drop - heavy formant warped drop, body bass, formant answer, rapid hi-hats, wide mids, open hat, pedal 808 hold, 10 bars]
+
+[build-up - snare roll, octave sub stack, offbeat hats, wide mid growl, side hats, closed hat, hats denser, 4 bars]
+
+[inst - trap drums denser, body bass, call-response reese, wide low-mid, room snare, low rumble wreck, 6 bars]
+
+[drop - wreck wobble warped drop, octave sub stack, growl answer, ghost snare, side percussion, tight kick, full send drop, 12 bars]
+
+[build-up - snare roll, body bass, kick pattern flip, formant bass melody, wide mids, loose hats, chest formant, 6 bars]
+
+[drop - heavy formant warped drop, octave sub stack, wide mid reese counterline, snare roll, side hats, pushed snare, kick holds, 12 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, growl answer, side hats, late snare, 4 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -279,14 +319,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `120.0` |
+| 0 | `157.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `120.0` |
+| 0 | `157.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -295,25 +335,49 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave, 8…` |
-| 2 | `[intro - chest-sub wobble, snare roll, warped sub stack, filter down] [build-up…` |
+| 2 | `[build-up - snare roll, body bass, ghost snare, wide mid growl, wide low-mid, c…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/02-low-lane` |
 
 ```text
-riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 144 bpm, instrumental, no vocals
+riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[intro - chest-sub wobble, snare roll, warped sub stack, filter down]
+[build-up - snare roll, body bass, ghost snare, wide mid growl, wide low-mid, chopped hats, chest-sub wobble, 4 bars]
 
-[build-up - formant crush, chest-sub 808, kick holds, snare roll]
+[drop - harder warped drop, octave sub stack, call-response reese, kick pattern flip, side percussion, hat density up, wobble bass, heavy riddim drop, 8 bars]
 
-[drop - heavy riddim drop, warped wreck, harder growl drop, stacked 808 wall, full send drop, riddim wreck, warped wall]
+[inst - snare roll, body bass, growl answer, wide mids, kick opens, warped wreck, 6 bars]
 
-[inst - rapid hi-hats denser, 808 triplets, hats denser]
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side hats, octave sub stack, kick tightens, stacked 808 wall, 4 bars]
 
-[outro - wobble sustain, riddim growl hold, wobble ride, kick holds]
+[drop - stacked growl warped drop, body bass, wide mid reese counterline, offbeat hats, wide low-mid, snare answers, harder growl drop, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side percussion, octave sub stack, offbeat push, formant crush, 4 bars]
+
+[build-up - snare roll, body bass, ghost snare, wide mid growl, wide mids, straight hats, rapid hi-hats denser, 6 bars]
+
+[inst - kick pattern flip, octave sub stack, call-response reese, side hats, triplet hats, wobble sustain, 4 bars]
+
+[drop - wreck reese warped drop, body bass, growl answer, snare roll, wide low-mid, backbeat shove, 10 bars]
+
+[build-up - snare roll, octave sub stack, rapid hi-hats, formant bass melody, side percussion, ghost notes, chest-sub 808, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, body bass, dry hats, 808 triplets, 8 bars]
+
+[build-up - snare roll, octave sub stack, trap drums denser, formant answer, side hats, wide hat bed, riddim growl hold, 4 bars]
+
+[inst - ghost snare, body bass, wide mid growl, wide low-mid, mono kick, warped sub stack, 8 bars]
+
+[drop - wreck reese warped drop, octave sub stack, call-response reese, kick pattern flip, side percussion, side snare, full send drop, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, body bass, rolling hats, riddim wreck, 6 bars]
+
+[inst - rapid hi-hats, octave sub stack, formant bass melody, side hats, late snare, kick holds, 12 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side hats, late snare, 4 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -321,11 +385,11 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave, 80
 | Slot | Value |
 | --- | --- |
 | 0 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave, 8…` |
-| 1 | `[intro - chest-sub wobble, snare roll, warped sub stack, filter down] [build-up…` |
+| 1 | `[build-up - snare roll, body bass, ghost snare, wide mid growl, wide low-mid, c…` |
 | 2 | `277` |
 | 3 | `fixed` |
-| 4 | `144` |
-| 5 | `120.0` |
+| 4 | `168` |
+| 5 | `157.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `F# minor` |
@@ -337,19 +401,43 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave, 80
 | 14 | `0.0` |
 
 ```text
-riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 144 bpm, instrumental, no vocals
+riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[intro - chest-sub wobble, snare roll, warped sub stack, filter down]
+[build-up - snare roll, body bass, ghost snare, wide mid growl, wide low-mid, chopped hats, chest-sub wobble, 4 bars]
 
-[build-up - formant crush, chest-sub 808, kick holds, snare roll]
+[drop - harder warped drop, octave sub stack, call-response reese, kick pattern flip, side percussion, hat density up, wobble bass, heavy riddim drop, 8 bars]
 
-[drop - heavy riddim drop, warped wreck, harder growl drop, stacked 808 wall, full send drop, riddim wreck, warped wall]
+[inst - snare roll, body bass, growl answer, wide mids, kick opens, warped wreck, 6 bars]
 
-[inst - rapid hi-hats denser, 808 triplets, hats denser]
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side hats, octave sub stack, kick tightens, stacked 808 wall, 4 bars]
 
-[outro - wobble sustain, riddim growl hold, wobble ride, kick holds]
+[drop - stacked growl warped drop, body bass, wide mid reese counterline, offbeat hats, wide low-mid, snare answers, harder growl drop, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side percussion, octave sub stack, offbeat push, formant crush, 4 bars]
+
+[build-up - snare roll, body bass, ghost snare, wide mid growl, wide mids, straight hats, rapid hi-hats denser, 6 bars]
+
+[inst - kick pattern flip, octave sub stack, call-response reese, side hats, triplet hats, wobble sustain, 4 bars]
+
+[drop - wreck reese warped drop, body bass, growl answer, snare roll, wide low-mid, backbeat shove, 10 bars]
+
+[build-up - snare roll, octave sub stack, rapid hi-hats, formant bass melody, side percussion, ghost notes, chest-sub 808, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, body bass, dry hats, 808 triplets, 8 bars]
+
+[build-up - snare roll, octave sub stack, trap drums denser, formant answer, side hats, wide hat bed, riddim growl hold, 4 bars]
+
+[inst - ghost snare, body bass, wide mid growl, wide low-mid, mono kick, warped sub stack, 8 bars]
+
+[drop - wreck reese warped drop, octave sub stack, call-response reese, kick pattern flip, side percussion, side snare, full send drop, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, body bass, rolling hats, riddim wreck, 6 bars]
+
+[inst - rapid hi-hats, octave sub stack, formant bass melody, side hats, late snare, kick holds, 12 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side hats, late snare, 4 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -432,14 +520,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `175.0` |
+| 0 | `191.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `175.0` |
+| 0 | `191.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -448,23 +536,53 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, rave, n…` |
-| 2 | `[build-up - fold grind, chest-sub 808, low 808 wall, rapid hi-hats roll, snare …` |
+| 2 | `[build-up - snare roll, mono chest-sub, trap drums denser, wide mid reese count…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/03-warm-merge` |
 
 ```text
-wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 148 bpm, instrumental, no vocals
+wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - fold grind, chest-sub 808, low 808 wall, rapid hi-hats roll, snare roll]
+[build-up - snare roll, mono chest-sub, trap drums denser, wide mid reese counterline, side percussion, side snare, warped 808 wreck, 4 bars]
 
-[inst - rapid hi-hats roll, snare roll, warped fold, wave ride, warped 808 wreck]
+[drop - stacked warped drop, low chest-sub, formant answer, ghost snare, wide mids, rolling hats, wave bass, heavy wave drop, 10 bars]
 
-[drop - heavy wave drop, warped 808 wreck, harder formant drop, stacked wave bass, full send drop, warped wall]
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, side hats, mono chest-sub, late snare, fold grind, 8 bars]
 
-[outro - wave 808 hold merge, 808 slide, kick holds, filter down]
+[inst - snare roll, low chest-sub, call-response reese, wide low-mid, early kick, rapid hi-hats roll, 10 bars]
+
+[drop - full send growl warped drop, mono chest-sub, growl answer, rapid hi-hats, side percussion, syncopated hats, wave 808 hold merge, 8 bars]
+
+[inst - offbeat hats, low chest-sub, formant bass melody, wide mids, open hat, stacked wave bass, 4 bars]
+
+[build-up - snare roll, mono chest-sub, trap drums denser, wide mid reese counterline, side hats, closed hat, chest-sub 808, 6 bars]
+
+[inst - ghost snare, low chest-sub, formant answer, wide low-mid, room snare, snare roll, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, side percussion, mono chest-sub, tight kick, 808 slide, 4 bars]
+
+[build-up - snare roll, low chest-sub, snare roll, call-response reese, wide mids, loose hats, low 808 wall, 6 bars]
+
+[inst - rapid hi-hats, mono chest-sub, growl answer, side hats, pushed snare, warped fold, 4 bars]
+
+[drop - stacked warped drop, low chest-sub, formant bass melody, offbeat hats, wide low-mid, chopped hats, harder formant drop, 8 bars]
+
+[build-up - snare roll, mono chest-sub, trap drums denser, wide mid reese counterline, side percussion, hat density up, kick holds, 4 bars]
+
+[inst - ghost snare, low chest-sub, formant answer, wide mids, kick opens, wave ride, 10 bars]
+
+[drop - full send growl warped drop, mono chest-sub, wide mid growl, kick pattern flip, side hats, kick tightens, full send drop, 12 bars]
+
+[build-up - snare roll, low chest-sub, snare roll, call-response reese, wide low-mid, snare answers, 6 bars]
+
+[drop - stacked warped drop, mono chest-sub, growl answer, rapid hi-hats, side percussion, offbeat push, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide mids, low chest-sub, straight hats, 6 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, formant answer, wide low-mid, room snare, 4 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -472,11 +590,11 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, rave, no
 | Slot | Value |
 | --- | --- |
 | 0 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, rave, n…` |
-| 1 | `[build-up - fold grind, chest-sub 808, low 808 wall, rapid hi-hats roll, snare …` |
+| 1 | `[build-up - snare roll, mono chest-sub, trap drums denser, wide mid reese count…` |
 | 2 | `281` |
 | 3 | `fixed` |
-| 4 | `148` |
-| 5 | `175.0` |
+| 4 | `168` |
+| 5 | `191.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A major` |
@@ -488,17 +606,47 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, rave, no
 | 14 | `0.0` |
 
 ```text
-wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 148 bpm, instrumental, no vocals
+wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - fold grind, chest-sub 808, low 808 wall, rapid hi-hats roll, snare roll]
+[build-up - snare roll, mono chest-sub, trap drums denser, wide mid reese counterline, side percussion, side snare, warped 808 wreck, 4 bars]
 
-[inst - rapid hi-hats roll, snare roll, warped fold, wave ride, warped 808 wreck]
+[drop - stacked warped drop, low chest-sub, formant answer, ghost snare, wide mids, rolling hats, wave bass, heavy wave drop, 10 bars]
 
-[drop - heavy wave drop, warped 808 wreck, harder formant drop, stacked wave bass, full send drop, warped wall]
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, side hats, mono chest-sub, late snare, fold grind, 8 bars]
 
-[outro - wave 808 hold merge, 808 slide, kick holds, filter down]
+[inst - snare roll, low chest-sub, call-response reese, wide low-mid, early kick, rapid hi-hats roll, 10 bars]
+
+[drop - full send growl warped drop, mono chest-sub, growl answer, rapid hi-hats, side percussion, syncopated hats, wave 808 hold merge, 8 bars]
+
+[inst - offbeat hats, low chest-sub, formant bass melody, wide mids, open hat, stacked wave bass, 4 bars]
+
+[build-up - snare roll, mono chest-sub, trap drums denser, wide mid reese counterline, side hats, closed hat, chest-sub 808, 6 bars]
+
+[inst - ghost snare, low chest-sub, formant answer, wide low-mid, room snare, snare roll, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, side percussion, mono chest-sub, tight kick, 808 slide, 4 bars]
+
+[build-up - snare roll, low chest-sub, snare roll, call-response reese, wide mids, loose hats, low 808 wall, 6 bars]
+
+[inst - rapid hi-hats, mono chest-sub, growl answer, side hats, pushed snare, warped fold, 4 bars]
+
+[drop - stacked warped drop, low chest-sub, formant bass melody, offbeat hats, wide low-mid, chopped hats, harder formant drop, 8 bars]
+
+[build-up - snare roll, mono chest-sub, trap drums denser, wide mid reese counterline, side percussion, hat density up, kick holds, 4 bars]
+
+[inst - ghost snare, low chest-sub, formant answer, wide mids, kick opens, wave ride, 10 bars]
+
+[drop - full send growl warped drop, mono chest-sub, wide mid growl, kick pattern flip, side hats, kick tightens, full send drop, 12 bars]
+
+[build-up - snare roll, low chest-sub, snare roll, call-response reese, wide low-mid, snare answers, 6 bars]
+
+[drop - stacked warped drop, mono chest-sub, growl answer, rapid hi-hats, side percussion, offbeat push, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide mids, low chest-sub, straight hats, 6 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, formant answer, wide low-mid, room snare, 4 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -581,14 +729,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `80.0` |
+| 0 | `203.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `80.0` |
+| 0 | `203.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -597,25 +745,57 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `color bass, formant bass, chest-sub, rapid hi-hats, trap drums, warped bass, ra…` |
-| 2 | `[intro - chest-sub 808 warp, color 808 sustain span, color ride, kick holds] [b…` |
+| 2 | `[build-up - snare roll, stacked 808, offbeat hats, growl answer, wide mids, bac…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/04-colour-span` |
 
 ```text
-color bass, formant bass, chest-sub, rapid hi-hats, trap drums, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals
+color bass, formant bass, chest-sub, rapid hi-hats, trap drums, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[intro - chest-sub 808 warp, color 808 sustain span, color ride, kick holds]
+[build-up - snare roll, stacked 808, offbeat hats, growl answer, wide mids, backbeat shove, chest-sub 808 warp, 4 bars]
 
-[build-up - analog 808 stack, warped sub, snare roll]
+[drop - wreck warped drop, fold bass, formant bass melody, trap drums denser, side hats, ghost notes, color bass, heavy color drop, 12 bars]
 
-[drop - heavy color drop, formant wreck, harder growl drop, full send drop, stacked color wreck, warped wall]
+[build-up - snare roll, stacked 808, ghost snare, wide mid reese counterline, wide low-mid, dry hats, formant wreck, 4 bars]
 
-[breakdown - warped color, kick holds, muted stab]
+[inst - kick pattern flip, fold bass, formant answer, side percussion, wide hat bed, analog 808 stack, 8 bars]
 
-[outro - rapid hi-hats denser, hats denser, kick holds]
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, stacked 808, mono kick, warped color, 4 bars]
+
+[drop - full send wobble warped drop, fold bass, call-response reese, rapid hi-hats, side hats, side snare, harder growl drop, 8 bars]
+
+[inst - offbeat hats, stacked 808, growl answer, wide low-mid, rolling hats, rapid hi-hats denser, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, fold bass, late snare, color 808 sustain span, 8 bars]
+
+[build-up - snare roll, stacked 808, ghost snare, wide mid reese counterline, wide mids, early kick, stacked color wreck, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side hats, fold bass, syncopated hats, warped sub, 6 bars]
+
+[drop - full send wobble warped drop, stacked 808, wide mid growl, snare roll, wide low-mid, open hat, full send drop, 12 bars]
+
+[inst - rapid hi-hats, fold bass, call-response reese, side percussion, closed hat, kick holds, 10 bars]
+
+[build-up - snare roll, stacked 808, offbeat hats, growl answer, wide mids, room snare, hats denser, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side hats, fold bass, tight kick, color ride, 8 bars]
+
+[build-up - snare roll, stacked 808, ghost snare, wide mid reese counterline, wide low-mid, loose hats, 4 bars]
+
+[drop - full send wobble warped drop, fold bass, formant answer, kick pattern flip, side percussion, pushed snare, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, stacked 808, chopped hats, 4 bars]
+
+[build-up - snare roll, fold bass, rapid hi-hats, call-response reese, side hats, hat density up, 6 bars]
+
+[inst - offbeat hats, stacked 808, growl answer, wide low-mid, kick opens, 4 bars]
+
+[drop - harder growl warped drop, fold bass, formant bass melody, trap drums denser, side percussion, kick tightens, 8 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, call-response reese, side percussion, closed hat, 4 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -623,11 +803,11 @@ color bass, formant bass, chest-sub, rapid hi-hats, trap drums, warped bass, rav
 | Slot | Value |
 | --- | --- |
 | 0 | `color bass, formant bass, chest-sub, rapid hi-hats, trap drums, warped bass, ra…` |
-| 1 | `[intro - chest-sub 808 warp, color 808 sustain span, color ride, kick holds] [b…` |
+| 1 | `[build-up - snare roll, stacked 808, offbeat hats, growl answer, wide mids, bac…` |
 | 2 | `283` |
 | 3 | `fixed` |
-| 4 | `150` |
-| 5 | `80.0` |
+| 4 | `168` |
+| 5 | `203.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A minor` |
@@ -639,19 +819,51 @@ color bass, formant bass, chest-sub, rapid hi-hats, trap drums, warped bass, rav
 | 14 | `0.0` |
 
 ```text
-color bass, formant bass, chest-sub, rapid hi-hats, trap drums, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals
+color bass, formant bass, chest-sub, rapid hi-hats, trap drums, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[intro - chest-sub 808 warp, color 808 sustain span, color ride, kick holds]
+[build-up - snare roll, stacked 808, offbeat hats, growl answer, wide mids, backbeat shove, chest-sub 808 warp, 4 bars]
 
-[build-up - analog 808 stack, warped sub, snare roll]
+[drop - wreck warped drop, fold bass, formant bass melody, trap drums denser, side hats, ghost notes, color bass, heavy color drop, 12 bars]
 
-[drop - heavy color drop, formant wreck, harder growl drop, full send drop, stacked color wreck, warped wall]
+[build-up - snare roll, stacked 808, ghost snare, wide mid reese counterline, wide low-mid, dry hats, formant wreck, 4 bars]
 
-[breakdown - warped color, kick holds, muted stab]
+[inst - kick pattern flip, fold bass, formant answer, side percussion, wide hat bed, analog 808 stack, 8 bars]
 
-[outro - rapid hi-hats denser, hats denser, kick holds]
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, stacked 808, mono kick, warped color, 4 bars]
+
+[drop - full send wobble warped drop, fold bass, call-response reese, rapid hi-hats, side hats, side snare, harder growl drop, 8 bars]
+
+[inst - offbeat hats, stacked 808, growl answer, wide low-mid, rolling hats, rapid hi-hats denser, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, fold bass, late snare, color 808 sustain span, 8 bars]
+
+[build-up - snare roll, stacked 808, ghost snare, wide mid reese counterline, wide mids, early kick, stacked color wreck, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side hats, fold bass, syncopated hats, warped sub, 6 bars]
+
+[drop - full send wobble warped drop, stacked 808, wide mid growl, snare roll, wide low-mid, open hat, full send drop, 12 bars]
+
+[inst - rapid hi-hats, fold bass, call-response reese, side percussion, closed hat, kick holds, 10 bars]
+
+[build-up - snare roll, stacked 808, offbeat hats, growl answer, wide mids, room snare, hats denser, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side hats, fold bass, tight kick, color ride, 8 bars]
+
+[build-up - snare roll, stacked 808, ghost snare, wide mid reese counterline, wide low-mid, loose hats, 4 bars]
+
+[drop - full send wobble warped drop, fold bass, formant answer, kick pattern flip, side percussion, pushed snare, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, stacked 808, chopped hats, 4 bars]
+
+[build-up - snare roll, fold bass, rapid hi-hats, call-response reese, side hats, hat density up, 6 bars]
+
+[inst - offbeat hats, stacked 808, growl answer, wide low-mid, kick opens, 4 bars]
+
+[drop - harder growl warped drop, fold bass, formant bass melody, trap drums denser, side percussion, kick tightens, 8 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, call-response reese, side percussion, closed hat, 4 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -734,14 +946,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `132.0` |
+| 0 | `227.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `132.0` |
+| 0 | `227.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -750,23 +962,61 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, rave, no…` |
-| 2 | `[drop - heavy trap drop, harder growl drop, full send drop, half-time growl] [b…` |
+| 2 | `[build-up - snare roll, low chest-sub, snare roll, wide mid reese counterline, …` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/05-garage-ticket` |
 
 ```text
-festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 140 bpm, instrumental, no vocals
+festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[drop - heavy trap drop, harder growl drop, full send drop, half-time growl]
+[build-up - snare roll, low chest-sub, snare roll, wide mid reese counterline, side percussion, loose hats, warped 808 wreck, 6 bars]
 
-[build-up - formant stamp, 808 slide, snare roll, chest-sub 808 wall, kick holds, 808 ride]
+[drop - heavy growl warped drop, mono chest-sub, formant answer, rapid hi-hats, wide mids, pushed snare, festival trap, heavy trap drop, 10 bars]
 
-[drop - warped 808 wreck, stacked trap bass, double-time hats]
+[inst - offbeat hats, low chest-sub, wide mid growl, side hats, chopped hats, formant stamp, 4 bars]
 
-[outro - rapid hi-hats roll, chest warp, chest-sub 808 punch, warped trap, rapid hi-hats roll, kick holds]
+[drop - full send warped drop, mono chest-sub, call-response reese, trap drums denser, wide low-mid, hat density up, rapid hi-hats roll, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, side percussion, low chest-sub, kick opens, 808 slide, 6 bars]
+
+[build-up - snare roll, mono chest-sub, kick pattern flip, formant bass melody, wide mids, kick tightens, stacked trap bass, 4 bars]
+
+[inst - snare roll, low chest-sub, wide mid reese counterline, side hats, snare answers, chest warp, 8 bars]
+
+[build-up - snare roll, mono chest-sub, rapid hi-hats, formant answer, wide low-mid, offbeat push, 6 bars]
+
+[drop - full send warped drop, low chest-sub, wide mid growl, offbeat hats, side percussion, straight hats, harder growl drop, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, wide mids, mono chest-sub, triplet hats, chest-sub 808 punch, 6 bars]
+
+[drop - stacked reese warped drop, low chest-sub, growl answer, ghost snare, side hats, backbeat shove, full send drop, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide low-mid, mono chest-sub, ghost notes, chest-sub 808 wall, 6 bars]
+
+[inst - snare roll, low chest-sub, wide mid reese counterline, side percussion, dry hats, warped trap, 4 bars]
+
+[build-up - snare roll, mono chest-sub, rapid hi-hats, formant answer, wide mids, wide hat bed, kick holds, 6 bars]
+
+[inst - offbeat hats, low chest-sub, wide mid growl, side hats, mono kick, 808 ride, 8 bars]
+
+[build-up - snare roll, mono chest-sub, trap drums denser, call-response reese, wide low-mid, side snare, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, side percussion, low chest-sub, rolling hats, 4 bars]
+
+[build-up - snare roll, mono chest-sub, kick pattern flip, formant bass melody, wide mids, late snare, 6 bars]
+
+[inst - snare roll, low chest-sub, wide mid reese counterline, side hats, early kick, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide low-mid, mono chest-sub, syncopated hats, 4 bars]
+
+[inst - offbeat hats, low chest-sub, wide mid growl, side percussion, open hat, 10 bars]
+
+[drop - heavy growl warped drop, mono chest-sub, call-response reese, trap drums denser, wide mids, closed hat, 12 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, growl answer, side percussion, kick opens, 4 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -774,11 +1024,11 @@ festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, rave, no 
 | Slot | Value |
 | --- | --- |
 | 0 | `festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, rave, no…` |
-| 1 | `[drop - heavy trap drop, harder growl drop, full send drop, half-time growl] [b…` |
+| 1 | `[build-up - snare roll, low chest-sub, snare roll, wide mid reese counterline, …` |
 | 2 | `293` |
 | 3 | `fixed` |
-| 4 | `140` |
-| 5 | `132.0` |
+| 4 | `165` |
+| 5 | `227.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `C major` |
@@ -790,17 +1040,55 @@ festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, rave, no 
 | 14 | `0.0` |
 
 ```text
-festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 140 bpm, instrumental, no vocals
+festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[drop - heavy trap drop, harder growl drop, full send drop, half-time growl]
+[build-up - snare roll, low chest-sub, snare roll, wide mid reese counterline, side percussion, loose hats, warped 808 wreck, 6 bars]
 
-[build-up - formant stamp, 808 slide, snare roll, chest-sub 808 wall, kick holds, 808 ride]
+[drop - heavy growl warped drop, mono chest-sub, formant answer, rapid hi-hats, wide mids, pushed snare, festival trap, heavy trap drop, 10 bars]
 
-[drop - warped 808 wreck, stacked trap bass, double-time hats]
+[inst - offbeat hats, low chest-sub, wide mid growl, side hats, chopped hats, formant stamp, 4 bars]
 
-[outro - rapid hi-hats roll, chest warp, chest-sub 808 punch, warped trap, rapid hi-hats roll, kick holds]
+[drop - full send warped drop, mono chest-sub, call-response reese, trap drums denser, wide low-mid, hat density up, rapid hi-hats roll, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, side percussion, low chest-sub, kick opens, 808 slide, 6 bars]
+
+[build-up - snare roll, mono chest-sub, kick pattern flip, formant bass melody, wide mids, kick tightens, stacked trap bass, 4 bars]
+
+[inst - snare roll, low chest-sub, wide mid reese counterline, side hats, snare answers, chest warp, 8 bars]
+
+[build-up - snare roll, mono chest-sub, rapid hi-hats, formant answer, wide low-mid, offbeat push, 6 bars]
+
+[drop - full send warped drop, low chest-sub, wide mid growl, offbeat hats, side percussion, straight hats, harder growl drop, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, wide mids, mono chest-sub, triplet hats, chest-sub 808 punch, 6 bars]
+
+[drop - stacked reese warped drop, low chest-sub, growl answer, ghost snare, side hats, backbeat shove, full send drop, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide low-mid, mono chest-sub, ghost notes, chest-sub 808 wall, 6 bars]
+
+[inst - snare roll, low chest-sub, wide mid reese counterline, side percussion, dry hats, warped trap, 4 bars]
+
+[build-up - snare roll, mono chest-sub, rapid hi-hats, formant answer, wide mids, wide hat bed, kick holds, 6 bars]
+
+[inst - offbeat hats, low chest-sub, wide mid growl, side hats, mono kick, 808 ride, 8 bars]
+
+[build-up - snare roll, mono chest-sub, trap drums denser, call-response reese, wide low-mid, side snare, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, side percussion, low chest-sub, rolling hats, 4 bars]
+
+[build-up - snare roll, mono chest-sub, kick pattern flip, formant bass melody, wide mids, late snare, 6 bars]
+
+[inst - snare roll, low chest-sub, wide mid reese counterline, side hats, early kick, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide low-mid, mono chest-sub, syncopated hats, 4 bars]
+
+[inst - offbeat hats, low chest-sub, wide mid growl, side percussion, open hat, 10 bars]
+
+[drop - heavy growl warped drop, mono chest-sub, call-response reese, trap drums denser, wide mids, closed hat, 12 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, growl answer, side percussion, kick opens, 4 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -883,14 +1171,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `188.0` |
+| 0 | `256.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `188.0` |
+| 0 | `256.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -899,19 +1187,65 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808…` |
-| 2 | `[drop - heavy drumstep drop, reese wreck, harder growl drop, full send drop, st…` |
+| 2 | `[build-up - snare roll, mono chest-sub, offbeat hats, wide mid reese counterlin…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/06-liquid-grade` |
 
 ```text
-drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 174 bpm, instrumental, no vocals
+drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 176 bpm, instrumental, no vocals
 ```
 
 ```text
-[drop - heavy drumstep drop, reese wreck, harder growl drop, full send drop, stacked amen wreck, harder warped drop, chest-sub 808 wreck, warped wall]
+[build-up - snare roll, mono chest-sub, offbeat hats, wide mid reese counterline, wide mids, open hat, reese wreck, 6 bars]
 
-[outro - warped amen, amen break, rapid hi-hats 808 liquid, reese stack, chest formant, hats denser, reese hold, warped 808 punch, drumstep grind, kick holds, amen break, reese ride]
+[drop - heavy wobble warped drop, low chest-sub, formant answer, trap drums denser, side hats, closed hat, amen break, heavy drumstep drop, 8 bars]
+
+[build-up - snare roll, mono chest-sub, ghost snare, wide mid growl, wide low-mid, room snare, warped amen, 4 bars]
+
+[inst - kick pattern flip, low chest-sub, call-response reese, side percussion, tight kick, amen break, 10 bars]
+
+[build-up - snare roll, mono chest-sub, snare roll, growl answer, wide mids, loose hats, rapid hi-hats 808 liquid, 6 bars]
+
+[drop - stacked growl warped drop, low chest-sub, formant bass melody, rapid hi-hats, side hats, pushed snare, harder growl drop, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide low-mid, mono chest-sub, chopped hats, reese stack, 6 bars]
+
+[inst - trap drums denser, low chest-sub, formant answer, side percussion, hat density up, chest formant, 12 bars]
+
+[build-up - snare roll, mono chest-sub, ghost snare, wide mid growl, wide mids, kick opens, hats denser, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side hats, low chest-sub, kick tightens, reese hold, 8 bars]
+
+[build-up - snare roll, mono chest-sub, snare roll, growl answer, wide low-mid, snare answers, stacked amen wreck, 4 bars]
+
+[inst - rapid hi-hats, low chest-sub, formant bass melody, side percussion, offbeat push, warped 808 punch, 12 bars]
+
+[drop - harder warped drop, mono chest-sub, wide mid reese counterline, offbeat hats, wide mids, straight hats, full send drop, 8 bars]
+
+[build-up - snare roll, low chest-sub, trap drums denser, formant answer, side hats, triplet hats, chest-sub 808 wreck, 4 bars]
+
+[inst - ghost snare, mono chest-sub, wide mid growl, wide low-mid, backbeat shove, drumstep grind, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side percussion, low chest-sub, ghost notes, kick holds, 8 bars]
+
+[drop - heavy wobble warped drop, mono chest-sub, growl answer, snare roll, wide mids, dry hats, harder warped drop, 10 bars]
+
+[inst - rapid hi-hats, low chest-sub, formant bass melody, side hats, wide hat bed, reese ride, 12 bars]
+
+[drop - full send formant warped drop, mono chest-sub, wide mid reese counterline, offbeat hats, wide low-mid, mono kick, 8 bars]
+
+[build-up - snare roll, low chest-sub, trap drums denser, formant answer, side percussion, side snare, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, mono chest-sub, rolling hats, 8 bars]
+
+[build-up - snare roll, low chest-sub, kick pattern flip, call-response reese, side hats, late snare, 4 bars]
+
+[inst - snare roll, mono chest-sub, growl answer, wide low-mid, early kick, 6 bars]
+
+[drop - full send formant warped drop, low chest-sub, formant bass melody, rapid hi-hats, side percussion, syncopated hats, 8 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, wide mid reese counterline, wide mids, open hat, 4 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -919,11 +1253,11 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808,
 | Slot | Value |
 | --- | --- |
 | 0 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808…` |
-| 1 | `[drop - heavy drumstep drop, reese wreck, harder growl drop, full send drop, st…` |
+| 1 | `[build-up - snare roll, mono chest-sub, offbeat hats, wide mid reese counterlin…` |
 | 2 | `307` |
 | 3 | `fixed` |
-| 4 | `174` |
-| 5 | `188.0` |
+| 4 | `176` |
+| 5 | `256.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `E minor` |
@@ -935,13 +1269,59 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808,
 | 14 | `0.0` |
 
 ```text
-drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 174 bpm, instrumental, no vocals
+drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 176 bpm, instrumental, no vocals
 ```
 
 ```text
-[drop - heavy drumstep drop, reese wreck, harder growl drop, full send drop, stacked amen wreck, harder warped drop, chest-sub 808 wreck, warped wall]
+[build-up - snare roll, mono chest-sub, offbeat hats, wide mid reese counterline, wide mids, open hat, reese wreck, 6 bars]
 
-[outro - warped amen, amen break, rapid hi-hats 808 liquid, reese stack, chest formant, hats denser, reese hold, warped 808 punch, drumstep grind, kick holds, amen break, reese ride]
+[drop - heavy wobble warped drop, low chest-sub, formant answer, trap drums denser, side hats, closed hat, amen break, heavy drumstep drop, 8 bars]
+
+[build-up - snare roll, mono chest-sub, ghost snare, wide mid growl, wide low-mid, room snare, warped amen, 4 bars]
+
+[inst - kick pattern flip, low chest-sub, call-response reese, side percussion, tight kick, amen break, 10 bars]
+
+[build-up - snare roll, mono chest-sub, snare roll, growl answer, wide mids, loose hats, rapid hi-hats 808 liquid, 6 bars]
+
+[drop - stacked growl warped drop, low chest-sub, formant bass melody, rapid hi-hats, side hats, pushed snare, harder growl drop, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide low-mid, mono chest-sub, chopped hats, reese stack, 6 bars]
+
+[inst - trap drums denser, low chest-sub, formant answer, side percussion, hat density up, chest formant, 12 bars]
+
+[build-up - snare roll, mono chest-sub, ghost snare, wide mid growl, wide mids, kick opens, hats denser, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side hats, low chest-sub, kick tightens, reese hold, 8 bars]
+
+[build-up - snare roll, mono chest-sub, snare roll, growl answer, wide low-mid, snare answers, stacked amen wreck, 4 bars]
+
+[inst - rapid hi-hats, low chest-sub, formant bass melody, side percussion, offbeat push, warped 808 punch, 12 bars]
+
+[drop - harder warped drop, mono chest-sub, wide mid reese counterline, offbeat hats, wide mids, straight hats, full send drop, 8 bars]
+
+[build-up - snare roll, low chest-sub, trap drums denser, formant answer, side hats, triplet hats, chest-sub 808 wreck, 4 bars]
+
+[inst - ghost snare, mono chest-sub, wide mid growl, wide low-mid, backbeat shove, drumstep grind, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side percussion, low chest-sub, ghost notes, kick holds, 8 bars]
+
+[drop - heavy wobble warped drop, mono chest-sub, growl answer, snare roll, wide mids, dry hats, harder warped drop, 10 bars]
+
+[inst - rapid hi-hats, low chest-sub, formant bass melody, side hats, wide hat bed, reese ride, 12 bars]
+
+[drop - full send formant warped drop, mono chest-sub, wide mid reese counterline, offbeat hats, wide low-mid, mono kick, 8 bars]
+
+[build-up - snare roll, low chest-sub, trap drums denser, formant answer, side percussion, side snare, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, mono chest-sub, rolling hats, 8 bars]
+
+[build-up - snare roll, low chest-sub, kick pattern flip, call-response reese, side hats, late snare, 4 bars]
+
+[inst - snare roll, mono chest-sub, growl answer, wide low-mid, early kick, 6 bars]
+
+[drop - full send formant warped drop, low chest-sub, formant bass melody, rapid hi-hats, side percussion, syncopated hats, 8 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, wide mid reese counterline, wide mids, open hat, 4 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1024,14 +1404,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `90.0` |
+| 0 | `266.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `90.0` |
+| 0 | `266.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -1040,27 +1420,69 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8…` |
-| 2 | `[inst - warped 808, chest-sub 808, growl bass hold, growl ride, rapid hi-hats] …` |
+| 2 | `[build-up - snare roll, body bass, kick pattern flip, wide mid reese counterlin…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/07-jump-bay` |
 
 ```text
-dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals
+dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[inst - warped 808, chest-sub 808, growl bass hold, growl ride, rapid hi-hats]
+[build-up - snare roll, body bass, kick pattern flip, wide mid reese counterline, side percussion, syncopated hats, growl wreck, 4 bars]
 
-[build-up - metal hats roll, rapid hi-hats denser, mid growl, snare roll]
+[drop - heavy growl warped drop, octave sub stack, formant answer, snare roll, wide mids, open hat, brostep, heavy brostep drop, 8 bars]
 
-[drop - heavy brostep drop, harder formant drop, brostep wreck, harder warped drop, warped wall]
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, side hats, body bass, closed hat, warped 808, 6 bars]
 
-[breakdown - growl sustain, wobble hold, kick holds, muted stab]
+[inst - offbeat hats, octave sub stack, call-response reese, wide low-mid, room snare, metal hats roll, 10 bars]
 
-[drop - growl wreck, full send drop, stacked growl, stacked 808 wreck, stacked wreck]
+[drop - wreck formant warped drop, body bass, growl answer, trap drums denser, side percussion, tight kick, growl sustain, 8 bars]
 
-[outro - sub crush, snare roll, hats denser, filter down]
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide mids, octave sub stack, loose hats, sub crush, 4 bars]
+
+[inst - kick pattern flip, body bass, wide mid reese counterline, side hats, pushed snare, chest-sub 808, 10 bars]
+
+[drop - harder wobble warped drop, octave sub stack, formant answer, snare roll, wide low-mid, chopped hats, harder formant drop, 12 bars]
+
+[inst - rapid hi-hats, body bass, wide mid growl, side percussion, hat density up, rapid hi-hats denser, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, wide mids, octave sub stack, kick opens, wobble hold, 6 bars]
+
+[inst - trap drums denser, body bass, growl answer, side hats, kick tightens, brostep wreck, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide low-mid, octave sub stack, snare answers, stacked growl, 4 bars]
+
+[build-up - snare roll, body bass, kick pattern flip, wide mid reese counterline, side percussion, offbeat push, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide mids, octave sub stack, straight hats, growl bass hold, 4 bars]
+
+[drop - wreck formant warped drop, body bass, wide mid growl, rapid hi-hats, side hats, triplet hats, full send drop, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, wide low-mid, octave sub stack, backbeat shove, stacked 808 wreck, 4 bars]
+
+[build-up - snare roll, body bass, trap drums denser, growl answer, side percussion, ghost notes, mid growl, 6 bars]
+
+[inst - ghost snare, octave sub stack, formant bass melody, wide mids, dry hats, kick holds, 8 bars]
+
+[build-up - snare roll, body bass, kick pattern flip, wide mid reese counterline, side hats, wide hat bed, hats denser, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide low-mid, octave sub stack, mono kick, growl ride, 8 bars]
+
+[drop - stacked reese warped drop, body bass, wide mid growl, rapid hi-hats, side percussion, side snare, harder warped drop, 12 bars]
+
+[inst - offbeat hats, octave sub stack, call-response reese, wide mids, rolling hats, 8 bars]
+
+[build-up - snare roll, body bass, trap drums denser, growl answer, side hats, late snare, 4 bars]
+
+[drop - full send warped drop, octave sub stack, formant bass melody, ghost snare, wide low-mid, early kick, 12 bars]
+
+[build-up - snare roll, fold bass, snare roll, formant bass melody, wide low-mid, open hat, 4 bars]
+
+[inst - snare roll, octave sub stack, formant answer, wide mids, open hat, 8 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, call-response reese, wide low-mid, room snare, 4 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -1068,11 +1490,11 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 | Slot | Value |
 | --- | --- |
 | 0 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8…` |
-| 1 | `[inst - warped 808, chest-sub 808, growl bass hold, growl ride, rapid hi-hats] …` |
+| 1 | `[build-up - snare roll, body bass, kick pattern flip, wide mid reese counterlin…` |
 | 2 | `311` |
 | 3 | `fixed` |
-| 4 | `150` |
-| 5 | `90.0` |
+| 4 | `168` |
+| 5 | `266.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `G major` |
@@ -1084,21 +1506,63 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 | 14 | `0.0` |
 
 ```text
-dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals
+dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[inst - warped 808, chest-sub 808, growl bass hold, growl ride, rapid hi-hats]
+[build-up - snare roll, body bass, kick pattern flip, wide mid reese counterline, side percussion, syncopated hats, growl wreck, 4 bars]
 
-[build-up - metal hats roll, rapid hi-hats denser, mid growl, snare roll]
+[drop - heavy growl warped drop, octave sub stack, formant answer, snare roll, wide mids, open hat, brostep, heavy brostep drop, 8 bars]
 
-[drop - heavy brostep drop, harder formant drop, brostep wreck, harder warped drop, warped wall]
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, side hats, body bass, closed hat, warped 808, 6 bars]
 
-[breakdown - growl sustain, wobble hold, kick holds, muted stab]
+[inst - offbeat hats, octave sub stack, call-response reese, wide low-mid, room snare, metal hats roll, 10 bars]
 
-[drop - growl wreck, full send drop, stacked growl, stacked 808 wreck, stacked wreck]
+[drop - wreck formant warped drop, body bass, growl answer, trap drums denser, side percussion, tight kick, growl sustain, 8 bars]
 
-[outro - sub crush, snare roll, hats denser, filter down]
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide mids, octave sub stack, loose hats, sub crush, 4 bars]
+
+[inst - kick pattern flip, body bass, wide mid reese counterline, side hats, pushed snare, chest-sub 808, 10 bars]
+
+[drop - harder wobble warped drop, octave sub stack, formant answer, snare roll, wide low-mid, chopped hats, harder formant drop, 12 bars]
+
+[inst - rapid hi-hats, body bass, wide mid growl, side percussion, hat density up, rapid hi-hats denser, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, wide mids, octave sub stack, kick opens, wobble hold, 6 bars]
+
+[inst - trap drums denser, body bass, growl answer, side hats, kick tightens, brostep wreck, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide low-mid, octave sub stack, snare answers, stacked growl, 4 bars]
+
+[build-up - snare roll, body bass, kick pattern flip, wide mid reese counterline, side percussion, offbeat push, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide mids, octave sub stack, straight hats, growl bass hold, 4 bars]
+
+[drop - wreck formant warped drop, body bass, wide mid growl, rapid hi-hats, side hats, triplet hats, full send drop, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, wide low-mid, octave sub stack, backbeat shove, stacked 808 wreck, 4 bars]
+
+[build-up - snare roll, body bass, trap drums denser, growl answer, side percussion, ghost notes, mid growl, 6 bars]
+
+[inst - ghost snare, octave sub stack, formant bass melody, wide mids, dry hats, kick holds, 8 bars]
+
+[build-up - snare roll, body bass, kick pattern flip, wide mid reese counterline, side hats, wide hat bed, hats denser, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide low-mid, octave sub stack, mono kick, growl ride, 8 bars]
+
+[drop - stacked reese warped drop, body bass, wide mid growl, rapid hi-hats, side percussion, side snare, harder warped drop, 12 bars]
+
+[inst - offbeat hats, octave sub stack, call-response reese, wide mids, rolling hats, 8 bars]
+
+[build-up - snare roll, body bass, trap drums denser, growl answer, side hats, late snare, 4 bars]
+
+[drop - full send warped drop, octave sub stack, formant bass melody, ghost snare, wide low-mid, early kick, 12 bars]
+
+[build-up - snare roll, fold bass, snare roll, formant bass melody, wide low-mid, open hat, 4 bars]
+
+[inst - snare roll, octave sub stack, formant answer, wide mids, open hat, 8 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, call-response reese, wide low-mid, room snare, 4 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1181,14 +1645,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `144.0` |
+| 0 | `306.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `144.0` |
+| 0 | `306.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -1197,25 +1661,77 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warp…` |
-| 2 | `[intro - warped coil, formant 808 wall, kick holds] [drop - heavy neuro drop, h…` |
+| 2 | `[build-up - snare roll, octave sub stack, ghost snare, growl answer, wide mids,…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/08-psy-median` |
 
 ```text
-neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 145 bpm, instrumental, no vocals
+neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[intro - warped coil, formant 808 wall, kick holds]
+[build-up - snare roll, octave sub stack, ghost snare, growl answer, wide mids, rolling hats, reese 808 wreck, 6 bars]
 
-[drop - heavy neuro drop, harder stacked drop, chest-sub wreck, reese 808 wreck, amen freight]
+[drop - wreck wobble warped drop, body bass, formant bass melody, kick pattern flip, side hats, late snare, reese bass, heavy neuro drop, 12 bars]
 
-[breakdown - rapid hi-hats roll, chest-sub, rapid hi-hats roll, pluck]
+[inst - snare roll, octave sub stack, wide mid reese counterline, wide low-mid, early kick, warped coil, 10 bars]
 
-[drop - reese 808 wreck, full send drop, warped wall]
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side percussion, body bass, syncopated hats, rapid hi-hats roll, 4 bars]
 
-[outro - reese sustain, neuro warp, reese ride, kick holds]
+[inst - offbeat hats, octave sub stack, wide mid growl, wide mids, open hat, reese sustain, 6 bars]
+
+[drop - full send growl warped drop, body bass, call-response reese, trap drums denser, side hats, closed hat, harder stacked drop, 12 bars]
+
+[build-up - snare roll, octave sub stack, ghost snare, growl answer, wide low-mid, room snare, formant 808 wall, 4 bars]
+
+[inst - kick pattern flip, body bass, formant bass melody, side percussion, tight kick, chest-sub, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, octave sub stack, loose hats, chest-sub wreck, 4 bars]
+
+[drop - harder reese warped drop, body bass, formant answer, rapid hi-hats, side hats, pushed snare, full send drop, 8 bars]
+
+[inst - offbeat hats, octave sub stack, wide mid growl, wide low-mid, chopped hats, neuro warp, 4 bars]
+
+[build-up - snare roll, body bass, trap drums denser, call-response reese, side percussion, hat density up, kick holds, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, octave sub stack, kick opens, reese ride, 4 bars]
+
+[build-up - snare roll, body bass, kick pattern flip, formant bass melody, side hats, kick tightens, 6 bars]
+
+[drop - harder reese warped drop, octave sub stack, wide mid reese counterline, snare roll, wide low-mid, snare answers, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side percussion, body bass, offbeat push, 6 bars]
+
+[build-up - snare roll, octave sub stack, offbeat hats, wide mid growl, wide mids, straight hats, 4 bars]
+
+[drop - stacked warped drop, body bass, call-response reese, trap drums denser, side hats, triplet hats, 10 bars]
+
+[inst - ghost snare, octave sub stack, growl answer, wide low-mid, backbeat shove, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, body bass, ghost notes, 4 bars]
+
+[build-up - snare roll, octave sub stack, snare roll, wide mid reese counterline, wide mids, dry hats, 6 bars]
+
+[inst - rapid hi-hats, body bass, formant answer, side hats, wide hat bed, 8 bars]
+
+[drop - stacked warped drop, octave sub stack, wide mid growl, offbeat hats, wide low-mid, mono kick, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side percussion, body bass, side snare, 4 bars]
+
+[inst - ghost snare, octave sub stack, growl answer, wide mids, rolling hats, 8 bars]
+
+[drop - full send growl warped drop, body bass, formant bass melody, kick pattern flip, side hats, late snare, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide low-mid, octave sub stack, early kick, 4 bars]
+
+[inst - rapid hi-hats, body bass, formant answer, side percussion, syncopated hats, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, octave sub stack, open hat, 8 bars]
+
+[build-up - snare roll, body bass, trap drums denser, call-response reese, side hats, closed hat, 6 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, wide mid reese counterline, wide low-mid, snare answers, 4 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -1223,11 +1739,11 @@ neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warpe
 | Slot | Value |
 | --- | --- |
 | 0 | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warp…` |
-| 1 | `[intro - warped coil, formant 808 wall, kick holds] [drop - heavy neuro drop, h…` |
+| 1 | `[build-up - snare roll, octave sub stack, ghost snare, growl answer, wide mids,…` |
 | 2 | `313` |
 | 3 | `fixed` |
-| 4 | `145` |
-| 5 | `144.0` |
+| 4 | `168` |
+| 5 | `306.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `B minor` |
@@ -1239,19 +1755,71 @@ neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warpe
 | 14 | `0.0` |
 
 ```text
-neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 145 bpm, instrumental, no vocals
+neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[intro - warped coil, formant 808 wall, kick holds]
+[build-up - snare roll, octave sub stack, ghost snare, growl answer, wide mids, rolling hats, reese 808 wreck, 6 bars]
 
-[drop - heavy neuro drop, harder stacked drop, chest-sub wreck, reese 808 wreck, amen freight]
+[drop - wreck wobble warped drop, body bass, formant bass melody, kick pattern flip, side hats, late snare, reese bass, heavy neuro drop, 12 bars]
 
-[breakdown - rapid hi-hats roll, chest-sub, rapid hi-hats roll, pluck]
+[inst - snare roll, octave sub stack, wide mid reese counterline, wide low-mid, early kick, warped coil, 10 bars]
 
-[drop - reese 808 wreck, full send drop, warped wall]
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side percussion, body bass, syncopated hats, rapid hi-hats roll, 4 bars]
 
-[outro - reese sustain, neuro warp, reese ride, kick holds]
+[inst - offbeat hats, octave sub stack, wide mid growl, wide mids, open hat, reese sustain, 6 bars]
+
+[drop - full send growl warped drop, body bass, call-response reese, trap drums denser, side hats, closed hat, harder stacked drop, 12 bars]
+
+[build-up - snare roll, octave sub stack, ghost snare, growl answer, wide low-mid, room snare, formant 808 wall, 4 bars]
+
+[inst - kick pattern flip, body bass, formant bass melody, side percussion, tight kick, chest-sub, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, octave sub stack, loose hats, chest-sub wreck, 4 bars]
+
+[drop - harder reese warped drop, body bass, formant answer, rapid hi-hats, side hats, pushed snare, full send drop, 8 bars]
+
+[inst - offbeat hats, octave sub stack, wide mid growl, wide low-mid, chopped hats, neuro warp, 4 bars]
+
+[build-up - snare roll, body bass, trap drums denser, call-response reese, side percussion, hat density up, kick holds, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, octave sub stack, kick opens, reese ride, 4 bars]
+
+[build-up - snare roll, body bass, kick pattern flip, formant bass melody, side hats, kick tightens, 6 bars]
+
+[drop - harder reese warped drop, octave sub stack, wide mid reese counterline, snare roll, wide low-mid, snare answers, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side percussion, body bass, offbeat push, 6 bars]
+
+[build-up - snare roll, octave sub stack, offbeat hats, wide mid growl, wide mids, straight hats, 4 bars]
+
+[drop - stacked warped drop, body bass, call-response reese, trap drums denser, side hats, triplet hats, 10 bars]
+
+[inst - ghost snare, octave sub stack, growl answer, wide low-mid, backbeat shove, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, body bass, ghost notes, 4 bars]
+
+[build-up - snare roll, octave sub stack, snare roll, wide mid reese counterline, wide mids, dry hats, 6 bars]
+
+[inst - rapid hi-hats, body bass, formant answer, side hats, wide hat bed, 8 bars]
+
+[drop - stacked warped drop, octave sub stack, wide mid growl, offbeat hats, wide low-mid, mono kick, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side percussion, body bass, side snare, 4 bars]
+
+[inst - ghost snare, octave sub stack, growl answer, wide mids, rolling hats, 8 bars]
+
+[drop - full send growl warped drop, body bass, formant bass melody, kick pattern flip, side hats, late snare, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide low-mid, octave sub stack, early kick, 4 bars]
+
+[inst - rapid hi-hats, body bass, formant answer, side percussion, syncopated hats, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, octave sub stack, open hat, 8 bars]
+
+[build-up - snare roll, body bass, trap drums denser, call-response reese, side hats, closed hat, 6 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, wide mid reese counterline, wide low-mid, snare answers, 4 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1334,14 +1902,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `198.0` |
+| 0 | `386.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `198.0` |
+| 0 | `386.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -1350,25 +1918,85 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, rave, 80…` |
-| 2 | `[build-up - mile grind, chest punch, warped trap, 808 ride, snare roll] [drop -…` |
+| 2 | `[build-up - snare roll, mono chest-sub, offbeat hats, wide mid growl, side perc…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/09-groove-mile` |
 
 ```text
-warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 144 bpm, instrumental, no vocals
+warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - mile grind, chest punch, warped trap, 808 ride, snare roll]
+[build-up - snare roll, mono chest-sub, offbeat hats, wide mid growl, side percussion, kick opens, warped hybrid-trap drums 808 wreck, 6 bars]
 
-[drop - heavy warped drop, harder growl drop, full send drop, offbeat kick]
+[drop - harder reese warped drop, low chest-sub, call-response reese, trap drums denser, wide mids, kick tightens, warped hybrid-trap, heavy warped drop, 10 bars]
 
-[inst - rapid hi-hats roll, snare roll, kick holds, warped hybrid-trap drums 808 wreck]
+[build-up - snare roll, mono chest-sub, ghost snare, growl answer, side hats, snare answers, mile grind, 4 bars]
 
-[drop - warped hybrid-trap drums 808 wreck, stacked 808 warp, body bass wreck, stacked wreck]
+[inst - kick pattern flip, low chest-sub, formant bass melody, wide low-mid, offbeat push, rapid hi-hats roll, 12 bars]
 
-[outro - 808 bounce hold, chest-sub 808, hats denser, kick holds]
+[drop - stacked warped drop, mono chest-sub, wide mid reese counterline, snare roll, side percussion, straight hats, 808 bounce hold, 8 bars]
+
+[inst - rapid hi-hats, low chest-sub, formant answer, wide mids, triplet hats, stacked 808 warp, 4 bars]
+
+[build-up - snare roll, mono chest-sub, offbeat hats, wide mid growl, side hats, backbeat shove, chest punch, 6 bars]
+
+[inst - trap drums denser, low chest-sub, call-response reese, wide low-mid, ghost notes, snare roll, 4 bars]
+
+[build-up - snare roll, mono chest-sub, ghost snare, growl answer, side percussion, dry hats, chest-sub 808, 6 bars]
+
+[inst - kick pattern flip, low chest-sub, formant bass melody, wide mids, wide hat bed, body bass wreck, 10 bars]
+
+[drop - heavy formant warped drop, mono chest-sub, wide mid reese counterline, snare roll, side hats, mono kick, harder growl drop, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide low-mid, low chest-sub, side snare, warped trap, 8 bars]
+
+[build-up - snare roll, mono chest-sub, offbeat hats, wide mid growl, side percussion, rolling hats, kick holds, 6 bars]
+
+[drop - wreck wobble warped drop, low chest-sub, call-response reese, trap drums denser, wide mids, late snare, full send drop, 8 bars]
+
+[inst - ghost snare, mono chest-sub, growl answer, side hats, early kick, hats denser, 10 bars]
+
+[drop - heavy formant warped drop, low chest-sub, formant bass melody, kick pattern flip, wide low-mid, syncopated hats, 808 ride, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, side percussion, mono chest-sub, open hat, 6 bars]
+
+[drop - full send growl warped drop, low chest-sub, formant answer, rapid hi-hats, wide mids, closed hat, 10 bars]
+
+[build-up - snare roll, mono chest-sub, offbeat hats, wide mid growl, side hats, room snare, 6 bars]
+
+[drop - stacked warped drop, low chest-sub, call-response reese, trap drums denser, wide low-mid, tight kick, 10 bars]
+
+[inst - ghost snare, mono chest-sub, growl answer, side percussion, loose hats, 8 bars]
+
+[build-up - snare roll, low chest-sub, kick pattern flip, formant bass melody, wide mids, pushed snare, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, side hats, mono chest-sub, chopped hats, 8 bars]
+
+[build-up - snare roll, low chest-sub, rapid hi-hats, formant answer, wide low-mid, hat density up, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, side percussion, mono chest-sub, kick opens, 8 bars]
+
+[drop - heavy formant warped drop, low chest-sub, call-response reese, trap drums denser, wide mids, kick tightens, 12 bars]
+
+[inst - ghost snare, mono chest-sub, growl answer, side hats, snare answers, 6 bars]
+
+[drop - full send growl warped drop, low chest-sub, formant bass melody, kick pattern flip, wide low-mid, offbeat push, 10 bars]
+
+[build-up - snare roll, mono chest-sub, snare roll, wide mid reese counterline, side percussion, straight hats, 6 bars]
+
+[inst - offbeat hats, body bass, wide mid reese counterline, side percussion, backbeat shove, 10 bars]
+
+[drop - heavy formant warped drop, mono chest-sub, wide mid growl, offbeat hats, side hats, backbeat shove, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, wide low-mid, low chest-sub, ghost notes, 6 bars]
+
+[drop - full send growl warped drop, mono chest-sub, growl answer, ghost snare, side percussion, dry hats, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide mids, low chest-sub, wide hat bed, 8 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, wide mid reese counterline, side percussion, straight hats, 4 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -1376,11 +2004,11 @@ warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, rave, 808
 | Slot | Value |
 | --- | --- |
 | 0 | `warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, rave, 80…` |
-| 1 | `[build-up - mile grind, chest punch, warped trap, 808 ride, snare roll] [drop -…` |
+| 1 | `[build-up - snare roll, mono chest-sub, offbeat hats, wide mid growl, side perc…` |
 | 2 | `317` |
 | 3 | `fixed` |
-| 4 | `144` |
-| 5 | `198.0` |
+| 4 | `168` |
+| 5 | `386.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `D major` |
@@ -1392,19 +2020,79 @@ warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, rave, 808
 | 14 | `0.0` |
 
 ```text
-warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 144 bpm, instrumental, no vocals
+warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - mile grind, chest punch, warped trap, 808 ride, snare roll]
+[build-up - snare roll, mono chest-sub, offbeat hats, wide mid growl, side percussion, kick opens, warped hybrid-trap drums 808 wreck, 6 bars]
 
-[drop - heavy warped drop, harder growl drop, full send drop, offbeat kick]
+[drop - harder reese warped drop, low chest-sub, call-response reese, trap drums denser, wide mids, kick tightens, warped hybrid-trap, heavy warped drop, 10 bars]
 
-[inst - rapid hi-hats roll, snare roll, kick holds, warped hybrid-trap drums 808 wreck]
+[build-up - snare roll, mono chest-sub, ghost snare, growl answer, side hats, snare answers, mile grind, 4 bars]
 
-[drop - warped hybrid-trap drums 808 wreck, stacked 808 warp, body bass wreck, stacked wreck]
+[inst - kick pattern flip, low chest-sub, formant bass melody, wide low-mid, offbeat push, rapid hi-hats roll, 12 bars]
 
-[outro - 808 bounce hold, chest-sub 808, hats denser, kick holds]
+[drop - stacked warped drop, mono chest-sub, wide mid reese counterline, snare roll, side percussion, straight hats, 808 bounce hold, 8 bars]
+
+[inst - rapid hi-hats, low chest-sub, formant answer, wide mids, triplet hats, stacked 808 warp, 4 bars]
+
+[build-up - snare roll, mono chest-sub, offbeat hats, wide mid growl, side hats, backbeat shove, chest punch, 6 bars]
+
+[inst - trap drums denser, low chest-sub, call-response reese, wide low-mid, ghost notes, snare roll, 4 bars]
+
+[build-up - snare roll, mono chest-sub, ghost snare, growl answer, side percussion, dry hats, chest-sub 808, 6 bars]
+
+[inst - kick pattern flip, low chest-sub, formant bass melody, wide mids, wide hat bed, body bass wreck, 10 bars]
+
+[drop - heavy formant warped drop, mono chest-sub, wide mid reese counterline, snare roll, side hats, mono kick, harder growl drop, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide low-mid, low chest-sub, side snare, warped trap, 8 bars]
+
+[build-up - snare roll, mono chest-sub, offbeat hats, wide mid growl, side percussion, rolling hats, kick holds, 6 bars]
+
+[drop - wreck wobble warped drop, low chest-sub, call-response reese, trap drums denser, wide mids, late snare, full send drop, 8 bars]
+
+[inst - ghost snare, mono chest-sub, growl answer, side hats, early kick, hats denser, 10 bars]
+
+[drop - heavy formant warped drop, low chest-sub, formant bass melody, kick pattern flip, wide low-mid, syncopated hats, 808 ride, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, side percussion, mono chest-sub, open hat, 6 bars]
+
+[drop - full send growl warped drop, low chest-sub, formant answer, rapid hi-hats, wide mids, closed hat, 10 bars]
+
+[build-up - snare roll, mono chest-sub, offbeat hats, wide mid growl, side hats, room snare, 6 bars]
+
+[drop - stacked warped drop, low chest-sub, call-response reese, trap drums denser, wide low-mid, tight kick, 10 bars]
+
+[inst - ghost snare, mono chest-sub, growl answer, side percussion, loose hats, 8 bars]
+
+[build-up - snare roll, low chest-sub, kick pattern flip, formant bass melody, wide mids, pushed snare, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, side hats, mono chest-sub, chopped hats, 8 bars]
+
+[build-up - snare roll, low chest-sub, rapid hi-hats, formant answer, wide low-mid, hat density up, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, side percussion, mono chest-sub, kick opens, 8 bars]
+
+[drop - heavy formant warped drop, low chest-sub, call-response reese, trap drums denser, wide mids, kick tightens, 12 bars]
+
+[inst - ghost snare, mono chest-sub, growl answer, side hats, snare answers, 6 bars]
+
+[drop - full send growl warped drop, low chest-sub, formant bass melody, kick pattern flip, wide low-mid, offbeat push, 10 bars]
+
+[build-up - snare roll, mono chest-sub, snare roll, wide mid reese counterline, side percussion, straight hats, 6 bars]
+
+[inst - offbeat hats, body bass, wide mid reese counterline, side percussion, backbeat shove, 10 bars]
+
+[drop - heavy formant warped drop, mono chest-sub, wide mid growl, offbeat hats, side hats, backbeat shove, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, wide low-mid, low chest-sub, ghost notes, 6 bars]
+
+[drop - full send growl warped drop, mono chest-sub, growl answer, ghost snare, side percussion, dry hats, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide mids, low chest-sub, wide hat bed, 8 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, wide mid reese counterline, side percussion, straight hats, 4 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1487,14 +2175,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `99.0` |
+| 0 | `386.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `99.0` |
+| 0 | `386.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -1503,23 +2191,93 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ra…` |
-| 2 | `[drop - heavy tearout drop, harder warped drop, dirty analog wreck, warped wall…` |
+| 2 | `[build-up - snare roll, fold bass, snare roll, growl answer, wide low-mid, push…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/10-donk-ramp` |
 
 ```text
-tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals
+tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[drop - heavy tearout drop, harder warped drop, dirty analog wreck, warped wall]
+[build-up - snare roll, fold bass, snare roll, growl answer, wide low-mid, pushed snare, growl 808 wreck, 6 bars]
 
-[inst - formant ramp, tearout grind, growl sustain, kick holds, growl ride, rapid hi-hats]
+[drop - stacked warped drop, stacked 808, formant bass melody, rapid hi-hats, side percussion, chopped hats, tearout, heavy tearout drop, 8 bars]
 
-[drop - growl 808 wreck, full send drop, stacked wreck]
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, fold bass, hat density up, formant ramp, 6 bars]
 
-[outro - chest-sub 808 stack, rapid hi-hats denser, warped 808, rapid hi-hats roll, kick holds]
+[build-up - snare roll, stacked 808, trap drums denser, formant answer, side hats, kick opens, chest-sub 808 stack, 4 bars]
+
+[inst - ghost snare, fold bass, wide mid growl, wide low-mid, kick tightens, tearout grind, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side percussion, stacked 808, snare answers, rapid hi-hats denser, 4 bars]
+
+[drop - stacked warped drop, fold bass, growl answer, snare roll, wide mids, offbeat push, harder warped drop, 10 bars]
+
+[inst - rapid hi-hats, stacked 808, formant bass melody, side hats, straight hats, growl sustain, 4 bars]
+
+[build-up - snare roll, fold bass, offbeat hats, wide mid reese counterline, wide low-mid, triplet hats, dirty analog wreck, 6 bars]
+
+[inst - trap drums denser, stacked 808, formant answer, side percussion, backbeat shove, warped 808, 8 bars]
+
+[drop - wreck wobble warped drop, fold bass, wide mid growl, ghost snare, wide mids, ghost notes, full send drop, 10 bars]
+
+[build-up - snare roll, stacked 808, kick pattern flip, call-response reese, side hats, dry hats, kick holds, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide low-mid, fold bass, wide hat bed, rapid hi-hats roll, 6 bars]
+
+[inst - rapid hi-hats, stacked 808, formant bass melody, side percussion, mono kick, growl ride, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, fold bass, side snare, 4 bars]
+
+[drop - wreck wobble warped drop, stacked 808, formant answer, trap drums denser, side hats, rolling hats, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, fold bass, late snare, 6 bars]
+
+[inst - kick pattern flip, stacked 808, call-response reese, side percussion, early kick, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, fold bass, syncopated hats, 6 bars]
+
+[build-up - snare roll, stacked 808, rapid hi-hats, formant bass melody, side hats, open hat, 4 bars]
+
+[inst - offbeat hats, fold bass, wide mid reese counterline, wide low-mid, closed hat, 12 bars]
+
+[drop - stacked warped drop, stacked 808, formant answer, trap drums denser, side percussion, room snare, 10 bars]
+
+[inst - ghost snare, fold bass, wide mid growl, wide mids, tight kick, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side hats, stacked 808, loose hats, 4 bars]
+
+[build-up - snare roll, mono chest-sub, rapid hi-hats, call-response reese, side hats, chopped hats, 6 bars]
+
+[inst - rapid hi-hats, stacked 808, formant bass melody, side percussion, chopped hats, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, mono chest-sub, kick opens, 6 bars]
+
+[build-up - snare roll, low chest-sub, ghost snare, wide mid reese counterline, wide mids, kick tightens, 4 bars]
+
+[drop - harder reese warped drop, fold bass, wide mid growl, ghost snare, wide low-mid, kick tightens, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, low chest-sub, offbeat push, 4 bars]
+
+[build-up - snare roll, fold bass, snare roll, growl answer, wide mids, offbeat push, 6 bars]
+
+[drop - stacked warped drop, stacked 808, formant bass melody, rapid hi-hats, side hats, straight hats, 8 bars]
+
+[inst - offbeat hats, fold bass, wide mid reese counterline, wide low-mid, triplet hats, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side percussion, stacked 808, backbeat shove, 6 bars]
+
+[drop - full send growl warped drop, fold bass, wide mid growl, ghost snare, wide mids, ghost notes, 10 bars]
+
+[build-up - snare roll, low chest-sub, snare roll, wide mid growl, wide mids, wide hat bed, 4 bars]
+
+[inst - snare roll, fold bass, growl answer, wide low-mid, wide hat bed, 6 bars]
+
+[drop - heavy formant warped drop, stacked 808, formant bass melody, rapid hi-hats, side percussion, mono kick, 10 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, growl answer, wide low-mid, wide hat bed, 4 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -1527,11 +2285,11 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rav
 | Slot | Value |
 | --- | --- |
 | 0 | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ra…` |
-| 1 | `[drop - heavy tearout drop, harder warped drop, dirty analog wreck, warped wall…` |
+| 1 | `[build-up - snare roll, fold bass, snare roll, growl answer, wide low-mid, push…` |
 | 2 | `331` |
 | 3 | `fixed` |
-| 4 | `150` |
-| 5 | `99.0` |
+| 4 | `168` |
+| 5 | `386.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `F# minor` |
@@ -1543,17 +2301,87 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rav
 | 14 | `0.0` |
 
 ```text
-tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals
+tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[drop - heavy tearout drop, harder warped drop, dirty analog wreck, warped wall]
+[build-up - snare roll, fold bass, snare roll, growl answer, wide low-mid, pushed snare, growl 808 wreck, 6 bars]
 
-[inst - formant ramp, tearout grind, growl sustain, kick holds, growl ride, rapid hi-hats]
+[drop - stacked warped drop, stacked 808, formant bass melody, rapid hi-hats, side percussion, chopped hats, tearout, heavy tearout drop, 8 bars]
 
-[drop - growl 808 wreck, full send drop, stacked wreck]
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, fold bass, hat density up, formant ramp, 6 bars]
 
-[outro - chest-sub 808 stack, rapid hi-hats denser, warped 808, rapid hi-hats roll, kick holds]
+[build-up - snare roll, stacked 808, trap drums denser, formant answer, side hats, kick opens, chest-sub 808 stack, 4 bars]
+
+[inst - ghost snare, fold bass, wide mid growl, wide low-mid, kick tightens, tearout grind, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side percussion, stacked 808, snare answers, rapid hi-hats denser, 4 bars]
+
+[drop - stacked warped drop, fold bass, growl answer, snare roll, wide mids, offbeat push, harder warped drop, 10 bars]
+
+[inst - rapid hi-hats, stacked 808, formant bass melody, side hats, straight hats, growl sustain, 4 bars]
+
+[build-up - snare roll, fold bass, offbeat hats, wide mid reese counterline, wide low-mid, triplet hats, dirty analog wreck, 6 bars]
+
+[inst - trap drums denser, stacked 808, formant answer, side percussion, backbeat shove, warped 808, 8 bars]
+
+[drop - wreck wobble warped drop, fold bass, wide mid growl, ghost snare, wide mids, ghost notes, full send drop, 10 bars]
+
+[build-up - snare roll, stacked 808, kick pattern flip, call-response reese, side hats, dry hats, kick holds, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide low-mid, fold bass, wide hat bed, rapid hi-hats roll, 6 bars]
+
+[inst - rapid hi-hats, stacked 808, formant bass melody, side percussion, mono kick, growl ride, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, fold bass, side snare, 4 bars]
+
+[drop - wreck wobble warped drop, stacked 808, formant answer, trap drums denser, side hats, rolling hats, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, fold bass, late snare, 6 bars]
+
+[inst - kick pattern flip, stacked 808, call-response reese, side percussion, early kick, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, fold bass, syncopated hats, 6 bars]
+
+[build-up - snare roll, stacked 808, rapid hi-hats, formant bass melody, side hats, open hat, 4 bars]
+
+[inst - offbeat hats, fold bass, wide mid reese counterline, wide low-mid, closed hat, 12 bars]
+
+[drop - stacked warped drop, stacked 808, formant answer, trap drums denser, side percussion, room snare, 10 bars]
+
+[inst - ghost snare, fold bass, wide mid growl, wide mids, tight kick, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side hats, stacked 808, loose hats, 4 bars]
+
+[build-up - snare roll, mono chest-sub, rapid hi-hats, call-response reese, side hats, chopped hats, 6 bars]
+
+[inst - rapid hi-hats, stacked 808, formant bass melody, side percussion, chopped hats, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, mono chest-sub, kick opens, 6 bars]
+
+[build-up - snare roll, low chest-sub, ghost snare, wide mid reese counterline, wide mids, kick tightens, 4 bars]
+
+[drop - harder reese warped drop, fold bass, wide mid growl, ghost snare, wide low-mid, kick tightens, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, low chest-sub, offbeat push, 4 bars]
+
+[build-up - snare roll, fold bass, snare roll, growl answer, wide mids, offbeat push, 6 bars]
+
+[drop - stacked warped drop, stacked 808, formant bass melody, rapid hi-hats, side hats, straight hats, 8 bars]
+
+[inst - offbeat hats, fold bass, wide mid reese counterline, wide low-mid, triplet hats, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side percussion, stacked 808, backbeat shove, 6 bars]
+
+[drop - full send growl warped drop, fold bass, wide mid growl, ghost snare, wide mids, ghost notes, 10 bars]
+
+[build-up - snare roll, low chest-sub, snare roll, wide mid growl, wide mids, wide hat bed, 4 bars]
+
+[inst - snare roll, fold bass, growl answer, wide low-mid, wide hat bed, 6 bars]
+
+[drop - heavy formant warped drop, stacked 808, formant bass melody, rapid hi-hats, side percussion, mono kick, 10 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, growl answer, wide low-mid, wide hat bed, 4 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1636,14 +2464,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `156.0` |
+| 0 | `451.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `156.0` |
+| 0 | `451.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -1652,25 +2480,101 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, rave, no si…` |
-| 2 | `[build-up - booth grind, formant wall, warped chest, chest ride, snare roll] [d…` |
+| 2 | `[build-up - snare roll, stacked 808, kick pattern flip, call-response reese, si…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/11-bounce-booth` |
 
 ```text
-chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 140 bpm, instrumental, no vocals
+chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - booth grind, formant wall, warped chest, chest ride, snare roll]
+[build-up - snare roll, stacked 808, kick pattern flip, call-response reese, side hats, snare answers, warped 808 wreck, 6 bars]
 
-[drop - heavy chest drop, harder growl drop, full send drop, warped wall]
+[drop - stacked wobble warped drop, fold bass, growl answer, snare roll, wide low-mid, offbeat push, chest-sub, heavy chest drop, 12 bars]
 
-[breakdown - rapid hi-hats roll, snare roll, kick holds, pluck]
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, stacked 808, straight hats, booth grind, 6 bars]
 
-[drop - warped 808 wreck, stacked chest-sub 808, low 808 wreck, stacked wreck]
+[inst - offbeat hats, fold bass, wide mid reese counterline, wide mids, triplet hats, rapid hi-hats roll, 10 bars]
 
-[outro - 808 punch hold, chest-sub hold, hats denser, filter down]
+[drop - full send reese warped drop, stacked 808, formant answer, trap drums denser, side hats, backbeat shove, 808 punch hold, 8 bars]
+
+[inst - ghost snare, fold bass, wide mid growl, wide low-mid, ghost notes, stacked chest-sub 808, 10 bars]
+
+[build-up - snare roll, stacked 808, kick pattern flip, call-response reese, side percussion, dry hats, formant wall, 6 bars]
+
+[inst - snare roll, fold bass, growl answer, wide mids, wide hat bed, 10 bars]
+
+[drop - harder formant warped drop, stacked 808, formant bass melody, rapid hi-hats, side hats, mono kick, harder growl drop, 8 bars]
+
+[inst - offbeat hats, fold bass, wide mid reese counterline, wide low-mid, side snare, chest-sub hold, 6 bars]
+
+[drop - wreck growl warped drop, stacked 808, formant answer, trap drums denser, side percussion, rolling hats, full send drop, 10 bars]
+
+[build-up - snare roll, fold bass, ghost snare, wide mid growl, wide mids, late snare, low 808 wreck, 6 bars]
+
+[inst - kick pattern flip, stacked 808, call-response reese, side hats, early kick, warped chest, 8 bars]
+
+[build-up - snare roll, fold bass, snare roll, growl answer, wide low-mid, syncopated hats, kick holds, 4 bars]
+
+[inst - rapid hi-hats, stacked 808, formant bass melody, side percussion, open hat, hats denser, 8 bars]
+
+[build-up - snare roll, fold bass, offbeat hats, wide mid reese counterline, wide mids, closed hat, chest ride, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side hats, stacked 808, room snare, 8 bars]
+
+[inst - ghost snare, fold bass, wide mid growl, wide low-mid, tight kick, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side percussion, stacked 808, loose hats, 4 bars]
+
+[build-up - snare roll, fold bass, snare roll, growl answer, wide mids, pushed snare, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side hats, stacked 808, chopped hats, 8 bars]
+
+[build-up - snare roll, fold bass, offbeat hats, wide mid reese counterline, wide low-mid, hat density up, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side percussion, stacked 808, kick opens, 8 bars]
+
+[build-up - snare roll, fold bass, ghost snare, wide mid growl, wide mids, kick tightens, 4 bars]
+
+[inst - kick pattern flip, stacked 808, call-response reese, side hats, snare answers, 12 bars]
+
+[drop - wreck growl warped drop, fold bass, growl answer, snare roll, wide low-mid, offbeat push, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide low-mid, low chest-sub, triplet hats, 8 bars]
+
+[build-up - snare roll, fold bass, offbeat hats, wide mid reese counterline, wide mids, triplet hats, 4 bars]
+
+[drop - harder formant warped drop, stacked 808, formant answer, trap drums denser, side hats, backbeat shove, 10 bars]
+
+[build-up - snare roll, fold bass, ghost snare, wide mid growl, wide low-mid, ghost notes, 6 bars]
+
+[drop - wreck growl warped drop, stacked 808, call-response reese, kick pattern flip, side percussion, dry hats, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, fold bass, wide hat bed, 6 bars]
+
+[build-up - snare roll, stacked 808, rapid hi-hats, formant bass melody, side hats, mono kick, 4 bars]
+
+[inst - trap drums denser, mono chest-sub, formant bass melody, side hats, rolling hats, 8 bars]
+
+[drop - full send reese warped drop, stacked 808, formant answer, trap drums denser, side percussion, rolling hats, 10 bars]
+
+[inst - ghost snare, fold bass, wide mid growl, wide mids, late snare, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side hats, stacked 808, early kick, 8 bars]
+
+[build-up - snare roll, mono chest-sub, rapid hi-hats, call-response reese, side hats, open hat, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, stacked 808, open hat, 8 bars]
+
+[build-up - snare roll, mono chest-sub, trap drums denser, formant bass melody, side percussion, room snare, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, low chest-sub, tight kick, 6 bars]
+
+[build-up - snare roll, fold bass, ghost snare, wide mid growl, wide low-mid, tight kick, 8 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side hats, chopped hats, 4 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -1678,11 +2582,11 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, rave, no sin
 | Slot | Value |
 | --- | --- |
 | 0 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, rave, no si…` |
-| 1 | `[build-up - booth grind, formant wall, warped chest, chest ride, snare roll] [d…` |
+| 1 | `[build-up - snare roll, stacked 808, kick pattern flip, call-response reese, si…` |
 | 2 | `337` |
 | 3 | `fixed` |
-| 4 | `140` |
-| 5 | `156.0` |
+| 4 | `165` |
+| 5 | `451.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A major` |
@@ -1694,19 +2598,95 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, rave, no sin
 | 14 | `0.0` |
 
 ```text
-chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 140 bpm, instrumental, no vocals
+chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - booth grind, formant wall, warped chest, chest ride, snare roll]
+[build-up - snare roll, stacked 808, kick pattern flip, call-response reese, side hats, snare answers, warped 808 wreck, 6 bars]
 
-[drop - heavy chest drop, harder growl drop, full send drop, warped wall]
+[drop - stacked wobble warped drop, fold bass, growl answer, snare roll, wide low-mid, offbeat push, chest-sub, heavy chest drop, 12 bars]
 
-[breakdown - rapid hi-hats roll, snare roll, kick holds, pluck]
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, stacked 808, straight hats, booth grind, 6 bars]
 
-[drop - warped 808 wreck, stacked chest-sub 808, low 808 wreck, stacked wreck]
+[inst - offbeat hats, fold bass, wide mid reese counterline, wide mids, triplet hats, rapid hi-hats roll, 10 bars]
 
-[outro - 808 punch hold, chest-sub hold, hats denser, filter down]
+[drop - full send reese warped drop, stacked 808, formant answer, trap drums denser, side hats, backbeat shove, 808 punch hold, 8 bars]
+
+[inst - ghost snare, fold bass, wide mid growl, wide low-mid, ghost notes, stacked chest-sub 808, 10 bars]
+
+[build-up - snare roll, stacked 808, kick pattern flip, call-response reese, side percussion, dry hats, formant wall, 6 bars]
+
+[inst - snare roll, fold bass, growl answer, wide mids, wide hat bed, 10 bars]
+
+[drop - harder formant warped drop, stacked 808, formant bass melody, rapid hi-hats, side hats, mono kick, harder growl drop, 8 bars]
+
+[inst - offbeat hats, fold bass, wide mid reese counterline, wide low-mid, side snare, chest-sub hold, 6 bars]
+
+[drop - wreck growl warped drop, stacked 808, formant answer, trap drums denser, side percussion, rolling hats, full send drop, 10 bars]
+
+[build-up - snare roll, fold bass, ghost snare, wide mid growl, wide mids, late snare, low 808 wreck, 6 bars]
+
+[inst - kick pattern flip, stacked 808, call-response reese, side hats, early kick, warped chest, 8 bars]
+
+[build-up - snare roll, fold bass, snare roll, growl answer, wide low-mid, syncopated hats, kick holds, 4 bars]
+
+[inst - rapid hi-hats, stacked 808, formant bass melody, side percussion, open hat, hats denser, 8 bars]
+
+[build-up - snare roll, fold bass, offbeat hats, wide mid reese counterline, wide mids, closed hat, chest ride, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side hats, stacked 808, room snare, 8 bars]
+
+[inst - ghost snare, fold bass, wide mid growl, wide low-mid, tight kick, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side percussion, stacked 808, loose hats, 4 bars]
+
+[build-up - snare roll, fold bass, snare roll, growl answer, wide mids, pushed snare, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side hats, stacked 808, chopped hats, 8 bars]
+
+[build-up - snare roll, fold bass, offbeat hats, wide mid reese counterline, wide low-mid, hat density up, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side percussion, stacked 808, kick opens, 8 bars]
+
+[build-up - snare roll, fold bass, ghost snare, wide mid growl, wide mids, kick tightens, 4 bars]
+
+[inst - kick pattern flip, stacked 808, call-response reese, side hats, snare answers, 12 bars]
+
+[drop - wreck growl warped drop, fold bass, growl answer, snare roll, wide low-mid, offbeat push, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide low-mid, low chest-sub, triplet hats, 8 bars]
+
+[build-up - snare roll, fold bass, offbeat hats, wide mid reese counterline, wide mids, triplet hats, 4 bars]
+
+[drop - harder formant warped drop, stacked 808, formant answer, trap drums denser, side hats, backbeat shove, 10 bars]
+
+[build-up - snare roll, fold bass, ghost snare, wide mid growl, wide low-mid, ghost notes, 6 bars]
+
+[drop - wreck growl warped drop, stacked 808, call-response reese, kick pattern flip, side percussion, dry hats, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, fold bass, wide hat bed, 6 bars]
+
+[build-up - snare roll, stacked 808, rapid hi-hats, formant bass melody, side hats, mono kick, 4 bars]
+
+[inst - trap drums denser, mono chest-sub, formant bass melody, side hats, rolling hats, 8 bars]
+
+[drop - full send reese warped drop, stacked 808, formant answer, trap drums denser, side percussion, rolling hats, 10 bars]
+
+[inst - ghost snare, fold bass, wide mid growl, wide mids, late snare, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side hats, stacked 808, early kick, 8 bars]
+
+[build-up - snare roll, mono chest-sub, rapid hi-hats, call-response reese, side hats, open hat, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side percussion, stacked 808, open hat, 8 bars]
+
+[build-up - snare roll, mono chest-sub, trap drums denser, formant bass melody, side percussion, room snare, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, low chest-sub, tight kick, 6 bars]
+
+[build-up - snare roll, fold bass, ghost snare, wide mid growl, wide low-mid, tight kick, 8 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side hats, chopped hats, 4 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1789,14 +2769,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `208.0` |
+| 0 | `163.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `208.0` |
+| 0 | `163.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -1805,25 +2785,47 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rav…` |
-| 2 | `[intro - warped toll, chest-sub 808, snare roll, hats denser, filter down] [bui…` |
+| 2 | `[build-up - snare roll, low chest-sub, kick pattern flip, call-response reese, …` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/12-toll-growl` |
 
 ```text
-riddim, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals
+riddim, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[intro - warped toll, chest-sub 808, snare roll, hats denser, filter down]
+[build-up - snare roll, low chest-sub, kick pattern flip, call-response reese, wide mids, tight kick, tearout growl wreck, 4 bars]
 
-[build-up - metal hats roll, rapid hi-hats denser, growl bass hold, growl ride, snare roll]
+[drop - heavy growl warped drop, mono chest-sub, growl answer, snare roll, side hats, loose hats, wobble bass, heavy riddim drop, 10 bars]
 
-[drop - heavy riddim drop, tearout growl wreck, harder formant drop, full send drop, stacked growl wreck, harder warped drop, stacked growl wreck, warped wall]
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide low-mid, low chest-sub, pushed snare, warped toll, 4 bars]
 
-[inst - growl sustain, growl hold, low rumble, rapid hi-hats]
+[drop - full send warped drop, mono chest-sub, wide mid reese counterline, offbeat hats, side percussion, chopped hats, metal hats roll, 10 bars]
 
-[outro - sub crush, wobble wall, kick holds]
+[build-up - snare roll, low chest-sub, trap drums denser, formant answer, wide mids, hat density up, growl sustain, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, side hats, mono chest-sub, kick opens, sub crush, 4 bars]
+
+[build-up - snare roll, low chest-sub, kick pattern flip, call-response reese, wide low-mid, kick tightens, chest-sub 808, 6 bars]
+
+[inst - snare roll, mono chest-sub, growl answer, side percussion, snare answers, rapid hi-hats denser, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide mids, low chest-sub, offbeat push, growl hold, 4 bars]
+
+[build-up - snare roll, mono chest-sub, offbeat hats, wide mid reese counterline, side hats, straight hats, stacked growl wreck, 6 bars]
+
+[inst - trap drums denser, low chest-sub, formant answer, wide low-mid, triplet hats, wobble wall, 12 bars]
+
+[drop - heavy growl warped drop, mono chest-sub, wide mid growl, ghost snare, side percussion, backbeat shove, harder formant drop, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide low-mid, low chest-sub, triplet hats, 6 bars]
+
+[build-up - snare roll, mono chest-sub, kick pattern flip, wide mid growl, side percussion, room snare, 10 bars]
+
+[drop - full send wobble warped drop, low chest-sub, call-response reese, rapid hi-hats, side percussion, ghost notes, 12 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, growl answer, side hats, dry hats, 4 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -1831,11 +2833,11 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave
 | Slot | Value |
 | --- | --- |
 | 0 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rav…` |
-| 1 | `[intro - warped toll, chest-sub 808, snare roll, hats denser, filter down] [bui…` |
+| 1 | `[build-up - snare roll, low chest-sub, kick pattern flip, call-response reese, …` |
 | 2 | `347` |
 | 3 | `fixed` |
-| 4 | `150` |
-| 5 | `208.0` |
+| 4 | `168` |
+| 5 | `163.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A minor` |
@@ -1847,19 +2849,41 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave
 | 14 | `0.0` |
 
 ```text
-riddim, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals
+riddim, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[intro - warped toll, chest-sub 808, snare roll, hats denser, filter down]
+[build-up - snare roll, low chest-sub, kick pattern flip, call-response reese, wide mids, tight kick, tearout growl wreck, 4 bars]
 
-[build-up - metal hats roll, rapid hi-hats denser, growl bass hold, growl ride, snare roll]
+[drop - heavy growl warped drop, mono chest-sub, growl answer, snare roll, side hats, loose hats, wobble bass, heavy riddim drop, 10 bars]
 
-[drop - heavy riddim drop, tearout growl wreck, harder formant drop, full send drop, stacked growl wreck, harder warped drop, stacked growl wreck, warped wall]
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide low-mid, low chest-sub, pushed snare, warped toll, 4 bars]
 
-[inst - growl sustain, growl hold, low rumble, rapid hi-hats]
+[drop - full send warped drop, mono chest-sub, wide mid reese counterline, offbeat hats, side percussion, chopped hats, metal hats roll, 10 bars]
 
-[outro - sub crush, wobble wall, kick holds]
+[build-up - snare roll, low chest-sub, trap drums denser, formant answer, wide mids, hat density up, growl sustain, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, side hats, mono chest-sub, kick opens, sub crush, 4 bars]
+
+[build-up - snare roll, low chest-sub, kick pattern flip, call-response reese, wide low-mid, kick tightens, chest-sub 808, 6 bars]
+
+[inst - snare roll, mono chest-sub, growl answer, side percussion, snare answers, rapid hi-hats denser, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, wide mids, low chest-sub, offbeat push, growl hold, 4 bars]
+
+[build-up - snare roll, mono chest-sub, offbeat hats, wide mid reese counterline, side hats, straight hats, stacked growl wreck, 6 bars]
+
+[inst - trap drums denser, low chest-sub, formant answer, wide low-mid, triplet hats, wobble wall, 12 bars]
+
+[drop - heavy growl warped drop, mono chest-sub, wide mid growl, ghost snare, side percussion, backbeat shove, harder formant drop, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, wide low-mid, low chest-sub, triplet hats, 6 bars]
+
+[build-up - snare roll, mono chest-sub, kick pattern flip, wide mid growl, side percussion, room snare, 10 bars]
+
+[drop - full send wobble warped drop, low chest-sub, call-response reese, rapid hi-hats, side percussion, ghost notes, 12 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, growl answer, side hats, dry hats, 4 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1942,14 +2966,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `108.0` |
+| 0 | `154.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `108.0` |
+| 0 | `154.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -1958,23 +2982,45 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, rav…` |
-| 2 | `[build-up - oil grind, trap bass wall, kick holds, snare roll] [inst - rapid hi…` |
+| 2 | `[build-up - snare roll, octave sub stack, kick pattern flip, formant answer, si…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/13-night-oil` |
 
 ```text
-warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 142 bpm, instrumental, no vocals
+warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - oil grind, trap bass wall, kick holds, snare roll]
+[build-up - snare roll, octave sub stack, kick pattern flip, formant answer, side percussion, kick tightens, warped 808 wreck, 6 bars]
 
-[inst - rapid hi-hats roll, formant crush, rapid hi-hats roll, warped 808 wreck]
+[drop - harder reese warped drop, body bass, wide mid growl, snare roll, wide mids, snare answers, festival trap, heavy hybrid drop, 10 bars]
 
-[drop - heavy hybrid drop, warped 808 wreck, harder growl drop, full send drop, chest-sub wreck, warped wall]
+[build-up - snare roll, octave sub stack, rapid hi-hats, call-response reese, side hats, offbeat push, oil grind, 6 bars]
 
-[outro - 808 slide, hybrid warp, 808 ride, filter down]
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide low-mid, body bass, straight hats, rapid hi-hats roll, 4 bars]
+
+[build-up - snare roll, octave sub stack, trap drums denser, formant bass melody, side percussion, triplet hats, 808 slide, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, body bass, backbeat shove, trap bass wall, 4 bars]
+
+[inst - kick pattern flip, octave sub stack, formant answer, side hats, ghost notes, formant crush, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, body bass, dry hats, chest-sub wreck, 8 bars]
+
+[build-up - snare roll, octave sub stack, rapid hi-hats, call-response reese, side percussion, wide hat bed, hybrid warp, 6 bars]
+
+[drop - stacked warped drop, body bass, growl answer, offbeat hats, wide mids, mono kick, harder growl drop, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side hats, octave sub stack, side snare, kick holds, 8 bars]
+
+[build-up - snare roll, body bass, ghost snare, wide mid reese counterline, wide low-mid, rolling hats, 808 ride, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side percussion, octave sub stack, late snare, 6 bars]
+
+[drop - wreck wobble warped drop, body bass, wide mid growl, snare roll, wide mids, early kick, full send drop, 10 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side percussion, triplet hats, 4 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -1982,11 +3028,11 @@ warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, rave
 | Slot | Value |
 | --- | --- |
 | 0 | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, rav…` |
-| 1 | `[build-up - oil grind, trap bass wall, kick holds, snare roll] [inst - rapid hi…` |
+| 1 | `[build-up - snare roll, octave sub stack, kick pattern flip, formant answer, si…` |
 | 2 | `349` |
 | 3 | `fixed` |
-| 4 | `142` |
-| 5 | `108.0` |
+| 4 | `165` |
+| 5 | `154.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `C major` |
@@ -1998,17 +3044,39 @@ warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, rave
 | 14 | `0.0` |
 
 ```text
-warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 142 bpm, instrumental, no vocals
+warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - oil grind, trap bass wall, kick holds, snare roll]
+[build-up - snare roll, octave sub stack, kick pattern flip, formant answer, side percussion, kick tightens, warped 808 wreck, 6 bars]
 
-[inst - rapid hi-hats roll, formant crush, rapid hi-hats roll, warped 808 wreck]
+[drop - harder reese warped drop, body bass, wide mid growl, snare roll, wide mids, snare answers, festival trap, heavy hybrid drop, 10 bars]
 
-[drop - heavy hybrid drop, warped 808 wreck, harder growl drop, full send drop, chest-sub wreck, warped wall]
+[build-up - snare roll, octave sub stack, rapid hi-hats, call-response reese, side hats, offbeat push, oil grind, 6 bars]
 
-[outro - 808 slide, hybrid warp, 808 ride, filter down]
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide low-mid, body bass, straight hats, rapid hi-hats roll, 4 bars]
+
+[build-up - snare roll, octave sub stack, trap drums denser, formant bass melody, side percussion, triplet hats, 808 slide, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, body bass, backbeat shove, trap bass wall, 4 bars]
+
+[inst - kick pattern flip, octave sub stack, formant answer, side hats, ghost notes, formant crush, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, body bass, dry hats, chest-sub wreck, 8 bars]
+
+[build-up - snare roll, octave sub stack, rapid hi-hats, call-response reese, side percussion, wide hat bed, hybrid warp, 6 bars]
+
+[drop - stacked warped drop, body bass, growl answer, offbeat hats, wide mids, mono kick, harder growl drop, 12 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant bass melody, side hats, octave sub stack, side snare, kick holds, 8 bars]
+
+[build-up - snare roll, body bass, ghost snare, wide mid reese counterline, wide low-mid, rolling hats, 808 ride, 4 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, formant answer, side percussion, octave sub stack, late snare, 6 bars]
+
+[drop - wreck wobble warped drop, body bass, wide mid growl, snare roll, wide mids, early kick, full send drop, 10 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side percussion, triplet hats, 4 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -2091,14 +3159,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `168.0` |
+| 0 | `154.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `168.0` |
+| 0 | `154.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -2107,25 +3175,49 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action peda…` |
-| 2 | `[intro - pass grind, pedal 808 hold, hats denser, kick holds] [build-up - rapid…` |
+| 2 | `[build-up - snare roll, stacked 808, ghost snare, wide mid reese counterline, w…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/14-chest-pass` |
 
 ```text
-dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals
+dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[intro - pass grind, pedal 808 hold, hats denser, kick holds]
+[build-up - snare roll, stacked 808, ghost snare, wide mid reese counterline, wide mids, hat density up, sub warp wreck, 4 bars]
 
-[build-up - rapid hi-hats denser, hats roll, pedal ride, snare roll]
+[drop - stacked formant warped drop, fold bass, formant answer, kick pattern flip, side hats, kick opens, dirty bass, dual-action pedal bass, heavy chest drop, 8 bars]
 
-[drop - heavy chest drop, sub warp wreck, harder growl drop, stacked 808 wall, full send drop, body bass wreck, warped wall]
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, stacked 808, kick tightens, pass grind, 4 bars]
 
-[breakdown - 808 hold, warped chest, pluck]
+[drop - harder growl warped drop, fold bass, call-response reese, rapid hi-hats, side percussion, snare answers, rapid hi-hats denser, 12 bars]
 
-[outro - dual-action pedal bass, kick holds]
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, stacked 808, offbeat push, 808 hold, 4 bars]
+
+[drop - wreck warped drop, fold bass, formant bass melody, trap drums denser, side hats, straight hats, harder growl drop, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide low-mid, stacked 808, triplet hats, dual-action pedal bass, 6 bars]
+
+[inst - kick pattern flip, fold bass, formant answer, side percussion, backbeat shove, stacked 808 wall, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, stacked 808, ghost notes, pedal 808 hold, 4 bars]
+
+[drop - full send wobble warped drop, fold bass, call-response reese, rapid hi-hats, side hats, dry hats, hats roll, 8 bars]
+
+[build-up - snare roll, stacked 808, offbeat hats, growl answer, wide low-mid, wide hat bed, body bass wreck, 4 bars]
+
+[inst - trap drums denser, fold bass, formant bass melody, side percussion, mono kick, warped chest, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, stacked 808, side snare, kick holds, 4 bars]
+
+[inst - kick pattern flip, fold bass, formant answer, side hats, rolling hats, hats denser, 10 bars]
+
+[build-up - snare roll, stacked 808, snare roll, wide mid growl, wide low-mid, late snare, pedal ride, 4 bars]
+
+[inst - rapid hi-hats, fold bass, call-response reese, side percussion, early kick, 8 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, call-response reese, side percussion, early kick, 4 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -2133,11 +3225,11 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal
 | Slot | Value |
 | --- | --- |
 | 0 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action peda…` |
-| 1 | `[intro - pass grind, pedal 808 hold, hats denser, kick holds] [build-up - rapid…` |
+| 1 | `[build-up - snare roll, stacked 808, ghost snare, wide mid reese counterline, w…` |
 | 2 | `353` |
 | 3 | `fixed` |
-| 4 | `150` |
-| 5 | `168.0` |
+| 4 | `168` |
+| 5 | `154.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `E minor` |
@@ -2149,19 +3241,43 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal
 | 14 | `0.0` |
 
 ```text
-dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals
+dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[intro - pass grind, pedal 808 hold, hats denser, kick holds]
+[build-up - snare roll, stacked 808, ghost snare, wide mid reese counterline, wide mids, hat density up, sub warp wreck, 4 bars]
 
-[build-up - rapid hi-hats denser, hats roll, pedal ride, snare roll]
+[drop - stacked formant warped drop, fold bass, formant answer, kick pattern flip, side hats, kick opens, dirty bass, dual-action pedal bass, heavy chest drop, 8 bars]
 
-[drop - heavy chest drop, sub warp wreck, harder growl drop, stacked 808 wall, full send drop, body bass wreck, warped wall]
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, stacked 808, kick tightens, pass grind, 4 bars]
 
-[breakdown - 808 hold, warped chest, pluck]
+[drop - harder growl warped drop, fold bass, call-response reese, rapid hi-hats, side percussion, snare answers, rapid hi-hats denser, 12 bars]
 
-[outro - dual-action pedal bass, kick holds]
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, stacked 808, offbeat push, 808 hold, 4 bars]
+
+[drop - wreck warped drop, fold bass, formant bass melody, trap drums denser, side hats, straight hats, harder growl drop, 8 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide low-mid, stacked 808, triplet hats, dual-action pedal bass, 6 bars]
+
+[inst - kick pattern flip, fold bass, formant answer, side percussion, backbeat shove, stacked 808 wall, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide mids, stacked 808, ghost notes, pedal 808 hold, 4 bars]
+
+[drop - full send wobble warped drop, fold bass, call-response reese, rapid hi-hats, side hats, dry hats, hats roll, 8 bars]
+
+[build-up - snare roll, stacked 808, offbeat hats, growl answer, wide low-mid, wide hat bed, body bass wreck, 4 bars]
+
+[inst - trap drums denser, fold bass, formant bass melody, side percussion, mono kick, warped chest, 6 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid reese counterline, wide mids, stacked 808, side snare, kick holds, 4 bars]
+
+[inst - kick pattern flip, fold bass, formant answer, side hats, rolling hats, hats denser, 10 bars]
+
+[build-up - snare roll, stacked 808, snare roll, wide mid growl, wide low-mid, late snare, pedal ride, 4 bars]
+
+[inst - rapid hi-hats, fold bass, call-response reese, side percussion, early kick, 8 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, call-response reese, side percussion, early kick, 4 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -2244,14 +3360,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `209.0` |
+| 0 | `227.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `209.0` |
+| 0 | `227.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -2260,23 +3376,53 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, r…` |
-| 2 | `[drop - heavy wave drop, harder formant drop, full send drop, half-time growl] …` |
+| 2 | `[build-up - snare roll, octave sub stack, offbeat hats, wide mid reese counterl…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/15-sunrise-sub` |
 
 ```text
-wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 140 bpm, instrumental, no vocals
+wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[drop - heavy wave drop, harder formant drop, full send drop, half-time growl]
+[build-up - snare roll, octave sub stack, offbeat hats, wide mid reese counterline, wide mids, rolling hats, warped sub wreck, 4 bars]
 
-[build-up - fold 808, wave 808 sustain dawn, wave warp, rapid hi-hats roll, snare roll]
+[drop - full send reese warped drop, body bass, formant answer, trap drums denser, side hats, late snare, wave bass, heavy wave drop, 12 bars]
 
-[drop - warped sub wreck, chest gold wreck, low 808 wreck, double-time hats]
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, octave sub stack, early kick, fold 808, 8 bars]
 
-[outro - rapid hi-hats roll, 808 punch, kick holds, wave ride]
+[drop - stacked wobble warped drop, body bass, call-response reese, kick pattern flip, side percussion, syncopated hats, rapid hi-hats roll, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, octave sub stack, open hat, wave 808 sustain dawn, 6 bars]
+
+[build-up - snare roll, body bass, rapid hi-hats, formant bass melody, side hats, closed hat, chest gold wreck, 4 bars]
+
+[inst - offbeat hats, octave sub stack, wide mid reese counterline, wide low-mid, room snare, 808 punch, 10 bars]
+
+[build-up - snare roll, body bass, trap drums denser, formant answer, side percussion, tight kick, low 808 wreck, 6 bars]
+
+[drop - stacked wobble warped drop, octave sub stack, wide mid growl, ghost snare, wide mids, loose hats, harder formant drop, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side hats, body bass, pushed snare, wave warp, 8 bars]
+
+[drop - harder formant warped drop, octave sub stack, growl answer, snare roll, wide low-mid, chopped hats, full send drop, 10 bars]
+
+[build-up - snare roll, body bass, rapid hi-hats, formant bass melody, side percussion, hat density up, kick holds, 6 bars]
+
+[inst - offbeat hats, octave sub stack, wide mid reese counterline, wide mids, kick opens, wave ride, 12 bars]
+
+[drop - stacked wobble warped drop, body bass, formant answer, trap drums denser, side hats, kick tightens, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, octave sub stack, snare answers, 6 bars]
+
+[drop - harder formant warped drop, body bass, call-response reese, kick pattern flip, side percussion, offbeat push, 12 bars]
+
+[inst - snare roll, octave sub stack, growl answer, wide mids, straight hats, 8 bars]
+
+[drop - wreck growl warped drop, body bass, formant bass melody, rapid hi-hats, side hats, triplet hats, 10 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side hats, closed hat, 4 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -2284,11 +3430,11 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, ra
 | Slot | Value |
 | --- | --- |
 | 0 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, r…` |
-| 1 | `[drop - heavy wave drop, harder formant drop, full send drop, half-time growl] …` |
+| 1 | `[build-up - snare roll, octave sub stack, offbeat hats, wide mid reese counterl…` |
 | 2 | `359` |
 | 3 | `fixed` |
-| 4 | `140` |
-| 5 | `209.0` |
+| 4 | `165` |
+| 5 | `227.0` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `G major` |
@@ -2300,17 +3446,47 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, ra
 | 14 | `0.0` |
 
 ```text
-wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 140 bpm, instrumental, no vocals
+wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, no brass, no horns, no trumpets, heavy chest bass, wide low-mid layers, fast switch-ups, riser, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[drop - heavy wave drop, harder formant drop, full send drop, half-time growl]
+[build-up - snare roll, octave sub stack, offbeat hats, wide mid reese counterline, wide mids, rolling hats, warped sub wreck, 4 bars]
 
-[build-up - fold 808, wave 808 sustain dawn, wave warp, rapid hi-hats roll, snare roll]
+[drop - full send reese warped drop, body bass, formant answer, trap drums denser, side hats, late snare, wave bass, heavy wave drop, 12 bars]
 
-[drop - warped sub wreck, chest gold wreck, low 808 wreck, double-time hats]
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, octave sub stack, early kick, fold 808, 8 bars]
 
-[outro - rapid hi-hats roll, 808 punch, kick holds, wave ride]
+[drop - stacked wobble warped drop, body bass, call-response reese, kick pattern flip, side percussion, syncopated hats, rapid hi-hats roll, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, growl answer, wide mids, octave sub stack, open hat, wave 808 sustain dawn, 6 bars]
+
+[build-up - snare roll, body bass, rapid hi-hats, formant bass melody, side hats, closed hat, chest gold wreck, 4 bars]
+
+[inst - offbeat hats, octave sub stack, wide mid reese counterline, wide low-mid, room snare, 808 punch, 10 bars]
+
+[build-up - snare roll, body bass, trap drums denser, formant answer, side percussion, tight kick, low 808 wreck, 6 bars]
+
+[drop - stacked wobble warped drop, octave sub stack, wide mid growl, ghost snare, wide mids, loose hats, harder formant drop, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, call-response reese, side hats, body bass, pushed snare, wave warp, 8 bars]
+
+[drop - harder formant warped drop, octave sub stack, growl answer, snare roll, wide low-mid, chopped hats, full send drop, 10 bars]
+
+[build-up - snare roll, body bass, rapid hi-hats, formant bass melody, side percussion, hat density up, kick holds, 6 bars]
+
+[inst - offbeat hats, octave sub stack, wide mid reese counterline, wide mids, kick opens, wave ride, 12 bars]
+
+[drop - stacked wobble warped drop, body bass, formant answer, trap drums denser, side hats, kick tightens, 10 bars]
+
+[breakdown - rapid hi-hats, chest-sub pulse, wide mid growl, wide low-mid, octave sub stack, snare answers, 6 bars]
+
+[drop - harder formant warped drop, body bass, call-response reese, kick pattern flip, side percussion, offbeat push, 12 bars]
+
+[inst - snare roll, octave sub stack, growl answer, wide mids, straight hats, 8 bars]
+
+[drop - wreck growl warped drop, body bass, formant bass melody, rapid hi-hats, side hats, triplet hats, 10 bars]
+
+[outro - kick pattern flip, chest-sub, rapid hi-hats, formant bass melody, side hats, closed hat, 4 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -2589,21 +3765,21 @@ The constant.
 
 | Instance | Value |
 | --- | --- |
-| Song Duration | `72.0` |
-| Song Duration | `120.0` |
 | Song Duration | `175.0` |
-| Song Duration | `80.0` |
-| Song Duration | `132.0` |
-| Song Duration | `188.0` |
-| Song Duration | `90.0` |
-| Song Duration | `144.0` |
-| Song Duration | `198.0` |
-| Song Duration | `99.0` |
-| Song Duration | `156.0` |
-| Song Duration | `208.0` |
-| Song Duration | `108.0` |
-| Song Duration | `168.0` |
-| Song Duration | `209.0` |
+| Song Duration | `157.0` |
+| Song Duration | `191.0` |
+| Song Duration | `203.0` |
+| Song Duration | `227.0` |
+| Song Duration | `256.0` |
+| Song Duration | `266.0` |
+| Song Duration | `306.0` |
+| Song Duration | `386.0` |
+| Song Duration | `386.0` |
+| Song Duration | `451.0` |
+| Song Duration | `163.0` |
+| Song Duration | `154.0` |
+| Song Duration | `154.0` |
+| Song Duration | `227.0` |
 
 #### `control_after_generate`
 
@@ -2630,7 +3806,7 @@ Allocate an ACE-Step audio latent for N seconds.
 
 !!! warning "Lab notes"
 
-    Draft is the cold-open bar length. Full is the pre-chorus bar length. Album takes are 64–210 s from the song plan. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
+    Draft is the cold-open bar length. Full is the pre-chorus bar length. Nill Bye albums are 64–210 s. Drive-through is 150–480 s from per-take bar math, not a shared clock target. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -2639,29 +3815,29 @@ Allocate an ACE-Step audio latent for N seconds.
 
 #### `seconds`
 
-Type `FLOAT`. Range / default: draft / full / 64–210 album.
+Type `FLOAT`. Range / default: draft / full / album plan.
 
 Duration in seconds.
 
-**How it affects generation:** Longer latents cost RAM/time linearly. Stay at the seeded length unless you have headroom.
+**How it affects generation:** Longer latents cost RAM/time linearly. Nill Bye stays 64–210 s. Drive-through is 150–480 s. Stay at the seeded length unless you have headroom.
 
 | Instance | Value |
 | --- | --- |
-| Latent length (seconds) | `72.0` |
-| Latent length (seconds) | `120.0` |
 | Latent length (seconds) | `175.0` |
-| Latent length (seconds) | `80.0` |
-| Latent length (seconds) | `132.0` |
-| Latent length (seconds) | `188.0` |
-| Latent length (seconds) | `90.0` |
-| Latent length (seconds) | `144.0` |
-| Latent length (seconds) | `198.0` |
-| Latent length (seconds) | `99.0` |
-| Latent length (seconds) | `156.0` |
-| Latent length (seconds) | `208.0` |
-| Latent length (seconds) | `108.0` |
-| Latent length (seconds) | `168.0` |
-| Latent length (seconds) | `209.0` |
+| Latent length (seconds) | `157.0` |
+| Latent length (seconds) | `191.0` |
+| Latent length (seconds) | `203.0` |
+| Latent length (seconds) | `227.0` |
+| Latent length (seconds) | `256.0` |
+| Latent length (seconds) | `266.0` |
+| Latent length (seconds) | `306.0` |
+| Latent length (seconds) | `386.0` |
+| Latent length (seconds) | `386.0` |
+| Latent length (seconds) | `451.0` |
+| Latent length (seconds) | `163.0` |
+| Latent length (seconds) | `154.0` |
+| Latent length (seconds) | `154.0` |
+| Latent length (seconds) | `227.0` |
 
 #### `batch_size`
 
@@ -2733,21 +3909,21 @@ Sectioned lyrics.
 
 | Instance | Value |
 | --- | --- |
-| ez_edm_prompt | `[build-up - rumble grind, dual-action pedal bass, chest formant, pedal ride, sn…` |
-| ez_edm_prompt | `[intro - chest-sub wobble, snare roll, warped sub stack, filter down] [build-up…` |
-| ez_edm_prompt | `[build-up - fold grind, chest-sub 808, low 808 wall, rapid hi-hats roll, snare …` |
-| ez_edm_prompt | `[intro - chest-sub 808 warp, color 808 sustain span, color ride, kick holds] [b…` |
-| ez_edm_prompt | `[drop - heavy trap drop, harder growl drop, full send drop, half-time growl] [b…` |
-| ez_edm_prompt | `[drop - heavy drumstep drop, reese wreck, harder growl drop, full send drop, st…` |
-| ez_edm_prompt | `[inst - warped 808, chest-sub 808, growl bass hold, growl ride, rapid hi-hats] …` |
-| ez_edm_prompt | `[intro - warped coil, formant 808 wall, kick holds] [drop - heavy neuro drop, h…` |
-| ez_edm_prompt | `[build-up - mile grind, chest punch, warped trap, 808 ride, snare roll] [drop -…` |
-| ez_edm_prompt | `[drop - heavy tearout drop, harder warped drop, dirty analog wreck, warped wall…` |
-| ez_edm_prompt | `[build-up - booth grind, formant wall, warped chest, chest ride, snare roll] [d…` |
-| ez_edm_prompt | `[intro - warped toll, chest-sub 808, snare roll, hats denser, filter down] [bui…` |
-| ez_edm_prompt | `[build-up - oil grind, trap bass wall, kick holds, snare roll] [inst - rapid hi…` |
-| ez_edm_prompt | `[intro - pass grind, pedal 808 hold, hats denser, kick holds] [build-up - rapid…` |
-| ez_edm_prompt | `[drop - heavy wave drop, harder formant drop, full send drop, half-time growl] …` |
+| ez_edm_prompt | `[build-up - snare roll, body bass, kick pattern flip, formant bass melody, wide…` |
+| ez_edm_prompt | `[build-up - snare roll, body bass, ghost snare, wide mid growl, wide low-mid, c…` |
+| ez_edm_prompt | `[build-up - snare roll, mono chest-sub, trap drums denser, wide mid reese count…` |
+| ez_edm_prompt | `[build-up - snare roll, stacked 808, offbeat hats, growl answer, wide mids, bac…` |
+| ez_edm_prompt | `[build-up - snare roll, low chest-sub, snare roll, wide mid reese counterline, …` |
+| ez_edm_prompt | `[build-up - snare roll, mono chest-sub, offbeat hats, wide mid reese counterlin…` |
+| ez_edm_prompt | `[build-up - snare roll, body bass, kick pattern flip, wide mid reese counterlin…` |
+| ez_edm_prompt | `[build-up - snare roll, octave sub stack, ghost snare, growl answer, wide mids,…` |
+| ez_edm_prompt | `[build-up - snare roll, mono chest-sub, offbeat hats, wide mid growl, side perc…` |
+| ez_edm_prompt | `[build-up - snare roll, fold bass, snare roll, growl answer, wide low-mid, push…` |
+| ez_edm_prompt | `[build-up - snare roll, stacked 808, kick pattern flip, call-response reese, si…` |
+| ez_edm_prompt | `[build-up - snare roll, low chest-sub, kick pattern flip, call-response reese, …` |
+| ez_edm_prompt | `[build-up - snare roll, octave sub stack, kick pattern flip, formant answer, si…` |
+| ez_edm_prompt | `[build-up - snare roll, stacked 808, ghost snare, wide mid reese counterline, w…` |
+| ez_edm_prompt | `[build-up - snare roll, octave sub stack, offbeat hats, wide mid reese counterl…` |
 
 #### `enhance`
 
@@ -2854,21 +4030,21 @@ Sectioned lyrics or [inst] cues.
 
 | Instance | Value |
 | --- | --- |
-| ACE tags + lyrics | `[build-up - rumble grind, dual-action pedal bass, chest formant, pedal ride, sn…` |
-| ACE tags + lyrics | `[intro - chest-sub wobble, snare roll, warped sub stack, filter down] [build-up…` |
-| ACE tags + lyrics | `[build-up - fold grind, chest-sub 808, low 808 wall, rapid hi-hats roll, snare …` |
-| ACE tags + lyrics | `[intro - chest-sub 808 warp, color 808 sustain span, color ride, kick holds] [b…` |
-| ACE tags + lyrics | `[drop - heavy trap drop, harder growl drop, full send drop, half-time growl] [b…` |
-| ACE tags + lyrics | `[drop - heavy drumstep drop, reese wreck, harder growl drop, full send drop, st…` |
-| ACE tags + lyrics | `[inst - warped 808, chest-sub 808, growl bass hold, growl ride, rapid hi-hats] …` |
-| ACE tags + lyrics | `[intro - warped coil, formant 808 wall, kick holds] [drop - heavy neuro drop, h…` |
-| ACE tags + lyrics | `[build-up - mile grind, chest punch, warped trap, 808 ride, snare roll] [drop -…` |
-| ACE tags + lyrics | `[drop - heavy tearout drop, harder warped drop, dirty analog wreck, warped wall…` |
-| ACE tags + lyrics | `[build-up - booth grind, formant wall, warped chest, chest ride, snare roll] [d…` |
-| ACE tags + lyrics | `[intro - warped toll, chest-sub 808, snare roll, hats denser, filter down] [bui…` |
-| ACE tags + lyrics | `[build-up - oil grind, trap bass wall, kick holds, snare roll] [inst - rapid hi…` |
-| ACE tags + lyrics | `[intro - pass grind, pedal 808 hold, hats denser, kick holds] [build-up - rapid…` |
-| ACE tags + lyrics | `[drop - heavy wave drop, harder formant drop, full send drop, half-time growl] …` |
+| ACE tags + lyrics | `[build-up - snare roll, body bass, kick pattern flip, formant bass melody, wide…` |
+| ACE tags + lyrics | `[build-up - snare roll, body bass, ghost snare, wide mid growl, wide low-mid, c…` |
+| ACE tags + lyrics | `[build-up - snare roll, mono chest-sub, trap drums denser, wide mid reese count…` |
+| ACE tags + lyrics | `[build-up - snare roll, stacked 808, offbeat hats, growl answer, wide mids, bac…` |
+| ACE tags + lyrics | `[build-up - snare roll, low chest-sub, snare roll, wide mid reese counterline, …` |
+| ACE tags + lyrics | `[build-up - snare roll, mono chest-sub, offbeat hats, wide mid reese counterlin…` |
+| ACE tags + lyrics | `[build-up - snare roll, body bass, kick pattern flip, wide mid reese counterlin…` |
+| ACE tags + lyrics | `[build-up - snare roll, octave sub stack, ghost snare, growl answer, wide mids,…` |
+| ACE tags + lyrics | `[build-up - snare roll, mono chest-sub, offbeat hats, wide mid growl, side perc…` |
+| ACE tags + lyrics | `[build-up - snare roll, fold bass, snare roll, growl answer, wide low-mid, push…` |
+| ACE tags + lyrics | `[build-up - snare roll, stacked 808, kick pattern flip, call-response reese, si…` |
+| ACE tags + lyrics | `[build-up - snare roll, low chest-sub, kick pattern flip, call-response reese, …` |
+| ACE tags + lyrics | `[build-up - snare roll, octave sub stack, kick pattern flip, formant answer, si…` |
+| ACE tags + lyrics | `[build-up - snare roll, stacked 808, ghost snare, wide mid reese counterline, w…` |
+| ACE tags + lyrics | `[build-up - snare roll, octave sub stack, offbeat hats, wide mid reese counterl…` |
 
 #### `seed`
 
@@ -2925,21 +4101,21 @@ Tempo written into the codes.
 
 | Instance | Value |
 | --- | --- |
-| ACE tags + lyrics | `140` |
-| ACE tags + lyrics | `144` |
-| ACE tags + lyrics | `148` |
-| ACE tags + lyrics | `150` |
-| ACE tags + lyrics | `140` |
-| ACE tags + lyrics | `174` |
-| ACE tags + lyrics | `150` |
-| ACE tags + lyrics | `145` |
-| ACE tags + lyrics | `144` |
-| ACE tags + lyrics | `150` |
-| ACE tags + lyrics | `140` |
-| ACE tags + lyrics | `150` |
-| ACE tags + lyrics | `142` |
-| ACE tags + lyrics | `150` |
-| ACE tags + lyrics | `140` |
+| ACE tags + lyrics | `165` |
+| ACE tags + lyrics | `168` |
+| ACE tags + lyrics | `168` |
+| ACE tags + lyrics | `168` |
+| ACE tags + lyrics | `165` |
+| ACE tags + lyrics | `176` |
+| ACE tags + lyrics | `168` |
+| ACE tags + lyrics | `168` |
+| ACE tags + lyrics | `168` |
+| ACE tags + lyrics | `168` |
+| ACE tags + lyrics | `165` |
+| ACE tags + lyrics | `168` |
+| ACE tags + lyrics | `165` |
+| ACE tags + lyrics | `168` |
+| ACE tags + lyrics | `165` |
 
 #### `duration`
 
@@ -2951,21 +4127,21 @@ Seconds (duplicated on the latent).
 
 | Instance | Value |
 | --- | --- |
-| ACE tags + lyrics | `72.0` |
-| ACE tags + lyrics | `120.0` |
 | ACE tags + lyrics | `175.0` |
-| ACE tags + lyrics | `80.0` |
-| ACE tags + lyrics | `132.0` |
-| ACE tags + lyrics | `188.0` |
-| ACE tags + lyrics | `90.0` |
-| ACE tags + lyrics | `144.0` |
-| ACE tags + lyrics | `198.0` |
-| ACE tags + lyrics | `99.0` |
-| ACE tags + lyrics | `156.0` |
-| ACE tags + lyrics | `208.0` |
-| ACE tags + lyrics | `108.0` |
-| ACE tags + lyrics | `168.0` |
-| ACE tags + lyrics | `209.0` |
+| ACE tags + lyrics | `157.0` |
+| ACE tags + lyrics | `191.0` |
+| ACE tags + lyrics | `203.0` |
+| ACE tags + lyrics | `227.0` |
+| ACE tags + lyrics | `256.0` |
+| ACE tags + lyrics | `266.0` |
+| ACE tags + lyrics | `306.0` |
+| ACE tags + lyrics | `386.0` |
+| ACE tags + lyrics | `386.0` |
+| ACE tags + lyrics | `451.0` |
+| ACE tags + lyrics | `163.0` |
+| ACE tags + lyrics | `154.0` |
+| ACE tags + lyrics | `154.0` |
+| ACE tags + lyrics | `227.0` |
 
 #### `timesignature`
 
@@ -3488,21 +4664,21 @@ Markdown-ish operator note.
 
 | Instance | Value |
 | --- | --- |
-| Operator note | `## 01-rumble-strip US-safe EDM **72 s** take: **rumble strip**. Fictional act *…` |
-| Operator note | `## 02-low-lane US-safe EDM **120 s** take: **low lane**. Fictional act **Drive-…` |
-| Operator note | `## 03-warm-merge US-safe EDM **175 s** take: **warm merge**. Fictional act **Dr…` |
-| Operator note | `## 04-colour-span US-safe EDM **80 s** take: **colour span**. Fictional act **D…` |
-| Operator note | `## 05-garage-ticket US-safe EDM **132 s** take: **garage ticket**. Fictional ac…` |
-| Operator note | `## 06-liquid-grade US-safe EDM **188 s** take: **liquid grade**. Fictional act …` |
-| Operator note | `## 07-jump-bay US-safe EDM **90 s** take: **jump bay**. Fictional act **Drive-t…` |
-| Operator note | `## 08-psy-median US-safe EDM **144 s** take: **psy median**. Fictional act **Dr…` |
-| Operator note | `## 09-groove-mile US-safe EDM **198 s** take: **groove mile**. Fictional act **…` |
-| Operator note | `## 10-donk-ramp US-safe EDM **99 s** take: **donk ramp**. Fictional act **Drive…` |
-| Operator note | `## 11-bounce-booth US-safe EDM **156 s** take: **bounce booth**. Fictional act …` |
-| Operator note | `## 12-toll-growl US-safe EDM **208 s** take: **toll growl**. Fictional act **Dr…` |
-| Operator note | `## 13-night-oil US-safe EDM **108 s** take: **night oil**. Fictional act **Driv…` |
-| Operator note | `## 14-chest-pass US-safe EDM **168 s** take: **chest pass**. Fictional act **Dr…` |
-| Operator note | `## 15-sunrise-sub US-safe EDM **209 s** take: **sunrise sub**. Fictional act **…` |
+| Operator note | `## 01-rumble-strip US-safe EDM **175 s** take: **rumble strip**. Fictional act …` |
+| Operator note | `## 02-low-lane US-safe EDM **157 s** take: **low lane**. Fictional act **Drive-…` |
+| Operator note | `## 03-warm-merge US-safe EDM **191 s** take: **warm merge**. Fictional act **Dr…` |
+| Operator note | `## 04-colour-span US-safe EDM **203 s** take: **colour span**. Fictional act **…` |
+| Operator note | `## 05-garage-ticket US-safe EDM **227 s** take: **garage ticket**. Fictional ac…` |
+| Operator note | `## 06-liquid-grade US-safe EDM **256 s** take: **liquid grade**. Fictional act …` |
+| Operator note | `## 07-jump-bay US-safe EDM **266 s** take: **jump bay**. Fictional act **Drive-…` |
+| Operator note | `## 08-psy-median US-safe EDM **306 s** take: **psy median**. Fictional act **Dr…` |
+| Operator note | `## 09-groove-mile US-safe EDM **386 s** take: **groove mile**. Fictional act **…` |
+| Operator note | `## 10-donk-ramp US-safe EDM **386 s** take: **donk ramp**. Fictional act **Driv…` |
+| Operator note | `## 11-bounce-booth US-safe EDM **451 s** take: **bounce booth**. Fictional act …` |
+| Operator note | `## 12-toll-growl US-safe EDM **163 s** take: **toll growl**. Fictional act **Dr…` |
+| Operator note | `## 13-night-oil US-safe EDM **154 s** take: **night oil**. Fictional act **Driv…` |
+| Operator note | `## 14-chest-pass US-safe EDM **154 s** take: **chest pass**. Fictional act **Dr…` |
+| Operator note | `## 15-sunrise-sub US-safe EDM **227 s** take: **sunrise sub**. Fictional act **…` |
 | Operator note | `## audio/albums/drive-through/hour-2/album Album **Hour 2** by **Drive-through*…` |
 | Operator note | `## audio/albums/drive-through/hour-2/cover Album cover for **Drive-through — Ho…` |
 

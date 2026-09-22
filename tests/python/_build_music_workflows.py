@@ -314,9 +314,10 @@ def _edm_note(ex: EdmExample) -> str:
     treat = ex["ace_mode"] == "vocal"
     if treat:
         score_blurb = (
-            "Live bass-set take. One 1–2 word DJ chop in a single `[chorus]` "
-            "block; bed and drops stay empty-body `[drop]` / `[inst]` markers. "
-            "Not a rap verse."
+            "Live bass-set take. Short build, then the drop. Later stanzas "
+            "switch layers instead of riding one loop. One 1–2 word DJ chop "
+            "in a single `[chorus]` block; bed and drops stay empty-body "
+            "markers. No brass and no high leads. Not a rap verse."
         )
         mode_blurb = (
             "Keep App **Vocal / instrumental** on vocal so the shout renders. "
@@ -328,8 +329,9 @@ def _edm_note(ex: EdmExample) -> str:
             "Live bass-set take. Instrumental score is empty-body ACE "
             "markers (`[drop - cues]`, `[inst - cues]`, `[build-up]`, "
             "`[breakdown]`, `[outro]`) so ACE does not sing production notes. "
-            f"Form **{ex['form_id']}**. Warped hybrid-trap, trap drums. "
-            "Intros, builds, and breakdowns are part of the arc. "
+            f"Form **{ex['form_id']}**. Short build, then the drop. "
+            "Later stanzas switch layers. No section is a long loop. "
+            "No brass and no high leads. "
             "Vocals are a rare DJ treat on other graphs, not here."
         )
         mode_blurb = (
