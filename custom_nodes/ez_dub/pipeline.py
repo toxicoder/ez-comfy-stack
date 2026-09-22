@@ -1526,12 +1526,40 @@ def _chatterbox_device() -> str:
     return "cpu"
 
 
+def _install_lab_tts_compat() -> None:
+    """Re-apply the lab Chatterbox deprecation shims once torch is loaded.
+
+    ``docker/pythonpath/sitecustomize.py`` installs these at interpreter start,
+    but recent torch exposes ``torch.backends`` through a proxy whose attribute
+    lookup can hand back an object the start-up sweep never patched. Calling the
+    hook here, after torch is definitely imported, keeps the deprecated
+    ``torch.backends.cuda.sdp_kernel`` ``FutureWarning`` out of Dub logs
+    regardless of which process or import order loaded torch.
+
+    Returns:
+        None
+    """
+    try:
+        import importlib
+
+        sitecustomize = importlib.import_module("sitecustomize")
+    except ImportError:
+        return  # Lab pythonpath not on this interpreter; nothing to re-apply.
+    try:
+        ensure = getattr(sitecustomize, "ensure_lab_tts_compat_hooks", None)
+        if callable(ensure):
+            ensure()
+    except Exception as exc:  # noqa: BLE001 — shim is an optimisation, never blocking
+        _log(f"lab tts compat hook failed: {exc}")
+
+
 def _load_chatterbox_model() -> tuple[Any | None, str]:
     """Uncached from_local. Prefer this snapshot over a mixed comfy/tts dir.
 
     Returns:
         ``(model, "")`` or ``(None, reason)``. Model is optional-dep ``Any``.
     """
+    _install_lab_tts_compat()
     try:
         from chatterbox.mtl_tts import ChatterboxMultilingualTTS
     except ImportError:
