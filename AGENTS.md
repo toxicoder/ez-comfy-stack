@@ -79,3 +79,10 @@ If operator behavior, CLI, env vars, safety, or failure modes change, update doc
 the **same change**. Keep YAML frontmatter (`title`, `description`, `tags`).
 Add symptoms to [docs/troubleshooting.mdx](docs/troubleshooting.mdx).
 Relative in-repo links only.
+
+# Parent vs children
+- Parent is the dispatcher. No bulk Grep/Read/Edit on the parent once children exist.
+- One child per disjoint file cluster. At most four at once.
+- Child return: ≤20 lines. Files, command, result. No source dumps.
+- Parent verifies with one targeted test or diff, not by re-reading every file.
+- If the task is one file or one function, do not spawn. A child is overhead.
