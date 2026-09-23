@@ -1,125 +1,81 @@
-# AGENTS.md
+# ez-comfy-stack
 
-Guidelines for AI coding agents in **ez-comfy-stack**.
+Single-Spark ComfyUI Compose demo. US-safe local studio. Not a cluster product.
+Do not add K3s, a dashboard, multi-node NCCL, or extra model families.
 
-Shared style lives in [docs/project-conventions.md](docs/project-conventions.md). **Shell code follows the [Google Shell Style Guide](https://google.github.io/styleguide/shellguide.html)** with documented deviations in that conventions page. This file is **agent workflow** only.
+Style: [docs/project-conventions.md](docs/project-conventions.md).
+Shell: [Google Shell Style Guide](https://google.github.io/styleguide/shellguide.html)
+(deviations only as documented there).
+
+## Commands
+
+Prefer Bazelisk. Make targets are shims.
+
+- validate: `bazelisk run //:validate`
+- test (fast): `bazelisk test //:test-fast`
+- one bats suite: `bazelisk test //tests:bats_<suite>_test`
+- lint: `bazelisk test //:lint --test_tag_filters=manual`
+- fmt: `bazelisk run //:fix`  (`make fmt` / `make lint` are shims)
+- types: `make typecheck` (Pyright + mypy; `disallow_untyped_defs`)
+- docs serve: `bazelisk run //docs:serve` or `./docs/manage-docs.sh serve`
+- docs export: `bazelisk run //docs:docs`
+- doctor: `./scripts/manage.sh doctor` or `make doctor`
+- stack: `./scripts/manage.sh setup|download-models|start|stop`
+- Python tools: `pip install -r tests/requirements.txt`
+
+Done means `bazelisk run //:validate` is green. Type errors are defects.
+
+## Structure
+
+- `scripts/manage.sh` — operator CLI. Prefer this over raw docker compose.
+- `scripts/lib/*.sh` — shared shell. Tests: `tests/bats/lib_unit.bats`
+- `scripts/utilities/<name>.sh` — tests: `tests/bats/<name>.bats`
+- `docker/` — Compose + `patch_*.py`. Tests: `tests/python/*`, `tests/bats/safety.bats`
+- `workflows/` — graphs. Lab: `workflows/_lab/<lane>/<id>.json`. Never copy `_lab` into `_user`.
+- `custom_nodes/`, `config/`, `studio-ui/`
+- `docs/`, `docs-site/` — Fumadocs. `main` publishes `/latest/`, `development` publishes `/development/`
+- `tests/bats/`, `tests/python/`
+
+Prefer relative paths. Operator actions go through `./scripts/manage.sh`.
 
 ## Branching
 
-| Branch | Role |
-| --- | --- |
-| `development` | Primary integration |
-| `main` | Production-ready promotion only |
+- Integrate on `development`. `main` is production promotion only.
+- Every change: fetch, checkout `development`, `git pull --ff-only`, then `feature/…` `fix/…` `chore/…` `docs/…`
+- PR into `development`. Do not commit on `development` or `main`.
+- Do not base work on `main` except an explicit production hotfix (say so in the PR).
+- No force-push on `development` or `main`.
+- Commits: `feat:|fix:|docs:|test:|chore:|ci:|refactor:` + imperative summary.
 
-### Always branch from `development`
+## Tests
 
-**Mandatory for every feature, fix, chore, or docs change:**
+TDD for non-trivial work: red (failing bats/pytest) → green (minimum change) → refactor.
+Ship tests in the **same commit** as the production files they cover.
 
-1. Update integration: `git fetch origin && git checkout development && git pull --ff-only origin development`
-2. Create a topic branch: `feature/…`, `fix/…`, `chore/…`, or `docs/…`
-3. Implement and open a PR **into `development`**
+- New shell functions must be named and exercised under `tests/` in that commit.
+- First-party Python: 100% coverage fail-under, Pyright clean, mypy clean.
+- No `eval` or aliases in scripts. Prefer `"${var}"`, `[[ ]]`, `$(…)`.
+- Document new shell functions: Globals / Arguments / Outputs / Returns.
 
-**Do not:**
+## Safety
 
-- Commit feature/fix work directly on `development` or `main`
-- Base a new branch on `main` (exception: explicit production hotfix only; state that in the PR)
-- Force-push protected branches (`development`, `main`)
+Do not weaken, and state impact if you touch any of:
 
-Conventional commits: `feat:`, `fix:`, `docs:`, `test:`, `chore:`
+- `restart: "no"`
+- heavy confirm on start
+- headroom preflight
+- download-limit clear-on-exit for wrap
 
-```mermaid
-flowchart LR
-  Base["checkout + update development"] --> Topic["feature/* · fix/* · chore/* · docs/*"]
-  Topic --> PR["PR → development"]
-  PR --> Dev["development"]
-  Dev --> Main["main · production-ready only"]
-```
+`download-limit auto` = 85% of measured Mbps. Occupancy is XOR: one heavy GPU job.
+Models stay US-safe: Klein 4B stills, Wan 2.2 silent motion, LTX-2.5 distilled AV.
+Do not pin MiniMax, Seedance, or other non-catalog models in promoted workflows.
 
-## TDD
-
-Default for non-trivial changes:
-
-1. **Red** — failing BATS or pytest  
-2. **Green** — minimum production change  
-3. **Refactor** — keep green  
-
-### Tests ship with production code
-
-**Always commit tests in the same change as the files they cover.** Do not land a feature or fix and follow up with a separate “add tests” commit for that work.
-
-| Production change | Same commit includes |
-| --- | --- |
-| `scripts/lib/*.sh` | `tests/bats/lib_unit.bats` (or a focused bats file) |
-| `scripts/utilities/<name>.sh` | `tests/bats/<name>.bats` (or extend existing) |
-| `scripts/manage.sh` | `tests/bats/manage.bats` |
-| `docker/patch_*.py` / compose safety fields | `tests/python/*` and/or `tests/bats/safety.bats` |
-
-```mermaid
-flowchart TB
-  subgraph SameCommit["Same commit"]
-    P1["scripts/lib/*.sh"] --> T1["tests/bats/lib_unit.bats"]
-    P2["scripts/utilities/name.sh"] --> T2["tests/bats/name.bats"]
-    P3["scripts/manage.sh"] --> T3["tests/bats/manage.bats"]
-    P4["docker/patch_*.py · safety"] --> T4["tests/python/* · safety.bats"]
-  end
-```
-
-### Shell style (Google)
-
-When adding or editing shell (including `tests/bats/*.bash` helpers and `tests/*.sh` runners):
-
-- Prefer `"${var}"`, `[[ … ]]`, `$(…)`, process substitution over `find | while`
-- Document functions with **Globals / Arguments / Outputs / Returns**
-- Run `bazelisk run //:fix` and `bazelisk test //:lint --test_tag_filters=manual` (ShellCheck warnings, Pyright errors, and mypy errors are defects). `make fmt` / `make lint` are shims.
-- Do not use `eval` or aliases in scripts
-- See conventions for intentional deviations (`env bash`, modular script length)
-- Coverage: new functions must be **named and exercised under `tests/`** in the same commit
-Finish with:
-
-```bash
-bazelisk run //:validate
-```
-
-Prefer `bazelisk test //tests:bats_<suite>_test` while red/green. `make test` / `make coverage` / `make lint` delegate to Bazelisk when it is on `PATH`.
-
-**Pyright (Pylance) and mypy** run inside `//:test-fast` and `//:lint`. mypy uses `disallow_untyped_defs`. Type errors are defects. Do not consider a task complete while Pyright or mypy reports errors — fix the types; do not skip the gate. Install with `pip install -r tests/requirements.txt`.
-
-## Safety callouts
-
-Any change to Docker resources, restart policy, headroom, or download-limit must state **safety impact**. Do not weaken:
-
-- `restart: "no"`  
-- heavy confirm on start  
-- headroom preflight  
-- download-limit clear-on-exit for wrap  
-
-```mermaid
-flowchart TB
-  S1["restart: no"] --> Keep["Do not weaken"]
-  S2["heavy confirm on start"] --> Keep
-  S3["headroom preflight"] --> Keep
-  S4["download-limit clear-on-exit"] --> Keep
-```
-
-## Paths
-
-Prefer relative paths. Prefer `./scripts/manage.sh` for operator actions.
+Promote a live graph with `./scripts/manage.sh promote-workflow` into
+`workflows/_lab/<lane>/<id>.json`, then update `_build_*.py` + tests. Never copy `_lab` → `_user`.
 
 ## Docs
 
-### Always keep documentation current with the change
-
-**Mandatory:** when operator behavior, CLI surface, env vars, safety, or failure modes change, update docs in the **same change set** as the production code. Do not land behavior changes with a default “docs later” follow-up.
-
-After code changes, agents must:
-
-1. Update the relevant `docs/*.md` / `docs/*.mdx` pages (and README if onboarding/commands change)
-2. Keep YAML frontmatter (`title`, `description`, `tags`) + “What's on this page” / “What this enables”
-3. Prefer **relative** in-repo doc links
-4. Update [docs/troubleshooting.mdx](docs/troubleshooting.mdx) when new symptoms or fixes appear
-
-Public site publishes after merge via `.github/workflows/deploy-docs.yml` (Fumadocs static export): `main` → `/latest/`, `development` → `/development/`. Local: `bazelisk run //docs:serve` or `./docs/manage-docs.sh serve`.
-
-## Scope
-
-This is a **sample** Compose stack. Bazelisk is the contributor/CI entry point for test, lint, and docs (`bazelisk run //:validate`). Do **not** pull in K3s, a full dashboard, or multi-node NCCL. Point long-term cluster users at nvidia-dgx-spark-lab. Independent Sparks share `MODELS_DIR`; still no in-tree NCCL.
+If operator behavior, CLI, env vars, safety, or failure modes change, update docs in
+the **same change**. Keep YAML frontmatter (`title`, `description`, `tags`).
+Add symptoms to [docs/troubleshooting.mdx](docs/troubleshooting.mdx).
+Relative in-repo links only.
