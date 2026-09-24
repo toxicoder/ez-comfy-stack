@@ -16,7 +16,15 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import NamedTuple
 
-from .drive_arrange import RECIPE_LINES, _blocked, _cue_for, _salt, lift_drive_bpm
+from .drive_arrange import (
+    DRIVE_LYRICS_CHAR_BUDGET,
+    RECIPE_LINES,
+    _blocked,
+    _cue_for,
+    _salt,
+    fit_sections_to_lyrics,
+    lift_drive_bpm,
+)
 from .song_plan import SongSection
 
 # Source files, in the order the album reads them.
@@ -373,6 +381,59 @@ def apply_code_cues(sections: list[SongSection], tokens: Sequence[str]) -> None:
     for section, cue in zip(sections, cues):
         bars = int(section["bars"])
         section["pattern"] = f"{cue}, {bars} bars"
+
+
+def voice_code_sections(
+    sections: Sequence[SongSection],
+    tokens: Sequence[str],
+) -> list[SongSection]:
+    """Fit stanzas to the lyric window, then voice the survivors.
+
+    Re-voicing can change the score length, so the fit is re-measured
+    after every voice pass. When the re-voiced score runs over the
+    window, one more stanza is dropped in front of the outro and the
+    pass repeats. The plan keeps its full duration.
+
+    Args:
+        sections: Fitted stanzas, build-up then drop ... outro.
+        tokens: This take's coder words.
+
+    Returns:
+        New stanza list whose cues come from the coder span and whose
+        rendered score fits ``DRIVE_LYRICS_CHAR_BUDGET``.
+
+    Raises:
+        ValueError: the budget cannot be met without losing structure.
+    """
+    current = list(sections)
+    while True:
+        kept = fit_sections_to_lyrics(current)
+        apply_code_cues(kept, tokens)
+        score = [
+            f"[{section['role']} - {section['pattern']}]" for section in kept
+        ]
+        if len("\n\n".join(score)) <= DRIVE_LYRICS_CHAR_BUDGET:
+            return kept
+        _drop_lyrics_tail(kept)
+        current = kept
+
+
+def _drop_lyrics_tail(sections: list[SongSection]) -> None:
+    """Drop one more stanza in front of the outro after an overrun.
+
+    Args:
+        sections: Stanzas ending in the outro. Mutated.
+
+    Raises:
+        ValueError: no unprotected stanza is left to drop.
+    """
+    drops = sum(section["role"] == "drop" for section in sections)
+    for index in range(len(sections) - 2, 1, -1):
+        if sections[index]["role"] == "drop" and drops <= 3:
+            continue
+        del sections[index]
+        return
+    raise ValueError("drive score cannot fit the lyric window")
 
 
 def authored_bpm(tokens: Sequence[str]) -> int:

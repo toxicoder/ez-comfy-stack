@@ -14,8 +14,14 @@ from ez_music.code_score import (
     performance_bpm,
     performance_recipe,
 )
-from ez_music.drive_arrange import DRIVE_BPM_CHOICES, RECIPE_LINES, _cue_for
+from ez_music.drive_arrange import (
+    DRIVE_BPM_CHOICES,
+    DRIVE_LYRICS_CHAR_BUDGET,
+    RECIPE_LINES,
+    _cue_for,
+)
 from ez_music.edm_examples import EDM_EXAMPLES, EdmExample, finalize_drive_album
+from ez_music.song_plan import SongSection
 from ez_music.edm_drive_through import EDM_DRIVE_THROUGH
 from ez_music.edm_drive_through_afterparty import EDM_DRIVE_THROUGH_AFTERPARTY
 from ez_music.edm_drive_through_bass import EDM_DRIVE_THROUGH_BASS
@@ -121,6 +127,67 @@ def test_fresh_cue_skips_drop_language_then_exhausts(monkeypatch: pytest.MonkeyP
     monkeypatch.setattr(code_score, "_cue_for", lambda *_args, **_kwargs: "pluck")
     with pytest.raises(ValueError, match="no code cue"):
         cell_cues(("alpha",), ("inst",))
+
+
+def _stanzas(roles: tuple[str, ...]) -> list[SongSection]:
+    """Two-bar placeholder stanzas for one role line-up."""
+    return [
+        SongSection(role=role, bars=2, pattern=f"chest-sub, cue for {role}, 2 bars")
+        for role in roles
+    ]
+
+
+def test_voice_code_sections_keeps_structure_and_budget() -> None:
+    tokens = ("alpha", "beta", "gamma")
+    roles = ("build-up", "drop", "inst", "outro")
+    out = code_score.voice_code_sections(_stanzas(roles), tokens)
+    assert [section["role"] for section in out] == list(roles)
+    expected = cell_cues(tokens, roles)
+    for section, cue in zip(out, expected):
+        assert section["pattern"] == f"{cue}, 2 bars"
+    score = "\n\n".join(
+        f"[{section['role']} - {section['pattern']}]" for section in out
+    )
+    assert len(score) <= DRIVE_LYRICS_CHAR_BUDGET
+
+
+def test_voice_code_sections_drops_tail_when_revoiced_score_overruns(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls = {"n": 0}
+    real = _cue_for
+
+    def fake(role: str, n: int, salt: int, attempt: int = 0) -> str:
+        calls["n"] += 1
+        return f"chest-sub {calls['n']}, " + "wide low-mid orbit, " * 45
+
+    monkeypatch.setattr(code_score, "_cue_for", fake)
+    roles = ("build-up", "drop", "inst", "drop", "inst", "inst", "outro")
+    out = code_score.voice_code_sections(_stanzas(roles), ("alpha",))
+    assert [section["role"] for section in out] == [
+        "build-up",
+        "drop",
+        "inst",
+        "drop",
+        "inst",
+        "outro",
+    ]
+    assert calls["n"] > len(out)
+    score = "\n\n".join(
+        f"[{section['role']} - {section['pattern']}]" for section in out
+    )
+    assert len(score) <= DRIVE_LYRICS_CHAR_BUDGET
+
+
+def test_drop_lyrics_tail_drops_fill_before_outro() -> None:
+    sections = _stanzas(("build-up", "drop", "inst", "outro"))
+    code_score._drop_lyrics_tail(sections)
+    assert [section["role"] for section in sections] == ["build-up", "drop", "outro"]
+
+
+def test_drop_lyrics_tail_refuses_protected_tail() -> None:
+    with pytest.raises(ValueError, match="cannot fit"):
+        code_score._drop_lyrics_tail(_stanzas(("build-up", "drop", "drop", "drop", "outro")))
 
 
 def test_my_coder_scores_are_the_source() -> None:

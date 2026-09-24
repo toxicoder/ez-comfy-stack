@@ -26,6 +26,7 @@ from ez_music.diss_examples import (  # noqa: E402
 )
 from ez_music.drive_arrange import (  # noqa: E402
     DRIVE_BPM_CHOICES,
+    DRIVE_LYRICS_CHAR_BUDGET,
     _MIDS,
     _SPATIAL,
     _SUBS,
@@ -652,8 +653,6 @@ EXPECTED_DRIVE_THROUGH_TITLES = (
     "score format",
     "finalize album",
 )
-DRIVE_TREAT_TITLES = frozenset({"wide open", "second wave"})
-
 
 def _valid_edm_sections() -> list[tuple[str, str]]:
     return [
@@ -752,8 +751,8 @@ def test_drive_tags_lock_instrumental_bed() -> None:
     assert "rave" not in tags_low
     assert "warped hybrid-trap" in tags_low
     assert "bass boosted" in tags_low
-    assert "no brass" in tags_low
-    assert "no horns" in tags_low
+    for needle in ("no brass", "no horns", "no trumpets", "no singing", "no choir", "no vocal chops"):
+        assert needle not in tags_low, needle
     assert "wide low-mid" in tags_low
 
 
@@ -767,8 +766,8 @@ def test_drive_tags_lock_vocal_treat() -> None:
     assert "no singing" not in tags_low
     assert f"{lifted} bpm" in tags_low
     assert "bass boosted" in tags_low
-    assert "no brass" in tags_low
-    assert "no trumpets" in tags_low
+    assert "no brass" not in tags_low
+    assert "no trumpets" not in tags_low
 
 
 def test_format_edm_score_requires_weighted_drops() -> None:
@@ -895,7 +894,6 @@ def test_drive_through_edm_examples_are_varied_lengths() -> None:
     phase4_core = 0
     pedal_rows = 0
     breakdown_takes = 0
-    treat_titles: list[str] = []
     shapes: list[tuple[tuple[str, int], ...]] = []
     for ex in EDM_EXAMPLES:
         assert 150.0 <= float(ex["duration"]) <= 480.0
@@ -917,9 +915,10 @@ def test_drive_through_edm_examples_are_varied_lengths() -> None:
         assert "techno" not in lyrics_low, ex["stem"]
         for needle in ("brass", "horn", "trumpet", "trombone", "saxophone", "fanfare", "stab"):
             assert needle not in lyrics_low, (ex["stem"], needle)
-        assert "no brass" in tags_low
-        assert "no horns" in tags_low
-        assert "no trumpets" in tags_low
+        for needle in ("no brass", "no horns", "no trumpets", "no singing", "no choir", "no vocal chops"):
+            assert needle not in tags_low, (ex["stem"], needle)
+        assert "instrumental, no vocals" in tags_low, ex["stem"]
+        assert len(lyrics) <= DRIVE_LYRICS_CHAR_BUDGET, (ex["stem"], len(lyrics))
         for needle in FORBIDDEN_SCORE_NEEDLES:
             if needle == "mute":
                 assert "mute" not in lyrics_low.replace("muted", ""), (ex["stem"], needle)
@@ -972,10 +971,9 @@ def test_drive_through_edm_examples_are_varied_lengths() -> None:
             if not stripped.startswith("[") or stripped.startswith("[chorus"):
                 continue
             low = stripped.lower()
-            assert "bass boosted" in low, (ex["stem"], stripped)
-            assert "layers stay" in low, (ex["stem"], stripped)
-            assert "sub stays" in low, (ex["stem"], stripped)
-            assert "no gap" in low, (ex["stem"], stripped)
+            assert "chest-sub" in low, (ex["stem"], stripped)
+            for phrase in ("bass boosted", "layers stay", "sub stays", "no gap"):
+                assert phrase not in low, (ex["stem"], stripped)
             assert "one-shot phrase" not in low, (ex["stem"], stripped)
             assert any(phrase.lower() in low for phrase in _SPATIAL), (
                 ex["stem"],
@@ -989,7 +987,7 @@ def test_drive_through_edm_examples_are_varied_lengths() -> None:
                 ex["stem"],
                 stripped,
             )
-        assert int(ex["duration"]) == duration_seconds(
+        assert int(ex["duration"]) >= duration_seconds(
             bars=sum(bar_counts),
             meter="4",
             bpm=int(ex["bpm"]),
@@ -1047,27 +1045,19 @@ def test_drive_through_edm_examples_are_varied_lengths() -> None:
             assert ex["album_slug"] == "my-coder", ex["stem"]
         else:
             raise AssertionError(ex["phase"])
-        treat = ex["title"] in DRIVE_TREAT_TITLES
-        if treat:
-            assert "[chorus]" in lyrics
-            assert lyrics.count("[chorus]") == 1
-            assert ex["ace_mode"] == "vocal"
-            for token in DRIVE_TREAT_LOCK.split(", "):
-                assert token in ex["tags"], (ex["stem"], token)
-            treat_titles.append(ex["title"])
-        else:
-            assert "[chorus]" not in lyrics
-            for line in lyrics.splitlines():
-                stripped = line.strip()
-                if not stripped:
-                    continue
-                assert stripped.startswith("[") and stripped.endswith("]"), (
-                    ex["stem"],
-                    line,
-                )
-            assert ex["ace_mode"] == "instrumental"
-            for token in DRIVE_LOCK.split(", "):
-                assert token in ex["tags"], (ex["stem"], token)
+        assert ex["ace_mode"] == "instrumental", ex["stem"]
+        assert "[chorus]" not in lyrics, ex["stem"]
+        assert "DJ shout" not in ex["tags"], ex["stem"]
+        for line in lyrics.splitlines():
+            stripped = line.strip()
+            if not stripped:
+                continue
+            assert stripped.startswith("[") and stripped.endswith("]"), (
+                ex["stem"],
+                line,
+            )
+        for token in DRIVE_LOCK.split(", "):
+            assert token in ex["tags"], (ex["stem"], token)
         assert "rave" not in ex["tags"]
         assert str(ex["bpm"]) in ex["tags"]
         assert ex["stem"] == f"{ex['track']:02d}-{ex['slug']}"
@@ -1123,7 +1113,6 @@ def test_drive_through_edm_examples_are_varied_lengths() -> None:
         lengths = [float(ex["duration"]) for ex in rows]
         assert max(lengths) - min(lengths) >= 180, phase
         assert max(lengths) >= 300, phase
-    assert frozenset(treat_titles) == DRIVE_TREAT_TITLES
     assert tuple(ex["title"] for ex in EDM_EXAMPLES) == EXPECTED_DRIVE_THROUGH_TITLES
     assert "warped" in EDM_EXAMPLES[0]["lyrics"].lower()
     assert "wobble" in EDM_EXAMPLES[1]["lyrics"].lower()

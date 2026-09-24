@@ -67,7 +67,6 @@ TUNNEL_BASS_LYRICS = format_edm_score(
 
 WIDE_OPEN_LYRICS = format_edm_score(
     ("inst", "heavy color drop\nwarped 808 wreck\nchest-sub stack"),
-    ("chorus", "hey"),
     ("inst", "harder warped drop\nchest sub warp\ncolor bass wreck"),
     ("inst", "trap hats roll\n808 slide"),
     ("inst", "full send drop\nlow 808 wall\nwarped color"),
@@ -88,7 +87,6 @@ OVERPASS_LYRICS = format_edm_score(
 SECOND_WAVE_LYRICS = format_edm_score(
     ("inst", "heavy warped drop\nhybrid trap warped wreck\n808 stack"),
     ("inst", "trap hats roll\n808 slide"),
-    ("chorus", "go"),
     ("inst", "harder double drop\nfull send bass warp\nchest-sub wreck"),
     ("inst", "full send drop\nchest 808 wreck\nwarped trap"),
     ("outro", "kick holds\ntrap hats roll\nwarped ride"),
@@ -218,11 +216,10 @@ EDM_DRIVE_THROUGH: tuple[EdmExample, ...] = (
         150,
         239,
         0,
-        "wide-open color bass DJ shout",
+        "wide-open color bass",
         WIDE_OPEN_LYRICS,
         recipe="rec_drive_color",
         picks={"bass_low_end": "bass_stacked_808"},
-        treat=True,
     ),
     _ex(
         "overpass",
@@ -240,10 +237,9 @@ EDM_DRIVE_THROUGH: tuple[EdmExample, ...] = (
         150,
         241,
         0,
-        "second-wave hybrid trap chop",
+        "second-wave hybrid trap",
         SECOND_WAVE_LYRICS,
-        recipe="rec_drive_dj_shout",
-        treat=True,
+        recipe="rec_drive_through_drop",
     ),
     _ex(
         "freight-pulse",

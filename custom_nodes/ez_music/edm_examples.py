@@ -16,8 +16,8 @@ from .naming import music_output_prefix
 # Take length and Drive-through vocal locks.
 EDM_DURATION_S = 180.0
 DRIVE_LOCK = (
-    "instrumental, no vocals, no singing, no choir, no vocal chops, "
-    "original composition"
+    "808, original composition, heavy chest bass, bass boosted, "
+    "wide low-mid layers, fast switch-ups"
 )
 DRIVE_TREAT_LOCK = "sparse vocal chop, DJ shout, no rap, original composition"
 EdmSeries = Literal["drive-through"]
@@ -592,9 +592,9 @@ def finalize_drive_album(rows: tuple[EdmExample, ...]) -> tuple[EdmExample, ...]
         plan = plans[index - 1]
         code_tokens = row.get("code_tokens")
         if code_tokens:
-            from .code_score import apply_code_cues
+            from .code_score import voice_code_sections
 
-            apply_code_cues(plan["sections"], code_tokens)
+            plan["sections"] = voice_code_sections(plan["sections"], code_tokens)
         slug = drive_slug_from_stem(str(row.get("slug") or row["stem"]))
         stem = f"{index:02d}-{slug}"
         out.append(
