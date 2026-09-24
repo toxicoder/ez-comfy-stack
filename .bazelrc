@@ -41,8 +41,3 @@ test:ci --jobs=HOST_CPUS
 test:ci --local_resources=memory=HOST_RAM*0.8
 test:ci --test_sharding_strategy=disabled
 test:ci --keep_going
-
-# =============================================================================
-# Query
-# =============================================================================
-query --query_file=-
