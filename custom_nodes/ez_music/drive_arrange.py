@@ -7,6 +7,10 @@ whole stanzas. Bars are not stretched or squeezed to hit a clock time.
 Tempos snap onto Audio Rack ids that already exist (165–176). The
 authored BPM stays the rank; the encoder and the tags use the snapped
 value.
+
+The rendered score is fitted to ``DRIVE_LYRICS_CHAR_BUDGET`` so the
+whole score stays inside ACE-Step's 2048-token lyric window. The latent
+keeps the full planned duration and extends the last described texture.
 """
 
 from __future__ import annotations
@@ -29,6 +33,10 @@ from ez_music.song_plan import (
 DRIVE_FLOOR_S = 150
 DRIVE_CAP_S = 480
 DRIVE_BPM_CHOICES: tuple[int, ...] = (165, 168, 170, 172, 174, 176)
+# ACE-Step 1.5 truncates lyrics at 2048 tokens. Measured at 3.43–3.56
+# chars/token on this vocabulary, so 6000 chars stays under the window
+# with margin. The score is a representative arc, not a full timeline.
+DRIVE_LYRICS_CHAR_BUDGET = 6000
 _BPM_LO = 140
 _BPM_HI = 176
 _BAR_PALETTE = frozenset({2})
@@ -65,12 +73,6 @@ _DRUMS = (
     "trap drums denser",
     "ghost snare",
     "kick pattern flip",
-)
-_WIDTHS = (
-    "wide low-mid",
-    "low-mid spread",
-    "chest width",
-    "sub center",
 )
 _WEIGHTS = ("heavy", "wreck", "harder", "stacked", "full send")
 _WARPS = ("warped", "wobble", "reese")
@@ -222,7 +224,11 @@ def plan_drive_album(
 
 
 def arrange_drive(source: str, plan: SongPlan, *, treat: bool = False) -> str:
-    """Render a plan as ACE markers. A treat keeps one short chorus chop.
+    """Render a plan as ACE markers, fitted to the lyric window.
+
+    A treat keeps one short chorus chop. The tail is trimmed before the
+    outro so the joined score stays inside ``DRIVE_LYRICS_CHAR_BUDGET``;
+    the plan keeps its full duration.
 
     Args:
         source: Authored score. Only the chorus chop is read.
@@ -230,17 +236,107 @@ def arrange_drive(source: str, plan: SongPlan, *, treat: bool = False) -> str:
         treat: When True, insert the DJ chop after the first drop.
 
     Returns:
-        ACE score. Instrumental lines are one bracket each.
+        ACE score within the char budget. Instrumental lines are one
+        bracket each.
     """
     blocks = [
-        f"[{section['role']} - {section['pattern']}]" for section in plan["sections"]
+        f"[{section['role']} - {section['pattern']}]"
+        for section in fit_sections_to_lyrics(plan["sections"])
     ]
     if treat:
         _cues, chorus = _parse_edm(source)
         text = " ".join(chorus.split())
         if text:
             blocks.insert(2, f"[chorus]\n{text}")
-    return "\n\n".join(blocks)
+    kept = _window_survivor_indices(blocks)
+    return "\n\n".join(blocks[index] for index in kept)
+
+
+def _fit_lyrics_window(blocks: list[str]) -> str:
+    """Join stanzas, dropping the tail before the outro when over budget.
+
+    ACE-Step 1.5 truncates lyrics at 2048 tokens; a longer score
+    conditions on a cut-off prefix and renders as static. Keeps the
+    opening build-up, the first drop, at least three drops, and the
+    outro.
+
+    Args:
+        blocks: Bracketed stanzas, build-up then drop ... outro.
+
+    Returns:
+        The joined score within ``DRIVE_LYRICS_CHAR_BUDGET``.
+
+    Raises:
+        ValueError: the budget cannot be met without losing structure.
+    """
+    kept = _window_survivor_indices(blocks)
+    return "\n\n".join(blocks[index] for index in kept)
+
+
+def _window_survivor_indices(blocks: Sequence[str]) -> list[int]:
+    """Indices of the stanzas that survive the lyric-window fit.
+
+    Trims from in front of the outro. The opening build-up, the first
+    drop, at least three drops, and the outro stay.
+
+    Args:
+        blocks: Bracketed stanzas, build-up then drop ... outro.
+
+    Returns:
+        Surviving block indices, in order.
+
+    Raises:
+        ValueError: the budget cannot be met without losing structure.
+    """
+
+    def size(indices: Sequence[int]) -> int:
+        """Joined character count of the blocks at these indices.
+
+        Args:
+            indices: Block indices to measure.
+
+        Returns:
+            Character count of the blocks joined with blank lines.
+        """
+        return len("\n\n".join(blocks[index] for index in indices))
+
+    all_indices = list(range(len(blocks)))
+    if size(all_indices) <= DRIVE_LYRICS_CHAR_BUDGET:
+        return all_indices
+    kept = list(all_indices)
+    while size(kept) > DRIVE_LYRICS_CHAR_BUDGET:
+        drops = sum(1 for index in kept if blocks[index].startswith("[drop"))
+        for position in range(len(kept) - 2, 1, -1):
+            if blocks[kept[position]].startswith("[drop") and drops <= 3:
+                continue
+            kept.pop(position)
+            break
+        else:
+            raise ValueError("drive score cannot fit the lyric window")
+    return kept
+
+
+def fit_sections_to_lyrics(
+    sections: Sequence[SongSection],
+) -> list[SongSection]:
+    """Keep the stanzas whose rendered score fits the lyric window.
+
+    Mirrors ``_fit_lyrics_window`` on the stanza data so a caller can
+    re-voice the survivors before the final render.
+
+    Args:
+        sections: Fitted stanzas, build-up then drop ... outro.
+
+    Returns:
+        The surviving stanzas, in order.
+
+    Raises:
+        ValueError: the budget cannot be met without losing structure.
+    """
+    blocks = [
+        f"[{section['role']} - {section['pattern']}]" for section in sections
+    ]
+    return [sections[index] for index in _window_survivor_indices(blocks)]
 
 
 def _signature(sections: list[SongSection]) -> tuple[tuple[str, int], ...]:
@@ -366,7 +462,7 @@ def _slot(pool: tuple[str, ...], n: int, salt: int, attempt: int, step: int) -> 
 
 
 def _bed(n: int, salt: int, attempt: int) -> str:
-    """Front of every cue: bass, a 3D move, and a bed that does not stop.
+    """Front of every cue: the chest-sub anchor and a 3D low-mid move.
 
     Args:
         n: Section index.
@@ -377,17 +473,14 @@ def _bed(n: int, salt: int, attempt: int) -> str:
         The shared prefix.
     """
     spatial = _slot(_SPATIAL, n, salt, attempt, 13)
-    return (
-        "bass boosted, "
-        f"{spatial}, layers stay, sub stays, no gap"
-    )
+    return f"chest-sub, {spatial}"
 
 
 def _cue_for(role: str, n: int, salt: int, attempt: int = 0) -> str:
     """One layered cue. Drops name a weight and a warp. Beds do not say drop.
 
-    The bass, the spatial move, and the keep-playing words sit at the
-    front so a long tail cannot hide them.
+    The chest-sub anchor and the spatial move sit at the front so a long
+    tail cannot hide them.
 
     Args:
         role: Section role.
@@ -402,7 +495,6 @@ def _cue_for(role: str, n: int, salt: int, attempt: int = 0) -> str:
     sub = _slot(_SUBS, n, salt, attempt, 3)
     mid = _slot(_MIDS, n, salt, attempt, 5)
     drum = _slot(_DRUMS, n, salt, attempt, 7)
-    width = _slot(_WIDTHS, n, salt, attempt, 11)
     motion = _slot(_MOTIONS, n, salt, attempt, 1)
     if role == "drop":
         weight = _slot(_WEIGHTS, n, salt, attempt, 2)
@@ -410,20 +502,15 @@ def _cue_for(role: str, n: int, salt: int, attempt: int = 0) -> str:
         warp_bit = "" if warp == "warped" else f"{warp} "
         return (
             f"{bed}, {weight} {warp_bit}warped drop, {sub}, {mid}, {drum}, "
-            f"{width}, {motion}"
+            f"{motion}"
         )
     if role == "build-up":
-        return f"{bed}, kick tightens, {sub}, {drum}, {mid}, {width}, {motion}"
+        return f"{bed}, kick tightens, {sub}, {drum}, {mid}, {motion}"
     if role == "breakdown":
-        return (
-            f"{bed}, rapid hi-hats, chest-sub pulse, {mid}, {width}, {sub}, {motion}"
-        )
+        return f"{bed}, rapid hi-hats, {mid}, {sub}, {motion}"
     if role == "outro":
-        return (
-            f"{bed}, kick pattern flip, chest-sub, rapid hi-hats, {mid}, "
-            f"{width}, {motion}"
-        )
-    return f"{bed}, {drum}, {sub}, {mid}, {width}, {motion}"
+        return f"{bed}, kick pattern flip, rapid hi-hats, {mid}, {motion}"
+    return f"{bed}, {drum}, {sub}, {mid}, {motion}"
 
 
 def _unique_cue(role: str, n: int, salt: int, used: set[str]) -> str:

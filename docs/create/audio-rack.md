@@ -90,7 +90,7 @@ Shipped Drive-through takes under `_lab/audio/albums/drive-through/` splice thes
 | `rec_drive_festival_trap` | Festival trap |
 | `rec_drive_dj_shout` | Hybrid trap + `voc_dj_shout` |
 
-Instrumental takes use `mix_drive_lock` (no brass, no horns, no trumpets, heavy chest bass, bass boosted). DJ-shout treats use `mix_drive_treat` with the same brass lock. Drive recipes leave the sound-design axis empty so a noise riser is not a whole-clip tag. Color bass tags stay `low-mid bass`, not formant. Do not pick `ins_warped_saw` on a Drive-through graph (supersaw is a high-pitch needle). Playbook: [Drive-through EDM](music-edm.md).
+Instrumental takes use `mix_drive_lock` (808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups). The DJ-shout lane keeps `mix_drive_treat` with the same chest-bass lock for manual recipes. Drive recipes leave the sound-design axis empty so a noise riser is not a whole-clip tag. Color bass tags stay `low-mid bass`, not formant. Do not pick `ins_warped_saw` on a Drive-through graph (supersaw is a high-pitch needle). Playbook: [Drive-through EDM](music-edm.md).
 
 ## Handoff
 

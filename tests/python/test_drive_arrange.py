@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 import pytest
 
 from ez_music import drive_arrange as arrange
@@ -148,6 +150,103 @@ def test_arrange_drive_places_one_chop_after_the_first_drop() -> None:
     assert "[chorus]" not in quiet
 
 
+def test_arrange_drive_fits_the_lyrics_window() -> None:
+    rows: list[dict[str, Any]] = [
+        {
+            "bpm": bpm,
+            "seed": seed,
+            "lyrics": "drop - heavy warped drop, mono chest-sub, rapid hi-hats",
+            "recipe": "rec_drive_through_drop",
+        }
+        for seed, bpm in (
+            (11, 165),
+            (12, 168),
+            (13, 170),
+            (14, 172),
+            (15, 174),
+            (16, 176),
+            (17, 165),
+            (18, 176),
+        )
+    ]
+    plans = plan_drive_album("hour-1", rows)
+    assert len(plans) == 8
+    for plan in plans:
+        score = arrange_drive(rows[0]["lyrics"], plan)
+        assert len(score) <= arrange.DRIVE_LYRICS_CHAR_BUDGET, plan["form_id"]
+        assert score.startswith("[build-up")
+        assert score.endswith("2 bars]")
+        assert "[outro" in score
+        drops = sum(1 for line in score.splitlines() if line.startswith("[drop"))
+        assert drops >= 3, plan["form_id"]
+
+
+def test_fit_lyrics_window_trims_tail_keeps_structure() -> None:
+    blocks = ["[build-up - kick tightens, mono chest-sub, rapid hi-hats, 2 bars]"]
+    blocks.append("[drop - heavy warped drop, mono chest-sub, 2 bars]")
+    for index in range(90):
+        blocks.append(f"[inst - rapid hi-hats, body bass, low-mid bass melody, cell {index}, 2 bars]")
+    blocks.append("[drop - wreck wobble warped drop, low chest-sub, 2 bars]")
+    blocks.append("[outro - kick pattern flip, chest-sub, rapid hi-hats, 2 bars]")
+    out = arrange._fit_lyrics_window(list(blocks))
+    kept = out.split("\n\n")
+    assert len(out) <= arrange.DRIVE_LYRICS_CHAR_BUDGET
+    assert kept[0] == blocks[0]
+    assert kept[1] == blocks[1]
+    assert kept[-1] == blocks[-1]
+    assert sum(1 for block in kept if block.startswith("[drop")) == 2
+    assert len(kept) < len(blocks)
+
+
+def test_fit_lyrics_window_refuses_an_untrimmable_score() -> None:
+    filler = "chest-sub, low-mid bass melody, trap drums denser, " * 40
+    blocks = [
+        f"[build-up - {filler}, 2 bars]",
+        f"[inst - {filler}, 2 bars]",
+        f"[drop - heavy reese warped drop, {filler}, 2 bars]",
+        f"[drop - heavy wobble warped drop, {filler}, 2 bars]",
+        f"[drop - heavy warped drop, {filler}, 2 bars]",
+        f"[outro - {filler}, 2 bars]",
+    ]
+    with pytest.raises(ValueError, match="cannot fit"):
+        arrange._fit_lyrics_window(blocks)
+    assert len("\n\n".join(blocks)) > arrange.DRIVE_LYRICS_CHAR_BUDGET
+
+
+def test_fit_sections_to_lyrics_mirrors_block_fit() -> None:
+    sections = [
+        SongSection(role="build-up", bars=2, pattern="chest-sub, 3D low-mid orbit, 2 bars"),
+        SongSection(role="drop", bars=2, pattern="heavy reese warped drop, 2 bars"),
+    ]
+    sections.extend(
+        SongSection(
+            role="inst",
+            bars=2,
+            pattern=f"chest-sub, low-mid bass melody, trap drums denser, cell {index}, 2 bars",
+        )
+        for index in range(90)
+    )
+    sections.extend(
+        [
+            SongSection(role="drop", bars=2, pattern="wreck wobble warped drop, 2 bars"),
+            SongSection(role="outro", bars=2, pattern="chest-sub, kick pattern flip, 2 bars"),
+        ]
+    )
+    kept = arrange.fit_sections_to_lyrics(sections)
+    blocks = [f"[{s['role']} - {s['pattern']}]" for s in sections]
+    assert len(kept) < len(sections)
+    assert len("\n\n".join(f"[{s['role']} - {s['pattern']}]" for s in kept)) <= arrange.DRIVE_LYRICS_CHAR_BUDGET
+    assert kept[0] is sections[0]
+    assert kept[1] is sections[1]
+    assert kept[-1] is sections[-1]
+    assert sum(1 for s in kept if s["role"] == "drop") == 2
+    expected_roles = [
+        blocks[i].strip()[1:].split(" - ")[0]
+        for i in arrange._window_survivor_indices(blocks)
+    ]
+    assert [s["role"] for s in kept] == expected_roles
+
+
 def test_pick_helpers_and_cue_filters() -> None:
     assert arrange._pick_bars("build-up", 6, salt=1, index=3, before_outro=True) == 2
     saw_same = False
@@ -171,10 +270,11 @@ def test_pick_helpers_and_cue_filters() -> None:
     for role in ("drop", "build-up", "breakdown", "inst", "outro"):
         cue = arrange._cue_for(role, 2, 5, 0)
         assert not arrange._blocked(cue)
-        assert "bass boosted" in cue
-        assert "layers stay" in cue
-        assert "sub stays" in cue
-        assert "no gap" in cue
+        assert "chest-sub" in cue
+        assert "bass boosted" not in cue
+        assert "layers stay" not in cue
+        assert "sub stays" not in cue
+        assert "no gap" not in cue
         assert "one-shot phrase" not in cue
         assert any(phrase in cue for phrase in arrange._SPATIAL)
         if role != "drop":
@@ -321,8 +421,8 @@ def test_rare_breakdown_is_one_two_bar_cell() -> None:
     breakdowns = [section for section in sections if section["role"] == "breakdown"]
     assert len(breakdowns) == 1
     assert breakdowns[0]["bars"] == 2
-    assert "bass boosted" in breakdowns[0]["pattern"]
-    assert "no gap" in breakdowns[0]["pattern"]
+    assert "chest-sub" in breakdowns[0]["pattern"]
+    assert "no gap" not in breakdowns[0]["pattern"]
 
 
 def test_check_rejects_broken_shapes() -> None:
