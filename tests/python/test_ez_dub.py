@@ -3579,7 +3579,8 @@ def test_fit_speed_cap_default_uses_max_speed() -> None:
     assert pipeline.fit_speed_cap(1.25) == align.MAX_SPEED
     assert pipeline.fit_speed_cap(1.5) == align.MAX_SPEED
     assert pipeline.fit_speed_cap(1.1) == pytest.approx(1.1)
-    assert pipeline.CLONE_REPETITION_PENALTY == 1.2
+    assert pipeline.CLONE_REPETITION_PENALTY == 1.9
+    assert pipeline.CLONE_TOP_P == 1.0
 
 
 def test_whisper_word_timestamps_tighten_turn_window(
