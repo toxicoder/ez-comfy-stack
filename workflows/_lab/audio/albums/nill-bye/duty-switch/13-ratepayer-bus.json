@@ -1,6 +1,6 @@
 {
   "id": "13-ratepayer-bus",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 17,
   "last_link_id": 17,
   "nodes": [
@@ -9,7 +9,7 @@
       "type": "CheckpointLoaderSimple",
       "pos": [
         40,
-        728
+        744
       ],
       "size": [
         360,
@@ -58,7 +58,7 @@
       "type": "ModelSamplingAuraFlow",
       "pos": [
         40,
-        900
+        916
       ],
       "size": [
         330,
@@ -97,7 +97,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40,
-        1076
+        1092
       ],
       "size": [
         280,
@@ -135,7 +135,7 @@
       "type": "EmptyAceStep1.5LatentAudio",
       "pos": [
         2976,
-        728
+        744
       ],
       "size": [
         320,
@@ -178,7 +178,7 @@
       "type": "EZRapLyrics",
       "pos": [
         500,
-        728
+        744
       ],
       "size": [
         400,
@@ -214,7 +214,7 @@
       "type": "EZAceStepPromptEnhance",
       "pos": [
         500,
-        1220
+        1236
       ],
       "size": [
         400,
@@ -269,7 +269,7 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        1712
+        1728
       ],
       "size": [
         400,
@@ -347,7 +347,7 @@
       "type": "ConditioningZeroOut",
       "pos": [
         948,
-        728
+        744
       ],
       "size": [
         240,
@@ -384,7 +384,7 @@
       "type": "KSampler",
       "pos": [
         948,
-        860
+        876
       ],
       "size": [
         330,
@@ -444,7 +444,7 @@
       "type": "VAEDecodeAudio",
       "pos": [
         1340,
-        728
+        744
       ],
       "size": [
         280,
@@ -488,7 +488,7 @@
       "type": "SaveAudio",
       "pos": [
         1340,
-        860
+        876
       ],
       "size": [
         320,
@@ -518,7 +518,7 @@
       "type": "SaveAudioMP3",
       "pos": [
         1340,
-        1202
+        1218
       ],
       "size": [
         320,
@@ -573,7 +573,7 @@
       "type": "LoadImage",
       "pos": [
         2608,
-        728
+        744
       ],
       "size": [
         320,
@@ -611,7 +611,7 @@
       "type": "EZAudioMetadata",
       "pos": [
         1340,
-        1544
+        1560
       ],
       "size": [
         360,
@@ -881,7 +881,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        656,
+        672,
         400,
         348
       ],
@@ -894,7 +894,7 @@
       "title": "DURATION",
       "bounding": [
         20,
-        1004,
+        1020,
         320,
         198
       ],
@@ -907,7 +907,7 @@
       "title": "PROMPT",
       "bounding": [
         480,
-        656,
+        672,
         818,
         1520
       ],
@@ -920,7 +920,7 @@
       "title": "OUTPUT",
       "bounding": [
         1320,
-        656,
+        672,
         400,
         1152
       ],
@@ -933,7 +933,7 @@
       "title": "INPUT",
       "bounding": [
         2588,
-        656,
+        672,
         360,
         430
       ],
@@ -946,7 +946,7 @@
       "title": "SETTINGS",
       "bounding": [
         2956,
-        656,
+        672,
         360,
         198
       ],
