@@ -19,8 +19,10 @@ from typing import NamedTuple
 from .drive_arrange import (
     DRIVE_LYRICS_CHAR_BUDGET,
     RECIPE_LINES,
+    _DROP_FLOOR,
     _blocked,
     _cue_for,
+    _drop_combo,
     _salt,
     fit_sections_to_lyrics,
     lift_drive_bpm,
@@ -327,7 +329,9 @@ def _fresh_cue(role: str, index: int, salt: int, used: set[str]) -> str:
         role: ACE role.
         index: Cell index.
         salt: Window salt.
-        used: Cues already emitted. Updated on success.
+        used: Cues and drop-combo keys already emitted. Updated on
+            success. Drops must also carry a weight/warp/spatial combo
+            this take has not voiced.
 
     Returns:
         A Drive-through production cue.
@@ -340,9 +344,16 @@ def _fresh_cue(role: str, index: int, salt: int, used: set[str]) -> str:
         cue = _cue_for(role, index, salt + attempt, attempt)
         if cue in used or _blocked(cue):
             continue
+        combo_key: str | None = None
+        if role == "drop":
+            combo_key = f"drop-combo::{_drop_combo(index, salt + attempt, attempt)}"
+            if combo_key in used:
+                continue
         if role != "drop" and "drop" in cue:
             continue
         used.add(cue)
+        if combo_key is not None:
+            used.add(combo_key)
         return cue
     raise ValueError(f"no code cue for {role} at {index}")
 
@@ -429,7 +440,7 @@ def _drop_lyrics_tail(sections: list[SongSection]) -> None:
     """
     drops = sum(section["role"] == "drop" for section in sections)
     for index in range(len(sections) - 2, 1, -1):
-        if sections[index]["role"] == "drop" and drops <= 3:
+        if sections[index]["role"] == "drop" and drops <= _DROP_FLOOR:
             continue
         del sections[index]
         return

@@ -28,14 +28,14 @@ Numbered takes under `audio/albums/drive-through/secret-homage/`. Queue one trac
 ```text
 ## 01-hush-lane
 
-US-safe EDM **369 s** take: **hush lane**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[build-up]`, `[breakdown]`, `[outro]`) so ACE does not sing production notes. Form **drv-ab6e64070b**. Short build, then the drop. Later stanzas switch layers. No section is a long loop. No brass and no high leads. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** — draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
+US-safe EDM **369 s** take: **hush lane**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[build-up]`, `[breakdown]`, `[outro]`) so ACE does not sing production notes. Form **drv-a2a5fd4b34**. Short build, then the drop. Later stanzas switch layers. No section is a long loop. No brass and no high leads. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** — draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and `[drop]` / `[inst]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.
 3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing. Encoder language is `unknown`. Free-text lines under a marker are lyrics — keep cues inside the brackets.
 4. Original arrangements only. No “in the style of <living artist>”. No living-DJ names. No famous-hook paraphrases.
 5. ACE-Step timbre is **invented**, not a cloned act.
-6. Sampler: 8 steps, cfg 1, euler, simple. Duration 369 s, bpm 165, language unknown, timesignature 4, key B minor, form drv-ab6e64070b, generate_audio_codes true. Seed 593.
+6. Sampler: 8 steps, cfg 1, euler, simple. Duration 369 s, bpm 165, language unknown, timesignature 4, key B minor, form drv-a2a5fd4b34, generate_audio_codes true. Seed 593.
 7. Saves: `01 - Hush Lane` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.
 8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.
 9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).
@@ -147,103 +147,91 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, …` |
-| 2 | `[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, octave su…` |
+| 2 | `[build-up - chest-sub, sub center, low-mid moves wide, layered sub stack, kick …` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/secret-homage/01-hush-lane` |
 
 ```text
-dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 165 bpm, instrumental, no vocals
+dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, octave sub stack, rapid hi-hats, low reese counterline, snare answers, dirty dubstep wreck, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, layered sub stack, kick tightens, octave sub stack, rapid hi-hats, low reese counterline, snare answers, dirty dubstep wreck, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked warped drop, body bass, body bass answer, trap drums denser, offbeat push, dirty dubstep, heavy wobble drop, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, stacked warped drop, body bass, body bass answer, trap drums denser, offbeat push, dirty dubstep, heavy wobble drop, 2 bars]
 
-[breakdown - chest-sub, low-mid orbits the sub, rapid hi-hats, fold bass melody, body bass, tight kick, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, octave sub stack, kick pattern flip, low wobble answer, straight hats, warped 808, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder reese warped drop, body bass, chest-sub melody, offbeat hats, triplet hats, rapid hi-hats denser, 2 bars]
+[breakdown - chest-sub, 3D low-mid orbit, parallel low-mid layer, rapid hi-hats, low reese counterline, octave sub stack, loose hats, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, octave sub stack, low-mid bass melody, backbeat shove, wobble sustain, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, full send warped drop, octave sub stack, low-mid bass melody, ghost snare, backbeat shove, wobble sustain, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, body bass, rapid hi-hats, fold bass melody, ghost notes, low rumble wreck, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, body bass, rapid hi-hats, fold bass melody, ghost notes, low rumble wreck, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, octave sub stack, low reese counterline, dry hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, stacked reese drop, octave sub stack, low reese counterline, trap drums denser, dry hats, harder warped drop, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy warped drop, body bass, body bass answer, kick pattern flip, wide hat bed, harder warped drop, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, body bass, kick pattern flip, body bass answer, wide hat bed, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, octave sub stack, offbeat hats, low wobble answer, mono kick, chest-sub wreck, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, harder wobble drop, octave sub stack, low wobble answer, offbeat hats, mono kick, full send drop, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, body bass, chest-sub melody, side snare, dubstep warp, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, panning bass layer, ghost snare, body bass, chest-sub melody, side snare, chest-sub wreck, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, octave sub stack, rapid hi-hats, low-mid bass melody, rolling hats, kick holds, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, octave sub stack, rapid hi-hats, low-mid bass melody, rolling hats, dubstep warp, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked wobble warped drop, body bass, fold bass melody, trap drums denser, late snare, full send drop, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, trap drums denser, body bass, fold bass melody, late snare, kick holds, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, octave sub stack, kick pattern flip, low reese counterline, early kick, rapid hi-hats roll, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, heavy reese drop, octave sub stack, low reese counterline, kick pattern flip, early kick, rapid hi-hats roll, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, body bass, body bass answer, syncopated hats, wobble ride, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, body bass, offbeat hats, body bass answer, syncopated hats, wobble ride, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, octave sub stack, ghost snare, low wobble answer, open hat, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, full send wobble drop, octave sub stack, low wobble answer, ghost snare, open hat, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, body bass, chest-sub melody, closed hat, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, body bass, rapid hi-hats, chest-sub melody, closed hat, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, octave sub stack, trap drums denser, low-mid bass melody, room snare, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, trap drums denser, octave sub stack, low-mid bass melody, room snare, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, kick pattern flip, body bass, fold bass melody, tight kick, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, heavy wobble drop, body bass, fold bass melody, kick pattern flip, tight kick, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder reese warped drop, octave sub stack, low reese counterline, offbeat hats, loose hats, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, octave 808 stack, offbeat hats, octave sub stack, low reese counterline, loose hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, ghost snare, body bass, body bass answer, pushed snare, 2 bars]
+[drop - chest-sub, bass circles the low-mid, panning bass layer, full send warped drop, body bass, body bass answer, ghost snare, pushed snare, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck wobble warped drop, octave sub stack, low wobble answer, rapid hi-hats, chopped hats, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, layered sub stack, kick tightens, octave sub stack, rapid hi-hats, low wobble answer, chopped hats, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, body bass, trap drums denser, chest-sub melody, hat density up, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, stacked reese drop, body bass, chest-sub melody, trap drums denser, hat density up, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, octave sub stack, low-mid bass melody, kick opens, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, kick pattern flip, octave sub stack, low-mid bass melody, kick opens, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, body bass, offbeat hats, fold bass melody, kick tightens, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, octave 808 stack, kick tightens, body bass, offbeat hats, fold bass melody, kick tightens, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, octave sub stack, low reese counterline, snare answers, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, full send reese drop, octave sub stack, low reese counterline, ghost snare, snare answers, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, body bass, rapid hi-hats, body bass answer, offbeat push, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, layered sub stack, rapid hi-hats, body bass, body bass answer, offbeat push, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, octave sub stack, low wobble answer, straight hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, stacked wobble drop, octave sub stack, low wobble answer, trap drums denser, straight hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy reese warped drop, body bass, chest-sub melody, kick pattern flip, triplet hats, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, body bass, kick pattern flip, chest-sub melody, triplet hats, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, offbeat hats, octave sub stack, low-mid bass melody, backbeat shove, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, offbeat hats, octave sub stack, low-mid bass melody, backbeat shove, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, body bass, ghost snare, fold bass melody, ghost notes, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, full send wobble drop, body bass, fold bass melody, ghost snare, ghost notes, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, rapid hi-hats, octave sub stack, low reese counterline, dry hats, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, octave sub stack, rapid hi-hats, low reese counterline, dry hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked warped drop, body bass, body bass answer, trap drums denser, wide hat bed, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, trap drums denser, body bass, body bass answer, wide hat bed, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, octave sub stack, low wobble answer, mono kick, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, heavy wobble drop, octave sub stack, low wobble answer, kick pattern flip, mono kick, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder reese warped drop, body bass, chest-sub melody, offbeat hats, side snare, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, body bass, offbeat hats, chest-sub melody, side snare, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, octave sub stack, low-mid bass melody, rolling hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, full send warped drop, octave sub stack, low-mid bass melody, ghost snare, rolling hats, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, body bass, rapid hi-hats, fold bass melody, late snare, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, body bass, rapid hi-hats, fold bass melody, late snare, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, stacked reese warped drop, octave sub stack, low reese counterline, trap drums denser, early kick, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, trap drums denser, octave sub stack, low reese counterline, early kick, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, kick pattern flip, body bass, body bass answer, syncopated hats, 2 bars]
-
-[drop - chest-sub, 3D low-mid orbit, harder wobble warped drop, octave sub stack, low wobble answer, offbeat hats, open hat, 2 bars]
-
-[build-up - chest-sub, bass circles the low-mid, kick tightens, body bass, ghost snare, chest-sub melody, closed hat, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, octave sub stack, low-mid bass melody, room snare, 2 bars]
-
-[drop - chest-sub, low-mid orbits the sub, stacked wobble warped drop, body bass, fold bass melody, trap drums denser, tight kick, 2 bars]
-
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, octave sub stack, low reese counterline, loose hats, 2 bars]
-
-[outro - chest-sub, 3D low-mid orbit, kick pattern flip, rapid hi-hats, low reese counterline, loose hats, 2 bars]
+[outro - chest-sub, 3D low-mid orbit, wide stereo layer, kick pattern flip, rapid hi-hats, low reese counterline, loose hats, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -251,7 +239,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, 8
 | Slot | Value |
 | --- | --- |
 | 0 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, …` |
-| 1 | `[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, octave su…` |
+| 1 | `[build-up - chest-sub, sub center, low-mid moves wide, layered sub stack, kick …` |
 | 2 | `593` |
 | 3 | `fixed` |
 | 4 | `165` |
@@ -267,97 +255,85 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, 8
 | 14 | `0.0` |
 
 ```text
-dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 165 bpm, instrumental, no vocals
+dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, octave sub stack, rapid hi-hats, low reese counterline, snare answers, dirty dubstep wreck, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, layered sub stack, kick tightens, octave sub stack, rapid hi-hats, low reese counterline, snare answers, dirty dubstep wreck, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked warped drop, body bass, body bass answer, trap drums denser, offbeat push, dirty dubstep, heavy wobble drop, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, stacked warped drop, body bass, body bass answer, trap drums denser, offbeat push, dirty dubstep, heavy wobble drop, 2 bars]
 
-[breakdown - chest-sub, low-mid orbits the sub, rapid hi-hats, fold bass melody, body bass, tight kick, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, octave sub stack, kick pattern flip, low wobble answer, straight hats, warped 808, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder reese warped drop, body bass, chest-sub melody, offbeat hats, triplet hats, rapid hi-hats denser, 2 bars]
+[breakdown - chest-sub, 3D low-mid orbit, parallel low-mid layer, rapid hi-hats, low reese counterline, octave sub stack, loose hats, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, octave sub stack, low-mid bass melody, backbeat shove, wobble sustain, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, full send warped drop, octave sub stack, low-mid bass melody, ghost snare, backbeat shove, wobble sustain, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, body bass, rapid hi-hats, fold bass melody, ghost notes, low rumble wreck, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, body bass, rapid hi-hats, fold bass melody, ghost notes, low rumble wreck, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, octave sub stack, low reese counterline, dry hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, stacked reese drop, octave sub stack, low reese counterline, trap drums denser, dry hats, harder warped drop, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy warped drop, body bass, body bass answer, kick pattern flip, wide hat bed, harder warped drop, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, body bass, kick pattern flip, body bass answer, wide hat bed, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, octave sub stack, offbeat hats, low wobble answer, mono kick, chest-sub wreck, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, harder wobble drop, octave sub stack, low wobble answer, offbeat hats, mono kick, full send drop, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, body bass, chest-sub melody, side snare, dubstep warp, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, panning bass layer, ghost snare, body bass, chest-sub melody, side snare, chest-sub wreck, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, octave sub stack, rapid hi-hats, low-mid bass melody, rolling hats, kick holds, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, octave sub stack, rapid hi-hats, low-mid bass melody, rolling hats, dubstep warp, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked wobble warped drop, body bass, fold bass melody, trap drums denser, late snare, full send drop, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, trap drums denser, body bass, fold bass melody, late snare, kick holds, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, octave sub stack, kick pattern flip, low reese counterline, early kick, rapid hi-hats roll, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, heavy reese drop, octave sub stack, low reese counterline, kick pattern flip, early kick, rapid hi-hats roll, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, body bass, body bass answer, syncopated hats, wobble ride, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, body bass, offbeat hats, body bass answer, syncopated hats, wobble ride, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, octave sub stack, ghost snare, low wobble answer, open hat, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, full send wobble drop, octave sub stack, low wobble answer, ghost snare, open hat, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, body bass, chest-sub melody, closed hat, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, body bass, rapid hi-hats, chest-sub melody, closed hat, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, octave sub stack, trap drums denser, low-mid bass melody, room snare, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, trap drums denser, octave sub stack, low-mid bass melody, room snare, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, kick pattern flip, body bass, fold bass melody, tight kick, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, heavy wobble drop, body bass, fold bass melody, kick pattern flip, tight kick, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder reese warped drop, octave sub stack, low reese counterline, offbeat hats, loose hats, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, octave 808 stack, offbeat hats, octave sub stack, low reese counterline, loose hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, ghost snare, body bass, body bass answer, pushed snare, 2 bars]
+[drop - chest-sub, bass circles the low-mid, panning bass layer, full send warped drop, body bass, body bass answer, ghost snare, pushed snare, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck wobble warped drop, octave sub stack, low wobble answer, rapid hi-hats, chopped hats, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, layered sub stack, kick tightens, octave sub stack, rapid hi-hats, low wobble answer, chopped hats, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, body bass, trap drums denser, chest-sub melody, hat density up, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, stacked reese drop, body bass, chest-sub melody, trap drums denser, hat density up, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, octave sub stack, low-mid bass melody, kick opens, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, kick pattern flip, octave sub stack, low-mid bass melody, kick opens, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, body bass, offbeat hats, fold bass melody, kick tightens, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, octave 808 stack, kick tightens, body bass, offbeat hats, fold bass melody, kick tightens, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, octave sub stack, low reese counterline, snare answers, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, full send reese drop, octave sub stack, low reese counterline, ghost snare, snare answers, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, body bass, rapid hi-hats, body bass answer, offbeat push, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, layered sub stack, rapid hi-hats, body bass, body bass answer, offbeat push, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, octave sub stack, low wobble answer, straight hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, stacked wobble drop, octave sub stack, low wobble answer, trap drums denser, straight hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy reese warped drop, body bass, chest-sub melody, kick pattern flip, triplet hats, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, body bass, kick pattern flip, chest-sub melody, triplet hats, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, offbeat hats, octave sub stack, low-mid bass melody, backbeat shove, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, offbeat hats, octave sub stack, low-mid bass melody, backbeat shove, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, body bass, ghost snare, fold bass melody, ghost notes, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, full send wobble drop, body bass, fold bass melody, ghost snare, ghost notes, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, rapid hi-hats, octave sub stack, low reese counterline, dry hats, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, octave sub stack, rapid hi-hats, low reese counterline, dry hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked warped drop, body bass, body bass answer, trap drums denser, wide hat bed, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, trap drums denser, body bass, body bass answer, wide hat bed, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, octave sub stack, low wobble answer, mono kick, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, heavy wobble drop, octave sub stack, low wobble answer, kick pattern flip, mono kick, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder reese warped drop, body bass, chest-sub melody, offbeat hats, side snare, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, body bass, offbeat hats, chest-sub melody, side snare, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, octave sub stack, low-mid bass melody, rolling hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, full send warped drop, octave sub stack, low-mid bass melody, ghost snare, rolling hats, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, body bass, rapid hi-hats, fold bass melody, late snare, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, body bass, rapid hi-hats, fold bass melody, late snare, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, stacked reese warped drop, octave sub stack, low reese counterline, trap drums denser, early kick, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, trap drums denser, octave sub stack, low reese counterline, early kick, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, kick pattern flip, body bass, body bass answer, syncopated hats, 2 bars]
-
-[drop - chest-sub, 3D low-mid orbit, harder wobble warped drop, octave sub stack, low wobble answer, offbeat hats, open hat, 2 bars]
-
-[build-up - chest-sub, bass circles the low-mid, kick tightens, body bass, ghost snare, chest-sub melody, closed hat, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, octave sub stack, low-mid bass melody, room snare, 2 bars]
-
-[drop - chest-sub, low-mid orbits the sub, stacked wobble warped drop, body bass, fold bass melody, trap drums denser, tight kick, 2 bars]
-
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, octave sub stack, low reese counterline, loose hats, 2 bars]
-
-[outro - chest-sub, 3D low-mid orbit, kick pattern flip, rapid hi-hats, low reese counterline, loose hats, 2 bars]
+[outro - chest-sub, 3D low-mid orbit, wide stereo layer, kick pattern flip, rapid hi-hats, low reese counterline, loose hats, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -456,103 +432,93 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8…` |
-| 2 | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, offbeat hats…` |
+| 2 | `[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens,…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/secret-homage/02-cipher-lock` |
 
 ```text
-dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, warped bass, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 165 bpm, instrumental, no vocals
+dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, warped bass, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, offbeat hats, low reese counterline, straight hats, brostep wreck, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, fold bass, offbeat hats, low reese counterline, straight hats, brostep wreck, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck reese warped drop, stacked 808, body bass answer, ghost snare, triplet hats, brostep, heavy growl drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, wreck reese drop, stacked 808, body bass answer, ghost snare, triplet hats, brostep, heavy growl drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, rapid hi-hats, low wobble answer, backbeat shove, warped lock, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick tightens, fold bass, rapid hi-hats, low wobble answer, backbeat shove, warped lock, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, stacked 808, chest-sub melody, ghost notes, rapid hi-hats roll, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, heavy wobble drop, stacked 808, chest-sub melody, trap drums denser, ghost notes, rapid hi-hats roll, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder reese warped drop, fold bass, low-mid bass melody, kick pattern flip, dry hats, growl sustain, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, fold bass, kick pattern flip, low-mid bass melody, dry hats, growl sustain, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, stacked 808, offbeat hats, fold bass melody, wide hat bed, sub crush, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, offbeat hats, stacked 808, fold bass melody, wide hat bed, sub crush, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, fold bass, low reese counterline, mono kick, chest-sub 808 warped, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, wreck wobble drop, fold bass, low reese counterline, ghost snare, mono kick, harder dirty drop, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked reese warped drop, stacked 808, body bass answer, rapid hi-hats, side snare, harder dirty drop, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, stacked 808, rapid hi-hats, body bass answer, side snare, chest-sub 808 warped, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, trap drums denser, low wobble answer, rolling hats, rapid hi-hats denser, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, trap drums denser, fold bass, low wobble answer, rolling hats, rapid hi-hats denser, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder wobble warped drop, stacked 808, chest-sub melody, kick pattern flip, late snare, growl hold, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, harder wobble drop, stacked 808, chest-sub melody, kick pattern flip, late snare, growl hold, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, offbeat hats, low-mid bass melody, early kick, stacked growl wreck, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, fold bass, offbeat hats, low-mid bass melody, early kick, stacked growl wreck, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, stacked 808, fold bass melody, syncopated hats, brostep warp, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, wide stereo layer, ghost snare, stacked 808, fold bass melody, syncopated hats, brostep warp, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked wobble warped drop, fold bass, low reese counterline, rapid hi-hats, open hat, full send drop, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, stacked wobble drop, fold bass, low reese counterline, rapid hi-hats, open hat, full send drop, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, stacked 808, trap drums denser, body bass answer, closed hat, kick holds, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, stacked 808, trap drums denser, body bass answer, closed hat, kick holds, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, fold bass, low wobble answer, room snare, hats denser, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, kick pattern flip, fold bass, low wobble answer, room snare, hats denser, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, offbeat hats, chest-sub melody, tight kick, growl ride, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, stacked 808, offbeat hats, chest-sub melody, tight kick, growl ride, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck reese warped drop, fold bass, low-mid bass melody, ghost snare, loose hats, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, ghost snare, fold bass, low-mid bass melody, loose hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, stacked 808, fold bass melody, pushed snare, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, stacked warped drop, stacked 808, fold bass melody, rapid hi-hats, pushed snare, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy wobble warped drop, fold bass, low reese counterline, trap drums denser, chopped hats, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, fold bass, trap drums denser, low reese counterline, chopped hats, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, kick pattern flip, body bass answer, hat density up, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, layered sub stack, kick pattern flip, stacked 808, body bass answer, hat density up, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, fold bass, low wobble answer, kick opens, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, full send warped drop, fold bass, low wobble answer, offbeat hats, kick opens, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck wobble warped drop, stacked 808, chest-sub melody, ghost snare, kick tightens, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, stacked 808, ghost snare, chest-sub melody, kick tightens, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, fold bass, low-mid bass melody, snare answers, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, rapid hi-hats, fold bass, low-mid bass melody, snare answers, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, heavy warped drop, stacked 808, fold bass melody, trap drums denser, offbeat push, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, heavy warped drop, stacked 808, fold bass melody, trap drums denser, offbeat push, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, kick pattern flip, low reese counterline, straight hats, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, layered sub stack, kick pattern flip, fold bass, low reese counterline, straight hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, stacked 808, body bass answer, triplet hats, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, parallel low-mid layer, kick tightens, stacked 808, offbeat hats, body bass answer, triplet hats, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck warped drop, fold bass, low wobble answer, ghost snare, backbeat shove, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, wreck warped drop, fold bass, low wobble answer, ghost snare, backbeat shove, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, stacked 808, chest-sub melody, ghost notes, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, stacked 808, rapid hi-hats, chest-sub melody, ghost notes, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, heavy reese warped drop, fold bass, low-mid bass melody, trap drums denser, dry hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, heavy reese drop, fold bass, low-mid bass melody, trap drums denser, dry hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, stacked 808, fold bass melody, wide hat bed, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, stacked 808, kick pattern flip, fold bass melody, wide hat bed, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, offbeat hats, low reese counterline, mono kick, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, full send wobble drop, fold bass, low reese counterline, offbeat hats, mono kick, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, stacked 808, body bass answer, side snare, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, stacked 808, ghost snare, body bass answer, side snare, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked warped drop, fold bass, low wobble answer, rapid hi-hats, rolling hats, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, octave 808 stack, rapid hi-hats, fold bass, low wobble answer, rolling hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, stacked 808, chest-sub melody, late snare, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, stacked 808, trap drums denser, chest-sub melody, late snare, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder reese warped drop, fold bass, low-mid bass melody, kick pattern flip, early kick, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, kick pattern flip, fold bass, low-mid bass melody, early kick, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, stacked 808, fold bass melody, syncopated hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, stacked 808, offbeat hats, fold bass melody, syncopated hats, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, ghost snare, low reese counterline, open hat, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, ghost snare, fold bass, low reese counterline, open hat, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked reese warped drop, stacked 808, body bass answer, rapid hi-hats, closed hat, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, stacked reese drop, stacked 808, body bass answer, rapid hi-hats, closed hat, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, trap drums denser, low wobble answer, room snare, 2 bars]
-
-[inst - chest-sub, low-mid orbits the sub, kick pattern flip, stacked 808, chest-sub melody, tight kick, 2 bars]
-
-[drop - chest-sub, 3D low-mid orbit, full send reese warped drop, fold bass, low-mid bass melody, offbeat hats, loose hats, 2 bars]
-
-[inst - chest-sub, bass circles the low-mid, ghost snare, stacked 808, fold bass melody, pushed snare, 2 bars]
-
-[drop - chest-sub, sub center, low-mid moves wide, stacked wobble warped drop, fold bass, low reese counterline, rapid hi-hats, chopped hats, 2 bars]
-
-[outro - chest-sub, bass circles the low-mid, kick pattern flip, rapid hi-hats, fold bass melody, pushed snare, 2 bars]
+[outro - chest-sub, bass circles the low-mid, layered sub stack, kick pattern flip, rapid hi-hats, fold bass melody, pushed snare, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -560,7 +526,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 | Slot | Value |
 | --- | --- |
 | 0 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8…` |
-| 1 | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, offbeat hats…` |
+| 1 | `[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens,…` |
 | 2 | `599` |
 | 3 | `fixed` |
 | 4 | `165` |
@@ -576,97 +542,87 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 | 14 | `0.0` |
 
 ```text
-dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, warped bass, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 165 bpm, instrumental, no vocals
+dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, warped bass, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, offbeat hats, low reese counterline, straight hats, brostep wreck, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, fold bass, offbeat hats, low reese counterline, straight hats, brostep wreck, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck reese warped drop, stacked 808, body bass answer, ghost snare, triplet hats, brostep, heavy growl drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, wreck reese drop, stacked 808, body bass answer, ghost snare, triplet hats, brostep, heavy growl drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, rapid hi-hats, low wobble answer, backbeat shove, warped lock, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick tightens, fold bass, rapid hi-hats, low wobble answer, backbeat shove, warped lock, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, stacked 808, chest-sub melody, ghost notes, rapid hi-hats roll, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, heavy wobble drop, stacked 808, chest-sub melody, trap drums denser, ghost notes, rapid hi-hats roll, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder reese warped drop, fold bass, low-mid bass melody, kick pattern flip, dry hats, growl sustain, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, fold bass, kick pattern flip, low-mid bass melody, dry hats, growl sustain, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, stacked 808, offbeat hats, fold bass melody, wide hat bed, sub crush, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, offbeat hats, stacked 808, fold bass melody, wide hat bed, sub crush, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, fold bass, low reese counterline, mono kick, chest-sub 808 warped, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, wreck wobble drop, fold bass, low reese counterline, ghost snare, mono kick, harder dirty drop, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked reese warped drop, stacked 808, body bass answer, rapid hi-hats, side snare, harder dirty drop, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, stacked 808, rapid hi-hats, body bass answer, side snare, chest-sub 808 warped, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, trap drums denser, low wobble answer, rolling hats, rapid hi-hats denser, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, trap drums denser, fold bass, low wobble answer, rolling hats, rapid hi-hats denser, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder wobble warped drop, stacked 808, chest-sub melody, kick pattern flip, late snare, growl hold, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, harder wobble drop, stacked 808, chest-sub melody, kick pattern flip, late snare, growl hold, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, offbeat hats, low-mid bass melody, early kick, stacked growl wreck, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, fold bass, offbeat hats, low-mid bass melody, early kick, stacked growl wreck, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, stacked 808, fold bass melody, syncopated hats, brostep warp, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, wide stereo layer, ghost snare, stacked 808, fold bass melody, syncopated hats, brostep warp, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked wobble warped drop, fold bass, low reese counterline, rapid hi-hats, open hat, full send drop, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, stacked wobble drop, fold bass, low reese counterline, rapid hi-hats, open hat, full send drop, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, stacked 808, trap drums denser, body bass answer, closed hat, kick holds, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, stacked 808, trap drums denser, body bass answer, closed hat, kick holds, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, fold bass, low wobble answer, room snare, hats denser, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, kick pattern flip, fold bass, low wobble answer, room snare, hats denser, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, offbeat hats, chest-sub melody, tight kick, growl ride, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, stacked 808, offbeat hats, chest-sub melody, tight kick, growl ride, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck reese warped drop, fold bass, low-mid bass melody, ghost snare, loose hats, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, ghost snare, fold bass, low-mid bass melody, loose hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, stacked 808, fold bass melody, pushed snare, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, stacked warped drop, stacked 808, fold bass melody, rapid hi-hats, pushed snare, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy wobble warped drop, fold bass, low reese counterline, trap drums denser, chopped hats, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, fold bass, trap drums denser, low reese counterline, chopped hats, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, kick pattern flip, body bass answer, hat density up, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, layered sub stack, kick pattern flip, stacked 808, body bass answer, hat density up, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, fold bass, low wobble answer, kick opens, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, full send warped drop, fold bass, low wobble answer, offbeat hats, kick opens, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck wobble warped drop, stacked 808, chest-sub melody, ghost snare, kick tightens, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, stacked 808, ghost snare, chest-sub melody, kick tightens, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, fold bass, low-mid bass melody, snare answers, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, rapid hi-hats, fold bass, low-mid bass melody, snare answers, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, heavy warped drop, stacked 808, fold bass melody, trap drums denser, offbeat push, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, heavy warped drop, stacked 808, fold bass melody, trap drums denser, offbeat push, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, kick pattern flip, low reese counterline, straight hats, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, layered sub stack, kick pattern flip, fold bass, low reese counterline, straight hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, stacked 808, body bass answer, triplet hats, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, parallel low-mid layer, kick tightens, stacked 808, offbeat hats, body bass answer, triplet hats, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck warped drop, fold bass, low wobble answer, ghost snare, backbeat shove, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, wreck warped drop, fold bass, low wobble answer, ghost snare, backbeat shove, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, stacked 808, chest-sub melody, ghost notes, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, stacked 808, rapid hi-hats, chest-sub melody, ghost notes, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, heavy reese warped drop, fold bass, low-mid bass melody, trap drums denser, dry hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, heavy reese drop, fold bass, low-mid bass melody, trap drums denser, dry hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, stacked 808, fold bass melody, wide hat bed, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, stacked 808, kick pattern flip, fold bass melody, wide hat bed, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, offbeat hats, low reese counterline, mono kick, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, full send wobble drop, fold bass, low reese counterline, offbeat hats, mono kick, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, stacked 808, body bass answer, side snare, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, stacked 808, ghost snare, body bass answer, side snare, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked warped drop, fold bass, low wobble answer, rapid hi-hats, rolling hats, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, octave 808 stack, rapid hi-hats, fold bass, low wobble answer, rolling hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, stacked 808, chest-sub melody, late snare, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, stacked 808, trap drums denser, chest-sub melody, late snare, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder reese warped drop, fold bass, low-mid bass melody, kick pattern flip, early kick, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, kick pattern flip, fold bass, low-mid bass melody, early kick, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, stacked 808, fold bass melody, syncopated hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, stacked 808, offbeat hats, fold bass melody, syncopated hats, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, ghost snare, low reese counterline, open hat, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, ghost snare, fold bass, low reese counterline, open hat, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked reese warped drop, stacked 808, body bass answer, rapid hi-hats, closed hat, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, stacked reese drop, stacked 808, body bass answer, rapid hi-hats, closed hat, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, trap drums denser, low wobble answer, room snare, 2 bars]
-
-[inst - chest-sub, low-mid orbits the sub, kick pattern flip, stacked 808, chest-sub melody, tight kick, 2 bars]
-
-[drop - chest-sub, 3D low-mid orbit, full send reese warped drop, fold bass, low-mid bass melody, offbeat hats, loose hats, 2 bars]
-
-[inst - chest-sub, bass circles the low-mid, ghost snare, stacked 808, fold bass melody, pushed snare, 2 bars]
-
-[drop - chest-sub, sub center, low-mid moves wide, stacked wobble warped drop, fold bass, low reese counterline, rapid hi-hats, chopped hats, 2 bars]
-
-[outro - chest-sub, bass circles the low-mid, kick pattern flip, rapid hi-hats, fold bass melody, pushed snare, 2 bars]
+[outro - chest-sub, bass circles the low-mid, layered sub stack, kick pattern flip, rapid hi-hats, fold bass melody, pushed snare, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -765,101 +721,89 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or…` |
-| 2 | `[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub,…` |
+| 2 | `[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tighte…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/secret-homage/03-ghost-dock` |
 
 ```text
-riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 165 bpm, instrumental, no vocals
+riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, trap drums denser, body bass answer, early kick, wobble wreck, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, mono chest-sub, trap drums denser, body bass answer, early kick, wobble wreck, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder wobble warped drop, low chest-sub, low wobble answer, kick pattern flip, syncopated hats, wobble bass, heavy riddim drop, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, harder wobble drop, low chest-sub, low wobble answer, kick pattern flip, syncopated hats, wobble bass, heavy riddim drop, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, mono chest-sub, chest-sub melody, open hat, warped dock, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, mono chest-sub, offbeat hats, chest-sub melody, open hat, warped dock, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck warped drop, low chest-sub, low-mid bass melody, ghost snare, closed hat, harder warped drop, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, wreck warped drop, low chest-sub, low-mid bass melody, ghost snare, closed hat, harder warped drop, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, rapid hi-hats, fold bass melody, room snare, chest warped wreck, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, mono chest-sub, rapid hi-hats, fold bass melody, room snare, chest warped wreck, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, low chest-sub, low reese counterline, tight kick, 808 crush, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, heavy reese drop, low chest-sub, low reese counterline, trap drums denser, tight kick, 808 crush, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, kick pattern flip, body bass answer, loose hats, rapid hi-hats roll, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick pattern flip, mono chest-sub, body bass answer, loose hats, rapid hi-hats roll, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, low chest-sub, low wobble answer, pushed snare, wobble hold, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, low chest-sub, offbeat hats, low wobble answer, pushed snare, wobble hold, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, ghost snare, chest-sub melody, chopped hats, low rumble wreck, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, wreck reese drop, mono chest-sub, chest-sub melody, ghost snare, chopped hats, full send drop, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, stacked warped drop, low chest-sub, low-mid bass melody, rapid hi-hats, hat density up, full send drop, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, low chest-sub, rapid hi-hats, low-mid bass melody, hat density up, low rumble wreck, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, mono chest-sub, fold bass melody, kick opens, riddim warp, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, heavy wobble drop, mono chest-sub, fold bass melody, trap drums denser, kick opens, riddim warp, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder reese warped drop, low chest-sub, low reese counterline, kick pattern flip, kick tightens, kick holds, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, low chest-sub, kick pattern flip, low reese counterline, kick tightens, kick holds, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, offbeat hats, body bass answer, snare answers, wobble ride, 2 bars]
+[inst - chest-sub, bass circles the low-mid, wide stereo layer, offbeat hats, mono chest-sub, body bass answer, snare answers, wobble ride, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, low chest-sub, low wobble answer, offbeat push, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, wreck wobble drop, low chest-sub, low wobble answer, ghost snare, offbeat push, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked reese warped drop, mono chest-sub, chest-sub melody, rapid hi-hats, straight hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tightens, mono chest-sub, rapid hi-hats, chest-sub melody, straight hats, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, trap drums denser, low-mid bass melody, triplet hats, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, layered sub stack, trap drums denser, low chest-sub, low-mid bass melody, triplet hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, mono chest-sub, fold bass melody, backbeat shove, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, harder wobble drop, mono chest-sub, fold bass melody, kick pattern flip, backbeat shove, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, full send reese warped drop, low chest-sub, low reese counterline, offbeat hats, ghost notes, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, low chest-sub, offbeat hats, low reese counterline, ghost notes, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, mono chest-sub, body bass answer, dry hats, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, wreck warped drop, mono chest-sub, body bass answer, ghost snare, dry hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked wobble warped drop, low chest-sub, low wobble answer, rapid hi-hats, wide hat bed, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, panning bass layer, kick tightens, low chest-sub, rapid hi-hats, low wobble answer, wide hat bed, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, trap drums denser, chest-sub melody, mono kick, 2 bars]
+[inst - chest-sub, bass circles the low-mid, layered sub stack, trap drums denser, mono chest-sub, chest-sub melody, mono kick, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, low chest-sub, low-mid bass melody, side snare, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, harder warped drop, low chest-sub, low-mid bass melody, kick pattern flip, side snare, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, full send wobble warped drop, mono chest-sub, fold bass melody, offbeat hats, rolling hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, mono chest-sub, offbeat hats, fold bass melody, rolling hats, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, ghost snare, low reese counterline, late snare, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, wreck reese drop, low chest-sub, low reese counterline, ghost snare, late snare, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, mono chest-sub, body bass answer, early kick, 2 bars]
+[inst - chest-sub, bass circles the low-mid, panning bass layer, rapid hi-hats, mono chest-sub, body bass answer, early kick, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy wobble warped drop, low chest-sub, low wobble answer, trap drums denser, syncopated hats, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, heavy wobble drop, low chest-sub, low wobble answer, trap drums denser, syncopated hats, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, kick pattern flip, chest-sub melody, open hat, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, mono chest-sub, kick pattern flip, chest-sub melody, open hat, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, full send warped drop, low chest-sub, low-mid bass melody, offbeat hats, closed hat, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, offbeat hats, low chest-sub, low-mid bass melody, closed hat, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, ghost snare, fold bass melody, room snare, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, wreck wobble drop, mono chest-sub, fold bass melody, ghost snare, room snare, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, low chest-sub, low reese counterline, tight kick, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, low chest-sub, rapid hi-hats, low reese counterline, tight kick, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, trap drums denser, body bass answer, loose hats, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, heavy warped drop, mono chest-sub, body bass answer, trap drums denser, loose hats, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, low chest-sub, low wobble answer, pushed snare, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, low chest-sub, kick pattern flip, low wobble answer, pushed snare, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send reese warped drop, mono chest-sub, chest-sub melody, offbeat hats, chopped hats, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, full send reese drop, mono chest-sub, chest-sub melody, offbeat hats, chopped hats, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, ghost snare, low-mid bass melody, hat density up, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick tightens, low chest-sub, ghost snare, low-mid bass melody, hat density up, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, mono chest-sub, fold bass melody, kick opens, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, panning bass layer, rapid hi-hats, mono chest-sub, fold bass melody, kick opens, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, heavy reese warped drop, low chest-sub, low reese counterline, trap drums denser, kick tightens, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, layered sub stack, heavy reese drop, low chest-sub, low reese counterline, trap drums denser, kick tightens, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, mono chest-sub, body bass answer, snare answers, 2 bars]
-
-[drop - chest-sub, sub center, low-mid moves wide, full send wobble warped drop, low chest-sub, low wobble answer, offbeat hats, offbeat push, 2 bars]
-
-[inst - chest-sub, low-mid orbits the sub, ghost snare, mono chest-sub, chest-sub melody, straight hats, 2 bars]
-
-[drop - chest-sub, 3D low-mid orbit, stacked warped drop, low chest-sub, low-mid bass melody, rapid hi-hats, triplet hats, 2 bars]
-
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, trap drums denser, fold bass melody, backbeat shove, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, low chest-sub, low reese counterline, ghost notes, 2 bars]
-
-[outro - chest-sub, low-mid orbits the sub, kick pattern flip, rapid hi-hats, body bass answer, loose hats, 2 bars]
+[outro - chest-sub, low-mid orbits the sub, panning bass layer, kick pattern flip, rapid hi-hats, body bass answer, loose hats, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -867,7 +811,7 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, ori
 | Slot | Value |
 | --- | --- |
 | 0 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or…` |
-| 1 | `[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub,…` |
+| 1 | `[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tighte…` |
 | 2 | `601` |
 | 3 | `fixed` |
 | 4 | `165` |
@@ -883,95 +827,83 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, ori
 | 14 | `0.0` |
 
 ```text
-riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 165 bpm, instrumental, no vocals
+riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, trap drums denser, body bass answer, early kick, wobble wreck, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, mono chest-sub, trap drums denser, body bass answer, early kick, wobble wreck, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder wobble warped drop, low chest-sub, low wobble answer, kick pattern flip, syncopated hats, wobble bass, heavy riddim drop, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, harder wobble drop, low chest-sub, low wobble answer, kick pattern flip, syncopated hats, wobble bass, heavy riddim drop, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, mono chest-sub, chest-sub melody, open hat, warped dock, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, mono chest-sub, offbeat hats, chest-sub melody, open hat, warped dock, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck warped drop, low chest-sub, low-mid bass melody, ghost snare, closed hat, harder warped drop, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, wreck warped drop, low chest-sub, low-mid bass melody, ghost snare, closed hat, harder warped drop, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, rapid hi-hats, fold bass melody, room snare, chest warped wreck, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, mono chest-sub, rapid hi-hats, fold bass melody, room snare, chest warped wreck, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, low chest-sub, low reese counterline, tight kick, 808 crush, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, heavy reese drop, low chest-sub, low reese counterline, trap drums denser, tight kick, 808 crush, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, kick pattern flip, body bass answer, loose hats, rapid hi-hats roll, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick pattern flip, mono chest-sub, body bass answer, loose hats, rapid hi-hats roll, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, low chest-sub, low wobble answer, pushed snare, wobble hold, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, low chest-sub, offbeat hats, low wobble answer, pushed snare, wobble hold, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, ghost snare, chest-sub melody, chopped hats, low rumble wreck, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, wreck reese drop, mono chest-sub, chest-sub melody, ghost snare, chopped hats, full send drop, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, stacked warped drop, low chest-sub, low-mid bass melody, rapid hi-hats, hat density up, full send drop, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, low chest-sub, rapid hi-hats, low-mid bass melody, hat density up, low rumble wreck, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, mono chest-sub, fold bass melody, kick opens, riddim warp, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, heavy wobble drop, mono chest-sub, fold bass melody, trap drums denser, kick opens, riddim warp, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder reese warped drop, low chest-sub, low reese counterline, kick pattern flip, kick tightens, kick holds, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, low chest-sub, kick pattern flip, low reese counterline, kick tightens, kick holds, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, offbeat hats, body bass answer, snare answers, wobble ride, 2 bars]
+[inst - chest-sub, bass circles the low-mid, wide stereo layer, offbeat hats, mono chest-sub, body bass answer, snare answers, wobble ride, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, low chest-sub, low wobble answer, offbeat push, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, wreck wobble drop, low chest-sub, low wobble answer, ghost snare, offbeat push, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked reese warped drop, mono chest-sub, chest-sub melody, rapid hi-hats, straight hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tightens, mono chest-sub, rapid hi-hats, chest-sub melody, straight hats, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, trap drums denser, low-mid bass melody, triplet hats, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, layered sub stack, trap drums denser, low chest-sub, low-mid bass melody, triplet hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, mono chest-sub, fold bass melody, backbeat shove, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, harder wobble drop, mono chest-sub, fold bass melody, kick pattern flip, backbeat shove, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, full send reese warped drop, low chest-sub, low reese counterline, offbeat hats, ghost notes, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, low chest-sub, offbeat hats, low reese counterline, ghost notes, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, mono chest-sub, body bass answer, dry hats, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, wreck warped drop, mono chest-sub, body bass answer, ghost snare, dry hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked wobble warped drop, low chest-sub, low wobble answer, rapid hi-hats, wide hat bed, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, panning bass layer, kick tightens, low chest-sub, rapid hi-hats, low wobble answer, wide hat bed, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, trap drums denser, chest-sub melody, mono kick, 2 bars]
+[inst - chest-sub, bass circles the low-mid, layered sub stack, trap drums denser, mono chest-sub, chest-sub melody, mono kick, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, low chest-sub, low-mid bass melody, side snare, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, harder warped drop, low chest-sub, low-mid bass melody, kick pattern flip, side snare, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, full send wobble warped drop, mono chest-sub, fold bass melody, offbeat hats, rolling hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, mono chest-sub, offbeat hats, fold bass melody, rolling hats, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, ghost snare, low reese counterline, late snare, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, wreck reese drop, low chest-sub, low reese counterline, ghost snare, late snare, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, mono chest-sub, body bass answer, early kick, 2 bars]
+[inst - chest-sub, bass circles the low-mid, panning bass layer, rapid hi-hats, mono chest-sub, body bass answer, early kick, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy wobble warped drop, low chest-sub, low wobble answer, trap drums denser, syncopated hats, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, heavy wobble drop, low chest-sub, low wobble answer, trap drums denser, syncopated hats, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, kick pattern flip, chest-sub melody, open hat, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, mono chest-sub, kick pattern flip, chest-sub melody, open hat, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, full send warped drop, low chest-sub, low-mid bass melody, offbeat hats, closed hat, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, offbeat hats, low chest-sub, low-mid bass melody, closed hat, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, ghost snare, fold bass melody, room snare, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, wreck wobble drop, mono chest-sub, fold bass melody, ghost snare, room snare, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, low chest-sub, low reese counterline, tight kick, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, low chest-sub, rapid hi-hats, low reese counterline, tight kick, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, trap drums denser, body bass answer, loose hats, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, heavy warped drop, mono chest-sub, body bass answer, trap drums denser, loose hats, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, low chest-sub, low wobble answer, pushed snare, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, low chest-sub, kick pattern flip, low wobble answer, pushed snare, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send reese warped drop, mono chest-sub, chest-sub melody, offbeat hats, chopped hats, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, full send reese drop, mono chest-sub, chest-sub melody, offbeat hats, chopped hats, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, ghost snare, low-mid bass melody, hat density up, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick tightens, low chest-sub, ghost snare, low-mid bass melody, hat density up, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, mono chest-sub, fold bass melody, kick opens, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, panning bass layer, rapid hi-hats, mono chest-sub, fold bass melody, kick opens, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, heavy reese warped drop, low chest-sub, low reese counterline, trap drums denser, kick tightens, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, layered sub stack, heavy reese drop, low chest-sub, low reese counterline, trap drums denser, kick tightens, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, mono chest-sub, body bass answer, snare answers, 2 bars]
-
-[drop - chest-sub, sub center, low-mid moves wide, full send wobble warped drop, low chest-sub, low wobble answer, offbeat hats, offbeat push, 2 bars]
-
-[inst - chest-sub, low-mid orbits the sub, ghost snare, mono chest-sub, chest-sub melody, straight hats, 2 bars]
-
-[drop - chest-sub, 3D low-mid orbit, stacked warped drop, low chest-sub, low-mid bass melody, rapid hi-hats, triplet hats, 2 bars]
-
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, trap drums denser, fold bass melody, backbeat shove, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, low chest-sub, low reese counterline, ghost notes, 2 bars]
-
-[outro - chest-sub, low-mid orbits the sub, kick pattern flip, rapid hi-hats, body bass answer, loose hats, 2 bars]
+[outro - chest-sub, low-mid orbits the sub, panning bass layer, kick pattern flip, rapid hi-hats, body bass answer, loose hats, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1070,101 +1002,89 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, or…` |
-| 2 | `[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stac…` |
+| 2 | `[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tighte…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/secret-homage/04-sealed-ramp` |
 
 ```text
-tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 168 bpm, instrumental, no vocals
+tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, kick pattern flip, low wobble answer, kick tightens, growl wreck, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, octave sub stack, kick pattern flip, low wobble answer, kick tightens, growl wreck, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, stacked reese warped drop, body bass, chest-sub melody, offbeat hats, snare answers, tearout, heavy tearout drop, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, stacked reese drop, body bass, chest-sub melody, offbeat hats, snare answers, tearout, heavy tearout drop, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, ghost snare, low-mid bass melody, offbeat push, warped seal, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, octave sub stack, ghost snare, low-mid bass melody, offbeat push, warped seal, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, rapid hi-hats, body bass, fold bass melody, straight hats, rapid hi-hats roll, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, harder wobble drop, body bass, fold bass melody, rapid hi-hats, straight hats, rapid hi-hats roll, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, trap drums denser, low reese counterline, triplet hats, growl sustain, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, octave sub stack, trap drums denser, low reese counterline, triplet hats, growl sustain, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck warped drop, body bass, body bass answer, kick pattern flip, backbeat shove, harder dirty drop, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, kick pattern flip, body bass, body bass answer, backbeat shove, sub crush, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, octave sub stack, low wobble answer, ghost notes, sub crush, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, stacked wobble drop, octave sub stack, low wobble answer, offbeat hats, ghost notes, harder dirty drop, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, heavy reese warped drop, body bass, chest-sub melody, ghost snare, dry hats, chest-sub 808 warp, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, ghost snare, body bass, chest-sub melody, dry hats, chest-sub 808 warp, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, rapid hi-hats, low-mid bass melody, wide hat bed, rapid hi-hats denser, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, harder warped drop, octave sub stack, low-mid bass melody, rapid hi-hats, wide hat bed, rapid hi-hats denser, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, full send wobble warped drop, body bass, fold bass melody, trap drums denser, mono kick, growl hold, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, panning bass layer, trap drums denser, body bass, fold bass melody, mono kick, growl hold, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, kick pattern flip, low reese counterline, side snare, stacked tearout wreck, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, wreck reese drop, octave sub stack, low reese counterline, kick pattern flip, side snare, full send drop, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, body bass, body bass answer, rolling hats, warped grind, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, parallel low-mid layer, offbeat hats, body bass, body bass answer, rolling hats, stacked tearout wreck, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, ghost snare, low wobble answer, late snare, low rumble wreck, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, heavy wobble drop, octave sub stack, low wobble answer, ghost snare, late snare, warped grind, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, body bass, chest-sub melody, early kick, 808 warp, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick tightens, body bass, rapid hi-hats, chest-sub melody, early kick, low rumble wreck, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, trap drums denser, low-mid bass melody, syncopated hats, kick holds, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, full send warped drop, octave sub stack, low-mid bass melody, trap drums denser, syncopated hats, harder stacked drop, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, body bass, fold bass melody, open hat, hats denser, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, body bass, kick pattern flip, fold bass melody, open hat, 808 warp, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, offbeat hats, low reese counterline, closed hat, growl ride, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, stacked reese drop, octave sub stack, low reese counterline, offbeat hats, closed hat, kick holds, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, body bass, body bass answer, room snare, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, body bass, ghost snare, body bass answer, room snare, hats denser, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, rapid hi-hats, low wobble answer, tight kick, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, octave 808 stack, rapid hi-hats, octave sub stack, low wobble answer, tight kick, growl ride, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, full send reese warped drop, body bass, chest-sub melody, trap drums denser, loose hats, full send drop, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, panning bass layer, kick tightens, body bass, trap drums denser, chest-sub melody, loose hats, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, kick pattern flip, low-mid bass melody, pushed snare, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, wreck warped drop, octave sub stack, low-mid bass melody, kick pattern flip, pushed snare, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, offbeat hats, body bass, fold bass melody, chopped hats, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, body bass, offbeat hats, fold bass melody, chopped hats, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, heavy reese warped drop, octave sub stack, low reese counterline, ghost snare, hat density up, harder stacked drop, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, heavy reese drop, octave sub stack, low reese counterline, ghost snare, hat density up, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, rapid hi-hats, body bass answer, kick opens, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, octave 808 stack, kick tightens, body bass, rapid hi-hats, body bass answer, kick opens, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, octave sub stack, low wobble answer, kick tightens, 2 bars]
+[inst - chest-sub, bass circles the low-mid, panning bass layer, trap drums denser, octave sub stack, low wobble answer, kick tightens, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck reese warped drop, body bass, chest-sub melody, kick pattern flip, snare answers, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, wreck reese drop, body bass, chest-sub melody, kick pattern flip, snare answers, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, offbeat hats, low-mid bass melody, offbeat push, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, parallel low-mid layer, offbeat hats, octave sub stack, low-mid bass melody, offbeat push, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, body bass, fold bass melody, straight hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, heavy wobble drop, body bass, fold bass melody, ghost snare, straight hats, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, rapid hi-hats, low reese counterline, triplet hats, 2 bars]
+[inst - chest-sub, bass circles the low-mid, octave 808 stack, rapid hi-hats, octave sub stack, low reese counterline, triplet hats, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, full send warped drop, body bass, body bass answer, trap drums denser, backbeat shove, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, full send warped drop, body bass, body bass answer, trap drums denser, backbeat shove, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, kick pattern flip, low wobble answer, ghost notes, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, octave sub stack, kick pattern flip, low wobble answer, ghost notes, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, body bass, chest-sub melody, dry hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, stacked reese drop, body bass, chest-sub melody, offbeat hats, dry hats, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, ghost snare, low-mid bass melody, wide hat bed, 2 bars]
+[inst - chest-sub, bass circles the low-mid, wide stereo layer, ghost snare, octave sub stack, low-mid bass melody, wide hat bed, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, body bass, fold bass melody, mono kick, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, harder wobble drop, body bass, fold bass melody, rapid hi-hats, mono kick, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, full send reese warped drop, octave sub stack, low reese counterline, trap drums denser, side snare, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tightens, octave sub stack, trap drums denser, low reese counterline, side snare, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, kick pattern flip, body bass answer, rolling hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, layered sub stack, wreck warped drop, body bass, body bass answer, kick pattern flip, rolling hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, octave sub stack, low wobble answer, late snare, 2 bars]
-
-[drop - chest-sub, sub center, low-mid moves wide, heavy reese warped drop, body bass, chest-sub melody, ghost snare, early kick, 2 bars]
-
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, octave sub stack, low-mid bass melody, syncopated hats, 2 bars]
-
-[drop - chest-sub, 3D low-mid orbit, full send wobble warped drop, body bass, fold bass melody, trap drums denser, open hat, 2 bars]
-
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, kick pattern flip, low reese counterline, closed hat, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, offbeat hats, body bass, body bass answer, room snare, 2 bars]
-
-[outro - chest-sub, sub center, low-mid moves wide, kick pattern flip, rapid hi-hats, chest-sub melody, early kick, 2 bars]
+[outro - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick pattern flip, rapid hi-hats, chest-sub melody, early kick, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -1172,7 +1092,7 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ori
 | Slot | Value |
 | --- | --- |
 | 0 | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, or…` |
-| 1 | `[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stac…` |
+| 1 | `[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tighte…` |
 | 2 | `607` |
 | 3 | `fixed` |
 | 4 | `168` |
@@ -1188,95 +1108,83 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ori
 | 14 | `0.0` |
 
 ```text
-tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 168 bpm, instrumental, no vocals
+tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, kick pattern flip, low wobble answer, kick tightens, growl wreck, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, octave sub stack, kick pattern flip, low wobble answer, kick tightens, growl wreck, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, stacked reese warped drop, body bass, chest-sub melody, offbeat hats, snare answers, tearout, heavy tearout drop, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, stacked reese drop, body bass, chest-sub melody, offbeat hats, snare answers, tearout, heavy tearout drop, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, ghost snare, low-mid bass melody, offbeat push, warped seal, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, octave sub stack, ghost snare, low-mid bass melody, offbeat push, warped seal, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, rapid hi-hats, body bass, fold bass melody, straight hats, rapid hi-hats roll, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, harder wobble drop, body bass, fold bass melody, rapid hi-hats, straight hats, rapid hi-hats roll, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, trap drums denser, low reese counterline, triplet hats, growl sustain, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, octave sub stack, trap drums denser, low reese counterline, triplet hats, growl sustain, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck warped drop, body bass, body bass answer, kick pattern flip, backbeat shove, harder dirty drop, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, kick pattern flip, body bass, body bass answer, backbeat shove, sub crush, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, octave sub stack, low wobble answer, ghost notes, sub crush, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, stacked wobble drop, octave sub stack, low wobble answer, offbeat hats, ghost notes, harder dirty drop, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, heavy reese warped drop, body bass, chest-sub melody, ghost snare, dry hats, chest-sub 808 warp, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, ghost snare, body bass, chest-sub melody, dry hats, chest-sub 808 warp, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, rapid hi-hats, low-mid bass melody, wide hat bed, rapid hi-hats denser, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, harder warped drop, octave sub stack, low-mid bass melody, rapid hi-hats, wide hat bed, rapid hi-hats denser, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, full send wobble warped drop, body bass, fold bass melody, trap drums denser, mono kick, growl hold, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, panning bass layer, trap drums denser, body bass, fold bass melody, mono kick, growl hold, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, kick pattern flip, low reese counterline, side snare, stacked tearout wreck, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, wreck reese drop, octave sub stack, low reese counterline, kick pattern flip, side snare, full send drop, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, body bass, body bass answer, rolling hats, warped grind, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, parallel low-mid layer, offbeat hats, body bass, body bass answer, rolling hats, stacked tearout wreck, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, ghost snare, low wobble answer, late snare, low rumble wreck, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, heavy wobble drop, octave sub stack, low wobble answer, ghost snare, late snare, warped grind, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, body bass, chest-sub melody, early kick, 808 warp, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick tightens, body bass, rapid hi-hats, chest-sub melody, early kick, low rumble wreck, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, trap drums denser, low-mid bass melody, syncopated hats, kick holds, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, full send warped drop, octave sub stack, low-mid bass melody, trap drums denser, syncopated hats, harder stacked drop, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, body bass, fold bass melody, open hat, hats denser, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, body bass, kick pattern flip, fold bass melody, open hat, 808 warp, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, offbeat hats, low reese counterline, closed hat, growl ride, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, stacked reese drop, octave sub stack, low reese counterline, offbeat hats, closed hat, kick holds, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, body bass, body bass answer, room snare, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, body bass, ghost snare, body bass answer, room snare, hats denser, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, rapid hi-hats, low wobble answer, tight kick, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, octave 808 stack, rapid hi-hats, octave sub stack, low wobble answer, tight kick, growl ride, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, full send reese warped drop, body bass, chest-sub melody, trap drums denser, loose hats, full send drop, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, panning bass layer, kick tightens, body bass, trap drums denser, chest-sub melody, loose hats, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, kick pattern flip, low-mid bass melody, pushed snare, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, wreck warped drop, octave sub stack, low-mid bass melody, kick pattern flip, pushed snare, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, offbeat hats, body bass, fold bass melody, chopped hats, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, body bass, offbeat hats, fold bass melody, chopped hats, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, heavy reese warped drop, octave sub stack, low reese counterline, ghost snare, hat density up, harder stacked drop, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, heavy reese drop, octave sub stack, low reese counterline, ghost snare, hat density up, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, rapid hi-hats, body bass answer, kick opens, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, octave 808 stack, kick tightens, body bass, rapid hi-hats, body bass answer, kick opens, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, octave sub stack, low wobble answer, kick tightens, 2 bars]
+[inst - chest-sub, bass circles the low-mid, panning bass layer, trap drums denser, octave sub stack, low wobble answer, kick tightens, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck reese warped drop, body bass, chest-sub melody, kick pattern flip, snare answers, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, wreck reese drop, body bass, chest-sub melody, kick pattern flip, snare answers, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, offbeat hats, low-mid bass melody, offbeat push, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, parallel low-mid layer, offbeat hats, octave sub stack, low-mid bass melody, offbeat push, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, body bass, fold bass melody, straight hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, heavy wobble drop, body bass, fold bass melody, ghost snare, straight hats, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, rapid hi-hats, low reese counterline, triplet hats, 2 bars]
+[inst - chest-sub, bass circles the low-mid, octave 808 stack, rapid hi-hats, octave sub stack, low reese counterline, triplet hats, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, full send warped drop, body bass, body bass answer, trap drums denser, backbeat shove, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, full send warped drop, body bass, body bass answer, trap drums denser, backbeat shove, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, kick pattern flip, low wobble answer, ghost notes, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, octave sub stack, kick pattern flip, low wobble answer, ghost notes, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, body bass, chest-sub melody, dry hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, stacked reese drop, body bass, chest-sub melody, offbeat hats, dry hats, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, ghost snare, low-mid bass melody, wide hat bed, 2 bars]
+[inst - chest-sub, bass circles the low-mid, wide stereo layer, ghost snare, octave sub stack, low-mid bass melody, wide hat bed, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, body bass, fold bass melody, mono kick, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, harder wobble drop, body bass, fold bass melody, rapid hi-hats, mono kick, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, full send reese warped drop, octave sub stack, low reese counterline, trap drums denser, side snare, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tightens, octave sub stack, trap drums denser, low reese counterline, side snare, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, kick pattern flip, body bass answer, rolling hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, layered sub stack, wreck warped drop, body bass, body bass answer, kick pattern flip, rolling hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, octave sub stack, low wobble answer, late snare, 2 bars]
-
-[drop - chest-sub, sub center, low-mid moves wide, heavy reese warped drop, body bass, chest-sub melody, ghost snare, early kick, 2 bars]
-
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, octave sub stack, low-mid bass melody, syncopated hats, 2 bars]
-
-[drop - chest-sub, 3D low-mid orbit, full send wobble warped drop, body bass, fold bass melody, trap drums denser, open hat, 2 bars]
-
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, kick pattern flip, low reese counterline, closed hat, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, offbeat hats, body bass, body bass answer, room snare, 2 bars]
-
-[outro - chest-sub, sub center, low-mid moves wide, kick pattern flip, rapid hi-hats, chest-sub melody, early kick, 2 bars]
+[outro - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick pattern flip, rapid hi-hats, chest-sub melody, early kick, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1375,101 +1283,91 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass,…` |
-| 2 | `[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass…` |
+| 2 | `[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/secret-homage/05-fog-vault` |
 
 ```text
-color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 165 bpm, instrumental, no vocals
+color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, ghost snare, low reese counterline, open hat, warped 808 wreck, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, body bass, ghost snare, low reese counterline, open hat, warped 808 wreck, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked warped drop, octave sub stack, body bass answer, rapid hi-hats, closed hat, color bass, heavy color drop, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, stacked warped drop, octave sub stack, body bass answer, rapid hi-hats, closed hat, color bass, heavy color drop, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, body bass, low wobble answer, room snare, vault grind, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, parallel low-mid layer, trap drums denser, body bass, low wobble answer, room snare, vault grind, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder reese warped drop, octave sub stack, chest-sub melody, kick pattern flip, tight kick, rapid hi-hats roll, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, harder reese drop, octave sub stack, chest-sub melody, kick pattern flip, tight kick, rapid hi-hats roll, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, offbeat hats, low-mid bass melody, loose hats, color 808 hold vault, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, stacked reese drop, octave sub stack, chest-sub melody, rapid hi-hats, ghost notes, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, octave sub stack, fold bass melody, pushed snare, chest analog wreck, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, panning bass layer, ghost snare, octave sub stack, fold bass melody, pushed snare, chest analog wreck, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked reese warped drop, body bass, low reese counterline, rapid hi-hats, chopped hats, harder warped drop, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, body bass, rapid hi-hats, low reese counterline, chopped hats, chest-sub 808, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, trap drums denser, body bass answer, hat density up, chest-sub 808, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, heavy warped drop, octave sub stack, body bass answer, trap drums denser, hat density up, harder warped drop, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, body bass, low wobble answer, kick opens, kick tightens, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick pattern flip, body bass, low wobble answer, kick opens, kick tightens, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, full send reese warped drop, octave sub stack, chest-sub melody, offbeat hats, kick tightens, chest-sub 808 punch, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, octave sub stack, offbeat hats, chest-sub melody, kick tightens, chest-sub 808 punch, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, ghost snare, low-mid bass melody, snare answers, stacked color wreck, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, ghost snare, body bass, low-mid bass melody, snare answers, stacked color wreck, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, octave sub stack, fold bass melody, offbeat push, warped sub, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, stacked wobble drop, octave sub stack, fold bass melody, rapid hi-hats, offbeat push, full send drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, trap drums denser, low reese counterline, straight hats, kick holds, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, body bass, trap drums denser, low reese counterline, straight hats, warped sub, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, kick pattern flip, octave sub stack, body bass answer, triplet hats, hats denser, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, harder warped drop, octave sub stack, body bass answer, kick pattern flip, triplet hats, kick holds, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, offbeat hats, low wobble answer, backbeat shove, color ride, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, octave 808 stack, offbeat hats, body bass, low wobble answer, backbeat shove, hats denser, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, ghost snare, octave sub stack, chest-sub melody, ghost notes, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, octave sub stack, ghost snare, chest-sub melody, ghost notes, color ride, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, stacked warped drop, body bass, low-mid bass melody, rapid hi-hats, dry hats, full send drop, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, rapid hi-hats, body bass, low-mid bass melody, dry hats, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, trap drums denser, fold bass melody, wide hat bed, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, heavy wobble drop, octave sub stack, fold bass melody, trap drums denser, wide hat bed, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder reese warped drop, body bass, low reese counterline, kick pattern flip, mono kick, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, kick pattern flip, body bass, low reese counterline, mono kick, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, octave sub stack, body bass answer, side snare, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, full send warped drop, octave sub stack, body bass answer, offbeat hats, side snare, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, ghost snare, low wobble answer, rolling hats, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, body bass, ghost snare, low wobble answer, rolling hats, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked reese warped drop, octave sub stack, chest-sub melody, rapid hi-hats, late snare, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, stacked reese drop, octave sub stack, chest-sub melody, rapid hi-hats, late snare, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, body bass, low-mid bass melody, early kick, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, parallel low-mid layer, trap drums denser, body bass, low-mid bass melody, early kick, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder wobble warped drop, octave sub stack, fold bass melody, kick pattern flip, syncopated hats, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, octave sub stack, kick pattern flip, fold bass melody, syncopated hats, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, offbeat hats, low reese counterline, open hat, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, offbeat hats, body bass, low reese counterline, open hat, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, octave sub stack, body bass answer, closed hat, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, wreck warped drop, octave sub stack, body bass answer, ghost snare, closed hat, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked wobble warped drop, body bass, low wobble answer, rapid hi-hats, room snare, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, body bass, rapid hi-hats, low wobble answer, room snare, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, trap drums denser, chest-sub melody, tight kick, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, trap drums denser, octave sub stack, chest-sub melody, tight kick, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder warped drop, body bass, low-mid bass melody, kick pattern flip, loose hats, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, harder warped drop, body bass, low-mid bass melody, kick pattern flip, loose hats, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, octave sub stack, fold bass melody, pushed snare, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, octave sub stack, offbeat hats, fold bass melody, pushed snare, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy wobble warped drop, octave sub stack, fold bass melody, trap drums denser, offbeat push, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, trap drums denser, octave sub stack, fold bass melody, offbeat push, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, body bass, ghost snare, low reese counterline, open hat, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, heavy reese drop, body bass, low reese counterline, ghost snare, open hat, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy reese warped drop, octave sub stack, low reese counterline, rapid hi-hats, triplet hats, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, parallel low-mid layer, kick tightens, octave sub stack, rapid hi-hats, low reese counterline, triplet hats, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, offbeat hats, body bass answer, tight kick, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, panning bass layer, offbeat hats, body bass, body bass answer, tight kick, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck warped drop, octave sub stack, low wobble answer, ghost snare, dry hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, wreck warped drop, octave sub stack, low wobble answer, ghost snare, dry hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, body bass, low wobble answer, pushed snare, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, body bass, kick pattern flip, low wobble answer, pushed snare, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder reese warped drop, octave sub stack, chest-sub melody, offbeat hats, mono kick, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, wide stereo layer, offbeat hats, octave sub stack, chest-sub melody, mono kick, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, body bass, low-mid bass melody, hat density up, 2 bars]
-
-[drop - chest-sub, sub center, low-mid moves wide, harder warped drop, octave sub stack, low-mid bass melody, kick pattern flip, late snare, 2 bars]
-
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, rapid hi-hats, fold bass melody, snare answers, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, octave sub stack, fold bass melody, syncopated hats, 2 bars]
-
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, body bass, ghost snare, low reese counterline, straight hats, 2 bars]
-
-[outro - chest-sub, 3D low-mid orbit, kick pattern flip, rapid hi-hats, low wobble answer, backbeat shove, 2 bars]
+[outro - chest-sub, 3D low-mid orbit, layered sub stack, kick pattern flip, rapid hi-hats, low wobble answer, backbeat shove, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -1477,7 +1375,7 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 
 | Slot | Value |
 | --- | --- |
 | 0 | `color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass,…` |
-| 1 | `[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass…` |
+| 1 | `[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick…` |
 | 2 | `613` |
 | 3 | `fixed` |
 | 4 | `165` |
@@ -1493,95 +1391,85 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 
 | 14 | `0.0` |
 
 ```text
-color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 165 bpm, instrumental, no vocals
+color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, ghost snare, low reese counterline, open hat, warped 808 wreck, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, body bass, ghost snare, low reese counterline, open hat, warped 808 wreck, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked warped drop, octave sub stack, body bass answer, rapid hi-hats, closed hat, color bass, heavy color drop, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, stacked warped drop, octave sub stack, body bass answer, rapid hi-hats, closed hat, color bass, heavy color drop, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, body bass, low wobble answer, room snare, vault grind, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, parallel low-mid layer, trap drums denser, body bass, low wobble answer, room snare, vault grind, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder reese warped drop, octave sub stack, chest-sub melody, kick pattern flip, tight kick, rapid hi-hats roll, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, harder reese drop, octave sub stack, chest-sub melody, kick pattern flip, tight kick, rapid hi-hats roll, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, offbeat hats, low-mid bass melody, loose hats, color 808 hold vault, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, stacked reese drop, octave sub stack, chest-sub melody, rapid hi-hats, ghost notes, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, octave sub stack, fold bass melody, pushed snare, chest analog wreck, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, panning bass layer, ghost snare, octave sub stack, fold bass melody, pushed snare, chest analog wreck, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked reese warped drop, body bass, low reese counterline, rapid hi-hats, chopped hats, harder warped drop, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, body bass, rapid hi-hats, low reese counterline, chopped hats, chest-sub 808, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, trap drums denser, body bass answer, hat density up, chest-sub 808, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, heavy warped drop, octave sub stack, body bass answer, trap drums denser, hat density up, harder warped drop, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, body bass, low wobble answer, kick opens, kick tightens, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick pattern flip, body bass, low wobble answer, kick opens, kick tightens, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, full send reese warped drop, octave sub stack, chest-sub melody, offbeat hats, kick tightens, chest-sub 808 punch, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, octave sub stack, offbeat hats, chest-sub melody, kick tightens, chest-sub 808 punch, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, ghost snare, low-mid bass melody, snare answers, stacked color wreck, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, ghost snare, body bass, low-mid bass melody, snare answers, stacked color wreck, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, octave sub stack, fold bass melody, offbeat push, warped sub, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, stacked wobble drop, octave sub stack, fold bass melody, rapid hi-hats, offbeat push, full send drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, trap drums denser, low reese counterline, straight hats, kick holds, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, body bass, trap drums denser, low reese counterline, straight hats, warped sub, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, kick pattern flip, octave sub stack, body bass answer, triplet hats, hats denser, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, harder warped drop, octave sub stack, body bass answer, kick pattern flip, triplet hats, kick holds, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, offbeat hats, low wobble answer, backbeat shove, color ride, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, octave 808 stack, offbeat hats, body bass, low wobble answer, backbeat shove, hats denser, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, ghost snare, octave sub stack, chest-sub melody, ghost notes, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, octave sub stack, ghost snare, chest-sub melody, ghost notes, color ride, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, stacked warped drop, body bass, low-mid bass melody, rapid hi-hats, dry hats, full send drop, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, rapid hi-hats, body bass, low-mid bass melody, dry hats, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, trap drums denser, fold bass melody, wide hat bed, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, heavy wobble drop, octave sub stack, fold bass melody, trap drums denser, wide hat bed, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder reese warped drop, body bass, low reese counterline, kick pattern flip, mono kick, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, kick pattern flip, body bass, low reese counterline, mono kick, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, octave sub stack, body bass answer, side snare, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, full send warped drop, octave sub stack, body bass answer, offbeat hats, side snare, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, ghost snare, low wobble answer, rolling hats, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, body bass, ghost snare, low wobble answer, rolling hats, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked reese warped drop, octave sub stack, chest-sub melody, rapid hi-hats, late snare, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, stacked reese drop, octave sub stack, chest-sub melody, rapid hi-hats, late snare, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, body bass, low-mid bass melody, early kick, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, parallel low-mid layer, trap drums denser, body bass, low-mid bass melody, early kick, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder wobble warped drop, octave sub stack, fold bass melody, kick pattern flip, syncopated hats, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, octave sub stack, kick pattern flip, fold bass melody, syncopated hats, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, offbeat hats, low reese counterline, open hat, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, offbeat hats, body bass, low reese counterline, open hat, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, octave sub stack, body bass answer, closed hat, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, wreck warped drop, octave sub stack, body bass answer, ghost snare, closed hat, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked wobble warped drop, body bass, low wobble answer, rapid hi-hats, room snare, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, body bass, rapid hi-hats, low wobble answer, room snare, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, trap drums denser, chest-sub melody, tight kick, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, trap drums denser, octave sub stack, chest-sub melody, tight kick, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder warped drop, body bass, low-mid bass melody, kick pattern flip, loose hats, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, harder warped drop, body bass, low-mid bass melody, kick pattern flip, loose hats, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, octave sub stack, fold bass melody, pushed snare, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, octave sub stack, offbeat hats, fold bass melody, pushed snare, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy wobble warped drop, octave sub stack, fold bass melody, trap drums denser, offbeat push, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, trap drums denser, octave sub stack, fold bass melody, offbeat push, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, body bass, ghost snare, low reese counterline, open hat, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, heavy reese drop, body bass, low reese counterline, ghost snare, open hat, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy reese warped drop, octave sub stack, low reese counterline, rapid hi-hats, triplet hats, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, parallel low-mid layer, kick tightens, octave sub stack, rapid hi-hats, low reese counterline, triplet hats, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, offbeat hats, body bass answer, tight kick, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, panning bass layer, offbeat hats, body bass, body bass answer, tight kick, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck warped drop, octave sub stack, low wobble answer, ghost snare, dry hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, wreck warped drop, octave sub stack, low wobble answer, ghost snare, dry hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, body bass, low wobble answer, pushed snare, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, body bass, kick pattern flip, low wobble answer, pushed snare, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder reese warped drop, octave sub stack, chest-sub melody, offbeat hats, mono kick, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, wide stereo layer, offbeat hats, octave sub stack, chest-sub melody, mono kick, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, body bass, low-mid bass melody, hat density up, 2 bars]
-
-[drop - chest-sub, sub center, low-mid moves wide, harder warped drop, octave sub stack, low-mid bass melody, kick pattern flip, late snare, 2 bars]
-
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, rapid hi-hats, fold bass melody, snare answers, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, octave sub stack, fold bass melody, syncopated hats, 2 bars]
-
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, body bass, ghost snare, low reese counterline, straight hats, 2 bars]
-
-[outro - chest-sub, 3D low-mid orbit, kick pattern flip, rapid hi-hats, low wobble answer, backbeat shove, 2 bars]
+[outro - chest-sub, 3D low-mid orbit, layered sub stack, kick pattern flip, rapid hi-hats, low wobble answer, backbeat shove, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1680,101 +1568,91 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped b…` |
-| 2 | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, ghost sn…` |
+| 2 | `[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, low …` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/secret-homage/06-dummy-light` |
 
 ```text
-warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 168 bpm, instrumental, no vocals
+warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, ghost snare, chest-sub melody, triplet hats, stacked 808 wreck, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, low chest-sub, ghost snare, chest-sub melody, triplet hats, stacked 808 wreck, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send reese warped drop, mono chest-sub, low-mid bass melody, rapid hi-hats, backbeat shove, warped hybrid-trap, heavy warped drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, full send reese drop, mono chest-sub, low-mid bass melody, rapid hi-hats, backbeat shove, warped hybrid-trap, heavy warped drop, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, low chest-sub, fold bass melody, ghost notes, light grind, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, low chest-sub, trap drums denser, fold bass melody, ghost notes, light grind, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, kick pattern flip, low reese counterline, dry hats, rapid hi-hats denser, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, octave 808 stack, kick pattern flip, mono chest-sub, low reese counterline, dry hats, rapid hi-hats denser, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, low chest-sub, body bass answer, wide hat bed, 808 hold, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, heavy reese drop, low chest-sub, body bass answer, offbeat hats, wide hat bed, 808 hold, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder warped drop, mono chest-sub, low wobble answer, ghost snare, mono kick, harder stacked drop, 2 bars]
+[inst - chest-sub, bass circles the low-mid, layered sub stack, ghost snare, mono chest-sub, low wobble answer, mono kick, chest-sub wall, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, rapid hi-hats, chest-sub melody, side snare, chest-sub wall, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, full send wobble drop, low chest-sub, chest-sub melody, rapid hi-hats, side snare, harder stacked drop, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, wreck reese warped drop, mono chest-sub, low-mid bass melody, trap drums denser, rolling hats, hybrid warped, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, mono chest-sub, trap drums denser, low-mid bass melody, rolling hats, hybrid warped, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, kick pattern flip, fold bass melody, late snare, low 808 wreck, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, octave 808 stack, kick pattern flip, low chest-sub, fold bass melody, late snare, low 808 wreck, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, mono chest-sub, low reese counterline, early kick, trap warp, 2 bars]
+[drop - chest-sub, bass circles the low-mid, panning bass layer, heavy wobble drop, mono chest-sub, low reese counterline, offbeat hats, early kick, full send drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, ghost snare, body bass answer, syncopated hats, kick holds, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, ghost snare, low chest-sub, body bass answer, syncopated hats, trap warp, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, full send warped drop, mono chest-sub, low wobble answer, rapid hi-hats, open hat, full send drop, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, mono chest-sub, rapid hi-hats, low wobble answer, open hat, kick holds, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, low chest-sub, chest-sub melody, closed hat, rapid hi-hats roll, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, trap drums denser, low chest-sub, chest-sub melody, closed hat, rapid hi-hats roll, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked reese warped drop, mono chest-sub, low-mid bass melody, kick pattern flip, room snare, 808 ride, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, octave 808 stack, kick tightens, mono chest-sub, kick pattern flip, low-mid bass melody, room snare, 808 ride, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, offbeat hats, fold bass melody, tight kick, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, heavy warped drop, low chest-sub, fold bass melody, offbeat hats, tight kick, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, mono chest-sub, low reese counterline, loose hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, mono chest-sub, ghost snare, low reese counterline, loose hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, full send reese warped drop, low chest-sub, body bass answer, rapid hi-hats, pushed snare, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, full send reese drop, low chest-sub, body bass answer, rapid hi-hats, pushed snare, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, trap drums denser, low wobble answer, chopped hats, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, mono chest-sub, trap drums denser, low wobble answer, chopped hats, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, stacked wobble warped drop, low chest-sub, chest-sub melody, kick pattern flip, hat density up, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, stacked wobble drop, low chest-sub, chest-sub melody, kick pattern flip, hat density up, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, offbeat hats, low-mid bass melody, kick opens, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, panning bass layer, offbeat hats, mono chest-sub, low-mid bass melody, kick opens, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, low chest-sub, fold bass melody, kick tightens, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, layered sub stack, harder warped drop, low chest-sub, fold bass melody, ghost snare, kick tightens, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send wobble warped drop, mono chest-sub, low reese counterline, rapid hi-hats, snare answers, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, rapid hi-hats, mono chest-sub, low reese counterline, snare answers, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, low chest-sub, body bass answer, offbeat push, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, low chest-sub, trap drums denser, body bass answer, offbeat push, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked warped drop, mono chest-sub, low wobble answer, kick pattern flip, straight hats, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, stacked warped drop, mono chest-sub, low wobble answer, kick pattern flip, straight hats, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, low chest-sub, chest-sub melody, triplet hats, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, offbeat hats, low chest-sub, chest-sub melody, triplet hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder reese warped drop, mono chest-sub, low-mid bass melody, ghost snare, backbeat shove, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, harder reese drop, mono chest-sub, low-mid bass melody, ghost snare, backbeat shove, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, rapid hi-hats, fold bass melody, ghost notes, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, low chest-sub, rapid hi-hats, fold bass melody, ghost notes, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, mono chest-sub, low reese counterline, dry hats, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, wide stereo layer, trap drums denser, mono chest-sub, low reese counterline, dry hats, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, kick pattern flip, body bass answer, wide hat bed, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, stacked reese drop, low chest-sub, body bass answer, kick pattern flip, wide hat bed, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, mono chest-sub, low wobble answer, mono kick, 2 bars]
+[inst - chest-sub, bass circles the low-mid, panning bass layer, offbeat hats, mono chest-sub, low wobble answer, mono kick, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder wobble warped drop, low chest-sub, chest-sub melody, ghost snare, side snare, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, harder wobble drop, low chest-sub, chest-sub melody, ghost snare, side snare, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, mono chest-sub, low-mid bass melody, rolling hats, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, parallel low-mid layer, rapid hi-hats, mono chest-sub, low-mid bass melody, rolling hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck warped drop, low chest-sub, fold bass melody, trap drums denser, late snare, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, wreck warped drop, low chest-sub, fold bass melody, trap drums denser, late snare, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, mono chest-sub, low reese counterline, early kick, 2 bars]
+[inst - chest-sub, bass circles the low-mid, octave 808 stack, kick pattern flip, mono chest-sub, low reese counterline, early kick, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy reese warped drop, low chest-sub, body bass answer, offbeat hats, syncopated hats, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, low chest-sub, offbeat hats, body bass answer, syncopated hats, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, mono chest-sub, low wobble answer, open hat, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, harder warped drop, mono chest-sub, low wobble answer, ghost snare, open hat, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, full send wobble warped drop, low chest-sub, chest-sub melody, rapid hi-hats, closed hat, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, parallel low-mid layer, rapid hi-hats, low chest-sub, chest-sub melody, closed hat, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, trap drums denser, low-mid bass melody, room snare, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, low chest-sub, fold bass melody, tight kick, 2 bars]
-
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, offbeat hats, low reese counterline, loose hats, 2 bars]
-
-[drop - chest-sub, 3D low-mid orbit, harder reese warped drop, low chest-sub, body bass answer, ghost snare, pushed snare, 2 bars]
-
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, rapid hi-hats, low wobble answer, chopped hats, 2 bars]
-
-[outro - chest-sub, 3D low-mid orbit, kick pattern flip, rapid hi-hats, body bass answer, wide hat bed, 2 bars]
+[outro - chest-sub, 3D low-mid orbit, layered sub stack, kick pattern flip, rapid hi-hats, body bass answer, wide hat bed, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -1782,7 +1660,7 @@ warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped ba
 | Slot | Value |
 | --- | --- |
 | 0 | `warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped b…` |
-| 1 | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, ghost sn…` |
+| 1 | `[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, low …` |
 | 2 | `617` |
 | 3 | `fixed` |
 | 4 | `168` |
@@ -1798,95 +1676,85 @@ warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped ba
 | 14 | `0.0` |
 
 ```text
-warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 168 bpm, instrumental, no vocals
+warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, ghost snare, chest-sub melody, triplet hats, stacked 808 wreck, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, low chest-sub, ghost snare, chest-sub melody, triplet hats, stacked 808 wreck, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send reese warped drop, mono chest-sub, low-mid bass melody, rapid hi-hats, backbeat shove, warped hybrid-trap, heavy warped drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, full send reese drop, mono chest-sub, low-mid bass melody, rapid hi-hats, backbeat shove, warped hybrid-trap, heavy warped drop, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, low chest-sub, fold bass melody, ghost notes, light grind, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, low chest-sub, trap drums denser, fold bass melody, ghost notes, light grind, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, kick pattern flip, low reese counterline, dry hats, rapid hi-hats denser, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, octave 808 stack, kick pattern flip, mono chest-sub, low reese counterline, dry hats, rapid hi-hats denser, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, low chest-sub, body bass answer, wide hat bed, 808 hold, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, heavy reese drop, low chest-sub, body bass answer, offbeat hats, wide hat bed, 808 hold, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder warped drop, mono chest-sub, low wobble answer, ghost snare, mono kick, harder stacked drop, 2 bars]
+[inst - chest-sub, bass circles the low-mid, layered sub stack, ghost snare, mono chest-sub, low wobble answer, mono kick, chest-sub wall, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, rapid hi-hats, chest-sub melody, side snare, chest-sub wall, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, full send wobble drop, low chest-sub, chest-sub melody, rapid hi-hats, side snare, harder stacked drop, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, wreck reese warped drop, mono chest-sub, low-mid bass melody, trap drums denser, rolling hats, hybrid warped, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, mono chest-sub, trap drums denser, low-mid bass melody, rolling hats, hybrid warped, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, kick pattern flip, fold bass melody, late snare, low 808 wreck, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, octave 808 stack, kick pattern flip, low chest-sub, fold bass melody, late snare, low 808 wreck, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, mono chest-sub, low reese counterline, early kick, trap warp, 2 bars]
+[drop - chest-sub, bass circles the low-mid, panning bass layer, heavy wobble drop, mono chest-sub, low reese counterline, offbeat hats, early kick, full send drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, ghost snare, body bass answer, syncopated hats, kick holds, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, ghost snare, low chest-sub, body bass answer, syncopated hats, trap warp, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, full send warped drop, mono chest-sub, low wobble answer, rapid hi-hats, open hat, full send drop, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, mono chest-sub, rapid hi-hats, low wobble answer, open hat, kick holds, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, low chest-sub, chest-sub melody, closed hat, rapid hi-hats roll, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, trap drums denser, low chest-sub, chest-sub melody, closed hat, rapid hi-hats roll, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked reese warped drop, mono chest-sub, low-mid bass melody, kick pattern flip, room snare, 808 ride, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, octave 808 stack, kick tightens, mono chest-sub, kick pattern flip, low-mid bass melody, room snare, 808 ride, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, offbeat hats, fold bass melody, tight kick, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, heavy warped drop, low chest-sub, fold bass melody, offbeat hats, tight kick, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, mono chest-sub, low reese counterline, loose hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, mono chest-sub, ghost snare, low reese counterline, loose hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, full send reese warped drop, low chest-sub, body bass answer, rapid hi-hats, pushed snare, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, full send reese drop, low chest-sub, body bass answer, rapid hi-hats, pushed snare, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, trap drums denser, low wobble answer, chopped hats, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, mono chest-sub, trap drums denser, low wobble answer, chopped hats, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, stacked wobble warped drop, low chest-sub, chest-sub melody, kick pattern flip, hat density up, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, stacked wobble drop, low chest-sub, chest-sub melody, kick pattern flip, hat density up, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, offbeat hats, low-mid bass melody, kick opens, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, panning bass layer, offbeat hats, mono chest-sub, low-mid bass melody, kick opens, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, low chest-sub, fold bass melody, kick tightens, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, layered sub stack, harder warped drop, low chest-sub, fold bass melody, ghost snare, kick tightens, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send wobble warped drop, mono chest-sub, low reese counterline, rapid hi-hats, snare answers, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, rapid hi-hats, mono chest-sub, low reese counterline, snare answers, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, low chest-sub, body bass answer, offbeat push, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, low chest-sub, trap drums denser, body bass answer, offbeat push, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked warped drop, mono chest-sub, low wobble answer, kick pattern flip, straight hats, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, stacked warped drop, mono chest-sub, low wobble answer, kick pattern flip, straight hats, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, low chest-sub, chest-sub melody, triplet hats, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, offbeat hats, low chest-sub, chest-sub melody, triplet hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder reese warped drop, mono chest-sub, low-mid bass melody, ghost snare, backbeat shove, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, harder reese drop, mono chest-sub, low-mid bass melody, ghost snare, backbeat shove, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, rapid hi-hats, fold bass melody, ghost notes, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, low chest-sub, rapid hi-hats, fold bass melody, ghost notes, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, mono chest-sub, low reese counterline, dry hats, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, wide stereo layer, trap drums denser, mono chest-sub, low reese counterline, dry hats, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, kick pattern flip, body bass answer, wide hat bed, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, stacked reese drop, low chest-sub, body bass answer, kick pattern flip, wide hat bed, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, mono chest-sub, low wobble answer, mono kick, 2 bars]
+[inst - chest-sub, bass circles the low-mid, panning bass layer, offbeat hats, mono chest-sub, low wobble answer, mono kick, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder wobble warped drop, low chest-sub, chest-sub melody, ghost snare, side snare, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, harder wobble drop, low chest-sub, chest-sub melody, ghost snare, side snare, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, mono chest-sub, low-mid bass melody, rolling hats, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, parallel low-mid layer, rapid hi-hats, mono chest-sub, low-mid bass melody, rolling hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck warped drop, low chest-sub, fold bass melody, trap drums denser, late snare, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, wreck warped drop, low chest-sub, fold bass melody, trap drums denser, late snare, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, mono chest-sub, low reese counterline, early kick, 2 bars]
+[inst - chest-sub, bass circles the low-mid, octave 808 stack, kick pattern flip, mono chest-sub, low reese counterline, early kick, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy reese warped drop, low chest-sub, body bass answer, offbeat hats, syncopated hats, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, low chest-sub, offbeat hats, body bass answer, syncopated hats, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, mono chest-sub, low wobble answer, open hat, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, harder warped drop, mono chest-sub, low wobble answer, ghost snare, open hat, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, full send wobble warped drop, low chest-sub, chest-sub melody, rapid hi-hats, closed hat, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, parallel low-mid layer, rapid hi-hats, low chest-sub, chest-sub melody, closed hat, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, trap drums denser, low-mid bass melody, room snare, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, low chest-sub, fold bass melody, tight kick, 2 bars]
-
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, offbeat hats, low reese counterline, loose hats, 2 bars]
-
-[drop - chest-sub, 3D low-mid orbit, harder reese warped drop, low chest-sub, body bass answer, ghost snare, pushed snare, 2 bars]
-
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, rapid hi-hats, low wobble answer, chopped hats, 2 bars]
-
-[outro - chest-sub, 3D low-mid orbit, kick pattern flip, rapid hi-hats, body bass answer, wide hat bed, 2 bars]
+[outro - chest-sub, 3D low-mid orbit, layered sub stack, kick pattern flip, rapid hi-hats, body bass answer, wide hat bed, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1985,101 +1853,91 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, 808, original co…` |
-| 2 | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, ghost sn…` |
+| 2 | `[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens,…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/secret-homage/07-quiet-wreck` |
 
 ```text
-dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 165 bpm, instrumental, no vocals
+dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, ghost snare, body bass answer, closed hat, warped bass wreck, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, low chest-sub, ghost snare, body bass answer, closed hat, warped bass wreck, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked reese warped drop, mono chest-sub, low wobble answer, rapid hi-hats, room snare, dirty bass, heavy dirty drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, stacked reese drop, mono chest-sub, low wobble answer, rapid hi-hats, room snare, dirty bass, heavy dirty drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, trap drums denser, chest-sub melody, tight kick, slam 808, 2 bars]
+[breakdown - chest-sub, bass circles the low-mid, parallel low-mid layer, rapid hi-hats, low reese counterline, mono chest-sub, mono kick, 2 bars]
 
-[breakdown - chest-sub, sub center, low-mid moves wide, rapid hi-hats, body bass answer, low chest-sub, side snare, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, harder wobble drop, mono chest-sub, low-mid bass melody, kick pattern flip, loose hats, rapid hi-hats roll, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, offbeat hats, fold bass melody, pushed snare, 808 slide, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, layered sub stack, offbeat hats, low chest-sub, fold bass melody, pushed snare, 808 slide, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck warped drop, mono chest-sub, low reese counterline, ghost snare, chopped hats, harder warped drop, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, parallel low-mid layer, kick tightens, mono chest-sub, ghost snare, low reese counterline, chopped hats, low rumble wreck, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, low chest-sub, body bass answer, hat density up, low rumble wreck, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, wide stereo layer, rapid hi-hats, low chest-sub, body bass answer, hat density up, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, heavy reese warped drop, mono chest-sub, low wobble answer, trap drums denser, kick opens, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, heavy reese drop, mono chest-sub, low wobble answer, trap drums denser, kick opens, harder warped drop, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, kick pattern flip, chest-sub melody, kick tightens, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, kick pattern flip, low chest-sub, chest-sub melody, kick tightens, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, mono chest-sub, low-mid bass melody, snare answers, chest-sub 808 punch, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, full send wobble drop, mono chest-sub, low-mid bass melody, offbeat hats, snare answers, chest-sub 808 punch, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck reese warped drop, low chest-sub, fold bass melody, ghost snare, offbeat push, full send drop, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, ghost snare, low chest-sub, fold bass melody, offbeat push, chest-sub wreck, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, rapid hi-hats, low reese counterline, straight hats, chest-sub wreck, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, stacked warped drop, mono chest-sub, low reese counterline, rapid hi-hats, straight hats, full send drop, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, low chest-sub, body bass answer, triplet hats, dirty warp, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, octave 808 stack, kick tightens, low chest-sub, trap drums denser, body bass answer, triplet hats, dirty warp, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder reese warped drop, mono chest-sub, low wobble answer, kick pattern flip, backbeat shove, hats denser, 2 bars]
+[inst - chest-sub, bass circles the low-mid, panning bass layer, kick pattern flip, mono chest-sub, low wobble answer, backbeat shove, hats denser, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, offbeat hats, chest-sub melody, ghost notes, 808 punch hold, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, full send warped drop, low chest-sub, chest-sub melody, offbeat hats, ghost notes, 808 punch hold, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, mono chest-sub, low-mid bass melody, dry hats, slam wreck, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, mono chest-sub, ghost snare, low-mid bass melody, dry hats, slam wreck, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked reese warped drop, low chest-sub, fold bass melody, rapid hi-hats, wide hat bed, harder stacked drop, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, rapid hi-hats, low chest-sub, fold bass melody, wide hat bed, warped 808, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, trap drums denser, low reese counterline, mono kick, warped 808, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, octave 808 stack, kick tightens, mono chest-sub, trap drums denser, low reese counterline, mono kick, kick holds, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, low chest-sub, body bass answer, side snare, kick holds, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, panning bass layer, kick pattern flip, low chest-sub, body bass answer, side snare, 808 ride, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, offbeat hats, low wobble answer, rolling hats, 808 ride, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, full send reese drop, mono chest-sub, low wobble answer, offbeat hats, rolling hats, harder stacked drop, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, low chest-sub, chest-sub melody, late snare, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, low chest-sub, ghost snare, chest-sub melody, late snare, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked wobble warped drop, mono chest-sub, low-mid bass melody, rapid hi-hats, early kick, 2 bars]
+[inst - chest-sub, bass circles the low-mid, wide stereo layer, rapid hi-hats, mono chest-sub, low-mid bass melody, early kick, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, trap drums denser, fold bass melody, syncopated hats, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, heavy reese drop, low chest-sub, fold bass melody, trap drums denser, syncopated hats, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, kick pattern flip, mono chest-sub, low reese counterline, open hat, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tightens, mono chest-sub, kick pattern flip, low reese counterline, open hat, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, full send wobble warped drop, low chest-sub, body bass answer, offbeat hats, closed hat, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, layered sub stack, offbeat hats, low chest-sub, body bass answer, closed hat, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, ghost snare, low wobble answer, room snare, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, parallel low-mid layer, kick tightens, mono chest-sub, ghost snare, low wobble answer, room snare, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, low chest-sub, chest-sub melody, tight kick, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, wide stereo layer, rapid hi-hats, low chest-sub, chest-sub melody, tight kick, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, heavy wobble warped drop, mono chest-sub, low-mid bass melody, trap drums denser, loose hats, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, heavy wobble drop, mono chest-sub, low-mid bass melody, trap drums denser, loose hats, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, kick pattern flip, fold bass melody, pushed snare, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, panning bass layer, kick tightens, low chest-sub, kick pattern flip, fold bass melody, pushed snare, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send warped drop, mono chest-sub, low reese counterline, offbeat hats, chopped hats, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, full send warped drop, mono chest-sub, low reese counterline, offbeat hats, chopped hats, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, low chest-sub, body bass answer, hat density up, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, low chest-sub, ghost snare, body bass answer, hat density up, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked reese warped drop, mono chest-sub, low wobble answer, rapid hi-hats, kick opens, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, wide stereo layer, rapid hi-hats, mono chest-sub, low wobble answer, kick opens, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, trap drums denser, chest-sub melody, kick tightens, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, heavy warped drop, low chest-sub, chest-sub melody, trap drums denser, kick tightens, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder wobble warped drop, mono chest-sub, low-mid bass melody, kick pattern flip, snare answers, 2 bars]
+[inst - chest-sub, bass circles the low-mid, panning bass layer, kick pattern flip, mono chest-sub, low-mid bass melody, snare answers, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, offbeat hats, fold bass melody, offbeat push, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, full send reese drop, low chest-sub, fold bass melody, offbeat hats, offbeat push, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, mono chest-sub, low reese counterline, straight hats, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, parallel low-mid layer, ghost snare, mono chest-sub, low reese counterline, straight hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked wobble warped drop, low chest-sub, body bass answer, rapid hi-hats, triplet hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, stacked wobble drop, low chest-sub, body bass answer, rapid hi-hats, triplet hats, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, trap drums denser, low wobble answer, backbeat shove, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, low chest-sub, chest-sub melody, ghost notes, 2 bars]
-
-[drop - chest-sub, low-mid orbits the sub, full send wobble warped drop, mono chest-sub, low-mid bass melody, offbeat hats, dry hats, 2 bars]
-
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, ghost snare, fold bass melody, wide hat bed, 2 bars]
-
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, mono chest-sub, low reese counterline, mono kick, 2 bars]
-
-[outro - chest-sub, sub center, low-mid moves wide, kick pattern flip, rapid hi-hats, body bass answer, side snare, 2 bars]
+[outro - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick pattern flip, rapid hi-hats, body bass answer, side snare, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -2087,7 +1945,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, 808, original com
 | Slot | Value |
 | --- | --- |
 | 0 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, 808, original co…` |
-| 1 | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, ghost sn…` |
+| 1 | `[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens,…` |
 | 2 | `619` |
 | 3 | `fixed` |
 | 4 | `165` |
@@ -2103,95 +1961,85 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, 808, original com
 | 14 | `0.0` |
 
 ```text
-dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 165 bpm, instrumental, no vocals
+dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, ghost snare, body bass answer, closed hat, warped bass wreck, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, low chest-sub, ghost snare, body bass answer, closed hat, warped bass wreck, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked reese warped drop, mono chest-sub, low wobble answer, rapid hi-hats, room snare, dirty bass, heavy dirty drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, stacked reese drop, mono chest-sub, low wobble answer, rapid hi-hats, room snare, dirty bass, heavy dirty drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, trap drums denser, chest-sub melody, tight kick, slam 808, 2 bars]
+[breakdown - chest-sub, bass circles the low-mid, parallel low-mid layer, rapid hi-hats, low reese counterline, mono chest-sub, mono kick, 2 bars]
 
-[breakdown - chest-sub, sub center, low-mid moves wide, rapid hi-hats, body bass answer, low chest-sub, side snare, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, harder wobble drop, mono chest-sub, low-mid bass melody, kick pattern flip, loose hats, rapid hi-hats roll, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, offbeat hats, fold bass melody, pushed snare, 808 slide, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, layered sub stack, offbeat hats, low chest-sub, fold bass melody, pushed snare, 808 slide, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck warped drop, mono chest-sub, low reese counterline, ghost snare, chopped hats, harder warped drop, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, parallel low-mid layer, kick tightens, mono chest-sub, ghost snare, low reese counterline, chopped hats, low rumble wreck, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, low chest-sub, body bass answer, hat density up, low rumble wreck, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, wide stereo layer, rapid hi-hats, low chest-sub, body bass answer, hat density up, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, heavy reese warped drop, mono chest-sub, low wobble answer, trap drums denser, kick opens, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, heavy reese drop, mono chest-sub, low wobble answer, trap drums denser, kick opens, harder warped drop, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, kick pattern flip, chest-sub melody, kick tightens, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, kick pattern flip, low chest-sub, chest-sub melody, kick tightens, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, mono chest-sub, low-mid bass melody, snare answers, chest-sub 808 punch, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, full send wobble drop, mono chest-sub, low-mid bass melody, offbeat hats, snare answers, chest-sub 808 punch, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck reese warped drop, low chest-sub, fold bass melody, ghost snare, offbeat push, full send drop, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, ghost snare, low chest-sub, fold bass melody, offbeat push, chest-sub wreck, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, rapid hi-hats, low reese counterline, straight hats, chest-sub wreck, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, stacked warped drop, mono chest-sub, low reese counterline, rapid hi-hats, straight hats, full send drop, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, low chest-sub, body bass answer, triplet hats, dirty warp, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, octave 808 stack, kick tightens, low chest-sub, trap drums denser, body bass answer, triplet hats, dirty warp, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder reese warped drop, mono chest-sub, low wobble answer, kick pattern flip, backbeat shove, hats denser, 2 bars]
+[inst - chest-sub, bass circles the low-mid, panning bass layer, kick pattern flip, mono chest-sub, low wobble answer, backbeat shove, hats denser, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, offbeat hats, chest-sub melody, ghost notes, 808 punch hold, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, full send warped drop, low chest-sub, chest-sub melody, offbeat hats, ghost notes, 808 punch hold, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, mono chest-sub, low-mid bass melody, dry hats, slam wreck, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, mono chest-sub, ghost snare, low-mid bass melody, dry hats, slam wreck, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked reese warped drop, low chest-sub, fold bass melody, rapid hi-hats, wide hat bed, harder stacked drop, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, rapid hi-hats, low chest-sub, fold bass melody, wide hat bed, warped 808, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, trap drums denser, low reese counterline, mono kick, warped 808, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, octave 808 stack, kick tightens, mono chest-sub, trap drums denser, low reese counterline, mono kick, kick holds, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, low chest-sub, body bass answer, side snare, kick holds, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, panning bass layer, kick pattern flip, low chest-sub, body bass answer, side snare, 808 ride, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, offbeat hats, low wobble answer, rolling hats, 808 ride, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, full send reese drop, mono chest-sub, low wobble answer, offbeat hats, rolling hats, harder stacked drop, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, low chest-sub, chest-sub melody, late snare, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, low chest-sub, ghost snare, chest-sub melody, late snare, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked wobble warped drop, mono chest-sub, low-mid bass melody, rapid hi-hats, early kick, 2 bars]
+[inst - chest-sub, bass circles the low-mid, wide stereo layer, rapid hi-hats, mono chest-sub, low-mid bass melody, early kick, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, trap drums denser, fold bass melody, syncopated hats, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, heavy reese drop, low chest-sub, fold bass melody, trap drums denser, syncopated hats, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, kick pattern flip, mono chest-sub, low reese counterline, open hat, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tightens, mono chest-sub, kick pattern flip, low reese counterline, open hat, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, full send wobble warped drop, low chest-sub, body bass answer, offbeat hats, closed hat, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, layered sub stack, offbeat hats, low chest-sub, body bass answer, closed hat, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, ghost snare, low wobble answer, room snare, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, parallel low-mid layer, kick tightens, mono chest-sub, ghost snare, low wobble answer, room snare, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, low chest-sub, chest-sub melody, tight kick, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, wide stereo layer, rapid hi-hats, low chest-sub, chest-sub melody, tight kick, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, heavy wobble warped drop, mono chest-sub, low-mid bass melody, trap drums denser, loose hats, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, heavy wobble drop, mono chest-sub, low-mid bass melody, trap drums denser, loose hats, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, kick pattern flip, fold bass melody, pushed snare, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, panning bass layer, kick tightens, low chest-sub, kick pattern flip, fold bass melody, pushed snare, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send warped drop, mono chest-sub, low reese counterline, offbeat hats, chopped hats, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, full send warped drop, mono chest-sub, low reese counterline, offbeat hats, chopped hats, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, low chest-sub, body bass answer, hat density up, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, low chest-sub, ghost snare, body bass answer, hat density up, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked reese warped drop, mono chest-sub, low wobble answer, rapid hi-hats, kick opens, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, wide stereo layer, rapid hi-hats, mono chest-sub, low wobble answer, kick opens, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, trap drums denser, chest-sub melody, kick tightens, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, heavy warped drop, low chest-sub, chest-sub melody, trap drums denser, kick tightens, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder wobble warped drop, mono chest-sub, low-mid bass melody, kick pattern flip, snare answers, 2 bars]
+[inst - chest-sub, bass circles the low-mid, panning bass layer, kick pattern flip, mono chest-sub, low-mid bass melody, snare answers, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, offbeat hats, fold bass melody, offbeat push, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, full send reese drop, low chest-sub, fold bass melody, offbeat hats, offbeat push, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, mono chest-sub, low reese counterline, straight hats, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, parallel low-mid layer, ghost snare, mono chest-sub, low reese counterline, straight hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked wobble warped drop, low chest-sub, body bass answer, rapid hi-hats, triplet hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, stacked wobble drop, low chest-sub, body bass answer, rapid hi-hats, triplet hats, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, trap drums denser, low wobble answer, backbeat shove, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, low chest-sub, chest-sub melody, ghost notes, 2 bars]
-
-[drop - chest-sub, low-mid orbits the sub, full send wobble warped drop, mono chest-sub, low-mid bass melody, offbeat hats, dry hats, 2 bars]
-
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, ghost snare, fold bass melody, wide hat bed, 2 bars]
-
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, mono chest-sub, low reese counterline, mono kick, 2 bars]
-
-[outro - chest-sub, sub center, low-mid moves wide, kick pattern flip, rapid hi-hats, body bass answer, side snare, 2 bars]
+[outro - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick pattern flip, rapid hi-hats, body bass answer, side snare, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -2290,101 +2138,89 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig…` |
-| 2 | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, trap dru…` |
+| 2 | `[build-up - chest-sub, 3D low-mid orbit, panning bass layer, kick tightens, low…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/secret-homage/08-off-ledger` |
 
 ```text
-drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 176 bpm, instrumental, no vocals
+drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 176 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, trap drums denser, low wobble answer, hat density up, reese wreck, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, panning bass layer, kick tightens, low chest-sub, trap drums denser, low wobble answer, hat density up, reese wreck, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck warped drop, mono chest-sub, chest-sub melody, kick pattern flip, kick opens, amen break, heavy amen drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, wreck warped drop, mono chest-sub, chest-sub melody, kick pattern flip, kick opens, amen break, heavy amen drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, offbeat hats, low-mid bass melody, kick tightens, warped ledger, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, low chest-sub, offbeat hats, low-mid bass melody, kick tightens, warped ledger, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, mono chest-sub, fold bass melody, snare answers, amen break, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, wide stereo layer, ghost snare, mono chest-sub, fold bass melody, snare answers, amen break, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, rapid hi-hats, low reese counterline, offbeat push, rapid hi-hats 808 ledger, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, harder warped drop, low chest-sub, low reese counterline, rapid hi-hats, offbeat push, rapid hi-hats 808 ledger, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, mono chest-sub, body bass answer, straight hats, reese stack, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, mono chest-sub, trap drums denser, body bass answer, straight hats, reese stack, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck reese warped drop, low chest-sub, low wobble answer, kick pattern flip, triplet hats, harder dirty drop, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, wreck reese drop, low chest-sub, low wobble answer, kick pattern flip, triplet hats, harder dirty drop, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, offbeat hats, chest-sub melody, backbeat shove, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, parallel low-mid layer, offbeat hats, mono chest-sub, chest-sub melody, backbeat shove, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, heavy wobble warped drop, low chest-sub, low-mid bass melody, ghost snare, ghost notes, hats denser, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, heavy wobble drop, low chest-sub, low-mid bass melody, ghost snare, ghost notes, hats denser, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, rapid hi-hats, fold bass melody, dry hats, reese hold, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, octave 808 stack, kick tightens, mono chest-sub, rapid hi-hats, fold bass melody, dry hats, reese hold, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, low chest-sub, low reese counterline, wide hat bed, stacked amen wreck, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, full send warped drop, low chest-sub, low reese counterline, trap drums denser, wide hat bed, full send drop, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, kick pattern flip, body bass answer, mono kick, 808 warp, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, mono chest-sub, kick pattern flip, body bass answer, mono kick, stacked amen wreck, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, low chest-sub, low wobble answer, side snare, chest-sub 808 wreck, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, parallel low-mid layer, offbeat hats, low chest-sub, low wobble answer, side snare, 808 warp, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy warped drop, mono chest-sub, chest-sub melody, ghost snare, rolling hats, full send drop, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, mono chest-sub, ghost snare, chest-sub melody, rolling hats, chest-sub 808 wreck, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, rapid hi-hats, low-mid bass melody, late snare, drumstep grind, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, harder wobble drop, low chest-sub, low-mid bass melody, rapid hi-hats, late snare, harder warped drop, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, full send reese warped drop, mono chest-sub, fold bass melody, trap drums denser, early kick, harder warped drop, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tightens, mono chest-sub, trap drums denser, fold bass melody, early kick, drumstep grind, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, low chest-sub, low reese counterline, syncopated hats, kick holds, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, layered sub stack, kick pattern flip, low chest-sub, low reese counterline, syncopated hats, kick holds, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, offbeat hats, body bass answer, open hat, reese ride, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, stacked wobble drop, mono chest-sub, body bass answer, offbeat hats, open hat, reese ride, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, low chest-sub, low wobble answer, closed hat, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, wide stereo layer, ghost snare, low chest-sub, low wobble answer, closed hat, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder warped drop, mono chest-sub, chest-sub melody, rapid hi-hats, room snare, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, harder warped drop, mono chest-sub, chest-sub melody, rapid hi-hats, room snare, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, trap drums denser, low-mid bass melody, tight kick, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, trap drums denser, low chest-sub, low-mid bass melody, tight kick, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, mono chest-sub, fold bass melody, loose hats, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, wreck reese drop, mono chest-sub, fold bass melody, kick pattern flip, loose hats, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, offbeat hats, low reese counterline, pushed snare, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, low chest-sub, offbeat hats, low reese counterline, pushed snare, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, mono chest-sub, body bass answer, chopped hats, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, heavy wobble drop, mono chest-sub, body bass answer, ghost snare, chopped hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder reese warped drop, low chest-sub, low wobble answer, rapid hi-hats, hat density up, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, octave 808 stack, kick tightens, low chest-sub, rapid hi-hats, low wobble answer, hat density up, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, trap drums denser, chest-sub melody, kick opens, 2 bars]
+[inst - chest-sub, bass circles the low-mid, panning bass layer, trap drums denser, mono chest-sub, chest-sub melody, kick opens, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, low chest-sub, low-mid bass melody, kick tightens, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, wreck wobble drop, low chest-sub, low-mid bass melody, kick pattern flip, kick tightens, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked reese warped drop, mono chest-sub, fold bass melody, offbeat hats, snare answers, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, mono chest-sub, offbeat hats, fold bass melody, snare answers, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, ghost snare, low reese counterline, offbeat push, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, heavy warped drop, low chest-sub, low reese counterline, ghost snare, offbeat push, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, mono chest-sub, body bass answer, straight hats, 2 bars]
+[inst - chest-sub, bass circles the low-mid, octave 808 stack, rapid hi-hats, mono chest-sub, body bass answer, straight hats, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, full send reese warped drop, low chest-sub, low wobble answer, trap drums denser, triplet hats, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, full send reese drop, low chest-sub, low wobble answer, trap drums denser, triplet hats, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, kick pattern flip, chest-sub melody, backbeat shove, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, mono chest-sub, kick pattern flip, chest-sub melody, backbeat shove, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, low chest-sub, low-mid bass melody, ghost notes, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, parallel low-mid layer, offbeat hats, low chest-sub, low-mid bass melody, ghost notes, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy reese warped drop, mono chest-sub, fold bass melody, ghost snare, dry hats, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, heavy reese drop, mono chest-sub, fold bass melody, ghost snare, dry hats, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, low chest-sub, low reese counterline, wide hat bed, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, rapid hi-hats, low chest-sub, low reese counterline, wide hat bed, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, full send wobble warped drop, mono chest-sub, body bass answer, trap drums denser, mono kick, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, full send wobble drop, mono chest-sub, body bass answer, trap drums denser, mono kick, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, low chest-sub, low wobble answer, side snare, 2 bars]
-
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, offbeat hats, chest-sub melody, rolling hats, 2 bars]
-
-[drop - chest-sub, sub center, low-mid moves wide, heavy wobble warped drop, low chest-sub, low-mid bass melody, ghost snare, late snare, 2 bars]
-
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, rapid hi-hats, fold bass melody, early kick, 2 bars]
-
-[drop - chest-sub, 3D low-mid orbit, full send warped drop, low chest-sub, low reese counterline, trap drums denser, syncopated hats, 2 bars]
-
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, kick pattern flip, body bass answer, open hat, 2 bars]
-
-[outro - chest-sub, low-mid orbits the sub, kick pattern flip, rapid hi-hats, body bass answer, chopped hats, 2 bars]
+[outro - chest-sub, low-mid orbits the sub, octave 808 stack, kick pattern flip, rapid hi-hats, body bass answer, chopped hats, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -2392,7 +2228,7 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 | Slot | Value |
 | --- | --- |
 | 0 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig…` |
-| 1 | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, trap dru…` |
+| 1 | `[build-up - chest-sub, 3D low-mid orbit, panning bass layer, kick tightens, low…` |
 | 2 | `631` |
 | 3 | `fixed` |
 | 4 | `176` |
@@ -2408,95 +2244,83 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 | 14 | `0.0` |
 
 ```text
-drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 176 bpm, instrumental, no vocals
+drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 176 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, trap drums denser, low wobble answer, hat density up, reese wreck, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, panning bass layer, kick tightens, low chest-sub, trap drums denser, low wobble answer, hat density up, reese wreck, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck warped drop, mono chest-sub, chest-sub melody, kick pattern flip, kick opens, amen break, heavy amen drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, wreck warped drop, mono chest-sub, chest-sub melody, kick pattern flip, kick opens, amen break, heavy amen drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, offbeat hats, low-mid bass melody, kick tightens, warped ledger, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, low chest-sub, offbeat hats, low-mid bass melody, kick tightens, warped ledger, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, mono chest-sub, fold bass melody, snare answers, amen break, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, wide stereo layer, ghost snare, mono chest-sub, fold bass melody, snare answers, amen break, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, rapid hi-hats, low reese counterline, offbeat push, rapid hi-hats 808 ledger, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, harder warped drop, low chest-sub, low reese counterline, rapid hi-hats, offbeat push, rapid hi-hats 808 ledger, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, mono chest-sub, body bass answer, straight hats, reese stack, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, mono chest-sub, trap drums denser, body bass answer, straight hats, reese stack, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck reese warped drop, low chest-sub, low wobble answer, kick pattern flip, triplet hats, harder dirty drop, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, wreck reese drop, low chest-sub, low wobble answer, kick pattern flip, triplet hats, harder dirty drop, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, offbeat hats, chest-sub melody, backbeat shove, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, parallel low-mid layer, offbeat hats, mono chest-sub, chest-sub melody, backbeat shove, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, heavy wobble warped drop, low chest-sub, low-mid bass melody, ghost snare, ghost notes, hats denser, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, heavy wobble drop, low chest-sub, low-mid bass melody, ghost snare, ghost notes, hats denser, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, rapid hi-hats, fold bass melody, dry hats, reese hold, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, octave 808 stack, kick tightens, mono chest-sub, rapid hi-hats, fold bass melody, dry hats, reese hold, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, low chest-sub, low reese counterline, wide hat bed, stacked amen wreck, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, full send warped drop, low chest-sub, low reese counterline, trap drums denser, wide hat bed, full send drop, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, kick pattern flip, body bass answer, mono kick, 808 warp, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, mono chest-sub, kick pattern flip, body bass answer, mono kick, stacked amen wreck, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, low chest-sub, low wobble answer, side snare, chest-sub 808 wreck, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, parallel low-mid layer, offbeat hats, low chest-sub, low wobble answer, side snare, 808 warp, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy warped drop, mono chest-sub, chest-sub melody, ghost snare, rolling hats, full send drop, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, mono chest-sub, ghost snare, chest-sub melody, rolling hats, chest-sub 808 wreck, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, rapid hi-hats, low-mid bass melody, late snare, drumstep grind, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, harder wobble drop, low chest-sub, low-mid bass melody, rapid hi-hats, late snare, harder warped drop, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, full send reese warped drop, mono chest-sub, fold bass melody, trap drums denser, early kick, harder warped drop, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tightens, mono chest-sub, trap drums denser, fold bass melody, early kick, drumstep grind, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, low chest-sub, low reese counterline, syncopated hats, kick holds, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, layered sub stack, kick pattern flip, low chest-sub, low reese counterline, syncopated hats, kick holds, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, offbeat hats, body bass answer, open hat, reese ride, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, stacked wobble drop, mono chest-sub, body bass answer, offbeat hats, open hat, reese ride, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, low chest-sub, low wobble answer, closed hat, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, wide stereo layer, ghost snare, low chest-sub, low wobble answer, closed hat, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder warped drop, mono chest-sub, chest-sub melody, rapid hi-hats, room snare, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, harder warped drop, mono chest-sub, chest-sub melody, rapid hi-hats, room snare, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, trap drums denser, low-mid bass melody, tight kick, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, trap drums denser, low chest-sub, low-mid bass melody, tight kick, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, mono chest-sub, fold bass melody, loose hats, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, wreck reese drop, mono chest-sub, fold bass melody, kick pattern flip, loose hats, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, offbeat hats, low reese counterline, pushed snare, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, low chest-sub, offbeat hats, low reese counterline, pushed snare, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, mono chest-sub, body bass answer, chopped hats, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, heavy wobble drop, mono chest-sub, body bass answer, ghost snare, chopped hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder reese warped drop, low chest-sub, low wobble answer, rapid hi-hats, hat density up, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, octave 808 stack, kick tightens, low chest-sub, rapid hi-hats, low wobble answer, hat density up, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, trap drums denser, chest-sub melody, kick opens, 2 bars]
+[inst - chest-sub, bass circles the low-mid, panning bass layer, trap drums denser, mono chest-sub, chest-sub melody, kick opens, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, low chest-sub, low-mid bass melody, kick tightens, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, wreck wobble drop, low chest-sub, low-mid bass melody, kick pattern flip, kick tightens, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked reese warped drop, mono chest-sub, fold bass melody, offbeat hats, snare answers, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, mono chest-sub, offbeat hats, fold bass melody, snare answers, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, ghost snare, low reese counterline, offbeat push, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, heavy warped drop, low chest-sub, low reese counterline, ghost snare, offbeat push, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, mono chest-sub, body bass answer, straight hats, 2 bars]
+[inst - chest-sub, bass circles the low-mid, octave 808 stack, rapid hi-hats, mono chest-sub, body bass answer, straight hats, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, full send reese warped drop, low chest-sub, low wobble answer, trap drums denser, triplet hats, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, full send reese drop, low chest-sub, low wobble answer, trap drums denser, triplet hats, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, kick pattern flip, chest-sub melody, backbeat shove, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, mono chest-sub, kick pattern flip, chest-sub melody, backbeat shove, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, low chest-sub, low-mid bass melody, ghost notes, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, parallel low-mid layer, offbeat hats, low chest-sub, low-mid bass melody, ghost notes, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy reese warped drop, mono chest-sub, fold bass melody, ghost snare, dry hats, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, heavy reese drop, mono chest-sub, fold bass melody, ghost snare, dry hats, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, low chest-sub, low reese counterline, wide hat bed, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, rapid hi-hats, low chest-sub, low reese counterline, wide hat bed, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, full send wobble warped drop, mono chest-sub, body bass answer, trap drums denser, mono kick, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, full send wobble drop, mono chest-sub, body bass answer, trap drums denser, mono kick, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, low chest-sub, low wobble answer, side snare, 2 bars]
-
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, offbeat hats, chest-sub melody, rolling hats, 2 bars]
-
-[drop - chest-sub, sub center, low-mid moves wide, heavy wobble warped drop, low chest-sub, low-mid bass melody, ghost snare, late snare, 2 bars]
-
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, rapid hi-hats, fold bass melody, early kick, 2 bars]
-
-[drop - chest-sub, 3D low-mid orbit, full send warped drop, low chest-sub, low reese counterline, trap drums denser, syncopated hats, 2 bars]
-
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, kick pattern flip, body bass answer, open hat, 2 bars]
-
-[outro - chest-sub, low-mid orbits the sub, kick pattern flip, rapid hi-hats, body bass answer, chopped hats, 2 bars]
+[outro - chest-sub, low-mid orbits the sub, octave 808 stack, kick pattern flip, rapid hi-hats, body bass answer, chopped hats, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -2595,101 +2419,91 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped …` |
-| 2 | `[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack,…` |
+| 2 | `[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/secret-homage/09-back-alley` |
 
 ```text
-drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 174 bpm, instrumental, no vocals
+drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 174 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, offbeat hats, low-mid bass melody, open hat, reese 808 wreck, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, octave sub stack, offbeat hats, low-mid bass melody, open hat, reese 808 wreck, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder wobble warped drop, body bass, fold bass melody, ghost snare, closed hat, reese bass, heavy neuro drop, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, harder wobble drop, body bass, fold bass melody, ghost snare, closed hat, reese bass, heavy neuro drop, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, octave sub stack, low reese counterline, room snare, warped alley, 2 bars]
+[inst - chest-sub, bass circles the low-mid, wide stereo layer, rapid hi-hats, octave sub stack, low reese counterline, room snare, warped alley, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, trap drums denser, body bass answer, tight kick, hats denser, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, wreck warped drop, body bass, body bass answer, trap drums denser, tight kick, hats denser, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, kick pattern flip, octave sub stack, low wobble answer, loose hats, reese hold, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tightens, octave sub stack, kick pattern flip, low wobble answer, loose hats, reese hold, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, offbeat hats, chest-sub melody, pushed snare, chest reese wreck, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, layered sub stack, offbeat hats, body bass, chest-sub melody, pushed snare, chest reese wreck, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder warped drop, octave sub stack, low-mid bass melody, ghost snare, chopped hats, harder stacked drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, harder warped drop, octave sub stack, low-mid bass melody, ghost snare, chopped hats, harder stacked drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, rapid hi-hats, fold bass melody, hat density up, chest-sub coil, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, body bass, rapid hi-hats, fold bass melody, hat density up, chest-sub coil, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, octave sub stack, low reese counterline, kick opens, rapid hi-hats roll, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, octave 808 stack, trap drums denser, octave sub stack, low reese counterline, kick opens, rapid hi-hats roll, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, kick pattern flip, body bass answer, kick tightens, 808 punch, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, stacked warped drop, body bass, body bass answer, kick pattern flip, kick tightens, 808 punch, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, octave sub stack, low wobble answer, snare answers, neuro 808 wreck, 2 bars]
+[inst - chest-sub, bass circles the low-mid, layered sub stack, offbeat hats, octave sub stack, low wobble answer, snare answers, neuro 808 wreck, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder reese warped drop, body bass, chest-sub melody, ghost snare, offbeat push, full send drop, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, body bass, ghost snare, chest-sub melody, offbeat push, chest warp, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, octave sub stack, low-mid bass melody, straight hats, chest warp, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, full send warped drop, octave sub stack, low-mid bass melody, rapid hi-hats, straight hats, full send drop, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, trap drums denser, fold bass melody, triplet hats, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, octave 808 stack, kick tightens, body bass, trap drums denser, fold bass melody, triplet hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, octave sub stack, low reese counterline, backbeat shove, alley 808 punch, 2 bars]
+[inst - chest-sub, bass circles the low-mid, panning bass layer, kick pattern flip, octave sub stack, low reese counterline, backbeat shove, alley 808 punch, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy warped drop, body bass, body bass answer, offbeat hats, ghost notes, harder growl drop, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, layered sub stack, kick tightens, body bass, offbeat hats, body bass answer, ghost notes, stacked reese wreck, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, ghost snare, low wobble answer, dry hats, stacked reese wreck, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, parallel low-mid layer, ghost snare, octave sub stack, low wobble answer, dry hats, alley grind, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, full send reese warped drop, body bass, chest-sub melody, rapid hi-hats, wide hat bed, alley grind, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, full send reese drop, body bass, chest-sub melody, rapid hi-hats, wide hat bed, harder growl drop, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, trap drums denser, low-mid bass melody, mono kick, kick holds, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, octave 808 stack, kick tightens, octave sub stack, trap drums denser, low-mid bass melody, mono kick, kick holds, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, stacked wobble warped drop, body bass, fold bass melody, kick pattern flip, side snare, reese ride, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, stacked wobble drop, body bass, fold bass melody, kick pattern flip, side snare, reese ride, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, offbeat hats, low reese counterline, rolling hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, octave sub stack, offbeat hats, low reese counterline, rolling hats, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, body bass, body bass answer, late snare, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, parallel low-mid layer, ghost snare, body bass, body bass answer, late snare, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send wobble warped drop, octave sub stack, low wobble answer, rapid hi-hats, early kick, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, octave sub stack, rapid hi-hats, low wobble answer, early kick, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, trap drums denser, chest-sub melody, syncopated hats, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, wreck reese drop, body bass, chest-sub melody, trap drums denser, syncopated hats, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, kick pattern flip, octave sub stack, low-mid bass melody, open hat, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tightens, octave sub stack, kick pattern flip, low-mid bass melody, open hat, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, heavy wobble warped drop, body bass, fold bass melody, offbeat hats, closed hat, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, layered sub stack, heavy wobble drop, body bass, fold bass melody, offbeat hats, closed hat, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, ghost snare, low reese counterline, room snare, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, ghost snare, octave sub stack, low reese counterline, room snare, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, full send warped drop, body bass, body bass answer, rapid hi-hats, tight kick, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, full send warped drop, body bass, body bass answer, rapid hi-hats, tight kick, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, trap drums denser, low wobble answer, loose hats, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, octave 808 stack, trap drums denser, octave sub stack, low wobble answer, loose hats, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, body bass, chest-sub melody, pushed snare, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, stacked reese drop, body bass, chest-sub melody, kick pattern flip, pushed snare, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy warped drop, octave sub stack, low-mid bass melody, offbeat hats, chopped hats, 2 bars]
+[inst - chest-sub, bass circles the low-mid, layered sub stack, offbeat hats, octave sub stack, low-mid bass melody, chopped hats, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, ghost snare, fold bass melody, hat density up, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, harder wobble drop, body bass, fold bass melody, ghost snare, hat density up, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, octave sub stack, low reese counterline, kick opens, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, octave sub stack, rapid hi-hats, low reese counterline, kick opens, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, trap drums denser, body bass answer, kick tightens, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, octave 808 stack, trap drums denser, body bass, body bass answer, kick tightens, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, octave sub stack, low wobble answer, snare answers, 2 bars]
+[drop - chest-sub, bass circles the low-mid, panning bass layer, stacked wobble drop, octave sub stack, low wobble answer, kick pattern flip, snare answers, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy reese warped drop, body bass, chest-sub melody, offbeat hats, offbeat push, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, offbeat hats, body bass, chest-sub melody, offbeat push, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, ghost snare, low-mid bass melody, straight hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, octave sub stack, ghost snare, low-mid bass melody, straight hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, full send wobble warped drop, body bass, fold bass melody, rapid hi-hats, triplet hats, 2 bars]
-
-[inst - chest-sub, bass circles the low-mid, trap drums denser, octave sub stack, low reese counterline, backbeat shove, 2 bars]
-
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, kick pattern flip, body bass answer, ghost notes, 2 bars]
-
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, octave sub stack, low wobble answer, dry hats, 2 bars]
-
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, ghost snare, chest-sub melody, wide hat bed, 2 bars]
-
-[outro - chest-sub, low-mid orbits the sub, kick pattern flip, rapid hi-hats, low-mid bass melody, open hat, 2 bars]
+[outro - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick pattern flip, rapid hi-hats, low-mid bass melody, open hat, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -2697,7 +2511,7 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 | Slot | Value |
 | --- | --- |
 | 0 | `drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped …` |
-| 1 | `[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack,…` |
+| 1 | `[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens…` |
 | 2 | `641` |
 | 3 | `fixed` |
 | 4 | `174` |
@@ -2713,95 +2527,85 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 | 14 | `0.0` |
 
 ```text
-drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 174 bpm, instrumental, no vocals
+drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 174 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, offbeat hats, low-mid bass melody, open hat, reese 808 wreck, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, octave sub stack, offbeat hats, low-mid bass melody, open hat, reese 808 wreck, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder wobble warped drop, body bass, fold bass melody, ghost snare, closed hat, reese bass, heavy neuro drop, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, harder wobble drop, body bass, fold bass melody, ghost snare, closed hat, reese bass, heavy neuro drop, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, octave sub stack, low reese counterline, room snare, warped alley, 2 bars]
+[inst - chest-sub, bass circles the low-mid, wide stereo layer, rapid hi-hats, octave sub stack, low reese counterline, room snare, warped alley, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, trap drums denser, body bass answer, tight kick, hats denser, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, wreck warped drop, body bass, body bass answer, trap drums denser, tight kick, hats denser, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, kick pattern flip, octave sub stack, low wobble answer, loose hats, reese hold, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tightens, octave sub stack, kick pattern flip, low wobble answer, loose hats, reese hold, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, offbeat hats, chest-sub melody, pushed snare, chest reese wreck, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, layered sub stack, offbeat hats, body bass, chest-sub melody, pushed snare, chest reese wreck, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder warped drop, octave sub stack, low-mid bass melody, ghost snare, chopped hats, harder stacked drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, harder warped drop, octave sub stack, low-mid bass melody, ghost snare, chopped hats, harder stacked drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, rapid hi-hats, fold bass melody, hat density up, chest-sub coil, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, body bass, rapid hi-hats, fold bass melody, hat density up, chest-sub coil, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, octave sub stack, low reese counterline, kick opens, rapid hi-hats roll, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, octave 808 stack, trap drums denser, octave sub stack, low reese counterline, kick opens, rapid hi-hats roll, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, kick pattern flip, body bass answer, kick tightens, 808 punch, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, stacked warped drop, body bass, body bass answer, kick pattern flip, kick tightens, 808 punch, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, octave sub stack, low wobble answer, snare answers, neuro 808 wreck, 2 bars]
+[inst - chest-sub, bass circles the low-mid, layered sub stack, offbeat hats, octave sub stack, low wobble answer, snare answers, neuro 808 wreck, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder reese warped drop, body bass, chest-sub melody, ghost snare, offbeat push, full send drop, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, body bass, ghost snare, chest-sub melody, offbeat push, chest warp, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, octave sub stack, low-mid bass melody, straight hats, chest warp, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, full send warped drop, octave sub stack, low-mid bass melody, rapid hi-hats, straight hats, full send drop, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, trap drums denser, fold bass melody, triplet hats, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, octave 808 stack, kick tightens, body bass, trap drums denser, fold bass melody, triplet hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, octave sub stack, low reese counterline, backbeat shove, alley 808 punch, 2 bars]
+[inst - chest-sub, bass circles the low-mid, panning bass layer, kick pattern flip, octave sub stack, low reese counterline, backbeat shove, alley 808 punch, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy warped drop, body bass, body bass answer, offbeat hats, ghost notes, harder growl drop, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, layered sub stack, kick tightens, body bass, offbeat hats, body bass answer, ghost notes, stacked reese wreck, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, ghost snare, low wobble answer, dry hats, stacked reese wreck, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, parallel low-mid layer, ghost snare, octave sub stack, low wobble answer, dry hats, alley grind, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, full send reese warped drop, body bass, chest-sub melody, rapid hi-hats, wide hat bed, alley grind, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, full send reese drop, body bass, chest-sub melody, rapid hi-hats, wide hat bed, harder growl drop, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, trap drums denser, low-mid bass melody, mono kick, kick holds, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, octave 808 stack, kick tightens, octave sub stack, trap drums denser, low-mid bass melody, mono kick, kick holds, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, stacked wobble warped drop, body bass, fold bass melody, kick pattern flip, side snare, reese ride, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, stacked wobble drop, body bass, fold bass melody, kick pattern flip, side snare, reese ride, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, offbeat hats, low reese counterline, rolling hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, octave sub stack, offbeat hats, low reese counterline, rolling hats, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, body bass, body bass answer, late snare, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, parallel low-mid layer, ghost snare, body bass, body bass answer, late snare, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send wobble warped drop, octave sub stack, low wobble answer, rapid hi-hats, early kick, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, octave sub stack, rapid hi-hats, low wobble answer, early kick, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, trap drums denser, chest-sub melody, syncopated hats, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, wreck reese drop, body bass, chest-sub melody, trap drums denser, syncopated hats, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, kick pattern flip, octave sub stack, low-mid bass melody, open hat, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tightens, octave sub stack, kick pattern flip, low-mid bass melody, open hat, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, heavy wobble warped drop, body bass, fold bass melody, offbeat hats, closed hat, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, layered sub stack, heavy wobble drop, body bass, fold bass melody, offbeat hats, closed hat, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, ghost snare, low reese counterline, room snare, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, ghost snare, octave sub stack, low reese counterline, room snare, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, full send warped drop, body bass, body bass answer, rapid hi-hats, tight kick, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, full send warped drop, body bass, body bass answer, rapid hi-hats, tight kick, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, trap drums denser, low wobble answer, loose hats, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, octave 808 stack, trap drums denser, octave sub stack, low wobble answer, loose hats, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, body bass, chest-sub melody, pushed snare, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, stacked reese drop, body bass, chest-sub melody, kick pattern flip, pushed snare, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy warped drop, octave sub stack, low-mid bass melody, offbeat hats, chopped hats, 2 bars]
+[inst - chest-sub, bass circles the low-mid, layered sub stack, offbeat hats, octave sub stack, low-mid bass melody, chopped hats, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, ghost snare, fold bass melody, hat density up, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, harder wobble drop, body bass, fold bass melody, ghost snare, hat density up, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, octave sub stack, low reese counterline, kick opens, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, octave sub stack, rapid hi-hats, low reese counterline, kick opens, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, trap drums denser, body bass answer, kick tightens, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, octave 808 stack, trap drums denser, body bass, body bass answer, kick tightens, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, octave sub stack, low wobble answer, snare answers, 2 bars]
+[drop - chest-sub, bass circles the low-mid, panning bass layer, stacked wobble drop, octave sub stack, low wobble answer, kick pattern flip, snare answers, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy reese warped drop, body bass, chest-sub melody, offbeat hats, offbeat push, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, offbeat hats, body bass, chest-sub melody, offbeat push, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, ghost snare, low-mid bass melody, straight hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, octave sub stack, ghost snare, low-mid bass melody, straight hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, full send wobble warped drop, body bass, fold bass melody, rapid hi-hats, triplet hats, 2 bars]
-
-[inst - chest-sub, bass circles the low-mid, trap drums denser, octave sub stack, low reese counterline, backbeat shove, 2 bars]
-
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, kick pattern flip, body bass answer, ghost notes, 2 bars]
-
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, octave sub stack, low wobble answer, dry hats, 2 bars]
-
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, ghost snare, chest-sub melody, wide hat bed, 2 bars]
-
-[outro - chest-sub, low-mid orbits the sub, kick pattern flip, rapid hi-hats, low-mid bass melody, open hat, 2 bars]
+[outro - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick pattern flip, rapid hi-hats, low-mid bass melody, open hat, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -2900,101 +2704,89 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, …` |
-| 2 | `[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stac…` |
+| 2 | `[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tight…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/secret-homage/10-cellar-kick` |
 
 ```text
-dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 168 bpm, instrumental, no vocals
+dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, offbeat hats, low-mid bass melody, triplet hats, dirty dubstep wreck, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, octave sub stack, offbeat hats, low-mid bass melody, triplet hats, dirty dubstep wreck, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder wobble warped drop, body bass, fold bass melody, ghost snare, backbeat shove, dirty dubstep, heavy wobble drop, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, harder wobble drop, body bass, fold bass melody, ghost snare, backbeat shove, dirty dubstep, heavy wobble drop, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, octave sub stack, low reese counterline, ghost notes, warped cellar, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, parallel low-mid layer, rapid hi-hats, octave sub stack, low reese counterline, ghost notes, warped cellar, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck warped drop, body bass, body bass answer, trap drums denser, dry hats, rapid hi-hats denser, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, wreck warped drop, body bass, body bass answer, trap drums denser, dry hats, rapid hi-hats denser, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, kick pattern flip, low wobble answer, wide hat bed, wobble sustain, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, octave 808 stack, kick tightens, octave sub stack, kick pattern flip, low wobble answer, wide hat bed, wobble sustain, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy reese warped drop, body bass, chest-sub melody, offbeat hats, mono kick, harder warped drop, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, heavy reese drop, body bass, chest-sub melody, offbeat hats, mono kick, harder warped drop, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, ghost snare, low-mid bass melody, side snare, low rumble wreck, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, octave sub stack, ghost snare, low-mid bass melody, side snare, low rumble wreck, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, rapid hi-hats, body bass, fold bass melody, rolling hats, chest-sub 808, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, parallel low-mid layer, rapid hi-hats, body bass, fold bass melody, rolling hats, chest-sub 808, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck reese warped drop, octave sub stack, low reese counterline, trap drums denser, late snare, full send drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, wreck reese drop, octave sub stack, low reese counterline, trap drums denser, late snare, full send drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, kick pattern flip, body bass answer, early kick, chest-sub wreck, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick tightens, body bass, kick pattern flip, body bass answer, early kick, chest-sub wreck, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, octave sub stack, low wobble answer, syncopated hats, dubstep warp, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, heavy wobble drop, octave sub stack, low wobble answer, offbeat hats, syncopated hats, dubstep warp, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder reese warped drop, body bass, chest-sub melody, ghost snare, open hat, kick holds, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, body bass, ghost snare, chest-sub melody, open hat, kick holds, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, rapid hi-hats, low-mid bass melody, closed hat, rapid hi-hats roll, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, full send warped drop, octave sub stack, low-mid bass melody, rapid hi-hats, closed hat, rapid hi-hats roll, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, body bass, fold bass melody, room snare, wobble ride, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, body bass, trap drums denser, fold bass melody, room snare, wobble ride, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked reese warped drop, octave sub stack, low reese counterline, kick pattern flip, tight kick, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, stacked reese drop, octave sub stack, low reese counterline, kick pattern flip, tight kick, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, offbeat hats, body bass answer, loose hats, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, panning bass layer, kick tightens, body bass, offbeat hats, body bass answer, loose hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder wobble warped drop, octave sub stack, low wobble answer, ghost snare, pushed snare, 2 bars]
+[inst - chest-sub, bass circles the low-mid, layered sub stack, ghost snare, octave sub stack, low wobble answer, pushed snare, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, body bass, chest-sub melody, chopped hats, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, full send reese drop, body bass, chest-sub melody, rapid hi-hats, chopped hats, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, wreck warped drop, octave sub stack, low-mid bass melody, trap drums denser, hat density up, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, octave sub stack, trap drums denser, low-mid bass melody, hat density up, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, kick pattern flip, fold bass melody, kick opens, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, stacked wobble drop, body bass, fold bass melody, kick pattern flip, kick opens, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, octave sub stack, low reese counterline, kick tightens, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, octave sub stack, offbeat hats, low reese counterline, kick tightens, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder warped drop, body bass, body bass answer, ghost snare, snare answers, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, ghost snare, body bass, body bass answer, snare answers, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, rapid hi-hats, low wobble answer, offbeat push, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, full send wobble drop, octave sub stack, low wobble answer, rapid hi-hats, offbeat push, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck reese warped drop, body bass, chest-sub melody, trap drums denser, straight hats, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, trap drums denser, body bass, chest-sub melody, straight hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, octave sub stack, low-mid bass melody, triplet hats, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, stacked warped drop, octave sub stack, low-mid bass melody, kick pattern flip, triplet hats, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy wobble warped drop, body bass, fold bass melody, offbeat hats, backbeat shove, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, body bass, offbeat hats, fold bass melody, backbeat shove, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, ghost snare, low reese counterline, ghost notes, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, layered sub stack, ghost snare, octave sub stack, low reese counterline, ghost notes, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, rapid hi-hats, body bass, body bass answer, dry hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, full send warped drop, body bass, body bass answer, rapid hi-hats, dry hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck wobble warped drop, octave sub stack, low wobble answer, trap drums denser, wide hat bed, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, octave sub stack, trap drums denser, low wobble answer, wide hat bed, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, body bass, chest-sub melody, mono kick, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, stacked reese drop, body bass, chest-sub melody, kick pattern flip, mono kick, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, heavy warped drop, octave sub stack, low-mid bass melody, offbeat hats, side snare, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tightens, octave sub stack, offbeat hats, low-mid bass melody, side snare, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, ghost snare, fold bass melody, rolling hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, layered sub stack, harder wobble drop, body bass, fold bass melody, ghost snare, rolling hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, octave sub stack, low reese counterline, late snare, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, rapid hi-hats, octave sub stack, low reese counterline, late snare, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck warped drop, body bass, body bass answer, trap drums denser, early kick, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, wreck warped drop, body bass, body bass answer, trap drums denser, early kick, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, kick pattern flip, low wobble answer, syncopated hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, octave sub stack, kick pattern flip, low wobble answer, syncopated hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, heavy reese warped drop, body bass, chest-sub melody, offbeat hats, open hat, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, offbeat hats, body bass, chest-sub melody, open hat, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, ghost snare, low-mid bass melody, closed hat, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, body bass, fold bass melody, room snare, 2 bars]
-
-[drop - chest-sub, low-mid orbits the sub, wreck reese warped drop, octave sub stack, low reese counterline, trap drums denser, tight kick, 2 bars]
-
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, body bass, body bass answer, loose hats, 2 bars]
-
-[drop - chest-sub, bass circles the low-mid, heavy wobble warped drop, octave sub stack, low wobble answer, offbeat hats, pushed snare, 2 bars]
-
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, ghost snare, chest-sub melody, chopped hats, 2 bars]
-
-[outro - chest-sub, bass circles the low-mid, kick pattern flip, rapid hi-hats, low-mid bass melody, closed hat, 2 bars]
+[outro - chest-sub, bass circles the low-mid, panning bass layer, kick pattern flip, rapid hi-hats, low-mid bass melody, closed hat, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -3002,7 +2794,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, 8
 | Slot | Value |
 | --- | --- |
 | 0 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, …` |
-| 1 | `[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stac…` |
+| 1 | `[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tight…` |
 | 2 | `643` |
 | 3 | `fixed` |
 | 4 | `168` |
@@ -3018,95 +2810,83 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, 8
 | 14 | `0.0` |
 
 ```text
-dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 168 bpm, instrumental, no vocals
+dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, offbeat hats, low-mid bass melody, triplet hats, dirty dubstep wreck, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, octave sub stack, offbeat hats, low-mid bass melody, triplet hats, dirty dubstep wreck, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder wobble warped drop, body bass, fold bass melody, ghost snare, backbeat shove, dirty dubstep, heavy wobble drop, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, harder wobble drop, body bass, fold bass melody, ghost snare, backbeat shove, dirty dubstep, heavy wobble drop, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, octave sub stack, low reese counterline, ghost notes, warped cellar, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, parallel low-mid layer, rapid hi-hats, octave sub stack, low reese counterline, ghost notes, warped cellar, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck warped drop, body bass, body bass answer, trap drums denser, dry hats, rapid hi-hats denser, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, wreck warped drop, body bass, body bass answer, trap drums denser, dry hats, rapid hi-hats denser, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, kick pattern flip, low wobble answer, wide hat bed, wobble sustain, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, octave 808 stack, kick tightens, octave sub stack, kick pattern flip, low wobble answer, wide hat bed, wobble sustain, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy reese warped drop, body bass, chest-sub melody, offbeat hats, mono kick, harder warped drop, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, heavy reese drop, body bass, chest-sub melody, offbeat hats, mono kick, harder warped drop, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, ghost snare, low-mid bass melody, side snare, low rumble wreck, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, octave sub stack, ghost snare, low-mid bass melody, side snare, low rumble wreck, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, rapid hi-hats, body bass, fold bass melody, rolling hats, chest-sub 808, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, parallel low-mid layer, rapid hi-hats, body bass, fold bass melody, rolling hats, chest-sub 808, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck reese warped drop, octave sub stack, low reese counterline, trap drums denser, late snare, full send drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, wreck reese drop, octave sub stack, low reese counterline, trap drums denser, late snare, full send drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, kick pattern flip, body bass answer, early kick, chest-sub wreck, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick tightens, body bass, kick pattern flip, body bass answer, early kick, chest-sub wreck, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, octave sub stack, low wobble answer, syncopated hats, dubstep warp, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, heavy wobble drop, octave sub stack, low wobble answer, offbeat hats, syncopated hats, dubstep warp, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder reese warped drop, body bass, chest-sub melody, ghost snare, open hat, kick holds, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, body bass, ghost snare, chest-sub melody, open hat, kick holds, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, rapid hi-hats, low-mid bass melody, closed hat, rapid hi-hats roll, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, full send warped drop, octave sub stack, low-mid bass melody, rapid hi-hats, closed hat, rapid hi-hats roll, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, body bass, fold bass melody, room snare, wobble ride, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, body bass, trap drums denser, fold bass melody, room snare, wobble ride, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked reese warped drop, octave sub stack, low reese counterline, kick pattern flip, tight kick, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, stacked reese drop, octave sub stack, low reese counterline, kick pattern flip, tight kick, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, offbeat hats, body bass answer, loose hats, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, panning bass layer, kick tightens, body bass, offbeat hats, body bass answer, loose hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder wobble warped drop, octave sub stack, low wobble answer, ghost snare, pushed snare, 2 bars]
+[inst - chest-sub, bass circles the low-mid, layered sub stack, ghost snare, octave sub stack, low wobble answer, pushed snare, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, body bass, chest-sub melody, chopped hats, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, full send reese drop, body bass, chest-sub melody, rapid hi-hats, chopped hats, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, wreck warped drop, octave sub stack, low-mid bass melody, trap drums denser, hat density up, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, octave sub stack, trap drums denser, low-mid bass melody, hat density up, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, kick pattern flip, fold bass melody, kick opens, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, stacked wobble drop, body bass, fold bass melody, kick pattern flip, kick opens, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, octave sub stack, low reese counterline, kick tightens, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, octave sub stack, offbeat hats, low reese counterline, kick tightens, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder warped drop, body bass, body bass answer, ghost snare, snare answers, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, ghost snare, body bass, body bass answer, snare answers, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, rapid hi-hats, low wobble answer, offbeat push, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, full send wobble drop, octave sub stack, low wobble answer, rapid hi-hats, offbeat push, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck reese warped drop, body bass, chest-sub melody, trap drums denser, straight hats, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, trap drums denser, body bass, chest-sub melody, straight hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, octave sub stack, low-mid bass melody, triplet hats, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, stacked warped drop, octave sub stack, low-mid bass melody, kick pattern flip, triplet hats, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy wobble warped drop, body bass, fold bass melody, offbeat hats, backbeat shove, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, body bass, offbeat hats, fold bass melody, backbeat shove, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, ghost snare, low reese counterline, ghost notes, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, layered sub stack, ghost snare, octave sub stack, low reese counterline, ghost notes, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, rapid hi-hats, body bass, body bass answer, dry hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, full send warped drop, body bass, body bass answer, rapid hi-hats, dry hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck wobble warped drop, octave sub stack, low wobble answer, trap drums denser, wide hat bed, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, octave sub stack, trap drums denser, low wobble answer, wide hat bed, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, body bass, chest-sub melody, mono kick, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, stacked reese drop, body bass, chest-sub melody, kick pattern flip, mono kick, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, heavy warped drop, octave sub stack, low-mid bass melody, offbeat hats, side snare, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tightens, octave sub stack, offbeat hats, low-mid bass melody, side snare, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, ghost snare, fold bass melody, rolling hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, layered sub stack, harder wobble drop, body bass, fold bass melody, ghost snare, rolling hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, octave sub stack, low reese counterline, late snare, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, rapid hi-hats, octave sub stack, low reese counterline, late snare, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck warped drop, body bass, body bass answer, trap drums denser, early kick, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, wreck warped drop, body bass, body bass answer, trap drums denser, early kick, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, kick pattern flip, low wobble answer, syncopated hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, octave sub stack, kick pattern flip, low wobble answer, syncopated hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, heavy reese warped drop, body bass, chest-sub melody, offbeat hats, open hat, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, offbeat hats, body bass, chest-sub melody, open hat, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, ghost snare, low-mid bass melody, closed hat, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, body bass, fold bass melody, room snare, 2 bars]
-
-[drop - chest-sub, low-mid orbits the sub, wreck reese warped drop, octave sub stack, low reese counterline, trap drums denser, tight kick, 2 bars]
-
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, body bass, body bass answer, loose hats, 2 bars]
-
-[drop - chest-sub, bass circles the low-mid, heavy wobble warped drop, octave sub stack, low wobble answer, offbeat hats, pushed snare, 2 bars]
-
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, ghost snare, chest-sub melody, chopped hats, 2 bars]
-
-[outro - chest-sub, bass circles the low-mid, kick pattern flip, rapid hi-hats, low-mid bass melody, closed hat, 2 bars]
+[outro - chest-sub, bass circles the low-mid, panning bass layer, kick pattern flip, rapid hi-hats, low-mid bass melody, closed hat, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -3205,103 +2985,91 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, …` |
-| 2 | `[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass…` |
+| 2 | `[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick …` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/secret-homage/11-hidden-booth` |
 
 ```text
-dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 165 bpm, instrumental, no vocals
+dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, kick pattern flip, fold bass melody, kick opens, trap drums 808 wreck, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, fold bass, kick pattern flip, fold bass melody, kick opens, trap drums 808 wreck, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, wreck wobble warped drop, stacked 808, low reese counterline, offbeat hats, kick tightens, warped hybrid-trap, heavy hybrid drop, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, wreck wobble drop, stacked 808, low reese counterline, offbeat hats, kick tightens, warped hybrid-trap, heavy hybrid drop, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, ghost snare, body bass answer, snare answers, warped booth, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, panning bass layer, kick tightens, fold bass, ghost snare, body bass answer, snare answers, warped booth, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy warped drop, stacked 808, low wobble answer, rapid hi-hats, offbeat push, rapid hi-hats roll, 2 bars]
+[inst - chest-sub, bass circles the low-mid, layered sub stack, rapid hi-hats, stacked 808, low wobble answer, offbeat push, rapid hi-hats roll, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, trap drums denser, chest-sub melody, straight hats, 808 slide, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, harder wobble drop, fold bass, chest-sub melody, trap drums denser, straight hats, 808 slide, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, full send reese warped drop, stacked 808, low-mid bass melody, kick pattern flip, triplet hats, harder warped drop, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, stacked 808, kick pattern flip, low-mid bass melody, triplet hats, stacked trap bass, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, offbeat hats, fold bass melody, backbeat shove, stacked trap bass, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, wreck warped drop, fold bass, fold bass melody, offbeat hats, backbeat shove, harder warped drop, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, ghost snare, stacked 808, low reese counterline, ghost notes, 2 bars]
+[inst - chest-sub, bass circles the low-mid, panning bass layer, ghost snare, stacked 808, low reese counterline, ghost notes, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy reese warped drop, fold bass, body bass answer, rapid hi-hats, dry hats, kick tightens, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, heavy reese drop, fold bass, body bass answer, rapid hi-hats, dry hats, kick tightens, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, trap drums denser, low wobble answer, wide hat bed, chest-sub 808 punch, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, parallel low-mid layer, trap drums denser, stacked 808, low wobble answer, wide hat bed, chest-sub 808 punch, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, fold bass, chest-sub melody, mono kick, chest-sub 808 wall, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, full send wobble drop, fold bass, chest-sub melody, kick pattern flip, mono kick, full send drop, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck reese warped drop, stacked 808, low-mid bass melody, offbeat hats, side snare, full send drop, 2 bars]
+[inst - chest-sub, bass circles the low-mid, octave 808 stack, offbeat hats, stacked 808, low-mid bass melody, side snare, chest-sub 808 wall, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, ghost snare, fold bass melody, rolling hats, hybrid warp, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, stacked warped drop, fold bass, fold bass melody, ghost snare, rolling hats, hybrid warp, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, stacked 808, low reese counterline, late snare, kick holds, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, layered sub stack, rapid hi-hats, stacked 808, low reese counterline, late snare, kick holds, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder reese warped drop, fold bass, body bass answer, trap drums denser, early kick, hats denser, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, fold bass, trap drums denser, body bass answer, early kick, hats denser, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, stacked 808, low wobble answer, syncopated hats, 808 ride, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, full send warped drop, stacked 808, low wobble answer, kick pattern flip, syncopated hats, 808 ride, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, offbeat hats, chest-sub melody, open hat, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick tightens, fold bass, offbeat hats, chest-sub melody, open hat, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked reese warped drop, stacked 808, low-mid bass melody, ghost snare, closed hat, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, stacked reese drop, stacked 808, low-mid bass melody, ghost snare, closed hat, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, rapid hi-hats, fold bass melody, room snare, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, fold bass, rapid hi-hats, fold bass melody, room snare, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, stacked 808, low reese counterline, tight kick, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, trap drums denser, stacked 808, low reese counterline, tight kick, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, full send reese warped drop, fold bass, body bass answer, kick pattern flip, loose hats, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, full send reese drop, fold bass, body bass answer, kick pattern flip, loose hats, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, offbeat hats, low wobble answer, pushed snare, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, stacked 808, offbeat hats, low wobble answer, pushed snare, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked wobble warped drop, fold bass, chest-sub melody, ghost snare, chopped hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, stacked wobble drop, fold bass, chest-sub melody, ghost snare, chopped hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, stacked 808, low-mid bass melody, hat density up, 2 bars]
+[inst - chest-sub, bass circles the low-mid, layered sub stack, rapid hi-hats, stacked 808, low-mid bass melody, hat density up, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder warped drop, fold bass, fold bass melody, trap drums denser, kick opens, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, harder warped drop, fold bass, fold bass melody, trap drums denser, kick opens, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, kick pattern flip, low reese counterline, kick tightens, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, stacked 808, kick pattern flip, low reese counterline, kick tightens, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck reese warped drop, fold bass, body bass answer, offbeat hats, snare answers, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, wreck reese drop, fold bass, body bass answer, offbeat hats, snare answers, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, stacked 808, ghost snare, low wobble answer, offbeat push, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, stacked 808, ghost snare, low wobble answer, offbeat push, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, fold bass, chest-sub melody, straight hats, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, rapid hi-hats, fold bass, chest-sub melody, straight hats, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder reese warped drop, stacked 808, low-mid bass melody, trap drums denser, triplet hats, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, harder reese drop, stacked 808, low-mid bass melody, trap drums denser, triplet hats, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, kick pattern flip, fold bass melody, backbeat shove, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, fold bass, kick pattern flip, fold bass melody, backbeat shove, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, stacked 808, low reese counterline, ghost notes, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, wreck wobble drop, stacked 808, low reese counterline, offbeat hats, ghost notes, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, ghost snare, body bass answer, dry hats, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, fold bass, ghost snare, body bass answer, dry hats, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, heavy warped drop, stacked 808, low wobble answer, rapid hi-hats, wide hat bed, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, heavy warped drop, stacked 808, low wobble answer, rapid hi-hats, wide hat bed, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, trap drums denser, chest-sub melody, mono kick, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, parallel low-mid layer, trap drums denser, fold bass, chest-sub melody, mono kick, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, stacked 808, low-mid bass melody, side snare, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, stacked 808, kick pattern flip, low-mid bass melody, side snare, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck warped drop, fold bass, fold bass melody, offbeat hats, rolling hats, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, wreck warped drop, fold bass, fold bass melody, offbeat hats, rolling hats, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, stacked 808, low reese counterline, late snare, 2 bars]
-
-[drop - chest-sub, 3D low-mid orbit, heavy reese warped drop, fold bass, body bass answer, rapid hi-hats, early kick, 2 bars]
-
-[build-up - chest-sub, bass circles the low-mid, kick tightens, stacked 808, trap drums denser, low wobble answer, syncopated hats, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, fold bass, chest-sub melody, open hat, 2 bars]
-
-[drop - chest-sub, low-mid orbits the sub, wreck reese warped drop, stacked 808, low-mid bass melody, offbeat hats, closed hat, 2 bars]
-
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, ghost snare, fold bass melody, room snare, 2 bars]
-
-[outro - chest-sub, low-mid orbits the sub, kick pattern flip, rapid hi-hats, low-mid bass melody, triplet hats, 2 bars]
+[outro - chest-sub, low-mid orbits the sub, wide stereo layer, kick pattern flip, rapid hi-hats, low-mid bass melody, triplet hats, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -3309,7 +3077,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 8
 | Slot | Value |
 | --- | --- |
 | 0 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, …` |
-| 1 | `[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass…` |
+| 1 | `[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick …` |
 | 2 | `647` |
 | 3 | `fixed` |
 | 4 | `165` |
@@ -3325,97 +3093,85 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 8
 | 14 | `0.0` |
 
 ```text
-dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 165 bpm, instrumental, no vocals
+dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, kick pattern flip, fold bass melody, kick opens, trap drums 808 wreck, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, fold bass, kick pattern flip, fold bass melody, kick opens, trap drums 808 wreck, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, wreck wobble warped drop, stacked 808, low reese counterline, offbeat hats, kick tightens, warped hybrid-trap, heavy hybrid drop, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, wreck wobble drop, stacked 808, low reese counterline, offbeat hats, kick tightens, warped hybrid-trap, heavy hybrid drop, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, ghost snare, body bass answer, snare answers, warped booth, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, panning bass layer, kick tightens, fold bass, ghost snare, body bass answer, snare answers, warped booth, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy warped drop, stacked 808, low wobble answer, rapid hi-hats, offbeat push, rapid hi-hats roll, 2 bars]
+[inst - chest-sub, bass circles the low-mid, layered sub stack, rapid hi-hats, stacked 808, low wobble answer, offbeat push, rapid hi-hats roll, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, trap drums denser, chest-sub melody, straight hats, 808 slide, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, harder wobble drop, fold bass, chest-sub melody, trap drums denser, straight hats, 808 slide, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, full send reese warped drop, stacked 808, low-mid bass melody, kick pattern flip, triplet hats, harder warped drop, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, stacked 808, kick pattern flip, low-mid bass melody, triplet hats, stacked trap bass, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, offbeat hats, fold bass melody, backbeat shove, stacked trap bass, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, wreck warped drop, fold bass, fold bass melody, offbeat hats, backbeat shove, harder warped drop, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, ghost snare, stacked 808, low reese counterline, ghost notes, 2 bars]
+[inst - chest-sub, bass circles the low-mid, panning bass layer, ghost snare, stacked 808, low reese counterline, ghost notes, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy reese warped drop, fold bass, body bass answer, rapid hi-hats, dry hats, kick tightens, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, heavy reese drop, fold bass, body bass answer, rapid hi-hats, dry hats, kick tightens, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, trap drums denser, low wobble answer, wide hat bed, chest-sub 808 punch, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, parallel low-mid layer, trap drums denser, stacked 808, low wobble answer, wide hat bed, chest-sub 808 punch, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, fold bass, chest-sub melody, mono kick, chest-sub 808 wall, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, full send wobble drop, fold bass, chest-sub melody, kick pattern flip, mono kick, full send drop, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck reese warped drop, stacked 808, low-mid bass melody, offbeat hats, side snare, full send drop, 2 bars]
+[inst - chest-sub, bass circles the low-mid, octave 808 stack, offbeat hats, stacked 808, low-mid bass melody, side snare, chest-sub 808 wall, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, ghost snare, fold bass melody, rolling hats, hybrid warp, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, stacked warped drop, fold bass, fold bass melody, ghost snare, rolling hats, hybrid warp, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, stacked 808, low reese counterline, late snare, kick holds, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, layered sub stack, rapid hi-hats, stacked 808, low reese counterline, late snare, kick holds, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder reese warped drop, fold bass, body bass answer, trap drums denser, early kick, hats denser, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, fold bass, trap drums denser, body bass answer, early kick, hats denser, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, stacked 808, low wobble answer, syncopated hats, 808 ride, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, full send warped drop, stacked 808, low wobble answer, kick pattern flip, syncopated hats, 808 ride, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, offbeat hats, chest-sub melody, open hat, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick tightens, fold bass, offbeat hats, chest-sub melody, open hat, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked reese warped drop, stacked 808, low-mid bass melody, ghost snare, closed hat, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, stacked reese drop, stacked 808, low-mid bass melody, ghost snare, closed hat, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, rapid hi-hats, fold bass melody, room snare, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, fold bass, rapid hi-hats, fold bass melody, room snare, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, stacked 808, low reese counterline, tight kick, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, trap drums denser, stacked 808, low reese counterline, tight kick, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, full send reese warped drop, fold bass, body bass answer, kick pattern flip, loose hats, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, full send reese drop, fold bass, body bass answer, kick pattern flip, loose hats, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, offbeat hats, low wobble answer, pushed snare, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, stacked 808, offbeat hats, low wobble answer, pushed snare, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked wobble warped drop, fold bass, chest-sub melody, ghost snare, chopped hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, stacked wobble drop, fold bass, chest-sub melody, ghost snare, chopped hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, stacked 808, low-mid bass melody, hat density up, 2 bars]
+[inst - chest-sub, bass circles the low-mid, layered sub stack, rapid hi-hats, stacked 808, low-mid bass melody, hat density up, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder warped drop, fold bass, fold bass melody, trap drums denser, kick opens, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, harder warped drop, fold bass, fold bass melody, trap drums denser, kick opens, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, kick pattern flip, low reese counterline, kick tightens, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, stacked 808, kick pattern flip, low reese counterline, kick tightens, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck reese warped drop, fold bass, body bass answer, offbeat hats, snare answers, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, wreck reese drop, fold bass, body bass answer, offbeat hats, snare answers, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, stacked 808, ghost snare, low wobble answer, offbeat push, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, stacked 808, ghost snare, low wobble answer, offbeat push, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, fold bass, chest-sub melody, straight hats, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, rapid hi-hats, fold bass, chest-sub melody, straight hats, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder reese warped drop, stacked 808, low-mid bass melody, trap drums denser, triplet hats, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, harder reese drop, stacked 808, low-mid bass melody, trap drums denser, triplet hats, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, kick pattern flip, fold bass melody, backbeat shove, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, fold bass, kick pattern flip, fold bass melody, backbeat shove, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, stacked 808, low reese counterline, ghost notes, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, wreck wobble drop, stacked 808, low reese counterline, offbeat hats, ghost notes, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, ghost snare, body bass answer, dry hats, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, fold bass, ghost snare, body bass answer, dry hats, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, heavy warped drop, stacked 808, low wobble answer, rapid hi-hats, wide hat bed, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, heavy warped drop, stacked 808, low wobble answer, rapid hi-hats, wide hat bed, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, trap drums denser, chest-sub melody, mono kick, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, parallel low-mid layer, trap drums denser, fold bass, chest-sub melody, mono kick, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, stacked 808, low-mid bass melody, side snare, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, stacked 808, kick pattern flip, low-mid bass melody, side snare, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck warped drop, fold bass, fold bass melody, offbeat hats, rolling hats, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, wreck warped drop, fold bass, fold bass melody, offbeat hats, rolling hats, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, stacked 808, low reese counterline, late snare, 2 bars]
-
-[drop - chest-sub, 3D low-mid orbit, heavy reese warped drop, fold bass, body bass answer, rapid hi-hats, early kick, 2 bars]
-
-[build-up - chest-sub, bass circles the low-mid, kick tightens, stacked 808, trap drums denser, low wobble answer, syncopated hats, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, fold bass, chest-sub melody, open hat, 2 bars]
-
-[drop - chest-sub, low-mid orbits the sub, wreck reese warped drop, stacked 808, low-mid bass melody, offbeat hats, closed hat, 2 bars]
-
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, ghost snare, fold bass melody, room snare, 2 bars]
-
-[outro - chest-sub, low-mid orbits the sub, kick pattern flip, rapid hi-hats, low-mid bass melody, triplet hats, 2 bars]
+[outro - chest-sub, low-mid orbits the sub, wide stereo layer, kick pattern flip, rapid hi-hats, low-mid bass melody, triplet hats, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -3514,103 +3270,91 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, …` |
-| 2 | `[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, trap…` |
+| 2 | `[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tig…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/secret-homage/12-coded-sub` |
 
 ```text
-chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, warped bass, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 165 bpm, instrumental, no vocals
+chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, warped bass, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, trap drums denser, fold bass melody, late snare, dual-action pedal bass, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, stacked 808, trap drums denser, fold bass melody, late snare, dual-action pedal bass, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder wobble warped drop, fold bass, low reese counterline, kick pattern flip, early kick, dual-action pedal bass, heavy chest drop, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, harder wobble drop, fold bass, low reese counterline, kick pattern flip, early kick, dual-action pedal bass, heavy chest drop, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, stacked 808, offbeat hats, body bass answer, syncopated hats, 808 warp wreck, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, octave 808 stack, kick tightens, stacked 808, offbeat hats, body bass answer, syncopated hats, 808 warp wreck, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, fold bass, low wobble answer, open hat, pedal 808 hold, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, panning bass layer, ghost snare, fold bass, low wobble answer, open hat, pedal 808 hold, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked wobble warped drop, stacked 808, chest-sub melody, rapid hi-hats, closed hat, rapid hi-hats roll, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, stacked 808, rapid hi-hats, chest-sub melody, closed hat, rapid hi-hats roll, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, trap drums denser, low-mid bass melody, room snare, stacked 808 wall, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, heavy reese drop, fold bass, low-mid bass melody, trap drums denser, room snare, harder warped drop, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, stacked 808, fold bass melody, tight kick, 2 bars]
+[inst - chest-sub, bass circles the low-mid, wide stereo layer, kick pattern flip, stacked 808, fold bass melody, tight kick, stacked 808 wall, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, offbeat hats, low reese counterline, loose hats, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, full send wobble drop, fold bass, low reese counterline, offbeat hats, loose hats, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, stacked 808, body bass answer, pushed snare, chest-sub 808, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, panning bass layer, ghost snare, stacked 808, body bass answer, pushed snare, kick tightens, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, rapid hi-hats, low wobble answer, chopped hats, hats denser, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, layered sub stack, stacked warped drop, fold bass, low wobble answer, rapid hi-hats, chopped hats, chest-sub 808, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy wobble warped drop, stacked 808, chest-sub melody, trap drums denser, hat density up, harder warped drop, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, trap drums denser, stacked 808, chest-sub melody, hat density up, hats denser, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, kick pattern flip, low-mid bass melody, kick opens, coded 808 hold, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, harder reese drop, fold bass, low-mid bass melody, kick pattern flip, kick opens, coded 808 hold, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, stacked 808, fold bass melody, kick tightens, chest-sub wreck, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, stacked 808, offbeat hats, fold bass melody, kick tightens, chest-sub wreck, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, ghost snare, low reese counterline, snare answers, pedal warp, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, ghost snare, fold bass, low reese counterline, snare answers, pedal warp, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked reese warped drop, stacked 808, body bass answer, rapid hi-hats, offbeat push, full send drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, stacked reese drop, stacked 808, body bass answer, rapid hi-hats, offbeat push, full send drop, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, fold bass, low wobble answer, straight hats, kick holds, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, trap drums denser, fold bass, low wobble answer, straight hats, kick holds, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder wobble warped drop, stacked 808, chest-sub melody, kick pattern flip, triplet hats, pedal ride, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, harder wobble drop, stacked 808, chest-sub melody, kick pattern flip, triplet hats, pedal ride, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, offbeat hats, low-mid bass melody, backbeat shove, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, octave 808 stack, offbeat hats, fold bass, low-mid bass melody, backbeat shove, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, ghost snare, stacked 808, fold bass melody, ghost notes, 2 bars]
+[drop - chest-sub, bass circles the low-mid, panning bass layer, wreck warped drop, stacked 808, fold bass melody, ghost snare, ghost notes, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, rapid hi-hats, low reese counterline, dry hats, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, layered sub stack, kick tightens, fold bass, rapid hi-hats, low reese counterline, dry hats, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, stacked 808, body bass answer, wide hat bed, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, heavy reese drop, stacked 808, body bass answer, trap drums denser, wide hat bed, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder warped drop, fold bass, low wobble answer, kick pattern flip, mono kick, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, fold bass, kick pattern flip, low wobble answer, mono kick, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, stacked 808, offbeat hats, chest-sub melody, side snare, 2 bars]
+[inst - chest-sub, bass circles the low-mid, octave 808 stack, offbeat hats, stacked 808, chest-sub melody, side snare, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, fold bass, low-mid bass melody, rolling hats, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, wreck reese drop, fold bass, low-mid bass melody, ghost snare, rolling hats, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked warped drop, stacked 808, fold bass melody, rapid hi-hats, late snare, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, layered sub stack, rapid hi-hats, stacked 808, fold bass melody, late snare, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, trap drums denser, low reese counterline, early kick, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, heavy wobble drop, fold bass, low reese counterline, trap drums denser, early kick, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder reese warped drop, stacked 808, body bass answer, kick pattern flip, syncopated hats, 2 bars]
+[inst - chest-sub, bass circles the low-mid, wide stereo layer, kick pattern flip, stacked 808, body bass answer, syncopated hats, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, offbeat hats, fold bass, low wobble answer, open hat, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, full send warped drop, fold bass, low wobble answer, offbeat hats, open hat, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, wreck wobble warped drop, stacked 808, chest-sub melody, ghost snare, closed hat, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tightens, stacked 808, ghost snare, chest-sub melody, closed hat, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, rapid hi-hats, low-mid bass melody, room snare, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, layered sub stack, rapid hi-hats, fold bass, low-mid bass melody, room snare, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, stacked 808, fold bass melody, tight kick, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, heavy warped drop, stacked 808, fold bass melody, trap drums denser, tight kick, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder wobble warped drop, fold bass, low reese counterline, kick pattern flip, loose hats, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick pattern flip, fold bass, low reese counterline, loose hats, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, offbeat hats, body bass answer, pushed snare, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, full send reese drop, stacked 808, body bass answer, offbeat hats, pushed snare, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, fold bass, low wobble answer, chopped hats, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, panning bass layer, kick tightens, fold bass, ghost snare, low wobble answer, chopped hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked wobble warped drop, stacked 808, chest-sub melody, rapid hi-hats, hat density up, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, stacked wobble drop, stacked 808, chest-sub melody, rapid hi-hats, hat density up, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, trap drums denser, low-mid bass melody, kick opens, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, fold bass, trap drums denser, low-mid bass melody, kick opens, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder warped drop, stacked 808, fold bass melody, kick pattern flip, kick tightens, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, wide stereo layer, kick pattern flip, stacked 808, fold bass melody, kick tightens, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, offbeat hats, low reese counterline, snare answers, 2 bars]
-
-[inst - chest-sub, bass circles the low-mid, ghost snare, stacked 808, body bass answer, offbeat push, 2 bars]
-
-[drop - chest-sub, sub center, low-mid moves wide, stacked warped drop, fold bass, low wobble answer, rapid hi-hats, straight hats, 2 bars]
-
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, stacked 808, chest-sub melody, triplet hats, 2 bars]
-
-[drop - chest-sub, 3D low-mid orbit, harder reese warped drop, fold bass, low-mid bass melody, kick pattern flip, backbeat shove, 2 bars]
-
-[build-up - chest-sub, bass circles the low-mid, kick tightens, stacked 808, offbeat hats, fold bass melody, ghost notes, 2 bars]
-
-[outro - chest-sub, sub center, low-mid moves wide, kick pattern flip, rapid hi-hats, low wobble answer, straight hats, 2 bars]
+[outro - chest-sub, sub center, low-mid moves wide, panning bass layer, kick pattern flip, rapid hi-hats, low wobble answer, straight hats, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -3618,7 +3362,7 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, w
 | Slot | Value |
 | --- | --- |
 | 0 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, …` |
-| 1 | `[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, trap…` |
+| 1 | `[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tig…` |
 | 2 | `653` |
 | 3 | `fixed` |
 | 4 | `165` |
@@ -3634,97 +3378,85 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, w
 | 14 | `0.0` |
 
 ```text
-chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, warped bass, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 165 bpm, instrumental, no vocals
+chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, warped bass, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, trap drums denser, fold bass melody, late snare, dual-action pedal bass, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, stacked 808, trap drums denser, fold bass melody, late snare, dual-action pedal bass, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder wobble warped drop, fold bass, low reese counterline, kick pattern flip, early kick, dual-action pedal bass, heavy chest drop, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, harder wobble drop, fold bass, low reese counterline, kick pattern flip, early kick, dual-action pedal bass, heavy chest drop, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, stacked 808, offbeat hats, body bass answer, syncopated hats, 808 warp wreck, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, octave 808 stack, kick tightens, stacked 808, offbeat hats, body bass answer, syncopated hats, 808 warp wreck, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, fold bass, low wobble answer, open hat, pedal 808 hold, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, panning bass layer, ghost snare, fold bass, low wobble answer, open hat, pedal 808 hold, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked wobble warped drop, stacked 808, chest-sub melody, rapid hi-hats, closed hat, rapid hi-hats roll, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, stacked 808, rapid hi-hats, chest-sub melody, closed hat, rapid hi-hats roll, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, trap drums denser, low-mid bass melody, room snare, stacked 808 wall, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, heavy reese drop, fold bass, low-mid bass melody, trap drums denser, room snare, harder warped drop, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, stacked 808, fold bass melody, tight kick, 2 bars]
+[inst - chest-sub, bass circles the low-mid, wide stereo layer, kick pattern flip, stacked 808, fold bass melody, tight kick, stacked 808 wall, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, offbeat hats, low reese counterline, loose hats, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, full send wobble drop, fold bass, low reese counterline, offbeat hats, loose hats, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, stacked 808, body bass answer, pushed snare, chest-sub 808, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, panning bass layer, ghost snare, stacked 808, body bass answer, pushed snare, kick tightens, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, rapid hi-hats, low wobble answer, chopped hats, hats denser, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, layered sub stack, stacked warped drop, fold bass, low wobble answer, rapid hi-hats, chopped hats, chest-sub 808, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy wobble warped drop, stacked 808, chest-sub melody, trap drums denser, hat density up, harder warped drop, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, trap drums denser, stacked 808, chest-sub melody, hat density up, hats denser, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, kick pattern flip, low-mid bass melody, kick opens, coded 808 hold, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, harder reese drop, fold bass, low-mid bass melody, kick pattern flip, kick opens, coded 808 hold, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, stacked 808, fold bass melody, kick tightens, chest-sub wreck, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, stacked 808, offbeat hats, fold bass melody, kick tightens, chest-sub wreck, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, ghost snare, low reese counterline, snare answers, pedal warp, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, ghost snare, fold bass, low reese counterline, snare answers, pedal warp, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked reese warped drop, stacked 808, body bass answer, rapid hi-hats, offbeat push, full send drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, stacked reese drop, stacked 808, body bass answer, rapid hi-hats, offbeat push, full send drop, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, fold bass, low wobble answer, straight hats, kick holds, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, trap drums denser, fold bass, low wobble answer, straight hats, kick holds, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder wobble warped drop, stacked 808, chest-sub melody, kick pattern flip, triplet hats, pedal ride, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, harder wobble drop, stacked 808, chest-sub melody, kick pattern flip, triplet hats, pedal ride, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, offbeat hats, low-mid bass melody, backbeat shove, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, octave 808 stack, offbeat hats, fold bass, low-mid bass melody, backbeat shove, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, ghost snare, stacked 808, fold bass melody, ghost notes, 2 bars]
+[drop - chest-sub, bass circles the low-mid, panning bass layer, wreck warped drop, stacked 808, fold bass melody, ghost snare, ghost notes, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, rapid hi-hats, low reese counterline, dry hats, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, layered sub stack, kick tightens, fold bass, rapid hi-hats, low reese counterline, dry hats, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, stacked 808, body bass answer, wide hat bed, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, heavy reese drop, stacked 808, body bass answer, trap drums denser, wide hat bed, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder warped drop, fold bass, low wobble answer, kick pattern flip, mono kick, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, fold bass, kick pattern flip, low wobble answer, mono kick, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, stacked 808, offbeat hats, chest-sub melody, side snare, 2 bars]
+[inst - chest-sub, bass circles the low-mid, octave 808 stack, offbeat hats, stacked 808, chest-sub melody, side snare, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, fold bass, low-mid bass melody, rolling hats, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, wreck reese drop, fold bass, low-mid bass melody, ghost snare, rolling hats, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked warped drop, stacked 808, fold bass melody, rapid hi-hats, late snare, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, layered sub stack, rapid hi-hats, stacked 808, fold bass melody, late snare, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, trap drums denser, low reese counterline, early kick, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, heavy wobble drop, fold bass, low reese counterline, trap drums denser, early kick, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder reese warped drop, stacked 808, body bass answer, kick pattern flip, syncopated hats, 2 bars]
+[inst - chest-sub, bass circles the low-mid, wide stereo layer, kick pattern flip, stacked 808, body bass answer, syncopated hats, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, offbeat hats, fold bass, low wobble answer, open hat, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, full send warped drop, fold bass, low wobble answer, offbeat hats, open hat, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, wreck wobble warped drop, stacked 808, chest-sub melody, ghost snare, closed hat, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tightens, stacked 808, ghost snare, chest-sub melody, closed hat, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, rapid hi-hats, low-mid bass melody, room snare, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, layered sub stack, rapid hi-hats, fold bass, low-mid bass melody, room snare, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, stacked 808, fold bass melody, tight kick, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, heavy warped drop, stacked 808, fold bass melody, trap drums denser, tight kick, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder wobble warped drop, fold bass, low reese counterline, kick pattern flip, loose hats, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick pattern flip, fold bass, low reese counterline, loose hats, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, offbeat hats, body bass answer, pushed snare, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, full send reese drop, stacked 808, body bass answer, offbeat hats, pushed snare, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, fold bass, low wobble answer, chopped hats, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, panning bass layer, kick tightens, fold bass, ghost snare, low wobble answer, chopped hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked wobble warped drop, stacked 808, chest-sub melody, rapid hi-hats, hat density up, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, stacked wobble drop, stacked 808, chest-sub melody, rapid hi-hats, hat density up, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, trap drums denser, low-mid bass melody, kick opens, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, fold bass, trap drums denser, low-mid bass melody, kick opens, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder warped drop, stacked 808, fold bass melody, kick pattern flip, kick tightens, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, wide stereo layer, kick pattern flip, stacked 808, fold bass melody, kick tightens, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, offbeat hats, low reese counterline, snare answers, 2 bars]
-
-[inst - chest-sub, bass circles the low-mid, ghost snare, stacked 808, body bass answer, offbeat push, 2 bars]
-
-[drop - chest-sub, sub center, low-mid moves wide, stacked warped drop, fold bass, low wobble answer, rapid hi-hats, straight hats, 2 bars]
-
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, stacked 808, chest-sub melody, triplet hats, 2 bars]
-
-[drop - chest-sub, 3D low-mid orbit, harder reese warped drop, fold bass, low-mid bass melody, kick pattern flip, backbeat shove, 2 bars]
-
-[build-up - chest-sub, bass circles the low-mid, kick tightens, stacked 808, offbeat hats, fold bass melody, ghost notes, 2 bars]
-
-[outro - chest-sub, sub center, low-mid moves wide, kick pattern flip, rapid hi-hats, low wobble answer, straight hats, 2 bars]
+[outro - chest-sub, sub center, low-mid moves wide, panning bass layer, kick pattern flip, rapid hi-hats, low wobble answer, straight hats, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -3823,103 +3555,91 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808,…` |
-| 2 | `[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, ghos…` |
+| 2 | `[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/secret-homage/13-shadow-coil` |
 
 ```text
-neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 168 bpm, instrumental, no vocals
+neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, ghost snare, chest-sub melody, side snare, reese coil wreck, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, stacked 808, ghost snare, chest-sub melody, side snare, reese coil wreck, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder wobble warped drop, fold bass, low-mid bass melody, rapid hi-hats, rolling hats, reese bass, heavy neuro drop, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, harder wobble drop, fold bass, low-mid bass melody, rapid hi-hats, rolling hats, reese bass, heavy neuro drop, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, stacked 808, fold bass melody, late snare, warped shadow, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, stacked 808, trap drums denser, fold bass melody, late snare, warped shadow, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, kick pattern flip, low reese counterline, early kick, hats denser, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick pattern flip, fold bass, low reese counterline, early kick, hats denser, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked wobble warped drop, stacked 808, body bass answer, offbeat hats, syncopated hats, reese hold, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, stacked wobble drop, stacked 808, body bass answer, offbeat hats, syncopated hats, reese hold, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, fold bass, low wobble answer, open hat, chest reese wreck, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, fold bass, ghost snare, low wobble answer, open hat, chest reese wreck, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, stacked 808, rapid hi-hats, chest-sub melody, closed hat, chest-sub coil, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, rapid hi-hats, stacked 808, chest-sub melody, closed hat, chest-sub coil, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, fold bass, low-mid bass melody, room snare, rapid hi-hats roll, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, full send wobble drop, fold bass, low-mid bass melody, trap drums denser, room snare, harder stacked drop, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, wreck reese warped drop, stacked 808, fold bass melody, kick pattern flip, tight kick, harder stacked drop, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, octave 808 stack, kick pattern flip, stacked 808, fold bass melody, tight kick, rapid hi-hats roll, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, offbeat hats, low reese counterline, loose hats, 808 punch, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, stacked warped drop, fold bass, low reese counterline, offbeat hats, loose hats, 808 punch, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, ghost snare, stacked 808, body bass answer, pushed snare, coiled 808 wreck, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, stacked 808, ghost snare, body bass answer, pushed snare, coiled 808 wreck, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, rapid hi-hats, low wobble answer, chopped hats, chest warp, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, harder reese drop, fold bass, low wobble answer, rapid hi-hats, chopped hats, full send drop, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, full send warped drop, stacked 808, chest-sub melody, trap drums denser, hat density up, full send drop, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, stacked 808, trap drums denser, chest-sub melody, hat density up, chest warp, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, kick pattern flip, low-mid bass melody, kick opens, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, octave 808 stack, kick pattern flip, fold bass, low-mid bass melody, kick opens, kick tightens, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, stacked 808, fold bass melody, kick tightens, shadow 808 punch, 2 bars]
+[drop - chest-sub, bass circles the low-mid, panning bass layer, stacked reese drop, stacked 808, fold bass melody, offbeat hats, kick tightens, shadow 808 punch, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy warped drop, fold bass, low reese counterline, ghost snare, snare answers, harder growl drop, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, layered sub stack, kick tightens, fold bass, ghost snare, low reese counterline, snare answers, stacked reese wreck, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, rapid hi-hats, body bass answer, offbeat push, stacked reese wreck, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, harder wobble drop, stacked 808, body bass answer, rapid hi-hats, offbeat push, harder growl drop, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, fold bass, low wobble answer, straight hats, shadow grind, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, fold bass, trap drums denser, low wobble answer, straight hats, shadow grind, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, stacked 808, kick pattern flip, chest-sub melody, triplet hats, kick holds, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, wreck warped drop, stacked 808, chest-sub melody, kick pattern flip, triplet hats, kick holds, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, stacked wobble warped drop, fold bass, low-mid bass melody, offbeat hats, backbeat shove, reese ride, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, fold bass, offbeat hats, low-mid bass melody, backbeat shove, reese ride, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, ghost snare, fold bass melody, ghost notes, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, heavy reese drop, stacked 808, fold bass melody, ghost snare, ghost notes, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, rapid hi-hats, fold bass, low reese counterline, dry hats, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, fold bass, rapid hi-hats, low reese counterline, dry hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send wobble warped drop, stacked 808, body bass answer, trap drums denser, wide hat bed, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, full send wobble drop, stacked 808, body bass answer, trap drums denser, wide hat bed, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, kick pattern flip, low wobble answer, mono kick, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick tightens, fold bass, kick pattern flip, low wobble answer, mono kick, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, stacked 808, chest-sub melody, side snare, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, panning bass layer, offbeat hats, stacked 808, chest-sub melody, side snare, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, heavy wobble warped drop, fold bass, low-mid bass melody, ghost snare, rolling hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, layered sub stack, heavy wobble drop, fold bass, low-mid bass melody, ghost snare, rolling hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, stacked 808, fold bass melody, late snare, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, parallel low-mid layer, kick tightens, stacked 808, rapid hi-hats, fold bass melody, late snare, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, full send warped drop, fold bass, low reese counterline, trap drums denser, early kick, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, full send warped drop, fold bass, low reese counterline, trap drums denser, early kick, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, kick pattern flip, body bass answer, syncopated hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, stacked 808, kick pattern flip, body bass answer, syncopated hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked reese warped drop, fold bass, low wobble answer, offbeat hats, open hat, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, offbeat hats, fold bass, low wobble answer, open hat, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, stacked 808, ghost snare, chest-sub melody, closed hat, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, stacked 808, ghost snare, chest-sub melody, closed hat, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder wobble warped drop, fold bass, low-mid bass melody, rapid hi-hats, room snare, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, rapid hi-hats, fold bass, low-mid bass melody, room snare, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, trap drums denser, fold bass melody, tight kick, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, full send reese drop, stacked 808, fold bass melody, trap drums denser, tight kick, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, fold bass, low reese counterline, loose hats, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, octave 808 stack, kick tightens, fold bass, kick pattern flip, low reese counterline, loose hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked wobble warped drop, stacked 808, body bass answer, offbeat hats, pushed snare, 2 bars]
+[drop - chest-sub, bass circles the low-mid, panning bass layer, stacked wobble drop, stacked 808, body bass answer, offbeat hats, pushed snare, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, fold bass, low wobble answer, chopped hats, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, layered sub stack, kick tightens, fold bass, ghost snare, low wobble answer, chopped hats, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder warped drop, stacked 808, chest-sub melody, rapid hi-hats, hat density up, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, parallel low-mid layer, rapid hi-hats, stacked 808, chest-sub melody, hat density up, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, fold bass, low-mid bass melody, kick opens, 2 bars]
-
-[drop - chest-sub, bass circles the low-mid, wreck reese warped drop, stacked 808, fold bass melody, kick pattern flip, kick tightens, 2 bars]
-
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, offbeat hats, low reese counterline, snare answers, 2 bars]
-
-[inst - chest-sub, low-mid orbits the sub, ghost snare, stacked 808, body bass answer, offbeat push, 2 bars]
-
-[drop - chest-sub, 3D low-mid orbit, harder reese warped drop, fold bass, low wobble answer, rapid hi-hats, straight hats, 2 bars]
-
-[build-up - chest-sub, bass circles the low-mid, kick tightens, stacked 808, trap drums denser, chest-sub melody, triplet hats, 2 bars]
-
-[outro - chest-sub, low-mid orbits the sub, kick pattern flip, rapid hi-hats, chest-sub melody, hat density up, 2 bars]
+[outro - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick pattern flip, rapid hi-hats, chest-sub melody, hat density up, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -3927,7 +3647,7 @@ neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808, 
 | Slot | Value |
 | --- | --- |
 | 0 | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808,…` |
-| 1 | `[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, ghos…` |
+| 1 | `[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens…` |
 | 2 | `659` |
 | 3 | `fixed` |
 | 4 | `168` |
@@ -3943,97 +3663,85 @@ neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808, 
 | 14 | `0.0` |
 
 ```text
-neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 168 bpm, instrumental, no vocals
+neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, ghost snare, chest-sub melody, side snare, reese coil wreck, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, stacked 808, ghost snare, chest-sub melody, side snare, reese coil wreck, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder wobble warped drop, fold bass, low-mid bass melody, rapid hi-hats, rolling hats, reese bass, heavy neuro drop, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, harder wobble drop, fold bass, low-mid bass melody, rapid hi-hats, rolling hats, reese bass, heavy neuro drop, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, stacked 808, fold bass melody, late snare, warped shadow, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, stacked 808, trap drums denser, fold bass melody, late snare, warped shadow, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, kick pattern flip, low reese counterline, early kick, hats denser, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick pattern flip, fold bass, low reese counterline, early kick, hats denser, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked wobble warped drop, stacked 808, body bass answer, offbeat hats, syncopated hats, reese hold, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, stacked wobble drop, stacked 808, body bass answer, offbeat hats, syncopated hats, reese hold, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, fold bass, low wobble answer, open hat, chest reese wreck, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, fold bass, ghost snare, low wobble answer, open hat, chest reese wreck, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, stacked 808, rapid hi-hats, chest-sub melody, closed hat, chest-sub coil, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, rapid hi-hats, stacked 808, chest-sub melody, closed hat, chest-sub coil, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, fold bass, low-mid bass melody, room snare, rapid hi-hats roll, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, full send wobble drop, fold bass, low-mid bass melody, trap drums denser, room snare, harder stacked drop, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, wreck reese warped drop, stacked 808, fold bass melody, kick pattern flip, tight kick, harder stacked drop, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, octave 808 stack, kick pattern flip, stacked 808, fold bass melody, tight kick, rapid hi-hats roll, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, offbeat hats, low reese counterline, loose hats, 808 punch, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, stacked warped drop, fold bass, low reese counterline, offbeat hats, loose hats, 808 punch, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, ghost snare, stacked 808, body bass answer, pushed snare, coiled 808 wreck, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, stacked 808, ghost snare, body bass answer, pushed snare, coiled 808 wreck, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, rapid hi-hats, low wobble answer, chopped hats, chest warp, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, harder reese drop, fold bass, low wobble answer, rapid hi-hats, chopped hats, full send drop, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, full send warped drop, stacked 808, chest-sub melody, trap drums denser, hat density up, full send drop, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, stacked 808, trap drums denser, chest-sub melody, hat density up, chest warp, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, kick pattern flip, low-mid bass melody, kick opens, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, octave 808 stack, kick pattern flip, fold bass, low-mid bass melody, kick opens, kick tightens, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, stacked 808, fold bass melody, kick tightens, shadow 808 punch, 2 bars]
+[drop - chest-sub, bass circles the low-mid, panning bass layer, stacked reese drop, stacked 808, fold bass melody, offbeat hats, kick tightens, shadow 808 punch, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy warped drop, fold bass, low reese counterline, ghost snare, snare answers, harder growl drop, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, layered sub stack, kick tightens, fold bass, ghost snare, low reese counterline, snare answers, stacked reese wreck, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, rapid hi-hats, body bass answer, offbeat push, stacked reese wreck, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, harder wobble drop, stacked 808, body bass answer, rapid hi-hats, offbeat push, harder growl drop, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, fold bass, low wobble answer, straight hats, shadow grind, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, fold bass, trap drums denser, low wobble answer, straight hats, shadow grind, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, stacked 808, kick pattern flip, chest-sub melody, triplet hats, kick holds, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, wreck warped drop, stacked 808, chest-sub melody, kick pattern flip, triplet hats, kick holds, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, stacked wobble warped drop, fold bass, low-mid bass melody, offbeat hats, backbeat shove, reese ride, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, fold bass, offbeat hats, low-mid bass melody, backbeat shove, reese ride, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, ghost snare, fold bass melody, ghost notes, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, heavy reese drop, stacked 808, fold bass melody, ghost snare, ghost notes, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, rapid hi-hats, fold bass, low reese counterline, dry hats, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, fold bass, rapid hi-hats, low reese counterline, dry hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send wobble warped drop, stacked 808, body bass answer, trap drums denser, wide hat bed, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, full send wobble drop, stacked 808, body bass answer, trap drums denser, wide hat bed, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, kick pattern flip, low wobble answer, mono kick, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick tightens, fold bass, kick pattern flip, low wobble answer, mono kick, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, stacked 808, chest-sub melody, side snare, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, panning bass layer, offbeat hats, stacked 808, chest-sub melody, side snare, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, heavy wobble warped drop, fold bass, low-mid bass melody, ghost snare, rolling hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, layered sub stack, heavy wobble drop, fold bass, low-mid bass melody, ghost snare, rolling hats, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, stacked 808, fold bass melody, late snare, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, parallel low-mid layer, kick tightens, stacked 808, rapid hi-hats, fold bass melody, late snare, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, full send warped drop, fold bass, low reese counterline, trap drums denser, early kick, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, full send warped drop, fold bass, low reese counterline, trap drums denser, early kick, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, kick pattern flip, body bass answer, syncopated hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, stacked 808, kick pattern flip, body bass answer, syncopated hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked reese warped drop, fold bass, low wobble answer, offbeat hats, open hat, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, offbeat hats, fold bass, low wobble answer, open hat, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, stacked 808, ghost snare, chest-sub melody, closed hat, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, stacked 808, ghost snare, chest-sub melody, closed hat, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder wobble warped drop, fold bass, low-mid bass melody, rapid hi-hats, room snare, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, rapid hi-hats, fold bass, low-mid bass melody, room snare, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, trap drums denser, fold bass melody, tight kick, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, full send reese drop, stacked 808, fold bass melody, trap drums denser, tight kick, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, fold bass, low reese counterline, loose hats, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, octave 808 stack, kick tightens, fold bass, kick pattern flip, low reese counterline, loose hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked wobble warped drop, stacked 808, body bass answer, offbeat hats, pushed snare, 2 bars]
+[drop - chest-sub, bass circles the low-mid, panning bass layer, stacked wobble drop, stacked 808, body bass answer, offbeat hats, pushed snare, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, fold bass, low wobble answer, chopped hats, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, layered sub stack, kick tightens, fold bass, ghost snare, low wobble answer, chopped hats, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder warped drop, stacked 808, chest-sub melody, rapid hi-hats, hat density up, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, parallel low-mid layer, rapid hi-hats, stacked 808, chest-sub melody, hat density up, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, fold bass, low-mid bass melody, kick opens, 2 bars]
-
-[drop - chest-sub, bass circles the low-mid, wreck reese warped drop, stacked 808, fold bass melody, kick pattern flip, kick tightens, 2 bars]
-
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass, offbeat hats, low reese counterline, snare answers, 2 bars]
-
-[inst - chest-sub, low-mid orbits the sub, ghost snare, stacked 808, body bass answer, offbeat push, 2 bars]
-
-[drop - chest-sub, 3D low-mid orbit, harder reese warped drop, fold bass, low wobble answer, rapid hi-hats, straight hats, 2 bars]
-
-[build-up - chest-sub, bass circles the low-mid, kick tightens, stacked 808, trap drums denser, chest-sub melody, triplet hats, 2 bars]
-
-[outro - chest-sub, low-mid orbits the sub, kick pattern flip, rapid hi-hats, chest-sub melody, hat density up, 2 bars]
+[outro - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick pattern flip, rapid hi-hats, chest-sub melody, hat density up, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -4132,105 +3840,93 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, o…` |
-| 2 | `[build-up - chest-sub, bass circles the low-mid, kick tightens, fold bass, offb…` |
+| 2 | `[build-up - chest-sub, bass circles the low-mid, octave 808 stack, kick tighten…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/secret-homage/14-mute-pyro` |
 
 ```text
-wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 168 bpm, instrumental, no vocals
+wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, bass circles the low-mid, kick tightens, fold bass, offbeat hats, low reese counterline, side snare, warped 808 wreck, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, octave 808 stack, kick tightens, fold bass, offbeat hats, low reese counterline, side snare, warped 808 wreck, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck wobble warped drop, stacked 808, body bass answer, ghost snare, rolling hats, wave bass, heavy wave drop, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, wreck wobble drop, stacked 808, body bass answer, ghost snare, rolling hats, wave bass, heavy wave drop, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, fold bass, rapid hi-hats, low wobble answer, late snare, fold grind, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, layered sub stack, rapid hi-hats, fold bass, low wobble answer, late snare, fold grind, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, stacked 808, chest-sub melody, early kick, chest analog wreck, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, heavy warped drop, stacked 808, chest-sub melody, trap drums denser, early kick, harder warped drop, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder wobble warped drop, fold bass, low-mid bass melody, kick pattern flip, syncopated hats, harder warped drop, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, fold bass, kick pattern flip, low-mid bass melody, syncopated hats, chest analog wreck, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, offbeat hats, stacked 808, fold bass melody, open hat, chest-sub 808, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, full send reese drop, stacked 808, fold bass melody, offbeat hats, open hat, chest-sub 808, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, wreck warped drop, fold bass, low reese counterline, ghost snare, closed hat, rapid hi-hats roll, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, panning bass layer, ghost snare, fold bass, low reese counterline, closed hat, rapid hi-hats roll, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, rapid hi-hats, stacked 808, body bass answer, room snare, wave 808 hold analog, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, stacked 808, rapid hi-hats, body bass answer, room snare, wave 808 hold analog, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy reese warped drop, fold bass, low wobble answer, trap drums denser, tight kick, full send drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, heavy reese drop, fold bass, low wobble answer, trap drums denser, tight kick, full send drop, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, stacked 808, chest-sub melody, loose hats, stacked wave wreck, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, stacked 808, kick pattern flip, chest-sub melody, loose hats, stacked wave wreck, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, full send wobble warped drop, fold bass, low-mid bass melody, offbeat hats, pushed snare, warped sub, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, full send wobble drop, fold bass, low-mid bass melody, offbeat hats, pushed snare, warped sub, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, stacked 808, ghost snare, fold bass melody, chopped hats, kick holds, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, ghost snare, stacked 808, fold bass melody, chopped hats, kick holds, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, fold bass, low reese counterline, hat density up, wave ride, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, stacked warped drop, fold bass, low reese counterline, rapid hi-hats, hat density up, wave ride, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy wobble warped drop, stacked 808, body bass answer, trap drums denser, kick opens, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, stacked 808, trap drums denser, body bass answer, kick opens, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, fold bass, kick pattern flip, low wobble answer, kick tightens, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, wide stereo layer, kick pattern flip, fold bass, low wobble answer, kick tightens, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, stacked 808, chest-sub melody, snare answers, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, full send warped drop, stacked 808, chest-sub melody, offbeat hats, snare answers, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck wobble warped drop, fold bass, low-mid bass melody, ghost snare, offbeat push, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, fold bass, ghost snare, low-mid bass melody, offbeat push, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, stacked 808, rapid hi-hats, fold bass melody, straight hats, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, rapid hi-hats, stacked 808, fold bass melody, straight hats, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, fold bass, low reese counterline, triplet hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, fold bass, trap drums denser, low reese counterline, triplet hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder wobble warped drop, stacked 808, body bass answer, kick pattern flip, backbeat shove, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, harder wobble drop, stacked 808, body bass answer, kick pattern flip, backbeat shove, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, fold bass, low wobble answer, ghost notes, 2 bars]
+[inst - chest-sub, bass circles the low-mid, octave 808 stack, offbeat hats, fold bass, low wobble answer, ghost notes, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck warped drop, stacked 808, chest-sub melody, ghost snare, dry hats, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, wreck warped drop, stacked 808, chest-sub melody, ghost snare, dry hats, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, fold bass, low-mid bass melody, wide hat bed, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, fold bass, rapid hi-hats, low-mid bass melody, wide hat bed, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, heavy reese warped drop, stacked 808, fold bass melody, trap drums denser, mono kick, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, heavy reese drop, stacked 808, fold bass melody, trap drums denser, mono kick, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, fold bass, kick pattern flip, low reese counterline, side snare, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, fold bass, kick pattern flip, low reese counterline, side snare, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, full send wobble warped drop, stacked 808, body bass answer, offbeat hats, rolling hats, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, offbeat hats, stacked 808, body bass answer, rolling hats, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, fold bass, low wobble answer, late snare, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, wreck reese drop, fold bass, low wobble answer, ghost snare, late snare, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, stacked 808, rapid hi-hats, chest-sub melody, early kick, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, stacked 808, rapid hi-hats, chest-sub melody, early kick, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, fold bass, low-mid bass melody, syncopated hats, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, heavy wobble drop, fold bass, low-mid bass melody, trap drums denser, syncopated hats, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, stacked 808, kick pattern flip, fold bass melody, open hat, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, stacked 808, kick pattern flip, fold bass melody, open hat, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, fold bass, low reese counterline, closed hat, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, octave 808 stack, offbeat hats, fold bass, low reese counterline, closed hat, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck wobble warped drop, stacked 808, body bass answer, ghost snare, room snare, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, wreck wobble drop, stacked 808, body bass answer, ghost snare, room snare, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, fold bass, low wobble answer, tight kick, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, fold bass, rapid hi-hats, low wobble answer, tight kick, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy warped drop, stacked 808, chest-sub melody, trap drums denser, loose hats, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, trap drums denser, stacked 808, chest-sub melody, loose hats, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, fold bass, kick pattern flip, low-mid bass melody, pushed snare, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, harder wobble drop, fold bass, low-mid bass melody, kick pattern flip, pushed snare, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, stacked 808, fold bass melody, chopped hats, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, octave 808 stack, kick tightens, stacked 808, offbeat hats, fold bass melody, chopped hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck warped drop, fold bass, low reese counterline, ghost snare, hat density up, 2 bars]
+[inst - chest-sub, bass circles the low-mid, panning bass layer, ghost snare, fold bass, low reese counterline, hat density up, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, stacked 808, body bass answer, kick opens, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, stacked wobble drop, stacked 808, body bass answer, rapid hi-hats, kick opens, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, fold bass, trap drums denser, low wobble answer, kick tightens, 2 bars]
-
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, stacked 808, chest-sub melody, snare answers, 2 bars]
-
-[drop - chest-sub, bass circles the low-mid, full send wobble warped drop, fold bass, low-mid bass melody, offbeat hats, offbeat push, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, stacked 808, fold bass melody, straight hats, 2 bars]
-
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, fold bass, rapid hi-hats, low reese counterline, triplet hats, 2 bars]
-
-[drop - chest-sub, 3D low-mid orbit, heavy wobble warped drop, stacked 808, body bass answer, trap drums denser, backbeat shove, 2 bars]
-
-[outro - chest-sub, bass circles the low-mid, kick pattern flip, rapid hi-hats, low-mid bass melody, syncopated hats, 2 bars]
+[outro - chest-sub, bass circles the low-mid, panning bass layer, kick pattern flip, rapid hi-hats, low-mid bass melody, syncopated hats, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -4238,7 +3934,7 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 | Slot | Value |
 | --- | --- |
 | 0 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, o…` |
-| 1 | `[build-up - chest-sub, bass circles the low-mid, kick tightens, fold bass, offb…` |
+| 1 | `[build-up - chest-sub, bass circles the low-mid, octave 808 stack, kick tighten…` |
 | 2 | `661` |
 | 3 | `fixed` |
 | 4 | `168` |
@@ -4254,99 +3950,87 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 | 14 | `0.0` |
 
 ```text
-wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 168 bpm, instrumental, no vocals
+wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, bass circles the low-mid, kick tightens, fold bass, offbeat hats, low reese counterline, side snare, warped 808 wreck, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, octave 808 stack, kick tightens, fold bass, offbeat hats, low reese counterline, side snare, warped 808 wreck, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck wobble warped drop, stacked 808, body bass answer, ghost snare, rolling hats, wave bass, heavy wave drop, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, wreck wobble drop, stacked 808, body bass answer, ghost snare, rolling hats, wave bass, heavy wave drop, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, fold bass, rapid hi-hats, low wobble answer, late snare, fold grind, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, layered sub stack, rapid hi-hats, fold bass, low wobble answer, late snare, fold grind, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, stacked 808, chest-sub melody, early kick, chest analog wreck, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, heavy warped drop, stacked 808, chest-sub melody, trap drums denser, early kick, harder warped drop, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder wobble warped drop, fold bass, low-mid bass melody, kick pattern flip, syncopated hats, harder warped drop, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, fold bass, kick pattern flip, low-mid bass melody, syncopated hats, chest analog wreck, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, offbeat hats, stacked 808, fold bass melody, open hat, chest-sub 808, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, full send reese drop, stacked 808, fold bass melody, offbeat hats, open hat, chest-sub 808, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, wreck warped drop, fold bass, low reese counterline, ghost snare, closed hat, rapid hi-hats roll, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, panning bass layer, ghost snare, fold bass, low reese counterline, closed hat, rapid hi-hats roll, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, rapid hi-hats, stacked 808, body bass answer, room snare, wave 808 hold analog, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, stacked 808, rapid hi-hats, body bass answer, room snare, wave 808 hold analog, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy reese warped drop, fold bass, low wobble answer, trap drums denser, tight kick, full send drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, heavy reese drop, fold bass, low wobble answer, trap drums denser, tight kick, full send drop, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, stacked 808, chest-sub melody, loose hats, stacked wave wreck, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, stacked 808, kick pattern flip, chest-sub melody, loose hats, stacked wave wreck, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, full send wobble warped drop, fold bass, low-mid bass melody, offbeat hats, pushed snare, warped sub, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, full send wobble drop, fold bass, low-mid bass melody, offbeat hats, pushed snare, warped sub, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, stacked 808, ghost snare, fold bass melody, chopped hats, kick holds, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, ghost snare, stacked 808, fold bass melody, chopped hats, kick holds, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, fold bass, low reese counterline, hat density up, wave ride, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, stacked warped drop, fold bass, low reese counterline, rapid hi-hats, hat density up, wave ride, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy wobble warped drop, stacked 808, body bass answer, trap drums denser, kick opens, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, stacked 808, trap drums denser, body bass answer, kick opens, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, fold bass, kick pattern flip, low wobble answer, kick tightens, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, wide stereo layer, kick pattern flip, fold bass, low wobble answer, kick tightens, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, stacked 808, chest-sub melody, snare answers, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, full send warped drop, stacked 808, chest-sub melody, offbeat hats, snare answers, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck wobble warped drop, fold bass, low-mid bass melody, ghost snare, offbeat push, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, fold bass, ghost snare, low-mid bass melody, offbeat push, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, stacked 808, rapid hi-hats, fold bass melody, straight hats, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, rapid hi-hats, stacked 808, fold bass melody, straight hats, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, fold bass, low reese counterline, triplet hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, fold bass, trap drums denser, low reese counterline, triplet hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder wobble warped drop, stacked 808, body bass answer, kick pattern flip, backbeat shove, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, harder wobble drop, stacked 808, body bass answer, kick pattern flip, backbeat shove, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, fold bass, low wobble answer, ghost notes, 2 bars]
+[inst - chest-sub, bass circles the low-mid, octave 808 stack, offbeat hats, fold bass, low wobble answer, ghost notes, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck warped drop, stacked 808, chest-sub melody, ghost snare, dry hats, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, wreck warped drop, stacked 808, chest-sub melody, ghost snare, dry hats, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, fold bass, low-mid bass melody, wide hat bed, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, fold bass, rapid hi-hats, low-mid bass melody, wide hat bed, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, heavy reese warped drop, stacked 808, fold bass melody, trap drums denser, mono kick, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, heavy reese drop, stacked 808, fold bass melody, trap drums denser, mono kick, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, fold bass, kick pattern flip, low reese counterline, side snare, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, fold bass, kick pattern flip, low reese counterline, side snare, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, full send wobble warped drop, stacked 808, body bass answer, offbeat hats, rolling hats, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, offbeat hats, stacked 808, body bass answer, rolling hats, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, fold bass, low wobble answer, late snare, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, wreck reese drop, fold bass, low wobble answer, ghost snare, late snare, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, stacked 808, rapid hi-hats, chest-sub melody, early kick, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, stacked 808, rapid hi-hats, chest-sub melody, early kick, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, fold bass, low-mid bass melody, syncopated hats, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, heavy wobble drop, fold bass, low-mid bass melody, trap drums denser, syncopated hats, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, stacked 808, kick pattern flip, fold bass melody, open hat, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, stacked 808, kick pattern flip, fold bass melody, open hat, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, fold bass, low reese counterline, closed hat, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, octave 808 stack, offbeat hats, fold bass, low reese counterline, closed hat, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck wobble warped drop, stacked 808, body bass answer, ghost snare, room snare, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, wreck wobble drop, stacked 808, body bass answer, ghost snare, room snare, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, fold bass, low wobble answer, tight kick, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, fold bass, rapid hi-hats, low wobble answer, tight kick, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy warped drop, stacked 808, chest-sub melody, trap drums denser, loose hats, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, trap drums denser, stacked 808, chest-sub melody, loose hats, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, fold bass, kick pattern flip, low-mid bass melody, pushed snare, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, harder wobble drop, fold bass, low-mid bass melody, kick pattern flip, pushed snare, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, stacked 808, fold bass melody, chopped hats, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, octave 808 stack, kick tightens, stacked 808, offbeat hats, fold bass melody, chopped hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck warped drop, fold bass, low reese counterline, ghost snare, hat density up, 2 bars]
+[inst - chest-sub, bass circles the low-mid, panning bass layer, ghost snare, fold bass, low reese counterline, hat density up, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, stacked 808, body bass answer, kick opens, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, stacked wobble drop, stacked 808, body bass answer, rapid hi-hats, kick opens, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, fold bass, trap drums denser, low wobble answer, kick tightens, 2 bars]
-
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, stacked 808, chest-sub melody, snare answers, 2 bars]
-
-[drop - chest-sub, bass circles the low-mid, full send wobble warped drop, fold bass, low-mid bass melody, offbeat hats, offbeat push, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, stacked 808, fold bass melody, straight hats, 2 bars]
-
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, fold bass, rapid hi-hats, low reese counterline, triplet hats, 2 bars]
-
-[drop - chest-sub, 3D low-mid orbit, heavy wobble warped drop, stacked 808, body bass answer, trap drums denser, backbeat shove, 2 bars]
-
-[outro - chest-sub, bass circles the low-mid, kick pattern flip, rapid hi-hats, low-mid bass melody, syncopated hats, 2 bars]
+[outro - chest-sub, bass circles the low-mid, panning bass layer, kick pattern flip, rapid hi-hats, low-mid bass melody, syncopated hats, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -4445,101 +4129,89 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig…` |
-| 2 | `[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, tr…` |
+| 2 | `[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tighten…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/secret-homage/15-unlisted-row` |
 
 ```text
-drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 176 bpm, instrumental, no vocals
+drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 176 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, trap drums denser, low reese counterline, straight hats, reese wreck, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tightens, low chest-sub, trap drums denser, low reese counterline, straight hats, reese wreck, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder wobble warped drop, mono chest-sub, body bass answer, kick pattern flip, triplet hats, amen break, heavy amen drop, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, layered sub stack, harder wobble drop, mono chest-sub, body bass answer, kick pattern flip, triplet hats, amen break, heavy amen drop, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, offbeat hats, low wobble answer, backbeat shove, warped row, 2 bars]
+[breakdown - chest-sub, bass circles the low-mid, parallel low-mid layer, rapid hi-hats, low wobble answer, low chest-sub, backbeat shove, 2 bars]
 
-[breakdown - chest-sub, sub center, low-mid moves wide, rapid hi-hats, chest-sub melody, mono chest-sub, ghost notes, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, wreck warped drop, mono chest-sub, chest-sub melody, ghost snare, ghost notes, amen break, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked wobble warped drop, low chest-sub, low-mid bass melody, rapid hi-hats, dry hats, rapid hi-hats 808 row, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, low chest-sub, rapid hi-hats, low-mid bass melody, dry hats, rapid hi-hats 808 row, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, trap drums denser, fold bass melody, wide hat bed, chest reese wreck, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, trap drums denser, mono chest-sub, fold bass melody, wide hat bed, chest reese wreck, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, low chest-sub, low reese counterline, mono kick, chest-sub 808, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, low chest-sub, kick pattern flip, low reese counterline, mono kick, chest-sub 808, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, full send wobble warped drop, mono chest-sub, body bass answer, offbeat hats, side snare, harder stacked drop, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, full send wobble drop, mono chest-sub, body bass answer, offbeat hats, side snare, harder stacked drop, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, ghost snare, low wobble answer, rolling hats, hats denser, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, low chest-sub, ghost snare, low wobble answer, rolling hats, hats denser, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, rapid hi-hats, mono chest-sub, chest-sub melody, late snare, reese hold, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, stacked warped drop, mono chest-sub, chest-sub melody, rapid hi-hats, late snare, reese hold, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, trap drums denser, low-mid bass melody, early kick, stacked amen wreck, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, low chest-sub, trap drums denser, low-mid bass melody, early kick, stacked amen wreck, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder reese warped drop, mono chest-sub, fold bass melody, kick pattern flip, syncopated hats, full send drop, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, kick pattern flip, mono chest-sub, fold bass melody, syncopated hats, 808 warp, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, offbeat hats, low reese counterline, open hat, 808 warp, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, full send warped drop, low chest-sub, low reese counterline, offbeat hats, open hat, full send drop, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, mono chest-sub, body bass answer, closed hat, kick tightens, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, mono chest-sub, ghost snare, body bass answer, closed hat, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked reese warped drop, low chest-sub, low wobble answer, rapid hi-hats, room snare, chest-sub 808 punch, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, stacked reese drop, low chest-sub, low wobble answer, rapid hi-hats, room snare, chest-sub 808 punch, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, mono chest-sub, chest-sub melody, tight kick, chest-sub 808 wreck, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, panning bass layer, trap drums denser, mono chest-sub, chest-sub melody, tight kick, chest-sub 808 wreck, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder wobble warped drop, low chest-sub, low-mid bass melody, kick pattern flip, loose hats, harder warped drop, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, harder wobble drop, low chest-sub, low-mid bass melody, kick pattern flip, loose hats, harder warped drop, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, mono chest-sub, fold bass melody, pushed snare, drumstep grind, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, parallel low-mid layer, offbeat hats, mono chest-sub, fold bass melody, pushed snare, drumstep grind, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck warped drop, low chest-sub, low reese counterline, ghost snare, chopped hats, kick holds, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, low chest-sub, ghost snare, low reese counterline, chopped hats, kick holds, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, mono chest-sub, body bass answer, hat density up, reese ride, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, rapid hi-hats, mono chest-sub, body bass answer, hat density up, reese ride, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, heavy reese warped drop, low chest-sub, low wobble answer, trap drums denser, kick opens, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, heavy reese drop, low chest-sub, low wobble answer, trap drums denser, kick opens, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, kick pattern flip, chest-sub melody, kick tightens, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, mono chest-sub, kick pattern flip, chest-sub melody, kick tightens, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, low chest-sub, low-mid bass melody, snare answers, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, full send wobble drop, low chest-sub, low-mid bass melody, offbeat hats, snare answers, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, mono chest-sub, ghost snare, fold bass melody, offbeat push, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, mono chest-sub, ghost snare, fold bass melody, offbeat push, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked warped drop, low chest-sub, low reese counterline, rapid hi-hats, straight hats, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, stacked warped drop, low chest-sub, low reese counterline, rapid hi-hats, straight hats, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, mono chest-sub, body bass answer, triplet hats, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, trap drums denser, mono chest-sub, body bass answer, triplet hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder reese warped drop, low chest-sub, low wobble answer, kick pattern flip, backbeat shove, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, harder reese drop, low chest-sub, low wobble answer, kick pattern flip, backbeat shove, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, mono chest-sub, offbeat hats, chest-sub melody, ghost notes, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, mono chest-sub, offbeat hats, chest-sub melody, ghost notes, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, low chest-sub, low-mid bass melody, dry hats, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, wide stereo layer, ghost snare, low chest-sub, low-mid bass melody, dry hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked reese warped drop, mono chest-sub, fold bass melody, rapid hi-hats, wide hat bed, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, stacked reese drop, mono chest-sub, fold bass melody, rapid hi-hats, wide hat bed, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, low chest-sub, low reese counterline, mono kick, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, low chest-sub, trap drums denser, low reese counterline, mono kick, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder wobble warped drop, mono chest-sub, body bass answer, kick pattern flip, side snare, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, harder wobble drop, mono chest-sub, body bass answer, kick pattern flip, side snare, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, offbeat hats, low wobble answer, rolling hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, low chest-sub, offbeat hats, low wobble answer, rolling hats, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, mono chest-sub, chest-sub melody, late snare, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, ghost snare, mono chest-sub, chest-sub melody, late snare, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked wobble warped drop, low chest-sub, low-mid bass melody, rapid hi-hats, early kick, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, stacked wobble drop, low chest-sub, low-mid bass melody, rapid hi-hats, early kick, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, mono chest-sub, fold bass melody, syncopated hats, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, panning bass layer, trap drums denser, mono chest-sub, fold bass melody, syncopated hats, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, kick pattern flip, low reese counterline, open hat, 2 bars]
-
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, mono chest-sub, body bass answer, closed hat, 2 bars]
-
-[drop - chest-sub, bass circles the low-mid, wreck reese warped drop, low chest-sub, low wobble answer, ghost snare, room snare, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, mono chest-sub, chest-sub melody, tight kick, 2 bars]
-
-[drop - chest-sub, low-mid orbits the sub, heavy wobble warped drop, low chest-sub, low-mid bass melody, trap drums denser, loose hats, 2 bars]
-
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, kick pattern flip, fold bass melody, pushed snare, 2 bars]
-
-[outro - chest-sub, sub center, low-mid moves wide, kick pattern flip, rapid hi-hats, chest-sub melody, ghost notes, 2 bars]
+[outro - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick pattern flip, rapid hi-hats, chest-sub melody, ghost notes, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -4547,7 +4219,7 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 | Slot | Value |
 | --- | --- |
 | 0 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig…` |
-| 1 | `[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, tr…` |
+| 1 | `[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tighten…` |
 | 2 | `673` |
 | 3 | `fixed` |
 | 4 | `176` |
@@ -4563,95 +4235,83 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 | 14 | `0.0` |
 
 ```text
-drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 176 bpm, instrumental, no vocals
+drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 176 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, trap drums denser, low reese counterline, straight hats, reese wreck, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tightens, low chest-sub, trap drums denser, low reese counterline, straight hats, reese wreck, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder wobble warped drop, mono chest-sub, body bass answer, kick pattern flip, triplet hats, amen break, heavy amen drop, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, layered sub stack, harder wobble drop, mono chest-sub, body bass answer, kick pattern flip, triplet hats, amen break, heavy amen drop, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, offbeat hats, low wobble answer, backbeat shove, warped row, 2 bars]
+[breakdown - chest-sub, bass circles the low-mid, parallel low-mid layer, rapid hi-hats, low wobble answer, low chest-sub, backbeat shove, 2 bars]
 
-[breakdown - chest-sub, sub center, low-mid moves wide, rapid hi-hats, chest-sub melody, mono chest-sub, ghost notes, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, wreck warped drop, mono chest-sub, chest-sub melody, ghost snare, ghost notes, amen break, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked wobble warped drop, low chest-sub, low-mid bass melody, rapid hi-hats, dry hats, rapid hi-hats 808 row, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, low chest-sub, rapid hi-hats, low-mid bass melody, dry hats, rapid hi-hats 808 row, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, trap drums denser, fold bass melody, wide hat bed, chest reese wreck, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, trap drums denser, mono chest-sub, fold bass melody, wide hat bed, chest reese wreck, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, low chest-sub, low reese counterline, mono kick, chest-sub 808, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, low chest-sub, kick pattern flip, low reese counterline, mono kick, chest-sub 808, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, full send wobble warped drop, mono chest-sub, body bass answer, offbeat hats, side snare, harder stacked drop, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, full send wobble drop, mono chest-sub, body bass answer, offbeat hats, side snare, harder stacked drop, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, ghost snare, low wobble answer, rolling hats, hats denser, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, low chest-sub, ghost snare, low wobble answer, rolling hats, hats denser, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, rapid hi-hats, mono chest-sub, chest-sub melody, late snare, reese hold, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, stacked warped drop, mono chest-sub, chest-sub melody, rapid hi-hats, late snare, reese hold, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, trap drums denser, low-mid bass melody, early kick, stacked amen wreck, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, low chest-sub, trap drums denser, low-mid bass melody, early kick, stacked amen wreck, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder reese warped drop, mono chest-sub, fold bass melody, kick pattern flip, syncopated hats, full send drop, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, kick pattern flip, mono chest-sub, fold bass melody, syncopated hats, 808 warp, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, offbeat hats, low reese counterline, open hat, 808 warp, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, full send warped drop, low chest-sub, low reese counterline, offbeat hats, open hat, full send drop, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, mono chest-sub, body bass answer, closed hat, kick tightens, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, mono chest-sub, ghost snare, body bass answer, closed hat, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked reese warped drop, low chest-sub, low wobble answer, rapid hi-hats, room snare, chest-sub 808 punch, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, stacked reese drop, low chest-sub, low wobble answer, rapid hi-hats, room snare, chest-sub 808 punch, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, mono chest-sub, chest-sub melody, tight kick, chest-sub 808 wreck, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, panning bass layer, trap drums denser, mono chest-sub, chest-sub melody, tight kick, chest-sub 808 wreck, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder wobble warped drop, low chest-sub, low-mid bass melody, kick pattern flip, loose hats, harder warped drop, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, harder wobble drop, low chest-sub, low-mid bass melody, kick pattern flip, loose hats, harder warped drop, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, mono chest-sub, fold bass melody, pushed snare, drumstep grind, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, parallel low-mid layer, offbeat hats, mono chest-sub, fold bass melody, pushed snare, drumstep grind, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck warped drop, low chest-sub, low reese counterline, ghost snare, chopped hats, kick holds, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, low chest-sub, ghost snare, low reese counterline, chopped hats, kick holds, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, mono chest-sub, body bass answer, hat density up, reese ride, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, rapid hi-hats, mono chest-sub, body bass answer, hat density up, reese ride, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, heavy reese warped drop, low chest-sub, low wobble answer, trap drums denser, kick opens, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, heavy reese drop, low chest-sub, low wobble answer, trap drums denser, kick opens, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, kick pattern flip, chest-sub melody, kick tightens, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, mono chest-sub, kick pattern flip, chest-sub melody, kick tightens, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, low chest-sub, low-mid bass melody, snare answers, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, full send wobble drop, low chest-sub, low-mid bass melody, offbeat hats, snare answers, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, mono chest-sub, ghost snare, fold bass melody, offbeat push, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, mono chest-sub, ghost snare, fold bass melody, offbeat push, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked warped drop, low chest-sub, low reese counterline, rapid hi-hats, straight hats, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, stacked warped drop, low chest-sub, low reese counterline, rapid hi-hats, straight hats, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, mono chest-sub, body bass answer, triplet hats, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, trap drums denser, mono chest-sub, body bass answer, triplet hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder reese warped drop, low chest-sub, low wobble answer, kick pattern flip, backbeat shove, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, harder reese drop, low chest-sub, low wobble answer, kick pattern flip, backbeat shove, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, mono chest-sub, offbeat hats, chest-sub melody, ghost notes, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, mono chest-sub, offbeat hats, chest-sub melody, ghost notes, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, low chest-sub, low-mid bass melody, dry hats, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, wide stereo layer, ghost snare, low chest-sub, low-mid bass melody, dry hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked reese warped drop, mono chest-sub, fold bass melody, rapid hi-hats, wide hat bed, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, stacked reese drop, mono chest-sub, fold bass melody, rapid hi-hats, wide hat bed, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, low chest-sub, low reese counterline, mono kick, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, low chest-sub, trap drums denser, low reese counterline, mono kick, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder wobble warped drop, mono chest-sub, body bass answer, kick pattern flip, side snare, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, harder wobble drop, mono chest-sub, body bass answer, kick pattern flip, side snare, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, offbeat hats, low wobble answer, rolling hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, low chest-sub, offbeat hats, low wobble answer, rolling hats, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, mono chest-sub, chest-sub melody, late snare, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, ghost snare, mono chest-sub, chest-sub melody, late snare, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked wobble warped drop, low chest-sub, low-mid bass melody, rapid hi-hats, early kick, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, stacked wobble drop, low chest-sub, low-mid bass melody, rapid hi-hats, early kick, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, mono chest-sub, fold bass melody, syncopated hats, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, panning bass layer, trap drums denser, mono chest-sub, fold bass melody, syncopated hats, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, kick pattern flip, low reese counterline, open hat, 2 bars]
-
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, mono chest-sub, body bass answer, closed hat, 2 bars]
-
-[drop - chest-sub, bass circles the low-mid, wreck reese warped drop, low chest-sub, low wobble answer, ghost snare, room snare, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, mono chest-sub, chest-sub melody, tight kick, 2 bars]
-
-[drop - chest-sub, low-mid orbits the sub, heavy wobble warped drop, low chest-sub, low-mid bass melody, trap drums denser, loose hats, 2 bars]
-
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, kick pattern flip, fold bass melody, pushed snare, 2 bars]
-
-[outro - chest-sub, sub center, low-mid moves wide, kick pattern flip, rapid hi-hats, chest-sub melody, ghost notes, 2 bars]
+[outro - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick pattern flip, rapid hi-hats, chest-sub melody, ghost notes, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -4750,101 +4410,91 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, fold bass, 808, …` |
-| 2 | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, ghost s…` |
+| 2 | `[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, mono…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/secret-homage/16-night-cipher` |
 
 ```text
-dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, fold bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 165 bpm, instrumental, no vocals
+dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, fold bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, ghost snare, fold bass melody, triplet hats, warped bass wreck, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, mono chest-sub, ghost snare, fold bass melody, triplet hats, warped bass wreck, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send wobble warped drop, low chest-sub, low reese counterline, rapid hi-hats, backbeat shove, wave bass, heavy wave drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, full send wobble drop, low chest-sub, low reese counterline, rapid hi-hats, backbeat shove, wave bass, heavy wave drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, mono chest-sub, trap drums denser, body bass answer, ghost notes, cipher 808, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, wide stereo layer, trap drums denser, mono chest-sub, body bass answer, ghost notes, cipher 808, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, kick pattern flip, low chest-sub, low wobble answer, dry hats, rapid hi-hats denser, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, low chest-sub, kick pattern flip, low wobble answer, dry hats, rapid hi-hats denser, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, offbeat hats, chest-sub melody, wide hat bed, wave 808 sustain cipher, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, heavy wobble drop, mono chest-sub, chest-sub melody, offbeat hats, wide hat bed, wave 808 sustain cipher, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, ghost snare, low chest-sub, low-mid bass melody, mono kick, chest-sub 808 wall, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, low chest-sub, ghost snare, low-mid bass melody, mono kick, chest-sub 808 wall, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, mono chest-sub, rapid hi-hats, fold bass melody, side snare, chest-sub fold, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, full send warped drop, mono chest-sub, fold bass melody, rapid hi-hats, side snare, harder warped drop, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, low chest-sub, low reese counterline, rolling hats, low swell wreck, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, low chest-sub, trap drums denser, low reese counterline, rolling hats, chest-sub fold, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked reese warped drop, mono chest-sub, body bass answer, kick pattern flip, late snare, harder warped drop, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, octave 808 stack, kick pattern flip, mono chest-sub, body bass answer, late snare, low swell wreck, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, offbeat hats, low wobble answer, early kick, wave warp, 2 bars]
+[drop - chest-sub, bass circles the low-mid, panning bass layer, heavy warped drop, low chest-sub, low wobble answer, offbeat hats, early kick, full send drop, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, mono chest-sub, chest-sub melody, syncopated hats, kick holds, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, ghost snare, mono chest-sub, chest-sub melody, syncopated hats, wave warp, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, rapid hi-hats, low-mid bass melody, open hat, hats denser, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, full send reese drop, low chest-sub, low-mid bass melody, rapid hi-hats, open hat, kick holds, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck warped drop, mono chest-sub, fold bass melody, trap drums denser, closed hat, full send drop, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, mono chest-sub, trap drums denser, fold bass melody, closed hat, hats denser, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, kick pattern flip, low reese counterline, room snare, wave ride, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, stacked wobble drop, low chest-sub, low reese counterline, kick pattern flip, room snare, wave ride, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, offbeat hats, mono chest-sub, body bass answer, tight kick, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, panning bass layer, offbeat hats, mono chest-sub, body bass answer, tight kick, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder warped drop, low chest-sub, low wobble answer, ghost snare, loose hats, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, harder warped drop, low chest-sub, low wobble answer, ghost snare, loose hats, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, rapid hi-hats, chest-sub melody, pushed snare, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, mono chest-sub, rapid hi-hats, chest-sub melody, pushed snare, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, low chest-sub, low-mid bass melody, chopped hats, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, wreck reese drop, low chest-sub, low-mid bass melody, trap drums denser, chopped hats, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, stacked warped drop, mono chest-sub, fold bass melody, kick pattern flip, hat density up, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick pattern flip, mono chest-sub, fold bass melody, hat density up, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, offbeat hats, low reese counterline, kick opens, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, heavy wobble drop, low chest-sub, low reese counterline, offbeat hats, kick opens, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, mono chest-sub, body bass answer, kick tightens, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, mono chest-sub, ghost snare, body bass answer, kick tightens, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send warped drop, low chest-sub, low wobble answer, rapid hi-hats, snare answers, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, rapid hi-hats, low chest-sub, low wobble answer, snare answers, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, mono chest-sub, chest-sub melody, offbeat push, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, mono chest-sub, trap drums denser, chest-sub melody, offbeat push, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked reese warped drop, low chest-sub, low-mid bass melody, kick pattern flip, straight hats, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, stacked reese drop, low chest-sub, low-mid bass melody, kick pattern flip, straight hats, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, mono chest-sub, fold bass melody, triplet hats, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, panning bass layer, kick tightens, mono chest-sub, offbeat hats, fold bass melody, triplet hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder wobble warped drop, low chest-sub, low reese counterline, ghost snare, backbeat shove, 2 bars]
+[inst - chest-sub, bass circles the low-mid, layered sub stack, ghost snare, low chest-sub, low reese counterline, backbeat shove, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, mono chest-sub, rapid hi-hats, body bass answer, ghost notes, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, mono chest-sub, rapid hi-hats, body bass answer, ghost notes, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, wreck warped drop, low chest-sub, low wobble answer, trap drums denser, dry hats, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, wide stereo layer, trap drums denser, low chest-sub, low wobble answer, dry hats, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, mono chest-sub, chest-sub melody, wide hat bed, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, stacked wobble drop, mono chest-sub, chest-sub melody, kick pattern flip, wide hat bed, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy reese warped drop, low chest-sub, low-mid bass melody, offbeat hats, mono kick, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, low chest-sub, offbeat hats, low-mid bass melody, mono kick, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, mono chest-sub, ghost snare, fold bass melody, side snare, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, harder warped drop, mono chest-sub, fold bass melody, ghost snare, side snare, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, low chest-sub, low reese counterline, rolling hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, low chest-sub, rapid hi-hats, low reese counterline, rolling hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck reese warped drop, mono chest-sub, body bass answer, trap drums denser, late snare, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, trap drums denser, mono chest-sub, body bass answer, late snare, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, kick pattern flip, low wobble answer, early kick, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, stacked warped drop, low chest-sub, low wobble answer, kick pattern flip, early kick, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, offbeat hats, mono chest-sub, chest-sub melody, syncopated hats, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, panning bass layer, offbeat hats, mono chest-sub, chest-sub melody, syncopated hats, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder reese warped drop, low chest-sub, low-mid bass melody, ghost snare, open hat, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, harder reese drop, low chest-sub, low-mid bass melody, ghost snare, open hat, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, rapid hi-hats, mono chest-sub, fold bass melody, closed hat, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, mono chest-sub, rapid hi-hats, fold bass melody, closed hat, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, trap drums denser, low reese counterline, room snare, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, mono chest-sub, body bass answer, tight kick, 2 bars]
-
-[drop - chest-sub, low-mid orbits the sub, heavy warped drop, low chest-sub, low wobble answer, offbeat hats, loose hats, 2 bars]
-
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, ghost snare, chest-sub melody, pushed snare, 2 bars]
-
-[drop - chest-sub, bass circles the low-mid, full send reese warped drop, low chest-sub, low-mid bass melody, rapid hi-hats, chopped hats, 2 bars]
-
-[outro - chest-sub, sub center, low-mid moves wide, kick pattern flip, rapid hi-hats, fold bass melody, side snare, 2 bars]
+[outro - chest-sub, sub center, low-mid moves wide, layered sub stack, kick pattern flip, rapid hi-hats, fold bass melody, side snare, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -4852,7 +4502,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, fold bass, 808, o
 | Slot | Value |
 | --- | --- |
 | 0 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, fold bass, 808, …` |
-| 1 | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, ghost s…` |
+| 1 | `[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, mono…` |
 | 2 | `677` |
 | 3 | `fixed` |
 | 4 | `165` |
@@ -4868,95 +4518,85 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, fold bass, 808, o
 | 14 | `0.0` |
 
 ```text
-dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, fold bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 165 bpm, instrumental, no vocals
+dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, fold bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, ghost snare, fold bass melody, triplet hats, warped bass wreck, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, mono chest-sub, ghost snare, fold bass melody, triplet hats, warped bass wreck, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send wobble warped drop, low chest-sub, low reese counterline, rapid hi-hats, backbeat shove, wave bass, heavy wave drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, full send wobble drop, low chest-sub, low reese counterline, rapid hi-hats, backbeat shove, wave bass, heavy wave drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, mono chest-sub, trap drums denser, body bass answer, ghost notes, cipher 808, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, wide stereo layer, trap drums denser, mono chest-sub, body bass answer, ghost notes, cipher 808, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, kick pattern flip, low chest-sub, low wobble answer, dry hats, rapid hi-hats denser, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, low chest-sub, kick pattern flip, low wobble answer, dry hats, rapid hi-hats denser, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, offbeat hats, chest-sub melody, wide hat bed, wave 808 sustain cipher, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, heavy wobble drop, mono chest-sub, chest-sub melody, offbeat hats, wide hat bed, wave 808 sustain cipher, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, ghost snare, low chest-sub, low-mid bass melody, mono kick, chest-sub 808 wall, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, low chest-sub, ghost snare, low-mid bass melody, mono kick, chest-sub 808 wall, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, mono chest-sub, rapid hi-hats, fold bass melody, side snare, chest-sub fold, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, full send warped drop, mono chest-sub, fold bass melody, rapid hi-hats, side snare, harder warped drop, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, low chest-sub, low reese counterline, rolling hats, low swell wreck, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, low chest-sub, trap drums denser, low reese counterline, rolling hats, chest-sub fold, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked reese warped drop, mono chest-sub, body bass answer, kick pattern flip, late snare, harder warped drop, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, octave 808 stack, kick pattern flip, mono chest-sub, body bass answer, late snare, low swell wreck, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, offbeat hats, low wobble answer, early kick, wave warp, 2 bars]
+[drop - chest-sub, bass circles the low-mid, panning bass layer, heavy warped drop, low chest-sub, low wobble answer, offbeat hats, early kick, full send drop, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, mono chest-sub, chest-sub melody, syncopated hats, kick holds, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, ghost snare, mono chest-sub, chest-sub melody, syncopated hats, wave warp, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, rapid hi-hats, low-mid bass melody, open hat, hats denser, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, full send reese drop, low chest-sub, low-mid bass melody, rapid hi-hats, open hat, kick holds, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck warped drop, mono chest-sub, fold bass melody, trap drums denser, closed hat, full send drop, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, mono chest-sub, trap drums denser, fold bass melody, closed hat, hats denser, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, kick pattern flip, low reese counterline, room snare, wave ride, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, stacked wobble drop, low chest-sub, low reese counterline, kick pattern flip, room snare, wave ride, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, offbeat hats, mono chest-sub, body bass answer, tight kick, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, panning bass layer, offbeat hats, mono chest-sub, body bass answer, tight kick, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder warped drop, low chest-sub, low wobble answer, ghost snare, loose hats, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, harder warped drop, low chest-sub, low wobble answer, ghost snare, loose hats, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, rapid hi-hats, chest-sub melody, pushed snare, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, mono chest-sub, rapid hi-hats, chest-sub melody, pushed snare, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, low chest-sub, low-mid bass melody, chopped hats, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, wreck reese drop, low chest-sub, low-mid bass melody, trap drums denser, chopped hats, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, stacked warped drop, mono chest-sub, fold bass melody, kick pattern flip, hat density up, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick pattern flip, mono chest-sub, fold bass melody, hat density up, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, offbeat hats, low reese counterline, kick opens, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, heavy wobble drop, low chest-sub, low reese counterline, offbeat hats, kick opens, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, mono chest-sub, body bass answer, kick tightens, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, mono chest-sub, ghost snare, body bass answer, kick tightens, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send warped drop, low chest-sub, low wobble answer, rapid hi-hats, snare answers, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, rapid hi-hats, low chest-sub, low wobble answer, snare answers, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, mono chest-sub, chest-sub melody, offbeat push, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, mono chest-sub, trap drums denser, chest-sub melody, offbeat push, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked reese warped drop, low chest-sub, low-mid bass melody, kick pattern flip, straight hats, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, stacked reese drop, low chest-sub, low-mid bass melody, kick pattern flip, straight hats, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, mono chest-sub, fold bass melody, triplet hats, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, panning bass layer, kick tightens, mono chest-sub, offbeat hats, fold bass melody, triplet hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder wobble warped drop, low chest-sub, low reese counterline, ghost snare, backbeat shove, 2 bars]
+[inst - chest-sub, bass circles the low-mid, layered sub stack, ghost snare, low chest-sub, low reese counterline, backbeat shove, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, mono chest-sub, rapid hi-hats, body bass answer, ghost notes, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, mono chest-sub, rapid hi-hats, body bass answer, ghost notes, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, wreck warped drop, low chest-sub, low wobble answer, trap drums denser, dry hats, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, wide stereo layer, trap drums denser, low chest-sub, low wobble answer, dry hats, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, mono chest-sub, chest-sub melody, wide hat bed, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, stacked wobble drop, mono chest-sub, chest-sub melody, kick pattern flip, wide hat bed, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy reese warped drop, low chest-sub, low-mid bass melody, offbeat hats, mono kick, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, low chest-sub, offbeat hats, low-mid bass melody, mono kick, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, mono chest-sub, ghost snare, fold bass melody, side snare, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, harder warped drop, mono chest-sub, fold bass melody, ghost snare, side snare, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, low chest-sub, low reese counterline, rolling hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, low chest-sub, rapid hi-hats, low reese counterline, rolling hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck reese warped drop, mono chest-sub, body bass answer, trap drums denser, late snare, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, trap drums denser, mono chest-sub, body bass answer, late snare, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, kick pattern flip, low wobble answer, early kick, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, stacked warped drop, low chest-sub, low wobble answer, kick pattern flip, early kick, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, offbeat hats, mono chest-sub, chest-sub melody, syncopated hats, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, panning bass layer, offbeat hats, mono chest-sub, chest-sub melody, syncopated hats, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder reese warped drop, low chest-sub, low-mid bass melody, ghost snare, open hat, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, harder reese drop, low chest-sub, low-mid bass melody, ghost snare, open hat, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, rapid hi-hats, mono chest-sub, fold bass melody, closed hat, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, mono chest-sub, rapid hi-hats, fold bass melody, closed hat, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, trap drums denser, low reese counterline, room snare, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, mono chest-sub, body bass answer, tight kick, 2 bars]
-
-[drop - chest-sub, low-mid orbits the sub, heavy warped drop, low chest-sub, low wobble answer, offbeat hats, loose hats, 2 bars]
-
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, ghost snare, chest-sub melody, pushed snare, 2 bars]
-
-[drop - chest-sub, bass circles the low-mid, full send reese warped drop, low chest-sub, low-mid bass melody, rapid hi-hats, chopped hats, 2 bars]
-
-[outro - chest-sub, sub center, low-mid moves wide, kick pattern flip, rapid hi-hats, fold bass melody, side snare, 2 bars]
+[outro - chest-sub, sub center, low-mid moves wide, layered sub stack, kick pattern flip, rapid hi-hats, fold bass melody, side snare, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -5055,101 +4695,89 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808…` |
-| 2 | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, rapid h…` |
+| 2 | `[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens,…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/secret-homage/17-blank-stencil` |
 
 ```text
-dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 165 bpm, instrumental, no vocals
+dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, rapid hi-hats, low-mid bass melody, kick tightens, stencil 808 wreck, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, mono chest-sub, rapid hi-hats, low-mid bass melody, kick tightens, stencil 808 wreck, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send wobble warped drop, low chest-sub, fold bass melody, trap drums denser, snare answers, festival trap, heavy trap drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, full send wobble drop, low chest-sub, fold bass melody, trap drums denser, snare answers, festival trap, heavy trap drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, mono chest-sub, kick pattern flip, low reese counterline, offbeat push, warped stamp, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick pattern flip, mono chest-sub, low reese counterline, offbeat push, warped stamp, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, low chest-sub, body bass answer, straight hats, rapid hi-hats roll, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, stacked warped drop, low chest-sub, body bass answer, offbeat hats, straight hats, rapid hi-hats roll, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, heavy wobble warped drop, mono chest-sub, low wobble answer, ghost snare, triplet hats, 808 slide, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, mono chest-sub, ghost snare, low wobble answer, triplet hats, 808 slide, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, rapid hi-hats, chest-sub melody, backbeat shove, trap wall wreck, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, rapid hi-hats, low chest-sub, chest-sub melody, backbeat shove, trap wall wreck, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, mono chest-sub, low-mid bass melody, ghost notes, chest warped, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, full send warped drop, mono chest-sub, low-mid bass melody, trap drums denser, ghost notes, harder stacked drop, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, wreck wobble warped drop, low chest-sub, fold bass melody, kick pattern flip, dry hats, harder stacked drop, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, low chest-sub, kick pattern flip, fold bass melody, dry hats, chest warped, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, offbeat hats, low reese counterline, wide hat bed, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, offbeat hats, mono chest-sub, low reese counterline, wide hat bed, kick tightens, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, ghost snare, low chest-sub, body bass answer, mono kick, stencil 808 punch, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, heavy warped drop, low chest-sub, body bass answer, ghost snare, mono kick, stencil 808 punch, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, mono chest-sub, rapid hi-hats, low wobble answer, side snare, hats denser, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, mono chest-sub, rapid hi-hats, low wobble answer, side snare, hats denser, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, full send reese warped drop, low chest-sub, chest-sub melody, trap drums denser, rolling hats, trap drums 808 hold, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, full send reese drop, low chest-sub, chest-sub melody, trap drums denser, rolling hats, trap drums 808 hold, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, kick pattern flip, low-mid bass melody, late snare, low 808 wreck, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, octave 808 stack, kick pattern flip, mono chest-sub, low-mid bass melody, late snare, low 808 wreck, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, low chest-sub, fold bass melody, early kick, stencil warp, 2 bars]
+[drop - chest-sub, bass circles the low-mid, panning bass layer, stacked wobble drop, low chest-sub, fold bass melody, offbeat hats, early kick, full send drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, mono chest-sub, ghost snare, low reese counterline, syncopated hats, kick holds, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, layered sub stack, kick tightens, mono chest-sub, ghost snare, low reese counterline, syncopated hats, stencil warp, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, low chest-sub, body bass answer, open hat, 808 ride, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, harder warped drop, low chest-sub, body bass answer, rapid hi-hats, open hat, kick holds, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, full send wobble warped drop, mono chest-sub, low wobble answer, trap drums denser, closed hat, full send drop, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, trap drums denser, mono chest-sub, low wobble answer, closed hat, 808 ride, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, kick pattern flip, chest-sub melody, room snare, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, wreck reese drop, low chest-sub, chest-sub melody, kick pattern flip, room snare, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, offbeat hats, mono chest-sub, low-mid bass melody, tight kick, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, mono chest-sub, offbeat hats, low-mid bass melody, tight kick, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, heavy wobble warped drop, low chest-sub, fold bass melody, ghost snare, loose hats, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, heavy wobble drop, low chest-sub, fold bass melody, ghost snare, loose hats, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, rapid hi-hats, low reese counterline, pushed snare, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, mono chest-sub, rapid hi-hats, low reese counterline, pushed snare, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, low chest-sub, body bass answer, chopped hats, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, full send warped drop, low chest-sub, body bass answer, trap drums denser, chopped hats, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck wobble warped drop, mono chest-sub, low wobble answer, kick pattern flip, hat density up, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick pattern flip, mono chest-sub, low wobble answer, hat density up, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, offbeat hats, chest-sub melody, kick opens, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, stacked reese drop, low chest-sub, chest-sub melody, offbeat hats, kick opens, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, mono chest-sub, low-mid bass melody, kick tightens, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, mono chest-sub, ghost snare, low-mid bass melody, kick tightens, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder wobble warped drop, low chest-sub, fold bass melody, rapid hi-hats, snare answers, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, rapid hi-hats, low chest-sub, fold bass melody, snare answers, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, mono chest-sub, low reese counterline, offbeat push, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, full send reese drop, mono chest-sub, low reese counterline, trap drums denser, offbeat push, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, kick pattern flip, body bass answer, straight hats, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, octave 808 stack, kick pattern flip, low chest-sub, body bass answer, straight hats, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, mono chest-sub, low wobble answer, triplet hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, stacked wobble drop, mono chest-sub, low wobble answer, offbeat hats, triplet hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy reese warped drop, low chest-sub, chest-sub melody, ghost snare, backbeat shove, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, low chest-sub, ghost snare, chest-sub melody, backbeat shove, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, mono chest-sub, low-mid bass melody, late snare, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, wreck warped drop, mono chest-sub, low-mid bass melody, kick pattern flip, late snare, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck warped drop, low chest-sub, low-mid bass melody, offbeat hats, offbeat push, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, offbeat hats, low chest-sub, low-mid bass melody, offbeat push, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, mono chest-sub, fold bass melody, open hat, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, wreck wobble drop, mono chest-sub, fold bass melody, trap drums denser, open hat, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder wobble warped drop, low chest-sub, fold bass melody, kick pattern flip, triplet hats, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, parallel low-mid layer, kick tightens, low chest-sub, kick pattern flip, fold bass melody, triplet hats, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, rapid hi-hats, low reese counterline, room snare, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, harder reese drop, mono chest-sub, low reese counterline, rapid hi-hats, room snare, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, low chest-sub, body bass answer, dry hats, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, low chest-sub, trap drums denser, body bass answer, dry hats, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder warped drop, mono chest-sub, body bass answer, ghost snare, pushed snare, 2 bars]
-
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, rapid hi-hats, low wobble answer, mono kick, 2 bars]
-
-[inst - chest-sub, bass circles the low-mid, offbeat hats, mono chest-sub, low wobble answer, hat density up, 2 bars]
-
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, ghost snare, chest-sub melody, late snare, 2 bars]
-
-[drop - chest-sub, bass circles the low-mid, full send reese warped drop, mono chest-sub, low-mid bass melody, kick pattern flip, snare answers, 2 bars]
-
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, offbeat hats, low-mid bass melody, syncopated hats, 2 bars]
-
-[outro - chest-sub, low-mid orbits the sub, kick pattern flip, rapid hi-hats, body bass answer, open hat, 2 bars]
+[outro - chest-sub, low-mid orbits the sub, wide stereo layer, kick pattern flip, rapid hi-hats, body bass answer, open hat, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -5157,7 +4785,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808,
 | Slot | Value |
 | --- | --- |
 | 0 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808…` |
-| 1 | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, rapid h…` |
+| 1 | `[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens,…` |
 | 2 | `683` |
 | 3 | `fixed` |
 | 4 | `165` |
@@ -5173,95 +4801,83 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808,
 | 14 | `0.0` |
 
 ```text
-dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 165 bpm, instrumental, no vocals
+dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, rapid hi-hats, low-mid bass melody, kick tightens, stencil 808 wreck, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, mono chest-sub, rapid hi-hats, low-mid bass melody, kick tightens, stencil 808 wreck, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send wobble warped drop, low chest-sub, fold bass melody, trap drums denser, snare answers, festival trap, heavy trap drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, full send wobble drop, low chest-sub, fold bass melody, trap drums denser, snare answers, festival trap, heavy trap drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, mono chest-sub, kick pattern flip, low reese counterline, offbeat push, warped stamp, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick pattern flip, mono chest-sub, low reese counterline, offbeat push, warped stamp, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, low chest-sub, body bass answer, straight hats, rapid hi-hats roll, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, stacked warped drop, low chest-sub, body bass answer, offbeat hats, straight hats, rapid hi-hats roll, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, heavy wobble warped drop, mono chest-sub, low wobble answer, ghost snare, triplet hats, 808 slide, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, mono chest-sub, ghost snare, low wobble answer, triplet hats, 808 slide, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, rapid hi-hats, chest-sub melody, backbeat shove, trap wall wreck, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, rapid hi-hats, low chest-sub, chest-sub melody, backbeat shove, trap wall wreck, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, mono chest-sub, low-mid bass melody, ghost notes, chest warped, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, full send warped drop, mono chest-sub, low-mid bass melody, trap drums denser, ghost notes, harder stacked drop, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, wreck wobble warped drop, low chest-sub, fold bass melody, kick pattern flip, dry hats, harder stacked drop, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, low chest-sub, kick pattern flip, fold bass melody, dry hats, chest warped, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, offbeat hats, low reese counterline, wide hat bed, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, offbeat hats, mono chest-sub, low reese counterline, wide hat bed, kick tightens, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, ghost snare, low chest-sub, body bass answer, mono kick, stencil 808 punch, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, heavy warped drop, low chest-sub, body bass answer, ghost snare, mono kick, stencil 808 punch, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, mono chest-sub, rapid hi-hats, low wobble answer, side snare, hats denser, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, mono chest-sub, rapid hi-hats, low wobble answer, side snare, hats denser, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, full send reese warped drop, low chest-sub, chest-sub melody, trap drums denser, rolling hats, trap drums 808 hold, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, full send reese drop, low chest-sub, chest-sub melody, trap drums denser, rolling hats, trap drums 808 hold, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, kick pattern flip, low-mid bass melody, late snare, low 808 wreck, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, octave 808 stack, kick pattern flip, mono chest-sub, low-mid bass melody, late snare, low 808 wreck, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, low chest-sub, fold bass melody, early kick, stencil warp, 2 bars]
+[drop - chest-sub, bass circles the low-mid, panning bass layer, stacked wobble drop, low chest-sub, fold bass melody, offbeat hats, early kick, full send drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, mono chest-sub, ghost snare, low reese counterline, syncopated hats, kick holds, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, layered sub stack, kick tightens, mono chest-sub, ghost snare, low reese counterline, syncopated hats, stencil warp, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, low chest-sub, body bass answer, open hat, 808 ride, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, harder warped drop, low chest-sub, body bass answer, rapid hi-hats, open hat, kick holds, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, full send wobble warped drop, mono chest-sub, low wobble answer, trap drums denser, closed hat, full send drop, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, wide stereo layer, trap drums denser, mono chest-sub, low wobble answer, closed hat, 808 ride, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, kick pattern flip, chest-sub melody, room snare, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, wreck reese drop, low chest-sub, chest-sub melody, kick pattern flip, room snare, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, offbeat hats, mono chest-sub, low-mid bass melody, tight kick, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, mono chest-sub, offbeat hats, low-mid bass melody, tight kick, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, heavy wobble warped drop, low chest-sub, fold bass melody, ghost snare, loose hats, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, heavy wobble drop, low chest-sub, fold bass melody, ghost snare, loose hats, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, rapid hi-hats, low reese counterline, pushed snare, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, mono chest-sub, rapid hi-hats, low reese counterline, pushed snare, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, low chest-sub, body bass answer, chopped hats, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, full send warped drop, low chest-sub, body bass answer, trap drums denser, chopped hats, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck wobble warped drop, mono chest-sub, low wobble answer, kick pattern flip, hat density up, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick pattern flip, mono chest-sub, low wobble answer, hat density up, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, offbeat hats, chest-sub melody, kick opens, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, stacked reese drop, low chest-sub, chest-sub melody, offbeat hats, kick opens, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, mono chest-sub, low-mid bass melody, kick tightens, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, mono chest-sub, ghost snare, low-mid bass melody, kick tightens, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder wobble warped drop, low chest-sub, fold bass melody, rapid hi-hats, snare answers, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, rapid hi-hats, low chest-sub, fold bass melody, snare answers, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, mono chest-sub, low reese counterline, offbeat push, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, full send reese drop, mono chest-sub, low reese counterline, trap drums denser, offbeat push, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, kick pattern flip, body bass answer, straight hats, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, octave 808 stack, kick pattern flip, low chest-sub, body bass answer, straight hats, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, mono chest-sub, low wobble answer, triplet hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, stacked wobble drop, mono chest-sub, low wobble answer, offbeat hats, triplet hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy reese warped drop, low chest-sub, chest-sub melody, ghost snare, backbeat shove, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, low chest-sub, ghost snare, chest-sub melody, backbeat shove, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, mono chest-sub, low-mid bass melody, late snare, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, wreck warped drop, mono chest-sub, low-mid bass melody, kick pattern flip, late snare, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck warped drop, low chest-sub, low-mid bass melody, offbeat hats, offbeat push, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, offbeat hats, low chest-sub, low-mid bass melody, offbeat push, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, mono chest-sub, fold bass melody, open hat, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, wreck wobble drop, mono chest-sub, fold bass melody, trap drums denser, open hat, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder wobble warped drop, low chest-sub, fold bass melody, kick pattern flip, triplet hats, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, parallel low-mid layer, kick tightens, low chest-sub, kick pattern flip, fold bass melody, triplet hats, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, rapid hi-hats, low reese counterline, room snare, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, harder reese drop, mono chest-sub, low reese counterline, rapid hi-hats, room snare, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, low chest-sub, body bass answer, dry hats, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, low chest-sub, trap drums denser, body bass answer, dry hats, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder warped drop, mono chest-sub, body bass answer, ghost snare, pushed snare, 2 bars]
-
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, rapid hi-hats, low wobble answer, mono kick, 2 bars]
-
-[inst - chest-sub, bass circles the low-mid, offbeat hats, mono chest-sub, low wobble answer, hat density up, 2 bars]
-
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, ghost snare, chest-sub melody, late snare, 2 bars]
-
-[drop - chest-sub, bass circles the low-mid, full send reese warped drop, mono chest-sub, low-mid bass melody, kick pattern flip, snare answers, 2 bars]
-
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, offbeat hats, low-mid bass melody, syncopated hats, 2 bars]
-
-[outro - chest-sub, low-mid orbits the sub, kick pattern flip, rapid hi-hats, body bass answer, open hat, 2 bars]
+[outro - chest-sub, low-mid orbits the sub, wide stereo layer, kick pattern flip, rapid hi-hats, body bass answer, open hat, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -5360,101 +4976,91 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or…` |
-| 2 | `[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, …` |
+| 2 | `[build-up - chest-sub, bass circles the low-mid, parallel low-mid layer, kick t…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/secret-homage/18-blind-stamp` |
 
 ```text
-riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 168 bpm, instrumental, no vocals
+riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, offbeat hats, low-mid bass melody, straight hats, wobble wreck, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, parallel low-mid layer, kick tightens, low chest-sub, offbeat hats, low-mid bass melody, straight hats, wobble wreck, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder reese warped drop, mono chest-sub, fold bass melody, ghost snare, triplet hats, wobble bass, heavy riddim drop, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, harder reese drop, mono chest-sub, fold bass melody, ghost snare, triplet hats, wobble bass, heavy riddim drop, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, rapid hi-hats, low reese counterline, backbeat shove, warped stamp, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, low chest-sub, rapid hi-hats, low reese counterline, backbeat shove, warped stamp, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, mono chest-sub, body bass answer, ghost notes, rapid hi-hats roll, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, wreck wobble drop, mono chest-sub, body bass answer, trap drums denser, ghost notes, rapid hi-hats roll, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked reese warped drop, low chest-sub, low wobble answer, kick pattern flip, dry hats, wobble sustain, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, low chest-sub, kick pattern flip, low wobble answer, dry hats, wobble sustain, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, offbeat hats, mono chest-sub, chest-sub melody, wide hat bed, chest warped wreck, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, heavy warped drop, mono chest-sub, chest-sub melody, offbeat hats, wide hat bed, harder warped drop, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder wobble warped drop, low chest-sub, low-mid bass melody, ghost snare, mono kick, harder warped drop, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, wide stereo layer, ghost snare, low chest-sub, low-mid bass melody, mono kick, chest warped wreck, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, rapid hi-hats, fold bass melody, side snare, 808 crush, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, full send reese drop, mono chest-sub, fold bass melody, rapid hi-hats, side snare, 808 crush, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, low chest-sub, low reese counterline, rolling hats, rapid hi-hats denser, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, low chest-sub, trap drums denser, low reese counterline, rolling hats, rapid hi-hats denser, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, mono chest-sub, kick pattern flip, body bass answer, late snare, wobble hold, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, kick pattern flip, mono chest-sub, body bass answer, late snare, wobble hold, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, heavy reese warped drop, low chest-sub, low wobble answer, offbeat hats, early kick, full send drop, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, heavy reese drop, low chest-sub, low wobble answer, offbeat hats, early kick, full send drop, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, ghost snare, chest-sub melody, syncopated hats, sub crush wreck, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, mono chest-sub, ghost snare, chest-sub melody, syncopated hats, sub crush wreck, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send wobble warped drop, low chest-sub, low-mid bass melody, rapid hi-hats, open hat, riddim warp, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, full send wobble drop, low chest-sub, low-mid bass melody, rapid hi-hats, open hat, riddim warp, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, mono chest-sub, fold bass melody, closed hat, kick holds, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, panning bass layer, trap drums denser, mono chest-sub, fold bass melody, closed hat, kick holds, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, kick pattern flip, low reese counterline, room snare, hats denser, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, stacked warped drop, low chest-sub, low reese counterline, kick pattern flip, room snare, hats denser, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, mono chest-sub, body bass answer, tight kick, wobble ride, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, mono chest-sub, offbeat hats, body bass answer, tight kick, wobble ride, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, ghost snare, low wobble answer, loose hats, 2 bars]
+[inst - chest-sub, bass circles the low-mid, wide stereo layer, ghost snare, low chest-sub, low wobble answer, loose hats, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, mono chest-sub, chest-sub melody, pushed snare, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, full send warped drop, mono chest-sub, chest-sub melody, rapid hi-hats, pushed snare, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, wreck wobble warped drop, low chest-sub, low-mid bass melody, trap drums denser, chopped hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tightens, low chest-sub, trap drums denser, low-mid bass melody, chopped hats, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, kick pattern flip, fold bass melody, hat density up, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, layered sub stack, kick pattern flip, mono chest-sub, fold bass melody, hat density up, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, low chest-sub, low reese counterline, kick opens, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, parallel low-mid layer, kick tightens, low chest-sub, offbeat hats, low reese counterline, kick opens, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder wobble warped drop, mono chest-sub, body bass answer, ghost snare, kick tightens, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, wide stereo layer, ghost snare, mono chest-sub, body bass answer, kick tightens, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, low chest-sub, low wobble answer, snare answers, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, full send reese drop, low chest-sub, low wobble answer, rapid hi-hats, snare answers, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, trap drums denser, chest-sub melody, offbeat push, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, trap drums denser, mono chest-sub, chest-sub melody, offbeat push, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked wobble warped drop, low chest-sub, low-mid bass melody, kick pattern flip, straight hats, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, stacked wobble drop, low chest-sub, low-mid bass melody, kick pattern flip, straight hats, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, mono chest-sub, offbeat hats, fold bass melody, triplet hats, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, offbeat hats, mono chest-sub, fold bass melody, triplet hats, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder warped drop, low chest-sub, low reese counterline, ghost snare, backbeat shove, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, harder warped drop, low chest-sub, low reese counterline, ghost snare, backbeat shove, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, rapid hi-hats, body bass answer, ghost notes, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, octave 808 stack, kick tightens, mono chest-sub, rapid hi-hats, body bass answer, ghost notes, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, low chest-sub, low wobble answer, dry hats, 2 bars]
+[inst - chest-sub, bass circles the low-mid, panning bass layer, trap drums denser, low chest-sub, low wobble answer, dry hats, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, stacked warped drop, mono chest-sub, chest-sub melody, kick pattern flip, wide hat bed, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, stacked warped drop, mono chest-sub, chest-sub melody, kick pattern flip, wide hat bed, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, offbeat hats, low-mid bass melody, mono kick, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, low chest-sub, offbeat hats, low-mid bass melody, mono kick, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, mono chest-sub, fold bass melody, side snare, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, harder reese drop, mono chest-sub, fold bass melody, ghost snare, side snare, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, rapid hi-hats, low reese counterline, rolling hats, 2 bars]
+[inst - chest-sub, bass circles the low-mid, octave 808 stack, rapid hi-hats, low chest-sub, low reese counterline, rolling hats, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck wobble warped drop, mono chest-sub, body bass answer, trap drums denser, late snare, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, mono chest-sub, trap drums denser, body bass answer, late snare, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, kick pattern flip, low chest-sub, low wobble answer, early kick, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, layered sub stack, kick pattern flip, low chest-sub, low wobble answer, early kick, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, heavy warped drop, mono chest-sub, chest-sub melody, offbeat hats, syncopated hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, heavy warped drop, mono chest-sub, chest-sub melody, offbeat hats, syncopated hats, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, ghost snare, low-mid bass melody, open hat, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, low chest-sub, ghost snare, low-mid bass melody, open hat, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, mono chest-sub, fold bass melody, closed hat, 2 bars]
-
-[drop - chest-sub, low-mid orbits the sub, wreck warped drop, low chest-sub, low reese counterline, trap drums denser, room snare, 2 bars]
-
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, mono chest-sub, body bass answer, tight kick, 2 bars]
-
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, offbeat hats, low wobble answer, loose hats, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, mono chest-sub, chest-sub melody, pushed snare, 2 bars]
-
-[outro - chest-sub, bass circles the low-mid, kick pattern flip, rapid hi-hats, low wobble answer, loose hats, 2 bars]
+[outro - chest-sub, bass circles the low-mid, layered sub stack, kick pattern flip, rapid hi-hats, low wobble answer, loose hats, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -5462,7 +5068,7 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, ori
 | Slot | Value |
 | --- | --- |
 | 0 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or…` |
-| 1 | `[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, …` |
+| 1 | `[build-up - chest-sub, bass circles the low-mid, parallel low-mid layer, kick t…` |
 | 2 | `691` |
 | 3 | `fixed` |
 | 4 | `168` |
@@ -5478,95 +5084,85 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, ori
 | 14 | `0.0` |
 
 ```text
-riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 168 bpm, instrumental, no vocals
+riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 168 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, offbeat hats, low-mid bass melody, straight hats, wobble wreck, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, parallel low-mid layer, kick tightens, low chest-sub, offbeat hats, low-mid bass melody, straight hats, wobble wreck, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder reese warped drop, mono chest-sub, fold bass melody, ghost snare, triplet hats, wobble bass, heavy riddim drop, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, harder reese drop, mono chest-sub, fold bass melody, ghost snare, triplet hats, wobble bass, heavy riddim drop, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, rapid hi-hats, low reese counterline, backbeat shove, warped stamp, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, low chest-sub, rapid hi-hats, low reese counterline, backbeat shove, warped stamp, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, mono chest-sub, body bass answer, ghost notes, rapid hi-hats roll, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, wreck wobble drop, mono chest-sub, body bass answer, trap drums denser, ghost notes, rapid hi-hats roll, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked reese warped drop, low chest-sub, low wobble answer, kick pattern flip, dry hats, wobble sustain, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, low chest-sub, kick pattern flip, low wobble answer, dry hats, wobble sustain, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, offbeat hats, mono chest-sub, chest-sub melody, wide hat bed, chest warped wreck, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, heavy warped drop, mono chest-sub, chest-sub melody, offbeat hats, wide hat bed, harder warped drop, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder wobble warped drop, low chest-sub, low-mid bass melody, ghost snare, mono kick, harder warped drop, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, wide stereo layer, ghost snare, low chest-sub, low-mid bass melody, mono kick, chest warped wreck, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, rapid hi-hats, fold bass melody, side snare, 808 crush, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, full send reese drop, mono chest-sub, fold bass melody, rapid hi-hats, side snare, 808 crush, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, low chest-sub, low reese counterline, rolling hats, rapid hi-hats denser, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, low chest-sub, trap drums denser, low reese counterline, rolling hats, rapid hi-hats denser, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, mono chest-sub, kick pattern flip, body bass answer, late snare, wobble hold, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, kick pattern flip, mono chest-sub, body bass answer, late snare, wobble hold, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, heavy reese warped drop, low chest-sub, low wobble answer, offbeat hats, early kick, full send drop, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, heavy reese drop, low chest-sub, low wobble answer, offbeat hats, early kick, full send drop, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, ghost snare, chest-sub melody, syncopated hats, sub crush wreck, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, mono chest-sub, ghost snare, chest-sub melody, syncopated hats, sub crush wreck, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send wobble warped drop, low chest-sub, low-mid bass melody, rapid hi-hats, open hat, riddim warp, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, full send wobble drop, low chest-sub, low-mid bass melody, rapid hi-hats, open hat, riddim warp, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, mono chest-sub, fold bass melody, closed hat, kick holds, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, panning bass layer, trap drums denser, mono chest-sub, fold bass melody, closed hat, kick holds, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, kick pattern flip, low reese counterline, room snare, hats denser, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, stacked warped drop, low chest-sub, low reese counterline, kick pattern flip, room snare, hats denser, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, mono chest-sub, body bass answer, tight kick, wobble ride, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, mono chest-sub, offbeat hats, body bass answer, tight kick, wobble ride, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, ghost snare, low wobble answer, loose hats, 2 bars]
+[inst - chest-sub, bass circles the low-mid, wide stereo layer, ghost snare, low chest-sub, low wobble answer, loose hats, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, mono chest-sub, chest-sub melody, pushed snare, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, full send warped drop, mono chest-sub, chest-sub melody, rapid hi-hats, pushed snare, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, wreck wobble warped drop, low chest-sub, low-mid bass melody, trap drums denser, chopped hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tightens, low chest-sub, trap drums denser, low-mid bass melody, chopped hats, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, kick pattern flip, fold bass melody, hat density up, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, layered sub stack, kick pattern flip, mono chest-sub, fold bass melody, hat density up, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, low chest-sub, low reese counterline, kick opens, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, parallel low-mid layer, kick tightens, low chest-sub, offbeat hats, low reese counterline, kick opens, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder wobble warped drop, mono chest-sub, body bass answer, ghost snare, kick tightens, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, wide stereo layer, ghost snare, mono chest-sub, body bass answer, kick tightens, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, low chest-sub, low wobble answer, snare answers, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, full send reese drop, low chest-sub, low wobble answer, rapid hi-hats, snare answers, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, trap drums denser, chest-sub melody, offbeat push, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, panning bass layer, trap drums denser, mono chest-sub, chest-sub melody, offbeat push, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked wobble warped drop, low chest-sub, low-mid bass melody, kick pattern flip, straight hats, 2 bars]
+[drop - chest-sub, bass circles the low-mid, layered sub stack, stacked wobble drop, low chest-sub, low-mid bass melody, kick pattern flip, straight hats, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, mono chest-sub, offbeat hats, fold bass melody, triplet hats, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, offbeat hats, mono chest-sub, fold bass melody, triplet hats, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder warped drop, low chest-sub, low reese counterline, ghost snare, backbeat shove, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, harder warped drop, low chest-sub, low reese counterline, ghost snare, backbeat shove, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, rapid hi-hats, body bass answer, ghost notes, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, octave 808 stack, kick tightens, mono chest-sub, rapid hi-hats, body bass answer, ghost notes, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, low chest-sub, low wobble answer, dry hats, 2 bars]
+[inst - chest-sub, bass circles the low-mid, panning bass layer, trap drums denser, low chest-sub, low wobble answer, dry hats, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, stacked warped drop, mono chest-sub, chest-sub melody, kick pattern flip, wide hat bed, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, stacked warped drop, mono chest-sub, chest-sub melody, kick pattern flip, wide hat bed, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, offbeat hats, low-mid bass melody, mono kick, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tightens, low chest-sub, offbeat hats, low-mid bass melody, mono kick, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, ghost snare, mono chest-sub, fold bass melody, side snare, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, harder reese drop, mono chest-sub, fold bass melody, ghost snare, side snare, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, rapid hi-hats, low reese counterline, rolling hats, 2 bars]
+[inst - chest-sub, bass circles the low-mid, octave 808 stack, rapid hi-hats, low chest-sub, low reese counterline, rolling hats, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck wobble warped drop, mono chest-sub, body bass answer, trap drums denser, late snare, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, mono chest-sub, trap drums denser, body bass answer, late snare, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, kick pattern flip, low chest-sub, low wobble answer, early kick, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, layered sub stack, kick pattern flip, low chest-sub, low wobble answer, early kick, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, heavy warped drop, mono chest-sub, chest-sub melody, offbeat hats, syncopated hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, heavy warped drop, mono chest-sub, chest-sub melody, offbeat hats, syncopated hats, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, ghost snare, low-mid bass melody, open hat, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, low chest-sub, ghost snare, low-mid bass melody, open hat, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, rapid hi-hats, mono chest-sub, fold bass melody, closed hat, 2 bars]
-
-[drop - chest-sub, low-mid orbits the sub, wreck warped drop, low chest-sub, low reese counterline, trap drums denser, room snare, 2 bars]
-
-[inst - chest-sub, 3D low-mid orbit, kick pattern flip, mono chest-sub, body bass answer, tight kick, 2 bars]
-
-[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, offbeat hats, low wobble answer, loose hats, 2 bars]
-
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, mono chest-sub, chest-sub melody, pushed snare, 2 bars]
-
-[outro - chest-sub, bass circles the low-mid, kick pattern flip, rapid hi-hats, low wobble answer, loose hats, 2 bars]
+[outro - chest-sub, bass circles the low-mid, layered sub stack, kick pattern flip, rapid hi-hats, low wobble answer, loose hats, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -5665,101 +5261,89 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808…` |
-| 2 | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, offbeat …` |
+| 2 | `[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, low …` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/secret-homage/19-cold-cache` |
 
 ```text
-warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 165 bpm, instrumental, no vocals
+warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, offbeat hats, fold bass melody, hat density up, warped 808 wreck, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, low chest-sub, offbeat hats, fold bass melody, hat density up, warped 808 wreck, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck wobble warped drop, mono chest-sub, low reese counterline, ghost snare, kick opens, warped hybrid-trap, heavy hybrid drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, wreck wobble drop, mono chest-sub, low reese counterline, ghost snare, kick opens, warped hybrid-trap, heavy hybrid drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, rapid hi-hats, body bass answer, kick tightens, cache grind, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, low chest-sub, rapid hi-hats, body bass answer, kick tightens, cache grind, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, mono chest-sub, low wobble answer, snare answers, rapid hi-hats roll, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, heavy warped drop, mono chest-sub, low wobble answer, trap drums denser, snare answers, rapid hi-hats roll, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder wobble warped drop, low chest-sub, chest-sub melody, kick pattern flip, offbeat push, 808 slide, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick pattern flip, low chest-sub, chest-sub melody, offbeat push, 808 slide, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, mono chest-sub, low-mid bass melody, straight hats, trap bass wall, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, full send reese drop, mono chest-sub, low-mid bass melody, offbeat hats, straight hats, harder warped drop, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck warped drop, low chest-sub, fold bass melody, ghost snare, triplet hats, harder warped drop, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, ghost snare, low chest-sub, fold bass melody, triplet hats, trap bass wall, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, mono chest-sub, low reese counterline, backbeat shove, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, stacked wobble drop, mono chest-sub, low reese counterline, rapid hi-hats, backbeat shove, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, heavy reese warped drop, low chest-sub, body bass answer, trap drums denser, ghost notes, kick tightens, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, layered sub stack, trap drums denser, low chest-sub, body bass answer, ghost notes, kick tightens, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, mono chest-sub, low wobble answer, dry hats, chest-sub 808 punch, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, harder warped drop, mono chest-sub, low wobble answer, kick pattern flip, dry hats, chest-sub 808 punch, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, offbeat hats, chest-sub melody, wide hat bed, hats denser, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, low chest-sub, offbeat hats, chest-sub melody, wide hat bed, hats denser, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, mono chest-sub, low-mid bass melody, mono kick, cache 808 hold, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, wreck reese drop, mono chest-sub, low-mid bass melody, ghost snare, mono kick, cache 808 hold, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, rapid hi-hats, fold bass melody, side snare, 808 triplets, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, panning bass layer, kick tightens, low chest-sub, rapid hi-hats, fold bass melody, side snare, 808 triplets, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, mono chest-sub, low reese counterline, rolling hats, hybrid warped sustain, 2 bars]
+[inst - chest-sub, bass circles the low-mid, layered sub stack, trap drums denser, mono chest-sub, low reese counterline, rolling hats, hybrid warped sustain, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder reese warped drop, low chest-sub, body bass answer, kick pattern flip, late snare, full send drop, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, low chest-sub, kick pattern flip, body bass answer, late snare, chest-sub wreck, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, offbeat hats, low wobble answer, early kick, chest-sub wreck, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, full send warped drop, mono chest-sub, low wobble answer, offbeat hats, early kick, full send drop, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck wobble warped drop, low chest-sub, chest-sub melody, ghost snare, syncopated hats, hybrid warp, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, octave 808 stack, kick tightens, low chest-sub, ghost snare, chest-sub melody, syncopated hats, hybrid warp, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, rapid hi-hats, low-mid bass melody, open hat, kick holds, 2 bars]
+[inst - chest-sub, bass circles the low-mid, panning bass layer, rapid hi-hats, mono chest-sub, low-mid bass melody, open hat, kick holds, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, low chest-sub, fold bass melody, closed hat, 808 ride, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, heavy warped drop, low chest-sub, fold bass melody, trap drums denser, closed hat, 808 ride, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, kick pattern flip, low reese counterline, room snare, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick pattern flip, mono chest-sub, low reese counterline, room snare, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, low chest-sub, body bass answer, tight kick, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, full send reese drop, low chest-sub, body bass answer, offbeat hats, tight kick, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck warped drop, mono chest-sub, low wobble answer, ghost snare, loose hats, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, octave 808 stack, kick tightens, mono chest-sub, ghost snare, low wobble answer, loose hats, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, rapid hi-hats, chest-sub melody, pushed snare, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, panning bass layer, rapid hi-hats, low chest-sub, chest-sub melody, pushed snare, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, mono chest-sub, low-mid bass melody, chopped hats, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, heavy reese drop, mono chest-sub, low-mid bass melody, trap drums denser, chopped hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder warped drop, low chest-sub, fold bass melody, kick pattern flip, hat density up, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, low chest-sub, kick pattern flip, fold bass melody, hat density up, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, offbeat hats, low reese counterline, kick opens, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, full send wobble drop, mono chest-sub, low reese counterline, offbeat hats, kick opens, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, low chest-sub, body bass answer, kick tightens, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick tightens, low chest-sub, ghost snare, body bass answer, kick tightens, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked warped drop, mono chest-sub, low wobble answer, rapid hi-hats, snare answers, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, panning bass layer, rapid hi-hats, mono chest-sub, low wobble answer, snare answers, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, low chest-sub, chest-sub melody, offbeat push, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, low chest-sub, trap drums denser, chest-sub melody, offbeat push, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder reese warped drop, mono chest-sub, low-mid bass melody, kick pattern flip, straight hats, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, kick pattern flip, mono chest-sub, low-mid bass melody, straight hats, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, offbeat hats, fold bass melody, triplet hats, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, low chest-sub, offbeat hats, fold bass melody, triplet hats, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, mono chest-sub, low reese counterline, backbeat shove, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, octave 808 stack, ghost snare, mono chest-sub, low reese counterline, backbeat shove, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked reese warped drop, low chest-sub, body bass answer, rapid hi-hats, ghost notes, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, stacked reese drop, low chest-sub, body bass answer, rapid hi-hats, ghost notes, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, trap drums denser, low wobble answer, dry hats, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, mono chest-sub, trap drums denser, low wobble answer, dry hats, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, low chest-sub, chest-sub melody, wide hat bed, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick pattern flip, low chest-sub, chest-sub melody, wide hat bed, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, full send reese warped drop, mono chest-sub, low-mid bass melody, offbeat hats, mono kick, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, full send reese drop, mono chest-sub, low-mid bass melody, offbeat hats, mono kick, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, ghost snare, fold bass melody, side snare, 2 bars]
-
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, mono chest-sub, low reese counterline, rolling hats, 2 bars]
-
-[drop - chest-sub, sub center, low-mid moves wide, heavy reese warped drop, low chest-sub, body bass answer, trap drums denser, late snare, 2 bars]
-
-[inst - chest-sub, low-mid orbits the sub, kick pattern flip, mono chest-sub, low wobble answer, early kick, 2 bars]
-
-[drop - chest-sub, 3D low-mid orbit, full send wobble warped drop, low chest-sub, chest-sub melody, offbeat hats, syncopated hats, 2 bars]
-
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, ghost snare, low-mid bass melody, open hat, 2 bars]
-
-[outro - chest-sub, bass circles the low-mid, kick pattern flip, rapid hi-hats, low wobble answer, loose hats, 2 bars]
+[outro - chest-sub, bass circles the low-mid, layered sub stack, kick pattern flip, rapid hi-hats, low wobble answer, loose hats, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -5767,7 +5351,7 @@ warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808,
 | Slot | Value |
 | --- | --- |
 | 0 | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808…` |
-| 1 | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, offbeat …` |
+| 1 | `[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, low …` |
 | 2 | `701` |
 | 3 | `fixed` |
 | 4 | `165` |
@@ -5783,95 +5367,83 @@ warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808,
 | 14 | `0.0` |
 
 ```text
-warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 165 bpm, instrumental, no vocals
+warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, offbeat hats, fold bass melody, hat density up, warped 808 wreck, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, low chest-sub, offbeat hats, fold bass melody, hat density up, warped 808 wreck, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck wobble warped drop, mono chest-sub, low reese counterline, ghost snare, kick opens, warped hybrid-trap, heavy hybrid drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, wreck wobble drop, mono chest-sub, low reese counterline, ghost snare, kick opens, warped hybrid-trap, heavy hybrid drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, rapid hi-hats, body bass answer, kick tightens, cache grind, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, low chest-sub, rapid hi-hats, body bass answer, kick tightens, cache grind, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, mono chest-sub, low wobble answer, snare answers, rapid hi-hats roll, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, heavy warped drop, mono chest-sub, low wobble answer, trap drums denser, snare answers, rapid hi-hats roll, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder wobble warped drop, low chest-sub, chest-sub melody, kick pattern flip, offbeat push, 808 slide, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick pattern flip, low chest-sub, chest-sub melody, offbeat push, 808 slide, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, offbeat hats, mono chest-sub, low-mid bass melody, straight hats, trap bass wall, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, full send reese drop, mono chest-sub, low-mid bass melody, offbeat hats, straight hats, harder warped drop, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, wreck warped drop, low chest-sub, fold bass melody, ghost snare, triplet hats, harder warped drop, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, ghost snare, low chest-sub, fold bass melody, triplet hats, trap bass wall, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, rapid hi-hats, mono chest-sub, low reese counterline, backbeat shove, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, stacked wobble drop, mono chest-sub, low reese counterline, rapid hi-hats, backbeat shove, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, heavy reese warped drop, low chest-sub, body bass answer, trap drums denser, ghost notes, kick tightens, 2 bars]
+[inst - chest-sub, 3D low-mid orbit, layered sub stack, trap drums denser, low chest-sub, body bass answer, ghost notes, kick tightens, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, kick pattern flip, mono chest-sub, low wobble answer, dry hats, chest-sub 808 punch, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, harder warped drop, mono chest-sub, low wobble answer, kick pattern flip, dry hats, chest-sub 808 punch, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, offbeat hats, chest-sub melody, wide hat bed, hats denser, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, low chest-sub, offbeat hats, chest-sub melody, wide hat bed, hats denser, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, mono chest-sub, low-mid bass melody, mono kick, cache 808 hold, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, octave 808 stack, wreck reese drop, mono chest-sub, low-mid bass melody, ghost snare, mono kick, cache 808 hold, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, rapid hi-hats, fold bass melody, side snare, 808 triplets, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, panning bass layer, kick tightens, low chest-sub, rapid hi-hats, fold bass melody, side snare, 808 triplets, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, trap drums denser, mono chest-sub, low reese counterline, rolling hats, hybrid warped sustain, 2 bars]
+[inst - chest-sub, bass circles the low-mid, layered sub stack, trap drums denser, mono chest-sub, low reese counterline, rolling hats, hybrid warped sustain, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, harder reese warped drop, low chest-sub, body bass answer, kick pattern flip, late snare, full send drop, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick tightens, low chest-sub, kick pattern flip, body bass answer, late snare, chest-sub wreck, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, offbeat hats, low wobble answer, early kick, chest-sub wreck, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, full send warped drop, mono chest-sub, low wobble answer, offbeat hats, early kick, full send drop, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck wobble warped drop, low chest-sub, chest-sub melody, ghost snare, syncopated hats, hybrid warp, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, octave 808 stack, kick tightens, low chest-sub, ghost snare, chest-sub melody, syncopated hats, hybrid warp, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, rapid hi-hats, low-mid bass melody, open hat, kick holds, 2 bars]
+[inst - chest-sub, bass circles the low-mid, panning bass layer, rapid hi-hats, mono chest-sub, low-mid bass melody, open hat, kick holds, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, trap drums denser, low chest-sub, fold bass melody, closed hat, 808 ride, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, layered sub stack, heavy warped drop, low chest-sub, fold bass melody, trap drums denser, closed hat, 808 ride, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, mono chest-sub, kick pattern flip, low reese counterline, room snare, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick pattern flip, mono chest-sub, low reese counterline, room snare, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, low chest-sub, body bass answer, tight kick, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, wide stereo layer, full send reese drop, low chest-sub, body bass answer, offbeat hats, tight kick, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck warped drop, mono chest-sub, low wobble answer, ghost snare, loose hats, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, octave 808 stack, kick tightens, mono chest-sub, ghost snare, low wobble answer, loose hats, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, rapid hi-hats, chest-sub melody, pushed snare, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, panning bass layer, rapid hi-hats, low chest-sub, chest-sub melody, pushed snare, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, mono chest-sub, low-mid bass melody, chopped hats, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, layered sub stack, heavy reese drop, mono chest-sub, low-mid bass melody, trap drums denser, chopped hats, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, harder warped drop, low chest-sub, fold bass melody, kick pattern flip, hat density up, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens, low chest-sub, kick pattern flip, fold bass melody, hat density up, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, offbeat hats, low reese counterline, kick opens, 2 bars]
+[drop - chest-sub, bass circles the low-mid, wide stereo layer, full send wobble drop, mono chest-sub, low reese counterline, offbeat hats, kick opens, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, low chest-sub, body bass answer, kick tightens, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick tightens, low chest-sub, ghost snare, body bass answer, kick tightens, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked warped drop, mono chest-sub, low wobble answer, rapid hi-hats, snare answers, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, panning bass layer, rapid hi-hats, mono chest-sub, low wobble answer, snare answers, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, low chest-sub, chest-sub melody, offbeat push, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, low chest-sub, trap drums denser, chest-sub melody, offbeat push, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder reese warped drop, mono chest-sub, low-mid bass melody, kick pattern flip, straight hats, 2 bars]
+[inst - chest-sub, bass circles the low-mid, parallel low-mid layer, kick pattern flip, mono chest-sub, low-mid bass melody, straight hats, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, low chest-sub, offbeat hats, fold bass melody, triplet hats, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, low chest-sub, offbeat hats, fold bass melody, triplet hats, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, ghost snare, mono chest-sub, low reese counterline, backbeat shove, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, octave 808 stack, ghost snare, mono chest-sub, low reese counterline, backbeat shove, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, stacked reese warped drop, low chest-sub, body bass answer, rapid hi-hats, ghost notes, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, stacked reese drop, low chest-sub, body bass answer, rapid hi-hats, ghost notes, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, trap drums denser, low wobble answer, dry hats, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, mono chest-sub, trap drums denser, low wobble answer, dry hats, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, kick pattern flip, low chest-sub, chest-sub melody, wide hat bed, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, kick pattern flip, low chest-sub, chest-sub melody, wide hat bed, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, full send reese warped drop, mono chest-sub, low-mid bass melody, offbeat hats, mono kick, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, wide stereo layer, full send reese drop, mono chest-sub, low-mid bass melody, offbeat hats, mono kick, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, ghost snare, fold bass melody, side snare, 2 bars]
-
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, mono chest-sub, low reese counterline, rolling hats, 2 bars]
-
-[drop - chest-sub, sub center, low-mid moves wide, heavy reese warped drop, low chest-sub, body bass answer, trap drums denser, late snare, 2 bars]
-
-[inst - chest-sub, low-mid orbits the sub, kick pattern flip, mono chest-sub, low wobble answer, early kick, 2 bars]
-
-[drop - chest-sub, 3D low-mid orbit, full send wobble warped drop, low chest-sub, chest-sub melody, offbeat hats, syncopated hats, 2 bars]
-
-[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub, ghost snare, low-mid bass melody, open hat, 2 bars]
-
-[outro - chest-sub, bass circles the low-mid, kick pattern flip, rapid hi-hats, low wobble answer, loose hats, 2 bars]
+[outro - chest-sub, bass circles the low-mid, layered sub stack, kick pattern flip, rapid hi-hats, low wobble answer, loose hats, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -5970,101 +5542,89 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, …` |
-| 2 | `[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack,…` |
+| 2 | `[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/secret-homage/20-secret-homage` |
 
 ```text
-dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 165 bpm, instrumental, no vocals
+dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, trap drums denser, low reese counterline, room snare, dirty dubstep wreck, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, octave sub stack, trap drums denser, low reese counterline, room snare, dirty dubstep wreck, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck reese warped drop, body bass, body bass answer, kick pattern flip, tight kick, dirty dubstep, heavy wobble drop, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, wreck reese drop, body bass, body bass answer, kick pattern flip, tight kick, dirty dubstep, heavy wobble drop, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, offbeat hats, low wobble answer, loose hats, warped homage, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, octave sub stack, offbeat hats, low wobble answer, loose hats, warped homage, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy wobble warped drop, body bass, chest-sub melody, ghost snare, pushed snare, rapid hi-hats denser, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, ghost snare, body bass, chest-sub melody, pushed snare, rapid hi-hats denser, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, rapid hi-hats, low-mid bass melody, chopped hats, wobble sustain, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, harder reese drop, octave sub stack, low-mid bass melody, rapid hi-hats, chopped hats, wobble sustain, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, body bass, fold bass melody, hat density up, chest-sub wall, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, body bass, trap drums denser, fold bass melody, hat density up, chest-sub wall, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck wobble warped drop, octave sub stack, low reese counterline, kick pattern flip, kick opens, harder stacked drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, wreck wobble drop, octave sub stack, low reese counterline, kick pattern flip, kick opens, harder stacked drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, offbeat hats, body bass answer, kick tightens, 808 warped, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, body bass, offbeat hats, body bass answer, kick tightens, 808 warped, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, heavy warped drop, octave sub stack, low wobble answer, ghost snare, snare answers, full send drop, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, layered sub stack, ghost snare, octave sub stack, low wobble answer, snare answers, low rumble wreck, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, rapid hi-hats, body bass, chest-sub melody, offbeat push, low rumble wreck, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, harder wobble drop, body bass, chest-sub melody, rapid hi-hats, offbeat push, full send drop, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send reese warped drop, octave sub stack, low-mid bass melody, trap drums denser, straight hats, dubstep warp, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, octave sub stack, trap drums denser, low-mid bass melody, straight hats, dubstep warp, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, kick pattern flip, fold bass melody, triplet hats, kick holds, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, wreck warped drop, body bass, fold bass melody, kick pattern flip, triplet hats, kick holds, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked wobble warped drop, octave sub stack, low reese counterline, offbeat hats, backbeat shove, rapid hi-hats roll, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, panning bass layer, offbeat hats, octave sub stack, low reese counterline, backbeat shove, rapid hi-hats roll, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, ghost snare, body bass answer, ghost notes, wobble ride, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, layered sub stack, heavy reese drop, body bass, body bass answer, ghost snare, ghost notes, wobble ride, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder warped drop, octave sub stack, low wobble answer, rapid hi-hats, dry hats, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, parallel low-mid layer, kick tightens, octave sub stack, rapid hi-hats, low wobble answer, dry hats, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, trap drums denser, chest-sub melody, wide hat bed, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, full send wobble drop, body bass, chest-sub melody, trap drums denser, wide hat bed, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, wreck reese warped drop, octave sub stack, low-mid bass melody, kick pattern flip, mono kick, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, octave sub stack, kick pattern flip, low-mid bass melody, mono kick, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, offbeat hats, fold bass melody, side snare, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, stacked warped drop, body bass, fold bass melody, offbeat hats, side snare, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy wobble warped drop, octave sub stack, low reese counterline, ghost snare, rolling hats, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, octave sub stack, ghost snare, low reese counterline, rolling hats, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, rapid hi-hats, body bass answer, late snare, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, harder reese drop, body bass, body bass answer, rapid hi-hats, late snare, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, octave sub stack, low wobble answer, early kick, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, octave sub stack, trap drums denser, low wobble answer, early kick, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, kick pattern flip, chest-sub melody, syncopated hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, wreck wobble drop, body bass, chest-sub melody, kick pattern flip, syncopated hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked reese warped drop, octave sub stack, low-mid bass melody, offbeat hats, open hat, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, octave sub stack, offbeat hats, low-mid bass melody, open hat, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, body bass, fold bass melody, closed hat, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, ghost snare, body bass, fold bass melody, closed hat, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder wobble warped drop, octave sub stack, low reese counterline, rapid hi-hats, room snare, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, harder wobble drop, octave sub stack, low reese counterline, rapid hi-hats, room snare, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, trap drums denser, body bass answer, tight kick, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, body bass, trap drums denser, body bass answer, tight kick, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck warped drop, octave sub stack, low wobble answer, kick pattern flip, loose hats, 2 bars]
+[inst - chest-sub, bass circles the low-mid, octave 808 stack, kick pattern flip, octave sub stack, low wobble answer, loose hats, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, offbeat hats, body bass, chest-sub melody, pushed snare, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, stacked wobble drop, body bass, chest-sub melody, offbeat hats, pushed snare, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, heavy reese warped drop, octave sub stack, low-mid bass melody, ghost snare, chopped hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, octave sub stack, ghost snare, low-mid bass melody, chopped hats, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, rapid hi-hats, body bass, fold bass melody, hat density up, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, harder warped drop, body bass, fold bass melody, rapid hi-hats, hat density up, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send wobble warped drop, octave sub stack, low reese counterline, trap drums denser, kick opens, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, octave sub stack, trap drums denser, low reese counterline, kick opens, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, kick pattern flip, body bass answer, kick tightens, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick pattern flip, body bass, body bass answer, kick tightens, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, octave sub stack, low wobble answer, snare answers, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, stacked warped drop, octave sub stack, low wobble answer, offbeat hats, snare answers, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, ghost snare, chest-sub melody, offbeat push, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, body bass, ghost snare, chest-sub melody, offbeat push, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, octave sub stack, low-mid bass melody, straight hats, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, harder reese drop, octave sub stack, low-mid bass melody, rapid hi-hats, straight hats, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, full send warped drop, body bass, fold bass melody, trap drums denser, triplet hats, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, body bass, trap drums denser, fold bass melody, triplet hats, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, kick pattern flip, low reese counterline, backbeat shove, 2 bars]
-
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, body bass, body bass answer, ghost notes, 2 bars]
-
-[drop - chest-sub, bass circles the low-mid, heavy warped drop, octave sub stack, low wobble answer, ghost snare, dry hats, 2 bars]
-
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, rapid hi-hats, chest-sub melody, wide hat bed, 2 bars]
-
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, octave sub stack, low-mid bass melody, mono kick, 2 bars]
-
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, kick pattern flip, fold bass melody, side snare, 2 bars]
-
-[outro - chest-sub, 3D low-mid orbit, kick pattern flip, rapid hi-hats, body bass answer, ghost notes, 2 bars]
+[outro - chest-sub, 3D low-mid orbit, layered sub stack, kick pattern flip, rapid hi-hats, body bass answer, ghost notes, 2 bars]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -6072,7 +5632,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, w
 | Slot | Value |
 | --- | --- |
 | 0 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, …` |
-| 1 | `[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack,…` |
+| 1 | `[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens…` |
 | 2 | `709` |
 | 3 | `fixed` |
 | 4 | `165` |
@@ -6088,95 +5648,83 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, w
 | 14 | `0.0` |
 
 ```text
-dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, drop first, 165 bpm, instrumental, no vocals
+dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped bass, 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, drop first, 165 bpm, instrumental, no vocals
 ```
 
 ```text
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, trap drums denser, low reese counterline, room snare, dirty dubstep wreck, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, octave sub stack, trap drums denser, low reese counterline, room snare, dirty dubstep wreck, 2 bars]
 
-[drop - chest-sub, 3D low-mid orbit, wreck reese warped drop, body bass, body bass answer, kick pattern flip, tight kick, dirty dubstep, heavy wobble drop, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, wreck reese drop, body bass, body bass answer, kick pattern flip, tight kick, dirty dubstep, heavy wobble drop, 2 bars]
 
-[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stack, offbeat hats, low wobble answer, loose hats, warped homage, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, octave sub stack, offbeat hats, low wobble answer, loose hats, warped homage, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, heavy wobble warped drop, body bass, chest-sub melody, ghost snare, pushed snare, rapid hi-hats denser, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, ghost snare, body bass, chest-sub melody, pushed snare, rapid hi-hats denser, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, rapid hi-hats, low-mid bass melody, chopped hats, wobble sustain, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, harder reese drop, octave sub stack, low-mid bass melody, rapid hi-hats, chopped hats, wobble sustain, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, trap drums denser, body bass, fold bass melody, hat density up, chest-sub wall, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, body bass, trap drums denser, fold bass melody, hat density up, chest-sub wall, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck wobble warped drop, octave sub stack, low reese counterline, kick pattern flip, kick opens, harder stacked drop, 2 bars]
+[drop - chest-sub, bass circles the low-mid, octave 808 stack, wreck wobble drop, octave sub stack, low reese counterline, kick pattern flip, kick opens, harder stacked drop, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, offbeat hats, body bass answer, kick tightens, 808 warped, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick tightens, body bass, offbeat hats, body bass answer, kick tightens, 808 warped, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, heavy warped drop, octave sub stack, low wobble answer, ghost snare, snare answers, full send drop, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, layered sub stack, ghost snare, octave sub stack, low wobble answer, snare answers, low rumble wreck, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, rapid hi-hats, body bass, chest-sub melody, offbeat push, low rumble wreck, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, harder wobble drop, body bass, chest-sub melody, rapid hi-hats, offbeat push, full send drop, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send reese warped drop, octave sub stack, low-mid bass melody, trap drums denser, straight hats, dubstep warp, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, octave sub stack, trap drums denser, low-mid bass melody, straight hats, dubstep warp, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, kick pattern flip, fold bass melody, triplet hats, kick holds, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, octave 808 stack, wreck warped drop, body bass, fold bass melody, kick pattern flip, triplet hats, kick holds, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, stacked wobble warped drop, octave sub stack, low reese counterline, offbeat hats, backbeat shove, rapid hi-hats roll, 2 bars]
+[inst - chest-sub, low-mid orbits the sub, panning bass layer, offbeat hats, octave sub stack, low reese counterline, backbeat shove, rapid hi-hats roll, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, ghost snare, body bass answer, ghost notes, wobble ride, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, layered sub stack, heavy reese drop, body bass, body bass answer, ghost snare, ghost notes, wobble ride, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, harder warped drop, octave sub stack, low wobble answer, rapid hi-hats, dry hats, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, parallel low-mid layer, kick tightens, octave sub stack, rapid hi-hats, low wobble answer, dry hats, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, trap drums denser, chest-sub melody, wide hat bed, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, wide stereo layer, full send wobble drop, body bass, chest-sub melody, trap drums denser, wide hat bed, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, wreck reese warped drop, octave sub stack, low-mid bass melody, kick pattern flip, mono kick, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, octave 808 stack, kick tightens, octave sub stack, kick pattern flip, low-mid bass melody, mono kick, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, offbeat hats, fold bass melody, side snare, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, panning bass layer, stacked warped drop, body bass, fold bass melody, offbeat hats, side snare, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, heavy wobble warped drop, octave sub stack, low reese counterline, ghost snare, rolling hats, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tightens, octave sub stack, ghost snare, low reese counterline, rolling hats, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, rapid hi-hats, body bass answer, late snare, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, parallel low-mid layer, harder reese drop, body bass, body bass answer, rapid hi-hats, late snare, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, octave sub stack, low wobble answer, early kick, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens, octave sub stack, trap drums denser, low wobble answer, early kick, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, kick pattern flip, chest-sub melody, syncopated hats, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, octave 808 stack, wreck wobble drop, body bass, chest-sub melody, kick pattern flip, syncopated hats, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, stacked reese warped drop, octave sub stack, low-mid bass melody, offbeat hats, open hat, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tightens, octave sub stack, offbeat hats, low-mid bass melody, open hat, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, ghost snare, body bass, fold bass melody, closed hat, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, layered sub stack, ghost snare, body bass, fold bass melody, closed hat, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, harder wobble warped drop, octave sub stack, low reese counterline, rapid hi-hats, room snare, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, parallel low-mid layer, harder wobble drop, octave sub stack, low reese counterline, rapid hi-hats, room snare, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, trap drums denser, body bass answer, tight kick, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, body bass, trap drums denser, body bass answer, tight kick, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, wreck warped drop, octave sub stack, low wobble answer, kick pattern flip, loose hats, 2 bars]
+[inst - chest-sub, bass circles the low-mid, octave 808 stack, kick pattern flip, octave sub stack, low wobble answer, loose hats, 2 bars]
 
-[inst - chest-sub, sub center, low-mid moves wide, offbeat hats, body bass, chest-sub melody, pushed snare, 2 bars]
+[drop - chest-sub, sub center, low-mid moves wide, panning bass layer, stacked wobble drop, body bass, chest-sub melody, offbeat hats, pushed snare, 2 bars]
 
-[drop - chest-sub, low-mid orbits the sub, heavy reese warped drop, octave sub stack, low-mid bass melody, ghost snare, chopped hats, 2 bars]
+[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens, octave sub stack, ghost snare, low-mid bass melody, chopped hats, 2 bars]
 
-[inst - chest-sub, 3D low-mid orbit, rapid hi-hats, body bass, fold bass melody, hat density up, 2 bars]
+[drop - chest-sub, 3D low-mid orbit, parallel low-mid layer, harder warped drop, body bass, fold bass melody, rapid hi-hats, hat density up, 2 bars]
 
-[drop - chest-sub, bass circles the low-mid, full send wobble warped drop, octave sub stack, low reese counterline, trap drums denser, kick opens, 2 bars]
+[build-up - chest-sub, bass circles the low-mid, wide stereo layer, kick tightens, octave sub stack, trap drums denser, low reese counterline, kick opens, 2 bars]
 
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, kick pattern flip, body bass answer, kick tightens, 2 bars]
+[inst - chest-sub, sub center, low-mid moves wide, octave 808 stack, kick pattern flip, body bass, body bass answer, kick tightens, 2 bars]
 
-[inst - chest-sub, low-mid orbits the sub, offbeat hats, octave sub stack, low wobble answer, snare answers, 2 bars]
+[drop - chest-sub, low-mid orbits the sub, panning bass layer, stacked warped drop, octave sub stack, low wobble answer, offbeat hats, snare answers, 2 bars]
 
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, ghost snare, chest-sub melody, offbeat push, 2 bars]
+[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, body bass, ghost snare, chest-sub melody, offbeat push, 2 bars]
 
-[inst - chest-sub, bass circles the low-mid, rapid hi-hats, octave sub stack, low-mid bass melody, straight hats, 2 bars]
+[drop - chest-sub, bass circles the low-mid, parallel low-mid layer, harder reese drop, octave sub stack, low-mid bass melody, rapid hi-hats, straight hats, 2 bars]
 
-[drop - chest-sub, sub center, low-mid moves wide, full send warped drop, body bass, fold bass melody, trap drums denser, triplet hats, 2 bars]
+[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick tightens, body bass, trap drums denser, fold bass melody, triplet hats, 2 bars]
 
-[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack, kick pattern flip, low reese counterline, backbeat shove, 2 bars]
-
-[inst - chest-sub, 3D low-mid orbit, offbeat hats, body bass, body bass answer, ghost notes, 2 bars]
-
-[drop - chest-sub, bass circles the low-mid, heavy warped drop, octave sub stack, low wobble answer, ghost snare, dry hats, 2 bars]
-
-[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass, rapid hi-hats, chest-sub melody, wide hat bed, 2 bars]
-
-[inst - chest-sub, low-mid orbits the sub, trap drums denser, octave sub stack, low-mid bass melody, mono kick, 2 bars]
-
-[build-up - chest-sub, 3D low-mid orbit, kick tightens, body bass, kick pattern flip, fold bass melody, side snare, 2 bars]
-
-[outro - chest-sub, 3D low-mid orbit, kick pattern flip, rapid hi-hats, body bass answer, ghost notes, 2 bars]
+[outro - chest-sub, 3D low-mid orbit, layered sub stack, kick pattern flip, rapid hi-hats, body bass answer, ghost notes, 2 bars]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -6614,26 +6162,26 @@ Sectioned lyrics.
 
 | Instance | Value |
 | --- | --- |
-| ez_edm_prompt | `[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, octave su…` |
-| ez_edm_prompt | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, offbeat hats…` |
-| ez_edm_prompt | `[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub,…` |
-| ez_edm_prompt | `[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stac…` |
-| ez_edm_prompt | `[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass…` |
-| ez_edm_prompt | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, ghost sn…` |
-| ez_edm_prompt | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, ghost sn…` |
-| ez_edm_prompt | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, trap dru…` |
-| ez_edm_prompt | `[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack,…` |
-| ez_edm_prompt | `[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stac…` |
-| ez_edm_prompt | `[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass…` |
-| ez_edm_prompt | `[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, trap…` |
-| ez_edm_prompt | `[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, ghos…` |
-| ez_edm_prompt | `[build-up - chest-sub, bass circles the low-mid, kick tightens, fold bass, offb…` |
-| ez_edm_prompt | `[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, tr…` |
-| ez_edm_prompt | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, ghost s…` |
-| ez_edm_prompt | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, rapid h…` |
-| ez_edm_prompt | `[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, …` |
-| ez_edm_prompt | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, offbeat …` |
-| ez_edm_prompt | `[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack,…` |
+| ez_edm_prompt | `[build-up - chest-sub, sub center, low-mid moves wide, layered sub stack, kick …` |
+| ez_edm_prompt | `[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens,…` |
+| ez_edm_prompt | `[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tighte…` |
+| ez_edm_prompt | `[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tighte…` |
+| ez_edm_prompt | `[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick…` |
+| ez_edm_prompt | `[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, low …` |
+| ez_edm_prompt | `[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens,…` |
+| ez_edm_prompt | `[build-up - chest-sub, 3D low-mid orbit, panning bass layer, kick tightens, low…` |
+| ez_edm_prompt | `[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens…` |
+| ez_edm_prompt | `[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tight…` |
+| ez_edm_prompt | `[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick …` |
+| ez_edm_prompt | `[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tig…` |
+| ez_edm_prompt | `[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens…` |
+| ez_edm_prompt | `[build-up - chest-sub, bass circles the low-mid, octave 808 stack, kick tighten…` |
+| ez_edm_prompt | `[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tighten…` |
+| ez_edm_prompt | `[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, mono…` |
+| ez_edm_prompt | `[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens,…` |
+| ez_edm_prompt | `[build-up - chest-sub, bass circles the low-mid, parallel low-mid layer, kick t…` |
+| ez_edm_prompt | `[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, low …` |
+| ez_edm_prompt | `[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens…` |
 
 #### `enhance`
 
@@ -6750,26 +6298,26 @@ Sectioned lyrics or [inst] cues.
 
 | Instance | Value |
 | --- | --- |
-| ACE tags + lyrics | `[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, octave su…` |
-| ACE tags + lyrics | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, fold bass, offbeat hats…` |
-| ACE tags + lyrics | `[build-up - chest-sub, bass circles the low-mid, kick tightens, mono chest-sub,…` |
-| ACE tags + lyrics | `[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stac…` |
-| ACE tags + lyrics | `[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, body bass…` |
-| ACE tags + lyrics | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, ghost sn…` |
-| ACE tags + lyrics | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, ghost sn…` |
-| ACE tags + lyrics | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, trap dru…` |
-| ACE tags + lyrics | `[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack,…` |
-| ACE tags + lyrics | `[build-up - chest-sub, bass circles the low-mid, kick tightens, octave sub stac…` |
-| ACE tags + lyrics | `[build-up - chest-sub, sub center, low-mid moves wide, kick tightens, fold bass…` |
-| ACE tags + lyrics | `[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, trap…` |
-| ACE tags + lyrics | `[build-up - chest-sub, low-mid orbits the sub, kick tightens, stacked 808, ghos…` |
-| ACE tags + lyrics | `[build-up - chest-sub, bass circles the low-mid, kick tightens, fold bass, offb…` |
-| ACE tags + lyrics | `[build-up - chest-sub, low-mid orbits the sub, kick tightens, low chest-sub, tr…` |
-| ACE tags + lyrics | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, ghost s…` |
-| ACE tags + lyrics | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, mono chest-sub, rapid h…` |
-| ACE tags + lyrics | `[build-up - chest-sub, bass circles the low-mid, kick tightens, low chest-sub, …` |
-| ACE tags + lyrics | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, low chest-sub, offbeat …` |
-| ACE tags + lyrics | `[build-up - chest-sub, low-mid orbits the sub, kick tightens, octave sub stack,…` |
+| ACE tags + lyrics | `[build-up - chest-sub, sub center, low-mid moves wide, layered sub stack, kick …` |
+| ACE tags + lyrics | `[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens,…` |
+| ACE tags + lyrics | `[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tighte…` |
+| ACE tags + lyrics | `[build-up - chest-sub, bass circles the low-mid, layered sub stack, kick tighte…` |
+| ACE tags + lyrics | `[build-up - chest-sub, sub center, low-mid moves wide, panning bass layer, kick…` |
+| ACE tags + lyrics | `[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, low …` |
+| ACE tags + lyrics | `[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens,…` |
+| ACE tags + lyrics | `[build-up - chest-sub, 3D low-mid orbit, panning bass layer, kick tightens, low…` |
+| ACE tags + lyrics | `[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens…` |
+| ACE tags + lyrics | `[build-up - chest-sub, bass circles the low-mid, panning bass layer, kick tight…` |
+| ACE tags + lyrics | `[build-up - chest-sub, sub center, low-mid moves wide, wide stereo layer, kick …` |
+| ACE tags + lyrics | `[build-up - chest-sub, low-mid orbits the sub, parallel low-mid layer, kick tig…` |
+| ACE tags + lyrics | `[build-up - chest-sub, low-mid orbits the sub, layered sub stack, kick tightens…` |
+| ACE tags + lyrics | `[build-up - chest-sub, bass circles the low-mid, octave 808 stack, kick tighten…` |
+| ACE tags + lyrics | `[build-up - chest-sub, low-mid orbits the sub, panning bass layer, kick tighten…` |
+| ACE tags + lyrics | `[build-up - chest-sub, 3D low-mid orbit, layered sub stack, kick tightens, mono…` |
+| ACE tags + lyrics | `[build-up - chest-sub, 3D low-mid orbit, parallel low-mid layer, kick tightens,…` |
+| ACE tags + lyrics | `[build-up - chest-sub, bass circles the low-mid, parallel low-mid layer, kick t…` |
+| ACE tags + lyrics | `[build-up - chest-sub, 3D low-mid orbit, wide stereo layer, kick tightens, low …` |
+| ACE tags + lyrics | `[build-up - chest-sub, low-mid orbits the sub, wide stereo layer, kick tightens…` |
 
 #### `seed`
 

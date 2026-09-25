@@ -17,7 +17,8 @@ from .naming import music_output_prefix
 EDM_DURATION_S = 180.0
 DRIVE_LOCK = (
     "808, original composition, heavy chest bass, bass boosted, "
-    "wide low-mid layers, fast switch-ups"
+    "wide low-mid layers, fast switch-ups, "
+    "deep 3D spatial low-mid, stacked 808 layers"
 )
 DRIVE_TREAT_LOCK = "sparse vocal chop, DJ shout, no rap, original composition"
 EdmSeries = Literal["drive-through"]

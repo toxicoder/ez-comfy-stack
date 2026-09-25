@@ -1,6 +1,6 @@
 {
   "id": "album",
-  "revision": 3,
+  "revision": 1,
   "last_node_id": 4,
   "last_link_id": 0,
   "nodes": [
@@ -32,8 +32,8 @@
       "id": 2,
       "type": "EZAlbumPack",
       "pos": [
-        728,
-        648
+        720,
+        664
       ],
       "size": [
         360,
@@ -148,8 +148,8 @@
       "id": 3,
       "title": "PACK",
       "bounding": [
-        708,
-        576,
+        700,
+        592,
         400,
         236
       ],
@@ -198,6 +198,9 @@
     },
     "lab_rel": "audio/albums/drive-through/hour-2/album",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -238,10 +241,7 @@
         2
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

@@ -40,8 +40,16 @@ DRIVE_LYRICS_CHAR_BUDGET = 6000
 _BPM_LO = 140
 _BPM_HI = 176
 _BAR_PALETTE = frozenset({2})
+# Body stanza count dealt per take before the duration fit. The menu
+# size sets the album's length spread: the short end pads toward the
+# 150 s floor, the long end lands near 8 minutes.
 _MENU = (28, 40, 52, 64, 76, 88, 100, 112, 124, 136, 148, 160)
 _BODY_ROLES = ("inst", "drop", "build-up")
+# Drops must hit hard and often: every take deals at least _DROP_FLOOR
+# drops; _drop_target scales the requirement with body size, capped at
+# _DROP_CAP so long bodies do not demand more drops than the take holds.
+_DROP_FLOOR = 5
+_DROP_CAP = 30
 _BRASS = (
     "brass",
     "horn",
@@ -81,6 +89,13 @@ _SPATIAL = (
     "bass circles the low-mid",
     "sub center, low-mid moves wide",
     "low-mid orbits the sub",
+)
+_LAYERS = (
+    "wide stereo layer",
+    "octave 808 stack",
+    "panning bass layer",
+    "layered sub stack",
+    "parallel low-mid layer",
 )
 _MOTIONS = (
     "hat density up",
@@ -125,6 +140,21 @@ RECIPE_LINES = {
 }
 
 
+def _drop_target(body: int) -> int:
+    """Drop-count target for a body of this size.
+
+    About 35% drop density keeps builds short and hits frequent; the
+    cap keeps long bodies from demanding endless drops.
+
+    Args:
+        body: Body stanza count, excluding the opening build and outro.
+
+    Returns:
+        Required drop count: at least the floor, at most the cap.
+    """
+    return max(_DROP_FLOOR, min(_DROP_CAP, round(body * 0.35)))
+
+
 def lift_drive_bpm(authored: int) -> int:
     """Map an authored tempo onto a fast Audio Rack BPM, keeping rank.
 
@@ -147,6 +177,7 @@ def fit_drive_sections(
     *,
     bpm: int,
     salt: int,
+    used: set[str] | None = None,
 ) -> list[SongSection]:
     """Add or drop whole stanzas until duration sits in 150–480 s.
 
@@ -158,6 +189,9 @@ def fit_drive_sections(
         sections: Stanzas, build then drop … outro.
         bpm: Performance tempo.
         salt: Cue salt for any stanza this function adds.
+        used: Cues and drop-combo keys already spent on this take.
+            Inserted stanzas avoid them. Defaults to the music text of
+            the given sections.
 
     Returns:
         A new list. Surviving stanzas are the same dicts.
@@ -166,7 +200,8 @@ def fit_drive_sections(
         ValueError: the list cannot reach the window without resizing.
     """
     out = list(sections)
-    used = {_music(section["pattern"]) for section in out}
+    if used is None:
+        used = {_music(section["pattern"]) for section in out}
     guard = 0
     while _seconds(out, bpm) > DRIVE_CAP_S and len(out) > 3 and guard < 80:
         _drop_tail(out)
@@ -257,7 +292,7 @@ def _fit_lyrics_window(blocks: list[str]) -> str:
 
     ACE-Step 1.5 truncates lyrics at 2048 tokens; a longer score
     conditions on a cut-off prefix and renders as static. Keeps the
-    opening build-up, the first drop, at least three drops, and the
+    opening build-up, the first drop, at least five drops, and the
     outro.
 
     Args:
@@ -277,7 +312,7 @@ def _window_survivor_indices(blocks: Sequence[str]) -> list[int]:
     """Indices of the stanzas that survive the lyric-window fit.
 
     Trims from in front of the outro. The opening build-up, the first
-    drop, at least three drops, and the outro stay.
+    drop, at least five drops, and the outro stay.
 
     Args:
         blocks: Bracketed stanzas, build-up then drop ... outro.
@@ -307,7 +342,7 @@ def _window_survivor_indices(blocks: Sequence[str]) -> list[int]:
     while size(kept) > DRIVE_LYRICS_CHAR_BUDGET:
         drops = sum(1 for index in kept if blocks[index].startswith("[drop"))
         for position in range(len(kept) - 2, 1, -1):
-            if blocks[kept[position]].startswith("[drop") and drops <= 3:
+            if blocks[kept[position]].startswith("[drop") and drops <= _DROP_FLOOR:
                 continue
             kept.pop(position)
             break
@@ -405,8 +440,8 @@ def _menu_count(album_slug: str, track_number: int) -> int:
         track_number: One-based index.
 
     Returns:
-        A menu size from the short end (~2.5 min after padding) to the
-        long end (near 8 min).
+        A menu size of 28–160 body stanzas, from the short end
+        (~2.5 min after padding) to the long end (near 8 min).
     """
     offset = sum(ord(char) for char in album_slug) % len(_MENU)
     return _MENU[(int(track_number) - 1 + offset) % len(_MENU)]
@@ -479,8 +514,8 @@ def _bed(n: int, salt: int, attempt: int) -> str:
 def _cue_for(role: str, n: int, salt: int, attempt: int = 0) -> str:
     """One layered cue. Drops name a weight and a warp. Beds do not say drop.
 
-    The chest-sub anchor and the spatial move sit at the front so a long
-    tail cannot hide them.
+    Every stanza carries the chest-sub bed, a 3D low-mid move, and an
+    extra layer cue so the take never sits on one flat loop.
 
     Args:
         role: Section role.
@@ -496,25 +531,45 @@ def _cue_for(role: str, n: int, salt: int, attempt: int = 0) -> str:
     mid = _slot(_MIDS, n, salt, attempt, 5)
     drum = _slot(_DRUMS, n, salt, attempt, 7)
     motion = _slot(_MOTIONS, n, salt, attempt, 1)
+    layer = _slot(_LAYERS, n, salt, attempt, 11)
     if role == "drop":
         weight = _slot(_WEIGHTS, n, salt, attempt, 2)
         warp = _slot(_WARPS, n, salt, attempt, 4)
-        warp_bit = "" if warp == "warped" else f"{warp} "
         return (
-            f"{bed}, {weight} {warp_bit}warped drop, {sub}, {mid}, {drum}, "
+            f"{bed}, {layer}, {weight} {warp} drop, {sub}, {mid}, {drum}, "
             f"{motion}"
         )
     if role == "build-up":
-        return f"{bed}, kick tightens, {sub}, {drum}, {mid}, {motion}"
+        return f"{bed}, {layer}, kick tightens, {sub}, {drum}, {mid}, {motion}"
     if role == "breakdown":
-        return f"{bed}, rapid hi-hats, {mid}, {sub}, {motion}"
+        return f"{bed}, {layer}, rapid hi-hats, {mid}, {sub}, {motion}"
     if role == "outro":
-        return f"{bed}, kick pattern flip, rapid hi-hats, {mid}, {motion}"
-    return f"{bed}, {drum}, {sub}, {mid}, {motion}"
+        return f"{bed}, {layer}, kick pattern flip, rapid hi-hats, {mid}, {motion}"
+    return f"{bed}, {layer}, {drum}, {sub}, {mid}, {motion}"
+
+
+def _drop_combo(n: int, salt: int, attempt: int) -> str:
+    """Weight/warp/spatial combo for one drop cue attempt.
+
+    Args:
+        n: Cue index.
+        salt: Take salt.
+        attempt: Retry counter.
+
+    Returns:
+        Pipe-joined combo, stable for the same cue.
+    """
+    weight = _slot(_WEIGHTS, n, salt, attempt, 2)
+    warp = _slot(_WARPS, n, salt, attempt, 4)
+    spatial = _slot(_SPATIAL, n, salt, attempt, 13)
+    return f"{weight}|{warp}|{spatial}"
 
 
 def _unique_cue(role: str, n: int, salt: int, used: set[str]) -> str:
     """A cue this take has not used yet.
+
+    Drop cues must also carry a weight/warp/spatial combo the take has
+    not voiced, so two drops never sound like the same stack.
 
     Args:
         role: Section role.
@@ -532,9 +587,16 @@ def _unique_cue(role: str, n: int, salt: int, used: set[str]) -> str:
         cue = _cue_for(role, n, salt, attempt)
         if cue in used or _blocked(cue):
             continue
+        combo_key: str | None = None
+        if role == "drop":
+            combo_key = f"drop-combo::{_drop_combo(n, salt, attempt)}"
+            if combo_key in used:
+                continue
         if role != "drop" and "drop" in cue:
             continue
         used.add(cue)
+        if combo_key is not None:
+            used.add(combo_key)
         return cue
     raise ValueError(f"no unique cue for {role}")
 
@@ -556,8 +618,17 @@ def _mix_int(salt: int, index: int, lane: int) -> int:
     return value ^ (value >> 31)
 
 
+# Weighted role roll: a 20-step cycle where drops take the first 9 steps,
+# instrumentals the next 7, and build-ups the remaining 4.
+_ROLE_PERIOD = 20
+_DROP_SLICE = 9
+_INST_SLICE = 7
+
+
 def _pick_role(salt: int, index: int, prev: str) -> str:
-    """Next body role, never the same as the stanza just written.
+    """Next body role, drop-weighted, never the stanza just written.
+
+    Drops take 9 of 20 rolls so builds stay short and hits come fast.
 
     Args:
         salt: Take salt.
@@ -565,12 +636,18 @@ def _pick_role(salt: int, index: int, prev: str) -> str:
         prev: Previous role.
 
     Returns:
-        A body role.
+        A body role, different from ``prev``.
     """
     mixed = _mix_int(salt, index, 1)
-    role = _BODY_ROLES[mixed % len(_BODY_ROLES)]
+    roll = mixed % _ROLE_PERIOD
+    if roll < _DROP_SLICE:
+        role = "drop"
+    elif roll < _DROP_SLICE + _INST_SLICE:
+        role = "inst"
+    else:
+        role = "build-up"
     if role == prev:
-        role = _BODY_ROLES[(mixed + 1) % len(_BODY_ROLES)]
+        role = _BODY_ROLES[(_BODY_ROLES.index(role) + 1) % len(_BODY_ROLES)]
     return role
 
 
@@ -753,10 +830,10 @@ def _insert(out: list[SongSection], *, salt: int, used: set[str]) -> None:
 
 
 def _ensure_drops(out: list[SongSection], salt: int, used: set[str]) -> None:
-    """Turn early fills into drops until the take has three drops.
+    """Promote fills to drops until the floor and target hold.
 
-    New drops sit in the first dozen stanzas so a later trim cannot
-    delete the only ones. The promoted cell stays 2 bars.
+    A fill is promoted only when doing so keeps the drop run at most
+    two stanzas, so roles keep switching. Promoted cells stay 2 bars.
 
     Args:
         out: Stanza list ending in the outro. Mutated.
@@ -766,22 +843,27 @@ def _ensure_drops(out: list[SongSection], salt: int, used: set[str]) -> None:
     Raises:
         ValueError: no legal slot is left for another drop.
     """
-    guard = 0
-    while sum(section["role"] == "drop" for section in out) < 3 and guard < 6:
-        guard += 1
-        limit = min(len(out) - 1, 14)
-        placed = False
-        for index in range(2, limit):
+    while True:
+        body = len(out) - 2
+        drops = sum(section["role"] == "drop" for section in out)
+        if drops >= _DROP_FLOOR and drops >= _drop_target(body):
+            return
+        for index in range(2, len(out) - 1):
             if out[index]["role"] == "drop":
                 continue
-            if out[index - 1]["role"] == "drop" or out[index + 1]["role"] == "drop":
+            left = 0
+            while out[index - 1 - left]["role"] == "drop":
+                left += 1
+            right = 0
+            while out[index + 1 + right]["role"] == "drop":
+                right += 1
+            if left + right >= 2:
                 continue
             cue = _unique_cue("drop", salt + index, salt, used)
             out[index] = _make("drop", 2, cue)
-            placed = True
             break
-        if not placed:
-            raise ValueError("could not place a third drop")
+        else:
+            raise ValueError("could not place a drive drop")
 
 
 def _place_rare_breakdown(
@@ -824,7 +906,8 @@ def _compose(
     recipe: str,
     extra: int,
 ) -> list[SongSection]:
-    """Deal the movement list, then fit it into the duration window.
+    """Deal the movement list, fit it to the duration window, then hit the
+    drop floor and the rare breakdown.
 
     Args:
         album_slug: Album folder slug.
@@ -865,9 +948,16 @@ def _compose(
     ]
     prev_role = "drop"
     prev_bars = 2
+    drop_deals = 0
     menu = _menu_count(album_slug, track_number)
     for index in range(menu):
         role = _pick_role(salt, index, prev_role)
+        if role == "drop" and drop_deals >= _DROP_CAP:
+            # The dealt drop count is capped so long bodies stay inside
+            # the unique drop-combo space; keep roles switching.
+            role = "inst" if prev_role != "inst" else "build-up"
+        elif role == "drop":
+            drop_deals += 1
         before_outro = index == menu - 1
         bars = _pick_bars(role, prev_bars, salt, index, before_outro=before_outro)
         cue = _cue_with_donor(role, index + 2, salt, used, queue)
@@ -875,14 +965,15 @@ def _compose(
         prev_role = role
         prev_bars = bars
     sections.append(_make("outro", 2, _unique_cue("outro", salt + 99, salt, used)))
-    _ensure_drops(sections, salt, used)
+    fitted = fit_drive_sections(sections, bpm=bpm, salt=salt, used=used)
+    _ensure_drops(fitted, salt, used)
     _place_rare_breakdown(
-        sections,
+        fitted,
         salt,
         used,
         gate=_salt(album_slug, track_number, seed),
     )
-    return fit_drive_sections(sections, bpm=bpm, salt=salt)
+    return fitted
 
 
 def _check(sections: list[SongSection]) -> None:
@@ -903,8 +994,22 @@ def _check(sections: list[SongSection]) -> None:
     bars = [int(section["bars"]) for section in sections]
     if any(count not in _BAR_PALETTE for count in bars):
         raise ValueError("bar count left the 2-bar palette")
-    if sum(section["role"] == "drop" for section in sections) < 3:
-        raise ValueError("need at least three drops")
+    drops = sum(section["role"] == "drop" for section in sections)
+    if drops < _DROP_FLOOR:
+        raise ValueError("need at least five drops")
+    body = len(sections) - 2
+    if body > 0 and drops < _drop_target(body):
+        raise ValueError("drop target below minimum")
+    run = 0
+    prev_run_role: str | None = None
+    for section in sections:
+        if section["role"] == prev_run_role:
+            run += 1
+        else:
+            run = 1
+            prev_run_role = section["role"]
+        if run > 2:
+            raise ValueError("role run longer than two stanzas")
     if sum(section["role"] == "breakdown" for section in sections) > 1:
         raise ValueError("more than one breakdown")
     musics = [_music(section["pattern"]) for section in sections]
