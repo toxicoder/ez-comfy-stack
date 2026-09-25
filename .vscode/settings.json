@@ -1,9 +1,9 @@
 {
-  "bazel.buildifierExecutable": "buildifier",
-  "bazel.enableCodeLens": false,
-  "bazel.enableWorkspaceTree": false,
+  "bazel.buildifier.executable": "buildifier",
+  "bazel.codeLens.enable": false,
+  "bazel.commandLine.queriesShareServer": false,
   "bazel.executable": "bazelisk",
-  "bazel.queriesShareServer": false,
+  "bazel.workspaceTree.enable": false,
   "css.lint.unknownAtRules": "ignore",
   "editor.formatOnSave": false,
   "editor.insertSpaces": true,
@@ -15,8 +15,6 @@
     "*.bzl": "starlark",
     "BUILD.bazel": "starlark",
     "MODULE.bazel": "starlark",
-    "WORKSPACE": "starlark",
-    "WORKSPACE.bazel": "starlark",
     "compose*.yml": "dockercompose",
     "docker-compose*.yml": "dockercompose"
   },
@@ -89,6 +87,8 @@
   "git.branchProtection": ["development", "main"],
   "git.branchProtectionPrompt": "alwaysPrompt",
   "git.inputValidationSubjectLength": 72,
+  "js/ts.tsdk.path": "docs-site/node_modules/typescript/lib",
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true,
   "mypy-type-checker.cwd": "${workspaceFolder}",
   "mypy-type-checker.ignorePatterns": [
     "docs-site/**",
@@ -171,13 +171,7 @@
   "tailwindCSS.includeLanguages": {
     "mdx": "html"
   },
-  "typescript.enablePromptUseWorkspaceTsdk": true,
-  "typescript.tsdk": "docs-site/node_modules/typescript/lib",
   "yaml.schemaStore.enable": false,
-  "[bazel]": {
-    "editor.defaultFormatter": "bazelbuild.vscode-bazel",
-    "editor.formatOnSave": true
-  },
   "[css]": {
     "editor.formatOnSave": false
   },
@@ -214,7 +208,7 @@
     "editor.tabSize": 2
   },
   "[starlark]": {
-    "editor.defaultFormatter": "bazelbuild.vscode-bazel",
+    "editor.defaultFormatter": "BazelBuild.vscode-bazel",
     "editor.formatOnSave": true
   },
   "[typescript]": {

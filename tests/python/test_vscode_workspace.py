@@ -352,8 +352,8 @@ def test_settings_hide_generated_trees_and_keep_format_on_save_narrow() -> None:
     missing_ro = [key for key in READONLY_EXTRA if key not in readonly]
     assert missing_ro == [], f"files.readonlyInclude missing: {missing_ro}"
     assert settings.get("editor.formatOnSave") is False
-    assert settings.get("typescript.enablePromptUseWorkspaceTsdk") is True
-    assert settings.get("typescript.tsdk") == "docs-site/node_modules/typescript/lib"
+    assert settings.get("js/ts.tsdk.promptToUseWorkspaceVersion") is True
+    assert settings.get("js/ts.tsdk.path") == "docs-site/node_modules/typescript/lib"
     assert settings.get("mypy-type-checker.cwd") == "${workspaceFolder}"
     assert settings.get("css.lint.unknownAtRules") == "ignore"
     tailwind_langs = settings.get("tailwindCSS.includeLanguages")
@@ -473,9 +473,9 @@ def test_editor_perf_scopes_language_servers() -> None:
     assert settings.get("python.testing.autoTestDiscoverOnSaveEnabled") is False
     assert settings.get("mypy-type-checker.reportingScope") == "file"
     assert settings.get("mypy-type-checker.ignorePatterns") == MYPY_IGNORE_PATTERNS
-    assert settings.get("bazel.queriesShareServer") is False
-    assert settings.get("bazel.enableCodeLens") is False
-    assert settings.get("bazel.enableWorkspaceTree") is False
+    assert settings.get("bazel.commandLine.queriesShareServer") is False
+    assert settings.get("bazel.codeLens.enable") is False
+    assert settings.get("bazel.workspaceTree.enable") is False
     assert settings.get("yaml.schemaStore.enable") is False
     assert settings.get("tailwindCSS.files.exclude") == TAILWIND_FILES_EXCLUDE
     assert settings.get("shellcheck.run") == "onSave"
@@ -566,7 +566,25 @@ def test_devcontainer_mirrors_editor_perf_settings() -> None:
     assert settings.get("python.analysis.diagnosticMode") == "openFilesOnly"
     assert settings.get("python.testing.autoTestDiscoverOnSaveEnabled") is False
     assert settings.get("mypy-type-checker.reportingScope") == "file"
-    assert settings.get("bazel.queriesShareServer") is False
-    assert settings.get("bazel.enableCodeLens") is False
-    assert settings.get("bazel.enableWorkspaceTree") is False
+    assert settings.get("bazel.commandLine.queriesShareServer") is False
+    assert settings.get("bazel.codeLens.enable") is False
+    assert settings.get("bazel.workspaceTree.enable") is False
     assert settings.get("bazel.executable") == "/usr/local/bin/bazelisk"
+
+
+def test_devcontainer_drops_privileges_via_run_args() -> None:
+    """Capability drops live in runArgs; the schema has no capDrop key."""
+    dev = _load_json(DEVCONTAINER)
+    assert isinstance(dev, dict)
+    assert "capDrop" not in dev
+    run_args = dev.get("runArgs")
+    assert isinstance(run_args, list)
+    cap_drops = [a for a in run_args if isinstance(a, str) and a.startswith("--cap-drop=")]
+    assert sorted(cap_drops) == [
+        "--cap-drop=MKNOD",
+        "--cap-drop=NET_ADMIN",
+        "--cap-drop=NET_RAW",
+        "--cap-drop=SYS_ADMIN",
+        "--cap-drop=SYS_MODULE",
+        "--cap-drop=SYS_PTRACE",
+    ]

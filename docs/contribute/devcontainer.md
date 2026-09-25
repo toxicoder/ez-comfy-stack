@@ -112,7 +112,7 @@ Default model stays the xAI catalog so a machine without a local LLM still works
 | Control | What it does |
 | --- | --- |
 | Default bridge | Container is not on the host netns |
-| `capDrop` | Drops `SYS_ADMIN`, `SYS_MODULE`, `SYS_PTRACE`, `NET_ADMIN`, `NET_RAW`, `MKNOD` |
+| `runArgs` `--cap-drop` | Drops `SYS_ADMIN`, `SYS_MODULE`, `SYS_PTRACE`, `NET_ADMIN`, `NET_RAW`, `MKNOD` |
 | `GROK_SANDBOX=devcontainer` | Workspace writes + kernel deny of `docker.sock`, `**/.env`, `**/*.pem`, SSH keys |
 | `shell_environment_policy inherit = "core"` | Child bash does not inherit `XAI_API_KEY` |
 | bubblewrap | Required for Grok `deny` lists on Linux |
