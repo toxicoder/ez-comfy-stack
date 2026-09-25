@@ -21,6 +21,7 @@ from _lab_layout import (
 )
 from _lab_paths import LAB_ROOT, apply_lab_identity, lab_dest, lab_json, write_lab_graph
 from _stamp_app_mode import NODE_MODE_BYPASS, stamp_suite_graph
+from _wire_format import ensure_format_note
 
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
@@ -753,6 +754,11 @@ def build_cover(info: AlbumInfo) -> dict:
     apply_lab_identity(graph, rel)
     prefix = f"albums/{info['artist']}/{info['title']}/cover"
     prompt = info["cover_prompt"]
+    note = (
+        f"## {rel}\n\nAlbum cover for **{info['artist']} — {info['title']}**. "
+        "Occupancy klein — stop ACE-Step / Wan / LTX. Queue this before "
+        f"album-render --art generate. Prefix `{prefix}`.\n"
+    )
     for node in graph["nodes"]:
         ntype = node.get("type")
         if ntype == "EZKleinPromptEnhance":
@@ -767,15 +773,10 @@ def build_cover(info: AlbumInfo) -> dict:
         if ntype == "EmptyFlux2LatentImage":
             node["widgets_values"] = [1024, 1024, 1]
         if ntype == "Note":
-            node["widgets_values"] = [
-                f"## {rel}\n\nAlbum cover for **{info['artist']} — {info['title']}**. "
-                "Occupancy klein — stop ACE-Step / Wan / LTX. Queue this before "
-                "album-render --art generate. Prefix "
-                f"`{prefix}`.\n"
-            ]
+            node["widgets_values"] = [note]
     extra = graph.setdefault("extra", {})
     extra["lab_profile"] = "us-safe-music-cover"
-    extra["lab_note"] = graph["nodes"][-1]["widgets_values"][0] if graph["nodes"] else ""
+    extra["lab_note"] = note
     extra["lab_description"] = f"Album cover still for {info['artist']} / {info['title']}"
     extra["lab_album"] = {
         "artist": info["artist"],
@@ -785,6 +786,7 @@ def build_cover(info: AlbumInfo) -> dict:
         "year": info["year"],
     }
     stamp_suite_graph(graph)
+    ensure_format_note(graph)
     return graph
 
 

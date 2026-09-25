@@ -39,6 +39,7 @@ from ez_image.video_formats import (  # noqa: E402
     load_video_formats,
     resolve_video_canvas,
 )
+from ez_music.albums import album_rel, shipped_albums  # noqa: E402
 
 FORMAT_BLURB = (
     "Format / platform sets pixels (Custom uses Width × Height). "
@@ -137,8 +138,15 @@ def _services_rels(kinds: frozenset[str]) -> frozenset[str]:
     return frozenset(spec.rel for spec in SERVICES if spec.kind in kinds)
 
 
-STILL_SCOPE = KLEIN_GENERIC | _pack3_rels(PACK3_STILL_KINDS) | _services_rels(
-    SERVICES_STILL_KINDS
+ALBUM_COVER_SCOPE = frozenset(
+    album_rel(info["artist_slug"], info["slug"], "cover") for info in shipped_albums()
+)
+
+STILL_SCOPE = (
+    KLEIN_GENERIC
+    | _pack3_rels(PACK3_STILL_KINDS)
+    | _services_rels(SERVICES_STILL_KINDS)
+    | ALBUM_COVER_SCOPE
 )
 VIDEO_SCOPE = VIDEO_GENERIC | _pack3_rels(PACK3_VIDEO_KINDS) | _services_rels(
     SERVICES_VIDEO_KINDS
