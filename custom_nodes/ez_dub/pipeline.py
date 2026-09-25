@@ -182,9 +182,11 @@ CFG_RETRY_BELOW = 0.45
 CFG_SAME_LANG = 0.5
 EXAGGERATION_DEFAULT = 0.5
 CLONE_TEMPERATURE = 0.8
-CLONE_REPETITION_PENALTY = 1.2
+# 1.9 suppresses the T3 token loops that HiFT vocodes as low F0-glide "whale"
+# moans; 1.0 top-p keeps sampling from concentrating on a single looped token.
+CLONE_REPETITION_PENALTY = 1.9
 CLONE_MIN_P = 0.05
-CLONE_TOP_P = 0.95
+CLONE_TOP_P = 1.0
 EXPECTED_WORDS_PER_S = 2.7
 TAIL_SLACK = 1.6
 VOICED_MIN_FRAC = 0.20
