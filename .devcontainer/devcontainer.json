@@ -25,16 +25,14 @@
     "storage": "16gb"
   },
   "init": true,
-  "capDrop": [
-    "SYS_ADMIN",
-    "SYS_MODULE",
-    "SYS_PTRACE",
-    "NET_ADMIN",
-    "NET_RAW",
-    "MKNOD"
-  ],
   "runArgs": [
-    "--add-host=host.docker.internal:host-gateway"
+    "--add-host=host.docker.internal:host-gateway",
+    "--cap-drop=SYS_ADMIN",
+    "--cap-drop=SYS_MODULE",
+    "--cap-drop=SYS_PTRACE",
+    "--cap-drop=NET_ADMIN",
+    "--cap-drop=NET_RAW",
+    "--cap-drop=MKNOD"
   ],
   "mounts": [
     "source=ez-comfy-bazel-disk,target=/home/vscode/.cache/bazel-disk,type=volume",
@@ -60,14 +58,14 @@
       "settings": {
         "terminal.integrated.defaultProfile.linux": "bash",
         "bazel.executable": "/usr/local/bin/bazelisk",
-        "bazel.buildifierExecutable": "/usr/local/bin/buildifier",
+        "bazel.buildifier.executable": "/usr/local/bin/buildifier",
         "python.defaultInterpreterPath": "/home/vscode/.venv/bin/python",
         "python.analysis.diagnosticMode": "openFilesOnly",
         "python.testing.autoTestDiscoverOnSaveEnabled": false,
         "mypy-type-checker.reportingScope": "file",
-        "bazel.queriesShareServer": false,
-        "bazel.enableCodeLens": false,
-        "bazel.enableWorkspaceTree": false
+        "bazel.commandLine.queriesShareServer": false,
+        "bazel.codeLens.enable": false,
+        "bazel.workspaceTree.enable": false
       }
     }
   },
