@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 import pytest
@@ -178,7 +179,7 @@ def test_arrange_drive_fits_the_lyrics_window() -> None:
         assert score.endswith("2 bars]")
         assert "[outro" in score
         drops = sum(1 for line in score.splitlines() if line.startswith("[drop"))
-        assert drops >= 3, plan["form_id"]
+        assert drops >= 5, plan["form_id"]
 
 
 def test_fit_lyrics_window_trims_tail_keeps_structure() -> None:
@@ -186,7 +187,8 @@ def test_fit_lyrics_window_trims_tail_keeps_structure() -> None:
     blocks.append("[drop - heavy warped drop, mono chest-sub, 2 bars]")
     for index in range(90):
         blocks.append(f"[inst - rapid hi-hats, body bass, low-mid bass melody, cell {index}, 2 bars]")
-    blocks.append("[drop - wreck wobble warped drop, low chest-sub, 2 bars]")
+    for index in range(4):
+        blocks.append(f"[drop - wreck wobble drop, low chest-sub, cell {index}, 2 bars]")
     blocks.append("[outro - kick pattern flip, chest-sub, rapid hi-hats, 2 bars]")
     out = arrange._fit_lyrics_window(list(blocks))
     kept = out.split("\n\n")
@@ -194,7 +196,7 @@ def test_fit_lyrics_window_trims_tail_keeps_structure() -> None:
     assert kept[0] == blocks[0]
     assert kept[1] == blocks[1]
     assert kept[-1] == blocks[-1]
-    assert sum(1 for block in kept if block.startswith("[drop")) == 2
+    assert sum(1 for block in kept if block.startswith("[drop")) == 5
     assert len(kept) < len(blocks)
 
 
@@ -249,19 +251,16 @@ def test_fit_sections_to_lyrics_mirrors_block_fit() -> None:
 
 def test_pick_helpers_and_cue_filters() -> None:
     assert arrange._pick_bars("build-up", 6, salt=1, index=3, before_outro=True) == 2
-    saw_same = False
-    saw_other = False
-    for index in range(40):
-        mixed = arrange._mix_int(1, index, 1)
-        first = arrange._BODY_ROLES[mixed % len(arrange._BODY_ROLES)]
-        chosen = arrange._pick_role(1, index, "drop")
-        assert chosen != "drop"
-        if first == "drop":
-            saw_same = True
-        else:
-            saw_other = True
-            assert chosen == first
-    assert saw_same and saw_other
+    for index in range(200):
+        assert arrange._pick_role(7, index, "inst") != "inst"
+    drops_from_inst = sum(
+        arrange._pick_role(7, index, "inst") == "drop" for index in range(200)
+    )
+    assert drops_from_inst >= 130
+    drops_from_build = sum(
+        arrange._pick_role(7, index, "build-up") == "drop" for index in range(200)
+    )
+    assert 60 <= drops_from_build <= 120
     assert arrange._music("fold bass, 8 bars") == "fold bass"
     assert arrange._music("plain cue") == "plain cue"
     assert arrange._blocked("brass fanfare")
@@ -277,7 +276,15 @@ def test_pick_helpers_and_cue_filters() -> None:
         assert "no gap" not in cue
         assert "one-shot phrase" not in cue
         assert any(phrase in cue for phrase in arrange._SPATIAL)
-        if role != "drop":
+        assert any(phrase in cue for phrase in arrange._LAYERS)
+        if role == "drop":
+            weight_pattern = "|".join(arrange._WEIGHTS)
+            warp_pattern = "|".join(arrange._WARPS)
+            match = re.search(
+                rf"\b({weight_pattern}) ({warp_pattern}) drop\b", cue
+            )
+            assert match, cue
+        else:
             assert "drop" not in cue
 
 
@@ -376,18 +383,59 @@ def test_drop_tail_removes_one_stanza() -> None:
     ]
 
 
-def test_ensure_drops_promotes_one_fill_then_stops() -> None:
+def test_drop_target_scales_with_body() -> None:
+    assert arrange._drop_target(0) == 5
+    assert arrange._drop_target(9) == 5
+    assert arrange._drop_target(28) == 10
+    assert arrange._drop_target(43) == 15
+    assert arrange._drop_target(90) == 30
+    assert arrange._drop_target(160) == 30
+
+
+def test_ensure_drops_promotes_fills_to_meet_floor_and_share() -> None:
     sections = [
         _section("build-up", 2, "snare roll, mono chest-sub, rapid hi-hats, a"),
         _section("drop", 2, "heavy warped drop, mono chest-sub, b"),
-        _section("inst", 2, "rapid hi-hats, mono chest-sub, wide mids, c"),
-        _section("inst", 2, "offbeat hats, stacked 808, wide mids, d"),
-        _section("outro", 2, "kick pattern flip, chest-sub, rapid hi-hats, e"),
     ]
-    with pytest.raises(ValueError, match="third drop"):
-        arrange._ensure_drops(sections, salt=4, used=set())
-    assert sections[3]["role"] == "drop"
-    assert sections[3]["bars"] == 2
+    sections.extend(
+        _section(
+            "inst", 2, f"rapid hi-hats, mono chest-sub, wide mids, cell {index}"
+        )
+        for index in range(12)
+    )
+    sections.append(
+        _section("outro", 2, "kick pattern flip, chest-sub, rapid hi-hats, e")
+    )
+    arrange._ensure_drops(sections, salt=4, used=set())
+    roles = [section["role"] for section in sections]
+    drops = sum(role == "drop" for role in roles)
+    body = len(roles) - 2
+    assert drops >= 5
+    assert drops >= arrange._drop_target(body)
+    assert all(section["bars"] == 2 for section in sections)
+    drop_run = 0
+    max_drop_run = 0
+    for role in roles:
+        drop_run = drop_run + 1 if role == "drop" else 0
+        max_drop_run = max(max_drop_run, drop_run)
+    assert max_drop_run <= 2
+    assert len({section["pattern"] for section in sections}) == len(sections)
+
+
+def test_ensure_drops_refuses_without_legal_slots() -> None:
+    sections = [
+        _section("build-up", 2, "snare roll, mono chest-sub, a"),
+        _section("drop", 2, "heavy warped drop, mono chest-sub, b"),
+        _section("inst", 2, "rapid hi-hats, mono chest-sub, c"),
+        _section("drop", 2, "harder wobble drop, mono chest-sub, d"),
+        _section("inst", 2, "offbeat hats, mono chest-sub, e"),
+        _section("drop", 2, "wreck reese drop, mono chest-sub, f"),
+        _section("inst", 2, "ghost snare, mono chest-sub, g"),
+        _section("drop", 2, "full send warped drop, mono chest-sub, h"),
+        _section("outro", 2, "kick pattern flip, chest-sub, i"),
+    ]
+    with pytest.raises(ValueError, match="could not place a drive drop"):
+        arrange._ensure_drops(sections, salt=1, used=set())
 
 
 def _two_bar_bed() -> list[SongSection]:
@@ -397,6 +445,14 @@ def _two_bar_bed() -> list[SongSection]:
         _section("inst", 2, "rapid hi-hats, mono chest-sub, wide mids, c"),
         _section("outro", 2, "kick pattern flip, chest-sub, rapid hi-hats, e"),
     ]
+
+
+def test_bucket_labels_map_duration_bands() -> None:
+    assert arrange._bucket(150) == "short"
+    assert arrange._bucket(209) == "short"
+    assert arrange._bucket(210) == "standard"
+    assert arrange._bucket(359) == "standard"
+    assert arrange._bucket(360) == "long"
 
 
 def test_rare_breakdown_is_one_two_bar_cell() -> None:
@@ -449,18 +505,70 @@ def test_check_rejects_broken_shapes() -> None:
                 ("inst", 2, "rapid hi-hats, body bass, one"),
                 ("drop", 2, "harder warped drop, two"),
                 ("inst", 2, "offbeat hats, fold bass, three"),
+                ("drop", 2, "wreck wobble drop, low chest-sub"),
                 ("outro", 2, "kick pattern flip, chest-sub"),
             ],
-            "three drops",
+            "at least five drops",
         ),
         (
             [
                 ("build-up", 2, "snare roll, mono chest-sub"),
                 ("drop", 2, "heavy warped drop"),
-                ("breakdown", 2, "rapid hi-hats, one"),
-                ("drop", 2, "harder warped drop"),
-                ("breakdown", 2, "offbeat hats, two"),
-                ("drop", 2, "wreck warped drop"),
+                ("inst", 2, "rapid hi-hats, body bass, one"),
+                ("inst", 2, "offbeat hats, fold bass, two"),
+                ("inst", 2, "ghost snare, body bass, three"),
+                ("inst", 2, "triplet hats, fold bass, four"),
+                ("inst", 2, "tight kick, body bass, five"),
+                ("drop", 2, "harder warped drop, two"),
+                ("inst", 2, "offbeat hats, fold bass, six"),
+                ("inst", 2, "ghost snare, body bass, seven"),
+                ("drop", 2, "stacked reese drop, mono chest-sub"),
+                ("inst", 2, "triplet hats, fold bass, eight"),
+                ("inst", 2, "tight kick, body bass, nine"),
+                ("drop", 2, "wreck wobble drop, low chest-sub"),
+                ("inst", 2, "offbeat hats, fold bass, ten"),
+                ("inst", 2, "ghost snare, body bass, eleven"),
+                ("drop", 2, "full send warped drop, chest-sub melody"),
+                ("inst", 2, "triplet hats, fold bass, twelve"),
+                ("inst", 2, "tight kick, body bass, thirteen"),
+                ("outro", 2, "kick pattern flip, chest-sub"),
+            ],
+            "drop target below minimum",
+        ),
+        (
+            [
+                ("build-up", 2, "snare roll, mono chest-sub"),
+                ("drop", 2, "heavy warped drop"),
+                ("inst", 2, "rapid hi-hats, body bass, one"),
+                ("inst", 2, "offbeat hats, fold bass, two"),
+                ("inst", 2, "ghost snare, body bass, three"),
+                ("drop", 2, "harder warped drop, four"),
+                ("inst", 2, "triplet hats, fold bass, five"),
+                ("inst", 2, "tight kick, body bass, six"),
+                ("drop", 2, "stacked reese drop, mono chest-sub"),
+                ("inst", 2, "offbeat hats, fold bass, seven"),
+                ("inst", 2, "ghost snare, body bass, eight"),
+                ("drop", 2, "wreck wobble drop, low chest-sub"),
+                ("inst", 2, "triplet hats, fold bass, nine"),
+                ("inst", 2, "tight kick, body bass, ten"),
+                ("drop", 2, "full send warped drop, chest-sub melody"),
+                ("outro", 2, "kick pattern flip, chest-sub"),
+            ],
+            "role run longer than two",
+        ),
+        (
+            [
+                ("build-up", 2, "snare roll, mono chest-sub"),
+                ("drop", 2, "heavy warped drop"),
+                ("inst", 2, "rapid hi-hats, body bass, one"),
+                ("drop", 2, "harder warped drop, two"),
+                ("breakdown", 2, "rapid hi-hats, three"),
+                ("inst", 2, "offbeat hats, fold bass, four"),
+                ("drop", 2, "stacked reese drop, mono chest-sub"),
+                ("breakdown", 2, "offbeat hats, five"),
+                ("inst", 2, "ghost snare, body bass, six"),
+                ("drop", 2, "wreck wobble drop, low chest-sub"),
+                ("drop", 2, "full send warped drop, chest-sub melody"),
                 ("outro", 2, "kick pattern flip, chest-sub"),
             ],
             "more than one breakdown",
@@ -477,6 +585,10 @@ def test_check_rejects_broken_shapes() -> None:
             ("drop", 2, "same phrase"),
             ("inst", 2, "offbeat hats, fold bass"),
             ("drop", 2, "wreck warped drop, low chest-sub"),
+            ("inst", 2, "ghost snare, body bass, one"),
+            ("drop", 2, "stacked reese drop, mono chest-sub"),
+            ("inst", 2, "triplet hats, fold bass, two"),
+            ("drop", 2, "full send wobble drop, chest-sub melody"),
             ("outro", 2, "kick pattern flip, chest-sub"),
         ]
     )
@@ -490,6 +602,10 @@ def test_check_rejects_broken_shapes() -> None:
             ("drop", 2, "harder wobble warped drop"),
             ("inst", 2, "offbeat hats, fold bass"),
             ("drop", 2, "wreck warped drop, low chest-sub"),
+            ("inst", 2, "ghost snare, body bass, one"),
+            ("drop", 2, "stacked reese drop, mono chest-sub"),
+            ("inst", 2, "triplet hats, fold bass, two"),
+            ("drop", 2, "full send wobble drop, chest-sub melody"),
             ("outro", 2, "kick pattern flip, chest-sub"),
         ]
     )
@@ -503,6 +619,10 @@ def test_check_rejects_broken_shapes() -> None:
             ("drop", 2, "harder wobble warped drop"),
             ("inst", 2, "offbeat hats, fold bass"),
             ("drop", 2, "wreck warped drop, low chest-sub"),
+            ("inst", 2, "ghost snare, body bass, one"),
+            ("drop", 2, "stacked reese drop, mono chest-sub"),
+            ("inst", 2, "triplet hats, fold bass, two"),
+            ("drop", 2, "full send wobble drop, chest-sub melody"),
             ("outro", 2, "kick pattern flip, chest-sub"),
         ]
     )

@@ -3384,14 +3384,16 @@ def mix_production() -> list[dict[str, Any]]:
             "drive_lock",
             "Drive-through instrumental lock",
             "808, original composition, heavy chest bass, bass boosted, "
-            "wide low-mid layers, fast switch-ups",
+            "wide low-mid layers, fast switch-ups, "
+            "deep 3D spatial low-mid, stacked 808 layers",
             "Lock a live bass-set mix so the take stays instrumental, original, and chest-heavy",
         ),
         (
             "drive_treat",
             "Drive-through DJ-shout lock",
             "808, original composition, heavy chest bass, bass boosted, "
-            "wide low-mid layers, fast switch-ups",
+            "wide low-mid layers, fast switch-ups, "
+            "deep 3D spatial low-mid, stacked 808 layers",
             "Lock a live bass-set mix so a sparse DJ shout can sit without a rap verse",
         ),
     ]

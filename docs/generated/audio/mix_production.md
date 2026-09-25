@@ -42,8 +42,8 @@ Operator playbook: [Audio Rack](../../create/audio-rack.md).
 | `mix_no_master_toy` | Clean master | clean master | vocal, instrumental, podcast | — |
 | `mix_podcast_duck` | Speech duck | ducked under speech | instrumental, podcast | — |
 | `mix_sting_bright` | Bright sting | bright sting mix | vocal, instrumental, podcast | — |
-| `mix_drive_lock` | Drive-through instrumental lock | 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups | vocal, instrumental | — |
-| `mix_drive_treat` | Drive-through DJ-shout lock | 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups | vocal, instrumental | — |
+| `mix_drive_lock` | Drive-through instrumental lock | 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers | vocal, instrumental | — |
+| `mix_drive_treat` | Drive-through DJ-shout lock | 808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers | vocal, instrumental | — |
 | `mix_fill_00` | Mix color 1 | mix color 1 | vocal, instrumental, podcast | — |
 | `mix_fill_01` | Mix color 2 | mix color 2 | vocal, instrumental, podcast | — |
 | `mix_fill_02` | Mix color 3 | mix color 3 | vocal, instrumental, podcast | — |
