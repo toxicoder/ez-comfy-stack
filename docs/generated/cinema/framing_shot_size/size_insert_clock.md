@@ -1,6 +1,6 @@
 ---
 title: "Clock Cutaway"
-description: "Cinema Rack illustration — Clock Cutaway."
+description: "Cinema Rack illustration - Clock Cutaway."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

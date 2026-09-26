@@ -1,6 +1,6 @@
 ---
 title: "Ring Insert"
-description: "Cinema Rack illustration — Ring Insert."
+description: "Cinema Rack illustration - Ring Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

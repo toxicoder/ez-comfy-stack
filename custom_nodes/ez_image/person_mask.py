@@ -122,7 +122,7 @@ def _download(url: str, dest: str) -> bool:
     try:
         with urlopen(url, timeout=DOWNLOAD_TIMEOUT_S) as response:  # noqa: S310
             payload = response.read()
-    except Exception:  # noqa: BLE001 — offline / blocked
+    except Exception:  # noqa: BLE001 - offline / blocked
         return False
     if not payload:
         return False
@@ -165,7 +165,7 @@ def _deeplab_tools() -> tuple[Any, Any, Any] | None:
             DeepLabV3_ResNet50_Weights,
             deeplabv3_resnet50,
         )
-    except Exception:  # noqa: BLE001 — hermetic tests / CPU dev venv
+    except Exception:  # noqa: BLE001 - hermetic tests / CPU dev venv
         return None
     return torch, deeplabv3_resnet50, DeepLabV3_ResNet50_Weights
 
@@ -208,7 +208,7 @@ def load_segmenter() -> Any:
             model.load_state_dict(state)
         else:
             model = factory(weights=weights_enum.COCO_WITH_VOC_LABELS_V1)
-    except Exception:  # noqa: BLE001 — bad file or download refused
+    except Exception:  # noqa: BLE001 - bad file or download refused
         return None
     eval_fn = getattr(model, "eval", None)
     if callable(eval_fn):
@@ -224,7 +224,7 @@ def _try_torch() -> Any:
     """
     try:
         import torch
-    except Exception:  # noqa: BLE001 — hermetic tests
+    except Exception:  # noqa: BLE001 - hermetic tests
         return None
     return torch
 
@@ -334,7 +334,7 @@ def run_deeplab(model: Any, image: Any) -> list[list[float]] | None:
                 raw = model(tensor)
         else:
             raw = model(tensor)
-    except Exception:  # noqa: BLE001 — fail-soft
+    except Exception:  # noqa: BLE001 - fail-soft
         return None
     if isinstance(raw, dict):
         raw = raw.get("out")
@@ -407,7 +407,7 @@ def _resize_mask(mask: list[list[float]], height: int, width: int) -> list[list[
 
 
 def _fit_hwc(frame: list[Any], height: int, width: int) -> list[Any]:
-    """Nearest-resize one HWC frame to ``height``×``width``.
+    """Nearest-resize one HWC frame to ``height``x``width``.
 
     Args:
         frame: Source frame.
@@ -605,7 +605,7 @@ def reinsert_people(
     mask_fn = segment if segment is not None else segment_people
     try:
         mask = mask_fn(source)
-    except Exception:  # noqa: BLE001 — fail-soft to the cubic plate
+    except Exception:  # noqa: BLE001 - fail-soft to the cubic plate
         return plate, REASON_MISSING
     if not mask:
         return plate, REASON_MISSING

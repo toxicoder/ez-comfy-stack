@@ -35,7 +35,7 @@ CONTEXT_SYSTEM_ADDENDUM = (
     "The user message may contain a Context block (bible, logline, research, "
     "or episode script). That is supporting context. Rewrite the operator "
     "prompt (or tags/lyrics) so it stays consistent with Context. Do not dump "
-    "Context verbatim. On I2V, FLF, and VACE the start frame owns look — do "
+    "Context verbatim. On I2V, FLF, and VACE the start frame owns look - do "
     "not restate look, clothing, or architecture from Context."
 )
 _WEAVE_BY_FLAVOR = {
@@ -212,8 +212,8 @@ def with_cinema_system(system: str, system_name: str = "", mode: str = "") -> st
 
     Args:
         system: Family system prompt.
-        system_name: Prompt file stem (``klein_t2i``, ``ace_tags``, …).
-        mode: Optional node mode (``i2v``, ``iclora``, …).
+        system_name: Prompt file stem (``klein_t2i``, ``ace_tags``, ...).
+        mode: Optional node mode (``i2v``, ``iclora``, ...).
 
     Returns:
         System text. Unchanged for ACE stems or when the addendum is empty.
@@ -231,8 +231,8 @@ def with_audio_system(system: str, system_name: str = "", mode: str = "") -> str
 
     Args:
         system: Family system prompt.
-        system_name: Prompt file stem (``ace_tags``, ``klein_t2i``, …).
-        mode: Optional node mode (``vocal``, ``instrumental``, …).
+        system_name: Prompt file stem (``ace_tags``, ``klein_t2i``, ...).
+        mode: Optional node mode (``vocal``, ``instrumental``, ...).
 
     Returns:
         System text. Unchanged for visual stems or when the addendum is empty.

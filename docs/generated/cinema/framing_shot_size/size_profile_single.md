@@ -1,6 +1,6 @@
 ---
 title: "Profile Single"
-description: "Cinema Rack illustration — Profile Single."
+description: "Cinema Rack illustration - Profile Single."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

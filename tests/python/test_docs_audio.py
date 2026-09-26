@@ -27,11 +27,11 @@ def _load() -> Any:
 def test_generate_audio_docs_writes_axis_pages(tmp_path: Path) -> None:
     mod = _load()
     assert mod._cell("a | b", 20) == "a \\| b"
-    assert "…" in mod._cell("x" * 200, 20)
+    assert "..." in mod._cell("x" * 200, 20)
     assert mod._flags({"vocal_ok": True, "instrumental_ok": False, "podcast_ok": True}) == (
         "vocal, podcast"
     )
-    assert mod._flags({"vocal_ok": False, "instrumental_ok": False, "podcast_ok": False}) == "—"
+    assert mod._flags({"vocal_ok": False, "instrumental_ok": False, "podcast_ok": False}) == "-"
     original_out = mod.OUT
     original_root = mod.ROOT
     try:

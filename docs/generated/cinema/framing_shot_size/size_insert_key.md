@@ -1,6 +1,6 @@
 ---
 title: "Key Insert"
-description: "Cinema Rack illustration — Key Insert."
+description: "Cinema Rack illustration - Key Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

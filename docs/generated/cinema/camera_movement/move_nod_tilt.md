@@ -1,6 +1,6 @@
 ---
 title: "Nod tilt"
-description: "Cinema Rack illustration — Nod tilt."
+description: "Cinema Rack illustration - Nod tilt."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

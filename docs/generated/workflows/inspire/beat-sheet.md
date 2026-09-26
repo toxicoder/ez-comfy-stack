@@ -1,6 +1,6 @@
 ---
 title: "inspire/beat-sheet"
-description: "Script desk: logline, audio policy, 18 shot cards → shot-sheet YAML"
+description: "Script desk: logline, audio policy, 18 shot cards -> shot-sheet YAML"
 tags: [workflows, generated, comfyui, inspire]
 ---
 
@@ -29,9 +29,9 @@ Occupancy **none**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fam
 ```text
 ## inspire/beat-sheet
 
-Script desk — 6 beats × enter / traverse / exit. Occupancy: none — stop nothing GPU.
+Script desk - 6 beats x enter / traverse / exit. Occupancy: none - stop nothing GPU.
 
-This graph does not print video. Fill Logline, Script, Audio policy, Score — those desk
+This graph does not print video. Fill Logline, Script, Audio policy, Score - those desk
 fields are packed into Context Join and condition every card rewrite. Then fill the 18 cards
 (`action | camera | world SFX | dialogue`). Audio policy also feeds LTX audio notes.
 Write YAML on the host:
@@ -50,7 +50,7 @@ Shot-card keys (defaults fail-closed):
   score: none | acestep-instrumental
   clay: skip | required
   audio_lock: none | a2v
-  camera: dolly in | tracking | fixed camera | …
+  camera: dolly in | tracking | fixed camera | ...
 
 Shot 1 of beat 1 load_from: identity. Later shots load_from: <prev_prefix>_last.
 
@@ -133,9 +133,9 @@ flowchart TB
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
 
-### `Note` — Note
+### `Note` - Note
 
 On-canvas operator note (not executed).
 
@@ -151,14 +151,14 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## inspire/beat-sheet Script desk — 6 beats × enter / traverse / exit. Occupancy: none — stop nothing GPU. This graph does not print video. Fill Logline, Script, Audio policy, Score — those desk fiel…`
+**This graph:** `## inspire/beat-sheet Script desk - 6 beats x enter / traverse / exit. Occupancy: none - stop nothing GPU. This graph does not print video. Fill Logline, Script, Audio policy, Score - those desk fiel...`
 
 ```text
 ## inspire/beat-sheet
 
-Script desk — 6 beats × enter / traverse / exit. Occupancy: none — stop nothing GPU.
+Script desk - 6 beats x enter / traverse / exit. Occupancy: none - stop nothing GPU.
 
-This graph does not print video. Fill Logline, Script, Audio policy, Score — those desk
+This graph does not print video. Fill Logline, Script, Audio policy, Score - those desk
 fields are packed into Context Join and condition every card rewrite. Then fill the 18 cards
 (`action | camera | world SFX | dialogue`). Audio policy also feeds LTX audio notes.
 Write YAML on the host:
@@ -177,7 +177,7 @@ Shot-card keys (defaults fail-closed):
   score: none | acestep-instrumental
   clay: skip | required
   audio_lock: none | a2v
-  camera: dolly in | tracking | fixed camera | …
+  camera: dolly in | tracking | fixed camera | ...
 
 Shot 1 of beat 1 load_from: identity. Later shots load_from: <prev_prefix>_last.
 
@@ -185,7 +185,7 @@ Do not type a 30/60/90 s denoise. One LTX print is 5.00 s (121 frames = 1+8n @ 2
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 ```
 
-### `EZSamplePrompt` — Sample Prompt
+### `EZSamplePrompt` - Sample Prompt
 
 STRING source with a sample-prompt combo plus Custom textarea.
 
@@ -223,7 +223,7 @@ Catalog id (inspire/prompt-forge).
 
 **This graph:** `inspire/beat-sheet`
 
-### `PrimitiveNode` — Primitive
+### `PrimitiveNode` - Primitive
 
 A typed constant (string or float) with seed-style control.
 
@@ -248,24 +248,24 @@ The constant.
 | Script | `Spoken and visual beats. Words are cheap; prints are not.` |
 | Audio policy | `world-only` |
 | Score | `none` |
-| Beat 1 enter | `enter beat 1 — action \| camera \| world SFX \| dialogue` |
-| Beat 1 traverse | `traverse beat 1 — action \| camera \| world SFX \| dialogue` |
-| Beat 1 exit | `exit beat 1 — action \| camera \| world SFX \| dialogue` |
-| Beat 2 enter | `enter beat 2 — action \| camera \| world SFX \| dialogue` |
-| Beat 2 traverse | `traverse beat 2 — action \| camera \| world SFX \| dialogue` |
-| Beat 2 exit | `exit beat 2 — action \| camera \| world SFX \| dialogue` |
-| Beat 3 enter | `enter beat 3 — action \| camera \| world SFX \| dialogue` |
-| Beat 3 traverse | `traverse beat 3 — action \| camera \| world SFX \| dialogue` |
-| Beat 3 exit | `exit beat 3 — action \| camera \| world SFX \| dialogue` |
-| Beat 4 enter | `enter beat 4 — action \| camera \| world SFX \| dialogue` |
-| Beat 4 traverse | `traverse beat 4 — action \| camera \| world SFX \| dialogue` |
-| Beat 4 exit | `exit beat 4 — action \| camera \| world SFX \| dialogue` |
-| Beat 5 enter | `enter beat 5 — action \| camera \| world SFX \| dialogue` |
-| Beat 5 traverse | `traverse beat 5 — action \| camera \| world SFX \| dialogue` |
-| Beat 5 exit | `exit beat 5 — action \| camera \| world SFX \| dialogue` |
-| Beat 6 enter | `enter beat 6 — action \| camera \| world SFX \| dialogue` |
-| Beat 6 traverse | `traverse beat 6 — action \| camera \| world SFX \| dialogue` |
-| Beat 6 exit | `exit beat 6 — action \| camera \| world SFX \| dialogue` |
+| Beat 1 enter | `enter beat 1 - action \| camera \| world SFX \| dialogue` |
+| Beat 1 traverse | `traverse beat 1 - action \| camera \| world SFX \| dialogue` |
+| Beat 1 exit | `exit beat 1 - action \| camera \| world SFX \| dialogue` |
+| Beat 2 enter | `enter beat 2 - action \| camera \| world SFX \| dialogue` |
+| Beat 2 traverse | `traverse beat 2 - action \| camera \| world SFX \| dialogue` |
+| Beat 2 exit | `exit beat 2 - action \| camera \| world SFX \| dialogue` |
+| Beat 3 enter | `enter beat 3 - action \| camera \| world SFX \| dialogue` |
+| Beat 3 traverse | `traverse beat 3 - action \| camera \| world SFX \| dialogue` |
+| Beat 3 exit | `exit beat 3 - action \| camera \| world SFX \| dialogue` |
+| Beat 4 enter | `enter beat 4 - action \| camera \| world SFX \| dialogue` |
+| Beat 4 traverse | `traverse beat 4 - action \| camera \| world SFX \| dialogue` |
+| Beat 4 exit | `exit beat 4 - action \| camera \| world SFX \| dialogue` |
+| Beat 5 enter | `enter beat 5 - action \| camera \| world SFX \| dialogue` |
+| Beat 5 traverse | `traverse beat 5 - action \| camera \| world SFX \| dialogue` |
+| Beat 5 exit | `exit beat 5 - action \| camera \| world SFX \| dialogue` |
+| Beat 6 enter | `enter beat 6 - action \| camera \| world SFX \| dialogue` |
+| Beat 6 traverse | `traverse beat 6 - action \| camera \| world SFX \| dialogue` |
+| Beat 6 exit | `exit beat 6 - action \| camera \| world SFX \| dialogue` |
 
 #### `control_after_generate`
 
@@ -286,7 +286,7 @@ Whether the primitive mutates after Queue.
 | `decrement` | Subtract 1 after Queue. |
 | `randomize` | Draw a new seed after Queue. Exploration only. |
 
-### `EZContextJoin` — Context Join
+### `EZContextJoin` - Context Join
 
 Pack labeled desk fields into one context STRING for rewriter nodes.
 
@@ -338,7 +338,7 @@ Label for field D.
 
 **This graph:** `Score`
 
-### `EZLTXPromptEnhance` — LTX Prompt Enhance
+### `EZLTXPromptEnhance` - LTX Prompt Enhance
 
 Rewrite a lazy prompt for LTX-2.5 (present-tense paragraph, audio interleaved).
 
@@ -370,24 +370,24 @@ Lazy sentence or authored LTX paragraph.
 
 | Instance | Value |
 | --- | --- |
-| Beat 1 enter LTX enhance | `enter beat 1 — action \| camera \| world SFX \| dialogue` |
-| Beat 1 traverse LTX enhance | `traverse beat 1 — action \| camera \| world SFX \| dialogue` |
-| Beat 1 exit LTX enhance | `exit beat 1 — action \| camera \| world SFX \| dialogue` |
-| Beat 2 enter LTX enhance | `enter beat 2 — action \| camera \| world SFX \| dialogue` |
-| Beat 2 traverse LTX enhance | `traverse beat 2 — action \| camera \| world SFX \| dialogue` |
-| Beat 2 exit LTX enhance | `exit beat 2 — action \| camera \| world SFX \| dialogue` |
-| Beat 3 enter LTX enhance | `enter beat 3 — action \| camera \| world SFX \| dialogue` |
-| Beat 3 traverse LTX enhance | `traverse beat 3 — action \| camera \| world SFX \| dialogue` |
-| Beat 3 exit LTX enhance | `exit beat 3 — action \| camera \| world SFX \| dialogue` |
-| Beat 4 enter LTX enhance | `enter beat 4 — action \| camera \| world SFX \| dialogue` |
-| Beat 4 traverse LTX enhance | `traverse beat 4 — action \| camera \| world SFX \| dialogue` |
-| Beat 4 exit LTX enhance | `exit beat 4 — action \| camera \| world SFX \| dialogue` |
-| Beat 5 enter LTX enhance | `enter beat 5 — action \| camera \| world SFX \| dialogue` |
-| Beat 5 traverse LTX enhance | `traverse beat 5 — action \| camera \| world SFX \| dialogue` |
-| Beat 5 exit LTX enhance | `exit beat 5 — action \| camera \| world SFX \| dialogue` |
-| Beat 6 enter LTX enhance | `enter beat 6 — action \| camera \| world SFX \| dialogue` |
-| Beat 6 traverse LTX enhance | `traverse beat 6 — action \| camera \| world SFX \| dialogue` |
-| Beat 6 exit LTX enhance | `exit beat 6 — action \| camera \| world SFX \| dialogue` |
+| Beat 1 enter LTX enhance | `enter beat 1 - action \| camera \| world SFX \| dialogue` |
+| Beat 1 traverse LTX enhance | `traverse beat 1 - action \| camera \| world SFX \| dialogue` |
+| Beat 1 exit LTX enhance | `exit beat 1 - action \| camera \| world SFX \| dialogue` |
+| Beat 2 enter LTX enhance | `enter beat 2 - action \| camera \| world SFX \| dialogue` |
+| Beat 2 traverse LTX enhance | `traverse beat 2 - action \| camera \| world SFX \| dialogue` |
+| Beat 2 exit LTX enhance | `exit beat 2 - action \| camera \| world SFX \| dialogue` |
+| Beat 3 enter LTX enhance | `enter beat 3 - action \| camera \| world SFX \| dialogue` |
+| Beat 3 traverse LTX enhance | `traverse beat 3 - action \| camera \| world SFX \| dialogue` |
+| Beat 3 exit LTX enhance | `exit beat 3 - action \| camera \| world SFX \| dialogue` |
+| Beat 4 enter LTX enhance | `enter beat 4 - action \| camera \| world SFX \| dialogue` |
+| Beat 4 traverse LTX enhance | `traverse beat 4 - action \| camera \| world SFX \| dialogue` |
+| Beat 4 exit LTX enhance | `exit beat 4 - action \| camera \| world SFX \| dialogue` |
+| Beat 5 enter LTX enhance | `enter beat 5 - action \| camera \| world SFX \| dialogue` |
+| Beat 5 traverse LTX enhance | `traverse beat 5 - action \| camera \| world SFX \| dialogue` |
+| Beat 5 exit LTX enhance | `exit beat 5 - action \| camera \| world SFX \| dialogue` |
+| Beat 6 enter LTX enhance | `enter beat 6 - action \| camera \| world SFX \| dialogue` |
+| Beat 6 traverse LTX enhance | `traverse beat 6 - action \| camera \| world SFX \| dialogue` |
+| Beat 6 exit LTX enhance | `exit beat 6 - action \| camera \| world SFX \| dialogue` |
 
 #### `enhance`
 
@@ -423,7 +423,7 @@ Type `STRING`. Range / default: 8 seconds, 24 fps.
 
 Duration hint.
 
-**How it affects generation:** Does not set 193 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
+**How it affects generation:** Does not set 193 frames - LTXVImgToVideo does. Film printers stay 5 seconds / 121.
 
 **This graph (all 18 instances):** `5 seconds, 24 fps`
 
@@ -761,7 +761,7 @@ Sample-catalog id.
 
 **This graph (all 18 instances):** `inspire/beat-sheet`
 
-### `EZQuality` — Quality
+### `EZQuality` - Quality
 
 Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
@@ -796,7 +796,7 @@ custom freezes last overlay; lab restores graph defaults.
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
-### `EZModelCheck` — Check models
+### `EZModelCheck` - Check models
 
 Manual disk check for occupancy + Quality weights. Queue does not run this node.
 

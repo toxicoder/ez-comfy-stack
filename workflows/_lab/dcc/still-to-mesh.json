@@ -25,7 +25,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "## dcc/still-to-mesh\n\nStill pack plate \u2192 native TRELLIS.2 INT8 mesh (Comfy core nodes). Occupancy: **trellis**.\n\n```bash\n./scripts/manage.sh download-3d --tier trellis2\n./scripts/manage.sh occupancy enter trellis --yes\n```\n\nEZDCCLoadStillPack slug ``go-see`` plate ``mug`` \u2192 OccupancyGate \u2192 EZUnloadModels \u2192 TRELLIS.2 INT8. Save under ``assets/objects/_lab-mug/`` (output tree, never MODELS_DIR). Do not mint an Asset Bible row from this graph.\n\nNo Preview3D / Load3D / Save3D types in-tree \u2014 inspect the GLB with core Load 3D / Preview 3D after Queue. Native INT8 only.\n"
+        "## dcc/still-to-mesh\n\nStill pack plate -> native TRELLIS.2 INT8 mesh (Comfy core nodes). Occupancy: **trellis**.\n\n```bash\n./scripts/manage.sh download-3d --tier trellis2\n./scripts/manage.sh occupancy enter trellis --yes\n```\n\nEZDCCLoadStillPack slug ``go-see`` plate ``mug`` -> OccupancyGate -> EZUnloadModels -> TRELLIS.2 INT8. Save under ``assets/objects/_lab-mug/`` (output tree, never MODELS_DIR). Do not mint an Asset Bible row from this graph.\n\nNo Preview3D / Load3D / Save3D types in-tree - inspect the GLB with core Load 3D / Preview 3D after Queue. Native INT8 only.\n"
       ],
       "title": "Operator note"
     },
@@ -1493,7 +1493,7 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## dcc/still-to-mesh\n\nStill pack plate \u2192 native TRELLIS.2 INT8 mesh (Comfy core nodes). Occupancy: **trellis**.\n\n```bash\n./scripts/manage.sh download-3d --tier trellis2\n./scripts/manage.sh occupancy enter trellis --yes\n```\n\nEZDCCLoadStillPack slug ``go-see`` plate ``mug`` \u2192 OccupancyGate \u2192 EZUnloadModels \u2192 TRELLIS.2 INT8. Save under ``assets/objects/_lab-mug/`` (output tree, never MODELS_DIR). Do not mint an Asset Bible row from this graph.\n\nNo Preview3D / Load3D / Save3D types in-tree \u2014 inspect the GLB with core Load 3D / Preview 3D after Queue. Native INT8 only.\n",
+    "lab_note": "## dcc/still-to-mesh\n\nStill pack plate -> native TRELLIS.2 INT8 mesh (Comfy core nodes). Occupancy: **trellis**.\n\n```bash\n./scripts/manage.sh download-3d --tier trellis2\n./scripts/manage.sh occupancy enter trellis --yes\n```\n\nEZDCCLoadStillPack slug ``go-see`` plate ``mug`` -> OccupancyGate -> EZUnloadModels -> TRELLIS.2 INT8. Save under ``assets/objects/_lab-mug/`` (output tree, never MODELS_DIR). Do not mint an Asset Bible row from this graph.\n\nNo Preview3D / Load3D / Save3D types in-tree - inspect the GLB with core Load 3D / Preview 3D after Queue. Native INT8 only.\n",
     "lab_profile": "dcc/still-to-mesh",
     "lab_description": "EZDCCLoadStillPack mug plate to native TRELLIS.2 INT8. Occupancy trellis.",
     "lab_trellis": {
@@ -1518,7 +1518,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
           }
         ],
         [

@@ -73,7 +73,7 @@ teardown() {
 }
 
 @test "blender-install without apt-get refuses unofficial tarball path" {
-  # PATH must not include /bin: on Ubuntu 24.04 /bin → /usr/bin, so apt-get
+  # PATH must not include /bin: on Ubuntu 24.04 /bin -> /usr/bin, so apt-get
   # is found and this test would sudo apt-get install blender on CI.
   export PATH="${TEST_TMP_DIR}/empty:${TEST_TMP_DIR}/core-tools"
   hash -r

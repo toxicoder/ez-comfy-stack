@@ -60,7 +60,7 @@ WF = ROOT / "workflows"
 SHORTS = WF / "shorts"
 
 PREVIEW_BULLET = (
-    "After Queue, click **Save video (MP4) — open node for preview** for an inline "
+    "After Queue, click **Save video (MP4) - open node for preview** for an inline "
     "preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` "
     "(container `/outputs`). Save frames PNG is secondary."
 )
@@ -71,7 +71,7 @@ LTX_CANVAS_PORTRAIT = (
     "LTX canvas 768x1280 (width/height must be divisible by 32; 720 and 1080 are invalid)."
 )
 GIF_PREVIEW_BULLET = (
-    "After Queue, click **Infinite loop (ping-pong) — open for preview** for an "
+    "After Queue, click **Infinite loop (ping-pong) - open for preview** for an "
     "inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_gif_loop_*.gif`."
 )
 
@@ -178,7 +178,7 @@ def _ensure_preview_line(text: str, *, gif: bool = False) -> str:
 
 
 def wire_ltx_audio(graph: dict) -> dict:
-    """Attach LTXVAudioVAEDecode → VHS.audio if missing."""
+    """Attach LTXVAudioVAEDecode -> VHS.audio if missing."""
     if any(n.get("type") == "LTXVAudioVAEDecode" for n in graph["nodes"]):
         # Still ensure VHS.audio is linked
         vhs = _node(graph, "VHS_VideoCombine")
@@ -268,9 +268,9 @@ def polish_video_graph(graph: dict, *, gif: bool = False) -> dict:
             if isinstance(wv, dict):
                 wv["save_output"] = True
             if gif:
-                n["title"] = "Infinite loop (ping-pong) — open for preview"
+                n["title"] = "Infinite loop (ping-pong) - open for preview"
             else:
-                n["title"] = "Save video (MP4) — open node for preview"
+                n["title"] = "Save video (MP4) - open node for preview"
         if n.get("type") == "SaveImage":
             title = n.get("title") or ""
             if "last" in title.lower():
@@ -424,7 +424,7 @@ def build_shot_map_markdown(film: str, label: str, parsed: dict) -> str:
         "Motion+Audio, and prefixes for each of 18 shots. Optional Wan rehearsal:",
         "**motion/silent/still-to-shot**.",
         "",
-        "18 × 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. Last frame of shot N is LoadImage of shot N+1.",
+        "18 x 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. Last frame of shot N is LoadImage of shot N+1.",
         f"Concat: `./scripts/utilities/concat-shots.sh --film {film} --yes`",
         "",
         "Do not Queue a 90s denoise in one graph. US-safe local pack only. No score "
@@ -439,7 +439,7 @@ def build_shot_map_markdown(film: str, label: str, parsed: dict) -> str:
             [
                 f"### b{s['beat']} s{s['shot']} `{p}`",
                 f"- LoadImage: `{s['load_from']}`",
-                f"- VHS LTX: `{p}_ltx_video` · last: `{p}_last` · optional Wan: `{p}_wan_video`",
+                f"- VHS LTX: `{p}_ltx_video` - last: `{p}_last` - optional Wan: `{p}_wan_video`",
                 f"- Motion: {s['motion']}",
                 f"- Audio: {s['audio']}",
                 "",
@@ -454,12 +454,12 @@ def build_film_operator_note(stem: str, film: str, slug: str, label: str) -> str
 {LTX_CANVAS_LANDSCAPE}
 
 Unified 90s film graph ({label}): Klein identity still + LTX 5.00s AV shot printer + shot map.
-Models: Klein 4B distilled FP8 (identity) · LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).
-LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
+Models: Klein 4B distilled FP8 (identity) - LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).
+LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
 
 {PREVIEW_BULLET}
 
-1. Leave **Shot print (LTX)** bypassed (Ctrl+B). Queue **Identity (Klein)** → `ez_{slug}_identity_*.png`.
+1. Leave **Shot print (LTX)** bypassed (Ctrl+B). Queue **Identity (Klein)** -> `ez_{slug}_identity_*.png`.
 2. Bypass Identity; enable Shot print. Set LoadImage to the identity PNG (shot 1) or previous `*_last`.
 3. Paste Motion + Audio from the on-canvas shot map. Set VHS prefix `ez_{slug}_bN_sM_ltx_video` and last-frame `ez_{slug}_bN_sM_last`. Queue **5.00s** AV.
 4. Repeat 18 times. Optional silent rehearsal: **motion/silent/still-to-shot**.
@@ -509,7 +509,7 @@ def _refresh_film_notes(graph: dict, film: str, slug: str, stem: str, label: str
     for n in graph["nodes"]:
         if n.get("type") == "Note":
             n["widgets_values"] = [op_note]
-            n["title"] = "Operator note — unified 90s film"
+            n["title"] = "Operator note - unified 90s film"
         if n.get("type") == "MarkdownNote":
             n["widgets_values"] = [shot_md]
             n["title"] = f"{film} 90s shot map"
@@ -526,7 +526,7 @@ def _refresh_film_notes(graph: dict, film: str, slug: str, stem: str, label: str
             wire_ltx_audio(graph)
     for n in graph["nodes"]:
         if n.get("type") == "VHS_VideoCombine":
-            n["title"] = "Save video (MP4) — open node for preview"
+            n["title"] = "Save video (MP4) - open node for preview"
             n["widgets_values"]["save_output"] = True
         if n.get("type") == "SaveImage" and "last" not in (n.get("title") or "").lower():
             if "identity" in str(n.get("widgets_values", [""])[0]):
@@ -604,7 +604,7 @@ def build_creator_toolkit() -> None:
     _node(g, "CLIPTextEncode", "Positive")["widgets_values"] = [prompt]
     note = f"""## stills/shorts-still
 
-Vertical Shorts/Reels still (Klein 4B distilled FP8). Default **432×768** (9:16).
+Vertical Shorts/Reels still (Klein 4B distilled FP8). Default **432x768** (9:16).
 Save prefix: `ez_shorts_still`. Feed into **motion/silent/shorts-still-5s** or **motion/av/shorts-still-8s**.
 Widgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.
 """
@@ -622,9 +622,9 @@ Widgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; r
     g["id"] = "motion/silent/shorts-still-5s"
     g["revision"] = 1
     lat = _node(g, "Wan22ImageToVideoLatent")
-    # width, height, length — keep 121 smoke length; vertical size
+    # width, height, length - keep 121 smoke length; vertical size
     vals = list(lat["widgets_values"])
-    # Typical order: width, height, length, batch… inspect
+    # Typical order: width, height, length, batch... inspect
     # Wan22ImageToVideoLatent widgets: [width, height, length, batch]
     if len(vals) >= 3:
         vals[0], vals[1] = 480, 832
@@ -681,7 +681,7 @@ PRIMARY OUTPUT: MP4 via VHS. Prefix `ez_shorts_wan_video`.
 
 {LTX_CANVAS_PORTRAIT}
 
-Vertical AV Shorts I2V (~8 s). LTX-2.5 distilled. Community License — not Apache. $10M cap.
+Vertical AV Shorts I2V (~8 s). LTX-2.5 distilled. Community License - not Apache. $10M cap.
 LoadImage: `ez_shorts_still_*.png`. Prefix `ez_shorts_ltx_video`. World audio muxed into MP4.
 
 {PREVIEW_BULLET}
@@ -702,8 +702,8 @@ Disclose AI-generated media; do not strip provenance; do not distill. No score.
     _node(g, "CLIPTextEncode", "Positive")["widgets_values"] = [prompt]
     note = """## stills/thumbnail
 
-YouTube thumbnail still (Klein 4B). Default 1280×720. Prefix `ez_thumbnail`.
-Keep the subject large and readable at small sizes. Do not burn in titles — add text in your editor.
+YouTube thumbnail still (Klein 4B). Default 1280x720. Prefix `ez_thumbnail`.
+Keep the subject large and readable at small sizes. Do not burn in titles - add text in your editor.
 """
     _set_note(g, note, "Klein 4B YouTube thumbnail 1280x720")
     _dump(lab_json("stills/thumbnail.json"), g)
@@ -727,7 +727,7 @@ Keep the subject large and readable at small sizes. Do not burn in titles — ad
     _set_neg(g, KLEIN_NEG_PHOTO)
     note = """## stills/product-packshot
 
-Clean product / packshot still (Klein 4B). Default 1024×1024. Prefix `ez_packshot`.
+Clean product / packshot still (Klein 4B). Default 1024x1024. Prefix `ez_packshot`.
 Swap the subject in the prompt; keep seamless background and soft studio light.
 """
     _set_note(g, note, "Klein 4B product packshot 1:1")
@@ -780,7 +780,7 @@ Two Klein 4B stills of one mug. SHOT BEFORE is the identity plate; AFTER Klein-e
         neg=KLEIN_NEG_STILL,
         note=f"""## stills/style-lock
 
-Four Klein 4B stills of **one place** from new cameras (Prompt Join lock=view). Type any place in IDENTITY — default placeholder is the lab penthouse. Hidden cards are camera roles. Prefixes `ez_style_01`…`04`. Independent T2I, same seed.
+Four Klein 4B stills of **one place** from new cameras (Prompt Join lock=view). Type any place in IDENTITY - default placeholder is the lab penthouse. Hidden cards are camera roles. Prefixes `ez_style_01`...`04`. Independent T2I, same seed.
 
 Identity-mode enhance is on for the bible (camera-free). Shot cards are not Klein-t2i-enhanced.
 """,
@@ -802,7 +802,7 @@ Identity-mode enhance is on for the bible (camera-free). Shot cards are not Klei
     vhs["widgets_values"]["frame_rate"] = 12
     vhs["widgets_values"]["filename_prefix"] = "ez_bumper"
     vhs["widgets_values"]["save_output"] = True
-    vhs["title"] = "Save video (MP4) — open node for preview"
+    vhs["title"] = "Save video (MP4) - open node for preview"
     for n in g["nodes"]:
         if n.get("type") == "SaveImage":
             n["widgets_values"] = ["ez_bumper_frames"]
@@ -851,7 +851,7 @@ LoadImage: a still or logo plate. Leave ping-pong on for seamless loops.
 
 {LTX_CANVAS_LANDSCAPE}
 
-Ambient B-roll AV plate (~5 s T2V). LTX-2.5 distilled. Community License — not Apache.
+Ambient B-roll AV plate (~5 s T2V). LTX-2.5 distilled. Community License - not Apache.
 Locked camera, world audio muxed into MP4. Prefix `ez_broll_video`.
 
 {PREVIEW_BULLET}
@@ -874,7 +874,7 @@ Disclose AI-generated media. No score.
         shots=board_shots,
         note=f"""## stills/storyboard-6up
 
-Six Klein 4B storyboard frames of **one scene** from new cameras (lock=view). Type any scene in IDENTITY. Prefixes `ez_board_01`…`06`. Independent T2I, same seed. Identity-mode enhance is on for the bible.
+Six Klein 4B storyboard frames of **one scene** from new cameras (lock=view). Type any scene in IDENTITY. Prefixes `ez_board_01`...`06`. Independent T2I, same seed. Identity-mode enhance is on for the bible.
 """,
         description="Klein 4B six-frame storyboard pack, new cameras",
     )
@@ -961,7 +961,7 @@ def _klein_pack(
 ) -> None:
     """Multi-shot Klein pack.
 
-    persist=state: shot 01 T2I, 02–N ReferenceLatent of 01 (same camera).
+    persist=state: shot 01 T2I, 02-N ReferenceLatent of 01 (same camera).
     persist=view: every shot independent T2I with a locked world bible (new camera).
     """
     del cols  # layout is a vertical shot stack, shared loaders
@@ -1426,8 +1426,8 @@ def build_creator_toolkit_v2() -> None:
         ),
         note="""## stills/endcard-cta
 
-YouTube/end-card still (Klein 4B). Default 1280×720. Prefix `ez_endcard`.
-Keep the lower-right quiet — add CTA text in your editor, not in the prompt.
+YouTube/end-card still (Klein 4B). Default 1280x720. Prefix `ez_endcard`.
+Keep the lower-right quiet - add CTA text in your editor, not in the prompt.
 """,
         description="Klein 4B end-card / CTA plate 1280x720",
         size_title="Size 16:9 end card",
@@ -1443,7 +1443,7 @@ Keep the lower-right quiet — add CTA text in your editor, not in the prompt.
         ),
         note="""## stills/quote-bg
 
-Quote-card background (Klein 4B). Default 1024×1024. Prefix `ez_quote_bg`.
+Quote-card background (Klein 4B). Default 1024x1024. Prefix `ez_quote_bg`.
 Keep the center empty of detail; add the quote in your editor.
 """,
         description="Klein 4B quote-card background 1:1",
@@ -1460,7 +1460,7 @@ Keep the center empty of detail; add the quote in your editor.
         ),
         note="""## stills/open-graph
 
-Blog / Open Graph hero (Klein 4B). Default 1216×640. Prefix `ez_og`.
+Blog / Open Graph hero (Klein 4B). Default 1216x640. Prefix `ez_og`.
 Leave space for a title overlay. No burned-in words.
 """,
         description="Klein 4B blog / OG hero ~1.9:1",
@@ -1477,7 +1477,7 @@ Leave space for a title overlay. No burned-in words.
         ),
         note="""## stills/podcast-cover
 
-Podcast / playlist cover (Klein 4B). Default 1024×1024. Prefix `ez_podcast`.
+Podcast / playlist cover (Klein 4B). Default 1024x1024. Prefix `ez_podcast`.
 Swap the props in the prompt. Add show title in your editor.
 """,
         description="Klein 4B podcast cover 1:1",
@@ -1495,7 +1495,7 @@ Swap the props in the prompt. Add show title in your editor.
         ),
         note="""## stills/banner-wide
 
-Channel / LinkedIn banner (Klein 4B). Default 1536×512. Prefix `ez_banner`.
+Channel / LinkedIn banner (Klein 4B). Default 1536x512. Prefix `ez_banner`.
 Keep the upper band simple for a name overlay.
 """,
         description="Klein 4B wide banner ~3:1",
@@ -1511,7 +1511,7 @@ Keep the upper band simple for a name overlay.
         ),
         note="""## stills/instagram-square
 
-Generic Instagram 1:1 still (Klein 4B). Default 1024×1024. Prefix `ez_ig_square`.
+Generic Instagram 1:1 still (Klein 4B). Default 1024x1024. Prefix `ez_ig_square`.
 Edit the prompt for any feed post.
 """,
         description="Klein 4B Instagram 1:1 still",
@@ -1525,7 +1525,7 @@ Edit the prompt for any feed post.
         prompt=KLEIN_HOOK,
         note="""## stills/hook-still
 
-First-frame Shorts hook still (Klein 4B). Default 432×768 (9:16). Prefix `ez_hook_still`.
+First-frame Shorts hook still (Klein 4B). Default 432x768 (9:16). Prefix `ez_hook_still`.
 Feed into **motion/silent/shorts-still-5s** or **motion/av/hook-av**.
 """,
         description="Klein 4B 9:16 Shorts hook still",
@@ -1542,7 +1542,7 @@ Feed into **motion/silent/shorts-still-5s** or **motion/av/hook-av**.
         ),
         note="""## stills/lower-third-bg
 
-Lower-third-safe 16:9 plate (Klein 4B). Default 1280×720. Prefix `ez_lowerthird`.
+Lower-third-safe 16:9 plate (Klein 4B). Default 1280x720. Prefix `ez_lowerthird`.
 Keep the bottom band empty; composite titles later.
 """,
         description="Klein 4B lower-third-safe 16:9 plate",
@@ -1559,7 +1559,7 @@ Keep the bottom band empty; composite titles later.
         ),
         note="""## stills/food-tabletop
 
-Food / tabletop still (Klein 4B). Default 1024×1280 (4:5). Prefix `ez_tabletop`.
+Food / tabletop still (Klein 4B). Default 1024x1280 (4:5). Prefix `ez_tabletop`.
 Swap the dish in the prompt; keep unmarked surfaces.
 """,
         description="Klein 4B food tabletop 4:5",
@@ -1579,8 +1579,8 @@ Swap the dish in the prompt; keep unmarked surfaces.
         ],
         note=f"""## stills/lighting-trio
 
-Same subject under three lights (Klein 4B). Type any subject in IDENTITY. SHOT KEY is the identity plate. Queue the whole graph; 02–03 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.
-Prefixes `ez_light_01`…`03` (key / window / night lamp). Change only the light.
+Same subject under three lights (Klein 4B). Type any subject in IDENTITY. SHOT KEY is the identity plate. Queue the whole graph; 02-03 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.
+Prefixes `ez_light_01`...`03` (key / window / night lamp). Change only the light.
 
 {ENHANCE_NOTE}
 """,
@@ -1606,9 +1606,9 @@ Prefixes `ez_light_01`…`03` (key / window / night lamp). Change only the light
 
 Three-angle Klein identity sheet. Type any character in IDENTITY. Frozen seed 42. Identity-mode enhance is on. Optional style dropdown applies to the bible.
 Prints ez_identity_front / ez_identity_threequarter / ez_identity_profile.
-I2V feeders stay 1280×704. Unload before LTX prints.
+I2V feeders stay 1280x704. Unload before LTX prints.
 
-Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
+Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.
 
 {ENHANCE_NOTE}
 """,
@@ -1630,8 +1630,8 @@ Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
         ],
         note=f"""## stills/time-of-day
 
-Same place at golden hour / dawn / noon / night (Klein 4B). Type any place in IDENTITY. SHOT GOLDEN is the identity plate. Queue the whole graph; 02–04 Klein-edit from 01. Do not bypass GOLDEN on a cold canvas.
-Prefixes `ez_tod_01`…`04`. Change only time of day.
+Same place at golden hour / dawn / noon / night (Klein 4B). Type any place in IDENTITY. SHOT GOLDEN is the identity plate. Queue the whole graph; 02-04 Klein-edit from 01. Do not bypass GOLDEN on a cold canvas.
+Prefixes `ez_tod_01`...`04`. Change only time of day.
 
 {ENHANCE_NOTE}
 """,
@@ -1651,7 +1651,7 @@ Prefixes `ez_tod_01`…`04`. Change only time of day.
         ],
         note=f"""## stills/camera-angles
 
-Wide / medium / close of one subject (Klein 4B, lock=view). Type any subject in IDENTITY. Prefixes `ez_angle_wide`, `ez_angle_med`, `ez_angle_close`. Independent T2I, same seed — new lens and framing, not copies of MEDIUM.
+Wide / medium / close of one subject (Klein 4B, lock=view). Type any subject in IDENTITY. Prefixes `ez_angle_wide`, `ez_angle_med`, `ez_angle_close`. Independent T2I, same seed - new lens and framing, not copies of MEDIUM.
 
 Identity-mode enhance is on for the bible (camera-free).
 """,
@@ -1669,8 +1669,8 @@ Identity-mode enhance is on for the bible (camera-free).
         ],
         note=f"""## stills/color-moods
 
-Four color moods, shared identity (Klein 4B). Type any subject in IDENTITY. SHOT WARM is the identity plate. Queue the whole graph; 02–04 Klein-edit from 01. Do not bypass WARM on a cold canvas.
-Prefixes `ez_mood_01`…`04`. Change only grade / mood.
+Four color moods, shared identity (Klein 4B). Type any subject in IDENTITY. SHOT WARM is the identity plate. Queue the whole graph; 02-04 Klein-edit from 01. Do not bypass WARM on a cold canvas.
+Prefixes `ez_mood_01`...`04`. Change only grade / mood.
 
 {ENHANCE_NOTE}
 """,
@@ -1752,7 +1752,7 @@ LoadImage: a cutout-friendly still.
 
 {LTX_CANVAS_LANDSCAPE}
 
-Weather B-roll AV (~5 s T2V). LTX-2.5 distilled. Community License — not Apache.
+Weather B-roll AV (~5 s T2V). LTX-2.5 distilled. Community License - not Apache.
 Prefix `ez_weather_video`. World audio muxed into MP4.
 
 {PREVIEW_BULLET}
@@ -1774,7 +1774,7 @@ Disclose AI-generated media. No score.
 
 {LTX_CANVAS_LANDSCAPE}
 
-Interior room-tone AV (~5 s T2V). LTX-2.5 distilled. Community License — not Apache.
+Interior room-tone AV (~5 s T2V). LTX-2.5 distilled. Community License - not Apache.
 Prefix `ez_interior_video`.
 
 {PREVIEW_BULLET}
@@ -1792,7 +1792,7 @@ Disclose AI-generated media. No score.
 
 {LTX_CANVAS_LANDSCAPE}
 
-~5 s AV cold-open / hook (LTX-2.5 T2V). Community License — not Apache.
+~5 s AV cold-open / hook (LTX-2.5 T2V). Community License - not Apache.
 Prefix `ez_hook_video`. Pair with **stills/hook-still** if you want I2V instead.
 
 {PREVIEW_BULLET}

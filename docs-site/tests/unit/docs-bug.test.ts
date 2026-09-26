@@ -29,7 +29,7 @@ describe("docsBugHref", () => {
     const href = docsBugHref(report());
     const url = new URL(href);
     expect(url.origin + url.pathname).toBe("https://github.com/toxicoder/ez-comfy-stack/issues/new");
-    expect(url.searchParams.get("title")).toBe("Docs: Update the stack — Pull this docs branch");
+    expect(url.searchParams.get("title")).toBe("Docs: Update the stack - Pull this docs branch");
     const body = url.searchParams.get("body") ?? "";
     expect(body).toContain("operate/update/#pull-this-docs-branch");
     expect(body).toContain("`#pull-this-docs-branch`");

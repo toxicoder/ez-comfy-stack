@@ -41,7 +41,7 @@ cmd_help() {
   echo "Usage: studio-mcp.sh [--stdio] | --list-tools | --call TOOL [JSON]" >&2
   echo "  In-tree studio MCP. No execute_code. No telemetry. No Queue." >&2
   echo "  Clones shipped _lab graphs into live _user/. Optional CPU GGUF." >&2
-  echo "  Does not refuse a GPU session. Does not switch occupancy idle → blender-desk." >&2
+  echo "  Does not refuse a GPU session. Does not switch occupancy idle -> blender-desk." >&2
   echo "  See docs/occupancy.md" >&2
 }
 
@@ -73,7 +73,7 @@ mcp_occupancy_only() {
 
 #######################################
 # Record this PID as mcp_pid without changing occupancy mode.
-# blender occupancy_set_mcp_pid maps idle → blender-desk; studio must not.
+# blender occupancy_set_mcp_pid maps idle -> blender-desk; studio must not.
 # Globals:
 #   COMFY_OUTPUT_DIR
 # Arguments:

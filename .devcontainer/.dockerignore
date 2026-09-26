@@ -1,4 +1,4 @@
-# Whitelist-only context — never send the repo, secrets, or host files.
+# Whitelist-only context - never send the repo, secrets, or host files.
 *
 !Dockerfile
 !grok/

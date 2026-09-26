@@ -1,6 +1,6 @@
 ---
 title: "Arch Frame"
-description: "Cinema Rack illustration — Arch Frame."
+description: "Cinema Rack illustration - Arch Frame."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

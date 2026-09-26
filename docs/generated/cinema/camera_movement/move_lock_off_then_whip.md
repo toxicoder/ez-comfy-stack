@@ -1,6 +1,6 @@
 ---
 title: "Lock then whip"
-description: "Cinema Rack illustration — Lock then whip."
+description: "Cinema Rack illustration - Lock then whip."
 tags: [cinema, prompting, catalog, clip]
 ---
 

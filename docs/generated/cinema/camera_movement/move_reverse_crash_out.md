@@ -1,6 +1,6 @@
 ---
 title: "Crash out"
-description: "Cinema Rack illustration — Crash out."
+description: "Cinema Rack illustration - Crash out."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

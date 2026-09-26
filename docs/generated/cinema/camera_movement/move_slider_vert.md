@@ -1,6 +1,6 @@
 ---
 title: "Vertical slider"
-description: "Cinema Rack illustration — Vertical slider."
+description: "Cinema Rack illustration - Vertical slider."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

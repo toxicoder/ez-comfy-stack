@@ -1,6 +1,6 @@
 ---
 title: "Crushed Headroom"
-description: "Cinema Rack illustration — Crushed Headroom."
+description: "Cinema Rack illustration - Crushed Headroom."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

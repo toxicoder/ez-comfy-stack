@@ -26,7 +26,7 @@ def test_rel_renames_are_unique_short_and_stable() -> None:
     """Every alias is unique, under the stem cap, and idempotent via rel_id."""
     assert REL_RENAMES
     assert len(set(REL_RENAMES)) == len(REL_RENAMES)
-    # Folder moves are many-to-one (cryptic + previous path → job folder).
+    # Folder moves are many-to-one (cryptic + previous path -> job folder).
     assert len(set(REL_RENAMES.values())) <= len(REL_RENAMES)
     stems = stem_renames()
     assert stems

@@ -1,6 +1,6 @@
 ---
 title: "Handheld breathe"
-description: "Cinema Rack illustration — Handheld breathe."
+description: "Cinema Rack illustration - Handheld breathe."
 tags: [cinema, prompting, catalog, clip]
 ---
 

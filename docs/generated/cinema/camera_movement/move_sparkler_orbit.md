@@ -1,6 +1,6 @@
 ---
 title: "Spark-orbit"
-description: "Cinema Rack illustration — Spark-orbit."
+description: "Cinema Rack illustration - Spark-orbit."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

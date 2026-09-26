@@ -447,7 +447,7 @@ def test_ingest_helpers_and_caps(tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     )
     assert "second source" not in capped
     ingest_paste("see ./no-such-notes.md please", fetch_links=False)
-    assert format_status([_rec(title="A", status="ok")]) == "paste: A — ok"
+    assert format_status([_rec(title="A", status="ok")]) == "paste: A - ok"
     monkeypatch.setattr(sys, "path", [p for p in sys.path if Path(p).resolve() != CUSTOM.resolve()])
     _ensure_lab_custom_nodes_path()
     assert Path(sys.path[0]).resolve() == CUSTOM.resolve()

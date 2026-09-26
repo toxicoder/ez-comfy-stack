@@ -521,7 +521,7 @@ def test_finder_create_module_uses_origin_loader(
 class _BackendsProxy(types.ModuleType):
     """Stand-in for ``torch.backends`` ``GenericModule``/``PropModule``.
 
-    Torch ≥ 2.9 replaces ``sys.modules["torch.backends"]`` with a proxy whose
+    Torch >= 2.9 replaces ``sys.modules["torch.backends"]`` with a proxy whose
     attribute lookup delegates to a stored inner module, so the object reached
     by ``torch.backends.cuda`` can differ from the ``sys.modules`` entry.
     """

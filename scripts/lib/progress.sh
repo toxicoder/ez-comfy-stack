@@ -310,7 +310,7 @@ progress_newline() {
 #   $1  Label
 #   $2  Start unix timestamp
 # Outputs:
-#   Newline log (never rewrites — command may also use stderr)
+#   Newline log (never rewrites - command may also use stderr)
 # Returns:
 #   0
 #######################################
@@ -323,7 +323,7 @@ progress_heartbeat() {
   if [[ ${elapsed} -lt 0 ]]; then
     elapsed=0
   fi
-  log "… ${label}  elapsed $(progress_format_elapsed "${elapsed}")  (still running)"
+  log "... ${label}  elapsed $(progress_format_elapsed "${elapsed}")  (still running)"
 }
 
 #######################################
@@ -348,7 +348,7 @@ run_with_heartbeat() {
   fi
   local start_ts hb_pid="" rc=0 interval
   start_ts="$(date +%s)"
-  log "${label}…"
+  log "${label}..."
   interval="$(progress_interval_s)"
   if progress_enabled && [[ ${interval} != "0" && ${interval} != "0.0" ]]; then
     (
@@ -458,7 +458,7 @@ run_ffmpeg_logged() {
   fi
   local start_ts rc=0 interval prog="" fpid="" dur="" now elapsed body tsec
   start_ts="$(date +%s)"
-  log "${label}…"
+  log "${label}..."
   interval="$(progress_interval_s)"
   dur="$(ffmpeg_duration_from_args "$@")"
 

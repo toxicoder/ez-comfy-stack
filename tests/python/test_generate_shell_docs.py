@@ -125,7 +125,7 @@ def test_subsection_nests_in_parent(gen: Any, tmp_path: Path) -> None:
 
 
 def test_preserves_session_vars(gen: Any, tmp_path: Path) -> None:
-    """Session variables stay ``${VAR}`` — never lab placeholders."""
+    """Session variables stay ``${VAR}`` - never lab placeholders."""
     path = _write_script(
         tmp_path,
         "# ## Example\n"

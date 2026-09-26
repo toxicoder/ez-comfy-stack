@@ -288,7 +288,7 @@ def test_download_tiers_page_states_pack_not_quality() -> None:
     assert "pack" in text.lower()
     assert "download-models" in text
     assert "--limit" in text
-    assert "not a quality" in text.lower() or "not “better”" in text or "not a universal" in text.lower()
+    assert "not a quality" in text.lower() or "not a universal" in text.lower()
     assert "vace" in text
     assert "does not include" in text.lower() or "not in `--tier all`" in text or "not in all" in text.lower()
     assert "```ezcmd" in text or "<EzCommand" in text

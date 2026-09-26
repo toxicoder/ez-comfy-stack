@@ -1,6 +1,6 @@
 ---
 title: "Slow tilt up"
-description: "Cinema Rack illustration — Slow tilt up."
+description: "Cinema Rack illustration - Slow tilt up."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

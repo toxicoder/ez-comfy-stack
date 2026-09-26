@@ -1,7 +1,7 @@
 """Wan / LTX clip canvas catalog: Spark-safe aspect and platform presets.
 
 Hermetic stdlib. JSON lives under ``js/video_formats.json`` so the frontend
-can fetch the same file from WEB_DIRECTORY. Length is not in this catalog —
+can fetch the same file from WEB_DIRECTORY. Length is not in this catalog -
 graphs keep authored frame counts (121 smoke, 49 GIF, 120 shot).
 """
 
@@ -118,7 +118,7 @@ class VideoFormatResult:
 
 
 def clamp_video_dim(n: int, *, grid: int, min_dim: int, max_dim: int) -> int:
-    """Snap to ``grid`` and clamp to ``min_dim``…``max_dim``.
+    """Snap to ``grid`` and clamp to ``min_dim``...``max_dim``.
 
     Args:
         n: Requested pixel count.
@@ -149,7 +149,7 @@ def load_families() -> dict[str, FamilySpec]:
     """Load Wan / LTX family rows.
 
     Returns:
-        Family id → spec.
+        Family id -> spec.
 
     Raises:
         ValueError: catalog missing or malformed.
@@ -383,7 +383,7 @@ def _compose_hint(spec: VideoFormatSpec, width: int, height: int) -> str:
     """
     hint = spec.hint.strip()
     if spec.id == CUSTOM_ID:
-        hint = f"Custom clip {width}×{height}"
+        hint = f"Custom clip {width}x{height}"
     lock = spec.lock.strip()
     parts = [part for part in (hint, lock) if part]
     return ". ".join(parts)

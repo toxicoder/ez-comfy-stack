@@ -1,6 +1,6 @@
 ---
 title: "FPV through"
-description: "Cinema Rack illustration — FPV through."
+description: "Cinema Rack illustration - FPV through."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

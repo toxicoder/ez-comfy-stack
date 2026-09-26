@@ -21,7 +21,7 @@ export function mermaidRenderId(reactId: string): string {
  * Renders a ```mermaid fence.
  *
  * `remarkMdxMermaid` (registered in `source.config.ts`) rewrites `mermaid` code fences into
- * `<Mermaid chart="…" />`, so this component only has to draw the diagram.  It re-renders
+ * `<Mermaid chart="..." />`, so this component only has to draw the diagram.  It re-renders
  * when the colour scheme flips so diagrams follow the Voltage theme instead of staying stuck
  * on Mermaid's default palette.
  */

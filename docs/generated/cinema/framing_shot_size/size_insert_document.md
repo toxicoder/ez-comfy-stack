@@ -1,6 +1,6 @@
 ---
 title: "Document Insert"
-description: "Cinema Rack illustration — Document Insert."
+description: "Cinema Rack illustration - Document Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

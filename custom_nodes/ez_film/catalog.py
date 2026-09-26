@@ -103,10 +103,10 @@ FILMS: dict[str, FilmRow] = {
     "last-lane": _row("lastlane", long=True),
     "breakwater": _row("breakwater", long=True),
 }
-"""Shipped film ids → slug, shot count, publish cap, beat map."""
+"""Shipped film ids -> slug, shot count, publish cap, beat map."""
 
 FILM_SLUGS: dict[str, str] = {film: row["slug"] for film, row in FILMS.items()}
-"""Film id → output prefix."""
+"""Film id -> output prefix."""
 FILM_CHOICES: tuple[str, ...] = tuple(FILMS)
 """Ordered film ids for Comfy combo widgets."""
 NINETY_S_FILMS: tuple[str, ...] = tuple(
@@ -132,7 +132,7 @@ def film_row(film: str) -> FilmRow:
     """Return the catalog row for ``film``.
 
     Args:
-        film: Film id (``go-see``, ``tide-table``, …).
+        film: Film id (``go-see``, ``tide-table``, ...).
 
     Returns:
         FilmRow.
@@ -214,7 +214,7 @@ def film_id_for_slug(slug: str) -> str | None:
     """Return film id for an output slug, or None.
 
     Args:
-        slug: Output prefix (``gosee``, ``tidetable``, …).
+        slug: Output prefix (``gosee``, ``tidetable``, ...).
 
     Returns:
         Film id, or None when unknown.

@@ -1,4 +1,4 @@
-"""LTX video VAE spatial alignment (32×). Stdlib only; no Comfy import.
+"""LTX video VAE spatial alignment (32x). Stdlib only; no Comfy import.
 
 The LTX-2.5 video encoder space-to-depth stages require pixel H and W
 divisible by 32. Broadcast 720 and 1080 are not (720/16=45, then the next
@@ -63,7 +63,7 @@ def center_crop_bcthw(
     x: Any,
     multiple: int = SPATIAL_MULTIPLE,
 ) -> Any:
-    """Center-crop the last two axes of a ``B,C,T,H,W`` (or ``…,H,W``) tensor.
+    """Center-crop the last two axes of a ``B,C,T,H,W`` (or ``...,H,W``) tensor.
 
     Never grows a side. If a side is already aligned, or too small to yield a
     positive multiple, that side is left unchanged.

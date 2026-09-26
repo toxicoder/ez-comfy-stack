@@ -289,7 +289,7 @@ reap_apply() {
     [[ -z ${f} ]] && continue
     i=$((i + 1))
     if ((i % 25 == 0)); then
-      log "… reap apply scanned ${i} paths (still running)"
+      log "... reap apply scanned ${i} paths (still running)"
     fi
     class="$(reap_classify_path "${f}")"
     if [[ ${class} == foreign && ${I_FOREIGN} -eq 0 ]]; then

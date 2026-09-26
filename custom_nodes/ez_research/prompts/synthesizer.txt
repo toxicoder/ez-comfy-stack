@@ -8,7 +8,7 @@ Output markdown with these headings, in this order:
 ## Prompt ingredients
 ## Next App
 
-Prompt ingredients: 4–8 concrete visual or audio phrases the artist can paste.
+Prompt ingredients: 4-8 concrete visual or audio phrases the artist can paste.
 Next App: one of prompt-forge-lab-example or klein-still-draft-lab-example (Spark Still).
 
 Do not invent URLs. If sources are empty, say so and still give useful on-box advice.

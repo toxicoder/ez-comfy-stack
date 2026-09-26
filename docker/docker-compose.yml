@@ -5,11 +5,11 @@
 # Source of truth: this file (operator entry via scripts/manage.sh)
 # Regenerate: n/a
 # Safety:
-#   - restart: "no" — never auto-start after host reboot (remote SSH safety)
+#   - restart: "no" - never auto-start after host reboot (remote SSH safety)
 #   - mem_limit / mem_reservation leave host headroom for OS and interactive SSH
 #   - host models at MODELS_DIR; generated media, input, and Comfy user/ at host COMFY_OUTPUT_DIR
 #     (container env COMFY_OUTPUT_DIR=/outputs); Comfy install on named volume only
-#   - gpus: all (exclusive GPU demo — stop other GPU workloads first)
+#   - gpus: all (exclusive GPU demo - stop other GPU workloads first)
 
 name: ez-comfy
 
@@ -40,12 +40,12 @@ services:
       cache_from:
         - ${EZ_COMFY_IMAGE:-ghcr.io/toxicoder/ez-comfy:us-safe-studio-development}
     # Prefer GHCR prebuilt (arm64). manage.sh sets EZ_COMFY_IMAGE from git branch:
-    #   main → :us-safe-studio ; development/feature → :us-safe-studio-development
+    #   main -> :us-safe-studio ; development/feature -> :us-safe-studio-development
     # Static fallback matches primary integration branch (development).
     # Never put tokens in this file; HF_TOKEN comes from host env/.env at runtime only.
     image: ${EZ_COMFY_IMAGE:-ghcr.io/toxicoder/ez-comfy:us-safe-studio-development}
     container_name: ez-comfy-studio
-    # Manual lifecycle only — operator uses manage.sh start/stop
+    # Manual lifecycle only - operator uses manage.sh start/stop
     restart: "no"
     ports:
       - "${COMFY_PORT:-8188}:8188"
@@ -59,7 +59,7 @@ services:
       HUGGINGFACE_HUB_CACHE: /models/hub
       # spacy-pkuseg reads this at import; default ~/.pkuseg is ephemeral.
       PKUSEG_HOME: /models/pkuseg
-      # Runtime only — not baked into image layers
+      # Runtime only - not baked into image layers
       HF_TOKEN: ${HF_TOKEN:-}
       # On-box prompt-enhance GGUF (CPU llama.cpp). Never bake weights into the image.
       EZ_LLM_GGUF: ${EZ_LLM_GGUF:-/models/comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf}
@@ -100,9 +100,9 @@ services:
     volumes:
       - ${MODELS_DIR:-/mnt/models}:/models
       - comfy-state:/comfy-state
-      # Generated PNG/MP4 — host path, not the named volume
+      # Generated PNG/MP4 - host path, not the named volume
       - ${COMFY_OUTPUT_DIR:-/mnt/comfy-output}:/outputs
-      # LoadImage start frames — same host tree, survives cleanup / pin sync
+      # LoadImage start frames - same host tree, survives cleanup / pin sync
       - ${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/input:/inputs
       # Comfy user/ (lab graphs, operator saves, history) on the host
       - ${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/comfy-user:/comfy-state/ComfyUI/user
@@ -113,7 +113,7 @@ services:
       - ../workflows:/opt/ez-comfy/workflows:ro
       # In-tree custom nodes (prompt-enhance, LTX spatial snap); entrypoint copies packs
       - ../custom_nodes:/opt/ez-comfy/custom_nodes:ro
-      # Host ops scripts — iterate without image rebuild (image still embeds for GHCR)
+      # Host ops scripts - iterate without image rebuild (image still embeds for GHCR)
       - ./entrypoint.sh:/opt/ez-comfy/entrypoint.sh:ro
       - ./install-comfy.sh:/opt/ez-comfy/install-comfy.sh:ro
       - ./install-comfy:/opt/ez-comfy/install-comfy:ro

@@ -149,7 +149,7 @@ default_out_dir() {
 }
 
 #######################################
-# Default LoadImage directory (COMFY_OUTPUT_DIR/input → /inputs).
+# Default LoadImage directory (COMFY_OUTPUT_DIR/input -> /inputs).
 # Globals:
 #   COMFY_OUTPUT_DIR
 # Arguments:
@@ -343,8 +343,8 @@ cmd_run() {
   local -a bcmd=("${bin}" --background --python "${REPO_ROOT}/tools/blender/export_house_views.py" --)
   bcmd+=(--out "${dest}" --layout "${layout}" --slug "${SLUG}" --engine "${ENGINE}")
   bcmd+=(--width "${WIDTH}" --height "${HEIGHT}" --input-dir "${input}")
-  log "dumping house views → ${dest}"
-  run_with_heartbeat "Blender house-views dump → ${dest}" -- "${bcmd[@]}" || {
+  log "dumping house views -> ${dest}"
+  run_with_heartbeat "Blender house-views dump -> ${dest}" -- "${bcmd[@]}" || {
     err "Blender house-views dump failed"
     return 1
   }

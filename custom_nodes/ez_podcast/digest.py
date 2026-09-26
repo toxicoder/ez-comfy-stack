@@ -223,7 +223,7 @@ def _complete(system: str, user: str) -> tuple[str, str]:
     try:
         _ensure_lab_custom_nodes_path()
         from ez_prompt_enhance.client import complete as llama_complete
-    except Exception as exc:  # noqa: BLE001 — fail-soft
+    except Exception as exc:  # noqa: BLE001 - fail-soft
         _log(f"prompt enhance client unavailable: {exc}")
         return "", "llama.cpp unavailable"
     text, reason = llama_complete(system, user, max_tokens=800, temperature=0.2)
@@ -235,12 +235,12 @@ def _close_writer() -> None:
     try:
         _ensure_lab_custom_nodes_path()
         from ez_prompt_enhance.client import _close_llm
-    except Exception as exc:  # noqa: BLE001 — unload is best-effort
+    except Exception as exc:  # noqa: BLE001 - unload is best-effort
         _log(f"writer unload import failed: {exc}")
         return
     try:
         _close_llm()
-    except Exception as exc:  # noqa: BLE001 — unload is best-effort
+    except Exception as exc:  # noqa: BLE001 - unload is best-effort
         _log(f"writer unload failed: {exc}")
 
 

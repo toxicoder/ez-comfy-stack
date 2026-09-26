@@ -1,6 +1,6 @@
 ---
 title: "Packed Crowd"
-description: "Cinema Rack illustration — Packed Crowd."
+description: "Cinema Rack illustration - Packed Crowd."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

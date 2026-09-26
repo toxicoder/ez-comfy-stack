@@ -1,6 +1,6 @@
 ---
 title: "Orbit and rise"
-description: "Cinema Rack illustration — Orbit and rise."
+description: "Cinema Rack illustration - Orbit and rise."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

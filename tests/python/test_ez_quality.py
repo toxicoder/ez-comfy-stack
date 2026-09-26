@@ -1035,8 +1035,8 @@ def test_js_mentions_free_commercial_and_clip_feeders() -> None:
     body = JS.read_text(encoding="utf-8")
     assert QUALITY_FREE_COMMERCIAL in body
     assert "free_commercial" in body
-    assert "16:9 LTX feeder (1280×704)" in body
-    assert "9:16 LTX feeder (768×1280)" in body
+    assert "16:9 LTX feeder (1280x704)" in body
+    assert "9:16 LTX feeder (768x1280)" in body
     assert "aspect_16_9_draft" in body
     assert "aspect_9_16_draft" in body
 

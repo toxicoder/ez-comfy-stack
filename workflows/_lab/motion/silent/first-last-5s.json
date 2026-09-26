@@ -551,7 +551,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 14,
@@ -573,9 +573,9 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## Fun InP FLF (opt-in)\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\n./scripts/utilities/download-wan.sh run --tier fun-inp\nApache 2.0. Not part of download-models. Occupancy: stop LTX first.\nLoad a start frame and an end frame. 121 frames @ 24 fps. MagCache off.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## Fun InP FLF (opt-in)\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\n./scripts/utilities/download-wan.sh run --tier fun-inp\nApache 2.0. Not part of download-models. Occupancy: stop LTX first.\nLoad a start frame and an end frame. 121 frames @ 24 fps. MagCache off.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
-      "title": "Operator note \u2014 Fun InP FLF"
+      "title": "Operator note - Fun InP FLF"
     },
     {
       "id": 15,
@@ -791,7 +791,7 @@
       },
       "widgets_values": [
         "Wan 5B",
-        "Wan \u00b7 16:9 YouTube (832\u00d7480)",
+        "Wan - 16:9 YouTube (832x480)",
         832,
         480,
         "Match input",
@@ -1149,7 +1149,7 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## Fun InP FLF (opt-in)\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\n./scripts/utilities/download-wan.sh run --tier fun-inp\nApache 2.0. Not part of download-models. Occupancy: stop LTX first.\nLoad a start frame and an end frame. 121 frames @ 24 fps. MagCache off.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## Fun InP FLF (opt-in)\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\n./scripts/utilities/download-wan.sh run --tier fun-inp\nApache 2.0. Not part of download-models. Occupancy: stop LTX first.\nLoad a start frame and an end frame. 121 frames @ 24 fps. MagCache off.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_profile": "motion/silent/first-last-5s",
     "lab_description": "Wan 2.2 Fun InP first-last-frame 5 s draft. Opt-in pack (~47 GB). MagCache off. Unload LTX first.",
     "ds": {
@@ -1183,7 +1183,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
           }
         ],
         [
@@ -1207,7 +1207,7 @@
           19,
           "format",
           {
-            "description": "Aspect or named platform job. Sets clip width and height on the Wan \u00f716 or LTX \u00f732 grid. Custom uses Width \u00d7 Height. Length stays on the latent node.",
+            "description": "Aspect or named platform job. Sets clip width and height on the Wan div16 or LTX div32 grid. Custom uses Width x Height. Length stays on the latent node.",
             "label": "Format / platform"
           }
         ],

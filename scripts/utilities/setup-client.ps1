@@ -21,7 +21,7 @@ function Write-Status([string] $Message) {
 
 $wsl = Get-Command wsl -ErrorAction SilentlyContinue
 if ($null -ne $wsl) {
-    Write-Status "WSL found — running setup-client.sh inside the default distro"
+    Write-Status "WSL found - running setup-client.sh inside the default distro"
     $repo = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
     wsl -e bash -lc "cd '$repo' && ./scripts/utilities/setup-client.sh --host $HostName --user $User --port $Port"
     exit $LASTEXITCODE

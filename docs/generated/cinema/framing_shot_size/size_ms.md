@@ -1,6 +1,6 @@
 ---
 title: "Medium Shot"
-description: "Cinema Rack illustration — Medium Shot."
+description: "Cinema Rack illustration - Medium Shot."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

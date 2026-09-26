@@ -1,6 +1,6 @@
 ---
 title: "Close face circle"
-description: "Cinema Rack illustration — Close face circle."
+description: "Cinema Rack illustration - Close face circle."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

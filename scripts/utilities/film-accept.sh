@@ -2,7 +2,7 @@
 #
 # ## film-accept
 #
-# Fail-closed accept gate before 90s concat (duration, 1280×704, LTX audio).
+# Fail-closed accept gate before 90s concat (duration, 1280x704, LTX audio).
 #
 # Usage:
 #   ./scripts/utilities/film-accept.sh go-see|still-here|switchyard
@@ -52,7 +52,7 @@ cmd_run() {
   local slug dest
   if [[ ${film} == "-h" || ${film} == "--help" || -z ${film} ]]; then
     echo "Usage: film-accept.sh FILM" >&2
-    echo "  Fail closed: catalog shot count, 5.00±0.05s, 1280x704, LTX audio; world-only speech-band; publish-cap master when present." >&2
+    echo "  Fail closed: catalog shot count, 5.00 +/- 0.05s, 1280x704, LTX audio; world-only speech-band; publish-cap master when present." >&2
     [[ -n ${film} ]] && return 0
     return 1
   fi

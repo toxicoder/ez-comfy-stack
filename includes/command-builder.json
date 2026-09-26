@@ -55,7 +55,7 @@
             },
             {
               "value": "off",
-              "label": "off (SSH risk \u2014 full-rate pull)"
+              "label": "off (SSH risk - full-rate pull)"
             }
           ]
         },
@@ -84,43 +84,43 @@
           "choices": [
             {
               "value": "fast",
-              "label": "fast \u2014 Klein 4B distilled FP8 + TE + VAE (default, in download-models)"
+              "label": "fast - Klein 4B distilled FP8 + TE + VAE (default, in download-models)"
             },
             {
               "value": "nvfp4",
-              "label": "nvfp4 \u2014 Klein 4B NVFP4 still UNET (optional)"
+              "label": "nvfp4 - Klein 4B NVFP4 still UNET (optional)"
             },
             {
               "value": "base",
-              "label": "base \u2014 Klein 4B base FP8 still UNET (optional)"
+              "label": "base - Klein 4B base FP8 still UNET (optional)"
             },
             {
               "value": "zimage",
-              "label": "zimage \u2014 Z-Image Turbo stills (optional)"
+              "label": "zimage - Z-Image Turbo stills (optional)"
             },
             {
               "value": "all",
-              "label": "all \u2014 fast + nvfp4 + base + zimage (Apache only)"
+              "label": "all - fast + nvfp4 + base + zimage (Apache only)"
             },
             {
               "value": "9b",
-              "label": "9b \u2014 Klein 9B distilled FP8 + Qwen3-8B TE (FLUX Non-Commercial, not YouTube-ok)"
+              "label": "9b - Klein 9B distilled FP8 + Qwen3-8B TE (FLUX Non-Commercial, not YouTube-ok)"
             },
             {
               "value": "9b-base",
-              "label": "9b-base \u2014 Klein 9B base FP8 (FLUX Non-Commercial)"
+              "label": "9b-base - Klein 9B base FP8 (FLUX Non-Commercial)"
             },
             {
               "value": "9b-nvfp4",
-              "label": "9b-nvfp4 \u2014 Klein 9B NVFP4 (FLUX Non-Commercial)"
+              "label": "9b-nvfp4 - Klein 9B NVFP4 (FLUX Non-Commercial)"
             },
             {
               "value": "small-vae",
-              "label": "small-vae \u2014 Apache FLUX.2 small decoder VAE"
+              "label": "small-vae - Apache FLUX.2 small decoder VAE"
             },
             {
               "value": "flux2-dev",
-              "label": "flux2-dev \u2014 FLUX.2 [dev] FP8 + Mistral TE (FLUX Non-Commercial, not YouTube-ok)"
+              "label": "flux2-dev - FLUX.2 [dev] FP8 + Mistral TE (FLUX Non-Commercial, not YouTube-ok)"
             }
           ]
         }
@@ -143,27 +143,27 @@
           "choices": [
             {
               "value": "5b",
-              "label": "5b \u2014 Wan 2.2 TI2V-5B silent (~12 GB, in download-models)"
+              "label": "5b - Wan 2.2 TI2V-5B silent (~12 GB, in download-models)"
             },
             {
               "value": "a14b",
-              "label": "a14b \u2014 Wan 2.2 I2V A14B FP8 (~20 GB, opt-in)"
+              "label": "a14b - Wan 2.2 I2V A14B FP8 (~20 GB, opt-in)"
             },
             {
               "value": "fun-inp",
-              "label": "fun-inp \u2014 Fun InP A14B first-last-frame (~47 GB, floor 40)"
+              "label": "fun-inp - Fun InP A14B first-last-frame (~47 GB, floor 40)"
             },
             {
               "value": "vace",
-              "label": "vace \u2014 Wan 2.1 VACE 1.3B join (~6 GB, not in all)"
+              "label": "vace - Wan 2.1 VACE 1.3B join (~6 GB, not in all)"
             },
             {
               "value": "s2v",
-              "label": "s2v \u2014 Wan 2.2 S2V-14B talking-head (~20 GB, not in all)"
+              "label": "s2v - Wan 2.2 S2V-14B talking-head (~20 GB, not in all)"
             },
             {
               "value": "all",
-              "label": "all \u2014 5b + a14b + fun-inp (not vace, not s2v)"
+              "label": "all - 5b + a14b + fun-inp (not vace, not s2v)"
             }
           ]
         }
@@ -172,7 +172,7 @@
     {
       "id": "download-ltx",
       "title": "download-ltx --tier",
-      "description": "LTX generation selector, not \u201cbetter\u201d. 2.5 is the lab default. balanced/quality are 2.3 aliases. all is 2.5+2.3+gemma (not iclora).",
+      "description": "LTX generation selector, not 'better'. 2.5 is the lab default. balanced/quality are 2.3 aliases. all is 2.5+2.3+gemma (not iclora).",
       "argv": [
         "./scripts/utilities/download-ltx.sh",
         "run"
@@ -186,31 +186,31 @@
           "choices": [
             {
               "value": "2.5",
-              "label": "2.5 \u2014 distilled INT8-convrot AV (~30 GB, in download-models)"
+              "label": "2.5 - distilled INT8-convrot AV (~30 GB, in download-models)"
             },
             {
               "value": "2.3",
-              "label": "2.3 \u2014 retired distilled FP8 fallback (auto-includes gemma)"
+              "label": "2.3 - retired distilled FP8 fallback (auto-includes gemma)"
             },
             {
               "value": "balanced",
-              "label": "balanced \u2014 2.3 alias (FP8, auto-includes gemma)"
+              "label": "balanced - 2.3 alias (FP8, auto-includes gemma)"
             },
             {
               "value": "quality",
-              "label": "quality \u2014 2.3 BF16 alias (larger, auto-includes gemma)"
+              "label": "quality - 2.3 BF16 alias (larger, auto-includes gemma)"
             },
             {
               "value": "iclora",
-              "label": "iclora \u2014 IC-LoRA Union Control (~1 GB, not in all)"
+              "label": "iclora - IC-LoRA Union Control (~1 GB, not in all)"
             },
             {
               "value": "gemma",
-              "label": "gemma \u2014 LTX-2.3 Gemma DualCLIP (~8 GB)"
+              "label": "gemma - LTX-2.3 Gemma DualCLIP (~8 GB)"
             },
             {
               "value": "all",
-              "label": "all \u2014 2.5 + 2.3 + gemma (not iclora)"
+              "label": "all - 2.5 + 2.3 + gemma (not iclora)"
             }
           ]
         }
@@ -233,23 +233,23 @@
           "choices": [
             {
               "value": "analog",
-              "label": "analog \u2014 Kokoro-82M ONNX + voices (tiny, default)"
+              "label": "analog - Kokoro-82M ONNX + voices (tiny, default)"
             },
             {
               "value": "acestep",
-              "label": "acestep \u2014 ACE-Step 1.5 turbo AIO (~10 GB, shared with music turbo)"
+              "label": "acestep - ACE-Step 1.5 turbo AIO (~10 GB, shared with music turbo)"
             },
             {
               "value": "chatterbox",
-              "label": "chatterbox \u2014 optional MIT GPU TTS"
+              "label": "chatterbox - optional MIT GPU TTS"
             },
             {
               "value": "qwen3tts",
-              "label": "qwen3tts \u2014 optional Qwen3-TTS 0.6B"
+              "label": "qwen3tts - optional Qwen3-TTS 0.6B"
             },
             {
               "value": "all",
-              "label": "all \u2014 analog + acestep + chatterbox + qwen3tts"
+              "label": "all - analog + acestep + chatterbox + qwen3tts"
             }
           ]
         },
@@ -290,15 +290,15 @@
           "choices": [
             {
               "value": "asr",
-              "label": "asr \u2014 Silero VAD + faster-whisper large-v3 (default)"
+              "label": "asr - Silero VAD + faster-whisper large-v3 (default)"
             },
             {
               "value": "clone",
-              "label": "clone \u2014 Chatterbox Multilingual V3 (MIT, PerTh on)"
+              "label": "clone - Chatterbox Multilingual V3 (MIT, PerTh on)"
             },
             {
               "value": "all",
-              "label": "all \u2014 asr + clone"
+              "label": "all - asr + clone"
             }
           ]
         },
@@ -325,7 +325,7 @@
     {
       "id": "download-music",
       "title": "download-music --tier",
-      "description": "Closest thing to a size ladder. turbo shares dest with download-podcast --tier acestep \u2014 do not pull the AIO twice. Occupancy: stop LTX/Wan/Klein first.",
+      "description": "Closest thing to a size ladder. turbo shares dest with download-podcast --tier acestep - do not pull the AIO twice. Occupancy: stop LTX/Wan/Klein first.",
       "argv": [
         "./scripts/manage.sh",
         "download-music"
@@ -339,15 +339,15 @@
           "choices": [
             {
               "value": "turbo",
-              "label": "turbo \u2014 ACE-Step 1.5 AIO (~10 GB, default rap/podcast beds)"
+              "label": "turbo - ACE-Step 1.5 AIO (~10 GB, default rap/podcast beds)"
             },
             {
               "value": "xl",
-              "label": "xl \u2014 split XL files (larger; not the default)"
+              "label": "xl - split XL files (larger; not the default)"
             },
             {
               "value": "all",
-              "label": "all \u2014 turbo + xl"
+              "label": "all - turbo + xl"
             }
           ]
         },
@@ -388,15 +388,15 @@
           "choices": [
             {
               "value": "trellis2",
-              "label": "trellis2 \u2014 Comfy-Org TRELLIS.2 INT8 + DINOv3 (~12 GB)"
+              "label": "trellis2 - Comfy-Org TRELLIS.2 INT8 + DINOv3 (~12 GB)"
             },
             {
               "value": "da3-base",
-              "label": "da3-base \u2014 Depth Anything 3 BASE Apache (~1 GB)"
+              "label": "da3-base - Depth Anything 3 BASE Apache (~1 GB)"
             },
             {
               "value": "all",
-              "label": "all \u2014 trellis2 + da3-base"
+              "label": "all - trellis2 + da3-base"
             }
           ]
         }
@@ -419,15 +419,15 @@
           "choices": [
             {
               "value": "video",
-              "label": "video \u2014 LongCat-Video"
+              "label": "video - LongCat-Video"
             },
             {
               "value": "avatar",
-              "label": "avatar \u2014 LongCat-Video-Avatar"
+              "label": "avatar - LongCat-Video-Avatar"
             },
             {
               "value": "all",
-              "label": "all \u2014 video + avatar"
+              "label": "all - video + avatar"
             }
           ]
         }
@@ -450,7 +450,7 @@
           "choices": [
             {
               "value": "creator",
-              "label": "creator \u2014 DreamX-Creator 1.0 Apache (~8 GB selective, full repo ~54 GB)"
+              "label": "creator - DreamX-Creator 1.0 Apache (~8 GB selective, full repo ~54 GB)"
             }
           ]
         }
@@ -473,7 +473,7 @@
           "choices": [
             {
               "value": "seedvr2-3b",
-              "label": "seedvr2-3b \u2014 SeedVR2-3B Apache (~15 GB)"
+              "label": "seedvr2-3b - SeedVR2-3B Apache (~15 GB)"
             }
           ]
         }
@@ -496,19 +496,19 @@
           "choices": [
             {
               "value": "enhance",
-              "label": "enhance \u2014 Qwen3-4B Q4_K_M (default, in download-models)"
+              "label": "enhance - Qwen3-4B Q4_K_M (default, in download-models)"
             },
             {
               "value": "qwen36-35b-a3b",
-              "label": "qwen36-35b-a3b \u2014 Qwen3.6-35B-A3B UD-Q4_K_XL (~23 GB, llm-desk)"
+              "label": "qwen36-35b-a3b - Qwen3.6-35B-A3B UD-Q4_K_XL (~23 GB, llm-desk)"
             },
             {
               "value": "describe",
-              "label": "describe \u2014 Qwen2.5-VL-3B caption GGUF + mmproj (~4 GB)"
+              "label": "describe - Qwen2.5-VL-3B caption GGUF + mmproj (~4 GB)"
             },
             {
               "value": "all",
-              "label": "all \u2014 enhance + qwen36-35b-a3b + describe"
+              "label": "all - enhance + qwen36-35b-a3b + describe"
             }
           ]
         },
@@ -550,31 +550,31 @@
           "choices": [
             {
               "value": "blender-desk",
-              "label": "blender-desk \u2014 park Comfy, Workbench dumps"
+              "label": "blender-desk - park Comfy, Workbench dumps"
             },
             {
               "value": "llm-desk",
-              "label": "llm-desk \u2014 park Comfy, host 35B llama-server"
+              "label": "llm-desk - park Comfy, host 35B llama-server"
             },
             {
               "value": "klein",
-              "label": "klein \u2014 stop Blender and 35B sidecar, Queue stills"
+              "label": "klein - stop Blender and 35B sidecar, Queue stills"
             },
             {
               "value": "trellis",
-              "label": "trellis \u2014 stop Blender and 35B sidecar, Queue TRELLIS.2"
+              "label": "trellis - stop Blender and 35B sidecar, Queue TRELLIS.2"
             },
             {
               "value": "wan",
-              "label": "wan \u2014 stop Blender and 35B sidecar, Queue silent motion"
+              "label": "wan - stop Blender and 35B sidecar, Queue silent motion"
             },
             {
               "value": "ltx",
-              "label": "ltx \u2014 stop Blender and 35B sidecar, Queue AV print"
+              "label": "ltx - stop Blender and 35B sidecar, Queue AV print"
             },
             {
               "value": "idle",
-              "label": "idle \u2014 stop Blender, 35B sidecar, and Compose"
+              "label": "idle - stop Blender, 35B sidecar, and Compose"
             }
           ]
         }

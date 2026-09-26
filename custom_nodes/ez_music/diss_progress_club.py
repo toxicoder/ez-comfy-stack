@@ -103,7 +103,7 @@ DUTY_SWITCH_LYRICS = format_diss_lyrics(
         "Boring Januarys are a feature we already named\n"
         "This is the human half of that feature\n"
         "Bring the camera, lose the spectator chair",
-        "Family texts, ally texts, counsel in the hallway — all of that is slower than the principal\n"
+        "Family texts, ally texts, counsel in the hallway - all of that is slower than the principal\n"
         "The principal is the only voice the crowd calibrated to\n"
         "Nill Bye posting the duty switch\n"
         "Calibrate the voice in advance. The advance is a script on a card, peacefulverb\n"

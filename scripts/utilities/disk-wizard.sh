@@ -189,7 +189,7 @@ disk_survey_jsonl() {
       -- "${roots[@]}"
   fi
 
-  log "Querying Docker disk usage (docker system df; can take a while)…"
+  log "Querying Docker disk usage (docker system df; can take a while)..."
   docker_blob="$(disk_docker_df || true)"
   if [[ -n ${docker_blob} ]]; then
     python3 -c '
@@ -227,14 +227,14 @@ for line in raw.splitlines():
 #######################################
 disk_survey() {
   local ranked dest jsonl n
-  log "Starting read-only disk survey (can take a while on a full host; nothing is deleted)…"
+  log "Starting read-only disk survey (can take a while on a full host; nothing is deleted)..."
   disk_df_report >&2 || true
   jsonl="$(disk_survey_jsonl)"
   n=0
   if [[ -n ${jsonl} ]]; then
     n="$(printf '%s\n' "${jsonl}" | grep -c . || true)"
   fi
-  log "Ranking ${n} candidates…"
+  log "Ranking ${n} candidates..."
   ranked="$(printf '%s\n' "${jsonl}" | disk_rank_candidates)"
   dest="$(disk_plan_file)"
   printf '%s\n' "${ranked}" >"${dest}"

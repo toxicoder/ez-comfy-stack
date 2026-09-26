@@ -114,7 +114,7 @@ cmd_run() {
     print_blender_host_hint
     return 1
   fi
-  log "Installing host blender (apt universe; never in docker/Dockerfile)…"
+  log "Installing host blender (apt universe; never in docker/Dockerfile)..."
   if ! sudo apt-get update -qq ||
     ! run_with_heartbeat "apt-get install blender" -- \
       sudo DEBIAN_FRONTEND=noninteractive apt-get install -y blender; then

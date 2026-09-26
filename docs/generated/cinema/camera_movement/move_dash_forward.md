@@ -1,6 +1,6 @@
 ---
 title: "Dash forward"
-description: "Cinema Rack illustration — Dash forward."
+description: "Cinema Rack illustration - Dash forward."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

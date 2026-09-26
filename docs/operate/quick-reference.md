@@ -8,9 +8,9 @@ tags: [operate, quick-reference, doctor, start, stop, download, disk]
 
 **What's on this page**
 
-- **Update** — stop, pull the branch these docs describe, start
-- **Run** — doctor, start, stop, status, logs, open the UI
-- **Models and disk** — default download, pack table, wizard, reap, cleanup
+- **Update** - stop, pull the branch these docs describe, start
+- **Run** - doctor, start, stop, status, logs, open the UI
+- **Models and disk** - default download, pack table, wizard, reap, cleanup
 
 **What this enables**
 

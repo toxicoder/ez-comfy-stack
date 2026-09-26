@@ -1,6 +1,6 @@
 ---
 title: "Arc left"
-description: "Cinema Rack illustration — Arc left."
+description: "Cinema Rack illustration - Arc left."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

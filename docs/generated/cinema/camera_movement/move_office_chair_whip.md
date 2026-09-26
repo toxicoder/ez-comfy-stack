@@ -1,6 +1,6 @@
 ---
 title: "Chair whip"
-description: "Cinema Rack illustration — Chair whip."
+description: "Cinema Rack illustration - Chair whip."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

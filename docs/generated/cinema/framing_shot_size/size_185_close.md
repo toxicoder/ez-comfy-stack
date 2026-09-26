@@ -1,6 +1,6 @@
 ---
 title: "1.85 Close Face"
-description: "Cinema Rack illustration — 1.85 Close Face."
+description: "Cinema Rack illustration - 1.85 Close Face."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -3,7 +3,7 @@
 # ## spark-timing
 #
 # Record wall-clock seconds for the three Kitchen smokes on a real Spark.
-# CI has no GPU — this file is the operator timing table. Do not invent seconds.
+# CI has no GPU - this file is the operator timing table. Do not invent seconds.
 #
 # Usage:
 #   ./scripts/utilities/spark-timing.sh show [--json]

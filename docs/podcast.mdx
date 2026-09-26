@@ -34,7 +34,7 @@ tags: [podcast, kokoro, ace-step, tts, disclosure, us-safe]
 
 Do **not** load Klein + Wan + LTX + ACE-Step + TTS in one session. Cover art is a separate graph.
 
-### Option A — two-host-episode commercial episode
+### Option A - two-host-episode commercial episode
 
 Graph: **audio/podcast/two-host-episode** (`extra.lab_profile` `us-safe-podcast`).
 
@@ -44,8 +44,8 @@ Graph: **audio/podcast/two-host-episode** (`extra.lab_profile` `us-safe-podcast`
 | DISCLOSURE | `EZPodcastDisclosure` prepends the spoken bumper | (string) |
 | VOICES | App **Speaker A / B**, **Include announcer**, **Speaking speed**. `EZKokoroTTS` Kokoro-82M ONNX/CPU built-ins. Voice-clone refs stay graph-only | `ez_podcast_voice` |
 | BEDS | App **Bed tags**, **Rewrite bed**, **Bed length (seconds)**. Native Comfy ACE-Step 1.5, instrumental (lyrics hidden) | `ez_podcast_bed` |
-| MIX | Duck −15 dB + overlay. FLAC master + 320 kbps MP3 | `ez_podcast_ep` / `ez_podcast_mix` |
-| COVER | Queue **stills/podcast-cover** separately (1024², `ez_podcast`) | `ez_podcast` |
+| MIX | Duck -15 dB + overlay. FLAC master + 320 kbps MP3 | `ez_podcast_ep` / `ez_podcast_mix` |
+| COVER | Queue **stills/podcast-cover** separately (1024^2, `ez_podcast`) | `ez_podcast` |
 
 First spoken line is always:
 
@@ -53,13 +53,13 @@ First spoken line is always:
 
 Do not type that line yourself. The disclosure node prepends it.
 
-### Option B — one-graph radio drama
+### Option B - one-graph radio drama
 
 Graph: **audio/podcast/radio-drama** (`us-safe-radio`). Same legal engines. Writer prompt is lab-original fiction (`radio_drama.txt`), not a news rewrite. App Mode: **Script**, **Sting tags** / **Bed tags**, sting and bed length, **Speaker A / B / Announcer**, **Include announcer**, **Speaking speed**. ACE-Step sting + bed stay instrumental (lyrics hidden). One master mix (`ez_radio_ep` / `ez_radio_mix`).
 
 Optional Wan silent bumper / LTX 5s hook **groups default off** (node mode never). Queue **motion/loops/bumper-loop** or **motion/av/hook-av** in a later session. Not a one-graph film.
 
-### Option C — learning episode
+### Option C - learning episode
 
 Graph: **audio/podcast/learn-episode** (`us-safe-learn-podcast`). Same legal engines as Option A. Occupancy **audio**.
 
@@ -70,9 +70,9 @@ Paste a lazy blob of notes, `https://` links, captioned video URLs, or local `.t
 | SOURCES | App **Sources**, **Format**, **Duration**, **Fetch links**, **Rewrite**. `EZPodcastLearn` writes a deduped digest then a Speaker A/B (or solo) script | `ez_learn_sources` |
 | DISCLOSURE | `EZPodcastDisclosure` prepends the spoken bumper | (string) |
 | VOICES | App **Speaker A / B**, **Speaking speed**. `EZKokoroTTS` Kokoro-82M built-ins | `ez_learn_voice` |
-| BEDS | App **Bed tags**. Native ACE-Step 1.5, **30 s** instrumental, looped under the speech (`EZAudioLoopToMatch`). Duck −15 dB | `ez_learn_bed` |
+| BEDS | App **Bed tags**. Native ACE-Step 1.5, **30 s** instrumental, looped under the speech (`EZAudioLoopToMatch`). Duck -15 dB | `ez_learn_bed` |
 | MIX | Overlay. FLAC master + 320 kbps MP3 | `ez_learn_ep` / `ez_learn_mix` |
-| COVER | Queue **stills/podcast-cover** separately (1024², `ez_podcast`) | `ez_podcast` |
+| COVER | Queue **stills/podcast-cover** separately (1024^2, `ez_podcast`) | `ez_podcast` |
 
 | Format | Shape |
 | --- | --- |
@@ -90,7 +90,7 @@ Paste a lazy blob of notes, `https://` links, captioned video URLs, or local `.t
 | 15 min lesson | ~2250 words | 5 |
 | 25 min seminar | ~3750 words | 8 (slow CPU TTS) |
 
-Fetch is SSRF-safe **HTTPS** only. Video URLs pull **captions only** (`yt-dlp --skip-download --write-sub`). No media download. No dub ASR or voice clone. Missing captions are a status line; the rest of the mix still runs. This is a personal study mix of operator-provided sources — not news copy, not a doctor / lawyer / finance-advisor persona. Missing GGUF concatenates sources and wraps Speaker A lines.
+Fetch is SSRF-safe **HTTPS** only. Video URLs pull **captions only** (`yt-dlp --skip-download --write-sub`). No media download. No dub ASR or voice clone. Missing captions are a status line; the rest of the mix still runs. This is a personal study mix of operator-provided sources - not news copy, not a doctor / lawyer / finance-advisor persona. Missing GGUF concatenates sources and wraps Speaker A lines.
 
 ---
 
@@ -98,11 +98,11 @@ Fetch is SSRF-safe **HTTPS** only. Video URLs pull **captions only** (`yt-dlp --
 
 This lab does **not** git-clone, pip-require, or default to:
 
-- **TTS-Audio-Suite** — many engines, including F5-TTS CC-BY-NC, Fish NC, Higgs commercial traps, VibeVoice research-only, and ARM wheel pain on GB10
-- **ComfyUI-OldTimeRadio** — optional lanes that pull US-excluded or non-commercial video models
+- **TTS-Audio-Suite** - many engines, including F5-TTS CC-BY-NC, Fish NC, Higgs commercial traps, VibeVoice research-only, and ARM wheel pain on GB10
+- **ComfyUI-OldTimeRadio** - optional lanes that pull US-excluded or non-commercial video models
 - Cloud ACE-Step forks, MiniMax Music, F5-TTS official weights, Coqui XTTS v2, Echo-TTS, Fish Audio S2, celebrity reference WAVs, ElevenLabs, or xAI TTS
 
-Native ACE-Step 1.5 already ships in `COMFYUI_REF=v0.37.0` (`TextEncodeAceStepAudio1.5`, `EmptyAceStep1.5LatentAudio`). Beds stay **instrumental** (`instrumental`, `no vocals` in tags; empty lyrics). Rap vocals with original lyrics live on [Local music](music.md) and reuse this same AIO dest — do not download it twice.
+Native ACE-Step 1.5 already ships in `COMFYUI_REF=v0.37.0` (`TextEncodeAceStepAudio1.5`, `EmptyAceStep1.5LatentAudio`). Beds stay **instrumental** (`instrumental`, `no vocals` in tags; empty lyrics). Rap vocals with original lyrics live on [Local music](music.md) and reuse this same AIO dest - do not download it twice.
 
 ---
 
@@ -110,15 +110,15 @@ Native ACE-Step 1.5 already ships in `COMFYUI_REF=v0.37.0` (`TextEncodeAceStepAu
 
 | Engine | License | Role | Default download? |
 | --- | --- | --- | --- |
-| Kokoro-82M ONNX | Apache 2.0 | Default TTS, built-in voices, CPU/aarch64-safe | No — `download-podcast --tier analog` |
-| ACE-Step 1.5 turbo AIO | MIT | Instrumental beds | No — `--tier acestep` |
-| Chatterbox Turbo | MIT | Optional GPU TTS; PerTh watermark stays on | No — `--tier chatterbox` |
-| Qwen3-TTS 0.6B | Apache 2.0 | Optional TTS + voice design. `--tier qwen3tts` is a **complete Base snapshot** (config + text tokenizer + nested 12Hz `speech_tokenizer/`), not `model.safetensors` only. Wheel is a separate `--no-deps` extra | No — `--tier qwen3tts` |
+| Kokoro-82M ONNX | Apache 2.0 | Default TTS, built-in voices, CPU/aarch64-safe | No - `download-podcast --tier analog` |
+| ACE-Step 1.5 turbo AIO | MIT | Instrumental beds | No - `--tier acestep` |
+| Chatterbox Turbo | MIT | Optional GPU TTS; PerTh watermark stays on | No - `--tier chatterbox` |
+| Qwen3-TTS 0.6B | Apache 2.0 | Optional TTS + voice design. `--tier qwen3tts` is a **complete Base snapshot** (config + text tokenizer + nested 12Hz `speech_tokenizer/`), not `model.safetensors` only. Wheel is a separate `--no-deps` extra | No - `--tier qwen3tts` |
 | Qwen3-4B-Instruct GGUF | Apache 2.0 | Script draft, fail-soft | Already in `download-models` |
 
 Empty Chatterbox/Qwen3 refs fall back to Kokoro built-ins. Never drop celebrity WAVs into the graph.
 
-`kokoro-onnx` / `onnxruntime` are **optional runtime** installs inside the container venv. They are **not** baked in `phase-nodes.sh` (a new pip would invalidate **venv-extra**, not the multi‑GB torch layer). Analog graphs still load if the wheel is missing; Queue fail-softs until you install it and `download-podcast --tier analog`.
+`kokoro-onnx` / `onnxruntime` are **optional runtime** installs inside the container venv. They are **not** baked in `phase-nodes.sh` (a new pip would invalidate **venv-extra**, not the multi-GB torch layer). Analog graphs still load if the wheel is missing; Queue fail-softs until you install it and `download-podcast --tier analog`.
 
 ---
 
@@ -130,11 +130,11 @@ Hosts are **original characters**, not recordings of real people. Operator-owned
 
 ## Platform and US rules (operator checklist)
 
-- **Apple Podcasts 1.11** — disclose material AI audio in the **content** and in **metadata**
-- **YouTube** — use the synthetic/altered content toggle; July 2026 inauthentic-content rules (no template slop, no AI doctor / lawyer / finance-advisor persona)
-- **Spotify** — allowed if you own the rights, disclose, and do not use unconsented clones
-- **FTC** — spoken sponsor reads; synthetic persona endorsements need both a paid-connection disclosure and “this voice is AI”
-- **USCO Part 2 / Thaler** — prompts are not authorship. A human-edited script plus selection, arrangement, and mix **can** be. Raw generations are not registrable
+- **Apple Podcasts 1.11** - disclose material AI audio in the **content** and in **metadata**
+- **YouTube** - use the synthetic/altered content toggle; July 2026 inauthentic-content rules (no template slop, no AI doctor / lawyer / finance-advisor persona)
+- **Spotify** - allowed if you own the rights, disclose, and do not use unconsented clones
+- **FTC** - spoken sponsor reads; synthetic persona endorsements need both a paid-connection disclosure and "this voice is AI"
+- **USCO Part 2 / Thaler** - prompts are not authorship. A human-edited script plus selection, arrangement, and mix **can** be. Raw generations are not registrable
 
 ---
 
@@ -150,7 +150,7 @@ Podcast weights are **opt-in**. `./scripts/manage.sh download-models` does **not
 ./scripts/manage.sh download-podcast --tier all         # analog + ACE + optional TTS
 # same --limit auto|N|off wrap as download-models (always clears on exit)
 # qwen3tts with compose up: extras then pip install --no-deps qwen-tts
-# (never unconstrained pip install qwen-tts — it pins transformers==4.57.3)
+# (never unconstrained pip install qwen-tts - it pins transformers==4.57.3)
 ```
 
 Layout after analog + acestep:
@@ -191,18 +191,18 @@ Cover art is a **later** Klein session. Occupancy: do not load LTX + ACE-Step to
 ## Sequential Queue
 
 1. `download-podcast --tier analog` (and `--tier acestep` for beds)
-2. Optional: `pip install kokoro-onnx onnxruntime` in the Comfy venv (runtime; see [Troubleshooting — models and workflows](operate/troubleshooting-models-workflows.md))
-3. `./scripts/manage.sh start` — type **yes**
+2. Optional: `pip install kokoro-onnx onnxruntime` in the Comfy venv (runtime; see [Troubleshooting - models and workflows](operate/troubleshooting-models-workflows.md))
+3. `./scripts/manage.sh start` - type **yes**
 4. Load **audio/podcast/two-host-episode** (authored script) or **audio/podcast/learn-episode** (paste sources, pick Format + Duration). Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_podcast_ep_*.flac` / `ez_learn_ep_*.flac` (plus the matching `*_mix_*.mp3`)
 5. Load **stills/podcast-cover** in a **later** session. Queue `ez_podcast_*.png`
 6. Loudness (ffmpeg; Comfy cannot LUFS):
 
 ```bash
 ./scripts/utilities/podcast-loudnorm.sh run --in "${COMFY_OUTPUT_DIR}/ez_podcast_ep_00001_.flac"
-# --target youtube  → −14 LUFS; default podcast → −16 LUFS
+# --target youtube  -> -14 LUFS; default podcast -> -16 LUFS
 ```
 
-7. Optional YouTube still-image video (host ffmpeg; the graph still saves FLAC + MP3). Do this **after** loudnorm if you want −14 LUFS in the MP4; `audio-still-video` does not loudnorm unless `--loudnorm youtube`:
+7. Optional YouTube still-image video (host ffmpeg; the graph still saves FLAC + MP3). Do this **after** loudnorm if you want -14 LUFS in the MP4; `audio-still-video` does not loudnorm unless `--loudnorm youtube`:
 
 ```bash
 ./scripts/manage.sh audio-still-video \

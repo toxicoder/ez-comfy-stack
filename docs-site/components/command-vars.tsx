@@ -177,7 +177,7 @@ function CodeVarBinder() {
           span.spellcheck = false;
           span.setAttribute("role", "textbox");
           span.setAttribute("aria-label", `${part.id}, session variable, click to edit`);
-          span.title = `${part.id} — session variable, click to edit`;
+          span.title = `${part.id} - session variable, click to edit`;
           span.textContent = part.text;
           frag.appendChild(span);
         } else if (part.text) {

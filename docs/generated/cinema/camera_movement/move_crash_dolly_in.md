@@ -1,6 +1,6 @@
 ---
 title: "Crash dolly in"
-description: "Cinema Rack illustration — Crash dolly in."
+description: "Cinema Rack illustration - Crash dolly in."
 tags: [cinema, prompting, catalog, clip]
 ---
 

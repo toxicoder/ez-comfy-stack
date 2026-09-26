@@ -1,6 +1,6 @@
 ---
 title: "Jib sweep"
-description: "Cinema Rack illustration — Jib sweep."
+description: "Cinema Rack illustration - Jib sweep."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

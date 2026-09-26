@@ -1,6 +1,6 @@
 ---
 title: "Orbit right"
-description: "Cinema Rack illustration — Orbit right."
+description: "Cinema Rack illustration - Orbit right."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

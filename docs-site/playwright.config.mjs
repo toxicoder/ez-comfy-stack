@@ -10,7 +10,7 @@ import { defineConfig } from "@playwright/test";
  *
  * Goldens are produced on the CI image.  Screenshots taken on another platform differ in
  * font metrics, so refresh them from Linux (or in the same container CI uses) rather than
- * from a laptop — see MIGRATION.md at the repo root.
+ * from a laptop - see MIGRATION.md at the repo root.
  */
 const PORT = process.env.PLAYWRIGHT_PORT ?? "3135";
 const BASE_URL = process.env.PLAYWRIGHT_BASE_URL ?? `http://127.0.0.1:${PORT}`;

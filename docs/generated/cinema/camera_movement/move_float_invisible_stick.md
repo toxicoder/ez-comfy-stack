@@ -1,6 +1,6 @@
 ---
 title: "Floating stick"
-description: "Cinema Rack illustration — Floating stick."
+description: "Cinema Rack illustration - Floating stick."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

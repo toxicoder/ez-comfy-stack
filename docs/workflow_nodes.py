@@ -33,7 +33,7 @@ def encyclopedia() -> dict[str, Any]:
     """Return the node encyclopedia keyed by Comfy type.
 
     Returns:
-        Mapping of node type → spec.
+        Mapping of node type -> spec.
     """
     nodes: dict[str, Any] = {}
     nodes.update(core_nodes())

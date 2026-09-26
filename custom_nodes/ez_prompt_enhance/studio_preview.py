@@ -145,7 +145,7 @@ def _seed_note(seed: str, control: object) -> str:
     """
     kind = _as_str(control).casefold() or "fixed"
     if kind in {"randomize", "random", "increment", "decrement"}:
-        return f"Seed {seed} — changes when you Run ({kind})"
+        return f"Seed {seed} - changes when you Run ({kind})"
     return f"Seed {seed} (fixed)"
 
 
@@ -172,7 +172,7 @@ def _next_pass(
     if not has_image and (iterate or enhance_mode == "t2i"):
         return "text to image"
     if has_image and filename:
-        return f"{enhance_mode} · {filename}"
+        return f"{enhance_mode} - {filename}"
     return enhance_mode
 
 
@@ -242,23 +242,23 @@ def _summary(preview: StudioPreview) -> str:
     lines: list[str] = []
     if preview.missing_file:
         lines.append(
-            f"Reference file missing ({preview.filename}) — this run is text to image."
+            f"Reference file missing ({preview.filename}) - this run is text to image."
         )
     lines.append(f"Next pass: {preview.next_pass}")
     lines.append(f"Enhance mode: {preview.enhance_mode}")
     lines.append(f"Prompt ({preview.prompt_source}): {preview.prompt}")
     lines.append(f"Style: {preview.style_note}")
     if preview.rewrite:
-        lines.append("Rewrite is on — this is the rewriter source, not the CLIP text.")
+        lines.append("Rewrite is on - this is the rewriter source, not the CLIP text.")
     else:
-        lines.append("Rewrite is off — this prompt is the CLIP text.")
-    lines.append(f"Size: {preview.width}×{preview.height} · batch {preview.batch}")
+        lines.append("Rewrite is off - this prompt is the CLIP text.")
+    lines.append(f"Size: {preview.width}x{preview.height} - batch {preview.batch}")
     lines.append(f"Prefix: {preview.prefix}")
-    lines.append(f"Steps {preview.steps} · CFG {preview.cfg} · {preview.unet}")
+    lines.append(f"Steps {preview.steps} - CFG {preview.cfg} - {preview.unet}")
     lines.append(preview.seed_note)
     if preview.iterate:
         lines.append(
-            "Iterate is on — Creator mode is not used for mode, instruction, or prefix."
+            "Iterate is on - Creator mode is not used for mode, instruction, or prefix."
         )
         if preview.batch > 1:
             lines.append("Iterate feeds the first still only.")

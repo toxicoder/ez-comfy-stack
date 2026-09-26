@@ -3,7 +3,7 @@
 
 Host ``manage.sh start`` still prefers layout-accurate plates via
 ``house_layout.py``. This module runs inside the container (stdlib only) when
-``/inputs/ez_house_clay_NN.png`` are missing or not 1024×1280.
+``/inputs/ez_house_clay_NN.png`` are missing or not 1024x1280.
 
 Typical invocation
 ------------------
@@ -118,7 +118,7 @@ def clay_plate_valid(path: Path) -> bool:
         path: Candidate LoadImage plate.
 
     Returns:
-        Whether ``path`` is a file whose IHDR is ``PACK_WIDTH`` × ``PACK_HEIGHT``.
+        Whether ``path`` is a file whose IHDR is ``PACK_WIDTH`` x ``PACK_HEIGHT``.
     """
     return path.is_file() and png_size(path) == (PACK_WIDTH, PACK_HEIGHT)
 

@@ -1,6 +1,6 @@
 ---
 title: "Three-Shot"
-description: "Cinema Rack illustration — Three-Shot."
+description: "Cinema Rack illustration - Three-Shot."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

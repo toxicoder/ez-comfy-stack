@@ -14,7 +14,7 @@
     },
     {
       "id": "aspect_16_9_draft",
-      "label": "16:9 draft (768×432)",
+      "label": "16:9 draft (768x432)",
       "group": "aspect",
       "width": 768,
       "height": 432,
@@ -24,17 +24,17 @@
     },
     {
       "id": "aspect_16_9_ltx",
-      "label": "16:9 LTX feeder (1280×704)",
+      "label": "16:9 LTX feeder (1280x704)",
       "group": "aspect",
       "width": 1280,
       "height": 704,
       "prefix": "ez_still_studio",
       "hint": "YouTube 16:9 still, LTX feeder",
-      "lock": "LTX I2V feeders stay 1280×704. Empty of lettering."
+      "lock": "LTX I2V feeders stay 1280x704. Empty of lettering."
     },
     {
       "id": "aspect_16_9",
-      "label": "16:9 (1280×720)",
+      "label": "16:9 (1280x720)",
       "group": "aspect",
       "width": 1280,
       "height": 720,
@@ -44,7 +44,7 @@
     },
     {
       "id": "aspect_16_9_mid",
-      "label": "16:9 mid (1024×576)",
+      "label": "16:9 mid (1024x576)",
       "group": "aspect",
       "width": 1024,
       "height": 576,
@@ -54,7 +54,7 @@
     },
     {
       "id": "aspect_1_1",
-      "label": "1:1 square (1024×1024)",
+      "label": "1:1 square (1024x1024)",
       "group": "aspect",
       "width": 1024,
       "height": 1024,
@@ -64,7 +64,7 @@
     },
     {
       "id": "aspect_1_1_circle",
-      "label": "1:1 circle-safe (768×768)",
+      "label": "1:1 circle-safe (768x768)",
       "group": "aspect",
       "width": 768,
       "height": 768,
@@ -74,7 +74,7 @@
     },
     {
       "id": "aspect_4_5",
-      "label": "4:5 portrait (1024×1280)",
+      "label": "4:5 portrait (1024x1280)",
       "group": "aspect",
       "width": 1024,
       "height": 1280,
@@ -84,7 +84,7 @@
     },
     {
       "id": "aspect_9_16_draft",
-      "label": "9:16 draft (432×768)",
+      "label": "9:16 draft (432x768)",
       "group": "aspect",
       "width": 432,
       "height": 768,
@@ -94,7 +94,7 @@
     },
     {
       "id": "aspect_9_16",
-      "label": "9:16 (576×1024)",
+      "label": "9:16 (576x1024)",
       "group": "aspect",
       "width": 576,
       "height": 1024,
@@ -104,17 +104,17 @@
     },
     {
       "id": "aspect_9_16_ltx",
-      "label": "9:16 LTX feeder (768×1280)",
+      "label": "9:16 LTX feeder (768x1280)",
       "group": "aspect",
       "width": 768,
       "height": 1280,
       "prefix": "ez_still_studio",
       "hint": "Shorts 9:16 still, LTX feeder",
-      "lock": "LTX I2V feeders stay 768×1280. Vertical 9:16. Keep the subject in the middle third; top and bottom stay quiet for platform UI. Empty of lettering."
+      "lock": "LTX I2V feeders stay 768x1280. Vertical 9:16. Keep the subject in the middle third; top and bottom stay quiet for platform UI. Empty of lettering."
     },
     {
       "id": "aspect_191",
-      "label": "~1.91:1 landscape (1216×640)",
+      "label": "~1.91:1 landscape (1216x640)",
       "group": "aspect",
       "width": 1216,
       "height": 640,
@@ -124,7 +124,7 @@
     },
     {
       "id": "aspect_3_1",
-      "label": "~3:1 banner (1536×512)",
+      "label": "~3:1 banner (1536x512)",
       "group": "aspect",
       "width": 1536,
       "height": 512,
@@ -134,7 +134,7 @@
     },
     {
       "id": "aspect_4_1",
-      "label": "4:1 banner (1536×384)",
+      "label": "4:1 banner (1536x384)",
       "group": "aspect",
       "width": 1536,
       "height": 384,
@@ -144,7 +144,7 @@
     },
     {
       "id": "aspect_2_3",
-      "label": "2:3 pin (768×1152)",
+      "label": "2:3 pin (768x1152)",
       "group": "aspect",
       "width": 768,
       "height": 1152,
@@ -154,7 +154,7 @@
     },
     {
       "id": "aspect_3_4",
-      "label": "3:4 panel (768×1024)",
+      "label": "3:4 panel (768x1024)",
       "group": "aspect",
       "width": 768,
       "height": 1024,
@@ -164,7 +164,7 @@
     },
     {
       "id": "youtube_thumb",
-      "label": "YouTube · thumbnail (1280×720)",
+      "label": "YouTube - thumbnail (1280x720)",
       "group": "youtube",
       "width": 1280,
       "height": 720,
@@ -174,7 +174,7 @@
     },
     {
       "id": "youtube_channel_art",
-      "label": "YouTube · channel art (1536×864)",
+      "label": "YouTube - channel art (1536x864)",
       "group": "youtube",
       "width": 1536,
       "height": 864,
@@ -184,7 +184,7 @@
     },
     {
       "id": "youtube_channel_icon",
-      "label": "YouTube · channel icon (768×768)",
+      "label": "YouTube - channel icon (768x768)",
       "group": "youtube",
       "width": 768,
       "height": 768,
@@ -194,7 +194,7 @@
     },
     {
       "id": "youtube_shorts_thumb",
-      "label": "YouTube · Shorts thumb (576×1024)",
+      "label": "YouTube - Shorts thumb (576x1024)",
       "group": "youtube",
       "width": 576,
       "height": 1024,
@@ -204,7 +204,7 @@
     },
     {
       "id": "youtube_community",
-      "label": "YouTube · Community (1024×1024)",
+      "label": "YouTube - Community (1024x1024)",
       "group": "youtube",
       "width": 1024,
       "height": 1024,
@@ -214,7 +214,7 @@
     },
     {
       "id": "youtube_chapter",
-      "label": "YouTube · chapter card (1280×720)",
+      "label": "YouTube - chapter card (1280x720)",
       "group": "youtube",
       "width": 1280,
       "height": 720,
@@ -224,7 +224,7 @@
     },
     {
       "id": "youtube_subscribe",
-      "label": "YouTube · subscribe plate (1280×720)",
+      "label": "YouTube - subscribe plate (1280x720)",
       "group": "youtube",
       "width": 1280,
       "height": 720,
@@ -234,7 +234,7 @@
     },
     {
       "id": "youtube_endscreen",
-      "label": "YouTube · end screen (1280×720)",
+      "label": "YouTube - end screen (1280x720)",
       "group": "youtube",
       "width": 1280,
       "height": 720,
@@ -244,7 +244,7 @@
     },
     {
       "id": "ig_square",
-      "label": "Instagram · square (1024×1024)",
+      "label": "Instagram - square (1024x1024)",
       "group": "instagram",
       "width": 1024,
       "height": 1024,
@@ -254,7 +254,7 @@
     },
     {
       "id": "ig_portrait",
-      "label": "Instagram · 4:5 portrait (1024×1280)",
+      "label": "Instagram - 4:5 portrait (1024x1280)",
       "group": "instagram",
       "width": 1024,
       "height": 1280,
@@ -264,7 +264,7 @@
     },
     {
       "id": "ig_landscape",
-      "label": "Instagram · landscape (1216×640)",
+      "label": "Instagram - landscape (1216x640)",
       "group": "instagram",
       "width": 1216,
       "height": 640,
@@ -274,7 +274,7 @@
     },
     {
       "id": "ig_story",
-      "label": "Instagram · Story (576×1024)",
+      "label": "Instagram - Story (576x1024)",
       "group": "instagram",
       "width": 576,
       "height": 1024,
@@ -284,7 +284,7 @@
     },
     {
       "id": "ig_reel",
-      "label": "Instagram · Reel cover (576×1024)",
+      "label": "Instagram - Reel cover (576x1024)",
       "group": "instagram",
       "width": 576,
       "height": 1024,
@@ -294,7 +294,7 @@
     },
     {
       "id": "ig_highlight",
-      "label": "Instagram · Highlight (768×768)",
+      "label": "Instagram - Highlight (768x768)",
       "group": "instagram",
       "width": 768,
       "height": 768,
@@ -304,7 +304,7 @@
     },
     {
       "id": "ig_profile",
-      "label": "Instagram · profile (768×768)",
+      "label": "Instagram - profile (768x768)",
       "group": "instagram",
       "width": 768,
       "height": 768,
@@ -314,7 +314,7 @@
     },
     {
       "id": "tt_cover",
-      "label": "TikTok · cover (576×1024)",
+      "label": "TikTok - cover (576x1024)",
       "group": "tiktok",
       "width": 576,
       "height": 1024,
@@ -324,7 +324,7 @@
     },
     {
       "id": "tt_shop",
-      "label": "TikTok · Shop (1024×1024)",
+      "label": "TikTok - Shop (1024x1024)",
       "group": "tiktok",
       "width": 1024,
       "height": 1024,
@@ -334,7 +334,7 @@
     },
     {
       "id": "x_post",
-      "label": "X · post (1280×720)",
+      "label": "X - post (1280x720)",
       "group": "x",
       "width": 1280,
       "height": 720,
@@ -344,7 +344,7 @@
     },
     {
       "id": "x_header",
-      "label": "X · header (1536×512)",
+      "label": "X - header (1536x512)",
       "group": "x",
       "width": 1536,
       "height": 512,
@@ -354,7 +354,7 @@
     },
     {
       "id": "x_card",
-      "label": "X · card (1216×640)",
+      "label": "X - card (1216x640)",
       "group": "x",
       "width": 1216,
       "height": 640,
@@ -364,7 +364,7 @@
     },
     {
       "id": "li_post",
-      "label": "LinkedIn · square (1024×1024)",
+      "label": "LinkedIn - square (1024x1024)",
       "group": "linkedin",
       "width": 1024,
       "height": 1024,
@@ -374,7 +374,7 @@
     },
     {
       "id": "li_landscape",
-      "label": "LinkedIn · landscape (1216×640)",
+      "label": "LinkedIn - landscape (1216x640)",
       "group": "linkedin",
       "width": 1216,
       "height": 640,
@@ -384,7 +384,7 @@
     },
     {
       "id": "li_banner",
-      "label": "LinkedIn · banner (1536×384)",
+      "label": "LinkedIn - banner (1536x384)",
       "group": "linkedin",
       "width": 1536,
       "height": 384,
@@ -394,7 +394,7 @@
     },
     {
       "id": "li_article",
-      "label": "LinkedIn · article (1216×640)",
+      "label": "LinkedIn - article (1216x640)",
       "group": "linkedin",
       "width": 1216,
       "height": 640,
@@ -404,7 +404,7 @@
     },
     {
       "id": "pin",
-      "label": "Pinterest · pin (768×1152)",
+      "label": "Pinterest - pin (768x1152)",
       "group": "pinterest",
       "width": 768,
       "height": 1152,
@@ -414,7 +414,7 @@
     },
     {
       "id": "pin_story",
-      "label": "Pinterest · Idea Pin (576×1024)",
+      "label": "Pinterest - Idea Pin (576x1024)",
       "group": "pinterest",
       "width": 576,
       "height": 1024,
@@ -424,7 +424,7 @@
     },
     {
       "id": "fb_post",
-      "label": "Facebook · post (1216×640)",
+      "label": "Facebook - post (1216x640)",
       "group": "meta",
       "width": 1216,
       "height": 640,
@@ -434,7 +434,7 @@
     },
     {
       "id": "threads",
-      "label": "Threads · 4:5 (1024×1280)",
+      "label": "Threads - 4:5 (1024x1280)",
       "group": "meta",
       "width": 1024,
       "height": 1280,
@@ -444,7 +444,7 @@
     },
     {
       "id": "twitch_offline",
-      "label": "Twitch · offline (1280×720)",
+      "label": "Twitch - offline (1280x720)",
       "group": "twitch",
       "width": 1280,
       "height": 720,
@@ -454,7 +454,7 @@
     },
     {
       "id": "twitch_starting",
-      "label": "Twitch · starting soon (1280×720)",
+      "label": "Twitch - starting soon (1280x720)",
       "group": "twitch",
       "width": 1280,
       "height": 720,
@@ -464,7 +464,7 @@
     },
     {
       "id": "twitch_brb",
-      "label": "Twitch · BRB (1280×720)",
+      "label": "Twitch - BRB (1280x720)",
       "group": "twitch",
       "width": 1280,
       "height": 720,
@@ -474,7 +474,7 @@
     },
     {
       "id": "twitch_ending",
-      "label": "Twitch · ending (1280×720)",
+      "label": "Twitch - ending (1280x720)",
       "group": "twitch",
       "width": 1280,
       "height": 720,
@@ -484,7 +484,7 @@
     },
     {
       "id": "twitch_overlay",
-      "label": "Twitch · overlay (1280×720)",
+      "label": "Twitch - overlay (1280x720)",
       "group": "twitch",
       "width": 1280,
       "height": 720,
@@ -494,7 +494,7 @@
     },
     {
       "id": "twitch_panel",
-      "label": "Twitch · panel (768×1024)",
+      "label": "Twitch - panel (768x1024)",
       "group": "twitch",
       "width": 768,
       "height": 1024,
@@ -504,7 +504,7 @@
     },
     {
       "id": "twitch_profile",
-      "label": "Twitch · profile (768×768)",
+      "label": "Twitch - profile (768x768)",
       "group": "twitch",
       "width": 768,
       "height": 768,
@@ -514,7 +514,7 @@
     },
     {
       "id": "twitch_banner",
-      "label": "Twitch · banner (1536×512)",
+      "label": "Twitch - banner (1536x512)",
       "group": "twitch",
       "width": 1536,
       "height": 512,
@@ -524,7 +524,7 @@
     },
     {
       "id": "spot_playlist",
-      "label": "Spotify · playlist (1024×1024)",
+      "label": "Spotify - playlist (1024x1024)",
       "group": "spotify",
       "width": 1024,
       "height": 1024,
@@ -534,7 +534,7 @@
     },
     {
       "id": "spot_canvas",
-      "label": "Spotify · Canvas still (576×1024)",
+      "label": "Spotify - Canvas still (576x1024)",
       "group": "spotify",
       "width": 576,
       "height": 1024,
@@ -544,7 +544,7 @@
     },
     {
       "id": "album_cover",
-      "label": "Album · cover (1024×1024)",
+      "label": "Album - cover (1024x1024)",
       "group": "spotify",
       "width": 1024,
       "height": 1024,
@@ -554,7 +554,7 @@
     },
     {
       "id": "lyric_card",
-      "label": "Lyric card (1024×1024)",
+      "label": "Lyric card (1024x1024)",
       "group": "spotify",
       "width": 1024,
       "height": 1024,
@@ -564,7 +564,7 @@
     },
     {
       "id": "ag_wide",
-      "label": "Audiogram · wide (1280×720)",
+      "label": "Audiogram - wide (1280x720)",
       "group": "podcast",
       "width": 1280,
       "height": 720,
@@ -574,7 +574,7 @@
     },
     {
       "id": "ag_vert",
-      "label": "Audiogram · vertical (576×1024)",
+      "label": "Audiogram - vertical (576x1024)",
       "group": "podcast",
       "width": 576,
       "height": 1024,
@@ -584,7 +584,7 @@
     },
     {
       "id": "episode_art",
-      "label": "Podcast · episode art (1024×1024)",
+      "label": "Podcast - episode art (1024x1024)",
       "group": "podcast",
       "width": 1024,
       "height": 1024,
@@ -594,7 +594,7 @@
     },
     {
       "id": "podcast_cover",
-      "label": "Podcast · cover (1024×1024)",
+      "label": "Podcast - cover (1024x1024)",
       "group": "podcast",
       "width": 1024,
       "height": 1024,
@@ -604,7 +604,7 @@
     },
     {
       "id": "og",
-      "label": "Open Graph / blog (1216×640)",
+      "label": "Open Graph / blog (1216x640)",
       "group": "web",
       "width": 1216,
       "height": 640,
@@ -614,7 +614,7 @@
     },
     {
       "id": "email_header",
-      "label": "Email · header (1216×640)",
+      "label": "Email - header (1216x640)",
       "group": "web",
       "width": 1216,
       "height": 640,
@@ -624,7 +624,7 @@
     },
     {
       "id": "substack",
-      "label": "Substack · hero (1216×640)",
+      "label": "Substack - hero (1216x640)",
       "group": "web",
       "width": 1216,
       "height": 640,
@@ -634,7 +634,7 @@
     },
     {
       "id": "patreon",
-      "label": "Patreon · post (1024×1280)",
+      "label": "Patreon - post (1024x1280)",
       "group": "web",
       "width": 1024,
       "height": 1280,
@@ -644,7 +644,7 @@
     },
     {
       "id": "banner",
-      "label": "Channel · banner (1536×512)",
+      "label": "Channel - banner (1536x512)",
       "group": "web",
       "width": 1536,
       "height": 512,
@@ -654,7 +654,7 @@
     },
     {
       "id": "endcard",
-      "label": "End-card / CTA (1280×720)",
+      "label": "End-card / CTA (1280x720)",
       "group": "production",
       "width": 1280,
       "height": 720,
@@ -664,7 +664,7 @@
     },
     {
       "id": "quote_bg",
-      "label": "Quote background (1024×1024)",
+      "label": "Quote background (1024x1024)",
       "group": "production",
       "width": 1024,
       "height": 1024,
@@ -674,7 +674,7 @@
     },
     {
       "id": "lower_third",
-      "label": "Lower-third plate (1280×720)",
+      "label": "Lower-third plate (1280x720)",
       "group": "production",
       "width": 1280,
       "height": 720,
@@ -684,7 +684,7 @@
     },
     {
       "id": "food_tabletop",
-      "label": "Food / tabletop (1024×1280)",
+      "label": "Food / tabletop (1024x1280)",
       "group": "production",
       "width": 1024,
       "height": 1280,
@@ -694,7 +694,7 @@
     },
     {
       "id": "shorts_still",
-      "label": "Shorts still (432×768)",
+      "label": "Shorts still (432x768)",
       "group": "production",
       "width": 432,
       "height": 768,
@@ -704,7 +704,7 @@
     },
     {
       "id": "hook_still",
-      "label": "Hook still (432×768)",
+      "label": "Hook still (432x768)",
       "group": "production",
       "width": 432,
       "height": 768,
@@ -714,7 +714,7 @@
     },
     {
       "id": "packshot",
-      "label": "Product packshot (1024×1024)",
+      "label": "Product packshot (1024x1024)",
       "group": "production",
       "width": 1024,
       "height": 1024,
@@ -724,7 +724,7 @@
     },
     {
       "id": "lifestyle",
-      "label": "Product lifestyle (1024×1280)",
+      "label": "Product lifestyle (1024x1280)",
       "group": "production",
       "width": 1024,
       "height": 1280,
@@ -734,7 +734,7 @@
     },
     {
       "id": "desk_setup",
-      "label": "Desk setup (1280×720)",
+      "label": "Desk setup (1280x720)",
       "group": "production",
       "width": 1280,
       "height": 720,
@@ -744,7 +744,7 @@
     },
     {
       "id": "coming_soon",
-      "label": "Coming soon (1280×720)",
+      "label": "Coming soon (1280x720)",
       "group": "production",
       "width": 1280,
       "height": 720,
@@ -754,7 +754,7 @@
     },
     {
       "id": "slide_title",
-      "label": "Slide title (1280×720)",
+      "label": "Slide title (1280x720)",
       "group": "slides",
       "width": 1280,
       "height": 720,
@@ -764,7 +764,7 @@
     },
     {
       "id": "zoom_bg",
-      "label": "Zoom / Meet background (1280×720)",
+      "label": "Zoom / Meet background (1280x720)",
       "group": "slides",
       "width": 1280,
       "height": 720,
@@ -774,7 +774,7 @@
     },
     {
       "id": "merch_tee",
-      "label": "Merch · tee (1024×1024)",
+      "label": "Merch - tee (1024x1024)",
       "group": "merch",
       "width": 1024,
       "height": 1024,
@@ -784,7 +784,7 @@
     },
     {
       "id": "merch_mug",
-      "label": "Merch · mug (1024×1024)",
+      "label": "Merch - mug (1024x1024)",
       "group": "merch",
       "width": 1024,
       "height": 1024,
@@ -794,7 +794,7 @@
     },
     {
       "id": "poster",
-      "label": "Print poster (768×1152)",
+      "label": "Print poster (768x1152)",
       "group": "merch",
       "width": 768,
       "height": 1152,

@@ -192,7 +192,7 @@ default_input_dir() {
 #######################################
 require_still_size() {
   local token="${SIZE}"
-  token="${token//×/x}"
+  token="${token//x/x}"
   case "${token}" in
     1280x704 | 768x1280 | 1024x1280 | 1024x1024 | 1280x720)
       WIDTH="${token%x*}"
@@ -295,8 +295,8 @@ cmd_run() {
   if [[ -n ${CAMERA} ]]; then
     bcmd+=(--camera "${CAMERA}")
   fi
-  log "dumping still pack → ${dest}"
-  run_with_heartbeat "Blender still dump → ${dest}" -- "${bcmd[@]}" || {
+  log "dumping still pack -> ${dest}"
+  run_with_heartbeat "Blender still dump -> ${dest}" -- "${bcmd[@]}" || {
     err "Blender still dump failed"
     return 1
   }

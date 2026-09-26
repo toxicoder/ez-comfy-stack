@@ -1,6 +1,6 @@
 ---
 title: "Kitchen pass"
-description: "Cinema Rack illustration — Kitchen pass."
+description: "Cinema Rack illustration - Kitchen pass."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

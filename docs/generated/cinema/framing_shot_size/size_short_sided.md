@@ -1,6 +1,6 @@
 ---
 title: "Short-Sided"
-description: "Cinema Rack illustration — Short-Sided."
+description: "Cinema Rack illustration - Short-Sided."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

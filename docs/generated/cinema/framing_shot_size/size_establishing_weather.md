@@ -1,6 +1,6 @@
 ---
 title: "Weather Establishing"
-description: "Cinema Rack illustration — Weather Establishing."
+description: "Cinema Rack illustration - Weather Establishing."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

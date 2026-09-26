@@ -29,9 +29,9 @@ Occupancy **llm**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 ```text
 ## inspire/audio-rack
 
-Audio Rack — pick one audio/music technique per axis and splice ACE-Step tags and lyrics form. No UNET, no VAE, no KSampler.
+Audio Rack - pick one audio/music technique per axis and splice ACE-Step tags and lyrics form. No UNET, no VAE, no KSampler.
 
-Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
+Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
   ./scripts/manage.sh occupancy enter llm-desk --yes
 
@@ -41,7 +41,7 @@ Do **not** load ACE-Step on this canvas. Copy tags/lyrics into audio/music/rap-d
 
 1. Optional **Brief** (what the track is about). Ignored on instrumental / podcast-bed.
 2. Optional **Recipe** fills empty axes. Explicit dropdowns win.
-3. Pick at most one technique per axis (genre, tempo, drums, bass, …).
+3. Pick at most one technique per axis (genre, tempo, drums, bass, ...).
 4. Set **Family** (ace_vocal, ace_instrumental, or podcast_bed).
 5. Queue. Vocal / instrumental Enhance nodes preview rewritten tags and lyrics.
 6. Copy tags into **audio/music/rap-draft**. Match encoder BPM to the notes line.
@@ -86,9 +86,9 @@ flowchart LR
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
 
-### `Note` — Note
+### `Note` - Note
 
 On-canvas operator note (not executed).
 
@@ -104,14 +104,14 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## inspire/audio-rack Audio Rack — pick one audio/music technique per axis and splice ACE-Step tags and lyrics form. No UNET, no VAE, no KSampler. Occupancy: llm — graph label (not a CLI mode). Prefe…`
+**This graph:** `## inspire/audio-rack Audio Rack - pick one audio/music technique per axis and splice ACE-Step tags and lyrics form. No UNET, no VAE, no KSampler. Occupancy: llm - graph label (not a CLI mode). Prefe...`
 
 ```text
 ## inspire/audio-rack
 
-Audio Rack — pick one audio/music technique per axis and splice ACE-Step tags and lyrics form. No UNET, no VAE, no KSampler.
+Audio Rack - pick one audio/music technique per axis and splice ACE-Step tags and lyrics form. No UNET, no VAE, no KSampler.
 
-Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
+Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
   ./scripts/manage.sh occupancy enter llm-desk --yes
 
@@ -121,7 +121,7 @@ Do **not** load ACE-Step on this canvas. Copy tags/lyrics into audio/music/rap-d
 
 1. Optional **Brief** (what the track is about). Ignored on instrumental / podcast-bed.
 2. Optional **Recipe** fills empty axes. Explicit dropdowns win.
-3. Pick at most one technique per axis (genre, tempo, drums, bass, …).
+3. Pick at most one technique per axis (genre, tempo, drums, bass, ...).
 4. Set **Family** (ace_vocal, ace_instrumental, or podcast_bed).
 5. Queue. Vocal / instrumental Enhance nodes preview rewritten tags and lyrics.
 6. Copy tags into **audio/music/rap-draft**. Match encoder BPM to the notes line.
@@ -131,7 +131,7 @@ Audio Rack is deterministic (no LLM). Enhance is optional downstream.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 ```
 
-### `EZAudioRack` — Audio Rack
+### `EZAudioRack` - Audio Rack
 
 Pick one audio/music technique per axis and splice ACE-Step tags and lyrics form.
 
@@ -313,7 +313,7 @@ Use.
 
 **This graph:** `none`
 
-### `EZAceStepPromptEnhance` — ACE-Step Prompt Enhance
+### `EZAceStepPromptEnhance` - ACE-Step Prompt Enhance
 
 Rewrite ACE tags (genre first) and lyrics. Instrumental mode forces [inst].
 
@@ -393,7 +393,7 @@ Sample-catalog id.
 
 **This graph (all 2 instances):** `inspire/audio-rack`
 
-### `EZQuality` — Quality
+### `EZQuality` - Quality
 
 Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
@@ -428,7 +428,7 @@ custom freezes last overlay; lab restores graph defaults.
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
-### `EZModelCheck` — Check models
+### `EZModelCheck` - Check models
 
 Manual disk check for occupancy + Quality weights. Queue does not run this node.
 

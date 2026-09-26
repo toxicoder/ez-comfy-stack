@@ -1,6 +1,6 @@
 ---
 title: "Low slider push"
-description: "Cinema Rack illustration — Low slider push."
+description: "Cinema Rack illustration - Low slider push."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

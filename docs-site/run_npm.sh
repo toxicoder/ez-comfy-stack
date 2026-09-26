@@ -32,14 +32,14 @@ if [[ $SUBCMD == "run_npm.sh" || $SUBCMD == "npm" ]] && [[ $# -gt 0 ]]; then
   shift
 fi
 
-# bazel run //docs-site:build invokes "build build" — drop the duplicated subcommand arg.
+# bazel run //docs-site:build invokes "build build" - drop the duplicated subcommand arg.
 if [[ $# -gt 0 && $1 == "$SUBCMD" ]]; then
   shift
 fi
 
 ensure_deps() {
   if [[ ! -x "node_modules/.bin/next" || ! -x "node_modules/.bin/vitest" ]]; then
-    echo "→ docs-site: installing npm deps (node_modules missing)"
+    echo "-> docs-site: installing npm deps (node_modules missing)"
     npm ci --legacy-peer-deps
   fi
 }

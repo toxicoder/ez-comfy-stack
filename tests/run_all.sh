@@ -18,7 +18,7 @@
 #   bats --jobs. No GPU or Hugging Face network.
 #
 # Environment:
-#   BATS_JOBS — parallel BATS file jobs (default: nproc or 4)
+#   BATS_JOBS - parallel BATS file jobs (default: nproc or 4)
 #
 # Exit codes:
 #   Non-zero if any stage fails (set -e).

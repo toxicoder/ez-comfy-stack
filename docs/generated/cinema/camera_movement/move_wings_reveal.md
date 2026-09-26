@@ -1,6 +1,6 @@
 ---
 title: "Wings reveal"
-description: "Cinema Rack illustration — Wings reveal."
+description: "Cinema Rack illustration - Wings reveal."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

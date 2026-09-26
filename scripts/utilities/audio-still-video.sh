@@ -336,7 +336,7 @@ cmd_status() {
     log "audio-still-video size=${SIZE} fit=${FIT} loudnorm=${LOUDNORM} ffmpeg=${has}"
   fi
   if [[ ${has} != "true" ]]; then
-    err "ffmpeg missing — still-video will not silently skip"
+    err "ffmpeg missing - still-video will not silently skip"
     return 1
   fi
   return 0
@@ -383,8 +383,8 @@ cmd_run() {
   fi
   parent="$(dirname "${OUT_FILE}")"
   mkdir -p "${parent}"
-  log "mux ${IMAGE_FILE} + ${AUDIO_FILE} → ${OUT_FILE} (size=${SIZE} fit=${FIT})"
-  if ! run_ffmpeg_logged "mux still+audio → ${OUT_FILE}" -- "${FFMPEG_ARGV[@]}"; then
+  log "mux ${IMAGE_FILE} + ${AUDIO_FILE} -> ${OUT_FILE} (size=${SIZE} fit=${FIT})"
+  if ! run_ffmpeg_logged "mux still+audio -> ${OUT_FILE}" -- "${FFMPEG_ARGV[@]}"; then
     err "ffmpeg still-video failed for ${AUDIO_FILE} (not skipped)"
     return 1
   fi

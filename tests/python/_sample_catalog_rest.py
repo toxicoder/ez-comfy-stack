@@ -652,7 +652,7 @@ def ltx_t2v() -> list[dict[str, str]]:
             "Harbor fog AV",
             _ltx_t2v(
                 "A photoreal shot of an unmarked pier in fog. A techno wizard in a dark indigo-violet suede coat stands at the edge.",
-                "Fog hush, water lap, distant horn far off — not a carrier identity.",
+                "Fog hush, water lap, distant horn far off - not a carrier identity.",
                 "The camera holds a fixed frame.",
             ),
         ),

@@ -1,6 +1,6 @@
 ---
 title: "Ankle Insert"
-description: "Cinema Rack illustration — Ankle Insert."
+description: "Cinema Rack illustration - Ankle Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

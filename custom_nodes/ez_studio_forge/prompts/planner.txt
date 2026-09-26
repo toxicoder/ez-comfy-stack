@@ -6,7 +6,7 @@ Shape:
 Rules:
 - template must be an id from the catalog (lab_rel such as stills/instagram-square)
 - Do not invent node types, links, coordinates, or new occupancy
-- slots keys must be widget names on that template (prompt, seed, filename_prefix, style, …)
+- slots keys must be widget names on that template (prompt, seed, filename_prefix, style, ...)
 - slug is lowercase [a-z0-9-], no slash
 - as_app is true unless the catalog default_view is graph (90s film)
 - No MiniMax, Kling, FLUX.2-dev, Klein 9B, Seedance, z_image_turbo

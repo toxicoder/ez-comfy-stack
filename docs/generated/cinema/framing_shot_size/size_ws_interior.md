@@ -1,6 +1,6 @@
 ---
 title: "Interior Wide"
-description: "Cinema Rack illustration — Interior Wide."
+description: "Cinema Rack illustration - Interior Wide."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

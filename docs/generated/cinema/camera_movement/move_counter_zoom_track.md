@@ -1,6 +1,6 @@
 ---
 title: "Counter-zoom track"
-description: "Cinema Rack illustration — Counter-zoom track."
+description: "Cinema Rack illustration - Counter-zoom track."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

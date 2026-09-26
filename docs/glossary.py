@@ -1,7 +1,7 @@
 """First-party glossary: JSON source, markdown render, HTML wrap, modal inject.
 
 Designed for the Fumadocs remark plugin and hermetic pytest (stdlib
-``json`` only — CI's test job does not install PyYAML).
+``json`` only - CI's test job does not install PyYAML).
 """
 
 from __future__ import annotations
@@ -288,7 +288,7 @@ def render_glossary_markdown(terms: Sequence[Term]) -> str:
                 chunks.append("")
             if term.see_also:
                 by_id = {t.id: t for t in terms}
-                links = " · ".join(
+                links = " - ".join(
                     f"[{by_id[ref].title}](#{ref})" for ref in term.see_also
                 )
                 chunks.append(f"**See also:** {links}")
@@ -322,7 +322,7 @@ def _alias_index(
         terms: Glossary entries.
 
     Returns:
-        Compiled pattern capturing the alias, and alias-lower → Term.
+        Compiled pattern capturing the alias, and alias-lower -> Term.
     """
     lookup: dict[str, Term] = {}
     aliases: list[str] = []
@@ -373,7 +373,7 @@ def _wrap_text(
     Args:
         text: Raw HTML text node.
         pattern: Combined alias regex.
-        lookup: Lowercased alias → Term.
+        lookup: Lowercased alias -> Term.
         seen: Term ids already wrapped on this page (mutated).
         page_url: MkDocs page URL for relative hrefs.
 
@@ -462,7 +462,7 @@ def _wrap_fragment(
     Args:
         html_fragment: HTML (article inner or whole document).
         pattern: Combined alias regex.
-        lookup: Lowercased alias → Term.
+        lookup: Lowercased alias -> Term.
         seen: Term ids already wrapped (mutated).
         page_url: MkDocs page URL.
 

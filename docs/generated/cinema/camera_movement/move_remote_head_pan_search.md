@@ -1,6 +1,6 @@
 ---
 title: "Remote-head search"
-description: "Cinema Rack illustration — Remote-head search."
+description: "Cinema Rack illustration - Remote-head search."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

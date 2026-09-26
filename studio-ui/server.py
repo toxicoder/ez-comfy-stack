@@ -47,7 +47,7 @@ class FilmRow(TypedDict):
     shots: list[dict[str, str]]
 
 
-# Allowlisted 90s masters under the Comfy output root (slug → filename).
+# Allowlisted 90s masters under the Comfy output root (slug -> filename).
 PUBLISH_FILES = {
     "gosee": "ez_gosee_90s.mp4",
     "stillhere": "ez_stillhere_90s.mp4",
@@ -272,11 +272,11 @@ def _page() -> bytes:
             slug = str(row["slug"])
             if publish_mp4(slug) is not None:
                 watch = (
-                    ' · <a href="/watch/{0}">Watch 90s film</a>'
-                    ' · <a href="/media/{0}?dl=1">Download MP4</a>'
+                    ' - <a href="/watch/{0}">Watch 90s film</a>'
+                    ' - <a href="/media/{0}?dl=1">Download MP4</a>'
                 ).format(html.escape(slug))
             body.append(
-                "<p>prints {}/{} · audio_policy {}{}</p>".format(
+                "<p>prints {}/{} - audio_policy {}{}</p>".format(
                     html.escape(str(row["ok"])),
                     html.escape(str(row["total"])),
                     html.escape(str(row["audio_policy"])),
@@ -342,7 +342,7 @@ def watch_page(slug: str) -> bytes | None:
         f"<h1>{name}</h1>"
         f'<video controls playsinline src="/media/{safe}"></video>'
         f'<p><a href="/media/{safe}?dl=1">Download MP4</a>'
-        ' · <a href="/">Board</a></p>'
+        ' - <a href="/">Board</a></p>'
         "</main></body></html>"
     ).encode("utf-8")
 

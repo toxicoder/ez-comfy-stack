@@ -1,6 +1,6 @@
 ---
 title: "Start-stop dolly"
-description: "Cinema Rack illustration — Start-stop dolly."
+description: "Cinema Rack illustration - Start-stop dolly."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

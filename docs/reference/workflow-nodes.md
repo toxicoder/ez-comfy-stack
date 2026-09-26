@@ -10,7 +10,7 @@ tags: [workflows, generated, comfyui, reference]
 
 - **Every node type** that appears in `workflows/_lab/`
 - **Widgets in lab JSON order**, including combo choices
-- **Lab notes** (CFG 1.0 on distilled Klein, LTX ÷32, occupancy XOR)
+- **Lab notes** (CFG 1.0 on distilled Klein, LTX div32, occupancy XOR)
 
 **What this enables**
 
@@ -25,15 +25,15 @@ ComfyUI pin **v0.37.0**. MiniMax is banned. Klein 9B / FLUX.2-dev are opt-in NC,
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
 
-### `AudioAdjustVolume` — Audio Adjust Volume
+### `AudioAdjustVolume` - Audio Adjust Volume
 
 Gain an AUDIO tensor in dB.
 
 !!! warning "Lab notes"
 
-    Podcast duck −15 dB on the ACE bed under Kokoro speech.
+    Podcast duck -15 dB on the ACE bed under Kokoro speech.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -42,13 +42,13 @@ Gain an AUDIO tensor in dB.
 
 #### `volume_db`
 
-Type `FLOAT`. Range / default: lab −15.
+Type `FLOAT`. Range / default: lab -15.
 
 Gain in decibels.
 
-**How it affects generation:** Negative ducks the bed. −15 dB is the lab podcast duck (same idea as host stem-mix.sh).
+**How it affects generation:** Negative ducks the bed. -15 dB is the lab podcast duck (same idea as host stem-mix.sh).
 
-### `AudioConcat` — Audio Concat
+### `AudioConcat` - Audio Concat
 
 Play two AUDIO tensors in sequence.
 
@@ -73,7 +73,7 @@ Order.
 | `after` | audio1 then audio2 (lab). |
 | `before` | audio2 then audio1. |
 
-### `AudioMerge` — Audio Merge
+### `AudioMerge` - Audio Merge
 
 Mix two AUDIO tensors.
 
@@ -99,7 +99,7 @@ How to combine overlapping samples.
 | `add` | Sum. Can clip. |
 | `mean` | Average. Quieter. |
 
-### `CLIPLoader` — Load CLIP
+### `CLIPLoader` - Load CLIP
 
 Load a text encoder. The type combo must match the UNET family.
 
@@ -125,7 +125,7 @@ Type `COMBO`.
 
 CLIPType enum. Picks tokenizer + template.
 
-**How it affects generation:** flux2 wraps Klein strings in a Qwen chat template — do not paste <|im_start|>. wan is UMT5. ltxv is Gemma4-with-proj.
+**How it affects generation:** flux2 wraps Klein strings in a Qwen chat template - do not paste <|im_start|>. wan is UMT5. ltxv is Gemma4-with-proj.
 
 **Other choices**
 
@@ -175,7 +175,7 @@ Where to load the encoder.
 | `default` | Load on the Comfy compute device (GPU). Lab default. |
 | `cpu` | Force CPU. Much slower; only for debugging a CLIP load. |
 
-### `CLIPTextEncode` — CLIP Text Encode
+### `CLIPTextEncode` - CLIP Text Encode
 
 Turn a prompt string into CONDITIONING for the sampler.
 
@@ -195,9 +195,9 @@ Type `STRING`.
 
 Prompt encoded by CLIP.
 
-**How it affects generation:** Klein: sentences, subject → place → light → camera. Wan I2V: motion + one camera only. LTX: present-tense paragraph with audio interleaved. Distilled Klein quality lives here, not in CFG.
+**How it affects generation:** Klein: sentences, subject -> place -> light -> camera. Wan I2V: motion + one camera only. LTX: present-tense paragraph with audio interleaved. Distilled Klein quality lives here, not in CFG.
 
-### `CLIPVisionLoader` — Load CLIP Vision
+### `CLIPVisionLoader` - Load CLIP Vision
 
 Load an image encoder for TRELLIS.2 conditioning.
 
@@ -217,7 +217,7 @@ Vision checkpoint filename.
 
 **How it affects generation:** DINOv3 ViT-L is the TRELLIS.2 pair. A text CLIP will not work here.
 
-### `CheckpointLoaderSimple` — Load Checkpoint
+### `CheckpointLoaderSimple` - Load Checkpoint
 
 Load a single-file checkpoint that bundles MODEL + CLIP + VAE.
 
@@ -237,9 +237,9 @@ Type `STRING`.
 
 Filename under checkpoints/.
 
-**How it affects generation:** Lab music is the turbo AIO. XL is opt-in via download-music --tier xl — swap only if you meant to.
+**How it affects generation:** Lab music is the turbo AIO. XL is opt-in via download-music --tier xl - swap only if you meant to.
 
-### `ConditioningZeroOut` — Conditioning Zero Out
+### `ConditioningZeroOut` - Conditioning Zero Out
 
 Replace a conditioning with zeros (unconditional / empty negative).
 
@@ -254,7 +254,7 @@ Replace a conditioning with zeros (unconditional / empty negative).
 
 No widgets. Sockets only.
 
-### `EZAceStepPromptEnhance` — ACE-Step Prompt Enhance
+### `EZAceStepPromptEnhance` - ACE-Step Prompt Enhance
 
 Rewrite ACE tags (genre first) and lyrics. Instrumental mode forces [inst].
 
@@ -323,7 +323,7 @@ Sample-catalog id.
 
 **How it affects generation:** Leave as stamped.
 
-### `EZAlbumPack` — Album Pack
+### `EZAlbumPack` - Album Pack
 
 Write <Album>.m3u and <Album>.zip under albums/<Artist>/<Album>/.
 
@@ -347,7 +347,7 @@ Album folder display name.
 
 **How it affects generation:** Queue tracks first (or album-render). CPU only.
 
-### `EZAppForge` — App Forge
+### `EZAppForge` - App Forge
 
 Clone a shipped lab graph into live _user/ as a new App. No UNET.
 
@@ -415,7 +415,7 @@ Catalog id.
 
 **How it affects generation:** Leave as stamped.
 
-### `EZAudioLoopToMatch` — Loop bed to speech
+### `EZAudioLoopToMatch` - Loop bed to speech
 
 Repeat a short instrumental bed until it covers the speech stem, then trim.
 
@@ -431,7 +431,7 @@ Repeat a short instrumental bed until it covers the speech stem, then trim.
 
 No widgets. Sockets only.
 
-### `EZAudioMetadata` — Audio Metadata
+### `EZAudioMetadata` - Audio Metadata
 
 Stamp artist/album/title tags and optional cover on saved audio.
 
@@ -467,11 +467,11 @@ Track title.
 
 #### `track`
 
-Type `INT`. Range / default: 1–99.
+Type `INT`. Range / default: 1-99.
 
 Track number.
 
-**How it affects generation:** Numbered takes 01–20.
+**How it affects generation:** Numbered takes 01-20.
 
 #### `tracktotal`
 
@@ -495,7 +495,7 @@ Type `COMBO`. Range / default: skip.
 
 Cover art policy.
 
-**How it affects generation:** skip on every audio Queue (Cover LoadImage is bypassed). generate is klein occupancy — later session. upload: graph view, Ctrl+B Cover image, then wire.
+**How it affects generation:** skip on every audio Queue (Cover LoadImage is bypassed). generate is klein occupancy - later session. upload: graph view, Ctrl+B Cover image, then wire.
 
 **Other choices**
 
@@ -513,7 +513,7 @@ SaveAudio stem to stamp.
 
 **How it affects generation:** Must match SaveAudio / SaveAudioMP3.
 
-### `EZAudioRack` — Audio Rack
+### `EZAudioRack` - Audio Rack
 
 Pick one audio/music technique per axis and splice ACE-Step tags and lyrics form.
 
@@ -663,7 +663,7 @@ Use.
 
 **How it affects generation:** Draft, album take, 30 s bed, bumper. Catalog under generated/audio.
 
-### `EZBackgroundCast` — Background cast
+### `EZBackgroundCast` - Background cast
 
 Choose whether companions and extras count as background on Klein background Apps.
 
@@ -691,7 +691,7 @@ Treat extras as background.
 
 **How it affects generation:** On: extras, crowd, and distant figures are environment. Off: keep them as they appear.
 
-### `EZCinemaRack` — Cinema Rack
+### `EZCinemaRack` - Cinema Rack
 
 Pick one cinematography technique per axis and splice a Klein / Wan / LTX prompt.
 
@@ -844,13 +844,13 @@ Short-form hook.
 
 **How it affects generation:** Platform-agnostic hook grammar. Catalog under generated/cinema.
 
-### `EZClipConcat` — Save clip chain (MP4)
+### `EZClipConcat` - Save clip chain (MP4)
 
-Concat 1–24 duration-head MP4s. Cap is a ceiling, not a pad-to-runtime.
+Concat 1-24 duration-head MP4s. Cap is a ceiling, not a pad-to-runtime.
 
 !!! warning "Lab notes"
 
-    clip_01 required; clip_02…24 optional. Collect-until-gap (a hole refuses). v1 hard-cut only (xfade_cs=0). Master ≈ sum(stems); default cap 600 s, max 1800. No films/<slug>/publish copy.
+    clip_01 required; clip_02...24 optional. Collect-until-gap (a hole refuses). v1 hard-cut only (xfade_cs=0). Master ~ sum(stems); default cap 600 s, max 1800. No films/<slug>/publish copy.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -895,23 +895,23 @@ Type `FLOAT`. Range / default: 600 default, 1800 max.
 
 Fail-closed duration ceiling.
 
-**How it affects generation:** Not a pad target. 4×8 s is ~32 s. Past 24 stems use concat-shots.sh --files … --cap-seconds.
+**How it affects generation:** Not a pad target. 4x8 s is ~32 s. Past 24 stems use concat-shots.sh --files ... --cap-seconds.
 
 #### `xfade_cs`
 
-Type `INT`. Range / default: 0–50; v1 must be 0.
+Type `INT`. Range / default: 0-50; v1 must be 0.
 
 Audio acrossfade in centiseconds.
 
 **How it affects generation:** v1 raises unless 0 (hard cut). Widget stays for a later overlap-off acrossfade.
 
-### `EZClipLastFrame` — Last frame (IMAGE)
+### `EZClipLastFrame` - Last frame (IMAGE)
 
 Return the last frame of an IMAGE batch (index -1) as the next clip's I2V start.
 
 !!! warning "Lab notes"
 
-    Duration-safe. Do not hardcode ImageFromBatch 120 — legal last indices are 120 / 192 / 240 / 288.
+    Duration-safe. Do not hardcode ImageFromBatch 120 - legal last indices are 120 / 192 / 240 / 288.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -920,7 +920,7 @@ Return the last frame of an IMAGE batch (index -1) as the next clip's I2V start.
 
 No widgets. Sockets only.
 
-### `EZContextJoin` — Context Join
+### `EZContextJoin` - Context Join
 
 Pack labeled desk fields into one context STRING for rewriter nodes.
 
@@ -964,7 +964,7 @@ Label for field D.
 
 **How it affects generation:** Optional.
 
-### `EZCreativeResearch` — Creative research
+### `EZCreativeResearch` - Creative research
 
 Creative-process chat with optional web search and sequential research subagents. No UNET.
 
@@ -1017,7 +1017,7 @@ Allow web search.
 
 #### `subagents`
 
-Type `INT`. Range / default: 1–3, lab 2.
+Type `INT`. Range / default: 1-3, lab 2.
 
 How many research subagents.
 
@@ -1039,7 +1039,7 @@ Catalog id.
 
 **How it affects generation:** Leave as stamped.
 
-### `EZCubicCondition` — Cubic or photo reference
+### `EZCubicCondition` - Cubic or photo reference
 
 Attach the photo latent, or a people-erased block-study latent when the prompt rebuilds the place as cubes.
 
@@ -1058,7 +1058,7 @@ Attach the photo latent, or a people-erased block-study latent when the prompt r
 
 No widgets. Sockets only.
 
-### `EZDCCLoadGuideStill` — Load guide still
+### `EZDCCLoadGuideStill` - Load guide still
 
 Load clay/depth/canny/first/last from guides/<slug>/<shot_id>/. Fail-closed QC.
 
@@ -1090,7 +1090,7 @@ Type `COMBO`. Range / default: first.
 
 Which PNG.
 
-**How it affects generation:** first/last are RGB plates. clay/depth/canny are guides. Depth is mist 0–1 (near=white).
+**How it affects generation:** first/last are RGB plates. clay/depth/canny are guides. Depth is mist 0-1 (near=white).
 
 **Other choices**
 
@@ -1102,7 +1102,7 @@ Which PNG.
 | `depth` | Depth mist. |
 | `canny` | Canny edges. |
 
-### `EZDCCLoadGuideVideo` — Load guide video path
+### `EZDCCLoadGuideVideo` - Load guide video path
 
 Absolute clay.mp4 / depth.mp4 / canny.mp4 at 24 fps. Does not decode 120 frames.
 
@@ -1143,7 +1143,7 @@ Which mp4.
 | `depth` | Depth mp4 (lab IC-LoRA). |
 | `canny` | Canny mp4. |
 
-### `EZDCCLoadStillPack` — Load still pack
+### `EZDCCLoadStillPack` - Load still pack
 
 Load a blender-stills plate from guides/<slug>/stills/<plate>/.
 
@@ -1187,7 +1187,7 @@ Which layer.
 | `canny` | Canny. |
 | `normal` | Normals. |
 
-### `EZDCCOccupancyGate` — Occupancy gate
+### `EZDCCOccupancyGate` - Occupancy gate
 
 Pass-through IMAGE that fail-closes on occupancy XOR. Does not start Compose.
 
@@ -1217,7 +1217,7 @@ Heavy GPU mode that must already be entered.
 | `wan` | Wan 5B. |
 | `ltx` | LTX-2.5. |
 
-### `EZDescribeImage` — Describe reference still
+### `EZDescribeImage` - Describe reference still
 
 Fail-soft caption for models that are not multimodal. Empty without VL weights.
 
@@ -1236,15 +1236,15 @@ Type `BOOLEAN`. Range / default: false.
 
 Presence flag.
 
-**How it affects generation:** Off or missing VL weights → empty string.
+**How it affects generation:** Off or missing VL weights -> empty string.
 
-### `EZDreamXPromptEnhance` — DreamX Prompt Enhance
+### `EZDreamXPromptEnhance` - DreamX Prompt Enhance
 
 Rewrite a lazy first-frame+text prompt for DreamX-Creator (UMT5, joint AV).
 
 !!! warning "Lab notes"
 
-    First frame owns look. Paragraph is visual dynamics plus interleaved acoustic events. No DreamX UNET on lab graphs — Prompt Forge preview only.
+    First frame owns look. Paragraph is visual dynamics plus interleaved acoustic events. No DreamX UNET on lab graphs - Prompt Forge preview only.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1614,7 +1614,7 @@ Sample-catalog id.
 
 **How it affects generation:** Leave as stamped.
 
-### `EZDubIngest` — Dub ingest (file or URL)
+### `EZDubIngest` - Dub ingest (file or URL)
 
 Extract audio from input/ or a URL. Queue refuses unless I have rights is on.
 
@@ -1655,7 +1655,7 @@ Optional http(s) URL.
 
 **How it affects generation:** Empty unless you ingest from the network.
 
-### `EZDubRender` — Dub clone + mix
+### `EZDubRender` - Dub clone + mix
 
 Zero-shot clone from a scored reference window, duration-lock, mix, SRT, disclosure sidecar.
 
@@ -1698,29 +1698,29 @@ Overlay a spoken bumper on the mix wav.
 
 #### `speed`
 
-Type `FLOAT`. Range / default: 0.5–1.5, 1.0.
+Type `FLOAT`. Range / default: 0.5-1.5, 1.0.
 
 Fit ceiling for duration lock.
 
-**How it affects generation:** 1.0 uses the lab 1.25× pitch-preserving lock, then spill, then fade-trim the end.
+**How it affects generation:** 1.0 uses the lab 1.25x pitch-preserving lock, then spill, then fade-trim the end.
 
 #### `cfg_weight`
 
-Type `FLOAT`. Range / default: −1.0 = auto.
+Type `FLOAT`. Range / default: -1.0 = auto.
 
 Clone CFG.
 
-**How it affects generation:** −1 auto. Lab auto 0.3 on EN→ES (retry 0.5).
+**How it affects generation:** -1 auto. Lab auto 0.3 on EN->ES (retry 0.5).
 
 #### `exaggeration`
 
-Type `FLOAT`. Range / default: 0.25–2.0, 0.5.
+Type `FLOAT`. Range / default: 0.25-2.0, 0.5.
 
 Chatterbox exaggeration.
 
 **How it affects generation:** 0.5 is the lab default. Higher is cartoon-emotive.
 
-### `EZDubScript` — Dub transcript + translate
+### `EZDubScript` - Dub transcript + translate
 
 Diarize + ASR + on-box GGUF translation. Widget JSON is the human edit surface.
 
@@ -1751,7 +1751,7 @@ Type `COMBO`. Range / default: es.
 
 Target ISO code.
 
-**How it affects generation:** es is the lab smoke. Clone CFG auto 0.3 on EN→ES.
+**How it affects generation:** es is the lab smoke. Clone CFG auto 0.3 on EN->ES.
 
 **Other choices**
 
@@ -1820,7 +1820,7 @@ Source language.
 
 #### `max_speakers`
 
-Type `INT`. Range / default: 0–12, 0 = auto.
+Type `INT`. Range / default: 0-12, 0 = auto.
 
 Diarize cap.
 
@@ -1842,7 +1842,7 @@ Analyze vs render vs both.
 | `analyze` | ASR/translate only. |
 | `render` | Skip ASR; clone widget JSON. |
 
-### `EZEmptyFlux2FromImage` — Empty Flux.2 from image
+### `EZEmptyFlux2FromImage` - Empty Flux.2 from image
 
 Allocate an empty Flux.2 latent matching a still's snapped width and height.
 
@@ -1853,17 +1853,17 @@ Allocate an empty Flux.2 latent matching a still's snapped width and height.
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `image` | in | `IMAGE` | Snapped still. |
-| `LATENT` | out | `LATENT` | Empty Flux.2 noise canvas (÷16, 128 channels). |
+| `LATENT` | out | `LATENT` | Empty Flux.2 noise canvas (div16, 128 channels). |
 
 No widgets. Sockets only.
 
-### `EZFilmConcat` — Save 90s film (MP4)
+### `EZFilmConcat` - Save 90s film (MP4)
 
 Concat 18 LTX 5.00 s MP4s, cap 90 s, H.264 CRF 18 + AAC + loudnorm + faststart.
 
 !!! warning "Lab notes"
 
-    Queue once. xfade_cs is audio-only acrossfade; 0 is a hard cut. go-see ships xfade_cs 8. act=0 is a 90s film master; act=1–5 writes ez_<slug>_actN_90s.mp4.
+    Queue once. xfade_cs is audio-only acrossfade; 0 is a hard cut. go-see ships xfade_cs 8. act=0 is a 90s film master; act=1-5 writes ez_<slug>_actN_90s.mp4.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1919,7 +1919,7 @@ Hard duration cap for this 18-shot stitch.
 
 #### `xfade_cs`
 
-Type `INT`. Range / default: 0–50; 10 = 0.10 s.
+Type `INT`. Range / default: 0-50; 10 = 0.10 s.
 
 Audio-only acrossfade in centiseconds.
 
@@ -1927,13 +1927,13 @@ Audio-only acrossfade in centiseconds.
 
 #### `act`
 
-Type `INT`. Range / default: 0–5.
+Type `INT`. Range / default: 0-5.
 
-0 = 90s film master; 1–5 = act master for a 7.5 min film.
+0 = 90s film master; 1-5 = act master for a 7.5 min film.
 
 **How it affects generation:** Festival shorts Queue five act graphs, then concat-shots.sh writes ez_<slug>_450s.mp4.
 
-### `EZFilmDisclosure` — LTX AI-media disclosure
+### `EZFilmDisclosure` - LTX AI-media disclosure
 
 Prepend the LTX Community License AI-media disclosure. Idempotent. Not legal advice.
 
@@ -1949,7 +1949,7 @@ Optional extra line after the stock disclosure.
 
 **How it affects generation:** Empty = stock sentence only. Do not strip provenance.
 
-### `EZImageDescribe` — Describe image
+### `EZImageDescribe` - Describe image
 
 Caption a source still so Prompt Enhance can name inventory and lettering.
 
@@ -1959,7 +1959,7 @@ Caption a source still so Prompt Enhance can name inventory and lettering.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
-| `image` | in | `IMAGE` | Source still. Lazy — skipped when enable is off. |
+| `image` | in | `IMAGE` | Source still. Lazy - skipped when enable is off. |
 | `caption` | out | `STRING` | Short caption, or empty. |
 
 #### `enable`
@@ -1970,7 +1970,7 @@ Run the captioner.
 
 **How it affects generation:** Off skips the VLM. On needs download-llm --tier describe.
 
-### `EZImageFormat` — Format / platform
+### `EZImageFormat` - Format / platform
 
 Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack look recipe.
 
@@ -1981,8 +1981,8 @@ Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `image` | in | `IMAGE` | Optional still used when Output size is Match input. |
-| `width` | out | `INT` | Latent width (÷16). |
-| `height` | out | `INT` | Latent height (÷16). |
+| `width` | out | `INT` | Latent width (div16). |
+| `height` | out | `INT` | Latent height (div16). |
 | `batch` | out | `INT` | Batch size. |
 | `hint` | out | `STRING` | Enhance duration / framing line. |
 | `prefix` | out | `STRING` | SaveImage filename prefix. |
@@ -1994,92 +1994,92 @@ Type `COMBO`. Range / default: 16:9 LTX feeder / platform jobs / Custom.
 
 Aspect or named platform job.
 
-**How it affects generation:** Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width × Height (snapped to ÷16, max 2048). Does not change Quality, CLIP, or VAE.
+**How it affects generation:** Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (snapped to div16, max 2048). Does not change Quality, CLIP, or VAE.
 
 **Other choices**
 
 | Choice | What it does |
 | --- | --- |
-| `Custom` | Width × Height widgets, snapped to ÷16. |
-| `16:9 draft (768×432)` | 768×432. aspect_16_9_draft. |
-| `16:9 LTX feeder (1280×704)` | 1280×704. aspect_16_9_ltx. |
-| `16:9 (1280×720)` | 1280×720. aspect_16_9. |
-| `16:9 mid (1024×576)` | 1024×576. aspect_16_9_mid. |
-| `1:1 square (1024×1024)` | 1024×1024. aspect_1_1. |
-| `1:1 circle-safe (768×768)` | 768×768. aspect_1_1_circle. |
-| `4:5 portrait (1024×1280)` | 1024×1280. aspect_4_5. |
-| `9:16 draft (432×768)` | 432×768. aspect_9_16_draft. |
-| `9:16 (576×1024)` | 576×1024. aspect_9_16. |
-| `9:16 LTX feeder (768×1280)` | 768×1280. aspect_9_16_ltx. |
-| `~1.91:1 landscape (1216×640)` | 1216×640. aspect_191. |
-| `~3:1 banner (1536×512)` | 1536×512. aspect_3_1. |
-| `4:1 banner (1536×384)` | 1536×384. aspect_4_1. |
-| `2:3 pin (768×1152)` | 768×1152. aspect_2_3. |
-| `3:4 panel (768×1024)` | 768×1024. aspect_3_4. |
-| `YouTube · thumbnail (1280×720)` | 1280×720. youtube_thumb. |
-| `YouTube · channel art (1536×864)` | 1536×864. youtube_channel_art. |
-| `YouTube · channel icon (768×768)` | 768×768. youtube_channel_icon. |
-| `YouTube · Shorts thumb (576×1024)` | 576×1024. youtube_shorts_thumb. |
-| `YouTube · Community (1024×1024)` | 1024×1024. youtube_community. |
-| `YouTube · chapter card (1280×720)` | 1280×720. youtube_chapter. |
-| `YouTube · subscribe plate (1280×720)` | 1280×720. youtube_subscribe. |
-| `YouTube · end screen (1280×720)` | 1280×720. youtube_endscreen. |
-| `Instagram · square (1024×1024)` | 1024×1024. ig_square. |
-| `Instagram · 4:5 portrait (1024×1280)` | 1024×1280. ig_portrait. |
-| `Instagram · landscape (1216×640)` | 1216×640. ig_landscape. |
-| `Instagram · Story (576×1024)` | 576×1024. ig_story. |
-| `Instagram · Reel cover (576×1024)` | 576×1024. ig_reel. |
-| `Instagram · Highlight (768×768)` | 768×768. ig_highlight. |
-| `Instagram · profile (768×768)` | 768×768. ig_profile. |
-| `TikTok · cover (576×1024)` | 576×1024. tt_cover. |
-| `TikTok · Shop (1024×1024)` | 1024×1024. tt_shop. |
-| `X · post (1280×720)` | 1280×720. x_post. |
-| `X · header (1536×512)` | 1536×512. x_header. |
-| `X · card (1216×640)` | 1216×640. x_card. |
-| `LinkedIn · square (1024×1024)` | 1024×1024. li_post. |
-| `LinkedIn · landscape (1216×640)` | 1216×640. li_landscape. |
-| `LinkedIn · banner (1536×384)` | 1536×384. li_banner. |
-| `LinkedIn · article (1216×640)` | 1216×640. li_article. |
-| `Pinterest · pin (768×1152)` | 768×1152. pin. |
-| `Pinterest · Idea Pin (576×1024)` | 576×1024. pin_story. |
-| `Facebook · post (1216×640)` | 1216×640. fb_post. |
-| `Threads · 4:5 (1024×1280)` | 1024×1280. threads. |
-| `Twitch · offline (1280×720)` | 1280×720. twitch_offline. |
-| `Twitch · starting soon (1280×720)` | 1280×720. twitch_starting. |
-| `Twitch · BRB (1280×720)` | 1280×720. twitch_brb. |
-| `Twitch · ending (1280×720)` | 1280×720. twitch_ending. |
-| `Twitch · overlay (1280×720)` | 1280×720. twitch_overlay. |
-| `Twitch · panel (768×1024)` | 768×1024. twitch_panel. |
-| `Twitch · profile (768×768)` | 768×768. twitch_profile. |
-| `Twitch · banner (1536×512)` | 1536×512. twitch_banner. |
-| `Spotify · playlist (1024×1024)` | 1024×1024. spot_playlist. |
-| `Spotify · Canvas still (576×1024)` | 576×1024. spot_canvas. |
-| `Album · cover (1024×1024)` | 1024×1024. album_cover. |
-| `Lyric card (1024×1024)` | 1024×1024. lyric_card. |
-| `Audiogram · wide (1280×720)` | 1280×720. ag_wide. |
-| `Audiogram · vertical (576×1024)` | 576×1024. ag_vert. |
-| `Podcast · episode art (1024×1024)` | 1024×1024. episode_art. |
-| `Podcast · cover (1024×1024)` | 1024×1024. podcast_cover. |
-| `Open Graph / blog (1216×640)` | 1216×640. og. |
-| `Email · header (1216×640)` | 1216×640. email_header. |
-| `Substack · hero (1216×640)` | 1216×640. substack. |
-| `Patreon · post (1024×1280)` | 1024×1280. patreon. |
-| `Channel · banner (1536×512)` | 1536×512. banner. |
-| `End-card / CTA (1280×720)` | 1280×720. endcard. |
-| `Quote background (1024×1024)` | 1024×1024. quote_bg. |
-| `Lower-third plate (1280×720)` | 1280×720. lower_third. |
-| `Food / tabletop (1024×1280)` | 1024×1280. food_tabletop. |
-| `Shorts still (432×768)` | 432×768. shorts_still. |
-| `Hook still (432×768)` | 432×768. hook_still. |
-| `Product packshot (1024×1024)` | 1024×1024. packshot. |
-| `Product lifestyle (1024×1280)` | 1024×1280. lifestyle. |
-| `Desk setup (1280×720)` | 1280×720. desk_setup. |
-| `Coming soon (1280×720)` | 1280×720. coming_soon. |
-| `Slide title (1280×720)` | 1280×720. slide_title. |
-| `Zoom / Meet background (1280×720)` | 1280×720. zoom_bg. |
-| `Merch · tee (1024×1024)` | 1024×1024. merch_tee. |
-| `Merch · mug (1024×1024)` | 1024×1024. merch_mug. |
-| `Print poster (768×1152)` | 768×1152. poster. |
+| `Custom` | Width x Height widgets, snapped to div16. |
+| `16:9 draft (768x432)` | 768x432. aspect_16_9_draft. |
+| `16:9 LTX feeder (1280x704)` | 1280x704. aspect_16_9_ltx. |
+| `16:9 (1280x720)` | 1280x720. aspect_16_9. |
+| `16:9 mid (1024x576)` | 1024x576. aspect_16_9_mid. |
+| `1:1 square (1024x1024)` | 1024x1024. aspect_1_1. |
+| `1:1 circle-safe (768x768)` | 768x768. aspect_1_1_circle. |
+| `4:5 portrait (1024x1280)` | 1024x1280. aspect_4_5. |
+| `9:16 draft (432x768)` | 432x768. aspect_9_16_draft. |
+| `9:16 (576x1024)` | 576x1024. aspect_9_16. |
+| `9:16 LTX feeder (768x1280)` | 768x1280. aspect_9_16_ltx. |
+| `~1.91:1 landscape (1216x640)` | 1216x640. aspect_191. |
+| `~3:1 banner (1536x512)` | 1536x512. aspect_3_1. |
+| `4:1 banner (1536x384)` | 1536x384. aspect_4_1. |
+| `2:3 pin (768x1152)` | 768x1152. aspect_2_3. |
+| `3:4 panel (768x1024)` | 768x1024. aspect_3_4. |
+| `YouTube - thumbnail (1280x720)` | 1280x720. youtube_thumb. |
+| `YouTube - channel art (1536x864)` | 1536x864. youtube_channel_art. |
+| `YouTube - channel icon (768x768)` | 768x768. youtube_channel_icon. |
+| `YouTube - Shorts thumb (576x1024)` | 576x1024. youtube_shorts_thumb. |
+| `YouTube - Community (1024x1024)` | 1024x1024. youtube_community. |
+| `YouTube - chapter card (1280x720)` | 1280x720. youtube_chapter. |
+| `YouTube - subscribe plate (1280x720)` | 1280x720. youtube_subscribe. |
+| `YouTube - end screen (1280x720)` | 1280x720. youtube_endscreen. |
+| `Instagram - square (1024x1024)` | 1024x1024. ig_square. |
+| `Instagram - 4:5 portrait (1024x1280)` | 1024x1280. ig_portrait. |
+| `Instagram - landscape (1216x640)` | 1216x640. ig_landscape. |
+| `Instagram - Story (576x1024)` | 576x1024. ig_story. |
+| `Instagram - Reel cover (576x1024)` | 576x1024. ig_reel. |
+| `Instagram - Highlight (768x768)` | 768x768. ig_highlight. |
+| `Instagram - profile (768x768)` | 768x768. ig_profile. |
+| `TikTok - cover (576x1024)` | 576x1024. tt_cover. |
+| `TikTok - Shop (1024x1024)` | 1024x1024. tt_shop. |
+| `X - post (1280x720)` | 1280x720. x_post. |
+| `X - header (1536x512)` | 1536x512. x_header. |
+| `X - card (1216x640)` | 1216x640. x_card. |
+| `LinkedIn - square (1024x1024)` | 1024x1024. li_post. |
+| `LinkedIn - landscape (1216x640)` | 1216x640. li_landscape. |
+| `LinkedIn - banner (1536x384)` | 1536x384. li_banner. |
+| `LinkedIn - article (1216x640)` | 1216x640. li_article. |
+| `Pinterest - pin (768x1152)` | 768x1152. pin. |
+| `Pinterest - Idea Pin (576x1024)` | 576x1024. pin_story. |
+| `Facebook - post (1216x640)` | 1216x640. fb_post. |
+| `Threads - 4:5 (1024x1280)` | 1024x1280. threads. |
+| `Twitch - offline (1280x720)` | 1280x720. twitch_offline. |
+| `Twitch - starting soon (1280x720)` | 1280x720. twitch_starting. |
+| `Twitch - BRB (1280x720)` | 1280x720. twitch_brb. |
+| `Twitch - ending (1280x720)` | 1280x720. twitch_ending. |
+| `Twitch - overlay (1280x720)` | 1280x720. twitch_overlay. |
+| `Twitch - panel (768x1024)` | 768x1024. twitch_panel. |
+| `Twitch - profile (768x768)` | 768x768. twitch_profile. |
+| `Twitch - banner (1536x512)` | 1536x512. twitch_banner. |
+| `Spotify - playlist (1024x1024)` | 1024x1024. spot_playlist. |
+| `Spotify - Canvas still (576x1024)` | 576x1024. spot_canvas. |
+| `Album - cover (1024x1024)` | 1024x1024. album_cover. |
+| `Lyric card (1024x1024)` | 1024x1024. lyric_card. |
+| `Audiogram - wide (1280x720)` | 1280x720. ag_wide. |
+| `Audiogram - vertical (576x1024)` | 576x1024. ag_vert. |
+| `Podcast - episode art (1024x1024)` | 1024x1024. episode_art. |
+| `Podcast - cover (1024x1024)` | 1024x1024. podcast_cover. |
+| `Open Graph / blog (1216x640)` | 1216x640. og. |
+| `Email - header (1216x640)` | 1216x640. email_header. |
+| `Substack - hero (1216x640)` | 1216x640. substack. |
+| `Patreon - post (1024x1280)` | 1024x1280. patreon. |
+| `Channel - banner (1536x512)` | 1536x512. banner. |
+| `End-card / CTA (1280x720)` | 1280x720. endcard. |
+| `Quote background (1024x1024)` | 1024x1024. quote_bg. |
+| `Lower-third plate (1280x720)` | 1280x720. lower_third. |
+| `Food / tabletop (1024x1280)` | 1024x1280. food_tabletop. |
+| `Shorts still (432x768)` | 432x768. shorts_still. |
+| `Hook still (432x768)` | 432x768. hook_still. |
+| `Product packshot (1024x1024)` | 1024x1024. packshot. |
+| `Product lifestyle (1024x1280)` | 1024x1280. lifestyle. |
+| `Desk setup (1280x720)` | 1280x720. desk_setup. |
+| `Coming soon (1280x720)` | 1280x720. coming_soon. |
+| `Slide title (1280x720)` | 1280x720. slide_title. |
+| `Zoom / Meet background (1280x720)` | 1280x720. zoom_bg. |
+| `Merch - tee (1024x1024)` | 1024x1024. merch_tee. |
+| `Merch - mug (1024x1024)` | 1024x1024. merch_mug. |
+| `Print poster (768x1152)` | 768x1152. poster. |
 
 #### `look`
 
@@ -2121,7 +2121,7 @@ Optional Cinema Rack starter.
 
 #### `width`
 
-Type `INT`. Range / default: 16–2048, step 16.
+Type `INT`. Range / default: 16-2048, step 16.
 
 Custom width.
 
@@ -2129,7 +2129,7 @@ Custom width.
 
 #### `height`
 
-Type `INT`. Range / default: 16–2048, step 16.
+Type `INT`. Range / default: 16-2048, step 16.
 
 Custom height.
 
@@ -2137,7 +2137,7 @@ Custom height.
 
 #### `batch_size`
 
-Type `INT`. Range / default: 1–4.
+Type `INT`. Range / default: 1-4.
 
 How many stills in one Run.
 
@@ -2151,7 +2151,7 @@ Match a loaded still's aspect, or keep Format / platform.
 
 **How it affects generation:** Match input (default) picks the nearest aspect catalog row when a still is loaded. Force format keeps the Format pick. No still: authored format. Quality does not change size.
 
-### `EZImageMode` — Creator mode
+### `EZImageMode` - Creator mode
 
 Pick one of 100 creator modes. Category filters Mode. Queue splices an instruction into Enhance context and selects t2i/edit/text_swap/identity/background_swap/background_edit plus a save prefix.
 
@@ -2164,12 +2164,12 @@ Pick one of 100 creator modes. Category filters Mode. Queue splices an instructi
 | `context` | in | `STRING` | Optional look-recipe splice from EZImageFormat. |
 | `has_image` | in | `BOOLEAN` | Presence flag from EZOptionalImage. Force input. Off while Iterate is on means the next Run is text-to-image. |
 | `context` | out | `STRING` | Mode instruction plus incoming look splice, or the Iterate edit line. |
-| `enhance_mode` | out | `COMBO` | t2i, edit, identity, text_swap, background_swap, or background_edit — same combo as EZKleinPromptEnhance.mode. |
+| `enhance_mode` | out | `COMBO` | t2i, edit, identity, text_swap, background_swap, or background_edit - same combo as EZKleinPromptEnhance.mode. |
 | `prefix` | out | `STRING` | SaveImage filename prefix. ez_iterate while Iterate is on. |
 
 #### `category`
 
-Type `COMBO`. Range / default: Generate / Scene / Subject / ….
+Type `COMBO`. Range / default: Generate / Scene / Subject / ....
 
 Filter Creator mode.
 
@@ -2192,7 +2192,7 @@ Filter Creator mode.
 
 #### `mode`
 
-Type `COMBO`. Range / default: Photoreal still / Background swap / Change text / ….
+Type `COMBO`. Range / default: Photoreal still / Background swap / Change text / ....
 
 Creator preset.
 
@@ -2212,7 +2212,7 @@ Creator preset.
 | `Exterior architecture` | Exterior architecture still. Massing, facade material, and sun angle. Empty of signage. |
 | `Macro detail` | Macro still of a small subject. Shallow depth, tactile material, no readable type. |
 | `Illustration still` | Illustration still in a named medium (ink, gouache, woodcut). Not photoreal. |
-| `Background swap` | Keep the subject from the reference still. Replace the entire environment — backdrop, sky, architecture, ground or floor, and set dressing near the subject. |
+| `Background swap` | Keep the subject from the reference still. Replace the entire environment - backdrop, sky, architecture, ground or floor, and set dressing near the subject. |
 | `Sky replace` | Keep the scene from the reference. Replace only the sky and the light it casts. |
 | `Time of day` | Keep inventory and camera. Relight the reference for a new time of day. |
 | `Weather change` | Keep the place. Change weather only: rain, snow, fog, or clear air as prompted. |
@@ -2319,7 +2319,7 @@ This run. Values Queue will send.
 
 **How it affects generation:** Display only. Python run() ignores it. The App fills it from POST /ez_image/studio-preview before Run.
 
-### `EZImageUpscale` — Upscale still
+### `EZImageUpscale` - Upscale still
 
 Optional lanczos upscale after a still decode. none passes the tensor through.
 
@@ -2339,7 +2339,7 @@ Type `COMBO`. Range / default: none / 2x / 4x / 4K.
 
 Upscale mode.
 
-**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.
+**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840x2160 box (portrait 2160x3840). No extra weights.
 
 **Other choices**
 
@@ -2350,7 +2350,7 @@ Upscale mode.
 | `4x` | Quadruple pixels. |
 | `4K` | Fit in a 4K box. |
 
-### `EZKleinPromptEnhance` — Klein Prompt Enhance
+### `EZKleinPromptEnhance` - Klein Prompt Enhance
 
 Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
 
@@ -2413,9 +2413,9 @@ System prompt flavor.
 
 Type `STRING`.
 
-Framing hint (YouTube 16:9 still, Instagram 4:5, …).
+Framing hint (YouTube 16:9 still, Instagram 4:5, ...).
 
-**How it affects generation:** Steers aspect language in the rewrite. Does not set the latent size — EmptyFlux2LatentImage does.
+**How it affects generation:** Steers aspect language in the rewrite. Does not set the latent size - EmptyFlux2LatentImage does.
 
 #### `style`
 
@@ -2739,7 +2739,7 @@ Sample-catalog id (graph stem).
 
 **How it affects generation:** Internal. Leave as stamped so sample dropdowns resolve.
 
-### `EZKleinRefCanvas` — Klein canvas (optional ref)
+### `EZKleinRefCanvas` - Klein canvas (optional ref)
 
 Pass the empty Flux2 latent, or VAE-encode a still and attach ReferenceLatent.
 
@@ -2764,7 +2764,7 @@ Presence flag when unwired.
 
 **How it affects generation:** Lab graphs wire this from EZOptionalImage. Off = T2I.
 
-### `EZKokoroTTS` — Kokoro TTS
+### `EZKokoroTTS` - Kokoro TTS
 
 Two-host (plus optional announcer) TTS. Kokoro-82M stock voices by default.
 
@@ -2843,13 +2843,13 @@ Optional clone reference path.
 
 #### `speed`
 
-Type `FLOAT`. Range / default: 0.5–1.5, lab 1.0.
+Type `FLOAT`. Range / default: 0.5-1.5, lab 1.0.
 
 Speaking rate.
 
 **How it affects generation:** 1.0 is natural. Faster shrinks the episode and can clip diction.
 
-### `EZLTXPromptEnhance` — LTX Prompt Enhance
+### `EZLTXPromptEnhance` - LTX Prompt Enhance
 
 Rewrite a lazy prompt for LTX-2.5 (present-tense paragraph, audio interleaved).
 
@@ -2907,7 +2907,7 @@ Type `STRING`. Range / default: 8 seconds, 24 fps.
 
 Duration hint.
 
-**How it affects generation:** Does not set 193 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
+**How it affects generation:** Does not set 193 frames - LTXVImgToVideo does. Film printers stay 5 seconds / 121.
 
 #### `audio_notes`
 
@@ -3239,7 +3239,7 @@ Sample-catalog id.
 
 **How it affects generation:** Leave as stamped.
 
-### `EZLongCatPromptEnhance` — LongCat Prompt Enhance
+### `EZLongCatPromptEnhance` - LongCat Prompt Enhance
 
 Rewrite a lazy prompt for LongCat-Video (T2V / I2V / continuation).
 
@@ -3623,7 +3623,7 @@ Sample-catalog id.
 
 **How it affects generation:** Leave as stamped.
 
-### `EZMatchImageSize` — Match image size
+### `EZMatchImageSize` - Match image size
 
 Resize a still to another image's exact width and height.
 
@@ -3634,12 +3634,12 @@ Resize a still to another image's exact width and height.
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `image` | in | `IMAGE` | Edited still. |
-| `size_src` | in | `IMAGE` | Source still whose H×W is the target. |
+| `size_src` | in | `IMAGE` | Source still whose HxW is the target. |
 | `IMAGE` | out | `IMAGE` | Edited still at source size. |
 
 No widgets. Sockets only.
 
-### `EZModelCheck` — Check models
+### `EZModelCheck` - Check models
 
 Manual disk check for occupancy + Quality weights. Queue does not run this node.
 
@@ -3655,7 +3655,7 @@ Last check result.
 
 **How it affects generation:** JS overwrites after Check models. Queue ignores this node.
 
-### `EZNegativePromptEnhance` — Negative Prompt Enhance
+### `EZNegativePromptEnhance` - Negative Prompt Enhance
 
 Rewrite a negative CLIP seed against the final positive. Stays on when Rewrite prompt is off.
 
@@ -3700,9 +3700,9 @@ Which negative family.
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
 
-### `EZOptionalImage` — Optional reference stills
+### `EZOptionalImage` - Optional reference stills
 
-Optional example or reference stills. Empty is valid — Queue without a file.
+Optional example or reference stills. Empty is valid - Queue without a file.
 
 !!! warning "Lab notes"
 
@@ -3725,7 +3725,7 @@ Upload or pick a still on the drive. Empty is valid.
 
 **How it affects generation:** Empty Queues a T2I. A pick loads from input/. Choose from outputs copies a durable file into input/.
 
-### `EZPodcastDisclosure` — Podcast Disclosure
+### `EZPodcastDisclosure` - Podcast Disclosure
 
 Prepend the fixed synthesized-voices bumper. Operators cannot edit the string.
 
@@ -3736,7 +3736,7 @@ Prepend the fixed synthesized-voices bumper. Operators cannot edit the string.
 
 No widgets. Sockets only.
 
-### `EZPodcastLearn` — Podcast Learn
+### `EZPodcastLearn` - Podcast Learn
 
 Paste notes and links; write a study digest and a duration-sized script.
 
@@ -3825,7 +3825,7 @@ Catalog id.
 
 **How it affects generation:** Leave as stamped.
 
-### `EZPodcastScript` — Podcast Script
+### `EZPodcastScript` - Podcast Script
 
 Draft Speaker A/B (and Announcer) lines via the on-box GGUF.
 
@@ -3880,7 +3880,7 @@ Catalog id.
 
 **How it affects generation:** Leave as stamped.
 
-### `EZPromptBundle` — Prompt Bundle
+### `EZPromptBundle` - Prompt Bundle
 
 Join final shot prompts for one shared film negative. No LLM.
 
@@ -3895,7 +3895,7 @@ Join final shot prompts for one shared film negative. No LLM.
 
 No widgets. Sockets only.
 
-### `EZPromptJoin` — Prompt Join
+### `EZPromptJoin` - Prompt Join
 
 Join a shared identity paragraph with a shot-specific camera line.
 
@@ -3935,7 +3935,7 @@ What stays pinned.
 | `view` | New camera, same world. |
 | `state` | Same framing, new light/grade/action. |
 
-### `EZQuality` — Quality
+### `EZQuality` - Quality
 
 Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
@@ -3968,7 +3968,7 @@ custom freezes last overlay; lab restores graph defaults.
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
-### `EZRapLyrics` — Rap Lyrics
+### `EZRapLyrics` - Rap Lyrics
 
 Draft original rap lyrics via the on-box GGUF. Forbids living-MC names.
 
@@ -4009,7 +4009,7 @@ Catalog id.
 
 **How it affects generation:** Leave as stamped.
 
-### `EZReinsertPeople` — Reinsert people
+### `EZReinsertPeople` - Reinsert people
 
 Paste detected people from the source photo onto a cubic rebuild.
 
@@ -4026,7 +4026,7 @@ Paste detected people from the source photo onto a cubic rebuild.
 
 No widgets. Sockets only.
 
-### `EZSamplePrompt` — Sample Prompt
+### `EZSamplePrompt` - Sample Prompt
 
 STRING source with a sample-prompt combo plus Custom textarea.
 
@@ -4058,7 +4058,7 @@ Catalog id (inspire/prompt-forge).
 
 **How it affects generation:** Leave as stamped.
 
-### `EZSnapImage` — Snap image (div 16)
+### `EZSnapImage` - Snap image (div 16)
 
 Scale a still to the largest width and height that fit inside the source and are multiples of 16.
 
@@ -4073,7 +4073,7 @@ Scale a still to the largest width and height that fit inside the source and are
 
 No widgets. Sockets only.
 
-### `EZUnloadModels` — Unload models
+### `EZUnloadModels` - Unload models
 
 Pass-through IMAGE that unloads diffusion models first.
 
@@ -4088,7 +4088,7 @@ Pass-through IMAGE that unloads diffusion models first.
 
 No widgets. Sockets only.
 
-### `EZVideoFormat` — Format / platform (video)
+### `EZVideoFormat` - Format / platform (video)
 
 Pick a Wan or LTX clip canvas (aspect or named platform).
 
@@ -4099,8 +4099,8 @@ Pick a Wan or LTX clip canvas (aspect or named platform).
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `image` | in | `IMAGE` | Optional still used when Output size is Match input. |
-| `width` | out | `INT` | Latent width (Wan ÷16, LTX ÷32). |
-| `height` | out | `INT` | Latent height (Wan ÷16, LTX ÷32). |
+| `width` | out | `INT` | Latent width (Wan div16, LTX div32). |
+| `height` | out | `INT` | Latent height (Wan div16, LTX div32). |
 | `hint` | out | `STRING` | Enhance duration / framing line. |
 | `prefix` | out | `STRING` | Optional filename prefix (often unwired). |
 
@@ -4110,14 +4110,14 @@ Type `COMBO`. Range / default: Wan 5B / LTX-2.5.
 
 Which VAE grid to use.
 
-**How it affects generation:** Wan snaps ÷16 (max 1024). LTX snaps ÷32 (max 1280). App Mode hides this — occupancy already picks the model.
+**How it affects generation:** Wan snaps div16 (max 1024). LTX snaps div32 (max 1280). App Mode hides this - occupancy already picks the model.
 
 **Other choices**
 
 | Choice | What it does |
 | --- | --- |
-| `Wan 5B` | wan VAE grid ÷16. |
-| `LTX-2.5` | ltx VAE grid ÷32. |
+| `Wan 5B` | wan VAE grid div16. |
+| `LTX-2.5` | ltx VAE grid div32. |
 
 #### `format`
 
@@ -4125,33 +4125,33 @@ Type `COMBO`. Range / default: 16:9 YouTube / 9:16 Shorts / Custom.
 
 Aspect or named platform job.
 
-**How it affects generation:** Preset writes pixels and Rewrite prompt framing. Custom uses Width × Height. Does not change Quality, length, CLIP, or VAE.
+**How it affects generation:** Preset writes pixels and Rewrite prompt framing. Custom uses Width x Height. Does not change Quality, length, CLIP, or VAE.
 
 **Other choices**
 
 | Choice | What it does |
 | --- | --- |
-| `Custom` | Width × Height widgets, snapped to the Family VAE grid. |
-| `Wan · 16:9 YouTube (832×480)` | 832×480. wan. |
-| `Wan · 16:9 mid (1024×576)` | 1024×576. wan. |
-| `Wan · 9:16 Shorts (480×832)` | 480×832. wan. |
-| `Wan · 1:1 square (768×768)` | 768×768. wan. |
-| `LTX · 16:9 YouTube (1280×704)` | 1280×704. ltx. |
-| `LTX · 9:16 Shorts (768×1280)` | 768×1280. ltx. |
-| `LTX · 1:1 square (768×768)` | 768×768. ltx. |
-| `LTX · 4:5 portrait (1024×1280)` | 1024×1280. ltx. |
+| `Custom` | Width x Height widgets, snapped to the Family VAE grid. |
+| `Wan - 16:9 YouTube (832x480)` | 832x480. wan. |
+| `Wan - 16:9 mid (1024x576)` | 1024x576. wan. |
+| `Wan - 9:16 Shorts (480x832)` | 480x832. wan. |
+| `Wan - 1:1 square (768x768)` | 768x768. wan. |
+| `LTX - 16:9 YouTube (1280x704)` | 1280x704. ltx. |
+| `LTX - 9:16 Shorts (768x1280)` | 768x1280. ltx. |
+| `LTX - 1:1 square (768x768)` | 768x768. ltx. |
+| `LTX - 4:5 portrait (1024x1280)` | 1024x1280. ltx. |
 
 #### `width`
 
-Type `INT`. Range / default: 16–1280.
+Type `INT`. Range / default: 16-1280.
 
 Custom width.
 
-**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue. LTX Custom snaps 720→704.
+**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue. LTX Custom snaps 720->704.
 
 #### `height`
 
-Type `INT`. Range / default: 16–1280.
+Type `INT`. Range / default: 16-1280.
 
 Custom height.
 
@@ -4173,7 +4173,7 @@ LTX clip length.
 
 **How it affects generation:** Default 8 seconds (193 frames, 1+8n). Frontend writes latent length. Wan 5B stays 5 seconds. Film printers stay 5 seconds / 121.
 
-### `EZWanPromptEnhance` — Wan Prompt Enhance
+### `EZWanPromptEnhance` - Wan Prompt Enhance
 
 Rewrite a lazy prompt for Wan 2.2 TI2V-5B (silent).
 
@@ -4197,7 +4197,7 @@ Type `STRING`.
 
 Lazy motion sentence.
 
-**How it affects generation:** I2V rewrites to motion + one camera only. Do not prompt audio — Wan is silent.
+**How it affects generation:** I2V rewrites to motion + one camera only. Do not prompt audio - Wan is silent.
 
 #### `enhance`
 
@@ -4231,7 +4231,7 @@ Type `STRING`. Range / default: 5 seconds, 24 fps.
 
 Duration/fps hint for the rewriter.
 
-**How it affects generation:** Does not change latent length — Wan22ImageToVideoLatent does.
+**How it affects generation:** Does not change latent length - Wan22ImageToVideoLatent does.
 
 #### `style`
 
@@ -4555,7 +4555,7 @@ Sample-catalog id.
 
 **How it affects generation:** Leave as stamped.
 
-### `EZZimagePromptEnhance` — Z-Image Prompt Enhance
+### `EZZimagePromptEnhance` - Z-Image Prompt Enhance
 
 Rewrite a lazy still prompt for Z-Image Turbo (Qwen3-4B chat wrap).
 
@@ -4597,7 +4597,7 @@ Run the rewriter.
 
 Type `STRING`.
 
-Framing hint (YouTube 16:9 still, …).
+Framing hint (YouTube 16:9 still, ...).
 
 **How it affects generation:** Steers aspect language. Does not set the latent size.
 
@@ -4923,13 +4923,13 @@ Sample-catalog id (graph stem).
 
 **How it affects generation:** Internal. Leave as stamped.
 
-### `EmptyAceStep1.5LatentAudio` — Empty ACE-Step 1.5 Latent Audio
+### `EmptyAceStep1.5LatentAudio` - Empty ACE-Step 1.5 Latent Audio
 
 Allocate an ACE-Step audio latent for N seconds.
 
 !!! warning "Lab notes"
 
-    Draft is the cold-open bar length. Full is the pre-chorus bar length. Nill Bye albums are 64–210 s. Drive-through is ~90–120 s from per-take bar math, not a shared clock target. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
+    Draft is the cold-open bar length. Full is the pre-chorus bar length. Nill Bye albums are 64-210 s. Drive-through is ~90-120 s from per-take bar math, not a shared clock target. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -4942,7 +4942,7 @@ Type `FLOAT`. Range / default: draft / full / album plan.
 
 Duration in seconds.
 
-**How it affects generation:** Longer latents cost RAM/time linearly. Nill Bye stays 64–210 s. Drive-through is ~90–120 s. Stay at the seeded length unless you have headroom.
+**How it affects generation:** Longer latents cost RAM/time linearly. Nill Bye stays 64-210 s. Drive-through is ~90-120 s. Stay at the seeded length unless you have headroom.
 
 #### `batch_size`
 
@@ -4952,13 +4952,13 @@ Takes per Queue.
 
 **How it affects generation:** Stay 1.
 
-### `EmptyFlux2LatentImage` — Empty Flux.2 Latent
+### `EmptyFlux2LatentImage` - Empty Flux.2 Latent
 
-Allocate a Klein / Flux.2 still latent (width × height × batch).
+Allocate a Klein / Flux.2 still latent (width x height x batch).
 
 !!! warning "Lab notes"
 
-    Draft 768×432 batch 2. Hero / LTX feeders 1280×704. Portrait 1024×1280 or 768×1280. 1280×720 is OK for thumbnails, not for LTX feeders.
+    Draft 768x432 batch 2. Hero / LTX feeders 1280x704. Portrait 1024x1280 or 768x1280. 1280x720 is OK for thumbnails, not for LTX feeders.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -4966,7 +4966,7 @@ Allocate a Klein / Flux.2 still latent (width × height × batch).
 
 #### `width`
 
-Type `INT`. Range / default: lab 768 / 1280 / 1024 / 432….
+Type `INT`. Range / default: lab 768 / 1280 / 1024 / 432....
 
 Latent pixel width.
 
@@ -4978,7 +4978,7 @@ Type `INT`.
 
 Latent pixel height.
 
-**How it affects generation:** 1280×704 is the LTX VAE grid (÷32). 1280×720 is not.
+**How it affects generation:** 1280x704 is the LTX VAE grid (div32). 1280x720 is not.
 
 #### `batch_size`
 
@@ -4988,13 +4988,13 @@ How many stills in one Queue.
 
 **How it affects generation:** Draft uses 2 for a cheap fork. Heroes stay 1.
 
-### `EmptyLTXVLatentVideo` — Empty LTX Latent Video
+### `EmptyLTXVLatentVideo` - Empty LTX Latent Video
 
 Allocate a T2V LTX video latent (no start image).
 
 !!! warning "Lab notes"
 
-    Width/height must be ÷32. Length must be 1+8n (193 for ~8 s Apps; 121 for 5 s film printers). ez_ltx_spatial snaps illegal values.
+    Width/height must be div32. Length must be 1+8n (193 for ~8 s Apps; 121 for 5 s film printers). ez_ltx_spatial snaps illegal values.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -5006,7 +5006,7 @@ Type `INT`. Range / default: 1280 (landscape) / 768 (shorts).
 
 Frame width.
 
-**How it affects generation:** ÷32. 1280×720 will snap to 704.
+**How it affects generation:** div32. 1280x720 will snap to 704.
 
 #### `height`
 
@@ -5022,9 +5022,9 @@ Type `INT`. Range / default: 193 Apps / 121 film = 1+8n.
 
 Frame count.
 
-**How it affects generation:** Standalone Apps default 193 @ 24 fps ≈ 8.04 s. Film printers stay 121 (~5.04 s). 120 is illegal (VAE floors to 113). Do not type a 30/60/90 s latent.
+**How it affects generation:** Standalone Apps default 193 @ 24 fps ~ 8.04 s. Film printers stay 121 (~5.04 s). 120 is illegal (VAE floors to 113). Do not type a 30/60/90 s latent.
 
-### `EmptyTrellis2LatentStructure` — Empty TRELLIS.2 Latent Structure
+### `EmptyTrellis2LatentStructure` - Empty TRELLIS.2 Latent Structure
 
 Allocate a TRELLIS.2 structure latent (batch only).
 
@@ -5044,7 +5044,7 @@ Meshes per Queue.
 
 **How it affects generation:** Stay 1 on GB10.
 
-### `ImageFromBatch` — Image From Batch
+### `ImageFromBatch` - Image From Batch
 
 Pick one frame out of a decoded video batch.
 
@@ -5073,7 +5073,7 @@ How many frames to take.
 
 **How it affects generation:** Stay 1 (one still).
 
-### `ImageScale` — Upscale Image
+### `ImageScale` - Upscale Image
 
 Resize a still to a target width/height.
 
@@ -5135,7 +5135,7 @@ Crop mode.
 | `center` | Center crop after resize. Lab plates. |
 | `disabled` | No crop. May letterbox or stretch depending on the node. |
 
-### `KSampler` — KSampler
+### `KSampler` - KSampler
 
 Denoise a latent for N steps at a CFG, sampler, and scheduler.
 
@@ -5147,17 +5147,17 @@ Denoise a latent for N steps at a CFG, sampler, and scheduler.
 | --- | --- | --- | --- |
 | `model` | in | `MODEL` | UNET / transformer after any ModelSampling* patch. |
 | `positive` | in | `CONDITIONING` | What to include (CLIP / ACE / LTX prompt). |
-| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well — put constraints in the positive. |
+| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well - put constraints in the positive. |
 | `latent_image` | in | `LATENT` | Noise canvas or encoded start image / video / audio latent. |
 | `LATENT` | out | `LATENT` | Denoised latent for VAE decode. |
 
 #### `seed`
 
-Type `INT`. Range / default: 0 … 2^64-1; lab 42.
+Type `INT`. Range / default: 0 ... 2^64-1; lab 42.
 
 Random seed for the noise tensor.
 
-**How it affects generation:** Same seed + same graph ≈ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
+**How it affects generation:** Same seed + same graph ~ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
 
 #### `control_after_generate`
 
@@ -5178,19 +5178,19 @@ What happens to seed after Queue.
 
 #### `steps`
 
-Type `INT`. Range / default: 1–10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
+Type `INT`. Range / default: 1-10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
 
 Denoising iterations.
 
-**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 — raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
+**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 - raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
 
 #### `cfg`
 
-Type `FLOAT`. Range / default: 0–100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
+Type `FLOAT`. Range / default: 0-100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
 
 Classifier-free guidance scale.
 
-**How it affects generation:** Distilled Klein is CFG 1.0 — raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
+**How it affects generation:** Distilled Klein is CFG 1.0 - raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
 
 #### `sampler_name`
 
@@ -5274,13 +5274,13 @@ How sigmas are spaced across steps.
 
 #### `denoise`
 
-Type `FLOAT`. Range / default: 0–1; lab 1.0.
+Type `FLOAT`. Range / default: 0-1; lab 1.0.
 
 Fraction of the latent to replace with denoised signal.
 
 **How it affects generation:** 1.0 is full generation (T2I / T2V / ACE). Values below 1 keep structure from an encoded start image (Klein edit / clay). Lab I2V uses dedicated latent nodes, not denoise<1 on empty noise.
 
-### `LTXVAddGuide` — LTX Add Guide
+### `LTXVAddGuide` - LTX Add Guide
 
 Pin a still onto a latent frame (first-last-frame).
 
@@ -5315,7 +5315,7 @@ How hard to pin.
 
 **How it affects generation:** 1.0 locks the still. Lower lets motion drift off the guide.
 
-### `LTXVAudioVAEDecode` — LTX Audio VAE Decode
+### `LTXVAudioVAEDecode` - LTX Audio VAE Decode
 
 Decode LTX audio latent to AUDIO for the MP4 mux.
 
@@ -5331,7 +5331,7 @@ Decode LTX audio latent to AUDIO for the MP4 mux.
 
 No widgets. Sockets only.
 
-### `LTXVAudioVAEEncode` — LTX Audio VAE Encode
+### `LTXVAudioVAEEncode` - LTX Audio VAE Encode
 
 Encode a wav into the LTX audio latent (A2V freeze).
 
@@ -5343,7 +5343,7 @@ Encode a wav into the LTX audio latent (A2V freeze).
 
 No widgets. Sockets only.
 
-### `LTXVConcatAVLatent` — LTX Concat AV Latent
+### `LTXVConcatAVLatent` - LTX Concat AV Latent
 
 Join video + audio latents into one joint AV latent for the sampler.
 
@@ -5355,7 +5355,7 @@ Join video + audio latents into one joint AV latent for the sampler.
 
 No widgets. Sockets only.
 
-### `LTXVConditioning` — LTX Conditioning
+### `LTXVConditioning` - LTX Conditioning
 
 Stamp frame-rate onto LTX positive/negative cond.
 
@@ -5374,7 +5374,7 @@ Frames per second written into cond.
 
 **How it affects generation:** Must match VHS frame_rate (24). Mismatch makes motion too fast/slow.
 
-### `LTXVCropGuides` — LTX Crop Guides
+### `LTXVCropGuides` - LTX Crop Guides
 
 Crop guide metadata off the latent after FLF pins.
 
@@ -5389,7 +5389,7 @@ Crop guide metadata off the latent after FLF pins.
 
 No widgets. Sockets only.
 
-### `LTXVEmptyLatentAudio` — Empty LTX Audio Latent
+### `LTXVEmptyLatentAudio` - Empty LTX Audio Latent
 
 Allocate a silent/world-audio latent matching video length.
 
@@ -5422,13 +5422,13 @@ Clips per Queue.
 
 **How it affects generation:** Stay 1.
 
-### `LTXVImgToVideo` — LTX Image to Video
+### `LTXVImgToVideo` - LTX Image to Video
 
 Condition LTX on a start image and allocate the video latent.
 
 !!! warning "Lab notes"
 
-    ÷32 spatial, length 1+8n. Standalone Apps 1280×704×193. Film printers 1280×704×121. Shorts 768×1280. Some shot graphs still store 120 and rely on ez_ltx_spatial to snap.
+    div32 spatial, length 1+8n. Standalone Apps 1280x704x193. Film printers 1280x704x121. Shorts 768x1280. Some shot graphs still store 120 and rely on ez_ltx_spatial to snap.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -5446,7 +5446,7 @@ Type `INT`. Range / default: 1280 / 768.
 
 Frame width.
 
-**How it affects generation:** Must be ÷32. 720p width is fine; height 720 is not.
+**How it affects generation:** Must be div32. 720p width is fine; height 720 is not.
 
 #### `height`
 
@@ -5462,7 +5462,7 @@ Type `INT`. Range / default: 193 Apps / 121 film = 1+8n.
 
 Frame count.
 
-**How it affects generation:** Standalone Apps default 193 @ 24 fps ≈ 8.04 s. Film printers stay 121 (~5.04 s). Do not type a 90 s length.
+**How it affects generation:** Standalone Apps default 193 @ 24 fps ~ 8.04 s. Film printers stay 121 (~5.04 s). Do not type a 90 s length.
 
 #### `batch_size`
 
@@ -5472,7 +5472,7 @@ Clips per Queue.
 
 **How it affects generation:** Stay 1.
 
-### `LTXVModalityGuidance` — LTX Modality Guidance
+### `LTXVModalityGuidance` - LTX Modality Guidance
 
 Couple audio and video during sampling (dialogue graphs).
 
@@ -5495,7 +5495,7 @@ A/V coupling strength.
 
 #### `start`
 
-Type `FLOAT`. Range / default: 0–1, lab 0.
+Type `FLOAT`. Range / default: 0-1, lab 0.
 
 Fraction of steps to start coupling.
 
@@ -5503,25 +5503,25 @@ Fraction of steps to start coupling.
 
 #### `end`
 
-Type `FLOAT`. Range / default: 0–1, lab 1.
+Type `FLOAT`. Range / default: 0-1, lab 1.
 
 Fraction of steps to stop coupling.
 
 **How it affects generation:** 1 = through the last step.
 
-### `LTXVSeparateAVLatent` — LTX Separate AV Latent
+### `LTXVSeparateAVLatent` - LTX Separate AV Latent
 
 Split a joint AV latent after sampling.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `av_latent` | in | `LATENT` | KSampler output. |
-| `video_latent` | out | `LATENT` | Picture latent → VAEDecode. |
-| `audio_latent` | out | `LATENT` | Audio latent → LTXVAudioVAEDecode (not on a2v). |
+| `video_latent` | out | `LATENT` | Picture latent -> VAEDecode. |
+| `audio_latent` | out | `LATENT` | Audio latent -> LTXVAudioVAEDecode (not on a2v). |
 
 No widgets. Sockets only.
 
-### `LoadAudio` — Load Audio
+### `LoadAudio` - Load Audio
 
 Load a wav/mp3 from input/.
 
@@ -5541,7 +5541,7 @@ Filename in input/.
 
 **How it affects generation:** The original wav is muxed into the MP4 (no audio VAE decode on a2v).
 
-### `LoadImage` — Load Image
+### `LoadImage` - Load Image
 
 Load a still from Comfy input/ (or upload).
 
@@ -5570,7 +5570,7 @@ Upload widget type.
 
 **How it affects generation:** Leave image. This is the choose-file control, not a generation knob.
 
-### `MarkdownNote` — Markdown Note
+### `MarkdownNote` - Markdown Note
 
 Rendered markdown note (90s shot maps).
 
@@ -5582,7 +5582,7 @@ Markdown body.
 
 **How it affects generation:** Does not affect pixels. 90s films put the beat table here.
 
-### `MeshToFile3D` — Mesh to File 3D
+### `MeshToFile3D` - Mesh to File 3D
 
 Write a GLB/mesh file.
 
@@ -5597,7 +5597,7 @@ Write a GLB/mesh file.
 
 No widgets. Sockets only.
 
-### `ModelSamplingAuraFlow` — ModelSamplingAuraFlow
+### `ModelSamplingAuraFlow` - ModelSamplingAuraFlow
 
 Patch ACE-Step with AuraFlow sampling shift.
 
@@ -5618,7 +5618,7 @@ AuraFlow shift.
 
 **How it affects generation:** 3 is the ACE-Step 1.5 lab value. Higher shift changes timing/attack of the beat.
 
-### `ModelSamplingSD3` — ModelSamplingSD3
+### `ModelSamplingSD3` - ModelSamplingSD3
 
 Patch a model with SD3-style flow-matching shift.
 
@@ -5639,7 +5639,7 @@ Flow-matching shift.
 
 **How it affects generation:** 8 is the Wan 2.2 TI2V lab value. Changing it moves the noise schedule; do not copy SD3 defaults blindly.
 
-### `Note` — Note
+### `Note` - Note
 
 On-canvas operator note (not executed).
 
@@ -5655,7 +5655,7 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-### `PaintMesh` — Paint Mesh
+### `PaintMesh` - Paint Mesh
 
 Apply voxel colors onto the mesh.
 
@@ -5667,7 +5667,7 @@ Apply voxel colors onto the mesh.
 
 No widgets. Sockets only.
 
-### `PrimitiveNode` — Primitive
+### `PrimitiveNode` - Primitive
 
 A typed constant (string or float) with seed-style control.
 
@@ -5704,7 +5704,7 @@ Whether the primitive mutates after Queue.
 | `decrement` | Subtract 1 after Queue. |
 | `randomize` | Draw a new seed after Queue. Exploration only. |
 
-### `ReferenceLatent` — Reference Latent
+### `ReferenceLatent` - Reference Latent
 
 Pack an encoded image latent into positive conditioning (Klein edit).
 
@@ -5720,7 +5720,7 @@ Pack an encoded image latent into positive conditioning (Klein edit).
 
 No widgets. Sockets only.
 
-### `SaveAudio` — Save Audio
+### `SaveAudio` - Save Audio
 
 Write a FLAC/wav master.
 
@@ -5740,7 +5740,7 @@ Save stem.
 
 **How it affects generation:** Album tracks use NN - Song Title. Tags come from EZAudioMetadata.
 
-### `SaveAudioMP3` — Save Audio (MP3)
+### `SaveAudioMP3` - Save Audio (MP3)
 
 Write an MP3 copy of the same take.
 
@@ -5772,7 +5772,7 @@ Bitrate preset.
 | `192k` | Smaller, more artifacts. |
 | `128k` | Preview only. |
 
-### `SaveImage` — Save Image
+### `SaveImage` - Save Image
 
 Write PNG stills under the output folder.
 
@@ -5788,7 +5788,7 @@ Save prefix.
 
 **How it affects generation:** Lab prefixes start with ez_. Last-frame savers on shot graphs feed concat-shots.
 
-### `TextEncodeAceStepAudio1.5` — ACE-Step 1.5 Text Encode
+### `TextEncodeAceStepAudio1.5` - ACE-Step 1.5 Text Encode
 
 Pack tags, lyrics, BPM, key, and duration into ACE conditioning.
 
@@ -5847,7 +5847,7 @@ Seed control.
 
 #### `bpm`
 
-Type `INT`. Range / default: 10–300.
+Type `INT`. Range / default: 10-300.
 
 Tempo written into the codes.
 
@@ -6037,7 +6037,7 @@ Minimum probability floor.
 
 **How it affects generation:** 0.0 disables min-p (lab).
 
-### `Trellis2Conditioning` — TRELLIS.2 Conditioning
+### `Trellis2Conditioning` - TRELLIS.2 Conditioning
 
 Encode a still with CLIP Vision into TRELLIS positive/negative.
 
@@ -6050,7 +6050,7 @@ Encode a still with CLIP Vision into TRELLIS positive/negative.
 
 No widgets. Sockets only.
 
-### `Trellis2ShapeStage` — TRELLIS.2 Shape Stage
+### `Trellis2ShapeStage` - TRELLIS.2 Shape Stage
 
 Sample structure from a voxel latent.
 
@@ -6065,7 +6065,7 @@ Sample structure from a voxel latent.
 
 No widgets. Sockets only.
 
-### `Trellis2TextureStage` — TRELLIS.2 Texture Stage
+### `Trellis2TextureStage` - TRELLIS.2 Texture Stage
 
 Sample voxel colors for the mesh.
 
@@ -6080,7 +6080,7 @@ Sample voxel colors for the mesh.
 
 No widgets. Sockets only.
 
-### `Trellis2UpsampleStage` — TRELLIS.2 Upsample Stage
+### `Trellis2UpsampleStage` - TRELLIS.2 Upsample Stage
 
 Upsample the shape latent toward 512.
 
@@ -6113,7 +6113,7 @@ Target structure resolution.
 | `512` | Lab default. |
 | `256` | Faster, coarser. |
 
-### `UNETLoader` — Load Diffusion Model
+### `UNETLoader` - Load Diffusion Model
 
 Load a standalone transformer/UNET from diffusion_models/.
 
@@ -6150,7 +6150,7 @@ Cast at load.
 | `fp8_e4m3fn_fast` | FP8 e4m3fn with fast optimizations. |
 | `fp8_e5m2` | Cast to FP8 e5m2. |
 
-### `VAEDecode` — VAE Decode
+### `VAEDecode` - VAE Decode
 
 Decode image/video latents to pixels.
 
@@ -6162,7 +6162,7 @@ Decode image/video latents to pixels.
 
 No widgets. Sockets only.
 
-### `VAEDecodeAudio` — VAE Decode Audio
+### `VAEDecodeAudio` - VAE Decode Audio
 
 Decode an ACE audio latent to AUDIO.
 
@@ -6174,7 +6174,7 @@ Decode an ACE audio latent to AUDIO.
 
 No widgets. Sockets only.
 
-### `VAEEncode` — VAE Encode
+### `VAEEncode` - VAE Encode
 
 Encode pixels to a latent (Klein edit / clay).
 
@@ -6186,9 +6186,9 @@ Encode pixels to a latent (Klein edit / clay).
 
 No widgets. Sockets only.
 
-### `VAELoader` — Load VAE
+### `VAELoader` - Load VAE
 
-Load the autoencoder that maps pixels ↔ latents (and LTX audio).
+Load the autoencoder that maps pixels <-> latents (and LTX audio).
 
 !!! warning "Lab notes"
 
@@ -6206,7 +6206,7 @@ Filename under vae/.
 
 **How it affects generation:** Wrong VAE = color trash or a shape error.
 
-### `VHS_VideoCombine` — VHS Video Combine
+### `VHS_VideoCombine` - VHS Video Combine
 
 Encode frames (and optional audio) to MP4 or GIF.
 
@@ -6309,7 +6309,7 @@ Write the file to disk.
 
 **How it affects generation:** Lab video graphs require true. After Queue, open the node for the inline preview.
 
-### `VaeDecodeShapeTrellis` — TRELLIS Decode Shape
+### `VaeDecodeShapeTrellis` - TRELLIS Decode Shape
 
 Decode shape latent to a mesh.
 
@@ -6322,7 +6322,7 @@ Decode shape latent to a mesh.
 
 No widgets. Sockets only.
 
-### `VaeDecodeStructureTrellis2` — TRELLIS.2 Decode Structure
+### `VaeDecodeStructureTrellis2` - TRELLIS.2 Decode Structure
 
 Decode structure latent to voxels.
 
@@ -6346,7 +6346,7 @@ Voxel grid size.
 | --- | --- |
 | `32` | Lab default. |
 
-### `VaeDecodeTextureTrellis` — TRELLIS Decode Texture
+### `VaeDecodeTextureTrellis` - TRELLIS Decode Texture
 
 Decode texture latent to voxel colors.
 
@@ -6359,13 +6359,13 @@ Decode texture latent to voxel colors.
 
 No widgets. Sockets only.
 
-### `Wan22ImageToVideoLatent` — Wan 2.2 Image to Video Latent
+### `Wan22ImageToVideoLatent` - Wan 2.2 Image to Video Latent
 
 Build a Wan 5B I2V latent from a start image (or empty for T2V).
 
 !!! warning "Lab notes"
 
-    Smoke 832×480 × 121 frames. Shot graphs use 120 frames for concat. GIF 49 frames. VACE join 17 frames (1+8n).
+    Smoke 832x480 x 121 frames. Shot graphs use 120 frames for concat. GIF 49 frames. VACE join 17 frames (1+8n).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -6379,7 +6379,7 @@ Type `INT`. Range / default: 832 landscape / 480 portrait.
 
 Frame width.
 
-**How it affects generation:** 832×480 is the Wan 5B smoke size. Larger melts GB10.
+**How it affects generation:** 832x480 is the Wan 5B smoke size. Larger melts GB10.
 
 #### `height`
 
@@ -6387,7 +6387,7 @@ Type `INT`.
 
 Frame height.
 
-**How it affects generation:** Swap for 9:16 shorts (480×832).
+**How it affects generation:** Swap for 9:16 shorts (480x832).
 
 #### `length`
 

@@ -79,7 +79,7 @@ const nextConfig: NextConfig = {
      * The bundler infers the root by walking up looking for a lockfile, and a lockfile
      * belonging to something else can sit above the repository in a developer's home
      * directory.  It also cannot read content above the root it picks, and the pages live
-     * in `docs/` next to this package — so the root is the repository itself.
+     * in `docs/` next to this package - so the root is the repository itself.
      */
     root: path.resolve(packageRoot, "..")
   }

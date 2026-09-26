@@ -59,7 +59,7 @@ sheet_film_slug() {
 #######################################
 cmd_help() {
   echo "Usage: shot-sheet.sh status|run --film SLUG [--from PATH] [--out PATH] [--lab-example]" >&2
-  echo "  Write films/<slug>/shots.yaml with shot-card defaults (audio_policy, clay, …)." >&2
+  echo "  Write films/<slug>/shots.yaml with shot-card defaults (audio_policy, clay, ...)." >&2
   echo "  Does not start Docker. Does not copy YAML into Comfy." >&2
   echo "  --lab-example writes workflows/shorts/<film>.shots.yaml (refused otherwise)." >&2
   return 0

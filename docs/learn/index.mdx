@@ -10,7 +10,7 @@ tags: [learn, comfyui, studio, dgx-spark, concepts]
 
 - What this project is (and is not)
 - Operator vs studio user
-- The still → silent 5 s → AV 8 s loop
+- The still -> silent 5 s -> AV 8 s loop
 - Where to read next
 
 **What this enables**
@@ -67,7 +67,7 @@ It is **not** nvidia-dgx-spark-lab (no K3s, no dashboard, no multi-node NCCL). H
 flowchart TB
   subgraph Host["DGX Spark host"]
     Op["Operator: manage.sh"]
-    Compose["Docker Compose · restart: no"]
+    Compose["Docker Compose - restart: no"]
     Weights["MODELS_DIR weights"]
     Out["COMFY_OUTPUT_DIR media"]
   end
@@ -87,7 +87,7 @@ You can be both people. First-time path is still operator-shaped (clone, doctor,
 
 ## What you make
 
-Text → **still** (Klein) → **silent ~5 s** (Wan) → **AV ~5 s** (LTX). Iterate in minutes. A 90 s YouTube short is **18 × 5 s** prints stitched, not one 90 s denoise.
+Text -> **still** (Klein) -> **silent ~5 s** (Wan) -> **AV ~5 s** (LTX). Iterate in minutes. A 90 s YouTube short is **18 x 5 s** prints stitched, not one 90 s denoise.
 
 ```mermaid
 flowchart LR
@@ -104,16 +104,16 @@ Learn the models: [Klein, Wan, and LTX](pipeline.md). Learn the math-lite versio
 
 This tab is a course. Read top to bottom; skip a lesson only if you already know it.
 
-1. This page (you are here) — roles and the still → silent → AV loop
-2. [ComfyUI basics](comfyui.md) — graph, App Mode, Queue
-3. [Image and video generation](generation.md) — latents, steps, I2V
-4. [Klein, Wan, and LTX](pipeline.md) — why these three models
-5. [Why one heavy job](occupancy.md) — occupancy as an idea
-6. [Hardware, memory, and safety](hardware.md) — why SSH-safe defaults exist
-7. [Architecture](architecture.md) — Compose, three stores
-8. [How we land changes](merges.md) — merge commits, stacked PRs (contributors)
-9. Optional DCC: [Clay to finish](clay-to-finish.md) · [Blender creator suite](blender-creator.md) · [Dream-house tours](dream-house.md)
-10. [Glossary](../glossary.md) — dictionary, not the course
+1. This page (you are here) - roles and the still -> silent -> AV loop
+2. [ComfyUI basics](comfyui.md) - graph, App Mode, Queue
+3. [Image and video generation](generation.md) - latents, steps, I2V
+4. [Klein, Wan, and LTX](pipeline.md) - why these three models
+5. [Why one heavy job](occupancy.md) - occupancy as an idea
+6. [Hardware, memory, and safety](hardware.md) - why SSH-safe defaults exist
+7. [Architecture](architecture.md) - Compose, three stores
+8. [How we land changes](merges.md) - merge commits, stacked PRs (contributors)
+9. Optional DCC: [Clay to finish](clay-to-finish.md) - [Blender creator suite](blender-creator.md) - [Dream-house tours](dream-house.md)
+10. [Glossary](../glossary.md) - dictionary, not the course
 
 Then leave Learn: [Getting Started](../getting-started.md) for the first still, [Still to motion to AV](../visual-generative-ai.md) for the daily playbook, [Workflow catalog](../studio-workflows.md) for filenames.
 

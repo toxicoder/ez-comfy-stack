@@ -13,7 +13,7 @@ DURATION_DEFAULT_S = 5.00
 DURATION_APP_S = 8.00
 DURATION_HEAD_S = (5.00, 8.00, 10.00, 12.00)
 FRAME_MODULUS = 8
-# 5.00 s @ 24 fps → 121; 8.00 s @ 24 fps → 193 (both 1+8n).
+# 5.00 s @ 24 fps -> 121; 8.00 s @ 24 fps -> 193 (both 1+8n).
 FRAMES_DEFAULT = 121
 FRAMES_APP = 193
 

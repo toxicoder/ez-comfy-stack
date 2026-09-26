@@ -21,7 +21,7 @@ from _build_inspire_apps import _node
 
 NOTE = """## audio/stem-mix
 
-Picture-lock stem mix. Occupancy **audio** — stop Klein / Wan / LTX first. ACE-Step
+Picture-lock stem mix. Occupancy **audio** - stop Klein / Wan / LTX first. ACE-Step
 score is a later session if `score: acestep-instrumental`.
 
 This canvas does not denoise video. Mix on the host:
@@ -30,9 +30,9 @@ This canvas does not denoise video. Mix on the host:
 
 Stems: BG = demuxed LTX world bed, FX = optional Templates LTX-2.5 T2A (same distilled
 transformer; not a vendored subgraph), DX = Kokoro / Qwen3-TTS, MX = ACE-Step
-instrumental. Duck beds −15 dB under DX. YouTube loudnorm I=-14.
+instrumental. Duck beds -15 dB under DX. YouTube loudnorm I=-14.
 
-A2V lock (talking-head): mix DX first, then Templates → LTX-2.5 A2V freeze. Mouths will
+A2V lock (talking-head): mix DX first, then Templates -> LTX-2.5 A2V freeze. Mouths will
 not match (banned lip-sync OSS stays out). Foley V2A LoRA is not in v1.
 
 Do not start Docker. Do not co-resident ACE-Step with LTX.

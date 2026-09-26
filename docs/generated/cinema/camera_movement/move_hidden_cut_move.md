@@ -1,6 +1,6 @@
 ---
 title: "Hidden-cut move"
-description: "Cinema Rack illustration — Hidden-cut move."
+description: "Cinema Rack illustration - Hidden-cut move."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

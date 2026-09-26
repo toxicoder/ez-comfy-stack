@@ -36,7 +36,7 @@ def cell_size(height: int, width: int) -> int:
         width: Pixel width.
 
     Returns:
-        Cell edge in pixels, clamped to 12–40.
+        Cell edge in pixels, clamped to 12-40.
     """
     side = max(1, min(int(height), int(width)))
     raw = int(round(side / CELL_DIVISOR))
@@ -55,7 +55,7 @@ def _try_torch() -> Any:
     """
     try:
         import torch
-    except Exception:  # noqa: BLE001 — hermetic tests
+    except Exception:  # noqa: BLE001 - hermetic tests
         return None
     return torch
 
@@ -418,12 +418,12 @@ def attach_reference(conditioning: Any, latent: Any) -> Any:
     cloned = _clone_conditioning(conditioning)
     try:
         from comfy_extras.nodes_flux import ReferenceLatent  # type: ignore[import-not-found]
-    except Exception:  # noqa: BLE001 — hermetic tests / older Comfy
+    except Exception:  # noqa: BLE001 - hermetic tests / older Comfy
         return _attach_fallback(cloned, latent)
     try:
         node = ReferenceLatent()
         result = node.append(cloned, latent)
-    except Exception:  # noqa: BLE001 — fail-soft to the dict attach
+    except Exception:  # noqa: BLE001 - fail-soft to the dict attach
         return _attach_fallback(cloned, latent)
     if isinstance(result, tuple):
         return result[0]
@@ -445,7 +445,7 @@ def _encode_image(image: Any, vae: Any) -> Any | None:
         return None
     try:
         return encode(image)
-    except Exception:  # noqa: BLE001 — fail-soft to the photo reference
+    except Exception:  # noqa: BLE001 - fail-soft to the photo reference
         return None
 
 
@@ -509,7 +509,7 @@ class EZCubicCondition:
             study = block_study(image)
             study = erase_people(study, image)
             encoded = _encode_image(study, vae)
-        except Exception:  # noqa: BLE001 — keep the photo reference
+        except Exception:  # noqa: BLE001 - keep the photo reference
             encoded = None
         if encoded is None:
             return (attach_reference(conditioning, latent),)

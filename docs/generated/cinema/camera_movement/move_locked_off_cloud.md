@@ -1,6 +1,6 @@
 ---
 title: "Locked cloud"
-description: "Cinema Rack illustration — Locked cloud."
+description: "Cinema Rack illustration - Locked cloud."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

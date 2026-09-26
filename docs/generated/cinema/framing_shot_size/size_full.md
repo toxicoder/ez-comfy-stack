@@ -1,6 +1,6 @@
 ---
 title: "Full Shot"
-description: "Cinema Rack illustration — Full Shot."
+description: "Cinema Rack illustration - Full Shot."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

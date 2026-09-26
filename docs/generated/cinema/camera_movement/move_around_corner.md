@@ -1,6 +1,6 @@
 ---
 title: "Around the corner"
-description: "Cinema Rack illustration — Around the corner."
+description: "Cinema Rack illustration - Around the corner."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

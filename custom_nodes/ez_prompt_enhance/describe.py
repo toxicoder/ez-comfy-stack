@@ -27,7 +27,7 @@ DESCRIBE_SYSTEM = (
     "Return only a caption of this still. No preface, no markdown, no wrapping "
     "quotes. Name inventory, lettering (spell it), colors, layout, and where "
     "the subject sits. SFW. No real-person names. Stay under 80 words. This "
-    "caption will be supporting context for a prompt rewriter — do not write "
+    "caption will be supporting context for a prompt rewriter - do not write "
     "a new scene."
 )
 
@@ -127,7 +127,7 @@ def _image_to_png_b64(image: Any) -> str:
     """
     try:
         import numpy as np
-    except Exception:  # noqa: BLE001 — hermetic tests
+    except Exception:  # noqa: BLE001 - hermetic tests
         return ""
     try:
         tensor = image
@@ -164,7 +164,7 @@ def _image_to_png_b64(image: Any) -> str:
         buf = io.BytesIO()
         pil.save(buf, format="PNG")
         return base64.b64encode(buf.getvalue()).decode("ascii")
-    except Exception:  # noqa: BLE001 — fail-soft
+    except Exception:  # noqa: BLE001 - fail-soft
         return ""
 
 

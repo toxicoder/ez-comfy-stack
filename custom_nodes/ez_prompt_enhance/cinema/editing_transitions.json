@@ -648,7 +648,7 @@
   {
     "id": "edt_montage_three",
     "label": "Three Beat Montage",
-    "clause": "Montage three beats\u2014pack, platform, arrival\u2014compressing the journey into three hits.",
+    "clause": "Montage three beats-pack, platform, arrival-compressing the journey into three hits.",
     "still": "",
     "wan_token": "",
     "audio": "",
@@ -709,7 +709,7 @@
   {
     "id": "edt_cut_on_sound",
     "label": "Cut On World Sound",
-    "clause": "Cut on world SFX\u2014the glass breaking\u2014picture changing with that sound, no score.",
+    "clause": "Cut on world SFX-the glass breaking-picture changing with that sound, no score.",
     "still": "",
     "wan_token": "",
     "audio": "World SFX of breaking glass triggers the picture cut, no score.",
@@ -1093,7 +1093,7 @@
   {
     "id": "edt_dip_color",
     "label": "Dip Through Color",
-    "clause": "Dip through a solid color\u2014deep teal\u2014between scenes instead of black.",
+    "clause": "Dip through a solid color-deep teal-between scenes instead of black.",
     "still": "",
     "wan_token": "",
     "audio": "",
@@ -1200,7 +1200,7 @@
   {
     "id": "edt_match_shape_circle",
     "label": "Circle Shape Match",
-    "clause": "Match a circle\u2014the mouth of a cup\u2014to a circular tunnel, shape carrying the cut.",
+    "clause": "Match a circle-the mouth of a cup-to a circular tunnel, shape carrying the cut.",
     "still": "",
     "wan_token": "",
     "audio": "",
@@ -1370,7 +1370,7 @@
   {
     "id": "edt_montage_work",
     "label": "Work Montage",
-    "clause": "Montage the work: measure, cut, sand, stain\u2014four beats of the table being born.",
+    "clause": "Montage the work: measure, cut, sand, stain-four beats of the table being born.",
     "still": "",
     "wan_token": "",
     "audio": "",
@@ -1940,7 +1940,7 @@
   {
     "id": "edt_pass_through_dark",
     "label": "Pass Through Dark Join",
-    "clause": "Join two scenes by passing through dark\u2014a tunnel, a sleeve\u2014picture born again on the far side.",
+    "clause": "Join two scenes by passing through dark-a tunnel, a sleeve-picture born again on the far side.",
     "still": "",
     "wan_token": "",
     "audio": "",
@@ -2048,7 +2048,7 @@
   {
     "id": "edt_axial_triple",
     "label": "Triple Axial Punch",
-    "clause": "Punch axially three times\u2014wide, medium, close\u2014on the same axis as the news lands.",
+    "clause": "Punch axially three times-wide, medium, close-on the same axis as the news lands.",
     "still": "",
     "wan_token": "",
     "audio": "",
@@ -2155,7 +2155,7 @@
   {
     "id": "edt_montage_three_doors",
     "label": "Three Doors Montage",
-    "clause": "Montage three doors opening\u2014home, office, night\u2014as three beats of a life.",
+    "clause": "Montage three doors opening-home, office, night-as three beats of a life.",
     "still": "",
     "wan_token": "",
     "audio": "",
@@ -2201,7 +2201,7 @@
   {
     "id": "edt_parallel_weather",
     "label": "Parallel Weather",
-    "clause": "Parallel-cut two weathers\u2014rain here, sun there\u2014then join the travelers in a third place.",
+    "clause": "Parallel-cut two weathers-rain here, sun there-then join the travelers in a third place.",
     "still": "",
     "wan_token": "",
     "audio": "",

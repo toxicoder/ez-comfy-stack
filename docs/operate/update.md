@@ -9,8 +9,8 @@ tags: [operate, update, git, start, stop]
 **What's on this page**
 
 - **Which branch** these docs describe (`__DOCS_GIT_REF__`)
-- **Stop, pull, start** — the order that picks up scripts, workflows, and the container image
-- **What an update does not do** — it does not re-download weights or delete `${MODELS_DIR}`
+- **Stop, pull, start** - the order that picks up scripts, workflows, and the container image
+- **What an update does not do** - it does not re-download weights or delete `${MODELS_DIR}`
 
 **What this enables**
 

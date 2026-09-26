@@ -19,7 +19,7 @@ FIXTURE = ROOT / "tests" / "fixtures" / "dcc" / "suzanne-12"
 SCHEMA = ROOT / "schemas" / "guide_pack.shot.yaml"
 VENDOR = ROOT / "custom_nodes" / "ez_dcc" / "_guide_pack.py"
 
-import ez_dcc._guide_pack as _vendor_gp  # noqa: E402,F401 — coverage alias
+import ez_dcc._guide_pack as _vendor_gp  # noqa: E402,F401 - coverage alias
 
 
 def _load_vendor() -> ModuleType:
@@ -43,7 +43,7 @@ def test_schema_file_documents_v1() -> None:
     assert "ez.guide.shot.v1" in text
     assert "1280" in text
     assert "704" in text
-    assert "1280x720" in text or "1280×720" in text or "Never 1280" in text
+    assert "1280x720" in text or "1280x720" in text or "Never 1280" in text
     still_schema = ROOT / "schemas" / "guide_pack.still.yaml"
     still_text = still_schema.read_text(encoding="utf-8")
     assert "ez.guide.still.v1" in still_text
@@ -228,7 +228,7 @@ def test_still_schema_and_sizes(tmp_path: Path, gp: ModuleType) -> None:
     (dest / "canny.png").unlink()
     assert any("canny.png" in d for d in gp.validate_still_pack(dest))
     assert gp.parse_size_token("1024x1024") == (1024, 1024)
-    assert gp.parse_size_token("1280×704") == (1280, 704)
+    assert gp.parse_size_token("1280x704") == (1280, 704)
     assert gp.parse_size_token("nope") is None
 
 

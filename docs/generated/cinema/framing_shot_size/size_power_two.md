@@ -1,6 +1,6 @@
 ---
 title: "Power Two-Shot"
-description: "Cinema Rack illustration — Power Two-Shot."
+description: "Cinema Rack illustration - Power Two-Shot."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

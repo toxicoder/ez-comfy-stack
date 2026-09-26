@@ -13,13 +13,13 @@ tags: [music, rap, edm, ace-step, us-safe, disclosure]
 - **`download-music --tier turbo`** (same ACE-Step AIO as podcast acestep)
 - **Sequential Queue** and album art in a later Klein session
 - **Child pages** for RAP-FIRST albums, Drive-through EDM, and disclosure
-- **Audio Rack** (`inspire/audio-rack`) splices professional tags/lyrics on occupancy **llm** — copy into rap-draft; do not load ACE-Step on the rack canvas
+- **Audio Rack** (`inspire/audio-rack`) splices professional tags/lyrics on occupancy **llm** - copy into rap-draft; do not load ACE-Step on the rack canvas
 
 **What this enables**
 
 - **A cold-open boom-bap draft** on one NVIDIA DGX Spark without cloud music APIs
-- **One hundred thirty-five original Nill Bye takes** (64–210 s, varied form) without cloud music APIs
-- **One hundred one original Drive-through EDM takes** (~90–120 s, fast switch-ups, 165–176 BPM) without cloud music APIs
+- **One hundred thirty-five original Nill Bye takes** (64-210 s, varied form) without cloud music APIs
+- **One hundred one original Drive-through EDM takes** (~90-120 s, fast switch-ups, 165-176 BPM) without cloud music APIs
 - **Reusing** the podcast ACE-Step AIO dest so the 10 GB file is not pulled twice
 - **Keeping** the visual studio bootable when the music pack is missing
 - **Muxing** a cover still + FLAC into a YouTube MP4 without changing the rap graphs
@@ -31,7 +31,7 @@ tags: [music, rap, edm, ace-step, us-safe, disclosure]
 </Callout>
 
 <Callout type="error" title="Occupancy">
-  Do **not** load Klein + Wan + LTX + ACE-Step in one session. Cover art is a **later** Klein session. Spark: the AIO is ~10 GB VRAM-adjacent work — do **not** co-resident with LTX / Wan / Klein. Start still requires typing `yes`. Compose `restart: "no"` is unchanged.
+  Do **not** load Klein + Wan + LTX + ACE-Step in one session. Cover art is a **later** Klein session. Spark: the AIO is ~10 GB VRAM-adjacent work - do **not** co-resident with LTX / Wan / Klein. Start still requires typing `yes`. Compose `restart: "no"` is unchanged.
 </Callout>
 ---
 
@@ -55,14 +55,14 @@ Cover art is a **later** Klein session. Occupancy: do not load LTX + ACE-Step to
   <Card title="RAP-FIRST">
     ---
 
-    Cold-open draft, pre-chorus full take, then nine Nill Bye albums (135 takes, 64–210 s, varied form).
+    Cold-open draft, pre-chorus full take, then nine Nill Bye albums (135 takes, 64-210 s, varied form).
 
     [Nill Bye albums](create/music-rap.md)
   </Card>
   <Card title="Drive-through EDM">
     ---
 
-    Six bass-set albums (101 takes, ~90–120 s). The score covers the full take: beds, layers, and 3D moves rotate every 2 bars. Tempos 165–176. Not rap over a club bed.
+    Six bass-set albums (101 takes, ~90-120 s). The score covers the full take: beds, layers, and 3D moves rotate every 2 bars. Tempos 165-176. Not rap over a club bed.
 
     [Drive-through EDM](create/music-edm.md)
   </Card>
@@ -113,7 +113,7 @@ Relative symlinks only (host `/mnt/models` vs container `/models`).
 ## Sequential Queue
 
 1. `./scripts/manage.sh download-music --tier turbo`
-2. `./scripts/manage.sh start` — type **yes**
+2. `./scripts/manage.sh start` - type **yes**
 3. Load **audio/music/rap-draft**. Enhance on. Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_rap_draft_*.flac` / `ez_rap_draft_*.mp3`
 4. Then load **audio/music/rap-full** (pre-chorus form), **or** a numbered take under `_lab/audio/albums/nill-bye/<album>/`, **or** `_lab/audio/albums/drive-through/<album>/`. Full album: `./scripts/manage.sh album-render --album nill-bye/peer-review --art skip|upload|generate`
 5. Album art: App **Album art** skip (default) / upload / generate, or `album-render --art skip|upload|generate`. Cover LoadImage is **bypassed** (and unwired) so App Queue does not require a file. Upload: graph view, **Ctrl+B** Cover image, then wire IMAGE to Album metadata. Generate queues `cover.json` (klein occupancy) then POST `/free` then ACE tracks. Do not co-resident Klein + ACE. Generic stills: **stills/thumbnail** or **stills/podcast-cover** in a later session.
@@ -123,8 +123,8 @@ Relative symlinks only (host `/mnt/models` vs container `/models`).
 ./scripts/manage.sh audio-still-video \
   --audio "${COMFY_OUTPUT_DIR}/ez_rap_full_00001_.flac" \
   --image "${COMFY_OUTPUT_DIR}/ez_thumbnail_00001_.png"
-# → ${COMFY_OUTPUT_DIR}/ez_rap_full_00001_.mp4
-# Square covers letterbox onto 1920×1080. Shorts: --size 1080x1920
+# -> ${COMFY_OUTPUT_DIR}/ez_rap_full_00001_.mp4
+# Square covers letterbox onto 1920x1080. Shorts: --size 1080x1920
 ```
 
 Spark: the AIO is ~10 GB VRAM-adjacent work. Do **not** co-resident with LTX / Wan / Klein.

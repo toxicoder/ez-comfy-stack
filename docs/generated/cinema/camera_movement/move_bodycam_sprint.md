@@ -1,6 +1,6 @@
 ---
 title: "Body-cam sprint"
-description: "Cinema Rack illustration — Body-cam sprint."
+description: "Cinema Rack illustration - Body-cam sprint."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

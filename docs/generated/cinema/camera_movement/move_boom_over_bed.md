@@ -1,6 +1,6 @@
 ---
 title: "Boom over bed"
-description: "Cinema Rack illustration — Boom over bed."
+description: "Cinema Rack illustration - Boom over bed."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

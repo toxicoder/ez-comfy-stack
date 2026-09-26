@@ -1,6 +1,6 @@
 ---
 title: "Over-Table Two-Shot"
-description: "Cinema Rack illustration — Over-Table Two-Shot."
+description: "Cinema Rack illustration - Over-Table Two-Shot."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

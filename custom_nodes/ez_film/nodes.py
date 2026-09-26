@@ -41,7 +41,7 @@ def _unload_models() -> str:
         if hasattr(mm, "soft_empty_cache"):
             mm.soft_empty_cache()
         status = "unloaded"
-    except Exception as exc:  # noqa: BLE001 — Comfy optional in tests
+    except Exception as exc:  # noqa: BLE001 - Comfy optional in tests
         log(f"model unload skipped: {exc}")
         status = "skipped"
     gc.collect()
@@ -50,7 +50,7 @@ def _unload_models() -> str:
 
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
-    except Exception as exc:  # noqa: BLE001 — torch optional in tests
+    except Exception as exc:  # noqa: BLE001 - torch optional in tests
         log(f"cuda empty_cache skipped: {exc}")
     return status
 
@@ -148,7 +148,7 @@ class EZFilmConcat:
     DESCRIPTION = (
         "Concat 18 LTX 5.00s MP4s in beat/shot order. H.264 CRF 18 + AAC + "
         "YouTube loudnorm + faststart, cap 90s. act=0 writes the 90s film "
-        "master; act=1–5 writes ez_<slug>_actN_90s.mp4 for festival shorts. "
+        "master; act=1-5 writes ez_<slug>_actN_90s.mp4 for festival shorts. "
         "xfade_cs is audio-only acrossfade (10 = 0.10s, overlap off so "
         "duration stays on picture); 0 is a hard cut. A play/download overlay "
         "appears when Queue finishes."
@@ -170,9 +170,9 @@ class EZFilmConcat:
             film: Film id from the catalog.
             cap_seconds: Publish duration cap (default 90; widget max 90).
             xfade_cs: Audio acrossfade in centiseconds; 0 is a hard cut.
-            act: 0 = 90s film master; 1–5 = act master for 7.5 min films.
+            act: 0 = 90s film master; 1-5 = act master for 7.5 min films.
             disclosure: Optional LTX disclosure text for the sidecar.
-            shots: ``shot_01`` … ``shot_18`` VHS_FILENAMES payloads.
+            shots: ``shot_01`` ... ``shot_18`` VHS_FILENAMES payloads.
 
         Returns:
             Comfy output dict with ``ui.gifs`` preview and ``result`` path.
@@ -322,7 +322,7 @@ class EZClipConcat:
         """Return the Comfy widget schema.
 
         Returns:
-            Prefix, cap, xfade, required ``clip_01``, optional ``clip_02``…24.
+            Prefix, cap, xfade, required ``clip_01``, optional ``clip_02``...24.
         """
         required: dict[str, Any] = {
             "prefix": ("STRING", {"default": CLIP_PREFIX_DEFAULT}),
@@ -355,7 +355,7 @@ class EZClipConcat:
     CATEGORY = "ez-comfy/film"
     OUTPUT_NODE = True
     DESCRIPTION = (
-        "Concat 1–24 LTX duration-head MP4s (5/8/10/12 s). H.264 CRF 18 + "
+        "Concat 1-24 LTX duration-head MP4s (5/8/10/12 s). H.264 CRF 18 + "
         "AAC + YouTube loudnorm + faststart. Cap is a fail-closed ceiling "
         "(default 600 s), not a pad-to-runtime. v1 is a hard cut "
         "(xfade_cs must be 0). A play/download overlay appears when Queue "
@@ -379,7 +379,7 @@ class EZClipConcat:
             xfade_cs: Must be 0 in v1 (hard cut).
             clip_01: First ``VHS_FILENAMES`` payload (required).
             disclosure: Optional LTX disclosure text for the sidecar.
-            clips: ``clip_02`` … ``clip_24`` optional VHS payloads.
+            clips: ``clip_02`` ... ``clip_24`` optional VHS payloads.
 
         Returns:
             Comfy output dict with ``ui.gifs`` preview and ``result`` path.
@@ -421,7 +421,7 @@ def _collect_clip_payloads(
 
     Args:
         clip_01: Required first payload.
-        clips: Optional ``clip_02``…``clip_24`` kwargs.
+        clips: Optional ``clip_02``...``clip_24`` kwargs.
 
     Returns:
         ``(1-based index, payload)`` pairs in order.
@@ -480,8 +480,8 @@ NODE_CLASS_MAPPINGS = {
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "EZUnloadModels": "Unload models (pass IMAGE)",
-    "EZFilmConcat": "Save 90s film (MP4) — play / download",
+    "EZFilmConcat": "Save 90s film (MP4) - play / download",
     "EZFilmDisclosure": "LTX AI-media disclosure (end-card)",
-    "EZClipLastFrame": "Last frame (IMAGE) — next I2V start",
-    "EZClipConcat": "Save clip chain (MP4) — play / download",
+    "EZClipLastFrame": "Last frame (IMAGE) - next I2V start",
+    "EZClipConcat": "Save clip chain (MP4) - play / download",
 }

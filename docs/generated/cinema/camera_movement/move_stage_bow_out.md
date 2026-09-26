@@ -1,6 +1,6 @@
 ---
 title: "Stage bow-out"
-description: "Cinema Rack illustration — Stage bow-out."
+description: "Cinema Rack illustration - Stage bow-out."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

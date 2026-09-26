@@ -10,13 +10,13 @@ tags: [prompting, klein, wan, ltx, zimage, longcat, dreamx, comfyui]
 
 - How each US-safe model actually reads a prompt (defaults and opt-in)
 - Canned lab graph text (already rewritten)
-- GIF loop motion and dream-house world bible (one place prompt; walkthrough shot cards per room — lens, height, a distinct room program, near/far; Prompt Join lock=view). Clay tour: same bible, Klein restyles Blender stills
+- GIF loop motion and dream-house world bible (one place prompt; walkthrough shot cards per room - lens, height, a distinct room program, near/far; Prompt Join lock=view). Clay tour: same bible, Klein restyles Blender stills
 - Character draft then tweak (style dropdown; generated still as the next reference)
 - Lazy path: Prompt Enhance nodes (on-box Qwen3-4B-Instruct-2507). Seeded graphs pin Enhance **on** for lazy CLIP printers and **off** when the string is already a recipe, script, or film shot.
 - Negative CLIP nodes go through **Negative Prompt Enhance**, separate from **Rewrite prompt**. It stays **on** even when Rewrite prompt is off. It reads the final positive (the enhance output, the Prompt Join line, or every film shot through a prompt bundle) so canned `illustration` / `Pixar` terms cannot fight the look you actually queued. Families: klein, wan, ltx, zimage, longcat, dreamx, s2v. Distilled CFG 1 models still ignore the box; fold real exclusions into the **positive**, including a natural hand when a person is in frame.
 - Rewriter **context** sockets carry a bible, logline, research brief, or episode script. Enhance **off** ignores context so authored recipes stay pinned
 - Style dropdown: research-backed look references; dropdown wins over style already in the source
-- Sample prompt dropdown: 30 lab recipes for **this graph** plus **Custom** to type your own. Default is Custom so the canned widget text still Queues. Pick a sample to fill (and lock) the Prompt box; pick Custom to edit. **stills/dream-house** lists place recipes (Cliff villa, Forest cabin, …), not Klein still or Wan motion recipes. Queue still accepts a stamped label from another catalog so specialized graphs do not fail validation.
+- Sample prompt dropdown: 30 lab recipes for **this graph** plus **Custom** to type your own. Default is Custom so the canned widget text still Queues. Pick a sample to fill (and lock) the Prompt box; pick Custom to edit. **stills/dream-house** lists place recipes (Cliff villa, Forest cabin, ...), not Klein still or Wan motion recipes. Queue still accepts a stamped label from another catalog so specialized graphs do not fail validation.
 - After Queue, the dim **CLIP prompt** box is always visible and shows the string CLIP/ACE encoded
 - Graph **Positive** (CLIPTextEncode; Wan I2V **Motion / prompt**) is a linked preview of that string: it follows Prompt / Rewrite prompt, then the rewritten CLIP text after Queue. Queue still encodes the Enhance STRING, not the preview widget.
 
@@ -25,11 +25,11 @@ tags: [prompting, klein, wan, ltx, zimage, longcat, dreamx, comfyui]
 - Writing (or pasting) a prompt that matches the encoder in front of you instead of SD1.5 tag soup
 - Picking a lab sample prompt from the App dropdown, or Custom to type a lazy sentence the on-box Qwen3 rewriter expands for Klein / Wan / LTX / Z-Image / LongCat / DreamX
 - Optional style dropdown (300 presets): the rewriter weaves research-backed medium, light, color, and texture into the CLIP prompt, and retunes any style already in the source
-- **Cinema Rack** (`inspire/cinema-rack`): pick one cinematography technique per axis (shot size, angle, move, lens, light, …) and splice a Klein / Wan / LTX string. Deterministic — no LLM. Wan emits one camera verb. Lazy Prompt Enhance uses the same catalog language (clauses, recipes, Wan tokens) when it rewrites. [Cinema Rack](create/cinema-rack.md)
-- **Audio Rack** (`inspire/audio-rack`): pick one audio/music technique per axis (genre, tempo, drums, bass, vocal, form, …) and splice ACE-Step tags plus lyrics form. Deterministic — no LLM. Vocal identity is omitted on instrumental and podcast-bed. ACE Prompt Enhance uses the same catalog language when it rewrites. [Audio Rack](create/audio-rack.md)
+- **Cinema Rack** (`inspire/cinema-rack`): pick one cinematography technique per axis (shot size, angle, move, lens, light, ...) and splice a Klein / Wan / LTX string. Deterministic - no LLM. Wan emits one camera verb. Lazy Prompt Enhance uses the same catalog language (clauses, recipes, Wan tokens) when it rewrites. [Cinema Rack](create/cinema-rack.md)
+- **Audio Rack** (`inspire/audio-rack`): pick one audio/music technique per axis (genre, tempo, drums, bass, vocal, form, ...) and splice ACE-Step tags plus lyrics form. Deterministic - no LLM. Vocal identity is omitted on instrumental and podcast-bed. ACE Prompt Enhance uses the same catalog language when it rewrites. [Audio Rack](create/audio-rack.md)
 
 <Callout type="info" title="Lab graphs already ship model-native prompts">
-  Seeded lab graphs use research-backed Positive / Motion text. Prompt Enhance is **on** for lazy CLIP printers (Klein stills, generic 5s Wan/LTX, identity bibles you type). It is **off** for authored recipes: 90s films, talking-head freeze, ping-pong loops, camera-verb I2V, podcast Speaker A/B scripts, ACE tags/lyrics, IC-LoRA. Turn it the other way in the App if you want. **inspire/app-forge** clones a shipped lab graph into live `_user/` from a brief (occupancy **llm**; does not Queue). **inspire/research-chat** is a no-UNET creative desk (occupancy **llm**): chat or planner+search subagents, then paste ingredients into **inspire/prompt-forge** Context (or type the lazy sentence once in Prompt — all three families share it). Beat Sheet packs Logline / Script / Audio policy / Score into every card rewrite. 90s films wire the Klein identity STRING into each LTX enhance **context** (dormant while Enhance is off). The CLIP prompt box is visible before Queue (empty until rewrite) and shows the encoded string after. Graph **Positive** follows Prompt / Rewrite prompt immediately, then that rewritten string after Queue.
+  Seeded lab graphs use research-backed Positive / Motion text. Prompt Enhance is **on** for lazy CLIP printers (Klein stills, generic 5s Wan/LTX, identity bibles you type). It is **off** for authored recipes: 90s films, talking-head freeze, ping-pong loops, camera-verb I2V, podcast Speaker A/B scripts, ACE tags/lyrics, IC-LoRA. Turn it the other way in the App if you want. **inspire/app-forge** clones a shipped lab graph into live `_user/` from a brief (occupancy **llm**; does not Queue). **inspire/research-chat** is a no-UNET creative desk (occupancy **llm**): chat or planner+search subagents, then paste ingredients into **inspire/prompt-forge** Context (or type the lazy sentence once in Prompt - all three families share it). Beat Sheet packs Logline / Script / Audio policy / Score into every card rewrite. 90s films wire the Klein identity STRING into each LTX enhance **context** (dormant while Enhance is off). The CLIP prompt box is visible before Queue (empty until rewrite) and shows the encoded string after. Graph **Positive** follows Prompt / Rewrite prompt immediately, then that rewritten string after Queue.
 </Callout>
 
 ```mermaid
@@ -37,11 +37,11 @@ flowchart TB
   Which{"Which graph is loaded?"} --> K["Klein still / edit"]
   Which --> W["Wan T2V or I2V"]
   Which --> L["LTX T2V or I2V"]
-  K --> Kp["Sentences: subject → shot size → angle → lens → light"]
+  K --> Kp["Sentences: subject -> shot size -> angle -> lens -> light"]
   W --> Wp{"I2V?"}
   Wp -->|yes| Wi["Motion + one Cinema Rack camera token"]
   Wp -->|no| Wt["Entity + scene + motion + aesthetic + one camera token"]
-  L --> Lp["Present-tense paragraph · Cinema Rack + foley interleaved"]
+  L --> Lp["Present-tense paragraph - Cinema Rack + foley interleaved"]
 ```
 
 Why the three models exist: [Klein, Wan, and LTX](learn/pipeline.md).
@@ -52,23 +52,23 @@ Why the three models exist: [Klein, Wan, and LTX](learn/pipeline.md).
 
 | Model | Encoder | CLIP type | Prompt shape | Negative |
 | --- | --- | --- | --- | --- |
-| FLUX.2 Klein 4B distilled / NVFP4 | Qwen3-4B | `flux2` | Sentences. Subject → shot size → angle → lens → light (Cinema Rack). Under ~150 words. Positive opposites, not “no logos”. | CFG 1.0 — ignored unless you raise CFG or swap **base** |
-| FLUX.2 Klein 4B base | Qwen3-4B | `flux2` | Same sentences. 20–50 steps, CFG ~4. | Live. Same artifact list |
-| Z-Image Turbo | Qwen3-4B | `flux2` / Z-Image wrap | 80–250 words. Shot & subject → appearance → clothing → environment → lighting → mood → medium → in-prompt constraints. | Official pipeline ignores `negative_prompt`. Fold exclusions into the positive |
-| Wan 2.2 TI2V-5B | UMT5-XXL | `wan` | T2V: Entity + Scene + Motion + Aesthetic + one Cinema Rack token (~80–120 words). I2V: **Motion + Camera only**. Silent. | Often CFG 1 on MagCache drafts |
-| Wan 2.2 A14B | UMT5-XXL | `wan` | Same formula. Cinematic aesthetic labels. MagCache **off**. Official guide scale ~3–4. | Live |
+| FLUX.2 Klein 4B distilled / NVFP4 | Qwen3-4B | `flux2` | Sentences. Subject -> shot size -> angle -> lens -> light (Cinema Rack). Under ~150 words. Positive opposites, not "no logos". | CFG 1.0 - ignored unless you raise CFG or swap **base** |
+| FLUX.2 Klein 4B base | Qwen3-4B | `flux2` | Same sentences. 20-50 steps, CFG ~4. | Live. Same artifact list |
+| Z-Image Turbo | Qwen3-4B | `flux2` / Z-Image wrap | 80-250 words. Shot & subject -> appearance -> clothing -> environment -> lighting -> mood -> medium -> in-prompt constraints. | Official pipeline ignores `negative_prompt`. Fold exclusions into the positive |
+| Wan 2.2 TI2V-5B | UMT5-XXL | `wan` | T2V: Entity + Scene + Motion + Aesthetic + one Cinema Rack token (~80-120 words). I2V: **Motion + Camera only**. Silent. | Often CFG 1 on MagCache drafts |
+| Wan 2.2 A14B | UMT5-XXL | `wan` | Same formula. Cinematic aesthetic labels. MagCache **off**. Official guide scale ~3-4. | Live |
 | Wan Fun InP / VACE | UMT5 | `wan` | FLF: motion between two frames. VACE: motion through the seam. One camera. Silent. | Same Wan artifacts |
 | Wan S2V-14B | UMT5 + wav2vec | `wan` | Look lock + talking/singing action + one camera. **Wav owns lip-sync and duration.** | Live (CFG ~4.5). Do not negate the wav |
-| LTX-2.5 distilled | Gemma4-12B-with-proj | `ltxv` | One flowing present-tense paragraph, 4–8 sentences, **audio interleaved**. Dialogue in `"quotes"` only if you asked for speech. | Distilled CFG 1; keep flicker/wrong-audio list |
-| LTX IC-LoRA Union | Gemma4-with-proj | `ltxv` | Look, materials, light — **not** “depth map / canny / pose”. Guide owns blocking. Seeded graphs pin Enhance **off**. | `negative_ltx` |
+| LTX-2.5 distilled | Gemma4-12B-with-proj | `ltxv` | One flowing present-tense paragraph, 4-8 sentences, **audio interleaved**. Dialogue in `"quotes"` only if you asked for speech. | Distilled CFG 1; keep flicker/wrong-audio list |
+| LTX IC-LoRA Union | Gemma4-with-proj | `ltxv` | Look, materials, light - **not** "depth map / canny / pose". Guide owns blocking. Seeded graphs pin Enhance **off**. | `negative_ltx` |
 | LongCat-Video | LongCat text | opt-in | Scene + motion + cinematography + style. I2V extends the still. Continuation names the next beat. Picture only. | Standard CFG ~4. Distill CFG 1 |
 | DreamX-Creator | UMT5-XXL | opt-in | First frame owns look. Unified AV paragraph (motion + acoustic events). Text CFG ~5. | Live. Do not negate named foley |
 | ACE-Step 1.5 turbo / XL | ACE tags | `ace` | Genre-first tags; lyrics keep `[verse]` / `[chorus]`. Instrumental: `instrumental, no vocals` + `[inst]`. | Not applicable |
-| TRELLIS.2 / SeedVR2 / DA3 / TTS / ASR | — | — | No CLIP text contract. TRELLIS conditions on DINOv3 + image. | Not applicable |
+| TRELLIS.2 / SeedVR2 / DA3 / TTS / ASR | - | - | No CLIP text contract. TRELLIS conditions on DINOv3 + image. | Not applicable |
 
-Comfy wraps Klein’s string in a Qwen chat template. Do **not** paste `<|im_start|>` into the widget.
+Comfy wraps Klein's string in a Qwen chat template. Do **not** paste `<|im_start|>` into the widget.
 
-Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Positive prompt. FLUX-family models do not use negatives well; put constraints in the positive (“unmarked facades, empty of signage”).
+Distilled Klein is **CFG 1.0 / 4 steps** - quality is almost entirely the Positive prompt. FLUX-family models do not use negatives well; put constraints in the positive ("unmarked facades, empty of signage").
 
 ---
 
@@ -78,39 +78,39 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
   <Tab value="Klein 4B (still)">
     Front-load the subject. Write prose.
 
-    **Do:** `A chest-mounted first-person body-cam still, already at a dead sprint across a golden-hour tropical rooftop terrace, looking straight ahead at a wide rooftop gap that already fills the center. Mount at sternum height. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge, empty palms, hands free. An open short storm-cloak with warm-gold lining streams at the edges. Late-sun rim light, fabric weave and stone grit. Wide 24mm body-cam, YouTube 16:9, bare frame edges and a clean unmarked lens…`
+    **Do:** `A chest-mounted first-person body-cam still, already at a dead sprint across a golden-hour tropical rooftop terrace, looking straight ahead at a wide rooftop gap that already fills the center. Mount at sternum height. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge, empty palms, hands free. An open short storm-cloak with warm-gold lining streams at the edges. Late-sun rim light, fabric weave and stone grit. Wide 24mm body-cam, YouTube 16:9, bare frame edges and a clean unmarked lens...`
 
-    **Don’t:** `rooftop, techno wizard, photo, 24mm, no logos, no text`
+    **Don't:** `rooftop, techno wizard, photo, 24mm, no logos, no text`
   </Tab>
   <Tab value="Wan 2.2 T2V">
-    Entity + scene + motion + **one** Cinema Rack camera token (`dolly in`, `pan left`, `tracking`, `orbit`, `fixed camera`). About 80–120 words. No audio, no score. Lighting and lens use catalog look language (golden-hour amber, 24mm-equivalent wide), not tag soup.
+    Entity + scene + motion + **one** Cinema Rack camera token (`dolly in`, `pan left`, `tracking`, `orbit`, `fixed camera`). About 80-120 words. No audio, no score. Lighting and lens use catalog look language (golden-hour amber, 24mm-equivalent wide), not tag soup.
   </Tab>
   <Tab value="Wan 2.2 I2V">
     The start image owns look. Prompt only motion and camera. Keep identity locked. Lab I2V graphs no longer encode a separate look CLIP into the sampler.
   </Tab>
   <Tab value="Looping GIF (Wan I2V)">
-    Locked camera plus cyclic motion (breeze, curtains, leaves, water). Do **not** prompt a walk or a one-way dolly — **motion/loops/gif-loop** plays the clip forward then reverse (VHS ping-pong) so the join frame is the start image. Turn ping-pong off only when reverse playback would look wrong.
+    Locked camera plus cyclic motion (breeze, curtains, leaves, water). Do **not** prompt a walk or a one-way dolly - **motion/loops/gif-loop** plays the clip forward then reverse (VHS ping-pong) so the join frame is the start image. Turn ping-pong off only when reverse playback would look wrong.
   </Tab>
   <Tab value="Dream-house pack (Klein)">
-    Type **one place**. Identity-mode enhance freezes only the rooms, furniture, outdoor lamps, and surroundings you named (the default placeholder is a full-floor penthouse on a tall tower in a dense unmarked city). Name lounge, kitchen, dining, bath, bedroom, terrace, study, and outdoor lamps so the tour can enter them. Name each room’s backdrop in the bible (which wall or opening that room faces). Hidden SHOT cards are walkthrough cameras — tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study — lens, camera height, a distinct room program (entrance hall, living hall, cook line, dining hall, sleep chamber, wet room, open-air terrace, writing room), near/far planes, and which room, not a penthouse template and not one volume restyled. They do not name dusk, materials, or architecture. **Prompt Join** `lock=view` front-loads the shot, then “same building, rooms, furniture, and materials” + “this still is only the room and backdrop the shot names” + the bible, and repeats that closer after the bible. Shot cards are **not** Klein-t2i-enhanced — a per-shot rewrite would mutate the bible. Shots 02–10 are independent T2I (empty latent, same seed) — they do **not** `ReferenceLatent` shot 01. Dawn / noon / night of one camera belong on **stills/time-of-day** (`lock=state`). `lock=state` is the other mode: same camera, change only light/grade/action (lighting-trio, before/after). Unused shots may be bypassed.
+    Type **one place**. Identity-mode enhance freezes only the rooms, furniture, outdoor lamps, and surroundings you named (the default placeholder is a full-floor penthouse on a tall tower in a dense unmarked city). Name lounge, kitchen, dining, bath, bedroom, terrace, study, and outdoor lamps so the tour can enter them. Name each room's backdrop in the bible (which wall or opening that room faces). Hidden SHOT cards are walkthrough cameras - tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study - lens, camera height, a distinct room program (entrance hall, living hall, cook line, dining hall, sleep chamber, wet room, open-air terrace, writing room), near/far planes, and which room, not a penthouse template and not one volume restyled. They do not name dusk, materials, or architecture. **Prompt Join** `lock=view` front-loads the shot, then "same building, rooms, furniture, and materials" + "this still is only the room and backdrop the shot names" + the bible, and repeats that closer after the bible. Shot cards are **not** Klein-t2i-enhanced - a per-shot rewrite would mutate the bible. Shots 02-10 are independent T2I (empty latent, same seed) - they do **not** `ReferenceLatent` shot 01. Dawn / noon / night of one camera belong on **stills/time-of-day** (`lock=state`). `lock=state` is the other mode: same camera, change only light/grade/action (lighting-trio, before/after). Unused shots may be bypassed.
 
-    Second door — **stills/dream-house-clay**: same bible and shot cards, but each still `ReferenceLatent`s a clay plate (`ez_house_clay_01`…`10`). `start` seeds LoadImage; optional Workbench dump with `./scripts/manage.sh house-views` while Comfy is **down**. Prompt the **look** (style dropdown, materials); do not re-describe the floorplan — the greybox already locked cameras and adjacency. Prefix `ez_dream_house_clay_01`…`10`. Language-only (no geometry) → T2I tour. Playbook: [Dream-house tours](learn/dream-house.md).
+    Second door - **stills/dream-house-clay**: same bible and shot cards, but each still `ReferenceLatent`s a clay plate (`ez_house_clay_01`...`10`). `start` seeds LoadImage; optional Workbench dump with `./scripts/manage.sh house-views` while Comfy is **down**. Prompt the **look** (style dropdown, materials); do not re-describe the floorplan - the greybox already locked cameras and adjacency. Prefix `ez_dream_house_clay_01`...`10`. Language-only (no geometry) -> T2I tour. Playbook: [Dream-house tours](learn/dream-house.md).
   </Tab>
   <Tab value="LTX-2.5 AV">
-    Flowing paragraph, present tense, audio beside the action (wind, footsteps, a shop bell) — not a sound trailer at the end. Shorts: world SFX, **no score**. Do not paste a Wan or Kling shot list unchanged. 90s films bake one `ltx_i2v` paragraph per shot (I2V: motion + one camera + interleaved foley; start image owns look). All three 90s films pin Enhance **off** so the identity and each shot paragraph are encoded as written. Showcase Apps: **motion/av/dialogue-8s** puts speech in `"quotes"`; **motion/av/multishot-8s** names the cut in prose (`hard cut`, `match cut`) and says whether audio continues; **motion/av/first-last-8s** describes the transition between two stills; **motion/av/audio-to-video-8s** lets the loaded wav own timing.
+    Flowing paragraph, present tense, audio beside the action (wind, footsteps, a shop bell) - not a sound trailer at the end. Shorts: world SFX, **no score**. Do not paste a Wan or Kling shot list unchanged. 90s films bake one `ltx_i2v` paragraph per shot (I2V: motion + one camera + interleaved foley; start image owns look). All three 90s films pin Enhance **off** so the identity and each shot paragraph are encoded as written. Showcase Apps: **motion/av/dialogue-8s** puts speech in `"quotes"`; **motion/av/multishot-8s** names the cut in prose (`hard cut`, `match cut`) and says whether audio continues; **motion/av/first-last-8s** describes the transition between two stills; **motion/av/audio-to-video-8s** lets the loaded wav own timing.
 
-    First-person body-cam (go-see): one signature stunt per 5 s; eye-level chest-cam; only the wearer's own sleeves and gloves along the bottom edge — never a person occupying the plate. Look at the landing before a jump; dip on impact then recover; land the last frame on a readable plant for the next I2V. Close-mic breath + surface foley beside the move. No speech. Identity still is already at a dead sprint. I2V describes motion from the start frame; do not restate a second body.
+    First-person body-cam (go-see): one signature stunt per 5 s; eye-level chest-cam; only the wearer's own sleeves and gloves along the bottom edge - never a person occupying the plate. Look at the landing before a jump; dip on impact then recover; land the last frame on a readable plant for the next I2V. Close-mic breath + surface foley beside the move. No speech. Identity still is already at a dead sprint. I2V describes motion from the start frame; do not restate a second body.
 
     LTX audio: name the mix first (`Wordless mix: only footfalls, wind, grit, close-mic breath, silent mouth`). Put `No speech.` last for the bible contract. Do not quote dialogue. Distilled AV will talk if the clause is only a prohibition.
   </Tab>
   <Tab value="Z-Image Turbo (opt-in)">
-    Same Qwen3-4B chat wrap as Klein, longer (80–250 words). Turbo **ignores** a Negative CLIP box — put cleanup in the positive (`unmarked surfaces, solitary street, clean lens`).
+    Same Qwen3-4B chat wrap as Klein, longer (80-250 words). Turbo **ignores** a Negative CLIP box - put cleanup in the positive (`unmarked surfaces, solitary street, clean lens`).
   </Tab>
   <Tab value="Wan S2V (opt-in)">
     Reference image + wav. Prompt the talking/singing action and one camera. Do not quote dialogue the wav does not contain. CFG ~4.5 so negatives are live; do not negate the wav.
   </Tab>
   <Tab value="LongCat-Video (opt-in)">
-    Scene + motion + cinematography + style. I2V extends the still. Continuation names only the next beat. Picture only — no audio. Standard CFG ~4.
+    Scene + motion + cinematography + style. I2V extends the still. Continuation names only the next beat. Picture only - no audio. Standard CFG ~4.
   </Tab>
   <Tab value="DreamX-Creator (opt-in)">
     First frame owns look. One paragraph of **visual dynamics plus acoustic events** (UMT5). Text CFG ~5. Do not restyle the still.
@@ -136,14 +136,14 @@ In-tree pack `custom_nodes/ez_prompt_enhance` (category **ez-comfy/prompt**). En
 | **ACE-Step Prompt Enhance** | `vocal`, `instrumental` | music-rap-* tags+lyrics; music-edm-drive-through-* scores; podcast instrumental beds |
 | **Negative Prompt Enhance** | family `klein` `wan` `ltx` `zimage` `longcat` `dreamx` `s2v` | every CLIP **Negative**. App label **Rewrite negative**. Reads the final positive so the negative cannot fight it. Stays on when Rewrite prompt is off |
 | **Prompt Join** | `lock=view`: shot + lock + bible + inventory + closer (camera-first walkthrough; this still is only the room and backdrop the shot names). `lock=state`: bible + inventory + lock + shot | dream-house (view) and lighting/before-after (state) |
-| **Context Join** | labeled logline / script / audio policy / score packed into one STRING | beat-sheet desk → every LTX card enhance `context` |
+| **Context Join** | labeled logline / script / audio policy / score packed into one STRING | beat-sheet desk -> every LTX card enhance `context` |
 
-STRING out → CLIPTextEncode `text` input.
+STRING out -> CLIPTextEncode `text` input.
 
 1. `./scripts/manage.sh download-models` (includes `comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf`).
 2. Pick a **Sample prompt** (30 lab recipes) or **Custom** to type a lazy sentence (the canned paragraph stays until you pick a sample). **Enhance** defaults **on**.
-3. Optional: pick a **style** (photorealistic, anime, cartoon, … — 300 ids, or `none`).
-4. Queue. On the Enhance node, read the dim **CLIP prompt** box — that is the text CLIP encoded. The Graph **Positive** node (CLIPTextEncode) is the same preview. The top prompt widget stays as you typed it. If the 4B rewriter was skipped, **Enhance status** says why (missing GGUF, missing llama.cpp, timeout) and generation still runs. A selected style should read as that medium (cel, watercolor, oil on canvas, …), not a 3D/photo paragraph with a style trailer. Rewrite prompt **off** copies the Prompt box onto Positive immediately; **on** waits for Queue for the 4B rewrite (Positive still shows the source until then).
+3. Optional: pick a **style** (photorealistic, anime, cartoon, ... - 300 ids, or `none`).
+4. Queue. On the Enhance node, read the dim **CLIP prompt** box - that is the text CLIP encoded. The Graph **Positive** node (CLIPTextEncode) is the same preview. The top prompt widget stays as you typed it. If the 4B rewriter was skipped, **Enhance status** says why (missing GGUF, missing llama.cpp, timeout) and generation still runs. A selected style should read as that medium (cel, watercolor, oil on canvas, ...), not a 3D/photo paragraph with a style trailer. Rewrite prompt **off** copies the Prompt box onto Positive immediately; **on** waits for Queue for the 4B rewrite (Positive still shows the source until then).
 
 **Enhance defaults to true on the node** (a dragged node still rewrites). Seeded JSON pins it **off** when a rewrite would mutate structured input:
 
@@ -159,7 +159,7 @@ STRING out → CLIPTextEncode `text` input.
 | Rap tags + lyrics (draft, full, nill-bye) | `[verse]`/`[chorus]`, BPM, `language=en` vs encoder widgets |
 | Drive-through EDM arrangement scores | empty-body `[drop]`/`[inst]`/`[outro]` with cues inside the brackets, BPM; all one hundred one takes stay instrumental, and each score is fitted to ACE-Step's 2048-token lyric window. Free-text under a marker is sung |
 
-Lazy Klein stills, identity bibles you type, Klein edit, generic 5s Wan/LTX printers, Prompt Forge, Cinema Rack, and Beat Sheet stay **on**. Dub **Rewrite translation** stays on — that path translates turns, it does not CLIP-rewrite. Identity mode keeps the bible camera-free and still weaves a selected style (medium and texture, no camera). Style is ignored on I2V / FLF / VACE / S2V / LongCat continuation (the start image or wav owns look). Do not Klein-t2i-enhance Prompt Join shot cards.
+Lazy Klein stills, identity bibles you type, Klein edit, generic 5s Wan/LTX printers, Prompt Forge, Cinema Rack, and Beat Sheet stay **on**. Dub **Rewrite translation** stays on - that path translates turns, it does not CLIP-rewrite. Identity mode keeps the bible camera-free and still weaves a selected style (medium and texture, no camera). Style is ignored on I2V / FLF / VACE / S2V / LongCat continuation (the start image or wav owns look). Do not Klein-t2i-enhance Prompt Join shot cards.
 
 ```mermaid
 flowchart TD
@@ -168,24 +168,24 @@ flowchart TD
   Lazy --> Style{"Style dropdown?"}
   Style -->|preset| Rep["Dropdown wins over medium already in the source"]
   Style -->|none| Keep["Keep rewriter output"]
-  Lazy --> Miss["Missing GGUF / llama.cpp / timeout → passthrough + status"]
+  Lazy --> Miss["Missing GGUF / llama.cpp / timeout -> passthrough + status"]
 ```
 
 When Enhance is **on** and a style is selected (t2i / t2v / Klein edit / identity):
 
 - The dropdown is look authority. If the source already names a medium, lighting, grade, lens, or art style, the rewriter **replaces** those clauses so they match the dropdown. It does not stack two styles.
 - Each preset is a short reference (medium, light, color, texture, camera or projection) tuned for Klein prose, Wan aesthetic+stylization, or LTX lighting/surface in the flowing paragraph.
-- CLIP text stays generic: no camera/film/studio brand names. Labels such as **Pixar-like 3D** still weave as “stylized feature 3D”.
+- CLIP text stays generic: no camera/film/studio brand names. Labels such as **Pixar-like 3D** still weave as "stylized feature 3D".
 - The dropdown wins in the CLIP string even if the 4B rewriter ignores the hint or the GGUF passthroughs: conflicting medium words are dropped and the catalog medium is front-loaded.
 - **Rewrite negative** takes that final CLIP string as context, including when Rewrite prompt is off (the string is the text you typed). A canned `illustration` / `Pixar` negative is dropped when the positive is watercolor or stylized feature 3D. Anatomy terms such as extra fingers stay unless the positive asked for that body. Watermarks and melt/flicker stay. Distilled Klein, Z-Image Turbo, Wan 5B MagCache drafts, and distilled LTX are CFG 1 (the box is ignored); the positive has to name a natural hand. Klein base, Wan A14B, S2V, LongCat, and DreamX read the list. Turning Rewrite negative off skips the LLM only; the conflict filter still runs.
 - After Queue, the **CLIP prompt** box on the node is the preview. First deploy: restart the container so `js/` is copied, then hard-refresh the Comfy tab.
 
 After Queue the node is an output: the **CLIP prompt** widget is the CLIP string (no `[passthrough:` prefix). **Enhance status** is empty when the rewriter ran, or a next step when it did not.
 
-Fail-soft: missing GGUF, missing `llama-cpp-python`, timeout, or empty model output logs a warning and passes the source through (with style applied if one is selected). Generation still runs. Do not copy a GGUF by hand — `./scripts/manage.sh download-models` plus a restart heals `comfy/llm/` and `doctor`/`start` relink a snapshot that is already on disk. **Enhance status** `llama.cpp unavailable` means `from llama_cpp import Llama` failed (not that pip skipped). Queue self-heals the CPU wheel from the official extra-index, then force-reinstalls the GitHub manylinux wheel if the pin is already satisfied but Llama still will not import. If status still names a `docker exec … pip install --force-reinstall` command, run that line. Confirm: `docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -c 'from llama_cpp import Llama'`. Pip “already satisfied” alone is not the check.
+Fail-soft: missing GGUF, missing `llama-cpp-python`, timeout, or empty model output logs a warning and passes the source through (with style applied if one is selected). Generation still runs. Do not copy a GGUF by hand - `./scripts/manage.sh download-models` plus a restart heals `comfy/llm/` and `doctor`/`start` relink a snapshot that is already on disk. **Enhance status** `llama.cpp unavailable` means `from llama_cpp import Llama` failed (not that pip skipped). Queue self-heals the CPU wheel from the official extra-index, then force-reinstalls the GitHub manylinux wheel if the pin is already satisfied but Llama still will not import. If status still names a `docker exec ... pip install --force-reinstall` command, run that line. Confirm: `docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -c 'from llama_cpp import Llama'`. Pip "already satisfied" alone is not the check.
 
 <Callout type="warning" title="GPU-first local LLM">
-  GPU-first: occupancy `llm` / `llm-desk` / `idle` uses the host 35B sidecar when it answers (`occupancy enter llm-desk --yes`). Prompt Enhance on Wan / LTX / TRELLIS stays **CPU 4B** so the denoise keeps unified memory (OOM-safe). `EZ_LLM_ALLOW_GPU=0` forces CPU everywhere. Do not run the 35B sidecar next to LTX. The in-image llama-cpp pin is still a CPU wheel — in-canvas 4B ngl is occupancy-ready for a later CUDA wheel.
+  GPU-first: occupancy `llm` / `llm-desk` / `idle` uses the host 35B sidecar when it answers (`occupancy enter llm-desk --yes`). Prompt Enhance on Wan / LTX / TRELLIS stays **CPU 4B** so the denoise keeps unified memory (OOM-safe). `EZ_LLM_ALLOW_GPU=0` forces CPU everywhere. Do not run the 35B sidecar next to LTX. The in-image llama-cpp pin is still a CPU wheel - in-canvas 4B ngl is occupancy-ready for a later CUDA wheel.
 </Callout>
 Safety: `restart: "no"`, headroom preflight, and download-limit clear-on-exit are unchanged. No API keys. The GGUF lives under `MODELS_DIR`, never in the image.
 
@@ -193,4 +193,4 @@ Safety: `restart: "no"`, headroom preflight, and download-limit clear-on-exit ar
 
 ## Next steps
 
-Queue **stills/still-draft** first ([Getting Started](getting-started.md)). Canvas Apps (still-draft, still-hero, Wan/LTX 5 s, creator jobs) expose **Format / platform**. **stills/still-studio** is the still desk where prefix follows Format and Look recipe is on. **stills/image-studio** is the universal still desk: 100 creator modes, Format / platform, and an optional example/reference still (Queue without a file is valid). **This run** (under **Iterate**) is the mode, prompt, size, prefix, and sampler values Queue will send — a named Sample wins over the prompt box, and Rewrite on means that box is the rewriter source, not the CLIP text. **Iterate** off keeps creator mode. **Iterate** on: the first Run is text-to-image; the saved still is fed back and the next Run is an edit you can retune. Clear the reference to start from text again. **stills/character-draft** then **stills/character-tweak** iterates a still. Swap lettering on an existing plate with **stills/text-swap** (output matches the source size; style is off). Replace the environment (including ground) with **stills/background-swap** (named samples skip the rewriter; Cubic block world rebuilds this photographed place from a block study and pastes the original people), or restyle it in place with **stills/background-edit**. Daily loop: still → Wan 5 s → LTX 5 s on [Visual Generative AI](visual-generative-ai.md).
+Queue **stills/still-draft** first ([Getting Started](getting-started.md)). Canvas Apps (still-draft, still-hero, Wan/LTX 5 s, creator jobs) expose **Format / platform**. **stills/still-studio** is the still desk where prefix follows Format and Look recipe is on. **stills/image-studio** is the universal still desk: 100 creator modes, Format / platform, and an optional example/reference still (Queue without a file is valid). **This run** (under **Iterate**) is the mode, prompt, size, prefix, and sampler values Queue will send - a named Sample wins over the prompt box, and Rewrite on means that box is the rewriter source, not the CLIP text. **Iterate** off keeps creator mode. **Iterate** on: the first Run is text-to-image; the saved still is fed back and the next Run is an edit you can retune. Clear the reference to start from text again. **stills/character-draft** then **stills/character-tweak** iterates a still. Swap lettering on an existing plate with **stills/text-swap** (output matches the source size; style is off). Replace the environment (including ground) with **stills/background-swap** (named samples skip the rewriter; Cubic block world rebuilds this photographed place from a block study and pastes the original people), or restyle it in place with **stills/background-edit**. Daily loop: still -> Wan 5 s -> LTX 5 s on [Visual Generative AI](visual-generative-ai.md).

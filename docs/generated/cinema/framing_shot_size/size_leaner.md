@@ -1,6 +1,6 @@
 ---
 title: "Leaner"
-description: "Cinema Rack illustration — Leaner."
+description: "Cinema Rack illustration - Leaner."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -1,6 +1,6 @@
 ---
 title: "Track with follow-focus"
-description: "Cinema Rack illustration — Track with follow-focus."
+description: "Cinema Rack illustration - Track with follow-focus."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

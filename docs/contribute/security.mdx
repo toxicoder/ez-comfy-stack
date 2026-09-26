@@ -1,6 +1,6 @@
 ---
 title: Security
-description: "Docs-chrome summary of repo-root SECURITY.md — private reporting, no public :8188, no committed tokens."
+description: "Docs-chrome summary of repo-root SECURITY.md - private reporting, no public :8188, no committed tokens."
 tags: [security, safety, comfyui, contributing]
 ---
 
@@ -8,10 +8,10 @@ tags: [security, safety, comfyui, contributing]
 
 **What's on this page**
 
-- **Canonical file** — repo-root `SECURITY.md` (this page is a summary)
-- **Private reporting** — GitHub Security Advisories
+- **Canonical file** - repo-root `SECURITY.md` (this page is a summary)
+- **Private reporting** - GitHub Security Advisories
 - **Do not expose Comfy `:8188`** to the public internet
-- **Operational safety** — headroom, `restart: "no"`, download-limit
+- **Operational safety** - headroom, `restart: "no"`, download-limit
 
 **What this enables**
 
@@ -57,7 +57,7 @@ flowchart LR
 - This project is a **lab/demo** stack for controlled DGX Spark environments.
 - **Do not expose ComfyUI (port 8188) to the public internet** without authentication / network policy.
 - Never commit `HF_TOKEN`, `.env`, or host secrets.
-- `download-limit` uses `sudo` for wondershaper — review sudoers policy on shared hosts.
+- `download-limit` uses `sudo` for wondershaper - review sudoers policy on shared hosts.
 
 ```mermaid
 flowchart TB
@@ -86,5 +86,5 @@ Resource exhaustion can be as bad as a software CVE when the host is remote-only
 - Manual start only (`restart: "no"`, type **yes**)
 
 <Callout type="error" title="Do not weaken these for demos">
-  Occupancy XOR, `restart: "no"`, headroom preflight, and download-limit clear-on-exit stay in force. [Occupancy matrix](../operate/occupancy-matrix.md) · [Reboot safety](../reboot-safety.md).
+  Occupancy XOR, `restart: "no"`, headroom preflight, and download-limit clear-on-exit stay in force. [Occupancy matrix](../operate/occupancy-matrix.md) - [Reboot safety](../reboot-safety.md).
 </Callout>

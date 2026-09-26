@@ -1,6 +1,6 @@
 ---
 title: "Pocket peek"
-description: "Cinema Rack illustration — Pocket peek."
+description: "Cinema Rack illustration - Pocket peek."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

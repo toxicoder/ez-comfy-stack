@@ -1,6 +1,6 @@
 ---
 title: "Breath Insert"
-description: "Cinema Rack illustration — Breath Insert."
+description: "Cinema Rack illustration - Breath Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

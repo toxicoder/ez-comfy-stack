@@ -98,7 +98,7 @@ shots:
     prefix: ez_switchyard_b4_s2
     load_from: ez_switchyard_b4_s1_last
     ltx_i2v: |
-      The start image holds as the first frame. A distant generic horn answers far off the yard — not a carrier identity — while rain and breath stay close. The camera keeps the roof walk. No music and no score.
+      The start image holds as the first frame. A distant generic horn answers far off the yard - not a carrier identity - while rain and breath stay close. The camera keeps the roof walk. No music and no score.
     wan_i2v: |
       Roof walk continues. Slow forward along unmarked cars. Rain as texture.
   - beat: 4

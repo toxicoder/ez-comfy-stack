@@ -29,11 +29,11 @@ Occupancy **klein**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fa
 ```text
 ## services/education/course-thumb
 
-Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
+Format / platform sets pixels (Custom uses Width x Height). Quality does not change size.
 
-Course thumbnail 16:9. Lab size **1280×704**. Prefix `ez_svc_crs_th`.
+Course thumbnail 16:9. Lab size **1280x704**. Prefix `ez_svc_crs_th`.
 Empty of lettering. Add titles in your editor, not in the prompt.
-Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
+Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.
 Handoff: none.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 ```
@@ -106,7 +106,7 @@ flowchart LR
 | 8 | VAE Decode | `VAEDecode` | OUTPUT |
 | 9 | Save PNG | `SaveImage` | OUTPUT |
 | 10 | Operator note | `Note` | NOTE |
-| 11 | Draft still (set to ez_still_draft_0000… | `LoadImage` | INPUT |
+| 11 | Draft still (set to ez_still_draft_0000... | `LoadImage` | INPUT |
 | 12 | Klein Prompt Enhance | `EZKleinPromptEnhance` | PROMPT |
 | 13 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |
 | 14 | Quality | `EZQuality` | QUALITY |
@@ -119,9 +119,9 @@ flowchart LR
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
 
-### `UNETLoader` — Load Diffusion Model
+### `UNETLoader` - Load Diffusion Model
 
 Load a standalone transformer/UNET from diffusion_models/.
 
@@ -162,7 +162,7 @@ Cast at load.
 | `fp8_e4m3fn_fast` | FP8 e4m3fn with fast optimizations. |
 | `fp8_e5m2` | Cast to FP8 e5m2. |
 
-### `CLIPLoader` — Load CLIP
+### `CLIPLoader` - Load CLIP
 
 Load a text encoder. The type combo must match the UNET family.
 
@@ -190,7 +190,7 @@ Type `COMBO`.
 
 CLIPType enum. Picks tokenizer + template.
 
-**How it affects generation:** flux2 wraps Klein strings in a Qwen chat template — do not paste <|im_start|>. wan is UMT5. ltxv is Gemma4-with-proj.
+**How it affects generation:** flux2 wraps Klein strings in a Qwen chat template - do not paste <|im_start|>. wan is UMT5. ltxv is Gemma4-with-proj.
 
 **This graph:** `flux2`
 
@@ -244,9 +244,9 @@ Where to load the encoder.
 | `default` | Load on the Comfy compute device (GPU). Lab default. |
 | `cpu` | Force CPU. Much slower; only for debugging a CLIP load. |
 
-### `VAELoader` — Load VAE
+### `VAELoader` - Load VAE
 
-Load the autoencoder that maps pixels ↔ latents (and LTX audio).
+Load the autoencoder that maps pixels <-> latents (and LTX audio).
 
 !!! warning "Lab notes"
 
@@ -266,7 +266,7 @@ Filename under vae/.
 
 **This graph:** `flux2-vae.safetensors`
 
-### `CLIPTextEncode` — CLIP Text Encode
+### `CLIPTextEncode` - CLIP Text Encode
 
 Turn a prompt string into CONDITIONING for the sampler.
 
@@ -286,20 +286,20 @@ Type `STRING`.
 
 Prompt encoded by CLIP.
 
-**How it affects generation:** Klein: sentences, subject → place → light → camera. Wan I2V: motion + one camera only. LTX: present-tense paragraph with audio interleaved. Distilled Klein quality lives here, not in CFG.
+**How it affects generation:** Klein: sentences, subject -> place -> light -> camera. Wan I2V: motion + one camera only. LTX: present-tense paragraph with audio interleaved. Distilled Klein quality lives here, not in CFG.
 
 | Instance | Value |
 | --- | --- |
-| Positive | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An…` |
-| Negative | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| Positive | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An...` |
+| Negative | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
-### `EmptyFlux2LatentImage` — Empty Flux.2 Latent
+### `EmptyFlux2LatentImage` - Empty Flux.2 Latent
 
-Allocate a Klein / Flux.2 still latent (width × height × batch).
+Allocate a Klein / Flux.2 still latent (width x height x batch).
 
 !!! warning "Lab notes"
 
-    Draft 768×432 batch 2. Hero / LTX feeders 1280×704. Portrait 1024×1280 or 768×1280. 1280×720 is OK for thumbnails, not for LTX feeders.
+    Draft 768x432 batch 2. Hero / LTX feeders 1280x704. Portrait 1024x1280 or 768x1280. 1280x720 is OK for thumbnails, not for LTX feeders.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -307,7 +307,7 @@ Allocate a Klein / Flux.2 still latent (width × height × batch).
 
 #### `width`
 
-Type `INT`. Range / default: lab 768 / 1280 / 1024 / 432….
+Type `INT`. Range / default: lab 768 / 1280 / 1024 / 432....
 
 Latent pixel width.
 
@@ -321,7 +321,7 @@ Type `INT`.
 
 Latent pixel height.
 
-**How it affects generation:** 1280×704 is the LTX VAE grid (÷32). 1280×720 is not.
+**How it affects generation:** 1280x704 is the LTX VAE grid (div32). 1280x720 is not.
 
 **This graph:** `704`
 
@@ -335,7 +335,7 @@ How many stills in one Queue.
 
 **This graph:** `1`
 
-### `KSampler` — KSampler
+### `KSampler` - KSampler
 
 Denoise a latent for N steps at a CFG, sampler, and scheduler.
 
@@ -347,17 +347,17 @@ Denoise a latent for N steps at a CFG, sampler, and scheduler.
 | --- | --- | --- | --- |
 | `model` | in | `MODEL` | UNET / transformer after any ModelSampling* patch. |
 | `positive` | in | `CONDITIONING` | What to include (CLIP / ACE / LTX prompt). |
-| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well — put constraints in the positive. |
+| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well - put constraints in the positive. |
 | `latent_image` | in | `LATENT` | Noise canvas or encoded start image / video / audio latent. |
 | `LATENT` | out | `LATENT` | Denoised latent for VAE decode. |
 
 #### `seed`
 
-Type `INT`. Range / default: 0 … 2^64-1; lab 42.
+Type `INT`. Range / default: 0 ... 2^64-1; lab 42.
 
 Random seed for the noise tensor.
 
-**How it affects generation:** Same seed + same graph ≈ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
+**How it affects generation:** Same seed + same graph ~ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
 
 **This graph:** `42`
 
@@ -382,21 +382,21 @@ What happens to seed after Queue.
 
 #### `steps`
 
-Type `INT`. Range / default: 1–10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
+Type `INT`. Range / default: 1-10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
 
 Denoising iterations.
 
-**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 — raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
+**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 - raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
 
 **This graph:** `8`
 
 #### `cfg`
 
-Type `FLOAT`. Range / default: 0–100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
+Type `FLOAT`. Range / default: 0-100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
 
 Classifier-free guidance scale.
 
-**How it affects generation:** Distilled Klein is CFG 1.0 — raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
+**How it affects generation:** Distilled Klein is CFG 1.0 - raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
 
 **This graph:** `1.0`
 
@@ -486,7 +486,7 @@ How sigmas are spaced across steps.
 
 #### `denoise`
 
-Type `FLOAT`. Range / default: 0–1; lab 1.0.
+Type `FLOAT`. Range / default: 0-1; lab 1.0.
 
 Fraction of the latent to replace with denoised signal.
 
@@ -494,7 +494,7 @@ Fraction of the latent to replace with denoised signal.
 
 **This graph:** `1.0`
 
-### `VAEDecode` — VAE Decode
+### `VAEDecode` - VAE Decode
 
 Decode image/video latents to pixels.
 
@@ -506,7 +506,7 @@ Decode image/video latents to pixels.
 
 No widgets. Sockets only.
 
-### `SaveImage` — Save Image
+### `SaveImage` - Save Image
 
 Write PNG stills under the output folder.
 
@@ -524,7 +524,7 @@ Save prefix.
 
 **This graph:** `ez_svc_crs_th`
 
-### `Note` — Note
+### `Note` - Note
 
 On-canvas operator note (not executed).
 
@@ -540,21 +540,21 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## services/education/course-thumb Format / platform sets pixels (Custom uses Width × Height). Quality does not change size. Course thumbnail 16:9. Lab size **1280×704**. Prefix `ez_svc_crs_th`. Empt…`
+**This graph:** `## services/education/course-thumb Format / platform sets pixels (Custom uses Width x Height). Quality does not change size. Course thumbnail 16:9. Lab size **1280x704**. Prefix `ez_svc_crs_th`. Empt...`
 
 ```text
 ## services/education/course-thumb
 
-Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
+Format / platform sets pixels (Custom uses Width x Height). Quality does not change size.
 
-Course thumbnail 16:9. Lab size **1280×704**. Prefix `ez_svc_crs_th`.
+Course thumbnail 16:9. Lab size **1280x704**. Prefix `ez_svc_crs_th`.
 Empty of lettering. Add titles in your editor, not in the prompt.
-Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
+Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.
 Handoff: none.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 ```
 
-### `LoadImage` — Load Image
+### `LoadImage` - Load Image
 
 Load a still from Comfy input/ (or upload).
 
@@ -587,7 +587,7 @@ Upload widget type.
 
 **This graph:** `image`
 
-### `EZKleinPromptEnhance` — Klein Prompt Enhance
+### `EZKleinPromptEnhance` - Klein Prompt Enhance
 
 Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
 
@@ -611,7 +611,7 @@ Lab sample prompt or Custom.
 
 **How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 30 recipes plus Custom (place recipes such as Cliff villa on stills/dream-house).
 
-**This graph:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread…`
+**This graph:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread...`
 
 ```text
 A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Subject large, readable at small sizes, quiet lower band. Empty of lettering.
@@ -662,9 +662,9 @@ System prompt flavor.
 
 Type `STRING`.
 
-Framing hint (YouTube 16:9 still, Instagram 4:5, …).
+Framing hint (YouTube 16:9 still, Instagram 4:5, ...).
 
-**How it affects generation:** Steers aspect language in the rewrite. Does not set the latent size — EmptyFlux2LatentImage does.
+**How it affects generation:** Steers aspect language in the rewrite. Does not set the latent size - EmptyFlux2LatentImage does.
 
 **This graph:** `YouTube 16:9 still`
 
@@ -994,7 +994,7 @@ Sample-catalog id (graph stem).
 
 **This graph:** `stills/still-hero`
 
-### `EZNegativePromptEnhance` — Negative Prompt Enhance
+### `EZNegativePromptEnhance` - Negative Prompt Enhance
 
 Rewrite a negative CLIP seed against the final positive. Stays on when Rewrite prompt is off.
 
@@ -1049,7 +1049,7 @@ Which negative family.
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
 
-### `EZQuality` — Quality
+### `EZQuality` - Quality
 
 Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
@@ -1084,7 +1084,7 @@ custom freezes last overlay; lab restores graph defaults.
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
-### `EZImageFormat` — Format / platform
+### `EZImageFormat` - Format / platform
 
 Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack look recipe.
 
@@ -1095,8 +1095,8 @@ Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `image` | in | `IMAGE` | Optional still used when Output size is Match input. |
-| `width` | out | `INT` | Latent width (÷16). |
-| `height` | out | `INT` | Latent height (÷16). |
+| `width` | out | `INT` | Latent width (div16). |
+| `height` | out | `INT` | Latent height (div16). |
 | `batch` | out | `INT` | Batch size. |
 | `hint` | out | `STRING` | Enhance duration / framing line. |
 | `prefix` | out | `STRING` | SaveImage filename prefix. |
@@ -1108,94 +1108,94 @@ Type `COMBO`. Range / default: 16:9 LTX feeder / platform jobs / Custom.
 
 Aspect or named platform job.
 
-**How it affects generation:** Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width × Height (snapped to ÷16, max 2048). Does not change Quality, CLIP, or VAE.
+**How it affects generation:** Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (snapped to div16, max 2048). Does not change Quality, CLIP, or VAE.
 
-**This graph:** `16:9 LTX feeder (1280×704)`
+**This graph:** `16:9 LTX feeder (1280x704)`
 
 **Other choices**
 
 | Choice | What it does |
 | --- | --- |
-| `Custom` | Width × Height widgets, snapped to ÷16. |
-| `16:9 draft (768×432)` | 768×432. aspect_16_9_draft. |
-| `16:9 LTX feeder (1280×704)` | 1280×704. aspect_16_9_ltx. |
-| `16:9 (1280×720)` | 1280×720. aspect_16_9. |
-| `16:9 mid (1024×576)` | 1024×576. aspect_16_9_mid. |
-| `1:1 square (1024×1024)` | 1024×1024. aspect_1_1. |
-| `1:1 circle-safe (768×768)` | 768×768. aspect_1_1_circle. |
-| `4:5 portrait (1024×1280)` | 1024×1280. aspect_4_5. |
-| `9:16 draft (432×768)` | 432×768. aspect_9_16_draft. |
-| `9:16 (576×1024)` | 576×1024. aspect_9_16. |
-| `9:16 LTX feeder (768×1280)` | 768×1280. aspect_9_16_ltx. |
-| `~1.91:1 landscape (1216×640)` | 1216×640. aspect_191. |
-| `~3:1 banner (1536×512)` | 1536×512. aspect_3_1. |
-| `4:1 banner (1536×384)` | 1536×384. aspect_4_1. |
-| `2:3 pin (768×1152)` | 768×1152. aspect_2_3. |
-| `3:4 panel (768×1024)` | 768×1024. aspect_3_4. |
-| `YouTube · thumbnail (1280×720)` | 1280×720. youtube_thumb. |
-| `YouTube · channel art (1536×864)` | 1536×864. youtube_channel_art. |
-| `YouTube · channel icon (768×768)` | 768×768. youtube_channel_icon. |
-| `YouTube · Shorts thumb (576×1024)` | 576×1024. youtube_shorts_thumb. |
-| `YouTube · Community (1024×1024)` | 1024×1024. youtube_community. |
-| `YouTube · chapter card (1280×720)` | 1280×720. youtube_chapter. |
-| `YouTube · subscribe plate (1280×720)` | 1280×720. youtube_subscribe. |
-| `YouTube · end screen (1280×720)` | 1280×720. youtube_endscreen. |
-| `Instagram · square (1024×1024)` | 1024×1024. ig_square. |
-| `Instagram · 4:5 portrait (1024×1280)` | 1024×1280. ig_portrait. |
-| `Instagram · landscape (1216×640)` | 1216×640. ig_landscape. |
-| `Instagram · Story (576×1024)` | 576×1024. ig_story. |
-| `Instagram · Reel cover (576×1024)` | 576×1024. ig_reel. |
-| `Instagram · Highlight (768×768)` | 768×768. ig_highlight. |
-| `Instagram · profile (768×768)` | 768×768. ig_profile. |
-| `TikTok · cover (576×1024)` | 576×1024. tt_cover. |
-| `TikTok · Shop (1024×1024)` | 1024×1024. tt_shop. |
-| `X · post (1280×720)` | 1280×720. x_post. |
-| `X · header (1536×512)` | 1536×512. x_header. |
-| `X · card (1216×640)` | 1216×640. x_card. |
-| `LinkedIn · square (1024×1024)` | 1024×1024. li_post. |
-| `LinkedIn · landscape (1216×640)` | 1216×640. li_landscape. |
-| `LinkedIn · banner (1536×384)` | 1536×384. li_banner. |
-| `LinkedIn · article (1216×640)` | 1216×640. li_article. |
-| `Pinterest · pin (768×1152)` | 768×1152. pin. |
-| `Pinterest · Idea Pin (576×1024)` | 576×1024. pin_story. |
-| `Facebook · post (1216×640)` | 1216×640. fb_post. |
-| `Threads · 4:5 (1024×1280)` | 1024×1280. threads. |
-| `Twitch · offline (1280×720)` | 1280×720. twitch_offline. |
-| `Twitch · starting soon (1280×720)` | 1280×720. twitch_starting. |
-| `Twitch · BRB (1280×720)` | 1280×720. twitch_brb. |
-| `Twitch · ending (1280×720)` | 1280×720. twitch_ending. |
-| `Twitch · overlay (1280×720)` | 1280×720. twitch_overlay. |
-| `Twitch · panel (768×1024)` | 768×1024. twitch_panel. |
-| `Twitch · profile (768×768)` | 768×768. twitch_profile. |
-| `Twitch · banner (1536×512)` | 1536×512. twitch_banner. |
-| `Spotify · playlist (1024×1024)` | 1024×1024. spot_playlist. |
-| `Spotify · Canvas still (576×1024)` | 576×1024. spot_canvas. |
-| `Album · cover (1024×1024)` | 1024×1024. album_cover. |
-| `Lyric card (1024×1024)` | 1024×1024. lyric_card. |
-| `Audiogram · wide (1280×720)` | 1280×720. ag_wide. |
-| `Audiogram · vertical (576×1024)` | 576×1024. ag_vert. |
-| `Podcast · episode art (1024×1024)` | 1024×1024. episode_art. |
-| `Podcast · cover (1024×1024)` | 1024×1024. podcast_cover. |
-| `Open Graph / blog (1216×640)` | 1216×640. og. |
-| `Email · header (1216×640)` | 1216×640. email_header. |
-| `Substack · hero (1216×640)` | 1216×640. substack. |
-| `Patreon · post (1024×1280)` | 1024×1280. patreon. |
-| `Channel · banner (1536×512)` | 1536×512. banner. |
-| `End-card / CTA (1280×720)` | 1280×720. endcard. |
-| `Quote background (1024×1024)` | 1024×1024. quote_bg. |
-| `Lower-third plate (1280×720)` | 1280×720. lower_third. |
-| `Food / tabletop (1024×1280)` | 1024×1280. food_tabletop. |
-| `Shorts still (432×768)` | 432×768. shorts_still. |
-| `Hook still (432×768)` | 432×768. hook_still. |
-| `Product packshot (1024×1024)` | 1024×1024. packshot. |
-| `Product lifestyle (1024×1280)` | 1024×1280. lifestyle. |
-| `Desk setup (1280×720)` | 1280×720. desk_setup. |
-| `Coming soon (1280×720)` | 1280×720. coming_soon. |
-| `Slide title (1280×720)` | 1280×720. slide_title. |
-| `Zoom / Meet background (1280×720)` | 1280×720. zoom_bg. |
-| `Merch · tee (1024×1024)` | 1024×1024. merch_tee. |
-| `Merch · mug (1024×1024)` | 1024×1024. merch_mug. |
-| `Print poster (768×1152)` | 768×1152. poster. |
+| `Custom` | Width x Height widgets, snapped to div16. |
+| `16:9 draft (768x432)` | 768x432. aspect_16_9_draft. |
+| `16:9 LTX feeder (1280x704)` | 1280x704. aspect_16_9_ltx. |
+| `16:9 (1280x720)` | 1280x720. aspect_16_9. |
+| `16:9 mid (1024x576)` | 1024x576. aspect_16_9_mid. |
+| `1:1 square (1024x1024)` | 1024x1024. aspect_1_1. |
+| `1:1 circle-safe (768x768)` | 768x768. aspect_1_1_circle. |
+| `4:5 portrait (1024x1280)` | 1024x1280. aspect_4_5. |
+| `9:16 draft (432x768)` | 432x768. aspect_9_16_draft. |
+| `9:16 (576x1024)` | 576x1024. aspect_9_16. |
+| `9:16 LTX feeder (768x1280)` | 768x1280. aspect_9_16_ltx. |
+| `~1.91:1 landscape (1216x640)` | 1216x640. aspect_191. |
+| `~3:1 banner (1536x512)` | 1536x512. aspect_3_1. |
+| `4:1 banner (1536x384)` | 1536x384. aspect_4_1. |
+| `2:3 pin (768x1152)` | 768x1152. aspect_2_3. |
+| `3:4 panel (768x1024)` | 768x1024. aspect_3_4. |
+| `YouTube - thumbnail (1280x720)` | 1280x720. youtube_thumb. |
+| `YouTube - channel art (1536x864)` | 1536x864. youtube_channel_art. |
+| `YouTube - channel icon (768x768)` | 768x768. youtube_channel_icon. |
+| `YouTube - Shorts thumb (576x1024)` | 576x1024. youtube_shorts_thumb. |
+| `YouTube - Community (1024x1024)` | 1024x1024. youtube_community. |
+| `YouTube - chapter card (1280x720)` | 1280x720. youtube_chapter. |
+| `YouTube - subscribe plate (1280x720)` | 1280x720. youtube_subscribe. |
+| `YouTube - end screen (1280x720)` | 1280x720. youtube_endscreen. |
+| `Instagram - square (1024x1024)` | 1024x1024. ig_square. |
+| `Instagram - 4:5 portrait (1024x1280)` | 1024x1280. ig_portrait. |
+| `Instagram - landscape (1216x640)` | 1216x640. ig_landscape. |
+| `Instagram - Story (576x1024)` | 576x1024. ig_story. |
+| `Instagram - Reel cover (576x1024)` | 576x1024. ig_reel. |
+| `Instagram - Highlight (768x768)` | 768x768. ig_highlight. |
+| `Instagram - profile (768x768)` | 768x768. ig_profile. |
+| `TikTok - cover (576x1024)` | 576x1024. tt_cover. |
+| `TikTok - Shop (1024x1024)` | 1024x1024. tt_shop. |
+| `X - post (1280x720)` | 1280x720. x_post. |
+| `X - header (1536x512)` | 1536x512. x_header. |
+| `X - card (1216x640)` | 1216x640. x_card. |
+| `LinkedIn - square (1024x1024)` | 1024x1024. li_post. |
+| `LinkedIn - landscape (1216x640)` | 1216x640. li_landscape. |
+| `LinkedIn - banner (1536x384)` | 1536x384. li_banner. |
+| `LinkedIn - article (1216x640)` | 1216x640. li_article. |
+| `Pinterest - pin (768x1152)` | 768x1152. pin. |
+| `Pinterest - Idea Pin (576x1024)` | 576x1024. pin_story. |
+| `Facebook - post (1216x640)` | 1216x640. fb_post. |
+| `Threads - 4:5 (1024x1280)` | 1024x1280. threads. |
+| `Twitch - offline (1280x720)` | 1280x720. twitch_offline. |
+| `Twitch - starting soon (1280x720)` | 1280x720. twitch_starting. |
+| `Twitch - BRB (1280x720)` | 1280x720. twitch_brb. |
+| `Twitch - ending (1280x720)` | 1280x720. twitch_ending. |
+| `Twitch - overlay (1280x720)` | 1280x720. twitch_overlay. |
+| `Twitch - panel (768x1024)` | 768x1024. twitch_panel. |
+| `Twitch - profile (768x768)` | 768x768. twitch_profile. |
+| `Twitch - banner (1536x512)` | 1536x512. twitch_banner. |
+| `Spotify - playlist (1024x1024)` | 1024x1024. spot_playlist. |
+| `Spotify - Canvas still (576x1024)` | 576x1024. spot_canvas. |
+| `Album - cover (1024x1024)` | 1024x1024. album_cover. |
+| `Lyric card (1024x1024)` | 1024x1024. lyric_card. |
+| `Audiogram - wide (1280x720)` | 1280x720. ag_wide. |
+| `Audiogram - vertical (576x1024)` | 576x1024. ag_vert. |
+| `Podcast - episode art (1024x1024)` | 1024x1024. episode_art. |
+| `Podcast - cover (1024x1024)` | 1024x1024. podcast_cover. |
+| `Open Graph / blog (1216x640)` | 1216x640. og. |
+| `Email - header (1216x640)` | 1216x640. email_header. |
+| `Substack - hero (1216x640)` | 1216x640. substack. |
+| `Patreon - post (1024x1280)` | 1024x1280. patreon. |
+| `Channel - banner (1536x512)` | 1536x512. banner. |
+| `End-card / CTA (1280x720)` | 1280x720. endcard. |
+| `Quote background (1024x1024)` | 1024x1024. quote_bg. |
+| `Lower-third plate (1280x720)` | 1280x720. lower_third. |
+| `Food / tabletop (1024x1280)` | 1024x1280. food_tabletop. |
+| `Shorts still (432x768)` | 432x768. shorts_still. |
+| `Hook still (432x768)` | 432x768. hook_still. |
+| `Product packshot (1024x1024)` | 1024x1024. packshot. |
+| `Product lifestyle (1024x1280)` | 1024x1280. lifestyle. |
+| `Desk setup (1280x720)` | 1280x720. desk_setup. |
+| `Coming soon (1280x720)` | 1280x720. coming_soon. |
+| `Slide title (1280x720)` | 1280x720. slide_title. |
+| `Zoom / Meet background (1280x720)` | 1280x720. zoom_bg. |
+| `Merch - tee (1024x1024)` | 1024x1024. merch_tee. |
+| `Merch - mug (1024x1024)` | 1024x1024. merch_mug. |
+| `Print poster (768x1152)` | 768x1152. poster. |
 
 #### `look`
 
@@ -1239,7 +1239,7 @@ Optional Cinema Rack starter.
 
 #### `width`
 
-Type `INT`. Range / default: 16–2048, step 16.
+Type `INT`. Range / default: 16-2048, step 16.
 
 Custom width.
 
@@ -1249,7 +1249,7 @@ Custom width.
 
 #### `height`
 
-Type `INT`. Range / default: 16–2048, step 16.
+Type `INT`. Range / default: 16-2048, step 16.
 
 Custom height.
 
@@ -1259,7 +1259,7 @@ Custom height.
 
 #### `batch_size`
 
-Type `INT`. Range / default: 1–4.
+Type `INT`. Range / default: 1-4.
 
 How many stills in one Run.
 
@@ -1277,9 +1277,9 @@ Match a loaded still's aspect, or keep Format / platform.
 
 **This graph:** `Match input`
 
-### `EZOptionalImage` — Optional reference stills
+### `EZOptionalImage` - Optional reference stills
 
-Optional example or reference stills. Empty is valid — Queue without a file.
+Optional example or reference stills. Empty is valid - Queue without a file.
 
 !!! warning "Lab notes"
 
@@ -1302,7 +1302,7 @@ Upload or pick a still on the drive. Empty is valid.
 
 **How it affects generation:** Empty Queues a T2I. A pick loads from input/. Choose from outputs copies a durable file into input/.
 
-### `EZKleinRefCanvas` — Klein canvas (optional ref)
+### `EZKleinRefCanvas` - Klein canvas (optional ref)
 
 Pass the empty Flux2 latent, or VAE-encode a still and attach ReferenceLatent.
 
@@ -1329,7 +1329,7 @@ Presence flag when unwired.
 
 **This graph:** `false`
 
-### `EZImageUpscale` — Upscale still
+### `EZImageUpscale` - Upscale still
 
 Optional lanczos upscale after a still decode. none passes the tensor through.
 
@@ -1349,7 +1349,7 @@ Type `COMBO`. Range / default: none / 2x / 4x / 4K.
 
 Upscale mode.
 
-**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.
+**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840x2160 box (portrait 2160x3840). No extra weights.
 
 **This graph:** `none`
 
@@ -1362,7 +1362,7 @@ Upscale mode.
 | `4x` | Quadruple pixels. |
 | `4K` | Fit in a 4K box. |
 
-### `EZImageDescribe` — Describe image
+### `EZImageDescribe` - Describe image
 
 Caption a source still so Prompt Enhance can name inventory and lettering.
 
@@ -1372,7 +1372,7 @@ Caption a source still so Prompt Enhance can name inventory and lettering.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
-| `image` | in | `IMAGE` | Source still. Lazy — skipped when enable is off. |
+| `image` | in | `IMAGE` | Source still. Lazy - skipped when enable is off. |
 | `caption` | out | `STRING` | Short caption, or empty. |
 
 #### `enable`
@@ -1385,7 +1385,7 @@ Run the captioner.
 
 **This graph:** `false`
 
-### `EZModelCheck` — Check models
+### `EZModelCheck` - Check models
 
 Manual disk check for occupancy + Quality weights. Queue does not run this node.
 

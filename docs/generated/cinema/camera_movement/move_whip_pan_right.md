@@ -1,6 +1,6 @@
 ---
 title: "Whip pan right"
-description: "Cinema Rack illustration — Whip pan right."
+description: "Cinema Rack illustration - Whip pan right."
 tags: [cinema, prompting, catalog, clip]
 ---
 

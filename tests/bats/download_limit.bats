@@ -306,7 +306,7 @@ exit 0
   unset LAB_SHAPING_SUPPORTED
   unset HF_DOWNLOAD_MAX_WORKERS
   export LAB_MOCK_WONDERSHAPER=1
-  # Reliable HTTP mock → use probe path (not idle RX)
+  # Reliable HTTP mock -> use probe path (not idle RX)
   export LAB_MOCK_HTTP_SPEED_MBPS=200
   LIMIT_SPEC=auto
   WRAP_ARGS=(bash -c 'echo live-wrap >"${TEST_TMP_DIR}/live.ok"')
@@ -316,7 +316,7 @@ exit 0
   [[ "${output}" == *"HTTP probe"* || "${output}" == *"200"* || "${output}" == *"gentle"* || "${output}" == *"foreground"* || "${output}" == *"max-workers"* ]]
   [[ "${output}" != *"Stopping sample-phase"* ]]
 
-  # No HTTP mock + hermetic → untrusted path (no real curl), default workers=4
+  # No HTTP mock + hermetic -> untrusted path (no real curl), default workers=4
   unset LAB_MOCK_HTTP_SPEED_MBPS
   unset LAB_MOCK_SPEEDTEST_MBPS
   export LAB_HERMETIC=1

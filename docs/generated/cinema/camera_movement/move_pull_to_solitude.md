@@ -1,6 +1,6 @@
 ---
 title: "Pull to solitude"
-description: "Cinema Rack illustration — Pull to solitude."
+description: "Cinema Rack illustration - Pull to solitude."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

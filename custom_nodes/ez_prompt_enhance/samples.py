@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
 
-# Sample catalog paths, combo sentinel, and node-type → family mapping.
+# Sample catalog paths, combo sentinel, and node-type -> family mapping.
 CUSTOM = "custom"
 SAMPLES_DIR = Path(__file__).resolve().parent / "js" / "samples"
 INDEX_NAME = "index.json"
@@ -36,7 +36,7 @@ def catalog_expected_count(catalog_id: str) -> int:
         return BACKGROUND_SWAP_COUNT
     return SAMPLE_COUNT
 
-# Node type + mode widget → default sample catalog stem.
+# Node type + mode widget -> default sample catalog stem.
 _FAMILY_FOR_MODE: dict[tuple[str, str], str] = {
     ("EZKleinPromptEnhance", "t2i"): "klein_t2i",
     ("EZKleinPromptEnhance", "edit"): "klein_clay_edit",
@@ -138,7 +138,7 @@ def album_hides_sample(lab_rel: str) -> bool:
 
 @lru_cache(maxsize=1)
 def load_index() -> dict[str, str]:
-    """Return lab_rel → catalog id from ``index.json``.
+    """Return lab_rel -> catalog id from ``index.json``.
 
     Returns:
         Mapping of graph ids to catalog stems. Empty when the file is missing.

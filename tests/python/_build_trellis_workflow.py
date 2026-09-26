@@ -18,7 +18,7 @@ from _stamp_app_mode import stamp_app_mode
 
 NOTE = """## optional/trellis2
 
-Klein still → native TRELLIS.2 INT8 mesh (Comfy core nodes).
+Klein still -> native TRELLIS.2 INT8 mesh (Comfy core nodes).
 
 ```bash
 ./scripts/manage.sh download-3d --tier trellis2
@@ -29,7 +29,7 @@ LoadImage: a Klein still (`ez_still_*.png` or a clay plate). Unload models first
 UNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack).
 Lab upsample **512** (not 1536). TRELLIS-only canvas. Occupancy: trellis.
 
-DINOv3 is Meta's custom commercial-friendly license — not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.
+DINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.
 """
 
 

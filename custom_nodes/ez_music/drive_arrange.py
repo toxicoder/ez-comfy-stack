@@ -1,10 +1,10 @@
-"""Drive-through arrangement: two-bar cells, an early drop, 90–120 s.
+"""Drive-through arrangement: two-bar cells, an early drop, 90-120 s.
 
-Each stanza is 2 bars, under 3 seconds at 165–176. Duration is that sum
+Each stanza is 2 bars, under 3 seconds at 165-176. Duration is that sum
 at the take's BPM. A shortfall adds whole stanzas. An overrun drops
 whole stanzas. Bars are not stretched or squeezed to hit a clock time.
 
-Tempos snap onto Audio Rack ids that already exist (165–176). The
+Tempos snap onto Audio Rack ids that already exist (165-176). The
 authored BPM stays the rank; the encoder and the tags use the snapped
 value.
 
@@ -34,15 +34,15 @@ from ez_music.song_plan import (
 DRIVE_FLOOR_S = 90
 DRIVE_CAP_S = 120
 DRIVE_BPM_CHOICES: tuple[int, ...] = (165, 168, 170, 172, 174, 176)
-# ACE-Step 1.5 truncates lyrics at 2048 tokens. Measured at 3.43–3.56
+# ACE-Step 1.5 truncates lyrics at 2048 tokens. Measured at 3.43-3.56
 # chars/token on this vocabulary, so 6000 chars stays under the window
-# with margin. The score covers the whole take — no unguided tail.
+# with margin. The score covers the whole take - no unguided tail.
 DRIVE_LYRICS_CHAR_BUDGET = 6000
 _BPM_LO = 140
 _BPM_HI = 176
 _BAR_PALETTE = frozenset({2})
 # Body stanza count dealt per take before the duration fit. The menu
-# sizes keep every take inside the 90–120 s window after the fit.
+# sizes keep every take inside the 90-120 s window after the fit.
 _MENU = (31, 34, 37, 40, 43)
 _BODY_ROLES = ("inst", "drop", "build-up")
 # Drops must hit hard and often: every take deals at least _DROP_FLOOR
@@ -195,7 +195,7 @@ def lift_drive_bpm(authored: int) -> int:
     """Map an authored tempo onto a fast Audio Rack BPM, keeping rank.
 
     Args:
-        authored: Tempo written on the take. Values outside 140–176 clamp
+        authored: Tempo written on the take. Values outside 140-176 clamp
             to that span before the map.
 
     Returns:
@@ -215,17 +215,17 @@ def fit_drive_sections(
     salt: int,
     used: set[str] | None = None,
 ) -> list[SongSection]:
-    """Add or drop whole stanzas until duration sits in 90–120 s.
+    """Add or drop whole stanzas until duration sits in 90-120 s.
 
     The opening build, the first drop, and the outro stay. Their bar
     counts stay. New stanzas are inserted in front of the outro. Extra
     tail stanzas are removed from in front of the outro. The rendered
     score then re-syncs the plan's duration to the stanzas that ship,
-    so the take's duration equals the score's coverage — no unguided
+    so the take's duration equals the score's coverage - no unguided
     tail.
 
     Args:
-        sections: Stanzas, build then drop … outro.
+        sections: Stanzas, build then drop ... outro.
         bpm: Performance tempo.
         salt: Cue salt for any stanza this function adds.
         used: Cues and drop-combo keys already spent on this take.
@@ -251,7 +251,7 @@ def fit_drive_sections(
         guard += 1
     seconds = _seconds(out, bpm)
     if seconds < DRIVE_FLOOR_S or seconds > DRIVE_CAP_S:
-        raise ValueError(f"drive duration {seconds}s is outside 90–120")
+        raise ValueError(f"drive duration {seconds}s is outside 90-120")
     return out
 
 
@@ -303,7 +303,7 @@ def arrange_drive(source: str, plan: SongPlan, *, treat: bool = False) -> str:
     A treat keeps one short chorus chop. The tail is trimmed before the
     outro so the joined score stays inside ``DRIVE_LYRICS_CHAR_BUDGET``.
     The plan's duration and bucket re-sync to the stanzas that ship, so
-    the take's duration equals the score's coverage — no unguided tail.
+    the take's duration equals the score's coverage - no unguided tail.
 
     Args:
         source: Authored score. Only the chorus chop is read.
@@ -485,8 +485,8 @@ def _menu_count(album_slug: str, track_number: int) -> int:
         track_number: One-based index.
 
     Returns:
-        A menu size of 31–43 body stanzas; the duration fit then keeps
-        the take inside the 90–120 s window.
+        A menu size of 31-43 body stanzas; the duration fit then keeps
+        the take inside the 90-120 s window.
     """
     offset = sum(ord(char) for char in album_slug) % len(_MENU)
     return _MENU[(int(track_number) - 1 + offset) % len(_MENU)]
@@ -759,7 +759,7 @@ def _pick_bars(role: str, prev: int, salt: int, index: int, *, before_outro: boo
         before_outro: Ignored.
 
     Returns:
-        2. Under 3 seconds at 165–176.
+        2. Under 3 seconds at 165-176.
     """
     del role, prev, salt, index, before_outro
     return 2

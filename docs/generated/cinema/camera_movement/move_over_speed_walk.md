@@ -1,6 +1,6 @@
 ---
 title: "Over-speed walk"
-description: "Cinema Rack illustration — Over-speed walk."
+description: "Cinema Rack illustration - Over-speed walk."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -1,6 +1,6 @@
 ---
 title: "Drone descend"
-description: "Cinema Rack illustration — Drone descend."
+description: "Cinema Rack illustration - Drone descend."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

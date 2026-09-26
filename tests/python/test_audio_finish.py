@@ -36,4 +36,4 @@ def test_audio_finish_app_contract() -> None:
     save = next(n for n in graph["nodes"] if n.get("type") == "SaveAudio")
     assert save["widgets_values"][0] == "ez_stem_mix"
     assert extra["lab_app_mode"]["default_view"] == "app"
-    assert "1280x720" not in blob and "1280×720" not in blob
+    assert "1280x720" not in blob and "1280x720" not in blob

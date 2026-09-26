@@ -24,12 +24,12 @@
 #   - Always stop before node reboot
 #   - setup may use sudo only to create/chown MODELS_DIR#
 # Environment:
-#   See .env.example — MODELS_DIR, HF_TOKEN, MEM_LIMIT, DOWNLOAD_LIMIT,
+#   See .env.example - MODELS_DIR, HF_TOKEN, MEM_LIMIT, DOWNLOAD_LIMIT,
 #   LAB_NON_INTERACTIVE, LAB_CONFIRM_TOKEN, MIN_HOST_FREE_GIB, etc.
 #
 # Exit codes:
-#   0 — success or interactive user abort on confirm
-#   1 — hard failure (preflight, docker, missing confirm token, unknown command)
+#   0 - success or interactive user abort on confirm
+#   1 - hard failure (preflight, docker, missing confirm token, unknown command)
 #
 # @command manage
 
@@ -82,7 +82,7 @@ ensure_prompt_enhance_gguf() {
     log "Prompt Enhance GGUF ready: ${dest}"
     return 0
   fi
-  warn "Prompt Enhance GGUF missing at ${dest} — Enhance will pass through until:"
+  warn "Prompt Enhance GGUF missing at ${dest} - Enhance will pass through until:"
   warn "  ./scripts/manage.sh download-models"
   return 0
 }
@@ -106,7 +106,7 @@ install_dub_runtime_wheels() {
   py="$(comfy_volume_python)"
   zip="$(chatterbox_tts_zip_url)"
   if ! compose_is_running; then
-    log "dub wheels: stack stopped — start, then re-run download-dub, or rebuild the image"
+    log "dub wheels: stack stopped - start, then re-run download-dub, or rebuild the image"
     return 0
   fi
   log "dub wheels: pip install faster-whisper, llama-cpp-python CPU wheel, then chatterbox V3 zip --no-deps"
@@ -114,7 +114,7 @@ install_dub_runtime_wheels() {
     --upgrade-strategy only-if-needed faster-whisper; then
     log "dub wheels: faster-whisper installed"
   else
-    warn "dub wheels: faster-whisper pip failed — Queue writes empty mix until WhisperModel imports"
+    warn "dub wheels: faster-whisper pip failed - Queue writes empty mix until WhisperModel imports"
   fi
   install_llama_cpp_runtime_wheel "${py}"
   pin="$(chatterbox_setuptools_pin)"
@@ -122,7 +122,7 @@ install_dub_runtime_wheels() {
     extras+=("${tok}")
   done < <(chatterbox_clone_extra_packages)
   compose_run exec -T comfyui "${py}" -m pip install "${pin}" ||
-    warn "dub wheels: setuptools pin pip failed — PerTh watermarker may be missing"
+    warn "dub wheels: setuptools pin pip failed - PerTh watermarker may be missing"
   compose_run exec -T comfyui "${py}" -m pip install \
     --upgrade-strategy only-if-needed "${extras[@]}" ||
     warn "dub wheels: chatterbox extras pip failed"
@@ -130,7 +130,7 @@ install_dub_runtime_wheels() {
     --upgrade --force-reinstall --no-deps "${zip}"; then
     log "dub wheels: chatterbox-tts V3 installed --no-deps (did not pin torch)"
   else
-    warn "dub wheels: chatterbox-tts --no-deps failed — clone will fail-soft"
+    warn "dub wheels: chatterbox-tts --no-deps failed - clone will fail-soft"
   fi
   check_dub_runtime_wheels
   return 0
@@ -155,7 +155,7 @@ install_qwen3tts_runtime_wheel() {
   py="$(comfy_volume_python)"
   wheel="$(qwen_tts_wheel)"
   if ! compose_is_running; then
-    log "qwen3tts wheel: stack stopped — start, then re-run download-podcast --tier qwen3tts"
+    log "qwen3tts wheel: stack stopped - start, then re-run download-podcast --tier qwen3tts"
     return 0
   fi
   while IFS= read -r tok; do
@@ -165,12 +165,12 @@ install_qwen3tts_runtime_wheel() {
   if [[ ${#extras[@]} -gt 0 ]]; then
     compose_run exec -T comfyui "${py}" -m pip install \
       --upgrade-strategy only-if-needed "${extras[@]}" ||
-      warn "qwen3tts extras pip failed — wheel may still miss"
+      warn "qwen3tts extras pip failed - wheel may still miss"
   fi
   if compose_run exec -T comfyui "${py}" -m pip install --no-deps "${wheel}"; then
     log "qwen3tts wheel: ${wheel} installed --no-deps (did not pin transformers)"
   else
-    warn "qwen3tts --no-deps failed — Queue writes empty mix until the extra imports"
+    warn "qwen3tts --no-deps failed - Queue writes empty mix until the extra imports"
   fi
   return 0
 }
@@ -232,7 +232,7 @@ install_llama_cpp_runtime_wheel() {
       return 0
     fi
   fi
-  warn "dub wheels: llama-cpp-python CPU wheel pip failed — Queue will retry; status names the pip command"
+  warn "dub wheels: llama-cpp-python CPU wheel pip failed - Queue will retry; status names the pip command"
   return 0
 }
 
@@ -264,12 +264,12 @@ check_dub_runtime_wheels() {
     'from faster_whisper import WhisperModel'; then
     log "dub wheels: faster-whisper WhisperModel import ok"
   else
-    warn "dub ASR wheel missing — download-dub --tier asr (stack up) or restart"
+    warn "dub ASR wheel missing - download-dub --tier asr (stack up) or restart"
   fi
   if compose_run exec -T comfyui "${py}" -c 'from llama_cpp import Llama'; then
     log "dub wheels: llama-cpp-python Llama import ok"
   else
-    warn "dub llama.cpp wheel missing — download-dub (stack up) or Queue self-heals"
+    warn "dub llama.cpp wheel missing - download-dub (stack up) or Queue self-heals"
   fi
   t3_check="from inspect import signature; "
   t3_check+="from chatterbox.mtl_tts import ChatterboxMultilingualTTS; "
@@ -278,13 +278,13 @@ check_dub_runtime_wheels() {
   if compose_run exec -T comfyui "${py}" -c "${t3_check}"; then
     log "dub wheels: chatterbox.mtl_tts t3_model=v3 import ok"
   else
-    warn "dub clone wheel missing t3_model=v3 — V3 zip --no-deps (do not pin torch)"
+    warn "dub clone wheel missing t3_model=v3 - V3 zip --no-deps (do not pin torch)"
   fi
   perth_check="import perth; assert callable(perth.PerthImplicitWatermarker)"
   if compose_run exec -T comfyui "${py}" -c "${perth_check}"; then
     log "dub wheels: resemble-perth PerthImplicitWatermarker import ok"
   else
-    warn "dub PerTh watermarker missing — pip install 'setuptools<82' (do not disable PerTh)"
+    warn "dub PerTh watermarker missing - pip install 'setuptools<82' (do not disable PerTh)"
   fi
   return 0
 }
@@ -303,7 +303,7 @@ check_dub_runtime_wheels() {
 #######################################
 cmd_help() {
   cat <<'EOF'
-ez-comfy-stack manage — unified Visual Generative AI (local US-safe studio via ComfyUI)
+ez-comfy-stack manage - unified Visual Generative AI (local US-safe studio via ComfyUI)
 
 Commands:
   help              Show this help
@@ -348,13 +348,13 @@ Commands:
                     Delete *.incomplete under MODELS_DIR (finished weights kept)
   cleanup           Remove comfy-state volume only (type DELETE; keeps COMFY_OUTPUT_DIR)
   print-shot <film> <id>
-                    Queue one compiled shot (01–18) into films/<slug>/shots/
+                    Queue one compiled shot (01-18) into films/<slug>/shots/
   film-resume <film>
-                    Reprint failed/crashed shots only (skip ok with 5.00±0.05s)
+                    Reprint failed/crashed shots only (skip ok with 5.00 +/- 0.05s)
   film-export-otio <film>
                     Write films/<slug>/publish/<slug>.otio from jobstore
   film-proxies <film>
-                    960×528 h264 NVENC proxies (refuse if compose is up; never rewrite masters)
+                    960x528 h264 NVENC proxies (refuse if compose is up; never rewrite masters)
   take-promote <film> <id> <take>
                     Copy takes/<id>/tNNN.mp4 to shots/<id>.mp4 and mark ok
   promote-workflow --from PATH --lane LANE --id STEM [--subdir REL]
@@ -401,7 +401,7 @@ Commands:
   audio-still-video --audio FILE --image FILE
                     Mux a still + audio master to YouTube MP4 (host ffmpeg)
   film-accept <film>
-                    Fail-closed gate before concat (5.00s, 1280×704, LTX audio)
+                    Fail-closed gate before concat (5.00s, 1280x704, LTX audio)
   download-longcat [--tier video|avatar|all]
                     Opt-in LongCat-Video MIT (no NCCL; context-parallel flag only)
   download-dreamx [--tier creator]
@@ -502,7 +502,7 @@ EOF
     need_docker_install=1
   elif [[ ${force_docker} -eq 1 || ${LAB_MOCK_DOCKER_INSTALL:-} == "1" ]]; then
     need_docker_install=1
-    log "docker preflight: ok — still running install path (--install-docker or mock)"
+    log "docker preflight: ok - still running install path (--install-docker or mock)"
   else
     log "docker preflight: ok"
   fi
@@ -515,7 +515,7 @@ EOF
         if check_docker_preflight; then
           log "docker preflight: ok after install"
         else
-          warn "Docker installed but preflight still failing — try: newgrp docker"
+          warn "Docker installed but preflight still failing - try: newgrp docker"
           ok=1
         fi
       else
@@ -542,7 +542,7 @@ EOF
   elif install_hf_cli && resolve_hf_on_path; then
     log "hf CLI installed: $(command -v hf)"
   else
-    warn "hf CLI missing — download-models will attempt install"
+    warn "hf CLI missing - download-models will attempt install"
   fi
 
   log "Re-running doctor..."
@@ -553,13 +553,13 @@ EOF
     local st=0
     docker_daemon_status || st=$?
     if [[ ${st} -eq 1 ]]; then
-      err "Setup incomplete — run: newgrp docker   # then ./scripts/manage.sh doctor"
+      err "Setup incomplete - run: newgrp docker   # then ./scripts/manage.sh doctor"
       return 1
     fi
-    err "Setup incomplete — fix errors above, then re-run: ./scripts/manage.sh setup --install-docker"
+    err "Setup incomplete - fix errors above, then re-run: ./scripts/manage.sh setup --install-docker"
     return 1
   fi
-  log "Setup OK — next: ./scripts/manage.sh download-models"
+  log "Setup OK - next: ./scripts/manage.sh download-models"
   return 0
 }
 
@@ -587,7 +587,7 @@ cmd_doctor() {
     docker_failed=1
     docker_daemon_status || docker_st=$?
     if command -v sudo >/dev/null 2>&1 && sudo -n docker --version >/dev/null 2>&1; then
-      warn "sudo docker works — add your user to the docker group and re-login (newgrp docker)"
+      warn "sudo docker works - add your user to the docker group and re-login (newgrp docker)"
     fi
     ok=1
   fi
@@ -600,7 +600,7 @@ cmd_doctor() {
   if resolve_hf_on_path; then
     log "hf: $(command -v hf)"
   else
-    warn "hf CLI not found — setup / download-models will auto-install"
+    warn "hf CLI not found - setup / download-models will auto-install"
   fi
   check_mem_limit_vs_headroom || true
   if ! check_host_headroom; then
@@ -626,14 +626,14 @@ cmd_doctor() {
   if [[ ${attn} == "unknown" ]]; then
     log "attention flags: --use-ck-attention (Kitchen XOR Sage; stack stopped or logs not yet classified)"
   elif [[ ${attn} == "pytorch-fallback" ]]; then
-    warn "attention is pytorch-fallback — 10–20× slow vs Kitchen. See docs/troubleshooting.md"
+    warn "attention is pytorch-fallback - 10-20x slow vs Kitchen. See docs/troubleshooting.md"
   fi
   local timing_file
   timing_file="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/spark-timing.json"
   if [[ -f ${timing_file} ]]; then
     log "spark-timing: $(tr -d '\n' <"${timing_file}")"
   else
-    log "spark-timing: none — Queue klein-still-draft / wan-i2v-5s / ltx-i2v-5s then spark-timing record --klein N --wan N --ltx N"
+    log "spark-timing: none - Queue klein-still-draft / wan-i2v-5s / ltx-i2v-5s then spark-timing record --klein N --wan N --ltx N"
   fi
   local image_json wan_json ltx_json llm_json podcast_json dub_json dub_clone_json music_json
   image_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-image.sh" status --tier fast --json 2>/dev/null || echo '{}')
@@ -670,9 +670,9 @@ cmd_doctor() {
   log "default image: $(stack_default_image) (branch=$(stack_git_branch))"
   if [[ ${ok} -ne 0 ]]; then
     if [[ ${docker_failed} -eq 1 ]]; then
-      err "Doctor found problems — try: $(doctor_next_step_hint "${docker_st}")"
+      err "Doctor found problems - try: $(doctor_next_step_hint "${docker_st}")"
     else
-      err "Doctor found problems — see errors above (headroom, MODELS_DIR, COMFY_OUTPUT_DIR, or compose)"
+      err "Doctor found problems - see errors above (headroom, MODELS_DIR, COMFY_OUTPUT_DIR, or compose)"
     fi
     return 1
   fi
@@ -710,7 +710,7 @@ cmd_status() {
     elif ! stack_port_open "${COMFY_PORT:-8188}"; then
       warn "container running but :${COMFY_PORT:-8188} not open yet (cold install?). ./scripts/manage.sh logs"
     else
-      log "ComfyUI port open — http://localhost:${COMFY_PORT:-8188}"
+      log "ComfyUI port open - http://localhost:${COMFY_PORT:-8188}"
     fi
   else
     warn "docker not available"
@@ -921,7 +921,7 @@ cmd_download_models() {
 Usage: manage.sh download-models [--limit auto|N|off] [--drop-incomplete]
   Default: Apache still (Klein 4B) + Wan 2.2 5B + LTX distilled AV.
   --limit auto  speedtest then 85% (default, or DOWNLOAD_LIMIT in .env)
-  --limit N     fixed cap in Mbps (e.g. 40 ≈ 5 MB/s); overrides DOWNLOAD_LIMIT
+  --limit N     fixed cap in Mbps (e.g. 40 ~ 5 MB/s); overrides DOWNLOAD_LIMIT
   --limit off   no throttle (not recommended over remote SSH)
   --drop-incomplete  delete *.incomplete then download (stuck 0 MiB/s resume)
   MiniMax H3 is banned (US Excluded Territory). See docs/licenses.md
@@ -959,7 +959,7 @@ EOF
   llm_cmd=(bash "${REPO_ROOT}/scripts/utilities/download-llm.sh" run)
   log "download-models: 4 packs (Klein 4B, Wan 5B, LTX 2.5, prompt-enhance GGUF) limit=${limit}"
   if [[ ${limit} == "off" || ${limit} == "0" ]]; then
-    warn "DOWNLOAD_LIMIT=off — saturating the link may lock remote SSH"
+    warn "DOWNLOAD_LIMIT=off - saturating the link may lock remote SSH"
     log_step 1 4 "Klein 4B still pack (download-image --tier fast)"
     "${image_cmd[@]}" || rc=$?
     if [[ ${rc} -eq 0 ]]; then
@@ -992,7 +992,7 @@ EOF
   if ! check_lab_models_ready "${MODELS_DIR}"; then
     err "download-models: lab workflow weights incomplete under ${MODELS_DIR}/comfy"
     if [[ ! -e ${MODELS_DIR}/comfy/diffusion_models/ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors ]]; then
-      err "LTX-2.5 is gated. HF_TOKEN set is not enough — Agree at https://huggingface.co/Lightricks/LTX-2.5 as that token's user."
+      err "LTX-2.5 is gated. HF_TOKEN set is not enough - Agree at https://huggingface.co/Lightricks/LTX-2.5 as that token's user."
     else
       err "Re-run after fixing HF_TOKEN / network, or download tiers individually."
     fi
@@ -1082,7 +1082,7 @@ EOF
   prepare_comfy_layout "${MODELS_DIR}" || return 1
   clear_stale_hf_locks "${MODELS_DIR}"
   if [[ ${limit} == "off" || ${limit} == "0" ]]; then
-    warn "DOWNLOAD_LIMIT=off — saturating the link may lock remote SSH"
+    warn "DOWNLOAD_LIMIT=off - saturating the link may lock remote SSH"
     MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-podcast.sh" run --tier "${tier}" || rc=$?
   else
     local dl="${REPO_ROOT}/scripts/utilities/download-limit.sh"
@@ -1183,7 +1183,7 @@ EOF
   prepare_comfy_layout "${MODELS_DIR}" || return 1
   clear_stale_hf_locks "${MODELS_DIR}"
   if [[ ${limit} == "off" || ${limit} == "0" ]]; then
-    warn "DOWNLOAD_LIMIT=off — saturating the link may lock remote SSH"
+    warn "DOWNLOAD_LIMIT=off - saturating the link may lock remote SSH"
     MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-dub.sh" run --tier "${tier}" || rc=$?
   else
     local dl="${REPO_ROOT}/scripts/utilities/download-limit.sh"
@@ -1277,7 +1277,7 @@ EOF
   prepare_comfy_layout "${MODELS_DIR}" || return 1
   clear_stale_hf_locks "${MODELS_DIR}"
   if [[ ${limit} == "off" || ${limit} == "0" ]]; then
-    warn "DOWNLOAD_LIMIT=off — saturating the link may lock remote SSH"
+    warn "DOWNLOAD_LIMIT=off - saturating the link may lock remote SSH"
     MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-music.sh" run --tier "${tier}" || rc=$?
   else
     local dl="${REPO_ROOT}/scripts/utilities/download-limit.sh"
@@ -1299,7 +1299,7 @@ EOF
 # Globals:
 #   See file header / caller environment.
 # Arguments:
-#   $@  Forwarded subcommand and flags (status|run|clear|wrap …).
+#   $@  Forwarded subcommand and flags (status|run|clear|wrap ...).
 # Outputs:
 #   Status via log/warn/err on stderr unless noted.
 # Returns:
@@ -1510,7 +1510,7 @@ EOF
   prepare_comfy_layout "${MODELS_DIR}" || return 1
   clear_stale_hf_locks "${MODELS_DIR}"
   if [[ ${limit} == "off" || ${limit} == "0" ]]; then
-    warn "DOWNLOAD_LIMIT=off — saturating the link may lock remote SSH"
+    warn "DOWNLOAD_LIMIT=off - saturating the link may lock remote SSH"
     MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-llm.sh" run --tier "${tier}" || rc=$?
   else
     local dl="${REPO_ROOT}/scripts/utilities/download-limit.sh"

@@ -1,6 +1,6 @@
 ---
 title: "Sky Cutaway"
-description: "Cinema Rack illustration — Sky Cutaway."
+description: "Cinema Rack illustration - Sky Cutaway."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

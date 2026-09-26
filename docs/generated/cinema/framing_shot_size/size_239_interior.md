@@ -1,6 +1,6 @@
 ---
 title: "2.39 Interior Span"
-description: "Cinema Rack illustration — 2.39 Interior Span."
+description: "Cinema Rack illustration - 2.39 Interior Span."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

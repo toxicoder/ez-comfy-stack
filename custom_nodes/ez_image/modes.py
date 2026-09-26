@@ -63,8 +63,8 @@ class ModeSpec:
         id: Stable snake_case id.
         label: Combo value shown in the App.
         category: Category id.
-        enhance_mode: Klein Enhance mode (``t2i`` / ``edit`` / …).
-        needs_ref: How many optional stills the mode prefers (0–2).
+        enhance_mode: Klein Enhance mode (``t2i`` / ``edit`` / ...).
+        needs_ref: How many optional stills the mode prefers (0-2).
         instruction: Splice prepended to Enhance context.
         prefix: SaveImage filename prefix.
     """
@@ -145,7 +145,7 @@ def _as_int(value: object, default: int) -> int:
 
 
 def _clamp_needs_ref(value: object) -> int:
-    """Clamp a preferred-reference count to 0–2.
+    """Clamp a preferred-reference count to 0-2.
 
     Args:
         value: Catalog or widget value.
@@ -541,7 +541,7 @@ def reset_mode_cache_for_tests() -> None:
 
 
 class EZImageMode:
-    """Pick a creator mode (background swap, change text, …) for image-studio."""
+    """Pick a creator mode (background swap, change text, ...) for image-studio."""
 
     @classmethod
     def INPUT_TYPES(cls) -> ComfyInputTypes:
@@ -585,7 +585,7 @@ class EZImageMode:
         "100 creator modes for stills/image-studio. Category filters the Mode "
         "combo in the App. Queue splices the mode instruction into Enhance "
         "context, selects t2i/edit/text_swap/identity, and sets the save "
-        "prefix. Optional reference stills stay optional — modes never error "
+        "prefix. Optional reference stills stay optional - modes never error "
         "when empty. Iterate (off by default) forces text-to-image, then edit "
         "once a reference still is present, and ignores the creator-mode "
         "instruction. This run is a display of the values Queue will send."
@@ -622,7 +622,7 @@ class EZImageMode:
             iterate=iterate,
             has_image=has_image,
         )
-        summary = f"{result.label} · {result.enhance_mode} · {result.prefix}"
+        summary = f"{result.label} - {result.enhance_mode} - {result.prefix}"
         return {
             "ui": {"text": (summary,)},
             "result": (result.context, result.enhance_mode, result.prefix),

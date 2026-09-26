@@ -1,6 +1,6 @@
 ---
 title: "Locked with breathing iris"
-description: "Cinema Rack illustration — Locked with breathing iris."
+description: "Cinema Rack illustration - Locked with breathing iris."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

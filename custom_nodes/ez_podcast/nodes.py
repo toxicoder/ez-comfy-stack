@@ -327,7 +327,7 @@ def _empty_audio(sample_rate: int = SAMPLE_RATE_KOKORO) -> dict[str, Any]:
 
         wave = torch.zeros(1, 1, 1)
         return {"waveform": wave, "sample_rate": int(sample_rate)}
-    except Exception:  # noqa: BLE001 — hermetic tests have no torch
+    except Exception:  # noqa: BLE001 - hermetic tests have no torch
         return {"waveform": [[[0.0]]], "sample_rate": int(sample_rate)}
 
 
@@ -350,7 +350,7 @@ def _audio_from_pcm(samples: Any, sample_rate: int) -> dict[str, Any]:
         elif tensor.ndim == 2:
             tensor = tensor.unsqueeze(0)
         return {"waveform": tensor, "sample_rate": int(sample_rate)}
-    except Exception:  # noqa: BLE001 — fail-soft without torch
+    except Exception:  # noqa: BLE001 - fail-soft without torch
         return {"waveform": samples, "sample_rate": int(sample_rate)}
 
 
@@ -470,7 +470,7 @@ class EZPodcastScript:
             from ez_prompt_enhance.client import complete
             from ez_prompt_enhance.client import compose_context_user
             from ez_prompt_enhance.client import with_context_system
-        except Exception as exc:  # noqa: BLE001 — fail-soft
+        except Exception as exc:  # noqa: BLE001 - fail-soft
             _log(f"prompt enhance client unavailable: {exc}")
             return _pack_text(original, "llama.cpp unavailable")
         system = with_context_system(load_writer_prompt(name), ctx)
@@ -479,7 +479,7 @@ class EZPodcastScript:
         finally:
             try:
                 _close_llm()
-            except Exception as exc:  # noqa: BLE001 — unload is best-effort
+            except Exception as exc:  # noqa: BLE001 - unload is best-effort
                 _log(f"writer unload failed: {exc}")
         if not (rewritten or "").strip():
             return _pack_text(original, reason or "passthrough")
@@ -601,7 +601,7 @@ class EZKokoroTTS:
             backend: kokoro / chatterbox / qwen3tts.
             speaker_a_ref: Optional owned reference WAV for speaker A.
             speaker_b_ref: Optional owned reference WAV for speaker B.
-            speed: Kokoro speed (0.5–1.5).
+            speed: Kokoro speed (0.5-1.5).
 
         Returns:
             One-item AUDIO tuple. Torch is imported inside helpers only.
@@ -631,7 +631,7 @@ class EZKokoroTTS:
             from ez_common import node_progress
 
             bar = node_progress(max(len(turns), 1))
-        except Exception:  # noqa: BLE001 — pytest / missing pack
+        except Exception:  # noqa: BLE001 - pytest / missing pack
             bar = None
         for role, spoken in turns:
             _log(f"TTS {role}")
@@ -719,7 +719,7 @@ class EZKokoroTTS:
         onnx, voices = resolve_kokoro_paths()
         if not os.path.isfile(onnx) or not os.path.isfile(voices):
             _log(
-                f"Kokoro ONNX missing ({onnx}, {voices}) — run "
+                f"Kokoro ONNX missing ({onnx}, {voices}) - run "
                 "./scripts/manage.sh download-podcast --tier analog"
             )
             return None, SAMPLE_RATE_KOKORO
@@ -727,14 +727,14 @@ class EZKokoroTTS:
             from kokoro_onnx import Kokoro
         except ImportError:
             _log(
-                "kokoro-onnx not installed — optional runtime: pip install "
+                "kokoro-onnx not installed - optional runtime: pip install "
                 "kokoro-onnx onnxruntime (invalidates a baked venv layer if you rebuild)"
             )
             return None, SAMPLE_RATE_KOKORO
         try:
             tts = Kokoro(onnx, voices)
             samples, rate = tts.create(text, voice=voice, speed=speed)
-        except Exception as exc:  # noqa: BLE001 — fail-soft
+        except Exception as exc:  # noqa: BLE001 - fail-soft
             _log(f"Kokoro synthesis failed: {exc}")
             return None, SAMPLE_RATE_KOKORO
         return samples, int(rate or SAMPLE_RATE_KOKORO)
@@ -824,7 +824,7 @@ class EZPodcastLearn:
 
         Args:
             sources: Operator paste or sample override.
-            format: Episode shape (explainer, quiz, …).
+            format: Episode shape (explainer, quiz, ...).
             duration: Spoken length combo.
             fetch_links: When true, fetch HTTPS pages and video captions.
             enhance: When false, concatenate sources and naive-wrap the script.

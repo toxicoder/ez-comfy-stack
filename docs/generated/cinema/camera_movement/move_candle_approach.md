@@ -1,6 +1,6 @@
 ---
 title: "Candle approach"
-description: "Cinema Rack illustration — Candle approach."
+description: "Cinema Rack illustration - Candle approach."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

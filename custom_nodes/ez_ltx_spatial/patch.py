@@ -1,4 +1,4 @@
-"""Fail-soft wraps so LTX encode never sees a non-÷32 spatial size."""
+"""Fail-soft wraps so LTX encode never sees a non-div32 spatial size."""
 
 from __future__ import annotations
 
@@ -79,7 +79,7 @@ def snap_width_height_in_call(
     kwargs: dict[str, Any],
     width_index: int,
 ) -> tuple[tuple[Any, ...], dict[str, Any]]:
-    """Replace width/height in a node ``execute`` call with ÷32 snaps.
+    """Replace width/height in a node ``execute`` call with div32 snaps.
 
     Args:
         args: Positional args after ``cls``.
@@ -106,7 +106,7 @@ def snap_width_height_in_call(
     new_w, new_h = snap_hw(width, height)
     old_w, old_h = int(width), int(height)
     if (new_w, new_h) != (old_w, old_h):
-        log(f"{old_w}x{old_h} -> {new_w}x{new_h} (LTX VAE requires spatial ÷32)")
+        log(f"{old_w}x{old_h} -> {new_w}x{new_h} (LTX VAE requires spatial div32)")
     if "width" in kwargs_out:
         kwargs_out["width"] = new_w
     else:
@@ -208,7 +208,7 @@ def _wrap_classmethod_wh(
 
 
 def _wrap_video_vae_encode(cls: Any) -> bool:
-    """Center-crop VideoVAE.encode inputs to a ÷32 spatial window.
+    """Center-crop VideoVAE.encode inputs to a div32 spatial window.
 
     Args:
         cls: ``VideoVAE`` class.
@@ -222,7 +222,7 @@ def _wrap_video_vae_encode(cls: Any) -> bool:
     orig_fn = getattr(orig, "__func__", orig)
 
     def encode(self: Any, x: Any, device: Any = None) -> Any:
-        """Crop ``x`` to ÷32 then call the original encode.
+        """Crop ``x`` to div32 then call the original encode.
 
         Args:
             x: Latent or pixel tensor with spatial trailing axes.
@@ -242,10 +242,10 @@ def _wrap_video_vae_encode(cls: Any) -> bool:
                 new_h, new_w = int(cropped.shape[-2]), int(cropped.shape[-1])
                 log(
                     f"encode {old_w}x{old_h} -> {new_w}x{new_h} "
-                    "(LTX VAE requires spatial ÷32)"
+                    "(LTX VAE requires spatial div32)"
                 )
             except Exception:
-                log("encode cropped to a ÷32 spatial window")
+                log("encode cropped to a div32 spatial window")
         return orig_fn(self, cropped, device)
 
     _mark_wrapped(encode)
@@ -256,7 +256,7 @@ def _wrap_video_vae_encode(cls: Any) -> bool:
 def apply_patches() -> dict[str, bool]:
     """Wrap LTX nodes and VideoVAE.encode when Comfy modules are importable.
 
-    Spatial widgets snap to ÷32. Frame-count widgets snap to ``1+8n``
+    Spatial widgets snap to div32. Frame-count widgets snap to ``1+8n``
     (illegal 120 becomes 121, not the VAE floor of 113).
 
     Returns:

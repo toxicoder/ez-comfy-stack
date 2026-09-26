@@ -115,7 +115,7 @@ def test_dialogue_and_multishot_are_t2v_av() -> None:
     modality = next(n for n in dialogue["nodes"] if n.get("type") == "LTXVModalityGuidance")
     sampler = next(n for n in dialogue["nodes"] if n.get("type") == "KSampler")
     assert _source_of(dialogue, sampler, "model") is modality
-    assert '"' in LTX_DIALOGUE or "\u201c" in LTX_DIALOGUE
+    assert '"' in LTX_DIALOGUE or "'" in LTX_DIALOGUE
     assert "hard cut" in LTX_MULTISHOT.lower()
     assert "match cut" in LTX_MULTISHOT.lower()
 

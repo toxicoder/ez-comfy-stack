@@ -9,7 +9,7 @@ tags: [models, cache, sharing, spark-lab, huggingface]
 **What's on this page**
 
 - **One `MODELS_DIR`** shared by this Docker stack and nvidia-dgx-spark-lab
-- **Download path** (`download-models` → Klein / Wan / LTX, limit clears on exit)
+- **Download path** (`download-models` -> Klein / Wan / LTX, limit clears on exit)
 - **Readiness check** (`status --json` and `doctor`)
 
 **What this enables**

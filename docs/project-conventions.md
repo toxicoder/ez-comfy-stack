@@ -56,7 +56,7 @@ bazelisk run //docs:docs
 | `BUILD.bazel` or `.bzl` | `bazelisk run //:fix` |
 | Shell structured comments | `bazelisk run //docs:docs` |
 
-See [Building with Bazel](contribute/building-with-bazel.md). Runtime is still Docker Compose — Bazel does not add K3s, a dashboard, or NCCL.
+See [Building with Bazel](contribute/building-with-bazel.md). Runtime is still Docker Compose - Bazel does not add K3s, a dashboard, or NCCL.
 
 ## Repo layout
 
@@ -64,19 +64,19 @@ See [Building with Bazel](contribute/building-with-bazel.md). Runtime is still D
 flowchart TB
   Root["ez-comfy-stack"]
   Root --> Manage["scripts/manage.sh<br/>operator CLI"]
-  Root --> Lib["scripts/lib/*<br/>common · compose · paths · safety"]
-  Root --> Util["scripts/utilities/*<br/>download-image · download-wan · download-ltx · download-limit · download-dub · concat-shots · blender-guide · blender-stills · spark-farm · blender-mcp · research-mcp · studio-mcp"]
-  Root --> Docker["docker/*<br/>compose · Dockerfile · entrypoint · patch"]
+  Root --> Lib["scripts/lib/*<br/>common - compose - paths - safety"]
+  Root --> Util["scripts/utilities/*<br/>download-image - download-wan - download-ltx - download-limit - download-dub - concat-shots - blender-guide - blender-stills - spark-farm - blender-mcp - research-mcp - studio-mcp"]
+  Root --> Docker["docker/*<br/>compose - Dockerfile - entrypoint - patch"]
   Root --> Cfg["config/resource-policy.yaml"]
-  Root --> Docs["docs/ · docs-site/ Fumadocs"]
-  Root --> Tests["tests/bats · tests/python"]
+  Root --> Docs["docs/ - docs-site/ Fumadocs"]
+  Root --> Tests["tests/bats - tests/python"]
   Root --> Wf["workflows/_lab/<lane> shipped JSON<br/>workflows/_user local only<br/>workflows/shorts YAML"]
   Manage --> Lib
   Manage --> Util
   Manage --> Docker
 ```
 
-Shipped Comfy graphs live under `workflows/_lab/<lane>/` (`stills`, `motion`, `creator`, `services`, `films`, `dcc`, `optional`, `audio`, `inspire`). Filenames drop lane prefixes and the old `-lab-example` suffix (`stills/still-draft.json`). Nested folders under a lane are allowed. Creator platform Apps nest as `_lab/creator/<kind>/<stem>.json` (`creator/stills/youtube-channel-icon`). Services pack Apps nest as `_lab/services/<vertical>/<stem>.json` (`services/ecommerce/pdp-on-white`). Motion printers nest as `_lab/motion/silent|loops|av/`. Film JSON lives under `_lab/films/` (shot YAML stays in `workflows/shorts/`). Music catalogs nest as `_lab/audio/albums/<artist>/<album-slug>/` with numbered tracks plus `cover.json` and `album.json`. Tags carry artist/album/title; SaveAudio stem is `NN - Song Title`. Graph `id` is the file stem; `extra.lab_rel` is the unique `_lab`-relative id; `extra.workflowRendererVersion` is `Vue-corrected` (Nodes 2.0 canonical coordinates — never stamp `"Vue"`). Node `pos` is spaced for Vue widget height (`tests/python/_lab_layout.py`: `organize_stages` then estimated AABB + `NODE_GAP`, groups keep `GROUP_TITLE_INSET`; DCC and TRELLIS are not exempt). The operator **Note** is the top-left node (`LAB_X0`, `LAB_NODE_Y0`); **Check models** and **Quality** share that header row to the right; remaining nodes flow left-to-right in MODEL / INPUT / PROMPT / SETTINGS / OUTPUT columns (named SHOT / Beat / RACK groups stay named and shift as blocks under the header). `finalize_layout` is the builder contract. Do not pack to LiteGraph `size` alone. Per-graph node/parameter pages are generated (`docs/generate_workflow_docs.py`, encyclopedia `docs/workflow_nodes.py`) into `docs/generated/workflows/` — do not hand-edit them. Shot YAML stays in `workflows/shorts/*.shots.yaml`. `workflows/_user/` is a local convention only — live private graphs are on `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/` (plus `_user/_rescued/` for explicit in-place lab Saves). `start` does not clone the shipped catalog into live `_user/`. Do not commit `_user/` contents.
+Shipped Comfy graphs live under `workflows/_lab/<lane>/` (`stills`, `motion`, `creator`, `services`, `films`, `dcc`, `optional`, `audio`, `inspire`). Filenames drop lane prefixes and the old `-lab-example` suffix (`stills/still-draft.json`). Nested folders under a lane are allowed. Creator platform Apps nest as `_lab/creator/<kind>/<stem>.json` (`creator/stills/youtube-channel-icon`). Services pack Apps nest as `_lab/services/<vertical>/<stem>.json` (`services/ecommerce/pdp-on-white`). Motion printers nest as `_lab/motion/silent|loops|av/`. Film JSON lives under `_lab/films/` (shot YAML stays in `workflows/shorts/`). Music catalogs nest as `_lab/audio/albums/<artist>/<album-slug>/` with numbered tracks plus `cover.json` and `album.json`. Tags carry artist/album/title; SaveAudio stem is `NN - Song Title`. Graph `id` is the file stem; `extra.lab_rel` is the unique `_lab`-relative id; `extra.workflowRendererVersion` is `Vue-corrected` (Nodes 2.0 canonical coordinates - never stamp `"Vue"`). Node `pos` is spaced for Vue widget height (`tests/python/_lab_layout.py`: `organize_stages` then estimated AABB + `NODE_GAP`, groups keep `GROUP_TITLE_INSET`; DCC and TRELLIS are not exempt). The operator **Note** is the top-left node (`LAB_X0`, `LAB_NODE_Y0`); **Check models** and **Quality** share that header row to the right; remaining nodes flow left-to-right in MODEL / INPUT / PROMPT / SETTINGS / OUTPUT columns (named SHOT / Beat / RACK groups stay named and shift as blocks under the header). `finalize_layout` is the builder contract. Do not pack to LiteGraph `size` alone. Per-graph node/parameter pages are generated (`docs/generate_workflow_docs.py`, encyclopedia `docs/workflow_nodes.py`) into `docs/generated/workflows/` - do not hand-edit them. Shot YAML stays in `workflows/shorts/*.shots.yaml`. `workflows/_user/` is a local convention only - live private graphs are on `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/` (plus `_user/_rescued/` for explicit in-place lab Saves). `start` does not clone the shipped catalog into live `_user/`. Do not commit `_user/` contents.
 
 ## Shell style
 
@@ -89,24 +89,24 @@ This project follows that guide for executables and libraries, with the **intent
 | Area | Rule |
 | --- | --- |
 | Language | Bash only for executables |
-| STDERR | `log` / `warn` / `err` → stderr; data/JSON → stdout |
+| STDERR | `log` / `warn` / `err` -> stderr; data/JSON -> stdout |
 | Progress | Long jobs: start banner, TTY rewrite or periodic newline, end + elapsed. `scripts/lib/progress.sh` + `scripts/lib/operator_log.py`. `EZ_COMFY_PROGRESS=0` disables bars |
 | Comments | File overview header; every library function documented |
 | Function docs | Google-style **Globals / Arguments / Outputs / Returns** blocks |
 | Indent | 2 spaces; no tabs (`shfmt -i 2 -ci`) |
 | Control flow | `; then` / `; do` on same line as `if` / `for` / `while` |
-| Tests | Prefer `[[ … ]]`; use `-z` / `-n` for empty strings; `==` for equality |
-| Command subst | `$(…)` only (never backticks) |
+| Tests | Prefer `[[ ... ]]`; use `-z` / `-n` for empty strings; `==` for equality |
+| Command subst | `$(...)` only (never backticks) |
 | Quoting | Quote expansions: `"${var}"`, `"${array[@]}"`, `"$@"` |
 | Arrays | Use arrays for argument lists; expand with `"${arr[@]}"` |
-| Arithmetic | `$((…))` / `((…))`; not `let` / `expr` / `$[…]` |
+| Arithmetic | `$((...))` / `((...))`; not `let` / `expr` / `$[...]` |
 | Eval / aliases | Forbidden in scripts |
-| Pipes to while | Prefer process substitution: `while read; do …; done < <(cmd)` |
+| Pipes to while | Prefer process substitution: `while read; do ...; done < <(cmd)` |
 | Locals | `local` in functions; split `local x` / `x="$(cmd)"` when exit status of `cmd` matters |
 | Constants | `UPPER_SNAKE`; prefer `readonly` when set once |
 | Naming | Functions/vars `lower_snake_case`; `name()` without `function` keyword |
 | Structure | Helpers grouped; multi-function scripts use `main` + source guard |
-| Libraries | `scripts/lib/*.sh` — `.sh` extension, **not** executable |
+| Libraries | `scripts/lib/*.sh` - `.sh` extension, **not** executable |
 | Entry scripts | `*.sh`, executable, `set -euo pipefail` |
 | ShellCheck | Clean at warning level (`bazelisk test //:lint --test_tag_filters=manual`) |
 | Pyright | Clean at `standard` (`bazelisk test //tests:typecheck`) |
@@ -118,9 +118,9 @@ This project follows that guide for executables and libraries, with the **intent
 | Google guide | This project | Why |
 | --- | --- | --- |
 | Shebang `#!/bin/bash` | `#!/usr/bin/env bash` | Works on macOS (Homebrew bash) and Linux Spark without assuming `/bin/bash` is modern |
-| Prefer scripts ≤ ~100 lines or rewrite | Modular multi-file shell ops surface | Operator tooling is intentionally Bash; split by domain (`lib/*`, utilities) |
+| Prefer scripts \<= ~100 lines or rewrite | Modular multi-file shell ops surface | Operator tooling is intentionally Bash; split by domain (`lib/*`, utilities) |
 | Function banner style only | Globals/Arguments/Outputs/Returns labels (Google fields) | Clearer API docs; optional `# @command` on CLI entrypoints for help discoverability |
-| Hard 80-column lines | Prefer ≤80; soft max ~100 | Long HF repo ids and one-line JSON status payloads |
+| Hard 80-column lines | Prefer \<=80; soft max ~100 | Long HF repo ids and one-line JSON status payloads |
 | Package functions with `::` | Flat `verb_noun` names | Single small repository |
 
 ### Function comment template
@@ -132,7 +132,7 @@ This project follows that guide for executables and libraries, with the **intent
 # Globals:
 #   MODELS_DIR (read)
 # Arguments:
-#   $1 - tier id (fast|quality|…)
+#   $1 - tier id (fast|quality|...)
 # Outputs:
 #   Writes human status to stderr; JSON to stdout when --json
 # Returns:
@@ -140,7 +140,7 @@ This project follows that guide for executables and libraries, with the **intent
 #######################################
 some_func() {
   local tier="${1}"
-  …
+  ...
 }
 ```
 
@@ -152,9 +152,9 @@ First-party Python (`custom_nodes`, `docker`, `docs/*.py`, `scripts/lib/*.py`, `
 | --- | --- |
 | Annotations | Every def, including `_private` and nested. `from __future__ import annotations` |
 | mypy | `disallow_untyped_defs` and `disallow_incomplete_defs` |
-| Pyright | `standard` (not `strict` — Comfy/torch/bpy stay optional) |
+| Pyright | `standard` (not `strict` - Comfy/torch/bpy stay optional) |
 | `Any` | Only at tensor / `bpy` / optional-import boundaries, with a one-line reason |
-| Behavioral seams | `typing.Protocol` (PEP 544). Small capability interfaces (`ProgressReporter`, `ToolHandler`, `ChatCompleter`, `MediaProbe`). Classes satisfy them structurally — do not inherit |
+| Behavioral seams | `typing.Protocol` (PEP 544). Small capability interfaces (`ProgressReporter`, `ToolHandler`, `ChatCompleter`, `MediaProbe`). Classes satisfy them structurally - do not inherit |
 | Data records | `TypedDict` for JSON/YAML shapes (`Turn`, `JobState`, `ToolSpec`, `HouseLayout`). Do not wrap records in a Protocol |
 | ABC | Not used. Prefer Protocol over `abc.ABC` |
 | Comfy `INPUT_TYPES` | Return `ComfyInputTypes` from `ez_common` via `TYPE_CHECKING` import (no runtime sibling import at module load) |
@@ -190,9 +190,9 @@ set -euo pipefail
 # sources, constants (readonly where fixed)
 
 #######################################
-# …
+# ...
 #######################################
-helper() { …; }
+helper() { ...; }
 
 #######################################
 # CLI dispatcher.
@@ -200,7 +200,7 @@ helper() { …; }
 #   $@ - CLI args
 #######################################
 main() {
-  …
+  ...
 }
 
 # shfmt -s may leave ${BASH_SOURCE[0]} unquoted inside [[ ]]; that is intentional.
@@ -213,16 +213,16 @@ fi
 
 Long-running operator commands must not look hung. Shared helpers:
 
-- Shell: `scripts/lib/progress.sh` (sourced from `common.sh`) — `log_step`, `log_ok`, `progress_bar`, `run_with_heartbeat`, `run_ffmpeg_logged`
-- Python: `scripts/lib/operator_log.py` — same prefix and TTY rewrite
-- In-canvas: `custom_nodes/ez_common` — Comfy `ProgressBar` when importable
+- Shell: `scripts/lib/progress.sh` (sourced from `common.sh`) - `log_step`, `log_ok`, `progress_bar`, `run_with_heartbeat`, `run_ffmpeg_logged`
+- Python: `scripts/lib/operator_log.py` - same prefix and TTY rewrite
+- In-canvas: `custom_nodes/ez_common` - Comfy `ProgressBar` when importable
 
 | Variable | Default | Meaning |
 | --- | --- | --- |
 | `EZ_COMFY_PROGRESS` | `1` | `0` disables bars/heartbeats (`log`/`warn`/`err` stay) |
 | `EZ_COMFY_PROGRESS_INTERVAL` | `2` | Heartbeat seconds (ffmpeg/blender/rsync/docker) |
 | `HF_PROGRESS` / `HF_PROGRESS_INTERVAL` | `1` / `10` | HF disk-growth line (hub/tqdm stay off) |
-| `EZ_COMFY_LOG_LEVEL` | `info` | `debug` ≡ `LAB_DEBUG=1` |
+| `EZ_COMFY_LOG_LEVEL` | `info` | `debug` == `LAB_DEBUG=1` |
 | `NO_COLOR` | unset | No ANSI when set or when stderr is not a TTY |
 
 Hermetic tests set `EZ_COMFY_PROGRESS=0` and `HF_PROGRESS=0` so suites never sleep on progress monitors.
@@ -247,17 +247,17 @@ flowchart LR
 ## Docker
 
 - One compose service for the unified stack
-- Multi-stage image: **runtime** builder stages + **runtime** final (no secrets/models; `CUDA_BASE_IMAGE=…devel` is an override)
+- Multi-stage image: **runtime** builder stages + **runtime** final (no secrets/models; `CUDA_BASE_IMAGE=...devel` is an override)
 - **Layer cache contract** (do not regress):
   - Torch stage `COPY` is only `install-comfy/core.sh` + `phase-venv-torch.sh` (not `common.sh` / Comfy pins)
-  - Named stages `torch` → `comfy` → `nodes`; pin `ARG`s declared in the stage that uses them
+  - Named stages `torch` -> `comfy` -> `nodes`; pin `ARG`s declared in the stage that uses them
   - Runtime: `COPY --link` `/opt/parts/venv` then `venv-extra` then `app` **before** entrypoint/install/patch
   - Validated pins: `TORCH_VERSION`, `COMFYUI_REF`, `COMFYUI_MANAGER_REF`, `COMFYUI_NUNCHAKU_NODE_REF` (see operate/models-packs.md)
   - BuildKit `# syntax=docker/dockerfile:1`, `COPY --link`, `COPY --chmod`, pip + apt cache mounts
   - Compose bind-mounts ops scripts + `install-comfy/` for zero-rebuild iteration
   - `docker/.dockerignore` is **whitelist-only** (`*` then `!exceptions`). Every `COPY` source from the build context must have a matching `!` line or GHCR/`docker build` fails with `not found`
 - GHCR channel by long-lived branch: publish tags `us-safe-studio` (`main`) and `us-safe-studio-development`; `manage.sh` pulls the tag for the current git branch (feature branches use the development channel). Old `flux-to-ltx*` tags freeze on the previous image.
-- Contributor Dev Container (`.devcontainer/`, `ghcr.io/toxicoder/ez-comfy-devcontainer`) is a separate image — not the Comfy CUDA tags. See [Contributor Dev Container](contribute/devcontainer.md).
+- Contributor Dev Container (`.devcontainer/`, `ghcr.io/toxicoder/ez-comfy-devcontainer`) is a separate image - not the Comfy CUDA tags. See [Contributor Dev Container](contribute/devcontainer.md).
 - Scripts as real files (not inline ConfigMap YAML)
 - Host model cache + named volume for Comfy state
 - Compose `restart: "no"`; explicit `mem_limit` / `mem_reservation`
@@ -269,7 +269,7 @@ flowchart TB
   Svc --> Mem["mem_limit / mem_reservation"]
   Svc --> Models["bind MODELS_DIR"]
   Svc --> State["volume comfy-state"]
-  Svc --> Scripts["bind entrypoint · install · patch"]
+  Svc --> Scripts["bind entrypoint - install - patch"]
 ```
 
 ## Testing
@@ -285,8 +285,8 @@ flowchart TB
   - **Custom-node JSDoc**: file banner + JSDoc on `function` declarations (`tests/python/test_jsdoc.py`)
   - **Strict shell inventory**: every function in `scripts/**/*.sh` and `docker/**/*.sh` must be **invoked by a test** under `tests/` (production-only references do not count)
   - Full BATS suite green
-- **Tests ship with production code** — same commit as the files under test
-- **Test shell style**: `tests/bats/*.bats`, `tests/bats/*.bash`, and `tests/*.sh` follow the Google Shell Style Guide where applicable (quoted `"${var}"`, `[[ … ]]`, Google-style helper comments in `test_helper.bash`, 2-space indent / shfmt for `.sh` runners)
+- **Tests ship with production code** - same commit as the files under test
+- **Test shell style**: `tests/bats/*.bats`, `tests/bats/*.bash`, and `tests/*.sh` follow the Google Shell Style Guide where applicable (quoted `"${var}"`, `[[ ... ]]`, Google-style helper comments in `test_helper.bash`, 2-space indent / shfmt for `.sh` runners)
 - Install test tools: `pip install -r tests/requirements.txt` (pytest, pytest-cov, pyright, mypy)
 
 ```mermaid
@@ -298,8 +298,8 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-  Cov["bazelisk test //:test-fast"] --> Py["100% line · first-party Python"]
-  Cov --> Pyright["Pyright standard + mypy untyped-defs · first-party Python"]
+  Cov["bazelisk test //:test-fast"] --> Py["100% line - first-party Python"]
+  Cov --> Pyright["Pyright standard + mypy untyped-defs - first-party Python"]
   Cov --> DocsInv["Production Google docs + JSDoc inventory"]
   Cov --> Shell["Every scripts/** + docker/** function<br/>invoked under tests/"]
   Cov --> Bats["Full BATS suite green"]
@@ -317,7 +317,7 @@ flowchart TB
 
 ```mermaid
 flowchart LR
-  Feat["feature/* · fix/* · chore/* · docs/*"] --> Dev["development"]
+  Feat["feature/* - fix/* - chore/* - docs/*"] --> Dev["development"]
   Dev --> Main["main<br/>production-ready only"]
 ```
 
@@ -325,29 +325,29 @@ flowchart LR
 
 Contributor how-to (scan + voice): [Docs style](contribute/docs-style.md). How docs tests work: [Testing docs](contribute/testing-docs.md). Comment-derived CLI: [Generated shell reference](generated/shell/reference.md). **AI-drafted docs still need a human pass** before merge.
 
-- Local / PR: `bazelisk run //docs:docs` (or `make docs`) — generators then Fumadocs static export into `docs-site/out/`
+- Local / PR: `bazelisk run //docs:docs` (or `make docs`) - generators then Fumadocs static export into `docs-site/out/`
 - Dev server: `bazelisk run //docs:serve` (or `./docs/manage-docs.sh serve`) at http://localhost:3005
 - Public site (per long-lived branch) via one Next export per GitHub Pages deploy:
-  - `main` → [latest](https://toxicoder.github.io/ez-comfy-stack/latest/)
-  - `development` → [development](https://toxicoder.github.io/ez-comfy-stack/development/)
+  - `main` -> [latest](https://toxicoder.github.io/ez-comfy-stack/latest/)
+  - `development` -> [development](https://toxicoder.github.io/ez-comfy-stack/development/)
 - Workflow: `.github/workflows/deploy-docs.yml` (push to `main`/`development` with docs paths, or `workflow_dispatch`)
 - Stack is **Fumadocs** on Next.js 16 (`docs-site/`). Content stays in `docs/`. Node 22+, `npm ci --legacy-peer-deps` inside `docs-site/`. Python `docs/requirements.txt` is generators only. Sidebar groups live in `docs-site/lib/nav.json`.
 - Keep the top nav on screen while scrolling (`root: true` folders in `docs-site/lib/nav.ts`). Do **not** hide the header (`translateY(-100%)` / autohide). Chrome lives in `docs-site/app/global.css` (Overeazy Voltage `--color-fd-*`). Article copy is `0.875rem`; do not raise `html` font-size. Do not add `display: none` hide rules (theme tests).
 - Code appearance matches [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab) text styling, not their body type scale: **Roboto Mono** / `ui-monospace` stack; fenced `article pre > code` uses `line-height: 1.55` and extra padding; prose / table / list `code` is terminal green `rgb(134, 183, 55)`. Do **not** paint `pre > code` solid green. Do **not** copy spark-lab table `overflow: hidden` (breaks `.ez-table-pin`) or their `0.82rem` typeset.
-- Table headers: `docs-site/components/table-chrome.tsx` clones `table:not([class]) thead` into a `.ez-table-pin` overlay that sits under the navbar while scrolling, then releases so the last row and 25% (`0.25`) of the previous row stay visible. Hide the pin **and** the h-scroll bar once the table is fully above the navbar or below the viewport (`inStickyBand`) so a `position: fixed` clone cannot stay stuck after the table has scrolled past. The clone pans with wrap `scrollLeft` (`translateX`) so column labels stay aligned while the table scrolls horizontally. When the table is wider than the article **and** taller than the viewport, the native wrap bar sits off-screen at wrap bottom — the component mirrors it with a `position: fixed` `.ez-table-hscroll` bar at the viewport bottom (same `scrollLeft`). Do **not** use `position: sticky` on `th` or the h-scroll bar. Keep **`display: table`** and **overflow visible** on the table. Do not `position: fixed` the original thead (the overlay is the fixed clone).
+- Table headers: `docs-site/components/table-chrome.tsx` clones `table:not([class]) thead` into a `.ez-table-pin` overlay that sits under the navbar while scrolling, then releases so the last row and 25% (`0.25`) of the previous row stay visible. Hide the pin **and** the h-scroll bar once the table is fully above the navbar or below the viewport (`inStickyBand`) so a `position: fixed` clone cannot stay stuck after the table has scrolled past. The clone pans with wrap `scrollLeft` (`translateX`) so column labels stay aligned while the table scrolls horizontally. When the table is wider than the article **and** taller than the viewport, the native wrap bar sits off-screen at wrap bottom - the component mirrors it with a `position: fixed` `.ez-table-hscroll` bar at the viewport bottom (same `scrollLeft`). Do **not** use `position: sticky` on `th` or the h-scroll bar. Keep **`display: table`** and **overflow visible** on the table. Do not `position: fixed` the original thead (the overlay is the fixed clone).
 - Prefer **relative** links between pages and to in-repo paths so they stay correct on every git branch and under each published version prefix
 - Branch-stamped at build time via `docs-site/lib/site.ts` (`EZ_DOCS_VERSION` / `DGX_DOCS_VERSION`; optional `EZ_DOCS_GIT_REF` override):
   - Edit links (`edit/<ref>/docs/`)
   - This-repo GitHub `blob` / `tree` URLs
   - Operator Setup git ref: write `__DOCS_GIT_REF__` in source (e.g. `git clone -b __DOCS_GIT_REF__`); the app stamps `main` or `development` to match the published alias
-- Operator docs that mean “the branch for **these** docs” must use `__DOCS_GIT_REF__`, not a hardcoded long-lived branch name. Contributor workflow text (“branch from `development`”) stays literal.
-- **Last published** chip (`.ez-published-chip`): site-wide build stamp for the published alias, injected beside the page `h1` by `docs-site/components/published-chip.tsx` (not per-page git history, not the site header). Deploy sets `EZ_DOCS_PUBLISHED_AT` (UTC ISO) in `.github/workflows/deploy-docs.yml`; local / PR `make docs` falls back to `SOURCE_DATE_EPOCH` then git HEAD. Invalid or missing stamps omit the chip — never wall-clock `now()`. The chip rewrites the visible `<time>` to a relative label (“2 days ago”); the `datetime` attribute stays absolute UTC. Do not hide the chip with `display: none`.
+- Operator docs that mean "the branch for **these** docs" must use `__DOCS_GIT_REF__`, not a hardcoded long-lived branch name. Contributor workflow text ("branch from `development`") stays literal.
+- **Last published** chip (`.ez-published-chip`): site-wide build stamp for the published alias, injected beside the page `h1` by `docs-site/components/published-chip.tsx` (not per-page git history, not the site header). Deploy sets `EZ_DOCS_PUBLISHED_AT` (UTC ISO) in `.github/workflows/deploy-docs.yml`; local / PR `make docs` falls back to `SOURCE_DATE_EPOCH` then git HEAD. Invalid or missing stamps omit the chip - never wall-clock `now()`. The chip rewrites the visible `<time>` to a relative label ("2 days ago"); the `datetime` attribute stays absolute UTC. Do not hide the chip with `display: none`.
 
 ### Docs formatting (human readability)
 
 Readers **scan**. Prefer inverted pyramid: outcome and commands first, theory and edge cases later.
 
-**Source spacing** (enforced by `tests/python/test_docs_markdown.py`): no trailing whitespace (including two-space hard breaks), at most one blank line between blocks, files end with a single newline, ATX headings and column-0 fences/tables/admonitions sit next to a blank line. Do not hand-edit `docs/generated/shell/reference.md` — `docs/generate_shell_docs.py` collapses extra blanks.
+**Source spacing** (enforced by `tests/python/test_docs_markdown.py`): no trailing whitespace (including two-space hard breaks), at most one blank line between blocks, files end with a single newline, ATX headings and column-0 fences/tables/admonitions sit next to a blank line. Do not hand-edit `docs/generated/shell/reference.md` - `docs/generate_shell_docs.py` collapses extra blanks.
 
 **Required page chrome** (every `docs/*.md` / `docs/*.mdx` page, including `docs/learn/`):
 
@@ -355,30 +355,30 @@ Readers **scan**. Prefer inverted pyramid: outcome and commands first, theory an
 2. **What's on this page** (bullet list)
 3. **What this enables** (bullet list)
 
-Author those two lists as **bold + bullets** in source. The Fumadocs remark plugin (and hermetic `docs/page_brief.py`) wraps the first pair after the page `h1` into `.ez-page-brief`: a two-column scan card (stacked under `44.99em`). Titles stay `<p>`, not headings, so they do not enter the TOC. Do not rewrite pages as a fence, admonition, or card grid. Trailing `**Who this is for:**` stays outside the card. Quote YAML scalars that contain a colon (`description: "US-safe …: …"`).
+Author those two lists as **bold + bullets** in source. The Fumadocs remark plugin (and hermetic `docs/page_brief.py`) wraps the first pair after the page `h1` into `.ez-page-brief`: a two-column scan card (stacked under `44.99em`). Titles stay `<p>`, not headings, so they do not enter the TOC. Do not rewrite pages as a fence, admonition, or card grid. Trailing `**Who this is for:**` stays outside the card. Quote YAML scalars that contain a colon (`description: "US-safe ...: ..."`).
 
-**Nav (Diátaxis-shaped, task tabs):** Learn (explanation + [glossary](glossary.md)) → Start (tutorial) → Create (how-to) → Operate (how-to + reference) → Contribute. Do not mix a command catalog into Getting Started (`manage-cli.md`) or a workflow spreadsheet into the playbook (`studio-workflows.md`).
+**Nav (Diátaxis-shaped, task tabs):** Learn (explanation + [glossary](glossary.md)) -> Start (tutorial) -> Create (how-to) -> Operate (how-to + reference) -> Contribute. Do not mix a command catalog into Getting Started (`manage-cli.md`) or a workflow spreadsheet into the playbook (`studio-workflows.md`).
 
 **Glossary (definition modal):**
 
-- Source of truth: `includes/glossary.json` (JSON, not YAML — CI pytest does not install PyYAML)
+- Source of truth: `includes/glossary.json` (JSON, not YAML - CI pytest does not install PyYAML)
 - Unique `id` (`[a-z0-9-]+`) and unique case-insensitive `aliases`
 - `short` is one line (CSS hover bubble via `data-short` / `data-category`, dialog body, and `title=` fallback); `long` is markdown on [glossary.md](glossary.md)
 - First occurrence per term **per page**; skip `code` / `pre` / headings / links / the glossary page itself
 - `docs/glossary.py` wraps HTML for hermetic tests; `docs-site/lib/remark-glossary.ts` + `EzTerm` open a native `<dialog>` with a category line
 - Do **not** enable Material `abbr` + snippets `auto_append` (hover-only, double-wraps)
 
-**Rich formatting patterns** (Fumadocs — see `docs-site/components/mdx-components.tsx`):
+**Rich formatting patterns** (Fumadocs - see `docs-site/components/mdx-components.tsx`):
 
 | Pattern | Use for |
 | --- | --- |
-| Numbered steps | Operator sequences (`setup` → `start` → `stop`) |
-| Tables | Defaults, symptom → action, file basenames |
+| Numbered steps | Operator sequences (`setup` -> `start` -> `stop`) |
+| Tables | Defaults, symptom -> action, file basenames |
 | `<Callout type="info\|warning\|error">` | Side notes that must not break narrative flow |
-| `<details>` | Advanced, optional, “how it works”, long diagrams |
+| `<details>` | Advanced, optional, "how it works", long diagrams |
 | `<Tabs>` / `<Tab>` | Mutually exclusive paths (interactive vs non-interactive; image vs video) |
 | Task lists `- [ ]` | Prerequisites the operator can check off |
-| Mermaid | Architecture / decision trees — **after** actionable commands when the reader’s job is to run something |
+| Mermaid | Architecture / decision trees - **after** actionable commands when the reader's job is to run something |
 | Page brief (`.ez-page-brief`) | Required What's on this page / What this enables lists, rendered as a two-column scan card |
 | Bold first phrase in list items | Scan anchors |
 
@@ -386,9 +386,9 @@ Generated `docs/generated/**/*.md` may still use `!!! warning`; `remarkAdmonitio
 
 **Getting Started** is the primary operator path: keep the happy path short; park image-layer, cold-start, and lab-internals content in collapsible blocks.
 
-**Session variables:** operator command fences **and inline `code`** should reuse `SPARK_HOST`, `SPARK_USER`, `MODELS_DIR`, `COMFY_OUTPUT_DIR`, `COMFY_PORT`, `DOWNLOAD_LIMIT` (defaults from `.env.example`) so blocks are paste-and-run. Do not hardcode `<spark-ip>`. `docs-site/lib/command-vars.ts` substitutes `${VAR}` and `${VAR:-default}` at runtime from `localStorage` (`ez-comfy.cmdvars`) and renders each known token as an editable `.ez-var` chip. Token split lives in `docs/commands.py` (`split_var_template`) — keep the TypeScript regex in sync.
+**Session variables:** operator command fences **and inline `code`** should reuse `SPARK_HOST`, `SPARK_USER`, `MODELS_DIR`, `COMFY_OUTPUT_DIR`, `COMFY_PORT`, `DOWNLOAD_LIMIT` (defaults from `.env.example`) so blocks are paste-and-run. Do not hardcode `<spark-ip>`. `docs-site/lib/command-vars.ts` substitutes `${VAR}` and `${VAR:-default}` at runtime from `localStorage` (`ez-comfy.cmdvars`) and renders each known token as an editable `.ez-var` chip. Token split lives in `docs/commands.py` (`split_var_template`) - keep the TypeScript regex in sync.
 
-**Interactive commands (`ezcmd`):** flagged download examples use `<EzCommand id="…" />` on authored MDX, or a fenced `ezcmd` block whose body is `id: <recipe>` matching `includes/command-builder.json` (generated `.md` still uses the fence). Recipes and substitution live in `docs/commands.py` — keep `command-vars.ts` aligned with `substitute_vars` / `render_command`. `--tier` is a per-utility **pack id**; document it on [Download tiers](download-tiers.md), not as a global quality flag.
+**Interactive commands (`ezcmd`):** flagged download examples use `<EzCommand id="..." />` on authored MDX, or a fenced `ezcmd` block whose body is `id: <recipe>` matching `includes/command-builder.json` (generated `.md` still uses the fence). Recipes and substitution live in `docs/commands.py` - keep `command-vars.ts` aligned with `substitute_vars` / `render_command`. `--tier` is a per-utility **pack id**; document it on [Download tiers](download-tiers.md), not as a global quality flag.
 
 **Your Spark panel:** injected by command-vars into the article (not the site header). Do not add `display: none` to `docs-site/app/global.css` (theme tests). Collapse with `<details>` / the `hidden` attribute.
 

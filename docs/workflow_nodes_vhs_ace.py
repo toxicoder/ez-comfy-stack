@@ -56,7 +56,7 @@ def vhs_ace_nodes() -> dict[str, Any]:
                 _w("lyrics", index=1, desc="Sectioned lyrics or [inst] cues.", gen="Non-empty lines under a section are sung. Instrumental graphs must keep cues inside [brackets]."),
                 _w("seed", index=2, typ="INT", desc="ACE encoder seed (audio-codes LLM).", gen="Independent from KSampler seed. Lab locks it with the take."),
                 _w("control_after_generate", index=3, typ="COMBO", rng="fixed", desc="Seed control.", gen="fixed on every lab take.", choices=_SEED_CONTROL),
-                _w("bpm", index=4, typ="INT", rng="10–300", desc="Tempo written into the codes.", gen="Must match the tags' BPM. Mismatch makes the vocal drift the grid."),
+                _w("bpm", index=4, typ="INT", rng="10-300", desc="Tempo written into the codes.", gen="Must match the tags' BPM. Mismatch makes the vocal drift the grid."),
                 _w("duration", index=5, typ="FLOAT", desc="Seconds (duplicated on the latent).", gen="Keep in lockstep with EmptyAceStep1.5LatentAudio / Primitive."),
                 _w("timesignature", index=6, typ="COMBO", rng="4", desc="Beats per bar.", gen="Rap Apps stay 4. Album takes may use 2, 3, or 6 when the bed is not a dance grid.", choices=[("2", "2/4."), ("3", "3/4."), ("4", "Lab 4/4."), ("6", "6/8.")]),
                 _w("language", index=7, typ="COMBO", rng="en / unknown", desc="Lyric language.", gen="en for sung English. unknown for instrumental (do not leave en on a no-vocal take).", choices_from="ace_language"),

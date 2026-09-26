@@ -18,12 +18,12 @@ tags: [models, huggingface, cache, klein, wan, ltx]
 
 - **Downloading Klein 4B, Wan 2.2, and LTX-2.5 weights once** and reusing them across stacks
 - **Keeping weights** off the GHCR image (`us-safe-studio`)
-- **Checking the tree** without network access — including **Check models** on every lab App (Queue does not run that node)
+- **Checking the tree** without network access - including **Check models** on every lab App (Queue does not run that node)
 
 **Who this is for:** operators setting `MODELS_DIR` before `download-models`.
 
 <Callout type="info" title="Operator path">
-  Most operators only need: set `MODELS_DIR` → `download-models` → confirm basenames. Layer pins, gated tokens, and multi-stack sharing are linked below.
+  Most operators only need: set `MODELS_DIR` -> `download-models` -> confirm basenames. Layer pins, gated tokens, and multi-stack sharing are linked below.
 </Callout>
 <Cards>
   <Card title="Gated models">
@@ -74,8 +74,8 @@ tags: [models, huggingface, cache, klein, wan, ltx]
 | Generated PNG/MP4/audio | `${COMFY_OUTPUT_DIR:-/mnt/comfy-output}` | `/outputs` (`COMFY_OUTPUT_DIR=/outputs` in the container) | persist |
 | LoadImage inputs | `${COMFY_OUTPUT_DIR}/input` | `/inputs` | persist |
 | Comfy `user/` (sidebar, history) | `${COMFY_OUTPUT_DIR}/comfy-user` | `/comfy-state/ComfyUI/user` (`--user-directory`) | persist |
-| Live lab graphs | `…/comfy-user/default/workflows/_lab/` | same | **overwrite** from repo `workflows/_lab/` |
-| Live operator graphs | `…/comfy-user/default/workflows/_user/` | same | **never overwrite** |
+| Live lab graphs | `.../comfy-user/default/workflows/_lab/` | same | **overwrite** from repo `workflows/_lab/` |
+| Live operator graphs | `.../comfy-user/default/workflows/_user/` | same | **never overwrite** |
 | Operator JSON saved under `_lab/` | same tree | same | **rescue** extras into `_user/` and explicit in-place Saves into `_user/_rescued/`, then lab overwrite. Catalog restamps do **not** clone `_lab` |
 | Other files under live workflows | same tree | same | **never touch** |
 | Lab custom nodes `ez_*` | git `custom_nodes/` | `$COMFY_HOME/custom_nodes/ez_*` | overwrite |
@@ -96,7 +96,7 @@ Override in `.env` if needed. Prefer a large, durable disk on the Spark.
 
 ### Permissions
 
-`doctor` requires `MODELS_DIR` to be **writable by the current user** (check only; no sudo). Nested `${MODELS_DIR}/comfy` can still be root-owned after a container start — that is a **warning**, not a hard doctor failure.
+`doctor` requires `MODELS_DIR` to be **writable by the current user** (check only; no sudo). Nested `${MODELS_DIR}/comfy` can still be root-owned after a container start - that is a **warning**, not a hard doctor failure.
 
 `setup`, `download-models`, and `start` **sudo-heal** `${MODELS_DIR}/comfy` and each layout subdir (and the dest dir of each relative symlink) when they are not writable. They do **not** recurse `chown` over HF snapshots under `MODELS_DIR`. Do not prefix `download-models` with `sudo` (download-limit uses sudo internally; `hf` must stay on the login user's PATH).
 
@@ -124,9 +124,9 @@ Override in `.env` if needed. Prefer a large, durable disk on the Spark.
 
 ### Output layout permissions
 
-`doctor` requires `${COMFY_OUTPUT_DIR}` (default `/mnt/comfy-output`) to be **writable by the current user** (check only; no sudo). Nested `comfy-user/` (and `_user/_rescued`) can still be root-owned after a container start — that is a **warning**, not a hard doctor failure.
+`doctor` requires `${COMFY_OUTPUT_DIR}` (default `/mnt/comfy-output`) to be **writable by the current user** (check only; no sudo). Nested `comfy-user/` (and `_user/_rescued`) can still be root-owned after a container start - that is a **warning**, not a hard doctor failure.
 
-`setup` and `start` **sudo-heal** each output layout dir (`input/`, `custom-nodes-user/`, `comfy-user/…/_user/_rescued`) when they are not writable. They do **not** recurse `chown` over generated PNG/MP4 or operator JSON.
+`setup` and `start` **sudo-heal** each output layout dir (`input/`, `custom-nodes-user/`, `comfy-user/.../_user/_rescued`) when they are not writable. They do **not** recurse `chown` over generated PNG/MP4 or operator JSON.
 
 <Tabs groupId="preferred-setup-start-manual-last-resort" items={["Preferred (setup / start)", "Manual last resort"]} persist>
   <Tab value="Preferred (setup / start)">
@@ -169,7 +169,7 @@ ${MODELS_DIR}/
   hub/                  # HF cache (optional)
 ```
 
-Host-wide leftovers (HF hub, Docker layers, Ollama, other inference backends) are **not** `reap-models` — use [disk-wizard](disk-wizard.md) (`--plan` first). When the default pack moves (LTX 2.3 → 2.5 already happened), **reap** the old tree — do not wait for disk-full:
+Host-wide leftovers (HF hub, Docker layers, Ollama, other inference backends) are **not** `reap-models` - use [disk-wizard](disk-wizard.md) (`--plan` first). When the default pack moves (LTX 2.3 -> 2.5 already happened), **reap** the old tree - do not wait for disk-full:
 
 ```bash
 ./scripts/manage.sh models-status
@@ -180,7 +180,7 @@ Host-wide leftovers (HF hub, Docker layers, Ollama, other inference backends) ar
 
 `manage.sh cleanup` is **volume-only** (named volume `comfy-state`). It does **not** delete weights. `reap-models --plan` is the default; `--apply` requires `--yes`. Shared files (`flux2-vae`, ACE-Step AIO) stay in the keep-set so `--drop-pack` cannot eat them.
 
-`download-models` links weights into `comfy/*` with **relative** symlinks (e.g. `../../Comfy-Org__flux2-dev_vae/split_files/vae/flux2-vae.safetensors`). That way the same tree resolves on the host (`MODELS_DIR=/mnt/models`) and inside the container (bind-mounted at `/models`). Absolute `/mnt/models/…` file links look fine on the host but break Comfy with “exists but doesn't link anywhere”.
+`download-models` links weights into `comfy/*` with **relative** symlinks (e.g. `../../Comfy-Org__flux2-dev_vae/split_files/vae/flux2-vae.safetensors`). That way the same tree resolves on the host (`MODELS_DIR=/mnt/models`) and inside the container (bind-mounted at `/models`). Absolute `/mnt/models/...` file links look fine on the host but break Comfy with "exists but doesn't link anywhere".
 
 This matches the lab hostPath pattern so K8s and Docker demos can share weights.
 
@@ -194,14 +194,14 @@ flowchart TB
   Root --> Ltx["Lightricks__LTX-2.5_2.5"]
   Root --> Llm["unsloth__Qwen3-4B-Instruct-2507-GGUF_llm"]
   Root --> Comfy["comfy/"]
-  Root --> Hub["hub/ · optional HF cache"]
-  Comfy --> DM["diffusion_models/ · symlinks"]
+  Root --> Hub["hub/ - optional HF cache"]
+  Comfy --> DM["diffusion_models/ - symlinks"]
   Comfy --> TEd["text_encoders/"]
   Comfy --> VAEd["vae/"]
   Comfy --> LlmDir["llm/"]
-  Comfy --> Onnx["onnx/ · opt-in Kokoro"]
-  Comfy --> Tts["tts/ · opt-in voices"]
-  Comfy --> Ckpt["checkpoints/ · opt-in ACE-Step AIO"]
+  Comfy --> Onnx["onnx/ - opt-in Kokoro"]
+  Comfy --> Tts["tts/ - opt-in voices"]
+  Comfy --> Ckpt["checkpoints/ - opt-in ACE-Step AIO"]
 ```
 
 ---
@@ -233,4 +233,4 @@ Every lab App also has an isolated **Check models** node (and an occupancy-chip 
 
 ## Disk headroom
 
-`manage.sh doctor` / `start` require free disk ≥ `MIN_DISK_FREE_GIB` (default 40).
+`manage.sh doctor` / `start` require free disk >= `MIN_DISK_FREE_GIB` (default 40).

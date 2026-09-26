@@ -4,7 +4,7 @@ Free Commercial Use / ultra / max).
 Python is the source of truth. The frontend JS mirrors these constants.
 Overlays never change width, height, frames, or length. Named qualities may
 swap UNET, CLIP, and VAE when the files are present. ``custom`` is a freeze.
-``Free Commercial Use (<$10M)`` is Apache Klein 4B + LTX-2.5 only — never
+``Free Commercial Use (<$10M)`` is Apache Klein 4B + LTX-2.5 only - never
 Klein 9B or FLUX.2-dev. Wan / audio / trellis are no-ops for that choice.
 """
 
@@ -33,7 +33,7 @@ QUALITY_CHOICES: tuple[str, ...] = (
     QUALITY_ULTRA,
     QUALITY_MAX,
 )
-# casefold(widget value) → canonical QUALITY_CHOICES entry (incl. alias).
+# casefold(widget value) -> canonical QUALITY_CHOICES entry (incl. alias).
 _QUALITY_NORMALIZE: dict[str, str] = {
     choice.casefold(): choice for choice in QUALITY_CHOICES
 }
@@ -301,7 +301,7 @@ def resolve_overlay(
     """Return the overlay for one sampler + loader set.
 
     Args:
-        occupancy: extra.lab_app_mode.occupancy (klein, wan, ltx, …).
+        occupancy: extra.lab_app_mode.occupancy (klein, wan, ltx, ...).
         quality: quality id.
         authored_steps: Current KSampler steps.
         authored_cfg: Current KSampler CFG.

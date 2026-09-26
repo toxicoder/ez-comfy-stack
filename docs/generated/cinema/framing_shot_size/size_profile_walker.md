@@ -1,6 +1,6 @@
 ---
 title: "Profile Walker"
-description: "Cinema Rack illustration — Profile Walker."
+description: "Cinema Rack illustration - Profile Walker."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

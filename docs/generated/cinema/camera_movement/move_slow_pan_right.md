@@ -1,6 +1,6 @@
 ---
 title: "Slow pan right"
-description: "Cinema Rack illustration — Slow pan right."
+description: "Cinema Rack illustration - Slow pan right."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -1313,7 +1313,7 @@ def main() -> None:
         "klein_text_swap": klein_text_swap(),
     }
     # Remaining catalogs are filled by the rest of this module via import-time
-    # helpers defined below main in the second half — keep a single dump loop.
+    # helpers defined below main in the second half - keep a single dump loop.
     from _sample_catalog_rest import rest_catalogs  # noqa: E402
 
     catalogs.update(rest_catalogs())

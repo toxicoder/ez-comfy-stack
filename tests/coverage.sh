@@ -5,9 +5,9 @@
 # Enforce project coverage gates for CI (`make coverage`) and local pre-merge.
 #
 # Gates:
-#   1. Python — pytest-cov on all first-party production packages with --cov-fail-under=100
-#   2. Pyright (Pylance) + mypy — first-party Python typecheck (tests/typecheck.sh)
-#   3. Shell function inventory — every function under scripts/ and docker/**/*.sh
+#   1. Python - pytest-cov on all first-party production packages with --cov-fail-under=100
+#   2. Pyright (Pylance) + mypy - first-party Python typecheck (tests/typecheck.sh)
+#   3. Shell function inventory - every function under scripts/ and docker/**/*.sh
 #      must be named under tests/ (strict; production-only refs do not count)
 #   4. Full BATS suite
 #   5. Optional kcov when available (non-fatal on hosts without kcov)
@@ -58,7 +58,7 @@ main() {
     bats tests/bats || FAIL=1
   fi
 
-  # Optional kcov — never fail the gate (CI/mac may lack paths kcov expects)
+  # Optional kcov - never fail the gate (CI/mac may lack paths kcov expects)
   if command -v kcov >/dev/null 2>&1; then
     echo "=== kcov line coverage (optional; non-fatal) ==="
     rm -rf coverage/kcov

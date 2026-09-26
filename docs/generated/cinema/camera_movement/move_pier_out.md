@@ -1,6 +1,6 @@
 ---
 title: "Pier dolly out"
-description: "Cinema Rack illustration — Pier dolly out."
+description: "Cinema Rack illustration - Pier dolly out."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

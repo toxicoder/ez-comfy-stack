@@ -8,7 +8,7 @@ from .align import SAMPLE_RATE
 from .audio import audio_from_pcm, empty_audio, read_wav
 from .jobstore import dub_dir, record_ingest_failure, sanitize_slug
 from .pipeline import (
-    DISCLOSURE_TEXT,  # noqa: F401 — re-exported for tests and graph builder
+    DISCLOSURE_TEXT,  # noqa: F401 - re-exported for tests and graph builder
     ENGINE_CHATTERBOX,
     ENGINES,
     LANG_CODES,
@@ -167,7 +167,7 @@ class EZDubIngest:
                 "ui": {"text": (str(exc),), "passthrough": ("rights refused",)},
                 "result": (slug, empty_audio()),
             }
-        except Exception as exc:  # noqa: BLE001 — fail-soft
+        except Exception as exc:  # noqa: BLE001 - fail-soft
             record_ingest_failure(dest, str(exc), str(exc))
             return {
                 "ui": {"text": (str(exc),), "passthrough": (str(exc),)},
@@ -338,7 +338,7 @@ class EZDubRender:
     DESCRIPTION = (
         "Zero-shot clone (Chatterbox Multilingual V3 or Qwen3-TTS) with "
         "PerTh on. Cross-lang CFG auto is 0.3. Default speaking speed 1.0 uses "
-        "the 1.25× pitch-preserving lock. Writes duration-locked YT WAV + "
+        "the 1.25x pitch-preserving lock. Writes duration-locked YT WAV + "
         "SRT + disclosure sidecars. Spoken bumper (off by default) overlays "
         "the mix wav only. Off: mix starts on speech; YT wav stays source-timed."
     )
@@ -361,7 +361,7 @@ class EZDubRender:
             engine: Clone engine id.
             keep_bed: Keep source in non-speech gaps.
             spoken_disclosure: Overlay a localized bumper on the mix wav.
-            speed: Fit ceiling. ``1.0`` uses the lab 1.25× lock.
+            speed: Fit ceiling. ``1.0`` uses the lab 1.25x lock.
             cfg_weight: Chatterbox CFG; ``< 0`` means auto.
             exaggeration: Chatterbox exaggeration.
             job_id: Optional ingest slug.
@@ -371,7 +371,7 @@ class EZDubRender:
         """
         payload = parse_payload(script)
         if payload.get("stage") == STAGE_ANALYZE:
-            return _pack_audio([], SAMPLE_RATE, "analyze only — set Stage to render")
+            return _pack_audio([], SAMPLE_RATE, "analyze only - set Stage to render")
         slug = sanitize_slug(job_id or "episode")
         dest = dub_dir(slug)
         wav = dest / "source.wav"

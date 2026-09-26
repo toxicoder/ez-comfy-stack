@@ -175,7 +175,7 @@ def _constant_block_starts(
         body: Module body.
 
     Returns:
-        Index → block-start index.
+        Index -> block-start index.
     """
     starts: dict[int, int] = {}
     block_start: int | None = None

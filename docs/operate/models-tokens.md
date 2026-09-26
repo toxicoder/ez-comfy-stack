@@ -28,7 +28,7 @@ tags: [models, huggingface, ltx, token, gated]
 ```bash
 # .env
 HF_TOKEN=hf_...
-# Browser, same account: https://huggingface.co/Lightricks/LTX-2.5 → Agree
+# Browser, same account: https://huggingface.co/Lightricks/LTX-2.5 -> Agree
 # or: hf auth login
 hf auth whoami
 ```

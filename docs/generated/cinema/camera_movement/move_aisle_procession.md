@@ -1,6 +1,6 @@
 ---
 title: "Aisle procession"
-description: "Cinema Rack illustration — Aisle procession."
+description: "Cinema Rack illustration - Aisle procession."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

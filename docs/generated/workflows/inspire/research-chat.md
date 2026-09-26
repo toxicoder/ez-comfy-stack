@@ -29,10 +29,10 @@ Occupancy **llm**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 ```text
 ## inspire/research-chat
 
-Creative research desk — chat LLM with web search and sequential research
+Creative research desk - chat LLM with web search and sequential research
 subagents. No UNET, no VAE, no KSampler.
 
-Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
+Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
   ./scripts/manage.sh occupancy enter llm-desk --yes
 
@@ -79,9 +79,9 @@ flowchart LR
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
 
-### `Note` — Note
+### `Note` - Note
 
 On-canvas operator note (not executed).
 
@@ -97,15 +97,15 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## inspire/research-chat Creative research desk — chat LLM with web search and sequential research subagents. No UNET, no VAE, no KSampler. Occupancy: llm — graph label (not a CLI mode). Prefer GPU 3…`
+**This graph:** `## inspire/research-chat Creative research desk - chat LLM with web search and sequential research subagents. No UNET, no VAE, no KSampler. Occupancy: llm - graph label (not a CLI mode). Prefer GPU 3...`
 
 ```text
 ## inspire/research-chat
 
-Creative research desk — chat LLM with web search and sequential research
+Creative research desk - chat LLM with web search and sequential research
 subagents. No UNET, no VAE, no KSampler.
 
-Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
+Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
   ./scripts/manage.sh occupancy enter llm-desk --yes
 
@@ -123,7 +123,7 @@ pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 ```
 
-### `EZCreativeResearch` — Creative research
+### `EZCreativeResearch` - Creative research
 
 Creative-process chat with optional web search and sequential research subagents. No UNET.
 
@@ -188,7 +188,7 @@ Allow web search.
 
 #### `subagents`
 
-Type `INT`. Range / default: 1–3, lab 2.
+Type `INT`. Range / default: 1-3, lab 2.
 
 How many research subagents.
 
@@ -214,7 +214,7 @@ Catalog id.
 
 **This graph:** `inspire/research-chat`
 
-### `EZQuality` — Quality
+### `EZQuality` - Quality
 
 Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
@@ -249,7 +249,7 @@ custom freezes last overlay; lab restores graph defaults.
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
-### `EZModelCheck` — Check models
+### `EZModelCheck` - Check models
 
 Manual disk check for occupancy + Quality weights. Queue does not run this node.
 

@@ -1,6 +1,6 @@
 ---
 title: "Interior Master"
-description: "Cinema Rack illustration — Interior Master."
+description: "Cinema Rack illustration - Interior Master."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

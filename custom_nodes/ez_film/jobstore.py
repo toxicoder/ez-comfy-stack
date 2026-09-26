@@ -29,7 +29,7 @@ PINS_REL = Path("comfy") / ".lab-model-pins.json"
 
 
 def shot_id(beat: int, shot: int, *, total: int = SHOT_COUNT) -> str:
-    """Map YAML beat/shot (1-based) to ``01``…``total``.
+    """Map YAML beat/shot (1-based) to ``01``...``total``.
 
     Args:
         beat: 1-based beat index.
@@ -74,7 +74,7 @@ def empty_shot(sid: str) -> dict[str, Any]:
     """One pending shot row.
 
     Args:
-        sid: Shot id ``01``…``18``.
+        sid: Shot id ``01``...``18``.
 
     Returns:
         Pending shot dict.
@@ -169,7 +169,7 @@ def get_shot(state: dict[str, Any], sid: str) -> dict[str, Any]:
 
     Args:
         state: Loaded jobstore state.
-        sid: Shot id ``01``…``18``.
+        sid: Shot id ``01``...``18``.
 
     Returns:
         Shot row dict.
@@ -198,7 +198,7 @@ def probe_duration_s(path: Path) -> float | None:
 
 
 def duration_ok(path: Path, expected: float = DURATION_S, tol: float = DURATION_TOL) -> bool:
-    """True when the MP4 exists and duration is expected ± tol.
+    """True when the MP4 exists and duration is expected +/- tol.
 
     Args:
         path: MP4 path.
@@ -359,7 +359,7 @@ def promote_take(dest: Path, sid: str, take: int) -> Path:
 
 
 def should_skip_shot(dest: Path, state: dict[str, Any], sid: str) -> bool:
-    """Idempotent skip: status ok and duration 5.00±0.05.
+    """Idempotent skip: status ok and duration 5.00 +/- 0.05.
 
     Args:
         dest: ``films/<slug>`` jobstore directory.

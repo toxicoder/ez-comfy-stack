@@ -1,6 +1,6 @@
 ---
 title: "Hands-forward body rig"
-description: "Cinema Rack illustration — Hands-forward body rig."
+description: "Cinema Rack illustration - Hands-forward body rig."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

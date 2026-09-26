@@ -111,7 +111,7 @@ def cluster_embeddings(
         max_speakers: 0 means cap at 8.
         threshold: Below this, start a new speaker (until the cap).
     Returns:
-        Speaker ids ``spk00``… aligned with ``vectors``.
+        Speaker ids ``spk00``... aligned with ``vectors``.
     """
     labels: list[str] = []
     centroids: list[tuple[str, list[float], int]] = []
@@ -1372,7 +1372,7 @@ def _one_pole_alpha(rate: int, cutoff_hz: float) -> float:
 
     Args:
         rate: Sample rate.
-        cutoff_hz: −3 dB frequency.
+        cutoff_hz: -3 dB frequency.
 
     Returns:
         Coefficient in ``(0, 1]``.
@@ -1385,7 +1385,7 @@ def _one_pole_alpha(rate: int, cutoff_hz: float) -> float:
 
 
 def speech_band_ratio(pcm: list[float], rate: int) -> float:
-    """Fraction of RMS in the 300–3400 Hz speech band (1-pole HP then LP).
+    """Fraction of RMS in the 300-3400 Hz speech band (1-pole HP then LP).
 
     Vocoder moans sit below 300 Hz. Spoken formants and sibilants do not.
 
@@ -1517,7 +1517,7 @@ def is_speech_like(pcm: list[float], rate: int) -> bool:
     """False for silence, noise, a steady tone, or a PerTh/Chatterbox drone.
 
     Also rejects an F0-glide vocoder moan (whale): energy below the
-    300–3400 Hz speech band, or almost every frame a near-pure tone.
+    300-3400 Hz speech band, or almost every frame a near-pure tone.
 
     Args:
         pcm: Mono PCM.
@@ -1550,7 +1550,7 @@ def is_speech_like(pcm: list[float], rate: int) -> bool:
 def crop_hallucination_tail(
     pcm: list[float], rate: int, text: str
 ) -> list[float]:
-    """Onset-crop hush, then keep a prefix up to 1.6× expected spoken duration.
+    """Onset-crop hush, then keep a prefix up to 1.6x expected spoken duration.
 
     Args:
         pcm: Clone PCM.

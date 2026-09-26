@@ -600,7 +600,7 @@ def parse_size_token(token: str) -> tuple[int, int] | None:
     Returns:
         ``(width, height)`` or None when the token is not ``WxH``.
     """
-    text = token.lower().replace("×", "x").strip()
+    text = token.lower().replace("x", "x").strip()
     if "x" not in text:
         return None
     left, right = text.split("x", 1)

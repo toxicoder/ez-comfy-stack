@@ -1,6 +1,6 @@
 ---
 title: "Dock strafe"
-description: "Cinema Rack illustration — Dock strafe."
+description: "Cinema Rack illustration - Dock strafe."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

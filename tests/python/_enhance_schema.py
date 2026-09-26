@@ -90,7 +90,7 @@ def enhance_widget_index(ntype: str, name: str) -> int | None:
 
 
 def enhance_mode(node: Mapping[str, object]) -> str:
-    """Return the enhance node's mode widget (t2i / i2v / vocal / …).
+    """Return the enhance node's mode widget (t2i / i2v / vocal / ...).
 
     Args:
         node: Serialized Comfy node.

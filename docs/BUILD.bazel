@@ -1,4 +1,4 @@
-"""Package purpose: Documentation content package — markdown/MDX pages, generators, and the Bazel entry points that drive the Fumadocs site in docs-site/.
+"""Package purpose: Documentation content package - markdown/MDX pages, generators, and the Bazel entry points that drive the Fumadocs site in docs-site/.
 
 The site itself is the Next.js app in `docs-site/` (see that package for the npm runners).
 This package owns the *content*: the pages under `docs/`, the generators that fill

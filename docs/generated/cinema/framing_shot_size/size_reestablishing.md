@@ -1,6 +1,6 @@
 ---
 title: "Re-establishing"
-description: "Cinema Rack illustration — Re-establishing."
+description: "Cinema Rack illustration - Re-establishing."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-
