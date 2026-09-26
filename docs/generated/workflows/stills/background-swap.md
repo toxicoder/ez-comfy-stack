@@ -1,6 +1,6 @@
 ---
 title: "stills/background-swap"
-description: "Klein 4B background swap. LoadImage source still. Empty Flux.2 canvas. Photo reference for place swaps. Cubic block world uses a block study and pastes people"
+description: "Klein 4B background swap. LoadImage source still. Empty Flux.2 canvas. Photo reference for place swaps. Cubic block world uses a people-erased block study and"
 tags: [workflows, generated, comfyui, stills]
 ---
 
@@ -33,12 +33,12 @@ Klein 4B **background swap**. Load a still. Pick a sample place or type a custom
 
 Other characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero.
 
-Do not Queue without a start image. Describe image (default on) captions the source so CLIP can name inventory; missing `download-llm --tier describe` fail-softs empty. Upscale (default none) is lanczos after decode.
+Do not Queue without a start image. Describe image (default on) captions the source so CLIP can name inventory on ordinary place swaps; Cubic block world skips the caption because the plate has no people. Missing `download-llm --tier describe` fail-softs empty. Upscale (default none) is lanczos after decode.
 
 The sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is the photo reference for ordinary place swaps. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
 Prompt enhance is on by default for bare place names (on-box Qwen3-4B-Instruct-2507). Named samples skip the rewriter so Cubic block world and the place recipes reach CLIP as written. Style is hidden — the source still owns the subject's look.
 
-**Cubic block world** does not edit the photograph in place. Klein sees a coarse block study of this photo (same camera and layout, cube faces) and rebuilds that study as a constructed block world. Detected people are pasted back from the source pixels (every person the mask catches; animals stay cubed). Other / background character toggles still apply to the other place samples. The person segmenter is BSD-3 DeepLabV3, optional, under `${MODELS_DIR}/comfy/ez-person/` (not part of `download-models`). Missing weights still save the block world; people stay cubed. Set `EZ_PERSON_MASK=off` to skip the paste. If the plate is only the flat study, set Quality **High** (Klein base if `download-image --tier base` is on disk).
+**Cubic block world** does not edit the photograph in place. The source people are erased from a coarse block study of this photo (same camera and layout, cube faces), so Klein rebuilds an empty block world — no figures, no silhouettes, no person-shaped blocks. The people from the photo are pasted back at full resolution from the original still (every person the mask catches; animals stay cubed), dilated ~2 px and feathered ~6 px so each keeps its full silhouette with soft edges. Other / background character toggles still apply to the other place samples. The person segmenter is BSD-3 DeepLabV3, optional, under `${MODELS_DIR}/comfy/ez-person/` (not part of `download-models`). Missing weights leave the study unchanged and skip the paste; people stay cubed. Set `EZ_PERSON_MASK=off` to skip the paste. If the plate is only the flat study, set Quality **High** (Klein base if `download-image --tier base` is on disk).
 ```
 
 ## How to Queue
@@ -68,44 +68,44 @@ flowchart LR
   N14["Quality"]
   N18["Upscale still"]
   N19["Describe image"]
-  N20["Encode snapped source"]
-  N21["Cubic or photo reference"]
-  N22["Snap to Klein grid"]
-  N23["Match source size"]
-  N24["Background cast"]
-  N25["Check models"]
-  N26["Empty Klein canvas"]
-  N27["Reinsert people"]
+  N20["Check models"]
+  N21["Encode snapped source"]
+  N22["Cubic or photo reference"]
+  N23["Snap to Klein grid"]
+  N24["Match source size"]
+  N25["Empty Klein canvas"]
+  N26["Reinsert people"]
+  N27["Background cast"]
   N1 --> N7
   N2 --> N4
   N2 --> N5
   N3 --> N8
-  N3 --> N20
   N3 --> N21
-  N4 --> N21
+  N3 --> N22
+  N4 --> N22
   N5 --> N7
   N7 --> N8
-  N8 --> N27
-  N11 --> N22
+  N8 --> N26
   N11 --> N23
+  N11 --> N24
+  N11 --> N26
   N11 --> N19
   N12 --> N4
   N12 --> N13
-  N12 --> N21
-  N12 --> N27
+  N12 --> N22
+  N12 --> N26
   N13 --> N5
   N18 --> N9
   N19 --> N12
-  N20 --> N21
-  N21 --> N7
-  N22 --> N20
-  N22 --> N26
-  N22 --> N21
-  N22 --> N27
-  N23 --> N18
-  N24 --> N12
-  N26 --> N7
-  N27 --> N23
+  N21 --> N22
+  N22 --> N7
+  N23 --> N21
+  N23 --> N25
+  N23 --> N22
+  N24 --> N18
+  N25 --> N7
+  N26 --> N24
+  N27 --> N12
 ```
 
 ## Nodes on this graph
@@ -127,14 +127,14 @@ flowchart LR
 | 14 | Quality | `EZQuality` | QUALITY |
 | 18 | Upscale still | `EZImageUpscale` | OUTPUT |
 | 19 | Describe image | `EZImageDescribe` | INPUT |
-| 20 | Encode snapped source | `VAEEncode` | SETTINGS |
-| 21 | Cubic or photo reference | `EZCubicCondition` | SETTINGS |
-| 22 | Snap to Klein grid | `EZSnapImage` | SETTINGS |
-| 23 | Match source size | `EZMatchImageSize` | SETTINGS |
-| 24 | Background cast | `EZBackgroundCast` | SETTINGS |
-| 25 | Check models | `EZModelCheck` | QUALITY |
-| 26 | Empty Klein canvas | `EZEmptyFlux2FromImage` | SETTINGS |
-| 27 | Reinsert people | `EZReinsertPeople` | SETTINGS |
+| 20 | Check models | `EZModelCheck` | QUALITY |
+| 21 | Encode snapped source | `VAEEncode` | SETTINGS |
+| 22 | Cubic or photo reference | `EZCubicCondition` | SETTINGS |
+| 23 | Snap to Klein grid | `EZSnapImage` | SETTINGS |
+| 24 | Match source size | `EZMatchImageSize` | SETTINGS |
+| 25 | Empty Klein canvas | `EZEmptyFlux2FromImage` | SETTINGS |
+| 26 | Reinsert people | `EZReinsertPeople` | SETTINGS |
+| 27 | Background cast | `EZBackgroundCast` | SETTINGS |
 
 ## Node parameter reference
 
@@ -526,12 +526,12 @@ Klein 4B **background swap**. Load a still. Pick a sample place or type a custom
 
 Other characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero.
 
-Do not Queue without a start image. Describe image (default on) captions the source so CLIP can name inventory; missing `download-llm --tier describe` fail-softs empty. Upscale (default none) is lanczos after decode.
+Do not Queue without a start image. Describe image (default on) captions the source so CLIP can name inventory on ordinary place swaps; Cubic block world skips the caption because the plate has no people. Missing `download-llm --tier describe` fail-softs empty. Upscale (default none) is lanczos after decode.
 
 The sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is the photo reference for ordinary place swaps. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
 Prompt enhance is on by default for bare place names (on-box Qwen3-4B-Instruct-2507). Named samples skip the rewriter so Cubic block world and the place recipes reach CLIP as written. Style is hidden — the source still owns the subject's look.
 
-**Cubic block world** does not edit the photograph in place. Klein sees a coarse block study of this photo (same camera and layout, cube faces) and rebuilds that study as a constructed block world. Detected people are pasted back from the source pixels (every person the mask catches; animals stay cubed). Other / background character toggles still apply to the other place samples. The person segmenter is BSD-3 DeepLabV3, optional, under `${MODELS_DIR}/comfy/ez-person/` (not part of `download-models`). Missing weights still save the block world; people stay cubed. Set `EZ_PERSON_MASK=off` to skip the paste. If the plate is only the flat study, set Quality **High** (Klein base if `download-image --tier base` is on disk).
+**Cubic block world** does not edit the photograph in place. The source people are erased from a coarse block study of this photo (same camera and layout, cube faces), so Klein rebuilds an empty block world — no figures, no silhouettes, no person-shaped blocks. The people from the photo are pasted back at full resolution from the original still (every person the mask catches; animals stay cubed), dilated ~2 px and feathered ~6 px so each keeps its full silhouette with soft edges. Other / background character toggles still apply to the other place samples. The person segmenter is BSD-3 DeepLabV3, optional, under `${MODELS_DIR}/comfy/ez-person/` (not part of `download-models`). Missing weights leave the study unchanged and skip the paste; people stay cubed. Set `EZ_PERSON_MASK=off` to skip the paste. If the plate is only the flat study, set Quality **High** (Klein base if `download-image --tier base` is on disk).
 ```
 
 ### `LoadImage` — Load Image
@@ -1120,6 +1120,24 @@ Run the captioner.
 
 **This graph:** `true`
 
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph:** `Click Check models. Queue does not run this node.`
+
 ### `VAEEncode` — VAE Encode
 
 Encode pixels to a latent (Klein edit / clay).
@@ -1134,11 +1152,11 @@ No widgets. Sockets only.
 
 ### `EZCubicCondition` — Cubic or photo reference
 
-Attach the photo latent, or a block-study latent when the prompt rebuilds the place as cubes.
+Attach the photo latent, or a people-erased block-study latent when the prompt rebuilds the place as cubes.
 
 !!! warning "Lab notes"
 
-    stills/background-swap. Ordinary place swaps keep the encoded photo. Cubic block world encodes a coarse cube picture of that photo instead, so Klein is not locked to photoreal surfaces.
+    stills/background-swap. Ordinary place swaps keep the encoded photo. Cubic block world erases the source people from the coarse block study before VAE-encoding, so Klein is not locked to photoreal surfaces and is not primed to cube the people. Without person-segmentation weights the study stays unchanged (fail-soft).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1182,6 +1200,38 @@ Resize a still to another image's exact width and height.
 
 No widgets. Sockets only.
 
+### `EZEmptyFlux2FromImage` — Empty Flux.2 from image
+
+Allocate an empty Flux.2 latent matching a still's snapped width and height.
+
+!!! warning "Lab notes"
+
+    stills/background-swap uses this as KSampler.latent_image. The encoded source is a reference (photo, or a block study for Cubic block world), not the denoise start.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Snapped still. |
+| `LATENT` | out | `LATENT` | Empty Flux.2 noise canvas (÷16, 128 channels). |
+
+No widgets. Sockets only.
+
+### `EZReinsertPeople` — Reinsert people
+
+Paste detected people from the source photo onto a cubic rebuild.
+
+!!! warning "Lab notes"
+
+    stills/background-swap, between decode and match-to-source. Paste dilates the person mask ~2 px and feathers ~6 px, so people own their full silhouette and blend onto the plate. source is the full-resolution LoadImage still. Other prompts pass the plate through. Missing DeepLab weights fail soft (status `person mask missing`; people stay cubed).
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `plate` | in | `IMAGE` | Decoded still. |
+| `source` | in | `IMAGE` | Full-resolution source still from LoadImage. |
+| `prompt` | in | `STRING` | Enhance STRING. A link, not an App widget. |
+| `IMAGE` | out | `IMAGE` | Plate with people pasted when the prompt is a cube rebuild. |
+
+No widgets. Sockets only.
+
 ### `EZBackgroundCast` — Background cast
 
 Choose whether companions and extras count as background on Klein background Apps.
@@ -1213,53 +1263,3 @@ Treat extras as background.
 **How it affects generation:** On: extras, crowd, and distant figures are environment. Off: keep them as they appear.
 
 **This graph:** `true`
-
-### `EZModelCheck` — Check models
-
-Manual disk check for occupancy + Quality weights. Queue does not run this node.
-
-!!! warning "Lab notes"
-
-    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
-
-#### `status`
-
-Type `STRING`.
-
-Last check result.
-
-**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
-
-**This graph:** `Click Check models. Queue does not run this node.`
-
-### `EZEmptyFlux2FromImage` — Empty Flux.2 from image
-
-Allocate an empty Flux.2 latent matching a still's snapped width and height.
-
-!!! warning "Lab notes"
-
-    stills/background-swap uses this as KSampler.latent_image. The encoded source is a reference (photo, or a block study for Cubic block world), not the denoise start.
-
-| Socket | Dir | Type | What it carries |
-| --- | --- | --- | --- |
-| `image` | in | `IMAGE` | Snapped still. |
-| `LATENT` | out | `LATENT` | Empty Flux.2 noise canvas (÷16, 128 channels). |
-
-No widgets. Sockets only.
-
-### `EZReinsertPeople` — Reinsert people
-
-Paste detected people from the source photo onto a cubic rebuild.
-
-!!! warning "Lab notes"
-
-    stills/background-swap, between decode and match-to-source. Other prompts pass the plate through. Missing DeepLab weights fail soft (people stay cubed).
-
-| Socket | Dir | Type | What it carries |
-| --- | --- | --- | --- |
-| `plate` | in | `IMAGE` | Decoded still. |
-| `source` | in | `IMAGE` | Snapped photograph. |
-| `prompt` | in | `STRING` | Enhance STRING. A link, not an App widget. |
-| `IMAGE` | out | `IMAGE` | Plate with people pasted when the prompt is a cube rebuild. |
-
-No widgets. Sockets only.

@@ -1,15 +1,15 @@
 {
   "id": "background-edit",
-  "revision": 4,
+  "revision": 2,
   "last_node_id": 25,
-  "last_link_id": 43,
+  "last_link_id": 45,
   "nodes": [
     {
       "id": 1,
       "type": "UNETLoader",
       "pos": [
         40,
-        508
+        936
       ],
       "size": [
         360,
@@ -43,7 +43,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        662
+        1090
       ],
       "size": [
         360,
@@ -79,7 +79,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        840
+        1268
       ],
       "size": [
         360,
@@ -112,8 +112,8 @@
       "id": 4,
       "type": "CLIPTextEncode",
       "pos": [
-        816,
-        1000
+        856,
+        1428
       ],
       "size": [
         420,
@@ -159,8 +159,8 @@
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        816,
-        1724
+        856,
+        2152
       ],
       "size": [
         420,
@@ -206,8 +206,8 @@
       "id": 7,
       "type": "KSampler",
       "pos": [
-        1284,
-        1106
+        1324,
+        1406
       ],
       "size": [
         320,
@@ -266,8 +266,8 @@
       "id": 8,
       "type": "VAEDecode",
       "pos": [
-        1652,
-        508
+        1732,
+        2220
       ],
       "size": [
         240,
@@ -308,8 +308,8 @@
       "id": 9,
       "type": "SaveImage",
       "pos": [
-        1652,
-        778
+        1732,
+        2490
       ],
       "size": [
         280,
@@ -322,7 +322,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 41
+          "link": 43
         }
       ],
       "outputs": [],
@@ -363,7 +363,7 @@
       "type": "LoadImage",
       "pos": [
         448,
-        508
+        936
       ],
       "size": [
         320,
@@ -380,7 +380,7 @@
           "links": [
             36,
             40,
-            42
+            44
           ],
           "slot_index": 0
         },
@@ -404,8 +404,8 @@
       "id": 12,
       "type": "EZKleinPromptEnhance",
       "pos": [
-        816,
-        508
+        856,
+        936
       ],
       "size": [
         420,
@@ -431,7 +431,7 @@
         {
           "name": "background_cast",
           "type": "STRING",
-          "link": 43
+          "link": 45
         }
       ],
       "outputs": [
@@ -463,8 +463,8 @@
       "id": 13,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        816,
-        1232
+        856,
+        1660
       ],
       "size": [
         420,
@@ -535,8 +535,8 @@
       "id": 18,
       "type": "EZImageUpscale",
       "pos": [
-        1652,
-        626
+        1732,
+        2338
       ],
       "size": [
         280,
@@ -549,7 +549,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 22
+          "link": 42
         }
       ],
       "outputs": [
@@ -557,7 +557,7 @@
           "name": "image",
           "type": "IMAGE",
           "links": [
-            41
+            43
           ],
           "slot_index": 0
         },
@@ -581,7 +581,7 @@
       "type": "EZImageDescribe",
       "pos": [
         448,
-        894
+        1470
       ],
       "size": [
         280,
@@ -602,7 +602,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 42
+          "link": 44
         }
       ],
       "outputs": [
@@ -625,10 +625,34 @@
     },
     {
       "id": 20,
+      "type": "EZModelCheck",
+      "pos": [
+        1048,
+        80
+      ],
+      "size": [
+        320.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "EZModelCheck"
+      },
+      "widgets_values": [
+        "Click Check models. Queue does not run this node."
+      ],
+      "title": "Check models"
+    },
+    {
+      "id": 21,
       "type": "VAEEncode",
       "pos": [
-        1284,
-        802
+        1324,
+        1872
       ],
       "size": [
         240,
@@ -667,11 +691,11 @@
       "title": "Encode snapped source"
     },
     {
-      "id": 21,
+      "id": 22,
       "type": "ReferenceLatent",
       "pos": [
-        1284,
-        954
+        1440,
+        784
       ],
       "size": [
         280,
@@ -710,11 +734,11 @@
       "title": "Positive + source plate"
     },
     {
-      "id": 22,
+      "id": 23,
       "type": "EZSnapImage",
       "pos": [
-        1284,
-        670
+        1324,
+        1740
       ],
       "size": [
         240,
@@ -747,11 +771,11 @@
       "title": "Snap to Klein grid"
     },
     {
-      "id": 23,
+      "id": 24,
       "type": "EZMatchImageSize",
       "pos": [
-        1284,
-        1440
+        1324,
+        2024
       ],
       "size": [
         280,
@@ -777,7 +801,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            22
+            42
           ],
           "slot_index": 0
         }
@@ -789,18 +813,18 @@
       "title": "Match source size"
     },
     {
-      "id": 24,
+      "id": 25,
       "type": "EZBackgroundCast",
       "pos": [
-        1284,
-        508
+        1324,
+        936
       ],
       "size": [
         280,
         90
       ],
       "flags": {},
-      "order": 24,
+      "order": 25,
       "mode": 0,
       "inputs": [
         {
@@ -825,7 +849,7 @@
           "name": "cast",
           "type": "STRING",
           "links": [
-            43
+            45
           ],
           "slot_index": 0
         }
@@ -838,30 +862,6 @@
         true
       ],
       "title": "Background cast"
-    },
-    {
-      "id": 25,
-      "type": "EZModelCheck",
-      "pos": [
-        1048,
-        80
-      ],
-      "size": [
-        320.0,
-        140.0
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "properties": {
-        "Node name for S&R": "EZModelCheck"
-      },
-      "widgets_values": [
-        "Click Check models. Queue does not run this node."
-      ],
-      "title": "Check models"
     }
   ],
   "links": [
@@ -938,14 +938,6 @@
       "STRING"
     ],
     [
-      22,
-      23,
-      0,
-      18,
-      0,
-      "IMAGE"
-    ],
-    [
       25,
       19,
       0,
@@ -957,7 +949,7 @@
       32,
       3,
       0,
-      20,
+      21,
       1,
       "VAE"
     ],
@@ -965,21 +957,21 @@
       33,
       4,
       0,
-      21,
+      22,
       0,
       "CONDITIONING"
     ],
     [
       34,
-      20,
-      0,
       21,
+      0,
+      22,
       1,
       "LATENT"
     ],
     [
       35,
-      21,
+      22,
       0,
       7,
       1,
@@ -989,21 +981,21 @@
       36,
       11,
       0,
-      22,
+      23,
       0,
       "IMAGE"
     ],
     [
       37,
-      22,
+      23,
       0,
-      20,
+      21,
       0,
       "IMAGE"
     ],
     [
       38,
-      20,
+      21,
       0,
       7,
       3,
@@ -1013,7 +1005,7 @@
       39,
       8,
       0,
-      23,
+      24,
       0,
       "IMAGE"
     ],
@@ -1021,12 +1013,20 @@
       40,
       11,
       0,
-      23,
+      24,
       1,
       "IMAGE"
     ],
     [
-      41,
+      42,
+      24,
+      0,
+      18,
+      0,
+      "IMAGE"
+    ],
+    [
+      43,
       18,
       0,
       9,
@@ -1034,7 +1034,7 @@
       "IMAGE"
     ],
     [
-      42,
+      44,
       11,
       0,
       19,
@@ -1042,8 +1042,8 @@
       "IMAGE"
     ],
     [
-      43,
-      24,
+      45,
+      25,
       0,
       12,
       2,
@@ -1082,7 +1082,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        436,
+        864,
         400,
         506
       ],
@@ -1095,9 +1095,9 @@
       "title": "INPUT",
       "bounding": [
         428,
-        436,
+        864,
         360,
-        592
+        740
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1107,8 +1107,8 @@
       "id": 5,
       "title": "PROMPT",
       "bounding": [
-        796,
-        436,
+        836,
+        864,
         460,
         1492
       ],
@@ -1120,10 +1120,10 @@
       "id": 6,
       "title": "SETTINGS",
       "bounding": [
-        1264,
+        1304,
+        712,
         436,
-        360,
-        1128
+        1436
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1133,8 +1133,8 @@
       "id": 7,
       "title": "OUTPUT",
       "bounding": [
-        1632,
-        436,
+        1712,
+        2148,
         320,
         656
       ],
@@ -1206,7 +1206,7 @@
           }
         ],
         [
-          24,
+          25,
           "other_characters",
           {
             "description": "On: treat companions and group members as part of the background. Off: keep them locked with the hero.",
@@ -1214,7 +1214,7 @@
           }
         ],
         [
-          24,
+          25,
           "background_characters",
           {
             "description": "On: treat extras, crowd, and distant figures as part of the background. Off: keep them as they appear.",
@@ -1257,8 +1257,8 @@
           13,
           "enhance",
           {
-            "label": "Rewrite negative",
-            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs."
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs.",
+            "label": "Rewrite negative"
           }
         ],
         [

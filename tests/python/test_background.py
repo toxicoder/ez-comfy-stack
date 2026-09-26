@@ -98,6 +98,13 @@ def test_wrap_bare_place_and_passthrough_instructions() -> None:
     assert wrap_background_prompt(42, "background_swap").startswith(
         SWAP_BARE.format(place="42")
     )
+    bare_rebuild = RECONSTRUCT_BARE.format(place="voxel cubes")
+    assert "with its people removed" in bare_rebuild
+    assert "no figures, no humanoid shapes, no silhouettes, no person-shaped blocks" in (
+        bare_rebuild
+    )
+    assert "cube tiles under every sole" not in bare_rebuild
+    assert "person-shaped regions" not in bare_rebuild
     cubic = next(
         item
         for item in load_catalog("klein_background_swap")
@@ -105,16 +112,25 @@ def test_wrap_bare_place_and_passthrough_instructions() -> None:
     )
     assert not is_background_instruction(cubic.prompt)
     assert is_reconstruction(cubic.prompt)
+    assert "with its people removed" in cubic.prompt
+    assert "no figures, no humanoid shapes, no silhouettes, no person-shaped blocks" in (
+        cubic.prompt
+    )
+    assert "cube tiles under every sole" not in cubic.prompt
+    assert "person-shaped regions" not in cubic.prompt
     cubic_wrap = wrap_background_prompt(cubic.prompt, "background_swap")
     assert cubic_wrap.startswith(cubic.prompt)
     assert VOXEL_TRAILER in cubic_wrap
-    assert OTHER_ON in cubic_wrap
-    assert CROWD_ON in cubic_wrap
+    assert OTHER_ON not in cubic_wrap
+    assert CROWD_ON not in cubic_wrap
     assert "with: Keep the subject" not in cubic_wrap
     assert SWAP_BARE.format(place=cubic.prompt) not in cubic_wrap
     assert RECONSTRUCT_BARE.format(place=cubic.prompt) not in cubic_wrap
     cubes = wrap_background_prompt("voxel cubes", "background_swap")
     assert cubes.startswith(RECONSTRUCT_BARE.format(place="voxel cubes"))
+    assert "with its people removed" in cubes
+    assert OTHER_ON not in cubes
+    assert CROWD_ON not in cubes
     assert "minecraft" not in cubes.casefold()
     branded = wrap_background_prompt("minecraft harbor", "background_swap")
     assert "minecraft" not in branded.casefold()
@@ -214,7 +230,7 @@ def test_klein_background_modes_wrap_before_enhance() -> None:
     mock.assert_not_called()
     text = packed["result"][0]
     assert cubic.prompt in text
-    assert "Source still: wet dock, red coat, unmarked hull" in text
+    assert "Source still:" not in text
     assert packed["ui"]["passthrough"][0] == REASON_PRECISE_BACKGROUND
     with patch.object(client, "complete", return_value=("rewritten-cubes", None)) as mock:
         bare = klein.run("voxel cubes", True, "background_swap", "match the source still", "none")
@@ -233,7 +249,33 @@ def test_klein_background_modes_wrap_before_enhance() -> None:
         image_desc="a red coat on a dock",
     )
     assert off["ui"]["passthrough"][0] == "enhance off"
-    assert "Source still: a red coat on a dock" in off["result"][0]
+    assert "Source still:" not in off["result"][0]
+    normal_off = klein.run(
+        "fog harbor",
+        False,
+        "background_swap",
+        "match the source still",
+        image_desc="a red coat on a dock",
+    )
+    assert normal_off["ui"]["passthrough"][0] == "enhance off"
+    assert "Source still: a red coat on a dock" in normal_off["result"][0]
+    normal_precise_off = klein.run(
+        "Keep the subject from the reference. Replace the entire environment "
+        "with a fog harbor.",
+        False,
+        "background_swap",
+        "match the source still",
+        image_desc="a red coat on a dock",
+    )
+    assert "Source still: a red coat on a dock" in normal_precise_off["result"][0]
+    edit_cubic = klein.run(
+        "cubes over the pier",
+        False,
+        "background_edit",
+        "match the source still",
+        image_desc="a red coat on a dock",
+    )
+    assert "Source still: a red coat on a dock" in edit_cubic["result"][0]
 
 
 def test_background_cast_node_and_mode_combo() -> None:
@@ -257,6 +299,11 @@ def test_background_cast_node_and_mode_combo() -> None:
     assert "block study" in swap_l
     assert "texel" in swap_l or "texture-pack" in swap_l
     assert "generic cube biome" in swap_l
+    assert "no figures, no humanoid shapes, no silhouettes, no person-shaped blocks" in (
+        swap_l
+    )
+    assert "cube tiles under every sole" not in swap_l
+    assert "person-shaped regions" not in swap_l
     assert "minecraft" not in swap_l
     edit = client.load_system_prompt("klein_background_edit")
     assert "cartoon" in edit.lower()

@@ -314,9 +314,9 @@ def core_nodes() -> dict[str, Any]:
         ),
         "EZCubicCondition": _n(
             "Cubic or photo reference",
-            "Attach the photo latent, or a block-study latent when the prompt rebuilds the place as cubes.",
+            "Attach the photo latent, or a people-erased block-study latent when the prompt rebuilds the place as cubes.",
             origin="ez_image",
-            lab="stills/background-swap. Ordinary place swaps keep the encoded photo. Cubic block world encodes a coarse cube picture of that photo instead, so Klein is not locked to photoreal surfaces.",
+            lab="stills/background-swap. Ordinary place swaps keep the encoded photo. Cubic block world erases the source people from the coarse block study before VAE-encoding, so Klein is not locked to photoreal surfaces and is not primed to cube the people. Without person-segmentation weights the study stays unchanged (fail-soft).",
             sockets=[
                 _s("conditioning", "CONDITIONING", "in", "Positive CLIP conditioning before any reference."),
                 _s("latent", "LATENT", "in", "VAE encode of the snapped photograph."),
@@ -331,10 +331,10 @@ def core_nodes() -> dict[str, Any]:
             "Reinsert people",
             "Paste detected people from the source photo onto a cubic rebuild.",
             origin="ez_image",
-            lab="stills/background-swap, between decode and match-to-source. Other prompts pass the plate through. Missing DeepLab weights fail soft (people stay cubed).",
+            lab="stills/background-swap, between decode and match-to-source. Paste dilates the person mask ~2 px and feathers ~6 px, so people own their full silhouette and blend onto the plate. source is the full-resolution LoadImage still. Other prompts pass the plate through. Missing DeepLab weights fail soft (status `person mask missing`; people stay cubed).",
             sockets=[
                 _s("plate", "IMAGE", "in", "Decoded still."),
-                _s("source", "IMAGE", "in", "Snapped photograph."),
+                _s("source", "IMAGE", "in", "Full-resolution source still from LoadImage."),
                 _s("prompt", "STRING", "in", "Enhance STRING. A link, not an App widget."),
                 _s("IMAGE", "IMAGE", "out", "Plate with people pasted when the prompt is a cube rebuild."),
             ],

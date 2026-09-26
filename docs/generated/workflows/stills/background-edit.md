@@ -66,35 +66,35 @@ flowchart LR
   N14["Quality"]
   N18["Upscale still"]
   N19["Describe image"]
-  N20["Encode snapped source"]
-  N21["Positive + source plate"]
-  N22["Snap to Klein grid"]
-  N23["Match source size"]
-  N24["Background cast"]
-  N25["Check models"]
+  N20["Check models"]
+  N21["Encode snapped source"]
+  N22["Positive + source plate"]
+  N23["Snap to Klein grid"]
+  N24["Match source size"]
+  N25["Background cast"]
   N1 --> N7
   N2 --> N4
   N2 --> N5
   N3 --> N8
-  N3 --> N20
-  N4 --> N21
+  N3 --> N21
+  N4 --> N22
   N5 --> N7
   N7 --> N8
-  N8 --> N23
-  N11 --> N22
+  N8 --> N24
   N11 --> N23
+  N11 --> N24
   N11 --> N19
   N12 --> N4
   N12 --> N13
   N13 --> N5
-  N19 --> N12
-  N20 --> N21
-  N20 --> N7
-  N21 --> N7
-  N22 --> N20
-  N23 --> N18
   N18 --> N9
-  N24 --> N12
+  N19 --> N12
+  N21 --> N22
+  N21 --> N7
+  N22 --> N7
+  N23 --> N21
+  N24 --> N18
+  N25 --> N12
 ```
 
 ## Nodes on this graph
@@ -116,12 +116,12 @@ flowchart LR
 | 14 | Quality | `EZQuality` | QUALITY |
 | 18 | Upscale still | `EZImageUpscale` | OUTPUT |
 | 19 | Describe image | `EZImageDescribe` | INPUT |
-| 20 | Encode snapped source | `VAEEncode` | SETTINGS |
-| 21 | Positive + source plate | `ReferenceLatent` | SETTINGS |
-| 22 | Snap to Klein grid | `EZSnapImage` | SETTINGS |
-| 23 | Match source size | `EZMatchImageSize` | SETTINGS |
-| 24 | Background cast | `EZBackgroundCast` | SETTINGS |
-| 25 | Check models | `EZModelCheck` | QUALITY |
+| 20 | Check models | `EZModelCheck` | QUALITY |
+| 21 | Encode snapped source | `VAEEncode` | SETTINGS |
+| 22 | Positive + source plate | `ReferenceLatent` | SETTINGS |
+| 23 | Snap to Klein grid | `EZSnapImage` | SETTINGS |
+| 24 | Match source size | `EZMatchImageSize` | SETTINGS |
+| 25 | Background cast | `EZBackgroundCast` | SETTINGS |
 
 ## Node parameter reference
 
@@ -1101,6 +1101,24 @@ Run the captioner.
 
 **This graph:** `false`
 
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph:** `Click Check models. Queue does not run this node.`
+
 ### `VAEEncode` — VAE Encode
 
 Encode pixels to a latent (Klein edit / clay).
@@ -1191,21 +1209,3 @@ Treat extras as background.
 **How it affects generation:** On: extras, crowd, and distant figures are environment. Off: keep them as they appear.
 
 **This graph:** `true`
-
-### `EZModelCheck` — Check models
-
-Manual disk check for occupancy + Quality weights. Queue does not run this node.
-
-!!! warning "Lab notes"
-
-    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
-
-#### `status`
-
-Type `STRING`.
-
-Last check result.
-
-**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
-
-**This graph:** `Click Check models. Queue does not run this node.`

@@ -49,11 +49,12 @@ VOXEL_TRAILER = "Voxel art, cubic voxels, limited palette."
 RECONSTRUCT_BARE = (
     "Rebuild this photographed place as a constructed cubic block world. "
     "Same camera, horizon, and inventory. The reference is a coarse block "
-    "study of that place. Rebuild every backdrop, sky, building, tree, water, "
-    "floor, and prop as large axis-aligned cubes with visible tops and sides, "
-    "square faces, and a coarse texel grid. Stacked block walls, cube canopies, "
-    "cube water, cube tiles under every sole. Person-shaped regions become the "
-    "cube surfaces behind those people. Place or look: {place}. "
+    "study of that place with its people removed. Rebuild every backdrop, "
+    "sky, building, tree, water, floor, and prop as large axis-aligned cubes "
+    "with visible tops and sides, square faces, and a coarse texel grid. "
+    "Stacked block walls, cube canopies, cube water. The scene is empty of "
+    "people: no figures, no humanoid shapes, no silhouettes, no person-shaped "
+    "blocks. Place or look: {place}. "
     "Empty of new lettering."
 )
 """Wrapper for a bare cube / voxel phrase in background_swap."""
@@ -332,8 +333,9 @@ def wrap_background_prompt(text: object, mode: str, cast: object = "") -> str:
     / voxel requests stay a reconstruction of the photographed place (never
     nested inside ``SWAP_BARE``). A line that already starts with "Rebuild this
     photographed place" passes through. Brand names minecraft and mojang are
-    rewritten to cubic before CLIP. Cast clauses always splice unless they are
-    already present.
+    rewritten to cubic before CLIP. Cast clauses splice unless already present;
+    reconstruction plates skip the cast entirely because the reinsert-paste
+    owns the people.
 
     Args:
         text: Place name, edit, or a full targeting sentence.
@@ -357,7 +359,7 @@ def wrap_background_prompt(text: object, mode: str, cast: object = "") -> str:
                 body = _with_voxel_trailer(raw)
             else:
                 body = RECONSTRUCT_BARE.format(place=raw)
-            return _with_cast(body, clauses)
+            return body
     if is_background_instruction(raw):
         return _with_cast(raw, clauses)
     template = EDIT_BARE if kind == "background_edit" else SWAP_BARE

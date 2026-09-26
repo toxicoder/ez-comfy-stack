@@ -1041,11 +1041,11 @@ Catalog id.
 
 ### `EZCubicCondition` — Cubic or photo reference
 
-Attach the photo latent, or a block-study latent when the prompt rebuilds the place as cubes.
+Attach the photo latent, or a people-erased block-study latent when the prompt rebuilds the place as cubes.
 
 !!! warning "Lab notes"
 
-    stills/background-swap. Ordinary place swaps keep the encoded photo. Cubic block world encodes a coarse cube picture of that photo instead, so Klein is not locked to photoreal surfaces.
+    stills/background-swap. Ordinary place swaps keep the encoded photo. Cubic block world erases the source people from the coarse block study before VAE-encoding, so Klein is not locked to photoreal surfaces and is not primed to cube the people. Without person-segmentation weights the study stays unchanged (fail-soft).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -4015,12 +4015,12 @@ Paste detected people from the source photo onto a cubic rebuild.
 
 !!! warning "Lab notes"
 
-    stills/background-swap, between decode and match-to-source. Other prompts pass the plate through. Missing DeepLab weights fail soft (people stay cubed).
+    stills/background-swap, between decode and match-to-source. Paste dilates the person mask ~2 px and feathers ~6 px, so people own their full silhouette and blend onto the plate. source is the full-resolution LoadImage still. Other prompts pass the plate through. Missing DeepLab weights fail soft (status `person mask missing`; people stay cubed).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `plate` | in | `IMAGE` | Decoded still. |
-| `source` | in | `IMAGE` | Snapped photograph. |
+| `source` | in | `IMAGE` | Full-resolution source still from LoadImage. |
 | `prompt` | in | `STRING` | Enhance STRING. A link, not an App widget. |
 | `IMAGE` | out | `IMAGE` | Plate with people pasted when the prompt is a cube rebuild. |
 

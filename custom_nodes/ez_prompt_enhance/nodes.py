@@ -275,7 +275,9 @@ def _run(
         sample: Sample combo label.
         catalog: Hidden catalog widget.
         node_type: Comfy class name for family catalog fallback.
-        image_desc: Optional still caption from EZImageDescribe.
+        image_desc: Optional still caption from EZImageDescribe; spliced for
+            background modes, except cubic rebuilds in background_swap, whose
+            empty plate must not be primed with the source people.
         background_cast: Optional compact token from EZBackgroundCast.
 
     Returns:
@@ -289,16 +291,17 @@ def _run(
         mode=mode,
     )
     precise_background = False
+    reconstruction = False
     if mode == "text_swap":
         original = wrap_text_swap_prompt(original)
     elif mode in BACKGROUND_MODES:
-        precise_background = is_background_instruction(original) or is_reconstruction(
-            original
-        )
+        reconstruction = is_reconstruction(original)
+        precise_background = is_background_instruction(original) or reconstruction
         original = wrap_background_prompt(original, mode, background_cast)
     ctx = context if isinstance(context, str) else str(context or "")
     caption = image_desc if isinstance(image_desc, str) else str(image_desc or "")
-    if mode in BACKGROUND_MODES:
+    skip_caption = mode == "background_swap" and reconstruction
+    if mode in BACKGROUND_MODES and not skip_caption:
         original = splice_source_caption(original, caption)
     if caption.strip():
         ctx = join_context_fields(("Context", ctx), ("Image", caption))

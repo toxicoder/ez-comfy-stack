@@ -180,8 +180,8 @@ def test_cubic_block_world_rebuilds_the_photographed_place() -> None:
     assert "cube water" in folded
     assert "stacked block walls" in folded
     assert "texel grid" in folded
-    assert "sole" in folded
-    assert "person-shaped" in folded
+    assert "empty of people" in folded
+    assert "no person-shaped blocks" in folded
     assert "keep the subject" not in folded
     assert "minecraft" not in folded
     assert "mojang" not in folded

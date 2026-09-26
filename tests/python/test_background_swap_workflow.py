@@ -108,7 +108,7 @@ def test_background_swap_is_size_matched_klein_edit() -> None:
     assert pasted["type"] == "EZReinsertPeople"
     assert pasted.get("widgets_values") == []
     assert _src(graph, pasted, "plate")["type"] == "VAEDecode"
-    assert _src(graph, pasted, "source")["type"] == "EZSnapImage"
+    assert _src(graph, pasted, "source")["type"] == "LoadImage"
     assert _src(graph, pasted, "prompt")["type"] == "EZKleinPromptEnhance"
     empty = next(
         node for node in graph["nodes"] if node.get("type") == "EZEmptyFlux2FromImage"

@@ -19,8 +19,10 @@ from ez_image.cubic import (  # noqa: E402
     attach_reference,
     block_study,
     cell_size,
+    erase_people,
     read_bhwc,
     write_bhwc,
+    _quantize_channel,
 )
 from ez_image.person_mask import (  # noqa: E402
     EZReinsertPeople,
@@ -36,8 +38,8 @@ from ez_image.person_mask import (  # noqa: E402
     _deeplab_tools,
     _download,
     _torch_load,
+    dilate_mask,
     download_weight,
-    erode_mask,
     feather_mask,
     load_segmenter,
     person_mask_disabled,
@@ -192,7 +194,12 @@ def test_attach_reference_uses_comfy_when_present(
     assert fallen[0][1]["reference_latents"] == ["study"]
 
 
-def test_cubic_condition_picks_photo_or_study() -> None:
+def test_cubic_condition_picks_photo_or_study(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        "ez_image.person_mask.segment_people", lambda _image: None
+    )
     node = EZCubicCondition()
     assert node.INPUT_TYPES()["required"]["prompt"][1]["forceInput"] is True
     cond = [["tok", {}]]
@@ -222,6 +229,72 @@ def test_cubic_condition_picks_photo_or_study() -> None:
     assert no_encode[0][0][1]["reference_latents"] == [photo]
 
 
+def test_erase_people_fills_persons_with_blurred_background(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    background = (0.75, 0.5, 0.25)
+    person = (0.0, 1.0, 0.0)
+    image = _frame(
+        36,
+        36,
+        lambda y, x: person if 12 <= y < 24 and 12 <= x < 24 else background,
+    )
+    study = block_study([image])
+    bare = block_study([image])[0]
+    assert bare[18][18] == [0.0, 1.0, 0.0]  # cubed person before erase
+
+    def mask_of(_image: Any) -> list[list[float]]:
+        return [
+            [1.0 if 12 <= x < 24 and 12 <= y < 24 else 0.0 for x in range(36)]
+            for y in range(36)
+        ]
+
+    monkeypatch.setattr("ez_image.person_mask.segment_people", mask_of)
+    erased = erase_people(study, image)[0]
+    radius = cell_size(36, 36)
+    for channel in range(3):
+        plane = [[bare[y][x][channel] for x in range(36)] for y in range(36)]
+        expected = feather_mask(plane, radius)
+        for y in range(36):
+            for x in range(36):
+                if 12 <= y < 24 and 12 <= x < 24:
+                    assert erased[y][x][channel] == _quantize_channel(expected[y][x])
+                else:
+                    assert erased[y][x] == bare[y][x]
+    # filled cell reads as background, not the cubed person
+    assert erased[18][18] != list(bare[18][18])
+
+    def small_mask(_image: Any) -> list[list[float]]:
+        return [
+            [1.0 if 6 <= x < 12 and 6 <= y < 12 else 0.0 for x in range(18)]
+            for y in range(18)
+        ]
+
+    monkeypatch.setattr("ez_image.person_mask.segment_people", small_mask)
+    # half-resolution mask resizes onto the study before erasing
+    assert erase_people(study, image)[0] == erased
+
+
+def test_erase_people_fail_soft(monkeypatch: pytest.MonkeyPatch) -> None:
+    image = _frame(
+        36,
+        36,
+        lambda y, x: (0.1, 0.9, 0.1) if 12 <= y < 24 and 12 <= x < 24 else (0.75, 0.5, 0.25),
+    )
+    study = block_study([image])
+    # segmenter unavailable (missing weights): study passes through
+    monkeypatch.setattr("ez_image.person_mask.segment_people", lambda _image: None)
+    assert erase_people(study, image) is study
+    # no person pixels: study passes through
+    monkeypatch.setattr(
+        "ez_image.person_mask.segment_people",
+        lambda _image: [[0.0] * 36 for _ in range(36)],
+    )
+    assert erase_people(study, image) is study
+    empty: list[Any] = []
+    assert erase_people(empty, image) is empty
+
+
 def test_reinsert_passthrough_and_paste() -> None:
     plate = [_flat((0.0, 0.0, 1.0), 20, 20)]
     source = [_flat((1.0, 0.0, 0.0), 20, 20)]
@@ -238,8 +311,15 @@ def test_reinsert_passthrough_and_paste() -> None:
 
     pasted, pasted_status = reinsert_people(plate, source, CUBIC, segment=mask)
     assert pasted_status == REASON_PASTED
-    assert pasted[0][0][0] == [0.0, 0.0, 1.0]
     assert pasted[0][10][10] == [1.0, 0.0, 0.0]
+    # dilate: the paste owns a ring just outside the raw segmentation boundary
+    ring = dilate_mask(mask(None), 2)
+    assert ring[10][16] == 1.0 and ring[10][2] == 1.0
+    assert ring[10][18] == 0.0 and ring[10][1] == 0.0
+    # feather: alpha ramps down over ~6px, no 1px hard step
+    red = [pasted[0][10][x][0] for x in range(12, 20)]
+    assert red == pytest.approx([12 / 13, 11 / 13, 10 / 12, 9 / 11, 8 / 10, 7 / 9, 6 / 8, 5 / 7])
+    assert pasted[0][0][0] == pytest.approx([25 / 49, 0.0, 24 / 49])
     assert pasted is not plate
 
     empty, empty_status = reinsert_people(
@@ -287,6 +367,26 @@ def test_reinsert_resizes_and_respects_the_off_switch(
     assert status == REASON_PASTED
     assert len(pasted[0]) == 8
     assert len(pasted[0][0]) == 8
+    big_plate = [_flat((0.0, 0.0, 1.0), 8, 8)]
+    big_source = _frame(
+        16,
+        16,
+        lambda y, x: (1.0, 0.0, 0.0) if 4 <= y < 12 and 4 <= x < 12 else (0.0, 1.0, 0.0),
+    )
+
+    def big_mask(_image: Any) -> list[list[float]]:
+        return [
+            [1.0 if 4 <= x < 12 and 4 <= y < 12 else 0.0 for x in range(16)]
+            for y in range(16)
+        ]
+
+    pasted_big, status_big = reinsert_people(big_plate, [big_source], CUBIC, segment=big_mask)
+    assert status_big == REASON_PASTED
+    assert len(pasted_big[0]) == 8
+    assert len(pasted_big[0][0]) == 8
+    # resize math is resolution-agnostic: plate pixel (y, x) samples source (2y, 2x)
+    assert pasted_big[0][4][4] == [1.0, 0.0, 0.0]
+    assert pasted_big[0][0][0] == [0.0, 1.0, 0.0]
     node = EZReinsertPeople()
     assert node.INPUT_TYPES()["required"]["prompt"][1]["forceInput"] is True
     packed = node.run(wide, small, "fog harbor")
@@ -306,16 +406,21 @@ def test_imagenet_normalize_matches_deeplab_stats() -> None:
 def test_mask_morphology_and_logits() -> None:
     assert _resize_mask([], 4, 4) == []
     assert _fit_hwc([], 4, 4) == []
-    assert erode_mask([], 1) == []
+    assert dilate_mask([], 1) == []
     assert feather_mask([], 1) == []
-    assert erode_mask([[1.0, 1.0]], 0) == [[1.0, 1.0]]
+    assert dilate_mask([[1.0, 1.0]], 0) == [[1.0, 1.0]]
     assert feather_mask([[1.0, 0.0]], 0) == [[1.0, 0.0]]
-    solid = [[1.0, 1.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]
-    eroded = erode_mask(solid, 1)
-    assert eroded[1][1] == 1.0
-    assert eroded[0][0] == 0.0
+    assert dilate_mask([[0.0, 0.0]], 1) == [[0.0, 0.0]]
+    dot = [[0.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 0.0]]
+    dilated = dilate_mask(dot, 1)
+    assert dilated == [[1.0, 1.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]
     soft = feather_mask([[0.0, 1.0, 0.0]], 1)
     assert 0.0 < soft[0][0] < 1.0
+    ramp = feather_mask([[0.0] * 13 + [1.0] + [0.0] * 13], 6)
+    assert ramp[0][6] == 0.0
+    assert ramp[0][7] == pytest.approx(1 / 13)
+    assert ramp[0][19] == pytest.approx(1 / 13)
+    assert ramp[0][20] == 0.0
     chw: list[Any] = []
     for cls in range(16):
         score = 5.0 if cls == PERSON_CLASS else 0.1

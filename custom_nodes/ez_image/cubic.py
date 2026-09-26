@@ -273,6 +273,82 @@ def block_study(image: Any) -> Any:
     return write_bhwc(painted, image)
 
 
+def _erase_frame(
+    frame: list[Any], mask: list[list[float]], radius: int
+) -> list[Any]:
+    """Fill one frame's masked pixels with blurred, re-quantized colors.
+
+    Args:
+        frame: Block-study HWC frame.
+        mask: HW mask, ``>= 0.5`` where a person stands.
+        radius: Box-blur radius in pixels for the fill color.
+
+    Returns:
+        New HWC frame. Masked pixels hold the blurred frame's color snapped
+        onto the five-level palette; other pixels copy the frame.
+    """
+    # Lazy import: ez_image.person_mask imports this module at top level.
+    from ez_image.person_mask import feather_mask
+
+    height = len(frame)
+    width = len(frame[0])
+    channels = len(frame[0][0])
+    planes: list[list[list[float]]] = []
+    for channel in range(channels):
+        plane = [
+            [float(frame[y][x][channel]) for x in range(width)]
+            for y in range(height)
+        ]
+        planes.append(feather_mask(plane, radius))
+    out: list[Any] = []
+    for y in range(height):
+        row: list[Any] = []
+        for x in range(width):
+            if mask[y][x] >= 0.5:
+                row.append([_quantize_channel(planes[c][y][x]) for c in range(channels)])
+            else:
+                row.append(list(frame[y][x]))
+        out.append(row)
+    return out
+
+
+def erase_people(study: Any, image: Any) -> Any:
+    """Erase the source's people from a block study.
+
+    Person pixels of ``study`` are filled with a large-kernel blur of the
+    study itself, re-quantized to the five-level palette, so the study shows
+    a plausible background where the people stood instead of cubed figures.
+    Fails soft: when the segmenter is unavailable or finds no person pixels,
+    ``study`` is returned unchanged.
+
+    Args:
+        study: Block-study IMAGE in the container kind ``block_study`` gives
+            back (tensor or lists).
+        image: Source still the person mask is computed for.
+
+    Returns:
+        The study with person pixels filled, in the same container kind as
+        ``study``; unchanged ``study`` when nothing is erased.
+    """
+    frames = read_bhwc(study)
+    if not frames or not frames[0] or not frames[0][0]:
+        return study
+    # Lazy import: ez_image.person_mask imports this module at top level.
+    from ez_image.person_mask import _resize_mask, segment_people
+
+    mask = segment_people(image)
+    if not mask:
+        return study
+    height = len(frames[0])
+    width = len(frames[0][0])
+    resized = _resize_mask(mask, height, width)
+    if not resized or not any(v >= 0.5 for row in resized for v in row):
+        return study
+    radius = cell_size(height, width)
+    painted = [_erase_frame(frame, resized, radius) for frame in frames]
+    return write_bhwc(painted, study)
+
+
 def _clone_conditioning(conditioning: Any) -> Any:
     """Copy a conditioning list so a reference attach cannot alias it.
 
@@ -431,6 +507,7 @@ class EZCubicCondition:
             return (attach_reference(conditioning, latent),)
         try:
             study = block_study(image)
+            study = erase_people(study, image)
             encoded = _encode_image(study, vae)
         except Exception:  # noqa: BLE001 — keep the photo reference
             encoded = None
