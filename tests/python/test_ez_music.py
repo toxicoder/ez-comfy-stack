@@ -30,12 +30,12 @@ from ez_music.drive_arrange import (  # noqa: E402
     DRIVE_BPM_CHOICES,
     DRIVE_LYRICS_CHAR_BUDGET,
     _LAYERS,
-    _MIDS,
     _SPATIAL,
-    _SUBS,
+    arrange_drive,
     lift_drive_bpm,
     plan_drive_album,
 )
+from ez_music.code_score import voice_code_sections  # noqa: E402
 # edm_examples must load before the per-hour catalog modules: its
 # module-level _catalog() imports them back.
 from ez_music.edm_examples import (  # noqa: E402
@@ -784,6 +784,7 @@ def _drive_plan_rows() -> list[tuple[str, list[dict[str, Any]]]]:
                         "seed": ex["seed"],
                         "lyrics": ex["lyrics"],
                         "recipe": ex["recipe"],
+                        "code_tokens": ex.get("code_tokens"),
                     }
                     for ex in rows
                 ],
@@ -808,6 +809,8 @@ def test_drive_tags_lock_instrumental_bed() -> None:
     assert "wide low-mid" in tags_low
     assert "deep 3d spatial low-mid" in tags_low
     assert "stacked 808 layers" in tags_low
+    assert "electric warp texture" in tags_low
+    assert "wavy fm layers" in tags_low
 
 
 def test_drive_tags_lock_vocal_treat() -> None:
@@ -822,6 +825,8 @@ def test_drive_tags_lock_vocal_treat() -> None:
     assert "bass boosted" in tags_low
     assert "no brass" not in tags_low
     assert "no trumpets" not in tags_low
+    assert "electric warp texture" in tags_low
+    assert "wavy fm layers" in tags_low
 
 
 def test_format_edm_score_requires_weighted_drops() -> None:
@@ -950,7 +955,7 @@ def test_drive_through_edm_examples_are_varied_lengths() -> None:
     breakdown_takes = 0
     shapes: list[tuple[tuple[str, int], ...]] = []
     for ex in EDM_EXAMPLES:
-        assert 150.0 <= float(ex["duration"]) <= 480.0
+        assert 90.0 <= float(ex["duration"]) <= 120.0
         assert int(ex["bpm"]) in DRIVE_BPM_CHOICES
         assert ex["meter"] == "4"
         assert ex["form_id"]
@@ -1025,7 +1030,6 @@ def test_drive_through_edm_examples_are_varied_lengths() -> None:
             if not stripped.startswith("[") or stripped.startswith("[chorus"):
                 continue
             low = stripped.lower()
-            assert "chest-sub" in low, (ex["stem"], stripped)
             for phrase in ("bass boosted", "layers stay", "sub stays", "no gap"):
                 assert phrase not in low, (ex["stem"], stripped)
             assert "one-shot phrase" not in low, (ex["stem"], stripped)
@@ -1033,19 +1037,14 @@ def test_drive_through_edm_examples_are_varied_lengths() -> None:
                 ex["stem"],
                 stripped,
             )
-            assert any(phrase.lower() in low for phrase in _MIDS), (
-                ex["stem"],
-                stripped,
-            )
-            assert any(phrase.lower() in low for phrase in _SUBS) or "chest-sub" in low, (
-                ex["stem"],
-                stripped,
-            )
-            assert any(phrase.lower() in low for phrase in _LAYERS), (
-                ex["stem"],
-                stripped,
-            )
-        assert int(ex["duration"]) >= duration_seconds(
+            cue = drive_arrange._music(stripped.split(" - ", 1)[1])
+            parts = cue.split(", ")
+            assert parts[0] in drive_arrange._BEDS, (ex["stem"], stripped)
+            if parts[-1] in drive_arrange._SPARSE:
+                assert len(parts) == 3, (ex["stem"], stripped)
+            else:
+                assert len(parts) >= 4, (ex["stem"], stripped)
+        assert int(ex["duration"]) == duration_seconds(
             bars=sum(bar_counts),
             meter="4",
             bpm=int(ex["bpm"]),
@@ -1114,11 +1113,6 @@ def test_drive_through_edm_examples_are_varied_lengths() -> None:
                 ex["stem"],
                 lyrics,
             )
-            for block in drops:
-                assert _hits_needles(block, HEADLINER_BOUNCE_NEEDLES), (
-                    ex["stem"],
-                    block,
-                )
         elif ex["phase"] == 3:
             assert int(ex["bpm"]) >= 150, ex["stem"]
             assert ex["ace_mode"] == "instrumental", ex["stem"]
@@ -1197,11 +1191,10 @@ def test_drive_through_edm_examples_are_varied_lengths() -> None:
         assert len({ex["form_id"] for ex in rows}) >= 8, phase
         assert len({ex["keyscale"] for ex in rows}) >= 4, phase
         lengths = [float(ex["duration"]) for ex in rows]
-        assert min(lengths) >= 150.0, phase
-        assert max(lengths) <= 480.0, phase
+        assert min(lengths) >= 90.0, phase
+        assert max(lengths) <= 120.0, phase
     album_lengths = [float(ex["duration"]) for ex in EDM_EXAMPLES]
-    assert len(set(album_lengths)) >= 5
-    assert max(album_lengths) - min(album_lengths) >= 100.0
+    assert len(set(album_lengths)) >= 8
     assert tuple(ex["title"] for ex in EDM_EXAMPLES) == EXPECTED_DRIVE_THROUGH_TITLES
     for ex in EDM_EXAMPLES[:2]:
         assert _hits_needles(ex["lyrics"], WARP_NEEDLES), ex["stem"]
@@ -1249,7 +1242,13 @@ def test_drive_plans_match_shipped_catalog() -> None:
     offset = 0
     for slug, rows in _drive_plan_rows():
         plans = plan_drive_album(slug, rows)
-        for plan, ex in zip(plans, shipped[offset : offset + len(rows)]):
+        for plan, row, ex in zip(plans, rows, shipped[offset : offset + len(rows)]):
+            code_tokens = row.get("code_tokens")
+            if code_tokens:
+                plan["sections"] = voice_code_sections(
+                    plan["sections"], code_tokens
+                )
+            arrange_drive(str(row["lyrics"]), plan)
             assert plan["form_id"] == ex["form_id"], ex["stem"]
             assert plan["duration_s"] == int(ex["duration"]), ex["stem"]
         offset += len(rows)

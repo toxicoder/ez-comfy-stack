@@ -6736,7 +6736,7 @@ Allocate an ACE-Step audio latent for N seconds.
 
 !!! warning "Lab notes"
 
-    Draft is the cold-open bar length. Full is the pre-chorus bar length. Nill Bye albums are 64–210 s. Drive-through is 150–480 s from per-take bar math, not a shared clock target. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
+    Draft is the cold-open bar length. Full is the pre-chorus bar length. Nill Bye albums are 64–210 s. Drive-through is ~90–120 s from per-take bar math, not a shared clock target. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -6749,7 +6749,7 @@ Type `FLOAT`. Range / default: draft / full / album plan.
 
 Duration in seconds.
 
-**How it affects generation:** Longer latents cost RAM/time linearly. Nill Bye stays 64–210 s. Drive-through is 150–480 s. Stay at the seeded length unless you have headroom.
+**How it affects generation:** Longer latents cost RAM/time linearly. Nill Bye stays 64–210 s. Drive-through is ~90–120 s. Stay at the seeded length unless you have headroom.
 
 | Instance | Value |
 | --- | --- |

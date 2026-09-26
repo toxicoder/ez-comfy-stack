@@ -3385,7 +3385,8 @@ def mix_production() -> list[dict[str, Any]]:
             "Drive-through instrumental lock",
             "808, original composition, heavy chest bass, bass boosted, "
             "wide low-mid layers, fast switch-ups, "
-            "deep 3D spatial low-mid, stacked 808 layers",
+            "deep 3D spatial low-mid, stacked 808 layers, "
+            "electric warp texture, wavy FM layers",
             "Lock a live bass-set mix so the take stays instrumental, original, and chest-heavy",
         ),
         (
@@ -3393,7 +3394,8 @@ def mix_production() -> list[dict[str, Any]]:
             "Drive-through DJ-shout lock",
             "808, original composition, heavy chest bass, bass boosted, "
             "wide low-mid layers, fast switch-ups, "
-            "deep 3D spatial low-mid, stacked 808 layers",
+            "deep 3D spatial low-mid, stacked 808 layers, "
+            "electric warp texture, wavy FM layers",
             "Lock a live bass-set mix so a sparse DJ shout can sit without a rap verse",
         ),
     ]

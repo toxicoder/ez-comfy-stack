@@ -49,7 +49,7 @@ SKYLINE_PASS_LYRICS = format_edm_score(
 )
 
 ON_RAMP_LYRICS = format_edm_score(
-    ("inst", "heavy wave drop\nwarped 808 wreck\nfold bass"),
+    ("inst", "heavy wave drop\nwarped 808 wreck\nwavy low-mid line"),
     ("inst", "trap hats roll\nwave 808 sustain"),
     ("inst", "harder chest-sub drop\ndouble 808 split\nchest warp"),
     ("inst", "kick tightens\n808 slide"),
