@@ -18,9 +18,13 @@ EDM_DURATION_S = 180.0
 DRIVE_LOCK = (
     "808, original composition, heavy chest bass, bass boosted, "
     "wide low-mid layers, fast switch-ups, "
-    "deep 3D spatial low-mid, stacked 808 layers"
+    "deep 3D spatial low-mid, stacked 808 layers, "
+    "electric warp texture, wavy FM layers"
 )
-DRIVE_TREAT_LOCK = "sparse vocal chop, DJ shout, no rap, original composition"
+DRIVE_TREAT_LOCK = (
+    "sparse vocal chop, DJ shout, no rap, original composition, "
+    "electric warp texture, wavy FM layers"
+)
 EdmSeries = Literal["drive-through"]
 EdmAceMode = Literal["instrumental", "vocal"]
 

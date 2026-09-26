@@ -72,7 +72,7 @@ The rack emits at most one BPM token. Match `TextEncodeAceStepAudio1.5` BPM to t
 
 ## Drive-through recipes
 
-Shipped Drive-through takes under `_lab/audio/albums/drive-through/` splice these starters. The arranger then snaps tempo onto 165–176 and replaces the form with a per-take sequence of 2-bar stanzas (150–480 s, each cell under 3 seconds). Bass identity stays with the recipe:
+Shipped Drive-through takes under `_lab/audio/albums/drive-through/` splice these starters. The arranger then snaps tempo onto 165–176 and replaces the form with a per-take sequence of 2-bar stanzas (~90–120 s, each cell under 3 seconds). Bass identity stays with the recipe:
 
 | Recipe | Genre |
 | --- | --- |
@@ -90,7 +90,7 @@ Shipped Drive-through takes under `_lab/audio/albums/drive-through/` splice thes
 | `rec_drive_festival_trap` | Festival trap |
 | `rec_drive_dj_shout` | Hybrid trap + `voc_dj_shout` |
 
-Instrumental takes use `mix_drive_lock` (808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups). The DJ-shout lane keeps `mix_drive_treat` with the same chest-bass lock for manual recipes. Drive recipes leave the sound-design axis empty so a noise riser is not a whole-clip tag. Color bass tags stay `low-mid bass`, not formant. Do not pick `ins_warped_saw` on a Drive-through graph (supersaw is a high-pitch needle). Playbook: [Drive-through EDM](music-edm.md).
+Instrumental takes use `mix_drive_lock` (808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, electric warp texture, wavy FM layers). The DJ-shout lane keeps `mix_drive_treat` with the same chest-bass lock for manual recipes. Drive recipes leave the sound-design axis empty so a noise riser is not a whole-clip tag. Color bass tags stay `low-mid bass`, not formant. Do not pick `ins_warped_saw` on a Drive-through graph (supersaw is a high-pitch needle). Playbook: [Drive-through EDM](music-edm.md).
 
 ## Handoff
 

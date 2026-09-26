@@ -1,4 +1,4 @@
-"""Drive-through arrangement: two-bar cells, an early drop, 150–480 s.
+"""Drive-through arrangement: two-bar cells, an early drop, 90–120 s.
 
 Each stanza is 2 bars, under 3 seconds at 165–176. Duration is that sum
 at the take's BPM. A shortfall adds whole stanzas. An overrun drops
@@ -9,8 +9,9 @@ authored BPM stays the rank; the encoder and the tags use the snapped
 value.
 
 The rendered score is fitted to ``DRIVE_LYRICS_CHAR_BUDGET`` so the
-whole score stays inside ACE-Step's 2048-token lyric window. The latent
-keeps the full planned duration and extends the last described texture.
+whole score stays inside ACE-Step's 2048-token lyric window. The plan's
+duration equals the score's coverage, so no unguided tail loops the last
+texture.
 """
 
 from __future__ import annotations
@@ -30,20 +31,19 @@ from ez_music.song_plan import (
 )
 
 # Floor, cap, and the fast tempos the Audio Rack already knows.
-DRIVE_FLOOR_S = 150
-DRIVE_CAP_S = 480
+DRIVE_FLOOR_S = 90
+DRIVE_CAP_S = 120
 DRIVE_BPM_CHOICES: tuple[int, ...] = (165, 168, 170, 172, 174, 176)
 # ACE-Step 1.5 truncates lyrics at 2048 tokens. Measured at 3.43–3.56
 # chars/token on this vocabulary, so 6000 chars stays under the window
-# with margin. The score is a representative arc, not a full timeline.
+# with margin. The score covers the whole take — no unguided tail.
 DRIVE_LYRICS_CHAR_BUDGET = 6000
 _BPM_LO = 140
 _BPM_HI = 176
 _BAR_PALETTE = frozenset({2})
 # Body stanza count dealt per take before the duration fit. The menu
-# size sets the album's length spread: the short end pads toward the
-# 150 s floor, the long end lands near 8 minutes.
-_MENU = (28, 40, 52, 64, 76, 88, 100, 112, 124, 136, 148, 160)
+# sizes keep every take inside the 90–120 s window after the fit.
+_MENU = (31, 34, 37, 40, 43)
 _BODY_ROLES = ("inst", "drop", "build-up")
 # Drops must hit hard and often: every take deals at least _DROP_FLOOR
 # drops; _drop_target scales the requirement with body size, capped at
@@ -59,13 +59,23 @@ _BRASS = (
     "fanfare",
     "stab",
 )
+# Rotating electric beds: no single bed owns the whole take.
+_BEDS = (
+    "chest-sub",
+    "FM warp sub",
+    "wavy phase sub",
+    "neuro wobble sub",
+    "bitcrushed 808",
+    "phase-distorted sub",
+    "octave sub pulse",
+)
 _SUBS = (
     "mono chest-sub",
     "octave sub stack",
     "stacked 808",
     "low chest-sub",
     "body bass",
-    "fold bass",
+    "FM 808",
 )
 _MIDS = (
     "low-mid bass melody",
@@ -73,7 +83,18 @@ _MIDS = (
     "low wobble answer",
     "body bass answer",
     "low reese counterline",
-    "fold bass melody",
+    "wavy low-mid line",
+)
+# Electric, wavy, warpy melodic voice in the mid-low register.
+_LEADS = (
+    "warped FM lead",
+    "phase-wavy synth line",
+    "wobble FM voice",
+    "granular bass figure",
+    "distorted sub figure",
+    "square-wave pulse figure",
+    "neuro wobble lead",
+    "acid squelch line",
 )
 _DRUMS = (
     "rapid hi-hats",
@@ -89,7 +110,22 @@ _SPATIAL = (
     "bass circles the low-mid",
     "sub center, low-mid moves wide",
     "low-mid orbits the sub",
+    "bass pans wide behind",
+    "low-mid from every angle",
+    "sub anchored, mids orbit",
+    "layers surround the ear",
+    "wide 3D bass field",
+    "panning low-mid sweep",
 )
+# Downbeat-only phrases for the sparse stanzas.
+_SPARSE = (
+    "downbeat kick",
+    "kick only on downbeats",
+    "downbeat sub pulse",
+    "sparse four-on-floor kick",
+)
+# Performative tempo pushes. The global BPM never moves.
+_TEMPO_PUSH = ("tempo push", "accelerating hats", "rising energy")
 _LAYERS = (
     "wide stereo layer",
     "octave 808 stack",
@@ -179,11 +215,14 @@ def fit_drive_sections(
     salt: int,
     used: set[str] | None = None,
 ) -> list[SongSection]:
-    """Add or drop whole stanzas until duration sits in 150–480 s.
+    """Add or drop whole stanzas until duration sits in 90–120 s.
 
     The opening build, the first drop, and the outro stay. Their bar
     counts stay. New stanzas are inserted in front of the outro. Extra
-    tail stanzas are removed from in front of the outro.
+    tail stanzas are removed from in front of the outro. The rendered
+    score then re-syncs the plan's duration to the stanzas that ship,
+    so the take's duration equals the score's coverage — no unguided
+    tail.
 
     Args:
         sections: Stanzas, build then drop … outro.
@@ -212,7 +251,7 @@ def fit_drive_sections(
         guard += 1
     seconds = _seconds(out, bpm)
     if seconds < DRIVE_FLOOR_S or seconds > DRIVE_CAP_S:
-        raise ValueError(f"drive duration {seconds}s is outside 150–480")
+        raise ValueError(f"drive duration {seconds}s is outside 90–120")
     return out
 
 
@@ -262,27 +301,33 @@ def arrange_drive(source: str, plan: SongPlan, *, treat: bool = False) -> str:
     """Render a plan as ACE markers, fitted to the lyric window.
 
     A treat keeps one short chorus chop. The tail is trimmed before the
-    outro so the joined score stays inside ``DRIVE_LYRICS_CHAR_BUDGET``;
-    the plan keeps its full duration.
+    outro so the joined score stays inside ``DRIVE_LYRICS_CHAR_BUDGET``.
+    The plan's duration and bucket re-sync to the stanzas that ship, so
+    the take's duration equals the score's coverage — no unguided tail.
 
     Args:
         source: Authored score. Only the chorus chop is read.
         plan: Planned stanzas. Patterns already include the bar count.
+            Mutated: ``duration_s`` and ``bucket`` follow the stanzas
+            that survive the lyric-window fit.
         treat: When True, insert the DJ chop after the first drop.
 
     Returns:
         ACE score within the char budget. Instrumental lines are one
         bracket each.
     """
+    kept_sections = fit_sections_to_lyrics(plan["sections"])
     blocks = [
         f"[{section['role']} - {section['pattern']}]"
-        for section in fit_sections_to_lyrics(plan["sections"])
+        for section in kept_sections
     ]
     if treat:
         _cues, chorus = _parse_edm(source)
         text = " ".join(chorus.split())
         if text:
             blocks.insert(2, f"[chorus]\n{text}")
+    plan["duration_s"] = _seconds(kept_sections, int(plan["bpm"]))
+    plan["bucket"] = _bucket(int(plan["duration_s"]))
     kept = _window_survivor_indices(blocks)
     return "\n\n".join(blocks[index] for index in kept)
 
@@ -440,8 +485,8 @@ def _menu_count(album_slug: str, track_number: int) -> int:
         track_number: One-based index.
 
     Returns:
-        A menu size of 28–160 body stanzas, from the short end
-        (~2.5 min after padding) to the long end (near 8 min).
+        A menu size of 31–43 body stanzas; the duration fit then keeps
+        the take inside the 90–120 s window.
     """
     offset = sum(ord(char) for char in album_slug) % len(_MENU)
     return _MENU[(int(track_number) - 1 + offset) % len(_MENU)]
@@ -497,7 +542,7 @@ def _slot(pool: tuple[str, ...], n: int, salt: int, attempt: int, step: int) -> 
 
 
 def _bed(n: int, salt: int, attempt: int) -> str:
-    """Front of every cue: the chest-sub anchor and a 3D low-mid move.
+    """Front of every cue: a rotating electric bed and a 3D move.
 
     Args:
         n: Section index.
@@ -505,47 +550,89 @@ def _bed(n: int, salt: int, attempt: int) -> str:
         attempt: Retry counter.
 
     Returns:
-        The shared prefix.
+        The shared prefix: bed phrase plus a spatial phrase.
     """
+    bed = _slot(_BEDS, n, salt, attempt, 9)
     spatial = _slot(_SPATIAL, n, salt, attempt, 13)
-    return f"chest-sub, {spatial}"
+    return f"{bed}, {spatial}"
 
 
-def _cue_for(role: str, n: int, salt: int, attempt: int = 0) -> str:
+def _cue_for(
+    role: str,
+    n: int,
+    salt: int,
+    attempt: int = 0,
+    *,
+    depth: float = 0.5,
+    sparse: bool = False,
+) -> str:
     """One layered cue. Drops name a weight and a warp. Beds do not say drop.
 
-    Every stanza carries the chest-sub bed, a 3D low-mid move, and an
-    extra layer cue so the take never sits on one flat loop.
+    Slots stack up as the take deepens: the sub slot opens at 0.25, the
+    mid slot and an optional lead at 0.5, and the layer slot at 0.7.
+    Drops always render at full depth. A sparse stanza is just the
+    rotating bed plus one downbeat phrase.
 
     Args:
         role: Section role.
         n: Cue index.
         salt: Take salt.
         attempt: Retry counter. Changes every layer so retries cannot repeat.
+        depth: 0-to-1 position across the take. Gates the stacking slots.
+        sparse: When True, return the downbeat-only two-part cue.
 
     Returns:
         Comma-separated production cue.
     """
+    if sparse:
+        return f"{_bed(n, salt, attempt)}, {_slot(_SPARSE, n, salt, attempt, 5)}"
+    if role == "drop":
+        depth = 1.0
     bed = _bed(n, salt, attempt)
-    sub = _slot(_SUBS, n, salt, attempt, 3)
-    mid = _slot(_MIDS, n, salt, attempt, 5)
-    drum = _slot(_DRUMS, n, salt, attempt, 7)
+    sub = _slot(_SUBS, n, salt, attempt, 3) if depth >= 0.25 else ""
+    mid = _slot(_MIDS, n, salt, attempt, 5) if depth >= 0.5 else ""
+    lead = (
+        _slot(_LEADS, n, salt, attempt, 7)
+        if depth >= 0.5 and role != "outro" and _mix_int(salt, n, 5) % 5 < 3
+        else ""
+    )
+    layer = (
+        _slot(_LAYERS, n, salt, attempt, 11)
+        if depth >= 0.7 and role != "drop"
+        else ""
+    )
     motion = _slot(_MOTIONS, n, salt, attempt, 1)
-    layer = _slot(_LAYERS, n, salt, attempt, 11)
     if role == "drop":
         weight = _slot(_WEIGHTS, n, salt, attempt, 2)
         warp = _slot(_WARPS, n, salt, attempt, 4)
-        return (
-            f"{bed}, {layer}, {weight} {warp} drop, {sub}, {mid}, {drum}, "
-            f"{motion}"
-        )
-    if role == "build-up":
-        return f"{bed}, {layer}, kick tightens, {sub}, {drum}, {mid}, {motion}"
-    if role == "breakdown":
-        return f"{bed}, {layer}, rapid hi-hats, {mid}, {sub}, {motion}"
-    if role == "outro":
-        return f"{bed}, {layer}, kick pattern flip, rapid hi-hats, {mid}, {motion}"
-    return f"{bed}, {layer}, {drum}, {sub}, {mid}, {motion}"
+        parts = [
+            f"{bed}, {_slot(_LAYERS, n, salt, attempt, 11)}, "
+            f"{weight} {warp} drop"
+        ]
+        if _mix_int(salt, n, 6) % 5 < 2:
+            parts.append("double-time feel")
+    elif role == "build-up":
+        parts = [
+            f"{bed}, kick tightens, {_slot(_TEMPO_PUSH, n, salt, attempt, 2)}"
+        ]
+    elif role == "breakdown":
+        parts = [f"{bed}, rapid hi-hats, tempo dip"]
+    elif role == "outro":
+        parts = [f"{bed}, kick pattern flip, rapid hi-hats"]
+    else:
+        parts = [bed]
+    if layer:
+        parts.append(layer)
+    if sub:
+        parts.append(sub)
+    if mid:
+        parts.append(mid)
+    if lead:
+        parts.append(lead)
+    if role in ("drop", "inst"):
+        parts.append(_slot(_DRUMS, n, salt, attempt, 7))
+    parts.append(motion)
+    return ", ".join(parts)
 
 
 def _drop_combo(n: int, salt: int, attempt: int) -> str:
@@ -565,7 +652,15 @@ def _drop_combo(n: int, salt: int, attempt: int) -> str:
     return f"{weight}|{warp}|{spatial}"
 
 
-def _unique_cue(role: str, n: int, salt: int, used: set[str]) -> str:
+def _unique_cue(
+    role: str,
+    n: int,
+    salt: int,
+    used: set[str],
+    *,
+    depth: float = 0.5,
+    sparse: bool = False,
+) -> str:
     """A cue this take has not used yet.
 
     Drop cues must also carry a weight/warp/spatial combo the take has
@@ -576,6 +671,8 @@ def _unique_cue(role: str, n: int, salt: int, used: set[str]) -> str:
         n: Preferred index.
         salt: Take salt.
         used: Musical cues already emitted. Updated on success.
+        depth: Stacking depth threaded to ``_cue_for``.
+        sparse: Downbeat-only cue, threaded to ``_cue_for``.
 
     Returns:
         The cue.
@@ -584,7 +681,7 @@ def _unique_cue(role: str, n: int, salt: int, used: set[str]) -> str:
         ValueError: the cue space for this role is exhausted.
     """
     for attempt in range(len(_MOTIONS)):
-        cue = _cue_for(role, n, salt, attempt)
+        cue = _cue_for(role, n, salt, attempt, depth=depth, sparse=sparse)
         if cue in used or _blocked(cue):
             continue
         combo_key: str | None = None
@@ -773,8 +870,13 @@ def _cue_with_donor(
     *,
     identity: str = "",
     pedal: bool = False,
+    depth: float = 0.5,
+    sparse: bool = False,
 ) -> str:
     """Unique base cue plus at most one donor and the optional identity.
+
+    A sparse stanza ships the downbeat cue as-is: no donor, identity, or
+    pedal extras, so it stays exactly bed plus phrase.
 
     Args:
         role: Section role.
@@ -784,11 +886,15 @@ def _cue_with_donor(
         queue: Donor queue.
         identity: Recipe line for the first drop.
         pedal: Keep the pedal phrase on the first drop.
+        depth: Stacking depth threaded to ``_cue_for``.
+        sparse: Downbeat-only stanza; extras are skipped.
 
     Returns:
         Musical cue.
     """
-    cue = _unique_cue(role, n, salt, used)
+    cue = _unique_cue(role, n, salt, used, depth=depth, sparse=sparse)
+    if sparse:
+        return cue
     return _with_extras(
         role,
         cue,
@@ -814,7 +920,10 @@ def _drop_tail(out: list[SongSection]) -> None:
 
 
 def _insert(out: list[SongSection], *, salt: int, used: set[str]) -> None:
-    """Insert one new stanza in front of the outro.
+    """Insert one new dense stanza in front of the outro.
+
+    Fit padding renders near full depth so a padded stanza is a stacked
+    cue, never a thin one.
 
     Args:
         out: Stanza list ending in the outro. Mutated.
@@ -825,7 +934,7 @@ def _insert(out: list[SongSection], *, salt: int, used: set[str]) -> None:
     index = len(out)
     role = _pick_role(salt, index, prev["role"])
     bars = _pick_bars(role, int(prev["bars"]), salt, index, before_outro=True)
-    cue = _unique_cue(role, salt, salt, used)
+    cue = _unique_cue(role, salt, salt, used, depth=0.95)
     out.insert(-1, _make(role, bars, cue))
 
 
@@ -875,9 +984,9 @@ def _place_rare_breakdown(
 ) -> None:
     """Turn one inst into a 2-bar breakdown on about one take in seven.
 
-    The cue is the same keep-playing bed as every other cell. The role
-    is the dip. Two bars keeps that dip under 3 seconds. ``gate`` ignores
-    the collision retry so a retry cannot drop the dip.
+    The cue stacks at late-take depth; the role is the dip. Two bars
+    keeps that dip under 3 seconds. ``gate`` ignores the collision retry
+    so a retry cannot drop the dip.
 
     Args:
         out: Stanza list ending in the outro. Mutated.
@@ -891,9 +1000,53 @@ def _place_rare_breakdown(
     for index in range(2, len(out) - 1):
         if out[index]["role"] != "inst":
             continue
-        cue = _unique_cue("breakdown", salt + index, salt, used)
+        cue = _unique_cue("breakdown", salt + index, salt, used, depth=0.95)
         out[index] = _make("breakdown", 2, cue)
         return
+
+
+def _ensure_sparse(
+    out: list[SongSection],
+    salt: int,
+    queue: list[str],
+    used: set[str],
+) -> None:
+    """Guarantee at least three downbeat-only stanzas in a long body.
+
+    The probabilistic sparse pick in ``_compose`` lands below the check
+    floor on unlucky rolls; backfill the gap by converting the earliest
+    eligible fill (never a drop, never adjacent to an existing sparse
+    stanza) so every long take keeps the dense/sparse back-and-forth.
+
+    Args:
+        out: Fitted stanzas ending in the outro. Mutated.
+        salt: Take salt, including the collision retry.
+        queue: Donor queue. Unused by sparse cues; kept for a stable
+            call shape with ``_cue_with_donor``.
+        used: Musical cues. Updated when a sparse cue lands.
+
+    Raises:
+        ValueError: no legal slot is left for a sparse stanza.
+    """
+    if len(out) - 2 < 20:
+        return
+    while sum(1 for section in out if _is_sparse(section)) < 3:
+        for index in range(2, len(out) - 1):
+            section = out[index]
+            if section["role"] == "drop" or _is_sparse(section):
+                continue
+            if _is_sparse(out[index - 1]) or _is_sparse(out[index + 1]):
+                continue
+            out[index] = _make(
+                section["role"],
+                section["bars"],
+                _cue_with_donor(
+                    section["role"], index, salt, used, queue, sparse=True
+                ),
+            )
+            break
+        else:
+            raise ValueError("no legal slot for a sparse stanza")
 
 
 def _compose(
@@ -908,6 +1061,11 @@ def _compose(
 ) -> list[SongSection]:
     """Deal the movement list, fit it to the duration window, then hit the
     drop floor and the rare breakdown.
+
+    Cues deepen with position: the opening build sits at depth zero and
+    each body stanza ramps toward full depth, so stanzas gain slots as
+    the take goes. About three of ten non-drop stanzas are downbeat-only
+    and never two in a row, cutting the loop feel.
 
     Args:
         album_slug: Album folder slug.
@@ -930,7 +1088,7 @@ def _compose(
         _make(
             "build-up",
             2,
-            _cue_with_donor("build-up", 0, salt, used, queue),
+            _cue_with_donor("build-up", 0, salt, used, queue, depth=0.0),
         ),
         _make(
             "drop",
@@ -948,6 +1106,7 @@ def _compose(
     ]
     prev_role = "drop"
     prev_bars = 2
+    prev_sparse = False
     drop_deals = 0
     menu = _menu_count(album_slug, track_number)
     for index in range(menu):
@@ -960,10 +1119,19 @@ def _compose(
             drop_deals += 1
         before_outro = index == menu - 1
         bars = _pick_bars(role, prev_bars, salt, index, before_outro=before_outro)
-        cue = _cue_with_donor(role, index + 2, salt, used, queue)
+        depth = (index + 2) / (menu + 2)
+        sparse = (
+            role != "drop"
+            and not prev_sparse
+            and _mix_int(salt, index, 7) % 10 < 3
+        )
+        cue = _cue_with_donor(
+            role, index + 2, salt, used, queue, depth=depth, sparse=sparse
+        )
         sections.append(_make(role, bars, cue))
         prev_role = role
         prev_bars = bars
+        prev_sparse = sparse
     sections.append(_make("outro", 2, _unique_cue("outro", salt + 99, salt, used)))
     fitted = fit_drive_sections(sections, bpm=bpm, salt=salt, used=used)
     _ensure_drops(fitted, salt, used)
@@ -973,11 +1141,28 @@ def _compose(
         used,
         gate=_salt(album_slug, track_number, seed),
     )
+    _ensure_sparse(fitted, salt, queue, used)
     return fitted
+
+
+def _is_sparse(section: SongSection) -> bool:
+    """Whether a stanza's cue is a downbeat-only sparse one.
+
+    Args:
+        section: Planned stanza.
+
+    Returns:
+        True when the cue's last comma part is a ``_SPARSE`` phrase.
+    """
+    parts = _music(section["pattern"]).split(", ")
+    return len(parts) >= 2 and parts[-1] in _SPARSE
 
 
 def _check(sections: list[SongSection]) -> None:
     """Reject a take that runs long, starts late, or names brass.
+
+    Also rejects two adjacent sparse stanzas and long takes with fewer
+    than three of them.
 
     Args:
         sections: Fitted stanzas.
@@ -1012,6 +1197,12 @@ def _check(sections: list[SongSection]) -> None:
             raise ValueError("role run longer than two stanzas")
     if sum(section["role"] == "breakdown" for section in sections) > 1:
         raise ValueError("more than one breakdown")
+    sparse_flags = [_is_sparse(section) for section in sections]
+    for flag, prev in zip(sparse_flags[1:], sparse_flags):
+        if flag and prev:
+            raise ValueError("two adjacent stanzas are both sparse")
+    if body >= 20 and sum(sparse_flags) < 3:
+        raise ValueError("take needs at least three sparse stanzas")
     musics = [_music(section["pattern"]) for section in sections]
     if len(musics) != len(set(musics)):
         raise ValueError("a cue repeats inside the take")
@@ -1047,11 +1238,11 @@ def _bucket(seconds: int) -> str:
         seconds: Fitted duration.
 
     Returns:
-        ``short``, ``standard``, or ``long``.
+        ``short`` under 100, ``standard`` under 112, else ``long``.
     """
-    if seconds < 210:
+    if seconds < 100:
         return "short"
-    if seconds < 360:
+    if seconds < 112:
         return "standard"
     return "long"
 

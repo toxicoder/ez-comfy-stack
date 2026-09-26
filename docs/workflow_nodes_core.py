@@ -145,7 +145,7 @@ def core_nodes() -> dict[str, Any]:
                 _s("LATENT", "LATENT", "out", "Audio latent for KSampler."),
             ],
             widgets=[
-                _w("seconds", index=0, typ="FLOAT", rng="draft / full / album plan", desc="Duration in seconds.", gen="Longer latents cost RAM/time linearly. Nill Bye stays 64–210 s. Drive-through is 150–480 s. Stay at the seeded length unless you have headroom."),
+                _w("seconds", index=0, typ="FLOAT", rng="draft / full / album plan", desc="Duration in seconds.", gen="Longer latents cost RAM/time linearly. Nill Bye stays 64–210 s. Drive-through is ~90–120 s. Stay at the seeded length unless you have headroom."),
                 _w("batch_size", index=1, typ="INT", rng="1", desc="Takes per Queue.", gen="Stay 1."),
             ],
         ),

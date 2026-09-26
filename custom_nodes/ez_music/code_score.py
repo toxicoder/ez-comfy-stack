@@ -403,7 +403,8 @@ def voice_code_sections(
     Re-voicing can change the score length, so the fit is re-measured
     after every voice pass. When the re-voiced score runs over the
     window, one more stanza is dropped in front of the outro and the
-    pass repeats. The plan keeps its full duration.
+    pass repeats. ``arrange_drive`` later re-syncs the plan duration to
+    the stanzas that survive the fit.
 
     Args:
         sections: Fitted stanzas, build-up then drop ... outro.
