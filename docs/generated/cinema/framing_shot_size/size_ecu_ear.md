@@ -1,6 +1,6 @@
 ---
 title: "Ear Insert"
-description: "Cinema Rack illustration — Ear Insert."
+description: "Cinema Rack illustration - Ear Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -1,6 +1,6 @@
 ---
 title: "Switcher pan"
-description: "Cinema Rack illustration — Switcher pan."
+description: "Cinema Rack illustration - Switcher pan."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

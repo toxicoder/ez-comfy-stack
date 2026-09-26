@@ -1,6 +1,6 @@
 ---
 title: "Rain windshield"
-description: "Cinema Rack illustration — Rain windshield."
+description: "Cinema Rack illustration - Rain windshield."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

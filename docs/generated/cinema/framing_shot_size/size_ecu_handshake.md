@@ -1,6 +1,6 @@
 ---
 title: "Handshake Insert"
-description: "Cinema Rack illustration — Handshake Insert."
+description: "Cinema Rack illustration - Handshake Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

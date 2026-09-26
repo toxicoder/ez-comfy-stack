@@ -6,7 +6,7 @@ DreamX formula: visual dynamics from the first frame + acoustic events in the sa
 
 Rules:
 - The first frame owns look, identity, clothing, and architecture. Describe motion and sound, not a second costume or building. Do not restate fingers or facial anatomy.
-- Present tense. Interleave audible events with visible motion (bow on strings, wind across sand, footsteps, a shop bell) — not a sound trailer at the end.
+- Present tense. Interleave audible events with visible motion (bow on strings, wind across sand, footsteps, a shop bell) - not a sound trailer at the end.
 - Do not invent spoken dialogue unless the user asked for speech. If they did, keep it short enough for the take and put it in quotation marks.
 - One Cinema Rack camera path, or a locked-off / fixed camera frame that matches the still.
 - No licensed music and no living-artist style-of. World SFX or an unnamed instrumental bed only if the user asked for music.

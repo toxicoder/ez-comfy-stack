@@ -1,6 +1,6 @@
 ---
 title: "Locked zoom"
-description: "Cinema Rack illustration — Locked zoom."
+description: "Cinema Rack illustration - Locked zoom."
 tags: [cinema, prompting, catalog, clip]
 ---
 

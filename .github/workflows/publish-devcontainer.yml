@@ -2,8 +2,8 @@
 # Privacy: no Hugging Face credentials, no .env, no model weights, no host secrets.
 #
 # Tags:
-#   main         → latest + main + sha-*
-#   development  → development + sha-*
+#   main         -> latest + main + sha-*
+#   development  -> development + sha-*
 name: publish-devcontainer
 
 on:

@@ -88,7 +88,7 @@ def empty_audio(sample_rate: int = SAMPLE_RATE) -> dict[str, Any]:
 
         wave_t = torch.zeros(1, 1, 1)
         return {"waveform": wave_t, "sample_rate": int(sample_rate)}
-    except Exception:  # noqa: BLE001 — hermetic tests have no torch
+    except Exception:  # noqa: BLE001 - hermetic tests have no torch
         return {"waveform": [[[0.0]]], "sample_rate": int(sample_rate)}
 
 
@@ -112,5 +112,5 @@ def audio_from_pcm(samples: Any, sample_rate: int) -> dict[str, Any]:
         elif tensor.ndim == 2:
             tensor = tensor.unsqueeze(0)
         return {"waveform": tensor, "sample_rate": int(sample_rate)}
-    except Exception:  # noqa: BLE001 — fail-soft without torch
+    except Exception:  # noqa: BLE001 - fail-soft without torch
         return {"waveform": samples, "sample_rate": int(sample_rate)}

@@ -1,6 +1,6 @@
 ---
 title: "FPV dive"
-description: "Cinema Rack illustration — FPV dive."
+description: "Cinema Rack illustration - FPV dive."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

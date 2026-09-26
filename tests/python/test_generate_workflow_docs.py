@@ -222,7 +222,7 @@ def test_expand_choices_image_formats_and_cinema_recipes() -> None:
     )
     ids = {row["id"] for row in formats}
     assert "Custom" in ids
-    assert "16:9 LTX feeder (1280×704)" in ids
+    assert "16:9 LTX feeder (1280x704)" in ids
     video = gen.expand_choices(
         {"choices_from": "video_formats"},
         styles={},
@@ -231,7 +231,7 @@ def test_expand_choices_image_formats_and_cinema_recipes() -> None:
     )
     video_ids = {row["id"] for row in video}
     assert "Custom" in video_ids
-    assert "LTX · 16:9 YouTube (1280×704)" in video_ids
+    assert "LTX - 16:9 YouTube (1280x704)" in video_ids
     families = gen.expand_choices(
         {"choices_from": "video_families"},
         styles={},
@@ -309,7 +309,7 @@ def test_format_choice_helpers_missing_files(tmp_path: Path, monkeypatch: pytest
     )
     video_rows = gen._video_format_choices()
     assert video_rows[0]["id"] == "Custom"
-    assert "832×480" in video_rows[1]["description"]
+    assert "832x480" in video_rows[1]["description"]
     family_rows = gen._video_family_choices()
     assert family_rows[0]["id"] == "Wan 5B"
     (tmp_path / "no-modes.json").write_text("[]", encoding="utf-8")

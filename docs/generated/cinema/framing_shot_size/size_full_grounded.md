@@ -1,6 +1,6 @@
 ---
 title: "Grounded Full"
-description: "Cinema Rack illustration — Grounded Full."
+description: "Cinema Rack illustration - Grounded Full."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

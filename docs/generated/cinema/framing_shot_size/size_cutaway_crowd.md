@@ -1,6 +1,6 @@
 ---
 title: "Crowd Cutaway"
-description: "Cinema Rack illustration — Crowd Cutaway."
+description: "Cinema Rack illustration - Crowd Cutaway."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

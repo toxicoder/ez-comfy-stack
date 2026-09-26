@@ -27,7 +27,7 @@ Destination is `workflows/_lab/<lane>/<id>.json` (optional `--subdir`). Do not r
 
 ```mermaid
 flowchart TB
-  A["Branch from development"] --> B["TDD: red → green → refactor"]
+  A["Branch from development"] --> B["TDD: red -> green -> refactor"]
   B --> C["Commit tests + production together"]
   C --> D["bazelisk run //:validate<br/>Pyright + mypy inside test-fast + lint"]
   D --> E["PR into development"]
@@ -35,9 +35,9 @@ flowchart TB
 
 ## Editor
 
-VS Code / Cursor: open the **repo root**. Accept the recommended extensions (Pylance, mypy, shfmt, ShellCheck, Bazel, Container Tools, GitHub Actions, Tailwind CSS, MDX). Optional: **Dev Containers: Reopen in Container** ([Contributor Dev Container](docs/contribute/devcontainer.md)) for a Linux amd64/arm64 toolchain with Grok Build. **Run Task** → `validate` is `bazelisk run //:validate`; `doctor` and `docs-serve` wrap `//:manage -- doctor` and `//docs:serve`. Format-on-save is shell (shfmt) and Starlark only. Debug configs run pytest with a relative `PYTHONPATH` only — no `.env`, interpreter path, or host variables are committed. `main` and `development` are branch-protected in the workspace so casual commits on those names prompt first.
+VS Code / Cursor: open the **repo root**. Accept the recommended extensions (Pylance, mypy, shfmt, ShellCheck, Bazel, Container Tools, GitHub Actions, Tailwind CSS, MDX). Optional: **Dev Containers: Reopen in Container** ([Contributor Dev Container](docs/contribute/devcontainer.md)) for a Linux amd64/arm64 toolchain with Grok Build. **Run Task** -> `validate` is `bazelisk run //:validate`; `doctor` and `docs-serve` wrap `//:manage -- doctor` and `//docs:serve`. Format-on-save is shell (shfmt) and Starlark only. Debug configs run pytest with a relative `PYTHONPATH` only - no `.env`, interpreter path, or host variables are committed. `main` and `development` are branch-protected in the workspace so casual commits on those names prompt first.
 
-File watchers ignore local runtime dumps (`.models`, `comfy-state`, `output` / `outputs`, `input` / `inputs`, venvs, and Bazel `external/`). Pylance reports diagnostics for open files only; workspace-wide Pyright and mypy still run in `bazelisk test //:test-fast`. Bazel CodeLens and the Targets tree are off so the extension does not background-query (`bazel.commandLine.queriesShareServer` is false). Tailwind does not scan `docs/generated` or docs-site build output. If the editor is still heavy: Command Palette → **Developer: Open Process Explorer** / **Extension Bisect**, starting with Bazel, Tailwind, and MDX.
+File watchers ignore local runtime dumps (`.models`, `comfy-state`, `output` / `outputs`, `input` / `inputs`, venvs, and Bazel `external/`). Pylance reports diagnostics for open files only; workspace-wide Pyright and mypy still run in `bazelisk test //:test-fast`. Bazel CodeLens and the Targets tree are off so the extension does not background-query (`bazel.commandLine.queriesShareServer` is false). Tailwind does not scan `docs/generated` or docs-site build output. If the editor is still heavy: Command Palette -> **Developer: Open Process Explorer** / **Extension Bisect**, starting with Bazel, Tailwind, and MDX.
 
 ## Commit messages
 
@@ -54,7 +54,7 @@ flowchart LR
   P["scripts/lib/*.sh"] --> T1["tests/bats/lib_unit.bats"]
   U["scripts/utilities/name.sh"] --> T2["tests/bats/name.bats"]
   M["scripts/manage.sh"] --> T3["tests/bats/manage.bats"]
-  D["docker/patch_*.py · safety"] --> T4["tests/python/* · safety.bats"]
+  D["docker/patch_*.py - safety"] --> T4["tests/python/* - safety.bats"]
 ```
 
 ## PR checklist
@@ -69,11 +69,11 @@ flowchart LR
 
 ## Published docs
 
-Public site: [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (`main`) · [development](https://toxicoder.github.io/ez-comfy-stack/development/) (`development`).
+Public site: [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (`main`) - [development](https://toxicoder.github.io/ez-comfy-stack/development/) (`development`).
 
 - PRs validate with `make docs` / `bazelisk run //docs:docs` (generators + Fumadocs export into `docs-site/out/`).
-- After merge to `main` or `development`, `.github/workflows/deploy-docs.yml` publishes one Next export per run → `gh-pages` (`/latest/` from `main`, `/development/` from `development`). Each alias shows a **Last published** chip stamped at that deploy (`EZ_DOCS_PUBLISHED_AT`).
-- Prefer **relative** in-repo doc links (`docs/…`, same-folder page links) so they work on the branch you are viewing and under each published version path.
+- After merge to `main` or `development`, `.github/workflows/deploy-docs.yml` publishes one Next export per run -> `gh-pages` (`/latest/` from `main`, `/development/` from `development`). Each alias shows a **Last published** chip stamped at that deploy (`EZ_DOCS_PUBLISHED_AT`).
+- Prefer **relative** in-repo doc links (`docs/...`, same-folder page links) so they work on the branch you are viewing and under each published version path.
 - Docs app: Node 22+ and `./docs/setup-docs.sh` (npm inside `docs-site/`). Python `docs/requirements.txt` is generators only.
 
 ## Style

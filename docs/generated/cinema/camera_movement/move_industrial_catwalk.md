@@ -1,6 +1,6 @@
 ---
 title: "Catwalk track"
-description: "Cinema Rack illustration — Catwalk track."
+description: "Cinema Rack illustration - Catwalk track."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

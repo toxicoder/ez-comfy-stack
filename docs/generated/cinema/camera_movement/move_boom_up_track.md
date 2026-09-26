@@ -1,6 +1,6 @@
 ---
 title: "Boom up while tracking"
-description: "Cinema Rack illustration — Boom up while tracking."
+description: "Cinema Rack illustration - Boom up while tracking."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

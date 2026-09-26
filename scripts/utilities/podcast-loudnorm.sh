@@ -5,7 +5,7 @@
 # ffmpeg loudnorm for podcast / YouTube masters. Comfy cannot LUFS-normalize.
 #
 # Purpose:
-#   Target −16 LUFS (podcast) or −14 LUFS (YouTube). Never silently skip.
+#   Target -16 LUFS (podcast) or -14 LUFS (YouTube). Never silently skip.
 #
 # Usage:
 #   ./scripts/utilities/podcast-loudnorm.sh status [--json]
@@ -127,7 +127,7 @@ parse_args() {
       status | run) CMD="${1}" ;;
       -h | --help)
         echo "Usage: $0 status|run [--in FILE] [--out FILE] [--target podcast|youtube] [--json]" >&2
-        echo "  podcast = −16 LUFS; youtube = −14 LUFS. Fails if ffmpeg is missing." >&2
+        echo "  podcast = -16 LUFS; youtube = -14 LUFS. Fails if ffmpeg is missing." >&2
         exit 0
         ;;
       *)
@@ -184,7 +184,7 @@ cmd_status() {
     log "podcast-loudnorm target=${TARGET} I=${i} LUFS filter=$(loudnorm_filter) ffmpeg=${has}"
   fi
   if [[ ${has} != "true" ]]; then
-    err "ffmpeg missing — loudnorm will not silently skip"
+    err "ffmpeg missing - loudnorm will not silently skip"
     return 1
   fi
   return 0
@@ -217,8 +217,8 @@ cmd_run() {
     out="$(default_out_path)"
   fi
   filter="$(loudnorm_filter)"
-  log "loudnorm ${IN_FILE} → ${out} (${filter})"
-  if ! run_ffmpeg_logged "loudnorm → ${out}" -- ffmpeg -y -i "${IN_FILE}" -af "${filter}" "${out}"; then
+  log "loudnorm ${IN_FILE} -> ${out} (${filter})"
+  if ! run_ffmpeg_logged "loudnorm -> ${out}" -- ffmpeg -y -i "${IN_FILE}" -af "${filter}" "${out}"; then
     err "ffmpeg loudnorm failed for ${IN_FILE} (not skipped)"
     return 1
   fi

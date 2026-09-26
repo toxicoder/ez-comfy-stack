@@ -389,7 +389,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## dcc/guide-still\n\nKlein 4B **edit** of a guide-pack still loaded in-canvas (no LoadImage / --install-inputs). Enhance **on**. Seed **42**. Size **1280x704**. Prefix ``ez_guide_hero``.\n\nOccupancy: **klein**. Wire: EZDCCLoadGuideStill ``layer=first`` \u2192 OccupancyGate \u2192 Klein envelope. Defaults: slug ``go-see``, shot_id ``12``.\n\n```bash\n./scripts/manage.sh occupancy enter blender-desk\n./scripts/manage.sh export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth\n./scripts/manage.sh occupancy enter klein --yes\n```\n\nblender-desk fails the gate (park is for dumps). After Queue, overlay-qc. Path D: laptop dump, rsync ``guides/``, Spark Comfy. Stay on :8188.\n"
+        "## dcc/guide-still\n\nKlein 4B **edit** of a guide-pack still loaded in-canvas (no LoadImage / --install-inputs). Enhance **on**. Seed **42**. Size **1280x704**. Prefix ``ez_guide_hero``.\n\nOccupancy: **klein**. Wire: EZDCCLoadGuideStill ``layer=first`` -> OccupancyGate -> Klein envelope. Defaults: slug ``go-see``, shot_id ``12``.\n\n```bash\n./scripts/manage.sh occupancy enter blender-desk\n./scripts/manage.sh export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth\n./scripts/manage.sh occupancy enter klein --yes\n```\n\nblender-desk fails the gate (park is for dumps). After Queue, overlay-qc. Path D: laptop dump, rsync ``guides/``, Spark Comfy. Stay on :8188.\n"
       ],
       "title": "Operator note"
     },
@@ -996,7 +996,7 @@
         0
       ]
     },
-    "lab_note": "## dcc/guide-still\n\nKlein 4B **edit** of a guide-pack still loaded in-canvas (no LoadImage / --install-inputs). Enhance **on**. Seed **42**. Size **1280x704**. Prefix ``ez_guide_hero``.\n\nOccupancy: **klein**. Wire: EZDCCLoadGuideStill ``layer=first`` \u2192 OccupancyGate \u2192 Klein envelope. Defaults: slug ``go-see``, shot_id ``12``.\n\n```bash\n./scripts/manage.sh occupancy enter blender-desk\n./scripts/manage.sh export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth\n./scripts/manage.sh occupancy enter klein --yes\n```\n\nblender-desk fails the gate (park is for dumps). After Queue, overlay-qc. Path D: laptop dump, rsync ``guides/``, Spark Comfy. Stay on :8188.\n",
+    "lab_note": "## dcc/guide-still\n\nKlein 4B **edit** of a guide-pack still loaded in-canvas (no LoadImage / --install-inputs). Enhance **on**. Seed **42**. Size **1280x704**. Prefix ``ez_guide_hero``.\n\nOccupancy: **klein**. Wire: EZDCCLoadGuideStill ``layer=first`` -> OccupancyGate -> Klein envelope. Defaults: slug ``go-see``, shot_id ``12``.\n\n```bash\n./scripts/manage.sh occupancy enter blender-desk\n./scripts/manage.sh export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth\n./scripts/manage.sh occupancy enter klein --yes\n```\n\nblender-desk fails the gate (park is for dumps). After Queue, overlay-qc. Path D: laptop dump, rsync ``guides/``, Spark Comfy. Stay on :8188.\n",
     "lab_description": "Klein 4B edit of EZDCCLoadGuideStill first.png. Enhance on. 1280x704. Seed 42.",
     "lab_app_mode": {
       "enabled": true,
@@ -1017,7 +1017,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
           }
         ],
         [
@@ -1069,7 +1069,7 @@
           18,
           "upscale",
           {
-            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840\u00d72160 box (portrait 2160\u00d73840).",
+            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840x2160 box (portrait 2160x3840).",
             "label": "Upscale"
           }
         ],
@@ -1077,7 +1077,7 @@
           12,
           "style",
           {
-            "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
+            "description": "Optional look. Hidden on I2V - the start image owns look.",
             "label": "Style"
           }
         ],

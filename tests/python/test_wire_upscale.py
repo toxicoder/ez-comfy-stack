@@ -81,7 +81,7 @@ def _save_image_source(graph: dict[str, Any], save: dict[str, Any]) -> dict[str,
 
 
 def test_wire_upscale_reuses_orphan_between_match_and_save() -> None:
-    """A dead decode → upscale branch is moved onto Match → Save."""
+    """A dead decode -> upscale branch is moved onto Match -> Save."""
     graph: dict[str, Any] = {
         "last_node_id": 4,
         "last_link_id": 3,

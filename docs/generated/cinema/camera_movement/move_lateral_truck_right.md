@@ -1,6 +1,6 @@
 ---
 title: "Truck right"
-description: "Cinema Rack illustration — Truck right."
+description: "Cinema Rack illustration - Truck right."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

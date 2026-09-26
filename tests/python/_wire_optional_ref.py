@@ -36,7 +36,7 @@ def _link_map(graph: dict[str, Any]) -> dict[int, list[Any]]:
         graph: Serialized graph.
 
     Returns:
-        link id → link row.
+        link id -> link row.
     """
     return {int(row[0]): row for row in graph.get("links") or []}
 
@@ -159,7 +159,7 @@ def wire_optional_ref(graph: dict[str, Any]) -> dict[str, Any]:
                 "filename",
                 {
                     "label": "Example / reference (optional)",
-                    "description": "Optional still. Empty is valid — Queue without a file. When set, Klein uses it as a native reference.",
+                    "description": "Optional still. Empty is valid - Queue without a file. When set, Klein uses it as a native reference.",
                 },
             ]
         )

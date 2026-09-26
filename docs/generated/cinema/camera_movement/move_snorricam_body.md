@@ -1,6 +1,6 @@
 ---
 title: "Body-mounted facing"
-description: "Cinema Rack illustration — Body-mounted facing."
+description: "Cinema Rack illustration - Body-mounted facing."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

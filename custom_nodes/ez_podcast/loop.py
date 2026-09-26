@@ -27,12 +27,12 @@ def _as_pcm(waveform: Any) -> list[float]:
     if hasattr(waveform, "numpy"):
         try:
             waveform = waveform.numpy()
-        except Exception:  # noqa: BLE001 — keep walking
+        except Exception:  # noqa: BLE001 - keep walking
             pass
     if hasattr(waveform, "reshape"):
         try:
             return [float(x) for x in waveform.reshape(-1).tolist()]
-        except Exception:  # noqa: BLE001 — fall through
+        except Exception:  # noqa: BLE001 - fall through
             pass
     if isinstance(waveform, (int, float)):
         return [float(waveform)]
@@ -102,7 +102,7 @@ def pack_audio(samples: list[float], sample_rate: int) -> dict[str, Any]:
         elif tensor.ndim == 2:
             tensor = tensor.unsqueeze(0)
         return {"waveform": tensor, "sample_rate": rate}
-    except Exception:  # noqa: BLE001 — hermetic tests have no torch
+    except Exception:  # noqa: BLE001 - hermetic tests have no torch
         return {"waveform": [[[float(x) for x in body]]], "sample_rate": rate}
 
 

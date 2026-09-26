@@ -105,7 +105,7 @@ for candidate in "${REFERENCES[@]}"; do
     IMAGE="$candidate"
     break
   fi
-  echo "→ ${candidate} reported '${reported:-nothing}'; wanted ${EXPECTED_MACHINE}" >&2
+  echo "-> ${candidate} reported '${reported:-nothing}'; wanted ${EXPECTED_MACHINE}" >&2
 done
 [[ -n $IMAGE ]] || {
   echo "no candidate image starts a ${PLATFORM} container (${EXPECTED_MACHINE})" >&2
@@ -113,7 +113,7 @@ done
   exit 1
 }
 
-echo "→ baselines render in ${IMAGE} (${PLATFORM}), matching the docs CI job"
+echo "-> baselines render in ${IMAGE} (${PLATFORM}), matching the docs CI job"
 
 # Named volume shadows the checkout's node_modules so the workstation install is neither used
 # (wrong platform binaries) nor clobbered.  It is keyed to the package, not the machine.
@@ -133,11 +133,11 @@ docker run --rm --init --platform "$PLATFORM" \
 status=$?
 if [[ $status -eq 0 ]]; then
   if [[ $UPDATE == "true" ]]; then
-    echo "→ baselines rewritten in docs-site/tests/visual/goldens — review the image diff, then commit"
+    echo "-> baselines rewritten in docs-site/tests/visual/goldens - review the image diff, then commit"
   else
-    echo "→ baselines match"
+    echo "-> baselines match"
   fi
 else
-  echo "→ see docs-site/tests/visual/actuals/ for what was captured" >&2
+  echo "-> see docs-site/tests/visual/actuals/ for what was captured" >&2
 fi
 exit "$status"

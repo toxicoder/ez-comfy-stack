@@ -29,9 +29,9 @@ LAZY = LAZY_FORGE
 
 FORGE_NOTE = """## inspire/prompt-forge
 
-Prompt Forge — rewrite a lazy sentence for every US-safe CLIP family. No UNET, no VAE, no KSampler.
+Prompt Forge - rewrite a lazy sentence for every US-safe CLIP family. No UNET, no VAE, no KSampler.
 
-Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
+Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
   ./scripts/manage.sh occupancy enter llm-desk --yes
 
@@ -44,15 +44,15 @@ Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to
 5. Copy the family you need into **stills/still-draft** (Spark Still) or an opt-in graph.
 
 Turn Enhance off to pin the widget text. Context is ignored when Enhance is off.
-Z-Image Turbo ignores a separate negative — exclusions stay in the positive.
+Z-Image Turbo ignores a separate negative - exclusions stay in the positive.
 Wan S2V: wav owns lip-sync. DreamX: first frame owns look; paragraph is AV.
 """
 
 BEAT_NOTE = """## inspire/beat-sheet
 
-Script desk — 6 beats × enter / traverse / exit. Occupancy: none — stop nothing GPU.
+Script desk - 6 beats x enter / traverse / exit. Occupancy: none - stop nothing GPU.
 
-This graph does not print video. Fill Logline, Script, Audio policy, Score — those desk
+This graph does not print video. Fill Logline, Script, Audio policy, Score - those desk
 fields are packed into Context Join and condition every card rewrite. Then fill the 18 cards
 (`action | camera | world SFX | dialogue`). Audio policy also feeds LTX audio notes.
 Write YAML on the host:
@@ -71,7 +71,7 @@ Shot-card keys (defaults fail-closed):
   score: none | acestep-instrumental
   clay: skip | required
   audio_lock: none | a2v
-  camera: dolly in | tracking | fixed camera | …
+  camera: dolly in | tracking | fixed camera | ...
 
 Shot 1 of beat 1 load_from: identity. Later shots load_from: <prev_prefix>_last.
 
@@ -80,10 +80,10 @@ Do not type a 30/60/90 s denoise. Standalone LTX Apps default to 8.00 s (193 fra
 
 RESEARCH_NOTE = """## inspire/research-chat
 
-Creative research desk — chat LLM with web search and sequential research
+Creative research desk - chat LLM with web search and sequential research
 subagents. No UNET, no VAE, no KSampler.
 
-Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
+Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
   ./scripts/manage.sh occupancy enter llm-desk --yes
 
@@ -102,10 +102,10 @@ pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
 
 APP_FORGE_NOTE = """## inspire/app-forge
 
-App Forge — clone a shipped lab graph into live `_user/` as a new App.
+App Forge - clone a shipped lab graph into live `_user/` as a new App.
 No UNET, no VAE, no KSampler. Does not Queue the result.
 
-Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
+Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
   ./scripts/manage.sh occupancy enter llm-desk --yes
 
@@ -117,7 +117,7 @@ heuristic if the GGUF is missing. CPU 4B is required next to Wan/LTX/TRELLIS.
 2. Set **Slug** (lowercase, hyphen). **As app** on writes `*.app.json`.
 3. Queue. Read **Path**, **Picked template**, and **Result occupancy**.
 4. Open `_user/<slug>` from the Apps sidebar. Queue that graph when GB10
-   occupancy matches the result (klein / wan / ltx / …).
+   occupancy matches the result (klein / wan / ltx / ...).
 
 Laptop agents: `./scripts/manage.sh studio-mcp --stdio` (Path D). Same
 pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
@@ -126,9 +126,9 @@ Does not write `workflows/_lab/`. Keepers: `promote-workflow`.
 
 CINEMA_NOTE = """## inspire/cinema-rack
 
-Cinema Rack — pick one cinematography technique per axis and splice a Klein / Wan / LTX prompt. No UNET, no VAE, no KSampler.
+Cinema Rack - pick one cinematography technique per axis and splice a Klein / Wan / LTX prompt. No UNET, no VAE, no KSampler.
 
-Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
+Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
   ./scripts/manage.sh occupancy enter llm-desk --yes
 
@@ -136,7 +136,7 @@ Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to
 
 1. Type a **Subject** (who/what). Leave empty to splice techniques only.
 2. Optional **Recipe** fills empty axes. Explicit dropdowns win.
-3. Pick at most one technique per axis (shot size, angle, move, lens, …).
+3. Pick at most one technique per axis (shot size, angle, move, lens, ...).
 4. Set **Family** (klein, wan_t2v, ltx_t2v, or the i2v / identity flavors).
 5. Queue. Each Enhance node previews the rewritten STRING. Style stays **none** so cinema clauses are not stripped.
 6. Copy the family you need into **stills/still-draft** or an I2V graph.
@@ -147,9 +147,9 @@ Cinema Rack is deterministic (no LLM). Enhance is optional downstream.
 
 AUDIO_NOTE = """## inspire/audio-rack
 
-Audio Rack — pick one audio/music technique per axis and splice ACE-Step tags and lyrics form. No UNET, no VAE, no KSampler.
+Audio Rack - pick one audio/music technique per axis and splice ACE-Step tags and lyrics form. No UNET, no VAE, no KSampler.
 
-Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
+Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
   ./scripts/manage.sh occupancy enter llm-desk --yes
 
@@ -159,7 +159,7 @@ Do **not** load ACE-Step on this canvas. Copy tags/lyrics into audio/music/rap-d
 
 1. Optional **Brief** (what the track is about). Ignored on instrumental / podcast-bed.
 2. Optional **Recipe** fills empty axes. Explicit dropdowns win.
-3. Pick at most one technique per axis (genre, tempo, drums, bass, …).
+3. Pick at most one technique per axis (genre, tempo, drums, bass, ...).
 4. Set **Family** (ace_vocal, ace_instrumental, or podcast_bed).
 5. Queue. Vocal / instrumental Enhance nodes preview rewritten tags and lyrics.
 6. Copy tags into **audio/music/rap-draft**. Match encoder BPM to the notes line.
@@ -557,7 +557,7 @@ def build_beat_sheet() -> dict:
             x = 40 + col * (card_w + gap)
             title = f"Beat {beat} {role}"
             placeholder = (
-                f"{role} beat {beat} — action | camera | world SFX | dialogue"
+                f"{role} beat {beat} - action | camera | world SFX | dialogue"
             )
             prim_id = nid
             nodes.append(
@@ -634,7 +634,7 @@ def build_beat_sheet() -> dict:
         "extra": {
             "lab_profile": "inspire/beat-sheet",
             "lab_note": BEAT_NOTE,
-            "lab_description": "Script desk: logline, audio policy, 18 shot cards → shot-sheet YAML",
+            "lab_description": "Script desk: logline, audio policy, 18 shot cards -> shot-sheet YAML",
             "ds": {"scale": 1, "offset": [0, 0]},
         },
         "version": 0.4,
@@ -1003,7 +1003,7 @@ LONGCAT_NOTE = """## optional/longcat-video
 Opt-in LongCat-Video (MIT) prompt preview. Not download-models. No UNET on this canvas.
 
 Download: ./scripts/manage.sh download-longcat --tier video
-Context-parallel two-Spark only with LAB_ALLOW_CONTEXT_PARALLEL=1. NCCL is out of this sample — tensor-parallel LLMs belong in nvidia-dgx-spark-lab.
+Context-parallel two-Spark only with LAB_ALLOW_CONTEXT_PARALLEL=1. NCCL is out of this sample - tensor-parallel LLMs belong in nvidia-dgx-spark-lab.
 Unload LTX first. Occupancy: one heavy job when you Queue a real LongCat printer.
 
 This canvas rewrites a lazy sentence with LongCat Prompt Enhance (T2V / I2V / continuation). Copy the CLIP box into your LongCat graph. Distilled LongCat is CFG 1 (negatives ignored); standard CFG is about 4.

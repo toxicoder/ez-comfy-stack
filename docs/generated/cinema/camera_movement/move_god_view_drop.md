@@ -1,6 +1,6 @@
 ---
 title: "God-view drop"
-description: "Cinema Rack illustration — God-view drop."
+description: "Cinema Rack illustration - God-view drop."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

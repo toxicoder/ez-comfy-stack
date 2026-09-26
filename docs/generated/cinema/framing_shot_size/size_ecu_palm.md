@@ -1,6 +1,6 @@
 ---
 title: "Palm Insert"
-description: "Cinema Rack illustration — Palm Insert."
+description: "Cinema Rack illustration - Palm Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -1,6 +1,6 @@
 ---
 title: "Low Over-Shoulder"
-description: "Cinema Rack illustration — Low Over-Shoulder."
+description: "Cinema Rack illustration - Low Over-Shoulder."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

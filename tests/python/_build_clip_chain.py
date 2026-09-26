@@ -8,7 +8,7 @@ Not imported by pytest (leading underscore). Run from repo root:
 Clones the standalone LTX I2V App, drops the full-batch SaveImage
 (``ez_ltx_hero_frames``), and expands to four Beat groups that share one
 UNET / video VAE / audio VAE / CLIP / EZQuality / EZVideoFormat /
-EZImageDescribe. Continuity is EZClipLastFrame IMAGE → next I2V start.
+EZImageDescribe. Continuity is EZClipLastFrame IMAGE -> next I2V start.
 Do not copy Klein identity, EZUnloadModels, ImageFromBatch, or EZFilmConcat.
 """
 
@@ -115,23 +115,23 @@ LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are inva
 
 Four LTX AV beats share one UNET / video VAE / audio VAE / CLIP. Last frame of beat N starts beat N+1. EZClipConcat stitches the four MP4s (hard cut). Primary output: `${{COMFY_OUTPUT_DIR}}/{CLIP_PREFIX_DEFAULT}.mp4` plus per-beat VHS (`ez_clip_b0N_ltx_video`) and last-frame PNG (`ez_clip_b0N_last`). No full-batch SaveImage.
 
-**8 seconds, 24 fps** (193 frames = 1+8n) chain-wide. Duration combo stays 5/8/10/12; mixed per-beat lengths are unsupported. Four × 8 s sequential prints are tens of minutes on GB10 — not a hang. Headroom preflight still applies at `start`.
+**8 seconds, 24 fps** (193 frames = 1+8n) chain-wide. Duration combo stays 5/8/10/12; mixed per-beat lengths are unsupported. Four x 8 s sequential prints are tens of minutes on GB10 - not a hang. Headroom preflight still applies at `start`.
 
-Occupancy: ltx — stop Wan, podcast, music, other LTX. One GB10 job. Occupancy ltx XOR. `occupancy enter ltx` before Queue. No Klein identity on this canvas.
+Occupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job. Occupancy ltx XOR. `occupancy enter ltx` before Queue. No Klein identity on this canvas.
 
-Duplicate Beat groups on canvas for beats 5–24:
+Duplicate Beat groups on canvas for beats 5-24:
 
 1. Duplicate the last Beat group.
-2. Set `VHS_VideoCombine.filename_prefix` to `ez_clip_b05_ltx_video` (then b06…).
+2. Set `VHS_VideoCombine.filename_prefix` to `ez_clip_b05_ltx_video` (then b06...).
 3. Set last-frame SaveImage prefix to `ez_clip_b05_last`.
-4. Wire previous `EZClipLastFrame.last_frame` → new `LTXVImgToVideo.image`.
-5. Wire new `VHS_VideoCombine.Filenames` → the next free `EZClipConcat.clip_0N` (`clip_05` for the fifth beat).
+4. Wire previous `EZClipLastFrame.last_frame` -> new `LTXVImgToVideo.image`.
+5. Wire new `VHS_VideoCombine.Filenames` -> the next free `EZClipConcat.clip_0N` (`clip_05` for the fifth beat).
 6. Keep the shared UNET / VAE / CLIP / Format / Seed / Rewrite / Audio notes wires (do not duplicate loaders).
 7. Save under `_user/` if you want a personal App; shipped `_lab` stays 4 beats.
 
 Past 24 stems: host `./scripts/utilities/concat-shots.sh --files a.mp4,b.mp4 --cap-seconds <sum> --yes` (default `--files` cap is 90 s).
 
-LTX-2.5 distilled AV. LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
+LTX-2.5 distilled AV. LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
 
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown is hidden on I2V.
 
@@ -293,7 +293,7 @@ def _make_last_save(nid: int, pos: list[float], beat: int) -> dict[str, Any]:
 
 
 def _make_concat(nid: int, pos: list[float]) -> dict[str, Any]:
-    """EZClipConcat with clip_01–24 sockets (four wired by the builder)."""
+    """EZClipConcat with clip_01-24 sockets (four wired by the builder)."""
     inputs: list[dict[str, Any]] = [
         {"name": f"clip_{index:02d}", "type": "VHS_FILENAMES", "link": None}
         for index in range(1, CLIP_COUNT_MAX + 1)
@@ -311,7 +311,7 @@ def _make_concat(nid: int, pos: list[float]) -> dict[str, Any]:
         "EZClipConcat",
         pos,
         [420, 280],
-        "Save clip chain (MP4) — play / download",
+        "Save clip chain (MP4) - play / download",
         [CLIP_PREFIX_DEFAULT, CLIP_CAP_DEFAULT_S, 0],
         inputs,
         [{"name": "path", "type": "STRING", "links": [], "slot_index": 0}],
@@ -331,7 +331,7 @@ def _instantiate_beat(
         index: 0-based beat index.
 
     Returns:
-        Slot name → new node.
+        Slot name -> new node.
     """
     beat_n = index + 1
     ox = BEAT_X
@@ -424,7 +424,7 @@ def _instantiate_beat(
         templates["vhs"],
         _beat_id(index, "vhs"),
         [ox + 1960, oy],
-        f"Beat {beat_n} video (MP4) — open node for preview",
+        f"Beat {beat_n} video (MP4) - open node for preview",
     )
     widgets = vhs.get("widgets_values")
     if isinstance(widgets, dict):
@@ -704,7 +704,7 @@ def build_clip_chain() -> dict[str, Any]:
     load["title"] = "Start image"
     note = live[17]
     note["widgets_values"] = [OPERATOR_NOTE]
-    note["title"] = "Operator note — clip chain"
+    note["title"] = "Operator note - clip chain"
     note["size"] = [960, 520]
     fmt = live[23]
     fmt["widgets_values"] = [

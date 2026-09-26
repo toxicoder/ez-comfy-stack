@@ -207,7 +207,7 @@ def expand_roots(env: dict[str, str] | None = None) -> dict[str, str]:
         env: Override environment. Default os.environ.
 
     Returns:
-        Token → path (missing tokens omitted).
+        Token -> path (missing tokens omitted).
     """
     src = env if env is not None else dict(os.environ)
     home = src.get("DISK_WIZARD_HOME") or src.get("HOME") or str(Path.home())
@@ -226,7 +226,7 @@ def expand_roots(env: dict[str, str] | None = None) -> dict[str, str]:
 
 
 def rank_score(size_bytes: int, leftover_weight: int, risk: str) -> float:
-    """Size × leftover weight / risk penalty.
+    """Size x leftover weight / risk penalty.
 
     Args:
         size_bytes: File or object size.
@@ -516,7 +516,7 @@ def walk_roots_to_stdout(roots: list[str], max_depth: int) -> int:
     for root in roots:
         if not root or not os.path.isdir(root):
             continue
-        emit_walk_progress(f"Scanning {root} (max depth {max_depth})…")
+        emit_walk_progress(f"Scanning {root} (max depth {max_depth})...")
         started = time.monotonic()
         count = 0
         last_hb = started
@@ -529,7 +529,7 @@ def walk_roots_to_stdout(roots: list[str], max_depth: int) -> int:
             now = time.monotonic()
             if count % WALK_PROGRESS_EVERY == 0 or (now - last_hb) >= interval:
                 emit_walk_progress(
-                    f"  still scanning {root}: {count} paths…",
+                    f"  still scanning {root}: {count} paths...",
                     rewrite=True,
                 )
                 last_hb = now

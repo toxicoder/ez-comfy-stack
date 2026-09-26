@@ -36,7 +36,7 @@ comfy-state/
 .models/
 
 # Operator / contributor private Comfy state (never commit)
-# Do not ignore the directory itself — git cannot re-include README/.gitkeep
+# Do not ignore the directory itself - git cannot re-include README/.gitkeep
 # if the parent is ignored. Nested _user dumps stay fully ignored.
 /workflows/*/_user/
 /workflows/*/*/_user/

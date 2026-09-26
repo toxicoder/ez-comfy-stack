@@ -1,6 +1,6 @@
 ---
 title: "Reverse Re-establish"
-description: "Cinema Rack illustration — Reverse Re-establish."
+description: "Cinema Rack illustration - Reverse Re-establish."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -1425,7 +1425,7 @@ def test_docs_shell_and_workflow_remainder(tmp_path: Path, monkeypatch: pytest.M
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
-    assert gwd._cell(None) == "—"
+    assert gwd._cell(None) == "-"
     assert gwd._fence("") == ""
     assert gwd._fence("``` hi")
     assert gwd._mermaid_id("G", "") == "Gx"

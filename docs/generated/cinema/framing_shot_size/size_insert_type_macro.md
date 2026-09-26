@@ -1,6 +1,6 @@
 ---
 title: "Macro Type Insert"
-description: "Cinema Rack illustration — Macro Type Insert."
+description: "Cinema Rack illustration - Macro Type Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

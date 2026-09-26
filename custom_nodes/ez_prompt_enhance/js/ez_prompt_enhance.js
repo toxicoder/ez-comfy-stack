@@ -49,7 +49,7 @@ const SAMPLE_CUSTOM = "custom";
 const TEXT_WIDGET_NAMES = ["prompt", "tags", "lyrics", "sources"];
 const catalogCache = new Map();
 
-/** Node type + mode/flavor → catalog stem. Mirrors samples.py _FAMILY_FOR_MODE. */
+/** Node type + mode/flavor -> catalog stem. Mirrors samples.py _FAMILY_FOR_MODE. */
 const FAMILY_FOR_MODE = {
   EZKleinPromptEnhance: {
     t2i: "klein_t2i",

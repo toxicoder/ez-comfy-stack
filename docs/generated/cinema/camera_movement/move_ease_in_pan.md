@@ -1,6 +1,6 @@
 ---
 title: "Ease-in pan"
-description: "Cinema Rack illustration — Ease-in pan."
+description: "Cinema Rack illustration - Ease-in pan."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

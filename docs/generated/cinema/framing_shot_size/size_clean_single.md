@@ -1,6 +1,6 @@
 ---
 title: "Clean Single"
-description: "Cinema Rack illustration — Clean Single."
+description: "Cinema Rack illustration - Clean Single."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

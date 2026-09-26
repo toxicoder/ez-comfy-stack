@@ -1,6 +1,6 @@
 ---
 title: "Toes Insert"
-description: "Cinema Rack illustration — Toes Insert."
+description: "Cinema Rack illustration - Toes Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Asset Bible contract (ez.asset.v1) — hermetic stdlib, no PyYAML.
+"""Asset Bible contract (ez.asset.v1) - hermetic stdlib, no PyYAML.
 
 Assets are operator outputs under COMFY_OUTPUT_DIR/assets, never MODELS_DIR.
 """
@@ -116,7 +116,7 @@ def kind_dirname(kind: str) -> str:
         kind: Asset kind enum value.
 
     Returns:
-        Plural directory name (e.g. object → objects).
+        Plural directory name (e.g. object -> objects).
 
     Raises:
         AssetBibleError: Unknown kind.
@@ -558,7 +558,7 @@ def _normalize_files(value: object) -> dict[str, Any]:
     """Accept a file-role mapping or list of role names.
 
     Args:
-        value: Mapping of role → presence, or list of role names.
+        value: Mapping of role -> presence, or list of role names.
 
     Returns:
         Role mapping (list form becomes ``{role: True}``).
@@ -806,7 +806,7 @@ def list_assets(output_dir: str | Path) -> list[dict[str, Any]]:
     """Load every asset.yaml under the catalog (fail closed on defects).
 
     Args:
-        output_dir: Catalog root (…/assets).
+        output_dir: Catalog root (.../assets).
 
     Returns:
         List of normalized asset dicts with path/slug.

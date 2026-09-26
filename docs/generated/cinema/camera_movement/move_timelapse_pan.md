@@ -1,6 +1,6 @@
 ---
 title: "Timelapse pan"
-description: "Cinema Rack illustration — Timelapse pan."
+description: "Cinema Rack illustration - Timelapse pan."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -1,6 +1,6 @@
 ---
 title: "Handheld run"
-description: "Cinema Rack illustration — Handheld run."
+description: "Cinema Rack illustration - Handheld run."
 tags: [cinema, prompting, catalog, clip]
 ---
 

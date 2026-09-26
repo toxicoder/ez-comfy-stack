@@ -270,7 +270,7 @@ def _run(
         duration_hint: Duration / framing line.
         audio_notes: Optional audio notes for AV families.
         style: Style catalog id or none.
-        mode: Family mode (i2v/flf/…) used to ignore style.
+        mode: Family mode (i2v/flf/...) used to ignore style.
         context: Optional supporting STRING.
         sample: Sample combo label.
         catalog: Hidden catalog widget.
@@ -953,7 +953,7 @@ class EZAceStepPromptEnhance:
         finally:
             try:
                 _close_llm()
-            except Exception as exc:  # noqa: BLE001 — unload is best-effort
+            except Exception as exc:  # noqa: BLE001 - unload is best-effort
                 _log(f"ACE writer unload failed: {exc}")
         if instrumental and "instrumental" not in rewritten_tags.lower():
             rewritten_tags = f"{rewritten_tags.rstrip(', ')}, instrumental, no vocals"
@@ -1300,7 +1300,7 @@ class EZNegativePromptEnhance:
         Args:
             prompt: Negative seed textarea.
             enhance: BOOLEAN; off still runs deterministic complement.
-            family: Negative prompt family (klein/wan/ltx/…).
+            family: Negative prompt family (klein/wan/ltx/...).
             positive: Optional CLIP-bound positive STRING.
 
         Returns:
@@ -1374,7 +1374,7 @@ class EZPromptBundle:
         """Join non-empty prompt strings in slot order.
 
         Args:
-            **texts: ``text_01`` … ``text_24`` STRING values.
+            **texts: ``text_01`` ... ``text_24`` STRING values.
 
         Returns:
             One string, paragraphs separated by a blank line.

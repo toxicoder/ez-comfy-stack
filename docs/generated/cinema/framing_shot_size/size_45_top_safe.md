@@ -1,6 +1,6 @@
 ---
 title: "4:5 Top Safe"
-description: "Cinema Rack illustration — 4:5 Top Safe."
+description: "Cinema Rack illustration - 4:5 Top Safe."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

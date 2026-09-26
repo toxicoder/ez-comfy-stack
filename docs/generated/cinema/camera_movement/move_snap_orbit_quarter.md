@@ -1,6 +1,6 @@
 ---
 title: "Snap quarter orbit"
-description: "Cinema Rack illustration — Snap quarter orbit."
+description: "Cinema Rack illustration - Snap quarter orbit."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

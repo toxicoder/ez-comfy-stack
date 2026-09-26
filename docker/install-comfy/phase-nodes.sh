@@ -83,9 +83,9 @@ nunchaku_platform_tag() {
 #######################################
 # Build a candidate GitHub release wheel URL for nunchaku (no network).
 # Globals:
-#   NUNCHAKU_VERSION — default 1.2.1 (aligned with ComfyUI-nunchaku v1.2.1)
+#   NUNCHAKU_VERSION - default 1.2.1 (aligned with ComfyUI-nunchaku v1.2.1)
 # Arguments:
-#   $1  Platform tag (linux_x86_64, …)
+#   $1  Platform tag (linux_x86_64, ...)
 #   $2  Python tag (cp312)
 #   $3  CUDA tag (cu13.0)
 #   $4  Torch tag (torch2.11)
@@ -141,9 +141,9 @@ install_nunchaku_wheel() {
     warn "nunchaku: unsupported arch $(uname -m); skipping (optional)"
     return 0
   fi
-  # Official v1.2.1 release assets are linux_x86_64 / win_amd64 only — no aarch64
+  # Official v1.2.1 release assets are linux_x86_64 / win_amd64 only - no aarch64
   if [[ ${plat} == "linux_aarch64" ]]; then
-    warn "nunchaku: no official linux_aarch64 wheels (GB10/Spark) — skipping"
+    warn "nunchaku: no official linux_aarch64 wheels (GB10/Spark) - skipping"
     warn "*-lab-example graphs use core UNET/CLIP/VAE loaders and do not need nunchaku"
     return 0
   fi
@@ -173,7 +173,7 @@ install_nunchaku_wheel() {
     done
   done
   warn "nunchaku wheel not available for ${plat}/${py_tag}/torch${torch_mm} after ${tried} tries (optional)"
-  warn "Do not pip install bare 'nunchaku' from PyPI — that is an unrelated stats package"
+  warn "Do not pip install bare 'nunchaku' from PyPI - that is an unrelated stats package"
   return 0
 }
 
@@ -344,13 +344,13 @@ install_llama_cpp_cpu() {
     log "llama-cpp-python (CPU wheel) installed from GitHub release"
     return 0
   fi
-  warn "llama-cpp-python CPU wheel pip failed — Enhance/dub will pass through until Queue heals the wheel"
+  warn "llama-cpp-python CPU wheel pip failed - Enhance/dub will pass through until Queue heals the wheel"
   return 0
 }
 
 #######################################
 # Optional faster-whisper for local dub ASR. Fail-soft. Independent of clone.
-# chatterbox-tts pins torch==2.6.0 — never install it on the same pip command.
+# chatterbox-tts pins torch==2.6.0 - never install it on the same pip command.
 # Globals:
 #   None
 # Arguments:
@@ -365,7 +365,7 @@ install_faster_whisper_wheel() {
     log "faster-whisper installed for local dub ASR"
     return 0
   fi
-  warn "faster-whisper pip failed — Queue writes empty mix until: pip install faster-whisper"
+  warn "faster-whisper pip failed - Queue writes empty mix until: pip install faster-whisper"
   return 0
 }
 
@@ -393,21 +393,21 @@ install_chatterbox_wheel() {
   done < <(chatterbox_clone_extra_packages)
   # Downgrade setuptools 82+ so resemble-perth can import pkg_resources.
   pip_install "${pin}" ||
-    warn "setuptools pin pip failed — PerTh watermarker may be missing"
+    warn "setuptools pin pip failed - PerTh watermarker may be missing"
   pip_install --upgrade-strategy only-if-needed "${extras[@]}" ||
-    warn "chatterbox extras pip failed — clone may still miss"
+    warn "chatterbox extras pip failed - clone may still miss"
   if pip_install --upgrade --force-reinstall --no-deps "${zip}"; then
     log "chatterbox-tts V3 source installed --no-deps (did not pin torch)"
     return 0
   fi
-  warn "chatterbox-tts --no-deps failed — clone status will name the miss"
+  warn "chatterbox-tts --no-deps failed - clone status will name the miss"
   return 0
 }
 
 #######################################
 # Optional faster-whisper + chatterbox-tts for local dub. Fail-soft.
 # Installs ASR first so a clone miss cannot block transcription.
-# Does not pull weights (download-dub). Missing wheels → empty mix + Dub status.
+# Does not pull weights (download-dub). Missing wheels -> empty mix + Dub status.
 # Globals:
 #   None
 # Arguments:
@@ -443,13 +443,13 @@ install_sage_wheel_if_pinned() {
     return 0
   fi
   if [[ -z ${sha} ]]; then
-    warn "LAB_SAGE_WHEEL_URL set without LAB_SAGE_WHEEL_SHA256 — refusing Sage wheel"
+    warn "LAB_SAGE_WHEEL_URL set without LAB_SAGE_WHEEL_SHA256 - refusing Sage wheel"
     return 0
   fi
   log "SageAttention pinned wheel requested (sha256=${sha})"
   warn "Kitchen remains the Comfy CLI default; do not pass --use-sage-attention with --use-ck-attention"
   if pip_install "${url}"; then
-    log "Sage wheel pip ok — verify torch ABI before switching attention flags"
+    log "Sage wheel pip ok - verify torch ABI before switching attention flags"
   else
     warn "Sage wheel install failed (optional; Kitchen stays default)"
   fi
@@ -508,6 +508,6 @@ phase_nodes() {
   if pip_install mutagen; then
     log "mutagen installed for album FLAC/MP3 tags"
   else
-    warn "mutagen pip failed — album tags write sidecar JSON only"
+    warn "mutagen pip failed - album tags write sidecar JSON only"
   fi
 }

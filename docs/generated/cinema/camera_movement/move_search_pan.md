@@ -1,6 +1,6 @@
 ---
 title: "Search pan"
-description: "Cinema Rack illustration — Search pan."
+description: "Cinema Rack illustration - Search pan."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

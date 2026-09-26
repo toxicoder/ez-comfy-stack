@@ -1,6 +1,6 @@
 ---
 title: "Dolly zoom out"
-description: "Cinema Rack illustration — Dolly zoom out."
+description: "Cinema Rack illustration - Dolly zoom out."
 tags: [cinema, prompting, catalog, clip]
 ---
 

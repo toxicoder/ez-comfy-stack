@@ -1,6 +1,6 @@
 ---
 title: "Group Shot"
-description: "Cinema Rack illustration — Group Shot."
+description: "Cinema Rack illustration - Group Shot."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

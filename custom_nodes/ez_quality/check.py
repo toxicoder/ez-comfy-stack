@@ -722,7 +722,7 @@ def _folder_paths_has(name: str) -> bool:
         return False
     try:
         import folder_paths  # type: ignore[import-not-found]
-    except Exception:  # noqa: BLE001 — optional in pytest
+    except Exception:  # noqa: BLE001 - optional in pytest
         return False
     getter = getattr(folder_paths, "get_filename_list", None)
     if getter is None:
@@ -730,7 +730,7 @@ def _folder_paths_has(name: str) -> bool:
     for key in _FOLDER_KEYS:
         try:
             names = getter(key)
-        except Exception:  # noqa: BLE001 — unknown folder key
+        except Exception:  # noqa: BLE001 - unknown folder key
             continue
         if not names:
             continue

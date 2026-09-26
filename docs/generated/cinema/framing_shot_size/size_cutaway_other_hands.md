@@ -1,6 +1,6 @@
 ---
 title: "Other Hands Cutaway"
-description: "Cinema Rack illustration — Other Hands Cutaway."
+description: "Cinema Rack illustration - Other Hands Cutaway."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -8,11 +8,11 @@ tags: [architecture, compose, occupancy, spark, safety]
 
 **What's on this page**
 
-- **Compose services** — `comfyui` plus optional `studio-ui` profile
-- **Three stores** — GHCR image vs `${MODELS_DIR}` vs `comfy-state`
-- **Occupancy XOR** — park vs stop; one heavy GPU job
+- **Compose services** - `comfyui` plus optional `studio-ui` profile
+- **Three stores** - GHCR image vs `${MODELS_DIR}` vs `comfy-state`
+- **Occupancy XOR** - park vs stop; one heavy GPU job
 - **Host sidecars** vs Compose
-- **Spark farm** — independent workers and a shared `${MODELS_DIR}`; no in-tree NCCL
+- **Spark farm** - independent workers and a shared `${MODELS_DIR}`; no in-tree NCCL
 
 **What this enables**
 
@@ -42,16 +42,16 @@ Source of truth: `docker/docker-compose.yml` (operator entry: `./scripts/manage.
 
 | Service | Profile | GPU | Memory | Restart | Port |
 | --- | --- | --- | --- | --- | --- |
-| **comfyui** (`ez-comfy-studio`) | default | `gpus: all` | `mem_limit` **90g**, `mem_reservation` **80g**, `shm_size` 16gb, `cpus: 16.0` | `"no"` | `${COMFY_PORT}` → 8188 |
-| **studio-ui** (`ez-comfy-studio-ui`) | `studio-ui` | **none** | `mem_limit` 512m | `"no"` | `${STUDIO_UI_PORT:-8190}` → 8190 |
+| **comfyui** (`ez-comfy-studio`) | default | `gpus: all` | `mem_limit` **90g**, `mem_reservation` **80g**, `shm_size` 16gb, `cpus: 16.0` | `"no"` | `${COMFY_PORT}` -> 8188 |
+| **studio-ui** (`ez-comfy-studio-ui`) | `studio-ui` | **none** | `mem_limit` 512m | `"no"` | `${STUDIO_UI_PORT:-8190}` -> 8190 |
 
 Default `./scripts/manage.sh start` starts **comfyui only**. The jobstore board is opt-in: [studio-ui](../reference/studio-ui.md).
 
 ```mermaid
 flowchart TB
-  subgraph Compose["Docker Compose · project ez-comfy"]
-    C["comfyui<br/>restart: no · 90g / 80g<br/>gpus: all"]
-    U["studio-ui profile<br/>optional · no GPU · 512m"]
+  subgraph Compose["Docker Compose - project ez-comfy"]
+    C["comfyui<br/>restart: no - 90g / 80g<br/>gpus: all"]
+    U["studio-ui profile<br/>optional - no GPU - 512m"]
   end
   subgraph Host["Spark host"]
     M["MODELS_DIR bind /models"]
@@ -71,10 +71,10 @@ flowchart TB
 | Store | Holds | Destroyed by |
 | --- | --- | --- |
 | **GHCR image** | ComfyUI + PyTorch (no Klein / Wan / LTX weights) | Re-pull / rebuild |
-| **`${MODELS_DIR}`** | Weights + `comfy/` relative symlinks | You, `reap-models`, or disk-wizard — **not** `cleanup` |
+| **`${MODELS_DIR}`** | Weights + `comfy/` relative symlinks | You, `reap-models`, or disk-wizard - **not** `cleanup` |
 | **`comfy-state` volume** (`ez-comfy-state`) | Comfy install, venv, lab `ez_*` packs | `cleanup` (type **DELETE**) only |
 
-Generated media, LoadImage inputs, Comfy `user/`, occupancy JSON, and operator `_user` node packs live on **`${COMFY_OUTPUT_DIR}`**. Inside the container that tree is `/outputs` (`COMFY_OUTPUT_DIR=/outputs`) plus the `comfy-user` bind at `/comfy-state/ComfyUI/user`. `cleanup` does not delete the host tree. Layout: [Hardware, memory, and safety](hardware.md) · [Models and cache](../models-and-cache.md) · [Backup and restore](../operate/backup-restore.md).
+Generated media, LoadImage inputs, Comfy `user/`, occupancy JSON, and operator `_user` node packs live on **`${COMFY_OUTPUT_DIR}`**. Inside the container that tree is `/outputs` (`COMFY_OUTPUT_DIR=/outputs`) plus the `comfy-user` bind at `/comfy-state/ComfyUI/user`. `cleanup` does not delete the host tree. Layout: [Hardware, memory, and safety](hardware.md) - [Models and cache](../models-and-cache.md) - [Backup and restore](../operate/backup-restore.md).
 
 ```mermaid
 flowchart LR
@@ -98,7 +98,7 @@ GB10 is **one** heavy GPU job. CLI modes: `idle`, `blender-desk`, `llm-desk`, `k
 
 `occupancy enter` **does not** start Compose. Heavy modes tell you to `./scripts/manage.sh start` (type **yes**) when the container is down.
 
-Graph occupancy labels (`none` / `llm` / `film` / `audio` / …) on App Mode are **not** CLI modes.
+Graph occupancy labels (`none` / `llm` / `film` / `audio` / ...) on App Mode are **not** CLI modes.
 
 ---
 
@@ -120,7 +120,7 @@ MCP stdio servers (`blender-mcp`, `research-mcp`) are host Python, not container
 
 ## Spark farm (independent workers)
 
-Three Sparks can share **one** `${MODELS_DIR}` (NFS over the fabric, or rsync replicas). Each node still runs **its own** Compose `comfyui` with `restart: "no"` and local **yes** on `start`. That is throughput + one weight copy — **not** slicing one sampler.
+Three Sparks can share **one** `${MODELS_DIR}` (NFS over the fabric, or rsync replicas). Each node still runs **its own** Compose `comfyui` with `restart: "no"` and local **yes** on `start`. That is throughput + one weight copy - **not** slicing one sampler.
 
 There is **no** in-tree NCCL, no multi-GPU graph, and no MiniMax H3. Tensor-parallel LLMs belong in nvidia-dgx-spark-lab.
 
@@ -146,6 +146,6 @@ Runbook: [Spark farm](../spark-farm.md).
 | Need | Page |
 | --- | --- |
 | First install | [Getting Started](../getting-started.md) |
-| Mode × legal GPU jobs | [Occupancy matrix](../operate/occupancy-matrix.md) |
+| Mode x legal GPU jobs | [Occupancy matrix](../operate/occupancy-matrix.md) |
 | Compose demo vs K3s lab | [When to use vs spark-lab](../start/when-to-use-vs-spark-lab.md) |
 | FAQ | [FAQ](../start/faq.md) |

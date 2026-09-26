@@ -1,6 +1,6 @@
 ---
 title: "Elevator drop"
-description: "Cinema Rack illustration — Elevator drop."
+description: "Cinema Rack illustration - Elevator drop."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

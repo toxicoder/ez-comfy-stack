@@ -67,7 +67,7 @@ class DissExample(TypedDict):
         tracktotal: Album track count.
         year: Release year.
         cover_prompt: US-safe cover-art prompt.
-        form_id: Song-plan archetype (``v_pre``, ``v_bridge``, …).
+        form_id: Song-plan archetype (``v_pre``, ``v_bridge``, ...).
         meter: ACE time signature ``2``, ``3``, ``4``, or ``6``.
         keyscale: ACE key, not a global C minor.
     """

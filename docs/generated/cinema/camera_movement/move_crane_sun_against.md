@@ -1,6 +1,6 @@
 ---
 title: "Crane against sun"
-description: "Cinema Rack illustration — Crane against sun."
+description: "Cinema Rack illustration - Crane against sun."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -1,6 +1,6 @@
 ---
 title: "Pan right"
-description: "Cinema Rack illustration — Pan right."
+description: "Cinema Rack illustration - Pan right."
 tags: [cinema, prompting, catalog, clip]
 ---
 

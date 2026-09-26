@@ -1,8 +1,8 @@
 name: Deploy Documentation
 
 # Publish Fumadocs static exports to gh-pages.
-# - main       → /latest/
-# - development → /development/
+# - main       -> /latest/
+# - development -> /development/
 #
 # Each run builds ONE alias (the branch that triggered it) and keeps the other
 # alias from the current gh-pages tree. Two full Next exports of ~850 pages

@@ -1,6 +1,6 @@
 ---
 title: "Isolated in Crowd"
-description: "Cinema Rack illustration — Isolated in Crowd."
+description: "Cinema Rack illustration - Isolated in Crowd."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

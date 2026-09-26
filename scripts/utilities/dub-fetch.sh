@@ -139,7 +139,7 @@ dub_fetch_cmd_status() {
   if [[ ${has} -eq 1 ]]; then
     return 0
   fi
-  err "yt-dlp missing — URL ingest will not silently skip"
+  err "yt-dlp missing - URL ingest will not silently skip"
   return 1
 }
 
@@ -164,7 +164,7 @@ dub_fetch_cmd_run() {
   local dest="${OUT_DIR}/ez_dub_fetch.%(ext)s"
   if [[ ${LAB_MOCK_YT_DLP:-} == "1" ]]; then
     echo "mock" >"${OUT_DIR}/ez_dub_fetch.wav"
-    log "dub-fetch mock → ${OUT_DIR}/ez_dub_fetch.wav"
+    log "dub-fetch mock -> ${OUT_DIR}/ez_dub_fetch.wav"
     return 0
   fi
   if ! yt-dlp --no-playlist -f "bestaudio/best" -o "${dest}" "${URL}"; then

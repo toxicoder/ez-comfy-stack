@@ -1,6 +1,6 @@
 ---
 title: "Wave-level track"
-description: "Cinema Rack illustration — Wave-level track."
+description: "Cinema Rack illustration - Wave-level track."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

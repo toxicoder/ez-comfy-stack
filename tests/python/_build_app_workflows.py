@@ -62,22 +62,22 @@ GIF_NEG = (
 
 STUDIO_NOTE = """## stills/still-studio
 
-Klein 4B still desk. Pick Format / platform for pixels, save prefix, and Rewrite prompt framing. Custom uses Width × Height (snapped to ÷16, max 2048).
+Klein 4B still desk. Pick Format / platform for pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (snapped to div16, max 2048).
 Look recipe is an optional Cinema Rack starter (Enhance context). Style stays on Rewrite prompt. Quality does not change size.
-Default canvas: 1280×704 (LTX I2V feeder). 1280×720 platform rows are stills-only — scale in an editor if a host wants more pixels.
+Default canvas: 1280x704 (LTX I2V feeder). 1280x720 platform rows are stills-only - scale in an editor if a host wants more pixels.
 Models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.
 Click Image model to swap distilled / NVFP4 / base. High quality may swap Klein base when download-image --tier base is on disk.
-Save prefix follows Format (Custom keeps ez_still_studio). Empty of lettering — composite titles later.
+Save prefix follows Format (Custom keeps ez_still_studio). Empty of lettering - composite titles later.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.
 Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-8s, stills/text-swap.
 """
 
 IMAGE_STUDIO_NOTE = """## stills/image-studio
 
-Universal Klein 4B still desk with 100 creator modes (background swap, change text, change ratio, face lock, packshot, …).
+Universal Klein 4B still desk with 100 creator modes (background swap, change text, change ratio, face lock, packshot, ...).
 Pick Mode category then Creator mode. The mode sets Rewrite prompt mode (t2i / edit / text_swap / identity / background_swap / background_edit), save prefix, and a locked instruction spliced into Enhance context.
-Format / platform still sets pixels and Look recipe. Custom uses Width × Height (snapped to ÷16, max 2048). Quality does not change size.
-Example / reference is optional — Queue without a file. When present, Klein attaches it as a native Flux.2 reference. Modes never error if the still is empty. Face swap is original characters only.
+Format / platform still sets pixels and Look recipe. Custom uses Width x Height (snapped to div16, max 2048). Quality does not change size.
+Example / reference is optional - Queue without a file. When present, Klein attaches it as a native Flux.2 reference. Modes never error if the still is empty. Face swap is original characters only.
 Authored models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors. Apache-2.0.
 Quality ultra/max may select opt-in Non-Commercial weights when those files are on disk (gated, not YouTube-ok). Lab default stays 4B. Do not pin those filenames on this graph.
 Save prefix follows Creator mode (`ez_gen_photoreal` for Photoreal still). Empty of lettering unless the mode is a text job.
@@ -92,11 +92,11 @@ Daily Klein 4B still app. Click the UNET filename to swap Apache Klein 4B weight
 CLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for every Klein 4B UNET.
 
 Swap table:
-- flux-2-klein-4b-fp8.safetensors — daily default, 4 steps, CFG 1.0
-- flux-2-klein-4b-nvfp4.safetensors — Spark NVFP4 (download-image --tier nvfp4), 4 steps, CFG 1.0
-- flux-2-klein-base-4b-fp8.safetensors — more quality (download-image --tier base), raise steps to 20-28 and CFG to about 3.5
+- flux-2-klein-4b-fp8.safetensors - daily default, 4 steps, CFG 1.0
+- flux-2-klein-4b-nvfp4.safetensors - Spark NVFP4 (download-image --tier nvfp4), 4 steps, CFG 1.0
+- flux-2-klein-base-4b-fp8.safetensors - more quality (download-image --tier base), raise steps to 20-28 and CFG to about 3.5
 
-SETTINGS: Format / platform sets pixels (default 1024×576 16:9 mid). Custom uses Width × Height. Seed, steps, CFG on KSampler.
+SETTINGS: Format / platform sets pixels (default 1024x576 16:9 mid). Custom uses Width x Height. Seed, steps, CFG on KSampler.
 Save prefix: ez_still_app.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.
 """
@@ -105,7 +105,7 @@ GIF_NOTE = """## motion/loops/gif-loop
 
 Wan 2.2 TI2V-5B Apache silent GIF (~4 s @ 12 fps, 49 frames).
 Models: wan2.2_ti2v_5B_fp16.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.
-PRIMARY OUTPUT: VHS image/gif. loop_count 0 = infinite. Ping-pong ON so playback goes forward then reverse — first and last frames meet for a seamless loop.
+PRIMARY OUTPUT: VHS image/gif. loop_count 0 = infinite. Ping-pong ON so playback goes forward then reverse - first and last frames meet for a seamless loop.
 Easy loop: leave Infinite loop (ping-pong) ON. Turn ping-pong OFF only for one-way motion (a walk or dolly looks wrong in reverse).
 LoadImage default example.png so Queue works; after still-app set ez_still_app_*.png.
 Motion: locked camera plus breeze / fabric / city lights. Do not prompt a walk or a one-way dolly.
@@ -115,9 +115,9 @@ Prompt enhance is **off** so the locked-camera cyclic motion stays ping-pong saf
 
 HOUSE_NOTE = """## stills/dream-house
 
-Ten Instagram 4:5 stills: a virtual tour of **one place** (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). Type any place in HOUSE IDENTITY — the default placeholder is the lab penthouse.
-HOUSE IDENTITY is a camera-free world bible (rooms, furniture, outdoor lamps, sky, surroundings, time of day). Enhance extracts only the rooms and furniture you named — name lounge, kitchen, dining, bath, bedroom, terrace, study, and outdoor lamps so the tour can enter them. Name each room’s backdrop in the bible (which wall or opening that room faces). Hidden SHOT cards are camera stations (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study): lens, camera height, a distinct room program (entrance hall, living hall, cook line, dining hall, sleep chamber, wet room, open-air terrace, writing room), near/far planes, and which room — not a penthouse template and not one volume restyled. They do not name dusk, materials, or architecture. Prompt Join lock=view front-loads the shot and closes with “this still is only the room and backdrop the shot names.” Shots 02–10 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.
-Identity-mode enhance is **on**. Shot cards are not Klein-t2i-enhanced — a per-shot rewrite would mutate the bible. Optional style dropdown applies to the bible.
+Ten Instagram 4:5 stills: a virtual tour of **one place** (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). Type any place in HOUSE IDENTITY - the default placeholder is the lab penthouse.
+HOUSE IDENTITY is a camera-free world bible (rooms, furniture, outdoor lamps, sky, surroundings, time of day). Enhance extracts only the rooms and furniture you named - name lounge, kitchen, dining, bath, bedroom, terrace, study, and outdoor lamps so the tour can enter them. Name each room's backdrop in the bible (which wall or opening that room faces). Hidden SHOT cards are camera stations (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study): lens, camera height, a distinct room program (entrance hall, living hall, cook line, dining hall, sleep chamber, wet room, open-air terrace, writing room), near/far planes, and which room - not a penthouse template and not one volume restyled. They do not name dusk, materials, or architecture. Prompt Join lock=view front-loads the shot and closes with "this still is only the room and backdrop the shot names." Shots 02-10 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.
+Identity-mode enhance is **on**. Shot cards are not Klein-t2i-enhanced - a per-shot rewrite would mutate the bible. Optional style dropdown applies to the bible.
 Queue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Dawn / noon / night of one camera belong on klein-time-of-day, not this tour.
 If materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.
 """
@@ -129,11 +129,11 @@ CLAY_LOCK = (
 
 HOUSE_CLAY_NOTE = """## stills/dream-house-clay
 
-Ten Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence is the 3D cameras — Klein only restyles.
+Ten Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence is the 3D cameras - Klein only restyles.
 
-`manage.sh start` seeds ez_house_clay_01.png … 10.png into COMFY_OUTPUT_DIR/input (container /inputs) so LoadImage can Queue. Seed copies an existing house-views pack when present; otherwise it renders the shipped lab-penthouse layout (no Blender). Reload the App if it was open before seed. Prefix ez_dream_house_clay_01 … 10.
+`manage.sh start` seeds ez_house_clay_01.png ... 10.png into COMFY_OUTPUT_DIR/input (container /inputs) so LoadImage can Queue. Seed copies an existing house-views pack when present; otherwise it renders the shipped lab-penthouse layout (no Blender). Reload the App if it was open before seed. Prefix ez_dream_house_clay_01 ... 10.
 
-Workbench dump (optional, higher quality) — stop Comfy first:
+Workbench dump (optional, higher quality) - stop Comfy first:
 
   ./scripts/manage.sh stop
   ./scripts/manage.sh house-views --slug lab-penthouse
@@ -149,7 +149,7 @@ Reseed LoadImage plates without Blender (compose may stay up):
 
 HOUSE IDENTITY is the same camera-free world bible as stills/dream-house. Shot cards are camera stations from place_10 (lens, camera height, a distinct room program, near/far planes, and which room). Prompt Join lock=view. Each shot VAEEncodes its clay plate into ReferenceLatent. Shot cards are not Klein-t2i-enhanced.
 
-Language-only tour (no geometry) → stills/dream-house. Do not substitute T2I stills or example.png as clay. Occupancy XOR: do not Blender-dump while compose is up. Seed/copy-inputs may run while compose is up.
+Language-only tour (no geometry) -> stills/dream-house. Do not substitute T2I stills or example.png as clay. Occupancy XOR: do not Blender-dump while compose is up. Seed/copy-inputs may run while compose is up.
 Optional style dropdown applies to the bible. Unused SHOT groups may be bypassed (Ctrl+B).
 """
 
@@ -159,7 +159,7 @@ Klein 4B character still. Type a character, pick a style, Queue. 1024x1280 (Inst
 
 Handoff: load **stills/character-tweak**, pick `ez_character_*.png`, and prompt the change.
 
-Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
+Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.
 """
 
 CHARACTER_TWEAK_NOTE = """## stills/character-tweak
@@ -168,19 +168,19 @@ Klein 4B **edit** of a character still. LoadImage: `ez_character_*.png` from Cha
 
 VAEEncode + ReferenceLatent. Do not Queue without a start image.
 
-Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
+Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.
 """
 
 TEXT_SWAP_NOTE = """## stills/text-swap
 
-Klein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or "Replace SALE with OPEN"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height when Upscale is none (snapped to the Flux.2 ÷16 grid for denoise, then scaled back). 2x, 4x, and 4K lanczos-resize that saved PNG. Prefix `ez_text_swap`.
+Klein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or "Replace SALE with OPEN"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height when Upscale is none (snapped to the Flux.2 div16 grid for denoise, then scaled back). 2x, 4x, and 4K lanczos-resize that saved PNG. Prefix `ez_text_swap`.
 
 Do not Queue without a start image. Short high-contrast lettering holds best. For tiny or dense type, set Quality **High** (Klein base if `download-image --tier base` is on disk). Distilled 4B is best-effort, not a typesetter.
 
 Type only the new lettering (HELLO) or a targeting line (Replace SALE with OPEN). The graph always wraps that into a glyph-lock instruction, even when Rewrite prompt is off.
 
-VAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
-Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Style is hidden — the source still owns look.
+VAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.
+Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Style is hidden - the source still owns look.
 """
 
 BACKGROUND_SWAP_NOTE = """## stills/background-swap
@@ -191,10 +191,10 @@ Other characters / Background characters (default on) treat companions and extra
 
 Do not Queue without a start image. Describe image (default on) captions the source so CLIP can name inventory on ordinary place swaps; Cubic block world skips the caption because the plate has no people. Missing `download-llm --tier describe` fail-softs empty. Upscale (default none) is lanczos after decode.
 
-The sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is the photo reference for ordinary place swaps. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
-Prompt enhance is on by default for bare place names (on-box Qwen3-4B-Instruct-2507). Named samples skip the rewriter so Cubic block world and the place recipes reach CLIP as written. Style is hidden — the source still owns the subject's look.
+The sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is the photo reference for ordinary place swaps. Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.
+Prompt enhance is on by default for bare place names (on-box Qwen3-4B-Instruct-2507). Named samples skip the rewriter so Cubic block world and the place recipes reach CLIP as written. Style is hidden - the source still owns the subject's look.
 
-**Cubic block world** does not edit the photograph in place. The source people are erased from a coarse block study of this photo (same camera and layout, cube faces), so Klein rebuilds an empty block world — no figures, no silhouettes, no person-shaped blocks. The people from the photo are pasted back at full resolution from the original still (every person the mask catches; animals stay cubed), dilated ~2 px and feathered ~6 px so each keeps its full silhouette with soft edges. Other / background character toggles still apply to the other place samples. The person segmenter is BSD-3 DeepLabV3, optional, under `${MODELS_DIR}/comfy/ez-person/` (not part of `download-models`). Missing weights leave the study unchanged and skip the paste; people stay cubed. Set `EZ_PERSON_MASK=off` to skip the paste. If the plate is only the flat study, set Quality **High** (Klein base if `download-image --tier base` is on disk).
+**Cubic block world** does not edit the photograph in place. The source people are erased from a coarse block study of this photo (same camera and layout, cube faces), so Klein rebuilds an empty block world - no figures, no silhouettes, no person-shaped blocks. The people from the photo are pasted back at full resolution from the original still (every person the mask catches; animals stay cubed), dilated ~2 px and feathered ~6 px so each keeps its full silhouette with soft edges. Other / background character toggles still apply to the other place samples. The person segmenter is BSD-3 DeepLabV3, optional, under `${MODELS_DIR}/comfy/ez-person/` (not part of `download-models`). Missing weights leave the study unchanged and skip the paste; people stay cubed. Set `EZ_PERSON_MASK=off` to skip the paste. If the plate is only the flat study, set Quality **High** (Klein base if `download-image --tier base` is on disk).
 """
 
 BACKGROUND_EDIT_NOTE = """## stills/background-edit
@@ -205,7 +205,7 @@ Other characters / Background characters (default on) treat companions and extra
 
 Do not Queue without a start image. Describe image (default off) captions the source so Rewrite prompt can name wardrobe and props. Upscale (default none) is lanczos after decode.
 
-VAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
+VAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507).
 """
 
@@ -221,8 +221,8 @@ Prefixes and sizes (copy of the single-plate graphs):
 - ez_pack_og 1216x640
 - ez_pack_banner 1536x512 (~3:1)
 
-Unused SHOT groups may be bypassed (Ctrl+B). Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
-Handoff: Spark Still → this pack → Silent 5s / Hook AV.
+Unused SHOT groups may be bypassed (Ctrl+B). Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.
+Handoff: Spark Still -> this pack -> Silent 5s / Hook AV.
 """
 
 PACK_PLATES = [
@@ -319,7 +319,7 @@ def build_still_app() -> dict:
     graph["id"] = "stills/still-daily"
     graph["revision"] = 1
     unet = _node(graph, "UNETLoader")
-    unet["title"] = "Image model — click filename to swap"
+    unet["title"] = "Image model - click filename to swap"
     latent = _node(graph, "EmptyFlux2LatentImage")
     latent["widgets_values"] = [1024, 576, 1]
     latent["title"] = "Size (width x height x batch)"
@@ -399,7 +399,7 @@ def build_still_studio() -> dict:
     graph["last_node_id"] = nid
     graph["revision"] = 1
     unet = _node(graph, "UNETLoader")
-    unet["title"] = "Image model — click filename to swap"
+    unet["title"] = "Image model - click filename to swap"
     latent = _node(graph, "EmptyFlux2LatentImage")
     latent["widgets_values"] = [1280, 704, 1]
     latent["title"] = "Latent (wired from Format)"
@@ -438,7 +438,7 @@ def build_still_studio() -> dict:
         ],
         "properties": {"Node name for S&R": "EZImageFormat"},
         "widgets_values": [
-            "16:9 LTX feeder (1280×704)",
+            "16:9 LTX feeder (1280x704)",
             "none",
             1280,
             704,
@@ -607,7 +607,7 @@ def build_gif_loop() -> dict:
     lat["widgets_values"][2] = 49
     lat["title"] = "GIF size and length (49 frames)"
     vhs = _node(graph, "VHS_VideoCombine")
-    vhs["title"] = "Infinite loop (ping-pong) — open for preview"
+    vhs["title"] = "Infinite loop (ping-pong) - open for preview"
     vhs["widgets_values"]["format"] = "image/gif"
     vhs["widgets_values"]["pingpong"] = True
     vhs["widgets_values"]["loop_count"] = 0
@@ -1651,7 +1651,7 @@ def build_character_tweak() -> dict:
 
 
 def _rewire_text_swap_canvas(graph: dict) -> None:
-    """Drop the fixed latent; snap source → encode → sampler + reference; match size."""
+    """Drop the fixed latent; snap source -> encode -> sampler + reference; match size."""
     from _build_dcc_workflows import _add_link, _append_out_link
     from _wire_prompt_enhance import next_ids, remove_node
 
@@ -2209,9 +2209,9 @@ def build_background_swap() -> dict:
         prefix="ez_bg_swap",
         mode="background_swap",
         prompt=(
-            "Keep the subject from the reference. Replace the entire environment — "
+            "Keep the subject from the reference. Replace the entire environment - "
             "backdrop, sky, architecture, ground or floor, and set dressing near the "
-            "subject — with a fog harbor pier at blue hour. Match ground contact, "
+            "subject - with a fog harbor pier at blue hour. Match ground contact, "
             "scale, and wrap light. Original characters only. Empty of new lettering."
         ),
         title="Save background swap",

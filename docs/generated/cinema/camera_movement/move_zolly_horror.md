@@ -1,6 +1,6 @@
 ---
 title: "Space-warp push"
-description: "Cinema Rack illustration — Space-warp push."
+description: "Cinema Rack illustration - Space-warp push."
 tags: [cinema, prompting, catalog, clip]
 ---
 

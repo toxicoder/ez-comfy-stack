@@ -9,7 +9,7 @@
 #   sync-models: rsync MODELS_DIR/comfy over SPARK_FABRIC_IPS only (not mgmt NIC).
 #   run: refuses MiniMax H3 names; operators Queue motion/silent/still-to-shot / motion/av/still-to-shot
 #   graphs per host, then concat-shots.sh locally.
-#   Never starts compose on a remote node — prints the local manage.sh start.
+#   Never starts compose on a remote node - prints the local manage.sh start.
 #
 # Usage:
 #   ./scripts/utilities/spark-farm.sh status [--json]
@@ -114,7 +114,7 @@ cmd_status() {
   hosts="$(csv_lines "${SPARK_HOSTS}")"
   fabric_ips="$(csv_lines "${SPARK_FABRIC_IPS}")"
   if [[ -z ${hosts} ]]; then
-    err "SPARK_HOSTS is empty — source config/spark-farm.example.env"
+    err "SPARK_HOSTS is empty - source config/spark-farm.example.env"
     return 1
   fi
   while IFS= read -r host; do
@@ -170,8 +170,8 @@ cmd_sync_models() {
   local dest i=0 n=$((${#ips[@]} - 1))
   for dest in "${ips[@]:1}"; do
     i=$((i + 1))
-    log_step "${i}" "${n}" "rsync comfy weights ${src} → ${dest} over fabric"
-    run_with_heartbeat "rsync ${src} → ${dest}" -- rsync -a --info=progress2 --inplace -e "ssh -o BatchMode=yes" \
+    log_step "${i}" "${n}" "rsync comfy weights ${src} -> ${dest} over fabric"
+    run_with_heartbeat "rsync ${src} -> ${dest}" -- rsync -a --info=progress2 --inplace -e "ssh -o BatchMode=yes" \
       "${SPARK_USER}@${src}:${tree}/" \
       "${SPARK_USER}@${dest}:${tree}/"
   done
@@ -264,7 +264,7 @@ cmd_dispatch() {
     [[ -n ${line} ]] && hosts+=("${line}")
   done < <(csv_lines "${SPARK_HOSTS}")
   if [[ ${#hosts[@]} -eq 0 ]]; then
-    err "SPARK_HOSTS is empty — source config/spark-farm.example.env"
+    err "SPARK_HOSTS is empty - source config/spark-farm.example.env"
     return 1
   fi
   print_remote_start_hint
@@ -284,7 +284,7 @@ cmd_dispatch() {
       "${SPARK_USER}@${host}:${FARM_SHARE}/" \
       "${FARM_SHARE}/out/${host}/"
   done
-  log "gather done under ${FARM_SHARE}/out — concat on spark-0 with concat-shots.sh --film ${FILM}"
+  log "gather done under ${FARM_SHARE}/out - concat on spark-0 with concat-shots.sh --film ${FILM}"
 }
 
 #######################################

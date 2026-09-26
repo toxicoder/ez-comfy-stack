@@ -1,6 +1,6 @@
 ---
 title: When to use ez-comfy-stack vs spark-lab
-description: Compose demo on one Spark vs K3s lab — this repo must not grow K3s, a dashboard, or in-tree NCCL.
+description: Compose demo on one Spark vs K3s lab - this repo must not grow K3s, a dashboard, or in-tree NCCL.
 tags: [spark-lab, compose, k3s, nccl, farm]
 ---
 
@@ -8,15 +8,15 @@ tags: [spark-lab, compose, k3s, nccl, farm]
 
 **What's on this page**
 
-- **Compose demo vs K3s lab** — what each repo is for
-- **What this sample stack refuses** — K3s, a full dashboard, NCCL-as-a-feature, MiniMax H3
+- **Compose demo vs K3s lab** - what each repo is for
+- **What this sample stack refuses** - K3s, a full dashboard, NCCL-as-a-feature, MiniMax H3
 - **Independent Sparks** may share `${MODELS_DIR}`; still **no NCCL**
 - **How to graduate** without rewriting this tree into the lab
 
 **What this enables**
 
 - **Picking** the repo that matches one-box stills / 5 s prints vs long-term multi-workload ops
-- **Avoiding** a “just add K3s” PR in ez-comfy-stack
+- **Avoiding** a "just add K3s" PR in ez-comfy-stack
 - **Sharing** one weight copy across Sparks without pretending it is tensor-parallel
 
 ```bash
@@ -41,7 +41,7 @@ ez-comfy-stack is the **sample / demo** Compose studio. [nvidia-dgx-spark-lab](h
 | **Weights** | Host `${MODELS_DIR}` (default `/mnt/models`) | Same cache convention; shareable |
 | **UI** | ComfyUI `${COMFY_PORT}` (8188) | Many services |
 | **Clustering** | Independent Comfy workers + one weight copy | Tensor-parallel / NCCL belongs **there** |
-| **Scope** | Klein 4B → Wan 2.2 5 s → LTX-2.5 AV demo | Long-term ops |
+| **Scope** | Klein 4B -> Wan 2.2 5 s -> LTX-2.5 AV demo | Long-term ops |
 
 ```mermaid
 flowchart TB

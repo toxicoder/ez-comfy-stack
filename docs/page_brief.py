@@ -66,7 +66,7 @@ def _skip_ws(html_text: str, start: int) -> int:
 
 
 def _match_label(html_text: str, start: int, pattern: re.Pattern[str]) -> int | None:
-    """Match a labeled ``<p><strong>…</strong></p>`` after optional whitespace.
+    """Match a labeled ``<p><strong>...</strong></p>`` after optional whitespace.
 
     Args:
         html_text: Rendered HTML.
@@ -84,7 +84,7 @@ def _match_label(html_text: str, start: int, pattern: re.Pattern[str]) -> int | 
 
 
 def _read_ul(html_text: str, start: int) -> tuple[str, int] | None:
-    """Read one ``<ul>…</ul>`` with depth counting so inner lists stay intact.
+    """Read one ``<ul>...</ul>`` with depth counting so inner lists stay intact.
 
     Args:
         html_text: Rendered HTML.

@@ -17,21 +17,21 @@ const QUALITY_FREE_COMMERCIAL = "Free Commercial Use (<$10M)";
 const QUALITY_FREE_COMMERCIAL_ALIAS = "free_commercial";
 const QUALITY_ULTRA = "ultra";
 const QUALITY_MAX = "max";
-const CLIP_16_9_LABEL = "16:9 LTX feeder (1280×704)";
-const CLIP_9_16_LABEL = "9:16 LTX feeder (768×1280)";
+const CLIP_16_9_LABEL = "16:9 LTX feeder (1280x704)";
+const CLIP_9_16_LABEL = "9:16 LTX feeder (768x1280)";
 const GENERIC_16_9 = [
   "aspect_16_9_draft",
-  "16:9 draft (768×432)",
+  "16:9 draft (768x432)",
   "aspect_16_9",
-  "16:9 (1280×720)",
+  "16:9 (1280x720)",
   "aspect_16_9_mid",
-  "16:9 mid (1024×576)",
+  "16:9 mid (1024x576)",
 ];
 const GENERIC_9_16 = [
   "aspect_9_16_draft",
-  "9:16 draft (432×768)",
+  "9:16 draft (432x768)",
   "aspect_9_16",
-  "9:16 (576×1024)",
+  "9:16 (576x1024)",
 ];
 
 const KLEIN_DISTILLED = "flux-2-klein-4b-fp8.safetensors";
@@ -677,7 +677,7 @@ function overlayCaption(choice, overlay, occ) {
   } else if (occ === "audio") {
     bits.push("ACE");
   }
-  return bits.join(" · ");
+  return bits.join(" - ");
 }
 
 /**
@@ -698,7 +698,7 @@ function stampQualityCaption(graph, caption) {
     }
     const widget = widgetByName(node, "quality");
     if (widget) {
-      widget.label = caption ? `Quality — ${caption}` : "Quality";
+      widget.label = caption ? `Quality - ${caption}` : "Quality";
     }
   }
 }
@@ -762,12 +762,12 @@ function applyQuality(choice, qualityNode) {
   try {
     const normalized = normalizeQuality(choice);
     if (normalized === QUALITY_CUSTOM) {
-      stampQualityCaption(graph, "custom · last overlay frozen");
+      stampQualityCaption(graph, "custom - last overlay frozen");
       return;
     }
     if (normalized === QUALITY_LAB) {
       restoreSnapshot(graph);
-      stampQualityCaption(graph, "lab · authored defaults");
+      stampQualityCaption(graph, "lab - authored defaults");
       return;
     }
     const unetName = firstUnetName(graph);

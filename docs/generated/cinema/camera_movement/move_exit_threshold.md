@@ -1,6 +1,6 @@
 ---
 title: "Threshold exit"
-description: "Cinema Rack illustration — Threshold exit."
+description: "Cinema Rack illustration - Threshold exit."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

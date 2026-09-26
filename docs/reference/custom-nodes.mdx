@@ -1,6 +1,6 @@
 ---
 title: Custom nodes
-description: Lab ez_* ComfyUI packs — class names, display names, inputs/outputs, occupancy, and QC/rights notes from NODE_CLASS_MAPPINGS.
+description: Lab ez_* ComfyUI packs - class names, display names, inputs/outputs, occupancy, and QC/rights notes from NODE_CLASS_MAPPINGS.
 tags: [custom-nodes, comfyui, occupancy, qc]
 ---
 
@@ -8,9 +8,9 @@ tags: [custom-nodes, comfyui, occupancy, qc]
 
 **What's on this page**
 
-- **Every pack** under `custom_nodes/` (`ez_common` … `ez_quality` … `ez_outputs` … `ez_studio_blocks`)
+- **Every pack** under `custom_nodes/` (`ez_common` ... `ez_quality` ... `ez_outputs` ... `ez_studio_blocks`)
 - **Mapped nodes** from `NODE_CLASS_MAPPINGS` / `INPUT_TYPES` / `RETURN_TYPES`
-- **Empty mappings** — helpers, LTX spatial patch, App occupancy chip, Outputs sidebar, subgraphs
+- **Empty mappings** - helpers, LTX spatial patch, App occupancy chip, Outputs sidebar, subgraphs
 - **Frontend JS** under Nodes 2.0 (preview `widget.value`, no LiteGraph `inputEl` / `node_widget`)
 - **QC / rights** notes that ship on the node `DESCRIPTION` (nothing invented)
 
@@ -18,7 +18,7 @@ tags: [custom-nodes, comfyui, occupancy, qc]
 
 - **Looking up** a canvas class without opening `nodes.py`
 - **Seeing** occupancy widgets vs graph labels (`llm` is not a CLI mode)
-- **Keeping** App Mode widgets on [ComfyUI Apps](../studio-apps.md) (this page is the pack catalog). Per-graph widgets: [Workflow details](../create/workflows-index.md) · [Workflow node parameters](workflow-nodes.md)
+- **Keeping** App Mode widgets on [ComfyUI Apps](../studio-apps.md) (this page is the pack catalog). Per-graph widgets: [Workflow details](../create/workflows-index.md) - [Workflow node parameters](workflow-nodes.md)
 
 Entrypoint copies these packs into `$COMFY_HOME/custom_nodes/` on `start`. Operator-installed packs live on `${COMFY_OUTPUT_DIR}/custom-nodes-user` (`_user/`) and are not overwritten.
 
@@ -32,7 +32,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 ```
 
 <Callout type="warning" title="Occupancy and licenses">
-  One heavy GPU job on GB10. In-canvas **Occupancy gate** reads `${COMFY_OUTPUT_DIR}/.occupancy.json` only — it does not start Compose. LTX Community License disclosure nodes are not legal advice. Dub Queue refuses unless **I have rights** is on.
+  One heavy GPU job on GB10. In-canvas **Occupancy gate** reads `${COMFY_OUTPUT_DIR}/.occupancy.json` only - it does not start Compose. LTX Community License disclosure nodes are not legal advice. Dub Queue refuses unless **I have rights** is on.
 </Callout>
 ---
 
@@ -73,15 +73,15 @@ Used by other `ez_*` packs (podcast TTS turns, and similar). Import is hermetic.
 
 ## ez_dcc
 
-Category `ez-comfy/dcc`. Fail-closed pack QC. Depth stills are mist 0–1 (near=white, far=black). Paths under `${COMFY_OUTPUT_DIR}/guides/`. Stay in Comfy: [Stay in Comfy after a Blender dump](../learn/comfy-first-blender.md).
+Category `ez-comfy/dcc`. Fail-closed pack QC. Depth stills are mist 0-1 (near=white, far=black). Paths under `${COMFY_OUTPUT_DIR}/guides/`. Stay in Comfy: [Stay in Comfy after a Blender dump](../learn/comfy-first-blender.md).
 
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
-| `EZDCCLoadGuideStill` | Load guide still | `slug` STRING (default `go-see`), `shot_id` STRING (default `12`), `layer` combo `first` `last` `clay` `depth` `canny` (default `first`) | `IMAGE` image, `MASK` mask, `STRING` metadata | — | Fail-closed QC. Clay/depth/canny/first/last from `guides/<slug>/<shot_id>/` |
-| `EZDCCLoadGuideVideo` | Load guide video path | `slug`, `shot_id`, `layer` combo `clay` `depth` `canny` (default `clay`) | `STRING` path, `INT` fps | — | Absolute `clay.mp4` / `depth.mp4` / `canny.mp4` at **24 fps**. Does not decode 120 frames |
-| `EZDCCLoadStillPack` | Load still pack | `slug`, `plate` STRING (default `mug`), `layer` combo `first` `rgb` `depth` `canny` `normal` (default `first`) | `IMAGE` image, `MASK` mask, `STRING` metadata | — | `guides/<slug>/stills/<plate>/`. Sizes match `guide_pack.STILL_SIZES` |
-| `EZDCCCameraJson` | Load camera.json | `slug`, `shot_id` | `STRING` camera_json | — | Missing file → empty string. No CAMERA socket |
-| `EZDCCPreviewGuideLayer` | Preview guide layer | `IMAGE` image, `label` STRING (default `guide`) | `IMAGE` image | — | Identity pass-through |
+| `EZDCCLoadGuideStill` | Load guide still | `slug` STRING (default `go-see`), `shot_id` STRING (default `12`), `layer` combo `first` `last` `clay` `depth` `canny` (default `first`) | `IMAGE` image, `MASK` mask, `STRING` metadata | - | Fail-closed QC. Clay/depth/canny/first/last from `guides/<slug>/<shot_id>/` |
+| `EZDCCLoadGuideVideo` | Load guide video path | `slug`, `shot_id`, `layer` combo `clay` `depth` `canny` (default `clay`) | `STRING` path, `INT` fps | - | Absolute `clay.mp4` / `depth.mp4` / `canny.mp4` at **24 fps**. Does not decode 120 frames |
+| `EZDCCLoadStillPack` | Load still pack | `slug`, `plate` STRING (default `mug`), `layer` combo `first` `rgb` `depth` `canny` `normal` (default `first`) | `IMAGE` image, `MASK` mask, `STRING` metadata | - | `guides/<slug>/stills/<plate>/`. Sizes match `guide_pack.STILL_SIZES` |
+| `EZDCCCameraJson` | Load camera.json | `slug`, `shot_id` | `STRING` camera_json | - | Missing file -> empty string. No CAMERA socket |
+| `EZDCCPreviewGuideLayer` | Preview guide layer | `IMAGE` image, `label` STRING (default `guide`) | `IMAGE` image | - | Identity pass-through |
 | `EZDCCOccupancyGate` | Occupancy gate | `IMAGE` image, `required_mode` combo `klein` `trellis` `wan` `ltx` (default `klein`) | `IMAGE` image | **required_mode** (CLI heavy modes) | Reads `.occupancy.json`. Missing file **passes**. `idle` / `blender-desk` / `llm-desk` / mismatch **fail**. Does **not** start Compose or spawn Blender |
 
 ---
@@ -93,8 +93,8 @@ Category `ez-comfy/dub`. Output nodes. No celebrity refs. [Local dub](../dub.md)
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
 | `EZDubIngest` | Dub ingest (file or URL) | `source` combo (files in Comfy input/ plus `(none)`), `have_rights` BOOLEAN (default **false**), `job_slug` STRING (default `episode`), `source_url` STRING | `STRING` job_id, `AUDIO` audio | graph **audio** (App Mode) | Queue **refuses** unless **I have rights** is on (`RightsError`). File in input/ or optional http(s) URL |
-| `EZDubScript` | Dub transcript + translate | `prompt` STRING multiline JSON, `enhance` BOOLEAN (default on), `target_language` combo (ISO codes, default `es`), `source_language` combo (`auto` + same codes, default `auto`), `max_speakers` INT 0–12 (default 0), `stage` combo `all` `analyze` `render` (default `all`); optional `job_id` STRING | `STRING` script | graph **audio** | Diarize + ASR + on-box GGUF. Turn **Rewrite translation** off to pin widget text. Stage=`render` skips ASR. Default `all` analyzes then clones |
-| `EZDubRender` | Dub clone + mix | `script` STRING, `engine` combo `chatterbox-ml` `qwen3tts` (default `chatterbox-ml`), `keep_bed` BOOLEAN (default true), `spoken_disclosure` BOOLEAN (default **false**), `speed` FLOAT 0.5–1.5 (default 1.0 = lab 1.25× lock), `cfg_weight` FLOAT −1.0–1.0 (default −1.0), `exaggeration` FLOAT 0.25–2.0 (default 0.5); optional `job_id` | `AUDIO` audio | graph **audio** | Zero-shot clone from a scored 4–10 s reference window per speaker (`spkNN.ref.json`, `top_p` 1.0); PerTh **on**. Duration-locked YT WAV + SRT + disclosure sidecars. Default speed 1.0 uses the 1.25× pitch-preserving lock. Spoken bumper (off by default) overlays the mix wav only. Off: mix/FLAC starts on speech (leading hush stripped); YT wav stays source-timed. Stage `analyze` returns empty audio |
+| `EZDubScript` | Dub transcript + translate | `prompt` STRING multiline JSON, `enhance` BOOLEAN (default on), `target_language` combo (ISO codes, default `es`), `source_language` combo (`auto` + same codes, default `auto`), `max_speakers` INT 0-12 (default 0), `stage` combo `all` `analyze` `render` (default `all`); optional `job_id` STRING | `STRING` script | graph **audio** | Diarize + ASR + on-box GGUF. Turn **Rewrite translation** off to pin widget text. Stage=`render` skips ASR. Default `all` analyzes then clones |
+| `EZDubRender` | Dub clone + mix | `script` STRING, `engine` combo `chatterbox-ml` `qwen3tts` (default `chatterbox-ml`), `keep_bed` BOOLEAN (default true), `spoken_disclosure` BOOLEAN (default **false**), `speed` FLOAT 0.5-1.5 (default 1.0 = lab 1.25x lock), `cfg_weight` FLOAT -1.0-1.0 (default -1.0), `exaggeration` FLOAT 0.25-2.0 (default 0.5); optional `job_id` | `AUDIO` audio | graph **audio** | Zero-shot clone from a scored 4-10 s reference window per speaker (`spkNN.ref.json`, `top_p` 1.0); PerTh **on**. Duration-locked YT WAV + SRT + disclosure sidecars. Default speed 1.0 uses the 1.25x pitch-preserving lock. Spoken bumper (off by default) overlays the mix wav only. Off: mix/FLAC starts on speech (leading hush stripped); YT wav stays source-timed. Stage `analyze` returns empty audio |
 
 ---
 
@@ -104,11 +104,11 @@ Category `ez-comfy/film`. Films: `go-see`, `still-here`, `switchyard` (90s) and 
 
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
-| `EZUnloadModels` | Unload models (pass IMAGE) | `IMAGE` image | `IMAGE` image | — (used between Klein and LTX) | Best-effort Comfy + CUDA unload, then identity IMAGE. Keeps Klein 4B and LTX-2.5 from sitting in memory together |
-| `EZFilmConcat` | Save 90s film (MP4) — play / download | `film` combo (default `go-see`), `cap_seconds` FLOAT 1.0–90.0 (default 90), `xfade_cs` INT 0–50 (default 0), `shot_01`…`shot_18` `VHS_FILENAMES`; optional `disclosure` STRING | `STRING` path | graph **film** | Concat 18 LTX 5.00s MP4s. Refuses fewer than 18 readable stems. H.264 CRF 18 + AAC + YouTube loudnorm + faststart. `xfade_cs` is audio-only acrossfade (10 = 0.10s) with overlap off (`o=0`) so duration stays `18 × 5.00` / cap; 0 is a hard cut |
-| `EZClipLastFrame` | Last frame (IMAGE) — next I2V start | `IMAGE` image | `IMAGE` last_frame | — | Last frame of a decoded batch (`[-1:]`). Empty batch raises. Use as the next clip's I2V start; do not hardcode ImageFromBatch 120 |
-| `EZClipConcat` | Save clip chain (MP4) — play / download | `prefix` STRING (default `ez_clip_chain`), `cap_seconds` FLOAT 1.0–1800 (default 600), `xfade_cs` INT 0–50 (default 0), `clip_01` `VHS_FILENAMES`; optional `clip_02`…`clip_24` `VHS_FILENAMES`, `disclosure` STRING | `STRING` path | graph **ltx** (clip chain) | Concat 1–24 duration-head MP4s (5/8/10/12 s). Collect-until-gap; a hole refuses. Cap is a ceiling (not pad-to-runtime). v1 hard-cut only (`xfade_cs` must be 0). H.264 CRF 18 + AAC + YouTube loudnorm + faststart, no ffmpeg `-t` / `apad` |
-| `EZFilmDisclosure` | LTX AI-media disclosure (end-card) | `text` STRING multiline | `STRING` text | — | Prepends the LTX Community License AI-media disclosure. Idempotent. **Not legal advice** |
+| `EZUnloadModels` | Unload models (pass IMAGE) | `IMAGE` image | `IMAGE` image | - (used between Klein and LTX) | Best-effort Comfy + CUDA unload, then identity IMAGE. Keeps Klein 4B and LTX-2.5 from sitting in memory together |
+| `EZFilmConcat` | Save 90s film (MP4) - play / download | `film` combo (default `go-see`), `cap_seconds` FLOAT 1.0-90.0 (default 90), `xfade_cs` INT 0-50 (default 0), `shot_01`...`shot_18` `VHS_FILENAMES`; optional `disclosure` STRING | `STRING` path | graph **film** | Concat 18 LTX 5.00s MP4s. Refuses fewer than 18 readable stems. H.264 CRF 18 + AAC + YouTube loudnorm + faststart. `xfade_cs` is audio-only acrossfade (10 = 0.10s) with overlap off (`o=0`) so duration stays `18 x 5.00` / cap; 0 is a hard cut |
+| `EZClipLastFrame` | Last frame (IMAGE) - next I2V start | `IMAGE` image | `IMAGE` last_frame | - | Last frame of a decoded batch (`[-1:]`). Empty batch raises. Use as the next clip's I2V start; do not hardcode ImageFromBatch 120 |
+| `EZClipConcat` | Save clip chain (MP4) - play / download | `prefix` STRING (default `ez_clip_chain`), `cap_seconds` FLOAT 1.0-1800 (default 600), `xfade_cs` INT 0-50 (default 0), `clip_01` `VHS_FILENAMES`; optional `clip_02`...`clip_24` `VHS_FILENAMES`, `disclosure` STRING | `STRING` path | graph **ltx** (clip chain) | Concat 1-24 duration-head MP4s (5/8/10/12 s). Collect-until-gap; a hole refuses. Cap is a ceiling (not pad-to-runtime). v1 hard-cut only (`xfade_cs` must be 0). H.264 CRF 18 + AAC + YouTube loudnorm + faststart, no ffmpeg `-t` / `apad` |
+| `EZFilmDisclosure` | LTX AI-media disclosure (end-card) | `text` STRING multiline | `STRING` text | - | Prepends the LTX Community License AI-media disclosure. Idempotent. **Not legal advice** |
 
 ---
 
@@ -116,7 +116,7 @@ Category `ez-comfy/film`. Films: `go-see`, `still-here`, `switchyard` (90s) and 
 
 **No canvas nodes.** `NODE_CLASS_MAPPINGS` is empty.
 
-On import, `apply_patches()` wraps Comfy `LTXVImgToVideo`, `EmptyLTXVLatentVideo`, `LTXVEmptyLatentAudio`, and `VideoVAE.encode` when those modules exist. Spatial size snaps to the video VAE **32×** grid; length snaps to **1+8n**. Fail-soft. Lab size is **1280×704** (never 1280×720 as the plan).
+On import, `apply_patches()` wraps Comfy `LTXVImgToVideo`, `EmptyLTXVLatentVideo`, `LTXVEmptyLatentAudio`, and `VideoVAE.encode` when those modules exist. Spatial size snaps to the video VAE **32x** grid; length snaps to **1+8n**. Fail-soft. Lab size is **1280x704** (never 1280x720 as the plan).
 
 ---
 
@@ -127,7 +127,7 @@ Category `ez-comfy/music`. [Local music](../music.md).
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
 | `EZRapLyrics` | Rap Lyrics | `sample` combo, `lyrics` STRING multiline, `enhance` BOOLEAN (default on), `catalog`; optional `context` STRING (forceInput) | `STRING` lyrics | graph **audio** | On-box Qwen3-4B-Instruct GGUF. Missing GGUF passes widget text. **Forbids living-MC names and famous hooks**. ACE-Step still invents vocal timbre from tags plus lyrics. Context ignored when Enhance is off. Album tracks hide Sample in App Mode |
-| `EZAudioMetadata` | Album metadata | `AUDIO` audio, `artist` `album` `title` STRING, `track` INT 1–99, `tracktotal` INT 1–99, `year` INT 1900–2100 (default 2026), `art_mode` combo `skip` `upload` `generate` (default `skip`), `prefix` STRING; optional `IMAGE` cover | `AUDIO` audio | graph **audio** | Copies ACE SaveAudio masters into `albums/<Artist>/<Album>/` and writes tags |
+| `EZAudioMetadata` | Album metadata | `AUDIO` audio, `artist` `album` `title` STRING, `track` INT 1-99, `tracktotal` INT 1-99, `year` INT 1900-2100 (default 2026), `art_mode` combo `skip` `upload` `generate` (default `skip`), `prefix` STRING; optional `IMAGE` cover | `AUDIO` audio | graph **audio** | Copies ACE SaveAudio masters into `albums/<Artist>/<Album>/` and writes tags |
 | `EZAlbumPack` | Pack album zip | `artist` STRING, `album` STRING | `STRING` zip_path | graph **audio** | Writes `<Album>.m3u` and `<Album>.zip`. CPU only |
 
 ---
@@ -142,7 +142,7 @@ Category `ez-comfy/podcast`. [Local podcast](../podcast.md).
 | `EZPodcastLearn` | Podcast Learn | `sample` combo, `sources` STRING multiline, `format` combo (Quick recap / Deep dive / Explainer / Quiz drill / Solo lecture / Debate; default Explainer), `duration` combo (3 min commute / 8 min briefing / 15 min lesson / 25 min seminar; default 8 min briefing), `fetch_links` BOOLEAN (default on), `enhance` BOOLEAN (default on), `catalog` | `STRING` digest, `STRING` script | graph **audio** | Paste notes, HTTPS links, captioned video URLs. SSRF-safe fetch; videos are captions only. Missing GGUF concatenates sources and wraps Speaker A lines. Unloads the writer so TTS can run in the same Queue |
 | `EZAudioLoopToMatch` | Loop bed to speech | `speech` AUDIO, `bed` AUDIO | `AUDIO` bed | graph **audio** | Repeats a short instrumental bed until it covers the speech stem, then trims. Empty speech stays empty |
 | `EZPodcastDisclosure` | Podcast Disclosure | `script` STRING | `STRING` script | graph **audio** | Prepends the **fixed** line: voices and music are synthesized; hosts are original characters, not recordings of real people. Operators cannot edit that string |
-| `EZKokoroTTS` | Kokoro TTS (two-host) | `script` STRING, `speaker_a_voice` / `speaker_b_voice` / `announcer_voice` combo (Kokoro ids; defaults `af_heart` / `am_michael` / `bm_george`), `include_announcer` BOOLEAN (default false), `backend` combo `kokoro` `chatterbox` `qwen3tts` (default `kokoro`), `speaker_a_ref` / `speaker_b_ref` STRING, `speed` FLOAT 0.5–1.5 (default 1.0) | `AUDIO` audio | graph **audio** | Kokoro-82M ONNX/CPU built-ins (Apache 2.0). Chatterbox / Qwen3-TTS only with operator-owned refs; empty refs fall back to Kokoro. **Never ships celebrity WAVs** |
+| `EZKokoroTTS` | Kokoro TTS (two-host) | `script` STRING, `speaker_a_voice` / `speaker_b_voice` / `announcer_voice` combo (Kokoro ids; defaults `af_heart` / `am_michael` / `bm_george`), `include_announcer` BOOLEAN (default false), `backend` combo `kokoro` `chatterbox` `qwen3tts` (default `kokoro`), `speaker_a_ref` / `speaker_b_ref` STRING, `speed` FLOAT 0.5-1.5 (default 1.0) | `AUDIO` audio | graph **audio** | Kokoro-82M ONNX/CPU built-ins (Apache 2.0). Chatterbox / Qwen3-TTS only with operator-owned refs; empty refs fall back to Kokoro. **Never ships celebrity WAVs** |
 
 ---
 
@@ -153,21 +153,21 @@ Category `ez-comfy/prompt`. On-box Qwen3-4B-Instruct-2507 GGUF. Fail-soft withou
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
 | `EZImageDescribe` | Describe image | `enable` BOOLEAN (default off); optional lazy `image` IMAGE | `STRING` caption | CPU VLM (not a CLI occupancy mode) | Off (node default) returns empty and does not load the describe GGUF. **stills/background-swap** defaults On so CLIP can name inventory (fail-soft if `download-llm --tier describe` is missing). On captions a source still into Enhance `image_desc` (and onto the CLIP line for background modes). Not `EZDescribeImage` |
-| `EZBackgroundCast` | Background cast | `other_characters` BOOLEAN (default on), `background_characters` BOOLEAN (default on) | `STRING` cast | — | **stills/background-swap** and **stills/background-edit**. On treats companions or extras as environment. Off keeps them locked with the hero. Wires into Klein Enhance `background_cast` |
-| `EZKleinPromptEnhance` | Klein Prompt Enhance | `sample` combo (App dropdown: this graph’s 20 `js/samples/` recipes + `custom`; Python union still accepts other catalogs for Queue), `prompt` STRING, `enhance` BOOLEAN (default on), `mode` combo `t2i` `edit` `identity` `text_swap` `background_swap` `background_edit` (default `t2i`), `duration_hint` STRING (default `YouTube 16:9 still`), `style` combo, `catalog` STRING (hidden); optional `context` STRING (forceInput), `image_desc` STRING, `background_cast` STRING | `STRING` prompt | CPU GGUF (not a CLI occupancy mode) | identity mode is camera-free bible. `text_swap` is glyph-lock lettering (style ignored; source still owns look). `background_swap` replaces environment including ground; `background_edit` restyles it in place (style applies to the environment). Named background samples skip the rewriter (`precise background instruction`). Context is bible/research; ignored when Enhance is off. Sample recipes live in `js/samples/`. JS filters the dropdown via the hidden `catalog` widget / `extra.lab_rel` (place recipes such as Cliff villa on **stills/dream-house**) |
+| `EZBackgroundCast` | Background cast | `other_characters` BOOLEAN (default on), `background_characters` BOOLEAN (default on) | `STRING` cast | - | **stills/background-swap** and **stills/background-edit**. On treats companions or extras as environment. Off keeps them locked with the hero. Wires into Klein Enhance `background_cast` |
+| `EZKleinPromptEnhance` | Klein Prompt Enhance | `sample` combo (App dropdown: this graph's 20 `js/samples/` recipes + `custom`; Python union still accepts other catalogs for Queue), `prompt` STRING, `enhance` BOOLEAN (default on), `mode` combo `t2i` `edit` `identity` `text_swap` `background_swap` `background_edit` (default `t2i`), `duration_hint` STRING (default `YouTube 16:9 still`), `style` combo, `catalog` STRING (hidden); optional `context` STRING (forceInput), `image_desc` STRING, `background_cast` STRING | `STRING` prompt | CPU GGUF (not a CLI occupancy mode) | identity mode is camera-free bible. `text_swap` is glyph-lock lettering (style ignored; source still owns look). `background_swap` replaces environment including ground; `background_edit` restyles it in place (style applies to the environment). Named background samples skip the rewriter (`precise background instruction`). Context is bible/research; ignored when Enhance is off. Sample recipes live in `js/samples/`. JS filters the dropdown via the hidden `catalog` widget / `extra.lab_rel` (place recipes such as Cliff villa on **stills/dream-house**) |
 | `EZWanPromptEnhance` | Wan Prompt Enhance | `sample`, `prompt`, `enhance`, `mode` combo `t2v` `i2v` `flf` `vace` `s2v` (default `t2v`), `duration_hint` (default `5 seconds, 24 fps`), `style`, `catalog`; optional `context` | `STRING` prompt | CPU GGUF | T2V look+motion+one camera; I2V motion+camera only; `flf` Fun InP first-last; `vace` join/inpaint; `s2v` talking-head (wav owns lip-sync). **No audio** except s2v. Style ignored on I2V/flf/vace/s2v. Context ignored when Enhance is off |
 | `EZLTXPromptEnhance` | LTX Prompt Enhance | `sample`, `prompt`, `enhance`, `mode` combo `t2v` `i2v` `iclora` (default `t2v`), `duration_hint`, `audio_notes` STRING, `style`, `catalog`; optional `context` | `STRING` prompt | CPU GGUF | Flowing present-tense paragraph with audio interleaved. `iclora` describes look/materials, not the control type. Style ignored on I2V. Context (identity/logline) ignored when Enhance is off |
-| `EZSamplePrompt` | Sample Prompt | `sample` combo, `prompt` STRING, `catalog` STRING | `STRING` prompt | — | Recipe picker for Prompt Forge / Beat Sheet logline. **Custom** uses the textarea |
-| `EZZimagePromptEnhance` | Z-Image Prompt Enhance | `sample`, `prompt`, `enhance`, `duration_hint`, `style`, `catalog`; optional `context` | `STRING` prompt | CPU GGUF | Z-Image Turbo Qwen wrap. Turbo ignores a separate negative — exclusions stay in the positive. Preview on Prompt Forge |
+| `EZSamplePrompt` | Sample Prompt | `sample` combo, `prompt` STRING, `catalog` STRING | `STRING` prompt | - | Recipe picker for Prompt Forge / Beat Sheet logline. **Custom** uses the textarea |
+| `EZZimagePromptEnhance` | Z-Image Prompt Enhance | `sample`, `prompt`, `enhance`, `duration_hint`, `style`, `catalog`; optional `context` | `STRING` prompt | CPU GGUF | Z-Image Turbo Qwen wrap. Turbo ignores a separate negative - exclusions stay in the positive. Preview on Prompt Forge |
 | `EZLongCatPromptEnhance` | LongCat Prompt Enhance | `sample`, `prompt`, `enhance`, `mode` combo `t2v` `i2v` `vc` (default `t2v`), `duration_hint`, `style`, `catalog`; optional `context` | `STRING` prompt | CPU GGUF | LongCat-Video. T2V scene+motion; I2V extends the still; `vc` continues previous frames. No native audio. Style ignored on I2V/vc |
 | `EZDreamXPromptEnhance` | DreamX Prompt Enhance | `sample`, `prompt`, `enhance`, `duration_hint`, `audio_notes`, `style`, `catalog`; optional `context` | `STRING` prompt | CPU GGUF | DreamX-Creator. First frame owns look. Unified AV paragraph. Style ignored |
 | `EZNegativePromptEnhance` | Negative Prompt Enhance | `prompt` STRING, `enhance` BOOLEAN (default on; App label **Rewrite negative**), `family` combo `klein` `wan` `ltx` `zimage` `longcat` `dreamx` `s2v` (default `klein`); optional `positive` STRING (forceInput) | `STRING` prompt | CPU GGUF | Rewrites the negative against the final positive so look terms cannot fight. Stays on when Rewrite prompt is off. Keeps anatomy artifacts unless the positive asked for that body. Fail-soft; a deterministic complement still runs |
-| `EZPromptBundle` | Prompt Bundle | optional `text_01`…`text_24` STRING (forceInput) | `STRING` prompt | — | Joins final shot prompts for one shared film negative. No LLM. Empty inputs are skipped |
-| `EZPromptJoin` | Prompt Join | `identity` STRING, `shot` STRING, `inventory` STRING, `lock` combo `view` `state` (default `view`) | `STRING` prompt | — | `view` front-loads the shot; `state` keeps framing and changes only light/grade/named action. Inventory is a locked object list |
-| `EZContextJoin` | Context Join | `a` STRING (forceInput), `label_a`…`label_d`; optional `b` `c` `d` STRING (forceInput) | `STRING` context | — | Packs labeled desk fields (logline/script/audio policy/score). Empty values omitted. Wire into Prompt Enhance `context` |
+| `EZPromptBundle` | Prompt Bundle | optional `text_01`...`text_24` STRING (forceInput) | `STRING` prompt | - | Joins final shot prompts for one shared film negative. No LLM. Empty inputs are skipped |
+| `EZPromptJoin` | Prompt Join | `identity` STRING, `shot` STRING, `inventory` STRING, `lock` combo `view` `state` (default `view`) | `STRING` prompt | - | `view` front-loads the shot; `state` keeps framing and changes only light/grade/named action. Inventory is a locked object list |
+| `EZContextJoin` | Context Join | `a` STRING (forceInput), `label_a`...`label_d`; optional `b` `c` `d` STRING (forceInput) | `STRING` context | - | Packs labeled desk fields (logline/script/audio policy/score). Empty values omitted. Wire into Prompt Enhance `context` |
 | `EZAceStepPromptEnhance` | ACE-Step Prompt Enhance | `sample` combo, `tags` STRING, `lyrics` STRING, `enhance` BOOLEAN (default on), `mode` combo `vocal` `instrumental` (default `vocal`), `catalog`; optional `context` | `STRING` tags, `STRING` lyrics | CPU GGUF | Instrumental mode forces no-vocals tags and empty-body `[inst]` / `[drop]` lyrics (free-text lines fold into the brackets so ACE does not sing them). Context (episode script) ignored when Enhance is off. Album tracks hide Sample in App Mode |
-| `EZCinemaRack` | Cinema Rack | `subject` STRING, `flavor` combo, `recipe` combo, thirteen axis combos (default `none`) | `STRING` prompt, `STRING` notes | — | Deterministic splice. Recipe fills empty axes. Wan emits one camera verb. I2V drops look. Editing omitted on stills. Catalogs: [Cinema Rack](../create/cinema-rack.md) |
-| `EZAudioRack` | Audio Rack | `brief` STRING, `flavor` combo `ace_vocal` `ace_instrumental` `podcast_bed`, `recipe` combo, thirteen axis combos (default `none`) | `STRING` tags, `STRING` lyrics, `STRING` notes | — | Deterministic splice. Recipe fills empty axes. Vocal omitted on instrumental/podcast. Instrumental forces no-vocals tags and `[inst]` form. Exactly one BPM when tempo is picked. Catalogs: [Audio Rack](../create/audio-rack.md) |
+| `EZCinemaRack` | Cinema Rack | `subject` STRING, `flavor` combo, `recipe` combo, thirteen axis combos (default `none`) | `STRING` prompt, `STRING` notes | - | Deterministic splice. Recipe fills empty axes. Wan emits one camera verb. I2V drops look. Editing omitted on stills. Catalogs: [Cinema Rack](../create/cinema-rack.md) |
+| `EZAudioRack` | Audio Rack | `brief` STRING, `flavor` combo `ace_vocal` `ace_instrumental` `podcast_bed`, `recipe` combo, thirteen axis combos (default `none`) | `STRING` tags, `STRING` lyrics, `STRING` notes | - | Deterministic splice. Recipe fills empty axes. Vocal omitted on instrumental/podcast. Instrumental forces no-vocals tags and `[inst]` form. Exactly one BPM when tempo is picked. Catalogs: [Audio Rack](../create/audio-rack.md) |
 
 ---
 
@@ -177,7 +177,7 @@ Category `ez-comfy/research`. Same pipeline as **inspire/research-chat**. Briefs
 
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
-| `EZCreativeResearch` | Creative Research | `sample` combo, `prompt` STRING (default night-rooftop lighting question), `mode` combo `chat` `research` (default `research`), `web_search` BOOLEAN (default on), `subagents` INT 1–3 (default 2), `history` STRING, `catalog` STRING | `STRING` reply | graph **`llm`** (not CLI `occupancy enter llm`) | GPU 35B sidecar when `llm-desk` is up, else on-box 4B. Fail-soft without a GGUF. HTTPS search is SSRF-guarded |
+| `EZCreativeResearch` | Creative Research | `sample` combo, `prompt` STRING (default night-rooftop lighting question), `mode` combo `chat` `research` (default `research`), `web_search` BOOLEAN (default on), `subagents` INT 1-3 (default 2), `history` STRING, `catalog` STRING | `STRING` reply | graph **`llm`** (not CLI `occupancy enter llm`) | GPU 35B sidecar when `llm-desk` is up, else on-box 4B. Fail-soft without a GGUF. HTTPS search is SSRF-guarded |
 
 Graph label `llm` means **nothing GPU** on the App occupancy chip unless `llm-desk` is the writing desk. It is not `occupancy enter llm`.
 
@@ -199,29 +199,29 @@ Category `ez-comfy/image`. Size helpers for Klein edit graphs, still and video F
 
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
-| `EZSnapImage` | Snap image (div 16) | `image` IMAGE | `IMAGE` image | — | Largest width/height that fit inside the source and are multiples of 16 (Flux.2 Klein VAE) |
-| `EZEmptyFlux2FromImage` | Empty Flux.2 from image | `image` IMAGE | `LATENT` latent | — | Empty Flux.2 noise canvas at the still's snapped W×H. **stills/background-swap** denoise start |
-| `EZMatchImageSize` | Match image size | `image` IMAGE, `size_src` IMAGE | `IMAGE` image | — | Lanczos-resize to `size_src` H×W. No-op when already equal |
-| `EZCubicCondition` | Cubic or photo reference | `conditioning`, `latent` (photo encode), `image`, `vae`, `prompt` STRING forceInput | `CONDITIONING` | — | **stills/background-swap**. Place swaps attach the photo. Cube / voxel / block-world prompts attach a coarse block study of that photo with its people erased (missing segmenter weights leave the study unchanged) |
-| `EZReinsertPeople` | Reinsert people | `plate` IMAGE, `source` IMAGE, `prompt` STRING forceInput | `IMAGE` image | — | Pastes detected people from the full-resolution source (mask dilated ~2 px, feathered ~6 px) onto a cubic rebuild. Other prompts pass the plate through. Missing BSD-3 DeepLab weights fail soft (`EZ_PERSON_MASK=off` skips the paste) |
-| `EZImageUpscale` | Upscale still | `image` IMAGE, `upscale` combo `none` `2x` `4x` `4K` (default `none`) | `IMAGE` image, `STRING` upscale | — | Optional lanczos after decode, wired before SaveImage on stills. `none` is a passthrough. `4K` fits a 3840×2160 box (portrait 2160×3840). No extra weights. Not a Manager pack |
-| `EZImageFormat` | Format / platform | `format` combo, `look` combo, `width`/`height`/`batch_size` INT | `INT` width/height/batch, `STRING` hint/prefix/context | klein | Preset sets ÷16 canvas and Enhance framing. Custom snaps Width×Height. Look recipe (still-studio / image-studio) is a Cinema Rack starter. Quality does not change size |
+| `EZSnapImage` | Snap image (div 16) | `image` IMAGE | `IMAGE` image | - | Largest width/height that fit inside the source and are multiples of 16 (Flux.2 Klein VAE) |
+| `EZEmptyFlux2FromImage` | Empty Flux.2 from image | `image` IMAGE | `LATENT` latent | - | Empty Flux.2 noise canvas at the still's snapped WxH. **stills/background-swap** denoise start |
+| `EZMatchImageSize` | Match image size | `image` IMAGE, `size_src` IMAGE | `IMAGE` image | - | Lanczos-resize to `size_src` HxW. No-op when already equal |
+| `EZCubicCondition` | Cubic or photo reference | `conditioning`, `latent` (photo encode), `image`, `vae`, `prompt` STRING forceInput | `CONDITIONING` | - | **stills/background-swap**. Place swaps attach the photo. Cube / voxel / block-world prompts attach a coarse block study of that photo with its people erased (missing segmenter weights leave the study unchanged) |
+| `EZReinsertPeople` | Reinsert people | `plate` IMAGE, `source` IMAGE, `prompt` STRING forceInput | `IMAGE` image | - | Pastes detected people from the full-resolution source (mask dilated ~2 px, feathered ~6 px) onto a cubic rebuild. Other prompts pass the plate through. Missing BSD-3 DeepLab weights fail soft (`EZ_PERSON_MASK=off` skips the paste) |
+| `EZImageUpscale` | Upscale still | `image` IMAGE, `upscale` combo `none` `2x` `4x` `4K` (default `none`) | `IMAGE` image, `STRING` upscale | - | Optional lanczos after decode, wired before SaveImage on stills. `none` is a passthrough. `4K` fits a 3840x2160 box (portrait 2160x3840). No extra weights. Not a Manager pack |
+| `EZImageFormat` | Format / platform | `format` combo, `look` combo, `width`/`height`/`batch_size` INT | `INT` width/height/batch, `STRING` hint/prefix/context | klein | Preset sets div16 canvas and Enhance framing. Custom snaps WidthxHeight. Look recipe (still-studio / image-studio) is a Cinema Rack starter. Quality does not change size |
 | `EZImageMode` | Creator mode | `category` combo, `mode` combo (100 labels), `iterate` BOOLEAN (default off), `run_summary` STRING, optional `context` STRING, `has_image` BOOLEAN force input | `STRING` context/enhance_mode/prefix | klein | stills/image-studio. Category filters Mode. Queue splices an instruction, picks t2i/edit/text_swap/identity/background_swap/background_edit, and sets the save prefix. Optional refs never required. **Iterate** on: first Run is text-to-image (`ez_iterate`); the saved still becomes the reference and the next Run is an edit. **This run** is the values Queue will send (`POST /ez_image/studio-preview`) |
-| `EZOptionalImage` | Optional reference stills | `filename` STRING (default empty), optional IMAGE×3 | `IMAGE` image, `INT` count, `BOOLEAN` has_image | klein | Empty is valid. Presence is the tensor, not the filename |
-| `EZKleinRefCanvas` | Klein canvas (optional ref) | `latent` LATENT, `vae` VAE, optional IMAGE + has_image | `LATENT` latent, `IMAGE` image | klein | Empty still passes the Flux2 latent through. Present still snaps ÷16, VAE-encodes, ReferenceLatent. Fail-soft |
-| `EZDescribeImage` | Describe reference still | `has_image` BOOLEAN, optional IMAGE | `STRING` caption | — | Fail-soft empty caption without VL weights. Lab graphs use `EZImageDescribe` (prompt-enhance pack) instead |
-| `EZVideoFormat` | Format / platform (video) | `family` combo (Wan 5B / LTX-2.5), `format` combo, `width`/`height` INT | `INT` width/height, `STRING` hint/prefix | wan / ltx | Preset sets Spark-safe clip pixels (Wan ÷16 max 1024, LTX ÷32 max 1280). Custom snaps 720→704 on LTX. Length stays on the latent. App Mode hides Family. Quality does not change size |
+| `EZOptionalImage` | Optional reference stills | `filename` STRING (default empty), optional IMAGEx3 | `IMAGE` image, `INT` count, `BOOLEAN` has_image | klein | Empty is valid. Presence is the tensor, not the filename |
+| `EZKleinRefCanvas` | Klein canvas (optional ref) | `latent` LATENT, `vae` VAE, optional IMAGE + has_image | `LATENT` latent, `IMAGE` image | klein | Empty still passes the Flux2 latent through. Present still snaps div16, VAE-encodes, ReferenceLatent. Fail-soft |
+| `EZDescribeImage` | Describe reference still | `has_image` BOOLEAN, optional IMAGE | `STRING` caption | - | Fail-soft empty caption without VL weights. Lab graphs use `EZImageDescribe` (prompt-enhance pack) instead |
+| `EZVideoFormat` | Format / platform (video) | `family` combo (Wan 5B / LTX-2.5), `format` combo, `width`/`height` INT | `INT` width/height, `STRING` hint/prefix | wan / ltx | Preset sets Spark-safe clip pixels (Wan div16 max 1024, LTX div32 max 1280). Custom snaps 720->704 on LTX. Length stays on the latent. App Mode hides Family. Quality does not change size |
 
 ---
 
 ## ez_quality (Quality combo)
 
-Category `ez-comfy`. One Quality combo and one isolated Check models node on every `_lab` graph. Python does not walk sibling nodes for Quality; `ez_quality.js` writes KSampler steps/CFG and Klein 4B UNET on change and again `beforeQueued`. Editing those overlay widgets selects **custom** so Queue keeps the live values. `setWidgetValue` updates only that widget's `widgets_values` slot (prompt text is never part of the overlay). Check models is **not** an output node — Queue skips it. Click **Check models** on the canvas node or the App occupancy chip (`POST /ez_quality/check`). Nodes 2.0: `widget.value`, no `node_widget`.
+Category `ez-comfy`. One Quality combo and one isolated Check models node on every `_lab` graph. Python does not walk sibling nodes for Quality; `ez_quality.js` writes KSampler steps/CFG and Klein 4B UNET on change and again `beforeQueued`. Editing those overlay widgets selects **custom** so Queue keeps the live values. `setWidgetValue` updates only that widget's `widgets_values` slot (prompt text is never part of the overlay). Check models is **not** an output node - Queue skips it. Click **Check models** on the canvas node or the App occupancy chip (`POST /ez_quality/check`). Nodes 2.0: `widget.value`, no `node_widget`.
 
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
 | `EZQuality` | Quality | `quality` combo `custom` `draft` `lab` `standard` `high` `Free Commercial Use (<$10M)` `ultra` `max` (default **lab**) | `STRING` quality | graph occupancy (overlay table) | custom freezes the last overlay. lab restores authored widgets. Editing Steps/CFG/UNET selects custom and keeps those values. Prompt edits Queue at any Quality. Named qualities may swap UNET/CLIP/VAE when files are on disk. Never changes size. Free Commercial Use is Klein 4B + LTX-2.5 (never 9B / FLUX.2-dev). ultra/max may select opt-in Non-Commercial weights. Not `--tier quality` |
-| `EZModelCheck` | Check models | `status` STRING (JS overwrites) | — | graph occupancy + Quality | Queue does not run this node. Reports Ready, or missing files plus the host command (`./scripts/manage.sh download-models` or an opt-in `download-image.sh --tier 9b`, …). Restart after a pull so `models/*` re-link |
+| `EZModelCheck` | Check models | `status` STRING (JS overwrites) | - | graph occupancy + Quality | Queue does not run this node. Reports Ready, or missing files plus the host command (`./scripts/manage.sh download-models` or an opt-in `download-image.sh --tier 9b`, ...). Restart after a pull so `models/*` re-link |
 
 ---
 
@@ -229,7 +229,7 @@ Category `ez-comfy`. One Quality combo and one isolated Check models node on eve
 
 **No Python nodes.** `NODE_CLASS_MAPPINGS` is empty. `WEB_DIRECTORY = ./js`.
 
-`ez_studio_app.js` relabels App widgets and draws an occupancy chip from `extra.lab_app_mode`. Chip “must be stopped” copy:
+`ez_studio_app.js` relabels App widgets and draws an occupancy chip from `extra.lab_app_mode`. Chip "must be stopped" copy:
 
 | Graph occupancy | Chip says stop |
 | --- | --- |
@@ -240,7 +240,7 @@ Category `ez-comfy`. One Quality combo and one isolated Check models node on eve
 | `film` | everything else on that Spark |
 | `audio` | Klein / Wan / LTX session |
 
-This is **not** [studio-ui](studio-ui.md) and not a second frontend. Widget catalog stays on [ComfyUI Apps](../studio-apps.md). Preview widgets on `ez_prompt_enhance`, `ez_research`, `ez_studio_forge`, and `ez_dub` set `widget.value` and treat `inputEl` as optional (Vue STRING widgets have no canvas textarea). `ez_prompt_enhance.js` also copies the CLIP string onto linked CLIPTextEncode **Positive** (and ACE tags/lyrics) when Prompt or Rewrite prompt changes, and after Queue. Dub **Upload media** is a native button widget — no LiteGraph `node_widget`.
+This is **not** [studio-ui](studio-ui.md) and not a second frontend. Widget catalog stays on [ComfyUI Apps](../studio-apps.md). Preview widgets on `ez_prompt_enhance`, `ez_research`, `ez_studio_forge`, and `ez_dub` set `widget.value` and treat `inputEl` as optional (Vue STRING widgets have no canvas textarea). `ez_prompt_enhance.js` also copies the CLIP string onto linked CLIPTextEncode **Positive** (and ACE tags/lyrics) when Prompt or Rewrite prompt changes, and after Queue. Dub **Upload media** is a native button widget - no LiteGraph `node_widget`.
 
 ---
 
@@ -248,9 +248,9 @@ This is **not** [studio-ui](studio-ui.md) and not a second frontend. Widget cata
 
 **No canvas nodes.** `NODE_CLASS_MAPPINGS` is empty. `WEB_DIRECTORY = ./js`.
 
-`ez_outputs.js` registers a Comfy **Outputs** sidebar tab (**Browse saved generations**). It lists media on `${COMFY_OUTPUT_DIR}` (container `/outputs`), skips `comfy-user` / `custom-nodes-user` / `input` / `temp`, and is a thumbnail browser — not only a path list:
+`ez_outputs.js` registers a Comfy **Outputs** sidebar tab (**Browse saved generations**). It lists media on `${COMFY_OUTPUT_DIR}` (container `/outputs`), skips `comfy-user` / `custom-nodes-user` / `input` / `temp`, and is a thumbnail browser - not only a path list:
 
-- **Grid** (default, reflowing `auto-fill`) or **List**, with an adjustable thumbnail size (80–280px, persisted)
+- **Grid** (default, reflowing `auto-fill`) or **List**, with an adjustable thumbnail size (80-280px, persisted)
 - Multi-select (checkbox, Shift-click range, Ctrl/Cmd-click, Select all) and bulk **Delete** / **Copy to input** / **Download** / **Copy paths**
 - Stills use Comfy `/view?preview=webp;80` thumbs; video plays on hover; double-click opens a lightbox
 - **Use as start image** copies into `/inputs` and sets `LoadImage.image` (then `EZOptionalImage.filename`); audio sets `LoadAudio.audio`

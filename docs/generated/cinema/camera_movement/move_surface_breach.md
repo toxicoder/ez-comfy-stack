@@ -1,6 +1,6 @@
 ---
 title: "Surface breach"
-description: "Cinema Rack illustration — Surface breach."
+description: "Cinema Rack illustration - Surface breach."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -239,7 +239,7 @@ class EdmExample(TypedDict):
         cover_prompt: US-safe cover-art prompt.
         recipe: Audio Rack recipe id.
         picks: Axis overrides spliced with the recipe.
-        form_id: Song-plan arc (``e_build``, ``e_drop_first``, …).
+        form_id: Song-plan arc (``e_build``, ``e_drop_first``, ...).
         meter: ACE time signature. Dance takes stay ``4``.
         keyscale: Key on the album's fifths path.
         code_tokens: Present on My Coder. Words of that take's coder
@@ -511,7 +511,7 @@ def format_edm_score(*sections: tuple[str, str]) -> str:
     Labels are intro, inst, drop, build-up, outro, and chorus (DJ-shout
     treats only). Instrumental sections emit empty-body markers with
     production cues inside the brackets so ACE-Step does not sing them.
-    An ``inst`` body that names a drop is promoted to ``[drop - …]``.
+    An ``inst`` body that names a drop is promoted to ``[drop - ...]``.
     This is not the Nill Bye verse/chorus loop and not a fixed
     melody-drop-break-drop skeleton. First section is a named drop.
 

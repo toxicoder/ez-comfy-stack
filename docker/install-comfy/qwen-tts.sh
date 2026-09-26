@@ -3,7 +3,7 @@
 # ## install-comfy/qwen-tts.sh
 #
 # Optional Qwen3-TTS wheel extras. Official qwen-tts pins
-# transformers==4.57.3 — never install it unconstrained on the lab venv
+# transformers==4.57.3 - never install it unconstrained on the lab venv
 # (Comfy 0.37.0 + torch 2.14+cu130). Extras first, then --no-deps.
 #
 # Sourced by manage.sh. Not baked into phase-nodes / ensure_dub_wheels.

@@ -37,7 +37,7 @@ source "${REPO_ROOT}/scripts/lib/occupancy.sh"
 #######################################
 cmd_help() {
   echo "Usage: blender-llm.sh PROMPT" >&2
-  echo "  Optional host llama.cpp + existing Qwen3-4B GGUF → blender-mcp." >&2
+  echo "  Optional host llama.cpp + existing Qwen3-4B GGUF -> blender-mcp." >&2
   echo "  CPU only. Path D if llama-cli is missing. Never in Dockerfile." >&2
 }
 
@@ -69,7 +69,7 @@ llm_gguf_path() {
 #######################################
 print_path_d_hint() {
   err "host llama.cpp not found (llama-cli / llama_cpp)."
-  err "Path D: laptop Grok/Cursor MCP client → SSH tunnel to blender-mcp."
+  err "Path D: laptop Grok/Cursor MCP client -> SSH tunnel to blender-mcp."
   err "  ./scripts/manage.sh occupancy enter blender-desk"
   err "  ./scripts/manage.sh blender-mcp --stdio"
 }

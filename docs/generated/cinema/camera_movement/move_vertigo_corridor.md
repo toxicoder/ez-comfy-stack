@@ -1,6 +1,6 @@
 ---
 title: "Corridor stretch"
-description: "Cinema Rack illustration — Corridor stretch."
+description: "Cinema Rack illustration - Corridor stretch."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

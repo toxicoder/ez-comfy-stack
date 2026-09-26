@@ -1,6 +1,6 @@
 ---
 title: "Move then crash zoom"
-description: "Cinema Rack illustration — Move then crash zoom."
+description: "Cinema Rack illustration - Move then crash zoom."
 tags: [cinema, prompting, catalog, clip]
 ---
 

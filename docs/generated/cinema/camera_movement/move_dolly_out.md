@@ -1,6 +1,6 @@
 ---
 title: "Dolly out"
-description: "Cinema Rack illustration — Dolly out."
+description: "Cinema Rack illustration - Dolly out."
 tags: [cinema, prompting, catalog, clip]
 ---
 

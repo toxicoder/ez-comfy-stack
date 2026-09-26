@@ -24,7 +24,7 @@ tags: [workflows, generated, comfyui, optional]
 
 ## Purpose
 
-Occupancy **—**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous family before Queue.
+Occupancy **-**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous family before Queue.
 
 ```text
 ## optional/longcat-video
@@ -32,7 +32,7 @@ Occupancy **—**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 Opt-in LongCat-Video (MIT) prompt preview. Not download-models. No UNET on this canvas.
 
 Download: ./scripts/manage.sh download-longcat --tier video
-Context-parallel two-Spark only with LAB_ALLOW_CONTEXT_PARALLEL=1. NCCL is out of this sample — tensor-parallel LLMs belong in nvidia-dgx-spark-lab.
+Context-parallel two-Spark only with LAB_ALLOW_CONTEXT_PARALLEL=1. NCCL is out of this sample - tensor-parallel LLMs belong in nvidia-dgx-spark-lab.
 Unload LTX first. Occupancy: one heavy job when you Queue a real LongCat printer.
 
 This canvas rewrites a lazy sentence with LongCat Prompt Enhance (T2V / I2V / continuation). Copy the CLIP box into your LongCat graph. Distilled LongCat is CFG 1 (negatives ignored); standard CFG is about 4.
@@ -75,9 +75,9 @@ flowchart LR
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
 
-### `Note` — Note
+### `Note` - Note
 
 On-canvas operator note (not executed).
 
@@ -93,7 +93,7 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## optional/longcat-video Opt-in LongCat-Video (MIT) prompt preview. Not download-models. No UNET on this canvas. Download: ./scripts/manage.sh download-longcat --tier video Context-parallel two-Spar…`
+**This graph:** `## optional/longcat-video Opt-in LongCat-Video (MIT) prompt preview. Not download-models. No UNET on this canvas. Download: ./scripts/manage.sh download-longcat --tier video Context-parallel two-Spar...`
 
 ```text
 ## optional/longcat-video
@@ -101,7 +101,7 @@ Markdown-ish operator note.
 Opt-in LongCat-Video (MIT) prompt preview. Not download-models. No UNET on this canvas.
 
 Download: ./scripts/manage.sh download-longcat --tier video
-Context-parallel two-Spark only with LAB_ALLOW_CONTEXT_PARALLEL=1. NCCL is out of this sample — tensor-parallel LLMs belong in nvidia-dgx-spark-lab.
+Context-parallel two-Spark only with LAB_ALLOW_CONTEXT_PARALLEL=1. NCCL is out of this sample - tensor-parallel LLMs belong in nvidia-dgx-spark-lab.
 Unload LTX first. Occupancy: one heavy job when you Queue a real LongCat printer.
 
 This canvas rewrites a lazy sentence with LongCat Prompt Enhance (T2V / I2V / continuation). Copy the CLIP box into your LongCat graph. Distilled LongCat is CFG 1 (negatives ignored); standard CFG is about 4.
@@ -109,7 +109,7 @@ This canvas rewrites a lazy sentence with LongCat Prompt Enhance (T2V / I2V / co
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Enhance off to pin the widget text.
 ```
 
-### `EZSamplePrompt` — Sample Prompt
+### `EZSamplePrompt` - Sample Prompt
 
 STRING source with a sample-prompt combo plus Custom textarea.
 
@@ -147,7 +147,7 @@ Catalog id (inspire/prompt-forge).
 
 **This graph:** `optional/longcat-video`
 
-### `EZLongCatPromptEnhance` — LongCat Prompt Enhance
+### `EZLongCatPromptEnhance` - LongCat Prompt Enhance
 
 Rewrite a lazy prompt for LongCat-Video (T2V / I2V / continuation).
 
@@ -545,7 +545,7 @@ Sample-catalog id.
 
 **This graph:** `optional/longcat-video`
 
-### `EZNegativePromptEnhance` — Negative Prompt Enhance
+### `EZNegativePromptEnhance` - Negative Prompt Enhance
 
 Rewrite a negative CLIP seed against the final positive. Stays on when Rewrite prompt is off.
 
@@ -596,7 +596,7 @@ Which negative family.
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
 
-### `EZQuality` — Quality
+### `EZQuality` - Quality
 
 Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
@@ -631,7 +631,7 @@ custom freezes last overlay; lab restores graph defaults.
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
-### `EZModelCheck` — Check models
+### `EZModelCheck` - Check models
 
 Manual disk check for occupancy + Quality weights. Queue does not run this node.
 

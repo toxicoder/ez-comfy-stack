@@ -1,6 +1,6 @@
 ---
 title: "Vehicle chase"
-description: "Cinema Rack illustration — Vehicle chase."
+description: "Cinema Rack illustration - Vehicle chase."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

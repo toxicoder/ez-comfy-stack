@@ -1,7 +1,7 @@
 """Dub test/production seams as ``typing.Protocol`` interfaces.
 
 Hook *variables* stay on :mod:`ez_dub.pipeline` so existing
-``pipeline.tts_hook = …`` monkeypatches keep working. This module is the
+``pipeline.tts_hook = ...`` monkeypatches keep working. This module is the
 contract those callables must match.
 """
 

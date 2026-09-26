@@ -24,7 +24,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## inspire/beat-sheet\n\nScript desk \u2014 6 beats \u00d7 enter / traverse / exit. Occupancy: none \u2014 stop nothing GPU.\n\nThis graph does not print video. Fill Logline, Script, Audio policy, Score \u2014 those desk\nfields are packed into Context Join and condition every card rewrite. Then fill the 18 cards\n(`action | camera | world SFX | dialogue`). Audio policy also feeds LTX audio notes.\nWrite YAML on the host:\n\n  ./scripts/manage.sh shot-sheet run --film <slug>\n\nThat writes `${COMFY_OUTPUT_DIR}/films/<slug>/shots.yaml`. The entrypoint does **not**\ncopy YAML. Do not overwrite `workflows/shorts/*.shots.yaml` unless `--lab-example`.\n\nNext: stills/identity-sheet, or export-guides if clay is required, then\ndcc/clay-hero.\n\nShot-card keys (defaults fail-closed):\n\n  audio_policy: world-only | stems | a2v-lock\n  score: none | acestep-instrumental\n  clay: skip | required\n  audio_lock: none | a2v\n  camera: dolly in | tracking | fixed camera | \u2026\n\nShot 1 of beat 1 load_from: identity. Later shots load_from: <prev_prefix>_last.\n\nDo not type a 30/60/90 s denoise. One LTX print is 5.00 s (121 frames = 1+8n @ 24 fps).\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## inspire/beat-sheet\n\nScript desk - 6 beats x enter / traverse / exit. Occupancy: none - stop nothing GPU.\n\nThis graph does not print video. Fill Logline, Script, Audio policy, Score - those desk\nfields are packed into Context Join and condition every card rewrite. Then fill the 18 cards\n(`action | camera | world SFX | dialogue`). Audio policy also feeds LTX audio notes.\nWrite YAML on the host:\n\n  ./scripts/manage.sh shot-sheet run --film <slug>\n\nThat writes `${COMFY_OUTPUT_DIR}/films/<slug>/shots.yaml`. The entrypoint does **not**\ncopy YAML. Do not overwrite `workflows/shorts/*.shots.yaml` unless `--lab-example`.\n\nNext: stills/identity-sheet, or export-guides if clay is required, then\ndcc/clay-hero.\n\nShot-card keys (defaults fail-closed):\n\n  audio_policy: world-only | stems | a2v-lock\n  score: none | acestep-instrumental\n  clay: skip | required\n  audio_lock: none | a2v\n  camera: dolly in | tracking | fixed camera | ...\n\nShot 1 of beat 1 load_from: identity. Later shots load_from: <prev_prefix>_last.\n\nDo not type a 30/60/90 s denoise. One LTX print is 5.00 s (121 frames = 1+8n @ 24 fps).\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     },
@@ -298,7 +298,7 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "enter beat 1 \u2014 action | camera | world SFX | dialogue",
+        "enter beat 1 - action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 1 enter"
@@ -353,7 +353,7 @@
       },
       "widgets_values": [
         "custom",
-        "enter beat 1 \u2014 action | camera | world SFX | dialogue",
+        "enter beat 1 - action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -395,7 +395,7 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "traverse beat 1 \u2014 action | camera | world SFX | dialogue",
+        "traverse beat 1 - action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 1 traverse"
@@ -450,7 +450,7 @@
       },
       "widgets_values": [
         "custom",
-        "traverse beat 1 \u2014 action | camera | world SFX | dialogue",
+        "traverse beat 1 - action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -492,7 +492,7 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "exit beat 1 \u2014 action | camera | world SFX | dialogue",
+        "exit beat 1 - action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 1 exit"
@@ -547,7 +547,7 @@
       },
       "widgets_values": [
         "custom",
-        "exit beat 1 \u2014 action | camera | world SFX | dialogue",
+        "exit beat 1 - action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -589,7 +589,7 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "enter beat 2 \u2014 action | camera | world SFX | dialogue",
+        "enter beat 2 - action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 2 enter"
@@ -644,7 +644,7 @@
       },
       "widgets_values": [
         "custom",
-        "enter beat 2 \u2014 action | camera | world SFX | dialogue",
+        "enter beat 2 - action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -686,7 +686,7 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "traverse beat 2 \u2014 action | camera | world SFX | dialogue",
+        "traverse beat 2 - action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 2 traverse"
@@ -741,7 +741,7 @@
       },
       "widgets_values": [
         "custom",
-        "traverse beat 2 \u2014 action | camera | world SFX | dialogue",
+        "traverse beat 2 - action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -783,7 +783,7 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "exit beat 2 \u2014 action | camera | world SFX | dialogue",
+        "exit beat 2 - action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 2 exit"
@@ -838,7 +838,7 @@
       },
       "widgets_values": [
         "custom",
-        "exit beat 2 \u2014 action | camera | world SFX | dialogue",
+        "exit beat 2 - action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -880,7 +880,7 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "enter beat 3 \u2014 action | camera | world SFX | dialogue",
+        "enter beat 3 - action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 3 enter"
@@ -935,7 +935,7 @@
       },
       "widgets_values": [
         "custom",
-        "enter beat 3 \u2014 action | camera | world SFX | dialogue",
+        "enter beat 3 - action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -977,7 +977,7 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "traverse beat 3 \u2014 action | camera | world SFX | dialogue",
+        "traverse beat 3 - action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 3 traverse"
@@ -1032,7 +1032,7 @@
       },
       "widgets_values": [
         "custom",
-        "traverse beat 3 \u2014 action | camera | world SFX | dialogue",
+        "traverse beat 3 - action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -1074,7 +1074,7 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "exit beat 3 \u2014 action | camera | world SFX | dialogue",
+        "exit beat 3 - action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 3 exit"
@@ -1129,7 +1129,7 @@
       },
       "widgets_values": [
         "custom",
-        "exit beat 3 \u2014 action | camera | world SFX | dialogue",
+        "exit beat 3 - action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -1171,7 +1171,7 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "enter beat 4 \u2014 action | camera | world SFX | dialogue",
+        "enter beat 4 - action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 4 enter"
@@ -1226,7 +1226,7 @@
       },
       "widgets_values": [
         "custom",
-        "enter beat 4 \u2014 action | camera | world SFX | dialogue",
+        "enter beat 4 - action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -1268,7 +1268,7 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "traverse beat 4 \u2014 action | camera | world SFX | dialogue",
+        "traverse beat 4 - action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 4 traverse"
@@ -1323,7 +1323,7 @@
       },
       "widgets_values": [
         "custom",
-        "traverse beat 4 \u2014 action | camera | world SFX | dialogue",
+        "traverse beat 4 - action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -1365,7 +1365,7 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "exit beat 4 \u2014 action | camera | world SFX | dialogue",
+        "exit beat 4 - action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 4 exit"
@@ -1420,7 +1420,7 @@
       },
       "widgets_values": [
         "custom",
-        "exit beat 4 \u2014 action | camera | world SFX | dialogue",
+        "exit beat 4 - action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -1462,7 +1462,7 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "enter beat 5 \u2014 action | camera | world SFX | dialogue",
+        "enter beat 5 - action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 5 enter"
@@ -1517,7 +1517,7 @@
       },
       "widgets_values": [
         "custom",
-        "enter beat 5 \u2014 action | camera | world SFX | dialogue",
+        "enter beat 5 - action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -1559,7 +1559,7 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "traverse beat 5 \u2014 action | camera | world SFX | dialogue",
+        "traverse beat 5 - action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 5 traverse"
@@ -1614,7 +1614,7 @@
       },
       "widgets_values": [
         "custom",
-        "traverse beat 5 \u2014 action | camera | world SFX | dialogue",
+        "traverse beat 5 - action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -1656,7 +1656,7 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "exit beat 5 \u2014 action | camera | world SFX | dialogue",
+        "exit beat 5 - action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 5 exit"
@@ -1711,7 +1711,7 @@
       },
       "widgets_values": [
         "custom",
-        "exit beat 5 \u2014 action | camera | world SFX | dialogue",
+        "exit beat 5 - action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -1753,7 +1753,7 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "enter beat 6 \u2014 action | camera | world SFX | dialogue",
+        "enter beat 6 - action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 6 enter"
@@ -1808,7 +1808,7 @@
       },
       "widgets_values": [
         "custom",
-        "enter beat 6 \u2014 action | camera | world SFX | dialogue",
+        "enter beat 6 - action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -1850,7 +1850,7 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "traverse beat 6 \u2014 action | camera | world SFX | dialogue",
+        "traverse beat 6 - action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 6 traverse"
@@ -1905,7 +1905,7 @@
       },
       "widgets_values": [
         "custom",
-        "traverse beat 6 \u2014 action | camera | world SFX | dialogue",
+        "traverse beat 6 - action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -1947,7 +1947,7 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "exit beat 6 \u2014 action | camera | world SFX | dialogue",
+        "exit beat 6 - action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 6 exit"
@@ -2002,7 +2002,7 @@
       },
       "widgets_values": [
         "custom",
-        "exit beat 6 \u2014 action | camera | world SFX | dialogue",
+        "exit beat 6 - action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -2669,8 +2669,8 @@
   "config": {},
   "extra": {
     "lab_profile": "inspire/beat-sheet",
-    "lab_note": "## inspire/beat-sheet\n\nScript desk \u2014 6 beats \u00d7 enter / traverse / exit. Occupancy: none \u2014 stop nothing GPU.\n\nThis graph does not print video. Fill Logline, Script, Audio policy, Score \u2014 those desk\nfields are packed into Context Join and condition every card rewrite. Then fill the 18 cards\n(`action | camera | world SFX | dialogue`). Audio policy also feeds LTX audio notes.\nWrite YAML on the host:\n\n  ./scripts/manage.sh shot-sheet run --film <slug>\n\nThat writes `${COMFY_OUTPUT_DIR}/films/<slug>/shots.yaml`. The entrypoint does **not**\ncopy YAML. Do not overwrite `workflows/shorts/*.shots.yaml` unless `--lab-example`.\n\nNext: stills/identity-sheet, or export-guides if clay is required, then\ndcc/clay-hero.\n\nShot-card keys (defaults fail-closed):\n\n  audio_policy: world-only | stems | a2v-lock\n  score: none | acestep-instrumental\n  clay: skip | required\n  audio_lock: none | a2v\n  camera: dolly in | tracking | fixed camera | \u2026\n\nShot 1 of beat 1 load_from: identity. Later shots load_from: <prev_prefix>_last.\n\nDo not type a 30/60/90 s denoise. One LTX print is 5.00 s (121 frames = 1+8n @ 24 fps).\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
-    "lab_description": "Script desk: logline, audio policy, 18 shot cards \u2192 shot-sheet YAML",
+    "lab_note": "## inspire/beat-sheet\n\nScript desk - 6 beats x enter / traverse / exit. Occupancy: none - stop nothing GPU.\n\nThis graph does not print video. Fill Logline, Script, Audio policy, Score - those desk\nfields are packed into Context Join and condition every card rewrite. Then fill the 18 cards\n(`action | camera | world SFX | dialogue`). Audio policy also feeds LTX audio notes.\nWrite YAML on the host:\n\n  ./scripts/manage.sh shot-sheet run --film <slug>\n\nThat writes `${COMFY_OUTPUT_DIR}/films/<slug>/shots.yaml`. The entrypoint does **not**\ncopy YAML. Do not overwrite `workflows/shorts/*.shots.yaml` unless `--lab-example`.\n\nNext: stills/identity-sheet, or export-guides if clay is required, then\ndcc/clay-hero.\n\nShot-card keys (defaults fail-closed):\n\n  audio_policy: world-only | stems | a2v-lock\n  score: none | acestep-instrumental\n  clay: skip | required\n  audio_lock: none | a2v\n  camera: dolly in | tracking | fixed camera | ...\n\nShot 1 of beat 1 load_from: identity. Later shots load_from: <prev_prefix>_last.\n\nDo not type a 30/60/90 s denoise. One LTX print is 5.00 s (121 frames = 1+8n @ 24 fps).\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_description": "Script desk: logline, audio policy, 18 shot cards -> shot-sheet YAML",
     "ds": {
       "scale": 1,
       "offset": [
@@ -2700,7 +2700,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
           }
         ],
         [

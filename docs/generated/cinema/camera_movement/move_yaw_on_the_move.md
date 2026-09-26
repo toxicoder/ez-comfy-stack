@@ -1,6 +1,6 @@
 ---
 title: "Yaw while tracking"
-description: "Cinema Rack illustration — Yaw while tracking."
+description: "Cinema Rack illustration - Yaw while tracking."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

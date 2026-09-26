@@ -68,9 +68,9 @@ GROUP_TITLES = {
 }
 
 OCC_LINE = {
-    "klein": "klein — stop Wan, LTX, podcast, music",
-    "wan": "wan — stop LTX, podcast, music",
-    "ltx": "ltx — stop Wan, podcast, music, other LTX",
+    "klein": "klein - stop Wan, LTX, podcast, music",
+    "wan": "wan - stop LTX, podcast, music",
+    "ltx": "ltx - stop Wan, podcast, music, other LTX",
 }
 
 
@@ -92,7 +92,7 @@ def _note(spec: Pack3Spec) -> str:
     lines = [
         f"## {spec.rel}",
         "",
-        f"{spec.title}. Lab size **{width}×{height}**. Prefix `{spec.prefix}`.",
+        f"{spec.title}. Lab size **{width}x{height}**. Prefix `{spec.prefix}`.",
         "Empty of lettering. Add titles in your editor, not in the prompt.",
         f"Occupancy: {OCC_LINE[spec.occupancy]}. One GB10 job.",
         f"Handoff: {hand}.",
@@ -102,17 +102,17 @@ def _note(spec: Pack3Spec) -> str:
         lines.append(f"Pack prefixes: {listed}.")
     if spec.kind in {"wan_i2v", "wan_loop", "ltx_av"}:
         lines.append(
-            "After Queue, click **Save video (MP4) — open node for preview**. "
+            "After Queue, click **Save video (MP4) - open node for preview**. "
             "File lands on `${COMFY_OUTPUT_DIR}`."
         )
         lines.append("LoadImage defaults to example.png so Queue smokes.")
     if "spotify-canvas" in spec.rel:
         lines.append(
-            "Spotify Canvas is silent 9:16, 3–8 s, MP4 or JPG. Scale in an editor "
+            "Spotify Canvas is silent 9:16, 3-8 s, MP4 or JPG. Scale in an editor "
             "if the current Canvas pixel range rejects this height."
         )
     if spec.occupancy == "ltx":
-        canvas = "768×1280" if spec.portrait else "1280×704"
+        canvas = "768x1280" if spec.portrait else "1280x704"
         lines.append(
             f"LTX canvas {canvas} (width/height must be divisible by 32; "
             "720 and 1080 are invalid). Disclose AI-generated media. "
@@ -349,16 +349,16 @@ def _write_catalog() -> None:
         "- **One hundred extra Apps** nested under `_lab/<lane>/creator/`",
         "- **Platform stills** (YouTube, Instagram, TikTok, X, LinkedIn, Pinterest, Twitch, Spotify)",
         "- **Silent Wan loops / I2V** and **LTX AV** job plates",
-        "- **Lab sizes vs upload pixels** — match aspect; scale in an editor if a platform wants more pixels",
+        "- **Lab sizes vs upload pixels** - match aspect; scale in an editor if a platform wants more pixels",
         "",
         "**What this enables**",
         "",
         "- **Queuing a job-named App** (channel art, 4:5 feed, Canvas loop, BRB screen) instead of restyling a generic still",
-        "- **Keeping occupancy XOR** — Klein, Wan, and LTX still do not share a GB10 session",
+        "- **Keeping occupancy XOR** - Klein, Wan, and LTX still do not share a GB10 session",
         "",
         "**Who this is for:** studio users after `stills/still-draft`. Index: [Workflow catalog](../studio-workflows.md). Occupancy and widgets: [ComfyUI Apps](../studio-apps.md).",
         "",
-        "These graphs clone the shipped Klein 4B / Wan 2.2 / LTX-2.5 printers. They do **not** add models. Empty of lettering — composite titles later. LTX feeders stay **÷32**. Spotify Canvas is **silent**.",
+        "These graphs clone the shipped Klein 4B / Wan 2.2 / LTX-2.5 printers. They do **not** add models. Empty of lettering - composite titles later. LTX feeders stay **div32**. Spotify Canvas is **silent**.",
         "",
         "Safety impact: **none**. `restart: \"no\"`, headroom, and download-limit are unchanged.",
         "",
@@ -378,7 +378,7 @@ def _write_catalog() -> None:
         width, height = spec.size
         link = f"**[{spec.rel}](../generated/workflows/{spec.rel}.md)**"
         lines.append(
-            f"| {link} | {width}×{height} | `{spec.prefix}` | {_md_cell(spec.title)} |"
+            f"| {link} | {width}x{height} | `{spec.prefix}` | {_md_cell(spec.title)} |"
         )
         nxt = PACK3[index + 1] if index + 1 < len(PACK3) else None
         if nxt is None or nxt.group != current:

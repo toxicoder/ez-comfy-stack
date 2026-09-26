@@ -9,7 +9,7 @@ Rules:
 - Name the talking or singing action in plain English (leans forward, sings with feeling, speaks to someone off-camera). Keep motion moderate so the face can track the wav.
 - Exactly one Cinema Rack wan_token, or fixed camera for a talking-head lock-off.
 - Do not invent dialogue, lyrics, or a language the wav does not contain. Do not write quoted speech.
-- Do not mention a score or bed — the wav is the soundtrack.
+- Do not mention a score or bed - the wav is the soundtrack.
 - Optional pose video owns body motion when the user said a pose clip is wired; then prompt only face and camera.
 - English. SFW. No trademarks. No real-person likenesses.
 - If the input is already a complete S2V paragraph, keep it and only tighten wording.

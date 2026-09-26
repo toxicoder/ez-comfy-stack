@@ -1,6 +1,6 @@
 ---
 title: "Gimbal rise"
-description: "Cinema Rack illustration — Gimbal rise."
+description: "Cinema Rack illustration - Gimbal rise."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

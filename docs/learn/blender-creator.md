@@ -25,11 +25,11 @@ Blender stays on the **host**. It is never in `docker/Dockerfile`. Park Comfy (`
 
 ```mermaid
 flowchart TB
-  subgraph Host["Host GPU · Comfy stopped"]
+  subgraph Host["Host GPU - Comfy stopped"]
     B[".blend"] --> S["blender-stills"]
     B --> G["export-guides"]
   end
-  subgraph Comfy["Compose up · one occupancy"]
+  subgraph Comfy["Compose up - one occupancy"]
     S --> P["klein-from-clay-plates / klein-from-canny"]
     G --> K["klein-from-clay"]
     K --> QC["overlay-qc"]
@@ -48,18 +48,18 @@ Not the 5.00s pack. Not the ten-camera [dream-house tour](dream-house.md). One c
 ./scripts/manage.sh occupancy enter blender-desk
 ./scripts/manage.sh blender-stills --film go-see --plate mug --blend /path/to/prop.blend --size 1024x1024
 ./scripts/manage.sh occupancy enter klein --yes
-# Apps → klein-from-clay-plates  (or klein-from-canny)
+# Apps -> klein-from-clay-plates  (or klein-from-canny)
 ```
 
 `--install-inputs` copies `first.png` into `${COMFY_OUTPUT_DIR}/input` as `ez_clay_still_<plate>.png` (compose may stay up).
 
 | Size | Use |
 | --- | --- |
-| 1280×704 | LTX / hero feeder |
-| 768×1280 | Shorts / hook |
-| 1024×1280 | Instagram 4:5 (generic) |
-| 1024×1024 | Product packshot |
-| 1280×720 | Thumbnail only — Klein, never LTX |
+| 1280x704 | LTX / hero feeder |
+| 768x1280 | Shorts / hook |
+| 1024x1280 | Instagram 4:5 (generic) |
+| 1024x1024 | Product packshot |
+| 1280x720 | Thumbnail only - Klein, never LTX |
 
 ---
 
@@ -69,7 +69,7 @@ Not the 5.00s pack. Not the ten-camera [dream-house tour](dream-house.md). One c
 ./scripts/manage.sh occupancy enter blender-desk
 ./scripts/manage.sh export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth
 ./scripts/manage.sh occupancy enter klein --yes
-# klein-from-clay → overlay-qc → occupancy enter ltx --yes → ltx-iclora-depth
+# klein-from-clay -> overlay-qc -> occupancy enter ltx --yes -> ltx-iclora-depth
 ```
 
 Portrait 5.00s: `--width 768 --height 1280`, then **ltx-iclora-depth-shorts**. Silent first-last: **wan-flf-from-guide** after `download-wan --tier fun-inp`.
@@ -78,7 +78,7 @@ Pack files and print modes: [DCC guide pack](../dcc-workflows.md). Golden film l
 
 Path D: dump on the laptop, rsync `guides/`, Spark only runs Comfy.
 
-Stay on `:8188` after the dump (no `--install-inputs`): [Stay in Comfy after a Blender dump](comfy-first-blender.md) — **dcc/guide-still**.
+Stay on `:8188` after the dump (no `--install-inputs`): [Stay in Comfy after a Blender dump](comfy-first-blender.md) - **dcc/guide-still**.
 
 ---
 
@@ -89,6 +89,6 @@ Stay on `:8188` after the dump (no `--install-inputs`): [Stay in Comfy after a B
 | No Blender / Path D not ready | Dumps. Queue language stills (`klein-still-draft`, `klein-dream-house`). Overlay QC is skipped, not faked |
 | Need a walkable house | `blender-stills`. Use [house-views](dream-house.md) |
 | Talking-head / VO-locked picture | Union Control. Use A2V freeze (`motion/av/audio-to-video-8s`) |
-| Engine-final Cycles beauty | Path A (`dcc-final`) — not this suite |
+| Engine-final Cycles beauty | Path A (`dcc-final`) - not this suite |
 
 Occupancy: one GB10 heavy job. `export-guides` and `blender-stills` die (exit 2) if Compose is up and **not** parked. Safety is unchanged: `restart: "no"`, type **yes** on start, headroom, download-limit clear-on-exit.

@@ -1,6 +1,6 @@
 ---
 title: "Front Single"
-description: "Cinema Rack illustration — Front Single."
+description: "Cinema Rack illustration - Front Single."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

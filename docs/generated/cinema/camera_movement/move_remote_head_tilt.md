@@ -1,6 +1,6 @@
 ---
 title: "Remote-head tilt"
-description: "Cinema Rack illustration — Remote-head tilt."
+description: "Cinema Rack illustration - Remote-head tilt."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -1,6 +1,6 @@
 ---
 title: "Dirty Single"
-description: "Cinema Rack illustration — Dirty Single."
+description: "Cinema Rack illustration - Dirty Single."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

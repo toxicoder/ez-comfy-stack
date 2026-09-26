@@ -17,7 +17,7 @@ tags: [workflows, generated, comfyui, audio, album]
 - **Queuing one numbered take** or `album-render`
 - **Reading tags, lyrics, seed, BPM** without opening raw JSON
 
-**Who this is for:** studio users after `download-music`. Occupancy **audio** (cover stills are **klein** — separate session).
+**Who this is for:** studio users after `download-music`. Occupancy **audio** (cover stills are **klein** - separate session).
 
 > Generated from `workflows/_lab/audio/albums/nill-bye/peer-review/`. Do not hand-edit this file.
 
@@ -28,12 +28,12 @@ Numbered takes under `audio/albums/nill-bye/peer-review/`. Queue one track, or `
 ```text
 ## 01-lab-coat
 
-US-safe rap **71 s diss** take: **lab coat lecture**. Fictional MCs **Nill Bye** (science guy) vs **Rake** (in his feels). Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** — draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
+US-safe rap **71 s diss** take: **lab coat lecture**. Fictional MCs **Nill Bye** (science guy) vs **Rake** (in his feels). Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** - draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.
 3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.
-4. Original lyrics only. No “in the style of <living artist>”. No living-MC names. No famous-hook paraphrases.
+4. Original lyrics only. No 'in the style of <living artist>'. No living-MC names. No famous-hook paraphrases.
 5. ACE-Step vocal is an **invented** identity, not a cloned MC.
 6. Sampler: 8 steps, cfg 1, euler, simple. Duration 71 s, bpm 88, language en, timesignature 4, key G minor, form v_delayed_hook, generate_audio_codes true. Seed 42.
 7. Saves: `01 - Lab Coat Lecture` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.
@@ -43,7 +43,7 @@ US-safe rap **71 s diss** take: **lab coat lecture**. Fictional MCs **Nill Bye**
 
 Beat-only pass: append instrumental, no vocals, and replace lyrics with [inst].
 
-Occupancy: audio — stop Klein / Wan / LTX session. One GB10 job.
+Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
 ```
 
 ## Shared graph
@@ -145,7 +145,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] yeah lab coat on Nill Bye talking [verse] Rake walks in with a club rep…` |
+| 1 | `[intro] yeah lab coat on Nill Bye talking [verse] Rake walks in with a club rep...` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/peer-review/01-lab-coat` |
 
@@ -247,8 +247,8 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| 2 | `[intro] yeah lab coat on Nill Bye talking [verse] Rake walks in with a club rep…` |
+| 1 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| 2 | `[intro] yeah lab coat on Nill Bye talking [verse] Rake walks in with a club rep...` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/peer-review/01-lab-coat` |
@@ -354,8 +354,8 @@ yeah
 
 | Slot | Value |
 | --- | --- |
-| 0 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| 1 | `[intro] yeah lab coat on Nill Bye talking [verse] Rake walks in with a club rep…` |
+| 0 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| 1 | `[intro] yeah lab coat on Nill Bye talking [verse] Rake walks in with a club rep...` |
 | 2 | `42` |
 | 3 | `fixed` |
 | 4 | `88` |
@@ -562,7 +562,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[spoken word] Peer review time Rake submitted feelings Zero citations Rejected …` |
+| 1 | `[spoken word] Peer review time Rake submitted feelings Zero citations Rejected ...` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/peer-review/02-peer-review` |
 
@@ -674,8 +674,8 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| 2 | `[spoken word] Peer review time Rake submitted feelings Zero citations Rejected …` |
+| 1 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| 2 | `[spoken word] Peer review time Rake submitted feelings Zero citations Rejected ...` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/peer-review/02-peer-review` |
@@ -791,8 +791,8 @@ cut
 
 | Slot | Value |
 | --- | --- |
-| 0 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| 1 | `[spoken word] Peer review time Rake submitted feelings Zero citations Rejected …` |
+| 0 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| 1 | `[spoken word] Peer review time Rake submitted feelings Zero citations Rejected ...` |
 | 2 | `42` |
 | 3 | `fixed` |
 | 4 | `88` |
@@ -1009,7 +1009,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] soft drums hard facts Nill Bye here [verse] Rake in his feels like a fu…` |
+| 1 | `[intro] soft drums hard facts Nill Bye here [verse] Rake in his feels like a fu...` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/peer-review/03-feels` |
 
@@ -1115,8 +1115,8 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 8…` |
-| 2 | `[intro] soft drums hard facts Nill Bye here [verse] Rake in his feels like a fu…` |
+| 1 | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 8...` |
+| 2 | `[intro] soft drums hard facts Nill Bye here [verse] Rake in his feels like a fu...` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/peer-review/03-feels` |
@@ -1226,8 +1226,8 @@ yeah
 
 | Slot | Value |
 | --- | --- |
-| 0 | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 8…` |
-| 1 | `[intro] soft drums hard facts Nill Bye here [verse] Rake in his feels like a fu…` |
+| 0 | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 8...` |
+| 1 | `[intro] soft drums hard facts Nill Bye here [verse] Rake in his feels like a fu...` |
 | 2 | `42` |
 | 3 | `fixed` |
 | 4 | `86` |
@@ -1438,7 +1438,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[chorus] Talk that club talk That ain't a method Nill Bye on facts Rake on a le…` |
+| 1 | `[chorus] Talk that club talk That ain't a method Nill Bye on facts Rake on a le...` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/peer-review/04-fake-cool` |
 
@@ -1528,7 +1528,7 @@ yeah
 | --- | --- |
 | 0 | `custom` |
 | 1 | `trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm` |
-| 2 | `[chorus] Talk that club talk That ain't a method Nill Bye on facts Rake on a le…` |
+| 2 | `[chorus] Talk that club talk That ain't a method Nill Bye on facts Rake on a le...` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/peer-review/04-fake-cool` |
@@ -1618,7 +1618,7 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm` |
-| 1 | `[chorus] Talk that club talk That ain't a method Nill Bye on facts Rake on a le…` |
+| 1 | `[chorus] Talk that club talk That ain't a method Nill Bye on facts Rake on a le...` |
 | 2 | `42` |
 | 3 | `fixed` |
 | 4 | `140` |
@@ -1808,7 +1808,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] H-zero up Nill Bye checking [verse] Hypothesis: Rake is cool Lab notes …` |
+| 1 | `[intro] H-zero up Nill Bye checking [verse] Hypothesis: Rake is cool Lab notes ...` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/peer-review/05-hypothesis` |
 
@@ -1921,8 +1921,8 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| 2 | `[intro] H-zero up Nill Bye checking [verse] Hypothesis: Rake is cool Lab notes …` |
+| 1 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| 2 | `[intro] H-zero up Nill Bye checking [verse] Hypothesis: Rake is cool Lab notes ...` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/peer-review/05-hypothesis` |
@@ -2039,8 +2039,8 @@ yeah
 
 | Slot | Value |
 | --- | --- |
-| 0 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| 1 | `[intro] H-zero up Nill Bye checking [verse] Hypothesis: Rake is cool Lab notes …` |
+| 0 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| 1 | `[intro] H-zero up Nill Bye checking [verse] Hypothesis: Rake is cool Lab notes ...` |
 | 2 | `7` |
 | 3 | `fixed` |
 | 4 | `92` |
@@ -2258,7 +2258,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] yeah control on Nill Bye splitting [verse] Rake walks in as the wild ca…` |
+| 1 | `[intro] yeah control on Nill Bye splitting [verse] Rake walks in as the wild ca...` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/peer-review/06-control-group` |
 
@@ -2348,8 +2348,8 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| 2 | `[intro] yeah control on Nill Bye splitting [verse] Rake walks in as the wild ca…` |
+| 1 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| 2 | `[intro] yeah control on Nill Bye splitting [verse] Rake walks in as the wild ca...` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/peer-review/06-control-group` |
@@ -2443,8 +2443,8 @@ yeah
 
 | Slot | Value |
 | --- | --- |
-| 0 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| 1 | `[intro] yeah control on Nill Bye splitting [verse] Rake walks in as the wild ca…` |
+| 0 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| 1 | `[intro] yeah control on Nill Bye splitting [verse] Rake walks in as the wild ca...` |
 | 2 | `42` |
 | 3 | `fixed` |
 | 4 | `88` |
@@ -2639,7 +2639,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[verse] Rake built a study from a single night Called it proof with the club in…` |
+| 1 | `[verse] Rake built a study from a single night Called it proof with the club in...` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/peer-review/07-sample-size` |
 
@@ -2746,8 +2746,8 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| 2 | `[verse] Rake built a study from a single night Called it proof with the club in…` |
+| 1 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| 2 | `[verse] Rake built a study from a single night Called it proof with the club in...` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/peer-review/07-sample-size` |
@@ -2858,8 +2858,8 @@ yeah
 
 | Slot | Value |
 | --- | --- |
-| 0 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| 1 | `[verse] Rake built a study from a single night Called it proof with the club in…` |
+| 0 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| 1 | `[verse] Rake built a study from a single night Called it proof with the club in...` |
 | 2 | `11` |
 | 3 | `fixed` |
 | 4 | `92` |
@@ -3071,7 +3071,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] 808 sugar pill Nill Bye dosing [verse] Rake popped a glow like a sugar …` |
+| 1 | `[intro] 808 sugar pill Nill Bye dosing [verse] Rake popped a glow like a sugar ...` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/peer-review/08-placebo` |
 
@@ -3178,7 +3178,7 @@ yeah
 | --- | --- |
 | 0 | `custom` |
 | 1 | `trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm` |
-| 2 | `[intro] 808 sugar pill Nill Bye dosing [verse] Rake popped a glow like a sugar …` |
+| 2 | `[intro] 808 sugar pill Nill Bye dosing [verse] Rake popped a glow like a sugar ...` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/peer-review/08-placebo` |
@@ -3285,7 +3285,7 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm` |
-| 1 | `[intro] 808 sugar pill Nill Bye dosing [verse] Rake popped a glow like a sugar …` |
+| 1 | `[intro] 808 sugar pill Nill Bye dosing [verse] Rake popped a glow like a sugar ...` |
 | 2 | `13` |
 | 3 | `fixed` |
 | 4 | `140` |
@@ -3492,7 +3492,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[verse] Rake talks sure like the bar is thin Error huge on a tiny peak, kid, gr…` |
+| 1 | `[verse] Rake talks sure like the bar is thin Error huge on a tiny peak, kid, gr...` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/peer-review/09-error-bars` |
 
@@ -3577,8 +3577,8 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| 2 | `[verse] Rake talks sure like the bar is thin Error huge on a tiny peak, kid, gr…` |
+| 1 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| 2 | `[verse] Rake talks sure like the bar is thin Error huge on a tiny peak, kid, gr...` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/peer-review/09-error-bars` |
@@ -3667,8 +3667,8 @@ yeah
 
 | Slot | Value |
 | --- | --- |
-| 0 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| 1 | `[verse] Rake talks sure like the bar is thin Error huge on a tiny peak, kid, gr…` |
+| 0 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| 1 | `[verse] Rake talks sure like the bar is thin Error huge on a tiny peak, kid, gr...` |
 | 2 | `17` |
 | 3 | `fixed` |
 | 4 | `88` |
@@ -3858,7 +3858,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[verse] Rake cites a night with no line item Screenshot lore from a vanished ti…` |
+| 1 | `[verse] Rake cites a night with no line item Screenshot lore from a vanished ti...` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/peer-review/10-lab-notebook` |
 
@@ -3973,8 +3973,8 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| 2 | `[verse] Rake cites a night with no line item Screenshot lore from a vanished ti…` |
+| 1 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| 2 | `[verse] Rake cites a night with no line item Screenshot lore from a vanished ti...` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/peer-review/10-lab-notebook` |
@@ -4093,8 +4093,8 @@ yeah
 
 | Slot | Value |
 | --- | --- |
-| 0 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| 1 | `[verse] Rake cites a night with no line item Screenshot lore from a vanished ti…` |
+| 0 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| 1 | `[verse] Rake cites a night with no line item Screenshot lore from a vanished ti...` |
 | 2 | `19` |
 | 3 | `fixed` |
 | 4 | `92` |
@@ -4314,7 +4314,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] quiet drums door open Nill Bye waiting [verse] Rake booked the slot, th…` |
+| 1 | `[intro] quiet drums door open Nill Bye waiting [verse] Rake booked the slot, th...` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/peer-review/11-office-hours` |
 
@@ -4416,8 +4416,8 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 8…` |
-| 2 | `[intro] quiet drums door open Nill Bye waiting [verse] Rake booked the slot, th…` |
+| 1 | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 8...` |
+| 2 | `[intro] quiet drums door open Nill Bye waiting [verse] Rake booked the slot, th...` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/peer-review/11-office-hours` |
@@ -4523,8 +4523,8 @@ yeah
 
 | Slot | Value |
 | --- | --- |
-| 0 | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 8…` |
-| 1 | `[intro] quiet drums door open Nill Bye waiting [verse] Rake booked the slot, th…` |
+| 0 | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 8...` |
+| 1 | `[intro] quiet drums door open Nill Bye waiting [verse] Rake booked the slot, th...` |
 | 2 | `23` |
 | 3 | `fixed` |
 | 4 | `86` |
@@ -4731,7 +4731,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[spoken word] Grant review Rake requested feelings Budget zero Denied [intro] r…` |
+| 1 | `[spoken word] Grant review Rake requested feelings Budget zero Denied [intro] r...` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/peer-review/12-grant-denied` |
 
@@ -4845,8 +4845,8 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| 2 | `[spoken word] Grant review Rake requested feelings Budget zero Denied [intro] r…` |
+| 1 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| 2 | `[spoken word] Grant review Rake requested feelings Budget zero Denied [intro] r...` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/peer-review/12-grant-denied` |
@@ -4964,8 +4964,8 @@ cut
 
 | Slot | Value |
 | --- | --- |
-| 0 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| 1 | `[spoken word] Grant review Rake requested feelings Budget zero Denied [intro] r…` |
+| 0 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| 1 | `[spoken word] Grant review Rake requested feelings Budget zero Denied [intro] r...` |
 | 2 | `29` |
 | 3 | `fixed` |
 | 4 | `88` |
@@ -5184,7 +5184,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] 808 sample spoiled Nill Bye bagging [verse] Rake cracked the seal with …` |
+| 1 | `[intro] 808 sample spoiled Nill Bye bagging [verse] Rake cracked the seal with ...` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/peer-review/13-contamination` |
 
@@ -5287,7 +5287,7 @@ yeah
 | --- | --- |
 | 0 | `custom` |
 | 1 | `trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm` |
-| 2 | `[intro] 808 sample spoiled Nill Bye bagging [verse] Rake cracked the seal with …` |
+| 2 | `[intro] 808 sample spoiled Nill Bye bagging [verse] Rake cracked the seal with ...` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/peer-review/13-contamination` |
@@ -5390,7 +5390,7 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm` |
-| 1 | `[intro] 808 sample spoiled Nill Bye bagging [verse] Rake cracked the seal with …` |
+| 1 | `[intro] 808 sample spoiled Nill Bye bagging [verse] Rake cracked the seal with ...` |
 | 2 | `31` |
 | 3 | `fixed` |
 | 4 | `140` |
@@ -5593,7 +5593,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[verse] Rake peeled the sticker on the hidden key Wanted a hint like a gossip s…` |
+| 1 | `[verse] Rake peeled the sticker on the hidden key Wanted a hint like a gossip s...` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/peer-review/14-double-blind` |
 
@@ -5700,8 +5700,8 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| 2 | `[verse] Rake peeled the sticker on the hidden key Wanted a hint like a gossip s…` |
+| 1 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| 2 | `[verse] Rake peeled the sticker on the hidden key Wanted a hint like a gossip s...` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/peer-review/14-double-blind` |
@@ -5812,8 +5812,8 @@ yeah
 
 | Slot | Value |
 | --- | --- |
-| 0 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| 1 | `[verse] Rake peeled the sticker on the hidden key Wanted a hint like a gossip s…` |
+| 0 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| 1 | `[verse] Rake peeled the sticker on the hidden key Wanted a hint like a gossip s...` |
 | 2 | `37` |
 | 3 | `fixed` |
 | 4 | `92` |
@@ -6025,7 +6025,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] run it twice Nill Bye repeating [verse] Rake did the night like a one-t…` |
+| 1 | `[intro] run it twice Nill Bye repeating [verse] Rake did the night like a one-t...` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/peer-review/15-replicate` |
 
@@ -6128,8 +6128,8 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| 2 | `[intro] run it twice Nill Bye repeating [verse] Rake did the night like a one-t…` |
+| 1 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| 2 | `[intro] run it twice Nill Bye repeating [verse] Rake did the night like a one-t...` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/peer-review/15-replicate` |
@@ -6236,8 +6236,8 @@ yeah
 
 | Slot | Value |
 | --- | --- |
-| 0 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| 1 | `[intro] run it twice Nill Bye repeating [verse] Rake did the night like a one-t…` |
+| 0 | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| 1 | `[intro] run it twice Nill Bye repeating [verse] Rake did the night like a one-t...` |
 | 2 | `7` |
 | 3 | `fixed` |
 | 4 | `88` |
@@ -6464,7 +6464,7 @@ Album cover still for Nill Bye / Peer Review
 
 | Slot | Value |
 | --- | --- |
-| 0 | `square album cover, graphic print, chalkboard, lab coat silhouette, beaker, coo…` |
+| 0 | `square album cover, graphic print, chalkboard, lab coat silhouette, beaker, coo...` |
 
 ```text
 square album cover, graphic print, chalkboard, lab coat silhouette, beaker, cool fluorescent light, fictional act Nill Bye, album Peer Review, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
@@ -6474,7 +6474,7 @@ square album cover, graphic print, chalkboard, lab coat silhouette, beaker, cool
 
 | Slot | Value |
 | --- | --- |
-| 0 | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| 0 | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
 ```text
 game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
@@ -6517,8 +6517,8 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 
 | Slot | Value |
 | --- | --- |
-| 0 | `square album cover, graphic print, chalkboard, lab coat silhouette, beaker, coo…` |
-| 1 | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An…` |
+| 0 | `square album cover, graphic print, chalkboard, lab coat silhouette, beaker, coo...` |
+| 1 | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An...` |
 | 2 | `true` |
 | 3 | `t2i` |
 | 4 | `YouTube 16:9 still` |
@@ -6537,7 +6537,7 @@ A photoreal still of a tropical coastal city rooftop terrace at golden hour. An 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| 0 | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 | 1 | `true` |
 | 2 | `klein` |
 
@@ -6555,7 +6555,7 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 
 | Slot | Value |
 | --- | --- |
-| 0 | `Instagram · square (1024×1024)` |
+| 0 | `Instagram - square (1024x1024)` |
 | 1 | `none` |
 | 2 | `1024` |
 | 3 | `1024` |
@@ -6582,9 +6582,9 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
 
-### `CheckpointLoaderSimple` — Load Checkpoint
+### `CheckpointLoaderSimple` - Load Checkpoint
 
 Load a single-file checkpoint that bundles MODEL + CLIP + VAE.
 
@@ -6604,11 +6604,11 @@ Type `STRING`.
 
 Filename under checkpoints/.
 
-**How it affects generation:** Lab music is the turbo AIO. XL is opt-in via download-music --tier xl — swap only if you meant to.
+**How it affects generation:** Lab music is the turbo AIO. XL is opt-in via download-music --tier xl - swap only if you meant to.
 
 **This graph (all 15 instances):** `ace_step_1.5_turbo_aio.safetensors`
 
-### `ModelSamplingAuraFlow` — ModelSamplingAuraFlow
+### `ModelSamplingAuraFlow` - ModelSamplingAuraFlow
 
 Patch ACE-Step with AuraFlow sampling shift.
 
@@ -6631,7 +6631,7 @@ AuraFlow shift.
 
 **This graph (all 15 instances):** `3`
 
-### `PrimitiveNode` — Primitive
+### `PrimitiveNode` - Primitive
 
 A typed constant (string or float) with seed-style control.
 
@@ -6688,13 +6688,13 @@ Whether the primitive mutates after Queue.
 | `decrement` | Subtract 1 after Queue. |
 | `randomize` | Draw a new seed after Queue. Exploration only. |
 
-### `EmptyAceStep1.5LatentAudio` — Empty ACE-Step 1.5 Latent Audio
+### `EmptyAceStep1.5LatentAudio` - Empty ACE-Step 1.5 Latent Audio
 
 Allocate an ACE-Step audio latent for N seconds.
 
 !!! warning "Lab notes"
 
-    Draft is the cold-open bar length. Full is the pre-chorus bar length. Nill Bye albums are 64–210 s. Drive-through is ~90–120 s from per-take bar math, not a shared clock target. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
+    Draft is the cold-open bar length. Full is the pre-chorus bar length. Nill Bye albums are 64-210 s. Drive-through is ~90-120 s from per-take bar math, not a shared clock target. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -6707,7 +6707,7 @@ Type `FLOAT`. Range / default: draft / full / album plan.
 
 Duration in seconds.
 
-**How it affects generation:** Longer latents cost RAM/time linearly. Nill Bye stays 64–210 s. Drive-through is ~90–120 s. Stay at the seeded length unless you have headroom.
+**How it affects generation:** Longer latents cost RAM/time linearly. Nill Bye stays 64-210 s. Drive-through is ~90-120 s. Stay at the seeded length unless you have headroom.
 
 | Instance | Value |
 | --- | --- |
@@ -6737,7 +6737,7 @@ Takes per Queue.
 
 **This graph (all 15 instances):** `1`
 
-### `EZRapLyrics` — Rap Lyrics
+### `EZRapLyrics` - Rap Lyrics
 
 Draft original rap lyrics via the on-box GGUF. Forbids living-MC names.
 
@@ -6766,21 +6766,21 @@ Sectioned lyrics.
 
 | Instance | Value |
 | --- | --- |
-| Rap lyrics | `[intro] yeah lab coat on Nill Bye talking [verse] Rake walks in with a club rep…` |
-| Rap lyrics | `[spoken word] Peer review time Rake submitted feelings Zero citations Rejected …` |
-| Rap lyrics | `[intro] soft drums hard facts Nill Bye here [verse] Rake in his feels like a fu…` |
-| Rap lyrics | `[chorus] Talk that club talk That ain't a method Nill Bye on facts Rake on a le…` |
-| Rap lyrics | `[intro] H-zero up Nill Bye checking [verse] Hypothesis: Rake is cool Lab notes …` |
-| Rap lyrics | `[intro] yeah control on Nill Bye splitting [verse] Rake walks in as the wild ca…` |
-| Rap lyrics | `[verse] Rake built a study from a single night Called it proof with the club in…` |
-| Rap lyrics | `[intro] 808 sugar pill Nill Bye dosing [verse] Rake popped a glow like a sugar …` |
-| Rap lyrics | `[verse] Rake talks sure like the bar is thin Error huge on a tiny peak, kid, gr…` |
-| Rap lyrics | `[verse] Rake cites a night with no line item Screenshot lore from a vanished ti…` |
-| Rap lyrics | `[intro] quiet drums door open Nill Bye waiting [verse] Rake booked the slot, th…` |
-| Rap lyrics | `[spoken word] Grant review Rake requested feelings Budget zero Denied [intro] r…` |
-| Rap lyrics | `[intro] 808 sample spoiled Nill Bye bagging [verse] Rake cracked the seal with …` |
-| Rap lyrics | `[verse] Rake peeled the sticker on the hidden key Wanted a hint like a gossip s…` |
-| Rap lyrics | `[intro] run it twice Nill Bye repeating [verse] Rake did the night like a one-t…` |
+| Rap lyrics | `[intro] yeah lab coat on Nill Bye talking [verse] Rake walks in with a club rep...` |
+| Rap lyrics | `[spoken word] Peer review time Rake submitted feelings Zero citations Rejected ...` |
+| Rap lyrics | `[intro] soft drums hard facts Nill Bye here [verse] Rake in his feels like a fu...` |
+| Rap lyrics | `[chorus] Talk that club talk That ain't a method Nill Bye on facts Rake on a le...` |
+| Rap lyrics | `[intro] H-zero up Nill Bye checking [verse] Hypothesis: Rake is cool Lab notes ...` |
+| Rap lyrics | `[intro] yeah control on Nill Bye splitting [verse] Rake walks in as the wild ca...` |
+| Rap lyrics | `[verse] Rake built a study from a single night Called it proof with the club in...` |
+| Rap lyrics | `[intro] 808 sugar pill Nill Bye dosing [verse] Rake popped a glow like a sugar ...` |
+| Rap lyrics | `[verse] Rake talks sure like the bar is thin Error huge on a tiny peak, kid, gr...` |
+| Rap lyrics | `[verse] Rake cites a night with no line item Screenshot lore from a vanished ti...` |
+| Rap lyrics | `[intro] quiet drums door open Nill Bye waiting [verse] Rake booked the slot, th...` |
+| Rap lyrics | `[spoken word] Grant review Rake requested feelings Budget zero Denied [intro] r...` |
+| Rap lyrics | `[intro] 808 sample spoiled Nill Bye bagging [verse] Rake cracked the seal with ...` |
+| Rap lyrics | `[verse] Rake peeled the sticker on the hidden key Wanted a hint like a gossip s...` |
+| Rap lyrics | `[intro] run it twice Nill Bye repeating [verse] Rake did the night like a one-t...` |
 
 #### `enhance`
 
@@ -6818,7 +6818,7 @@ Catalog id.
 | Rap lyrics | `audio/albums/nill-bye/peer-review/14-double-blind` |
 | Rap lyrics | `audio/albums/nill-bye/peer-review/15-replicate` |
 
-### `EZAceStepPromptEnhance` — ACE-Step Prompt Enhance
+### `EZAceStepPromptEnhance` - ACE-Step Prompt Enhance
 
 Rewrite ACE tags (genre first) and lyrics. Instrumental mode forces [inst].
 
@@ -6852,21 +6852,21 @@ Genre-first tags.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| ez_rap_prompt | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 8…` |
+| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| ez_rap_prompt | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 8...` |
 | ez_rap_prompt | `trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm` |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
+| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
 | ez_rap_prompt | `trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm` |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| ez_rap_prompt | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 8…` |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
+| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| ez_rap_prompt | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 8...` |
+| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
 | ez_rap_prompt | `trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm` |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
+| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
 
 #### `lyrics`
 
@@ -6878,21 +6878,21 @@ Sectioned lyrics.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `[intro] yeah lab coat on Nill Bye talking [verse] Rake walks in with a club rep…` |
-| ez_rap_prompt | `[spoken word] Peer review time Rake submitted feelings Zero citations Rejected …` |
-| ez_rap_prompt | `[intro] soft drums hard facts Nill Bye here [verse] Rake in his feels like a fu…` |
-| ez_rap_prompt | `[chorus] Talk that club talk That ain't a method Nill Bye on facts Rake on a le…` |
-| ez_rap_prompt | `[intro] H-zero up Nill Bye checking [verse] Hypothesis: Rake is cool Lab notes …` |
-| ez_rap_prompt | `[intro] yeah control on Nill Bye splitting [verse] Rake walks in as the wild ca…` |
-| ez_rap_prompt | `[verse] Rake built a study from a single night Called it proof with the club in…` |
-| ez_rap_prompt | `[intro] 808 sugar pill Nill Bye dosing [verse] Rake popped a glow like a sugar …` |
-| ez_rap_prompt | `[verse] Rake talks sure like the bar is thin Error huge on a tiny peak, kid, gr…` |
-| ez_rap_prompt | `[verse] Rake cites a night with no line item Screenshot lore from a vanished ti…` |
-| ez_rap_prompt | `[intro] quiet drums door open Nill Bye waiting [verse] Rake booked the slot, th…` |
-| ez_rap_prompt | `[spoken word] Grant review Rake requested feelings Budget zero Denied [intro] r…` |
-| ez_rap_prompt | `[intro] 808 sample spoiled Nill Bye bagging [verse] Rake cracked the seal with …` |
-| ez_rap_prompt | `[verse] Rake peeled the sticker on the hidden key Wanted a hint like a gossip s…` |
-| ez_rap_prompt | `[intro] run it twice Nill Bye repeating [verse] Rake did the night like a one-t…` |
+| ez_rap_prompt | `[intro] yeah lab coat on Nill Bye talking [verse] Rake walks in with a club rep...` |
+| ez_rap_prompt | `[spoken word] Peer review time Rake submitted feelings Zero citations Rejected ...` |
+| ez_rap_prompt | `[intro] soft drums hard facts Nill Bye here [verse] Rake in his feels like a fu...` |
+| ez_rap_prompt | `[chorus] Talk that club talk That ain't a method Nill Bye on facts Rake on a le...` |
+| ez_rap_prompt | `[intro] H-zero up Nill Bye checking [verse] Hypothesis: Rake is cool Lab notes ...` |
+| ez_rap_prompt | `[intro] yeah control on Nill Bye splitting [verse] Rake walks in as the wild ca...` |
+| ez_rap_prompt | `[verse] Rake built a study from a single night Called it proof with the club in...` |
+| ez_rap_prompt | `[intro] 808 sugar pill Nill Bye dosing [verse] Rake popped a glow like a sugar ...` |
+| ez_rap_prompt | `[verse] Rake talks sure like the bar is thin Error huge on a tiny peak, kid, gr...` |
+| ez_rap_prompt | `[verse] Rake cites a night with no line item Screenshot lore from a vanished ti...` |
+| ez_rap_prompt | `[intro] quiet drums door open Nill Bye waiting [verse] Rake booked the slot, th...` |
+| ez_rap_prompt | `[spoken word] Grant review Rake requested feelings Budget zero Denied [intro] r...` |
+| ez_rap_prompt | `[intro] 808 sample spoiled Nill Bye bagging [verse] Rake cracked the seal with ...` |
+| ez_rap_prompt | `[verse] Rake peeled the sticker on the hidden key Wanted a hint like a gossip s...` |
+| ez_rap_prompt | `[intro] run it twice Nill Bye repeating [verse] Rake did the night like a one-t...` |
 
 #### `enhance`
 
@@ -6947,7 +6947,7 @@ Sample-catalog id.
 | ez_rap_prompt | `audio/albums/nill-bye/peer-review/14-double-blind` |
 | ez_rap_prompt | `audio/albums/nill-bye/peer-review/15-replicate` |
 
-### `TextEncodeAceStepAudio1.5` — ACE-Step 1.5 Text Encode
+### `TextEncodeAceStepAudio1.5` - ACE-Step 1.5 Text Encode
 
 Pack tags, lyrics, BPM, key, and duration into ACE conditioning.
 
@@ -6973,21 +6973,21 @@ Genre-first tags, BPM last.
 
 | Instance | Value |
 | --- | --- |
-| ACE tags + lyrics | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| ACE tags + lyrics | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| ACE tags + lyrics | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 8…` |
+| ACE tags + lyrics | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| ACE tags + lyrics | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| ACE tags + lyrics | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 8...` |
 | ACE tags + lyrics | `trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm` |
-| ACE tags + lyrics | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| ACE tags + lyrics | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| ACE tags + lyrics | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
+| ACE tags + lyrics | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| ACE tags + lyrics | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| ACE tags + lyrics | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
 | ACE tags + lyrics | `trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm` |
-| ACE tags + lyrics | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| ACE tags + lyrics | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| ACE tags + lyrics | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 8…` |
-| ACE tags + lyrics | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
+| ACE tags + lyrics | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| ACE tags + lyrics | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| ACE tags + lyrics | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 8...` |
+| ACE tags + lyrics | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
 | ACE tags + lyrics | `trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm` |
-| ACE tags + lyrics | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
-| ACE tags + lyrics | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u…` |
+| ACE tags + lyrics | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| ACE tags + lyrics | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
 
 #### `lyrics`
 
@@ -6999,21 +6999,21 @@ Sectioned lyrics or [inst] cues.
 
 | Instance | Value |
 | --- | --- |
-| ACE tags + lyrics | `[intro] yeah lab coat on Nill Bye talking [verse] Rake walks in with a club rep…` |
-| ACE tags + lyrics | `[spoken word] Peer review time Rake submitted feelings Zero citations Rejected …` |
-| ACE tags + lyrics | `[intro] soft drums hard facts Nill Bye here [verse] Rake in his feels like a fu…` |
-| ACE tags + lyrics | `[chorus] Talk that club talk That ain't a method Nill Bye on facts Rake on a le…` |
-| ACE tags + lyrics | `[intro] H-zero up Nill Bye checking [verse] Hypothesis: Rake is cool Lab notes …` |
-| ACE tags + lyrics | `[intro] yeah control on Nill Bye splitting [verse] Rake walks in as the wild ca…` |
-| ACE tags + lyrics | `[verse] Rake built a study from a single night Called it proof with the club in…` |
-| ACE tags + lyrics | `[intro] 808 sugar pill Nill Bye dosing [verse] Rake popped a glow like a sugar …` |
-| ACE tags + lyrics | `[verse] Rake talks sure like the bar is thin Error huge on a tiny peak, kid, gr…` |
-| ACE tags + lyrics | `[verse] Rake cites a night with no line item Screenshot lore from a vanished ti…` |
-| ACE tags + lyrics | `[intro] quiet drums door open Nill Bye waiting [verse] Rake booked the slot, th…` |
-| ACE tags + lyrics | `[spoken word] Grant review Rake requested feelings Budget zero Denied [intro] r…` |
-| ACE tags + lyrics | `[intro] 808 sample spoiled Nill Bye bagging [verse] Rake cracked the seal with …` |
-| ACE tags + lyrics | `[verse] Rake peeled the sticker on the hidden key Wanted a hint like a gossip s…` |
-| ACE tags + lyrics | `[intro] run it twice Nill Bye repeating [verse] Rake did the night like a one-t…` |
+| ACE tags + lyrics | `[intro] yeah lab coat on Nill Bye talking [verse] Rake walks in with a club rep...` |
+| ACE tags + lyrics | `[spoken word] Peer review time Rake submitted feelings Zero citations Rejected ...` |
+| ACE tags + lyrics | `[intro] soft drums hard facts Nill Bye here [verse] Rake in his feels like a fu...` |
+| ACE tags + lyrics | `[chorus] Talk that club talk That ain't a method Nill Bye on facts Rake on a le...` |
+| ACE tags + lyrics | `[intro] H-zero up Nill Bye checking [verse] Hypothesis: Rake is cool Lab notes ...` |
+| ACE tags + lyrics | `[intro] yeah control on Nill Bye splitting [verse] Rake walks in as the wild ca...` |
+| ACE tags + lyrics | `[verse] Rake built a study from a single night Called it proof with the club in...` |
+| ACE tags + lyrics | `[intro] 808 sugar pill Nill Bye dosing [verse] Rake popped a glow like a sugar ...` |
+| ACE tags + lyrics | `[verse] Rake talks sure like the bar is thin Error huge on a tiny peak, kid, gr...` |
+| ACE tags + lyrics | `[verse] Rake cites a night with no line item Screenshot lore from a vanished ti...` |
+| ACE tags + lyrics | `[intro] quiet drums door open Nill Bye waiting [verse] Rake booked the slot, th...` |
+| ACE tags + lyrics | `[spoken word] Grant review Rake requested feelings Budget zero Denied [intro] r...` |
+| ACE tags + lyrics | `[intro] 808 sample spoiled Nill Bye bagging [verse] Rake cracked the seal with ...` |
+| ACE tags + lyrics | `[verse] Rake peeled the sticker on the hidden key Wanted a hint like a gossip s...` |
+| ACE tags + lyrics | `[intro] run it twice Nill Bye repeating [verse] Rake did the night like a one-t...` |
 
 #### `seed`
 
@@ -7062,7 +7062,7 @@ Seed control.
 
 #### `bpm`
 
-Type `INT`. Range / default: 10–300.
+Type `INT`. Range / default: 10-300.
 
 Tempo written into the codes.
 
@@ -7338,7 +7338,7 @@ Minimum probability floor.
 
 **This graph (all 15 instances):** `0.0`
 
-### `ConditioningZeroOut` — Conditioning Zero Out
+### `ConditioningZeroOut` - Conditioning Zero Out
 
 Replace a conditioning with zeros (unconditional / empty negative).
 
@@ -7353,7 +7353,7 @@ Replace a conditioning with zeros (unconditional / empty negative).
 
 No widgets. Sockets only.
 
-### `KSampler` — KSampler
+### `KSampler` - KSampler
 
 Denoise a latent for N steps at a CFG, sampler, and scheduler.
 
@@ -7365,17 +7365,17 @@ Denoise a latent for N steps at a CFG, sampler, and scheduler.
 | --- | --- | --- | --- |
 | `model` | in | `MODEL` | UNET / transformer after any ModelSampling* patch. |
 | `positive` | in | `CONDITIONING` | What to include (CLIP / ACE / LTX prompt). |
-| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well — put constraints in the positive. |
+| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well - put constraints in the positive. |
 | `latent_image` | in | `LATENT` | Noise canvas or encoded start image / video / audio latent. |
 | `LATENT` | out | `LATENT` | Denoised latent for VAE decode. |
 
 #### `seed`
 
-Type `INT`. Range / default: 0 … 2^64-1; lab 42.
+Type `INT`. Range / default: 0 ... 2^64-1; lab 42.
 
 Random seed for the noise tensor.
 
-**How it affects generation:** Same seed + same graph ≈ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
+**How it affects generation:** Same seed + same graph ~ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
 
 | Instance | Value |
 | --- | --- |
@@ -7417,21 +7417,21 @@ What happens to seed after Queue.
 
 #### `steps`
 
-Type `INT`. Range / default: 1–10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
+Type `INT`. Range / default: 1-10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
 
 Denoising iterations.
 
-**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 — raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
+**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 - raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
 
 **This graph (all 16 instances):** `8`
 
 #### `cfg`
 
-Type `FLOAT`. Range / default: 0–100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
+Type `FLOAT`. Range / default: 0-100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
 
 Classifier-free guidance scale.
 
-**How it affects generation:** Distilled Klein is CFG 1.0 — raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
+**How it affects generation:** Distilled Klein is CFG 1.0 - raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
 
 **This graph (all 16 instances):** `1.0`
 
@@ -7521,7 +7521,7 @@ How sigmas are spaced across steps.
 
 #### `denoise`
 
-Type `FLOAT`. Range / default: 0–1; lab 1.0.
+Type `FLOAT`. Range / default: 0-1; lab 1.0.
 
 Fraction of the latent to replace with denoised signal.
 
@@ -7529,7 +7529,7 @@ Fraction of the latent to replace with denoised signal.
 
 **This graph (all 16 instances):** `1.0`
 
-### `VAEDecodeAudio` — VAE Decode Audio
+### `VAEDecodeAudio` - VAE Decode Audio
 
 Decode an ACE audio latent to AUDIO.
 
@@ -7541,7 +7541,7 @@ Decode an ACE audio latent to AUDIO.
 
 No widgets. Sockets only.
 
-### `SaveAudio` — Save Audio
+### `SaveAudio` - Save Audio
 
 Write a FLAC/wav master.
 
@@ -7579,7 +7579,7 @@ Save stem.
 | FLAC master | `14 - Double Blind` |
 | FLAC master | `15 - Replicate or Retract` |
 
-### `SaveAudioMP3` — Save Audio (MP3)
+### `SaveAudioMP3` - Save Audio (MP3)
 
 Write an MP3 copy of the same take.
 
@@ -7631,7 +7631,7 @@ Bitrate preset.
 | `192k` | Smaller, more artifacts. |
 | `128k` | Preview only. |
 
-### `Note` — Note
+### `Note` - Note
 
 On-canvas operator note (not executed).
 
@@ -7649,25 +7649,25 @@ Markdown-ish operator note.
 
 | Instance | Value |
 | --- | --- |
-| Operator note | `## 01-lab-coat US-safe rap **71 s diss** take: **lab coat lecture**. Fictional …` |
-| Operator note | `## 02-peer-review US-safe rap **120 s diss** take: **peer review**. Fictional M…` |
-| Operator note | `## 03-feels US-safe rap **176 s diss** take: **in his feels**. Fictional MCs **…` |
-| Operator note | `## 04-fake-cool US-safe rap **79 s diss** take: **fake cool**. Fictional MCs **…` |
-| Operator note | `## 05-hypothesis US-safe rap **133 s diss** take: **hypothesis vs rumor**. Fict…` |
-| Operator note | `## 06-control-group US-safe rap **188 s diss** take: **control group**. Fiction…` |
-| Operator note | `## 07-sample-size US-safe rap **89 s diss** take: **sample size**. Fictional MC…` |
-| Operator note | `## 08-placebo US-safe rap **144 s diss** take: **placebo**. Fictional MCs **Nil…` |
-| Operator note | `## 09-error-bars US-safe rap **199 s diss** take: **error bars**. Fictional MCs…` |
-| Operator note | `## 10-lab-notebook US-safe rap **98 s diss** take: **lab notebook**. Fictional …` |
-| Operator note | `## 11-office-hours US-safe rap **156 s diss** take: **office hours**. Fictional…` |
-| Operator note | `## 12-grant-denied US-safe rap **207 s diss** take: **grant denied**. Fictional…` |
-| Operator note | `## 13-contamination US-safe rap **108 s diss** take: **contamination**. Fiction…` |
-| Operator note | `## 14-double-blind US-safe rap **167 s diss** take: **double blind**. Fictional…` |
-| Operator note | `## 15-replicate US-safe rap **209 s diss** take: **replicate or retract**. Fict…` |
-| Operator note | `## audio/albums/nill-bye/peer-review/album Album **Peer Review** by **Nill Bye*…` |
-| Operator note | `## audio/albums/nill-bye/peer-review/cover Format / platform sets pixels (Custo…` |
+| Operator note | `## 01-lab-coat US-safe rap **71 s diss** take: **lab coat lecture**. Fictional ...` |
+| Operator note | `## 02-peer-review US-safe rap **120 s diss** take: **peer review**. Fictional M...` |
+| Operator note | `## 03-feels US-safe rap **176 s diss** take: **in his feels**. Fictional MCs **...` |
+| Operator note | `## 04-fake-cool US-safe rap **79 s diss** take: **fake cool**. Fictional MCs **...` |
+| Operator note | `## 05-hypothesis US-safe rap **133 s diss** take: **hypothesis vs rumor**. Fict...` |
+| Operator note | `## 06-control-group US-safe rap **188 s diss** take: **control group**. Fiction...` |
+| Operator note | `## 07-sample-size US-safe rap **89 s diss** take: **sample size**. Fictional MC...` |
+| Operator note | `## 08-placebo US-safe rap **144 s diss** take: **placebo**. Fictional MCs **Nil...` |
+| Operator note | `## 09-error-bars US-safe rap **199 s diss** take: **error bars**. Fictional MCs...` |
+| Operator note | `## 10-lab-notebook US-safe rap **98 s diss** take: **lab notebook**. Fictional ...` |
+| Operator note | `## 11-office-hours US-safe rap **156 s diss** take: **office hours**. Fictional...` |
+| Operator note | `## 12-grant-denied US-safe rap **207 s diss** take: **grant denied**. Fictional...` |
+| Operator note | `## 13-contamination US-safe rap **108 s diss** take: **contamination**. Fiction...` |
+| Operator note | `## 14-double-blind US-safe rap **167 s diss** take: **double blind**. Fictional...` |
+| Operator note | `## 15-replicate US-safe rap **209 s diss** take: **replicate or retract**. Fict...` |
+| Operator note | `## audio/albums/nill-bye/peer-review/album Album **Peer Review** by **Nill Bye*...` |
+| Operator note | `## audio/albums/nill-bye/peer-review/cover Format / platform sets pixels (Custo...` |
 
-### `LoadImage` — Load Image
+### `LoadImage` - Load Image
 
 Load a still from Comfy input/ (or upload).
 
@@ -7705,7 +7705,7 @@ Filename in input/.
 | Cover image | `cover.png` |
 | Cover image | `cover.png` |
 | Cover image | `cover.png` |
-| Draft still (set to ez_still_draft_0000… | `example.png` |
+| Draft still (set to ez_still_draft_0000... | `example.png` |
 
 #### `upload`
 
@@ -7717,7 +7717,7 @@ Upload widget type.
 
 **This graph (all 16 instances):** `image`
 
-### `EZAudioMetadata` — Audio Metadata
+### `EZAudioMetadata` - Audio Metadata
 
 Stamp artist/album/title tags and optional cover on saved audio.
 
@@ -7775,11 +7775,11 @@ Track title.
 
 #### `track`
 
-Type `INT`. Range / default: 1–99.
+Type `INT`. Range / default: 1-99.
 
 Track number.
 
-**How it affects generation:** Numbered takes 01–20.
+**How it affects generation:** Numbered takes 01-20.
 
 | Instance | Value |
 | --- | --- |
@@ -7825,7 +7825,7 @@ Type `COMBO`. Range / default: skip.
 
 Cover art policy.
 
-**How it affects generation:** skip on every audio Queue (Cover LoadImage is bypassed). generate is klein occupancy — later session. upload: graph view, Ctrl+B Cover image, then wire.
+**How it affects generation:** skip on every audio Queue (Cover LoadImage is bypassed). generate is klein occupancy - later session. upload: graph view, Ctrl+B Cover image, then wire.
 
 **This graph (all 15 instances):** `skip`
 
@@ -7863,7 +7863,7 @@ SaveAudio stem to stamp.
 | Album metadata | `14 - Double Blind` |
 | Album metadata | `15 - Replicate or Retract` |
 
-### `EZQuality` — Quality
+### `EZQuality` - Quality
 
 Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
@@ -7898,7 +7898,7 @@ custom freezes last overlay; lab restores graph defaults.
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
-### `EZModelCheck` — Check models
+### `EZModelCheck` - Check models
 
 Manual disk check for occupancy + Quality weights. Queue does not run this node.
 
@@ -7916,7 +7916,7 @@ Last check result.
 
 **This graph (all 17 instances):** `Click Check models. Queue does not run this node.`
 
-### `EZAlbumPack` — Album Pack
+### `EZAlbumPack` - Album Pack
 
 Write <Album>.m3u and <Album>.zip under albums/<Artist>/<Album>/.
 
@@ -7944,7 +7944,7 @@ Album folder display name.
 
 **This graph:** `Peer Review`
 
-### `UNETLoader` — Load Diffusion Model
+### `UNETLoader` - Load Diffusion Model
 
 Load a standalone transformer/UNET from diffusion_models/.
 
@@ -7985,7 +7985,7 @@ Cast at load.
 | `fp8_e4m3fn_fast` | FP8 e4m3fn with fast optimizations. |
 | `fp8_e5m2` | Cast to FP8 e5m2. |
 
-### `CLIPLoader` — Load CLIP
+### `CLIPLoader` - Load CLIP
 
 Load a text encoder. The type combo must match the UNET family.
 
@@ -8013,7 +8013,7 @@ Type `COMBO`.
 
 CLIPType enum. Picks tokenizer + template.
 
-**How it affects generation:** flux2 wraps Klein strings in a Qwen chat template — do not paste <|im_start|>. wan is UMT5. ltxv is Gemma4-with-proj.
+**How it affects generation:** flux2 wraps Klein strings in a Qwen chat template - do not paste <|im_start|>. wan is UMT5. ltxv is Gemma4-with-proj.
 
 **This graph:** `flux2`
 
@@ -8067,9 +8067,9 @@ Where to load the encoder.
 | `default` | Load on the Comfy compute device (GPU). Lab default. |
 | `cpu` | Force CPU. Much slower; only for debugging a CLIP load. |
 
-### `VAELoader` — Load VAE
+### `VAELoader` - Load VAE
 
-Load the autoencoder that maps pixels ↔ latents (and LTX audio).
+Load the autoencoder that maps pixels <-> latents (and LTX audio).
 
 !!! warning "Lab notes"
 
@@ -8089,7 +8089,7 @@ Filename under vae/.
 
 **This graph:** `flux2-vae.safetensors`
 
-### `CLIPTextEncode` — CLIP Text Encode
+### `CLIPTextEncode` - CLIP Text Encode
 
 Turn a prompt string into CONDITIONING for the sampler.
 
@@ -8109,20 +8109,20 @@ Type `STRING`.
 
 Prompt encoded by CLIP.
 
-**How it affects generation:** Klein: sentences, subject → place → light → camera. Wan I2V: motion + one camera only. LTX: present-tense paragraph with audio interleaved. Distilled Klein quality lives here, not in CFG.
+**How it affects generation:** Klein: sentences, subject -> place -> light -> camera. Wan I2V: motion + one camera only. LTX: present-tense paragraph with audio interleaved. Distilled Klein quality lives here, not in CFG.
 
 | Instance | Value |
 | --- | --- |
-| Positive | `square album cover, graphic print, chalkboard, lab coat silhouette, beaker, coo…` |
-| Negative | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| Positive | `square album cover, graphic print, chalkboard, lab coat silhouette, beaker, coo...` |
+| Negative | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
-### `EmptyFlux2LatentImage` — Empty Flux.2 Latent
+### `EmptyFlux2LatentImage` - Empty Flux.2 Latent
 
-Allocate a Klein / Flux.2 still latent (width × height × batch).
+Allocate a Klein / Flux.2 still latent (width x height x batch).
 
 !!! warning "Lab notes"
 
-    Draft 768×432 batch 2. Hero / LTX feeders 1280×704. Portrait 1024×1280 or 768×1280. 1280×720 is OK for thumbnails, not for LTX feeders.
+    Draft 768x432 batch 2. Hero / LTX feeders 1280x704. Portrait 1024x1280 or 768x1280. 1280x720 is OK for thumbnails, not for LTX feeders.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -8130,7 +8130,7 @@ Allocate a Klein / Flux.2 still latent (width × height × batch).
 
 #### `width`
 
-Type `INT`. Range / default: lab 768 / 1280 / 1024 / 432….
+Type `INT`. Range / default: lab 768 / 1280 / 1024 / 432....
 
 Latent pixel width.
 
@@ -8144,7 +8144,7 @@ Type `INT`.
 
 Latent pixel height.
 
-**How it affects generation:** 1280×704 is the LTX VAE grid (÷32). 1280×720 is not.
+**How it affects generation:** 1280x704 is the LTX VAE grid (div32). 1280x720 is not.
 
 **This graph:** `1024`
 
@@ -8158,7 +8158,7 @@ How many stills in one Queue.
 
 **This graph:** `1`
 
-### `VAEDecode` — VAE Decode
+### `VAEDecode` - VAE Decode
 
 Decode image/video latents to pixels.
 
@@ -8170,7 +8170,7 @@ Decode image/video latents to pixels.
 
 No widgets. Sockets only.
 
-### `SaveImage` — Save Image
+### `SaveImage` - Save Image
 
 Write PNG stills under the output folder.
 
@@ -8188,7 +8188,7 @@ Save prefix.
 
 **This graph:** `albums/Nill Bye/Peer Review/cover`
 
-### `EZKleinPromptEnhance` — Klein Prompt Enhance
+### `EZKleinPromptEnhance` - Klein Prompt Enhance
 
 Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
 
@@ -8212,7 +8212,7 @@ Lab sample prompt or Custom.
 
 **How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 30 recipes plus Custom (place recipes such as Cliff villa on stills/dream-house).
 
-**This graph:** `square album cover, graphic print, chalkboard, lab coat silhouette, beaker, cool fluorescent light, fictional act Nill Bye, album Peer Review, no text, no letters, no logos, no living person likeness…`
+**This graph:** `square album cover, graphic print, chalkboard, lab coat silhouette, beaker, cool fluorescent light, fictional act Nill Bye, album Peer Review, no text, no letters, no logos, no living person likeness...`
 
 ```text
 square album cover, graphic print, chalkboard, lab coat silhouette, beaker, cool fluorescent light, fictional act Nill Bye, album Peer Review, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
@@ -8226,7 +8226,7 @@ Lazy sentence or authored still prompt.
 
 **How it affects generation:** When Enhance is on, the GGUF expands this into Klein-native sentences.
 
-**This graph:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread…`
+**This graph:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread...`
 
 ```text
 A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Instagram 1:1 square. Subject centered, warm key, unmarked surfaces.
@@ -8267,9 +8267,9 @@ System prompt flavor.
 
 Type `STRING`.
 
-Framing hint (YouTube 16:9 still, Instagram 4:5, …).
+Framing hint (YouTube 16:9 still, Instagram 4:5, ...).
 
-**How it affects generation:** Steers aspect language in the rewrite. Does not set the latent size — EmptyFlux2LatentImage does.
+**How it affects generation:** Steers aspect language in the rewrite. Does not set the latent size - EmptyFlux2LatentImage does.
 
 **This graph:** `YouTube 16:9 still`
 
@@ -8599,7 +8599,7 @@ Sample-catalog id (graph stem).
 
 **This graph:** `stills/instagram-square`
 
-### `EZNegativePromptEnhance` — Negative Prompt Enhance
+### `EZNegativePromptEnhance` - Negative Prompt Enhance
 
 Rewrite a negative CLIP seed against the final positive. Stays on when Rewrite prompt is off.
 
@@ -8654,7 +8654,7 @@ Which negative family.
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
 
-### `EZImageFormat` — Format / platform
+### `EZImageFormat` - Format / platform
 
 Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack look recipe.
 
@@ -8665,8 +8665,8 @@ Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `image` | in | `IMAGE` | Optional still used when Output size is Match input. |
-| `width` | out | `INT` | Latent width (÷16). |
-| `height` | out | `INT` | Latent height (÷16). |
+| `width` | out | `INT` | Latent width (div16). |
+| `height` | out | `INT` | Latent height (div16). |
 | `batch` | out | `INT` | Batch size. |
 | `hint` | out | `STRING` | Enhance duration / framing line. |
 | `prefix` | out | `STRING` | SaveImage filename prefix. |
@@ -8678,94 +8678,94 @@ Type `COMBO`. Range / default: 16:9 LTX feeder / platform jobs / Custom.
 
 Aspect or named platform job.
 
-**How it affects generation:** Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width × Height (snapped to ÷16, max 2048). Does not change Quality, CLIP, or VAE.
+**How it affects generation:** Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (snapped to div16, max 2048). Does not change Quality, CLIP, or VAE.
 
-**This graph:** `Instagram · square (1024×1024)`
+**This graph:** `Instagram - square (1024x1024)`
 
 **Other choices**
 
 | Choice | What it does |
 | --- | --- |
-| `Custom` | Width × Height widgets, snapped to ÷16. |
-| `16:9 draft (768×432)` | 768×432. aspect_16_9_draft. |
-| `16:9 LTX feeder (1280×704)` | 1280×704. aspect_16_9_ltx. |
-| `16:9 (1280×720)` | 1280×720. aspect_16_9. |
-| `16:9 mid (1024×576)` | 1024×576. aspect_16_9_mid. |
-| `1:1 square (1024×1024)` | 1024×1024. aspect_1_1. |
-| `1:1 circle-safe (768×768)` | 768×768. aspect_1_1_circle. |
-| `4:5 portrait (1024×1280)` | 1024×1280. aspect_4_5. |
-| `9:16 draft (432×768)` | 432×768. aspect_9_16_draft. |
-| `9:16 (576×1024)` | 576×1024. aspect_9_16. |
-| `9:16 LTX feeder (768×1280)` | 768×1280. aspect_9_16_ltx. |
-| `~1.91:1 landscape (1216×640)` | 1216×640. aspect_191. |
-| `~3:1 banner (1536×512)` | 1536×512. aspect_3_1. |
-| `4:1 banner (1536×384)` | 1536×384. aspect_4_1. |
-| `2:3 pin (768×1152)` | 768×1152. aspect_2_3. |
-| `3:4 panel (768×1024)` | 768×1024. aspect_3_4. |
-| `YouTube · thumbnail (1280×720)` | 1280×720. youtube_thumb. |
-| `YouTube · channel art (1536×864)` | 1536×864. youtube_channel_art. |
-| `YouTube · channel icon (768×768)` | 768×768. youtube_channel_icon. |
-| `YouTube · Shorts thumb (576×1024)` | 576×1024. youtube_shorts_thumb. |
-| `YouTube · Community (1024×1024)` | 1024×1024. youtube_community. |
-| `YouTube · chapter card (1280×720)` | 1280×720. youtube_chapter. |
-| `YouTube · subscribe plate (1280×720)` | 1280×720. youtube_subscribe. |
-| `YouTube · end screen (1280×720)` | 1280×720. youtube_endscreen. |
-| `Instagram · square (1024×1024)` | 1024×1024. ig_square. |
-| `Instagram · 4:5 portrait (1024×1280)` | 1024×1280. ig_portrait. |
-| `Instagram · landscape (1216×640)` | 1216×640. ig_landscape. |
-| `Instagram · Story (576×1024)` | 576×1024. ig_story. |
-| `Instagram · Reel cover (576×1024)` | 576×1024. ig_reel. |
-| `Instagram · Highlight (768×768)` | 768×768. ig_highlight. |
-| `Instagram · profile (768×768)` | 768×768. ig_profile. |
-| `TikTok · cover (576×1024)` | 576×1024. tt_cover. |
-| `TikTok · Shop (1024×1024)` | 1024×1024. tt_shop. |
-| `X · post (1280×720)` | 1280×720. x_post. |
-| `X · header (1536×512)` | 1536×512. x_header. |
-| `X · card (1216×640)` | 1216×640. x_card. |
-| `LinkedIn · square (1024×1024)` | 1024×1024. li_post. |
-| `LinkedIn · landscape (1216×640)` | 1216×640. li_landscape. |
-| `LinkedIn · banner (1536×384)` | 1536×384. li_banner. |
-| `LinkedIn · article (1216×640)` | 1216×640. li_article. |
-| `Pinterest · pin (768×1152)` | 768×1152. pin. |
-| `Pinterest · Idea Pin (576×1024)` | 576×1024. pin_story. |
-| `Facebook · post (1216×640)` | 1216×640. fb_post. |
-| `Threads · 4:5 (1024×1280)` | 1024×1280. threads. |
-| `Twitch · offline (1280×720)` | 1280×720. twitch_offline. |
-| `Twitch · starting soon (1280×720)` | 1280×720. twitch_starting. |
-| `Twitch · BRB (1280×720)` | 1280×720. twitch_brb. |
-| `Twitch · ending (1280×720)` | 1280×720. twitch_ending. |
-| `Twitch · overlay (1280×720)` | 1280×720. twitch_overlay. |
-| `Twitch · panel (768×1024)` | 768×1024. twitch_panel. |
-| `Twitch · profile (768×768)` | 768×768. twitch_profile. |
-| `Twitch · banner (1536×512)` | 1536×512. twitch_banner. |
-| `Spotify · playlist (1024×1024)` | 1024×1024. spot_playlist. |
-| `Spotify · Canvas still (576×1024)` | 576×1024. spot_canvas. |
-| `Album · cover (1024×1024)` | 1024×1024. album_cover. |
-| `Lyric card (1024×1024)` | 1024×1024. lyric_card. |
-| `Audiogram · wide (1280×720)` | 1280×720. ag_wide. |
-| `Audiogram · vertical (576×1024)` | 576×1024. ag_vert. |
-| `Podcast · episode art (1024×1024)` | 1024×1024. episode_art. |
-| `Podcast · cover (1024×1024)` | 1024×1024. podcast_cover. |
-| `Open Graph / blog (1216×640)` | 1216×640. og. |
-| `Email · header (1216×640)` | 1216×640. email_header. |
-| `Substack · hero (1216×640)` | 1216×640. substack. |
-| `Patreon · post (1024×1280)` | 1024×1280. patreon. |
-| `Channel · banner (1536×512)` | 1536×512. banner. |
-| `End-card / CTA (1280×720)` | 1280×720. endcard. |
-| `Quote background (1024×1024)` | 1024×1024. quote_bg. |
-| `Lower-third plate (1280×720)` | 1280×720. lower_third. |
-| `Food / tabletop (1024×1280)` | 1024×1280. food_tabletop. |
-| `Shorts still (432×768)` | 432×768. shorts_still. |
-| `Hook still (432×768)` | 432×768. hook_still. |
-| `Product packshot (1024×1024)` | 1024×1024. packshot. |
-| `Product lifestyle (1024×1280)` | 1024×1280. lifestyle. |
-| `Desk setup (1280×720)` | 1280×720. desk_setup. |
-| `Coming soon (1280×720)` | 1280×720. coming_soon. |
-| `Slide title (1280×720)` | 1280×720. slide_title. |
-| `Zoom / Meet background (1280×720)` | 1280×720. zoom_bg. |
-| `Merch · tee (1024×1024)` | 1024×1024. merch_tee. |
-| `Merch · mug (1024×1024)` | 1024×1024. merch_mug. |
-| `Print poster (768×1152)` | 768×1152. poster. |
+| `Custom` | Width x Height widgets, snapped to div16. |
+| `16:9 draft (768x432)` | 768x432. aspect_16_9_draft. |
+| `16:9 LTX feeder (1280x704)` | 1280x704. aspect_16_9_ltx. |
+| `16:9 (1280x720)` | 1280x720. aspect_16_9. |
+| `16:9 mid (1024x576)` | 1024x576. aspect_16_9_mid. |
+| `1:1 square (1024x1024)` | 1024x1024. aspect_1_1. |
+| `1:1 circle-safe (768x768)` | 768x768. aspect_1_1_circle. |
+| `4:5 portrait (1024x1280)` | 1024x1280. aspect_4_5. |
+| `9:16 draft (432x768)` | 432x768. aspect_9_16_draft. |
+| `9:16 (576x1024)` | 576x1024. aspect_9_16. |
+| `9:16 LTX feeder (768x1280)` | 768x1280. aspect_9_16_ltx. |
+| `~1.91:1 landscape (1216x640)` | 1216x640. aspect_191. |
+| `~3:1 banner (1536x512)` | 1536x512. aspect_3_1. |
+| `4:1 banner (1536x384)` | 1536x384. aspect_4_1. |
+| `2:3 pin (768x1152)` | 768x1152. aspect_2_3. |
+| `3:4 panel (768x1024)` | 768x1024. aspect_3_4. |
+| `YouTube - thumbnail (1280x720)` | 1280x720. youtube_thumb. |
+| `YouTube - channel art (1536x864)` | 1536x864. youtube_channel_art. |
+| `YouTube - channel icon (768x768)` | 768x768. youtube_channel_icon. |
+| `YouTube - Shorts thumb (576x1024)` | 576x1024. youtube_shorts_thumb. |
+| `YouTube - Community (1024x1024)` | 1024x1024. youtube_community. |
+| `YouTube - chapter card (1280x720)` | 1280x720. youtube_chapter. |
+| `YouTube - subscribe plate (1280x720)` | 1280x720. youtube_subscribe. |
+| `YouTube - end screen (1280x720)` | 1280x720. youtube_endscreen. |
+| `Instagram - square (1024x1024)` | 1024x1024. ig_square. |
+| `Instagram - 4:5 portrait (1024x1280)` | 1024x1280. ig_portrait. |
+| `Instagram - landscape (1216x640)` | 1216x640. ig_landscape. |
+| `Instagram - Story (576x1024)` | 576x1024. ig_story. |
+| `Instagram - Reel cover (576x1024)` | 576x1024. ig_reel. |
+| `Instagram - Highlight (768x768)` | 768x768. ig_highlight. |
+| `Instagram - profile (768x768)` | 768x768. ig_profile. |
+| `TikTok - cover (576x1024)` | 576x1024. tt_cover. |
+| `TikTok - Shop (1024x1024)` | 1024x1024. tt_shop. |
+| `X - post (1280x720)` | 1280x720. x_post. |
+| `X - header (1536x512)` | 1536x512. x_header. |
+| `X - card (1216x640)` | 1216x640. x_card. |
+| `LinkedIn - square (1024x1024)` | 1024x1024. li_post. |
+| `LinkedIn - landscape (1216x640)` | 1216x640. li_landscape. |
+| `LinkedIn - banner (1536x384)` | 1536x384. li_banner. |
+| `LinkedIn - article (1216x640)` | 1216x640. li_article. |
+| `Pinterest - pin (768x1152)` | 768x1152. pin. |
+| `Pinterest - Idea Pin (576x1024)` | 576x1024. pin_story. |
+| `Facebook - post (1216x640)` | 1216x640. fb_post. |
+| `Threads - 4:5 (1024x1280)` | 1024x1280. threads. |
+| `Twitch - offline (1280x720)` | 1280x720. twitch_offline. |
+| `Twitch - starting soon (1280x720)` | 1280x720. twitch_starting. |
+| `Twitch - BRB (1280x720)` | 1280x720. twitch_brb. |
+| `Twitch - ending (1280x720)` | 1280x720. twitch_ending. |
+| `Twitch - overlay (1280x720)` | 1280x720. twitch_overlay. |
+| `Twitch - panel (768x1024)` | 768x1024. twitch_panel. |
+| `Twitch - profile (768x768)` | 768x768. twitch_profile. |
+| `Twitch - banner (1536x512)` | 1536x512. twitch_banner. |
+| `Spotify - playlist (1024x1024)` | 1024x1024. spot_playlist. |
+| `Spotify - Canvas still (576x1024)` | 576x1024. spot_canvas. |
+| `Album - cover (1024x1024)` | 1024x1024. album_cover. |
+| `Lyric card (1024x1024)` | 1024x1024. lyric_card. |
+| `Audiogram - wide (1280x720)` | 1280x720. ag_wide. |
+| `Audiogram - vertical (576x1024)` | 576x1024. ag_vert. |
+| `Podcast - episode art (1024x1024)` | 1024x1024. episode_art. |
+| `Podcast - cover (1024x1024)` | 1024x1024. podcast_cover. |
+| `Open Graph / blog (1216x640)` | 1216x640. og. |
+| `Email - header (1216x640)` | 1216x640. email_header. |
+| `Substack - hero (1216x640)` | 1216x640. substack. |
+| `Patreon - post (1024x1280)` | 1024x1280. patreon. |
+| `Channel - banner (1536x512)` | 1536x512. banner. |
+| `End-card / CTA (1280x720)` | 1280x720. endcard. |
+| `Quote background (1024x1024)` | 1024x1024. quote_bg. |
+| `Lower-third plate (1280x720)` | 1280x720. lower_third. |
+| `Food / tabletop (1024x1280)` | 1024x1280. food_tabletop. |
+| `Shorts still (432x768)` | 432x768. shorts_still. |
+| `Hook still (432x768)` | 432x768. hook_still. |
+| `Product packshot (1024x1024)` | 1024x1024. packshot. |
+| `Product lifestyle (1024x1280)` | 1024x1280. lifestyle. |
+| `Desk setup (1280x720)` | 1280x720. desk_setup. |
+| `Coming soon (1280x720)` | 1280x720. coming_soon. |
+| `Slide title (1280x720)` | 1280x720. slide_title. |
+| `Zoom / Meet background (1280x720)` | 1280x720. zoom_bg. |
+| `Merch - tee (1024x1024)` | 1024x1024. merch_tee. |
+| `Merch - mug (1024x1024)` | 1024x1024. merch_mug. |
+| `Print poster (768x1152)` | 768x1152. poster. |
 
 #### `look`
 
@@ -8809,7 +8809,7 @@ Optional Cinema Rack starter.
 
 #### `width`
 
-Type `INT`. Range / default: 16–2048, step 16.
+Type `INT`. Range / default: 16-2048, step 16.
 
 Custom width.
 
@@ -8819,7 +8819,7 @@ Custom width.
 
 #### `height`
 
-Type `INT`. Range / default: 16–2048, step 16.
+Type `INT`. Range / default: 16-2048, step 16.
 
 Custom height.
 
@@ -8829,7 +8829,7 @@ Custom height.
 
 #### `batch_size`
 
-Type `INT`. Range / default: 1–4.
+Type `INT`. Range / default: 1-4.
 
 How many stills in one Run.
 
@@ -8847,7 +8847,7 @@ Match a loaded still's aspect, or keep Format / platform.
 
 **This graph:** `Match input`
 
-### `EZImageUpscale` — Upscale still
+### `EZImageUpscale` - Upscale still
 
 Optional lanczos upscale after a still decode. none passes the tensor through.
 
@@ -8867,7 +8867,7 @@ Type `COMBO`. Range / default: none / 2x / 4x / 4K.
 
 Upscale mode.
 
-**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.
+**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840x2160 box (portrait 2160x3840). No extra weights.
 
 **This graph:** `none`
 
@@ -8880,7 +8880,7 @@ Upscale mode.
 | `4x` | Quadruple pixels. |
 | `4K` | Fit in a 4K box. |
 
-### `EZImageDescribe` — Describe image
+### `EZImageDescribe` - Describe image
 
 Caption a source still so Prompt Enhance can name inventory and lettering.
 
@@ -8890,7 +8890,7 @@ Caption a source still so Prompt Enhance can name inventory and lettering.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
-| `image` | in | `IMAGE` | Source still. Lazy — skipped when enable is off. |
+| `image` | in | `IMAGE` | Source still. Lazy - skipped when enable is off. |
 | `caption` | out | `STRING` | Short caption, or empty. |
 
 #### `enable`

@@ -1,6 +1,6 @@
 ---
 title: "Boom-avoiding dip"
-description: "Cinema Rack illustration — Boom-avoiding dip."
+description: "Cinema Rack illustration - Boom-avoiding dip."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

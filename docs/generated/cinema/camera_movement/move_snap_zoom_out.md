@@ -1,6 +1,6 @@
 ---
 title: "Snap zoom out"
-description: "Cinema Rack illustration — Snap zoom out."
+description: "Cinema Rack illustration - Snap zoom out."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

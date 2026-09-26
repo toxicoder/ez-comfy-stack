@@ -1,6 +1,6 @@
 ---
 title: "Food Insert"
-description: "Cinema Rack illustration — Food Insert."
+description: "Cinema Rack illustration - Food Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

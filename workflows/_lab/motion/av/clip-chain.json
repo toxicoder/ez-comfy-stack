@@ -264,9 +264,9 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## motion/av/clip-chain\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nFour LTX AV beats share one UNET / video VAE / audio VAE / CLIP. Last frame of beat N starts beat N+1. EZClipConcat stitches the four MP4s (hard cut). Primary output: `${COMFY_OUTPUT_DIR}/ez_clip_chain.mp4` plus per-beat VHS (`ez_clip_b0N_ltx_video`) and last-frame PNG (`ez_clip_b0N_last`). No full-batch SaveImage.\n\n**8 seconds, 24 fps** (193 frames = 1+8n) chain-wide. Duration combo stays 5/8/10/12; mixed per-beat lengths are unsupported. Four \u00d7 8 s sequential prints are tens of minutes on GB10 \u2014 not a hang. Headroom preflight still applies at `start`.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job. Occupancy ltx XOR. `occupancy enter ltx` before Queue. No Klein identity on this canvas.\n\nDuplicate Beat groups on canvas for beats 5\u201324:\n\n1. Duplicate the last Beat group.\n2. Set `VHS_VideoCombine.filename_prefix` to `ez_clip_b05_ltx_video` (then b06\u2026).\n3. Set last-frame SaveImage prefix to `ez_clip_b05_last`.\n4. Wire previous `EZClipLastFrame.last_frame` \u2192 new `LTXVImgToVideo.image`.\n5. Wire new `VHS_VideoCombine.Filenames` \u2192 the next free `EZClipConcat.clip_0N` (`clip_05` for the fifth beat).\n6. Keep the shared UNET / VAE / CLIP / Format / Seed / Rewrite / Audio notes wires (do not duplicate loaders).\n7. Save under `_user/` if you want a personal App; shipped `_lab` stays 4 beats.\n\nPast 24 stems: host `./scripts/utilities/concat-shots.sh --files a.mp4,b.mp4 --cap-seconds <sum> --yes` (default `--files` cap is 90 s).\n\nLTX-2.5 distilled AV. LTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown is hidden on I2V.\n\nLoadImage default example.png; after a still set ez_still_hero_*.png. Match input Format. MagCache off.\n"
+        "## motion/av/clip-chain\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nFour LTX AV beats share one UNET / video VAE / audio VAE / CLIP. Last frame of beat N starts beat N+1. EZClipConcat stitches the four MP4s (hard cut). Primary output: `${COMFY_OUTPUT_DIR}/ez_clip_chain.mp4` plus per-beat VHS (`ez_clip_b0N_ltx_video`) and last-frame PNG (`ez_clip_b0N_last`). No full-batch SaveImage.\n\n**8 seconds, 24 fps** (193 frames = 1+8n) chain-wide. Duration combo stays 5/8/10/12; mixed per-beat lengths are unsupported. Four x 8 s sequential prints are tens of minutes on GB10 - not a hang. Headroom preflight still applies at `start`.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job. Occupancy ltx XOR. `occupancy enter ltx` before Queue. No Klein identity on this canvas.\n\nDuplicate Beat groups on canvas for beats 5-24:\n\n1. Duplicate the last Beat group.\n2. Set `VHS_VideoCombine.filename_prefix` to `ez_clip_b05_ltx_video` (then b06...).\n3. Set last-frame SaveImage prefix to `ez_clip_b05_last`.\n4. Wire previous `EZClipLastFrame.last_frame` -> new `LTXVImgToVideo.image`.\n5. Wire new `VHS_VideoCombine.Filenames` -> the next free `EZClipConcat.clip_0N` (`clip_05` for the fifth beat).\n6. Keep the shared UNET / VAE / CLIP / Format / Seed / Rewrite / Audio notes wires (do not duplicate loaders).\n7. Save under `_user/` if you want a personal App; shipped `_lab` stays 4 beats.\n\nPast 24 stems: host `./scripts/utilities/concat-shots.sh --files a.mp4,b.mp4 --cap-seconds <sum> --yes` (default `--files` cap is 90 s).\n\nLTX-2.5 distilled AV. LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown is hidden on I2V.\n\nLoadImage default example.png; after a still set ez_still_hero_*.png. Match input Format. MagCache off.\n"
       ],
-      "title": "Operator note \u2014 clip chain"
+      "title": "Operator note - clip chain"
     },
     {
       "id": 22,
@@ -360,7 +360,7 @@
       },
       "widgets_values": [
         "LTX-2.5",
-        "LTX \u00b7 16:9 YouTube (1280\u00d7704)",
+        "LTX - 16:9 YouTube (1280x704)",
         1280,
         704,
         "Match input",
@@ -775,7 +775,7 @@
         600.0,
         0
       ],
-      "title": "Save clip chain (MP4) \u2014 play / download"
+      "title": "Save clip chain (MP4) - play / download"
     },
     {
       "id": 41,
@@ -1099,7 +1099,7 @@
           "slot_index": 2
         }
       ],
-      "title": "LTX Img\u2192Video condition",
+      "title": "LTX Img->Video condition",
       "properties": {
         "Node name for S&R": "LTXVImgToVideo"
       },
@@ -1466,7 +1466,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Beat 1 video (MP4) \u2014 open node for preview"
+      "title": "Beat 1 video (MP4) - open node for preview"
     },
     {
       "id": 112,
@@ -1820,7 +1820,7 @@
           "slot_index": 2
         }
       ],
-      "title": "LTX Img\u2192Video condition",
+      "title": "LTX Img->Video condition",
       "properties": {
         "Node name for S&R": "LTXVImgToVideo"
       },
@@ -2187,7 +2187,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Beat 2 video (MP4) \u2014 open node for preview"
+      "title": "Beat 2 video (MP4) - open node for preview"
     },
     {
       "id": 152,
@@ -2541,7 +2541,7 @@
           "slot_index": 2
         }
       ],
-      "title": "LTX Img\u2192Video condition",
+      "title": "LTX Img->Video condition",
       "properties": {
         "Node name for S&R": "LTXVImgToVideo"
       },
@@ -2908,7 +2908,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Beat 3 video (MP4) \u2014 open node for preview"
+      "title": "Beat 3 video (MP4) - open node for preview"
     },
     {
       "id": 192,
@@ -3262,7 +3262,7 @@
           "slot_index": 2
         }
       ],
-      "title": "LTX Img\u2192Video condition",
+      "title": "LTX Img->Video condition",
       "properties": {
         "Node name for S&R": "LTXVImgToVideo"
       },
@@ -3629,7 +3629,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Beat 4 video (MP4) \u2014 open node for preview"
+      "title": "Beat 4 video (MP4) - open node for preview"
     },
     {
       "id": 232,
@@ -4976,7 +4976,7 @@
   "extra": {
     "lab_profile": "motion/av/clip-chain",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## motion/av/clip-chain\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nFour LTX AV beats share one UNET / video VAE / audio VAE / CLIP. Last frame of beat N starts beat N+1. EZClipConcat stitches the four MP4s (hard cut). Primary output: `${COMFY_OUTPUT_DIR}/ez_clip_chain.mp4` plus per-beat VHS (`ez_clip_b0N_ltx_video`) and last-frame PNG (`ez_clip_b0N_last`). No full-batch SaveImage.\n\n**8 seconds, 24 fps** (193 frames = 1+8n) chain-wide. Duration combo stays 5/8/10/12; mixed per-beat lengths are unsupported. Four \u00d7 8 s sequential prints are tens of minutes on GB10 \u2014 not a hang. Headroom preflight still applies at `start`.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job. Occupancy ltx XOR. `occupancy enter ltx` before Queue. No Klein identity on this canvas.\n\nDuplicate Beat groups on canvas for beats 5\u201324:\n\n1. Duplicate the last Beat group.\n2. Set `VHS_VideoCombine.filename_prefix` to `ez_clip_b05_ltx_video` (then b06\u2026).\n3. Set last-frame SaveImage prefix to `ez_clip_b05_last`.\n4. Wire previous `EZClipLastFrame.last_frame` \u2192 new `LTXVImgToVideo.image`.\n5. Wire new `VHS_VideoCombine.Filenames` \u2192 the next free `EZClipConcat.clip_0N` (`clip_05` for the fifth beat).\n6. Keep the shared UNET / VAE / CLIP / Format / Seed / Rewrite / Audio notes wires (do not duplicate loaders).\n7. Save under `_user/` if you want a personal App; shipped `_lab` stays 4 beats.\n\nPast 24 stems: host `./scripts/utilities/concat-shots.sh --files a.mp4,b.mp4 --cap-seconds <sum> --yes` (default `--files` cap is 90 s).\n\nLTX-2.5 distilled AV. LTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown is hidden on I2V.\n\nLoadImage default example.png; after a still set ez_still_hero_*.png. Match input Format. MagCache off.\n",
+    "lab_note": "## motion/av/clip-chain\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nFour LTX AV beats share one UNET / video VAE / audio VAE / CLIP. Last frame of beat N starts beat N+1. EZClipConcat stitches the four MP4s (hard cut). Primary output: `${COMFY_OUTPUT_DIR}/ez_clip_chain.mp4` plus per-beat VHS (`ez_clip_b0N_ltx_video`) and last-frame PNG (`ez_clip_b0N_last`). No full-batch SaveImage.\n\n**8 seconds, 24 fps** (193 frames = 1+8n) chain-wide. Duration combo stays 5/8/10/12; mixed per-beat lengths are unsupported. Four x 8 s sequential prints are tens of minutes on GB10 - not a hang. Headroom preflight still applies at `start`.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job. Occupancy ltx XOR. `occupancy enter ltx` before Queue. No Klein identity on this canvas.\n\nDuplicate Beat groups on canvas for beats 5-24:\n\n1. Duplicate the last Beat group.\n2. Set `VHS_VideoCombine.filename_prefix` to `ez_clip_b05_ltx_video` (then b06...).\n3. Set last-frame SaveImage prefix to `ez_clip_b05_last`.\n4. Wire previous `EZClipLastFrame.last_frame` -> new `LTXVImgToVideo.image`.\n5. Wire new `VHS_VideoCombine.Filenames` -> the next free `EZClipConcat.clip_0N` (`clip_05` for the fifth beat).\n6. Keep the shared UNET / VAE / CLIP / Format / Seed / Rewrite / Audio notes wires (do not duplicate loaders).\n7. Save under `_user/` if you want a personal App; shipped `_lab` stays 4 beats.\n\nPast 24 stems: host `./scripts/utilities/concat-shots.sh --files a.mp4,b.mp4 --cap-seconds <sum> --yes` (default `--files` cap is 90 s).\n\nLTX-2.5 distilled AV. LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown is hidden on I2V.\n\nLoadImage default example.png; after a still set ez_still_hero_*.png. Match input Format. MagCache off.\n",
     "lab_ltx_av": true,
     "lab_description": "Four LTX AV beats with last-frame continuity, 8.00 s / 193 each",
     "lab_app_mode": {
@@ -5003,7 +5003,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
           }
         ],
         [
@@ -5054,7 +5054,7 @@
           23,
           "format",
           {
-            "description": "Aspect or named platform job. Sets clip width and height on the Wan \u00f716 or LTX \u00f732 grid. Custom uses Width \u00d7 Height. Length stays on the latent node.",
+            "description": "Aspect or named platform job. Sets clip width and height on the Wan div16 or LTX div32 grid. Custom uses Width x Height. Length stays on the latent node.",
             "label": "Format / platform"
           }
         ],

@@ -1,5 +1,5 @@
 # Purpose: ez.shot.card.v1 film bible extras on workflows/shorts/*.shots.yaml and films/<slug>/shots.yaml.
-# ez.shot.card.v1 — film bible extras on workflows/shorts/*.shots.yaml
+# ez.shot.card.v1 - film bible extras on workflows/shorts/*.shots.yaml
 # and films/<slug>/shots.yaml (shot-sheet output). Optional keys default
 # fail-closed. Does not replace ez.guide.shot.v1 (DCC pack handshake).
 schema: ez.shot.card.v1
@@ -23,9 +23,9 @@ shots:
     prefix: ez_gosee_b1_s1
     load_from: identity
     script: One sentence of action.
-    dialogue: ""             # empty → no DX stem
+    dialogue: ""             # empty -> no DX stem
     audio_world: wind, footfalls, breath
-    camera: tracking         # prompt_enums.CAMERAS; "fixed" → fixed camera
+    camera: tracking         # prompt_enums.CAMERAS; "fixed" -> fixed camera
     clay: skip               # skip | required
     look: ""                 # ez_clay_hero_*.png or identity
     print_mode: ""           # override film print, or empty

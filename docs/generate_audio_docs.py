@@ -43,7 +43,7 @@ def _cell(value: object, limit: int = 160) -> str:
     text = " ".join(str(value or "").split())
     text = text.replace("|", "\\|")
     if len(text) > limit:
-        return text[: limit - 1] + "…"
+        return text[: limit - 1] + "..."
     return text
 
 
@@ -63,7 +63,7 @@ def _flags(row: dict[str, Any]) -> str:
         bits.append("instrumental")
     if row.get("podcast_ok", True):
         bits.append("podcast")
-    return ", ".join(bits) or "—"
+    return ", ".join(bits) or "-"
 
 
 def write_axis_page(axis_id: str, meta: dict[str, Any], rows: list[dict[str, Any]]) -> str:
@@ -83,7 +83,7 @@ def write_axis_page(axis_id: str, meta: dict[str, Any], rows: list[dict[str, Any
     lines = [
         "---",
         f"title: {label}",
-        f"description: Audio Rack catalog — {label} ({len(rows)} spliceable techniques).",
+        f"description: Audio Rack catalog - {label} ({len(rows)} spliceable techniques).",
         "tags: [audio, music, prompting, catalog]",
         "---",
         "",
@@ -115,7 +115,7 @@ def write_axis_page(axis_id: str, meta: dict[str, Any], rows: list[dict[str, Any
                 label=_cell(row.get("label"), 40),
                 clause=_cell(clause, 140),
                 flags=_flags(row),
-                conflicts=_cell(conflicts or "—", 60),
+                conflicts=_cell(conflicts or "-", 60),
             )
         )
     path.parent.mkdir(parents=True, exist_ok=True)

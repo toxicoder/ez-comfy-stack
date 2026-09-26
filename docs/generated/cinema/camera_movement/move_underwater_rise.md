@@ -1,6 +1,6 @@
 ---
 title: "Underwater rise"
-description: "Cinema Rack illustration — Underwater rise."
+description: "Cinema Rack illustration - Underwater rise."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

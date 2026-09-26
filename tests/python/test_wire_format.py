@@ -126,7 +126,7 @@ def test_wire_still_draft_links_latent_and_hint() -> None:
     assert _src(graph, enh, "duration_hint")["id"] == fmt["id"]
     assert not any(item.get("name") == "filename_prefix" for item in save.get("inputs") or [])
     assert FORMAT_BLURB in str((graph.get("extra") or {}).get("lab_note") or "")
-    assert fmt["widgets_values"][0] == "16:9 draft (768×432)"
+    assert fmt["widgets_values"][0] == "16:9 draft (768x432)"
     assert "Match input" in fmt["widgets_values"]
     _strip_format(graph, "EZImageFormat")
     assert wire_still_format(graph) is True
@@ -146,7 +146,7 @@ def test_wire_video_links_wan_latent() -> None:
     assert _src(graph, latent, "height")["id"] == fmt["id"]
     assert _src(graph, enh, "duration_hint")["id"] == fmt["id"]
     assert fmt["widgets_values"][0] == "Wan 5B"
-    assert fmt["widgets_values"][1] == "Wan · 16:9 YouTube (832×480)"
+    assert fmt["widgets_values"][1] == "Wan - 16:9 YouTube (832x480)"
     assert "Match input" in fmt["widgets_values"]
     assert "8 seconds" in fmt["widgets_values"]
     _strip_format(graph, "EZVideoFormat")

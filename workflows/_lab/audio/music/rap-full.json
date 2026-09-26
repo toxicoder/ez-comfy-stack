@@ -564,7 +564,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## audio/music/rap-full\n\nUS-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration 153 s on the pre-chorus form (4/4, C minor, 88 bpm). Album takes vary form, meter, key, and length.\n\n1. Queue **audio/music/rap-draft** first. Then this graph.\n2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).\n3. Prompt enhance is **off** so the canned bars stay as written. Turn Enhance on only if you want the 4B rewriter. Edit **Rap lyrics** before Queue (wired into ACE). Human rewrite required before any release.\n4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No \u201cin the style of <living artist>\u201d.\n5. ACE-Step vocal is an invented timbre, not a clone.\n6. Saves: `ez_rap_full` FLAC + 320 kbps MP3.\n7. Cover: sequential Queue **stills/thumbnail.json** / **stills/podcast-cover.json**. Do not embed Klein.\n8. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nCanned style swaps (tags widget only):\n- trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm\n- lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
+        "## audio/music/rap-full\n\nUS-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration 153 s on the pre-chorus form (4/4, C minor, 88 bpm). Album takes vary form, meter, key, and length.\n\n1. Queue **audio/music/rap-draft** first. Then this graph.\n2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).\n3. Prompt enhance is **off** so the canned bars stay as written. Turn Enhance on only if you want the 4B rewriter. Edit **Rap lyrics** before Queue (wired into ACE). Human rewrite required before any release.\n4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No 'in the style of <living artist>'.\n5. ACE-Step vocal is an invented timbre, not a clone.\n6. Saves: `ez_rap_full` FLAC + 320 kbps MP3.\n7. Cover: sequential Queue **stills/thumbnail.json** / **stills/podcast-cover.json**. Do not embed Klein.\n8. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nCanned style swaps (tags widget only):\n- trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm\n- lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm\n\nOccupancy: audio - stop Klein / Wan / LTX session. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -958,7 +958,7 @@
   "config": {},
   "extra": {
     "lab_profile": "us-safe-music",
-    "lab_note": "## audio/music/rap-full\n\nUS-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration 153 s on the pre-chorus form (4/4, C minor, 88 bpm). Album takes vary form, meter, key, and length.\n\n1. Queue **audio/music/rap-draft** first. Then this graph.\n2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).\n3. Prompt enhance is **off** so the canned bars stay as written. Turn Enhance on only if you want the 4B rewriter. Edit **Rap lyrics** before Queue (wired into ACE). Human rewrite required before any release.\n4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No \u201cin the style of <living artist>\u201d.\n5. ACE-Step vocal is an invented timbre, not a clone.\n6. Saves: `ez_rap_full` FLAC + 320 kbps MP3.\n7. Cover: sequential Queue **stills/thumbnail.json** / **stills/podcast-cover.json**. Do not embed Klein.\n8. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nCanned style swaps (tags widget only):\n- trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm\n- lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
+    "lab_note": "## audio/music/rap-full\n\nUS-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration 153 s on the pre-chorus form (4/4, C minor, 88 bpm). Album takes vary form, meter, key, and length.\n\n1. Queue **audio/music/rap-draft** first. Then this graph.\n2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).\n3. Prompt enhance is **off** so the canned bars stay as written. Turn Enhance on only if you want the 4B rewriter. Edit **Rap lyrics** before Queue (wired into ACE). Human rewrite required before any release.\n4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No 'in the style of <living artist>'.\n5. ACE-Step vocal is an invented timbre, not a clone.\n6. Saves: `ez_rap_full` FLAC + 320 kbps MP3.\n7. Cover: sequential Queue **stills/thumbnail.json** / **stills/podcast-cover.json**. Do not embed Klein.\n8. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nCanned style swaps (tags widget only):\n- trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm\n- lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm\n\nOccupancy: audio - stop Klein / Wan / LTX session. One GB10 job.\n",
     "lab_description": "US-safe rap full track: ACE-Step 1.5 turbo AIO, pre-chorus boom-bap, invented vocal\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_optional_unwired": [
       "LoadImage"
@@ -1000,7 +1000,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
           }
         ],
         [
@@ -1057,7 +1057,7 @@
           3,
           "seconds",
           {
-            "description": "Length in seconds. Rap draft is a cold open. Full track uses a pre-chorus form. Album takes are 64\u2013210 s.",
+            "description": "Length in seconds. Rap draft is a cold open. Full track uses a pre-chorus form. Album takes are 64-210 s.",
             "label": "Duration (seconds)"
           }
         ],

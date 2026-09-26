@@ -1,6 +1,6 @@
 ---
 title: "Hold before enter"
-description: "Cinema Rack illustration — Hold before enter."
+description: "Cinema Rack illustration - Hold before enter."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

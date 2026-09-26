@@ -15,8 +15,8 @@
 #   docs/project-conventions.md (notably #!/usr/bin/env bash).
 #
 # Environment:
-#   REPO_ROOT   — optional override for the repository root (must be a directory)
-#   MODELS_DIR  — optional override for the shared model cache (default /mnt/models)
+#   REPO_ROOT   - optional override for the repository root (must be a directory)
+#   MODELS_DIR  - optional override for the shared model cache (default /mnt/models)
 #
 
 #######################################

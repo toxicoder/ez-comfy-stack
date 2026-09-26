@@ -18,7 +18,7 @@ from _stamp_app_mode import stamp_suite_graph
 
 KLEIN_NOTE = """## dcc/clay-hero
 
-Klein 4B **edit** of a DCC clay first frame (guide pack ``first.png``). Enhance **on**. Seed **42**. Size **1280x704** (LTX VAE grid — not 1280x720).
+Klein 4B **edit** of a DCC clay first frame (guide pack ``first.png``). Enhance **on**. Seed **42**. Size **1280x704** (LTX VAE grid - not 1280x720).
 
 LoadImage: clay ``first.png`` from ``guides/<slug>/<shot>/``. Prefix ``ez_clay_hero``.
 
@@ -37,13 +37,13 @@ Lab envelope for Path B depth-guided 8.00s print. LTX canvas 1280x704 (width/hei
 
 This tree does **not** vendor Lightricks UUID subgraphs. Queue the official Templates graph:
 
-  Templates → LTX-2.5 → LTX-2.5_ICLoRA_Union_Control_Distilled.json
+  Templates -> LTX-2.5 -> LTX-2.5_ICLoRA_Union_Control_Distilled.json
 
 Depth is wired by default. LoRA (opt-in, not download-models):
 
   ./scripts/manage.sh download-ltx --tier iclora
   ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors
-  (Lightricks/LTX-2.3-22b-IC-LoRA-Union-Control — official 2.5 graph widgets this 2.3 Union file)
+  (Lightricks/LTX-2.3-22b-IC-LoRA-Union-Control - official 2.5 graph widgets this 2.3 Union file)
 
 Refuse 19B Union. Do not pair IC-LoRA with a dev transformer.
 
@@ -85,7 +85,7 @@ Lab envelope for Path B **canny**-guided 8.00s print. LTX canvas 1280x704 (width
 
 This tree does **not** vendor Lightricks UUID subgraphs. Queue the official Templates graph:
 
-  Templates → LTX-2.5 → LTX-2.5_ICLoRA_Union_Control_Distilled.json
+  Templates -> LTX-2.5 -> LTX-2.5_ICLoRA_Union_Control_Distilled.json
 
 Switch the annotator to **canny**. Wire ``canny.mp4`` from the guide pack. LoRA (opt-in, not download-models):
 
@@ -107,7 +107,7 @@ Dump the pack with:
 
   ./scripts/manage.sh export-guides --film SLUG --shot ID --width 768 --height 1280 --print ltx-iclora-depth
 
-Queue Templates → LTX-2.5 → LTX-2.5_ICLoRA_Union_Control_Distilled.json. Depth default. Opt-in ``download-ltx --tier iclora``. Refuse 19B Union.
+Queue Templates -> LTX-2.5 -> LTX-2.5_ICLoRA_Union_Control_Distilled.json. Depth default. Opt-in ``download-ltx --tier iclora``. Refuse 19B Union.
 
 Prefix ``ez_iclora_depth_shorts``. Occupancy: ltx. Handoff: audio-finish.
 """
@@ -142,7 +142,7 @@ KLEIN_LOADER_NOTE = """## dcc/guide-still
 
 Klein 4B **edit** of a guide-pack still loaded in-canvas (no LoadImage / --install-inputs). Enhance **on**. Seed **42**. Size **1280x704**. Prefix ``ez_guide_hero``.
 
-Occupancy: **klein**. Wire: EZDCCLoadGuideStill ``layer=first`` → OccupancyGate → Klein envelope. Defaults: slug ``go-see``, shot_id ``12``.
+Occupancy: **klein**. Wire: EZDCCLoadGuideStill ``layer=first`` -> OccupancyGate -> Klein envelope. Defaults: slug ``go-see``, shot_id ``12``.
 
 ```bash
 ./scripts/manage.sh occupancy enter blender-desk
@@ -157,9 +157,9 @@ LTX_LOADER_NOTE = """## dcc/depth-from-loader
 
 Lab envelope for Path B depth-guided 8.00s print from in-canvas loaders. LTX canvas **1280x704** (width/height must be divisible by 32; 720 and 1080 are invalid). **193 frames @ 24 fps**. MagCache **off**. Distilled transformer only. Prefix ``ez_iclora_guide``.
 
-Occupancy: **ltx**. EZDCCLoadGuideStill ``first`` → OccupancyGate. EZDCCLoadGuideVideo returns the ``depth.mp4`` path (do not decode 120 frames). This tree does **not** vendor Lightricks UUID subgraphs.
+Occupancy: **ltx**. EZDCCLoadGuideStill ``first`` -> OccupancyGate. EZDCCLoadGuideVideo returns the ``depth.mp4`` path (do not decode 120 frames). This tree does **not** vendor Lightricks UUID subgraphs.
 
-  Templates → LTX-2.5 → LTX-2.5_ICLoRA_Union_Control_Distilled.json
+  Templates -> LTX-2.5 -> LTX-2.5_ICLoRA_Union_Control_Distilled.json
 
 Opt-in: ``./scripts/manage.sh download-ltx --tier iclora``. Refuse 19B Union. No 1280x720. Stop Klein first.
 
@@ -168,16 +168,16 @@ LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not str
 
 TRELLIS_LOADER_NOTE = """## dcc/still-to-mesh
 
-Still pack plate → native TRELLIS.2 INT8 mesh (Comfy core nodes). Occupancy: **trellis**.
+Still pack plate -> native TRELLIS.2 INT8 mesh (Comfy core nodes). Occupancy: **trellis**.
 
 ```bash
 ./scripts/manage.sh download-3d --tier trellis2
 ./scripts/manage.sh occupancy enter trellis --yes
 ```
 
-EZDCCLoadStillPack slug ``go-see`` plate ``mug`` → OccupancyGate → EZUnloadModels → TRELLIS.2 INT8. Save under ``assets/objects/_lab-mug/`` (output tree, never MODELS_DIR). Do not mint an Asset Bible row from this graph.
+EZDCCLoadStillPack slug ``go-see`` plate ``mug`` -> OccupancyGate -> EZUnloadModels -> TRELLIS.2 INT8. Save under ``assets/objects/_lab-mug/`` (output tree, never MODELS_DIR). Do not mint an Asset Bible row from this graph.
 
-No Preview3D / Load3D / Save3D types in-tree — inspect the GLB with core Load 3D / Preview 3D after Queue. Native INT8 only.
+No Preview3D / Load3D / Save3D types in-tree - inspect the GLB with core Load 3D / Preview 3D after Queue. Native INT8 only.
 """
 
 CLAY_PLATES = (
@@ -313,7 +313,7 @@ def _insert_occupancy_gate(
 
 
 def _add_guide_video_node(graph: dict, *, layer: str = "depth") -> dict:
-    """Unwired video-path loader (envelope only — do not decode frames)."""
+    """Unwired video-path loader (envelope only - do not decode frames)."""
     max_id, _max_link = _max_ids(graph)
     nid = max_id + 1
     node = {
@@ -390,7 +390,7 @@ def build_klein_from_clay() -> dict:
         elif ntype == "Note":
             node["widgets_values"] = [KLEIN_NOTE]
             node["title"] = "Operator note"
-    # Wire LoadImage → VAEEncode → ReferenceLatent on the positive CLIP.
+    # Wire LoadImage -> VAEEncode -> ReferenceLatent on the positive CLIP.
     max_id = max(int(n["id"]) for n in graph["nodes"])
     max_link = max(int(link[0]) for link in graph.get("links") or [ [0] ])
     load = next(n for n in graph["nodes"] if n.get("type") == "LoadImage")
@@ -597,7 +597,7 @@ def build_klein_from_canny() -> dict:
 
 
 def _insert_image_scale(graph: dict, width: int, height: int, title: str) -> int:
-    """Rewire LoadImage → ImageScale → VAEEncode. Returns ImageScale id."""
+    """Rewire LoadImage -> ImageScale -> VAEEncode. Returns ImageScale id."""
     load = next(n for n in graph["nodes"] if n.get("type") == "LoadImage")
     encode = next(n for n in graph["nodes"] if n.get("type") == "VAEEncode")
     pix = next(inp for inp in encode["inputs"] if inp.get("name") == "pixels")

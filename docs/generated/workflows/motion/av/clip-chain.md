@@ -29,29 +29,29 @@ Occupancy **ltx**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 ```text
 ## motion/av/clip-chain
 
-Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
+Format / platform sets pixels (Custom uses Width x Height). Quality does not change size.
 
 LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).
 
 Four LTX AV beats share one UNET / video VAE / audio VAE / CLIP. Last frame of beat N starts beat N+1. EZClipConcat stitches the four MP4s (hard cut). Primary output: `${COMFY_OUTPUT_DIR}/ez_clip_chain.mp4` plus per-beat VHS (`ez_clip_b0N_ltx_video`) and last-frame PNG (`ez_clip_b0N_last`). No full-batch SaveImage.
 
-**8 seconds, 24 fps** (193 frames = 1+8n) chain-wide. Duration combo stays 5/8/10/12; mixed per-beat lengths are unsupported. Four × 8 s sequential prints are tens of minutes on GB10 — not a hang. Headroom preflight still applies at `start`.
+**8 seconds, 24 fps** (193 frames = 1+8n) chain-wide. Duration combo stays 5/8/10/12; mixed per-beat lengths are unsupported. Four x 8 s sequential prints are tens of minutes on GB10 - not a hang. Headroom preflight still applies at `start`.
 
-Occupancy: ltx — stop Wan, podcast, music, other LTX. One GB10 job. Occupancy ltx XOR. `occupancy enter ltx` before Queue. No Klein identity on this canvas.
+Occupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job. Occupancy ltx XOR. `occupancy enter ltx` before Queue. No Klein identity on this canvas.
 
-Duplicate Beat groups on canvas for beats 5–24:
+Duplicate Beat groups on canvas for beats 5-24:
 
 1. Duplicate the last Beat group.
-2. Set `VHS_VideoCombine.filename_prefix` to `ez_clip_b05_ltx_video` (then b06…).
+2. Set `VHS_VideoCombine.filename_prefix` to `ez_clip_b05_ltx_video` (then b06...).
 3. Set last-frame SaveImage prefix to `ez_clip_b05_last`.
-4. Wire previous `EZClipLastFrame.last_frame` → new `LTXVImgToVideo.image`.
-5. Wire new `VHS_VideoCombine.Filenames` → the next free `EZClipConcat.clip_0N` (`clip_05` for the fifth beat).
+4. Wire previous `EZClipLastFrame.last_frame` -> new `LTXVImgToVideo.image`.
+5. Wire new `VHS_VideoCombine.Filenames` -> the next free `EZClipConcat.clip_0N` (`clip_05` for the fifth beat).
 6. Keep the shared UNET / VAE / CLIP / Format / Seed / Rewrite / Audio notes wires (do not duplicate loaders).
 7. Save under `_user/` if you want a personal App; shipped `_lab` stays 4 beats.
 
 Past 24 stems: host `./scripts/utilities/concat-shots.sh --files a.mp4,b.mp4 --cap-seconds <sum> --yes` (default `--files` cap is 90 s).
 
-LTX-2.5 distilled AV. LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
+LTX-2.5 distilled AV. LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
 
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown is hidden on I2V.
 
@@ -91,7 +91,7 @@ flowchart TB
 | 4 | Start image | `LoadImage` | 2. Start / occupancy / format |
 | 13 | LTX-2.5 audio VAE | `VAELoader` | 1. LTX models |
 | 14 | Empty LTX audio latent | `LTXVEmptyLatentAudio` | 1. LTX models |
-| 17 | Operator note — clip chain | `Note` | NOTE |
+| 17 | Operator note - clip chain | `Note` | NOTE |
 | 22 | Quality | `EZQuality` | QUALITY |
 | 23 | Format / platform | `EZVideoFormat` | 2. Start / occupancy / format |
 | 24 | Describe image | `EZImageDescribe` | 2. Start / occupancy / format |
@@ -100,71 +100,71 @@ flowchart TB
 | 32 | Rewrite prompt | `PrimitiveNode` | 2. Start / occupancy / format |
 | 33 | Audio notes | `PrimitiveNode` | 2. Start / occupancy / format |
 | 34 | Logline / context | `PrimitiveNode` | 2. Start / occupancy / format |
-| 40 | Save clip chain (MP4) — play / download | `EZClipConcat` | 7. Publish clip chain |
+| 40 | Save clip chain (MP4) - play / download | `EZClipConcat` | 7. Publish clip chain |
 | 41 | LTX AI-media disclosure (end-card) | `EZFilmDisclosure` | 7. Publish clip chain |
 | 109 | Beat 1 | `EZLTXPromptEnhance` | 3. Beat 1 (8.00s LTX) |
 | 100 | Beat 1 prompt | `CLIPTextEncode` | 3. Beat 1 (8.00s LTX) |
 | 111 | Beat 1 negative enhance | `EZNegativePromptEnhance` | 3. Beat 1 (8.00s LTX) |
 | 101 | Beat 1 negative | `CLIPTextEncode` | 3. Beat 1 (8.00s LTX) |
-| 102 | LTX Img→Video condition | `LTXVImgToVideo` | 3. Beat 1 (8.00s LTX) |
+| 102 | LTX Img->Video condition | `LTXVImgToVideo` | 3. Beat 1 (8.00s LTX) |
 | 103 | LTX frame rate cond | `LTXVConditioning` | 3. Beat 1 (8.00s LTX) |
 | 106 | Concat AV latents | `LTXVConcatAVLatent` | 3. Beat 1 (8.00s LTX) |
 | 104 | Beat 1 KSampler | `KSampler` | 3. Beat 1 (8.00s LTX) |
 | 107 | Separate AV latents | `LTXVSeparateAVLatent` | 3. Beat 1 (8.00s LTX) |
 | 105 | VAE Decode | `VAEDecode` | 3. Beat 1 (8.00s LTX) |
 | 110 | Audio VAE Decode | `LTXVAudioVAEDecode` | 3. Beat 1 (8.00s LTX) |
-| 108 | Beat 1 video (MP4) — open node for prev… | `VHS_VideoCombine` | 3. Beat 1 (8.00s LTX) |
+| 108 | Beat 1 video (MP4) - open node for prev... | `VHS_VideoCombine` | 3. Beat 1 (8.00s LTX) |
 | 112 | Beat 1 last frame | `EZClipLastFrame` | 3. Beat 1 (8.00s LTX) |
 | 113 | Save beat 1 last frame | `SaveImage` | 3. Beat 1 (8.00s LTX) |
 | 149 | Beat 2 | `EZLTXPromptEnhance` | 4. Beat 2 (8.00s LTX) |
 | 140 | Beat 2 prompt | `CLIPTextEncode` | 4. Beat 2 (8.00s LTX) |
 | 151 | Beat 2 negative enhance | `EZNegativePromptEnhance` | 4. Beat 2 (8.00s LTX) |
 | 141 | Beat 2 negative | `CLIPTextEncode` | 4. Beat 2 (8.00s LTX) |
-| 142 | LTX Img→Video condition | `LTXVImgToVideo` | 4. Beat 2 (8.00s LTX) |
+| 142 | LTX Img->Video condition | `LTXVImgToVideo` | 4. Beat 2 (8.00s LTX) |
 | 143 | LTX frame rate cond | `LTXVConditioning` | 4. Beat 2 (8.00s LTX) |
 | 146 | Concat AV latents | `LTXVConcatAVLatent` | 4. Beat 2 (8.00s LTX) |
 | 144 | Beat 2 KSampler | `KSampler` | 4. Beat 2 (8.00s LTX) |
 | 147 | Separate AV latents | `LTXVSeparateAVLatent` | 4. Beat 2 (8.00s LTX) |
 | 145 | VAE Decode | `VAEDecode` | 4. Beat 2 (8.00s LTX) |
 | 150 | Audio VAE Decode | `LTXVAudioVAEDecode` | 4. Beat 2 (8.00s LTX) |
-| 148 | Beat 2 video (MP4) — open node for prev… | `VHS_VideoCombine` | 4. Beat 2 (8.00s LTX) |
+| 148 | Beat 2 video (MP4) - open node for prev... | `VHS_VideoCombine` | 4. Beat 2 (8.00s LTX) |
 | 152 | Beat 2 last frame | `EZClipLastFrame` | 4. Beat 2 (8.00s LTX) |
 | 153 | Save beat 2 last frame | `SaveImage` | 4. Beat 2 (8.00s LTX) |
 | 189 | Beat 3 | `EZLTXPromptEnhance` | 5. Beat 3 (8.00s LTX) |
 | 180 | Beat 3 prompt | `CLIPTextEncode` | 5. Beat 3 (8.00s LTX) |
 | 191 | Beat 3 negative enhance | `EZNegativePromptEnhance` | 5. Beat 3 (8.00s LTX) |
 | 181 | Beat 3 negative | `CLIPTextEncode` | 5. Beat 3 (8.00s LTX) |
-| 182 | LTX Img→Video condition | `LTXVImgToVideo` | 5. Beat 3 (8.00s LTX) |
+| 182 | LTX Img->Video condition | `LTXVImgToVideo` | 5. Beat 3 (8.00s LTX) |
 | 183 | LTX frame rate cond | `LTXVConditioning` | 5. Beat 3 (8.00s LTX) |
 | 186 | Concat AV latents | `LTXVConcatAVLatent` | 5. Beat 3 (8.00s LTX) |
 | 184 | Beat 3 KSampler | `KSampler` | 5. Beat 3 (8.00s LTX) |
 | 187 | Separate AV latents | `LTXVSeparateAVLatent` | 5. Beat 3 (8.00s LTX) |
 | 185 | VAE Decode | `VAEDecode` | 5. Beat 3 (8.00s LTX) |
 | 190 | Audio VAE Decode | `LTXVAudioVAEDecode` | 5. Beat 3 (8.00s LTX) |
-| 188 | Beat 3 video (MP4) — open node for prev… | `VHS_VideoCombine` | 5. Beat 3 (8.00s LTX) |
+| 188 | Beat 3 video (MP4) - open node for prev... | `VHS_VideoCombine` | 5. Beat 3 (8.00s LTX) |
 | 192 | Beat 3 last frame | `EZClipLastFrame` | 5. Beat 3 (8.00s LTX) |
 | 193 | Save beat 3 last frame | `SaveImage` | 5. Beat 3 (8.00s LTX) |
 | 229 | Beat 4 | `EZLTXPromptEnhance` | 6. Beat 4 (8.00s LTX) |
 | 220 | Beat 4 prompt | `CLIPTextEncode` | 6. Beat 4 (8.00s LTX) |
 | 231 | Beat 4 negative enhance | `EZNegativePromptEnhance` | 6. Beat 4 (8.00s LTX) |
 | 221 | Beat 4 negative | `CLIPTextEncode` | 6. Beat 4 (8.00s LTX) |
-| 222 | LTX Img→Video condition | `LTXVImgToVideo` | 6. Beat 4 (8.00s LTX) |
+| 222 | LTX Img->Video condition | `LTXVImgToVideo` | 6. Beat 4 (8.00s LTX) |
 | 223 | LTX frame rate cond | `LTXVConditioning` | 6. Beat 4 (8.00s LTX) |
 | 226 | Concat AV latents | `LTXVConcatAVLatent` | 6. Beat 4 (8.00s LTX) |
 | 224 | Beat 4 KSampler | `KSampler` | 6. Beat 4 (8.00s LTX) |
 | 227 | Separate AV latents | `LTXVSeparateAVLatent` | 6. Beat 4 (8.00s LTX) |
 | 225 | VAE Decode | `VAEDecode` | 6. Beat 4 (8.00s LTX) |
 | 230 | Audio VAE Decode | `LTXVAudioVAEDecode` | 6. Beat 4 (8.00s LTX) |
-| 228 | Beat 4 video (MP4) — open node for prev… | `VHS_VideoCombine` | 6. Beat 4 (8.00s LTX) |
+| 228 | Beat 4 video (MP4) - open node for prev... | `VHS_VideoCombine` | 6. Beat 4 (8.00s LTX) |
 | 232 | Beat 4 last frame | `EZClipLastFrame` | 6. Beat 4 (8.00s LTX) |
 | 233 | Save beat 4 last frame | `SaveImage` | 6. Beat 4 (8.00s LTX) |
 | 234 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
 
-### `UNETLoader` — Load Diffusion Model
+### `UNETLoader` - Load Diffusion Model
 
 Load a standalone transformer/UNET from diffusion_models/.
 
@@ -205,9 +205,9 @@ Cast at load.
 | `fp8_e4m3fn_fast` | FP8 e4m3fn with fast optimizations. |
 | `fp8_e5m2` | Cast to FP8 e5m2. |
 
-### `VAELoader` — Load VAE
+### `VAELoader` - Load VAE
 
-Load the autoencoder that maps pixels ↔ latents (and LTX audio).
+Load the autoencoder that maps pixels <-> latents (and LTX audio).
 
 !!! warning "Lab notes"
 
@@ -230,7 +230,7 @@ Filename under vae/.
 | LTX-2.5 video VAE | `ltx-2.5-video-vae-bf16.safetensors` |
 | LTX-2.5 audio VAE | `ltx-2.5-audio-vae-bf16.safetensors` |
 
-### `CLIPLoader` — Load CLIP
+### `CLIPLoader` - Load CLIP
 
 Load a text encoder. The type combo must match the UNET family.
 
@@ -258,7 +258,7 @@ Type `COMBO`.
 
 CLIPType enum. Picks tokenizer + template.
 
-**How it affects generation:** flux2 wraps Klein strings in a Qwen chat template — do not paste <|im_start|>. wan is UMT5. ltxv is Gemma4-with-proj.
+**How it affects generation:** flux2 wraps Klein strings in a Qwen chat template - do not paste <|im_start|>. wan is UMT5. ltxv is Gemma4-with-proj.
 
 **This graph:** `ltxv`
 
@@ -312,7 +312,7 @@ Where to load the encoder.
 | `default` | Load on the Comfy compute device (GPU). Lab default. |
 | `cpu` | Force CPU. Much slower; only for debugging a CLIP load. |
 
-### `LoadImage` — Load Image
+### `LoadImage` - Load Image
 
 Load a still from Comfy input/ (or upload).
 
@@ -345,7 +345,7 @@ Upload widget type.
 
 **This graph:** `image`
 
-### `LTXVEmptyLatentAudio` — Empty LTX Audio Latent
+### `LTXVEmptyLatentAudio` - Empty LTX Audio Latent
 
 Allocate a silent/world-audio latent matching video length.
 
@@ -384,7 +384,7 @@ Clips per Queue.
 
 **This graph:** `1`
 
-### `Note` — Note
+### `Note` - Note
 
 On-canvas operator note (not executed).
 
@@ -400,41 +400,41 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## motion/av/clip-chain Format / platform sets pixels (Custom uses Width × Height). Quality does not change size. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).…`
+**This graph:** `## motion/av/clip-chain Format / platform sets pixels (Custom uses Width x Height). Quality does not change size. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid)....`
 
 ```text
 ## motion/av/clip-chain
 
-Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
+Format / platform sets pixels (Custom uses Width x Height). Quality does not change size.
 
 LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).
 
 Four LTX AV beats share one UNET / video VAE / audio VAE / CLIP. Last frame of beat N starts beat N+1. EZClipConcat stitches the four MP4s (hard cut). Primary output: `${COMFY_OUTPUT_DIR}/ez_clip_chain.mp4` plus per-beat VHS (`ez_clip_b0N_ltx_video`) and last-frame PNG (`ez_clip_b0N_last`). No full-batch SaveImage.
 
-**8 seconds, 24 fps** (193 frames = 1+8n) chain-wide. Duration combo stays 5/8/10/12; mixed per-beat lengths are unsupported. Four × 8 s sequential prints are tens of minutes on GB10 — not a hang. Headroom preflight still applies at `start`.
+**8 seconds, 24 fps** (193 frames = 1+8n) chain-wide. Duration combo stays 5/8/10/12; mixed per-beat lengths are unsupported. Four x 8 s sequential prints are tens of minutes on GB10 - not a hang. Headroom preflight still applies at `start`.
 
-Occupancy: ltx — stop Wan, podcast, music, other LTX. One GB10 job. Occupancy ltx XOR. `occupancy enter ltx` before Queue. No Klein identity on this canvas.
+Occupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job. Occupancy ltx XOR. `occupancy enter ltx` before Queue. No Klein identity on this canvas.
 
-Duplicate Beat groups on canvas for beats 5–24:
+Duplicate Beat groups on canvas for beats 5-24:
 
 1. Duplicate the last Beat group.
-2. Set `VHS_VideoCombine.filename_prefix` to `ez_clip_b05_ltx_video` (then b06…).
+2. Set `VHS_VideoCombine.filename_prefix` to `ez_clip_b05_ltx_video` (then b06...).
 3. Set last-frame SaveImage prefix to `ez_clip_b05_last`.
-4. Wire previous `EZClipLastFrame.last_frame` → new `LTXVImgToVideo.image`.
-5. Wire new `VHS_VideoCombine.Filenames` → the next free `EZClipConcat.clip_0N` (`clip_05` for the fifth beat).
+4. Wire previous `EZClipLastFrame.last_frame` -> new `LTXVImgToVideo.image`.
+5. Wire new `VHS_VideoCombine.Filenames` -> the next free `EZClipConcat.clip_0N` (`clip_05` for the fifth beat).
 6. Keep the shared UNET / VAE / CLIP / Format / Seed / Rewrite / Audio notes wires (do not duplicate loaders).
 7. Save under `_user/` if you want a personal App; shipped `_lab` stays 4 beats.
 
 Past 24 stems: host `./scripts/utilities/concat-shots.sh --files a.mp4,b.mp4 --cap-seconds <sum> --yes` (default `--files` cap is 90 s).
 
-LTX-2.5 distilled AV. LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
+LTX-2.5 distilled AV. LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
 
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown is hidden on I2V.
 
 LoadImage default example.png; after a still set ez_still_hero_*.png. Match input Format. MagCache off.
 ```
 
-### `EZQuality` — Quality
+### `EZQuality` - Quality
 
 Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
@@ -469,7 +469,7 @@ custom freezes last overlay; lab restores graph defaults.
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
-### `EZVideoFormat` — Format / platform (video)
+### `EZVideoFormat` - Format / platform (video)
 
 Pick a Wan or LTX clip canvas (aspect or named platform).
 
@@ -480,8 +480,8 @@ Pick a Wan or LTX clip canvas (aspect or named platform).
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `image` | in | `IMAGE` | Optional still used when Output size is Match input. |
-| `width` | out | `INT` | Latent width (Wan ÷16, LTX ÷32). |
-| `height` | out | `INT` | Latent height (Wan ÷16, LTX ÷32). |
+| `width` | out | `INT` | Latent width (Wan div16, LTX div32). |
+| `height` | out | `INT` | Latent height (Wan div16, LTX div32). |
 | `hint` | out | `STRING` | Enhance duration / framing line. |
 | `prefix` | out | `STRING` | Optional filename prefix (often unwired). |
 
@@ -491,7 +491,7 @@ Type `COMBO`. Range / default: Wan 5B / LTX-2.5.
 
 Which VAE grid to use.
 
-**How it affects generation:** Wan snaps ÷16 (max 1024). LTX snaps ÷32 (max 1280). App Mode hides this — occupancy already picks the model.
+**How it affects generation:** Wan snaps div16 (max 1024). LTX snaps div32 (max 1280). App Mode hides this - occupancy already picks the model.
 
 **This graph:** `LTX-2.5`
 
@@ -499,8 +499,8 @@ Which VAE grid to use.
 
 | Choice | What it does |
 | --- | --- |
-| `Wan 5B` | wan VAE grid ÷16. |
-| `LTX-2.5` | ltx VAE grid ÷32. |
+| `Wan 5B` | wan VAE grid div16. |
+| `LTX-2.5` | ltx VAE grid div32. |
 
 #### `format`
 
@@ -508,37 +508,37 @@ Type `COMBO`. Range / default: 16:9 YouTube / 9:16 Shorts / Custom.
 
 Aspect or named platform job.
 
-**How it affects generation:** Preset writes pixels and Rewrite prompt framing. Custom uses Width × Height. Does not change Quality, length, CLIP, or VAE.
+**How it affects generation:** Preset writes pixels and Rewrite prompt framing. Custom uses Width x Height. Does not change Quality, length, CLIP, or VAE.
 
-**This graph:** `LTX · 16:9 YouTube (1280×704)`
+**This graph:** `LTX - 16:9 YouTube (1280x704)`
 
 **Other choices**
 
 | Choice | What it does |
 | --- | --- |
-| `Custom` | Width × Height widgets, snapped to the Family VAE grid. |
-| `Wan · 16:9 YouTube (832×480)` | 832×480. wan. |
-| `Wan · 16:9 mid (1024×576)` | 1024×576. wan. |
-| `Wan · 9:16 Shorts (480×832)` | 480×832. wan. |
-| `Wan · 1:1 square (768×768)` | 768×768. wan. |
-| `LTX · 16:9 YouTube (1280×704)` | 1280×704. ltx. |
-| `LTX · 9:16 Shorts (768×1280)` | 768×1280. ltx. |
-| `LTX · 1:1 square (768×768)` | 768×768. ltx. |
-| `LTX · 4:5 portrait (1024×1280)` | 1024×1280. ltx. |
+| `Custom` | Width x Height widgets, snapped to the Family VAE grid. |
+| `Wan - 16:9 YouTube (832x480)` | 832x480. wan. |
+| `Wan - 16:9 mid (1024x576)` | 1024x576. wan. |
+| `Wan - 9:16 Shorts (480x832)` | 480x832. wan. |
+| `Wan - 1:1 square (768x768)` | 768x768. wan. |
+| `LTX - 16:9 YouTube (1280x704)` | 1280x704. ltx. |
+| `LTX - 9:16 Shorts (768x1280)` | 768x1280. ltx. |
+| `LTX - 1:1 square (768x768)` | 768x768. ltx. |
+| `LTX - 4:5 portrait (1024x1280)` | 1024x1280. ltx. |
 
 #### `width`
 
-Type `INT`. Range / default: 16–1280.
+Type `INT`. Range / default: 16-1280.
 
 Custom width.
 
-**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue. LTX Custom snaps 720→704.
+**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue. LTX Custom snaps 720->704.
 
 **This graph:** `1280`
 
 #### `height`
 
-Type `INT`. Range / default: 16–1280.
+Type `INT`. Range / default: 16-1280.
 
 Custom height.
 
@@ -566,7 +566,7 @@ LTX clip length.
 
 **This graph:** `8 seconds`
 
-### `EZImageDescribe` — Describe image
+### `EZImageDescribe` - Describe image
 
 Caption a source still so Prompt Enhance can name inventory and lettering.
 
@@ -576,7 +576,7 @@ Caption a source still so Prompt Enhance can name inventory and lettering.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
-| `image` | in | `IMAGE` | Source still. Lazy — skipped when enable is off. |
+| `image` | in | `IMAGE` | Source still. Lazy - skipped when enable is off. |
 | `caption` | out | `STRING` | Short caption, or empty. |
 
 #### `enable`
@@ -589,7 +589,7 @@ Run the captioner.
 
 **This graph:** `false`
 
-### `EZDCCOccupancyGate` — Occupancy gate
+### `EZDCCOccupancyGate` - Occupancy gate
 
 Pass-through IMAGE that fail-closes on occupancy XOR. Does not start Compose.
 
@@ -621,7 +621,7 @@ Heavy GPU mode that must already be entered.
 | `wan` | Wan 5B. |
 | `ltx` | LTX-2.5. |
 
-### `PrimitiveNode` — Primitive
+### `PrimitiveNode` - Primitive
 
 A typed constant (string or float) with seed-style control.
 
@@ -646,7 +646,7 @@ The constant.
 | Seed | `42` |
 | Rewrite prompt | `true` |
 | Audio notes | `world SFX matching the start image, no score` |
-| Logline / context | `—` |
+| Logline / context | `-` |
 
 #### `control_after_generate`
 
@@ -667,13 +667,13 @@ Whether the primitive mutates after Queue.
 | `decrement` | Subtract 1 after Queue. |
 | `randomize` | Draw a new seed after Queue. Exploration only. |
 
-### `EZClipConcat` — Save clip chain (MP4)
+### `EZClipConcat` - Save clip chain (MP4)
 
-Concat 1–24 duration-head MP4s. Cap is a ceiling, not a pad-to-runtime.
+Concat 1-24 duration-head MP4s. Cap is a ceiling, not a pad-to-runtime.
 
 !!! warning "Lab notes"
 
-    clip_01 required; clip_02…24 optional. Collect-until-gap (a hole refuses). v1 hard-cut only (xfade_cs=0). Master ≈ sum(stems); default cap 600 s, max 1800. No films/<slug>/publish copy.
+    clip_01 required; clip_02...24 optional. Collect-until-gap (a hole refuses). v1 hard-cut only (xfade_cs=0). Master ~ sum(stems); default cap 600 s, max 1800. No films/<slug>/publish copy.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -720,13 +720,13 @@ Type `FLOAT`. Range / default: 600 default, 1800 max.
 
 Fail-closed duration ceiling.
 
-**How it affects generation:** Not a pad target. 4×8 s is ~32 s. Past 24 stems use concat-shots.sh --files … --cap-seconds.
+**How it affects generation:** Not a pad target. 4x8 s is ~32 s. Past 24 stems use concat-shots.sh --files ... --cap-seconds.
 
 **This graph:** `600.0`
 
 #### `xfade_cs`
 
-Type `INT`. Range / default: 0–50; v1 must be 0.
+Type `INT`. Range / default: 0-50; v1 must be 0.
 
 Audio acrossfade in centiseconds.
 
@@ -734,7 +734,7 @@ Audio acrossfade in centiseconds.
 
 **This graph:** `0`
 
-### `EZFilmDisclosure` — LTX AI-media disclosure
+### `EZFilmDisclosure` - LTX AI-media disclosure
 
 Prepend the LTX Community License AI-media disclosure. Idempotent. Not legal advice.
 
@@ -750,7 +750,7 @@ Optional extra line after the stock disclosure.
 
 **How it affects generation:** Empty = stock sentence only. Do not strip provenance.
 
-### `EZLTXPromptEnhance` — LTX Prompt Enhance
+### `EZLTXPromptEnhance` - LTX Prompt Enhance
 
 Rewrite a lazy prompt for LTX-2.5 (present-tense paragraph, audio interleaved).
 
@@ -782,10 +782,10 @@ Lazy sentence or authored LTX paragraph.
 
 | Instance | Value |
 | --- | --- |
-| Beat 1 | `The start image holds as the first frame. The camera dollies in slowly toward t…` |
-| Beat 2 | `The start image holds as the first frame. The camera continues the slow dolly, …` |
-| Beat 3 | `The start image holds as the first frame. The subject continues the same action…` |
-| Beat 4 | `The start image holds as the first frame. Motion settles: the camera eases to a…` |
+| Beat 1 | `The start image holds as the first frame. The camera dollies in slowly toward t...` |
+| Beat 2 | `The start image holds as the first frame. The camera continues the slow dolly, ...` |
+| Beat 3 | `The start image holds as the first frame. The subject continues the same action...` |
+| Beat 4 | `The start image holds as the first frame. Motion settles: the camera eases to a...` |
 
 #### `enhance`
 
@@ -821,7 +821,7 @@ Type `STRING`. Range / default: 8 seconds, 24 fps.
 
 Duration hint.
 
-**How it affects generation:** Does not set 193 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
+**How it affects generation:** Does not set 193 frames - LTXVImgToVideo does. Film printers stay 5 seconds / 121.
 
 **This graph (all 4 instances):** `8 seconds, 24 fps`
 
@@ -1161,7 +1161,7 @@ Sample-catalog id.
 
 **This graph (all 4 instances):** `motion/av/clip-chain`
 
-### `CLIPTextEncode` — CLIP Text Encode
+### `CLIPTextEncode` - CLIP Text Encode
 
 Turn a prompt string into CONDITIONING for the sampler.
 
@@ -1181,20 +1181,20 @@ Type `STRING`.
 
 Prompt encoded by CLIP.
 
-**How it affects generation:** Klein: sentences, subject → place → light → camera. Wan I2V: motion + one camera only. LTX: present-tense paragraph with audio interleaved. Distilled Klein quality lives here, not in CFG.
+**How it affects generation:** Klein: sentences, subject -> place -> light -> camera. Wan I2V: motion + one camera only. LTX: present-tense paragraph with audio interleaved. Distilled Klein quality lives here, not in CFG.
 
 | Instance | Value |
 | --- | --- |
-| Beat 1 prompt | `The start image holds as the first frame. The camera dollies in slowly toward t…` |
-| Beat 1 negative | `morphing, identity drift, warping objects, face melting, flicker, jitter, frame…` |
-| Beat 2 prompt | `The start image holds as the first frame. The camera continues the slow dolly, …` |
-| Beat 2 negative | `morphing, identity drift, warping objects, face melting, flicker, jitter, frame…` |
-| Beat 3 prompt | `The start image holds as the first frame. The subject continues the same action…` |
-| Beat 3 negative | `morphing, identity drift, warping objects, face melting, flicker, jitter, frame…` |
-| Beat 4 prompt | `The start image holds as the first frame. Motion settles: the camera eases to a…` |
-| Beat 4 negative | `morphing, identity drift, warping objects, face melting, flicker, jitter, frame…` |
+| Beat 1 prompt | `The start image holds as the first frame. The camera dollies in slowly toward t...` |
+| Beat 1 negative | `morphing, identity drift, warping objects, face melting, flicker, jitter, frame...` |
+| Beat 2 prompt | `The start image holds as the first frame. The camera continues the slow dolly, ...` |
+| Beat 2 negative | `morphing, identity drift, warping objects, face melting, flicker, jitter, frame...` |
+| Beat 3 prompt | `The start image holds as the first frame. The subject continues the same action...` |
+| Beat 3 negative | `morphing, identity drift, warping objects, face melting, flicker, jitter, frame...` |
+| Beat 4 prompt | `The start image holds as the first frame. Motion settles: the camera eases to a...` |
+| Beat 4 negative | `morphing, identity drift, warping objects, face melting, flicker, jitter, frame...` |
 
-### `EZNegativePromptEnhance` — Negative Prompt Enhance
+### `EZNegativePromptEnhance` - Negative Prompt Enhance
 
 Rewrite a negative CLIP seed against the final positive. Stays on when Rewrite prompt is off.
 
@@ -1245,13 +1245,13 @@ Which negative family.
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
 
-### `LTXVImgToVideo` — LTX Image to Video
+### `LTXVImgToVideo` - LTX Image to Video
 
 Condition LTX on a start image and allocate the video latent.
 
 !!! warning "Lab notes"
 
-    ÷32 spatial, length 1+8n. Standalone Apps 1280×704×193. Film printers 1280×704×121. Shorts 768×1280. Some shot graphs still store 120 and rely on ez_ltx_spatial to snap.
+    div32 spatial, length 1+8n. Standalone Apps 1280x704x193. Film printers 1280x704x121. Shorts 768x1280. Some shot graphs still store 120 and rely on ez_ltx_spatial to snap.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1269,7 +1269,7 @@ Type `INT`. Range / default: 1280 / 768.
 
 Frame width.
 
-**How it affects generation:** Must be ÷32. 720p width is fine; height 720 is not.
+**How it affects generation:** Must be div32. 720p width is fine; height 720 is not.
 
 **This graph (all 4 instances):** `1280`
 
@@ -1289,7 +1289,7 @@ Type `INT`. Range / default: 193 Apps / 121 film = 1+8n.
 
 Frame count.
 
-**How it affects generation:** Standalone Apps default 193 @ 24 fps ≈ 8.04 s. Film printers stay 121 (~5.04 s). Do not type a 90 s length.
+**How it affects generation:** Standalone Apps default 193 @ 24 fps ~ 8.04 s. Film printers stay 121 (~5.04 s). Do not type a 90 s length.
 
 **This graph (all 4 instances):** `193`
 
@@ -1303,7 +1303,7 @@ Clips per Queue.
 
 **This graph (all 4 instances):** `1`
 
-### `LTXVConditioning` — LTX Conditioning
+### `LTXVConditioning` - LTX Conditioning
 
 Stamp frame-rate onto LTX positive/negative cond.
 
@@ -1324,7 +1324,7 @@ Frames per second written into cond.
 
 **This graph (all 4 instances):** `24.0`
 
-### `LTXVConcatAVLatent` — LTX Concat AV Latent
+### `LTXVConcatAVLatent` - LTX Concat AV Latent
 
 Join video + audio latents into one joint AV latent for the sampler.
 
@@ -1336,7 +1336,7 @@ Join video + audio latents into one joint AV latent for the sampler.
 
 No widgets. Sockets only.
 
-### `KSampler` — KSampler
+### `KSampler` - KSampler
 
 Denoise a latent for N steps at a CFG, sampler, and scheduler.
 
@@ -1348,17 +1348,17 @@ Denoise a latent for N steps at a CFG, sampler, and scheduler.
 | --- | --- | --- | --- |
 | `model` | in | `MODEL` | UNET / transformer after any ModelSampling* patch. |
 | `positive` | in | `CONDITIONING` | What to include (CLIP / ACE / LTX prompt). |
-| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well — put constraints in the positive. |
+| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well - put constraints in the positive. |
 | `latent_image` | in | `LATENT` | Noise canvas or encoded start image / video / audio latent. |
 | `LATENT` | out | `LATENT` | Denoised latent for VAE decode. |
 
 #### `seed`
 
-Type `INT`. Range / default: 0 … 2^64-1; lab 42.
+Type `INT`. Range / default: 0 ... 2^64-1; lab 42.
 
 Random seed for the noise tensor.
 
-**How it affects generation:** Same seed + same graph ≈ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
+**How it affects generation:** Same seed + same graph ~ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
 
 **This graph (all 4 instances):** `42`
 
@@ -1383,21 +1383,21 @@ What happens to seed after Queue.
 
 #### `steps`
 
-Type `INT`. Range / default: 1–10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
+Type `INT`. Range / default: 1-10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
 
 Denoising iterations.
 
-**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 — raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
+**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 - raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
 
 **This graph (all 4 instances):** `20`
 
 #### `cfg`
 
-Type `FLOAT`. Range / default: 0–100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
+Type `FLOAT`. Range / default: 0-100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
 
 Classifier-free guidance scale.
 
-**How it affects generation:** Distilled Klein is CFG 1.0 — raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
+**How it affects generation:** Distilled Klein is CFG 1.0 - raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
 
 **This graph (all 4 instances):** `1.0`
 
@@ -1487,7 +1487,7 @@ How sigmas are spaced across steps.
 
 #### `denoise`
 
-Type `FLOAT`. Range / default: 0–1; lab 1.0.
+Type `FLOAT`. Range / default: 0-1; lab 1.0.
 
 Fraction of the latent to replace with denoised signal.
 
@@ -1495,19 +1495,19 @@ Fraction of the latent to replace with denoised signal.
 
 **This graph (all 4 instances):** `1.0`
 
-### `LTXVSeparateAVLatent` — LTX Separate AV Latent
+### `LTXVSeparateAVLatent` - LTX Separate AV Latent
 
 Split a joint AV latent after sampling.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `av_latent` | in | `LATENT` | KSampler output. |
-| `video_latent` | out | `LATENT` | Picture latent → VAEDecode. |
-| `audio_latent` | out | `LATENT` | Audio latent → LTXVAudioVAEDecode (not on a2v). |
+| `video_latent` | out | `LATENT` | Picture latent -> VAEDecode. |
+| `audio_latent` | out | `LATENT` | Audio latent -> LTXVAudioVAEDecode (not on a2v). |
 
 No widgets. Sockets only.
 
-### `VAEDecode` — VAE Decode
+### `VAEDecode` - VAE Decode
 
 Decode image/video latents to pixels.
 
@@ -1519,7 +1519,7 @@ Decode image/video latents to pixels.
 
 No widgets. Sockets only.
 
-### `LTXVAudioVAEDecode` — LTX Audio VAE Decode
+### `LTXVAudioVAEDecode` - LTX Audio VAE Decode
 
 Decode LTX audio latent to AUDIO for the MP4 mux.
 
@@ -1535,7 +1535,7 @@ Decode LTX audio latent to AUDIO for the MP4 mux.
 
 No widgets. Sockets only.
 
-### `VHS_VideoCombine` — VHS Video Combine
+### `VHS_VideoCombine` - VHS Video Combine
 
 Encode frames (and optional audio) to MP4 or GIF.
 
@@ -1581,10 +1581,10 @@ Save prefix under the output folder.
 
 | Instance | Value |
 | --- | --- |
-| Beat 1 video (MP4) — open node for prev… | `ez_clip_b01_ltx_video` |
-| Beat 2 video (MP4) — open node for prev… | `ez_clip_b02_ltx_video` |
-| Beat 3 video (MP4) — open node for prev… | `ez_clip_b03_ltx_video` |
-| Beat 4 video (MP4) — open node for prev… | `ez_clip_b04_ltx_video` |
+| Beat 1 video (MP4) - open node for prev... | `ez_clip_b01_ltx_video` |
+| Beat 2 video (MP4) - open node for prev... | `ez_clip_b02_ltx_video` |
+| Beat 3 video (MP4) - open node for prev... | `ez_clip_b03_ltx_video` |
+| Beat 4 video (MP4) - open node for prev... | `ez_clip_b04_ltx_video` |
 
 #### `format`
 
@@ -1663,13 +1663,13 @@ Write the file to disk.
 
 **This graph (all 4 instances):** `true`
 
-### `EZClipLastFrame` — Last frame (IMAGE)
+### `EZClipLastFrame` - Last frame (IMAGE)
 
 Return the last frame of an IMAGE batch (index -1) as the next clip's I2V start.
 
 !!! warning "Lab notes"
 
-    Duration-safe. Do not hardcode ImageFromBatch 120 — legal last indices are 120 / 192 / 240 / 288.
+    Duration-safe. Do not hardcode ImageFromBatch 120 - legal last indices are 120 / 192 / 240 / 288.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1678,7 +1678,7 @@ Return the last frame of an IMAGE batch (index -1) as the next clip's I2V start.
 
 No widgets. Sockets only.
 
-### `SaveImage` — Save Image
+### `SaveImage` - Save Image
 
 Write PNG stills under the output folder.
 
@@ -1701,7 +1701,7 @@ Save prefix.
 | Save beat 3 last frame | `ez_clip_b03_last` |
 | Save beat 4 last frame | `ez_clip_b04_last` |
 
-### `EZModelCheck` — Check models
+### `EZModelCheck` - Check models
 
 Manual disk check for occupancy + Quality weights. Queue does not run this node.
 

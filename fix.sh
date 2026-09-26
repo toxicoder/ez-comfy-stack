@@ -21,7 +21,7 @@ set -euo pipefail
 ROOT="${BUILD_WORKSPACE_DIRECTORY:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
 cd "${ROOT}"
 
-echo "→ Running trusted formatters (//:fix)"
+echo "-> Running trusted formatters (//:fix)"
 
 if command -v buildifier >/dev/null 2>&1; then
   echo "   buildifier -mode=fix"

@@ -1,6 +1,6 @@
 ---
 title: "Cable descend"
-description: "Cinema Rack illustration — Cable descend."
+description: "Cinema Rack illustration - Cable descend."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

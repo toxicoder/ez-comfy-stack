@@ -250,7 +250,7 @@ if missing:
     p && /^FROM / {exit}
     p {print}
   ' "${df}")"
-  # Instruction lines only — comments may mention files that must not be bound.
+  # Instruction lines only - comments may mention files that must not be bound.
   torch_copy="$(printf '%s\n' "${torch_stage}" | grep -E '^COPY ' || true)"
   torch_bind="$(printf '%s\n' "${torch_stage}" | grep -E 'mount=type=bind' || true)"
   torch_pins="$(printf '%s\n' "${torch_stage}" | grep -E '^(ARG|ENV) ' || true)"
@@ -359,7 +359,7 @@ if missing:
 }
 
 @test "workflow mount is outside COMFY_HOME tree" {
-  # Host workflows/ tree → image path (not under comfy-state volume)
+  # Host workflows/ tree -> image path (not under comfy-state volume)
   run grep -E 'workflows:/opt/ez-comfy/workflows' "${REPO_ROOT}/docker/docker-compose.yml"
   [ "$status" -eq 0 ]
   run grep -E 'workflows:.*/comfy-state/ComfyUI/' "${REPO_ROOT}/docker/docker-compose.yml"
@@ -430,7 +430,7 @@ if missing:
   [ "$status" -eq 0 ]
   run grep -E 'cache-to:.*type=registry' "${REPO_ROOT}/.github/workflows/publish-image.yml"
   [ "$status" -eq 0 ]
-  # GHA cache is 10GB shared — do not probe it for multi-GB torch layers.
+  # GHA cache is 10GB shared - do not probe it for multi-GB torch layers.
   run grep -E 'type=gha' "${REPO_ROOT}/.github/workflows/publish-image.yml"
   [ "$status" -ne 0 ]
 }

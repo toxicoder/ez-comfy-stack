@@ -81,7 +81,7 @@ END_STOPWORDS = frozenset(
     }
 )
 
-# Phrase → the only title allowed to use it (substring, case-insensitive).
+# Phrase -> the only title allowed to use it (substring, case-insensitive).
 RESERVED_MOTIFS: tuple[tuple[str, str], ...] = (
     ("in his feels", "in his feels"),
     ("lab coat", "lab coat lecture"),

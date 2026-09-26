@@ -1,6 +1,6 @@
 ---
 title: "Ease-out dolly"
-description: "Cinema Rack illustration — Ease-out dolly."
+description: "Cinema Rack illustration - Ease-out dolly."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

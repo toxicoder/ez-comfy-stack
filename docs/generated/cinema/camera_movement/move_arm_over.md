@@ -1,6 +1,6 @@
 ---
 title: "Long arm over"
-description: "Cinema Rack illustration — Long arm over."
+description: "Cinema Rack illustration - Long arm over."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

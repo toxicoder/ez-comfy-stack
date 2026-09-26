@@ -1,6 +1,6 @@
 ---
 title: "Lead Room"
-description: "Cinema Rack illustration — Lead Room."
+description: "Cinema Rack illustration - Lead Room."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

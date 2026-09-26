@@ -45,7 +45,7 @@ def _cell(value: object, limit: int = 160) -> str:
     text = " ".join(str(value or "").split())
     text = text.replace("|", "\\|")
     if len(text) > limit:
-        return text[: limit - 1] + "…"
+        return text[: limit - 1] + "..."
     return text
 
 
@@ -65,7 +65,7 @@ def _flags(row: dict[str, Any]) -> str:
         bits.append("motion")
     if row.get("av_ok", True):
         bits.append("av")
-    return ", ".join(bits) or "—"
+    return ", ".join(bits) or "-"
 
 
 def _yaml_str(value: object) -> str:
@@ -117,11 +117,11 @@ def _example_cell(axis_id: str, row: dict[str, Any]) -> str:
         row: Technique object.
 
     Returns:
-        HTML thumbnail link or ``—``.
+        HTML thumbnail link or ``-``.
     """
     tid = str(row.get("id") or "")
     if not tid or not has_clip(axis_id, tid):
-        return "—"
+        return "-"
     label = html.escape(str(row.get("label") or tid), quote=True)
     poster = f"../assets/cinema/{axis_id}/{tid}.jpg"
     href = f"{axis_id}/{tid}.md"
@@ -152,7 +152,7 @@ def write_technique_page(axis_id: str, axis_label: str, row: dict[str, Any]) -> 
     lines = [
         "---",
         f"title: {_yaml_str(label)}",
-        f"description: {_yaml_str('Cinema Rack illustration — ' + label + '.')}",
+        f"description: {_yaml_str('Cinema Rack illustration - ' + label + '.')}",
         "tags: [cinema, prompting, catalog, clip]",
         "---",
         "",
@@ -180,7 +180,7 @@ def write_technique_page(axis_id: str, axis_label: str, row: dict[str, Any]) -> 
         "",
         "## Clause",
         "",
-        str(row.get("clause") or "—"),
+        str(row.get("clause") or "-"),
         "",
         "## Use on",
         "",
@@ -188,7 +188,7 @@ def write_technique_page(axis_id: str, axis_label: str, row: dict[str, Any]) -> 
         "",
         "## Conflicts",
         "",
-        conflicts or "—",
+        conflicts or "-",
         "",
     ]
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -215,7 +215,7 @@ def write_axis_page(axis_id: str, meta: dict[str, Any], rows: list[dict[str, Any
     lines = [
         "---",
         f"title: {label}",
-        f"description: Cinema Rack catalog — {label} ({len(rows)} spliceable techniques).",
+        f"description: Cinema Rack catalog - {label} ({len(rows)} spliceable techniques).",
         "tags: [cinema, prompting, catalog]",
         "---",
         "",
@@ -252,7 +252,7 @@ def write_axis_page(axis_id: str, meta: dict[str, Any], rows: list[dict[str, Any
                 example=_example_cell(axis_id, row),
                 clause=_cell(row.get("clause"), 140),
                 flags=_flags(row),
-                conflicts=_cell(conflicts or "—", 60),
+                conflicts=_cell(conflicts or "-", 60),
             )
         )
         if tid and has_clip(axis_id, tid):

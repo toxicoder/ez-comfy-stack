@@ -43,7 +43,7 @@ def normalize_upscale(value: object) -> str:
     """Return a known upscale id, defaulting to none.
 
     Args:
-        value: Combo id or label (``2×`` accepted as ``2x``).
+        value: Combo id or label (``2x`` accepted as ``2x``).
 
     Returns:
         One of :data:`UPSCALE_IDS`.
@@ -51,7 +51,7 @@ def normalize_upscale(value: object) -> str:
     raw = _as_str(value)
     if not raw:
         return DEFAULT_UPSCALE
-    folded = raw.replace("×", "x").replace(" ", "")
+    folded = raw.replace("x", "x").replace(" ", "")
     lower = folded.casefold()
     if lower in {UPSCALE_NONE, "off", "passthrough"}:
         return UPSCALE_NONE
@@ -74,7 +74,7 @@ def upscale_combo_labels() -> list[str]:
 
 
 def _fit_box(width: int, height: int, box_w: int, box_h: int) -> tuple[int, int]:
-    """Scale ``width``×``height`` to fit inside the box (integer pixels).
+    """Scale ``width``x``height`` to fit inside the box (integer pixels).
 
     Args:
         width: Source width.
@@ -96,7 +96,7 @@ def _fit_box(width: int, height: int, box_w: int, box_h: int) -> tuple[int, int]
 def resolve_upscale_hw(
     width: int, height: int, mode: object
 ) -> tuple[int, int] | None:
-    """Return target H×W, or ``None`` when the still should pass through.
+    """Return target HxW, or ``None`` when the still should pass through.
 
     Args:
         width: Source width in pixels.

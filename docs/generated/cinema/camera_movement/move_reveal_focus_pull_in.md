@@ -1,6 +1,6 @@
 ---
 title: "Focus-pull reveal in"
-description: "Cinema Rack illustration — Focus-pull reveal in."
+description: "Cinema Rack illustration - Focus-pull reveal in."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

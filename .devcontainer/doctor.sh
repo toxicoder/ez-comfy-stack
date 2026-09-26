@@ -10,7 +10,7 @@
 #   bash .devcontainer/doctor.sh --quiet
 #
 # Environment:
-#   DEVCONTAINER_DOCTOR_STRICT=0 — warn only (exit 0)
+#   DEVCONTAINER_DOCTOR_STRICT=0 - warn only (exit 0)
 
 set -euo pipefail
 

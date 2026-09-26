@@ -1,6 +1,6 @@
 ---
 title: "9:16 Upward Room"
-description: "Cinema Rack illustration — 9:16 Upward Room."
+description: "Cinema Rack illustration - 9:16 Upward Room."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

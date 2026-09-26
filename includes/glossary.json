@@ -14,7 +14,7 @@
     "aliases": ["Wan 2.2 5B", "Wan 2.2", "TI2V-5B", "Wan"],
     "category": "Models",
     "short": "Apache silent motion model (T2V + I2V). No native audio. Daily-driver 5 s clips.",
-    "long": "Wan 2.2 TI2V-5B is the silent motion lane. I2V prompts should be **motion + one camera move** — the start image owns look. Do not prompt audio or a score. Optional A14B and Fun InP packs are not part of `download-models`. See [Klein, Wan, and LTX](learn/pipeline.md).",
+    "long": "Wan 2.2 TI2V-5B is the silent motion lane. I2V prompts should be **motion + one camera move** - the start image owns look. Do not prompt audio or a score. Optional A14B and Fun InP packs are not part of `download-models`. See [Klein, Wan, and LTX](learn/pipeline.md).",
     "see_also": ["i2v", "t2v", "umt5", "ltx", "ping-pong"]
   },
   {
@@ -23,7 +23,7 @@
     "aliases": ["LTX-2.5", "LTX"],
     "category": "Models",
     "short": "Joint audio/video model (Community License, gated, $10M company-revenue cap).",
-    "long": "LTX-2.5 distilled INT8-convrot is the AV hero. Lab graphs load an audio VAE, concat empty audio latents with video latents, then decode audio into VHS so the MP4 has world sound. Landscape size is **1280×704** (VAE ÷32), not 1280×720. Accept the Hugging Face license and set HF_TOKEN before `download-models`. See [Model licenses](licenses.md).",
+    "long": "LTX-2.5 distilled INT8-convrot is the AV hero. Lab graphs load an audio VAE, concat empty audio latents with video latents, then decode audio into VHS so the MP4 has world sound. Landscape size is **1280x704** (VAE div32), not 1280x720. Accept the Hugging Face license and set HF_TOKEN before `download-models`. See [Model licenses](licenses.md).",
     "see_also": ["av", "i2v", "community-license", "gated", "vhs"]
   },
   {
@@ -32,7 +32,7 @@
     "aliases": ["Qwen3-4B", "qwen_3_4b", "Qwen3"],
     "category": "Models",
     "short": "Klein's text encoder (CLIP type flux2) and the Prompt Enhance GGUF family.",
-    "long": "Klein stills encode prompts with `qwen_3_4b` as CLIP type `flux2`. Comfy wraps the string in a Qwen chat template — do not paste `<|im_start|>` into the widget. A separate Qwen3-4B-Instruct GGUF rewrites lazy sentences when Prompt Enhance is on (CPU-only). See [Prompting](prompting.md).",
+    "long": "Klein stills encode prompts with `qwen_3_4b` as CLIP type `flux2`. Comfy wraps the string in a Qwen chat template - do not paste `<|im_start|>` into the widget. A separate Qwen3-4B-Instruct GGUF rewrites lazy sentences when Prompt Enhance is on (CPU-only). See [Prompting](prompting.md).",
     "see_also": ["klein", "clip", "gguf", "prompt-enhance"]
   },
   {
@@ -86,7 +86,7 @@
     "aliases": ["Local dub", "dub-localize"],
     "category": "Audio",
     "short": "Clone-and-translate a recorded show into a duration-locked second audio track.",
-    "long": "The **audio/dub/clone-translate** App transcribes with faster-whisper (segments become turns), clusters speakers with Chatterbox `ve.pt`, merges same-speaker gaps under 0.35 s, writes 6–10 s per-speaker clone refs, translates each turn with the on-box GGUF (ISO source → target), and clones each voice (Chatterbox Multilingual V3, `language_id` like `es`, **Clone CFG** auto 0.3 on EN→ES, retry 0.5). Clones are onset-cropped per chunk (Chatterbox hush / PerTh floor) and T3 is capped per line so a 1000-token walk cannot overlay a silent intro then a tonal drone. Default Speaking speed 1.0 pitch-preserves up to 1.25×, then spills, then fade-trims the end — it does not crush a long clone into the original window. Failed rewrite leaves `text_target` empty so Queue does not clone English as the target. First Queue is Stage **all** (analyze then clone). To edit `text_target` first, use Stage **analyze** then Stage **render**. Pick or upload a file from `input/` (or set a Source URL). **I have rights** must be on. Occupancy audio. After Queue, **Dub status** lists speaker/turn counts and `translated N/M`. Missing ASR, clone, llama.cpp, or GGUF yields an empty mix plus that status, not the original recording. Wheels install separately (Chatterbox GitHub zip `--no-deps` so torch 2.14 stays; PyPI 0.1.7 has no `t3_model=v3`). YouTube Studio wants the duration-locked job-dir `ez_dub_yt.wav`, not the Comfy preview MP3 and not a muxed multi-track MP4. See [Local dub](dub.md).",
+    "long": "The **audio/dub/clone-translate** App transcribes with faster-whisper (segments become turns), clusters speakers with Chatterbox `ve.pt`, merges same-speaker gaps under 0.35 s, writes 6-10 s per-speaker clone refs, translates each turn with the on-box GGUF (ISO source -> target), and clones each voice (Chatterbox Multilingual V3, `language_id` like `es`, **Clone CFG** auto 0.3 on EN->ES, retry 0.5). Clones are onset-cropped per chunk (Chatterbox hush / PerTh floor) and T3 is capped per line so a 1000-token walk cannot overlay a silent intro then a tonal drone. Default Speaking speed 1.0 pitch-preserves up to 1.25x, then spills, then fade-trims the end - it does not crush a long clone into the original window. Failed rewrite leaves `text_target` empty so Queue does not clone English as the target. First Queue is Stage **all** (analyze then clone). To edit `text_target` first, use Stage **analyze** then Stage **render**. Pick or upload a file from `input/` (or set a Source URL). **I have rights** must be on. Occupancy audio. After Queue, **Dub status** lists speaker/turn counts and `translated N/M`. Missing ASR, clone, llama.cpp, or GGUF yields an empty mix plus that status, not the original recording. Wheels install separately (Chatterbox GitHub zip `--no-deps` so torch 2.14 stays; PyPI 0.1.7 has no `t3_model=v3`). YouTube Studio wants the duration-locked job-dir `ez_dub_yt.wav`, not the Comfy preview MP3 and not a muxed multi-track MP4. See [Local dub](dub.md).",
     "see_also": ["chatterbox", "tts", "occupancy", "disclosure", "multi-language-audio"]
   },
   {
@@ -95,7 +95,7 @@
     "aliases": ["Chatterbox Multilingual", "Chatterbox Multilingual V3"],
     "category": "Models",
     "short": "MIT 23-language zero-shot clone. PerTh watermark stays on. Opt-in download-dub --tier clone.",
-    "long": "Default engine for [Local dub](dub.md). Cross-lingual clone from a 6–10 s ref extracted from this job, not a celebrity pack. Language transfer uses `cfg_weight=0.3` (CFG 0 turns off T3 text-following and often vocodes a moan). Needs `from_local(..., t3_model=\"v3\")` (GitHub pin `CHATTERBOX_TTS_REF`; PyPI 0.1.7 is too old) and `setuptools<82` so PerTh (`perth.PerthImplicitWatermarker`) stays importable. Turbo English remains `download-podcast --tier chatterbox`.",
+    "long": "Default engine for [Local dub](dub.md). Cross-lingual clone from a 6-10 s ref extracted from this job, not a celebrity pack. Language transfer uses `cfg_weight=0.3` (CFG 0 turns off T3 text-following and often vocodes a moan). Needs `from_local(..., t3_model=\"v3\")` (GitHub pin `CHATTERBOX_TTS_REF`; PyPI 0.1.7 is too old) and `setuptools<82` so PerTh (`perth.PerthImplicitWatermarker`) stays importable. Turbo English remains `download-podcast --tier chatterbox`.",
     "see_also": ["chatterbox", "dub", "tts"]
   },
   {
@@ -104,7 +104,7 @@
     "aliases": ["multi-language audio", "MLA"],
     "category": "Audio",
     "short": "YouTube Studio Languages tab: upload an audio-only dub the same length as the video.",
-    "long": "YouTube does not reliably ingest extra AAC tracks muxed into an MP4. Export the duration-locked job-dir `ez_dub_yt.wav` (not the Comfy 24 kHz preview MP3), upload it under Languages → Audio, add the translated SRT, and use the synthetic/altered-content toggle. Eligibility varies by channel. See [Local dub](dub.md).",
+    "long": "YouTube does not reliably ingest extra AAC tracks muxed into an MP4. Export the duration-locked job-dir `ez_dub_yt.wav` (not the Comfy 24 kHz preview MP3), upload it under Languages -> Audio, add the translated SRT, and use the synthetic/altered-content toggle. Eligibility varies by channel. See [Local dub](dub.md).",
     "see_also": ["dub", "loudnorm"]
   },
   {
@@ -113,7 +113,7 @@
     "aliases": ["CLIP"],
     "category": "Models",
     "short": "Text encoder that turns a prompt into conditioning for the sampler.",
-    "long": "In this studio, “CLIP” means the model-specific text encoder: Qwen (`flux2`) for Klein, UMT5 (`wan`) for Wan, Gemma4-with-proj (`ltxv`) for LTX. Wrong CLIP type is a common Queue failure. See [Image and video generation](learn/generation.md).",
+    "long": "In this studio, 'CLIP' means the model-specific text encoder: Qwen (`flux2`) for Klein, UMT5 (`wan`) for Wan, Gemma4-with-proj (`ltxv`) for LTX. Wrong CLIP type is a common Queue failure. See [Image and video generation](learn/generation.md).",
     "see_also": ["qwen", "umt5", "gemma4", "sampler"]
   },
   {
@@ -167,7 +167,7 @@
     "aliases": ["SeedVR2-3B", "SeedVR2"],
     "category": "Models",
     "short": "Optional Apache restorer for a still PNG or a stitched 90s master. Not part of download-models.",
-    "long": "SeedVR2-3B is opt-in Apache (`download-restore --tier seedvr2-3b`). Use it as optional polish on a Klein 4B PNG (Free Commercial Use quality: add detail, do not jump to 4K) or as a conservative 1.3–1.5× restore on a film master after concat. Occupancy: stop Comfy first if you restore on GPU. See [90s shorts](shorts.md) and [Still to motion to AV](visual-generative-ai.md).",
+    "long": "SeedVR2-3B is opt-in Apache (`download-restore --tier seedvr2-3b`). Use it as optional polish on a Klein 4B PNG (Free Commercial Use quality: add detail, do not jump to 4K) or as a conservative 1.3-1.5x restore on a film master after concat. Occupancy: stop Comfy first if you restore on GPU. See [90s shorts](shorts.md) and [Still to motion to AV](visual-generative-ai.md).",
     "see_also": ["occupancy", "last-frame"]
   },
   {
@@ -185,7 +185,7 @@
     "aliases": ["Asset Bible", "asset-bible"],
     "category": "Studio",
     "short": "Versioned 3D asset catalog under COMFY_OUTPUT_DIR/assets. Outputs, never MODELS_DIR.",
-    "long": "Each slug is an `ez.asset.v1` record (kind, prompt, seed, pipeline, takes). `scene.json` instances slugs; it does not embed meshes. Gen is Klein still → TRELLIS.2. Construct is a shopping list of primitives + HDRI + bible refs. Operator verb today: `asset-ls`. See [Asset Bible](asset-bible.md).",
+    "long": "Each slug is an `ez.asset.v1` record (kind, prompt, seed, pipeline, takes). `scene.json` instances slugs; it does not embed meshes. Gen is Klein still -> TRELLIS.2. Construct is a shopping list of primitives + HDRI + bible refs. Operator verb today: `asset-ls`. See [Asset Bible](asset-bible.md).",
     "see_also": ["klein", "ltx", "trellis"]
   },
   {
@@ -239,7 +239,7 @@
     "aliases": ["Z-Image Turbo", "Z-Image"],
     "category": "Models",
     "short": "Optional Apache still runner-up. Not the default Klein path.",
-    "long": "Z-Image Turbo uses different weights (`ae`, `z_image_turbo_*`). Seeded lab stills are Klein 4B. If a template asks for `ae.safetensors`, you loaded the wrong graph — open `stills/still-draft`. Optional: `download-image --tier zimage`. See [Model licenses](licenses.md).",
+    "long": "Z-Image Turbo uses different weights (`ae`, `z_image_turbo_*`). Seeded lab stills are Klein 4B. If a template asks for `ae.safetensors`, you loaded the wrong graph - open `stills/still-draft`. Optional: `download-image --tier zimage`. See [Model licenses](licenses.md).",
     "see_also": ["klein", "t2i"]
   },
   {
@@ -248,7 +248,7 @@
     "aliases": ["VHS_VideoCombine", "VideoHelperSuite", "VHS"],
     "category": "Models",
     "short": "Comfy pack that writes MP4 (and GIF). Open the Save video node after Queue for preview.",
-    "long": "Wan and LTX lab graphs wire `VHS_VideoCombine` with `save_output: true`. After Queue, open **Save video (MP4) — open node for preview**. Files land on the host at COMFY_OUTPUT_DIR. LTX also feeds decoded audio into VHS. See [Still to motion to AV](visual-generative-ai.md).",
+    "long": "Wan and LTX lab graphs wire `VHS_VideoCombine` with `save_output: true`. After Queue, open **Save video (MP4) - open node for preview**. Files land on the host at COMFY_OUTPUT_DIR. LTX also feeds decoded audio into VHS. See [Still to motion to AV](visual-generative-ai.md).",
     "see_also": ["ltx", "wan", "comfy-output-dir"]
   },
   {
@@ -275,7 +275,7 @@
     "aliases": ["INT8-convrot"],
     "category": "Models",
     "short": "Quantized LTX-2.5 transformer format used by the lab distilled weights.",
-    "long": "Lab LTX-2.5 filenames include `int8-convrot`. If INT8-convrot or gated access fails, LTX-2.3 distilled FP8 is an optional fallback — seeded graphs still expect 2.5 names. See [Models and cache](models-and-cache.md).",
+    "long": "Lab LTX-2.5 filenames include `int8-convrot`. If INT8-convrot or gated access fails, LTX-2.3 distilled FP8 is an optional fallback - seeded graphs still expect 2.5 names. See [Models and cache](models-and-cache.md).",
     "see_also": ["ltx", "fp8"]
   },
   {
@@ -293,7 +293,7 @@
     "aliases": ["image-to-video", "I2V"],
     "category": "Modalities",
     "short": "Image-to-video: a start still plus motion text becomes a clip. Start image owns look.",
-    "long": "Wan I2V is silent; LTX I2V can carry world audio. Point LoadImage at `ez_still_draft_*.png` (or a hero 1280×704 still for LTX). Do not re-describe wardrobe and location in an I2V prompt. See [Klein, Wan, and LTX](learn/pipeline.md).",
+    "long": "Wan I2V is silent; LTX I2V can carry world audio. Point LoadImage at `ez_still_draft_*.png` (or a hero 1280x704 still for LTX). Do not re-describe wardrobe and location in an I2V prompt. See [Klein, Wan, and LTX](learn/pipeline.md).",
     "see_also": ["t2v", "loadimage", "wan", "ltx"]
   },
   {
@@ -311,7 +311,7 @@
     "aliases": ["audio-to-video", "A2V"],
     "category": "Modalities",
     "short": "Audio-to-video: picture follows a soundtrack (audio freeze, not lip-sync OSS).",
-    "long": "`motion/av/audio-to-video-8s` encodes a ~5 s wav and muxes the original waveform. `stills/talking-head` is I2V smoke. Banned lip-sync OSS (Wav2Lip) stays out. Two-stage freeze lives in Comfy Templates → LTX-2.5. See [Motion catalog](create/workflows-motion.md).",
+    "long": "`motion/av/audio-to-video-8s` encodes a ~5 s wav and muxes the original waveform. `stills/talking-head` is I2V smoke. Banned lip-sync OSS (Wav2Lip) stays out. Two-stage freeze lives in Comfy Templates -> LTX-2.5. See [Motion catalog](create/workflows-motion.md).",
     "see_also": ["s2v", "ltx"]
   },
   {
@@ -338,7 +338,7 @@
     "aliases": ["first-last-frame", "FLF"],
     "category": "Modalities",
     "short": "Condition a clip on both a first and last still (Wan Fun InP).",
-    "long": "FLF is a continuity draft: you pick how the shot starts and ends. It is optional and large. 90s films instead chain last-frame PNG → next I2V start. See [90s shorts](shorts.md).",
+    "long": "FLF is a continuity draft: you pick how the shot starts and ends. It is optional and large. 90s films instead chain last-frame PNG -> next I2V start. See [90s shorts](shorts.md).",
     "see_also": ["fun-inp", "last-frame", "i2v"]
   },
   {
@@ -373,7 +373,7 @@
     "title": "workflow",
     "aliases": ["node graph", "lab graph", "workflow"],
     "category": "Studio",
-    "short": "A saved ComfyUI graph (JSON). Lab examples are already wired — change widgets, not the file.",
+    "short": "A saved ComfyUI graph (JSON). Lab examples are already wired - change widgets, not the file.",
     "long": "Host files live under `workflows/_lab/<lane>/`. The entrypoint copies them into Comfy (`*.app.json` when App Mode is the default view). Do not edit raw JSON for daily use; type on the canvas. Every lab graph includes a Note node. Node-by-node widgets: [Workflow details](create/workflows-index.md). See [Workflow catalog](studio-workflows.md) and [Still workflows](create/workflows-stills.md).",
     "see_also": ["lab-example", "note-node", "widget", "comfyui"]
   },
@@ -401,7 +401,7 @@
     "aliases": ["App Mode"],
     "category": "Studio",
     "short": "ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.",
-    "long": "App Mode shows the creator widgets listed in `extra.linearData` (Prompt, Style, Rewrite prompt, seed; LoadImage on I2V; size/UNET only on the daily still). Persist is `[nodeId, widgetName, config]` with an integer node id — frontend 1.49.6+ upgrades that to a live WidgetId. Two-part `11:prompt` ids are dropped and the side panel looks empty. It is not a second frontend. The lab contract is `lab_app_mode`. Multi-shot Apps expose one identity prompt, not per-shot cards. Film graphs may open in graph view. On start, App Mode graphs seed as `*.app.json` so they appear in Comfy's Apps sidebar as well as Workflows. See [ComfyUI Apps](studio-apps.md) and [ComfyUI basics](learn/comfyui.md).",
+    "long": "App Mode shows the creator widgets listed in `extra.linearData` (Prompt, Style, Rewrite prompt, seed; LoadImage on I2V; size/UNET only on the daily still). Persist is `[nodeId, widgetName, config]` with an integer node id - frontend 1.49.6+ upgrades that to a live WidgetId. Two-part `11:prompt` ids are dropped and the side panel looks empty. It is not a second frontend. The lab contract is `lab_app_mode`. Multi-shot Apps expose one identity prompt, not per-shot cards. Film graphs may open in graph view. On start, App Mode graphs seed as `*.app.json` so they appear in Comfy's Apps sidebar as well as Workflows. See [ComfyUI Apps](studio-apps.md) and [ComfyUI basics](learn/comfyui.md).",
     "see_also": ["lab-app-mode", "widget", "occupancy", "workflow", "studio-ui", "quality-widget"]
   },
   {
@@ -419,7 +419,7 @@
     "aliases": ["lab_app_mode"],
     "category": "Studio",
     "short": "Lab extra on shipped graphs: lane, occupancy, handoff, frontend_min.",
-    "long": "`extra.lab_app_mode` marks a seeded graph as an App (`enabled`, `default_view`, `lane` inspire/produce/audio/film/dcc/optional, `occupancy`, `handoff`). `default_view: app` seeds as `*.app.json` (Apps + Workflows sidebars). Do not require `extra.linearMode` — Comfy upstream does not write it. See [ComfyUI Apps](studio-apps.md).",
+    "long": "`extra.lab_app_mode` marks a seeded graph as an App (`enabled`, `default_view`, `lane` inspire/produce/audio/film/dcc/optional, `occupancy`, `handoff`). `default_view: app` seeds as `*.app.json` (Apps + Workflows sidebars). Do not require `extra.linearMode` - Comfy upstream does not write it. See [ComfyUI Apps](studio-apps.md).",
     "see_also": ["app-mode", "occupancy", "lab-example"]
   },
   {
@@ -427,8 +427,8 @@
     "title": "latent",
     "aliases": ["latent space", "latent"],
     "category": "Studio",
-    "short": "Compressed representation the sampler denoises. Frame count × size live here, not in the PNG yet.",
-    "long": "LTX 5 s printers are **121 frames** (`1+8n`) at 24 fps ≈ 5.04 s. Illegal **120** floors to 113 frames (4.71 s) and stitch refuses. Wan shot graphs stay 120 = 5.00 s. LTX spatial size must be divisible by 32 — lab landscape is 1280×704. Do not Queue a 30–90 s latent on GB10. See [Image and video generation](learn/generation.md).",
+    "short": "Compressed representation the sampler denoises. Frame count x size live here, not in the PNG yet.",
+    "long": "LTX 5 s printers are **121 frames** (`1+8n`) at 24 fps ~ 5.04 s. Illegal **120** floors to 113 frames (4.71 s) and stitch refuses. Wan shot graphs stay 120 = 5.00 s. LTX spatial size must be divisible by 32 - lab landscape is 1280x704. Do not Queue a 30-90 s latent on GB10. See [Image and video generation](learn/generation.md).",
     "see_also": ["vae", "sampler", "ltx"]
   },
   {
@@ -445,8 +445,8 @@
     "title": "CFG",
     "aliases": ["CFG"],
     "category": "Studio",
-    "short": "Classifier-free guidance scale. Distilled Klein wants 1.0 — do not 'turn it up for quality'.",
-    "long": "CFG 1.0 on distilled Klein means the positive prompt is the whole game. FLUX-family models do not use negatives well; put constraints in the positive (“unmarked facades”). See [Prompting](prompting.md).",
+    "short": "Classifier-free guidance scale. Distilled Klein wants 1.0 - do not 'turn it up for quality'.",
+    "long": "CFG 1.0 on distilled Klein means the positive prompt is the whole game. FLUX-family models do not use negatives well; put constraints in the positive ('unmarked facades'). See [Prompting](prompting.md).",
     "see_also": ["klein", "sampler"]
   },
   {
@@ -454,7 +454,7 @@
     "title": "seed",
     "aliases": ["seed"],
     "category": "Studio",
-    "short": "RNG lock for a Queue. Same seed + same graph ≈ same picture; change it to explore.",
+    "short": "RNG lock for a Queue. Same seed + same graph ~ same picture; change it to explore.",
     "long": "Fix a seed when you iterate a prompt so lighting and identity do not jump. Identity sheets pin seed 42. Random seeds are for discovery, not for matching a still into I2V. See [ComfyUI basics](learn/comfyui.md).",
     "see_also": ["queue", "identity-still"]
   },
@@ -482,7 +482,7 @@
     "aliases": ["identity still"],
     "category": "Studio",
     "short": "Klein frame that locks wardrobe/place so later I2V shots stay the same person or house.",
-    "long": "90s films Queue a Klein identity at 1280×704 (LTX grid), then 18 LTX prints that start from last frames. Enhance stays off so the rewriter cannot restyle the bible. See [90s shorts](shorts.md).",
+    "long": "90s films Queue a Klein identity at 1280x704 (LTX grid), then 18 LTX prints that start from last frames. Enhance stays off so the rewriter cannot restyle the bible. See [90s shorts](shorts.md).",
     "see_also": ["klein", "world-bible", "last-frame"]
   },
   {
@@ -518,7 +518,7 @@
     "aliases": ["Enhance"],
     "category": "Studio",
     "short": "Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.",
-    "long": "Enhance is the Prompt Enhance toggle. Seeded lab graphs pin it **on** for lazy CLIP printers and identity bibles you type, and **off** for authored recipes: 90s films, talking-head, loops, camera-verb I2V, podcast scripts, ACE tags/lyrics, and IC-LoRA. Turn it the other way in the App if you want. Identity mode keeps world bibles camera-free. I2V / FLF / VACE ignore style — the start frames own look. See [Prompting](prompting.md).",
+    "long": "Enhance is the Prompt Enhance toggle. Seeded lab graphs pin it **on** for lazy CLIP printers and identity bibles you type, and **off** for authored recipes: 90s films, talking-head, loops, camera-verb I2V, podcast scripts, ACE tags/lyrics, and IC-LoRA. Turn it the other way in the App if you want. Identity mode keeps world bibles camera-free. I2V / FLF / VACE ignore style - the start frames own look. See [Prompting](prompting.md).",
     "see_also": ["prompt-enhance", "world-bible"]
   },
   {
@@ -554,7 +554,7 @@
     "aliases": ["occupancy"],
     "category": "Hardware and safety",
     "short": "One heavy GPU job. Park Comfy for blender-desk or llm-desk; stop those before TRELLIS/LTX.",
-    "long": "GB10 is one GPU. `occupancy enter blender-desk` parks Comfy (`POST /free`) for host Workbench dumps. `occupancy enter llm-desk` parks Comfy and starts the host 35B llama-server (`127.0.0.1:30000`). NVENC/proxies still want Compose down. Do not load Klein + Wan + LTX + TRELLIS + llm-desk in one session. App occupancy keys (`none`/`llm`/`klein`/`wan`/`ltx`/`film`/`audio`/`trellis`) are graph labels — `llm` is not a CLI mode. See [Occupancy desk](occupancy.md), [Occupancy matrix](operate/occupancy-matrix.md), [MCP](operate/mcp.md), and [Studio sidecars](studio-sidecars.md).",
+    "long": "GB10 is one GPU. `occupancy enter blender-desk` parks Comfy (`POST /free`) for host Workbench dumps. `occupancy enter llm-desk` parks Comfy and starts the host 35B llama-server (`127.0.0.1:30000`). NVENC/proxies still want Compose down. Do not load Klein + Wan + LTX + TRELLIS + llm-desk in one session. App occupancy keys (`none`/`llm`/`klein`/`wan`/`ltx`/`film`/`audio`/`trellis`) are graph labels - `llm` is not a CLI mode. See [Occupancy desk](occupancy.md), [Occupancy matrix](operate/occupancy-matrix.md), [MCP](operate/mcp.md), and [Studio sidecars](studio-sidecars.md).",
     "see_also": ["sidecar", "ace-step", "gb10", "app-mode", "park", "xor-desk", "blender-desk", "llm-desk", "path-d"]
   },
   {
@@ -662,7 +662,7 @@
     "aliases": ["GHCR"],
     "category": "Hardware and safety",
     "short": "GitHub Container Registry. Default start pulls a branch-aligned us-safe-studio image.",
-    "long": "`main` → `ghcr.io/toxicoder/ez-comfy:us-safe-studio`; `development` and feature branches → `-development`. The image has Comfy+torch, not Klein/Wan/LTX weights. Old `flux-to-ltx*` tags freeze. See [Getting Started](getting-started.md).",
+    "long": "`main` -> `ghcr.io/toxicoder/ez-comfy:us-safe-studio`; `development` and feature branches -> `-development`. The image has Comfy+torch, not Klein/Wan/LTX weights. Old `flux-to-ltx*` tags freeze. See [Getting Started](getting-started.md).",
     "see_also": ["comfy-state", "models-dir", "us-safe-studio", "three-stores"]
   },
   {
@@ -689,7 +689,7 @@
     "aliases": ["doctor"],
     "category": "Hardware and safety",
     "short": "Preflight: Docker, GPU, RAM/disk, dirs, license one-liner, image tag, timing.",
-    "long": "Fix hard doctor failures before `download-models`. Missing lab weights are a warning, not a hard fail. `attention: pytorch-fallback` on a running Spark is a 10–20× slow path. See [Troubleshooting](troubleshooting.md).",
+    "long": "Fix hard doctor failures before `download-models`. Missing lab weights are a warning, not a hard fail. `attention: pytorch-fallback` on a running Spark is a 10-20x slow path. See [Troubleshooting](troubleshooting.md).",
     "see_also": ["manage-sh", "headroom", "kitchen"]
   },
   {
@@ -715,7 +715,7 @@
     "title": "Comfy Kitchen",
     "aliases": ["Kitchen attention", "Comfy Kitchen"],
     "category": "Hardware and safety",
-    "short": "Default attention backend (--use-ck-attention). pytorch-fallback is a 10–20× slow path.",
+    "short": "Default attention backend (--use-ck-attention). pytorch-fallback is a 10-20x slow path.",
     "long": "`doctor` prints `attention: kitchen|sage|pytorch-fallback|unknown`. Never pass `--use-sage-attention` next to Kitchen. spark-timing refuses to record unless Kitchen is live. See [Hardware, memory, and safety](learn/hardware.md).",
     "see_also": ["pytorch-fallback", "doctor"]
   },
@@ -743,7 +743,7 @@
     "aliases": ["last-frame continuity"],
     "category": "Film",
     "short": "Shot N's last PNG becomes shot N+1's I2V start. How 90s films work without a 90s denoise.",
-    "long": "18 × 5.00 s LTX prints (121 frames = `1+8n` @ 24 fps) stitch under a 90.00 s cap. One-click film graphs chain this inside Comfy; `print-shot` / `film-resume` do it on the host jobstore. See [90s shorts](shorts.md).",
+    "long": "18 x 5.00 s LTX prints (121 frames = `1+8n` @ 24 fps) stitch under a 90.00 s cap. One-click film graphs chain this inside Comfy; `print-shot` / `film-resume` do it on the host jobstore. See [90s shorts](shorts.md).",
     "see_also": ["identity-still", "ltx", "film-accept"]
   },
   {
@@ -769,7 +769,7 @@
     "title": "film-accept",
     "aliases": ["film-accept"],
     "category": "Film",
-    "short": "Fail-closed gate: 5.00 s, 1280×704, LTX audio present before concat.",
+    "short": "Fail-closed gate: 5.00 s, 1280x704, LTX audio present before concat.",
     "long": "`manage.sh film-accept go-see` (and concat `--film --yes`) refuse shots that drift. 7.5 min films expect 90 stems and a 450s master. `--skip-accept` is an escape hatch, not a default. See [Short films](shorts.md).",
     "see_also": ["last-frame", "ltx"]
   },
@@ -796,7 +796,7 @@
     "title": "overlay-qc",
     "aliases": ["overlay-qc", "overlay QC"],
     "category": "Film",
-    "short": "50% blend of clay first.png vs Klein look plate. Fail-closed 1280×704.",
+    "short": "50% blend of clay first.png vs Klein look plate. Fail-closed 1280x704.",
     "long": "Host ffmpeg; compose may stay up. Writes `overlay.png` and `score.json`. Human still picks; the score only ranks. See [Clay to finish](learn/clay-to-finish.md).",
     "see_also": ["guide-pack", "occupancy"]
   },
@@ -814,8 +814,8 @@
     "title": "stem-mix",
     "aliases": ["stem-mix", "audio finish"],
     "category": "Audio",
-    "short": "Picture-lock mix: DX / BG / FX / MX, duck −15 dB, YouTube loudnorm −14 LUFS.",
-    "long": "LTX joint AV is the world bed, not the master. Occupancy audio — stop Klein / Wan / LTX first. `film-accept` checks stem LUFS when `audio_policy: stems`. See [Clay to finish](learn/clay-to-finish.md).",
+    "short": "Picture-lock mix: DX / BG / FX / MX, duck -15 dB, YouTube loudnorm -14 LUFS.",
+    "long": "LTX joint AV is the world bed, not the master. Occupancy audio - stop Klein / Wan / LTX first. `film-accept` checks stem LUFS when `audio_policy: stems`. See [Clay to finish](learn/clay-to-finish.md).",
     "see_also": ["loudnorm", "film-accept"]
   },
   {
@@ -824,7 +824,7 @@
     "aliases": ["audio-still-video"],
     "category": "Audio",
     "short": "Mux a FLAC/MP3 master with a still into a YouTube MP4. Host ffmpeg.",
-    "long": "Post-Queue export only. Rap / podcast / dub graphs still save FLAC + MP3. `manage.sh audio-still-video --audio FILE --image FILE` loops the still (libx264, 1920×1080 letterbox default, AAC, +faststart). CPU encode; compose may stay up. Missing ffmpeg is a hard fail. See [Local music](music.md).",
+    "long": "Post-Queue export only. Rap / podcast / dub graphs still save FLAC + MP3. `manage.sh audio-still-video --audio FILE --image FILE` loops the still (libx264, 1920x1080 letterbox default, AAC, +faststart). CPU encode; compose may stay up. Missing ffmpeg is a hard fail. See [Local music](music.md).",
     "see_also": ["loudnorm"]
   },
   {
@@ -832,8 +832,8 @@
     "title": "loudnorm",
     "aliases": ["loudnorm"],
     "category": "Film",
-    "short": "ffmpeg loudness pass. Comfy has no LUFS node. Podcast default −16; YouTube −14.",
-    "long": "`podcast-loudnorm.sh` is a hard fail if ffmpeg is missing — it will not skip. 90s publish graphs apply YouTube loudnorm in EZFilmConcat. See [Local podcast](podcast.md).",
+    "short": "ffmpeg loudness pass. Comfy has no LUFS node. Podcast default -16; YouTube -14.",
+    "long": "`podcast-loudnorm.sh` is a hard fail if ffmpeg is missing - it will not skip. 90s publish graphs apply YouTube loudnorm in EZFilmConcat. See [Local podcast](podcast.md).",
     "see_also": ["tts", "vhs"]
   },
   {
@@ -878,7 +878,7 @@
     "aliases": ["disclosure bumper"],
     "category": "Audio",
     "short": "Spoken line that the podcast graph prepends: voices and music are synthesized.",
-    "long": "Do not type the bumper yourself — `EZPodcastDisclosure` prepends it. Platform and USCO rules still apply; this page is not legal advice. See [Local podcast](podcast.md).",
+    "long": "Do not type the bumper yourself - `EZPodcastDisclosure` prepends it. Platform and USCO rules still apply; this page is not legal advice. See [Local podcast](podcast.md).",
     "see_also": ["tts", "kokoro"]
   },
   {
@@ -914,7 +914,7 @@
     "aliases": ["Research Chat", "research-chat", "inspire/research-chat"],
     "category": "Studio",
     "short": "Inspire App: CPU chat + web search + sequential research subagents. Occupancy llm.",
-    "long": "No-UNET creative-process desk (`inspire/research-chat`). Queue a Message; read Reply and Sources. Mode research runs a planner plus 1–3 sequential search workers, then a synthesizer brief (prompt ingredients → Prompt Forge → Spark Still). Same on-box Qwen3-4B GGUF as Prompt Enhance (`n_gpu_layers=0`). HTTPS search is SSRF-safe. Laptop Path D: `./scripts/manage.sh research-mcp --stdio`. See [ComfyUI Apps](studio-apps.md) and [Occupancy desk](occupancy.md).",
+    "long": "No-UNET creative-process desk (`inspire/research-chat`). Queue a Message; read Reply and Sources. Mode research runs a planner plus 1-3 sequential search workers, then a synthesizer brief (prompt ingredients -> Prompt Forge -> Spark Still). Same on-box Qwen3-4B GGUF as Prompt Enhance (`n_gpu_layers=0`). HTTPS search is SSRF-safe. Laptop Path D: `./scripts/manage.sh research-mcp --stdio`. See [ComfyUI Apps](studio-apps.md) and [Occupancy desk](occupancy.md).",
     "see_also": ["prompt-enhance", "occupancy", "qwen"]
   },
   {
@@ -958,8 +958,8 @@
     "title": "Guide pack",
     "aliases": ["guide pack", "guide-pack", "DCC guide pack"],
     "category": "Studio",
-    "short": "DCC handshake: 1280×704 clay/depth/canny/first+last for a 5.00s print.",
-    "long": "The DCC ↔ Comfy print handshake. Lives under `${COMFY_OUTPUT_DIR}/guides/<slug>/<shot>/`. Size is the LTX VAE grid (**1280×704** or **768×1280**, never 1280×720). 120 frames @ 24 fps. Workbench clay + mist depth + outline canny. Occupancy XOR: stop Comfy before `export-guides`. See [DCC guide pack](dcc-workflows.md).",
+    "short": "DCC handshake: 1280x704 clay/depth/canny/first+last for a 5.00s print.",
+    "long": "The DCC <-> Comfy print handshake. Lives under `${COMFY_OUTPUT_DIR}/guides/<slug>/<shot>/`. Size is the LTX VAE grid (**1280x704** or **768x1280**, never 1280x720). 120 frames @ 24 fps. Workbench clay + mist depth + outline canny. Occupancy XOR: stop Comfy before `export-guides`. See [DCC guide pack](dcc-workflows.md).",
     "see_also": ["ltx", "occupancy", "sidecar"]
   },
   {
@@ -967,8 +967,8 @@
     "title": "house-views",
     "aliases": ["house-views", "dream-house clay", "clay tour"],
     "category": "Studio",
-    "short": "Blender greybox + ten 1024×1280 Instagram clay stills. Occupancy XOR.",
-    "long": "Host Blender constructs a `bpy-primitive` set under `${COMFY_OUTPUT_DIR}/assets/sets/<slug>/` (layout, GLB, clay, depth). Size is Instagram 4:5 (**1024×1280**), not the LTX guide pack. Stop Comfy first for the dump. `manage.sh start` seeds LoadImage plates (copy pack or render layout) so **stills/dream-house-clay** can Queue without Blender. Language-only tour → **stills/dream-house**. See [Dream-house tours](learn/dream-house.md).",
+    "short": "Blender greybox + ten 1024x1280 Instagram clay stills. Occupancy XOR.",
+    "long": "Host Blender constructs a `bpy-primitive` set under `${COMFY_OUTPUT_DIR}/assets/sets/<slug>/` (layout, GLB, clay, depth). Size is Instagram 4:5 (**1024x1280**), not the LTX guide pack. Stop Comfy first for the dump. `manage.sh start` seeds LoadImage plates (copy pack or render layout) so **stills/dream-house-clay** can Queue without Blender. Language-only tour -> **stills/dream-house**. See [Dream-house tours](learn/dream-house.md).",
     "see_also": ["guide-pack", "occupancy", "sidecar", "klein"]
   },
   {
@@ -977,7 +977,7 @@
     "aliases": ["blender-stills", "still pack", "ez.guide.still.v1"],
     "category": "Studio",
     "short": "Single-frame clay/depth/canny dump at creator sizes. Occupancy: blender-desk.",
-    "long": "Host Blender dumps `ez.guide.still.v1` under `${COMFY_OUTPUT_DIR}/guides/<slug>/stills/<plate>/`. Sizes: 1280×704, 768×1280, 1024×1280, 1024×1024, 1280×720 (thumb, not LTX). Not the 5.00s shot pack and not `house-views`. Park Comfy (`occupancy enter blender-desk`) first. `--install-inputs` copies `first.png` into `input/` while compose may stay up. Apps: **klein-from-clay-plates**, **klein-from-canny**. See [Blender creator suite](learn/blender-creator.md).",
+    "long": "Host Blender dumps `ez.guide.still.v1` under `${COMFY_OUTPUT_DIR}/guides/<slug>/stills/<plate>/`. Sizes: 1280x704, 768x1280, 1024x1280, 1024x1024, 1280x720 (thumb, not LTX). Not the 5.00s shot pack and not `house-views`. Park Comfy (`occupancy enter blender-desk`) first. `--install-inputs` copies `first.png` into `input/` while compose may stay up. Apps: **klein-from-clay-plates**, **klein-from-canny**. See [Blender creator suite](learn/blender-creator.md).",
     "see_also": ["guide-pack", "house-views", "occupancy", "sidecar", "klein"]
   },
   {
@@ -1022,7 +1022,7 @@
     "aliases": ["Path D", "path-d"],
     "category": "Hardware and safety",
     "short": "Laptop SSH tunnel to MCP or llm-desk. Not a fourth occupancy CLI mode.",
-    "long": "Path D is a laptop client over SSH (`ssh -L` to Comfy, `research-mcp` / `blender-mcp` stdio, or llm-desk `127.0.0.1:30000`). Spark runs the server; the laptop is the MCP/agent client. Occupancy CLI modes stay `idle` / `blender-desk` / `llm-desk` / `klein` / `trellis` / `wan` / `ltx` — Path D is not a fourth mode. See [Occupancy desk](occupancy.md) and [MCP](operate/mcp.md).",
+    "long": "Path D is a laptop client over SSH (`ssh -L` to Comfy, `research-mcp` / `blender-mcp` stdio, or llm-desk `127.0.0.1:30000`). Spark runs the server; the laptop is the MCP/agent client. Occupancy CLI modes stay `idle` / `blender-desk` / `llm-desk` / `klein` / `trellis` / `wan` / `ltx` - Path D is not a fourth mode. See [Occupancy desk](occupancy.md) and [MCP](operate/mcp.md).",
     "see_also": ["occupancy", "llm-desk", "research-mcp"]
   },
   {
@@ -1049,7 +1049,7 @@
     "aliases": ["studio-ui"],
     "category": "Studio",
     "short": "Optional Compose profile jobstore board on :8190. Not App Mode.",
-    "long": "`docker compose --profile studio-ui up studio-ui` serves a lights-only jobstore board at port **8190**. No GPU. Default `start` skips it. App Mode is a ComfyUI widget surface on the same JSON — not this board. See [90s shorts](shorts.md) and [ComfyUI Apps](studio-apps.md).",
+    "long": "`docker compose --profile studio-ui up studio-ui` serves a lights-only jobstore board at port **8190**. No GPU. Default `start` skips it. App Mode is a ComfyUI widget surface on the same JSON - not this board. See [90s shorts](shorts.md) and [ComfyUI Apps](studio-apps.md).",
     "see_also": ["jobstore", "app-mode"]
   },
   {
@@ -1112,7 +1112,7 @@
     "aliases": ["download-podcast"],
     "category": "Downloads",
     "short": "Opt-in audio packs. analog is Kokoro; acestep shares the music turbo AIO.",
-    "long": "Not part of `download-models`. Default `--tier analog` is Kokoro only. `acestep` is the same ~10 GB AIO as `download-music --tier turbo`. Chatterbox and Qwen3-TTS are optional. Missing pack is not a doctor failure. Occupancy audio — stop Klein / Wan / LTX first. See [Local podcast](podcast.md).",
+    "long": "Not part of `download-models`. Default `--tier analog` is Kokoro only. `acestep` is the same ~10 GB AIO as `download-music --tier turbo`. Chatterbox and Qwen3-TTS are optional. Missing pack is not a doctor failure. Occupancy audio - stop Klein / Wan / LTX first. See [Local podcast](podcast.md).",
     "see_also": ["kokoro", "ace-step", "download-music", "occupancy"]
   },
   {
@@ -1130,7 +1130,7 @@
     "aliases": ["download-music"],
     "category": "Downloads",
     "short": "Opt-in ACE-Step packs. turbo shares dest with podcast acestep; xl is larger.",
-    "long": "The closest thing this repo has to a size ladder. `turbo` **reuses** the podcast acestep snapshot — do not pull the ~10 GB AIO twice. Occupancy audio. See [Local music](music.md) and [Download tiers](download-tiers.md).",
+    "long": "The closest thing this repo has to a size ladder. `turbo` **reuses** the podcast acestep snapshot - do not pull the ~10 GB AIO twice. Occupancy audio. See [Local music](music.md) and [Download tiers](download-tiers.md).",
     "see_also": ["ace-step", "download-podcast", "occupancy"]
   },
   {
@@ -1157,7 +1157,7 @@
     "aliases": ["pack id"],
     "category": "Downloads",
     "short": "The --tier value on one downloader. Not a studio-wide quality ladder.",
-    "long": "Each download utility has its own pack ids (`fast`, `5b`, `2.5`, `analog`, …). Image `fast` is not “better Wan”. `--limit` is bandwidth in Mbps. See [Download tiers](download-tiers.md).",
+    "long": "Each download utility has its own pack ids (`fast`, `5b`, `2.5`, `analog`, ...). Image `fast` is not 'better Wan'. `--limit` is bandwidth in Mbps. See [Download tiers](download-tiers.md).",
     "see_also": ["download-tier", "download-limit", "download-models"]
   },
   {
@@ -1175,7 +1175,7 @@
     "aliases": ["*.incomplete", "incomplete file"],
     "category": "Downloads",
     "short": "Hung Hugging Face partial. 0 MiB/s resume usually needs a drop, not a wait.",
-    "long": "Stuck `↓ 0 MiB/s` with `found N incomplete` means resume is not growing. Ctrl+C, then `--drop-incomplete` or `reset-hf-partials --yes`. Finished `.safetensors` stay. See [Download limit](download-limit.md) and [Downloads troubleshooting](operate/troubleshooting-downloads.md).",
+    "long": "Stuck `v 0 MiB/s` with `found N incomplete` means resume is not growing. Ctrl+C, then `--drop-incomplete` or `reset-hf-partials --yes`. Finished `.safetensors` stay. See [Download limit](download-limit.md) and [Downloads troubleshooting](operate/troubleshooting-downloads.md).",
     "see_also": ["download-limit", "huggingface", "drop-incomplete"]
   },
   {
@@ -1246,7 +1246,7 @@
     "title": "Gemma 3",
     "aliases": ["Gemma 3", "Gemma3"],
     "category": "Models",
-    "short": "LTX-2.3 DualCLIP text encoder (~8–9.5 GB). Auto-pulled with 2.3/balanced/quality.",
+    "short": "LTX-2.3 DualCLIP text encoder (~8-9.5 GB). Auto-pulled with 2.3/balanced/quality.",
     "long": "`download-ltx --tier gemma` (or any 2.3 alias) places `gemma_3_12B_it_fp4_mixed`. Lab 2.5 printers use Gemma 4 with-proj instead. See [Download tiers](download-tiers.md).",
     "see_also": ["gemma4", "dualclip", "ltx", "download-ltx"]
   },
@@ -1292,7 +1292,7 @@
     "aliases": ["clay"],
     "category": "Studio",
     "short": "Greybox / Workbench pass (still or 5 s video) that Klein or LTX restyles.",
-    "long": "Shot guide packs dump `clay.mp4` at 1280×704. Still packs dump clay PNGs at creator sizes. Dream-house clay is ten Instagram 4:5 plates. Occupancy XOR: park Comfy before the Blender dump. See [Clay to finish](learn/clay-to-finish.md).",
+    "long": "Shot guide packs dump `clay.mp4` at 1280x704. Still packs dump clay PNGs at creator sizes. Dream-house clay is ten Instagram 4:5 plates. Occupancy XOR: park Comfy before the Blender dump. See [Clay to finish](learn/clay-to-finish.md).",
     "see_also": ["guide-pack", "canny", "blender", "workbench"]
   },
   {
@@ -1355,7 +1355,7 @@
     "aliases": ["Cinema Rack", "inspire/cinema-rack"],
     "category": "Studio",
     "short": "Inspire App that splices cinematography dropdowns into Klein, Wan, and LTX prompts.",
-    "long": "One pick per axis (shot size, angle, move, lens, light, color, time, optical, edit, weather, genre, viral). Deterministic — no LLM. Wan emits one camera verb. I2V drops look axes. Editing is omitted on stills. Occupancy llm. See [Cinema Rack](create/cinema-rack.md).",
+    "long": "One pick per axis (shot size, angle, move, lens, light, color, time, optical, edit, weather, genre, viral). Deterministic - no LLM. Wan emits one camera verb. I2V drops look axes. Editing is omitted on stills. Occupancy llm. See [Cinema Rack](create/cinema-rack.md).",
     "see_also": ["prompt-forge", "prompt-enhance", "technique-splice"]
   },
   {
@@ -1415,10 +1415,10 @@
   {
     "id": "vae-grid",
     "title": "VAE grid",
-    "aliases": ["VAE grid", "1280×704", "1280x704"],
+    "aliases": ["VAE grid", "1280x704"],
     "category": "Studio",
-    "short": "LTX spatial size must be divisible by 32. Lab landscape is 1280×704, not 720.",
-    "long": "1280×720 is illegal on LTX (VAE ÷32). Shorts use 768×1280. Klein identity plates for 90s films match the LTX grid. See [Image and video generation](learn/generation.md).",
+    "short": "LTX spatial size must be divisible by 32. Lab landscape is 1280x704, not 720.",
+    "long": "1280x720 is illegal on LTX (VAE div32). Shorts use 768x1280. Klein identity plates for 90s films match the LTX grid. See [Image and video generation](learn/generation.md).",
     "see_also": ["ltx", "latent", "vae"]
   },
   {
@@ -1426,7 +1426,7 @@
     "title": "1+8n",
     "aliases": ["1+8n"],
     "category": "Studio",
-    "short": "Legal LTX frame count. 121 frames @ 24 fps ≈ 5.04 s. 120 snaps.",
+    "short": "Legal LTX frame count. 121 frames @ 24 fps ~ 5.04 s. 120 snaps.",
     "long": "LTX length must be `1+8n`. Lab 5 s printers are **121**. Typing 120 floors to 113 (4.71 s) and stitch refuses. Wan **shot** graphs stay 120 = 5.00 s; Wan **smoke** graphs are 121. See [90s shorts](shorts.md).",
     "see_also": ["latent", "ltx", "last-frame"]
   },
@@ -1705,7 +1705,7 @@
     "title": "duration lock",
     "aliases": ["duration lock", "duration-locked"],
     "category": "Audio",
-    "short": "Dub mix matches source length: pitch-preserve up to 1.25×, then spill, then fade-trim.",
+    "short": "Dub mix matches source length: pitch-preserve up to 1.25x, then spill, then fade-trim.",
     "long": "It does not crush a long clone into the original window. YouTube wants the job-dir `ez_dub_yt.wav`, not the Comfy preview MP3. See [Local dub](dub.md).",
     "see_also": ["dub", "multi-language-audio", "loudnorm"]
   },
@@ -1714,8 +1714,8 @@
     "title": "Clone CFG",
     "aliases": ["Clone CFG"],
     "category": "Audio",
-    "short": "Chatterbox language-transfer knob. Dub auto 0.3 on EN→ES (retry 0.5). CFG 0 often has no words.",
-    "long": "`cfg_weight=0.3` for cross-lingual clone from a 6–10 s ref extracted in this job (0.5 same-language). CFG 0 disables T3 guidance and HiFT then moans. Not a celebrity pack. See [Local dub](dub.md).",
+    "short": "Chatterbox language-transfer knob. Dub auto 0.3 on EN->ES (retry 0.5). CFG 0 often has no words.",
+    "long": "`cfg_weight=0.3` for cross-lingual clone from a 6-10 s ref extracted in this job (0.5 same-language). CFG 0 disables T3 guidance and HiFT then moans. Not a celebrity pack. See [Local dub](dub.md).",
     "see_also": ["chatterbox-ml", "dub", "cfg"]
   },
   {
@@ -1723,7 +1723,7 @@
     "title": "LUFS",
     "aliases": ["LUFS"],
     "category": "Audio",
-    "short": "Loudness units. Podcast default −16; YouTube −14. Comfy has no LUFS node — ffmpeg loudnorm.",
+    "short": "Loudness units. Podcast default -16; YouTube -14. Comfy has no LUFS node - ffmpeg loudnorm.",
     "long": "`film-accept` checks stem LUFS when `audio_policy: stems`. Missing ffmpeg is a hard fail. See [Local podcast](podcast.md).",
     "see_also": ["loudnorm", "stem-mix", "ffmpeg"]
   },
@@ -1768,8 +1768,8 @@
     "title": "picture-lock",
     "aliases": ["picture-lock"],
     "category": "Film",
-    "short": "Picture is accepted; now mix stems. Occupancy audio — stop Klein/Wan/LTX first.",
-    "long": "LTX joint AV is the world bed, not the master. Duck MX −15 dB; YouTube loudnorm −14 LUFS. See [Clay to finish](learn/clay-to-finish.md).",
+    "short": "Picture is accepted; now mix stems. Occupancy audio - stop Klein/Wan/LTX first.",
+    "long": "LTX joint AV is the world bed, not the master. Duck MX -15 dB; YouTube loudnorm -14 LUFS. See [Clay to finish](learn/clay-to-finish.md).",
     "see_also": ["stem-mix", "loudnorm", "film-accept"]
   },
   {
@@ -1859,7 +1859,7 @@
     "aliases": ["Wav2Lip"],
     "category": "Licenses",
     "short": "Banned lip-sync OSS. Lab talking-head is LTX audio freeze, not mouth-sync.",
-    "long": "Two-stage freeze lives in Comfy Templates → LTX-2.5. Do not pip-install Wav2Lip. See [Motion workflows](create/workflows-motion.md).",
+    "long": "Two-stage freeze lives in Comfy Templates -> LTX-2.5. Do not pip-install Wav2Lip. See [Motion workflows](create/workflows-motion.md).",
     "see_also": ["a2v", "ltx", "us-safe"]
   },
   {

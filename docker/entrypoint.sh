@@ -104,7 +104,7 @@ copy_prebuilt_tree() {
           cp -a "${pack}" "${dest}/custom_nodes/"
           n=$((n + 1))
           if ((n % 10 == 0)); then
-            ep_log "seed copy ${n} items…"
+            ep_log "seed copy ${n} items..."
           fi
         done
         continue
@@ -112,7 +112,7 @@ copy_prebuilt_tree() {
       cp -a "${item}" "${dest}/"
       n=$((n + 1))
       if ((n % 10 == 0)); then
-        ep_log "seed copy ${n} items…"
+        ep_log "seed copy ${n} items..."
       fi
     done
     ep_log "seed copy finished (${n} top-level items)"
@@ -139,7 +139,7 @@ seed_from_prebuilt() {
   local dest="${COMFY_HOME:-/comfy-state/ComfyUI}"
   local -a rsync_excludes=()
   local pat
-  ep_log "Seeding ${dest} from ${root} (local copy — not re-downloading torch)"
+  ep_log "Seeding ${dest} from ${root} (local copy - not re-downloading torch)"
   mkdir -p "${dest}"
   while IFS= read -r pat; do
     rsync_excludes+=(--exclude "${pat}")
@@ -211,7 +211,7 @@ find_libcuda_dir() {
   local old_ifs="${IFS}"
   if command -v ldconfig >/dev/null 2>&1; then
     while IFS= read -r line; do
-      # ldconfig -p lines: "libcuda.so.1 (libc6,…) => /path/libcuda.so.1"
+      # ldconfig -p lines: "libcuda.so.1 (libc6,...) => /path/libcuda.so.1"
       path="${line#*=>}"
       path="${path#"${path%%[![:space:]]*}"}"
       path="${path%"${path##*[![:space:]]}"}"
@@ -342,7 +342,7 @@ link_comfy_output_dir() {
     rm -f "${dest}"
   fi
   ln -sfn "${mount}" "${dest}"
-  ep_log "Comfy output → ${mount} (host COMFY_OUTPUT_DIR bind-mount)"
+  ep_log "Comfy output -> ${mount} (host COMFY_OUTPUT_DIR bind-mount)"
 }
 
 #######################################
@@ -378,7 +378,7 @@ link_comfy_input_dir() {
     rm -f "${dest}"
   fi
   ln -sfn "${mount}" "${dest}"
-  ep_log "Comfy input → ${mount} (host COMFY_OUTPUT_DIR/input bind-mount)"
+  ep_log "Comfy input -> ${mount} (host COMFY_OUTPUT_DIR/input bind-mount)"
 }
 
 #######################################
@@ -435,18 +435,18 @@ configure_torch_native_triton() {
   fi
 
   if [[ ${LAB_DISABLE_TORCH_NATIVE_TRITON:-0} == "1" ]]; then
-    ep_log "LAB_DISABLE_TORCH_NATIVE_TRITON=1 — torch.backends.python_native.triton off"
+    ep_log "LAB_DISABLE_TORCH_NATIVE_TRITON=1 - torch.backends.python_native.triton off"
     return 0
   fi
 
   if triton_build_deps_ok; then
-    ep_log "Triton JIT deps OK (gcc + Python.h + libcuda) — native Triton enabled"
+    ep_log "Triton JIT deps OK (gcc + Python.h + libcuda) - native Triton enabled"
     export LAB_DISABLE_TORCH_NATIVE_TRITON=0
     return 0
   fi
 
   export LAB_DISABLE_TORCH_NATIVE_TRITON=1
-  ep_log "WARN: Triton JIT deps incomplete — disabling torch.backends.python_native.triton"
+  ep_log "WARN: Triton JIT deps incomplete - disabling torch.backends.python_native.triton"
   ep_log "WARN: CLIP still works via eager/cuBLAS. Fix: image with python3-dev+gcc, GPU toolkit mounts"
   return 0
 }
@@ -493,7 +493,7 @@ PY
 
 #######################################
 # Map a workflow path relative to the workflows root onto a sidebar lane.
-# Prefers _lab/<lane>/…; else filename/dir globs used during the flat-tree
+# Prefers _lab/<lane>/...; else filename/dir globs used during the flat-tree
 # transition (deleted after git mv into workflows/_lab).
 # Globals:
 #   None
@@ -680,7 +680,7 @@ log_lab_seed_counts() {
 
 #######################################
 # Map a dest _lab relative JSON path onto the matching src file.
-# Accepts stem.app.json ↔ stem.json so App Mode renames still match git.
+# Accepts stem.app.json <-> stem.json so App Mode renames still match git.
 # Globals:
 #   None
 # Arguments:
@@ -808,7 +808,7 @@ lab_manifest_digest() {
 }
 
 #######################################
-# Manifest digest for a dest rel, accepting stem.app.json ↔ stem.json.
+# Manifest digest for a dest rel, accepting stem.app.json <-> stem.json.
 # Globals:
 #   None
 # Arguments:
@@ -908,7 +908,7 @@ warn_user_rescued_lab_dump() {
     n="$(find "${dest_user}/_rescued" -type f -name '*.json' | wc -l | tr -d ' ')"
   fi
   if ((n > 20)); then
-    ep_log "WARN: ${n} graphs under _user/_rescued — catalog clones from older starts can be deleted; keep _user/ itself"
+    ep_log "WARN: ${n} graphs under _user/_rescued - catalog clones from older starts can be deleted; keep _user/ itself"
   fi
 }
 
@@ -1041,7 +1041,7 @@ rescue_operator_lab_json() {
 #######################################
 # Copy host lab JSON into Comfy user/default/workflows/_lab/<lane>/.
 # Preferred: rescue operator JSON (last-seed, not new-catalog cmp), then
-# rsync -a --delete src/_lab/ → dest/_lab/ (JSON only). Transition: when
+# rsync -a --delete src/_lab/ -> dest/_lab/ (JSON only). Transition: when
 # src/_lab is missing, map legacy flat globs. Then rename App Mode graphs
 # to stem.app.json in dest only and rewrite .lab-seed-manifest.
 # Never overwrites dest/_user/ or dest root. Never copies YAML, NOTICE, quality/.
@@ -1082,7 +1082,7 @@ install_lab_workflows() {
 # Globals:
 #   None
 # Arguments:
-#   $1  Comfy user/default directory (…/user/default)
+#   $1  Comfy user/default directory (.../user/default)
 # Outputs:
 #   ep_log
 # Returns:
@@ -1093,7 +1093,7 @@ seed_comfy_vue_nodes_settings() {
   local settings="${dest_dir}/comfy.settings.json"
   mkdir -p "${dest_dir}"
   if ! command -v python3 >/dev/null 2>&1; then
-    ep_log "WARN: python3 missing — skip Vue nodes settings seed"
+    ep_log "WARN: python3 missing - skip Vue nodes settings seed"
     return 0
   fi
   if python3 - "${settings}" <<'PY'; then
@@ -1343,7 +1343,7 @@ install_dub_asr_wheel() {
     ep_log "dub ASR: faster-whisper installed"
     return 0
   fi
-  ep_log "WARN: faster-whisper pip failed — Queue writes empty mix"
+  ep_log "WARN: faster-whisper pip failed - Queue writes empty mix"
   return 0
 }
 
@@ -1404,7 +1404,7 @@ install_llama_cpp_cpu_wheel_logged() {
     ep_log "llama.cpp: llama-cpp-python CPU wheel installed"
     return 0
   fi
-  ep_log "WARN: llama-cpp-python CPU wheel pip failed — Queue will retry; Enhance/dub translation pass through until Llama imports"
+  ep_log "WARN: llama-cpp-python CPU wheel pip failed - Queue will retry; Enhance/dub translation pass through until Llama imports"
   return 0
 }
 
@@ -1424,7 +1424,7 @@ install_llama_cpp_cpu_wheel_logged() {
 ensure_llama_cpp_cpu() {
   local py
   if ! py="$(comfy_runtime_python)"; then
-    ep_log "llama.cpp: venv python missing — skip"
+    ep_log "llama.cpp: venv python missing - skip"
     return 0
   fi
   ep_log "llama.cpp: python=${py}"
@@ -1457,7 +1457,7 @@ ensure_llama_cpp_cpu() {
 ensure_dub_wheels() {
   local py
   if ! py="$(comfy_runtime_python)"; then
-    ep_log "dub wheels: venv python missing — skip"
+    ep_log "dub wheels: venv python missing - skip"
     return 0
   fi
   ep_log "dub wheels: python=${py}"
@@ -1499,9 +1499,9 @@ ensure_pkuseg_home() {
   mkdir -p "${home}" || true
   mkdir -p "$(dirname "${link}")" || true
   if ln -sfn "${home}" "${link}" 2>/dev/null; then
-    ep_log "pkuseg home: ${home} → ${link}"
+    ep_log "pkuseg home: ${home} -> ${link}"
   else
-    ep_log "WARN: pkuseg symlink ${link} failed — set PKUSEG_HOME=${home}"
+    ep_log "WARN: pkuseg symlink ${link} failed - set PKUSEG_HOME=${home}"
   fi
   return 0
 }
@@ -1627,7 +1627,7 @@ seed_clay_inputs_if_missing() {
   local dest="${LAB_INPUTS_MOUNT:-/inputs}"
   local script="${LAB_SEED_CLAY_PY:-/opt/ez-comfy/seed_clay_inputs.py}"
   if [[ ! -f ${script} ]]; then
-    ep_log "clay seed: seed_clay_inputs.py missing — skip"
+    ep_log "clay seed: seed_clay_inputs.py missing - skip"
     return 0
   fi
   mkdir -p "${dest}"
@@ -1635,7 +1635,7 @@ seed_clay_inputs_if_missing() {
     ep_log "clay plates ready in ${dest}"
     return 0
   fi
-  ep_log "WARN: clay seed backstop failed — klein-dream-house-clay LoadImage may be empty"
+  ep_log "WARN: clay seed backstop failed - klein-dream-house-clay LoadImage may be empty"
   return 0
 }
 
@@ -1665,32 +1665,32 @@ main() {
   ep_log "phase 1/4: prepare ComfyUI tree"
 
   if [[ ${LAB_FORCE_COLD_INSTALL:-0} == "1" ]]; then
-    ep_log "LAB_FORCE_COLD_INSTALL=1 — full pip install (slow)"
+    ep_log "LAB_FORCE_COLD_INSTALL=1 - full pip install (slow)"
     # shellcheck disable=SC2086
     ${install_cmd}
   elif [[ -f ${stamp} && -x ${venv}/bin/python ]]; then
     vol_pin="$(tr -d '\n' <"${comfy_home}/.lab-comfyui-ref" 2>/dev/null || true)"
     want="${COMFYUI_REF:-v0.37.0}"
     if [[ ${vol_pin} != "${want}" ]]; then
-      ep_log "Comfy pin needs sync (${vol_pin:-unset} → ${want})"
+      ep_log "Comfy pin needs sync (${vol_pin:-unset} -> ${want})"
       if prebuilt_ready; then
         ep_log "Re-seeding volume from prebuilt"
         seed_from_prebuilt
       else
-        ep_log "Prebuilt missing — install refresh will clone COMFYUI_REF"
+        ep_log "Prebuilt missing - install refresh will clone COMFYUI_REF"
       fi
     fi
-    ep_log "Install stamp present — refresh (pin sync + links + patch)"
+    ep_log "Install stamp present - refresh (pin sync + links + patch)"
     # shellcheck disable=SC2086
     ${install_cmd}
   elif prebuilt_ready; then
-    ep_log "Prebuilt image detected — seeding volume (skip multi-GB pip)"
+    ep_log "Prebuilt image detected - seeding volume (skip multi-GB pip)"
     seed_from_prebuilt
     # Refresh path: model links + patch (stamp already in prebuilt)
     # shellcheck disable=SC2086
     ${install_cmd}
   else
-    ep_log "No prebuilt tree — cold install (10–30+ min; multi-GB wheels)"
+    ep_log "No prebuilt tree - cold install (10-30+ min; multi-GB wheels)"
     # shellcheck disable=SC2086
     ${install_cmd}
   fi
@@ -1742,7 +1742,7 @@ main() {
   link_comfy_input_dir "${comfy_home}/input"
   heal_misplaced_host_output_dir
   seed_clay_inputs_if_missing
-  ep_log "phase 4/4: exec ComfyUI → 0.0.0.0:8188 (output ${LAB_OUTPUTS_MOUNT:-/outputs}; input ${LAB_INPUTS_MOUNT:-/inputs}; Kitchen attention)"
+  ep_log "phase 4/4: exec ComfyUI -> 0.0.0.0:8188 (output ${LAB_OUTPUTS_MOUNT:-/outputs}; input ${LAB_INPUTS_MOUNT:-/inputs}; Kitchen attention)"
   if [[ ${LAB_ENTRYPOINT_NO_EXEC:-} == "1" ]]; then
     ep_log "LAB_ENTRYPOINT_NO_EXEC=1; skipping exec"
     return 0

@@ -9,7 +9,7 @@ tags: [comfyui, workflows, catalog, generated]
 **What's on this page**
 
 - **How to read** a generated workflow page (purpose, graph, node table, parameter reference)
-- **Where pages live** — one page per unique `_lab` graph, one page per album
+- **Where pages live** - one page per unique `_lab` graph, one page per album
 - **The node encyclopedia** that inlines at the bottom of every details page
 
 **What this enables**
@@ -31,22 +31,22 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 ```
 
 <Callout type="warning" title="Generated pages">
-  Per-graph pages under `docs/generated/workflows/` are built from `workflows/_lab/**/*.json` plus `docs/workflow_nodes.py`. Do not hand-edit them. Re-run `python3 docs/generate_workflow_docs.py` (or `make docs`). Combo lists are ComfyUI **v0.37.0** and lab `INPUT_TYPES` — not SD1.5 folklore.
+  Per-graph pages under `docs/generated/workflows/` are built from `workflows/_lab/**/*.json` plus `docs/workflow_nodes.py`. Do not hand-edit them. Re-run `python3 docs/generate_workflow_docs.py` (or `make docs`). Combo lists are ComfyUI **v0.37.0** and lab `INPUT_TYPES` - not SD1.5 folklore.
 </Callout>
 ---
 
 ## How a details page is laid out
 
-1. **Purpose** — occupancy, models, the on-canvas Note
-2. **How to Queue** — Apps vs Workflows, do not edit raw `_lab` JSON
-3. **Graph** — mermaid of nodes (small graphs) or **groups** (dream-house, 90s films)
-4. **Nodes on this graph** — every node id, title, type, group
-5. **Node parameter reference** (bottom) — every unique type on that graph:
+1. **Purpose** - occupancy, models, the on-canvas Note
+2. **How to Queue** - Apps vs Workflows, do not edit raw `_lab` JSON
+3. **Graph** - mermaid of nodes (small graphs) or **groups** (dream-house, 90s films)
+4. **Nodes on this graph** - every node id, title, type, group
+5. **Node parameter reference** (bottom) - every unique type on that graph:
    - sockets
    - each widget in lab JSON order
    - **this graph's value**
    - what the parameter does to the still / clip / audio
-   - **other legal choices** (samplers, CLIP types, styles, ACE language, …)
+   - **other legal choices** (samplers, CLIP types, styles, ACE language, ...)
 
 90s one-click films (239 nodes) document the identity printer + one LTX shot template once, then list all 18 shot instances in the node table. Album tracks share one ACE-Step topology: unique lyrics/tags/seed live in per-track H2 sections; the parameter reference is at the bottom of the album page.
 
@@ -61,7 +61,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 | [Stills catalog](workflows-stills.md) | Klein scan table |
 | [Motion catalog](workflows-motion.md) | Wan / LTX scan table |
 | [Creator pack](workflows-creator.md) | Platform stills, loops, and AV jobs |
-| [Services pack](workflows-services.md) | Agency SKUs (ecommerce, ads, local, courses, …) |
+| [Services pack](workflows-services.md) | Agency SKUs (ecommerce, ads, local, courses, ...) |
 | [Film catalog](workflows-film.md) | 90s + DCC |
 | [Audio catalog](workflows-audio.md) | Podcast, dub, albums |
 | [Custom nodes](../reference/custom-nodes.md) | `ez_*` pack catalog (`INPUT_TYPES`) |
@@ -75,9 +75,9 @@ Album JSON (`cover.json`, `album.json`) is documented on the album page even tho
 | Widget | Lab default | What goes wrong |
 | --- | --- | --- |
 | **Quality** | **lab** | Not `--tier quality`. Draft/High only change family sampler (and Klein 4B UNET). Distilled Klein High without Klein base keeps CFG 1.0 |
-| Klein **cfg** | **1.0** | Raising CFG is not a quality knob on distilled Klein — change the Positive prompt or use still-hero |
-| LTX **height** | **704** | 720 and 1080 are not ÷32; `ez_ltx_spatial` snaps them |
-| LTX **length** | **121** (`1+8n`) | Do not Queue a 90 s latent. 90s films stitch 18 × 5.00 s |
+| Klein **cfg** | **1.0** | Raising CFG is not a quality knob on distilled Klein - change the Positive prompt or use still-hero |
+| LTX **height** | **704** | 720 and 1080 are not div32; `ez_ltx_spatial` snaps them |
+| LTX **length** | **121** (`1+8n`) | Do not Queue a 90 s latent. 90s films stitch 18 x 5.00 s |
 | Wan I2V **prompt** | Motion + one camera | The start still owns look. Do not prompt audio (silent) |
 | VHS **save_output** | **true** | false means no file on `${COMFY_OUTPUT_DIR}` |
 | Prompt **Enhance** | on for lazy printers; **off** for authored recipes / 90s / albums | On will rewrite exclusive verses and film shot cards |

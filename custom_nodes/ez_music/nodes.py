@@ -188,7 +188,7 @@ class EZRapLyrics:
             from ez_prompt_enhance.client import complete
             from ez_prompt_enhance.client import compose_context_user
             from ez_prompt_enhance.client import with_context_system
-        except Exception as exc:  # noqa: BLE001 — fail-soft
+        except Exception as exc:  # noqa: BLE001 - fail-soft
             _log(f"prompt enhance client unavailable: {exc}")
             return _pack_text(original, "llama.cpp unavailable")
         try:
@@ -196,13 +196,13 @@ class EZRapLyrics:
         except FileNotFoundError as exc:
             _log(f"rap lyrics prompt missing: {exc}")
             return _pack_text(original, "passthrough")
-        _log("rewriting rap lyrics via on-box GGUF…")
+        _log("rewriting rap lyrics via on-box GGUF...")
         try:
             rewritten, reason = complete(system, compose_context_user(original, ctx))
         finally:
             try:
                 _close_llm()
-            except Exception as exc:  # noqa: BLE001 — unload is best-effort
+            except Exception as exc:  # noqa: BLE001 - unload is best-effort
                 _log(f"writer unload failed: {exc}")
         if not (rewritten or "").strip():
             return _pack_text(original, reason or "passthrough")
@@ -296,7 +296,7 @@ class EZAudioMetadata:
             upload_path = dest / "cover.png"
             try:
                 _save_cover_tensor(cover, upload_path)
-            except Exception as exc:  # noqa: BLE001 — optional art
+            except Exception as exc:  # noqa: BLE001 - optional art
                 _log(f"cover tensor save failed: {exc}")
                 upload_path = None
         try:
@@ -419,7 +419,7 @@ def _output_root(album_dir: Path) -> Path:
         from ez_common import output_root
 
         return output_root(default=str(album_dir))
-    except Exception:  # noqa: BLE001 — pytest / missing Comfy
+    except Exception:  # noqa: BLE001 - pytest / missing Comfy
         env = (os.environ.get("COMFY_OUTPUT_DIR") or "").strip()
         if env:
             return Path(env)
@@ -427,7 +427,7 @@ def _output_root(album_dir: Path) -> Path:
             import folder_paths  # type: ignore[import-not-found]
 
             return Path(folder_paths.get_output_directory())
-        except Exception:  # noqa: BLE001 — pytest / missing Comfy
+        except Exception:  # noqa: BLE001 - pytest / missing Comfy
             return album_dir
 
 

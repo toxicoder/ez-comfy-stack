@@ -42,7 +42,7 @@ from ez_prompt_enhance.studio_preview import (  # noqa: E402
     preview_studio_run,
 )
 
-_FORMAT = "16:9 LTX feeder (1280×704)"
+_FORMAT = "16:9 LTX feeder (1280x704)"
 
 
 class _Still:
@@ -88,7 +88,7 @@ def test_iterate_off_matches_resolve_mode_and_node_run() -> None:
     assert preview.next_pass == "text to image"
     assert "Rewrite is off" in preview.summary
     assert "Seed 42 (fixed)" in preview.summary
-    assert "Steps 4 · CFG 1 · flux-2-klein-4b-fp8.safetensors" in preview.summary
+    assert "Steps 4 - CFG 1 - flux-2-klein-4b-fp8.safetensors" in preview.summary
 
 
 def test_iterate_without_a_file_is_text_to_image() -> None:
@@ -211,7 +211,7 @@ def test_background_wrap_and_reference_pass_name() -> None:
     assert preview.enhance_mode == "background_swap"
     assert preview.prompt == wrap_background_prompt("pier", "background_swap", "")
     assert "style ignored" in preview.style_note
-    assert preview.next_pass == "background_swap · pier.png"
+    assert preview.next_pass == "background_swap - pier.png"
     bare = _preview(category="Text", mode="Change text", filename="", rewrite=False)
     assert bare.next_pass == "text_swap"
 

@@ -1,6 +1,6 @@
 ---
 title: "Wipe-by reveal"
-description: "Cinema Rack illustration — Wipe-by reveal."
+description: "Cinema Rack illustration - Wipe-by reveal."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

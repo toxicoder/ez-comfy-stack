@@ -135,7 +135,7 @@ def _by_id(graph: dict[str, Any]) -> dict[int, dict[str, Any]]:
         graph: Serialized graph.
 
     Returns:
-        id → node.
+        id -> node.
     """
     return {int(node["id"]): node for node in graph.get("nodes") or []}
 
@@ -147,7 +147,7 @@ def _link_map(graph: dict[str, Any]) -> dict[int, list[Any]]:
         graph: Serialized graph.
 
     Returns:
-        link id → row.
+        link id -> row.
     """
     return {int(row[0]): row for row in graph.get("links") or []}
 

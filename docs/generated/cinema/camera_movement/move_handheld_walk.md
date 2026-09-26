@@ -1,6 +1,6 @@
 ---
 title: "Handheld walk"
-description: "Cinema Rack illustration — Handheld walk."
+description: "Cinema Rack illustration - Handheld walk."
 tags: [cinema, prompting, catalog, clip]
 ---
 

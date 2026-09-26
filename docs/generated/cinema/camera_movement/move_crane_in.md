@@ -1,6 +1,6 @@
 ---
 title: "Crane in"
-description: "Cinema Rack illustration — Crane in."
+description: "Cinema Rack illustration - Crane in."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

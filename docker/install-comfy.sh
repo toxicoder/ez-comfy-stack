@@ -23,16 +23,16 @@
 #   Sourcable for hermetic BATS via source guard at bottom.
 #
 # Environment:
-#   COMFY_HOME, COMFY_USER, MODELS_ROOT — defaults in install-comfy/common.sh
-#   COMFYUI_REF — ComfyUI git pin (default v0.37.0; empty = default branch)
-#   COMFYUI_MANAGER_REF — Manager pin (default 4.2.2)
-#   COMFYUI_NUNCHAKU_NODE_REF — nunchaku node pin (default v1.2.1)
-#   COMFYUI_VHS_REF — VideoHelperSuite git ref (default empty = main; required for LTX MP4)
-#   COMFYUI_OPENCUT_REF — OpenCut tag (default 0.5.0)
-#   COMFYUI_MAGCACHE_REF — MagCache commit SHA
-#   COMFYUI_LTX_DIRECTOR_REF — GPL Director commit SHA (clone only if LAB_ENABLE_LTX_DIRECTOR=1)
-#   CHATTERBOX_TTS_REF — resemble-ai/chatterbox SHA for Multilingual V3 (t3_model)
-#   LAB_PACKAGE_PARTS=1 — split tree into /opt/parts/{venv,app} (Docker only)
+#   COMFY_HOME, COMFY_USER, MODELS_ROOT - defaults in install-comfy/common.sh
+#   COMFYUI_REF - ComfyUI git pin (default v0.37.0; empty = default branch)
+#   COMFYUI_MANAGER_REF - Manager pin (default 4.2.2)
+#   COMFYUI_NUNCHAKU_NODE_REF - nunchaku node pin (default v1.2.1)
+#   COMFYUI_VHS_REF - VideoHelperSuite git ref (default empty = main; required for LTX MP4)
+#   COMFYUI_OPENCUT_REF - OpenCut tag (default 0.5.0)
+#   COMFYUI_MAGCACHE_REF - MagCache commit SHA
+#   COMFYUI_LTX_DIRECTOR_REF - GPL Director commit SHA (clone only if LAB_ENABLE_LTX_DIRECTOR=1)
+#   CHATTERBOX_TTS_REF - resemble-ai/chatterbox SHA for Multilingual V3 (t3_model)
+#   LAB_PACKAGE_PARTS=1 - split tree into /opt/parts/{venv,app} (Docker only)
 #
 set -euo pipefail
 
@@ -152,7 +152,7 @@ refresh_comfy_pin_if_needed() {
     else
       log "rsync missing; copying prebuilt with seed excludes"
       # Do not clobber operator custom_nodes/_user on the cp fallback.
-      # ./input is top-level only — do not exclude comfy_api/input.
+      # ./input is top-level only - do not exclude comfy_api/input.
       tar -C "${pre}" \
         --exclude='./user' \
         --exclude='./input' \
@@ -164,7 +164,7 @@ refresh_comfy_pin_if_needed() {
     fi
     activate_venv
   else
-    log "Prebuilt missing — cloning COMFYUI_REF=${want}"
+    log "Prebuilt missing - cloning COMFYUI_REF=${want}"
     phase_clone_comfy
     activate_venv
     if [[ -f ${COMFY_HOME}/requirements.txt ]]; then
@@ -196,9 +196,9 @@ main() {
   parse_install_args "$@" || return $?
 
   log "Install started at $(date -u +%Y-%m-%dT%H:%MZ)"
-  log "Markers: ══ step N/M ══ — pip shows multi-GB wheel bars when downloading"
+  log "Markers: ══ step N/M ══ - pip shows multi-GB wheel bars when downloading"
 
-  # Single phase (Dockerfile multi-layer prebuild) — never take refresh short-circuit
+  # Single phase (Dockerfile multi-layer prebuild) - never take refresh short-circuit
   if [[ -n ${INSTALL_PHASE} ]]; then
     log "Docker phase: ${INSTALL_PHASE}"
     run_install_phase "${INSTALL_PHASE}"
@@ -209,39 +209,39 @@ main() {
   if [[ -f ${STAMP} && -x "${VENV}/bin/python" ]]; then
     refresh=1
     total=6
-    log "Install stamp present — fast refresh (pin sync + links + patch)"
+    log "Install stamp present - fast refresh (pin sync + links + patch)"
   else
-    log "Cold install path (~10–30+ min common on first start)"
+    log "Cold install path (~10-30+ min common on first start)"
   fi
 
   if [[ ${refresh} -eq 0 ]]; then
-    # Order matches Docker phased layers: venv → torch → comfy → nodes → finalize
+    # Order matches Docker phased layers: venv -> torch -> comfy -> nodes -> finalize
     step 1 "${total}" "Create Python venv + upgrade pip tooling"
     phase_venv
     log "step 1 done"
 
-    step 2 "${total}" "Install PyTorch (cu130 when available) — multi-GB; many minutes"
+    step 2 "${total}" "Install PyTorch (cu130 when available) - multi-GB; many minutes"
     phase_torch
     log "step 2 done (elapsed $(install_format_elapsed "$(install_elapsed_s)"))"
 
     step 3 "${total}" "Clone or update ComfyUI into ${COMFY_HOME}"
     step 4 "${total}" "Install ComfyUI requirements.txt"
-    step 5 "${total}" "Install hub/runtime extras (psutil, huggingface_hub, …)"
+    step 5 "${total}" "Install hub/runtime extras (psutil, huggingface_hub, ...)"
     phase_comfy
-    log "step 3–5 done"
+    log "step 3-5 done"
 
     step 6 "${total}" "Install Manager pip + VideoHelperSuite + Nunchaku"
     step 7 "${total}" "Optional SageAttention (fail-soft on aarch64)"
     step 8 "${total}" "Optional nunchaku package (fail-soft)"
     phase_nodes
-    log "step 6–8 done"
+    log "step 6-8 done"
 
     step 9 "${total}" "Write install stamp"
     step 10 "${total}" "Strip prebuilt bloat (.git, bytecode, caches)"
     step 11 "${total}" "Link model subdirs under ${MODELS_ROOT}/comfy"
     step 12 "${total}" "Apply Spark free-memory patch"
     phase_finalize
-    log "step 9–12 done"
+    log "step 9-12 done"
   else
     activate_venv
     step 1 "${total}" "Sync ComfyUI pin if the volume lags COMFYUI_REF"
@@ -249,7 +249,7 @@ main() {
     step 2 "${total}" "Refresh model directory links"
     link_all_models
     step 3 "${total}" "Ensure VideoHelperSuite (LTX lab MP4) + Manager pip"
-    ensure_lab_video_nodes || warn "VideoHelperSuite refresh failed — LTX lab MP4 may be unavailable"
+    ensure_lab_video_nodes || warn "VideoHelperSuite refresh failed - LTX lab MP4 may be unavailable"
     ensure_lab_manager
     step 4 "${total}" "Remove wrong PyPI nunchaku if present"
     cleanup_wrong_nunchaku

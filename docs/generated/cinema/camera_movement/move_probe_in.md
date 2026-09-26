@@ -1,6 +1,6 @@
 ---
 title: "Probe in"
-description: "Cinema Rack illustration — Probe in."
+description: "Cinema Rack illustration - Probe in."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

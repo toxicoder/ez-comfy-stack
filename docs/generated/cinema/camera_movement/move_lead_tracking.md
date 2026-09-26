@@ -1,6 +1,6 @@
 ---
 title: "Lead tracking"
-description: "Cinema Rack illustration — Lead tracking."
+description: "Cinema Rack illustration - Lead tracking."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

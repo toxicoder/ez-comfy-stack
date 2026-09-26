@@ -46,12 +46,12 @@ flowchart LR
 
 ## What it writes
 
-The generator App is occupancy **llm** (nothing GPU unless `llm-desk` is the writing desk). The **result** keeps the source occupancy (`klein` / `wan` / `ltx` / …). Open `_user/<slug>` and Queue only when that family is legal.
+The generator App is occupancy **llm** (nothing GPU unless `llm-desk` is the writing desk). The **result** keeps the source occupancy (`klein` / `wan` / `ltx` / ...). Open `_user/<slug>` and Queue only when that family is legal.
 
 | Widget | Role |
 | --- | --- |
 | **Brief** | What the new App should make |
-| **Template** | `auto` or a lab id (`stills/still-draft`, `motion/silent/still-to-video-5s`, …) |
+| **Template** | `auto` or a lab id (`stills/still-draft`, `motion/silent/still-to-video-5s`, ...) |
 | **Slug** | Live filename stem (`mug-ig`) |
 | **As app** | On writes `*.app.json` (Apps sidebar) |
 | **Overwrite** | Off refuses an existing `_user` file |
@@ -62,7 +62,7 @@ Dest: `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/<slug>.app.json`. 
 
 ## How auto picks
 
-When Template is **auto**, App Forge asks the on-box GGUF (or the 35B sidecar when `llm-desk` is up) for `{template, slug, slots}`. If the GGUF is missing it uses a keyword heuristic: `1:1` / square → `stills/instagram-square`, silent / i2v → `motion/silent/still-to-video-5s`, ltx / foley → `motion/av/still-to-video-8s`, default `stills/still-draft`. It never invents node types.
+When Template is **auto**, App Forge asks the on-box GGUF (or the 35B sidecar when `llm-desk` is up) for `{template, slug, slots}`. If the GGUF is missing it uses a keyword heuristic: `1:1` / square -> `stills/instagram-square`, silent / i2v -> `motion/silent/still-to-video-5s`, ltx / foley -> `motion/av/still-to-video-8s`, default `stills/still-draft`. It never invents node types.
 
 Official Comfy Cloud MCP / PyPI `comfy-mcp` stay out of the image. This is the in-tree analog: templates first, typed tools, no `execute_code`.
 
@@ -75,6 +75,6 @@ Official Comfy Cloud MCP / PyPI `comfy-mcp` stay out of the image. This is the i
 ./scripts/manage.sh studio-mcp --call generate_app '{"brief":"1:1 IG still of a mug","slug":"mug-ig"}'
 ```
 
-Same pipeline as the App. Does not Queue Comfy. Does not refuse a GPU session. Does not map `idle` → `blender-desk`.
+Same pipeline as the App. Does not Queue Comfy. Does not refuse a GPU session. Does not map `idle` -> `blender-desk`.
 
 Next: open the new App, then [Prompt Forge](../studio-apps.md) or **stills/still-draft**.

@@ -1,9 +1,9 @@
 # Publish prebuilt ez-comfy image to GitHub Container Registry only.
-# Privacy: no HF_TOKEN, no .env, no model weights — public git/pip in Dockerfile only.
+# Privacy: no HF_TOKEN, no .env, no model weights - public git/pip in Dockerfile only.
 #
 # Tag matrix (keep in sync with scripts/lib/compose.sh stack_image_tag_for_branch):
-#   main (default branch) → us-safe-studio + us-safe-studio-main + sha-*
-#   development           → us-safe-studio-development + sha-*
+#   main (default branch) -> us-safe-studio + us-safe-studio-main + sha-*
+#   development           -> us-safe-studio-development + sha-*
 # Operators pull via manage.sh stack_default_image (branch-aligned).
 name: publish-image
 
@@ -31,7 +31,7 @@ concurrency:
 
 jobs:
   build-arm64:
-    # DGX Spark / GB10 — native arm64 (avoid qemu for multi-GB torch)
+    # DGX Spark / GB10 - native arm64 (avoid qemu for multi-GB torch)
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 360
     steps:

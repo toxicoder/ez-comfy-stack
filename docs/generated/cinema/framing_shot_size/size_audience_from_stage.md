@@ -1,6 +1,6 @@
 ---
 title: "Audience from Stage"
-description: "Cinema Rack illustration — Audience from Stage."
+description: "Cinema Rack illustration - Audience from Stage."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

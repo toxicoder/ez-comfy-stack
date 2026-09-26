@@ -1,6 +1,6 @@
 ---
 title: "Step-printed move"
-description: "Cinema Rack illustration — Step-printed move."
+description: "Cinema Rack illustration - Step-printed move."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

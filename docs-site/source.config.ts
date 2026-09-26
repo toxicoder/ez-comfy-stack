@@ -7,7 +7,7 @@
  *
  * `mdxOptions` here is merged into Fumadocs' built-in remark/rehype chain (the preset
  * appends these `remarkPlugins` after GFM, heading, image and code-tab handling). Do not
- * set collection-level `mdxOptions` — that replaces the preset, including `rehypeToc`.
+ * set collection-level `mdxOptions` - that replaces the preset, including `rehypeToc`.
  */
 
 import { defineConfig, defineDocs } from "fumadocs-mdx/config";
@@ -25,8 +25,8 @@ import { remarkPageBrief } from "./lib/remark-page-brief";
  * `docs/generated/**` and contributors keep editing markdown where they always have.
  *
  * Both extensions are listed: pages that needed MkDocs syntax rewritten to JSX were renamed
- * to `.mdx` by `scripts/codemod_mkdocs_to_mdx.py`, while the rest of the corpus — including
- * everything under `generated/` — stays `.md`.
+ * to `.mdx` by `scripts/codemod_mkdocs_to_mdx.py`, while the rest of the corpus - including
+ * everything under `generated/` - stays `.md`.
  */
 export const docs = defineDocs({
   dir: "../docs",

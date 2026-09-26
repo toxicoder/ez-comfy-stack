@@ -16,7 +16,7 @@
 #
 
 # ANSI-C quotes so colors are real ESC bytes (printf %s and echo -e both work).
-# Single-quoted '\033…' stays literal and breaks hf_progress_emit TTY lines.
+# Single-quoted '\033...' stays literal and breaks hf_progress_emit TTY lines.
 # shellcheck disable=SC2034
 GREEN=$'\033[0;32m'
 YELLOW=$'\033[0;33m'
@@ -28,7 +28,7 @@ _RWSF_CHILD_PID=""
 _RWSF_EXTRA_PIDS=""
 
 #######################################
-# Kill a PID and its process group (INT → TERM → KILL). Never hangs forever.
+# Kill a PID and its process group (INT -> TERM -> KILL). Never hangs forever.
 # Globals:
 #   None
 # Arguments:
@@ -47,9 +47,9 @@ kill_pid_tree() {
   if ! kill -0 "${pid}" 2>/dev/null; then
     return 0
   fi
-  # Disable job-control notifications ([1]+ Terminated …)
+  # Disable job-control notifications ([1]+ Terminated ...)
   set +m 2>/dev/null || true
-  log "Stopping ${label} (PID ${pid})…"
+  log "Stopping ${label} (PID ${pid})..."
   kill -INT -- "-${pid}" 2>/dev/null || kill -INT "${pid}" 2>/dev/null || true
   for i in 1 2 3 4 5; do
     kill -0 "${pid}" 2>/dev/null || return 0
@@ -83,10 +83,10 @@ run_with_signal_forwarding() {
   "$@" &
   child=$!
   _RWSF_CHILD_PID="${child}"
-  # Trap-only handler: SC2329/SC2317 — ShellCheck does not see string trap refs as calls
+  # Trap-only handler: SC2329/SC2317 - ShellCheck does not see string trap refs as calls
   # shellcheck disable=SC2317,SC2329
   _rwsf_on_signal() {
-    log "Interrupted — stopping download process tree…"
+    log "Interrupted - stopping download process tree..."
     kill_pid_tree "${_RWSF_CHILD_PID}" "download"
     local extra
     for extra in ${_RWSF_EXTRA_PIDS:-}; do
@@ -316,7 +316,7 @@ resolve_docker_on_path() {
 print_docker_install_hints() {
   local user
   user="$(id -un)"
-  err "docker missing — install Docker CE (not snap) on DGX Spark:"
+  err "docker missing - install Docker CE (not snap) on DGX Spark:"
   err "  ./scripts/manage.sh setup --install-docker"
   err "  # or non-interactive:"
   err "  LAB_NON_INTERACTIVE=1 LAB_CONFIRM_TOKEN=yes SETUP_INSTALL_DOCKER=1 ./scripts/manage.sh setup"
@@ -471,9 +471,9 @@ EOF
     return 1
   fi
 
-  log "Installing Docker CE (apt preferred; may take a few minutes)…"
+  log "Installing Docker CE (apt preferred; may take a few minutes)..."
 
-  # Snap docker breaks GPU tooling — remove if present
+  # Snap docker breaks GPU tooling - remove if present
   if command -v snap >/dev/null 2>&1 && snap list docker >/dev/null 2>&1; then
     warn "Removing snap docker (prefer apt docker-ce for NVIDIA)"
     sudo snap remove docker 2>/dev/null || true
@@ -481,7 +481,7 @@ EOF
 
   local apt_ok=0
   if command -v apt-get >/dev/null 2>&1; then
-    log "apt-get update (package lists)…"
+    log "apt-get update (package lists)..."
     if sudo apt-get update -qq &&
       run_with_heartbeat "apt-get install docker-ce" -- \
         sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -520,7 +520,7 @@ EOF
       sudo systemctl restart docker 2>/dev/null || true
     fi
   elif command -v nvidia-smi >/dev/null 2>&1; then
-    warn "nvidia-smi present but nvidia-ctk missing — install nvidia-container-toolkit for GPU containers"
+    warn "nvidia-smi present but nvidia-ctk missing - install nvidia-container-toolkit for GPU containers"
   fi
 
   # Refresh PATH for common install locations
@@ -542,7 +542,7 @@ EOF
   fi
 
   if ! id -nG 2>/dev/null | grep -qw docker; then
-    warn "docker group not active in this shell yet — run: newgrp docker   (or re-login SSH)"
+    warn "docker group not active in this shell yet - run: newgrp docker   (or re-login SSH)"
   fi
   return 0
 }
@@ -596,13 +596,13 @@ check_docker_preflight() {
       return 0
       ;;
     1)
-      err "docker permission denied — user not active in docker group for this session"
+      err "docker permission denied - user not active in docker group for this session"
       err "  newgrp docker   # or disconnect/reconnect SSH"
       err "  # ensure: sudo usermod -aG docker $(id -un)"
       return 1
       ;;
     2)
-      err "docker daemon not reachable — is the service running?"
+      err "docker daemon not reachable - is the service running?"
       err "  sudo systemctl status docker"
       err "  sudo systemctl start docker"
       return 1
@@ -704,7 +704,7 @@ warn_unwritable_comfy_output_layout() {
   while IFS= read -r rel; do
     [[ -z ${rel} ]] && continue
     if [[ -d ${dir}/${rel} && ! -w ${dir}/${rel} ]]; then
-      warn "COMFY_OUTPUT_DIR/${rel}=${dir}/${rel} is not writable — setup / start will sudo-heal"
+      warn "COMFY_OUTPUT_DIR/${rel}=${dir}/${rel} is not writable - setup / start will sudo-heal"
       return 0
     fi
   done < <(lab_comfy_output_layout_dirs)
@@ -874,13 +874,13 @@ warn_unwritable_comfy_layout() {
     return 0
   fi
   if [[ ! -w ${comfy} ]]; then
-    warn "MODELS_DIR/comfy=${comfy} is not writable — download-models / setup / start will sudo-heal"
+    warn "MODELS_DIR/comfy=${comfy} is not writable - download-models / setup / start will sudo-heal"
     return 0
   fi
   while IFS= read -r sub; do
     [[ -z ${sub} ]] && continue
     if [[ -d ${comfy}/${sub} && ! -w ${comfy}/${sub} ]]; then
-      warn "MODELS_DIR/comfy/${sub} is not writable — download-models / setup / start will sudo-heal"
+      warn "MODELS_DIR/comfy/${sub} is not writable - download-models / setup / start will sudo-heal"
       return 0
     fi
   done < <(lab_comfy_layout_subdirs)
@@ -1146,7 +1146,7 @@ EOF
   mkdir -p "${bindir}" "${home}/.hf-cli"
   export PATH="${bindir}:${PATH}"
   errf="$(mktemp)"
-  log "hf CLI not found; attempting install…"
+  log "hf CLI not found; attempting install..."
 
   # Nested helpers are indented so the coverage inventory does not collect them.
   # shellcheck disable=SC2317,SC2329
@@ -1313,7 +1313,7 @@ _hf_pid_is_protected() {
 #######################################
 # Clear stale Hugging Face download locks under a models root.
 # By default may stop *orphan* hf PIDs (never the active download PIDs).
-# locks_only=1 (mid-download): remove unheld .lock files only — never pkill.
+# locks_only=1 (mid-download): remove unheld .lock files only - never pkill.
 # Globals:
 #   HF_LOCK_CLEAR, HF_LOCK_CLEAR_FORCE, _HF_PROTECTED_PIDS, MODELS_DIR
 # Arguments:
@@ -1340,7 +1340,7 @@ clear_stale_hf_locks() {
     return 0
   fi
 
-  log "Checking for stale Hugging Face download locks under ${root} …"
+  log "Checking for stale Hugging Face download locks under ${root} ..."
 
   # Never kill our own active download (mid-download cleanup = locks only).
   # Skip process sweep under LAB_HERMETIC=1: parallel BATS files share a host PID
@@ -1420,7 +1420,7 @@ clear_stale_hf_locks() {
     if [[ ${locks_only} -eq 1 ]]; then
       log "download still holds ${active} lock(s) (normal while hf runs)"
     else
-      warn "${active} lock(s) still held by live processes — wait or HF_LOCK_CLEAR_FORCE=1"
+      warn "${active} lock(s) still held by live processes - wait or HF_LOCK_CLEAR_FORCE=1"
     fi
   fi
   if [[ ${removed} -eq 0 && ${active} -eq 0 ]]; then
@@ -1464,7 +1464,7 @@ explain_hf_download_error() {
   fi
 
   if [[ ${text} =~ GatedRepoError|not\ in\ the\ authorized\ list|restricted\ and\ you\ are\ not|Cannot\ access\ gated\ repo ]]; then
-    err "Hugging Face gated model — access not granted for: ${repo}"
+    err "Hugging Face gated model - access not granted for: ${repo}"
     err "  Token identity: $(hf_auth_identity)"
     err "  1. Open https://huggingface.co/${repo}"
     err "  2. Log in as the SAME account that owns HF_TOKEN and click Agree / accept the license"
@@ -1685,7 +1685,7 @@ check_lab_models_ready() {
   local rel path missing=0 link_tgt
   local comfy="${root}/comfy"
   if [[ ! -d ${comfy} ]]; then
-    warn "lab models: ${comfy} missing — run ./scripts/manage.sh download-models"
+    warn "lab models: ${comfy} missing - run ./scripts/manage.sh download-models"
     return 1
   fi
   while IFS= read -r rel; do
@@ -1696,14 +1696,14 @@ check_lab_models_ready() {
       if [[ -L ${path} ]]; then
         link_tgt="$(readlink "${path}" 2>/dev/null || true)"
         if [[ ${link_tgt} == /* ]]; then
-          warn "lab model absolute symlink (container-fragile): ${rel} → ${link_tgt}"
+          warn "lab model absolute symlink (container-fragile): ${rel} -> ${link_tgt}"
           warn "  Re-run ./scripts/manage.sh download-models to rewrite relative links"
         fi
       fi
       log "lab model ok: ${rel}"
     else
       if [[ -L ${path} ]]; then
-        warn "lab model BROKEN symlink: ${rel} → $(readlink "${path}" 2>/dev/null || echo '?')"
+        warn "lab model BROKEN symlink: ${rel} -> $(readlink "${path}" 2>/dev/null || echo '?')"
       else
         warn "lab model MISSING: ${rel}"
       fi
@@ -1711,7 +1711,7 @@ check_lab_models_ready() {
     fi
   done < <(lab_expected_model_relpaths)
   if [[ ${missing} -gt 0 ]]; then
-    warn "Missing ${missing} lab model(s) under ${comfy} — run ./scripts/manage.sh download-models"
+    warn "Missing ${missing} lab model(s) under ${comfy} - run ./scripts/manage.sh download-models"
     warn "Then restart so Comfy models/* re-link to /models/comfy/*"
     if [[ ! -e ${comfy}/diffusion_models/ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors ]]; then
       warn "LTX-2.5 is gated: accept the license as the HF_TOKEN user at https://huggingface.co/Lightricks/LTX-2.5"
@@ -1837,7 +1837,7 @@ warn_hf_resume_stall() {
   local secs="${2:-30}"
   local n
   n="$(count_hf_incomplete "${dest}")"
-  warn "resume stall: ${n} incomplete, 0 MiB/s for ${secs}s — live hf holds the lock."
+  warn "resume stall: ${n} incomplete, 0 MiB/s for ${secs}s - live hf holds the lock."
   warn "FORCE-clearing locks will not unstick this. Ctrl+C, then:"
   warn "  ./scripts/manage.sh reset-hf-partials --yes"
   warn "  ./scripts/manage.sh download-models"
@@ -1937,7 +1937,7 @@ hf_progress_line() {
   local size="${2:-0 MiB}"
   local rate="${3:-0 MiB/s}"
   local elapsed="${4:-0:00}"
-  printf '↓ %s  %s  %s  elapsed %s' "${label}" "${size}" "${rate}" "${elapsed}"
+  printf 'v %s  %s  %s  elapsed %s' "${label}" "${size}" "${rate}" "${elapsed}"
 }
 
 #######################################
@@ -2044,7 +2044,7 @@ hf_download() {
     export HF_HOME="${MODELS_DIR}"
   fi
   # Non-interactive hub; we own progress UI (disable tqdm smash with heartbeat)
-  # Do not set force-download — hub resumes *.incomplete and skips up-to-date files.
+  # Do not set force-download - hub resumes *.incomplete and skips up-to-date files.
   export CI="${CI:-1}"
   export HF_HUB_DISABLE_TELEMETRY="${HF_HUB_DISABLE_TELEMETRY:-1}"
   export PYTHONUNBUFFERED=1
@@ -2086,19 +2086,19 @@ hf_download() {
   if [[ -n ${dest_dir} ]]; then
     mkdir -p "${dest_dir}" 2>/dev/null || true
     incomplete_n="$(count_hf_incomplete "${dest_dir}")"
-    log "downloading → ${dest_dir}  (resume-capable; re-run continues partials)"
+    log "downloading -> ${dest_dir}  (resume-capable; re-run continues partials)"
     if [[ ${incomplete_n} -gt 0 ]]; then
-      log "found ${incomplete_n} incomplete file(s) — resuming"
+      log "found ${incomplete_n} incomplete file(s) - resuming"
     fi
   fi
 
   local hb_pid="" hpid="" zero_streak=0
   _PROGRESS_ON_TTY=0
-  # Trap-only handler: SC2329/SC2317 — ShellCheck does not see string trap refs as calls
+  # Trap-only handler: SC2329/SC2317 - ShellCheck does not see string trap refs as calls
   # shellcheck disable=SC2317,SC2329
   _hf_dl_signal() {
     hf_progress_newline
-    log "Interrupted — stopping hf download and progress monitor…"
+    log "Interrupted - stopping hf download and progress monitor..."
     [[ -n ${hb_pid} ]] && kill_pid_tree "${hb_pid}" "progress monitor"
     [[ -n ${hpid} ]] && kill_pid_tree "${hpid}" "hf download"
     if [[ -n ${dest_dir} ]]; then
@@ -2145,8 +2145,8 @@ hf_download() {
             if [[ "$(count_hf_incomplete "${dest_dir}")" -gt 0 ]]; then
               warn_hf_resume_stall "${dest_dir}" "$((progress_interval * 3))"
             elif [[ ${HF_LOCK_CLEAR_MID:-1} == "1" ]]; then
-              # locks_only: NEVER pkill — that was killing the active hf download
-              warn "no disk growth for $((progress_interval * 3))s — clearing unheld HF locks (download still running)"
+              # locks_only: NEVER pkill - that was killing the active hf download
+              warn "no disk growth for $((progress_interval * 3))s - clearing unheld HF locks (download still running)"
               clear_stale_hf_locks "${MODELS_DIR:-$(dirname "${dest_dir}")}" "locks_only" || true
             fi
             zero_streak=0

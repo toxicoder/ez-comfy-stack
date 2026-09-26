@@ -1,6 +1,6 @@
 ---
 title: "Aerial Establishing"
-description: "Cinema Rack illustration — Aerial Establishing."
+description: "Cinema Rack illustration - Aerial Establishing."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

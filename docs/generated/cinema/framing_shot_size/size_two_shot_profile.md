@@ -1,6 +1,6 @@
 ---
 title: "Profile Two-Shot"
-description: "Cinema Rack illustration — Profile Two-Shot."
+description: "Cinema Rack illustration - Profile Two-Shot."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

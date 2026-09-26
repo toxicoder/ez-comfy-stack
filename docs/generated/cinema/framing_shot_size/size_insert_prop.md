@@ -1,6 +1,6 @@
 ---
 title: "Prop Detail Insert"
-description: "Cinema Rack illustration — Prop Detail Insert."
+description: "Cinema Rack illustration - Prop Detail Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

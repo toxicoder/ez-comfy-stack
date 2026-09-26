@@ -1,6 +1,6 @@
-"""Drive-through arranger: two-bar cells, an early drop, 90–120 s.
+"""Drive-through arranger: two-bar cells, an early drop, 90-120 s.
 
-The take's duration equals the rendered score's coverage — no unguided
+The take's duration equals the rendered score's coverage - no unguided
 tail. Beds rotate through the electric pool, stanzas stay thin early
 and stack up late, and downbeat-only stanzas trade places with full
 ones.

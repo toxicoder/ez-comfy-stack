@@ -1,6 +1,6 @@
 ---
 title: "Watch Insert"
-description: "Cinema Rack illustration — Watch Insert."
+description: "Cinema Rack illustration - Watch Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

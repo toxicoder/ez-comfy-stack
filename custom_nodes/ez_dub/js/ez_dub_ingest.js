@@ -2,7 +2,7 @@
  * EZDubIngest frontend: native Upload media button next to the source combo.
  *
  * Nodes 2.0: uses addWidget("button") and widget.value. Vue STRING widgets
- * have no canvas textarea — treat inputEl as optional.
+ * have no canvas textarea - treat inputEl as optional.
  */
 import { app } from "../../scripts/app.js";
 import { api } from "../../scripts/api.js";

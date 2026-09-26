@@ -26,10 +26,10 @@ from .protocols import (
 )
 
 NODE_CLASS_MAPPINGS: dict[str, type[Any]] = {}
-"""Comfy registry (empty — this pack has no nodes)."""
+"""Comfy registry (empty - this pack has no nodes)."""
 
 NODE_DISPLAY_NAME_MAPPINGS: dict[str, str] = {}
-"""Comfy display-name registry (empty — this pack has no nodes)."""
+"""Comfy display-name registry (empty - this pack has no nodes)."""
 
 _DEFAULT_OUTPUT = "/mnt/comfy-output"
 """Host fallback when Comfy and container paths are unset."""
@@ -114,7 +114,7 @@ def node_progress(total: int) -> ProgressReporter:
         from comfy.utils import ProgressBar  # type: ignore[import-not-found]
 
         return ProgressBar(n)
-    except Exception:  # noqa: BLE001 — fail-soft in tests / missing Comfy
+    except Exception:  # noqa: BLE001 - fail-soft in tests / missing Comfy
         return NullProgress()
 
 
@@ -138,7 +138,7 @@ def output_root(*, default: str | Path | None = _DEFAULT_OUTPUT) -> Path:
         raw = folder_paths.get_output_directory()
         if raw:
             return Path(raw)
-    except Exception:  # noqa: BLE001 — Comfy is optional in unit tests
+    except Exception:  # noqa: BLE001 - Comfy is optional in unit tests
         pass
     if Path(_CONTAINER_OUTPUT).is_dir():
         return Path(_CONTAINER_OUTPUT)

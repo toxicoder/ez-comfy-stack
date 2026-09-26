@@ -1,6 +1,6 @@
 ---
 title: "Snap tilt up"
-description: "Cinema Rack illustration — Snap tilt up."
+description: "Cinema Rack illustration - Snap tilt up."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

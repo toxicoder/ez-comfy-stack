@@ -338,9 +338,9 @@ link_into_comfy() {
     dest_sub="$(comfy_dest_subdir "${base}")"
     dest="${src}/${dest_sub}/${base}"
     if ln_sfn_relative "${f}" "${dest}"; then
-      log "linked ${base} → comfy/${dest_sub}/"
+      log "linked ${base} -> comfy/${dest_sub}/"
     else
-      warn "failed to link ${base} → comfy/${dest_sub}/"
+      warn "failed to link ${base} -> comfy/${dest_sub}/"
       failed=1
     fi
   done < <(
@@ -462,7 +462,7 @@ cmd_status() {
     for tier in $(tiers_to_process); do
       dir=$(tier_dir "${tier}")
       size=$(tier_size_gb "${dir}")
-      log "${tier}: $(tier_repo "${tier}") — ${size} GB at ${dir}"
+      log "${tier}: $(tier_repo "${tier}") - ${size} GB at ${dir}"
     done
   fi
 }
@@ -505,7 +505,7 @@ cmd_run() {
       continue
     fi
     include_args=()
-    log "Downloading ${repo} selective subset (tier: ${tier})…"
+    log "Downloading ${repo} selective subset (tier: ${tier})..."
     while IFS= read -r pat; do
       [[ -z ${pat} ]] && continue
       include_args+=(--include "${pat}")
@@ -567,7 +567,7 @@ cmd_cleanup() {
     n_extra=0
     n_del=0
     size_before="$(tier_size_gb "${dir}")"
-    log "cleanup ${tier}: scanning ${dir} (current ≈ ${size_before} GB)"
+    log "cleanup ${tier}: scanning ${dir} (current ~ ${size_before} GB)"
     while IFS= read -r f; do
       [[ -z ${f} ]] && continue
       n_extra=$((n_extra + 1))
@@ -584,7 +584,7 @@ cmd_cleanup() {
     if [[ ${CLEANUP_YES} -eq 1 ]]; then
       prune_empty_dirs "${dir}"
       size_after="$(tier_size_gb "${dir}")"
-      log "cleanup ${tier}: deleted ${n_del} extra file(s); size ${size_before} → ${size_after} GB"
+      log "cleanup ${tier}: deleted ${n_del} extra file(s); size ${size_before} -> ${size_after} GB"
     else
       log "cleanup ${tier}: ${n_extra} extra file(s) (dry-run). Re-run with --yes to delete."
     fi

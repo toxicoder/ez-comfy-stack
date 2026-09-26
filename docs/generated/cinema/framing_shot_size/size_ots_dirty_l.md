@@ -1,6 +1,6 @@
 ---
 title: "Dirty OTS Left"
-description: "Cinema Rack illustration — Dirty OTS Left."
+description: "Cinema Rack illustration - Dirty OTS Left."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

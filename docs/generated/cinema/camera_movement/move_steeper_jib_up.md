@@ -1,6 +1,6 @@
 ---
 title: "Steep jib up"
-description: "Cinema Rack illustration — Steep jib up."
+description: "Cinema Rack illustration - Steep jib up."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

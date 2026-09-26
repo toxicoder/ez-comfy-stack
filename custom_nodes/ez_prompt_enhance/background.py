@@ -26,7 +26,7 @@ CROWD_OFF = "Keep extras, crowd, and distant figures as they appear."
 
 SWAP_BARE = (
     "Keep the main subject from the reference. Replace the entire environment "
-    "— backdrop, ground or floor, and set dressing near the subject — with: "
+    "- backdrop, ground or floor, and set dressing near the subject - with: "
     "{place}. Match ground contact, scale, and wrap light. Do not invent a "
     "new hero. Empty of new lettering."
 )
@@ -40,8 +40,8 @@ EDIT_BARE = (
 )
 """Wrapper for a bare edit in background_edit."""
 ENTIRE_ENV_VERB = (
-    "Replace the entire environment — backdrop, sky, architecture, "
-    "ground or floor, and set dressing near the subject —"
+    "Replace the entire environment - backdrop, sky, architecture, "
+    "ground or floor, and set dressing near the subject -"
 )
 """Swap clause that replaces a weak 'only the background' line."""
 VOXEL_TRAILER = "Voxel art, cubic voxels, limited palette."

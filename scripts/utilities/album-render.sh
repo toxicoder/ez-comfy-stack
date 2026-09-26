@@ -289,7 +289,7 @@ main() {
     return 0
   fi
   if ! comfy_up; then
-    err "Comfy is not up at ${COMFY_URL} — start the stack first (does not auto-start)"
+    err "Comfy is not up at ${COMFY_URL} - start the stack first (does not auto-start)"
     return 1
   fi
   local dir cover track
