@@ -118,9 +118,9 @@ This project follows that guide for executables and libraries, with the **intent
 | Google guide | This project | Why |
 | --- | --- | --- |
 | Shebang `#!/bin/bash` | `#!/usr/bin/env bash` | Works on macOS (Homebrew bash) and Linux Spark without assuming `/bin/bash` is modern |
-| Prefer scripts <= ~100 lines or rewrite | Modular multi-file shell ops surface | Operator tooling is intentionally Bash; split by domain (`lib/*`, utilities) |
+| Prefer scripts \<= ~100 lines or rewrite | Modular multi-file shell ops surface | Operator tooling is intentionally Bash; split by domain (`lib/*`, utilities) |
 | Function banner style only | Globals/Arguments/Outputs/Returns labels (Google fields) | Clearer API docs; optional `# @command` on CLI entrypoints for help discoverability |
-| Hard 80-column lines | Prefer <=80; soft max ~100 | Long HF repo ids and one-line JSON status payloads |
+| Hard 80-column lines | Prefer \<=80; soft max ~100 | Long HF repo ids and one-line JSON status payloads |
 | Package functions with `::` | Flat `verb_noun` names | Single small repository |
 
 ### Function comment template

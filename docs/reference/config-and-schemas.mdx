@@ -69,7 +69,7 @@ Restricted YAML (stdlib parsers; no PyYAML). `scene.json` is JSON.
 | File | Purpose | Who consumes it | Safety |
 | --- | --- | --- | --- |
 | `schemas/asset.yaml` | `ez.asset.v1` Asset Bible record (outputs under `${COMFY_OUTPUT_DIR}/assets`) | `./scripts/manage.sh asset-ls` -> `scripts/lib/asset_bible.py` | **Never** `${MODELS_DIR}`. `license: operator-output` on the example |
-| `schemas/guide_pack.shot.yaml` | `ez.guide.shot.v1` DCC <-> Comfy print handshake (120 frames @ 24 fps) | `export-guides` / `scripts/lib/guide_pack.py` | Size is LTX VAE grid **1280x704** or **768x1280**. Never 1280x720 |
+| `schemas/guide_pack.shot.yaml` | `ez.guide.shot.v1` DCC \<-> Comfy print handshake (120 frames @ 24 fps) | `export-guides` / `scripts/lib/guide_pack.py` | Size is LTX VAE grid **1280x704** or **768x1280**. Never 1280x720 |
 | `schemas/guide_pack.still.yaml` | `ez.guide.still.v1` single-frame clay/depth/canny plates | `blender-stills` | Allowed sizes: 1280x704, 768x1280, 1024x1280, 1024x1024, 1280x720 (**Klein thumb only**, never LTX) |
 | `schemas/house_layout.yaml` | `ez.house.layout.v1` greybox for Instagram 4:5 clay stills | `house-views`, `start` seed-inputs -> `scripts/lib/house_layout.py` | Y-up meters. Occupancy: dump dies if Comfy is a heavy job |
 | `schemas/scene.json` | Instance list (`ref` + transform) - no embedded meshes | `asset_bible.py` `validate` / `load_scene` | Refuses data-URI / huge strings (meshes do not belong here) |
