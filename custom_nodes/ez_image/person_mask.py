@@ -41,6 +41,10 @@ WEIGHT_URL = (
 """Direct checkpoint URL (BSD-3). Not a default download."""
 DOWNLOAD_TIMEOUT_S = 120
 """Socket timeout for the optional first-run weight download."""
+DILATE_RADIUS = 2
+"""Pixels grown past the segmentation so the paste owns its full silhouette."""
+FEATHER_RADIUS = 6
+"""Soft-edge width of the paste, so the rim blends instead of a hard line."""
 
 _SEGMENTER: Any = None
 """Cached DeepLab module after a successful load."""
@@ -375,20 +379,6 @@ def segment_people(image: Any) -> list[list[float]] | None:
     return run_deeplab(_SEGMENTER, image)
 
 
-def mask_radius(height: int, width: int) -> int:
-    """Erode radius so a thin rim of the original ground is not pasted.
-
-    Args:
-        height: Plate height.
-        width: Plate width.
-
-    Returns:
-        Radius in pixels, 1–8.
-    """
-    side = max(1, min(int(height), int(width)))
-    return max(1, min(8, side // 64))
-
-
 def _resize_mask(mask: list[list[float]], height: int, width: int) -> list[list[float]]:
     """Nearest-resize an HW mask.
 
@@ -443,15 +433,15 @@ def _fit_hwc(frame: list[Any], height: int, width: int) -> list[Any]:
     return out
 
 
-def erode_mask(mask: list[list[float]], radius: int) -> list[list[float]]:
-    """Square erode. A pixel stays on only when the whole window is on.
+def dilate_mask(mask: list[list[float]], radius: int) -> list[list[float]]:
+    """Square dilate. A pixel turns on when any window pixel is on.
 
     Args:
         mask: HW mask.
         radius: Chebyshev radius. ``0`` copies the mask.
 
     Returns:
-        Eroded mask.
+        Dilated mask.
     """
     height = len(mask)
     if height < 1:
@@ -460,16 +450,16 @@ def erode_mask(mask: list[list[float]], radius: int) -> list[list[float]]:
     if radius <= 0:
         return [list(row) for row in mask]
 
-    def _erode_axis(rows: list[list[float]]) -> list[list[float]]:
-        """Erode each row. Out-of-window pixels count as off.
+    def _dilate_axis(rows: list[list[float]]) -> list[list[float]]:
+        """Dilate each row. Out-of-window pixels count as off.
 
         Args:
             rows: HW mask rows.
 
         Returns:
-            Eroded rows.
+            Dilated rows.
         """
-        eroded: list[list[float]] = []
+        dilated: list[list[float]] = []
         for row in rows:
             prefix = [0.0]
             for value in row:
@@ -477,20 +467,16 @@ def erode_mask(mask: list[list[float]], radius: int) -> list[list[float]]:
             new_row: list[float] = []
             count = len(row)
             for index in range(count):
-                left = index - radius
-                right = index + radius
-                if left < 0 or right >= count:
-                    new_row.append(0.0)
-                    continue
-                need = right - left + 1
-                got = prefix[right + 1] - prefix[left]
-                new_row.append(1.0 if got == need else 0.0)
-            eroded.append(new_row)
-        return eroded
+                left = max(0, index - radius)
+                right = min(count, index + radius + 1)
+                got = prefix[right] - prefix[left]
+                new_row.append(1.0 if got > 0 else 0.0)
+            dilated.append(new_row)
+        return dilated
 
-    horizontal = _erode_axis(mask)
+    horizontal = _dilate_axis(mask)
     transposed = [list(col) for col in zip(*horizontal, strict=False)]
-    vertical = _erode_axis(transposed)
+    vertical = _dilate_axis(transposed)
     return [list(col) for col in zip(*vertical, strict=False)]
 
 
@@ -602,7 +588,7 @@ def reinsert_people(
 
     Args:
         plate: Decoded cubic (or ordinary) still.
-        source: Snapped photograph.
+        source: Full-resolution source still from LoadImage.
         prompt: Enhance STRING.
         segment: Optional mask callable. Default is :func:`segment_people`.
 
@@ -644,8 +630,8 @@ def reinsert_people(
             painted.append(frame)
             continue
         person = _resize_mask(mask, height, width)
-        person = erode_mask(person, mask_radius(height, width))
-        person = feather_mask(person, 1)
+        person = dilate_mask(person, DILATE_RADIUS)
+        person = feather_mask(person, FEATHER_RADIUS)
         if _mask_peak(person) <= 0.0:
             painted.append(frame)
             continue
@@ -690,7 +676,7 @@ class EZReinsertPeople:
 
         Args:
             plate: Decoded still.
-            source: Snapped photograph.
+            source: Full-resolution source still from LoadImage.
             prompt: Enhance STRING.
 
         Returns:

@@ -497,6 +497,6 @@
   {
     "id": "voxel-block-world",
     "label": "Cubic block world",
-    "prompt": "Rebuild this photographed place as a constructed cubic block world. Same camera, horizon, and inventory. The reference is a coarse block study of that place. Rebuild every backdrop, sky, building, tree, water, floor, and prop as large axis-aligned cubes with visible tops and sides, square faces, and a coarse texel grid. Stacked block walls, cube canopies, cube water, cube tiles under every sole. Person-shaped regions become the cube surfaces behind those people. Empty of new lettering."
+    "prompt": "Rebuild this photographed place as a constructed cubic block world. Same camera, horizon, and inventory. The reference is a coarse block study of that place with its people removed. Rebuild every backdrop, sky, building, tree, water, floor, and prop as large axis-aligned cubes with visible tops and sides, square faces, and a coarse texel grid. Stacked block walls, cube canopies, cube water. The scene is empty of people: no figures, no humanoid shapes, no silhouettes, no person-shaped blocks. Empty of new lettering."
   }
 ]

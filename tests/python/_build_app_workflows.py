@@ -189,12 +189,12 @@ Klein 4B **background swap**. Load a still. Pick a sample place or type a custom
 
 Other characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero.
 
-Do not Queue without a start image. Describe image (default on) captions the source so CLIP can name inventory; missing `download-llm --tier describe` fail-softs empty. Upscale (default none) is lanczos after decode.
+Do not Queue without a start image. Describe image (default on) captions the source so CLIP can name inventory on ordinary place swaps; Cubic block world skips the caption because the plate has no people. Missing `download-llm --tier describe` fail-softs empty. Upscale (default none) is lanczos after decode.
 
 The sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is the photo reference for ordinary place swaps. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
 Prompt enhance is on by default for bare place names (on-box Qwen3-4B-Instruct-2507). Named samples skip the rewriter so Cubic block world and the place recipes reach CLIP as written. Style is hidden — the source still owns the subject's look.
 
-**Cubic block world** does not edit the photograph in place. Klein sees a coarse block study of this photo (same camera and layout, cube faces) and rebuilds that study as a constructed block world. Detected people are pasted back from the source pixels (every person the mask catches; animals stay cubed). Other / background character toggles still apply to the other place samples. The person segmenter is BSD-3 DeepLabV3, optional, under `${MODELS_DIR}/comfy/ez-person/` (not part of `download-models`). Missing weights still save the block world; people stay cubed. Set `EZ_PERSON_MASK=off` to skip the paste. If the plate is only the flat study, set Quality **High** (Klein base if `download-image --tier base` is on disk).
+**Cubic block world** does not edit the photograph in place. The source people are erased from a coarse block study of this photo (same camera and layout, cube faces), so Klein rebuilds an empty block world — no figures, no silhouettes, no person-shaped blocks. The people from the photo are pasted back at full resolution from the original still (every person the mask catches; animals stay cubed), dilated ~2 px and feathered ~6 px so each keeps its full silhouette with soft edges. Other / background character toggles still apply to the other place samples. The person segmenter is BSD-3 DeepLabV3, optional, under `${MODELS_DIR}/comfy/ez-person/` (not part of `download-models`). Missing weights leave the study unchanged and skip the paste; people stay cubed. Set `EZ_PERSON_MASK=off` to skip the paste. If the plate is only the flat study, set Quality **High** (Klein base if `download-image --tier base` is on disk).
 """
 
 BACKGROUND_EDIT_NOTE = """## stills/background-edit
@@ -287,6 +287,8 @@ def _dump(path: Path, graph: dict) -> None:
     wire_upscale(graph, rel)
     wire_image_describe(graph)
     wire_background_cast(graph)
+    if rel in ("stills/background-swap", "stills/background-edit"):
+        _park_background_cast(graph)
     if rel == "stills/background-swap":
         _paint_background_swap_defaults(graph)
     stamp_suite_graph(graph)
@@ -1905,6 +1907,7 @@ def _wire_cubic_rebuild(graph: dict) -> None:
     )
     decode = next(node for node in graph["nodes"] if node.get("type") == "VAEDecode")
     match = next(node for node in graph["nodes"] if node.get("type") == "EZMatchImageSize")
+    source_img = next(node for node in graph["nodes"] if node.get("type") == "LoadImage")
 
     cond_link = next(
         item.get("link")
@@ -1992,10 +1995,10 @@ def _wire_cubic_rebuild(graph: dict) -> None:
     )
     match_image["link"] = link_out
     _append_out_link(decode, decode_slot, link_dec)
-    _append_out_link(snap, 0, link_src)
+    _append_out_link(source_img, 0, link_src)
     _append_out_link(enhance, 0, link_pr)
     _add_link(graph, link_dec, decode_id, decode_slot, re_id, 0, "IMAGE")
-    _add_link(graph, link_src, int(snap["id"]), 0, re_id, 1, "IMAGE")
+    _add_link(graph, link_src, int(source_img["id"]), 0, re_id, 1, "IMAGE")
     _add_link(graph, link_pr, int(enhance["id"]), 0, re_id, 2, "STRING")
     _add_link(graph, link_out, re_id, 0, int(match["id"]), image_slot, "IMAGE")
     graph["last_node_id"] = max(int(graph.get("last_node_id") or 0), re_id)
@@ -2149,6 +2152,49 @@ def _paint_background_job(
     return graph
 
 
+def _park_background_cast(graph: dict) -> None:
+    """Park the cast node on the SETTINGS column (KSampler x).
+
+    ``wire_background_cast`` drops the cast at ``enhance.x + 320`` (x=1176),
+    left of the PROMPT column (x<=1296). That pulls the SETTINGS group into
+    the PROMPT group and ``finalize_layout`` fails on the overlap.
+
+    Args:
+        graph: Serialized background-swap / background-edit graph (mutated).
+    """
+    for node in graph.get("nodes") or []:
+        if node.get("type") == "EZBackgroundCast":
+            node["pos"] = [1324, 508]
+
+
+def _settle_background_swap_settings_column(graph: dict) -> None:
+    """Pack the cubic-rebuild nodes into one SETTINGS column at the KSampler x.
+
+    The reinsert/match nodes land in the header band (y<436) and the cast /
+    snap / encode nodes sit outside the SETTINGS box, so they become
+    ungrouped leftovers stacked left of the PROMPT column; the stage groups
+    then overlap in x and ``finalize_layout`` blows up. One column keeps the
+    groups apart.
+
+    Args:
+        graph: Serialized background-swap graph (mutated).
+    """
+    rows = {
+        "EZBackgroundCast": 508,
+        "EZSnapImage": 670,
+        "EZEmptyFlux2FromImage": 802,
+        "VAEEncode": 934,
+        "EZCubicCondition": 1086,
+        "KSampler": 1288,
+        "EZReinsertPeople": 1622,
+        "EZMatchImageSize": 1804,
+    }
+    for node in graph.get("nodes") or []:
+        y = rows.get(node.get("type"))
+        if y is not None:
+            node["pos"] = [1324, y]
+
+
 def build_background_swap() -> dict:
     graph = build_text_swap()
     graph = _paint_background_job(
@@ -2157,8 +2203,8 @@ def build_background_swap() -> dict:
         note=BACKGROUND_SWAP_NOTE,
         description=(
             "Klein 4B background swap. LoadImage source still. Empty Flux.2 canvas. "
-            "Photo reference for place swaps. Cubic block world uses a block study "
-            "and pastes people. Prefix ez_bg_swap."
+            "Photo reference for place swaps. Cubic block world uses a people-erased "
+            "block study and pastes the people back full-resolution. Prefix ez_bg_swap."
         ),
         prefix="ez_bg_swap",
         mode="background_swap",
@@ -2173,6 +2219,7 @@ def build_background_swap() -> dict:
     _rewire_background_swap_canvas(graph)
     _paint_background_swap_defaults(graph)
     _wire_cubic_rebuild(graph)
+    _settle_background_swap_settings_column(graph)
     return graph
 
 
