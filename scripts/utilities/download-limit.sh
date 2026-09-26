@@ -2,13 +2,13 @@
 #
 # ## download-limit
 #
-# Limit host download bandwidth so multi‑GB model pulls cannot starve remote SSH.
+# Limit host download bandwidth so multi-GB model pulls cannot starve remote SSH.
 #
 # Purpose:
 #   Apply kernel traffic shaping via wondershaper on the default-route interface.
 #   Supports fixed Mbps caps and an **auto** mode that measures download Mbps
 #   (duration HTTP probe first, then Ookla, then speedtest-cli) and applies
-#   floor(0.85 × measured_download_mbps). Auto measurements are cached 24h on the
+#   floor(0.85 x measured_download_mbps). Auto measurements are cached 24h on the
 #   host (not MODELS_DIR). Apply is verified via tc qdisc (or mocks).
 #   The wrap subcommand always clears limits on EXIT/INT/TERM so a killed download
 #   cannot leave the host permanently throttled. If apply fails, wrap soft-fails
@@ -36,7 +36,7 @@
 #   DOWNLOAD_LIMIT_REQUIRE, DOWNLOAD_LIMIT_CACHE_DIR, DOWNLOAD_LIMIT_CACHE_TTL_SEC
 #
 # Units:
-#   Limits are megabits per second (Mbps), not MB/s. 40 Mbps ≈ 5 MB/s.
+#   Limits are megabits per second (Mbps), not MB/s. 40 Mbps ~ 5 MB/s.
 #   Wondershaper rates are clamped to a legal HTB kbps range.
 #
 # Exit codes:
@@ -56,7 +56,7 @@ source "${REPO_ROOT}/scripts/lib/common.sh"
 
 readonly AUTO_FRACTION="0.85"
 readonly BANDWIDTH_UNIT_MULTIPLIER=1000
-# High-but-legal "uncapped" upload for HTB (Mbps → ×1000 = kbps for wondershaper).
+# High-but-legal "uncapped" upload for HTB (Mbps -> x1000 = kbps for wondershaper).
 # Values near 100000 Mbps produce Illegal "rate" on common kernels.
 readonly DEFAULT_UPLOAD_MBPS=10000
 # Clamp wondershaper kbps arguments to a range HTB typically accepts.
@@ -199,7 +199,7 @@ ensure_wondershaper() {
 #   Exit status depends on command path; see implementation.
 #######################################
 sudo_wondershaper() {
-  # Silence "queues have been cleared" on clear — that line pollutes
+  # Silence "queues have been cleared" on clear - that line pollutes
   # measured=$(run_speedtest_mbps) if left on stdout. Keep apply output for error checks.
   local quiet=0
   if [[ ${1:-} == "clear" ]]; then
@@ -264,7 +264,7 @@ load_shaping_modules() {
   if [[ ${LAB_MOCK_WONDERSHAPER:-} == "1" || ${LAB_NO_SUDO:-} == "1" ]]; then
     return 0
   fi
-  # Non-interactive only — never prompt mid-download
+  # Non-interactive only - never prompt mid-download
   if ! command -v sudo >/dev/null 2>&1 || ! sudo -n true 2>/dev/null; then
     return 0
   fi
@@ -279,7 +279,7 @@ load_shaping_modules() {
 
 #######################################
 # Return 0 when kernel HTB-based shaping is likely available.
-# DGX Spark / NVIDIA OFED kernels often lack sch_htb — detect and skip wondershaper spam.
+# DGX Spark / NVIDIA OFED kernels often lack sch_htb - detect and skip wondershaper spam.
 # Globals:
 #   LAB_MOCK_WONDERSHAPER, LAB_FORCE_NO_HTB, LAB_SHAPING_SUPPORTED (cache 0|1)
 # Arguments:
@@ -304,7 +304,7 @@ shaping_supported() {
     export LAB_SHAPING_SUPPORTED
     return 0
   fi
-  # Detection only — no interactive sudo (load_shaping_modules is -n only)
+  # Detection only - no interactive sudo (load_shaping_modules is -n only)
   load_shaping_modules
   # Require non-interactive sudo for any real apply path
   if command -v sudo >/dev/null 2>&1 && ! sudo -n true 2>/dev/null; then
@@ -349,7 +349,7 @@ shaping_supported() {
 gentle_hf_workers_for_mbps() {
   local mbps="${1:-50}"
   local min_w workers
-  # Floor ≥2: short HTTP probes often under-read line rate; workers=1 looks "hung" on multi-GB files
+  # Floor >=2: short HTTP probes often under-read line rate; workers=1 looks "hung" on multi-GB files
   min_w="${HF_DOWNLOAD_MIN_WORKERS:-2}"
   if [[ ${mbps} -ge 200 ]]; then
     workers=4
@@ -402,7 +402,7 @@ enable_gentle_download_mode() {
   if [[ -z ${HF_DOWNLOAD_MAX_WORKERS:-} ]]; then
     export HF_DOWNLOAD_MAX_WORKERS="${workers}"
   fi
-  dl_log "Kernel Mbps cap unavailable${iface:+ on ${iface}} (common on DGX Spark) — gentle HF mode: max-workers=${HF_DOWNLOAD_MAX_WORKERS} (target ~${mbps} Mbps)"
+  dl_log "Kernel Mbps cap unavailable${iface:+ on ${iface}} (common on DGX Spark) - gentle HF mode: max-workers=${HF_DOWNLOAD_MAX_WORKERS} (target ~${mbps} Mbps)"
   dl_log "Tip: DOWNLOAD_LIMIT=off skips limit machinery entirely"
 }
 
@@ -906,13 +906,13 @@ http_probe_url() {
   mbps="$(parse_curl_speed_sample "${out}" "${curl_rc}")" || return 1
   size="$(echo "${out}" | awk '{print $3}')"
   tsec="$(echo "${out}" | awk '{print $4}')"
-  dl_log "HTTP probe OK via ${url%%\?*} ≈ ${mbps} Mbps (${tsec}s, ${size} bytes)"
+  dl_log "HTTP probe OK via ${url%%\?*} ~ ${mbps} Mbps (${tsec}s, ${size} bytes)"
   echo "${mbps}"
   return 0
 }
 
 #######################################
-# HTTP download probe → approximate download Mbps (no sudo).
+# HTTP download probe -> approximate download Mbps (no sudo).
 # Duration transfer: large payload + short max-time; curl timeout is a valid sample.
 # Uses Cloudflare speed endpoint by default; override with SPEEDTEST_HTTP_URL.
 # Globals:
@@ -979,7 +979,7 @@ ensure_speedtest_cli() {
   if [[ -n ${LAB_MOCK_SPEEDTEST_MBPS:-} ]]; then
     return 0
   fi
-  dl_log "speedtest-cli not found; attempting install (multiple strategies)…"
+  dl_log "speedtest-cli not found; attempting install (multiple strategies)..."
   if [[ -d ${HOME}/.local/bin ]]; then
     export PATH="${HOME}/.local/bin:${PATH}"
   fi
@@ -1143,7 +1143,7 @@ run_speedtest_mbps() {
     clear_limits_for_speedtest
   fi
 
-  # HTTP first — short completed files and sivel-first were under-reading line rate.
+  # HTTP first - short completed files and sivel-first were under-reading line rate.
   if candidate="$(probe_http_download_mbps)"; then
     best="${candidate}"
     probe_src="http"
@@ -1236,7 +1236,7 @@ resolve_limit_mbps() {
     if measured=$(run_speedtest_mbps); then
       local auto
       auto=$(compute_auto_limit "${measured}")
-      dl_log "Measured download ≈ ${measured} Mbps → auto limit ${auto} Mbps (85%)"
+      dl_log "Measured download ~ ${measured} Mbps -> auto limit ${auto} Mbps (85%)"
       echo "${auto}"
       return 0
     fi
@@ -1339,7 +1339,7 @@ cmd_clear() {
 }
 
 #######################################
-# Sample interface receive rate over a duration → Mbps integer.
+# Sample interface receive rate over a duration -> Mbps integer.
 # Globals:
 #   LAB_MOCK_LIVE_RX_MBPS, LAB_MOCK_LIVE_SAMPLE_SLEEP
 # Arguments:
@@ -1378,9 +1378,9 @@ sample_iface_rx_mbps() {
     sleep "${left}"
     elapsed=$((elapsed + left))
     if [[ -n ${download_pid} ]] && kill -0 "${download_pid}" 2>/dev/null; then
-      dl_log "Sampling live RX… ${elapsed}/${sec}s (download PID ${download_pid} still running)"
+      dl_log "Sampling live RX... ${elapsed}/${sec}s (download PID ${download_pid} still running)"
     else
-      dl_log "Sampling live RX… ${elapsed}/${sec}s"
+      dl_log "Sampling live RX... ${elapsed}/${sec}s"
     fi
   done
   b2="$(cat "${rx_path}" 2>/dev/null)" || return 1
@@ -1398,7 +1398,7 @@ sample_iface_rx_mbps() {
 #   DOWNLOAD_LIMIT_REQUIRE
 # Arguments:
 #   $1  Interface
-#   $2  Measured raw Mbps (before 85% — this function applies auto fraction)
+#   $2  Measured raw Mbps (before 85% - this function applies auto fraction)
 # Outputs:
 #   Status logs
 # Returns:
@@ -1409,7 +1409,7 @@ apply_limit_from_measured() {
   local measured="${2}"
   local target
   target="$(compute_auto_limit "${measured}")"
-  dl_log "Live sample done: ≈ ${measured} Mbps → target ${target} Mbps (85%)"
+  dl_log "Live sample done: ~ ${measured} Mbps -> target ${target} Mbps (85%)"
   if ! shaping_supported; then
     if [[ ${DOWNLOAD_LIMIT_REQUIRE:-} == "1" ]]; then
       die "Failed to apply bandwidth limit on ${iface}"
@@ -1449,7 +1449,7 @@ wrap_with_live_speed_limit() {
 
   # Quick dry-run: if HTTP probe works, use it as preflight-quality measure (no 15s idle)
   if live_mbps=$(probe_http_download_mbps); then
-    dl_log "Reliable HTTP probe ≈ ${live_mbps} Mbps — skipping idle RX sample"
+    dl_log "Reliable HTTP probe ~ ${live_mbps} Mbps - skipping idle RX sample"
     write_speed_cache "${live_mbps}" "http" "${iface}"
     if shaping_supported; then
       apply_limit_from_measured "${iface}" "${live_mbps}" || true
@@ -1457,7 +1457,7 @@ wrap_with_live_speed_limit() {
       enable_gentle_download_mode "$(compute_auto_limit "${live_mbps}")" "${iface}"
     fi
     dl_log "=== download-limit: download (foreground) ==="
-    dl_log "Starting model download now — live progress should appear below"
+    dl_log "Starting model download now - live progress should appear below"
     dl_log "Running: ${WRAP_ARGS[*]}"
     run_with_signal_forwarding "${WRAP_ARGS[@]}"
     return $?
@@ -1465,12 +1465,12 @@ wrap_with_live_speed_limit() {
 
   # No working probe URL: do NOT treat idle NIC RX as line rate
   dl_log "=== download-limit: no reliable speed probe ==="
-  dl_log "HTTP/speedtest unavailable — using default max-workers=$(default_hf_workers_untrusted) (not idle RX)"
+  dl_log "HTTP/speedtest unavailable - using default max-workers=$(default_hf_workers_untrusted) (not idle RX)"
   export HF_HUB_ENABLE_HF_TRANSFER=0
   export HF_DOWNLOAD_MAX_WORKERS="${HF_DOWNLOAD_MAX_WORKERS:-$(default_hf_workers_untrusted)}"
   dl_log "Gentle HF mode: max-workers=${HF_DOWNLOAD_MAX_WORKERS} (untrusted/idle sample avoided)"
   dl_log "=== download-limit: download (foreground) ==="
-  dl_log "Starting model download now — live progress should appear below"
+  dl_log "Starting model download now - live progress should appear below"
   dl_log "Running: ${WRAP_ARGS[*]}"
   run_with_signal_forwarding "${WRAP_ARGS[@]}"
   return $?
@@ -1499,11 +1499,11 @@ cmd_wrap() {
     if measured=$(run_speedtest_mbps); then
       mbps=$(compute_auto_limit "${measured}")
       preflight_ok=1
-      dl_log "Preflight download ≈ ${measured} Mbps → auto limit ${mbps} Mbps (85%)"
+      dl_log "Preflight download ~ ${measured} Mbps -> auto limit ${mbps} Mbps (85%)"
     else
       preflight_ok=0
       mbps="${FALLBACK_MBPS}"
-      dl_log "Preflight failed — next: live RX measure, then one foreground model download"
+      dl_log "Preflight failed - next: live RX measure, then one foreground model download"
     fi
   else
     mbps=$(resolve_limit_mbps "${LIMIT_SPEC}")
@@ -1519,13 +1519,13 @@ cmd_wrap() {
   fi
 
   if shaping_supported && apply_limits "${iface}" "${mbps}"; then
-    dl_log "limit=${mbps} Mbps kernel HTB on ${iface} — live download progress follows"
+    dl_log "limit=${mbps} Mbps kernel HTB on ${iface} - live download progress follows"
   else
     if [[ ${DOWNLOAD_LIMIT_REQUIRE:-} == "1" ]]; then
       die "Failed to apply bandwidth limit on ${iface} (set DOWNLOAD_LIMIT=off to skip, or fix wondershaper/qdisc)"
     fi
     enable_gentle_download_mode "${mbps}" "${iface}"
-    dl_log "limit=${mbps} Mbps gentle HF workers (no kernel HTB) — live download progress follows"
+    dl_log "limit=${mbps} Mbps gentle HF workers (no kernel HTB) - live download progress follows"
   fi
   dl_log "Running: ${WRAP_ARGS[*]}"
   run_with_signal_forwarding "${WRAP_ARGS[@]}"

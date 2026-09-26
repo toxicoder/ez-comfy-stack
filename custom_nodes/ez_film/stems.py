@@ -1,4 +1,4 @@
-"""Picture-lock stem mix: DX / FX / BG / MX → duck → YouTube loudnorm."""
+"""Picture-lock stem mix: DX / FX / BG / MX -> duck -> YouTube loudnorm."""
 
 from __future__ import annotations
 
@@ -197,11 +197,11 @@ def parse_lufs(stderr: str) -> float | None:
 
 
 def lufs_in_band(value: float | None, *, target: float = LUFS_TARGET, tol: float = LUFS_TOL) -> bool:
-    """True when measured LUFS is within YouTube −14 ± 2.
+    """True when measured LUFS is within YouTube -14 +/- 2.
 
     Args:
         value: Measured integrated LUFS, or None.
-        target: Target LUFS (YouTube −14).
+        target: Target LUFS (YouTube -14).
         tol: Allowed absolute error.
 
     Returns:
@@ -257,7 +257,7 @@ def mix_stems(
     if dx is None and not beds:
         report["defects"].append("no stems")
     if dx is not None and not beds:
-        report["defects"].append("DX without a bed — pass BG from the LTX print")
+        report["defects"].append("DX without a bed - pass BG from the LTX print")
     exe = ffmpeg or find_ffmpeg()
     if not exe:
         report["defects"].append("ffmpeg missing")
@@ -273,7 +273,7 @@ def mix_stems(
     ordered.extend(beds)
     argv = mix_argv(ordered, out, has_dx=has_dx, duck_db=duck_db, video=video)
     argv[0] = exe
-    print(f"[ez_film] stem mix → {out}", file=sys.stderr)
+    print(f"[ez_film] stem mix -> {out}", file=sys.stderr)
     proc = _run(argv, run=run)
     if proc.returncode != 0:
         report["defects"].append(

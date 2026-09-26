@@ -1,6 +1,6 @@
 ---
 title: "Low-mode track"
-description: "Cinema Rack illustration — Low-mode track."
+description: "Cinema Rack illustration - Low-mode track."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

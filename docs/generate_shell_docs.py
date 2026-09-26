@@ -6,13 +6,13 @@ for lab-style markers and writes ``docs/generated/shell/reference.md``.
 
 Markers:
 
-- ``# ## Title`` — section
-- ``# ### Title`` — subsection (nested under the previous section when possible)
-- ``# @command name`` — public CLI verb
-- ``# @function name`` — documented helper (explicit marker only; Google
+- ``# ## Title`` - section
+- ``# ### Title`` - subsection (nested under the previous section when possible)
+- ``# @command name`` - public CLI verb
+- ``# @function name`` - documented helper (explicit marker only; Google
   ``#####`` banners without ``@function`` are not scraped)
 
-Stdlib only. Session variables stay ``${SPARK_HOST}``-style — never lab
+Stdlib only. Session variables stay ``${SPARK_HOST}``-style - never lab
 ``{{PLACEHOLDER}}``. No Bazel, TypeDoc, or kubectl examples.
 
 Usage:
@@ -215,7 +215,7 @@ def _collect_doc_body(lines: list[str], start: int) -> tuple[list[str], int]:
         if HASH_BANNER_RE.match(stripped) or SEPARATOR_RE.match(stripped):
             j += 1
             continue
-        # Google field labels stay as prose (Globals / Arguments / …).
+        # Google field labels stay as prose (Globals / Arguments / ...).
         body.append(content)
         j += 1
     return body, j

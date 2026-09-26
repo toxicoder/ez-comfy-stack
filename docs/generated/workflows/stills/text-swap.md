@@ -29,14 +29,14 @@ Occupancy **klein**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fa
 ```text
 ## stills/text-swap
 
-Klein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or "Replace SALE with OPEN"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height when Upscale is none (snapped to the Flux.2 ÷16 grid for denoise, then scaled back). 2x, 4x, and 4K lanczos-resize that saved PNG. Prefix `ez_text_swap`.
+Klein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or "Replace SALE with OPEN"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height when Upscale is none (snapped to the Flux.2 div16 grid for denoise, then scaled back). 2x, 4x, and 4K lanczos-resize that saved PNG. Prefix `ez_text_swap`.
 
 Do not Queue without a start image. Short high-contrast lettering holds best. For tiny or dense type, set Quality **High** (Klein base if `download-image --tier base` is on disk). Distilled 4B is best-effort, not a typesetter.
 
 Type only the new lettering (HELLO) or a targeting line (Replace SALE with OPEN). The graph always wraps that into a glyph-lock instruction, even when Rewrite prompt is off.
 
-VAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
-Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Style is hidden — the source still owns look.
+VAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.
+Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Style is hidden - the source still owns look.
 ```
 
 ## How to Queue
@@ -122,9 +122,9 @@ flowchart LR
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
 
-### `UNETLoader` — Load Diffusion Model
+### `UNETLoader` - Load Diffusion Model
 
 Load a standalone transformer/UNET from diffusion_models/.
 
@@ -165,7 +165,7 @@ Cast at load.
 | `fp8_e4m3fn_fast` | FP8 e4m3fn with fast optimizations. |
 | `fp8_e5m2` | Cast to FP8 e5m2. |
 
-### `CLIPLoader` — Load CLIP
+### `CLIPLoader` - Load CLIP
 
 Load a text encoder. The type combo must match the UNET family.
 
@@ -193,7 +193,7 @@ Type `COMBO`.
 
 CLIPType enum. Picks tokenizer + template.
 
-**How it affects generation:** flux2 wraps Klein strings in a Qwen chat template — do not paste <|im_start|>. wan is UMT5. ltxv is Gemma4-with-proj.
+**How it affects generation:** flux2 wraps Klein strings in a Qwen chat template - do not paste <|im_start|>. wan is UMT5. ltxv is Gemma4-with-proj.
 
 **This graph:** `flux2`
 
@@ -247,9 +247,9 @@ Where to load the encoder.
 | `default` | Load on the Comfy compute device (GPU). Lab default. |
 | `cpu` | Force CPU. Much slower; only for debugging a CLIP load. |
 
-### `VAELoader` — Load VAE
+### `VAELoader` - Load VAE
 
-Load the autoencoder that maps pixels ↔ latents (and LTX audio).
+Load the autoencoder that maps pixels <-> latents (and LTX audio).
 
 !!! warning "Lab notes"
 
@@ -269,7 +269,7 @@ Filename under vae/.
 
 **This graph:** `flux2-vae.safetensors`
 
-### `CLIPTextEncode` — CLIP Text Encode
+### `CLIPTextEncode` - CLIP Text Encode
 
 Turn a prompt string into CONDITIONING for the sampler.
 
@@ -289,14 +289,14 @@ Type `STRING`.
 
 Prompt encoded by CLIP.
 
-**How it affects generation:** Klein: sentences, subject → place → light → camera. Wan I2V: motion + one camera only. LTX: present-tense paragraph with audio interleaved. Distilled Klein quality lives here, not in CFG.
+**How it affects generation:** Klein: sentences, subject -> place -> light -> camera. Wan I2V: motion + one camera only. LTX: present-tense paragraph with audio interleaved. Distilled Klein quality lives here, not in CFG.
 
 | Instance | Value |
 | --- | --- |
 | Positive | `HELLO` |
-| Negative | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| Negative | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
-### `KSampler` — KSampler
+### `KSampler` - KSampler
 
 Denoise a latent for N steps at a CFG, sampler, and scheduler.
 
@@ -308,17 +308,17 @@ Denoise a latent for N steps at a CFG, sampler, and scheduler.
 | --- | --- | --- | --- |
 | `model` | in | `MODEL` | UNET / transformer after any ModelSampling* patch. |
 | `positive` | in | `CONDITIONING` | What to include (CLIP / ACE / LTX prompt). |
-| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well — put constraints in the positive. |
+| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well - put constraints in the positive. |
 | `latent_image` | in | `LATENT` | Noise canvas or encoded start image / video / audio latent. |
 | `LATENT` | out | `LATENT` | Denoised latent for VAE decode. |
 
 #### `seed`
 
-Type `INT`. Range / default: 0 … 2^64-1; lab 42.
+Type `INT`. Range / default: 0 ... 2^64-1; lab 42.
 
 Random seed for the noise tensor.
 
-**How it affects generation:** Same seed + same graph ≈ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
+**How it affects generation:** Same seed + same graph ~ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
 
 **This graph:** `42`
 
@@ -343,21 +343,21 @@ What happens to seed after Queue.
 
 #### `steps`
 
-Type `INT`. Range / default: 1–10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
+Type `INT`. Range / default: 1-10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
 
 Denoising iterations.
 
-**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 — raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
+**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 - raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
 
 **This graph:** `8`
 
 #### `cfg`
 
-Type `FLOAT`. Range / default: 0–100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
+Type `FLOAT`. Range / default: 0-100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
 
 Classifier-free guidance scale.
 
-**How it affects generation:** Distilled Klein is CFG 1.0 — raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
+**How it affects generation:** Distilled Klein is CFG 1.0 - raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
 
 **This graph:** `1.0`
 
@@ -447,7 +447,7 @@ How sigmas are spaced across steps.
 
 #### `denoise`
 
-Type `FLOAT`. Range / default: 0–1; lab 1.0.
+Type `FLOAT`. Range / default: 0-1; lab 1.0.
 
 Fraction of the latent to replace with denoised signal.
 
@@ -455,7 +455,7 @@ Fraction of the latent to replace with denoised signal.
 
 **This graph:** `1.0`
 
-### `VAEDecode` — VAE Decode
+### `VAEDecode` - VAE Decode
 
 Decode image/video latents to pixels.
 
@@ -467,7 +467,7 @@ Decode image/video latents to pixels.
 
 No widgets. Sockets only.
 
-### `SaveImage` — Save Image
+### `SaveImage` - Save Image
 
 Write PNG stills under the output folder.
 
@@ -485,7 +485,7 @@ Save prefix.
 
 **This graph:** `ez_text_swap`
 
-### `Note` — Note
+### `Note` - Note
 
 On-canvas operator note (not executed).
 
@@ -501,22 +501,22 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## stills/text-swap Klein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or "Replace SALE with OPEN"). Enhance **text_swap** rewrites a glyph-lock instruction: sam…`
+**This graph:** `## stills/text-swap Klein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or "Replace SALE with OPEN"). Enhance **text_swap** rewrites a glyph-lock instruction: sam...`
 
 ```text
 ## stills/text-swap
 
-Klein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or "Replace SALE with OPEN"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height when Upscale is none (snapped to the Flux.2 ÷16 grid for denoise, then scaled back). 2x, 4x, and 4K lanczos-resize that saved PNG. Prefix `ez_text_swap`.
+Klein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or "Replace SALE with OPEN"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height when Upscale is none (snapped to the Flux.2 div16 grid for denoise, then scaled back). 2x, 4x, and 4K lanczos-resize that saved PNG. Prefix `ez_text_swap`.
 
 Do not Queue without a start image. Short high-contrast lettering holds best. For tiny or dense type, set Quality **High** (Klein base if `download-image --tier base` is on disk). Distilled 4B is best-effort, not a typesetter.
 
 Type only the new lettering (HELLO) or a targeting line (Replace SALE with OPEN). The graph always wraps that into a glyph-lock instruction, even when Rewrite prompt is off.
 
-VAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
-Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Style is hidden — the source still owns look.
+VAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.
+Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Style is hidden - the source still owns look.
 ```
 
-### `LoadImage` — Load Image
+### `LoadImage` - Load Image
 
 Load a still from Comfy input/ (or upload).
 
@@ -549,7 +549,7 @@ Upload widget type.
 
 **This graph:** `image`
 
-### `EZKleinPromptEnhance` — Klein Prompt Enhance
+### `EZKleinPromptEnhance` - Klein Prompt Enhance
 
 Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
 
@@ -620,9 +620,9 @@ System prompt flavor.
 
 Type `STRING`.
 
-Framing hint (YouTube 16:9 still, Instagram 4:5, …).
+Framing hint (YouTube 16:9 still, Instagram 4:5, ...).
 
-**How it affects generation:** Steers aspect language in the rewrite. Does not set the latent size — EmptyFlux2LatentImage does.
+**How it affects generation:** Steers aspect language in the rewrite. Does not set the latent size - EmptyFlux2LatentImage does.
 
 **This graph:** `match the source still`
 
@@ -952,7 +952,7 @@ Sample-catalog id (graph stem).
 
 **This graph:** `stills/text-swap`
 
-### `EZNegativePromptEnhance` — Negative Prompt Enhance
+### `EZNegativePromptEnhance` - Negative Prompt Enhance
 
 Rewrite a negative CLIP seed against the final positive. Stays on when Rewrite prompt is off.
 
@@ -1007,7 +1007,7 @@ Which negative family.
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
 
-### `EZQuality` — Quality
+### `EZQuality` - Quality
 
 Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
@@ -1042,7 +1042,7 @@ custom freezes last overlay; lab restores graph defaults.
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
-### `VAEEncode` — VAE Encode
+### `VAEEncode` - VAE Encode
 
 Encode pixels to a latent (Klein edit / clay).
 
@@ -1054,7 +1054,7 @@ Encode pixels to a latent (Klein edit / clay).
 
 No widgets. Sockets only.
 
-### `ReferenceLatent` — Reference Latent
+### `ReferenceLatent` - Reference Latent
 
 Pack an encoded image latent into positive conditioning (Klein edit).
 
@@ -1070,7 +1070,7 @@ Pack an encoded image latent into positive conditioning (Klein edit).
 
 No widgets. Sockets only.
 
-### `EZSnapImage` — Snap image (div 16)
+### `EZSnapImage` - Snap image (div 16)
 
 Scale a still to the largest width and height that fit inside the source and are multiples of 16.
 
@@ -1085,7 +1085,7 @@ Scale a still to the largest width and height that fit inside the source and are
 
 No widgets. Sockets only.
 
-### `EZMatchImageSize` — Match image size
+### `EZMatchImageSize` - Match image size
 
 Resize a still to another image's exact width and height.
 
@@ -1096,12 +1096,12 @@ Resize a still to another image's exact width and height.
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `image` | in | `IMAGE` | Edited still. |
-| `size_src` | in | `IMAGE` | Source still whose H×W is the target. |
+| `size_src` | in | `IMAGE` | Source still whose HxW is the target. |
 | `IMAGE` | out | `IMAGE` | Edited still at source size. |
 
 No widgets. Sockets only.
 
-### `EZImageUpscale` — Upscale still
+### `EZImageUpscale` - Upscale still
 
 Optional lanczos upscale after a still decode. none passes the tensor through.
 
@@ -1121,7 +1121,7 @@ Type `COMBO`. Range / default: none / 2x / 4x / 4K.
 
 Upscale mode.
 
-**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.
+**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840x2160 box (portrait 2160x3840). No extra weights.
 
 **This graph:** `none`
 
@@ -1134,7 +1134,7 @@ Upscale mode.
 | `4x` | Quadruple pixels. |
 | `4K` | Fit in a 4K box. |
 
-### `EZImageDescribe` — Describe image
+### `EZImageDescribe` - Describe image
 
 Caption a source still so Prompt Enhance can name inventory and lettering.
 
@@ -1144,7 +1144,7 @@ Caption a source still so Prompt Enhance can name inventory and lettering.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
-| `image` | in | `IMAGE` | Source still. Lazy — skipped when enable is off. |
+| `image` | in | `IMAGE` | Source still. Lazy - skipped when enable is off. |
 | `caption` | out | `STRING` | Short caption, or empty. |
 
 #### `enable`
@@ -1157,7 +1157,7 @@ Run the captioner.
 
 **This graph:** `false`
 
-### `EZModelCheck` — Check models
+### `EZModelCheck` - Check models
 
 Manual disk check for occupancy + Quality weights. Queue does not run this node.
 

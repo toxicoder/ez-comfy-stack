@@ -1,6 +1,6 @@
 ---
 title: "Mirror Frame"
-description: "Cinema Rack illustration — Mirror Frame."
+description: "Cinema Rack illustration - Mirror Frame."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

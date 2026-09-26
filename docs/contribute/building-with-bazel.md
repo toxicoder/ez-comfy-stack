@@ -1,6 +1,6 @@
 ---
 title: Building with Bazel
-description: Bazel-first test, lint, and docs workflow for ez-comfy-stack — targets, Makefile shims, and CI.
+description: Bazel-first test, lint, and docs workflow for ez-comfy-stack - targets, Makefile shims, and CI.
 tags: [bazel, testing, contributing, ci]
 ---
 

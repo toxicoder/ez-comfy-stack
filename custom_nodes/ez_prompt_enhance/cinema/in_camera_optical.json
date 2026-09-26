@@ -1878,7 +1878,7 @@
   {
     "id": "fx_double_iris_peek",
     "label": "Double Iris Peek",
-    "clause": "Iris twice\u2014open, close to a peek, open\u2014so the plate blinks mechanically.",
+    "clause": "Iris twice-open, close to a peek, open-so the plate blinks mechanically.",
     "still": "Iris at the peek, plate blinked mechanically, double-iris hold.",
     "wan_token": "",
     "audio": "",
@@ -2189,7 +2189,7 @@
   {
     "id": "fx_iris_out_on_prop",
     "label": "Iris Out On Prop",
-    "clause": "Iris out on a prop\u2014the ring, the key\u2014until only that object remains then black.",
+    "clause": "Iris out on a prop-the ring, the key-until only that object remains then black.",
     "still": "Only the prop remaining inside a closing iris, then black implied.",
     "wan_token": "",
     "audio": "",

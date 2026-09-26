@@ -1,6 +1,6 @@
 ---
 title: "Single Against Mass"
-description: "Cinema Rack illustration — Single Against Mass."
+description: "Cinema Rack illustration - Single Against Mass."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

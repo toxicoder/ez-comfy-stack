@@ -1,6 +1,6 @@
 ---
 title: "Carousel around table"
-description: "Cinema Rack illustration — Carousel around table."
+description: "Cinema Rack illustration - Carousel around table."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

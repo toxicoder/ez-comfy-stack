@@ -1,6 +1,6 @@
 """Chat and bounded research subagents for ez_research.
 
-Subagents are sequential in-process roles (planner → searchers → synthesizer).
+Subagents are sequential in-process roles (planner -> searchers -> synthesizer).
 GPU sidecar first via ez_prompt_enhance.client.complete when occupancy allows;
 CPU 4B only as the OOM-safe fallback.
 """
@@ -57,7 +57,7 @@ def _progress(total: int) -> Any:
         from ez_common import node_progress
 
         return node_progress(total)
-    except Exception:  # noqa: BLE001 — pytest / missing pack
+    except Exception:  # noqa: BLE001 - pytest / missing pack
         return None
 
 
@@ -86,7 +86,7 @@ def load_prompt(name: str) -> str:
 
 
 def clamp_subagents(value: object) -> int:
-    """Clamp the subagent count to 1–3.
+    """Clamp the subagent count to 1-3.
 
     Args:
         value: Widget INT or loose numeric token.
@@ -119,7 +119,7 @@ def parse_planner_queries(text: str, fallback: str, limit: int) -> list[str]:
     Args:
         text: Planner LLM output.
         fallback: User message used when JSON is missing.
-        limit: Max queries (clamped 1–3).
+        limit: Max queries (clamped 1-3).
 
     Returns:
         Unique query strings, length at most ``limit``.
@@ -167,7 +167,7 @@ def _complete(system: str, user: str) -> tuple[str, str]:
     try:
         _ensure_lab_custom_nodes_path()
         from ez_prompt_enhance.client import complete as llama_complete
-    except Exception as exc:  # noqa: BLE001 — fail-soft
+    except Exception as exc:  # noqa: BLE001 - fail-soft
         _log(f"prompt enhance client unavailable: {exc}")
         return "", "llama.cpp unavailable"
     text, reason = llama_complete(system, user, max_tokens=700, temperature=0.2)
@@ -232,7 +232,7 @@ def _fallback_brief(message: str, hits: list[SearchHit]) -> str:
     if hits:
         lines.append(format_sources(hits) or "(none)")
     else:
-        lines.append("(none — search empty or web search off)")
+        lines.append("(none - search empty or web search off)")
     lines.extend(
         [
             "",
@@ -310,13 +310,13 @@ def run_research(
     web_search: bool = True,
     subagents: object = 2,
 ) -> ResearchResult:
-    """Planner → N searchers → synthesizer. Sequential; one GGUF.
+    """Planner -> N searchers -> synthesizer. Sequential; one GGUF.
 
     Args:
         message: User question.
         history: Prior turns.
         web_search: When true, run web search for each planner query.
-        subagents: Planner query count (clamped 1–3).
+        subagents: Planner query count (clamped 1-3).
 
     Returns:
         Synthesized brief, sources, status, and planner queries.
@@ -412,9 +412,9 @@ def write_brief(
 
                     raw = folder_paths.get_output_directory()
                     output_dir = Path(raw) if raw else None
-                except Exception:  # noqa: BLE001 — pytest / missing Comfy
+                except Exception:  # noqa: BLE001 - pytest / missing Comfy
                     output_dir = None
-        except Exception:  # noqa: BLE001 — pytest / missing pack
+        except Exception:  # noqa: BLE001 - pytest / missing pack
             env = (os.environ.get("COMFY_OUTPUT_DIR") or "").strip()
             if not env:
                 return None

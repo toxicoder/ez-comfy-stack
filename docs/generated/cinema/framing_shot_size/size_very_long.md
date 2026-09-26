@@ -1,6 +1,6 @@
 ---
 title: "Very Long Shot"
-description: "Cinema Rack illustration — Very Long Shot."
+description: "Cinema Rack illustration - Very Long Shot."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

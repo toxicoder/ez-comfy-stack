@@ -1,6 +1,6 @@
 ---
 title: "Extreme Close-Up"
-description: "Cinema Rack illustration — Extreme Close-Up."
+description: "Cinema Rack illustration - Extreme Close-Up."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

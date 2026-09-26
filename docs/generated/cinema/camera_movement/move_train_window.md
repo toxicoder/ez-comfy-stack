@@ -1,6 +1,6 @@
 ---
 title: "Train window"
-description: "Cinema Rack illustration — Train window."
+description: "Cinema Rack illustration - Train window."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

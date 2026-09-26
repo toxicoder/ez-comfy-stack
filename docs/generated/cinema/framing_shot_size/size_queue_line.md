@@ -1,6 +1,6 @@
 ---
 title: "Queue Line"
-description: "Cinema Rack illustration — Queue Line."
+description: "Cinema Rack illustration - Queue Line."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

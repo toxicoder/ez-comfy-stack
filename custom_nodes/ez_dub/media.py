@@ -43,7 +43,7 @@ def input_directory() -> Path:
         path = Path(folder_paths.get_input_directory())
         if str(path):
             return path
-    except Exception:  # noqa: BLE001 — Comfy is optional in unit tests
+    except Exception:  # noqa: BLE001 - Comfy is optional in unit tests
         pass
     env = (os.environ.get("COMFY_OUTPUT_DIR") or os.environ.get("COMFY_OUTPUT") or "").strip()
     if env:
@@ -142,7 +142,7 @@ def resolve_media_source(
             found = Path(annotated)
             if found.is_file():
                 return str(found)
-    except Exception:  # noqa: BLE001 — Comfy is optional in unit tests
+    except Exception:  # noqa: BLE001 - Comfy is optional in unit tests
         pass
     raise FileNotFoundError(f"source missing: {path}")
 

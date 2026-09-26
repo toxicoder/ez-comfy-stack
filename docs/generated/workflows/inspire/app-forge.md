@@ -29,10 +29,10 @@ Occupancy **llm**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 ```text
 ## inspire/app-forge
 
-App Forge — clone a shipped lab graph into live `_user/` as a new App.
+App Forge - clone a shipped lab graph into live `_user/` as a new App.
 No UNET, no VAE, no KSampler. Does not Queue the result.
 
-Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
+Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
   ./scripts/manage.sh occupancy enter llm-desk --yes
 
@@ -44,7 +44,7 @@ heuristic if the GGUF is missing. CPU 4B is required next to Wan/LTX/TRELLIS.
 2. Set **Slug** (lowercase, hyphen). **As app** on writes `*.app.json`.
 3. Queue. Read **Path**, **Picked template**, and **Result occupancy**.
 4. Open `_user/<slug>` from the Apps sidebar. Queue that graph when GB10
-   occupancy matches the result (klein / wan / ltx / …).
+   occupancy matches the result (klein / wan / ltx / ...).
 
 Laptop agents: `./scripts/manage.sh studio-mcp --stdio` (Path D). Same
 pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
@@ -81,9 +81,9 @@ flowchart LR
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
 
-### `Note` — Note
+### `Note` - Note
 
 On-canvas operator note (not executed).
 
@@ -99,15 +99,15 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## inspire/app-forge App Forge — clone a shipped lab graph into live `_user/` as a new App. No UNET, no VAE, no KSampler. Does not Queue the result. Occupancy: llm — graph label (not a CLI mode). Pre…`
+**This graph:** `## inspire/app-forge App Forge - clone a shipped lab graph into live `_user/` as a new App. No UNET, no VAE, no KSampler. Does not Queue the result. Occupancy: llm - graph label (not a CLI mode). Pre...`
 
 ```text
 ## inspire/app-forge
 
-App Forge — clone a shipped lab graph into live `_user/` as a new App.
+App Forge - clone a shipped lab graph into live `_user/` as a new App.
 No UNET, no VAE, no KSampler. Does not Queue the result.
 
-Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
+Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
   ./scripts/manage.sh occupancy enter llm-desk --yes
 
@@ -119,7 +119,7 @@ heuristic if the GGUF is missing. CPU 4B is required next to Wan/LTX/TRELLIS.
 2. Set **Slug** (lowercase, hyphen). **As app** on writes `*.app.json`.
 3. Queue. Read **Path**, **Picked template**, and **Result occupancy**.
 4. Open `_user/<slug>` from the Apps sidebar. Queue that graph when GB10
-   occupancy matches the result (klein / wan / ltx / …).
+   occupancy matches the result (klein / wan / ltx / ...).
 
 Laptop agents: `./scripts/manage.sh studio-mcp --stdio` (Path D). Same
 pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
@@ -127,7 +127,7 @@ Does not write `workflows/_lab/`. Keepers: `promote-workflow`.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 ```
 
-### `EZAppForge` — App Forge
+### `EZAppForge` - App Forge
 
 Clone a shipped lab graph into live _user/ as a new App. No UNET.
 
@@ -209,7 +209,7 @@ Catalog id.
 
 **This graph:** `inspire/app-forge`
 
-### `EZQuality` — Quality
+### `EZQuality` - Quality
 
 Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
@@ -244,7 +244,7 @@ custom freezes last overlay; lab restores graph defaults.
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
-### `EZModelCheck` — Check models
+### `EZModelCheck` - Check models
 
 Manual disk check for occupancy + Quality weights. Queue does not run this node.
 

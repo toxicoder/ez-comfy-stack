@@ -6,8 +6,8 @@
 #
 # Purpose:
 #   Concatenate approved 5.00 s lab MP4s. Default glob is six ez_shot_01..06
-#   files. --film joins a catalog film in beat/shot order (18×5s / 90s, or
-#   90×5s / 450s) and caps at the film's publish_cap_s. Video is
+#   files. --film joins a catalog film in beat/shot order (18x5s / 90s, or
+#   90x5s / 450s) and caps at the film's publish_cap_s. Video is
 #   libx264 CRF 18 (stream-copy fallback); audio is AAC + YouTube loudnorm +
 #   faststart (same contract as EZFilmConcat).
 #
@@ -18,7 +18,7 @@
 #   ./scripts/utilities/concat-shots.sh --film go-see --xfade 10 --yes
 #
 # Environment:
-#   COMFY_OUTPUT_DIR — default /mnt/comfy-output
+#   COMFY_OUTPUT_DIR - default /mnt/comfy-output
 #   Default glob: ez_shot_0{1..6}*.mp4
 #   --film: ez_<slug>_b{1..beats}_s{1..3}_ltx_video*.mp4 (prefers *-audio.mp4; fallback _wan_video)
 #   --cap-seconds: publish cap (default from catalog, else 90)
@@ -285,8 +285,8 @@ maybe_pad_ltx_neighbor() {
     return 0
   fi
   dest="$(mktemp "${TMPDIR:-/tmp}/ez-film-pad.XXXXXX.pad.mp4")"
-  log "padded ${dur}s → 5.00s (LTX 8n+1 neighbor 113 frames) (${src})"
-  if ! run_ffmpeg_logged "pad LTX 113-frame stem → 5.00s" -- ffmpeg -y -i "${src}" \
+  log "padded ${dur}s -> 5.00s (LTX 8n+1 neighbor 113 frames) (${src})"
+  if ! run_ffmpeg_logged "pad LTX 113-frame stem -> 5.00s" -- ffmpeg -y -i "${src}" \
     -filter_complex \
     "[0:v]tpad=stop_mode=clone:stop=7,fps=24,trim=duration=5.00,setpts=PTS-STARTPTS[v];[0:a]apad=pad_dur=0.291667,atrim=duration=5.00,asetpts=PTS-STARTPTS[a]" \
     -map "[v]" -map "[a]" -t 5.00 -r 24 \
@@ -451,7 +451,7 @@ EOF
 concat_playable() {
   local list="${1}"
   local out="${2}"
-  if run_ffmpeg_logged "encoding concat → ${out}" -- ffmpeg -y -fflags +genpts -f concat -safe 0 -i "${list}" \
+  if run_ffmpeg_logged "encoding concat -> ${out}" -- ffmpeg -y -fflags +genpts -f concat -safe 0 -i "${list}" \
     -t "${CAP_SECONDS}" -avoid_negative_ts make_zero \
     -r 24 -c:v libx264 -preset veryfast -crf 18 -pix_fmt yuv420p \
     -c:a aac -ar 48000 -ac 2 -b:a 192k \
@@ -461,7 +461,7 @@ concat_playable() {
     return 0
   fi
   warn "libx264 missing; falling back to stream-copy + faststart"
-  run_ffmpeg_logged "encoding concat (stream copy) → ${out}" -- ffmpeg -y -fflags +genpts -f concat -safe 0 -i "${list}" \
+  run_ffmpeg_logged "encoding concat (stream copy) -> ${out}" -- ffmpeg -y -fflags +genpts -f concat -safe 0 -i "${list}" \
     -t "${CAP_SECONDS}" -avoid_negative_ts make_zero \
     -c:v copy -c:a aac -ar 48000 -ac 2 -b:a 192k \
     -af "aresample=48000,loudnorm=I=-14:LRA=11:TP=-1.5,apad" \
@@ -501,7 +501,7 @@ concat_xfade_audio() {
   video_tmp="${list}.v.mp4"
   audio_tmp="${list}.a.m4a"
   write_concat_list "${list}" "${files[@]}"
-  if ! run_ffmpeg_logged "encoding concat video → ${video_tmp}" -- ffmpeg -y -fflags +genpts -f concat -safe 0 -i "${list}" \
+  if ! run_ffmpeg_logged "encoding concat video -> ${video_tmp}" -- ffmpeg -y -fflags +genpts -f concat -safe 0 -i "${list}" \
     -t "${CAP_SECONDS}" -avoid_negative_ts make_zero \
     -r 24 -c:v libx264 -preset veryfast -crf 18 -pix_fmt yuv420p -an \
     "${video_tmp}"; then
@@ -516,7 +516,7 @@ concat_xfade_audio() {
   done
   aargv+=(-filter_complex "${filter}" -map "[a]" -c:a aac -ar 48000 -ac 2 -b:a 192k "${audio_tmp}")
   run_ffmpeg_logged "encoding concat acrossfade audio" -- "${aargv[@]}"
-  run_ffmpeg_logged "mux concat → ${out}" -- ffmpeg -y -i "${video_tmp}" -i "${audio_tmp}" -t "${CAP_SECONDS}" \
+  run_ffmpeg_logged "mux concat -> ${out}" -- ffmpeg -y -i "${video_tmp}" -i "${audio_tmp}" -t "${CAP_SECONDS}" \
     -c:v copy -c:a copy -movflags +faststart "${out}"
   rm -f "${list}" "${video_tmp}" "${audio_tmp}"
 }
@@ -572,7 +572,7 @@ cmd_run() {
     log "  ${f}"
   done
   if [[ ${DRY_RUN} -eq 1 ]]; then
-    log "dry-run: would concat → ${OUT_MP4} cap ${CAP_SECONDS}s xfade_cs=${XFADE_CS} (pass --yes to run ffmpeg)"
+    log "dry-run: would concat -> ${OUT_MP4} cap ${CAP_SECONDS}s xfade_cs=${XFADE_CS} (pass --yes to run ffmpeg)"
     return 0
   fi
   if [[ -n ${FILM} && ${SKIP_ACCEPT} -ne 1 ]]; then
@@ -586,7 +586,7 @@ cmd_run() {
     return 1
   fi
   if [[ ${XFADE_CS} -lt 0 || ${XFADE_CS} -gt 50 ]]; then
-    err "xfade_cs must be 0–50 (centiseconds), got ${XFADE_CS}"
+    err "xfade_cs must be 0-50 (centiseconds), got ${XFADE_CS}"
     return 1
   fi
   local -a work=()

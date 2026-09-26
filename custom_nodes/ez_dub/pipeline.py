@@ -153,7 +153,7 @@ def _progress(total: int) -> ProgressReporter | None:
         from ez_common import node_progress
 
         return node_progress(total)
-    except Exception:  # noqa: BLE001 — pytest / missing pack
+    except Exception:  # noqa: BLE001 - pytest / missing pack
         return None
 
 
@@ -195,7 +195,7 @@ ZCR_SPEECH_MIN = 150.0
 ZC_INTERVAL_CV_MIN = 0.18
 ZC_INTERVAL_MIN_GAPS = 8
 ENVELOPE_CV_MIN = 0.12
-CLONE_UNVOICED_STATUS = "clone unvoiced — empty mix"
+CLONE_UNVOICED_STATUS = "clone unvoiced - empty mix"
 ONSET_ABS = 0.02
 ONSET_REL = 0.12
 ONSET_HOLD_S = 0.08
@@ -217,17 +217,17 @@ REF_PEAK = _speech.REF_PEAK
 REF_PURITY_MIN_DIM = _speech.REF_PURITY_MIN_DIM
 REF_PURITY_COSINE = _speech.REF_PURITY_COSINE
 CLONE_MISSING_STATUS = (
-    "clone engine missing — pip install chatterbox-tts and "
+    "clone engine missing - pip install chatterbox-tts and "
     "./scripts/manage.sh download-dub --tier clone"
 )
-T3_MODEL_STATUS = "chatterbox-tts missing t3_model=v3 — upgrade chatterbox-tts"
+T3_MODEL_STATUS = "chatterbox-tts missing t3_model=v3 - upgrade chatterbox-tts"
 PERTH_STATUS = (
-    "resemble-perth watermarker missing — PerTh stays on. "
+    "resemble-perth watermarker missing - PerTh stays on. "
     "docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -m pip install "
     "'setuptools<82' then restart"
 )
 TRANSLATE_LLAMA_STATUS = (
-    "llama.cpp unavailable — Llama did not import. "
+    "llama.cpp unavailable - Llama did not import. "
     "docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -m pip install "
     "--force-reinstall --no-deps --only-binary=:all: "
     "https://github.com/abetlen/llama-cpp-python/releases/download/v0.3.35/"
@@ -238,19 +238,19 @@ TRANSLATE_BLOCKING_MARKERS = (
     "GGUF missing",
     "GGUF failed to load",
 )
-NO_TURNS_STATUS = "no turns — ASR/translate did not run"
+NO_TURNS_STATUS = "no turns - ASR/translate did not run"
 NO_TARGET_STATUS = (
-    "no target lines — translation did not produce target-language text"
+    "no target lines - translation did not produce target-language text"
 )
 ASR_HALLUCINATION_SILENCE_S = 2.0
 MISSING_SOURCE_STATUS = (
-    "missing source.wav — pick Source file or Upload media, "
+    "missing source.wav - pick Source file or Upload media, "
     "turn I have rights on, then Queue"
 )
 _GENERIC_INGEST_STATUS = frozenset({"", "pending", "ok", "ingest"})
-ASR_WHEEL_STATUS = "faster-whisper not installed — pip install faster-whisper"
+ASR_WHEEL_STATUS = "faster-whisper not installed - pip install faster-whisper"
 ASR_PACK_STATUS = (
-    "ASR pack missing — run ./scripts/manage.sh download-dub --tier asr"
+    "ASR pack missing - run ./scripts/manage.sh download-dub --tier asr"
 )
 CLONE_REQUIRED_FILES = (
     "ve.pt",
@@ -261,16 +261,16 @@ CLONE_REQUIRED_FILES = (
     "conds.pt",
 )
 QWEN3_WHEEL_STATUS = (
-    "qwen3tts extra not installed — "
+    "qwen3tts extra not installed - "
     "docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -m pip install "
     "einops soundfile && docker exec ez-comfy-studio "
     "/comfy-state/ComfyUI/.venv/bin/python -m pip install --no-deps qwen-tts"
 )
 QWEN3_PACK_STATUS = (
-    "qwen3tts pack incomplete — ./scripts/manage.sh download-podcast --tier qwen3tts"
+    "qwen3tts pack incomplete - ./scripts/manage.sh download-podcast --tier qwen3tts"
 )
 QWEN3_TOKENIZER_STATUS = (
-    "qwen3tts tokenizer missing — ./scripts/manage.sh download-podcast --tier qwen3tts"
+    "qwen3tts tokenizer missing - ./scripts/manage.sh download-podcast --tier qwen3tts"
 )
 QWEN3_BASE_REQUIRED_FILES = (
     "model.safetensors",
@@ -523,11 +523,11 @@ def preflight_clone() -> str:
         from chatterbox.mtl_tts import ChatterboxMultilingualTTS
     except ImportError:
         return (
-            "chatterbox-tts not installed — optional runtime: pip install chatterbox-tts"
+            "chatterbox-tts not installed - optional runtime: pip install chatterbox-tts"
         )
     loader = getattr(ChatterboxMultilingualTTS, "from_local", None)
     if not callable(loader):
-        return "chatterbox-tts missing from_local — upgrade chatterbox-tts"
+        return "chatterbox-tts missing from_local - upgrade chatterbox-tts"
     try:
         if "t3_model" not in inspect.signature(loader).parameters:
             return T3_MODEL_STATUS
@@ -537,7 +537,7 @@ def preflight_clone() -> str:
     if perth_miss:
         return perth_miss
     if clone_ckpt_dir() is None:
-        return "clone pack missing — run ./scripts/manage.sh download-dub --tier clone"
+        return "clone pack missing - run ./scripts/manage.sh download-dub --tier clone"
     return ""
 
 
@@ -552,7 +552,7 @@ def _import_qwen3_model() -> tuple[Any | None, str]:
         from qwen_tts import Qwen3TTSModel  # type: ignore[import-not-found]
     except ImportError as exc:
         return None, f"{QWEN3_WHEEL_STATUS} ({exc})"
-    except Exception:  # noqa: BLE001 — optional runtime
+    except Exception:  # noqa: BLE001 - optional runtime
         return None, QWEN3_WHEEL_STATUS
     return Qwen3TTSModel, ""
 
@@ -586,7 +586,7 @@ def translate_llama_status() -> str:
     try:
         _ensure_lab_custom_nodes_path()
         from ez_prompt_enhance.client import llama_cpp_unavailable_status
-    except Exception:  # noqa: BLE001 — missing pack is a dub hard miss
+    except Exception:  # noqa: BLE001 - missing pack is a dub hard miss
         return TRANSLATE_LLAMA_STATUS
     return llama_cpp_unavailable_status()
 
@@ -601,11 +601,11 @@ def preflight_translate() -> str:
         _ensure_lab_custom_nodes_path()
         from ez_prompt_enhance.client import _get_llama
         from ez_prompt_enhance.client import status_for_reason
-    except Exception:  # noqa: BLE001 — missing pack is a dub hard miss
+    except Exception:  # noqa: BLE001 - missing pack is a dub hard miss
         return translate_llama_status()
     try:
         _handle, reason = _get_llama()
-    except Exception as exc:  # noqa: BLE001 — ctypes load is RuntimeError
+    except Exception as exc:  # noqa: BLE001 - ctypes load is RuntimeError
         _log(f"llama.cpp preflight raised: {exc}")
         return translate_llama_status()
     if not reason:
@@ -736,14 +736,14 @@ def _get_voice_encoder() -> Any | None:
     try:
         import torch
         from chatterbox.models.voice_encoder import VoiceEncoder
-    except Exception:  # noqa: BLE001 — optional runtime
+    except Exception:  # noqa: BLE001 - optional runtime
         return None
     try:
         encoder = VoiceEncoder()
         state = torch.load(str(ve_path), map_location="cpu", weights_only=True)
         encoder.load_state_dict(state)
         encoder.eval()
-    except Exception as exc:  # noqa: BLE001 — fail-soft to energy fingerprint
+    except Exception as exc:  # noqa: BLE001 - fail-soft to energy fingerprint
         _log(f"voice encoder load failed: {exc}")
         return None
     _VOICE_ENCODER = encoder
@@ -801,7 +801,7 @@ def speaker_embed(pcm: list[float], rate: int) -> list[float]:
         flat = _pcm_list(embeds[0] if getattr(embeds, "__len__", None) else embeds)
         if flat:
             return flat
-    except Exception as exc:  # noqa: BLE001 — energy fingerprint is the fallback
+    except Exception as exc:  # noqa: BLE001 - energy fingerprint is the fallback
         _log(f"voice encoder embed failed: {exc}")
     return _default_embed(pcm, rate)
 
@@ -843,7 +843,7 @@ def analyze_pcm(
             return [], detected, reason
     else:
         return [], "", MISSING_SOURCE_STATUS
-    _log(f"ASR {len(raw)} segments — clustering speakers")
+    _log(f"ASR {len(raw)} segments - clustering speakers")
     bar = _progress(max(len(raw), 1))
     vectors: list[list[float]] = []
     for turn in raw:
@@ -881,7 +881,7 @@ def _load_whisper_model(model_dir: str) -> Any:
     for device, compute in WHISPER_LOAD_ATTEMPTS:
         try:
             return whisper_cls(model_dir, device=device, compute_type=compute)
-        except Exception as exc:  # noqa: BLE001 — try the next device
+        except Exception as exc:  # noqa: BLE001 - try the next device
             last = exc
             _log(f"faster-whisper {device}/{compute} failed: {exc}")
     if last is not None:
@@ -906,7 +906,7 @@ def _get_whisper() -> tuple[Any | None, str]:
         return _WHISPER, ""
     try:
         _WHISPER = _load_whisper_model(model_dir)
-    except Exception as exc:  # noqa: BLE001 — fail-soft
+    except Exception as exc:  # noqa: BLE001 - fail-soft
         _WHISPER = None
         _WHISPER_DIR_CACHED = ""
         return None, f"faster-whisper failed: {exc}"
@@ -967,7 +967,7 @@ def _whisper_segments(
                     segments, info = model.transcribe(
                         path, language=lang, word_timestamps=False
                     )
-    except Exception as exc:  # noqa: BLE001 — fail-soft
+    except Exception as exc:  # noqa: BLE001 - fail-soft
         reason = f"faster-whisper failed: {exc}"
         _log(reason)
         return [], "", reason
@@ -1157,7 +1157,7 @@ def translate_turns(
         from ez_prompt_enhance.client import REASON_LLM_LOAD_FAILED
         from ez_prompt_enhance.client import _close_llm
         from ez_prompt_enhance.client import complete
-    except Exception as exc:  # noqa: BLE001 — fail-soft
+    except Exception as exc:  # noqa: BLE001 - fail-soft
         _log(f"prompt enhance client unavailable: {exc}")
         return [cast(Turn, dict(t)) for t in turns], "llama.cpp unavailable"
     system = load_translate_prompt()
@@ -1263,7 +1263,7 @@ def translate_turns(
     finally:
         try:
             _close_llm()
-        except Exception as exc:  # noqa: BLE001 — unload is best-effort
+        except Exception as exc:  # noqa: BLE001 - unload is best-effort
             _log(f"writer unload failed: {exc}")
     total = translated + passthrough
     if fatal:
@@ -1317,11 +1317,11 @@ def _pcm_list(wav: object) -> list[float]:
     data: Any = wav
     try:
         data = data.detach().cpu().float().reshape(-1)
-    except Exception:  # noqa: BLE001 — not a tensor
+    except Exception:  # noqa: BLE001 - not a tensor
         pass
     try:
         data = data.tolist()
-    except Exception:  # noqa: BLE001 — already a list
+    except Exception:  # noqa: BLE001 - already a list
         pass
     if isinstance(data, (int, float)):
         return normalize_clone_pcm([float(data)])
@@ -1464,7 +1464,7 @@ def _chatterbox_local_only(ckpt: Path) -> Iterator[None]:
             import huggingface_hub
 
             _patch(huggingface_hub, "hf_hub_download")
-        except Exception:  # noqa: BLE001 — optional at unit-test time
+        except Exception:  # noqa: BLE001 - optional at unit-test time
             pass
         tok_mod = sys.modules.get("chatterbox.models.tokenizers.tokenizer")
         if tok_mod is not None:
@@ -1526,7 +1526,7 @@ def _chatterbox_device() -> str:
 
         if torch.cuda.is_available():
             return "cuda"
-    except Exception:  # noqa: BLE001 — CPU is the safe default
+    except Exception:  # noqa: BLE001 - CPU is the safe default
         pass
     return "cpu"
 
@@ -1554,7 +1554,7 @@ def _install_lab_tts_compat() -> None:
         ensure = getattr(sitecustomize, "ensure_lab_tts_compat_hooks", None)
         if callable(ensure):
             ensure()
-    except Exception as exc:  # noqa: BLE001 — shim is an optimisation, never blocking
+    except Exception as exc:  # noqa: BLE001 - shim is an optimisation, never blocking
         _log(f"lab tts compat hook failed: {exc}")
 
 
@@ -1570,23 +1570,23 @@ def _load_chatterbox_model() -> tuple[Any | None, str]:
     except ImportError:
         return (
             None,
-            "chatterbox-tts not installed — optional runtime: pip install chatterbox-tts",
+            "chatterbox-tts not installed - optional runtime: pip install chatterbox-tts",
         )
     ckpt = clone_ckpt_dir()
     if ckpt is None:
         return (
             None,
-            "clone pack missing — run ./scripts/manage.sh download-dub --tier clone",
+            "clone pack missing - run ./scripts/manage.sh download-dub --tier clone",
         )
     loader = getattr(ChatterboxMultilingualTTS, "from_local", None)
     if not callable(loader):
-        return None, "chatterbox-tts missing from_local — upgrade chatterbox-tts"
+        return None, "chatterbox-tts missing from_local - upgrade chatterbox-tts"
     try:
         with _chatterbox_local_only(ckpt):
             model = _from_local_multilingual(loader, str(ckpt), _chatterbox_device())
     except RuntimeError as exc:
         return None, str(exc)
-    except Exception as exc:  # noqa: BLE001 — fail-soft
+    except Exception as exc:  # noqa: BLE001 - fail-soft
         return None, f"chatterbox failed: {exc}"
     return model, ""
 
@@ -1724,7 +1724,7 @@ def _ensure_conditionals(model: Any, ref: str, exaggeration: float) -> bool:
         return True
     try:
         _run_prepare_conditionals(prepare, ref, float(exaggeration), clone_ckpt_dir())
-    except Exception as exc:  # noqa: BLE001 — fall back to audio_prompt_path
+    except Exception as exc:  # noqa: BLE001 - fall back to audio_prompt_path
         _log(f"prepare_conditionals failed: {exc}")
         return False
     _CHATTERBOX_COND_KEY = key
@@ -1800,7 +1800,7 @@ def _try_chatterbox(
                 wav = generate(text, **kwargs)
         pcm = _pcm_list(wav)
         rate = int(getattr(model, "sr", SAMPLE_RATE) or SAMPLE_RATE)
-    except Exception as exc:  # noqa: BLE001 — fail-soft
+    except Exception as exc:  # noqa: BLE001 - fail-soft
         return [], SAMPLE_RATE, f"chatterbox failed: {exc}"
     if not pcm:
         return [], rate, "chatterbox returned empty audio"
@@ -1930,7 +1930,7 @@ def _load_qwen3_model() -> tuple[Any | None, str]:
         return None, "qwen3tts missing from_pretrained"
     try:
         return _from_pretrained_local(loader, str(ckpt)), ""
-    except Exception as exc:  # noqa: BLE001 — fail-soft
+    except Exception as exc:  # noqa: BLE001 - fail-soft
         return None, f"qwen3tts failed: {exc}"
 
 
@@ -2008,7 +2008,7 @@ def _try_qwen3tts(
                     ref_text=transcript or None,
                     x_vector_only_mode=xvec_only,
                 )
-            except Exception as exc:  # noqa: BLE001 — fall through to inline refs
+            except Exception as exc:  # noqa: BLE001 - fall through to inline refs
                 _log(f"qwen3tts prompt failed: {exc}")
                 prompt = None
             else:
@@ -2028,7 +2028,7 @@ def _try_qwen3tts(
     try:
         packed: Any = clone(**kwargs)
         wavs, sr = packed
-    except Exception as exc:  # noqa: BLE001 — fail-soft
+    except Exception as exc:  # noqa: BLE001 - fail-soft
         return [], SAMPLE_RATE, f"qwen3tts failed: {exc}"
     first: object = wavs
     if isinstance(wavs, (list, tuple)) and wavs:
@@ -2141,7 +2141,7 @@ def _maybe_loudnorm_yt(
     try:
         shutil.copyfile(loud, yt)
         pcm, _sr = read_wav(yt)
-    except Exception:  # noqa: BLE001 — fail-soft
+    except Exception:  # noqa: BLE001 - fail-soft
         return mix
     if not pcm:
         return mix
@@ -2235,7 +2235,7 @@ def _write_render_qc(
         qc_flags = [str(x) for x in (report.get("flags") or [])]
         if qc_flags:
             flags.append("qc: " + ",".join(qc_flags))
-    except Exception as exc:  # noqa: BLE001 — QC must not fail the mix
+    except Exception as exc:  # noqa: BLE001 - QC must not fail the mix
         _log(f"qc failed: {exc}")
 
 
@@ -2280,7 +2280,7 @@ def _clamp_render_knobs(
 def fit_speed_cap(pace: float) -> float:
     """Compression ceiling for :func:`fit_turn`.
 
-    Lab default ``1.0`` uses :data:`MAX_SPEED` (1.25×). Values above
+    Lab default ``1.0`` uses :data:`MAX_SPEED` (1.25x). Values above
     ``1.0`` stay capped at ``MAX_SPEED`` so 1.5 cannot crush.
 
     Args:
@@ -2504,7 +2504,7 @@ def render_mix(
         if cross_lang and has_source:
             status = NO_TARGET_STATUS
         else:
-            status = "no spoken text — ASR produced empty turns"
+            status = "no spoken text - ASR produced empty turns"
         return _empty_render(dest, rate, status, flags)
     unvoiced_only = (not cloned) and any("unvoiced" in f for f in flags)
     if not cloned and not unvoiced_only:

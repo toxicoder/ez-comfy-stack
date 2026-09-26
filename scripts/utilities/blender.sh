@@ -4,7 +4,7 @@
 #
 # Host Blender sidecar. Dies if compose is a heavy job (occupancy).
 # blender-desk (parked via POST /free) allows Workbench. Never in
-# docker/Dockerfile — GB10 DCC stays on the host. See docs/occupancy.md.
+# docker/Dockerfile - GB10 DCC stays on the host. See docs/occupancy.md.
 #
 # Usage:
 #   ./scripts/utilities/blender.sh [--] [blender args]

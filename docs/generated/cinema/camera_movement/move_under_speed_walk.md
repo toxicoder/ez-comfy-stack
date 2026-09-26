@@ -1,6 +1,6 @@
 ---
 title: "Under-speed walk"
-description: "Cinema Rack illustration — Under-speed walk."
+description: "Cinema Rack illustration - Under-speed walk."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

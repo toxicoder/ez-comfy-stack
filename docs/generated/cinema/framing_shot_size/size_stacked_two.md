@@ -1,6 +1,6 @@
 ---
 title: "Stacked Two-Shot"
-description: "Cinema Rack illustration — Stacked Two-Shot."
+description: "Cinema Rack illustration - Stacked Two-Shot."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

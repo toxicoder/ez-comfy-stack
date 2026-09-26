@@ -27,9 +27,9 @@ def _load() -> Any:
 def test_generate_cinema_docs_writes_axis_pages(tmp_path: Path) -> None:
     mod = _load()
     assert mod._cell("a | b", 20) == "a \\| b"
-    assert "…" in mod._cell("x" * 200, 20)
+    assert "..." in mod._cell("x" * 200, 20)
     assert mod._flags({"still_ok": True, "motion_ok": False, "av_ok": True}) == "still, av"
-    assert mod._flags({"still_ok": False, "motion_ok": False, "av_ok": False}) == "—"
+    assert mod._flags({"still_ok": False, "motion_ok": False, "av_ok": False}) == "-"
     assert mod._yaml_str('say "hi"') == '"say \\"hi\\""'
     original_out = mod.OUT
     original_root = mod.ROOT
@@ -73,7 +73,7 @@ def test_generate_cinema_docs_writes_axis_pages(tmp_path: Path) -> None:
         assert "What's on this page" in text
         assert "| Id | Label | Example | Clause | Use on | Conflicts |" in text
         assert "| `move_dolly_in` |" in text
-        assert "—" in text
+        assert "-" in text
         assert not (tmp_path / "camera_movement" / "move_dolly_in.md").is_file()
         manifest = json.loads((tmp_path / "manifest.json").read_text(encoding="utf-8"))
         assert len(manifest["pages"]) == 2

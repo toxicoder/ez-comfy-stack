@@ -1,6 +1,6 @@
 ---
 title: "Skater low"
-description: "Cinema Rack illustration — Skater low."
+description: "Cinema Rack illustration - Skater low."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

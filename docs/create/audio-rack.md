@@ -26,7 +26,7 @@ Load **inspire/audio-rack**. Optional **Brief**, pick techniques, Queue, then re
 ```mermaid
 flowchart LR
   B["Brief"] --> R["Audio Rack"]
-  A["13 axes · one pick each"] --> R
+  A["13 axes - one pick each"] --> R
   Rec["Recipe fills empty axes"] --> R
   R --> T["ACE tags"]
   R --> L["Lyrics form"]
@@ -54,7 +54,7 @@ Pick **none** or one id per axis. Splicing is across axes, not two tempos on one
 
 Catalog encyclopedia (generated, do not hand-edit): [Audio technique catalogs](../generated/audio/index.md).
 
-ACE tag order is encoder grammar, not widget order: genre → mood → drums → bass → instruments → harmony → vocal → mix → space → design → use → BPM last. Form writes lyrics only.
+ACE tag order is encoder grammar, not widget order: genre -> mood -> drums -> bass -> instruments -> harmony -> vocal -> mix -> space -> design -> use -> BPM last. Form writes lyrics only.
 
 ## Flavors
 
@@ -72,7 +72,7 @@ The rack emits at most one BPM token. Match `TextEncodeAceStepAudio1.5` BPM to t
 
 ## Drive-through recipes
 
-Shipped Drive-through takes under `_lab/audio/albums/drive-through/` splice these starters. The arranger then snaps tempo onto 165–176 and replaces the form with a per-take sequence of 2-bar stanzas (~90–120 s, each cell under 3 seconds). Bass identity stays with the recipe:
+Shipped Drive-through takes under `_lab/audio/albums/drive-through/` splice these starters. The arranger then snaps tempo onto 165-176 and replaces the form with a per-take sequence of 2-bar stanzas (~90-120 s, each cell under 3 seconds). Bass identity stays with the recipe:
 
 | Recipe | Genre |
 | --- | --- |

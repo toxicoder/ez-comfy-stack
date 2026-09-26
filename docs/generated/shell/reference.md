@@ -50,12 +50,12 @@ Usage:
       - Always stop before node reboot
       - setup may use sudo only to create/chown MODELS_DIR#
     Environment:
-      See .env.example — MODELS_DIR, HF_TOKEN, MEM_LIMIT, DOWNLOAD_LIMIT,
+      See .env.example - MODELS_DIR, HF_TOKEN, MEM_LIMIT, DOWNLOAD_LIMIT,
       LAB_NON_INTERACTIVE, LAB_CONFIRM_TOKEN, MIN_HOST_FREE_GIB, etc.
 
 Exit codes:
-  0 — success or interactive user abort on confirm
-  1 — hard failure (preflight, docker, missing confirm token, unknown command)
+  0 - success or interactive user abort on confirm
+  1 - hard failure (preflight, docker, missing confirm token, unknown command)
 
 ### Command: manage
 
@@ -256,7 +256,7 @@ Proxy remaining argv to scripts/utilities/download-limit.sh.
 Globals:
   See file header / caller environment.
 Arguments:
-  $@  Forwarded subcommand and flags (status|run|clear|wrap …).
+  $@  Forwarded subcommand and flags (status|run|clear|wrap ...).
 Outputs:
   Status via log/warn/err on stderr unless noted.
 Returns:
@@ -642,9 +642,9 @@ Audience:
   Sourced by manage.sh after paths.sh and common.sh.
 
 Environment:
-  MODELS_DIR, COMFY_PORT, MEM_LIMIT, MEM_RESERVATION — exported into compose
-  COMPOSE_BIN — optional full command override for tests (space-separated ok)
-  LAB_STACK_FOLLOW — 1 = stream logs until UI port is open (default 0: detach)
+  MODELS_DIR, COMFY_PORT, MEM_LIMIT, MEM_RESERVATION - exported into compose
+  COMPOSE_BIN - optional full command override for tests (space-separated ok)
+  LAB_STACK_FOLLOW - 1 = stream logs until UI port is open (default 0: detach)
 
 !!! warning
 
@@ -653,7 +653,7 @@ Environment:
       stack_start ignores SIGHUP so an SSH drop does not abort compose up.
       stack_start returns after up -d + verify; it does not stay bound to the shell.
       stack_cleanup_state removes named volumes but never deletes host MODELS_DIR.
-      restart: "no" is unchanged — logout is not a reboot and does not auto-start.
+      restart: "no" is unchanged - logout is not a reboot and does not auto-start.
 
 <!-- source: scripts/lib/disk_scan.sh -->
 ## disk_scan
@@ -721,8 +721,8 @@ Style:
   docs/project-conventions.md (notably #!/usr/bin/env bash).
 
 Environment:
-  REPO_ROOT   — optional override for the repository root (must be a directory)
-  MODELS_DIR  — optional override for the shared model cache (default /mnt/models)
+  REPO_ROOT   - optional override for the repository root (must be a directory)
+  MODELS_DIR  - optional override for the shared model cache (default /mnt/models)
 
 <!-- source: scripts/lib/progress.sh -->
 ## progress
@@ -740,7 +740,7 @@ Preflight checks, heavy confirmation, and host headroom for remote Spark safety.
 
 Purpose:
   DGX Spark hosts are often operated over the internet without physical access.
-  Starting a 90 GiB-class ComfyUI stack without free RAM/disk headroom can make
+  Starting a 90 GiB-class ComfyUI stack without free RAM/disk headroom can make
   SSH unresponsive. This library enforces explicit operator consent and minimum
   free resources before heavy work begins.
 
@@ -759,11 +759,11 @@ Audience:
   paths.sh (lab_models_dir) being available in the caller.
 
 Environment (defaults applied if unset):
-  MIN_HOST_FREE_GIB   — minimum free host RAM in GiB (default 28)
-  MIN_DISK_FREE_GIB   — minimum free disk on models path in GiB (default 40)
-  MEM_LIMIT           — Docker mem_limit string, e.g. 90g (default 90g)
-  LAB_MOCK_FREE_MEM_GIB / LAB_MOCK_DISK_FREE_GIB — hermetic test overrides
-  LAB_NON_INTERACTIVE / LAB_CONFIRM_TOKEN — automation confirm path
+  MIN_HOST_FREE_GIB   - minimum free host RAM in GiB (default 28)
+  MIN_DISK_FREE_GIB   - minimum free disk on models path in GiB (default 40)
+  MEM_LIMIT           - Docker mem_limit string, e.g. 90g (default 90g)
+  LAB_MOCK_FREE_MEM_GIB / LAB_MOCK_DISK_FREE_GIB - hermetic test overrides
+  LAB_NON_INTERACTIVE / LAB_CONFIRM_TOKEN - automation confirm path
 
 <!-- source: scripts/utilities/album-render.sh -->
 ## album-render
@@ -814,7 +814,7 @@ Usage:
 ```
 
 Environment:
-  COMFY_OUTPUT_DIR — default catalog is ${COMFY_OUTPUT_DIR}/assets
+  COMFY_OUTPUT_DIR - default catalog is ${COMFY_OUTPUT_DIR}/assets
 
 !!! warning
 
@@ -873,7 +873,7 @@ Usage:
 
     Safety:
       Host GPU job. Dies with exit 2 if compose is up. Does not start Comfy.
-      Software ffmpeg mux (pack-frames.sh) — not NVENC.
+      Software ffmpeg mux (pack-frames.sh) - not NVENC.
 
 Exit codes:
   0 success; 1 usage / missing blender / QC fail; 2 compose running
@@ -923,7 +923,7 @@ Usage:
 ## blender-mcp
 
 In-tree Blender MCP (typed tools, no execute_code, no telemetry).
-Host only — never in docker/Dockerfile. bpy tools require blender-desk.
+Host only - never in docker/Dockerfile. bpy tools require blender-desk.
 
 ```bash
 Usage:
@@ -963,7 +963,7 @@ Exit codes:
 
 Host Blender sidecar. Dies if compose is a heavy job (occupancy).
 blender-desk (parked via POST /free) allows Workbench. Never in
-docker/Dockerfile — GB10 DCC stays on the host. See docs/occupancy.md.
+docker/Dockerfile - GB10 DCC stays on the host. See docs/occupancy.md.
 
 ```bash
 Usage:
@@ -988,7 +988,7 @@ Usage:
 ```
 
 Environment:
-  COMFY_OUTPUT_DIR — default /mnt/comfy-output
+  COMFY_OUTPUT_DIR - default /mnt/comfy-output
 
 Exit codes:
   0 success; 1 usage / parse error
@@ -1002,7 +1002,7 @@ Re-encode a Cinema Rack illustration MP4 to muted 854x480 H.264 and
 write a JPEG poster. Host ffmpeg. Does not start Docker.
 
 Purpose:
-  Keep encyclopedia clips small enough for Git LFS (target ≤512KiB).
+  Keep encyclopedia clips small enough for Git LFS (target <=512KiB).
 
 ```bash
 Usage:
@@ -1029,8 +1029,8 @@ Concatenate approved 5 s lab MP4s with ffmpeg (host / spark-farm fallback).
 
 Purpose:
   Concatenate approved 5.00 s lab MP4s. Default glob is six ez_shot_01..06
-  files. --film joins a catalog film in beat/shot order (18×5s / 90s, or
-  90×5s / 450s) and caps at the film's publish_cap_s. Video is
+  files. --film joins a catalog film in beat/shot order (18x5s / 90s, or
+  90x5s / 450s) and caps at the film's publish_cap_s. Video is
   libx264 CRF 18 (stream-copy fallback); audio is AAC + YouTube loudnorm +
   faststart (same contract as EZFilmConcat).
 
@@ -1044,7 +1044,7 @@ Usage:
 ```
 
 Environment:
-  COMFY_OUTPUT_DIR — default /mnt/comfy-output
+  COMFY_OUTPUT_DIR - default /mnt/comfy-output
   Default glob: ez_shot_0{1..6}*.mp4
   --film: ez_<slug>_b{1..beats}_s{1..3}_ltx_video*.mp4 (prefers *-audio.mp4; fallback _wan_video)
   --cap-seconds: publish cap (default from catalog, else 90)
@@ -1181,7 +1181,7 @@ Environment:
 !!! warning
 
     Safety:
-      Large downloads — use download-limit wrap on remote SSH.
+      Large downloads - use download-limit wrap on remote SSH.
 
 Exit codes:
   0 success; 1 usage/tier/CLI errors.
@@ -1191,13 +1191,13 @@ Exit codes:
 <!-- source: scripts/utilities/download-limit.sh -->
 ## download-limit
 
-Limit host download bandwidth so multi‑GB model pulls cannot starve remote SSH.
+Limit host download bandwidth so multi-GB model pulls cannot starve remote SSH.
 
 Purpose:
   Apply kernel traffic shaping via wondershaper on the default-route interface.
   Supports fixed Mbps caps and an **auto** mode that measures download Mbps
   (duration HTTP probe first, then Ookla, then speedtest-cli) and applies
-  floor(0.85 × measured_download_mbps). Auto measurements are cached 24h on the
+  floor(0.85 x measured_download_mbps). Auto measurements are cached 24h on the
   host (not MODELS_DIR). Apply is verified via tc qdisc (or mocks).
   The wrap subcommand always clears limits on EXIT/INT/TERM so a killed download
   cannot leave the host permanently throttled. If apply fails, wrap soft-fails
@@ -1232,7 +1232,7 @@ Test hooks:
   DOWNLOAD_LIMIT_REQUIRE, DOWNLOAD_LIMIT_CACHE_DIR, DOWNLOAD_LIMIT_CACHE_TTL_SEC
 
 Units:
-  Limits are megabits per second (Mbps), not MB/s. 40 Mbps ≈ 5 MB/s.
+  Limits are megabits per second (Mbps), not MB/s. 40 Mbps ~ 5 MB/s.
   Wondershaper rates are clamped to a legal HTB kbps range.
 
 Exit codes:
@@ -1247,7 +1247,7 @@ Exit codes:
 Download on-box GGUF packs: default prompt-enhance 4B, optional 35B desk.
 
 Purpose:
-  Selective Hugging Face pull. Apache 2.0. File-level include — not the
+  Selective Hugging Face pull. Apache 2.0. File-level include - not the
   full Unsloth GGUF tree. Default enhance pack is part of download-models.
   Opt-in qwen36-35b-a3b is occupancy llm-desk only (not download-models).
   Opt-in describe is Qwen2.5-VL-3B + mmproj for EZImageDescribe.
@@ -1299,7 +1299,7 @@ Purpose:
   Fetch the small distilled AV set for lab graphs (not the 400 GB monorepo).
   Default 2.5: Lightricks/LTX-2.5 INT8-convrot + Gemma4-with-proj + VAEs.
   Fallback 2.3: Kijai/LTX2.3_comfy distilled FP8 + Gemma 3 DualCLIP.
-  LTX Community License ($10M company-revenue cap) — not Apache. Gated HF.
+  LTX Community License ($10M company-revenue cap) - not Apache. Gated HF.
 
 Audience:
   Operators preparing a Spark host for manage.sh start. Prefer
@@ -1314,13 +1314,13 @@ Usage:
 ```
 
 Environment:
-  MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD — same semantics as download-flux.
-  LTX_FULL_REPO=1 — download entire Kijai/LTX2.3_comfy snapshot (all variants).
+  MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD - same semantics as download-flux.
+  LTX_FULL_REPO=1 - download entire Kijai/LTX2.3_comfy snapshot (all variants).
 
 !!! warning
 
     Safety:
-      Multi‑GB transfer — use download-limit when on remote SSH.
+      Multi-GB transfer - use download-limit when on remote SSH.
       cleanup defaults to --dry-run; --yes deletes only non-selective files under
       the tier local-dir (never other MODELS_DIR trees like FLUX).
 
@@ -1444,7 +1444,7 @@ Environment:
 !!! warning
 
     Safety:
-      Large downloads — use download-limit wrap on remote SSH.
+      Large downloads - use download-limit wrap on remote SSH.
 
 Exit codes:
   0 success; 1 usage/tier/CLI errors.
@@ -1487,7 +1487,7 @@ Exit codes:
 <!-- source: scripts/utilities/film-accept.sh -->
 ## film-accept
 
-Fail-closed accept gate before 90s concat (duration, 1280×704, LTX audio).
+Fail-closed accept gate before 90s concat (duration, 1280x704, LTX audio).
 
 ```bash
 Usage:
@@ -1550,7 +1550,7 @@ Usage:
 
     Safety:
       Refuses if compose comfyui is running. Dry-run by default.
-      Proxies are 960×528 ~2 Mbps under films/<slug>/proxies/.
+      Proxies are 960x528 ~2 Mbps under films/<slug>/proxies/.
 
 ### Command: film-proxies
 
@@ -1694,7 +1694,7 @@ Exit codes:
 ## pack-frames
 
 Mux a PNG/EXR sequence to 24fps 1280x704 MP4 with software libx264.
-Not NVENC — may run while Comfy is up because it does not use the GPU.
+Not NVENC - may run while Comfy is up because it does not use the GPU.
 
 ```bash
 Usage:
@@ -1709,7 +1709,7 @@ Usage:
 ffmpeg loudnorm for podcast / YouTube masters. Comfy cannot LUFS-normalize.
 
 Purpose:
-  Target −16 LUFS (podcast) or −14 LUFS (YouTube). Never silently skip.
+  Target -16 LUFS (podcast) or -14 LUFS (YouTube). Never silently skip.
 
 ```bash
 Usage:
@@ -1739,7 +1739,7 @@ Queue one compiled shot on local ComfyUI and record the take in jobstore.
 Purpose:
   POST /prompt for films/<slug>/shots/NN.json, poll /history, copy the
   resulting MP4 to shots/NN.mp4, update state.json. film-resume skips
-  ok shots whose duration is 5.00±0.05 s.
+  ok shots whose duration is 5.00 +/- 0.05 s.
 
 ```bash
 Usage:
@@ -1750,7 +1750,7 @@ Usage:
 
 Environment:
   COMFY_OUTPUT_DIR, COMFY_PORT (default 8188), MODELS_DIR
-  COMFY_URL — override (tests)
+  COMFY_URL - override (tests)
 
 !!! warning
 
@@ -1896,7 +1896,7 @@ Purpose:
   sync-models: rsync MODELS_DIR/comfy over SPARK_FABRIC_IPS only (not mgmt NIC).
   run: refuses MiniMax H3 names; operators Queue motion/silent/still-to-shot / motion/av/still-to-shot
   graphs per host, then concat-shots.sh locally.
-  Never starts compose on a remote node — prints the local manage.sh start.
+  Never starts compose on a remote node - prints the local manage.sh start.
 
 ```bash
 Usage:
@@ -1928,7 +1928,7 @@ Exit codes:
 ## spark-timing
 
 Record wall-clock seconds for the three Kitchen smokes on a real Spark.
-CI has no GPU — this file is the operator timing table. Do not invent seconds.
+CI has no GPU - this file is the operator timing table. Do not invent seconds.
 
 ```bash
 Usage:

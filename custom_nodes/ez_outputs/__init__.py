@@ -10,10 +10,10 @@ from typing import Any
 from .routes import register_routes
 
 NODE_CLASS_MAPPINGS: dict[str, type[Any]] = {}
-"""Comfy registry (empty — JS + routes only)."""
+"""Comfy registry (empty - JS + routes only)."""
 
 NODE_DISPLAY_NAME_MAPPINGS: dict[str, str] = {}
-"""Comfy display-name registry (empty — no canvas nodes)."""
+"""Comfy display-name registry (empty - no canvas nodes)."""
 
 WEB_DIRECTORY = "./js"
 """Comfy extra web assets (Outputs sidebar under ``js/``)."""

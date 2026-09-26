@@ -64,7 +64,7 @@ signatures:
     risk: review
     reclaim: reap-models
     leftover_weight: 8
-    what: "Banned weight token (H3, DA3-LARGE, …)"
+    what: "Banned weight token (H3, DA3-LARGE, ...)"
     why: "An old download-h3 or refused pack was left on MODELS_DIR"
     leftover_when: "path matches the manifest refuse list"
     match_refuse: true
@@ -115,7 +115,7 @@ signatures:
     leftover_weight: 0
     what: "Compose volume ez-comfy-state (Comfy install + venv)"
     why: "This is the studio install, not leftover weights"
-    leftover_when: "never — use manage.sh cleanup (type DELETE)"
+    leftover_when: "never - use manage.sh cleanup (type DELETE)"
     docker_type: volume
     match_contains:
       - "ez-comfy-state"
@@ -168,7 +168,7 @@ signatures:
     reclaim: none
     leftover_weight: 2
     what: "Generated MP4/PNG under COMFY_OUTPUT_DIR"
-    why: "You Queued films or stills — this is your media, not a cache"
+    why: "You Queued films or stills - this is your media, not a cache"
     leftover_when: "only if you no longer need the take"
     match_suffix:
       - ".mp4"
@@ -207,7 +207,7 @@ signatures:
     leftover_weight: 0
     what: "Default lab keep-set weight"
     why: "Required by klein/wan/ltx lab graphs"
-    leftover_when: "never — disk-wizard will not touch this"
+    leftover_when: "never - disk-wizard will not touch this"
     match_keep_set: true
     roots:
       - MODELS_DIR

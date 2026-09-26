@@ -8,8 +8,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-# Printer-native canvases. Wan family max is 1024, so landscape stays 832×480
-# (still-to-video-5s) rather than the LTX 1280×704 grid.
+# Printer-native canvases. Wan family max is 1024, so landscape stays 832x480
+# (still-to-video-5s) rather than the LTX 1280x704 grid.
 _K_HERO = (1280, 704)
 _K_DRAFT = (768, 432)
 _K_SQ = (1024, 1024)

@@ -21,7 +21,7 @@
 #   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD
 #
 # Safety:
-#   Large downloads — use download-limit wrap on remote SSH.
+#   Large downloads - use download-limit wrap on remote SSH.
 #
 # Exit codes:
 #   0 success; 1 usage/tier/CLI errors.
@@ -77,7 +77,7 @@ tier_repo() {
 # Globals:
 #   See file header / caller environment.
 # Arguments:
-#   $1  Tier name (balanced|quality|…)
+#   $1  Tier name (balanced|quality|...)
 # Outputs:
 #   Minimum ready size in GB on stdout (selective payload, not full monorepo).
 # Returns:
@@ -259,7 +259,7 @@ is_nc_image_tier() {
 #######################################
 warn_flux_nc_image_tier() {
   warn "FLUX Non-Commercial (${1}): not monetized YouTube without a paid BFL commercial license."
-  warn "Gated Hugging Face card — accept as the same user as HF_TOKEN. Not legal advice. See docs/licenses.md"
+  warn "Gated Hugging Face card - accept as the same user as HF_TOKEN. Not legal advice. See docs/licenses.md"
 }
 
 #######################################
@@ -454,7 +454,7 @@ link_into_comfy() {
     base="$(basename "${f}")"
     rel="${f#"${dir}"/}"
     dest_sub="diffusion_models"
-    # Prefer HF layout path (vae/…, text_encoders/…); never match *te* against
+    # Prefer HF layout path (vae/..., text_encoders/...); never match *te* against
     # ".safetensors" (that mis-routed every weight into text_encoders).
     case "${rel}" in
       text_encoders/* | */text_encoders/*) dest_sub="text_encoders" ;;
@@ -471,9 +471,9 @@ link_into_comfy() {
     dest="${src}/${dest_sub}/${base}"
     # Relative targets so bind-mount path (/mnt/models vs /models) does not break
     if ln_sfn_relative "${f}" "${dest}"; then
-      log "linked ${base} → comfy/${dest_sub}/"
+      log "linked ${base} -> comfy/${dest_sub}/"
     else
-      warn "failed to link ${base} → comfy/${dest_sub}/"
+      warn "failed to link ${base} -> comfy/${dest_sub}/"
       failed=1
     fi
   done < <(find "${dir}" -type f \( -name '*.safetensors' -o -name '*.sft' -o -name '*.gguf' \) 2>/dev/null)
@@ -520,7 +520,7 @@ cmd_status() {
     for tier in $(tiers_to_process); do
       dir=$(tier_dir "$tier")
       size=$(tier_size_gb "$dir")
-      log "${tier}: $(tier_repo "$tier") — ${size} GB at ${dir}"
+      log "${tier}: $(tier_repo "$tier") - ${size} GB at ${dir}"
     done
   fi
 }
@@ -562,7 +562,7 @@ cmd_run() {
       continue
     fi
     include_args=()
-    log "Downloading ${repo} selective subset (tier: ${tier})…"
+    log "Downloading ${repo} selective subset (tier: ${tier})..."
     while IFS= read -r pat; do
       [[ -z ${pat} ]] && continue
       include_args+=(--include "${pat}")
@@ -629,7 +629,7 @@ cmd_cleanup() {
     n_extra=0
     n_del=0
     size_before="$(tier_size_gb "${dir}")"
-    log "cleanup ${tier}: scanning ${dir} (current ≈ ${size_before} GB)"
+    log "cleanup ${tier}: scanning ${dir} (current ~ ${size_before} GB)"
     log "cleanup ${tier}: keeping selective files from tier_include_patterns + LICENSE/README/.gitattributes"
     while IFS= read -r f; do
       [[ -z ${f} ]] && continue
@@ -647,7 +647,7 @@ cmd_cleanup() {
     if [[ ${CLEANUP_YES} -eq 1 ]]; then
       prune_empty_dirs "${dir}"
       size_after="$(tier_size_gb "${dir}")"
-      log "cleanup ${tier}: deleted ${n_del} extra file(s); size ${size_before} → ${size_after} GB"
+      log "cleanup ${tier}: deleted ${n_del} extra file(s); size ${size_before} -> ${size_after} GB"
     else
       log "cleanup ${tier}: ${n_extra} extra file(s) (dry-run). Re-run with --yes to delete."
     fi

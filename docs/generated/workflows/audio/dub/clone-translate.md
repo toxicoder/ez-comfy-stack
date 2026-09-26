@@ -29,22 +29,22 @@ Occupancy **audio**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fa
 ```text
 ## audio/dub/clone-translate
 
-US-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occupancy **audio** — stop Klein / Wan / LTX first.
+US-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occupancy **audio** - stop Klein / Wan / LTX first.
 
 1. **I have rights** must be on. Queue refuses otherwise. Clone only recordings you own or have speaker consent to translate.
 2. **Source file**: pick wav/mp4/mkv already in `${COMFY_OUTPUT_DIR}/input` (container `/inputs`), or **Upload media**. Optional **Source URL** for http(s) (`yt-dlp`). Host helper: `./scripts/utilities/dub-fetch.sh run --url URL` then reload the App so the file appears in the dropdown.
-3. First Queue is **Stage all** (default): analyze then clone in one pass. Faster-whisper segments become turns, speakers cluster with Chatterbox `ve.pt`, same-speaker turns closer than 0.35 s merge, per-speaker clone refs write under `dubs/<slug>/speakers/` (scored 4–10 s window, target 9.5 s; `spkNN.ref.json` records the score), then per-turn GGUF translate and Chatterbox clone. After Queue, **Dub status** lists speaker/turn counts and `translated N/M`. To edit translations first: set Stage **analyze**, Queue, edit `text_target`, turn Rewrite translation **off**, set Stage **render**, Queue again. Missing llama.cpp / GGUF with Rewrite translation **on** is blocking (empty mix, empty `text_target`) — Queue does not clone English as the target.
-4. Chatterbox Multilingual V3 (MIT, PerTh on) — ISO `language_id` (`es`, not `Spanish`). **Clone CFG** auto is 0.3 on EN→ES (CFG 0 often vocodes a moan with no words; retries once at 0.5 if that take is not speech-like); 0.5 same-language. TTS is onset-cropped (leading hush / PerTh floor) per chunk and T3 is capped per line (floor 200 tokens) before fit. **Speaking speed** 1.0 uses the 1.25× pitch-preserving lock (ffmpeg `atempo`), then spill, then fade-trim the **end** — it does not crush a long clone into the original window. Failed rewrite leaves `text_target` empty so Queue does not clone English as the target. Raw clones: `dubs/<slug>/render/turn_NNNN.raw.wav` (post-crop). A drone / hush leftover on a cross-language job is a blocking miss: **empty mix**, not a duration-locked YT wav of the bed. Needs the complete snapshot (`ve.pt`, `s3gen.pt`, T3 V3, tokenizer JSON, `conds.pt`), not t3-only `comfy/tts`, and a wheel whose `from_local` accepts `t3_model=v3` (GitHub pin, not PyPI 0.1.7). Qwen3-TTS Base clones from the same refs (`download-podcast --tier qwen3tts`). Missing ASR/clone/llama.cpp: empty mix + **Dub status** (never the original recording). Clone lines longer than 300 characters are split. **Job slug** is a string; Upload media does not occupy a widget slot.
-5. MLA master is the duration-locked job-dir WAV `${COMFY_OUTPUT_DIR}/dubs/<slug>/ez_dub_yt.wav`. Optional `ez_dub_yt_48k.mp3` (48 kHz / 320k) is fail-soft in the job dir. Comfy `ez_dub_yt_*.mp3` is a 24 kHz preview — not the 320k master. Job dir also has mix WAV, SRT, speaker refs, `qc.json`, and disclosure sidecars.
-6. YouTube Studio: Languages → Add language → upload `ez_dub_yt.wav` (audio-only, same length). Flip the synthetic/altered-content toggle. MLA eligibility varies by channel. Spoken bumper default **off**; sidecar is always written (localized `ez_dub.disclosure.txt` + English `ez_dub.disclosure.en.txt`). If you turn the bumper on, it overlays `ez_dub_mix.wav` only — it does not eat t=0 speech on the YT wav. If you leave it off, `ez_dub_mix` starts on speech (leading hush stripped); the YT wav stays source-timed.
-7. Loudness is in-graph raise-to-peak plus optional ffmpeg −14 LUFS (`loudnorm`). `./scripts/utilities/podcast-loudnorm.sh run --in FILE --target youtube` remains an operator fallback, not required.
+3. First Queue is **Stage all** (default): analyze then clone in one pass. Faster-whisper segments become turns, speakers cluster with Chatterbox `ve.pt`, same-speaker turns closer than 0.35 s merge, per-speaker clone refs write under `dubs/<slug>/speakers/` (scored 4-10 s window, target 9.5 s; `spkNN.ref.json` records the score), then per-turn GGUF translate and Chatterbox clone. After Queue, **Dub status** lists speaker/turn counts and `translated N/M`. To edit translations first: set Stage **analyze**, Queue, edit `text_target`, turn Rewrite translation **off**, set Stage **render**, Queue again. Missing llama.cpp / GGUF with Rewrite translation **on** is blocking (empty mix, empty `text_target`) - Queue does not clone English as the target.
+4. Chatterbox Multilingual V3 (MIT, PerTh on) - ISO `language_id` (`es`, not `Spanish`). **Clone CFG** auto is 0.3 on EN->ES (CFG 0 often vocodes a moan with no words; retries once at 0.5 if that take is not speech-like); 0.5 same-language. TTS is onset-cropped (leading hush / PerTh floor) per chunk and T3 is capped per line (floor 200 tokens) before fit. **Speaking speed** 1.0 uses the 1.25x pitch-preserving lock (ffmpeg `atempo`), then spill, then fade-trim the **end** - it does not crush a long clone into the original window. Failed rewrite leaves `text_target` empty so Queue does not clone English as the target. Raw clones: `dubs/<slug>/render/turn_NNNN.raw.wav` (post-crop). A drone / hush leftover on a cross-language job is a blocking miss: **empty mix**, not a duration-locked YT wav of the bed. Needs the complete snapshot (`ve.pt`, `s3gen.pt`, T3 V3, tokenizer JSON, `conds.pt`), not t3-only `comfy/tts`, and a wheel whose `from_local` accepts `t3_model=v3` (GitHub pin, not PyPI 0.1.7). Qwen3-TTS Base clones from the same refs (`download-podcast --tier qwen3tts`). Missing ASR/clone/llama.cpp: empty mix + **Dub status** (never the original recording). Clone lines longer than 300 characters are split. **Job slug** is a string; Upload media does not occupy a widget slot.
+5. MLA master is the duration-locked job-dir WAV `${COMFY_OUTPUT_DIR}/dubs/<slug>/ez_dub_yt.wav`. Optional `ez_dub_yt_48k.mp3` (48 kHz / 320k) is fail-soft in the job dir. Comfy `ez_dub_yt_*.mp3` is a 24 kHz preview - not the 320k master. Job dir also has mix WAV, SRT, speaker refs, `qc.json`, and disclosure sidecars.
+6. YouTube Studio: Languages -> Add language -> upload `ez_dub_yt.wav` (audio-only, same length). Flip the synthetic/altered-content toggle. MLA eligibility varies by channel. Spoken bumper default **off**; sidecar is always written (localized `ez_dub.disclosure.txt` + English `ez_dub.disclosure.en.txt`). If you turn the bumper on, it overlays `ez_dub_mix.wav` only - it does not eat t=0 speech on the YT wav. If you leave it off, `ez_dub_mix` starts on speech (leading hush stripped); the YT wav stays source-timed.
+7. Loudness is in-graph raise-to-peak plus optional ffmpeg -14 LUFS (`loudnorm`). `./scripts/utilities/podcast-loudnorm.sh run --in FILE --target youtube` remains an operator fallback, not required.
 8. No lip-sync. No celebrity refs.
 
 Disclosure sidecar: This audio is an AI-translated dub. Voices are synthesized from the original speakers with the rights-holder's authorization.
 
 Weights: `./scripts/manage.sh download-dub --tier asr` then `--tier clone` (pip-installs faster-whisper, the llama-cpp-python CPU wheel, then the Chatterbox V3 GitHub zip --no-deps --force-reinstall so torch 2.14 stays). Queue self-heals a missing llama.cpp wheel (needed for `text_target`). Missing pack is not a doctor failure. On DGX Spark, faster-whisper uses the CPU CTranslate2 wheel.
 
-Occupancy: audio — stop Klein / Wan / LTX session. One GB10 job.
+Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 ```
 
@@ -90,9 +90,9 @@ flowchart LR
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
 
-### `EZDubIngest` — Dub ingest (file or URL)
+### `EZDubIngest` - Dub ingest (file or URL)
 
 Extract audio from input/ or a URL. Queue refuses unless I have rights is on.
 
@@ -139,7 +139,7 @@ Optional http(s) URL.
 
 **How it affects generation:** Empty unless you ingest from the network.
 
-### `EZDubScript` — Dub transcript + translate
+### `EZDubScript` - Dub transcript + translate
 
 Diarize + ASR + on-box GGUF translation. Widget JSON is the human edit surface.
 
@@ -184,7 +184,7 @@ Type `COMBO`. Range / default: es.
 
 Target ISO code.
 
-**How it affects generation:** es is the lab smoke. Clone CFG auto 0.3 on EN→ES.
+**How it affects generation:** es is the lab smoke. Clone CFG auto 0.3 on EN->ES.
 
 **This graph:** `es`
 
@@ -257,7 +257,7 @@ Source language.
 
 #### `max_speakers`
 
-Type `INT`. Range / default: 0–12, 0 = auto.
+Type `INT`. Range / default: 0-12, 0 = auto.
 
 Diarize cap.
 
@@ -283,7 +283,7 @@ Analyze vs render vs both.
 | `analyze` | ASR/translate only. |
 | `render` | Skip ASR; clone widget JSON. |
 
-### `EZDubRender` — Dub clone + mix
+### `EZDubRender` - Dub clone + mix
 
 Zero-shot clone from a scored reference window, duration-lock, mix, SRT, disclosure sidecar.
 
@@ -332,27 +332,27 @@ Overlay a spoken bumper on the mix wav.
 
 #### `speed`
 
-Type `FLOAT`. Range / default: 0.5–1.5, 1.0.
+Type `FLOAT`. Range / default: 0.5-1.5, 1.0.
 
 Fit ceiling for duration lock.
 
-**How it affects generation:** 1.0 uses the lab 1.25× pitch-preserving lock, then spill, then fade-trim the end.
+**How it affects generation:** 1.0 uses the lab 1.25x pitch-preserving lock, then spill, then fade-trim the end.
 
 **This graph:** `1.0`
 
 #### `cfg_weight`
 
-Type `FLOAT`. Range / default: −1.0 = auto.
+Type `FLOAT`. Range / default: -1.0 = auto.
 
 Clone CFG.
 
-**How it affects generation:** −1 auto. Lab auto 0.3 on EN→ES (retry 0.5).
+**How it affects generation:** -1 auto. Lab auto 0.3 on EN->ES (retry 0.5).
 
 **This graph:** `-1.0`
 
 #### `exaggeration`
 
-Type `FLOAT`. Range / default: 0.25–2.0, 0.5.
+Type `FLOAT`. Range / default: 0.25-2.0, 0.5.
 
 Chatterbox exaggeration.
 
@@ -360,7 +360,7 @@ Chatterbox exaggeration.
 
 **This graph:** `0.5`
 
-### `SaveAudio` — Save Audio
+### `SaveAudio` - Save Audio
 
 Write a FLAC/wav master.
 
@@ -382,7 +382,7 @@ Save stem.
 
 **This graph:** `ez_dub_mix`
 
-### `SaveAudioMP3` — Save Audio (MP3)
+### `SaveAudioMP3` - Save Audio (MP3)
 
 Write an MP3 copy of the same take.
 
@@ -418,7 +418,7 @@ Bitrate preset.
 | `192k` | Smaller, more artifacts. |
 | `128k` | Preview only. |
 
-### `Note` — Note
+### `Note` - Note
 
 On-canvas operator note (not executed).
 
@@ -434,31 +434,31 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## audio/dub/clone-translate US-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occupancy **audio** — stop Klein / Wan / LTX first. 1. **I have rights** must be on. Queue ref…`
+**This graph:** `## audio/dub/clone-translate US-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occupancy **audio** - stop Klein / Wan / LTX first. 1. **I have rights** must be on. Queue ref...`
 
 ```text
 ## audio/dub/clone-translate
 
-US-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occupancy **audio** — stop Klein / Wan / LTX first.
+US-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occupancy **audio** - stop Klein / Wan / LTX first.
 
 1. **I have rights** must be on. Queue refuses otherwise. Clone only recordings you own or have speaker consent to translate.
 2. **Source file**: pick wav/mp4/mkv already in `${COMFY_OUTPUT_DIR}/input` (container `/inputs`), or **Upload media**. Optional **Source URL** for http(s) (`yt-dlp`). Host helper: `./scripts/utilities/dub-fetch.sh run --url URL` then reload the App so the file appears in the dropdown.
-3. First Queue is **Stage all** (default): analyze then clone in one pass. Faster-whisper segments become turns, speakers cluster with Chatterbox `ve.pt`, same-speaker turns closer than 0.35 s merge, per-speaker clone refs write under `dubs/<slug>/speakers/` (scored 4–10 s window, target 9.5 s; `spkNN.ref.json` records the score), then per-turn GGUF translate and Chatterbox clone. After Queue, **Dub status** lists speaker/turn counts and `translated N/M`. To edit translations first: set Stage **analyze**, Queue, edit `text_target`, turn Rewrite translation **off**, set Stage **render**, Queue again. Missing llama.cpp / GGUF with Rewrite translation **on** is blocking (empty mix, empty `text_target`) — Queue does not clone English as the target.
-4. Chatterbox Multilingual V3 (MIT, PerTh on) — ISO `language_id` (`es`, not `Spanish`). **Clone CFG** auto is 0.3 on EN→ES (CFG 0 often vocodes a moan with no words; retries once at 0.5 if that take is not speech-like); 0.5 same-language. TTS is onset-cropped (leading hush / PerTh floor) per chunk and T3 is capped per line (floor 200 tokens) before fit. **Speaking speed** 1.0 uses the 1.25× pitch-preserving lock (ffmpeg `atempo`), then spill, then fade-trim the **end** — it does not crush a long clone into the original window. Failed rewrite leaves `text_target` empty so Queue does not clone English as the target. Raw clones: `dubs/<slug>/render/turn_NNNN.raw.wav` (post-crop). A drone / hush leftover on a cross-language job is a blocking miss: **empty mix**, not a duration-locked YT wav of the bed. Needs the complete snapshot (`ve.pt`, `s3gen.pt`, T3 V3, tokenizer JSON, `conds.pt`), not t3-only `comfy/tts`, and a wheel whose `from_local` accepts `t3_model=v3` (GitHub pin, not PyPI 0.1.7). Qwen3-TTS Base clones from the same refs (`download-podcast --tier qwen3tts`). Missing ASR/clone/llama.cpp: empty mix + **Dub status** (never the original recording). Clone lines longer than 300 characters are split. **Job slug** is a string; Upload media does not occupy a widget slot.
-5. MLA master is the duration-locked job-dir WAV `${COMFY_OUTPUT_DIR}/dubs/<slug>/ez_dub_yt.wav`. Optional `ez_dub_yt_48k.mp3` (48 kHz / 320k) is fail-soft in the job dir. Comfy `ez_dub_yt_*.mp3` is a 24 kHz preview — not the 320k master. Job dir also has mix WAV, SRT, speaker refs, `qc.json`, and disclosure sidecars.
-6. YouTube Studio: Languages → Add language → upload `ez_dub_yt.wav` (audio-only, same length). Flip the synthetic/altered-content toggle. MLA eligibility varies by channel. Spoken bumper default **off**; sidecar is always written (localized `ez_dub.disclosure.txt` + English `ez_dub.disclosure.en.txt`). If you turn the bumper on, it overlays `ez_dub_mix.wav` only — it does not eat t=0 speech on the YT wav. If you leave it off, `ez_dub_mix` starts on speech (leading hush stripped); the YT wav stays source-timed.
-7. Loudness is in-graph raise-to-peak plus optional ffmpeg −14 LUFS (`loudnorm`). `./scripts/utilities/podcast-loudnorm.sh run --in FILE --target youtube` remains an operator fallback, not required.
+3. First Queue is **Stage all** (default): analyze then clone in one pass. Faster-whisper segments become turns, speakers cluster with Chatterbox `ve.pt`, same-speaker turns closer than 0.35 s merge, per-speaker clone refs write under `dubs/<slug>/speakers/` (scored 4-10 s window, target 9.5 s; `spkNN.ref.json` records the score), then per-turn GGUF translate and Chatterbox clone. After Queue, **Dub status** lists speaker/turn counts and `translated N/M`. To edit translations first: set Stage **analyze**, Queue, edit `text_target`, turn Rewrite translation **off**, set Stage **render**, Queue again. Missing llama.cpp / GGUF with Rewrite translation **on** is blocking (empty mix, empty `text_target`) - Queue does not clone English as the target.
+4. Chatterbox Multilingual V3 (MIT, PerTh on) - ISO `language_id` (`es`, not `Spanish`). **Clone CFG** auto is 0.3 on EN->ES (CFG 0 often vocodes a moan with no words; retries once at 0.5 if that take is not speech-like); 0.5 same-language. TTS is onset-cropped (leading hush / PerTh floor) per chunk and T3 is capped per line (floor 200 tokens) before fit. **Speaking speed** 1.0 uses the 1.25x pitch-preserving lock (ffmpeg `atempo`), then spill, then fade-trim the **end** - it does not crush a long clone into the original window. Failed rewrite leaves `text_target` empty so Queue does not clone English as the target. Raw clones: `dubs/<slug>/render/turn_NNNN.raw.wav` (post-crop). A drone / hush leftover on a cross-language job is a blocking miss: **empty mix**, not a duration-locked YT wav of the bed. Needs the complete snapshot (`ve.pt`, `s3gen.pt`, T3 V3, tokenizer JSON, `conds.pt`), not t3-only `comfy/tts`, and a wheel whose `from_local` accepts `t3_model=v3` (GitHub pin, not PyPI 0.1.7). Qwen3-TTS Base clones from the same refs (`download-podcast --tier qwen3tts`). Missing ASR/clone/llama.cpp: empty mix + **Dub status** (never the original recording). Clone lines longer than 300 characters are split. **Job slug** is a string; Upload media does not occupy a widget slot.
+5. MLA master is the duration-locked job-dir WAV `${COMFY_OUTPUT_DIR}/dubs/<slug>/ez_dub_yt.wav`. Optional `ez_dub_yt_48k.mp3` (48 kHz / 320k) is fail-soft in the job dir. Comfy `ez_dub_yt_*.mp3` is a 24 kHz preview - not the 320k master. Job dir also has mix WAV, SRT, speaker refs, `qc.json`, and disclosure sidecars.
+6. YouTube Studio: Languages -> Add language -> upload `ez_dub_yt.wav` (audio-only, same length). Flip the synthetic/altered-content toggle. MLA eligibility varies by channel. Spoken bumper default **off**; sidecar is always written (localized `ez_dub.disclosure.txt` + English `ez_dub.disclosure.en.txt`). If you turn the bumper on, it overlays `ez_dub_mix.wav` only - it does not eat t=0 speech on the YT wav. If you leave it off, `ez_dub_mix` starts on speech (leading hush stripped); the YT wav stays source-timed.
+7. Loudness is in-graph raise-to-peak plus optional ffmpeg -14 LUFS (`loudnorm`). `./scripts/utilities/podcast-loudnorm.sh run --in FILE --target youtube` remains an operator fallback, not required.
 8. No lip-sync. No celebrity refs.
 
 Disclosure sidecar: This audio is an AI-translated dub. Voices are synthesized from the original speakers with the rights-holder's authorization.
 
 Weights: `./scripts/manage.sh download-dub --tier asr` then `--tier clone` (pip-installs faster-whisper, the llama-cpp-python CPU wheel, then the Chatterbox V3 GitHub zip --no-deps --force-reinstall so torch 2.14 stays). Queue self-heals a missing llama.cpp wheel (needed for `text_target`). Missing pack is not a doctor failure. On DGX Spark, faster-whisper uses the CPU CTranslate2 wheel.
 
-Occupancy: audio — stop Klein / Wan / LTX session. One GB10 job.
+Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 ```
 
-### `EZQuality` — Quality
+### `EZQuality` - Quality
 
 Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
@@ -493,7 +493,7 @@ custom freezes last overlay; lab restores graph defaults.
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
-### `EZModelCheck` — Check models
+### `EZModelCheck` - Check models
 
 Manual disk check for occupancy + Quality weights. Queue does not run this node.
 

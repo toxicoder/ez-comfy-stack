@@ -37,4 +37,4 @@ if [[ ${DEVCONTAINER_INSTALL_DOCS_SITE:-0} == "1" ]] &&
 fi
 bazelisk version
 grok --version
-echo "post-create: ready — bazelisk run //:validate"
+echo "post-create: ready - bazelisk run //:validate"

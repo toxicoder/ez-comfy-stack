@@ -1,6 +1,6 @@
 ---
 title: "Spiral stair"
-description: "Cinema Rack illustration — Spiral stair."
+description: "Cinema Rack illustration - Spiral stair."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

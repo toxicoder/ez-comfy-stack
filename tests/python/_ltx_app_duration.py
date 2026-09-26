@@ -33,7 +33,7 @@ SUBGRAPH_APP = ROOT / "custom_nodes" / "ez_studio_blocks" / "subgraphs" / "ltx-a
 SUBGRAPH_APP_OLD = ROOT / "custom_nodes" / "ez_studio_blocks" / "subgraphs" / "ltx-av-12s.json"
 SUBGRAPH_APP_LEGACY = ROOT / "custom_nodes" / "ez_studio_blocks" / "subgraphs" / "ltx-av-5s.json"
 
-# Old lab-rel → 8s lab-rel (full paths only; do not stem-rewrite Wan twins).
+# Old lab-rel -> 8s lab-rel (full paths only; do not stem-rewrite Wan twins).
 APP_REL_RENAMES: dict[str, str] = {
     "motion/av/still-to-video-12s": "motion/av/still-to-video-8s",
     "motion/av/text-to-video-12s": "motion/av/text-to-video-8s",
@@ -217,7 +217,7 @@ def rewrite_operator_copy(text: str) -> str:
     out = out.replace("SFX ~12 s", "SFX ~8 s")
     out = out.replace("(289 frames = 1+8n @ 24 fps)", f"({FRAMES_APP} frames = 1+8n @ 24 fps)")
     out = out.replace("smoke/demo (289 frames)", f"smoke/demo ({FRAMES_APP} frames)")
-    out = out.replace("Widgets: seed 42 fixed · 289 frames", f"Widgets: seed 42 fixed · {FRAMES_APP} frames")
+    out = out.replace("Widgets: seed 42 fixed - 289 frames", f"Widgets: seed 42 fixed - {FRAMES_APP} frames")
     out = out.replace("Twelve seconds.", "Eight seconds.")
     out = out.replace("12 seconds, 24 fps", "8 seconds, 24 fps")
     return out

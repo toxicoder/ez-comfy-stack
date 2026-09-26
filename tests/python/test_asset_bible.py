@@ -1,4 +1,4 @@
-"""Asset Bible contract (ez.asset.v1) — hermetic, no TRELLIS/network."""
+"""Asset Bible contract (ez.asset.v1) - hermetic, no TRELLIS/network."""
 
 from __future__ import annotations
 

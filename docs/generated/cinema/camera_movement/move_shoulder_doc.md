@@ -1,6 +1,6 @@
 ---
 title: "Shoulder documentary"
-description: "Cinema Rack illustration — Shoulder documentary."
+description: "Cinema Rack illustration - Shoulder documentary."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

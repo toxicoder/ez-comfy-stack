@@ -18,7 +18,7 @@
 #   Chatterbox helpers bind only in the nodes stage (not Comfy pip).
 #   Pin ARGs are declared in the stage that uses them (never ENV'd before torch).
 #   Runtime COPY --link: /opt/parts/venv (torch) then venv-extra then app, then ops.
-#   Phases: torch | comfy | nodes+finalize+package — torch layer survives node edits.
+#   Phases: torch | comfy | nodes+finalize+package - torch layer survives node edits.
 #   venv-extra is the pip delta after torch so Comfy/node wheels do not re-pull torch.
 #   BuildKit pip + apt cache mounts: reuse when a phase layer does rebuild.
 #   Client pull: COPY --link rebases venv when only runtime apt changes.
@@ -79,7 +79,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     --mount=type=bind,source=install-comfy/core.sh,target=/opt/ez-comfy/install-comfy/core.sh \
     --mount=type=bind,source=install-comfy/phase-venv-torch.sh,target=/opt/ez-comfy/install-comfy/phase-venv-torch.sh \
     if [ "${EZ_COMFY_PREBUILD}" = "1" ]; then \
-      echo "[Dockerfile] phase venv + torch → /opt/comfy-prebuilt …"; \
+      echo "[Dockerfile] phase venv + torch -> /opt/comfy-prebuilt ..."; \
       bash -euo pipefail -c '\
         source /opt/ez-comfy/install-comfy/core.sh; \
         source /opt/ez-comfy/install-comfy/phase-venv-torch.sh; \
@@ -87,7 +87,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
         phase_venv; \
         phase_torch'; \
     else \
-      echo "[Dockerfile] EZ_COMFY_PREBUILD=0 — skipping prebuild"; \
+      echo "[Dockerfile] EZ_COMFY_PREBUILD=0 - skipping prebuild"; \
       mkdir -p /opt/comfy-prebuilt /opt/parts/venv /opt/parts/venv-extra /opt/parts/app; \
     fi
 
@@ -104,7 +104,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     --mount=type=bind,source=install-comfy/phase-venv-torch.sh,target=/opt/ez-comfy/install-comfy/phase-venv-torch.sh \
     --mount=type=bind,source=install-comfy/phase-comfy.sh,target=/opt/ez-comfy/install-comfy/phase-comfy.sh \
     if [ "${EZ_COMFY_PREBUILD}" = "1" ]; then \
-      echo "[Dockerfile] phase comfy …"; \
+      echo "[Dockerfile] phase comfy ..."; \
       bash -euo pipefail -c '\
         source /opt/ez-comfy/install-comfy/common.sh; \
         source /opt/ez-comfy/install-comfy/phase-venv-torch.sh; \
@@ -140,7 +140,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     --mount=type=bind,source=install-comfy/llama-cpp-cpu.sh,target=/opt/ez-comfy/install-comfy/llama-cpp-cpu.sh \
     --mount=type=bind,source=install-comfy/chatterbox-tts.sh,target=/opt/ez-comfy/install-comfy/chatterbox-tts.sh \
     if [ "${EZ_COMFY_PREBUILD}" = "1" ]; then \
-      echo "[Dockerfile] phase nodes + finalize + package parts …"; \
+      echo "[Dockerfile] phase nodes + finalize + package parts ..."; \
       bash -euo pipefail -c '\
         source /opt/ez-comfy/install-comfy/common.sh; \
         source /opt/ez-comfy/install-comfy/phase-venv-torch.sh; \
@@ -169,8 +169,8 @@ RUN rm -f /etc/apt/apt.conf.d/docker-clean \
 
 # Runtime: keep slim (no git-lfs / full build-essential).
 # Triton JIT (PyTorch 2.13+ torch._native / first CLIPTextEncode) needs:
-#   - gcc/g++  — compile cuda_utils.c (else "Failed to find C compiler")
-#   - python3-dev — Python.h for that extension (else CalledProcessError from gcc)
+#   - gcc/g++  - compile cuda_utils.c (else "Failed to find C compiler")
+#   - python3-dev - Python.h for that extension (else CalledProcessError from gcc)
 # Not full build-essential: small apt layer; COPY --link keeps venv cacheable.
 # ffmpeg: preferred by VideoHelperSuite (imageio-ffmpeg is pip fallback)
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
@@ -190,7 +190,7 @@ COPY --link --from=torch /opt/parts/venv /opt/comfy-prebuilt/.venv
 COPY --link --from=nodes /opt/parts/venv-extra /opt/comfy-prebuilt/.venv
 COPY --link --from=nodes /opt/parts/app /opt/comfy-prebuilt
 
-# Volatile ops scripts last — entrypoint/patch/orchestrator edits rebuild only thin layers
+# Volatile ops scripts last - entrypoint/patch/orchestrator edits rebuild only thin layers
 COPY --chmod=755 install-comfy.sh entrypoint.sh /opt/ez-comfy/
 COPY --chmod=755 install-comfy/ /opt/ez-comfy/install-comfy/
 COPY --chmod=644 patch_get_free_memory.py patch_unified_memory_copy.py \

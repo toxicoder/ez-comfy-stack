@@ -34,11 +34,11 @@ LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are inva
 The stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}` (container `/outputs`) as a faststart H.264 master, plus an HTML sidecar. After Queue, a **Film ready** overlay offers play and download. Per-shot VHS nodes remain for inspection. Optional board: studio-ui `/watch/<slug>`.
 
 One-click 90s unit (first-person parkour): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.
-Models: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, t2i mode) · LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).
-LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
+Models: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, t2i mode) - LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).
+LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
 
-1. Queue **once**. Klein runs first; models unload; then 18 × 5.00s LTX prints chain last-frame → next start.
-2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) — expected, not a hang.
+1. Queue **once**. Klein runs first; models unload; then 18 x 5.00s LTX prints chain last-frame -> next start.
+2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) - expected, not a hang.
 3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4` (act graphs write `ez_gosee_actN_90s.mp4`). A **Film ready** overlay plays it. Copy off the Spark with scp.
 4. Optional single-shot iterate: **motion/av/still-to-shot**. Optional silent rehearsal: **motion/silent/still-to-shot**.
 5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film go-see --yes`
@@ -46,7 +46,7 @@ LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-gene
 Do not Queue a 90s denoise (keep 121-frame / 1+8n widgets). US-safe local pack only. No score.
 Prompt enhance is **off** so the pinned identity and each baked LTX I2V paragraph are encoded as written. The identity STRING is wired into each shot enhance as context (used only if you turn Enhance on).
 
-Occupancy: film — stop everything else on that Spark. One GB10 job.
+Occupancy: film - stop everything else on that Spark. One GB10 job.
 ```
 
 ## How to Queue
@@ -65,12 +65,12 @@ flowchart TB
   GQUALITY["QUALITY"]
   G1__Identity__Klein_["1. Identity (Klein)"]
   G2__LTX_models["2. LTX models"]
-  G3__Beat_1__3___5_00s_LTX_["3. Beat 1 (3 × 5.00s LTX)"]
-  G4__Beat_2__3___5_00s_LTX_["4. Beat 2 (3 × 5.00s LTX)"]
-  G5__Beat_3__3___5_00s_LTX_["5. Beat 3 (3 × 5.00s LTX)"]
-  G6__Beat_4__3___5_00s_LTX_["6. Beat 4 (3 × 5.00s LTX)"]
-  G7__Beat_5__3___5_00s_LTX_["7. Beat 5 (3 × 5.00s LTX)"]
-  G8__Beat_6__3___5_00s_LTX_["8. Beat 6 (3 × 5.00s LTX)"]
+  G3__Beat_1__3_x_5_00s_LTX_["3. Beat 1 (3 x 5.00s LTX)"]
+  G4__Beat_2__3_x_5_00s_LTX_["4. Beat 2 (3 x 5.00s LTX)"]
+  G5__Beat_3__3_x_5_00s_LTX_["5. Beat 3 (3 x 5.00s LTX)"]
+  G6__Beat_4__3_x_5_00s_LTX_["6. Beat 4 (3 x 5.00s LTX)"]
+  G7__Beat_5__3_x_5_00s_LTX_["7. Beat 5 (3 x 5.00s LTX)"]
+  G8__Beat_6__3_x_5_00s_LTX_["8. Beat 6 (3 x 5.00s LTX)"]
   G9__Publish_90s_MP4["9. Publish 90s MP4"]
   GPROMPT["PROMPT"]
 ```
@@ -88,7 +88,7 @@ flowchart TB
 | 7 | KSampler | `KSampler` | 1. Identity (Klein) |
 | 8 | VAE Decode | `VAEDecode` | 1. Identity (Klein) |
 | 9 | Save identity PNG | `SaveImage` | 1. Identity (Klein) |
-| 10 | Operator note — one-click film | `Note` | NOTE |
+| 10 | Operator note - one-click film | `Note` | NOTE |
 | 11 | Klein Prompt Enhance | `EZKleinPromptEnhance` | 1. Identity (Klein) |
 | 12 | Negative Prompt Enhance | `EZNegativePromptEnhance` | 1. Identity (Klein) |
 | 13 | Quality | `EZQuality` | QUALITY |
@@ -100,223 +100,223 @@ flowchart TB
 | 103 | LTX-2.5 audio VAE | `VAELoader` | 2. LTX models |
 | 104 | Negative | `CLIPTextEncode` | 2. LTX models |
 | 105 | Empty LTX audio latent | `LTXVEmptyLatentAudio` | 2. LTX models |
-| 900 | Save 90s film (MP4) — play / download | `EZFilmConcat` | 9. Publish 90s MP4 |
-| 211 | b1 s1 LTX I2V enhance | `EZLTXPromptEnhance` | 3. Beat 1 (3 × 5.00s LTX) |
-| 200 | b1 s1 LTX I2V | `CLIPTextEncode` | 3. Beat 1 (3 × 5.00s LTX) |
-| 201 | LTX Img→Video condition | `LTXVImgToVideo` | 3. Beat 1 (3 × 5.00s LTX) |
-| 202 | LTX frame rate cond | `LTXVConditioning` | 3. Beat 1 (3 × 5.00s LTX) |
-| 203 | Concat AV latents | `LTXVConcatAVLatent` | 3. Beat 1 (3 × 5.00s LTX) |
-| 204 | KSampler | `KSampler` | 3. Beat 1 (3 × 5.00s LTX) |
-| 205 | Separate AV latents | `LTXVSeparateAVLatent` | 3. Beat 1 (3 × 5.00s LTX) |
-| 206 | VAE Decode | `VAEDecode` | 3. Beat 1 (3 × 5.00s LTX) |
-| 207 | Audio VAE Decode | `LTXVAudioVAEDecode` | 3. Beat 1 (3 × 5.00s LTX) |
-| 208 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | 3. Beat 1 (3 × 5.00s LTX) |
-| 209 | Last frame | `ImageFromBatch` | 3. Beat 1 (3 × 5.00s LTX) |
-| 210 | Save last frame | `SaveImage` | 3. Beat 1 (3 × 5.00s LTX) |
-| 231 | b1 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 3. Beat 1 (3 × 5.00s LTX) |
-| 220 | b1 s2 LTX I2V | `CLIPTextEncode` | 3. Beat 1 (3 × 5.00s LTX) |
-| 221 | LTX Img→Video condition | `LTXVImgToVideo` | 3. Beat 1 (3 × 5.00s LTX) |
-| 222 | LTX frame rate cond | `LTXVConditioning` | 3. Beat 1 (3 × 5.00s LTX) |
-| 223 | Concat AV latents | `LTXVConcatAVLatent` | 3. Beat 1 (3 × 5.00s LTX) |
-| 224 | KSampler | `KSampler` | 3. Beat 1 (3 × 5.00s LTX) |
-| 225 | Separate AV latents | `LTXVSeparateAVLatent` | 3. Beat 1 (3 × 5.00s LTX) |
-| 226 | VAE Decode | `VAEDecode` | 3. Beat 1 (3 × 5.00s LTX) |
-| 227 | Audio VAE Decode | `LTXVAudioVAEDecode` | 3. Beat 1 (3 × 5.00s LTX) |
-| 228 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | 3. Beat 1 (3 × 5.00s LTX) |
-| 229 | Last frame | `ImageFromBatch` | 3. Beat 1 (3 × 5.00s LTX) |
-| 230 | Save last frame | `SaveImage` | 3. Beat 1 (3 × 5.00s LTX) |
-| 251 | b1 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 3. Beat 1 (3 × 5.00s LTX) |
-| 240 | b1 s3 LTX I2V | `CLIPTextEncode` | 3. Beat 1 (3 × 5.00s LTX) |
-| 241 | LTX Img→Video condition | `LTXVImgToVideo` | 3. Beat 1 (3 × 5.00s LTX) |
-| 242 | LTX frame rate cond | `LTXVConditioning` | 3. Beat 1 (3 × 5.00s LTX) |
-| 243 | Concat AV latents | `LTXVConcatAVLatent` | 3. Beat 1 (3 × 5.00s LTX) |
-| 244 | KSampler | `KSampler` | 3. Beat 1 (3 × 5.00s LTX) |
-| 245 | Separate AV latents | `LTXVSeparateAVLatent` | 3. Beat 1 (3 × 5.00s LTX) |
-| 246 | VAE Decode | `VAEDecode` | 3. Beat 1 (3 × 5.00s LTX) |
-| 247 | Audio VAE Decode | `LTXVAudioVAEDecode` | 3. Beat 1 (3 × 5.00s LTX) |
-| 248 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | 3. Beat 1 (3 × 5.00s LTX) |
-| 249 | Last frame | `ImageFromBatch` | 3. Beat 1 (3 × 5.00s LTX) |
-| 250 | Save last frame | `SaveImage` | 3. Beat 1 (3 × 5.00s LTX) |
-| 271 | b2 s1 LTX I2V enhance | `EZLTXPromptEnhance` | 4. Beat 2 (3 × 5.00s LTX) |
-| 260 | b2 s1 LTX I2V | `CLIPTextEncode` | 4. Beat 2 (3 × 5.00s LTX) |
-| 261 | LTX Img→Video condition | `LTXVImgToVideo` | 4. Beat 2 (3 × 5.00s LTX) |
-| 262 | LTX frame rate cond | `LTXVConditioning` | 4. Beat 2 (3 × 5.00s LTX) |
-| 263 | Concat AV latents | `LTXVConcatAVLatent` | 4. Beat 2 (3 × 5.00s LTX) |
-| 264 | KSampler | `KSampler` | 4. Beat 2 (3 × 5.00s LTX) |
-| 265 | Separate AV latents | `LTXVSeparateAVLatent` | 4. Beat 2 (3 × 5.00s LTX) |
-| 266 | VAE Decode | `VAEDecode` | 4. Beat 2 (3 × 5.00s LTX) |
-| 267 | Audio VAE Decode | `LTXVAudioVAEDecode` | 4. Beat 2 (3 × 5.00s LTX) |
-| 268 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | 4. Beat 2 (3 × 5.00s LTX) |
-| 269 | Last frame | `ImageFromBatch` | 4. Beat 2 (3 × 5.00s LTX) |
-| 270 | Save last frame | `SaveImage` | 4. Beat 2 (3 × 5.00s LTX) |
-| 291 | b2 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 4. Beat 2 (3 × 5.00s LTX) |
-| 280 | b2 s2 LTX I2V | `CLIPTextEncode` | 4. Beat 2 (3 × 5.00s LTX) |
-| 281 | LTX Img→Video condition | `LTXVImgToVideo` | 4. Beat 2 (3 × 5.00s LTX) |
-| 282 | LTX frame rate cond | `LTXVConditioning` | 4. Beat 2 (3 × 5.00s LTX) |
-| 283 | Concat AV latents | `LTXVConcatAVLatent` | 4. Beat 2 (3 × 5.00s LTX) |
-| 284 | KSampler | `KSampler` | 4. Beat 2 (3 × 5.00s LTX) |
-| 285 | Separate AV latents | `LTXVSeparateAVLatent` | 4. Beat 2 (3 × 5.00s LTX) |
-| 286 | VAE Decode | `VAEDecode` | 4. Beat 2 (3 × 5.00s LTX) |
-| 287 | Audio VAE Decode | `LTXVAudioVAEDecode` | 4. Beat 2 (3 × 5.00s LTX) |
-| 288 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | 4. Beat 2 (3 × 5.00s LTX) |
-| 289 | Last frame | `ImageFromBatch` | 4. Beat 2 (3 × 5.00s LTX) |
-| 290 | Save last frame | `SaveImage` | 4. Beat 2 (3 × 5.00s LTX) |
-| 311 | b2 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 4. Beat 2 (3 × 5.00s LTX) |
-| 300 | b2 s3 LTX I2V | `CLIPTextEncode` | 4. Beat 2 (3 × 5.00s LTX) |
-| 301 | LTX Img→Video condition | `LTXVImgToVideo` | 4. Beat 2 (3 × 5.00s LTX) |
-| 302 | LTX frame rate cond | `LTXVConditioning` | 4. Beat 2 (3 × 5.00s LTX) |
-| 303 | Concat AV latents | `LTXVConcatAVLatent` | 4. Beat 2 (3 × 5.00s LTX) |
-| 304 | KSampler | `KSampler` | 4. Beat 2 (3 × 5.00s LTX) |
-| 305 | Separate AV latents | `LTXVSeparateAVLatent` | 4. Beat 2 (3 × 5.00s LTX) |
-| 306 | VAE Decode | `VAEDecode` | 4. Beat 2 (3 × 5.00s LTX) |
-| 307 | Audio VAE Decode | `LTXVAudioVAEDecode` | 4. Beat 2 (3 × 5.00s LTX) |
-| 308 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | 4. Beat 2 (3 × 5.00s LTX) |
-| 309 | Last frame | `ImageFromBatch` | 4. Beat 2 (3 × 5.00s LTX) |
-| 310 | Save last frame | `SaveImage` | 4. Beat 2 (3 × 5.00s LTX) |
-| 331 | b3 s1 LTX I2V enhance | `EZLTXPromptEnhance` | 5. Beat 3 (3 × 5.00s LTX) |
-| 320 | b3 s1 LTX I2V | `CLIPTextEncode` | 5. Beat 3 (3 × 5.00s LTX) |
-| 321 | LTX Img→Video condition | `LTXVImgToVideo` | 5. Beat 3 (3 × 5.00s LTX) |
-| 322 | LTX frame rate cond | `LTXVConditioning` | 5. Beat 3 (3 × 5.00s LTX) |
-| 323 | Concat AV latents | `LTXVConcatAVLatent` | 5. Beat 3 (3 × 5.00s LTX) |
-| 324 | KSampler | `KSampler` | 5. Beat 3 (3 × 5.00s LTX) |
-| 325 | Separate AV latents | `LTXVSeparateAVLatent` | 5. Beat 3 (3 × 5.00s LTX) |
-| 326 | VAE Decode | `VAEDecode` | 5. Beat 3 (3 × 5.00s LTX) |
-| 327 | Audio VAE Decode | `LTXVAudioVAEDecode` | 5. Beat 3 (3 × 5.00s LTX) |
-| 328 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | 5. Beat 3 (3 × 5.00s LTX) |
-| 329 | Last frame | `ImageFromBatch` | 5. Beat 3 (3 × 5.00s LTX) |
-| 330 | Save last frame | `SaveImage` | 5. Beat 3 (3 × 5.00s LTX) |
-| 351 | b3 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 5. Beat 3 (3 × 5.00s LTX) |
-| 340 | b3 s2 LTX I2V | `CLIPTextEncode` | 5. Beat 3 (3 × 5.00s LTX) |
-| 341 | LTX Img→Video condition | `LTXVImgToVideo` | 5. Beat 3 (3 × 5.00s LTX) |
-| 342 | LTX frame rate cond | `LTXVConditioning` | 5. Beat 3 (3 × 5.00s LTX) |
-| 343 | Concat AV latents | `LTXVConcatAVLatent` | 5. Beat 3 (3 × 5.00s LTX) |
-| 344 | KSampler | `KSampler` | 5. Beat 3 (3 × 5.00s LTX) |
-| 345 | Separate AV latents | `LTXVSeparateAVLatent` | 5. Beat 3 (3 × 5.00s LTX) |
-| 346 | VAE Decode | `VAEDecode` | 5. Beat 3 (3 × 5.00s LTX) |
-| 347 | Audio VAE Decode | `LTXVAudioVAEDecode` | 5. Beat 3 (3 × 5.00s LTX) |
-| 348 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | 5. Beat 3 (3 × 5.00s LTX) |
-| 349 | Last frame | `ImageFromBatch` | 5. Beat 3 (3 × 5.00s LTX) |
-| 350 | Save last frame | `SaveImage` | 5. Beat 3 (3 × 5.00s LTX) |
-| 371 | b3 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 5. Beat 3 (3 × 5.00s LTX) |
-| 360 | b3 s3 LTX I2V | `CLIPTextEncode` | 5. Beat 3 (3 × 5.00s LTX) |
-| 361 | LTX Img→Video condition | `LTXVImgToVideo` | 5. Beat 3 (3 × 5.00s LTX) |
-| 362 | LTX frame rate cond | `LTXVConditioning` | 5. Beat 3 (3 × 5.00s LTX) |
-| 363 | Concat AV latents | `LTXVConcatAVLatent` | 5. Beat 3 (3 × 5.00s LTX) |
-| 364 | KSampler | `KSampler` | 5. Beat 3 (3 × 5.00s LTX) |
-| 365 | Separate AV latents | `LTXVSeparateAVLatent` | 5. Beat 3 (3 × 5.00s LTX) |
-| 366 | VAE Decode | `VAEDecode` | 5. Beat 3 (3 × 5.00s LTX) |
-| 367 | Audio VAE Decode | `LTXVAudioVAEDecode` | 5. Beat 3 (3 × 5.00s LTX) |
-| 368 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | 5. Beat 3 (3 × 5.00s LTX) |
-| 369 | Last frame | `ImageFromBatch` | 5. Beat 3 (3 × 5.00s LTX) |
-| 370 | Save last frame | `SaveImage` | 5. Beat 3 (3 × 5.00s LTX) |
-| 391 | b4 s1 LTX I2V enhance | `EZLTXPromptEnhance` | 6. Beat 4 (3 × 5.00s LTX) |
-| 380 | b4 s1 LTX I2V | `CLIPTextEncode` | 6. Beat 4 (3 × 5.00s LTX) |
-| 381 | LTX Img→Video condition | `LTXVImgToVideo` | 6. Beat 4 (3 × 5.00s LTX) |
-| 382 | LTX frame rate cond | `LTXVConditioning` | 6. Beat 4 (3 × 5.00s LTX) |
-| 383 | Concat AV latents | `LTXVConcatAVLatent` | 6. Beat 4 (3 × 5.00s LTX) |
-| 384 | KSampler | `KSampler` | 6. Beat 4 (3 × 5.00s LTX) |
-| 385 | Separate AV latents | `LTXVSeparateAVLatent` | 6. Beat 4 (3 × 5.00s LTX) |
-| 386 | VAE Decode | `VAEDecode` | 6. Beat 4 (3 × 5.00s LTX) |
-| 387 | Audio VAE Decode | `LTXVAudioVAEDecode` | 6. Beat 4 (3 × 5.00s LTX) |
-| 388 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | 6. Beat 4 (3 × 5.00s LTX) |
-| 389 | Last frame | `ImageFromBatch` | 6. Beat 4 (3 × 5.00s LTX) |
-| 390 | Save last frame | `SaveImage` | 6. Beat 4 (3 × 5.00s LTX) |
-| 411 | b4 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 6. Beat 4 (3 × 5.00s LTX) |
-| 400 | b4 s2 LTX I2V | `CLIPTextEncode` | 6. Beat 4 (3 × 5.00s LTX) |
-| 401 | LTX Img→Video condition | `LTXVImgToVideo` | 6. Beat 4 (3 × 5.00s LTX) |
-| 402 | LTX frame rate cond | `LTXVConditioning` | 6. Beat 4 (3 × 5.00s LTX) |
-| 403 | Concat AV latents | `LTXVConcatAVLatent` | 6. Beat 4 (3 × 5.00s LTX) |
-| 404 | KSampler | `KSampler` | 6. Beat 4 (3 × 5.00s LTX) |
-| 405 | Separate AV latents | `LTXVSeparateAVLatent` | 6. Beat 4 (3 × 5.00s LTX) |
-| 406 | VAE Decode | `VAEDecode` | 6. Beat 4 (3 × 5.00s LTX) |
-| 407 | Audio VAE Decode | `LTXVAudioVAEDecode` | 6. Beat 4 (3 × 5.00s LTX) |
-| 408 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | 6. Beat 4 (3 × 5.00s LTX) |
-| 409 | Last frame | `ImageFromBatch` | 6. Beat 4 (3 × 5.00s LTX) |
-| 410 | Save last frame | `SaveImage` | 6. Beat 4 (3 × 5.00s LTX) |
-| 431 | b4 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 6. Beat 4 (3 × 5.00s LTX) |
-| 420 | b4 s3 LTX I2V | `CLIPTextEncode` | 6. Beat 4 (3 × 5.00s LTX) |
-| 421 | LTX Img→Video condition | `LTXVImgToVideo` | 6. Beat 4 (3 × 5.00s LTX) |
-| 422 | LTX frame rate cond | `LTXVConditioning` | 6. Beat 4 (3 × 5.00s LTX) |
-| 423 | Concat AV latents | `LTXVConcatAVLatent` | 6. Beat 4 (3 × 5.00s LTX) |
-| 424 | KSampler | `KSampler` | 6. Beat 4 (3 × 5.00s LTX) |
-| 425 | Separate AV latents | `LTXVSeparateAVLatent` | 6. Beat 4 (3 × 5.00s LTX) |
-| 426 | VAE Decode | `VAEDecode` | 6. Beat 4 (3 × 5.00s LTX) |
-| 427 | Audio VAE Decode | `LTXVAudioVAEDecode` | 6. Beat 4 (3 × 5.00s LTX) |
-| 428 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | 6. Beat 4 (3 × 5.00s LTX) |
-| 429 | Last frame | `ImageFromBatch` | 6. Beat 4 (3 × 5.00s LTX) |
-| 430 | Save last frame | `SaveImage` | 6. Beat 4 (3 × 5.00s LTX) |
-| 451 | b5 s1 LTX I2V enhance | `EZLTXPromptEnhance` | 7. Beat 5 (3 × 5.00s LTX) |
-| 440 | b5 s1 LTX I2V | `CLIPTextEncode` | 7. Beat 5 (3 × 5.00s LTX) |
-| 441 | LTX Img→Video condition | `LTXVImgToVideo` | 7. Beat 5 (3 × 5.00s LTX) |
-| 442 | LTX frame rate cond | `LTXVConditioning` | 7. Beat 5 (3 × 5.00s LTX) |
-| 443 | Concat AV latents | `LTXVConcatAVLatent` | 7. Beat 5 (3 × 5.00s LTX) |
-| 444 | KSampler | `KSampler` | 7. Beat 5 (3 × 5.00s LTX) |
-| 445 | Separate AV latents | `LTXVSeparateAVLatent` | 7. Beat 5 (3 × 5.00s LTX) |
-| 446 | VAE Decode | `VAEDecode` | 7. Beat 5 (3 × 5.00s LTX) |
-| 447 | Audio VAE Decode | `LTXVAudioVAEDecode` | 7. Beat 5 (3 × 5.00s LTX) |
-| 448 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | 7. Beat 5 (3 × 5.00s LTX) |
-| 449 | Last frame | `ImageFromBatch` | 7. Beat 5 (3 × 5.00s LTX) |
-| 450 | Save last frame | `SaveImage` | 7. Beat 5 (3 × 5.00s LTX) |
-| 471 | b5 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 7. Beat 5 (3 × 5.00s LTX) |
-| 460 | b5 s2 LTX I2V | `CLIPTextEncode` | 7. Beat 5 (3 × 5.00s LTX) |
-| 461 | LTX Img→Video condition | `LTXVImgToVideo` | 7. Beat 5 (3 × 5.00s LTX) |
-| 462 | LTX frame rate cond | `LTXVConditioning` | 7. Beat 5 (3 × 5.00s LTX) |
-| 463 | Concat AV latents | `LTXVConcatAVLatent` | 7. Beat 5 (3 × 5.00s LTX) |
-| 464 | KSampler | `KSampler` | 7. Beat 5 (3 × 5.00s LTX) |
-| 465 | Separate AV latents | `LTXVSeparateAVLatent` | 7. Beat 5 (3 × 5.00s LTX) |
-| 466 | VAE Decode | `VAEDecode` | 7. Beat 5 (3 × 5.00s LTX) |
-| 467 | Audio VAE Decode | `LTXVAudioVAEDecode` | 7. Beat 5 (3 × 5.00s LTX) |
-| 468 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | 7. Beat 5 (3 × 5.00s LTX) |
-| 469 | Last frame | `ImageFromBatch` | 7. Beat 5 (3 × 5.00s LTX) |
-| 470 | Save last frame | `SaveImage` | 7. Beat 5 (3 × 5.00s LTX) |
-| 491 | b5 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 7. Beat 5 (3 × 5.00s LTX) |
-| 480 | b5 s3 LTX I2V | `CLIPTextEncode` | 7. Beat 5 (3 × 5.00s LTX) |
-| 481 | LTX Img→Video condition | `LTXVImgToVideo` | 7. Beat 5 (3 × 5.00s LTX) |
-| 482 | LTX frame rate cond | `LTXVConditioning` | 7. Beat 5 (3 × 5.00s LTX) |
-| 483 | Concat AV latents | `LTXVConcatAVLatent` | 7. Beat 5 (3 × 5.00s LTX) |
-| 484 | KSampler | `KSampler` | 7. Beat 5 (3 × 5.00s LTX) |
-| 485 | Separate AV latents | `LTXVSeparateAVLatent` | 7. Beat 5 (3 × 5.00s LTX) |
-| 486 | VAE Decode | `VAEDecode` | 7. Beat 5 (3 × 5.00s LTX) |
-| 487 | Audio VAE Decode | `LTXVAudioVAEDecode` | 7. Beat 5 (3 × 5.00s LTX) |
-| 488 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | 7. Beat 5 (3 × 5.00s LTX) |
-| 489 | Last frame | `ImageFromBatch` | 7. Beat 5 (3 × 5.00s LTX) |
-| 490 | Save last frame | `SaveImage` | 7. Beat 5 (3 × 5.00s LTX) |
-| 511 | b6 s1 LTX I2V enhance | `EZLTXPromptEnhance` | 8. Beat 6 (3 × 5.00s LTX) |
-| 500 | b6 s1 LTX I2V | `CLIPTextEncode` | 8. Beat 6 (3 × 5.00s LTX) |
-| 501 | LTX Img→Video condition | `LTXVImgToVideo` | 8. Beat 6 (3 × 5.00s LTX) |
-| 502 | LTX frame rate cond | `LTXVConditioning` | 8. Beat 6 (3 × 5.00s LTX) |
-| 503 | Concat AV latents | `LTXVConcatAVLatent` | 8. Beat 6 (3 × 5.00s LTX) |
-| 504 | KSampler | `KSampler` | 8. Beat 6 (3 × 5.00s LTX) |
-| 505 | Separate AV latents | `LTXVSeparateAVLatent` | 8. Beat 6 (3 × 5.00s LTX) |
-| 506 | VAE Decode | `VAEDecode` | 8. Beat 6 (3 × 5.00s LTX) |
-| 507 | Audio VAE Decode | `LTXVAudioVAEDecode` | 8. Beat 6 (3 × 5.00s LTX) |
-| 508 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | 8. Beat 6 (3 × 5.00s LTX) |
-| 509 | Last frame | `ImageFromBatch` | 8. Beat 6 (3 × 5.00s LTX) |
-| 510 | Save last frame | `SaveImage` | 8. Beat 6 (3 × 5.00s LTX) |
-| 531 | b6 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 8. Beat 6 (3 × 5.00s LTX) |
-| 520 | b6 s2 LTX I2V | `CLIPTextEncode` | 8. Beat 6 (3 × 5.00s LTX) |
-| 521 | LTX Img→Video condition | `LTXVImgToVideo` | 8. Beat 6 (3 × 5.00s LTX) |
-| 522 | LTX frame rate cond | `LTXVConditioning` | 8. Beat 6 (3 × 5.00s LTX) |
-| 523 | Concat AV latents | `LTXVConcatAVLatent` | 8. Beat 6 (3 × 5.00s LTX) |
-| 524 | KSampler | `KSampler` | 8. Beat 6 (3 × 5.00s LTX) |
-| 525 | Separate AV latents | `LTXVSeparateAVLatent` | 8. Beat 6 (3 × 5.00s LTX) |
-| 526 | VAE Decode | `VAEDecode` | 8. Beat 6 (3 × 5.00s LTX) |
-| 527 | Audio VAE Decode | `LTXVAudioVAEDecode` | 8. Beat 6 (3 × 5.00s LTX) |
-| 528 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | 8. Beat 6 (3 × 5.00s LTX) |
-| 529 | Last frame | `ImageFromBatch` | 8. Beat 6 (3 × 5.00s LTX) |
-| 530 | Save last frame | `SaveImage` | 8. Beat 6 (3 × 5.00s LTX) |
-| 551 | b6 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 8. Beat 6 (3 × 5.00s LTX) |
-| 540 | b6 s3 LTX I2V | `CLIPTextEncode` | 8. Beat 6 (3 × 5.00s LTX) |
-| 541 | LTX Img→Video condition | `LTXVImgToVideo` | 8. Beat 6 (3 × 5.00s LTX) |
-| 542 | LTX frame rate cond | `LTXVConditioning` | 8. Beat 6 (3 × 5.00s LTX) |
-| 543 | Concat AV latents | `LTXVConcatAVLatent` | 8. Beat 6 (3 × 5.00s LTX) |
-| 544 | KSampler | `KSampler` | 8. Beat 6 (3 × 5.00s LTX) |
-| 545 | Separate AV latents | `LTXVSeparateAVLatent` | 8. Beat 6 (3 × 5.00s LTX) |
-| 546 | VAE Decode | `VAEDecode` | 8. Beat 6 (3 × 5.00s LTX) |
-| 547 | Audio VAE Decode | `LTXVAudioVAEDecode` | 8. Beat 6 (3 × 5.00s LTX) |
-| 548 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | 8. Beat 6 (3 × 5.00s LTX) |
-| 549 | Last frame | `ImageFromBatch` | 8. Beat 6 (3 × 5.00s LTX) |
-| 550 | Save last frame | `SaveImage` | 8. Beat 6 (3 × 5.00s LTX) |
+| 900 | Save 90s film (MP4) - play / download | `EZFilmConcat` | 9. Publish 90s MP4 |
+| 211 | b1 s1 LTX I2V enhance | `EZLTXPromptEnhance` | 3. Beat 1 (3 x 5.00s LTX) |
+| 200 | b1 s1 LTX I2V | `CLIPTextEncode` | 3. Beat 1 (3 x 5.00s LTX) |
+| 201 | LTX Img->Video condition | `LTXVImgToVideo` | 3. Beat 1 (3 x 5.00s LTX) |
+| 202 | LTX frame rate cond | `LTXVConditioning` | 3. Beat 1 (3 x 5.00s LTX) |
+| 203 | Concat AV latents | `LTXVConcatAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
+| 204 | KSampler | `KSampler` | 3. Beat 1 (3 x 5.00s LTX) |
+| 205 | Separate AV latents | `LTXVSeparateAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
+| 206 | VAE Decode | `VAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
+| 207 | Audio VAE Decode | `LTXVAudioVAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
+| 208 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 3. Beat 1 (3 x 5.00s LTX) |
+| 209 | Last frame | `ImageFromBatch` | 3. Beat 1 (3 x 5.00s LTX) |
+| 210 | Save last frame | `SaveImage` | 3. Beat 1 (3 x 5.00s LTX) |
+| 231 | b1 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 3. Beat 1 (3 x 5.00s LTX) |
+| 220 | b1 s2 LTX I2V | `CLIPTextEncode` | 3. Beat 1 (3 x 5.00s LTX) |
+| 221 | LTX Img->Video condition | `LTXVImgToVideo` | 3. Beat 1 (3 x 5.00s LTX) |
+| 222 | LTX frame rate cond | `LTXVConditioning` | 3. Beat 1 (3 x 5.00s LTX) |
+| 223 | Concat AV latents | `LTXVConcatAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
+| 224 | KSampler | `KSampler` | 3. Beat 1 (3 x 5.00s LTX) |
+| 225 | Separate AV latents | `LTXVSeparateAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
+| 226 | VAE Decode | `VAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
+| 227 | Audio VAE Decode | `LTXVAudioVAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
+| 228 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 3. Beat 1 (3 x 5.00s LTX) |
+| 229 | Last frame | `ImageFromBatch` | 3. Beat 1 (3 x 5.00s LTX) |
+| 230 | Save last frame | `SaveImage` | 3. Beat 1 (3 x 5.00s LTX) |
+| 251 | b1 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 3. Beat 1 (3 x 5.00s LTX) |
+| 240 | b1 s3 LTX I2V | `CLIPTextEncode` | 3. Beat 1 (3 x 5.00s LTX) |
+| 241 | LTX Img->Video condition | `LTXVImgToVideo` | 3. Beat 1 (3 x 5.00s LTX) |
+| 242 | LTX frame rate cond | `LTXVConditioning` | 3. Beat 1 (3 x 5.00s LTX) |
+| 243 | Concat AV latents | `LTXVConcatAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
+| 244 | KSampler | `KSampler` | 3. Beat 1 (3 x 5.00s LTX) |
+| 245 | Separate AV latents | `LTXVSeparateAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
+| 246 | VAE Decode | `VAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
+| 247 | Audio VAE Decode | `LTXVAudioVAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
+| 248 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 3. Beat 1 (3 x 5.00s LTX) |
+| 249 | Last frame | `ImageFromBatch` | 3. Beat 1 (3 x 5.00s LTX) |
+| 250 | Save last frame | `SaveImage` | 3. Beat 1 (3 x 5.00s LTX) |
+| 271 | b2 s1 LTX I2V enhance | `EZLTXPromptEnhance` | 4. Beat 2 (3 x 5.00s LTX) |
+| 260 | b2 s1 LTX I2V | `CLIPTextEncode` | 4. Beat 2 (3 x 5.00s LTX) |
+| 261 | LTX Img->Video condition | `LTXVImgToVideo` | 4. Beat 2 (3 x 5.00s LTX) |
+| 262 | LTX frame rate cond | `LTXVConditioning` | 4. Beat 2 (3 x 5.00s LTX) |
+| 263 | Concat AV latents | `LTXVConcatAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
+| 264 | KSampler | `KSampler` | 4. Beat 2 (3 x 5.00s LTX) |
+| 265 | Separate AV latents | `LTXVSeparateAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
+| 266 | VAE Decode | `VAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
+| 267 | Audio VAE Decode | `LTXVAudioVAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
+| 268 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 4. Beat 2 (3 x 5.00s LTX) |
+| 269 | Last frame | `ImageFromBatch` | 4. Beat 2 (3 x 5.00s LTX) |
+| 270 | Save last frame | `SaveImage` | 4. Beat 2 (3 x 5.00s LTX) |
+| 291 | b2 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 4. Beat 2 (3 x 5.00s LTX) |
+| 280 | b2 s2 LTX I2V | `CLIPTextEncode` | 4. Beat 2 (3 x 5.00s LTX) |
+| 281 | LTX Img->Video condition | `LTXVImgToVideo` | 4. Beat 2 (3 x 5.00s LTX) |
+| 282 | LTX frame rate cond | `LTXVConditioning` | 4. Beat 2 (3 x 5.00s LTX) |
+| 283 | Concat AV latents | `LTXVConcatAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
+| 284 | KSampler | `KSampler` | 4. Beat 2 (3 x 5.00s LTX) |
+| 285 | Separate AV latents | `LTXVSeparateAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
+| 286 | VAE Decode | `VAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
+| 287 | Audio VAE Decode | `LTXVAudioVAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
+| 288 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 4. Beat 2 (3 x 5.00s LTX) |
+| 289 | Last frame | `ImageFromBatch` | 4. Beat 2 (3 x 5.00s LTX) |
+| 290 | Save last frame | `SaveImage` | 4. Beat 2 (3 x 5.00s LTX) |
+| 311 | b2 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 4. Beat 2 (3 x 5.00s LTX) |
+| 300 | b2 s3 LTX I2V | `CLIPTextEncode` | 4. Beat 2 (3 x 5.00s LTX) |
+| 301 | LTX Img->Video condition | `LTXVImgToVideo` | 4. Beat 2 (3 x 5.00s LTX) |
+| 302 | LTX frame rate cond | `LTXVConditioning` | 4. Beat 2 (3 x 5.00s LTX) |
+| 303 | Concat AV latents | `LTXVConcatAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
+| 304 | KSampler | `KSampler` | 4. Beat 2 (3 x 5.00s LTX) |
+| 305 | Separate AV latents | `LTXVSeparateAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
+| 306 | VAE Decode | `VAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
+| 307 | Audio VAE Decode | `LTXVAudioVAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
+| 308 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 4. Beat 2 (3 x 5.00s LTX) |
+| 309 | Last frame | `ImageFromBatch` | 4. Beat 2 (3 x 5.00s LTX) |
+| 310 | Save last frame | `SaveImage` | 4. Beat 2 (3 x 5.00s LTX) |
+| 331 | b3 s1 LTX I2V enhance | `EZLTXPromptEnhance` | 5. Beat 3 (3 x 5.00s LTX) |
+| 320 | b3 s1 LTX I2V | `CLIPTextEncode` | 5. Beat 3 (3 x 5.00s LTX) |
+| 321 | LTX Img->Video condition | `LTXVImgToVideo` | 5. Beat 3 (3 x 5.00s LTX) |
+| 322 | LTX frame rate cond | `LTXVConditioning` | 5. Beat 3 (3 x 5.00s LTX) |
+| 323 | Concat AV latents | `LTXVConcatAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
+| 324 | KSampler | `KSampler` | 5. Beat 3 (3 x 5.00s LTX) |
+| 325 | Separate AV latents | `LTXVSeparateAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
+| 326 | VAE Decode | `VAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
+| 327 | Audio VAE Decode | `LTXVAudioVAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
+| 328 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 5. Beat 3 (3 x 5.00s LTX) |
+| 329 | Last frame | `ImageFromBatch` | 5. Beat 3 (3 x 5.00s LTX) |
+| 330 | Save last frame | `SaveImage` | 5. Beat 3 (3 x 5.00s LTX) |
+| 351 | b3 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 5. Beat 3 (3 x 5.00s LTX) |
+| 340 | b3 s2 LTX I2V | `CLIPTextEncode` | 5. Beat 3 (3 x 5.00s LTX) |
+| 341 | LTX Img->Video condition | `LTXVImgToVideo` | 5. Beat 3 (3 x 5.00s LTX) |
+| 342 | LTX frame rate cond | `LTXVConditioning` | 5. Beat 3 (3 x 5.00s LTX) |
+| 343 | Concat AV latents | `LTXVConcatAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
+| 344 | KSampler | `KSampler` | 5. Beat 3 (3 x 5.00s LTX) |
+| 345 | Separate AV latents | `LTXVSeparateAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
+| 346 | VAE Decode | `VAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
+| 347 | Audio VAE Decode | `LTXVAudioVAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
+| 348 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 5. Beat 3 (3 x 5.00s LTX) |
+| 349 | Last frame | `ImageFromBatch` | 5. Beat 3 (3 x 5.00s LTX) |
+| 350 | Save last frame | `SaveImage` | 5. Beat 3 (3 x 5.00s LTX) |
+| 371 | b3 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 5. Beat 3 (3 x 5.00s LTX) |
+| 360 | b3 s3 LTX I2V | `CLIPTextEncode` | 5. Beat 3 (3 x 5.00s LTX) |
+| 361 | LTX Img->Video condition | `LTXVImgToVideo` | 5. Beat 3 (3 x 5.00s LTX) |
+| 362 | LTX frame rate cond | `LTXVConditioning` | 5. Beat 3 (3 x 5.00s LTX) |
+| 363 | Concat AV latents | `LTXVConcatAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
+| 364 | KSampler | `KSampler` | 5. Beat 3 (3 x 5.00s LTX) |
+| 365 | Separate AV latents | `LTXVSeparateAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
+| 366 | VAE Decode | `VAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
+| 367 | Audio VAE Decode | `LTXVAudioVAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
+| 368 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 5. Beat 3 (3 x 5.00s LTX) |
+| 369 | Last frame | `ImageFromBatch` | 5. Beat 3 (3 x 5.00s LTX) |
+| 370 | Save last frame | `SaveImage` | 5. Beat 3 (3 x 5.00s LTX) |
+| 391 | b4 s1 LTX I2V enhance | `EZLTXPromptEnhance` | 6. Beat 4 (3 x 5.00s LTX) |
+| 380 | b4 s1 LTX I2V | `CLIPTextEncode` | 6. Beat 4 (3 x 5.00s LTX) |
+| 381 | LTX Img->Video condition | `LTXVImgToVideo` | 6. Beat 4 (3 x 5.00s LTX) |
+| 382 | LTX frame rate cond | `LTXVConditioning` | 6. Beat 4 (3 x 5.00s LTX) |
+| 383 | Concat AV latents | `LTXVConcatAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
+| 384 | KSampler | `KSampler` | 6. Beat 4 (3 x 5.00s LTX) |
+| 385 | Separate AV latents | `LTXVSeparateAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
+| 386 | VAE Decode | `VAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
+| 387 | Audio VAE Decode | `LTXVAudioVAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
+| 388 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 6. Beat 4 (3 x 5.00s LTX) |
+| 389 | Last frame | `ImageFromBatch` | 6. Beat 4 (3 x 5.00s LTX) |
+| 390 | Save last frame | `SaveImage` | 6. Beat 4 (3 x 5.00s LTX) |
+| 411 | b4 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 6. Beat 4 (3 x 5.00s LTX) |
+| 400 | b4 s2 LTX I2V | `CLIPTextEncode` | 6. Beat 4 (3 x 5.00s LTX) |
+| 401 | LTX Img->Video condition | `LTXVImgToVideo` | 6. Beat 4 (3 x 5.00s LTX) |
+| 402 | LTX frame rate cond | `LTXVConditioning` | 6. Beat 4 (3 x 5.00s LTX) |
+| 403 | Concat AV latents | `LTXVConcatAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
+| 404 | KSampler | `KSampler` | 6. Beat 4 (3 x 5.00s LTX) |
+| 405 | Separate AV latents | `LTXVSeparateAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
+| 406 | VAE Decode | `VAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
+| 407 | Audio VAE Decode | `LTXVAudioVAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
+| 408 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 6. Beat 4 (3 x 5.00s LTX) |
+| 409 | Last frame | `ImageFromBatch` | 6. Beat 4 (3 x 5.00s LTX) |
+| 410 | Save last frame | `SaveImage` | 6. Beat 4 (3 x 5.00s LTX) |
+| 431 | b4 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 6. Beat 4 (3 x 5.00s LTX) |
+| 420 | b4 s3 LTX I2V | `CLIPTextEncode` | 6. Beat 4 (3 x 5.00s LTX) |
+| 421 | LTX Img->Video condition | `LTXVImgToVideo` | 6. Beat 4 (3 x 5.00s LTX) |
+| 422 | LTX frame rate cond | `LTXVConditioning` | 6. Beat 4 (3 x 5.00s LTX) |
+| 423 | Concat AV latents | `LTXVConcatAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
+| 424 | KSampler | `KSampler` | 6. Beat 4 (3 x 5.00s LTX) |
+| 425 | Separate AV latents | `LTXVSeparateAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
+| 426 | VAE Decode | `VAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
+| 427 | Audio VAE Decode | `LTXVAudioVAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
+| 428 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 6. Beat 4 (3 x 5.00s LTX) |
+| 429 | Last frame | `ImageFromBatch` | 6. Beat 4 (3 x 5.00s LTX) |
+| 430 | Save last frame | `SaveImage` | 6. Beat 4 (3 x 5.00s LTX) |
+| 451 | b5 s1 LTX I2V enhance | `EZLTXPromptEnhance` | 7. Beat 5 (3 x 5.00s LTX) |
+| 440 | b5 s1 LTX I2V | `CLIPTextEncode` | 7. Beat 5 (3 x 5.00s LTX) |
+| 441 | LTX Img->Video condition | `LTXVImgToVideo` | 7. Beat 5 (3 x 5.00s LTX) |
+| 442 | LTX frame rate cond | `LTXVConditioning` | 7. Beat 5 (3 x 5.00s LTX) |
+| 443 | Concat AV latents | `LTXVConcatAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
+| 444 | KSampler | `KSampler` | 7. Beat 5 (3 x 5.00s LTX) |
+| 445 | Separate AV latents | `LTXVSeparateAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
+| 446 | VAE Decode | `VAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
+| 447 | Audio VAE Decode | `LTXVAudioVAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
+| 448 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 7. Beat 5 (3 x 5.00s LTX) |
+| 449 | Last frame | `ImageFromBatch` | 7. Beat 5 (3 x 5.00s LTX) |
+| 450 | Save last frame | `SaveImage` | 7. Beat 5 (3 x 5.00s LTX) |
+| 471 | b5 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 7. Beat 5 (3 x 5.00s LTX) |
+| 460 | b5 s2 LTX I2V | `CLIPTextEncode` | 7. Beat 5 (3 x 5.00s LTX) |
+| 461 | LTX Img->Video condition | `LTXVImgToVideo` | 7. Beat 5 (3 x 5.00s LTX) |
+| 462 | LTX frame rate cond | `LTXVConditioning` | 7. Beat 5 (3 x 5.00s LTX) |
+| 463 | Concat AV latents | `LTXVConcatAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
+| 464 | KSampler | `KSampler` | 7. Beat 5 (3 x 5.00s LTX) |
+| 465 | Separate AV latents | `LTXVSeparateAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
+| 466 | VAE Decode | `VAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
+| 467 | Audio VAE Decode | `LTXVAudioVAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
+| 468 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 7. Beat 5 (3 x 5.00s LTX) |
+| 469 | Last frame | `ImageFromBatch` | 7. Beat 5 (3 x 5.00s LTX) |
+| 470 | Save last frame | `SaveImage` | 7. Beat 5 (3 x 5.00s LTX) |
+| 491 | b5 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 7. Beat 5 (3 x 5.00s LTX) |
+| 480 | b5 s3 LTX I2V | `CLIPTextEncode` | 7. Beat 5 (3 x 5.00s LTX) |
+| 481 | LTX Img->Video condition | `LTXVImgToVideo` | 7. Beat 5 (3 x 5.00s LTX) |
+| 482 | LTX frame rate cond | `LTXVConditioning` | 7. Beat 5 (3 x 5.00s LTX) |
+| 483 | Concat AV latents | `LTXVConcatAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
+| 484 | KSampler | `KSampler` | 7. Beat 5 (3 x 5.00s LTX) |
+| 485 | Separate AV latents | `LTXVSeparateAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
+| 486 | VAE Decode | `VAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
+| 487 | Audio VAE Decode | `LTXVAudioVAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
+| 488 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 7. Beat 5 (3 x 5.00s LTX) |
+| 489 | Last frame | `ImageFromBatch` | 7. Beat 5 (3 x 5.00s LTX) |
+| 490 | Save last frame | `SaveImage` | 7. Beat 5 (3 x 5.00s LTX) |
+| 511 | b6 s1 LTX I2V enhance | `EZLTXPromptEnhance` | 8. Beat 6 (3 x 5.00s LTX) |
+| 500 | b6 s1 LTX I2V | `CLIPTextEncode` | 8. Beat 6 (3 x 5.00s LTX) |
+| 501 | LTX Img->Video condition | `LTXVImgToVideo` | 8. Beat 6 (3 x 5.00s LTX) |
+| 502 | LTX frame rate cond | `LTXVConditioning` | 8. Beat 6 (3 x 5.00s LTX) |
+| 503 | Concat AV latents | `LTXVConcatAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
+| 504 | KSampler | `KSampler` | 8. Beat 6 (3 x 5.00s LTX) |
+| 505 | Separate AV latents | `LTXVSeparateAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
+| 506 | VAE Decode | `VAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
+| 507 | Audio VAE Decode | `LTXVAudioVAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
+| 508 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 8. Beat 6 (3 x 5.00s LTX) |
+| 509 | Last frame | `ImageFromBatch` | 8. Beat 6 (3 x 5.00s LTX) |
+| 510 | Save last frame | `SaveImage` | 8. Beat 6 (3 x 5.00s LTX) |
+| 531 | b6 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 8. Beat 6 (3 x 5.00s LTX) |
+| 520 | b6 s2 LTX I2V | `CLIPTextEncode` | 8. Beat 6 (3 x 5.00s LTX) |
+| 521 | LTX Img->Video condition | `LTXVImgToVideo` | 8. Beat 6 (3 x 5.00s LTX) |
+| 522 | LTX frame rate cond | `LTXVConditioning` | 8. Beat 6 (3 x 5.00s LTX) |
+| 523 | Concat AV latents | `LTXVConcatAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
+| 524 | KSampler | `KSampler` | 8. Beat 6 (3 x 5.00s LTX) |
+| 525 | Separate AV latents | `LTXVSeparateAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
+| 526 | VAE Decode | `VAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
+| 527 | Audio VAE Decode | `LTXVAudioVAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
+| 528 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 8. Beat 6 (3 x 5.00s LTX) |
+| 529 | Last frame | `ImageFromBatch` | 8. Beat 6 (3 x 5.00s LTX) |
+| 530 | Save last frame | `SaveImage` | 8. Beat 6 (3 x 5.00s LTX) |
+| 551 | b6 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 8. Beat 6 (3 x 5.00s LTX) |
+| 540 | b6 s3 LTX I2V | `CLIPTextEncode` | 8. Beat 6 (3 x 5.00s LTX) |
+| 541 | LTX Img->Video condition | `LTXVImgToVideo` | 8. Beat 6 (3 x 5.00s LTX) |
+| 542 | LTX frame rate cond | `LTXVConditioning` | 8. Beat 6 (3 x 5.00s LTX) |
+| 543 | Concat AV latents | `LTXVConcatAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
+| 544 | KSampler | `KSampler` | 8. Beat 6 (3 x 5.00s LTX) |
+| 545 | Separate AV latents | `LTXVSeparateAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
+| 546 | VAE Decode | `VAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
+| 547 | Audio VAE Decode | `LTXVAudioVAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
+| 548 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 8. Beat 6 (3 x 5.00s LTX) |
+| 549 | Last frame | `ImageFromBatch` | 8. Beat 6 (3 x 5.00s LTX) |
+| 550 | Save last frame | `SaveImage` | 8. Beat 6 (3 x 5.00s LTX) |
 | 901 | LTX AI-media disclosure (end-card) | `EZFilmDisclosure` | 9. Publish 90s MP4 |
 | 902 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |
 | 903 | Check models | `EZModelCheck` | QUALITY |
@@ -324,9 +324,9 @@ flowchart TB
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
 
-### `UNETLoader` — Load Diffusion Model
+### `UNETLoader` - Load Diffusion Model
 
 Load a standalone transformer/UNET from diffusion_models/.
 
@@ -370,7 +370,7 @@ Cast at load.
 | `fp8_e4m3fn_fast` | FP8 e4m3fn with fast optimizations. |
 | `fp8_e5m2` | Cast to FP8 e5m2. |
 
-### `CLIPLoader` — Load CLIP
+### `CLIPLoader` - Load CLIP
 
 Load a text encoder. The type combo must match the UNET family.
 
@@ -401,7 +401,7 @@ Type `COMBO`.
 
 CLIPType enum. Picks tokenizer + template.
 
-**How it affects generation:** flux2 wraps Klein strings in a Qwen chat template — do not paste <|im_start|>. wan is UMT5. ltxv is Gemma4-with-proj.
+**How it affects generation:** flux2 wraps Klein strings in a Qwen chat template - do not paste <|im_start|>. wan is UMT5. ltxv is Gemma4-with-proj.
 
 | Instance | Value |
 | --- | --- |
@@ -458,9 +458,9 @@ Where to load the encoder.
 | `default` | Load on the Comfy compute device (GPU). Lab default. |
 | `cpu` | Force CPU. Much slower; only for debugging a CLIP load. |
 
-### `VAELoader` — Load VAE
+### `VAELoader` - Load VAE
 
-Load the autoencoder that maps pixels ↔ latents (and LTX audio).
+Load the autoencoder that maps pixels <-> latents (and LTX audio).
 
 !!! warning "Lab notes"
 
@@ -484,7 +484,7 @@ Filename under vae/.
 | LTX-2.5 video VAE | `ltx-2.5-video-vae-bf16.safetensors` |
 | LTX-2.5 audio VAE | `ltx-2.5-audio-vae-bf16.safetensors` |
 
-### `CLIPTextEncode` — CLIP Text Encode
+### `CLIPTextEncode` - CLIP Text Encode
 
 Turn a prompt string into CONDITIONING for the sampler.
 
@@ -504,39 +504,39 @@ Type `STRING`.
 
 Prompt encoded by CLIP.
 
-**How it affects generation:** Klein: sentences, subject → place → light → camera. Wan I2V: motion + one camera only. LTX: present-tense paragraph with audio interleaved. Distilled Klein quality lives here, not in CFG.
+**How it affects generation:** Klein: sentences, subject -> place -> light -> camera. Wan I2V: motion + one camera only. LTX: present-tense paragraph with audio interleaved. Distilled Klein quality lives here, not in CFG.
 
 | Instance | Value |
 | --- | --- |
-| Positive | `A chest-mounted first-person body-cam still, eye-level, already at a dead sprin…` |
-| Negative | `plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, …` |
-| Negative | `morphing, identity drift, warping objects, face melting, flicker, jitter, frame…` |
-| b1 s1 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Race-pace…` |
-| b1 s2 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. A takeoff…` |
-| b1 s3 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Both blan…` |
-| b2 s1 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Dead spri…` |
-| b2 s2 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. A cat lea…` |
-| b2 s3 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Dive off …` |
-| b3 s1 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Parkour w…` |
-| b3 s2 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Tic-tac a…` |
-| b3 s3 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Parkour b…` |
-| b4 s1 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Dead spri…` |
-| b4 s2 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Precision…` |
-| b4 s3 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Dash vaul…` |
-| b5 s1 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Dead spri…` |
-| b5 s2 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Slide und…` |
-| b5 s3 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Parkour c…` |
-| b6 s1 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Last all-…` |
-| b6 s2 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Leap onto…` |
-| b6 s3 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Hold on t…` |
+| Positive | `A chest-mounted first-person body-cam still, eye-level, already at a dead sprin...` |
+| Negative | `plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, ...` |
+| Negative | `morphing, identity drift, warping objects, face melting, flicker, jitter, frame...` |
+| b1 s1 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Race-pace...` |
+| b1 s2 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. A takeoff...` |
+| b1 s3 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Both blan...` |
+| b2 s1 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Dead spri...` |
+| b2 s2 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. A cat lea...` |
+| b2 s3 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Dive off ...` |
+| b3 s1 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Parkour w...` |
+| b3 s2 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Tic-tac a...` |
+| b3 s3 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Parkour b...` |
+| b4 s1 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Dead spri...` |
+| b4 s2 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Precision...` |
+| b4 s3 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Dash vaul...` |
+| b5 s1 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Dead spri...` |
+| b5 s2 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Slide und...` |
+| b5 s3 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Parkour c...` |
+| b6 s1 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Last all-...` |
+| b6 s2 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Leap onto...` |
+| b6 s3 LTX I2V | `The start image holds as the first frame. Wordless mix: silent mouth. Hold on t...` |
 
-### `EmptyFlux2LatentImage` — Empty Flux.2 Latent
+### `EmptyFlux2LatentImage` - Empty Flux.2 Latent
 
-Allocate a Klein / Flux.2 still latent (width × height × batch).
+Allocate a Klein / Flux.2 still latent (width x height x batch).
 
 !!! warning "Lab notes"
 
-    Draft 768×432 batch 2. Hero / LTX feeders 1280×704. Portrait 1024×1280 or 768×1280. 1280×720 is OK for thumbnails, not for LTX feeders.
+    Draft 768x432 batch 2. Hero / LTX feeders 1280x704. Portrait 1024x1280 or 768x1280. 1280x720 is OK for thumbnails, not for LTX feeders.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -544,7 +544,7 @@ Allocate a Klein / Flux.2 still latent (width × height × batch).
 
 #### `width`
 
-Type `INT`. Range / default: lab 768 / 1280 / 1024 / 432….
+Type `INT`. Range / default: lab 768 / 1280 / 1024 / 432....
 
 Latent pixel width.
 
@@ -558,7 +558,7 @@ Type `INT`.
 
 Latent pixel height.
 
-**How it affects generation:** 1280×704 is the LTX VAE grid (÷32). 1280×720 is not.
+**How it affects generation:** 1280x704 is the LTX VAE grid (div32). 1280x720 is not.
 
 **This graph:** `704`
 
@@ -572,7 +572,7 @@ How many stills in one Queue.
 
 **This graph:** `1`
 
-### `KSampler` — KSampler
+### `KSampler` - KSampler
 
 Denoise a latent for N steps at a CFG, sampler, and scheduler.
 
@@ -584,17 +584,17 @@ Denoise a latent for N steps at a CFG, sampler, and scheduler.
 | --- | --- | --- | --- |
 | `model` | in | `MODEL` | UNET / transformer after any ModelSampling* patch. |
 | `positive` | in | `CONDITIONING` | What to include (CLIP / ACE / LTX prompt). |
-| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well — put constraints in the positive. |
+| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well - put constraints in the positive. |
 | `latent_image` | in | `LATENT` | Noise canvas or encoded start image / video / audio latent. |
 | `LATENT` | out | `LATENT` | Denoised latent for VAE decode. |
 
 #### `seed`
 
-Type `INT`. Range / default: 0 … 2^64-1; lab 42.
+Type `INT`. Range / default: 0 ... 2^64-1; lab 42.
 
 Random seed for the noise tensor.
 
-**How it affects generation:** Same seed + same graph ≈ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
+**How it affects generation:** Same seed + same graph ~ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
 
 | Instance | Value |
 | --- | --- |
@@ -639,11 +639,11 @@ What happens to seed after Queue.
 
 #### `steps`
 
-Type `INT`. Range / default: 1–10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
+Type `INT`. Range / default: 1-10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
 
 Denoising iterations.
 
-**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 — raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
+**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 - raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
 
 | Instance | Value |
 | --- | --- |
@@ -669,11 +669,11 @@ Denoising iterations.
 
 #### `cfg`
 
-Type `FLOAT`. Range / default: 0–100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
+Type `FLOAT`. Range / default: 0-100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
 
 Classifier-free guidance scale.
 
-**How it affects generation:** Distilled Klein is CFG 1.0 — raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
+**How it affects generation:** Distilled Klein is CFG 1.0 - raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
 
 **This graph (all 19 instances):** `1.0`
 
@@ -763,7 +763,7 @@ How sigmas are spaced across steps.
 
 #### `denoise`
 
-Type `FLOAT`. Range / default: 0–1; lab 1.0.
+Type `FLOAT`. Range / default: 0-1; lab 1.0.
 
 Fraction of the latent to replace with denoised signal.
 
@@ -771,7 +771,7 @@ Fraction of the latent to replace with denoised signal.
 
 **This graph (all 19 instances):** `1.0`
 
-### `VAEDecode` — VAE Decode
+### `VAEDecode` - VAE Decode
 
 Decode image/video latents to pixels.
 
@@ -783,7 +783,7 @@ Decode image/video latents to pixels.
 
 No widgets. Sockets only.
 
-### `SaveImage` — Save Image
+### `SaveImage` - Save Image
 
 Write PNG stills under the output folder.
 
@@ -821,7 +821,7 @@ Save prefix.
 | Save last frame | `ez_gosee_b6_s2_last` |
 | Save last frame | `ez_gosee_b6_s3_last` |
 
-### `Note` — Note
+### `Note` - Note
 
 On-canvas operator note (not executed).
 
@@ -837,7 +837,7 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## films/go-see LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). The stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}` (container `/outputs`) as a fa…`
+**This graph:** `## films/go-see LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). The stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}` (container `/outputs`) as a fa...`
 
 ```text
 ## films/go-see
@@ -847,11 +847,11 @@ LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are inva
 The stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}` (container `/outputs`) as a faststart H.264 master, plus an HTML sidecar. After Queue, a **Film ready** overlay offers play and download. Per-shot VHS nodes remain for inspection. Optional board: studio-ui `/watch/<slug>`.
 
 One-click 90s unit (first-person parkour): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.
-Models: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, t2i mode) · LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).
-LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
+Models: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, t2i mode) - LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).
+LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
 
-1. Queue **once**. Klein runs first; models unload; then 18 × 5.00s LTX prints chain last-frame → next start.
-2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) — expected, not a hang.
+1. Queue **once**. Klein runs first; models unload; then 18 x 5.00s LTX prints chain last-frame -> next start.
+2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) - expected, not a hang.
 3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4` (act graphs write `ez_gosee_actN_90s.mp4`). A **Film ready** overlay plays it. Copy off the Spark with scp.
 4. Optional single-shot iterate: **motion/av/still-to-shot**. Optional silent rehearsal: **motion/silent/still-to-shot**.
 5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film go-see --yes`
@@ -859,10 +859,10 @@ LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-gene
 Do not Queue a 90s denoise (keep 121-frame / 1+8n widgets). US-safe local pack only. No score.
 Prompt enhance is **off** so the pinned identity and each baked LTX I2V paragraph are encoded as written. The identity STRING is wired into each shot enhance as context (used only if you turn Enhance on).
 
-Occupancy: film — stop everything else on that Spark. One GB10 job.
+Occupancy: film - stop everything else on that Spark. One GB10 job.
 ```
 
-### `EZKleinPromptEnhance` — Klein Prompt Enhance
+### `EZKleinPromptEnhance` - Klein Prompt Enhance
 
 Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
 
@@ -896,7 +896,7 @@ Lazy sentence or authored still prompt.
 
 **How it affects generation:** When Enhance is on, the GGUF expands this into Klein-native sentences.
 
-**This graph:** `A chest-mounted first-person body-cam still, eye-level, already at a dead sprint across a golden-hour tropical rooftop terrace, looking straight ahead at a wide rooftop gap that already fills the cen…`
+**This graph:** `A chest-mounted first-person body-cam still, eye-level, already at a dead sprint across a golden-hour tropical rooftop terrace, looking straight ahead at a wide rooftop gap that already fills the cen...`
 
 ```text
 A chest-mounted first-person body-cam still, eye-level, already at a dead sprint across a golden-hour tropical rooftop terrace, looking straight ahead at a wide rooftop gap that already fills the center. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, left glove hip-to-chest, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the left and right frame edges. Tiny floating warm-gold rune motes hover near the wrists only. Unmarked palm trees and glass towers rush toward a bright bay beyond the gap. Late-sun rim light, fabric weave and stone grit, mild film grain. Mount at sternum height. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering.
@@ -937,9 +937,9 @@ System prompt flavor.
 
 Type `STRING`.
 
-Framing hint (YouTube 16:9 still, Instagram 4:5, …).
+Framing hint (YouTube 16:9 still, Instagram 4:5, ...).
 
-**How it affects generation:** Steers aspect language in the rewrite. Does not set the latent size — EmptyFlux2LatentImage does.
+**How it affects generation:** Steers aspect language in the rewrite. Does not set the latent size - EmptyFlux2LatentImage does.
 
 **This graph:** `YouTube 16:9 still`
 
@@ -1269,7 +1269,7 @@ Sample-catalog id (graph stem).
 
 **This graph:** `films/go-see`
 
-### `EZNegativePromptEnhance` — Negative Prompt Enhance
+### `EZNegativePromptEnhance` - Negative Prompt Enhance
 
 Rewrite a negative CLIP seed against the final positive. Stays on when Rewrite prompt is off.
 
@@ -1288,8 +1288,8 @@ Negative seed (artifacts, not style).
 
 | Instance | Value |
 | --- | --- |
-| Negative Prompt Enhance | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
-| Negative Prompt Enhance | `morphing, identity drift, warping objects, face melting, flicker, jitter, frame…` |
+| Negative Prompt Enhance | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative Prompt Enhance | `morphing, identity drift, warping objects, face melting, flicker, jitter, frame...` |
 
 #### `enhance`
 
@@ -1326,7 +1326,7 @@ Which negative family.
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
 
-### `EZQuality` — Quality
+### `EZQuality` - Quality
 
 Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
@@ -1361,7 +1361,7 @@ custom freezes last overlay; lab restores graph defaults.
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
-### `MarkdownNote` — Markdown Note
+### `MarkdownNote` - Markdown Note
 
 Rendered markdown note (90s shot maps).
 
@@ -1373,14 +1373,14 @@ Markdown body.
 
 **How it affects generation:** Does not affect pixels. 90s films put the beat table here.
 
-**This graph:** `## go-see (first-person parkour) Queue **once**. Klein identity still → 18 × 5.00s LTX AV prints (last-frame continuity) → **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames = 1+8n per s…`
+**This graph:** `## go-see (first-person parkour) Queue **once**. Klein identity still -> 18 x 5.00s LTX AV prints (last-frame continuity) -> **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames = 1+8n per...`
 
 ```text
 ## go-see (first-person parkour)
 
-Queue **once**. Klein identity still → 18 × 5.00s LTX AV prints (last-frame continuity) → **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames = 1+8n per shot). Optional silent rehearsal: **motion/silent/still-to-shot**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film go-see --yes`.
+Queue **once**. Klein identity still -> 18 x 5.00s LTX AV prints (last-frame continuity) -> **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames = 1+8n per shot). Optional silent rehearsal: **motion/silent/still-to-shot**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film go-see --yes`.
 
-18 × 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.
+18 x 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.
 
 **Identity look:** A chest-mounted first-person body-cam still, eye-level, already at a dead sprint across a golden-hour tropical rooftop terrace, looking straight ahead at a wide rooftop gap that already fills the center. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, left glove hip-to-chest, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the left and right frame edges. Tiny floating warm-gold rune motes hover near the wrists only. Unmarked palm trees and glass towers rush toward a bright bay beyond the gap. Late-sun rim light, fabric weave and stone grit, mild film grain. Mount at sternum height. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering.
 
@@ -1395,7 +1395,7 @@ Queue **once**. Klein identity still → 18 × 5.00s LTX AV prints (last-frame c
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 ```
 
-### `EZUnloadModels` — Unload models
+### `EZUnloadModels` - Unload models
 
 Pass-through IMAGE that unloads diffusion models first.
 
@@ -1410,7 +1410,7 @@ Pass-through IMAGE that unloads diffusion models first.
 
 No widgets. Sockets only.
 
-### `LTXVEmptyLatentAudio` — Empty LTX Audio Latent
+### `LTXVEmptyLatentAudio` - Empty LTX Audio Latent
 
 Allocate a silent/world-audio latent matching video length.
 
@@ -1449,13 +1449,13 @@ Clips per Queue.
 
 **This graph:** `1`
 
-### `EZFilmConcat` — Save 90s film (MP4)
+### `EZFilmConcat` - Save 90s film (MP4)
 
 Concat 18 LTX 5.00 s MP4s, cap 90 s, H.264 CRF 18 + AAC + loudnorm + faststart.
 
 !!! warning "Lab notes"
 
-    Queue once. xfade_cs is audio-only acrossfade; 0 is a hard cut. go-see ships xfade_cs 8. act=0 is a 90s film master; act=1–5 writes ez_<slug>_actN_90s.mp4.
+    Queue once. xfade_cs is audio-only acrossfade; 0 is a hard cut. go-see ships xfade_cs 8. act=0 is a 90s film master; act=1-5 writes ez_<slug>_actN_90s.mp4.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1515,7 +1515,7 @@ Hard duration cap for this 18-shot stitch.
 
 #### `xfade_cs`
 
-Type `INT`. Range / default: 0–50; 10 = 0.10 s.
+Type `INT`. Range / default: 0-50; 10 = 0.10 s.
 
 Audio-only acrossfade in centiseconds.
 
@@ -1525,15 +1525,15 @@ Audio-only acrossfade in centiseconds.
 
 #### `act`
 
-Type `INT`. Range / default: 0–5.
+Type `INT`. Range / default: 0-5.
 
-0 = 90s film master; 1–5 = act master for a 7.5 min film.
+0 = 90s film master; 1-5 = act master for a 7.5 min film.
 
 **How it affects generation:** Festival shorts Queue five act graphs, then concat-shots.sh writes ez_<slug>_450s.mp4.
 
 **This graph:** `0`
 
-### `EZLTXPromptEnhance` — LTX Prompt Enhance
+### `EZLTXPromptEnhance` - LTX Prompt Enhance
 
 Rewrite a lazy prompt for LTX-2.5 (present-tense paragraph, audio interleaved).
 
@@ -1565,24 +1565,24 @@ Lazy sentence or authored LTX paragraph.
 
 | Instance | Value |
 | --- | --- |
-| b1 s1 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Race-pace…` |
-| b1 s2 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. A takeoff…` |
-| b1 s3 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Both blan…` |
-| b2 s1 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Dead spri…` |
-| b2 s2 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. A cat lea…` |
-| b2 s3 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Dive off …` |
-| b3 s1 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Parkour w…` |
-| b3 s2 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Tic-tac a…` |
-| b3 s3 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Parkour b…` |
-| b4 s1 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Dead spri…` |
-| b4 s2 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Precision…` |
-| b4 s3 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Dash vaul…` |
-| b5 s1 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Dead spri…` |
-| b5 s2 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Slide und…` |
-| b5 s3 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Parkour c…` |
-| b6 s1 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Last all-…` |
-| b6 s2 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Leap onto…` |
-| b6 s3 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Hold on t…` |
+| b1 s1 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Race-pace...` |
+| b1 s2 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. A takeoff...` |
+| b1 s3 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Both blan...` |
+| b2 s1 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Dead spri...` |
+| b2 s2 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. A cat lea...` |
+| b2 s3 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Dive off ...` |
+| b3 s1 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Parkour w...` |
+| b3 s2 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Tic-tac a...` |
+| b3 s3 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Parkour b...` |
+| b4 s1 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Dead spri...` |
+| b4 s2 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Precision...` |
+| b4 s3 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Dash vaul...` |
+| b5 s1 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Dead spri...` |
+| b5 s2 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Slide und...` |
+| b5 s3 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Parkour c...` |
+| b6 s1 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Last all-...` |
+| b6 s2 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Leap onto...` |
+| b6 s3 LTX I2V enhance | `The start image holds as the first frame. Wordless mix: silent mouth. Hold on t...` |
 
 #### `enhance`
 
@@ -1618,7 +1618,7 @@ Type `STRING`. Range / default: 8 seconds, 24 fps.
 
 Duration hint.
 
-**How it affects generation:** Does not set 193 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
+**How it affects generation:** Does not set 193 frames - LTXVImgToVideo does. Film printers stay 5 seconds / 121.
 
 **This graph (all 18 instances):** `5 seconds, 24 fps`
 
@@ -1956,13 +1956,13 @@ Sample-catalog id.
 
 **This graph (all 18 instances):** `films/go-see`
 
-### `LTXVImgToVideo` — LTX Image to Video
+### `LTXVImgToVideo` - LTX Image to Video
 
 Condition LTX on a start image and allocate the video latent.
 
 !!! warning "Lab notes"
 
-    ÷32 spatial, length 1+8n. Standalone Apps 1280×704×193. Film printers 1280×704×121. Shorts 768×1280. Some shot graphs still store 120 and rely on ez_ltx_spatial to snap.
+    div32 spatial, length 1+8n. Standalone Apps 1280x704x193. Film printers 1280x704x121. Shorts 768x1280. Some shot graphs still store 120 and rely on ez_ltx_spatial to snap.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1980,7 +1980,7 @@ Type `INT`. Range / default: 1280 / 768.
 
 Frame width.
 
-**How it affects generation:** Must be ÷32. 720p width is fine; height 720 is not.
+**How it affects generation:** Must be div32. 720p width is fine; height 720 is not.
 
 **This graph (all 18 instances):** `1280`
 
@@ -2000,7 +2000,7 @@ Type `INT`. Range / default: 193 Apps / 121 film = 1+8n.
 
 Frame count.
 
-**How it affects generation:** Standalone Apps default 193 @ 24 fps ≈ 8.04 s. Film printers stay 121 (~5.04 s). Do not type a 90 s length.
+**How it affects generation:** Standalone Apps default 193 @ 24 fps ~ 8.04 s. Film printers stay 121 (~5.04 s). Do not type a 90 s length.
 
 **This graph (all 18 instances):** `121`
 
@@ -2014,7 +2014,7 @@ Clips per Queue.
 
 **This graph (all 18 instances):** `1`
 
-### `LTXVConditioning` — LTX Conditioning
+### `LTXVConditioning` - LTX Conditioning
 
 Stamp frame-rate onto LTX positive/negative cond.
 
@@ -2035,7 +2035,7 @@ Frames per second written into cond.
 
 **This graph (all 18 instances):** `24.0`
 
-### `LTXVConcatAVLatent` — LTX Concat AV Latent
+### `LTXVConcatAVLatent` - LTX Concat AV Latent
 
 Join video + audio latents into one joint AV latent for the sampler.
 
@@ -2047,19 +2047,19 @@ Join video + audio latents into one joint AV latent for the sampler.
 
 No widgets. Sockets only.
 
-### `LTXVSeparateAVLatent` — LTX Separate AV Latent
+### `LTXVSeparateAVLatent` - LTX Separate AV Latent
 
 Split a joint AV latent after sampling.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `av_latent` | in | `LATENT` | KSampler output. |
-| `video_latent` | out | `LATENT` | Picture latent → VAEDecode. |
-| `audio_latent` | out | `LATENT` | Audio latent → LTXVAudioVAEDecode (not on a2v). |
+| `video_latent` | out | `LATENT` | Picture latent -> VAEDecode. |
+| `audio_latent` | out | `LATENT` | Audio latent -> LTXVAudioVAEDecode (not on a2v). |
 
 No widgets. Sockets only.
 
-### `LTXVAudioVAEDecode` — LTX Audio VAE Decode
+### `LTXVAudioVAEDecode` - LTX Audio VAE Decode
 
 Decode LTX audio latent to AUDIO for the MP4 mux.
 
@@ -2075,7 +2075,7 @@ Decode LTX audio latent to AUDIO for the MP4 mux.
 
 No widgets. Sockets only.
 
-### `VHS_VideoCombine` — VHS Video Combine
+### `VHS_VideoCombine` - VHS Video Combine
 
 Encode frames (and optional audio) to MP4 or GIF.
 
@@ -2121,24 +2121,24 @@ Save prefix under the output folder.
 
 | Instance | Value |
 | --- | --- |
-| Save video (MP4) — open node for preview | `ez_gosee_b1_s1_ltx_video` |
-| Save video (MP4) — open node for preview | `ez_gosee_b1_s2_ltx_video` |
-| Save video (MP4) — open node for preview | `ez_gosee_b1_s3_ltx_video` |
-| Save video (MP4) — open node for preview | `ez_gosee_b2_s1_ltx_video` |
-| Save video (MP4) — open node for preview | `ez_gosee_b2_s2_ltx_video` |
-| Save video (MP4) — open node for preview | `ez_gosee_b2_s3_ltx_video` |
-| Save video (MP4) — open node for preview | `ez_gosee_b3_s1_ltx_video` |
-| Save video (MP4) — open node for preview | `ez_gosee_b3_s2_ltx_video` |
-| Save video (MP4) — open node for preview | `ez_gosee_b3_s3_ltx_video` |
-| Save video (MP4) — open node for preview | `ez_gosee_b4_s1_ltx_video` |
-| Save video (MP4) — open node for preview | `ez_gosee_b4_s2_ltx_video` |
-| Save video (MP4) — open node for preview | `ez_gosee_b4_s3_ltx_video` |
-| Save video (MP4) — open node for preview | `ez_gosee_b5_s1_ltx_video` |
-| Save video (MP4) — open node for preview | `ez_gosee_b5_s2_ltx_video` |
-| Save video (MP4) — open node for preview | `ez_gosee_b5_s3_ltx_video` |
-| Save video (MP4) — open node for preview | `ez_gosee_b6_s1_ltx_video` |
-| Save video (MP4) — open node for preview | `ez_gosee_b6_s2_ltx_video` |
-| Save video (MP4) — open node for preview | `ez_gosee_b6_s3_ltx_video` |
+| Save video (MP4) - open node for preview | `ez_gosee_b1_s1_ltx_video` |
+| Save video (MP4) - open node for preview | `ez_gosee_b1_s2_ltx_video` |
+| Save video (MP4) - open node for preview | `ez_gosee_b1_s3_ltx_video` |
+| Save video (MP4) - open node for preview | `ez_gosee_b2_s1_ltx_video` |
+| Save video (MP4) - open node for preview | `ez_gosee_b2_s2_ltx_video` |
+| Save video (MP4) - open node for preview | `ez_gosee_b2_s3_ltx_video` |
+| Save video (MP4) - open node for preview | `ez_gosee_b3_s1_ltx_video` |
+| Save video (MP4) - open node for preview | `ez_gosee_b3_s2_ltx_video` |
+| Save video (MP4) - open node for preview | `ez_gosee_b3_s3_ltx_video` |
+| Save video (MP4) - open node for preview | `ez_gosee_b4_s1_ltx_video` |
+| Save video (MP4) - open node for preview | `ez_gosee_b4_s2_ltx_video` |
+| Save video (MP4) - open node for preview | `ez_gosee_b4_s3_ltx_video` |
+| Save video (MP4) - open node for preview | `ez_gosee_b5_s1_ltx_video` |
+| Save video (MP4) - open node for preview | `ez_gosee_b5_s2_ltx_video` |
+| Save video (MP4) - open node for preview | `ez_gosee_b5_s3_ltx_video` |
+| Save video (MP4) - open node for preview | `ez_gosee_b6_s1_ltx_video` |
+| Save video (MP4) - open node for preview | `ez_gosee_b6_s2_ltx_video` |
+| Save video (MP4) - open node for preview | `ez_gosee_b6_s3_ltx_video` |
 
 #### `format`
 
@@ -2217,7 +2217,7 @@ Write the file to disk.
 
 **This graph (all 18 instances):** `true`
 
-### `ImageFromBatch` — Image From Batch
+### `ImageFromBatch` - Image From Batch
 
 Pick one frame out of a decoded video batch.
 
@@ -2250,7 +2250,7 @@ How many frames to take.
 
 **This graph (all 18 instances):** `1`
 
-### `EZFilmDisclosure` — LTX AI-media disclosure
+### `EZFilmDisclosure` - LTX AI-media disclosure
 
 Prepend the LTX Community License AI-media disclosure. Idempotent. Not legal advice.
 
@@ -2266,7 +2266,7 @@ Optional extra line after the stock disclosure.
 
 **How it affects generation:** Empty = stock sentence only. Do not strip provenance.
 
-### `EZModelCheck` — Check models
+### `EZModelCheck` - Check models
 
 Manual disk check for occupancy + Quality weights. Queue does not run this node.
 
@@ -2284,7 +2284,7 @@ Last check result.
 
 **This graph:** `Click Check models. Queue does not run this node.`
 
-### `EZPromptBundle` — Prompt Bundle
+### `EZPromptBundle` - Prompt Bundle
 
 Join final shot prompts for one shared film negative. No LLM.
 

@@ -1,6 +1,6 @@
 ---
 title: "Push then hold"
-description: "Cinema Rack illustration — Push then hold."
+description: "Cinema Rack illustration - Push then hold."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

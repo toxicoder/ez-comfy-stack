@@ -1,7 +1,7 @@
 """LTX video VAE requires spatial dims divisible by 32.
 
 Hermetic: stdlib only. 720 and 1080 look like broadcast sizes but fail
-inside the LTX encoder (einops cannot split H=45 after 16× downsample).
+inside the LTX encoder (einops cannot split H=45 after 16x downsample).
 """
 
 from __future__ import annotations
@@ -66,7 +66,7 @@ def test_ltx_spatial_dims_are_vae_aligned() -> None:
             assert len(values) >= 2, (rel, node.get("type"), values)
             width, height = int(values[0]), int(values[1])
             if width % 32 != 0 or height % 32 != 0:
-                hits.append(f"{rel} {node['type']} {width}x{height} not ÷32")
+                hits.append(f"{rel} {node['type']} {width}x{height} not div32")
             if width in BROADCAST_ILLEGAL or height in BROADCAST_ILLEGAL:
                 hits.append(f"{rel} {node['type']} {width}x{height} uses 720/1080")
     assert found >= 10, found
@@ -98,11 +98,11 @@ def test_ltx_operator_notes_state_div32_canvas() -> None:
             continue
         note = graph.get("extra", {}).get("lab_note") or ""
         if "divisible by 32" not in note:
-            missing.append(f"{path.name}: lab_note missing ÷32 rule")
+            missing.append(f"{path.name}: lab_note missing div32 rule")
         if path.stem in PORTRAIT_STEMS:
-            if "768x1280" not in note and "768×1280" not in note:
+            if "768x1280" not in note and "768x1280" not in note:
                 missing.append(f"{path.name}: lab_note missing 768x1280")
         else:
-            if "1280x704" not in note and "1280×704" not in note:
+            if "1280x704" not in note and "1280x704" not in note:
                 missing.append(f"{path.name}: lab_note missing 1280x704")
     assert missing == [], missing

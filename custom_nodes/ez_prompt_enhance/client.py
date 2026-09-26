@@ -45,7 +45,7 @@ from ._styles import (
     with_context_system,
     with_style_system,
 )
-from ._styles import (  # noqa: F401 — coverage/monkeypatch façade
+from ._styles import (  # noqa: F401 - coverage/monkeypatch façade
     _collapse_spaces,
     _drop_phrase,
     _own_look_blob,
@@ -234,7 +234,7 @@ def llama_cpp_operator_pip_command() -> str:
     """Exact docker exec pip line for a blocking Dub / Enhance status.
 
     Returns:
-        One-line ``docker exec … pip install`` the operator can paste.
+        One-line ``docker exec ... pip install`` the operator can paste.
     """
     args = llama_cpp_direct_wheel_pip_args() or llama_cpp_cpu_pip_index_args()
     return (
@@ -253,12 +253,12 @@ def llama_cpp_unavailable_status() -> str:
     pip_detail = _HEAL_ERROR.strip()
     import_detail = _LAST_IMPORT_ERROR.strip()
     if _HEAL_PIP_FAILED and pip_detail:
-        return f"llama.cpp unavailable — CPU wheel pip failed ({pip_detail}). {cmd}"
+        return f"llama.cpp unavailable - CPU wheel pip failed ({pip_detail}). {cmd}"
     if import_detail:
-        return f"llama.cpp unavailable — Llama import failed ({import_detail}). {cmd}"
+        return f"llama.cpp unavailable - Llama import failed ({import_detail}). {cmd}"
     if pip_detail:
-        return f"llama.cpp unavailable — Llama import failed ({pip_detail}). {cmd}"
-    return f"llama.cpp unavailable — Llama did not import. {cmd}"
+        return f"llama.cpp unavailable - Llama import failed ({pip_detail}). {cmd}"
+    return f"llama.cpp unavailable - Llama did not import. {cmd}"
 
 
 def reset_llama_runtime_for_tests() -> None:
@@ -350,7 +350,7 @@ def _heal_llama_cpp_cpu() -> str:
             return _HEAL_ERROR
         _HEAL_TRIED = True
         _HEAL_PIP_FAILED = False
-        _log("llama-cpp-python missing — installing CPU wheel")
+        _log("llama-cpp-python missing - installing CPU wheel")
 
         def _import_ok() -> bool:
             """Reload llama_cpp and report whether Llama imports.
@@ -396,7 +396,7 @@ def status_for_reason(reason: str | None) -> str:
     if not reason:
         return ""
     if reason == REASON_GGUF_MISSING:
-        return "GGUF missing — run ./scripts/manage.sh download-models"
+        return "GGUF missing - run ./scripts/manage.sh download-models"
     if reason == REASON_LLAMA_UNAVAILABLE:
         return llama_cpp_unavailable_status()
     if reason == REASON_LLM_LOAD_FAILED:
@@ -1009,7 +1009,7 @@ def _n_gpu_layers() -> int:
     """GPU 4B when occupancy is not a video/mesh hog. CPU next to Wan/LTX/TRELLIS.
 
     ``EZ_LLM_ALLOW_GPU=0`` forces CPU. Occupancy ``wan``/``ltx``/``trellis``
-    forces CPU even if ngl is set. GPU-safe occupancy (klein/llm/idle/…)
+    forces CPU even if ngl is set. GPU-safe occupancy (klein/llm/idle/...)
     defaults to 99 so CPU is not the writing-desk default.
 
     Returns:
@@ -1107,7 +1107,7 @@ def _close_llm() -> None:
     if callable(closer):
         try:
             closer()
-        except Exception as exc:  # noqa: BLE001 — fail-soft unload
+        except Exception as exc:  # noqa: BLE001 - fail-soft unload
             _log(f"llama close failed: {exc}")
 
 
@@ -1120,7 +1120,7 @@ def _get_llama() -> tuple[Any | None, str | None]:
     global _LLM, _LLM_PATH
     path = _gguf_path()
     if not path or not os.path.isfile(path):
-        _log(f"GGUF missing at {path or '(empty EZ_LLM_GGUF)'} — passing prompt through")
+        _log(f"GGUF missing at {path or '(empty EZ_LLM_GGUF)'} - passing prompt through")
         return None, REASON_GGUF_MISSING
     if _LLM is not None and _LLM_PATH == path:
         return _LLM, None
@@ -1129,11 +1129,11 @@ def _get_llama() -> tuple[Any | None, str | None]:
     if llama_cls is None:
         heal_err = _heal_llama_cpp_cpu()
         if heal_err:
-            _log(f"llama-cpp-python not installed — {heal_err}")
+            _log(f"llama-cpp-python not installed - {heal_err}")
             return None, REASON_LLAMA_UNAVAILABLE
         llama_cls = _load_llama_class()
         if llama_cls is None:
-            _log("llama-cpp-python not installed — passing prompt through")
+            _log("llama-cpp-python not installed - passing prompt through")
             return None, REASON_LLAMA_UNAVAILABLE
     kwargs: dict[str, Any] = {
         "model_path": path,
@@ -1148,12 +1148,12 @@ def _get_llama() -> tuple[Any | None, str | None]:
         _log(f"Llama chat_format unsupported ({exc}); retrying without it")
         try:
             _LLM = llama_cls(**kwargs)
-        except Exception as retry_exc:  # noqa: BLE001 — fail-soft
+        except Exception as retry_exc:  # noqa: BLE001 - fail-soft
             _log(f"failed to load GGUF {path}: {retry_exc}")
             _LLM = None
             _LLM_PATH = ""
             return None, REASON_LLM_LOAD_FAILED
-    except Exception as exc:  # noqa: BLE001 — fail-soft
+    except Exception as exc:  # noqa: BLE001 - fail-soft
         _log(f"failed to load GGUF {path}: {exc}")
         _LLM = None
         _LLM_PATH = ""
@@ -1225,7 +1225,7 @@ def complete(
     Returns:
         ``(text, None)`` on success, or ``("", reason)`` for fail-soft.
     """
-    _log("enhancing prompt (sidecar or local 4B)…")
+    _log("enhancing prompt (sidecar or local 4B)...")
     tokens = DEFAULT_MAX_TOKENS if max_tokens is None else int(max_tokens)
     if tokens < 1:
         tokens = DEFAULT_MAX_TOKENS
@@ -1254,7 +1254,7 @@ def complete(
     except FuturesTimeout:
         _log(f"local LLM timed out after {timeout}s")
         return "", REASON_EMPTY
-    except Exception as exc:  # noqa: BLE001 — fail-soft
+    except Exception as exc:  # noqa: BLE001 - fail-soft
         _log(f"local LLM failed: {exc}")
         return "", REASON_EMPTY
     finally:

@@ -1,6 +1,6 @@
 ---
 title: "Hyperlapse walk"
-description: "Cinema Rack illustration — Hyperlapse walk."
+description: "Cinema Rack illustration - Hyperlapse walk."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

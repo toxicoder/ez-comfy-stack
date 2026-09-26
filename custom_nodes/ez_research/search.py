@@ -288,7 +288,7 @@ def http_get(
     method = "POST" if data is not None else "GET"
     request = urllib.request.Request(url, data=data, headers=headers, method=method)
     try:
-        with _urlopen(  # noqa: S310 — scheme/host checked in is_blocked_url
+        with _urlopen(  # noqa: S310 - scheme/host checked in is_blocked_url
             request,
             timeout=timeout,
             context=ssl.create_default_context(),
@@ -306,7 +306,7 @@ def http_get(
         raw = raw[:MAX_BODY]
     try:
         return raw.decode("utf-8", errors="replace")
-    except Exception as exc:  # noqa: BLE001 — fail-soft
+    except Exception as exc:  # noqa: BLE001 - fail-soft
         _log(f"decode failed: {exc}")
         return ""
 
@@ -341,7 +341,7 @@ def wikipedia_search(query: str, *, limit: int = 3, fetch_bodies: bool = True) -
 
     Args:
         query: Search string.
-        limit: Max hits (clamped 1–5).
+        limit: Max hits (clamped 1-5).
         fetch_bodies: When true, fill ``hit.body`` from REST summary.
 
     Returns:
@@ -378,7 +378,7 @@ def duckduckgo_search(query: str, *, limit: int = 3, fetch_bodies: bool = False)
 
     Args:
         query: Search string.
-        limit: Max hits (clamped 1–5).
+        limit: Max hits (clamped 1-5).
         fetch_bodies: When true, GET each result URL (still SSRF-gated).
 
     Returns:
@@ -413,7 +413,7 @@ def search_web(
 
     Args:
         query: Search string.
-        limit: Max hits (clamped 1–8).
+        limit: Max hits (clamped 1-8).
         fetch_bodies: When true, fill Wikipedia summary bodies.
 
     Returns:
@@ -453,7 +453,7 @@ def format_sources(hits: Sequence[SearchHit]) -> str:
     lines: list[str] = []
     for i, hit in enumerate(hits, start=1):
         snippet = hit.snippet or hit.body[:MAX_SNIPPET]
-        lines.append(f"{i}. {hit.title} — {hit.url}")
+        lines.append(f"{i}. {hit.title} - {hit.url}")
         if snippet:
             lines.append(f"   {snippet}")
     return "\n".join(lines)

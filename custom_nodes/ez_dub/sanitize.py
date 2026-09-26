@@ -60,7 +60,7 @@ _TAIL_CONNECTOR_RE = re.compile(
 
 
 def strip_model_fences(text: str) -> str:
-    """Remove <think>…</think>, wrapping quotes, 'Translation:' / 'Traducción:' prefixes.
+    """Remove <think>...</think>, wrapping quotes, 'Translation:' / 'Traducción:' prefixes.
 
     Args:
         text: Raw GGUF output.
@@ -173,7 +173,7 @@ def ensure_spoken_punctuation(text: str) -> str:
     out = " ".join((text or "").split())
     if not out:
         return ""
-    out = out.replace("...", ", ").replace("…", ", ")
+    out = out.replace("...", ", ").replace("...", ", ")
     out = " ".join(out.split())
     if out[0].islower():
         out = out[0].upper() + out[1:]
@@ -183,7 +183,7 @@ def ensure_spoken_punctuation(text: str) -> str:
 
 
 def sanitize_target(text: str, *, source_text: str, language: str) -> str:
-    """strip fences → strip leak tails → spoken punctuation.
+    """strip fences -> strip leak tails -> spoken punctuation.
 
     Args:
         text: Raw GGUF output.

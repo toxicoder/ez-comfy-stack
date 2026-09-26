@@ -1,6 +1,6 @@
 ---
 title: "Crowd Wide"
-description: "Cinema Rack illustration — Crowd Wide."
+description: "Cinema Rack illustration - Crowd Wide."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

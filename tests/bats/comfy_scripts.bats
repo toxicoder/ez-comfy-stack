@@ -417,7 +417,7 @@ teardown() {
   [[ ! -f ${COMFY_HOME}/models/text_encoders/old.bin ]]
   [[ -d ${MODELS_ROOT}/comfy/text_encoders ]]
 
-  # clone_node soft-fails without network if git missing target — mock git
+  # clone_node soft-fails without network if git missing target - mock git
   export CUSTOM="${TEST_TMP_DIR}/custom_nodes"
   mkdir -p "${CUSTOM}"
   install_mock_bin git 'echo "git $*"; exit 1'
@@ -432,7 +432,7 @@ teardown() {
   run clone_node_ref_is_sha main
   [ "${status}" -ne 0 ]
 
-  # strip_prebuilt removes .git — clone_node must not git clone into that tree
+  # strip_prebuilt removes .git - clone_node must not git clone into that tree
   mkdir -p "${CUSTOM}/ComfyUI-VideoHelperSuite"
   echo vhs >"${CUSTOM}/ComfyUI-VideoHelperSuite/nodes.py"
   echo opencv-python >"${CUSTOM}/ComfyUI-VideoHelperSuite/requirements.txt"
@@ -1481,7 +1481,7 @@ PY
   run ensure_triton_build_env
   [ "${status}" -eq 0 ]
   [[ ${output} == *"libcuda dir=${fake_dir}"* ]]
-  # ensure_triton_build_env exports in subshell via run — re-run in current shell
+  # ensure_triton_build_env exports in subshell via run - re-run in current shell
   ensure_triton_build_env
   [[ ${LIBRARY_PATH} == *"${fake_dir}"* ]]
   [[ ${LD_LIBRARY_PATH} == *"${fake_dir}"* ]]

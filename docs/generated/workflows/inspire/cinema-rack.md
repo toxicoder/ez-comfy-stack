@@ -29,9 +29,9 @@ Occupancy **llm**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 ```text
 ## inspire/cinema-rack
 
-Cinema Rack — pick one cinematography technique per axis and splice a Klein / Wan / LTX prompt. No UNET, no VAE, no KSampler.
+Cinema Rack - pick one cinematography technique per axis and splice a Klein / Wan / LTX prompt. No UNET, no VAE, no KSampler.
 
-Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
+Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
   ./scripts/manage.sh occupancy enter llm-desk --yes
 
@@ -39,7 +39,7 @@ Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to
 
 1. Type a **Subject** (who/what). Leave empty to splice techniques only.
 2. Optional **Recipe** fills empty axes. Explicit dropdowns win.
-3. Pick at most one technique per axis (shot size, angle, move, lens, …).
+3. Pick at most one technique per axis (shot size, angle, move, lens, ...).
 4. Set **Family** (klein, wan_t2v, ltx_t2v, or the i2v / identity flavors).
 5. Queue. Each Enhance node previews the rewritten STRING. Style stays **none** so cinema clauses are not stripped.
 6. Copy the family you need into **stills/still-draft** or an I2V graph.
@@ -88,9 +88,9 @@ flowchart LR
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
 
-### `Note` — Note
+### `Note` - Note
 
 On-canvas operator note (not executed).
 
@@ -106,14 +106,14 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## inspire/cinema-rack Cinema Rack — pick one cinematography technique per axis and splice a Klein / Wan / LTX prompt. No UNET, no VAE, no KSampler. Occupancy: llm — graph label (not a CLI mode). Pre…`
+**This graph:** `## inspire/cinema-rack Cinema Rack - pick one cinematography technique per axis and splice a Klein / Wan / LTX prompt. No UNET, no VAE, no KSampler. Occupancy: llm - graph label (not a CLI mode). Pre...`
 
 ```text
 ## inspire/cinema-rack
 
-Cinema Rack — pick one cinematography technique per axis and splice a Klein / Wan / LTX prompt. No UNET, no VAE, no KSampler.
+Cinema Rack - pick one cinematography technique per axis and splice a Klein / Wan / LTX prompt. No UNET, no VAE, no KSampler.
 
-Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
+Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
   ./scripts/manage.sh occupancy enter llm-desk --yes
 
@@ -121,7 +121,7 @@ Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to
 
 1. Type a **Subject** (who/what). Leave empty to splice techniques only.
 2. Optional **Recipe** fills empty axes. Explicit dropdowns win.
-3. Pick at most one technique per axis (shot size, angle, move, lens, …).
+3. Pick at most one technique per axis (shot size, angle, move, lens, ...).
 4. Set **Family** (klein, wan_t2v, ltx_t2v, or the i2v / identity flavors).
 5. Queue. Each Enhance node previews the rewritten STRING. Style stays **none** so cinema clauses are not stripped.
 6. Copy the family you need into **stills/still-draft** or an I2V graph.
@@ -131,7 +131,7 @@ Cinema Rack is deterministic (no LLM). Enhance is optional downstream.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 ```
 
-### `EZCinemaRack` — Cinema Rack
+### `EZCinemaRack` - Cinema Rack
 
 Pick one cinematography technique per axis and splice a Klein / Wan / LTX prompt.
 
@@ -316,7 +316,7 @@ Short-form hook.
 
 **This graph:** `none`
 
-### `EZKleinPromptEnhance` — Klein Prompt Enhance
+### `EZKleinPromptEnhance` - Klein Prompt Enhance
 
 Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
 
@@ -387,9 +387,9 @@ System prompt flavor.
 
 Type `STRING`.
 
-Framing hint (YouTube 16:9 still, Instagram 4:5, …).
+Framing hint (YouTube 16:9 still, Instagram 4:5, ...).
 
-**How it affects generation:** Steers aspect language in the rewrite. Does not set the latent size — EmptyFlux2LatentImage does.
+**How it affects generation:** Steers aspect language in the rewrite. Does not set the latent size - EmptyFlux2LatentImage does.
 
 **This graph:** `YouTube 16:9 still`
 
@@ -719,7 +719,7 @@ Sample-catalog id (graph stem).
 
 **This graph:** `inspire/cinema-rack`
 
-### `EZWanPromptEnhance` — Wan Prompt Enhance
+### `EZWanPromptEnhance` - Wan Prompt Enhance
 
 Rewrite a lazy prompt for Wan 2.2 TI2V-5B (silent).
 
@@ -745,7 +745,7 @@ Type `STRING`.
 
 Lazy motion sentence.
 
-**How it affects generation:** I2V rewrites to motion + one camera only. Do not prompt audio — Wan is silent.
+**How it affects generation:** I2V rewrites to motion + one camera only. Do not prompt audio - Wan is silent.
 
 **This graph:** `A techno wizard on a sunny tropical city rooftop.`
 
@@ -785,7 +785,7 @@ Type `STRING`. Range / default: 5 seconds, 24 fps.
 
 Duration/fps hint for the rewriter.
 
-**How it affects generation:** Does not change latent length — Wan22ImageToVideoLatent does.
+**How it affects generation:** Does not change latent length - Wan22ImageToVideoLatent does.
 
 **This graph:** `5 seconds, 24 fps`
 
@@ -1115,7 +1115,7 @@ Sample-catalog id.
 
 **This graph:** `inspire/cinema-rack`
 
-### `EZLTXPromptEnhance` — LTX Prompt Enhance
+### `EZLTXPromptEnhance` - LTX Prompt Enhance
 
 Rewrite a lazy prompt for LTX-2.5 (present-tense paragraph, audio interleaved).
 
@@ -1181,7 +1181,7 @@ Type `STRING`. Range / default: 8 seconds, 24 fps.
 
 Duration hint.
 
-**How it affects generation:** Does not set 193 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
+**How it affects generation:** Does not set 193 frames - LTXVImgToVideo does. Film printers stay 5 seconds / 121.
 
 **This graph:** `5 seconds, 24 fps`
 
@@ -1521,7 +1521,7 @@ Sample-catalog id.
 
 **This graph:** `inspire/cinema-rack`
 
-### `EZQuality` — Quality
+### `EZQuality` - Quality
 
 Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
@@ -1556,7 +1556,7 @@ custom freezes last overlay; lab restores graph defaults.
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
-### `EZModelCheck` — Check models
+### `EZModelCheck` - Check models
 
 Manual disk check for occupancy + Quality weights. Queue does not run this node.
 

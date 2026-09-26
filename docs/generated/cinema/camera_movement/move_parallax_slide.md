@@ -1,6 +1,6 @@
 ---
 title: "Parallax slide"
-description: "Cinema Rack illustration — Parallax slide."
+description: "Cinema Rack illustration - Parallax slide."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 #
-# ## ci_check_only — lightweight CI validate-gate
+# ## ci_check_only - lightweight CI validate-gate
 #
 # Verifies path-filtered GitHub jobs reported success (or were correctly
-# skipped). No Bazel cold start — intended for the validate-gate job only.
+# skipped). No Bazel cold start - intended for the validate-gate job only.
 #
 # Env (set by CI):
 #   BAZEL_CORE_RESULT, DOCS_RESULT

@@ -1,6 +1,6 @@
 ---
 title: "Extreme Wide Shot"
-description: "Cinema Rack illustration — Extreme Wide Shot."
+description: "Cinema Rack illustration - Extreme Wide Shot."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -1,6 +1,6 @@
 ---
 title: "Mouth Insert"
-description: "Cinema Rack illustration — Mouth Insert."
+description: "Cinema Rack illustration - Mouth Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

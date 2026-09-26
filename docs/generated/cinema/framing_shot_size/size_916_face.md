@@ -1,6 +1,6 @@
 ---
 title: "9:16 Face Stack"
-description: "Cinema Rack illustration — 9:16 Face Stack."
+description: "Cinema Rack illustration - 9:16 Face Stack."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

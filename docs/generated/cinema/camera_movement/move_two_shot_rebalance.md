@@ -1,6 +1,6 @@
 ---
 title: "Two-shot rebalance"
-description: "Cinema Rack illustration — Two-shot rebalance."
+description: "Cinema Rack illustration - Two-shot rebalance."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

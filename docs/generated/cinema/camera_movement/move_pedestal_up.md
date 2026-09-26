@@ -1,6 +1,6 @@
 ---
 title: "Pedestal up"
-description: "Cinema Rack illustration — Pedestal up."
+description: "Cinema Rack illustration - Pedestal up."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

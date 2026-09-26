@@ -1,6 +1,6 @@
 ---
 title: "Bike low mount"
-description: "Cinema Rack illustration — Bike low mount."
+description: "Cinema Rack illustration - Bike low mount."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

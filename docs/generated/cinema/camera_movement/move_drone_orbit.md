@@ -1,6 +1,6 @@
 ---
 title: "Drone orbit"
-description: "Cinema Rack illustration — Drone orbit."
+description: "Cinema Rack illustration - Drone orbit."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

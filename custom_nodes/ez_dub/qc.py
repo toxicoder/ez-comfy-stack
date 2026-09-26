@@ -146,7 +146,7 @@ def evaluate_qc(
             if name:
                 level = "fail" if name in fail_extra else "warn"
                 checks.append({"id": name, "level": level, "rule": name})
-    except Exception:  # noqa: BLE001 — never raise
+    except Exception:  # noqa: BLE001 - never raise
         return {"ok": False, "flags": [], "checks": []}
     flags: list[str] = []
     seen: set[str] = set()

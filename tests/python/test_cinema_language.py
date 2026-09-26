@@ -93,7 +93,7 @@ def test_clip_clause_and_empty_catalog_branches(
     assert cinema._clip_clause("one two three") == "one two three"
     long = " ".join(f"word{i}" for i in range(24))
     clipped = cinema._clip_clause(long, 18)
-    assert clipped.endswith("…")
+    assert clipped.endswith("...")
     assert len(clipped.split()) == 18
     monkeypatch.setattr(
         cinema,

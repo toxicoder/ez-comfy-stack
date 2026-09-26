@@ -1,6 +1,6 @@
 ---
 title: "Costume Full"
-description: "Cinema Rack illustration — Costume Full."
+description: "Cinema Rack illustration - Costume Full."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

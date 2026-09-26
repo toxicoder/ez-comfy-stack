@@ -37,7 +37,7 @@ MASTER_DURATION_S = 90.00
 MASTER_TOL_S = 0.10
 AUDIO_SYNC_TOL_S = 0.050
 # World-only speech-band gate (no neural VAD). Speech-shaped energy is
-# 300–3400 Hz RMS within 8 dB of full-band, a peak above −18 dB, and a
+# 300-3400 Hz RMS within 8 dB of full-band, a peak above -18 dB, and a
 # window longer than 0.40 s. Band-limited silencedetect then treats
 # regions longer than 0.40 s as non-transients (not footfall/splash).
 SPEECH_BAND_DB = 8.0
@@ -134,7 +134,7 @@ def probe_wh(
     ffprobe: str | None = None,
     run: RunFn = subprocess.run,
 ) -> tuple[int, int] | None:
-    """First video stream width×height, or None.
+    """First video stream widthxheight, or None.
 
     Args:
         path: Media file.
@@ -177,7 +177,7 @@ def stem_mix_path(dest: Path, sid: str) -> Path | None:
 
     Args:
         dest: ``films/<slug>`` jobstore directory.
-        sid: Shot id ``01``…``18``.
+        sid: Shot id ``01``...``18``.
 
     Returns:
         Mix path, or None when missing.
@@ -345,7 +345,7 @@ def probe_speech_band_ratio(
 ) -> float | None:
     """Speech-band RMS / full-band RMS, or None if unreadable.
 
-    Speech band is 300–3400 Hz via ``highpass=f=300,lowpass=f=3400`` then
+    Speech band is 300-3400 Hz via ``highpass=f=300,lowpass=f=3400`` then
     astats. A ratio at or above ``SPEECH_RATIO_MIN`` (~0.398, 8 dB) means
     the mix is voice-shaped.
 
@@ -431,7 +431,7 @@ def probe_sustained_nonsilence_s(
     )
     text = _ffmpeg_af(path, af, ffmpeg=ffmpeg, run=run)
     if not text and dur > 0:
-        # ffmpeg missing / failed — do not invent coverage.
+        # ffmpeg missing / failed - do not invent coverage.
         return None
     return parse_sustained_nonsilence_s(text, dur)
 
@@ -484,7 +484,7 @@ def world_only_speech_defects(
     if sustained > NONSILENCE_BUDGET_S:
         defects.append(
             f"{label}: sustained speech-band non-silence {sustained:.2f}s "
-            f"(need ≤ {NONSILENCE_BUDGET_S}s transients)"
+            f"(need <= {NONSILENCE_BUDGET_S}s transients)"
         )
     return defects
 
@@ -561,7 +561,7 @@ def accept_master(
     dur = probe_duration_s(mp4, ffprobe=ffprobe, run=run)
     cap = float(cap_seconds)
     if dur is None or abs(dur - cap) > MASTER_TOL_S:
-        defects.append(f"master: duration {dur!r} (need {cap}±{MASTER_TOL_S})")
+        defects.append(f"master: duration {dur!r} (need {cap} +/- {MASTER_TOL_S})")
     wh = probe_wh(mp4, ffprobe=ffprobe, run=run)
     if wh != (ACCEPT_WIDTH, ACCEPT_HEIGHT):
         defects.append(
@@ -630,7 +630,7 @@ def accept_shot(
         return defects
     dur = probe_duration_s(mp4, ffprobe=ffprobe, run=run)
     if dur is None or abs(dur - DURATION_S) > DURATION_TOL:
-        defects.append(f"{sid}: duration {dur!r} (need {DURATION_S}±{DURATION_TOL})")
+        defects.append(f"{sid}: duration {dur!r} (need {DURATION_S} +/- {DURATION_TOL})")
     wh = probe_wh(mp4, ffprobe=ffprobe, run=run)
     if wh != (ACCEPT_WIDTH, ACCEPT_HEIGHT):
         defects.append(f"{sid}: size {wh!r} (need {ACCEPT_WIDTH}x{ACCEPT_HEIGHT})")
@@ -646,7 +646,7 @@ def accept_shot(
             lufs = measurer(mix, run=run)
             if lufs is None or not lufs_in_band(lufs):
                 defects.append(
-                    f"{sid}: stem loudness {lufs!r} (need {LUFS_TARGET}±{LUFS_TOL} LUFS)"
+                    f"{sid}: stem loudness {lufs!r} (need {LUFS_TARGET} +/- {LUFS_TOL} LUFS)"
                 )
     elif audio_policy == "world-only" and backend != "wan":
         defects.extend(
@@ -670,7 +670,7 @@ def accept_film(
     run: RunFn = subprocess.run,
     probe_lufs_fn: Callable[..., float | None] | None = None,
 ) -> dict[str, Any]:
-    """Fail closed: all shots ok, 5.00s, 1280×704, LTX audio present.
+    """Fail closed: all shots ok, 5.00s, 1280x704, LTX audio present.
 
     Args:
         dest: ``films/<slug>`` jobstore directory.

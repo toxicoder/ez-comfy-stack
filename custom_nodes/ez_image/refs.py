@@ -77,7 +77,7 @@ def input_still_choices() -> list[str]:
         import folder_paths  # type: ignore[import-not-found]
 
         found = folder_paths.get_filename_list("input")
-    except Exception:  # noqa: BLE001 — hermetic tests / missing Comfy
+    except Exception:  # noqa: BLE001 - hermetic tests / missing Comfy
         found = None
     if found:
         names.extend(str(item) for item in found if str(item).strip())
@@ -101,11 +101,11 @@ def load_input_still(filename: object) -> object | None:
         from PIL import Image
 
         import folder_paths  # type: ignore[import-not-found]
-    except Exception:  # noqa: BLE001 — hermetic tests / missing deps
+    except Exception:  # noqa: BLE001 - hermetic tests / missing deps
         return None
     try:
         path = folder_paths.get_annotated_filepath(name)
-    except Exception:  # noqa: BLE001 — missing helper
+    except Exception:  # noqa: BLE001 - missing helper
         path = None
     if not path:
         return None
@@ -113,7 +113,7 @@ def load_input_still(filename: object) -> object | None:
         with Image.open(path) as img:
             rgb = img.convert("RGB")
             arr = (np.asarray(rgb).astype("float32") / 255.0)
-    except Exception:  # noqa: BLE001 — unreadable file
+    except Exception:  # noqa: BLE001 - unreadable file
         return None
     if getattr(arr, "ndim", 0) != 3:
         return None
@@ -154,7 +154,7 @@ class EZOptionalImage:
     CATEGORY = CATEGORY
     OUTPUT_NODE = True
     DESCRIPTION = (
-        "Optional example or reference stills. Empty is valid — Queue without "
+        "Optional example or reference stills. Empty is valid - Queue without "
         "a file. Klein graphs attach a present still via EZKleinRefCanvas."
     )
 
@@ -224,7 +224,7 @@ class EZKleinRefCanvas:
     FUNCTION = "run"
     CATEGORY = CATEGORY
     DESCRIPTION = (
-        "When has_image is set, snap ÷16, VAE-encode, and attach ReferenceLatent. "
+        "When has_image is set, snap div16, VAE-encode, and attach ReferenceLatent. "
         "Otherwise pass the empty Flux2 latent through. Never errors if empty."
     )
 
@@ -330,7 +330,7 @@ def _encode_ref(image: Any, vae: Any) -> Any | None:
         image = _resize_bhwc(image, snap_h, snap_w)
     try:
         return encode(image)
-    except Exception:  # noqa: BLE001 — fail-soft to empty latent
+    except Exception:  # noqa: BLE001 - fail-soft to empty latent
         return None
 
 
@@ -346,7 +346,7 @@ def _reference_latent(empty: Any, encoded: Any) -> Any:
     """
     try:
         from comfy_extras.nodes_flux import ReferenceLatent  # type: ignore[import-not-found]
-    except Exception:  # noqa: BLE001 — hermetic tests / older Comfy
+    except Exception:  # noqa: BLE001 - hermetic tests / older Comfy
         if isinstance(empty, dict):
             merged = dict(empty)
             merged["reference"] = encoded

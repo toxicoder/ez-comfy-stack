@@ -19,7 +19,7 @@ def ltx_nodes() -> dict[str, Any]:
         "LTXVImgToVideo": _n(
             "LTX Image to Video",
             "Condition LTX on a start image and allocate the video latent.",
-            lab="÷32 spatial, length 1+8n. Standalone Apps 1280×704×193. Film printers 1280×704×121. Shorts 768×1280. Some shot graphs still store 120 and rely on ez_ltx_spatial to snap.",
+            lab="div32 spatial, length 1+8n. Standalone Apps 1280x704x193. Film printers 1280x704x121. Shorts 768x1280. Some shot graphs still store 120 and rely on ez_ltx_spatial to snap.",
             origin="comfy-extras",
             sockets=[
                 _s("positive", "CONDITIONING", "in", "LTX prompt cond."),
@@ -31,9 +31,9 @@ def ltx_nodes() -> dict[str, Any]:
                 _s("latent", "LATENT", "out", "Video latent."),
             ],
             widgets=[
-                _w("width", index=0, typ="INT", rng="1280 / 768", desc="Frame width.", gen="Must be ÷32. 720p width is fine; height 720 is not."),
+                _w("width", index=0, typ="INT", rng="1280 / 768", desc="Frame width.", gen="Must be div32. 720p width is fine; height 720 is not."),
                 _w("height", index=1, typ="INT", rng="704 / 1280", desc="Frame height.", gen="704 not 720. Shorts 1280."),
-                _w("length", index=2, typ="INT", rng="193 Apps / 121 film = 1+8n", desc="Frame count.", gen="Standalone Apps default 193 @ 24 fps ≈ 8.04 s. Film printers stay 121 (~5.04 s). Do not type a 90 s length."),
+                _w("length", index=2, typ="INT", rng="193 Apps / 121 film = 1+8n", desc="Frame count.", gen="Standalone Apps default 193 @ 24 fps ~ 8.04 s. Film printers stay 121 (~5.04 s). Do not type a 90 s length."),
                 _w("batch_size", index=3, typ="INT", rng="1", desc="Clips per Queue.", gen="Stay 1."),
             ],
         ),
@@ -65,8 +65,8 @@ def ltx_nodes() -> dict[str, Any]:
             origin="comfy-extras",
             sockets=[
                 _s("av_latent", "LATENT", "in", "KSampler output."),
-                _s("video_latent", "LATENT", "out", "Picture latent → VAEDecode."),
-                _s("audio_latent", "LATENT", "out", "Audio latent → LTXVAudioVAEDecode (not on a2v)."),
+                _s("video_latent", "LATENT", "out", "Picture latent -> VAEDecode."),
+                _s("audio_latent", "LATENT", "out", "Audio latent -> LTXVAudioVAEDecode (not on a2v)."),
             ],
         ),
         "LTXVAudioVAEDecode": _n(
@@ -135,8 +135,8 @@ def ltx_nodes() -> dict[str, Any]:
             ],
             widgets=[
                 _w("strength", index=0, typ="FLOAT", rng="3.0", desc="A/V coupling strength.", gen="Higher ties picture motion to the audio latent. Too high can freeze faces."),
-                _w("start", index=1, typ="FLOAT", rng="0–1, lab 0", desc="Fraction of steps to start coupling.", gen="0 = from the first step."),
-                _w("end", index=2, typ="FLOAT", rng="0–1, lab 1", desc="Fraction of steps to stop coupling.", gen="1 = through the last step."),
+                _w("start", index=1, typ="FLOAT", rng="0-1, lab 0", desc="Fraction of steps to start coupling.", gen="0 = from the first step."),
+                _w("end", index=2, typ="FLOAT", rng="0-1, lab 1", desc="Fraction of steps to stop coupling.", gen="1 = through the last step."),
             ],
         ),
         "LTXVCropGuides": _n(
@@ -155,12 +155,12 @@ def ltx_nodes() -> dict[str, Any]:
         "AudioAdjustVolume": _n(
             "Audio Adjust Volume",
             "Gain an AUDIO tensor in dB.",
-            lab="Podcast duck −15 dB on the ACE bed under Kokoro speech.",
+            lab="Podcast duck -15 dB on the ACE bed under Kokoro speech.",
             sockets=[
                 _s("audio", "AUDIO", "in", "Bed or sting."),
                 _s("AUDIO", "AUDIO", "out", "Gained audio."),
             ],
-            widgets=[_w("volume_db", index=0, typ="FLOAT", rng="lab −15", desc="Gain in decibels.", gen="Negative ducks the bed. −15 dB is the lab podcast duck (same idea as host stem-mix.sh).")],
+            widgets=[_w("volume_db", index=0, typ="FLOAT", rng="lab -15", desc="Gain in decibels.", gen="Negative ducks the bed. -15 dB is the lab podcast duck (same idea as host stem-mix.sh).")],
         ),
         "AudioMerge": _n(
             "Audio Merge",

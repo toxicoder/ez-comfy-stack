@@ -284,7 +284,7 @@ class SongSection(TypedDict):
     """One planned section.
 
     Attributes:
-        role: ACE marker role (``verse``, ``drop``, ``pre``, …).
+        role: ACE marker role (``verse``, ``drop``, ``pre``, ...).
         bars: Bar count for this section.
         pattern: Short clause inside the marker, or empty.
     """
@@ -298,11 +298,11 @@ class SongPlan(TypedDict):
     """Arrangement chosen for one catalog take.
 
     Attributes:
-        form_id: Archetype id (``v_pre``, ``e_build``, …).
+        form_id: Archetype id (``v_pre``, ``e_build``, ...).
         sections: Ordered sections with bars and pattern clauses.
         meter: Encoder time signature ``2``, ``3``, ``4``, or ``6``.
         keyscale: Encoder key such as ``A minor``.
-        duration_s: Whole-second length inside 64–210.
+        duration_s: Whole-second length inside 64-210.
         bpm: Authored tempo. Not recomposed.
         bucket: ``short``, ``standard``, or ``long``.
     """
@@ -347,7 +347,7 @@ def duration_seconds(
         bars: Total bars.
         meter: Encoder time signature.
         bpm: Tempo in beats per minute.
-        clamp: When True, keep the result inside 64–210.
+        clamp: When True, keep the result inside 64-210.
 
     Returns:
         Rounded seconds.
@@ -516,7 +516,7 @@ def _raw_duration(bars: int, meter: str, bpm: int) -> int:
         bpm: Tempo.
 
     Returns:
-        Rounded seconds. May sit outside 64–210.
+        Rounded seconds. May sit outside 64-210.
     """
     return duration_seconds(bars=bars, meter=meter, bpm=bpm, clamp=False)
 
@@ -531,7 +531,7 @@ def _bars_for_target(bpm: int, meter: str, target: int, min_bars: int) -> tuple[
         min_bars: Lower bound so every section can hold two bars.
 
     Returns:
-        ``(bars, seconds)`` with seconds clamped to 64–210.
+        ``(bars, seconds)`` with seconds clamped to 64-210.
     """
     beats = beats_per_bar(meter)
     cap = int(DURATION_MAX * int(bpm) / (beats * 60)) + 8

@@ -1,6 +1,6 @@
 ---
 title: Contributor Dev Container
-description: Multi-arch Linux contributor image with Bazel, Node 22, Python 3.12, and Grok Build — host LLM via host.docker.internal, not host networking.
+description: Multi-arch Linux contributor image with Bazel, Node 22, Python 3.12, and Grok Build - host LLM via host.docker.internal, not host networking.
 tags: [contributing, devcontainer, docker, grok]
 ---
 
@@ -10,8 +10,8 @@ tags: [contributing, devcontainer, docker, grok]
 
 - **Reopen in Container** on macOS, Windows (WSL2), Linux, and DGX Spark
 - **What is baked** vs post-create vs the Docker-outside-of-Docker Feature
-- **Grok Build** in the image — device-code or `XAI_API_KEY`, optional host LLM
-- **Sandbox** — no host netns; Grok denies the Docker socket
+- **Grok Build** in the image - device-code or `XAI_API_KEY`, optional host LLM
+- **Sandbox** - no host netns; Grok denies the Docker socket
 - **Pin bumps** and the GHCR cache tag
 
 **What this enables**
@@ -20,7 +20,7 @@ tags: [contributing, devcontainer, docker, grok]
 - **Rebuilding** cheaply when only one CLI pin changes (layer order + BuildKit cache + GHCR)
 - **Calling** a host Ollama / LM Studio / llama.cpp server without `--network=host`
 
-**Who this is for:** contributors and agents using VS Code / Cursor Dev Containers. Studio operators on the Spark stay on [Set up this computer](../start/this-computer.md) — this image is not the Comfy GPU image.
+**Who this is for:** contributors and agents using VS Code / Cursor Dev Containers. Studio operators on the Spark stay on [Set up this computer](../start/this-computer.md) - this image is not the Comfy GPU image.
 
 The container OS is always **Linux** (`linux/amd64` or `linux/arm64`). Windows and macOS hosts run that Linux image through Docker Desktop, OrbStack, Colima, or Engine 20.10+.
 
@@ -39,7 +39,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 
 1. Install Docker Desktop (Mac/Windows) or Docker Engine 20.10+ (Linux / Spark).
 2. Open the **repo root** in VS Code or Cursor.
-3. Command Palette → **Dev Containers: Reopen in Container**.
+3. Command Palette -> **Dev Containers: Reopen in Container**.
 
 First create installs `tests/requirements.txt` into `~/.venv` and prewarms `bazelisk` / `grok`. Named volumes keep Bazel and pip caches across rebuilds.
 
@@ -54,13 +54,13 @@ Then: `bazelisk run //:validate`.
 | Image (apt) | Ubuntu 24.04, Python 3.12, bubblewrap, shellcheck | Rarely |
 | Image (Node) | Official Node 22 tarball | `NODE_VERSION` / SHA256 |
 | Image (CLIs) | bazelisk, buildifier, shfmt | those pins |
-| Image (Grok) | Grok Build binary (~170 MiB) | `GROK_VERSION` |
+| Image (Grok) | Grok Build binary (~170 MiB) | `GROK_VERSION` |
 | Image (config) | `/etc/grok/managed_config.toml`, `~/.grok/sandbox.toml` | grok config files |
 | Feature | docker-outside-of-docker `1.10.1` (host `docker.sock` + GID) | Feature pin |
 | post-create | `~/.venv` from `tests/requirements.txt` | requirements / recreate |
 | Opt-in | `docs-site npm ci` | `DEVCONTAINER_INSTALL_DOCS_SITE=1` |
 
-Pins: `.devcontainer/tool-versions.env`. Dockerfile `ARG` defaults must match (BATS). Do **not** `COPY` that env file before apt — it would bust the package layer.
+Pins: `.devcontainer/tool-versions.env`. Dockerfile `ARG` defaults must match (BATS). Do **not** `COPY` that env file before apt - it would bust the package layer.
 
 Docs site: `./docs/setup-docs.sh` (or set `DEVCONTAINER_INSTALL_DOCS_SITE=1` on create). Skipping default `npm ci` keeps create light.
 
@@ -117,7 +117,7 @@ Default model stays the xAI catalog so a machine without a local LLM still works
 | `shell_environment_policy inherit = "core"` | Child bash does not inherit `XAI_API_KEY` |
 | bubblewrap | Required for Grok `deny` lists on Linux |
 
-The Docker-outside-of-Docker Feature still mounts the host socket so **you** can run Compose from the terminal. Grok’s sandbox denies that socket so the **agent** cannot `docker run --privileged`.
+The Docker-outside-of-Docker Feature still mounts the host socket so **you** can run Compose from the terminal. Grok's sandbox denies that socket so the **agent** cannot `docker run --privileged`.
 
 ---
 
@@ -139,4 +139,4 @@ The Docker-outside-of-Docker Feature still mounts the host socket so **you** can
 | Slow create | `docs-site npm ci` running | Leave `DEVCONTAINER_INSTALL_DOCS_SITE` unset; use `./docs/setup-docs.sh` when you need the docs app |
 | GHCR cache miss | Image not published yet | First merge to `development` publishes `ez-comfy-devcontainer:development`; local Dockerfile still builds |
 
-Related: [Building with Bazel](building-with-bazel.md) · [Contributing](contributing.md) · [Host and Docker](../operate/troubleshooting-host-docker.md)
+Related: [Building with Bazel](building-with-bazel.md) - [Contributing](contributing.md) - [Host and Docker](../operate/troubleshooting-host-docker.md)

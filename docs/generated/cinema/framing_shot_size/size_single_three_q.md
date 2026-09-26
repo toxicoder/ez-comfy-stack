@@ -1,6 +1,6 @@
 ---
 title: "Three-Quarter Single"
-description: "Cinema Rack illustration — Three-Quarter Single."
+description: "Cinema Rack illustration - Three-Quarter Single."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

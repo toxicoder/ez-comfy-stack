@@ -26,21 +26,21 @@ tags: [comfyui, klein, wan, ltx, dgx-spark, docker]
   <Card title="New to the studio">
     ---
 
-    What ComfyUI, Klein, Wan, LTX, latents, and Queue mean — then a glossary dialog on dotted terms.
+    What ComfyUI, Klein, Wan, LTX, latents, and Queue mean - then a glossary dialog on dotted terms.
 
     [How the studio works](learn/index.md)
   </Card>
   <Card title="First install">
     ---
 
-    Clone → setup → doctor → download → start (type **yes**) → Queue a still → stop.
+    Clone -> setup -> doctor -> download -> start (type **yes**) -> Queue a still -> stop.
 
     [Getting Started](getting-started.md)
   </Card>
   <Card title="Make something">
     ---
 
-    Still → silent 5 s → AV 8 s, or pick a thumbnail / GIF / 90s film from the catalog.
+    Still -> silent 5 s -> AV 8 s, or pick a thumbnail / GIF / 90s film from the catalog.
 
     [Still to motion to AV](visual-generative-ai.md)
   </Card>
@@ -60,7 +60,7 @@ tags: [comfyui, klein, wan, ltx, dgx-spark, docker]
   </Card>
 </Cards>
 
-Also: [Architecture](learn/architecture.md) · [FAQ](start/faq.md) · [When to use vs spark-lab](start/when-to-use-vs-spark-lab.md). Contributors: [Conventions](project-conventions.md). Licenses before a 30 GB pull: [Model licenses](licenses.md).
+Also: [Architecture](learn/architecture.md) - [FAQ](start/faq.md) - [When to use vs spark-lab](start/when-to-use-vs-spark-lab.md). Contributors: [Conventions](project-conventions.md). Licenses before a 30 GB pull: [Model licenses](licenses.md).
 
 ---
 
@@ -68,7 +68,7 @@ Also: [Architecture](learn/architecture.md) · [FAQ](start/faq.md) · [When to u
 
 This is a **sample / demo** repository for **Visual Generative AI** on a **single NVIDIA DGX Spark (GB10)**. It is deliberately smaller than [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab): Docker Compose instead of K3s, one unified profile instead of a full lab.
 
-Long-term multi-workload operations should use the full lab project. Use **ez-comfy-stack** when you want faster experimentation — [when to use vs spark-lab](start/when-to-use-vs-spark-lab.md).
+Long-term multi-workload operations should use the full lab project. Use **ez-comfy-stack** when you want faster experimentation - [when to use vs spark-lab](start/when-to-use-vs-spark-lab.md).
 
 ```mermaid
 flowchart TB
@@ -98,10 +98,10 @@ flowchart TB
 | Item | Value |
 | --- | --- |
 | Runtime | ComfyUI (Docker) |
-| Pipeline | **studio** — Klein 4B still → Wan 2.2 5 s silent → LTX-2.5 AV ([licenses](licenses.md)) |
-| Image tier | **fast** — FLUX.2 Klein 4B distilled FP8 (Apache) |
-| Wan tier | **5b** — Wan 2.2 TI2V-5B (Apache, silent) |
-| LTX tier | **2.5** — LTX-2.5 distilled INT8-convrot (Community License, gated) |
+| Pipeline | **studio** - Klein 4B still -> Wan 2.2 5 s silent -> LTX-2.5 AV ([licenses](licenses.md)) |
+| Image tier | **fast** - FLUX.2 Klein 4B distilled FP8 (Apache) |
+| Wan tier | **5b** - Wan 2.2 TI2V-5B (Apache, silent) |
+| LTX tier | **2.5** - LTX-2.5 distilled INT8-convrot (Community License, gated) |
 | Models | host `${MODELS_DIR}` (default `/mnt/models`) |
 | Outputs | host `${COMFY_OUTPUT_DIR}` (default `/mnt/comfy-output`) |
 | UI | port **`${COMFY_PORT}`** (default **8188**) |
@@ -132,7 +132,7 @@ flowchart LR
   S4 --> Safe["SSH stays usable"]
 ```
 
-Why those exist: [Hardware, memory, and safety](learn/hardware.md). Operator details: [Reboot safety](reboot-safety.md) · [Download limit](download-limit.md).
+Why those exist: [Hardware, memory, and safety](learn/hardware.md). Operator details: [Reboot safety](reboot-safety.md) - [Download limit](download-limit.md).
 
 ---
 
@@ -146,21 +146,21 @@ flowchart TB
   Home --> Operate["Operate"]
   Home --> Ref["Reference"]
   Home --> Contribute["Contribute"]
-  Learn --> L1["syllabus · ComfyUI · pipeline · occupancy idea · glossary"]
-  Start --> S1["Getting Started · licenses · FAQ"]
-  Studio --> C1["still → motion → AV · catalogs · playbooks"]
-  Operate --> O1["daily loop · occupancy desk · troubleshooting"]
-  Ref --> R1["manage.sh · occupancy matrix · node encyclopedia"]
-  Contribute --> N1["conventions · docs-style · tests"]
+  Learn --> L1["syllabus - ComfyUI - pipeline - occupancy idea - glossary"]
+  Start --> S1["Getting Started - licenses - FAQ"]
+  Studio --> C1["still -> motion -> AV - catalogs - playbooks"]
+  Operate --> O1["daily loop - occupancy desk - troubleshooting"]
+  Ref --> R1["manage.sh - occupancy matrix - node encyclopedia"]
+  Contribute --> N1["conventions - docs-style - tests"]
 ```
 
 | When | Read |
 | --- | --- |
-| **What is this?** | [How the studio works](learn/index.md) · [Glossary](glossary.md) |
+| **What is this?** | [How the studio works](learn/index.md) - [Glossary](glossary.md) |
 | **This repo or the lab?** | [When to use vs spark-lab](start/when-to-use-vs-spark-lab.md) |
-| **First run** | [Getting Started](getting-started.md) · [FAQ](start/faq.md) |
+| **First run** | [Getting Started](getting-started.md) - [FAQ](start/faq.md) |
 | **Licenses before a 30 GB pull** | [Model licenses](licenses.md) |
-| **Still → silent 5 s → AV 8 s** | [Still to motion to AV](visual-generative-ai.md) |
+| **Still -> silent 5 s -> AV 8 s** | [Still to motion to AV](visual-generative-ai.md) |
 | **Something broke** | [Troubleshooting](troubleshooting.md) |
-| **Exact CLI / widgets** | [manage.sh reference](manage-cli.md) · [Workflow details](create/workflows-index.md) |
+| **Exact CLI / widgets** | [manage.sh reference](manage-cli.md) - [Workflow details](create/workflows-index.md) |
 | **Contributing** | [Conventions](project-conventions.md) |

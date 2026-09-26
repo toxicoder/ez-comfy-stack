@@ -1,16 +1,16 @@
 ---
-title: Troubleshooting — docs site
+title: Troubleshooting - docs site
 description: Fix docs copy-paste that still shows session-variable chips instead of Your Spark values.
 tags: [troubleshooting, docs, session-variables]
 ---
 
-# Troubleshooting — docs site
+# Troubleshooting - docs site
 
 **What's on this page**
 
 - **Session chips** still showing `${SPARK_HOST}` / `${MODELS_DIR}`
 - **Hard-refresh** when docs JS or a cached command-vars / table-chrome bundle is blocked
-- **Table chrome** — pinned header or on-screen horizontal scrollbar missing on a wide table, or still stuck after the table has scrolled past
+- **Table chrome** - pinned header or on-screen horizontal scrollbar missing on a wide table, or still stuck after the table has scrolled past
 
 **What this enables**
 
@@ -18,15 +18,15 @@ tags: [troubleshooting, docs, session-variables]
 - **Editing** the same session fields as **Your Spark** (this browser only)
 
 <Callout type="info" title="Not a Spark failure">
-  Highlighted chips (dotted underline) are the same session fields as **Your Spark** — click to edit. Values stay in this browser only. Stack issues: [Troubleshooting](../troubleshooting.md).
+  Highlighted chips (dotted underline) are the same session fields as **Your Spark** - click to edit. Values stay in this browser only. Stack issues: [Troubleshooting](../troubleshooting.md).
 </Callout>
 
 ## Docs site
 
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
-| Copy still shows `${SPARK_HOST}` / `${MODELS_DIR}` | Docs JS blocked, or a hard-cached command-vars bundle | Hard-refresh the docs tab. Highlighted chips (dotted underline) are the same session fields as **Your Spark** — click to edit. Not a Spark/`doctor` failure. Values stay in this browser only |
+| Copy still shows `${SPARK_HOST}` / `${MODELS_DIR}` | Docs JS blocked, or a hard-cached command-vars bundle | Hard-refresh the docs tab. Highlighted chips (dotted underline) are the same session fields as **Your Spark** - click to edit. Not a Spark/`doctor` failure. Values stay in this browser only |
 | Wide table has no on-screen horizontal bar, or the pinned header does not pan with columns | Docs JS blocked, or a hard-cached table-chrome bundle | Hard-refresh the docs tab. `.ez-table-hscroll` is a `table-chrome.tsx` mirror of the wrap `scrollLeft` (native bar sits at the table bottom). Not a Spark/`doctor` failure |
 | Pinned table header or bottom scrollbar stays after the table has scrolled past | Stale table-chrome bundle (pin must hide once the table leaves the viewport) | Hard-refresh the docs tab. `.ez-table-pin` and `.ez-table-hscroll` release when the table is fully above the navbar. Not a Spark/`doctor` failure |
 | Docs CI `docs-and-render` dies with `JavaScript heap out of memory` / exit 134 during `Creating an optimized production build` | Webpack compiled every markdown page (`fumadocs-mdx/macro`). A 6 GB heap plus Bazel SIGKILLs the 7 GB runner (exit 143) | Keep `dynamic: true` on the Fumadocs collection in `docs-site/source.config.ts`, `next build --webpack`, `enablePrerenderSourceMaps: false`, and `NODE_OPTIONS=--max-old-space-size=5120` after `bazelisk shutdown`. Do not raise the heap to 6144 |
-| Search opens and every query says no results on the published site | The browser asked the host root for `/api/search`. The index is under the alias (`/ez-comfy-stack/development/api/search` or `/latest/…`) | Hard-refresh the docs tab. A local `next dev` preview uses `/api/search` and is a different build |
+| Search opens and every query says no results on the published site | The browser asked the host root for `/api/search`. The index is under the alias (`/ez-comfy-stack/development/api/search` or `/latest/...`) | Hard-refresh the docs tab. A local `next dev` preview uses `/api/search` and is a different build |

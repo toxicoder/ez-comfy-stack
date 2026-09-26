@@ -1,6 +1,6 @@
 ---
 title: "Crane kiss"
-description: "Cinema Rack illustration — Crane kiss."
+description: "Cinema Rack illustration - Crane kiss."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

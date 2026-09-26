@@ -1,6 +1,6 @@
 ---
 title: "Headless Torso"
-description: "Cinema Rack illustration — Headless Torso."
+description: "Cinema Rack illustration - Headless Torso."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

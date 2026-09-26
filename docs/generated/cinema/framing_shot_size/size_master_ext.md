@@ -1,6 +1,6 @@
 ---
 title: "Exterior Master"
-description: "Cinema Rack illustration — Exterior Master."
+description: "Cinema Rack illustration - Exterior Master."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

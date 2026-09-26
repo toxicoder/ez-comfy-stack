@@ -93,7 +93,7 @@ def _cross(a: Vec3, b: Vec3) -> Vec3:
         b: Right operand.
 
     Returns:
-        ``a × b``.
+        ``a x b``.
     """
     return (
         a[1] * b[2] - a[2] * b[1],

@@ -48,12 +48,12 @@ COVER_PODCAST = "stills/podcast-cover.json"
 
 DRAFT_NOTE = f"""## audio/music/rap-draft
 
-US-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-Step 1.5 turbo AIO. Sequential Queue — do not load Klein + Wan + LTX + ACE-Step together.
+US-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-Step 1.5 turbo AIO. Sequential Queue - do not load Klein + Wan + LTX + ACE-Step together.
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.
 3. **Rap lyrics** owns the bars; ACE-Step Prompt Enhance owns tags. Lyrics are wired into ACE. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.
-4. Original lyrics only. No “in the style of <living artist>”. No living-MC names. No famous-hook paraphrases.
+4. Original lyrics only. No "in the style of <living artist>". No living-MC names. No famous-hook paraphrases.
 5. ACE-Step vocal is an **invented** identity, not a cloned MC.
 6. Sampler: 8 steps, cfg 1, euler, simple. Duration {demo_draft_seconds()} s, bpm 88, language en, timesignature 4, key C minor, generate_audio_codes true. Form is a cold open (verse, lift, hook). Album takes use the full form catalog.
 7. Saves: `ez_rap_draft` FLAC master + 320 kbps MP3 under `${{COMFY_OUTPUT_DIR}}`.
@@ -62,7 +62,7 @@ US-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-
 
 Beat-only pass: keep boom-bap tags, append instrumental, no vocals, and replace lyrics with [inst].
 
-Canned style swaps (tags widget only — not extra files):
+Canned style swaps (tags widget only - not extra files):
 - trap: {TRAP_TAGS}
 - lo-fi: {LOFI_TAGS}
 """
@@ -74,7 +74,7 @@ US-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1,
 1. Queue **audio/music/rap-draft** first. Then this graph.
 2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).
 3. Prompt enhance is **off** so the canned bars stay as written. Turn Enhance on only if you want the 4B rewriter. Edit **Rap lyrics** before Queue (wired into ACE). Human rewrite required before any release.
-4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No “in the style of <living artist>”.
+4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No "in the style of <living artist>".
 5. ACE-Step vocal is an invented timbre, not a clone.
 6. Saves: `ez_rap_full` FLAC + 320 kbps MP3.
 7. Cover: sequential Queue **{COVER_THUMB}** / **{COVER_PODCAST}**. Do not embed Klein.
@@ -293,12 +293,12 @@ def _diss_note(ex: DissExample) -> str:
     kind = "progress" if ex["series"] in {"progress", "progress-club"} else "diss"
     return f"""## {ex["stem"]}
 
-US-safe rap **{duration_s} s {kind}** take: **{ex["title"]}**. {_diss_cast(ex)}. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** — draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
+US-safe rap **{duration_s} s {kind}** take: **{ex["title"]}**. {_diss_cast(ex)}. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** - draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.
 3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.
-4. Original lyrics only. No “in the style of <living artist>”. No living-MC names. No famous-hook paraphrases.
+4. Original lyrics only. No "in the style of <living artist>". No living-MC names. No famous-hook paraphrases.
 5. ACE-Step vocal is an **invented** identity, not a cloned MC.
 6. Sampler: 8 steps, cfg 1, euler, simple. Duration {duration_s} s, bpm {ex["bpm"]}, language en, timesignature {ex["meter"]}, key {ex["keyscale"]}, form {ex["form_id"]}, generate_audio_codes true. Seed {ex["seed"]}.
 7. Saves: `{ex["prefix"]}` FLAC master + 320 kbps MP3 under `${{COMFY_OUTPUT_DIR}}`.
@@ -316,7 +316,7 @@ def _edm_note(ex: EdmExample) -> str:
     if treat:
         score_blurb = (
             "Live bass-set take. Short build, then the drop. Later stanzas "
-            "switch layers instead of riding one loop. One 1–2 word DJ chop "
+            "switch layers instead of riding one loop. One 1-2 word DJ chop "
             "in a single `[chorus]` block; bed and drops stay empty-body "
             "markers. No brass and no high leads. Not a rap verse."
         )
@@ -338,17 +338,17 @@ def _edm_note(ex: EdmExample) -> str:
         mode_blurb = (
             "Keep App **Vocal / instrumental** on instrumental so ACE does "
             "not sing. Encoder language is `unknown`. Free-text lines under "
-            "a marker are lyrics — keep cues inside the brackets."
+            "a marker are lyrics - keep cues inside the brackets."
         )
         labels_blurb = "`[drop]` / `[inst]` / `[outro]`"
     return f"""## {ex["stem"]}
 
-US-safe EDM **{duration_s} s** take: **{ex["title"]}**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. {score_blurb} Queue this graph **on its own** — draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
+US-safe EDM **{duration_s} s** take: **{ex["title"]}**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. {score_blurb} Queue this graph **on its own** - draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and {labels_blurb} stay as written. Turn Enhance on only if you want the 4B rewriter.
 3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. {mode_blurb}
-4. Original arrangements only. No “in the style of <living artist>”. No living-DJ names. No famous-hook paraphrases.
+4. Original arrangements only. No "in the style of <living artist>". No living-DJ names. No famous-hook paraphrases.
 5. ACE-Step timbre is **invented**, not a cloned act.
 6. Sampler: 8 steps, cfg 1, euler, simple. Duration {duration_s} s, bpm {ex["bpm"]}, language {"en" if treat else "unknown"}, timesignature {ex["meter"]}, key {ex["keyscale"]}, form {ex["form_id"]}, generate_audio_codes true. Seed {ex["seed"]}.
 7. Saves: `{ex["prefix"]}` FLAC master + 320 kbps MP3 under `${{COMFY_OUTPUT_DIR}}`.
@@ -748,15 +748,15 @@ def _node(graph: dict, ntype: str) -> dict:
 
 
 def build_cover(info: AlbumInfo) -> dict:
-    """Klein 1024×1024 square still for one album cover."""
+    """Klein 1024x1024 square still for one album cover."""
     graph = json.loads(lab_json("stills/instagram-square").read_text(encoding="utf-8"))
     rel = album_rel(info["artist_slug"], info["slug"], "cover")
     apply_lab_identity(graph, rel)
     prefix = f"albums/{info['artist']}/{info['title']}/cover"
     prompt = info["cover_prompt"]
     note = (
-        f"## {rel}\n\nAlbum cover for **{info['artist']} — {info['title']}**. "
-        "Occupancy klein — stop ACE-Step / Wan / LTX. Queue this before "
+        f"## {rel}\n\nAlbum cover for **{info['artist']} - {info['title']}**. "
+        "Occupancy klein - stop ACE-Step / Wan / LTX. Queue this before "
         f"album-render --art generate. Prefix `{prefix}`.\n"
     )
     for node in graph["nodes"]:

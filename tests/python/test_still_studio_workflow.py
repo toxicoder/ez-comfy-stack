@@ -71,7 +71,7 @@ def test_still_studio_format_wires_latent_hint_prefix_context() -> None:
     assert _src(graph, enh, "context")["id"] == fmt["id"]
     assert _src(graph, save, "filename_prefix")["id"] == fmt["id"]
     values = list(fmt.get("widgets_values") or [])
-    assert values[0] == "16:9 LTX feeder (1280×704)"
+    assert values[0] == "16:9 LTX feeder (1280x704)"
     assert values[1] == "none"
     assert values[2] == 1280
     assert values[3] == 704

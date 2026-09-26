@@ -551,7 +551,7 @@
         "pingpong": true,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 14,
@@ -573,7 +573,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## creator/silent/spotify-canvas\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nSilent Spotify Canvas rebound 9:16. Lab size **480\u00d7832**. Prefix `ez_spot_canvas`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nSpotify Canvas is silent 9:16, 3\u20138 s, MP4 or JPG. Scale in an editor if the current Canvas pixel range rejects this height.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
+        "## creator/silent/spotify-canvas\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nSilent Spotify Canvas rebound 9:16. Lab size **480x832**. Prefix `ez_spot_canvas`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: wan - stop LTX, podcast, music. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) - open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nSpotify Canvas is silent 9:16, 3-8 s, MP4 or JPG. Scale in an editor if the current Canvas pixel range rejects this height.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
       ],
       "title": "Operator note"
     },
@@ -745,7 +745,7 @@
       },
       "widgets_values": [
         "Wan 5B",
-        "Wan \u00b7 9:16 Shorts (480\u00d7832)",
+        "Wan - 9:16 Shorts (480x832)",
         480,
         832,
         "Match input",
@@ -1095,7 +1095,7 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## creator/silent/spotify-canvas\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nSilent Spotify Canvas rebound 9:16. Lab size **480\u00d7832**. Prefix `ez_spot_canvas`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nSpotify Canvas is silent 9:16, 3\u20138 s, MP4 or JPG. Scale in an editor if the current Canvas pixel range rejects this height.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "lab_note": "## creator/silent/spotify-canvas\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nSilent Spotify Canvas rebound 9:16. Lab size **480x832**. Prefix `ez_spot_canvas`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: wan - stop LTX, podcast, music. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) - open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nSpotify Canvas is silent 9:16, 3-8 s, MP4 or JPG. Scale in an editor if the current Canvas pixel range rejects this height.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_profile": "creator/silent/spotify-canvas",
     "lab_description": "Silent Spotify Canvas rebound 9:16\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "ds": {
@@ -1139,7 +1139,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
           }
         ],
         [
@@ -1163,7 +1163,7 @@
           18,
           "format",
           {
-            "description": "Aspect or named platform job. Sets clip width and height on the Wan \u00f716 or LTX \u00f732 grid. Custom uses Width \u00d7 Height. Length stays on the latent node.",
+            "description": "Aspect or named platform job. Sets clip width and height on the Wan div16 or LTX div32 grid. Custom uses Width x Height. Length stays on the latent node.",
             "label": "Format / platform"
           }
         ],

@@ -220,7 +220,7 @@ FROZEN_MANAGE_VERBS=(
   # cmd_setup uses global REPO_ROOT; override for this test
   REPO_ROOT="${fake_root}"
   export REPO_ROOT
-  # lab_compose_file will miss compose — doctor will fail compose check.
+  # lab_compose_file will miss compose - doctor will fail compose check.
   # Provide minimal compose path structure for doctor.
   mkdir -p "${fake_root}/docker"
   echo 'services: {}' >"${fake_root}/docker/docker-compose.yml"
@@ -451,7 +451,7 @@ FROZEN_MANAGE_VERBS=(
   [[ -z ${tgt} || ${tgt} != /* ]]
   tgt="$(readlink "${MODELS_DIR}/comfy/onnx/kokoro-v1.0.onnx" || true)"
   [[ -z ${tgt} || ${tgt} != /* ]]
-  # Wipe comfy links only — cache hit + link_into_comfy should restore
+  # Wipe comfy links only - cache hit + link_into_comfy should restore
   rm -f "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors"
   run cmd_download_models
   [ "${status}" -eq 0 ]

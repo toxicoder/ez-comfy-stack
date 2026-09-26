@@ -41,7 +41,7 @@ export_otio() {
   }
   dest="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/films/${slug}"
   if [[ ! -f ${dest}/state.json ]]; then
-    err "missing jobstore ${dest}/state.json — compile-film / print-shot first"
+    err "missing jobstore ${dest}/state.json - compile-film / print-shot first"
     return 1
   fi
   PYTHONPATH="${REPO_ROOT}/custom_nodes${PYTHONPATH:+:${PYTHONPATH}}" \

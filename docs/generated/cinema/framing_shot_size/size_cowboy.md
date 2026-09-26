@@ -1,6 +1,6 @@
 ---
 title: "Cowboy"
-description: "Cinema Rack illustration — Cowboy."
+description: "Cinema Rack illustration - Cowboy."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

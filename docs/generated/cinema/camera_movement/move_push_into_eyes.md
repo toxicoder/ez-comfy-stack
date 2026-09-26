@@ -1,6 +1,6 @@
 ---
 title: "Push into eyes"
-description: "Cinema Rack illustration — Push into eyes."
+description: "Cinema Rack illustration - Push into eyes."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

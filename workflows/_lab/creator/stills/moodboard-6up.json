@@ -312,7 +312,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## creator/stills/moodboard-6up\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nSix-still moodboard of one identity. Lab size **768\u00d7432**. Prefix `ez_mood_c01`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPack prefixes: `ez_mood_c01`, `ez_mood_c02`, `ez_mood_c03`, `ez_mood_c04`, `ez_mood_c05`, `ez_mood_c06`.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## creator/stills/moodboard-6up\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nSix-still moodboard of one identity. Lab size **768x432**. Prefix `ez_mood_c01`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPack prefixes: `ez_mood_c01`, `ez_mood_c02`, `ez_mood_c03`, `ez_mood_c04`, `ez_mood_c05`, `ez_mood_c06`.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     },
@@ -1779,7 +1779,7 @@
         "Node name for S&R": "EZImageFormat"
       },
       "widgets_values": [
-        "16:9 draft (768\u00d7432)",
+        "16:9 draft (768x432)",
         "none",
         768,
         432,
@@ -3476,7 +3476,7 @@
   "config": {},
   "extra": {
     "lab_profile": "creator/stills/moodboard-6up",
-    "lab_note": "## creator/stills/moodboard-6up\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nSix-still moodboard of one identity. Lab size **768\u00d7432**. Prefix `ez_mood_c01`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPack prefixes: `ez_mood_c01`, `ez_mood_c02`, `ez_mood_c03`, `ez_mood_c04`, `ez_mood_c05`, `ez_mood_c06`.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## creator/stills/moodboard-6up\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nSix-still moodboard of one identity. Lab size **768x432**. Prefix `ez_mood_c01`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPack prefixes: `ez_mood_c01`, `ez_mood_c02`, `ez_mood_c03`, `ez_mood_c04`, `ez_mood_c05`, `ez_mood_c06`.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_description": "Six-still moodboard of one identity",
     "lab_rel": "creator/stills/moodboard-6up",
     "workflowRendererVersion": "Vue-corrected",
@@ -3496,7 +3496,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
           }
         ],
         [
@@ -3520,7 +3520,7 @@
           47,
           "format",
           {
-            "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width \u00d7 Height (\u00f716).",
+            "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (div16).",
             "label": "Format / platform"
           }
         ],
@@ -3536,7 +3536,7 @@
           48,
           "upscale",
           {
-            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840\u00d72160 box (portrait 2160\u00d73840).",
+            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840x2160 box (portrait 2160x3840).",
             "label": "Upscale"
           }
         ],
@@ -3544,7 +3544,7 @@
           4,
           "style",
           {
-            "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
+            "description": "Optional look. Hidden on I2V - the start image owns look.",
             "label": "Style"
           }
         ],

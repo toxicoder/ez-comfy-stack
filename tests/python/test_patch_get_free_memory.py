@@ -41,7 +41,7 @@ def test_apply_primary_pattern(tmp_path: Path, capsys: pytest.CaptureFixture[str
     assert patch_mod.MARKER in text
     assert "psutil" in text
     assert "applied" in capsys.readouterr().out
-    # Indent preserved (4 spaces) — single-line replacement
+    # Indent preserved (4 spaces) - single-line replacement
     assert re.search(r"^    mem_free_cuda, _ = \(__import__\('psutil'\)", text, re.M)
     compile(text, str(target), "exec")
 
@@ -116,8 +116,8 @@ def test_repairs_broken_multiline_patch(tmp_path: Path, capsys: pytest.CaptureFi
         "    return mem_free_cuda\n"
     )
     target.write_text(broken, encoding="utf-8")
-    assert not patch_mod._compiles(broken)  # noqa: SLF001 — intentional unit access
-    # Without git: strip marker lines then re-apply needs clean pattern — after strip
+    assert not patch_mod._compiles(broken)  # noqa: SLF001 - intentional unit access
+    # Without git: strip marker lines then re-apply needs clean pattern - after strip
     # the mem_get_info line is gone, so repair strips and may only leave broken structure.
     # Provide a recoverable shape: marker lines + original pattern still present below
     recoverable = (
@@ -280,7 +280,7 @@ def test_already_applied_after_repair_with_write(
         f"    mem_free_cuda, _ = (1, 0)  # {patch_mod.MARKER}\n"
         "    return mem_free_cuda\n"
     )
-    # MARKER present but invalid syntax → repair path
+    # MARKER present but invalid syntax -> repair path
     target.write_text(
         f"not valid python (((  # {patch_mod.MARKER}\n",
         encoding="utf-8",

@@ -354,7 +354,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## stills/text-swap\n\nKlein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or \"Replace SALE with OPEN\"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height when Upscale is none (snapped to the Flux.2 \u00f716 grid for denoise, then scaled back). 2x, 4x, and 4K lanczos-resize that saved PNG. Prefix `ez_text_swap`.\n\nDo not Queue without a start image. Short high-contrast lettering holds best. For tiny or dense type, set Quality **High** (Klein base if `download-image --tier base` is on disk). Distilled 4B is best-effort, not a typesetter.\n\nType only the new lettering (HELLO) or a targeting line (Replace SALE with OPEN). The graph always wraps that into a glyph-lock instruction, even when Rewrite prompt is off.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Style is hidden \u2014 the source still owns look.\n"
+        "## stills/text-swap\n\nKlein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or \"Replace SALE with OPEN\"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height when Upscale is none (snapped to the Flux.2 div16 grid for denoise, then scaled back). 2x, 4x, and 4K lanczos-resize that saved PNG. Prefix `ez_text_swap`.\n\nDo not Queue without a start image. Short high-contrast lettering holds best. For tiny or dense type, set Quality **High** (Klein base if `download-image --tier base` is on disk). Distilled 4B is best-effort, not a typesetter.\n\nType only the new lettering (HELLO) or a targeting line (Replace SALE with OPEN). The graph always wraps that into a glyph-lock instruction, even when Rewrite prompt is off.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Style is hidden - the source still owns look.\n"
       ],
       "title": "Operator note"
     },
@@ -1090,7 +1090,7 @@
         0
       ]
     },
-    "lab_note": "## stills/text-swap\n\nKlein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or \"Replace SALE with OPEN\"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height when Upscale is none (snapped to the Flux.2 \u00f716 grid for denoise, then scaled back). 2x, 4x, and 4K lanczos-resize that saved PNG. Prefix `ez_text_swap`.\n\nDo not Queue without a start image. Short high-contrast lettering holds best. For tiny or dense type, set Quality **High** (Klein base if `download-image --tier base` is on disk). Distilled 4B is best-effort, not a typesetter.\n\nType only the new lettering (HELLO) or a targeting line (Replace SALE with OPEN). The graph always wraps that into a glyph-lock instruction, even when Rewrite prompt is off.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Style is hidden \u2014 the source still owns look.\n",
+    "lab_note": "## stills/text-swap\n\nKlein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or \"Replace SALE with OPEN\"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height when Upscale is none (snapped to the Flux.2 div16 grid for denoise, then scaled back). 2x, 4x, and 4K lanczos-resize that saved PNG. Prefix `ez_text_swap`.\n\nDo not Queue without a start image. Short high-contrast lettering holds best. For tiny or dense type, set Quality **High** (Klein base if `download-image --tier base` is on disk). Distilled 4B is best-effort, not a typesetter.\n\nType only the new lettering (HELLO) or a targeting line (Replace SALE with OPEN). The graph always wraps that into a glyph-lock instruction, even when Rewrite prompt is off.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Style is hidden - the source still owns look.\n",
     "lab_description": "Klein 4B lettering swap. LoadImage source still. Snap + ReferenceLatent. Output matches source size. Prefix ez_text_swap.",
     "lab_app_mode": {
       "enabled": true,
@@ -1118,7 +1118,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
           }
         ],
         [
@@ -1142,7 +1142,7 @@
           22,
           "upscale",
           {
-            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840\u00d72160 box (portrait 2160\u00d73840).",
+            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840x2160 box (portrait 2160x3840).",
             "label": "Upscale"
           }
         ],

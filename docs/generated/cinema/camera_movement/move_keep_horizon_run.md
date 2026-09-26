@@ -1,6 +1,6 @@
 ---
 title: "Horizon-locked run"
-description: "Cinema Rack illustration — Horizon-locked run."
+description: "Cinema Rack illustration - Horizon-locked run."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

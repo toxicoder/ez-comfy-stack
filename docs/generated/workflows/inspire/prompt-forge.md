@@ -29,9 +29,9 @@ Occupancy **llm**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 ```text
 ## inspire/prompt-forge
 
-Prompt Forge — rewrite a lazy sentence for every US-safe CLIP family. No UNET, no VAE, no KSampler.
+Prompt Forge - rewrite a lazy sentence for every US-safe CLIP family. No UNET, no VAE, no KSampler.
 
-Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
+Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
   ./scripts/manage.sh occupancy enter llm-desk --yes
 
@@ -44,7 +44,7 @@ Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to
 5. Copy the family you need into **stills/still-draft** (Spark Still) or an opt-in graph.
 
 Turn Enhance off to pin the widget text. Context is ignored when Enhance is off.
-Z-Image Turbo ignores a separate negative — exclusions stay in the positive.
+Z-Image Turbo ignores a separate negative - exclusions stay in the positive.
 Wan S2V: wav owns lip-sync. DreamX: first frame owns look; paragraph is AV.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 ```
@@ -104,9 +104,9 @@ flowchart LR
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
 
-### `Note` — Note
+### `Note` - Note
 
 On-canvas operator note (not executed).
 
@@ -122,14 +122,14 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## inspire/prompt-forge Prompt Forge — rewrite a lazy sentence for every US-safe CLIP family. No UNET, no VAE, no KSampler. Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B: ./scripts/ma…`
+**This graph:** `## inspire/prompt-forge Prompt Forge - rewrite a lazy sentence for every US-safe CLIP family. No UNET, no VAE, no KSampler. Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B: ./scripts/ma...`
 
 ```text
 ## inspire/prompt-forge
 
-Prompt Forge — rewrite a lazy sentence for every US-safe CLIP family. No UNET, no VAE, no KSampler.
+Prompt Forge - rewrite a lazy sentence for every US-safe CLIP family. No UNET, no VAE, no KSampler.
 
-Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
+Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
   ./scripts/manage.sh occupancy enter llm-desk --yes
 
@@ -142,12 +142,12 @@ Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to
 5. Copy the family you need into **stills/still-draft** (Spark Still) or an opt-in graph.
 
 Turn Enhance off to pin the widget text. Context is ignored when Enhance is off.
-Z-Image Turbo ignores a separate negative — exclusions stay in the positive.
+Z-Image Turbo ignores a separate negative - exclusions stay in the positive.
 Wan S2V: wav owns lip-sync. DreamX: first frame owns look; paragraph is AV.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 ```
 
-### `EZSamplePrompt` — Sample Prompt
+### `EZSamplePrompt` - Sample Prompt
 
 STRING source with a sample-prompt combo plus Custom textarea.
 
@@ -185,7 +185,7 @@ Catalog id (inspire/prompt-forge).
 
 **This graph:** `inspire/prompt-forge`
 
-### `PrimitiveNode` — Primitive
+### `PrimitiveNode` - Primitive
 
 A typed constant (string or float) with seed-style control.
 
@@ -224,7 +224,7 @@ Whether the primitive mutates after Queue.
 | `decrement` | Subtract 1 after Queue. |
 | `randomize` | Draw a new seed after Queue. Exploration only. |
 
-### `EZKleinPromptEnhance` — Klein Prompt Enhance
+### `EZKleinPromptEnhance` - Klein Prompt Enhance
 
 Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
 
@@ -295,9 +295,9 @@ System prompt flavor.
 
 Type `STRING`.
 
-Framing hint (YouTube 16:9 still, Instagram 4:5, …).
+Framing hint (YouTube 16:9 still, Instagram 4:5, ...).
 
-**How it affects generation:** Steers aspect language in the rewrite. Does not set the latent size — EmptyFlux2LatentImage does.
+**How it affects generation:** Steers aspect language in the rewrite. Does not set the latent size - EmptyFlux2LatentImage does.
 
 **This graph:** `YouTube 16:9 still`
 
@@ -627,7 +627,7 @@ Sample-catalog id (graph stem).
 
 **This graph:** `inspire/prompt-forge`
 
-### `EZWanPromptEnhance` — Wan Prompt Enhance
+### `EZWanPromptEnhance` - Wan Prompt Enhance
 
 Rewrite a lazy prompt for Wan 2.2 TI2V-5B (silent).
 
@@ -653,7 +653,7 @@ Type `STRING`.
 
 Lazy motion sentence.
 
-**How it affects generation:** I2V rewrites to motion + one camera only. Do not prompt audio — Wan is silent.
+**How it affects generation:** I2V rewrites to motion + one camera only. Do not prompt audio - Wan is silent.
 
 **This graph:** `A techno wizard on a sunny tropical city rooftop.`
 
@@ -693,7 +693,7 @@ Type `STRING`. Range / default: 5 seconds, 24 fps.
 
 Duration/fps hint for the rewriter.
 
-**How it affects generation:** Does not change latent length — Wan22ImageToVideoLatent does.
+**How it affects generation:** Does not change latent length - Wan22ImageToVideoLatent does.
 
 **This graph:** `5 seconds, 24 fps`
 
@@ -1023,7 +1023,7 @@ Sample-catalog id.
 
 **This graph:** `inspire/prompt-forge`
 
-### `EZLTXPromptEnhance` — LTX Prompt Enhance
+### `EZLTXPromptEnhance` - LTX Prompt Enhance
 
 Rewrite a lazy prompt for LTX-2.5 (present-tense paragraph, audio interleaved).
 
@@ -1089,7 +1089,7 @@ Type `STRING`. Range / default: 8 seconds, 24 fps.
 
 Duration hint.
 
-**How it affects generation:** Does not set 193 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
+**How it affects generation:** Does not set 193 frames - LTXVImgToVideo does. Film printers stay 5 seconds / 121.
 
 **This graph:** `5 seconds, 24 fps`
 
@@ -1429,7 +1429,7 @@ Sample-catalog id.
 
 **This graph:** `inspire/prompt-forge`
 
-### `EZZimagePromptEnhance` — Z-Image Prompt Enhance
+### `EZZimagePromptEnhance` - Z-Image Prompt Enhance
 
 Rewrite a lazy still prompt for Z-Image Turbo (Qwen3-4B chat wrap).
 
@@ -1477,7 +1477,7 @@ Run the rewriter.
 
 Type `STRING`.
 
-Framing hint (YouTube 16:9 still, …).
+Framing hint (YouTube 16:9 still, ...).
 
 **How it affects generation:** Steers aspect language. Does not set the latent size.
 
@@ -1809,7 +1809,7 @@ Sample-catalog id (graph stem).
 
 **This graph:** `inspire/prompt-forge`
 
-### `EZLongCatPromptEnhance` — LongCat Prompt Enhance
+### `EZLongCatPromptEnhance` - LongCat Prompt Enhance
 
 Rewrite a lazy prompt for LongCat-Video (T2V / I2V / continuation).
 
@@ -2207,13 +2207,13 @@ Sample-catalog id.
 
 **This graph:** `inspire/prompt-forge`
 
-### `EZDreamXPromptEnhance` — DreamX Prompt Enhance
+### `EZDreamXPromptEnhance` - DreamX Prompt Enhance
 
 Rewrite a lazy first-frame+text prompt for DreamX-Creator (UMT5, joint AV).
 
 !!! warning "Lab notes"
 
-    First frame owns look. Paragraph is visual dynamics plus interleaved acoustic events. No DreamX UNET on lab graphs — Prompt Forge preview only.
+    First frame owns look. Paragraph is visual dynamics plus interleaved acoustic events. No DreamX UNET on lab graphs - Prompt Forge preview only.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -2597,7 +2597,7 @@ Sample-catalog id.
 
 **This graph:** `inspire/prompt-forge`
 
-### `EZQuality` — Quality
+### `EZQuality` - Quality
 
 Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
@@ -2632,7 +2632,7 @@ custom freezes last overlay; lab restores graph defaults.
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
-### `EZModelCheck` — Check models
+### `EZModelCheck` - Check models
 
 Manual disk check for occupancy + Quality weights. Queue does not run this node.
 

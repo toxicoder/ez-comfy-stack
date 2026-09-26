@@ -27,7 +27,7 @@ export interface HrefTarget {
  * Drop a trailing `index` segment from link candidates.
  *
  * An `index` page is published at its directory address (see `keepAuthorSlugs` in
- * `lib/source.ts`), so a link written the MkDocs way — `[Learn the lab](learn/index.md)` —
+ * `lib/source.ts`), so a link written the MkDocs way - `[Learn the lab](learn/index.md)` -
  * names a file that is never itself a route.  Retrying with the segment removed is what
  * makes those links resolve.
  */

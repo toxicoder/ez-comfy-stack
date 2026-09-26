@@ -6,7 +6,7 @@ Background
 On Grace Blackwell GB10, CUDA memory is unified with system RAM. ComfyUI's
 ``torch.cuda.mem_get_info`` path often under-reports free "VRAM" when any other
 CUDA context holds allocations. ComfyUI then thrash-offloads models onto the
-*same* physical memory, producing extreme slowdowns (often reported as 5–15×).
+*same* physical memory, producing extreme slowdowns (often reported as 5-15x).
 
 This module rewrites the free-memory probe in ``comfy/model_management.py`` so
 it uses ``psutil.virtual_memory().available`` (host free RAM) instead of the
@@ -14,12 +14,12 @@ under-reported CUDA query.
 
 Properties
 ----------
-* **Idempotent** — a marker comment prevents double application.
-* **Indent-safe** — single-line replacements preserve the matched line's indent
+* **Idempotent** - a marker comment prevents double application.
+* **Indent-safe** - single-line replacements preserve the matched line's indent
   (older multi-line inserts caused IndentationError on modern ComfyUI).
-* **Self-healing** — if a previous broken patch is detected (MARKER present but
+* **Self-healing** - if a previous broken patch is detected (MARKER present but
   file does not compile), restore via git checkout when possible and re-apply.
-* **Fail-soft** — missing files or unknown ComfyUI revisions skip with warnings
+* **Fail-soft** - missing files or unknown ComfyUI revisions skip with warnings
   and exit 0 so container entrypoints do not crash install paths.
 
 Typical invocation
@@ -153,7 +153,7 @@ def _apply_single_line(text: str) -> tuple[str, bool]:
 def repair_broken_patch(root: Path, path: Path, text: str) -> str:
     """If a prior patch left invalid syntax, restore a clean file when possible.
 
-    Order: git checkout → strip marker lines.
+    Order: git checkout -> strip marker lines.
 
     Args:
         root: ComfyUI repository root.
@@ -164,7 +164,7 @@ def repair_broken_patch(root: Path, path: Path, text: str) -> str:
         Source to continue applying on (git-restored or marker-stripped).
     """
     print(
-        "[spark-patch] prior patch left invalid syntax — attempting repair",
+        "[spark-patch] prior patch left invalid syntax - attempting repair",
         file=sys.stderr,
     )
     if _restore_from_git(root):

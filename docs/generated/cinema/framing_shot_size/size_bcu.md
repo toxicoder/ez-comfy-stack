@@ -1,6 +1,6 @@
 ---
 title: "Big Close-Up"
-description: "Cinema Rack illustration — Big Close-Up."
+description: "Cinema Rack illustration - Big Close-Up."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

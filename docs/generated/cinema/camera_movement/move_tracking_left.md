@@ -1,6 +1,6 @@
 ---
 title: "Tracking left"
-description: "Cinema Rack illustration — Tracking left."
+description: "Cinema Rack illustration - Tracking left."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

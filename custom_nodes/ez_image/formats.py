@@ -45,7 +45,7 @@ class FormatSpec:
     Attributes:
         id: Stable snake_case id.
         label: Combo value shown in the App.
-        group: Catalog section (aspect, youtube, …).
+        group: Catalog section (aspect, youtube, ...).
         width: Latent width, or 0 for Custom.
         height: Latent height, or 0 for Custom.
         prefix: SaveImage filename prefix.
@@ -130,7 +130,7 @@ def _as_int(value: object, default: int) -> int:
 
 
 def clamp_dim(n: int) -> int:
-    """Snap to the Klein ÷16 grid and clamp to ``MIN_DIM``…``MAX_DIM``.
+    """Snap to the Klein div16 grid and clamp to ``MIN_DIM``...``MAX_DIM``.
 
     Args:
         n: Requested pixel count.
@@ -149,7 +149,7 @@ def clamp_dim(n: int) -> int:
 
 
 def clamp_batch(n: int) -> int:
-    """Clamp batch size to ``MIN_BATCH``…``MAX_BATCH``.
+    """Clamp batch size to ``MIN_BATCH``...``MAX_BATCH``.
 
     Args:
         n: Requested batch.
@@ -312,7 +312,7 @@ def _compose_hint(spec: FormatSpec, width: int, height: int) -> str:
     """
     hint = spec.hint.strip()
     if spec.id == CUSTOM_ID:
-        hint = f"Custom still {width}×{height}"
+        hint = f"Custom still {width}x{height}"
     lock = spec.lock.strip()
     parts = [part for part in (hint, lock) if part]
     return ". ".join(parts)
@@ -322,11 +322,11 @@ def _cinema_recipes() -> Mapping[str, Any] | None:
     """Load Cinema Rack recipes, or None when the pack is missing.
 
     Returns:
-        Recipe id → object mapping, or None.
+        Recipe id -> object mapping, or None.
     """
     try:
         from ez_prompt_enhance.cinema import load_recipes
-    except Exception:  # noqa: BLE001 — hermetic tests without the pack
+    except Exception:  # noqa: BLE001 - hermetic tests without the pack
         return None
     return load_recipes()
 
@@ -347,7 +347,7 @@ def _cinema_splice(recipe_id: str) -> str:
             WIDGET_AXIS_ORDER,
             splice,
         )
-    except Exception:  # noqa: BLE001 — fail-soft without cinema
+    except Exception:  # noqa: BLE001 - fail-soft without cinema
         return ""
     picks = {axis: NONE for axis in WIDGET_AXIS_ORDER}
     result = splice(picks, flavor=FLAVOR_KLEIN, recipe=recipe_id)

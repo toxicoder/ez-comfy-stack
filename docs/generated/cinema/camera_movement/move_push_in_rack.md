@@ -1,6 +1,6 @@
 ---
 title: "Push in with rack"
-description: "Cinema Rack illustration — Push in with rack."
+description: "Cinema Rack illustration - Push in with rack."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

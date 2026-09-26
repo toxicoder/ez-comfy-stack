@@ -315,7 +315,7 @@ def _fetch_page(url: str) -> str:
     _ensure_lab_custom_nodes_path()
     try:
         from ez_research.search import http_get, is_blocked_url
-    except Exception as exc:  # noqa: BLE001 — fail-soft
+    except Exception as exc:  # noqa: BLE001 - fail-soft
         _log(f"page fetch unavailable: {exc}")
         return ""
     reason = is_blocked_url(url)
@@ -354,7 +354,7 @@ def _yt_dlp_captions(url: str) -> str:
             url,
         ]
         try:
-            proc = subprocess.run(  # noqa: S603 — fixed argv, no shell
+            proc = subprocess.run(  # noqa: S603 - fixed argv, no shell
                 cmd,
                 check=False,
                 capture_output=True,
@@ -448,7 +448,7 @@ def _ingest_url(url: str, *, fetch_links: bool) -> SourceRecord:
         check_blocked: Callable[..., str | None] | None
         try:
             from ez_research.search import is_blocked_url as check_blocked
-        except Exception:  # noqa: BLE001 — treat as fetch miss
+        except Exception:  # noqa: BLE001 - treat as fetch miss
             check_blocked = None
         if check_blocked is not None:
             blocked_reason = check_blocked(url)
@@ -580,5 +580,5 @@ def format_status(records: list[SourceRecord]) -> str:
         title = rec.get("title") or rec.get("url") or rec.get("kind") or "source"
         status = rec.get("status") or ""
         kind = rec.get("kind") or ""
-        lines.append(f"{kind}: {title} — {status}")
+        lines.append(f"{kind}: {title} - {status}")
     return "\n".join(lines)

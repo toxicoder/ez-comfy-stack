@@ -54,7 +54,7 @@ docs_install_site_deps() {
     return 0
   fi
   if [[ ${QUIET} != "true" ]]; then
-    echo "→ docs-site: npm ci"
+    echo "-> docs-site: npm ci"
   fi
   (cd "${SITE_DIR}" && npm ci --legacy-peer-deps)
 }

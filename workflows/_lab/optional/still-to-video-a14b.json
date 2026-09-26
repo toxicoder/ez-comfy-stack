@@ -567,7 +567,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 14,
@@ -589,7 +589,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## optional/still-to-video-a14b\n\nOpt-in Wan 2.2 A14B FP8 silent hero. Not download-models.\nDownload: ./scripts/utilities/download-wan.sh run --tier a14b\nUnload 5B first. MagCache is off. Lightning-style 8 steps (not 4-step TI2V-5B).\nModels: wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors + wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors + wan_2.1_vae.safetensors.\nBoth UNETs sit on the canvas. Queue uses the high-noise expert so the graph loads. Dual-expert KSampler split is the full A14B I2V recipe after both weights exist (Comfy Templates / operator).\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.\n"
+        "## optional/still-to-video-a14b\n\nOpt-in Wan 2.2 A14B FP8 silent hero. Not download-models.\nDownload: ./scripts/utilities/download-wan.sh run --tier a14b\nUnload 5B first. MagCache is off. Lightning-style 8 steps (not 4-step TI2V-5B).\nModels: wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors + wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors + wan_2.1_vae.safetensors.\nBoth UNETs sit on the canvas. Queue uses the high-noise expert so the graph loads. Dual-expert KSampler split is the full A14B I2V recipe after both weights exist (Comfy Templates / operator).\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: wan - stop LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -968,7 +968,7 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## optional/still-to-video-a14b\n\nOpt-in Wan 2.2 A14B FP8 silent hero. Not download-models.\nDownload: ./scripts/utilities/download-wan.sh run --tier a14b\nUnload 5B first. MagCache is off. Lightning-style 8 steps (not 4-step TI2V-5B).\nModels: wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors + wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors + wan_2.1_vae.safetensors.\nBoth UNETs sit on the canvas. Queue uses the high-noise expert so the graph loads. Dual-expert KSampler split is the full A14B I2V recipe after both weights exist (Comfy Templates / operator).\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.\n",
+    "lab_note": "## optional/still-to-video-a14b\n\nOpt-in Wan 2.2 A14B FP8 silent hero. Not download-models.\nDownload: ./scripts/utilities/download-wan.sh run --tier a14b\nUnload 5B first. MagCache is off. Lightning-style 8 steps (not 4-step TI2V-5B).\nModels: wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors + wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors + wan_2.1_vae.safetensors.\nBoth UNETs sit on the canvas. Queue uses the high-noise expert so the graph loads. Dual-expert KSampler split is the full A14B I2V recipe after both weights exist (Comfy Templates / operator).\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: wan - stop LTX, podcast, music. One GB10 job.\n",
     "lab_profile": "optional/still-to-video-a14b",
     "lab_description": "Wan 2.2 A14B FP8 high+low UNET; Queue on high-noise 8-step. MagCache off. Unload 5B first.",
     "ds": {
@@ -1013,7 +1013,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
           }
         ],
         [

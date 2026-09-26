@@ -1,6 +1,6 @@
 ---
 title: "Behind the Crowd"
-description: "Cinema Rack illustration — Behind the Crowd."
+description: "Cinema Rack illustration - Behind the Crowd."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

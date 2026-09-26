@@ -184,7 +184,7 @@ def _validate_flag(
 
 
 def default_var_values(builder: Mapping[str, Any] | None = None) -> dict[str, str]:
-    """Return id → default string for every session variable.
+    """Return id -> default string for every session variable.
 
     Args:
         builder: Optional preloaded builder. Default loads the shipped file.
@@ -225,11 +225,11 @@ def split_var_template(
 
     Known ``${NAME}`` and ``${NAME:-default}`` become
     ``(values[NAME], NAME)``. Unknown tokens stay inside the surrounding
-    literal. Spec for ``commands.js`` — keep the JS splitter in sync.
+    literal. Spec for ``commands.js`` - keep the JS splitter in sync.
 
     Args:
         template: Source command, fence, or inline code text.
-        values: Variable id → replacement.
+        values: Variable id -> replacement.
 
     Returns:
         Ordered parts. ``var_id`` is None for literals.
@@ -260,7 +260,7 @@ def substitute_vars(template: str, values: Mapping[str, str]) -> str:
 
     Args:
         template: Source command or fence text.
-        values: Variable id → replacement.
+        values: Variable id -> replacement.
 
     Returns:
         Substituted string.

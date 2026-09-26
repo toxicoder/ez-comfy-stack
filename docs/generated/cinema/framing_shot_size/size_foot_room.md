@@ -1,6 +1,6 @@
 ---
 title: "Foot Room"
-description: "Cinema Rack illustration — Foot Room."
+description: "Cinema Rack illustration - Foot Room."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

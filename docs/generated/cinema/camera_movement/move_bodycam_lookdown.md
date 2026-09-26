@@ -1,6 +1,6 @@
 ---
 title: "Body-cam look-down"
-description: "Cinema Rack illustration — Body-cam look-down."
+description: "Cinema Rack illustration - Body-cam look-down."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -1,6 +1,6 @@
 ---
 title: "Nose Room"
-description: "Cinema Rack illustration — Nose Room."
+description: "Cinema Rack illustration - Nose Room."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

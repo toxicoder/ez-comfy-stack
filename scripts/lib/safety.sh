@@ -5,7 +5,7 @@
 #
 # Purpose:
 #   DGX Spark hosts are often operated over the internet without physical access.
-#   Starting a 90 GiB-class ComfyUI stack without free RAM/disk headroom can make
+#   Starting a 90 GiB-class ComfyUI stack without free RAM/disk headroom can make
 #   SSH unresponsive. This library enforces explicit operator consent and minimum
 #   free resources before heavy work begins.
 #
@@ -21,11 +21,11 @@
 #   paths.sh (lab_models_dir) being available in the caller.
 #
 # Environment (defaults applied if unset):
-#   MIN_HOST_FREE_GIB   — minimum free host RAM in GiB (default 28)
-#   MIN_DISK_FREE_GIB   — minimum free disk on models path in GiB (default 40)
-#   MEM_LIMIT           — Docker mem_limit string, e.g. 90g (default 90g)
-#   LAB_MOCK_FREE_MEM_GIB / LAB_MOCK_DISK_FREE_GIB — hermetic test overrides
-#   LAB_NON_INTERACTIVE / LAB_CONFIRM_TOKEN — automation confirm path
+#   MIN_HOST_FREE_GIB   - minimum free host RAM in GiB (default 28)
+#   MIN_DISK_FREE_GIB   - minimum free disk on models path in GiB (default 40)
+#   MEM_LIMIT           - Docker mem_limit string, e.g. 90g (default 90g)
+#   LAB_MOCK_FREE_MEM_GIB / LAB_MOCK_DISK_FREE_GIB - hermetic test overrides
+#   LAB_NON_INTERACTIVE / LAB_CONFIRM_TOKEN - automation confirm path
 #
 
 # Defaults (overridable via env / .env)
@@ -39,9 +39,9 @@
 # (case-insensitive). Non-interactive mode (LAB_NON_INTERACTIVE=1) requires
 # LAB_CONFIRM_TOKEN=yes; any other token fails closed.
 # Exit codes are intentional for manage.sh:
-#   0 — confirmed, proceed
-#   1 — hard failure (automation missing token)
-#   2 — user aborted interactively (manage treats as soft exit 0)
+#   0 - confirmed, proceed
+#   1 - hard failure (automation missing token)
+#   2 - user aborted interactively (manage treats as soft exit 0)
 # Side effects: Reads stdin when interactive; writes warnings to stderr.
 # Globals:
 #   See file header / caller environment.
@@ -113,9 +113,9 @@ require_delete_confirm() {
 #######################################
 # Convert a Docker-style memory limit string into integer GiB (floor).
 # Accepts forms used by Compose mem_limit / mem_reservation:
-#   - NNg / NNG → N GiB
-#   - NNm / NNM → floor(N/1024) GiB
-#   - bare integer → treated as bytes, converted to GiB
+#   - NNg / NNG -> N GiB
+#   - NNm / NNM -> floor(N/1024) GiB
+#   - bare integer -> treated as bytes, converted to GiB
 # Unparseable input yields 0 so callers can skip soft checks.
 # Globals:
 #   See file header / caller environment.
@@ -232,8 +232,8 @@ check_host_headroom() {
   free_disk=$(host_disk_free_gib "$(lab_models_dir 2>/dev/null || echo /mnt/models)")
   free_ram=${free_ram:-0}
   free_disk=${free_disk:-0}
-  log "Host free RAM ≈ ${free_ram} GiB (need ≥ ${MIN_HOST_FREE_GIB})"
-  log "Host free disk ≈ ${free_disk} GiB (need ≥ ${MIN_DISK_FREE_GIB})"
+  log "Host free RAM ~ ${free_ram} GiB (need >= ${MIN_HOST_FREE_GIB})"
+  log "Host free disk ~ ${free_disk} GiB (need >= ${MIN_DISK_FREE_GIB})"
   if [[ ${free_ram} -lt ${MIN_HOST_FREE_GIB} ]]; then
     err "Insufficient free memory: ${free_ram} GiB < ${MIN_HOST_FREE_GIB} GiB headroom"
     err "Stop other GPU/memory workloads and retry. Do not risk locking out remote SSH."
@@ -247,10 +247,10 @@ check_host_headroom() {
 }
 
 #######################################
-# Soft-warn when container MEM_LIMIT plus host headroom exceeds 128 GiB unified memory.
-# DGX Spark GB10 has 128 GiB unified memory. If MEM_LIMIT + MIN_HOST_FREE_GIB is
+# Soft-warn when container MEM_LIMIT plus host headroom exceeds 128 GiB unified memory.
+# DGX Spark GB10 has 128 GiB unified memory. If MEM_LIMIT + MIN_HOST_FREE_GIB is
 # greater than 128, the configuration is likely to thrash under load. This check
-# never fails the start path—only warns—so operators can still force a start after
+# never fails the start path-only warns-so operators can still force a start after
 # acknowledging the risk.
 # Side effects: May warn on stderr.
 # Globals:

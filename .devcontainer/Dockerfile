@@ -11,10 +11,10 @@
 #   the RUN that uses them so a Grok bump does not rebuild Node.
 #   BuildKit apt cache mounts: reuse packages when a layer does rebuild.
 #   Build context is .devcontainer/ only (whitelist .dockerignore).
-#   Workspace sources are bind-mounted at runtime — never COPY the repo.
+#   Workspace sources are bind-mounted at runtime - never COPY the repo.
 #
 # Tool versions: .devcontainer/tool-versions.env (ARG defaults must match).
-# Compose studio / CUDA image is docker/Dockerfile — not this file.
+# Compose studio / CUDA image is docker/Dockerfile - not this file.
 
 FROM mcr.microsoft.com/devcontainers/base:noble
 

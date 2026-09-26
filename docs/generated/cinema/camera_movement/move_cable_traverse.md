@@ -1,6 +1,6 @@
 ---
 title: "Cable traverse"
-description: "Cinema Rack illustration — Cable traverse."
+description: "Cinema Rack illustration - Cable traverse."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

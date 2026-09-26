@@ -1,6 +1,6 @@
 ---
 title: "Window Cutaway"
-description: "Cinema Rack illustration — Window Cutaway."
+description: "Cinema Rack illustration - Window Cutaway."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

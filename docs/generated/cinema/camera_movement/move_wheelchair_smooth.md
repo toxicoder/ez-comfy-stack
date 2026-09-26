@@ -1,6 +1,6 @@
 ---
 title: "Chair-smooth track"
-description: "Cinema Rack illustration — Chair-smooth track."
+description: "Cinema Rack illustration - Chair-smooth track."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

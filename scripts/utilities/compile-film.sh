@@ -12,7 +12,7 @@
 #   ./scripts/utilities/compile-film.sh FILM
 #
 # Environment:
-#   COMFY_OUTPUT_DIR — default /mnt/comfy-output
+#   COMFY_OUTPUT_DIR - default /mnt/comfy-output
 #
 # Exit codes:
 #   0 success; 1 usage / parse error
@@ -73,7 +73,7 @@ compile_film_run() {
   dest="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/films/${slug}"
   PYTHONPATH="${REPO_ROOT}/custom_nodes${PYTHONPATH:+:${PYTHONPATH}}" \
     python3 -m ez_film.jobstore init --yaml "${yaml}" --dest "${dest}"
-  log "compiled ${film} → ${dest}"
+  log "compiled ${film} -> ${dest}"
 }
 
 #######################################

@@ -1,6 +1,6 @@
 ---
 title: "Drift in current"
-description: "Cinema Rack illustration — Drift in current."
+description: "Cinema Rack illustration - Drift in current."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -198,7 +198,7 @@ print_llama_server_hint() {
   err "llama-server not found on PATH."
   err "Install host llama.cpp (aarch64). Do not apt/pip inside the Comfy container."
   err "Never add llama.cpp to docker/Dockerfile."
-  err "Path D: ssh -L 30000:127.0.0.1:30000  (laptop client → Spark sidecar)"
+  err "Path D: ssh -L 30000:127.0.0.1:30000  (laptop client -> Spark sidecar)"
   err "  ./scripts/manage.sh occupancy enter llm-desk --yes"
 }
 
@@ -306,13 +306,13 @@ sidecar_start_allowed() {
   mode="$(occupancy_mode)"
   case "${mode}" in
     klein | trellis | wan | ltx)
-      err "occupancy is ${mode} — stop the visual job before llm-sidecar start"
+      err "occupancy is ${mode} - stop the visual job before llm-sidecar start"
       err "  ./scripts/manage.sh occupancy enter llm-desk --yes"
       return 2
       ;;
   esac
   if comfy_queue_busy; then
-    err "Comfy queue is busy — wait before llm-sidecar start"
+    err "Comfy queue is busy - wait before llm-sidecar start"
     return 2
   fi
   if [[ ${mode} == "llm-desk" ]]; then
@@ -392,7 +392,7 @@ cmd_start() {
   else
     log "llama-server has no --spec-type; starting without MTP"
   fi
-  log "loading GGUF ${gguf} into llama-server (can take a minute)…"
+  log "loading GGUF ${gguf} into llama-server (can take a minute)..."
   nohup llama-server \
     -m "${gguf}" \
     --host "${host}" \
@@ -412,16 +412,16 @@ cmd_start() {
       return 0
     fi
     if ! kill -0 "${pid}" 2>/dev/null; then
-      err "llama-server exited while loading GGUF — see ${logf}"
+      err "llama-server exited while loading GGUF - see ${logf}"
       return 1
     fi
     if ((waited % 5 == 0)); then
-      log "… loading GGUF elapsed ${waited}s (still running)"
+      log "... loading GGUF elapsed ${waited}s (still running)"
     fi
     sleep 1
     waited=$((waited + 1))
   done
-  warn "llm-sidecar pid=${pid} started but ${host}:${port} not open yet — see ${logf}"
+  warn "llm-sidecar pid=${pid} started but ${host}:${port} not open yet - see ${logf}"
   log "llm-sidecar started pid=${pid} ${host}:${port} log=${logf}"
   return 0
 }

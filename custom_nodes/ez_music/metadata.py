@@ -237,7 +237,7 @@ def stamp_audio_file(path: Path, meta: AudioMeta, cover: Path | None = None) -> 
             _log(f"skip tags for unsupported suffix {suffix}")
     except ImportError as exc:
         _log(f"mutagen unavailable: {exc}")
-    except Exception as exc:  # noqa: BLE001 — fail-soft around SaveAudio
+    except Exception as exc:  # noqa: BLE001 - fail-soft around SaveAudio
         _log(f"tag stamp failed for {audio.name}: {exc}")
     return write_sidecar(audio, meta, cover=cover)
 
@@ -259,7 +259,7 @@ def album_dir_from_env(artist: str, album: str, *, output_dir: Path | None = Non
             from ez_common import output_root
 
             output_dir = output_root(default="output")
-        except Exception:  # noqa: BLE001 — pytest / missing Comfy
+        except Exception:  # noqa: BLE001 - pytest / missing Comfy
             env = (os.environ.get("COMFY_OUTPUT_DIR") or "").strip()
             if env:
                 output_dir = Path(env)
@@ -268,7 +268,7 @@ def album_dir_from_env(artist: str, album: str, *, output_dir: Path | None = Non
                     import folder_paths  # type: ignore[import-not-found]
 
                     output_dir = Path(folder_paths.get_output_directory())
-                except Exception:  # noqa: BLE001 — pytest / missing Comfy
+                except Exception:  # noqa: BLE001 - pytest / missing Comfy
                     output_dir = Path("output")
     dest = output_dir / album_output_dir(artist, album)
     dest.mkdir(parents=True, exist_ok=True)

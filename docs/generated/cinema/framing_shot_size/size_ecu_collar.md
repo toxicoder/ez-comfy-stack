@@ -1,6 +1,6 @@
 ---
 title: "Collar Insert"
-description: "Cinema Rack illustration — Collar Insert."
+description: "Cinema Rack illustration - Collar Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

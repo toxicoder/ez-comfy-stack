@@ -429,7 +429,7 @@ def _render_card_grid(lines: list[str], start: int, end: int) -> list[str] | Non
 
 
 def _transform_ezcmd(lines: list[str]) -> list[str]:
-    """Replace `` ```ezcmd `` fences with ``<EzCommand id="…" />``.
+    """Replace `` ```ezcmd `` fences with ``<EzCommand id="..." />``.
 
     Args:
         lines: Source lines.
@@ -748,7 +748,7 @@ def _as_mdx_comment(match: re.Match[str]) -> str:
         match: A comment match from :data:`_HTML_COMMENT_RE`.
 
     Returns:
-        The equivalent ``{/* … */}`` comment, single-line and without nested terminators.
+        The equivalent ``{/* ... */}`` comment, single-line and without nested terminators.
     """
     body = re.sub(r"\s+", " ", match.group().removeprefix("<!--").removesuffix("-->")).strip()
     body = body.replace("*/", "* /")
@@ -776,7 +776,7 @@ def to_mdx(text: str) -> str:
     """Rewrite a page so the MDX compiler renders it without changing what it says.
 
     The MDX parser is CommonMark plus JSX/expressions, and the two extra grammars disagree
-    with Markdown about ``<``, ``{``, ``}``, ``<!--`` and ``<scheme://…>``.  Each is settled
+    with Markdown about ``<``, ``{``, ``}``, ``<!--`` and ``<scheme://...>``.  Each is settled
     here in favour of what the MkDocs page displayed: autolinks become explicit links,
     comments become MDX comments (invisible in both), and the remaining characters are
     escaped so they render as the literal text they always were.
@@ -891,7 +891,7 @@ def pending_markers(text: str) -> list[tuple[int, str]]:
     """Report MkDocs markers the transform deliberately declined to rewrite.
 
     A marker is declined when converting it would mean authoring content the tool does not
-    have — an admonition with no body, a tab with no body, or an include of an unknown file.
+    have - an admonition with no body, a tab with no body, or an include of an unknown file.
     Those lines are left verbatim for a human, and this function is how CI lists them.
 
     Args:
@@ -1017,7 +1017,7 @@ def main(argv: list[str] | None = None) -> int:
         original = path.read_text(encoding="utf-8")
         updated = to_mdx(transform_text(original))
         if prose_projection(original) != prose_projection(updated):
-            print(f"REFUSING {path}: prose changed — this tool must not edit content", file=sys.stderr)
+            print(f"REFUSING {path}: prose changed - this tool must not edit content", file=sys.stderr)
             return 1
         if updated == original:
             if args.verbose:

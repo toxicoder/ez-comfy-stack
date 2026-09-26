@@ -80,7 +80,7 @@ def shot_card(
     """One App Mode / subgraph card payload for a shot.
 
     Args:
-        sid: Shot id ``01``…``18``.
+        sid: Shot id ``01``...``18``.
         camera: Camera token (default dolly in).
         foley: Foley token (default room tone).
         status: Jobstore status string.

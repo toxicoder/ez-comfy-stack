@@ -1,6 +1,6 @@
 ---
 title: "Pull to wide"
-description: "Cinema Rack illustration — Pull to wide."
+description: "Cinema Rack illustration - Pull to wide."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

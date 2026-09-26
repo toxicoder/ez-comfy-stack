@@ -76,7 +76,7 @@ export default async function DocsRoute({ params }: PageProps) {
       {isDevelopmentAlias() && (
         <Banner id="development-alias" variant="normal" changeLayout={false}>
           <span className="font-medium">
-            Development docs — these pages track the <code>development</code> branch and may
+            Development docs - these pages track the <code>development</code> branch and may
             describe work that is not released yet. Prefer{" "}
             <a href="../latest/">latest</a> for production-ready guidance.
           </span>

@@ -1,6 +1,6 @@
 ---
 title: Clay to finish
-description: Script desk → optional clay blockout → Klein look → overlay QC → LTX Union Control → stem audio on the US-safe studio.
+description: Script desk -> optional clay blockout -> Klein look -> overlay QC -> LTX Union Control -> stem audio on the US-safe studio.
 tags: [learn, clay, dcc, ltx, audio, storyboard]
 ---
 
@@ -32,14 +32,14 @@ This stack's Path B is that split. MiniMax H3 clay graphs are banned (US Exclude
 
 ```mermaid
 flowchart TB
-  S["Script desk · occupancy none"] --> Card["Shot card YAML"]
-  B["Board desk · klein"] --> Card
-  C["Clay dump · Comfy down"] --> Card
-  Card --> Ani["Animatic · ffmpeg"]
+  S["Script desk - occupancy none"] --> Card["Shot card YAML"]
+  B["Board desk - klein"] --> Card
+  C["Clay dump - Comfy down"] --> Card
+  Card --> Ani["Animatic - ffmpeg"]
   Ani --> Look["Klein-from-clay"]
   Look --> QC["overlay-qc"]
   QC --> Print["LTX Union Control 5.00s"]
-  Print --> Mix["stem-mix · occupancy audio"]
+  Print --> Mix["stem-mix - occupancy audio"]
   Mix --> Pub["film-accept + concat"]
 ```
 
@@ -49,15 +49,15 @@ flowchart TB
 
 1. Load **inspire/beat-sheet**. Fill logline, script, audio policy, 18 cards. Occupancy **none**.
 2. `./scripts/manage.sh shot-sheet run --film go-see` writes `films/gosee/shots.yaml`. Does not overwrite lab YAML.
-3. Optional board: **stills/identity-sheet** then **stills/storyboard-6up** (seed 42, 1280×704).
-4. Optional clay: `manage.sh stop` then `export-guides --film go-see --shot 12`. Workbench clay + depth + canny, not Cycles beauty. Path D: dump on the laptop, rsync `guides/`. Creator plates (not 5.00s): `blender-stills` then **klein-from-clay-plates** — [Blender creator suite](blender-creator.md).
-5. `manage.sh film-animatic --film go-see` — clay.mp4 or 5.00 s still holds, cap 90 s. Compose may stay up.
+3. Optional board: **stills/identity-sheet** then **stills/storyboard-6up** (seed 42, 1280x704).
+4. Optional clay: `manage.sh stop` then `export-guides --film go-see --shot 12`. Workbench clay + depth + canny, not Cycles beauty. Path D: dump on the laptop, rsync `guides/`. Creator plates (not 5.00s): `blender-stills` then **klein-from-clay-plates** - [Blender creator suite](blender-creator.md).
+5. `manage.sh film-animatic --film go-see` - clay.mp4 or 5.00 s still holds, cap 90 s. Compose may stay up.
 6. Start Comfy. Queue **dcc/clay-hero** on `first.png`, or stay on `:8188` with **dcc/guide-still** ([Stay in Comfy after a Blender dump](comfy-first-blender.md)). Then `overlay-qc --film go-see --shot 12 --look PATH`. Iterate the look, not the print.
-7. Stop Klein. `download-ltx --tier iclora` if needed. Queue **dcc/depth-control-8s** or Templates → LTX-2.5 Union Control (depth from `depth.mp4`). MagCache off. Distilled-only. Refuse 19B Union.
-8. Stop LTX. Occupancy **audio**. `stem-mix --film go-see --shot 12 --bg PATH` (optional `--dx`). Duck −15 dB, YouTube loudnorm I=-14. App: **audio/stem-mix**.
+7. Stop Klein. `download-ltx --tier iclora` if needed. Queue **dcc/depth-control-8s** or Templates -> LTX-2.5 Union Control (depth from `depth.mp4`). MagCache off. Distilled-only. Refuse 19B Union.
+8. Stop LTX. Occupancy **audio**. `stem-mix --film go-see --shot 12 --bg PATH` (optional `--dx`). Duck -15 dB, YouTube loudnorm I=-14. App: **audio/stem-mix**.
 9. `film-accept` then concat. Disclosure sidecar stays.
 
-Printers stay **5.00 s / 1280×704 / 121 frames (`1+8n`) @ 24 fps**. Do not type a 90 s latent. Do not type 120 (VAE floors to 113 frames).
+Printers stay **5.00 s / 1280x704 / 121 frames (`1+8n`) @ 24 fps**. Do not type a 90 s latent. Do not type 120 (VAE floors to 113 frames).
 
 ---
 
@@ -65,9 +65,9 @@ Printers stay **5.00 s / 1280×704 / 121 frames (`1+8n`) @ 24 fps**. Do not type
 
 | If | Skip |
 | --- | --- |
-| No Blender / Path D not ready | Film clay dump. Look plate owns composition. Overlay QC is skipped, not faked. Instagram clay tour still Queues on `start` / `--seed-inputs` layout plates; language-only → **stills/dream-house**. |
+| No Blender / Path D not ready | Film clay dump. Look plate owns composition. Overlay QC is skipped, not faked. Instagram clay tour still Queues on `start` / `--seed-inputs` layout plates; language-only -> **stills/dream-house**. |
 | Empty dialogue | DX stem |
-| Shorts “world SFX, no score” | MX. Do not load ACE-Step next to LTX. |
+| Shorts "world SFX, no score" | MX. Do not load ACE-Step next to LTX. |
 | Talking-head / VO-locked picture | Union Control. Use A2V freeze (`motion/av/audio-to-video-8s`). Mouths will not match. |
 
 ---
@@ -76,7 +76,7 @@ Printers stay **5.00 s / 1280×704 / 121 frames (`1+8n`) @ 24 fps**. Do not type
 
 One GB10 job. `export-guides` and `house-views` die if compose is up (exit 2). `overlay-qc`, `film-animatic`, and `stem-mix` are host ffmpeg and **may** run while Comfy is up. Stop the visual session before ACE-Step.
 
-Instagram stills of one place (not a 5.00s print): [Dream-house tours](dream-house.md). That dump is 1024×1280, not the LTX 1280×704 pack.
+Instagram stills of one place (not a 5.00s print): [Dream-house tours](dream-house.md). That dump is 1024x1280, not the LTX 1280x704 pack.
 
 Safety is unchanged: `restart: "no"`, type **yes** on start, headroom, download-limit clear-on-exit.
 

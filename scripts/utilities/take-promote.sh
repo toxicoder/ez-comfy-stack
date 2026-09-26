@@ -50,7 +50,7 @@ promote_run() {
   fi
   PYTHONPATH="${REPO_ROOT}/custom_nodes${PYTHONPATH:+:${PYTHONPATH}}" \
     python3 -m ez_film.jobstore promote --dest "${dest}" --id "${sid}" --take "${take}"
-  log "promoted ${film} ${sid} take ${take} → ${dest}/shots/${sid}.mp4"
+  log "promoted ${film} ${sid} take ${take} -> ${dest}/shots/${sid}.mp4"
 }
 
 if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then

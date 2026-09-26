@@ -1,6 +1,6 @@
 ---
 title: "Vehicle side mount"
-description: "Cinema Rack illustration — Vehicle side mount."
+description: "Cinema Rack illustration - Vehicle side mount."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

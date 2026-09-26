@@ -15,10 +15,10 @@ TTS (ez_dub Chatterbox clone)
 -----------------------------
 Lazy import hooks (no eager torch import):
 
-* ``torch.backends.cuda.sdp_kernel`` → ``torch.nn.attention.sdpa_kernel``
+* ``torch.backends.cuda.sdp_kernel`` -> ``torch.nn.attention.sdpa_kernel``
   with the same enable_* mapping torch 2.14 uses internally, minus the
   ``FutureWarning``.
-* ``diffusers.models.lora.LoRACompatibleLinear`` → ``torch.nn.Linear`` so
+* ``diffusers.models.lora.LoRACompatibleLinear`` -> ``torch.nn.Linear`` so
   Chatterbox Matcha ``FeedForward`` / ``SnakeBeta`` do not construct the
   class deprecated in diffusers 1.0. Does **not** install PEFT (that would
   flip ``USE_PEFT_BACKEND`` for Comfy LoRAs).
@@ -62,7 +62,7 @@ def apply_lab_torch_native_policy() -> None:
     try:
         triton_ctl.enabled = False
     except Exception:
-        # Older torch without python_native.triton controller — ignore.
+        # Older torch without python_native.triton controller - ignore.
         return
 
 

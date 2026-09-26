@@ -152,7 +152,7 @@ ensure_ssh_key() {
     return 0
   fi
   if ! command -v ssh-keygen >/dev/null 2>&1; then
-    err "ssh-keygen missing — install OpenSSH, then re-run setup-client"
+    err "ssh-keygen missing - install OpenSSH, then re-run setup-client"
     return 1
   fi
   ssh-keygen -t ed25519 -N "" -f "${key}" >/dev/null

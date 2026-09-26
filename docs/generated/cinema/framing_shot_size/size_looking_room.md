@@ -1,6 +1,6 @@
 ---
 title: "Looking Room"
-description: "Cinema Rack illustration — Looking Room."
+description: "Cinema Rack illustration - Looking Room."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -1,6 +1,6 @@
 ---
 title: "Seated Cowboy"
-description: "Cinema Rack illustration — Seated Cowboy."
+description: "Cinema Rack illustration - Seated Cowboy."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

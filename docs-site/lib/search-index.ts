@@ -4,7 +4,7 @@
  * Advanced search inserts one document per heading and per content block
  * (`tableCell` is a default block type). Generated workflow/cinema/audio
  * encyclopedias are mostly tables, so the static `/api/search` export was
- * 379 MiB / 408k documents — over GitHub's 100 MiB blob limit, and too
+ * 379 MiB / 408k documents - over GitHub's 100 MiB blob limit, and too
  * large to fetch in the browser anyway.
  */
 
@@ -34,7 +34,7 @@ export const SEARCH_AUTHORED_CONTENTS_MAX = 80;
  *
  * Generated encyclopedias and the workflow-nodes dump are table-heavy.
  *
- * @param path Page path relative to `docs/` (`generated/workflows/…`).
+ * @param path Page path relative to `docs/` (`generated/workflows/...`).
  * @returns Whether to drop body blocks from the search index.
  */
 export function isHeavySearchPath(path: string): boolean {

@@ -97,7 +97,7 @@ def output_directory() -> Path:
         from ez_common import output_root
 
         return output_root(default="/outputs")
-    except Exception:  # noqa: BLE001 — Comfy optional in unit tests
+    except Exception:  # noqa: BLE001 - Comfy optional in unit tests
         env = (os.environ.get("COMFY_OUTPUT_DIR") or "").strip()
         if env:
             return Path(env)
@@ -105,7 +105,7 @@ def output_directory() -> Path:
             import folder_paths  # type: ignore[import-not-found]
 
             return Path(folder_paths.get_output_directory())
-        except Exception:  # noqa: BLE001 — Comfy optional in unit tests
+        except Exception:  # noqa: BLE001 - Comfy optional in unit tests
             return Path("/outputs")
 
 
@@ -124,7 +124,7 @@ def input_root(*, default: Path | None = None) -> Path:
         raw = folder_paths.get_input_directory()
         if raw:
             return Path(raw)
-    except Exception:  # noqa: BLE001 — Comfy optional in unit tests
+    except Exception:  # noqa: BLE001 - Comfy optional in unit tests
         pass
     if default is not None:
         return Path(default)

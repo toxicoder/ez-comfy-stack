@@ -1,6 +1,6 @@
 ---
 title: "Undercranked handheld"
-description: "Cinema Rack illustration — Undercranked handheld."
+description: "Cinema Rack illustration - Undercranked handheld."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

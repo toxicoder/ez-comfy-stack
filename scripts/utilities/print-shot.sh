@@ -7,7 +7,7 @@
 # Purpose:
 #   POST /prompt for films/<slug>/shots/NN.json, poll /history, copy the
 #   resulting MP4 to shots/NN.mp4, update state.json. film-resume skips
-#   ok shots whose duration is 5.00±0.05 s.
+#   ok shots whose duration is 5.00 +/- 0.05 s.
 #
 # Usage:
 #   ./scripts/utilities/print-shot.sh <film> <id>
@@ -15,7 +15,7 @@
 #
 # Environment:
 #   COMFY_OUTPUT_DIR, COMFY_PORT (default 8188), MODELS_DIR
-#   COMFY_URL — override (tests)
+#   COMFY_URL - override (tests)
 #
 # Safety:
 #   Does not start compose. Does not Queue the 18-printer canvas.
@@ -197,7 +197,7 @@ print_one_shot() {
   comfy_wait_history "${prompt_id}" || true
   : >"${mp4}"
   jobstore_cli mark --dest "${dest}" --id "${sid}" --status ok --mp4 "shots/${sid}.mp4" --backend ltx
-  log "printed ${film} ${sid} → ${mp4} take recorded"
+  log "printed ${film} ${sid} -> ${mp4} take recorded"
 }
 
 #######################################

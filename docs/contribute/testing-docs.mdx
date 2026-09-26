@@ -1,6 +1,6 @@
 ---
 title: Testing docs
-description: bazelisk test-fast, coverage, lint, docs, typecheck — 100% Python gate, shell inventory, Fumadocs aliases, generate_shell_docs.py.
+description: bazelisk test-fast, coverage, lint, docs, typecheck - 100% Python gate, shell inventory, Fumadocs aliases, generate_shell_docs.py.
 tags: [testing, coverage, fumadocs, contributing]
 ---
 
@@ -8,11 +8,11 @@ tags: [testing, coverage, fumadocs, contributing]
 
 **What's on this page**
 
-- **Bazel / Make targets** — `//:test-fast` / `coverage` / `lint` / `docs` / `typecheck`
-- **100% Python gate** — all first-party production Python (`custom_nodes`, `docker`, `docs/*.py`, `scripts/lib`, `studio-ui`, `tools`)
+- **Bazel / Make targets** - `//:test-fast` / `coverage` / `lint` / `docs` / `typecheck`
+- **100% Python gate** - all first-party production Python (`custom_nodes`, `docker`, `docs/*.py`, `scripts/lib`, `studio-ui`, `tools`)
 - **Shell function inventory** (invoked by a test, not only named)
-- **`deploy-docs.yml`** — `main` → `latest`, `development` → `development` (one Next export per run)
-- **`bazelisk run //docs:docs`** — generators then Fumadocs `next build --webpack` into `docs-site/out/` (MDX compiles on demand; webpack does not bundle the ~850-page corpus)
+- **`deploy-docs.yml`** - `main` -> `latest`, `development` -> `development` (one Next export per run)
+- **`bazelisk run //docs:docs`** - generators then Fumadocs `next build --webpack` into `docs-site/out/` (MDX compiles on demand; webpack does not bundle the ~850-page corpus)
 
 **What this enables**
 
@@ -66,7 +66,7 @@ Pyright errors and mypy errors are **defects**. Do not skip the gate.
 - `studio-ui`
 - `tools` (Blender exporters; `bpy` is faked)
 
-Vendored `custom_nodes/ez_dcc/_guide_pack.py` is included (same tests as `scripts/lib/guide_pack.py`). GPU loaders, llama.cpp, and host Blender are exercised with `sys.modules` fakes — tests stay hermetic.
+Vendored `custom_nodes/ez_dcc/_guide_pack.py` is included (same tests as `scripts/lib/guide_pack.py`). GPU loaders, llama.cpp, and host Blender are exercised with `sys.modules` fakes - tests stay hermetic.
 
 `PYTHONPATH=docker:docker/pythonpath:custom_nodes:scripts/lib:studio-ui:docs:tools`.
 
@@ -105,7 +105,7 @@ Pins: Fumadocs on Next.js 16 (`docs-site/package.json`). Node **22+**. [Docs sty
 
 PR validation is `make docs` in CI only (no Pages push). Each run builds **one** alias and keeps the other from `origin/gh-pages`. The export is `next build --webpack` in-process with one static-generation worker and `NODE_OPTIONS=--max-old-space-size=5120` so the ~850-page site fits GitHub's 7 GB runner. CI calls `./docs/manage-docs.sh build` after `bazelisk shutdown` so Bazel is not resident during the compile. Publish uses `scripts/ci/publish-pages-tree.sh` (a separate git worktree) so Next's rewrite of tracked `docs-site/next-env.d.ts` cannot block the `gh-pages` checkout. The helper refuses any file at GitHub's 100 MiB blob limit. Generated encyclopedias are indexed by title, headings, and tags only so the static `/api/search` export stays under that cap. Deploy sets `EZ_DOCS_PUBLISHED_AT` for the last-published chip. `docs-site/lib/site.ts` stamps `__DOCS_GIT_REF__` and GitHub blob/tree URLs to the long-lived ref.
 
-Public URLs: [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) · [development](https://toxicoder.github.io/ez-comfy-stack/development/).
+Public URLs: [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) - [development](https://toxicoder.github.io/ez-comfy-stack/development/).
 
 <Callout type="warning" title="AI-drafted docs still need a human pass">
   Green `make docs` does not prove the page matches the code. Read `nodes.py` / compose / occupancy before merge.

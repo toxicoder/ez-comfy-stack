@@ -4,8 +4,8 @@
  *
  * MkDocs declared the whole navigation in `mkdocs.yml` under `nav:`; `scripts/gen_nav.py`
  * transcribed it into `lib/nav.json`. Generated cinema / audio / workflow children are
- * merged here at build time from the generator manifests — the same job `docs/hooks.py`
- * used to do — so adding a lab graph does not require a hand-edit of nav.json.
+ * merged here at build time from the generator manifests - the same job `docs/hooks.py`
+ * used to do - so adding a lab graph does not require a hand-edit of nav.json.
  *
  * Nested groups stay nested: Cinema Rack, Audio Rack, and Workflow details are folders
  * inside their tab, not a flattened list of hundreds of siblings.
@@ -25,7 +25,7 @@ import navData from "./nav.json";
  * The slice of the content loader the navigation needs.
  *
  * Declared structurally (rather than as a bare `LoaderOutput`) so the loader instance built
- * in `lib/source.ts` — whose page type is the specialised one from the collection schemas —
+ * in `lib/source.ts` - whose page type is the specialised one from the collection schemas -
  * is accepted without a variance complaint.
  */
 export type NavSource = Pick<LoaderOutput, "getPages">;
@@ -38,7 +38,7 @@ export interface NavPage {
   path: string;
 }
 
-/** A nested sidebar folder (Cinema Rack, a workflow lane, …). */
+/** A nested sidebar folder (Cinema Rack, a workflow lane, ...). */
 export interface NavGroup {
   title: string;
   pages: NavNode[];
@@ -238,7 +238,7 @@ function toNodes(source: NavSource, tabTitle: string, nodes: NavNode[], idPrefix
  * Build the page tree the docs layout renders.
  *
  * Every tab becomes a root folder, which is what makes it appear in the tab strip while the
- * sidebar shows only the pages of the tab the reader is currently in — the behaviour the
+ * sidebar shows only the pages of the tab the reader is currently in - the behaviour the
  * Material theme produced with `navigation.tabs`.
  */
 export function buildPageTree(source: NavSource): Root {

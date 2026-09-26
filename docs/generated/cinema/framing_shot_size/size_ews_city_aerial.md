@@ -1,6 +1,6 @@
 ---
 title: "Aerial City Extreme"
-description: "Cinema Rack illustration — Aerial City Extreme."
+description: "Cinema Rack illustration - Aerial City Extreme."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

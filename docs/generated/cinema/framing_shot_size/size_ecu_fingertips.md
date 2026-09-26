@@ -1,6 +1,6 @@
 ---
 title: "Fingertip Insert"
-description: "Cinema Rack illustration — Fingertip Insert."
+description: "Cinema Rack illustration - Fingertip Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

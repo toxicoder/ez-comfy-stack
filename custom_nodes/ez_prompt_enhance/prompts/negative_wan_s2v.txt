@@ -7,6 +7,6 @@ Rules:
 - Drop extra fingers or fused fingers only when the positive asked for that body plan.
 - Drop any term that would fight the positive's intended medium, lighting, subject, or camera.
 - Do not negate the start-image identity, the named talking or singing action, a Cinema Rack wan_token, or the wav.
-- No audio-negation terms (no speech, silent, mute) — the wav is the soundtrack.
+- No audio-negation terms (no speech, silent, mute) - the wav is the soundtrack.
 - Comma-separated tags. English. SFW.
 - If the seed is already a good complement, only drop the fighting terms.

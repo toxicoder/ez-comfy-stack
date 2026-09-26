@@ -21,7 +21,7 @@ tags: [comfyui, workflows, klein, wan, ltx, catalog]
 
 **Who this is for:** studio users after the first still-draft Queue. Node-by-node widgets: [Workflow details](create/workflows-index.md). Encyclopedia: [Workflow node parameters](reference/workflow-nodes.md).
 
-After `download-models` + `start`, load from Comfy’s **Workflows** sidebar under **`_lab/<lane>/`** (seeded from host `workflows/_lab/`). Filenames are short stems in lane folders (`stills/still-draft.json`); the unique id is `extra.lab_rel`. Every shipped graph is Nodes 2.0 native (`extra.workflowRendererVersion` = `Vue-corrected`). App Mode graphs also appear under Comfy’s **Apps** sidebar (`*.app.json` on disk under the same lane folder; same stem). Save your own graphs in **`_user/`**. Live `_lab/` is the git catalog (overwritten on start). An explicit Save that landed in `_lab/` is **rescued** into `_user/` (new files) or `_user/_rescued/` (in-place lab Saves). Catalog restamps on `start` do **not** clone shipped `_lab` graphs into `_user/`. Do **not** edit raw JSON — change widgets on the canvas. Toggle Nodes 2.0 from the Comfy logo menu if you need classic LiteGraph; the JSON still loads.
+After `download-models` + `start`, load from Comfy's **Workflows** sidebar under **`_lab/<lane>/`** (seeded from host `workflows/_lab/`). Filenames are short stems in lane folders (`stills/still-draft.json`); the unique id is `extra.lab_rel`. Every shipped graph is Nodes 2.0 native (`extra.workflowRendererVersion` = `Vue-corrected`). App Mode graphs also appear under Comfy's **Apps** sidebar (`*.app.json` on disk under the same lane folder; same stem). Save your own graphs in **`_user/`**. Live `_lab/` is the git catalog (overwritten on start). An explicit Save that landed in `_lab/` is **rescued** into `_user/` (new files) or `_user/_rescued/` (in-place lab Saves). Catalog restamps on `start` do **not** clone shipped `_lab` graphs into `_user/`. Do **not** edit raw JSON - change widgets on the canvas. Toggle Nodes 2.0 from the Comfy logo menu if you need classic LiteGraph; the JSON still loads.
 
 Sidebar tree after start:
 
@@ -38,8 +38,8 @@ user/default/workflows/
       silent/  Wan loops and I2V jobs
       av/      LTX AV jobs
     services/  agency SKUs (ecommerce, ads, local, education, podcasts, listings, fashion, B2B, events, travel)
-    films/     go-see, still-here, switchyard (90s); tide-table / night-oven / glasshouse / last-lane / breakwater act-01…05
-    dcc/       clay → print, plates, canny, depth/canny control, first-last from guide
+    films/     go-see, still-here, switchyard (90s); tide-table / night-oven / glasshouse / last-lane / breakwater act-01...05
+    dcc/       clay -> print, plates, canny, depth/canny control, first-last from guide
     optional/  a14b, longcat stub, trellis2
     audio/     podcast, dub, music/rap-draft, music/rap-full
       albums/nill-bye/<album>/     nine Nill Bye albums (numbered tracks + cover + album)
@@ -83,14 +83,14 @@ App Mode (frontend **1.41.13+**) is a widget surface on the same lab JSON. Occup
   <Card title="Motion and AV">
     ---
 
-    Wan 2.2 silent ~5 s, LTX-2.5 AV, GIF / bumper / sticker, creator motion plates. LTX size is ÷32.
+    Wan 2.2 silent ~5 s, LTX-2.5 AV, GIF / bumper / sticker, creator motion plates. LTX size is div32.
 
     [Motion catalog](create/workflows-motion.md)
   </Card>
   <Card title="90s film and DCC">
     ---
 
-    One-click 90s shorts, five-act 7.5 min films, plus clay → print, IC-LoRA envelopes, and in-canvas guide loaders.
+    One-click 90s shorts, five-act 7.5 min films, plus clay -> print, IC-LoRA envelopes, and in-canvas guide loaders.
 
     [Film catalog](create/workflows-film.md)
   </Card>
@@ -143,7 +143,7 @@ No UNET still. Occupancy **llm** or **none**. Full Apps Lane A Klein stills: [St
 
 ## Notes that apply to every lab graph
 
-Every seeded lab graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS with **`save_output: true`**; after Queue, open **Save video (MP4) — open node for preview**. LTX graphs decode audio (`LTXVAudioVAEDecode`) into the MP4. **[motion/loops/gif-loop](generated/workflows/motion/loops/gif-loop.md)** emits `image/gif`.
+Every seeded lab graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS with **`save_output: true`**; after Queue, open **Save video (MP4) - open node for preview**. LTX graphs decode audio (`LTXVAudioVAEDecode`) into the MP4. **[motion/loops/gif-loop](generated/workflows/motion/loops/gif-loop.md)** emits `image/gif`.
 
 Optional Wan A14B is a Queue graph (`workflows/_lab/optional/still-to-video-a14b.json`): **both** high-noise and low-noise FP8 UNETs on the canvas. Queue uses the high-noise expert at 8 Lightning-style steps (MagCache **off**) so the graph loads. Dual-expert KSampler split is the full I2V recipe after both weights exist (Comfy Templates / operator). Download `download-wan.sh run --tier a14b` and unload 5B first.
 

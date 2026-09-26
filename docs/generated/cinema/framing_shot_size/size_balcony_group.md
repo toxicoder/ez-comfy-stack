@@ -1,6 +1,6 @@
 ---
 title: "Balcony Group"
-description: "Cinema Rack illustration — Balcony Group."
+description: "Cinema Rack illustration - Balcony Group."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

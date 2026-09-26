@@ -8,10 +8,10 @@ tags: [faq, getting-started, occupancy, safety]
 
 **What's on this page**
 
-- **Doctor vs Missing Models** — preflight warnings are not a hard fail
-- **`--tier` vs `--limit`** — pack id vs bandwidth
-- **Park vs stop** — `POST /free` vs container down
-- **App Mode vs studio-ui** — widget surface vs jobstore board
+- **Doctor vs Missing Models** - preflight warnings are not a hard fail
+- **`--tier` vs `--limit`** - pack id vs bandwidth
+- **Park vs stop** - `POST /free` vs container down
+- **App Mode vs studio-ui** - widget surface vs jobstore board
 - **When to graduate** to nvidia-dgx-spark-lab
 - **`cleanup` does not delete `${MODELS_DIR}`**
 
@@ -97,7 +97,7 @@ This repo must **not** grow K3s, a full dashboard, or in-tree NCCL. Bazelisk is 
 
 **No.** Type **DELETE** and `cleanup` removes the named volume **`ez-comfy-state`** (Comfy install + venv + lab `ez_*` copies). It does **not** delete `${MODELS_DIR}` or `${COMFY_OUTPUT_DIR}`.
 
-Weights cleanup is `reap-models` (default `--plan`). Host leftovers: `disk-wizard` (default `--plan`). [Backup and restore](../operate/backup-restore.md) · [Disk wizard](../disk-wizard.md).
+Weights cleanup is `reap-models` (default `--plan`). Host leftovers: `disk-wizard` (default `--plan`). [Backup and restore](../operate/backup-restore.md) - [Disk wizard](../disk-wizard.md).
 
 <Callout type="error" title="DELETE is the volume, not a cache wipe">
   Do not confuse `cleanup` with `docker system prune -a --volumes` or deleting `${MODELS_DIR}`. Those are not this verb.
@@ -108,6 +108,6 @@ Weights cleanup is `reap-models` (default `--plan`). Host leftovers: `disk-wizar
 
 | Need | Page |
 | --- | --- |
-| Symptom → action | [Troubleshooting](../troubleshooting.md) |
+| Symptom -> action | [Troubleshooting](../troubleshooting.md) |
 | Architecture | [Architecture](../learn/architecture.md) |
 | Licenses before a 30 GB pull | [Model licenses](../licenses.md) |

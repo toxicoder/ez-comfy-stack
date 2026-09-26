@@ -1,4 +1,4 @@
-# Documentation site migration: MkDocs → Fumadocs
+# Documentation site migration: MkDocs -> Fumadocs
 
 The documentation site moved from **Material for MkDocs** to **Fumadocs** (Next.js App Router).
 The content did not move: pages still live in `docs/`, the generators still write
@@ -26,7 +26,7 @@ The content did not move: pages still live in `docs/`, the generators still writ
 | Content | `docs/**/*.md` | unchanged location; pages that need JSX are `.mdx` |
 | Navigation | `mkdocs.yml` `nav:` plus `docs/hooks.py` manifest inject | `docs-site/lib/nav.json` + `docs-site/lib/nav.ts` (workflow / cinema / audio children merged at build) |
 | Search | Material search | Orama index at `/api/search`, searchable by title **and** `tags` |
-| Publishing | `mike deploy` → `gh-pages` | two static exports (`/ez-comfy-stack/latest/`, `/ez-comfy-stack/development/`) → `gh-pages` (with `.nojekyll`) |
+| Publishing | `mike deploy` -> `gh-pages` | two static exports (`/ez-comfy-stack/latest/`, `/ez-comfy-stack/development/`) -> `gh-pages` (with `.nojekyll`) |
 | Version banner | `docs/hooks.py` | `EZ_DOCS_VERSION` / `DGX_DOCS_VERSION` read by `docs-site/lib/site.ts` |
 | Edit-on-GitHub | `hooks.py` `on_config` | same behaviour, branch-aware, in `docs-site/lib/site.ts` |
 | Theme | Material indigo | Overeazy Voltage `--color-fd-*` in `docs-site/app/global.css` |
@@ -38,14 +38,14 @@ No operator prose was rewritten. The codemod (`docs-site/scripts/codemod_mkdocs_
 
 | MkDocs | Fumadocs |
 | --- | --- |
-| `!!! note "Title"` / `warning` / `danger` / `tip` | `<Callout type="info\|warning\|error" title="…">` |
-| `=== "Tab"` blocks | `<Tabs groupId="…" items={[…]}>` / `<Tab value="…">` |
-| fenced `ezcmd` (`id: recipe`) | `<EzCommand id="…" />` |
+| `!!! note "Title"` / `warning` / `danger` / `tip` | `<Callout type="info\|warning\|error" title="...">` |
+| `=== "Tab"` blocks | `<Tabs groupId="..." items={[...]}>` / `<Tab value="...">` |
+| fenced `ezcmd` (`id: recipe`) | `<EzCommand id="..." />` |
 | `<!-- ez-glossary:render -->` | `<GlossaryBody />` |
 
 Generated pages under `docs/generated/` stay `.md` and may still use `!!! warning`.
 `source.config.ts` registers `remarkAdmonition`, so those fences still build. Do not
-hand-edit generated files — regenerate with `bazelisk run //docs:docs`.
+hand-edit generated files - regenerate with `bazelisk run //docs:docs`.
 
 Pages that gained none of the JSX forms keep the `.md` extension; the rest are `.mdx`.
 Body text is otherwise untouched.
@@ -58,7 +58,7 @@ and `localStorage` key `ez-comfy.cmdvars`.
 
 ```bash
 bazelisk run //docs:serve                       # dev server, hot reload, http://localhost:3005
-bazelisk run //docs:docs                        # generators + static export → docs-site/out/
+bazelisk run //docs:docs                        # generators + static export -> docs-site/out/
 bazelisk run //docs:preview                     # export + serve it
 bazelisk test //docs:test_docs_site_render //docs-site:unit //docs-site:typecheck
 ```
@@ -77,20 +77,20 @@ remain for a repository that still has a `mkdocs.yml` (this one does not).
 
 Dependencies: Node 22+ (the contributor Dev Container bakes the official Node 22
 tarball; on a host `brew install node@22`). Python is only needed by the
-generators and the pytest gates — `docs/requirements.txt` no longer installs MkDocs.
+generators and the pytest gates - `docs/requirements.txt` no longer installs MkDocs.
 
 ## Stable URLs
 
-The old site published `…/latest/` and `…/development/` through mike. Each alias is a Next
+The old site published `.../latest/` and `.../development/` through mike. Each alias is a Next
 export with `basePath=/ez-comfy-stack/<alias>` baked into asset URLs
 (`//docs-site:build-latest`, `//docs-site:build-development`). `.github/workflows/deploy-docs.yml`
-builds **one** alias per run (`main` → `/latest/`, `development` → `/development/`) and keeps
-the other directory from the current `gh-pages` tree — two full 650-page exports OOM the
+builds **one** alias per run (`main` -> `/latest/`, `development` -> `/development/`) and keeps
+the other directory from the current `gh-pages` tree - two full 650-page exports OOM the
 GitHub-hosted runner. It writes a root `.nojekyll` (legacy GitHub Pages runs Jekyll, which
 would otherwise drop `_next/`) and fast-forwards `gh-pages`. Every previously published URL
-keeps resolving; a root `index.html` forwards bare `…/ez-comfy-stack/` traffic to `/latest/`.
+keeps resolving; a root `index.html` forwards bare `.../ez-comfy-stack/` traffic to `/latest/`.
 
-The development alias renders a banner. The branch used by “Edit on GitHub” and in-page source
+The development alias renders a banner. The branch used by "Edit on GitHub" and in-page source
 links comes from `EZ_DOCS_VERSION` (override locally with `EZ_DOCS_GIT_REF` or
 `DGX_DOCS_GIT_REF`).
 
@@ -103,7 +103,7 @@ the tree. Hermetic Python specs that remain: `docs/commands.py`, `docs/glossary.
 `docs/page_brief.py`.
 
 If a stale checkout still has `site/`, `.venv-docs/`, or `.mkdocs-serve-*.yml`, they are
-build artefacts and can be removed — they are gitignored.
+build artefacts and can be removed - they are gitignored.
 
 ## Gates, before and after
 
@@ -112,7 +112,7 @@ build artefacts and can be removed — they are gitignored.
 | Content contract of navigable pages | `//docs:test_mkdocs_render` | `//docs:test_docs_site_render` (in `//:test`) |
 | Same checks against the export | (same target) | `bazelisk run //docs:render-check` after `//docs:docs` |
 | Widget behaviour | Material extra JS | `//docs-site:unit` (Vitest), `//docs-site:typecheck` |
-| Nav ↔ pages | `mkdocs.yml` vs disk | `docs-site/lib/nav.json` vs disk (`test_docs_nav_coverage.py`, `//docs-site:nav_test`) |
+| Nav <-> pages | `mkdocs.yml` vs disk | `docs-site/lib/nav.json` vs disk (`test_docs_nav_coverage.py`, `//docs-site:nav_test`) |
 | Nav transcriber / codemod units | n/a | `//docs-site:nav_test`, `//docs-site:codemod_test` |
 | Python coverage | generators + `hooks.py` | generators + `commands.py` / `glossary.py` / `page_brief.py` (100% gate unchanged) |
 | Public aliases | mike `latest` / `development` | Next exports at the same URL prefixes (one alias per deploy) |

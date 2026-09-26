@@ -1,6 +1,6 @@
 ---
 title: "Screen Insert"
-description: "Cinema Rack illustration — Screen Insert."
+description: "Cinema Rack illustration - Screen Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

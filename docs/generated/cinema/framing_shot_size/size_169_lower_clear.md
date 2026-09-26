@@ -1,6 +1,6 @@
 ---
 title: "16:9 Lower-Third Clear"
-description: "Cinema Rack illustration — 16:9 Lower-Third Clear."
+description: "Cinema Rack illustration - 16:9 Lower-Third Clear."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -205,4 +205,4 @@ def heartbeat(label: str, start: float) -> None:
         start: ``time.monotonic()`` start timestamp.
     """
     elapsed = format_elapsed(time.monotonic() - start)
-    emit(f"… {label}  elapsed {elapsed}  (still running)", rewrite=False)
+    emit(f"... {label}  elapsed {elapsed}  (still running)", rewrite=False)

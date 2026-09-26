@@ -1,7 +1,7 @@
 """TextEncodeAceStepAudio1.5 widgets_values layout (ComfyUI v0.37.0).
 
 Not collected by pytest (leading underscore). Native ACE-Step 1.5 seed
-has control_after_generate, so widgets_values is 15 slots — seed is
+has control_after_generate, so widgets_values is 15 slots - seed is
 followed by fixed/increment/decrement/randomize. Combo widgets are
 strict; a missing control slot shifts timesignature/language/keyscale.
 """

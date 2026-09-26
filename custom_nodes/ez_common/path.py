@@ -15,7 +15,7 @@ def ensure_custom_nodes_path(*, anchor: Path | str | None = None) -> Path:
     Comfy 0.34 registers directory packs as the filesystem path, not the
     folder name, and does not put ``custom_nodes`` on ``sys.path``. Packs
     that still boot without this helper should call it before importing a
-    sibling (``ez_common``, ``ez_prompt_enhance``, …).
+    sibling (``ez_common``, ``ez_prompt_enhance``, ...).
 
     Args:
         anchor: File or directory under ``custom_nodes/``. ``None`` uses

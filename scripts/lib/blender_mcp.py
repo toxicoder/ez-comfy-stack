@@ -133,7 +133,7 @@ def _run_occupancy_enter(mode: str, yes: bool) -> dict[str, Any]:
     """Run ``occupancy.sh enter MODE``.
 
     Args:
-        mode: Occupancy mode (idle, blender-desk, klein, …).
+        mode: Occupancy mode (idle, blender-desk, klein, ...).
         yes: Pass ``--yes`` (skip confirm).
 
     Returns:

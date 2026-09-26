@@ -239,10 +239,10 @@ dub_seed_pkuseg() {
     return 0
   fi
   url="$(dub_pkuseg_zip_url)"
-  log "Downloading pkuseg ontonotes → ${zip}"
+  log "Downloading pkuseg ontonotes -> ${zip}"
   if ! curl -fsSL -o "${zip}.partial" "${url}"; then
     rm -f "${zip}.partial"
-    warn "pkuseg ontonotes download failed — Chinese segmentation may hit GitHub on first Queue"
+    warn "pkuseg ontonotes download failed - Chinese segmentation may hit GitHub on first Queue"
     return 1
   fi
   mv "${zip}.partial" "${zip}"
@@ -447,9 +447,9 @@ dub_link_into_comfy() {
     dest_sub="$(dub_comfy_dest_subdir "${base}")"
     dest="${src}/${dest_sub}/${base}"
     if ln_sfn_relative "${f}" "${dest}"; then
-      log "linked ${base} → comfy/${dest_sub}/"
+      log "linked ${base} -> comfy/${dest_sub}/"
     else
-      warn "failed to link ${base} → comfy/${dest_sub}/"
+      warn "failed to link ${base} -> comfy/${dest_sub}/"
       failed=1
     fi
   done < <(
@@ -574,7 +574,7 @@ dub_cmd_status() {
     for tier in $(dub_tiers_to_process); do
       dir=$(dub_tier_dir "${tier}")
       size=$(dub_tier_size_gb "${dir}")
-      log "${tier}: $(dub_tier_repo "${tier}") — ${size} GB at ${dir}"
+      log "${tier}: $(dub_tier_repo "${tier}") - ${size} GB at ${dir}"
     done
   fi
 }
@@ -620,7 +620,7 @@ dub_cmd_run() {
       continue
     fi
     include_args=()
-    log "Downloading ${repo} selective subset (tier: ${tier})…"
+    log "Downloading ${repo} selective subset (tier: ${tier})..."
     while IFS= read -r pat; do
       [[ -z ${pat} ]] && continue
       include_args+=(--include "${pat}")
@@ -685,7 +685,7 @@ dub_cmd_cleanup() {
     n_extra=0
     n_del=0
     size_before="$(dub_tier_size_gb "${dir}")"
-    log "cleanup ${tier}: scanning ${dir} (current ≈ ${size_before} GB)"
+    log "cleanup ${tier}: scanning ${dir} (current ~ ${size_before} GB)"
     while IFS= read -r f; do
       [[ -z ${f} ]] && continue
       n_extra=$((n_extra + 1))
@@ -702,7 +702,7 @@ dub_cmd_cleanup() {
     if [[ ${CLEANUP_YES} -eq 1 ]]; then
       dub_prune_empty_dirs "${dir}"
       size_after="$(dub_tier_size_gb "${dir}")"
-      log "cleanup ${tier}: deleted ${n_del} extra file(s); size ${size_before} → ${size_after} GB"
+      log "cleanup ${tier}: deleted ${n_del} extra file(s); size ${size_before} -> ${size_after} GB"
     else
       log "cleanup ${tier}: ${n_extra} extra file(s) (dry-run). Re-run with --yes to delete."
     fi

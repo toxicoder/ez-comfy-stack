@@ -120,13 +120,13 @@ class EZCreativeResearch:
         sample: object = CUSTOM,
         catalog: object = "",
     ) -> dict[str, Any]:
-        """Run chat or planner→search→synth and write a research brief.
+        """Run chat or planner->search->synth and write a research brief.
 
         Args:
             prompt: Operator question or sample override.
             mode: ``chat`` or ``research``.
             web_search: When true, fetch SSRF-safe sources.
-            subagents: Planner query count (clamped 1–3).
+            subagents: Planner query count (clamped 1-3).
             history: Prior turns.
             sample: Prompt catalog sample id.
             catalog: Optional sample catalog override.

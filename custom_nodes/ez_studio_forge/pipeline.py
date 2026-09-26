@@ -200,7 +200,7 @@ class ForgeResult:
 
 
 def _repo_root() -> Path:
-    """Repository root (custom_nodes/ez_studio_forge → parents[2]).
+    """Repository root (custom_nodes/ez_studio_forge -> parents[2]).
 
     Returns:
         Absolute repo root.
@@ -673,7 +673,7 @@ def _nodes_by_id(graph: Mapping[str, Any]) -> dict[int, dict[str, Any]]:
         graph: Serialized Comfy graph.
 
     Returns:
-        ``id → node`` mapping; invalid ids are skipped.
+        ``id -> node`` mapping; invalid ids are skipped.
     """
     out: dict[int, dict[str, Any]] = {}
     for node in graph.get("nodes") or []:
@@ -727,7 +727,7 @@ def apply_slots(graph: dict[str, Any], slots: Mapping[str, Any] | None) -> dict[
 
     Args:
         graph: Serialized Comfy graph (mutated).
-        slots: Widget name/label → value.
+        slots: Widget name/label -> value.
 
     Returns:
         The same graph dict.
@@ -976,7 +976,7 @@ def _complete(system: str, user: str) -> tuple[str, str]:
 
         text, reason = llama_complete(system, user, max_tokens=400, temperature=0.1)
         return (text or "").strip(), (reason or "")
-    except Exception as exc:  # noqa: BLE001 — fail-soft
+    except Exception as exc:  # noqa: BLE001 - fail-soft
         _log(f"prompt enhance client unavailable: {exc}")
         return "", "llama.cpp unavailable"
 

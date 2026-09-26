@@ -59,30 +59,30 @@ package_prebuilt_parts() {
   mkdir -p "${extra_dest}"
 
   if [[ -d ${parts}/venv ]]; then
-    log "package_prebuilt_parts: delta ${COMFY_HOME}/.venv vs torch snapshot → venv-extra"
+    log "package_prebuilt_parts: delta ${COMFY_HOME}/.venv vs torch snapshot -> venv-extra"
     torch_snap="$(cd "${parts}/venv" && pwd)"
     if command -v rsync >/dev/null 2>&1; then
       rsync -a --compare-dest="${torch_snap}/" "${COMFY_HOME}/.venv/" "${extra_dest}/"
     else
-      warn "package_prebuilt_parts: rsync missing — copying full venv into extra"
+      warn "package_prebuilt_parts: rsync missing - copying full venv into extra"
       cp -a "${COMFY_HOME}/.venv/." "${extra_dest}/"
     fi
     find "${extra_dest}" -type d -empty -delete 2>/dev/null || true
     mkdir -p "${extra_dest}"
   else
-    log "package_prebuilt_parts: no torch snapshot; moving full venv → ${parts}/venv"
+    log "package_prebuilt_parts: no torch snapshot; moving full venv -> ${parts}/venv"
     mv "${COMFY_HOME}/.venv" "${parts}/venv"
   fi
   printf 'ez-comfy-venv-extra\n' >"${extra_dest}/.lab-venv-extra"
 
   if venv_extra_has_torch "${extra_dest}"; then
-    warn "package_prebuilt_parts: venv-extra contains torch — overlay would re-pull multi-GB"
+    warn "package_prebuilt_parts: venv-extra contains torch - overlay would re-pull multi-GB"
     return 1
   fi
 
   rm -rf "${COMFY_HOME}/.venv"
   # Remaining tree (ComfyUI sources, custom_nodes, stamp) becomes app layer
-  log "package_prebuilt_parts: splitting ${COMFY_HOME} → ${parts}/app"
+  log "package_prebuilt_parts: splitting ${COMFY_HOME} -> ${parts}/app"
   mv "${COMFY_HOME}" "${parts}/app"
   mkdir -p "${COMFY_HOME}"
   if [[ -d ${parts}/app/.venv ]]; then

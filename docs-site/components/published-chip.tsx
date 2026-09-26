@@ -41,7 +41,7 @@ export function PublishedChip({ iso, label }: { iso: string; label: string }) {
       </svg>
       <span className="ez-published-chip__label">Last published</span>
       <span className="ez-published-chip__sep" aria-hidden="true">
-        ·
+        -
       </span>
       <time dateTime={iso}>{text}</time>
     </span>

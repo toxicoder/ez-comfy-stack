@@ -81,11 +81,11 @@ phase_clone_comfy() {
   if [[ ! -d "${COMFY_HOME}/.git" ]]; then
     mkdir -p "$(dirname "${COMFY_HOME}")"
     # Destination may already exist (empty volume + old workflow bind mount created
-    # intermediate dirs). git clone refuses non-empty targets — clone then merge.
+    # intermediate dirs). git clone refuses non-empty targets - clone then merge.
     if [[ -d ${COMFY_HOME} && -n "$(ls -A "${COMFY_HOME}" 2>/dev/null || true)" ]]; then
       local tmp_clone
       tmp_clone="$(mktemp -d)"
-      log "git clone (temp) then merge into existing ${COMFY_HOME}…"
+      log "git clone (temp) then merge into existing ${COMFY_HOME}..."
       git clone "${clone_args[@]}" "${COMFYUI_REPO}" "${tmp_clone}/ComfyUI"
       if command -v rsync >/dev/null 2>&1; then
         rsync -a "${tmp_clone}/ComfyUI/" "${COMFY_HOME}/"
@@ -94,7 +94,7 @@ phase_clone_comfy() {
       fi
       rm -rf "${tmp_clone}"
     else
-      log "git clone into ${COMFY_HOME}…"
+      log "git clone into ${COMFY_HOME}..."
       git clone "${clone_args[@]}" "${COMFYUI_REPO}" "${COMFY_HOME}"
     fi
   else
@@ -129,14 +129,14 @@ phase_comfy() {
     log "Comfy requirements constrained to $(tr '\n' ' ' <"${constraint}")"
     pip_install -r "${COMFY_HOME}/requirements.txt" -c "${constraint}"
   else
-    warn "No torch freeze pins — installing Comfy requirements unconstrained"
+    warn "No torch freeze pins - installing Comfy requirements unconstrained"
     pip_install -r "${COMFY_HOME}/requirements.txt"
   fi
   rm -f "${constraint}"
   pip_install psutil huggingface_hub safetensors einops
   assert_torch_cuda || rc=$?
   if [[ ${rc} -eq 1 ]]; then
-    warn "torch has no CUDA after Comfy requirements — cu130 wheel may have been replaced"
+    warn "torch has no CUDA after Comfy requirements - cu130 wheel may have been replaced"
     if [[ ${LAB_PACKAGE_PARTS:-0} == "1" ]]; then
       return 1
     fi

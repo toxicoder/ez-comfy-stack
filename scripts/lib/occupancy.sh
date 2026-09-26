@@ -397,7 +397,7 @@ comfy_system_stats() {
 refuse_if_comfy_running() {
   local job="${1:-host GPU sidecar (occupancy)}"
   if compose_is_running; then
-    err "ComfyUI is running — stop it before ${job}"
+    err "ComfyUI is running - stop it before ${job}"
     return 2
   fi
   return 0
@@ -422,13 +422,13 @@ refuse_if_heavy_gpu() {
     return 0
   fi
   if comfy_queue_busy; then
-    err "Comfy queue is busy — wait or occupancy enter blender-desk before ${job}"
+    err "Comfy queue is busy - wait or occupancy enter blender-desk before ${job}"
     return 2
   fi
   if occupancy_is_parked && [[ $(occupancy_mode) == "blender-desk" ]]; then
     return 0
   fi
-  err "ComfyUI is running — occupancy enter blender-desk (or stop) before ${job}"
+  err "ComfyUI is running - occupancy enter blender-desk (or stop) before ${job}"
   return 2
 }
 
@@ -449,13 +449,13 @@ refuse_cycles_while_compose() {
     return 0
   fi
   if [[ ${CYCLES_DEVICE:-} == "CUDA" || ${CYCLES_DEVICE:-} == "OPTIX" ]]; then
-    err "Cycles GPU while Comfy is up — occupancy idle first (Workbench only in blender-desk)"
+    err "Cycles GPU while Comfy is up - occupancy idle first (Workbench only in blender-desk)"
     return 2
   fi
   for arg in "$@"; do
     case "${arg}" in
       *CYCLES* | *OPTIX* | *CUDA*)
-        err "Cycles GPU while Comfy is up — occupancy idle first (Workbench only in blender-desk)"
+        err "Cycles GPU while Comfy is up - occupancy idle first (Workbench only in blender-desk)"
         return 2
         ;;
     esac
@@ -581,7 +581,7 @@ stop_llm_sidecar() {
 refuse_if_llm_sidecar() {
   local job="${1:-host GPU job (occupancy)}"
   if llm_pid_alive; then
-    err "llm-desk sidecar is running — occupancy enter blender-desk or idle before ${job}"
+    err "llm-desk sidecar is running - occupancy enter blender-desk or idle before ${job}"
     return 2
   fi
   return 0
@@ -769,7 +769,7 @@ occupancy_enter() {
       stop_llm_sidecar
       if compose_is_running; then
         if comfy_queue_busy; then
-          err "Comfy queue is busy — wait or interrupt before blender-desk"
+          err "Comfy queue is busy - wait or interrupt before blender-desk"
           return 2
         fi
         if ! comfy_free_memory; then
@@ -787,13 +787,13 @@ occupancy_enter() {
     llm-desk)
       if compose_is_running; then
         if comfy_queue_busy; then
-          err "Comfy queue is busy — wait or interrupt before llm-desk"
+          err "Comfy queue is busy - wait or interrupt before llm-desk"
           return 2
         fi
       fi
       if blender_pid_alive || mcp_pid_alive; then
         if [[ ${yes} != "1" ]]; then
-          err "Blender desk is running — occupancy enter llm-desk --yes to stop it"
+          err "Blender desk is running - occupancy enter llm-desk --yes to stop it"
           return 2
         fi
         stop_blender_desk
@@ -820,24 +820,24 @@ occupancy_enter() {
       stop_llm_sidecar
       if blender_pid_alive || mcp_pid_alive; then
         if [[ ${yes} != "1" ]]; then
-          err "Blender desk is running — occupancy enter ${target} --yes to stop it"
+          err "Blender desk is running - occupancy enter ${target} --yes to stop it"
           return 2
         fi
         stop_blender_desk
       fi
       if ! compose_is_running; then
-        err "ComfyUI is not running — ./scripts/manage.sh start (type yes)"
+        err "ComfyUI is not running - ./scripts/manage.sh start (type yes)"
         return 1
       fi
       if comfy_queue_busy; then
-        err "Comfy queue is busy — wait before occupancy enter ${target}"
+        err "Comfy queue is busy - wait before occupancy enter ${target}"
         return 2
       fi
       if ! comfy_free_memory; then
         warn "POST /free failed before ${target}"
       fi
       occupancy_write "${target}" "false" 0 0 0
-      log "occupancy: ${target} — one heavy GPU job. Queue the ${target} graph."
+      log "occupancy: ${target} - one heavy GPU job. Queue the ${target} graph."
       ;;
   esac
   return 0

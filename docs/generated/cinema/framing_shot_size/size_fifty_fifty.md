@@ -1,6 +1,6 @@
 ---
 title: "Fifty-Fifty"
-description: "Cinema Rack illustration — Fifty-Fifty."
+description: "Cinema Rack illustration - Fifty-Fifty."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

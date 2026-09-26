@@ -58,7 +58,7 @@ def _link_map(graph: dict[str, Any]) -> dict[int, list[Any]]:
         graph: Serialized graph.
 
     Returns:
-        link id → link row.
+        link id -> link row.
     """
     return {int(row[0]): row for row in graph.get("links") or []}
 
@@ -296,8 +296,8 @@ def wire_upscale(graph: dict[str, Any], lab_rel: str = "") -> bool:
 
     The first unlinked combo owns the App dropdown. Extra SaveImage paths
     take ``upscale`` as a linked widget. An upscale node that does not feed
-    a save is reused instead of left orphaned (Match → Save with a dead
-    decode → upscale branch).
+    a save is reused instead of left orphaned (Match -> Save with a dead
+    decode -> upscale branch).
 
     Args:
         graph: Serialized lab graph (mutated).

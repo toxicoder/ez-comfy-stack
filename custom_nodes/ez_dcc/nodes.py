@@ -194,7 +194,7 @@ class EZDCCCameraJson:
     RETURN_NAMES = ("camera_json",)
     FUNCTION = "run"
     CATEGORY = CATEGORY
-    DESCRIPTION = "Optional camera.json from the shot pack. Missing file → empty string."
+    DESCRIPTION = "Optional camera.json from the shot pack. Missing file -> empty string."
 
     def run(self, slug: str, shot_id: str) -> tuple[str]:
         """Read optional camera.json from the shot pack.

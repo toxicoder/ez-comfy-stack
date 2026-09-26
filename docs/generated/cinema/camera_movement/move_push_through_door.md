@@ -1,6 +1,6 @@
 ---
 title: "Push through door"
-description: "Cinema Rack illustration — Push through door."
+description: "Cinema Rack illustration - Push through door."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

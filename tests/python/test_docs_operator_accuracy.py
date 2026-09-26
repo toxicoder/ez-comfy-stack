@@ -17,7 +17,7 @@ README = ROOT / "README.md"
 
 # Stale CLI / graph / encoder names that are not the lab default.
 # licenses.md and conventions.md may still mention Klein 9B or frozen
-# flux-to-ltx* tags as banned/historical — those files are excluded from
+# flux-to-ltx* tags as banned/historical - those files are excluded from
 # the full GHCR-tag ban below.
 FORBIDDEN_EVERYWHERE = (
     "download-flux.sh",

@@ -1,6 +1,6 @@
 ---
 title: "Handheld Screen"
-description: "Cinema Rack illustration — Handheld Screen."
+description: "Cinema Rack illustration - Handheld Screen."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

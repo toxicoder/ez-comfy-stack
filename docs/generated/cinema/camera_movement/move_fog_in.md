@@ -1,6 +1,6 @@
 ---
 title: "Push into fog"
-description: "Cinema Rack illustration — Push into fog."
+description: "Cinema Rack illustration - Push into fog."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -1,6 +1,6 @@
 ---
 title: Asset Bible
-description: Versioned 3D asset catalog under COMFY_OUTPUT_DIR/assets — slugs, takes, scene.json instances. Not MODELS_DIR.
+description: Versioned 3D asset catalog under COMFY_OUTPUT_DIR/assets - slugs, takes, scene.json instances. Not MODELS_DIR.
 tags: [asset-bible, 3d, trellis, klein, scene, catalog]
 ---
 
@@ -43,10 +43,10 @@ flowchart TB
 
 | Lane | Meaning | Use |
 | --- | --- | --- |
-| **Gen** | Klein still → TRELLIS.2 | Hero *pieces* (a mug, a jacket, a hero mesh) |
+| **Gen** | Klein still -> TRELLIS.2 | Hero *pieces* (a mug, a jacket, a hero mesh) |
 | **Construct** | `scene.json` shopping list | Layout: primitives, HDRI, **instances of bible slugs** |
 
-`mcp-construct` is the in-tree [Blender MCP](occupancy.md) (`manage.sh blender-mcp`). Typed tools only — no `execute_code`. **`bpy-primitive`** now has one operator verb: `./scripts/manage.sh house-views` builds a greybox set under `assets/sets/<slug>/` (layout + GLB + ten 1024×1280 clay stills). Host Blender stays a [sidecar](blender-gb10-sidecar.md) (dies if compose is up). Playbook: [Dream-house tours](learn/dream-house.md).
+`mcp-construct` is the in-tree [Blender MCP](occupancy.md) (`manage.sh blender-mcp`). Typed tools only - no `execute_code`. **`bpy-primitive`** now has one operator verb: `./scripts/manage.sh house-views` builds a greybox set under `assets/sets/<slug>/` (layout + GLB + ten 1024x1280 clay stills). Host Blender stays a [sidecar](blender-gb10-sidecar.md) (dies if compose is up). Playbook: [Dream-house tours](learn/dream-house.md).
 
 ---
 
@@ -55,12 +55,12 @@ flowchart TB
 | Path | What |
 | --- | --- |
 | `${COMFY_OUTPUT_DIR}/assets/<kind>/<slug>/asset.yaml` | `ez.asset.v1` record |
-| `…/mesh/`, `…/views/`, `…/variants/`, `…/prompts.jsonl` | Takes and previews |
+| `.../mesh/`, `.../views/`, `.../variants/`, `.../prompts.jsonl` | Takes and previews |
 | `${COMFY_OUTPUT_DIR}/assets/index.yaml` | Catalog index (written by the library, not by `asset-ls`) |
-| `MODELS_DIR` | Weights only — **never** bible assets |
-| `guides/` | Docs/guides — **never** generated GLBs |
+| `MODELS_DIR` | Weights only - **never** bible assets |
+| `guides/` | Docs/guides - **never** generated GLBs |
 
-Kinds: `object` · `character` · `building` · `set` · `scene` · `material` · `hdri` (directories are plural: `objects/`, …).
+Kinds: `object` - `character` - `building` - `set` - `scene` - `material` - `hdri` (directories are plural: `objects/`, ...).
 
 Schema and a sample scene that **instances slugs** (no embedded mesh bytes): repo-root `schemas/asset.yaml` and `schemas/scene.json`.
 
@@ -70,8 +70,8 @@ Schema and a sample scene that **instances slugs** (no embedded mesh bytes): rep
 
 | Verb | Status |
 | --- | --- |
-| `asset-ls` | **Shipped** — read-only catalog |
-| `house-views` | **Shipped** — occupancy-gated Blender greybox + Instagram clay stills (`bpy-primitive` sets) |
+| `asset-ls` | **Shipped** - read-only catalog |
+| `house-views` | **Shipped** - occupancy-gated Blender greybox + Instagram clay stills (`bpy-primitive` sets) |
 | `asset-new` / `asset-iterate` / `asset-promote` | Coming (P-A1) |
 
 ```bash
@@ -80,4 +80,4 @@ Schema and a sample scene that **instances slugs** (no embedded mesh bytes): rep
 ./scripts/utilities/asset-ls.sh --output-dir "${COMFY_OUTPUT_DIR}/assets"
 ```
 
-Empty catalog is success. Occupancy for Gen (Klein + TRELLIS) is `occupancy enter trellis` after a still — [Occupancy desk](occupancy.md). TRELLIS.2 remains opt-in `download-3d`, not `download-models`. See [Model licenses](licenses.md).
+Empty catalog is success. Occupancy for Gen (Klein + TRELLIS) is `occupancy enter trellis` after a still - [Occupancy desk](occupancy.md). TRELLIS.2 remains opt-in `download-3d`, not `download-models`. See [Model licenses](licenses.md).

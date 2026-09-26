@@ -5,7 +5,7 @@
 # Download on-box GGUF packs: default prompt-enhance 4B, optional 35B desk.
 #
 # Purpose:
-#   Selective Hugging Face pull. Apache 2.0. File-level include — not the
+#   Selective Hugging Face pull. Apache 2.0. File-level include - not the
 #   full Unsloth GGUF tree. Default enhance pack is part of download-models.
 #   Opt-in qwen36-35b-a3b is occupancy llm-desk only (not download-models).
 #   Opt-in describe is Qwen2.5-VL-3B + mmproj for EZImageDescribe.
@@ -330,9 +330,9 @@ link_llm_describe_into_comfy() {
     dest="${src}/${name}"
     [[ -f ${f} ]] || continue
     if ln_sfn_relative "${f}" "${dest}"; then
-      log "linked ${name} → comfy/llm/"
+      log "linked ${name} -> comfy/llm/"
     else
-      warn "failed to link ${name} → comfy/llm/"
+      warn "failed to link ${name} -> comfy/llm/"
     fi
   done
 }
@@ -424,10 +424,10 @@ link_llm_into_comfy() {
     return 1
   fi
   if ln_sfn_relative "${f}" "${dest}"; then
-    log "linked $(llm_filename) → comfy/llm/"
+    log "linked $(llm_filename) -> comfy/llm/"
     return 0
   fi
-  warn "failed to link $(llm_filename) → comfy/llm/"
+  warn "failed to link $(llm_filename) -> comfy/llm/"
   return 1
 }
 
@@ -456,10 +456,10 @@ link_llm35_into_comfy() {
     return 1
   fi
   if ln_sfn_relative "${f}" "${dest}"; then
-    log "linked $(llm35_filename) → comfy/llm/"
+    log "linked $(llm35_filename) -> comfy/llm/"
     return 0
   fi
-  warn "failed to link $(llm35_filename) → comfy/llm/"
+  warn "failed to link $(llm35_filename) -> comfy/llm/"
   return 1
 }
 
@@ -650,7 +650,7 @@ cmd_status() {
   else
     for tier in $(tiers_to_process); do
       json="$(tier_status_json "${tier}")"
-      log "$(printf '%s' "${json}" | python3 -c 'import json,sys; d=json.load(sys.stdin); print("%s: %s — %s GB at %s (ready=%s)" % (d["tier"], d["repo"], d["size_gb"], d["path"], d["ready"]))')"
+      log "$(printf '%s' "${json}" | python3 -c 'import json,sys; d=json.load(sys.stdin); print("%s: %s - %s GB at %s (ready=%s)" % (d["tier"], d["repo"], d["size_gb"], d["path"], d["ready"]))')"
     done
   fi
 }
@@ -701,7 +701,7 @@ run_one_tier() {
     "${link_fn}" || return 1
     return 0
   fi
-  log "Downloading ${repo} selective subset (tier: ${tier})…"
+  log "Downloading ${repo} selective subset (tier: ${tier})..."
   log "  include: ${include}"
   if [[ ${tier} == "describe" ]]; then
     if HF_HOME="${MODELS_DIR}" hf_download "${repo}" --local-dir "${dir}" \

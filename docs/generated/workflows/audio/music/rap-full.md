@@ -34,7 +34,7 @@ US-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1,
 1. Queue **audio/music/rap-draft** first. Then this graph.
 2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).
 3. Prompt enhance is **off** so the canned bars stay as written. Turn Enhance on only if you want the 4B rewriter. Edit **Rap lyrics** before Queue (wired into ACE). Human rewrite required before any release.
-4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No “in the style of <living artist>”.
+4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No 'in the style of <living artist>'.
 5. ACE-Step vocal is an invented timbre, not a clone.
 6. Saves: `ez_rap_full` FLAC + 320 kbps MP3.
 7. Cover: sequential Queue **stills/thumbnail.json** / **stills/podcast-cover.json**. Do not embed Klein.
@@ -44,7 +44,7 @@ Canned style swaps (tags widget only):
 - trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm
 - lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm
 
-Occupancy: audio — stop Klein / Wan / LTX session. One GB10 job.
+Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
 ```
 
 ## How to Queue
@@ -118,9 +118,9 @@ flowchart LR
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
 
-### `CheckpointLoaderSimple` — Load Checkpoint
+### `CheckpointLoaderSimple` - Load Checkpoint
 
 Load a single-file checkpoint that bundles MODEL + CLIP + VAE.
 
@@ -140,11 +140,11 @@ Type `STRING`.
 
 Filename under checkpoints/.
 
-**How it affects generation:** Lab music is the turbo AIO. XL is opt-in via download-music --tier xl — swap only if you meant to.
+**How it affects generation:** Lab music is the turbo AIO. XL is opt-in via download-music --tier xl - swap only if you meant to.
 
 **This graph:** `ace_step_1.5_turbo_aio.safetensors`
 
-### `ModelSamplingAuraFlow` — ModelSamplingAuraFlow
+### `ModelSamplingAuraFlow` - ModelSamplingAuraFlow
 
 Patch ACE-Step with AuraFlow sampling shift.
 
@@ -167,7 +167,7 @@ AuraFlow shift.
 
 **This graph:** `3`
 
-### `PrimitiveNode` — Primitive
+### `PrimitiveNode` - Primitive
 
 A typed constant (string or float) with seed-style control.
 
@@ -208,13 +208,13 @@ Whether the primitive mutates after Queue.
 | `decrement` | Subtract 1 after Queue. |
 | `randomize` | Draw a new seed after Queue. Exploration only. |
 
-### `EmptyAceStep1.5LatentAudio` — Empty ACE-Step 1.5 Latent Audio
+### `EmptyAceStep1.5LatentAudio` - Empty ACE-Step 1.5 Latent Audio
 
 Allocate an ACE-Step audio latent for N seconds.
 
 !!! warning "Lab notes"
 
-    Draft is the cold-open bar length. Full is the pre-chorus bar length. Nill Bye albums are 64–210 s. Drive-through is ~90–120 s from per-take bar math, not a shared clock target. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
+    Draft is the cold-open bar length. Full is the pre-chorus bar length. Nill Bye albums are 64-210 s. Drive-through is ~90-120 s from per-take bar math, not a shared clock target. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -227,7 +227,7 @@ Type `FLOAT`. Range / default: draft / full / album plan.
 
 Duration in seconds.
 
-**How it affects generation:** Longer latents cost RAM/time linearly. Nill Bye stays 64–210 s. Drive-through is ~90–120 s. Stay at the seeded length unless you have headroom.
+**How it affects generation:** Longer latents cost RAM/time linearly. Nill Bye stays 64-210 s. Drive-through is ~90-120 s. Stay at the seeded length unless you have headroom.
 
 **This graph:** `153.0`
 
@@ -241,7 +241,7 @@ Takes per Queue.
 
 **This graph:** `1`
 
-### `EZRapLyrics` — Rap Lyrics
+### `EZRapLyrics` - Rap Lyrics
 
 Draft original rap lyrics via the on-box GGUF. Forbids living-MC names.
 
@@ -268,7 +268,7 @@ Sectioned lyrics.
 
 **How it affects generation:** Human rewrite required before any release. Catalog takes keep Enhance off.
 
-**This graph:** `[intro] yeah local signal on the box [verse] Fan stays loud on a quiet street Weights on disk, no rented beat Card runs hot, the cut stays clean If it ships from here it stays unseen [pre-chorus] Own…`
+**This graph:** `[intro] yeah local signal on the box [verse] Fan stays loud on a quiet street Weights on disk, no rented beat Card runs hot, the cut stays clean If it ships from here it stays unseen [pre-chorus] Own...`
 
 ```text
 [intro]
@@ -328,7 +328,7 @@ Catalog id.
 
 **This graph:** `audio/music/rap-full`
 
-### `EZAceStepPromptEnhance` — ACE-Step Prompt Enhance
+### `EZAceStepPromptEnhance` - ACE-Step Prompt Enhance
 
 Rewrite ACE tags (genre first) and lyrics. Instrumental mode forces [inst].
 
@@ -374,7 +374,7 @@ Sectioned lyrics.
 
 **How it affects generation:** Enhance off on catalog takes so exclusive verses stay pinned.
 
-**This graph:** `[intro] yeah local signal on the box [verse] Fan stays loud on a quiet street Weights on disk, no rented beat Card runs hot, the cut stays clean If it ships from here it stays unseen [pre-chorus] Own…`
+**This graph:** `[intro] yeah local signal on the box [verse] Fan stays loud on a quiet street Weights on disk, no rented beat Card runs hot, the cut stays clean If it ships from here it stays unseen [pre-chorus] Own...`
 
 ```text
 [intro]
@@ -451,7 +451,7 @@ Sample-catalog id.
 
 **This graph:** `audio/music/rap-full`
 
-### `TextEncodeAceStepAudio1.5` — ACE-Step 1.5 Text Encode
+### `TextEncodeAceStepAudio1.5` - ACE-Step 1.5 Text Encode
 
 Pack tags, lyrics, BPM, key, and duration into ACE conditioning.
 
@@ -489,7 +489,7 @@ Sectioned lyrics or [inst] cues.
 
 **How it affects generation:** Non-empty lines under a section are sung. Instrumental graphs must keep cues inside [brackets].
 
-**This graph:** `[intro] yeah local signal on the box [verse] Fan stays loud on a quiet street Weights on disk, no rented beat Card runs hot, the cut stays clean If it ships from here it stays unseen [pre-chorus] Own…`
+**This graph:** `[intro] yeah local signal on the box [verse] Fan stays loud on a quiet street Weights on disk, no rented beat Card runs hot, the cut stays clean If it ships from here it stays unseen [pre-chorus] Own...`
 
 ```text
 [intro]
@@ -560,7 +560,7 @@ Seed control.
 
 #### `bpm`
 
-Type `INT`. Range / default: 10–300.
+Type `INT`. Range / default: 10-300.
 
 Tempo written into the codes.
 
@@ -772,7 +772,7 @@ Minimum probability floor.
 
 **This graph:** `0.0`
 
-### `ConditioningZeroOut` — Conditioning Zero Out
+### `ConditioningZeroOut` - Conditioning Zero Out
 
 Replace a conditioning with zeros (unconditional / empty negative).
 
@@ -787,7 +787,7 @@ Replace a conditioning with zeros (unconditional / empty negative).
 
 No widgets. Sockets only.
 
-### `KSampler` — KSampler
+### `KSampler` - KSampler
 
 Denoise a latent for N steps at a CFG, sampler, and scheduler.
 
@@ -799,17 +799,17 @@ Denoise a latent for N steps at a CFG, sampler, and scheduler.
 | --- | --- | --- | --- |
 | `model` | in | `MODEL` | UNET / transformer after any ModelSampling* patch. |
 | `positive` | in | `CONDITIONING` | What to include (CLIP / ACE / LTX prompt). |
-| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well — put constraints in the positive. |
+| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well - put constraints in the positive. |
 | `latent_image` | in | `LATENT` | Noise canvas or encoded start image / video / audio latent. |
 | `LATENT` | out | `LATENT` | Denoised latent for VAE decode. |
 
 #### `seed`
 
-Type `INT`. Range / default: 0 … 2^64-1; lab 42.
+Type `INT`. Range / default: 0 ... 2^64-1; lab 42.
 
 Random seed for the noise tensor.
 
-**How it affects generation:** Same seed + same graph ≈ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
+**How it affects generation:** Same seed + same graph ~ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
 
 **This graph:** `42`
 
@@ -834,21 +834,21 @@ What happens to seed after Queue.
 
 #### `steps`
 
-Type `INT`. Range / default: 1–10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
+Type `INT`. Range / default: 1-10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
 
 Denoising iterations.
 
-**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 — raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
+**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 - raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
 
 **This graph:** `8`
 
 #### `cfg`
 
-Type `FLOAT`. Range / default: 0–100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
+Type `FLOAT`. Range / default: 0-100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
 
 Classifier-free guidance scale.
 
-**How it affects generation:** Distilled Klein is CFG 1.0 — raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
+**How it affects generation:** Distilled Klein is CFG 1.0 - raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
 
 **This graph:** `1.0`
 
@@ -938,7 +938,7 @@ How sigmas are spaced across steps.
 
 #### `denoise`
 
-Type `FLOAT`. Range / default: 0–1; lab 1.0.
+Type `FLOAT`. Range / default: 0-1; lab 1.0.
 
 Fraction of the latent to replace with denoised signal.
 
@@ -946,7 +946,7 @@ Fraction of the latent to replace with denoised signal.
 
 **This graph:** `1.0`
 
-### `VAEDecodeAudio` — VAE Decode Audio
+### `VAEDecodeAudio` - VAE Decode Audio
 
 Decode an ACE audio latent to AUDIO.
 
@@ -958,7 +958,7 @@ Decode an ACE audio latent to AUDIO.
 
 No widgets. Sockets only.
 
-### `SaveAudio` — Save Audio
+### `SaveAudio` - Save Audio
 
 Write a FLAC/wav master.
 
@@ -980,7 +980,7 @@ Save stem.
 
 **This graph:** `ez_rap_full`
 
-### `SaveAudioMP3` — Save Audio (MP3)
+### `SaveAudioMP3` - Save Audio (MP3)
 
 Write an MP3 copy of the same take.
 
@@ -1016,7 +1016,7 @@ Bitrate preset.
 | `192k` | Smaller, more artifacts. |
 | `128k` | Preview only. |
 
-### `Note` — Note
+### `Note` - Note
 
 On-canvas operator note (not executed).
 
@@ -1032,7 +1032,7 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## audio/music/rap-full US-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration 153 s on the pre-chorus form (4/4, C minor, 88 bpm). Album takes vary…`
+**This graph:** `## audio/music/rap-full US-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration 153 s on the pre-chorus form (4/4, C minor, 88 bpm). Album takes vary...`
 
 ```text
 ## audio/music/rap-full
@@ -1042,7 +1042,7 @@ US-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1,
 1. Queue **audio/music/rap-draft** first. Then this graph.
 2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).
 3. Prompt enhance is **off** so the canned bars stay as written. Turn Enhance on only if you want the 4B rewriter. Edit **Rap lyrics** before Queue (wired into ACE). Human rewrite required before any release.
-4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No “in the style of <living artist>”.
+4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No 'in the style of <living artist>'.
 5. ACE-Step vocal is an invented timbre, not a clone.
 6. Saves: `ez_rap_full` FLAC + 320 kbps MP3.
 7. Cover: sequential Queue **stills/thumbnail.json** / **stills/podcast-cover.json**. Do not embed Klein.
@@ -1052,10 +1052,10 @@ Canned style swaps (tags widget only):
 - trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm
 - lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm
 
-Occupancy: audio — stop Klein / Wan / LTX session. One GB10 job.
+Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
 ```
 
-### `LoadImage` — Load Image
+### `LoadImage` - Load Image
 
 Load a still from Comfy input/ (or upload).
 
@@ -1088,7 +1088,7 @@ Upload widget type.
 
 **This graph:** `image`
 
-### `EZAudioMetadata` — Audio Metadata
+### `EZAudioMetadata` - Audio Metadata
 
 Stamp artist/album/title tags and optional cover on saved audio.
 
@@ -1130,11 +1130,11 @@ Track title.
 
 #### `track`
 
-Type `INT`. Range / default: 1–99.
+Type `INT`. Range / default: 1-99.
 
 Track number.
 
-**How it affects generation:** Numbered takes 01–20.
+**How it affects generation:** Numbered takes 01-20.
 
 **This graph:** `1`
 
@@ -1164,7 +1164,7 @@ Type `COMBO`. Range / default: skip.
 
 Cover art policy.
 
-**How it affects generation:** skip on every audio Queue (Cover LoadImage is bypassed). generate is klein occupancy — later session. upload: graph view, Ctrl+B Cover image, then wire.
+**How it affects generation:** skip on every audio Queue (Cover LoadImage is bypassed). generate is klein occupancy - later session. upload: graph view, Ctrl+B Cover image, then wire.
 
 **This graph:** `skip`
 
@@ -1186,7 +1186,7 @@ SaveAudio stem to stamp.
 
 **This graph:** `ez_rap_full`
 
-### `EZQuality` — Quality
+### `EZQuality` - Quality
 
 Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
@@ -1221,7 +1221,7 @@ custom freezes last overlay; lab restores graph defaults.
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
-### `EZModelCheck` — Check models
+### `EZModelCheck` - Check models
 
 Manual disk check for occupancy + Quality weights. Queue does not run this node.
 

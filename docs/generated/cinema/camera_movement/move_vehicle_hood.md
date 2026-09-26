@@ -1,6 +1,6 @@
 ---
 title: "Vehicle hood mount"
-description: "Cinema Rack illustration — Vehicle hood mount."
+description: "Cinema Rack illustration - Vehicle hood mount."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

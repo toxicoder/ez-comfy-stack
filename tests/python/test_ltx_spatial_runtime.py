@@ -27,7 +27,7 @@ CUSTOM = ROOT / "custom_nodes"
 
 
 class FakeBCTHW:
-    """Minimal ``…,H,W`` object: shape plus spatial slicing."""
+    """Minimal ``...,H,W`` object: shape plus spatial slicing."""
 
     def __init__(self, shape: tuple[int, ...], origin: tuple[int, int] = (0, 0)) -> None:
         self.shape = shape
@@ -345,7 +345,7 @@ def test_encode_log_shape_failure_still_forwards(
 
     assert _wrap_video_vae_encode(VAE) is True
     assert isinstance(VAE().encode(Partial()), Sliced)
-    assert "encode cropped to a ÷32 spatial window" in capsys.readouterr().err
+    assert "encode cropped to a div32 spatial window" in capsys.readouterr().err
 
 
 def _is_custom_nodes_entry(entry: str) -> bool:

@@ -6,7 +6,7 @@
 # write a JPEG poster. Host ffmpeg. Does not start Docker.
 #
 # Purpose:
-#   Keep encyclopedia clips small enough for Git LFS (target ≤512KiB).
+#   Keep encyclopedia clips small enough for Git LFS (target <=512KiB).
 #
 # Usage:
 #   ./scripts/utilities/compress-cinema-clip.sh --in FILE --out FILE

@@ -29,7 +29,7 @@ Occupancy **audio**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fa
 ```text
 ## audio/stem-mix
 
-Picture-lock stem mix. Occupancy **audio** — stop Klein / Wan / LTX first. ACE-Step
+Picture-lock stem mix. Occupancy **audio** - stop Klein / Wan / LTX first. ACE-Step
 score is a later session if `score: acestep-instrumental`.
 
 This canvas does not denoise video. Mix on the host:
@@ -38,14 +38,14 @@ This canvas does not denoise video. Mix on the host:
 
 Stems: BG = demuxed LTX world bed, FX = optional Templates LTX-2.5 T2A (same distilled
 transformer; not a vendored subgraph), DX = Kokoro / Qwen3-TTS, MX = ACE-Step
-instrumental. Duck beds −15 dB under DX. YouTube loudnorm I=-14.
+instrumental. Duck beds -15 dB under DX. YouTube loudnorm I=-14.
 
-A2V lock (talking-head): mix DX first, then Templates → LTX-2.5 A2V freeze. Mouths will
+A2V lock (talking-head): mix DX first, then Templates -> LTX-2.5 A2V freeze. Mouths will
 not match (banned lip-sync OSS stays out). Foley V2A LoRA is not in v1.
 
 Do not start Docker. Do not co-resident ACE-Step with LTX.
 
-Occupancy: audio — stop Klein / Wan / LTX session. One GB10 job.
+Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 ```
 
@@ -88,9 +88,9 @@ flowchart LR
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
 
-### `Note` — Note
+### `Note` - Note
 
 On-canvas operator note (not executed).
 
@@ -106,12 +106,12 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## audio/stem-mix Picture-lock stem mix. Occupancy **audio** — stop Klein / Wan / LTX first. ACE-Step score is a later session if `score: acestep-instrumental`. This canvas does not denoise video. Mi…`
+**This graph:** `## audio/stem-mix Picture-lock stem mix. Occupancy **audio** - stop Klein / Wan / LTX first. ACE-Step score is a later session if `score: acestep-instrumental`. This canvas does not denoise video. Mi...`
 
 ```text
 ## audio/stem-mix
 
-Picture-lock stem mix. Occupancy **audio** — stop Klein / Wan / LTX first. ACE-Step
+Picture-lock stem mix. Occupancy **audio** - stop Klein / Wan / LTX first. ACE-Step
 score is a later session if `score: acestep-instrumental`.
 
 This canvas does not denoise video. Mix on the host:
@@ -120,18 +120,18 @@ This canvas does not denoise video. Mix on the host:
 
 Stems: BG = demuxed LTX world bed, FX = optional Templates LTX-2.5 T2A (same distilled
 transformer; not a vendored subgraph), DX = Kokoro / Qwen3-TTS, MX = ACE-Step
-instrumental. Duck beds −15 dB under DX. YouTube loudnorm I=-14.
+instrumental. Duck beds -15 dB under DX. YouTube loudnorm I=-14.
 
-A2V lock (talking-head): mix DX first, then Templates → LTX-2.5 A2V freeze. Mouths will
+A2V lock (talking-head): mix DX first, then Templates -> LTX-2.5 A2V freeze. Mouths will
 not match (banned lip-sync OSS stays out). Foley V2A LoRA is not in v1.
 
 Do not start Docker. Do not co-resident ACE-Step with LTX.
 
-Occupancy: audio — stop Klein / Wan / LTX session. One GB10 job.
+Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 ```
 
-### `PrimitiveNode` — Primitive
+### `PrimitiveNode` - Primitive
 
 A typed constant (string or float) with seed-style control.
 
@@ -178,7 +178,7 @@ Whether the primitive mutates after Queue.
 | `decrement` | Subtract 1 after Queue. |
 | `randomize` | Draw a new seed after Queue. Exploration only. |
 
-### `SaveAudio` — Save Audio
+### `SaveAudio` - Save Audio
 
 Write a FLAC/wav master.
 
@@ -200,7 +200,7 @@ Save stem.
 
 **This graph:** `ez_stem_mix`
 
-### `EZQuality` — Quality
+### `EZQuality` - Quality
 
 Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
@@ -235,7 +235,7 @@ custom freezes last overlay; lab restores graph defaults.
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
-### `EZModelCheck` — Check models
+### `EZModelCheck` - Check models
 
 Manual disk check for occupancy + Quality weights. Queue does not run this node.
 

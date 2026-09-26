@@ -1,6 +1,6 @@
 ---
 title: "Knee Shot"
-description: "Cinema Rack illustration — Knee Shot."
+description: "Cinema Rack illustration - Knee Shot."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

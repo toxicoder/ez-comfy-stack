@@ -4,7 +4,7 @@ Not imported by pytest collection (leading underscore). Builders import it.
 
 The operator note sits at ``(LAB_X0, LAB_NODE_Y0)``. Check models and Quality
 share that row to the right. Remaining nodes flow left-to-right / top-to-bottom
-in MODEL → INPUT → PROMPT → SETTINGS → OUTPUT columns (or existing named
+in MODEL -> INPUT -> PROMPT -> SETTINGS -> OUTPUT columns (or existing named
 SHOT/Beat groups, shifted as blocks under the header).
 
 ComfyUI draws the group title in the top LiteGraph.NODE_TITLE_HEIGHT (30px) of
@@ -341,7 +341,7 @@ def group_overlap_hits(graph: dict[str, Any]) -> list[str]:
             area = _overlap_area(a["bounding"], b["bounding"])
             if area > _GROUP_OVERLAP_EPS:
                 hits.append(
-                    f"{a.get('title', a.get('id'))} vs {b.get('title', b.get('id'))}: {area:.1f}px²"
+                    f"{a.get('title', a.get('id'))} vs {b.get('title', b.get('id'))}: {area:.1f}px^2"
                 )
     return hits
 
@@ -850,7 +850,7 @@ def operator_note(graph: dict[str, Any]) -> dict[str, Any] | None:
 
 
 def has_named_stages(graph: dict[str, Any]) -> bool:
-    """True when any group title is not a generic MODEL/PROMPT/… stage.
+    """True when any group title is not a generic MODEL/PROMPT/... stage.
 
     Args:
         graph: Serialized Comfy graph.
@@ -1021,7 +1021,7 @@ def _restage_columns(
     origin_x: float,
     pipeline_y: float,
 ) -> dict[str, list[dict[str, Any]]]:
-    """Lay remaining nodes into MODEL…OUTPUT columns. Returns stage members."""
+    """Lay remaining nodes into MODEL...OUTPUT columns. Returns stage members."""
     ranks = topo_rank(graph)
     buckets: dict[str, list[dict[str, Any]]] = {stage: [] for stage in STAGE_ORDER}
     extras: list[dict[str, Any]] = []

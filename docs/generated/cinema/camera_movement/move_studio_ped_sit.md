@@ -1,6 +1,6 @@
 ---
 title: "Studio pedestal sit"
-description: "Cinema Rack illustration — Studio pedestal sit."
+description: "Cinema Rack illustration - Studio pedestal sit."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

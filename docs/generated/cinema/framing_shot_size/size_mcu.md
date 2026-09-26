@@ -1,6 +1,6 @@
 ---
 title: "Medium Close-Up"
-description: "Cinema Rack illustration — Medium Close-Up."
+description: "Cinema Rack illustration - Medium Close-Up."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -1,6 +1,6 @@
 ---
 title: "4:5 Face-Plate Headroom"
-description: "Cinema Rack illustration — 4:5 Face-Plate Headroom."
+description: "Cinema Rack illustration - 4:5 Face-Plate Headroom."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

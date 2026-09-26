@@ -1,6 +1,6 @@
 ---
 title: "Locked off"
-description: "Cinema Rack illustration — Locked off."
+description: "Cinema Rack illustration - Locked off."
 tags: [cinema, prompting, catalog, clip]
 ---
 

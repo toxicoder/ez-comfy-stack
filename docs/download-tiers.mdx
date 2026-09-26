@@ -1,6 +1,6 @@
 ---
 title: Download tiers
-description: One table of every pack — what it is, rough size on disk, and the command that downloads it.
+description: One table of every pack - what it is, rough size on disk, and the command that downloads it.
 tags: [download, tier, models, klein, wan, ltx, podcast, dub, music]
 ---
 
@@ -8,10 +8,10 @@ tags: [download, tier, models, klein, wan, ltx, podcast, dub, music]
 
 **What's on this page**
 
-- **One table** — pack, what you get, rough size, download command
-- **`--tier` vs `--limit`** — pack id versus Mbps
-- **What `all` skips** — Wan VACE / S2V, LTX IC-LoRA, Klein 9B / FLUX.2-dev
-- **Banned names** — image `quality`, Nunchaku, DA3-LARGE, DreamX-World, MiniMax H3
+- **One table** - pack, what you get, rough size, download command
+- **`--tier` vs `--limit`** - pack id versus Mbps
+- **What `all` skips** - Wan VACE / S2V, LTX IC-LoRA, Klein 9B / FLUX.2-dev
+- **Banned names** - image `quality`, Nunchaku, DA3-LARGE, DreamX-World, MiniMax H3
 
 **What this enables**
 
@@ -34,7 +34,7 @@ Wan `--tier all` is `5b` + `a14b` + `fun-inp`. It does not include `vace` or `s2
 | Pack | What you get | ~size on disk | Command |
 | --- | --- | --- | --- |
 | Default studio | Klein 4B + Wan 2.2 5B + LTX-2.5 + prompt-enhance GGUF. Not podcast, dub, music, 3D, LongCat, DreamX, or SeedVR2 | ~50 GB | `./scripts/manage.sh download-models` |
-| `fast` | Klein 4B distilled FP8 still, plus the Qwen text encoder and flux2 VAE. Already in the default pack | 3–4 GB + companions | `./scripts/utilities/download-image.sh run --tier fast` |
+| `fast` | Klein 4B distilled FP8 still, plus the Qwen text encoder and flux2 VAE. Already in the default pack | 3-4 GB + companions | `./scripts/utilities/download-image.sh run --tier fast` |
 | `nvfp4` | Optional Klein 4B NVFP4, plus companions | ~2 GB + companions | `./scripts/utilities/download-image.sh run --tier nvfp4` |
 | `base` | Optional Klein 4B base FP8, plus companions | ~3 GB + companions | `./scripts/utilities/download-image.sh run --tier base` |
 | `zimage` | Z-Image Turbo. No Klein text encoder or VAE | ~4 GB | `./scripts/utilities/download-image.sh run --tier zimage` |
@@ -51,10 +51,10 @@ Wan `--tier all` is `5b` + `a14b` + `fun-inp`. It does not include `vace` or `s2
 | `s2v` | Wan S2V talking-head. Not in Wan `--tier all`. Unload LTX first | ~20 GB | `./scripts/utilities/download-wan.sh run --tier s2v` |
 | Wan `all` | `5b` + `a14b` + `fun-inp`. Does not include `vace` or `s2v` | sum of those three | `./scripts/utilities/download-wan.sh run --tier all` |
 | `2.5` | LTX-2.5 distilled AV (Gemma 4). Gated. Already in the default pack | ~30 GB | `./scripts/utilities/download-ltx.sh run --tier 2.5` |
-| `2.3` | Retired LTX-2.3 FP8 fallback. Auto-includes `gemma` | ~28–30 GB | `./scripts/utilities/download-ltx.sh run --tier 2.3` |
-| `balanced` | Alias of `2.3`, not a 2.5 quality knob. Auto-includes `gemma` | ~28–30 GB | `./scripts/utilities/download-ltx.sh run --tier balanced` |
-| `quality` | LTX 2.3 BF16 alias, not 2.5. Auto-includes `gemma` | ~45–48 GB | `./scripts/utilities/download-ltx.sh run --tier quality` |
-| `gemma` | Gemma 3 DualCLIP companion for LTX 2.3. Lab 2.5 uses Gemma 4 instead | ~8–9.5 GB | `./scripts/utilities/download-ltx.sh run --tier gemma` |
+| `2.3` | Retired LTX-2.3 FP8 fallback. Auto-includes `gemma` | ~28-30 GB | `./scripts/utilities/download-ltx.sh run --tier 2.3` |
+| `balanced` | Alias of `2.3`, not a 2.5 quality knob. Auto-includes `gemma` | ~28-30 GB | `./scripts/utilities/download-ltx.sh run --tier balanced` |
+| `quality` | LTX 2.3 BF16 alias, not 2.5. Auto-includes `gemma` | ~45-48 GB | `./scripts/utilities/download-ltx.sh run --tier quality` |
+| `gemma` | Gemma 3 DualCLIP companion for LTX 2.3. Lab 2.5 uses Gemma 4 instead | ~8-9.5 GB | `./scripts/utilities/download-ltx.sh run --tier gemma` |
 | `iclora` | LTX Union Control LoRA. Not in LTX `--tier all` | ~1 GB | `./scripts/utilities/download-ltx.sh run --tier iclora` |
 | LTX `all` | `2.5` + `2.3` + `gemma`. Does not include `iclora` | sum of those three | `./scripts/utilities/download-ltx.sh run --tier all` |
 | `analog` | Podcast Kokoro-82M ONNX and voices. Not in `download-models` | tiny | `./scripts/manage.sh download-podcast --tier analog` |
@@ -74,7 +74,7 @@ Wan `--tier all` is `5b` + `a14b` + `fun-inp`. It does not include `vace` or `s2
 | `video` | LongCat-Video (MIT). No NCCL in this stack | opt-in | `./scripts/manage.sh download-longcat run --tier video` |
 | `avatar` | LongCat-Video-Avatar. No NCCL | opt-in | `./scripts/manage.sh download-longcat run --tier avatar` |
 | LongCat `all` | `video` + `avatar` | opt-in | `./scripts/manage.sh download-longcat run --tier all` |
-| `creator` | DreamX-Creator selective payload. Not DreamX-World. Unload LTX first. The full hub repo is ~54 GB — this command does not pull that | ~8 GB selective | `./scripts/manage.sh download-dreamx run --tier creator` |
+| `creator` | DreamX-Creator selective payload. Not DreamX-World. Unload LTX first. The full hub repo is ~54 GB - this command does not pull that | ~8 GB selective | `./scripts/manage.sh download-dreamx run --tier creator` |
 | `seedvr2-3b` | SeedVR2-3B still polish or post-concat restore. Stop Comfy first if it runs on GPU | ~15 GB | `./scripts/manage.sh download-restore run --tier seedvr2-3b` |
 | `enhance` | Qwen3-4B prompt-enhance GGUF. Already in `download-models` | ~3 GB | `./scripts/manage.sh download-llm --tier enhance` |
 | `qwen36-35b-a3b` | Occupancy `llm-desk` GGUF. Not part of `download-models` | ~23 GB | `./scripts/manage.sh download-llm --tier qwen36-35b-a3b` |
@@ -100,7 +100,7 @@ The widget below is the same music row with `--tier` and `--limit` filled in. Po
 | DreamX-World | Refused |
 | MiniMax H3 / `download-h3` | Refused |
 
-Read [Model licenses](licenses.md) before a 30 GB pull. One heavy GPU job at a time — do not Queue Klein next to Wan, LTX, TRELLIS, or `llm-desk`.
+Read [Model licenses](licenses.md) before a 30 GB pull. One heavy GPU job at a time - do not Queue Klein next to Wan, LTX, TRELLIS, or `llm-desk`.
 
 ---
 

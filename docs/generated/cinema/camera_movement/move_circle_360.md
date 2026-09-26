@@ -1,6 +1,6 @@
 ---
 title: "Full circle"
-description: "Cinema Rack illustration — Full circle."
+description: "Cinema Rack illustration - Full circle."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

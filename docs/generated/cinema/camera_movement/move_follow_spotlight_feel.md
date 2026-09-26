@@ -1,6 +1,6 @@
 ---
 title: "Follow-spot feel"
-description: "Cinema Rack illustration — Follow-spot feel."
+description: "Cinema Rack illustration - Follow-spot feel."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

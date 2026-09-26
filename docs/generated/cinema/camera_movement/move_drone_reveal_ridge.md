@@ -1,6 +1,6 @@
 ---
 title: "Drone ridge reveal"
-description: "Cinema Rack illustration — Drone ridge reveal."
+description: "Cinema Rack illustration - Drone ridge reveal."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

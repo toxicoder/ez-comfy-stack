@@ -49,7 +49,7 @@ def test_prompt_forge_has_no_unet_and_stamps_llm() -> None:
     blob = json.dumps(graph)
     for needle in BANNED:
         assert needle not in blob
-    assert "1280×720" not in blob and "1280x720" not in blob
+    assert "1280x720" not in blob and "1280x720" not in blob
     assert "MODELS_DIR" not in blob
     extra = graph["extra"]
     assert extra["lab_app_mode"]["enabled"] is True
@@ -297,7 +297,7 @@ def test_beat_sheet_documents_yaml_contract_and_has_no_unet() -> None:
     assert "films/go-see" in handoff
     assert "dcc/clay-hero" in handoff
     assert "stills/identity-sheet" in handoff
-    assert "1280×720" not in blob and "1280x720" not in blob
+    assert "1280x720" not in blob and "1280x720" not in blob
     assert "MODELS_DIR" not in blob
     for needle in BANNED:
         assert needle not in blob

@@ -140,7 +140,7 @@ link_into_comfy() {
     base="$(basename "${f}")"
     dest="${src}/${base}"
     if ln_sfn_relative "${f}" "${dest}"; then
-      log "linked ${base} → comfy/upscale_models/"
+      log "linked ${base} -> comfy/upscale_models/"
     fi
   done < <(find "${dir}" -maxdepth 1 -type f \( -name '*.pth' -o -name '*.pt' -o -name '*.safetensors' \) 2>/dev/null)
 }

@@ -1,6 +1,6 @@
 ---
 title: "Truck left"
-description: "Cinema Rack illustration — Truck left."
+description: "Cinema Rack illustration - Truck left."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

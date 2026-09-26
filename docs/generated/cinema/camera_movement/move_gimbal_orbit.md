@@ -1,6 +1,6 @@
 ---
 title: "Gimbal orbit"
-description: "Cinema Rack illustration — Gimbal orbit."
+description: "Cinema Rack illustration - Gimbal orbit."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

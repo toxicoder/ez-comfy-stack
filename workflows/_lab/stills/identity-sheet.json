@@ -294,7 +294,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## stills/identity-sheet\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nThree-angle Klein identity sheet. Type any character in IDENTITY. Frozen seed 42. Identity-mode enhance is on. Optional style dropdown applies to the bible.\nPrints ez_identity_front / ez_identity_threequarter / ez_identity_profile.\nI2V feeders stay 1280\u00d7704. Unload before LTX prints.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n"
+        "## stills/identity-sheet\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nThree-angle Klein identity sheet. Type any character in IDENTITY. Frozen seed 42. Identity-mode enhance is on. Optional style dropdown applies to the bible.\nPrints ez_identity_front / ez_identity_threequarter / ez_identity_profile.\nI2V feeders stay 1280x704. Unload before LTX prints.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n"
       ],
       "title": "Operator note"
     },
@@ -1098,7 +1098,7 @@
         "Node name for S&R": "EZImageFormat"
       },
       "widgets_values": [
-        "16:9 LTX feeder (1280\u00d7704)",
+        "16:9 LTX feeder (1280x704)",
         "none",
         1280,
         704,
@@ -1970,7 +1970,7 @@
   "config": {},
   "extra": {
     "lab_profile": "stills/identity-sheet",
-    "lab_note": "## stills/identity-sheet\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nThree-angle Klein identity sheet. Type any character in IDENTITY. Frozen seed 42. Identity-mode enhance is on. Optional style dropdown applies to the bible.\nPrints ez_identity_front / ez_identity_threequarter / ez_identity_profile.\nI2V feeders stay 1280\u00d7704. Unload before LTX prints.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n",
+    "lab_note": "## stills/identity-sheet\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nThree-angle Klein identity sheet. Type any character in IDENTITY. Frozen seed 42. Identity-mode enhance is on. Optional style dropdown applies to the bible.\nPrints ez_identity_front / ez_identity_threequarter / ez_identity_profile.\nI2V feeders stay 1280x704. Unload before LTX prints.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n",
     "lab_description": "Klein 4B three-angle identity sheet 1280x704",
     "lab_app_mode": {
       "enabled": true,
@@ -1988,7 +1988,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
           }
         ],
         [
@@ -2012,7 +2012,7 @@
           29,
           "format",
           {
-            "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width \u00d7 Height (\u00f716).",
+            "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (div16).",
             "label": "Format / platform"
           }
         ],
@@ -2028,7 +2028,7 @@
           30,
           "upscale",
           {
-            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840\u00d72160 box (portrait 2160\u00d73840).",
+            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840x2160 box (portrait 2160x3840).",
             "label": "Upscale"
           }
         ],
@@ -2036,7 +2036,7 @@
           4,
           "style",
           {
-            "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
+            "description": "Optional look. Hidden on I2V - the start image owns look.",
             "label": "Style"
           }
         ],

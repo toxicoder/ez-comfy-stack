@@ -1,6 +1,6 @@
 ---
 title: "Slider left"
-description: "Cinema Rack illustration — Slider left."
+description: "Cinema Rack illustration - Slider left."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

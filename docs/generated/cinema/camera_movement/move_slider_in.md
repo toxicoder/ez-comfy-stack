@@ -1,6 +1,6 @@
 ---
 title: "Slider in"
-description: "Cinema Rack illustration — Slider in."
+description: "Cinema Rack illustration - Slider in."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

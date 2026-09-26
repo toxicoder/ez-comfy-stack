@@ -159,7 +159,7 @@ class FfprobeMediaProbe:
         return _parse_float_token(text, index=0)
 
     def size_wh(self, path: str) -> tuple[int, int] | None:
-        """First video stream width×height.
+        """First video stream widthxheight.
 
         Args:
             path: Media file.
@@ -352,7 +352,7 @@ def probe_seconds(
 def probe_wh(
     path: str, ffprobe: str | None = None, run: FfmpegRunner | None = None
 ) -> tuple[int, int] | None:
-    """First video stream width×height, or None.
+    """First video stream widthxheight, or None.
 
     Args:
         path: MP4 path.

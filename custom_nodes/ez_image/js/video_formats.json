@@ -13,7 +13,7 @@
     },
     {
       "id": "wan_16_9",
-      "label": "Wan · 16:9 YouTube (832×480)",
+      "label": "Wan - 16:9 YouTube (832x480)",
       "family": "wan",
       "group": "youtube",
       "width": 832,
@@ -24,18 +24,18 @@
     },
     {
       "id": "wan_16_9_mid",
-      "label": "Wan · 16:9 mid (1024×576)",
+      "label": "Wan - 16:9 mid (1024x576)",
       "family": "wan",
       "group": "youtube",
       "width": 1024,
       "height": 576,
       "prefix": "ez_wan_yt",
       "hint": "YouTube 16:9 clip",
-      "lock": "Horizontal 16:9. Heavier than the 832×480 default."
+      "lock": "Horizontal 16:9. Heavier than the 832x480 default."
     },
     {
       "id": "wan_9_16",
-      "label": "Wan · 9:16 Shorts (480×832)",
+      "label": "Wan - 9:16 Shorts (480x832)",
       "family": "wan",
       "group": "shorts",
       "width": 480,
@@ -46,7 +46,7 @@
     },
     {
       "id": "wan_1_1",
-      "label": "Wan · 1:1 square (768×768)",
+      "label": "Wan - 1:1 square (768x768)",
       "family": "wan",
       "group": "aspect",
       "width": 768,
@@ -57,47 +57,47 @@
     },
     {
       "id": "ltx_16_9",
-      "label": "LTX · 16:9 YouTube (1280×704)",
+      "label": "LTX - 16:9 YouTube (1280x704)",
       "family": "ltx",
       "group": "youtube",
       "width": 1280,
       "height": 704,
       "prefix": "ez_ltx_yt",
       "hint": "YouTube 16:9 AV clip, LTX VAE grid",
-      "lock": "LTX width/height stay ÷32. 1280×720 is invalid — this row is 1280×704."
+      "lock": "LTX width/height stay div32. 1280x720 is invalid - this row is 1280x704."
     },
     {
       "id": "ltx_9_16",
-      "label": "LTX · 9:16 Shorts (768×1280)",
+      "label": "LTX - 9:16 Shorts (768x1280)",
       "family": "ltx",
       "group": "shorts",
       "width": 768,
       "height": 1280,
       "prefix": "ez_ltx_shorts",
       "hint": "Shorts / Reels / TikTok 9:16 AV clip",
-      "lock": "Vertical 9:16 on the LTX ÷32 grid. Keep the subject in the middle third; top and bottom stay quiet for platform UI."
+      "lock": "Vertical 9:16 on the LTX div32 grid. Keep the subject in the middle third; top and bottom stay quiet for platform UI."
     },
     {
       "id": "ltx_1_1",
-      "label": "LTX · 1:1 square (768×768)",
+      "label": "LTX - 1:1 square (768x768)",
       "family": "ltx",
       "group": "aspect",
       "width": 768,
       "height": 768,
       "prefix": "ez_ltx_square",
       "hint": "Square 1:1 AV clip",
-      "lock": "Square 1:1 on the LTX ÷32 grid. Subject centered."
+      "lock": "Square 1:1 on the LTX div32 grid. Subject centered."
     },
     {
       "id": "ltx_4_5",
-      "label": "LTX · 4:5 portrait (1024×1280)",
+      "label": "LTX - 4:5 portrait (1024x1280)",
       "family": "ltx",
       "group": "instagram",
       "width": 1024,
       "height": 1280,
       "prefix": "ez_ltx_portrait",
       "hint": "Instagram 4:5 AV clip",
-      "lock": "Portrait 4:5 on the LTX ÷32 grid."
+      "lock": "Portrait 4:5 on the LTX div32 grid."
     }
   ],
   "families": {

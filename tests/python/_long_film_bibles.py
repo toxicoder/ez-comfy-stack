@@ -29,7 +29,7 @@ CAMERAS = (
 )
 
 # Each film: identity, enhance, wordless, hook (LTX identity clause), wan lock,
-# then 30 beats of (place, (script, foley, end)×3).
+# then 30 beats of (place, (script, foley, end)x3).
 FilmSpec = dict[str, Any]
 
 

@@ -1,6 +1,6 @@
 ---
 title: "Helmet cam"
-description: "Cinema Rack illustration — Helmet cam."
+description: "Cinema Rack illustration - Helmet cam."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

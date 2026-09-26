@@ -239,11 +239,11 @@ def test_progress_prefix_matches_operator_log() -> None:
 
 def test_emit_walk_progress_newline(capsys: pytest.CaptureFixture[str]) -> None:
     """Non-TTY progress is a full prefixed line (BATS/CI)."""
-    dc.emit_walk_progress("Scanning /tmp/models (max depth 6)…")
+    dc.emit_walk_progress("Scanning /tmp/models (max depth 6)...")
     err = capsys.readouterr().err
     assert err.startswith("[ez-comfy] Scanning")
     assert err.endswith("\n")
-    dc.emit_walk_progress("  still scanning /tmp/models: 12 paths…", rewrite=True)
+    dc.emit_walk_progress("  still scanning /tmp/models: 12 paths...", rewrite=True)
     err2 = capsys.readouterr().err
     assert "still scanning" in err2
     assert err2.endswith("\n")

@@ -1,4 +1,4 @@
-"""Package purpose: Fumadocs (Next.js App Router) documentation site — npm runners, typecheck, unit and visual gates.
+"""Package purpose: Fumadocs (Next.js App Router) documentation site - npm runners, typecheck, unit and visual gates.
 
 The site renders the markdown/MDX content that lives in the sibling `docs/` package, so the
 content data dependencies below come from `//docs:content`.  Keeping content out of this
@@ -234,8 +234,8 @@ sh_binary(
 )
 
 # Capture baselines in the Linux image that matches the docs CI job.  Committed goldens must
-# come from that environment — a laptop capture differs in font metrics and then reports every
-# page as changed in CI — so this is the supported way to refresh them.  Needs Docker running.
+# come from that environment - a laptop capture differs in font metrics and then reports every
+# page as changed in CI - so this is the supported way to refresh them.  Needs Docker running.
 #   bazelisk run //docs-site:visual-linux            # compare
 #   bazelisk run //docs-site:visual-linux -- --update  # rewrite, then review the diff
 sh_binary(

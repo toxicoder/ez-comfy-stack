@@ -3,7 +3,7 @@
 
 Invoked as: blender --background --python this.py -- --out DIR --layout FILE
 Constructs a Workbench greybox from ez.house.layout.v1. No Comfy socket.
-Clay does not need to look good — cameras and adjacency are the product.
+Clay does not need to look good - cameras and adjacency are the product.
 """
 
 from __future__ import annotations

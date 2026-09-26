@@ -1,6 +1,6 @@
 ---
 title: "Seated Two-Shot"
-description: "Cinema Rack illustration — Seated Two-Shot."
+description: "Cinema Rack illustration - Seated Two-Shot."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

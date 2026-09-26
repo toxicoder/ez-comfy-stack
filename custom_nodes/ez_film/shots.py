@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from .catalog import (  # noqa: F401 — re-export for existing importers
+from .catalog import (  # noqa: F401 - re-export for existing importers
     DEFAULT_CAP_SECONDS,
     FILM_CHOICES,
     FILM_SLUGS,

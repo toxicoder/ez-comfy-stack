@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import re
 
-# Cryptic lab-relative id → slightly longer descriptive id.
+# Cryptic lab-relative id -> slightly longer descriptive id.
 # Applied after OLD_TO_REL so *-lab-example stems resolve in one rel_id() call.
 REL_RENAMES: dict[str, str] = {
     "audio/dub/localize": "audio/dub/clone-translate",
@@ -289,7 +289,7 @@ REL_RENAMES: dict[str, str] = {
     "wan/vace-join": "motion/silent/vace-join",
 }
 
-# Old unique stem (no .json) → _lab-relative id (no .json).
+# Old unique stem (no .json) -> _lab-relative id (no .json).
 OLD_TO_REL: dict[str, str] = {
     "klein-banner-wide-lab-example": "klein/banner-wide",
     "klein-before-after-lab-example": "klein/before-after",
@@ -412,7 +412,7 @@ def stem_renames() -> dict[str, str]:
     """File-stem map implied by ``REL_RENAMES`` (no hyphenated collisions).
 
     Returns:
-        Old file stem → new file stem. Values agree when two lanes share a stem.
+        Old file stem -> new file stem. Values agree when two lanes share a stem.
         Generic English stems (``finish``, ``localize``) are omitted.
     """
     stems: dict[str, str] = {}

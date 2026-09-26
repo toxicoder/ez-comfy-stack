@@ -1,6 +1,6 @@
 ---
 title: "Label Insert"
-description: "Cinema Rack illustration — Label Insert."
+description: "Cinema Rack illustration - Label Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

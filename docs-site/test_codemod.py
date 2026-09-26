@@ -284,7 +284,7 @@ class MdxSafetyTests(unittest.TestCase):
         self.assertNotIn("<!--", result)
 
     def test_autolink_becomes_an_explicit_link(self) -> None:
-        """``<https://…>`` is rejected as an element name; a link keeps it clickable."""
+        """``<https://...>`` is rejected as an element name; a link keeps it clickable."""
         result = codemod.to_mdx("see <https://example.com/a> ok\n")
         self.assertIn("[https://example.com/a](https://example.com/a)", result)
         self.assertNotIn("<https://", result)
@@ -647,7 +647,7 @@ class RealContentTests(unittest.TestCase):
 
         The MDX compiler silently drops literal JSX when the file is read as ``md``, so a
         page that needs a component and keeps the ``.md`` suffix would lose its callouts,
-        tabs or cards without any build error — this is the check that catches that.
+        tabs or cards without any build error - this is the check that catches that.
         """
         needs_mdx = {
             str(path.relative_to(codemod.REPO_ROOT))

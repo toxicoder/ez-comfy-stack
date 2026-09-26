@@ -277,7 +277,7 @@ def nill_album_for_series(series: str) -> AlbumInfo:
     """Return the Nill Bye album row for a catalog series.
 
     Args:
-        series: Diss series key (``lab``, ``civic``, …).
+        series: Diss series key (``lab``, ``civic``, ...).
     Returns:
         Album metadata.
     Raises:

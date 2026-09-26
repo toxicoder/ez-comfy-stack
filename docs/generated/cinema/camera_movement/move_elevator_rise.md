@@ -1,6 +1,6 @@
 ---
 title: "Elevator rise"
-description: "Cinema Rack illustration — Elevator rise."
+description: "Cinema Rack illustration - Elevator rise."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

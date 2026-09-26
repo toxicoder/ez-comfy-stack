@@ -13,10 +13,10 @@
 | US-safe models | Klein 4B + Wan 2.2 + LTX-2.5 |
 | Occupancy | One heavy GPU job (XOR) |
 | Downloads | `download-limit auto` = **85%** of measured Mbps (24h host cache) |
-| Restart | `restart: "no"` — type **yes** on start |
+| Restart | `restart: "no"` - type **yes** on start |
 | Tests | Hermetic **100%** coverage gate (`bazelisk run //:validate`) |
 
-**Documentation:** [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (from `main`) · [development](https://toxicoder.github.io/ez-comfy-stack/development/) (from `development`) — Fumadocs (Next.js) with Orama search, glossary tooltips, Mermaid, and live editable command variables. Local: `bazelisk run //docs:serve`. Migration notes: [MIGRATION.md](MIGRATION.md).
+**Documentation:** [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (from `main`) - [development](https://toxicoder.github.io/ez-comfy-stack/development/) (from `development`) - Fumadocs (Next.js) with Orama search, glossary tooltips, Mermaid, and live editable command variables. Local: `bazelisk run //docs:serve`. Migration notes: [MIGRATION.md](MIGRATION.md).
 
 When to use this sample vs [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab): [docs/start/when-to-use-vs-spark-lab.md](docs/start/when-to-use-vs-spark-lab.md). Licenses: [docs/licenses.md](docs/licenses.md).
 
@@ -30,12 +30,12 @@ flowchart TB
   Home --> Operate["Operate"]
   Home --> Ref["Reference"]
   Home --> Contribute["Contribute"]
-  Learn --> L1["syllabus · ComfyUI · pipeline · glossary"]
-  Start --> S1["Getting Started · licenses · FAQ"]
-  Studio --> C1["still → motion → AV · catalogs"]
-  Operate --> O1["daily loop · occupancy · troubleshooting"]
-  Ref --> R1["manage.sh · occupancy matrix · nodes"]
-  Contribute --> N1["conventions · docs-style · tests"]
+  Learn --> L1["syllabus - ComfyUI - pipeline - glossary"]
+  Start --> S1["Getting Started - licenses - FAQ"]
+  Studio --> C1["still -> motion -> AV - catalogs"]
+  Operate --> O1["daily loop - occupancy - troubleshooting"]
+  Ref --> R1["manage.sh - occupancy matrix - nodes"]
+  Contribute --> N1["conventions - docs-style - tests"]
 ```
 
 ## Quick start
@@ -62,11 +62,11 @@ export COMFY_PORT="${COMFY_PORT:-8188}"
 
 ## Safety
 
-- Compose `restart: "no"` — manual start only
+- Compose `restart: "no"` - manual start only
 - Heavy confirmation + free RAM/disk headroom
 - Download throttle by default; wrap **clears on exit**
 - See [docs/reboot-safety.md](docs/reboot-safety.md)
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT - see [LICENSE](LICENSE).

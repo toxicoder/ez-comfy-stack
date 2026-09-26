@@ -281,7 +281,7 @@ teardown() {
   DRY_RUN=0
   run cmd_run
   [ "${status}" -ne 0 ]
-  [[ "${output}" == *"0–50"* || "${output}" == *"0-50"* ]]
+  [[ "${output}" == *"0-50"* || "${output}" == *"0-50"* ]]
 }
 
 @test "concat-shots xfade three-step ffmpeg when audio present" {

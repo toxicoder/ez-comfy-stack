@@ -1,6 +1,6 @@
 ---
 title: "Night practical push"
-description: "Cinema Rack illustration — Night practical push."
+description: "Cinema Rack illustration - Night practical push."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

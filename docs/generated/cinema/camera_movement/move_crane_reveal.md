@@ -1,6 +1,6 @@
 ---
 title: "Crane reveal"
-description: "Cinema Rack illustration — Crane reveal."
+description: "Cinema Rack illustration - Crane reveal."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

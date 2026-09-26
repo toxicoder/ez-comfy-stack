@@ -70,7 +70,7 @@ class MediaProbe(Protocol):
         ...
 
     def size_wh(self, path: str) -> tuple[int, int] | None:
-        """First video stream width×height.
+        """First video stream widthxheight.
 
         Args:
             path: Media file.

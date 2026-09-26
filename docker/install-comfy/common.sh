@@ -28,7 +28,7 @@ COMFYUI_OPENCUT_REF="${COMFYUI_OPENCUT_REF:-0.5.0}"
 COMFYUI_MAGCACHE_REF="${COMFYUI_MAGCACHE_REF:-47bdd2aca97e568087c4e92d2d2f0426bdce7a37}"
 COMFYUI_LTX_DIRECTOR_REF="${COMFYUI_LTX_DIRECTOR_REF:-a3c809c8b593a74c2ddcd6c1f83ad85ebebe3c64}"
 # Chatterbox helpers live in chatterbox-tts.sh and are sourced from
-# phase-nodes.sh only — do not source them here (would bust the Comfy pip layer).
+# phase-nodes.sh only - do not source them here (would bust the Comfy pip layer).
 
 #######################################
 # Path of the volume ComfyUI pin stamp.
@@ -62,7 +62,7 @@ write_comfy_pin() {
   dest="$(dirname "${f}")"
   mkdir -p "${dest}"
   printf '%s\n' "${COMFYUI_REF:-}" >"${f}"
-  log "Wrote Comfy pin ${COMFYUI_REF:-} → ${f}"
+  log "Wrote Comfy pin ${COMFYUI_REF:-} -> ${f}"
 }
 
 #######################################
@@ -198,7 +198,7 @@ clone_node() {
   local any=""
   log "custom node: begin ${name}${ref:+ (ref ${ref})}"
   if [[ -d ${dest}/.git ]]; then
-    log "custom node: updating ${name}…"
+    log "custom node: updating ${name}..."
     if [[ -n ${ref} ]]; then
       git -C "${dest}" fetch --depth 1 origin "${ref}" 2>/dev/null || true
       git -C "${dest}" checkout "${ref}" 2>/dev/null ||
@@ -211,9 +211,9 @@ clone_node() {
       any="$(find "${dest}" -mindepth 1 -maxdepth 1 -print -quit 2>/dev/null || true)"
     fi
     if [[ -n ${any} ]]; then
-      log "custom node: ${name} already present (no .git) — skip clone"
+      log "custom node: ${name} already present (no .git) - skip clone"
     else
-      log "custom node: cloning ${name}…"
+      log "custom node: cloning ${name}..."
       if [[ -n ${ref} ]] && clone_node_ref_is_sha "${ref}"; then
         mkdir -p "${dest}"
         git -C "${dest}" init >/dev/null 2>&1 || true
@@ -230,7 +230,7 @@ clone_node() {
     fi
   fi
   if [[ -f "${CUSTOM}/${name}/requirements.txt" ]]; then
-    log "custom node: pip requirements for ${name}…"
+    log "custom node: pip requirements for ${name}..."
     pip_install -r "${CUSTOM}/${name}/requirements.txt" || warn "requirements failed: ${name}"
   fi
   log "custom node: done ${name}"
@@ -269,7 +269,7 @@ layout_host_uid_gid() {
 #######################################
 # Symlink a Comfy models subdir to the host cache under MODELS_ROOT/comfy.
 # Host MODELS_ROOT/comfy is the source of truth for weights (download-models).
-# Always retarget COMFY_HOME/models/<sub> → host dir so prebuilt/seeded trees
+# Always retarget COMFY_HOME/models/<sub> -> host dir so prebuilt/seeded trees
 # cannot leave a real directory that hides host files from ComfyUI.
 # Globals:
 #   MODELS_ROOT, COMFY_HOME, HOST_UID, HOST_GID
@@ -299,14 +299,14 @@ link_models() {
       [[ ${target} == "${host_dir}" ]]; then
       return 0
     fi
-    log "retarget models/${sub} → ${host_dir} (was symlink → ${target})"
+    log "retarget models/${sub} -> ${host_dir} (was symlink -> ${target})"
     rm -f "${comfy_dir}" 2>/dev/null || true
   elif [[ -d ${comfy_dir} ]]; then
-    # Real dir (even non-empty) blocks host weights — move aside once
+    # Real dir (even non-empty) blocks host weights - move aside once
     if [[ -n "$(ls -A "${comfy_dir}" 2>/dev/null || true)" ]]; then
       local bak
       bak="${comfy_dir}.bak.$(date +%s)"
-      log "moving non-empty models/${sub} aside → ${bak} (host weights take over)"
+      log "moving non-empty models/${sub} aside -> ${bak} (host weights take over)"
       mv "${comfy_dir}" "${bak}" 2>/dev/null || rm -rf "${comfy_dir}" 2>/dev/null || true
     else
       rmdir "${comfy_dir}" 2>/dev/null || rm -rf "${comfy_dir}" 2>/dev/null || true
@@ -316,7 +316,7 @@ link_models() {
   fi
 
   ln -sfn "${host_dir}" "${comfy_dir}"
-  log "link models/${sub} → ${host_dir}"
+  log "link models/${sub} -> ${host_dir}"
 }
 
 #######################################
@@ -458,7 +458,7 @@ heal_comfy_api_input_from_prebuilt() {
     }
   fi
   if [[ -f ${dest_init} ]]; then
-    log "Healed comfy_api/input → ${dest_init}"
+    log "Healed comfy_api/input -> ${dest_init}"
   else
     warn "comfy_api/input still missing after heal"
   fi

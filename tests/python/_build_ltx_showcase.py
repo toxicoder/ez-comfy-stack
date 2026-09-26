@@ -35,15 +35,15 @@ LTX_CANVAS = (
     "LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid)."
 )
 PREVIEW = (
-    "After Queue, click **Save video (MP4) — open node for preview** for an inline "
+    "After Queue, click **Save video (MP4) - open node for preview** for an inline "
     "preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` "
     "(container `/outputs`). Save frames PNG is secondary."
 )
 LICENSE = (
-    "LTX Community License — not Apache. $10M company-revenue cap. Disclose "
+    "LTX Community License - not Apache. $10M company-revenue cap. Disclose "
     "AI-generated media; do not strip provenance; do not distill."
 )
-OCCUPANCY = "Occupancy: ltx — stop Wan, podcast, music, other LTX. One GB10 job."
+OCCUPANCY = "Occupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job."
 MODELS = (
     "Models: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + "
     "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + "
@@ -208,7 +208,7 @@ def _set_prefix(graph: dict, prefix: str) -> None:
     vhs = _node(graph, "VHS_VideoCombine")
     vhs["widgets_values"]["filename_prefix"] = prefix
     vhs["widgets_values"]["save_output"] = True
-    vhs["title"] = "Save video (MP4) — open node for preview"
+    vhs["title"] = "Save video (MP4) - open node for preview"
     for node in graph["nodes"]:
         if node.get("type") == "SaveImage":
             node["widgets_values"] = [f"{prefix}_frames"]
@@ -280,8 +280,8 @@ def build_dialogue() -> None:
 LTX-2.5 distilled **dialogue** T2V (~8 s). Joint AV speech Wan cannot mux. {LICENSE}
 {MODELS}
 193 frames @ 24 fps. Authored quoted line; mouths will not match. {PIN_OFF}
-Modality guidance (A/V coupling, scale 3.0) is on — one extra forward pass per step.
-Two-stage DFR stays in Comfy **Templates → LTX-2.5**.
+Modality guidance (A/V coupling, scale 3.0) is on - one extra forward pass per step.
+Two-stage DFR stays in Comfy **Templates -> LTX-2.5**.
 
 {OCCUPANCY}
 """
@@ -467,10 +467,10 @@ def build_flf() -> None:
 
 {PREVIEW}
 
-LTX-2.5 distilled **first-last-frame** AV (~8 s). Two Klein stills (hero 1280×704) pin start and end via `LTXVAddGuide` on the **video** latent, then audio concat. {LICENSE}
+LTX-2.5 distilled **first-last-frame** AV (~8 s). Two Klein stills (hero 1280x704) pin start and end via `LTXVAddGuide` on the **video** latent, then audio concat. {LICENSE}
 {MODELS}
 Guides are cropped after sample. Load **First frame** / **Last frame** (`ez_still_hero_*.png`). Same aspect. {PIN_OFF}
-Official FLF2V subgraph stays in Comfy **Templates → LTX-2.5**.
+Official FLF2V subgraph stays in Comfy **Templates -> LTX-2.5**.
 
 {OCCUPANCY}
 """
@@ -551,7 +551,7 @@ def build_a2v() -> None:
 LTX-2.5 distilled **audio-to-video freeze** (~8 s). Drop a ~8 s wav/mp3 in `${{COMFY_OUTPUT_DIR}}/input` as `ez_a2v_bed.wav` (or pick it on **Audio file**). Optional start still locks look. {LICENSE}
 {MODELS}
 Audio VAE **encodes** the clip into the joint latent. The MP4 muxes the **original** waveform (no `LTXVAudioVAEDecode`). Residual denoise on the audio latent is possible; picture still follows the bed. Mouths will not match. Banned lip-sync OSS stays out.
-Two-stage A2V with frozen tokens in both stages lives in Comfy **Templates → LTX-2.5**. {PIN_OFF}
+Two-stage A2V with frozen tokens in both stages lives in Comfy **Templates -> LTX-2.5**. {PIN_OFF}
 
 Handoff from **stills/talking-head** or any Klein still. ACE-Step bed: stop/unload music occupancy first.
 
@@ -571,8 +571,8 @@ def patch_talking_head() -> None:
             "Real single-stage freeze is **motion/av/audio-to-video-8s** (LoadAudio + encode, mux original wav). "
         )
         note = note.replace(
-            "Official two-stage A2V lives in Comfy Templates → LTX-2.5.",
-            insert + "Official two-stage A2V lives in Comfy Templates → LTX-2.5.",
+            "Official two-stage A2V lives in Comfy Templates -> LTX-2.5.",
+            insert + "Official two-stage A2V lives in Comfy Templates -> LTX-2.5.",
         )
         extra["lab_note"] = note
         for node in graph["nodes"]:

@@ -25,14 +25,14 @@ tags: [comfyui, workflows, klein, stills, catalog]
 
 | Workflow | What it does |
 | --- | --- |
-| **[stills/still-draft](../generated/workflows/stills/still-draft.md)** | Apache Klein 4B distilled. Default **768×432**, **4** steps, batch 2, prefix `ez_still_draft`. **Format / platform** retargets |
-| **[stills/still-hero](../generated/workflows/stills/still-hero.md)** | Same prompt + seed, **1280×704** (LTX VAE grid), more steps, prefix `ez_still_hero`. Enhance **on**. |
-| **[stills/still-studio](../generated/workflows/stills/still-studio.md)** | Still desk. Format / platform (aspect or named job), Style, Rewrite prompt, Look recipe. Default **1280×704**. Prefix follows Format. |
-| **[stills/image-studio](../generated/workflows/stills/image-studio.md)** | Universal still desk. 100 creator modes (background swap, change text, change ratio, …), Format / platform, optional reference still. **Iterate** does text-to-image then edit. **This run** shows the values Queue will send. Default **1280×704**. Prefix follows Creator mode unless Iterate is on (`ez_iterate`). |
-| **[stills/identity-sheet](../generated/workflows/stills/identity-sheet.md)** | 3-angle sheet (front / three-quarter / profile) of the identity you type. Seed **42**, Enhance **on** (identity mode), **1280×704** |
-| **[stills/character-draft](../generated/workflows/stills/character-draft.md)** | Character still 1024×1280, style dropdown, prefix `ez_character` |
+| **[stills/still-draft](../generated/workflows/stills/still-draft.md)** | Apache Klein 4B distilled. Default **768x432**, **4** steps, batch 2, prefix `ez_still_draft`. **Format / platform** retargets |
+| **[stills/still-hero](../generated/workflows/stills/still-hero.md)** | Same prompt + seed, **1280x704** (LTX VAE grid), more steps, prefix `ez_still_hero`. Enhance **on**. |
+| **[stills/still-studio](../generated/workflows/stills/still-studio.md)** | Still desk. Format / platform (aspect or named job), Style, Rewrite prompt, Look recipe. Default **1280x704**. Prefix follows Format. |
+| **[stills/image-studio](../generated/workflows/stills/image-studio.md)** | Universal still desk. 100 creator modes (background swap, change text, change ratio, ...), Format / platform, optional reference still. **Iterate** does text-to-image then edit. **This run** shows the values Queue will send. Default **1280x704**. Prefix follows Creator mode unless Iterate is on (`ez_iterate`). |
+| **[stills/identity-sheet](../generated/workflows/stills/identity-sheet.md)** | 3-angle sheet (front / three-quarter / profile) of the identity you type. Seed **42**, Enhance **on** (identity mode), **1280x704** |
+| **[stills/character-draft](../generated/workflows/stills/character-draft.md)** | Character still 1024x1280, style dropdown, prefix `ez_character` |
 | **[stills/character-tweak](../generated/workflows/stills/character-tweak.md)** | Klein-edit that still (LoadImage + ReferenceLatent), prefix `ez_character_tweak` |
-| **[stills/talking-head](../generated/workflows/stills/talking-head.md)** | Klein still → LTX I2V talking smoke. Real freeze: **[motion/av/audio-to-video-8s](../generated/workflows/motion/av/audio-to-video-8s.md)**. Qwen3-TTS / Wan S2V opt-in. No banned lip-sync OSS |
+| **[stills/talking-head](../generated/workflows/stills/talking-head.md)** | Klein still -> LTX I2V talking smoke. Real freeze: **[motion/av/audio-to-video-8s](../generated/workflows/motion/av/audio-to-video-8s.md)**. Qwen3-TTS / Wan S2V opt-in. No banned lip-sync OSS |
 
 Lane B Klein stills (same occupancy **klein**):
 
@@ -48,19 +48,19 @@ Lane B Klein stills (same occupancy **klein**):
 
 ---
 
-## Apps Lane A — Klein stills
+## Apps Lane A - Klein stills
 
 App Mode (frontend **1.41.13+**) is a widget surface on the same lab JSON. Occupancy and handoff: [ComfyUI Apps](../studio-apps.md). Inspire (no UNET) stays on the [catalog index](../studio-workflows.md#inspire-lane-a).
 
 | Workflow | What it does |
 | --- | --- |
 | **[stills/image-studio](../generated/workflows/stills/image-studio.md)** | Universal still desk. 100 creator modes, Format / platform, optional reference. **Iterate** (text, then edit the saved still) and **This run** (values Queue will send). Prefix follows Creator mode |
-| **[stills/still-draft](../generated/workflows/stills/still-draft.md)** | Spark Still. Default 768×432; **Format / platform** retargets. Enhance on. Prefix `ez_still_draft` |
-| **[stills/identity-sheet](../generated/workflows/stills/identity-sheet.md)** | 3-angle sheet of the identity you type, seed **42**, **1280×704** |
-| **[stills/storyboard-6up](../generated/workflows/stills/storyboard-6up.md)** | Six new cameras of one scene (`ez_board_01`…`06`) |
+| **[stills/still-draft](../generated/workflows/stills/still-draft.md)** | Spark Still. Default 768x432; **Format / platform** retargets. Enhance on. Prefix `ez_still_draft` |
+| **[stills/identity-sheet](../generated/workflows/stills/identity-sheet.md)** | 3-angle sheet of the identity you type, seed **42**, **1280x704** |
+| **[stills/storyboard-6up](../generated/workflows/stills/storyboard-6up.md)** | Six new cameras of one scene (`ez_board_01`...`06`) |
 | **[stills/dream-house](../generated/workflows/stills/dream-house.md)** | World bible. Ten Instagram 4:5 stills: virtual tour of one place, each a different room or view (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study) |
-| **[stills/dream-house-clay](../generated/workflows/stills/dream-house-clay.md)** | Same tour as Klein **edit** of clay (`ez_house_clay_01`…`10`). `start` seeds plates; optional `house-views` dump. Prefix `ez_dream_house_clay_*` |
-| **[stills/character-draft](../generated/workflows/stills/character-draft.md)** | Character still, 1024×1280, style dropdown, prefix `ez_character` |
+| **[stills/dream-house-clay](../generated/workflows/stills/dream-house-clay.md)** | Same tour as Klein **edit** of clay (`ez_house_clay_01`...`10`). `start` seeds plates; optional `house-views` dump. Prefix `ez_dream_house_clay_*` |
+| **[stills/character-draft](../generated/workflows/stills/character-draft.md)** | Character still, 1024x1280, style dropdown, prefix `ez_character` |
 | **[stills/character-tweak](../generated/workflows/stills/character-tweak.md)** | Edit `ez_character_*.png` with a change prompt (ReferenceLatent) |
 | **[stills/background-swap](../generated/workflows/stills/background-swap.md)** | Keep the subject; replace backdrop, ground, and nearby set dressing. 100 sample places + Custom. Cubic block world rebuilds this place as cubes from a block study, then pastes the original people. Other/background character toggles. Prefix `ez_bg_swap` |
 | **[stills/background-edit](../generated/workflows/stills/background-edit.md)** | Keep the subject; restyle the environment in place (cartoon, add/remove, weather). 30 samples + Custom. Other/background character toggles. Prefix `ez_bg_edit` |
@@ -68,20 +68,20 @@ App Mode (frontend **1.41.13+**) is a widget surface on the same lab JSON. Occup
 
 ---
 
-## Creator toolkit — stills and plates
+## Creator toolkit - stills and plates
 
 Pack 1 stills (motion/AV companions: [Motion catalog](workflows-motion.md)):
 
 | Workflow | What it does |
 | --- | --- |
 | **[stills/shorts-still](../generated/workflows/stills/shorts-still.md)** | Vertical 9:16 Shorts still (`ez_shorts_still`) |
-| **[stills/thumbnail](../generated/workflows/stills/thumbnail.md)** | YouTube thumbnail still 1280×720 |
+| **[stills/thumbnail](../generated/workflows/stills/thumbnail.md)** | YouTube thumbnail still 1280x720 |
 | **[stills/product-packshot](../generated/workflows/stills/product-packshot.md)** | Clean product packshot 1:1 |
 | **[stills/before-after](../generated/workflows/stills/before-after.md)** | Before plate, after Klein-edit of the same mug |
 | **[stills/style-lock](../generated/workflows/stills/style-lock.md)** | One penthouse, four cameras, locked inventory |
 | **[stills/storyboard-6up](../generated/workflows/stills/storyboard-6up.md)** | Six storyboard frames of one rooftop from new cameras |
 
-Pack 2 — stills and plates:
+Pack 2 - stills and plates:
 
 | Workflow | What it does |
 | --- | --- |
@@ -99,4 +99,4 @@ Pack 2 — stills and plates:
 | **[stills/camera-angles](../generated/workflows/stills/camera-angles.md)** | Wide / medium / close of one subject, new cameras |
 | **[stills/color-moods](../generated/workflows/stills/color-moods.md)** | Warm plate, then three grade edits |
 
-Klein stills may use 1280×720; LTX feeders stay **1280×704**. See [Troubleshooting](../troubleshooting.md).
+Klein stills may use 1280x720; LTX feeders stay **1280x704**. See [Troubleshooting](../troubleshooting.md).

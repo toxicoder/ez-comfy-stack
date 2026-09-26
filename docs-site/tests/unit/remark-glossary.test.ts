@@ -3,7 +3,7 @@
  *
  * The MkDocs site auto-appended `docs/includes/abbreviations.md` and wrapped each known
  * term in a tooltip.  The port has to keep doing that, and it has to keep working when the
- * compiler's working directory is the docs package rather than the repository — which is
+ * compiler's working directory is the docs package rather than the repository - which is
  * the case that silently produced zero tooltips once.
  */
 

@@ -1,6 +1,6 @@
 ---
 title: Why one heavy job
-description: Occupancy as an idea — GB10 runs one denoise, mesh, or writing desk at a time, so SSH stays usable.
+description: Occupancy as an idea - GB10 runs one denoise, mesh, or writing desk at a time, so SSH stays usable.
 tags: [learn, occupancy, gb10, safety]
 ---
 
@@ -27,7 +27,7 @@ tags: [learn, occupancy, gb10, safety]
 
 The Spark has a lot of unified memory, but this stack still treats the GPU as **one** heavy occupant. A Klein still, a Wan 5 s clip, an LTX AV shot, a TRELLIS mesh, and the optional 35B writing desk each want the same RAM. Running two of them is how SSH dies.
 
-Occupancy is the name for that rule. The App chip on a lab graph is not decoration — it is the job you just reserved.
+Occupancy is the name for that rule. The App chip on a lab graph is not decoration - it is the job you just reserved.
 
 ```mermaid
 flowchart LR
@@ -49,7 +49,7 @@ You do **not** need the matrix to Queue `stills/still-draft`. You do need it bef
 | Action | What it does |
 | --- | --- |
 | **Queue another App** | Unload the previous occupant first if the chip changed |
-| **Park** (`occupancy enter …`) | `POST /free` unloads weights; the container can stay up |
+| **Park** (`occupancy enter ...`) | `POST /free` unloads weights; the container can stay up |
 | **Stop** | Container down. Type **yes** on the next `start` |
 | **Reboot the Spark** | Always `stop` first. Compose `restart: "no"` will not bring Comfy back |
 

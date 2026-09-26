@@ -421,7 +421,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## creator/stills/spotify-canvas-still\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nSpotify Canvas still 9:16 (silent JPG stand-in). Lab size **576\u00d71024**. Prefix `ez_spot_still`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: **creator/silent/spotify-canvas**.\nSpotify Canvas is silent 9:16, 3\u20138 s, MP4 or JPG. Scale in an editor if the current Canvas pixel range rejects this height.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## creator/stills/spotify-canvas-still\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nSpotify Canvas still 9:16 (silent JPG stand-in). Lab size **576x1024**. Prefix `ez_spot_still`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: **creator/silent/spotify-canvas**.\nSpotify Canvas is silent 9:16, 3-8 s, MP4 or JPG. Scale in an editor if the current Canvas pixel range rejects this height.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     },
@@ -613,7 +613,7 @@
         "Node name for S&R": "EZImageFormat"
       },
       "widgets_values": [
-        "Spotify \u00b7 Canvas still (576\u00d71024)",
+        "Spotify - Canvas still (576x1024)",
         "none",
         576,
         1024,
@@ -929,7 +929,7 @@
         0
       ]
     },
-    "lab_note": "## creator/stills/spotify-canvas-still\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nSpotify Canvas still 9:16 (silent JPG stand-in). Lab size **576\u00d71024**. Prefix `ez_spot_still`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: **creator/silent/spotify-canvas**.\nSpotify Canvas is silent 9:16, 3\u20138 s, MP4 or JPG. Scale in an editor if the current Canvas pixel range rejects this height.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## creator/stills/spotify-canvas-still\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nSpotify Canvas still 9:16 (silent JPG stand-in). Lab size **576x1024**. Prefix `ez_spot_still`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: **creator/silent/spotify-canvas**.\nSpotify Canvas is silent 9:16, 3-8 s, MP4 or JPG. Scale in an editor if the current Canvas pixel range rejects this height.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_description": "Spotify Canvas still 9:16 (silent JPG stand-in)",
     "lab_app_mode": {
       "enabled": true,
@@ -949,7 +949,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
           }
         ],
         [
@@ -973,7 +973,7 @@
           14,
           "format",
           {
-            "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width \u00d7 Height (\u00f716).",
+            "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (div16).",
             "label": "Format / platform"
           }
         ],
@@ -989,7 +989,7 @@
           15,
           "upscale",
           {
-            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840\u00d72160 box (portrait 2160\u00d73840).",
+            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840x2160 box (portrait 2160x3840).",
             "label": "Upscale"
           }
         ],
@@ -997,7 +997,7 @@
           11,
           "style",
           {
-            "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
+            "description": "Optional look. Hidden on I2V - the start image owns look.",
             "label": "Style"
           }
         ],

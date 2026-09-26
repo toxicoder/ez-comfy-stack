@@ -9,7 +9,7 @@
 #
 # Safety:
 #   Refuses if compose comfyui is running. Dry-run by default.
-#   Proxies are 960×528 ~2 Mbps under films/<slug>/proxies/.
+#   Proxies are 960x528 ~2 Mbps under films/<slug>/proxies/.
 #
 # @command film-proxies
 
@@ -68,7 +68,7 @@ cmd_run() {
   slug="$(film_slug "${FILM}")" || return 1
   dest="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/films/${slug}"
   if compose_is_running; then
-    err "ComfyUI is running — stop it before film-proxies (NVENC contention)"
+    err "ComfyUI is running - stop it before film-proxies (NVENC contention)"
     return 2
   fi
   if [[ ! -d ${dest}/shots ]]; then
@@ -99,7 +99,7 @@ cmd_run() {
       err "ffmpeg not on PATH"
       return 1
     fi
-    run_ffmpeg_logged "NVENC proxy → ${out}" -- ffmpeg -y -i "${src}" -vf scale=960:528 -c:v h264_nvenc -preset p4 \
+    run_ffmpeg_logged "NVENC proxy -> ${out}" -- ffmpeg -y -i "${src}" -vf scale=960:528 -c:v h264_nvenc -preset p4 \
       -b:v 2M -maxrate 2M -bufsize 4M -an "${out}"
     log "wrote ${out}"
   done

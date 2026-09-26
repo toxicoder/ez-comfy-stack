@@ -1,6 +1,6 @@
 ---
 title: "Switchback drone"
-description: "Cinema Rack illustration — Switchback drone."
+description: "Cinema Rack illustration - Switchback drone."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

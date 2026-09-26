@@ -1,6 +1,6 @@
 ---
 title: "Crowd part"
-description: "Cinema Rack illustration — Crowd part."
+description: "Cinema Rack illustration - Crowd part."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -1,6 +1,6 @@
 ---
 title: Daily loop
-description: Doctor, start (type yes), Queue, stop — the returning operator path on one Spark.
+description: Doctor, start (type yes), Queue, stop - the returning operator path on one Spark.
 tags: [operate, doctor, start, stop, occupancy]
 ---
 
@@ -37,11 +37,11 @@ Do not weaken `restart: "no"`, type **yes** on `start`, headroom, or download-li
 
 ## Loop
 
-1. `./scripts/manage.sh doctor` — expect `Doctor OK`. Fail: [Host and Docker](troubleshooting-host-docker.md).
-2. `./scripts/manage.sh start` — type **yes**. Headroom is a hard fail.
+1. `./scripts/manage.sh doctor` - expect `Doctor OK`. Fail: [Host and Docker](troubleshooting-host-docker.md).
+2. `./scripts/manage.sh start` - type **yes**. Headroom is a hard fail.
 3. Open the UI. Load a `_lab` App. Queue **one** occupancy chip at a time.
-4. Optional: park for Blender or the writing desk — [Occupancy desk](../occupancy.md).
-5. `./scripts/manage.sh stop` before reboot — [Reboot safety](../reboot-safety.md).
+4. Optional: park for Blender or the writing desk - [Occupancy desk](../occupancy.md).
+5. `./scripts/manage.sh stop` before reboot - [Reboot safety](../reboot-safety.md).
 
 From a laptop, forward the port:
 
@@ -51,7 +51,7 @@ ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
 
 Then open `http://127.0.0.1:${COMFY_PORT}`.
 
-Weights already on disk? Skip `download-models`. Missing Models on the canvas is a cache problem, not a graph bug — [Models and workflows](troubleshooting-models-workflows.md).
+Weights already on disk? Skip `download-models`. Missing Models on the canvas is a cache problem, not a graph bug - [Models and workflows](troubleshooting-models-workflows.md).
 
 ---
 

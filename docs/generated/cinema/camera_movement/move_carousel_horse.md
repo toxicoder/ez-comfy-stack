@@ -1,6 +1,6 @@
 ---
 title: "Fairground circle"
-description: "Cinema Rack illustration — Fairground circle."
+description: "Cinema Rack illustration - Fairground circle."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -1,6 +1,6 @@
 ---
 title: "Periscope over"
-description: "Cinema Rack illustration — Periscope over."
+description: "Cinema Rack illustration - Periscope over."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

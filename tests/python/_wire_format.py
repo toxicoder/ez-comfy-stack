@@ -42,7 +42,7 @@ from ez_image.video_formats import (  # noqa: E402
 from ez_music.albums import album_rel, shipped_albums  # noqa: E402
 
 FORMAT_BLURB = (
-    "Format / platform sets pixels (Custom uses Width × Height). "
+    "Format / platform sets pixels (Custom uses Width x Height). "
     "Quality does not change size."
 )
 STILL_FORMAT_TYPE = "EZImageFormat"

@@ -70,9 +70,9 @@ GROUP_TITLES = {
 }
 
 OCC_LINE = {
-    "klein": "klein — stop Wan, LTX, podcast, music",
-    "wan": "wan — stop LTX, podcast, music",
-    "ltx": "ltx — stop Wan, podcast, music, other LTX",
+    "klein": "klein - stop Wan, LTX, podcast, music",
+    "wan": "wan - stop LTX, podcast, music",
+    "ltx": "ltx - stop Wan, podcast, music, other LTX",
 }
 
 _STILL_FORMAT = "EZImageFormat"
@@ -98,19 +98,19 @@ def _note(spec: ServiceSpec) -> str:
     lines = [
         f"## {spec.rel}",
         "",
-        f"{spec.title}. Lab size **{width}×{height}**. Prefix `{spec.prefix}`.",
+        f"{spec.title}. Lab size **{width}x{height}**. Prefix `{spec.prefix}`.",
         "Empty of lettering. Add titles in your editor, not in the prompt.",
         f"Occupancy: {OCC_LINE[spec.occupancy]}. One GB10 job.",
         "Handoff: none.",
     ]
     if spec.kind in {"wan_i2v", "wan_loop", "ltx_av"}:
         lines.append(
-            "After Queue, click **Save video (MP4) — open node for preview**. "
+            "After Queue, click **Save video (MP4) - open node for preview**. "
             "File lands on `${COMFY_OUTPUT_DIR}`."
         )
         lines.append("LoadImage defaults to example.png so Queue smokes.")
     if spec.occupancy == "ltx":
-        canvas = "768×1280" if spec.portrait else "1280×704"
+        canvas = "768x1280" if spec.portrait else "1280x704"
         lines.append(
             f"LTX canvas {canvas} (width/height must be divisible by 32; "
             "720 and 1080 are invalid). Disclose AI-generated media. "
@@ -360,16 +360,16 @@ def _write_catalog() -> None:
         "- **Two hundred job Apps** nested under `_lab/services/<vertical>/`",
         "- **Agency SKUs** (product photography, paid-social, local business, courses, podcasts, listings, fashion, B2B, events, fitness/travel)",
         "- **Silent Wan loops / I2V** and **LTX AV** plates mixed into each vertical",
-        "- **Lab sizes vs upload pixels** — Size column is the **default**. **Format / platform** retargets the same App. Match aspect; scale in an editor if a client wants more pixels",
+        "- **Lab sizes vs upload pixels** - Size column is the **default**. **Format / platform** retargets the same App. Match aspect; scale in an editor if a client wants more pixels",
         "",
         "**What this enables**",
         "",
         "- **Queuing a job-named App** (PDP on-white, UGC kitchen AV, listing walkthrough) instead of restyling a generic still",
-        "- **Keeping occupancy XOR** — Klein, Wan, and LTX still do not share a GB10 session",
+        "- **Keeping occupancy XOR** - Klein, Wan, and LTX still do not share a GB10 session",
         "",
         "**Who this is for:** studio users after `stills/still-draft`. Index: [Workflow catalog](../studio-workflows.md). Occupancy and widgets: [ComfyUI Apps](../studio-apps.md).",
         "",
-        "These graphs clone the shipped Klein 4B / Wan 2.2 / LTX-2.5 printers. They do **not** add models. Empty of lettering — composite titles later. LTX feeders stay **÷32**.",
+        "These graphs clone the shipped Klein 4B / Wan 2.2 / LTX-2.5 printers. They do **not** add models. Empty of lettering - composite titles later. LTX feeders stay **div32**.",
         "",
         "Safety impact: **none**. `restart: \"no\"`, headroom, and download-limit are unchanged.",
         "",
@@ -389,7 +389,7 @@ def _write_catalog() -> None:
         width, height = spec.size
         link = f"**[{spec.rel}](../generated/workflows/{spec.rel}.md)**"
         lines.append(
-            f"| {link} | {width}×{height} | `{spec.prefix}` | {_md_cell(spec.title)} |"
+            f"| {link} | {width}x{height} | `{spec.prefix}` | {_md_cell(spec.title)} |"
         )
         nxt = SERVICES[index + 1] if index + 1 < len(SERVICES) else None
         if nxt is None or nxt.group != current:

@@ -1,5 +1,5 @@
 # Purpose: ez.house.layout.v1 greybox of one place for Instagram 4:5 clay stills.
-# ez.house.layout.v1 — greybox of one place for Instagram 4:5 clay stills.
+# ez.house.layout.v1 - greybox of one place for Instagram 4:5 clay stills.
 # Restricted YAML (scripts/lib/house_layout.py; no PyYAML).
 # Y-up meters. box is [x, y, z, sx, sy, sz] min-corner + size.
 # cameras must be the place_10 walkthrough in order (24mm / 35mm).

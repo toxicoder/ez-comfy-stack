@@ -296,7 +296,7 @@ def fit_turn(
 ) -> tuple[list[float], FitFlags]:
     """Fit a clone into ``window_s``, spilling only into the following gap.
 
-    Never time-compress more than ``max_speed`` (default 1.25×). Overflow
+    Never time-compress more than ``max_speed`` (default 1.25x). Overflow
     after that fade-trims the **end** of the sentence. ``min_stretch`` is
     accepted for call-site compatibility and is not stacked with max_speed.
 

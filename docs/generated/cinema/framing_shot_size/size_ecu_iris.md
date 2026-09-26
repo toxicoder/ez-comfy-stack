@@ -1,6 +1,6 @@
 ---
 title: "Iris Insert"
-description: "Cinema Rack illustration — Iris Insert."
+description: "Cinema Rack illustration - Iris Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

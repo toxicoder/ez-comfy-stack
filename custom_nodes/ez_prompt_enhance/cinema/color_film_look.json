@@ -891,7 +891,7 @@
   {
     "id": "col_green_matrix_office",
     "label": "Matrix-adjacent office",
-    "clause": "Office green-black, monitors the only other hue \u2014 grammar, not a titled film.",
+    "clause": "Office green-black, monitors the only other hue - grammar, not a titled film.",
     "still": "",
     "wan_token": "",
     "audio": "",
@@ -1491,7 +1491,7 @@
   {
     "id": "col_product_true",
     "label": "Product-true color",
-    "clause": "Product-true: the object\u2019s color honest, the room secondary.",
+    "clause": "Product-true: the object's color honest, the room secondary.",
     "still": "",
     "wan_token": "",
     "audio": "",
@@ -2076,7 +2076,7 @@
   {
     "id": "col_led_mixed_ugly",
     "label": "Mixed LED ugly",
-    "clause": "Mixed LED ugly: green shop, magenta bar, no unify \u2014 documentary night.",
+    "clause": "Mixed LED ugly: green shop, magenta bar, no unify - documentary night.",
     "still": "",
     "wan_token": "",
     "audio": "",

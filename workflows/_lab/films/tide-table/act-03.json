@@ -388,9 +388,9 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## films/tide-table/act-03\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nThe stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}` (container `/outputs`) as a faststart H.264 master, plus an HTML sidecar. After Queue, a **Film ready** overlay offers play and download. Per-shot VHS nodes remain for inspection. Optional board: studio-ui `/watch/<slug>`.\n\nOne-click 90s unit (dawn skiff \u00b7 Fog and spit): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, t2i mode) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 \u00d7 5.00s LTX prints chain last-frame \u2192 next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) \u2014 expected, not a hang.\n3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_tidetable_90s.mp4` (act graphs write `ez_tidetable_actN_90s.mp4`). A **Film ready** overlay plays it. Copy off the Spark with scp.\n4. Optional single-shot iterate: **motion/av/still-to-shot**. Optional silent rehearsal: **motion/silent/still-to-shot**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film tide-table --yes`\n\nDo not Queue a 90s denoise (keep 121-frame / 1+8n widgets). US-safe local pack only. No score.\nPrompt enhance is **off** so the pinned identity and each baked LTX I2V paragraph are encoded as written. The identity STRING is wired into each shot enhance as context (used only if you turn Enhance on).\n\nThis graph is **act 3/5** of a 7.5 min film (90 \u00d7 5.00s). Act 3 LoadImage should be the previous act last frame (ez_tidetable_b12_s3_last_*.png). In-graph stitch writes `ez_tidetable_act3_90s.mp4`. After all five acts: `concat-shots.sh --film tide-table --yes` \u2192 `ez_tidetable_450s.mp4`.\n\nOccupancy: film \u2014 stop everything else on that Spark. One GB10 job.\n"
+        "## films/tide-table/act-03\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nThe stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}` (container `/outputs`) as a faststart H.264 master, plus an HTML sidecar. After Queue, a **Film ready** overlay offers play and download. Per-shot VHS nodes remain for inspection. Optional board: studio-ui `/watch/<slug>`.\n\nOne-click 90s unit (dawn skiff - Fog and spit): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, t2i mode) - LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 x 5.00s LTX prints chain last-frame -> next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) - expected, not a hang.\n3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_tidetable_90s.mp4` (act graphs write `ez_tidetable_actN_90s.mp4`). A **Film ready** overlay plays it. Copy off the Spark with scp.\n4. Optional single-shot iterate: **motion/av/still-to-shot**. Optional silent rehearsal: **motion/silent/still-to-shot**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film tide-table --yes`\n\nDo not Queue a 90s denoise (keep 121-frame / 1+8n widgets). US-safe local pack only. No score.\nPrompt enhance is **off** so the pinned identity and each baked LTX I2V paragraph are encoded as written. The identity STRING is wired into each shot enhance as context (used only if you turn Enhance on).\n\nThis graph is **act 3/5** of a 7.5 min film (90 x 5.00s). Act 3 LoadImage should be the previous act last frame (ez_tidetable_b12_s3_last_*.png). In-graph stitch writes `ez_tidetable_act3_90s.mp4`. After all five acts: `concat-shots.sh --film tide-table --yes` -> `ez_tidetable_450s.mp4`.\n\nOccupancy: film - stop everything else on that Spark. One GB10 job.\n"
       ],
-      "title": "Operator note \u2014 one-click film"
+      "title": "Operator note - one-click film"
     },
     {
       "id": 11,
@@ -542,7 +542,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "## tide-table (dawn skiff \u00b7 Fog and spit)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames = 1+8n per shot). Optional silent rehearsal: **motion/silent/still-to-shot**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film tide-table --yes`.\n\n18 \u00d7 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.\n\n**Identity look:** A photoreal third-person dawn still. A weathered unmarked wooden skiff bow fills the lower third, wet grain and a blank painter coil on the thwart, looking out from a stone hard toward a cut of unmarked piles and grey-pink water. Match a standing eyeline. 35mm-equivalent classic, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Lane | Piles return as pale marks | The pile slides past | The cut narrows |\n| 2 | Piles | The hard is a grey bar ahead | The bow aims at the ring | The hull kisses stone |\n| 3 | Tie | Hands take the painter | The hitch is made | The thwart holds still |\n| 4 | Quiet | The skiff rests against stone | A last look down the cut | Hands leave the thwart |\n| 5 | Hold | The unmarked bow sits in first real sun | Steam lifts off wet wood | The camera holds the bow |\n| 6 | Still water | Ripples die against stone | A gull-less empty sky | The bow and the hard together |\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
+        "## tide-table (dawn skiff - Fog and spit)\n\nQueue **once**. Klein identity still -> 18 x 5.00s LTX AV prints (last-frame continuity) -> **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames = 1+8n per shot). Optional silent rehearsal: **motion/silent/still-to-shot**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film tide-table --yes`.\n\n18 x 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.\n\n**Identity look:** A photoreal third-person dawn still. A weathered unmarked wooden skiff bow fills the lower third, wet grain and a blank painter coil on the thwart, looking out from a stone hard toward a cut of unmarked piles and grey-pink water. Match a standing eyeline. 35mm-equivalent classic, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Lane | Piles return as pale marks | The pile slides past | The cut narrows |\n| 2 | Piles | The hard is a grey bar ahead | The bow aims at the ring | The hull kisses stone |\n| 3 | Tie | Hands take the painter | The hitch is made | The thwart holds still |\n| 4 | Quiet | The skiff rests against stone | A last look down the cut | Hands leave the thwart |\n| 5 | Hold | The unmarked bow sits in first real sun | Steam lifts off wet wood | The camera holds the bow |\n| 6 | Still water | Ripples die against stone | A gull-less empty sky | The bow and the hard together |\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
       ],
       "title": "tide-table 90s shot map"
     },
@@ -1059,7 +1059,7 @@
         0,
         3
       ],
-      "title": "Save act 3 (90s MP4) \u2014 play / download"
+      "title": "Save act 3 (90s MP4) - play / download"
     },
     {
       "id": 211,
@@ -1226,7 +1226,7 @@
         121,
         1
       ],
-      "title": "LTX Img\u2192Video condition"
+      "title": "LTX Img->Video condition"
     },
     {
       "id": 202,
@@ -1576,7 +1576,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 209,
@@ -1815,7 +1815,7 @@
         121,
         1
       ],
-      "title": "LTX Img\u2192Video condition"
+      "title": "LTX Img->Video condition"
     },
     {
       "id": 222,
@@ -2165,7 +2165,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 229,
@@ -2404,7 +2404,7 @@
         121,
         1
       ],
-      "title": "LTX Img\u2192Video condition"
+      "title": "LTX Img->Video condition"
     },
     {
       "id": 242,
@@ -2754,7 +2754,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 249,
@@ -2993,7 +2993,7 @@
         121,
         1
       ],
-      "title": "LTX Img\u2192Video condition"
+      "title": "LTX Img->Video condition"
     },
     {
       "id": 262,
@@ -3343,7 +3343,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 269,
@@ -3582,7 +3582,7 @@
         121,
         1
       ],
-      "title": "LTX Img\u2192Video condition"
+      "title": "LTX Img->Video condition"
     },
     {
       "id": 282,
@@ -3932,7 +3932,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 289,
@@ -4171,7 +4171,7 @@
         121,
         1
       ],
-      "title": "LTX Img\u2192Video condition"
+      "title": "LTX Img->Video condition"
     },
     {
       "id": 302,
@@ -4521,7 +4521,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 309,
@@ -4760,7 +4760,7 @@
         121,
         1
       ],
-      "title": "LTX Img\u2192Video condition"
+      "title": "LTX Img->Video condition"
     },
     {
       "id": 322,
@@ -5110,7 +5110,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 329,
@@ -5349,7 +5349,7 @@
         121,
         1
       ],
-      "title": "LTX Img\u2192Video condition"
+      "title": "LTX Img->Video condition"
     },
     {
       "id": 342,
@@ -5699,7 +5699,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 349,
@@ -5938,7 +5938,7 @@
         121,
         1
       ],
-      "title": "LTX Img\u2192Video condition"
+      "title": "LTX Img->Video condition"
     },
     {
       "id": 362,
@@ -6288,7 +6288,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 369,
@@ -6527,7 +6527,7 @@
         121,
         1
       ],
-      "title": "LTX Img\u2192Video condition"
+      "title": "LTX Img->Video condition"
     },
     {
       "id": 382,
@@ -6877,7 +6877,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 389,
@@ -7116,7 +7116,7 @@
         121,
         1
       ],
-      "title": "LTX Img\u2192Video condition"
+      "title": "LTX Img->Video condition"
     },
     {
       "id": 402,
@@ -7466,7 +7466,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 409,
@@ -7705,7 +7705,7 @@
         121,
         1
       ],
-      "title": "LTX Img\u2192Video condition"
+      "title": "LTX Img->Video condition"
     },
     {
       "id": 422,
@@ -8055,7 +8055,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 429,
@@ -8294,7 +8294,7 @@
         121,
         1
       ],
-      "title": "LTX Img\u2192Video condition"
+      "title": "LTX Img->Video condition"
     },
     {
       "id": 442,
@@ -8644,7 +8644,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 449,
@@ -8883,7 +8883,7 @@
         121,
         1
       ],
-      "title": "LTX Img\u2192Video condition"
+      "title": "LTX Img->Video condition"
     },
     {
       "id": 462,
@@ -9233,7 +9233,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 469,
@@ -9472,7 +9472,7 @@
         121,
         1
       ],
-      "title": "LTX Img\u2192Video condition"
+      "title": "LTX Img->Video condition"
     },
     {
       "id": 482,
@@ -9822,7 +9822,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 489,
@@ -10061,7 +10061,7 @@
         121,
         1
       ],
-      "title": "LTX Img\u2192Video condition"
+      "title": "LTX Img->Video condition"
     },
     {
       "id": 502,
@@ -10411,7 +10411,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 509,
@@ -10650,7 +10650,7 @@
         121,
         1
       ],
-      "title": "LTX Img\u2192Video condition"
+      "title": "LTX Img->Video condition"
     },
     {
       "id": 522,
@@ -11000,7 +11000,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 529,
@@ -11239,7 +11239,7 @@
         121,
         1
       ],
-      "title": "LTX Img\u2192Video condition"
+      "title": "LTX Img->Video condition"
     },
     {
       "id": 542,
@@ -11589,7 +11589,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 549,
@@ -15869,7 +15869,7 @@
     },
     {
       "id": 5,
-      "title": "3. Beat 1 (3 \u00d7 5.00s LTX)",
+      "title": "3. Beat 1 (3 x 5.00s LTX)",
       "bounding": [
         2180,
         436,
@@ -15882,7 +15882,7 @@
     },
     {
       "id": 6,
-      "title": "4. Beat 2 (3 \u00d7 5.00s LTX)",
+      "title": "4. Beat 2 (3 x 5.00s LTX)",
       "bounding": [
         2180,
         2950,
@@ -15895,7 +15895,7 @@
     },
     {
       "id": 7,
-      "title": "5. Beat 3 (3 \u00d7 5.00s LTX)",
+      "title": "5. Beat 3 (3 x 5.00s LTX)",
       "bounding": [
         2180,
         4684,
@@ -15908,7 +15908,7 @@
     },
     {
       "id": 8,
-      "title": "6. Beat 4 (3 \u00d7 5.00s LTX)",
+      "title": "6. Beat 4 (3 x 5.00s LTX)",
       "bounding": [
         2180,
         5850,
@@ -15921,7 +15921,7 @@
     },
     {
       "id": 9,
-      "title": "7. Beat 5 (3 \u00d7 5.00s LTX)",
+      "title": "7. Beat 5 (3 x 5.00s LTX)",
       "bounding": [
         2180,
         7016,
@@ -15934,7 +15934,7 @@
     },
     {
       "id": 10,
-      "title": "8. Beat 6 (3 \u00d7 5.00s LTX)",
+      "title": "8. Beat 6 (3 x 5.00s LTX)",
       "bounding": [
         2180,
         8182,
@@ -15962,8 +15962,8 @@
   "config": {},
   "extra": {
     "lab_profile": "films/tide-table/act-03",
-    "lab_note": "## films/tide-table/act-03\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nThe stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}` (container `/outputs`) as a faststart H.264 master, plus an HTML sidecar. After Queue, a **Film ready** overlay offers play and download. Per-shot VHS nodes remain for inspection. Optional board: studio-ui `/watch/<slug>`.\n\nOne-click 90s unit (dawn skiff \u00b7 Fog and spit): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, t2i mode) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 \u00d7 5.00s LTX prints chain last-frame \u2192 next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) \u2014 expected, not a hang.\n3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_tidetable_90s.mp4` (act graphs write `ez_tidetable_actN_90s.mp4`). A **Film ready** overlay plays it. Copy off the Spark with scp.\n4. Optional single-shot iterate: **motion/av/still-to-shot**. Optional silent rehearsal: **motion/silent/still-to-shot**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film tide-table --yes`\n\nDo not Queue a 90s denoise (keep 121-frame / 1+8n widgets). US-safe local pack only. No score.\nPrompt enhance is **off** so the pinned identity and each baked LTX I2V paragraph are encoded as written. The identity STRING is wired into each shot enhance as context (used only if you turn Enhance on).\n\nThis graph is **act 3/5** of a 7.5 min film (90 \u00d7 5.00s). Act 3 LoadImage should be the previous act last frame (ez_tidetable_b12_s3_last_*.png). In-graph stitch writes `ez_tidetable_act3_90s.mp4`. After all five acts: `concat-shots.sh --film tide-table --yes` \u2192 `ez_tidetable_450s.mp4`.\n\nOccupancy: film \u2014 stop everything else on that Spark. One GB10 job.\n",
-    "lab_description": "One-click dawn skiff \u00b7 Fog and spit: 18 LTX 5.00s AV shots + stitch\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "lab_note": "## films/tide-table/act-03\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nThe stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}` (container `/outputs`) as a faststart H.264 master, plus an HTML sidecar. After Queue, a **Film ready** overlay offers play and download. Per-shot VHS nodes remain for inspection. Optional board: studio-ui `/watch/<slug>`.\n\nOne-click 90s unit (dawn skiff - Fog and spit): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, t2i mode) - LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 x 5.00s LTX prints chain last-frame -> next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) - expected, not a hang.\n3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_tidetable_90s.mp4` (act graphs write `ez_tidetable_actN_90s.mp4`). A **Film ready** overlay plays it. Copy off the Spark with scp.\n4. Optional single-shot iterate: **motion/av/still-to-shot**. Optional silent rehearsal: **motion/silent/still-to-shot**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film tide-table --yes`\n\nDo not Queue a 90s denoise (keep 121-frame / 1+8n widgets). US-safe local pack only. No score.\nPrompt enhance is **off** so the pinned identity and each baked LTX I2V paragraph are encoded as written. The identity STRING is wired into each shot enhance as context (used only if you turn Enhance on).\n\nThis graph is **act 3/5** of a 7.5 min film (90 x 5.00s). Act 3 LoadImage should be the previous act last frame (ez_tidetable_b12_s3_last_*.png). In-graph stitch writes `ez_tidetable_act3_90s.mp4`. After all five acts: `concat-shots.sh --film tide-table --yes` -> `ez_tidetable_450s.mp4`.\n\nOccupancy: film - stop everything else on that Spark. One GB10 job.\n",
+    "lab_description": "One-click dawn skiff - Fog and spit: 18 LTX 5.00s AV shots + stitch\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_film": "tide-table",
     "lab_slug": "tidetable",
     "lab_act": 3,
@@ -15972,7 +15972,7 @@
     "lab_disclosure": "This video includes AI-generated picture and sound (LTX Community License). Do not strip provenance. Not legal advice.",
     "lab_dfr": {
       "print": "ltx",
-      "note": "Two-stage DFR lives in Comfy Templates \u2192 LTX-2.5 (not vendored). YAML print: dfr selects that path. Lab printers stay 5.00s / 1280\u00d7704 / 1+8n."
+      "note": "Two-stage DFR lives in Comfy Templates -> LTX-2.5 (not vendored). YAML print: dfr selects that path. Lab printers stay 5.00s / 1280x704 / 1+8n."
     },
     "lab_rel": "films/tide-table/act-03",
     "workflowRendererVersion": "Vue-corrected",
@@ -15995,7 +15995,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
           }
         ],
         [
@@ -16019,7 +16019,7 @@
           11,
           "style",
           {
-            "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
+            "description": "Optional look. Hidden on I2V - the start image owns look.",
             "label": "Style"
           }
         ],

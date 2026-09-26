@@ -1,6 +1,6 @@
 ---
 title: "Snap zoom in"
-description: "Cinema Rack illustration — Snap zoom in."
+description: "Cinema Rack illustration - Snap zoom in."
 tags: [cinema, prompting, catalog, clip]
 ---
 

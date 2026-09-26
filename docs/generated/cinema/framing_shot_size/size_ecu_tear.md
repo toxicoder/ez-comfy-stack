@@ -1,6 +1,6 @@
 ---
 title: "Tear Insert"
-description: "Cinema Rack illustration — Tear Insert."
+description: "Cinema Rack illustration - Tear Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

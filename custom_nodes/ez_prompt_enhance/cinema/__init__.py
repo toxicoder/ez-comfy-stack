@@ -787,15 +787,15 @@ def _clip_clause(text: str, limit: int = 18) -> str:
     words = cleaned.split()
     if len(words) <= limit:
         return cleaned
-    return " ".join(words[:limit]).rstrip(".,;:") + "…"
+    return " ".join(words[:limit]).rstrip(".,;:") + "..."
 
 
 def addendum_kind(system_name: str = "", mode: str = "") -> str:
     """Classify a Prompt Enhance stem/mode for the cinema addendum.
 
     Args:
-        system_name: Prompt file stem (``klein_t2i``, ``negative_wan``, …).
-        mode: Optional node mode (``i2v``, ``iclora``, …).
+        system_name: Prompt file stem (``klein_t2i``, ``negative_wan``, ...).
+        mode: Optional node mode (``i2v``, ``iclora``, ...).
 
     Returns:
         One of ``skip``, ``negative``, ``identity``, ``iclora``, ``i2v``,
@@ -860,7 +860,7 @@ def cinema_language_addendum(system_name: str = "", mode: str = "") -> str:
         "Axes in splice order: " + "; ".join(labels) + ".",
         (
             "Write at most one idea per axis. Prefer catalog labels and clause "
-            "style: concrete physical action of light, lens, and support — not "
+            "style: concrete physical action of light, lens, and support - not "
             "tag soup such as cinematic, 8k, dramatic lighting."
         ),
         (
@@ -903,7 +903,7 @@ def cinema_language_addendum(system_name: str = "", mode: str = "") -> str:
     elif kind == "wan":
         lines.append(
             "Wan T2V: entity, scene, motion, aesthetic look axes, then exactly "
-            "one camera token. Silent — do not mention audio."
+            "one camera token. Silent - do not mention audio."
         )
     elif kind == "ltx":
         lines.append(

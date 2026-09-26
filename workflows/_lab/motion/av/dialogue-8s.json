@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A medium photoreal shot of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands at the glass, warm gold-cyan holographic glyph rings hovering over a compact unmarked data-staff. The camera holds, then eases in as the wizard turns toward lens, eyes bright, and says, \"The tools are already here \u2014 we just have to use them well.\" A warm terrace breeze and palm rustle sit under distant bay traffic; the voice is close and clear, then a single glyph chime. Unmarked surfaces, empty of lettering. No music and no score. Eight seconds."
+        "A medium photoreal shot of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands at the glass, warm gold-cyan holographic glyph rings hovering over a compact unmarked data-staff. The camera holds, then eases in as the wizard turns toward lens, eyes bright, and says, \"The tools are already here - we just have to use them well.\" A warm terrace breeze and palm rustle sit under distant bay traffic; the voice is close and clear, then a single glyph chime. Unmarked surfaces, empty of lettering. No music and no score. Eight seconds."
       ],
       "title": "Positive"
     },
@@ -618,9 +618,9 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## motion/av/dialogue-8s\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **dialogue** T2V (~8 s). Joint AV speech Wan cannot mux. LTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\n193 frames @ 24 fps. Authored quoted line; mouths will not match. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\nModality guidance (A/V coupling, scale 3.0) is on \u2014 one extra forward pass per step.\nTwo-stage DFR stays in Comfy **Templates \u2192 LTX-2.5**.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\n"
+        "## motion/av/dialogue-8s\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) - open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **dialogue** T2V (~8 s). Joint AV speech Wan cannot mux. LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\n193 frames @ 24 fps. Authored quoted line; mouths will not match. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\nModality guidance (A/V coupling, scale 3.0) is on - one extra forward pass per step.\nTwo-stage DFR stays in Comfy **Templates -> LTX-2.5**.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\n"
       ],
-      "title": "Operator note \u2014 video output"
+      "title": "Operator note - video output"
     },
     {
       "id": 16,
@@ -684,7 +684,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 17,
@@ -726,7 +726,7 @@
       },
       "widgets_values": [
         "custom",
-        "A medium photoreal shot of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands at the glass, warm gold-cyan holographic glyph rings hovering over a compact unmarked data-staff. The camera holds, then eases in as the wizard turns toward lens, eyes bright, and says, \"The tools are already here \u2014 we just have to use them well.\" A warm terrace breeze and palm rustle sit under distant bay traffic; the voice is close and clear, then a single glyph chime. Unmarked surfaces, empty of lettering. No music and no score. Eight seconds.",
+        "A medium photoreal shot of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands at the glass, warm gold-cyan holographic glyph rings hovering over a compact unmarked data-staff. The camera holds, then eases in as the wizard turns toward lens, eyes bright, and says, \"The tools are already here - we just have to use them well.\" A warm terrace breeze and palm rustle sit under distant bay traffic; the voice is close and clear, then a single glyph chime. Unmarked surfaces, empty of lettering. No music and no score. Eight seconds.",
         false,
         "t2v",
         "8 seconds, 24 fps",
@@ -943,7 +943,7 @@
       },
       "widgets_values": [
         "LTX-2.5",
-        "LTX \u00b7 16:9 YouTube (1280\u00d7704)",
+        "LTX - 16:9 YouTube (1280x704)",
         1280,
         704,
         "Match input",
@@ -1270,7 +1270,7 @@
   "extra": {
     "lab_profile": "motion/av/dialogue-8s",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## motion/av/dialogue-8s\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **dialogue** T2V (~8 s). Joint AV speech Wan cannot mux. LTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\n193 frames @ 24 fps. Authored quoted line; mouths will not match. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\nModality guidance (A/V coupling, scale 3.0) is on \u2014 one extra forward pass per step.\nTwo-stage DFR stays in Comfy **Templates \u2192 LTX-2.5**.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\n",
+    "lab_note": "## motion/av/dialogue-8s\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) - open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **dialogue** T2V (~8 s). Joint AV speech Wan cannot mux. LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\n193 frames @ 24 fps. Authored quoted line; mouths will not match. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\nModality guidance (A/V coupling, scale 3.0) is on - one extra forward pass per step.\nTwo-stage DFR stays in Comfy **Templates -> LTX-2.5**.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\n",
     "lab_ltx_av": true,
     "lab_description": "LTX-2.5 dialogue AV T2V, quoted speech, modality guidance\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_app_mode": {
@@ -1289,7 +1289,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
           }
         ],
         [
@@ -1313,7 +1313,7 @@
           22,
           "format",
           {
-            "description": "Aspect or named platform job. Sets clip width and height on the Wan \u00f716 or LTX \u00f732 grid. Custom uses Width \u00d7 Height. Length stays on the latent node.",
+            "description": "Aspect or named platform job. Sets clip width and height on the Wan div16 or LTX div32 grid. Custom uses Width x Height. Length stays on the latent node.",
             "label": "Format / platform"
           }
         ],
@@ -1337,7 +1337,7 @@
           17,
           "style",
           {
-            "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
+            "description": "Optional look. Hidden on I2V - the start image owns look.",
             "label": "Style"
           }
         ],

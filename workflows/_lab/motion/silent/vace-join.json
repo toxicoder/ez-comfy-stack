@@ -535,7 +535,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 14,
@@ -557,7 +557,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## motion/silent/vace-join\n\nOpt-in Wan 2.1 VACE 1.3B Apache join smoke. Not download-models.\nDownload: ./scripts/utilities/download-wan.sh run --tier vace\nUnload LTX first. MagCache is off (never on this graph).\nFrame count is 17 (1+8n, inside 16\u201324). Even latents crash.\nModels: diffusion_pytorch_model.safetensors (VACE 1.3B) + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.\nLoad Shot A last frame and Shot B first frame. Native WanVaceToVideo is the intended join when the Comfy pin exposes it; this graph Queues on core Wan22ImageToVideoLatent so the canvas loads without a missing-node error.\nPRIMARY OUTPUT: VHS_VideoCombine MP4 24 fps. Prefix ez_vace_join.\nDo not coreside with TRELLIS, Fun InP, SeedVR2, or LTX.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.\n"
+        "## motion/silent/vace-join\n\nOpt-in Wan 2.1 VACE 1.3B Apache join smoke. Not download-models.\nDownload: ./scripts/utilities/download-wan.sh run --tier vace\nUnload LTX first. MagCache is off (never on this graph).\nFrame count is 17 (1+8n, inside 16-24). Even latents crash.\nModels: diffusion_pytorch_model.safetensors (VACE 1.3B) + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.\nLoad Shot A last frame and Shot B first frame. Native WanVaceToVideo is the intended join when the Comfy pin exposes it; this graph Queues on core Wan22ImageToVideoLatent so the canvas loads without a missing-node error.\nPRIMARY OUTPUT: VHS_VideoCombine MP4 24 fps. Prefix ez_vace_join.\nDo not coreside with TRELLIS, Fun InP, SeedVR2, or LTX.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: wan - stop LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -1044,7 +1044,7 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## motion/silent/vace-join\n\nOpt-in Wan 2.1 VACE 1.3B Apache join smoke. Not download-models.\nDownload: ./scripts/utilities/download-wan.sh run --tier vace\nUnload LTX first. MagCache is off (never on this graph).\nFrame count is 17 (1+8n, inside 16\u201324). Even latents crash.\nModels: diffusion_pytorch_model.safetensors (VACE 1.3B) + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.\nLoad Shot A last frame and Shot B first frame. Native WanVaceToVideo is the intended join when the Comfy pin exposes it; this graph Queues on core Wan22ImageToVideoLatent so the canvas loads without a missing-node error.\nPRIMARY OUTPUT: VHS_VideoCombine MP4 24 fps. Prefix ez_vace_join.\nDo not coreside with TRELLIS, Fun InP, SeedVR2, or LTX.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.\n",
+    "lab_note": "## motion/silent/vace-join\n\nOpt-in Wan 2.1 VACE 1.3B Apache join smoke. Not download-models.\nDownload: ./scripts/utilities/download-wan.sh run --tier vace\nUnload LTX first. MagCache is off (never on this graph).\nFrame count is 17 (1+8n, inside 16-24). Even latents crash.\nModels: diffusion_pytorch_model.safetensors (VACE 1.3B) + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.\nLoad Shot A last frame and Shot B first frame. Native WanVaceToVideo is the intended join when the Comfy pin exposes it; this graph Queues on core Wan22ImageToVideoLatent so the canvas loads without a missing-node error.\nPRIMARY OUTPUT: VHS_VideoCombine MP4 24 fps. Prefix ez_vace_join.\nDo not coreside with TRELLIS, Fun InP, SeedVR2, or LTX.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: wan - stop LTX, podcast, music. One GB10 job.\n",
     "lab_profile": "motion/silent/vace-join",
     "lab_description": "Wan 2.1 VACE 1.3B 17-frame join smoke (1+8n). MagCache off. Opt-in.",
     "ds": {
@@ -1086,7 +1086,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
           }
         ],
         [

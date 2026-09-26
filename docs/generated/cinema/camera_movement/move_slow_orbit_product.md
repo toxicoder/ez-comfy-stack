@@ -1,6 +1,6 @@
 ---
 title: "Slow product orbit"
-description: "Cinema Rack illustration — Slow product orbit."
+description: "Cinema Rack illustration - Slow product orbit."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

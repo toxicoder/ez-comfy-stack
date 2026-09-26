@@ -8,7 +8,7 @@ Official persist: extra.linearData = {inputs, outputs}
   LinearInput = [nodeId, widgetName, config?]
   nodeId = integer node.id (Comfy SerializedNodeId). Frontend 1.49.6+
   upgrades this to a live WidgetId (graphId:nodeId:name) at load.
-  Do not persist "nodeId:widgetName" — the frontend treats a colon as a
+  Do not persist "nodeId:widgetName" - the frontend treats a colon as a
   subgraph locator and drops the input.
 Lab contract: extra.lab_app_mode
 Do not require extra.linearMode (upstream does not write it; lab sugar only).
@@ -472,7 +472,7 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
     "quality": (
         "Lab default, Draft (faster), High (slower), or Free Commercial Use "
         "(<$10M: Klein 4B + LTX-2.5, never Non-Commercial stills). "
-        "Family-specific — not --tier."
+        "Family-specific - not --tier."
     ),
     "sample": "Pick a lab recipe, or Custom to type your own.",
     "prompt": "What to generate. Rewrite prompt expands this for the model.",
@@ -497,15 +497,15 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
     "genre_looks": "Genre lighting and texture grammar, not a titled film.",
     "viral_looks": "Short-form hook grammar. I2V drops look axes.",
     "web_search": "On: Wikipedia + DuckDuckGo snippets. Off: on-box GGUF only.",
-    "subagents": "Planner search count (1–3). Sequential CPU workers.",
-    "history": "Optional prior turns. One Queue per message — not a streaming chat.",
-    "style": "Optional look. Hidden on I2V — the start image owns look.",
+    "subagents": "Planner search count (1-3). Sequential CPU workers.",
+    "history": "Optional prior turns. One Queue per message - not a streaming chat.",
+    "style": "Optional look. Hidden on I2V - the start image owns look.",
     "enhance": (
         "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
     ),
     "upscale": (
         "none passes the still through. 2x and 4x are lanczos. "
-        "4K fits the still in a 3840×2160 box (portrait 2160×3840)."
+        "4K fits the still in a 3840x2160 box (portrait 2160x3840)."
     ),
     "enable": (
         "On: caption the source still so Rewrite prompt can name inventory. "
@@ -551,14 +551,14 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
     "mode": "Rewrite family for this encoder.",
     "duration_hint": "Aspect or duration the rewriter should target.",
     "value": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-    "seconds": "Length in seconds. Rap draft is a cold open. Full track uses a pre-chorus form. Album takes are 64–210 s.",
+    "seconds": "Length in seconds. Rap draft is a cold open. Full track uses a pre-chorus form. Album takes are 64-210 s.",
     "speaker_a_voice": "Kokoro built-in for Speaker A. Voice-clone refs stay graph-only.",
     "speaker_b_voice": "Kokoro built-in for Speaker B.",
     "announcer_voice": "Kokoro built-in for Announcer: lines.",
     "include_announcer": "On: speak Announcer: lines. Off: skip them.",
     "speed": "TTS speed. 1.0 is the Kokoro default.",
     "cfg_weight": (
-        "-1 auto: 0.3 for EN→ES (CFG 0 often moans). 0.5 same-language clone."
+        "-1 auto: 0.3 for EN->ES (CFG 0 often moans). 0.5 same-language clone."
     ),
     "exaggeration": "0.5 is neutral. Higher is more intense and faster.",
     "source": (
@@ -585,7 +585,7 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
 
 
 def _enhance_mode(node: Mapping[str, Any]) -> str:
-    """Return the enhance node's mode widget (t2i / i2v / vocal / …)."""
+    """Return the enhance node's mode widget (t2i / i2v / vocal / ...)."""
     return enhance_mode(node)
 
 
@@ -829,11 +829,11 @@ def display_label(
                 "audio_notes": f"{family} audio notes",
             }.get(name, generic)
         if title:
-            return f"{title} — {generic}"
+            return f"{title} - {generic}"
     if collide and name == "sample" and title:
-        return f"{title} — Sample prompt"
+        return f"{title} - Sample prompt"
     if collide and title:
-        return f"{title} — {generic}"
+        return f"{title} - {generic}"
     return generic
 
 
@@ -842,7 +842,7 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
     ntype = (node or {}).get("type")
     if ntype == "EZDubRender" and name == "speed":
         return (
-            "Fit ceiling. 1.0 uses the lab 1.25× pitch-preserving lock "
+            "Fit ceiling. 1.0 uses the lab 1.25x pitch-preserving lock "
             "(then spill, then fade-trim the end). 1.5 still caps at 1.25."
         )
     if ntype == "EZAudioRack":
@@ -879,9 +879,9 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
             "web_search": (
                 "On: Wikipedia + DuckDuckGo snippets. Off: on-box GGUF only."
             ),
-            "subagents": "Planner search count (1–3). Sequential CPU workers.",
+            "subagents": "Planner search count (1-3). Sequential CPU workers.",
             "history": (
-                "Optional prior turns. One Queue per message — not a streaming chat."
+                "Optional prior turns. One Queue per message - not a streaming chat."
             ),
         }.get(name)
     if ntype == "EZAppForge":
@@ -924,14 +924,14 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
     if ntype == "EZOptionalImage" and name == "filename":
         return (
             "Upload a still or pick one already on the drive (input/ or "
-            "Outputs). Empty is valid — Queue without a file. When set, "
+            "Outputs). Empty is valid - Queue without a file. When set, "
             "Klein uses it as a native reference."
         )
     if ntype == "EZImageFormat":
         return {
             "format": (
                 "Aspect or named platform job. Sets pixels, save prefix, and "
-                "Rewrite prompt framing. Custom uses Width × Height (÷16)."
+                "Rewrite prompt framing. Custom uses Width x Height (div16)."
             ),
             "size_mode": (
                 "Match input uses a loaded still's aspect (nearest catalog "
@@ -950,7 +950,7 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
         return {
             "format": (
                 "Aspect or named platform job. Sets clip width and height on the "
-                "Wan ÷16 or LTX ÷32 grid. Custom uses Width × Height. Length stays "
+                "Wan div16 or LTX div32 grid. Custom uses Width x Height. Length stays "
                 "on the latent node."
             ),
             "size_mode": (
@@ -1632,7 +1632,7 @@ _register_services_stamps()
 
 def occupancy_stanza(occupancy: str) -> str:
     stop = OCCUPANCY_STOP[occupancy]
-    return f"Occupancy: {occupancy} — stop {stop}. One GB10 job."
+    return f"Occupancy: {occupancy} - stop {stop}. One GB10 job."
 
 
 def ensure_occupancy_note(graph: dict, occupancy: str) -> None:

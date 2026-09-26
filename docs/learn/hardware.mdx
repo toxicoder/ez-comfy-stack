@@ -37,7 +37,7 @@ flowchart LR
   S4 --> Safe["SSH stays usable"]
 ```
 
-Details: [Reboot safety](../reboot-safety.md) · [Download limit](../download-limit.md). Disk full from leftover experiments: [Disk wizard](../disk-wizard.md) (`--plan` first).
+Details: [Reboot safety](../reboot-safety.md) - [Download limit](../download-limit.md). Disk full from leftover experiments: [Disk wizard](../disk-wizard.md) (`--plan` first).
 
 ---
 
@@ -49,26 +49,26 @@ GB10 shares **~128 GiB** among OS, SSH, Docker, and Comfy. There is no separate 
 flowchart TB
   subgraph UM["~128 GiB unified memory"]
     OS["OS + Docker + interactive SSH"]
-    Free["min_host_free_gib ≥ 28 · required before start"]
-    Cont["Container mem_limit 90g · mem_reservation 80g"]
+    Free["min_host_free_gib >= 28 - required before start"]
+    Cont["Container mem_limit 90g - mem_reservation 80g"]
   end
   Free --> Gate{"doctor / start OK?"}
   Gate -->|yes| Cont
   Gate -->|no| Refuse["start refused"]
 ```
 
-Lab flags (do not “optimize” these away):
+Lab flags (do not "optimize" these away):
 
 | Setting | Why |
 | --- | --- |
 | Default VRAM + offload flags | Unified memory. Omit `--highvram` / `--gpu-only`. ComfyUI dropped `--normalvram` |
 | `patch_unified_memory_copy.py` | `copy=False` so UM does not double weights |
 | `patch_get_free_memory.py` | Host free RAM instead of under-reporting `cudaMemGetInfo` |
-| `--use-ck-attention` | Comfy Kitchen. XOR Sage — never both |
+| `--use-ck-attention` | Comfy Kitchen. XOR Sage - never both |
 | `TORCH_COMPILE_DISABLE=1` | Triton compile off by default on sm_121 |
 | Occupancy | One heavy GPU job |
 
-`doctor` must **not** print `attention: pytorch-fallback` on a running Spark (10–20× slow). spark-timing is measured on a real Spark after Kitchen is live — CI does not invent seconds.
+`doctor` must **not** print `attention: pytorch-fallback` on a running Spark (10-20x slow). spark-timing is measured on a real Spark after Kitchen is live - CI does not invent seconds.
 
 ```bash
 ./scripts/manage.sh doctor
@@ -90,10 +90,10 @@ Outputs live in **COMFY_OUTPUT_DIR** (default `/mnt/comfy-output`). The containe
 
 ```mermaid
 flowchart TB
-  Image["GHCR image · Comfy + torch"] --> Vol["comfy-state volume"]
-  Weights["MODELS_DIR · bind /models"] -.-> Comfy["ComfyUI process"]
+  Image["GHCR image - Comfy + torch"] --> Vol["comfy-state volume"]
+  Weights["MODELS_DIR - bind /models"] -.-> Comfy["ComfyUI process"]
   Vol --> Comfy
-  Out["COMFY_OUTPUT_DIR · bind /outputs"] -.-> Comfy
+  Out["COMFY_OUTPUT_DIR - bind /outputs"] -.-> Comfy
 ```
 
 ---
@@ -132,6 +132,6 @@ sequenceDiagram
   E->>U: Kitchen + UM flags on :8188
 ```
 
-First start usually **seeds** from `/opt/comfy-prebuilt`. Without that image, cold pip is **10–30+ minutes**. Ops scripts are bind-mounted — edit them on the host and restart; do not rebuild for an entrypoint typo.
+First start usually **seeds** from `/opt/comfy-prebuilt`. Without that image, cold pip is **10-30+ minutes**. Ops scripts are bind-mounted - edit them on the host and restart; do not rebuild for an entrypoint typo.
 
 Next: [Architecture](architecture.md). Operator first run: [Getting Started](../getting-started.md). Command catalog: [manage.sh reference](../manage-cli.md).

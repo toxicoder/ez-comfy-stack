@@ -74,7 +74,7 @@ setup_repo_env() {
   export DOWNLOAD_LIMIT_CACHE_DIR="${TEST_TMP_DIR}/dl-speed-cache"
   mkdir -p "${DOWNLOAD_LIMIT_CACHE_DIR}"
   export LAB_MOCK_HF_DOWNLOAD=1
-  # Default speed/probe mocks — tests must not hit real network (curl/speedtest).
+  # Default speed/probe mocks - tests must not hit real network (curl/speedtest).
   export LAB_MOCK_HTTP_SPEED_MBPS="${LAB_MOCK_HTTP_SPEED_MBPS:-100}"
   export LAB_MOCK_SPEEDTEST_MBPS="${LAB_MOCK_SPEEDTEST_MBPS:-100}"
   # Hermetic guard: probe_http_download_mbps / run_speedtest skip real I/O.

@@ -11,7 +11,7 @@
 #
 # Safety:
 #   Host GPU job. Dies with exit 2 if compose is up. Does not start Comfy.
-#   Software ffmpeg mux (pack-frames.sh) — not NVENC.
+#   Software ffmpeg mux (pack-frames.sh) - not NVENC.
 #
 # Exit codes:
 #   0 success; 1 usage / missing blender / QC fail; 2 compose running
@@ -298,8 +298,8 @@ cmd_run() {
   if [[ ${INCLUDE_NORMAL} -eq 1 ]]; then
     bcmd+=(--include-normal)
   fi
-  log "dumping guide pack → ${dest}"
-  run_with_heartbeat "Blender guide dump → ${dest}" -- "${bcmd[@]}" || {
+  log "dumping guide pack -> ${dest}"
+  run_with_heartbeat "Blender guide dump -> ${dest}" -- "${bcmd[@]}" || {
     err "Blender guide dump failed"
     return 1
   }

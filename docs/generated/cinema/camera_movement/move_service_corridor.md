@@ -1,6 +1,6 @@
 ---
 title: "Service corridor"
-description: "Cinema Rack illustration — Service corridor."
+description: "Cinema Rack illustration - Service corridor."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

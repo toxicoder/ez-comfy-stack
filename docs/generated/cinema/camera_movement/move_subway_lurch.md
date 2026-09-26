@@ -1,6 +1,6 @@
 ---
 title: "Subway lurch"
-description: "Cinema Rack illustration — Subway lurch."
+description: "Cinema Rack illustration - Subway lurch."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

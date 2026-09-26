@@ -1,6 +1,6 @@
 ---
 title: "Figure-eight"
-description: "Cinema Rack illustration — Figure-eight."
+description: "Cinema Rack illustration - Figure-eight."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

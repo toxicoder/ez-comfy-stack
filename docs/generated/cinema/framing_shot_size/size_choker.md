@@ -1,6 +1,6 @@
 ---
 title: "Choker"
-description: "Cinema Rack illustration — Choker."
+description: "Cinema Rack illustration - Choker."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

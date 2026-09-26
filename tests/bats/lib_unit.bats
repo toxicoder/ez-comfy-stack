@@ -227,7 +227,7 @@ teardown() {
   unset FOO_FROM_ENV
   run load_dotenv "${TEST_TMP_DIR}"
   [ "${status}" -eq 0 ]
-  # load_dotenv runs in a subshell under `run` — call directly for export effect
+  # load_dotenv runs in a subshell under `run` - call directly for export effect
   load_dotenv "${TEST_TMP_DIR}"
   [ "${FOO_FROM_ENV}" = "1" ]
   export PRESET_VAR=keep
@@ -743,7 +743,7 @@ exit 0
   [ "${output}" = "0 MiB/s" ]
   run hf_format_rate 140288 10
   [[ "${output}" == *"MiB/s"* ]]
-  # 140288 KiB / 10s ≈ 13.7 MiB/s
+  # 140288 KiB / 10s ~ 13.7 MiB/s
   [[ "${output}" == "13.7 MiB/s" ]]
 
   run hf_format_elapsed 0
@@ -755,12 +755,12 @@ exit 0
 
   run hf_progress_line "Kijai__LTX2.3_comfy_balanced" "179 MiB" "13.7 MiB/s" "0:30"
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"↓ Kijai__LTX2.3_comfy_balanced"* ]]
+  [[ "${output}" == *"v Kijai__LTX2.3_comfy_balanced"* ]]
   [[ "${output}" == *"179 MiB"* ]]
   [[ "${output}" == *"13.7 MiB/s"* ]]
   [[ "${output}" == *"elapsed 0:30"* ]]
 
-  # Color vars must be real ESC (ANSI-C) so printf %s works — not only echo -e
+  # Color vars must be real ESC (ANSI-C) so printf %s works - not only echo -e
   [[ "${GREEN}" == $'\033'* ]]
   [[ "${YELLOW}" == $'\033'* ]]
   [[ "${RED}" == $'\033'* ]]
@@ -772,9 +772,9 @@ exit 0
   [[ "${output}" == $'\033'*"[ez-comfy]"$'\033'* ]]
 
   # non-TTY path uses log (no smash); force via redirect
-  run bash -c 'source "'"${REPO_ROOT}"'/scripts/lib/common.sh"; hf_progress_emit "↓ test 1 MiB  0 MiB/s  elapsed 0:00" 2>&1'
+  run bash -c 'source "'"${REPO_ROOT}"'/scripts/lib/common.sh"; hf_progress_emit "v test 1 MiB  0 MiB/s  elapsed 0:00" 2>&1'
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"↓ test"* ]]
+  [[ "${output}" == *"v test"* ]]
   run hf_progress_newline
   [ "${status}" -eq 0 ]
 }
@@ -954,7 +954,7 @@ exit 0
   [ "${status}" -eq 0 ]
   [ "${output}" = "development" ]
 
-  # stack_default_image: branch → channel tag; EZ_COMFY_IMAGE wins
+  # stack_default_image: branch -> channel tag; EZ_COMFY_IMAGE wins
   unset EZ_COMFY_IMAGE
   export LAB_GIT_BRANCH=main
   run stack_default_image
@@ -1061,7 +1061,7 @@ exit 0
   run stack_logs
   [ "${status}" -eq 0 ]
 
-  # up without compose_running flag → verify fails
+  # up without compose_running flag -> verify fails
   rm -f "${TEST_TMP_DIR}/compose_running"
   install_mock_bin docker '
 echo "docker $*" >> "${TEST_TMP_DIR}/docker_calls.log"
@@ -1174,7 +1174,7 @@ exit 0
   mkdir -p "${HOME}"
   unset BLENDER_BIN
   mkdir -p "${TEST_TMP_DIR}/empty"
-  # Ubuntu 24.04 merges /bin → /usr/bin; keep grep/rm on PATH, hide blender
+  # Ubuntu 24.04 merges /bin -> /usr/bin; keep grep/rm on PATH, hide blender
   # only for the resolver calls.
   local keep_path="${PATH}"
   local hermetic_cands open_cands hint_out req_out

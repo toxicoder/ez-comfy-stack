@@ -1,6 +1,6 @@
 ---
 title: "High-mode track"
-description: "Cinema Rack illustration — High-mode track."
+description: "Cinema Rack illustration - High-mode track."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

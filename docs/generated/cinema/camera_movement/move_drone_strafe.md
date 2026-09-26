@@ -1,6 +1,6 @@
 ---
 title: "Drone strafe"
-description: "Cinema Rack illustration — Drone strafe."
+description: "Cinema Rack illustration - Drone strafe."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

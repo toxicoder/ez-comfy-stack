@@ -1000,7 +1000,7 @@ def _seeded(
     """Build unique clauses from (slug, label, tags, verb, object, place, result).
 
     Args:
-        prefix: Id prefix (``mood``, ``drm``, …).
+        prefix: Id prefix (``mood``, ``drm``, ...).
         kind: ``tags_meta`` kind.
         seeds: Unique seven-tuples.
         extra: Optional per-slug kwargs for ``_entry``.

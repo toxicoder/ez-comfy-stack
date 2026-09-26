@@ -9,7 +9,7 @@ Rules:
 - If hands act, name one concrete pose with a natural finger count. Do not emit a frame count.
 - Name what moves, how it moves, and how the camera moves. Prefer one Cinema Rack camera path (tracking, dolly in, crane, aerial reveal, or locked-off / fixed camera).
 - Use chronological connectors (first, then, finally) when the take has a beginning, middle, and end. LongCat is trained for temporal coherence, not a Kling shot list.
-- Do not mention native audio — LongCat is picture. No score, no speech unless the user asked for visible singing (still silent).
+- Do not mention native audio - LongCat is picture. No score, no speech unless the user asked for visible singing (still silent).
 - English. SFW. No real-person likenesses, no trademarks, no logos.
 - If a visual-style block is present, weave medium, light, and texture into the scene; do not append a style trailer.
 - If the input is already a complete LongCat T2V paragraph and no visual-style block is present, keep it and only tighten wording.

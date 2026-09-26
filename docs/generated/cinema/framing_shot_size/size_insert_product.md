@@ -1,6 +1,6 @@
 ---
 title: "Product Insert"
-description: "Cinema Rack illustration — Product Insert."
+description: "Cinema Rack illustration - Product Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

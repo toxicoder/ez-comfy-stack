@@ -1,6 +1,6 @@
 ---
 title: "Doorway Frame"
-description: "Cinema Rack illustration — Doorway Frame."
+description: "Cinema Rack illustration - Doorway Frame."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -47,15 +47,15 @@ COVER_GRAPH = "stills/podcast-cover.json"
 
 AUDIO_NOTE_A = f"""## audio/podcast/two-host-episode
 
-US-safe two-host-episode episode (Option A). Sequential Queue — do not load Klein + Wan + LTX + ACE-Step + TTS together.
+US-safe two-host-episode episode (Option A). Sequential Queue - do not load Klein + Wan + LTX + ACE-Step + TTS together.
 
 1. Edit the script (human part). Prompt enhance is **off** so Speaker A/B labels stay parser input. Turn Enhance on only if you want the 4B rewriter.
 2. Disclosure is prepended by the node (do not type it): {DISCLOSURE_TEXT}
 3. Kokoro-82M built-in voices (Apache). Optional Chatterbox/Qwen3-TTS only with operator-owned refs.
-4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. The script STRING is wired into ACE enhance as context (used if you turn Enhance on). Duck −15 dB under speech.
+4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. The script STRING is wired into ACE enhance as context (used if you turn Enhance on). Duck -15 dB under speech.
 5. Saves: `ez_podcast_ep` FLAC master + `ez_podcast_mix` 320 kbps MP3.
-6. Cover separately: Queue **{COVER_GRAPH}** (prefix `ez_podcast`, 1024²). Do not embed Klein here.
-7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (−16 LUFS podcast / `--youtube` −14). Comfy cannot loudnorm.
+6. Cover separately: Queue **{COVER_GRAPH}** (prefix `ez_podcast`, 1024^2). Do not embed Klein here.
+7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (-16 LUFS podcast / `--youtube` -14). Comfy cannot loudnorm.
 
 Weights: `./scripts/manage.sh download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).
 """
@@ -66,7 +66,7 @@ US-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engin
 
 - Writer flavor `radio_drama` (enhance **off** so Speaker A/B / Announcer labels stay parser input). Announcer + two Kokoro stock voices.
 - ACE-Step sting + bed, instrumental only, empty lyrics. Script STRING is wired into both ACE enhance nodes as context. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).
-- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **motion/loops/bumper-loop** / **motion/av/hook-av** in a later session — not a one-graph film.
+- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **motion/loops/bumper-loop** / **motion/av/hook-av** in a later session - not a one-graph film.
 - Cover: Queue **{COVER_GRAPH}** separately.
 
 {DISCLOSURE_TEXT}
@@ -74,16 +74,16 @@ US-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engin
 
 AUDIO_NOTE_C = f"""## audio/podcast/learn-episode
 
-US-safe learning episode (Option C). Sequential Queue — do not load Klein + Wan + LTX + ACE-Step + TTS together.
+US-safe learning episode (Option C). Sequential Queue - do not load Klein + Wan + LTX + ACE-Step + TTS together.
 
 1. Paste notes, HTTPS links, captioned video URLs, or local `.txt`/`.md`/`.srt`/`.vtt` paths into **Sources**. Pick **Format** and **Duration**. Rewrite is **on**.
 2. Fetch is SSRF-safe HTTPS. Videos pull **captions only** (no media download, no dub ASR). Missing captions are a status line.
 3. The node writes a deduped study digest, then a Speaker A/B (or solo) script sized to the duration. Missing GGUF concatenates sources and wraps Speaker A lines.
 4. Disclosure is prepended by the node (do not type it): {DISCLOSURE_TEXT}
-5. Kokoro-82M built-in voices (Apache). ACE-Step 1.5 native bed: 30 s instrumental, looped under the speech, duck −15 dB.
+5. Kokoro-82M built-in voices (Apache). ACE-Step 1.5 native bed: 30 s instrumental, looped under the speech, duck -15 dB.
 6. Saves: `ez_learn_ep` FLAC master + `ez_learn_mix` 320 kbps MP3.
-7. Cover separately: Queue **{COVER_GRAPH}** (prefix `ez_podcast`, 1024²). Do not embed Klein here.
-8. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (−16 LUFS podcast / `--youtube` −14). Comfy cannot loudnorm.
+7. Cover separately: Queue **{COVER_GRAPH}** (prefix `ez_podcast`, 1024^2). Do not embed Klein here.
+8. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (-16 LUFS podcast / `--youtube` -14). Comfy cannot loudnorm.
 
 25 min seminar is the slow CPU-TTS path. Weights: `./scripts/manage.sh download-podcast --tier analog` then `--tier acestep`.
 """
@@ -222,7 +222,7 @@ def build_audio_first() -> dict:
         "AudioAdjustVolume",
         [1440, 610],
         [280, 80],
-        "Duck bed −15 dB",
+        "Duck bed -15 dB",
         [-15],
         inputs=[g.inp("audio", "AUDIO")],
         outputs=[g.out("AUDIO", "AUDIO", [])],
@@ -451,7 +451,7 @@ def build_radio_drama() -> dict:
         "AudioAdjustVolume",
         [1860, 420],
         [300, 80],
-        "Duck −15 dB",
+        "Duck -15 dB",
         [-15],
         inputs=[g.inp("audio", "AUDIO")],
         outputs=[g.out("AUDIO", "AUDIO", [])],
@@ -703,7 +703,7 @@ def build_learn_episode() -> dict:
         "AudioAdjustVolume",
         [1860, 80],
         [280, 80],
-        "Duck bed −15 dB",
+        "Duck bed -15 dB",
         [-15],
         inputs=[g.inp("audio", "AUDIO")],
         outputs=[g.out("AUDIO", "AUDIO", [])],

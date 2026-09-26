@@ -1,6 +1,6 @@
 ---
 title: "Threshold enter"
-description: "Cinema Rack illustration — Threshold enter."
+description: "Cinema Rack illustration - Threshold enter."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

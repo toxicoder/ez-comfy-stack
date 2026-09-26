@@ -1,6 +1,6 @@
 ---
 title: "Head and Shoulders"
-description: "Cinema Rack illustration — Head and Shoulders."
+description: "Cinema Rack illustration - Head and Shoulders."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -86,7 +86,7 @@ def _resize_bhwc(image: Any, height: int, width: int) -> Any:
     """
     try:
         from comfy.utils import common_upscale  # type: ignore[import-not-found]
-    except Exception:  # noqa: BLE001 — hermetic tests / missing Comfy
+    except Exception:  # noqa: BLE001 - hermetic tests / missing Comfy
         common_upscale = None
     if common_upscale is not None:
         nchw = image.movedim(-1, 1)
@@ -94,7 +94,7 @@ def _resize_bhwc(image: Any, height: int, width: int) -> Any:
         return scaled.movedim(1, -1)
     try:
         import torch.nn.functional as F
-    except Exception as exc:  # noqa: BLE001 — fail closed in production
+    except Exception as exc:  # noqa: BLE001 - fail closed in production
         raise RuntimeError("EZ image resize needs Comfy common_upscale or torch") from exc
     nchw = image.movedim(-1, 1)
     scaled = F.interpolate(
@@ -122,8 +122,8 @@ def _call_empty_flux2(width: int, height: int, batch_size: int) -> Any | None:
     """Ask Comfy EmptyFlux2LatentImage for a zeros latent when the class exists.
 
     Args:
-        width: Pixel width (already ÷16).
-        height: Pixel height (already ÷16).
+        width: Pixel width (already div16).
+        height: Pixel height (already div16).
         batch_size: Latent batch.
 
     Returns:
@@ -133,13 +133,13 @@ def _call_empty_flux2(width: int, height: int, batch_size: int) -> Any | None:
         try:
             mod = importlib.import_module(mod_name)
             cls = getattr(mod, "EmptyFlux2LatentImage", None)
-        except Exception:  # noqa: BLE001 — hermetic tests / older Comfy
+        except Exception:  # noqa: BLE001 - hermetic tests / older Comfy
             continue
         if cls is None:
             continue
         try:
             node = cls()
-        except Exception:  # noqa: BLE001 — constructor may need Comfy
+        except Exception:  # noqa: BLE001 - constructor may need Comfy
             continue
         for method in ("execute", "generate", "run"):
             fn = getattr(node, method, None)
@@ -150,9 +150,9 @@ def _call_empty_flux2(width: int, height: int, batch_size: int) -> Any | None:
             except TypeError:
                 try:
                     result = fn(width=width, height=height, batch_size=batch_size)
-                except Exception:  # noqa: BLE001 — signature mismatch
+                except Exception:  # noqa: BLE001 - signature mismatch
                     continue
-            except Exception:  # noqa: BLE001 — fail-soft to zeros fallback
+            except Exception:  # noqa: BLE001 - fail-soft to zeros fallback
                 continue
             if isinstance(result, tuple):
                 return result[0]
@@ -164,8 +164,8 @@ def _zeros_flux2_latent(width: int, height: int, batch_size: int) -> dict[str, A
     """Build a zeros Flux.2 latent dict without requiring Comfy.
 
     Args:
-        width: Pixel width (already ÷16).
-        height: Pixel height (already ÷16).
+        width: Pixel width (already div16).
+        height: Pixel height (already div16).
         batch_size: Latent batch.
 
     Returns:
@@ -176,7 +176,7 @@ def _zeros_flux2_latent(width: int, height: int, batch_size: int) -> dict[str, A
     shape = (int(batch_size), FLUX2_LATENT_CHANNELS, spatial_h, spatial_w)
     try:
         import torch
-    except Exception:  # noqa: BLE001 — hermetic tests
+    except Exception:  # noqa: BLE001 - hermetic tests
         torch = None
     if torch is not None:
         zeros = getattr(torch, "zeros", None)
@@ -186,7 +186,7 @@ def _zeros_flux2_latent(width: int, height: int, batch_size: int) -> dict[str, A
 
 
 def empty_flux2_latent(width: int, height: int, batch_size: int = 1) -> dict[str, Any]:
-    """Return an empty Flux.2 latent for ``width``×``height``.
+    """Return an empty Flux.2 latent for ``width``x``height``.
 
     Prefers Comfy ``EmptyFlux2LatentImage``. Falls back to zeros (torch when
     present, shape-only otherwise).
@@ -209,7 +209,7 @@ def empty_flux2_latent(width: int, height: int, batch_size: int = 1) -> dict[str
 
 
 class EZSnapImage:
-    """Scale a still down to the largest Flux.2 Klein ÷16 canvas that fits."""
+    """Scale a still down to the largest Flux.2 Klein div16 canvas that fits."""
 
     @classmethod
     def INPUT_TYPES(cls) -> ComfyInputTypes:
@@ -251,7 +251,7 @@ class EZSnapImage:
 
 
 class EZEmptyFlux2FromImage:
-    """Allocate an empty Flux.2 latent matching a still's snapped W×H."""
+    """Allocate an empty Flux.2 latent matching a still's snapped WxH."""
 
     @classmethod
     def INPUT_TYPES(cls) -> ComfyInputTypes:
@@ -269,7 +269,7 @@ class EZEmptyFlux2FromImage:
     CATEGORY = CATEGORY
     DESCRIPTION = (
         "Empty Flux.2 noise canvas at the still's width and height snapped to "
-        "÷16. stills/background-swap uses this as KSampler.latent_image so "
+        "div16. stills/background-swap uses this as KSampler.latent_image so "
         "the encoded source is only a ReferenceLatent, not the denoise start."
     )
 
@@ -320,7 +320,7 @@ class EZMatchImageSize:
 
         Args:
             image: Edited still (BHWC).
-            size_src: Source still whose H×W is the target.
+            size_src: Source still whose HxW is the target.
 
         Returns:
             One-tuple with the resized (or original) image.
@@ -395,7 +395,7 @@ class EZImageFormat:
     DESCRIPTION = (
         "Klein still canvas. Format / platform sets width, height, SaveImage "
         "prefix, and Enhance framing. Custom uses the width/height widgets "
-        "(snapped to ÷16). Match input snaps aspect to a provided still. "
+        "(snapped to div16). Match input snaps aspect to a provided still. "
         "Look recipe splices a Cinema Rack starter into Enhance context. "
         "Quality does not change size. Empty of lettering."
     )
@@ -434,7 +434,7 @@ class EZImageFormat:
             size_mode=size_mode,
             image=image,
         )
-        summary = f"{result.width}×{result.height} · {result.prefix} · {result.label}"
+        summary = f"{result.width}x{result.height} - {result.prefix} - {result.label}"
         return {
             "ui": {"text": (summary,)},
             "result": (
@@ -507,7 +507,7 @@ class EZVideoFormat:
     CATEGORY = CATEGORY
     OUTPUT_NODE = True
     DESCRIPTION = (
-        "Wan / LTX clip canvas. Family picks the VAE grid (Wan ÷16, LTX ÷32). "
+        "Wan / LTX clip canvas. Family picks the VAE grid (Wan div16, LTX div32). "
         "Format / platform sets width, height, and Enhance framing. Custom "
         "uses the width/height widgets. Match input snaps aspect to a "
         "provided still. Duration is LTX-only (5/8/10/12 s, default 8) and "
@@ -548,7 +548,7 @@ class EZVideoFormat:
             size_mode=size_mode,
             image=image,
         )
-        summary = f"{result.width}×{result.height} · {result.label} · {duration_s}"
+        summary = f"{result.width}x{result.height} - {result.label} - {duration_s}"
         return {
             "ui": {"text": (summary,)},
             "result": (
@@ -586,8 +586,8 @@ class EZImageUpscale:
     CATEGORY = CATEGORY
     DESCRIPTION = (
         "Optional still upscale after decode. none passes the tensor through. "
-        "2x and 4x are lanczos. 4K fits the still in a 3840×2160 box "
-        "(portrait 2160×3840). No extra weights. Wire upscale into more "
+        "2x and 4x are lanczos. 4K fits the still in a 3840x2160 box "
+        "(portrait 2160x3840). No extra weights. Wire upscale into more "
         "EZImageUpscale nodes so one App dropdown drives every SaveImage."
     )
 

@@ -1,6 +1,6 @@
 ---
 title: "Over-crib orbit"
-description: "Cinema Rack illustration — Over-crib orbit."
+description: "Cinema Rack illustration - Over-crib orbit."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

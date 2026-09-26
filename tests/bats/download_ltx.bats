@@ -279,7 +279,7 @@ teardown() {
   [[ -L "${MODELS_DIR}/comfy/text_encoders/ltx-2.3_text_projection_bf16.safetensors" ]]
   [[ -L "${MODELS_DIR}/comfy/vae/LTX23_video_vae_bf16.safetensors" ]]
   [[ -L "${MODELS_DIR}/comfy/vae/LTX23_audio_vae_bf16.safetensors" ]]
-  # Must not land transformers/VAEs under text_encoders via *te* ↔ safetensors
+  # Must not land transformers/VAEs under text_encoders via *te* <-> safetensors
   [[ ! -e ${MODELS_DIR}/comfy/text_encoders/ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors ]]
   [[ ! -e ${MODELS_DIR}/comfy/text_encoders/LTX23_video_vae_bf16.safetensors ]]
   # Relative links (container mount path independence)

@@ -1,6 +1,6 @@
 ---
 title: "Level out"
-description: "Cinema Rack illustration — Level out."
+description: "Cinema Rack illustration - Level out."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

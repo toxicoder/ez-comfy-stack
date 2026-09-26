@@ -36,20 +36,20 @@ function clip(value: string, max: number): string {
   const text = value.replace(/\s+/g, " ").trim();
   if (text.length <= max) return text;
   if (max < 2) return "";
-  return `${text.slice(0, max - 1)}…`;
+  return `${text.slice(0, max - 1)}...`;
 }
 
 /**
  * Build a new-issue URL the reader can revise and submit.
  *
- * Title shape is `Docs: <page> — <heading>`. The body names the page, heading,
+ * Title shape is `Docs: <page> - <heading>`. The body names the page, heading,
  * docs alias, git ref, and source file, then leaves two blanks for the reader.
  *
  * @param report Page and browser facts.
  * @returns `https://github.com/.../issues/new?title=&body=`.
  */
 export function docsBugHref(report: DocsBugReport): string {
-  const title = clip(`Docs: ${report.pageTitle} — ${report.heading}`, 140);
+  const title = clip(`Docs: ${report.pageTitle} - ${report.heading}`, 140);
 
   const build = (selection: string, agent: string): string => {
     const lines = [

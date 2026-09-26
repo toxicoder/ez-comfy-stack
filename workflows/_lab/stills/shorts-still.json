@@ -413,7 +413,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## stills/shorts-still\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nVertical Shorts/Reels still (Klein 4B distilled FP8). Default **432\u00d7768** (9:16).\nSave prefix: `ez_shorts_still`. Feed into **motion/silent/shorts-still-5s** or **motion/av/shorts-still-8s**.\nWidgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## stills/shorts-still\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nVertical Shorts/Reels still (Klein 4B distilled FP8). Default **432x768** (9:16).\nSave prefix: `ez_shorts_still`. Feed into **motion/silent/shorts-still-5s** or **motion/av/shorts-still-8s**.\nWidgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -603,7 +603,7 @@
         "Node name for S&R": "EZImageFormat"
       },
       "widgets_values": [
-        "Shorts still (432\u00d7768)",
+        "Shorts still (432x768)",
         "none",
         432,
         768,
@@ -911,7 +911,7 @@
         0
       ]
     },
-    "lab_note": "## stills/shorts-still\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nVertical Shorts/Reels still (Klein 4B distilled FP8). Default **432\u00d7768** (9:16).\nSave prefix: `ez_shorts_still`. Feed into **motion/silent/shorts-still-5s** or **motion/av/shorts-still-8s**.\nWidgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_note": "## stills/shorts-still\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nVertical Shorts/Reels still (Klein 4B distilled FP8). Default **432x768** (9:16).\nSave prefix: `ez_shorts_still`. Feed into **motion/silent/shorts-still-5s** or **motion/av/shorts-still-8s**.\nWidgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n",
     "lab_description": "Klein 4B vertical 9:16 Shorts still",
     "lab_app_mode": {
       "enabled": true,
@@ -929,7 +929,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
           }
         ],
         [
@@ -953,7 +953,7 @@
           14,
           "format",
           {
-            "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width \u00d7 Height (\u00f716).",
+            "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (div16).",
             "label": "Format / platform"
           }
         ],
@@ -969,7 +969,7 @@
           15,
           "upscale",
           {
-            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840\u00d72160 box (portrait 2160\u00d73840).",
+            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840x2160 box (portrait 2160x3840).",
             "label": "Upscale"
           }
         ],
@@ -977,7 +977,7 @@
           11,
           "style",
           {
-            "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
+            "description": "Optional look. Hidden on I2V - the start image owns look.",
             "label": "Style"
           }
         ],

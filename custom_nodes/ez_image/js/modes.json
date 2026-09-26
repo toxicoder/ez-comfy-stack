@@ -139,7 +139,7 @@
       "category": "edit_scene",
       "enhance_mode": "background_swap",
       "needs_ref": 1,
-      "instruction": "Keep the subject from the reference still. Replace the entire environment — backdrop, sky, architecture, ground or floor, and set dressing near the subject.",
+      "instruction": "Keep the subject from the reference still. Replace the entire environment - backdrop, sky, architecture, ground or floor, and set dressing near the subject.",
       "prefix": "ez_edit_bg_swap"
     },
     {

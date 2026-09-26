@@ -1,6 +1,6 @@
 ---
 title: Studio sidecars
-description: Host-only 3D and DCC sidecars on GB10 — Blender, SuperSplat, TRELLIS.2, DA3-BASE. Occupancy with Comfy.
+description: Host-only 3D and DCC sidecars on GB10 - Blender, SuperSplat, TRELLIS.2, DA3-BASE. Occupancy with Comfy.
 tags: [sidecar, blender, splat, trellis, 3d, occupancy]
 ---
 
@@ -37,15 +37,15 @@ flowchart TB
 
 | Sidecar | Where it runs | License | In image? |
 | --- | --- | --- | --- |
-| Blender | Host binary (`PATH` / `BLENDER_BIN` / `blender-install`) | Blender's own | **No** — [Blender GB10 sidecar](blender-gb10-sidecar.md) |
-| SuperSplat | Host static viewer | MIT | **No** — [Splat sidecar](splat-sidecar.md) |
+| Blender | Host binary (`PATH` / `BLENDER_BIN` / `blender-install`) | Blender's own | **No** - [Blender GB10 sidecar](blender-gb10-sidecar.md) |
+| SuperSplat | Host static viewer | MIT | **No** - [Splat sidecar](splat-sidecar.md) |
 | TRELLIS.2 native | Comfy after `download-3d` | MIT | Weights on `MODELS_DIR` only. No nvdiffrast |
 | DA3-BASE | Comfy after `download-3d` | Apache 2.0 | Weights on `MODELS_DIR` only. DA3-LARGE refused |
-| llama-server 35B | Host `llama-server` on `127.0.0.1:30000` | Apache 2.0 GGUF | **No** — occupancy `llm-desk`. Never a Compose service |
+| llama-server 35B | Host `llama-server` on `127.0.0.1:30000` | Apache 2.0 GGUF | **No** - occupancy `llm-desk`. Never a Compose service |
 
 Never `pip install nvdiffrast` / `nvdiffrec`. Never vendor Inria 3DGS or Pixal3D as a default.
 
-Generated meshes, previews, and scene instances are **outputs** in the [Asset Bible](asset-bible.md) under `COMFY_OUTPUT_DIR/assets/` — never in `MODELS_DIR` or `guides/`.
+Generated meshes, previews, and scene instances are **outputs** in the [Asset Bible](asset-bible.md) under `COMFY_OUTPUT_DIR/assets/` - never in `MODELS_DIR` or `guides/`.
 
 ```bash
 ./scripts/manage.sh blender-install              # once; never in Dockerfile
@@ -58,7 +58,7 @@ Generated meshes, previews, and scene instances are **outputs** in the [Asset Bi
 ./scripts/manage.sh occupancy enter trellis --yes
 ```
 
-Guide packs: [DCC guide pack](dcc-workflows.md). Clay is Workbench; beauty is Path A. Never 1280×720.
+Guide packs: [DCC guide pack](dcc-workflows.md). Clay is Workbench; beauty is Path A. Never 1280x720.
 
 `custom_nodes/ez_dcc` is a **Comfy pack on `:8188`**, not a sidecar. It loads dumped packs and gates occupancy in-canvas. It does not run Blender. Playbook: [Stay in Comfy after a Blender dump](learn/comfy-first-blender.md).
 
@@ -66,12 +66,12 @@ VACE join (Wan 2.1 1.3B Apache, 17 frames = `1+8n`) is a Comfy graph, not a side
 
 ```bash
 ./scripts/utilities/download-wan.sh run --tier vace
-# load workflows/_lab/motion/silent/vace-join.json — MagCache off
+# load workflows/_lab/motion/silent/vace-join.json - MagCache off
 ```
 
 ## Host NLE (Kdenlive / Shotcut)
 
-OTIO from `./scripts/manage.sh film-export-otio go-see` is stdlib JSON under `films/<slug>/publish/`. Import on the Spark host or a laptop — never in the Docker image.
+OTIO from `./scripts/manage.sh film-export-otio go-see` is stdlib JSON under `films/<slug>/publish/`. Import on the Spark host or a laptop - never in the Docker image.
 
 On DGX Spark (Ubuntu aarch64):
 

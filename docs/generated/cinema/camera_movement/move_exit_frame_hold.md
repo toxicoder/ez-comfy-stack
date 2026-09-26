@@ -1,6 +1,6 @@
 ---
 title: "Hold after exit"
-description: "Cinema Rack illustration — Hold after exit."
+description: "Cinema Rack illustration - Hold after exit."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

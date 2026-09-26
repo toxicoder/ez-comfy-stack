@@ -421,7 +421,7 @@ def test_stitch_film_xfade_requires_audio_and_runs_three_steps(
     assert ",apad,atrim=duration=90.00" in filt
     assert captured[2][captured[2].index("-c:v") + 1] == "copy"
 
-    with pytest.raises(ValueError, match="0–50"):
+    with pytest.raises(ValueError, match="0-50"):
         stitch_film(shots, out, 90.0, ffmpeg="ffmpeg", run=fake_run, xfade_cs=99)
 
     captured.clear()

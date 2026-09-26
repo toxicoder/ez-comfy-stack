@@ -1,6 +1,6 @@
 ---
 title: Dream-house tours
-description: "Two Instagram 4:5 virtual tours of one place — language-locked T2I, or a Blender greybox that Klein restyles."
+description: "Two Instagram 4:5 virtual tours of one place - language-locked T2I, or a Blender greybox that Klein restyles."
 tags: [learn, klein, dream-house, blender, clay, instagram]
 ---
 
@@ -45,17 +45,17 @@ flowchart TB
 | **stills/dream-house** | Prompt Join `lock=view`. Independent T2I | No Blender, or you want a one-Queue draft |
 | **stills/dream-house-clay** | One greybox + ten cameras. Klein edit + `ReferenceLatent` | You want the kitchen to stay next to the lounge. `start` seeds plates; Blender dump is optional Workbench quality |
 
-Same ten cameras (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study). Same 1024×1280 Instagram 4:5. Same optional style dropdown on the bible. Prefixes do **not** collide. Language-tour shot cards are walkthrough cameras (lens, height, a distinct room program, near/far, which room); type the place — materials, time of day, architecture — in **HOUSE IDENTITY**. Each still names its own room (entrance hall, living hall, cook line, dining hall, sleep chamber, wet room, open-air terrace, writing room) so a Queue reads as a tour, not one volume with different finishes.
+Same ten cameras (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study). Same 1024x1280 Instagram 4:5. Same optional style dropdown on the bible. Prefixes do **not** collide. Language-tour shot cards are walkthrough cameras (lens, height, a distinct room program, near/far, which room); type the place - materials, time of day, architecture - in **HOUSE IDENTITY**. Each still names its own room (entrance hall, living hall, cook line, dining hall, sleep chamber, wet room, open-air terrace, writing room) so a Queue reads as a tour, not one volume with different finishes.
 
-TRELLIS.2 is a hero-piece tool, not a walkable house. Do not TRELLIS a full-scene still and expect a foyer. Godot is P2 — `house-views` is Blender only.
+TRELLIS.2 is a hero-piece tool, not a walkable house. Do not TRELLIS a full-scene still and expect a foyer. Godot is P2 - `house-views` is Blender only.
 
 ---
 
 ## Clay loop
 
-`manage.sh start` seeds `ez_house_clay_01.png` … `10.png` into `${COMFY_OUTPUT_DIR}/input` (container `/inputs`) so LoadImage can Queue. If a `house-views` pack already exists it is copied; otherwise the shipped `schemas/house_layout.yaml` cameras are rendered (no Blender). Reload the App if it was open before seed.
+`manage.sh start` seeds `ez_house_clay_01.png` ... `10.png` into `${COMFY_OUTPUT_DIR}/input` (container `/inputs`) so LoadImage can Queue. If a `house-views` pack already exists it is copied; otherwise the shipped `schemas/house_layout.yaml` cameras are rendered (no Blender). Reload the App if it was open before seed.
 
-Optional Workbench dump (higher quality) — host Blender, then park or stop Comfy:
+Optional Workbench dump (higher quality) - host Blender, then park or stop Comfy:
 
 ```bash
 ./scripts/manage.sh blender-install
@@ -66,9 +66,9 @@ Optional Workbench dump (higher quality) — host Blender, then park or stop Com
 # Queue workflows/_lab/stills/dream-house-clay.json
 ```
 
-Dump lives under `${COMFY_OUTPUT_DIR}/assets/sets/<slug>/` (layout, `mesh/house.glb`, `views/`, `depth/`). Clay copies `ez_house_clay_01.png` … `10.png` land in that folder and in `${COMFY_OUTPUT_DIR}/input`. LoadImage does **not** list the output root.
+Dump lives under `${COMFY_OUTPUT_DIR}/assets/sets/<slug>/` (layout, `mesh/house.glb`, `views/`, `depth/`). Clay copies `ez_house_clay_01.png` ... `10.png` land in that folder and in `${COMFY_OUTPUT_DIR}/input`. LoadImage does **not** list the output root.
 
-Already dumped but Clay 01–10 show **Missing Inputs** / “no file selected”? Copy or reseed without Blender (compose may stay up), then reload the graph:
+Already dumped but Clay 01-10 show **Missing Inputs** / "no file selected"? Copy or reseed without Blender (compose may stay up), then reload the graph:
 
 ```bash
 ./scripts/manage.sh house-views --slug lab-penthouse --install-inputs
@@ -83,7 +83,7 @@ Default layout is `schemas/house_layout.yaml` (lab penthouse matching the canned
 
 | If | Skip |
 | --- | --- |
-| No host Blender | Workbench dump. `start` / `--seed-inputs` still render layout cameras. Language-only tour → **stills/dream-house**. Do not substitute T2I stills or `example.png` as clay |
+| No host Blender | Workbench dump. `start` / `--seed-inputs` still render layout cameras. Language-only tour -> **stills/dream-house**. Do not substitute T2I stills or `example.png` as clay |
 | Compose is up | Blender `house-views` dump (exit 2). `./scripts/manage.sh stop` first. `--install-inputs` and `--seed-inputs` may run while compose is up |
 | You only needed a language bible | Clay dump. Queue **stills/dream-house** |
 
@@ -93,4 +93,4 @@ Default layout is `schemas/house_layout.yaml` (lab penthouse matching the canned
 
 One GB10 job. A Blender `house-views` dump dies if compose is up (exit 2), same XOR as `export-guides`. `--install-inputs` and `--seed-inputs` are host file writes and may run while Comfy is up. Do not Queue the clay graph and a Blender dump in one session. `restart: "no"`, type **yes** on start, headroom, and download-limit clear-on-exit are unchanged. Blender is never in the Dockerfile.
 
-Related: [Clay to finish](clay-to-finish.md) (film Path B), [DCC guide pack](../dcc-workflows.md) (1280×704 / 120f LTX packs — different contract), [Asset Bible](../asset-bible.md), [Prompting](../prompting.md).
+Related: [Clay to finish](clay-to-finish.md) (film Path B), [DCC guide pack](../dcc-workflows.md) (1280x704 / 120f LTX packs - different contract), [Asset Bible](../asset-bible.md), [Prompting](../prompting.md).

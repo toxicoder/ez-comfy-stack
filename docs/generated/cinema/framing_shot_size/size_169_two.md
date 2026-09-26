@@ -1,6 +1,6 @@
 ---
 title: "16:9 Conversation"
-description: "Cinema Rack illustration — 16:9 Conversation."
+description: "Cinema Rack illustration - 16:9 Conversation."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

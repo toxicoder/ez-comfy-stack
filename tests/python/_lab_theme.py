@@ -3,7 +3,7 @@
 Internal (never CLIP, never captions): a wizard of technology who is excited
 about the future, cares about people, and is focused on the good uses of the
 tools in front of them. Familiar, trustworthy, hopeful. On screen they stay
-epic and adventurous — parkour, music, tropical cities, remote nature, and
+epic and adventurous - parkour, music, tropical cities, remote nature, and
 everything between. Do not write hope, trust, or "bright future" into prompts.
 
 Not imported by pytest collection (leading underscore). Builders import it:
@@ -203,7 +203,7 @@ LTX_DIALOGUE = (
     "An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and "
     "faint circuit-thread seams stands at the glass, warm gold-cyan holographic glyph rings "
     "hovering over a compact unmarked data-staff. The camera holds a locked-off frame, then dollies in as the "
-    "wizard turns toward lens, eyes bright, and says, \"The tools are already here — we "
+    "wizard turns toward lens, eyes bright, and says, \"The tools are already here - we "
     "just have to use them well.\" A warm terrace breeze and palm rustle sit under distant "
     "bay traffic; the voice is close and clear, then a single glyph chime. Unmarked surfaces, "
     "empty of lettering. No music and no score. Twelve seconds."

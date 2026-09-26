@@ -1,4 +1,4 @@
-"""ez.house.layout.v1 / ez.house.views.v1 — hermetic, no Blender."""
+"""ez.house.layout.v1 / ez.house.views.v1 - hermetic, no Blender."""
 
 from __future__ import annotations
 

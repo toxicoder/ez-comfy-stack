@@ -209,7 +209,7 @@ def _s(name: str, typ: str, direction: str, desc: str) -> dict[str, str]:
 
     Args:
         name: Socket label as shown in ComfyUI.
-        typ: Comfy type string (``IMAGE``, ``LATENT``, …).
+        typ: Comfy type string (``IMAGE``, ``LATENT``, ...).
         direction: ``in`` or ``out``.
         desc: Operator-facing description.
 
@@ -237,10 +237,10 @@ def _w(
         name: Widget label as shown in ComfyUI.
         index: List-storage index when widgets live in ``inputs`` lists.
         key: Dict-storage key when widgets live in ``inputs`` mappings.
-        typ: Comfy widget type (``STRING``, ``INT``, …).
+        typ: Comfy widget type (``STRING``, ``INT``, ...).
         rng: Human-readable range, when applicable.
         desc: Operator-facing description.
-        gen: How the value is produced (seed, file, …).
+        gen: How the value is produced (seed, file, ...).
         choices: Optional ``(id, description)`` pairs.
         choices_from: Optional named choice catalog.
 
@@ -316,9 +316,9 @@ def ksampler_widgets() -> list[dict[str, Any]]:
             "seed",
             index=0,
             typ="INT",
-            rng="0 … 2^64-1; lab 42",
+            rng="0 ... 2^64-1; lab 42",
             desc="Random seed for the noise tensor.",
-            gen="Same seed + same graph ≈ same picture or clip. Lab locks 42 on smokes so drafts are comparable.",
+            gen="Same seed + same graph ~ same picture or clip. Lab locks 42 on smokes so drafts are comparable.",
         ),
         _w(
             "control_after_generate",
@@ -333,17 +333,17 @@ def ksampler_widgets() -> list[dict[str, Any]]:
             "steps",
             index=2,
             typ="INT",
-            rng="1–10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12",
+            rng="1-10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12",
             desc="Denoising iterations.",
-            gen="More steps refine detail with diminishing returns. Distilled Klein is authored at 4 — raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.",
+            gen="More steps refine detail with diminishing returns. Distilled Klein is authored at 4 - raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.",
         ),
         _w(
             "cfg",
             index=3,
             typ="FLOAT",
-            rng="0–100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5",
+            rng="0-100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5",
             desc="Classifier-free guidance scale.",
-            gen="Distilled Klein is CFG 1.0 — raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.",
+            gen="Distilled Klein is CFG 1.0 - raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.",
         ),
         _w(
             "sampler_name",
@@ -367,7 +367,7 @@ def ksampler_widgets() -> list[dict[str, Any]]:
             "denoise",
             index=6,
             typ="FLOAT",
-            rng="0–1; lab 1.0",
+            rng="0-1; lab 1.0",
             desc="Fraction of the latent to replace with denoised signal.",
             gen="1.0 is full generation (T2I / T2V / ACE). Values below 1 keep structure from an encoded start image (Klein edit / clay). Lab I2V uses dedicated latent nodes, not denoise<1 on empty noise.",
         ),

@@ -1,6 +1,6 @@
 ---
 title: "Tilt up while dollying in"
-description: "Cinema Rack illustration — Tilt up while dollying in."
+description: "Cinema Rack illustration - Tilt up while dollying in."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

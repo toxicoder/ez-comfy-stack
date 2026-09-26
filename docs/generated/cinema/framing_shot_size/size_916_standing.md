@@ -1,6 +1,6 @@
 ---
 title: "9:16 Standing Full"
-description: "Cinema Rack illustration — 9:16 Standing Full."
+description: "Cinema Rack illustration - 9:16 Standing Full."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

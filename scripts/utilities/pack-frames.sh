@@ -3,7 +3,7 @@
 # ## pack-frames
 #
 # Mux a PNG/EXR sequence to 24fps 1280x704 MP4 with software libx264.
-# Not NVENC — may run while Comfy is up because it does not use the GPU.
+# Not NVENC - may run while Comfy is up because it does not use the GPU.
 #
 # Usage:
 #   ./scripts/utilities/pack-frames.sh --in DIR --out FILE [--fps 24] [--pattern '%04d.png']
@@ -118,8 +118,8 @@ cmd_run() {
     return 1
   fi
   mkdir -p "$(dirname "${OUT_MP4}")"
-  log "mux ${IN_DIR} → ${OUT_MP4} (${FPS} fps, libx264, not NVENC)"
-  run_ffmpeg_logged "mux frames → ${OUT_MP4}" -- ffmpeg -y -framerate "${FPS}" -i "${IN_DIR}/${PATTERN}" \
+  log "mux ${IN_DIR} -> ${OUT_MP4} (${FPS} fps, libx264, not NVENC)"
+  run_ffmpeg_logged "mux frames -> ${OUT_MP4}" -- ffmpeg -y -framerate "${FPS}" -i "${IN_DIR}/${PATTERN}" \
     -an -c:v libx264 -pix_fmt yuv420p -s "${WIDTH}x${HEIGHT}" "${OUT_MP4}"
   log "wrote ${OUT_MP4}"
 }

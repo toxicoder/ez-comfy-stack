@@ -1,6 +1,6 @@
 ---
 title: "Security pan"
-description: "Cinema Rack illustration — Security pan."
+description: "Cinema Rack illustration - Security pan."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

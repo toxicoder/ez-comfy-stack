@@ -1,6 +1,6 @@
 ---
 title: "1:1 Centered Face"
-description: "Cinema Rack illustration — 1:1 Centered Face."
+description: "Cinema Rack illustration - 1:1 Centered Face."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

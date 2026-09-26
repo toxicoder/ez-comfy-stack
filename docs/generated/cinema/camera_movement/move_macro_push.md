@@ -1,6 +1,6 @@
 ---
 title: "Macro push"
-description: "Cinema Rack illustration — Macro push."
+description: "Cinema Rack illustration - Macro push."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

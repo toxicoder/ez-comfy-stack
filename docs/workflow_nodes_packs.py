@@ -55,7 +55,7 @@ def pack_nodes() -> dict[str, Any]:
             _w("backend", index=4, typ="COMBO", rng="kokoro", desc="TTS engine.", gen="kokoro is the lab default. chatterbox/qwen3tts need operator-owned refs.", choices=[("kokoro", "Kokoro-82M ONNX/CPU (lab)."), ("chatterbox", "Opt-in clone. Empty ref falls back."), ("qwen3tts", "Opt-in clone. Empty ref falls back.")]),
             _w("speaker_a_ref", index=5, desc="Optional clone reference path.", gen="Leave empty. Do not paste celebrity WAVs."),
             _w("speaker_b_ref", index=6, desc="Optional clone reference path.", gen="Leave empty."),
-            _w("speed", index=7, typ="FLOAT", rng="0.5–1.5, lab 1.0", desc="Speaking rate.", gen="1.0 is natural. Faster shrinks the episode and can clip diction."),
+            _w("speed", index=7, typ="FLOAT", rng="0.5-1.5, lab 1.0", desc="Speaking rate.", gen="1.0 is natural. Faster shrinks the episode and can clip diction."),
         ],
     )
     nodes["EZPodcastLearn"] = _n(
@@ -151,9 +151,9 @@ def pack_nodes() -> dict[str, Any]:
         widgets=[
             _w("prompt", index=0, desc="Editable translation JSON.", gen="Turn Enhance off to pin widget text after a human rewrite."),
             _w("enhance", index=1, typ="BOOLEAN", desc="Rewrite translation via GGUF.", gen="Off pins your edits."),
-            _w("target_language", index=2, typ="COMBO", rng="es", desc="Target ISO code.", gen="es is the lab smoke. Clone CFG auto 0.3 on EN→ES.", choices=dub_langs),
+            _w("target_language", index=2, typ="COMBO", rng="es", desc="Target ISO code.", gen="es is the lab smoke. Clone CFG auto 0.3 on EN->ES.", choices=dub_langs),
             _w("source_language", index=3, typ="COMBO", rng="auto", desc="Source language.", gen="auto detects. Pin en if ASR mis-detects.", choices=[("auto", "Detect.")] + dub_langs),
-            _w("max_speakers", index=4, typ="INT", rng="0–12, 0 = auto", desc="Diarize cap.", gen="0 lets the pipeline decide."),
+            _w("max_speakers", index=4, typ="INT", rng="0-12, 0 = auto", desc="Diarize cap.", gen="0 lets the pipeline decide."),
             _w("stage", index=5, typ="COMBO", rng="all", desc="Analyze vs render vs both.", gen="all analyzes then clones. render skips ASR. analyze stops after JSON.", choices=[("all", "Analyze then clone (lab)."), ("analyze", "ASR/translate only."), ("render", "Skip ASR; clone widget JSON.")]),
         ],
     )
@@ -170,9 +170,9 @@ def pack_nodes() -> dict[str, Any]:
             _w("engine", index=0, typ="COMBO", rng="chatterbox-ml", desc="Clone engine.", gen="chatterbox-ml is the lab default. qwen3tts is opt-in.", choices=[("chatterbox-ml", "Lab default."), ("qwen3tts", "Opt-in Qwen3-TTS.")]),
             _w("keep_bed", index=1, typ="BOOLEAN", rng="true", desc="Keep source bed under the clone.", gen="true duration-locks to the source (YouTube Languages)."),
             _w("spoken_disclosure", index=2, typ="BOOLEAN", rng="false", desc="Overlay a spoken bumper on the mix wav.", gen="Off: mix starts on speech. YT wav stays source-timed either way."),
-            _w("speed", index=3, typ="FLOAT", rng="0.5–1.5, 1.0", desc="Fit ceiling for duration lock.", gen="1.0 uses the lab 1.25× pitch-preserving lock, then spill, then fade-trim the end."),
-            _w("cfg_weight", index=4, typ="FLOAT", rng="−1.0 = auto", desc="Clone CFG.", gen="−1 auto. Lab auto 0.3 on EN→ES (retry 0.5)."),
-            _w("exaggeration", index=5, typ="FLOAT", rng="0.25–2.0, 0.5", desc="Chatterbox exaggeration.", gen="0.5 is the lab default. Higher is cartoon-emotive."),
+            _w("speed", index=3, typ="FLOAT", rng="0.5-1.5, 1.0", desc="Fit ceiling for duration lock.", gen="1.0 uses the lab 1.25x pitch-preserving lock, then spill, then fade-trim the end."),
+            _w("cfg_weight", index=4, typ="FLOAT", rng="-1.0 = auto", desc="Clone CFG.", gen="-1 auto. Lab auto 0.3 on EN->ES (retry 0.5)."),
+            _w("exaggeration", index=5, typ="FLOAT", rng="0.25-2.0, 0.5", desc="Chatterbox exaggeration.", gen="0.5 is the lab default. Higher is cartoon-emotive."),
         ],
     )
     nodes["EZFilmDisclosure"] = _n(
@@ -196,7 +196,7 @@ def pack_nodes() -> dict[str, Any]:
         "Save 90s film (MP4)",
         "Concat 18 LTX 5.00 s MP4s, cap 90 s, H.264 CRF 18 + AAC + loudnorm + faststart.",
         origin="ez_film",
-        lab="Queue once. xfade_cs is audio-only acrossfade; 0 is a hard cut. go-see ships xfade_cs 8. act=0 is a 90s film master; act=1–5 writes ez_<slug>_actN_90s.mp4.",
+        lab="Queue once. xfade_cs is audio-only acrossfade; 0 is a hard cut. go-see ships xfade_cs 8. act=0 is a 90s film master; act=1-5 writes ez_<slug>_actN_90s.mp4.",
         sockets=[
             *[_s(f"shot_{i:02d}", "VHS_FILENAMES", "in", f"Shot {i:02d} MP4.") for i in range(1, 19)],
             _s("disclosure", "STRING", "in", "EZFilmDisclosure text."),
@@ -205,15 +205,15 @@ def pack_nodes() -> dict[str, Any]:
         widgets=[
             _w("film", index=0, typ="COMBO", desc="Film id.", gen="Picks output name and shot-map. Must match the graph.", choices=[("go-see", "Parkour 90s."), ("still-here", "Household morning 90s."), ("switchyard", "Night freight-yard 90s."), ("tide-table", "Dawn skiff 7.5 min."), ("night-oven", "Bakery 7.5 min."), ("glasshouse", "Storm glasshouse 7.5 min."), ("last-lane", "Night two-lane 7.5 min."), ("breakwater", "Storm-wall walk 7.5 min.")]),
             _w("cap_seconds", index=1, typ="FLOAT", rng="90.0 max", desc="Hard duration cap for this 18-shot stitch.", gen="Stay 90. This is a stitch cap, not a denoise length. 7.5 min masters are host concat of 90 stems."),
-            _w("xfade_cs", index=2, typ="INT", rng="0–50; 10 = 0.10 s", desc="Audio-only acrossfade in centiseconds.", gen="0 = hard cut (still-here, switchyard). 8 = 0.08 s audio cross on go-see / last-lane / breakwater. Picture stays cut-only so duration stays on picture."),
-            _w("act", index=3, typ="INT", rng="0–5", desc="0 = 90s film master; 1–5 = act master for a 7.5 min film.", gen="Festival shorts Queue five act graphs, then concat-shots.sh writes ez_<slug>_450s.mp4."),
+            _w("xfade_cs", index=2, typ="INT", rng="0-50; 10 = 0.10 s", desc="Audio-only acrossfade in centiseconds.", gen="0 = hard cut (still-here, switchyard). 8 = 0.08 s audio cross on go-see / last-lane / breakwater. Picture stays cut-only so duration stays on picture."),
+            _w("act", index=3, typ="INT", rng="0-5", desc="0 = 90s film master; 1-5 = act master for a 7.5 min film.", gen="Festival shorts Queue five act graphs, then concat-shots.sh writes ez_<slug>_450s.mp4."),
         ],
     )
     nodes["EZClipLastFrame"] = _n(
         "Last frame (IMAGE)",
         "Return the last frame of an IMAGE batch (index -1) as the next clip's I2V start.",
         origin="ez_film",
-        lab="Duration-safe. Do not hardcode ImageFromBatch 120 — legal last indices are 120 / 192 / 240 / 288.",
+        lab="Duration-safe. Do not hardcode ImageFromBatch 120 - legal last indices are 120 / 192 / 240 / 288.",
         sockets=[
             _s("image", "IMAGE", "in", "Decoded video batch."),
             _s("last_frame", "IMAGE", "out", "Last frame (batch dim 1)."),
@@ -221,9 +221,9 @@ def pack_nodes() -> dict[str, Any]:
     )
     nodes["EZClipConcat"] = _n(
         "Save clip chain (MP4)",
-        "Concat 1–24 duration-head MP4s. Cap is a ceiling, not a pad-to-runtime.",
+        "Concat 1-24 duration-head MP4s. Cap is a ceiling, not a pad-to-runtime.",
         origin="ez_film",
-        lab="clip_01 required; clip_02…24 optional. Collect-until-gap (a hole refuses). v1 hard-cut only (xfade_cs=0). Master ≈ sum(stems); default cap 600 s, max 1800. No films/<slug>/publish copy.",
+        lab="clip_01 required; clip_02...24 optional. Collect-until-gap (a hole refuses). v1 hard-cut only (xfade_cs=0). Master ~ sum(stems); default cap 600 s, max 1800. No films/<slug>/publish copy.",
         sockets=[
             _s("clip_01", "VHS_FILENAMES", "in", "First clip MP4."),
             *[_s(f"clip_{i:02d}", "VHS_FILENAMES", "in", f"Clip {i:02d} MP4 (optional).") for i in range(2, 25)],
@@ -232,8 +232,8 @@ def pack_nodes() -> dict[str, Any]:
         ],
         widgets=[
             _w("prefix", index=0, rng="ez_clip_chain", desc="Output filename stem.", gen="Writes ez_clip_chain.mp4 under Comfy output. Rename if you Queue more than one chain."),
-            _w("cap_seconds", index=1, typ="FLOAT", rng="600 default, 1800 max", desc="Fail-closed duration ceiling.", gen="Not a pad target. 4×8 s is ~32 s. Past 24 stems use concat-shots.sh --files … --cap-seconds."),
-            _w("xfade_cs", index=2, typ="INT", rng="0–50; v1 must be 0", desc="Audio acrossfade in centiseconds.", gen="v1 raises unless 0 (hard cut). Widget stays for a later overlap-off acrossfade."),
+            _w("cap_seconds", index=1, typ="FLOAT", rng="600 default, 1800 max", desc="Fail-closed duration ceiling.", gen="Not a pad target. 4x8 s is ~32 s. Past 24 stems use concat-shots.sh --files ... --cap-seconds."),
+            _w("xfade_cs", index=2, typ="INT", rng="0-50; v1 must be 0", desc="Audio acrossfade in centiseconds.", gen="v1 raises unless 0 (hard cut). Widget stays for a later overlap-off acrossfade."),
         ],
     )
     nodes["EZDCCLoadGuideStill"] = _n(
@@ -248,7 +248,7 @@ def pack_nodes() -> dict[str, Any]:
         widgets=[
             _w("slug", index=0, rng="go-see", desc="Guide-pack slug.", gen="Must exist under ${COMFY_OUTPUT_DIR}/guides/."),
             _w("shot_id", index=1, rng="12", desc="Shot folder.", gen="Matches blender-guide dump ids."),
-            _w("layer", index=2, typ="COMBO", rng="first", desc="Which PNG.", gen="first/last are RGB plates. clay/depth/canny are guides. Depth is mist 0–1 (near=white).", choices=[("first", "First-frame RGB."), ("last", "Last-frame RGB."), ("clay", "Clay beauty."), ("depth", "Depth mist."), ("canny", "Canny edges.")]),
+            _w("layer", index=2, typ="COMBO", rng="first", desc="Which PNG.", gen="first/last are RGB plates. clay/depth/canny are guides. Depth is mist 0-1 (near=white).", choices=[("first", "First-frame RGB."), ("last", "Last-frame RGB."), ("clay", "Clay beauty."), ("depth", "Depth mist."), ("canny", "Canny edges.")]),
         ],
     )
     nodes["EZDCCLoadGuideVideo"] = _n(
@@ -304,7 +304,7 @@ def pack_nodes() -> dict[str, Any]:
             _w("prompt", index=1, desc="Message.", gen="One widget, then Queue. Not a streaming chat box."),
             _w("mode", index=2, typ="COMBO", rng="research", desc="Chat vs planner+search.", gen="research runs subagents. chat is a single turn.", choices=[("chat", "Single-turn chat."), ("research", "Planner + sequential subagents (lab).")]),
             _w("web_search", index=3, typ="BOOLEAN", rng="true", desc="Allow web search.", gen="true uses the research MCP. Off stays on-box."),
-            _w("subagents", index=4, typ="INT", rng="1–3, lab 2", desc="How many research subagents.", gen="2 is the lab default. 3 is slower."),
+            _w("subagents", index=4, typ="INT", rng="1-3, lab 2", desc="How many research subagents.", gen="2 is the lab default. 3 is slower."),
             _w("history", index=5, desc="Prior turns.", gen="Paste if you continue a desk session."),
             _w("catalog", index=6, desc="Catalog id.", gen="Leave as stamped."),
         ],

@@ -29,13 +29,13 @@ Occupancy **klein**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fa
 ```text
 ## stills/dream-house-clay
 
-Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
+Format / platform sets pixels (Custom uses Width x Height). Quality does not change size.
 
-Ten Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence is the 3D cameras — Klein only restyles.
+Ten Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence is the 3D cameras - Klein only restyles.
 
-`manage.sh start` seeds ez_house_clay_01.png … 10.png into COMFY_OUTPUT_DIR/input (container /inputs) so LoadImage can Queue. Seed copies an existing house-views pack when present; otherwise it renders the shipped lab-penthouse layout (no Blender). Reload the App if it was open before seed. Prefix ez_dream_house_clay_01 … 10.
+`manage.sh start` seeds ez_house_clay_01.png ... 10.png into COMFY_OUTPUT_DIR/input (container /inputs) so LoadImage can Queue. Seed copies an existing house-views pack when present; otherwise it renders the shipped lab-penthouse layout (no Blender). Reload the App if it was open before seed. Prefix ez_dream_house_clay_01 ... 10.
 
-Workbench dump (optional, higher quality) — stop Comfy first:
+Workbench dump (optional, higher quality) - stop Comfy first:
 
   ./scripts/manage.sh stop
   ./scripts/manage.sh house-views --slug lab-penthouse
@@ -51,10 +51,10 @@ Reseed LoadImage plates without Blender (compose may stay up):
 
 HOUSE IDENTITY is the same camera-free world bible as stills/dream-house. Shot cards are camera stations from place_10 (lens, camera height, a distinct room program, near/far planes, and which room). Prompt Join lock=view. Each shot VAEEncodes its clay plate into ReferenceLatent. Shot cards are not Klein-t2i-enhanced.
 
-Language-only tour (no geometry) → stills/dream-house. Do not substitute T2I stills or example.png as clay. Occupancy XOR: do not Blender-dump while compose is up. Seed/copy-inputs may run while compose is up.
+Language-only tour (no geometry) -> stills/dream-house. Do not substitute T2I stills or example.png as clay. Occupancy XOR: do not Blender-dump while compose is up. Seed/copy-inputs may run while compose is up.
 Optional style dropdown applies to the bible. Unused SHOT groups may be bypassed (Ctrl+B).
 
-Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
+Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 ```
 
@@ -213,9 +213,9 @@ flowchart TB
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
 
-### `UNETLoader` — Load Diffusion Model
+### `UNETLoader` - Load Diffusion Model
 
 Load a standalone transformer/UNET from diffusion_models/.
 
@@ -256,7 +256,7 @@ Cast at load.
 | `fp8_e4m3fn_fast` | FP8 e4m3fn with fast optimizations. |
 | `fp8_e5m2` | Cast to FP8 e5m2. |
 
-### `CLIPLoader` — Load CLIP
+### `CLIPLoader` - Load CLIP
 
 Load a text encoder. The type combo must match the UNET family.
 
@@ -284,7 +284,7 @@ Type `COMBO`.
 
 CLIPType enum. Picks tokenizer + template.
 
-**How it affects generation:** flux2 wraps Klein strings in a Qwen chat template — do not paste <|im_start|>. wan is UMT5. ltxv is Gemma4-with-proj.
+**How it affects generation:** flux2 wraps Klein strings in a Qwen chat template - do not paste <|im_start|>. wan is UMT5. ltxv is Gemma4-with-proj.
 
 **This graph:** `flux2`
 
@@ -338,9 +338,9 @@ Where to load the encoder.
 | `default` | Load on the Comfy compute device (GPU). Lab default. |
 | `cpu` | Force CPU. Much slower; only for debugging a CLIP load. |
 
-### `VAELoader` — Load VAE
+### `VAELoader` - Load VAE
 
-Load the autoencoder that maps pixels ↔ latents (and LTX audio).
+Load the autoencoder that maps pixels <-> latents (and LTX audio).
 
 !!! warning "Lab notes"
 
@@ -360,7 +360,7 @@ Filename under vae/.
 
 **This graph:** `flux2-vae.safetensors`
 
-### `EZKleinPromptEnhance` — Klein Prompt Enhance
+### `EZKleinPromptEnhance` - Klein Prompt Enhance
 
 Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
 
@@ -394,7 +394,7 @@ Lazy sentence or authored still prompt.
 
 **How it affects generation:** When Enhance is on, the GGUF expands this into Klein-native sentences.
 
-**This graph:** `A photoreal still of one full-floor warm-glass crown penthouse on a very tall unmarked tropical coastal tower in a dense city of unmarked glass skyscrapers, a bright bay only as a distant slot betwee…`
+**This graph:** `A photoreal still of one full-floor warm-glass crown penthouse on a very tall unmarked tropical coastal tower in a dense city of unmarked glass skyscrapers, a bright bay only as a distant slot betwee...`
 
 ```text
 A photoreal still of one full-floor warm-glass crown penthouse on a very tall unmarked tropical coastal tower in a dense city of unmarked glass skyscrapers, a bright bay only as a distant slot between towers. A wide wraparound terrace sits outside a three-bay black-framed glass wall. Teak floors, pale stone, coral-teal edge light. Lounge at the glass with one sand linen sofa facing the towers. Kitchen island faces a solid teak cook wall. Dining faces an interior stone wall. Master bedroom faces the headboard wall. Bath is an interior wet room with frosted glass. Study faces a teak shelf wall. Warm teak terrace lanterns and low path lights. Palms on the terrace. Unmarked home, empty of lettering.
@@ -435,9 +435,9 @@ System prompt flavor.
 
 Type `STRING`.
 
-Framing hint (YouTube 16:9 still, Instagram 4:5, …).
+Framing hint (YouTube 16:9 still, Instagram 4:5, ...).
 
-**How it affects generation:** Steers aspect language in the rewrite. Does not set the latent size — EmptyFlux2LatentImage does.
+**How it affects generation:** Steers aspect language in the rewrite. Does not set the latent size - EmptyFlux2LatentImage does.
 
 **This graph:** `Instagram 4:5 still`
 
@@ -767,7 +767,7 @@ Sample-catalog id (graph stem).
 
 **This graph:** `stills/dream-house-clay`
 
-### `CLIPTextEncode` — CLIP Text Encode
+### `CLIPTextEncode` - CLIP Text Encode
 
 Turn a prompt string into CONDITIONING for the sampler.
 
@@ -787,38 +787,38 @@ Type `STRING`.
 
 Prompt encoded by CLIP.
 
-**How it affects generation:** Klein: sentences, subject → place → light → camera. Wan I2V: motion + one camera only. LTX: present-tense paragraph with audio interleaved. Distilled Klein quality lives here, not in CFG.
+**How it affects generation:** Klein: sentences, subject -> place -> light -> camera. Wan I2V: motion + one camera only. LTX: present-tense paragraph with audio interleaved. Distilled Klein quality lives here, not in CFG.
 
 | Instance | Value |
 | --- | --- |
-| Negative | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
-| Positive 01 | `Low exterior looking up at this place from outside, 24mm, Instagram 4:5. Arriva…` |
-| Positive 02 | `A narrow unoccupied entrance hall at the way in, 24mm, Instagram 4:5, eye-level…` |
-| Positive 03 | `A wide unoccupied living hall from the lounge the bible named; if none, the pri…` |
-| Positive 04 | `An unoccupied kitchen the bible named; if none, a cook room. 35mm, Instagram 4:…` |
-| Positive 05 | `An unoccupied dining hall from the dining interior the bible named; if none, a …` |
-| Positive 06 | `An unoccupied sleep chamber from the bedroom the bible named; if none, a privat…` |
-| Positive 07 | `An unoccupied small wet room from the bath the bible named; if none, a wet inte…` |
-| Positive 08 | `An unoccupied open-air terrace from the outdoor living the bible named; if none…` |
-| Positive 09 | `Overhead looking down at this same place, 24mm, Instagram 4:5. Straight-down pl…` |
-| Positive 10 | `An unoccupied writing room from the study the bible named; if none, a small wri…` |
-| Negative Negative SHOT 02 foyer | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
-| Negative Negative SHOT 03 lounge | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
-| Negative Negative SHOT 04 kitchen | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
-| Negative Negative SHOT 05 dining | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
-| Negative Negative SHOT 06 bedroom | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
-| Negative Negative SHOT 07 bath | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
-| Negative Negative SHOT 08 terrace | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
-| Negative Negative SHOT 09 drone | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
-| Negative Negative SHOT 10 study | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| Negative | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Positive 01 | `Low exterior looking up at this place from outside, 24mm, Instagram 4:5. Arriva...` |
+| Positive 02 | `A narrow unoccupied entrance hall at the way in, 24mm, Instagram 4:5, eye-level...` |
+| Positive 03 | `A wide unoccupied living hall from the lounge the bible named; if none, the pri...` |
+| Positive 04 | `An unoccupied kitchen the bible named; if none, a cook room. 35mm, Instagram 4:...` |
+| Positive 05 | `An unoccupied dining hall from the dining interior the bible named; if none, a ...` |
+| Positive 06 | `An unoccupied sleep chamber from the bedroom the bible named; if none, a privat...` |
+| Positive 07 | `An unoccupied small wet room from the bath the bible named; if none, a wet inte...` |
+| Positive 08 | `An unoccupied open-air terrace from the outdoor living the bible named; if none...` |
+| Positive 09 | `Overhead looking down at this same place, 24mm, Instagram 4:5. Straight-down pl...` |
+| Positive 10 | `An unoccupied writing room from the study the bible named; if none, a small wri...` |
+| Negative Negative SHOT 02 foyer | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative Negative SHOT 03 lounge | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative Negative SHOT 04 kitchen | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative Negative SHOT 05 dining | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative Negative SHOT 06 bedroom | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative Negative SHOT 07 bath | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative Negative SHOT 08 terrace | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative Negative SHOT 09 drone | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative Negative SHOT 10 study | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
-### `EmptyFlux2LatentImage` — Empty Flux.2 Latent
+### `EmptyFlux2LatentImage` - Empty Flux.2 Latent
 
-Allocate a Klein / Flux.2 still latent (width × height × batch).
+Allocate a Klein / Flux.2 still latent (width x height x batch).
 
 !!! warning "Lab notes"
 
-    Draft 768×432 batch 2. Hero / LTX feeders 1280×704. Portrait 1024×1280 or 768×1280. 1280×720 is OK for thumbnails, not for LTX feeders.
+    Draft 768x432 batch 2. Hero / LTX feeders 1280x704. Portrait 1024x1280 or 768x1280. 1280x720 is OK for thumbnails, not for LTX feeders.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -826,7 +826,7 @@ Allocate a Klein / Flux.2 still latent (width × height × batch).
 
 #### `width`
 
-Type `INT`. Range / default: lab 768 / 1280 / 1024 / 432….
+Type `INT`. Range / default: lab 768 / 1280 / 1024 / 432....
 
 Latent pixel width.
 
@@ -840,7 +840,7 @@ Type `INT`.
 
 Latent pixel height.
 
-**How it affects generation:** 1280×704 is the LTX VAE grid (÷32). 1280×720 is not.
+**How it affects generation:** 1280x704 is the LTX VAE grid (div32). 1280x720 is not.
 
 **This graph:** `1280`
 
@@ -854,7 +854,7 @@ How many stills in one Queue.
 
 **This graph:** `1`
 
-### `Note` — Note
+### `Note` - Note
 
 On-canvas operator note (not executed).
 
@@ -870,18 +870,18 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## stills/dream-house-clay Format / platform sets pixels (Custom uses Width × Height). Quality does not change size. Ten Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence i…`
+**This graph:** `## stills/dream-house-clay Format / platform sets pixels (Custom uses Width x Height). Quality does not change size. Ten Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence i...`
 
 ```text
 ## stills/dream-house-clay
 
-Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
+Format / platform sets pixels (Custom uses Width x Height). Quality does not change size.
 
-Ten Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence is the 3D cameras — Klein only restyles.
+Ten Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence is the 3D cameras - Klein only restyles.
 
-`manage.sh start` seeds ez_house_clay_01.png … 10.png into COMFY_OUTPUT_DIR/input (container /inputs) so LoadImage can Queue. Seed copies an existing house-views pack when present; otherwise it renders the shipped lab-penthouse layout (no Blender). Reload the App if it was open before seed. Prefix ez_dream_house_clay_01 … 10.
+`manage.sh start` seeds ez_house_clay_01.png ... 10.png into COMFY_OUTPUT_DIR/input (container /inputs) so LoadImage can Queue. Seed copies an existing house-views pack when present; otherwise it renders the shipped lab-penthouse layout (no Blender). Reload the App if it was open before seed. Prefix ez_dream_house_clay_01 ... 10.
 
-Workbench dump (optional, higher quality) — stop Comfy first:
+Workbench dump (optional, higher quality) - stop Comfy first:
 
   ./scripts/manage.sh stop
   ./scripts/manage.sh house-views --slug lab-penthouse
@@ -897,14 +897,14 @@ Reseed LoadImage plates without Blender (compose may stay up):
 
 HOUSE IDENTITY is the same camera-free world bible as stills/dream-house. Shot cards are camera stations from place_10 (lens, camera height, a distinct room program, near/far planes, and which room). Prompt Join lock=view. Each shot VAEEncodes its clay plate into ReferenceLatent. Shot cards are not Klein-t2i-enhanced.
 
-Language-only tour (no geometry) → stills/dream-house. Do not substitute T2I stills or example.png as clay. Occupancy XOR: do not Blender-dump while compose is up. Seed/copy-inputs may run while compose is up.
+Language-only tour (no geometry) -> stills/dream-house. Do not substitute T2I stills or example.png as clay. Occupancy XOR: do not Blender-dump while compose is up. Seed/copy-inputs may run while compose is up.
 Optional style dropdown applies to the bible. Unused SHOT groups may be bypassed (Ctrl+B).
 
-Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
+Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 ```
 
-### `EZPromptJoin` — Prompt Join
+### `EZPromptJoin` - Prompt Join
 
 Join a shared identity paragraph with a shot-specific camera line.
 
@@ -923,16 +923,16 @@ Shot card (camera, room, action).
 
 | Instance | Value |
 | --- | --- |
-| SHOT 01 tower | `Low exterior looking up at this place from outside, 24mm, Instagram 4:5. Arriva…` |
-| SHOT 02 foyer | `A narrow unoccupied entrance hall at the way in, 24mm, Instagram 4:5, eye-level…` |
-| SHOT 03 lounge | `A wide unoccupied living hall from the lounge the bible named; if none, the pri…` |
-| SHOT 04 kitchen | `An unoccupied kitchen the bible named; if none, a cook room. 35mm, Instagram 4:…` |
-| SHOT 05 dining | `An unoccupied dining hall from the dining interior the bible named; if none, a …` |
-| SHOT 06 bedroom | `An unoccupied sleep chamber from the bedroom the bible named; if none, a privat…` |
-| SHOT 07 bath | `An unoccupied small wet room from the bath the bible named; if none, a wet inte…` |
-| SHOT 08 terrace | `An unoccupied open-air terrace from the outdoor living the bible named; if none…` |
-| SHOT 09 drone | `Overhead looking down at this same place, 24mm, Instagram 4:5. Straight-down pl…` |
-| SHOT 10 study | `An unoccupied writing room from the study the bible named; if none, a small wri…` |
+| SHOT 01 tower | `Low exterior looking up at this place from outside, 24mm, Instagram 4:5. Arriva...` |
+| SHOT 02 foyer | `A narrow unoccupied entrance hall at the way in, 24mm, Instagram 4:5, eye-level...` |
+| SHOT 03 lounge | `A wide unoccupied living hall from the lounge the bible named; if none, the pri...` |
+| SHOT 04 kitchen | `An unoccupied kitchen the bible named; if none, a cook room. 35mm, Instagram 4:...` |
+| SHOT 05 dining | `An unoccupied dining hall from the dining interior the bible named; if none, a ...` |
+| SHOT 06 bedroom | `An unoccupied sleep chamber from the bedroom the bible named; if none, a privat...` |
+| SHOT 07 bath | `An unoccupied small wet room from the bath the bible named; if none, a wet inte...` |
+| SHOT 08 terrace | `An unoccupied open-air terrace from the outdoor living the bible named; if none...` |
+| SHOT 09 drone | `Overhead looking down at this same place, 24mm, Instagram 4:5. Straight-down pl...` |
+| SHOT 10 study | `An unoccupied writing room from the study the bible named; if none, a small wri...` |
 
 #### `inventory`
 
@@ -961,7 +961,7 @@ What stays pinned.
 | `view` | New camera, same world. |
 | `state` | Same framing, new light/grade/action. |
 
-### `LoadImage` — Load Image
+### `LoadImage` - Load Image
 
 Load a still from Comfy input/ (or upload).
 
@@ -1005,7 +1005,7 @@ Upload widget type.
 
 **This graph (all 10 instances):** `image`
 
-### `VAEEncode` — VAE Encode
+### `VAEEncode` - VAE Encode
 
 Encode pixels to a latent (Klein edit / clay).
 
@@ -1017,7 +1017,7 @@ Encode pixels to a latent (Klein edit / clay).
 
 No widgets. Sockets only.
 
-### `ReferenceLatent` — Reference Latent
+### `ReferenceLatent` - Reference Latent
 
 Pack an encoded image latent into positive conditioning (Klein edit).
 
@@ -1033,7 +1033,7 @@ Pack an encoded image latent into positive conditioning (Klein edit).
 
 No widgets. Sockets only.
 
-### `KSampler` — KSampler
+### `KSampler` - KSampler
 
 Denoise a latent for N steps at a CFG, sampler, and scheduler.
 
@@ -1045,17 +1045,17 @@ Denoise a latent for N steps at a CFG, sampler, and scheduler.
 | --- | --- | --- | --- |
 | `model` | in | `MODEL` | UNET / transformer after any ModelSampling* patch. |
 | `positive` | in | `CONDITIONING` | What to include (CLIP / ACE / LTX prompt). |
-| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well — put constraints in the positive. |
+| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well - put constraints in the positive. |
 | `latent_image` | in | `LATENT` | Noise canvas or encoded start image / video / audio latent. |
 | `LATENT` | out | `LATENT` | Denoised latent for VAE decode. |
 
 #### `seed`
 
-Type `INT`. Range / default: 0 … 2^64-1; lab 42.
+Type `INT`. Range / default: 0 ... 2^64-1; lab 42.
 
 Random seed for the noise tensor.
 
-**How it affects generation:** Same seed + same graph ≈ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
+**How it affects generation:** Same seed + same graph ~ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
 
 **This graph (all 10 instances):** `42`
 
@@ -1080,21 +1080,21 @@ What happens to seed after Queue.
 
 #### `steps`
 
-Type `INT`. Range / default: 1–10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
+Type `INT`. Range / default: 1-10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
 
 Denoising iterations.
 
-**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 — raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
+**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 - raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
 
 **This graph (all 10 instances):** `4`
 
 #### `cfg`
 
-Type `FLOAT`. Range / default: 0–100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
+Type `FLOAT`. Range / default: 0-100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
 
 Classifier-free guidance scale.
 
-**How it affects generation:** Distilled Klein is CFG 1.0 — raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
+**How it affects generation:** Distilled Klein is CFG 1.0 - raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
 
 **This graph (all 10 instances):** `1.0`
 
@@ -1184,7 +1184,7 @@ How sigmas are spaced across steps.
 
 #### `denoise`
 
-Type `FLOAT`. Range / default: 0–1; lab 1.0.
+Type `FLOAT`. Range / default: 0-1; lab 1.0.
 
 Fraction of the latent to replace with denoised signal.
 
@@ -1192,7 +1192,7 @@ Fraction of the latent to replace with denoised signal.
 
 **This graph (all 10 instances):** `1.0`
 
-### `VAEDecode` — VAE Decode
+### `VAEDecode` - VAE Decode
 
 Decode image/video latents to pixels.
 
@@ -1204,7 +1204,7 @@ Decode image/video latents to pixels.
 
 No widgets. Sockets only.
 
-### `SaveImage` — Save Image
+### `SaveImage` - Save Image
 
 Write PNG stills under the output folder.
 
@@ -1233,7 +1233,7 @@ Save prefix.
 | Save 09 | `ez_dream_house_clay_09` |
 | Save 10 | `ez_dream_house_clay_10` |
 
-### `EZNegativePromptEnhance` — Negative Prompt Enhance
+### `EZNegativePromptEnhance` - Negative Prompt Enhance
 
 Rewrite a negative CLIP seed against the final positive. Stays on when Rewrite prompt is off.
 
@@ -1284,7 +1284,7 @@ Which negative family.
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
 
-### `EZQuality` — Quality
+### `EZQuality` - Quality
 
 Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
@@ -1319,7 +1319,7 @@ custom freezes last overlay; lab restores graph defaults.
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
-### `EZImageUpscale` — Upscale still
+### `EZImageUpscale` - Upscale still
 
 Optional lanczos upscale after a still decode. none passes the tensor through.
 
@@ -1339,7 +1339,7 @@ Type `COMBO`. Range / default: none / 2x / 4x / 4K.
 
 Upscale mode.
 
-**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.
+**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840x2160 box (portrait 2160x3840). No extra weights.
 
 **This graph (all 10 instances):** `none`
 
@@ -1352,7 +1352,7 @@ Upscale mode.
 | `4x` | Quadruple pixels. |
 | `4K` | Fit in a 4K box. |
 
-### `EZModelCheck` — Check models
+### `EZModelCheck` - Check models
 
 Manual disk check for occupancy + Quality weights. Queue does not run this node.
 

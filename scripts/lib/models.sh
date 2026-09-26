@@ -125,7 +125,7 @@ models_dir_is_safe() {
   home="$(python3 -c 'import os; print(os.path.realpath(os.path.expanduser("~")))')"
   case "${real}" in
     / | /mnt | "${home}")
-      err "MODELS_DIR is unsafe: ${MODELS_DIR} → ${real}"
+      err "MODELS_DIR is unsafe: ${MODELS_DIR} -> ${real}"
       return 1
       ;;
   esac

@@ -3,7 +3,7 @@
 # ## blender-mcp
 #
 # In-tree Blender MCP (typed tools, no execute_code, no telemetry).
-# Host only — never in docker/Dockerfile. bpy tools require blender-desk.
+# Host only - never in docker/Dockerfile. bpy tools require blender-desk.
 #
 # Usage:
 #   ./scripts/utilities/blender-mcp.sh [--stdio]

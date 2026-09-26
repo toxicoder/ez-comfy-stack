@@ -1,6 +1,6 @@
 ---
 title: "Chase tracking"
-description: "Cinema Rack illustration — Chase tracking."
+description: "Cinema Rack illustration - Chase tracking."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

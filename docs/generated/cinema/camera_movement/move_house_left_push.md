@@ -1,6 +1,6 @@
 ---
 title: "House-left push"
-description: "Cinema Rack illustration — House-left push."
+description: "Cinema Rack illustration - House-left push."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

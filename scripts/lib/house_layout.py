@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""ez.house.layout.v1 and ez.house.views.v1 — hermetic stdlib, no bpy.
+"""ez.house.layout.v1 and ez.house.views.v1 - hermetic stdlib, no bpy.
 
 Greybox floorplans and Instagram 4:5 clay still packs under
 COMFY_OUTPUT_DIR/assets/sets/<slug>. Never MODELS_DIR or guides/.
@@ -869,7 +869,7 @@ def _cli(argv: list[str] | None = None) -> int:
             return 0
         if ns.cmd == "copy-inputs":
             written = copy_clay_to_input_dir(ns.pack, ns.input_dir)
-            print(f"ok {len(written)} clay plates → {ns.input_dir}")
+            print(f"ok {len(written)} clay plates -> {ns.input_dir}")
             return 0
         if ns.cmd == "seed-inputs":
             written = seed_clay_to_input_dir(
@@ -878,7 +878,7 @@ def _cli(argv: list[str] | None = None) -> int:
                 layout_path=ns.layout or None,
                 slug=ns.slug,
             )
-            print(f"ok {len(written)} clay plates seeded → {ns.input_dir}")
+            print(f"ok {len(written)} clay plates seeded -> {ns.input_dir}")
             return 0
         write_fixture_pack(ns.path, slug=ns.slug)
         print(f"wrote fixture {ns.path}")

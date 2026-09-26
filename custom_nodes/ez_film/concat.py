@@ -1,6 +1,6 @@
-"""ffmpeg stitch for 18 × 5.00s LTX MP4s with a 90s publish cap.
+"""ffmpeg stitch for 18 x 5.00s LTX MP4s with a 90s publish cap.
 
-Clip-chain stitch (1–24 duration-head stems) lives beside the film path
+Clip-chain stitch (1-24 duration-head stems) lives beside the film path
 and does not pad the master to the cap.
 
 Illegal LTX ``length=120`` stems (113 frames / 4.708s) are padded to 5.00s
@@ -22,7 +22,7 @@ from typing import TYPE_CHECKING
 
 from .jobstore import DURATION_S, DURATION_TOL
 from .ltx_timing import DURATION_HEAD_S, ltx_decoded_frames
-from .probe import (  # noqa: F401 — coverage/monkeypatch façade
+from .probe import (  # noqa: F401 - coverage/monkeypatch façade
     FfprobeMediaProbe,
     _ffprobe_csv,
     probe_audio_hz,
@@ -63,12 +63,12 @@ MASTER_TOL_S = 0.10
 AUDIO_SYNC_TOL_S = 0.050
 VIDEO_SUFFIXES = (".mp4", ".webm", ".mkv", ".mov", ".m4v")
 IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg", ".webp", ".gif")
-# Clip-chain stitch: 1–24 stems; cap is a ceiling, not pad-to-runtime.
+# Clip-chain stitch: 1-24 stems; cap is a ceiling, not pad-to-runtime.
 CLIP_COUNT_MAX = 24
 CLIP_CAP_DEFAULT_S = 600.0
 CLIP_CAP_MAX_S = 1800.0
 CLIP_PREFIX_DEFAULT = "ez_clip_chain"
-CLIP_DURATION_HEAD_LABEL = "(5.00, 8.00, 10.00, 12.00)±0.05"
+CLIP_DURATION_HEAD_LABEL = "(5.00, 8.00, 10.00, 12.00) +/- 0.05"
 
 
 def log(message: str) -> None:
@@ -92,12 +92,12 @@ def output_directory() -> Path:
         from ez_common import output_root
 
         return output_root(default="output")
-    except Exception:  # noqa: BLE001 — Comfy is optional in unit tests
+    except Exception:  # noqa: BLE001 - Comfy is optional in unit tests
         try:
             import folder_paths  # type: ignore[import-not-found]
 
             return Path(folder_paths.get_output_directory())
-        except Exception:  # noqa: BLE001 — Comfy is optional in unit tests
+        except Exception:  # noqa: BLE001 - Comfy is optional in unit tests
             if Path("/outputs").is_dir():
                 return Path("/outputs")
             env = (os.environ.get("COMFY_OUTPUT_DIR") or "").strip()
@@ -143,7 +143,7 @@ def find_ffmpeg() -> str:
         exe = imageio_ffmpeg.get_ffmpeg_exe()
         if exe:
             return str(exe)
-    except Exception as exc:  # noqa: BLE001 — optional dep
+    except Exception as exc:  # noqa: BLE001 - optional dep
         log(f"imageio_ffmpeg unavailable: {exc}")
     raise RuntimeError("ffmpeg not on PATH")
 
@@ -393,7 +393,7 @@ def concat_list_line(path: str) -> str:
     Args:
         path: Absolute or relative MP4 path.
     Returns:
-        ``file '…'`` line without newline.
+        ``file '...'`` line without newline.
     """
     escaped = path.replace("'", "'\\''")
     return f"file '{escaped}'"
@@ -632,7 +632,7 @@ def audio_acrossfade_filter(
     then loudnormed and padded/trimmed to ``cap_seconds``.
 
     Args:
-        n_inputs: Number of audio inputs (``[0:a]`` …).
+        n_inputs: Number of audio inputs (``[0:a]`` ...).
         duration_s: Acrossfade duration in seconds (e.g. 0.10).
         cap_seconds: Publish cap for the final atrim (default 90).
         shot_seconds: Per-shot atrim (default 5.00).
@@ -821,7 +821,7 @@ def ffmpeg_pad_stem_argv(
         src: Short LTX stem.
         dest: Padded destination MP4.
         ffmpeg: ffmpeg executable.
-        extra_frames: Cloned hold frames (default 7 for 113→120).
+        extra_frames: Cloned hold frames (default 7 for 113->120).
 
     Returns:
         Argument vector.
@@ -905,7 +905,7 @@ def normalize_stitch_stem(
     if temps is not None:
         temps.append(dest)
     log(
-        f"padded {dur:.6f}s → {DURATION_S:.2f}s "
+        f"padded {dur:.6f}s -> {DURATION_S:.2f}s "
         f"(LTX 8n+1 neighbor {LTX_120_DECODED_FRAMES} frames) ({path})"
     )
     _run_ffmpeg(ffmpeg_pad_stem_argv(path, dest, ffmpeg), run or subprocess.run)
@@ -976,7 +976,7 @@ def validate_stitch_stems(
         dur = probe_seconds(path, ffprobe=exe, run=run)
         if dur is None or abs(dur - DURATION_S) > DURATION_TOL:
             raise RuntimeError(
-                f"shot duration {dur!r} (need {DURATION_S}±{DURATION_TOL}) ({path})"
+                f"shot duration {dur!r} (need {DURATION_S} +/- {DURATION_TOL}) ({path})"
             )
         wh = probe_wh(path, ffprobe=exe, run=run)
         if wh != (SHOT_WIDTH, SHOT_HEIGHT):
@@ -1009,7 +1009,7 @@ def assert_master_duration(
     ffprobe: str | None = None,
     run: FfmpegRunner | None = None,
 ) -> None:
-    """Fail closed if the stitched master is not ``cap±0.10`` with synced audio.
+    """Fail closed if the stitched master is not ``cap +/- 0.10`` with synced audio.
 
     Args:
         out_mp4: Stitched MP4 path.
@@ -1038,7 +1038,7 @@ def assert_master_duration(
         _unlink_master(out_mp4)
         raise RuntimeError(
             f"concat duration {dur}s short of cap {cap}s "
-            f"(need {cap:.2f}±{MASTER_TOL_S})"
+            f"(need {cap:.2f} +/- {MASTER_TOL_S})"
         )
     if not probe_has_audio(out_mp4, ffprobe=exe, run=run):
         _unlink_master(out_mp4)
@@ -1091,7 +1091,7 @@ def assert_clip_master_duration(
         _unlink_master(out_mp4)
         raise RuntimeError(
             f"clip concat duration {dur}s off sum {probed_sum}s "
-            f"(need ±{clip_tol})"
+            f"(need +/-{clip_tol})"
         )
     if dur > cap + MASTER_TOL_S:
         _unlink_master(out_mp4)
@@ -1231,17 +1231,17 @@ class ConcatPipeline:
             if _is_image_path(path):
                 raise RuntimeError(
                     f"shot is an image, not an MP4 ({path}); "
-                    "VHS_FILENAMES first file is a metadata PNG — use the muxed *-audio.mp4"
+                    "VHS_FILENAMES first file is a metadata PNG - use the muxed *-audio.mp4"
                 )
 
     def _require_xfade_range(self) -> None:
-        """Refuse xfade outside 0–50 centiseconds.
+        """Refuse xfade outside 0-50 centiseconds.
 
         Raises:
             ValueError: ``xfade_cs`` is out of range.
         """
         if self._xfade_cs < 0 or self._xfade_cs > 50:
-            raise ValueError(f"xfade_cs must be 0–50, got {self._xfade_cs}")
+            raise ValueError(f"xfade_cs must be 0-50, got {self._xfade_cs}")
 
     def _ffmpeg(self) -> str:
         """Resolve ffmpeg (override, else PATH / imageio).
@@ -1294,7 +1294,7 @@ class ConcatPipeline:
         Returns:
             Progress bar, or None in hermetic tests.
         """
-        log(f"stitching {n_shots} shots → {self._out}")
+        log(f"stitching {n_shots} shots -> {self._out}")
         try:
             root = str(Path(__file__).resolve().parent.parent)
             if root not in sys.path:
@@ -1303,7 +1303,7 @@ class ConcatPipeline:
 
             node_log("ez_film", f"stitching {n_shots} shots")
             return node_progress(2)
-        except Exception:  # noqa: BLE001 — pytest / missing pack
+        except Exception:  # noqa: BLE001 - pytest / missing pack
             return None
 
     def _write_concat_list(self, work_paths: list[str]) -> str:
@@ -1470,13 +1470,13 @@ def stitch_film(
     ``+faststart`` so browsers can play and download the master. ``xfade_cs``
     is centiseconds of **audio** acrossfade (10 = 0.10 s) with overlap off
     (``o=0``) so duration stays on the hard-cut picture. Wan-silent shots
-    have no audio — xfade refuses. If ffmpeg lacks libx264, fall back to
+    have no audio - xfade refuses. If ffmpeg lacks libx264, fall back to
     ``-c:v copy`` with faststart still set.
 
-    Every stem must exist, last 5.00±0.05s, be 1280×704, and carry audio.
+    Every stem must exist, last 5.00 +/- 0.05s, be 1280x704, and carry audio.
     Illegal LTX ``length=120`` files (113 frames / 4.708s) are padded to
     5.00s (cloned last frame) before the duration gate. After stitch the
-    master must be ``cap±0.10`` s with audio within 50 ms of picture. A
+    master must be ``cap +/- 0.10`` s with audio within 50 ms of picture. A
     failed master is deleted so a short stem list cannot publish.
 
     Args:
@@ -1545,7 +1545,7 @@ class ClipConcatPipeline:
         Returns:
             ``out_mp4``.
         Raises:
-            ValueError: stem count outside 1–24.
+            ValueError: stem count outside 1-24.
             RuntimeError: xfade, missing stems, duration-head miss, or ffmpeg.
         """
         self._require_count()
@@ -1568,7 +1568,7 @@ class ClipConcatPipeline:
         """Refuse an empty or over-long stem list.
 
         Raises:
-            ValueError: ``len(clip_paths)`` is not in 1–24.
+            ValueError: ``len(clip_paths)`` is not in 1-24.
         """
         count = len(self._clips)
         if count < 1 or count > CLIP_COUNT_MAX:
@@ -1595,7 +1595,7 @@ class ClipConcatPipeline:
             if _is_image_path(path):
                 raise RuntimeError(
                     f"clip is an image, not an MP4 ({path}); "
-                    "VHS_FILENAMES first file is a metadata PNG — use the muxed *-audio.mp4"
+                    "VHS_FILENAMES first file is a metadata PNG - use the muxed *-audio.mp4"
                 )
 
     def _ffmpeg(self) -> str:
@@ -1684,7 +1684,7 @@ class ClipConcatPipeline:
         Returns:
             Progress bar, or None in hermetic tests.
         """
-        log(f"stitching {n_clips} clips → {self._out}")
+        log(f"stitching {n_clips} clips -> {self._out}")
         try:
             root = str(Path(__file__).resolve().parent.parent)
             if root not in sys.path:
@@ -1693,7 +1693,7 @@ class ClipConcatPipeline:
 
             node_log("ez_film", f"stitching {n_clips} clips")
             return node_progress(2)
-        except Exception:  # noqa: BLE001 — pytest / missing pack
+        except Exception:  # noqa: BLE001 - pytest / missing pack
             return None
 
     def _write_concat_list(self, work_paths: list[str]) -> str:
@@ -1744,7 +1744,7 @@ def stitch_clips(
     run: FfmpegRunner | None = None,
     xfade_cs: int = 0,
 ) -> str:
-    """Concat N clip MP4s. Cap is a ceiling. Master ≈ sum(stems).
+    """Concat N clip MP4s. Cap is a ceiling. Master ~ sum(stems).
 
     Raises if ``xfade_cs != 0`` (v1 hard-cut). Does not call film stitch
     helpers that pad or cut to cap.
@@ -1760,7 +1760,7 @@ def stitch_clips(
     Returns:
         ``out_mp4``.
     Raises:
-        ValueError: stem count outside 1–24.
+        ValueError: stem count outside 1-24.
         RuntimeError: ffmpeg missing/fails, missing stems, or duration off sum.
     """
     return ClipConcatPipeline(
@@ -1784,7 +1784,7 @@ def publish_path(
 
     90s films write ``ez_{slug}_90s.mp4``. Five-act films write
     ``ez_{slug}_450s.mp4`` for the whole film, or
-    ``ez_{slug}_actN_90s.mp4`` when ``act`` is 1–5.
+    ``ez_{slug}_actN_90s.mp4`` when ``act`` is 1-5.
 
     Args:
         film: Film id.

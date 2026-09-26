@@ -87,7 +87,7 @@ for (const [slug, route] of KEY_PAGES) {
       }
       mkdirSync(dirname(golden), { recursive: true });
       writeFileSync(golden, await page.screenshot({ fullPage: true, animations: "disabled" }));
-      expect(true, `no baseline for ${slug} yet; created ${golden} — review and commit it`).toBe(true);
+      expect(true, `no baseline for ${slug} yet; created ${golden} - review and commit it`).toBe(true);
       return;
     }
 

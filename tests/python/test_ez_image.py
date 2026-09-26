@@ -262,7 +262,7 @@ def test_resolve_upscale_hw_none_2x_4k() -> None:
     assert normalize_upscale("nope") == UPSCALE_NONE
     assert DEFAULT_UPSCALE == UPSCALE_NONE
     assert upscale_combo_labels()[0] == UPSCALE_NONE
-    assert normalize_upscale("2×") == "2x"
+    assert normalize_upscale("2x") == "2x"
     assert normalize_upscale("uhd") == UPSCALE_4K
     assert resolve_upscale_hw(1280, 704, "none") is None
     assert resolve_upscale_hw(1280, 704, "2x") == (2560, 1408)
@@ -493,27 +493,27 @@ def test_default_format_is_ltx_feeder() -> None:
 def test_nine_sixteen_ltx_feeder_exists() -> None:
     spec = get_format("aspect_9_16_ltx")
     assert spec.id == "aspect_9_16_ltx"
-    assert spec.label == "9:16 LTX feeder (768×1280)"
+    assert spec.label == "9:16 LTX feeder (768x1280)"
     assert spec.group == "aspect"
     assert spec.width == 768
     assert spec.height == 1280
     assert spec.width % GRID == 0
     assert spec.height % GRID == 0
-    assert "768×1280" in spec.lock or "LTX" in spec.lock
+    assert "768x1280" in spec.lock or "LTX" in spec.lock
 
 
 def test_ltx_clip_format_id_maps_generic_aspects_only() -> None:
     assert ltx_clip_format_id("aspect_16_9_draft") == "aspect_16_9_ltx"
-    assert ltx_clip_format_id("16:9 (1280×720)") == "aspect_16_9_ltx"
+    assert ltx_clip_format_id("16:9 (1280x720)") == "aspect_16_9_ltx"
     assert ltx_clip_format_id("aspect_16_9_mid") == "aspect_16_9_ltx"
     assert ltx_clip_format_id("aspect_9_16_draft") == "aspect_9_16_ltx"
-    assert ltx_clip_format_id("9:16 (576×1024)") == "aspect_9_16_ltx"
+    assert ltx_clip_format_id("9:16 (576x1024)") == "aspect_9_16_ltx"
     assert ltx_clip_format_id("aspect_16_9_ltx") is None
-    assert ltx_clip_format_id("9:16 LTX feeder (768×1280)") is None
+    assert ltx_clip_format_id("9:16 LTX feeder (768x1280)") is None
     assert ltx_clip_format_id("Custom") is None
-    assert ltx_clip_format_id("YouTube · thumbnail (1280×720)") is None
-    assert ltx_clip_format_id("1:1 square (1024×1024)") is None
-    assert ltx_clip_format_id("4:5 portrait (1024×1280)") is None
+    assert ltx_clip_format_id("YouTube - thumbnail (1280x720)") is None
+    assert ltx_clip_format_id("1:1 square (1024x1024)") is None
+    assert ltx_clip_format_id("4:5 portrait (1024x1280)") is None
 
 
 def test_custom_snaps_1920x1080_and_unknown_falls_back() -> None:
@@ -523,8 +523,8 @@ def test_custom_snaps_1920x1080_and_unknown_falls_back() -> None:
     assert custom.height == 1072
     assert custom.batch == 4
     assert custom.prefix == "ez_still_studio"
-    assert "1920×1072" in custom.hint
-    preset = resolve_canvas("YouTube · thumbnail (1280×720)", width=16, height=16)
+    assert "1920x1072" in custom.hint
+    preset = resolve_canvas("YouTube - thumbnail (1280x720)", width=16, height=16)
     assert preset.width == 1280
     assert preset.height == 720
     assert preset.prefix == "ez_thumbnail"
@@ -536,23 +536,23 @@ def test_match_input_snaps_portrait_and_force_keeps_format() -> None:
         def __init__(self, height: int, width: int) -> None:
             self.shape = (1, height, width, 3)
 
-    current = get_format("16:9 draft (768×432)")
+    current = get_format("16:9 draft (768x432)")
     portrait = nearest_aspect_format(768, 1280, current)
     assert portrait.height > portrait.width
     img = _FakeImg(1280, 768)
     forced = resolve_canvas(
-        "16:9 draft (768×432)",
+        "16:9 draft (768x432)",
         size_mode=SIZE_MODE_FORCE,
         image=img,
     )
     matched = resolve_canvas(
-        "16:9 draft (768×432)",
+        "16:9 draft (768x432)",
         size_mode=SIZE_MODE_MATCH,
         image=img,
     )
     assert forced.width > forced.height
     assert matched.height >= matched.width
-    empty = resolve_canvas("16:9 draft (768×432)", size_mode=SIZE_MODE_MATCH)
+    empty = resolve_canvas("16:9 draft (768x432)", size_mode=SIZE_MODE_MATCH)
     assert empty.width == 768
     assert empty.height == 432
     types = EZImageFormat.INPUT_TYPES()
@@ -581,7 +581,7 @@ def test_ez_image_format_run_packs_ui_and_result() -> None:
     assert LOOK_NONE in required["look"][0]
     assert required["size_mode"][1]["default"] == SIZE_MODE_MATCH
     packed = EZImageFormat().run(
-        "Instagram · 4:5 portrait (1024×1280)",
+        "Instagram - 4:5 portrait (1024x1280)",
         look=LOOK_NONE,
         width=1,
         height=1,
@@ -591,7 +591,7 @@ def test_ez_image_format_run_packs_ui_and_result() -> None:
     assert packed["result"][1] == 1280
     assert packed["result"][2] == 2
     assert packed["result"][4] == "ez_ig_portrait"
-    assert "1024×1280" in packed["ui"]["text"][0]
+    assert "1024x1280" in packed["ui"]["text"][0]
 
 
 def test_format_helpers_cover_remaining_branches(
@@ -765,9 +765,9 @@ def test_video_catalog_ids_grids_and_families() -> None:
     ltx_labels = family_format_labels(FAMILY_LTX_LABEL)
     assert CUSTOM_LABEL in wan_labels
     assert CUSTOM_LABEL in ltx_labels
-    assert "Wan · 16:9 YouTube (832×480)" in wan_labels
-    assert "LTX · 16:9 YouTube (1280×704)" in ltx_labels
-    assert "LTX · 16:9 YouTube (1280×704)" not in wan_labels
+    assert "Wan - 16:9 YouTube (832x480)" in wan_labels
+    assert "LTX - 16:9 YouTube (1280x704)" in ltx_labels
+    assert "LTX - 16:9 YouTube (1280x704)" not in wan_labels
     for row in rows:
         assert _ID_RE.match(row.id), row.id
         if row.id == CUSTOM_ID:
@@ -791,9 +791,9 @@ def test_ltx_custom_snaps_720_and_family_mismatch_falls_back() -> None:
     assert custom.format_id == CUSTOM_ID
     assert custom.width == 1280
     assert custom.height == 704
-    assert "1280×704" in custom.hint
+    assert "1280x704" in custom.hint
     assert custom.prefix == "ez_ltx_clip"
-    wan = resolve_video_canvas(FAMILY_WAN, "LTX · 16:9 YouTube (1280×704)")
+    wan = resolve_video_canvas(FAMILY_WAN, "LTX - 16:9 YouTube (1280x704)")
     assert wan.format_id == "wan_16_9"
     assert wan.width == 832
     assert wan.height == 480
@@ -815,14 +815,14 @@ def test_ez_video_format_run_packs_ui_and_result() -> None:
     assert "image" in types["optional"]
     packed = EZVideoFormat().run(
         FAMILY_LTX_LABEL,
-        "LTX · 9:16 Shorts (768×1280)",
+        "LTX - 9:16 Shorts (768x1280)",
         width=16,
         height=16,
     )
     assert packed["result"][0] == 768
     assert packed["result"][1] == 1280
     assert packed["result"][3] == "ez_ltx_shorts"
-    assert "768×1280" in packed["ui"]["text"][0]
+    assert "768x1280" in packed["ui"]["text"][0]
 
     class _Portrait:
         shape = (1, 1280, 768, 3)

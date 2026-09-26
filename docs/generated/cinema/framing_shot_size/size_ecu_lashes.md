@@ -1,6 +1,6 @@
 ---
 title: "Lash Insert"
-description: "Cinema Rack illustration — Lash Insert."
+description: "Cinema Rack illustration - Lash Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

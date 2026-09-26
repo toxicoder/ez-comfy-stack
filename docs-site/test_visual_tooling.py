@@ -350,7 +350,7 @@ class ImageResolutionTests(unittest.TestCase):
     def test_default_candidates_resolve_the_manifest_for_the_default_platform(self) -> None:
         """The CLI path (``--print-candidates``) passes no argument at all.
 
-        With a readable registry manifest — which the MCR version prefix now guarantees —
+        With a readable registry manifest - which the MCR version prefix now guarantees -
         the digest must still be found for the default platform.  The default used to be
         the full ``linux/amd64`` string, which no manifest line carries as its
         architecture, so the candidate list raised a ``LookupError`` on a fresh runner.

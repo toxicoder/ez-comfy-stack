@@ -1,6 +1,6 @@
 ---
 title: "Stabilized follow"
-description: "Cinema Rack illustration — Stabilized follow."
+description: "Cinema Rack illustration - Stabilized follow."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

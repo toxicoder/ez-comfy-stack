@@ -1,6 +1,6 @@
 ---
 title: "Drone push in"
-description: "Cinema Rack illustration — Drone push in."
+description: "Cinema Rack illustration - Drone push in."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -1,6 +1,6 @@
 ---
 title: "Glue-Line Label"
-description: "Cinema Rack illustration — Glue-Line Label."
+description: "Cinema Rack illustration - Glue-Line Label."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

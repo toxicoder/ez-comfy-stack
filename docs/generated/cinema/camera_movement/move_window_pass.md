@@ -1,6 +1,6 @@
 ---
 title: "Window pass"
-description: "Cinema Rack illustration — Window pass."
+description: "Cinema Rack illustration - Window pass."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

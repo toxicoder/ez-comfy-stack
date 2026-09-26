@@ -209,7 +209,7 @@ async function loadCatalog() {
 }
 
 const PREVIEW_UNAVAILABLE =
-  "Preview unavailable — Queue still uses the nodes. Reload the App after pull if this stays.";
+  "Preview unavailable - Queue still uses the nodes. Reload the App after pull if this stays.";
 const PREVIEW_MS = 200;
 let previewTimer = 0;
 

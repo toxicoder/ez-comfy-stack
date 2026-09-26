@@ -1,6 +1,6 @@
 ---
 title: "Generous Headroom"
-description: "Cinema Rack illustration — Generous Headroom."
+description: "Cinema Rack illustration - Generous Headroom."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

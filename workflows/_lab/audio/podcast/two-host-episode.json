@@ -470,7 +470,7 @@
       "widgets_values": [
         -15
       ],
-      "title": "Duck bed \u221215 dB"
+      "title": "Duck bed -15 dB"
     },
     {
       "id": 11,
@@ -598,7 +598,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## audio/podcast/two-host-episode\n\nUS-safe two-host-episode episode (Option A). Sequential Queue \u2014 do not load Klein + Wan + LTX + ACE-Step + TTS together.\n\n1. Edit the script (human part). Prompt enhance is **off** so Speaker A/B labels stay parser input. Turn Enhance on only if you want the 4B rewriter.\n2. Disclosure is prepended by the node (do not type it): Voices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n3. Kokoro-82M built-in voices (Apache). Optional Chatterbox/Qwen3-TTS only with operator-owned refs.\n4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. The script STRING is wired into ACE enhance as context (used if you turn Enhance on). Duck \u221215 dB under speech.\n5. Saves: `ez_podcast_ep` FLAC master + `ez_podcast_mix` 320 kbps MP3.\n6. Cover separately: Queue **stills/podcast-cover.json** (prefix `ez_podcast`, 1024\u00b2). Do not embed Klein here.\n7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (\u221216 LUFS podcast / `--youtube` \u221214). Comfy cannot loudnorm.\n\nWeights: `./scripts/manage.sh download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
+        "## audio/podcast/two-host-episode\n\nUS-safe two-host-episode episode (Option A). Sequential Queue - do not load Klein + Wan + LTX + ACE-Step + TTS together.\n\n1. Edit the script (human part). Prompt enhance is **off** so Speaker A/B labels stay parser input. Turn Enhance on only if you want the 4B rewriter.\n2. Disclosure is prepended by the node (do not type it): Voices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n3. Kokoro-82M built-in voices (Apache). Optional Chatterbox/Qwen3-TTS only with operator-owned refs.\n4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. The script STRING is wired into ACE enhance as context (used if you turn Enhance on). Duck -15 dB under speech.\n5. Saves: `ez_podcast_ep` FLAC master + `ez_podcast_mix` 320 kbps MP3.\n6. Cover separately: Queue **stills/podcast-cover.json** (prefix `ez_podcast`, 1024^2). Do not embed Klein here.\n7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (-16 LUFS podcast / `--youtube` -14). Comfy cannot loudnorm.\n\nWeights: `./scripts/manage.sh download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).\n\nOccupancy: audio - stop Klein / Wan / LTX session. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -939,7 +939,7 @@
   "config": {},
   "extra": {
     "lab_profile": "us-safe-podcast",
-    "lab_note": "## audio/podcast/two-host-episode\n\nUS-safe two-host-episode episode (Option A). Sequential Queue \u2014 do not load Klein + Wan + LTX + ACE-Step + TTS together.\n\n1. Edit the script (human part). Prompt enhance is **off** so Speaker A/B labels stay parser input. Turn Enhance on only if you want the 4B rewriter.\n2. Disclosure is prepended by the node (do not type it): Voices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n3. Kokoro-82M built-in voices (Apache). Optional Chatterbox/Qwen3-TTS only with operator-owned refs.\n4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. The script STRING is wired into ACE enhance as context (used if you turn Enhance on). Duck \u221215 dB under speech.\n5. Saves: `ez_podcast_ep` FLAC master + `ez_podcast_mix` 320 kbps MP3.\n6. Cover separately: Queue **stills/podcast-cover.json** (prefix `ez_podcast`, 1024\u00b2). Do not embed Klein here.\n7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (\u221216 LUFS podcast / `--youtube` \u221214). Comfy cannot loudnorm.\n\nWeights: `./scripts/manage.sh download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
+    "lab_note": "## audio/podcast/two-host-episode\n\nUS-safe two-host-episode episode (Option A). Sequential Queue - do not load Klein + Wan + LTX + ACE-Step + TTS together.\n\n1. Edit the script (human part). Prompt enhance is **off** so Speaker A/B labels stay parser input. Turn Enhance on only if you want the 4B rewriter.\n2. Disclosure is prepended by the node (do not type it): Voices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n3. Kokoro-82M built-in voices (Apache). Optional Chatterbox/Qwen3-TTS only with operator-owned refs.\n4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. The script STRING is wired into ACE enhance as context (used if you turn Enhance on). Duck -15 dB under speech.\n5. Saves: `ez_podcast_ep` FLAC master + `ez_podcast_mix` 320 kbps MP3.\n6. Cover separately: Queue **stills/podcast-cover.json** (prefix `ez_podcast`, 1024^2). Do not embed Klein here.\n7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (-16 LUFS podcast / `--youtube` -14). Comfy cannot loudnorm.\n\nWeights: `./scripts/manage.sh download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).\n\nOccupancy: audio - stop Klein / Wan / LTX session. One GB10 job.\n",
     "lab_description": "US-safe two-host-episode episode: Kokoro TTS + ACE-Step instrumental bed + mix\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "ds": {
       "scale": 1,
@@ -966,7 +966,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
           }
         ],
         [

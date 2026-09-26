@@ -1,9 +1,9 @@
 /**
- * Rewrite cinema asset URLs onto `/assets/cinema/…` (plus the published basePath).
+ * Rewrite cinema asset URLs onto `/assets/cinema/...` (plus the published basePath).
  *
  * Generated pages use file-relative `../assets/cinema/` and `../../../assets/cinema/`
  * paths. The build copies `docs/assets` to `docs-site/public/assets`, so the browser
- * URL is `/assets/cinema/…` (or `/ez-comfy-stack/<alias>/assets/cinema/…`).
+ * URL is `/assets/cinema/...` (or `/ez-comfy-stack/<alias>/assets/cinema/...`).
  */
 
 import { visit } from "unist-util-visit";

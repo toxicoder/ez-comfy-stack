@@ -43,7 +43,7 @@ def sanitize_slug(slug: object, default: str = "episode") -> str:
 
     Args:
         slug: Operator widget text. Non-strings (bool, int, None) use
-            ``default`` — never ``str(True)``.
+            ``default`` - never ``str(True)``.
         default: Fallback when empty after sanitizing.
     Returns:
         Non-empty slug.
@@ -67,7 +67,7 @@ def output_root() -> Path:
         from ez_common import output_root as shared_output_root
 
         return shared_output_root()
-    except Exception:  # noqa: BLE001 — Comfy is optional in unit tests
+    except Exception:  # noqa: BLE001 - Comfy is optional in unit tests
         pass
     try:
         import folder_paths  # type: ignore[import-not-found]
@@ -75,7 +75,7 @@ def output_root() -> Path:
         raw = folder_paths.get_output_directory()
         if raw:
             return Path(raw)
-    except Exception:  # noqa: BLE001 — Comfy is optional in unit tests
+    except Exception:  # noqa: BLE001 - Comfy is optional in unit tests
         pass
     if Path("/outputs").is_dir():
         return Path("/outputs")

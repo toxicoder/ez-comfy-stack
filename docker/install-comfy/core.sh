@@ -15,7 +15,7 @@ fi
 _EZ_COMFY_CORE_LOADED=1
 
 # Defaults when sourced standalone (Dockerfile phases set COMFY_HOME first).
-# Do not put COMFYUI_REF here — bumping that pin must not invalidate torch COPY.
+# Do not put COMFYUI_REF here - bumping that pin must not invalidate torch COPY.
 COMFY_HOME="${COMFY_HOME:-/comfy-state/ComfyUI}"
 COMFY_USER="${COMFY_USER:-0}"
 MODELS_ROOT="${MODELS_ROOT:-/models}"

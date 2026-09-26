@@ -34,7 +34,7 @@ def handle_check(
     """Scan required models for the posted graph hints.
 
     Args:
-        args: JSON body (occupancy, quality, loader names, …).
+        args: JSON body (occupancy, quality, loader names, ...).
         roots: Models-root override for tests.
 
     Returns:
@@ -62,7 +62,7 @@ async def request_json(request: object) -> object:
         if inspect.isawaitable(raw):
             return await raw  # type: ignore[misc]
         return raw
-    except Exception:  # noqa: BLE001 — empty/invalid body
+    except Exception:  # noqa: BLE001 - empty/invalid body
         return {}
 
 
@@ -87,7 +87,7 @@ def register_routes(
             from aiohttp import web
 
             responder = web.json_response
-        except Exception:  # noqa: BLE001 — optional in pytest
+        except Exception:  # noqa: BLE001 - optional in pytest
             return False
     inst = server
     if inst is None:
@@ -95,7 +95,7 @@ def register_routes(
             server_mod = __import__("server")
             prompt_server = getattr(server_mod, "PromptServer", None)
             inst = getattr(prompt_server, "instance", None)
-        except Exception:  # noqa: BLE001 — Comfy optional in pytest
+        except Exception:  # noqa: BLE001 - Comfy optional in pytest
             return False
         if inst is None:
             return False

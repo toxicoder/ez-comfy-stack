@@ -175,7 +175,7 @@ function setStatus(node, text) {
  * @returns {Promise<void>}
  */
 async function runOnNode(node) {
-  setStatus(node, "Checking models…");
+  setStatus(node, "Checking models...");
   try {
     const payload = await postCheck(app.graph);
     setStatus(node, String(payload.message || (payload.ok ? "Ready." : "Missing models.")));

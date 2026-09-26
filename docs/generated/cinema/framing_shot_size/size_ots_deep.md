@@ -1,6 +1,6 @@
 ---
 title: "Deep Over-Shoulder"
-description: "Cinema Rack illustration — Deep Over-Shoulder."
+description: "Cinema Rack illustration - Deep Over-Shoulder."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

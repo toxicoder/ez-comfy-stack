@@ -31,7 +31,7 @@ A **merge** is how one branch's commits become reachable from another branch. Gi
 
 | Method | What GitHub writes | We use it? |
 | --- | --- | --- |
-| **Merge commit** (`Merge pull request #N`) | A two-parent commit on the **base** branch. Topic commits stay in history. | **Yes — this is how we land into `development`.** |
+| **Merge commit** (`Merge pull request #N`) | A two-parent commit on the **base** branch. Topic commits stay in history. | **Yes - this is how we land into `development`.** |
 | **Squash** | One new commit on the base. The topic branch's individual commits disappear from that history. | No for integration. Do not squash stacked feature PRs. `main` promotions have used squash-style titles historically; that is not the feature-landing path. |
 | **Rebase (GitHub)** | Replay the PR commits onto the tip of the base, linear history, no merge commit. | No for landing. Local `git rebase` onto latest `development` **before** you open or update a PR is fine. |
 | **Fast-forward** | Move the branch pointer when there is no divergence. | Rare. Use `git pull --ff-only origin development` when updating your local integration branch. |
@@ -50,12 +50,12 @@ The important noun is **base**. GitHub merges into whatever base the PR currentl
 
 ```mermaid
 flowchart LR
-  Feat["feature/* · fix/* · chore/* · docs/*"] --> Dev["development"]
-  Dev --> Main["main · production-ready only"]
+  Feat["feature/* - fix/* - chore/* - docs/*"] --> Dev["development"]
+  Dev --> Main["main - production-ready only"]
 ```
 
 1. Update integration: `git fetch origin && git checkout development && git pull --ff-only origin development`
-2. Branch `feature/…`, `fix/…`, `chore/…`, or `docs/…` from that tip
+2. Branch `feature/...`, `fix/...`, `chore/...`, or `docs/...` from that tip
 3. Open a PR **into `development`**
 4. Land with a **merge commit**
 5. Promote to `main` only when the tree is production-ready
@@ -70,9 +70,9 @@ Large work is split so each PR is independently green (`bazelisk run //:validate
 
 ```mermaid
 flowchart TB
-  Dev["development"] --> P1["PR 1 · base development"]
-  P1 --> P2["PR 2 · base may be PR 1's branch while open"]
-  P2 --> P3["PR 3 · base may be PR 2's branch while open"]
+  Dev["development"] --> P1["PR 1 - base development"]
+  P1 --> P2["PR 2 - base may be PR 1's branch while open"]
+  P2 --> P3["PR 3 - base may be PR 2's branch while open"]
 ```
 
 That targeting is for **review**. It is not how you land.
@@ -80,7 +80,7 @@ That targeting is for **review**. It is not how you land.
 ### Landing rule
 
 1. Merge **PR 1 into `development`** (merge commit).
-2. **Retarget** PR 2's base to `development` (GitHub: Edit → base). Confirm the Files tab is still PR 2's unique delta.
+2. **Retarget** PR 2's base to `development` (GitHub: Edit -> base). Confirm the Files tab is still PR 2's unique delta.
 3. Merge PR 2 **into `development`**. Repeat down the stack.
 4. Never click Merge on a PR whose base is still another topic branch.
 5. After each merge, prove the unique commits are ancestors of integration:
@@ -90,13 +90,13 @@ git fetch origin
 git merge-base --is-ancestor <pr-head-sha> origin/development
 ```
 
-Exit 0 means the commit is in `development`. Exit 1 means GitHub's Merged badge is not enough — the work is on the old topic branch only.
+Exit 0 means the commit is in `development`. Exit 1 means GitHub's Merged badge is not enough - the work is on the old topic branch only.
 
 Merging the **tip** of the stack into `development` once also works when every unique commit is already on that tip. Merging each stacked PR into its feature-branch base does not.
 
 ### Why this failed once
 
-App Mode PRs **#266 → #268 → #267 → #265** were stacked. #266 targeted `development` and landed. #268 / #267 / #265 targeted the previous topic branches. All four were marked Merged within a minute. Only #266 reached `development`. Media picker, 300 styles / 30 sample recipes, and the LTX duration combo had to be restored later, keeping the later **#274** 8 s LTX default.
+App Mode PRs **#266 -> #268 -> #267 -> #265** were stacked. #266 targeted `development` and landed. #268 / #267 / #265 targeted the previous topic branches. All four were marked Merged within a minute. Only #266 reached `development`. Media picker, 300 styles / 30 sample recipes, and the LTX duration combo had to be restored later, keeping the later **#274** 8 s LTX default.
 
 ---
 
@@ -123,7 +123,7 @@ flowchart TB
 | Action | When |
 | --- | --- |
 | `git fetch origin && git rebase origin/development` on your topic branch | Before opening a PR, or when `development` moved and you need a clean diff |
-| GitHub “Rebase and merge” | Do not use to land into `development` |
+| GitHub "Rebase and merge" | Do not use to land into `development` |
 | `git pull --ff-only origin development` | Updating your local `development` |
 
 Prefer stacked independently-green PRs over one giant change. Tests ship in the same commit as the production files they cover.

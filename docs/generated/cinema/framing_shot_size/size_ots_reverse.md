@@ -1,6 +1,6 @@
 ---
 title: "Reverse Over-Shoulder"
-description: "Cinema Rack illustration — Reverse Over-Shoulder."
+description: "Cinema Rack illustration - Reverse Over-Shoulder."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

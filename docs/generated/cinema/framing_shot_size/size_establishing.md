@@ -1,6 +1,6 @@
 ---
 title: "Establishing"
-description: "Cinema Rack illustration — Establishing."
+description: "Cinema Rack illustration - Establishing."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

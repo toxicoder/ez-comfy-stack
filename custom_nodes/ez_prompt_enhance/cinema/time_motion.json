@@ -612,7 +612,7 @@
   {
     "id": "tim_day_for_night_temporal",
     "label": "Hours Into Night",
-    "clause": "Keep rolling until daylight actually dies, letting hours\u2014not a grade\u2014turn the street to night.",
+    "clause": "Keep rolling until daylight actually dies, letting hours-not a grade-turn the street to night.",
     "still": "Last daylight dying on the street, lamps not yet sure, hours visible in the sky.",
     "wan_token": "",
     "audio": "",

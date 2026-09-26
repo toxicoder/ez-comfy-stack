@@ -233,12 +233,12 @@ def build_shot_map_markdown(film: str, label: str, parsed: dict, beats: tuple) -
     lines = [
         f"## {film} ({label})",
         "",
-        "Queue **once**. Klein identity still → 18 × 5.00s LTX AV prints (last-frame "
-        "continuity) → **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames "
+        "Queue **once**. Klein identity still -> 18 x 5.00s LTX AV prints (last-frame "
+        "continuity) -> **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames "
         "= 1+8n per shot). Optional silent rehearsal: **motion/silent/still-to-shot**. Optional "
         f"host stitch: `./scripts/utilities/concat-shots.sh --film {film} --yes`.",
         "",
-        "18 × 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. "
+        "18 x 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. "
         "Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.",
         "",
         f"**Identity look:** {parsed['identity']}",
@@ -267,7 +267,7 @@ def build_film_operator_note(
     )
     klein_line = (
         "Models: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, "
-        "t2i mode) · LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + "
+        "t2i mode) - LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + "
         "video/audio VAEs (print)."
     )
     note = f"""## {stem}
@@ -278,10 +278,10 @@ def build_film_operator_note(
 
 One-click 90s unit ({label}): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.
 {klein_line}
-LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
+LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
 
-1. Queue **once**. Klein runs first; models unload; then 18 × 5.00s LTX prints chain last-frame → next start.
-2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) — expected, not a hang.
+1. Queue **once**. Klein runs first; models unload; then 18 x 5.00s LTX prints chain last-frame -> next start.
+2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) - expected, not a hang.
 3. The MP4 is already on disk at `${{COMFY_OUTPUT_DIR}}/ez_{slug}_90s.mp4` (act graphs write `ez_{slug}_actN_90s.mp4`). A **Film ready** overlay plays it. Copy off the Spark with scp.
 4. Optional single-shot iterate: **motion/av/still-to-shot**. Optional silent rehearsal: **motion/silent/still-to-shot**.
 5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film {film} --yes`
@@ -300,10 +300,10 @@ Do not Queue a 90s denoise (keep 121-frame / 1+8n widgets). US-safe local pack o
         )
         note = (
             note
-            + f"\nThis graph is **act {act}/5** of a 7.5 min film (90 × 5.00s). "
+            + f"\nThis graph is **act {act}/5** of a 7.5 min film (90 x 5.00s). "
             + prev
             + f"In-graph stitch writes `ez_{slug}_act{act}_90s.mp4`. "
-            + f"After all five acts: `concat-shots.sh --film {film} --yes` → "
+            + f"After all five acts: `concat-shots.sh --film {film} --yes` -> "
             + f"`ez_{slug}_450s.mp4`.\n"
         )
     return note
@@ -365,7 +365,7 @@ def _shot_nodes(
             "LTXVImgToVideo",
             [ox + 460, oy],
             [320, 200],
-            "LTX Img→Video condition",
+            "LTX Img->Video condition",
             [1280, 704, 121, 1],
             [
                 _inp("positive", "CONDITIONING"),
@@ -449,7 +449,7 @@ def _shot_nodes(
             "VHS_VideoCombine",
             [ox + 1180, oy + 192],
             [320, 420],
-            "Save video (MP4) — open node for preview",
+            "Save video (MP4) - open node for preview",
             {
                 "frame_rate": 24,
                 "loop_count": 0,
@@ -526,7 +526,7 @@ def build_one_click_film(
             node["title"] = "Save identity PNG"
         if node.get("type") == "Note":
             node["widgets_values"] = [op_note]
-            node["title"] = "Operator note — one-click film"
+            node["title"] = "Operator note - one-click film"
             node["size"] = [960, 280]
         if node.get("type") == "EZKleinPromptEnhance":
             node["widgets_values"] = [
@@ -631,9 +631,9 @@ def build_one_click_film(
     ]
     xfade_cs = 8 if film in POV_FILMS else 0
     concat_title = (
-        f"Save act {act} (90s MP4) — play / download"
+        f"Save act {act} (90s MP4) - play / download"
         if act > 0
-        else "Save 90s film (MP4) — play / download"
+        else "Save 90s film (MP4) - play / download"
     )
     concat = _mk(
         ID_CONCAT,
@@ -776,7 +776,7 @@ def build_one_click_film(
         groups.append(
             _group(
                 3 + beat,
-                f"{3 + beat}. Beat {beat + 1} (3 × 5.00s LTX)",
+                f"{3 + beat}. Beat {beat + 1} (3 x 5.00s LTX)",
                 BEAT_X - 20,
                 BEAT_Y0 + beat * BEAT_DY - GROUP_TITLE_INSET,
                 3 * SHOT_DX + 40,
@@ -809,8 +809,8 @@ def build_one_click_film(
         "lab_dfr": {
             "print": "ltx",
             "note": (
-                "Two-stage DFR lives in Comfy Templates → LTX-2.5 (not vendored). "
-                "YAML print: dfr selects that path. Lab printers stay 5.00s / 1280×704 / 1+8n."
+                "Two-stage DFR lives in Comfy Templates -> LTX-2.5 (not vendored). "
+                "YAML print: dfr selects that path. Lab printers stay 5.00s / 1280x704 / 1+8n."
             ),
         },
     }
@@ -848,7 +848,7 @@ def build_all_films() -> None:
         yaml_name = f"{film}.shots.yaml"
         for act in range(1, 6):
             beats, act_title = _act_beat_table(film, act)
-            label = f"{LONG_LABELS[film]} · {act_title}"
+            label = f"{LONG_LABELS[film]} - {act_title}"
             stem = f"films/{film}/act-0{act}"
             graph = build_one_click_film(
                 film,

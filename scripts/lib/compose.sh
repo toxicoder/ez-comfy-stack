@@ -12,16 +12,16 @@
 #   Sourced by manage.sh after paths.sh and common.sh.
 #
 # Environment:
-#   MODELS_DIR, COMFY_PORT, MEM_LIMIT, MEM_RESERVATION — exported into compose
-#   COMPOSE_BIN — optional full command override for tests (space-separated ok)
-#   LAB_STACK_FOLLOW — 1 = stream logs until UI port is open (default 0: detach)
+#   MODELS_DIR, COMFY_PORT, MEM_LIMIT, MEM_RESERVATION - exported into compose
+#   COMPOSE_BIN - optional full command override for tests (space-separated ok)
+#   LAB_STACK_FOLLOW - 1 = stream logs until UI port is open (default 0: detach)
 #
 # Safety:
 #   stack_start does not ask for confirmation (caller must require_heavy_confirm).
 #   stack_start ignores SIGHUP so an SSH drop does not abort compose up.
 #   stack_start returns after up -d + verify; it does not stay bound to the shell.
 #   stack_cleanup_state removes named volumes but never deletes host MODELS_DIR.
-#   restart: "no" is unchanged — logout is not a reboot and does not auto-start.
+#   restart: "no" is unchanged - logout is not a reboot and does not auto-start.
 #
 
 #######################################
@@ -89,10 +89,10 @@ require_docker() {
 #######################################
 # Emit a JSON object describing the studio stack state on stdout.
 # State values:
-#   stopped  — no containers / empty ps output
-#   running  — ps JSON mentions running
-#   present  — containers exist but not clearly running
-#   unknown  — compose ps failed (Docker down, etc.)
+#   stopped  - no containers / empty ps output
+#   running  - ps JSON mentions running
+#   present  - containers exist but not clearly running
+#   unknown  - compose ps failed (Docker down, etc.)
 # Also includes attention (kitchen|sage|pytorch-fallback|unknown) and host_free_gib.
 # Globals:
 #   See file header / caller environment.
@@ -219,12 +219,12 @@ stack_verify_running() {
       sleep 1
     fi
   done
-  err "Container is not running after start (restart: no → exits stay stopped)."
+  err "Container is not running after start (restart: no -> exits stay stopped)."
   warn "compose ps -a:"
   compose_run ps -a 2>/dev/null || true
   warn "Recent comfyui logs:"
   compose_run logs --tail 80 comfyui 2>/dev/null || true
-  err "Tips: ./scripts/manage.sh logs — if volume was poisoned by a failed first start:"
+  err "Tips: ./scripts/manage.sh logs - if volume was poisoned by a failed first start:"
   err "  ./scripts/manage.sh stop && docker volume rm ez-comfy-state  # then start again"
   err "  Stop other GPU containers if nvidia runtime fails; check free RAM vs MEM_RESERVATION"
   return 1
@@ -304,7 +304,7 @@ stack_wait_for_port() {
     sleep 1
     waited=$((waited + 1))
     if [[ $((waited % 15)) -eq 0 ]]; then
-      log "… waiting for UI port ${state} (elapsed ${waited}s)"
+      log "... waiting for UI port ${state} (elapsed ${waited}s)"
     fi
   done
 }
@@ -328,7 +328,7 @@ stack_ignore_hangup() {
 
 #######################################
 # Stream compose logs and poll until UI port is open (or timeout / detach).
-# Opt-in via LAB_STACK_FOLLOW=1. Ctrl+C detaches follower only — container
+# Opt-in via LAB_STACK_FOLLOW=1. Ctrl+C detaches follower only - container
 # keeps running. Default is not to follow (start returns after up -d).
 # Globals:
 #   COMFY_PORT, LAB_STACK_FOLLOW, LAB_STACK_READY_TIMEOUT, LAB_STACK_HEARTBEAT
@@ -347,7 +347,7 @@ stack_follow_until_ready() {
   local follow="${LAB_STACK_FOLLOW:-0}"
 
   if [[ ${follow} == "0" ]]; then
-    log "LAB_STACK_FOLLOW=0 — not streaming logs; use: ./scripts/manage.sh logs"
+    log "LAB_STACK_FOLLOW=0 - not streaming logs; use: ./scripts/manage.sh logs"
     return 0
   fi
 
@@ -357,7 +357,7 @@ stack_follow_until_ready() {
   fi
 
   log "Streaming container logs until UI is ready on :${port} (timeout ${timeout_s}s)"
-  log "Ctrl+C detaches this view only — container keeps installing/running"
+  log "Ctrl+C detaches this view only - container keeps installing/running"
   log "Re-attach anytime: ./scripts/manage.sh logs"
 
   t0="$(date +%s)"
@@ -388,13 +388,13 @@ stack_follow_until_ready() {
     if stack_port_open "${port}"; then
       _stack_follow_cleanup
       trap - INT TERM
-      log "✓ ComfyUI is up — http://localhost:${port}"
+      log "✓ ComfyUI is up - http://localhost:${port}"
       return 0
     fi
     if ! compose_is_running; then
       _stack_follow_cleanup
       trap - INT TERM
-      err "Container exited during install — see logs above"
+      err "Container exited during install - see logs above"
       compose_run ps -a 2>/dev/null || true
       return 1
     fi
@@ -408,7 +408,7 @@ stack_follow_until_ready() {
       return 0
     fi
     if [[ $((elapsed - last_hb)) -ge ${heartbeat_s} ]]; then
-      log "… still waiting for ComfyUI on :${port} (elapsed ${elapsed}s; container running)"
+      log "... still waiting for ComfyUI on :${port} (elapsed ${elapsed}s; container running)"
       last_hb=${elapsed}
     fi
     sleep 2
@@ -459,8 +459,8 @@ stack_git_branch() {
 
 #######################################
 # Map a git branch name to the published GHCR image tag channel.
-# Aligns with publish-image.yml: main → us-safe-studio; development →
-# us-safe-studio-development; feature/other → development channel.
+# Aligns with publish-image.yml: main -> us-safe-studio; development ->
+# us-safe-studio-development; feature/other -> development channel.
 # Globals:
 #   None
 # Arguments:
@@ -477,7 +477,7 @@ stack_image_tag_for_branch() {
       echo "us-safe-studio"
       ;;
     *)
-      # development, feature/*, detached/unknown → integration channel
+      # development, feature/*, detached/unknown -> integration channel
       echo "us-safe-studio-development"
       ;;
   esac
@@ -520,10 +520,10 @@ stack_default_image() {
 stack_pull_image() {
   local img="${1:?}"
   if [[ ${LAB_STACK_SKIP_PULL:-0} == "1" ]]; then
-    log "LAB_STACK_SKIP_PULL=1 — not pulling ${img}"
+    log "LAB_STACK_SKIP_PULL=1 - not pulling ${img}"
     return 1
   fi
-  log "Pulling prebuilt image ${img} (GHCR; no model weights inside)…"
+  log "Pulling prebuilt image ${img} (GHCR; no model weights inside)..."
   local pull_ok=0
   if [[ -t 2 ]]; then
     if docker pull "${img}"; then
@@ -538,7 +538,7 @@ stack_pull_image() {
     log_ok "Pull ok: ${img}"
     return 0
   fi
-  warn "Pull failed for ${img} — will build locally if needed (long if prebuild enabled)"
+  warn "Pull failed for ${img} - will build locally if needed (long if prebuild enabled)"
   return 1
 }
 
@@ -565,7 +565,7 @@ seed_house_clay_inputs() {
   }
   python3 "${root}/scripts/lib/house_layout.py" seed-inputs "${input}" \
     --slug lab-penthouse || {
-    warn "house clay seed into ${input} failed — stills/dream-house-clay LoadImage may be empty"
+    warn "house clay seed into ${input} failed - stills/dream-house-clay LoadImage may be empty"
     return 0
   }
   log "house clay plates ready in ${input}"
@@ -607,18 +607,18 @@ stack_start() {
   seed_house_clay_inputs
   log "══ start ══ unified us-safe-studio (mem_limit=${MEM_LIMIT})"
   log "Image: ${EZ_COMFY_IMAGE} (branch=${branch})"
-  log "Outputs: ${COMFY_OUTPUT_DIR} → /outputs"
-  log "Input: ${COMFY_OUTPUT_DIR}/input → /inputs"
-  log "Comfy user: ${COMFY_OUTPUT_DIR}/comfy-user → /comfy-state/ComfyUI/user"
+  log "Outputs: ${COMFY_OUTPUT_DIR} -> /outputs"
+  log "Input: ${COMFY_OUTPUT_DIR}/input -> /inputs"
+  log "Comfy user: ${COMFY_OUTPUT_DIR}/comfy-user -> /comfy-state/ComfyUI/user"
 
   local up_args=(up -d)
   if [[ ${LAB_STACK_FORCE_BUILD:-0} == "1" ]]; then
-    log "LAB_STACK_FORCE_BUILD=1 — compose up --build (may take a long time)"
+    log "LAB_STACK_FORCE_BUILD=1 - compose up --build (may take a long time)"
     up_args+=(--build)
   elif stack_pull_image "${EZ_COMFY_IMAGE}"; then
     log "Using pulled image (compose up without rebuild)"
   else
-    log "Building image locally (Dockerfile prebuild installs torch — can take 30+ min)…"
+    log "Building image locally (Dockerfile prebuild installs torch - can take 30+ min)..."
     up_args+=(--build)
   fi
 
@@ -637,7 +637,7 @@ stack_start() {
       return 1
     fi
   fi
-  log "Compose up finished — verifying container is running…"
+  log "Compose up finished - verifying container is running..."
   # LAB_STACK_VERIFY_SETTLE=0 skips sleep in hermetic tests
   if ! stack_verify_running "${LAB_STACK_VERIFY_SETTLE:-3}"; then
     return 1

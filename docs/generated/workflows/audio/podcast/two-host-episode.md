@@ -29,19 +29,19 @@ Occupancy **audio**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fa
 ```text
 ## audio/podcast/two-host-episode
 
-US-safe two-host-episode episode (Option A). Sequential Queue — do not load Klein + Wan + LTX + ACE-Step + TTS together.
+US-safe two-host-episode episode (Option A). Sequential Queue - do not load Klein + Wan + LTX + ACE-Step + TTS together.
 
 1. Edit the script (human part). Prompt enhance is **off** so Speaker A/B labels stay parser input. Turn Enhance on only if you want the 4B rewriter.
 2. Disclosure is prepended by the node (do not type it): Voices and music on this show are synthesized. The hosts are original characters, not recordings of real people.
 3. Kokoro-82M built-in voices (Apache). Optional Chatterbox/Qwen3-TTS only with operator-owned refs.
-4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. The script STRING is wired into ACE enhance as context (used if you turn Enhance on). Duck −15 dB under speech.
+4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. The script STRING is wired into ACE enhance as context (used if you turn Enhance on). Duck -15 dB under speech.
 5. Saves: `ez_podcast_ep` FLAC master + `ez_podcast_mix` 320 kbps MP3.
-6. Cover separately: Queue **stills/podcast-cover.json** (prefix `ez_podcast`, 1024²). Do not embed Klein here.
-7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (−16 LUFS podcast / `--youtube` −14). Comfy cannot loudnorm.
+6. Cover separately: Queue **stills/podcast-cover.json** (prefix `ez_podcast`, 1024^2). Do not embed Klein here.
+7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (-16 LUFS podcast / `--youtube` -14). Comfy cannot loudnorm.
 
 Weights: `./scripts/manage.sh download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).
 
-Occupancy: audio — stop Klein / Wan / LTX session. One GB10 job.
+Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
 ```
 
 ## How to Queue
@@ -65,7 +65,7 @@ flowchart LR
   N7["Bed length (seconds)"]
   N8["ACE sampler"]
   N9["ACE decode"]
-  N10["Duck bed −15 dB"]
+  N10["Duck bed -15 dB"]
   N11["ez_podcast_mix overlay"]
   N12["FLAC master"]
   N13["MP3 320k"]
@@ -105,7 +105,7 @@ flowchart LR
 | 7 | Bed length (seconds) | `EmptyAceStep1.5LatentAudio` | SETTINGS |
 | 8 | ACE sampler | `KSampler` | SETTINGS |
 | 9 | ACE decode | `VAEDecodeAudio` | SETTINGS |
-| 10 | Duck bed −15 dB | `AudioAdjustVolume` | SETTINGS |
+| 10 | Duck bed -15 dB | `AudioAdjustVolume` | SETTINGS |
 | 11 | ez_podcast_mix overlay | `AudioMerge` | OUTPUT |
 | 12 | FLAC master | `SaveAudio` | OUTPUT |
 | 13 | MP3 320k | `SaveAudioMP3` | OUTPUT |
@@ -116,9 +116,9 @@ flowchart LR
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
 
-### `CheckpointLoaderSimple` — Load Checkpoint
+### `CheckpointLoaderSimple` - Load Checkpoint
 
 Load a single-file checkpoint that bundles MODEL + CLIP + VAE.
 
@@ -138,11 +138,11 @@ Type `STRING`.
 
 Filename under checkpoints/.
 
-**How it affects generation:** Lab music is the turbo AIO. XL is opt-in via download-music --tier xl — swap only if you meant to.
+**How it affects generation:** Lab music is the turbo AIO. XL is opt-in via download-music --tier xl - swap only if you meant to.
 
 **This graph:** `ace_step_1.5_turbo_aio.safetensors`
 
-### `EZPodcastScript` — Podcast Script
+### `EZPodcastScript` - Podcast Script
 
 Draft Speaker A/B (and Announcer) lines via the on-box GGUF.
 
@@ -168,7 +168,7 @@ Speaker A/B script.
 
 **How it affects generation:** Keep hosts original. No celebrity refs.
 
-**This graph:** `Speaker A: Welcome back to Local Signal. Today we stay on the machine in front of us. Speaker B: No cloud voices. No rented music. If the card dies, the show dies with it. Speaker A: That is the poin…`
+**This graph:** `Speaker A: Welcome back to Local Signal. Today we stay on the machine in front of us. Speaker B: No cloud voices. No rented music. If the card dies, the show dies with it. Speaker A: That is the poin...`
 
 ```text
 Speaker A: Welcome back to Local Signal. Today we stay on the machine in front of us.
@@ -214,7 +214,7 @@ Catalog id.
 
 **This graph:** `audio/podcast/two-host-episode`
 
-### `EZPodcastDisclosure` — Podcast Disclosure
+### `EZPodcastDisclosure` - Podcast Disclosure
 
 Prepend the fixed synthesized-voices bumper. Operators cannot edit the string.
 
@@ -225,7 +225,7 @@ Prepend the fixed synthesized-voices bumper. Operators cannot edit the string.
 
 No widgets. Sockets only.
 
-### `EZKokoroTTS` — Kokoro TTS
+### `EZKokoroTTS` - Kokoro TTS
 
 Two-host (plus optional announcer) TTS. Kokoro-82M stock voices by default.
 
@@ -314,7 +314,7 @@ Optional clone reference path.
 
 #### `speed`
 
-Type `FLOAT`. Range / default: 0.5–1.5, lab 1.0.
+Type `FLOAT`. Range / default: 0.5-1.5, lab 1.0.
 
 Speaking rate.
 
@@ -322,7 +322,7 @@ Speaking rate.
 
 **This graph:** `1.0`
 
-### `TextEncodeAceStepAudio1.5` — ACE-Step 1.5 Text Encode
+### `TextEncodeAceStepAudio1.5` - ACE-Step 1.5 Text Encode
 
 Pack tags, lyrics, BPM, key, and duration into ACE conditioning.
 
@@ -393,7 +393,7 @@ Seed control.
 
 #### `bpm`
 
-Type `INT`. Range / default: 10–300.
+Type `INT`. Range / default: 10-300.
 
 Tempo written into the codes.
 
@@ -605,13 +605,13 @@ Minimum probability floor.
 
 **This graph (all 2 instances):** `0.0`
 
-### `EmptyAceStep1.5LatentAudio` — Empty ACE-Step 1.5 Latent Audio
+### `EmptyAceStep1.5LatentAudio` - Empty ACE-Step 1.5 Latent Audio
 
 Allocate an ACE-Step audio latent for N seconds.
 
 !!! warning "Lab notes"
 
-    Draft is the cold-open bar length. Full is the pre-chorus bar length. Nill Bye albums are 64–210 s. Drive-through is ~90–120 s from per-take bar math, not a shared clock target. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
+    Draft is the cold-open bar length. Full is the pre-chorus bar length. Nill Bye albums are 64-210 s. Drive-through is ~90-120 s from per-take bar math, not a shared clock target. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -624,7 +624,7 @@ Type `FLOAT`. Range / default: draft / full / album plan.
 
 Duration in seconds.
 
-**How it affects generation:** Longer latents cost RAM/time linearly. Nill Bye stays 64–210 s. Drive-through is ~90–120 s. Stay at the seeded length unless you have headroom.
+**How it affects generation:** Longer latents cost RAM/time linearly. Nill Bye stays 64-210 s. Drive-through is ~90-120 s. Stay at the seeded length unless you have headroom.
 
 **This graph:** `30.0`
 
@@ -638,7 +638,7 @@ Takes per Queue.
 
 **This graph:** `1`
 
-### `KSampler` — KSampler
+### `KSampler` - KSampler
 
 Denoise a latent for N steps at a CFG, sampler, and scheduler.
 
@@ -650,17 +650,17 @@ Denoise a latent for N steps at a CFG, sampler, and scheduler.
 | --- | --- | --- | --- |
 | `model` | in | `MODEL` | UNET / transformer after any ModelSampling* patch. |
 | `positive` | in | `CONDITIONING` | What to include (CLIP / ACE / LTX prompt). |
-| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well — put constraints in the positive. |
+| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well - put constraints in the positive. |
 | `latent_image` | in | `LATENT` | Noise canvas or encoded start image / video / audio latent. |
 | `LATENT` | out | `LATENT` | Denoised latent for VAE decode. |
 
 #### `seed`
 
-Type `INT`. Range / default: 0 … 2^64-1; lab 42.
+Type `INT`. Range / default: 0 ... 2^64-1; lab 42.
 
 Random seed for the noise tensor.
 
-**How it affects generation:** Same seed + same graph ≈ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
+**How it affects generation:** Same seed + same graph ~ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
 
 **This graph:** `42`
 
@@ -685,21 +685,21 @@ What happens to seed after Queue.
 
 #### `steps`
 
-Type `INT`. Range / default: 1–10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
+Type `INT`. Range / default: 1-10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
 
 Denoising iterations.
 
-**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 — raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
+**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 - raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
 
 **This graph:** `8`
 
 #### `cfg`
 
-Type `FLOAT`. Range / default: 0–100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
+Type `FLOAT`. Range / default: 0-100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
 
 Classifier-free guidance scale.
 
-**How it affects generation:** Distilled Klein is CFG 1.0 — raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
+**How it affects generation:** Distilled Klein is CFG 1.0 - raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
 
 **This graph:** `1.0`
 
@@ -789,7 +789,7 @@ How sigmas are spaced across steps.
 
 #### `denoise`
 
-Type `FLOAT`. Range / default: 0–1; lab 1.0.
+Type `FLOAT`. Range / default: 0-1; lab 1.0.
 
 Fraction of the latent to replace with denoised signal.
 
@@ -797,7 +797,7 @@ Fraction of the latent to replace with denoised signal.
 
 **This graph:** `1.0`
 
-### `VAEDecodeAudio` — VAE Decode Audio
+### `VAEDecodeAudio` - VAE Decode Audio
 
 Decode an ACE audio latent to AUDIO.
 
@@ -809,13 +809,13 @@ Decode an ACE audio latent to AUDIO.
 
 No widgets. Sockets only.
 
-### `AudioAdjustVolume` — Audio Adjust Volume
+### `AudioAdjustVolume` - Audio Adjust Volume
 
 Gain an AUDIO tensor in dB.
 
 !!! warning "Lab notes"
 
-    Podcast duck −15 dB on the ACE bed under Kokoro speech.
+    Podcast duck -15 dB on the ACE bed under Kokoro speech.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -824,15 +824,15 @@ Gain an AUDIO tensor in dB.
 
 #### `volume_db`
 
-Type `FLOAT`. Range / default: lab −15.
+Type `FLOAT`. Range / default: lab -15.
 
 Gain in decibels.
 
-**How it affects generation:** Negative ducks the bed. −15 dB is the lab podcast duck (same idea as host stem-mix.sh).
+**How it affects generation:** Negative ducks the bed. -15 dB is the lab podcast duck (same idea as host stem-mix.sh).
 
 **This graph:** `-15`
 
-### `AudioMerge` — Audio Merge
+### `AudioMerge` - Audio Merge
 
 Mix two AUDIO tensors.
 
@@ -860,7 +860,7 @@ How to combine overlapping samples.
 | `add` | Sum. Can clip. |
 | `mean` | Average. Quieter. |
 
-### `SaveAudio` — Save Audio
+### `SaveAudio` - Save Audio
 
 Write a FLAC/wav master.
 
@@ -882,7 +882,7 @@ Save stem.
 
 **This graph:** `ez_podcast_ep`
 
-### `SaveAudioMP3` — Save Audio (MP3)
+### `SaveAudioMP3` - Save Audio (MP3)
 
 Write an MP3 copy of the same take.
 
@@ -918,7 +918,7 @@ Bitrate preset.
 | `192k` | Smaller, more artifacts. |
 | `128k` | Preview only. |
 
-### `Note` — Note
+### `Note` - Note
 
 On-canvas operator note (not executed).
 
@@ -934,27 +934,27 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## audio/podcast/two-host-episode US-safe two-host-episode episode (Option A). Sequential Queue — do not load Klein + Wan + LTX + ACE-Step + TTS together. 1. Edit the script (human part). Prompt enha…`
+**This graph:** `## audio/podcast/two-host-episode US-safe two-host-episode episode (Option A). Sequential Queue - do not load Klein + Wan + LTX + ACE-Step + TTS together. 1. Edit the script (human part). Prompt enha...`
 
 ```text
 ## audio/podcast/two-host-episode
 
-US-safe two-host-episode episode (Option A). Sequential Queue — do not load Klein + Wan + LTX + ACE-Step + TTS together.
+US-safe two-host-episode episode (Option A). Sequential Queue - do not load Klein + Wan + LTX + ACE-Step + TTS together.
 
 1. Edit the script (human part). Prompt enhance is **off** so Speaker A/B labels stay parser input. Turn Enhance on only if you want the 4B rewriter.
 2. Disclosure is prepended by the node (do not type it): Voices and music on this show are synthesized. The hosts are original characters, not recordings of real people.
 3. Kokoro-82M built-in voices (Apache). Optional Chatterbox/Qwen3-TTS only with operator-owned refs.
-4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. The script STRING is wired into ACE enhance as context (used if you turn Enhance on). Duck −15 dB under speech.
+4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. The script STRING is wired into ACE enhance as context (used if you turn Enhance on). Duck -15 dB under speech.
 5. Saves: `ez_podcast_ep` FLAC master + `ez_podcast_mix` 320 kbps MP3.
-6. Cover separately: Queue **stills/podcast-cover.json** (prefix `ez_podcast`, 1024²). Do not embed Klein here.
-7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (−16 LUFS podcast / `--youtube` −14). Comfy cannot loudnorm.
+6. Cover separately: Queue **stills/podcast-cover.json** (prefix `ez_podcast`, 1024^2). Do not embed Klein here.
+7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (-16 LUFS podcast / `--youtube` -14). Comfy cannot loudnorm.
 
 Weights: `./scripts/manage.sh download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).
 
-Occupancy: audio — stop Klein / Wan / LTX session. One GB10 job.
+Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
 ```
 
-### `EZAceStepPromptEnhance` — ACE-Step Prompt Enhance
+### `EZAceStepPromptEnhance` - ACE-Step Prompt Enhance
 
 Rewrite ACE tags (genre first) and lyrics. Instrumental mode forces [inst].
 
@@ -1037,7 +1037,7 @@ Sample-catalog id.
 
 **This graph:** `audio/podcast/two-host-episode`
 
-### `EZQuality` — Quality
+### `EZQuality` - Quality
 
 Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
@@ -1072,7 +1072,7 @@ custom freezes last overlay; lab restores graph defaults.
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
-### `EZModelCheck` — Check models
+### `EZModelCheck` - Check models
 
 Manual disk check for occupancy + Quality weights. Queue does not run this node.
 

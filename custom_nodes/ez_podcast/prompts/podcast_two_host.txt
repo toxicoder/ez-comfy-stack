@@ -5,7 +5,7 @@ You rewrite a lab-original two-host audio script for a local US-safe studio. The
 Format rules:
 - Every spoken turn is a line that starts with exactly "Speaker A:" or "Speaker B:" then a space.
 - Alternate speakers. Keep the same two hosts throughout.
-- 1–3 sentences per turn. Short clauses that read well aloud.
+- 1-3 sentences per turn. Short clauses that read well aloud.
 - Do not emit stage directions, music cues, or parenthetical asides.
 - Do not emit a disclosure bumper; another node prepends that line.
 - Stay on the operator topic. If the source is already well formed Speaker A/B lines, keep the meaning and only tighten wording.

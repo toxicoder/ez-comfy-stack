@@ -1,6 +1,6 @@
 ---
 title: "Over-shoulder adjust"
-description: "Cinema Rack illustration — Over-shoulder adjust."
+description: "Cinema Rack illustration - Over-shoulder adjust."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

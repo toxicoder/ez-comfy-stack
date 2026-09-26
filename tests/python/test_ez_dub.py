@@ -2462,7 +2462,7 @@ def test_ensure_lab_custom_nodes_path_inserts_parent(monkeypatch: pytest.MonkeyP
 
 
 def _f0(samples: list[float], rate: int, skip_s: float = 0.08) -> float:
-    """Autocorrelation F0 (Hz). Lags cover ~300–800 Hz so 2×440 is excluded."""
+    """Autocorrelation F0 (Hz). Lags cover ~300-800 Hz so 2x440 is excluded."""
     a = int(skip_s * rate)
     b = len(samples) - a
     chunk = samples[a:b] if b > a else samples

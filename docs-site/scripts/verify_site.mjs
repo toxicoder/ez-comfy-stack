@@ -341,7 +341,7 @@ check(
 /**
  * Find a page whose source actually contains a callout, so the probe is not asserting on a
  * page that never had one.  The codemod rewrote every MkDocs `!!!` admonition into
- * `<Callout type=…>`, so the source is the authority on where they are.
+ * `<Callout type=...>`, so the source is the authority on where they are.
  */
 async function pageWithCallouts() {
   for (const route of routes) {
@@ -795,7 +795,7 @@ const HARNESS_NOISE = /favicon|DevTools|istanbul|Download the React|Launch|Web V
  * Two artefacts are excused, and only these:
  *  - `open()` aborts the router's `_rsc` prefetches on purpose (see the comment there), and
  *    Chromium reports each abort as a failed load plus a follow-up "Failed to fetch RSC
- *    payload" — excused only when the entry names a URL this harness really did abort.
+ *    payload" - excused only when the entry names a URL this harness really did abort.
  *  - prefetches still in flight when a context closes come back `net::ERR_ABORTED`; the
  *    harness closes every context the moment a probe finishes, so those are not page faults.
  *

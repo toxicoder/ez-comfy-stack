@@ -190,7 +190,7 @@ promote_run() {
     return 1
   fi
   if [[ ${from} == *"/_lab/"* || ${from} == *"/workflows/_lab/"* ]]; then
-    err "never copy _lab into the lab tree from _lab (promote is user → lab only)"
+    err "never copy _lab into the lab tree from _lab (promote is user -> lab only)"
     return 1
   fi
   promote_refuse_banned "${from}" || return 1
@@ -205,7 +205,7 @@ promote_run() {
   dest="${dest_dir}/${id}.json"
   mkdir -p "$(dirname "${dest}")"
   cp -a "${from}" "${dest}"
-  log "copied ${from} → ${dest}"
+  log "copied ${from} -> ${dest}"
   log "next: stamp App Mode, add/adjust tests/python/_build_*.py, run make test"
   log "do not copy _lab graphs into _user"
 }

@@ -1,6 +1,6 @@
 ---
 title: "Feet Insert"
-description: "Cinema Rack illustration — Feet Insert."
+description: "Cinema Rack illustration - Feet Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

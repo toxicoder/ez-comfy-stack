@@ -764,15 +764,15 @@ def _clip_clause(text: str, limit: int = 18) -> str:
     words = cleaned.split()
     if len(words) <= limit:
         return cleaned
-    return " ".join(words[:limit]).rstrip(".,;:") + "…"
+    return " ".join(words[:limit]).rstrip(".,;:") + "..."
 
 
 def addendum_kind(system_name: str = "", mode: str = "") -> str:
     """Classify a Prompt Enhance stem/mode for the audio addendum.
 
     Args:
-        system_name: Prompt file stem (``ace_tags``, ``klein_t2i``, …).
-        mode: Optional node mode (``vocal``, ``instrumental``, …).
+        system_name: Prompt file stem (``ace_tags``, ``klein_t2i``, ...).
+        mode: Optional node mode (``vocal``, ``instrumental``, ...).
 
     Returns:
         One of ``skip``, ``vocal``, ``instrumental``, or ``lyrics``.
@@ -855,7 +855,7 @@ def audio_language_addendum(system_name: str = "", mode: str = "") -> str:
     elif kind == "lyrics":
         lines.append(
             "Lyrics: keep section tags the operator used. Short percussive "
-            "lines, about 6–10 syllables. Original bars only."
+            "lines, about 6-10 syllables. Original bars only."
         )
     else:
         lines.append(

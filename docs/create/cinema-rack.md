@@ -27,10 +27,10 @@ Load **inspire/cinema-rack**. Type a **Subject**, pick techniques, Queue, then r
 ```mermaid
 flowchart LR
   S["Subject"] --> R["Cinema Rack"]
-  A["13 axes · one pick each"] --> R
+  A["13 axes - one pick each"] --> R
   Rec["Recipe fills empty axes"] --> R
   R --> K["Klein still sentences"]
-  R --> W["Wan · one camera verb"]
+  R --> W["Wan - one camera verb"]
   R --> L["LTX present tense + foley"]
 ```
 
@@ -56,7 +56,7 @@ Pick **none** or one id per axis. Splicing is across axes, not two dollies on on
 
 Catalog encyclopedia (generated, do not hand-edit): [Cinema technique catalogs](../generated/cinema/index.md). When a 5s muted illustration is shipped, the axis table links a poster to a technique page. Clips live under `docs/assets/cinema/<axis_id>/<technique_id>.mp4` (Git LFS) with a JPEG poster; compress with `./scripts/utilities/compress-cinema-clip.sh`.
 
-Klein sentence order is cinematic grammar, not widget order: shot size → angle → lens → composition → lighting → color → weather → genre → viral → time → move → optical → edit.
+Klein sentence order is cinematic grammar, not widget order: shot size -> angle -> lens -> composition -> lighting -> color -> weather -> genre -> viral -> time -> move -> optical -> edit.
 
 ## Flavors
 

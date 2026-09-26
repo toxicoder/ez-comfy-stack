@@ -1,6 +1,6 @@
 ---
 title: "Interface Insert"
-description: "Cinema Rack illustration — Interface Insert."
+description: "Cinema Rack illustration - Interface Insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -17,7 +17,7 @@ tags: [workflows, generated, comfyui, audio, album]
 - **Queuing one numbered take** or `album-render`
 - **Reading tags, lyrics, seed, BPM** without opening raw JSON
 
-**Who this is for:** studio users after `download-music`. Occupancy **audio** (cover stills are **klein** — separate session).
+**Who this is for:** studio users after `download-music`. Occupancy **audio** (cover stills are **klein** - separate session).
 
 > Generated from `workflows/_lab/audio/albums/drive-through/hour-2/`. Do not hand-edit this file.
 
@@ -28,12 +28,12 @@ Numbered takes under `audio/albums/drive-through/hour-2/`. Queue one track, or `
 ```text
 ## 01-rumble-strip
 
-US-safe EDM **108 s** take: **rumble strip**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[build-up]`, `[breakdown]`, `[outro]`) so ACE does not sing production notes. Form **drv-68d726049a**. Short build, then the drop. Later stanzas switch layers. No section is a long loop. No brass and no high leads. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** — draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
+US-safe EDM **108 s** take: **rumble strip**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[build-up]`, `[breakdown]`, `[outro]`) so ACE does not sing production notes. Form **drv-68d726049a**. Short build, then the drop. Later stanzas switch layers. No section is a long loop. No brass and no high leads. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** - draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and `[drop]` / `[inst]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.
-3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing. Encoder language is `unknown`. Free-text lines under a marker are lyrics — keep cues inside the brackets.
-4. Original arrangements only. No “in the style of <living artist>”. No living-DJ names. No famous-hook paraphrases.
+3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing. Encoder language is `unknown`. Free-text lines under a marker are lyrics - keep cues inside the brackets.
+4. Original arrangements only. No 'in the style of <living artist>'. No living-DJ names. No famous-hook paraphrases.
 5. ACE-Step timbre is **invented**, not a cloned act.
 6. Sampler: 8 steps, cfg 1, euler, simple. Duration 108 s, bpm 165, language unknown, timesignature 4, key D major, form drv-68d726049a, generate_audio_codes true. Seed 271.
 7. Saves: `01 - Rumble Strip` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.
@@ -41,7 +41,7 @@ US-safe EDM **108 s** take: **rumble strip**. Fictional act **Drive-through** (h
 9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).
 10. Do not co-resident with LTX / Wan / Klein on this Spark.
 
-Occupancy: audio — stop Klein / Wan / LTX session. One GB10 job.
+Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
 ```
 
 ## Shared graph
@@ -141,8 +141,8 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-su…` |
-| 2 | `[build-up - bitcrushed 808, wide 3D bass field, kick tightens, tempo push, dry …` |
+| 1 | `warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-su...` |
+| 2 | `[build-up - bitcrushed 808, wide 3D bass field, kick tightens, tempo push, dry ...` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/01-rumble-strip` |
@@ -231,8 +231,8 @@ warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub
 
 | Slot | Value |
 | --- | --- |
-| 0 | `warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-su…` |
-| 1 | `[build-up - bitcrushed 808, wide 3D bass field, kick tightens, tempo push, dry …` |
+| 0 | `warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-su...` |
+| 1 | `[build-up - bitcrushed 808, wide 3D bass field, kick tightens, tempo push, dry ...` |
 | 2 | `271` |
 | 3 | `fixed` |
 | 4 | `165` |
@@ -422,8 +422,8 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808, or…` |
-| 2 | `[build-up - wavy phase sub, bass circles the low-mid, kick tightens, tempo push…` |
+| 1 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808, or...` |
+| 2 | `[build-up - wavy phase sub, bass circles the low-mid, kick tightens, tempo push...` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/02-low-lane` |
@@ -518,8 +518,8 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808, ori
 
 | Slot | Value |
 | --- | --- |
-| 0 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808, or…` |
-| 1 | `[build-up - wavy phase sub, bass circles the low-mid, kick tightens, tempo push…` |
+| 0 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808, or...` |
+| 1 | `[build-up - wavy phase sub, bass circles the low-mid, kick tightens, tempo push...` |
 | 2 | `277` |
 | 3 | `fixed` |
 | 4 | `168` |
@@ -715,8 +715,8 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, origina…` |
-| 2 | `[build-up - neuro wobble sub, sub center, low-mid moves wide, kick tightens, ri…` |
+| 1 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, origina...` |
+| 2 | `[build-up - neuro wobble sub, sub center, low-mid moves wide, kick tightens, ri...` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/03-warm-merge` |
@@ -813,8 +813,8 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, original
 
 | Slot | Value |
 | --- | --- |
-| 0 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, origina…` |
-| 1 | `[build-up - neuro wobble sub, sub center, low-mid moves wide, kick tightens, ri…` |
+| 0 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, origina...` |
+| 1 | `[build-up - neuro wobble sub, sub center, low-mid moves wide, kick tightens, ri...` |
 | 2 | `281` |
 | 3 | `fixed` |
 | 4 | `168` |
@@ -1012,8 +1012,8 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, warped bass, 80…` |
-| 2 | `[build-up - octave sub pulse, wide 3D bass field, kick tightens, accelerating h…` |
+| 1 | `color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, warped bass, 80...` |
+| 2 | `[build-up - octave sub pulse, wide 3D bass field, kick tightens, accelerating h...` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/04-colour-span` |
@@ -1112,8 +1112,8 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808
 
 | Slot | Value |
 | --- | --- |
-| 0 | `color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, warped bass, 80…` |
-| 1 | `[build-up - octave sub pulse, wide 3D bass field, kick tightens, accelerating h…` |
+| 0 | `color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, warped bass, 80...` |
+| 1 | `[build-up - octave sub pulse, wide 3D bass field, kick tightens, accelerating h...` |
 | 2 | `283` |
 | 3 | `fixed` |
 | 4 | `168` |
@@ -1313,8 +1313,8 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, original…` |
-| 2 | `[build-up - chest-sub, layers surround the ear, kick tightens, tempo push, loos…` |
+| 1 | `festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, original...` |
+| 2 | `[build-up - chest-sub, layers surround the ear, kick tightens, tempo push, loos...` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/05-garage-ticket` |
@@ -1397,8 +1397,8 @@ festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, original 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, original…` |
-| 1 | `[build-up - chest-sub, layers surround the ear, kick tightens, tempo push, loos…` |
+| 0 | `festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, original...` |
+| 1 | `[build-up - chest-sub, layers surround the ear, kick tightens, tempo push, loos...` |
 | 2 | `293` |
 | 3 | `fixed` |
 | 4 | `165` |
@@ -1582,8 +1582,8 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig…` |
-| 2 | `[build-up - chest-sub, low-mid from every angle, kick tightens, rising energy, …` |
+| 1 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig...` |
+| 2 | `[build-up - chest-sub, low-mid from every angle, kick tightens, rising energy, ...` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/06-liquid-grade` |
@@ -1672,8 +1672,8 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 
 | Slot | Value |
 | --- | --- |
-| 0 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig…` |
-| 1 | `[build-up - chest-sub, low-mid from every angle, kick tightens, rising energy, …` |
+| 0 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig...` |
+| 1 | `[build-up - chest-sub, low-mid from every angle, kick tightens, rising energy, ...` |
 | 2 | `307` |
 | 3 | `fixed` |
 | 4 | `176` |
@@ -1863,8 +1863,8 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8…` |
-| 2 | `[build-up - neuro wobble sub, bass circles the low-mid, kick tightens, tempo pu…` |
+| 1 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8...` |
+| 2 | `[build-up - neuro wobble sub, bass circles the low-mid, kick tightens, tempo pu...` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/07-jump-bay` |
@@ -1955,8 +1955,8 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 
 | Slot | Value |
 | --- | --- |
-| 0 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8…` |
-| 1 | `[build-up - neuro wobble sub, bass circles the low-mid, kick tightens, tempo pu…` |
+| 0 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8...` |
+| 1 | `[build-up - neuro wobble sub, bass circles the low-mid, kick tightens, tempo pu...` |
 | 2 | `311` |
 | 3 | `fixed` |
 | 4 | `168` |
@@ -2148,8 +2148,8 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warp…` |
-| 2 | `[build-up - FM warp sub, low-mid orbits the sub, kick tightens, tempo push, rol…` |
+| 1 | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warp...` |
+| 2 | `[build-up - FM warp sub, low-mid orbits the sub, kick tightens, tempo push, rol...` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/08-psy-median` |
@@ -2246,8 +2246,8 @@ neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warpe
 
 | Slot | Value |
 | --- | --- |
-| 0 | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warp…` |
-| 1 | `[build-up - FM warp sub, low-mid orbits the sub, kick tightens, tempo push, rol…` |
+| 0 | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warp...` |
+| 1 | `[build-up - FM warp sub, low-mid orbits the sub, kick tightens, tempo push, rol...` |
 | 2 | `313` |
 | 3 | `fixed` |
 | 4 | `168` |
@@ -2445,8 +2445,8 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, 808, ori…` |
-| 2 | `[build-up - FM warp sub, sub center, low-mid moves wide, kick tightens, rising …` |
+| 1 | `warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, 808, ori...` |
+| 2 | `[build-up - FM warp sub, sub center, low-mid moves wide, kick tightens, rising ...` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/09-groove-mile` |
@@ -2543,8 +2543,8 @@ warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, 808, orig
 
 | Slot | Value |
 | --- | --- |
-| 0 | `warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, 808, ori…` |
-| 1 | `[build-up - FM warp sub, sub center, low-mid moves wide, kick tightens, rising …` |
+| 0 | `warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, 808, ori...` |
+| 1 | `[build-up - FM warp sub, sub center, low-mid moves wide, kick tightens, rising ...` |
 | 2 | `317` |
 | 3 | `fixed` |
 | 4 | `168` |
@@ -2742,8 +2742,8 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, or…` |
-| 2 | `[build-up - phase-distorted sub, panning low-mid sweep, kick tightens, tempo pu…` |
+| 1 | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, or...` |
+| 2 | `[build-up - phase-distorted sub, panning low-mid sweep, kick tightens, tempo pu...` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/10-donk-ramp` |
@@ -2826,8 +2826,8 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ori
 
 | Slot | Value |
 | --- | --- |
-| 0 | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, or…` |
-| 1 | `[build-up - phase-distorted sub, panning low-mid sweep, kick tightens, tempo pu…` |
+| 0 | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, or...` |
+| 1 | `[build-up - phase-distorted sub, panning low-mid sweep, kick tightens, tempo pu...` |
 | 2 | `331` |
 | 3 | `fixed` |
 | 4 | `168` |
@@ -3011,8 +3011,8 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, original co…` |
-| 2 | `[build-up - phase-distorted sub, low-mid from every angle, kick tightens, risin…` |
+| 1 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, original co...` |
+| 2 | `[build-up - phase-distorted sub, low-mid from every angle, kick tightens, risin...` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/11-bounce-booth` |
@@ -3101,8 +3101,8 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, original com
 
 | Slot | Value |
 | --- | --- |
-| 0 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, original co…` |
-| 1 | `[build-up - phase-distorted sub, low-mid from every angle, kick tightens, risin…` |
+| 0 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, original co...` |
+| 1 | `[build-up - phase-distorted sub, low-mid from every angle, kick tightens, risin...` |
 | 2 | `337` |
 | 3 | `fixed` |
 | 4 | `165` |
@@ -3292,8 +3292,8 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or…` |
-| 2 | `[build-up - octave sub pulse, layers surround the ear, kick tightens, tempo pus…` |
+| 1 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or...` |
+| 2 | `[build-up - octave sub pulse, layers surround the ear, kick tightens, tempo pus...` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/12-toll-growl` |
@@ -3386,8 +3386,8 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, ori
 
 | Slot | Value |
 | --- | --- |
-| 0 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or…` |
-| 1 | `[build-up - octave sub pulse, layers surround the ear, kick tightens, tempo pus…` |
+| 0 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or...` |
+| 1 | `[build-up - octave sub pulse, layers surround the ear, kick tightens, tempo pus...` |
 | 2 | `347` |
 | 3 | `fixed` |
 | 4 | `168` |
@@ -3581,8 +3581,8 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808…` |
-| 2 | `[build-up - phase-distorted sub, low-mid from every angle, kick tightens, risin…` |
+| 1 | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808...` |
+| 2 | `[build-up - phase-distorted sub, low-mid from every angle, kick tightens, risin...` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/13-night-oil` |
@@ -3679,8 +3679,8 @@ warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808,
 
 | Slot | Value |
 | --- | --- |
-| 0 | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808…` |
-| 1 | `[build-up - phase-distorted sub, low-mid from every angle, kick tightens, risin…` |
+| 0 | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808...` |
+| 1 | `[build-up - phase-distorted sub, low-mid from every angle, kick tightens, risin...` |
 | 2 | `349` |
 | 3 | `fixed` |
 | 4 | `165` |
@@ -3878,8 +3878,8 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action peda…` |
-| 2 | `[build-up - neuro wobble sub, low-mid from every angle, kick tightens, accelera…` |
+| 1 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action peda...` |
+| 2 | `[build-up - neuro wobble sub, low-mid from every angle, kick tightens, accelera...` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/14-chest-pass` |
@@ -3978,8 +3978,8 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal
 
 | Slot | Value |
 | --- | --- |
-| 0 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action peda…` |
-| 1 | `[build-up - neuro wobble sub, low-mid from every angle, kick tightens, accelera…` |
+| 0 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action peda...` |
+| 1 | `[build-up - neuro wobble sub, low-mid from every angle, kick tightens, accelera...` |
 | 2 | `353` |
 | 3 | `fixed` |
 | 4 | `168` |
@@ -4179,8 +4179,8 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, o…` |
-| 2 | `[build-up - wavy phase sub, sub anchored, mids orbit, kick tightens, tempo push…` |
+| 1 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, o...` |
+| 2 | `[build-up - wavy phase sub, sub anchored, mids orbit, kick tightens, tempo push...` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/15-sunrise-sub` |
@@ -4263,8 +4263,8 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 
 | Slot | Value |
 | --- | --- |
-| 0 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, o…` |
-| 1 | `[build-up - wavy phase sub, sub anchored, mids orbit, kick tightens, tempo push…` |
+| 0 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, o...` |
+| 1 | `[build-up - wavy phase sub, sub anchored, mids orbit, kick tightens, tempo push...` |
 | 2 | `359` |
 | 3 | `fixed` |
 | 4 | `165` |
@@ -4467,7 +4467,7 @@ Album cover still for Drive-through / Hour 2
 
 | Slot | Value |
 | --- | --- |
-| 0 | `square album cover, graphic print, toll booth glow, chest-sub night, long expos…` |
+| 0 | `square album cover, graphic print, toll booth glow, chest-sub night, long expos...` |
 
 ```text
 square album cover, graphic print, toll booth glow, chest-sub night, long exposure headlights, fictional act Drive-through, album Hour 2, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
@@ -4477,7 +4477,7 @@ square album cover, graphic print, toll booth glow, chest-sub night, long exposu
 
 | Slot | Value |
 | --- | --- |
-| 0 | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| 0 | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
 ```text
 game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
@@ -4520,8 +4520,8 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 
 | Slot | Value |
 | --- | --- |
-| 0 | `square album cover, graphic print, toll booth glow, chest-sub night, long expos…` |
-| 1 | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An…` |
+| 0 | `square album cover, graphic print, toll booth glow, chest-sub night, long expos...` |
+| 1 | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An...` |
 | 2 | `true` |
 | 3 | `t2i` |
 | 4 | `YouTube 16:9 still` |
@@ -4540,7 +4540,7 @@ A photoreal still of a tropical coastal city rooftop terrace at golden hour. An 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| 0 | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 | 1 | `true` |
 | 2 | `klein` |
 
@@ -4558,7 +4558,7 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 
 | Slot | Value |
 | --- | --- |
-| 0 | `Instagram · square (1024×1024)` |
+| 0 | `Instagram - square (1024x1024)` |
 | 1 | `none` |
 | 2 | `1024` |
 | 3 | `1024` |
@@ -4585,9 +4585,9 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
 
-### `CheckpointLoaderSimple` — Load Checkpoint
+### `CheckpointLoaderSimple` - Load Checkpoint
 
 Load a single-file checkpoint that bundles MODEL + CLIP + VAE.
 
@@ -4607,11 +4607,11 @@ Type `STRING`.
 
 Filename under checkpoints/.
 
-**How it affects generation:** Lab music is the turbo AIO. XL is opt-in via download-music --tier xl — swap only if you meant to.
+**How it affects generation:** Lab music is the turbo AIO. XL is opt-in via download-music --tier xl - swap only if you meant to.
 
 **This graph (all 15 instances):** `ace_step_1.5_turbo_aio.safetensors`
 
-### `ModelSamplingAuraFlow` — ModelSamplingAuraFlow
+### `ModelSamplingAuraFlow` - ModelSamplingAuraFlow
 
 Patch ACE-Step with AuraFlow sampling shift.
 
@@ -4634,7 +4634,7 @@ AuraFlow shift.
 
 **This graph (all 15 instances):** `3`
 
-### `PrimitiveNode` — Primitive
+### `PrimitiveNode` - Primitive
 
 A typed constant (string or float) with seed-style control.
 
@@ -4691,13 +4691,13 @@ Whether the primitive mutates after Queue.
 | `decrement` | Subtract 1 after Queue. |
 | `randomize` | Draw a new seed after Queue. Exploration only. |
 
-### `EmptyAceStep1.5LatentAudio` — Empty ACE-Step 1.5 Latent Audio
+### `EmptyAceStep1.5LatentAudio` - Empty ACE-Step 1.5 Latent Audio
 
 Allocate an ACE-Step audio latent for N seconds.
 
 !!! warning "Lab notes"
 
-    Draft is the cold-open bar length. Full is the pre-chorus bar length. Nill Bye albums are 64–210 s. Drive-through is ~90–120 s from per-take bar math, not a shared clock target. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
+    Draft is the cold-open bar length. Full is the pre-chorus bar length. Nill Bye albums are 64-210 s. Drive-through is ~90-120 s from per-take bar math, not a shared clock target. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -4710,7 +4710,7 @@ Type `FLOAT`. Range / default: draft / full / album plan.
 
 Duration in seconds.
 
-**How it affects generation:** Longer latents cost RAM/time linearly. Nill Bye stays 64–210 s. Drive-through is ~90–120 s. Stay at the seeded length unless you have headroom.
+**How it affects generation:** Longer latents cost RAM/time linearly. Nill Bye stays 64-210 s. Drive-through is ~90-120 s. Stay at the seeded length unless you have headroom.
 
 | Instance | Value |
 | --- | --- |
@@ -4740,7 +4740,7 @@ Takes per Queue.
 
 **This graph (all 15 instances):** `1`
 
-### `EZAceStepPromptEnhance` — ACE-Step Prompt Enhance
+### `EZAceStepPromptEnhance` - ACE-Step Prompt Enhance
 
 Rewrite ACE tags (genre first) and lyrics. Instrumental mode forces [inst].
 
@@ -4774,21 +4774,21 @@ Genre-first tags.
 
 | Instance | Value |
 | --- | --- |
-| ez_edm_prompt | `warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-su…` |
-| ez_edm_prompt | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808, or…` |
-| ez_edm_prompt | `wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, origina…` |
-| ez_edm_prompt | `color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, warped bass, 80…` |
-| ez_edm_prompt | `festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, original…` |
-| ez_edm_prompt | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig…` |
-| ez_edm_prompt | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8…` |
-| ez_edm_prompt | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warp…` |
-| ez_edm_prompt | `warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, 808, ori…` |
-| ez_edm_prompt | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, or…` |
-| ez_edm_prompt | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, original co…` |
-| ez_edm_prompt | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or…` |
-| ez_edm_prompt | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808…` |
-| ez_edm_prompt | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action peda…` |
-| ez_edm_prompt | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, o…` |
+| ez_edm_prompt | `warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-su...` |
+| ez_edm_prompt | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808, or...` |
+| ez_edm_prompt | `wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, origina...` |
+| ez_edm_prompt | `color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, warped bass, 80...` |
+| ez_edm_prompt | `festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, original...` |
+| ez_edm_prompt | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig...` |
+| ez_edm_prompt | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8...` |
+| ez_edm_prompt | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warp...` |
+| ez_edm_prompt | `warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, 808, ori...` |
+| ez_edm_prompt | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, or...` |
+| ez_edm_prompt | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, original co...` |
+| ez_edm_prompt | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or...` |
+| ez_edm_prompt | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808...` |
+| ez_edm_prompt | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action peda...` |
+| ez_edm_prompt | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, o...` |
 
 #### `lyrics`
 
@@ -4800,21 +4800,21 @@ Sectioned lyrics.
 
 | Instance | Value |
 | --- | --- |
-| ez_edm_prompt | `[build-up - bitcrushed 808, wide 3D bass field, kick tightens, tempo push, dry …` |
-| ez_edm_prompt | `[build-up - wavy phase sub, bass circles the low-mid, kick tightens, tempo push…` |
-| ez_edm_prompt | `[build-up - neuro wobble sub, sub center, low-mid moves wide, kick tightens, ri…` |
-| ez_edm_prompt | `[build-up - octave sub pulse, wide 3D bass field, kick tightens, accelerating h…` |
-| ez_edm_prompt | `[build-up - chest-sub, layers surround the ear, kick tightens, tempo push, loos…` |
-| ez_edm_prompt | `[build-up - chest-sub, low-mid from every angle, kick tightens, rising energy, …` |
-| ez_edm_prompt | `[build-up - neuro wobble sub, bass circles the low-mid, kick tightens, tempo pu…` |
-| ez_edm_prompt | `[build-up - FM warp sub, low-mid orbits the sub, kick tightens, tempo push, rol…` |
-| ez_edm_prompt | `[build-up - FM warp sub, sub center, low-mid moves wide, kick tightens, rising …` |
-| ez_edm_prompt | `[build-up - phase-distorted sub, panning low-mid sweep, kick tightens, tempo pu…` |
-| ez_edm_prompt | `[build-up - phase-distorted sub, low-mid from every angle, kick tightens, risin…` |
-| ez_edm_prompt | `[build-up - octave sub pulse, layers surround the ear, kick tightens, tempo pus…` |
-| ez_edm_prompt | `[build-up - phase-distorted sub, low-mid from every angle, kick tightens, risin…` |
-| ez_edm_prompt | `[build-up - neuro wobble sub, low-mid from every angle, kick tightens, accelera…` |
-| ez_edm_prompt | `[build-up - wavy phase sub, sub anchored, mids orbit, kick tightens, tempo push…` |
+| ez_edm_prompt | `[build-up - bitcrushed 808, wide 3D bass field, kick tightens, tempo push, dry ...` |
+| ez_edm_prompt | `[build-up - wavy phase sub, bass circles the low-mid, kick tightens, tempo push...` |
+| ez_edm_prompt | `[build-up - neuro wobble sub, sub center, low-mid moves wide, kick tightens, ri...` |
+| ez_edm_prompt | `[build-up - octave sub pulse, wide 3D bass field, kick tightens, accelerating h...` |
+| ez_edm_prompt | `[build-up - chest-sub, layers surround the ear, kick tightens, tempo push, loos...` |
+| ez_edm_prompt | `[build-up - chest-sub, low-mid from every angle, kick tightens, rising energy, ...` |
+| ez_edm_prompt | `[build-up - neuro wobble sub, bass circles the low-mid, kick tightens, tempo pu...` |
+| ez_edm_prompt | `[build-up - FM warp sub, low-mid orbits the sub, kick tightens, tempo push, rol...` |
+| ez_edm_prompt | `[build-up - FM warp sub, sub center, low-mid moves wide, kick tightens, rising ...` |
+| ez_edm_prompt | `[build-up - phase-distorted sub, panning low-mid sweep, kick tightens, tempo pu...` |
+| ez_edm_prompt | `[build-up - phase-distorted sub, low-mid from every angle, kick tightens, risin...` |
+| ez_edm_prompt | `[build-up - octave sub pulse, layers surround the ear, kick tightens, tempo pus...` |
+| ez_edm_prompt | `[build-up - phase-distorted sub, low-mid from every angle, kick tightens, risin...` |
+| ez_edm_prompt | `[build-up - neuro wobble sub, low-mid from every angle, kick tightens, accelera...` |
+| ez_edm_prompt | `[build-up - wavy phase sub, sub anchored, mids orbit, kick tightens, tempo push...` |
 
 #### `enhance`
 
@@ -4869,7 +4869,7 @@ Sample-catalog id.
 | ez_edm_prompt | `audio/albums/drive-through/hour-2/14-chest-pass` |
 | ez_edm_prompt | `audio/albums/drive-through/hour-2/15-sunrise-sub` |
 
-### `TextEncodeAceStepAudio1.5` — ACE-Step 1.5 Text Encode
+### `TextEncodeAceStepAudio1.5` - ACE-Step 1.5 Text Encode
 
 Pack tags, lyrics, BPM, key, and duration into ACE conditioning.
 
@@ -4895,21 +4895,21 @@ Genre-first tags, BPM last.
 
 | Instance | Value |
 | --- | --- |
-| ACE tags + lyrics | `warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-su…` |
-| ACE tags + lyrics | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808, or…` |
-| ACE tags + lyrics | `wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, origina…` |
-| ACE tags + lyrics | `color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, warped bass, 80…` |
-| ACE tags + lyrics | `festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, original…` |
-| ACE tags + lyrics | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig…` |
-| ACE tags + lyrics | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8…` |
-| ACE tags + lyrics | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warp…` |
-| ACE tags + lyrics | `warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, 808, ori…` |
-| ACE tags + lyrics | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, or…` |
-| ACE tags + lyrics | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, original co…` |
-| ACE tags + lyrics | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or…` |
-| ACE tags + lyrics | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808…` |
-| ACE tags + lyrics | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action peda…` |
-| ACE tags + lyrics | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, o…` |
+| ACE tags + lyrics | `warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-su...` |
+| ACE tags + lyrics | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808, or...` |
+| ACE tags + lyrics | `wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, origina...` |
+| ACE tags + lyrics | `color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, warped bass, 80...` |
+| ACE tags + lyrics | `festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, original...` |
+| ACE tags + lyrics | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig...` |
+| ACE tags + lyrics | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8...` |
+| ACE tags + lyrics | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warp...` |
+| ACE tags + lyrics | `warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, 808, ori...` |
+| ACE tags + lyrics | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, or...` |
+| ACE tags + lyrics | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, original co...` |
+| ACE tags + lyrics | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or...` |
+| ACE tags + lyrics | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808...` |
+| ACE tags + lyrics | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action peda...` |
+| ACE tags + lyrics | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, o...` |
 
 #### `lyrics`
 
@@ -4921,21 +4921,21 @@ Sectioned lyrics or [inst] cues.
 
 | Instance | Value |
 | --- | --- |
-| ACE tags + lyrics | `[build-up - bitcrushed 808, wide 3D bass field, kick tightens, tempo push, dry …` |
-| ACE tags + lyrics | `[build-up - wavy phase sub, bass circles the low-mid, kick tightens, tempo push…` |
-| ACE tags + lyrics | `[build-up - neuro wobble sub, sub center, low-mid moves wide, kick tightens, ri…` |
-| ACE tags + lyrics | `[build-up - octave sub pulse, wide 3D bass field, kick tightens, accelerating h…` |
-| ACE tags + lyrics | `[build-up - chest-sub, layers surround the ear, kick tightens, tempo push, loos…` |
-| ACE tags + lyrics | `[build-up - chest-sub, low-mid from every angle, kick tightens, rising energy, …` |
-| ACE tags + lyrics | `[build-up - neuro wobble sub, bass circles the low-mid, kick tightens, tempo pu…` |
-| ACE tags + lyrics | `[build-up - FM warp sub, low-mid orbits the sub, kick tightens, tempo push, rol…` |
-| ACE tags + lyrics | `[build-up - FM warp sub, sub center, low-mid moves wide, kick tightens, rising …` |
-| ACE tags + lyrics | `[build-up - phase-distorted sub, panning low-mid sweep, kick tightens, tempo pu…` |
-| ACE tags + lyrics | `[build-up - phase-distorted sub, low-mid from every angle, kick tightens, risin…` |
-| ACE tags + lyrics | `[build-up - octave sub pulse, layers surround the ear, kick tightens, tempo pus…` |
-| ACE tags + lyrics | `[build-up - phase-distorted sub, low-mid from every angle, kick tightens, risin…` |
-| ACE tags + lyrics | `[build-up - neuro wobble sub, low-mid from every angle, kick tightens, accelera…` |
-| ACE tags + lyrics | `[build-up - wavy phase sub, sub anchored, mids orbit, kick tightens, tempo push…` |
+| ACE tags + lyrics | `[build-up - bitcrushed 808, wide 3D bass field, kick tightens, tempo push, dry ...` |
+| ACE tags + lyrics | `[build-up - wavy phase sub, bass circles the low-mid, kick tightens, tempo push...` |
+| ACE tags + lyrics | `[build-up - neuro wobble sub, sub center, low-mid moves wide, kick tightens, ri...` |
+| ACE tags + lyrics | `[build-up - octave sub pulse, wide 3D bass field, kick tightens, accelerating h...` |
+| ACE tags + lyrics | `[build-up - chest-sub, layers surround the ear, kick tightens, tempo push, loos...` |
+| ACE tags + lyrics | `[build-up - chest-sub, low-mid from every angle, kick tightens, rising energy, ...` |
+| ACE tags + lyrics | `[build-up - neuro wobble sub, bass circles the low-mid, kick tightens, tempo pu...` |
+| ACE tags + lyrics | `[build-up - FM warp sub, low-mid orbits the sub, kick tightens, tempo push, rol...` |
+| ACE tags + lyrics | `[build-up - FM warp sub, sub center, low-mid moves wide, kick tightens, rising ...` |
+| ACE tags + lyrics | `[build-up - phase-distorted sub, panning low-mid sweep, kick tightens, tempo pu...` |
+| ACE tags + lyrics | `[build-up - phase-distorted sub, low-mid from every angle, kick tightens, risin...` |
+| ACE tags + lyrics | `[build-up - octave sub pulse, layers surround the ear, kick tightens, tempo pus...` |
+| ACE tags + lyrics | `[build-up - phase-distorted sub, low-mid from every angle, kick tightens, risin...` |
+| ACE tags + lyrics | `[build-up - neuro wobble sub, low-mid from every angle, kick tightens, accelera...` |
+| ACE tags + lyrics | `[build-up - wavy phase sub, sub anchored, mids orbit, kick tightens, tempo push...` |
 
 #### `seed`
 
@@ -4984,7 +4984,7 @@ Seed control.
 
 #### `bpm`
 
-Type `INT`. Range / default: 10–300.
+Type `INT`. Range / default: 10-300.
 
 Tempo written into the codes.
 
@@ -5244,7 +5244,7 @@ Minimum probability floor.
 
 **This graph (all 15 instances):** `0.0`
 
-### `ConditioningZeroOut` — Conditioning Zero Out
+### `ConditioningZeroOut` - Conditioning Zero Out
 
 Replace a conditioning with zeros (unconditional / empty negative).
 
@@ -5259,7 +5259,7 @@ Replace a conditioning with zeros (unconditional / empty negative).
 
 No widgets. Sockets only.
 
-### `KSampler` — KSampler
+### `KSampler` - KSampler
 
 Denoise a latent for N steps at a CFG, sampler, and scheduler.
 
@@ -5271,17 +5271,17 @@ Denoise a latent for N steps at a CFG, sampler, and scheduler.
 | --- | --- | --- | --- |
 | `model` | in | `MODEL` | UNET / transformer after any ModelSampling* patch. |
 | `positive` | in | `CONDITIONING` | What to include (CLIP / ACE / LTX prompt). |
-| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well — put constraints in the positive. |
+| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well - put constraints in the positive. |
 | `latent_image` | in | `LATENT` | Noise canvas or encoded start image / video / audio latent. |
 | `LATENT` | out | `LATENT` | Denoised latent for VAE decode. |
 
 #### `seed`
 
-Type `INT`. Range / default: 0 … 2^64-1; lab 42.
+Type `INT`. Range / default: 0 ... 2^64-1; lab 42.
 
 Random seed for the noise tensor.
 
-**How it affects generation:** Same seed + same graph ≈ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
+**How it affects generation:** Same seed + same graph ~ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
 
 | Instance | Value |
 | --- | --- |
@@ -5323,21 +5323,21 @@ What happens to seed after Queue.
 
 #### `steps`
 
-Type `INT`. Range / default: 1–10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
+Type `INT`. Range / default: 1-10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
 
 Denoising iterations.
 
-**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 — raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
+**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 - raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
 
 **This graph (all 16 instances):** `8`
 
 #### `cfg`
 
-Type `FLOAT`. Range / default: 0–100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
+Type `FLOAT`. Range / default: 0-100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
 
 Classifier-free guidance scale.
 
-**How it affects generation:** Distilled Klein is CFG 1.0 — raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
+**How it affects generation:** Distilled Klein is CFG 1.0 - raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
 
 **This graph (all 16 instances):** `1.0`
 
@@ -5427,7 +5427,7 @@ How sigmas are spaced across steps.
 
 #### `denoise`
 
-Type `FLOAT`. Range / default: 0–1; lab 1.0.
+Type `FLOAT`. Range / default: 0-1; lab 1.0.
 
 Fraction of the latent to replace with denoised signal.
 
@@ -5435,7 +5435,7 @@ Fraction of the latent to replace with denoised signal.
 
 **This graph (all 16 instances):** `1.0`
 
-### `VAEDecodeAudio` — VAE Decode Audio
+### `VAEDecodeAudio` - VAE Decode Audio
 
 Decode an ACE audio latent to AUDIO.
 
@@ -5447,7 +5447,7 @@ Decode an ACE audio latent to AUDIO.
 
 No widgets. Sockets only.
 
-### `SaveAudio` — Save Audio
+### `SaveAudio` - Save Audio
 
 Write a FLAC/wav master.
 
@@ -5485,7 +5485,7 @@ Save stem.
 | FLAC master | `14 - Chest Pass` |
 | FLAC master | `15 - Sunrise Sub` |
 
-### `SaveAudioMP3` — Save Audio (MP3)
+### `SaveAudioMP3` - Save Audio (MP3)
 
 Write an MP3 copy of the same take.
 
@@ -5537,7 +5537,7 @@ Bitrate preset.
 | `192k` | Smaller, more artifacts. |
 | `128k` | Preview only. |
 
-### `Note` — Note
+### `Note` - Note
 
 On-canvas operator note (not executed).
 
@@ -5555,25 +5555,25 @@ Markdown-ish operator note.
 
 | Instance | Value |
 | --- | --- |
-| Operator note | `## 01-rumble-strip US-safe EDM **108 s** take: **rumble strip**. Fictional act …` |
-| Operator note | `## 02-low-lane US-safe EDM **114 s** take: **low lane**. Fictional act **Drive-…` |
-| Operator note | `## 03-warm-merge US-safe EDM **117 s** take: **warm merge**. Fictional act **Dr…` |
-| Operator note | `## 04-colour-span US-safe EDM **120 s** take: **colour span**. Fictional act **…` |
-| Operator note | `## 05-garage-ticket US-safe EDM **99 s** take: **garage ticket**. Fictional act…` |
-| Operator note | `## 06-liquid-grade US-safe EDM **101 s** take: **liquid grade**. Fictional act …` |
-| Operator note | `## 07-jump-bay US-safe EDM **109 s** take: **jump bay**. Fictional act **Drive-…` |
-| Operator note | `## 08-psy-median US-safe EDM **117 s** take: **psy median**. Fictional act **Dr…` |
-| Operator note | `## 09-groove-mile US-safe EDM **117 s** take: **groove mile**. Fictional act **…` |
-| Operator note | `## 10-donk-ramp US-safe EDM **97 s** take: **donk ramp**. Fictional act **Drive…` |
-| Operator note | `## 11-bounce-booth US-safe EDM **108 s** take: **bounce booth**. Fictional act …` |
-| Operator note | `## 12-toll-growl US-safe EDM **111 s** take: **toll growl**. Fictional act **Dr…` |
-| Operator note | `## 13-night-oil US-safe EDM **119 s** take: **night oil**. Fictional act **Driv…` |
-| Operator note | `## 14-chest-pass US-safe EDM **120 s** take: **chest pass**. Fictional act **Dr…` |
-| Operator note | `## 15-sunrise-sub US-safe EDM **99 s** take: **sunrise sub**. Fictional act **D…` |
-| Operator note | `## audio/albums/drive-through/hour-2/album Album **Hour 2** by **Drive-through*…` |
-| Operator note | `## audio/albums/drive-through/hour-2/cover Format / platform sets pixels (Custo…` |
+| Operator note | `## 01-rumble-strip US-safe EDM **108 s** take: **rumble strip**. Fictional act ...` |
+| Operator note | `## 02-low-lane US-safe EDM **114 s** take: **low lane**. Fictional act **Drive-...` |
+| Operator note | `## 03-warm-merge US-safe EDM **117 s** take: **warm merge**. Fictional act **Dr...` |
+| Operator note | `## 04-colour-span US-safe EDM **120 s** take: **colour span**. Fictional act **...` |
+| Operator note | `## 05-garage-ticket US-safe EDM **99 s** take: **garage ticket**. Fictional act...` |
+| Operator note | `## 06-liquid-grade US-safe EDM **101 s** take: **liquid grade**. Fictional act ...` |
+| Operator note | `## 07-jump-bay US-safe EDM **109 s** take: **jump bay**. Fictional act **Drive-...` |
+| Operator note | `## 08-psy-median US-safe EDM **117 s** take: **psy median**. Fictional act **Dr...` |
+| Operator note | `## 09-groove-mile US-safe EDM **117 s** take: **groove mile**. Fictional act **...` |
+| Operator note | `## 10-donk-ramp US-safe EDM **97 s** take: **donk ramp**. Fictional act **Drive...` |
+| Operator note | `## 11-bounce-booth US-safe EDM **108 s** take: **bounce booth**. Fictional act ...` |
+| Operator note | `## 12-toll-growl US-safe EDM **111 s** take: **toll growl**. Fictional act **Dr...` |
+| Operator note | `## 13-night-oil US-safe EDM **119 s** take: **night oil**. Fictional act **Driv...` |
+| Operator note | `## 14-chest-pass US-safe EDM **120 s** take: **chest pass**. Fictional act **Dr...` |
+| Operator note | `## 15-sunrise-sub US-safe EDM **99 s** take: **sunrise sub**. Fictional act **D...` |
+| Operator note | `## audio/albums/drive-through/hour-2/album Album **Hour 2** by **Drive-through*...` |
+| Operator note | `## audio/albums/drive-through/hour-2/cover Format / platform sets pixels (Custo...` |
 
-### `LoadImage` — Load Image
+### `LoadImage` - Load Image
 
 Load a still from Comfy input/ (or upload).
 
@@ -5611,7 +5611,7 @@ Filename in input/.
 | Cover image | `cover.png` |
 | Cover image | `cover.png` |
 | Cover image | `cover.png` |
-| Draft still (set to ez_still_draft_0000… | `example.png` |
+| Draft still (set to ez_still_draft_0000... | `example.png` |
 
 #### `upload`
 
@@ -5623,7 +5623,7 @@ Upload widget type.
 
 **This graph (all 16 instances):** `image`
 
-### `EZAudioMetadata` — Audio Metadata
+### `EZAudioMetadata` - Audio Metadata
 
 Stamp artist/album/title tags and optional cover on saved audio.
 
@@ -5681,11 +5681,11 @@ Track title.
 
 #### `track`
 
-Type `INT`. Range / default: 1–99.
+Type `INT`. Range / default: 1-99.
 
 Track number.
 
-**How it affects generation:** Numbered takes 01–20.
+**How it affects generation:** Numbered takes 01-20.
 
 | Instance | Value |
 | --- | --- |
@@ -5731,7 +5731,7 @@ Type `COMBO`. Range / default: skip.
 
 Cover art policy.
 
-**How it affects generation:** skip on every audio Queue (Cover LoadImage is bypassed). generate is klein occupancy — later session. upload: graph view, Ctrl+B Cover image, then wire.
+**How it affects generation:** skip on every audio Queue (Cover LoadImage is bypassed). generate is klein occupancy - later session. upload: graph view, Ctrl+B Cover image, then wire.
 
 **This graph (all 15 instances):** `skip`
 
@@ -5769,7 +5769,7 @@ SaveAudio stem to stamp.
 | Album metadata | `14 - Chest Pass` |
 | Album metadata | `15 - Sunrise Sub` |
 
-### `EZQuality` — Quality
+### `EZQuality` - Quality
 
 Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
@@ -5804,7 +5804,7 @@ custom freezes last overlay; lab restores graph defaults.
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
-### `EZModelCheck` — Check models
+### `EZModelCheck` - Check models
 
 Manual disk check for occupancy + Quality weights. Queue does not run this node.
 
@@ -5822,7 +5822,7 @@ Last check result.
 
 **This graph (all 17 instances):** `Click Check models. Queue does not run this node.`
 
-### `EZAlbumPack` — Album Pack
+### `EZAlbumPack` - Album Pack
 
 Write <Album>.m3u and <Album>.zip under albums/<Artist>/<Album>/.
 
@@ -5850,7 +5850,7 @@ Album folder display name.
 
 **This graph:** `Hour 2`
 
-### `UNETLoader` — Load Diffusion Model
+### `UNETLoader` - Load Diffusion Model
 
 Load a standalone transformer/UNET from diffusion_models/.
 
@@ -5891,7 +5891,7 @@ Cast at load.
 | `fp8_e4m3fn_fast` | FP8 e4m3fn with fast optimizations. |
 | `fp8_e5m2` | Cast to FP8 e5m2. |
 
-### `CLIPLoader` — Load CLIP
+### `CLIPLoader` - Load CLIP
 
 Load a text encoder. The type combo must match the UNET family.
 
@@ -5919,7 +5919,7 @@ Type `COMBO`.
 
 CLIPType enum. Picks tokenizer + template.
 
-**How it affects generation:** flux2 wraps Klein strings in a Qwen chat template — do not paste <|im_start|>. wan is UMT5. ltxv is Gemma4-with-proj.
+**How it affects generation:** flux2 wraps Klein strings in a Qwen chat template - do not paste <|im_start|>. wan is UMT5. ltxv is Gemma4-with-proj.
 
 **This graph:** `flux2`
 
@@ -5973,9 +5973,9 @@ Where to load the encoder.
 | `default` | Load on the Comfy compute device (GPU). Lab default. |
 | `cpu` | Force CPU. Much slower; only for debugging a CLIP load. |
 
-### `VAELoader` — Load VAE
+### `VAELoader` - Load VAE
 
-Load the autoencoder that maps pixels ↔ latents (and LTX audio).
+Load the autoencoder that maps pixels <-> latents (and LTX audio).
 
 !!! warning "Lab notes"
 
@@ -5995,7 +5995,7 @@ Filename under vae/.
 
 **This graph:** `flux2-vae.safetensors`
 
-### `CLIPTextEncode` — CLIP Text Encode
+### `CLIPTextEncode` - CLIP Text Encode
 
 Turn a prompt string into CONDITIONING for the sampler.
 
@@ -6015,20 +6015,20 @@ Type `STRING`.
 
 Prompt encoded by CLIP.
 
-**How it affects generation:** Klein: sentences, subject → place → light → camera. Wan I2V: motion + one camera only. LTX: present-tense paragraph with audio interleaved. Distilled Klein quality lives here, not in CFG.
+**How it affects generation:** Klein: sentences, subject -> place -> light -> camera. Wan I2V: motion + one camera only. LTX: present-tense paragraph with audio interleaved. Distilled Klein quality lives here, not in CFG.
 
 | Instance | Value |
 | --- | --- |
-| Positive | `square album cover, graphic print, toll booth glow, chest-sub night, long expos…` |
-| Negative | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| Positive | `square album cover, graphic print, toll booth glow, chest-sub night, long expos...` |
+| Negative | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
-### `EmptyFlux2LatentImage` — Empty Flux.2 Latent
+### `EmptyFlux2LatentImage` - Empty Flux.2 Latent
 
-Allocate a Klein / Flux.2 still latent (width × height × batch).
+Allocate a Klein / Flux.2 still latent (width x height x batch).
 
 !!! warning "Lab notes"
 
-    Draft 768×432 batch 2. Hero / LTX feeders 1280×704. Portrait 1024×1280 or 768×1280. 1280×720 is OK for thumbnails, not for LTX feeders.
+    Draft 768x432 batch 2. Hero / LTX feeders 1280x704. Portrait 1024x1280 or 768x1280. 1280x720 is OK for thumbnails, not for LTX feeders.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -6036,7 +6036,7 @@ Allocate a Klein / Flux.2 still latent (width × height × batch).
 
 #### `width`
 
-Type `INT`. Range / default: lab 768 / 1280 / 1024 / 432….
+Type `INT`. Range / default: lab 768 / 1280 / 1024 / 432....
 
 Latent pixel width.
 
@@ -6050,7 +6050,7 @@ Type `INT`.
 
 Latent pixel height.
 
-**How it affects generation:** 1280×704 is the LTX VAE grid (÷32). 1280×720 is not.
+**How it affects generation:** 1280x704 is the LTX VAE grid (div32). 1280x720 is not.
 
 **This graph:** `1024`
 
@@ -6064,7 +6064,7 @@ How many stills in one Queue.
 
 **This graph:** `1`
 
-### `VAEDecode` — VAE Decode
+### `VAEDecode` - VAE Decode
 
 Decode image/video latents to pixels.
 
@@ -6076,7 +6076,7 @@ Decode image/video latents to pixels.
 
 No widgets. Sockets only.
 
-### `SaveImage` — Save Image
+### `SaveImage` - Save Image
 
 Write PNG stills under the output folder.
 
@@ -6094,7 +6094,7 @@ Save prefix.
 
 **This graph:** `albums/Drive-through/Hour 2/cover`
 
-### `EZKleinPromptEnhance` — Klein Prompt Enhance
+### `EZKleinPromptEnhance` - Klein Prompt Enhance
 
 Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
 
@@ -6118,7 +6118,7 @@ Lab sample prompt or Custom.
 
 **How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 30 recipes plus Custom (place recipes such as Cliff villa on stills/dream-house).
 
-**This graph:** `square album cover, graphic print, toll booth glow, chest-sub night, long exposure headlights, fictional act Drive-through, album Hour 2, no text, no letters, no logos, no living person likeness, no …`
+**This graph:** `square album cover, graphic print, toll booth glow, chest-sub night, long exposure headlights, fictional act Drive-through, album Hour 2, no text, no letters, no logos, no living person likeness, no ...`
 
 ```text
 square album cover, graphic print, toll booth glow, chest-sub night, long exposure headlights, fictional act Drive-through, album Hour 2, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
@@ -6132,7 +6132,7 @@ Lazy sentence or authored still prompt.
 
 **How it affects generation:** When Enhance is on, the GGUF expands this into Klein-native sentences.
 
-**This graph:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread…`
+**This graph:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread...`
 
 ```text
 A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Instagram 1:1 square. Subject centered, warm key, unmarked surfaces.
@@ -6173,9 +6173,9 @@ System prompt flavor.
 
 Type `STRING`.
 
-Framing hint (YouTube 16:9 still, Instagram 4:5, …).
+Framing hint (YouTube 16:9 still, Instagram 4:5, ...).
 
-**How it affects generation:** Steers aspect language in the rewrite. Does not set the latent size — EmptyFlux2LatentImage does.
+**How it affects generation:** Steers aspect language in the rewrite. Does not set the latent size - EmptyFlux2LatentImage does.
 
 **This graph:** `YouTube 16:9 still`
 
@@ -6505,7 +6505,7 @@ Sample-catalog id (graph stem).
 
 **This graph:** `stills/instagram-square`
 
-### `EZNegativePromptEnhance` — Negative Prompt Enhance
+### `EZNegativePromptEnhance` - Negative Prompt Enhance
 
 Rewrite a negative CLIP seed against the final positive. Stays on when Rewrite prompt is off.
 
@@ -6560,7 +6560,7 @@ Which negative family.
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
 
-### `EZImageFormat` — Format / platform
+### `EZImageFormat` - Format / platform
 
 Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack look recipe.
 
@@ -6571,8 +6571,8 @@ Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `image` | in | `IMAGE` | Optional still used when Output size is Match input. |
-| `width` | out | `INT` | Latent width (÷16). |
-| `height` | out | `INT` | Latent height (÷16). |
+| `width` | out | `INT` | Latent width (div16). |
+| `height` | out | `INT` | Latent height (div16). |
 | `batch` | out | `INT` | Batch size. |
 | `hint` | out | `STRING` | Enhance duration / framing line. |
 | `prefix` | out | `STRING` | SaveImage filename prefix. |
@@ -6584,94 +6584,94 @@ Type `COMBO`. Range / default: 16:9 LTX feeder / platform jobs / Custom.
 
 Aspect or named platform job.
 
-**How it affects generation:** Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width × Height (snapped to ÷16, max 2048). Does not change Quality, CLIP, or VAE.
+**How it affects generation:** Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (snapped to div16, max 2048). Does not change Quality, CLIP, or VAE.
 
-**This graph:** `Instagram · square (1024×1024)`
+**This graph:** `Instagram - square (1024x1024)`
 
 **Other choices**
 
 | Choice | What it does |
 | --- | --- |
-| `Custom` | Width × Height widgets, snapped to ÷16. |
-| `16:9 draft (768×432)` | 768×432. aspect_16_9_draft. |
-| `16:9 LTX feeder (1280×704)` | 1280×704. aspect_16_9_ltx. |
-| `16:9 (1280×720)` | 1280×720. aspect_16_9. |
-| `16:9 mid (1024×576)` | 1024×576. aspect_16_9_mid. |
-| `1:1 square (1024×1024)` | 1024×1024. aspect_1_1. |
-| `1:1 circle-safe (768×768)` | 768×768. aspect_1_1_circle. |
-| `4:5 portrait (1024×1280)` | 1024×1280. aspect_4_5. |
-| `9:16 draft (432×768)` | 432×768. aspect_9_16_draft. |
-| `9:16 (576×1024)` | 576×1024. aspect_9_16. |
-| `9:16 LTX feeder (768×1280)` | 768×1280. aspect_9_16_ltx. |
-| `~1.91:1 landscape (1216×640)` | 1216×640. aspect_191. |
-| `~3:1 banner (1536×512)` | 1536×512. aspect_3_1. |
-| `4:1 banner (1536×384)` | 1536×384. aspect_4_1. |
-| `2:3 pin (768×1152)` | 768×1152. aspect_2_3. |
-| `3:4 panel (768×1024)` | 768×1024. aspect_3_4. |
-| `YouTube · thumbnail (1280×720)` | 1280×720. youtube_thumb. |
-| `YouTube · channel art (1536×864)` | 1536×864. youtube_channel_art. |
-| `YouTube · channel icon (768×768)` | 768×768. youtube_channel_icon. |
-| `YouTube · Shorts thumb (576×1024)` | 576×1024. youtube_shorts_thumb. |
-| `YouTube · Community (1024×1024)` | 1024×1024. youtube_community. |
-| `YouTube · chapter card (1280×720)` | 1280×720. youtube_chapter. |
-| `YouTube · subscribe plate (1280×720)` | 1280×720. youtube_subscribe. |
-| `YouTube · end screen (1280×720)` | 1280×720. youtube_endscreen. |
-| `Instagram · square (1024×1024)` | 1024×1024. ig_square. |
-| `Instagram · 4:5 portrait (1024×1280)` | 1024×1280. ig_portrait. |
-| `Instagram · landscape (1216×640)` | 1216×640. ig_landscape. |
-| `Instagram · Story (576×1024)` | 576×1024. ig_story. |
-| `Instagram · Reel cover (576×1024)` | 576×1024. ig_reel. |
-| `Instagram · Highlight (768×768)` | 768×768. ig_highlight. |
-| `Instagram · profile (768×768)` | 768×768. ig_profile. |
-| `TikTok · cover (576×1024)` | 576×1024. tt_cover. |
-| `TikTok · Shop (1024×1024)` | 1024×1024. tt_shop. |
-| `X · post (1280×720)` | 1280×720. x_post. |
-| `X · header (1536×512)` | 1536×512. x_header. |
-| `X · card (1216×640)` | 1216×640. x_card. |
-| `LinkedIn · square (1024×1024)` | 1024×1024. li_post. |
-| `LinkedIn · landscape (1216×640)` | 1216×640. li_landscape. |
-| `LinkedIn · banner (1536×384)` | 1536×384. li_banner. |
-| `LinkedIn · article (1216×640)` | 1216×640. li_article. |
-| `Pinterest · pin (768×1152)` | 768×1152. pin. |
-| `Pinterest · Idea Pin (576×1024)` | 576×1024. pin_story. |
-| `Facebook · post (1216×640)` | 1216×640. fb_post. |
-| `Threads · 4:5 (1024×1280)` | 1024×1280. threads. |
-| `Twitch · offline (1280×720)` | 1280×720. twitch_offline. |
-| `Twitch · starting soon (1280×720)` | 1280×720. twitch_starting. |
-| `Twitch · BRB (1280×720)` | 1280×720. twitch_brb. |
-| `Twitch · ending (1280×720)` | 1280×720. twitch_ending. |
-| `Twitch · overlay (1280×720)` | 1280×720. twitch_overlay. |
-| `Twitch · panel (768×1024)` | 768×1024. twitch_panel. |
-| `Twitch · profile (768×768)` | 768×768. twitch_profile. |
-| `Twitch · banner (1536×512)` | 1536×512. twitch_banner. |
-| `Spotify · playlist (1024×1024)` | 1024×1024. spot_playlist. |
-| `Spotify · Canvas still (576×1024)` | 576×1024. spot_canvas. |
-| `Album · cover (1024×1024)` | 1024×1024. album_cover. |
-| `Lyric card (1024×1024)` | 1024×1024. lyric_card. |
-| `Audiogram · wide (1280×720)` | 1280×720. ag_wide. |
-| `Audiogram · vertical (576×1024)` | 576×1024. ag_vert. |
-| `Podcast · episode art (1024×1024)` | 1024×1024. episode_art. |
-| `Podcast · cover (1024×1024)` | 1024×1024. podcast_cover. |
-| `Open Graph / blog (1216×640)` | 1216×640. og. |
-| `Email · header (1216×640)` | 1216×640. email_header. |
-| `Substack · hero (1216×640)` | 1216×640. substack. |
-| `Patreon · post (1024×1280)` | 1024×1280. patreon. |
-| `Channel · banner (1536×512)` | 1536×512. banner. |
-| `End-card / CTA (1280×720)` | 1280×720. endcard. |
-| `Quote background (1024×1024)` | 1024×1024. quote_bg. |
-| `Lower-third plate (1280×720)` | 1280×720. lower_third. |
-| `Food / tabletop (1024×1280)` | 1024×1280. food_tabletop. |
-| `Shorts still (432×768)` | 432×768. shorts_still. |
-| `Hook still (432×768)` | 432×768. hook_still. |
-| `Product packshot (1024×1024)` | 1024×1024. packshot. |
-| `Product lifestyle (1024×1280)` | 1024×1280. lifestyle. |
-| `Desk setup (1280×720)` | 1280×720. desk_setup. |
-| `Coming soon (1280×720)` | 1280×720. coming_soon. |
-| `Slide title (1280×720)` | 1280×720. slide_title. |
-| `Zoom / Meet background (1280×720)` | 1280×720. zoom_bg. |
-| `Merch · tee (1024×1024)` | 1024×1024. merch_tee. |
-| `Merch · mug (1024×1024)` | 1024×1024. merch_mug. |
-| `Print poster (768×1152)` | 768×1152. poster. |
+| `Custom` | Width x Height widgets, snapped to div16. |
+| `16:9 draft (768x432)` | 768x432. aspect_16_9_draft. |
+| `16:9 LTX feeder (1280x704)` | 1280x704. aspect_16_9_ltx. |
+| `16:9 (1280x720)` | 1280x720. aspect_16_9. |
+| `16:9 mid (1024x576)` | 1024x576. aspect_16_9_mid. |
+| `1:1 square (1024x1024)` | 1024x1024. aspect_1_1. |
+| `1:1 circle-safe (768x768)` | 768x768. aspect_1_1_circle. |
+| `4:5 portrait (1024x1280)` | 1024x1280. aspect_4_5. |
+| `9:16 draft (432x768)` | 432x768. aspect_9_16_draft. |
+| `9:16 (576x1024)` | 576x1024. aspect_9_16. |
+| `9:16 LTX feeder (768x1280)` | 768x1280. aspect_9_16_ltx. |
+| `~1.91:1 landscape (1216x640)` | 1216x640. aspect_191. |
+| `~3:1 banner (1536x512)` | 1536x512. aspect_3_1. |
+| `4:1 banner (1536x384)` | 1536x384. aspect_4_1. |
+| `2:3 pin (768x1152)` | 768x1152. aspect_2_3. |
+| `3:4 panel (768x1024)` | 768x1024. aspect_3_4. |
+| `YouTube - thumbnail (1280x720)` | 1280x720. youtube_thumb. |
+| `YouTube - channel art (1536x864)` | 1536x864. youtube_channel_art. |
+| `YouTube - channel icon (768x768)` | 768x768. youtube_channel_icon. |
+| `YouTube - Shorts thumb (576x1024)` | 576x1024. youtube_shorts_thumb. |
+| `YouTube - Community (1024x1024)` | 1024x1024. youtube_community. |
+| `YouTube - chapter card (1280x720)` | 1280x720. youtube_chapter. |
+| `YouTube - subscribe plate (1280x720)` | 1280x720. youtube_subscribe. |
+| `YouTube - end screen (1280x720)` | 1280x720. youtube_endscreen. |
+| `Instagram - square (1024x1024)` | 1024x1024. ig_square. |
+| `Instagram - 4:5 portrait (1024x1280)` | 1024x1280. ig_portrait. |
+| `Instagram - landscape (1216x640)` | 1216x640. ig_landscape. |
+| `Instagram - Story (576x1024)` | 576x1024. ig_story. |
+| `Instagram - Reel cover (576x1024)` | 576x1024. ig_reel. |
+| `Instagram - Highlight (768x768)` | 768x768. ig_highlight. |
+| `Instagram - profile (768x768)` | 768x768. ig_profile. |
+| `TikTok - cover (576x1024)` | 576x1024. tt_cover. |
+| `TikTok - Shop (1024x1024)` | 1024x1024. tt_shop. |
+| `X - post (1280x720)` | 1280x720. x_post. |
+| `X - header (1536x512)` | 1536x512. x_header. |
+| `X - card (1216x640)` | 1216x640. x_card. |
+| `LinkedIn - square (1024x1024)` | 1024x1024. li_post. |
+| `LinkedIn - landscape (1216x640)` | 1216x640. li_landscape. |
+| `LinkedIn - banner (1536x384)` | 1536x384. li_banner. |
+| `LinkedIn - article (1216x640)` | 1216x640. li_article. |
+| `Pinterest - pin (768x1152)` | 768x1152. pin. |
+| `Pinterest - Idea Pin (576x1024)` | 576x1024. pin_story. |
+| `Facebook - post (1216x640)` | 1216x640. fb_post. |
+| `Threads - 4:5 (1024x1280)` | 1024x1280. threads. |
+| `Twitch - offline (1280x720)` | 1280x720. twitch_offline. |
+| `Twitch - starting soon (1280x720)` | 1280x720. twitch_starting. |
+| `Twitch - BRB (1280x720)` | 1280x720. twitch_brb. |
+| `Twitch - ending (1280x720)` | 1280x720. twitch_ending. |
+| `Twitch - overlay (1280x720)` | 1280x720. twitch_overlay. |
+| `Twitch - panel (768x1024)` | 768x1024. twitch_panel. |
+| `Twitch - profile (768x768)` | 768x768. twitch_profile. |
+| `Twitch - banner (1536x512)` | 1536x512. twitch_banner. |
+| `Spotify - playlist (1024x1024)` | 1024x1024. spot_playlist. |
+| `Spotify - Canvas still (576x1024)` | 576x1024. spot_canvas. |
+| `Album - cover (1024x1024)` | 1024x1024. album_cover. |
+| `Lyric card (1024x1024)` | 1024x1024. lyric_card. |
+| `Audiogram - wide (1280x720)` | 1280x720. ag_wide. |
+| `Audiogram - vertical (576x1024)` | 576x1024. ag_vert. |
+| `Podcast - episode art (1024x1024)` | 1024x1024. episode_art. |
+| `Podcast - cover (1024x1024)` | 1024x1024. podcast_cover. |
+| `Open Graph / blog (1216x640)` | 1216x640. og. |
+| `Email - header (1216x640)` | 1216x640. email_header. |
+| `Substack - hero (1216x640)` | 1216x640. substack. |
+| `Patreon - post (1024x1280)` | 1024x1280. patreon. |
+| `Channel - banner (1536x512)` | 1536x512. banner. |
+| `End-card / CTA (1280x720)` | 1280x720. endcard. |
+| `Quote background (1024x1024)` | 1024x1024. quote_bg. |
+| `Lower-third plate (1280x720)` | 1280x720. lower_third. |
+| `Food / tabletop (1024x1280)` | 1024x1280. food_tabletop. |
+| `Shorts still (432x768)` | 432x768. shorts_still. |
+| `Hook still (432x768)` | 432x768. hook_still. |
+| `Product packshot (1024x1024)` | 1024x1024. packshot. |
+| `Product lifestyle (1024x1280)` | 1024x1280. lifestyle. |
+| `Desk setup (1280x720)` | 1280x720. desk_setup. |
+| `Coming soon (1280x720)` | 1280x720. coming_soon. |
+| `Slide title (1280x720)` | 1280x720. slide_title. |
+| `Zoom / Meet background (1280x720)` | 1280x720. zoom_bg. |
+| `Merch - tee (1024x1024)` | 1024x1024. merch_tee. |
+| `Merch - mug (1024x1024)` | 1024x1024. merch_mug. |
+| `Print poster (768x1152)` | 768x1152. poster. |
 
 #### `look`
 
@@ -6715,7 +6715,7 @@ Optional Cinema Rack starter.
 
 #### `width`
 
-Type `INT`. Range / default: 16–2048, step 16.
+Type `INT`. Range / default: 16-2048, step 16.
 
 Custom width.
 
@@ -6725,7 +6725,7 @@ Custom width.
 
 #### `height`
 
-Type `INT`. Range / default: 16–2048, step 16.
+Type `INT`. Range / default: 16-2048, step 16.
 
 Custom height.
 
@@ -6735,7 +6735,7 @@ Custom height.
 
 #### `batch_size`
 
-Type `INT`. Range / default: 1–4.
+Type `INT`. Range / default: 1-4.
 
 How many stills in one Run.
 
@@ -6753,7 +6753,7 @@ Match a loaded still's aspect, or keep Format / platform.
 
 **This graph:** `Match input`
 
-### `EZImageUpscale` — Upscale still
+### `EZImageUpscale` - Upscale still
 
 Optional lanczos upscale after a still decode. none passes the tensor through.
 
@@ -6773,7 +6773,7 @@ Type `COMBO`. Range / default: none / 2x / 4x / 4K.
 
 Upscale mode.
 
-**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.
+**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840x2160 box (portrait 2160x3840). No extra weights.
 
 **This graph:** `none`
 
@@ -6786,7 +6786,7 @@ Upscale mode.
 | `4x` | Quadruple pixels. |
 | `4K` | Fit in a 4K box. |
 
-### `EZImageDescribe` — Describe image
+### `EZImageDescribe` - Describe image
 
 Caption a source still so Prompt Enhance can name inventory and lettering.
 
@@ -6796,7 +6796,7 @@ Caption a source still so Prompt Enhance can name inventory and lettering.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
-| `image` | in | `IMAGE` | Source still. Lazy — skipped when enable is off. |
+| `image` | in | `IMAGE` | Source still. Lazy - skipped when enable is off. |
 | `caption` | out | `STRING` | Short caption, or empty. |
 
 #### `enable`

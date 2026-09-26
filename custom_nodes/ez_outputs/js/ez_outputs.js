@@ -211,7 +211,7 @@ function formatTime(mtime) {
 }
 
 /**
- * Comfy SaveImage stem (ez_still_draft_00001_.png → ez_still_draft).
+ * Comfy SaveImage stem (ez_still_draft_00001_.png -> ez_still_draft).
  * @param {string} name
  * @returns {string}
  */
@@ -366,7 +366,7 @@ async function postJson(path, body) {
  */
 function confirmDelete(rels) {
   const preview = rels.slice(0, 5).join("\n");
-  const extra = rels.length > 5 ? "\n…" : "";
+  const extra = rels.length > 5 ? "\n..." : "";
   return window.confirm("Delete " + rels.length + " file(s)?\n" + preview + extra);
 }
 
@@ -705,11 +705,11 @@ function mount(el) {
     const bytes = pool.reduce((sum, row) => sum + (Number(row.size) || 0), 0);
     let text = vis.length + " files";
     if (chosen.length) {
-      text += " · " + chosen.length + " selected";
+      text += " - " + chosen.length + " selected";
     }
-    text += " · " + formatSize(bytes);
+    text += " - " + formatSize(bytes);
     if (truncated && !folder && !prefix && !query) {
-      text += " · newest 500";
+      text += " - newest 500";
     }
     status.textContent = text;
   }
@@ -897,7 +897,7 @@ function mount(el) {
     sub.className = "ez-out-sub";
     sub.textContent = [formatSize(row.size), formatTime(row.mtime), row.rel]
       .filter(Boolean)
-      .join(" · ");
+      .join(" - ");
     meta.appendChild(name);
     meta.appendChild(sub);
 
@@ -997,7 +997,7 @@ function mount(el) {
       const empty = document.createElement("p");
       empty.className = "ez-out-empty";
       empty.textContent =
-        "Queue an App — files stay on the output disk after restart. History does not.";
+        "Queue an App - files stay on the output disk after restart. History does not.";
       scroll.appendChild(empty);
       renderStatus();
       return;

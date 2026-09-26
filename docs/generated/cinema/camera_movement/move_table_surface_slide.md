@@ -1,6 +1,6 @@
 ---
 title: "Table-surface slide"
-description: "Cinema Rack illustration — Table-surface slide."
+description: "Cinema Rack illustration - Table-surface slide."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

@@ -1,6 +1,6 @@
 ---
 title: "Dutch roll"
-description: "Cinema Rack illustration — Dutch roll."
+description: "Cinema Rack illustration - Dutch roll."
 tags: [cinema, prompting, catalog, clip]
 ---
 

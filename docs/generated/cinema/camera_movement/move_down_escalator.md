@@ -1,6 +1,6 @@
 ---
 title: "Down escalator"
-description: "Cinema Rack illustration — Down escalator."
+description: "Cinema Rack illustration - Down escalator."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

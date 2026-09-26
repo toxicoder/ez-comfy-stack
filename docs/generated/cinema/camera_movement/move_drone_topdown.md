@@ -1,6 +1,6 @@
 ---
 title: "Drone top-down"
-description: "Cinema Rack illustration — Drone top-down."
+description: "Cinema Rack illustration - Drone top-down."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

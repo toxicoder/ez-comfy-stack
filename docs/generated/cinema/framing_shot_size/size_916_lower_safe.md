@@ -1,6 +1,6 @@
 ---
 title: "9:16 Lower Safe"
-description: "Cinema Rack illustration — 9:16 Lower Safe."
+description: "Cinema Rack illustration - 9:16 Lower Safe."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

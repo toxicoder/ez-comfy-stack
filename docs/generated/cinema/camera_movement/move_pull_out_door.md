@@ -1,6 +1,6 @@
 ---
 title: "Pull out of door"
-description: "Cinema Rack illustration — Pull out of door."
+description: "Cinema Rack illustration - Pull out of door."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

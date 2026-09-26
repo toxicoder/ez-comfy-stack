@@ -73,14 +73,14 @@ def _cell(value: object, limit: int = 72) -> str:
         Escaped cell text.
     """
     if value is None:
-        return "—"
+        return "-"
     if isinstance(value, bool):
         text = "true" if value else "false"
     else:
         text = _WS_RE.sub(" ", str(value).replace("|", "\\|").replace("\n", " "))
-    text = text.strip() or "—"
+    text = text.strip() or "-"
     if len(text) > limit:
-        return text[: limit - 1] + "…"
+        return text[: limit - 1] + "..."
     return text
 
 
@@ -158,7 +158,7 @@ def occupancy_of(data: dict[str, Any]) -> str:
         data: Parsed graph.
 
     Returns:
-        Occupancy string or ``—``.
+        Occupancy string or ``-``.
     """
     extra = data.get("extra") or {}
     app = extra.get("lab_app_mode")
@@ -166,7 +166,7 @@ def occupancy_of(data: dict[str, Any]) -> str:
         occ = app.get("occupancy")
         if isinstance(occ, str) and occ.strip():
             return occ.strip()
-    return "—"
+    return "-"
 
 
 def extract_note(nodes: list[dict[str, Any]]) -> str:
@@ -190,7 +190,7 @@ def extract_note(nodes: list[dict[str, Any]]) -> str:
 def assign_groups(
     nodes: list[dict[str, Any]], groups: list[dict[str, Any]]
 ) -> dict[int, str]:
-    """Map node id → group title using Comfy bounding boxes.
+    """Map node id -> group title using Comfy bounding boxes.
 
     Args:
         nodes: Graph nodes with ``pos``.
@@ -277,7 +277,7 @@ def load_styles(path: Path | None = None) -> dict[str, dict[str, Any]]:
         path: Optional override of ``styles.json``.
 
     Returns:
-        Style id → entry.
+        Style id -> entry.
     """
     target = path or STYLES_FILE
     if not target.is_file():
@@ -311,9 +311,9 @@ def _image_format_choices() -> list[dict[str, str]]:
         width = item.get("width") or 0
         height = item.get("height") or 0
         if fid == "custom":
-            desc = "Width × Height widgets, snapped to ÷16."
+            desc = "Width x Height widgets, snapped to div16."
         else:
-            desc = f"{int(width)}×{int(height)}. {fid}."
+            desc = f"{int(width)}x{int(height)}. {fid}."
         out.append({"id": label, "description": desc})
     return out
 
@@ -415,9 +415,9 @@ def _video_format_choices() -> list[dict[str, str]]:
         height = item.get("height") or 0
         family = str(item.get("family") or "").strip()
         if fid == "custom":
-            desc = "Width × Height widgets, snapped to the Family VAE grid."
+            desc = "Width x Height widgets, snapped to the Family VAE grid."
         else:
-            desc = f"{int(width)}×{int(height)}. {family or fid}."
+            desc = f"{int(width)}x{int(height)}. {family or fid}."
         out.append({"id": label, "description": desc})
     return out
 
@@ -443,7 +443,7 @@ def _video_family_choices() -> list[dict[str, str]]:
         out.append(
             {
                 "id": label,
-                "description": f"{fid} VAE grid ÷{int(grid)}.",
+                "description": f"{fid} VAE grid div{int(grid)}.",
             }
         )
     return out
@@ -699,7 +699,7 @@ def render_param_reference(
         "## Node parameter reference",
         "",
         "Every unique node type on this graph. Widgets are in lab JSON order. "
-        "Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.",
+        "Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` - not SD1.5 folklore.",
         "",
     ]
     by_type: dict[str, list[dict[str, Any]]] = defaultdict(list)
@@ -708,7 +708,7 @@ def render_param_reference(
     for ntype in types_used:
         spec = encyclopedia.get(ntype) or {}
         display = str(spec.get("display_name") or ntype)
-        parts.append(f"### `{ntype}` — {display}")
+        parts.append(f"### `{ntype}` - {display}")
         parts.append("")
         summary = str(spec.get("summary") or "").strip()
         if summary:
@@ -1056,7 +1056,7 @@ def render_album_page(
             ],
         ),
         "",
-        f"**Who this is for:** studio users after `download-music`. Occupancy **{occ}** (cover stills are **klein** — separate session).",
+        f"**Who this is for:** studio users after `download-music`. Occupancy **{occ}** (cover stills are **klein** - separate session).",
         "",
         "> Generated from `workflows/_lab/"
         + album_id
@@ -1134,7 +1134,7 @@ def render_encyclopedia_page(
             [
                 "**Every node type** that appears in `workflows/_lab/`",
                 "**Widgets in lab JSON order**, including combo choices",
-                "**Lab notes** (CFG 1.0 on distilled Klein, LTX ÷32, occupancy XOR)",
+                "**Lab notes** (CFG 1.0 on distilled Klein, LTX div32, occupancy XOR)",
             ],
             [
                 "**Looking up a widget** without opening `nodes.py`",
@@ -1277,7 +1277,7 @@ def _write_generated_pages(
     """Write Markdown pages and ``manifest.json``.
 
     Args:
-        pages: Repo-relative path → markdown.
+        pages: Repo-relative path -> markdown.
         dest: ``docs/generated/workflows``.
         enc_page: ``docs/reference/workflow-nodes.md``.
         manifest_pages: Manifest rows.
@@ -1332,7 +1332,7 @@ def generate(
         write: When true, write files and the manifest.
 
     Returns:
-        Mapping of repo-relative posix path → markdown body.
+        Mapping of repo-relative posix path -> markdown body.
     """
     root = repo_root or REPO_ROOT
     lab = lab_root or (root / "workflows" / "_lab")

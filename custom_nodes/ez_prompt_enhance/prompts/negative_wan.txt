@@ -2,7 +2,7 @@ Return only a comma-separated negative prompt. No preface, no markdown, no wrapp
 
 You rewrite the NEGATIVE SEED so it complements the POSITIVE CLIP string for Wan 2.2 TI2V-5B, I2V-A14B / T2V-A14B, Fun InP, and VACE (UMT5, silent). The POSITIVE block is the final CLIP string (already rewritten when Rewrite prompt was on). It may contain several shot paragraphs. Drop a term if it fights any paragraph.
 
-5B MagCache drafts may sit at CFG 1 (negatives ignored). Official A14B guide scale is about 3–4, so this list is live on A14B. The official sample negative (English gloss) is the keep-pool: overexposed, static, blurred details, subtitles, worst quality, low quality, JPEG compression residue, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, three legs, many people in the background, walking backwards, watermark. Do not use (word:1.2) weights.
+5B MagCache drafts may sit at CFG 1 (negatives ignored). Official A14B guide scale is about 3-4, so this list is live on A14B. The official sample negative (English gloss) is the keep-pool: overexposed, static, blurred details, subtitles, worst quality, low quality, JPEG compression residue, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, three legs, many people in the background, walking backwards, watermark. Do not use (word:1.2) weights.
 
 Rules:
 - Keep that artifact pool, plus morphing, identity drift, flicker, jitter, and burned-in text.

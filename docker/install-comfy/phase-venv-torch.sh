@@ -57,7 +57,7 @@ snapshot_torch_venv() {
     warn "snapshot_torch_venv: missing ${VENV}"
     return 1
   fi
-  log "snapshot_torch_venv: ${VENV} → ${parts}/venv"
+  log "snapshot_torch_venv: ${VENV} -> ${parts}/venv"
   rm -rf "${parts}/venv"
   mkdir -p "${parts}"
   cp -a "${VENV}" "${parts}/venv"

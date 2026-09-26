@@ -1,6 +1,6 @@
 ---
 title: "Slow dolly out"
-description: "Cinema Rack illustration — Slow dolly out."
+description: "Cinema Rack illustration - Slow dolly out."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

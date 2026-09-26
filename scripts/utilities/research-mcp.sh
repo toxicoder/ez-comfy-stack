@@ -40,7 +40,7 @@ cmd_help() {
   echo "Usage: research-mcp.sh [--stdio] | --list-tools | --call TOOL [JSON]" >&2
   echo "  In-tree research MCP. No execute_code. No telemetry." >&2
   echo "  CPU Qwen3-4B + web search. Does not refuse a GPU session." >&2
-  echo "  Does not switch occupancy idle → blender-desk." >&2
+  echo "  Does not switch occupancy idle -> blender-desk." >&2
   echo "  See docs/occupancy.md" >&2
 }
 
@@ -70,7 +70,7 @@ mcp_occupancy_only() {
 
 #######################################
 # Record this PID as mcp_pid without changing occupancy mode.
-# blender occupancy_set_mcp_pid maps idle → blender-desk; research must not.
+# blender occupancy_set_mcp_pid maps idle -> blender-desk; research must not.
 # Globals:
 #   COMFY_OUTPUT_DIR
 # Arguments:

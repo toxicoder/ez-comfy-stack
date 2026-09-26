@@ -29,7 +29,7 @@ Occupancy **trellis**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous 
 ````text
 ## optional/trellis2
 
-Klein still → native TRELLIS.2 INT8 mesh (Comfy core nodes).
+Klein still -> native TRELLIS.2 INT8 mesh (Comfy core nodes).
 
 ```bash
 ./scripts/manage.sh download-3d --tier trellis2
@@ -40,7 +40,7 @@ LoadImage: a Klein still (`ez_still_*.png` or a clay plate). Unload models first
 UNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack).
 Lab upsample **512** (not 1536). TRELLIS-only canvas. Occupancy: trellis.
 
-DINOv3 is Meta's custom commercial-friendly license — not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.
+DINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.
 ````
 
 ## How to Queue
@@ -139,9 +139,9 @@ flowchart LR
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
 
-### `Note` — Note
+### `Note` - Note
 
 On-canvas operator note (not executed).
 
@@ -157,12 +157,12 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## optional/trellis2 Klein still → native TRELLIS.2 INT8 mesh (Comfy core nodes). ```bash ./scripts/manage.sh download-3d --tier trellis2 ./scripts/manage.sh occupancy enter trellis --yes ``` LoadIma…`
+**This graph:** `## optional/trellis2 Klein still -> native TRELLIS.2 INT8 mesh (Comfy core nodes). ```bash ./scripts/manage.sh download-3d --tier trellis2 ./scripts/manage.sh occupancy enter trellis --yes ``` LoadIm...`
 
 ````text
 ## optional/trellis2
 
-Klein still → native TRELLIS.2 INT8 mesh (Comfy core nodes).
+Klein still -> native TRELLIS.2 INT8 mesh (Comfy core nodes).
 
 ```bash
 ./scripts/manage.sh download-3d --tier trellis2
@@ -173,10 +173,10 @@ LoadImage: a Klein still (`ez_still_*.png` or a clay plate). Unload models first
 UNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack).
 Lab upsample **512** (not 1536). TRELLIS-only canvas. Occupancy: trellis.
 
-DINOv3 is Meta's custom commercial-friendly license — not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.
+DINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.
 ````
 
-### `LoadImage` — Load Image
+### `LoadImage` - Load Image
 
 Load a still from Comfy input/ (or upload).
 
@@ -209,7 +209,7 @@ Upload widget type.
 
 **This graph:** `image`
 
-### `EZUnloadModels` — Unload models
+### `EZUnloadModels` - Unload models
 
 Pass-through IMAGE that unloads diffusion models first.
 
@@ -224,7 +224,7 @@ Pass-through IMAGE that unloads diffusion models first.
 
 No widgets. Sockets only.
 
-### `CLIPVisionLoader` — Load CLIP Vision
+### `CLIPVisionLoader` - Load CLIP Vision
 
 Load an image encoder for TRELLIS.2 conditioning.
 
@@ -246,7 +246,7 @@ Vision checkpoint filename.
 
 **This graph:** `dino_v3_vit_l.safetensors`
 
-### `UNETLoader` — Load Diffusion Model
+### `UNETLoader` - Load Diffusion Model
 
 Load a standalone transformer/UNET from diffusion_models/.
 
@@ -287,9 +287,9 @@ Cast at load.
 | `fp8_e4m3fn_fast` | FP8 e4m3fn with fast optimizations. |
 | `fp8_e5m2` | Cast to FP8 e5m2. |
 
-### `VAELoader` — Load VAE
+### `VAELoader` - Load VAE
 
-Load the autoencoder that maps pixels ↔ latents (and LTX audio).
+Load the autoencoder that maps pixels <-> latents (and LTX audio).
 
 !!! warning "Lab notes"
 
@@ -312,7 +312,7 @@ Filename under vae/.
 | Shape VAE | `trellis_2_shape_vae_bf16.safetensors` |
 | Texture VAE | `trellis_2_texture_vae_bf16.safetensors` |
 
-### `Trellis2Conditioning` — TRELLIS.2 Conditioning
+### `Trellis2Conditioning` - TRELLIS.2 Conditioning
 
 Encode a still with CLIP Vision into TRELLIS positive/negative.
 
@@ -325,7 +325,7 @@ Encode a still with CLIP Vision into TRELLIS positive/negative.
 
 No widgets. Sockets only.
 
-### `EmptyTrellis2LatentStructure` — Empty TRELLIS.2 Latent Structure
+### `EmptyTrellis2LatentStructure` - Empty TRELLIS.2 Latent Structure
 
 Allocate a TRELLIS.2 structure latent (batch only).
 
@@ -347,7 +347,7 @@ Meshes per Queue.
 
 **This graph:** `1`
 
-### `KSampler` — KSampler
+### `KSampler` - KSampler
 
 Denoise a latent for N steps at a CFG, sampler, and scheduler.
 
@@ -359,17 +359,17 @@ Denoise a latent for N steps at a CFG, sampler, and scheduler.
 | --- | --- | --- | --- |
 | `model` | in | `MODEL` | UNET / transformer after any ModelSampling* patch. |
 | `positive` | in | `CONDITIONING` | What to include (CLIP / ACE / LTX prompt). |
-| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well — put constraints in the positive. |
+| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well - put constraints in the positive. |
 | `latent_image` | in | `LATENT` | Noise canvas or encoded start image / video / audio latent. |
 | `LATENT` | out | `LATENT` | Denoised latent for VAE decode. |
 
 #### `seed`
 
-Type `INT`. Range / default: 0 … 2^64-1; lab 42.
+Type `INT`. Range / default: 0 ... 2^64-1; lab 42.
 
 Random seed for the noise tensor.
 
-**How it affects generation:** Same seed + same graph ≈ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
+**How it affects generation:** Same seed + same graph ~ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
 
 | Instance | Value |
 | --- | --- |
@@ -399,21 +399,21 @@ What happens to seed after Queue.
 
 #### `steps`
 
-Type `INT`. Range / default: 1–10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
+Type `INT`. Range / default: 1-10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
 
 Denoising iterations.
 
-**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 — raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
+**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 - raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
 
 **This graph (all 4 instances):** `12`
 
 #### `cfg`
 
-Type `FLOAT`. Range / default: 0–100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
+Type `FLOAT`. Range / default: 0-100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
 
 Classifier-free guidance scale.
 
-**How it affects generation:** Distilled Klein is CFG 1.0 — raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
+**How it affects generation:** Distilled Klein is CFG 1.0 - raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
 
 | Instance | Value |
 | --- | --- |
@@ -513,7 +513,7 @@ How sigmas are spaced across steps.
 
 #### `denoise`
 
-Type `FLOAT`. Range / default: 0–1; lab 1.0.
+Type `FLOAT`. Range / default: 0-1; lab 1.0.
 
 Fraction of the latent to replace with denoised signal.
 
@@ -521,7 +521,7 @@ Fraction of the latent to replace with denoised signal.
 
 **This graph (all 4 instances):** `1`
 
-### `VaeDecodeStructureTrellis2` — TRELLIS.2 Decode Structure
+### `VaeDecodeStructureTrellis2` - TRELLIS.2 Decode Structure
 
 Decode structure latent to voxels.
 
@@ -547,7 +547,7 @@ Voxel grid size.
 | --- | --- |
 | `32` | Lab default. |
 
-### `Trellis2ShapeStage` — TRELLIS.2 Shape Stage
+### `Trellis2ShapeStage` - TRELLIS.2 Shape Stage
 
 Sample structure from a voxel latent.
 
@@ -562,7 +562,7 @@ Sample structure from a voxel latent.
 
 No widgets. Sockets only.
 
-### `Trellis2UpsampleStage` — TRELLIS.2 Upsample Stage
+### `Trellis2UpsampleStage` - TRELLIS.2 Upsample Stage
 
 Upsample the shape latent toward 512.
 
@@ -597,7 +597,7 @@ Target structure resolution.
 | `512` | Lab default. |
 | `256` | Faster, coarser. |
 
-### `VaeDecodeShapeTrellis` — TRELLIS Decode Shape
+### `VaeDecodeShapeTrellis` - TRELLIS Decode Shape
 
 Decode shape latent to a mesh.
 
@@ -610,7 +610,7 @@ Decode shape latent to a mesh.
 
 No widgets. Sockets only.
 
-### `Trellis2TextureStage` — TRELLIS.2 Texture Stage
+### `Trellis2TextureStage` - TRELLIS.2 Texture Stage
 
 Sample voxel colors for the mesh.
 
@@ -625,7 +625,7 @@ Sample voxel colors for the mesh.
 
 No widgets. Sockets only.
 
-### `VaeDecodeTextureTrellis` — TRELLIS Decode Texture
+### `VaeDecodeTextureTrellis` - TRELLIS Decode Texture
 
 Decode texture latent to voxel colors.
 
@@ -638,7 +638,7 @@ Decode texture latent to voxel colors.
 
 No widgets. Sockets only.
 
-### `PaintMesh` — Paint Mesh
+### `PaintMesh` - Paint Mesh
 
 Apply voxel colors onto the mesh.
 
@@ -650,7 +650,7 @@ Apply voxel colors onto the mesh.
 
 No widgets. Sockets only.
 
-### `MeshToFile3D` — Mesh to File 3D
+### `MeshToFile3D` - Mesh to File 3D
 
 Write a GLB/mesh file.
 
@@ -665,7 +665,7 @@ Write a GLB/mesh file.
 
 No widgets. Sockets only.
 
-### `EZQuality` — Quality
+### `EZQuality` - Quality
 
 Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
@@ -700,7 +700,7 @@ custom freezes last overlay; lab restores graph defaults.
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
-### `EZModelCheck` — Check models
+### `EZModelCheck` - Check models
 
 Manual disk check for occupancy + Quality weights. Queue does not run this node.
 

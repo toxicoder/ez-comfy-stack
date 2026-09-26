@@ -1,6 +1,6 @@
 ---
 title: "Push to insert"
-description: "Cinema Rack illustration — Push to insert."
+description: "Cinema Rack illustration - Push to insert."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

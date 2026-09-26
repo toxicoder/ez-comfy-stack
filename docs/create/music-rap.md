@@ -1,6 +1,6 @@
 ---
 title: RAP-FIRST (Nill Bye)
-description: US-safe ACE-Step rap draft and full-track graphs plus all nine Nill Bye albums (64–210 s, varied form).
+description: US-safe ACE-Step rap draft and full-track graphs plus all nine Nill Bye albums (64-210 s, varied form).
 tags: [music, rap, ace-step, nill-bye, us-safe]
 ---
 
@@ -15,7 +15,7 @@ tags: [music, rap, ace-step, nill-bye, us-safe]
 **What this enables**
 
 - **A cold-open boom-bap draft** on one NVIDIA DGX Spark without cloud music APIs
-- **One hundred thirty-five original Nill Bye takes** (64–210 s) with exclusive verses, varied form, and punchlines
+- **One hundred thirty-five original Nill Bye takes** (64-210 s) with exclusive verses, varied form, and punchlines
 
 **Who this is for:** studio users after `download-music --tier turbo`. Overview: [Local music](../music.md). Disclosure: [Music disclosure](music-disclosure.md). EDM pack: [Drive-through EDM](music-edm.md).
 
@@ -25,16 +25,16 @@ Do **not** load Klein + Wan + LTX + ACE-Step in one session. Cover art is a sepa
 
 Do **not** load Klein + Wan + LTX + ACE-Step in one session. Cover art is a separate graph.
 
-### Draft — first Queue
+### Draft - first Queue
 
 Graph: **audio/music/rap-draft** (`extra.lab_profile` `us-safe-music`). Same role as **klein-still-draft**.
 
 | Stage | What runs | Prefix |
 | --- | --- | --- |
-| MODEL | `CheckpointLoaderSimple` `ace_step_1.5_turbo_aio.safetensors` + `ModelSamplingAuraFlow` | — |
-| DURATION | App **Duration (seconds)** (cold-open bar length) → `EmptyAceStep1.5LatentAudio` | — |
+| MODEL | `CheckpointLoaderSimple` `ace_step_1.5_turbo_aio.safetensors` + `ModelSamplingAuraFlow` | - |
+| DURATION | App **Duration (seconds)** (cold-open bar length) -> `EmptyAceStep1.5LatentAudio` | - |
 | PROMPT | App **Tags**, **Lyrics**, **Rewrite prompt**, **Vocal / instrumental**. `EZAceStepPromptEnhance` enhance **off** so tags, BPM, and `[verse]`/`[chorus]` stay as written. `ConditioningZeroOut` negative. KSampler 8 / cfg 1 / euler / simple | `ez_rap_prompt` |
-| OUTPUT | `VAEDecodeAudio` → FLAC + 320 kbps MP3 | `ez_rap_draft` |
+| OUTPUT | `VAEDecodeAudio` -> FLAC + 320 kbps MP3 | `ez_rap_draft` |
 | COVER | Queue **stills/thumbnail** or **stills/podcast-cover** separately | `ez_thumbnail` / `ez_podcast` |
 
 Default tags (both graphs):
@@ -43,7 +43,7 @@ Default tags (both graphs):
 
 **Beat-only pass:** set App **Vocal / instrumental** to instrumental (forces no-vocals tags and `[inst]` lyrics). There is no third instrumental JSON.
 
-Canned style swaps (tags widget only — not extra files):
+Canned style swaps (tags widget only - not extra files):
 
 - **trap:** `trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm`
 - **lo-fi:** `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm`
@@ -54,11 +54,11 @@ Graph: **audio/music/rap-full**. App **Duration (seconds)** is the pre-chorus fo
 
 ### Nill Bye diss examples
 
-One hundred thirty-five extra full-track graphs under **`_lab/audio/albums/nill-bye/<album>/`**. Same AIO, sampler, occupancy **audio**. App **Duration (seconds)** is the song plan (64–210 s), not a flat 180. Each album mixes forms (hook-each, delayed hook, bridge, pre-chorus, breakdown, half-time chorus, and others), meters, and keys. Dance-bed albums stay 4/4. Authored verses stay in order; a bridge is the last lines of the last verse moved, not new claims. Queue a numbered track **on its own**, or generate the album in one go with `./scripts/manage.sh album-render --album nill-bye/<album-slug>`. SaveAudio stem is **`NN - Song Title`**. FLAC/MP3 tags include artist, album, title, and optional cover. The graph note names the form, meter, and key.
+One hundred thirty-five extra full-track graphs under **`_lab/audio/albums/nill-bye/<album>/`**. Same AIO, sampler, occupancy **audio**. App **Duration (seconds)** is the song plan (64-210 s), not a flat 180. Each album mixes forms (hook-each, delayed hook, bridge, pre-chorus, breakdown, half-time chorus, and others), meters, and keys. Dance-bed albums stay 4/4. Authored verses stay in order; a bridge is the last lines of the last verse moved, not new claims. Queue a numbered track **on its own**, or generate the album in one go with `./scripts/manage.sh album-render --album nill-bye/<album-slug>`. SaveAudio stem is **`NN - Song Title`**. FLAC/MP3 tags include artist, album, title, and optional cover. The graph note names the form, meter, and key.
 
-**Nill Bye** (science guy, mad) is a fictional MC with an invented ACE-Step vocal. Phases 0–2 roast fictional MC **Rake** (in his feels; club-talk and fake-cool as a brand). Phases 3–4 are civic satire of Texas Gov. **Greg Abbott** as a public-record target, not a vocal identity. Phases 5–6 are civic satire of **Donald Trump** as a public-record target, not a vocal identity. Phases 7–8 are **progress** takes: methods, statutes, and measurement with **no roast target** (winterize, preregister, hearings, NDCs, Article I, lead-line replacement). Original lyrics. No living-MC names. No famous-hook paraphrases. Punch **up** on diss phases; **build up** on progress phases. Do not roast disability, race, faith, children, or people at the river. Shipped bars stay short and SFW. Each take owns exclusive verses and punchlines — content bars are not reused across the one hundred thirty-five graphs; choruses stay unique hooks. Human rewrite required before any release.
+**Nill Bye** (science guy, mad) is a fictional MC with an invented ACE-Step vocal. Phases 0-2 roast fictional MC **Rake** (in his feels; club-talk and fake-cool as a brand). Phases 3-4 are civic satire of Texas Gov. **Greg Abbott** as a public-record target, not a vocal identity. Phases 5-6 are civic satire of **Donald Trump** as a public-record target, not a vocal identity. Phases 7-8 are **progress** takes: methods, statutes, and measurement with **no roast target** (winterize, preregister, hearings, NDCs, Article I, lead-line replacement). Original lyrics. No living-MC names. No famous-hook paraphrases. Punch **up** on diss phases; **build up** on progress phases. Do not roast disability, race, faith, children, or people at the river. Shipped bars stay short and SFW. Each take owns exclusive verses and punchlines - content bars are not reused across the one hundred thirty-five graphs; choruses stay unique hooks. Human rewrite required before any release.
 
-Style and trap/EDM packs keep the same dry-booth voice (`male rap vocals, dry booth, no autotune`). Trap/EDM graphs are rap **over** club beds — not autotune EDM vocals. Voices, tags, BPM, and seeds stay as shipped; only the bars change per take.
+Style and trap/EDM packs keep the same dry-booth voice (`male rap vocals, dry booth, no autotune`). Trap/EDM graphs are rap **over** club beds - not autotune EDM vocals. Voices, tags, BPM, and seeds stay as shipped; only the bars change per take.
 
 A new album lands in `_lab/audio/albums/<artist>/<album-slug>/` with numbered tracks plus `cover.json` and `album.json`. Do not leave new graphs at the artist folder root.
 
@@ -170,7 +170,7 @@ Same dry booth. Rap over club beds (no autotune). Same punch-up rule. Full album
 | **12-hold-request** | UK garage **130**, seed **347** | `12 - Hold Request` | ICE extradition fight |
 | **13-sharia-plank** | hardstyle **150**, seed **349** | `13 - Sharia Plank` | Convention scare, empty docket |
 | **14-invasion-hymn** | trance **138**, seed **353** | `14 - Invasion Hymn` | War-word as appropriation |
-| **15-demolish-hook** | festival trap **150**, seed **359** | `15 - Demolish Hook` | “Demolish” closer |
+| **15-demolish-hook** | festival trap **150**, seed **359** | `15 - Demolish Hook` | "Demolish" closer |
 
 #### Thirty Four Counts (`audio/albums/nill-bye/thirty-four-counts/`)
 
@@ -201,7 +201,7 @@ Same dry booth. Rap over club beds (no autotune). Same punch-up rule. Full album
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
 | **01-pardon-flood** | dark trap **140**, `[spoken word]`, seed **457** | `01 - Pardon Flood` | Day-one Jan 6 clemency |
-| **02-ieepa-wreck** | rage **148**, seed **461** | `02 - Ieepa Wreck` | IEEPA tariffs 6–3 |
+| **02-ieepa-wreck** | rage **148**, seed **461** | `02 - Ieepa Wreck` | IEEPA tariffs 6-3 |
 | **03-gold-card** | phonk **132**, seed **463** | `03 - Gold Card` | $1M residency SKU |
 | **04-memecoin-tab** | trap **145**, seed **467** | `04 - Memecoin Tab` | Pre-oath token float |
 | **05-east-wing-wreck** | house **126**, seed **479** | `05 - East Wing Wreck` | Ballroom teardown |

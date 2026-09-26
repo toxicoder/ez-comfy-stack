@@ -8,7 +8,7 @@
 #   Fetch the small distilled AV set for lab graphs (not the 400 GB monorepo).
 #   Default 2.5: Lightricks/LTX-2.5 INT8-convrot + Gemma4-with-proj + VAEs.
 #   Fallback 2.3: Kijai/LTX2.3_comfy distilled FP8 + Gemma 3 DualCLIP.
-#   LTX Community License ($10M company-revenue cap) — not Apache. Gated HF.
+#   LTX Community License ($10M company-revenue cap) - not Apache. Gated HF.
 #
 # Audience:
 #   Operators preparing a Spark host for manage.sh start. Prefer
@@ -20,11 +20,11 @@
 #   ./scripts/utilities/download-ltx.sh cleanup [--tier ...] [--dry-run|--yes]
 #
 # Environment:
-#   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD — same semantics as download-flux.
-#   LTX_FULL_REPO=1 — download entire Kijai/LTX2.3_comfy snapshot (all variants).
+#   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD - same semantics as download-flux.
+#   LTX_FULL_REPO=1 - download entire Kijai/LTX2.3_comfy snapshot (all variants).
 #
 # Safety:
-#   Multi‑GB transfer — use download-limit when on remote SSH.
+#   Multi-GB transfer - use download-limit when on remote SSH.
 #   cleanup defaults to --dry-run; --yes deletes only non-selective files under
 #   the tier local-dir (never other MODELS_DIR trees like FLUX).
 #
@@ -99,7 +99,7 @@ refuse_banned_iclora_tier() {
 # Globals:
 #   See file header / caller environment.
 # Arguments:
-#   $1  Tier name (balanced|quality|…)
+#   $1  Tier name (balanced|quality|...)
 # Outputs:
 #   Minimum ready size in GB on stdout (selective payload, not full monorepo).
 # Returns:
@@ -108,11 +108,11 @@ refuse_banned_iclora_tier() {
 tier_min_gb() {
   case "${1}" in
     2.5) echo 30 ;;
-    # distilled fp8 transformer (~25 GB) + projection + VAEs ≈ 28–30 GB
+    # distilled fp8 transformer (~25 GB) + projection + VAEs ~ 28-30 GB
     2.3 | balanced) echo 20 ;;
-    # distilled bf16 transformer (~42 GB) + projection + VAEs ≈ 45–48 GB
+    # distilled bf16 transformer (~42 GB) + projection + VAEs ~ 45-48 GB
     quality) echo 35 ;;
-    # gemma_3_12B_it_fp4_mixed ≈ 9.45 GB
+    # gemma_3_12B_it_fp4_mixed ~ 9.45 GB
     gemma) echo 8 ;;
     iclora) echo 1 ;;
     *) echo 0 ;;
@@ -410,7 +410,7 @@ link_into_comfy() {
     base="$(basename "${f}")"
     rel="${f#"${dir}"/}"
     dest_sub="diffusion_models"
-    # Prefer HF layout path (vae/…, text_encoders/…); never match *te* against
+    # Prefer HF layout path (vae/..., text_encoders/...); never match *te* against
     # ".safetensors" (that mis-routed every weight into text_encoders).
     case "${rel}" in
       text_encoders/* | */text_encoders/*) dest_sub="text_encoders" ;;
@@ -429,9 +429,9 @@ link_into_comfy() {
     dest="${src}/${dest_sub}/${base}"
     # Relative targets so bind-mount path (/mnt/models vs /models) does not break
     if ln_sfn_relative "${f}" "${dest}"; then
-      log "linked ${base} → comfy/${dest_sub}/"
+      log "linked ${base} -> comfy/${dest_sub}/"
     else
-      warn "failed to link ${base} → comfy/${dest_sub}/"
+      warn "failed to link ${base} -> comfy/${dest_sub}/"
       failed=1
     fi
   done < <(find "${dir}" -type f \( -name '*.safetensors' -o -name '*.sft' -o -name '*.gguf' \) 2>/dev/null)
@@ -478,7 +478,7 @@ cmd_status() {
     for tier in $(tiers_to_process); do
       dir=$(tier_dir "$tier")
       size=$(tier_size_gb "$dir")
-      log "${tier}: $(tier_repo "$tier") — ${size} GB at ${dir}"
+      log "${tier}: $(tier_repo "$tier") - ${size} GB at ${dir}"
     done
   fi
 }
@@ -519,10 +519,10 @@ cmd_run() {
     include_args=()
     # Full monorepo escape hatch is only for Kijai/LTX2.3_comfy, not Gemma companion
     if [[ ${LTX_FULL_REPO:-0} == "1" && ${tier} != "gemma" ]]; then
-      log "Downloading full ${repo} snapshot (tier: ${tier}; LTX_FULL_REPO=1)…"
+      log "Downloading full ${repo} snapshot (tier: ${tier}; LTX_FULL_REPO=1)..."
       log "Full monorepo is ~400 GB (every precision/variant). Prefer selective default."
     else
-      log "Downloading ${repo} selective subset (tier: ${tier})…"
+      log "Downloading ${repo} selective subset (tier: ${tier})..."
       while IFS= read -r pat; do
         [[ -z ${pat} ]] && continue
         include_args+=(--include "${pat}")
@@ -594,7 +594,7 @@ cmd_cleanup() {
     n_extra=0
     n_del=0
     size_before="$(tier_size_gb "${dir}")"
-    log "cleanup ${tier}: scanning ${dir} (current ≈ ${size_before} GB)"
+    log "cleanup ${tier}: scanning ${dir} (current ~ ${size_before} GB)"
     log "cleanup ${tier}: keeping selective files from tier_include_patterns + LICENSE/README/.gitattributes"
     while IFS= read -r f; do
       [[ -z ${f} ]] && continue
@@ -612,7 +612,7 @@ cmd_cleanup() {
     if [[ ${CLEANUP_YES} -eq 1 ]]; then
       prune_empty_dirs "${dir}"
       size_after="$(tier_size_gb "${dir}")"
-      log "cleanup ${tier}: deleted ${n_del} extra file(s); size ${size_before} → ${size_after} GB"
+      log "cleanup ${tier}: deleted ${n_del} extra file(s); size ${size_before} -> ${size_after} GB"
     else
       log "cleanup ${tier}: ${n_extra} extra file(s) (dry-run). Re-run with --yes to delete."
     fi

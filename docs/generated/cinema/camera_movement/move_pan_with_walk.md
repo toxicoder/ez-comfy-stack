@@ -1,6 +1,6 @@
 ---
 title: "Pan with walk"
-description: "Cinema Rack illustration — Pan with walk."
+description: "Cinema Rack illustration - Pan with walk."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

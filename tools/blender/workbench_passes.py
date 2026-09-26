@@ -72,7 +72,7 @@ def configure_canny(scene: Any) -> None:
 
 
 def configure_mist_depth(world: Any | None) -> None:
-    """Mist 0–1, near=white / far=black. Raw metric Z is a QC fail.
+    """Mist 0-1, near=white / far=black. Raw metric Z is a QC fail.
 
     Args:
         world: Blender world or ``None``.

@@ -1,6 +1,6 @@
 ---
 title: "Drone rise"
-description: "Cinema Rack illustration — Drone rise."
+description: "Cinema Rack illustration - Drone rise."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

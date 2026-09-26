@@ -130,7 +130,7 @@ run_laptop_client() {
   port="${COMFY_PORT:-8188}"
   write_ez_spark_ssh_config "${host}" "${user}" "${port}"
   log "Next: ssh ez-spark"
-  log "Then: ./scripts/manage.sh start   # type yes — never auto-started"
+  log "Then: ./scripts/manage.sh start   # type yes - never auto-started"
   log "UI:   http://127.0.0.1:${port} (after start + this LocalForward)"
 }
 
@@ -148,7 +148,7 @@ run_laptop_client() {
 run_onboard() {
   local download="${1:-0}"
   if client_is_spark_host; then
-    log "This host looks like the Spark — running manage.sh setup"
+    log "This host looks like the Spark - running manage.sh setup"
     bash "${REPO_ROOT}/scripts/manage.sh" setup --install-docker
     return $?
   fi

@@ -1,6 +1,6 @@
 ---
 title: "Mezzanine slide"
-description: "Cinema Rack illustration — Mezzanine slide."
+description: "Cinema Rack illustration - Mezzanine slide."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

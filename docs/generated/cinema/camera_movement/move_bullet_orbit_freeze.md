@@ -1,6 +1,6 @@
 ---
 title: "Orbit freeze"
-description: "Cinema Rack illustration — Orbit freeze."
+description: "Cinema Rack illustration - Orbit freeze."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

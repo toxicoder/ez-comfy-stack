@@ -6,7 +6,7 @@
 # PyPI chatterbox-tts==0.1.7 predates from_local(..., t3_model="v3") (PR #516).
 # Install the GitHub zip --no-deps so the package cannot pin torch==2.6.0.
 # resemble-perth 1.0.1 still imports pretrained weights via pkg_resources,
-# which setuptools 82 removed — pin setuptools<82 so PerTh stays on.
+# which setuptools 82 removed - pin setuptools<82 so PerTh stays on.
 #
 # Sourced by common.sh, phase-nodes.sh, entrypoint.sh, and manage.sh.
 #
@@ -54,7 +54,7 @@ chatterbox_setuptools_pin() {
 
 #######################################
 # Chatterbox clone extras (one package per line). Does not include
-# setuptools — that pin is chatterbox_setuptools_pin.
+# setuptools - that pin is chatterbox_setuptools_pin.
 # Globals:
 #   None
 # Arguments:

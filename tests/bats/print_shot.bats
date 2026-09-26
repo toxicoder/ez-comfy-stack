@@ -68,7 +68,7 @@ teardown() {
   [ "${status}" -eq 0 ]
   run print_one_shot go-see 12
   [ "${status}" -eq 0 ]
-  # 12 is ok + ffprobe 5.00 → skip
+  # 12 is ok + ffprobe 5.00 -> skip
   run print_one_shot go-see 12
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"skip"* ]]

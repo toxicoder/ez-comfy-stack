@@ -382,7 +382,7 @@ function bindChipControls(el) {
       event.preventDefault();
       event.stopPropagation();
       btn.disabled = true;
-      modelCheckText = "Checking models…";
+      modelCheckText = "Checking models...";
       renderBanner(lastStatus);
       try {
         const api = window.ezComfyModelCheck;
@@ -452,17 +452,17 @@ function renderBanner(status) {
   if (chipState === "min") {
     el.title = "Show occupancy";
     el.innerHTML =
-      `<button type="button" data-ez-chip-pill title="Show occupancy">App · ${escapeHtml(occupancy)}</button>`;
+      `<button type="button" data-ez-chip-pill title="Show occupancy">App - ${escapeHtml(occupancy)}</button>`;
     bindChipControls(el);
     return;
   }
   const stop = OCCUPANCY_STOP[occupancy] || "check the Note";
-  const handoff = (mode.handoff || []).slice(0, 3).join(" · ");
+  const handoff = (mode.handoff || []).slice(0, 3).join(" - ");
   const extra = app.graph?.extra || {};
   const summary = String(extra.lab_description || "").trim();
   const qualityCaption = String(extra.lab_quality_caption || "").trim();
   const lines = [
-    `<strong>${escapeHtml(occupancy)}</strong> — stop ${escapeHtml(stop)}. One GB10 job.`,
+    `<strong>${escapeHtml(occupancy)}</strong> - stop ${escapeHtml(stop)}. One GB10 job.`,
   ];
   if (summary) {
     lines.push(escapeHtml(summary));
@@ -488,8 +488,8 @@ function renderBanner(status) {
     : "";
   el.innerHTML = [
     '<div data-ez-chip-bar>',
-    '<button type="button" data-ez-chip-min title="Minimize" aria-label="Minimize">−</button>',
-    '<button type="button" data-ez-chip-close title="Close" aria-label="Close">×</button>',
+    '<button type="button" data-ez-chip-min title="Minimize" aria-label="Minimize">-</button>',
+    '<button type="button" data-ez-chip-close title="Close" aria-label="Close">x</button>',
     "</div>",
     lines.join("<br>"),
     checkResult,
@@ -540,7 +540,7 @@ app.registerExtension({
       done = 0;
       const total = countSaveNodes();
       revealClosedChip();
-      renderBanner(total ? `Running — 0 of ${total} outputs` : "Running…");
+      renderBanner(total ? `Running - 0 of ${total} outputs` : "Running...");
     });
     api.addEventListener("executed", ({ detail }) => {
       const node = app.graph?.getNodeById?.(detail?.node);
@@ -556,11 +556,11 @@ app.registerExtension({
     api.addEventListener("execution_success", () => {
       const total = countSaveNodes();
       revealClosedChip();
-      renderBanner(total ? `Done — ${total} of ${total}` : "Done");
+      renderBanner(total ? `Done - ${total} of ${total}` : "Done");
     });
     api.addEventListener("execution_error", () => {
       revealClosedChip();
-      renderBanner("Run failed — open the graph Note for occupancy and next steps.");
+      renderBanner("Run failed - open the graph Note for occupancy and next steps.");
     });
     relabelGraph();
     renderBanner("");

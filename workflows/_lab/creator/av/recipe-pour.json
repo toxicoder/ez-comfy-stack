@@ -699,9 +699,9 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## creator/av/recipe-pour\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nRecipe pour AV 9:16. Lab size **768\u00d71280**. Prefix `ez_pour`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nLTX canvas 768\u00d71280 (width/height must be divisible by 32; 720 and 1080 are invalid). Disclose AI-generated media. No score. Mouths will not match.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## creator/av/recipe-pour\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nRecipe pour AV 9:16. Lab size **768x1280**. Prefix `ez_pour`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) - open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nLTX canvas 768x1280 (width/height must be divisible by 32; 720 and 1080 are invalid). Disclose AI-generated media. No score. Mouths will not match.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
-      "title": "Operator note \u2014 video output"
+      "title": "Operator note - video output"
     },
     {
       "id": 18,
@@ -765,7 +765,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) \u2014 open node for preview"
+      "title": "Save video (MP4) - open node for preview"
     },
     {
       "id": 19,
@@ -988,7 +988,7 @@
       },
       "widgets_values": [
         "LTX-2.5",
-        "LTX \u00b7 9:16 Shorts (768\u00d71280)",
+        "LTX - 9:16 Shorts (768x1280)",
         768,
         1280,
         "Match input",
@@ -1415,7 +1415,7 @@
   "extra": {
     "lab_profile": "creator/av/recipe-pour",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## creator/av/recipe-pour\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nRecipe pour AV 9:16. Lab size **768\u00d71280**. Prefix `ez_pour`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nLTX canvas 768\u00d71280 (width/height must be divisible by 32; 720 and 1080 are invalid). Disclose AI-generated media. No score. Mouths will not match.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## creator/av/recipe-pour\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nRecipe pour AV 9:16. Lab size **768x1280**. Prefix `ez_pour`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) - open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nLTX canvas 768x1280 (width/height must be divisible by 32; 720 and 1080 are invalid). Disclose AI-generated media. No score. Mouths will not match.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_ltx_av": true,
     "lab_description": "Recipe pour AV 9:16",
     "lab_app_mode": {
@@ -1442,7 +1442,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
           }
         ],
         [
@@ -1466,7 +1466,7 @@
           23,
           "format",
           {
-            "description": "Aspect or named platform job. Sets clip width and height on the Wan \u00f716 or LTX \u00f732 grid. Custom uses Width \u00d7 Height. Length stays on the latent node.",
+            "description": "Aspect or named platform job. Sets clip width and height on the Wan div16 or LTX div32 grid. Custom uses Width x Height. Length stays on the latent node.",
             "label": "Format / platform"
           }
         ],

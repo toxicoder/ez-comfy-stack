@@ -1,6 +1,6 @@
 ---
 title: "Table Group"
-description: "Cinema Rack illustration — Table Group."
+description: "Cinema Rack illustration - Table Group."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

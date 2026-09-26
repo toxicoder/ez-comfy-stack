@@ -1,6 +1,6 @@
 ---
 title: "Open Frame"
-description: "Cinema Rack illustration — Open Frame."
+description: "Cinema Rack illustration - Open Frame."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

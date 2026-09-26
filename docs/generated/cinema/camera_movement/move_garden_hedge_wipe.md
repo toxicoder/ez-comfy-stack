@@ -1,6 +1,6 @@
 ---
 title: "Hedge wipe"
-description: "Cinema Rack illustration — Hedge wipe."
+description: "Cinema Rack illustration - Hedge wipe."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

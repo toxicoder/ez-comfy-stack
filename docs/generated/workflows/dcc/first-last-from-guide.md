@@ -63,7 +63,7 @@ flowchart LR
   N10["KSampler"]
   N11["VAE Decode"]
   N12["Save frames (secondary)"]
-  N13["Save video (MP4) — open node for preview"]
+  N13["Save video (MP4) - open node for preview"]
   N14["Operator note"]
   N15["Wan Prompt Enhance"]
   N16["Guide last.png"]
@@ -96,7 +96,7 @@ flowchart LR
 | 1 | Wan 2.2 TI2V-5B | `UNETLoader` | Load models |
 | 2 | UMT5 CLIP (wan) | `CLIPLoader` | Load models |
 | 3 | Wan 2.2 VAE | `VAELoader` | Load models |
-| 4 | Guide first.png | `LoadImage` | For i2v, LoadImage enabled (byp… |
+| 4 | Guide first.png | `LoadImage` | For i2v, LoadImage enabled (byp... |
 | 6 | Motion / prompt | `CLIPTextEncode` | PROMPT |
 | 7 | Negative | `CLIPTextEncode` | PROMPT |
 | 8 | Video size & length | `Wan22ImageToVideoLatent` | SETTINGS |
@@ -104,7 +104,7 @@ flowchart LR
 | 10 | KSampler | `KSampler` | SETTINGS |
 | 11 | VAE Decode | `VAEDecode` | OUTPUT |
 | 12 | Save frames (secondary) | `SaveImage` | OUTPUT |
-| 13 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | OUTPUT |
+| 13 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | OUTPUT |
 | 14 | Operator note | `Note` | NOTE |
 | 15 | Wan Prompt Enhance | `EZWanPromptEnhance` | PROMPT |
 | 16 | Guide last.png | `LoadImage` | INPUT |
@@ -114,9 +114,9 @@ flowchart LR
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
 
-### `UNETLoader` — Load Diffusion Model
+### `UNETLoader` - Load Diffusion Model
 
 Load a standalone transformer/UNET from diffusion_models/.
 
@@ -157,7 +157,7 @@ Cast at load.
 | `fp8_e4m3fn_fast` | FP8 e4m3fn with fast optimizations. |
 | `fp8_e5m2` | Cast to FP8 e5m2. |
 
-### `CLIPLoader` — Load CLIP
+### `CLIPLoader` - Load CLIP
 
 Load a text encoder. The type combo must match the UNET family.
 
@@ -185,7 +185,7 @@ Type `COMBO`.
 
 CLIPType enum. Picks tokenizer + template.
 
-**How it affects generation:** flux2 wraps Klein strings in a Qwen chat template — do not paste <|im_start|>. wan is UMT5. ltxv is Gemma4-with-proj.
+**How it affects generation:** flux2 wraps Klein strings in a Qwen chat template - do not paste <|im_start|>. wan is UMT5. ltxv is Gemma4-with-proj.
 
 **This graph:** `wan`
 
@@ -239,9 +239,9 @@ Where to load the encoder.
 | `default` | Load on the Comfy compute device (GPU). Lab default. |
 | `cpu` | Force CPU. Much slower; only for debugging a CLIP load. |
 
-### `VAELoader` — Load VAE
+### `VAELoader` - Load VAE
 
-Load the autoencoder that maps pixels ↔ latents (and LTX audio).
+Load the autoencoder that maps pixels <-> latents (and LTX audio).
 
 !!! warning "Lab notes"
 
@@ -261,7 +261,7 @@ Filename under vae/.
 
 **This graph:** `wan2.2_vae.safetensors`
 
-### `LoadImage` — Load Image
+### `LoadImage` - Load Image
 
 Load a still from Comfy input/ (or upload).
 
@@ -297,7 +297,7 @@ Upload widget type.
 
 **This graph (all 2 instances):** `image`
 
-### `CLIPTextEncode` — CLIP Text Encode
+### `CLIPTextEncode` - CLIP Text Encode
 
 Turn a prompt string into CONDITIONING for the sampler.
 
@@ -317,20 +317,20 @@ Type `STRING`.
 
 Prompt encoded by CLIP.
 
-**How it affects generation:** Klein: sentences, subject → place → light → camera. Wan I2V: motion + one camera only. LTX: present-tense paragraph with audio interleaved. Distilled Klein quality lives here, not in CFG.
+**How it affects generation:** Klein: sentences, subject -> place -> light -> camera. Wan I2V: motion + one camera only. LTX: present-tense paragraph with audio interleaved. Distilled Klein quality lives here, not in CFG.
 
 | Instance | Value |
 | --- | --- |
-| Motion / prompt | `Slow dolly in toward the start-image subject. Gentle motion in fabric, hair, or…` |
-| Negative | `morphing, identity drift, warping objects, face melting, flicker, jitter, frame…` |
+| Motion / prompt | `Slow dolly in toward the start-image subject. Gentle motion in fabric, hair, or...` |
+| Negative | `morphing, identity drift, warping objects, face melting, flicker, jitter, frame...` |
 
-### `Wan22ImageToVideoLatent` — Wan 2.2 Image to Video Latent
+### `Wan22ImageToVideoLatent` - Wan 2.2 Image to Video Latent
 
 Build a Wan 5B I2V latent from a start image (or empty for T2V).
 
 !!! warning "Lab notes"
 
-    Smoke 832×480 × 121 frames. Shot graphs use 120 frames for concat. GIF 49 frames. VACE join 17 frames (1+8n).
+    Smoke 832x480 x 121 frames. Shot graphs use 120 frames for concat. GIF 49 frames. VACE join 17 frames (1+8n).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -344,7 +344,7 @@ Type `INT`. Range / default: 832 landscape / 480 portrait.
 
 Frame width.
 
-**How it affects generation:** 832×480 is the Wan 5B smoke size. Larger melts GB10.
+**How it affects generation:** 832x480 is the Wan 5B smoke size. Larger melts GB10.
 
 **This graph:** `832`
 
@@ -354,7 +354,7 @@ Type `INT`.
 
 Frame height.
 
-**How it affects generation:** Swap for 9:16 shorts (480×832).
+**How it affects generation:** Swap for 9:16 shorts (480x832).
 
 **This graph:** `480`
 
@@ -378,7 +378,7 @@ Clips per Queue.
 
 **This graph:** `1`
 
-### `ModelSamplingSD3` — ModelSamplingSD3
+### `ModelSamplingSD3` - ModelSamplingSD3
 
 Patch a model with SD3-style flow-matching shift.
 
@@ -401,7 +401,7 @@ Flow-matching shift.
 
 **This graph:** `8`
 
-### `KSampler` — KSampler
+### `KSampler` - KSampler
 
 Denoise a latent for N steps at a CFG, sampler, and scheduler.
 
@@ -413,17 +413,17 @@ Denoise a latent for N steps at a CFG, sampler, and scheduler.
 | --- | --- | --- | --- |
 | `model` | in | `MODEL` | UNET / transformer after any ModelSampling* patch. |
 | `positive` | in | `CONDITIONING` | What to include (CLIP / ACE / LTX prompt). |
-| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well — put constraints in the positive. |
+| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well - put constraints in the positive. |
 | `latent_image` | in | `LATENT` | Noise canvas or encoded start image / video / audio latent. |
 | `LATENT` | out | `LATENT` | Denoised latent for VAE decode. |
 
 #### `seed`
 
-Type `INT`. Range / default: 0 … 2^64-1; lab 42.
+Type `INT`. Range / default: 0 ... 2^64-1; lab 42.
 
 Random seed for the noise tensor.
 
-**How it affects generation:** Same seed + same graph ≈ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
+**How it affects generation:** Same seed + same graph ~ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
 
 **This graph:** `42`
 
@@ -448,21 +448,21 @@ What happens to seed after Queue.
 
 #### `steps`
 
-Type `INT`. Range / default: 1–10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
+Type `INT`. Range / default: 1-10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
 
 Denoising iterations.
 
-**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 — raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
+**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 - raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
 
 **This graph:** `20`
 
 #### `cfg`
 
-Type `FLOAT`. Range / default: 0–100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
+Type `FLOAT`. Range / default: 0-100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
 
 Classifier-free guidance scale.
 
-**How it affects generation:** Distilled Klein is CFG 1.0 — raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
+**How it affects generation:** Distilled Klein is CFG 1.0 - raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
 
 **This graph:** `5`
 
@@ -552,7 +552,7 @@ How sigmas are spaced across steps.
 
 #### `denoise`
 
-Type `FLOAT`. Range / default: 0–1; lab 1.0.
+Type `FLOAT`. Range / default: 0-1; lab 1.0.
 
 Fraction of the latent to replace with denoised signal.
 
@@ -560,7 +560,7 @@ Fraction of the latent to replace with denoised signal.
 
 **This graph:** `1`
 
-### `VAEDecode` — VAE Decode
+### `VAEDecode` - VAE Decode
 
 Decode image/video latents to pixels.
 
@@ -572,7 +572,7 @@ Decode image/video latents to pixels.
 
 No widgets. Sockets only.
 
-### `SaveImage` — Save Image
+### `SaveImage` - Save Image
 
 Write PNG stills under the output folder.
 
@@ -590,7 +590,7 @@ Save prefix.
 
 **This graph:** `ez_flf_guide_frame`
 
-### `VHS_VideoCombine` — VHS Video Combine
+### `VHS_VideoCombine` - VHS Video Combine
 
 Encode frames (and optional audio) to MP4 or GIF.
 
@@ -713,7 +713,7 @@ Write the file to disk.
 
 **This graph:** `true`
 
-### `Note` — Note
+### `Note` - Note
 
 On-canvas operator note (not executed).
 
@@ -729,7 +729,7 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## dcc/first-last-from-guide Silent Fun InP first-last-frame from a DCC guide pack. LoadImage ``first.png`` and ``last.png``. MagCache **off**. Opt-in: ./scripts/manage.sh download-wan --tier fun-inp…`
+**This graph:** `## dcc/first-last-from-guide Silent Fun InP first-last-frame from a DCC guide pack. LoadImage ``first.png`` and ``last.png``. MagCache **off**. Opt-in: ./scripts/manage.sh download-wan --tier fun-inp...`
 
 ```text
 ## dcc/first-last-from-guide
@@ -745,7 +745,7 @@ Prefix ``ez_flf_guide``. 832x480, 121 frames (Wan 5B / Fun InP default). The pac
 Stay on :8188 after a dump: dcc/guide-still / dcc/depth-from-loader / dcc/still-to-mesh (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
 ```
 
-### `EZWanPromptEnhance` — Wan Prompt Enhance
+### `EZWanPromptEnhance` - Wan Prompt Enhance
 
 Rewrite a lazy prompt for Wan 2.2 TI2V-5B (silent).
 
@@ -771,9 +771,9 @@ Type `STRING`.
 
 Lazy motion sentence.
 
-**How it affects generation:** I2V rewrites to motion + one camera only. Do not prompt audio — Wan is silent.
+**How it affects generation:** I2V rewrites to motion + one camera only. Do not prompt audio - Wan is silent.
 
-**This graph:** `Slow dolly in toward the start-image subject. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One…`
+**This graph:** `Slow dolly in toward the start-image subject. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One...`
 
 ```text
 Slow dolly in toward the start-image subject. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps.
@@ -815,7 +815,7 @@ Type `STRING`. Range / default: 5 seconds, 24 fps.
 
 Duration/fps hint for the rewriter.
 
-**How it affects generation:** Does not change latent length — Wan22ImageToVideoLatent does.
+**How it affects generation:** Does not change latent length - Wan22ImageToVideoLatent does.
 
 **This graph:** `5 seconds, 24 fps`
 
@@ -1145,7 +1145,7 @@ Sample-catalog id.
 
 **This graph:** `dcc/first-last-from-guide`
 
-### `EZNegativePromptEnhance` — Negative Prompt Enhance
+### `EZNegativePromptEnhance` - Negative Prompt Enhance
 
 Rewrite a negative CLIP seed against the final positive. Stays on when Rewrite prompt is off.
 
@@ -1200,7 +1200,7 @@ Which negative family.
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
 
-### `EZQuality` — Quality
+### `EZQuality` - Quality
 
 Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
@@ -1235,7 +1235,7 @@ custom freezes last overlay; lab restores graph defaults.
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
-### `EZModelCheck` — Check models
+### `EZModelCheck` - Check models
 
 Manual disk check for occupancy + Quality weights. Queue does not run this node.
 

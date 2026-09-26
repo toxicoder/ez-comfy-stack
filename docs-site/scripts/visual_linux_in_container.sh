@@ -23,7 +23,7 @@ if [[ -n $EXPECTED_MACHINE && $ACTUAL_MACHINE != "$EXPECTED_MACHINE" ]]; then
   echo "baselines from the wrong renderer would fail the docs CI job, so this run stopped" >&2
   exit 1
 fi
-echo "→ rendering in ${ACTUAL_MACHINE} as expected"
+echo "-> rendering in ${ACTUAL_MACHINE} as expected"
 
 # Dependencies live in a named volume that shadows the checkout's node_modules.  The host
 # install is built for the workstation and contains platform-specific helper binaries, so
@@ -32,7 +32,7 @@ echo "→ rendering in ${ACTUAL_MACHINE} as expected"
 LOCK_HASH="$(sha256sum package-lock.json | cut -d ' ' -f 1)"
 STAMP=".deps-linux-stamp"
 if [[ ! -x node_modules/.bin/next ]] || [[ "$(cat "$STAMP" 2>/dev/null || echo none)" != "$LOCK_HASH" ]]; then
-  echo "→ installing npm dependencies for Linux"
+  echo "-> installing npm dependencies for Linux"
   # node_modules is a mountpoint for the shared volume, so the directory itself cannot be
   # removed; clear what is inside it (dot-entries included) and let the installer repopulate.
   shopt -s nullglob dotglob
@@ -41,14 +41,14 @@ if [[ ! -x node_modules/.bin/next ]] || [[ "$(cat "$STAMP" 2>/dev/null || echo n
   npm ci --legacy-peer-deps
   printf '%s\n' "$LOCK_HASH" >"$STAMP"
 else
-  echo "→ reusing the Linux dependency volume"
+  echo "-> reusing the Linux dependency volume"
 fi
 
 # The production bundle contains platform-specific native code, so the export has to be built
 # by this container rather than reused from the host.  It goes to its own directory so the
-# host's export — the one the other gates and the browser checks read — is left intact.
+# host's export - the one the other gates and the browser checks read - is left intact.
 EXPORT_DIR="out-linux"
-echo "→ building the static export into ${EXPORT_DIR}/"
+echo "-> building the static export into ${EXPORT_DIR}/"
 rm -rf "$EXPORT_DIR" .next
 # The build directory is shared with the host, so whatever this Linux build leaves behind is
 # removed on the way out rather than being left for a host build to pick up.
@@ -56,11 +56,11 @@ trap 'rm -rf .next "$EXPORT_DIR"' EXIT
 NEXT_DIST_DIR="$EXPORT_DIR" npm run build
 
 if [[ ${UPDATE:-false} == "true" ]]; then
-  echo "→ discarding the committed baselines to capture a fresh set"
+  echo "-> discarding the committed baselines to capture a fresh set"
   rm -rf tests/visual/goldens
 fi
 
-echo "→ capturing screenshots"
+echo "-> capturing screenshots"
 # Split the forwarded arguments into an array so each option reaches the runner as its own
 # word, including when a caller passes something like `--project desktop`.
 forwarded=()

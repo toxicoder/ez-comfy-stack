@@ -227,7 +227,7 @@ def test_operator_note_prefers_operator_title() -> None:
             _node(2, "Note", [40, 80], [960, 280]),
         ]
     }
-    graph["nodes"][1]["title"] = "Operator note — still"
+    graph["nodes"][1]["title"] = "Operator note - still"
     note = operator_note(graph)
     assert note is not None
     assert int(note["id"]) == 2

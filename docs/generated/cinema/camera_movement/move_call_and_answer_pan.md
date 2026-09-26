@@ -1,6 +1,6 @@
 ---
 title: "Call-and-answer pan"
-description: "Cinema Rack illustration — Call-and-answer pan."
+description: "Cinema Rack illustration - Call-and-answer pan."
 tags: [cinema, prompting, catalog, clip]
 ---
 
@@ -33,4 +33,4 @@ still, motion, av
 
 ## Conflicts
 
-—
+-

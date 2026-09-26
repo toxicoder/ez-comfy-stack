@@ -7,10 +7,10 @@ With ``--disable-mmap``, ComfyUI's ``comfy/utils.py`` does::
 
     tensor = tensor.to(device=device, copy=True)
 
-On discrete GPUs that copy is a host→device transfer. On GB10 unified memory
+On discrete GPUs that copy is a host->device transfer. On GB10 unified memory
 it **duplicates** the tensor in the same physical pool (GitHub ComfyUI#10896,
 NVIDIA Spark ComfyUI guides). Combined with mmap-disable, large safetensors
-can appear to need ~2× RAM.
+can appear to need ~2x RAM.
 
 This module rewrites that assignment to ``copy=False``. Fail-soft: missing
 files or unknown ComfyUI revisions skip with a warning and exit 0.
