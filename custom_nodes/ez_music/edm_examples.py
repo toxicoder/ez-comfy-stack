@@ -19,11 +19,13 @@ DRIVE_LOCK = (
     "808, original composition, heavy chest bass, bass boosted, "
     "wide low-mid layers, fast switch-ups, "
     "deep 3D spatial low-mid, stacked 808 layers, "
-    "electric warp texture, wavy FM layers"
+    "electric warp texture, wavy FM layers, "
+    "escalating layered drops, heavy fast bass, layered drop ladder"
 )
 DRIVE_TREAT_LOCK = (
     "sparse vocal chop, DJ shout, no rap, original composition, "
-    "electric warp texture, wavy FM layers"
+    "electric warp texture, wavy FM layers, "
+    "escalating layered drops, heavy fast bass, layered drop ladder"
 )
 EdmSeries = Literal["drive-through"]
 EdmAceMode = Literal["instrumental", "vocal"]
@@ -210,8 +212,11 @@ FORBIDDEN_SCORE_NEEDLES = (
 )
 
 
-class EdmExample(TypedDict):
-    """One Drive-through catalog take (score, tags, album fields).
+class EdmExampleRow(TypedDict):
+    """One authored Drive-through row, before the arranger fills the passes.
+
+    ``finalize_drive_album`` turns these into ``EdmExample`` rows by
+    attaching the per-pass scores, lengths, seams, movements, and cells.
 
     Attributes:
         stem: Lab filename stem (``NN-slug``).
@@ -276,6 +281,28 @@ class EdmExample(TypedDict):
     meter: str
     keyscale: str
     code_tokens: NotRequired[tuple[str, ...]]
+
+
+class EdmExample(EdmExampleRow):
+    """A finalized catalog take: every pass field is present.
+
+    Attributes:
+        pass_scores: One ACE score per ACE pass, render order. The
+            joined ``lyrics`` is these stitched with blank lines; the
+            graph renders each pass from its own entry so no single
+            latent carries more score than its window holds.
+        pass_seconds: Whole seconds each pass renders before its seam.
+        overlap_bars: Whole bars the joiner overlaps at each seam, one
+            entry per join.
+        movements: Movement role of each pass, render order.
+        pass_cells: Stanza count each pass ships.
+    """
+
+    pass_scores: tuple[str, ...]
+    pass_seconds: tuple[int, ...]
+    overlap_bars: tuple[int, ...]
+    movements: tuple[str, ...]
+    pass_cells: tuple[int, ...]
 
 
 def _tempo_id(bpm: int) -> str:
@@ -375,7 +402,7 @@ def _ex(
     picks: dict[str, str] | None = None,
     treat: bool = False,
     layout: str = "column",
-) -> EdmExample:
+) -> EdmExampleRow:
     """Build one Drive-through catalog row from Audio Rack picks.
 
     Args:
@@ -578,7 +605,9 @@ def drive_slug_from_stem(stem: str) -> str:
     return text
 
 
-def finalize_drive_album(rows: tuple[EdmExample, ...]) -> tuple[EdmExample, ...]:
+def finalize_drive_album(
+    rows: tuple[EdmExampleRow, ...],
+) -> tuple[EdmExample, ...]:
     """Number tracks and attach album metadata for one live-set hour.
 
     Args:
@@ -597,11 +626,24 @@ def finalize_drive_album(rows: tuple[EdmExample, ...]) -> tuple[EdmExample, ...]
         plan = plans[index - 1]
         code_tokens = row.get("code_tokens")
         if code_tokens:
-            from .code_score import voice_code_sections
+            from .code_score import voice_code_passes
 
-            plan["sections"] = voice_code_sections(plan["sections"], code_tokens)
+            plan["movements_sections"] = voice_code_passes(
+                plan["movements_sections"], code_tokens
+            )
+            plan["pass_cells"] = [len(span) for span in plan["movements_sections"]]
+            plan["sections"] = [
+                section
+                for span in plan["movements_sections"]
+                for section in span
+            ]
         slug = drive_slug_from_stem(str(row.get("slug") or row["stem"]))
         stem = f"{index:02d}-{slug}"
+        lyrics = arrange_drive(
+            str(row["lyrics"]),
+            plan,
+            treat=row["ace_mode"] == "vocal",
+        )
         out.append(
             {
                 **row,
@@ -617,15 +659,16 @@ def finalize_drive_album(rows: tuple[EdmExample, ...]) -> tuple[EdmExample, ...]
                 "year": info["year"],
                 "cover_prompt": info["cover_prompt"],
                 "prefix": music_output_prefix(row["title"], index),
-                "lyrics": arrange_drive(
-                    str(row["lyrics"]),
-                    plan,
-                    treat=row["ace_mode"] == "vocal",
-                ),
+                "lyrics": lyrics,
                 "duration": float(plan["duration_s"]),
                 "form_id": plan["form_id"],
                 "meter": plan["meter"],
                 "keyscale": plan["keyscale"],
+                "pass_scores": tuple(plan["pass_scores"]),
+                "pass_seconds": tuple(int(s) for s in plan["pass_seconds"]),
+                "overlap_bars": tuple(int(b) for b in plan["overlap_bars"]),
+                "movements": tuple(str(m) for m in plan["movements"]),
+                "pass_cells": tuple(int(c) for c in plan["pass_cells"]),
             }
         )
     return tuple(out)

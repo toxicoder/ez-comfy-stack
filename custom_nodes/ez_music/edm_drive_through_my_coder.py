@@ -9,7 +9,7 @@ satisfies the score checker; ``finalize_drive_album`` replaces it with
 from __future__ import annotations
 
 from .code_score import CodeSpan, authored_bpm, coder_spans, performance_recipe
-from .edm_examples import EdmExample, _ex, format_edm_score
+from .edm_examples import EdmExampleRow, _ex, format_edm_score
 
 # Fixed seeds, continuing the catalog primes after Secret Homage.
 _SEEDS: tuple[int, ...] = (
@@ -45,7 +45,7 @@ _SKETCH = format_edm_score(
 )
 
 
-def _row(index: int, span: CodeSpan) -> EdmExample:
+def _row(index: int, span: CodeSpan) -> EdmExampleRow:
     """One catalog row whose cues will be rewritten from ``span``.
 
     Args:
@@ -53,7 +53,7 @@ def _row(index: int, span: CodeSpan) -> EdmExample:
         span: Coder slice for this take.
 
     Returns:
-        A partial ``EdmExample`` with ``code_tokens`` set.
+        A partial ``EdmExampleRow`` with ``code_tokens`` set.
     """
     row = _ex(
         span.slug,
@@ -70,7 +70,7 @@ def _row(index: int, span: CodeSpan) -> EdmExample:
     return row
 
 
-def _rows() -> tuple[EdmExample, ...]:
+def _rows() -> tuple[EdmExampleRow, ...]:
     """Build the sixteen My Coder rows from the current coder source.
 
     Returns:
@@ -86,4 +86,4 @@ def _rows() -> tuple[EdmExample, ...]:
 
 
 # Phase 5 rows. Finalized when the catalog assembles.
-EDM_DRIVE_THROUGH_MY_CODER: tuple[EdmExample, ...] = _rows()
+EDM_DRIVE_THROUGH_MY_CODER: tuple[EdmExampleRow, ...] = _rows()

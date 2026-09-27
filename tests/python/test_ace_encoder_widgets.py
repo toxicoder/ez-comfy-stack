@@ -32,15 +32,15 @@ def test_every_lab_ace_encoder_has_seed_control_and_valid_combos() -> None:
 
 
 def test_music_rap_encoder_keeps_vocal_codes_and_c_minor() -> None:
-    cases: list[tuple[str, float, int, str, str]] = [
-        ("audio/music/rap-draft", float(demo_draft_seconds()), 88, "4", "C minor"),
-        ("audio/music/rap-full", float(demo_full_seconds()), 88, "4", "C minor"),
+    cases: list[tuple[str, tuple[float, ...], int, str, str]] = [
+        ("audio/music/rap-draft", (float(demo_draft_seconds()),), 88, "4", "C minor"),
+        ("audio/music/rap-full", (float(demo_full_seconds()),), 88, "4", "C minor"),
     ]
     for diss in DISS_EXAMPLES:
         cases.append(
             (
                 diss["stem"],
-                float(diss["duration"]),
+                (float(diss["duration"]),),
                 int(diss["bpm"]),
                 str(diss["meter"]),
                 str(diss["keyscale"]),
@@ -50,27 +50,29 @@ def test_music_rap_encoder_keeps_vocal_codes_and_c_minor() -> None:
         cases.append(
             (
                 edm["stem"],
-                float(edm["duration"]),
+                tuple(float(value) for value in edm["pass_seconds"]),
                 int(edm["bpm"]),
                 str(edm["meter"]),
                 str(edm["keyscale"]),
             )
         )
-    for stem, duration, bpm, meter, keyscale in cases:
+    for stem, durations, bpm, meter, keyscale in cases:
         graph = _load(lab_json(stem))
-        enc = next(iter_ace_encoders(graph))
-        widgets = assert_ace_encoder_widgets(enc, where=stem)
-        assert widgets[3] == "fixed"
-        assert widgets[4] == bpm
-        assert widgets[5] == duration
-        assert widgets[6] == meter
+        encoders = sorted(iter_ace_encoders(graph), key=lambda node: int(node["id"]))
+        assert len(encoders) == len(durations), stem
         expect_lang = "en"
         row = next((ex for ex in EDM_EXAMPLES if ex["stem"] == stem), None)
         if row is not None and row["ace_mode"] == "instrumental":
             expect_lang = "unknown"
-        assert widgets[7] == expect_lang
-        assert widgets[8] == keyscale
-        assert widgets[9] is True
+        for index, enc in enumerate(encoders):
+            widgets = assert_ace_encoder_widgets(enc, where=f"{stem}:pass{index}")
+            assert widgets[3] == "fixed"
+            assert widgets[4] == bpm
+            assert widgets[5] == durations[index], (stem, index, widgets[5])
+            assert widgets[6] == meter
+            assert widgets[7] == expect_lang
+            assert widgets[8] == keyscale
+            assert widgets[9] is True
 
 
 def test_podcast_ace_encoders_keep_instrumental_codes_off() -> None:

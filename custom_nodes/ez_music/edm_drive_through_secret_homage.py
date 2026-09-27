@@ -7,7 +7,7 @@ brostep, riddim, tearout. All instrumental.
 
 from __future__ import annotations
 
-from .edm_examples import EdmExample, _ex, format_edm_score
+from .edm_examples import EdmExampleRow, _ex, format_edm_score
 
 # Catalog phase, track scores, and catalog rows.
 SECRET_HOMAGE_PHASE = 4
@@ -201,7 +201,7 @@ SECRET_HOMAGE_LYRICS = format_edm_score(
 )
 
 
-EDM_DRIVE_THROUGH_SECRET_HOMAGE: tuple[EdmExample, ...] = (
+EDM_DRIVE_THROUGH_SECRET_HOMAGE: tuple[EdmExampleRow, ...] = (
     _ex(
         "hush-lane",
         "hush lane",

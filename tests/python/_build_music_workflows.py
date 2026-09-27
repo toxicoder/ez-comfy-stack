@@ -313,6 +313,18 @@ Beat-only pass: append instrumental, no vocals, and replace lyrics with [inst].
 def _edm_note(ex: EdmExample) -> str:
     duration_s = int(ex["duration"])
     treat = ex["ace_mode"] == "vocal"
+    pass_seconds = [int(value) for value in ex["pass_seconds"]]
+    overlaps = [int(value) for value in ex["overlap_bars"]]
+    n_passes = len(pass_seconds)
+    pass_blurb = " + ".join(f"{value} s" for value in pass_seconds)
+    seam_blurb = ", ".join(f"{value} bar" for value in overlaps)
+    join_blurb = (
+        f"The take is {n_passes} sequential ACE-Step passes ({pass_blurb}) "
+        f"joined in-graph on the bar grid by **Beat-join passes**: each seam "
+        f"overlaps {seam_blurb} whole bars, the 808 hand-off never stacks or "
+        "nulls, and the crossfade never clicks. SaveAudio, the MP3, and the "
+        "metadata stamp carry the one joined master"
+    )
     if treat:
         score_blurb = (
             "Live bass-set take. Short build, then the drop. Later stanzas "
@@ -343,14 +355,14 @@ def _edm_note(ex: EdmExample) -> str:
         labels_blurb = "`[drop]` / `[inst]` / `[outro]`"
     return f"""## {ex["stem"]}
 
-US-safe EDM **{duration_s} s** take: **{ex["title"]}**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. {score_blurb} Queue this graph **on its own** - draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
+US-safe EDM **{duration_s} s** take: **{ex["title"]}**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. {score_blurb} {join_blurb}. Queue this graph **on its own** - draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and {labels_blurb} stay as written. Turn Enhance on only if you want the 4B rewriter.
 3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. {mode_blurb}
 4. Original arrangements only. No "in the style of <living artist>". No living-DJ names. No famous-hook paraphrases.
 5. ACE-Step timbre is **invented**, not a cloned act.
-6. Sampler: 8 steps, cfg 1, euler, simple. Duration {duration_s} s, bpm {ex["bpm"]}, language {"en" if treat else "unknown"}, timesignature {ex["meter"]}, key {ex["keyscale"]}, form {ex["form_id"]}, generate_audio_codes true. Seed {ex["seed"]}.
+6. Sampler: 8 steps, cfg 1, euler, simple. Duration {duration_s} s across {n_passes} passes, bpm {ex["bpm"]}, language {"en" if treat else "unknown"}, timesignature {ex["meter"]}, key {ex["keyscale"]}, form {ex["form_id"]}, generate_audio_codes true. Seed {ex["seed"]}.
 7. Saves: `{ex["prefix"]}` FLAC master + 320 kbps MP3 under `${{COMFY_OUTPUT_DIR}}`.
 8. Cover separately: Queue **{COVER_THUMB}** or **{COVER_PODCAST}**. Do not embed Klein here.
 9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).
@@ -376,7 +388,41 @@ def _build_ace(
     rap_writer: bool = False,
     meter: str = "4",
     keyscale: str = "C minor",
+    passes: list[tuple[str, float]] | None = None,
+    overlap_bars: str = "",
 ) -> dict:
+    """Build one ACE-Step lab graph, single-chain or multi-pass.
+
+    Arguments:
+        stem: Lab rel for the graph.
+        duration: Total take seconds written into the operator note.
+        lyrics: Score for the single chain (ignored when ``passes`` given).
+        prefix: SaveAudio / metadata stem.
+        note: Operator note body.
+        description: Lab description line.
+        tags: ACE tags line.
+        bpm: Tempo written into the encoder widgets.
+        seed: Encoder and sampler seed.
+        ace_mode: "vocal" or "instrumental".
+        enhance_title: Title for the prompt-enhance nodes.
+        layout: Node placement layout key.
+        album_meta: Album metadata widgets.
+        rap_writer: Put EZRapLyrics in front of the enhancer.
+        meter: Timesignature widget value.
+        keyscale: Keyscale widget value.
+        passes: Per-ACE-pass (score, seconds) pairs. Given more than one,
+            the graph renders each pass as its own latent/enhancer/encoder/
+            sampler/decode chain and the join node stitches the masters.
+        overlap_bars: Per-seam whole-bar overlap list for the join node,
+            e.g. "2, 2". Required when ``passes`` has more than one entry.
+    Returns:
+        Serialized lab graph.
+    """
+    pass_specs = passes or [(lyrics, duration)]
+    multi = len(pass_specs) > 1
+    if multi and not overlap_bars:
+        raise ValueError("multi-pass graphs need overlap_bars per seam")
+    chain_one_seconds = pass_specs[0][1] if multi else duration
     pos, group_specs = _ace_layout(layout)
     pos[13] = [2200, 80]
     pos[14] = [2200, 280]
@@ -429,7 +475,7 @@ def _build_ace(
         pos[3],
         [280, 82],
         "Song Duration",
-        [duration, "fixed"],
+        [chain_one_seconds, "fixed"],
         outputs=[prim_out],
         properties={"Run widget replace on values": False},
     )
@@ -439,7 +485,7 @@ def _build_ace(
         pos[4],
         [320, 82],
         "Latent length (seconds)",
-        [duration, 1],
+        [chain_one_seconds, 1],
         inputs=[g.inp("seconds", "FLOAT", widget="seconds")],
         outputs=[g.out("LATENT", "LATENT", [])],
     )
@@ -467,7 +513,7 @@ def _build_ace(
         ace_pos,
         [400, 360],
         enhance_title,
-        [tags, lyrics, False, ace_mode],
+        [tags, pass_specs[0][0], False, ace_mode],
         inputs=ace_inputs or None,
         outputs=[
             g.out("tags", "STRING", []),
@@ -481,8 +527,8 @@ def _build_ace(
         [400, 420],
         "ACE tags + lyrics",
         _ace_widgets(
-            lyrics,
-            duration,
+            pass_specs[0][0],
+            chain_one_seconds,
             seed,
             tags=tags,
             bpm=bpm,
@@ -606,9 +652,156 @@ def _build_ace(
     g.link(4, 0, 8, 3, "LATENT")
     g.link(8, 0, 9, 0, "LATENT")
     g.link(1, 2, 9, 1, "VAE")
-    g.link(9, 0, 10, 0, "AUDIO")
-    g.link(9, 0, 11, 0, "AUDIO")
-    g.link(9, 0, 14, 0, "AUDIO")
+    # Passes 2..N render their own chain and hand their decoded AUDIO to the
+    # beat joiner. Chain 1 keeps node ids 1-12 so the phase-0 fingerprints
+    # and the single-valued App widgets survive. Each extra chain is one
+    # stacked column with its own group, so the stage organizer keeps the
+    # passes as readable blocks. The pass seconds stay in the latent and
+    # encoder widgets; only chain 1 carries the App-facing duration knob.
+    decoded = [9]
+    pass_groups: list[tuple] = []
+    next_id = 20
+    if multi:
+        x_base = 3400.0
+        for index, (pass_score, pass_seconds) in enumerate(pass_specs[1:], start=1):
+            base = next_id
+            next_id += 6
+            decode_id = next_id
+            next_id += 1
+            x = x_base + index * 460.0
+            # "Pass N clock" dodges the App-mode duration sniff (the widget
+            # is named "value" and the title says neither seconds nor
+            # duration), so the App keeps exactly one Duration knob.
+            g.add(
+                base,
+                "PrimitiveNode",
+                [x, 744.0],
+                [280, 82],
+                f"Pass {index + 1} clock",
+                [pass_seconds, "fixed"],
+                outputs=[{"name": "FLOAT", "type": "FLOAT", "links": [], "slot_index": 0}],
+                properties={"Run widget replace on values": False},
+            )
+            g.add(
+                base + 1,
+                "EmptyAceStep1.5LatentAudio",
+                [x, 904.0],
+                [320, 82],
+                f"Pass {index + 1} latent (seconds)",
+                [pass_seconds, 1],
+                inputs=[g.inp("seconds", "FLOAT", widget="seconds")],
+                outputs=[g.out("LATENT", "LATENT", [])],
+            )
+            g.add(
+                base + 2,
+                "EZAceStepPromptEnhance",
+                [x, 1064.0],
+                [400, 360],
+                f"{enhance_title} pass {index + 1}",
+                [tags, pass_score, False, ace_mode],
+                outputs=[
+                    g.out("tags", "STRING", []),
+                    g.out("lyrics", "STRING", []),
+                ],
+            )
+            g.add(
+                base + 3,
+                "TextEncodeAceStepAudio1.5",
+                [x, 1504.0],
+                [400, 420],
+                f"ACE tags + lyrics (pass {index + 1})",
+                _ace_widgets(
+                    pass_score,
+                    pass_seconds,
+                    seed,
+                    tags=tags,
+                    bpm=bpm,
+                    language="unknown" if ace_mode == "instrumental" else "en",
+                    meter=meter,
+                    keyscale=keyscale,
+                ),
+                inputs=[
+                    g.inp("clip", "CLIP"),
+                    g.inp("tags", "STRING", widget="tags"),
+                    g.inp("lyrics", "STRING", widget="lyrics"),
+                    g.inp("duration", "FLOAT", widget="duration"),
+                ],
+                outputs=[g.out("CONDITIONING", "CONDITIONING", [])],
+            )
+            g.add(
+                base + 4,
+                "ConditioningZeroOut",
+                [x, 2004.0],
+                [240, 46],
+                f"Negative (zero, pass {index + 1})",
+                [],
+                inputs=[g.inp("conditioning", "CONDITIONING")],
+                outputs=[g.out("CONDITIONING", "CONDITIONING", [])],
+            )
+            g.add(
+                base + 5,
+                "KSampler",
+                [x, 2130.0],
+                [330, 262],
+                f"ACE sampler (pass {index + 1})",
+                _sampler_widgets(seed),
+                inputs=[
+                    g.inp("model", "MODEL"),
+                    g.inp("positive", "CONDITIONING"),
+                    g.inp("negative", "CONDITIONING"),
+                    g.inp("latent_image", "LATENT"),
+                ],
+                outputs=[g.out("LATENT", "LATENT", [])],
+            )
+            g.add(
+                decode_id,
+                "VAEDecodeAudio",
+                [x, 2470.0],
+                [280, 60],
+                f"ACE decode (pass {index + 1})",
+                [],
+                inputs=[g.inp("samples", "LATENT"), g.inp("vae", "VAE")],
+                outputs=[g.out("AUDIO", "AUDIO", [])],
+            )
+            g.link(1, 0, base + 5, 0, "MODEL")
+            g.link(1, 1, base + 3, 0, "CLIP")
+            g.link(1, 2, decode_id, 1, "VAE")
+            g.link(base, 0, base + 1, 0, "FLOAT")
+            g.link(base, 0, base + 3, 3, "FLOAT")
+            g.link(base + 2, 0, base + 3, 1, "STRING")
+            g.link(base + 2, 1, base + 3, 2, "STRING")
+            g.link(base + 3, 0, base + 5, 1, "CONDITIONING")
+            g.link(base + 3, 0, base + 4, 0, "CONDITIONING")
+            g.link(base + 4, 0, base + 5, 2, "CONDITIONING")
+            g.link(base + 1, 0, base + 5, 3, "LATENT")
+            g.link(base + 5, 0, decode_id, 0, "LATENT")
+            decoded.append(decode_id)
+            pass_groups.append(
+                (10 + index, f"PASS {index + 1}", x - 20, 652, 440, 1946)
+            )
+        join_id = next_id
+        g.add(
+            join_id,
+            "EZAudioBeatJoin",
+            [3400.0, 2700.0],
+            [340, 180],
+            "Beat-join passes",
+            [int(bpm), overlap_bars, 120.0],
+            inputs=[
+                g.inp(f"audio_{slot:02d}", "AUDIO")
+                for slot in range(1, len(decoded) + 1)
+            ],
+            outputs=[g.out("audio", "AUDIO", [])],
+        )
+        for slot, source in enumerate(decoded):
+            g.link(source, 0, join_id, slot, "AUDIO")
+        pass_groups.append((19, "JOIN", 3380, 2628, 380, 296))
+    else:
+        join_id = 9
+    groups.extend(pass_groups)
+    g.link(join_id, 0, 10, 0, "AUDIO")
+    g.link(join_id, 0, 11, 0, "AUDIO")
+    g.link(join_id, 0, 14, 0, "AUDIO")
     extra = {
         "lab_rel": stem if "/" in stem else f"audio/music/{stem}",
         "lab_profile": "us-safe-music",
@@ -627,7 +820,7 @@ def _build_ace(
         "ds": {"scale": 1, "offset": [0, 0]},
         "groups": [
             _group(gid, title, x, y, w, h, "#3f789e")
-            for gid, title, x, y, w, h in group_specs
+            for gid, title, x, y, w, h in group_specs + pass_groups
         ],
     }
     return g.dump(extra)
@@ -713,6 +906,10 @@ def build_diss(ex: DissExample) -> dict:
 
 
 def build_edm(ex: EdmExample) -> dict:
+    pass_scores = [str(score) for score in ex["pass_scores"]]
+    pass_seconds = [float(value) for value in ex["pass_seconds"]]
+    passes = list(zip(pass_scores, pass_seconds))
+    overlap_bars = ", ".join(str(int(value)) for value in ex["overlap_bars"])
     return _build_ace(
         ex["rel"],
         float(ex["duration"]),
@@ -729,6 +926,8 @@ def build_edm(ex: EdmExample) -> dict:
         enhance_title="ez_edm_prompt",
         layout=ex["layout"],
         album_meta=_catalog_meta(ex),
+        passes=passes,
+        overlap_bars=overlap_bars,
     )
 
 

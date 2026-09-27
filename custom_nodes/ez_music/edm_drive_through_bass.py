@@ -7,7 +7,7 @@ dips, all instrumental.
 
 from __future__ import annotations
 
-from .edm_examples import EdmExample, _ex, format_edm_score
+from .edm_examples import EdmExampleRow, _ex, format_edm_score
 
 # Track scores and catalog rows.
 RUMBLE_STRIP_LYRICS = format_edm_score(
@@ -146,7 +146,7 @@ SUNRISE_SUB_LYRICS = format_edm_score(
     ("outro", "kick holds\ntrap hats roll\nwave ride"),
 )
 
-EDM_DRIVE_THROUGH_BASS: tuple[EdmExample, ...] = (
+EDM_DRIVE_THROUGH_BASS: tuple[EdmExampleRow, ...] = (
     _ex(
         "rumble-strip",
         "rumble strip",

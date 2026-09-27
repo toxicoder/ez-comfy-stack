@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from ez_music import code_score
+from ez_music import code_score, drive_arrange
 from ez_music.code_score import (
     _GROUPS,
     authored_bpm,
@@ -177,6 +177,42 @@ def test_voice_code_sections_drops_tail_when_revoiced_score_overruns(
         f"[{section['role']} - {section['pattern']}]" for section in out
     )
     assert len(score) <= DRIVE_LYRICS_CHAR_BUDGET
+
+
+def test_voice_code_passes_thins_an_overrun_pass(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Re-deal cues until every voiced pass fits its render window.
+
+    Shrinking the per-pass budget makes both passes overrun once their
+    coder cues are attached, so each loses stanzas from its back and the
+    cue deal is recomputed for the survivors until nothing thins again.
+
+    Args:
+        monkeypatch: Restores the pass budget after the call.
+    """
+    tokens = ("chest", "sub", "asphalt", "growl", "freight", "pulse")
+    roles = ("build-up", "drop", "inst", "inst", "inst", "inst", "outro")
+    budget = 860
+    monkeypatch.setattr(drive_arrange, "DRIVE_PASS_CHAR_BUDGET", budget)
+
+    out = code_score.voice_code_passes(
+        [_stanzas(roles), _stanzas(roles)],
+        tokens,
+    )
+    assert len(out) == 2
+    for pass_ in out:
+        score = "\n\n".join(
+            f"[{section['role']} - {section['pattern']}]" for section in pass_
+        )
+        assert len(pass_) < len(roles)
+        assert len(score) <= budget
+        assert pass_[0]["role"] == "build-up"
+        assert pass_[1]["role"] == "drop"
+        assert pass_[-1]["role"] == "outro"
+        assert all(section["pattern"].endswith(", 2 bars") for section in pass_)
+    cues = [section["pattern"].removesuffix(", 2 bars") for pass_ in out for section in pass_]
+    assert len(cues) == len(set(cues)), "the re-deal must not repeat a cue"
+    surviving = tuple(section["role"] for pass_ in out for section in pass_)
+    assert cues == list(cell_cues(tokens, surviving)), "cues come from the re-dealt span"
 
 
 def test_drop_lyrics_tail_drops_fill_before_outro() -> None:

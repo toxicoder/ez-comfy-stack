@@ -14,7 +14,7 @@ import re
 import tokenize
 from collections.abc import Sequence
 from pathlib import Path
-from typing import NamedTuple
+from typing import NamedTuple, cast
 
 from .drive_arrange import (
     DRIVE_LYRICS_CHAR_BUDGET,
@@ -25,6 +25,7 @@ from .drive_arrange import (
     _drop_combo,
     _salt,
     fit_sections_to_lyrics,
+    fit_sections_to_pass_lyrics,
     lift_drive_bpm,
 )
 from .song_plan import SongSection
@@ -428,6 +429,51 @@ def voice_code_sections(
             return kept
         _drop_lyrics_tail(kept)
         current = kept
+
+
+def voice_code_passes(
+    passes: Sequence[Sequence[SongSection]],
+    tokens: Sequence[str],
+) -> list[list[SongSection]]:
+    """Voice every stanza of a multi-pass take from its coder span.
+
+    Cues are dealt across the whole take in one pass so no cue repeats
+    inside the take, then each ACE pass is fitted to its own render
+    window. A pass whose voiced score overruns the window loses
+    stanzas from its back and the cue deal is recomputed for the
+    stanzas that survive; the loop stops when nothing thins further.
+
+    Args:
+        passes: The take's stanzas grouped per ACE pass, render order.
+        tokens: This take's coder words.
+
+    Returns:
+        One voiced, fitted stanza list per pass.
+
+    Raises:
+        ValueError: the budget cannot be met without losing structure.
+    """
+    spans = [list(span) for span in passes]
+    while True:
+        roles = tuple(section["role"] for span in spans for section in span)
+        cues = cell_cues(tokens, roles)
+        cursor = 0
+        thinned = False
+        for index, span in enumerate(spans):
+            voiced: list[SongSection] = [
+                cast(
+                    SongSection,
+                    dict(section, pattern=f"{cue}, {int(section['bars'])} bars"),
+                )
+                for section, cue in zip(span, cues[cursor : cursor + len(span)])
+            ]
+            kept = fit_sections_to_pass_lyrics(voiced)
+            if len(kept) != len(span):
+                thinned = True
+            spans[index] = kept
+            cursor += len(span)
+        if not thinned:
+            return spans
 
 
 def _drop_lyrics_tail(sections: list[SongSection]) -> None:

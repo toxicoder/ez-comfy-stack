@@ -45,7 +45,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 | `ez_dub` | 3 nodes | Ingest / translate / clone+mix |
 | `ez_film` | 3 nodes | Unload, 90s concat, LTX disclosure |
 | `ez_ltx_spatial` | empty | Runtime snap of LTX spatial dims |
-| `ez_music` | 3 nodes | Rap lyrics, album tags, zip |
+| `ez_music` | 4 nodes | Rap lyrics, album tags, beat-join, zip |
 | `ez_podcast` | 5 nodes | Script, learn, loop bed, disclosure, Kokoro TTS |
 | `ez_prompt_enhance` | 16 nodes | Describe still; Klein / Wan / LTX / Z-Image / LongCat / DreamX / negative / prompt bundle / join / context join / ACE-Step / sample prompt / cinema rack / audio rack |
 | `ez_image` | 9 nodes | Snap / match / optional upscale; still and video Format / platform; optional refs; Creator mode |
@@ -128,6 +128,7 @@ Category `ez-comfy/music`. [Local music](../music.md).
 | --- | --- | --- | --- | --- | --- |
 | `EZRapLyrics` | Rap Lyrics | `sample` combo, `lyrics` STRING multiline, `enhance` BOOLEAN (default on), `catalog`; optional `context` STRING (forceInput) | `STRING` lyrics | graph **audio** | On-box Qwen3-4B-Instruct GGUF. Missing GGUF passes widget text. **Forbids living-MC names and famous hooks**. ACE-Step still invents vocal timbre from tags plus lyrics. Context ignored when Enhance is off. Album tracks hide Sample in App Mode |
 | `EZAudioMetadata` | Album metadata | `AUDIO` audio, `artist` `album` `title` STRING, `track` INT 1-99, `tracktotal` INT 1-99, `year` INT 1900-2100 (default 2026), `art_mode` combo `skip` `upload` `generate` (default `skip`), `prefix` STRING; optional `IMAGE` cover | `AUDIO` audio | graph **audio** | Copies ACE SaveAudio masters into `albums/<Artist>/<Album>/` and writes tags |
+| `EZAudioBeatJoin` | Beat-join passes | `AUDIO` audio_01, `bpm` INT 40-300, `overlap_bars` STRING, `crossover_hz` FLOAT 40-500; optional `AUDIO` audio_02..audio_08 | `AUDIO` audio | graph **audio** | Stitches the ACE passes of one multi-pass take on the bar grid. Whole-bar seams, sub-808 hand-off never stacks or nulls, crossfade never clicks. SaveAudio, MP3, and metadata read only this output |
 | `EZAlbumPack` | Pack album zip | `artist` STRING, `album` STRING | `STRING` zip_path | graph **audio** | Writes `<Album>.m3u` and `<Album>.zip`. CPU only |
 
 ---

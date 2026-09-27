@@ -72,7 +72,7 @@ The rack emits at most one BPM token. Match `TextEncodeAceStepAudio1.5` BPM to t
 
 ## Drive-through recipes
 
-Shipped Drive-through takes under `_lab/audio/albums/drive-through/` splice these starters. The arranger then snaps tempo onto 165-176 and replaces the form with a per-take sequence of 2-bar stanzas (~90-120 s, each cell under 3 seconds). Bass identity stays with the recipe:
+Shipped Drive-through takes under `_lab/audio/albums/drive-through/` splice these starters. The arranger then snaps tempo onto 165-176 and replaces the form with a per-take run of movements dealt from eight archetypes, each a sequence of 2-bar stanzas (180-480 s total, 3-5 ACE-Step passes, each cell under 3 seconds). Bass identity stays with the recipe:
 
 | Recipe | Genre |
 | --- | --- |

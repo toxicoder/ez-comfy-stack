@@ -7,7 +7,7 @@ dips, vocals rare.
 
 from __future__ import annotations
 
-from .edm_examples import EdmExample, _ex, format_edm_score
+from .edm_examples import EdmExampleRow, _ex, format_edm_score
 
 # Track scores and catalog rows.
 NIGHT_WINDOW_LYRICS = format_edm_score(
@@ -147,7 +147,7 @@ DAWN_RECEIPT_LYRICS = format_edm_score(
     ("outro", "kick holds\nhats denser\nchest ride"),
 )
 
-EDM_DRIVE_THROUGH: tuple[EdmExample, ...] = (
+EDM_DRIVE_THROUGH: tuple[EdmExampleRow, ...] = (
     _ex(
         "night-window",
         "night window",
