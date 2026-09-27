@@ -7,7 +7,7 @@ pedal bass on some takes, all instrumental.
 
 from __future__ import annotations
 
-from .edm_examples import EdmExample, _ex, format_edm_score
+from .edm_examples import EdmExampleRow, _ex, format_edm_score
 
 # Catalog phase, track scores, and catalog rows.
 AFTERPARTY_PHASE = 3
@@ -203,7 +203,7 @@ TRAILER_HITCH_LYRICS = format_edm_score(
 )
 
 
-EDM_DRIVE_THROUGH_AFTERPARTY: tuple[EdmExample, ...] = (
+EDM_DRIVE_THROUGH_AFTERPARTY: tuple[EdmExampleRow, ...] = (
     _ex(
         "brake-fade",
         "brake fade",

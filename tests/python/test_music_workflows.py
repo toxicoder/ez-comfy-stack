@@ -57,6 +57,7 @@ def _assert_shared(
     edm_vocal_treat: bool = False,
     meter: str = "4",
     keyscale: str = "C minor",
+    pass_seconds: tuple[float, ...] | None = None,
 ) -> None:
     assert graph["id"] == Path(stem).name
     extra = graph["extra"]
@@ -88,17 +89,56 @@ def _assert_shared(
     assert any(n["type"] == "ConditioningZeroOut" for n in graph["nodes"])
     assert any(n["type"] == "PrimitiveNode" for n in graph["nodes"])
     prim = next(n for n in graph["nodes"] if n["type"] == "PrimitiveNode")
-    assert prim["widgets_values"][0] == duration
-    enc = next(n for n in graph["nodes"] if n["type"] == "TextEncodeAceStepAudio1.5")
+    chain_seconds = pass_seconds or (duration,)
+    # Chain 1's clock is the first primitive; each ACE pass renders its own
+    # latent at its own length, so the pass clocks sum to the take minus seams.
+    assert prim["widgets_values"][0] == chain_seconds[0]
+    prim_clocks = sorted(
+        float(node["widgets_values"][0])
+        for node in graph["nodes"]
+        if node["type"] == "PrimitiveNode"
+    )
+    assert prim_clocks == sorted(float(value) for value in chain_seconds)
+    encoders = sorted(
+        (
+            node
+            for node in graph["nodes"]
+            if node["type"] == "TextEncodeAceStepAudio1.5"
+        ),
+        key=lambda node: int(node["id"]),
+    )
+    enc = encoders[0]
     widgets = assert_ace_encoder_widgets(enc, where=stem)
     assert widgets[2] == seed
     assert widgets[3] == "fixed"
     assert widgets[4] == bpm
-    assert widgets[5] == duration
+    assert widgets[5] == chain_seconds[0]
     assert widgets[6] == meter
     assert widgets[7] == ("unknown" if ace_mode == "instrumental" else "en")
     assert widgets[8] == keyscale
     assert widgets[9] is True
+    for index, node in enumerate(encoders):
+        assert_ace_encoder_widgets(node, where=f"{stem}:pass{index}")
+        assert node["widgets_values"][5] == chain_seconds[index], (
+            stem,
+            index,
+            node["widgets_values"][5],
+        )
+        assert node["widgets_values"][4] == bpm, stem
+    latents = sorted(
+        (
+            node
+            for node in graph["nodes"]
+            if node["type"] == "EmptyAceStep1.5LatentAudio"
+        ),
+        key=lambda node: int(node["id"]),
+    )
+    assert len(latents) == len(chain_seconds), stem
+    for index, node in enumerate(latents):
+        assert float(node["widgets_values"][0]) == chain_seconds[index], (
+            stem,
+            index,
+        )
     sampler = next(n for n in graph["nodes"] if n["type"] == "KSampler")
     sw = sampler["widgets_values"]
     assert sw[0] == seed
@@ -106,6 +146,12 @@ def _assert_shared(
     assert sw[3] in (1, 1.0)
     assert sw[4] == "euler"
     assert sw[5] == "simple"
+    assert sum(1 for n in graph["nodes"] if n["type"] == "KSampler") == len(
+        chain_seconds
+    ), stem
+    assert sum(
+        1 for n in graph["nodes"] if n["type"] == "VAEDecodeAudio"
+    ) == len(chain_seconds), stem
     flac = next(n for n in graph["nodes"] if n["type"] == "SaveAudio")
     assert flac["widgets_values"][0] == prefix
     mp3 = next(n for n in graph["nodes"] if n["type"] == "SaveAudioMP3")
@@ -129,6 +175,69 @@ def _assert_shared(
     assert extra.get("lab_album")
     assert extra["lab_album"]["art_mode"] in {"skip", "upload", "generate"}
     assert any(n["type"] == "EZAudioMetadata" for n in graph["nodes"])
+    if len(chain_seconds) > 1:
+        _assert_joined_take(
+            graph,
+            stem,
+            duration=duration,
+            chain_seconds=chain_seconds,
+            prefix=prefix,
+            bpm=bpm,
+        )
+
+
+def _assert_joined_take(
+    graph: dict,
+    stem: str,
+    *,
+    duration: float,
+    chain_seconds: tuple[float, ...],
+    prefix: str,
+    bpm: int,
+) -> None:
+    """The joiner is the one master every save and stamp reads."""
+    joins = [n for n in graph["nodes"] if n["type"] == "EZAudioBeatJoin"]
+    assert len(joins) == 1, stem
+    join = joins[0]
+    assert join["widgets_values"][0] == bpm, stem
+    overlap_text = str(join["widgets_values"][1])
+    seams = [int(value.strip()) for value in overlap_text.split(",")]
+    assert len(seams) == len(chain_seconds) - 1, (stem, seams)
+    assert all(value >= 1 for value in seams), (stem, seams)
+    wired = [
+        inp["name"]
+        for inp in join["inputs"]
+        if inp.get("link") is not None
+    ]
+    assert wired == [
+        f"audio_{slot:02d}" for slot in range(1, len(chain_seconds) + 1)
+    ], (stem, wired)
+    join_links = set(join["outputs"][0]["links"] or [])
+    assert join_links, stem
+    for node in graph["nodes"]:
+        if node["type"] not in {"SaveAudio", "SaveAudioMP3", "EZAudioMetadata"}:
+            continue
+        audio_in = next(inp for inp in node["inputs"] if inp.get("name") == "audio")
+        assert audio_in.get("link") in join_links, (stem, node["type"])
+    decode_ids = {
+        int(node["id"])
+        for node in graph["nodes"]
+        if node["type"] == "VAEDecodeAudio"
+    }
+    join_incoming = {
+        (int(link[1]), int(link[3]))
+        for link in graph["links"]
+        if int(link[3]) == int(join["id"])
+    }
+    assert {src for src, _dst in join_incoming} == decode_ids, stem
+    assert all(int(node["mode"] or 0) == 0 for node in graph["nodes"]
+               if int(node["id"]) in decode_ids), stem
+    # The joined master is the take minus the whole-bar seams it eats.
+    bar_seconds = 240.0 / float(bpm)
+    expected = sum(chain_seconds) - sum(value * bar_seconds for value in seams)
+    assert abs(expected - float(duration)) < 0.6, (stem, expected, duration)
+    assert str(int(duration)) in graph["extra"]["lab_note"], stem
+    assert f"{len(chain_seconds)} passes" in graph["extra"]["lab_note"], stem
 
 
 def test_music_rap_draft_graph() -> None:
@@ -219,7 +328,6 @@ COLUMN_NODE_POS = (
     (1, 40.0, 744.0),
     (2, 40.0, 916.0),
     (3, 40.0, 1092.0),
-    (4, 2976.0, 744.0),
     (5, 500.0, 744.0),
     (6, 500.0, 1236.0),
     (7, 948.0, 744.0),
@@ -229,6 +337,12 @@ COLUMN_NODE_POS = (
     (11, 1340.0, 1218.0),
     (12, 40.0, 80.0),
 )
+# The stage organizer parks the LoadImage (INPUT) and the chain-1 latent
+# (SETTINGS) columns past every authored group, so their absolute x moves
+# with the number of ACE passes. Their row and their fixed 368 px gap are
+# the stable part of the column layout.
+COLUMN_LEFTOVER_ROW_Y = 744.0
+COLUMN_SETTINGS_GAP_X = 368.0
 
 
 def _node_fingerprint(graph: dict) -> tuple[tuple[int, float, float], ...]:
@@ -258,6 +372,9 @@ def test_music_edm_drive_through_graphs() -> None:
             edm_vocal_treat=treat,
             meter=str(ex["meter"]),
             keyscale=str(ex["keyscale"]),
+            pass_seconds=tuple(
+                float(value) for value in ex["pass_seconds"]
+            ),
         )
         blob = json.dumps(graph)
         assert "Drive-through" in blob
@@ -287,12 +404,45 @@ def test_drive_through_phase2_layouts_vary() -> None:
     fingerprints: set[tuple[tuple[int, float, float], ...]] = set()
     for ex in EDM_EXAMPLES:
         graph = _load(ex["stem"])
-        fingerprint = tuple(item for item in _node_fingerprint(graph) if item[0] <= 12)
+        fingerprint = _column_fingerprint(graph)
         if ex["phase"] < 2:
             assert fingerprint == COLUMN_NODE_POS, ex["stem"]
+            positions = _node_positions(graph)
+            assert positions[4][1] == COLUMN_LEFTOVER_ROW_Y, positions[4]
+            assert positions[13][1] == COLUMN_LEFTOVER_ROW_Y, positions[13]
+            assert positions[4][0] - positions[13][0] == COLUMN_SETTINGS_GAP_X
         else:
             fingerprints.add(fingerprint)
     assert len(fingerprints) >= 5
+
+
+def _node_positions(graph: dict) -> dict[int, tuple[float, float]]:
+    """Map node id to its (x, y) in a serialized graph."""
+    return {
+        int(node["id"]): (float(node["pos"][0]), float(node["pos"][1]))
+        for node in graph["nodes"]
+    }
+
+
+def _column_fingerprint(graph: dict) -> tuple[tuple[int, float, float], ...]:
+    """Node 1-12 positions with the engine-staged columns dropped.
+
+    ``_stack_column`` parks the INPUT (LoadImage) and SETTINGS (chain-1
+    latent) columns past every authored group box, so their absolute x
+    grows with the number of ACE passes in the take. The stable layout
+    contract is the authored columns; the leftover pair keeps its row and
+    its fixed gap, which ``test_drive_through_phase2_layouts_vary`` pins.
+
+    Arguments:
+        graph: Serialized lab graph.
+    Returns:
+        (id, x, y) tuples for ids 1-12 except the staged 4 and 13.
+    """
+    return tuple(
+        (node_id, x, y)
+        for node_id, (x, y) in sorted(_node_positions(graph).items())
+        if node_id <= 12 and node_id not in (4, 13)
+    )
 
 
 def test_drive_through_stems_are_stamped_audio() -> None:

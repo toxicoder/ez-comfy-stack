@@ -139,13 +139,13 @@ def core_nodes() -> dict[str, Any]:
         "EmptyAceStep1.5LatentAudio": _n(
             "Empty ACE-Step 1.5 Latent Audio",
             "Allocate an ACE-Step audio latent for N seconds.",
-            lab="Draft is the cold-open bar length. Full is the pre-chorus bar length. Nill Bye albums are 64-210 s. Drive-through is ~90-120 s from per-take bar math, not a shared clock target. seconds is also a socket from PrimitiveNode so App Duration stays in one place.",
+            lab="Draft is the cold-open bar length. Full is the pre-chorus bar length. Nill Bye albums are 64-210 s. Drive-through is 180-480 s built from 3-5 ACE passes of 63-93 s each, from per-take bar math, not a shared clock target. seconds is also a socket from PrimitiveNode so App Duration stays in one place.",
             sockets=[
                 _s("seconds", "FLOAT", "in", "Wired from Song Duration primitive on music graphs."),
                 _s("LATENT", "LATENT", "out", "Audio latent for KSampler."),
             ],
             widgets=[
-                _w("seconds", index=0, typ="FLOAT", rng="draft / full / album plan", desc="Duration in seconds.", gen="Longer latents cost RAM/time linearly. Nill Bye stays 64-210 s. Drive-through is ~90-120 s. Stay at the seeded length unless you have headroom."),
+                _w("seconds", index=0, typ="FLOAT", rng="draft / full / album plan", desc="Duration in seconds.", gen="Longer latents cost RAM/time linearly. Nill Bye stays 64-210 s. A Drive-through ACE pass stays 63-93 s inside a 180-480 s multi-pass take. Stay at the seeded length unless you have headroom."),
                 _w("batch_size", index=1, typ="INT", rng="1", desc="Takes per Queue.", gen="Stay 1."),
             ],
         ),

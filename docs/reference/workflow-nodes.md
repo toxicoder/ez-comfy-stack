@@ -415,6 +415,45 @@ Catalog id.
 
 **How it affects generation:** Leave as stamped.
 
+### `EZAudioBeatJoin` - Beat-join passes
+
+Stitch multi-pass ACE masters into one take on the bar grid.
+
+!!! warning "Lab notes"
+
+    Drive-through takes render 3-5 ACE passes per graph; each pass decodes to its own AUDIO and wires audio_01..audio_NN in render order. SaveAudio, SaveAudioMP3, and EZAudioMetadata read only this node's output.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `audio_01` | in | `AUDIO` | First pass decode (required). |
+| `audio_02` | in | `AUDIO` | Second pass decode; holes before a wired socket are an error. |
+| `audio_08` | in | `AUDIO` | Optional tail; unused sockets stay unwired. |
+| `audio` | out | `AUDIO` | Joined master for the saves and metadata stamp. |
+
+#### `bpm`
+
+Type `INT`. Range / default: 40-300.
+
+Bar-grid tempo.
+
+**How it affects generation:** Matches the take bpm; the bar is 240/bpm seconds at these half-time feels.
+
+#### `overlap_bars`
+
+Type `STRING`.
+
+Whole bars per seam.
+
+**How it affects generation:** One number for all seams or comma-separated per seam; the lab ships the plan's overlap bars.
+
+#### `crossover_hz`
+
+Type `FLOAT`. Range / default: 40-500.
+
+Sub/mid split.
+
+**How it affects generation:** 120 default; the sub band hands off linearly so two 808s never stack or null.
+
 ### `EZAudioLoopToMatch` - Loop bed to speech
 
 Repeat a short instrumental bed until it covers the speech stem, then trim.
@@ -4929,7 +4968,7 @@ Allocate an ACE-Step audio latent for N seconds.
 
 !!! warning "Lab notes"
 
-    Draft is the cold-open bar length. Full is the pre-chorus bar length. Nill Bye albums are 64-210 s. Drive-through is ~90-120 s from per-take bar math, not a shared clock target. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
+    Draft is the cold-open bar length. Full is the pre-chorus bar length. Nill Bye albums are 64-210 s. Drive-through is 180-480 s built from 3-5 ACE passes of 63-93 s each, from per-take bar math, not a shared clock target. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -4942,7 +4981,7 @@ Type `FLOAT`. Range / default: draft / full / album plan.
 
 Duration in seconds.
 
-**How it affects generation:** Longer latents cost RAM/time linearly. Nill Bye stays 64-210 s. Drive-through is ~90-120 s. Stay at the seeded length unless you have headroom.
+**How it affects generation:** Longer latents cost RAM/time linearly. Nill Bye stays 64-210 s. A Drive-through ACE pass stays 63-93 s inside a 180-480 s multi-pass take. Stay at the seeded length unless you have headroom.
 
 #### `batch_size`
 

@@ -7,7 +7,7 @@ headliner energy, all instrumental.
 
 from __future__ import annotations
 
-from .edm_examples import EdmExample, _ex, format_edm_score
+from .edm_examples import EdmExampleRow, _ex, format_edm_score
 
 # Catalog phase, track scores, and catalog rows.
 HEADLINER_PHASE = 2
@@ -163,7 +163,7 @@ EMBER_CREST_LYRICS = format_edm_score(
 )
 
 
-EDM_DRIVE_THROUGH_HEADLINER: tuple[EdmExample, ...] = (
+EDM_DRIVE_THROUGH_HEADLINER: tuple[EdmExampleRow, ...] = (
     _ex(
         "lantern-merge",
         "lantern merge",

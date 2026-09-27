@@ -468,15 +468,143 @@ def _stamp_output_masters(
     return stamped
 
 
+class EZAudioBeatJoin:
+    """Join multi-pass ACE masters into one beat-aligned take."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Declare Comfy widgets and the audio_XX segment sockets.
+
+        Returns:
+            Required and optional input specs.
+        """
+        from .join import MAX_JOIN_SEGMENTS
+
+        optional = {
+            f"audio_{index:02d}": ("AUDIO",)
+            for index in range(2, MAX_JOIN_SEGMENTS + 1)
+        }
+        return {
+            "required": {
+                "audio_01": ("AUDIO",),
+                "bpm": ("INT", {"default": 172, "min": 40, "max": 300}),
+                "overlap_bars": (
+                    "STRING",
+                    {
+                        "default": "2",
+                        "multiline": False,
+                        "tooltip": "Whole bars per seam: one number for "
+                        "all seams, or comma-separated per seam.",
+                    },
+                ),
+                "crossover_hz": (
+                    "FLOAT",
+                    {"default": 120.0, "min": 40.0, "max": 500.0, "step": 5.0},
+                ),
+            },
+            "optional": optional,
+        }
+
+    # Comfy node contract.
+    RETURN_TYPES = ("AUDIO",)
+    RETURN_NAMES = ("audio",)
+    FUNCTION = "run"
+    CATEGORY = "ez-comfy/music"
+    DESCRIPTION = (
+        "Stitches the ACE passes of one Drive-through pass into a single "
+        "master on the bar grid: each seam overlaps whole bars, the 808 "
+        "hand-off never stacks or nulls, and the crossfade never clicks. "
+        "Wire audio_01, then audio_02..audio_08 in render order."
+    )
+
+    def run(
+        self,
+        bpm: float,
+        overlap_bars: str | int,
+        crossover_hz: float,
+        **segments: object,
+    ) -> tuple[object]:
+        """Join the wired AUDIO passes in render order.
+
+        Args:
+            bpm: Tempo that defines the bar grid and the seams.
+            overlap_bars: Whole bars overlapped at each seam; one number
+                or a comma-separated list, one entry per seam.
+            crossover_hz: Sub/mid split for the hand-off.
+            segments: ``audio_01`` .. ``audio_08`` AUDIO payloads; a
+                hole ahead of a later pass is a graph error.
+
+        Returns:
+            One-element tuple with the master AUDIO.
+
+        Raises:
+            ValueError: audio_01 is unwired, a hole sits before a wired
+                socket, or the join parameters are invalid.
+        """
+        from .join import MAX_JOIN_SEGMENTS, join_audio
+
+        wired: list[dict[str, Any]] = []
+        for index in range(1, MAX_JOIN_SEGMENTS + 1):
+            name = f"audio_{index:02d}"
+            value = segments.get(name)
+            if value is None:
+                break
+            wired.append(cast("dict[str, Any]", value))
+        for name in segments:
+            if name.startswith("audio_") and segments[name] is not None:
+                position = int(name.removeprefix("audio_"))
+                if position > len(wired) + 1:
+                    raise ValueError(
+                        f"audio_{position - 1:02d} is unwired ahead of "
+                        f"{name}; wire the passes in render order"
+                    )
+        if not wired:
+            raise ValueError("audio_01 needs an ACE pass")
+        return (join_audio(wired, bpm=float(bpm),
+                           overlap_bars=_parse_overlap(overlap_bars),
+                           crossover_hz=float(crossover_hz)),)
+
+
+def _parse_overlap(value: str | int | list[int]) -> int | list[int]:
+    """Read the overlap widget as one number or a per-seam list.
+
+    Args:
+        value: The raw ``overlap_bars`` widget value.
+
+    Returns:
+        An int or a list of ints for ``join_audio``.
+
+    Raises:
+        ValueError: an entry is not a whole number of bars.
+    """
+    if isinstance(value, int):
+        return value
+    if isinstance(value, (list, tuple)):
+        parts = [str(piece).strip() for piece in value]
+    else:
+        parts = [piece.strip() for piece in str(value).split(",") if piece.strip()]
+    if not parts:
+        raise ValueError("overlap_bars needs a number of bars")
+    try:
+        numbers = [int(piece) for piece in parts]
+    except ValueError as exc:
+        raise ValueError(f"overlap_bars needs whole bars: {value!r}") from exc
+    if len(numbers) == 1:
+        return numbers[0]
+    return numbers
+
+
 # Comfy registry.
 NODE_CLASS_MAPPINGS = {
     "EZRapLyrics": EZRapLyrics,
     "EZAudioMetadata": EZAudioMetadata,
     "EZAlbumPack": EZAlbumPack,
+    "EZAudioBeatJoin": EZAudioBeatJoin,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "EZRapLyrics": "Rap Lyrics",
     "EZAudioMetadata": "Album metadata",
     "EZAlbumPack": "Pack album zip",
+    "EZAudioBeatJoin": "Beat-join passes",
 }

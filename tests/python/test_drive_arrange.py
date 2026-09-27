@@ -1,9 +1,10 @@
-"""Drive-through arranger: two-bar cells, an early drop, 90-120 s.
+"""Drive-through arranger: an epic arc of ACE passes, 180-480 s.
 
-The take's duration equals the rendered score's coverage - no unguided
-tail. Beds rotate through the electric pool, stanzas stay thin early
-and stack up late, and downbeat-only stanzas trade places with full
-ones.
+A take is several ACE passes, each inside its own 2048-token lyric
+window, joined into one master. Each pass's duration equals its own
+score's coverage - no unguided tail. Beds rotate through the electric
+pool, intensity only climbs across the passes, and downbeat-only stanzas
+trade places with full ones.
 """
 
 from __future__ import annotations
@@ -18,6 +19,7 @@ from ez_music.drive_arrange import (
     DRIVE_BPM_CHOICES,
     RECIPE_LINES,
     arrange_drive,
+    arrange_drive_passes,
     fit_drive_sections,
     lift_drive_bpm,
     plan_drive_album,
@@ -104,14 +106,14 @@ def test_fit_adds_stanzas_without_resizing() -> None:
         bpm=165,
         clamp=False,
     )
-    assert 90 <= seconds <= 120
+    assert arrange.DRIVE_FLOOR_S <= seconds <= arrange.DRIVE_CAP_S
 
 
 def test_fit_drops_tail_stanzas_without_resizing() -> None:
     opening = _opening()
     body = [
         _section("inst", 12, f"rapid hi-hats, mono chest-sub, wide mids, lane {index}")
-        for index in range(28)
+        for index in range(60)
     ]
     original = [opening[0], opening[1], *body, opening[2]]
     fitted = fit_drive_sections(original, bpm=165, salt=9)
@@ -126,7 +128,7 @@ def test_fit_drops_tail_stanzas_without_resizing() -> None:
         bpm=165,
         clamp=False,
     )
-    assert 90 <= seconds <= 120
+    assert arrange.DRIVE_FLOOR_S <= seconds <= arrange.DRIVE_CAP_S
 
 
 def test_fit_refuses_a_duration_the_window_cannot_reach(
@@ -186,8 +188,8 @@ def test_arrange_drive_places_one_chop_after_the_first_drop() -> None:
     quiet = arrange_drive("[drop - heavy warped drop]", plan, treat=True)
     assert "[chorus]" not in quiet
     # The plan re-syncs its duration to the stanzas that ship.
-    assert 90 <= plan["duration_s"] <= 120
-    assert plan["bucket"] in ("short", "standard", "long")
+    assert arrange.DRIVE_FLOOR_S <= plan["duration_s"] <= arrange.DRIVE_CAP_S
+    assert plan["bucket"] in ("short", "standard", "long", "epic")
 
 
 def test_arrange_drive_fits_the_lyrics_window() -> None:
@@ -213,12 +215,16 @@ def test_arrange_drive_fits_the_lyrics_window() -> None:
     assert len(plans) == 8
     for plan in plans:
         score = arrange_drive(rows[0]["lyrics"], plan)
-        assert len(score) <= arrange.DRIVE_LYRICS_CHAR_BUDGET, plan["form_id"]
-        assert score.startswith("[build-up")
-        assert score.endswith("2 bars]")
-        assert "[outro" in score
-        drops = sum(1 for line in score.splitlines() if line.startswith("[drop"))
-        assert drops >= 5, plan["form_id"]
+        passes = arrange_drive_passes(rows[0]["lyrics"], plan)
+        assert len(passes) == len(plan["movements"])
+        for score in passes:
+            assert len(score) <= arrange.DRIVE_PASS_CHAR_BUDGET, plan["form_id"]
+            assert score.startswith("[build-up"), plan["form_id"]
+            assert score.endswith("2 bars]"), plan["form_id"]
+        joined = "\n\n".join(passes)
+        assert "[outro" in joined
+        drops = sum(1 for line in joined.splitlines() if line.startswith("[drop"))
+        assert drops >= arrange._DROP_FLOOR, plan["form_id"]
 
 
 def test_fit_lyrics_window_trims_tail_keeps_structure() -> None:
@@ -505,12 +511,12 @@ def test_drop_tail_removes_one_stanza() -> None:
 
 
 def test_drop_target_scales_with_body() -> None:
-    assert arrange._drop_target(0) == 5
-    assert arrange._drop_target(9) == 5
-    assert arrange._drop_target(28) == 10
-    assert arrange._drop_target(43) == 15
-    assert arrange._drop_target(90) == 30
-    assert arrange._drop_target(160) == 30
+    assert arrange._drop_target(0) == 8
+    assert arrange._drop_target(9) == 8
+    assert arrange._drop_target(28) == 8
+    assert arrange._drop_target(43) == 13
+    assert arrange._drop_target(90) == 14
+    assert arrange._drop_target(160) == 14
 
 
 def test_drop_cap_forces_role_switching(
@@ -528,7 +534,9 @@ def test_drop_cap_forces_role_switching(
     # drop floor is restored by promotions alone.
     drops = sum(section["role"] == "drop" for section in sections)
     assert drops >= arrange._DROP_FLOOR
-    assert arrange._seconds(sections, int(plan["bpm"])) == plan["duration_s"]
+    # The take's length is the summed pass lengths less the seam overlaps.
+    seams = int(round(sum(plan["overlap_bars"]) * 240 / int(plan["bpm"])))
+    assert arrange._seconds(sections, int(plan["bpm"])) - seams == plan["duration_s"]
 
 
 def test_ensure_drops_promotes_fills_to_meet_floor_and_share() -> None:
@@ -660,12 +668,14 @@ def _two_bar_bed() -> list[SongSection]:
 
 
 def test_bucket_labels_map_duration_bands() -> None:
-    assert arrange._bucket(90) == "short"
-    assert arrange._bucket(99) == "short"
-    assert arrange._bucket(100) == "standard"
-    assert arrange._bucket(111) == "standard"
-    assert arrange._bucket(112) == "long"
-    assert arrange._bucket(120) == "long"
+    assert arrange._bucket(183) == "short"
+    assert arrange._bucket(209) == "short"
+    assert arrange._bucket(210) == "standard"
+    assert arrange._bucket(299) == "standard"
+    assert arrange._bucket(300) == "long"
+    assert arrange._bucket(399) == "long"
+    assert arrange._bucket(400) == "epic"
+    assert arrange._bucket(480) == "epic"
 
 
 def test_rare_breakdown_is_one_two_bar_cell() -> None:
@@ -684,9 +694,9 @@ def test_rare_breakdown_is_one_two_bar_cell() -> None:
         _section("drop", 2, "harder warped drop, c"),
         _section("outro", 2, "kick pattern flip, d"),
     ]
-    arrange._place_rare_breakdown(empty, salt=7, used=set(), gate=7)
+    arrange._place_rare_breakdown(empty, salt=7, used=set(), gate=5)
     assert [section["role"] for section in empty].count("breakdown") == 0
-    arrange._place_rare_breakdown(sections, salt=7, used=set(), gate=7)
+    arrange._place_rare_breakdown(sections, salt=7, used=set(), gate=5)
     breakdowns = [section for section in sections if section["role"] == "breakdown"]
     assert len(breakdowns) == 1
     assert breakdowns[0]["bars"] == 2
@@ -733,29 +743,20 @@ def test_check_rejects_broken_shapes() -> None:
                 ("drop", 2, "wreck wobble drop, low chest-sub"),
                 ("outro", 2, "kick pattern flip, chest-sub"),
             ],
-            "at least five drops",
+            "at least 8 drops",
         ),
         (
             [
                 ("build-up", 2, "snare roll, mono chest-sub"),
                 ("drop", 2, "heavy warped drop"),
-                ("inst", 2, "rapid hi-hats, body bass, one"),
-                ("inst", 2, "offbeat hats, fold bass, two"),
-                ("inst", 2, "ghost snare, body bass, three"),
-                ("inst", 2, "triplet hats, fold bass, four"),
-                ("inst", 2, "tight kick, body bass, five"),
-                ("drop", 2, "harder warped drop, two"),
-                ("inst", 2, "offbeat hats, fold bass, six"),
-                ("inst", 2, "ghost snare, body bass, seven"),
-                ("drop", 2, "stacked reese drop, mono chest-sub"),
-                ("inst", 2, "triplet hats, fold bass, eight"),
-                ("inst", 2, "tight kick, body bass, nine"),
-                ("drop", 2, "wreck wobble drop, low chest-sub"),
-                ("inst", 2, "offbeat hats, fold bass, ten"),
-                ("inst", 2, "ghost snare, body bass, eleven"),
-                ("drop", 2, "full send warped drop, chest-sub melody"),
-                ("inst", 2, "triplet hats, fold bass, twelve"),
-                ("inst", 2, "tight kick, body bass, thirteen"),
+                *[
+                    (
+                        "drop" if index % 4 == 0 else "inst",
+                        2,
+                        f"rapid hi-hats, body bass, cell {index}",
+                    )
+                    for index in range(39)
+                ],
                 ("outro", 2, "kick pattern flip, chest-sub"),
             ],
             "drop target below minimum",
@@ -764,22 +765,20 @@ def test_check_rejects_broken_shapes() -> None:
             [
                 ("build-up", 2, "snare roll, mono chest-sub"),
                 ("drop", 2, "heavy warped drop"),
-                ("inst", 2, "rapid hi-hats, body bass, one"),
-                ("inst", 2, "offbeat hats, fold bass, two"),
-                ("inst", 2, "ghost snare, body bass, three"),
-                ("drop", 2, "harder warped drop, four"),
-                ("inst", 2, "triplet hats, fold bass, five"),
-                ("inst", 2, "tight kick, body bass, six"),
-                ("drop", 2, "stacked reese drop, mono chest-sub"),
-                ("inst", 2, "offbeat hats, fold bass, seven"),
-                ("inst", 2, "ghost snare, body bass, eight"),
-                ("drop", 2, "wreck wobble drop, low chest-sub"),
-                ("inst", 2, "triplet hats, fold bass, nine"),
-                ("inst", 2, "tight kick, body bass, ten"),
-                ("drop", 2, "full send warped drop, chest-sub melody"),
+                *[
+                    (
+                        "drop" if index % 3 == 2 else "inst",
+                        2,
+                        f"rapid hi-hats, body bass, cell {index}",
+                    )
+                    for index in range(27)
+                ],
+                ("inst", 2, "rapid hi-hats, body bass, run a"),
+                ("inst", 2, "rapid hi-hats, body bass, run b"),
+                ("inst", 2, "rapid hi-hats, body bass, run c"),
                 ("outro", 2, "kick pattern flip, chest-sub"),
             ],
-            "role run longer than two",
+            "role run longer than the cap",
         ),
         (
             [
@@ -794,6 +793,12 @@ def test_check_rejects_broken_shapes() -> None:
                 ("inst", 2, "ghost snare, body bass, six"),
                 ("drop", 2, "wreck wobble drop, low chest-sub"),
                 ("drop", 2, "full send warped drop, chest-sub melody"),
+                ("inst", 2, "tight kick, body bass, seven"),
+                ("drop", 2, "heavy reese drop, body bass, eight"),
+                ("inst", 2, "rolling hats, body bass, nine"),
+                ("drop", 2, "stacked wobble drop, body bass, ten"),
+                ("inst", 2, "open hat, body bass, eleven"),
+                ("drop", 2, "harder reese drop, body bass, twelve"),
                 ("outro", 2, "kick pattern flip, chest-sub"),
             ],
             "more than one breakdown",
@@ -806,14 +811,16 @@ def test_check_rejects_broken_shapes() -> None:
         [
             ("build-up", 2, "snare roll, mono chest-sub"),
             ("drop", 2, "same phrase"),
-            ("inst", 2, "rapid hi-hats, body bass"),
             ("drop", 2, "same phrase"),
-            ("inst", 2, "offbeat hats, fold bass"),
+            ("inst", 2, "rapid hi-hats, body bass, one"),
             ("drop", 2, "wreck warped drop, low chest-sub"),
-            ("inst", 2, "ghost snare, body bass, one"),
             ("drop", 2, "stacked reese drop, mono chest-sub"),
-            ("inst", 2, "triplet hats, fold bass, two"),
+            ("inst", 2, "offbeat hats, fold bass, two"),
             ("drop", 2, "full send wobble drop, chest-sub melody"),
+            ("drop", 2, "heavy reese drop, body bass, three"),
+            ("inst", 2, "ghost snare, body bass, four"),
+            ("drop", 2, "harder reese drop, body bass, five"),
+            ("drop", 2, "tight wobble drop, body bass, six"),
             ("outro", 2, "kick pattern flip, chest-sub"),
         ]
     )
@@ -823,14 +830,16 @@ def test_check_rejects_broken_shapes() -> None:
         [
             ("build-up", 2, "pluck"),
             ("drop", 2, "heavy warped drop"),
-            ("inst", 2, "rapid hi-hats, body bass"),
-            ("drop", 2, "harder wobble warped drop"),
-            ("inst", 2, "offbeat hats, fold bass"),
+            ("drop", 2, "stacked reese drop"),
+            ("inst", 2, "rapid hi-hats, body bass, one"),
+            ("drop", 2, "harder wobble drop"),
             ("drop", 2, "wreck warped drop, low chest-sub"),
-            ("inst", 2, "ghost snare, body bass, one"),
-            ("drop", 2, "stacked reese drop, mono chest-sub"),
-            ("inst", 2, "triplet hats, fold bass, two"),
+            ("inst", 2, "offbeat hats, fold bass, two"),
             ("drop", 2, "full send wobble drop, chest-sub melody"),
+            ("drop", 2, "heavy reese drop, body bass, three"),
+            ("inst", 2, "ghost snare, body bass, four"),
+            ("drop", 2, "tight warped drop, body bass, five"),
+            ("drop", 2, "stacked wobble drop, body bass, six"),
             ("outro", 2, "kick pattern flip, chest-sub"),
         ]
     )
@@ -840,14 +849,16 @@ def test_check_rejects_broken_shapes() -> None:
         [
             ("build-up", 2, "kick tightens, mono chest-sub"),
             ("drop", 2, "heavy warped drop"),
+            ("drop", 2, "stacked reese drop"),
             ("inst", 2, "chest-sub drop"),
-            ("drop", 2, "harder wobble warped drop"),
-            ("inst", 2, "offbeat hats, fold bass"),
+            ("drop", 2, "harder wobble drop"),
             ("drop", 2, "wreck warped drop, low chest-sub"),
-            ("inst", 2, "ghost snare, body bass, one"),
-            ("drop", 2, "stacked reese drop, mono chest-sub"),
-            ("inst", 2, "triplet hats, fold bass, two"),
+            ("inst", 2, "offbeat hats, fold bass, two"),
             ("drop", 2, "full send wobble drop, chest-sub melody"),
+            ("drop", 2, "heavy reese drop, body bass, three"),
+            ("inst", 2, "ghost snare, body bass, four"),
+            ("drop", 2, "tight warped drop, body bass, five"),
+            ("drop", 2, "stacked wobble drop, body bass, six"),
             ("outro", 2, "kick pattern flip, chest-sub"),
         ]
     )
@@ -915,21 +926,34 @@ def test_inserted_stanzas_are_dense() -> None:
 
 
 def test_take_duration_matches_score_coverage() -> None:
+    """Every pass's own score covers its own latent: no unguided tail.
+
+    This is the invariant that keeps ACE-Step from rendering the
+    uncovered remainder of a latent as static. Each pass is measured
+    against its own char budget, and the take's duration is the summed
+    pass lengths less the seams the joiner overlaps.
+    """
     rows = _rows(10)
     for row, plan in zip(rows, plan_drive_album("hour-1", rows)):
-        score = arrange_drive(row["lyrics"], plan)
-        assert len(score) <= arrange.DRIVE_LYRICS_CHAR_BUDGET, plan["form_id"]
-        bars: list[int] = []
-        for line in score.splitlines():
-            match = re.fullmatch(r"\[.* - .*, (\d+) bars\]", line.strip())
-            if match:
-                bars.append(int(match.group(1)))
-        covered = duration_seconds(
-            bars=sum(bars), meter="4", bpm=plan["bpm"], clamp=False
-        )
-        assert plan["duration_s"] == covered, plan["form_id"]
-        assert 90 <= plan["duration_s"] <= 120, plan["form_id"]
-        assert plan["bucket"] in ("short", "standard", "long")
+        arrange_drive(row["lyrics"], plan)
+        passes = plan["pass_scores"]
+        assert len(passes) == len(plan["movements_sections"]), plan["form_id"]
+        total = 0
+        for score, span in zip(passes, plan["movements_sections"]):
+            assert len(score) <= arrange.DRIVE_PASS_CHAR_BUDGET, plan["form_id"]
+            bars: list[int] = []
+            for line in score.splitlines():
+                match = re.fullmatch(r"\[.* - .*, (\d+) bars\]", line.strip())
+                if match:
+                    bars.append(int(match.group(1)))
+            assert sum(bars) == sum(int(s["bars"]) for s in span), plan["form_id"]
+            total += duration_seconds(
+                bars=sum(bars), meter="4", bpm=plan["bpm"], clamp=False
+            )
+        seams = int(round(sum(plan["overlap_bars"]) * 240 / int(plan["bpm"])))
+        assert plan["duration_s"] == total - seams, plan["form_id"]
+        assert arrange.DRIVE_FLOOR_S <= plan["duration_s"] <= arrange.DRIVE_CAP_S
+        assert plan["bucket"] in ("short", "standard", "long", "epic")
 
 
 def _catalog_rows() -> list[tuple[str, list[dict[str, Any]]]]:
@@ -1078,3 +1102,346 @@ def test_plans_and_scores_are_deterministic() -> None:
         plan["sections"] for plan in second
     ]
     assert scores_first == scores_second
+
+
+def _fill(cue: str) -> str:
+    """Pad a cue so its bracketed stanza measures about 100 chars."""
+    return f"{cue}, {'x' * 60}"
+
+
+def test_arrange_drive_passes_falls_back_to_flat_sections() -> None:
+    """A plan without per-pass spans renders as one pass of its sections."""
+    opening = [
+        _section("build-up", 2, "sub energy lifts, chest-sub, a"),
+        _section("drop", 2, "heavy warped drop, chest-sub, b"),
+        _section("inst", 2, "rapid hi-hats, FM warp sub, c"),
+        _section("outro", 2, "kick pattern flip, chest-sub, d"),
+    ]
+    plan: Any = {"bpm": 168, "sections": opening, "overlap_bars": []}
+    scores = arrange_drive_passes("drop - heavy warped drop", plan)
+    assert len(scores) == 1
+    assert scores[0].startswith("[build-up")
+    assert plan["pass_seconds"] == [plan["duration_s"]]
+
+
+def test_arrange_drive_passes_refuses_a_chop_that_overruns_the_pass(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A DJ chop that would push the first pass past its window is an error."""
+    plan = plan_drive_album("hour-1", _rows(1))[0]
+    monkeypatch.setattr(
+        arrange, "_parse_edm", lambda lyrics: (["cue"], "word " * 2000)
+    )
+    with pytest.raises(ValueError, match="drive chop will not fit the first pass"):
+        arrange_drive_passes("source", plan, treat=True)
+
+
+def _pass_blocks() -> list[str]:
+    """Three fills and eight drops between the protected open and close."""
+    blocks = ["[build-up - " + _fill("a")]
+    blocks += ["[inst - " + _fill(f"i{k}") + "]" for k in range(3)]
+    blocks += ["[drop - " + _fill(f"d{k}") + "]" for k in range(8)]
+    blocks += ["[outro - " + _fill("z") + "]"]
+    return blocks
+
+
+def test_pass_survivor_indices_protects_drops_at_the_floor(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Trimming a pass spends the fills first; drops at the floor stay."""
+    blocks = _pass_blocks()
+    full = len("\n\n".join(blocks))
+    monkeypatch.setattr(arrange, "DRIVE_PASS_CHAR_BUDGET", full - 60)
+    kept = arrange._pass_survivor_indices(blocks)
+    assert len(kept) == len(blocks) - 1
+    drops = sum(blocks[index].startswith("[drop") for index in kept)
+    assert drops == arrange._DROP_FLOOR
+    assert kept[0] == 0 and kept[-1] == len(blocks) - 1
+
+
+def test_pass_survivor_indices_refuses_a_pass_of_only_drops(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """When every trimmable stanza is a protected drop, the fit fails."""
+    blocks = ["[build-up - " + _fill("a")]
+    blocks += ["[drop - " + _fill(f"d{k}") + "]" for k in range(arrange._DROP_FLOOR)]
+    blocks += ["[outro - " + _fill("z") + "]"]
+    full = len("\n\n".join(blocks))
+    monkeypatch.setattr(arrange, "DRIVE_PASS_CHAR_BUDGET", full - 1)
+    with pytest.raises(ValueError, match="cannot fit the lyric window"):
+        arrange._pass_survivor_indices(blocks)
+
+
+def test_menu_count_stays_inside_the_pass_menu() -> None:
+    """The dealt menu size is a menu entry for every album and track."""
+    picks = {
+        arrange._menu_count(slug, track)
+        for slug in ("hour-1", "afterparty", "my-coder")
+        for track in range(1, 21)
+    }
+    assert picks and picks <= set(arrange.PASS_CELL_CHOICES)
+
+
+def test_band_of_names_the_band_for_every_length() -> None:
+    """Seconds map onto the four bands without gaps."""
+    assert arrange._band_of(arrange.DRIVE_FLOOR_S) == "short"
+    assert arrange._band_of(240) == "mid"
+    assert arrange._band_of(300) == "long"
+    assert arrange._band_of(arrange.DRIVE_CAP_S) == "epic"
+
+
+def test_band_window_falls_back_to_the_full_span() -> None:
+    """An unknown band name still yields a usable window."""
+    assert arrange._band_window("nope") == (
+        arrange.DRIVE_FLOOR_S,
+        arrange.DRIVE_CAP_S + 1,
+    )
+
+
+def test_archetype_for_falls_back_when_no_shape_reaches_the_band(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """An impossible band window deals from the whole archetype table."""
+    monkeypatch.setattr(arrange, "_band_window", lambda name: (10, 20))
+    name, roles = arrange._archetype_for("hour-1", 1, 11, 0, 168)
+    assert name in arrange._ARCHETYPES
+    assert roles == arrange._ARCHETYPES[name]
+
+
+def test_archetype_seconds_counts_floor_cells_as_two_bar_cells() -> None:
+    """The floor length is every pass at the menu floor, 2 bars per cell."""
+    seconds = arrange._archetype_seconds(("cycle", "climax"), 168)
+    bars = 2 * arrange.PASS_CELL_MIN * 2
+    expected = bars * 240 // 168
+    assert abs(seconds - expected) <= 1
+
+
+def test_allocate_cells_on_an_empty_take() -> None:
+    """No movements means no cell allocation."""
+    assert arrange._allocate_cells((), 300, 168, 3) == []
+
+
+def test_movement_tiers_places_tag_mid_ladder() -> None:
+    """Cycles climb by index, a tag sits at tier 3, the finale is 4."""
+    assert arrange._movement_tiers(("cycle", "tag", "climax")) == [2, 3, 4]
+    assert arrange._movement_tiers(("cycle", "cycle", "climax")) == [2, 3, 4]
+
+
+def test_unique_cue_skips_a_bed_at_its_take_share() -> None:
+    """A bed already at its per-take cap cannot voice another cell."""
+    first_bed = arrange._bed(5, 3, 0).split(", ")[0]
+    cue = arrange._unique_cue(
+        "inst", 5, 3, set(), bed_counts={first_bed: 1}, bed_limit=1
+    )
+    assert cue.split(", ")[0] != first_bed
+    capped = {bed: 1 for bed in arrange._BEDS}
+    with pytest.raises(ValueError, match="no unique cue"):
+        arrange._unique_cue("inst", 5, 3, set(), bed_counts=capped, bed_limit=1)
+
+
+def test_repair_beds_on_an_empty_take() -> None:
+    """Nothing to re-voice when the take shipped no cells."""
+    arrange._repair_beds([], tiers=[], salt=3, used=set(), queue=[])
+
+
+def test_compose_returns_the_flat_stanzas_of_the_passes() -> None:
+    """The single-take composer opens on the build and closes on the outro."""
+    sections = arrange._compose(
+        album_slug="hour-1",
+        track_number=1,
+        bpm=168,
+        seed=11,
+        lyrics="drop - heavy warped drop, mono chest-sub, rapid hi-hats",
+        recipe="rec_drive_through_drop",
+        extra=0,
+    )
+    assert sections[0]["role"] == "build-up"
+    assert sections[-1]["role"] == "outro"
+    assert len(sections) >= arrange._DROP_FLOOR + 2
+
+
+def test_thin_pass_gives_up_when_nothing_may_go(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A pass whose only trimmable stanzas are drops raises, never ships."""
+    sections = [_section("build-up", 2, "sub energy lifts, chest-sub, a")]
+    sections += [
+        _section("drop", 2, f"heavy warped drop, chest-sub, d{k}")
+        for k in range(4)
+    ]
+    sections.append(_section("outro", 2, "kick pattern flip, chest-sub, z"))
+    monkeypatch.setattr(arrange, "DRIVE_PASS_CHAR_BUDGET", 10)
+    with pytest.raises(ValueError, match="cannot fit the lyric window"):
+        arrange._thin_pass(sections, bpm=168)
+
+
+def test_thin_pass_stops_at_the_guard(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A pair that never shrinks the pass exhausts the guard and raises."""
+    sections = [
+        _section("inst", 2, f"rapid hi-hats, chest-sub, i{k}") for k in range(20)
+    ]
+    monkeypatch.setattr(arrange, "DRIVE_PASS_CHAR_BUDGET", 10)
+    monkeypatch.setattr(arrange, "_thinnable_pair", lambda _sections: (2, 2))
+    with pytest.raises(ValueError, match="cannot fit the lyric window"):
+        arrange._thin_pass(sections, bpm=168)
+
+
+def _thinnable_probe(*, cells: int, breakdown_at: int | None) -> list[SongSection]:
+    """A pass body for aiming ``_thinnable_pair`` at its guards.
+
+    Args:
+        cells: Fill stanzas between the opening pair and the drop run.
+        breakdown_at: Index (within the fills) that becomes a breakdown.
+
+    Returns:
+        Sections with one opening drop plus eight closing drops and an outro.
+    """
+    out = [
+        _section("build-up", 2, "sub energy lifts, chest-sub, open"),
+        _section("drop", 2, "heavy warped drop, chest-sub, first"),
+    ]
+    out += [
+        _section(
+            "breakdown" if k == breakdown_at else "inst",
+            2,
+            f"rapid hi-hats, FM warp sub, i{k}",
+        )
+        for k in range(cells)
+    ]
+    out += [
+        _section("drop", 2, f"heavy stacked reese drop, wavy phase sub, x{k}")
+        for k in range(8)
+    ]
+    out.append(_section("outro", 2, "kick pattern flip, chest-sub, end"))
+    return out
+
+
+def test_thinnable_pair_skips_guards_and_returns_the_legal_pair() -> None:
+    """Drop-floor and breakdown guards pass over their pairs."""
+    sections = _thinnable_probe(cells=13, breakdown_at=12)
+    # The scan runs from the back: the closing drop pairs would take the
+    # take under its drop floor, and the breakdown pair is untouchable,
+    # so the first clean fill pair comes back.
+    assert arrange._thinnable_pair(sections) == (12, 14)
+
+
+def test_thinnable_pair_stops_at_the_cell_floor() -> None:
+    """A pass at the thin floor may not lose any pair."""
+    sections = _thinnable_probe(cells=2, breakdown_at=None)
+    assert len(sections) - 2 < arrange.PASS_CELL_THIN_FLOOR
+    assert arrange._thinnable_pair(sections) is None
+
+
+def test_thinnable_pair_yields_to_an_all_breakdown_tail() -> None:
+    """When every trimmable pair keeps a breakdown, nothing may go."""
+    sections = _thinnable_probe(cells=0, breakdown_at=None)
+    sections[2:2] = [
+        _section("breakdown", 2, f"half-time feel, chest-sub, b{k}")
+        for k in range(14)
+    ]
+    assert arrange._thinnable_pair(sections) is None
+
+
+def test_check_beds_accepts_a_clean_rotation() -> None:
+    """Seven beds cycling the pool respect both the window and the cap."""
+    beds = list(arrange._BEDS)
+    arrange._check_beds(list(beds) * 4)
+    arrange._check_beds(["some other phrase", "another one"])
+
+
+def test_check_beds_flags_a_bed_inside_the_rotation_window() -> None:
+    """A bed may not return inside the last few cells."""
+    beds = list(arrange._BEDS)
+    with pytest.raises(ValueError, match="returns inside the rotation window"):
+        arrange._check_beds([beds[0], beds[1], beds[2], beds[0]])
+
+
+def test_check_beds_flags_a_bed_that_hogs_the_take(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """One bed past the per-take share is refused."""
+    monkeypatch.setattr(arrange, "_BED_WINDOW", 2)
+    beds = list(arrange._BEDS)
+    with pytest.raises(ValueError, match="voices"):
+        arrange._check_beds([beds[0], beds[1], beds[2]] * 12)
+
+
+def _one_pass_sections(role_second: str = "drop") -> list[SongSection]:
+    """A minimal four-stanza pass for the per-pass checker."""
+    return [
+        _section("build-up", 2, "sub energy lifts, chest-sub, a"),
+        _section(role_second, 2, "heavy warped drop, chest-sub, b"),
+        _section("inst", 2, "rapid hi-hats, FM warp sub, c"),
+        _section("build-up", 2, "low-end pressure builds, wavy phase sub, d"),
+    ]
+
+
+def test_check_passes_rejects_broken_pass_structures() -> None:
+    """Every per-pass invariant has its own message."""
+    with pytest.raises(ValueError, match="do not cover the take"):
+        arrange._check_passes(_one_pass_sections(), [0], tiers=[], roles=(), bpm=None)
+    with pytest.raises(ValueError, match="leave stanzas unassigned"):
+        arrange._check_passes(_one_pass_sections(), [2], tiers=[], roles=(), bpm=None)
+    with pytest.raises(ValueError, match="too short to build and drop"):
+        arrange._check_passes(
+            _one_pass_sections()[:3], [3], tiers=[], roles=(), bpm=None
+        )
+    broken_open = _one_pass_sections()
+    broken_open[0]["role"] = "inst"
+    with pytest.raises(ValueError, match="does not open on a build-up"):
+        arrange._check_passes(broken_open, [4], tiers=[], roles=(), bpm=None)
+    with pytest.raises(ValueError, match="does not land its first drop"):
+        arrange._check_passes(
+            _one_pass_sections("inst"), [4], tiers=[], roles=(), bpm=None
+        )
+    no_handoff = _one_pass_sections()
+    no_handoff[-1]["role"] = "inst"
+    with pytest.raises(ValueError, match="does not hand off on a build-up"):
+        arrange._check_passes(
+            no_handoff + _one_pass_sections(),
+            [4, 4],
+            tiers=[1, 1],
+            roles=("cycle", "climax"),
+            bpm=None,
+        )
+    with pytest.raises(ValueError, match="under its drop floor"):
+        arrange._check_passes(_one_pass_sections(), [4], tiers=[], roles=(), bpm=None)
+
+
+def test_check_passes_flags_a_drop_in_intensity_between_passes(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Escalation only climbs: a later pass may not run a lower tier."""
+    monkeypatch.setattr(arrange, "_pass_drop_floor", lambda role: 0)
+    with pytest.raises(ValueError, match="intensity drops between passes"):
+        arrange._check_passes(
+            _one_pass_sections() + _one_pass_sections(),
+            [4, 4],
+            tiers=[3, 2],
+            roles=("cycle", "climax"),
+            bpm=None,
+        )
+
+
+def test_check_passes_flags_a_pass_over_its_window(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A pass whose score outgrows its own budget never ships."""
+    monkeypatch.setattr(arrange, "DRIVE_PASS_CHAR_BUDGET", 20)
+    with pytest.raises(ValueError, match="exceeds the lyric window"):
+        arrange._check_passes(_one_pass_sections(), [4], tiers=[], roles=(), bpm=None)
+
+
+def test_check_passes_flags_a_pass_outside_its_bounds(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A 68-bar pass is longer than one ACE render may run."""
+    monkeypatch.setattr(arrange, "_pass_drop_floor", lambda role: 0)
+    long_span = _one_pass_sections()
+    long_span += [
+        _section("inst", 2, f"rapid hi-hats, FM warp sub, j{k}") for k in range(30)
+    ]
+    with pytest.raises(ValueError, match="outside pass bounds"):
+        arrange._check_passes(long_span, [34], tiers=[], roles=(), bpm=168)

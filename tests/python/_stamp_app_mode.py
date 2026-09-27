@@ -17,6 +17,7 @@ Do not require extra.linearMode (upstream does not write it; lab sugar only).
 from __future__ import annotations
 
 import json
+import re
 from collections import Counter
 from typing import Any, Mapping, Sequence
 
@@ -807,6 +808,19 @@ def display_label(
                 "lyrics": f"{kind} lyrics",
                 "enhance": f"Rewrite {kind.lower()}",
                 "mode": f"{kind} mode",
+            }.get(name, generic)
+        # Multi-pass Drive-through graphs ship one enhancer per ACE pass
+        # ("ez_edm_prompt pass 2"); number the labels so the App shows each
+        # pass once instead of four identical "Vocal / instrumental" rows.
+        pass_match = re.search(r"\bpass (\d+)\b", title_l)
+        if pass_match and collide:
+            number = pass_match.group(1)
+            return {
+                "sample": f"Pass {number} sample",
+                "tags": f"Pass {number} tags",
+                "lyrics": f"Pass {number} lyrics",
+                "enhance": f"Rewrite pass {number}",
+                "mode": f"Pass {number} vocal / instrumental",
             }.get(name, generic)
         if name == "sample":
             return "Sample prompt"

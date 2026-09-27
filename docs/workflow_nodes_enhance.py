@@ -348,4 +348,26 @@ def enhance_nodes() -> dict[str, Any]:
             _w("album", index=1, desc="Album folder display name.", gen="Queue tracks first (or album-render). CPU only."),
         ],
     )
+    nodes["EZAudioBeatJoin"] = _n(
+        "Beat-join passes",
+        "Stitch multi-pass ACE masters into one take on the bar grid.",
+        origin="ez_music",
+        lab=(
+            "Drive-through takes render 3-5 ACE passes per graph; each pass "
+            "decodes to its own AUDIO and wires audio_01..audio_NN in render "
+            "order. SaveAudio, SaveAudioMP3, and EZAudioMetadata read only "
+            "this node's output."
+        ),
+        sockets=[
+            _s("audio_01", "AUDIO", "in", "First pass decode (required)."),
+            _s("audio_02", "AUDIO", "in", "Second pass decode; holes before a wired socket are an error."),
+            _s("audio_08", "AUDIO", "in", "Optional tail; unused sockets stay unwired."),
+            _s("audio", "AUDIO", "out", "Joined master for the saves and metadata stamp."),
+        ],
+        widgets=[
+            _w("bpm", index=0, typ="INT", rng="40-300", desc="Bar-grid tempo.", gen="Matches the take bpm; the bar is 240/bpm seconds at these half-time feels."),
+            _w("overlap_bars", index=1, desc="Whole bars per seam.", gen="One number for all seams or comma-separated per seam; the lab ships the plan's overlap bars."),
+            _w("crossover_hz", index=2, typ="FLOAT", rng="40-500", desc="Sub/mid split.", gen="120 default; the sub band hands off linearly so two 808s never stack or null."),
+        ],
+    )
     return nodes

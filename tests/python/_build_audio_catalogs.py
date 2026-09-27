@@ -3386,7 +3386,8 @@ def mix_production() -> list[dict[str, Any]]:
             "808, original composition, heavy chest bass, bass boosted, "
             "wide low-mid layers, fast switch-ups, "
             "deep 3D spatial low-mid, stacked 808 layers, "
-            "electric warp texture, wavy FM layers",
+            "electric warp texture, wavy FM layers, "
+            "escalating layered drops, heavy fast bass, layered drop ladder",
             "Lock a live bass-set mix so the take stays instrumental, original, and chest-heavy",
         ),
         (
@@ -3395,7 +3396,8 @@ def mix_production() -> list[dict[str, Any]]:
             "808, original composition, heavy chest bass, bass boosted, "
             "wide low-mid layers, fast switch-ups, "
             "deep 3D spatial low-mid, stacked 808 layers, "
-            "electric warp texture, wavy FM layers",
+            "electric warp texture, wavy FM layers, "
+            "escalating layered drops, heavy fast bass, layered drop ladder",
             "Lock a live bass-set mix so a sparse DJ shout can sit without a rap verse",
         ),
     ]
