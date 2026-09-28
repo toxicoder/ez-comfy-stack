@@ -122,6 +122,133 @@ def test_sample_picker_js_freezes_to_custom_on_prompt_edits() -> None:
         assert f'"{name}"' in body
 
 
+def test_queue_hooks_are_synchronous_widget_level_only() -> None:
+    """Frontend 1.52.7 invokes only widget.beforeQueued, synchronously.
+
+    An extension-level beforeQueued never fires, and an async body suspends
+    past serialization, so a queue-time decision made by either is dead code.
+    """
+    for path in sorted(CUSTOM.rglob("js/*.js")):
+        body = path.read_text(encoding="utf-8")
+        assert "async beforeQueued(" not in body, path
+        assert "beforeQueued = async" not in body, path
+
+
+def test_sample_picker_queue_freeze_is_synchronous_with_applied_row() -> None:
+    """The queue freeze must not await a fetch; it uses the row syncSample applied."""
+    body = (
+        CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js"
+    ).read_text(encoding="utf-8")
+    assert "function freezeSampleIfPromptDivergedSync" in body
+    assert "sampleWidget.beforeQueued = function ()" in body
+    assert "freezeSampleIfPromptDivergedSync(node)" in body
+    assert "node._ezSampleRow = row" in body
+    assert "node._ezSampleCatalog = catalogId" in body
+
+
+def test_prompt_enhance_queue_hook_resyncs_enhance_off_text() -> None:
+    """Toggle Rewrite off without a callback and Queue still sends the source text."""
+    body = (
+        CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js"
+    ).read_text(encoding="utf-8")
+    assert "widget.beforeQueued = function ()" in body
+    start = body.index("widget.beforeQueued = function ()")
+    hook = body[start : body.index("\n}", start)]
+    assert "syncLinkedClipFromWidgets(node)" in hook
+    assert "restoreUnlinkedClipWidgets(node)" in hook
+    assert "function restoreUnlinkedClipWidgets" in body
+    assert "_ezClipPreviewDests" in body
+    restore = body[body.index("function restoreUnlinkedClipWidgets") :]
+    restore = restore[: restore.index("\n}\n")]
+    assert "widget.options.serialize = true" in restore
+
+
+def test_set_linked_clip_widget_positional_write_is_cliptextencode_only() -> None:
+    """The ACE encoder restores widgets_values positionally; slot 0 is tags."""
+    body = (
+        CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js"
+    ).read_text(encoding="utf-8")
+    start = body.index("function setLinkedClipWidget")
+    linked = body[start : body.index("\nfunction ", start + 1)]
+    assert 'widgetName === "text"' in linked
+    assert "CLIPTextEncode" in linked
+    assert "widget.options.serialize = false" in linked
+    assert "widget.serialize = false" not in linked
+    assert "serializeValue" not in linked
+
+
+def test_sync_negative_family_writes_widgets_values_slot() -> None:
+    """Sibling Rewrite-negative copies must reach the App Mode widget store."""
+    body = (
+        CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js"
+    ).read_text(encoding="utf-8")
+    assert "function setNodeWidgetValue" in body
+    start = body.index("function syncNegativeFamily")
+    family = body[start : body.index("\n}\n", start)]
+    assert "setNodeWidgetValue(other, widget, on)" in family
+    assert "widget.callback()" not in family
+
+
+def test_quality_js_keeps_queue_time_user_edits() -> None:
+    """Overlay drift at Queue freezes Quality custom; nothing re-overwrites it."""
+    body = QUALITY_JS.read_text(encoding="utf-8")
+    assert "const overlayWrites = new WeakMap()" in body
+    assert "function recordOverlayWrite" in body
+    assert "function hasOverlayEdits" in body
+    assert "function hasSnapshotEdits" in body
+    assert "function applyOverlayWrite" in body
+    assert "custom - kept your edits" in body
+    start = body.index("widget.beforeQueued = function ()")
+    hook = body[start : body.index("\n  };", start)]
+    assert "applyQuality(widget.value, node)" in hook
+    assert "freezeQualityToCustom(graph)" in hook
+    assert "async" not in hook
+
+
+def test_quality_js_overlay_writes_are_node_type_bound() -> None:
+    """Mirror presets.apply_to_graph: KSampler steps/cfg, loaders by type."""
+    body = QUALITY_JS.read_text(encoding="utf-8")
+    assert "KSampler: [" in body
+    assert "UNETLoader: [" in body
+    assert "CLIPLoader: [" in body
+    assert "VAELoader: [" in body
+    # isFlux2Dev must match the underscore filename Python matches
+    # (flux2_dev_fp8mixed.safetensors).
+    start = body.index("function isFlux2Dev")
+    pred = body[start : body.index("\n}\n", start)]
+    assert "flux2_dev" in pred
+
+
+def test_format_js_queue_sync_keeps_user_size_and_single_slots() -> None:
+    """Hand-edited width/height under a named Format freeze it to Custom."""
+    for path in FORMAT_JS:
+        body = path.read_text(encoding="utf-8")
+        assert "function queueTimeFormatSync" in body, path
+        assert "formatWidget.beforeQueued = function ()" in body, path
+        assert "queueTimeFormatSync(node)" in body, path
+        assert "_ezFormatApplied" in body, path
+        assert "CUSTOM_LABEL" in body, path
+        assert "node.widgets.map((item) => item.value)" not in body, path
+        assert "widgets_values[idx]" in body, path
+    video = (CUSTOM / "ez_image" / "js" / "ez_video_format.js").read_text(
+        encoding="utf-8"
+    )
+    assert "applyDuration(node)" in video
+
+
+def test_image_mode_queue_hook_stays_sync_and_skips_preview() -> None:
+    """applyCategory moves to the category widget hook; preview never runs at Queue."""
+    body = (CUSTOM / "ez_image" / "js" / "ez_image_mode.js").read_text(
+        encoding="utf-8"
+    )
+    assert "categoryWidget.beforeQueued = function ()" in body
+    start = body.index("categoryWidget.beforeQueued = function ()")
+    hook = body[start : body.index("\n    };", start)]
+    assert "applyCategory(node)" in hook
+    assert "refreshPreview" not in hook
+    assert "await" not in hook
+
+
 def test_prompt_enhance_js_syncs_linked_clip_preview() -> None:
     """CLIPTextEncode Positive follows Prompt / Rewrite prompt and Queue."""
     body = (
