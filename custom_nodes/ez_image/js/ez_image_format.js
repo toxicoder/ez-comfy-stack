@@ -33,8 +33,11 @@ function setWidgetValue(node, widget, value) {
     return;
   }
   widget.value = value;
-  if (node?.widgets) {
-    node.widgets_values = node.widgets.map((item) => item.value);
+  if (Array.isArray(node?.widgets_values) && node.widgets) {
+    const idx = node.widgets.indexOf(widget);
+    if (idx >= 0) {
+      node.widgets_values[idx] = value;
+    }
   }
   if (typeof widget.callback === "function") {
     widget.callback(value, app.canvas, node);
@@ -205,8 +208,27 @@ function applyMatchInput(node) {
     setWidgetValue(node, formatWidget, String(row.label));
     setWidgetValue(node, widgetByName(node, "width"), Number(row.width));
     setWidgetValue(node, widgetByName(node, "height"), Number(row.height));
+    recordAppliedFormat(node, row);
     applying = false;
   });
+}
+
+/**
+ * Remember the preset size a named format row applied to a node.
+ *
+ * The snapshot is the baseline the queue-time check compares against; Custom
+ * clears it because the INT widgets are then the user's own.
+ * @param {object|undefined} node
+ * @param {object|null} row
+ * @returns {void}
+ */
+function recordAppliedFormat(node, row) {
+  if (!node) {
+    return;
+  }
+  node._ezFormatApplied = isCustom(row)
+    ? null
+    : { width: Number(row.width), height: Number(row.height) };
 }
 
 /**
@@ -223,11 +245,13 @@ function applyFormat(node) {
   }
   const row = findFormat(formatWidget.value);
   if (isCustom(row)) {
+    recordAppliedFormat(node, null);
     return;
   }
   applying = true;
   setWidgetValue(node, widthWidget, Number(row.width));
   setWidgetValue(node, heightWidget, Number(row.height));
+  recordAppliedFormat(node, row);
   applying = false;
 }
 
@@ -257,6 +281,53 @@ function maybeMarkCustom(node) {
   }
   applying = true;
   setWidgetValue(node, formatWidget, CUSTOM_LABEL);
+  recordAppliedFormat(node, null);
+  applying = false;
+}
+
+/**
+ * Reconcile Format with the size widgets synchronously before Queue.
+ *
+ * Runs from the Format widget's ``beforeQueued`` hook, which the pinned
+ * frontend invokes synchronously for every widget right before serializing the
+ * prompt, so it must stay synchronous and must not fetch (the catalog may be
+ * unfetched for a graph bound before loadCatalog resolved). Hand-edited sizes
+ * that match neither the selected row nor the last applied preset switch
+ * Format to Custom so Python encodes the user's numbers; untouched sizes
+ * re-apply the preset, which is what the never-invoked extension-level hook
+ * used to promise.
+ * @param {object|undefined} node
+ * @returns {void}
+ */
+function queueTimeFormatSync(node) {
+  if (applying) {
+    return;
+  }
+  const formatWidget = widgetByName(node, "format");
+  const widthWidget = widgetByName(node, "width");
+  const heightWidget = widgetByName(node, "height");
+  if (!formatWidget || !widthWidget || !heightWidget) {
+    return;
+  }
+  const row = findFormat(formatWidget.value);
+  if (isCustom(row)) {
+    return;
+  }
+  const applied = node._ezFormatApplied;
+  const width = Number(widthWidget.value);
+  const height = Number(heightWidget.value);
+  const rowMatch = width === Number(row.width) && height === Number(row.height);
+  const appliedMatch =
+    !!applied && width === Number(applied.width) && height === Number(applied.height);
+  applying = true;
+  if (!rowMatch && !appliedMatch) {
+    setWidgetValue(node, formatWidget, CUSTOM_LABEL);
+    node._ezFormatApplied = null;
+  } else {
+    setWidgetValue(node, widthWidget, Number(row.width));
+    setWidgetValue(node, heightWidget, Number(row.height));
+    recordAppliedFormat(node, row);
+  }
   applying = false;
 }
 
@@ -294,6 +365,13 @@ function bindFormatNode(node) {
         applyFormat(node);
       }
       return value;
+    };
+    /**
+     * Reconcile Format with the size widgets at Queue.
+     * @returns {void}
+     */
+    formatWidget.beforeQueued = function () {
+      queueTimeFormatSync(node);
     };
   }
   if (modeWidget) {
@@ -399,17 +477,5 @@ app.registerExtension({
   async afterConfigureGraph() {
     await loadCatalog();
     bindAll();
-  },
-  /**
-   * Re-apply preset size immediately before Queue.
-   * @returns {Promise<void>}
-   */
-  async beforeQueued() {
-    bindAll();
-    for (const node of app.graph?.nodes || []) {
-      if (node?.comfyClass === "EZImageFormat" || node?.type === "EZImageFormat") {
-        applyFormat(node);
-      }
-    }
   },
 });

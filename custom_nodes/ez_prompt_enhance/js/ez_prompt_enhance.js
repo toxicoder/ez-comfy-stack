@@ -405,7 +405,40 @@ function bindTextWatchers(node) {
 }
 
 /**
+ * Sample custom when live text diverged from the last applied row.
+ * Runs inside widget.beforeQueued, so it must stay synchronous: an async body
+ * suspends and its effect lands after graphToPrompt has serialized the payload.
+ * @param {object} node
+ * @returns {void}
+ */
+function freezeSampleIfPromptDivergedSync(node) {
+  const sampleWidget = widgetByName(node, "sample");
+  if (!sampleWidget) {
+    return;
+  }
+  const choice = sampleWidget.value;
+  const isCustom =
+    !choice || String(choice).trim().toLowerCase() === SAMPLE_CUSTOM;
+  if (isCustom) {
+    return;
+  }
+  if (!node._ezSampleRow && !node._ezSampleCatalog) {
+    return;
+  }
+  const row = node._ezSampleRow || {};
+  if (
+    textDiverged(widgetByName(node, "prompt"), row.prompt) ||
+    textDiverged(widgetByName(node, "sources"), row.prompt) ||
+    textDiverged(widgetByName(node, "tags"), row.tags) ||
+    textDiverged(widgetByName(node, "lyrics"), row.lyrics)
+  ) {
+    freezeSampleToCustom(node);
+  }
+}
+
+/**
  * If live text diverged from the selected sample, select Sample custom.
+ * Uses the row syncSample applied when available; otherwise fetches the catalog.
  * @param {object} node
  * @returns {Promise<void>}
  */
@@ -418,6 +451,10 @@ async function freezeSampleIfPromptDiverged(node) {
   const isCustom =
     !choice || String(choice).trim().toLowerCase() === SAMPLE_CUSTOM;
   if (isCustom) {
+    return;
+  }
+  if (node._ezSampleRow) {
+    freezeSampleIfPromptDivergedSync(node);
     return;
   }
   const rows = await loadCatalog(catalogIdFromNode(node));
@@ -446,13 +483,16 @@ async function syncSample(node) {
     return;
   }
   installValuesGetter(sampleWidget, node);
-  const rows = await loadCatalog(catalogIdFromNode(node));
+  const catalogId = catalogIdFromNode(node);
+  const rows = await loadCatalog(catalogId);
   node._ezSampleLabels = catalogLabels(rows);
   const choice = sampleWidget.value;
   const isCustom =
     !choice || String(choice).trim().toLowerCase() === SAMPLE_CUSTOM;
   const row = lookupSample(rows, choice);
   if (!isCustom && row) {
+    node._ezSampleRow = row;
+    node._ezSampleCatalog = catalogId;
     node._ezApplyingSample = true;
     try {
       applySampleRow(node, row, true);
@@ -462,6 +502,7 @@ async function syncSample(node) {
     syncLinkedClipFromWidgets(node);
     return;
   }
+  node._ezSampleRow = null;
   unlockTextWidgets(node);
   syncLinkedClipFromWidgets(node);
 }
@@ -492,11 +533,12 @@ function bindSamplePicker(node) {
       syncSample(node);
     };
     /**
-     * Use the textarea when it diverged from the selected sample.
-     * @returns {Promise<void>}
+     * Use the textarea when it diverged from the selected sample. Synchronous:
+     * the frontend awaits nothing here, so an async body would land too late.
+     * @returns {void}
      */
-    sampleWidget.beforeQueued = async function () {
-      await freezeSampleIfPromptDiverged(node);
+    sampleWidget.beforeQueued = function () {
+      freezeSampleIfPromptDivergedSync(node);
     };
   }
   syncSample(node);
@@ -677,7 +719,12 @@ function linkedDestinations(node, slot) {
 function setLinkedClipWidget(dest, widgetName, text) {
   const widget = widgetByName(dest, widgetName);
   if (!widget) {
-    if (Array.isArray(dest.widgets_values) && widgetName === "text") {
+    const destType = dest.comfyClass || dest.type;
+    if (
+      widgetName === "text" &&
+      destType === "CLIPTextEncode" &&
+      Array.isArray(dest.widgets_values)
+    ) {
       dest.widgets_values[0] = text;
     }
     return;
@@ -698,19 +745,98 @@ function setLinkedClipWidget(dest, widgetName, text) {
 }
 
 /**
- * Copy slot text onto linked CLIPTextEncode / ACE encoder widgets.
+ * Copy slot text onto linked CLIPTextEncode / ACE encoder widgets and record
+ * the destinations so an unlink can un-pin the widget afterwards.
  * @param {object} node
  * @param {Object<number, string>} slotTexts
  * @returns {void}
  */
 function pushClipPreview(node, slotTexts) {
+  if (!Array.isArray(node._ezClipPreviewDests)) {
+    node._ezClipPreviewDests = [];
+  }
+  const tracked = node._ezClipPreviewDests;
   for (const [slot, text] of Object.entries(slotTexts || {})) {
     if (text == null) {
       continue;
     }
     for (const dest of linkedDestinations(node, Number(slot))) {
+      const nodeId = dest.node.id;
+      if (
+        !tracked.some(
+          (item) =>
+            Number(item.nodeId) === Number(nodeId) &&
+            item.widgetName === dest.widgetName,
+        )
+      ) {
+        tracked.push({ nodeId, widgetName: dest.widgetName });
+      }
       setLinkedClipWidget(dest.node, dest.widgetName, text);
     }
+  }
+}
+
+/**
+ * Source text this node pushes into an encoder widget of this name.
+ * Mirrors the tag/lyrics/prompt selection in syncLinkedClipFromWidgets.
+ * @param {object} node
+ * @param {string} widgetName
+ * @returns {string}
+ */
+function sourceTextForWidget(node, widgetName) {
+  const slotTexts = slotTextsFromWidgets(node);
+  if (widgetName === "lyrics") {
+    return slotTexts[1] ?? slotTexts[0] ?? "";
+  }
+  return slotTexts[0] ?? "";
+}
+
+/**
+ * Un-pin encoder widgets whose link the user deleted: a widget left with
+ * options.serialize false is dropped from the queue payload entirely, so it
+ * goes back to serializing and carries the current source text.
+ * @param {object} node
+ * @returns {void}
+ */
+function restoreUnlinkedClipWidgets(node) {
+  const tracked = node._ezClipPreviewDests;
+  if (!Array.isArray(tracked) || !tracked.length) {
+    return;
+  }
+  const graph = node.graph || app.graph;
+  const linked = [];
+  const slotCount = Math.max(node.outputs?.length || 0, 1);
+  for (let slot = 0; slot < slotCount; slot += 1) {
+    linked.push(...linkedDestinations(node, slot));
+  }
+  let restored = false;
+  for (const entry of tracked) {
+    const stillLinked = linked.some(
+      (item) =>
+        Number(item.node.id) === Number(entry.nodeId) &&
+        item.widgetName === entry.widgetName,
+    );
+    if (stillLinked) {
+      continue;
+    }
+    const dest = nodeById(graph, entry.nodeId);
+    const widget = dest ? widgetByName(dest, entry.widgetName) : undefined;
+    if (!widget) {
+      continue;
+    }
+    widget.options = widget.options || {};
+    widget.options.serialize = true;
+    setTextWidget(widget, sourceTextForWidget(node, entry.widgetName), false);
+    if (Array.isArray(dest.widgets_values) && dest.widgets) {
+      const idx = dest.widgets.indexOf(widget);
+      if (idx >= 0) {
+        dest.widgets_values[idx] = String(widget.value ?? "");
+      }
+    }
+    restored = true;
+  }
+  if (restored && typeof graph?.setDirtyCanvas === "function") {
+    graph.setDirtyCanvas(true, true);
   }
 }
 
@@ -759,15 +885,11 @@ function enhanceIsOn(node) {
 }
 
 /**
- * Push current prompt/tags/lyrics onto linked CLIP widgets.
+ * Prompt / tags / lyrics text this node feeds into the encoder slots.
  * @param {object} node
- * @returns {void}
+ * @returns {Object<number, string>}
  */
-function syncLinkedClipFromWidgets(node) {
-  const ntype = node?.comfyClass || node?.type || "";
-  if (PREVIEW_SKIP.has(ntype)) {
-    return;
-  }
+function slotTextsFromWidgets(node) {
   const tags = widgetByName(node, "tags");
   const lyrics = widgetByName(node, "lyrics");
   const prompt = widgetByName(node, "prompt");
@@ -783,6 +905,20 @@ function syncLinkedClipFromWidgets(node) {
   } else if (prompt) {
     slotTexts[0] = String(prompt.value ?? "");
   }
+  return slotTexts;
+}
+
+/**
+ * Push current prompt/tags/lyrics onto linked CLIP widgets.
+ * @param {object} node
+ * @returns {void}
+ */
+function syncLinkedClipFromWidgets(node) {
+  const ntype = node?.comfyClass || node?.type || "";
+  if (PREVIEW_SKIP.has(ntype)) {
+    return;
+  }
+  const slotTexts = slotTextsFromWidgets(node);
   if (!Object.keys(slotTexts).length) {
     return;
   }
@@ -808,6 +944,27 @@ function syncLinkedClipFromWidgets(node) {
 function negativeFamily(node) {
   const widget = widgetByName(node, "family");
   return String(widget?.value || "klein");
+}
+
+/**
+ * Set one widget and sync only its own widgets_values slot.
+ * Mirrors ez_quality.js setWidgetValue so App Mode sees the new state.
+ * @param {object} node
+ * @param {object} widget
+ * @param {*} value
+ * @returns {void}
+ */
+function setNodeWidgetValue(node, widget, value) {
+  widget.value = value;
+  if (Array.isArray(node?.widgets_values) && node.widgets) {
+    const idx = node.widgets.indexOf(widget);
+    if (idx >= 0) {
+      node.widgets_values[idx] = value;
+    }
+  }
+  if (typeof widget.callback === "function") {
+    widget.callback(value, app.canvas, node);
+  }
 }
 
 /**
@@ -839,10 +996,7 @@ function syncNegativeFamily(source) {
       continue;
     }
     other._ezNegSync = true;
-    widget.value = on;
-    if (typeof widget.callback === "function") {
-      widget.callback();
-    }
+    setNodeWidgetValue(other, widget, on);
     other._ezNegSync = false;
   }
 }
@@ -870,6 +1024,16 @@ function bindEnhanceWatcher(node) {
     }
     syncLinkedClipFromWidgets(node);
     syncNegativeFamily(node);
+  };
+  /**
+   * Re-sync linked encoders at Queue so the payload matches the UI, whatever
+   * changed the toggle (App Mode panel, canvas, graph load). Body stays
+   * synchronous: the frontend serializes right after this returns.
+   * @returns {void}
+   */
+  widget.beforeQueued = function () {
+    syncLinkedClipFromWidgets(node);
+    restoreUnlinkedClipWidgets(node);
   };
 }
 
@@ -953,20 +1117,9 @@ app.registerExtension({
         syncAllSamplePickers();
         for (const node of app.graph?.nodes || []) {
           bindClipPreview(node);
+          restoreUnlinkedClipWidgets(node);
         }
       });
-    }
-  },
-  /**
-   * Prefer the typed prompt over a stale sample combo at Queue.
-   * @returns {Promise<void>}
-   */
-  async beforeQueued() {
-    for (const node of app.graph?.nodes || []) {
-      const ntype = node?.comfyClass || node?.type;
-      if (NODE_CLASSES.has(ntype)) {
-        await freezeSampleIfPromptDiverged(node);
-      }
     }
   },
 });

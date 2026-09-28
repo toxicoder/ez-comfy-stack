@@ -165,6 +165,19 @@ function bindModeNode(node) {
       applyCategory(node);
       return value;
     };
+    /**
+     * Re-apply the Mode filter right before the queue payload is serialized.
+     * Must stay synchronous: the pinned frontend calls widget.beforeQueued
+     * inline and never invokes extension-level async beforeQueued hooks.
+     * Reads only the cached catalog; never fetches, never refreshes preview.
+     * @returns {void}
+     */
+    categoryWidget.beforeQueued = function () {
+      if (!catalog || (!modeRows().length && !categoryRows().length)) {
+        return;
+      }
+      applyCategory(node);
+    };
   }
   applyCategory(node);
 }
@@ -596,19 +609,5 @@ app.registerExtension({
         void refreshPreview();
       });
     }
-  },
-  /**
-   * Re-apply the category filter and the run preview immediately before Queue.
-   * @returns {Promise<void>}
-   */
-  async beforeQueued() {
-    await loadCatalog();
-    bindAll();
-    for (const node of app.graph?.nodes || []) {
-      if (node?.comfyClass === "EZImageMode" || node?.type === "EZImageMode") {
-        applyCategory(node);
-      }
-    }
-    await refreshPreview();
   },
 });

@@ -85,6 +85,8 @@ const snapshots = new WeakMap();
 const applyingByGraph = new WeakMap();
 const defaulted = new WeakMap();
 const seedingByGraph = new WeakMap();
+// graph -> Map(widget -> value the overlay last wrote); lets Queue spot user edits.
+const overlayWrites = new WeakMap();
 const LAST_QUALITY_KEY = "ez-comfy.quality.last";
 const OVERLAY_WIDGET_NAMES = new Set([
   "steps",
@@ -175,10 +177,13 @@ function isWan14(name) {
  * @returns {boolean}
  */
 function isFlux2Dev(name) {
-  const blob = String(name || "")
-    .toLowerCase()
-    .replaceAll(".", "-");
-  return blob.includes("flux2-dev") || blob.includes("flux-2-dev");
+  const lower = String(name || "").toLowerCase();
+  const blob = lower.replaceAll(".", "-");
+  return (
+    blob.includes("flux2-dev") ||
+    blob.includes("flux-2-dev") ||
+    lower.includes("flux2_dev")
+  );
 }
 
 /**
@@ -623,6 +628,144 @@ function setWidgetValue(node, widget, value) {
 }
 
 /**
+ * Overlay-writable widget names per node type (mirrors presets.apply_to_graph).
+ * Steps/CFG only on KSampler, loader names only on their own loader node.
+ */
+const OVERLAY_WIDGETS_BY_TYPE = {
+  KSampler: ["steps", "cfg"],
+  UNETLoader: ["unet_name"],
+  CLIPLoader: ["clip_name", "type"],
+  VAELoader: ["vae_name"],
+};
+
+/**
+ * String form of a widget value for edit detection (numbers compare as text).
+ * @param {*} value
+ * @returns {string}
+ */
+function widgetValueText(value) {
+  return String(value == null ? "" : value);
+}
+
+/**
+ * True when two widget values are the same text.
+ * @param {*} a
+ * @param {*} b
+ * @returns {boolean}
+ */
+function sameWidgetValue(a, b) {
+  return widgetValueText(a) === widgetValueText(b);
+}
+
+/**
+ * Overlay widgets this node type may carry, keyed by widget name.
+ * @param {object|undefined} node
+ * @param {string} ntype
+ * @returns {object}
+ */
+function overlayWidgetsFor(node, ntype) {
+  const out = {};
+  const names = OVERLAY_WIDGETS_BY_TYPE[ntype];
+  if (!names) {
+    return out;
+  }
+  for (const name of names) {
+    const widget = widgetByName(node, name);
+    if (widget) {
+      out[name] = widget;
+    }
+  }
+  return out;
+}
+
+/**
+ * Remember the value the overlay wrote so Queue can spot later user edits.
+ * @param {object|undefined} graph
+ * @param {object|undefined} widget
+ * @param {*} value
+ * @returns {void}
+ */
+function recordOverlayWrite(graph, widget, value) {
+  if (!graph || !widget) {
+    return;
+  }
+  let map = overlayWrites.get(graph);
+  if (!map) {
+    map = new Map();
+    overlayWrites.set(graph, map);
+  }
+  map.set(widget, value);
+}
+
+/**
+ * Forget overlay-write records for widgets being (re)written or restored.
+ * @param {object|undefined} graph
+ * @param {object[]} widgets
+ * @returns {void}
+ */
+function clearOverlayWrites(graph, widgets) {
+  const map = graph && overlayWrites.get(graph);
+  if (!map) {
+    return;
+  }
+  for (const widget of widgets) {
+    map.delete(widget);
+  }
+}
+
+/**
+ * True when any overlay-written widget now holds a different (user-edited) value.
+ * @param {object|undefined} graph
+ * @returns {boolean}
+ */
+function hasOverlayEdits(graph) {
+  const map = graph && overlayWrites.get(graph);
+  if (!map || !map.size) {
+    return false;
+  }
+  for (const entry of map.entries()) {
+    if (!sameWidgetValue(entry[0].value, entry[1])) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Write one overlay value and record it as overlay-authored for this graph.
+ * @param {object|undefined} graph
+ * @param {object} node
+ * @param {object} widget
+ * @param {*} value
+ * @returns {void}
+ */
+function applyOverlayWrite(graph, node, widget, value) {
+  setWidgetValue(node, widget, value);
+  recordOverlayWrite(graph, widget, value);
+}
+
+/**
+ * True when a widget now holds a value the user typed over the authored one.
+ * Lab restores this snapshot at Queue, so an edit that skipped the widget
+ * callback (App Mode panel writes) must freeze Quality instead.
+ * @param {object|undefined} graph
+ * @returns {boolean}
+ */
+function hasSnapshotEdits(graph) {
+  const snap = graph && snapshots.get(graph);
+  if (!snap || !snap.length) {
+    return false;
+  }
+  for (const row of snap) {
+    const widget = widgetByName(row.node, row.name);
+    if (widget && !sameWidgetValue(widget.value, row.value)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
  * Persist the last named quality for newly opened Apps.
  * @param {*} value
  * @returns {void}
@@ -729,6 +872,7 @@ function snapshotGraph(graph) {
     }
   }
   snapshots.set(g, snap);
+  overlayWrites.set(g, new Map());
 }
 
 /**
@@ -741,10 +885,16 @@ function restoreSnapshot(graph) {
   if (!snap) {
     return;
   }
+  const restored = [];
   for (const row of snap) {
     const widget = widgetByName(row.node, row.name);
     setWidgetValue(row.node, widget, row.value);
+    if (widget) {
+      restored.push(widget);
+    }
   }
+  // Lab restores authored values; those are not user edits.
+  clearOverlayWrites(graph, restored);
 }
 
 /**
@@ -780,12 +930,23 @@ function applyQuality(choice, qualityNode) {
     let captionOverlay = {};
     const occ = occupancy(graph);
     for (const node of graph.nodes || []) {
-      const stepsWidget = widgetByName(node, "steps");
-      const cfgWidget = widgetByName(node, "cfg");
-      const unetWidget = widgetByName(node, "unet_name");
-      const clipWidget = widgetByName(node, "clip_name");
-      const typeWidget = widgetByName(node, "type");
-      const vaeWidget = widgetByName(node, "vae_name");
+      // Mirror presets.apply_to_graph: sampler and loader writes are type-bound.
+      const ntype = node?.comfyClass || node?.type || "";
+      const owned = overlayWidgetsFor(node, ntype);
+      const stepsWidget = owned.steps;
+      const cfgWidget = owned.cfg;
+      const unetWidget = owned.unet_name;
+      const clipWidget = owned.clip_name;
+      const typeWidget = owned.type;
+      const vaeWidget = owned.vae_name;
+      const candidates = [
+        stepsWidget,
+        cfgWidget,
+        unetWidget,
+        clipWidget,
+        typeWidget,
+        vaeWidget,
+      ].filter(Boolean);
       const authoredSteps = Number(stepsWidget?.value) || 0;
       const overlay = resolveOverlay(
         normalized,
@@ -799,11 +960,12 @@ function applyQuality(choice, qualityNode) {
       if (overlay && Object.keys(overlay).length) {
         captionOverlay = overlay;
       }
+      clearOverlayWrites(graph, candidates);
       if (stepsWidget && overlay.steps != null) {
-        setWidgetValue(node, stepsWidget, overlay.steps);
+        applyOverlayWrite(graph, node, stepsWidget, overlay.steps);
       }
       if (cfgWidget && overlay.cfg != null) {
-        setWidgetValue(node, cfgWidget, overlay.cfg);
+        applyOverlayWrite(graph, node, cfgWidget, overlay.cfg);
       }
       if (
         unetWidget &&
@@ -811,24 +973,24 @@ function applyQuality(choice, qualityNode) {
         !isWan14(String(unetWidget.value || "")) &&
         !isBannedUnet(overlay.unet_name)
       ) {
-        setWidgetValue(node, unetWidget, overlay.unet_name);
+        applyOverlayWrite(graph, node, unetWidget, overlay.unet_name);
       }
       if (
         clipWidget &&
         overlay.clip_name &&
         (!clipWidget.value || isFlux2Clip(String(clipWidget.value)))
       ) {
-        setWidgetValue(node, clipWidget, overlay.clip_name);
+        applyOverlayWrite(graph, node, clipWidget, overlay.clip_name);
       }
-      if (typeWidget && overlay.clip_type && node.type === "CLIPLoader") {
-        setWidgetValue(node, typeWidget, overlay.clip_type);
+      if (typeWidget && overlay.clip_type) {
+        applyOverlayWrite(graph, node, typeWidget, overlay.clip_type);
       }
       if (
         vaeWidget &&
         overlay.vae_name &&
         (!vaeWidget.value || isFlux2Vae(String(vaeWidget.value)))
       ) {
-        setWidgetValue(node, vaeWidget, overlay.vae_name);
+        applyOverlayWrite(graph, node, vaeWidget, overlay.vae_name);
       }
     }
     if (normalized === QUALITY_FREE_COMMERCIAL) {
@@ -858,6 +1020,7 @@ function freezeQualityToCustom(graph) {
     if (!widget) {
       continue;
     }
+    stampQualityCaption(graph, "custom - last overlay frozen");
     if (normalizeQuality(widget.value) === QUALITY_CUSTOM) {
       return;
     }
@@ -965,10 +1128,25 @@ function bindQualityNode(node) {
     applyQuality(value, node);
   };
   /**
-   * Re-apply the current quality immediately before Queue.
+   * Before Queue: keep user edits to overlay widgets, else re-apply the overlay.
+   * Runs synchronously while graphToPrompt serializes, so no async work here.
+   * At lab the same hazard is the snapshot restore reverting a callback-
+   * bypassed edit, so diverged authored widgets also freeze Quality instead.
    * @returns {void}
    */
   widget.beforeQueued = function () {
+    const graph = node.graph || app.graph;
+    const choice = normalizeQuality(widget.value);
+    if (choice === QUALITY_CUSTOM) {
+      return;
+    }
+    const diverged =
+      choice === QUALITY_LAB ? hasSnapshotEdits(graph) : hasOverlayEdits(graph);
+    if (diverged) {
+      freezeQualityToCustom(graph);
+      stampQualityCaption(graph, "custom - kept your edits");
+      return;
+    }
     applyQuality(widget.value, node);
   };
 }
