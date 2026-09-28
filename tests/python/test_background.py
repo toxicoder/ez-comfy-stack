@@ -6,6 +6,8 @@ import sys
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
@@ -18,8 +20,10 @@ from ez_prompt_enhance.background import (  # noqa: E402
     ENTIRE_ENV_VERB,
     OTHER_OFF,
     OTHER_ON,
+    REASON_PHOTO_ANCHOR,
     REASON_PRECISE_BACKGROUND,
     RECONSTRUCT_BARE,
+    RECONSTRUCT_PHOTO_BARE,
     SWAP_BARE,
     VOXEL_TRAILER,
     format_background_cast,
@@ -162,6 +166,77 @@ def test_wrap_bare_place_and_passthrough_instructions() -> None:
     assert is_background_instruction("") is False
 
 
+def test_wrap_erase_scene_false_keeps_the_people() -> None:
+    """The people-kept variant is used when the paste cannot run.
+
+    Both the bare cubic phrase and the authored ``voxel-block-world`` sample
+    line must lose the people-erased-study promise and the empty-scene ban,
+    keep the voxel trailer, and never ask CLIP for an empty scene.
+    """
+    bare = wrap_background_prompt("voxel cubes", "background_swap", erase_scene=False)
+    assert bare.startswith(RECONSTRUCT_PHOTO_BARE.format(place="voxel cubes"))
+    assert VOXEL_TRAILER in bare
+    assert "Keep the people as photographed, in place and photoreal." in bare
+    assert "The reference is the photograph of this place, including its people." in bare
+    assert "empty of people" not in bare.casefold()
+    assert "with its people removed" not in bare
+    assert "no figures, no humanoid shapes" not in bare
+    assert OTHER_ON not in bare
+    assert CROWD_ON not in bare
+
+    cubic = next(
+        item
+        for item in load_catalog("klein_background_swap")
+        if item.id == "voxel-block-world"
+    )
+    authored = wrap_background_prompt(cubic.prompt, "background_swap", erase_scene=False)
+    assert authored.startswith(cubic.prompt.replace(
+        "The reference is a coarse block study of that place with its people removed.",
+        "The reference is the photograph of this place, including its people.",
+    ).replace(
+        "The scene is empty of people: no figures, no humanoid shapes, "
+        "no silhouettes, no person-shaped blocks.",
+        "Keep the people as photographed, in place and photoreal.",
+    ))
+    assert VOXEL_TRAILER in authored
+    assert "empty of people" not in authored.casefold()
+    assert "with its people removed" not in authored
+    assert "Keep the people as photographed, in place and photoreal." in authored
+    assert "Source still:" not in authored
+    assert OTHER_ON not in authored
+    assert CROWD_ON not in authored
+    branded = wrap_background_prompt(
+        "minecraft block world", "background_swap", erase_scene=False
+    )
+    assert "minecraft" not in branded.casefold()
+    assert "mojang" not in branded.casefold()
+    assert "empty of people" not in branded.casefold()
+    kept = wrap_background_prompt(
+        "Rebuild this photographed place with cubic voxels. The reference is a "
+        "coarse block study of that place with its people removed. The scene "
+        "is empty of people: no figures.",
+        "background_swap",
+        erase_scene=False,
+    )
+    assert kept.count("Keep the people as photographed, in place and photoreal.") == 1
+    assert "empty of people" not in kept.casefold()
+    assert "including its people." in kept
+    assert VOXEL_TRAILER not in kept
+    no_voxel = wrap_background_prompt(
+        "Rebuild this photographed place as a block world. The scene is empty "
+        "of people: no figures.",
+        "background_swap",
+        erase_scene=False,
+    )
+    assert VOXEL_TRAILER in no_voxel
+    assert "empty of people" not in no_voxel.casefold()
+    erased = wrap_background_prompt("voxel cubes", "background_swap")
+    assert "empty of people" in erased.casefold()
+    assert "with its people removed" in erased
+    edit = wrap_background_prompt("voxel cubes", "background_edit", erase_scene=False)
+    assert edit.startswith(EDIT_BARE.format(place="voxel cubes"))
+
+
 def test_klein_background_modes_wrap_when_enhance_is_off() -> None:
     klein = EZKleinPromptEnhance()
     off = klein.run(
@@ -195,7 +270,15 @@ def test_klein_background_modes_wrap_when_enhance_is_off() -> None:
     assert "Edit only the environment" in styled_edit["result"][0]
 
 
-def test_klein_background_modes_wrap_before_enhance() -> None:
+def test_klein_background_modes_wrap_before_enhance(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Wraps happen before the rewriter and cubic stays unwrapped.
+
+    Args:
+        monkeypatch: Pytest attr helper.
+    """
+    monkeypatch.setattr("ez_image.person_mask.segmenter_available", lambda: True)
     klein = EZKleinPromptEnhance()
     with patch.object(client, "complete", return_value=("rewritten-bg", None)) as mock:
         klein.run(
@@ -276,6 +359,82 @@ def test_klein_background_modes_wrap_before_enhance() -> None:
         image_desc="a red coat on a dock",
     )
     assert "Source still: a red coat on a dock" in edit_cubic["result"][0]
+
+
+def test_klein_cubic_swap_without_a_segmenter_is_photo_anchored(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The photo-kept route wins over both passthrough statuses.
+
+    Args:
+        monkeypatch: Pytest attr helper.
+    """
+    monkeypatch.setattr("ez_image.person_mask.segmenter_available", lambda: False)
+    klein = EZKleinPromptEnhance()
+    cubic = next(
+        item
+        for item in load_catalog("klein_background_swap")
+        if item.id == "voxel-block-world"
+    )
+    off = klein.run(
+        cubic.prompt,
+        False,
+        "background_swap",
+        "match the source still",
+        image_desc="a red coat on a dock",
+    )
+    assert off["ui"]["passthrough"][0] == REASON_PHOTO_ANCHOR
+    assert "Keep the people as photographed" in off["result"][0]
+    assert "empty of people" not in off["result"][0].casefold()
+    assert "Source still: a red coat on a dock" in off["result"][0]
+    with patch.object(client, "complete", return_value=("rewritten", None)) as mock:
+        on = klein.run(
+            "voxel cubes",
+            True,
+            "background_swap",
+            "match the source still",
+            "none",
+        )
+    mock.assert_not_called()
+    assert on["ui"]["passthrough"][0] == REASON_PHOTO_ANCHOR
+    assert on["result"][0].startswith(RECONSTRUCT_PHOTO_BARE.format(place="voxel cubes"))
+    edit = klein.run(
+        "cubes over the pier",
+        False,
+        "background_edit",
+        "match the source still",
+    )
+    assert "empty of people" not in edit["result"][0].casefold()
+    assert edit["ui"]["passthrough"][0] == "enhance off"
+
+
+def test_studio_preview_mirrors_the_photo_anchor_gate(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """This run shows the same cubic CLIP line Queue will encode.
+
+    Args:
+        monkeypatch: Pytest attr helper.
+    """
+    from ez_prompt_enhance.studio_preview import _prompt_text
+
+    cubic = next(
+        item
+        for item in load_catalog("klein_background_swap")
+        if item.id == "voxel-block-world"
+    )
+    monkeypatch.setattr("ez_image.person_mask.segmenter_available", lambda: False)
+    anchored, note = _prompt_text(cubic.prompt, "background_swap", "none", rewrite=False)
+    assert "Keep the people as photographed" in anchored
+    assert "empty of people" not in anchored.casefold()
+    assert note == "style none"
+    monkeypatch.setattr("ez_image.person_mask.segmenter_available", lambda: True)
+    erased, _ = _prompt_text(cubic.prompt, "background_swap", "none", rewrite=False)
+    assert "empty of people" in erased.casefold()
+    ordinary, _ = _prompt_text("pier", "background_swap", "none", rewrite=False)
+    assert ordinary == wrap_background_prompt("pier", "background_swap", "")
+    edit, _ = _prompt_text("cubes over the pier", "background_edit", "none", rewrite=False)
+    assert "empty of people" not in edit.casefold()
 
 
 def test_background_cast_node_and_mode_combo() -> None:

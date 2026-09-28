@@ -1,13 +1,15 @@
 """Paste photographed people back onto a cubic block-world plate.
 
 The segmenter is torchvision DeepLabV3 ResNet50 (COCO person class, BSD-3).
-It is not part of ``download-models``. Missing weights fail soft: the cubic
-plate is saved and people stay cubed.
+It is not part of ``download-models``. When the segmenter cannot run the cubic
+swap fails closed to a photo-anchored rebuild: the CLIP line keeps the people
+and the plate passes through, so people are never silently deleted.
 """
 
 from __future__ import annotations
 
 import os
+import time
 from typing import Any
 from urllib.request import urlopen
 
@@ -46,14 +48,20 @@ DILATE_RADIUS = 2
 FEATHER_RADIUS = 6
 """Soft-edge width of the paste, so the rim blends instead of a hard line."""
 
+MISS_COOLDOWN_S = 600
+"""Seconds to skip reload attempts after a failed segmenter load."""
+
 _SEGMENTER: Any = None
 """Cached DeepLab module after a successful load."""
+_LAST_MISS_S: float | None = None
+"""``time.monotonic`` stamp of the last failed load, or None."""
 
 
 def reset_person_segmenter() -> None:
-    """Drop the cached segmenter so the next Queue loads again."""
-    global _SEGMENTER
+    """Drop the cached segmenter and the load-failure cooldown."""
+    global _SEGMENTER, _LAST_MISS_S
     _SEGMENTER = None
+    _LAST_MISS_S = None
 
 
 def person_mask_disabled() -> bool:
@@ -66,11 +74,45 @@ def person_mask_disabled() -> bool:
     return flag in {"0", "off", "false", "no"}
 
 
-def person_mask_path() -> str:
-    """Return the on-disk checkpoint path.
+def person_mask_roots() -> list[str]:
+    """Return model-root candidates, host and container order.
 
-    ``EZ_PERSON_MASK_PATH`` wins. Otherwise
-    ``${MODELS_DIR}/comfy/ez-person/<filename>``.
+    The Compose container sets ``MODELS_ROOT=/models`` and never sets
+    ``MODELS_DIR`` (that name is the host .env), so both env vars are
+    consulted, then the documented container and host fallbacks.
+
+    Returns:
+        Unique directory strings (may not exist).
+    """
+    roots: list[str] = []
+    for key in ("MODELS_ROOT", "MODELS_DIR"):
+        value = (os.environ.get(key) or "").strip()
+        if value and value not in roots:
+            roots.append(value)
+    for fallback in ("/models", "/mnt/models"):
+        if fallback not in roots:
+            roots.append(fallback)
+    return roots
+
+
+def _weight_in(root: str) -> str:
+    """Return the checkpoint path under one model root.
+
+    Args:
+        root: Model root directory.
+
+    Returns:
+        ``<root>/comfy/ez-person/<filename>``.
+    """
+    return os.path.join(root, "comfy", "ez-person", WEIGHT_NAME)
+
+
+def person_mask_path() -> str:
+    """Return the preferred on-disk checkpoint path.
+
+    ``EZ_PERSON_MASK_PATH`` wins. Otherwise the first model root's
+    ``comfy/ez-person/<filename>`` (see :func:`person_mask_roots`).
+    :func:`ready_weight_path` still probes every root.
 
     Returns:
         Absolute or env-relative path. The file may be absent.
@@ -78,8 +120,7 @@ def person_mask_path() -> str:
     override = os.environ.get("EZ_PERSON_MASK_PATH", "").strip()
     if override:
         return override
-    root = os.environ.get("MODELS_DIR", "/mnt/models").strip() or "/mnt/models"
-    return os.path.join(root, "comfy", "ez-person", WEIGHT_NAME)
+    return _weight_in(person_mask_roots()[0])
 
 
 def _file_ready(path: str) -> bool:
@@ -98,14 +139,19 @@ def _file_ready(path: str) -> bool:
 
 
 def ready_weight_path() -> str | None:
-    """Return the checkpoint path when it is already on disk.
+    """Return the first checkpoint path already on disk.
+
+    Probes ``EZ_PERSON_MASK_PATH`` when set, then every model root's
+    ``comfy/ez-person`` directory.
 
     Returns:
-        Path, or None when the file is missing or empty.
+        Path, or None when no root holds a non-empty checkpoint.
     """
-    path = person_mask_path()
-    if _file_ready(path):
-        return path
+    override = os.environ.get("EZ_PERSON_MASK_PATH", "").strip()
+    candidates = [override] if override else [_weight_in(r) for r in person_mask_roots()]
+    for path in candidates:
+        if _file_ready(path):
+            return path
     return None
 
 
@@ -135,21 +181,28 @@ def _download(url: str, dest: str) -> bool:
 
 
 def download_weight() -> str | None:
-    """Download the person checkpoint into ``person_mask_path`` when writable.
+    """Download the person checkpoint to the first writable candidate path.
+
+    ``EZ_PERSON_MASK_PATH`` wins; otherwise each model root's
+    ``comfy/ez-person`` directory is tried in :func:`person_mask_roots`
+    order until one is creatable and writable.
 
     Returns:
         Path after a successful download, or None.
     """
-    path = person_mask_path()
-    folder = os.path.dirname(path)
-    try:
-        os.makedirs(folder, exist_ok=True)
-    except OSError:
+    override = os.environ.get("EZ_PERSON_MASK_PATH", "").strip()
+    candidates = [override] if override else [_weight_in(r) for r in person_mask_roots()]
+    for path in candidates:
+        folder = os.path.dirname(path)
+        try:
+            os.makedirs(folder, exist_ok=True)
+        except OSError:
+            continue
+        if not os.access(folder, os.W_OK):
+            continue
+        if _download(WEIGHT_URL, path):
+            return path
         return None
-    if not os.access(folder, os.W_OK):
-        return None
-    if _download(WEIGHT_URL, path):
-        return path
     return None
 
 
@@ -356,6 +409,32 @@ def run_deeplab(model: Any, image: Any) -> list[list[float]] | None:
         return None
 
 
+def segmenter_available() -> bool:
+    """True when the person paste can run in this server process right now.
+
+    Caches a successful load in ``_SEGMENTER``. A failed load is remembered
+    for :data:`MISS_COOLDOWN_S` seconds so per-Queue calls stay cheap. Callers
+    that must not delete people treat False as "fail closed to the photo".
+
+    Returns:
+        Whether segmentation is usable (weights loadable and torch present).
+    """
+    global _SEGMENTER, _LAST_MISS_S
+    if person_mask_disabled():
+        return False
+    if _SEGMENTER is not None:
+        return True
+    now = time.monotonic()
+    if _LAST_MISS_S is not None and now - _LAST_MISS_S < MISS_COOLDOWN_S:
+        return False
+    loaded = load_segmenter()
+    if loaded is None:
+        _LAST_MISS_S = now
+        return False
+    _SEGMENTER = loaded
+    return True
+
+
 def segment_people(image: Any) -> list[list[float]] | None:
     """Return an HW person mask for ``image``.
 
@@ -368,14 +447,8 @@ def segment_people(image: Any) -> list[list[float]] | None:
     Returns:
         HW mask, or None when the segmenter is off or unavailable.
     """
-    global _SEGMENTER
-    if person_mask_disabled():
+    if not segmenter_available():
         return None
-    if _SEGMENTER is None:
-        loaded = load_segmenter()
-        if loaded is None:
-            return None
-        _SEGMENTER = loaded
     return run_deeplab(_SEGMENTER, image)
 
 

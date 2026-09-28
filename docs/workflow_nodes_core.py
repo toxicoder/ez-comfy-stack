@@ -316,7 +316,7 @@ def core_nodes() -> dict[str, Any]:
             "Cubic or photo reference",
             "Attach the photo latent, or a people-erased block-study latent when the prompt rebuilds the place as cubes.",
             origin="ez_image",
-            lab="stills/background-swap. Ordinary place swaps keep the encoded photo. Cubic block world erases the source people from the coarse block study before VAE-encoding, so Klein is not locked to photoreal surfaces and is not primed to cube the people. Without person-segmentation weights the study stays unchanged (fail-soft).",
+            lab="stills/background-swap. Ordinary place swaps keep the encoded photo. Cubic block world erases the source people from the coarse block study before VAE-encoding, so Klein is not locked to photoreal surfaces and is not primed to cube the people. When the person segmenter cannot run, the encoded photograph is attached instead (photo-anchored people-kept rebuild), so the block world never deletes the people.",
             sockets=[
                 _s("conditioning", "CONDITIONING", "in", "Positive CLIP conditioning before any reference."),
                 _s("latent", "LATENT", "in", "VAE encode of the snapped photograph."),
@@ -331,7 +331,7 @@ def core_nodes() -> dict[str, Any]:
             "Reinsert people",
             "Paste detected people from the source photo onto a cubic rebuild.",
             origin="ez_image",
-            lab="stills/background-swap, between decode and match-to-source. Paste dilates the person mask ~2 px and feathers ~6 px, so people own their full silhouette and blend onto the plate. source is the full-resolution LoadImage still. Other prompts pass the plate through. Missing DeepLab weights fail soft (status `person mask missing`; people stay cubed).",
+            lab="stills/background-swap, between decode and match-to-source. Paste dilates the person mask ~2 px and feathers ~6 px, so people own their full silhouette and blend onto the plate. source is the full-resolution LoadImage still. Other prompts pass the plate through. When the segmenter cannot run (weights or torch missing, or `EZ_PERSON_MASK=off`) the plate passes through untouched and the swap stays photo-anchored (status `person mask missing`); people are never deleted.",
             sockets=[
                 _s("plate", "IMAGE", "in", "Decoded still."),
                 _s("source", "IMAGE", "in", "Full-resolution source still from LoadImage."),

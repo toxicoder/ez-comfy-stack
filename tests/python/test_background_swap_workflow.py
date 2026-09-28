@@ -134,6 +134,9 @@ def test_background_swap_is_size_matched_klein_edit() -> None:
     assert "describe image (default on)" in note
     assert "block study" in note
     assert "pasted back" in note
+    assert "photo-anchored block world (person mask unavailable)" in note
+    assert "person-mask" in note
+    assert "keeps the people photoreal" in note
 
 
 def test_background_swap_catalog_has_one_hundred_recipes() -> None:

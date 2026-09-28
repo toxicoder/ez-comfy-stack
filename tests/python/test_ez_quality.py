@@ -23,6 +23,15 @@ if str(CUSTOM) not in sys.path:
     sys.path.insert(0, str(CUSTOM))
 
 from ez_quality import nodes as quality_nodes  # noqa: E402
+from ez_quality.check import (  # noqa: E402
+    CMD_PERSON_MASK,
+    PERSON_WEIGHT,
+    SUB_PERSON,
+    CheckHints,
+    FileSpec,
+    requirements_for,
+    scan,
+)
 from ez_quality.nodes import EZQuality  # noqa: E402
 from ez_quality.presets import (  # noqa: E402
     AUDIO_DRAFT_STEPS,
@@ -1029,6 +1038,61 @@ def test_apply_free_commercial_keeps_size_and_skips_wan() -> None:
     apply_to_graph(wan_graph, QUALITY_FREE_COMMERCIAL)
     assert list(_sampler(wan_graph)["widgets_values"]) == wan_steps
     assert _unet(wan_graph)["widgets_values"][UNET_NAME_INDEX] == wan_unet
+
+
+def test_person_mask_need_follows_the_reinsert_node(tmp_path: Path) -> None:
+    """EZReinsertPeople adds the optional DeepLabV3 checkpoint to Check models.
+
+    Args:
+        tmp_path: Scratch models root for the disk scan.
+    """
+    with_node = requirements_for(
+        CheckHints(
+            lab_rel="stills/background-swap",
+            occupancy="none",
+            types=("EZCubicCondition", "EZReinsertPeople"),
+        )
+    )
+    need = next(need for need in with_node if need.pack == "person-mask")
+    assert need.cmd == CMD_PERSON_MASK
+    assert need.files == (FileSpec(SUB_PERSON, PERSON_WEIGHT),)
+    assert PERSON_WEIGHT == "deeplabv3_resnet50_coco-cd0a2569.pth"
+    without_node = requirements_for(
+        CheckHints(
+            lab_rel="stills/background-edit",
+            occupancy="none",
+            types=("EZKleinPromptEnhance",),
+        )
+    )
+    assert without_node == []
+
+    missing = scan(
+        CheckHints(
+            lab_rel="stills/background-swap",
+            occupancy="none",
+            types=("EZReinsertPeople",),
+        ),
+        (tmp_path,),
+    )
+    assert any(row.pack == "person-mask" for row in missing.missing)
+    assert CMD_PERSON_MASK in missing.commands
+    assert "ez-person" in [row.subdir for row in missing.missing]
+
+    weight = tmp_path / "comfy" / SUB_PERSON / PERSON_WEIGHT
+    weight.parent.mkdir(parents=True, exist_ok=True)
+    weight.write_bytes(b"x")
+    found = scan(
+        CheckHints(
+            lab_rel="stills/background-swap",
+            occupancy="none",
+            types=("EZReinsertPeople",),
+        ),
+        (tmp_path,),
+    )
+    assert any(
+        row.pack == "person-mask" and row.state == "present" for row in found.present
+    )
+    assert not any(row.pack == "person-mask" for row in found.missing)
 
 
 def test_js_mentions_free_commercial_and_clip_feeders() -> None:

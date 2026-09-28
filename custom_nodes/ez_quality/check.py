@@ -51,6 +51,12 @@ CMD_RESTORE = "./scripts/manage.sh download-restore --tier seedvr2-3b"
 CMD_LONGCAT = "./scripts/manage.sh download-longcat"
 CMD_DREAMX = "./scripts/manage.sh download-dreamx"
 CMD_RESTART = "Then restart Comfy so models/* re-link."
+CMD_PERSON_MASK = (
+    'mkdir -p "$MODELS_DIR/comfy/ez-person" && '
+    "curl -fsSL -o \"$MODELS_DIR/comfy/ez-person/"
+    'deeplabv3_resnet50_coco-cd0a2569.pth" '
+    "https://download.pytorch.org/models/deeplabv3_resnet50_coco-cd0a2569.pth"
+)
 
 # Comfy models/* layout under MODELS_DIR/comfy.
 SUB_UNET = "diffusion_models"
@@ -61,6 +67,7 @@ SUB_LLM = "llm"
 SUB_ONNX = "onnx"
 SUB_TTS = "tts"
 SUB_CKPT = "checkpoints"
+SUB_PERSON = "ez-person"
 
 WAN_5B = "wan2.2_ti2v_5B_fp16.safetensors"
 WAN_VAE = "wan2.2_vae.safetensors"
@@ -83,6 +90,7 @@ KOKORO_ONNX = "kokoro-v1.0.onnx"
 DUB_T3 = "t3_mtl23ls_v3.safetensors"
 DREAMX_WEIGHTS = "cross_attn_weights.safetensors"
 SEEDVR2 = "seedvr2_ema_3b.pth"
+PERSON_WEIGHT = "deeplabv3_resnet50_coco-cd0a2569.pth"
 
 STATUS_DEFAULT = "Click Check models. Queue does not run this node."
 """Canvas status until the operator clicks Check models."""
@@ -637,6 +645,14 @@ def requirements_for(hints: CheckHints) -> list[Need]:
         )
     if types & DUB_TYPES:
         needs.append(_need("dub-clone", CMD_DUB, FileSpec(SUB_TTS, DUB_T3)))
+    if "EZReinsertPeople" in types:
+        needs.append(
+            _need(
+                "person-mask",
+                CMD_PERSON_MASK,
+                FileSpec(SUB_PERSON, PERSON_WEIGHT),
+            )
+        )
     if types & PODCAST_TTS_TYPES:
         needs.append(_need("podcast-analog", CMD_PODCAST, FileSpec(SUB_ONNX, KOKORO_ONNX)))
     if "EZLongCatPromptEnhance" in types:

@@ -1084,7 +1084,7 @@ Attach the photo latent, or a people-erased block-study latent when the prompt r
 
 !!! warning "Lab notes"
 
-    stills/background-swap. Ordinary place swaps keep the encoded photo. Cubic block world erases the source people from the coarse block study before VAE-encoding, so Klein is not locked to photoreal surfaces and is not primed to cube the people. Without person-segmentation weights the study stays unchanged (fail-soft).
+    stills/background-swap. Ordinary place swaps keep the encoded photo. Cubic block world erases the source people from the coarse block study before VAE-encoding, so Klein is not locked to photoreal surfaces and is not primed to cube the people. When the person segmenter cannot run, the encoded photograph is attached instead (photo-anchored people-kept rebuild), so the block world never deletes the people.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -4054,7 +4054,7 @@ Paste detected people from the source photo onto a cubic rebuild.
 
 !!! warning "Lab notes"
 
-    stills/background-swap, between decode and match-to-source. Paste dilates the person mask ~2 px and feathers ~6 px, so people own their full silhouette and blend onto the plate. source is the full-resolution LoadImage still. Other prompts pass the plate through. Missing DeepLab weights fail soft (status `person mask missing`; people stay cubed).
+    stills/background-swap, between decode and match-to-source. Paste dilates the person mask ~2 px and feathers ~6 px, so people own their full silhouette and blend onto the plate. source is the full-resolution LoadImage still. Other prompts pass the plate through. When the segmenter cannot run (weights or torch missing, or `EZ_PERSON_MASK=off`) the plate passes through untouched and the swap stays photo-anchored (status `person mask missing`); people are never deleted.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
