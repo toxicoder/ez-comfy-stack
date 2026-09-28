@@ -477,7 +477,8 @@ class EZCubicCondition:
     DESCRIPTION = (
         "stills/background-swap. Ordinary place prompts attach the encoded "
         "photo. Cube, voxel, and block-world prompts attach a coarse block "
-        "study of that photo so Klein rebuilds the place instead of copying it."
+        "study of that photo so Klein rebuilds the place instead of copying "
+        "it. Without a usable person segmenter the photo anchors the rebuild."
     )
 
     def run(
@@ -502,8 +503,15 @@ class EZCubicCondition:
         """
         from ez_prompt_enhance.background import is_reconstruction
 
+        from .person_mask import segmenter_available
+
         text = prompt if isinstance(prompt, str) else str(prompt or "")
         if not is_reconstruction(text):
+            return (attach_reference(conditioning, latent),)
+        # Fail closed: without the segmenter nobody erases or pastes people,
+        # so the empty-scene study stays unused and the photo anchors the
+        # rebuild (Enhance pairs this route with the people-kept CLIP line).
+        if not segmenter_available():
             return (attach_reference(conditioning, latent),)
         try:
             study = block_study(image)

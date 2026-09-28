@@ -13,7 +13,11 @@ from ez_image.formats import resolve_canvas
 from ez_image.modes import ITERATE_EDIT_LINE, resolve_studio_mode
 from ez_image.refs import load_input_still
 from ez_prompt_enhance._styles import apply_style_to_prompt
-from ez_prompt_enhance.background import BACKGROUND_MODES, wrap_background_prompt
+from ez_prompt_enhance.background import (
+    BACKGROUND_MODES,
+    is_reconstruction,
+    wrap_background_prompt,
+)
 from ez_prompt_enhance.client import STYLE_IGNORED_MODES, STYLE_NONE, style_ids
 from ez_prompt_enhance.lettering import wrap_text_swap_prompt
 from ez_prompt_enhance.samples import is_custom, resolve_prompt
@@ -219,7 +223,16 @@ def _prompt_text(
     if enhance_mode == "text_swap":
         text = wrap_text_swap_prompt(text)
     elif enhance_mode in BACKGROUND_MODES:
-        text = wrap_background_prompt(text, enhance_mode, "")
+        # Mirror the Enhance node's one-call gate so This run shows the same
+        # CLIP line Queue will encode.
+        from ez_image.person_mask import segmenter_available
+
+        erase = not (
+            enhance_mode == "background_swap"
+            and is_reconstruction(text)
+            and not segmenter_available()
+        )
+        text = wrap_background_prompt(text, enhance_mode, "", erase_scene=erase)
     ignored = STYLE_IGNORED_MODES.get(enhance_mode)
     if style_id != STYLE_NONE and ignored:
         return text, ignored

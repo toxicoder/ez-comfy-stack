@@ -57,9 +57,25 @@ RECONSTRUCT_BARE = (
     "blocks. Place or look: {place}. "
     "Empty of new lettering."
 )
-"""Wrapper for a bare cube / voxel phrase in background_swap."""
+"""Wrapper for a bare cube / voxel phrase in background_swap (people pasted
+back later by EZReinsertPeople)."""
+RECONSTRUCT_PHOTO_BARE = (
+    "Rebuild this photographed place as a constructed cubic block world. "
+    "Same camera, horizon, and inventory. The reference is the photograph of "
+    "this place, including its people. Rebuild every backdrop, sky, building, "
+    "tree, water, floor, and prop as large axis-aligned cubes with visible "
+    "tops and sides, square faces, and a coarse texel grid. Stacked block "
+    "walls, cube canopies, cube water. Keep the people as photographed, in "
+    "place and photoreal. Place or look: {place}. "
+    "Empty of new lettering."
+)
+"""People-kept variant used when the person segmenter cannot run, so the
+block world never silently deletes the people."""
 REASON_PRECISE_BACKGROUND = "precise background instruction"
 """Enhance status when a full swap/edit line skips the LLM rewriter."""
+REASON_PHOTO_ANCHOR = "photo-anchored block world (person mask unavailable)"
+"""Enhance status when a cubic swap keeps the people because the paste cannot
+run; the photo, not the people-erased study, anchors the rebuild."""
 
 _INSTRUCTION_RE = re.compile(
     r"^\s*(keep the (main )?subject|replace (only |the entire )?the background|"
@@ -83,6 +99,21 @@ _REBUILD_LEAD_RE = re.compile(
     re.IGNORECASE,
 )
 """Full cubic rebuild instructions that must pass through unwrapped."""
+_PEOPLE_REMOVED_SENT_RE = re.compile(
+    r"The reference is a coarse block study of that place with its people "
+    r"removed\.",
+    re.IGNORECASE,
+)
+"""Sentence in a full rebuild paragraph promising a people-erased study."""
+_EMPTY_PEOPLE_SENT_RE = re.compile(
+    r"The scene is empty of people[^.]*\.",
+    re.IGNORECASE,
+)
+"""Sentence in a full rebuild paragraph banning every figure."""
+_PEOPLE_KEPT_SENTENCE = (
+    "Keep the people as photographed, in place and photoreal."
+)
+"""Replacement promise when the paste cannot run and people stay in the plate."""
 _TRADEMARK_RE = re.compile(r"\b(minecraft|mojang)\b", re.IGNORECASE)
 """Brand names that must not reach Klein CLIP."""
 _SOURCE_STILL_RE = re.compile(r"source still:", re.IGNORECASE)
@@ -324,7 +355,30 @@ def _with_voxel_trailer(body: str) -> str:
     return f"{raw} {VOXEL_TRAILER}"
 
 
-def wrap_background_prompt(text: object, mode: str, cast: object = "") -> str:
+def _with_people_kept(body: str) -> str:
+    """Swap an authored rebuild paragraph to the people-kept promise.
+
+    The people-erased-study and empty-of-people sentences are replaced so a
+    photo-anchored rebuild never asks Klein to delete the people nobody can
+    paste back. Other text is untouched.
+
+    Args:
+        body: Full rebuild instruction (starts with Rebuild this place).
+
+    Returns:
+        Instruction with the people sentences swapped.
+    """
+    raw = _PEOPLE_REMOVED_SENT_RE.sub(
+        "The reference is the photograph of this place, including its people.",
+        body,
+    )
+    raw = _EMPTY_PEOPLE_SENT_RE.sub(_PEOPLE_KEPT_SENTENCE, raw)
+    return raw
+
+
+def wrap_background_prompt(
+    text: object, mode: str, cast: object = "", *, erase_scene: bool = True
+) -> str:
     """Return a subject-lock instruction for Klein background modes.
 
     Bare place or edit strings become a Keep-the-subject paragraph. Lines that
@@ -335,12 +389,16 @@ def wrap_background_prompt(text: object, mode: str, cast: object = "") -> str:
     photographed place" passes through. Brand names minecraft and mojang are
     rewritten to cubic before CLIP. Cast clauses splice unless already present;
     reconstruction plates skip the cast entirely because the reinsert-paste
-    owns the people.
+    owns the people. When ``erase_scene`` is False the segmenter cannot run, so
+    the people-kept rebuild variant is used instead and nothing asks for an
+    empty scene.
 
     Args:
         text: Place name, edit, or a full targeting sentence.
         mode: ``background_swap`` or ``background_edit``.
         cast: Compact token from EZBackgroundCast.
+        erase_scene: True when the person paste will run and the study is
+            people-erased; False fails closed to the photo-anchored rebuild.
 
     Returns:
         CLIP instruction, or empty when ``text`` is blank.
@@ -355,7 +413,14 @@ def wrap_background_prompt(text: object, mode: str, cast: object = "") -> str:
     if kind == "background_swap":
         raw = strengthen_swap_instruction(raw)
         if is_reconstruction(raw):
-            if _is_rebuild_instruction(raw) or is_background_instruction(raw):
+            authored = _is_rebuild_instruction(raw) or is_background_instruction(raw)
+            if not erase_scene:
+                if authored:
+                    body = _with_people_kept(raw)
+                else:
+                    body = RECONSTRUCT_PHOTO_BARE.format(place=raw)
+                return _with_voxel_trailer(body)
+            if authored:
                 body = _with_voxel_trailer(raw)
             else:
                 body = RECONSTRUCT_BARE.format(place=raw)

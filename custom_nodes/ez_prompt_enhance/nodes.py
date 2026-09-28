@@ -53,6 +53,7 @@ from .cinema import (
 )
 from .background import (
     BACKGROUND_MODES,
+    REASON_PHOTO_ANCHOR,
     REASON_PRECISE_BACKGROUND,
     format_background_cast,
     is_background_instruction,
@@ -292,15 +293,27 @@ def _run(
     )
     precise_background = False
     reconstruction = False
+    photo_anchor = False
     if mode == "text_swap":
         original = wrap_text_swap_prompt(original)
     elif mode in BACKGROUND_MODES:
         reconstruction = is_reconstruction(original)
+        if reconstruction and mode == "background_swap":
+            # One gate decides the whole cubic route: erase-and-paste when the
+            # segmenter can run, photo-anchored people-kept when it cannot.
+            from ez_image.person_mask import segmenter_available
+
+            if not segmenter_available():
+                photo_anchor = True
         precise_background = is_background_instruction(original) or reconstruction
-        original = wrap_background_prompt(original, mode, background_cast)
+        original = wrap_background_prompt(
+            original, mode, background_cast, erase_scene=not photo_anchor
+        )
     ctx = context if isinstance(context, str) else str(context or "")
     caption = image_desc if isinstance(image_desc, str) else str(image_desc or "")
-    skip_caption = mode == "background_swap" and reconstruction
+    # The empty-scene plate must not be primed with the source people; the
+    # photo-anchored plate keeps them, so its caption may splice.
+    skip_caption = mode == "background_swap" and reconstruction and not photo_anchor
     if mode in BACKGROUND_MODES and not skip_caption:
         original = splice_source_caption(original, caption)
     if caption.strip():
@@ -321,7 +334,12 @@ def _run(
         text = original
         if apply_style:
             text = apply_style_to_prompt(original, style)
-        status = REASON_PRECISE_BACKGROUND if skip_precise else "enhance off"
+        if photo_anchor:
+            status = REASON_PHOTO_ANCHOR
+        elif skip_precise:
+            status = REASON_PRECISE_BACKGROUND
+        else:
+            status = "enhance off"
         return _pack(EnhanceResult(text, status))
 
     user = _compose_user(original, duration_hint, audio_notes, ctx)
@@ -378,6 +396,8 @@ class EZKleinPromptEnhance:
         "bible), text_swap (glyph-lock lettering), background_swap (replace "
         "environment including ground), background_edit (restyle environment). "
         "Named background samples skip the rewriter (precise instruction). "
+        "A cubic block-world swap keeps the people (photo-anchored) when the "
+        "person paste cannot run. "
         "Optional context is bible/research (ignored when Enhance is "
         "off). Enhance defaults on. After Queue the CLIP prompt box is the "
         "CLIP string; Enhance status explains passthrough. Fail-soft without "

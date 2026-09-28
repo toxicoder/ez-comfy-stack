@@ -101,6 +101,14 @@ Canvas rows live in [Studio canvas](operate/troubleshooting-canvas.md). The fixt
 
 ---
 
+## Stills (Cubic block world)
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| **stills/background-swap** Cubic block world output has no people at all | The optional BSD-3 DeepLabV3 person mask could not load (weights missing, torch/torchvision missing, or `EZ_PERSON_MASK=off`), so the swap failed closed to the photo-anchored people-kept rebuild instead of erasing and pasting. Check the Enhance status: `photo-anchored block world (person mask unavailable)` means that mode ran | `./scripts/manage.sh doctor` or canvas **Check models** shows a `person-mask` row. Stage the checkpoint with the printed curl command into `$MODELS_DIR/comfy/ez-person/` (the first cubic Queue also auto-downloads it), then re-Queue with **Cubic block world** selected - the Enhance status should read `precise background instruction` and the paste reinserts the people. Set `EZ_PERSON_MASK=off` deliberately only if you want the people-kept rebuild. |
+
+---
+
 ## Symptom decision tree
 
 ```mermaid

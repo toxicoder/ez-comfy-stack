@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import sys
 import types
+from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
+from unittest.mock import patch
 
 import pytest
 
@@ -24,25 +26,34 @@ from ez_image.cubic import (  # noqa: E402
     write_bhwc,
     _quantize_channel,
 )
+from ez_image import person_mask as pm  # noqa: E402
+from ez_prompt_enhance import client  # noqa: E402
+from ez_prompt_enhance.background import REASON_PHOTO_ANCHOR  # noqa: E402
+from ez_prompt_enhance.nodes import EZKleinPromptEnhance  # noqa: E402
+from ez_prompt_enhance.samples import load_catalog  # noqa: E402
 from ez_image.person_mask import (  # noqa: E402
     EZReinsertPeople,
     _fit_hwc,
     _resize_mask,
+    MISS_COOLDOWN_S,
     PERSON_CLASS,
     REASON_MISSING,
     REASON_NOT_CUBIC,
     REASON_NO_PEOPLE,
     REASON_OFF,
     REASON_PASTED,
+    WEIGHT_NAME,
     WEIGHT_URL,
     _deeplab_tools,
     _download,
     _torch_load,
+    _weight_in,
     dilate_mask,
     download_weight,
     feather_mask,
     load_segmenter,
     person_mask_disabled,
+    person_mask_roots,
     imagenet_normalize,
     person_mask_from_logits,
     person_mask_path,
@@ -51,9 +62,32 @@ from ez_image.person_mask import (  # noqa: E402
     reset_person_segmenter,
     run_deeplab,
     segment_people,
+    segmenter_available,
 )
 
 CUBIC = "Rebuild this photographed place as cubic voxels."
+"""Short cube prompt that :func:`is_reconstruction` always recognizes."""
+
+
+@pytest.fixture(autouse=True)
+def _isolated_segmenter_state(
+    monkeypatch: pytest.MonkeyPatch,
+) -> Iterator[None]:
+    """Keep the cached segmenter, cooldown, and model-root env per test.
+
+    Args:
+        monkeypatch: Pytest env/attr helper.
+
+    Yields:
+        Nothing; the fixture only installs the guards.
+    """
+    reset_person_segmenter()
+    monkeypatch.delenv("EZ_PERSON_MASK", raising=False)
+    monkeypatch.delenv("EZ_PERSON_MASK_PATH", raising=False)
+    monkeypatch.delenv("MODELS_ROOT", raising=False)
+    monkeypatch.delenv("MODELS_DIR", raising=False)
+    yield
+    reset_person_segmenter()
 
 
 def _frame(height: int, width: int, paint: Any) -> list[Any]:
@@ -197,9 +231,15 @@ def test_attach_reference_uses_comfy_when_present(
 def test_cubic_condition_picks_photo_or_study(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    """Ordinary prompts and a usable segmenter route photo vs. block study.
+
+    Args:
+        monkeypatch: Pytest attr helper.
+    """
     monkeypatch.setattr(
         "ez_image.person_mask.segment_people", lambda _image: None
     )
+    monkeypatch.setattr("ez_image.person_mask.segmenter_available", lambda: True)
     node = EZCubicCondition()
     assert node.INPUT_TYPES()["required"]["prompt"][1]["forceInput"] is True
     cond = [["tok", {}]]
@@ -227,6 +267,44 @@ def test_cubic_condition_picks_photo_or_study(
     assert missing[0][0][1]["reference_latents"] == [photo]
     no_encode = node.run(cond, photo, [], types.SimpleNamespace(), CUBIC)
     assert no_encode[0][0][1]["reference_latents"] == [photo]
+
+
+def test_cubic_condition_fails_closed_to_the_photo_without_a_segmenter(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Without the person paste the study is never built, so people survive.
+
+    Args:
+        monkeypatch: Pytest attr helper.
+    """
+    monkeypatch.setattr("ez_image.person_mask.segmenter_available", lambda: False)
+    built: list[Any] = []
+
+    def spy_study(image: Any) -> Any:
+        """Record any attempt to build a block study.
+
+        Args:
+            image: Source still handed to the study builder.
+
+        Returns:
+            The image, unchanged.
+        """
+        built.append(image)
+        return image
+
+    monkeypatch.setattr("ez_image.cubic.block_study", spy_study)
+
+    class _Vae:
+        def encode(self, image: Any) -> dict[str, str]:
+            assert image
+            return {"samples": "study"}
+
+    node = EZCubicCondition()
+    cond = [["tok", {}]]
+    photo = {"samples": "photo"}
+    guarded = node.run(cond, photo, [_flat((0.2, 0.3, 0.4), 12, 12)], _Vae(), CUBIC)
+    assert guarded[0][0][1]["reference_latents"] == [photo]
+    assert built == []
 
 
 def test_erase_people_fills_persons_with_blurred_background(
@@ -431,6 +509,162 @@ def test_mask_morphology_and_logits() -> None:
         person_mask_from_logits([])
 
 
+def test_person_mask_roots_prefer_the_container_mount(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """Roots come from MODELS_ROOT then MODELS_DIR, then the fixed fallbacks.
+
+    Args:
+        monkeypatch: Pytest env helper.
+        tmp_path: Isolated directory used as a host model root.
+    """
+    host = str(tmp_path)
+    monkeypatch.setenv("MODELS_ROOT", "/models")
+    monkeypatch.setenv("MODELS_DIR", host)
+    assert person_mask_roots() == ["/models", host, "/mnt/models"]
+    monkeypatch.setenv("MODELS_DIR", "   ")
+    assert person_mask_roots() == ["/models", "/mnt/models"]
+    monkeypatch.delenv("MODELS_ROOT", raising=False)
+    monkeypatch.setenv("MODELS_DIR", "/models")
+    assert person_mask_roots() == ["/models", "/mnt/models"]
+    monkeypatch.delenv("MODELS_DIR", raising=False)
+    assert person_mask_roots() == ["/models", "/mnt/models"]
+    monkeypatch.setenv("MODELS_ROOT", "/mnt/models")
+    assert person_mask_roots() == ["/mnt/models", "/models"]
+    assert _weight_in("/models") == f"/models/comfy/ez-person/{WEIGHT_NAME}"
+    assert person_mask_path() == _weight_in("/mnt/models")
+    monkeypatch.delenv("MODELS_ROOT", raising=False)
+    assert person_mask_path() == _weight_in("/models")
+
+
+def test_ready_weight_path_finds_the_container_root_checkpoint(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """The Compose container only sets MODELS_ROOT, so that root must resolve.
+
+    Args:
+        monkeypatch: Pytest env helper.
+        tmp_path: Host model root that holds no checkpoint.
+    """
+    container = tmp_path / "container-models"
+    checkpoint = container / "comfy" / "ez-person" / WEIGHT_NAME
+    checkpoint.parent.mkdir(parents=True)
+    checkpoint.write_bytes(b"weights")
+    monkeypatch.setenv("MODELS_ROOT", str(container))
+    monkeypatch.setenv("MODELS_DIR", str(tmp_path / "host-models"))
+    assert person_mask_path() == str(checkpoint)
+    assert ready_weight_path() == str(checkpoint)
+    checkpoint.write_bytes(b"")
+    assert ready_weight_path() is None
+
+
+def test_segmenter_available_cooldown_cache_and_off_switch(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """One failed load is remembered; a success caches; reset clears both.
+
+    Args:
+        monkeypatch: Pytest attr/env helper.
+    """
+    clock = {"now": 1000.0}
+    monkeypatch.setattr(pm, "time", types.SimpleNamespace(monotonic=lambda: clock["now"]))
+    calls = {"load": 0}
+
+    def failing_load() -> Any:
+        calls["load"] += 1
+        return None
+
+    monkeypatch.setattr("ez_image.person_mask.load_segmenter", failing_load)
+    assert segmenter_available() is False
+    assert calls["load"] == 1
+    assert segmenter_available() is False
+    assert calls["load"] == 1
+    clock["now"] += MISS_COOLDOWN_S + 1.0
+    assert segmenter_available() is False
+    assert calls["load"] == 2
+    reset_person_segmenter()
+    assert segmenter_available() is False
+    assert calls["load"] == 3
+
+    reset_person_segmenter()
+    loads = {"n": 0}
+
+    def working_load() -> Any:
+        loads["n"] += 1
+        return object()
+
+    monkeypatch.setattr("ez_image.person_mask.load_segmenter", working_load)
+    assert segmenter_available() is True
+    assert segmenter_available() is True
+    assert loads["n"] == 1
+    monkeypatch.setenv("EZ_PERSON_MASK", "off")
+    assert segmenter_available() is False
+
+
+def test_container_state_without_weights_keeps_the_people(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """Compose-like env (MODELS_ROOT only, no checkpoint) fails closed.
+
+    This is the shipped bug: the person segmenter could never load in the
+    container, so every cubic step failed soft on its own and Klein deleted
+    the people. The gate must be one call that the whole route shares.
+
+    Args:
+        monkeypatch: Pytest env/attr helper.
+        tmp_path: Empty container model root standing in for ``/models``.
+    """
+    container = tmp_path / "models"
+    container.mkdir()
+    monkeypatch.setenv("MODELS_ROOT", str(container))
+    monkeypatch.delenv("MODELS_DIR", raising=False)
+    monkeypatch.setattr("ez_image.person_mask.load_segmenter", lambda: None)
+    assert person_mask_roots()[0] == str(container)
+    assert ready_weight_path() is None
+    assert segmenter_available() is False
+
+    cubic = next(
+        item
+        for item in load_catalog("klein_background_swap")
+        if item.id == "voxel-block-world"
+    )
+    klein = EZKleinPromptEnhance()
+    with patch.object(client, "complete", return_value=("rewritten", None)) as mock:
+        packed = klein.run(
+            cubic.prompt,
+            True,
+            "background_swap",
+            "match the source still",
+            "none",
+            image_desc="wet dock, red coat, unmarked hull",
+        )
+    mock.assert_not_called()
+    text = packed["result"][0]
+    assert "Keep the people as photographed" in text
+    assert "empty of people" not in text.lower()
+    assert "with its people removed" not in text
+    assert "Source still: wet dock, red coat, unmarked hull" in text
+    assert packed["ui"]["passthrough"][0] == REASON_PHOTO_ANCHOR
+
+    node = EZCubicCondition()
+    cond = [["tok", {}]]
+    photo = {"samples": "photo"}
+
+    class _Vae:
+        def encode(self, image: Any) -> dict[str, str]:
+            assert image
+            return {"samples": "study"}
+
+    routed = node.run(cond, photo, [_flat((0.2, 0.3, 0.4), 12, 12)], _Vae(), CUBIC)
+    assert routed[0][0][1]["reference_latents"] == [photo]
+
+    plate = [_flat((0.0, 0.0, 1.0), 8, 8)]
+    source = [_flat((1.0, 0.0, 0.0), 8, 8)]
+    same, status = reinsert_people(plate, source, CUBIC)
+    assert same is plate
+    assert status == REASON_MISSING
+
+
 def test_segmenter_paths(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     reset_person_segmenter()
     monkeypatch.setenv("EZ_PERSON_MASK", "off")
@@ -563,6 +797,51 @@ def test_download_weight(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> Non
     assert download_weight() is None
 
 
+def test_download_weight_walks_the_writable_root(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """Unwritable candidates are skipped, not fatal, and the next root wins.
+
+    Args:
+        monkeypatch: Pytest env/attr helper.
+        tmp_path: Writable scratch root.
+    """
+    blocker = tmp_path / "blocked"
+    blocker.write_text("x", encoding="utf-8")
+    monkeypatch.setenv("EZ_PERSON_MASK_PATH", str(blocker / WEIGHT_NAME))
+    monkeypatch.setattr("ez_image.person_mask._download", lambda *_a, **_k: False)
+    assert download_weight() is None
+
+    first = tmp_path / "first"
+    second = tmp_path / "second"
+    monkeypatch.delenv("EZ_PERSON_MASK_PATH", raising=False)
+    monkeypatch.setenv("MODELS_ROOT", str(first))
+    monkeypatch.setenv("MODELS_DIR", str(second))
+    seen: list[str] = []
+
+    def fake_makedirs(path: str, *_args: Any, **_kwargs: Any) -> None:
+        seen.append(str(path))
+
+    def fake_access(path: str, _mode: int) -> bool:
+        return str(path) == str(second / "comfy" / "ez-person")
+
+    def fake_download(url: str, dest: str) -> bool:
+        assert url == WEIGHT_URL
+        return True
+
+    monkeypatch.setattr("ez_image.person_mask.os.makedirs", fake_makedirs)
+    monkeypatch.setattr("ez_image.person_mask.os.access", fake_access)
+    monkeypatch.setattr("ez_image.person_mask._download", fake_download)
+    assert download_weight() == str(second / "comfy" / "ez-person" / WEIGHT_NAME)
+    assert seen == [
+        str(first / "comfy" / "ez-person"),
+        str(second / "comfy" / "ez-person"),
+    ]
+
+    monkeypatch.setattr("ez_image.person_mask.os.access", lambda *_a, **_k: False)
+    assert download_weight() is None
+
+
 def test_run_deeplab_and_segment_cache(monkeypatch: pytest.MonkeyPatch) -> None:
     reset_person_segmenter()
     monkeypatch.delenv("EZ_PERSON_MASK", raising=False)
@@ -676,7 +955,7 @@ def test_deeplab_import_and_weight_edges(monkeypatch: pytest.MonkeyPatch, tmp_pa
     monkeypatch.setenv("MODELS_DIR", str(tmp_path))
     assert person_mask_path().endswith("deeplabv3_resnet50_coco-cd0a2569.pth")
     monkeypatch.setenv("MODELS_DIR", "  ")
-    assert person_mask_path().startswith("/mnt/models")
+    assert person_mask_path().startswith("/models")
 
     def _boom(*_args: object, **_kwargs: object) -> bool:
         raise OSError("stat")
