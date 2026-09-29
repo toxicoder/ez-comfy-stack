@@ -9,6 +9,8 @@ from typing import TYPE_CHECKING, Any, TypedDict, cast
 if TYPE_CHECKING:
     from ez_common import ComfyInputTypes
 
+    from .metadata import AudioMeta
+
 from .fs import AUDIO_SUFFIXES, output_dir
 from .song_plan import demo_draft_lyrics, demo_full_lyrics
 
@@ -343,7 +345,7 @@ class _AlbumArt(TypedDict):
     error: str | None
 
 
-def _resolve_album_art(meta: object, dest: Path, cover: object | None) -> _AlbumArt:
+def _resolve_album_art(meta: AudioMeta, dest: Path, cover: object | None) -> _AlbumArt:
     """Pick cover art for one album folder and normalise it into that folder.
 
     Args:
@@ -356,7 +358,7 @@ def _resolve_album_art(meta: object, dest: Path, cover: object | None) -> _Album
     """
     from .metadata import resolve_cover
 
-    art_mode = str(getattr(meta, "art_mode", "skip") or "skip")
+    art_mode = str(meta.art_mode or "skip")
     upload_path: Path | None = None
     if cover is not None:
         candidate = dest / "cover.png"
@@ -382,7 +384,7 @@ def _resolve_album_art(meta: object, dest: Path, cover: object | None) -> _Album
     return {"cover_path": cover_path, "error": None}
 
 
-def _stamp_masters(meta: object, dest: Path, cover_path: Path | None, prefix: str) -> str:
+def _stamp_masters(meta: AudioMeta, dest: Path, cover_path: Path | None, prefix: str) -> str:
     """Copy matching SaveAudio masters into the album folder and tag them.
 
     Args:
@@ -396,8 +398,8 @@ def _stamp_masters(meta: object, dest: Path, cover_path: Path | None, prefix: st
     """
     from .naming import music_output_prefix
 
-    title = str(getattr(meta, "title", "") or "")
-    track = int(getattr(meta, "track", 1))
+    title = str(meta.title or "")
+    track = int(meta.track)
     stem = str(prefix or "").strip()
     if not stem and title:
         stem = music_output_prefix(title, track)

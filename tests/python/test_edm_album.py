@@ -30,13 +30,13 @@ from ez_music.edm_album import (
     layout_cycle,
     title_from_slug,
 )
+from ez_music.edm_examples import EDM_EXAMPLES, EdmExampleRow
 from ez_music.edm_drive_through import EDM_DRIVE_THROUGH
 from ez_music.edm_drive_through_afterparty import EDM_DRIVE_THROUGH_AFTERPARTY
 from ez_music.edm_drive_through_bass import EDM_DRIVE_THROUGH_BASS
 from ez_music.edm_drive_through_headliner import EDM_DRIVE_THROUGH_HEADLINER
 from ez_music.edm_drive_through_my_coder import EDM_DRIVE_THROUGH_MY_CODER
 from ez_music.edm_drive_through_secret_homage import EDM_DRIVE_THROUGH_SECRET_HOMAGE
-from ez_music.edm_examples import EDM_EXAMPLES, EdmExampleRow
 
 # Fields ``_ex`` copies through untouched, so a replay can assert them.
 _PASSTHROUGH = ("slug", "title", "seed", "phase", "recipe", "layout")
