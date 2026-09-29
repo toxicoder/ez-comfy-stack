@@ -2,14 +2,14 @@
 
 from __future__ import annotations
 
-import os
 import sys
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, Any, TypedDict, cast
 
 if TYPE_CHECKING:
     from ez_common import ComfyInputTypes
 
+from .fs import AUDIO_SUFFIXES, output_dir
 from .song_plan import demo_draft_lyrics, demo_full_lyrics
 
 # Prompt path, flavor id, and canned lyrics widgets.
@@ -27,7 +27,12 @@ def _log(message: str) -> None:
     Args:
         message: Human status without a trailing newline.
     """
-    print(f"[ez_music] {message}", file=sys.stderr)
+    try:
+        from ez_common import node_log
+
+        node_log("ez_music", message)
+    except Exception:  # noqa: BLE001 - pytest / missing sibling pack
+        print(f"[ez_music] {message}", file=sys.stderr)
 
 
 def _sample_combo() -> tuple:
@@ -48,9 +53,15 @@ def _ensure_lab_custom_nodes_path() -> None:
     Comfy registers directory packs as the filesystem path, not the folder
     name, and does not put custom_nodes on sys.path.
     """
-    root = str(Path(__file__).resolve().parent.parent)
-    if root not in sys.path:
-        sys.path.insert(0, root)
+    root = Path(__file__).resolve().parent.parent
+    try:
+        from ez_common import ensure_custom_nodes_path
+
+        ensure_custom_nodes_path(anchor=root)
+    except Exception:  # noqa: BLE001 - ez_common is itself a sibling
+        text = str(root)
+        if text not in sys.path:
+            sys.path.insert(0, text)
 
 
 def _as_bool(value: object) -> bool:
@@ -86,19 +97,28 @@ def load_writer_prompt(name: str = FLAVOR_RAP) -> str:
     return path.read_text(encoding="utf-8").strip()
 
 
-def _pack_text(text: str, status: str) -> dict[str, Any]:
-    """Build an output-node payload with lyrics and a UI status.
+def _pack_text(
+    text: str,
+    status: str | None = None,
+    *,
+    result: tuple[object, ...] | None = None,
+) -> dict[str, Any]:
+    """Build an output-node payload with a UI line and a result pin.
 
     Args:
-        text: Lyrics string on the result pin.
-        status: Passthrough / UI status text.
+        text: UI status text.
+        status: Passthrough text; omit for a text-only ``ui``.
+        result: Result pin tuple; defaults to ``(text,)``.
 
     Returns:
         Comfy ``ui`` plus ``result`` dict.
     """
+    ui: dict[str, Any] = {"text": (text,)}
+    if status is not None:
+        ui["passthrough"] = (status,)
     return {
-        "ui": {"text": (text,), "passthrough": (status,)},
-        "result": (text,),
+        "ui": ui,
+        "result": result if result is not None else (text,),
     }
 
 
@@ -182,31 +202,44 @@ class EZRapLyrics:
         ctx = context if isinstance(context, str) else str(context or "")
         if not _as_bool(enhance):
             return _pack_text(original, "enhance off")
+        return _rewrite_via_gguf(original, ctx)
+
+
+def _rewrite_via_gguf(original: str, ctx: str) -> dict[str, Any]:
+    """Rewrite lyrics with the on-box GGUF, passing text through on failure.
+
+    Args:
+        original: Resolved widget or sample lyrics.
+        ctx: Extra system context already coerced to str.
+
+    Returns:
+        Output-node dict with the rewritten or passed-through lyrics.
+    """
+    try:
+        _ensure_lab_custom_nodes_path()
+        from ez_prompt_enhance.client import _close_llm
+        from ez_prompt_enhance.client import complete
+        from ez_prompt_enhance.client import compose_context_user
+        from ez_prompt_enhance.client import with_context_system
+    except Exception as exc:  # noqa: BLE001 - fail-soft
+        _log(f"prompt enhance client unavailable: {exc}")
+        return _pack_text(original, "llama.cpp unavailable")
+    try:
+        system = with_context_system(load_writer_prompt(FLAVOR_RAP), ctx)
+    except FileNotFoundError as exc:
+        _log(f"rap lyrics prompt missing: {exc}")
+        return _pack_text(original, "passthrough")
+    _log("rewriting rap lyrics via on-box GGUF...")
+    try:
+        rewritten, reason = complete(system, compose_context_user(original, ctx))
+    finally:
         try:
-            _ensure_lab_custom_nodes_path()
-            from ez_prompt_enhance.client import _close_llm
-            from ez_prompt_enhance.client import complete
-            from ez_prompt_enhance.client import compose_context_user
-            from ez_prompt_enhance.client import with_context_system
-        except Exception as exc:  # noqa: BLE001 - fail-soft
-            _log(f"prompt enhance client unavailable: {exc}")
-            return _pack_text(original, "llama.cpp unavailable")
-        try:
-            system = with_context_system(load_writer_prompt(FLAVOR_RAP), ctx)
-        except FileNotFoundError as exc:
-            _log(f"rap lyrics prompt missing: {exc}")
-            return _pack_text(original, "passthrough")
-        _log("rewriting rap lyrics via on-box GGUF...")
-        try:
-            rewritten, reason = complete(system, compose_context_user(original, ctx))
-        finally:
-            try:
-                _close_llm()
-            except Exception as exc:  # noqa: BLE001 - unload is best-effort
-                _log(f"writer unload failed: {exc}")
-        if not (rewritten or "").strip():
-            return _pack_text(original, reason or "passthrough")
-        return _pack_text(rewritten, "")
+            _close_llm()
+        except Exception as exc:  # noqa: BLE001 - unload is best-effort
+            _log(f"writer unload failed: {exc}")
+    if not (rewritten or "").strip():
+        return _pack_text(original, reason or "passthrough")
+    return _pack_text(rewritten, "")
 
 
 class EZAudioMetadata:
@@ -278,8 +311,7 @@ class EZAudioMetadata:
         Returns:
             Output-node dict with the original AUDIO on ``result``.
         """
-        from .metadata import AudioMeta, album_dir_from_env, resolve_cover, stamp_audio_file
-        from .naming import music_output_prefix
+        from .metadata import AudioMeta, album_dir_from_env
 
         meta = AudioMeta(
             artist=str(artist or "").strip(),
@@ -291,39 +323,86 @@ class EZAudioMetadata:
             art_mode=str(art_mode or "skip"),
         )
         dest = album_dir_from_env(meta.artist or "Unknown", meta.album or "Untitled")
-        upload_path = None
-        if cover is not None:
-            upload_path = dest / "cover.png"
-            try:
-                _save_cover_tensor(cover, upload_path)
-            except Exception as exc:  # noqa: BLE001 - optional art
-                _log(f"cover tensor save failed: {exc}")
-                upload_path = None
-        try:
-            cover_path = resolve_cover(
-                art_mode=meta.art_mode,
-                upload=upload_path,
-                album_dir=dest,
-            )
-        except ValueError as exc:
-            _log(str(exc))
-            cover_path = None
-            if meta.art_mode != "skip":
-                return {
-                    "ui": {"text": (str(exc),)},
-                    "result": (audio,),
-                }
-        if cover_path is not None and cover_path.parent != dest:
-            copied = dest / "cover.jpg"
-            copied.write_bytes(cover_path.read_bytes())
-            cover_path = copied
-        stem = str(prefix or "").strip()
-        if not stem and meta.title:
-            stem = music_output_prefix(meta.title, meta.track)
-        stamped = _stamp_output_masters(stem, dest, meta, cover_path)
-        status = f"tagged {len(stamped)} file(s)" if stamped else "no SaveAudio masters yet"
+        art = _resolve_album_art(meta, dest, cover)
+        if art["error"] is not None and meta.art_mode != "skip":
+            return _pack_text(art["error"], result=(audio,))
+        status = _stamp_masters(meta, dest, art["cover_path"], prefix)
         _log(status)
-        return {"ui": {"text": (status,)}, "result": (audio,)}
+        return _pack_text(status, result=(audio,))
+
+
+class _AlbumArt(TypedDict):
+    """Cover-art resolution result for the metadata node.
+
+    Attributes:
+        cover_path: Art to stamp, copied into the album folder, or None.
+        error: Reason art could not be resolved, or None on success.
+    """
+
+    cover_path: Path | None
+    error: str | None
+
+
+def _resolve_album_art(meta: object, dest: Path, cover: object | None) -> _AlbumArt:
+    """Pick cover art for one album folder and normalise it into that folder.
+
+    Args:
+        meta: ``AudioMeta`` instance; only its ``art_mode`` is read.
+        dest: ``albums/<Artist>/<Album>`` folder.
+        cover: Optional Comfy IMAGE tensor used as the upload.
+
+    Returns:
+        Cover path plus the fail-soft reason when art is unavailable.
+    """
+    from .metadata import resolve_cover
+
+    art_mode = str(getattr(meta, "art_mode", "skip") or "skip")
+    upload_path: Path | None = None
+    if cover is not None:
+        candidate = dest / "cover.png"
+        try:
+            _save_cover_tensor(cover, candidate)
+        except Exception as exc:  # noqa: BLE001 - optional art
+            _log(f"cover tensor save failed: {exc}")
+        else:
+            upload_path = candidate
+    try:
+        cover_path = resolve_cover(
+            art_mode=art_mode,
+            upload=upload_path,
+            album_dir=dest,
+        )
+    except ValueError as exc:
+        _log(str(exc))
+        return {"cover_path": None, "error": str(exc)}
+    if cover_path is not None and cover_path.parent != dest:
+        copied = dest / "cover.jpg"
+        copied.write_bytes(cover_path.read_bytes())
+        cover_path = copied
+    return {"cover_path": cover_path, "error": None}
+
+
+def _stamp_masters(meta: object, dest: Path, cover_path: Path | None, prefix: str) -> str:
+    """Copy matching SaveAudio masters into the album folder and tag them.
+
+    Args:
+        meta: ``AudioMeta`` instance; the stem derives from title/track.
+        dest: Destination album folder.
+        cover_path: Cover art to embed, or None.
+        prefix: SaveAudio stem to match; derived from title when empty.
+
+    Returns:
+        Operator status line describing what was tagged.
+    """
+    from .naming import music_output_prefix
+
+    title = str(getattr(meta, "title", "") or "")
+    track = int(getattr(meta, "track", 1))
+    stem = str(prefix or "").strip()
+    if not stem and title:
+        stem = music_output_prefix(title, track)
+    stamped = _stamp_output_masters(stem, dest, meta, cover_path)
+    return f"tagged {len(stamped)} file(s)" if stamped else "no SaveAudio masters yet"
 
 
 class EZAlbumPack:
@@ -374,9 +453,9 @@ class EZAlbumPack:
             zip_path = pack_album(dest, album=album_s)
         except FileNotFoundError as exc:
             _log(str(exc))
-            return {"ui": {"text": (str(exc),)}, "result": ("",)}
+            return _pack_text(str(exc), result=("",))
         _log(f"packed {zip_path}")
-        return {"ui": {"text": (str(zip_path),)}, "result": (str(zip_path),)}
+        return _pack_text(str(zip_path))
 
 
 def _save_cover_tensor(image: object, dest: Path) -> Path:
@@ -415,20 +494,7 @@ def _output_root(album_dir: Path) -> Path:
     Returns:
         Directory that contains SaveAudio masters.
     """
-    try:
-        from ez_common import output_root
-
-        return output_root(default=str(album_dir))
-    except Exception:  # noqa: BLE001 - pytest / missing Comfy
-        env = (os.environ.get("COMFY_OUTPUT_DIR") or "").strip()
-        if env:
-            return Path(env)
-        try:
-            import folder_paths  # type: ignore[import-not-found]
-
-            return Path(folder_paths.get_output_directory())
-        except Exception:  # noqa: BLE001 - pytest / missing Comfy
-            return album_dir
+    return output_dir(default=album_dir)
 
 
 def _stamp_output_masters(
@@ -456,7 +522,7 @@ def _stamp_output_masters(
         return []
     output_root = _output_root(album_dir)
     hits: list[Path] = []
-    for suffix in (".flac", ".mp3", ".wav"):
+    for suffix in AUDIO_SUFFIXES:
         hits.extend(sorted(output_root.glob(f"{prefix}*{suffix}")))
     stamped: list[Path] = []
     for src in hits:

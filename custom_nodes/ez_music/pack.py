@@ -5,10 +5,8 @@ from __future__ import annotations
 import zipfile
 from pathlib import Path
 
+from .fs import AUDIO_SUFFIXES
 from .metadata import COVER_NAMES
-
-# Masters packed into the album zip.
-AUDIO_SUFFIXES = (".flac", ".mp3", ".wav")
 
 
 def _audio_files(album_dir: Path) -> list[Path]:
