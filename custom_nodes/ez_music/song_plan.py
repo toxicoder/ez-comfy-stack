@@ -363,6 +363,31 @@ def duration_seconds(
     return min(DURATION_MAX, max(DURATION_MIN, raw))
 
 
+# 48000 Hz / 1920 samples per ACE-Step 1.5 latent frame, so a
+# frame-boundary seconds value decodes to exactly that many frames.
+ACE_FRAMES_PER_SECOND = 25.0
+
+
+def bar_aligned_seconds(*, bars: int, meter: str, bpm: int) -> float:
+    """Latent-frame-snapped seconds for a bar count at one tempo and meter.
+
+    Args:
+        bars: Total bars.
+        meter: Encoder time signature.
+        bpm: Tempo in beats per minute.
+
+    Returns:
+        Seconds rounded to the nearest ACE latent frame boundary.
+
+    Raises:
+        ValueError: bpm is below 1, or meter is unknown.
+    """
+    if int(bpm) < 1:
+        raise ValueError("bpm must be positive")
+    exact = int(bars) * beats_per_bar(meter) * 60.0 / int(bpm)
+    return round(exact * ACE_FRAMES_PER_SECOND) / ACE_FRAMES_PER_SECOND
+
+
 def validate_keyscale(key: str) -> str:
     """Return a key if ACE-Step's combo list contains it.
 

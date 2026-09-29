@@ -25,7 +25,12 @@ from ez_music.drive_arrange import (
     plan_drive_album,
 )
 from ez_music.edm_examples import FORBIDDEN_SCORE_NEEDLES, HIGH_PITCH_NEEDLES
-from ez_music.song_plan import SongPlan, SongSection, duration_seconds
+from ez_music.song_plan import (
+    SongPlan,
+    SongSection,
+    bar_aligned_seconds,
+    duration_seconds,
+)
 
 
 def _section(role: str, bars: int, cue: str) -> SongSection:
@@ -536,7 +541,7 @@ def test_drop_cap_forces_role_switching(
     assert drops >= arrange._DROP_FLOOR
     # The take's length is the summed pass lengths less the seam overlaps.
     seams = int(round(sum(plan["overlap_bars"]) * 240 / int(plan["bpm"])))
-    assert arrange._seconds(sections, int(plan["bpm"])) - seams == plan["duration_s"]
+    assert plan["duration_s"] == round(sum(plan["pass_seconds"]) - seams)
 
 
 def test_ensure_drops_promotes_fills_to_meet_floor_and_share() -> None:
@@ -938,7 +943,7 @@ def test_take_duration_matches_score_coverage() -> None:
         arrange_drive(row["lyrics"], plan)
         passes = plan["pass_scores"]
         assert len(passes) == len(plan["movements_sections"]), plan["form_id"]
-        total = 0
+        total = 0.0
         for score, span in zip(passes, plan["movements_sections"]):
             assert len(score) <= arrange.DRIVE_PASS_CHAR_BUDGET, plan["form_id"]
             bars: list[int] = []
@@ -947,11 +952,11 @@ def test_take_duration_matches_score_coverage() -> None:
                 if match:
                     bars.append(int(match.group(1)))
             assert sum(bars) == sum(int(s["bars"]) for s in span), plan["form_id"]
-            total += duration_seconds(
-                bars=sum(bars), meter="4", bpm=plan["bpm"], clamp=False
+            total += bar_aligned_seconds(
+                bars=sum(bars), meter="4", bpm=plan["bpm"]
             )
         seams = int(round(sum(plan["overlap_bars"]) * 240 / int(plan["bpm"])))
-        assert plan["duration_s"] == total - seams, plan["form_id"]
+        assert plan["duration_s"] == round(total - seams), plan["form_id"]
         assert arrange.DRIVE_FLOOR_S <= plan["duration_s"] <= arrange.DRIVE_CAP_S
         assert plan["bucket"] in ("short", "standard", "long", "epic")
 
@@ -1121,7 +1126,8 @@ def test_arrange_drive_passes_falls_back_to_flat_sections() -> None:
     scores = arrange_drive_passes("drop - heavy warped drop", plan)
     assert len(scores) == 1
     assert scores[0].startswith("[build-up")
-    assert plan["pass_seconds"] == [plan["duration_s"]]
+    assert len(plan["pass_seconds"]) == 1
+    assert abs(plan["pass_seconds"][0] - plan["duration_s"]) <= 0.5
 
 
 def test_arrange_drive_passes_refuses_a_chop_that_overruns_the_pass(

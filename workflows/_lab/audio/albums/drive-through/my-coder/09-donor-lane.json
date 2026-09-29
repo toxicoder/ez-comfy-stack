@@ -137,7 +137,7 @@
         "Run widget replace on values": false
       },
       "widgets_values": [
-        85.0,
+        84.56,
         "fixed"
       ],
       "title": "Song Duration"
@@ -180,7 +180,7 @@
         "Node name for S&R": "EmptyAceStep1.5LatentAudio"
       },
       "widgets_values": [
-        85.0,
+        84.56,
         1
       ],
       "title": "Latent length (seconds)"
@@ -296,7 +296,7 @@
         769,
         "fixed",
         176,
-        85.0,
+        84.56,
         "4",
         "unknown",
         "A minor",
@@ -529,7 +529,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## 09-donor-lane\n\nUS-safe EDM **417 s** take: **donor lane**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[build-up]`, `[breakdown]`, `[outro]`) so ACE does not sing production notes. Form **drv-22ea240d8d**. Short build, then the drop. Later stanzas switch layers. No section is a long loop. No brass and no high leads. Vocals are a rare DJ treat on other graphs, not here. The take is 5 sequential ACE-Step passes (85 s + 85 s + 85 s + 85 s + 87 s) joined in-graph on the bar grid by **Beat-join passes**: each seam overlaps 2 bar, 1 bar, 2 bar, 2 bar whole bars, the 808 hand-off never stacks or nulls, and the crossfade never clicks. SaveAudio, the MP3, and the metadata stamp carry the one joined master. Queue this graph **on its own** - draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[drop]` / `[inst]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing. Encoder language is `unknown`. Free-text lines under a marker are lyrics - keep cues inside the brackets.\n4. Original arrangements only. No \"in the style of <living artist>\". No living-DJ names. No famous-hook paraphrases.\n5. ACE-Step timbre is **invented**, not a cloned act.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 417 s across 5 passes, bpm 176, language unknown, timesignature 4, key A minor, form drv-22ea240d8d, generate_audio_codes true. Seed 769.\n7. Saves: `09 - Donor Lane` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.\n9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nOccupancy: audio - stop Klein / Wan / LTX session. One GB10 job.\n"
+        "## 09-donor-lane\n\nUS-safe EDM **416 s** take: **donor lane**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[build-up]`, `[breakdown]`, `[outro]`) so ACE does not sing production notes. Form **drv-22ea240d8d**. Short build, then the drop. Later stanzas switch layers. No section is a long loop. No brass and no high leads. Vocals are a rare DJ treat on other graphs, not here. The take is 5 sequential ACE-Step passes (84.56 s + 84.56 s + 84.56 s + 84.56 s + 87.28 s) joined in-graph on the bar grid by **Beat-join passes**: each seam overlaps 2 bar, 1 bar, 2 bar, 2 bar whole bars, the 808 hand-off never stacks or nulls, and the crossfade never clicks. SaveAudio, the MP3, and the metadata stamp carry the one joined master. Queue this graph **on its own** - draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[drop]` / `[inst]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing. Encoder language is `unknown`. Free-text lines under a marker are lyrics - keep cues inside the brackets.\n4. Original arrangements only. No \"in the style of <living artist>\". No living-DJ names. No famous-hook paraphrases.\n5. ACE-Step timbre is **invented**, not a cloned act.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 416 s across 5 passes, bpm 176, language unknown, timesignature 4, key A minor, form drv-22ea240d8d, generate_audio_codes true. Seed 769.\n7. Saves: `09 - Donor Lane` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.\n9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nOccupancy: audio - stop Klein / Wan / LTX session. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -650,7 +650,7 @@
         "Run widget replace on values": false
       },
       "widgets_values": [
-        85.0,
+        84.56,
         "fixed"
       ],
       "title": "Pass 2 clock"
@@ -693,7 +693,7 @@
         "Node name for S&R": "EmptyAceStep1.5LatentAudio"
       },
       "widgets_values": [
-        85.0,
+        84.56,
         1
       ],
       "title": "Pass 2 latent (seconds)"
@@ -809,7 +809,7 @@
         769,
         "fixed",
         176,
-        85.0,
+        84.56,
         "4",
         "unknown",
         "A minor",
@@ -991,7 +991,7 @@
         "Run widget replace on values": false
       },
       "widgets_values": [
-        85.0,
+        84.56,
         "fixed"
       ],
       "title": "Pass 3 clock"
@@ -1034,7 +1034,7 @@
         "Node name for S&R": "EmptyAceStep1.5LatentAudio"
       },
       "widgets_values": [
-        85.0,
+        84.56,
         1
       ],
       "title": "Pass 3 latent (seconds)"
@@ -1150,7 +1150,7 @@
         769,
         "fixed",
         176,
-        85.0,
+        84.56,
         "4",
         "unknown",
         "A minor",
@@ -1332,7 +1332,7 @@
         "Run widget replace on values": false
       },
       "widgets_values": [
-        85.0,
+        84.56,
         "fixed"
       ],
       "title": "Pass 4 clock"
@@ -1375,7 +1375,7 @@
         "Node name for S&R": "EmptyAceStep1.5LatentAudio"
       },
       "widgets_values": [
-        85.0,
+        84.56,
         1
       ],
       "title": "Pass 4 latent (seconds)"
@@ -1491,7 +1491,7 @@
         769,
         "fixed",
         176,
-        85.0,
+        84.56,
         "4",
         "unknown",
         "A minor",
@@ -1673,7 +1673,7 @@
         "Run widget replace on values": false
       },
       "widgets_values": [
-        87.0,
+        87.28,
         "fixed"
       ],
       "title": "Pass 5 clock"
@@ -1716,7 +1716,7 @@
         "Node name for S&R": "EmptyAceStep1.5LatentAudio"
       },
       "widgets_values": [
-        87.0,
+        87.28,
         1
       ],
       "title": "Pass 5 latent (seconds)"
@@ -1832,7 +1832,7 @@
         769,
         "fixed",
         176,
-        87.0,
+        87.28,
         "4",
         "unknown",
         "A minor",
@@ -2818,7 +2818,7 @@
   "config": {},
   "extra": {
     "lab_profile": "us-safe-music",
-    "lab_note": "## 09-donor-lane\n\nUS-safe EDM **417 s** take: **donor lane**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[build-up]`, `[breakdown]`, `[outro]`) so ACE does not sing production notes. Form **drv-22ea240d8d**. Short build, then the drop. Later stanzas switch layers. No section is a long loop. No brass and no high leads. Vocals are a rare DJ treat on other graphs, not here. The take is 5 sequential ACE-Step passes (85 s + 85 s + 85 s + 85 s + 87 s) joined in-graph on the bar grid by **Beat-join passes**: each seam overlaps 2 bar, 1 bar, 2 bar, 2 bar whole bars, the 808 hand-off never stacks or nulls, and the crossfade never clicks. SaveAudio, the MP3, and the metadata stamp carry the one joined master. Queue this graph **on its own** - draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[drop]` / `[inst]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing. Encoder language is `unknown`. Free-text lines under a marker are lyrics - keep cues inside the brackets.\n4. Original arrangements only. No \"in the style of <living artist>\". No living-DJ names. No famous-hook paraphrases.\n5. ACE-Step timbre is **invented**, not a cloned act.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 417 s across 5 passes, bpm 176, language unknown, timesignature 4, key A minor, form drv-22ea240d8d, generate_audio_codes true. Seed 769.\n7. Saves: `09 - Donor Lane` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.\n9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nOccupancy: audio - stop Klein / Wan / LTX session. One GB10 job.\n",
+    "lab_note": "## 09-donor-lane\n\nUS-safe EDM **416 s** take: **donor lane**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[build-up]`, `[breakdown]`, `[outro]`) so ACE does not sing production notes. Form **drv-22ea240d8d**. Short build, then the drop. Later stanzas switch layers. No section is a long loop. No brass and no high leads. Vocals are a rare DJ treat on other graphs, not here. The take is 5 sequential ACE-Step passes (84.56 s + 84.56 s + 84.56 s + 84.56 s + 87.28 s) joined in-graph on the bar grid by **Beat-join passes**: each seam overlaps 2 bar, 1 bar, 2 bar, 2 bar whole bars, the 808 hand-off never stacks or nulls, and the crossfade never clicks. SaveAudio, the MP3, and the metadata stamp carry the one joined master. Queue this graph **on its own** - draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[drop]` / `[inst]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing. Encoder language is `unknown`. Free-text lines under a marker are lyrics - keep cues inside the brackets.\n4. Original arrangements only. No \"in the style of <living artist>\". No living-DJ names. No famous-hook paraphrases.\n5. ACE-Step timbre is **invented**, not a cloned act.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 416 s across 5 passes, bpm 176, language unknown, timesignature 4, key A minor, form drv-22ea240d8d, generate_audio_codes true. Seed 769.\n7. Saves: `09 - Donor Lane` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.\n9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nOccupancy: audio - stop Klein / Wan / LTX session. One GB10 job.\n",
     "lab_description": "US-safe EDM take: Drive-through donor-lane code warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_optional_unwired": [
       "LoadImage"

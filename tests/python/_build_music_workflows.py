@@ -313,10 +313,13 @@ Beat-only pass: append instrumental, no vocals, and replace lyrics with [inst].
 def _edm_note(ex: EdmExample) -> str:
     duration_s = int(ex["duration"])
     treat = ex["ace_mode"] == "vocal"
-    pass_seconds = [int(value) for value in ex["pass_seconds"]]
+    pass_seconds = [float(value) for value in ex["pass_seconds"]]
     overlaps = [int(value) for value in ex["overlap_bars"]]
     n_passes = len(pass_seconds)
-    pass_blurb = " + ".join(f"{value} s" for value in pass_seconds)
+    # Pass clocks are bar-aligned floats; print 87.52 s and 88 s, not 88.0 s.
+    pass_blurb = " + ".join(
+        f"{value:.2f}".rstrip("0").rstrip(".") + " s" for value in pass_seconds
+    )
     seam_blurb = ", ".join(f"{value} bar" for value in overlaps)
     join_blurb = (
         f"The take is {n_passes} sequential ACE-Step passes ({pass_blurb}) "

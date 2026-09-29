@@ -291,7 +291,8 @@ class EdmExample(EdmExampleRow):
             joined ``lyrics`` is these stitched with blank lines; the
             graph renders each pass from its own entry so no single
             latent carries more score than its window holds.
-        pass_seconds: Whole seconds each pass renders before its seam.
+        pass_seconds: Latent-frame-aligned seconds each pass renders
+            before its seam.
         overlap_bars: Whole bars the joiner overlaps at each seam, one
             entry per join.
         movements: Movement role of each pass, render order.
@@ -299,7 +300,7 @@ class EdmExample(EdmExampleRow):
     """
 
     pass_scores: tuple[str, ...]
-    pass_seconds: tuple[int, ...]
+    pass_seconds: tuple[float, ...]
     overlap_bars: tuple[int, ...]
     movements: tuple[str, ...]
     pass_cells: tuple[int, ...]
@@ -665,7 +666,7 @@ def finalize_drive_album(
                 "meter": plan["meter"],
                 "keyscale": plan["keyscale"],
                 "pass_scores": tuple(plan["pass_scores"]),
-                "pass_seconds": tuple(int(s) for s in plan["pass_seconds"]),
+                "pass_seconds": tuple(float(s) for s in plan["pass_seconds"]),
                 "overlap_bars": tuple(int(b) for b in plan["overlap_bars"]),
                 "movements": tuple(str(m) for m in plan["movements"]),
                 "pass_cells": tuple(int(c) for c in plan["pass_cells"]),

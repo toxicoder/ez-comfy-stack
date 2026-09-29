@@ -28,14 +28,14 @@ Numbered takes under `audio/albums/drive-through/afterparty/`. Queue one track, 
 ```text
 ## 01-brake-fade
 
-US-safe EDM **324 s** take: **brake fade**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[build-up]`, `[breakdown]`, `[outro]`) so ACE does not sing production notes. Form **drv-c93278a4d4**. Short build, then the drop. Later stanzas switch layers. No section is a long loop. No brass and no high leads. Vocals are a rare DJ treat on other graphs, not here. The take is 4 sequential ACE-Step passes (89 s + 89 s + 89 s + 66 s) joined in-graph on the bar grid by **Beat-join passes**: each seam overlaps 2 bar, 2 bar, 2 bar whole bars, the 808 hand-off never stacks or nulls, and the crossfade never clicks. SaveAudio, the MP3, and the metadata stamp carry the one joined master. Queue this graph **on its own** - draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
+US-safe EDM **322 s** take: **brake fade**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[build-up]`, `[breakdown]`, `[outro]`) so ACE does not sing production notes. Form **drv-c93278a4d4**. Short build, then the drop. Later stanzas switch layers. No section is a long loop. No brass and no high leads. Vocals are a rare DJ treat on other graphs, not here. The take is 4 sequential ACE-Step passes (88.56 s + 88.56 s + 88.56 s + 65.72 s) joined in-graph on the bar grid by **Beat-join passes**: each seam overlaps 2 bar, 2 bar, 2 bar whole bars, the 808 hand-off never stacks or nulls, and the crossfade never clicks. SaveAudio, the MP3, and the metadata stamp carry the one joined master. Queue this graph **on its own** - draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and `[drop]` / `[inst]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.
 3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing. Encoder language is `unknown`. Free-text lines under a marker are lyrics - keep cues inside the brackets.
 4. Original arrangements only. No "in the style of <living artist>". No living-DJ names. No famous-hook paraphrases.
 5. ACE-Step timbre is **invented**, not a cloned act.
-6. Sampler: 8 steps, cfg 1, euler, simple. Duration 324 s across 4 passes, bpm 168, language unknown, timesignature 4, key E minor, form drv-c93278a4d4, generate_audio_codes true. Seed 457.
+6. Sampler: 8 steps, cfg 1, euler, simple. Duration 322 s across 4 passes, bpm 168, language unknown, timesignature 4, key E minor, form drv-c93278a4d4, generate_audio_codes true. Seed 457.
 7. Saves: `01 - Brake Fade` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.
 8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.
 9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).
@@ -112,14 +112,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `89.0` |
+| 0 | `88.56` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `89.0` |
+| 0 | `88.56` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -210,7 +210,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808,
 | 2 | `457` |
 | 3 | `fixed` |
 | 4 | `168` |
-| 5 | `89.0` |
+| 5 | `88.56` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `E minor` |
@@ -338,14 +338,14 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808,
 
 | Slot | Value |
 | --- | --- |
-| 0 | `89.0` |
+| 0 | `88.56` |
 | 1 | `fixed` |
 
 **Pass 2 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `89.0` |
+| 0 | `88.56` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
@@ -436,7 +436,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808,
 | 2 | `457` |
 | 3 | `fixed` |
 | 4 | `168` |
-| 5 | `89.0` |
+| 5 | `88.56` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `E minor` |
@@ -531,14 +531,14 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808,
 
 | Slot | Value |
 | --- | --- |
-| 0 | `89.0` |
+| 0 | `88.56` |
 | 1 | `fixed` |
 
 **Pass 3 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `89.0` |
+| 0 | `88.56` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
@@ -629,7 +629,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808,
 | 2 | `457` |
 | 3 | `fixed` |
 | 4 | `168` |
-| 5 | `89.0` |
+| 5 | `88.56` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `E minor` |
@@ -724,14 +724,14 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808,
 
 | Slot | Value |
 | --- | --- |
-| 0 | `66.0` |
+| 0 | `65.72` |
 | 1 | `fixed` |
 
 **Pass 4 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `66.0` |
+| 0 | `65.72` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
@@ -806,7 +806,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808,
 | 2 | `457` |
 | 3 | `fixed` |
 | 4 | `168` |
-| 5 | `66.0` |
+| 5 | `65.72` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `E minor` |
@@ -924,14 +924,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `65.0` |
+| 0 | `64.96` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `65.0` |
+| 0 | `64.96` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -1006,7 +1006,7 @@ warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub
 | 2 | `461` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `65.0` |
+| 5 | `64.96` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `G major` |
@@ -1118,14 +1118,14 @@ warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub
 
 | Slot | Value |
 | --- | --- |
-| 0 | `88.0` |
+| 0 | `87.52` |
 | 1 | `fixed` |
 
 **Pass 2 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `88.0` |
+| 0 | `87.52` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
@@ -1216,7 +1216,7 @@ warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub
 | 2 | `461` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `88.0` |
+| 5 | `87.52` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `G major` |
@@ -1311,14 +1311,14 @@ warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub
 
 | Slot | Value |
 | --- | --- |
-| 0 | `88.0` |
+| 0 | `87.52` |
 | 1 | `fixed` |
 
 **Pass 3 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `88.0` |
+| 0 | `87.52` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
@@ -1409,7 +1409,7 @@ warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub
 | 2 | `461` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `88.0` |
+| 5 | `87.52` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `G major` |
@@ -1504,14 +1504,14 @@ warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub
 
 | Slot | Value |
 | --- | --- |
-| 0 | `88.0` |
+| 0 | `87.52` |
 | 1 | `fixed` |
 
 **Pass 4 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `88.0` |
+| 0 | `87.52` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
@@ -1602,7 +1602,7 @@ warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub
 | 2 | `461` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `88.0` |
+| 5 | `87.52` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `G major` |
@@ -1697,14 +1697,14 @@ warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub
 
 | Slot | Value |
 | --- | --- |
-| 0 | `65.0` |
+| 0 | `64.96` |
 | 1 | `fixed` |
 
 **Pass 5 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `65.0` |
+| 0 | `64.96` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 5** (`EZAceStepPromptEnhance`)
@@ -1779,7 +1779,7 @@ warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub
 | 2 | `461` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `65.0` |
+| 5 | `64.96` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `G major` |
@@ -1897,14 +1897,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `88.0` |
+| 0 | `87.52` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `88.0` |
+| 0 | `87.52` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -1995,7 +1995,7 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ori
 | 2 | `463` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `88.0` |
+| 5 | `87.52` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `B minor` |
@@ -2123,14 +2123,14 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ori
 
 | Slot | Value |
 | --- | --- |
-| 0 | `88.0` |
+| 0 | `87.52` |
 | 1 | `fixed` |
 
 **Pass 2 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `88.0` |
+| 0 | `87.52` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
@@ -2221,7 +2221,7 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ori
 | 2 | `463` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `88.0` |
+| 5 | `87.52` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `B minor` |
@@ -2316,14 +2316,14 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ori
 
 | Slot | Value |
 | --- | --- |
-| 0 | `88.0` |
+| 0 | `87.52` |
 | 1 | `fixed` |
 
 **Pass 3 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `88.0` |
+| 0 | `87.52` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
@@ -2414,7 +2414,7 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ori
 | 2 | `463` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `88.0` |
+| 5 | `87.52` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `B minor` |
@@ -2509,14 +2509,14 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ori
 
 | Slot | Value |
 | --- | --- |
-| 0 | `88.0` |
+| 0 | `87.52` |
 | 1 | `fixed` |
 
 **Pass 4 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `88.0` |
+| 0 | `87.52` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
@@ -2607,7 +2607,7 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ori
 | 2 | `463` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `88.0` |
+| 5 | `87.52` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `B minor` |
@@ -2702,14 +2702,14 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ori
 
 | Slot | Value |
 | --- | --- |
-| 0 | `65.0` |
+| 0 | `64.96` |
 | 1 | `fixed` |
 
 **Pass 5 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `65.0` |
+| 0 | `64.96` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 5** (`EZAceStepPromptEnhance`)
@@ -2784,7 +2784,7 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ori
 | 2 | `463` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `65.0` |
+| 5 | `64.96` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `B minor` |
@@ -2902,14 +2902,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -2984,7 +2984,7 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped b
 | 2 | `467` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `64.0` |
+| 5 | `64.2` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `D major` |
@@ -3096,14 +3096,14 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped b
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `fixed` |
 
 **Pass 2 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
@@ -3178,7 +3178,7 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped b
 | 2 | `467` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `64.0` |
+| 5 | `64.2` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `D major` |
@@ -3257,14 +3257,14 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped b
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `fixed` |
 
 **Pass 3 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
@@ -3339,7 +3339,7 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped b
 | 2 | `467` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `64.0` |
+| 5 | `64.2` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `D major` |
@@ -3418,14 +3418,14 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped b
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `fixed` |
 
 **Pass 4 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
@@ -3500,7 +3500,7 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped b
 | 2 | `467` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `64.0` |
+| 5 | `64.2` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `D major` |
@@ -3618,14 +3618,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -3700,7 +3700,7 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, ori
 | 2 | `479` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `64.0` |
+| 5 | `64.2` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `F# minor` |
@@ -3812,14 +3812,14 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, ori
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `fixed` |
 
 **Pass 2 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
@@ -3894,7 +3894,7 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, ori
 | 2 | `479` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `64.0` |
+| 5 | `64.2` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `F# minor` |
@@ -3973,14 +3973,14 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, ori
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `fixed` |
 
 **Pass 3 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
@@ -4055,7 +4055,7 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, ori
 | 2 | `479` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `64.0` |
+| 5 | `64.2` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `F# minor` |
@@ -4173,14 +4173,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -4255,7 +4255,7 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, dual-action peda
 | 2 | `487` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `64.0` |
+| 5 | `64.2` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A major` |
@@ -4367,14 +4367,14 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, dual-action peda
 
 | Slot | Value |
 | --- | --- |
-| 0 | `87.0` |
+| 0 | `86.52` |
 | 1 | `fixed` |
 
 **Pass 2 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `87.0` |
+| 0 | `86.52` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
@@ -4465,7 +4465,7 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, dual-action peda
 | 2 | `487` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `87.0` |
+| 5 | `86.52` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A major` |
@@ -4560,14 +4560,14 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, dual-action peda
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `fixed` |
 
 **Pass 3 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
@@ -4642,7 +4642,7 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, dual-action peda
 | 2 | `487` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `64.0` |
+| 5 | `64.2` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A major` |
@@ -4721,14 +4721,14 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, dual-action peda
 
 | Slot | Value |
 | --- | --- |
-| 0 | `87.0` |
+| 0 | `86.52` |
 | 1 | `fixed` |
 
 **Pass 4 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `87.0` |
+| 0 | `86.52` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
@@ -4819,7 +4819,7 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, dual-action peda
 | 2 | `487` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `87.0` |
+| 5 | `86.52` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A major` |
@@ -4914,14 +4914,14 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, dual-action peda
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `fixed` |
 
 **Pass 5 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 5** (`EZAceStepPromptEnhance`)
@@ -4996,7 +4996,7 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, dual-action peda
 | 2 | `487` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `64.0` |
+| 5 | `64.2` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A major` |
@@ -5114,14 +5114,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -5196,7 +5196,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 | 2 | `491` |
 | 3 | `fixed` |
 | 4 | `174` |
-| 5 | `63.0` |
+| 5 | `63.44` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A minor` |
@@ -5308,14 +5308,14 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `fixed` |
 
 **Pass 2 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
@@ -5390,7 +5390,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 | 2 | `491` |
 | 3 | `fixed` |
 | 4 | `174` |
-| 5 | `63.0` |
+| 5 | `63.44` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A minor` |
@@ -5469,14 +5469,14 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `fixed` |
 
 **Pass 3 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
@@ -5551,7 +5551,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 | 2 | `491` |
 | 3 | `fixed` |
 | 4 | `174` |
-| 5 | `63.0` |
+| 5 | `63.44` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A minor` |
@@ -5630,14 +5630,14 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `fixed` |
 
 **Pass 4 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
@@ -5712,7 +5712,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 | 2 | `491` |
 | 3 | `fixed` |
 | 4 | `174` |
-| 5 | `63.0` |
+| 5 | `63.44` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A minor` |
@@ -5830,14 +5830,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `89.0` |
+| 0 | `88.56` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `89.0` |
+| 0 | `88.56` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -5928,7 +5928,7 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 | 2 | `499` |
 | 3 | `fixed` |
 | 4 | `168` |
-| 5 | `89.0` |
+| 5 | `88.56` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `C major` |
@@ -6056,14 +6056,14 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 
 | Slot | Value |
 | --- | --- |
-| 0 | `89.0` |
+| 0 | `88.56` |
 | 1 | `fixed` |
 
 **Pass 2 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `89.0` |
+| 0 | `88.56` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
@@ -6154,7 +6154,7 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 | 2 | `499` |
 | 3 | `fixed` |
 | 4 | `168` |
-| 5 | `89.0` |
+| 5 | `88.56` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `C major` |
@@ -6249,14 +6249,14 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 
 | Slot | Value |
 | --- | --- |
-| 0 | `89.0` |
+| 0 | `88.56` |
 | 1 | `fixed` |
 
 **Pass 3 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `89.0` |
+| 0 | `88.56` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
@@ -6347,7 +6347,7 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 | 2 | `499` |
 | 3 | `fixed` |
 | 4 | `168` |
-| 5 | `89.0` |
+| 5 | `88.56` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `C major` |
@@ -6442,14 +6442,14 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 
 | Slot | Value |
 | --- | --- |
-| 0 | `89.0` |
+| 0 | `88.56` |
 | 1 | `fixed` |
 
 **Pass 4 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `89.0` |
+| 0 | `88.56` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
@@ -6540,7 +6540,7 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 | 2 | `499` |
 | 3 | `fixed` |
 | 4 | `168` |
-| 5 | `89.0` |
+| 5 | `88.56` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `C major` |
@@ -6635,14 +6635,14 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 
 | Slot | Value |
 | --- | --- |
-| 0 | `66.0` |
+| 0 | `65.72` |
 | 1 | `fixed` |
 
 **Pass 5 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `66.0` |
+| 0 | `65.72` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 5** (`EZAceStepPromptEnhance`)
@@ -6717,7 +6717,7 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 | 2 | `499` |
 | 3 | `fixed` |
 | 4 | `168` |
-| 5 | `66.0` |
+| 5 | `65.72` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `C major` |
@@ -6835,14 +6835,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -6917,7 +6917,7 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 | 2 | `503` |
 | 3 | `fixed` |
 | 4 | `174` |
-| 5 | `63.0` |
+| 5 | `63.44` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `E minor` |
@@ -7029,14 +7029,14 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `fixed` |
 
 **Pass 2 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
@@ -7111,7 +7111,7 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 | 2 | `503` |
 | 3 | `fixed` |
 | 4 | `174` |
-| 5 | `63.0` |
+| 5 | `63.44` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `E minor` |
@@ -7190,14 +7190,14 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `fixed` |
 
 **Pass 3 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
@@ -7272,7 +7272,7 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 | 2 | `503` |
 | 3 | `fixed` |
 | 4 | `174` |
-| 5 | `63.0` |
+| 5 | `63.44` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `E minor` |
@@ -7390,14 +7390,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `65.0` |
+| 0 | `64.96` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `65.0` |
+| 0 | `64.96` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -7472,7 +7472,7 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, w
 | 2 | `509` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `65.0` |
+| 5 | `64.96` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `G major` |
@@ -7584,14 +7584,14 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, w
 
 | Slot | Value |
 | --- | --- |
-| 0 | `65.0` |
+| 0 | `64.96` |
 | 1 | `fixed` |
 
 **Pass 2 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `65.0` |
+| 0 | `64.96` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
@@ -7666,7 +7666,7 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, w
 | 2 | `509` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `65.0` |
+| 5 | `64.96` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `G major` |
@@ -7745,14 +7745,14 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, w
 
 | Slot | Value |
 | --- | --- |
-| 0 | `90.0` |
+| 0 | `90.36` |
 | 1 | `fixed` |
 
 **Pass 3 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `90.0` |
+| 0 | `90.36` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
@@ -7845,7 +7845,7 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, w
 | 2 | `509` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `90.0` |
+| 5 | `90.36` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `G major` |
@@ -7981,14 +7981,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `74.0` |
+| 0 | `74.48` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `74.0` |
+| 0 | `74.48` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -8071,7 +8071,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 8
 | 2 | `521` |
 | 3 | `fixed` |
 | 4 | `174` |
-| 5 | `74.0` |
+| 5 | `74.48` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `B minor` |
@@ -8191,14 +8191,14 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 8
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `fixed` |
 
 **Pass 2 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
@@ -8273,7 +8273,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 8
 | 2 | `521` |
 | 3 | `fixed` |
 | 4 | `174` |
-| 5 | `63.0` |
+| 5 | `63.44` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `B minor` |
@@ -8352,14 +8352,14 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 8
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `fixed` |
 
 **Pass 3 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
@@ -8434,7 +8434,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 8
 | 2 | `521` |
 | 3 | `fixed` |
 | 4 | `174` |
-| 5 | `63.0` |
+| 5 | `63.44` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `B minor` |
@@ -8552,14 +8552,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `65.0` |
+| 0 | `64.96` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `65.0` |
+| 0 | `64.96` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -8634,7 +8634,7 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 | 2 | `523` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `65.0` |
+| 5 | `64.96` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `D major` |
@@ -8746,14 +8746,14 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 
 | Slot | Value |
 | --- | --- |
-| 0 | `88.0` |
+| 0 | `87.52` |
 | 1 | `fixed` |
 
 **Pass 2 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `88.0` |
+| 0 | `87.52` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
@@ -8844,7 +8844,7 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 | 2 | `523` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `88.0` |
+| 5 | `87.52` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `D major` |
@@ -8939,14 +8939,14 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 
 | Slot | Value |
 | --- | --- |
-| 0 | `76.0` |
+| 0 | `76.24` |
 | 1 | `fixed` |
 
 **Pass 3 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `76.0` |
+| 0 | `76.24` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
@@ -9029,7 +9029,7 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 | 2 | `523` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `76.0` |
+| 5 | `76.24` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `D major` |
@@ -9116,14 +9116,14 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 
 | Slot | Value |
 | --- | --- |
-| 0 | `90.0` |
+| 0 | `90.36` |
 | 1 | `fixed` |
 
 **Pass 4 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `90.0` |
+| 0 | `90.36` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
@@ -9216,7 +9216,7 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 | 2 | `523` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `90.0` |
+| 5 | `90.36` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `D major` |
@@ -9352,14 +9352,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `85.0` |
+| 0 | `84.56` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `85.0` |
+| 0 | `84.56` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -9450,7 +9450,7 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 | 2 | `541` |
 | 3 | `fixed` |
 | 4 | `176` |
-| 5 | `85.0` |
+| 5 | `84.56` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `F# minor` |
@@ -9578,14 +9578,14 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 
 | Slot | Value |
 | --- | --- |
-| 0 | `85.0` |
+| 0 | `84.56` |
 | 1 | `fixed` |
 
 **Pass 2 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `85.0` |
+| 0 | `84.56` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
@@ -9676,7 +9676,7 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 | 2 | `541` |
 | 3 | `fixed` |
 | 4 | `176` |
-| 5 | `85.0` |
+| 5 | `84.56` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `F# minor` |
@@ -9771,14 +9771,14 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 
 | Slot | Value |
 | --- | --- |
-| 0 | `85.0` |
+| 0 | `84.56` |
 | 1 | `fixed` |
 
 **Pass 3 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `85.0` |
+| 0 | `84.56` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
@@ -9869,7 +9869,7 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 | 2 | `541` |
 | 3 | `fixed` |
 | 4 | `176` |
-| 5 | `85.0` |
+| 5 | `84.56` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `F# minor` |
@@ -9964,14 +9964,14 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 
 | Slot | Value |
 | --- | --- |
-| 0 | `74.0` |
+| 0 | `73.64` |
 | 1 | `fixed` |
 
 **Pass 4 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `74.0` |
+| 0 | `73.64` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
@@ -10054,7 +10054,7 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 | 2 | `541` |
 | 3 | `fixed` |
 | 4 | `176` |
-| 5 | `74.0` |
+| 5 | `73.64` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `F# minor` |
@@ -10141,14 +10141,14 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `62.72` |
 | 1 | `fixed` |
 
 **Pass 5 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `62.72` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 5** (`EZAceStepPromptEnhance`)
@@ -10223,7 +10223,7 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 | 2 | `541` |
 | 3 | `fixed` |
 | 4 | `176` |
-| 5 | `63.0` |
+| 5 | `62.72` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `F# minor` |
@@ -10341,14 +10341,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -10423,7 +10423,7 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bas
 | 2 | `547` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `64.0` |
+| 5 | `64.2` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A major` |
@@ -10535,14 +10535,14 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bas
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `fixed` |
 
 **Pass 2 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
@@ -10617,7 +10617,7 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bas
 | 2 | `547` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `64.0` |
+| 5 | `64.2` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A major` |
@@ -10696,14 +10696,14 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bas
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `fixed` |
 
 **Pass 3 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
@@ -10778,7 +10778,7 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bas
 | 2 | `547` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `64.0` |
+| 5 | `64.2` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A major` |
@@ -10857,14 +10857,14 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bas
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `fixed` |
 
 **Pass 4 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
@@ -10939,7 +10939,7 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bas
 | 2 | `547` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `64.0` |
+| 5 | `64.2` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A major` |
@@ -11057,14 +11057,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `66.0` |
+| 0 | `65.72` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `66.0` |
+| 0 | `65.72` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -11139,7 +11139,7 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 
 | 2 | `557` |
 | 3 | `fixed` |
 | 4 | `168` |
-| 5 | `66.0` |
+| 5 | `65.72` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A minor` |
@@ -11251,14 +11251,14 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `66.0` |
+| 0 | `65.72` |
 | 1 | `fixed` |
 
 **Pass 2 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `66.0` |
+| 0 | `65.72` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
@@ -11333,7 +11333,7 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 
 | 2 | `557` |
 | 3 | `fixed` |
 | 4 | `168` |
-| 5 | `66.0` |
+| 5 | `65.72` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A minor` |
@@ -11412,14 +11412,14 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `66.0` |
+| 0 | `65.72` |
 | 1 | `fixed` |
 
 **Pass 3 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `66.0` |
+| 0 | `65.72` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
@@ -11494,7 +11494,7 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 
 | 2 | `557` |
 | 3 | `fixed` |
 | 4 | `168` |
-| 5 | `66.0` |
+| 5 | `65.72` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A minor` |
@@ -11573,14 +11573,14 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `66.0` |
+| 0 | `65.72` |
 | 1 | `fixed` |
 
 **Pass 4 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `66.0` |
+| 0 | `65.72` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
@@ -11655,7 +11655,7 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 
 | 2 | `557` |
 | 3 | `fixed` |
 | 4 | `168` |
-| 5 | `66.0` |
+| 5 | `65.72` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `A minor` |
@@ -11773,14 +11773,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `85.0` |
+| 0 | `84.56` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `85.0` |
+| 0 | `84.56` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -11871,7 +11871,7 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 | 2 | `563` |
 | 3 | `fixed` |
 | 4 | `176` |
-| 5 | `85.0` |
+| 5 | `84.56` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `C major` |
@@ -11999,14 +11999,14 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `62.72` |
 | 1 | `fixed` |
 
 **Pass 2 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `62.72` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
@@ -12081,7 +12081,7 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 | 2 | `563` |
 | 3 | `fixed` |
 | 4 | `176` |
-| 5 | `63.0` |
+| 5 | `62.72` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `C major` |
@@ -12160,14 +12160,14 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `62.72` |
 | 1 | `fixed` |
 
 **Pass 3 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `62.72` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
@@ -12242,7 +12242,7 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 | 2 | `563` |
 | 3 | `fixed` |
 | 4 | `176` |
-| 5 | `63.0` |
+| 5 | `62.72` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `C major` |
@@ -12321,14 +12321,14 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 
 | Slot | Value |
 | --- | --- |
-| 0 | `85.0` |
+| 0 | `84.56` |
 | 1 | `fixed` |
 
 **Pass 4 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `85.0` |
+| 0 | `84.56` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
@@ -12419,7 +12419,7 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 | 2 | `563` |
 | 3 | `fixed` |
 | 4 | `176` |
-| 5 | `85.0` |
+| 5 | `84.56` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `C major` |
@@ -12514,14 +12514,14 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 
 | Slot | Value |
 | --- | --- |
-| 0 | `87.0` |
+| 0 | `87.28` |
 | 1 | `fixed` |
 
 **Pass 5 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `87.0` |
+| 0 | `87.28` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 5** (`EZAceStepPromptEnhance`)
@@ -12614,7 +12614,7 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 | 2 | `563` |
 | 3 | `fixed` |
 | 4 | `176` |
-| 5 | `87.0` |
+| 5 | `87.28` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `C major` |
@@ -12750,14 +12750,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `87.0` |
+| 0 | `86.52` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `87.0` |
+| 0 | `86.52` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -12848,7 +12848,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal
 | 2 | `569` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `87.0` |
+| 5 | `86.52` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `E minor` |
@@ -12976,14 +12976,14 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `fixed` |
 
 **Pass 2 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
@@ -13058,7 +13058,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal
 | 2 | `569` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `64.0` |
+| 5 | `64.2` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `E minor` |
@@ -13137,14 +13137,14 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `fixed` |
 
 **Pass 3 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `64.0` |
+| 0 | `64.2` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
@@ -13219,7 +13219,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal
 | 2 | `569` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `64.0` |
+| 5 | `64.2` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `E minor` |
@@ -13298,14 +13298,14 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal
 
 | Slot | Value |
 | --- | --- |
-| 0 | `75.0` |
+| 0 | `75.36` |
 | 1 | `fixed` |
 
 **Pass 4 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `75.0` |
+| 0 | `75.36` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
@@ -13388,7 +13388,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal
 | 2 | `569` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `75.0` |
+| 5 | `75.36` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `E minor` |
@@ -13514,14 +13514,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `88.0` |
+| 0 | `87.52` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `88.0` |
+| 0 | `87.52` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -13612,7 +13612,7 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass,
 | 2 | `571` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `88.0` |
+| 5 | `87.52` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `G major` |
@@ -13740,14 +13740,14 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass,
 
 | Slot | Value |
 | --- | --- |
-| 0 | `76.0` |
+| 0 | `76.24` |
 | 1 | `fixed` |
 
 **Pass 2 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `76.0` |
+| 0 | `76.24` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
@@ -13830,7 +13830,7 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass,
 | 2 | `571` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `76.0` |
+| 5 | `76.24` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `G major` |
@@ -13917,14 +13917,14 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass,
 
 | Slot | Value |
 | --- | --- |
-| 0 | `88.0` |
+| 0 | `87.52` |
 | 1 | `fixed` |
 
 **Pass 3 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `88.0` |
+| 0 | `87.52` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
@@ -14015,7 +14015,7 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass,
 | 2 | `571` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `88.0` |
+| 5 | `87.52` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `G major` |
@@ -14110,14 +14110,14 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass,
 
 | Slot | Value |
 | --- | --- |
-| 0 | `88.0` |
+| 0 | `87.52` |
 | 1 | `fixed` |
 
 **Pass 4 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `88.0` |
+| 0 | `87.52` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
@@ -14208,7 +14208,7 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass,
 | 2 | `571` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `88.0` |
+| 5 | `87.52` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `G major` |
@@ -14303,14 +14303,14 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass,
 
 | Slot | Value |
 | --- | --- |
-| 0 | `90.0` |
+| 0 | `90.36` |
 | 1 | `fixed` |
 
 **Pass 5 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `90.0` |
+| 0 | `90.36` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 5** (`EZAceStepPromptEnhance`)
@@ -14403,7 +14403,7 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass,
 | 2 | `571` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `90.0` |
+| 5 | `90.36` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `G major` |
@@ -14539,14 +14539,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -14621,7 +14621,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action pe
 | 2 | `577` |
 | 3 | `fixed` |
 | 4 | `174` |
-| 5 | `63.0` |
+| 5 | `63.44` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `B minor` |
@@ -14733,14 +14733,14 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action pe
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `fixed` |
 
 **Pass 2 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
@@ -14815,7 +14815,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action pe
 | 2 | `577` |
 | 3 | `fixed` |
 | 4 | `174` |
-| 5 | `63.0` |
+| 5 | `63.44` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `B minor` |
@@ -14894,14 +14894,14 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action pe
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `fixed` |
 
 **Pass 3 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
@@ -14976,7 +14976,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action pe
 | 2 | `577` |
 | 3 | `fixed` |
 | 4 | `174` |
-| 5 | `63.0` |
+| 5 | `63.44` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `B minor` |
@@ -15055,14 +15055,14 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action pe
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `fixed` |
 
 **Pass 4 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
@@ -15137,7 +15137,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action pe
 | 2 | `577` |
 | 3 | `fixed` |
 | 4 | `174` |
-| 5 | `63.0` |
+| 5 | `63.44` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `B minor` |
@@ -15216,14 +15216,14 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action pe
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `fixed` |
 
 **Pass 5 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `63.0` |
+| 0 | `63.44` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 5** (`EZAceStepPromptEnhance`)
@@ -15298,7 +15298,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action pe
 | 2 | `577` |
 | 3 | `fixed` |
 | 4 | `174` |
-| 5 | `63.0` |
+| 5 | `63.44` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `B minor` |
@@ -15416,14 +15416,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `87.0` |
+| 0 | `86.52` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `87.0` |
+| 0 | `86.52` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -15514,7 +15514,7 @@ warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped ba
 | 2 | `587` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `87.0` |
+| 5 | `86.52` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `D major` |
@@ -15642,14 +15642,14 @@ warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped ba
 
 | Slot | Value |
 | --- | --- |
-| 0 | `87.0` |
+| 0 | `86.52` |
 | 1 | `fixed` |
 
 **Pass 2 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `87.0` |
+| 0 | `86.52` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
@@ -15740,7 +15740,7 @@ warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped ba
 | 2 | `587` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `87.0` |
+| 5 | `86.52` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `D major` |
@@ -15835,14 +15835,14 @@ warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped ba
 
 | Slot | Value |
 | --- | --- |
-| 0 | `87.0` |
+| 0 | `86.52` |
 | 1 | `fixed` |
 
 **Pass 3 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `87.0` |
+| 0 | `86.52` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
@@ -15933,7 +15933,7 @@ warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped ba
 | 2 | `587` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `87.0` |
+| 5 | `86.52` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `D major` |
@@ -16028,14 +16028,14 @@ warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped ba
 
 | Slot | Value |
 | --- | --- |
-| 0 | `87.0` |
+| 0 | `86.52` |
 | 1 | `fixed` |
 
 **Pass 4 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `87.0` |
+| 0 | `86.52` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
@@ -16126,7 +16126,7 @@ warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped ba
 | 2 | `587` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `87.0` |
+| 5 | `86.52` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `D major` |
@@ -16221,14 +16221,14 @@ warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped ba
 
 | Slot | Value |
 | --- | --- |
-| 0 | `89.0` |
+| 0 | `89.32` |
 | 1 | `fixed` |
 
 **Pass 5 latent (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `89.0` |
+| 0 | `89.32` |
 | 1 | `1` |
 
 **ez_edm_prompt pass 5** (`EZAceStepPromptEnhance`)
@@ -16321,7 +16321,7 @@ warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped ba
 | 2 | `587` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `89.0` |
+| 5 | `89.32` |
 | 6 | `4` |
 | 7 | `unknown` |
 | 8 | `D major` |
@@ -16680,91 +16680,91 @@ The constant.
 
 | Instance | Value |
 | --- | --- |
-| Song Duration | `89.0` |
-| Pass 2 clock | `89.0` |
-| Pass 3 clock | `89.0` |
-| Pass 4 clock | `66.0` |
-| Song Duration | `65.0` |
-| Pass 2 clock | `88.0` |
-| Pass 3 clock | `88.0` |
-| Pass 4 clock | `88.0` |
-| Pass 5 clock | `65.0` |
-| Song Duration | `88.0` |
-| Pass 2 clock | `88.0` |
-| Pass 3 clock | `88.0` |
-| Pass 4 clock | `88.0` |
-| Pass 5 clock | `65.0` |
-| Song Duration | `64.0` |
-| Pass 2 clock | `64.0` |
-| Pass 3 clock | `64.0` |
-| Pass 4 clock | `64.0` |
-| Song Duration | `64.0` |
-| Pass 2 clock | `64.0` |
-| Pass 3 clock | `64.0` |
-| Song Duration | `64.0` |
-| Pass 2 clock | `87.0` |
-| Pass 3 clock | `64.0` |
-| Pass 4 clock | `87.0` |
-| Pass 5 clock | `64.0` |
-| Song Duration | `63.0` |
-| Pass 2 clock | `63.0` |
-| Pass 3 clock | `63.0` |
-| Pass 4 clock | `63.0` |
-| Song Duration | `89.0` |
-| Pass 2 clock | `89.0` |
-| Pass 3 clock | `89.0` |
-| Pass 4 clock | `89.0` |
-| Pass 5 clock | `66.0` |
-| Song Duration | `63.0` |
-| Pass 2 clock | `63.0` |
-| Pass 3 clock | `63.0` |
-| Song Duration | `65.0` |
-| Pass 2 clock | `65.0` |
-| Pass 3 clock | `90.0` |
-| Song Duration | `74.0` |
-| Pass 2 clock | `63.0` |
-| Pass 3 clock | `63.0` |
-| Song Duration | `65.0` |
-| Pass 2 clock | `88.0` |
-| Pass 3 clock | `76.0` |
-| Pass 4 clock | `90.0` |
-| Song Duration | `85.0` |
-| Pass 2 clock | `85.0` |
-| Pass 3 clock | `85.0` |
-| Pass 4 clock | `74.0` |
-| Pass 5 clock | `63.0` |
-| Song Duration | `64.0` |
-| Pass 2 clock | `64.0` |
-| Pass 3 clock | `64.0` |
-| Pass 4 clock | `64.0` |
-| Song Duration | `66.0` |
-| Pass 2 clock | `66.0` |
-| Pass 3 clock | `66.0` |
-| Pass 4 clock | `66.0` |
-| Song Duration | `85.0` |
-| Pass 2 clock | `63.0` |
-| Pass 3 clock | `63.0` |
-| Pass 4 clock | `85.0` |
-| Pass 5 clock | `87.0` |
-| Song Duration | `87.0` |
-| Pass 2 clock | `64.0` |
-| Pass 3 clock | `64.0` |
-| Pass 4 clock | `75.0` |
-| Song Duration | `88.0` |
-| Pass 2 clock | `76.0` |
-| Pass 3 clock | `88.0` |
-| Pass 4 clock | `88.0` |
-| Pass 5 clock | `90.0` |
-| Song Duration | `63.0` |
-| Pass 2 clock | `63.0` |
-| Pass 3 clock | `63.0` |
-| Pass 4 clock | `63.0` |
-| Pass 5 clock | `63.0` |
-| Song Duration | `87.0` |
-| Pass 2 clock | `87.0` |
-| Pass 3 clock | `87.0` |
-| Pass 4 clock | `87.0` |
-| Pass 5 clock | `89.0` |
+| Song Duration | `88.56` |
+| Pass 2 clock | `88.56` |
+| Pass 3 clock | `88.56` |
+| Pass 4 clock | `65.72` |
+| Song Duration | `64.96` |
+| Pass 2 clock | `87.52` |
+| Pass 3 clock | `87.52` |
+| Pass 4 clock | `87.52` |
+| Pass 5 clock | `64.96` |
+| Song Duration | `87.52` |
+| Pass 2 clock | `87.52` |
+| Pass 3 clock | `87.52` |
+| Pass 4 clock | `87.52` |
+| Pass 5 clock | `64.96` |
+| Song Duration | `64.2` |
+| Pass 2 clock | `64.2` |
+| Pass 3 clock | `64.2` |
+| Pass 4 clock | `64.2` |
+| Song Duration | `64.2` |
+| Pass 2 clock | `64.2` |
+| Pass 3 clock | `64.2` |
+| Song Duration | `64.2` |
+| Pass 2 clock | `86.52` |
+| Pass 3 clock | `64.2` |
+| Pass 4 clock | `86.52` |
+| Pass 5 clock | `64.2` |
+| Song Duration | `63.44` |
+| Pass 2 clock | `63.44` |
+| Pass 3 clock | `63.44` |
+| Pass 4 clock | `63.44` |
+| Song Duration | `88.56` |
+| Pass 2 clock | `88.56` |
+| Pass 3 clock | `88.56` |
+| Pass 4 clock | `88.56` |
+| Pass 5 clock | `65.72` |
+| Song Duration | `63.44` |
+| Pass 2 clock | `63.44` |
+| Pass 3 clock | `63.44` |
+| Song Duration | `64.96` |
+| Pass 2 clock | `64.96` |
+| Pass 3 clock | `90.36` |
+| Song Duration | `74.48` |
+| Pass 2 clock | `63.44` |
+| Pass 3 clock | `63.44` |
+| Song Duration | `64.96` |
+| Pass 2 clock | `87.52` |
+| Pass 3 clock | `76.24` |
+| Pass 4 clock | `90.36` |
+| Song Duration | `84.56` |
+| Pass 2 clock | `84.56` |
+| Pass 3 clock | `84.56` |
+| Pass 4 clock | `73.64` |
+| Pass 5 clock | `62.72` |
+| Song Duration | `64.2` |
+| Pass 2 clock | `64.2` |
+| Pass 3 clock | `64.2` |
+| Pass 4 clock | `64.2` |
+| Song Duration | `65.72` |
+| Pass 2 clock | `65.72` |
+| Pass 3 clock | `65.72` |
+| Pass 4 clock | `65.72` |
+| Song Duration | `84.56` |
+| Pass 2 clock | `62.72` |
+| Pass 3 clock | `62.72` |
+| Pass 4 clock | `84.56` |
+| Pass 5 clock | `87.28` |
+| Song Duration | `86.52` |
+| Pass 2 clock | `64.2` |
+| Pass 3 clock | `64.2` |
+| Pass 4 clock | `75.36` |
+| Song Duration | `87.52` |
+| Pass 2 clock | `76.24` |
+| Pass 3 clock | `87.52` |
+| Pass 4 clock | `87.52` |
+| Pass 5 clock | `90.36` |
+| Song Duration | `63.44` |
+| Pass 2 clock | `63.44` |
+| Pass 3 clock | `63.44` |
+| Pass 4 clock | `63.44` |
+| Pass 5 clock | `63.44` |
+| Song Duration | `86.52` |
+| Pass 2 clock | `86.52` |
+| Pass 3 clock | `86.52` |
+| Pass 4 clock | `86.52` |
+| Pass 5 clock | `89.32` |
 
 #### `control_after_generate`
 
@@ -16808,91 +16808,91 @@ Duration in seconds.
 
 | Instance | Value |
 | --- | --- |
-| Latent length (seconds) | `89.0` |
-| Pass 2 latent (seconds) | `89.0` |
-| Pass 3 latent (seconds) | `89.0` |
-| Pass 4 latent (seconds) | `66.0` |
-| Latent length (seconds) | `65.0` |
-| Pass 2 latent (seconds) | `88.0` |
-| Pass 3 latent (seconds) | `88.0` |
-| Pass 4 latent (seconds) | `88.0` |
-| Pass 5 latent (seconds) | `65.0` |
-| Latent length (seconds) | `88.0` |
-| Pass 2 latent (seconds) | `88.0` |
-| Pass 3 latent (seconds) | `88.0` |
-| Pass 4 latent (seconds) | `88.0` |
-| Pass 5 latent (seconds) | `65.0` |
-| Latent length (seconds) | `64.0` |
-| Pass 2 latent (seconds) | `64.0` |
-| Pass 3 latent (seconds) | `64.0` |
-| Pass 4 latent (seconds) | `64.0` |
-| Latent length (seconds) | `64.0` |
-| Pass 2 latent (seconds) | `64.0` |
-| Pass 3 latent (seconds) | `64.0` |
-| Latent length (seconds) | `64.0` |
-| Pass 2 latent (seconds) | `87.0` |
-| Pass 3 latent (seconds) | `64.0` |
-| Pass 4 latent (seconds) | `87.0` |
-| Pass 5 latent (seconds) | `64.0` |
-| Latent length (seconds) | `63.0` |
-| Pass 2 latent (seconds) | `63.0` |
-| Pass 3 latent (seconds) | `63.0` |
-| Pass 4 latent (seconds) | `63.0` |
-| Latent length (seconds) | `89.0` |
-| Pass 2 latent (seconds) | `89.0` |
-| Pass 3 latent (seconds) | `89.0` |
-| Pass 4 latent (seconds) | `89.0` |
-| Pass 5 latent (seconds) | `66.0` |
-| Latent length (seconds) | `63.0` |
-| Pass 2 latent (seconds) | `63.0` |
-| Pass 3 latent (seconds) | `63.0` |
-| Latent length (seconds) | `65.0` |
-| Pass 2 latent (seconds) | `65.0` |
-| Pass 3 latent (seconds) | `90.0` |
-| Latent length (seconds) | `74.0` |
-| Pass 2 latent (seconds) | `63.0` |
-| Pass 3 latent (seconds) | `63.0` |
-| Latent length (seconds) | `65.0` |
-| Pass 2 latent (seconds) | `88.0` |
-| Pass 3 latent (seconds) | `76.0` |
-| Pass 4 latent (seconds) | `90.0` |
-| Latent length (seconds) | `85.0` |
-| Pass 2 latent (seconds) | `85.0` |
-| Pass 3 latent (seconds) | `85.0` |
-| Pass 4 latent (seconds) | `74.0` |
-| Pass 5 latent (seconds) | `63.0` |
-| Latent length (seconds) | `64.0` |
-| Pass 2 latent (seconds) | `64.0` |
-| Pass 3 latent (seconds) | `64.0` |
-| Pass 4 latent (seconds) | `64.0` |
-| Latent length (seconds) | `66.0` |
-| Pass 2 latent (seconds) | `66.0` |
-| Pass 3 latent (seconds) | `66.0` |
-| Pass 4 latent (seconds) | `66.0` |
-| Latent length (seconds) | `85.0` |
-| Pass 2 latent (seconds) | `63.0` |
-| Pass 3 latent (seconds) | `63.0` |
-| Pass 4 latent (seconds) | `85.0` |
-| Pass 5 latent (seconds) | `87.0` |
-| Latent length (seconds) | `87.0` |
-| Pass 2 latent (seconds) | `64.0` |
-| Pass 3 latent (seconds) | `64.0` |
-| Pass 4 latent (seconds) | `75.0` |
-| Latent length (seconds) | `88.0` |
-| Pass 2 latent (seconds) | `76.0` |
-| Pass 3 latent (seconds) | `88.0` |
-| Pass 4 latent (seconds) | `88.0` |
-| Pass 5 latent (seconds) | `90.0` |
-| Latent length (seconds) | `63.0` |
-| Pass 2 latent (seconds) | `63.0` |
-| Pass 3 latent (seconds) | `63.0` |
-| Pass 4 latent (seconds) | `63.0` |
-| Pass 5 latent (seconds) | `63.0` |
-| Latent length (seconds) | `87.0` |
-| Pass 2 latent (seconds) | `87.0` |
-| Pass 3 latent (seconds) | `87.0` |
-| Pass 4 latent (seconds) | `87.0` |
-| Pass 5 latent (seconds) | `89.0` |
+| Latent length (seconds) | `88.56` |
+| Pass 2 latent (seconds) | `88.56` |
+| Pass 3 latent (seconds) | `88.56` |
+| Pass 4 latent (seconds) | `65.72` |
+| Latent length (seconds) | `64.96` |
+| Pass 2 latent (seconds) | `87.52` |
+| Pass 3 latent (seconds) | `87.52` |
+| Pass 4 latent (seconds) | `87.52` |
+| Pass 5 latent (seconds) | `64.96` |
+| Latent length (seconds) | `87.52` |
+| Pass 2 latent (seconds) | `87.52` |
+| Pass 3 latent (seconds) | `87.52` |
+| Pass 4 latent (seconds) | `87.52` |
+| Pass 5 latent (seconds) | `64.96` |
+| Latent length (seconds) | `64.2` |
+| Pass 2 latent (seconds) | `64.2` |
+| Pass 3 latent (seconds) | `64.2` |
+| Pass 4 latent (seconds) | `64.2` |
+| Latent length (seconds) | `64.2` |
+| Pass 2 latent (seconds) | `64.2` |
+| Pass 3 latent (seconds) | `64.2` |
+| Latent length (seconds) | `64.2` |
+| Pass 2 latent (seconds) | `86.52` |
+| Pass 3 latent (seconds) | `64.2` |
+| Pass 4 latent (seconds) | `86.52` |
+| Pass 5 latent (seconds) | `64.2` |
+| Latent length (seconds) | `63.44` |
+| Pass 2 latent (seconds) | `63.44` |
+| Pass 3 latent (seconds) | `63.44` |
+| Pass 4 latent (seconds) | `63.44` |
+| Latent length (seconds) | `88.56` |
+| Pass 2 latent (seconds) | `88.56` |
+| Pass 3 latent (seconds) | `88.56` |
+| Pass 4 latent (seconds) | `88.56` |
+| Pass 5 latent (seconds) | `65.72` |
+| Latent length (seconds) | `63.44` |
+| Pass 2 latent (seconds) | `63.44` |
+| Pass 3 latent (seconds) | `63.44` |
+| Latent length (seconds) | `64.96` |
+| Pass 2 latent (seconds) | `64.96` |
+| Pass 3 latent (seconds) | `90.36` |
+| Latent length (seconds) | `74.48` |
+| Pass 2 latent (seconds) | `63.44` |
+| Pass 3 latent (seconds) | `63.44` |
+| Latent length (seconds) | `64.96` |
+| Pass 2 latent (seconds) | `87.52` |
+| Pass 3 latent (seconds) | `76.24` |
+| Pass 4 latent (seconds) | `90.36` |
+| Latent length (seconds) | `84.56` |
+| Pass 2 latent (seconds) | `84.56` |
+| Pass 3 latent (seconds) | `84.56` |
+| Pass 4 latent (seconds) | `73.64` |
+| Pass 5 latent (seconds) | `62.72` |
+| Latent length (seconds) | `64.2` |
+| Pass 2 latent (seconds) | `64.2` |
+| Pass 3 latent (seconds) | `64.2` |
+| Pass 4 latent (seconds) | `64.2` |
+| Latent length (seconds) | `65.72` |
+| Pass 2 latent (seconds) | `65.72` |
+| Pass 3 latent (seconds) | `65.72` |
+| Pass 4 latent (seconds) | `65.72` |
+| Latent length (seconds) | `84.56` |
+| Pass 2 latent (seconds) | `62.72` |
+| Pass 3 latent (seconds) | `62.72` |
+| Pass 4 latent (seconds) | `84.56` |
+| Pass 5 latent (seconds) | `87.28` |
+| Latent length (seconds) | `86.52` |
+| Pass 2 latent (seconds) | `64.2` |
+| Pass 3 latent (seconds) | `64.2` |
+| Pass 4 latent (seconds) | `75.36` |
+| Latent length (seconds) | `87.52` |
+| Pass 2 latent (seconds) | `76.24` |
+| Pass 3 latent (seconds) | `87.52` |
+| Pass 4 latent (seconds) | `87.52` |
+| Pass 5 latent (seconds) | `90.36` |
+| Latent length (seconds) | `63.44` |
+| Pass 2 latent (seconds) | `63.44` |
+| Pass 3 latent (seconds) | `63.44` |
+| Pass 4 latent (seconds) | `63.44` |
+| Pass 5 latent (seconds) | `63.44` |
+| Latent length (seconds) | `86.52` |
+| Pass 2 latent (seconds) | `86.52` |
+| Pass 3 latent (seconds) | `86.52` |
+| Pass 4 latent (seconds) | `86.52` |
+| Pass 5 latent (seconds) | `89.32` |
 
 #### `batch_size`
 
@@ -17672,91 +17672,91 @@ Seconds (duplicated on the latent).
 
 | Instance | Value |
 | --- | --- |
-| ACE tags + lyrics | `89.0` |
-| ACE tags + lyrics (pass 2) | `89.0` |
-| ACE tags + lyrics (pass 3) | `89.0` |
-| ACE tags + lyrics (pass 4) | `66.0` |
-| ACE tags + lyrics | `65.0` |
-| ACE tags + lyrics (pass 2) | `88.0` |
-| ACE tags + lyrics (pass 3) | `88.0` |
-| ACE tags + lyrics (pass 4) | `88.0` |
-| ACE tags + lyrics (pass 5) | `65.0` |
-| ACE tags + lyrics | `88.0` |
-| ACE tags + lyrics (pass 2) | `88.0` |
-| ACE tags + lyrics (pass 3) | `88.0` |
-| ACE tags + lyrics (pass 4) | `88.0` |
-| ACE tags + lyrics (pass 5) | `65.0` |
-| ACE tags + lyrics | `64.0` |
-| ACE tags + lyrics (pass 2) | `64.0` |
-| ACE tags + lyrics (pass 3) | `64.0` |
-| ACE tags + lyrics (pass 4) | `64.0` |
-| ACE tags + lyrics | `64.0` |
-| ACE tags + lyrics (pass 2) | `64.0` |
-| ACE tags + lyrics (pass 3) | `64.0` |
-| ACE tags + lyrics | `64.0` |
-| ACE tags + lyrics (pass 2) | `87.0` |
-| ACE tags + lyrics (pass 3) | `64.0` |
-| ACE tags + lyrics (pass 4) | `87.0` |
-| ACE tags + lyrics (pass 5) | `64.0` |
-| ACE tags + lyrics | `63.0` |
-| ACE tags + lyrics (pass 2) | `63.0` |
-| ACE tags + lyrics (pass 3) | `63.0` |
-| ACE tags + lyrics (pass 4) | `63.0` |
-| ACE tags + lyrics | `89.0` |
-| ACE tags + lyrics (pass 2) | `89.0` |
-| ACE tags + lyrics (pass 3) | `89.0` |
-| ACE tags + lyrics (pass 4) | `89.0` |
-| ACE tags + lyrics (pass 5) | `66.0` |
-| ACE tags + lyrics | `63.0` |
-| ACE tags + lyrics (pass 2) | `63.0` |
-| ACE tags + lyrics (pass 3) | `63.0` |
-| ACE tags + lyrics | `65.0` |
-| ACE tags + lyrics (pass 2) | `65.0` |
-| ACE tags + lyrics (pass 3) | `90.0` |
-| ACE tags + lyrics | `74.0` |
-| ACE tags + lyrics (pass 2) | `63.0` |
-| ACE tags + lyrics (pass 3) | `63.0` |
-| ACE tags + lyrics | `65.0` |
-| ACE tags + lyrics (pass 2) | `88.0` |
-| ACE tags + lyrics (pass 3) | `76.0` |
-| ACE tags + lyrics (pass 4) | `90.0` |
-| ACE tags + lyrics | `85.0` |
-| ACE tags + lyrics (pass 2) | `85.0` |
-| ACE tags + lyrics (pass 3) | `85.0` |
-| ACE tags + lyrics (pass 4) | `74.0` |
-| ACE tags + lyrics (pass 5) | `63.0` |
-| ACE tags + lyrics | `64.0` |
-| ACE tags + lyrics (pass 2) | `64.0` |
-| ACE tags + lyrics (pass 3) | `64.0` |
-| ACE tags + lyrics (pass 4) | `64.0` |
-| ACE tags + lyrics | `66.0` |
-| ACE tags + lyrics (pass 2) | `66.0` |
-| ACE tags + lyrics (pass 3) | `66.0` |
-| ACE tags + lyrics (pass 4) | `66.0` |
-| ACE tags + lyrics | `85.0` |
-| ACE tags + lyrics (pass 2) | `63.0` |
-| ACE tags + lyrics (pass 3) | `63.0` |
-| ACE tags + lyrics (pass 4) | `85.0` |
-| ACE tags + lyrics (pass 5) | `87.0` |
-| ACE tags + lyrics | `87.0` |
-| ACE tags + lyrics (pass 2) | `64.0` |
-| ACE tags + lyrics (pass 3) | `64.0` |
-| ACE tags + lyrics (pass 4) | `75.0` |
-| ACE tags + lyrics | `88.0` |
-| ACE tags + lyrics (pass 2) | `76.0` |
-| ACE tags + lyrics (pass 3) | `88.0` |
-| ACE tags + lyrics (pass 4) | `88.0` |
-| ACE tags + lyrics (pass 5) | `90.0` |
-| ACE tags + lyrics | `63.0` |
-| ACE tags + lyrics (pass 2) | `63.0` |
-| ACE tags + lyrics (pass 3) | `63.0` |
-| ACE tags + lyrics (pass 4) | `63.0` |
-| ACE tags + lyrics (pass 5) | `63.0` |
-| ACE tags + lyrics | `87.0` |
-| ACE tags + lyrics (pass 2) | `87.0` |
-| ACE tags + lyrics (pass 3) | `87.0` |
-| ACE tags + lyrics (pass 4) | `87.0` |
-| ACE tags + lyrics (pass 5) | `89.0` |
+| ACE tags + lyrics | `88.56` |
+| ACE tags + lyrics (pass 2) | `88.56` |
+| ACE tags + lyrics (pass 3) | `88.56` |
+| ACE tags + lyrics (pass 4) | `65.72` |
+| ACE tags + lyrics | `64.96` |
+| ACE tags + lyrics (pass 2) | `87.52` |
+| ACE tags + lyrics (pass 3) | `87.52` |
+| ACE tags + lyrics (pass 4) | `87.52` |
+| ACE tags + lyrics (pass 5) | `64.96` |
+| ACE tags + lyrics | `87.52` |
+| ACE tags + lyrics (pass 2) | `87.52` |
+| ACE tags + lyrics (pass 3) | `87.52` |
+| ACE tags + lyrics (pass 4) | `87.52` |
+| ACE tags + lyrics (pass 5) | `64.96` |
+| ACE tags + lyrics | `64.2` |
+| ACE tags + lyrics (pass 2) | `64.2` |
+| ACE tags + lyrics (pass 3) | `64.2` |
+| ACE tags + lyrics (pass 4) | `64.2` |
+| ACE tags + lyrics | `64.2` |
+| ACE tags + lyrics (pass 2) | `64.2` |
+| ACE tags + lyrics (pass 3) | `64.2` |
+| ACE tags + lyrics | `64.2` |
+| ACE tags + lyrics (pass 2) | `86.52` |
+| ACE tags + lyrics (pass 3) | `64.2` |
+| ACE tags + lyrics (pass 4) | `86.52` |
+| ACE tags + lyrics (pass 5) | `64.2` |
+| ACE tags + lyrics | `63.44` |
+| ACE tags + lyrics (pass 2) | `63.44` |
+| ACE tags + lyrics (pass 3) | `63.44` |
+| ACE tags + lyrics (pass 4) | `63.44` |
+| ACE tags + lyrics | `88.56` |
+| ACE tags + lyrics (pass 2) | `88.56` |
+| ACE tags + lyrics (pass 3) | `88.56` |
+| ACE tags + lyrics (pass 4) | `88.56` |
+| ACE tags + lyrics (pass 5) | `65.72` |
+| ACE tags + lyrics | `63.44` |
+| ACE tags + lyrics (pass 2) | `63.44` |
+| ACE tags + lyrics (pass 3) | `63.44` |
+| ACE tags + lyrics | `64.96` |
+| ACE tags + lyrics (pass 2) | `64.96` |
+| ACE tags + lyrics (pass 3) | `90.36` |
+| ACE tags + lyrics | `74.48` |
+| ACE tags + lyrics (pass 2) | `63.44` |
+| ACE tags + lyrics (pass 3) | `63.44` |
+| ACE tags + lyrics | `64.96` |
+| ACE tags + lyrics (pass 2) | `87.52` |
+| ACE tags + lyrics (pass 3) | `76.24` |
+| ACE tags + lyrics (pass 4) | `90.36` |
+| ACE tags + lyrics | `84.56` |
+| ACE tags + lyrics (pass 2) | `84.56` |
+| ACE tags + lyrics (pass 3) | `84.56` |
+| ACE tags + lyrics (pass 4) | `73.64` |
+| ACE tags + lyrics (pass 5) | `62.72` |
+| ACE tags + lyrics | `64.2` |
+| ACE tags + lyrics (pass 2) | `64.2` |
+| ACE tags + lyrics (pass 3) | `64.2` |
+| ACE tags + lyrics (pass 4) | `64.2` |
+| ACE tags + lyrics | `65.72` |
+| ACE tags + lyrics (pass 2) | `65.72` |
+| ACE tags + lyrics (pass 3) | `65.72` |
+| ACE tags + lyrics (pass 4) | `65.72` |
+| ACE tags + lyrics | `84.56` |
+| ACE tags + lyrics (pass 2) | `62.72` |
+| ACE tags + lyrics (pass 3) | `62.72` |
+| ACE tags + lyrics (pass 4) | `84.56` |
+| ACE tags + lyrics (pass 5) | `87.28` |
+| ACE tags + lyrics | `86.52` |
+| ACE tags + lyrics (pass 2) | `64.2` |
+| ACE tags + lyrics (pass 3) | `64.2` |
+| ACE tags + lyrics (pass 4) | `75.36` |
+| ACE tags + lyrics | `87.52` |
+| ACE tags + lyrics (pass 2) | `76.24` |
+| ACE tags + lyrics (pass 3) | `87.52` |
+| ACE tags + lyrics (pass 4) | `87.52` |
+| ACE tags + lyrics (pass 5) | `90.36` |
+| ACE tags + lyrics | `63.44` |
+| ACE tags + lyrics (pass 2) | `63.44` |
+| ACE tags + lyrics (pass 3) | `63.44` |
+| ACE tags + lyrics (pass 4) | `63.44` |
+| ACE tags + lyrics (pass 5) | `63.44` |
+| ACE tags + lyrics | `86.52` |
+| ACE tags + lyrics (pass 2) | `86.52` |
+| ACE tags + lyrics (pass 3) | `86.52` |
+| ACE tags + lyrics (pass 4) | `86.52` |
+| ACE tags + lyrics (pass 5) | `89.32` |
 
 #### `timesignature`
 
@@ -18429,26 +18429,26 @@ Markdown-ish operator note.
 
 | Instance | Value |
 | --- | --- |
-| Operator note | `## 01-brake-fade US-safe EDM **324 s** take: **brake fade**. Fictional act **Dr...` |
-| Operator note | `## 02-diesel-hum US-safe EDM **384 s** take: **diesel hum**. Fictional act **Dr...` |
-| Operator note | `## 03-axle-grind US-safe EDM **407 s** take: **axle grind**. Fictional act **Dr...` |
-| Operator note | `## 04-weigh-station US-safe EDM **249 s** take: **weigh station**. Fictional ac...` |
-| Operator note | `## 05-black-ice US-safe EDM **188 s** take: **black ice**. Fictional act **Driv...` |
+| Operator note | `## 01-brake-fade US-safe EDM **322 s** take: **brake fade**. Fictional act **Dr...` |
+| Operator note | `## 02-diesel-hum US-safe EDM **382 s** take: **diesel hum**. Fictional act **Dr...` |
+| Operator note | `## 03-axle-grind US-safe EDM **405 s** take: **axle grind**. Fictional act **Dr...` |
+| Operator note | `## 04-weigh-station US-safe EDM **250 s** take: **weigh station**. Fictional ac...` |
+| Operator note | `## 05-black-ice US-safe EDM **189 s** take: **black ice**. Fictional act **Driv...` |
 | Operator note | `## 06-high-beams US-safe EDM **356 s** take: **high beams**. Fictional act **Dr...` |
-| Operator note | `## 07-chain-hook US-safe EDM **245 s** take: **chain hook**. Fictional act **Dr...` |
-| Operator note | `## 08-grit-plate US-safe EDM **412 s** take: **grit plate**. Fictional act **Dr...` |
-| Operator note | `## 09-steel-grate US-safe EDM **185 s** take: **steel grate**. Fictional act **...` |
+| Operator note | `## 07-chain-hook US-safe EDM **247 s** take: **chain hook**. Fictional act **Dr...` |
+| Operator note | `## 08-grit-plate US-safe EDM **410 s** take: **grit plate**. Fictional act **Dr...` |
+| Operator note | `## 09-steel-grate US-safe EDM **186 s** take: **steel grate**. Fictional act **...` |
 | Operator note | `## 10-rest-bay US-safe EDM **214 s** take: **rest bay**. Fictional act **Drive-...` |
-| Operator note | `## 11-haul-crate US-safe EDM **194 s** take: **haul crate**. Fictional act **Dr...` |
+| Operator note | `## 11-haul-crate US-safe EDM **195 s** take: **haul crate**. Fictional act **Dr...` |
 | Operator note | `## 12-night-splice US-safe EDM **312 s** take: **night splice**. Fictional act ...` |
-| Operator note | `## 13-torque-bay US-safe EDM **382 s** take: **torque bay**. Fictional act **Dr...` |
-| Operator note | `## 14-spare-drum US-safe EDM **248 s** take: **spare drum**. Fictional act **Dr...` |
-| Operator note | `## 15-oil-pan US-safe EDM **257 s** take: **oil pan**. Fictional act **Drive-th...` |
-| Operator note | `## 16-curb-check US-safe EDM **373 s** take: **curb check**. Fictional act **Dr...` |
+| Operator note | `## 13-torque-bay US-safe EDM **380 s** take: **torque bay**. Fictional act **Dr...` |
+| Operator note | `## 14-spare-drum US-safe EDM **249 s** take: **spare drum**. Fictional act **Dr...` |
+| Operator note | `## 15-oil-pan US-safe EDM **256 s** take: **oil pan**. Fictional act **Drive-th...` |
+| Operator note | `## 16-curb-check US-safe EDM **372 s** take: **curb check**. Fictional act **Dr...` |
 | Operator note | `## 17-last-exit US-safe EDM **282 s** take: **last exit**. Fictional act **Driv...` |
-| Operator note | `## 18-asphalt-heart US-safe EDM **420 s** take: **asphalt heart**. Fictional ac...` |
-| Operator note | `## 19-clutch-slam US-safe EDM **305 s** take: **clutch slam**. Fictional act **...` |
-| Operator note | `## 20-trailer-hitch US-safe EDM **427 s** take: **trailer hitch**. Fictional ac...` |
+| Operator note | `## 18-asphalt-heart US-safe EDM **419 s** take: **asphalt heart**. Fictional ac...` |
+| Operator note | `## 19-clutch-slam US-safe EDM **307 s** take: **clutch slam**. Fictional act **...` |
+| Operator note | `## 20-trailer-hitch US-safe EDM **425 s** take: **trailer hitch**. Fictional ac...` |
 | Operator note | `## audio/albums/drive-through/afterparty/album Album **Afterparty** by **Drive-...` |
 | Operator note | `## audio/albums/drive-through/afterparty/cover Format / platform sets pixels (C...` |
 
