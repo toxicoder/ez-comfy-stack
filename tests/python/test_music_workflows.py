@@ -234,8 +234,17 @@ def _assert_joined_take(
                if int(node["id"]) in decode_ids), stem
     # The joined master is the take minus the whole-bar seams it eats.
     bar_seconds = 240.0 / float(bpm)
-    expected = sum(chain_seconds) - sum(value * bar_seconds for value in seams)
-    assert abs(expected - float(duration)) < 0.6, (stem, expected, duration)
+    # Every pass clock must sit on the bar grid that EZAudioBeatJoin checks,
+    # otherwise the joiner fails with "segment N is off the bar grid".
+    for value in chain_seconds:
+        nearest = round(value / bar_seconds) * bar_seconds
+        assert abs(value - nearest) <= 0.12, (stem, value, nearest)
+    # duration_s rounds each side the way drive_arrange does, so the gate
+    # pins that definition instead of widening a shared rounding tolerance.
+    expected = round(sum(chain_seconds)) - int(
+        round(sum(value * bar_seconds for value in seams))
+    )
+    assert float(duration) == float(expected), (stem, expected, duration)
     assert str(int(duration)) in graph["extra"]["lab_note"], stem
     assert f"{len(chain_seconds)} passes" in graph["extra"]["lab_note"], stem
 

@@ -80,7 +80,7 @@ from ez_music.edm_drive_through_my_coder import (  # noqa: E402
 from ez_music.edm_drive_through_secret_homage import (  # noqa: E402
     EDM_DRIVE_THROUGH_SECRET_HOMAGE,
 )
-from ez_music.song_plan import duration_seconds  # noqa: E402
+from ez_music.song_plan import bar_aligned_seconds  # noqa: E402
 from ez_music.albums import (  # noqa: E402
     DRIVE_THROUGH_ALBUMS,
     NILL_BYE_ALBUMS,
@@ -1051,14 +1051,15 @@ def test_drive_through_edm_examples_are_varied_lengths() -> None:
             else:
                 assert len(parts) >= 4, (ex["stem"], stripped)
         seams = int(round(sum(ex["overlap_bars"]) * 240 / int(ex["bpm"])))
-        assert int(ex["duration"]) == sum(ex["pass_seconds"]) - seams, ex["stem"]
-        assert sum(ex["pass_seconds"]) == sum(
-            duration_seconds(bars=sum(cue_bars), meter="4", bpm=int(ex["bpm"]), clamp=False)
+        aligned = [
+            bar_aligned_seconds(bars=sum(cue_bars), meter="4", bpm=int(ex["bpm"]))
             for cue_bars in (
                 [bars for _r, bars in _drive_shape(score)]
                 for score in ex["pass_scores"]
             )
-        ), ex["stem"]
+        ]
+        assert list(ex["pass_seconds"]) == aligned, ex["stem"]
+        assert int(ex["duration"]) == round(sum(aligned) - seams), ex["stem"]
         shapes.append(shape)
         sections = _section_blocks(lyrics)
         drops = _drop_blocks(lyrics)

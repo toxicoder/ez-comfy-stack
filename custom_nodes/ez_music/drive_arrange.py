@@ -37,6 +37,7 @@ from ez_music.song_plan import (
     SongPlan,
     SongSection,
     _parse_edm,
+    bar_aligned_seconds,
     duration_seconds,
     keyscale_for,
     validate_keyscale,
@@ -519,10 +520,12 @@ def arrange_drive_passes(
                     raise ValueError("drive chop will not fit the first pass")
         scores.append("\n\n".join(blocks))
     plan["pass_scores"] = scores
-    plan["pass_seconds"] = [_seconds(span, bpm) for span in passes]
+    plan["pass_seconds"] = [_aligned_seconds(span, bpm) for span in passes]
     plan["sections"] = [section for span in passes for section in span]
     seams = [int(bars) for bars in plan.get("overlap_bars") or ()]
-    plan["duration_s"] = sum(plan["pass_seconds"]) - _seam_seconds(seams, bpm)
+    plan["duration_s"] = int(
+        round(sum(plan["pass_seconds"]) - _seam_seconds(seams, bpm))
+    )
     plan["bucket"] = _bucket(int(plan["duration_s"]))
     return scores
 
@@ -737,6 +740,20 @@ def _seconds(sections: list[SongSection], bpm: int) -> int:
     """
     total = sum(int(section["bars"]) for section in sections)
     return duration_seconds(bars=total, meter="4", bpm=int(bpm), clamp=False)
+
+
+def _aligned_seconds(sections: list[SongSection], bpm: int) -> float:
+    """Latent-frame-aligned seconds for the summed bar count.
+
+    Args:
+        sections: Stanzas.
+        bpm: Performance tempo.
+
+    Returns:
+        Seconds on the ACE latent-frame grid. Not clamped.
+    """
+    total = sum(int(section["bars"]) for section in sections)
+    return bar_aligned_seconds(bars=total, meter="4", bpm=int(bpm))
 
 
 def _salt(*parts: object) -> int:
@@ -2440,7 +2457,8 @@ class DrivePlan(TypedDict):
         movements: Movement role of each pass, in render order.
         movements_sections: Stanzas grouped per pass, render order.
         pass_cells: Cell count dealt to each pass.
-        pass_seconds: Seconds of each pass before its seam is taken off.
+        pass_seconds: Latent-frame-aligned seconds of each pass before
+            its seam.
         overlap_bars: Seam overlap in whole bars, one entry per join.
         pass_scores: Joined ACE score per pass, index-aligned.
     """
@@ -2456,7 +2474,7 @@ class DrivePlan(TypedDict):
     movements: list[MovementRole]
     movements_sections: list[list[SongSection]]
     pass_cells: list[int]
-    pass_seconds: list[int]
+    pass_seconds: list[float]
     overlap_bars: list[int]
     pass_scores: list[str]
 
@@ -2517,8 +2535,8 @@ def _plan_one(
         roles=roles,
         bpm=int(bpm),
     )
-    pass_seconds = [_seconds(span, int(bpm)) for span in passes]
-    seconds = sum(pass_seconds) - _seam_seconds(seams, int(bpm))
+    pass_seconds = [_aligned_seconds(span, int(bpm)) for span in passes]
+    seconds = int(round(sum(pass_seconds) - _seam_seconds(seams, int(bpm))))
     return {
         "form_id": _form_id(album_slug, seed, sections),
         "sections": sections,

@@ -25,6 +25,7 @@ from ez_music.song_plan import (
     arrange_edm,
     arrange_vocal,
     assign_album_plans,
+    bar_aligned_seconds,
     beats_per_bar,
     demo_draft_lyrics,
     demo_draft_seconds,
@@ -108,6 +109,25 @@ def test_bar_math_and_clamp() -> None:
     with pytest.raises(ValueError, match="keyscale"):
         validate_keyscale("H minor")
     assert validate_keyscale("C minor") == "C minor"
+
+
+def test_bar_aligned_seconds_snaps_to_the_latent_grid() -> None:
+    """Pass clocks land on the 25-frame ACE grid the beat joiner expects."""
+    assert bar_aligned_seconds(bars=62, meter="4", bpm=170) == 87.52
+    exact_45 = round(45 * 240 / 172 * 25) / 25
+    assert bar_aligned_seconds(bars=45, meter="4", bpm=172) == exact_45
+    for bpm in (165, 168, 170, 172, 176):
+        for bars in (48, 62, 80, 96, 120):
+            aligned = bar_aligned_seconds(bars=bars, meter="4", bpm=bpm)
+            whole_bar = bars * beats_per_bar("4") * 60 / bpm
+            assert aligned * 25 == pytest.approx(round(aligned * 25), abs=1e-6)
+            # Well inside the 0.12 s grid tolerance EZAudioBeatJoin allows.
+            assert abs(aligned - whole_bar) <= 0.12, (bars, bpm)
+            assert abs(aligned - whole_bar) <= 0.02, (bars, bpm)
+    with pytest.raises(ValueError, match="positive"):
+        bar_aligned_seconds(bars=8, meter="4", bpm=0)
+    with pytest.raises(ValueError, match="unknown meter"):
+        bar_aligned_seconds(bars=8, meter="5", bpm=170)
 
 
 def test_meter_follows_the_bed() -> None:
