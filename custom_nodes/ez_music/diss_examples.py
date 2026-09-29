@@ -1,6 +1,10 @@
 """Canned Nill Bye vs Rake diss takes for ACE-Step rap lab graphs.
 
 Fictional MCs only. Original lyrics. No living-artist names.
+
+Row building, the tag join, and the SaveAudio prefix live in
+``ez_music.diss_rows``; the shared names are re-exported here so every
+``from ez_music.diss_examples import X`` consumer keeps working.
 """
 
 from __future__ import annotations
@@ -8,6 +12,12 @@ from __future__ import annotations
 from typing import Any, Literal, Mapping, Sequence, TypedDict
 
 from .albums import album_rel, nill_album_for_series
+from .diss_rows import (
+    DISS_DURATION_S,
+    NILL_VOICE,
+    nill_output_prefix,
+    nill_tags,
+)
 from .naming import music_output_prefix
 from .song_plan import arrange_vocal, assign_album_plans
 
@@ -27,8 +37,6 @@ LOFI_TAGS = (
     "lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm"
 )
 
-DISS_DURATION_S = 180.0
-NILL_VOICE = "male rap vocals, dry booth, no autotune"
 DissSeries = Literal[
     "lab",
     "variety",
@@ -96,33 +104,6 @@ class DissExample(TypedDict):
     form_id: str
     meter: str
     keyscale: str
-
-
-def nill_output_prefix(title: str, track: int) -> str:
-    """SaveAudio prefix for a Nill Bye take.
-
-    Args:
-        title: Catalog song title.
-        track: One-based track number (values below 1 become 1).
-
-    Returns:
-        ``NN - Song Title``.
-    """
-    return music_output_prefix(title, track if track >= 1 else 1)
-
-
-def nill_tags(*parts: str, bpm: int) -> str:
-    """Join style tags with the locked Nill Bye vocal and bpm.
-
-    Args:
-        parts: Genre and production tags for this take.
-        bpm: Tempo written into the tags line.
-
-    Returns:
-        Comma-separated ACE-Step tags line.
-    """
-    return ", ".join([*parts, NILL_VOICE, f"{bpm} bpm"])
-
 
 def _desc(take: str) -> str:
     """Lab graph description for one Nill Bye diss take.

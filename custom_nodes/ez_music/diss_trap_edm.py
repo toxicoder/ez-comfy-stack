@@ -6,57 +6,21 @@ Fictional MCs only. Original lyrics. No living-artist names. No autotune.
 
 from __future__ import annotations
 
-from typing import Any
+from functools import partial
 
 from .diss_examples import (
-    DISS_DURATION_S,
-    DissExample,
     _desc,
     format_diss_lyrics,
-    nill_output_prefix,
-    nill_tags,
 )
+from .diss_rows import diss_row
 
 # Catalog phase for this album.
 TRAP_EDM_PHASE = 2
 
 
-def _ex(
-    slug: str,
-    title: str,
-    bpm: int,
-    seed: int,
-    take: str,
-    lyrics: str,
-    *tag_parts: str,
-) -> dict[str, Any]:
-    """Build one catalog row for this series.
-
-    Args:
-        slug: Kebab title used in the lab stem.
-        title: Operator-facing take name.
-        bpm: Tempo written into tags.
-        seed: Fixed ACE / sampler seed.
-        take: Short blurb for the lab description.
-        lyrics: Formatted lyric block.
-        tag_parts: Style tags joined with the locked vocal.
-
-    Returns:
-        Partial catalog row (album fields filled later).
-    """
-    return {
-        "stem": f"music-rap-nill-bye-{slug}-lab-example",
-        "series": "trap-edm",
-        "title": title,
-        "tags": nill_tags(*tag_parts, bpm=bpm),
-        "bpm": bpm,
-        "duration": DISS_DURATION_S,
-        "seed": seed,
-        "phase": TRAP_EDM_PHASE,
-        "prefix": nill_output_prefix(title, TRAP_EDM_PHASE),
-        "description": _desc(take),
-        "lyrics": lyrics,
-    }
+# One row per take: the series key, album phase, and description
+# builder are bound once over the shared factory.
+_ex = partial(diss_row, "trap-edm", TRAP_EDM_PHASE, _desc)
 
 
 # Track lyrics and catalog rows.

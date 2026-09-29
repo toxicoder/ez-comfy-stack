@@ -5,12 +5,13 @@ Hermetic at import: stdlib only. mutagen is lazy inside stamp_audio_file.
 
 from __future__ import annotations
 
-import json
-import os
 import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
+
+from .fs import FLAC_SUFFIXES, ID3_SUFFIXES, output_dir as resolve_output_dir
+from .fs import write_json
 
 # AI comment, art-mode ids, and cover filenames.
 AI_DISCLOSURE = (
@@ -61,7 +62,12 @@ def _log(message: str) -> None:
     Args:
         message: Human status without a trailing newline.
     """
-    print(f"[ez_music] {message}", file=sys.stderr)
+    try:
+        from ez_common import node_log
+
+        node_log("ez_music", message)
+    except Exception:  # noqa: BLE001 - pytest / missing sibling pack
+        print(f"[ez_music] {message}", file=sys.stderr)
 
 
 def sidecar_path(audio_path: Path) -> Path:
@@ -88,9 +94,7 @@ def write_sidecar(audio_path: Path, meta: AudioMeta, *, cover: Path | None) -> P
     """
     payload: dict[str, Any] = asdict(meta)
     payload["cover"] = str(cover) if cover is not None else None
-    dest = sidecar_path(audio_path)
-    dest.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
-    return dest
+    return write_json(sidecar_path(audio_path), payload)
 
 
 def resolve_cover(
@@ -229,9 +233,9 @@ def stamp_audio_file(path: Path, meta: AudioMeta, cover: Path | None = None) -> 
         raise FileNotFoundError(str(audio))
     suffix = audio.suffix.lower()
     try:
-        if suffix == ".flac":
+        if suffix in FLAC_SUFFIXES:
             _stamp_flac(audio, meta, cover)
-        elif suffix in {".mp3", ".wav"}:
+        elif suffix in ID3_SUFFIXES:
             _stamp_id3(audio, meta, cover)
         else:
             _log(f"skip tags for unsupported suffix {suffix}")
@@ -255,21 +259,7 @@ def album_dir_from_env(artist: str, album: str, *, output_dir: Path | None = Non
     from .naming import album_output_dir
 
     if output_dir is None:
-        try:
-            from ez_common import output_root
-
-            output_dir = output_root(default="output")
-        except Exception:  # noqa: BLE001 - pytest / missing Comfy
-            env = (os.environ.get("COMFY_OUTPUT_DIR") or "").strip()
-            if env:
-                output_dir = Path(env)
-            else:
-                try:
-                    import folder_paths  # type: ignore[import-not-found]
-
-                    output_dir = Path(folder_paths.get_output_directory())
-                except Exception:  # noqa: BLE001 - pytest / missing Comfy
-                    output_dir = Path("output")
+        output_dir = resolve_output_dir(default="output")
     dest = output_dir / album_output_dir(artist, album)
     dest.mkdir(parents=True, exist_ok=True)
     return dest

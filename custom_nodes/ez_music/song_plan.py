@@ -9,6 +9,7 @@ one key for the whole take.
 from __future__ import annotations
 
 import re
+from collections.abc import Mapping, Sequence
 from typing import Any, Literal, TypedDict
 
 # Duration clamp, meters, and ACE marker roles.
@@ -733,6 +734,123 @@ def _sections_for(
     ]
 
 
+def _album_spoken_flags(
+    lyrics: list[str],
+    spoken: list[bool] | None,
+) -> list[bool]:
+    """Per-track spoken-word flags for one album.
+
+    Args:
+        lyrics: Per-track authored lyrics.
+        spoken: Caller-supplied flags. Detected from the lyrics when None.
+
+    Returns:
+        One flag per lyric block, copied so callers may not mutate the input.
+    """
+    if spoken is not None:
+        return list(spoken)
+    return ["[spoken word]" in text for text in lyrics]
+
+
+def _min_bars_for(form_id: str, kind: Kind, verse_count: int) -> int:
+    """Two bars per section of the form's narrowest shape.
+
+    Args:
+        form_id: Archetype id.
+        kind: ``vocal`` or ``edm``.
+        verse_count: Authored verse count; sizes the vocal template.
+
+    Returns:
+        Lower bound on the take's bar count.
+    """
+    if kind == "edm":
+        return 2 * len(_EDM_TEMPLATES[form_id])
+    return 2 * max(1, len(_expand_vocal_roles(form_id, verse_count, half_time=False)))
+
+
+def _with_spoken_first(
+    sections: list[SongSection],
+    kind: Kind,
+    has_spoken: bool,
+) -> list[SongSection]:
+    """Put a spoken block in front when the take has one and the form has none.
+
+    Args:
+        sections: Sections dealt for the take's form.
+        kind: ``vocal`` or ``edm``. EDM takes never gain a spoken block.
+        has_spoken: Whether the authored block carried a spoken marker.
+
+    Returns:
+        The sections, with a four-bar spoken section prepended when needed.
+    """
+    if kind != "vocal" or not has_spoken:
+        return sections
+    if any(section["role"] == "spoken" for section in sections):
+        return sections
+    return [{"role": "spoken", "bars": 4, "pattern": ""}, *sections]
+
+
+def _track_plan(
+    *,
+    family: str,
+    album_slug: str,
+    index: int,
+    bpm: int,
+    tag: str,
+    lyric: str,
+    form_id: str,
+    kind: Kind,
+    has_spoken: bool,
+    used: set[int],
+) -> SongPlan:
+    """Choose the plan for one track, taking a duration off ``used``.
+
+    Args:
+        family: Series key or ``drive-through``.
+        album_slug: Folder slug. Shifts the key cycle.
+        index: Zero-based track index.
+        bpm: Authored tempo.
+        tag: ACE tags line for this track.
+        lyric: Authored lyrics for this track.
+        form_id: Archetype id chosen for this track.
+        kind: ``vocal`` or ``edm``.
+        has_spoken: Whether this take has a spoken block.
+        used: Seconds already assigned in this album. Mutated.
+
+    Returns:
+        The track's plan.
+    """
+    track_number = index + 1
+    meter = meter_for(tag, track_number, family)
+    key = keyscale_for(family, album_slug, track_number)
+    bucket, target = _bucket_for(index)
+    verse_count = max(1, _verse_count(lyric))
+    bars_total, seconds = _unique_duration(
+        int(bpm), meter, target, _min_bars_for(form_id, kind, verse_count), used
+    )
+    used.add(seconds)
+    sections = _with_spoken_first(
+        _sections_for(
+            form_id,
+            kind=kind,
+            verse_count=verse_count,
+            track_number=track_number,
+            bars_total=bars_total,
+        ),
+        kind,
+        has_spoken,
+    )
+    return {
+        "form_id": form_id,
+        "sections": sections,
+        "meter": meter,
+        "keyscale": validate_keyscale(key),
+        "duration_s": seconds,
+        "bpm": int(bpm),
+        "bucket": bucket,
+    }
+
+
 def assign_album_plans(
     *,
     family: str,
@@ -759,52 +877,28 @@ def assign_album_plans(
         the tempo grid allows it.
     """
     count = len(bpms)
-    spoken_flags = list(spoken) if spoken is not None else [
-        "[spoken word]" in text for text in lyrics
-    ]
+    spoken_flags = _album_spoken_flags(lyrics, spoken)
     pool = EDM_FORMS if kind == "edm" else VOCAL_FORMS
     offset = sum(ord(char) for char in album_slug) % len(pool)
     forms = _choose_forms(pool, count, offset, spoken_flags if kind == "vocal" else [True] * count)
     used: set[int] = set()
     plans: list[SongPlan] = []
     for index in range(count):
-        track_number = index + 1
-        meter = meter_for(tags[index] if index < len(tags) else "", track_number, family)
-        key = keyscale_for(family, album_slug, track_number)
-        bucket, target = _bucket_for(index)
-        verse_count = max(1, _verse_count(lyrics[index] if index < len(lyrics) else ""))
-        form_id = forms[index]
-        if kind == "edm":
-            min_bars = 2 * len(_EDM_TEMPLATES[form_id])
-        else:
-            min_bars = 2 * max(1, len(_expand_vocal_roles(form_id, verse_count, half_time=False)))
-        bars_total, seconds = _unique_duration(
-            int(bpms[index]), meter, target, min_bars, used
-        )
-        used.add(seconds)
-        sections = _sections_for(
-            form_id,
-            kind=kind,
-            verse_count=verse_count,
-            track_number=track_number,
-            bars_total=bars_total,
-        )
         # Spoken stays on the take even when the form is not v_spoken.
         has_spoken = bool(spoken_flags[index]) if index < len(spoken_flags) else False
-        if kind == "vocal" and has_spoken and not any(
-            section["role"] == "spoken" for section in sections
-        ):
-            sections = [{"role": "spoken", "bars": 4, "pattern": ""}, *sections]
         plans.append(
-            {
-                "form_id": form_id,
-                "sections": sections,
-                "meter": meter,
-                "keyscale": validate_keyscale(key),
-                "duration_s": seconds,
-                "bpm": int(bpms[index]),
-                "bucket": bucket,
-            }
+            _track_plan(
+                family=family,
+                album_slug=album_slug,
+                index=index,
+                bpm=int(bpms[index]),
+                tag=tags[index] if index < len(tags) else "",
+                lyric=lyrics[index] if index < len(lyrics) else "",
+                form_id=forms[index],
+                kind=kind,
+                has_spoken=has_spoken,
+                used=used,
+            )
         )
     return plans
 
@@ -907,6 +1001,62 @@ def _marker(role: str, pattern: str) -> str:
     return f"[{label}]"
 
 
+def _render_blocks(marker: str, blocks: list[str]) -> str:
+    """One section: the marker line, then its non-empty lines.
+
+    Args:
+        marker: Bracket line for the section.
+        blocks: Lines to place under it.
+
+    Returns:
+        The section text, or empty when there is nothing to place so the
+        caller can drop the section entirely.
+    """
+    body = [line for line in blocks if line.strip()]
+    if not body:
+        return ""
+    return marker + "\n" + "\n".join(body)
+
+
+def _emit_vocal_section(
+    section: SongSection,
+    queue: list[list[str]],
+    pool: Mapping[str, list[str]],
+    raw: Mapping[str, str],
+) -> str:
+    """Render one planned vocal section from the authored text.
+
+    Args:
+        section: Planned section; its role names the destination shape.
+        queue: Verse blocks still to place. Mutated for ``verse`` roles.
+        pool: Lines on hand per line-based role (``chorus``, ``pre``,
+            ``bridge``).
+        raw: Stripped text on hand per text-based role (``intro``,
+            ``outro``, ``spoken``), kept verbatim, internal blanks included.
+
+    Returns:
+        The section text, or empty when the role has nothing to place.
+
+    Raises:
+        ValueError: the role is not a section this arranger emits.
+    """
+    role = section["role"]
+    pattern = section["pattern"]
+    if role == "verse":
+        return _render_blocks(_marker(role, pattern), queue.pop(0) if queue else [])
+    if role in {"chorus", "pre", "bridge"}:
+        return _render_blocks(_marker(role, pattern), pool[role])
+    if role in {"intro", "outro", "spoken"}:
+        text = raw[role]
+        if not text:
+            return ""
+        marker = _marker(role, "") if role == "spoken" else _marker(role, pattern)
+        return marker + "\n" + text
+    if role in {"inst", "breakdown"}:
+        return _marker(role, pattern or _INST_PATTERN.get(role, "hats only"))
+    raise ValueError(f"unknown section role {role}")
+
+
 def arrange_vocal(source: str, plan: SongPlan) -> str:
     """Re-section authored rap lines into the plan. Verse order stays put.
 
@@ -928,68 +1078,29 @@ def arrange_vocal(source: str, plan: SongPlan) -> str:
     verses = [_lines(body) for role, body in parsed if role == "verse"]
     if not verses:
         raise ValueError("vocal arrange needs a verse")
-    intro = next((body for role, body in parsed if role == "intro"), "")
-    outro = next((body for role, body in parsed if role == "outro"), "")
-    chorus = next((body for role, body in parsed if role == "chorus"), "")
-    spoken = next((body for role, body in parsed if role == "spoken"), "")
-    chorus_lines = _lines(chorus)
-    pre_lines = chorus_lines[:2] if chorus_lines else []
+    chorus_lines = _lines(next((body for role, body in parsed if role == "chorus"), ""))
+    pool: dict[str, list[str]] = {
+        "chorus": chorus_lines,
+        "pre": chorus_lines[:2] if chorus_lines else [],
+    }
+    raw: dict[str, str] = {
+        role: next((body for name, body in parsed if name == role), "").strip()
+        for role in ("intro", "outro", "spoken")
+    }
     bridge_lines: list[str] = []
     if any(section["role"] == "bridge" for section in plan["sections"]):
         kept, bridge_lines = _split_bridge(verses[-1])
         verses[-1] = kept
+    pool["bridge"] = bridge_lines
     queue = [list(block) for block in verses if block]
     parts: list[str] = []
     for section in plan["sections"]:
-        role = section["role"]
-        pattern = section["pattern"]
-        if role == "verse":
-            block = queue.pop(0) if queue else []
-            if not block:
-                continue
-            parts.append(_marker(role, pattern) + "\n" + "\n".join(block))
-            continue
-        if role == "chorus":
-            if not chorus_lines:
-                continue
-            parts.append(_marker(role, pattern) + "\n" + "\n".join(chorus_lines))
-            continue
-        if role == "pre":
-            if not pre_lines:
-                continue
-            parts.append(_marker(role, pattern) + "\n" + "\n".join(pre_lines))
-            continue
-        if role == "bridge":
-            if not bridge_lines:
-                continue
-            parts.append(_marker(role, pattern) + "\n" + "\n".join(bridge_lines))
-            continue
-        if role == "intro":
-            text = intro.strip()
-            if not text:
-                continue
-            parts.append(_marker(role, pattern) + "\n" + text)
-            continue
-        if role == "outro":
-            text = outro.strip()
-            if not text:
-                continue
-            parts.append(_marker(role, pattern) + "\n" + text)
-            continue
-        if role == "spoken":
-            text = spoken.strip()
-            if not text:
-                continue
-            parts.append(_marker(role, "") + "\n" + text)
-            continue
-        if role in {"inst", "breakdown"}:
-            parts.append(_marker(role, pattern or _INST_PATTERN.get(role, "hats only")))
-            continue
-        raise ValueError(f"unknown section role {role}")
+        rendered = _emit_vocal_section(section, queue, pool, raw)
+        if rendered:
+            parts.append(rendered)
     # Any verse the template did not ask for still ships, in order.
     while queue:
-        block = queue.pop(0)
-        parts.append("[verse]\n" + "\n".join(block))
+        parts.append("[verse]\n" + "\n".join(queue.pop(0)))
     return "\n\n".join(parts)
 
 
@@ -1101,6 +1212,109 @@ def _chunks(items: list[str], slots: int) -> list[list[str]]:
     return groups
 
 
+def _edm_role_indices(sections: Sequence[SongSection]) -> tuple[list[int], list[int]]:
+    """Split section positions into drop lanes and fill lanes.
+
+    Args:
+        sections: Planned sections of one EDM take.
+
+    Returns:
+        ``(drop_index, other_index)`` positions, each in ascending order.
+    """
+    drop_index = [i for i, section in enumerate(sections) if section["role"] == "drop"]
+    other_index = [i for i, section in enumerate(sections) if section["role"] != "drop"]
+    return drop_index, other_index
+
+
+def _place_drop_cues(
+    drop_index: Sequence[int],
+    cues: list[str],
+    drop_cues: list[str],
+    *,
+    bounce: bool,
+) -> dict[int, list[str]]:
+    """Deal the drop cues over the drop sections, each weighted.
+
+    Args:
+        drop_index: Positions of the drop sections.
+        cues: Every authored cue, used as a donor.
+        drop_cues: Cues holding drop or weight language.
+        bounce: When True, every drop keeps a chest / 808 / trap / warp cue.
+
+    Returns:
+        Position to cue list, one entry per drop section.
+    """
+    groups = _chunks(drop_cues, len(drop_index))
+    placed: dict[int, list[str]] = {}
+    for slot, index in enumerate(drop_index):
+        placed[index] = _ensure_drop(
+            groups[slot] if slot < len(groups) else [],
+            cues,
+            bounce=bounce,
+        )
+    return placed
+
+
+def _place_fill_cues(
+    other_index: Sequence[int],
+    sections: Sequence[SongSection],
+    cues: list[str],
+    other_cues: list[str],
+) -> dict[int, list[str]]:
+    """Deal the non-drop cues over the fill sections, keeping each one grounded.
+
+    An empty fill gets a rhythm donor, and an ``inst`` fill without a low
+    end borrows one, so no instrumental bar ships without a bass cue.
+
+    Args:
+        other_index: Positions of the non-drop sections.
+        sections: Planned sections of one EDM take.
+        cues: Every authored cue, used as a donor.
+        other_cues: Cues without drop or weight language.
+
+    Returns:
+        Position to cue list, one entry per fill section.
+    """
+    groups = _chunks(other_cues, len(other_index))
+    placed: dict[int, list[str]] = {}
+    for slot, index in enumerate(other_index):
+        group = groups[slot] if slot < len(groups) else []
+        if not group:
+            donor = _first_with(other_cues, ("hat", "kick", "808", "snare")) or (
+                "rapid hi-hats, chest-sub"
+            )
+            group = [donor]
+        if sections[index]["role"] == "inst":
+            blob = " ".join(group).lower()
+            if not any(
+                needle in blob for needle in ("bass", "808", "sub", "reese", "wobble", "growl")
+            ):
+                group = [
+                    *group,
+                    _first_with(cues, ("bass", "808", "sub", "reese")) or "chest-sub",
+                ]
+        placed[index] = group
+    return placed
+
+
+def _edm_marker_body(section: SongSection, frags: Sequence[str]) -> str:
+    """Bracketed cue line for one planned EDM section.
+
+    Args:
+        section: Planned section; its pattern clause closes the cue list.
+        frags: Cues placed on this section.
+
+    Returns:
+        One bracket line.
+    """
+    pattern = section["pattern"]
+    body_bits = [frag for frag in frags if frag]
+    if pattern and pattern not in " ".join(body_bits):
+        body_bits.append(pattern)
+    body = ", ".join(body_bits) if body_bits else pattern or "kick holds"
+    return f"[{section['role']} - {body}]"
+
+
 def arrange_edm(source: str, plan: SongPlan, *, treat: bool = False, bounce: bool = False) -> str:
     """Redistribute authored EDM cues into the plan's arc.
 
@@ -1119,43 +1333,14 @@ def arrange_edm(source: str, plan: SongPlan, *, treat: bool = False, bounce: boo
     cues, chorus = _parse_edm(source)
     drop_cues = [cue for cue in cues if _is_drop_cue(cue)]
     other_cues = [cue for cue in cues if not _is_drop_cue(cue)]
-    drop_index = [i for i, section in enumerate(plan["sections"]) if section["role"] == "drop"]
-    other_index = [i for i, section in enumerate(plan["sections"]) if section["role"] != "drop"]
-    drop_groups = _chunks(drop_cues, len(drop_index))
-    other_groups = _chunks(other_cues, len(other_index))
+    drop_index, other_index = _edm_role_indices(plan["sections"])
     placed: dict[int, list[str]] = {}
-    for slot, index in enumerate(drop_index):
-        placed[index] = _ensure_drop(
-            drop_groups[slot] if slot < len(drop_groups) else [],
-            cues,
-            bounce=bounce,
-        )
-    for slot, index in enumerate(other_index):
-        group = other_groups[slot] if slot < len(other_groups) else []
-        if not group:
-            donor = _first_with(other_cues, ("hat", "kick", "808", "snare")) or (
-                "rapid hi-hats, chest-sub"
-            )
-            group = [donor]
-        if plan["sections"][index]["role"] == "inst":
-            blob = " ".join(group).lower()
-            if not any(
-                needle in blob for needle in ("bass", "808", "sub", "reese", "wobble", "growl")
-            ):
-                group = [
-                    *group,
-                    _first_with(cues, ("bass", "808", "sub", "reese")) or "chest-sub",
-                ]
-        placed[index] = group
-    blocks: list[str] = []
-    for index, section in enumerate(plan["sections"]):
-        frags = placed.get(index, [])
-        pattern = section["pattern"]
-        body_bits = [frag for frag in frags if frag]
-        if pattern and pattern not in " ".join(body_bits):
-            body_bits.append(pattern)
-        body = ", ".join(body_bits) if body_bits else pattern or "kick holds"
-        blocks.append(f"[{section['role']} - {body}]")
+    placed.update(_place_drop_cues(drop_index, cues, drop_cues, bounce=bounce))
+    placed.update(_place_fill_cues(other_index, plan["sections"], cues, other_cues))
+    blocks: list[str] = [
+        _edm_marker_body(section, placed.get(index, []))
+        for index, section in enumerate(plan["sections"])
+    ]
     if treat and chorus:
         insert_at = 1 if blocks else 0
         blocks.insert(insert_at, f"[chorus]\n{chorus}")
