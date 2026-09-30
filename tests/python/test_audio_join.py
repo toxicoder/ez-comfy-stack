@@ -413,85 +413,215 @@ def test_as_pcm_accepts_tensors_arrays_lists_and_scalars() -> None:
         _flatten("nope")
 
 
-def test_pack_audio_uses_torch_when_present() -> None:
-    """The lazy torch path packs a tensor.
+# --- save-audio unpacking -------------------------------------------------
+
+
+class _FakeTensor:
+    """Stand-in for ``torch.Tensor`` that tracks its own shape.
 
     Args:
-        monkeypatch: pytest fixture.
+        data: Flattened PCM.
+        shape: Shape the PCM is wrapped in.
     """
 
-    class Tensor:
-        """Stand-in for ``torch.Tensor``."""
+    def __init__(self, data: Any, shape: tuple[int, ...]) -> None:
+        """Remember the payload.
 
-        def __init__(self, data: Any, ndim: int) -> None:
-            """Remember the payload.
+        Args:
+            data: Flattened PCM.
+            shape: Tensor shape.
+        """
+        self.data = data
+        self.shape = shape
 
-            Args:
-                data: Flattened PCM.
-                ndim: Rank.
-            """
-            self.data = data
-            self.ndim = ndim
+    @property
+    def ndim(self) -> int:
+        """Rank of the payload.
 
-        def unsqueeze(self, _dim: int) -> "Tensor":
-            """Raise the rank.
+        Returns:
+            Dimensions in ``shape``.
+        """
+        return len(self.shape)
 
-            Args:
-                _dim: Axis index.
+    def unsqueeze(self, dim: int) -> "_FakeTensor":
+        """Insert a size-1 axis at ``dim``, like ``torch.Tensor`` does.
 
-            Returns:
-                This tensor.
-            """
-            self.ndim += 1
-            return self
+        Args:
+            dim: Axis index.
 
-    class NoTensor:
-        """Stand-in whose conversion refuses, exercising the fallback."""
+        Returns:
+            A tensor one rank higher.
+        """
+        shape = list(self.shape)
+        shape.insert(dim, 1)
+        return _FakeTensor(self.data, tuple(shape))
 
-        @staticmethod
-        def as_tensor(*_args: Any, **_kwargs: Any) -> Any:
-            """Fail like a missing backend.
+    def tolist(self) -> Any:
+        """Return the payload.
 
-            Returns:
-                Nothing.
+        Returns:
+            Flattened PCM.
+        """
+        return self.data
 
-            Raises:
-                RuntimeError: always.
-            """
-            raise RuntimeError("no torch")
 
+class _FakeTorch:
+    """Stand-in for the ``torch`` module, packing PCM as a flat tensor.
+
+    Args:
+        seen: Optional dict that records each payload handed over.
+    """
+
+    float32 = "float32"
+
+    def __init__(self, seen: dict[str, Any] | None = None) -> None:
+        """Remember the recorder.
+
+        Args:
+            seen: Dict that records payloads, or None.
+        """
+        self.seen = seen
+
+    def as_tensor(self, data: Any, dtype: Any = None) -> _FakeTensor:
+        """Wrap a flat payload, one entry per sample.
+
+        Args:
+            data: PCM.
+            dtype: Requested dtype.
+
+        Returns:
+            A rank-1 tensor, exactly as ``torch.as_tensor`` wraps a list.
+        """
+        del dtype
+        if self.seen is not None:
+            self.seen["data"] = data
+        return _FakeTensor(data, (len(data),))
+
+
+class _FakeNoTorch:
+    """Stand-in whose conversion refuses, exercising the fallback."""
+
+    float32 = "float32"
+
+    @staticmethod
+    def as_tensor(*_args: Any, **_kwargs: Any) -> Any:
+        """Fail like a missing backend.
+
+        Returns:
+            Nothing.
+
+        Raises:
+            RuntimeError: always.
+        """
+        raise RuntimeError("no torch")
+
+
+def _shape(payload: Any) -> tuple[int, ...]:
+    """Shape of a waveform payload, nested lists or a tensor stand-in.
+
+    Args:
+        payload: Waveform value.
+
+    Returns:
+        One entry per axis; empty for a scalar or an empty payload.
+    """
+    if hasattr(payload, "shape"):
+        return tuple(payload.shape)
+    if not isinstance(payload, (list, tuple)) or not payload:
+        return ()
+    return (len(payload),) + _shape(payload[0])
+
+
+def _batch_item_ranks(waveform: Any) -> list[int]:
+    """Rank of every dim-0 item, as the core save nodes read them.
+
+    ``comfy_api/latest/_ui.py`` ``AudioSaveHelper.save_audio`` (ComfyUI
+    v0.37.0) walks dim 0 of the ``waveform`` payload as a batch axis and
+    unpacks each item as ``[channels, samples]``. A rank-1 item raises
+    ``IndexError: Dimension out of range (expected to be in range of
+    [-1, 0], but got 1)`` and the take never reaches the encoder.
+
+    Args:
+        waveform: Waveform value from an AUDIO dict.
+
+    Returns:
+        Rank of each batch item on the save-side read.
+    """
+    shape = _shape(waveform)
+    if not shape:
+        return []
+    return [len(shape) - 1] * shape[0]
+
+
+def test_packed_master_unwraps_the_way_save_audio_reads_it() -> None:
+    """Every joined master unwraps as one batch of mono [1, N] PCM.
+
+    A [1, N] waveform iterates as one rank-1 batch item, which is what
+    SaveAudio and SaveAudioMP3 reject on the pinned runtime, so the check
+    runs over the nested fallback and over the torch stand-in alike.
+    """
+    length = _bars_samples(6)
+
+    def join(*parts: list[float]) -> Any:
+        """Join PCM through the node and hand back the packed waveform.
+
+        Args:
+            *parts: One PCM segment per ACE pass, in render order.
+
+        Returns:
+            The joined master waveform.
+        """
+        node = EZAudioBeatJoin()
+        wired: dict[str, Any] = {
+            f"audio_{index:02d}": _audio(part) for index, part in enumerate(parts, 1)
+        }
+        result = node.run(bpm=BPM, overlap_bars=2, crossover_hz=120.0, **wired)
+        return cast("dict[str, Any]", result[0])["waveform"]
+
+    # A multi-pass take is the joined case; no pass at all is the one-sample
+    # silence. A single wired pass ships unchanged instead of being repacked.
+    masters = [aj.join_audio([], bpm=BPM, overlap_bars=2)["waveform"]]
+    with _patch_torch(_FakeTorch()):
+        masters.append(join(_mix(length, 1), _mix(length, 2)))
+        masters.append(join(_mix(length, 1), _mix(length, 2), _mix(length, 3)))
+    for master in masters:
+        assert _batch_item_ranks(master) == [2]
+    assert _batch_item_ranks([[0.0] * length]) == [1], "the guard needs teeth"
+
+
+def test_packed_waveform_is_a_rank3_mono_waveform() -> None:
+    """Both packers nest to 1 x 1 x N, the shape core producers emit."""
+    with _patch_torch(_FakeNoTorch()):
+        fallback = aj.pack_audio([0.1, 0.2], RATE)
+    assert fallback["waveform"] == [[[0.1, 0.2]]]
+    assert _batch_item_ranks(fallback["waveform"]) == [2]
+
+    with _patch_torch(_FakeTorch()):
+        packed = aj.pack_audio([0.1, 0.2], RATE)
+        empty = aj.pack_audio([], RATE)
+    assert isinstance(packed["waveform"], _FakeTensor), "the tensor branch was skipped"
+    assert isinstance(empty["waveform"], _FakeTensor), "the tensor branch was skipped"
+    assert _shape(packed["waveform"]) == (1, 1, 2)
+    assert _shape(empty["waveform"]) == (1, 1, 0)
+
+
+def test_pack_audio_uses_torch_when_present() -> None:
+    """The lazy torch path packs a tensor, not the nested-list fallback."""
     captured: dict[str, Any] = {}
 
-    class Torch:
-        """Stand-in for the ``torch`` module."""
-
-        float32 = "float32"
-
-        @staticmethod
-        def as_tensor(data: Any, dtype: Any = None) -> Tensor:
-            """Record and wrap a 1-D payload.
-
-            Args:
-                data: PCM.
-                dtype: Requested dtype.
-
-            Returns:
-                A fake tensor.
-            """
-            del dtype
-            captured["data"] = data
-            return Tensor(data, 1)
-
-    monkeypatch: Any
-    with _patch_torch(Torch):
+    with _patch_torch(_FakeTorch(captured)):
         packed = aj.pack_audio([0.1, 0.2], 44100)
     assert packed["sample_rate"] == 44100
     assert captured["data"] == [0.1, 0.2]
-    assert isinstance(packed["waveform"], Tensor)
-    with _patch_torch(NoTensor):
+    assert isinstance(packed["waveform"], _FakeTensor)
+    assert packed["waveform"].ndim == 3
+    assert packed["waveform"].shape == (1, 1, 2)
+    assert _batch_item_ranks(packed["waveform"]) == [2]
+    with _patch_torch(_FakeNoTorch()):
         fallback = aj.pack_audio([0.1, 0.2], 0)
     assert fallback["sample_rate"] == aj.FALLBACK_SAMPLE_RATE
     assert fallback["waveform"] == [[[0.1, 0.2]]]
+    assert _batch_item_ranks(fallback["waveform"]) == [2]
 
 
 class _patch_torch:
