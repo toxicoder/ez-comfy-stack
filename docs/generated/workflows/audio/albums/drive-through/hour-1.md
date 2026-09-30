@@ -11898,7 +11898,7 @@ Stitch multi-pass ACE masters into one take on the bar grid.
 
 !!! warning "Lab notes"
 
-    Drive-through takes render 3-5 ACE passes per graph; each pass decodes to its own AUDIO and wires audio_01..audio_NN in render order. SaveAudio, SaveAudioMP3, and EZAudioMetadata read only this node's output.
+    Drive-through takes render 3-5 ACE passes per graph; each pass decodes to its own AUDIO and wires audio_01..audio_NN in render order. The master is one joined mono waveform shaped 1 x 1 x N (batch 1, mono) that SaveAudio, SaveAudioMP3, and EZAudioMetadata read; a flat 1 x N row reads as one rank-1 batch item and makes SaveAudio crash before it encodes.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |

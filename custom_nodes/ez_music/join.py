@@ -100,6 +100,13 @@ def _as_pcm(payload: Any) -> list[float]:
 def pack_audio(samples: list[float], sample_rate: int) -> dict[str, Any]:
     """Wrap PCM in a Comfy AUDIO dict, using torch when it is present.
 
+    The waveform is always one batch of mono ``[channels, samples]`` PCM,
+    so the tensor is rank-3 ``[1, 1, N]`` and the fallback nests to the
+    same depth. Core ``AudioSaveHelper.save_audio`` iterates dim 0 as a
+    batch axis and unpacks each item as ``[channels, samples]``; a flat
+    ``[1, N]`` payload therefore reads as one rank-1 batch item and
+    raises ``IndexError: Dimension out of range`` in SaveAudio.
+
     Args:
         samples: 1-D PCM.
         sample_rate: Rate to stamp; anything at or below zero falls back
@@ -113,7 +120,9 @@ def pack_audio(samples: list[float], sample_rate: int) -> dict[str, Any]:
     try:
         import torch
 
-        tensor = torch.as_tensor(samples, dtype=torch.float32).unsqueeze(0)
+        # Two unsqueezes, not a reshape: an empty buffer has no unambiguous
+        # -1 to infer, and [1, 1, 0] is what the batch axis expects anyway.
+        tensor = torch.as_tensor(samples, dtype=torch.float32).unsqueeze(0).unsqueeze(0)
     except Exception:  # noqa: BLE001 - any torch absence falls back
         return {"waveform": [[list(samples)]], "sample_rate": rate}
     return {"waveform": tensor, "sample_rate": rate}
