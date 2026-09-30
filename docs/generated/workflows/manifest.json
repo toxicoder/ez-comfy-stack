@@ -2491,6 +2491,12 @@
       "kind": "graph"
     },
     {
+      "id": "stills/upscale-reframe",
+      "path": "generated/workflows/stills/upscale-reframe.md",
+      "lane": "stills",
+      "kind": "graph"
+    },
+    {
       "id": "audio/albums/drive-through/afterparty",
       "path": "generated/workflows/audio/albums/drive-through/afterparty.md",
       "lane": "audio-albums",
@@ -2581,6 +2587,6 @@
       "kind": "album"
     }
   ],
-  "graph_count": 680,
-  "page_count": 431
+  "graph_count": 681,
+  "page_count": 432
 }

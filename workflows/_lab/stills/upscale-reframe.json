@@ -1,0 +1,1345 @@
+{
+  "id": "upscale-reframe",
+  "revision": 1,
+  "last_node_id": 21,
+  "last_link_id": 25,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "UNETLoader",
+      "pos": [
+        40,
+        524
+      ],
+      "size": [
+        360,
+        82
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            1
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader"
+      },
+      "widgets_values": [
+        "flux-2-klein-4b-fp8.safetensors",
+        "default"
+      ],
+      "title": "Klein 4B distilled FP8"
+    },
+    {
+      "id": 2,
+      "type": "CLIPLoader",
+      "pos": [
+        40,
+        678
+      ],
+      "size": [
+        360,
+        106
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            2,
+            3
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": [
+        "qwen_3_4b.safetensors",
+        "flux2",
+        "default"
+      ],
+      "title": "Qwen3-4B TE"
+    },
+    {
+      "id": 3,
+      "type": "VAELoader",
+      "pos": [
+        40,
+        856
+      ],
+      "size": [
+        360,
+        58
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            4,
+            5
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "flux2-vae.safetensors"
+      ],
+      "title": "Flux2 VAE"
+    },
+    {
+      "id": 4,
+      "type": "CLIPTextEncode",
+      "pos": [
+        816,
+        1016
+      ],
+      "size": [
+        420,
+        160
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 2
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 13
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "Keep the subject, camera height, light, palette, and lens character of the reference still. Reframe the shot so the new canvas is filled: back the camera away or swing it sideways and continue the same place into the new edges. Keep the horizon level and keep scale, ground contact, and perspective consistent with the reference. Original characters only, and no added lettering."
+      ],
+      "title": "Positive"
+    },
+    {
+      "id": 5,
+      "type": "CLIPTextEncode",
+      "pos": [
+        816,
+        1740
+      ],
+      "size": [
+        420,
+        120
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 3
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 17
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            7
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "stretched and smeared subject, duplicated limbs, duplicated lettering, watermarks, black border vignette, mushy background, oversharpen halos, muddy blacks"
+      ],
+      "title": "Negative"
+    },
+    {
+      "id": 6,
+      "type": "EmptyFlux2LatentImage",
+      "pos": [
+        1284,
+        948
+      ],
+      "size": [
+        280,
+        106
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "link": 18,
+          "widget": {
+            "name": "width"
+          }
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": 19,
+          "widget": {
+            "name": "height"
+          }
+        },
+        {
+          "name": "batch_size",
+          "type": "INT",
+          "link": 20,
+          "widget": {
+            "name": "batch_size"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            8
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EmptyFlux2LatentImage"
+      },
+      "widgets_values": [
+        1280,
+        704,
+        1
+      ],
+      "title": "Latent (wired from Format)"
+    },
+    {
+      "id": 7,
+      "type": "KSampler",
+      "pos": [
+        1284,
+        1430
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 1
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 16
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 7
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 8
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            9
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        8,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "KSampler"
+    },
+    {
+      "id": 8,
+      "type": "VAEDecode",
+      "pos": [
+        1692,
+        524
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 9
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            22
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": [],
+      "title": "VAE Decode"
+    },
+    {
+      "id": 9,
+      "type": "SaveImage",
+      "pos": [
+        1692,
+        794
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 23
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_reframe"
+      ],
+      "title": "Save reframe"
+    },
+    {
+      "id": 10,
+      "type": "Note",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        960,
+        280
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## stills/upscale-reframe\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nKlein 4B **Upscale & Reframe**. Load a still, choose the aspect the result must land in on **Format / platform** (or type Custom Width x Height), set **Output size** to **Force format** so that canvas wins over the input's own aspect, then pick **Upscale** when the result also has to be bigger.\n\nReframe changes the canvas, not the pixels. The loaded still is snapped to the Klein VAE grid, VAE-encoded, and attached to the positive prompt as a ReferenceLatent; the sampler's `latent_image` is a blank Flux.2 canvas sized by Format / platform (or Custom Width x Height). A narrower or taller crop therefore generates the missing area instead of stretching or padding the source.\n\nOutput size stays on **Match input** in the shipped graph: the canvas then follows the loaded still's own aspect (nearest catalog row), so a still that already matches the target aspect keeps it - nothing is stretched or padded. Switch to **Force format** to push a still into a different aspect.\n\nUpscale (default none) is lanczos on the finished PNG: 2x and 4x multiply the canvas, 4K fits it in a 3840x2160 box (portrait 2160x3840).\n\nDo not Queue without a start image; with nothing to reference this is a blank canvas. Prompt names only what must survive the crop.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n"
+      ],
+      "title": "Operator note"
+    },
+    {
+      "id": 11,
+      "type": "LoadImage",
+      "pos": [
+        448,
+        524
+      ],
+      "size": [
+        320,
+        314
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            11,
+            24
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "example.png",
+        "image"
+      ],
+      "title": "Source still"
+    },
+    {
+      "id": 12,
+      "type": "EZKleinPromptEnhance",
+      "pos": [
+        816,
+        524
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "duration_hint",
+          "type": "STRING",
+          "link": 21,
+          "widget": {
+            "name": "duration_hint"
+          }
+        },
+        {
+          "name": "image_desc",
+          "type": "STRING",
+          "link": 25
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            13,
+            14
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZKleinPromptEnhance"
+      },
+      "widgets_values": [
+        "custom",
+        "Keep the subject, camera height, light, palette, and lens character of the reference still. Reframe the shot so the new canvas is filled: back the camera away or swing it sideways and continue the same place into the new edges. Keep the horizon level and keep scale, ground contact, and perspective consistent with the reference. Original characters only, and no added lettering.",
+        true,
+        "edit",
+        "16:9 landscape reframe",
+        "none",
+        "stills/upscale-reframe"
+      ],
+      "title": "Klein Prompt Enhance (reframe)"
+    },
+    {
+      "id": 13,
+      "type": "VAEEncode",
+      "pos": [
+        1284,
+        1126
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "pixels",
+          "type": "IMAGE",
+          "link": 12
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 5
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            15
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEEncode"
+      },
+      "widgets_values": [],
+      "title": "Encode source plate"
+    },
+    {
+      "id": 14,
+      "type": "ReferenceLatent",
+      "pos": [
+        1284,
+        1278
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 6
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 15,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            16
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ReferenceLatent"
+      },
+      "widgets_values": [],
+      "title": "Positive + source plate"
+    },
+    {
+      "id": 15,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        816,
+        1248
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 14
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            17
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "stretched and smeared subject, duplicated limbs, duplicated lettering, watermarks, black border vignette, mushy background, oversharpen halos, muddy blacks",
+        true,
+        "klein"
+      ],
+      "title": "Negative Prompt Enhance"
+    },
+    {
+      "id": 16,
+      "type": "EZSnapImage",
+      "pos": [
+        1284,
+        816
+      ],
+      "size": [
+        240,
+        60
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 11
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            12
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZSnapImage"
+      },
+      "widgets_values": [],
+      "title": "Snap to Klein grid"
+    },
+    {
+      "id": 17,
+      "type": "EZImageFormat",
+      "pos": [
+        1284,
+        524
+      ],
+      "size": [
+        360,
+        220
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "links": [
+            18
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": [
+            19
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "batch",
+          "type": "INT",
+          "links": [
+            20
+          ],
+          "slot_index": 2
+        },
+        {
+          "name": "hint",
+          "type": "STRING",
+          "links": [
+            21
+          ],
+          "slot_index": 3
+        },
+        {
+          "name": "prefix",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 4
+        },
+        {
+          "name": "context",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 5
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageFormat"
+      },
+      "widgets_values": [
+        "Custom",
+        "none",
+        1280,
+        704,
+        1,
+        "Match input"
+      ],
+      "title": "Format / platform"
+    },
+    {
+      "id": 18,
+      "type": "EZImageUpscale",
+      "pos": [
+        1692,
+        642
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 22
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            23
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
+    },
+    {
+      "id": 19,
+      "type": "EZImageDescribe",
+      "pos": [
+        448,
+        910
+      ],
+      "size": [
+        280,
+        90
+      ],
+      "flags": {},
+      "order": 19,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "enable",
+          "type": "BOOLEAN",
+          "link": null,
+          "widget": {
+            "name": "enable"
+          }
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 24
+        }
+      ],
+      "outputs": [
+        {
+          "name": "caption",
+          "type": "STRING",
+          "links": [
+            25
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageDescribe"
+      },
+      "widgets_values": [
+        false
+      ],
+      "title": "Describe image"
+    },
+    {
+      "id": 20,
+      "type": "EZQuality",
+      "pos": [
+        1416,
+        80
+      ],
+      "size": [
+        320.0,
+        82.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "quality",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZQuality"
+      },
+      "widgets_values": [
+        "lab"
+      ],
+      "title": "Quality"
+    },
+    {
+      "id": 21,
+      "type": "EZModelCheck",
+      "pos": [
+        1048,
+        80
+      ],
+      "size": [
+        320.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "EZModelCheck"
+      },
+      "widgets_values": [
+        "Click Check models. Queue does not run this node."
+      ],
+      "title": "Check models"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      7,
+      0,
+      "MODEL"
+    ],
+    [
+      2,
+      2,
+      0,
+      4,
+      0,
+      "CLIP"
+    ],
+    [
+      3,
+      2,
+      0,
+      5,
+      0,
+      "CLIP"
+    ],
+    [
+      4,
+      3,
+      0,
+      8,
+      1,
+      "VAE"
+    ],
+    [
+      5,
+      3,
+      0,
+      13,
+      1,
+      "VAE"
+    ],
+    [
+      6,
+      4,
+      0,
+      14,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      7,
+      5,
+      0,
+      7,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      8,
+      6,
+      0,
+      7,
+      3,
+      "LATENT"
+    ],
+    [
+      9,
+      7,
+      0,
+      8,
+      0,
+      "LATENT"
+    ],
+    [
+      11,
+      11,
+      0,
+      16,
+      0,
+      "IMAGE"
+    ],
+    [
+      12,
+      16,
+      0,
+      13,
+      0,
+      "IMAGE"
+    ],
+    [
+      13,
+      12,
+      0,
+      4,
+      1,
+      "STRING"
+    ],
+    [
+      14,
+      12,
+      0,
+      15,
+      0,
+      "STRING"
+    ],
+    [
+      15,
+      13,
+      0,
+      14,
+      1,
+      "LATENT"
+    ],
+    [
+      16,
+      14,
+      0,
+      7,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      17,
+      15,
+      0,
+      5,
+      1,
+      "STRING"
+    ],
+    [
+      18,
+      17,
+      0,
+      6,
+      0,
+      "INT"
+    ],
+    [
+      19,
+      17,
+      1,
+      6,
+      1,
+      "INT"
+    ],
+    [
+      20,
+      17,
+      2,
+      6,
+      2,
+      "INT"
+    ],
+    [
+      21,
+      17,
+      3,
+      12,
+      0,
+      "STRING"
+    ],
+    [
+      22,
+      8,
+      0,
+      18,
+      0,
+      "IMAGE"
+    ],
+    [
+      23,
+      18,
+      0,
+      9,
+      0,
+      "IMAGE"
+    ],
+    [
+      24,
+      11,
+      0,
+      19,
+      1,
+      "IMAGE"
+    ],
+    [
+      25,
+      19,
+      0,
+      12,
+      1,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "NOTE",
+      "bounding": [
+        20,
+        8,
+        1000,
+        396
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        1028,
+        8,
+        728,
+        256
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "MODEL",
+      "bounding": [
+        20,
+        452,
+        400,
+        506
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "INPUT",
+      "bounding": [
+        428,
+        452,
+        360,
+        592
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "PROMPT",
+      "bounding": [
+        796,
+        452,
+        460,
+        1492
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 6,
+      "title": "SETTINGS",
+      "bounding": [
+        1264,
+        452,
+        400,
+        1284
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 7,
+      "title": "OUTPUT",
+      "bounding": [
+        1672,
+        452,
+        320,
+        656
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "lab_profile": "stills/upscale-reframe",
+    "lab_flux_tier": "fast",
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    "lab_note": "## stills/upscale-reframe\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nKlein 4B **Upscale & Reframe**. Load a still, choose the aspect the result must land in on **Format / platform** (or type Custom Width x Height), set **Output size** to **Force format** so that canvas wins over the input's own aspect, then pick **Upscale** when the result also has to be bigger.\n\nReframe changes the canvas, not the pixels. The loaded still is snapped to the Klein VAE grid, VAE-encoded, and attached to the positive prompt as a ReferenceLatent; the sampler's `latent_image` is a blank Flux.2 canvas sized by Format / platform (or Custom Width x Height). A narrower or taller crop therefore generates the missing area instead of stretching or padding the source.\n\nOutput size stays on **Match input** in the shipped graph: the canvas then follows the loaded still's own aspect (nearest catalog row), so a still that already matches the target aspect keeps it - nothing is stretched or padded. Switch to **Force format** to push a still into a different aspect.\n\nUpscale (default none) is lanczos on the finished PNG: 2x and 4x multiply the canvas, 4K fits it in a 3840x2160 box (portrait 2160x3840).\n\nDo not Queue without a start image; with nothing to reference this is a blank canvas. Prompt names only what must survive the crop.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n",
+    "lab_description": "Klein 4B upscale and reframe of a loaded still. Format sets the target aspect, Upscale (default none) is lanczos on the finished PNG. Prefix ez_reframe.",
+    "lab_rel": "stills/upscale-reframe",
+    "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "produce",
+      "occupancy": "klein",
+      "enhance_off_identity": false,
+      "handoff": [
+        "motion/silent/still-to-video-5s"
+      ]
+    },
+    "linearData": {
+      "inputs": [
+        [
+          11,
+          "image",
+          {
+            "description": "Start frame or reference still. Only shown when the LoadImage is wired.",
+            "label": "Source still"
+          }
+        ],
+        [
+          20,
+          "quality",
+          {
+            "label": "Quality",
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
+          }
+        ],
+        [
+          12,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
+        [
+          12,
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model.",
+            "label": "Prompt",
+            "height": 140
+          }
+        ],
+        [
+          17,
+          "format",
+          {
+            "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (div16).",
+            "label": "Format / platform"
+          }
+        ],
+        [
+          17,
+          "size_mode",
+          {
+            "description": "Match input uses a loaded still's aspect (nearest catalog row). Force format keeps Format / platform. No still: authored format.",
+            "label": "Output size"
+          }
+        ],
+        [
+          18,
+          "upscale",
+          {
+            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840x2160 box (portrait 2160x3840).",
+            "label": "Upscale"
+          }
+        ],
+        [
+          19,
+          "enable",
+          {
+            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs download-llm --tier describe.",
+            "label": "Describe image"
+          }
+        ],
+        [
+          12,
+          "style",
+          {
+            "description": "Optional look. Hidden on I2V - the start image owns look.",
+            "label": "Style"
+          }
+        ],
+        [
+          12,
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
+            "label": "Rewrite prompt"
+          }
+        ],
+        [
+          15,
+          "enhance",
+          {
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs.",
+            "label": "Rewrite negative"
+          }
+        ],
+        [
+          7,
+          "seed",
+          {
+            "description": "Fix to iterate; randomize to explore.",
+            "label": "Seed"
+          }
+        ],
+        [
+          17,
+          "width",
+          {
+            "description": "Latent width in pixels. Used when Format is Custom; otherwise the preset wins.",
+            "label": "Width"
+          }
+        ],
+        [
+          17,
+          "height",
+          {
+            "description": "Latent height in pixels. Used when Format is Custom; otherwise the preset wins.",
+            "label": "Height"
+          }
+        ],
+        [
+          17,
+          "batch_size",
+          {
+            "description": "How many stills in one Run. Large canvases stay at 1.",
+            "label": "Batch"
+          }
+        ]
+      ],
+      "outputs": [
+        9
+      ]
+    },
+    "linearMode": true,
+    "lab_optional_unwired": [
+      "LoadImage"
+    ]
+  },
+  "version": 0.4
+}

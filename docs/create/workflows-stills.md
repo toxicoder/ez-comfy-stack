@@ -33,6 +33,7 @@ tags: [comfyui, workflows, klein, stills, catalog]
 | **[stills/character-draft](../generated/workflows/stills/character-draft.md)** | Character still 1024x1280, style dropdown, prefix `ez_character` |
 | **[stills/character-tweak](../generated/workflows/stills/character-tweak.md)** | Klein-edit that still (LoadImage + ReferenceLatent), prefix `ez_character_tweak` |
 | **[stills/talking-head](../generated/workflows/stills/talking-head.md)** | Klein still -> LTX I2V talking smoke. Real freeze: **[motion/av/audio-to-video-8s](../generated/workflows/motion/av/audio-to-video-8s.md)**. Qwen3-TTS / Wan S2V opt-in. No banned lip-sync OSS |
+| **[stills/upscale-reframe](../generated/workflows/stills/upscale-reframe.md)** | Upscale + reframe desk. Load a still, pick **Upscale** (none / 2x / 4x / 4K) and a **Format / platform** aspect (or Custom Width x Height); the missing frame area is generated to fill the new aspect, and the source plate is encoded as the reference. Format defaults to Custom (1280x704). Handoff: **[motion/silent/still-to-video-5s](../generated/workflows/motion/silent/still-to-video-5s.md)** |
 
 Lane B Klein stills (same occupancy **klein**):
 
@@ -65,6 +66,7 @@ App Mode (frontend **1.41.13+**) is a widget surface on the same lab JSON. Occup
 | **[stills/background-swap](../generated/workflows/stills/background-swap.md)** | Keep the subject; replace backdrop, ground, and nearby set dressing. 100 sample places + Custom. Cubic block world rebuilds this place as cubes from a block study, then pastes the original people; when the person mask cannot run it keeps the people photoreal on a photo-anchored rebuild. Other/background character toggles. Prefix `ez_bg_swap` |
 | **[stills/background-edit](../generated/workflows/stills/background-edit.md)** | Keep the subject; restyle the environment in place (cartoon, add/remove, weather). 30 samples + Custom. Other/background character toggles. Prefix `ez_bg_edit` |
 | **[stills/hook-still](../generated/workflows/stills/hook-still.md)** | Vertical 9:16 hook still |
+| **[stills/upscale-reframe](../generated/workflows/stills/upscale-reframe.md)** | Upscale + reframe desk: 2x / 4x / 4K upscale and aspect reframe of a loaded still, or a new plate at the chosen format. **Format / platform** defaults to Custom (1280x704); the new frame area is generated, not stretched |
 
 ---
 

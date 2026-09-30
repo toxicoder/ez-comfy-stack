@@ -495,3 +495,4 @@ tags: [workflows, generated, comfyui]
 | `stills/text-swap` | [stills/text-swap.md](stills/text-swap.md) |
 | `stills/thumbnail` | [stills/thumbnail.md](stills/thumbnail.md) |
 | `stills/time-of-day` | [stills/time-of-day.md](stills/time-of-day.md) |
+| `stills/upscale-reframe` | [stills/upscale-reframe.md](stills/upscale-reframe.md) |
