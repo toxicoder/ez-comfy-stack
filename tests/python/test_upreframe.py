@@ -122,9 +122,9 @@ def test_upreframe_canvas_follows_format() -> None:
     assert REL in KLEIN_GENERIC
     assert REL in FORMAT_SCOPE
     assert format_kind(REL) == "still"
-    fmt = _of_type(graph, "EZImageFormat")
-    assert len(fmt) == 1
-    fmt = fmt[0]
+    fmt_nodes = _of_type(graph, "EZImageFormat")
+    assert len(fmt_nodes) == 1
+    fmt = fmt_nodes[0]
     values = list(fmt.get("widgets_values") or [])
     # [format, look, width, height, batch, size_mode]
     assert values[0] == "Custom"
