@@ -1363,6 +1363,11 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "stills/food-tabletop": _spec("produce", "klein"),
     "stills/shorts-still": _spec("produce", "klein"),
     "stills/before-after": _spec("produce", "klein"),
+    "stills/upscale-reframe": _spec(
+        "produce",
+        "klein",
+        "motion/silent/still-to-video-5s",
+    ),
     "stills/platform-pack": _spec(
         "produce",
         "klein",

@@ -85,6 +85,7 @@ KLEIN_GENERIC = frozenset(
         "stills/color-moods",
         "stills/time-of-day",
         "stills/before-after",
+        "stills/upscale-reframe",
     }
 )
 VIDEO_GENERIC = frozenset(
@@ -123,6 +124,9 @@ STILL_REL_FORMAT = {
     "stills/still-draft": "aspect_16_9_draft",
     "stills/still-hero": "aspect_16_9_ltx",
     "stills/still-daily": "aspect_16_9_mid",
+    # Reframe starts on Custom so the Width x Height widgets (1280x704) set the
+    # first canvas; the App's whole job is moving to another aspect.
+    "stills/upscale-reframe": CUSTOM_ID,
 }
 PACK3_STILL_KINDS = frozenset({"klein_single", "klein_pack"})
 PACK3_VIDEO_KINDS = frozenset({"wan_i2v", "wan_loop", "ltx_av"})
