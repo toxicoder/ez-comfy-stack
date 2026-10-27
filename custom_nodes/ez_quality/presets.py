@@ -1,11 +1,13 @@
 """Family-specific Quality overlays (custom / draft / lab / standard / high /
-Free Commercial Use / ultra / max).
+Free Commercial Use / ultra / max / flux3-fast / flux3-quality / flux3-nvfp4).
 
 Python is the source of truth. The frontend JS mirrors these constants.
 Overlays never change width, height, frames, or length. Named qualities may
 swap UNET, CLIP, and VAE when the files are present. ``custom`` is a freeze.
 ``Free Commercial Use (<$10M)`` is Apache Klein 4B + LTX-2.5 only - never
 Klein 9B or FLUX.2-dev. Wan / audio / trellis are no-ops for that choice.
+The flux3-* profiles apply only to graphs that pin FLUX 3 Image Klein
+weights; on any other graph they are no-ops.
 """
 
 from __future__ import annotations
@@ -23,6 +25,9 @@ QUALITY_FREE_COMMERCIAL = "Free Commercial Use (<$10M)"
 QUALITY_FREE_COMMERCIAL_ALIAS = "free_commercial"
 QUALITY_ULTRA = "ultra"
 QUALITY_MAX = "max"
+QUALITY_FLUX3_FAST = "flux3-fast"
+QUALITY_FLUX3_QUALITY = "flux3-quality"
+QUALITY_FLUX3_NVFP4 = "flux3-nvfp4"
 QUALITY_CHOICES: tuple[str, ...] = (
     QUALITY_CUSTOM,
     QUALITY_DRAFT,
@@ -32,12 +37,21 @@ QUALITY_CHOICES: tuple[str, ...] = (
     QUALITY_FREE_COMMERCIAL,
     QUALITY_ULTRA,
     QUALITY_MAX,
+    QUALITY_FLUX3_FAST,
+    QUALITY_FLUX3_QUALITY,
+    QUALITY_FLUX3_NVFP4,
 )
 # casefold(widget value) -> canonical QUALITY_CHOICES entry (incl. alias).
 _QUALITY_NORMALIZE: dict[str, str] = {
     choice.casefold(): choice for choice in QUALITY_CHOICES
 }
 _QUALITY_NORMALIZE[QUALITY_FREE_COMMERCIAL_ALIAS] = QUALITY_FREE_COMMERCIAL
+# Profiles that only ever write on a graph pinning FLUX 3 Image Klein weights.
+FLUX3_QUALITY_CHOICES: tuple[str, ...] = (
+    QUALITY_FLUX3_FAST,
+    QUALITY_FLUX3_QUALITY,
+    QUALITY_FLUX3_NVFP4,
+)
 
 # Klein filenames, family step/CFG overlays, widget indexes.
 KLEIN_DISTILLED = "flux-2-klein-4b-fp8.safetensors"
@@ -47,11 +61,18 @@ KLEIN_9B = "flux-2-klein-9b-fp8.safetensors"
 KLEIN_9B_BASE = "flux-2-klein-base-9b-fp8.safetensors"
 KLEIN_9B_NVFP4 = "flux-2-klein-9b-nvfp4.safetensors"
 FLUX2_DEV = "flux2_dev_fp8mixed.safetensors"
+# FLUX 3 Image Klein (KLEIN3) weights from the official Comfy repo.
+KLEIN3_DISTILLED = "flux3-image-klein-int8-convrot.safetensors"
+KLEIN3_BASE = "flux3-image-klein-base-int8-convrot.safetensors"
+KLEIN3_NVFP4 = "flux3-image-klein-base-nvfp4.safetensors"
 
 CLIP_4B = "qwen_3_4b.safetensors"
 CLIP_8B = "qwen_3_8b_fp8mixed.safetensors"
 CLIP_MISTRAL = "mistral_3_small_flux2_bf16.safetensors"
 CLIP_TYPE_FLUX2 = "flux2"
+# KLEIN3 text encoder (Qwen3-VL) plus the optional prompt upsampler.
+KLEIN3_TE = "qwen3vl_4b_int8_convrot.safetensors"
+KLEIN3_UPSAMPLER = "qwen3.5_9b_flux3_prompt_upsampler_int8_convrot.safetensors"
 
 VAE_FULL = "flux2-vae.safetensors"
 VAE_SMALL = "full_encoder_small_decoder.safetensors"
@@ -70,6 +91,14 @@ KLEIN_9B_BASE_STEPS = 20
 KLEIN_9B_BASE_CFG = 5.0
 FLUX2_DEV_STEPS = 20
 FLUX2_DEV_CFG = 4.0
+# KLEIN3: distilled is guidance-free (official range 4-16 steps); the base
+# recipe is BFL's own 50 steps at CFG 3.5, and NVFP4 follows the base recipe.
+KLEIN3_FAST_STEPS = 16
+KLEIN3_FAST_CFG = 1.0
+KLEIN3_QUALITY_STEPS = 50
+KLEIN3_QUALITY_CFG = 3.5
+KLEIN3_NVFP4_STEPS = 50
+KLEIN3_NVFP4_CFG = 3.5
 
 WAN_DRAFT_STEPS = 12
 WAN_STANDARD_STEPS = 20
@@ -183,6 +212,55 @@ def is_flux2_dev_unet(name: str) -> bool:
     """
     blob = name.lower().replace(".", "-")
     return "flux2-dev" in blob or "flux-2-dev" in blob or "flux2_dev" in name.lower()
+
+
+def _klein3_blob(name: str) -> str:
+    """Fold separators in a KLEIN3 filename so needles match either style.
+
+    Args:
+        name: Candidate filename.
+
+    Returns:
+        Lowercased name with dots and underscores folded to dashes.
+    """
+    return name.lower().replace(".", "-").replace("_", "-")
+
+
+def is_klein3_unet(name: str) -> bool:
+    """True for FLUX 3 Image Klein UNET filenames (distilled/base/NVFP4).
+
+    Args:
+        name: UNET filename.
+
+    Returns:
+        True when the name is a KLEIN3 diffusion weight.
+    """
+    blob = _klein3_blob(name)
+    return "flux3-image-klein" in blob or "flux-3-image-klein" in blob
+
+
+def is_klein3_clip(name: str) -> bool:
+    """True for the KLEIN3 Qwen3-VL text-encoder filename.
+
+    Args:
+        name: CLIP filename.
+
+    Returns:
+        True when the name is the KLEIN3 text encoder.
+    """
+    return "qwen3vl-4b" in _klein3_blob(name)
+
+
+def is_klein3_upsampler(name: str) -> bool:
+    """True for the optional KLEIN3 prompt upsampler filename.
+
+    Args:
+        name: Text-encoder / model filename.
+
+    Returns:
+        True when the name is the KLEIN3 prompt upsampler.
+    """
+    return "flux3-prompt-upsampler" in _klein3_blob(name)
 
 
 def is_wan_14b_unet(name: str) -> bool:
@@ -338,6 +416,11 @@ def resolve_overlay(
             vaes,
         )
 
+    if choice in FLUX3_QUALITY_CHOICES:
+        return _flux3_overlay(
+            choice, unet_name, clip_name, vae_name, available, clips, vaes
+        )
+
     if occ == "klein" or is_klein_4b_unet(unet_name) or is_klein_9b_unet(unet_name):
         return _klein_overlay(
             choice,
@@ -471,6 +554,50 @@ def _free_commercial_overlay(
     if occupancy in _LTX_OCCUPANCY:
         return QualityOverlay(steps=LTX_HIGH_STEPS)
     return QualityOverlay()
+
+
+def _flux3_overlay(
+    choice: str,
+    unet_name: str,
+    clip_name: str,
+    vae_name: str,
+    available: set[str],
+    clips: set[str],
+    vaes: set[str],
+) -> QualityOverlay:
+    """FLUX 3 Image Klein profile, or empty when the graph pins other weights.
+
+    Args:
+        choice: One of FLUX3_QUALITY_CHOICES.
+        unet_name: Current UNET filename.
+        clip_name: Current CLIP filename.
+        vae_name: Current VAE filename.
+        available: UNET combo options.
+        clips: CLIP combo options.
+        vaes: VAE combo options.
+
+    Returns:
+        Overlay for the pinned KLEIN3 family, or empty for any other family.
+    """
+    if not (is_klein3_unet(unet_name) or is_klein3_clip(clip_name)):
+        return QualityOverlay()
+    if choice == QUALITY_FLUX3_NVFP4:
+        unet = _pick_unet(KLEIN3_NVFP4, available)
+        steps, cfg = KLEIN3_NVFP4_STEPS, KLEIN3_NVFP4_CFG
+    elif choice == QUALITY_FLUX3_QUALITY:
+        unet = _pick_unet(KLEIN3_BASE, available)
+        steps, cfg = KLEIN3_QUALITY_STEPS, KLEIN3_QUALITY_CFG
+    else:
+        unet = _pick_unet(KLEIN3_DISTILLED, available)
+        steps, cfg = KLEIN3_FAST_STEPS, KLEIN3_FAST_CFG
+    return QualityOverlay(
+        steps=steps,
+        cfg=cfg,
+        unet_name=_changed(unet_name, unet),
+        clip_name=_changed(clip_name, _pick_file(KLEIN3_TE, clips)),
+        vae_name=_changed(vae_name, _pick_file(VAE_FULL, vaes)),
+        clip_type=CLIP_TYPE_FLUX2,
+    )
 
 
 def _klein_overlay(
@@ -786,6 +913,7 @@ def apply_to_graph(
                 is_klein_4b_unet(current)
                 or is_klein_9b_unet(current)
                 or is_flux2_dev_unet(current)
+                or is_klein3_unet(current)
             ):
                 continue
             values[UNET_NAME_INDEX] = overlay.unet_name
@@ -793,7 +921,7 @@ def apply_to_graph(
             if overlay.clip_name is None or len(values) <= CLIP_NAME_INDEX:
                 continue
             current = str(values[CLIP_NAME_INDEX])
-            if current and not is_flux2_clip(current):
+            if current and not (is_flux2_clip(current) or is_klein3_clip(current)):
                 continue
             values[CLIP_NAME_INDEX] = overlay.clip_name
             if overlay.clip_type is not None and len(values) > 1:

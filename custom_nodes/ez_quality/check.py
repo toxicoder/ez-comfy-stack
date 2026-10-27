@@ -16,10 +16,18 @@ from .presets import (
     CLIP_8B,
     CLIP_MISTRAL,
     FLUX2_DEV,
+    FLUX3_QUALITY_CHOICES,
+    KLEIN3_BASE,
+    KLEIN3_DISTILLED,
+    KLEIN3_NVFP4,
+    KLEIN3_TE,
     KLEIN_9B,
     KLEIN_9B_BASE,
     KLEIN_9B_NVFP4,
     KLEIN_DISTILLED,
+    QUALITY_FLUX3_FAST,
+    QUALITY_FLUX3_NVFP4,
+    QUALITY_FLUX3_QUALITY,
     QUALITY_FREE_COMMERCIAL,
     QUALITY_LAB,
     QUALITY_MAX,
@@ -28,6 +36,9 @@ from .presets import (
     VAE_SMALL,
     infer_occupancy,
     is_flux2_dev_unet,
+    is_klein3_clip,
+    is_klein3_unet,
+    is_klein3_upsampler,
     is_klein_9b_unet,
     normalize_quality,
 )
@@ -37,6 +48,11 @@ CMD_DOWNLOAD_MODELS = "./scripts/manage.sh download-models"
 CMD_IMAGE_9B = "./scripts/utilities/download-image.sh run --tier 9b"
 CMD_IMAGE_9B_BASE = "./scripts/utilities/download-image.sh run --tier 9b-base"
 CMD_IMAGE_FLUX2_DEV = "./scripts/utilities/download-image.sh run --tier flux2-dev"
+CMD_IMAGE_FLUX3 = "./scripts/utilities/download-image.sh run --tier flux3"
+CMD_IMAGE_FLUX3_BASE = "./scripts/utilities/download-image.sh run --tier flux3-base"
+CMD_IMAGE_FLUX3_NVFP4 = "./scripts/utilities/download-image.sh run --tier flux3-nvfp4"
+CMD_IMAGE_FLUX3_TE = "./scripts/utilities/download-image.sh run --tier flux3-te"
+CMD_IMAGE_FLUX3_PUP = "./scripts/utilities/download-image.sh run --tier flux3-pup"
 CMD_WAN_FUN = "./scripts/utilities/download-wan.sh run --tier fun-inp"
 CMD_WAN_VACE = "./scripts/utilities/download-wan.sh run --tier vace"
 CMD_WAN_S2V = "./scripts/utilities/download-wan.sh run --tier s2v"
@@ -449,6 +465,16 @@ def command_for_filename(name: str) -> str:
         return CMD_WAN_VACE
     if "s2v" in blob:
         return CMD_WAN_S2V
+    if is_klein3_unet(name):
+        if "nvfp4" in blob:
+            return CMD_IMAGE_FLUX3_NVFP4
+        if "base" in blob:
+            return CMD_IMAGE_FLUX3_BASE
+        return CMD_IMAGE_FLUX3
+    if is_klein3_upsampler(name):
+        return CMD_IMAGE_FLUX3_PUP
+    if is_klein3_clip(name):
+        return CMD_IMAGE_FLUX3_TE
     if is_klein_9b_unet(name):
         if "base" in blob:
             return CMD_IMAGE_9B_BASE
@@ -600,6 +626,41 @@ def requirements_for(hints: CheckHints) -> list[Need]:
                 FileSpec(SUB_UNET, FLUX2_DEV),
                 satisfy="any",
             )
+        )
+
+    flux3_pinned = any(is_klein3_unet(name) for name in hints.unets) or any(
+        is_klein3_clip(name) for name in hints.clips
+    )
+    if quality in FLUX3_QUALITY_CHOICES and (occ == "klein" or flux3_pinned):
+        if quality == QUALITY_FLUX3_FAST:
+            needs.append(
+                _need(
+                    "flux3-fast-unet",
+                    CMD_IMAGE_FLUX3,
+                    FileSpec(SUB_UNET, KLEIN3_DISTILLED),
+                )
+            )
+        elif quality == QUALITY_FLUX3_QUALITY:
+            needs.append(
+                _need(
+                    "flux3-quality-unet",
+                    CMD_IMAGE_FLUX3_BASE,
+                    FileSpec(SUB_UNET, KLEIN3_BASE),
+                )
+            )
+        else:
+            needs.append(
+                _need(
+                    "flux3-nvfp4-unet",
+                    CMD_IMAGE_FLUX3_NVFP4,
+                    FileSpec(SUB_UNET, KLEIN3_NVFP4),
+                )
+            )
+        needs.append(
+            _need("flux3-te", CMD_IMAGE_FLUX3_TE, FileSpec(SUB_CLIP, KLEIN3_TE))
+        )
+        needs.append(
+            _need("flux3-vae", CMD_DOWNLOAD_MODELS, FileSpec(SUB_VAE, VAE_FULL))
         )
 
     if hints.enhance_on or (types & RESEARCH_TYPES):
