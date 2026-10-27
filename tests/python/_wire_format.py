@@ -86,6 +86,8 @@ KLEIN_GENERIC = frozenset(
         "stills/time-of-day",
         "stills/before-after",
         "stills/upscale-reframe",
+        "stills/still-flux3-fast",
+        "stills/still-flux3-quality",
     }
 )
 VIDEO_GENERIC = frozenset(
@@ -124,6 +126,9 @@ STILL_REL_FORMAT = {
     "stills/still-draft": "aspect_16_9_draft",
     "stills/still-hero": "aspect_16_9_ltx",
     "stills/still-daily": "aspect_16_9_mid",
+    # FLUX 3 stills start on the same 16:9 mid canvas as the daily desk.
+    "stills/still-flux3-fast": "aspect_16_9_mid",
+    "stills/still-flux3-quality": "aspect_16_9_mid",
     # Reframe starts on Custom so the Width x Height widgets (1280x704) set the
     # first canvas; the App's whole job is moving to another aspect.
     "stills/upscale-reframe": CUSTOM_ID,

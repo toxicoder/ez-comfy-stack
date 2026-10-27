@@ -1323,6 +1323,8 @@ def main() -> None:
         "stills/still-studio": "klein_t2i",
         "stills/image-studio": "klein_image_studio",
         "stills/still-hero": "klein_t2i",
+        "stills/still-flux3-fast": "klein_t2i",
+        "stills/still-flux3-quality": "klein_t2i",
         "stills/thumbnail": "klein_t2i",
         "stills/instagram-square": "klein_t2i",
         "stills/open-graph": "klein_t2i",

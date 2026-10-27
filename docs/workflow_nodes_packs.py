@@ -313,7 +313,7 @@ def pack_nodes() -> dict[str, Any]:
         "Quality",
         "Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.",
         origin="ez_quality",
-        lab="custom freezes the last overlay. lab restores authored widgets. Free Commercial Use (<$10M) pins Apache Klein 4B (never 9B / FLUX.2-dev) and LTX-2.5 steps; Wan / audio / trellis are no-ops. ultra/max may select Klein 9B or FLUX.2-dev when those files are on disk (FLUX Non-Commercial, not YouTube-ok). Never changes size. Not --tier quality.",
+        lab="custom freezes the last overlay. lab restores authored widgets. Free Commercial Use (<$10M) pins Apache Klein 4B (never 9B / FLUX.2-dev) and LTX-2.5 steps; Wan / audio / trellis are no-ops. ultra/max may select Klein 9B or FLUX.2-dev when those files are on disk (FLUX Non-Commercial, not YouTube-ok). flux3-fast / flux3-quality / flux3-nvfp4 are FLUX 3 Image Klein profiles and only write on a graph that pins FLUX 3 Klein weights (gated FLUX Kommunity pull). Never changes size. Not --tier quality.",
         sockets=[_s("quality", "STRING", "out", "Selected quality id.")],
         widgets=[
             _w(
@@ -322,7 +322,7 @@ def pack_nodes() -> dict[str, Any]:
                 typ="COMBO",
                 rng="lab",
                 desc="custom freezes last overlay; lab restores graph defaults.",
-                gen="Named qualities may swap UNET, CLIP, and VAE. Does not change size or length. Free Commercial Use (<$10M) is Klein 4B + LTX (never 9B / FLUX.2-dev). ultra/max need download-image --tier 9b or flux2-dev.",
+                gen="Named qualities may swap UNET, CLIP, and VAE. Does not change size or length. Free Commercial Use (<$10M) is Klein 4B + LTX (never 9B / FLUX.2-dev). ultra/max need download-image --tier 9b or flux2-dev. flux3-* need the gated FLUX 3 pull (download-image --tier flux3 / flux3-base / flux3-nvfp4) and only write on a graph pinning FLUX 3 Klein weights.",
                 choices=[
                     ("custom", "Freeze current widgets. Queue does not overlay."),
                     ("draft", "Faster Apache Klein 4B (NVFP4 if on disk)."),
@@ -332,6 +332,9 @@ def pack_nodes() -> dict[str, Any]:
                     ("Free Commercial Use (<$10M)", "Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops."),
                     ("ultra", "Klein 9B distilled when on disk (FLUX Non-Commercial). Else high."),
                     ("max", "Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high."),
+                    ("flux3-fast", "FLUX 3 Image Klein distilled INT8 (flux3-image-klein-int8-convrot.safetensors), 16 steps, CFG 1.0. Gated FLUX Kommunity; writes only on a FLUX 3 graph."),
+                    ("flux3-quality", "FLUX 3 Image Klein base INT8 (flux3-image-klein-base-int8-convrot.safetensors), 50 steps, CFG 3.5. Gated FLUX Kommunity; writes only on a FLUX 3 graph."),
+                    ("flux3-nvfp4", "FLUX 3 Image Klein base NVFP4 (flux3-image-klein-base-nvfp4.safetensors), 50 steps, CFG 3.5. Gated FLUX Kommunity; writes only on a FLUX 3 graph."),
                 ],
             ),
         ],

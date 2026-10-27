@@ -70,7 +70,7 @@
     {
       "id": "download-image",
       "title": "download-image --tier",
-      "description": "Still UNET pack. fast is the lab default and also pulls TE + flux2-vae companions. Not a video quality ladder.",
+      "description": "Still UNET pack. fast is the lab default and also pulls TE + flux2-vae companions. Not a video quality ladder. flux3* = FLUX 3 Image Klein opt-in (FLUX Kommunity v1.0, gated, revision-pinned, never in all).",
       "argv": [
         "./scripts/utilities/download-image.sh",
         "run"
@@ -121,6 +121,30 @@
             {
               "value": "flux2-dev",
               "label": "flux2-dev - FLUX.2 [dev] FP8 + Mistral TE (FLUX Non-Commercial, not YouTube-ok)"
+            },
+            {
+              "value": "flux3",
+              "label": "flux3 - FLUX 3 Image Klein distilled INT8-convrot + Qwen3VL TE (FLUX Kommunity v1.0, gated, pinned revision, opt-in)"
+            },
+            {
+              "value": "flux3-base",
+              "label": "flux3-base - FLUX 3 Image Klein base INT8 (FLUX Kommunity v1.0, gated)"
+            },
+            {
+              "value": "flux3-nvfp4",
+              "label": "flux3-nvfp4 - FLUX 3 Image Klein base NVFP4 (FLUX Kommunity v1.0, gated)"
+            },
+            {
+              "value": "flux3-bf16",
+              "label": "flux3-bf16 - FLUX 3 Image Klein base BF16 (FLUX Kommunity v1.0, gated, largest pull)"
+            },
+            {
+              "value": "flux3-te",
+              "label": "flux3-te - Qwen3VL-4B INT8 text encoder for FLUX 3 (gated, pulled automatically by any FLUX 3 UNET tier)"
+            },
+            {
+              "value": "flux3-pup",
+              "label": "flux3-pup - Qwen3.5-9B FLUX 3 prompt upsampler (optional, gated)"
             }
           ]
         }

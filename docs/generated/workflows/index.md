@@ -487,6 +487,8 @@ tags: [workflows, generated, comfyui]
 | `stills/shorts-still` | [stills/shorts-still.md](stills/shorts-still.md) |
 | `stills/still-daily` | [stills/still-daily.md](stills/still-daily.md) |
 | `stills/still-draft` | [stills/still-draft.md](stills/still-draft.md) |
+| `stills/still-flux3-fast` | [stills/still-flux3-fast.md](stills/still-flux3-fast.md) |
+| `stills/still-flux3-quality` | [stills/still-flux3-quality.md](stills/still-flux3-quality.md) |
 | `stills/still-hero` | [stills/still-hero.md](stills/still-hero.md) |
 | `stills/still-studio` | [stills/still-studio.md](stills/still-studio.md) |
 | `stills/storyboard-6up` | [stills/storyboard-6up.md](stills/storyboard-6up.md) |

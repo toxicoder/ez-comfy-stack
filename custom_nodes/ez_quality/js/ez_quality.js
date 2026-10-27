@@ -17,6 +17,9 @@ const QUALITY_FREE_COMMERCIAL = "Free Commercial Use (<$10M)";
 const QUALITY_FREE_COMMERCIAL_ALIAS = "free_commercial";
 const QUALITY_ULTRA = "ultra";
 const QUALITY_MAX = "max";
+const QUALITY_FLUX3_FAST = "flux3-fast";
+const QUALITY_FLUX3_QUALITY = "flux3-quality";
+const QUALITY_FLUX3_NVFP4 = "flux3-nvfp4";
 const CLIP_16_9_LABEL = "16:9 LTX feeder (1280x704)";
 const CLIP_9_16_LABEL = "9:16 LTX feeder (768x1280)";
 const GENERIC_16_9 = [
@@ -41,10 +44,14 @@ const KLEIN_9B = "flux-2-klein-9b-fp8.safetensors";
 const KLEIN_9B_BASE = "flux-2-klein-base-9b-fp8.safetensors";
 const KLEIN_9B_NVFP4 = "flux-2-klein-9b-nvfp4.safetensors";
 const FLUX2_DEV = "flux2_dev_fp8mixed.safetensors";
+const KLEIN3_DISTILLED = "flux3-image-klein-int8-convrot.safetensors";
+const KLEIN3_BASE = "flux3-image-klein-base-int8-convrot.safetensors";
+const KLEIN3_NVFP4 = "flux3-image-klein-base-nvfp4.safetensors";
 const CLIP_4B = "qwen_3_4b.safetensors";
 const CLIP_8B = "qwen_3_8b_fp8mixed.safetensors";
 const CLIP_MISTRAL = "mistral_3_small_flux2_bf16.safetensors";
 const CLIP_TYPE_FLUX2 = "flux2";
+const KLEIN3_TE = "qwen3vl_4b_int8_convrot.safetensors";
 const VAE_FULL = "flux2-vae.safetensors";
 const VAE_SMALL = "full_encoder_small_decoder.safetensors";
 
@@ -62,6 +69,12 @@ const KLEIN_9B_BASE_STEPS = 20;
 const KLEIN_9B_BASE_CFG = 5.0;
 const FLUX2_DEV_STEPS = 20;
 const FLUX2_DEV_CFG = 4.0;
+const KLEIN3_FAST_STEPS = 16;
+const KLEIN3_FAST_CFG = 1.0;
+const KLEIN3_QUALITY_STEPS = 50;
+const KLEIN3_QUALITY_CFG = 3.5;
+const KLEIN3_NVFP4_STEPS = 50;
+const KLEIN3_NVFP4_CFG = 3.5;
 const WAN_DRAFT_STEPS = 12;
 const WAN_STANDARD_STEPS = 20;
 const WAN_HIGH_STEPS = 28;
@@ -161,6 +174,34 @@ function isKlein9b(name) {
 }
 
 /**
+ * Fold separators so KLEIN3 needles match either filename style.
+ * @param {string} name
+ * @returns {string}
+ */
+function klein3Blob(name) {
+  return String(name || "").toLowerCase().replaceAll(".", "-").replaceAll("_", "-");
+}
+
+/**
+ * True when a UNET filename is FLUX 3 Image Klein (distilled, base, NVFP4).
+ * @param {string} name
+ * @returns {boolean}
+ */
+function isKlein3Unet(name) {
+  const blob = klein3Blob(name);
+  return blob.includes("flux3-image-klein") || blob.includes("flux-3-image-klein");
+}
+
+/**
+ * True when a CLIP filename is the KLEIN3 Qwen3-VL text encoder.
+ * @param {string} name
+ * @returns {boolean}
+ */
+function isKlein3Clip(name) {
+  return klein3Blob(name).includes("qwen3vl-4b");
+}
+
+/**
  * True when a UNET filename looks like Wan 14B.
  * @param {string} name
  * @returns {boolean}
@@ -209,6 +250,9 @@ function normalizeQuality(value) {
     QUALITY_HIGH,
     QUALITY_ULTRA,
     QUALITY_MAX,
+    QUALITY_FLUX3_FAST,
+    QUALITY_FLUX3_QUALITY,
+    QUALITY_FLUX3_NVFP4,
   ];
   if (known.includes(folded)) {
     return folded;
@@ -331,6 +375,24 @@ function firstUnetName(graph) {
       continue;
     }
     const widget = widgetByName(node, "unet_name");
+    if (widget?.value) {
+      return String(widget.value);
+    }
+  }
+  return "";
+}
+
+/**
+ * First CLIPLoader clip_name on the graph, or empty.
+ * @param {object|undefined} graph
+ * @returns {string}
+ */
+function firstClipName(graph) {
+  for (const node of graph?.nodes || []) {
+    if (node.type !== "CLIPLoader") {
+      continue;
+    }
+    const widget = widgetByName(node, "clip_name");
     if (widget?.value) {
       return String(widget.value);
     }
@@ -494,6 +556,46 @@ function resolveOverlay(choice, authoredSteps, unetName, available, clips, vaes,
       return { steps: LTX_HIGH_STEPS };
     }
     return {};
+  }
+  if (
+    choice === QUALITY_FLUX3_FAST ||
+    choice === QUALITY_FLUX3_QUALITY ||
+    choice === QUALITY_FLUX3_NVFP4
+  ) {
+    // KLEIN3 profiles only write on graphs that pin the FLUX 3 weights.
+    if (!isKlein3Unet(unetName) && !isKlein3Clip(firstClipName(graph))) {
+      return {};
+    }
+    const clip3 = pickFile(KLEIN3_TE, clips);
+    const vae3 = pickFile(VAE_FULL, vaes);
+    if (choice === QUALITY_FLUX3_NVFP4) {
+      return {
+        steps: KLEIN3_NVFP4_STEPS,
+        cfg: KLEIN3_NVFP4_CFG,
+        unet_name: pickUnet(KLEIN3_NVFP4, available),
+        clip_name: clip3,
+        vae_name: vae3,
+        clip_type: CLIP_TYPE_FLUX2,
+      };
+    }
+    if (choice === QUALITY_FLUX3_QUALITY) {
+      return {
+        steps: KLEIN3_QUALITY_STEPS,
+        cfg: KLEIN3_QUALITY_CFG,
+        unet_name: pickUnet(KLEIN3_BASE, available),
+        clip_name: clip3,
+        vae_name: vae3,
+        clip_type: CLIP_TYPE_FLUX2,
+      };
+    }
+    return {
+      steps: KLEIN3_FAST_STEPS,
+      cfg: KLEIN3_FAST_CFG,
+      unet_name: pickUnet(KLEIN3_DISTILLED, available),
+      clip_name: clip3,
+      vae_name: vae3,
+      clip_type: CLIP_TYPE_FLUX2,
+    };
   }
   if (occ === "klein" || isKlein4b(unetName) || isKlein9b(unetName)) {
     const clip4 = pickFile(CLIP_4B, clips);
@@ -807,7 +909,9 @@ function overlayCaption(choice, overlay, occ) {
     bits.push(`${overlay.steps} steps`);
   }
   const unet = overlay && overlay.unet_name ? String(overlay.unet_name) : "";
-  if (unet.includes("9b")) {
+  if (isKlein3Unet(unet)) {
+    bits.push("FLUX 3 Klein");
+  } else if (unet.includes("9b")) {
     bits.push("Klein 9B");
   } else if (unet.includes("base") && unet.includes("4b")) {
     bits.push("Klein 4B base");
@@ -978,7 +1082,9 @@ function applyQuality(choice, qualityNode) {
       if (
         clipWidget &&
         overlay.clip_name &&
-        (!clipWidget.value || isFlux2Clip(String(clipWidget.value)))
+        (!clipWidget.value ||
+          isFlux2Clip(String(clipWidget.value)) ||
+          isKlein3Clip(String(clipWidget.value)))
       ) {
         applyOverlayWrite(graph, node, clipWidget, overlay.clip_name);
       }

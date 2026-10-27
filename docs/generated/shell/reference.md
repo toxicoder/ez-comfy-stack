@@ -1181,13 +1181,15 @@ Purpose:
   Selective Hugging Face pull for the studio still generator.
   Default: Klein 4B distilled FP8 + Qwen3-4B TE + flux2 VAE (Apache 2.0).
   Opt-in FLUX Non-Commercial: 9b / 9b-base / 9b-nvfp4 / flux2-dev (gated, not YouTube-ok).
+  Opt-in FLUX 3 Image Klein (Kommunity, gated, revision-pinned):
+  flux3 / flux3-base / flux3-nvfp4 / flux3-bf16 / flux3-te / flux3-pup.
 
 Audience:
   Operators on the Spark host. Prefer manage.sh download-models.
 
 ```bash
 Usage:
-  ./scripts/utilities/download-image.sh status [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev] [--json]
+  ./scripts/utilities/download-image.sh status [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev|flux3|flux3-base|flux3-nvfp4|flux3-bf16|flux3-te|flux3-pup] [--json]
   ./scripts/utilities/download-image.sh run [--tier ...]
   ./scripts/utilities/download-image.sh cleanup [--tier ...] [--dry-run|--yes]
 

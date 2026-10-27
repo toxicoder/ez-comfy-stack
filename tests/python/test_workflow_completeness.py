@@ -333,3 +333,60 @@ def test_learn_episode_ace_bed_reads_digest_context() -> None:
     assert aces
     for ace in aces:
         assert _source_of(graph, ace, "context") is learn, ace.get("title")
+
+
+FLUX3_STILL_PROFILE = {
+    "stills/still-flux3-fast": {
+        "unet": "flux3-image-klein-int8-convrot.safetensors",
+        "steps": 16,
+        "cfg": 1.0,
+    },
+    "stills/still-flux3-quality": {
+        "unet": "flux3-image-klein-base-int8-convrot.safetensors",
+        "steps": 50,
+        "cfg": 3.5,
+    },
+}
+
+
+@pytest.mark.parametrize("rel", sorted(FLUX3_STILL_PROFILE))
+def test_flux3_stills_pin_gated_weights_and_profile_sampler(rel: str) -> None:
+    """Each FLUX 3 still pins the Kommunity weights its Quality profile writes."""
+    want = FLUX3_STILL_PROFILE[rel]
+    graph = _load(lab_json(rel))
+    extra = graph.get("extra") or {}
+    assert graph.get("id") == rel.rsplit("/", 1)[-1], rel
+    assert extra.get("lab_rel") == rel, rel
+    assert (extra.get("lab_app_mode") or {}).get("occupancy") == "klein", rel
+
+    by_type: dict[str, list[dict]] = {}
+    for node in graph["nodes"]:
+        by_type.setdefault(str(node.get("type")), []).append(node)
+    assert len(by_type.get("EZQuality", [])) == 1, rel
+    assert len(by_type.get("EZModelCheck", [])) == 1, rel
+    assert by_type["EZQuality"][0].get("widgets_values") == ["lab"], rel
+    assert "SaveImage" in by_type, rel
+
+    assert len(by_type.get("UNETLoader", [])) == 1, rel
+    assert by_type["UNETLoader"][0]["widgets_values"][0] == want["unet"], rel
+    clip = by_type["CLIPLoader"][0]["widgets_values"]
+    assert clip[0] == "qwen3vl_4b_int8_convrot.safetensors", rel
+    assert clip[1] == "flux2", rel
+    assert by_type["VAELoader"][0]["widgets_values"][0] == "flux2-vae.safetensors", rel
+
+    sampler = by_type["KSampler"][0]
+    values = sampler.get("widgets_values") or []
+    assert int(values[2]) == want["steps"], rel
+    assert float(values[3]) == want["cfg"], rel
+    for name in ("positive", "negative"):
+        inp = next(i for i in sampler.get("inputs") or [] if i.get("name") == name)
+        assert inp.get("link") is not None, (rel, name)
+
+    note_blob = " ".join(
+        str((node.get("widgets_values") or [""])[0])
+        for node in graph["nodes"]
+        if node.get("type") in NOTE_TYPES
+    )
+    assert "black-forest-labs/flux-3-image-klein-comfy" in note_blob, rel
+    assert "accept" in note_blob.lower(), rel
+    assert "kommunity" in note_blob.lower(), rel

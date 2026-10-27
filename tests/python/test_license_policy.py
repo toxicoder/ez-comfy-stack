@@ -29,6 +29,18 @@ REQUIRED_SNIPPETS = (
     "Apache 2.0",
     "FLUX.2 Klein 4B distilled FP8",
     "black-forest-labs/FLUX.2-klein-4b-fp8",
+    "FLUX 3 Image Klein",
+    "FLUX Kommunity License",
+    "black-forest-labs/flux-3-image-klein-comfy",
+    "feef60b0aaf63a4773ace96636ebbcf43b881312",
+    "$5M gross annualized revenue",
+    "flux3-image-klein-int8-convrot.safetensors",
+    "flux3-image-klein-base-int8-convrot.safetensors",
+    "flux3-image-klein-base-nvfp4.safetensors",
+    "flux3-image-klein-base-bf16.safetensors",
+    "qwen3vl_4b_int8_convrot.safetensors",
+    "qwen3.5_9b_flux3_prompt_upsampler_int8_convrot.safetensors",
+    "download-image --tier flux3",
     "Z-Image Turbo",
     "Wan 2.2 TI2V-5B",
     "Comfy-Org/Wan_2.2_ComfyUI_Repackaged",
@@ -155,6 +167,12 @@ DEFAULT_NO_MODELS = (
     "FLUX.2 [dev]",
     "FLUX.2 [dev] FP8 Comfy pack",
     "Mistral Small Flux2 text encoder",
+    "FLUX 3 Image Klein distilled INT8-convrot",
+    "FLUX 3 Image Klein base INT8",
+    "FLUX 3 Image Klein base NVFP4",
+    "FLUX 3 Image Klein base BF16",
+    "Qwen3VL-4B text encoder (FLUX 3 companion)",
+    "Qwen3.5-9B prompt upsampler (FLUX 3 companion)",
     "MiniMax H3",
     "HunyuanVideo 1.5",
     "LongCat-Video",
@@ -237,6 +255,33 @@ def test_klein_9b_not_youtube_ok() -> None:
                 cells = [c.strip() for c in row.strip("|").split("|")]
                 assert cells[4] == "No", row
                 assert "FLUX Non-Commercial" in row
+
+
+def test_flux3_klein_is_kommunity_not_apache() -> None:
+    """FLUX 3 rows carry the Kommunity license and never claim Apache 2.0."""
+    for path in (LICENSE_ROOT, LICENSE_DOCS):
+        rows = []
+        for row in _table_rows(_read(path)):
+            cells = [c.strip() for c in row.strip("|").split("|")]
+            if len(cells) >= 9 and "FLUX 3 Image Klein" in row:
+                rows.append((row, cells))
+        assert len(rows) >= 4, path
+        for row, cells in rows:
+            assert "FLUX Kommunity License" in row, row
+            assert "Apache 2.0" not in row, row
+            assert cells[3].startswith("Yes"), row
+            assert cells[8] == "No", row
+
+
+def test_flux3_klein_is_not_the_default_still() -> None:
+    """Docs keep Apache Klein 4B as the default and FLUX 3 as opt-in Kommunity."""
+    for path in (LICENSE_ROOT, LICENSE_DOCS):
+        text = _read(path)
+        assert "Kommunity" in text, path
+        assert "Klein 4B" in text, path
+        lower = text.lower()
+        assert "opt-in" in lower, path
+        assert "not legal advice" in lower, path
 
 
 def test_banned_podcast_rows_us_not_ok() -> None:

@@ -76,7 +76,7 @@ snapshot_torch_venv() {
 #   0 on success
 #######################################
 phase_torch() {
-  local ver="${TORCH_VERSION:-2.14.0}"
+  local ver="${TORCH_VERSION:-2.14.1}"
   local index="${TORCH_INDEX_URL:-https://download.pytorch.org/whl/cu130}"
   activate_venv
   log "Expect large wheels (torch + cuda toolkit + cudnn); pin torch==${ver}"

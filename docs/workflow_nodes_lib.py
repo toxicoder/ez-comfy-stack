@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Any
 
-# ComfyUI v0.37.0 combo catalogs, ACE language/key, and image scale/crop.
+# ComfyUI v0.43.0 combo catalogs, ACE language/key, and image scale/crop.
 _SAMPLER_CHOICES: list[tuple[str, str]] = [
     ("euler", "First-order ODE. Lab default for Klein, LTX, ACE, and most stills. Fast and stable at CFG 1.0."),
     ("euler_cfg_pp", "Euler with CFG++. Rarely needed on distilled Klein (CFG is already 1.0)."),

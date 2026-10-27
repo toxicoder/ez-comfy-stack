@@ -101,6 +101,43 @@ Save prefix: ez_still_app.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.
 """
 
+FLUX3_HF_REPO = "black-forest-labs/flux-3-image-klein-comfy"
+FLUX3_REVISION = "feef60b0aaf63a4773ace96636ebbcf43b881312"
+FLUX3_TE = "qwen3vl_4b_int8_convrot.safetensors"
+FLUX3_VAE = "flux2-vae.safetensors"
+FLUX3_DISTILLED_UNET = "flux3-image-klein-int8-convrot.safetensors"
+FLUX3_BASE_UNET = "flux3-image-klein-base-int8-convrot.safetensors"
+FLUX3_HANDOFF = (
+    "motion/silent/still-to-video-5s, motion/av/still-to-video-8s, stills/text-swap"
+)
+
+
+def _flux3_note(
+    rel: str,
+    *,
+    profile: str,
+    weights: str,
+    unet: str,
+    steps: int,
+    cfg: float,
+    tier: str,
+    prefix: str,
+) -> str:
+    """Return the operator note for a FLUX 3 Klein still graph."""
+    return f"""## {rel}
+
+FLUX 3 Image Klein {weights} still on the Klein still desk. Opt-in, gated, Kommunity - Klein 4B (stills/still-draft) stays the Apache default still.
+
+Profile: Quality `{profile}` writes UNET `{unet}`, {steps} steps, CFG {cfg}. This graph ships those same values, so Queue matches with Quality left on lab. Quality never changes pixels - Format / platform does (Custom uses Width x Height).
+Models: {unet} + {FLUX3_TE} (CLIP type flux2) + {FLUX3_VAE}.
+Gated pull: {FLUX3_HF_REPO} on Hugging Face is gated, so accept the FLUX Kommunity License (v1.0) on the model card with the **same HF account as HF_TOKEN** (a token alone is not acceptance), then run `./scripts/utilities/download-image.sh run --tier {tier}` - it auto-includes the `flux3-te` text encoder. Every pull is pinned to HF revision {FLUX3_REVISION}.
+License: FLUX Kommunity License (v1.0), not Apache. Monetized output only for qualifying users under $5M gross annualized revenue. Not in `download-models` and not in image `--tier all`.
+Weights missing: click Check models - it names the command, and Queue keeps the authored loaders (nothing swaps in weights you have not accepted).
+Save prefix `{prefix}`. Empty of lettering - composite titles later.
+Handoff: {FLUX3_HANDOFF}.
+"""
+
+
 GIF_NOTE = """## motion/loops/gif-loop
 
 Wan 2.2 TI2V-5B Apache silent GIF (~4 s @ 12 fps, 49 frames).
@@ -2240,6 +2277,104 @@ def build_background_edit() -> dict:
     )
 
 
+def _build_flux3_still(
+    *,
+    rel: str,
+    unet: str,
+    unet_title: str,
+    profile: str,
+    weights: str,
+    steps: int,
+    cfg: float,
+    tier: str,
+    prefix: str,
+    description: str,
+) -> dict:
+    """Clone the Klein still desk onto a gated FLUX 3 Klein UNET."""
+    graph = json.loads(lab_json("stills/still-draft.json").read_text(encoding="utf-8"))
+    apply_lab_identity(graph, rel)
+    graph["revision"] = 1
+    unet_node = _node(graph, "UNETLoader")
+    unet_node["title"] = unet_title
+    unet_node["widgets_values"] = [unet, "default"]
+    clip = _node(graph, "CLIPLoader")
+    clip["title"] = "FLUX 3 Qwen3VL TE (gated)"
+    clip["widgets_values"] = [FLUX3_TE, "flux2", "default"]
+    _node(graph, "VAELoader")["widgets_values"] = [FLUX3_VAE]
+    sampler = _node(graph, "KSampler")
+    sampler["title"] = "Sampler (profile steps / CFG)"
+    values = list(sampler.get("widgets_values") or [])
+    values[2] = steps
+    values[3] = cfg
+    sampler["widgets_values"] = values
+    _node(graph, "SaveImage")["widgets_values"] = [prefix]
+    fmt = _node(graph, "EZImageFormat")
+    fmt["widgets_values"] = ["16:9 mid (1024x576)", "none", 1024, 576, 1, "Match input"]
+    latent = _node(graph, "EmptyFlux2LatentImage")
+    latent["widgets_values"] = [1024, 576, 1]
+    enh = _node(graph, "EZKleinPromptEnhance")
+    enh_values = list(enh.get("widgets_values") or [])
+    while len(enh_values) < 7:
+        enh_values.append("")
+    enh_values[6] = rel
+    enh["widgets_values"] = enh_values
+    note_text = _flux3_note(
+        rel,
+        profile=profile,
+        weights=weights,
+        unet=unet,
+        steps=steps,
+        cfg=cfg,
+        tier=tier,
+        prefix=prefix,
+    )
+    _node(graph, "Note")["widgets_values"] = [note_text]
+    extra = graph.setdefault("extra", {})
+    extra["lab_profile"] = rel
+    extra["lab_flux_tier"] = tier
+    extra["lab_note"] = note_text
+    extra["lab_description"] = description
+    return graph
+
+
+def build_still_flux3_fast() -> dict:
+    """FLUX 3 Klein distilled still: 16 steps, CFG 1.0 (Quality flux3-fast)."""
+    return _build_flux3_still(
+        rel="stills/still-flux3-fast",
+        unet=FLUX3_DISTILLED_UNET,
+        unet_title="FLUX 3 Klein distilled INT8 (gated)",
+        profile="flux3-fast",
+        weights="distilled INT8",
+        steps=16,
+        cfg=1.0,
+        tier="flux3",
+        prefix="ez_still_flux3_fast",
+        description=(
+            "Gated FLUX 3 Klein distilled still; 16 steps, CFG 1.0 "
+            "(Quality flux3-fast). Klein 4B stays the Apache default"
+        ),
+    )
+
+
+def build_still_flux3_quality() -> dict:
+    """FLUX 3 Klein base still: 50 steps, CFG 3.5 (Quality flux3-quality)."""
+    return _build_flux3_still(
+        rel="stills/still-flux3-quality",
+        unet=FLUX3_BASE_UNET,
+        unet_title="FLUX 3 Klein base INT8 (gated)",
+        profile="flux3-quality",
+        weights="base INT8 (no distillation)",
+        steps=50,
+        cfg=3.5,
+        tier="flux3-base",
+        prefix="ez_still_flux3_quality",
+        description=(
+            "Gated FLUX 3 Klein base still; 50 steps, CFG 3.5 "
+            "(Quality flux3-quality). Klein 4B stays the Apache default"
+        ),
+    )
+
+
 def main() -> None:
     still = build_still_app()
     studio = build_still_studio()
@@ -2253,6 +2388,8 @@ def main() -> None:
     swap = build_text_swap()
     bg = build_background_swap()
     bg_edit = build_background_edit()
+    flux3_fast = build_still_flux3_fast()
+    flux3_quality = build_still_flux3_quality()
     _dump(lab_json("stills/still-daily.json"), still)
     _dump(lab_dest("stills/still-studio"), studio)
     _dump(lab_dest("stills/image-studio"), image_studio)
@@ -2265,9 +2402,12 @@ def main() -> None:
     _dump(lab_dest("stills/text-swap"), swap)
     _dump(lab_dest("stills/background-swap"), bg)
     _dump(lab_dest("stills/background-edit"), bg_edit)
+    _dump(lab_dest("stills/still-flux3-fast"), flux3_fast)
+    _dump(lab_dest("stills/still-flux3-quality"), flux3_quality)
     print(
         "wrote still-app, still-studio, image-studio, gif-loop, dream-house, dream-house-clay, "
-        "platform-pack, character draft/tweak, text-swap, background-swap, background-edit"
+        "platform-pack, character draft/tweak, text-swap, background-swap, background-edit, "
+        "still-flux3-fast, still-flux3-quality"
     )
 
 

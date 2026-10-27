@@ -1956,7 +1956,8 @@ hf_progress_line() {
 #   HF_LOCK_CLEAR_MID, HF_RESUME_STALL_S (default 90), HF_RESUME_RETRY (default 1)
 # Arguments:
 #   $@ - Passed to `hf download` / `huggingface-cli download`
-#        (typically REPO --local-dir PATH)
+#        (typically REPO --local-dir PATH, optionally --include GLOB and
+#        --revision SHA for a pinned opt-in pack)
 # Outputs:
 #   Progress via controlled UI; friendly errors on failure; mock writes .mock
 # Returns:
@@ -2055,8 +2056,29 @@ hf_download() {
   fi
 
   hf_log="$(mktemp)"
-  local -a hf_args=("$@")
   local dest_dir="" prev_a="" a
+  # Optional caller pin (opt-in packs only): strip any --revision pair here and
+  # re-add it below only when it carries a sha and the hf CLI advertises it, so an
+  # empty value never reaches `hf download`. Same shape as the --token check.
+  local hf_revision="" prev_r="" drop_next=0
+  local -a hf_args=()
+  for a in "$@"; do
+    if [[ ${prev_r} == "--revision" ]]; then
+      hf_revision="${a}"
+    fi
+    prev_r="${a}"
+  done
+  for a in "$@"; do
+    if [[ ${drop_next} -eq 1 ]]; then
+      drop_next=0
+      continue
+    fi
+    if [[ ${a} == "--revision" ]]; then
+      drop_next=1
+      continue
+    fi
+    hf_args+=("${a}")
+  done
   local progress_label="" progress_interval start_ts final_kib final_elapsed
   local incomplete_n=0
   local hf_help=""
@@ -2071,7 +2093,8 @@ hf_download() {
   if [[ ${progress_interval} -lt 1 ]]; then
     progress_interval=10
   fi
-  if [[ -n ${HF_TOKEN:-} || -n ${HF_DOWNLOAD_MAX_WORKERS:-} ]] && command -v hf >/dev/null 2>&1; then
+  if [[ -n ${HF_TOKEN:-} || -n ${HF_DOWNLOAD_MAX_WORKERS:-} || -n ${hf_revision} ]] &&
+    command -v hf >/dev/null 2>&1; then
     hf_help="$(hf download --help 2>&1 || true)"
   fi
   # Pin .env token so it wins over a leftover hf auth login. Never log the value.
@@ -2082,6 +2105,15 @@ hf_download() {
   if [[ -n ${HF_DOWNLOAD_MAX_WORKERS:-} && ${hf_help} == *"--max-workers"* ]]; then
     hf_args+=(--max-workers "${HF_DOWNLOAD_MAX_WORKERS}")
     log "hf download  max-workers=${HF_DOWNLOAD_MAX_WORKERS}"
+  fi
+  # Pinned revision for an opt-in pack (public commit sha, not a secret).
+  if [[ -n ${hf_revision} ]]; then
+    if [[ ${hf_help} == *"--revision"* ]]; then
+      hf_args+=(--revision "${hf_revision}")
+      log "hf download  revision=${hf_revision}"
+    else
+      warn "hf download has no --revision support - pulling the default revision of ${repo}"
+    fi
   fi
   if [[ -n ${dest_dir} ]]; then
     mkdir -p "${dest_dir}" 2>/dev/null || true

@@ -24,11 +24,25 @@ if str(CUSTOM) not in sys.path:
 
 from ez_quality import nodes as quality_nodes  # noqa: E402
 from ez_quality.check import (  # noqa: E402
+    CMD_DOWNLOAD_MODELS,
+    CMD_IMAGE_9B,
+    CMD_IMAGE_9B_BASE,
+    CMD_IMAGE_FLUX2_DEV,
+    CMD_IMAGE_FLUX3,
+    CMD_IMAGE_FLUX3_BASE,
+    CMD_IMAGE_FLUX3_NVFP4,
+    CMD_IMAGE_FLUX3_PUP,
+    CMD_IMAGE_FLUX3_TE,
     CMD_PERSON_MASK,
     PERSON_WEIGHT,
+    SUB_CLIP,
     SUB_PERSON,
+    SUB_UNET,
+    SUB_VAE,
+    _DEFAULT_FILES,
     CheckHints,
     FileSpec,
+    command_for_filename,
     requirements_for,
     scan,
 )
@@ -40,9 +54,27 @@ from ez_quality.presets import (  # noqa: E402
     AUDIO_STANDARD_STEPS,
     CLIP_4B,
     CLIP_8B,
+    CLIP_NAME_INDEX,
+    CLIP_TYPE_FLUX2,
     FLUX2_DEV,
+    FLUX2_DEV_CFG,
+    FLUX2_DEV_STEPS,
+    FLUX3_QUALITY_CHOICES,
+    KLEIN3_BASE,
+    KLEIN3_DISTILLED,
+    KLEIN3_FAST_CFG,
+    KLEIN3_FAST_STEPS,
+    KLEIN3_NVFP4,
+    KLEIN3_NVFP4_CFG,
+    KLEIN3_NVFP4_STEPS,
+    KLEIN3_QUALITY_CFG,
+    KLEIN3_QUALITY_STEPS,
+    KLEIN3_TE,
+    KLEIN3_UPSAMPLER,
     KLEIN_9B,
     KLEIN_9B_BASE,
+    KLEIN_9B_BASE_CFG,
+    KLEIN_9B_BASE_STEPS,
     KLEIN_9B_CFG,
     KLEIN_9B_STEPS,
     KLEIN_BASE,
@@ -53,6 +85,8 @@ from ez_quality.presets import (  # noqa: E402
     KLEIN_HIGH_BASE_STEPS,
     KLEIN_HIGH_DISTILLED_CFG,
     KLEIN_HIGH_DISTILLED_STEPS,
+    KLEIN_STANDARD_CFG,
+    KLEIN_STANDARD_STEPS,
     KSAMPLER_CFG_INDEX,
     KSAMPLER_STEPS_INDEX,
     LTX_DRAFT_STEPS,
@@ -62,6 +96,9 @@ from ez_quality.presets import (  # noqa: E402
     QUALITY_CHOICES,
     QUALITY_CUSTOM,
     QUALITY_DRAFT,
+    QUALITY_FLUX3_FAST,
+    QUALITY_FLUX3_NVFP4,
+    QUALITY_FLUX3_QUALITY,
     QUALITY_FREE_COMMERCIAL,
     QUALITY_HIGH,
     QUALITY_LAB,
@@ -74,6 +111,8 @@ from ez_quality.presets import (  # noqa: E402
     TRELLIS_MAX_STEPS,
     TRELLIS_STANDARD_STEPS,
     UNET_NAME_INDEX,
+    VAE_FULL,
+    VAE_NAME_INDEX,
     VAE_SMALL,
     WAN_DRAFT_STEPS,
     WAN_HIGH_STEPS,
@@ -84,6 +123,9 @@ from ez_quality.presets import (  # noqa: E402
     apply_to_graph,
     infer_occupancy,
     is_banned_unet,
+    is_klein3_clip,
+    is_klein3_unet,
+    is_klein3_upsampler,
     is_klein_4b_unet,
     is_klein_9b_unet,
     normalize_quality,
@@ -1118,3 +1160,491 @@ def test_klein_overlay_unknown_choice_uses_high() -> None:
     )
     assert overlay.unet_name == KLEIN_BASE
     assert overlay.steps == KLEIN_HIGH_BASE_STEPS
+
+
+KLEIN3_ALL: tuple[str, ...] = (KLEIN3_DISTILLED, KLEIN3_BASE, KLEIN3_NVFP4)
+OTHER_FAMILY_UNETS: tuple[str, ...] = (
+    KLEIN_DISTILLED,
+    KLEIN_BASE,
+    KLEIN_9B,
+    KLEIN_9B_BASE,
+    FLUX2_DEV,
+    "wan2.2_ti2v_5B_fp16.safetensors",
+    "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
+    "",
+)
+
+
+def _flux3_graph(
+    unet: str = KLEIN3_DISTILLED,
+    clip: str = KLEIN3_TE,
+    vae: str = VAE_FULL,
+) -> dict:
+    return {
+        "extra": {"lab_app_mode": {"occupancy": "klein"}},
+        "nodes": [
+            {"type": "UNETLoader", "widgets_values": [unet, "default"]},
+            {"type": "CLIPLoader", "widgets_values": [clip, "flux2", "default"]},
+            {"type": "VAELoader", "widgets_values": [vae]},
+            {
+                "type": "KSampler",
+                "widgets_values": [42, "fixed", 20, 2.5, "euler", "simple", 1.0],
+            },
+            {"type": "EmptyFlux2LatentImage", "widgets_values": [1024, 1024, 1]},
+        ],
+    }
+
+
+def test_flux3_constants_are_the_pinned_hf_filenames() -> None:
+    assert KLEIN3_DISTILLED == "flux3-image-klein-int8-convrot.safetensors"
+    assert KLEIN3_BASE == "flux3-image-klein-base-int8-convrot.safetensors"
+    assert KLEIN3_NVFP4 == "flux3-image-klein-base-nvfp4.safetensors"
+    assert KLEIN3_TE == "qwen3vl_4b_int8_convrot.safetensors"
+    assert KLEIN3_UPSAMPLER == (
+        "qwen3.5_9b_flux3_prompt_upsampler_int8_convrot.safetensors"
+    )
+    assert VAE_FULL == "flux2-vae.safetensors"
+    assert (KLEIN3_FAST_STEPS, KLEIN3_FAST_CFG) == (16, 1.0)
+    assert (KLEIN3_QUALITY_STEPS, KLEIN3_QUALITY_CFG) == (50, 3.5)
+    assert (KLEIN3_NVFP4_STEPS, KLEIN3_NVFP4_CFG) == (50, 3.5)
+    for name in (*KLEIN3_ALL, KLEIN3_TE, KLEIN3_UPSAMPLER):
+        assert is_banned_unet(name) is False
+        assert name not in _DEFAULT_FILES
+
+
+def test_flux3_quality_choices_are_additive() -> None:
+    assert FLUX3_QUALITY_CHOICES == (
+        QUALITY_FLUX3_FAST,
+        QUALITY_FLUX3_QUALITY,
+        QUALITY_FLUX3_NVFP4,
+    )
+    assert QUALITY_CHOICES[:8] == (
+        QUALITY_CUSTOM,
+        QUALITY_DRAFT,
+        QUALITY_LAB,
+        QUALITY_STANDARD,
+        QUALITY_HIGH,
+        QUALITY_FREE_COMMERCIAL,
+        QUALITY_ULTRA,
+        QUALITY_MAX,
+    )
+    assert QUALITY_CHOICES[8:] == FLUX3_QUALITY_CHOICES
+    spec = EZQuality.INPUT_TYPES()["required"]["quality"]
+    assert list(spec[0]) == list(QUALITY_CHOICES)
+    assert spec[1]["default"] == QUALITY_LAB
+    assert normalize_quality("FLUX3-Fast") == QUALITY_FLUX3_FAST
+    assert normalize_quality("  flux3-quality ") == QUALITY_FLUX3_QUALITY
+    assert normalize_quality("flux3-nvfp4") == QUALITY_FLUX3_NVFP4
+    assert normalize_quality("flux3_fast") == QUALITY_LAB
+    assert EZQuality().report("flux3-fast")["result"] == (QUALITY_FLUX3_FAST,)
+
+
+def test_is_klein3_predicates() -> None:
+    for name in KLEIN3_ALL:
+        assert is_klein3_unet(name) is True
+        assert is_klein_4b_unet(name) is False
+        assert is_klein_9b_unet(name) is False
+    assert is_klein3_unet("flux-3-image-klein-int8-convrot.safetensors") is True
+    for name in (KLEIN_DISTILLED, KLEIN_9B, FLUX2_DEV, KLEIN3_UPSAMPLER, ""):
+        assert is_klein3_unet(name) is False
+    assert is_klein3_clip(KLEIN3_TE) is True
+    assert is_klein3_clip(CLIP_4B) is False
+    assert is_klein3_clip(CLIP_8B) is False
+    assert is_klein3_clip(KLEIN3_UPSAMPLER) is False
+    assert is_klein3_upsampler(KLEIN3_UPSAMPLER) is True
+    assert is_klein3_upsampler(KLEIN3_TE) is False
+    assert is_klein3_upsampler(KLEIN3_DISTILLED) is False
+
+
+def test_flux3_fast_profile_writes_distilled_16_steps_cfg_1() -> None:
+    overlay = resolve_overlay(
+        occupancy="klein",
+        quality=QUALITY_FLUX3_FAST,
+        authored_steps=20,
+        authored_cfg=2.5,
+        unet_name=KLEIN3_NVFP4,
+        available_unets=KLEIN3_ALL,
+        clip_name=CLIP_4B,
+        available_clips=(CLIP_4B, KLEIN3_TE),
+        vae_name=VAE_SMALL,
+        available_vaes=(VAE_SMALL, VAE_FULL),
+    )
+    assert overlay == QualityOverlay(
+        steps=KLEIN3_FAST_STEPS,
+        cfg=KLEIN3_FAST_CFG,
+        unet_name=KLEIN3_DISTILLED,
+        clip_name=KLEIN3_TE,
+        vae_name=VAE_FULL,
+        clip_type=CLIP_TYPE_FLUX2,
+    )
+
+
+def test_flux3_quality_and_nvfp4_profiles_use_their_own_unet() -> None:
+    quality = resolve_overlay(
+        occupancy="klein",
+        quality=QUALITY_FLUX3_QUALITY,
+        authored_steps=16,
+        authored_cfg=1.0,
+        unet_name=KLEIN3_DISTILLED,
+        available_unets=KLEIN3_ALL,
+        clip_name=KLEIN3_TE,
+        available_clips=(CLIP_4B, KLEIN3_TE),
+        vae_name=VAE_FULL,
+        available_vaes=(VAE_FULL,),
+    )
+    assert quality.unet_name == KLEIN3_BASE
+    assert quality.steps == KLEIN3_QUALITY_STEPS
+    assert quality.cfg == KLEIN3_QUALITY_CFG
+    assert quality.clip_name is None
+    assert quality.vae_name is None
+    assert quality.clip_type == CLIP_TYPE_FLUX2
+    nvfp4 = resolve_overlay(
+        occupancy="klein",
+        quality=QUALITY_FLUX3_NVFP4,
+        authored_steps=16,
+        authored_cfg=1.0,
+        unet_name=KLEIN3_DISTILLED,
+        available_unets=KLEIN3_ALL,
+        clip_name=KLEIN3_TE,
+        available_clips=(KLEIN3_TE,),
+        vae_name=VAE_FULL,
+        available_vaes=(VAE_FULL,),
+    )
+    assert nvfp4.unet_name == KLEIN3_NVFP4
+    assert nvfp4.steps == KLEIN3_NVFP4_STEPS
+    assert nvfp4.cfg == KLEIN3_NVFP4_CFG
+
+
+def test_flux3_profile_keeps_authored_files_when_weights_are_missing() -> None:
+    overlay = resolve_overlay(
+        occupancy="klein",
+        quality=QUALITY_FLUX3_QUALITY,
+        authored_steps=12,
+        authored_cfg=2.0,
+        unet_name=KLEIN3_DISTILLED,
+        available_unets=(KLEIN3_DISTILLED,),
+        clip_name=CLIP_4B,
+        available_clips=(CLIP_4B,),
+        vae_name=VAE_SMALL,
+        available_vaes=(VAE_SMALL,),
+    )
+    assert overlay == QualityOverlay(
+        steps=KLEIN3_QUALITY_STEPS,
+        cfg=KLEIN3_QUALITY_CFG,
+        clip_type=CLIP_TYPE_FLUX2,
+    )
+
+
+def test_flux3_profile_applies_when_only_the_te_pins_flux3() -> None:
+    overlay = resolve_overlay(
+        occupancy="klein",
+        quality=QUALITY_FLUX3_FAST,
+        authored_steps=20,
+        authored_cfg=2.5,
+        unet_name="",
+        available_unets=KLEIN3_ALL,
+        clip_name=KLEIN3_TE,
+        available_clips=(CLIP_4B, KLEIN3_TE),
+        vae_name=VAE_FULL,
+        available_vaes=(VAE_FULL,),
+    )
+    assert overlay.unet_name == KLEIN3_DISTILLED
+    assert overlay.steps == KLEIN3_FAST_STEPS
+
+
+@pytest.mark.parametrize("quality", FLUX3_QUALITY_CHOICES)
+@pytest.mark.parametrize("unet_name", OTHER_FAMILY_UNETS)
+def test_flux3_profiles_never_touch_other_families(
+    quality: str, unet_name: str
+) -> None:
+    overlay = resolve_overlay(
+        occupancy="klein",
+        quality=quality,
+        authored_steps=20,
+        authored_cfg=2.5,
+        unet_name=unet_name,
+        available_unets=(*KLEIN3_ALL, KLEIN_DISTILLED, KLEIN_BASE, KLEIN_9B, FLUX2_DEV),
+        clip_name=CLIP_4B,
+        available_clips=(CLIP_4B, CLIP_8B, KLEIN3_TE),
+        vae_name=VAE_FULL,
+        available_vaes=(VAE_FULL, VAE_SMALL),
+    )
+    assert overlay == QualityOverlay()
+
+
+def test_apply_flux3_profile_writes_every_loader_and_sampler() -> None:
+    graph = _flux3_graph(unet=KLEIN3_NVFP4, clip=CLIP_4B, vae=VAE_SMALL)
+    latent = _values(_graph_node(graph, 4))
+    apply_to_graph(
+        graph,
+        QUALITY_FLUX3_FAST,
+        available_unets=KLEIN3_ALL,
+        available_clips=(CLIP_4B, KLEIN3_TE),
+        available_vaes=(VAE_SMALL, VAE_FULL),
+    )
+    assert _values(_graph_node(graph, 0))[UNET_NAME_INDEX] == KLEIN3_DISTILLED
+    assert _values(_graph_node(graph, 1))[CLIP_NAME_INDEX] == KLEIN3_TE
+    assert _values(_graph_node(graph, 1))[1] == CLIP_TYPE_FLUX2
+    assert _values(_graph_node(graph, 2))[VAE_NAME_INDEX] == VAE_FULL
+    assert _values(_graph_node(graph, 3))[KSAMPLER_STEPS_INDEX] == KLEIN3_FAST_STEPS
+    assert _values(_graph_node(graph, 3))[KSAMPLER_CFG_INDEX] == KLEIN3_FAST_CFG
+    assert _values(_graph_node(graph, 4)) == latent
+
+
+def test_apply_flux3_profile_skips_foreign_clip_and_vae() -> None:
+    graph = _flux3_graph(unet=KLEIN3_DISTILLED, clip="umt5_xxl_fp8_e4m3fn_scaled.safetensors")
+    graph["nodes"][2]["widgets_values"] = ["wan2.2_vae.safetensors"]
+    apply_to_graph(
+        graph,
+        QUALITY_FLUX3_QUALITY,
+        available_unets=KLEIN3_ALL,
+        available_clips=(CLIP_4B, KLEIN3_TE),
+        available_vaes=(VAE_FULL,),
+    )
+    assert _values(_graph_node(graph, 0))[UNET_NAME_INDEX] == KLEIN3_BASE
+    assert _values(_graph_node(graph, 1))[CLIP_NAME_INDEX] == (
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+    )
+    assert _values(_graph_node(graph, 1))[1] == "flux2"
+    assert _values(_graph_node(graph, 2))[VAE_NAME_INDEX] == "wan2.2_vae.safetensors"
+    assert (
+        _values(_graph_node(graph, 3))[KSAMPLER_STEPS_INDEX] == KLEIN3_QUALITY_STEPS
+    )
+
+
+@pytest.mark.parametrize("quality", FLUX3_QUALITY_CHOICES)
+def test_apply_flux3_profile_leaves_klein_graph_authored(quality: str) -> None:
+    graph = copy.deepcopy(_load("stills/still-draft.json"))
+    sampler_before = list(_values(_sampler(graph)))
+    loaders_before = {
+        node["type"]: list(node["widgets_values"])
+        for node in graph["nodes"]
+        if node.get("type") in {"UNETLoader", "CLIPLoader", "VAELoader"}
+    }
+    latent = next(n for n in graph["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
+    latent_before = list(latent["widgets_values"])
+    apply_to_graph(
+        graph,
+        quality,
+        available_unets=KLEIN3_ALL,
+        available_clips=(CLIP_4B, CLIP_8B, KLEIN3_TE),
+        available_vaes=(VAE_FULL, VAE_SMALL),
+    )
+    assert list(_values(_sampler(graph))) == sampler_before
+    assert latent["widgets_values"] == latent_before
+    for node in graph["nodes"]:
+        ntype = node.get("type")
+        if ntype in loaders_before:
+            assert list(node["widgets_values"]) == loaders_before[ntype], ntype
+
+
+def test_existing_family_overlays_are_unchanged_by_flux3() -> None:
+    cases: list[tuple[str, str, tuple[str, ...], QualityOverlay]] = [
+        (
+            QUALITY_DRAFT,
+            KLEIN_DISTILLED,
+            (KLEIN_DISTILLED,),
+            QualityOverlay(
+                steps=KLEIN_DRAFT_STEPS, cfg=KLEIN_DRAFT_CFG, clip_type=CLIP_TYPE_FLUX2
+            ),
+        ),
+        (
+            QUALITY_STANDARD,
+            KLEIN_BASE,
+            (KLEIN_DISTILLED, KLEIN_BASE),
+            QualityOverlay(
+                steps=KLEIN_STANDARD_STEPS,
+                cfg=KLEIN_STANDARD_CFG,
+                unet_name=KLEIN_DISTILLED,
+                clip_type=CLIP_TYPE_FLUX2,
+            ),
+        ),
+        (
+            QUALITY_HIGH,
+            KLEIN_DISTILLED,
+            (KLEIN_DISTILLED, KLEIN_BASE),
+            QualityOverlay(
+                steps=KLEIN_HIGH_BASE_STEPS,
+                cfg=KLEIN_HIGH_BASE_CFG,
+                unet_name=KLEIN_BASE,
+                clip_type=CLIP_TYPE_FLUX2,
+            ),
+        ),
+        (
+            QUALITY_ULTRA,
+            KLEIN_DISTILLED,
+            (KLEIN_DISTILLED, KLEIN_9B),
+            QualityOverlay(
+                steps=KLEIN_9B_STEPS,
+                cfg=KLEIN_9B_CFG,
+                unet_name=KLEIN_9B,
+                clip_name=CLIP_8B,
+                clip_type=CLIP_TYPE_FLUX2,
+            ),
+        ),
+        (
+            QUALITY_MAX,
+            KLEIN_DISTILLED,
+            (KLEIN_DISTILLED, KLEIN_9B_BASE),
+            QualityOverlay(
+                steps=KLEIN_9B_BASE_STEPS,
+                cfg=KLEIN_9B_BASE_CFG,
+                unet_name=KLEIN_9B_BASE,
+                clip_name=CLIP_8B,
+                clip_type=CLIP_TYPE_FLUX2,
+            ),
+        ),
+        (
+            QUALITY_MAX,
+            KLEIN_DISTILLED,
+            (KLEIN_DISTILLED, FLUX2_DEV),
+            QualityOverlay(
+                steps=FLUX2_DEV_STEPS,
+                cfg=FLUX2_DEV_CFG,
+                unet_name=FLUX2_DEV,
+                clip_type=CLIP_TYPE_FLUX2,
+            ),
+        ),
+        (
+            QUALITY_FREE_COMMERCIAL,
+            KLEIN_9B,
+            (KLEIN_DISTILLED, KLEIN_BASE, KLEIN_9B, KLEIN_9B_BASE, FLUX2_DEV),
+            QualityOverlay(
+                steps=KLEIN_HIGH_BASE_STEPS,
+                cfg=KLEIN_HIGH_BASE_CFG,
+                unet_name=KLEIN_BASE,
+                clip_type=CLIP_TYPE_FLUX2,
+            ),
+        ),
+    ]
+    for quality, unet_name, unets, expected in cases:
+        got = resolve_overlay(
+            occupancy="klein",
+            quality=quality,
+            authored_steps=20,
+            authored_cfg=2.5,
+            unet_name=unet_name,
+            available_unets=unets,
+            clip_name=CLIP_4B,
+            available_clips=(CLIP_4B, CLIP_8B),
+            vae_name=VAE_FULL,
+            available_vaes=(VAE_FULL,),
+        )
+        assert got == expected, (quality, unet_name)
+
+
+def test_flux3_check_needs_are_per_profile() -> None:
+    rows = {
+        quality: {
+            need.pack: need
+            for need in requirements_for(
+                CheckHints(lab_rel="stills/flux3", occupancy="klein", quality=quality)
+            )
+        }
+        for quality in FLUX3_QUALITY_CHOICES
+    }
+    fast = rows[QUALITY_FLUX3_FAST]
+    assert fast["flux3-fast-unet"].cmd == CMD_IMAGE_FLUX3
+    assert fast["flux3-fast-unet"].files == (FileSpec(SUB_UNET, KLEIN3_DISTILLED),)
+    quality_need = rows[QUALITY_FLUX3_QUALITY]
+    assert quality_need["flux3-quality-unet"].cmd == CMD_IMAGE_FLUX3_BASE
+    assert quality_need["flux3-quality-unet"].files == (FileSpec(SUB_UNET, KLEIN3_BASE),)
+    nvfp4 = rows[QUALITY_FLUX3_NVFP4]
+    assert nvfp4["flux3-nvfp4-unet"].cmd == CMD_IMAGE_FLUX3_NVFP4
+    assert nvfp4["flux3-nvfp4-unet"].files == (FileSpec(SUB_UNET, KLEIN3_NVFP4),)
+    for quality_rows in rows.values():
+        assert quality_rows["flux3-te"].cmd == CMD_IMAGE_FLUX3_TE
+        assert quality_rows["flux3-te"].files == (FileSpec(SUB_CLIP, KLEIN3_TE),)
+        assert quality_rows["flux3-vae"].cmd == CMD_DOWNLOAD_MODELS
+        assert quality_rows["flux3-vae"].files == (FileSpec(SUB_VAE, VAE_FULL),)
+    for probe in (QUALITY_LAB, QUALITY_ULTRA, QUALITY_MAX, QUALITY_FREE_COMMERCIAL):
+        packs = [
+            need.pack
+            for need in requirements_for(
+                CheckHints(occupancy="klein", quality=probe)
+            )
+        ]
+        assert not [pack for pack in packs if pack.startswith("flux3")], probe
+    other_occ = requirements_for(
+        CheckHints(occupancy="wan", quality=QUALITY_FLUX3_FAST)
+    )
+    assert not [need for need in other_occ if need.pack.startswith("flux3")]
+    pinned = requirements_for(
+        CheckHints(quality=QUALITY_FLUX3_NVFP4, unets=(KLEIN3_NVFP4,))
+    )
+    assert [need.pack for need in pinned if need.pack.startswith("flux3")] == [
+        "flux3-nvfp4-unet",
+        "flux3-te",
+        "flux3-vae",
+    ]
+
+
+def test_command_for_filename_maps_flux3_files_without_moving_others() -> None:
+    assert command_for_filename(KLEIN3_DISTILLED) == CMD_IMAGE_FLUX3
+    assert command_for_filename(KLEIN3_BASE) == CMD_IMAGE_FLUX3_BASE
+    assert command_for_filename(KLEIN3_NVFP4) == CMD_IMAGE_FLUX3_NVFP4
+    assert command_for_filename(KLEIN3_TE) == CMD_IMAGE_FLUX3_TE
+    assert command_for_filename(KLEIN3_UPSAMPLER) == CMD_IMAGE_FLUX3_PUP
+    assert command_for_filename(KLEIN_DISTILLED) == CMD_DOWNLOAD_MODELS
+    assert command_for_filename(VAE_FULL) == CMD_DOWNLOAD_MODELS
+    assert command_for_filename(KLEIN_9B) == CMD_IMAGE_9B
+    assert command_for_filename(KLEIN_9B_BASE) == CMD_IMAGE_9B_BASE
+    assert command_for_filename(FLUX2_DEV) == CMD_IMAGE_FLUX2_DEV
+
+
+def test_scan_flux3_quality_profile_missing_then_present(tmp_path: Path) -> None:
+    hints = CheckHints(
+        lab_rel="stills/flux3",
+        occupancy="klein",
+        quality=QUALITY_FLUX3_QUALITY,
+        unets=(KLEIN3_BASE,),
+        clips=(KLEIN3_TE,),
+        vaes=(VAE_FULL,),
+    )
+    missing = scan(hints, (tmp_path,))
+    missing_names = {row.name for row in missing.missing}
+    assert KLEIN3_BASE in missing_names
+    assert KLEIN3_TE in missing_names
+    assert VAE_FULL in missing_names
+    assert CMD_IMAGE_FLUX3_BASE in missing.commands
+    assert CMD_IMAGE_FLUX3_TE in missing.commands
+    for subdir, name in (
+        (SUB_UNET, KLEIN3_BASE),
+        (SUB_UNET, KLEIN_DISTILLED),
+        (SUB_CLIP, KLEIN3_TE),
+        (SUB_CLIP, CLIP_4B),
+        (SUB_VAE, VAE_FULL),
+    ):
+        folder = tmp_path / "comfy" / subdir
+        folder.mkdir(parents=True, exist_ok=True)
+        (folder / name).write_bytes(b"x")
+    found = scan(hints, (tmp_path,))
+    present_names = {row.name for row in found.present}
+    assert KLEIN3_BASE in present_names
+    assert KLEIN3_TE in present_names
+    assert VAE_FULL in present_names
+    assert not [row for row in found.missing if row.pack.startswith("flux3")]
+    assert found.ok
+
+
+@pytest.mark.parametrize("choice", QUALITY_CHOICES)
+def test_js_mirrors_every_quality_choice(choice: str) -> None:
+    assert choice in JS.read_text(encoding="utf-8")
+
+
+def test_js_mirrors_flux3_constants_and_predicates() -> None:
+    body = JS.read_text(encoding="utf-8")
+    for name in (*KLEIN3_ALL, KLEIN3_TE):
+        assert name in body
+    for choice in FLUX3_QUALITY_CHOICES:
+        assert choice in body
+    assert "function isKlein3Unet" in body
+    assert "function isKlein3Clip" in body
+    assert "firstClipName" in body
+    assert f"const KLEIN3_FAST_STEPS = {KLEIN3_FAST_STEPS};" in body
+    assert f"const KLEIN3_FAST_CFG = {KLEIN3_FAST_CFG};" in body
+    assert f"const KLEIN3_QUALITY_STEPS = {KLEIN3_QUALITY_STEPS};" in body
+    assert f"const KLEIN3_QUALITY_CFG = {KLEIN3_QUALITY_CFG};" in body
+    assert f"const KLEIN3_NVFP4_STEPS = {KLEIN3_NVFP4_STEPS};" in body
+    assert f"const KLEIN3_NVFP4_CFG = {KLEIN3_NVFP4_CFG};" in body
+
