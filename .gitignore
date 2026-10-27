@@ -3,6 +3,8 @@
 .env.*
 !.env.example
 .env.local
+# Operator copy of config/spark-farm.example.env (real hostnames; never commit)
+config/spark-farm.env
 *.pem
 *.key
 
