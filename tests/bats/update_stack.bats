@@ -1137,3 +1137,34 @@ docs/a.md'
   [[ "${stderr}" == *"plan   : none"* ]]
   [[ "${stderr}" == *"actions:  doctor"* ]]
 }
+
+@test "update_stack resolves its libraries under bazel run" {
+  # `bazel run` executes the built binary from Bazel's output tree, where the
+  # sibling ../lib directory does not exist, so a script-relative source dies at
+  # load. Reproduce that exact shape: the script alone in a fake output tree,
+  # with BUILD_WORKSPACE_DIRECTORY naming the real checkout.
+  local staged_dir="${TEST_TMP_DIR}/bazel-bin/scripts"
+  mkdir -p "${staged_dir}"
+  cp "${UTILITIES_DIR}/update-stack.sh" "${staged_dir}/update-stack"
+  chmod +x "${staged_dir}/update-stack"
+  [ ! -e "${staged_dir}/../lib" ]
+  run env BUILD_WORKSPACE_DIRECTORY="${REPO_ROOT}" \
+    bash "${staged_dir}/update-stack" --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"usage: update-stack"* ]]
+  [[ "${output}" != *"No such file or directory"* ]]
+  [[ "${output}" != *"paths.sh"* ]]
+}
+
+@test "update_stack names a runnable entry point when no root resolves" {
+  # The same output-tree shape, but without BUILD_WORKSPACE_DIRECTORY: fail with
+  # an actionable message and the contract's exit 5, not a bare bash error.
+  local staged_dir="${TEST_TMP_DIR}/orphan/scripts"
+  mkdir -p "${staged_dir}"
+  cp "${UTILITIES_DIR}/update-stack.sh" "${staged_dir}/update-stack"
+  chmod +x "${staged_dir}/update-stack"
+  run env -u BUILD_WORKSPACE_DIRECTORY bash "${staged_dir}/update-stack" --help
+  [ "${status}" -eq 5 ]
+  [[ "${output}" == *"cannot find scripts/lib/paths.sh"* ]]
+  [[ "${output}" == *"bazelisk run //scripts:update-stack"* ]]
+}

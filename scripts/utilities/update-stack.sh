@@ -85,10 +85,27 @@
 
 set -euo pipefail
 
-# shellcheck source=../lib/paths.sh disable=SC1091
-source "$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)/../lib/paths.sh"
+# Resolve the repo root BEFORE sourcing any library. `bazel run` executes this
+# file from Bazel's output tree, where ../lib does not exist, so a script-relative
+# source only works when the file runs from the checkout. BUILD_WORKSPACE_DIRECTORY
+# is set by `bazel run` and names the real checkout, which is the tree this flow
+# has to operate on anyway (git plus manage.sh). prove_repo_root repeats the same
+# precedence later, once err() is available.
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
-REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+if [[ -n ${BUILD_WORKSPACE_DIRECTORY:-} ]]; then
+  REPO_ROOT="${BUILD_WORKSPACE_DIRECTORY}"
+else
+  REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." >/dev/null 2>&1 && pwd || true)"
+fi
+
+if [[ -z ${REPO_ROOT} || ! -f ${REPO_ROOT}/scripts/lib/paths.sh ]]; then
+  printf '[ez-comfy][ERROR] cannot find scripts/lib/paths.sh under %s\n' "${REPO_ROOT:-<unset>}" >&2
+  printf '[ez-comfy][ERROR] run it with: bazelisk run //scripts:update-stack, or ./scripts/manage.sh update-stack\n' >&2
+  exit 5
+fi
+
+# shellcheck source=../lib/paths.sh disable=SC1091
+source "${REPO_ROOT}/scripts/lib/paths.sh"
 # shellcheck source=../lib/common.sh disable=SC1091
 source "${REPO_ROOT}/scripts/lib/common.sh"
 # shellcheck source=../lib/compose.sh disable=SC1091
