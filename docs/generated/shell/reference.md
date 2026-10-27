@@ -154,6 +154,24 @@ Outputs:
 Returns:
   Exit status of the final start path.
 
+### Command: update-stack
+
+Redeploy the stack from the branch currently checked out.
+Fetches and fast-forwards the checkout, resolves the GHCR image lane that belongs
+to this branch (main -> us-safe-studio, anything else -> the development lane),
+then restarts or recreates through the normal start path so the heavy confirm and
+the headroom preflight still run. Refuses a dirty tree, a detached HEAD, and an
+image lane that does not match the branch, unless the operator opts in.
+Globals:
+  REPO_ROOT, EZ_COMFY_IMAGE, LAB_STACK_FORCE_BUILD, LAB_NON_INTERACTIVE,
+  LAB_CONFIRM_TOKEN, LAB_GIT_BRANCH
+Arguments:
+  $@  update-stack flags (see scripts/utilities/update-stack.sh header)
+Outputs:
+  Status via log/warn/err on stderr unless noted.
+Returns:
+  0 ok or nothing to do; 1 failure; 2 usage; 3 guardrail refusal; 5 no repo root.
+
 ### Command: logs
 
 Follow Docker Compose logs for the stack.
@@ -1990,3 +2008,98 @@ Environment:
   COMFY_OUTPUT_DIR
 
 ### Command: take-promote
+
+<!-- source: scripts/utilities/update-stack.sh -->
+## update-stack
+
+Redeploy the Compose stack from the branch you are actually standing on.
+
+The published image lane comes from the git branch (scripts/lib/compose.sh):
+main publishes us-safe-studio and every other branch publishes
+us-safe-studio-development. This flow pins that pairing. It resolves the
+checked-out branch, refuses an explicit image from the other lane,
+fast-forwards the checkout, and redeploys through manage.sh.
+
+Sequence (the order is the contract; tests pin it):
+  1. update_stack_usage / parse_args
+  2. prove_repo_root           - BUILD_WORKSPACE_DIRECTORY, else script path
+  3. update_stack_preflight    - git present, docker usable
+  4. resolve_update_branch     - detached HEAD refuses without --branch
+  5. check_image_lane          - branch lane must match the image tag
+  6. check_dirty_tree          - dirty worktree refuses without --allow-dirty
+  7. guard_interactive_confirm - non-TTY start needs --yes
+  8. sync_checkout             - optional switch, fetch, pull --ff-only
+  9. changed_deploy_paths      - none | scripts | compose | image
+ 10. reconcile_env_file        - warn on keys .env lacks; never write it
+ 11. plan_redeploy             - none | restart | recreate
+ 12. pull_stack_image          - docker pull; failure is only a warning
+ 13. redeploy_stack            - manage.sh restart, or stop then start
+ 14. verify_stack              - manage.sh doctor
+ 15. promotion_note            - informational, never fails
+ 16. report_summary            - branch/lane/plan/actions table on stderr
+
+What this script never does:
+
+  - Never merges, rebases, or resets. The pull is --ff-only only.
+
+  - Never calls docker or docker compose for start/stop. It delegates to
+
+```bash
+    ./scripts/manage.sh so the heavy confirm, the headroom preflight, and
+```
+
+    the restart: "no" policy all stay in one place.
+
+  - Never removes volumes and never runs cleanup.
+
+  - Never writes the operator's .env file; it only reports missing keys.
+
+```bash
+Usage:
+  ./scripts/manage.sh update-stack
+  ./scripts/manage.sh update-stack --yes
+  ./scripts/manage.sh update-stack --dry-run
+  ./scripts/utilities/update-stack.sh --branch development --yes
+```
+
+  bazelisk run //scripts:update-stack -- --dry-run
+
+Options:
+  -h, --help               Print usage and exit 0.
+  --dry-run                Print what would run; mutate nothing. Guardrails
+                           still execute and read-only git probes still run,
+                           so the plan is the real plan.
+  --branch NAME            Checkout and update NAME first; also the only way
+                           to run on a detached HEAD.
+  --allow-dirty            Proceed with a dirty worktree.
+  --skip-fetch             Skip git fetch and git pull --ff-only.
+  --skip-image-pull        Skip the docker pull.
+  --no-restart             Update checkout and image; leave the running
+                           stack alone.
+  --force-recreate         Always stop+start, even for a scripts-only change.
+  --force-build            Export LAB_STACK_FORCE_BUILD=1 for the delegated
+                           start.
+  --image REF              Explicit image ref; must match the branch lane
+                           unless --allow-lane-mismatch.
+  --allow-lane-mismatch    Permit an explicit image from another lane.
+  --yes                    Automation: exports LAB_NON_INTERACTIVE=1 and
+                           LAB_CONFIRM_TOKEN=yes (the supported confirm pair).
+
+Environment:
+  EZ_COMFY_IMAGE         Explicit image ref (same effect as --image).
+  LAB_GIT_BRANCH         Hermetic branch override read by stack_git_branch.
+  LAB_STACK_SKIP_PULL    1 = stack_pull_image declines the pull.
+  LAB_STACK_FORCE_BUILD  1 = compose up --build (set by --force-build).
+  LAB_NON_INTERACTIVE    1 with LAB_CONFIRM_TOKEN=yes is the automation
+  LAB_CONFIRM_TOKEN      confirm path require_heavy_confirm accepts.
+  BUILD_WORKSPACE_DIRECTORY  Set by bazel run; preferred repo root.
+
+Exit codes:
+  0 success, or nothing to do
+  1 failure
+  2 usage error
+  3 guardrail refusal (dirty tree, detached HEAD without --branch, lane
+    mismatch, non-TTY start without --yes)
+  5 repo root could not be proven
+
+### Command: update-stack

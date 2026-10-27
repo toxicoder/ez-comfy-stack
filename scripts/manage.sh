@@ -319,6 +319,11 @@ Commands:
   start             Start studio stack detached (requires yes; not tied to this shell)
   stop              Stop stack (keep models, outputs, and comfy volume)
   restart           stop + start
+  update-stack [--dry-run] [--branch B] [--yes] [flags]
+                    Redeploy from the checked-out branch: ff-only pull, branch-matched
+                    image lane, then restart/recreate via start. Refuses dirty tree,
+                    detached HEAD, and an image lane that does not match the branch.
+                    --yes is the only way past the start confirm when there is no TTY.
   logs              Follow compose logs
   download-models [--limit auto|N|off] [--drop-incomplete]
                     Download Apache still + Wan 2.2 5B + LTX distilled (bandwidth limited)
@@ -780,6 +785,28 @@ cmd_stop() {
 cmd_restart() {
   cmd_stop
   cmd_start
+}
+
+# @command update-stack
+#######################################
+# Redeploy the stack from the branch currently checked out.
+# Fetches and fast-forwards the checkout, resolves the GHCR image lane that belongs
+# to this branch (main -> us-safe-studio, anything else -> the development lane),
+# then restarts or recreates through the normal start path so the heavy confirm and
+# the headroom preflight still run. Refuses a dirty tree, a detached HEAD, and an
+# image lane that does not match the branch, unless the operator opts in.
+# Globals:
+#   REPO_ROOT, EZ_COMFY_IMAGE, LAB_STACK_FORCE_BUILD, LAB_NON_INTERACTIVE,
+#   LAB_CONFIRM_TOKEN, LAB_GIT_BRANCH
+# Arguments:
+#   $@  update-stack flags (see scripts/utilities/update-stack.sh header)
+# Outputs:
+#   Status via log/warn/err on stderr unless noted.
+# Returns:
+#   0 ok or nothing to do; 1 failure; 2 usage; 3 guardrail refusal; 5 no repo root.
+#######################################
+cmd_update_stack() {
+  bash "${REPO_ROOT}/scripts/utilities/update-stack.sh" "$@"
 }
 
 # @command logs
@@ -1881,6 +1908,7 @@ main() {
     start) cmd_start ;;
     stop) cmd_stop ;;
     restart) cmd_restart ;;
+    update-stack) cmd_update_stack "$@" ;;
     logs) cmd_logs "$@" ;;
     download-models) cmd_download_models "$@" ;;
     download-podcast) cmd_download_podcast "$@" ;;
