@@ -30,6 +30,78 @@ DEFAULT_FILES = (
 )
 
 
+FLUX3_REPO_DIR = "black-forest-labs__flux-3-image-klein-comfy"
+
+# pack name -> (min_gb, tier suffix, basenames, cmd)
+FLUX3_PACKS: dict[str, tuple[int, str, list[str], str]] = {
+    "flux3-klein-distilled-int8": (
+        6,
+        "flux3",
+        ["flux3-image-klein-int8-convrot.safetensors"],
+        "download-image --tier flux3",
+    ),
+    "flux3-klein-base-int8": (
+        6,
+        "flux3-base",
+        ["flux3-image-klein-base-int8-convrot.safetensors"],
+        "download-image --tier flux3-base",
+    ),
+    "flux3-klein-base-nvfp4": (
+        6,
+        "flux3-nvfp4",
+        ["flux3-image-klein-base-nvfp4.safetensors"],
+        "download-image --tier flux3-nvfp4",
+    ),
+    "flux3-klein-base-bf16": (
+        12,
+        "flux3-bf16",
+        ["flux3-image-klein-base-bf16.safetensors"],
+        "download-image --tier flux3-bf16",
+    ),
+    "flux3-qwen3vl-te": (
+        5,
+        "flux3-te",
+        ["qwen3vl_4b_int8_convrot.safetensors"],
+        "download-image --tier flux3-te",
+    ),
+    "flux3-prompt-upsampler": (
+        10,
+        "flux3-pup",
+        ["qwen3.5_9b_flux3_prompt_upsampler_int8_convrot.safetensors"],
+        "download-image --tier flux3-pup",
+    ),
+}
+
+
+def test_flux3_klein_packs_are_opt_in() -> None:
+    """FLUX 3 Image Klein packs exist, are opt-in, and pin their tier dir."""
+    man = mm.load_manifest(MANIFEST)
+    packs = man["packs"]
+    for name, (min_gb, tier, files, cmd) in FLUX3_PACKS.items():
+        assert name in packs, name
+        pack = packs[name]
+        assert pack["default"] is False, name
+        assert pack["min_gb"] == min_gb, name
+        assert pack["tier_dir"] == f"{FLUX3_REPO_DIR}_{tier}", name
+        assert pack["files"] == files, name
+        assert pack["cmd"] == cmd, name
+    for name in ("flux3-klein-distilled-int8", "flux3-klein-base-int8"):
+        assert "flux2-vae" in packs[name]["shares"], name
+        assert "flux3-qwen3vl-te" in packs[name]["shares"], name
+
+
+def test_flux3_klein_files_stay_out_of_default_keep_set() -> None:
+    """Nothing FLUX 3 ships in download-models; Klein 4B stays the default."""
+    man = mm.load_manifest(MANIFEST)
+    default_keep = mm.default_keep_set(man)
+    for _, _, files, _ in FLUX3_PACKS.values():
+        for name in files:
+            assert name not in default_keep, name
+    assert "flux-2-klein-4b-fp8.safetensors" in default_keep
+    keep = mm.keep_set(man)
+    assert "flux3-image-klein-int8-convrot.safetensors" in keep
+
+
 def test_default_filenames_in_keep_set() -> None:
     man = mm.load_manifest(MANIFEST)
     keep = mm.default_keep_set(man)

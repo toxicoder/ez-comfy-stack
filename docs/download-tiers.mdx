@@ -10,7 +10,7 @@ tags: [download, tier, models, klein, wan, ltx, podcast, dub, music]
 
 - **One table** - pack, what you get, rough size, download command
 - **`--tier` vs `--limit`** - pack id versus Mbps
-- **What `all` skips** - Wan VACE / S2V, LTX IC-LoRA, Klein 9B / FLUX.2-dev
+- **What `all` skips** - Wan VACE / S2V, LTX IC-LoRA, Klein 9B / FLUX.2-dev / FLUX 3 Image Klein
 - **Banned names** - image `quality`, Nunchaku, DA3-LARGE, DreamX-World, MiniMax H3
 
 **What this enables**
@@ -25,7 +25,9 @@ Basenames on disk and the container image pin: [Download packs](operate/models-p
 
 `./scripts/manage.sh download-podcast`, `download-dub`, `download-music`, and `download-llm` already run the pull. 3D, LongCat, DreamX, and SeedVR2 forward to a utility that defaults to a status check, so those commands include the word `run`.
 
-Wan `--tier all` is `5b` + `a14b` + `fun-inp`. It does not include `vace` or `s2v`. LTX `--tier all` is `2.5` + `2.3` + `gemma` and does not include `iclora`. Image `--tier all` is the Apache stills (`fast`, `nvfp4`, `base`, `zimage`) and does not include `9b` or `flux2-dev`. `balanced` is a `2.3` alias, not a 2.5 quality knob. `quality` on LTX is the 2.3 BF16 alias.
+Wan `--tier all` is `5b` + `a14b` + `fun-inp`. It does not include `vace` or `s2v`. LTX `--tier all` is `2.5` + `2.3` + `gemma` and does not include `iclora`. Image `--tier all` is the Apache stills (`fast`, `nvfp4`, `base`, `zimage`) and does not include `9b`, `flux2-dev`, or any `flux3` pack. `balanced` is a `2.3` alias, not a 2.5 quality knob. `quality` on LTX is the 2.3 BF16 alias.
+
+**FLUX 3 Image Klein is gated.** The six `flux3*` packs all live in `black-forest-labs/flux-3-image-klein-comfy` (Hugging Face `gated=auto`), so you need `HF_TOKEN` in `.env` **and** license acceptance on the model card by the **same account as that token** - a token alone is not acceptance. Each pull is pinned to HF revision `feef60b0aaf63a4773ace96636ebbcf43b881312`, so a re-run resolves the same commit. License is **FLUX Kommunity License (v1.0)**, not Apache: monetized output is OK only for qualifying users under $5M gross annualized revenue. Klein 4B stays the Apache default and the only still in `download-models`. Read [Model licenses](licenses.md).
 
 ---
 
@@ -44,6 +46,12 @@ Wan `--tier all` is `5b` + `a14b` + `fun-inp`. It does not include `vace` or `s2
 | `9b-nvfp4` | FLUX Non-Commercial Klein 9B NVFP4. Gated. Not YouTube-ok | ~5 GB + companions | `./scripts/utilities/download-image.sh run --tier 9b-nvfp4` |
 | `small-vae` | Apache `full_encoder_small_decoder.safetensors` used with Klein 9B | small | `./scripts/utilities/download-image.sh run --tier small-vae` |
 | `flux2-dev` | FLUX Non-Commercial FLUX.2 [dev] FP8. Gated. Not YouTube-ok | ~20 GB+ | `./scripts/utilities/download-image.sh run --tier flux2-dev` |
+| `flux3` | FLUX 3 Image Klein distilled INT8-convrot still. Auto-includes `flux3-te`. Gated **FLUX Kommunity License (v1.0)**. Not in `--tier all`. Not the default - Klein 4B is | ~6 GB + TE | `./scripts/utilities/download-image.sh run --tier flux3` |
+| `flux3-base` | FLUX 3 Image Klein base INT8 (no distillation). Auto-includes `flux3-te`. Gated Kommunity. Not in `--tier all` | ~6 GB + TE | `./scripts/utilities/download-image.sh run --tier flux3-base` |
+| `flux3-nvfp4` | FLUX 3 Image Klein base NVFP4. Auto-includes `flux3-te`. Gated Kommunity. Not in `--tier all` | ~6 GB + TE | `./scripts/utilities/download-image.sh run --tier flux3-nvfp4` |
+| `flux3-bf16` | FLUX 3 Image Klein base BF16 - the largest FLUX 3 pull. Auto-includes `flux3-te`. Gated Kommunity. Not in `--tier all` | ~12 GB + TE | `./scripts/utilities/download-image.sh run --tier flux3-bf16` |
+| `flux3-te` | Qwen3VL-4B INT8 text encoder for any FLUX 3 pack (`qwen3vl_4b_int8_convrot.safetensors`). Gated Kommunity. Not in `--tier all` | ~5 GB | `./scripts/utilities/download-image.sh run --tier flux3-te` |
+| `flux3-pup` | Optional Qwen3.5-9B FLUX 3 prompt upsampler (`qwen3.5_9b_flux3_prompt_upsampler_int8_convrot.safetensors`). Gated Kommunity. Not in `--tier all` | ~10 GB | `./scripts/utilities/download-image.sh run --tier flux3-pup` |
 | `5b` | Wan 2.2 TI2V-5B silent shots. Already in the default pack | ~12 GB | `./scripts/utilities/download-wan.sh run --tier 5b` |
 | `a14b` | Wan 2.2 I2V 14B FP8 silent hero. Unload 5B first | ~20 GB | `./scripts/utilities/download-wan.sh run --tier a14b` |
 | `fun-inp` | Wan 2.2 Fun InP first-last-frame. Unload LTX first | ~47 GB | `./scripts/utilities/download-wan.sh run --tier fun-inp` |
@@ -95,6 +103,7 @@ The widget below is the same music row with `--tier` and `--limit` filled in. Po
 | --- | --- |
 | Image `quality` as a `--tier` | Refused. LTX `quality` is a different flag (2.3 BF16) |
 | Klein 9B or `flux2-dev` as a lab default | Not the default. Opt-in rows above. FLUX Non-Commercial. Not YouTube-ok |
+| Any `flux3` pack as a lab default or pinned UNET | Not the default. Opt-in rows above. FLUX Kommunity License (v1.0), not Apache. Klein 4B is the default still |
 | Nunchaku 9B | Refused |
 | `--tier da3-large` | Refused |
 | DreamX-World | Refused |

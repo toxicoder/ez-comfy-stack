@@ -75,6 +75,19 @@ Relative `comfy/` symlinks and the `MODELS_DIR` tree: [Models and cache](../mode
 | `ltx-2.5-audio-vae-bf16.safetensors` | `vae/` | LTX-2.5 audio VAE |
 | `Qwen3-4B-Instruct-2507-Q4_K_M.gguf` | `llm/` | On-box prompt enhance (CPU llama.cpp) |
 
+Opt-in FLUX 3 Image Klein (`./scripts/utilities/download-image.sh run --tier flux3`, **not** `download-models`). Gated **FLUX Kommunity License (v1.0)** - accept the card as the `HF_TOKEN` user. All six weights come from `black-forest-labs/flux-3-image-klein-comfy` at pinned HF revision `feef60b0aaf63a4773ace96636ebbcf43b881312`, and land in `MODELS_DIR/black-forest-labs__flux-3-image-klein-comfy_<tier>`:
+
+| File | Comfy folder | Role |
+| --- | --- | --- |
+| `flux3-image-klein-int8-convrot.safetensors` | `diffusion_models/` | FLUX 3 Image Klein distilled still UNET (`--tier flux3`) |
+| `flux3-image-klein-base-int8-convrot.safetensors` | `diffusion_models/` | FLUX 3 base INT8 (`--tier flux3-base`) |
+| `flux3-image-klein-base-nvfp4.safetensors` | `diffusion_models/` | FLUX 3 base NVFP4 (`--tier flux3-nvfp4`) |
+| `flux3-image-klein-base-bf16.safetensors` | `diffusion_models/` | FLUX 3 base BF16 (`--tier flux3-bf16`) |
+| `qwen3vl_4b_int8_convrot.safetensors` | `text_encoders/` | FLUX 3 Qwen3VL-4B TE (`--tier flux3-te`, auto-included by any FLUX 3 UNET tier) |
+| `qwen3.5_9b_flux3_prompt_upsampler_int8_convrot.safetensors` | `text_encoders/` | Optional FLUX 3 prompt upsampler (`--tier flux3-pup`) |
+
+Apache Klein 4B (`flux-2-klein-4b-fp8.safetensors`) stays the default still; FLUX 3 is opt-in and is never in image `--tier all`. License: [Model licenses](../licenses.md).
+
 Opt-in 35B writing desk (`./scripts/manage.sh download-llm --tier qwen36-35b-a3b`, **not** `download-models`):
 
 | File | Comfy folder | Role |

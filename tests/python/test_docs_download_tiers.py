@@ -29,6 +29,15 @@ WAN_ALL_EXCLUDED = ("vace", "s2v")
 # LTX --tier all is 2.5 + 2.3 + gemma (not iclora, not quality).
 LTX_ALL_INCLUDED = ("2.5", "2.3", "gemma")
 LTX_ALL_EXCLUDED = ("iclora",)
+# FLUX 3 Image Klein: opt-in Kommunity packs, never in image --tier all.
+FLUX3_IMAGE_TIERS = (
+    "flux3",
+    "flux3-base",
+    "flux3-nvfp4",
+    "flux3-bf16",
+    "flux3-te",
+    "flux3-pup",
+)
 LTX_BUILDER_CHOICES = (
     "2.5",
     "2.3",
@@ -190,6 +199,34 @@ def test_dreamx_selective_vs_full_repo_size() -> None:
     lower = text.lower()
     assert "selective" in lower or "min_gb" in lower or "status floor" in lower
     assert "full" in lower
+
+
+def test_flux3_image_tiers_are_documented_and_not_in_all() -> None:
+    """FLUX 3 Image Klein packs are opt-in, gated, and absent from image `all`."""
+    text = _read(DOWNLOAD_TIERS)
+    for tier in FLUX3_IMAGE_TIERS:
+        assert f"`{tier}`" in text, f"download-tiers.md missing {tier}"
+        assert f"download-image.sh run --tier {tier}" in text, tier
+    lower = text.lower()
+    assert "kommunity" in lower, "FLUX 3 must be named as Kommunity, not Apache"
+    assert "hf_token" in lower, "gated packs must name HF_TOKEN"
+    assert "license acceptance" in lower or "accept" in lower
+    assert "not in `--tier all`" in lower or "does not include `flux3`" in lower
+    for excluded in FLUX3_IMAGE_TIERS:
+        assert excluded in text
+
+
+def test_command_builder_download_image_choices_cover_flux3() -> None:
+    """The download-image ezcmd widget lists every FLUX 3 pack id."""
+    data = json.loads(_read(BUILDER))
+    commands = {row["id"]: row for row in data["commands"]}
+    assert "download-image" in commands
+    flags = commands["download-image"]["flags"]
+    tier_flag = next(flag for flag in flags if flag["name"] == "tier")
+    values = [choice["value"] for choice in tier_flag["choices"]]
+    for expected in (*FLUX3_IMAGE_TIERS, "all", "fast"):
+        assert expected in values, f"download-image widget missing {expected}"
+    assert "all" not in FLUX3_IMAGE_TIERS
 
 
 def test_download_models_has_no_tier() -> None:

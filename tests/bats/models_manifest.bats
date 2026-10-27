@@ -54,3 +54,25 @@ teardown() {
   run grep -E 'MiniMax-H3|FLUX.2-klein-9b' "${REPO_ROOT}/config/model-manifest.yaml"
   [ "${status}" -eq 0 ]
 }
+
+@test "models-manifest includes opt-in flux3 klein packs default false" {
+  run cmd_render
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"flux3-klein-distilled-int8"* ]]
+  [[ "${output}" == *"flux3-qwen3vl-te"* ]]
+  [[ "${output}" == *"flux3-prompt-upsampler"* ]]
+  run models_default_keep_set
+  [ "${status}" -eq 0 ]
+  [[ "${output}" != *"flux3-image-klein"* ]]
+  [[ "${output}" != *"qwen3vl_4b_int8_convrot"* ]]
+  run grep -A10 'flux3-klein-distilled-int8:' "${REPO_ROOT}/config/model-manifest.yaml"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"default: false"* ]]
+  [[ "${output}" == *"flux3-image-klein-int8-convrot.safetensors"* ]]
+  [[ "${output}" == *"download-image --tier flux3"* ]]
+  run grep -A6 'flux3-qwen3vl-te:' "${REPO_ROOT}/config/model-manifest.yaml"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"default: false"* ]]
+  [[ "${output}" == *"qwen3vl_4b_int8_convrot.safetensors"* ]]
+  [[ "${output}" == *"download-image --tier flux3-te"* ]]
+}

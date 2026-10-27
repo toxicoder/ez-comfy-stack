@@ -152,6 +152,142 @@ teardown() {
   [[ -L "${MODELS_DIR}/comfy/diffusion_models/flux-2-klein-4b-fp8.safetensors" ]]
 }
 
+@test "download-image flux3 tiers are gated opt-in NC on the pinned repo" {
+  local t
+  for t in flux3 flux3-base flux3-nvfp4 flux3-bf16 flux3-te flux3-pup; do
+    run tier_repo "${t}"
+    [[ "${output}" == *"black-forest-labs/flux-3-image-klein-comfy"* ]]
+    run is_nc_image_tier "${t}"
+    [ "${status}" -eq 0 ]
+    run warn_flux_nc_image_tier "${t}"
+    [ "${status}" -eq 0 ]
+    [[ "${output}" == *"Non-Commercial"* ]]
+    [[ "${output}" == *"Kommunity"* ]]
+    [[ "${output}" != *"hf_"* ]]
+  done
+  run tier_include_patterns flux3
+  [[ "${output}" == *"diffusion_models/flux3-image-klein-int8-convrot.safetensors"* ]]
+  run tier_include_patterns flux3-base
+  [[ "${output}" == *"diffusion_models/flux3-image-klein-base-int8-convrot.safetensors"* ]]
+  run tier_include_patterns flux3-nvfp4
+  [[ "${output}" == *"diffusion_models/flux3-image-klein-base-nvfp4.safetensors"* ]]
+  run tier_include_patterns flux3-bf16
+  [[ "${output}" == *"diffusion_models/flux3-image-klein-base-bf16.safetensors"* ]]
+  run tier_include_patterns flux3-te
+  [[ "${output}" == *"text_encoders/qwen3vl_4b_int8_convrot.safetensors"* ]]
+  run tier_include_patterns flux3-pup
+  [[ "${output}" == *"text_encoders/qwen3.5_9b_flux3_prompt_upsampler_int8_convrot.safetensors"* ]]
+  run tier_min_gb flux3-bf16
+  [ "${output}" = "12" ]
+  run tier_min_gb flux3-te
+  [ "${output}" = "5" ]
+  run tier_min_gb flux3-pup
+  [ "${output}" = "10" ]
+  run tier_dir flux3-te
+  [[ "${output}" == *"black-forest-labs__flux-3-image-klein-comfy_flux3-te"* ]]
+  run is_nc_image_tier fast
+  [ "${status}" -ne 0 ]
+}
+
+@test "download-image flux3 never enters tier all" {
+  local t
+  TIER=all
+  run tiers_to_process
+  [[ "${output}" != *"flux3"* ]]
+  for t in flux3-base flux3-nvfp4 flux3-bf16 flux3-te flux3-pup; do
+    TIER="${t}"
+    run tiers_to_process
+    [[ "${output}" != *"all"* ]]
+  done
+  TIER=flux3
+  run tiers_to_process
+  [ "${output}" = "flux3 flux3-te" ]
+  TIER=flux3-bf16
+  run tiers_to_process
+  [ "${output}" = "flux3-bf16 flux3-te" ]
+  TIER=flux3-te
+  run tiers_to_process
+  [ "${output}" = "flux3-te" ]
+  TIER=flux3-pup
+  run tiers_to_process
+  [ "${output}" = "flux3-pup" ]
+}
+
+@test "download-image flux3 parse_args accepts tiers still bans quality" {
+  local t
+  for t in flux3 flux3-base flux3-nvfp4 flux3-bf16 flux3-te flux3-pup; do
+    run bash -c "MODELS_DIR=\"${MODELS_DIR}\" bash \"${DI}\" status --tier ${t} --json"
+    [ "${status}" -eq 0 ]
+    [[ "${output}" == *"tiers"* ]]
+  done
+  run bash "${DI}" status --tier flux3-bogus
+  [ "${status}" -ne 0 ]
+  run bash "${DI}" run --tier quality
+  [ "${status}" -ne 0 ]
+  run bash "${DI}" --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"flux3-te"* ]]
+  [[ "${output}" == *"Kommunity"* ]]
+}
+
+@test "download-image run --tier flux3 links diffusion_models and text_encoders" {
+  run bash -c "MODELS_DIR=\"${MODELS_DIR}\" LAB_MOCK_HF_DOWNLOAD=1 bash \"${DI}\" run --tier flux3"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Kommunity"* ]]
+  [[ -e "${MODELS_DIR}/comfy/diffusion_models/flux3-image-klein-int8-convrot.safetensors" ]]
+  [[ -e "${MODELS_DIR}/comfy/text_encoders/qwen3vl_4b_int8_convrot.safetensors" ]]
+  [[ ! -e "${MODELS_DIR}/comfy/diffusion_models/flux3-image-klein-base-bf16.safetensors" ]]
+  run bash -c "MODELS_DIR=\"${MODELS_DIR}\" LAB_MOCK_HF_DOWNLOAD=1 bash \"${DI}\" run --tier flux3-pup"
+  [ "${status}" -eq 0 ]
+  [[ -e "${MODELS_DIR}/comfy/text_encoders/qwen3.5_9b_flux3_prompt_upsampler_int8_convrot.safetensors" ]]
+}
+
+@test "download-image flux3 gated failure exits non-zero with guidance" {
+  run bash -c "MODELS_DIR=\"${MODELS_DIR}\" LAB_MOCK_HF_DOWNLOAD=fail-gated bash \"${DI}\" run --tier flux3"
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"gated"* || "${output}" == *"Gated"* || "${output}" == *"Agree"* ]]
+  [[ "${output}" == *"flux-3-image-klein-comfy"* ]]
+  [[ ! -e "${MODELS_DIR}/comfy/diffusion_models/flux3-image-klein-int8-convrot.safetensors" ]]
+}
+
+@test "download-image flux3 pins HF revision 9b does not" {
+  run tier_revision flux3
+  [ "${output}" = "feef60b0aaf63a4773ace96636ebbcf43b881312" ]
+  run tier_revision flux3-pup
+  [ "${output}" = "feef60b0aaf63a4773ace96636ebbcf43b881312" ]
+  run tier_revision fast
+  [ "${output}" = "" ]
+  run tier_revision 9b
+  [ "${output}" = "" ]
+  unset LAB_MOCK_HF_DOWNLOAD
+  export HF_PROGRESS=0
+  install_mock_bin hf '
+if [[ ${2:-} == "--help" ]]; then
+  echo "Usage: hf download [OPTIONS] REPO_ID"
+  echo "  --revision TEXT   Git revision id"
+  echo "  --token TEXT"
+  echo "  --local-dir PATH"
+  exit 0
+fi
+echo "hf $*" >>"${TEST_TMP_DIR}/hf_calls.log"
+echo "hf $*"
+exit 0
+'
+  : >"${TEST_TMP_DIR}/hf_calls.log"
+  run hf_download "black-forest-labs/flux-3-image-klein-comfy" \
+    --local-dir "${MODELS_DIR}/rev" --include "diffusion_models/x.safetensors" \
+    --revision "$(tier_revision flux3)"
+  [ "${status}" -eq 0 ]
+  grep -q -- '--revision feef60b0aaf63a4773ace96636ebbcf43b881312' "${TEST_TMP_DIR}/hf_calls.log"
+  : >"${TEST_TMP_DIR}/hf_calls.log"
+  run hf_download "black-forest-labs/FLUX.2-klein-9b-fp8" \
+    --local-dir "${MODELS_DIR}/norev" --include "flux-2-klein-9b-fp8.safetensors" \
+    --revision "$(tier_revision 9b)"
+  [ "${status}" -eq 0 ]
+  ! grep -q -- '--revision' "${TEST_TMP_DIR}/hf_calls.log"
+  export LAB_MOCK_HF_DOWNLOAD=1
+}
+
 @test "download-image cleanup keep selective and prune" {
   local tdir extra
   tdir="$(tier_dir fast)"

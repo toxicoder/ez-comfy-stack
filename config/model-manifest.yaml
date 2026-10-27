@@ -77,6 +77,60 @@ packs:
     shares:
       - flux2-vae
     cmd: download-image --tier flux2-dev
+  flux3-klein-distilled-int8:
+    default: false
+    min_gb: 6
+    tier_dir: black-forest-labs__flux-3-image-klein-comfy_flux3
+    files:
+      - flux3-image-klein-int8-convrot.safetensors
+    shares:
+      - flux3-qwen3vl-te
+      - flux2-vae
+    cmd: download-image --tier flux3
+  flux3-klein-base-int8:
+    default: false
+    min_gb: 6
+    tier_dir: black-forest-labs__flux-3-image-klein-comfy_flux3-base
+    files:
+      - flux3-image-klein-base-int8-convrot.safetensors
+    shares:
+      - flux3-qwen3vl-te
+      - flux2-vae
+    cmd: download-image --tier flux3-base
+  flux3-klein-base-nvfp4:
+    default: false
+    min_gb: 6
+    tier_dir: black-forest-labs__flux-3-image-klein-comfy_flux3-nvfp4
+    files:
+      - flux3-image-klein-base-nvfp4.safetensors
+    shares:
+      - flux3-qwen3vl-te
+      - flux2-vae
+    cmd: download-image --tier flux3-nvfp4
+  flux3-klein-base-bf16:
+    default: false
+    min_gb: 12
+    tier_dir: black-forest-labs__flux-3-image-klein-comfy_flux3-bf16
+    files:
+      - flux3-image-klein-base-bf16.safetensors
+    shares:
+      - flux3-qwen3vl-te
+      - flux2-vae
+    cmd: download-image --tier flux3-bf16
+  flux3-qwen3vl-te:
+    default: false
+    min_gb: 5
+    tier_dir: black-forest-labs__flux-3-image-klein-comfy_flux3-te
+    files:
+      - qwen3vl_4b_int8_convrot.safetensors
+    cmd: download-image --tier flux3-te
+  flux3-prompt-upsampler:
+    default: false
+    min_gb: 10
+    tier_dir: black-forest-labs__flux-3-image-klein-comfy_flux3-pup
+    files:
+      - qwen3.5_9b_flux3_prompt_upsampler_int8_convrot.safetensors
+    cmd: download-image --tier flux3-pup
   wan-fun-inp:
     default: false
     min_gb: 40

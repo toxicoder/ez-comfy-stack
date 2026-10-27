@@ -8,12 +8,14 @@
 #   Selective Hugging Face pull for the studio still generator.
 #   Default: Klein 4B distilled FP8 + Qwen3-4B TE + flux2 VAE (Apache 2.0).
 #   Opt-in FLUX Non-Commercial: 9b / 9b-base / 9b-nvfp4 / flux2-dev (gated, not YouTube-ok).
+#   Opt-in FLUX 3 Image Klein (Kommunity, gated, revision-pinned):
+#   flux3 / flux3-base / flux3-nvfp4 / flux3-bf16 / flux3-te / flux3-pup.
 #
 # Audience:
 #   Operators on the Spark host. Prefer manage.sh download-models.
 #
 # Usage:
-#   ./scripts/utilities/download-image.sh status [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev] [--json]
+#   ./scripts/utilities/download-image.sh status [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev|flux3|flux3-base|flux3-nvfp4|flux3-bf16|flux3-te|flux3-pup] [--json]
 #   ./scripts/utilities/download-image.sh run [--tier ...]
 #   ./scripts/utilities/download-image.sh cleanup [--tier ...] [--dry-run|--yes]
 #
@@ -42,6 +44,9 @@ TIER="fast"
 JSON_FLAG=""
 CMD="status"
 CLEANUP_YES=0
+# Pinned HF commit for the gated FLUX 3 Image Klein monorepo (all six tiers share
+# one repo). Public sha, not a secret. Verify against the model card before a bump.
+FLUX3_KLEIN_HF_REVISION="feef60b0aaf63a4773ace96636ebbcf43b881312"
 
 #######################################
 # tier_repo helper.
@@ -68,6 +73,9 @@ tier_repo() {
     te8b) echo "Comfy-Org/flux2-klein-9B" ;;
     small-vae) echo "black-forest-labs/FLUX.2-small-decoder" ;;
     flux2-dev) echo "Comfy-Org/flux2-dev" ;;
+    flux3 | flux3-base | flux3-nvfp4 | flux3-bf16 | flux3-te | flux3-pup)
+      echo "black-forest-labs/flux-3-image-klein-comfy"
+      ;;
     *) echo "" ;;
   esac
 }
@@ -97,6 +105,12 @@ tier_min_gb() {
     te8b) echo 4 ;;
     small-vae) echo 0 ;;
     flux2-dev) echo 20 ;;
+    flux3) echo 6 ;;
+    flux3-base) echo 6 ;;
+    flux3-nvfp4) echo 6 ;;
+    flux3-bf16) echo 12 ;;
+    flux3-te) echo 5 ;;
+    flux3-pup) echo 10 ;;
     *) echo 0 ;;
   esac
 }
@@ -155,6 +169,24 @@ tier_include_patterns() {
         "split_files/text_encoders/mistral_3_small_flux2_bf16.safetensors" \
         "split_files/vae/flux2-vae.safetensors"
       ;;
+    flux3)
+      printf '%s\n' "diffusion_models/flux3-image-klein-int8-convrot.safetensors"
+      ;;
+    flux3-base)
+      printf '%s\n' "diffusion_models/flux3-image-klein-base-int8-convrot.safetensors"
+      ;;
+    flux3-nvfp4)
+      printf '%s\n' "diffusion_models/flux3-image-klein-base-nvfp4.safetensors"
+      ;;
+    flux3-bf16)
+      printf '%s\n' "diffusion_models/flux3-image-klein-base-bf16.safetensors"
+      ;;
+    flux3-te)
+      printf '%s\n' "text_encoders/qwen3vl_4b_int8_convrot.safetensors"
+      ;;
+    flux3-pup)
+      printf '%s\n' "text_encoders/qwen3.5_9b_flux3_prompt_upsampler_int8_convrot.safetensors"
+      ;;
     *)
       return 0
       ;;
@@ -176,6 +208,28 @@ tier_dir() {
   local repo
   repo=$(tier_repo "${1}")
   echo "${MODELS_DIR}/${repo//\//__}_${1}"
+}
+
+#######################################
+# Pinned Hugging Face revision (commit sha) for a tier.
+# Only the gated FLUX 3 Image Klein monorepo is pinned; every other tier follows
+# the moving default branch and gets an empty string (no --revision is passed).
+# Globals:
+#   FLUX3_KLEIN_HF_REVISION
+# Arguments:
+#   $1  Tier name
+# Outputs:
+#   Pinned commit sha on stdout, empty when the tier is unpinned
+# Returns:
+#   0
+#######################################
+tier_revision() {
+  case "${1}" in
+    flux3 | flux3-base | flux3-nvfp4 | flux3-bf16 | flux3-te | flux3-pup)
+      echo "${FLUX3_KLEIN_HF_REVISION}"
+      ;;
+    *) echo "" ;;
+  esac
 }
 
 # check_hf_cli / hf_download: provided by scripts/lib/common.sh (prefer `hf download`).
@@ -223,13 +277,20 @@ tiers_to_process() {
     9b-nvfp4) echo "9b-nvfp4 te8b small-vae vae" ;;
     small-vae) echo "small-vae" ;;
     flux2-dev) echo "flux2-dev" ;;
+    # FLUX 3 UNET tiers pull the Qwen3VL TE companion; flux2-vae is already a
+    # default pack, so it is shared (not re-pulled) here. Never in `all`.
+    flux3 | flux3-base | flux3-nvfp4 | flux3-bf16)
+      echo "${TIER} flux3-te"
+      ;;
+    flux3-te | flux3-pup) echo "${TIER}" ;;
     te | vae | te8b) echo "${TIER}" ;;
     *) echo "${TIER}" ;;
   esac
 }
 
 #######################################
-# True when this image pack is FLUX Non-Commercial (gated, not YouTube-ok).
+# True when this image pack is gated and not a casual-commercial default
+# (FLUX Non-Commercial 9B family, or the FLUX 3 Kommunity family).
 # Globals:
 #   None
 # Arguments:
@@ -242,6 +303,7 @@ tiers_to_process() {
 is_nc_image_tier() {
   case "${1}" in
     9b | 9b-base | 9b-nvfp4 | flux2-dev) return 0 ;;
+    flux3 | flux3-base | flux3-nvfp4 | flux3-bf16 | flux3-te | flux3-pup) return 0 ;;
     *) return 1 ;;
   esac
 }
@@ -260,6 +322,12 @@ is_nc_image_tier() {
 warn_flux_nc_image_tier() {
   warn "FLUX Non-Commercial (${1}): not monetized YouTube without a paid BFL commercial license."
   warn "Gated Hugging Face card - accept as the same user as HF_TOKEN. Not legal advice. See docs/licenses.md"
+  case "${1}" in
+    flux3*)
+      warn "FLUX 3 Image Klein (${1}): FLUX Kommunity License v1.0, not Apache. Monetized output is for"
+      warn "  qualifying users only, under 5M USD gross annualized revenue. Klein 4B stays the Apache default."
+      ;;
+  esac
 }
 
 #######################################
@@ -284,7 +352,7 @@ parse_args() {
             err "Banned image tier: ${TIER}. See docs/licenses.md"
             exit 1
             ;;
-          fast | nvfp4 | base | te | vae | zimage | all | 9b | 9b-base | 9b-nvfp4 | te8b | small-vae | flux2-dev) ;;
+          fast | nvfp4 | base | te | vae | zimage | all | 9b | 9b-base | 9b-nvfp4 | te8b | small-vae | flux2-dev | flux3 | flux3-base | flux3-nvfp4 | flux3-bf16 | flux3-te | flux3-pup) ;;
           *)
             err "Unknown image tier: ${TIER}. See docs/licenses.md"
             exit 1
@@ -304,10 +372,12 @@ parse_args() {
         exit 1
         ;;
       -h | --help)
-        echo "Usage: $0 status|run|cleanup [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev] [--json]" >&2
+        echo "Usage: $0 status|run|cleanup [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev|flux3|flux3-base|flux3-nvfp4|flux3-bf16|flux3-te|flux3-pup] [--json]" >&2
         echo "  Default fast = Klein 4B distilled FP8 + qwen_3_4b + flux2-vae (Apache 2.0)" >&2
         echo "  9b / 9b-base / 9b-nvfp4 / flux2-dev = FLUX Non-Commercial opt-in (not YouTube-ok, not in download-models)" >&2
         echo "  small-vae = Apache FLUX.2 small decoder (full_encoder_small_decoder.safetensors)" >&2
+        echo "  flux3 / flux3-base / flux3-nvfp4 / flux3-bf16 / flux3-te / flux3-pup = FLUX 3 Image Klein opt-in" >&2
+        echo "    (FLUX Kommunity License v1.0, gated, revision-pinned, not in download-models; Klein 4B stays the Apache default)" >&2
         echo "  cleanup options: --dry-run (default) | --yes" >&2
         exit 0
         ;;
@@ -574,10 +644,16 @@ cmd_run() {
       continue
     fi
     # Empty include_args must not expand under set -u (bash unbound array).
-    local dl_rc=0
+    local dl_rc=0 rev
+    local -a pin_args=()
+    rev="$(tier_revision "${tier}")"
+    if [[ -n ${rev} ]]; then
+      pin_args+=(--revision "${rev}")
+      log "  revision: ${rev} (pinned opt-in pack)"
+    fi
     if [[ ${#include_args[@]} -gt 0 ]]; then
       HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "${dir}" \
-        "${include_args[@]}" || dl_rc=$?
+        "${include_args[@]}" ${pin_args[@]+"${pin_args[@]}"} || dl_rc=$?
     else
       HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "${dir}" || dl_rc=$?
     fi
@@ -675,7 +751,7 @@ main() {
     run) cmd_run ;;
     cleanup) cmd_cleanup ;;
     *)
-      err "Usage: $0 status|run|cleanup [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev] [--json] [--yes]"
+      err "Usage: $0 status|run|cleanup [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev|flux3|flux3-base|flux3-nvfp4|flux3-bf16|flux3-te|flux3-pup] [--json] [--yes]"
       exit 1
       ;;
   esac

@@ -35,6 +35,12 @@ Policy: US-based casual creators (YouTube, client shorts, ads under a small LLC)
 | FLUX.2 [dev] | black-forest-labs/FLUX.2-dev | FLUX.2-dev / Non-Commercial | Yes (non-commercial only) | No | paid BFL commercial license | card | card | No |
 | FLUX.2 [dev] FP8 Comfy pack | Comfy-Org/flux2-dev | FLUX Non-Commercial | Yes (non-commercial only) | No | paid BFL commercial license | card | card | No |
 | Mistral Small Flux2 text encoder | Comfy-Org/flux2-dev (split_files/text_encoders) | FLUX Non-Commercial | Yes (non-commercial only) | No | paid BFL commercial license | card | card | No |
+| FLUX 3 Image Klein distilled INT8-convrot | black-forest-labs/flux-3-image-klein-comfy | FLUX Kommunity License (v1.0) | Yes | Yes if a qualifying user under the cap | $5M gross annualized revenue (qualifying users) | card | card | No |
+| FLUX 3 Image Klein base INT8 | black-forest-labs/flux-3-image-klein-comfy | FLUX Kommunity License (v1.0) | Yes | Yes if a qualifying user under the cap | $5M gross annualized revenue (qualifying users) | card | card | No |
+| FLUX 3 Image Klein base NVFP4 | black-forest-labs/flux-3-image-klein-comfy | FLUX Kommunity License (v1.0) | Yes | Yes if a qualifying user under the cap | $5M gross annualized revenue (qualifying users) | card | card | No |
+| FLUX 3 Image Klein base BF16 | black-forest-labs/flux-3-image-klein-comfy | FLUX Kommunity License (v1.0) | Yes | Yes if a qualifying user under the cap | $5M gross annualized revenue (qualifying users) | card | card | No |
+| Qwen3VL-4B text encoder (FLUX 3 companion) | black-forest-labs/flux-3-image-klein-comfy (text_encoders) | FLUX Kommunity License (v1.0) | Yes (with FLUX 3) | Yes if a qualifying user under the cap | $5M gross annualized revenue (qualifying users) | card | card | No |
+| Qwen3.5-9B prompt upsampler (FLUX 3 companion) | black-forest-labs/flux-3-image-klein-comfy (text_encoders) | FLUX Kommunity License (v1.0) | Yes (with FLUX 3) | Yes if a qualifying user under the cap | $5M gross annualized revenue (qualifying users) | card | card | No |
 | MiniMax H3 | Comfy-Org/MiniMax-H3 | MiniMax H3 Community License | No - US Excluded Territory for weights AND outputs | No | n/a | n/a | n/a | No |
 | Wan 2.5 / 2.6 / 2.7 / 3.0 | (API / partner) | API-only / partner | No (not local weights) | No as a lab default | n/a | n/a | n/a | No |
 | Seedance / Kling / Veo / fal / Comfy Cloud | (API / partner) | API-only / partner | No (not local weights) | No as a lab default | n/a | n/a | n/a | No |
@@ -70,6 +76,7 @@ TRELLIS.2 footnote: download `Comfy-Org/TRELLIS.2` (`trellis_2_int8_convrot` + s
 - Suno / Udio partner APIs
 - FLUX.2 [dev] as any default or "quality" image `--tier` alias (opt-in is `download-image --tier flux2-dev`)
 - FLUX.2 Klein 9B (`flux-2-klein-9b-fp8`, `FLUX.2-klein-9b-nvfp4`, Nunchaku 9B) as the **default** image model or a pinned lab UNET (opt-in is `download-image --tier 9b`)
+- FLUX 3 Image Klein (`flux3`, `flux3-base`, `flux3-nvfp4`, `flux3-bf16`, `flux3-te`, `flux3-pup`) as the **default** image model or a pinned lab UNET - FLUX Kommunity License (v1.0), opt-in only via `download-image --tier flux3`
 - Nunchaku 9B packs
 - API-only / US-excluded / paid-self-host-required models (Wan 2.5+, Seedance, Kling, Veo, fal, Comfy Cloud, MiniMax API)
 - F5-TTS official weights (CC-BY-NC-4.0), Coqui XTTS v2 (CPML), Echo-TTS (CC-BY-NC-SA)
@@ -85,6 +92,8 @@ TRELLIS.2 footnote: download `Comfy-Org/TRELLIS.2` (`trellis_2_int8_convrot` + s
 Apache still: `flux-2-klein-4b-fp8.safetensors` + `qwen_3_4b.safetensors` + `flux2-vae.safetensors`
 
 Opt-in NC still (not in `download-models`): `flux-2-klein-9b-fp8.safetensors` + `qwen_3_8b_fp8mixed.safetensors` + `full_encoder_small_decoder.safetensors` via `download-image --tier 9b`. FLUX Non-Commercial - not monetized YouTube. `flux2_dev_fp8mixed.safetensors` + `mistral_3_small_flux2_bf16.safetensors` via `--tier flux2-dev`.
+
+Opt-in FLUX 3 Image Klein still (not in `download-models`, gated, HF revision-pinned at `feef60b0aaf63a4773ace96636ebbcf43b881312`): `flux3-image-klein-int8-convrot.safetensors` + `qwen3vl_4b_int8_convrot.safetensors` via `download-image --tier flux3`. Base variants `flux3-image-klein-base-int8-convrot.safetensors` (`--tier flux3-base`), `flux3-image-klein-base-nvfp4.safetensors` (`--tier flux3-nvfp4`), `flux3-image-klein-base-bf16.safetensors` (`--tier flux3-bf16`). Optional prompt upsampler `qwen3.5_9b_flux3_prompt_upsampler_int8_convrot.safetensors` via `--tier flux3-pup`. All six are **FLUX Kommunity License (v1.0)** - monetized output is OK only for qualifying users under **$5M gross annualized revenue**. FLUX 3 is *not* Apache and is never a default; **Klein 4B remains the Apache default still**. Not legal advice.
 
 Apache silent motion: `wan2.2_ti2v_5B_fp16.safetensors` + `wan2.2_vae.safetensors` + `umt5_xxl_fp8_e4m3fn_scaled.safetensors`
 
