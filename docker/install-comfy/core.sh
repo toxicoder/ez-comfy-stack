@@ -21,8 +21,8 @@ COMFY_USER="${COMFY_USER:-0}"
 MODELS_ROOT="${MODELS_ROOT:-/models}"
 STAMP="${STAMP:-${COMFY_HOME}/.lab-install-complete}"
 VENV="${VENV:-${COMFY_HOME}/.venv}"
-# Validated cu130 pin (see docs/models-and-cache.md). Override via ARG/ENV.
-TORCH_VERSION="${TORCH_VERSION:-2.14.0}"
+# Validated cu130 pin 2.14.1 (2026-10-27; see docs/models-and-cache.md). Override via ARG/ENV.
+TORCH_VERSION="${TORCH_VERSION:-2.14.1}"
 TORCH_INDEX_URL="${TORCH_INDEX_URL:-https://download.pytorch.org/whl/cu130}"
 
 #######################################

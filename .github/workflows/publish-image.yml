@@ -71,14 +71,14 @@ jobs:
             EZ_COMFY_PREBUILD=${{ github.event.inputs.prebuild || '1' }}
             CUDA_BASE_IMAGE=nvidia/cuda:13.0.0-runtime-ubuntu24.04
             CUDA_RUNTIME_IMAGE=nvidia/cuda:13.0.0-runtime-ubuntu24.04
-            TORCH_VERSION=2.14.0
+            TORCH_VERSION=2.14.1
             TORCH_INDEX_URL=https://download.pytorch.org/whl/cu130
-            COMFYUI_REF=v0.37.0
+            COMFYUI_REF=v0.43.0
             COMFYUI_MANAGER_REF=4.2.2
             COMFYUI_NUNCHAKU_NODE_REF=v1.2.1
             COMFYUI_VHS_REF=
           # Do not pass HF_TOKEN or any host secrets as build-args
-          # Pins: torch 2.14.0 cu130 + ComfyUI v0.37.0 + Manager + VHS main
+          # Pins: torch 2.14.1 cu130 + ComfyUI v0.43.0 + Manager + VHS main
           provenance: false
           sbom: false
           cache-from: |
