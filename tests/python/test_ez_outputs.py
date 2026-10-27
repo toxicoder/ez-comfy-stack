@@ -348,18 +348,32 @@ def test_list_outputs_skips_stat_errors(
     assert "ok.png" in rels
     assert "boom.png" not in rels
 
-    hits = {"n": 0}
-
-    def _stat_second(self: Path, *args: Any, **kwargs: Any) -> Any:
+    # A file can disappear after the is_file() probe, so the row-level stat has
+    # its own guard. Pin is_file() open rather than counting Path.stat() calls:
+    # CPython routes is_file() through Path.stat() on 3.12 but not on 3.14, so
+    # a call counter only fires on the older interpreter.
+    def _stat_late(self: Path, *args: Any, **kwargs: Any) -> Any:
         if self.name == "ok.png":
-            hits["n"] += 1
-            if hits["n"] > 1:
-                raise OSError("gone later")
+            raise OSError("gone later")
         return real_stat(self, *args, **kwargs)
 
-    monkeypatch.setattr(Path, "stat", _stat_second)
+    monkeypatch.setattr(Path, "is_file", lambda self: True)
+    monkeypatch.setattr(Path, "stat", _stat_late)
     leftover = [row["rel"] for row in list_outputs(tmp_path)]
     assert "ok.png" not in leftover
+
+    # The is_file() probe failing is a separate branch from the row-level stat,
+    # and on 3.14 nothing routes through Path.stat() there, so drive it directly.
+    def _is_file(self: Path) -> bool:
+        if self.name == "boom.png":
+            raise OSError("probe failed")
+        return True
+
+    monkeypatch.setattr(Path, "is_file", _is_file)
+    monkeypatch.setattr(Path, "stat", real_stat)
+    raced = [row["rel"] for row in list_outputs(tmp_path)]
+    assert "boom.png" not in raced
+    assert "ok.png" in raced
 
 
 def test_input_root_empty_folder_paths(
