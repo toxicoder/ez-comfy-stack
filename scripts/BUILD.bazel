@@ -16,6 +16,17 @@ sh_binary(
     visibility = ["//visibility:public"],
 )
 
+sh_binary(
+    name = "update-stack",
+    srcs = ["utilities/update-stack.sh"],
+    data = [
+        ":doc_sources",
+        "//config:policy",
+        "//docker:sources",
+    ],
+    visibility = ["//visibility:public"],
+)
+
 sh_test(
     name = "manage_help_test",
     size = "small",

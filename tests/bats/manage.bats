@@ -634,3 +634,23 @@ FROZEN_MANAGE_VERBS=(
   [[ ! -f "${MODELS_DIR}/.cache/huggingface/download/blob.incomplete" ]]
   [[ "${output}" == *"drop"* || "${output}" == *"incomplete"* || "${output}" == *"lab workflow weights ready"* ]]
 }
+
+@test "manage: cmd_update_stack delegates to the utility and prints its usage" {
+  local util="${REPO_ROOT}/scripts/utilities/update-stack.sh"
+  [ -x "${util}" ]
+  run cmd_update_stack --help
+  [ "${status}" -eq 0 ]
+  # The usage must state the rule that matters: the lane follows the branch.
+  [[ "${output}" == *"usage: update-stack"* ]]
+  [[ "${output}" == *"from the branch currently checked out"* ]]
+  [[ "${output}" == *"--dry-run"* ]]
+  [[ "${output}" == *"--allow-dirty"* ]]
+  [[ "${output}" == *"another lane"* ]]
+}
+
+@test "manage: help advertises update-stack next to restart" {
+  run cmd_help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"update-stack"* ]]
+  [[ "${output}" == *"Redeploy from the checked-out branch"* ]]
+}
