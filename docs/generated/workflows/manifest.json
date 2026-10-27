@@ -2443,6 +2443,18 @@
       "kind": "graph"
     },
     {
+      "id": "stills/still-flux3-fast",
+      "path": "generated/workflows/stills/still-flux3-fast.md",
+      "lane": "stills",
+      "kind": "graph"
+    },
+    {
+      "id": "stills/still-flux3-quality",
+      "path": "generated/workflows/stills/still-flux3-quality.md",
+      "lane": "stills",
+      "kind": "graph"
+    },
+    {
       "id": "stills/still-hero",
       "path": "generated/workflows/stills/still-hero.md",
       "lane": "stills",
@@ -2587,6 +2599,6 @@
       "kind": "album"
     }
   ],
-  "graph_count": 681,
-  "page_count": 432
+  "graph_count": 683,
+  "page_count": 434
 }

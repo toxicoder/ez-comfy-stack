@@ -76,7 +76,7 @@ TRELLIS.2 footnote: download `Comfy-Org/TRELLIS.2` (`trellis_2_int8_convrot` + s
 - Suno / Udio partner APIs
 - FLUX.2 [dev] as any default or "quality" image `--tier` alias (opt-in is `download-image --tier flux2-dev`)
 - FLUX.2 Klein 9B (`flux-2-klein-9b-fp8`, `FLUX.2-klein-9b-nvfp4`, Nunchaku 9B) as the **default** image model or a pinned lab UNET (opt-in is `download-image --tier 9b`)
-- FLUX 3 Image Klein (`flux3`, `flux3-base`, `flux3-nvfp4`, `flux3-bf16`, `flux3-te`, `flux3-pup`) as the **default** image model or a pinned lab UNET - FLUX Kommunity License (v1.0), opt-in only via `download-image --tier flux3`
+- FLUX 3 Image Klein (`flux3`, `flux3-base`, `flux3-nvfp4`, `flux3-bf16`, `flux3-te`, `flux3-pup`) as the **default** image model or in the flagship still lanes - FLUX Kommunity License (v1.0), opt-in only via `download-image --tier flux3`; the opt-in `stills/still-flux3-*` lab graphs are allowed and never default
 - Nunchaku 9B packs
 - API-only / US-excluded / paid-self-host-required models (Wan 2.5+, Seedance, Kling, Veo, fal, Comfy Cloud, MiniMax API)
 - F5-TTS official weights (CC-BY-NC-4.0), Coqui XTTS v2 (CPML), Echo-TTS (CC-BY-NC-SA)

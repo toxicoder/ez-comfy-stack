@@ -1329,6 +1329,22 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "motion/av/still-to-video-8s",
         "motion/av/first-last-8s",
     ),
+    "stills/still-flux3-fast": _spec(
+        "produce",
+        "klein",
+        "motion/silent/still-to-video-5s",
+        "motion/av/still-to-video-8s",
+        "stills/text-swap",
+        sampler_steps_cfg=True,
+    ),
+    "stills/still-flux3-quality": _spec(
+        "produce",
+        "klein",
+        "motion/silent/still-to-video-5s",
+        "motion/av/still-to-video-8s",
+        "stills/text-swap",
+        sampler_steps_cfg=True,
+    ),
     "stills/thumbnail": _spec("produce", "klein"),
     "stills/text-swap": _spec(
         "produce",

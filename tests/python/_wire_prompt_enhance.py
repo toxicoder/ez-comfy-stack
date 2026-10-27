@@ -1910,6 +1910,10 @@ def enable_lab_graph(graph: dict[str, Any]) -> None:
 def main() -> None:
     klein(lab_json("stills/still-draft.json"), KLEIN_STILL, neg=KLEIN_NEG_STILL)
     klein(lab_json("stills/still-hero.json"), KLEIN_STILL, neg=KLEIN_NEG_STILL)
+    klein(lab_json("stills/still-flux3-fast.json"), KLEIN_STILL, neg=KLEIN_NEG_STILL)
+    klein(
+        lab_json("stills/still-flux3-quality.json"), KLEIN_STILL, neg=KLEIN_NEG_STILL
+    )
     wan_i2v(lab_json("motion/silent/still-to-video-5s.json"), WAN_I2V)
     wan_t2v(lab_json("motion/silent/text-to-video-5s.json"))
     wan_i2v(lab_json("motion/silent/still-to-shot.json"), GOSEE_WAN_I2V_01)

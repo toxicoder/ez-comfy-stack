@@ -49,6 +49,19 @@ Lane B Klein stills (same occupancy **klein**):
 
 ---
 
+## FLUX 3 Klein stills (opt-in, gated)
+
+Same Klein desk on **FLUX 3 Image Klein** weights: gated Hugging Face, **FLUX Kommunity License (v1.0)**, not Apache, and **not** in `download-models`. Accept the license on `black-forest-labs/flux-3-image-klein-comfy` with the **same HF account as `HF_TOKEN`**, then pull `./scripts/utilities/download-image.sh run --tier flux3` (or `--tier flux3-base`) - each tier auto-includes the `flux3-te` text encoder. Monetized output only for qualifying users under **$5M gross annualized revenue**: [Model licenses](../licenses.md). Klein 4B above stays the Apache default still.
+
+| Workflow | Occupancy | What it does |
+| --- | --- | --- |
+| **[stills/still-flux3-fast](../generated/workflows/stills/still-flux3-fast.md)** | klein | FLUX 3 Klein distilled INT8 (`flux3-image-klein-int8-convrot.safetensors`), **16** steps, CFG **1.0** - the graph ships the Quality `flux3-fast` values. Qwen3VL TE (type `flux2`) + `flux2-vae`. Prefix `ez_still_flux3_fast` |
+| **[stills/still-flux3-quality](../generated/workflows/stills/still-flux3-quality.md)** | klein | FLUX 3 Klein base INT8 (`flux3-image-klein-base-int8-convrot.safetensors`), **50** steps, CFG **3.5** - the graph ships the Quality `flux3-quality` values. Same gated TE + VAE. Prefix `ez_still_flux3_quality` |
+
+Weights missing: **Check models** names the command and Queue keeps the authored loaders (nothing swaps in weights you have not accepted). Both graphs pin `qwen3vl_4b_int8_convrot.safetensors` + `flux2-vae.safetensors`; Format / platform still sets pixels (16:9 mid 1024x576 by default).
+
+---
+
 ## Apps Lane A - Klein stills
 
 App Mode (frontend **1.41.13+**) is a widget surface on the same lab JSON. Occupancy and handoff: [ComfyUI Apps](../studio-apps.md). Inspire (no UNET) stays on the [catalog index](../studio-workflows.md#inspire-lane-a).

@@ -1,5 +1,7 @@
 {
   "stills/still-draft": "klein_t2i",
+  "stills/still-flux3-fast": "klein_t2i",
+  "stills/still-flux3-quality": "klein_t2i",
   "stills/still-daily": "klein_t2i",
   "stills/still-studio": "klein_t2i",
   "stills/image-studio": "klein_image_studio",
