@@ -788,6 +788,70 @@
       "flags": []
     },
     {
+      "id": "update-stack",
+      "title": "update-stack",
+      "description": "Redeploy from the checked-out branch: ff-only pull, branch-matched image lane, then restart or recreate through the normal start path (yes confirm and headroom still run). Refuses a dirty tree, a detached HEAD, and a mismatched image lane.",
+      "argv": [
+        "./scripts/manage.sh",
+        "update-stack"
+      ],
+      "flags": [
+        {
+          "name": "branch",
+          "kind": "choice",
+          "required": false,
+          "default": "development",
+          "label": "Branch to deploy from (picks the image lane)",
+          "choices": [
+            {
+              "value": "development",
+              "label": "development - us-safe-studio-development lane (default dev box)"
+            },
+            {
+              "value": "main",
+              "label": "main - us-safe-studio production lane (promoted only)"
+            }
+          ]
+        },
+        {
+          "name": "dry-run",
+          "kind": "bool",
+          "default": false,
+          "label": "Plan only: run the guardrails, mutate nothing"
+        },
+        {
+          "name": "yes",
+          "kind": "bool",
+          "default": false,
+          "label": "Automation confirm for a non-TTY run (no prompt)"
+        },
+        {
+          "name": "force-recreate",
+          "kind": "bool",
+          "default": false,
+          "label": "Always stop + start, even for a scripts-only change"
+        },
+        {
+          "name": "no-restart",
+          "kind": "bool",
+          "default": false,
+          "label": "Update checkout and image only; leave the running stack alone"
+        },
+        {
+          "name": "skip-image-pull",
+          "kind": "bool",
+          "default": false,
+          "label": "Skip the docker pull (offline or already pulled)"
+        },
+        {
+          "name": "allow-dirty",
+          "kind": "bool",
+          "default": false,
+          "label": "Proceed with a dirty worktree (rare; hides unreviewed edits)"
+        }
+      ]
+    },
+    {
       "id": "logs",
       "title": "logs",
       "description": "Follow compose logs.",

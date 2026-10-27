@@ -10,6 +10,7 @@ tags: [troubleshooting, comfyui, docker]
 
 - **Doctor first** - `./scripts/manage.sh doctor` before hunting rows
 - **Topic pages** - docs site, canvas, host/Docker, downloads, start/runtime, models/workflows, guide packs
+- **update-stack refusals** - exit 3 guardrails, exit 5 unprovable repo root, wrong image lane
 - **Symptom decision tree** - common failures in one diagram
 - **Logs and reset** - compose logs and `cleanup` that keeps `${MODELS_DIR}`
 
@@ -106,6 +107,28 @@ Canvas rows live in [Studio canvas](operate/troubleshooting-canvas.md). The fixt
 | Symptom | Cause | Fix |
 | --- | --- | --- |
 | **stills/background-swap** Cubic block world output has no people at all | The optional BSD-3 DeepLabV3 person mask could not load (weights missing, torch/torchvision missing, or `EZ_PERSON_MASK=off`), so the swap failed closed to the photo-anchored people-kept rebuild instead of erasing and pasting. Check the Enhance status: `photo-anchored block world (person mask unavailable)` means that mode ran | `./scripts/manage.sh doctor` or canvas **Check models** shows a `person-mask` row. Stage the checkpoint with the printed curl command into `$MODELS_DIR/comfy/ez-person/` (the first cubic Queue also auto-downloads it), then re-Queue with **Cubic block world** selected - the Enhance status should read `precise background instruction` and the paste reinserts the people. Set `EZ_PERSON_MASK=off` deliberately only if you want the people-kept rebuild. |
+
+---
+
+## update-stack (redeploy refusals)
+
+`./scripts/manage.sh update-stack` (or `bazelisk run //scripts:update-stack --`) redeploys the stack
+from the branch you are standing on, and the image lane follows that branch. Exit codes: `0` success
+or nothing to do, `1` failure, `2` usage error, `3` guardrail refusal, `5` the repo root could not be
+proven. Flags: [manage.sh reference](manage-cli.md#catalog).
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| `update-stack` exits **3** before it touches anything and prints the changed paths (up to 20) | The flow only deploys a checkout it can `git pull --ff-only`. A dirty worktree means the redeploy would ship edits nobody reviewed, so it refuses | `git status`, commit or stash the paths it listed, then re-run. `--dry-run` shows the plan without mutating, but the same guardrails still execute, so it refuses too. `--allow-dirty` is for a deliberate local experiment, never for forcing an unreviewed deploy out |
+| `update-stack` exits **3** naming an image ref that does not match the branch | The image lane must match the branch: `main` -> `us-safe-studio`, any other branch -> `us-safe-studio-development`. An `EZ_COMFY_IMAGE` or `--image` pointing at the other lane, or a stale `LAB_GIT_BRANCH`, breaks that invariant | Drop `--image` and unset `EZ_COMFY_IMAGE` / `LAB_GIT_BRANCH`, then re-run on the branch whose lane you want. Pass `--allow-lane-mismatch` only when you deliberately want the other lane's tag |
+| `update-stack` exits **3** and reports the branch as `unknown` | HEAD is detached, so `stack_git_branch()` cannot name a branch and the image lane cannot be derived from it | `git switch development` (or `main`) and re-run, or pass `--branch NAME`, which switches to NAME first. `--branch` is the only supported way to run on a detached HEAD |
+| In CI, cron, or a detached tmux session, `update-stack` exits **3** at the redeploy step and names `--yes` | The redeploy delegates to `./scripts/manage.sh restart`, or `stop` + `start`, and that start keeps the heavy `yes` confirm and the headroom preflight. With no TTY the confirm cannot be answered, so the flow fails closed instead of assuming | Re-run interactively and type `yes`, or pass `--yes` for automation (it exports `LAB_NON_INTERACTIVE=1` and `LAB_CONFIRM_TOKEN=yes`, the supported path). Do not call `docker compose up` by hand to get around it |
+| `update-stack` exits **5** with `cannot find scripts/lib/paths.sh`, before any git or docker work | The flow needs its own `scripts/lib` and a real checkout. Under `bazel run` the binary lives in Bazel's output tree, where the sibling `../lib` does not exist, so it resolves libraries from `BUILD_WORKSPACE_DIRECTORY`; without that variable, or from outside a checkout, neither the libraries nor the `scripts/manage.sh` + `docker/docker-compose.yml` markers are there | Re-run with `bazelisk run //scripts:update-stack --` from inside the repo (bazel run sets `BUILD_WORKSPACE_DIRECTORY`) or `./scripts/manage.sh update-stack` from the repo root. The error names both entry points. Never `bash` the file under `bazel-bin/` directly |
+| A warning says the image pull failed, but the run carries on and still finishes with the doctor check | Pull failure is a warning by design, not a hard failure: a locally built image stays viable. `--skip-image-pull` and `LAB_STACK_SKIP_PULL=1` skip the pull the same way | Check registry reachability and your GHCR `docker login`, then re-run. To build locally instead, pass `--force-build` (exports `LAB_STACK_FORCE_BUILD=1` for the delegated start) and confirm the result with `./scripts/manage.sh doctor` |
+| After `update-stack` the stack is on the wrong image lane (`status` shows `us-safe-studio-development` where you expected `us-safe-studio`, or the reverse) | The lane follows the checked-out branch, so the run happened on a branch other than `main`. A leftover `EZ_COMFY_IMAGE` / `LAB_GIT_BRANCH`, or `--allow-lane-mismatch`, also lands you on the other lane | Check `git branch --show-current` and `./scripts/manage.sh status` first. Clear `EZ_COMFY_IMAGE` / `LAB_GIT_BRANCH`, then re-run from the branch you want, with `--branch NAME` to switch and `--force-recreate` to force stop + start. `main` deploys the production lane; any other branch deploys the development lane |
+
+`update-stack` never merges, rebases, resets, removes a volume, or calls `docker` directly. If a row
+above does not match, run `./scripts/manage.sh doctor` and read [Start and runtime](operate/troubleshooting-start-runtime.md).
 
 ---
 
