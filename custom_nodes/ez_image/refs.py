@@ -9,6 +9,15 @@ from .nodes import CATEGORY, snap_dim
 if TYPE_CHECKING:
     from ez_common import ComfyInputTypes
 
+DEFAULT_MAX_REFS = 3
+"""Reference frames taken from a wired batch when the widget is unset."""
+
+MIN_MAX_REFS = 1
+"""Lowest accepted ``max_refs`` widget value."""
+
+MAX_MAX_REFS = 4
+"""Highest accepted ``max_refs`` widget value (Klein reference budget)."""
+
 
 def _as_bool(value: object) -> bool:
     """Parse a Comfy BOOLEAN or presence flag.
@@ -46,6 +55,62 @@ def _image_present(image: object) -> bool:
         return int(shape[1]) > 1 and int(shape[2]) > 1
     except (TypeError, IndexError, ValueError):
         return False
+
+
+def _batch_len(image: object) -> int:
+    """Return the leading batch size of a tensor-shaped value.
+
+    Args:
+        image: IMAGE or latent-samples tensor, or None.
+
+    Returns:
+        Frame count, or 1 when the shape is missing or unreadable.
+    """
+    shape = getattr(image, "shape", None)
+    if shape is None:
+        return 1
+    try:
+        length = int(shape[0])
+    except (TypeError, IndexError, ValueError):
+        return 1
+    return length if length > 0 else 1
+
+
+def _ref_limit(value: object) -> int:
+    """Clamp the ``max_refs`` widget into the canvas range.
+
+    Args:
+        value: Widget value (int, number, or junk from a stale graph).
+
+    Returns:
+        Reference count between ``MIN_MAX_REFS`` and ``MAX_MAX_REFS``.
+    """
+    raw: Any = value
+    try:
+        limit = int(raw)
+    except (TypeError, ValueError):
+        return DEFAULT_MAX_REFS
+    if limit < MIN_MAX_REFS:
+        return MIN_MAX_REFS
+    if limit > MAX_MAX_REFS:
+        return MAX_MAX_REFS
+    return limit
+
+
+def _count_note(count: int) -> str:
+    """Return the honest status line for a collected still count.
+
+    Args:
+        count: Total frames the node found.
+
+    Returns:
+        Plain ui text, never a placeholder.
+    """
+    if count <= 0:
+        return "no reference still"
+    if count == 1:
+        return "1 reference still"
+    return f"{count} reference stills"
 
 
 def _filename_str(value: object) -> str:
@@ -120,30 +185,61 @@ def load_input_still(filename: object) -> object | None:
     return arr[None, ...]
 
 
+def _concat_frames(frames: list[Any]) -> Any:
+    """Join several BHWC stills on the batch axis with torch.
+
+    Args:
+        frames: Present stills, more than one.
+
+    Returns:
+        Concatenated batch, or ``frames[0]`` when torch is missing or the
+        join fails, so an uneven set still reaches the sampler.
+    """
+    try:
+        import torch
+    except Exception:  # noqa: BLE001 - hermetic tests have no torch
+        return frames[0]
+    cat = getattr(torch, "cat", None)
+    if not callable(cat):
+        return frames[0]
+    try:
+        return cat(frames, dim=0)
+    except Exception:  # noqa: BLE001 - mismatched sizes keep the first still
+        return frames[0]
+
+
 class EZOptionalImage:
     """Optional example/reference stills. Empty filename or no tensor is fine."""
 
     @classmethod
     def INPUT_TYPES(cls) -> ComfyInputTypes:
-        """Return optional IMAGE inputs and filename widgets.
+        """Return the three upload pickers, the mute switch, and the batch socket.
+
+        Widget order is positional: saved graphs store widgets_values as a
+        bare ``[""]``, so ``filename`` must stay slot 0 and the rest defaults.
 
         Returns:
-            Optional image/filename map.
+            Required filename combo plus optional mute, pickers, and IMAGE.
         """
-        img = ("IMAGE",)
         choices = input_still_choices()
-        upload = (choices, {"default": "", "image_upload": True})
-        path = ("STRING", {"default": "", "multiline": False})
         return {
             "required": {
-                "filename": upload,
+                # Slot 0 and the frozen name: ez_outputs.js and 98 graphs
+                # address "filename" directly.
+                "filename": (list(choices), {"default": "", "image_upload": True}),
             },
             "optional": {
-                "image": img,
-                "image_2": img,
-                "image_3": img,
-                "filename_2": path,
-                "filename_3": path,
+                "use_references": (
+                    "BOOLEAN",
+                    {
+                        "default": True,
+                        "label_on": "Use references",
+                        "label_off": "References off",
+                    },
+                ),
+                "filename_2": (list(choices), {"default": "", "image_upload": True}),
+                "filename_3": (list(choices), {"default": "", "image_upload": True}),
+                "image": ("IMAGE",),
             },
         }
 
@@ -155,44 +251,58 @@ class EZOptionalImage:
     OUTPUT_NODE = True
     DESCRIPTION = (
         "Optional example or reference stills. Empty is valid - Queue without "
-        "a file. Klein graphs attach a present still via EZKleinRefCanvas."
+        "a file. Up to three upload pickers plus one wired image batch, all of "
+        "which reach the model as reference latents. use_references mutes them "
+        "without clearing your picks. Klein graphs attach a present still via "
+        "EZKleinRefCanvas."
     )
 
     def run(
         self,
-        image: object = None,
-        image_2: object = None,
-        image_3: object = None,
         filename: object = "",
+        use_references: object = True,
         filename_2: object = "",
         filename_3: object = "",
+        image: object = None,
     ) -> dict[str, Any]:
-        """Count present stills. Do not raise on empty.
+        """Collect the present stills. Never raise on empty or missing files.
 
         Args:
-            image: Optional first IMAGE tensor.
-            image_2: Optional second IMAGE tensor.
-            image_3: Optional third IMAGE tensor.
-            filename: Optional path; ignored when empty or missing.
-            filename_2: Optional second path.
-            filename_3: Optional third path.
+            filename: First picker; empty is a no-op.
+            use_references: False mutes every reference, picks stay as set.
+            filename_2: Second picker; empty is a no-op.
+            filename_3: Third picker; empty is a no-op.
+            image: Optional wired BHWC batch; counts by its leading dimension.
 
         Returns:
-            First present image (or None), count, and has_image flag.
+            Dict with the still (or None), the frame count, the has_image
+            flag, and a ui note.
         """
-        del filename_2, filename_3
-        loaded = load_input_still(filename) if not _image_present(image) else None
-        present = [
-            item
-            for item in (image, loaded, image_2, image_3)
-            if _image_present(item)
-        ]
-        count = len(present)
-        first = present[0] if present else None
+        if not _as_bool(use_references):
+            return {"ui": {"text": ("references off",)}, "result": (None, 0, False)}
+        frames: list[Any] = []
+        count = 0
+        if _image_present(image):
+            frames.append(image)
+            count += _batch_len(image)
+        seen: set[str] = set()
+        for value in (filename, filename_2, filename_3):
+            name = _filename_str(value)
+            if not name or name in seen:
+                continue
+            seen.add(name)
+            loaded = load_input_still(name)
+            if _image_present(loaded):
+                frames.append(loaded)
+                count += _batch_len(loaded)
+        first: Any = None
+        if len(frames) == 1:
+            first = frames[0]
+        elif len(frames) > 1:
+            first = _concat_frames(frames)
         has_image = count > 0
-        note = f"{count} reference still(s)" if has_image else "no reference still"
         return {
-            "ui": {"text": (note,)},
+            "ui": {"text": (_count_note(count),)},
             "result": (first, count, has_image),
         }
 
@@ -202,10 +312,11 @@ class EZKleinRefCanvas:
 
     @classmethod
     def INPUT_TYPES(cls) -> ComfyInputTypes:
-        """Return latent, VAE, and optional image inputs.
+        """Return latent, VAE, optional image, and the reference cap.
 
         Returns:
-            Required latent/vae plus optional image flag.
+            Required latent/vae plus the image, has_image, and max_refs
+            widgets in saved-graph order.
         """
         return {
             "required": {
@@ -215,6 +326,15 @@ class EZKleinRefCanvas:
             "optional": {
                 "image": ("IMAGE",),
                 "has_image": ("BOOLEAN", {"default": False}),
+                "max_refs": (
+                    "INT",
+                    {
+                        "default": DEFAULT_MAX_REFS,
+                        "min": MIN_MAX_REFS,
+                        "max": MAX_MAX_REFS,
+                        "step": 1,
+                    },
+                ),
             },
         }
 
@@ -224,8 +344,9 @@ class EZKleinRefCanvas:
     FUNCTION = "run"
     CATEGORY = CATEGORY
     DESCRIPTION = (
-        "When has_image is set, snap div16, VAE-encode, and attach ReferenceLatent. "
-        "Otherwise pass the empty Flux2 latent through. Never errors if empty."
+        "When has_image is set, snap div16, VAE-encode once, and attach at "
+        "most max_refs frames as ReferenceLatent. Otherwise pass the empty "
+        "Flux2 latent through. Never errors if empty."
     )
 
     def run(
@@ -234,25 +355,27 @@ class EZKleinRefCanvas:
         vae: Any,
         image: object = None,
         has_image: object = False,
+        max_refs: object = DEFAULT_MAX_REFS,
     ) -> tuple[Any, Any]:
-        """Attach a Klein reference latent when a still is present.
+        """Attach Klein reference latents when a still is present.
 
         Args:
             latent: Empty Flux2 latent canvas.
             vae: Flux2 VAE.
-            image: Optional start still.
+            image: Optional start still (BHWC batch).
             has_image: Presence flag from EZOptionalImage.
+            max_refs: Highest number of batch frames to attach.
 
         Returns:
-            Latent (possibly with reference) and the image (or None).
+            Latent (possibly with references) and the image (or None).
         """
         if not _as_bool(has_image) or not _image_present(image):
             return (latent, image)
         encoded = _encode_ref(image, vae)
         if encoded is None:
             return (latent, image)
-        attached = _reference_latent(latent, encoded)
-        return (attached, image)
+        frames = _encoded_frames(encoded, _ref_limit(max_refs))
+        return (_reference_latent_chain(latent, frames), image)
 
 
 class EZDescribeImage:
@@ -332,6 +455,59 @@ def _encode_ref(image: Any, vae: Any) -> Any | None:
         return encode(image)
     except Exception:  # noqa: BLE001 - fail-soft to empty latent
         return None
+
+
+def _encoded_frames(encoded: Any, max_refs: int) -> list[Any]:
+    """Split an encoded still into per-frame reference pieces.
+
+    Args:
+        encoded: VAE-encoded still batch (latent dict or samples tensor).
+        max_refs: Highest number of frames to hand to the reference helper.
+
+    Returns:
+        One piece per frame capped at ``max_refs``, or ``[encoded]`` whole
+        when the batch cannot be split (single frame, or unsliciable data).
+    """
+    samples = encoded.get("samples") if isinstance(encoded, dict) else encoded
+    frames = _batch_len(samples)
+    if frames <= 1 or samples is None:
+        return [encoded]
+    pieces: list[Any] = []
+    for index in range(min(frames, max_refs)):
+        try:
+            piece = samples[index : index + 1]
+        except Exception:  # noqa: BLE001 - unsliciable batch stays one reference
+            return [encoded]
+        if isinstance(encoded, dict):
+            merged = dict(encoded)
+            merged["samples"] = piece
+            pieces.append(merged)
+        else:
+            pieces.append(piece)
+    return pieces if pieces else [encoded]
+
+
+def _reference_latent_chain(empty: Any, frames: list[Any]) -> Any:
+    """Attach every encoded frame by chaining ``ReferenceLatent.append``.
+
+    One frame behaves exactly like a single :func:`_reference_latent` call.
+    A step that raises stops the chain and keeps what already attached, so
+    the sampler still gets a usable latent.
+
+    Args:
+        empty: Empty latent dict.
+        frames: Per-frame encoded stills, oldest first.
+
+    Returns:
+        Combined latent, or the last good latent when a step fails.
+    """
+    current = empty
+    for frame in frames:
+        try:
+            current = _reference_latent(current, frame)
+        except Exception:  # noqa: BLE001 - fail soft with what attached so far
+            break
+    return current
 
 
 def _reference_latent(empty: Any, encoded: Any) -> Any:
