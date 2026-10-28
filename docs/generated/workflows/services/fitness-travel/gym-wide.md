@@ -1286,24 +1286,48 @@ Optional example or reference stills. Empty is valid - Queue without a file.
 
 !!! warning "Lab notes"
 
-    Klein T2I Apps attach a present still via EZKleinRefCanvas. Upload or pick a file already on the drive; filename may be empty.
+    Klein T2I Apps attach a present still via EZKleinRefCanvas. Three upload pickers plus one wired batch; every one of them may stay empty.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
-| `image` | in | `IMAGE` | Optional first still. |
-| `image_2` | in | `IMAGE` | Optional second still. |
-| `image_3` | in | `IMAGE` | Optional third still. |
-| `image` | out | `IMAGE` | First present still, or empty. |
-| `count` | out | `INT` | How many stills are present. |
-| `has_image` | out | `BOOLEAN` | True when at least one still is present. |
+| `image` | in | `IMAGE` | Optional wired still or batch, for an upstream node instead of a picked file. |
+| `image` | out | `IMAGE` | Every present still as one batch, or empty. |
+| `count` | out | `INT` | How many stills are present. A wired batch counts its batch size. |
+| `has_image` | out | `BOOLEAN` | True when at least one still is present and references are not muted. |
 
 #### `filename`
 
 Type `COMBO`. Range / default: empty / input stills.
 
-Upload or pick a still on the drive. Empty is valid.
+First still. Upload, drop, or pick one already on the drive. Empty is valid.
 
-**How it affects generation:** Empty Queues a T2I. A pick loads from input/. Choose from outputs copies a durable file into input/.
+**How it affects generation:** Empty Queues a T2I. A pick loads from input/. Choose from outputs copies a durable file into input/. The reference card shows a thumbnail per slot.
+
+#### `use_references`
+
+Type `BOOLEAN`. Range / default: true.
+
+Use references / References off.
+
+**How it affects generation:** The mute. Off sends nothing to the model and queues text-to-image while keeping every pick, so the same setup can be A/B run. Any new pick turns it back on.
+
+**This graph:** `true`
+
+#### `filename_2`
+
+Type `COMBO`. Range / default: empty / input stills.
+
+Second still. Same picker as the first.
+
+**How it affects generation:** Filled slots pass hidden ones. The App reveals this slot with + Add reference. Duplicate filenames are counted once.
+
+#### `filename_3`
+
+Type `COMBO`. Range / default: empty / input stills.
+
+Third still. Same picker as the first.
+
+**How it affects generation:** Revealed by + Add reference. Readable or missing files fail soft to text-to-image.
 
 ### `EZKleinRefCanvas` - Klein canvas (optional ref)
 
@@ -1320,7 +1344,7 @@ Pass the empty Flux2 latent, or VAE-encode a still and attach ReferenceLatent.
 | `image` | in | `IMAGE` | Optional start still. |
 | `has_image` | in | `BOOLEAN` | Presence flag from EZOptionalImage. |
 | `latent` | out | `LATENT` | Empty or reference-attached latent. |
-| `image` | out | `IMAGE` | The still, or empty. |
+| `image` | out | `IMAGE` | The still batch, or empty. |
 
 #### `has_image`
 
@@ -1331,6 +1355,16 @@ Presence flag when unwired.
 **How it affects generation:** Lab graphs wire this from EZOptionalImage. Off = T2I.
 
 **This graph:** `false`
+
+#### `max_refs`
+
+Type `INT`. Range / default: 1 to 4, default 3.
+
+How many stills to attach as references.
+
+**How it affects generation:** Encodes the batch once, then chains ReferenceLatent per still up to this cap. One still behaves as a single reference. An encode failure passes the empty latent through.
+
+**This graph:** `3`
 
 ### `EZImageUpscale` - Upscale still
 

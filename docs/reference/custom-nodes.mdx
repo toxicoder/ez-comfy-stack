@@ -12,6 +12,7 @@ tags: [custom-nodes, comfyui, occupancy, qc]
 - **Mapped nodes** from `NODE_CLASS_MAPPINGS` / `INPUT_TYPES` / `RETURN_TYPES`
 - **Empty mappings** - helpers, LTX spatial patch, App occupancy chip, Outputs sidebar, subgraphs
 - **Frontend JS** under Nodes 2.0 (preview `widget.value`, no LiteGraph `inputEl` / `node_widget`)
+- **Reference stills card** - three pickers, thumbnails, the **References off** mute, and `max_refs` on the Klein canvas node
 - **QC / rights** notes that ship on the node `DESCRIPTION` (nothing invented)
 
 **What this enables**
@@ -48,7 +49,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 | `ez_music` | 4 nodes | Rap lyrics, album tags, beat-join, zip |
 | `ez_podcast` | 5 nodes | Script, learn, loop bed, disclosure, Kokoro TTS |
 | `ez_prompt_enhance` | 16 nodes | Describe still; Klein / Wan / LTX / Z-Image / LongCat / DreamX / negative / prompt bundle / join / context join / ACE-Step / sample prompt / cinema rack / audio rack |
-| `ez_image` | 9 nodes | Snap / match / optional upscale; still and video Format / platform; optional refs; Creator mode |
+| `ez_image` | 9 nodes | Snap / match / optional upscale; still and video Format / platform; optional reference stills (3 pickers + mute); Creator mode |
 | `ez_quality` | 1 node | Global Lab / Draft / High combo; JS overlays sampler / Klein UNET |
 | `ez_research` | 1 node | Creative research chat |
 | `ez_studio_forge` | 1 node | Clone lab graphs into live `_user/` |
@@ -196,7 +197,7 @@ Category `ez-comfy/studio`. Same pipeline as **inspire/app-forge**. Writes `${CO
 
 ## ez_image
 
-Category `ez-comfy/image`. Size helpers for Klein edit graphs, still and video Format / platform pickers, optional lanczos upscale, optional reference stills, and the 100-mode Creator mode node. Torch / Comfy `common_upscale` is lazy inside snap/match/upscale `run()`.
+Category `ez-comfy/image`. Size helpers for Klein edit graphs, still and video Format / platform pickers, optional lanczos upscale, the optional reference stills card, and the 100-mode Creator mode node. Torch / Comfy `common_upscale` is lazy inside snap/match/upscale `run()`.
 
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
@@ -208,10 +209,12 @@ Category `ez-comfy/image`. Size helpers for Klein edit graphs, still and video F
 | `EZImageUpscale` | Upscale still | `image` IMAGE, `upscale` combo `none` `2x` `4x` `4K` (default `none`) | `IMAGE` image, `STRING` upscale | - | Optional lanczos after decode, wired before SaveImage on stills. `none` is a passthrough. `4K` fits a 3840x2160 box (portrait 2160x3840). No extra weights. Not a Manager pack |
 | `EZImageFormat` | Format / platform | `format` combo, `look` combo, `width`/`height`/`batch_size` INT | `INT` width/height/batch, `STRING` hint/prefix/context | klein | Preset sets div16 canvas and Enhance framing. Custom snaps WidthxHeight. Look recipe (still-studio / image-studio) is a Cinema Rack starter. Quality does not change size |
 | `EZImageMode` | Creator mode | `category` combo, `mode` combo (100 labels), `iterate` BOOLEAN (default off), `run_summary` STRING, optional `context` STRING, `has_image` BOOLEAN force input | `STRING` context/enhance_mode/prefix | klein | stills/image-studio. Category filters Mode. Queue splices an instruction, picks t2i/edit/text_swap/identity/background_swap/background_edit, and sets the save prefix. Optional refs never required. **Iterate** on: first Run is text-to-image (`ez_iterate`); the saved still becomes the reference and the next Run is an edit. **This run** is the values Queue will send (`POST /ez_image/studio-preview`) |
-| `EZOptionalImage` | Optional reference stills | `filename` STRING (default empty), optional IMAGEx3 | `IMAGE` image, `INT` count, `BOOLEAN` has_image | klein | Empty is valid. Presence is the tensor, not the filename |
-| `EZKleinRefCanvas` | Klein canvas (optional ref) | `latent` LATENT, `vae` VAE, optional IMAGE + has_image | `LATENT` latent, `IMAGE` image | klein | Empty still passes the Flux2 latent through. Present still snaps div16, VAE-encodes, ReferenceLatent. Fail-soft |
+| `EZOptionalImage` | Optional reference stills | `filename` combo + upload (default empty), `use_references` BOOLEAN (default on; **Use references** / **References off**), `filename_2` / `filename_3` combo + upload (default empty); optional `image` IMAGE (wired batch) | `IMAGE` image, `INT` count, `BOOLEAN` has_image | klein | Empty is valid - Queue with nothing picked and the graph runs text-to-image. Every picker takes a drag-and-drop, an upload, a file already in `input/`, or a wired image. Up to three picked stills plus one wired batch reach the model as real Flux2 / Klein reference latents. Duplicates skip by normalized filename; a wired batch counts by its leading batch dim. `use_references` off mutes without clearing your picks (status `references off`). Missing or unreadable file loads as nothing - never an error. Presence is the tensor, not the filename |
+| `EZKleinRefCanvas` | Klein canvas (optional ref) | `latent` LATENT, `vae` VAE; optional IMAGE + has_image + `max_refs` INT 1-4 (default 3) | `LATENT` latent, `IMAGE` image | klein | Empty still passes the Flux2 latent through. Present still snaps div16, VAE-encodes once, then attaches at most `max_refs` frames as references (one `ReferenceLatent.append` per frame). Set `max_refs` to 1 for the old single-reference behavior. Fail-soft |
 | `EZDescribeImage` | Describe reference still | `has_image` BOOLEAN, optional IMAGE | `STRING` caption | - | Fail-soft empty caption without VL weights. Lab graphs use `EZImageDescribe` (prompt-enhance pack) instead |
 | `EZVideoFormat` | Format / platform (video) | `family` combo (Wan 5B / LTX-2.5), `format` combo, `width`/`height` INT | `INT` width/height, `STRING` hint/prefix | wan / ltx | Preset sets Spark-safe clip pixels (Wan div16 max 1024, LTX div32 max 1280). Custom snaps 720->704 on LTX. Length stays on the latent. App Mode hides Family. Quality does not change size |
+
+**Reference stills card** (`EZOptionalImage` front-end, Nodes 2.0 safe). Each picker slot shows a thumbnail of what Queue will attach. Fill a slot by dragging a file onto the card's drop zone, by **Upload media**, by **Choose from outputs** (same buttons as the other media pickers), by picking a name already in `input/`, or by wiring an IMAGE into the node. **+ Add reference** reveals the next picker; every filled slot has **Remove**. The status line reads `Reference stills: 2 of 3` while stills are attached, `Reference stills: 2 of 3 plus a wired batch` when a batch is also wired, `Reference stills muted` while the mute is off, and `No reference still - Queue as is` when nothing is picked, which is the text-to-image path. The **Use references** / **References off** toggle is the one-click mute and never clears a pick; a new pick turns it back on. Upload posts to `/upload/image` and stores `subfolder/name`; widget writes use `widget.value`, rebuild `widgets_values`, then dirty the canvas - no LiteGraph `node_widget`.
 
 ---
 

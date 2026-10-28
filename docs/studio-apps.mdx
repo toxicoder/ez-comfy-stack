@@ -1,6 +1,6 @@
 ---
 title: ComfyUI Apps
-description: App Mode surfaces for the US-safe studio - Lane A Inspire vs Lane B Produce, occupancy, and handoff chains.
+description: App Mode surfaces for the US-safe studio - Lane A Inspire vs Lane B Produce, occupancy, optional reference stills, and handoff chains.
 tags: [comfyui, app-mode, workflows, occupancy, klein, wan, ltx]
 ---
 
@@ -12,6 +12,7 @@ tags: [comfyui, app-mode, workflows, occupancy, klein, wan, ltx]
 - Apps sidebar (`.app.json`) vs Workflows
 - Where operator Apps persist (`_user/`; explicit lab Save or duplicate only)
 - Creator widgets: Quality (Lab / Draft / High / Free Commercial Use), Prompt, Style, Rewrite prompt, Rewrite negative (stays on so the negative cannot fight the final positive; one toggle per family), Seed (unique labels, wired LoadImage / LoadAudio)
+- **Example / reference (optional)** - LoadImage-style pickers (one in the App, three on the node card), a one-click **References off** mute, and `max_refs` on the Klein canvas node
 - Occupancy (one GB10 job) - chip at the top of the widget list, plus App summary and Quality caption. Minimize it to a corner pill or close it; a closed chip returns as a pill on the next run or App load. The choice is remembered in this browser.
 - Lane A (Inspire) vs Lane B (Produce)
 - Handoff chains (still -> motion -> AV)
@@ -21,6 +22,7 @@ tags: [comfyui, app-mode, workflows, occupancy, klein, wan, ltx]
 - Opening a lab graph from Comfy's **Apps** sidebar, not only Workflows
 - Queueing a lab graph from creator widgets instead of hunting the canvas
 - Knowing which App to stop before you load the next one
+- A/B-ing one setup with the reference stills muted, without clearing what you picked
 - Following Spark Still -> Hero -> Silent 5s -> AV 5s without renaming files
 
 **Who this is for:** studio users after `stills/still-draft` has been loaded once.
@@ -41,7 +43,7 @@ flowchart LR
 
 | Surface | What you edit | When |
 | --- | --- | --- |
-| **App** | Unique creator widgets. When the graph needs a still, **Start image** (or **First frame** / **Last frame**) is first so Queue cannot hide a missing file. Then **Quality** (Lab / Draft / High), **Sample prompt** (30 lab recipes + **Custom**), **Prompt**, **Format / platform** (on Apps that own a canvas), **Output size** (Match input uses a loaded still's aspect; Force format keeps the Format pick), **Duration** (LTX 5/8/10/12 s, default 8 s; Wan stays 5 s), **Style** (`none` = off), **Rewrite prompt**, then **Seed**, then Width / Height (and Batch on Klein stills). Format sets pixels and Rewrite prompt framing; Custom uses the size widgets (Klein div16, Wan div16, LTX div32 - pick **LTX - 16:9 YouTube (1280x704)**, never type 720). Filename / LoadImage / LoadAudio widgets upload a file or choose one already on the output disk. **Start image** only when that LoadImage is wired (I2V, talking-head, character tweak, clay, text-swap). Optional references use the same picker and may stay empty. **motion/av/first-last-8s** exposes **First frame** and **Last frame**. **motion/av/audio-to-video-8s** exposes **Audio file**. **motion/av/clip-chain** keeps Start image first, then Quality, Sample prompt (Beat 1), four **Beat N prompt** boxes, Format, Output size (Match input), Duration (default 8 s), Describe image, shared Rewrite / Audio notes / Logline, Seed, then Width / Height (Custom only). Occupancy stays on the chip, not as an App combo. Style is hidden on I2V (the start frame owns look). **stills/still-studio** also adds **Look recipe**, Image model, and Steps / CFG - prefix follows Format. **stills/image-studio** adds **Mode category**, **Creator mode** (100 presets), Look recipe, Image model, Steps / CFG, and an optional example/reference still - prefix follows Creator mode. **stills/still-daily** keeps Image model + steps/CFG. Music adds duration + vocal/instrumental; podcast adds bed length + Kokoro stock voices; **audio/podcast/learn-episode** adds **Sources**, **Format**, and **Duration** (ACE bed stays 30 s and loops); dub adds source file + upload, optional URL, rights, and target language. Duplicate widgets get distinct labels (Klein prompt / Wan prompt, Beat 1 prompt, Bed tags). | Daily Queue |
+| **App** | Unique creator widgets. When the graph needs a still, **Start image** (or **First frame** / **Last frame**) is first so Queue cannot hide a missing file. Then **Quality** (Lab / Draft / High), **Sample prompt** (30 lab recipes + **Custom**), **Prompt**, **Format / platform** (on Apps that own a canvas), **Output size** (Match input uses a loaded still's aspect; Force format keeps the Format pick), **Duration** (LTX 5/8/10/12 s, default 8 s; Wan stays 5 s), **Style** (`none` = off), **Rewrite prompt**, then **Seed**, then Width / Height (and Batch on Klein stills). Format sets pixels and Rewrite prompt framing; Custom uses the size widgets (Klein div16, Wan div16, LTX div32 - pick **LTX - 16:9 YouTube (1280x704)**, never type 720). Filename / LoadImage / LoadAudio widgets upload a file or choose one already on the output disk. **Start image** only when that LoadImage is wired (I2V, talking-head, character tweak, clay, text-swap). Optional references stay empty by default. The App surfaces **Example / reference (optional)** (one LoadImage-style picker) and the **Use reference stills** mute; the node card adds the two extra pickers, thumbnails, and the drop zone. Blank is the default and Queues as text-to-image. **motion/av/first-last-8s** exposes **First frame** and **Last frame**. **motion/av/audio-to-video-8s** exposes **Audio file**. **motion/av/clip-chain** keeps Start image first, then Quality, Sample prompt (Beat 1), four **Beat N prompt** boxes, Format, Output size (Match input), Duration (default 8 s), Describe image, shared Rewrite / Audio notes / Logline, Seed, then Width / Height (Custom only). Occupancy stays on the chip, not as an App combo. Style is hidden on I2V (the start frame owns look). **stills/still-studio** also adds **Look recipe**, Image model, and Steps / CFG - prefix follows Format. **stills/image-studio** adds **Mode category**, **Creator mode** (100 presets), Look recipe, Image model, Steps / CFG, and **Example / reference (optional)** - prefix follows Creator mode. **stills/still-daily** keeps Image model + steps/CFG. Music adds duration + vocal/instrumental; podcast adds bed length + Kokoro stock voices; **audio/podcast/learn-episode** adds **Sources**, **Format**, and **Duration** (ACE bed stays 30 s and loops); dub adds source file + upload, optional URL, rights, and target language. Duplicate widgets get distinct labels (Klein prompt / Wan prompt, Beat 1 prompt, Bed tags). | Daily Queue |
 | **Graph** | Groups, bypass (Ctrl+B), VHS preview, UNET/CLIP/VAE, hidden shot cards, unwired placeholders (Fun InP end frame, VACE shot B), voice-clone refs | Debug, film one-click, unused plates |
 
 **Quality** is a workflow-global combo (`EZQuality`) near the top of `linearData` (first on graphs with no required still; second when a LoadImage picker leads). Changing Quality updates Steps / CFG / Image model in the open App (Vue-safe widget writes) and does not live-link other open tabs. Newly opened Apps default to the last named Quality you picked in this browser. Editing Steps, CFG, or Image model (or CLIP / VAE) selects **custom** and keeps those values - Queue will not re-overlay. **custom** also freezes the last overlay if you pick it yourself. **lab** restores authored widgets. Prompt / tags / lyrics edits Queue at every Quality; typing the box selects Sample prompt **custom** so the textarea is what encodes. Named qualities (draft / standard / high / Free Commercial Use / ultra / max) may swap UNET, CLIP, and VAE when those files are on disk. They never change size or length, and Quality is not `--tier quality`. **Free Commercial Use (\<$10M)** pins Apache Klein 4B (never 9B or FLUX.2-dev) and LTX-2.5 steps; on Klein stills with a generic 16:9 / 9:16 Format it retargets to the LTX feeder size (`1280x704` / `768x1280`). Wan / audio / trellis are no-ops for that choice. ultra/max may select opt-in Non-Commercial weights (gated, not YouTube-ok). Inspire desks (no UNET) still show the combo as a no-op.
@@ -53,6 +55,25 @@ Comfy's **Apps** sidebar lists files whose name ends in `.app.json`. On `start`,
 Filenames: [Workflow catalog](studio-workflows.md). Playbook: [Still to motion to AV](visual-generative-ai.md). Restart the container after a pull so the `.app.json` copy runs.
 
 Save your own Apps under **`_user/`**. Duplicate a lab graph (App Forge, Save As `_user/`, or a new file under live `_lab/`) and it stays in `_user/`. A Save that overwrites live `_lab/<lane>/*.app.json` is rescued into `_user/_rescued/` on the next `start`. Catalog updates (pull + `start`) do **not** copy shipped `_lab` graphs into `_user/`. Re-open a rescued file - `_lab/` is the shipped catalog. If `_user/_rescued/` is already full of catalog clones from older starts, delete that folder (keep the rest of `_user/`).
+
+---
+
+## Reference stills (optional)
+
+**Example / reference (optional)** is the App label for the canvas node **Optional reference stills** (`EZOptionalImage`). Every Klein graph in the catalog ships it empty. Leave it blank and Queue: the graph runs text-to-image exactly as before. That is the default path, not a fallback.
+
+Give the model something to look at when you need it:
+
+1. Pick a still in **Example / reference (optional)**. To attach more than one, use **+ Add reference** on the node card to reveal the other two pickers (`filename_2`, `filename_3`). Each one is a real LoadImage-style picker: drag a file onto the card's drop zone, upload, choose a file already on disk, or pick a name from `input/`. A wired IMAGE batch also lands on the node.
+2. Read the card status line. `Reference stills: 2 of 3` means two stills attach, `No reference still - Queue as is` means Queue runs text-to-image, and `Reference stills muted` means the mute has them parked. A wired batch reads `plus a wired batch`. Each filled slot shows a thumbnail, so you can see what is going in.
+3. Queue. Up to three picked stills plus one wired batch reach Klein / Flux.2 as real reference latents.
+4. To compare with and without the stills, turn the **Use reference stills** mute off (the node widget reads **Use references** / **References off**) and Queue again. The stills stop reaching the model - the node reports `references off` - and your picks stay put, so turning it back on restores them. Picking a new still also turns the mute back on for you. Do not clear the picker to A/B.
+
+**Klein canvas (optional ref)** (`EZKleinRefCanvas`) attaches at most **max_refs** frames (1-4, default 3). Set it to 1 to make one still dominate, or when a wired batch is sending more frames than you meant.
+
+Nothing about the node name, its outputs, or the App input label changed, so graphs you saved keep loading. A graph saved against the older node keeps its single picker and gets the toggle plus the two extra pickers at their defaults (references on, extra slots empty).
+
+Stills that will not apply: [Troubleshooting](troubleshooting.md#reference-stills-optional-refs). Node table: [Custom nodes](reference/custom-nodes.md#ez_image).
 
 ---
 

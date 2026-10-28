@@ -12,6 +12,7 @@ tags: [troubleshooting, comfyui, docker]
 - **Topic pages** - docs site, canvas, host/Docker, downloads, start/runtime, models/workflows, guide packs
 - **update-stack refusals** - exit 3 guardrails, exit 5 unprovable repo root, wrong image lane
 - **Symptom decision tree** - common failures in one diagram
+- **Reference stills** - a picked still that does not apply, silent fail-soft loads, and `max_refs`
 - **Logs and reset** - compose logs and `cleanup` that keeps `${MODELS_DIR}`
 
 **What this enables**
@@ -107,6 +108,21 @@ Canvas rows live in [Studio canvas](operate/troubleshooting-canvas.md). The fixt
 | Symptom | Cause | Fix |
 | --- | --- | --- |
 | **stills/background-swap** Cubic block world output has no people at all | The optional BSD-3 DeepLabV3 person mask could not load (weights missing, torch/torchvision missing, or `EZ_PERSON_MASK=off`), so the swap failed closed to the photo-anchored people-kept rebuild instead of erasing and pasting. Check the Enhance status: `photo-anchored block world (person mask unavailable)` means that mode ran | `./scripts/manage.sh doctor` or canvas **Check models** shows a `person-mask` row. Stage the checkpoint with the printed curl command into `$MODELS_DIR/comfy/ez-person/` (the first cubic Queue also auto-downloads it), then re-Queue with **Cubic block world** selected - the Enhance status should read `precise background instruction` and the paste reinserts the people. Set `EZ_PERSON_MASK=off` deliberately only if you want the people-kept rebuild. |
+
+---
+
+## Reference stills (optional refs)
+
+**Example / reference (optional)** (**Optional reference stills**, `EZOptionalImage`) is empty by default and every failure path is fail-soft: a bad pick, a missing file, or a muted node never raises and never blocks Queue. Read the node status text and the **count** / **has_image** outputs before blaming the sampler. Widget guide: [ComfyUI Apps](studio-apps.md#reference-stills-optional).
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| You picked a still and the output looks like plain text-to-image | The **Use reference stills** mute is off (**References off**). The node returns `count 0` / `has_image false` and reports `references off`, so **Klein canvas (optional ref)** passes the empty Flux2 latent through | Turn the mute back on (**Use references**) - or just pick a still again, which turns it back on. The mute never clears what you picked. Confirm the card status line lists stills rather than `Reference stills muted` before you Queue |
+| You cleared a picker to A/B a run and lost the pick | Clearing a picker drops the file; only the mute is non-destructive | Use the mute for A/B (off, Queue, on, Queue). To restore a cleared slot, pick the file again or re-upload it |
+| A picked file behaves as if you never picked it, with no error anywhere | The load fails soft and yields nothing: the file is gone from Comfy `input/` (cleaned, renamed, moved), it is not a readable image, or the wired IMAGE is an empty batch. Zero stills is a legal text-to-image Queue | Re-pick a file that exists, use **Upload media**, or send one from the Outputs sidebar (**Use as start image** copies it into `input/`). Trust the status line and `count`, not the picker text |
+| More stills reach the model than the slots you filled | A wired IMAGE batch counts by its leading batch dim and each non-empty picker counts, so `count` can sit well above the number of slots you touched. The Klein canvas node then attaches up to `max_refs` frames | Set **max_refs** on **Klein canvas (optional ref)** (1-4, default 3) to how many you want - `1` is the old single-reference behavior. Unwire the batch or remove the extra picks you did not mean to send |
+| Fewer stills attach than slots you filled | The same file picked twice is one still (duplicates skip by normalized filename), and anything past **max_refs** is cut | Pick distinct files, or raise **max_refs** (max 4) |
+| A graph you saved before this change shows one picker and no mute | Saved `widgets_values` carry only the old single picker (`[""]`). The mute and the two extra pickers come from the node definition, so they land at their defaults once the updated `ez_image` pack is loaded | `./scripts/manage.sh restart`, then hard-refresh the Comfy tab (the entrypoint copies `custom_nodes/` on start). If the node still shows one widget, add a fresh **Optional reference stills** node. Node name, outputs, and the App label are unchanged, so the graph keeps loading |
 
 ---
 
