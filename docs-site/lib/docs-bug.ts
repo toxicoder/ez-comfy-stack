@@ -77,7 +77,7 @@ export function docsBugHref(report: DocsBugReport): string {
       `- User agent: ${agent}`
     ];
     if (selection) lines.push(`- Selected text: ${selection}`);
-    const params = new URLSearchParams({ title, body: lines.join("\n") });
+    const params = new URLSearchParams({ title, body: lines.join("\n"), labels: "documentation" });
     return `${ISSUE_NEW}?${params.toString()}`;
   };
 

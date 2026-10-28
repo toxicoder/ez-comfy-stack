@@ -4,6 +4,8 @@
  * Thumbnail grid / list, multi-select, bulk delete / copy / download.
  * Comfy History is in-memory. Files on COMFY_OUTPUT_DIR persist. Nodes 2.0
  * safe: no LiteGraph widget hooks, no canvas resize. Treat inputEl as optional.
+ * Report buttons reach window.EzFeedback lazily at click time and fall back to
+ * a prefilled GitHub issues tab when the ez_feedback core is not loaded.
  */
 import { app } from "../../scripts/app.js";
 
@@ -18,6 +20,9 @@ const THUMB_DEFAULT = 128;
 const SEARCH_MS = 150;
 const EXECUTED_MS = 1000;
 const ROOT_FOLDER = "__root__";
+const ISSUES_URL = "https://github.com/toxicoder/ez-comfy-stack/issues/new";
+const REPORT_HREF_MAX = 5500;
+const REPORT_REL_CAP = 10;
 const KIND_LABELS = {
   image: "Still",
   video: "Video",
@@ -340,7 +345,11 @@ async function fetchJson(path, init) {
   const response = await fetch(apiUrl(path), init);
   const data = await response.json();
   if (!response.ok) {
-    throw new Error(data.error || response.statusText);
+    const error = new Error(data.error || response.statusText);
+    // Carry route + status so every catch can report them.
+    error.endpoint = path;
+    error.status = response.status;
+    throw error;
   }
   return data;
 }
@@ -403,6 +412,145 @@ function makeButton(label, className, onClick) {
   button.className = className;
   button.addEventListener("click", onClick);
   return button;
+}
+
+/**
+ * Collapse whitespace and cap text so a handoff URL stays openable.
+ * @param {*} value
+ * @param {number} max
+ * @returns {string}
+ */
+function clipText(value, max) {
+  const text = String(value == null ? "" : value).replace(/\s+/g, " ").trim();
+  if (text.length <= max) {
+    return text;
+  }
+  if (max < 2) {
+    return "";
+  }
+  return text.slice(0, max - 1) + "...";
+}
+
+/**
+ * Reach the ez_feedback core lazily so extension load order cannot break us.
+ * @param {string} method Member the caller needs, e.g. "openReport"
+ * @returns {object|null} The core, or null when it is absent or too old
+ */
+function feedbackCore(method) {
+  const fb = window.EzFeedback;
+  if (!fb || typeof fb[method] !== "function") {
+    return null;
+  }
+  return fb;
+}
+
+/**
+ * Prefilled /issues/new URL for the no-core fallback (same builder shape the
+ * core uses: title prefix is the bare surface id, context is `- label: value`).
+ * @param {object} report {kind, surface, summary, context}
+ * @returns {string}
+ */
+function issuesHandoffUrl(report) {
+  const area = report.surface || "global";
+  const isFeature = report.kind === "enhancement";
+  const title = clipText(
+    "[" +
+      area +
+      "] " +
+      (report.summary || (isFeature ? "Feature request from " : "Bug report from ") + area),
+    140,
+  );
+  const pairs = Array.isArray(report.context) ? report.context : [];
+  const head = [
+    "Reported from the Outputs sidebar. Edit the blanks, then submit.",
+    "",
+    "## What happened",
+    "<!-- Replace this line. -->",
+    "",
+    "## Context",
+  ];
+  const tail = ["", "## Browser", "- ua: " + clipText(navigator.userAgent, 160)];
+  const build = (keepBrowser, contextLimit) => {
+    const lines = head.slice();
+    pairs.slice(0, contextLimit).forEach((pair) => {
+      lines.push("- " + pair[0] + ": " + clipText(pair[1], 200));
+    });
+    if (keepBrowser) {
+      lines.push.apply(lines, tail);
+    }
+    const query = new URLSearchParams();
+    query.set("title", title);
+    query.set("labels", isFeature ? "enhancement" : "bug");
+    query.set("body", lines.join("\n"));
+    return ISSUES_URL + "?" + query.toString();
+  };
+  let href = build(true, pairs.length);
+  if (href.length > REPORT_HREF_MAX) {
+    href = build(false, pairs.length);
+  }
+  if (href.length > REPORT_HREF_MAX) {
+    href = build(false, 5);
+  }
+  return href;
+}
+
+/**
+ * Open the core report dialog, falling back to the prefilled issues tab.
+ * @param {object} report {kind, surface, summary, context}
+ * @returns {void}
+ */
+function openFeedbackReport(report) {
+  const fb = feedbackCore("openReport");
+  if (fb) {
+    try {
+      fb.openReport(report);
+      return;
+    } catch (_err) {
+      /* fall through to the handoff */
+    }
+  }
+  try {
+    window.open(issuesHandoffUrl(report), "_blank", "noopener");
+  } catch (_err) {
+    /* a blocked pop-up must never break the explorer */
+  }
+}
+
+/**
+ * Compact one-line summary of route-level per-file rejections.
+ * @param {object[]} errors Rows from the route, shape {rel, error}
+ * @returns {string}
+ */
+function errorDetail(errors) {
+  const rows = Array.isArray(errors) ? errors : [];
+  return rows
+    .slice(0, 5)
+    .map((row) => String((row && row.rel) || "?") + ": " + String((row && row.error) || "failed"))
+    .join(" | ");
+}
+
+/**
+ * Push one caught failure into the core ring buffer; never throws.
+ * @param {string} surface
+ * @param {string} message
+ * @param {string} detail
+ * @returns {void}
+ */
+function recordFeedbackError(surface, message, detail) {
+  const fb = feedbackCore("recordError");
+  if (!fb) {
+    return;
+  }
+  try {
+    fb.recordError({
+      ts: new Date().toISOString(),
+      surface,
+      message: clipText(message, 200),
+      detail: clipText(detail, 500),
+    });
+  } catch (_err) {
+    /* error capture is additive */
+  }
 }
 
 /**
@@ -489,6 +637,18 @@ function mount(el) {
     refresh();
   });
   kindRow.appendChild(refreshBtn);
+
+  const reportBtn = makeButton("Report a problem", "ez-out-btn", () => {
+    openFeedbackReport(explorerReport("bug"));
+  });
+  reportBtn.title = "Open a prefilled GitHub issue for this explorer state";
+  kindRow.appendChild(reportBtn);
+
+  const featureBtn = makeButton("Suggest a feature", "ez-out-btn", () => {
+    openFeedbackReport(explorerReport("enhancement"));
+  });
+  featureBtn.title = "Open a prefilled GitHub feature request for this explorer";
+  kindRow.appendChild(featureBtn);
 
   const viewRow = document.createElement("div");
   viewRow.className = "ez-out-row";
@@ -712,6 +872,132 @@ function mount(el) {
       text += " - newest 500";
     }
     status.textContent = text;
+  }
+
+  /**
+   * Folder filter as a relative label; never an absolute host path.
+   * @returns {string}
+   */
+  function folderToken() {
+    if (folder === ROOT_FOLDER) {
+      return "root";
+    }
+    return folder || "all";
+  }
+
+  /**
+   * Context pairs that describe the explorer as filed: every filter plus the
+   * list shape and up to REPORT_REL_CAP selected rels.
+   * @returns {Array<Array<string>>}
+   */
+  function explorerContext() {
+    const vis = visibleItems();
+    const chosen = [...selected].slice(0, REPORT_REL_CAP);
+    if (selected.size > chosen.length) {
+      chosen.push("... " + (selected.size - chosen.length) + " more");
+    }
+    return [
+      ["folder", folderToken()],
+      ["prefix", prefix || "-"],
+      ["kind", kind],
+      ["search", query || "-"],
+      ["view", view],
+      ["sort", sortMode],
+      ["items", String(vis.length)],
+      ["loaded", String(items.length)],
+      ["truncated", truncated ? "yes - newest 500" : "no"],
+      ["selected", chosen.length ? chosen.join(", ") : "-"],
+    ];
+  }
+
+  /**
+   * Prefilled report for the toolbar: kind/surface/summary/context only.
+   * @param {string} reportKind "bug" or "enhancement"
+   * @returns {object}
+   */
+  function explorerReport(reportKind) {
+    const isFeature = reportKind === "enhancement";
+    const vis = visibleItems();
+    return {
+      kind: isFeature ? "enhancement" : "bug",
+      surface: "media-explorer",
+      summary: clipText(
+        "Outputs " +
+          (isFeature ? "feature request" : "problem") +
+          " - folder " +
+          folderToken() +
+          ", kind " +
+          kind +
+          ", " +
+          vis.length +
+          " files",
+        120,
+      ),
+      context: explorerContext(),
+    };
+  }
+
+  /**
+   * Context pairs for one file: only the relative fields the catalog returns.
+   * @param {object} row
+   * @returns {Array<Array<string>>}
+   */
+  function fileContext(row) {
+    const item = row || {};
+    return [
+      ["rel", String(item.rel || "")],
+      ["kind", String(item.kind || "")],
+      ["size", String(item.size == null ? "" : item.size)],
+      ["mtime", String(item.mtime == null ? "" : item.mtime)],
+      ["suffix", String(item.suffix || "")],
+      ["parent", String(item.parent == null ? parentOf(item) : item.parent)],
+    ];
+  }
+
+  /**
+   * Record a caught route failure with endpoint, status, and active filters.
+   * @param {string} endpoint Route that failed
+   * @param {object} err Caught error, maybe carrying status/endpoint
+   * @param {string} message Human summary
+   * @returns {void}
+   */
+  function noteFailure(endpoint, err, message) {
+    const httpStatus = err && err.status != null ? String(err.status) : "n/a";
+    recordFeedbackError(
+      "media-explorer",
+      message,
+      [
+        "endpoint=" + endpoint,
+        "status=" + httpStatus,
+        "folder=" + folderToken(),
+        "prefix=" + (prefix || "-"),
+        "kind=" + kind,
+        "query=" + (query || "-"),
+        "loaded=" + items.length,
+      ].join(" "),
+    );
+  }
+
+  /**
+   * Report button for the failure pane: one click from a broken list to an issue.
+   * @param {string} endpoint Route that failed
+   * @param {string} message Human summary
+   * @param {string} httpStatus Status text, or "n/a"
+   * @returns {HTMLButtonElement}
+   */
+  function failReportButton(endpoint, message, httpStatus) {
+    return makeButton("Report this problem", "ez-out-btn", () => {
+      openFeedbackReport({
+        kind: "bug",
+        surface: "media-explorer",
+        summary: clipText("Outputs " + endpoint + " failed: " + message, 120),
+        context: explorerContext().concat([
+          ["endpoint", endpoint],
+          ["status", httpStatus],
+          ["error", message],
+        ]),
+      });
+    });
   }
 
   /**
@@ -1092,6 +1378,16 @@ function mount(el) {
       }),
     );
     bar.appendChild(
+      makeButton("Report", "ez-out-btn", () => {
+        openFeedbackReport({
+          kind: "bug",
+          surface: "media-file",
+          summary: clipText("Problem with " + row.rel, 120),
+          context: fileContext(row),
+        });
+      }),
+    );
+    bar.appendChild(
       makeButton("Close", "ez-out-btn", () => {
         closeLightbox();
       }),
@@ -1166,6 +1462,11 @@ function mount(el) {
       if (failed) {
         status.textContent =
           "Deleted " + (data.deleted || []).length + ", " + failed + " failed";
+        recordFeedbackError(
+          "media-explorer",
+          "Delete rejected " + failed + " of " + unique.length + " file(s)",
+          "endpoint=/ez_outputs/delete " + errorDetail(data.errors),
+        );
       }
       if (lightboxRel && unique.includes(lightboxRel)) {
         closeLightbox();
@@ -1173,7 +1474,9 @@ function mount(el) {
       unique.forEach((rel) => selected.delete(rel));
       await refresh();
     } catch (err) {
-      status.textContent = String(err && err.message ? err.message : err);
+      const message = String(err && err.message ? err.message : err);
+      status.textContent = message;
+      noteFailure("/ez_outputs/delete", err, "Delete failed: " + message);
     }
   }
 
@@ -1216,6 +1519,13 @@ function mount(el) {
           data.copied.length +
           (failed ? ", " + failed + " failed" : "") +
           " to input";
+        if (failed) {
+          recordFeedbackError(
+            "media-explorer",
+            "Copy to input rejected " + failed + " of " + unique.length + " file(s)",
+            "endpoint=/ez_outputs/to-input " + errorDetail(data.errors),
+          );
+        }
         return;
       }
       if (data.name) {
@@ -1224,7 +1534,9 @@ function mount(el) {
         status.textContent = "Copied " + data.name + " to input";
       }
     } catch (err) {
-      status.textContent = String(err && err.message ? err.message : err);
+      const message = String(err && err.message ? err.message : err);
+      status.textContent = message;
+      noteFailure("/ez_outputs/to-input", err, "Copy to input failed: " + message);
     }
   }
 
@@ -1253,10 +1565,15 @@ function mount(el) {
       }
       paint();
     } catch (err) {
+      const message = String(err && err.message ? err.message : err);
+      const httpStatus = err && err.status != null ? String(err.status) : "n/a";
+      noteFailure("/ez_outputs/list", err, "List failed: " + message);
       scroll.replaceChildren();
       const fail = document.createElement("p");
       fail.className = "ez-out-fail";
-      fail.textContent = String(err && err.message ? err.message : err);
+      fail.textContent = message;
+      fail.appendChild(document.createTextNode(" "));
+      fail.appendChild(failReportButton("/ez_outputs/list", message, httpStatus));
       scroll.appendChild(fail);
     }
   }

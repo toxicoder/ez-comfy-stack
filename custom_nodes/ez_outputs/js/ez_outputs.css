@@ -302,6 +302,11 @@
   color: #f0a0a0;
 }
 
+.ez-out-fail .ez-out-btn {
+  margin-left: 8px;
+  color: inherit;
+}
+
 .ez-out-status {
   margin: 0;
   color: var(--ez-out-muted);

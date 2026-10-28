@@ -44,6 +44,7 @@ from ez_quality.check import (  # noqa: E402
     FileSpec,
     command_for_filename,
     requirements_for,
+    run_check,
     scan,
 )
 from ez_quality.nodes import EZQuality  # noqa: E402
@@ -133,6 +134,7 @@ from ez_quality.presets import (  # noqa: E402
 )
 
 JS = CUSTOM / "ez_quality" / "js" / "ez_quality.js"
+MODEL_CHECK_JS = CUSTOM / "ez_quality" / "js" / "ez_model_check.js"
 
 
 def _load(name: str) -> dict:
@@ -680,6 +682,56 @@ def test_js_mirrors_preset_constants() -> None:
     assert VAE_SMALL in body
     assert "freezeQualityToCustom" in body
     assert "widgets_values[idx]" in body
+
+
+def test_model_check_js_reports_the_check_payload_identities() -> None:
+    """The report button forwards what run_check emits, ASCII-clean."""
+    body = MODEL_CHECK_JS.read_text(encoding="utf-8")
+    assert 'addWidget("button", "Report failure", "report"' in body
+    assert 'const REPORT_SURFACE = "model-check";' in body
+    assert "window.EzFeedback" in body
+    assert "issues/new" in body
+    assert "node._ezLastCheck" in body
+    assert "node._ezLastHints" in body
+    for key in (
+        "lab_rel",
+        "occupancy",
+        "quality",
+        "missing",
+        "present",
+        "enhance_on",
+        "describe_on",
+    ):
+        assert key in body, key
+    assert "result.commands" not in body
+    assert body.isascii()
+
+
+@pytest.mark.parametrize(
+    ("occupancy", "quality", "pack"),
+    [
+        ("llm", QUALITY_LAB, "llm-qwen3-4b"),
+        ("klein", QUALITY_ULTRA, "klein-9b-te"),
+        ("klein", QUALITY_FLUX3_QUALITY, "flux3-te"),
+    ],
+)
+def test_model_check_report_forwards_canonical_pack_ids(
+    occupancy: str,
+    quality: str,
+    pack: str,
+) -> None:
+    """Missing packs are named by Need.pack from the payload, never re-derived."""
+    payload = run_check(
+        {"lab_rel": "stills/x.json", "occupancy": occupancy, "quality": quality},
+        roots=[],
+    )
+    assert payload["ok"] is False
+    assert {row["pack"] for row in payload["missing"]} >= {pack}
+    assert payload["quality"] == normalize_quality(quality)
+    body = MODEL_CHECK_JS.read_text(encoding="utf-8")
+    assert "row.pack" in body
+    assert pack not in body
+    assert normalize_quality("nope") == QUALITY_LAB
 
 
 def test_custom_and_lab_are_noop() -> None:

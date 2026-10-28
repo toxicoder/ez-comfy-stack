@@ -6,12 +6,13 @@ from __future__ import annotations
 import html
 import io
 import json
+import platform
 import re
 import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any, BinaryIO, TypedDict
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, urlencode, urlparse
 
 # Film ids and output prefixes used as a single path segment under guides/.
 _GUIDE_ID = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*\Z")
@@ -58,6 +59,45 @@ PUBLISH_FILES = {
     "lastlane": "ez_lastlane_450s.mp4",
     "breakwater": "ez_breakwater_450s.mp4",
 }
+
+# GitHub repo that receives operator reports. Keep in step with ``REPO`` in
+# ``custom_nodes/ez_feedback/context.py``; this process must not import it, so
+# tests/python/test_studio_ui.py pins the two builders against the same values.
+REPO = "toxicoder/ez-comfy-stack"
+# Token-optional handoff: every link prefills a new-issue tab, nothing is POSTed.
+ISSUES_NEW = f"https://github.com/{REPO}/issues/new"
+# Budget for the encoded issue URL so GitHub still opens the tab.
+MAX_HREF = 5500
+# Budget for the issue title, and for one free-text body field.
+MAX_TITLE = 140
+MAX_FIELD = 120
+# Board surfaces, from the shared vocabulary (this page owns only these two).
+SURFACE_BOARD = "film-board"
+SURFACE_WATCH = "watch"
+# kind -> labels. Only labels that exist in the repo, or GitHub drops them.
+LABELS = {"bug": "bug", "enhancement": "enhancement"}
+# Link text per kind; short because these sit inline in operator page lines.
+LINK_TEXT = {"bug": "Report a bug", "enhancement": "Request a feature"}
+# Body section headings in canonical order.
+HEAD_WHAT = "## What happened"
+HEAD_STEPS = "## Steps"
+HEAD_EXPECTED = "## Expected"
+HEAD_ACTUAL = "## Actual"
+HEAD_CONTEXT = "## Context"
+HEAD_ENVIRONMENT = "## Environment"
+HEAD_ERRORS = "## Recent errors"
+HEAD_BROWSER = "## Browser"
+FILL_HEADINGS = (HEAD_WHAT, HEAD_STEPS, HEAD_EXPECTED, HEAD_ACTUAL)
+BODY_HEADINGS = FILL_HEADINGS + (
+    HEAD_CONTEXT,
+    HEAD_ENVIRONMENT,
+    HEAD_ERRORS,
+    HEAD_BROWSER,
+)
+# Line the reporter replaces inside each fill-in section.
+BLANK = "<!-- Replace this line. -->"
+# Token-shaped runs that must never leave this process.
+_TOKEN_RE = re.compile(r"(?:ghp_|gho_|github_pat_|hf_)[A-Za-z0-9_.-]{4,}")
 
 
 def output_root() -> Path:
@@ -242,6 +282,266 @@ def _rows() -> list[FilmRow]:
     return rows
 
 
+def clip(value: str, max_len: int) -> str:
+    """Collapse whitespace and cap one free-text field.
+
+    Args:
+        value: Raw field text.
+        max_len: Maximum length, counting the ellipsis when trimmed.
+
+    Returns:
+        A single-line string no longer than ``max_len``.
+    """
+    text = " ".join(str(value or "").split())
+    if len(text) <= max_len:
+        return text
+    if max_len < 2:
+        return ""
+    if max_len < 4:
+        return text[:max_len]
+    return text[: max_len - 3] + "..."
+
+
+def redact(text: str) -> str:
+    """Strip secrets-shaped runs and the operator home directory.
+
+    Args:
+        text: Raw value destined for an issue body.
+
+    Returns:
+        ``text`` with any token-shaped run replaced by ``[redacted]`` and the
+        home directory replaced by ``~``.
+    """
+    out = _TOKEN_RE.sub("[redacted]", str(text or ""))
+    home = str(Path.home())
+    if len(home) > 1:
+        out = out.replace(home, "~")
+    return out
+
+
+def labels_for(kind: str) -> list[str]:
+    """GitHub labels for one report kind.
+
+    Args:
+        kind: ``bug`` or ``enhancement``; anything else reports as a bug.
+
+    Returns:
+        Labels that exist in the repo, so GitHub keeps them.
+    """
+    return [LABELS.get(kind, LABELS["bug"])]
+
+
+def title_for(kind: str, surface: str) -> str:
+    """Issue title ``[<surface>] <summary>`` for one report link.
+
+    Args:
+        kind: ``bug`` or ``enhancement``.
+        surface: Surface id (``film-board`` / ``watch``).
+
+    Returns:
+        Title clipped to :data:`MAX_TITLE`.
+    """
+    lead = "Feature request from" if kind == "enhancement" else "Bug report from"
+    return clip(f"[{surface}] {lead} {surface}", MAX_TITLE)
+
+
+def context_lines(pairs: list[tuple[str, str]]) -> list[str]:
+    """Render report pairs as ``- label: value`` markdown lines.
+
+    Args:
+        pairs: ``(label, value)`` pairs from one board or page.
+
+    Returns:
+        One clipped, redacted line per pair that has both parts.
+    """
+    lines: list[str] = []
+    for label, value in pairs:
+        name = clip(redact(label), 40)
+        text = clip(redact(value), MAX_FIELD)
+        if name and text:
+            lines.append(f"- {name}: {text}")
+    return lines
+
+
+def env_pairs() -> list[tuple[str, str]]:
+    """Runtime facts for the ``## Environment`` section.
+
+    Returns:
+        ``(label, value)`` pairs for python, platform, and the output root.
+    """
+    return [
+        ("python", platform.python_version()),
+        ("platform", platform.platform()),
+        ("output_dir", str(output_root())),
+    ]
+
+
+def build_body(
+    kind: str, context: list[tuple[str, str]], environment: list[tuple[str, str]]
+) -> str:
+    """Markdown body for one prefilled issue, in canonical section order.
+
+    A ``bug`` keeps the four fill-in sections for the reporter; an
+    ``enhancement`` keeps only the sections that carry data.
+
+    Args:
+        kind: ``bug`` or ``enhancement``.
+        context: Facts about the page the operator is on.
+        environment: Runtime facts from :func:`env_pairs`.
+
+    Returns:
+        Markdown string, blank line after each heading.
+    """
+    lead = "Feature request." if kind == "enhancement" else "Bug report."
+    lines = [f"{lead} Edit the blanks, then submit.", ""]
+    if kind != "enhancement":
+        for heading in FILL_HEADINGS:
+            lines += [heading, "", BLANK, ""]
+    ctx = context_lines(context)
+    if ctx:
+        lines += [HEAD_CONTEXT, "", *ctx, ""]
+    env = context_lines(environment)
+    if env:
+        lines += [HEAD_ENVIRONMENT, "", *env, ""]
+    return "\n".join(lines).rstrip()
+
+
+def issue_href(kind: str, surface: str, context: list[tuple[str, str]]) -> str:
+    """Prefilled GitHub new-issue URL, degraded rather than oversized.
+
+    Args:
+        kind: ``bug`` or ``enhancement``.
+        surface: Surface id (``film-board`` / ``watch``).
+        context: ``(label, value)`` pairs for the ``## Context`` section.
+
+    Returns:
+        ``ISSUES_NEW`` URL with ``title`` / ``body`` / ``labels``, kept within
+        :data:`MAX_HREF` by dropping ``## Environment``, then clipping free
+        text, then dropping context.
+    """
+    title = title_for(kind, surface)
+    labels = ",".join(labels_for(kind))
+
+    def build(ctx: list[tuple[str, str]], env: list[tuple[str, str]]) -> str:
+        """Encode one candidate URL.
+
+        Args:
+            ctx: Context pairs to render.
+            env: Environment pairs to render.
+
+        Returns:
+            Full new-issue URL.
+        """
+        query = urlencode(
+            {"title": title, "body": build_body(kind, ctx, env), "labels": labels}
+        )
+        return f"{ISSUES_NEW}?{query}"
+
+    href = build(context, env_pairs())
+    if len(href) <= MAX_HREF:
+        return href
+    href = build(context, [])
+    if len(href) <= MAX_HREF:
+        return href
+    href = build([(name, clip(value, 40)) for name, value in context], [])
+    if len(href) <= MAX_HREF:
+        return href
+    return build([], [])
+
+
+def report_link(kind: str, surface: str, context: list[tuple[str, str]]) -> str:
+    """Anchor tag for one prefilled report link.
+
+    Args:
+        kind: ``bug`` or ``enhancement``.
+        surface: Surface id (``film-board`` / ``watch``).
+        context: ``(label, value)`` pairs for the issue body.
+
+    Returns:
+        ``<a>`` markup opening a new tab, every interpolated value escaped.
+    """
+    href = html.escape(issue_href(kind, surface, context), quote=True)
+    text = html.escape(LINK_TEXT.get(kind, LINK_TEXT["bug"]))
+    return f'<a href="{href}" target="_blank" rel="noopener">{text}</a>'
+
+
+def _count(value: object) -> int:
+    """Parse one board counter.
+
+    Args:
+        value: Counter string from a film row.
+
+    Returns:
+        The integer value, or ``0`` when it is not a plain decimal.
+    """
+    text = str(value or "").strip()
+    return int(text) if text.isdigit() else 0
+
+
+def _board_context(rows: list[FilmRow]) -> list[tuple[str, str]]:
+    """Facts for a report about the board as a whole.
+
+    Args:
+        rows: Board rows from :func:`_rows`.
+
+    Returns:
+        ``(label, value)`` pairs: film count, prints, audio policies, route.
+    """
+    ok = sum(_count(row["ok"]) for row in rows)
+    total = sum(_count(row["total"]) for row in rows)
+    policies = sorted({str(row["audio_policy"]) for row in rows})
+    return [
+        ("films", str(len(rows))),
+        ("prints", f"{ok}/{total}"),
+        ("audio_policy", ", ".join(policies)),
+        ("route", "/"),
+    ]
+
+
+def _film_context(row: FilmRow) -> list[tuple[str, str]]:
+    """Facts for a report about one film.
+
+    Args:
+        row: One board row.
+
+    Returns:
+        ``(label, value)`` pairs: slug, film name, prints.
+    """
+    return [
+        ("slug", str(row["slug"])),
+        ("film", str(row["film"])),
+        ("prints", f"{row['ok']}/{row['total']}"),
+    ]
+
+
+def _shot_context(slug: str, shot_id: str, thumb: str) -> list[tuple[str, str]]:
+    """Facts for a report about one shot.
+
+    Args:
+        slug: Film slug.
+        shot_id: Shot directory name.
+        thumb: Thumb URL from :func:`_shot_lights`.
+
+    Returns:
+        ``(label, value)`` pairs: slug, shot id, thumb kind.
+    """
+    kind = "overlay" if "kind=overlay" in thumb else "clay"
+    return [("slug", slug), ("shot", shot_id), ("thumb", kind)]
+
+
+def _watch_context(slug: str, path: Path) -> list[tuple[str, str]]:
+    """Facts for a report filed from a watch page.
+
+    Args:
+        slug: Film slug from the route.
+        path: Published master from :func:`publish_mp4`.
+
+    Returns:
+        ``(label, value)`` pairs: slug, master name, watch route.
+    """
+    return [("slug", slug), ("film", path.name), ("route", f"/watch/{slug}")]
+
+
 def _page() -> bytes:
     """Render the jobstore board HTML.
 
@@ -249,9 +549,12 @@ def _page() -> bytes:
         UTF-8 HTML document bytes.
     """
     rows = _rows()
+    board = _board_context(rows)
     body = [
         "<h1>ez-comfy film board</h1>",
         "<p>Jobstore lights only. No GPU. Clay / look / overlay / print / audio.</p>",
+        f"<p>{report_link('bug', SURFACE_BOARD, board)}"
+        f" {report_link('enhancement', SURFACE_BOARD, board)}</p>",
         "<style>body{font:14px/1.4 ui-sans-serif,system-ui,sans-serif}"
         "table{border-collapse:collapse}td,th{padding:6px 8px;vertical-align:top}"
         ".on{color:#0a0}.off{color:#999}.strip img{width:64px;height:auto;"
@@ -276,11 +579,13 @@ def _page() -> bytes:
                     ' - <a href="/media/{0}?dl=1">Download MP4</a>'
                 ).format(html.escape(slug))
             body.append(
-                "<p>prints {}/{} - audio_policy {}{}</p>".format(
+                "<p>prints {}/{} - audio_policy {}{} - {} - {}</p>".format(
                     html.escape(str(row["ok"])),
                     html.escape(str(row["total"])),
                     html.escape(str(row["audio_policy"])),
                     watch,
+                    report_link("bug", SURFACE_BOARD, _film_context(row)),
+                    report_link("enhancement", SURFACE_BOARD, _film_context(row)),
                 )
             )
             body.append('<div class="strip">')
@@ -291,20 +596,25 @@ def _page() -> bytes:
                 thumb = str(shot.get("thumb") or "")
                 if thumb:
                     img = f'<img src="{thumb}" alt="" width="64">'
+                sid = str(shot.get("id") or "")
+                shot_link = report_link(
+                    "bug", SURFACE_BOARD, _shot_context(slug, sid, thumb)
+                )
                 body.append(
                     '<div class="shot">{}{}<br>'
                     '<span class="{}">clay</span> '
                     '<span class="{}">look</span> '
                     '<span class="{}">ov</span> '
                     '<span class="{}">print</span> '
-                    '<span class="{}">audio</span></div>'.format(
+                    '<span class="{}">audio</span><br>{}</div>'.format(
                         img,
-                        html.escape(str(shot.get("id") or "")),
+                        html.escape(sid),
                         shot.get("clay") or "off",
                         shot.get("look") or "off",
                         shot.get("overlay") or "off",
                         shot.get("print") or "off",
                         shot.get("audio") or "off",
+                        shot_link,
                     )
                 )
             body.append("</div>")
@@ -331,6 +641,7 @@ def watch_page(slug: str) -> bytes | None:
         return None
     name = html.escape(path.name)
     safe = html.escape(slug)
+    facts = _watch_context(slug, path)
     return (
         "<!doctype html><html><head><meta charset='utf-8'>"
         f"<title>{name}</title>"
@@ -342,7 +653,10 @@ def watch_page(slug: str) -> bytes | None:
         f"<h1>{name}</h1>"
         f'<video controls playsinline src="/media/{safe}"></video>'
         f'<p><a href="/media/{safe}?dl=1">Download MP4</a>'
-        ' - <a href="/">Board</a></p>'
+        ' - <a href="/">Board</a>'
+        f" - {report_link('bug', SURFACE_WATCH, facts)}"
+        f" - {report_link('enhancement', SURFACE_WATCH, facts)}"
+        "</p>"
         "</main></body></html>"
     ).encode("utf-8")
 

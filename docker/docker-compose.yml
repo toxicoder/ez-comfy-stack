@@ -61,6 +61,10 @@ services:
       PKUSEG_HOME: /models/pkuseg
       # Runtime only - not baked into image layers
       HF_TOKEN: ${HF_TOKEN:-}
+      # Optional. Enables the in-app "File directly" button (POST /ez_feedback/submit
+      # -> api.github.com). Unset still works: every Report button opens a prefilled
+      # github.com/.../issues/new tab. Never bake this into an image layer.
+      EZ_GITHUB_TOKEN: ${EZ_GITHUB_TOKEN:-}
       # On-box prompt-enhance GGUF (CPU llama.cpp). Never bake weights into the image.
       EZ_LLM_GGUF: ${EZ_LLM_GGUF:-/models/comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf}
       EZ_LLM_N_THREADS: ${EZ_LLM_N_THREADS:-8}

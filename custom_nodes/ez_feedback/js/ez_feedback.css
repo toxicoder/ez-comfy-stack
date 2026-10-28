@@ -1,0 +1,159 @@
+/* Feedback chrome: header buttons, report dialog, failure banner.
+ * Dark-theme-safe: every color comes from a Comfy theme token with a dark
+ * fallback, so the chrome matches both the default dark theme and a light one.
+ * Stacking is explicit: bar 40, banner 1070, backdrop 1080, dialog 1081. */
+
+.ez-fb-bar {
+  --ez-fb-fg: var(--fg-color, #e8e8e8);
+  --ez-fb-bg: var(--comfy-menu-bg, #24272e);
+  --ez-fb-border: var(--border-color, rgba(255, 255, 255, 0.16));
+  --ez-fb-accent: var(--p-primary-color, #6ea8fe);
+  --ez-fb-muted: var(--descrip-text, #9a9a9a);
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  color: var(--ez-fb-fg);
+  font: 12px/1.4 ui-sans-serif, system-ui, sans-serif;
+}
+
+.ez-fb-bar-inline {
+  margin: 0 0 0 8px;
+}
+
+.ez-fb-bar-fixed {
+  position: fixed;
+  left: 12px;
+  top: 56px;
+  z-index: 40;
+  max-width: calc(100vw - 24px);
+  padding: 6px 8px;
+  border: 1px solid var(--ez-fb-border);
+  border-radius: 10px;
+  background: var(--ez-fb-bg);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.ez-fb-btn {
+  padding: 4px 10px;
+  border: 1px solid var(--ez-fb-border, rgba(255, 255, 255, 0.16));
+  border-radius: 8px;
+  background: var(--ez-fb-bg, #24272e);
+  color: var(--ez-fb-fg, #e8e8e8);
+  font: inherit;
+  cursor: pointer;
+}
+
+.ez-fb-btn:hover {
+  border-color: var(--ez-fb-accent, #6ea8fe);
+}
+
+.ez-fb-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.ez-fb-btn-primary {
+  border-color: var(--ez-fb-accent, #6ea8fe);
+  background: var(--ez-fb-accent, #6ea8fe);
+  color: var(--p-primary-contrast-color, #0b0d10);
+  font-weight: 600;
+}
+
+.ez-fb-btn-direct {
+  border-color: var(--p-green-500, #4ade80);
+}
+
+.ez-fb-btn-quiet {
+  color: var(--ez-fb-muted, #9a9a9a);
+  background: transparent;
+}
+
+.ez-fb-btn:focus-visible,
+.ez-fb-textarea:focus-visible {
+  outline: 2px solid var(--ez-fb-accent, #6ea8fe);
+  outline-offset: 2px;
+}
+
+.ez-fb-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1080;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.ez-fb-dialog {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1081;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-sizing: border-box;
+  width: min(720px, calc(100vw - 32px));
+  max-height: min(80vh, 720px);
+  overflow: auto;
+  padding: 14px;
+  border: 1px solid var(--ez-fb-border, rgba(255, 255, 255, 0.14));
+  border-radius: 12px;
+  background: var(--ez-fb-bg, #14161b);
+  color: var(--ez-fb-fg, #e8e8e8);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.5);
+  font: 12px/1.45 ui-sans-serif, system-ui, sans-serif;
+}
+
+.ez-fb-title {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.ez-fb-textarea {
+  flex: 1;
+  min-height: 220px;
+  resize: vertical;
+  box-sizing: border-box;
+  padding: 8px;
+  border: 1px solid var(--ez-fb-border, rgba(255, 255, 255, 0.14));
+  border-radius: 8px;
+  background: var(--content-bg, rgba(0, 0, 0, 0.25));
+  color: var(--ez-fb-fg, #e8e8e8);
+  font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.ez-fb-status {
+  min-height: 16px;
+  color: var(--ez-fb-muted, #9a9a9a);
+  overflow-wrap: anywhere;
+}
+
+.ez-fb-footer {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.ez-fb-banner {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 1070;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  box-sizing: border-box;
+  max-width: min(420px, calc(100vw - 32px));
+  padding: 10px 12px;
+  border: 1px solid var(--ez-fb-border, rgba(255, 255, 255, 0.14));
+  border-radius: 10px;
+  background: var(--ez-fb-bg, #14161b);
+  color: var(--ez-fb-fg, #e8e8e8);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  font: 12px/1.45 ui-sans-serif, system-ui, sans-serif;
+}
+
+.ez-fb-banner-text {
+  flex: 1;
+  overflow-wrap: anywhere;
+}

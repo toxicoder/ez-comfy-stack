@@ -255,6 +255,10 @@
         "path": "operate/backup-restore.md"
       },
       {
+        "title": "Reporting issues",
+        "path": "operate/reporting-issues.md"
+      },
+      {
         "title": "Reboot safety",
         "path": "reboot-safety.md"
       },
