@@ -76,6 +76,12 @@ Empty films dir is a **page**, not a crash: "No films yet. Run `./scripts/utilit
 
 Unknown / missing allowlist -> **404**.
 
+Both HTML pages also carry prefilled GitHub report links: the board header, every film
+line, and every shot cell file against `film-board`, and the watch nav files against
+`watch`. They are plain `issues/new?title=&body=&labels=` links built with stdlib
+`urllib.parse.urlencode`, so the board needs no token, no JavaScript, and no network to
+render them. [Reporting issues](../operate/reporting-issues.md)
+
 ### Allowlisted masters
 
 Resolved under the Comfy output root (`/films` bind = `${COMFY_OUTPUT_DIR}`):

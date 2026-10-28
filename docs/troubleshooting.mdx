@@ -148,6 +148,19 @@ above does not match, run `./scripts/manage.sh doctor` and read [Start and runti
 
 ---
 
+## Report buttons (ez_feedback)
+
+Buttons live in the App widgets host, the Outputs toolbar and lightbox, the Check models
+node, and the film board. Operator guide: [Reporting issues](operate/reporting-issues.md).
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| No **Report a bug** / **Request a feature** buttons | `custom_nodes/ez_feedback/` did not load, or the frontend served a cached extension bundle | Hard-reload the browser. Confirm the pack is in the Comfy `custom_nodes` copy and that ComfyUI logged it. |
+| Buttons show but clicking opens nothing | Popup blocker also blocks the prefilled `issues/new` tab | Allow popups for the ComfyUI origin, or use **Copy markdown** and paste into a new issue. |
+| **File directly** never appears | `EZ_GITHUB_TOKEN` unset, or the container was not restarted after it was set | Set it in `.env`, then `./scripts/manage.sh stop && ./scripts/manage.sh start`. Everything else works without a token. |
+| Report body is missing the app name | The graph has no `extra.lab_rel` - true of hand-saved graphs, not lab apps | Name the workflow in the report; surface, environment, and browser facts still arrive. |
+| Body ends with `[report trimmed to fit the GitHub URL limit]` | Context plus traceback exceeded the prefilled-URL budget, which GitHub answers with `414 URI Too Long` | Expected, not a failure. Paste the remainder into the opened tab, or use **Copy markdown**. |
+
 ## Symptom decision tree
 
 ```mermaid

@@ -1,0 +1,116 @@
+---
+title: Reporting issues and requesting features
+description: Every Report a bug and Request a feature button in the studio, what each one prepopulates, and how EZ_GITHUB_TOKEN turns a prefilled tab into a filed issue.
+tags: [feedback, github, troubleshooting, studio-ui, safety]
+---
+
+# Reporting issues and requesting features
+
+The studio files its own bug reports. Every surface that can fail has a button that
+already knows what it was doing when it failed, so a report reaches
+[toxicoder/ez-comfy-stack](https://github.com/toxicoder/ez-comfy-stack) with the app id,
+the lane, the model family, the selected media, and the last errors already written. You
+type what happened and press Submit.
+
+**What's on this page**
+
+- **Where the buttons are** - global, per app, the Outputs explorer, the film board, Check models
+- **What each button prepopulates**
+- **How a report reaches GitHub** - prefilled tab, or filed directly with a token
+- **`EZ_GITHUB_TOKEN`** - the optional upgrade, and its scope
+- **What is never sent**
+
+**What this enables**
+
+- **Filing** a useful bug in seconds instead of writing the environment block by hand
+- **Reproducing** a failure for the maintainer without asking three follow-up questions
+- **Deciding** whether the stack may reach `api.github.com` at all
+
+Shared code: `custom_nodes/ez_feedback/` - the report dialog, the error banner, and the
+prefill, listed with the other packs in [Custom nodes](../reference/custom-nodes.mdx).
+When a report is about something you could not get to work, start from
+[Troubleshooting](../troubleshooting.mdx).
+
+## Where the buttons are
+
+| Surface | Buttons | Where |
+| --- | --- | --- |
+| Global | **Report a bug**, **Request a feature** | App widgets host, top of the canvas; falls back to a fixed corner bar outside App Mode |
+| Current app | Same two, prefilled with the open app | Same bar, reads the live graph |
+| Outputs explorer | **Report a problem**, **Suggest a feature** | Toolbar, next to Refresh |
+| One media file | **Report** | Lightbox bar, next to Close |
+| Explorer failure | **Report this problem** | Inside the error pane that replaces the grid |
+| Model check | **Report failure** | Second button on the Check models node |
+| Film board | Bug and feature links | Board header, per film, and per shot cell |
+| Watch page | Bug and feature links | Nav line, beside the Board link |
+
+Nothing about reporting blocks a run. A captured failure shows a dismissible banner in the
+bottom-right corner; it never opens a modal over a running Queues.
+
+## What each button prepopulates
+
+The graph and the container are the source of truth, so you rarely type context.
+
+- **App identity** - `extra.lab_rel`, the `lab_app_mode` lane, the occupancy family
+  (`klein`, `wan`, `ltx`, `audio`, `film`), the quality caption, the album, the node count,
+  and the workflow name when the frontend exposes one
+- **Explorer state** - the folder and prefix you were browsing, the kind filter, the search
+  text, view and sort mode, how many rows came back, whether the newest-500 cap truncated
+  them, and up to ten selected relative paths
+- **Model check** - the preset, the occupancy, the missing pack names, the present and
+  missing counts, and whether enhance or describe were on
+- **Environment** - ComfyUI ref, image tag, Python, platform, output directory, port, plus
+  GPU, torch, and CUDA facts from `/api/system_stats` when reachable
+- **Browser** - user agent, viewport, DPR, language, and whether you were online
+- **Recent errors** - the last five failures, newest first. Execution failures are captured
+  from `execution_error` and `execution_interrupted` with `node_id`, `node_type`,
+  `exception_message`, `exception_type`, and the traceback
+
+Title and labels are set for you: `[app:creator/stills/instagram-story] ...` for an app,
+`[media-explorer] ...` for the explorer, and `bug` or `enhancement` as the label. Only the
+three labels that exist in the repo are ever used, because GitHub silently drops a label it
+does not recognise.
+
+## How a report reaches GitHub
+
+Without a token every button opens
+`https://github.com/toxicoder/ez-comfy-stack/issues/new` with the title, body, and labels
+already filled in. That is the default and it needs no credential, no egress from the
+container, and no token to trust. You press Submit in the tab.
+
+With a token the dialog also offers **File directly**, which posts through
+`POST /ez_feedback/submit` to `api.github.com` and hands back the issue link. **Open on
+GitHub** and **Copy markdown** stay available either way.
+
+```bash
+# Optional: file from inside ComfyUI instead of opening a tab.
+printf '%s\n' 'EZ_GITHUB_TOKEN=github_pat_...' >> .env
+./scripts/manage.sh stop && ./scripts/manage.sh start
+```
+
+Read the token back out before you start: it is passed to the container at runtime only,
+never baked into an image layer, never sent to the browser, and never logged. The status
+route reports only whether it is present.
+
+<Callout type="error" title="What is never sent">
+  Report values are redacted before they leave the page or the process: anything shaped
+  like `ghp_`, `gho_`, `github_pat_`, or `hf_` becomes `[redacted]`, and the home directory
+  becomes `~`. The operator download commands that Check models prints stay on the screen
+  and are deliberately kept out of the report, because they carry host paths. Do not paste
+  a token into a report yourself.
+</Callout>
+
+## Troubleshooting the buttons
+
+- **No buttons appear.** The pack is `custom_nodes/ez_feedback/`. Check that ComfyUI loaded
+  it, then hard-reload the browser; the frontend caches extension modules.
+- **Buttons appear but nothing opens.** A popup blocker also blocks the prefilled tab.
+  **Copy markdown** still works, and you can paste into a new issue by hand.
+- **File directly is missing.** `EZ_GITHUB_TOKEN` is unset or the container was not
+  restarted after you set it. Everything else works without it.
+- **A report looks empty.** The app was opened from a graph with no `extra.lab_rel`, which
+  is true of your own saved graphs. Say so in the report; the surface and browser facts are
+  still there.
+- **A very long report got cut.** Reports are trimmed to stay under GitHub's URL limit
+  rather than fail with `414 URI Too Long`. The note `[report trimmed to fit the GitHub URL
+  limit]` means the tail was dropped; paste the rest in the tab.
