@@ -135,6 +135,37 @@ def test_still_studio_optional_ref_does_not_require_image() -> None:
     assert "filename" in names
 
 
+def test_still_studio_reference_ships_empty_with_the_mute_beside_it() -> None:
+    """The App ships text-to-image and offers the mute next to the picker."""
+    graph = _load()
+    opt = next(n for n in graph["nodes"] if n["type"] == "EZOptionalImage")
+    canvas = next(n for n in graph["nodes"] if n["type"] == "EZKleinRefCanvas")
+    assert list(opt["widgets_values"]) == ["", True, "", ""]
+    assert list(canvas["widgets_values"]) == [False, 3]
+    rows = graph["extra"]["linearData"]["inputs"]
+    pairs = [(entry[0], entry[1]) for entry in rows]
+    picker = (opt["id"], "filename")
+    mute = (opt["id"], "use_references")
+    assert picker in pairs and mute in pairs
+    assert pairs.index(mute) == pairs.index(picker) + 1
+    mute_cfg = next(entry[2] for entry in rows if entry[1] == "use_references")
+    assert mute_cfg["label"] == "Use reference stills"
+    assert "without clearing" in mute_cfg["description"]
+
+
+def test_still_studio_reference_reaches_the_sampler() -> None:
+    """A picked still has a live path into KSampler, so refs are not inert."""
+    graph = _load()
+    canvas = next(n for n in graph["nodes"] if n["type"] == "EZKleinRefCanvas")
+    opt = next(n for n in graph["nodes"] if n["type"] == "EZOptionalImage")
+    sampler = next(n for n in graph["nodes"] if n["type"] == "KSampler")
+    assert _src(graph, canvas, "image")["id"] == opt["id"]
+    assert _src(graph, canvas, "has_image")["id"] == opt["id"]
+    assert _src(graph, canvas, "latent")["type"] == "EmptyFlux2LatentImage"
+    assert _src(graph, canvas, "vae")["type"] == "VAELoader"
+    assert _src(graph, sampler, "latent_image")["id"] == canvas["id"]
+
+
 def test_still_studio_json_roundtrip() -> None:
     path = lab_json("stills/still-studio.json")
     raw = json.loads(path.read_text(encoding="utf-8"))
