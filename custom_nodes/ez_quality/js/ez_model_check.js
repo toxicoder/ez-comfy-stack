@@ -2,8 +2,18 @@
  * EZModelCheck: button POSTs /ez_quality/check. Queue does not run this node.
  *
  * Nodes 2.0: addWidget("button") plus widget.value. No LiteGraph hooks.
+ *
+ * A second button files the last verdict through the ez_feedback pack
+ * (window.EzFeedback), reached lazily at click time so extension load order
+ * cannot break this node. Reports carry pack/preset identities only: the
+ * payload's operator commands hold host paths and never leave the page.
  */
 import { app } from "../../scripts/app.js";
+
+const CHECK_ENDPOINT = "/ez_quality/check";
+const REPORT_SURFACE = "model-check";
+const REPORT_KIND = "bug";
+const FALLBACK_REPO = "toxicoder/ez-comfy-stack";
 
 const ENHANCE = new Set([
   "EZKleinPromptEnhance",
@@ -135,18 +145,182 @@ function collectHints(graph) {
 }
 
 /**
+ * Reach the ez_feedback client lazily; extension load order cannot break this.
+ * @returns {object|null} window.EzFeedback when it can file a report.
+ */
+function feedbackApi() {
+  const fb = typeof window === "undefined" ? null : window.EzFeedback;
+  return fb && typeof fb.openReport === "function" ? fb : null;
+}
+
+/**
+ * Collapse a status line for the ring buffer: first line only, so the
+ * operator commands format_report appends after "Run:" never leave the page.
+ * @param {string} text
+ * @param {number} [max]
+ * @returns {string}
+ */
+function oneLine(text, max) {
+  const limit = typeof max === "number" ? max : 160;
+  const head = String(text || "")
+    .split("\n", 1)[0]
+    .replace(/\s+/g, " ")
+    .trim();
+  return head.length > limit ? `${head.slice(0, limit - 3)}...` : head;
+}
+
+/**
+ * Push one check failure into the ez_feedback ring buffer. Best effort.
+ * @param {string} message
+ * @param {string} detail
+ * @returns {void}
+ */
+function recordCheckError(message, detail) {
+  const fb = feedbackApi();
+  if (!fb || typeof fb.recordError !== "function") {
+    return;
+  }
+  try {
+    fb.recordError({
+      ts: new Date().toISOString(),
+      surface: REPORT_SURFACE,
+      message: oneLine(message, 160) || "Model check failed.",
+      detail: oneLine(detail || `POST ${CHECK_ENDPOINT}`, 120),
+    });
+  } catch (err) {
+    // A dead ring buffer must not swallow the status paint below it.
+  }
+}
+
+/**
+ * Pack ids the last check could not satisfy, payload order, de-duplicated.
+ * @param {object} result Cached /ez_quality/check payload.
+ * @returns {string[]} Need.pack values from check.py.
+ */
+function missingPacks(result) {
+  const packs = [];
+  for (const row of (result && result.missing) || []) {
+    const pack = String((row && row.pack) || "").trim();
+    if (pack && !packs.includes(pack)) {
+      packs.push(pack);
+    }
+  }
+  return packs;
+}
+
+/**
+ * Context rows for the report. The operator commands stay out of it because
+ * they are host paths; the pack names carry the same identity safely.
+ * @param {object} node
+ * @returns {Array<Array<string>>} [label, value] pairs for ez_feedback.
+ */
+function reportContext(node) {
+  const result = node._ezLastCheck || {};
+  const hints = node._ezLastHints || {};
+  const packs = missingPacks(result).join(", ");
+  return [
+    ["App", String(result.lab_rel || hints.lab_rel || "")],
+    ["Occupancy", String(result.occupancy || hints.occupancy || "")],
+    ["Quality preset", String(result.quality || hints.quality || "")],
+    ["Missing packs", packs || "none"],
+    ["Present count", String((result.present || []).length)],
+    ["Missing count", String((result.missing || []).length)],
+    ["Rewrite on", String(hints.enhance_on === true)],
+    ["Describe on", String(hints.describe_on === true)],
+  ];
+}
+
+/**
+ * One-line summary that states the last verdict, ready or not.
+ * @param {object} node
+ * @returns {string}
+ */
+function reportSummary(node) {
+  const result = node._ezLastCheck || {};
+  const hints = node._ezLastHints || {};
+  const label = String(result.lab_rel || hints.lab_rel || "this App");
+  const quality = String(result.quality || hints.quality || "lab");
+  if (!node._ezLastCheck) {
+    return `Model check has not run for ${label} @ ${quality}`;
+  }
+  if (result.ok === true) {
+    return `Model check passed for ${label} @ ${quality}`;
+  }
+  const packs = missingPacks(result).join(", ");
+  return `Model check failed for ${label} @ ${quality}: ${packs || "missing models"}`;
+}
+
+/**
+ * Open the repo issues page when the ez_feedback pack is not loaded.
+ * @param {object} partial Report fields built by reportFailure.
+ * @returns {void}
+ */
+function openIssuesFallback(partial) {
+  const fb = typeof window === "undefined" ? null : window.EzFeedback;
+  const repo = (fb && fb.REPO) || FALLBACK_REPO;
+  const params = new URLSearchParams({
+    title: `[${REPORT_SURFACE}] ${String((partial && partial.summary) || "")}`,
+    labels: REPORT_KIND,
+  });
+  window.open(
+    `https://github.com/${repo}/issues/new?${params.toString()}`,
+    "_blank",
+    "noopener",
+  );
+}
+
+/**
+ * File the last verdict. Fire and forget: no await, no focus, no alert.
+ * @param {object} node
+ * @returns {void}
+ */
+function reportFailure(node) {
+  const partial = {
+    kind: REPORT_KIND,
+    surface: REPORT_SURFACE,
+    summary: reportSummary(node),
+    context: reportContext(node),
+  };
+  const fb = feedbackApi();
+  if (!fb) {
+    openIssuesFallback(partial);
+    return;
+  }
+  try {
+    fb.openReport(partial);
+  } catch (err) {
+    openIssuesFallback(partial);
+  }
+}
+
+/**
+ * POST a hints snapshot and return the JSON payload.
+ * @param {object} hints Snapshot built by collectHints.
+ * @returns {Promise<object>}
+ */
+async function postCheckHints(hints) {
+  const response = await fetch(apiUrl(CHECK_ENDPOINT), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(hints),
+  });
+  const payload = await response.json();
+  if (payload && typeof payload === "object") {
+    return payload;
+  }
+  // _ezRecorded keeps runOnNode from logging this same failure twice.
+  const empty = { ok: false, message: "Check failed.", _ezRecorded: true };
+  recordCheckError(empty.message, `POST ${CHECK_ENDPOINT} returned no JSON`);
+  return empty;
+}
+
+/**
  * POST hints and return the JSON payload.
  * @param {object} [graph]
  * @returns {Promise<object>}
  */
-async function postCheck(graph) {
-  const response = await fetch(apiUrl("/ez_quality/check"), {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(collectHints(graph)),
-  });
-  const payload = await response.json();
-  return payload && typeof payload === "object" ? payload : { ok: false, message: "Check failed." };
+function postCheck(graph) {
+  return postCheckHints(collectHints(graph));
 }
 
 /**
@@ -170,21 +344,40 @@ function setStatus(node, text) {
 }
 
 /**
- * Run the check and paint the node.
+ * Run the check, cache the verdict + hints on the node, paint the node.
  * @param {object} node
  * @returns {Promise<void>}
  */
 async function runOnNode(node) {
   setStatus(node, "Checking models...");
   try {
-    const payload = await postCheck(app.graph);
-    setStatus(node, String(payload.message || (payload.ok ? "Ready." : "Missing models.")));
+    const hints = collectHints(app.graph);
+    node._ezLastHints = hints;
+    const payload = await postCheckHints(hints);
+    node._ezLastCheck = payload;
+    const text = String(payload.message || (payload.ok ? "Ready." : "Missing models."));
+    setStatus(node, text);
+    if (payload.ok !== true && payload._ezRecorded !== true) {
+      recordCheckError(text, `POST ${CHECK_ENDPOINT}`);
+    }
   } catch (err) {
-    setStatus(node, `Check failed: ${err && err.message ? err.message : err}`);
+    const text = `Check failed: ${err && err.message ? err.message : err}`;
+    node._ezLastCheck = { ok: false, message: text };
+    setStatus(node, text);
+    recordCheckError(text, `POST ${CHECK_ENDPOINT} threw`);
   }
 }
 
-window.ezComfyModelCheck = { collectHints, postCheck, runOnNode };
+window.ezComfyModelCheck = {
+  collectHints,
+  postCheck,
+  postCheckHints,
+  runOnNode,
+  reportFailure,
+  reportSummary,
+  reportContext,
+  missingPacks,
+};
 
 app.registerExtension({
   name: "ez_quality.model_check",
@@ -200,13 +393,16 @@ app.registerExtension({
     }
     const onNodeCreated = nodeType.prototype.onNodeCreated;
     /**
-     * Mount a native button widget.
+     * Mount the native button widgets: re-check, then file the last verdict.
      * @returns {void}
      */
     nodeType.prototype.onNodeCreated = function () {
       onNodeCreated?.apply(this, arguments);
       this.addWidget("button", "Check models", "check", () => {
         runOnNode(this);
+      });
+      this.addWidget("button", "Report failure", "report", () => {
+        reportFailure(this);
       });
     };
   },

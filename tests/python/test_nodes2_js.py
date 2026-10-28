@@ -69,6 +69,7 @@ def test_every_frontend_js_file_is_nodes2_safe() -> None:
 
 
 QUALITY_JS = CUSTOM / "ez_quality" / "js" / "ez_quality.js"
+MODEL_CHECK_JS = CUSTOM / "ez_quality" / "js" / "ez_model_check.js"
 FORMAT_JS = (
     CUSTOM / "ez_image" / "js" / "ez_image_format.js",
     CUSTOM / "ez_image" / "js" / "ez_video_format.js",
@@ -363,3 +364,125 @@ def test_studio_app_banner_is_dismissable_and_minimizable() -> None:
     assert "localStorage.getItem" in body
     assert 'data-state="min"' in body
     assert 'chipState === "closed"' in body
+
+
+def _model_check_fn(name: str) -> str:
+    """Slice one top-level function out of the model-check frontend.
+
+    Args:
+        name: Function name.
+
+    Returns:
+        Source from its ``function`` keyword up to (not including) the
+        closing brace at column zero.
+    """
+    body = MODEL_CHECK_JS.read_text(encoding="utf-8")
+    start = body.index(f"function {name}(")
+    return body[start : body.index("\n}\n", start)]
+
+
+def test_model_check_js_mounts_the_report_failure_button() -> None:
+    """Second button widget files the last verdict; both use the same idiom."""
+    body = MODEL_CHECK_JS.read_text(encoding="utf-8")
+    assert 'addWidget("button", "Check models", "check", () => {' in body
+    assert 'addWidget("button", "Report failure", "report", () => {' in body
+    assert "runOnNode(this)" in body
+    assert "reportFailure(this)" in body
+    assert body.count('addWidget("button", ') == 2
+    assert "node_widget" not in body
+    assert "onResize" not in body
+    assert "window.alert" not in body
+    assert "focus(" not in body
+
+
+def test_model_check_js_caches_the_last_verdict_for_the_report() -> None:
+    """The report reads a snapshot the check cached; it never re-fetches."""
+    check = _model_check_fn("runOnNode")
+    assert 'collectHints(app.graph)' in check
+    assert "node._ezLastHints = hints;" in check
+    assert "node._ezLastCheck = payload;" in check
+    assert "node._ezLastCheck = { ok: false" in check
+    assert "fetch(" not in check
+    assert 'setStatus(node, "Checking models...")' in check
+    assert 'payload.ok ? "Ready." : "Missing models."' in check
+    assert "Check failed: ${err" in check
+
+
+def test_model_check_js_reports_on_the_model_check_surface() -> None:
+    """window.EzFeedback is reached lazily at click time, with an issues fallback."""
+    body = MODEL_CHECK_JS.read_text(encoding="utf-8")
+    assert 'const REPORT_SURFACE = "model-check";' in body
+    assert 'const REPORT_KIND = "bug";' in body
+    assert "kind: REPORT_KIND" in body
+    assert "surface: REPORT_SURFACE" in body
+    lazy = _model_check_fn("feedbackApi")
+    assert "window.EzFeedback" in lazy
+    assert "typeof window" in lazy
+    report = _model_check_fn("reportFailure")
+    assert "feedbackApi()" in report
+    assert "fb.openReport(partial)" in report
+    assert "openIssuesFallback(partial)" in report
+    assert "await" not in report
+    fallback = _model_check_fn("openIssuesFallback")
+    assert "issues/new" in fallback
+    assert "[${REPORT_SURFACE}]" in fallback
+    assert "toxicoder/ez-comfy-stack" in body
+
+
+def test_model_check_js_context_carries_identities_not_commands() -> None:
+    """Missing packs are named by Need.pack; download commands never ship."""
+    ctx = _model_check_fn("reportContext")
+    assert "commands" not in ctx
+    assert "cmd" not in ctx
+    for label in (
+        '"App"',
+        '"Occupancy"',
+        '"Quality preset"',
+        '"Missing packs"',
+        '"Present count"',
+        '"Missing count"',
+        '"Rewrite on"',
+        '"Describe on"',
+    ):
+        assert label in ctx
+    assert "hints.enhance_on" in ctx
+    assert "hints.describe_on" in ctx
+    assert "result.lab_rel" in ctx
+    assert "result.quality" in ctx
+    assert "row.pack" in _model_check_fn("missingPacks")
+    assert "result.commands" not in MODEL_CHECK_JS.read_text(encoding="utf-8")
+
+
+def test_model_check_js_summaries_tell_the_truth_about_a_pass() -> None:
+    """A passed check still files, and says it passed."""
+    summary = _model_check_fn("reportSummary")
+    assert "Model check passed for" in summary
+    assert "Model check failed for" in summary
+    assert "Model check has not run for" in summary
+    assert "!node._ezLastCheck" in summary
+
+
+def test_model_check_js_records_every_check_failure_into_the_ring() -> None:
+    """Three failure paths log to ez_feedback with the endpoint in detail."""
+    body = MODEL_CHECK_JS.read_text(encoding="utf-8")
+    assert body.count("recordCheckError(") == 4
+    assert "ts: new Date().toISOString()" in body
+    posted = _model_check_fn("postCheckHints")
+    assert 'recordCheckError(empty.message, `POST ${CHECK_ENDPOINT}' in posted
+    assert "fetch(apiUrl(CHECK_ENDPOINT)" in posted
+    assert 'const CHECK_ENDPOINT = "/ez_quality/check";' in body
+    assert body.count('"/ez_quality/check"') == 1
+    assert "recordCheckError(text," in _model_check_fn("runOnNode")
+
+
+def test_model_check_js_ring_entries_stay_one_line_and_command_free() -> None:
+    """format_report is multiline and ends with Run: commands; the ring is not."""
+    line = _model_check_fn("oneLine")
+    assert 'split("\\n", 1)[0]' in line
+    assert "replace(/\\s+/g, \" \")" in line
+    assert "slice(0, limit - 3)" in line
+    rec = _model_check_fn("recordCheckError")
+    assert "oneLine(message, 160)" in rec
+    assert "oneLine(detail ||" in rec
+    assert "surface: REPORT_SURFACE" in rec
+    assert "fb.recordError({" in rec
