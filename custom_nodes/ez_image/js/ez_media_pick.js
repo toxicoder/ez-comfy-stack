@@ -8,7 +8,11 @@ import { app } from "../../scripts/app.js";
 import { api } from "../../scripts/api.js";
 
 const TARGETS = {
-  EZOptionalImage: { widget: "filename", kind: "image", accept: "image/*" },
+  EZOptionalImage: {
+    widgets: ["filename", "filename_2", "filename_3"],
+    kind: "image",
+    accept: "image/*",
+  },
   LoadImage: { widget: "image", kind: "image", accept: "image/*" },
   LoadAudio: { widget: "audio", kind: "audio", accept: "audio/*" },
 };
@@ -125,17 +129,18 @@ async function listOutputs(kind) {
 }
 
 /**
- * Mount upload + choose-from-outputs buttons on a load widget.
+ * Mount upload + choose-from-outputs buttons on one or more load slots.
  * @param {object} node
- * @param {{widget: string, kind: string, accept: string}} spec
+ * @param {{widget?: string, widgets?: string[], kind: string, accept: string}} spec
  * @returns {void}
  */
 function bindPicker(node, spec) {
   if (node._ezMediaPickBound) {
     return;
   }
-  const widget = widgetByName(node, spec.widget);
-  if (!widget) {
+  const slots = spec.widgets || [spec.widget];
+  const named = slots.map((name) => widgetByName(node, name)).filter(Boolean);
+  if (!named.length) {
     return;
   }
   node._ezMediaPickBound = true;
@@ -144,6 +149,7 @@ function bindPicker(node, spec) {
   fileInput.accept = spec.accept;
   fileInput.style.display = "none";
   document.body.appendChild(fileInput);
+  let target = named[0];
   fileInput.onchange = async () => {
     const file = fileInput.files?.[0];
     fileInput.value = "";
@@ -151,39 +157,51 @@ function bindPicker(node, spec) {
       return;
     }
     try {
-      await uploadToInput(node, widget, file);
+      await uploadToInput(node, target, file);
     } catch (err) {
       console.error("[ez_image] upload failed", err);
     }
   };
-  node.addWidget("button", "Upload media", "upload", () => {
-    fileInput.click();
-  });
-  node.addWidget("button", "Choose from outputs", "outputs", async () => {
-    let items = [];
-    try {
-      items = await listOutputs(spec.kind);
-    } catch (err) {
-      console.error("[ez_image] outputs list failed", err);
-      return;
-    }
-    const names = items.map((row) => String(row.rel || row.name || "")).filter(Boolean);
-    if (!names.length) {
-      window.alert("No matching files on the output disk yet.");
-      return;
-    }
-    const picked = window.prompt(
-      "Choose an output file (paste a relative path):\n" + names.slice(0, 12).join("\n"),
-      names[0],
+  named.forEach((widget, index) => {
+    const suffix = named.length > 1 ? ` ${index + 1}` : "";
+    node.addWidget("button", `Upload media${suffix}`, `upload:${widget.name}`, () => {
+      target = widget;
+      fileInput.click();
+    });
+    node.addWidget(
+      "button",
+      `Choose from outputs${suffix}`,
+      `outputs:${widget.name}`,
+      async () => {
+        let items = [];
+        try {
+          items = await listOutputs(spec.kind);
+        } catch (err) {
+          console.error("[ez_image] outputs list failed", err);
+          return;
+        }
+        const names = items
+          .map((row) => String(row.rel || row.name || ""))
+          .filter(Boolean);
+        if (!names.length) {
+          window.alert("No matching files on the output disk yet.");
+          return;
+        }
+        const picked = window.prompt(
+          `Choose an output file for ${widget.name} (paste a relative path):\n` +
+            names.slice(0, 12).join("\n"),
+          names[0],
+        );
+        if (!picked) {
+          return;
+        }
+        try {
+          await chooseOutput(node, widget, picked);
+        } catch (err) {
+          console.error("[ez_image] choose output failed", err);
+        }
+      },
     );
-    if (!picked) {
-      return;
-    }
-    try {
-      await chooseOutput(node, widget, picked);
-    } catch (err) {
-      console.error("[ez_image] choose output failed", err);
-    }
   });
 }
 
