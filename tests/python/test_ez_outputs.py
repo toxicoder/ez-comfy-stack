@@ -265,6 +265,130 @@ def test_pack_exports_empty_mappings_and_js() -> None:
     assert "auto-fill" in sheet
 
 
+def _outputs_js() -> str:
+    """Return the Outputs sidebar frontend source.
+
+    Returns:
+        Contents of ``custom_nodes/ez_outputs/js/ez_outputs.js``.
+    """
+    pack_js = Path(__file__).resolve().parents[2] / "custom_nodes" / "ez_outputs" / "js"
+    return (pack_js / "ez_outputs.js").read_text(encoding="utf-8")
+
+
+def test_outputs_js_toolbar_report_buttons() -> None:
+    """The top chrome carries prefilled bug and feature report buttons."""
+    body = _outputs_js()
+    assert 'makeButton("Report a problem", "ez-out-btn"' in body
+    assert 'makeButton("Suggest a feature", "ez-out-btn"' in body
+    assert 'explorerReport("bug")' in body
+    assert 'explorerReport("enhancement")' in body
+    assert 'surface: "media-explorer"' in body
+    # Appended alongside Refresh in the kind row, not into a dialog of our own.
+    assert body.index("kindRow.appendChild(refreshBtn)") < body.index(
+        "kindRow.appendChild(reportBtn)"
+    ) < body.index("kindRow.appendChild(featureBtn)")
+    assert "showModal" not in body
+    assert "window.alert" not in body
+
+
+def test_outputs_js_lightbox_report_is_per_file() -> None:
+    """The lightbox bar reports one file on the media-file surface."""
+    body = _outputs_js()
+    assert 'makeButton("Report", "ez-out-btn"' in body
+    assert 'surface: "media-file"' in body
+    assert 'summary: clipText("Problem with " + row.rel, 120)' in body
+    assert "context: fileContext(row)" in body
+    # Sits with the other bar actions and never displaces Close.
+    assert body.index('makeButton("Report", "ez-out-btn"') < body.index(
+        'makeButton("Close", "ez-out-btn"'
+    )
+    # The keyboard cursor and arrow stepping stay owned by el's single handler.
+    assert body.count('addEventListener("keydown"') == 1
+    assert body.count("window.confirm(") == 1
+
+
+def test_outputs_js_reaches_the_core_lazily_with_a_handoff_fallback() -> None:
+    """window.EzFeedback is read at click time and absent-core falls back."""
+    body = _outputs_js()
+    assert "const fb = window.EzFeedback;" in body
+    assert "function feedbackCore(method)" in body
+    assert "typeof fb[method] !== " in body
+    assert "fb.openReport(report)" in body
+    assert "fb.recordError({" in body
+    assert "ts: new Date().toISOString()" in body
+    assert "function issuesHandoffUrl(report)" in body
+    assert (
+        'const ISSUES_URL = "https://github.com/toxicoder/ez-comfy-stack/issues/new";'
+        in body
+    )
+    assert 'window.open(issuesHandoffUrl(report), "_blank", "noopener")' in body
+    assert "REPORT_HREF_MAX" in body
+    assert '"## What happened"' in body
+    # Same-origin only: the single fetch is the backend route, the one absolute
+    # URL is the GitHub handoff tab.
+    assert body.count("await fetch(") == 1
+    assert body.count("https://") == 1
+    assert "window.location" not in body
+
+
+def test_outputs_js_records_route_failures() -> None:
+    """Every catch feeds the ring buffer with endpoint and status."""
+    body = _outputs_js()
+    assert "error.endpoint = path;" in body
+    assert "error.status = response.status;" in body
+    assert 'noteFailure("/ez_outputs/delete", err,' in body
+    assert 'noteFailure("/ez_outputs/to-input", err,' in body
+    assert 'noteFailure("/ez_outputs/list", err,' in body
+    assert '"endpoint=" + endpoint' in body
+    assert '"status=" + httpStatus' in body
+    assert "function errorDetail(errors)" in body
+    assert "endpoint=/ez_outputs/delete " in body
+    assert "endpoint=/ez_outputs/to-input " in body
+    # A broken list is one click from a filed issue.
+    assert 'fail.className = "ez-out-fail";' in body
+    assert 'failReportButton("/ez_outputs/list", message, httpStatus)' in body
+    assert 'makeButton("Report this problem", "ez-out-btn"' in body
+
+
+def test_outputs_js_report_context_is_prefilled_from_scope() -> None:
+    """Context carries the filters and the selected rels, never host paths."""
+    body = _outputs_js()
+    for pair in (
+        '["folder", folderToken()]',
+        '["prefix", prefix || "-"]',
+        '["kind", kind]',
+        '["search", query || "-"]',
+        '["view", view]',
+        '["sort", sortMode]',
+        '["items", String(vis.length)]',
+        '["loaded", String(items.length)]',
+        '["truncated", truncated ?',
+        '["selected", chosen.length',
+    ):
+        assert pair in body, pair
+    assert "const REPORT_REL_CAP = 10;" in body
+    assert ".slice(0, REPORT_REL_CAP)" in body
+    for pair in (
+        '["rel", String(item.rel || "")]',
+        '["kind", String(item.kind || "")]',
+        '["size", String(item.size',
+        '["mtime", String(item.mtime',
+        '["suffix", String(item.suffix',
+        '["parent", String(item.parent',
+    ):
+        assert pair in body, pair
+    assert "function folderToken()" in body
+    assert 'if (folder === ROOT_FOLDER)' in body
+
+
+def test_outputs_css_styles_the_fail_pane_button() -> None:
+    """The report button inside the failure pane keeps the pane's palette."""
+    pack_js = Path(__file__).resolve().parents[2] / "custom_nodes" / "ez_outputs" / "js"
+    sheet = (pack_js / "ez_outputs.css").read_text(encoding="utf-8")
+    assert ".ez-out-fail .ez-out-btn" in sheet
+    assert ".ez-out-chip," in sheet
+
+
 def test_output_and_input_root_env(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
