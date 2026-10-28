@@ -300,6 +300,33 @@ def test_media_pick_js_is_nodes2_safe() -> None:
     assert "onResize" not in body
 
 
+def test_media_pick_js_mounts_every_reference_still_slot() -> None:
+    """EZOptionalImage has three picker slots; each gets its own pair of buttons."""
+    body = (CUSTOM / "ez_image" / "js" / "ez_media_pick.js").read_text(encoding="utf-8")
+    assert 'widgets: ["filename", "filename_2", "filename_3"]' in body
+    assert "spec.widgets || [spec.widget]" in body
+    assert "named.length > 1" in body
+    assert "upload:${widget.name}" in body
+    assert "outputs:${widget.name}" in body
+    assert "node_widget" not in body
+    assert "onResize" not in body
+
+
+def test_reference_input_js_is_nodes2_safe() -> None:
+    """The reference card obeys the same widget-write and banned-token rules."""
+    body = (
+        CUSTOM / "ez_image" / "js" / "ez_reference_input.js"
+    ).read_text(encoding="utf-8")
+    assert "function setWidgetValue(node, widget, value)" in body
+    assert "node.widgets_values" in body
+    assert "setDirtyCanvas" in body
+    assert 'addWidget("button"' in body
+    assert "EZOptionalImage" in body
+    assert "onRemoved" in body
+    assert "node_widget" not in body
+    assert "onResize" not in body
+
+
 def test_format_js_matches_input_ratio() -> None:
     body = (CUSTOM / "ez_image" / "js" / "ez_image_format.js").read_text(encoding="utf-8")
     assert "Match input" in body

@@ -700,6 +700,9 @@
         "Node name for S&R": "EZOptionalImage"
       },
       "widgets_values": [
+        "",
+        true,
+        "",
         ""
       ],
       "title": "Example / reference (optional)"
@@ -760,7 +763,8 @@
         "Node name for S&R": "EZKleinRefCanvas"
       },
       "widgets_values": [
-        false
+        false,
+        3
       ],
       "title": "Optional Klein ref"
     },
@@ -1498,6 +1502,14 @@
           {
             "description": "Upload a still or pick one already on the drive (input/ or Outputs). Empty is valid - Queue without a file. When set, Klein uses it as a native reference.",
             "label": "Example / reference (optional)"
+          }
+        ],
+        [
+          15,
+          "use_references",
+          {
+            "label": "Use reference stills",
+            "description": "Turn off to run text-to-image without clearing your picks. Any new pick turns it back on."
           }
         ]
       ],
