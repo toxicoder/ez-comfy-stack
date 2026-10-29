@@ -1,13 +1,22 @@
 """Family-specific Quality overlays (custom / draft / lab / standard / high /
 Free Commercial Use / ultra / max / flux3-fast / flux3-quality / flux3-nvfp4).
 
-Python is the source of truth. The frontend JS mirrors these constants.
+This module is the only definition of what a tier asks for. The frontend reads
+a table generated from it (``export_table`` -> tests/python/_build_quality_js.py
+-> custom_nodes/ez_quality/js/ez_quality_presets.js) and derives the combo from
+that table, so no tier number or weight name lives in JS. ``match_tier`` is the
+mirror of the apply: it names the level the widgets currently sit on.
+
 Overlays never change width, height, frames, or length. Named qualities may
-swap UNET, CLIP, and VAE when the files are present. ``custom`` is a freeze.
+swap UNET, CLIP, and VAE when the files are present; a value that cannot be
+written is a failed apply, not a silent skip. ``custom`` keeps whatever the
+widgets currently hold, and ``match_tier`` is what decides that a graph sits
+there. ``lab`` means the widgets still equal the load-time authored values.
 ``Free Commercial Use (<$10M)`` is Apache Klein 4B + LTX-2.5 only - never
 Klein 9B or FLUX.2-dev. Wan / audio / trellis are no-ops for that choice.
 The flux3-* profiles apply only to graphs that pin FLUX 3 Image Klein
-weights; on any other graph they are no-ops.
+weights; on any other graph they are no-ops, and on such a graph the Klein
+ladder is a no-op too rather than a Klein 4B downgrade.
 """
 
 from __future__ import annotations
@@ -399,6 +408,12 @@ def resolve_overlay(
     if choice in _FREEZE_QUALITIES or occ in _NOOP_OCCUPANCY:
         return QualityOverlay()
     if is_wan_14b_unet(unet_name):
+        return QualityOverlay()
+    # A graph that pins FLUX 3 Image Klein weights has its own three profiles.
+    # The Klein ladder must never drop Klein 4B weights onto them.
+    if choice not in FLUX3_QUALITY_CHOICES and (
+        is_klein3_unet(unet_name) or is_klein3_clip(clip_name)
+    ):
         return QualityOverlay()
     available = _available(available_unets)
     clips = _available(available_clips)
@@ -934,3 +949,326 @@ def apply_to_graph(
                 continue
             values[VAE_NAME_INDEX] = overlay.vae_name
     return graph
+
+
+# ---------------------------------------------------------------------------
+# Tier table - the one definition the frontend is generated from.
+# ---------------------------------------------------------------------------
+
+# Transformer each family authors, so a table row is evaluated against the
+# loaders that family really pins. resolve_overlay branches on the pinned
+# weights, so the family fixture is what makes a row mean that family.
+WAN_5B_UNET = "wan2.2_ti2v_5B_fp16.safetensors"
+LTX_UNET = "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors"
+TRELLIS_UNET = "trellis_2_int8_convrot.safetensors"
+
+# Graphs that pin FLUX 3 Image Klein still stamp occupancy "klein", so the
+# table needs a family of its own to record their profiles separately.
+QUALITY_FAMILY_KLEIN3 = "klein3"
+
+# resolve_overlay reports only the widgets it would actually change, so the
+# family fixture must classify as the family while differing from every value
+# its tiers request; otherwise a request would be recorded as "no change".
+# These names are branch fixtures only and never appear in a graph.
+_KLEIN_TABLE_UNET = KLEIN_9B_NVFP4
+_KLEIN_TABLE_CLIP = CLIP_MISTRAL
+_KLEIN_TABLE_VAE = VAE_FULL
+_KLEIN3_TABLE_UNET = "flux3-image-klein-distilled-int8-convrot.safetensors"
+_KLEIN3_TABLE_CLIP = "qwen3vl_4b_table_sentinel.safetensors"
+_KLEIN3_TABLE_VAE = VAE_SMALL
+
+QUALITY_FAMILIES: tuple[str, ...] = (
+    "klein",
+    QUALITY_FAMILY_KLEIN3,
+    "wan",
+    "ltx",
+    "film",
+    "audio",
+    "trellis",
+    "none",
+    "llm",
+)
+
+_FAMILY_PINNED: dict[str, dict[str, str]] = {
+    "klein": {
+        "unet": _KLEIN_TABLE_UNET,
+        "clip": _KLEIN_TABLE_CLIP,
+        "vae": _KLEIN_TABLE_VAE,
+    },
+    QUALITY_FAMILY_KLEIN3: {
+        "unet": _KLEIN3_TABLE_UNET,
+        "clip": _KLEIN3_TABLE_CLIP,
+        "vae": _KLEIN3_TABLE_VAE,
+    },
+    "wan": {"unet": WAN_5B_UNET, "clip": "", "vae": ""},
+    "ltx": {"unet": LTX_UNET, "clip": "", "vae": ""},
+    "film": {"unet": LTX_UNET, "clip": "", "vae": ""},
+    "audio": {"unet": "", "clip": "", "vae": ""},
+    "trellis": {"unet": TRELLIS_UNET, "clip": "", "vae": ""},
+    "none": {"unet": "", "clip": "", "vae": ""},
+    "llm": {"unet": "", "clip": "", "vae": ""},
+}
+
+# The six widgets the overlay is allowed to own, in serialization order.
+OVERLAY_FIELDS: tuple[str, ...] = (
+    "steps",
+    "cfg",
+    "unet_name",
+    "clip_name",
+    "vae_name",
+    "clip_type",
+)
+
+# Combo options that mean "everything on disk", so a derived row records what a
+# tier asks for before availability filters it. apply_to_graph filters again.
+_ALL_CATALOG_WEIGHTS: frozenset[str] = frozenset(
+    {
+        KLEIN_DISTILLED,
+        KLEIN_NVFP4,
+        KLEIN_BASE,
+        KLEIN_9B,
+        KLEIN_9B_BASE,
+        KLEIN_9B_NVFP4,
+        FLUX2_DEV,
+        KLEIN3_DISTILLED,
+        KLEIN3_BASE,
+        KLEIN3_NVFP4,
+        CLIP_4B,
+        CLIP_8B,
+        CLIP_MISTRAL,
+        KLEIN3_TE,
+        VAE_FULL,
+        VAE_SMALL,
+        WAN_5B_UNET,
+        LTX_UNET,
+        TRELLIS_UNET,
+    }
+)
+
+NAMED_QUALITY_CHOICES: tuple[str, ...] = tuple(
+    choice for choice in QUALITY_CHOICES if choice not in _FREEZE_QUALITIES
+)
+
+
+def _profile(
+    family: str,
+    quality: str,
+    *,
+    available_unets: Sequence[str] | None,
+    available_clips: Sequence[str] | None,
+    available_vaes: Sequence[str] | None,
+    authored_steps: int = 0,
+) -> QualityOverlay:
+    """Resolve one family row against a loader availability set.
+
+    Args:
+        family: Occupancy id, or QUALITY_FAMILY_KLEIN3.
+        quality: Combo value.
+        available_unets: UNET combo options, None for the whole catalog.
+        available_clips: CLIP combo options.
+        available_vaes: VAE combo options.
+        authored_steps: KSampler steps, used by the Klein high floor.
+
+    Returns:
+        Overlay of requested values; None leaves that widget authored.
+    """
+    pinned = _FAMILY_PINNED.get(family)
+    if pinned is None:
+        return QualityOverlay()
+    everything = sorted(_ALL_CATALOG_WEIGHTS)
+    return resolve_overlay(
+        occupancy="klein" if family == QUALITY_FAMILY_KLEIN3 else family,
+        quality=quality,
+        authored_steps=authored_steps,
+        authored_cfg=1.0,
+        unet_name=pinned["unet"],
+        available_unets=everything if available_unets is None else available_unets,
+        clip_name=pinned["clip"],
+        available_clips=everything if available_clips is None else available_clips,
+        vae_name=pinned["vae"],
+        available_vaes=everything if available_vaes is None else available_vaes,
+    )
+
+
+def tier_profile(
+    family: str,
+    quality: str,
+    *,
+    available_unets: Sequence[str] | None = None,
+    available_clips: Sequence[str] | None = None,
+    available_vaes: Sequence[str] | None = None,
+    authored_steps: int = 0,
+) -> QualityOverlay:
+    """Return what one tier asks one family to change.
+
+    Args:
+        family: Occupancy id, or QUALITY_FAMILY_KLEIN3.
+        quality: Combo value.
+        available_unets: UNET combo options, None for the whole catalog.
+        available_clips: CLIP combo options.
+        available_vaes: VAE combo options.
+        authored_steps: KSampler steps for the Klein high floor.
+
+    Returns:
+        Overlay of requested values; None leaves that widget authored.
+    """
+    return _profile(
+        family,
+        quality,
+        available_unets=available_unets,
+        available_clips=available_clips,
+        available_vaes=available_vaes,
+        authored_steps=authored_steps,
+    )
+
+
+def family_owned_fields(family: str) -> tuple[str, ...]:
+    """Return the overlay fields any named tier sets for one family.
+
+    Fields no tier in the family ever sets stay authored, so a user edit to
+    one of them does not leave the pre-configured level.
+
+    Args:
+        family: Occupancy id, or QUALITY_FAMILY_KLEIN3.
+
+    Returns:
+        Field names in OVERLAY_FIELDS order, empty for a no-op family.
+    """
+    owned: set[str] = set()
+    for choice in NAMED_QUALITY_CHOICES:
+        profile = tier_profile(family, choice)
+        for field in OVERLAY_FIELDS:
+            if getattr(profile, field) is not None:
+                owned.add(field)
+    return tuple(f for f in OVERLAY_FIELDS if f in owned)
+
+
+def _same_value(left: object, right: object) -> bool:
+    """Compare two widget values the way the combo and KSampler report them.
+
+    Args:
+        left: Observed widget value.
+        right: Requested overlay value.
+
+    Returns:
+        True when the two hold the same setting.
+    """
+    if left is None or right is None:
+        return left is None and right is None
+    if isinstance(left, (int, float)) or isinstance(right, (int, float)):
+        try:
+            return float(left) == float(right)  # type: ignore[arg-type]
+        except (TypeError, ValueError):
+            return False
+    return str(left) == str(right)
+
+
+def match_tier(
+    observed: Mapping[str, object],
+    *,
+    family: str,
+    authored: Mapping[str, object] | None = None,
+    available_unets: Sequence[str] | None = None,
+    available_clips: Sequence[str] | None = None,
+    available_vaes: Sequence[str] | None = None,
+    authored_steps: int = 0,
+) -> str:
+    """Return the quality id that matches the widgets a graph now holds.
+
+    Named tiers win over ``lab`` because the tier names what Queue would send.
+    Only the fields the family owns are compared, so an edit outside the
+    overlay keeps the level. Unowned fields stay whatever the user left them.
+
+    Args:
+        observed: Current value per overlay field name.
+        family: Occupancy id, or QUALITY_FAMILY_KLEIN3.
+        authored: Load-time values per overlay field name, when known.
+        available_unets: UNET combo options.
+        available_clips: CLIP combo options.
+        available_vaes: VAE combo options.
+        authored_steps: KSampler steps for the Klein high floor.
+
+    Returns:
+        A named quality, QUALITY_LAB, or QUALITY_CUSTOM.
+    """
+    owned = family_owned_fields(family)
+    if not owned:
+        return QUALITY_LAB
+    for choice in NAMED_QUALITY_CHOICES:
+        profile = _profile(
+            family,
+            choice,
+            available_unets=available_unets,
+            available_clips=available_clips,
+            available_vaes=available_vaes,
+            authored_steps=authored_steps,
+        )
+        if all(
+            _same_value(observed.get(field), getattr(profile, field))
+            for field in owned
+        ):
+            return choice
+    if authored is not None and all(
+        _same_value(observed.get(field), authored.get(field)) for field in owned
+    ):
+        return QUALITY_LAB
+    return QUALITY_CUSTOM
+
+
+def tier_label(family: str, quality: str) -> str:
+    """Describe one tier the way the combo should, weights before steps.
+
+    Klein tiers swap weights rather than climbing a step ladder, so the label
+    names the transformer and the sampler settings it pins.
+
+    Args:
+        family: Occupancy id, or QUALITY_FAMILY_KLEIN3.
+        quality: Combo value.
+
+    Returns:
+        Caption text, empty for a tier that changes nothing.
+    """
+    profile = tier_profile(family, quality)
+    parts: list[str] = []
+    if profile.unet_name:
+        parts.append(profile.unet_name.rsplit(".", 1)[0])
+    if profile.steps is not None:
+        parts.append(f"{profile.steps} steps")
+    if profile.cfg is not None:
+        parts.append(f"CFG {profile.cfg}")
+    return ", ".join(parts)
+
+
+def export_table() -> dict[str, Any]:
+    """Return the full tier table in JSON-safe form.
+
+    Args:
+        None.
+
+    Returns:
+        Mapping with the tier table, owned fields, labels, and tier order.
+    """
+    table: dict[str, dict[str, dict[str, Any]]] = {}
+    owned: dict[str, list[str]] = {}
+    labels: dict[str, dict[str, str]] = {}
+    for family in QUALITY_FAMILIES:
+        table[family] = {}
+        labels[family] = {}
+        for choice in NAMED_QUALITY_CHOICES:
+            profile = tier_profile(family, choice)
+            table[family][choice] = {
+                field: getattr(profile, field) for field in OVERLAY_FIELDS
+            }
+            labels[family][choice] = tier_label(family, choice)
+        owned[family] = list(family_owned_fields(family))
+    return {
+        "choices": list(QUALITY_CHOICES),
+        "named": list(NAMED_QUALITY_CHOICES),
+        "families": list(QUALITY_FAMILIES),
+        "fields": list(OVERLAY_FIELDS),
+        "table": table,
+        "owned": owned,
+        "labels": labels,
+        "custom": QUALITY_CUSTOM,
+        "lab": QUALITY_LAB,
+    }

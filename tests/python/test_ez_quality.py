@@ -4,11 +4,14 @@ from __future__ import annotations
 
 import copy
 import json
+import re
 import sys
 from pathlib import Path
+from typing import Any
 
 import pytest
 
+import _build_quality_js
 from _lab_paths import lab_json, lab_graph_paths
 from _wire_quality import (
     QUALITY_TYPE,
@@ -94,9 +97,12 @@ from ez_quality.presets import (  # noqa: E402
     LTX_HIGH_STEPS,
     LTX_MAX_STEPS,
     LTX_STANDARD_STEPS,
+    NAMED_QUALITY_CHOICES,
     QUALITY_CHOICES,
     QUALITY_CUSTOM,
     QUALITY_DRAFT,
+    QUALITY_FAMILIES,
+    QUALITY_FAMILY_KLEIN3,
     QUALITY_FLUX3_FAST,
     QUALITY_FLUX3_NVFP4,
     QUALITY_FLUX3_QUALITY,
@@ -106,6 +112,7 @@ from ez_quality.presets import (  # noqa: E402
     QUALITY_MAX,
     QUALITY_STANDARD,
     QUALITY_ULTRA,
+    OVERLAY_FIELDS,
     QualityOverlay,
     TRELLIS_DRAFT_STEPS,
     TRELLIS_HIGH_STEPS,
@@ -122,6 +129,8 @@ from ez_quality.presets import (  # noqa: E402
     _klein_overlay,
     _pick_unet,
     apply_to_graph,
+    export_table,
+    family_owned_fields,
     infer_occupancy,
     is_banned_unet,
     is_klein3_clip,
@@ -129,12 +138,63 @@ from ez_quality.presets import (  # noqa: E402
     is_klein3_upsampler,
     is_klein_4b_unet,
     is_klein_9b_unet,
+    match_tier,
     normalize_quality,
     resolve_overlay,
+    tier_label,
+    tier_profile,
 )
 
 JS = CUSTOM / "ez_quality" / "js" / "ez_quality.js"
+QUALITY_PRESETS_JS = CUSTOM / "ez_quality" / "js" / "ez_quality_presets.js"
 MODEL_CHECK_JS = CUSTOM / "ez_quality" / "js" / "ez_model_check.js"
+
+_EXPORT_RE = re.compile(r"^export const EZ_QUALITY_([A-Z_]+) = ", re.MULTILINE)
+_JSON_DECODER = json.JSONDecoder()
+
+
+def _presets_payload() -> dict[str, Any]:
+    """Decode every JSON payload the generated frontend module exports.
+
+    Args:
+        None.
+
+    Returns:
+        Mapping of export name (``table``, ``owned``, ...) to its decoded value.
+    """
+    body = QUALITY_PRESETS_JS.read_text(encoding="utf-8")
+    payload: dict[str, Any] = {}
+    for match in _EXPORT_RE.finditer(body):
+        value, end = _JSON_DECODER.raw_decode(body, match.end())
+        assert body[end:].lstrip().startswith(";"), match.group(0)
+        payload[match.group(1).lower()] = value
+    return payload
+
+
+def _js_blob() -> str:
+    """Frontend sources the Quality node ships with, main module plus table.
+
+    Args:
+        None.
+
+    Returns:
+        Concatenated source text.
+    """
+    return JS.read_text(encoding="utf-8") + QUALITY_PRESETS_JS.read_text(
+        encoding="utf-8"
+    )
+
+
+# Widget values no tier in any family requests, so a nudged field can only
+# land off every ladder.
+_OFF_TIER_VALUES: dict[str, Any] = {
+    "steps": 9999,
+    "cfg": 7.77,
+    "unet_name": "off-tier-unet.safetensors",
+    "clip_name": "off-tier-clip.safetensors",
+    "vae_name": "off-tier-vae.safetensors",
+    "clip_type": "off-tier-clip-type",
+}
 
 
 def _load(name: str) -> dict:
@@ -665,23 +725,210 @@ def test_apply_refuses_banned_unet_overlay(monkeypatch: pytest.MonkeyPatch) -> N
     assert _unet(graph)["widgets_values"][UNET_NAME_INDEX] == before
 
 
-def test_js_mirrors_preset_constants() -> None:
+def test_js_wires_the_combo_without_legacy_hooks() -> None:
+    """The combo drives widget.value and freezes custom; no 14B pin ships."""
     body = JS.read_text(encoding="utf-8")
+    blob = _js_blob()
     assert "widget.value" in body
     assert "beforeQueued" in body
     assert "node_widget" not in body
     assert "onResize" not in body
-    assert KLEIN_BASE in body
-    assert str(WAN_HIGH_STEPS) in body
-    assert str(KLEIN_HIGH_BASE_STEPS) in body
-    assert "wan2.2_i2v_high_noise_14B" not in body
+    assert "wan2.2_i2v_high_noise_14B" not in blob
     assert 'includes("14b")' in body
-    assert "flux-2-klein-9b" in body.lower() or "klein-9b" in body
-    assert QUALITY_CUSTOM in body
+    assert "flux-2-klein-9b" in blob.lower() or "klein-9b" in blob
     assert "clip_name" in body
-    assert VAE_SMALL in body
     assert "freezeQualityToCustom" in body
     assert "widgets_values[idx]" in body
+
+
+def test_generated_presets_module_is_the_preset_table() -> None:
+    """The shipped frontend table is export_table(), so the browser cannot drift."""
+    payload = _presets_payload()
+    assert payload == export_table()
+    assert payload["choices"] == list(QUALITY_CHOICES)
+    assert payload["named"] == list(NAMED_QUALITY_CHOICES)
+    assert payload["families"] == list(QUALITY_FAMILIES)
+    assert payload["fields"] == list(OVERLAY_FIELDS)
+    assert payload["custom"] == QUALITY_CUSTOM
+    assert payload["lab"] == QUALITY_LAB
+    assert payload["table"]["klein"][QUALITY_HIGH]["unet_name"] == KLEIN_BASE
+    assert payload["table"]["klein"][QUALITY_HIGH]["steps"] == KLEIN_HIGH_BASE_STEPS
+    assert payload["table"]["wan"][QUALITY_HIGH]["steps"] == WAN_HIGH_STEPS
+    assert payload["table"]["klein"][QUALITY_HIGH]["vae_name"] == VAE_SMALL
+    assert payload["owned"]["klein"] == list(OVERLAY_FIELDS)
+
+
+def test_generated_presets_module_is_up_to_date() -> None:
+    """ez_quality_presets.js is a no-op rewrite of what presets.py renders."""
+    assert _build_quality_js.render() == QUALITY_PRESETS_JS.read_text(
+        encoding="utf-8"
+    )
+
+
+def test_tier_table_rows_are_json_safe_six_field_rows() -> None:
+    """Every family x named tier row is JSON-safe and holds six fields."""
+    table = export_table()["table"]
+    assert set(table) == set(QUALITY_FAMILIES)
+    for family in QUALITY_FAMILIES:
+        assert set(table[family]) == set(NAMED_QUALITY_CHOICES), family
+        for choice in NAMED_QUALITY_CHOICES:
+            row = table[family][choice]
+            assert list(row) == list(OVERLAY_FIELDS), (family, choice)
+            assert json.loads(json.dumps(row)) == row, (family, choice)
+            for field in OVERLAY_FIELDS:
+                value = row[field]
+                assert value is None or isinstance(value, (int, float, str)), (
+                    family,
+                    choice,
+                    field,
+                )
+                if field == "steps":
+                    assert value is None or isinstance(value, int), (family, choice)
+
+
+def test_owned_fields_are_the_family_tier_footprint() -> None:
+    """A family owns only the fields its own tiers ever write."""
+    assert family_owned_fields("klein") == OVERLAY_FIELDS
+    assert family_owned_fields(QUALITY_FAMILY_KLEIN3) == OVERLAY_FIELDS
+    for family in ("wan", "ltx", "film", "audio", "trellis"):
+        assert family_owned_fields(family) == ("steps",), family
+    for family in ("none", "llm"):
+        assert family_owned_fields(family) == (), family
+    assert family_owned_fields("not-a-family") == ()
+
+
+def _observed_for(family: str, choice: str) -> dict[str, Any]:
+    """Overlay values a graph must hold to read back as one tier.
+
+    Args:
+        family: Occupancy id, or QUALITY_FAMILY_KLEIN3.
+        choice: Named quality.
+
+    Returns:
+        Mapping of overlay field to the value that tier requests.
+    """
+    profile = tier_profile(family, choice)
+    return {field: getattr(profile, field) for field in OVERLAY_FIELDS}
+
+
+@pytest.mark.parametrize("family", ["klein", QUALITY_FAMILY_KLEIN3])
+@pytest.mark.parametrize("choice", NAMED_QUALITY_CHOICES)
+def test_match_tier_recognises_a_graph_sitting_on_a_tier(
+    family: str, choice: str
+) -> None:
+    """Widgets set to one tier read back as a tier with the same overlay."""
+    observed = _observed_for(family, choice)
+    matched = match_tier(observed, family=family)
+    assert matched in NAMED_QUALITY_CHOICES, (family, choice, matched)
+    assert _observed_for(family, matched) == observed, (family, choice, matched)
+
+
+@pytest.mark.parametrize("field", OVERLAY_FIELDS)
+def test_match_tier_calls_one_owned_field_nudge_custom(field: str) -> None:
+    """One owned widget moved off every ladder on a klein graph is custom."""
+    observed = _observed_for("klein", QUALITY_STANDARD)
+    assert observed[field] is not None
+    observed[field] = _OFF_TIER_VALUES[field]
+    assert match_tier(observed, family="klein") == QUALITY_CUSTOM
+
+
+@pytest.mark.parametrize("field", OVERLAY_FIELDS)
+def test_match_tier_ignores_fields_the_family_does_not_own(field: str) -> None:
+    """An edit outside the family footprint keeps the level it was on."""
+    owned = family_owned_fields("wan")
+    observed = _observed_for("wan", QUALITY_STANDARD)
+    observed[field] = _OFF_TIER_VALUES[field]
+    matched = match_tier(observed, family="wan")
+    if field in owned:
+        assert matched == QUALITY_CUSTOM, field
+    else:
+        assert matched == QUALITY_STANDARD, field
+
+
+def test_match_tier_keeps_a_wan_cfg_edit_on_its_tier() -> None:
+    """Wan tiers own steps alone, so a CFG edit keeps the level."""
+    observed = _observed_for("wan", QUALITY_STANDARD)
+    assert observed["cfg"] is None
+    observed["cfg"] = 7.5
+    assert match_tier(observed, family="wan") == QUALITY_STANDARD
+    observed["steps"] = WAN_STANDARD_STEPS + 3
+    assert match_tier(observed, family="wan") == QUALITY_CUSTOM
+
+
+def test_match_tier_reports_lab_for_the_authored_widgets() -> None:
+    """Widgets matching no tier but equal to what shipped read as lab."""
+    observed = {
+        "steps": 13,
+        "cfg": 2.75,
+        "unet_name": KLEIN_BASE,
+        "clip_name": CLIP_8B,
+        "vae_name": VAE_FULL,
+        "clip_type": "sd3",
+    }
+    assert match_tier(observed, family="klein") == QUALITY_CUSTOM
+    assert match_tier(observed, family="klein", authored=observed) == QUALITY_LAB
+
+
+@pytest.mark.parametrize("family", ["none", "llm"])
+def test_match_tier_on_a_no_op_family_is_lab(family: str) -> None:
+    """A family with no tier footprint can only report lab."""
+    observed = {
+        "steps": 3,
+        "cfg": 9.5,
+        "unet_name": "whatever.safetensors",
+        "clip_name": "whatever_clip.safetensors",
+        "vae_name": "whatever_vae.safetensors",
+        "clip_type": "sd3",
+    }
+    assert family_owned_fields(family) == ()
+    assert match_tier(observed, family=family) == QUALITY_LAB
+    assert match_tier({}, family=family) == QUALITY_LAB
+
+
+def test_match_tier_compares_widget_strings_as_numbers() -> None:
+    """KSampler text widgets compare equal to the tier numbers they hold."""
+    observed = _observed_for("klein", QUALITY_STANDARD)
+    observed["steps"] = str(KLEIN_STANDARD_STEPS)
+    observed["cfg"] = f"{KLEIN_STANDARD_CFG:.1f}"
+    assert match_tier(observed, family="klein") == QUALITY_STANDARD
+    observed["steps"] = "9"
+    assert match_tier(observed, family="klein") == QUALITY_CUSTOM
+
+
+def test_match_tier_rejects_text_where_a_tier_wants_a_number() -> None:
+    """A widget holding text where the tier wants a number is not that tier."""
+    observed = _observed_for("klein", QUALITY_STANDARD)
+    observed["steps"] = "auto"
+    assert match_tier(observed, family="klein") == QUALITY_CUSTOM
+
+
+def test_klein3_guard_keeps_the_klein_ladder_off_flux3_graphs() -> None:
+    """Klein 4B tiers stay empty on FLUX 3 graphs; only the flux3 rows write."""
+    flux3 = set(FLUX3_QUALITY_CHOICES)
+    assert flux3 <= set(NAMED_QUALITY_CHOICES)
+    for choice in NAMED_QUALITY_CHOICES:
+        profile = tier_profile(QUALITY_FAMILY_KLEIN3, choice)
+        values = [getattr(profile, field) for field in OVERLAY_FIELDS]
+        if choice in flux3:
+            assert all(value is not None for value in values), choice
+        else:
+            assert not any(value is not None for value in values), choice
+
+
+def test_tier_label_names_the_swap_or_is_silent() -> None:
+    """A weight-swap caption names the transformer and steps; a no-op row is blank."""
+    label = tier_label("klein", QUALITY_STANDARD)
+    assert KLEIN_DISTILLED.rsplit(".", 1)[0] in label
+    assert f"{KLEIN_STANDARD_STEPS} steps" in label
+    assert f"CFG {KLEIN_STANDARD_CFG}" in label
+    assert tier_label("klein", QUALITY_HIGH).startswith(
+        KLEIN_BASE.rsplit(".", 1)[0]
+    )
+    assert tier_label("none", QUALITY_STANDARD) == ""
+    assert tier_label("llm", QUALITY_ULTRA) == ""
+    assert tier_label("klein", QUALITY_FLUX3_FAST) == ""
+    assert tier_label(QUALITY_FAMILY_KLEIN3, QUALITY_DRAFT) == ""
+
 
 
 def test_model_check_js_reports_the_check_payload_identities() -> None:
@@ -1190,8 +1437,11 @@ def test_person_mask_need_follows_the_reinsert_node(tmp_path: Path) -> None:
 
 
 def test_js_mentions_free_commercial_and_clip_feeders() -> None:
+    # The combo string may come from the generated table; the feeder captions
+    # are node-module text and stay in ez_quality.js.
+    blob = _js_blob()
     body = JS.read_text(encoding="utf-8")
-    assert QUALITY_FREE_COMMERCIAL in body
+    assert QUALITY_FREE_COMMERCIAL in blob
     assert "free_commercial" in body
     assert "16:9 LTX feeder (1280x704)" in body
     assert "9:16 LTX feeder (768x1280)" in body
@@ -1681,22 +1931,32 @@ def test_scan_flux3_quality_profile_missing_then_present(tmp_path: Path) -> None
 
 @pytest.mark.parametrize("choice", QUALITY_CHOICES)
 def test_js_mirrors_every_quality_choice(choice: str) -> None:
-    assert choice in JS.read_text(encoding="utf-8")
+    """Every combo id reaches the browser, from the main module or the table."""
+    assert choice in _js_blob()
 
 
 def test_js_mirrors_flux3_constants_and_predicates() -> None:
+    """Given the FLUX 3 ladder, when the frontend is read, then the weights are
+    in the shipped table and the needles stay in the node module."""
     body = JS.read_text(encoding="utf-8")
+    blob = _js_blob()
+    table = _presets_payload()["table"]
     for name in (*KLEIN3_ALL, KLEIN3_TE):
-        assert name in body
+        assert name in blob
     for choice in FLUX3_QUALITY_CHOICES:
-        assert choice in body
+        assert choice in blob
     assert "function isKlein3Unet" in body
     assert "function isKlein3Clip" in body
-    assert "firstClipName" in body
-    assert f"const KLEIN3_FAST_STEPS = {KLEIN3_FAST_STEPS};" in body
-    assert f"const KLEIN3_FAST_CFG = {KLEIN3_FAST_CFG};" in body
-    assert f"const KLEIN3_QUALITY_STEPS = {KLEIN3_QUALITY_STEPS};" in body
-    assert f"const KLEIN3_QUALITY_CFG = {KLEIN3_QUALITY_CFG};" in body
-    assert f"const KLEIN3_NVFP4_STEPS = {KLEIN3_NVFP4_STEPS};" in body
-    assert f"const KLEIN3_NVFP4_CFG = {KLEIN3_NVFP4_CFG};" in body
+    # The FLUX 3 needle reads the CLIPLoader name widget by name, not by slot.
+    assert "widgetByName" in body
+    assert '"clip_name"' in body
+    fast = table[QUALITY_FAMILY_KLEIN3][QUALITY_FLUX3_FAST]
+    quality = table[QUALITY_FAMILY_KLEIN3][QUALITY_FLUX3_QUALITY]
+    nvfp4 = table[QUALITY_FAMILY_KLEIN3][QUALITY_FLUX3_NVFP4]
+    assert fast["steps"] == KLEIN3_FAST_STEPS
+    assert fast["cfg"] == KLEIN3_FAST_CFG
+    assert quality["steps"] == KLEIN3_QUALITY_STEPS
+    assert quality["cfg"] == KLEIN3_QUALITY_CFG
+    assert nvfp4["steps"] == KLEIN3_NVFP4_STEPS
+    assert nvfp4["cfg"] == KLEIN3_NVFP4_CFG
 

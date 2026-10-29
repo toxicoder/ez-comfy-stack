@@ -1,25 +1,41 @@
 /**
  * EZQuality frontend: overlay sampler + UNET/CLIP/VAE on named qualities.
  *
- * Nodes 2.0: writes widget.value (and widget.callback). Does not change size
- * or length. Custom freezes the last overlay. Lab restores the authored snapshot.
- * Overlay-widget edits select custom and keep the new values. Prompt widgets
- * are never overlaid. setWidgetValue writes only that widget's widgets_values slot.
+ * Nodes 2.0: writes widget.value plus the matching widgets_values slot, and
+ * fires widget.callback. Every step count, CFG, and weight name comes from
+ * ez_quality_presets.js, which presets.py generates; this file holds no tier
+ * number and no weight filename of its own.
+ *
+ * The rule the whole file serves: the combo shows what the queued prompt
+ * holds. applyQuality names a tier only when every write it asked for landed,
+ * and deriveQualityTier reads the tier back out of the live widgets, so a
+ * dropped write, a missing widget, or a hand-edited value cannot leave a tier
+ * name painted on the combo. Custom keeps the live values; lab restores the
+ * authored snapshot. Prompt widgets are never overlaid.
  */
 import { app } from "../../scripts/app.js";
+import {
+  EZ_QUALITY_CHOICES,
+  EZ_QUALITY_CUSTOM,
+  EZ_QUALITY_FAMILIES,
+  EZ_QUALITY_FIELDS,
+  EZ_QUALITY_LABELS,
+  EZ_QUALITY_LAB,
+  EZ_QUALITY_NAMED,
+  EZ_QUALITY_OWNED,
+  EZ_QUALITY_TABLE,
+} from "./ez_quality_presets.js";
 
-const QUALITY_CUSTOM = "custom";
-const QUALITY_DRAFT = "draft";
-const QUALITY_LAB = "lab";
-const QUALITY_STANDARD = "standard";
-const QUALITY_HIGH = "high";
+// Combo ids this build still has to accept from saved graphs. The option list
+// itself and every value behind it come from the generated table.
 const QUALITY_FREE_COMMERCIAL = "Free Commercial Use (<$10M)";
 const QUALITY_FREE_COMMERCIAL_ALIAS = "free_commercial";
-const QUALITY_ULTRA = "ultra";
-const QUALITY_MAX = "max";
-const QUALITY_FLUX3_FAST = "flux3-fast";
-const QUALITY_FLUX3_QUALITY = "flux3-quality";
-const QUALITY_FLUX3_NVFP4 = "flux3-nvfp4";
+
+// Family ids that carry no tier at all, so an unknown occupancy is a no-op.
+const FAMILY_NOOP = "none";
+const FAMILY_LLM = "llm";
+const FAMILY_KLEIN3 = "klein3";
+
 const CLIP_16_9_LABEL = "16:9 LTX feeder (1280x704)";
 const CLIP_9_16_LABEL = "9:16 LTX feeder (768x1280)";
 const GENERIC_16_9 = [
@@ -37,77 +53,47 @@ const GENERIC_9_16 = [
   "9:16 (576x1024)",
 ];
 
-const KLEIN_DISTILLED = "flux-2-klein-4b-fp8.safetensors";
-const KLEIN_NVFP4 = "flux-2-klein-4b-nvfp4.safetensors";
-const KLEIN_BASE = "flux-2-klein-base-4b-fp8.safetensors";
-const KLEIN_9B = "flux-2-klein-9b-fp8.safetensors";
-const KLEIN_9B_BASE = "flux-2-klein-base-9b-fp8.safetensors";
-const KLEIN_9B_NVFP4 = "flux-2-klein-9b-nvfp4.safetensors";
-const FLUX2_DEV = "flux2_dev_fp8mixed.safetensors";
-const KLEIN3_DISTILLED = "flux3-image-klein-int8-convrot.safetensors";
-const KLEIN3_BASE = "flux3-image-klein-base-int8-convrot.safetensors";
-const KLEIN3_NVFP4 = "flux3-image-klein-base-nvfp4.safetensors";
-const CLIP_4B = "qwen_3_4b.safetensors";
-const CLIP_8B = "qwen_3_8b_fp8mixed.safetensors";
-const CLIP_MISTRAL = "mistral_3_small_flux2_bf16.safetensors";
-const CLIP_TYPE_FLUX2 = "flux2";
-const KLEIN3_TE = "qwen3vl_4b_int8_convrot.safetensors";
-const VAE_FULL = "flux2-vae.safetensors";
-const VAE_SMALL = "full_encoder_small_decoder.safetensors";
-
-const KLEIN_DRAFT_STEPS = 4;
-const KLEIN_DRAFT_CFG = 1.0;
-const KLEIN_STANDARD_STEPS = 8;
-const KLEIN_STANDARD_CFG = 1.0;
-const KLEIN_HIGH_DISTILLED_STEPS = 8;
-const KLEIN_HIGH_DISTILLED_CFG = 1.0;
-const KLEIN_HIGH_BASE_STEPS = 24;
-const KLEIN_HIGH_BASE_CFG = 3.5;
-const KLEIN_9B_STEPS = 4;
-const KLEIN_9B_CFG = 1.0;
-const KLEIN_9B_BASE_STEPS = 20;
-const KLEIN_9B_BASE_CFG = 5.0;
-const FLUX2_DEV_STEPS = 20;
-const FLUX2_DEV_CFG = 4.0;
-const KLEIN3_FAST_STEPS = 16;
-const KLEIN3_FAST_CFG = 1.0;
-const KLEIN3_QUALITY_STEPS = 50;
-const KLEIN3_QUALITY_CFG = 3.5;
-const KLEIN3_NVFP4_STEPS = 50;
-const KLEIN3_NVFP4_CFG = 3.5;
-const WAN_DRAFT_STEPS = 12;
-const WAN_STANDARD_STEPS = 20;
-const WAN_HIGH_STEPS = 28;
-const WAN_MAX_STEPS = 32;
-const LTX_DRAFT_STEPS = 12;
-const LTX_STANDARD_STEPS = 20;
-const LTX_HIGH_STEPS = 28;
-const LTX_MAX_STEPS = 32;
-const AUDIO_DRAFT_STEPS = 4;
-const AUDIO_STANDARD_STEPS = 8;
-const AUDIO_HIGH_STEPS = 16;
-const AUDIO_MAX_STEPS = 24;
-const TRELLIS_DRAFT_STEPS = 8;
-const TRELLIS_STANDARD_STEPS = 12;
-const TRELLIS_HIGH_STEPS = 20;
-const TRELLIS_MAX_STEPS = 28;
-
+// Catalog policy, not tier data: these families are never lawful on this box.
 const BANNED = ["minimax", "seedance", "kling", "z_image_turbo"];
+
+/**
+ * Overlay field -> widget name on its owning node type. The overlay field
+ * clip_type is the CLIPLoader widget literally named "type".
+ */
+const FIELD_WIDGET_NAMES = {
+  steps: "steps",
+  cfg: "cfg",
+  unet_name: "unet_name",
+  clip_name: "clip_name",
+  vae_name: "vae_name",
+  clip_type: "type",
+};
+
+/**
+ * Overlay fields each node type owns, mirroring presets.apply_to_graph:
+ * steps/CFG only on KSampler, each loader name only on its own loader.
+ */
+const OVERLAY_FIELDS_BY_TYPE = {
+  KSampler: ["steps", "cfg"],
+  UNETLoader: ["unet_name"],
+  CLIPLoader: ["clip_name", "clip_type"],
+  VAELoader: ["vae_name"],
+};
+
+// Value no field comparison accepts: the targeted instances of one field
+// disagree, so the graph holds no single value for it.
+const DIVERGENT = Symbol("ez-quality-divergent");
 
 const snapshots = new WeakMap();
 const applyingByGraph = new WeakMap();
+const syncingByGraph = new WeakMap();
 const defaulted = new WeakMap();
 const seedingByGraph = new WeakMap();
 // graph -> Map(widget -> value the overlay last wrote); lets Queue spot user edits.
 const overlayWrites = new WeakMap();
+// graph -> {choice, fields, attempts}; a tier a missing widget blocked, retried once.
+const pendingApplies = new WeakMap();
 const LAST_QUALITY_KEY = "ez-comfy.quality.last";
-const OVERLAY_WIDGET_NAMES = new Set([
-  "steps",
-  "cfg",
-  "unet_name",
-  "clip_name",
-  "vae_name",
-]);
 
 /**
  * Find a widget by name on a node.
@@ -117,6 +103,48 @@ const OVERLAY_WIDGET_NAMES = new Set([
  */
 function widgetByName(node, name) {
   return node.widgets?.find((w) => w.name === name);
+}
+
+/**
+ * Node type, honoring the Nodes 2.0 comfyClass alias.
+ * @param {object|undefined} node
+ * @returns {string}
+ */
+function nodeType(node) {
+  return String(node?.comfyClass || node?.type || "");
+}
+
+/**
+ * True for the Quality combo node.
+ * @param {object|undefined} node
+ * @returns {boolean}
+ */
+function isQualityNode(node) {
+  return nodeType(node) === "EZQuality";
+}
+
+/**
+ * True when a node is mode 0. Muted and bypassed lanes are not in the queued
+ * prompt, so they neither drive the overlay nor wear its caption.
+ * @param {object|undefined} node
+ * @returns {boolean}
+ */
+function isLiveNode(node) {
+  return !node || node.mode == null || node.mode === 0;
+}
+
+/**
+ * First Quality combo the overlay should act on, ignoring muted copies.
+ * @param {object|undefined} graph
+ * @returns {object|null}
+ */
+function firstLiveQualityNode(graph) {
+  for (const node of graph?.nodes || []) {
+    if (isQualityNode(node) && isLiveNode(node) && widgetByName(node, "quality")) {
+      return node;
+    }
+  }
+  return null;
 }
 
 /**
@@ -174,7 +202,7 @@ function isKlein9b(name) {
 }
 
 /**
- * Fold separators so KLEIN3 needles match either filename style.
+ * Fold separators so the KLEIN3 needles match either filename style.
  * @param {string} name
  * @returns {string}
  */
@@ -203,13 +231,30 @@ function isKlein3Clip(name) {
 
 /**
  * True when a UNET filename looks like Wan 14B.
- * @param {string} name
+ * @param {*} name
  * @returns {boolean}
  */
 function isWan14(name) {
   return String(name || "")
     .toLowerCase()
     .includes("14b");
+}
+
+/**
+ * True when any live UNETLoader holds Wan 14B, which the overlay never touches.
+ * @param {object|undefined} graph
+ * @returns {boolean}
+ */
+function graphHasWan14(graph) {
+  for (const node of graph?.nodes || []) {
+    if (nodeType(node) !== "UNETLoader" || !isLiveNode(node)) {
+      continue;
+    }
+    if (isWan14(widgetByName(node, "unet_name")?.value)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 /**
@@ -228,36 +273,84 @@ function isFlux2Dev(name) {
 }
 
 /**
- * Return a legal quality id, defaulting to lab.
+ * True when a CLIP filename is a Flux.2 text encoder.
+ * @param {string} name
+ * @returns {boolean}
+ */
+function isFlux2Clip(name) {
+  const blob = String(name || "").toLowerCase();
+  return blob.includes("qwen_3_") || (blob.includes("mistral") && blob.includes("flux2"));
+}
+
+/**
+ * True when a VAE filename is a Flux.2 VAE.
+ * @param {string} name
+ * @returns {boolean}
+ */
+function isFlux2Vae(name) {
+  const blob = String(name || "").toLowerCase();
+  return blob.includes("flux2-vae") || blob.includes("small_decoder");
+}
+
+/**
+ * True when a loader still holds a weight the overlay may replace, the same
+ * swap guard presets.apply_to_graph applies server-side.
+ * @param {string} field
+ * @param {*} current
+ * @returns {boolean}
+ */
+function isSwappableTarget(field, current) {
+  const name = String(current || "");
+  if (!name) {
+    return true;
+  }
+  if (field === "unet_name") {
+    return isKlein4b(name) || isKlein9b(name) || isFlux2Dev(name) || isKlein3Unet(name);
+  }
+  if (field === "clip_name") {
+    return isFlux2Clip(name) || isKlein3Clip(name);
+  }
+  if (field === "vae_name") {
+    return isFlux2Vae(name);
+  }
+  return true;
+}
+
+/**
+ * True when any live loader pins FLUX 3 Image Klein weights.
+ * @param {object|undefined} graph
+ * @returns {boolean}
+ */
+function graphHasKlein3Weights(graph) {
+  for (const node of graph?.nodes || []) {
+    if (!isLiveNode(node)) {
+      continue;
+    }
+    const ntype = nodeType(node);
+    if (ntype === "UNETLoader" && isKlein3Unet(widgetByName(node, "unet_name")?.value)) {
+      return true;
+    }
+    if (ntype === "CLIPLoader" && isKlein3Clip(widgetByName(node, "clip_name")?.value)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Return a combo value this build knows, defaulting to lab.
  * @param {*} value
  * @returns {string}
  */
 function normalizeQuality(value) {
-  const folded = String(value || QUALITY_LAB)
+  const folded = String(value || EZ_QUALITY_LAB)
     .trim()
     .toLowerCase();
-  if (
-    folded === QUALITY_FREE_COMMERCIAL_ALIAS ||
-    folded === QUALITY_FREE_COMMERCIAL.toLowerCase()
-  ) {
+  if (folded === QUALITY_FREE_COMMERCIAL_ALIAS) {
     return QUALITY_FREE_COMMERCIAL;
   }
-  const known = [
-    QUALITY_CUSTOM,
-    QUALITY_DRAFT,
-    QUALITY_LAB,
-    QUALITY_STANDARD,
-    QUALITY_HIGH,
-    QUALITY_ULTRA,
-    QUALITY_MAX,
-    QUALITY_FLUX3_FAST,
-    QUALITY_FLUX3_QUALITY,
-    QUALITY_FLUX3_NVFP4,
-  ];
-  if (known.includes(folded)) {
-    return folded;
-  }
-  return QUALITY_LAB;
+  const known = EZ_QUALITY_CHOICES.find((item) => item.toLowerCase() === folded);
+  return known || EZ_QUALITY_LAB;
 }
 
 /**
@@ -285,8 +378,7 @@ function retargetClipFormat(graph) {
     return;
   }
   for (const node of g?.nodes || []) {
-    const ntype = node?.comfyClass || node?.type || "";
-    if (ntype !== "EZImageFormat") {
+    if (nodeType(node) !== "EZImageFormat") {
       continue;
     }
     const widget = widgetByName(node, "format");
@@ -299,26 +391,6 @@ function retargetClipFormat(graph) {
       setWidgetValue(node, widget, CLIP_9_16_LABEL);
     }
   }
-}
-
-/**
- * True when a CLIP filename is a Flux.2 text encoder.
- * @param {string} name
- * @returns {boolean}
- */
-function isFlux2Clip(name) {
-  const blob = String(name || "").toLowerCase();
-  return blob.includes("qwen_3_") || (blob.includes("mistral") && blob.includes("flux2"));
-}
-
-/**
- * True when a VAE filename is a Flux.2 VAE.
- * @param {string} name
- * @returns {boolean}
- */
-function isFlux2Vae(name) {
-  const blob = String(name || "").toLowerCase();
-  return blob.includes("flux2-vae") || blob.includes("small_decoder");
 }
 
 /**
@@ -365,380 +437,52 @@ function occupancy(graph) {
 }
 
 /**
- * First UNETLoader unet_name on the graph, or empty.
+ * Tier family the graph belongs to: its occupancy, Klein 3 when its weights
+ * say so, and a no-op family for anything this table does not cover.
  * @param {object|undefined} graph
  * @returns {string}
  */
-function firstUnetName(graph) {
-  for (const node of graph?.nodes || []) {
-    if (node.type !== "UNETLoader") {
-      continue;
-    }
-    const widget = widgetByName(node, "unet_name");
-    if (widget?.value) {
-      return String(widget.value);
-    }
+function graphFamily(graph) {
+  const occ = String(occupancy(graph) || "");
+  if (!EZ_QUALITY_FAMILIES.includes(occ)) {
+    return FAMILY_NOOP;
   }
-  return "";
+  const noOverlay = occ === FAMILY_NOOP || occ === FAMILY_LLM;
+  if (!noOverlay && graphHasKlein3Weights(graph)) {
+    return FAMILY_KLEIN3;
+  }
+  return occ;
 }
 
 /**
- * First CLIPLoader clip_name on the graph, or empty.
- * @param {object|undefined} graph
+ * Fields one family's tiers ever set; an edit outside this list keeps the level.
+ * @param {string} family
+ * @returns {string[]}
+ */
+function ownedFields(family) {
+  const owned = EZ_QUALITY_OWNED[family];
+  return Array.isArray(owned) ? owned : [];
+}
+
+/**
+ * Requested value per overlay field for one tier, or null for an unknown row.
+ * @param {string} family
+ * @param {string} tier
+ * @returns {object|null}
+ */
+function tierRow(family, tier) {
+  return EZ_QUALITY_TABLE[family]?.[tier] || null;
+}
+
+/**
+ * Caption naming the swap a tier performs, empty when it changes nothing.
+ * @param {string} family
+ * @param {string} tier
  * @returns {string}
  */
-function firstClipName(graph) {
-  for (const node of graph?.nodes || []) {
-    if (node.type !== "CLIPLoader") {
-      continue;
-    }
-    const widget = widgetByName(node, "clip_name");
-    if (widget?.value) {
-      return String(widget.value);
-    }
-  }
-  return "";
+function tierLabelFor(family, tier) {
+  return String(EZ_QUALITY_LABELS[family]?.[tier] || "");
 }
-
-/**
- * True when any UNETLoader is Wan 14B (overlay is a no-op then).
- * @param {object|undefined} graph
- * @returns {boolean}
- */
-function graphHasWan14(graph) {
-  for (const node of graph?.nodes || []) {
-    if (node.type !== "UNETLoader") {
-      continue;
-    }
-    const widget = widgetByName(node, "unet_name");
-    if (isWan14(widget?.value)) {
-      return true;
-    }
-  }
-  return false;
-}
-
-/**
- * Return name when it is present and not banned; otherwise null.
- * @param {string} name
- * @param {string[]} available
- * @returns {string|null}
- */
-function pickUnet(name, available) {
-  if (!name || isBannedUnet(name)) {
-    return null;
-  }
-  if (available.length && !available.includes(name)) {
-    return null;
-  }
-  return name;
-}
-
-/**
- * Return name when present in the combo (empty combo = no check).
- * @param {string} name
- * @param {string[]} available
- * @returns {string|null}
- */
-function pickFile(name, available) {
-  if (!name) {
-    return null;
-  }
-  if (available.length && !available.includes(name)) {
-    return null;
-  }
-  return name;
-}
-
-/**
- * Wan 5B step overlay.
- * @param {string} choice
- * @returns {number}
- */
-function wanSteps(choice) {
-  if (choice === QUALITY_DRAFT) {
-    return WAN_DRAFT_STEPS;
-  }
-  if (choice === QUALITY_STANDARD) {
-    return WAN_STANDARD_STEPS;
-  }
-  if (choice === QUALITY_MAX) {
-    return WAN_MAX_STEPS;
-  }
-  return WAN_HIGH_STEPS;
-}
-
-/**
- * LTX step overlay.
- * @param {string} choice
- * @returns {number}
- */
-function ltxSteps(choice) {
-  if (choice === QUALITY_DRAFT) {
-    return LTX_DRAFT_STEPS;
-  }
-  if (choice === QUALITY_STANDARD) {
-    return LTX_STANDARD_STEPS;
-  }
-  if (choice === QUALITY_MAX) {
-    return LTX_MAX_STEPS;
-  }
-  return LTX_HIGH_STEPS;
-}
-
-/**
- * Apache high overlay (4B base if present).
- * @param {number} authoredSteps
- * @param {string} unetName
- * @param {string[]} available
- * @param {string[]} clips
- * @param {string[]} vaes
- * @returns {object}
- */
-function kleinHigh(authoredSteps, unetName, available, clips, vaes) {
-  const base = pickUnet(KLEIN_BASE, available);
-  const clip = pickFile(CLIP_4B, clips);
-  const vae = pickFile(VAE_SMALL, vaes) || pickFile(VAE_FULL, vaes);
-  if (base && (isKlein4b(unetName) || isKlein9b(unetName) || !unetName)) {
-    return {
-      steps: KLEIN_HIGH_BASE_STEPS,
-      cfg: KLEIN_HIGH_BASE_CFG,
-      unet_name: base,
-      clip_name: clip,
-      vae_name: vae,
-      clip_type: CLIP_TYPE_FLUX2,
-    };
-  }
-  return {
-    steps: Math.max(authoredSteps, KLEIN_HIGH_DISTILLED_STEPS),
-    cfg: KLEIN_HIGH_DISTILLED_CFG,
-    unet_name: pickUnet(KLEIN_DISTILLED, available),
-    clip_name: clip,
-    vae_name: vae,
-    clip_type: CLIP_TYPE_FLUX2,
-  };
-}
-
-/**
- * Steps/CFG/UNET/CLIP/VAE overlay for a quality choice, or {} for freeze / no-op.
- * @param {string} choice
- * @param {number} authoredSteps
- * @param {string} unetName
- * @param {string[]} available
- * @param {string[]} clips
- * @param {string[]} vaes
- * @param {object|undefined} graph
- * @returns {object}
- */
-function resolveOverlay(choice, authoredSteps, unetName, available, clips, vaes, graph) {
-  const occ = occupancy(graph);
-  if (
-    choice === QUALITY_LAB ||
-    choice === QUALITY_CUSTOM ||
-    occ === "llm" ||
-    occ === "none"
-  ) {
-    return {};
-  }
-  if (isWan14(unetName) || graphHasWan14(graph)) {
-    return {};
-  }
-  if (choice === QUALITY_FREE_COMMERCIAL) {
-    if (
-      occ === "klein" ||
-      isKlein4b(unetName) ||
-      isKlein9b(unetName) ||
-      isFlux2Dev(unetName)
-    ) {
-      return kleinHigh(authoredSteps, unetName, available, clips, vaes);
-    }
-    if (occ === "ltx" || occ === "film") {
-      return { steps: LTX_HIGH_STEPS };
-    }
-    return {};
-  }
-  if (
-    choice === QUALITY_FLUX3_FAST ||
-    choice === QUALITY_FLUX3_QUALITY ||
-    choice === QUALITY_FLUX3_NVFP4
-  ) {
-    // KLEIN3 profiles only write on graphs that pin the FLUX 3 weights.
-    if (!isKlein3Unet(unetName) && !isKlein3Clip(firstClipName(graph))) {
-      return {};
-    }
-    const clip3 = pickFile(KLEIN3_TE, clips);
-    const vae3 = pickFile(VAE_FULL, vaes);
-    if (choice === QUALITY_FLUX3_NVFP4) {
-      return {
-        steps: KLEIN3_NVFP4_STEPS,
-        cfg: KLEIN3_NVFP4_CFG,
-        unet_name: pickUnet(KLEIN3_NVFP4, available),
-        clip_name: clip3,
-        vae_name: vae3,
-        clip_type: CLIP_TYPE_FLUX2,
-      };
-    }
-    if (choice === QUALITY_FLUX3_QUALITY) {
-      return {
-        steps: KLEIN3_QUALITY_STEPS,
-        cfg: KLEIN3_QUALITY_CFG,
-        unet_name: pickUnet(KLEIN3_BASE, available),
-        clip_name: clip3,
-        vae_name: vae3,
-        clip_type: CLIP_TYPE_FLUX2,
-      };
-    }
-    return {
-      steps: KLEIN3_FAST_STEPS,
-      cfg: KLEIN3_FAST_CFG,
-      unet_name: pickUnet(KLEIN3_DISTILLED, available),
-      clip_name: clip3,
-      vae_name: vae3,
-      clip_type: CLIP_TYPE_FLUX2,
-    };
-  }
-  if (occ === "klein" || isKlein4b(unetName) || isKlein9b(unetName)) {
-    const clip4 = pickFile(CLIP_4B, clips);
-    const clip8 = pickFile(CLIP_8B, clips);
-    const vae = pickFile(VAE_SMALL, vaes) || pickFile(VAE_FULL, vaes);
-    if (choice === QUALITY_DRAFT) {
-      let unet = null;
-      if (isKlein4b(unetName) || isKlein9b(unetName)) {
-        unet = pickUnet(KLEIN_NVFP4, available) || pickUnet(KLEIN_DISTILLED, available);
-      }
-      return {
-        steps: KLEIN_DRAFT_STEPS,
-        cfg: KLEIN_DRAFT_CFG,
-        unet_name: unet,
-        clip_name: clip4,
-        vae_name: vae,
-        clip_type: CLIP_TYPE_FLUX2,
-      };
-    }
-    if (choice === QUALITY_STANDARD) {
-      return {
-        steps: KLEIN_STANDARD_STEPS,
-        cfg: KLEIN_STANDARD_CFG,
-        unet_name: pickUnet(KLEIN_DISTILLED, available),
-        clip_name: clip4,
-        vae_name: vae,
-        clip_type: CLIP_TYPE_FLUX2,
-      };
-    }
-    if (choice === QUALITY_ULTRA) {
-      const nine = pickUnet(KLEIN_9B, available) || pickUnet(KLEIN_9B_NVFP4, available);
-      if (nine) {
-        return {
-          steps: KLEIN_9B_STEPS,
-          cfg: KLEIN_9B_CFG,
-          unet_name: nine,
-          clip_name: clip8,
-          vae_name: vae,
-          clip_type: CLIP_TYPE_FLUX2,
-        };
-      }
-      return kleinHigh(authoredSteps, unetName, available, clips, vaes);
-    }
-    if (choice === QUALITY_MAX) {
-      const nineBase = pickUnet(KLEIN_9B_BASE, available);
-      if (nineBase) {
-        return {
-          steps: KLEIN_9B_BASE_STEPS,
-          cfg: KLEIN_9B_BASE_CFG,
-          unet_name: nineBase,
-          clip_name: clip8,
-          vae_name: vae,
-          clip_type: CLIP_TYPE_FLUX2,
-        };
-      }
-      const dev = pickUnet(FLUX2_DEV, available);
-      if (dev) {
-        return {
-          steps: FLUX2_DEV_STEPS,
-          cfg: FLUX2_DEV_CFG,
-          unet_name: dev,
-          clip_name: pickFile(CLIP_MISTRAL, clips),
-          vae_name: vae,
-          clip_type: CLIP_TYPE_FLUX2,
-        };
-      }
-      return kleinHigh(authoredSteps, unetName, available, clips, vaes);
-    }
-    return kleinHigh(authoredSteps, unetName, available, clips, vaes);
-  }
-  if (occ === "wan") {
-    return { steps: wanSteps(choice) };
-  }
-  if (occ === "ltx" || occ === "film") {
-    return { steps: ltxSteps(choice) };
-  }
-  if (occ === "audio") {
-    if (choice === QUALITY_DRAFT) {
-      return { steps: AUDIO_DRAFT_STEPS };
-    }
-    if (choice === QUALITY_STANDARD) {
-      return { steps: AUDIO_STANDARD_STEPS };
-    }
-    if (choice === QUALITY_MAX) {
-      return { steps: AUDIO_MAX_STEPS };
-    }
-    return { steps: AUDIO_HIGH_STEPS };
-  }
-  if (occ === "trellis") {
-    if (choice === QUALITY_DRAFT) {
-      return { steps: TRELLIS_DRAFT_STEPS };
-    }
-    if (choice === QUALITY_STANDARD) {
-      return { steps: TRELLIS_STANDARD_STEPS };
-    }
-    if (choice === QUALITY_MAX) {
-      return { steps: TRELLIS_MAX_STEPS };
-    }
-    return { steps: TRELLIS_HIGH_STEPS };
-  }
-  return {};
-}
-
-/**
- * Set a widget value and notify Vue / App Mode (Nodes 2.0).
- * @param {object|undefined} node
- * @param {object|undefined} widget
- * @param {*} value
- * @returns {void}
- */
-function setWidgetValue(node, widget, value) {
-  if (!widget || widget.value === value) {
-    return;
-  }
-  widget.value = value;
-  if (Array.isArray(node?.widgets_values) && node.widgets) {
-    const idx = node.widgets.indexOf(widget);
-    if (idx >= 0) {
-      node.widgets_values[idx] = value;
-    }
-  }
-  if (typeof widget.callback === "function") {
-    widget.callback(value, app.canvas, node);
-  }
-  const graph = node?.graph;
-  if (graph && typeof graph.setDirtyCanvas === "function") {
-    graph.setDirtyCanvas(true, true);
-  }
-  if (graph && typeof graph.change === "function") {
-    graph.change();
-  }
-}
-
-/**
- * Overlay-writable widget names per node type (mirrors presets.apply_to_graph).
- * Steps/CFG only on KSampler, loader names only on their own loader node.
- */
-const OVERLAY_WIDGETS_BY_TYPE = {
-  KSampler: ["steps", "cfg"],
-  UNETLoader: ["unet_name"],
-  CLIPLoader: ["clip_name", "type"],
-  VAELoader: ["vae_name"],
-};
 
 /**
  * String form of a widget value for edit detection (numbers compare as text).
@@ -760,24 +504,319 @@ function sameWidgetValue(a, b) {
 }
 
 /**
- * Overlay widgets this node type may carry, keyed by widget name.
- * @param {object|undefined} node
- * @param {string} ntype
- * @returns {object}
+ * Compare an observed widget value with a tier value the way presets.match_tier
+ * does: numbers numerically, everything else as text, null equal only to null.
+ * @param {*} left
+ * @param {*} right
+ * @returns {boolean}
  */
-function overlayWidgetsFor(node, ntype) {
-  const out = {};
-  const names = OVERLAY_WIDGETS_BY_TYPE[ntype];
-  if (!names) {
-    return out;
+function sameTierValue(left, right) {
+  if (left === DIVERGENT || right === DIVERGENT) {
+    return false;
   }
-  for (const name of names) {
-    const widget = widgetByName(node, name);
-    if (widget) {
-      out[name] = widget;
+  if (left == null || right == null) {
+    return left == null && right == null;
+  }
+  if (typeof left === "number" || typeof right === "number") {
+    const a = Number(left);
+    const b = Number(right);
+    return Number.isFinite(a) && Number.isFinite(b) && a === b;
+  }
+  return String(left) === String(right);
+}
+
+/**
+ * Live widget per targeted instance of each overlay field, muted nodes skipped.
+ * @param {object|undefined} graph
+ * @returns {object} field -> Array of {node, widget}
+ */
+function collectOverlayInstances(graph) {
+  const out = {};
+  for (const field of EZ_QUALITY_FIELDS) {
+    out[field] = [];
+  }
+  for (const node of graph?.nodes || []) {
+    if (!isLiveNode(node)) {
+      continue;
+    }
+    const ntype = nodeType(node);
+    const fields = OVERLAY_FIELDS_BY_TYPE[ntype];
+    if (!fields) {
+      continue;
+    }
+    for (const field of fields) {
+      const widget = widgetByName(node, FIELD_WIDGET_NAMES[field]);
+      if (widget) {
+        out[field].push({ node, widget });
+      }
     }
   }
   return out;
+}
+
+/**
+ * Collapse one field's instances to the single value they agree on.
+ * @param {object[]} entries
+ * @param {function} read reads one entry; undefined when it knows nothing
+ * @returns {*} the shared value, null when the graph holds none, DIVERGENT
+ * when the instances of the class hold different values
+ */
+function agreeOn(entries, read) {
+  let shared = null;
+  let seen = false;
+  for (const entry of entries || []) {
+    const value = read(entry);
+    if (value === undefined) {
+      continue;
+    }
+    if (!seen) {
+      shared = value;
+      seen = true;
+      continue;
+    }
+    if (!sameTierValue(shared, value)) {
+      return DIVERGENT;
+    }
+  }
+  return shared;
+}
+
+/**
+ * observed / authored pair per owned field, the two maps presets.match_tier
+ * compares. A field its instances disagree on matches nothing, so a graph
+ * whose samplers contradict each other is custom rather than a tier.
+ * @param {object} graph
+ * @param {string} family
+ * @param {object} instances
+ * @returns {object} {observed, authored}
+ */
+function overlayValues(graph, family, instances) {
+  const snap = snapshots.get(graph);
+  const observed = {};
+  const authored = {};
+  for (const field of ownedFields(family)) {
+    const name = FIELD_WIDGET_NAMES[field];
+    observed[field] = agreeOn(instances[field], (entry) => entry.widget.value);
+    authored[field] = snap
+      ? agreeOn(instances[field], (entry) => snapshotValueOf(snap, entry.node, name))
+      : undefined;
+  }
+  return { observed, authored };
+}
+
+/**
+ * Derive the quality the widgets actually hold.
+ *
+ * Named tiers win in table order, because the tier names what Queue would send.
+ * Widgets still at their authored values read as lab; anything else, including
+ * instances that contradict each other, is custom, so a graph that never
+ * matched a tier cannot keep displaying one.
+ * @param {object|undefined} graph
+ * @param {string} family
+ * @returns {string}
+ */
+function deriveQualityTier(graph, family) {
+  if (!graph) {
+    return EZ_QUALITY_LAB;
+  }
+  const owned = ownedFields(family);
+  if (!owned.length) {
+    return EZ_QUALITY_LAB;
+  }
+  const instances = collectOverlayInstances(graph);
+  const seen = overlayValues(graph, family, instances);
+  for (const tier of EZ_QUALITY_NAMED) {
+    const row = tierRow(family, tier);
+    if (row && owned.every((field) => sameTierValue(seen.observed[field], row[field]))) {
+      return tier;
+    }
+  }
+  if (
+    snapHasValues(seen.authored) &&
+    owned.every((field) => sameTierValue(seen.observed[field], seen.authored[field]))
+  ) {
+    return EZ_QUALITY_LAB;
+  }
+  return EZ_QUALITY_CUSTOM;
+}
+
+/**
+ * True when the load-time snapshot covers every field it was asked about.
+ * @param {object} authored
+ * @returns {boolean}
+ */
+function snapHasValues(authored) {
+  return Object.values(authored).every((value) => value !== undefined);
+}
+
+/**
+ * Why one write cannot land, or empty when it can. An empty answer means the
+ * queued prompt will really hold the tier value.
+ * @param {string} field
+ * @param {object} entry
+ * @param {*} wanted
+ * @param {boolean} refused true when a Wan 14B loader pins the graph
+ * @returns {string}
+ */
+function writeBlockReason(field, entry, wanted, refused) {
+  if (refused) {
+    return "Wan 14B is not overlaid";
+  }
+  if (field === "unet_name" && isBannedUnet(String(wanted))) {
+    return `${wanted} is not allowed`;
+  }
+  if (!isSwappableTarget(field, entry.widget.value)) {
+    return `cannot swap ${widgetValueText(entry.widget.value)}`;
+  }
+  const available = comboValues(entry.widget);
+  if (available.length && !available.includes(String(wanted))) {
+    return `${wanted} not installed`;
+  }
+  if (widgetSlotIndex(entry.node, entry.widget) < 0) {
+    return `${FIELD_WIDGET_NAMES[field]} has no prompt slot`;
+  }
+  return "";
+}
+
+/**
+ * Decide every write one tier asks for, and record what cannot land.
+ * @param {object} graph
+ * @param {string} family
+ * @param {string} tier
+ * @returns {object} {writes, failures, missing}
+ */
+function planTierWrites(graph, family, tier) {
+  const row = tierRow(family, tier);
+  const instances = collectOverlayInstances(graph);
+  const refused = graphHasWan14(graph);
+  const writes = [];
+  const failures = [];
+  const missing = [];
+  for (const field of ownedFields(family)) {
+    const wanted = row ? row[field] : null;
+    if (wanted == null) {
+      continue;
+    }
+    const targets = instances[field] || [];
+    if (!targets.length) {
+      missing.push(field);
+      continue;
+    }
+    for (const entry of targets) {
+      if (sameTierValue(entry.widget.value, wanted)) {
+        continue;
+      }
+      const reason = writeBlockReason(field, entry, wanted, refused);
+      if (reason) {
+        if (!failures.includes(reason)) {
+          failures.push(reason);
+        }
+        continue;
+      }
+      writes.push({ node: entry.node, widget: entry.widget, field, value: wanted });
+    }
+  }
+  return { writes, failures, missing };
+}
+
+/**
+ * True when LiteGraph serializes this widget into widgets_values.
+ * @param {object|undefined} widget
+ * @returns {boolean}
+ */
+function isSerializedWidget(widget) {
+  if (!widget || widget.type === "button") {
+    return false;
+  }
+  return widget.serialize !== false && widget.options?.serialize !== false;
+}
+
+/**
+ * widgets_values slot a widget serializes into. LiteGraph skips widgets it does
+ * not serialize, so count only those; fall back to the raw position. -1 when no
+ * slot can be trusted, which fails the write instead of diverging the prompt.
+ * @param {object|undefined} node
+ * @param {object|undefined} widget
+ * @returns {number}
+ */
+function widgetSlotIndex(node, widget) {
+  if (!node || !widget) {
+    return -1;
+  }
+  if (!Array.isArray(node.widgets) || !Array.isArray(node.widgets_values)) {
+    return -1;
+  }
+  let slot = 0;
+  let found = -1;
+  for (const item of node.widgets) {
+    if (item === widget) {
+      found = slot;
+      break;
+    }
+    if (isSerializedWidget(item)) {
+      slot += 1;
+    }
+  }
+  if (found < 0) {
+    found = node.widgets.indexOf(widget);
+  }
+  if (found < 0 || found >= node.widgets_values.length) {
+    return -1;
+  }
+  return found;
+}
+
+/**
+ * Write the value and that widget's own widgets_values slot, so the shown value
+ * and the serialized prompt can never disagree.
+ * @param {object|undefined} node
+ * @param {object|undefined} widget
+ * @param {*} value
+ * @returns {void}
+ */
+function writeWidgetSlot(node, widget, value) {
+  widget.value = value;
+  if (Array.isArray(node?.widgets_values) && node.widgets) {
+    const idx = widgetSlotIndex(node, widget);
+    if (idx >= 0) {
+      node.widgets_values[idx] = value;
+    }
+  }
+}
+
+/**
+ * Notify Vue / App Mode that a graph moved.
+ * @param {object|undefined} graph
+ * @returns {void}
+ */
+function markGraphDirty(graph) {
+  if (!graph) {
+    return;
+  }
+  if (typeof graph.setDirtyCanvas === "function") {
+    graph.setDirtyCanvas(true, true);
+  }
+  if (typeof graph.change === "function") {
+    graph.change();
+  }
+}
+
+/**
+ * Set a widget value, its prompt slot, and notify Vue / App Mode (Nodes 2.0).
+ * @param {object|undefined} node
+ * @param {object|undefined} widget
+ * @param {*} value
+ * @returns {void}
+ */
+function setWidgetValue(node, widget, value) {
+  if (!widget || widget.value === value) {
+    return;
+  }
+  writeWidgetSlot(node, widget, value);
+  if (typeof widget.callback === "function") {
+    widget.callback(value, app.canvas, node);
+  }
+  markGraphDirty(node?.graph);
 }
 
 /**
@@ -847,6 +886,22 @@ function applyOverlayWrite(graph, node, widget, value) {
 }
 
 /**
+ * Authored value for one widget of one node, or undefined when unrecorded.
+ * @param {object[]|undefined} snap
+ * @param {object} node
+ * @param {string} name
+ * @returns {*}
+ */
+function snapshotValueOf(snap, node, name) {
+  for (const row of snap || []) {
+    if (row.node === node && row.name === name) {
+      return row.value;
+    }
+  }
+  return undefined;
+}
+
+/**
  * True when a widget now holds a value the user typed over the authored one.
  * Lab restores this snapshot at Queue, so an edit that skipped the widget
  * callback (App Mode panel writes) must freeze Quality instead.
@@ -868,85 +923,174 @@ function hasSnapshotEdits(graph) {
 }
 
 /**
- * Persist the last named quality for newly opened Apps.
- * @param {*} value
+ * Owned fields whose live widgets no longer hold what the overlay or the author
+ * last put there. Names what diverged, for the custom caption.
+ * @param {object|undefined} graph
+ * @param {string} family
+ * @returns {string[]}
+ */
+function divergedFields(graph, family) {
+  const out = [];
+  if (!graph) {
+    return out;
+  }
+  const snap = snapshots.get(graph);
+  const writes = overlayWrites.get(graph);
+  const instances = collectOverlayInstances(graph);
+  for (const field of ownedFields(family)) {
+    const name = FIELD_WIDGET_NAMES[field];
+    const dirty = (instances[field] || []).some((entry) => {
+      if (writes && writes.has(entry.widget)) {
+        // Overlay-authored: only a value past the last write is a user edit.
+        return !sameWidgetValue(entry.widget.value, writes.get(entry.widget));
+      }
+      const authored = snapshotValueOf(snap, entry.node, name);
+      return authored !== undefined && !sameWidgetValue(entry.widget.value, authored);
+    });
+    if (dirty) {
+      out.push(field);
+    }
+  }
+  return out;
+}
+
+/**
+ * Caption for a tier whose writes all landed: the swap its table row performs.
+ * @param {string} family
+ * @param {string} tier
+ * @returns {string}
+ */
+function tierCaption(family, tier) {
+  if (tier === EZ_QUALITY_LAB) {
+    return `${EZ_QUALITY_LAB} - authored defaults`;
+  }
+  const label = tierLabelFor(family, tier);
+  return label ? `${tier} - ${label}` : String(tier);
+}
+
+/**
+ * Caption for a custom state, naming what stopped the overlay. Never a tier
+ * name: nothing here claims a write that did not land.
+ * @param {string[]} reasons
+ * @returns {string}
+ */
+function customCaption(reasons) {
+  const bits = (reasons || []).filter(Boolean).slice(0, 2);
+  if (!bits.length) {
+    return `${EZ_QUALITY_CUSTOM} - last overlay frozen`;
+  }
+  return `${EZ_QUALITY_CUSTOM} - ${bits.join("; ")}`;
+}
+
+/**
+ * Caption for custom chosen because the widgets left the tier behind.
+ * @param {object|undefined} graph
+ * @param {string} family
+ * @returns {string}
+ */
+function keptEditsCaption(graph, family) {
+  const fields = divergedFields(graph, family);
+  const tail = fields.length ? ` (${fields.join(", ")})` : "";
+  return `custom - kept your edits${tail}`;
+}
+
+/**
+ * Remember a tier that missed a widget so the next graph configure retries once.
+ * @param {object|undefined} graph
+ * @param {string} choice
+ * @param {string[]} fields
  * @returns {void}
  */
-function persistLastQuality(value) {
-  const normalized = normalizeQuality(value);
-  if (normalized === QUALITY_CUSTOM) {
+function recordPendingApply(graph, choice, fields) {
+  if (!graph) {
     return;
   }
-  try {
-    localStorage.setItem(LAST_QUALITY_KEY, normalized);
-  } catch {
-    // private mode / blocked storage
-  }
+  const prior = pendingApplies.get(graph);
+  const attempts = prior && prior.choice === choice ? prior.attempts : 0;
+  pendingApplies.set(graph, { choice, fields: fields.slice(), attempts });
 }
 
 /**
- * Last named quality chosen in this browser, or empty.
- * @returns {string}
+ * Drop the retry record once a tier has fully landed.
+ * @param {object|undefined} graph
+ * @returns {void}
  */
-function readLastQuality() {
-  try {
-    return String(localStorage.getItem(LAST_QUALITY_KEY) || "");
-  } catch {
-    return "";
+function clearPendingApply(graph) {
+  if (graph) {
+    pendingApplies.delete(graph);
   }
 }
 
 /**
- * Short App Mode caption for the active overlay.
- * @param {string} choice
- * @param {object} overlay
- * @param {string} occ
- * @returns {string}
+ * Retry once a tier that was blocked by a widget that did not exist yet.
+ * @param {object|undefined} graph
+ * @returns {boolean} true when a retry ran
  */
-function overlayCaption(choice, overlay, occ) {
-  const bits = [String(choice)];
-  if (overlay && overlay.steps != null) {
-    bits.push(`${overlay.steps} steps`);
+function retryPendingApply(graph) {
+  const pending = graph && pendingApplies.get(graph);
+  if (!pending || pending.attempts > 0 || !pending.fields.length) {
+    return false;
   }
-  const unet = overlay && overlay.unet_name ? String(overlay.unet_name) : "";
-  if (isKlein3Unet(unet)) {
-    bits.push("FLUX 3 Klein");
-  } else if (unet.includes("9b")) {
-    bits.push("Klein 9B");
-  } else if (unet.includes("base") && unet.includes("4b")) {
-    bits.push("Klein 4B base");
-  } else if (unet.includes("klein")) {
-    bits.push("Klein 4B distilled");
-  } else if (occ === "wan") {
-    bits.push("Wan");
-  } else if (occ === "ltx" || occ === "film") {
-    bits.push("LTX");
-  } else if (occ === "audio") {
-    bits.push("ACE");
+  const node = firstLiveQualityNode(graph);
+  if (!node) {
+    return false;
   }
-  return bits.join(" - ");
+  pending.attempts = 1;
+  applyQuality(pending.choice, node);
+  return true;
 }
 
 /**
- * Stamp a live Quality caption onto the graph extra and Quality widget.
+ * Stamp a live Quality caption onto the graph extra and every visible combo.
+ * With no visible Quality combo there is nothing to caption, so a muted lane
+ * cannot leave a stamp on the graph either.
  * @param {object|undefined} graph
  * @param {string} caption
  * @returns {void}
  */
 function stampQualityCaption(graph, caption) {
-  if (!graph) {
+  if (!graph || !firstLiveQualityNode(graph)) {
     return;
   }
   graph.extra = graph.extra || {};
   graph.extra.lab_quality_caption = caption;
   for (const node of graph.nodes || []) {
-    if (node.type !== "EZQuality" && node.comfyClass !== "EZQuality") {
+    if (!isQualityNode(node) || !isLiveNode(node)) {
       continue;
     }
     const widget = widgetByName(node, "quality");
     if (widget) {
       widget.label = caption ? `Quality - ${caption}` : "Quality";
     }
+  }
+}
+
+/**
+ * Put one value on every Quality combo, so a second combo cannot keep showing a
+ * tier another one dropped. The combo callback stays quiet; the caller decides
+ * whether to apply, so setting the value cannot re-enter the overlay.
+ * @param {object|undefined} graph
+ * @param {string} value
+ * @returns {void}
+ */
+function setQualityOnAll(graph, value) {
+  if (!graph) {
+    return;
+  }
+  let moved = false;
+  for (const node of graph.nodes || []) {
+    if (!isQualityNode(node)) {
+      continue;
+    }
+    const widget = widgetByName(node, "quality");
+    if (!widget || widget.value === value) {
+      continue;
+    }
+    writeWidgetSlot(node, widget, value);
+    moved = true;
+  }
+  if (moved) {
+    markGraphDirty(graph);
   }
 }
 
@@ -1003,6 +1147,11 @@ function restoreSnapshot(graph) {
 
 /**
  * Apply or restore a quality overlay across sampler/loader widgets.
+ *
+ * A tier is named on the combo only when every write it asked for landed. Any
+ * field it cannot write (widget not on the graph, weight not installed, a
+ * loader holding a weight the overlay may not replace, a Wan 14B graph, no
+ * prompt slot) fails the apply to custom with a caption saying what diverged.
  * @param {string} choice
  * @param {object|undefined} qualityNode
  * @returns {void}
@@ -1012,127 +1161,131 @@ function applyQuality(choice, qualityNode) {
   if (!graph || applyingByGraph.get(graph)) {
     return;
   }
+  if (qualityNode && !isLiveNode(qualityNode)) {
+    // A muted Quality lane is not in the queued prompt; it drives nothing.
+    return;
+  }
   applyingByGraph.set(graph, true);
   try {
     const normalized = normalizeQuality(choice);
-    if (normalized === QUALITY_CUSTOM) {
-      stampQualityCaption(graph, "custom - last overlay frozen");
+    const family = graphFamily(graph);
+    if (normalized === EZ_QUALITY_CUSTOM) {
+      stampQualityCaption(graph, customCaption([]));
       return;
     }
-    if (normalized === QUALITY_LAB) {
+    if (normalized === EZ_QUALITY_LAB) {
       restoreSnapshot(graph);
-      stampQualityCaption(graph, "lab - authored defaults");
+      clearPendingApply(graph);
+      stampQualityCaption(graph, `${EZ_QUALITY_LAB} - authored defaults`);
       return;
     }
-    const unetName = firstUnetName(graph);
-    const unetNode = (graph.nodes || []).find((n) => n.type === "UNETLoader");
-    const clipNode = (graph.nodes || []).find((n) => n.type === "CLIPLoader");
-    const vaeNode = (graph.nodes || []).find((n) => n.type === "VAELoader");
-    const available = comboValues(widgetByName(unetNode || {}, "unet_name"));
-    const clips = comboValues(widgetByName(clipNode || {}, "clip_name"));
-    const vaes = comboValues(widgetByName(vaeNode || {}, "vae_name"));
-    let captionOverlay = {};
-    const occ = occupancy(graph);
-    for (const node of graph.nodes || []) {
-      // Mirror presets.apply_to_graph: sampler and loader writes are type-bound.
-      const ntype = node?.comfyClass || node?.type || "";
-      const owned = overlayWidgetsFor(node, ntype);
-      const stepsWidget = owned.steps;
-      const cfgWidget = owned.cfg;
-      const unetWidget = owned.unet_name;
-      const clipWidget = owned.clip_name;
-      const typeWidget = owned.type;
-      const vaeWidget = owned.vae_name;
-      const candidates = [
-        stepsWidget,
-        cfgWidget,
-        unetWidget,
-        clipWidget,
-        typeWidget,
-        vaeWidget,
-      ].filter(Boolean);
-      const authoredSteps = Number(stepsWidget?.value) || 0;
-      const overlay = resolveOverlay(
-        normalized,
-        authoredSteps,
-        unetWidget?.value ? String(unetWidget.value) : unetName,
-        available,
-        clips,
-        vaes,
-        graph,
-      );
-      if (overlay && Object.keys(overlay).length) {
-        captionOverlay = overlay;
+    const plan = planTierWrites(graph, family, normalized);
+    if (plan.missing.length) {
+      recordPendingApply(graph, normalized, plan.missing);
+    } else {
+      clearPendingApply(graph);
+    }
+    if (plan.failures.length || plan.missing.length) {
+      const reasons = plan.failures.slice();
+      for (const field of plan.missing) {
+        reasons.push(`${FIELD_WIDGET_NAMES[field]} widget not on graph`);
       }
-      clearOverlayWrites(graph, candidates);
-      if (stepsWidget && overlay.steps != null) {
-        applyOverlayWrite(graph, node, stepsWidget, overlay.steps);
-      }
-      if (cfgWidget && overlay.cfg != null) {
-        applyOverlayWrite(graph, node, cfgWidget, overlay.cfg);
-      }
-      if (
-        unetWidget &&
-        overlay.unet_name &&
-        !isWan14(String(unetWidget.value || "")) &&
-        !isBannedUnet(overlay.unet_name)
-      ) {
-        applyOverlayWrite(graph, node, unetWidget, overlay.unet_name);
-      }
-      if (
-        clipWidget &&
-        overlay.clip_name &&
-        (!clipWidget.value ||
-          isFlux2Clip(String(clipWidget.value)) ||
-          isKlein3Clip(String(clipWidget.value)))
-      ) {
-        applyOverlayWrite(graph, node, clipWidget, overlay.clip_name);
-      }
-      if (typeWidget && overlay.clip_type) {
-        applyOverlayWrite(graph, node, typeWidget, overlay.clip_type);
-      }
-      if (
-        vaeWidget &&
-        overlay.vae_name &&
-        (!vaeWidget.value || isFlux2Vae(String(vaeWidget.value)))
-      ) {
-        applyOverlayWrite(graph, node, vaeWidget, overlay.vae_name);
-      }
+      setQualityOnAll(graph, EZ_QUALITY_CUSTOM);
+      stampQualityCaption(graph, customCaption(reasons));
+      return;
+    }
+    clearOverlayWrites(
+      graph,
+      plan.writes.map((write) => write.widget),
+    );
+    for (const write of plan.writes) {
+      applyOverlayWrite(graph, write.node, write.widget, write.value);
     }
     if (normalized === QUALITY_FREE_COMMERCIAL) {
       retargetClipFormat(graph);
     }
-    stampQualityCaption(graph, overlayCaption(normalized, captionOverlay, occ));
+    setQualityOnAll(graph, normalized);
+    stampQualityCaption(graph, tierCaption(family, normalized));
   } finally {
     applyingByGraph.set(graph, false);
   }
 }
 
 /**
- * Select Quality custom so Queue keeps live overlay-widget values.
- * Skips overlay/seed writes. Does not persist custom as last named Quality.
+ * Read the tier back out of the live widgets and show it on every combo.
  * @param {object|undefined} graph
  * @returns {void}
  */
-function freezeQualityToCustom(graph) {
+function syncQualityFromGraph(graph) {
   if (!graph || applyingByGraph.get(graph) || seedingByGraph.get(graph)) {
     return;
   }
-  for (const node of graph.nodes || []) {
-    if (node.type !== "EZQuality" && node.comfyClass !== "EZQuality") {
-      continue;
-    }
-    const widget = widgetByName(node, "quality");
-    if (!widget) {
-      continue;
-    }
-    stampQualityCaption(graph, "custom - last overlay frozen");
-    if (normalizeQuality(widget.value) === QUALITY_CUSTOM) {
-      return;
-    }
-    setWidgetValue(node, widget, QUALITY_CUSTOM);
+  if (syncingByGraph.get(graph)) {
     return;
   }
+  syncingByGraph.set(graph, true);
+  try {
+    const family = graphFamily(graph);
+    const tier = deriveQualityTier(graph, family);
+    setQualityOnAll(graph, tier);
+    if (tier === EZ_QUALITY_CUSTOM) {
+      stampQualityCaption(graph, customEditCaption(graph));
+      return;
+    }
+    stampQualityCaption(graph, tierCaption(family, tier));
+  } finally {
+    syncingByGraph.set(graph, false);
+  }
+}
+
+/**
+ * Caption for a freeze: name the fields the operator moved, else say plainly
+ * that no tier describes this graph.
+ * @param {object|undefined} graph
+ * @returns {string}
+ */
+function customEditCaption(graph) {
+  const edited = hasOverlayEdits(graph) || hasSnapshotEdits(graph);
+  if (!edited) {
+    return `${EZ_QUALITY_CUSTOM} - no tier matches this graph`;
+  }
+  return keptEditsCaption(graph, graphFamily(graph));
+}
+
+/**
+ * True when the graph carries a Quality combo at all.
+ * @param {object|undefined} graph
+ * @returns {boolean}
+ */
+function hasQualityNode(graph) {
+  for (const node of graph?.nodes || []) {
+    if (isQualityNode(node) && widgetByName(node, "quality")) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Select Quality custom on every combo so Queue keeps live overlay-widget
+ * values. Skips overlay/seed writes. Does not persist custom as last named.
+ * @param {object|undefined} graph
+ * @param {string[]} [reasons] what stopped the overlay, for the caption
+ * @returns {void}
+ */
+function freezeQualityToCustom(graph, reasons) {
+  if (!graph || applyingByGraph.get(graph) || seedingByGraph.get(graph)) {
+    return;
+  }
+  if (!hasQualityNode(graph)) {
+    return;
+  }
+  setQualityOnAll(graph, EZ_QUALITY_CUSTOM);
+  if (reasons && reasons.length) {
+    stampQualityCaption(graph, customCaption(reasons));
+    return;
+  }
+  stampQualityCaption(graph, customEditCaption(graph));
 }
 
 /**
@@ -1146,15 +1299,15 @@ function isOverlayWidget(node, widget) {
   if (!name) {
     return false;
   }
-  if (OVERLAY_WIDGET_NAMES.has(name)) {
-    return true;
+  const fields = OVERLAY_FIELDS_BY_TYPE[nodeType(node)];
+  if (!fields) {
+    return false;
   }
-  const ntype = node?.comfyClass || node?.type || "";
-  return name === "type" && ntype === "CLIPLoader";
+  return fields.some((field) => FIELD_WIDGET_NAMES[field] === name);
 }
 
 /**
- * Chain a user-edit callback so overlay-widget changes freeze Quality.
+ * Chain a user-edit callback so an overlay-widget edit re-reads the tier.
  * @param {object} node
  * @param {object|undefined} widget
  * @returns {void}
@@ -1163,21 +1316,17 @@ function bindOverlayWidget(node, widget) {
   if (!widget || widget._ezQualityWatch || !isOverlayWidget(node, widget)) {
     return;
   }
-  const ntype = node?.comfyClass || node?.type || "";
-  if (ntype === "EZQuality") {
-    return;
-  }
   widget._ezQualityWatch = true;
   const prior = widget.callback;
   /**
-   * Chain the prior callback then freeze Quality at custom.
+   * Chain the prior callback then derive the tier the widgets now hold.
    * @returns {void}
    */
   widget.callback = function () {
     if (typeof prior === "function") {
       prior.apply(this, arguments);
     }
-    freezeQualityToCustom(node.graph);
+    syncQualityFromGraph(node.graph);
   };
 }
 
@@ -1207,7 +1356,8 @@ function bindOverlayWatchers(graph) {
 }
 
 /**
- * Bind the quality combo once so changes and Queue apply the overlay.
+ * Bind the quality combo once so changes and Queue keep it in step with the
+ * widgets.
  * @param {object} node
  * @returns {void}
  */
@@ -1234,27 +1384,67 @@ function bindQualityNode(node) {
     applyQuality(value, node);
   };
   /**
-   * Before Queue: keep user edits to overlay widgets, else re-apply the overlay.
-   * Runs synchronously while graphToPrompt serializes, so no async work here.
-   * At lab the same hazard is the snapshot restore reverting a callback-
-   * bypassed edit, so diverged authored widgets also freeze Quality instead.
+   * Before Queue: the combo must say what the prompt holds. Custom re-reads the
+   * widgets (they may have been moved back onto a tier by hand); a named tier
+   * re-applies, because the App Mode panel can write the combo without firing
+   * its callback and leave the widgets authored. Only widget.beforeQueued fires
+   * in the pinned frontend, and only synchronously, so this is the last line.
    * @returns {void}
    */
   widget.beforeQueued = function () {
     const graph = node.graph || app.graph;
     const choice = normalizeQuality(widget.value);
-    if (choice === QUALITY_CUSTOM) {
+    if (choice === EZ_QUALITY_CUSTOM) {
+      const derived = deriveQualityTier(graph, graphFamily(graph));
+      if (derived === EZ_QUALITY_LAB) {
+        syncQualityFromGraph(graph);
+        return;
+      }
+      if (derived !== EZ_QUALITY_CUSTOM) {
+        setQualityOnAll(graph, derived);
+        applyQuality(derived, node);
+        return;
+      }
+      freezeQualityToCustom(graph);
       return;
     }
     const diverged =
-      choice === QUALITY_LAB ? hasSnapshotEdits(graph) : hasOverlayEdits(graph);
+      choice === EZ_QUALITY_LAB ? hasSnapshotEdits(graph) : hasOverlayEdits(graph);
     if (diverged) {
       freezeQualityToCustom(graph);
-      stampQualityCaption(graph, "custom - kept your edits");
       return;
     }
     applyQuality(widget.value, node);
   };
+}
+
+/**
+ * Persist the last named quality for newly opened Apps.
+ * @param {*} value
+ * @returns {void}
+ */
+function persistLastQuality(value) {
+  const normalized = normalizeQuality(value);
+  if (normalized === EZ_QUALITY_CUSTOM) {
+    return;
+  }
+  try {
+    localStorage.setItem(LAST_QUALITY_KEY, normalized);
+  } catch {
+    // private mode / blocked storage
+  }
+}
+
+/**
+ * Last named quality chosen in this browser, or empty.
+ * @returns {string}
+ */
+function readLastQuality() {
+  try {
+    return String(localStorage.getItem(LAST_QUALITY_KEY) || "");
+  } catch {
+    return "";
+  }
 }
 
 /**
@@ -1278,19 +1468,19 @@ function isNewlyOpenedGraph(graph) {
  * @param {object} graph
  * @param {object} node
  * @param {object|undefined} widget
- * @returns {void}
+ * @returns {boolean} true when an overlay ran
  */
 function applyDefaultOrCurrent(graph, node, widget) {
   if (!widget) {
-    return;
+    return false;
   }
   const last = readLastQuality();
   const current = normalizeQuality(widget.value);
   if (
-    current === QUALITY_LAB &&
+    current === EZ_QUALITY_LAB &&
     last &&
-    last !== QUALITY_LAB &&
-    last !== QUALITY_CUSTOM
+    last !== EZ_QUALITY_LAB &&
+    last !== EZ_QUALITY_CUSTOM
   ) {
     seedingByGraph.set(graph, true);
     try {
@@ -1298,15 +1488,17 @@ function applyDefaultOrCurrent(graph, node, widget) {
     } finally {
       seedingByGraph.set(graph, false);
     }
-    return;
+    return true;
   }
-  if (widget.value && widget.value !== QUALITY_LAB && widget.value !== QUALITY_CUSTOM) {
-    applyQuality(widget.value, node);
+  if (current !== EZ_QUALITY_LAB && current !== EZ_QUALITY_CUSTOM) {
+    applyQuality(current, node);
+    return true;
   }
+  return false;
 }
 
 /**
- * Snapshot the graph and bind every EZQuality node.
+ * Snapshot the graph and bind every Quality combo.
  * @returns {void}
  */
 function bindAll() {
@@ -1320,20 +1512,22 @@ function bindAll() {
   }
   bindOverlayWatchers(graph);
   for (const node of graph.nodes || []) {
-    if (node.type === "EZQuality" || node.comfyClass === "EZQuality") {
+    if (isQualityNode(node)) {
       bindQualityNode(node);
-      const widget = widgetByName(node, "quality");
-      if (fresh) {
-        applyDefaultOrCurrent(graph, node, widget);
-      } else if (
-        widget &&
-        widget.value &&
-        widget.value !== QUALITY_LAB &&
-        widget.value !== QUALITY_CUSTOM
-      ) {
-        applyQuality(widget.value, node);
-      }
     }
+  }
+  const driver = firstLiveQualityNode(graph);
+  if (!driver) {
+    return;
+  }
+  if (fresh) {
+    if (!applyDefaultOrCurrent(graph, driver, widgetByName(driver, "quality"))) {
+      syncQualityFromGraph(graph);
+    }
+    return;
+  }
+  if (!retryPendingApply(graph)) {
+    syncQualityFromGraph(graph);
   }
 }
 
@@ -1341,27 +1535,27 @@ app.registerExtension({
   name: "ez_quality.overlay",
   /**
    * Wrap EZQuality so the combo applies overlays on create.
-   * @param {object} nodeType
+   * @param {object} nodeTypeArg
    * @param {object} nodeData
    * @returns {Promise<void>}
    */
-  async beforeRegisterNodeDef(nodeType, nodeData) {
+  async beforeRegisterNodeDef(nodeTypeArg, nodeData) {
     if (nodeData.name !== "EZQuality") {
       return;
     }
-    const onNodeCreated = nodeType.prototype.onNodeCreated;
+    const onNodeCreated = nodeTypeArg.prototype.onNodeCreated;
     /**
      * Bind the quality combo when the node is created.
      * @returns {void}
      */
-    nodeType.prototype.onNodeCreated = function () {
+    nodeTypeArg.prototype.onNodeCreated = function () {
       onNodeCreated?.apply(this, arguments);
       bindQualityNode(this);
       bindOverlayWatchers(this.graph);
     };
   },
   /**
-   * Re-bind overlays after a graph load.
+   * Re-read the tier after a graph load, retrying a tier a lazy widget blocked.
    * @returns {Promise<void>}
    */
   async afterConfigureGraph() {
@@ -1374,5 +1568,14 @@ app.registerExtension({
    */
   nodeCreated(node) {
     bindOverlayWatchersForNode(node);
+    syncQualityFromGraph(node?.graph);
+  },
+  /**
+   * Keep the combo honest while the operator edits the graph.
+   * @param {object} graph
+   * @returns {void}
+   */
+  graphChanged(graph) {
+    syncQualityFromGraph(graph || app.graph);
   },
 });

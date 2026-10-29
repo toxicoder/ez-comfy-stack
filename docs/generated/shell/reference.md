@@ -286,7 +286,7 @@ Dispatch print-shot to utilities/print-shot.sh.
 Globals:
   REPO_ROOT
 Arguments:
-  $@  film id [shot id]
+  $@  film id [shot id] [--quality TIER]
 Outputs:
   print-shot logs
 Returns:
@@ -298,7 +298,7 @@ Resume a film (skip ok shots with valid duration).
 Globals:
   REPO_ROOT
 Arguments:
-  $1  film id
+  $@  film id [--quality TIER]
 Outputs:
   print-shot logs
 Returns:
@@ -790,7 +790,9 @@ Queue one shipped music album on local ComfyUI, then zip the folder.
 
 Purpose:
   One-go album: optional Klein cover, then each ACE-Step track, then pack.
-  Sequential occupancy (klein XOR audio). Does not start compose.
+  Sequential occupancy (klein XOR audio). Does not start compose. Each POST
+  sends the graph the Quality table overlaid, so a CLI run posts what the
+  browser would queue.
 
 ```bash
 Usage:
@@ -798,7 +800,8 @@ Usage:
   ./scripts/utilities/album-render.sh run --album ARTIST/SLUG
 ```
 
-      [--art skip|upload|generate] [--image FILE] [--out DIR] [--dry-run]
+      [--art skip|upload|generate] [--image FILE] [--out DIR]
+      [--quality TIER] [--dry-run]
 
 ```bash
   ./scripts/utilities/album-render.sh pack --album ARTIST/SLUG [--out DIR]
@@ -807,6 +810,8 @@ Usage:
 
 Environment:
   COMFY_OUTPUT_DIR, COMFY_PORT (default 8188), COMFY_URL, REPO_ROOT
+  EZ_QUALITY - quality tier when --quality is absent (empty = the tier the
+  graph records, else lab)
 
 !!! warning
 
@@ -815,7 +820,8 @@ Environment:
       generate unloads models (POST /free) between cover and tracks.
 
 Exit codes:
-  0 success / dry-run; 1 usage / missing compose / queue failure.
+  0 success / dry-run; 1 usage / missing compose / quality overlay / queue
+  failure.
 
 ### Command: album-render
 
@@ -1759,18 +1765,21 @@ Queue one compiled shot on local ComfyUI and record the take in jobstore.
 Purpose:
   POST /prompt for films/<slug>/shots/NN.json, poll /history, copy the
   resulting MP4 to shots/NN.mp4, update state.json. film-resume skips
-  ok shots whose duration is 5.00 +/- 0.05 s.
+  ok shots whose duration is 5.00 +/- 0.05 s. Each POST sends the graph the
+  Quality table overlaid, so a CLI run posts what the browser would queue.
 
 ```bash
 Usage:
-  ./scripts/utilities/print-shot.sh <film> <id>
-  ./scripts/utilities/print-shot.sh --resume <film>
+  ./scripts/utilities/print-shot.sh <film> <id> [--quality TIER]
+  ./scripts/utilities/print-shot.sh --resume <film> [--quality TIER]
 
 ```
 
 Environment:
   COMFY_OUTPUT_DIR, COMFY_PORT (default 8188), MODELS_DIR
   COMFY_URL - override (tests)
+  EZ_QUALITY - quality tier when --quality is absent (empty = the tier the
+  graph records, else lab)
 
 !!! warning
 
@@ -1778,7 +1787,7 @@ Environment:
       Does not start compose. Does not Queue the 18-printer canvas.
 
 Exit codes:
-  0 success / skip; 1 usage or Comfy/jobstore error
+  0 success / skip; 1 usage, quality overlay, or Comfy/jobstore error
 
 ### Command: print-shot
 
