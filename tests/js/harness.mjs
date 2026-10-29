@@ -86,23 +86,36 @@ const tmpRootPromise = mkdtemp(path.join(tmpdir(), "ez-quality-js-"));
 let moduleSeq = 0;
 
 /**
+ * Load any ez_* extension fresh against a clean frontend stub.
+ * Arguments:
+ *   sourcePath - absolute path to the extension .js under custom_nodes/
+ *   extensionName - the name it passes to app.registerExtension
+ * Returns:
+ *   {ext, app} - the registered extension object and the app shim.
+ */
+export async function loadExtension(sourcePath, extensionName) {
+  const source = await readFile(sourcePath, "utf8");
+  const tmpRoot = await tmpRootPromise;
+  const base = path.basename(sourcePath, ".js");
+  const file = path.join(tmpRoot, `${base}_under_test_${moduleSeq++}.mjs`);
+  await writeFile(file, rewriteImports(source, path.dirname(sourcePath)), "utf8");
+  resetFrontend();
+  await import(pathToFileURL(file).href);
+  const registered = getExtensions();
+  const ext = registered.find((e) => e?.name === extensionName) || registered[0];
+  if (!ext) {
+    throw new Error(`${sourcePath} did not call app.registerExtension`);
+  }
+  return { ext, app };
+}
+
+/**
  * Load the overlay extension fresh against a clean frontend stub.
  * Returns:
  *   {ext, app} - the registered extension object and the app shim.
  */
 export async function loadOverlay() {
-  const source = await readFile(EXTENSION_JS, "utf8");
-  const tmpRoot = await tmpRootPromise;
-  const file = path.join(tmpRoot, `ez_quality_under_test_${moduleSeq++}.mjs`);
-  await writeFile(file, rewriteImports(source, path.dirname(EXTENSION_JS)), "utf8");
-  resetFrontend();
-  await import(pathToFileURL(file).href);
-  const registered = getExtensions();
-  const ext = registered.find((e) => e?.name === "ez_quality.overlay") || registered[0];
-  if (!ext) {
-    throw new Error("ez_quality.js did not call app.registerExtension");
-  }
-  return { ext, app };
+  return loadExtension(EXTENSION_JS, "ez_quality.overlay");
 }
 
 /**
