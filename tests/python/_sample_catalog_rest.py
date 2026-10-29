@@ -11,17 +11,14 @@ from _build_sample_catalogs import (
     GOSEE_IDENTITY,
     I2V_LOCK,
     LAZY_FORGE,
-    LTX_A2V,
     LTX_BROLL,
     LTX_DIALOGUE,
-    LTX_FLF,
     LTX_HOOK_AV,
     LTX_I2V,
     LTX_MULTISHOT,
     LTX_PRODUCT_HERO,
     LTX_T2V,
     LTX_TALKING_HEAD,
-    LTX_WEATHER,
     NO_SCORE,
     RAP_FULL_TAGS,
     RAP_TAGS,
@@ -42,7 +39,6 @@ from _build_sample_catalogs import (
     _wan_i2v,
     _wan_t2v,
 )
-from ez_music.nodes import DRAFT_LYRICS, FULL_LYRICS
 from ez_podcast.nodes import RADIO_SEED_SCRIPT, SEED_SCRIPT
 
 
@@ -974,7 +970,14 @@ def ltx_i2v() -> list[dict[str, str]]:
 def ltx_broll() -> list[dict[str, str]]:
     return [
         _row("terrace-ambient", "Terrace ambient", LTX_BROLL),
-        _row("storm-weather", "Storm weather", LTX_WEATHER),
+        _row(
+            "storm-weather",
+            "Storm weather",
+            "fixed-camera weather B-roll. A tropical storm streaks across a rooftop "
+            "terrace and a dark indigo-violet suede running coat; palms thrash and rain "
+            "sheets off unmarked glass. Soft wind, rain on glass, thunder far off. "
+            "Unmarked surfaces. No music and no score. Twelve seconds.",
+        ),
         _row(
             "interior-room",
             "Interior room tone",
@@ -1703,7 +1706,16 @@ def ltx_product() -> list[dict[str, str]]:
 
 def ltx_flf() -> list[dict[str, str]]:
     extras = [
-        ("step-through", "Step through", LTX_FLF),
+        (
+            "step-through",
+            "Step through",
+            "The first frame holds, then the wizard steps through the terrace toward "
+            "the last-frame pose as glyph rings bloom and settle. Camera eases with "
+            "the motion; no cut. A warm breeze and palm rustle sit under distant bay "
+            "traffic, then a glyph chime as the last frame lands. Keep wardrobe and "
+            "set locked to both stills. Unmarked surfaces. No music and no score. "
+            "Twelve seconds.",
+        ),
         (
             "ease-last",
             "Ease to last",
@@ -1881,7 +1893,15 @@ def ltx_flf() -> list[dict[str, str]]:
 
 def ltx_a2v() -> list[dict[str, str]]:
     extras = [
-        ("listen-move", "Listen and move", LTX_A2V),
+        (
+            "listen-move",
+            "Listen and move",
+            "The start image holds as the first frame. The subject listens and moves "
+            "with the loaded soundtrack: modest head motion, fabric hush, locked "
+            "wardrobe and set. Picture follows the audio. Keep every object and "
+            "surface from the start image; do not redesign. Mouths will not match. "
+            "No extra music. Twelve seconds.",
+        ),
         (
             "head-nod",
             "Head nod",
@@ -2538,9 +2558,15 @@ def _rap(sid: str, label: str, tags: str, lyrics: str) -> dict[str, str]:
     return _row(sid, label, lyrics, tags=tags, lyrics=lyrics)
 
 
+# Booth takes the rap catalogs open on. ez_music ships its own demo lyric as
+# the node widget default, so the catalog copy of the verse lives here.
+_BOOTH_DRAFT_LYRICS = "[intro]\nyeah\nlocal signal\non the box\n\n[verse]\nFan stays loud on a quiet street\nWeights on disk, no rented beat\nCard runs hot, the cut stays clean\nIf it ships from here it stays unseen\n\n[chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track\nSpark in the rack, the master comes back"
+_BOOTH_FULL_LYRICS = "[intro]\nyeah\nlocal signal\non the box\n\n[verse]\nFan stays loud on a quiet street\nWeights on disk, no rented beat\nCard runs hot, the cut stays clean\nIf it ships from here it stays unseen\n\n[chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track\nSpark in the rack, the master comes back\n\n[verse]\nRack light blinks on a solo take\nNo rented hook, no leased name\nBars stay tight, the booth stays mine\nStamp the master, keep the line\n\n[chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track\nSpark in the rack, the master comes back\n\n[outro]\nyeah\nlocal signal\ncut"
+
+
 def rap_draft() -> list[dict[str, str]]:
     verses = [
-        ("booth-stack", "Booth stack", RAP_TAGS, DRAFT_LYRICS),
+        ("booth-stack", "Booth stack", RAP_TAGS, _BOOTH_DRAFT_LYRICS),
         (
             "quiet-street",
             "Quiet street",
@@ -2661,14 +2687,14 @@ def rap_draft() -> list[dict[str, str]]:
 
 def rap_full() -> list[dict[str, str]]:
     verses = [
-        ("booth-full", "Booth full take", RAP_FULL_TAGS, FULL_LYRICS),
+        ("booth-full", "Booth full take", RAP_FULL_TAGS, _BOOTH_FULL_LYRICS),
     ]
     extras = [
         (
             "two-verse",
             "Two verse stack",
             RAP_FULL_TAGS,
-            FULL_LYRICS,
+            _BOOTH_FULL_LYRICS,
         ),
         (
             "rack-light",
