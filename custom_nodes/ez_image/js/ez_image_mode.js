@@ -437,12 +437,17 @@ function schedulePreview() {
 }
 
 /**
- * Chain a widget callback so edits refresh This run.
+ * Chain a widget callback so edits refresh This run. A missing node is a
+ * no-op taken before the closure captures anything, so the chained callback
+ * can never run against a class that is not on the graph.
  * @param {object|undefined} node
  * @param {string} widgetName
  * @returns {void}
  */
 function watchWidget(node, widgetName) {
+  if (!node) {
+    return;
+  }
   const widget = widgetByName(node, widgetName);
   if (!widget || widget._ezStudioWatch) {
     return;
@@ -498,6 +503,28 @@ function bindPreviewWatchers() {
   if (summary?.inputEl) {
     summary.inputEl.readOnly = true;
   }
+}
+
+let studioBindTimer = 0;
+
+/**
+ * Bind the desk watchers once the current LiteGraph pass returns.
+ * onNodeCreated runs inside LGraph.configure, where the desk classes that
+ * come after the Mode node in the graph are not built yet, so binding there
+ * skipped them and asked widgetByName for classes that did not exist. A
+ * timer also keeps one bind pass per graph load however many Mode nodes
+ * there are.
+ * @returns {void}
+ */
+function deferStudioBindings() {
+  if (studioBindTimer) {
+    return;
+  }
+  studioBindTimer = setTimeout(() => {
+    studioBindTimer = 0;
+    bindPreviewWatchers();
+    void refreshPreview();
+  }, 0);
 }
 
 /**
@@ -585,8 +612,10 @@ app.registerExtension({
     nodeType.prototype.onNodeCreated = function () {
       onNodeCreated?.apply(this, arguments);
       bindModeNode(this);
-      bindPreviewWatchers();
-      void refreshPreview();
+      // LiteGraph is still inside LGraph.configure here, so the other desk
+      // classes may not exist yet. Defer the graph-wide walk to the next
+      // macrotask, when the configure pass has finished.
+      deferStudioBindings();
     };
   },
   /**
