@@ -6,23 +6,29 @@
 #
 # Purpose:
 #   One-go album: optional Klein cover, then each ACE-Step track, then pack.
-#   Sequential occupancy (klein XOR audio). Does not start compose.
+#   Sequential occupancy (klein XOR audio). Does not start compose. Each POST
+#   sends the graph the Quality table overlaid, so a CLI run posts what the
+#   browser would queue.
 #
 # Usage:
 #   ./scripts/utilities/album-render.sh status [--json]
 #   ./scripts/utilities/album-render.sh run --album ARTIST/SLUG
-#       [--art skip|upload|generate] [--image FILE] [--out DIR] [--dry-run]
+#       [--art skip|upload|generate] [--image FILE] [--out DIR]
+#       [--quality TIER] [--dry-run]
 #   ./scripts/utilities/album-render.sh pack --album ARTIST/SLUG [--out DIR]
 #
 # Environment:
 #   COMFY_OUTPUT_DIR, COMFY_PORT (default 8188), COMFY_URL, REPO_ROOT
+#   EZ_QUALITY - quality tier when --quality is absent (empty = the tier the
+#   graph records, else lab)
 #
 # Safety:
 #   Does not start Docker. Does not change restart: "no". Sequential Queue.
 #   generate unloads models (POST /free) between cover and tracks.
 #
 # Exit codes:
-#   0 success / dry-run; 1 usage / missing compose / queue failure.
+#   0 success / dry-run; 1 usage / missing compose / quality overlay / queue
+#   failure.
 #
 # @command album-render
 
@@ -43,6 +49,25 @@ ART_MODE="skip"
 IMAGE_FILE=""
 OUT_DIR=""
 DRY_RUN=0
+QUALITY="${EZ_QUALITY:-}"
+# Per-run scratch dir for the Quality transform; removed by the EXIT trap.
+RUN_TMP_DIR="$(mktemp -d)"
+
+#######################################
+# Remove the scratch dir this run created (wired to EXIT when executed).
+# Globals:
+#   RUN_TMP_DIR
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   0
+#######################################
+cleanup_temp_files() {
+  rm -rf "${RUN_TMP_DIR:-}"
+  RUN_TMP_DIR=""
+}
 
 #######################################
 # Print usage.
@@ -56,9 +81,11 @@ DRY_RUN=0
 #   0
 #######################################
 cmd_help() {
-  echo "Usage: album-render.sh status|run|pack --album ARTIST/SLUG [--art skip|upload|generate] [--image FILE] [--out DIR] [--dry-run] [--json]" >&2
+  echo "Usage: album-render.sh status|run|pack --album ARTIST/SLUG [--art skip|upload|generate] [--image FILE] [--out DIR] [--quality TIER] [--dry-run] [--json]" >&2
   echo "  Sequential album Queue on local Comfy. Does not start compose." >&2
   echo "  --art generate queues cover.json (klein) then POST /free then tracks." >&2
+  echo "  --quality TIER overlays the Quality table before each POST" >&2
+  echo "    (default: what the graph records)." >&2
   return 0
 }
 
@@ -104,6 +131,34 @@ comfy_free() {
   curl -sf -X POST "${COMFY_URL}/free" \
     -H 'Content-Type: application/json' \
     --data '{"unload_models":true,"free_memory":true}' >/dev/null 2>&1 || true
+}
+
+#######################################
+# Quality-overlay a graph before it is POSTed.
+# Globals:
+#   REPO_ROOT, COMFY_URL, QUALITY, RUN_TMP_DIR
+# Arguments:
+#   $1  workflow json path
+# Outputs:
+#   Transformed json path on stdout; err on failure
+# Returns:
+#   0; 1 when the transform fails
+#######################################
+quality_apply_graph() {
+  local graph="${1:?}"
+  local out="${RUN_TMP_DIR}/quality-graph.json"
+  local -a tier_args=()
+  if [[ -n ${QUALITY} ]]; then
+    tier_args+=(--quality "${QUALITY}")
+  fi
+  PYTHONPATH="${REPO_ROOT}/custom_nodes${PYTHONPATH:+:${PYTHONPATH}}" \
+    python3 "${REPO_ROOT}/scripts/lib/quality_apply.py" \
+    --graph "${graph}" --out "${out}" "${tier_args[@]}" \
+    --comfy-url "${COMFY_URL}" || {
+    err "Quality overlay failed for ${graph}"
+    return 1
+  }
+  printf '%s\n' "${out}"
 }
 
 #######################################
@@ -189,7 +244,7 @@ PY
 #######################################
 # CLI dispatcher.
 # Globals:
-#   CMD, ALBUM_ID, ART_MODE, IMAGE_FILE, DRY_RUN, JSON_FLAG
+#   CMD, ALBUM_ID, ART_MODE, IMAGE_FILE, DRY_RUN, JSON_FLAG, QUALITY
 # Arguments:
 #   $@
 # Returns:
@@ -227,6 +282,14 @@ main() {
         ;;
       --out)
         OUT_DIR="${2:-}"
+        shift 2
+        ;;
+      --quality)
+        if [[ $# -lt 2 ]]; then
+          err "--quality needs a tier"
+          return 1
+        fi
+        QUALITY="${2}"
         shift 2
         ;;
       --dry-run)
@@ -292,7 +355,7 @@ main() {
     err "Comfy is not up at ${COMFY_URL} - start the stack first (does not auto-start)"
     return 1
   fi
-  local dir cover track
+  local dir cover track graph
   dir="$(album_dir "${ALBUM_ID}")"
   if [[ ${ART_MODE} == "generate" ]]; then
     cover="${dir}/cover.json"
@@ -301,7 +364,8 @@ main() {
       return 1
     fi
     log "queue cover (occupancy klein) ${cover}"
-    status="$(comfy_post_prompt "${cover}")" || return 1
+    graph="$(quality_apply_graph "${cover}")" || return 1
+    status="$(comfy_post_prompt "${graph}")" || return 1
     comfy_wait_history "${status}"
     comfy_free
   fi
@@ -333,12 +397,14 @@ PY
   fi
   while IFS= read -r -d '' track; do
     log "queue track ${track##*/}"
-    status="$(comfy_post_prompt "${track}")" || return 1
+    graph="$(quality_apply_graph "${track}")" || return 1
+    status="$(comfy_post_prompt "${graph}")" || return 1
     comfy_wait_history "${status}"
   done < <(find "${dir}" -maxdepth 1 -type f -name '[0-9][0-9]-*.json' -print0 | sort -z)
   pack_only "${ALBUM_ID}"
 }
 
 if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then
+  trap cleanup_temp_files EXIT
   main "$@"
 fi
