@@ -122,6 +122,43 @@ Distilled Klein is **CFG 1.0 / 4 steps** - quality is almost entirely the Positi
 </Tabs>
 ---
 
+## Prompt the job, not only the model
+
+A model-native prompt says how the encoder likes to be spoken to. It does not
+say what the picture is **for**, and a thumbnail has different requirements
+from a packshot. The Enhance nodes therefore add a second layer: a **goal**.
+
+The goal is resolved from the lane the graph already stamps, so you do not
+choose it. The **Goal** combo opens on **Auto (from lane)**. Open a thumbnail
+lane and the rewriter is told the cover tile has to be readable at roughly 120
+to 320 pixels wide, keep one dominant subject, hold a quiet band where a title
+can sit later, and drop detail that turns to mud when scaled down. Open a
+vertical lane and it is told to keep the subject in the middle third with the
+top and bottom clear for platform chrome. Pick a goal explicitly to force one
+that differs from the lane, or pick **None** to get today's model-only
+behavior back.
+
+| Goal | Optimize for |
+| --- | --- |
+| `thumbnail_cover_hero` | one dominant subject, contrast, readability at tiny sizes |
+| `title_safe_negative_space` | a quiet, even-luminance region for type added later |
+| `vertical_caption_headroom` | middle-third subject, clear hook and caption bands |
+| `wide_banner_edge_safe` | off-center subject, calm center, edges that tolerate crop |
+| `trust_portrait` | sharp lit eyes, approachable eyeline, plain background |
+| `packshot_conversion` | seamless field, true color, honest contact shadow |
+| `food_appeal` | texture leading, steam and glaze intact, clean plate rim |
+| `place_credibility` | standing eye height, true verticals, bright and decluttered |
+
+The registry lives in `custom_nodes/ez_prompt_enhance/goals.json` and the lane
+map in `goal_index.json`. Lanes with no deliverable (motion, tools, audio)
+resolve to `none`, so their prompts are unchanged. Sample recipes in catalogs
+that serve one deliverable carry the same goal clause, so the dropdown teaches
+the job as well as the model. See the
+[Cinema Rack](create/cinema-rack.md) for the cinematography vocabulary the
+rewriter draws on.
+
+---
+
 ## Prompt Enhance nodes
 
 In-tree pack `custom_nodes/ez_prompt_enhance` (category **ez-comfy/prompt**). Entrypoint copies every pack under `custom_nodes/` into Comfy on start (same pattern as lab workflows), including `ez_ltx_spatial` which snaps LTX canvases off 720/1080 so the video VAE does not einops-crash, and `ez_film` which unloads Klein before LTX and stitches the 90s MP4.
@@ -143,7 +180,7 @@ STRING out -> CLIPTextEncode `text` input.
 
 1. `./scripts/manage.sh download-models` (includes `comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf`).
 2. Pick a **Sample prompt** (30 lab recipes) or **Custom** to type a lazy sentence (the canned paragraph stays until you pick a sample). **Enhance** defaults **on**.
-3. Optional: pick a **style** (photorealistic, anime, cartoon, ... - 300 ids, or `none`).
+3. Optional: pick a **style** (photorealistic, anime, cartoon, ... - 300 ids, or `none`) and, if you want to override it, a **goal** (defaults to `none`, which means "use the goal this lane already declares").
 4. Queue. On the Enhance node, read the dim **CLIP prompt** box - that is the text CLIP encoded. The Graph **Positive** node (CLIPTextEncode) is the same preview. The top prompt widget stays as you typed it. If the 4B rewriter was skipped, **Enhance status** says why (missing GGUF, missing llama.cpp, timeout) and generation still runs. A selected style should read as that medium (cel, watercolor, oil on canvas, ...), not a 3D/photo paragraph with a style trailer. Rewrite prompt **off** copies the Prompt box onto Positive immediately; **on** waits for Queue for the 4B rewrite (Positive still shows the source until then).
 
 **Enhance defaults to true on the node** (a dragged node still rewrites). Seeded JSON pins it **off** when a rewrite would mutate structured input:

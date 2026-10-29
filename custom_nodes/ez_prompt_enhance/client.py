@@ -33,6 +33,7 @@ from ._styles import (
     ensure_style_details,
     flavor_for_system,
     format_style_instruction,
+    goal_llm_block,
     join_context_fields,
     load_styles,
     style_conflicts,
@@ -43,6 +44,7 @@ from ._styles import (
     with_audio_system,
     with_cinema_system,
     with_context_system,
+    with_goal_system,
     with_style_system,
 )
 from ._styles import (  # noqa: F401 - coverage/monkeypatch façade
