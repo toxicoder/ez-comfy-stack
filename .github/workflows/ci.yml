@@ -81,6 +81,10 @@ jobs:
         with:
           install-lint-tools: "true"
 
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+
       - name: Bazel test (fast core) and lint
         run: |
           bazelisk test //:test-fast --config=ci
