@@ -207,17 +207,80 @@ def test_quality_js_keeps_queue_time_user_edits() -> None:
 
 
 def test_quality_js_overlay_writes_are_node_type_bound() -> None:
-    """Mirror presets.apply_to_graph: KSampler steps/cfg, loaders by type."""
+    """Mirror presets.apply_to_graph: KSampler steps/cfg, loaders by type.
+
+    The tier table is imported from the generated module; the frontend must
+    not re-declare a step, a CFG, or a weight filename of its own.
+    """
     body = QUALITY_JS.read_text(encoding="utf-8")
+    assert 'from "./ez_quality_presets.js"' in body
+    for name in (
+        "EZ_QUALITY_TABLE",
+        "EZ_QUALITY_OWNED",
+        "EZ_QUALITY_LABELS",
+        "EZ_QUALITY_NAMED",
+        "EZ_QUALITY_FIELDS",
+    ):
+        assert name in body, name
+    assert "OVERLAY_FIELDS_BY_TYPE" in body
     assert "KSampler: [" in body
     assert "UNETLoader: [" in body
     assert "CLIPLoader: [" in body
     assert "VAELoader: [" in body
+    assert "OVERLAY_WIDGETS_BY_TYPE" not in body
+    assert "function resolveOverlay" not in body
+    assert ".safetensors" not in body
+    assert "_STEPS" not in body
+    assert "_CFG" not in body
     # isFlux2Dev must match the underscore filename Python matches
     # (flux2_dev_fp8mixed.safetensors).
     start = body.index("function isFlux2Dev")
     pred = body[start : body.index("\n}\n", start)]
     assert "flux2_dev" in pred
+
+
+def test_quality_js_combo_matches_the_queued_prompt() -> None:
+    """Reverse derivation, no silent drops, and one value on every combo."""
+    body = QUALITY_JS.read_text(encoding="utf-8")
+    # the tier is read back out of the live widgets, per instance
+    assert "function deriveQualityTier(graph, family)" in body
+    assert "function collectOverlayInstances(graph)" in body
+    assert "function agreeOn(entries, read)" in body
+    assert "function overlayValues(graph, family, instances)" in body
+    assert "function planTierWrites(graph, family, tier)" in body
+    assert "function writeBlockReason(" in body
+    # instances of one class that disagree match no tier and are not lab
+    assert "DIVERGENT" in body
+    for reason in ("not installed", "cannot swap", "widget not on graph"):
+        assert reason in body, reason
+    assert "Wan 14B is not overlaid" in body
+    # a write with no prompt slot is a failed apply, never a shown value
+    assert "function widgetSlotIndex(node, widget)" in body
+    assert "has no prompt slot" in body
+    # a widget that was missing retries once on the next configure
+    assert "pendingApplies" in body
+    assert "retryPendingApply(graph)" in body
+    # every combo moves together, and muted lanes drive nothing
+    assert "function setQualityOnAll(graph, value)" in body
+    assert "setQualityOnAll(graph, EZ_QUALITY_CUSTOM)" in body
+    assert "function isLiveNode(node)" in body
+    assert "node.mode === 0" in body
+    # captions name the swap the applied row performs
+    assert "function tierCaption(family, tier)" in body
+    start = body.index("function tierLabelFor(family, tier)")
+    label = body[start : body.index("\n}\n", start)]
+    assert "EZ_QUALITY_LABELS[family]" in label
+    # re-derived on configure, on graph change, on widget edits, and at Queue
+    assert "graphChanged(graph)" in body
+    assert "syncQualityFromGraph(graph)" in body
+    start = body.index("widget.beforeQueued = function ()")
+    hook = body[start : body.index("\n  };", start)]
+    assert "deriveQualityTier(graph, graphFamily(graph))" in hook
+    assert "setQualityOnAll(graph, derived)" in hook
+    assert "freezeQualityToCustom(graph)" in hook
+    assert "applyQuality(widget.value, node)" in hook
+    assert "async" not in hook
+    assert "node.widgets.map((item) => item.value)" not in body
 
 
 def test_format_js_queue_sync_keeps_user_size_and_single_slots() -> None:
@@ -406,6 +469,16 @@ def test_model_check_js_caches_the_last_verdict_for_the_report() -> None:
     assert 'setStatus(node, "Checking models...")' in check
     assert 'payload.ok ? "Ready." : "Missing models."' in check
     assert "Check failed: ${err" in check
+
+
+def test_model_check_js_reads_the_tier_off_the_visible_quality_node() -> None:
+    """The check reports the combo the overlay acts on, not the first copy."""
+    check = _model_check_fn("collectHints")
+    assert "tierFromGraph(g)" in check
+    assert 'ntype === "EZQuality"' not in check
+    reader = _model_check_fn("tierFromGraph")
+    assert "EZQuality" in reader
+    assert "node.mode === 0" in reader
 
 
 def test_model_check_js_reports_on_the_model_check_surface() -> None:

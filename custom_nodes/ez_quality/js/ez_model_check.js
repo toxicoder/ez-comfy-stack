@@ -76,6 +76,32 @@ function firstName(node) {
 }
 
 /**
+ * Tier the overlay reports, read off the same combo the overlay acts on: the
+ * first visible EZQuality. A muted copy drives nothing, so it reports nothing.
+ * @param {object} [graph]
+ * @returns {string}
+ */
+function tierFromGraph(graph) {
+  let fallback = "";
+  for (const node of graph?.nodes || []) {
+    if ((node.type || node.comfyClass || "") !== "EZQuality") {
+      continue;
+    }
+    const value = String(widgetValue(node, "quality", 0) || "");
+    if (!value) {
+      continue;
+    }
+    if (node.mode == null || node.mode === 0) {
+      return value;
+    }
+    if (!fallback) {
+      fallback = value;
+    }
+  }
+  return fallback || "lab";
+}
+
+/**
  * Compact graph snapshot for POST /ez_quality/check.
  * @param {object} [graph]
  * @returns {object}
@@ -91,7 +117,6 @@ function collectHints(graph) {
   const vaes = [];
   const loras = [];
   const checkpoints = [];
-  let quality = "lab";
   let enhanceOn = false;
   let describeOn = false;
   for (const node of g.nodes || []) {
@@ -111,8 +136,6 @@ function collectHints(graph) {
       loras.push(name);
     } else if (ntype === "CheckpointLoaderSimple" && name) {
       checkpoints.push(name);
-    } else if (ntype === "EZQuality") {
-      quality = String(widgetValue(node, "quality", 0) || "lab");
     }
     if (ENHANCE.has(ntype) && widgetValue(node, "enhance") === true) {
       enhanceOn = true;
@@ -121,6 +144,7 @@ function collectHints(graph) {
       describeOn = true;
     }
   }
+  const quality = tierFromGraph(g);
   const flags = [];
   if (extra.lab_iclora) {
     flags.push("iclora");
