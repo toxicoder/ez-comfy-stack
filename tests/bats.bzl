@@ -7,6 +7,9 @@ _MEDIUM = {
     "bats/workflow.bats": True,
     "bats/safety.bats": True,
     "bats/lib_unit.bats": True,
+    # 62 cases, the largest suite. It runs ~9s alone but crossed the 60s
+    # `short` cap while //tests:pytest and //tests:typecheck shared the runner.
+    "bats/comfy_scripts.bats": True,
 }
 
 # Extra runfiles only for suites that still need them after REPO_ROOT
