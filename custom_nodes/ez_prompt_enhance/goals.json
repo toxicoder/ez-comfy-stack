@@ -1,0 +1,42 @@
+{
+  "thumbnail_cover_hero": {
+    "label": "Thumbnail, cover, or hero",
+    "llm_block": "Deliverable goal: a cover tile a person decides on in under a second, often 120 to 320 pixels wide. Make one subject dominate the frame and read at that size. Keep a high-contrast key with clear separation between subject and background, so the silhouette survives being shrunk. Reserve a quiet band, usually the lower third, where a title can sit later, and keep the subject's eyes in the upper third. Push saturation and contrast a step past a photographic still while keeping color honest. Cut detail that turns to mud when scaled down: fine text, busy texture, many small objects. When a person is in frame, give them a readable expressive face and direct eyeline. Keep the frame uncluttered enough that the subject is identifiable before the details are.",
+    "sample_clause": "Reads at thumbnail size: one dominant subject, high-contrast key, clear edge separation from the background, color a step past natural, detail that survives being shrunk, eyes in the upper third, quiet lower band for a title later."
+  },
+  "title_safe_negative_space": {
+    "label": "Plate for overlaid title or type",
+    "llm_block": "Deliverable goal: a background plate that has to carry type added later. Compose the subject to one side and hold a deliberate quiet region for the type. Keep that region low-detail and even in luminance, so light and dark text both stay legible on it, and keep it free of faces, edges, and high-contrast texture. Give the frame a clear optical center that is not where the type will land. Preserve smooth gradient or soft falloff through the plate area rather than busy background detail.",
+    "sample_clause": "Built to carry type later: subject pushed to one side, a deliberate low-detail quiet region with even luminance for the title, no face or hard edge where text will sit."
+  },
+  "vertical_caption_headroom": {
+    "label": "Vertical frame with caption headroom",
+    "llm_block": "Deliverable goal: a full-bleed vertical frame watched on a phone with platform controls over the top and bottom. Keep the subject in the middle third so interface chrome cannot cover it. Leave the upper area clear for a hook line and the lower area clear for captions, and keep faces out of both bands. Compose for a tall read: foreground and background stacked vertically rather than spread side to side. Make the subject identifiable in the first half-second.",
+    "sample_clause": "Vertical and phone-first: subject held in the middle third, upper band clear for a hook line and lower band clear for captions, faces kept out of both, stacked depth rather than a sideways spread."
+  },
+  "wide_banner_edge_safe": {
+    "label": "Wide banner or header",
+    "llm_block": "Deliverable goal: a wide banner shown behind a name, handle, or menu, and cropped differently on every device. Keep the center band where a name or menu sits visually calm, and place the subject off center so a crop never cuts it. Keep nothing important in the outer edges, since side cropping is certain. Hold a consistent exposure across the full width so overlaid text reads anywhere on it, and avoid a second competing focal point.",
+    "sample_clause": "Wide banner that survives any crop: subject placed off center, calm center band for a name or menu, nothing important at the edges, even exposure across the full width."
+  },
+  "trust_portrait": {
+    "label": "Portrait that has to earn trust",
+    "llm_block": "Deliverable goal: a portrait a stranger judges for credibility, used small beside a name. Make the eyes sharp, evenly lit, and near the upper third, with a direct approachable eyeline to camera. Give an open, relaxed expression rather than a posed fashion look. Use a soft flattering key with true skin tone and a catchlight, and keep the background plain, uncluttered, and a step behind the subject in focus so nothing competes with the face. Frame so the head is not cropped at a joint and the face stays readable at small size. Name the hands positively and keep them relaxed or out of frame.",
+    "sample_clause": "Trust portrait: eyes sharp and lit with a catchlight, direct approachable eyeline, open relaxed expression, true skin tone under a soft key, plain background a step behind focus, head uncropped and face readable small."
+  },
+  "packshot_conversion": {
+    "label": "Product shot that has to sell",
+    "llm_block": "Deliverable goal: a product image a buyer decides on, usually in a small grid cell. Put the product on a clean seamless field and let it fill most of the frame. Use a three-quarter view that shows the form and one defining detail. Keep color true to the physical item so the listing does not mislead, and give a soft honest contact shadow so the product sits rather than floats. Remove props, hands, scenery, and reflection clutter. Keep the label or logo area clean and unoccluded, and control specular hotspots so material reads correctly.",
+    "sample_clause": "Selling product shot: product filling the frame on a clean seamless field, three-quarter view showing the form, true-to-item color, soft honest contact shadow, no props or hands, label unoccluded, highlights controlled."
+  },
+  "food_appeal": {
+    "label": "Food that has to look appetizing",
+    "llm_block": "Deliverable goal: a dish photographed to make someone order it. Shoot close enough that the texture of the dish is the subject, at a slight downward angle that shows the surface and the height of the stack. Keep moisture, steam, glaze, and crumbs visible, since those are what read as fresh and hot. Use a soft directional key that gives sheen without blowing out highlights, and keep garnish crisp rather than wilted. Keep the plate rim clean and the table simple so the dish stays the only focal point.",
+    "sample_clause": "Appetite-first food: close enough that texture leads, slight downward angle showing surface and height, steam and glaze and crumbs intact, soft directional key giving sheen, crisp garnish, clean plate rim, simple table."
+  },
+  "place_credibility": {
+    "label": "Space that has to be booked or bought",
+    "llm_block": "Deliverable goal: a room or building photographed so someone trusts it enough to enquire, tour, or book. Shoot at standing eye height, not low and not drone-high, so the space reads the way it feels to walk into. Keep verticals true and lines straight, since a tilted wall reads as a misleading listing. Light it bright and even, mixing daylight with the room's own practicals so no corner goes black, and show the full depth of the room from foreground to far wall. Declutter surfaces completely: no bin, cable, clutter, signage, or stray personal item. Keep color neutral and honest about materials so the floor, wall, and finish tones match the real place.",
+    "sample_clause": "Space that has to be trusted: standing eye height, true verticals and straight lines, bright even light mixing daylight with practicals, full depth from foreground to far wall, surfaces fully decluttered, neutral honest material color."
+  }
+}

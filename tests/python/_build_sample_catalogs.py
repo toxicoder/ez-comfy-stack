@@ -16,24 +16,20 @@ from _lab_theme import (
     CHARACTER_DRAFT,
     CHARACTER_TWEAK,
     TEXT_SWAP,
-    TEXT_SWAP_LOCK,
     CREATOR_IDENTITY,
     GIF_MOTION,
     GOSEE_IDENTITY,
     HOUSE_IDENTITY,
     KLEIN_STILL,
     LAZY_FORGE,
-    LTX_A2V,
     LTX_BROLL,
     LTX_DIALOGUE,
-    LTX_FLF,
     LTX_HOOK_AV,
     LTX_I2V,
     LTX_MULTISHOT,
     LTX_PRODUCT_HERO,
     LTX_T2V,
     LTX_TALKING_HEAD,
-    LTX_WEATHER,
     WAN_I2V,
     WAN_ORBIT,
     WAN_T2V,
@@ -45,11 +41,29 @@ CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
     sys.path.insert(0, str(CUSTOM))
 
-from ez_music.nodes import DRAFT_LYRICS, FULL_LYRICS  # noqa: E402
 from ez_podcast.nodes import RADIO_SEED_SCRIPT, SEED_SCRIPT  # noqa: E402
+from ez_prompt_enhance.samples import (  # noqa: E402
+    catalog_expected_count,
+    goal_field,
+    resolve_goal,
+)
 from ez_research.nodes import _DEFAULT_MESSAGE  # noqa: E402
 
 DEST = CUSTOM / "ez_prompt_enhance" / "js" / "samples"
+
+# Catalogs that exist to serve one deliverable register the goal they serve, so
+# the goal's craft clause is folded into every recipe. Catalogs shared across
+# goals (klein_t2i, wan_i2v) stay out of this table and keep their text as is.
+CATALOG_GOAL: dict[str, str] = {
+    "klein_banner": "wide_banner_edge_safe",
+    "klein_food": "food_appeal",
+    "klein_plate": "title_safe_negative_space",
+    "klein_vertical": "vertical_caption_headroom",
+    "klein_place": "place_credibility",
+    "klein_portrait": "trust_portrait",
+    "klein_product": "packshot_conversion",
+    "klein_thumbnail": "thumbnail_cover_hero",
+}
 
 I2V_LOCK = (
     "Keep the start-image identity locked. Keep every object and surface from "
@@ -942,7 +956,7 @@ def klein_product() -> list[dict[str, str]]:
         (
             "wax-coat-hook",
             "Waxed coat",
-            "A photoreal still of one unmarked waxed dark indigo-violet suede coat hung on a plain wood peg, packshot crop. Soft key, fabric sheen, empty of lettering. Eye-level 50mm, 1:1.",
+            "A photoreal still of one unmarked waxed teal coat hung on a plain wood peg, packshot crop. Soft key, fabric sheen, empty of lettering. Eye-level 50mm, 1:1.",
         ),
         (
             "glyph-ring",
@@ -1079,105 +1093,542 @@ def klein_food() -> list[dict[str, str]]:
     return [_row(sid, label, prompt) for sid, label, prompt in plates]
 
 
+def klein_thumbnail() -> list[dict[str, str]]:
+    """Thirty hero frames for the cover lane.
+
+    Each row carries the place, the light, and the lens. The craft a cover tile
+    has to survive arrives with the goal clause ``_write`` appends.
+    """
+    shots = [
+        (
+            "terrace-hero",
+            "Terrace hero",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams, face to camera",
+            "stands at the rail of a tropical rooftop terrace at golden hour",
+            "Low sun raking the coat from the left, cool sky behind, palms soft in the far plane.",
+            "Match a standing eyeline. 85mm-equivalent short telephoto. Framed for YouTube 16:9.",
+        ),
+        (
+            "harbor-crane",
+            "Harbor crane",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat",
+            "stands on a high unmarked crane catwalk above a tropical harbor at late day",
+            "Hard high sun, pale steel shine, hazy water holding the whole far plane flat.",
+            "Slightly below eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
+        ),
+        (
+            "tram-window",
+            "Tram window",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap, seated and face to camera",
+            "rides an unmarked tram while wet streets slide past the glass",
+            "Warm interior practicals on the face, cold street light through the wet glass behind.",
+            "Chest height. 50mm-equivalent. Framed for YouTube 16:9.",
+        ),
+        (
+            "quarry-noon",
+            "Quarry noon",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat mid-stride",
+            "crosses a pale unmarked quarry floor at hard noon",
+            "Overhead sun, pale stone bouncing back from below, dust standing in the air.",
+            "Match a standing eyeline. 24mm-equivalent wide. Framed for YouTube 16:9.",
+        ),
+        (
+            "clock-hall",
+            "Clock hall",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat with a compact unmarked data-staff",
+            "pauses in an unmarked civic clock hall",
+            "One high window shaft with dust in it, one warm practical low on the floor.",
+            "Waist height. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
+        ),
+        (
+            "ferry-bow",
+            "Ferry bow",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat with the collar turned up",
+            "stands at the bow of a small unmarked ferry running flat into a bright bay",
+            "Low sun off the water, spray lit in front of the lens, wake trailing behind.",
+            "Match a standing eyeline. 50mm-equivalent. Framed for YouTube 16:9.",
+        ),
+        (
+            "market-awning",
+            "Market awning",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat, face to camera",
+            "waits under an unmarked market awning while rain sheets the street",
+            "Warm bounce off the awning canvas in front, cold rain light behind.",
+            "Match a standing eyeline. 85mm-equivalent short telephoto. Framed for YouTube 16:9.",
+        ),
+        (
+            "observatory-rail",
+            "Observatory rail",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat with glyph rings at the staff",
+            "leans on an unmarked observatory rail under a clear night",
+            "Moonlight key from the open dome with a warm floor practical under the chin.",
+            "Slightly below eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
+        ),
+        (
+            "switchyard-dawn",
+            "Switchyard dawn",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat mid-stride",
+            "crosses unmarked rails at first light",
+            "Long cool shadows, one yard lamp still burning, wet ballast shining.",
+            "Match a standing eyeline. 24mm-equivalent wide. Framed for YouTube 16:9.",
+        ),
+        (
+            "greenhouse-aisle",
+            "Greenhouse aisle",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat",
+            "walks a long unmarked greenhouse aisle of palms and broad leaves",
+            "Dappled glass light, humid air, leaf sheen and condensation on the panes.",
+            "Match a standing eyeline. 50mm-equivalent. Framed for YouTube 16:9.",
+        ),
+        (
+            "mesa-dusk",
+            "Mesa dusk",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat",
+            "stands on a high unmarked mesa as the last sun hits red stone",
+            "Hard warm sidelight, grit in the air, one long shadow running to camera.",
+            "Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
+        ),
+        (
+            "reading-hall",
+            "Reading hall",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat, face to camera",
+            "pauses between tall unmarked wood stacks in a quiet reading hall",
+            "Warm practicals at the ends of the aisles, dust lit in a side window shaft.",
+            "Chest height. 85mm-equivalent short telephoto. Framed for YouTube 16:9.",
+        ),
+        (
+            "snow-pine-ridge",
+            "Snow pine ridge",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat",
+            "crosses a high unmarked ridge among snow-loaded pines",
+            "Thin winter sun, blue shadow in the snow, breath visible in cold air.",
+            "Match a standing eyeline. 50mm-equivalent. Framed for YouTube 16:9.",
+        ),
+        (
+            "unmarked-arcade",
+            "Unmarked arcade",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat",
+            "walks an unmarked indoor arcade of colored practicals and empty cabinets",
+            "Saturated cabinet bounce in red and cyan, polished floor carrying the color back up.",
+            "Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
+        ),
+        (
+            "stone-courtyard",
+            "Stone courtyard",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat",
+            "sits at an unmarked stone fountain in a quiet courtyard of palms",
+            "Open shade overhead with specular water throwing light up onto the coat.",
+            "Match a standing eyeline. 50mm-equivalent. Framed for YouTube 16:9.",
+        ),
+        (
+            "storm-rooftop",
+            "Storm rooftop",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat with a short storm-cloak",
+            "braces on a tropical rooftop as wind pulls the cloak",
+            "Lightning far off, wet stone, warm lining flash at the collar.",
+            "Slightly below eyeline. 24mm-equivalent wide. Framed for YouTube 16:9.",
+        ),
+        (
+            "workshop-bench",
+            "Workshop bench",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat",
+            "leans over a teak workbench with warm-gold holographic glyph rings blooming from a compact unmarked data-staff",
+            "A single practical lamp with tight falloff, metal filings and wood grain.",
+            "Chest-cam height. 50mm-equivalent. Framed for YouTube 16:9.",
+        ),
+        (
+            "concourse-stride",
+            "Concourse stride",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat mid-stride",
+            "crosses a vast unmarked concourse of concrete and glass",
+            "Cool overhead banks, the far crowd blurred by motion, coat held sharp.",
+            "Hip height. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
+        ),
+        (
+            "lighthouse-gallery",
+            "Lighthouse gallery",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat with a compact unmarked data-staff",
+            "stands on the gallery of an unmarked lighthouse at dusk",
+            "One lamp sweeping past the glass, the sea flat and dark beyond the rail.",
+            "Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
+        ),
+        (
+            "salt-pan",
+            "Salt pan",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat",
+            "stands on a wide unmarked salt pan under a bright sky",
+            "Bounced ground light from below, hard flat horizon, hot air shimmer at the edges.",
+            "Match a standing eyeline. 24mm-equivalent wide. Framed for YouTube 16:9.",
+        ),
+        (
+            "tiled-underpass",
+            "Tiled underpass",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat, face to camera",
+            "walks the middle of an unmarked tiled underpass",
+            "Sodium practicals overhead in a row, cool daylight holding at both mouths.",
+            "Waist height. 50mm-equivalent. Framed for YouTube 16:9.",
+        ),
+        (
+            "pier-fog",
+            "Pier fog",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat",
+            "stands on an unmarked concrete pier as fog holds a quiet tropical harbor",
+            "Soft overcast, low contrast, wet concrete and rope texture close to the lens.",
+            "Match a standing eyeline. 85mm-equivalent short telephoto. Framed for YouTube 16:9.",
+        ),
+        (
+            "lantern-alley",
+            "Lantern alley",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat",
+            "walks a narrow unmarked alley hung with paper lanterns",
+            "Red and gold bounce off wet stone, cool shadow between the hanging rows.",
+            "Chest height. 50mm-equivalent. Framed for YouTube 16:9.",
+        ),
+        (
+            "rack-aisle",
+            "Rack aisle",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat",
+            "stands in the cold aisle of an unmarked equipment room of plain racks",
+            "Cool blue aisle light from the ceiling, warm status points in rows, polished floor.",
+            "Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
+        ),
+        (
+            "dawn-rooftop",
+            "Dawn rooftop",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap",
+            "stands on a tropical rooftop as the sky turns amber",
+            "Low sun flaring across the rail, the city behind still holding in shade.",
+            "Slightly below eyeline. 50mm-equivalent. Framed for YouTube 16:9.",
+        ),
+        (
+            "cliff-road",
+            "Cliff road",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat mid-stride",
+            "walks the shoulder of an unmarked coast road cut into a bright headland",
+            "Hard sun, sea glare off the water below, fabric snapping in the wind.",
+            "Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
+        ),
+        (
+            "natatorium",
+            "Natatorium",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat",
+            "stands at the edge of an unmarked indoor pool hall",
+            "Cyan bounce up off the water, tiled light echoing across the far wall, humid air.",
+            "Waist height. 24mm-equivalent wide. Framed for YouTube 16:9.",
+        ),
+        (
+            "print-room",
+            "Print room",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat",
+            "stands beside a plain unmarked press with stacked blank stock",
+            "North window light, ink sheen on the roller, paper tooth in the stack.",
+            "Chest height. 50mm-equivalent. Framed for YouTube 16:9.",
+        ),
+        (
+            "bridge-deck",
+            "Bridge deck",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat",
+            "walks the deck of an unmarked harbor bridge at blue hour",
+            "Tower floodlights from above, warm ship lights low on the water, wet asphalt.",
+            "Hip height. 24mm-equivalent wide. Framed for YouTube 16:9.",
+        ),
+        (
+            "empty-stage",
+            "Empty stage",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat, face to camera",
+            "stands at the apron of an unmarked stage",
+            "One warm follow spot from the booth, house lights down, curtain fold behind.",
+            "Match a standing eyeline. 85mm-equivalent short telephoto. Framed for YouTube 16:9.",
+        ),
+    ]
+    return [
+        _row(sid, label, _klein(subject, place, light, camera))
+        for sid, label, subject, place, light, camera in shots
+    ]
+
+
+def klein_portrait() -> list[dict[str, str]]:
+    """Thirty head-and-shoulders frames for the profile lane.
+
+    Each row names the background, the key, and the lens. The craft a portrait
+    has to earn arrives with the goal clause ``_write`` appends.
+    """
+    sittings = [
+        (
+            "lime-plaster-wall",
+            "Lime plaster wall",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat, face to camera, shoulders square",
+            "sits against a washed lime plaster wall in a quiet room",
+            "Large soft window key from the left, gentle shadow under the jaw, even exposure across the face.",
+            "Chest height. 85mm-equivalent short telephoto. Framed 4:5.",
+        ),
+        (
+            "linen-backdrop",
+            "Linen backdrop",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap, chin level, face to camera",
+            "sits before an unmarked warm-grey linen backdrop",
+            "Broad diffused key at forty-five degrees, soft fill from the opposite side, color honest in the coat nap.",
+            "Chest height. 85mm-equivalent short telephoto. Framed 1:1.",
+        ),
+        (
+            "charcoal-sweep",
+            "Charcoal sweep",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat, three-quarter turn to camera",
+            "sits on a stool against an unmarked charcoal studio sweep",
+            "Soft top key with a faint rim separating the shoulder from the sweep behind.",
+            "Slightly below eyeline. 135mm-equivalent telephoto. Framed 2:3.",
+        ),
+        (
+            "reading-corner",
+            "Reading corner",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat, face to camera",
+            "sits in an unmarked reading corner of plain spines soft behind the shoulder",
+            "Warm practical at the end of the aisle plus a large bounce held in from camera left.",
+            "Chest height. 85mm-equivalent short telephoto. Framed 4:5.",
+        ),
+        (
+            "teak-pegboard",
+            "Teak pegboard",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat with the sleeves turned back, hands resting easy at the sides",
+            "stands against an unmarked teak pegboard with plain hand tools hung in rows",
+            "Daylight from a high window on the right, warm wood bounce filling the shadow side.",
+            "Match a standing eyeline. 85mm-equivalent short telephoto. Framed 4:5.",
+        ),
+        (
+            "north-window",
+            "North window",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat, face to camera, shoulders relaxed",
+            "sits in an unmarked studio room beside a north window",
+            "Even soft daylight with the glass just out of frame, shadow side falling gently.",
+            "Chest height. 85mm-equivalent short telephoto. Framed 2:3.",
+        ),
+        (
+            "harbor-rail-dusk",
+            "Harbor rail at dusk",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat with the collar turned up, face to camera",
+            "stands at an unmarked harbor rail with the water soft behind",
+            "Warm key from a distant yard lamp, open sky filling the shadow from above.",
+            "Slightly below eyeline. 135mm-equivalent telephoto. Framed 4:5.",
+        ),
+        (
+            "concrete-stairwell",
+            "Concrete stairwell",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat, chin level, face to camera",
+            "stands on an unmarked concrete stair under a high skylight",
+            "Diffuse skylight from above, soft shadow under the brow, pale wall returning light below.",
+            "Match a standing eyeline. 85mm-equivalent short telephoto. Framed 4:5.",
+        ),
+        (
+            "greenhouse-glass",
+            "Greenhouse glass",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat, face to camera",
+            "stands in an unmarked greenhouse with palm leaves soft behind",
+            "Dappled glass light evened by the humid air, green bounce low on the coat.",
+            "Chest height. 85mm-equivalent short telephoto. Framed 1:1.",
+        ),
+        (
+            "weathered-brick",
+            "Weathered brick",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat, three-quarter turn to camera",
+            "leans against an unmarked weathered brick wall with even mortar",
+            "Side key off a large bounce panel, the brick kept low in contrast.",
+            "Chest height. 85mm-equivalent short telephoto. Framed 4:5.",
+        ),
+        (
+            "canvas-field-office",
+            "Canvas field office",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat, face to camera",
+            "sits inside an unmarked canvas field office",
+            "Warm bounce off the canvas walls, cool air light coming in at the flap.",
+            "Chest height. 85mm-equivalent short telephoto. Framed 4:5.",
+        ),
+        (
+            "indigo-sweep",
+            "Indigo sweep",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat with silk-felt nap, face to camera",
+            "sits against an unmarked deep indigo studio sweep",
+            "Soft key close and large, the sweep falling a full stop behind the shoulder.",
+            "Slightly below eyeline. 135mm-equivalent telephoto. Framed 2:3.",
+        ),
+        (
+            "pantry-shelf",
+            "Pantry shelf",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat, face to camera",
+            "stands in an unmarked pantry of plain glass jars with blank lids",
+            "Even shelf practicals, glass throwing small soft highlights, warm wood shelf below.",
+            "Match a standing eyeline. 85mm-equivalent short telephoto. Framed 4:5.",
+        ),
+        (
+            "library-ladder",
+            "Library ladder",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat, chin level, face to camera",
+            "stands beside an unmarked rolling ladder in tall wood stacks",
+            "Warm practical at shoulder height, paper and wood returning a soft amber.",
+            "Chest height. 85mm-equivalent short telephoto. Framed 4:5.",
+        ),
+        (
+            "morning-fog-field",
+            "Morning fog field",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat, face to camera",
+            "stands in an open unmarked field held by morning fog",
+            "Diffuse light in every direction, the horizon dissolved a few steps back.",
+            "Match a standing eyeline. 135mm-equivalent telephoto. Framed 1:1.",
+        ),
+        (
+            "frosted-glass-wall",
+            "Frosted glass wall",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat, shoulders square, face to camera",
+            "stands in an unmarked meeting room before a plain frosted glass wall",
+            "Even ceiling panels with daylight bleeding through the frost from behind.",
+            "Chest height. 85mm-equivalent short telephoto. Framed 4:5.",
+        ),
+        (
+            "terrace-shade",
+            "Terrace shade",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat with faint circuit-thread seams, face to camera",
+            "sits on an unmarked tropical terrace in open shade, palms far behind",
+            "Open shade with a warm bounce up from the stone floor under the chin.",
+            "Slightly below eyeline. 85mm-equivalent short telephoto. Framed 2:3.",
+        ),
+        (
+            "workshop-bay",
+            "Workshop bay",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat, arms relaxed at the sides, face to camera",
+            "stands in an unmarked workshop bay before a plain roller door",
+            "Daylight flooding in from the open bay on the left, cool fill off the concrete.",
+            "Match a standing eyeline. 50mm-equivalent. Framed 4:5.",
+        ),
+        (
+            "pottery-bench",
+            "Pottery bench",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat with the sleeves turned back, hands resting easy on the bench",
+            "stands at an unmarked pottery bench of unglazed bowls",
+            "Soft window light from the right, clay dust holding the beam in the air.",
+            "Chest height. 85mm-equivalent short telephoto. Framed 1:1.",
+        ),
+        (
+            "plain-corridor",
+            "Plain corridor",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat, face to camera",
+            "stands in an unmarked corridor of plain painted doors",
+            "Soft key from a ceiling panel ahead, gentle rim from the corridor light behind.",
+            "Chest height. 85mm-equivalent short telephoto. Framed 4:5.",
+        ),
+        (
+            "sail-loft",
+            "Sail loft",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat, three-quarter turn to camera",
+            "stands in an unmarked sail loft beside folded canvas",
+            "Broad skylight from above, cotton white bounce coming up off the canvas.",
+            "Slightly below eyeline. 135mm-equivalent telephoto. Framed 4:5.",
+        ),
+        (
+            "tea-room",
+            "Tea room",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat, face to camera, shoulders relaxed",
+            "sits at an unmarked tea room table with one plain teapot",
+            "Soft side light through a paper screen, steam catching it above the table.",
+            "Chest height. 85mm-equivalent short telephoto. Framed 1:1.",
+        ),
+        (
+            "rooftop-night",
+            "Rooftop at night",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap, face to camera",
+            "stands on an unmarked rooftop with the city lights soft into discs behind",
+            "Warm practical key from a terrace lantern at the side, cool sky holding the far plane.",
+            "Chest height. 135mm-equivalent telephoto. Framed 4:5.",
+        ),
+        (
+            "dome-interior",
+            "Dome interior",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat, chin level, face to camera",
+            "stands inside an unmarked dome with a slit of night sky above",
+            "Cool moonlight mixed with a warm floor practical lifting the shadow side.",
+            "Slightly below eyeline. 85mm-equivalent short telephoto. Framed 2:3.",
+        ),
+        (
+            "screening-room",
+            "Screening room",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat, face to camera",
+            "sits in an empty unmarked screening room against a plain dark wall",
+            "One warm wall wash behind the shoulder, soft key turned up on the face.",
+            "Chest height. 85mm-equivalent short telephoto. Framed 1:1.",
+        ),
+        (
+            "stone-quay",
+            "Stone quay",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat with the collar turned up, face to camera",
+            "stands on an unmarked stone quay with the water flat behind",
+            "Open overcast, even and soft, the stone returning a pale neutral.",
+            "Match a standing eyeline. 135mm-equivalent telephoto. Framed 4:5.",
+        ),
+        (
+            "pine-stand",
+            "Pine stand",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat, face to camera",
+            "stands in an unmarked pine stand under soft snow light",
+            "Diffuse cool light, the snow bouncing gently from below, trunks soft behind.",
+            "Match a standing eyeline. 85mm-equivalent short telephoto. Framed 4:5.",
+        ),
+        (
+            "press-room",
+            "Press room",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat, sleeves turned back, hands resting easy",
+            "stands in an unmarked press room beside stacked blank stock",
+            "North window light, ink sheen low in the frame, paper tooth softening the room.",
+            "Chest height. 85mm-equivalent short telephoto. Framed 1:1.",
+        ),
+        (
+            "atrium-stair",
+            "Atrium stair",
+            "an original techno wizard in an unmarked dark indigo-violet suede running coat, face to camera",
+            "stands on an unmarked atrium stair beneath a roof lantern",
+            "Daylight falling through the lantern, plaster walls lifting the shadow evenly.",
+            "Slightly below eyeline. 50mm-equivalent. Framed 2:3.",
+        ),
+        (
+            "painted-door",
+            "Painted door",
+            "an original techno wizard in an unmarked dark indigo-violet suede coat, shoulders square, face to camera",
+            "stands in front of an unmarked painted door in a plain hallway",
+            "Soft key from a panel overhead, gentle rim from the corridor lamp behind.",
+            "Chest height. 85mm-equivalent short telephoto. Framed 4:5.",
+        ),
+    ]
+    return [
+        _row(sid, label, _klein(subject, place, light, camera))
+        for sid, label, subject, place, light, camera in sittings
+    ]
+
+
 def klein_text_swap() -> list[dict[str, str]]:
-    lock = TEXT_SWAP_LOCK
+    """Bare new lettering only.
+
+    ``lettering.wrap_text_swap_prompt`` adds the typeface lock at run time and
+    passes a line that already reads as an instruction straight through, so the
+    recipe stores the glyph the operator wants and nothing else.
+    """
     swaps = [
         ("hello-lock", "Replace with HELLO", TEXT_SWAP),
-        (
-            "neon-closed",
-            "Neon CLOSED",
-            f"Replace the visible lettering with: CLOSED. {lock}",
-        ),
-        (
-            "mug-good-morning",
-            "Mug GOOD MORNING",
-            f"Replace the mug lettering with: GOOD MORNING. {lock}",
-        ),
-        (
-            "poster-headline",
-            "Poster OPEN TONIGHT",
-            f"Replace the poster headline with: OPEN TONIGHT. {lock}",
-        ),
-        (
-            "book-spine",
-            "Book spine FIELD NOTES",
-            f"Replace the book-spine lettering with: FIELD NOTES. {lock}",
-        ),
-        (
-            "awning-open",
-            "Awning OPEN",
-            f"Replace the awning lettering with: OPEN. {lock}",
-        ),
-        (
-            "tee-print",
-            "Tee KEEP GOING",
-            f"Replace the shirt print with: KEEP GOING. {lock}",
-        ),
-        (
-            "thumb-title",
-            "Thumb NEW EPISODE",
-            f"Replace the thumbnail title with: NEW EPISODE. {lock}",
-        ),
-        (
-            "street-sign",
-            "Street sign HARBOR WAY",
-            f"Replace the street-sign lettering with: HARBOR WAY. {lock}",
-        ),
-        (
-            "bakery-hours",
-            "Hours 7AM-2PM",
-            f"Replace the hours lettering with: 7AM-2PM. {lock}",
-        ),
-        (
-            "sale-to-open",
-            "SALE to OPEN",
-            f"Replace SALE with OPEN. {lock}",
-        ),
-        (
-            "chapter-card",
-            "Chapter ONE",
-            f"Replace the chapter-card lettering with: ONE. {lock}",
-        ),
-        (
-            "enamel-pin",
-            "Pin HELLO",
-            f"Replace the pin lettering with: HELLO. {lock}",
-        ),
-        (
-            "vinyl-sticker",
-            "Sticker WAVE",
-            f"Replace the sticker lettering with: WAVE. {lock}",
-        ),
-        (
-            "cafe-chalkboard",
-            "Board TODAY'S SOUP",
-            f"Replace the chalkboard lettering with: TODAY'S SOUP. {lock}",
-        ),
-        (
-            "shipping-crate",
-            "Crate FRAGILE",
-            f"Replace the crate stencil with: FRAGILE. {lock}",
-        ),
-        (
-            "stadium-banner",
-            "Banner GO HOME",
-            f"Replace the banner lettering with: GO HOME. {lock}",
-        ),
-        (
-            "arcade-marquee",
-            "Marquee INSERT COIN",
-            f"Replace the marquee lettering with: INSERT COIN. {lock}",
-        ),
-        (
-            "luggage-tag",
-            "Tag GATE B",
-            f"Replace the luggage-tag lettering with: GATE B. {lock}",
-        ),
-        (
-            "window-vinyl",
-            "Window YES WE'RE OPEN",
-            f"Replace the window vinyl with: YES WE'RE OPEN. {lock}",
-        ),
+        ("neon-closed", "Neon CLOSED", "CLOSED"),
+        ("mug-good-morning", "Mug GOOD MORNING", "GOOD MORNING"),
+        ("poster-headline", "Poster OPEN TONIGHT", "OPEN TONIGHT"),
+        ("book-spine", "Book spine FIELD NOTES", "FIELD NOTES"),
+        ("awning-open", "Awning OPEN", "OPEN"),
+        ("tee-print", "Tee KEEP GOING", "KEEP GOING"),
+        ("thumb-title", "Thumb NEW EPISODE", "NEW EPISODE"),
+        ("street-sign", "Street sign HARBOR WAY", "HARBOR WAY"),
+        ("bakery-hours", "Hours 7AM-2PM", "7AM-2PM"),
+        ("sale-to-open", "SALE to OPEN", "Replace SALE with OPEN"),
+        ("chapter-card", "Chapter ONE", "ONE"),
+        ("enamel-pin", "Pin HELLO", "HELLO"),
+        ("vinyl-sticker", "Sticker WAVE", "WAVE"),
+        ("cafe-chalkboard", "Board TODAY'S SOUP", "TODAY'S SOUP"),
+        ("shipping-crate", "Crate FRAGILE", "FRAGILE"),
+        ("stadium-banner", "Banner GO HOME", "GO HOME"),
+        ("arcade-marquee", "Marquee INSERT COIN", "INSERT COIN"),
+        ("luggage-tag", "Tag GATE B", "GATE B"),
+        ("window-vinyl", "Window YES WE'RE OPEN", "YES WE'RE OPEN"),
     ]
     return [_row(sid, label, prompt) for sid, label, prompt in swaps]
 
@@ -1284,15 +1735,127 @@ def klein_clay_edit() -> list[dict[str, str]]:
     return [_row(sid, label, prompt) for sid, label, prompt in looks]
 
 
+def _read_shipped(name: str) -> list[dict[str, str]]:
+    """Read the catalog already on disk.
+
+    Globals:
+        DEST: Directory that holds the shipped sample catalogs.
+
+    Arguments:
+        name: Catalog file stem.
+
+    Returns:
+        Parsed rows, or an empty list when the file does not exist yet.
+    """
+    path = DEST / f"{name}.json"
+    if not path.is_file():
+        return []
+    data = json.loads(path.read_text(encoding="utf-8"))
+    return data if isinstance(data, list) else []
+
+
+def _with_goal(name: str, rows: list[dict[str, str]]) -> list[dict[str, str]]:
+    """Append the craft clause of a catalog's goal to every recipe.
+
+    A catalog that exists to serve one deliverable should teach the operator
+    what that deliverable needs, not only what the model likes. Catalogs that
+    serve many goals stay untouched so their text does not drift.
+
+    Globals:
+        CATALOG_GOAL: Catalog stem to goal id mapping.
+
+    Arguments:
+        name: Catalog file stem.
+        rows: Rows the builder produced.
+
+    Returns:
+        Rows with the goal clause folded into each prompt, unchanged when the
+        catalog registers no goal.
+    """
+    goal = CATALOG_GOAL.get(name, "")
+    clause = goal_field(goal, "sample_clause") if goal else ""
+    if not clause:
+        return rows
+    updated: list[dict[str, str]] = []
+    for row in rows:
+        prompt = str(row.get("prompt") or "").rstrip()
+        updated.append(
+            {**row, "prompt": prompt if clause in prompt else f"{prompt} {clause}"}
+        )
+    return updated
+
+
+def _strip_clause(prompt: object, clause: str) -> str:
+    """Remove an appended goal clause so builder and shipped text compare fairly.
+
+    Arguments:
+        prompt: Recipe text, possibly ending in the goal clause.
+        clause: The goal clause this catalog appends, or empty.
+
+    Returns:
+        The prompt with a trailing goal clause removed.
+    """
+    text = str(prompt or "").rstrip()
+    if clause and text.endswith(clause):
+        return text[: -len(clause)].rstrip()
+    return text
+
+
+def _plain_rows(rows: list[dict[str, str]], clause: str) -> list[dict[str, str]]:
+    """Return rows with goal clauses stripped from their prompts.
+
+    Arguments:
+        rows: Rows to normalize.
+        clause: The goal clause this catalog appends, or empty.
+
+    Returns:
+        Copies whose prompts carry no goal clause.
+    """
+    return [{**row, "prompt": _strip_clause(row.get("prompt"), clause)} for row in rows]
+
+
 def _write(name: str, rows: list[dict[str, str]]) -> None:
-    if len(rows) != 20:
-        raise SystemExit(f"{name} has {len(rows)} rows, need 20")
+    """Write one catalog and carry forward the rows the builder does not author.
+
+    Builders author the head of a catalog and operators have hand-added rows
+    past the builder's tail. Writing only the builder's rows would silently
+    drop those, so a shorter builder output is merged onto the shipped tail
+    when its rows match the shipped head. The comparison ignores the goal
+    clause, which this function appends afterwards, so adding goal language is
+    not mistaken for a lost hand-authored row. A real mismatch raises instead
+    of guessing which text wins.
+
+    Globals:
+        DEST: Directory that holds the shipped sample catalogs.
+
+    Arguments:
+        name: Catalog file stem.
+        rows: Rows the builder produced.
+
+    Returns:
+        None.
+    """
     labels = [row["label"] for row in rows]
-    if len(set(labels)) != 20:
+    if len(set(labels)) != len(labels):
         raise SystemExit(f"{name} duplicate labels")
     ids = [row["id"] for row in rows]
-    if len(set(ids)) != 20:
+    if len(set(ids)) != len(ids):
         raise SystemExit(f"{name} duplicate ids")
+    clause = goal_field(CATALOG_GOAL.get(name, ""), "sample_clause")
+    shipped = _read_shipped(name)
+    if len(rows) < len(shipped):
+        if json.dumps(_plain_rows(rows, clause), sort_keys=True) != json.dumps(
+            _plain_rows(shipped[: len(rows)], clause), sort_keys=True
+        ):
+            raise SystemExit(
+                f"{name}: builder rows diverge from the shipped head, so "
+                "hand-authored rows would be lost. Fold the edits into the builder."
+            )
+        rows = rows + shipped[len(rows) :]
+    expected = catalog_expected_count(name)
+    rows = _with_goal(name, rows)
+    if len(rows) != expected:
+        raise SystemExit(f"{name} has {len(rows)} rows, need {expected}")
     dest = DEST / f"{name}.json"
     dest.write_text(json.dumps(rows, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {dest.relative_to(ROOT)}")
@@ -1309,6 +1872,8 @@ def main() -> None:
         "klein_character_edit": klein_character_edit(),
         "klein_product": klein_product(),
         "klein_food": klein_food(),
+        "klein_thumbnail": klein_thumbnail(),
+        "klein_portrait": klein_portrait(),
         "klein_clay_edit": klein_clay_edit(),
         "klein_text_swap": klein_text_swap(),
     }
@@ -1317,15 +1882,19 @@ def main() -> None:
     from _sample_catalog_rest import rest_catalogs  # noqa: E402
 
     catalogs.update(rest_catalogs())
+    # The three goal-specific stills catalogs split out of the generic blob.
+    from _sample_catalog_goals import goal_catalogs  # noqa: E402
+
+    catalogs.update(goal_catalogs())
     index = {
         "stills/still-draft": "klein_t2i",
         "stills/still-daily": "klein_t2i",
         "stills/still-studio": "klein_t2i",
         "stills/image-studio": "klein_image_studio",
-        "stills/still-hero": "klein_t2i",
+        "stills/still-hero": "klein_thumbnail",
         "stills/still-flux3-fast": "klein_t2i",
         "stills/still-flux3-quality": "klein_t2i",
-        "stills/thumbnail": "klein_t2i",
+        "stills/thumbnail": "klein_thumbnail",
         "stills/instagram-square": "klein_t2i",
         "stills/open-graph": "klein_t2i",
         "stills/banner-wide": "klein_t2i",
@@ -1405,12 +1974,43 @@ def main() -> None:
     }
     for name, rows in catalogs.items():
         _write(name, rows)
-    missing = [cid for cid in index.values() if cid not in catalogs]
+    # index.json is co-authored: other generators contribute the bulk of its
+    # lane keys, so this module may only add or retarget keys, never drop one.
+    shipped_index = json.loads((DEST / "index.json").read_text(encoding="utf-8"))
+    lost = sorted(set(shipped_index) - set(index))
+    merged = {**shipped_index, **index}
+    # A lane whose deliverable has its own catalog should not draw from the
+    # generic 16:9 blob. Only lanes still on the blob are retargeted, so a lane
+    # that already names a purpose-built catalog is left alone. The three
+    # targets here each hold one aspect throughout, which is what makes the
+    # automatic retarget safe; cover lanes that vary in aspect stay on the blob
+    # and pick their framing from the prompt instead.
+    blob_targets = {
+        "vertical_caption_headroom": "klein_vertical",
+        "title_safe_negative_space": "klein_plate",
+        "wide_banner_edge_safe": "klein_banner",
+        "trust_portrait": "klein_portrait",
+    }
+    for rel, current in list(merged.items()):
+        if current != "klein_t2i":
+            continue
+        target = blob_targets.get(resolve_goal("", lab_rel=rel))
+        if target and (DEST / f"{target}.json").is_file():
+            merged[rel] = target
+    # The background pair and podcast_learn are hand-authored on purpose, so an
+    # index entry may legitimately name a catalog this module never writes; the
+    # guard is that no entry points at nothing at all.
+    missing = [
+        cid
+        for cid in merged.values()
+        if cid not in catalogs and not (DEST / f"{cid}.json").is_file()
+    ]
     if missing:
         raise SystemExit(f"index points at missing catalogs: {sorted(set(missing))}")
     (DEST / "index.json").write_text(
-        json.dumps(index, indent=2) + "\n", encoding="utf-8"
+        json.dumps(merged, indent=2) + "\n", encoding="utf-8"
     )
+    print(f"kept {len(lost)} lane keys contributed elsewhere")
     print(f"wrote { (DEST / 'index.json').relative_to(ROOT) }")
 
 

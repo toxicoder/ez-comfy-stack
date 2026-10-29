@@ -28,6 +28,7 @@ from .client import (
     with_audio_system,
     with_cinema_system,
     with_context_system,
+    with_goal_system,
     with_style_system,
 )
 from .client import _close_llm
@@ -63,7 +64,15 @@ from .background import (
 )
 from .describe import describe_image, last_status as describe_last_status
 from .lettering import wrap_text_swap_prompt
-from .samples import CUSTOM, resolve_ace_sample, resolve_prompt, sample_combo_labels
+from .samples import (
+    CUSTOM,
+    GOAL_AUTO,
+    goal_ids,
+    resolve_ace_sample,
+    resolve_goal,
+    resolve_prompt,
+    sample_combo_labels,
+)
 
 KLEIN_MODE_COMBO = [
     "t2i",
@@ -130,6 +139,7 @@ def _visual_input_types(
         "required": required,
         "optional": {
             "context": _CONTEXT_INPUT,
+            "goal": (goal_ids(), {"default": GOAL_AUTO}),
             "image_desc": (
                 "STRING",
                 {"forceInput": True, "dynamicPrompts": False},
@@ -261,6 +271,7 @@ def _run(
     node_type: str = "",
     image_desc: str = "",
     background_cast: str = "",
+    goal: object = GOAL_AUTO,
 ) -> dict[str, Any]:
     """Resolve sample, optionally rewrite, and pack CLIP text.
 
@@ -280,6 +291,8 @@ def _run(
             background modes, except cubic rebuilds in background_swap, whose
             empty plate must not be primed with the source people.
         background_cast: Optional compact token from EZBackgroundCast.
+        goal: Goal combo widget. ``auto`` or empty derives the goal from the
+            lane id the graph stamped into ``catalog``; ``none`` refuses it.
 
     Returns:
         Packed Enhance payload. LLM miss returns the original prompt.
@@ -346,6 +359,7 @@ def _run(
     system = load_system_prompt(system_name)
     system = with_cinema_system(system, system_name, mode)
     system = with_context_system(system, ctx)
+    system = with_goal_system(system, resolve_goal(goal, catalog=catalog))
     if apply_style:
         instruction = format_style_instruction(style, flavor_for_system(system_name))
         if instruction:
@@ -416,6 +430,7 @@ class EZKleinPromptEnhance:
         catalog: object = "",
         image_desc: str = "",
         background_cast: str = "",
+        goal: object = GOAL_AUTO,
     ) -> dict[str, Any]:
         """Rewrite a Klein still/edit/identity prompt.
 
@@ -459,6 +474,7 @@ class EZKleinPromptEnhance:
             catalog=catalog,
             node_type="EZKleinPromptEnhance",
             image_desc=image_desc,
+            goal=goal,
             background_cast=background_cast,
         )
 
@@ -505,6 +521,7 @@ class EZWanPromptEnhance:
         sample: object = CUSTOM,
         catalog: object = "",
         image_desc: str = "",
+        goal: object = GOAL_AUTO,
     ) -> dict[str, Any]:
         """Rewrite a Wan video prompt.
 
@@ -544,6 +561,7 @@ class EZWanPromptEnhance:
             catalog=catalog,
             node_type="EZWanPromptEnhance",
             image_desc=image_desc,
+            goal=goal,
         )
 
 
@@ -589,6 +607,7 @@ class EZLTXPromptEnhance:
         sample: object = CUSTOM,
         catalog: object = "",
         image_desc: str = "",
+        goal: object = GOAL_AUTO,
     ) -> dict[str, Any]:
         """Rewrite an LTX joint-AV prompt.
 
@@ -626,6 +645,7 @@ class EZLTXPromptEnhance:
             catalog=catalog,
             node_type="EZLTXPromptEnhance",
             image_desc=image_desc,
+            goal=goal,
         )
 
 
@@ -1027,6 +1047,7 @@ class EZZimagePromptEnhance:
         sample: object = CUSTOM,
         catalog: object = "",
         image_desc: str = "",
+        goal: object = GOAL_AUTO,
     ) -> dict[str, Any]:
         """Rewrite a Z-Image Turbo still prompt.
 
@@ -1055,6 +1076,7 @@ class EZZimagePromptEnhance:
             catalog=catalog,
             node_type="EZZimagePromptEnhance",
             image_desc=image_desc,
+            goal=goal,
         )
 
 
@@ -1098,6 +1120,7 @@ class EZLongCatPromptEnhance:
         sample: object = CUSTOM,
         catalog: object = "",
         image_desc: str = "",
+        goal: object = GOAL_AUTO,
     ) -> dict[str, Any]:
         """Rewrite a LongCat-Video prompt.
 
@@ -1133,6 +1156,7 @@ class EZLongCatPromptEnhance:
             catalog=catalog,
             node_type="EZLongCatPromptEnhance",
             image_desc=image_desc,
+            goal=goal,
         )
 
 
@@ -1176,6 +1200,7 @@ class EZDreamXPromptEnhance:
         sample: object = CUSTOM,
         catalog: object = "",
         image_desc: str = "",
+        goal: object = GOAL_AUTO,
     ) -> dict[str, Any]:
         """Rewrite a DreamX first-frame+text prompt.
 
@@ -1206,6 +1231,7 @@ class EZDreamXPromptEnhance:
             catalog=catalog,
             node_type="EZDreamXPromptEnhance",
             image_desc=image_desc,
+            goal=goal,
         )
 
 

@@ -11,6 +11,7 @@ import json
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
+from typing import Any
 
 # Sample catalog paths, combo sentinel, and node-type -> family mapping.
 CUSTOM = "custom"
@@ -20,6 +21,151 @@ SAMPLE_COUNT = 30
 """Default recipe count for family catalogs (plus Custom)."""
 BACKGROUND_SWAP_COUNT = 100
 """Recipe count for stills/background-swap."""
+
+# Goal registry. A goal says what a lane's output is FOR, so the sample text
+# and the Enhance system prompt can optimize for the job and not only the
+# model. These files sit at the package root beside styles.json and views.json
+# because only Python reads them.
+PACKAGE_DIR = Path(__file__).resolve().parent
+GOALS_NAME = "goals.json"
+GOAL_INDEX_NAME = "goal_index.json"
+GOAL_AUTO = "auto"
+"""Combo default: derive the goal from the lane the graph already stamps."""
+
+GOAL_NONE = "none"
+"""Combo value meaning "no goal language"; the prompt stays model-only."""
+
+
+def load_goals() -> dict[str, dict[str, Any]]:
+    """Read the goal registry.
+
+    Globals:
+        PACKAGE_DIR: Package directory that holds ``goals.json``.
+        GOALS_NAME: Goal registry file name.
+
+    Returns:
+        Goal id to entry mapping, or empty when the file is absent.
+    """
+    path = PACKAGE_DIR / GOALS_NAME
+    if not path.is_file():
+        return {}
+    data = json.loads(path.read_text(encoding="utf-8"))
+    return data if isinstance(data, dict) else {}
+
+
+def load_goal_index() -> dict[str, str]:
+    """Read the lane to goal id map.
+
+    Globals:
+        PACKAGE_DIR: Package directory that holds ``goal_index.json``.
+        GOAL_INDEX_NAME: Goal index file name.
+
+    Returns:
+        Lab-relative id to goal id mapping, or empty when absent.
+    """
+    path = PACKAGE_DIR / GOAL_INDEX_NAME
+    if not path.is_file():
+        return {}
+    data = json.loads(path.read_text(encoding="utf-8"))
+    return {str(k): str(v) for k, v in data.items()} if isinstance(data, dict) else {}
+
+
+def goal_ids() -> list[str]:
+    """Return goal combo values, ``auto`` and ``none`` first.
+
+    Returns:
+        ``GOAL_AUTO`` and ``GOAL_NONE``, followed by every registered goal id.
+    """
+    return [GOAL_AUTO, GOAL_NONE, *load_goals().keys()]
+
+
+def goal_label(goal_id: str) -> str:
+    """Return the display label for a goal.
+
+    Args:
+        goal_id: Goal id, ``GOAL_AUTO``, or ``GOAL_NONE``.
+
+    Returns:
+        The registry label, ``Auto (from lane)`` / ``None`` for the sentinels,
+        or empty when the id is unknown.
+    """
+    gid = _as_str(goal_id).strip()
+    if gid == GOAL_AUTO:
+        return "Auto (from lane)"
+    if gid == GOAL_NONE:
+        return "None"
+    entry = load_goals().get(gid) or {}
+    return str(entry.get("label") or "")
+
+
+def goal_field(goal_id: str, field: str) -> str:
+    """Return one text field from a goal entry.
+
+    Args:
+        goal_id: Goal id, or ``GOAL_NONE``.
+        field: Entry key, such as ``llm_block`` or ``sample_clause``.
+
+    Returns:
+        The field text, or empty when the goal or field is missing.
+    """
+    gid = _as_str(goal_id).strip()
+    if not gid or gid == GOAL_NONE:
+        return ""
+    entry = load_goals().get(gid) or {}
+    return str(entry.get(field) or "")
+
+
+def goal_for_rel(lab_rel: str) -> str:
+    """Map a lab-relative id to the goal its output has to serve.
+
+    Lanes that carry no deliverable (motion, tools, audio) resolve to
+    ``GOAL_NONE`` so their prompts keep today's model-only shape.
+
+    Args:
+        lab_rel: Lane path such as ``stills/thumbnail``, or empty.
+
+    Returns:
+        Goal id, or ``GOAL_NONE`` when no goal is registered.
+    """
+    rel = _as_str(lab_rel).strip().replace("\\", "/")
+    if not rel:
+        return GOAL_NONE
+    gid = load_goal_index().get(rel, "")
+    return gid if gid in load_goals() else GOAL_NONE
+
+
+def resolve_goal(
+    goal: object = "",
+    *,
+    catalog: object = "",
+    lab_rel: str = "",
+) -> str:
+    """Pick a goal from an explicit widget, then the lane the graph stamped.
+
+    Mirrors ``resolve_catalog`` precedence so an explicit operator pick
+    always wins over the derived one. ``GOAL_AUTO`` is the widget default and
+    asks for the derivation; ``GOAL_NONE`` refuses it, which is the only way to
+    get a model-only prompt on a lane that carries a deliverable.
+
+    Args:
+        goal: The ``goal`` combo widget.
+        catalog: Hidden ``catalog`` widget, which graphs stamp with a lane id.
+        lab_rel: Graph id when the catalog widget is empty.
+
+    Returns:
+        Goal id, or ``GOAL_NONE``.
+    """
+    explicit = _norm_choice(goal)
+    if explicit == GOAL_NONE:
+        return GOAL_NONE
+    if explicit and explicit != GOAL_AUTO and explicit in load_goals():
+        return explicit
+    for candidate in (_as_str(catalog).strip(), _as_str(lab_rel).strip()):
+        if candidate:
+            resolved = goal_for_rel(candidate)
+            if resolved != GOAL_NONE:
+                return resolved
+    return GOAL_NONE
 
 
 def catalog_expected_count(catalog_id: str) -> int:

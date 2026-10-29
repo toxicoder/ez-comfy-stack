@@ -207,6 +207,44 @@ def with_style_system(system: str, style_id: str) -> str:
     return f"{system.rstrip()}\n\n{STYLE_SYSTEM_ADDENDUM}"
 
 
+def goal_llm_block(goal_id: str) -> str:
+    """Return the goal addendum for one goal.
+
+    Args:
+        goal_id: Goal catalog id or ``none``.
+
+    Returns:
+        Goal language block, or empty for ``none`` and unknown ids.
+    """
+    from . import samples
+
+    text = samples.goal_field(goal_id, "llm_block").strip()
+    if not text:
+        return ""
+    return f"Goal: {samples.goal_label(goal_id)}\n{text}"
+
+
+def with_goal_system(system: str, goal_id: str = "") -> str:
+    """Append the block that says what the output has to achieve.
+
+    The family template optimizes for the model. This block adds the layer
+    that optimizes for the job the lane exists to do, so it is placed before
+    the style addendum, which must stay last because it declares the only
+    look.
+
+    Args:
+        system: Family system prompt.
+        goal_id: Goal catalog id or ``none``.
+
+    Returns:
+        System text, unchanged when no goal applies.
+    """
+    block = goal_llm_block(goal_id)
+    if not block:
+        return system
+    return f"{system.rstrip()}\n\n{block}"
+
+
 def with_cinema_system(system: str, system_name: str = "", mode: str = "") -> str:
     """Append the Cinema Rack language block for visual families.
 

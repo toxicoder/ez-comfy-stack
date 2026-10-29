@@ -127,6 +127,21 @@ Canvas rows live in [Studio canvas](operate/troubleshooting-canvas.md). The fixt
 
 ---
 
+## Prompt goal
+
+**Goal** on an Enhance node names the deliverable the picture has to survive. It arrives on its own: the node reads the lane id already stamped in the graph's **catalog** widget and looks it up in `custom_nodes/ez_prompt_enhance/goal_index.json`. The resolved goal is appended to the system prompt after the model rules and before any style. Widget and prose: [Prompting](prompting.md#prompt-the-job-not-only-the-model).
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| Every Queue looks the same however you set **Goal** | The node is a motion or audio Enhance, which has no **Goal** widget. Only the visual Enhance nodes take a deliverable | Expected. Motion lanes are timed shots; the craft lives in the duration hint and the motion prompt instead |
+| **Goal** reads `None` on a stills lane you expected to be goal-aware | Someone set the combo to **None**, which refuses the lane, or that lane has no row in `goal_index.json` so nothing could be derived. Roughly a third of the stills lanes map; the rest are deliberately goal-neutral drafts, sheets, and grids | Put the combo back on **Auto (from lane)**. To make a lane goal-aware for everyone, add its id to `goal_index.json` |
+| A vertical lane came back looking like a crowded landscape cover | The lane is mapped, but you picked a sample from the shared generic catalog, and those rows are written 16:9 | Pick the row set made for the deliverable (`klein_vertical`, `klein_plate`, `klein_banner`, `klein_thumbnail`, `klein_portrait`) or write your own. The Goal block steers the Enhancer; it cannot un-crop a row that specified a landscape frame |
+| You set **Goal** to **None** and lost the lane's advice as well | **None** is an explicit opt-out and outranks the lane, by design | Put the combo back on **Auto (from lane)** to keep the derived goal, and pick a named goal when the deliverable differs from the lane |
+| No **Goal** combo on a graph you saved before this existed | Saved `widgets_values` carry only the widgets that existed when the graph was written; new ones come from the node definition at their default | `./scripts/manage.sh restart`, then hard-refresh the Comfy tab. **Goal** is an optional widget, so old graphs load unchanged and resolve from the lane |
+| Text landed where a title has to sit later | The goal asked for a quiet band, the sampler did not honor it, and nothing forces it | Re-Queue with the goal set, or take the still into the text lane. Goal language biases the Enhancer; a hard layout rule belongs in the prompt you wrote, not in the goal block |
+
+---
+
 ## Quality combo
 
 The **Quality** combo is read back from the widgets, not written and forgotten: it re-derives on graph load, on graph change, on widget edit, and at Queue, and a value it cannot write is a failed apply rather than a dropped one. Tiers and what each family owns: [ComfyUI Apps](studio-apps.md#graph-vs-app).
