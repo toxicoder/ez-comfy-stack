@@ -19,11 +19,12 @@ from _lab_layout import (
     operator_note,
 )
 from _lab_paths import lab_graph_paths
+from ez_quality.presets import QUALITY_LAB
 
 QUALITY_TYPE = "EZQuality"
 QUALITY_TITLE = "Quality"
 QUALITY_WIDGET = "quality"
-QUALITY_DEFAULT = "lab"
+QUALITY_DEFAULT = QUALITY_LAB
 QUALITY_SIZE = (320.0, 82.0)
 QUALITY_PAD = 20.0
 QUALITY_LABEL = {
