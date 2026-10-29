@@ -19,7 +19,7 @@ cd "${ROOT}"
 echo "Running shfmt -d..."
 shfmt -d -s -i 2 -ci \
   scripts docker/install-comfy.sh docker/install-comfy docker/entrypoint.sh \
-  tests/coverage.sh tests/run_all.sh tests/run_pytest.sh tests/shell_inventory.sh \
+  tests/coverage.sh tests/run_all.sh tests/run_js.sh tests/run_pytest.sh tests/shell_inventory.sh \
   tests/typecheck.sh tests/bats_runner.sh \
   lints docs/manage-docs.sh docs/setup-docs.sh fix.sh \
   docs-site/run_npm.sh docs-site/scripts/visual_linux.sh \

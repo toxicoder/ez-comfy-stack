@@ -88,6 +88,7 @@ alias(
 _TEST_FAST = [
     "//scripts:manage_help_test",
     "//tests:bats",
+    "//tests:js",
     "//tests:pytest",
     "//tests:typecheck",
     "//tests:shell_inventory",

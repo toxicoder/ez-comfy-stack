@@ -5,15 +5,16 @@
 # Hermetic full-suite entrypoint for local developers and `make test`.
 #
 # Purpose:
-#   Run BATS for all suites under tests/bats, Python tests (preferring
-#   pytest-cov when installed), then Pyright (Pylance) and mypy on first-party
-#   Python.
+#   Run BATS for all suites under tests/bats, the node:test suites under
+#   tests/js, Python tests (preferring pytest-cov when installed), then
+#   Pyright (Pylance) and mypy on first-party Python.
 #
 # Style:
 #   Google Shell Style Guide (project deviations in docs/project-conventions.md).
 #
 # Requirements:
-#   bats, python3, pytest (optional pytest-cov), pyright, mypy
+#   bats, node 22+ (built-in node:test runner), python3, pytest (optional
+#   pytest-cov), pyright, mypy
 #   (pip install -r tests/requirements.txt). GNU parallel recommended for
 #   bats --jobs. No GPU or Hugging Face network.
 #
@@ -68,6 +69,9 @@ if bats --help 2>&1 | grep -q -- '--jobs'; then
 else
   bats tests/bats
 fi
+
+echo "==> JS (node:test)"
+bash tests/run_js.sh
 
 echo "==> Python"
 bash tests/run_pytest.sh

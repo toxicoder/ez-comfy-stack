@@ -161,10 +161,18 @@ let graphSeq = 0;
  * Arguments:
  *   opts - {occupancy, nodes, lab_rel}
  * Returns:
- *   The graph; each node gets an id and a .graph back-reference.
+ *   The graph; each node gets an id and a .graph back-reference. addNode()
+ *   appends later (a class created after the first pass) and dispatchEvent()
+ *   fires the "configured" listeners the real frontend fires on the graph.
  */
 export function makeGraph(opts = {}) {
   const nodes = opts.nodes || [];
+  const listeners = new Map();
+  /** Give a node the id + graph back-reference LiteGraph sets on add. */
+  const adopt = (node, index) => {
+    node.id = index + 1;
+    node.graph = graph;
+  };
   const graph = {
     id: `g${graphSeq++}`,
     nodes,
@@ -179,6 +187,22 @@ export function makeGraph(opts = {}) {
     },
     change() {
       graph.changes += 1;
+    },
+    addEventListener(type, handler) {
+      if (!listeners.has(type)) {
+        listeners.set(type, []);
+      }
+      listeners.get(type).push(handler);
+    },
+    dispatchEvent(event) {
+      for (const handler of listeners.get(event?.type) || []) {
+        handler(event);
+      }
+    },
+    addNode(node) {
+      nodes.push(node);
+      adopt(node, nodes.length - 1);
+      return node;
     },
     getNodeById(id) {
       return nodes.find((n) => String(n.id) === String(id));
@@ -208,10 +232,7 @@ export function makeGraph(opts = {}) {
       return { prompt: {}, output };
     },
   };
-  nodes.forEach((node, index) => {
-    node.id = index + 1;
-    node.graph = graph;
-  });
+  nodes.forEach(adopt);
   return graph;
 }
 

@@ -1,4 +1,4 @@
-"""Package purpose: Hermetic BATS, pytest coverage, typecheck, and shell inventory."""
+"""Package purpose: Hermetic BATS, node:test JS, pytest coverage, typecheck, and shell inventory."""
 
 load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
@@ -41,6 +41,7 @@ exports_files(
         "bats_runner.sh",
         "coverage.sh",
         "run_all.sh",
+        "run_js.sh",
         "run_pytest.sh",
         "shell_inventory.sh",
         "typecheck.sh",
@@ -113,6 +114,27 @@ sh_test(
     srcs = ["shell_inventory.sh"],
     data = [
         "repo_root.sh",
+        "//scripts:doc_sources",
+    ],
+    tags = [
+        "local",
+        "no-sandbox",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+sh_test(
+    name = "js",
+    # size small (<60s) is ample: the node:test suite runs in about 1s and
+    # needs no GPU, ComfyUI, or Docker.
+    size = "small",
+    srcs = ["run_js.sh"],
+    data = [
+        "repo_root.sh",
+        "//custom_nodes:sources",
+        # scripts/manage.sh in runfiles is the marker tests_repo_root resolves
+        # under bazel test; the suite itself reads custom_nodes **/*.js and
+        # **/*.json (ez_quality overlay, ez_image mode + modes.json).
         "//scripts:doc_sources",
     ],
     tags = [

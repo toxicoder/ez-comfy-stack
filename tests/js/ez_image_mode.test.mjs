@@ -2,13 +2,18 @@
  * @file Client contract for the EZImageMode stills-desk extension, run under
  * `node --test`.
  *
- * LiteGraph builds a graph one node at a time inside LGraph.configure(), so
- * the node classes bindPreviewWatchers() walks can still be missing while the
- * EZImageMode node is being created (and can be absent from the graph for
- * good on a plain text-to-image workflow). A missing class is a no-op: the
- * desk must load, and the watchers must still land on the classes that do
- * exist. A throw here aborts the whole load with the frontend's
- * "Loading aborted due to error reloading workflow data" banner.
+ * LiteGraph builds a graph one node at a time inside the synchronous
+ * LGraph.configure(), and it calls onNodeCreated from the middle of that
+ * pass. The desk classes bindPreviewWatchers() walks can therefore still be
+ * missing while the EZImageMode node is being created (and can be absent
+ * from the graph for good on a plain text-to-image workflow). Binding during
+ * onNodeCreated asked for classes that did not exist yet: it threw, and the
+ * frontend reported the throw as "Loading aborted due to error reloading
+ * workflow data" and cancelled the whole load.
+ *
+ * So the Mode node binds itself synchronously and defers the graph-wide walk
+ * one macrotask; the graph "configured" event re-runs it. A missing class is
+ * a clean no-op, and a class that shows up late still gets its watchers.
  */
 
 import assert from "node:assert/strict";
@@ -45,6 +50,8 @@ const STUDIO_LAB = "stills/image-studio";
 const PREVIEW_ROUTE = "/ez_image/studio-preview";
 /** Longer than the extension's 200ms preview debounce. */
 const DEBOUNCE_WAIT_MS = 400;
+/** Longer than the extension's 0ms deferred-bind timer. */
+const DEFER_WAIT_MS = 25;
 
 /** Make a widget callback observable without changing what it returns. */
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -147,9 +154,17 @@ describe("ez_image_mode graph load", () => {
 
       await createModeNode(ext, mode);
 
+      // The Mode node binds itself inline; only the graph-wide walk waits, so
+      // it can no longer ask LiteGraph for a class it has not built yet.
+      assert.equal(mode._ezModeBound, true, "the Mode node binds on create");
       const sampler = graph.nodes.find((n) => n.type === "KSampler");
-      assert.equal(sampler.widgets[0]._ezStudioWatch, true);
       const unet = graph.nodes.find((n) => n.type === "UNETLoader");
+      assert.equal(sampler.widgets[0]._ezStudioWatch, undefined);
+      assert.equal(unet.widgets[0]._ezStudioWatch, undefined);
+
+      await wait(DEFER_WAIT_MS);
+
+      assert.equal(sampler.widgets[0]._ezStudioWatch, true);
       assert.equal(unet.widgets[0]._ezStudioWatch, true);
     } finally {
       restore();
@@ -213,6 +228,70 @@ describe("ez_image_mode graph load", () => {
       assert.deepEqual(previewBodies, []);
       const sampler = graph.nodes.find((n) => n.type === "KSampler");
       assert.equal(sampler.widgets[0]._ezStudioWatch, undefined);
+    } finally {
+      restore();
+    }
+  });
+
+  test("the graph configured event binds what the create pass could not", async () => {
+    const { previewBodies, restore } = await stubFetch();
+    try {
+      const { ext, app } = await loadExtension(MODE_JS, "ez_image.mode");
+      const mode = makeModeNode();
+      // No onNodeCreated here, so the deferred timer never runs: the graph
+      // "configured" listener is the only thing that can bind these watchers.
+      const graph = makeGraph({ lab_rel: STUDIO_LAB, nodes: [mode] });
+      app.graph = graph;
+      ext.setup();
+
+      // LiteGraph returns from configure and the rest of the desk appears.
+      graph.addNode(makeFormatNode());
+      graph.addNode(makeSampler());
+      graph.dispatchEvent({ type: "configured" });
+
+      const format = graph.nodes.find((n) => n.type === "EZImageFormat");
+      assert.equal(format.widgets[0]._ezStudioWatch, true);
+      const sampler = graph.nodes.find((n) => n.type === "KSampler");
+      assert.equal(sampler.widgets[0]._ezStudioWatch, true);
+
+      editWidget(format, "width", 1152);
+      await wait(DEBOUNCE_WAIT_MS);
+      assert.equal(previewBodies.at(-1).width, 1152);
+    } finally {
+      restore();
+    }
+  });
+
+  test("a class absent from the graph is skipped and binds once it lands", async () => {
+    const { previewBodies, restore } = await stubFetch();
+    try {
+      const { ext, app } = await loadExtension(MODE_JS, "ez_image.mode");
+      const mode = makeModeNode();
+      // An image-studio graph with no EZKleinPromptEnhance and no
+      // EZOptionalImage: watchWidget() must no-op on those two, not throw.
+      const graph = makeGraph({
+        lab_rel: STUDIO_LAB,
+        nodes: [mode, makeFormatNode(), makeUnetLoader(), makeSampler()],
+      });
+      app.graph = graph;
+
+      await ext.afterConfigureGraph();
+
+      const format = graph.nodes.find((n) => n.type === "EZImageFormat");
+      assert.equal(format.widgets[0]._ezStudioWatch, true);
+
+      // The two classes arrive later; the next bind pass must still catch them.
+      const enhance = graph.addNode(makeEnhanceNode());
+      const optional = graph.addNode(makeOptionalImageNode());
+      await ext.afterConfigureGraph();
+
+      assert.equal(enhance.widgets[0]._ezStudioWatch, true);
+      assert.equal(optional.widgets[0]._ezStudioWatch, true);
+
+      const typed = "a fennec fox at dusk under a streetlamp";
+      editWidget(enhance, "prompt", typed);
+      await wait(DEBOUNCE_WAIT_MS);
+      assert.equal(previewBodies.at(-1).prompt, typed);
     } finally {
       restore();
     }
