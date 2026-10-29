@@ -104,6 +104,7 @@ def test_goal_label_variants() -> None:
     assert samples.goal_label("thumbnail_cover_hero") == GOALS[
         "thumbnail_cover_hero"
     ]["label"]
+    assert samples.goal_label(samples.GOAL_AUTO) == "Auto (from lane)"
     assert samples.goal_label(samples.GOAL_NONE) == "None"
     assert samples.goal_label("not-a-goal") == ""
 
@@ -111,6 +112,7 @@ def test_goal_label_variants() -> None:
 def test_goal_field_variants() -> None:
     assert samples.goal_field("thumbnail_cover_hero", "sample_clause")
     assert samples.goal_field("thumbnail_cover_hero", "missing_field") == ""
+    assert samples.goal_field(samples.GOAL_AUTO, "sample_clause") == ""
     assert samples.goal_field(samples.GOAL_NONE, "sample_clause") == ""
     assert samples.goal_field("", "sample_clause") == ""
     assert samples.goal_field("not-a-goal", "sample_clause") == ""
