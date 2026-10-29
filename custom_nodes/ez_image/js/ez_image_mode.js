@@ -10,13 +10,15 @@ import { app } from "../../scripts/app.js";
 let catalog = null;
 
 /**
- * Find a widget by name on a node.
- * @param {object} node
+ * Find a widget by name on a node. A missing node is a miss, not a throw:
+ * LiteGraph creates nodes one at a time, so a class this file walks can be
+ * absent from the graph (or not built yet) while these bindings run.
+ * @param {object|undefined} node
  * @param {string} name
  * @returns {object|undefined}
  */
 function widgetByName(node, name) {
-  return node.widgets?.find((w) => w.name === name);
+  return node?.widgets?.find((w) => w.name === name);
 }
 
 /**
