@@ -97,7 +97,7 @@ Placeholders below match `config/spark-farm.example.env`. Do **not** commit real
    ./scripts/utilities/spark-farm.sh status [--json]
    ```
 
-7. **Dispatch** `print-shot` (shots **01-06 / 07-12 / 13-18** on three hosts, or an even split on two). SSH-runs **local** `./scripts/manage.sh print-shot` only:
+7. **Dispatch** `print-shot` (shots **01-06 / 07-12 / 13-18** on three hosts, or an even split on two). SSH-runs **local** `./scripts/manage.sh print-shot` only. `dispatch` builds a fixed remote `print-shot <film> <id>`, so it forwards neither `--quality` nor `EZ_QUALITY` - each shot posts at the tier its graph records. To pin a tier across the farm, run local `./scripts/manage.sh print-shot <film> <id> --quality TIER` on each Spark instead of `dispatch` ([90s shorts](shorts.md)):
 
    ```bash
    ./scripts/utilities/spark-farm.sh dispatch --film go-see

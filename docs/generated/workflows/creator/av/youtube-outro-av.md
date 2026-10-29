@@ -1264,7 +1264,7 @@ Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, 
 
 !!! warning "Lab notes"
 
-    custom freezes the last overlay. lab restores authored widgets. Free Commercial Use (<$10M) pins Apache Klein 4B (never 9B / FLUX.2-dev) and LTX-2.5 steps; Wan / audio / trellis are no-ops. ultra/max may select Klein 9B or FLUX.2-dev when those files are on disk (FLUX Non-Commercial, not YouTube-ok). flux3-fast / flux3-quality / flux3-nvfp4 are FLUX 3 Image Klein profiles and only write on a graph that pins FLUX 3 Klein weights (gated FLUX Kommunity pull). Never changes size. Not --tier quality.
+    Workflow-global quality combo. presets.py is the only tier definition and the frontend reads a table generated from it. The combo is DERIVED from the widgets, not typed: it names the tier whose owned parameters the widgets actually hold, lab when they match the load-time authored values, custom otherwise, and it re-derives on load, graph change, widget edit, and Queue. custom is not absorbing - putting the owned widgets back on a tier's values re-derives that tier. A tier value that cannot be written (weight not installed, widget not built) is a FAILED apply: the combo drops to custom and the caption names what diverged. Writes resolve per node instance, so every sampler and loader in a graph is written. Only parameters the family's tiers own are compared, so a CFG edit on a steps-only family keeps the level. A combo whose node mode is nonzero is ignored. Never --tier quality.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1274,9 +1274,9 @@ Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, 
 
 Type `COMBO`. Range / default: lab.
 
-custom freezes last overlay; lab restores graph defaults.
+Derived from the widgets: the named tier they match, lab for the authored values, custom otherwise.
 
-**How it affects generation:** Named qualities may swap UNET, CLIP, and VAE. Does not change size or length. Free Commercial Use (<$10M) is Klein 4B + LTX (never 9B / FLUX.2-dev). ultra/max need download-image --tier 9b or flux2-dev. flux3-* need the gated FLUX 3 pull (download-image --tier flux3 / flux3-base / flux3-nvfp4) and only write on a graph pinning FLUX 3 Klein weights.
+**How it affects generation:** Named qualities may swap UNET, CLIP, and VAE, per node instance. A tier value that cannot be written is a failed apply, so the combo drops to custom rather than claiming a swap the prompt does not contain. Quality does not touch the Width / Height or Duration widgets; the one size effect is Free Commercial Use (<$10M) on Klein stills, where a generic 16:9 / 9:16 Format row retargets to the LTX feeder size (1280x704 / 768x1280). On Klein, high and Free Commercial Use (<$10M) are the same profile (Apache Klein 4B base, 24 steps, CFG 3.5 - never 9B / FLUX.2-dev) and ultra/max swap in Klein 9B or FLUX.2-dev when those files are on disk (FLUX Non-Commercial, not YouTube-ok); ultra/max are no-ops on audio and trellis. Wan / LTX / film / audio / trellis tiers set steps only, never CFG or weights. flux3-* need the gated FLUX 3 pull (download-image --tier flux3 / flux3-base / flux3-nvfp4) and are the only tiers that write on a graph pinning FLUX 3 Klein weights.
 
 **This graph:** `lab`
 
@@ -1284,7 +1284,7 @@ custom freezes last overlay; lab restores graph defaults.
 
 | Choice | What it does |
 | --- | --- |
-| `custom` | Freeze current widgets. Queue does not overlay. |
+| `custom` | Widgets match no tier, so they queue as they are. No overlay. |
 | `draft` | Faster Apache Klein 4B (NVFP4 if on disk). |
 | `lab` | Authored lab widgets. Default. |
 | `standard` | Distilled 4B, 8 steps, CFG 1.0. |

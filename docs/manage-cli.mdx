@@ -56,7 +56,7 @@ Redeploy the stack from the branch you are standing on. The image lane follows t
 | `clear-hf-locks` | Stale Hugging Face `.lock` files under `MODELS_DIR` | Force-clear while `hf` is still writing |
 | `reset-hf-partials [--yes] [--force]` | Delete `*.incomplete` (finished weights kept) | - |
 | `cleanup` | Type `DELETE`; remove `ez-comfy-state` only | Think this deletes weights or `COMFY_OUTPUT_DIR` |
-| `print-shot` / `film-resume` / `film-export-otio` / `film-proxies` / `take-promote` | 90s jobstore ([90s shorts](shorts.md)) | `film-proxies` while compose is up |
+| `print-shot` / `film-resume` / `film-export-otio` / `film-proxies` / `take-promote` | 90s jobstore ([90s shorts](shorts.md)). `print-shot` / `film-resume` also take `--quality TIER` (or `EZ_QUALITY=TIER`) and POST the graph the Quality table overlaid; with neither, the tier the graph records is used. An unknown tier fails the run | `film-proxies` while compose is up |
 | `promote-workflow --from PATH --lane LANE --id STEM` | Copy a live `_user` graph into `workflows/_lab/<lane>/` (does **not** commit) | MiniMax / Seedance / Kling / `z_image_turbo`; UNET pins of Klein 9B / FLUX.2-dev; copy `_lab` into `_user` |
 | `download-restore` | Opt-in SeedVR2-3B | Treat as part of `download-models` |
 | `download-3d` | Opt-in TRELLIS.2 + DA3-BASE (no nvdiffrast; DA3-LARGE refused) | `--tier da3-large` |
@@ -77,7 +77,7 @@ Redeploy the stack from the branch you are standing on. The image lane follows t
 | `film-animatic` | Cheap 90s animatic from clay.mp4 or stills | Treat as a 90s denoise |
 | `stem-mix` | Picture-lock stems; duck -15 dB; YouTube loudnorm | Mix ACE-Step next to LTX |
 | `audio-still-video --audio FILE --image FILE` | Mux a still + audio master to YouTube MP4 (host ffmpeg; compose may stay up) | Treat as a denoise; use NVENC; edit audio lab graphs |
-| `album-render --album ARTIST/SLUG [--art skip\|upload\|generate]` | Queue one shipped album (optional Klein cover, ACE tracks, zip+m3u). Does not start compose | Co-resident Klein + ACE; skip `/free` after generate |
+| `album-render --album ARTIST/SLUG [--art skip\|upload\|generate] [--quality TIER]` | Queue one shipped album (optional Klein cover, ACE tracks, zip+m3u). `--quality TIER` (or `EZ_QUALITY=TIER`) overlays the Quality table before each POST, cover and tracks; with neither, the tier the graph records is used. Does not start compose | Co-resident Klein + ACE; skip `/free` after generate |
 | `asset-ls` | Read-only [Asset Bible](asset-bible.md) catalog (`COMFY_OUTPUT_DIR/assets`) | Store assets in `MODELS_DIR` or `guides/` |
 | `film-accept` | Fail-closed 90s gate (duration / 1280x704 / LTX audio; world-only speech-band; 90s master when present; stems LUFS when `audio_policy: stems`) | `--skip-accept` as a habit |
 | `download-longcat` / `download-dreamx` | Opt-in LongCat MIT / DreamX-Creator Apache | DreamX-World; NCCL |

@@ -103,14 +103,14 @@ LTX-2.5 is a **joint audio/video** transformer. Seeded LTX graphs load the **aud
 
 ### Free Commercial Use (\<$10M)
 
-License-clean AV path for a company under the LTX Community License revenue cap. Quality combo **Free Commercial Use (\<$10M)** on Klein and LTX Apps. Do not put Klein 9B or FLUX.2-dev on this path (those are FLUX Non-Commercial).
+License-clean AV path for a company under the LTX Community License revenue cap. Quality combo **Free Commercial Use (\<$10M)** on Klein and LTX Apps. Do not put Klein 9B or FLUX.2-dev on this path (those are FLUX Non-Commercial). On Klein it is the same profile as `high` - Klein 4B base, 24 steps, CFG 3.5 - so the caption reads `flux-2-klein-base-4b-fp8, 24 steps, CFG 3.5`; on LTX it sets 28 steps and touches neither CFG nor weights. If `flux-2-klein-base-4b-fp8.safetensors` is not in that loader's list the combo falls to **custom** and names what diverged instead of queueing the old weights (`./scripts/manage.sh download-models`, then **Check models**).
 
-1. **Still** - Klein **4B** at clip size. Landscape **1280x704**. Portrait **768x1280**. Pick a seed on **Draft** (4-step), then Queue this quality at the **same** pixels. Generic 16:9 / 9:16 Format rows retarget to those feeders; named platform jobs stay put.
+1. **Still** - Klein **4B** at clip size. Landscape **1280x704**. Portrait **768x1280**. Pick a seed on **Draft** (4-step, Klein 4B nvfp4), then Queue this quality at the **same** pixels - it swaps the weights and steps only, never Width / Height. Generic 16:9 / 9:16 **Format** rows retarget to **16:9 LTX feeder (1280x704)** / **9:16 LTX feeder (768x1280)**; named platform jobs, **Custom**, and rows already on a feeder stay put.
 2. **Optional polish** - SeedVR2 on that PNG (`download-restore --tier seedvr2-3b`). Add detail at ~1.3-1.5x. Do not jump to 4K. Stop Comfy first.
 3. **Motion** - same PNG into **motion/av/still-to-video-8s** (LTX-2.5 I2V). Prompt only the motion and sound. Let LTX's own 2x upscaler / DFR Templates handle resolution.
 4. **Unload Klein before LTX.** Occupancy chip; one GB10 job. 90s films already pass the identity still through **Unload models**.
 
-Wan silent 5 s stays the Apache rehearsal path (no $10M cap, no native audio). This quality is a no-op on Wan / audio / trellis Apps.
+Wan silent 5 s stays the Apache rehearsal path (no $10M cap, no native audio). On Wan / audio / TRELLIS graphs Free Commercial Use writes nothing, and every tier there sets steps only - never CFG, never weights - with `ultra` repeating `high`.
 
 <Callout type="info" title="Pipeline tips">
   1. Download the default pack first (`download-models` = image fast + wan 5b + ltx 2.5)

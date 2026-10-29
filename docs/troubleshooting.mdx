@@ -13,6 +13,7 @@ tags: [troubleshooting, comfyui, docker]
 - **update-stack refusals** - exit 3 guardrails, exit 5 unprovable repo root, wrong image lane
 - **Symptom decision tree** - common failures in one diagram
 - **Reference stills** - a picked still that does not apply, silent fail-soft loads, and `max_refs`
+- **Quality combo** - a tier that drops to `custom`, a combo that moved by itself, muted film acts, and the CLI `--quality` seam
 - **Logs and reset** - compose logs and `cleanup` that keeps `${MODELS_DIR}`
 
 **What this enables**
@@ -123,6 +124,24 @@ Canvas rows live in [Studio canvas](operate/troubleshooting-canvas.md). The fixt
 | More stills reach the model than the slots you filled | A wired IMAGE batch counts by its leading batch dim and each non-empty picker counts, so `count` can sit well above the number of slots you touched. The Klein canvas node then attaches up to `max_refs` frames | Set **max_refs** on **Klein canvas (optional ref)** (1-4, default 3) to how many you want - `1` is the old single-reference behavior. Unwire the batch or remove the extra picks you did not mean to send |
 | Fewer stills attach than slots you filled | The same file picked twice is one still (duplicates skip by normalized filename), and anything past **max_refs** is cut | Pick distinct files, or raise **max_refs** (max 4) |
 | A graph you saved before this change shows one picker and no mute | Saved `widgets_values` carry only the old single picker (`[""]`). The mute and the two extra pickers come from the node definition, so they land at their defaults once the updated `ez_image` pack is loaded | `./scripts/manage.sh restart`, then hard-refresh the Comfy tab (the entrypoint copies `custom_nodes/` on start). If the node still shows one widget, add a fresh **Optional reference stills** node. Node name, outputs, and the App label are unchanged, so the graph keeps loading |
+
+---
+
+## Quality combo
+
+The **Quality** combo is read back from the widgets, not written and forgotten: it re-derives on graph load, on graph change, on widget edit, and at Queue, and a value it cannot write is a failed apply rather than a dropped one. Tiers and what each family owns: [ComfyUI Apps](studio-apps.md#graph-vs-app).
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| The combo drops to **custom** the moment you pick a named tier, and the caption names a filename | That tier's model file is not in the loader's combo list (or the widget was not built yet), so the write is refused instead of silently keeping the old weights. The caption names what diverged | Read the filename in the caption, then stage it: `./scripts/manage.sh download-models`, or the printed opt-in pack (`download-image --tier 9b` for `ultra` / `max`). Click **Check models** to see every file the graph plus that tier needs, restart Comfy so `models/*` re-links, then pick the tier again |
+| The combo changed by itself on load, with nothing edited | The widgets never matched a tier or the authored values when the graph loaded, so the derivation reports **custom** (or the tier they actually hold). An older build showed whatever was last typed into the combo | Expected, not a failure: the combo now reports what Queue would send. Pick the tier you want and re-check, or pick **lab** to return the owned widgets to the values the graph was authored with |
+| You edited Steps / CFG and the level did not move | Only the parameters that family's tiers own are compared, so a change outside that set keeps the level (CFG on a Wan graph, where the tiers own steps only) | Expected. To force **custom**, edit a widget the tiers own (Steps on Wan; Steps / CFG / Image model / CLIP / VAE on Klein) |
+| You put the widgets back on a tier's numbers and the combo still reads **custom** | Only the owned widgets count, and a value left off-tier (an unrounded CFG, a different VAE) keeps the derivation at **custom** | Set every owned widget on that tier's values - the caption under the combo names them - and the tier re-derives. **custom** is not absorbing |
+| One KSampler or loader kept its old value while another moved | Pre-fix extension JS resolved the tier from the first loader only, so extra instances were never written | Pull, `./scripts/manage.sh stop` then `start`, then hard-refresh the tab so the extension bundle reloads. Every instance of every sampler and loader is written now |
+| Picking a Klein tier on a FLUX 3 Image still (`stills/still-flux3-fast`, `still-flux3-quality`) does nothing | Those graphs pin flux3-image weights, so only `flux3-fast`, `flux3-quality`, and `flux3-nvfp4` apply. The Klein ladder is a no-op there by design | Pick one of the `flux3-*` tiers. Do not hand-edit the graph to take Klein 4B weights |
+| The combo does nothing on film acts 2-5 | Those graphs ship the copied-in **Quality** node muted (LiteGraph `mode` 4), so it neither drives the overlay nor shows a caption - acts 2+ take the previous act's frame as their image source | Set the tier on **act-01** and re-Queue forward. See [90s shorts](shorts.md) |
+| `print-shot` / `album-render` posted different weights than the browser showed | Both default to the tier the graph records, not the tier last picked in the browser | Pass `--quality TIER` (or `EZ_QUALITY=TIER`) on `./scripts/utilities/print-shot.sh` / `./scripts/utilities/album-render.sh`; the overlay runs before each POST, and an unknown tier name fails the run (`quality_apply: unknown quality tier: ...`, shot marked `failed`) |
+| The browser tiers disagree with the table after someone edited presets | `custom_nodes/ez_quality/js/ez_quality_presets.js` is generated from `custom_nodes/ez_quality/presets.py` and was left stale (or hand-edited, which is a defect) | From the repo root: `python3 tests/python/_build_quality_js.py`, then `./scripts/manage.sh restart` and hard-refresh. Never edit the generated file |
 
 ---
 
