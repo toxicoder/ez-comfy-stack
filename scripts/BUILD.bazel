@@ -2,12 +2,13 @@
 
 load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
+load("//tools:exec_shell.bzl", "exec_shell")
 
 package(default_visibility = ["//visibility:private"])
 
-sh_binary(
+exec_shell(
     name = "manage",
-    srcs = ["manage.sh"],
+    src = "manage.sh",
     data = [
         ":doc_sources",
         "//config:policy",
@@ -16,9 +17,9 @@ sh_binary(
     visibility = ["//visibility:public"],
 )
 
-sh_binary(
+exec_shell(
     name = "update-stack",
-    srcs = ["utilities/update-stack.sh"],
+    src = "utilities/update-stack.sh",
     data = [
         ":doc_sources",
         "//config:policy",
@@ -108,9 +109,9 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
-sh_binary(
+exec_shell(
     name = "run-utility",
-    srcs = ["utilities/runner.sh"],
+    src = "utilities/runner.sh",
     data = [":utilities"],
     visibility = ["//visibility:public"],
 )

@@ -1,6 +1,8 @@
-"""Package purpose: Host Blender helper scripts used by DCC utilities."""
+"""Package purpose: Host Blender helper scripts and the exec_shell launcher rule."""
 
 package(default_visibility = ["//visibility:public"])
+
+exports_files(["exec_shell.bzl"])
 
 filegroup(
     name = "blender",
