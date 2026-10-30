@@ -7,6 +7,7 @@
 # docker/Dockerfile - GB10 DCC stays on the host. See docs/occupancy.md.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- blender [--] [blender args]
 #   ./scripts/utilities/blender.sh [--] [blender args]
 #
 # @command blender
@@ -41,7 +42,7 @@ cmd_run() {
   if [[ ${1:-} == "-h" || ${1:-} == "--help" ]]; then
     echo "Usage: blender.sh [--] [args]  (host Blender; Workbench in blender-desk)" >&2
     echo "  Never in docker/Dockerfile. occupancy enter blender-desk if compose is up." >&2
-    echo "  Missing binary: ./scripts/manage.sh blender-install" >&2
+    echo "  Missing binary: bazelisk run //:manage -- blender-install" >&2
     echo "  See docs/occupancy.md and docs/blender-gb10-sidecar.md" >&2
     return 0
   fi

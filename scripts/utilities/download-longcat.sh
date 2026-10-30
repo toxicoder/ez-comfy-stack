@@ -7,6 +7,7 @@
 # NCCL is out of this sample stack.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- download-longcat status|run [--tier video|avatar|all] [--json]
 #   ./scripts/utilities/download-longcat.sh status|run [--tier video|avatar|all] [--json]
 #
 # @command download-longcat

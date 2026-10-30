@@ -7,6 +7,7 @@
 # Does not refuse a GPU Comfy session.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- studio-mcp [--stdio]
 #   ./scripts/utilities/studio-mcp.sh [--stdio]
 #   ./scripts/utilities/studio-mcp.sh --list-tools
 #   ./scripts/utilities/studio-mcp.sh --call TOOL [JSON]

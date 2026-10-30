@@ -10,6 +10,7 @@
 #   +faststart so YouTube ingest accepts a still-image video.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- audio-still-video status [--json]
 #   ./scripts/utilities/audio-still-video.sh status [--json]
 #   ./scripts/utilities/audio-still-video.sh run --audio FILE --image FILE [--out FILE]
 #       [--size 1920x1080|1280x720|1080x1920] [--fit letterbox|crop|stretch]

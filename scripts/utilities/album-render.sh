@@ -11,6 +11,7 @@
 #   browser would queue.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- album-render status [--json]
 #   ./scripts/utilities/album-render.sh status [--json]
 #   ./scripts/utilities/album-render.sh run --album ARTIST/SLUG
 #       [--art skip|upload|generate] [--image FILE] [--out DIR]

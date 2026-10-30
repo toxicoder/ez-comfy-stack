@@ -9,6 +9,7 @@
 #   so preview encode does not fight LTX/Wan denoise for the encoder.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- nvenc-preview --in MASTER.mp4 --out PREVIEW.mp4 [--yes]
 #   ./scripts/utilities/nvenc-preview.sh --in MASTER.mp4 --out PREVIEW.mp4 [--yes]
 #
 # Safety:

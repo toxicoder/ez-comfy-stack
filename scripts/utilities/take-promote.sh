@@ -5,6 +5,7 @@
 # Promote a take from films/<slug>/takes/<id>/tNNN.mp4 to shots/<id>.mp4.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- take-promote <film> <id> <take>
 #   ./scripts/utilities/take-promote.sh <film> <id> <take>
 #
 # Environment:

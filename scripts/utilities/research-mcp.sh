@@ -6,6 +6,7 @@
 # CPU GGUF + SSRF-safe HTTPS search. Does not refuse a GPU Comfy session.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- research-mcp [--stdio]
 #   ./scripts/utilities/research-mcp.sh [--stdio]
 #   ./scripts/utilities/research-mcp.sh --list-tools
 #   ./scripts/utilities/research-mcp.sh --call TOOL [JSON]

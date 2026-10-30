@@ -6,6 +6,7 @@
 # clay / depth / canny at creator sizes). Never in docker/Dockerfile.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- blender-stills --film go-see --plate mug --blend FILE
 #   ./scripts/utilities/blender-stills.sh --film go-see --plate mug --blend FILE
 #   ./scripts/utilities/blender-stills.sh --film go-see --plate mug --size 1024x1024
 #

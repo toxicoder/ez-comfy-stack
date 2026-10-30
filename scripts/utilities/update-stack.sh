@@ -37,6 +37,7 @@
 #   - Never writes the operator's .env file; it only reports missing keys.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- update-stack --branch development --yes
 #   ./scripts/manage.sh update-stack
 #   ./scripts/manage.sh update-stack --yes
 #   ./scripts/manage.sh update-stack --dry-run
@@ -313,7 +314,7 @@ update_stack_preflight() {
     return 0
   fi
   if ! resolve_docker_on_path; then
-    err "docker is not usable; install it with: ./scripts/manage.sh setup --install-docker"
+    err "docker is not usable; install it with: bazelisk run //:manage -- setup --install-docker"
     return 1
   fi
   return 0
@@ -917,7 +918,7 @@ run_manage() {
   fi
   log "running: ${cmd[*]}"
   if ! "${cmd[@]}"; then
-    err "manage.sh ${verb} failed; retry with: ./scripts/manage.sh ${verb}"
+    err "manage.sh ${verb} failed; retry with: bazelisk run //:manage -- ${verb}"
     return 1
   fi
   return 0
@@ -942,7 +943,7 @@ verify_stack() {
   fi
   US_ACTIONS="${US_ACTIONS} doctor"
   if ! run_manage doctor; then
-    err "doctor reported problems; look next with: ./scripts/manage.sh status"
+    err "doctor reported problems; look next with: bazelisk run //:manage -- status"
     return 1
   fi
   return 0

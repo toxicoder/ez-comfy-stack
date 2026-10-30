@@ -5,6 +5,7 @@
 # Host h264_nvenc proxies for a film jobstore. Never rewrite masters.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- film-proxies go-see|still-here|switchyard [--yes]
 #   ./scripts/utilities/film-proxies.sh go-see|still-here|switchyard [--yes]
 #
 # Safety:

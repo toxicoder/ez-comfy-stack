@@ -6,6 +6,7 @@
 # Does not mutate workflows/shorts/*.shots.yaml unless --lab-example.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- shot-sheet status [--json] [--film SLUG]
 #   ./scripts/utilities/shot-sheet.sh status [--json] [--film SLUG]
 #   ./scripts/utilities/shot-sheet.sh run --film SLUG [--from PATH] [--out PATH] [--lab-example]
 #

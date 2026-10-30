@@ -6,6 +6,7 @@
 # Does not overload manage.sh cleanup (volume-only) or reap-models (MODELS_DIR).
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- disk-wizard --plan
 #   ./scripts/utilities/disk-wizard.sh --plan
 #   ./scripts/utilities/disk-wizard.sh --json
 #   ./scripts/utilities/disk-wizard.sh --apply --yes

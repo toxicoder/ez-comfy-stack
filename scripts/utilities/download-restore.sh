@@ -6,6 +6,7 @@
 # download-models. Unload Comfy denoise first (occupancy).
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- download-restore status [--tier seedvr2-3b] [--json]
 #   ./scripts/utilities/download-restore.sh status [--tier seedvr2-3b] [--json]
 #   ./scripts/utilities/download-restore.sh run [--tier seedvr2-3b]
 #

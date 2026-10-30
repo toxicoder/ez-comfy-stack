@@ -9,6 +9,7 @@
 #   Keep encyclopedia clips small enough for Git LFS (target <=512KiB).
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- compress-cinema-clip --in FILE --out FILE
 #   ./scripts/utilities/compress-cinema-clip.sh --in FILE --out FILE
 #       [--poster FILE] [--crf 28] [--max-bytes 524288] [--dry-run]
 #

@@ -6,6 +6,7 @@
 # heavy graph family (klein / trellis / wan / ltx). One GB10 GPU job.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- occupancy status [--json]
 #   ./scripts/utilities/occupancy.sh status [--json]
 #   ./scripts/utilities/occupancy.sh enter blender-desk|llm-desk|klein|trellis|wan|ltx|idle [--yes]
 #

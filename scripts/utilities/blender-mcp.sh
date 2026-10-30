@@ -6,6 +6,7 @@
 # Host only - never in docker/Dockerfile. bpy tools require blender-desk.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- blender-mcp [--stdio]
 #   ./scripts/utilities/blender-mcp.sh [--stdio]
 #   ./scripts/utilities/blender-mcp.sh --list-tools
 #   ./scripts/utilities/blender-mcp.sh --call TOOL [JSON]

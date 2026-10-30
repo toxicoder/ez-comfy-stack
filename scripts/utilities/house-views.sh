@@ -6,6 +6,7 @@
 # 4:5 Workbench clay + depth stills + greybox GLB). Never in docker/Dockerfile.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- house-views --slug lab-penthouse
 #   ./scripts/utilities/house-views.sh --slug lab-penthouse
 #   ./scripts/utilities/house-views.sh --slug lab-penthouse --layout FILE
 #

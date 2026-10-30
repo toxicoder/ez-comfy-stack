@@ -11,6 +11,7 @@
 #   Quality table overlaid, so a CLI run posts what the browser would queue.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- print-shot <film> <id> [--quality TIER]
 #   ./scripts/utilities/print-shot.sh <film> <id> [--quality TIER]
 #   ./scripts/utilities/print-shot.sh --resume <film> [--quality TIER]
 #

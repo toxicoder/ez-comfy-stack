@@ -6,6 +6,7 @@
 # COMFY_OUTPUT_DIR/assets. Does not download, Queue, or write.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- asset-ls [--json] [--output-dir DIR]
 #   ./scripts/utilities/asset-ls.sh [--json] [--output-dir DIR]
 #
 # Environment:

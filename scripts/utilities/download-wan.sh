@@ -13,6 +13,7 @@
 #   Operators on the Spark host. Prefer manage.sh download-models.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- download-wan status [--tier 5b|a14b|fun-inp|all] [--json]
 #   ./scripts/utilities/download-wan.sh status [--tier 5b|a14b|fun-inp|all] [--json]
 #   ./scripts/utilities/download-wan.sh run [--tier ...]
 #   ./scripts/utilities/download-wan.sh cleanup [--tier ...] [--dry-run|--yes]

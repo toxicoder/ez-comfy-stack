@@ -14,6 +14,7 @@
 #   Operators on the Spark host. Prefer manage.sh download-llm / download-models.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- download-llm status|run|cleanup|link [--tier enhance|qwen36-35b-a3b|describe|all] [--json]
 #   ./scripts/utilities/download-llm.sh status|run|cleanup|link [--tier enhance|qwen36-35b-a3b|describe|all] [--json]
 #
 # Environment:
