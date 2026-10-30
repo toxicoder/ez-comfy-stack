@@ -1,11 +1,14 @@
 /**
  * Outputs sidebar: browse media that survives stack restart.
  *
- * Thumbnail grid / list, multi-select, bulk delete / copy / download.
- * Comfy History is in-memory. Files on COMFY_OUTPUT_DIR persist. Nodes 2.0
- * safe: no LiteGraph widget hooks, no canvas resize. Treat inputEl as optional.
- * Report buttons reach window.EzFeedback lazily at click time and fall back to
- * a prefilled GitHub issues tab when the ez_feedback core is not loaded.
+ * Adaptive explorer: width tiers (compact / cozy / wide) drive a folder rail,
+ * a pinned toolbar and footer, auto-fit tiles, list columns, skeletons, and a
+ * keyboard cursor. Thumbnail grid / list, multi-select, bulk delete / copy /
+ * download. Comfy History is in-memory. Files on COMFY_OUTPUT_DIR persist.
+ * Nodes 2.0 safe: no LiteGraph widget hooks, no canvas resize. Treat inputEl as
+ * optional. Report buttons reach window.EzFeedback lazily at click time and
+ * fall back to a prefilled GitHub issues tab when the ez_feedback core is not
+ * loaded.
  */
 import { app } from "../../scripts/app.js";
 
@@ -14,12 +17,41 @@ const STYLE_ID = "ez-outputs-css";
 const PREFS_VIEW = "ez-comfy.outputs.view";
 const PREFS_THUMB = "ez-comfy.outputs.thumb";
 const PREFS_SORT = "ez-comfy.outputs.sort";
+const PREFS_KIND = "ez-comfy.outputs.kind";
+const PREFS_FOLDER = "ez-comfy.outputs.folder";
+const PREFS_META = "ez-comfy.outputs.meta";
+const PREFS_HINT = "ez-comfy.outputs.hint";
 const THUMB_MIN = 80;
 const THUMB_MAX = 280;
 const THUMB_DEFAULT = 128;
 const SEARCH_MS = 150;
 const EXECUTED_MS = 1000;
 const ROOT_FOLDER = "__root__";
+// Progressive page sizes: the list route caps itself, so the pane starts small
+// and grows in place instead of pulling the whole tree on first paint.
+const PAGE_START = 200;
+const PAGE_MAX = 2000;
+// Panel width tiers. The same two numbers drive the CSS @container rules.
+const TIER_COZY = 380;
+const TIER_WIDE = 560;
+const AUTO_THUMB = { compact: 96, cozy: 128, wide: 160 };
+const SIZE_STEPS = ["auto", "96", "128", "160", "220"];
+const SKELETON_CARDS = 8;
+const SHORTCUTS = [
+  ["/", "Filter box"],
+  ["Arrows", "Move cursor"],
+  ["Shift + Arrows", "Extend selection"],
+  ["Home / End", "First / last file"],
+  ["Enter", "Open preview"],
+  ["Space", "Toggle select"],
+  ["Ctrl/Cmd + A", "Select all"],
+  ["Delete", "Delete selected"],
+  ["+ / - / 0", "Size up / down / auto"],
+  ["G / L", "Grid / list"],
+  ["F", "Folder list"],
+  ["Esc", "Close / clear"],
+  ["?", "This list"],
+];
 const ISSUES_URL = "https://github.com/toxicoder/ez-comfy-stack/issues/new";
 const REPORT_HREF_MAX = 5500;
 const REPORT_REL_CAP = 10;
@@ -35,9 +67,37 @@ const KIND_LABELS = {
 
 const FALLBACK_CSS = `
 .ez-out { --ez-out-thumb: 128px; display:flex; flex-direction:column; height:100%; gap:8px; padding:8px; position:relative; box-sizing:border-box; font:12px/1.4 ui-sans-serif,system-ui,sans-serif; }
+.ez-out [hidden] { display:none; }
+.ez-out button { font:inherit; cursor:pointer; }
+.ez-out-head { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.ez-out-crumb { display:flex; align-items:center; gap:4px; flex:1; min-width:0; }
+.ez-out-crumb-item { background:none; border:0; padding:2px 4px; text-decoration:underline; }
+.ez-out-summary { color:inherit; opacity:.7; font-size:11px; }
+.ez-out-toolbar { display:flex; flex-direction:column; gap:6px; }
+.ez-out-row { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.ez-out-more { display:flex; gap:6px; flex-wrap:wrap; }
+.ez-out-active .ez-out-pill { display:inline-flex; gap:4px; align-items:center; border:1px solid currentColor; border-radius:999px; padding:2px 6px; background:none; }
+.ez-out-body { display:flex; gap:8px; flex:1; min-height:0; }
+.ez-out-tree { display:flex; flex-direction:column; gap:2px; width:9rem; flex:0 0 auto; overflow:auto; }
+.ez-out-tree-item { display:flex; justify-content:space-between; gap:6px; text-align:left; }
+.ez-out-scroll { flex:1; min-height:0; overflow:auto; }
 .ez-out-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(var(--ez-out-thumb),1fr)); gap:8px; }
 .ez-out-list { display:flex; flex-direction:column; }
-.ez-out-scroll { flex:1; min-height:0; overflow:auto; }
+.ez-out-card { display:flex; flex-direction:column; gap:4px; position:relative; }
+.ez-out-thumb-wrap { position:relative; }
+.ez-out-thumb { width:100%; height:auto; display:block; object-fit:cover; }
+.ez-out-skeleton { display:grid; grid-template-columns:repeat(auto-fill,minmax(var(--ez-out-thumb),1fr)); gap:8px; }
+.ez-out-skeleton-card { aspect-ratio:1/1; background:rgba(128,128,128,.18); border-radius:6px; }
+.ez-out-bulk { display:none; gap:6px; flex-wrap:wrap; align-items:center; }
+.ez-out-bulk.is-open { display:flex; }
+.ez-out-status { margin:0; font-size:11px; opacity:.8; }
+.ez-out-lightbox, .ez-out-help { position:absolute; inset:0; display:none; flex-direction:column; gap:8px; padding:12px; background:rgba(0,0,0,.72); }
+.ez-out-lightbox.is-open, .ez-out-help.is-open { display:flex; }
+.ez-out-lightbox-media { flex:1; min-height:0; display:flex; align-items:center; justify-content:center; }
+.ez-out-lightbox-media img, .ez-out-lightbox-media video { max-width:100%; max-height:100%; }
+.ez-out-lightbox-bar { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+.ez-out-sr { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+.ez-out-clipboard { position:absolute; left:-9999px; top:0; }
 `;
 
 /**
@@ -581,6 +641,79 @@ function recordFeedbackError(surface, message, detail) {
 }
 
 /**
+ * Name the layout tier for a measured panel width.
+ * @param {number} width Panel inline size in px
+ * @returns {string} "compact" | "cozy" | "wide"
+ */
+function tierFor(width) {
+  const px = Number(width) || 0;
+  if (px < TIER_COZY) {
+    return "compact";
+  }
+  return px >= TIER_WIDE ? "wide" : "cozy";
+}
+
+/**
+ * Whether the visitor asked the OS to cut animation.
+ * @returns {boolean} True when motion should stay off
+ */
+function prefersReducedMotion() {
+  if (typeof window.matchMedia !== "function") {
+    return false;
+  }
+  try {
+    return Boolean(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  } catch (_err) {
+    return false;
+  }
+}
+
+/**
+ * Read a stored on/off preference.
+ * @param {string} key localStorage key
+ * @param {boolean} fallback Value to use when nothing is stored
+ * @returns {boolean} The stored flag
+ */
+function readBoolPref(key, fallback) {
+  const raw = readPref(key);
+  if (raw === "on") {
+    return true;
+  }
+  if (raw === "off") {
+    return false;
+  }
+  return fallback;
+}
+
+/**
+ * Human label for the density control.
+ * @param {boolean} auto True when width picks the size
+ * @param {number} px Effective thumbnail size
+ * @returns {string} Label text for the Size button
+ */
+function sizeLabelFor(auto, px) {
+  return "Size: " + (auto ? "Auto " + px : String(px));
+}
+
+/**
+ * Build the loading pane shown while a list call is in flight.
+ * @param {number} count Number of placeholder cards
+ * @returns {HTMLElement} Skeleton pane element
+ */
+function skeletonPane(count) {
+  const wrap = document.createElement("div");
+  wrap.className = "ez-out-skeleton";
+  const total = Math.max(1, Number(count) || SKELETON_CARDS);
+  for (let i = 0; i < total; i += 1) {
+    const card = document.createElement("div");
+    card.className = "ez-out-skeleton-card";
+    card.setAttribute("aria-hidden", "true");
+    wrap.appendChild(card);
+  }
+  return wrap;
+}
+
+/**
  * Render the sidebar into el.
  * @param {HTMLElement} el
  * @returns {void}
@@ -591,18 +724,22 @@ function mount(el) {
   el.classList.add("ez-out");
   el.tabIndex = 0;
 
+  const storedKind = readPref(PREFS_KIND);
   /** @type {string} */
-  let kind = "all";
+  let kind =
+    storedKind === "image" || storedKind === "video" || storedKind === "audio"
+      ? storedKind
+      : "all";
   /** @type {string} */
   let query = "";
   /** @type {string} */
   let view = loadView();
   /** @type {number} */
-  let thumbSize = loadThumb();
+  let thumbSize = THUMB_DEFAULT;
   /** @type {string} */
   let sortMode = loadSort();
   /** @type {string} */
-  let folder = "";
+  let folder = readPref(PREFS_FOLDER) || "";
   /** @type {string} */
   let prefix = "";
   /** @type {object[]} */
@@ -623,13 +760,99 @@ function mount(el) {
   let execTimer = 0;
   /** @type {IntersectionObserver|null} */
   let lazyVideo = null;
+  /** Width tier name, kept in sync with the CSS container rules. */
+  /** @type {string} */
+  let tier = tierFor(el.clientWidth || el.offsetWidth || 0);
+  /** @type {boolean} */
+  let autoSize = true;
+  /** @type {boolean} */
+  let loading = false;
+  /** @type {boolean} */
+  let failed = false;
+  /** @type {number} */
+  let pageSize = PAGE_START;
+  /** @type {boolean} */
+  let metaOn = readBoolPref(PREFS_META, true);
+  /** @type {boolean} */
+  let helpOpen = false;
+  /** @type {boolean} */
+  let moreOpen = false;
+  /** @type {boolean} */
+  let showHint = readBoolPref(PREFS_HINT, true);
+  /** @type {string} */
+  let lastFocusRel = "";
+  /** @type {HTMLElement|null} */
+  let lightboxReturn = null;
 
-  el.style.setProperty("--ez-out-thumb", thumbSize + "px");
+  // Auto is the default; only an explicit stored number pins a fixed size.
+  const storedThumb = readPref(PREFS_THUMB);
+  if (storedThumb !== "" && storedThumb !== "auto") {
+    autoSize = false;
+    thumbSize = loadThumb();
+  }
+
+  /**
+   * Effective thumbnail size for the current tier and density mode.
+   * @returns {number} Pixels per tile edge
+   */
+  function effectiveThumb() {
+    if (!autoSize) {
+      return thumbSize;
+    }
+    return AUTO_THUMB[tier] || THUMB_DEFAULT;
+  }
+
+  /**
+   * Push the density choice into the sheet variable and the control label.
+   * @returns {void}
+   */
+  function applyThumb() {
+    const px = effectiveThumb();
+    el.style.setProperty("--ez-out-thumb", px + "px");
+    sizeLabel.textContent = sizeLabelFor(autoSize, px);
+    sizeInput.value = String(px);
+    sizeInput.disabled = view === "list";
+    gridBtn.classList.toggle("is-active", view === "grid");
+    listBtn.classList.toggle("is-active", view === "list");
+    sizeBtn.textContent = sizeLabelFor(autoSize, px);
+  }
+
+  /**
+   * Publish the measured width tier so CSS and JS agree on one layout.
+   * @returns {void}
+   */
+  function applyTier() {
+    const next = tierFor(el.clientWidth || el.offsetWidth || 0);
+    if (next !== tier) {
+      tier = next;
+      el.dataset.tier = tier;
+      if (autoSize) {
+        applyThumb();
+      }
+    }
+  }
+
+  el.dataset.tier = tier;
 
   const hint = document.createElement("p");
   hint.className = "ez-out-hint";
   hint.textContent =
     "Files on the output disk survive restart. History does not.";
+  const hintClose = makeButton("Dismiss", "ez-out-btn", () => {
+    showHint = false;
+    storePref(PREFS_HINT, "off");
+    hint.classList.remove("is-open");
+    hint.setAttribute("hidden", "");
+    renderStatus();
+  });
+  hint.appendChild(document.createTextNode(" "));
+  hint.appendChild(hintClose);
+  if (!showHint) {
+    hint.classList.remove("is-open");
+    hint.setAttribute("hidden", "");
+  } else {
+    hint.classList.add("is-open");
+  }
 
   const kindRow = document.createElement("div");
   kindRow.className = "ez-out-row";
@@ -642,9 +865,12 @@ function mount(el) {
   const kindButtons = kinds.map(([id, label]) => {
     const button = makeButton(label, "ez-out-chip", () => {
       kind = id;
+      storePref(PREFS_KIND, kind);
+      pageSize = PAGE_START;
       refresh();
     });
     button.dataset.kind = id;
+    button.setAttribute("aria-pressed", kind === id ? "true" : "false");
     kindRow.appendChild(button);
     return button;
   });
@@ -652,11 +878,16 @@ function mount(el) {
   const search = document.createElement("input");
   search.type = "search";
   search.className = "ez-out-search";
-  search.placeholder = "Filter prefix (ez_still_draft)";
+  search.placeholder = "Filter files (type to search)";
+  search.setAttribute("aria-label", "Filter files by name or folder");
+  search.value = "";
   search.addEventListener("input", () => {
     query = search.value || "";
     window.clearTimeout(searchTimer);
-    searchTimer = window.setTimeout(refresh, SEARCH_MS);
+    searchTimer = window.setTimeout(() => {
+      pageSize = PAGE_START;
+      refresh();
+    }, SEARCH_MS);
   });
   kindRow.appendChild(search);
 
@@ -669,16 +900,20 @@ function mount(el) {
     openFeedbackReport(explorerReport("bug"));
   }, { icon: true });
   reportBtn.title = "Open a prefilled GitHub issue for this explorer state";
+  reportBtn.setAttribute("aria-label", "Report a problem on GitHub");
   kindRow.appendChild(reportBtn);
 
   const featureBtn = makeButton("Suggest a feature", "ez-out-btn", () => {
     openFeedbackReport(explorerReport("enhancement"));
   }, { icon: true });
   featureBtn.title = "Open a prefilled GitHub feature request for this explorer";
+  featureBtn.setAttribute("aria-label", "Suggest a feature on GitHub");
   kindRow.appendChild(featureBtn);
 
   const viewRow = document.createElement("div");
   viewRow.className = "ez-out-row";
+  viewRow.setAttribute("role", "toolbar");
+  viewRow.setAttribute("aria-label", "View, density, and sort");
   const gridBtn = makeButton("Grid", "ez-out-btn", () => {
     setView("grid");
   });
@@ -688,6 +923,10 @@ function mount(el) {
   const sizeLabel = document.createElement("span");
   sizeLabel.className = "ez-out-size-label";
   sizeLabel.textContent = "Size";
+  const sizeBtn = makeButton("Size: Auto", "ez-out-btn", () => {
+    cycleSize();
+  });
+  sizeBtn.title = "Cycle thumbnail size, or press 0 for auto";
   const sizeInput = document.createElement("input");
   sizeInput.type = "range";
   sizeInput.className = "ez-out-range";
@@ -696,13 +935,16 @@ function mount(el) {
   sizeInput.step = "8";
   sizeInput.value = String(thumbSize);
   sizeInput.title = "Thumbnail size";
+  sizeInput.setAttribute("aria-label", "Thumbnail size in pixels");
   sizeInput.addEventListener("input", () => {
+    autoSize = false;
     thumbSize = Number(sizeInput.value) || THUMB_DEFAULT;
-    el.style.setProperty("--ez-out-thumb", thumbSize + "px");
     storePref(PREFS_THUMB, String(thumbSize));
+    applyThumb();
   });
   const sortSelect = document.createElement("select");
   sortSelect.className = "ez-out-select";
+  sortSelect.setAttribute("aria-label", "Sort files by");
   [
     ["newest", "Newest"],
     ["oldest", "Oldest"],
@@ -723,12 +965,92 @@ function mount(el) {
   const selectAllBtn = makeButton("Select all", "ez-out-btn", () => {
     selectAllVisible();
   });
+  const moreBtn = makeButton("More", "ez-out-btn ez-out-more-btn", () => {
+    moreOpen = !moreOpen;
+    moreBtn.setAttribute("aria-expanded", moreOpen ? "true" : "false");
+    more.classList.toggle("is-open", moreOpen);
+    if (moreOpen) {
+      more.removeAttribute("hidden");
+    } else {
+      more.setAttribute("hidden", "");
+    }
+  });
+  moreBtn.setAttribute("aria-expanded", "false");
+  moreBtn.title = "Density, metadata, and view reset";
   viewRow.appendChild(gridBtn);
   viewRow.appendChild(listBtn);
+  viewRow.appendChild(sizeBtn);
   viewRow.appendChild(sizeLabel);
   viewRow.appendChild(sizeInput);
   viewRow.appendChild(sortSelect);
   viewRow.appendChild(selectAllBtn);
+  viewRow.appendChild(moreBtn);
+
+  const more = document.createElement("div");
+  more.className = "ez-out-more";
+  more.setAttribute("hidden", "");
+  const metaBtn = makeButton("Show details", "ez-out-btn", () => {
+    metaOn = !metaOn;
+    storePref(PREFS_META, metaOn ? "on" : "off");
+    metaBtn.setAttribute("aria-pressed", metaOn ? "true" : "false");
+    paint();
+  });
+  metaBtn.setAttribute("aria-pressed", metaOn ? "true" : "false");
+  more.appendChild(metaBtn);
+  more.appendChild(
+    makeButton("Reset view", "ez-out-btn", () => {
+      autoSize = true;
+      storePref(PREFS_THUMB, "auto");
+      kind = "all";
+      storePref(PREFS_KIND, kind);
+      query = "";
+      search.value = "";
+      folder = "";
+      storePref(PREFS_FOLDER, "");
+      prefix = "";
+      pageSize = PAGE_START;
+      applyThumb();
+      refresh();
+    }),
+  );
+  more.appendChild(
+    makeButton("Show intro", "ez-out-btn", () => {
+      showHint = true;
+      storePref(PREFS_HINT, "on");
+      hint.removeAttribute("hidden");
+      hint.classList.add("is-open");
+    }),
+  );
+
+  const head = document.createElement("div");
+  head.className = "ez-out-head";
+  const crumb = document.createElement("nav");
+  crumb.className = "ez-out-crumb";
+  crumb.setAttribute("aria-label", "Output folder path");
+  const summary = document.createElement("span");
+  summary.className = "ez-out-summary";
+  const helpBtn = makeButton("Shortcuts", "ez-out-btn ez-out-help-btn", () => {
+    toggleHelp();
+  });
+  helpBtn.setAttribute("aria-expanded", "false");
+  helpBtn.title = "Keyboard shortcuts";
+  head.appendChild(crumb);
+  head.appendChild(summary);
+  head.appendChild(helpBtn);
+
+  const active = document.createElement("div");
+  active.className = "ez-out-row ez-out-active";
+  active.setAttribute("hidden", "");
+  const clearBtn = makeButton("Clear filters", "ez-out-btn ez-out-clear", () => {
+    clearFilters();
+  });
+
+  const tree = document.createElement("aside");
+  tree.className = "ez-out-tree";
+  tree.setAttribute("aria-label", "Folders");
+
+  const bodyRow = document.createElement("div");
+  bodyRow.className = "ez-out-body";
 
   const folderRow = document.createElement("div");
   folderRow.className = "ez-out-row ez-out-chips";
@@ -769,13 +1091,83 @@ function mount(el) {
 
   const scroll = document.createElement("div");
   scroll.className = "ez-out-scroll";
+  scroll.setAttribute("tabindex", "-1");
+
+  const paneLabel = document.createElement("div");
+  paneLabel.className = "ez-out-sr";
 
   const status = document.createElement("p");
   status.className = "ez-out-status";
+  status.setAttribute("role", "status");
+  status.setAttribute("aria-live", "polite");
+
+  const loadMoreBtn = makeButton("Load more", "ez-out-btn ez-out-load-more", () => {
+    loadMore();
+  });
+  loadMoreBtn.setAttribute("hidden", "");
+
+  const listhead = document.createElement("div");
+  listhead.className = "ez-out-listhead";
+  listhead.setAttribute("hidden", "");
+  [
+    ["name", "Name"],
+    ["size", "Size"],
+    ["newest", "Modified"],
+  ].forEach(([key, label]) => {
+    const col = makeButton(label, "ez-out-col", () => {
+      sortMode = key === "newest" ? (sortMode === "newest" ? "oldest" : "newest") : key;
+      sortSelect.value = sortMode;
+      storePref(PREFS_SORT, sortMode);
+      paint();
+    });
+    col.dataset.sort = key;
+    listhead.appendChild(col);
+  });
 
   const lightbox = document.createElement("div");
   lightbox.className = "ez-out-lightbox";
+  lightbox.setAttribute("role", "dialog");
+  lightbox.setAttribute("aria-modal", "true");
+  lightbox.setAttribute("aria-label", "File preview");
   lightbox.setAttribute("hidden", "");
+
+  const help = document.createElement("div");
+  help.className = "ez-out-help";
+  help.tabIndex = -1;
+  help.setAttribute("role", "dialog");
+  help.setAttribute("aria-modal", "true");
+  help.setAttribute("aria-label", "Keyboard shortcuts");
+  help.setAttribute("hidden", "");
+  const helpTitle = document.createElement("p");
+  helpTitle.className = "ez-out-help-title";
+  helpTitle.textContent = "Explorer shortcuts";
+  help.appendChild(helpTitle);
+  const helpList = document.createElement("div");
+  helpList.className = "ez-out-help-list";
+  SHORTCUTS.forEach((pair) => {
+    const line = document.createElement("div");
+    line.className = "ez-out-help-row";
+    const kbd = document.createElement("kbd");
+    kbd.className = "ez-out-kbd";
+    kbd.textContent = pair[0];
+    const what = document.createElement("span");
+    what.className = "ez-out-help-what";
+    what.textContent = pair[1];
+    line.appendChild(kbd);
+    line.appendChild(what);
+    helpList.appendChild(line);
+  });
+  help.appendChild(helpList);
+  help.appendChild(
+    makeButton("Done", "ez-out-btn", () => {
+      toggleHelp(false);
+    }),
+  );
+
+  const clipboard = document.createElement("textarea");
+  clipboard.className = "ez-out-clipboard";
+  clipboard.setAttribute("aria-hidden", "true");
+  clipboard.setAttribute("tabindex", "-1");
 
   /**
    * Switch grid vs list and persist.
@@ -785,7 +1177,309 @@ function mount(el) {
   function setView(next) {
     view = next === "list" ? "list" : "grid";
     storePref(PREFS_VIEW, view);
+    applyThumb();
     paint();
+  }
+
+  /**
+   * Step the density control through auto and the fixed sizes.
+   * @returns {void}
+   */
+  function cycleSize() {
+    const current = autoSize ? "auto" : String(thumbSize);
+    const at = SIZE_STEPS.indexOf(current);
+    const next = SIZE_STEPS[(at + 1 + SIZE_STEPS.length) % SIZE_STEPS.length];
+    if (next === "auto") {
+      autoSize = true;
+      storePref(PREFS_THUMB, "auto");
+    } else {
+      autoSize = false;
+      thumbSize = Number(next) || THUMB_DEFAULT;
+      storePref(PREFS_THUMB, String(thumbSize));
+    }
+    applyThumb();
+    announce("Thumbnail size " + next);
+  }
+
+  /**
+   * Resize the tile grid by a fixed step, leaving auto mode.
+   * @param {number} delta Pixels to add to the tile edge
+   * @returns {void}
+   */
+  function nudgeSize(delta) {
+    // Step from what the user actually sees, not the stored default.
+    const base = autoSize ? effectiveThumb() : thumbSize;
+    autoSize = false;
+    thumbSize = Math.min(THUMB_MAX, Math.max(THUMB_MIN, base + delta));
+    storePref(PREFS_THUMB, String(thumbSize));
+    applyThumb();
+  }
+
+  /**
+   * Open or close the shortcut sheet.
+   * @param {boolean=} force True opens, false closes, omitted toggles
+   * @returns {void}
+   */
+  function toggleHelp(force) {
+    helpOpen = force === undefined ? !helpOpen : Boolean(force);
+    help.classList.toggle("is-open", helpOpen);
+    helpBtn.setAttribute("aria-expanded", helpOpen ? "true" : "false");
+    if (helpOpen) {
+      help.removeAttribute("hidden");
+      help.focus();
+    } else {
+      help.setAttribute("hidden", "");
+      el.focus();
+    }
+  }
+
+  /**
+   * Drop every active filter and reload.
+   * @returns {void}
+   */
+  function clearFilters() {
+    kind = "all";
+    storePref(PREFS_KIND, kind);
+    folder = "";
+    storePref(PREFS_FOLDER, "");
+    prefix = "";
+    query = "";
+    search.value = "";
+    pageSize = PAGE_START;
+    refresh();
+  }
+
+  /**
+   * Ask the list route for a bigger page without resetting the pane.
+   * @returns {void}
+   */
+  function loadMore() {
+    if (pageSize >= PAGE_MAX) {
+      announce("Everything loaded");
+      return;
+    }
+    pageSize = Math.min(PAGE_MAX, pageSize * 2);
+    refresh();
+  }
+
+  /**
+   * Write a line into the live status region with a tone class.
+   * @param {string} text Message to announce
+   * @param {string=} tone "ok", "warn", or "bad"
+   * @returns {void}
+   */
+  function announce(text, tone) {
+    status.textContent = text;
+    status.classList.toggle("is-ok", tone === "ok");
+    status.classList.toggle("is-warn", tone === "warn");
+    status.classList.toggle("is-bad", tone === "bad");
+  }
+
+  /**
+   * Folder rail with per-folder counts, driven by the loaded page.
+   * @returns {void}
+   */
+  function paintTree() {
+    tree.replaceChildren();
+    /** @type {Map<string, number>} */
+    const counts = new Map();
+    let rootCount = 0;
+    items.forEach((row) => {
+      const parent = parentOf(row);
+      if (parent) {
+        counts.set(parent, (counts.get(parent) || 0) + 1);
+      } else {
+        rootCount += 1;
+      }
+    });
+    /**
+     * One rail entry.
+     * @param {string} label Shown name
+     * @param {string} token Folder value to select
+     * @param {number} count Files in that folder
+     * @returns {HTMLButtonElement} The rail button
+     */
+    const row = (label, token, count) => {
+      const button = makeButton(label, "ez-out-tree-item", () => {
+        folder = token;
+        storePref(PREFS_FOLDER, token);
+        highlightRel = "";
+        paint();
+      });
+      button.textContent = "";
+      const name = document.createElement("span");
+      name.className = "ez-out-tree-label";
+      name.textContent = label;
+      button.appendChild(name);
+      const badge = document.createElement("span");
+      badge.className = "ez-out-tree-count";
+      badge.textContent = String(count);
+      button.appendChild(badge);
+      button.setAttribute("aria-current", folder === token ? "true" : "false");
+      return button;
+    };
+    tree.appendChild(row("All files", "", items.length));
+    if (rootCount) {
+      tree.appendChild(row("root", ROOT_FOLDER, rootCount));
+    }
+    [...counts.keys()].sort().forEach((name) => {
+      tree.appendChild(row(name, name, counts.get(name) || 0));
+    });
+  }
+
+  /**
+   * Breadcrumb above the pane: all files then the folder path.
+   * @returns {void}
+   */
+  function paintCrumb() {
+    crumb.replaceChildren();
+    const rootBtn = makeButton("All files", "ez-out-crumb-item", () => {
+      folder = "";
+      storePref(PREFS_FOLDER, "");
+      paint();
+    });
+    rootBtn.setAttribute("aria-current", folder === "" ? "page" : "false");
+    crumb.appendChild(rootBtn);
+    const parts = folder && folder !== ROOT_FOLDER ? folder.split("/") : [];
+    if (folder === ROOT_FOLDER) {
+      parts.push("root");
+    }
+    let walk = "";
+    parts.forEach((part, index) => {
+      const sep = document.createElement("span");
+      sep.className = "ez-out-crumb-sep";
+      sep.setAttribute("aria-hidden", "true");
+      sep.textContent = "/";
+      crumb.appendChild(sep);
+      walk = index === 0 ? part : walk + "/" + part;
+      const token = folder === ROOT_FOLDER && index === parts.length - 1
+        ? ROOT_FOLDER
+        : walk;
+      const last = index === parts.length - 1;
+      const crumbBtn = makeButton(part, "ez-out-crumb-item", () => {
+        folder = token;
+        storePref(PREFS_FOLDER, token);
+        paint();
+      });
+      crumbBtn.setAttribute("aria-current", last ? "page" : "false");
+      crumb.appendChild(crumbBtn);
+    });
+  }
+
+  /**
+   * Removable pills for every filter that is on.
+   * @returns {void}
+   */
+  function paintActive() {
+    active.replaceChildren();
+    /** @type {Array<Array<any>>} */
+    const pills = [];
+    if (kind !== "all") {
+      pills.push([
+        "Type: " + (KIND_LABELS[kind] || kind),
+        () => {
+          kind = "all";
+          storePref(PREFS_KIND, kind);
+          pageSize = PAGE_START;
+          refresh();
+        },
+      ]);
+    }
+    if (folder) {
+      pills.push([
+        "Folder: " + folderToken(),
+        () => {
+          folder = "";
+          storePref(PREFS_FOLDER, "");
+          paint();
+        },
+      ]);
+    }
+    if (prefix) {
+      pills.push([
+        "Prefix: " + prefix,
+        () => {
+          prefix = "";
+          paint();
+        },
+      ]);
+    }
+    if (query) {
+      pills.push([
+        "Search: " + query,
+        () => {
+          query = "";
+          search.value = "";
+          pageSize = PAGE_START;
+          refresh();
+        },
+      ]);
+    }
+    if (!pills.length) {
+      active.setAttribute("hidden", "");
+      active.classList.remove("is-open");
+      return;
+    }
+    active.removeAttribute("hidden");
+    active.classList.add("is-open");
+    pills.forEach((pill) => {
+      const node = document.createElement("button");
+      node.type = "button";
+      node.className = "ez-out-pill";
+      node.setAttribute("aria-label", "Remove filter " + pill[0]);
+      const label = document.createElement("span");
+      label.className = "ez-out-pill-label";
+      label.textContent = pill[0];
+      const mark = document.createElement("span");
+      mark.className = "ez-out-pill-x";
+      mark.setAttribute("aria-hidden", "true");
+      mark.textContent = "x";
+      node.appendChild(label);
+      node.appendChild(mark);
+      node.addEventListener("click", pill[1]);
+      active.appendChild(node);
+    });
+    active.appendChild(clearBtn);
+  }
+
+  /**
+   * Give the highlighted card the only tab stop in the pane.
+   * @returns {void}
+   */
+  function paintRovingFocus() {
+    const nodes = scroll.querySelectorAll("[data-rel]");
+    let found = false;
+    nodes.forEach((node) => {
+      const rel = node.getAttribute("data-rel") || "";
+      const on = Boolean(rel) && rel === highlightRel;
+      node.tabIndex = on ? 0 : -1;
+      node.classList.toggle("is-focus", on);
+      if (on) {
+        found = true;
+      }
+    });
+    if (!found && nodes.length) {
+      const first = nodes[0];
+      first.tabIndex = 0;
+      highlightRel = first.getAttribute("data-rel") || "";
+      first.classList.add("is-focus");
+    }
+  }
+
+  /**
+   * Move the keyboard cursor to a rel and repaint the cursor only.
+   * @param {string} rel Row to highlight
+   * @returns {void}
+   */
+  function focusRel(rel) {
+    highlightRel = rel;
+    anchorRel = rel;
+    paintSelection();
+    paintRovingFocus();
+    const node = scroll.querySelector("[data-rel=\"" + rel + "\"]");
+    if (node && typeof node.focus === "function") {
+      node.focus();
+    }
   }
 
   /**
@@ -813,19 +1507,7 @@ function mount(el) {
    */
   function applyClickSelect(rel, event) {
     if (event.shiftKey) {
-      const vis = visibleItems();
-      const rels = vis.map((row) => row.rel);
-      const a = rels.indexOf(anchorRel);
-      const b = rels.indexOf(rel);
-      if (a < 0 || b < 0) {
-        selected = new Set([rel]);
-      } else {
-        const lo = Math.min(a, b);
-        const hi = Math.max(a, b);
-        selected = new Set(rels.slice(lo, hi + 1));
-      }
-      highlightRel = rel;
-      paintSelection();
+      extendTo(rel);
       return;
     }
     if (event.metaKey || event.ctrlKey) {
@@ -859,12 +1541,6 @@ function mount(el) {
    * @returns {void}
    */
   function paintSelection() {
-    const vis = new Set(visibleItems().map((row) => row.rel));
-    selected.forEach((rel) => {
-      if (!vis.has(rel)) {
-        selected.delete(rel);
-      }
-    });
     scroll.querySelectorAll("[data-rel]").forEach((node) => {
       const rel = node.getAttribute("data-rel") || "";
       const on = selected.has(rel);
@@ -877,12 +1553,14 @@ function mount(el) {
     });
     const n = selected.size;
     bulk.classList.toggle("is-open", n > 0);
-    bulkCount.textContent = n + " selected";
+    bulk.setAttribute("aria-hidden", n > 0 ? "false" : "true");
+    bulkCount.textContent = n === 1 ? "1 file selected" : n + " files selected";
     renderStatus();
+    paintRovingFocus();
   }
 
   /**
-   * Status line: counts, selection, bytes, truncated cap.
+   * Status line: counts, selection, bytes, and the page cap.
    * @returns {void}
    */
   function renderStatus() {
@@ -891,14 +1569,22 @@ function mount(el) {
     const pool = chosen.length ? chosen : vis;
     const bytes = pool.reduce((sum, row) => sum + (Number(row.size) || 0), 0);
     let text = vis.length + " files";
-    if (chosen.length) {
-      text += " - " + chosen.length + " selected";
+    if (truncated) {
+      text = "Showing " + items.length + " of more files";
+    }
+    if (selected.size) {
+      text += " - " + selected.size + " selected";
     }
     text += " - " + formatSize(bytes);
-    if (truncated && !folder && !prefix && !query) {
-      text += " - newest 500";
+    if (loading) {
+      text += " - loading";
     }
     status.textContent = text;
+    summary.textContent = truncated
+      ? "Showing " + items.length + ", page size " + pageSize
+      : items.length + " loaded";
+    paneLabel.textContent =
+      view === "list" ? "File list, " + vis.length + " rows" : "File grid, " + vis.length + " tiles";
   }
 
   /**
@@ -932,7 +1618,7 @@ function mount(el) {
       ["sort", sortMode],
       ["items", String(vis.length)],
       ["loaded", String(items.length)],
-      ["truncated", truncated ? "yes - newest 500" : "no"],
+      ["truncated", truncated ? "yes - page " + pageSize : "no"],
       ["selected", chosen.length ? chosen.join(", ") : "-"],
     ];
   }
@@ -1013,7 +1699,7 @@ function mount(el) {
    * @returns {HTMLButtonElement}
    */
   function failReportButton(endpoint, message, httpStatus) {
-    return makeButton("Report this problem", "ez-out-btn", () => {
+    const button = makeButton("Report this problem", "ez-out-btn", () => {
       openFeedbackReport({
         kind: "bug",
         surface: "media-explorer",
@@ -1025,6 +1711,8 @@ function mount(el) {
         ]),
       });
     }, { icon: true });
+    button.setAttribute("aria-label", "Report this problem on GitHub");
+    return button;
   }
 
   /**
@@ -1130,6 +1818,9 @@ function mount(el) {
         video.src = video.dataset.src;
       }
       video.addEventListener("mouseenter", () => {
+        if (prefersReducedMotion()) {
+          return;
+        }
         if (!video.src && video.dataset.src) {
           video.src = video.dataset.src;
         }
@@ -1171,12 +1862,15 @@ function mount(el) {
     wrap.dataset.rel = row.rel;
     wrap.setAttribute("role", isList ? "listitem" : "gridcell");
     wrap.setAttribute("aria-selected", selected.has(row.rel) ? "true" : "false");
+    wrap.tabIndex = highlightRel === row.rel ? 0 : -1;
+    wrap.title = row.rel;
 
     const check = document.createElement("input");
     check.type = "checkbox";
     check.className = "ez-out-check";
     check.checked = selected.has(row.rel);
     check.title = "Select";
+    check.setAttribute("aria-label", "Select " + (row.name || row.rel));
     check.addEventListener("click", (event) => {
       event.stopPropagation();
       if (selected.has(row.rel)) {
@@ -1208,16 +1902,23 @@ function mount(el) {
     name.title = row.rel;
     const sub = document.createElement("span");
     sub.className = "ez-out-sub";
-    sub.textContent = [formatSize(row.size), formatTime(row.mtime), row.rel]
+    sub.textContent = (metaOn
+      ? [formatSize(row.size), formatTime(row.mtime), row.rel]
+      : [formatSize(row.size)]
+    )
       .filter(Boolean)
       .join(" - ");
     meta.appendChild(name);
     meta.appendChild(sub);
+    if (!metaOn) {
+      meta.classList.add("is-compact");
+    }
 
     wrap.addEventListener("click", (event) => {
       if (event.target === check) {
         return;
       }
+      lastFocusRel = row.rel;
       applyClickSelect(row.rel, event);
     });
     wrap.addEventListener("dblclick", (event) => {
@@ -1265,13 +1966,27 @@ function mount(el) {
     if (lazyVideo) {
       lazyVideo.disconnect();
     }
+    if (typeof IntersectionObserver !== "function") {
+      scroll.querySelectorAll("video[data-src]").forEach((node) => {
+        if (!node.getAttribute("src")) {
+          node.src = node.dataset.src;
+        }
+      });
+      return;
+    }
     lazyVideo = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          const media = entry.target;
           if (!entry.isIntersecting) {
+            // Release decoded video memory for tiles that scrolled away.
+            if (media.getAttribute("src")) {
+              media.pause();
+              media.removeAttribute("src");
+              media.load();
+            }
             return;
           }
-          const media = entry.target;
           if (media.dataset.src && !media.getAttribute("src")) {
             media.src = media.dataset.src;
           }
@@ -1300,30 +2015,85 @@ function mount(el) {
         button.dataset.kind === kind ? "true" : "false",
       );
     });
-    gridBtn.classList.toggle("is-active", view === "grid");
-    listBtn.classList.toggle("is-active", view === "list");
-    sizeInput.disabled = view === "list";
+    applyThumb();
+    paintCrumb();
+    paintTree();
+    paintActive();
     paintChips();
+    const filtering = Boolean(folder || prefix || query) || kind !== "all";
+    if (view === "list") {
+      listhead.removeAttribute("hidden");
+    } else {
+      listhead.setAttribute("hidden", "");
+    }
+    listhead.querySelectorAll(".ez-out-col").forEach((col) => {
+      const key = col.dataset.sort || "";
+      const on = key === sortMode || (key === "newest" && sortMode === "oldest");
+      col.classList.toggle("is-active", on);
+      col.setAttribute(
+        "aria-sort",
+        on ? (sortMode === "oldest" && key === "newest" ? "descending" : "ascending") : "none",
+      );
+    });
     const vis = visibleItems();
     scroll.replaceChildren();
+    if (loading && !items.length) {
+      scroll.appendChild(skeletonPane(pageSize > PAGE_START ? 12 : SKELETON_CARDS));
+      renderStatus();
+      return;
+    }
     if (!vis.length) {
       const empty = document.createElement("p");
       empty.className = "ez-out-empty";
-      empty.textContent =
-        "Queue an App - files stay on the output disk after restart. History does not.";
+      let variant = "nofiles";
+      if (!items.length && !filtering) {
+        empty.textContent =
+          "Queue an App - files stay on the output disk after restart. History does not.";
+      } else if (filtering) {
+        variant = folder ? "folder" : "filtered";
+        empty.textContent = folder
+          ? "No files in " + folderToken() + "."
+          : "No files match the current filters.";
+      } else {
+        empty.textContent = "No media files on the output disk yet.";
+      }
+      empty.dataset.variant = variant;
+      if (filtering) {
+        empty.appendChild(document.createTextNode(" "));
+        empty.appendChild(
+          makeButton("Clear filters", "ez-out-btn", () => {
+            clearFilters();
+          }),
+        );
+      }
       scroll.appendChild(empty);
       renderStatus();
       return;
     }
+    if (view === "list") {
+      scroll.appendChild(listhead);
+    }
+    const paneText = view === "list"
+      ? "File list, " + vis.length + " rows"
+      : "File grid, " + vis.length + " tiles";
+    paneLabel.textContent = paneText;
     const pane = document.createElement("div");
     pane.className = view === "list" ? "ez-out-list" : "ez-out-grid";
     pane.setAttribute("role", view === "list" ? "list" : "grid");
+    pane.setAttribute("aria-label", paneText);
     vis.forEach((row) => {
       pane.appendChild(itemEl(row));
     });
     scroll.appendChild(pane);
+    if (truncated) {
+      loadMoreBtn.removeAttribute("hidden");
+      scroll.appendChild(loadMoreBtn);
+    } else {
+      loadMoreBtn.setAttribute("hidden", "");
+    }
     bindLazyVideos();
     paintSelection();
+    paintRovingFocus();
     if (lightboxRel) {
       openLightbox(lightboxRel);
     }
@@ -1404,16 +2174,19 @@ function mount(el) {
         deleteRels([row.rel]);
       }),
     );
-    bar.appendChild(
-      makeButton("Report", "ez-out-btn", () => {
-        openFeedbackReport({
-          kind: "bug",
-          surface: "media-file",
-          summary: clipText("Problem with " + row.rel, 120),
-          context: fileContext(row),
-        });
-      }, { icon: true }),
+    const fileReportBtn = makeButton("Report", "ez-out-btn", () => {
+      openFeedbackReport({
+        kind: "bug",
+        surface: "media-file",
+        summary: clipText("Problem with " + row.rel, 120),
+        context: fileContext(row),
+      });
+    }, { icon: true });
+    fileReportBtn.setAttribute(
+      "aria-label",
+      "Report a problem with this file on GitHub",
     );
+    bar.appendChild(fileReportBtn);
     bar.appendChild(
       makeButton("Close", "ez-out-btn", () => {
         closeLightbox();
@@ -1423,6 +2196,21 @@ function mount(el) {
     lightbox.appendChild(bar);
     lightbox.classList.add("is-open");
     lightbox.removeAttribute("hidden");
+    lightbox.setAttribute("aria-label", "Preview " + (row.name || row.rel));
+    if (!lightboxRel || !lightbox.contains(document.activeElement)) {
+      const prior = document.activeElement;
+      lightboxReturn =
+        prior && prior !== el && el.contains(prior)
+          ? prior
+          : scroll.querySelector("[data-rel=\"" + rel + "\"]") || null;
+    }
+    const first = bar.querySelector("button");
+    if (first && typeof first.focus === "function") {
+      first.focus();
+    } else if (typeof lightbox.focus === "function") {
+      lightbox.tabIndex = -1;
+      lightbox.focus();
+    }
     paintSelection();
   }
 
@@ -1435,6 +2223,37 @@ function mount(el) {
     lightbox.classList.remove("is-open");
     lightbox.setAttribute("hidden", "");
     lightbox.replaceChildren();
+    const back = lightboxReturn;
+    lightboxReturn = null;
+    if (back && typeof back.focus === "function" && el.contains(back)) {
+      back.focus();
+    } else {
+      el.focus();
+    }
+  }
+
+  /**
+   * Keep Tab inside the open preview dialog.
+   * @param {KeyboardEvent} event Key event under the single panel handler
+   * @returns {boolean} True when the key was handled
+   */
+  function trapLightboxFocus(event) {
+    if (!lightboxRel || event.key !== "Tab") {
+      return false;
+    }
+    const stops = lightbox.querySelectorAll("button, audio, video, [tabindex]");
+    if (!stops.length) {
+      return false;
+    }
+    const list = [...stops];
+    const at = list.indexOf(document.activeElement);
+    const step = event.shiftKey ? -1 : 1;
+    const nextNode = list[(at + step + list.length) % list.length] || list[0];
+    if (nextNode && typeof nextNode.focus === "function") {
+      nextNode.focus();
+    }
+    event.preventDefault();
+    return true;
   }
 
   /**
@@ -1459,13 +2278,38 @@ function mount(el) {
    */
   async function copyPaths(rels) {
     const text = rels.join("\n");
+    if (!text) {
+      announce("Nothing selected", "warn");
+      return;
+    }
     try {
       if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
         await navigator.clipboard.writeText(text);
-        status.textContent = "Copied " + rels.length + " path(s)";
+        announce("Copied " + rels.length + " path(s)", "ok");
+        return;
       }
+      throw new Error("clipboard unavailable");
     } catch (err) {
-      status.textContent = String(err && err.message ? err.message : err);
+      // No clipboard permission or a plain-http origin: fall back to a
+      // selectable offscreen textarea so the paths still reach the user.
+      clipboard.value = text;
+      el.appendChild(clipboard);
+      clipboard.select();
+      let copied = false;
+      try {
+        copied = Boolean(document.execCommand && document.execCommand("copy"));
+      } catch (_err) {
+        copied = false;
+      }
+      if (copied) {
+        announce("Copied " + rels.length + " path(s)", "ok");
+      } else {
+        clipboard.focus();
+        announce("Clipboard blocked - paths are selected, press Ctrl/Cmd+C", "warn");
+      }
+      if (clipboard.parentNode) {
+        clipboard.parentNode.removeChild(clipboard);
+      }
     }
   }
 
@@ -1486,14 +2330,17 @@ function mount(el) {
       const body = unique.length === 1 ? { rel: unique[0] } : { rels: unique };
       const data = await postJson("/ez_outputs/delete", body);
       const failed = (data.errors || []).length;
+      const gone = (data.deleted || []).length;
       if (failed) {
-        status.textContent =
-          "Deleted " + (data.deleted || []).length + ", " + failed + " failed";
+        announce("Deleted " + gone + ", " + failed + " failed", "warn");
         recordFeedbackError(
           "media-explorer",
           "Delete rejected " + failed + " of " + unique.length + " file(s)",
           "endpoint=/ez_outputs/delete " + errorDetail(data.errors),
         );
+      }
+      if (!failed) {
+        announce("Deleted " + gone + " file(s)", "ok");
       }
       if (lightboxRel && unique.includes(lightboxRel)) {
         closeLightbox();
@@ -1502,7 +2349,7 @@ function mount(el) {
       await refresh();
     } catch (err) {
       const message = String(err && err.message ? err.message : err);
-      status.textContent = message;
+      announce(message, "bad");
       noteFailure("/ez_outputs/delete", err, "Delete failed: " + message);
     }
   }
@@ -1562,22 +2409,32 @@ function mount(el) {
       }
     } catch (err) {
       const message = String(err && err.message ? err.message : err);
-      status.textContent = message;
+      announce(message, "bad");
       noteFailure("/ez_outputs/to-input", err, "Copy to input failed: " + message);
     }
   }
 
   /**
    * Reload the file list from GET /ez_outputs/list.
+   * @param {boolean=} background Keep the current pane while refetching
    * @returns {Promise<void>}
    */
-  async function refresh() {
+  async function refresh(background) {
+    const quiet = Boolean(background) && items.length > 0;
+    loading = !quiet;
+    failed = false;
+    refreshBtn.setAttribute("aria-busy", loading ? "true" : "false");
+    if (loading) {
+      paint();
+    }
     try {
       const data = await fetchJson(
         "/ez_outputs/list?kind=" +
           encodeURIComponent(kind) +
           "&q=" +
-          encodeURIComponent(query),
+          encodeURIComponent(query) +
+          "&limit=" +
+          encodeURIComponent(String(pageSize)),
       );
       items = Array.isArray(data.items) ? data.items : [];
       truncated = Boolean(data.truncated);
@@ -1590,23 +2447,75 @@ function mount(el) {
       if (highlightRel && !live.has(highlightRel)) {
         highlightRel = items[0]?.rel || "";
       }
+      // Clear the flag before painting or an empty result keeps the skeleton.
+      loading = false;
       paint();
     } catch (err) {
       const message = String(err && err.message ? err.message : err);
       const httpStatus = err && err.status != null ? String(err.status) : "n/a";
       noteFailure("/ez_outputs/list", err, "List failed: " + message);
+      // A dead list must not leave a pane of rows that no longer exist.
+      items = [];
+      truncated = false;
+      failed = true;
       scroll.replaceChildren();
       const fail = document.createElement("p");
       fail.className = "ez-out-fail";
       fail.textContent = message;
       fail.appendChild(document.createTextNode(" "));
+      fail.appendChild(
+        makeButton("Retry", "ez-out-btn", () => {
+          refresh();
+        }),
+      );
+      fail.appendChild(document.createTextNode(" "));
       fail.appendChild(failReportButton("/ez_outputs/list", message, httpStatus));
       scroll.appendChild(fail);
+      announce("Could not list outputs - " + message, "bad");
+      renderStatus();
+    } finally {
+      loading = false;
+      refreshBtn.setAttribute("aria-busy", "false");
     }
   }
 
   /**
-   * Keyboard: arrows, space, enter, delete, escape, ctrl+a, +/-.
+   * Add the range from the anchor to a rel into the current selection.
+   * @param {string} rel Row to extend to
+   * @returns {void}
+   */
+  function extendTo(rel) {
+    const rels = visibleItems().map((row) => row.rel);
+    const a = rels.indexOf(anchorRel);
+    const b = rels.indexOf(rel);
+    if (a < 0 || b < 0) {
+      selected.add(rel);
+    } else {
+      const lo = Math.min(a, b);
+      const hi = Math.max(a, b);
+      rels.slice(lo, hi + 1).forEach((one) => selected.add(one));
+    }
+    anchorRel = anchorRel || rel;
+    highlightRel = rel;
+    paintSelection();
+    paintRovingFocus();
+  }
+
+  /**
+   * Columns in the grid so Up and Down jump a whole row.
+   * @returns {number} Column count, at least one
+   */
+  function gridColumns() {
+    if (view !== "grid") {
+      return 1;
+    }
+    const edge = effectiveThumb() + 8;
+    const width = Number(scroll.clientWidth) || Number(el.clientWidth) || edge;
+    return Math.max(1, Math.floor(width / edge) || 1);
+  }
+
+  /**
+   * Keyboard: arrows, space, enter, delete, escape, ctrl+a, size, view, help.
    * @param {KeyboardEvent} event
    * @returns {void}
    */
@@ -1614,9 +2523,17 @@ function mount(el) {
     const tag = (event.target && event.target.tagName) || "";
     if (tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA") {
       if (event.key === "Escape") {
-        event.target.blur();
-        el.focus();
+        if (lightboxRel) {
+          closeLightbox();
+        } else {
+          event.target.blur();
+          el.focus();
+        }
+        event.preventDefault();
       }
+      return;
+    }
+    if (trapLightboxFocus(event)) {
       return;
     }
     const vis = visibleItems();
@@ -1627,24 +2544,72 @@ function mount(el) {
         event.preventDefault();
         return;
       }
-      selected = new Set();
-      paintSelection();
+      if (helpOpen) {
+        toggleHelp(false);
+        event.preventDefault();
+        return;
+      }
+      if (selected.size) {
+        selected = new Set();
+        paintSelection();
+        event.preventDefault();
+        return;
+      }
+      if (folder || prefix || query || kind !== "all") {
+        clearFilters();
+        event.preventDefault();
+      }
+      return;
+    }
+    if (event.key === "?") {
+      toggleHelp();
+      event.preventDefault();
+      return;
+    }
+    if (event.key === "/") {
+      search.focus();
+      if (typeof search.select === "function") {
+        search.select();
+      }
+      event.preventDefault();
+      return;
+    }
+    if (event.key === "f" || event.key === "F") {
+      // Below the wide tier the rail is hidden, so reach the folder chips instead.
+      const target = tier === "wide"
+        ? tree.querySelector(".ez-out-tree-item")
+        : folderRow.querySelector(".ez-out-chip");
+      if (target && typeof target.focus === "function") {
+        target.focus();
+      }
+      event.preventDefault();
+      return;
+    }
+    if (event.key === "g" || event.key === "G") {
+      setView("grid");
+      event.preventDefault();
+      return;
+    }
+    if (event.key === "l" || event.key === "L") {
+      setView("list");
       event.preventDefault();
       return;
     }
     if ((event.key === "+" || event.key === "=") && view === "grid") {
-      thumbSize = Math.min(THUMB_MAX, thumbSize + 8);
-      sizeInput.value = String(thumbSize);
-      el.style.setProperty("--ez-out-thumb", thumbSize + "px");
-      storePref(PREFS_THUMB, String(thumbSize));
+      nudgeSize(8);
       event.preventDefault();
       return;
     }
     if (event.key === "-" && view === "grid") {
-      thumbSize = Math.max(THUMB_MIN, thumbSize - 8);
-      sizeInput.value = String(thumbSize);
-      el.style.setProperty("--ez-out-thumb", thumbSize + "px");
-      storePref(PREFS_THUMB, String(thumbSize));
+      nudgeSize(-8);
+      event.preventDefault();
+      return;
+    }
+    if (event.key === "0" && view === "grid") {
+      autoSize = true;
+      storePref(PREFS_THUMB, "auto");
+      applyThumb();
+      announce("Thumbnail size auto", "ok");
       event.preventDefault();
       return;
     }
@@ -1669,7 +2634,24 @@ function mount(el) {
       } else {
         selected.add(highlightRel);
       }
+      anchorRel = highlightRel;
       paintSelection();
+      event.preventDefault();
+      return;
+    }
+    if (event.key === "Home" || event.key === "End") {
+      if (!vis.length) {
+        return;
+      }
+      const target = event.key === "Home" ? vis[0] : vis[vis.length - 1];
+      if (event.shiftKey) {
+        extendTo(target.rel);
+      } else {
+        focusRel(target.rel);
+      }
+      if (lightboxRel) {
+        openLightbox(target.rel);
+      }
       event.preventDefault();
       return;
     }
@@ -1677,12 +2659,14 @@ function mount(el) {
       if (!vis.length) {
         return;
       }
-      const next = vis[Math.min(vis.length - 1, Math.max(0, idx) + 1)] || vis[0];
+      const step = event.key === "ArrowDown" ? gridColumns() : 1;
+      const from = idx < 0 ? -1 : idx;
+      const next = vis[Math.min(vis.length - 1, from + step)] || vis[0];
       highlightRel = next.rel;
       if (event.shiftKey) {
-        applyClickSelect(next.rel, event);
+        extendTo(next.rel);
       } else {
-        paintSelection();
+        focusRel(next.rel);
       }
       if (lightboxRel) {
         openLightbox(highlightRel);
@@ -1694,12 +2678,14 @@ function mount(el) {
       if (!vis.length) {
         return;
       }
-      const next = vis[Math.max(0, (idx < 0 ? 0 : idx) - 1)] || vis[0];
+      const step = event.key === "ArrowUp" ? gridColumns() : 1;
+      const from = idx < 0 ? 0 : idx;
+      const next = vis[Math.max(0, from - step)] || vis[0];
       highlightRel = next.rel;
       if (event.shiftKey) {
-        applyClickSelect(next.rel, event);
+        extendTo(next.rel);
       } else {
-        paintSelection();
+        focusRel(next.rel);
       }
       if (lightboxRel) {
         openLightbox(highlightRel);
@@ -1716,12 +2702,14 @@ function mount(el) {
 
   const api = app.api;
   /**
-   * Debounced refresh after a Queue step so new files appear.
+   * Debounced background refresh after a Queue step so new files appear.
    * @returns {void}
    */
   function onExecuted() {
     window.clearTimeout(execTimer);
-    execTimer = window.setTimeout(refresh, EXECUTED_MS);
+    execTimer = window.setTimeout(() => {
+      refresh(true);
+    }, EXECUTED_MS);
   }
   if (api && typeof api.addEventListener === "function") {
     if (mount._onExecuted && typeof api.removeEventListener === "function") {
@@ -1734,15 +2722,41 @@ function mount(el) {
     el._ezOutIo.disconnect();
   }
 
+  kindRow.setAttribute("role", "toolbar");
+  kindRow.setAttribute("aria-label", "Filter by type, search, refresh, report");
+  const toolbar = document.createElement("div");
+  toolbar.className = "ez-out-toolbar";
+  toolbar.appendChild(kindRow);
+  toolbar.appendChild(viewRow);
+  toolbar.appendChild(more);
+
+  bodyRow.appendChild(tree);
+  bodyRow.appendChild(scroll);
+
+  el.appendChild(head);
   el.appendChild(hint);
-  el.appendChild(kindRow);
-  el.appendChild(viewRow);
+  el.appendChild(toolbar);
+  el.appendChild(active);
   el.appendChild(folderRow);
   el.appendChild(prefixRow);
   el.appendChild(bulk);
-  el.appendChild(scroll);
+  el.appendChild(bodyRow);
   el.appendChild(status);
   el.appendChild(lightbox);
+  el.appendChild(help);
+
+  if (el._ezOutRo && typeof el._ezOutRo.disconnect === "function") {
+    el._ezOutRo.disconnect();
+  }
+  if (typeof ResizeObserver === "function") {
+    const observer = new ResizeObserver(() => {
+      applyTier();
+    });
+    observer.observe(el);
+    el._ezOutRo = observer;
+  }
+
+  applyThumb();
   refresh();
 }
 
