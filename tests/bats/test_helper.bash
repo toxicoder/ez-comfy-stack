@@ -60,6 +60,8 @@ setup_repo_env() {
   export UTILITIES_DIR="${REPO_ROOT}/scripts/utilities"
   export TEST_TMP_DIR
   TEST_TMP_DIR="$(mktemp -d)"
+  # Per-test PATH masking state (mock_path_hide); never inherit it from a prior test.
+  unset EZ_MOCK_PATH_SAVED EZ_MOCK_PATH_HIDDEN
   export PATH="${TEST_TMP_DIR}/bin:${PATH}"
   mkdir -p "${TEST_TMP_DIR}/bin" "${TEST_TMP_DIR}/models"
   export MODELS_DIR="${TEST_TMP_DIR}/models"
@@ -129,6 +131,91 @@ install_mock_bin() {
 ${body}
 EOF
   chmod +x "${TEST_TMP_DIR}/bin/${name}"
+}
+
+#######################################
+# Make a command genuinely unresolvable on PATH, host-independently.
+#
+# Deletes the mock copy and rebuilds PATH from the mock bin dir plus a symlink
+# farm of every command reachable before the first mask, minus the named one.
+# A host that ships the real binary (e.g. /usr/bin/ffmpeg inside a container)
+# can therefore not undo a "tool missing" case, and a host that lacks the tool
+# behaves the same way.
+#
+# Globals:
+#   PATH, TEST_TMP_DIR, EZ_MOCK_PATH_SAVED, EZ_MOCK_PATH_HIDDEN
+# Arguments:
+#   $1 - Command name that must become unresolvable
+# Outputs:
+#   Writes ${TEST_TMP_DIR}/bin-masked-<n>; exports PATH; diagnostics on stderr
+# Returns:
+#   0 when the command is gone from PATH; 1 when the farm broke or the
+#   command is still resolvable
+#######################################
+mock_path_hide() {
+  local name="${1}"
+  local masked_dir
+  local dir entry hidden
+  local -a dirs=() entries=() hidden_names=()
+  if [[ -z ${EZ_MOCK_PATH_SAVED:-} ]]; then
+    EZ_MOCK_PATH_SAVED="${PATH}"
+    export EZ_MOCK_PATH_SAVED
+  fi
+  IFS=':' read -r -a hidden_names <<< "${EZ_MOCK_PATH_HIDDEN:-}"
+  # Fresh farm per call: PATH still points at the previous farm, so the
+  # rebuild never unlinks the binaries it is itself running.
+  masked_dir="${TEST_TMP_DIR}/bin-masked-${#hidden_names[@]}"
+  rm -f "${TEST_TMP_DIR}/bin/${name}"
+  mkdir -p "${masked_dir}"
+  IFS=':' read -r -a dirs <<< "${EZ_MOCK_PATH_SAVED}"
+  for dir in "${dirs[@]}"; do
+    [[ -d ${dir} ]] || continue
+    entries=()
+    for entry in "${dir}"/*; do
+      [[ -f ${entry} && -x ${entry} ]] || continue
+      entries+=("${entry}")
+    done
+    [[ ${#entries[@]} -gt 0 ]] || continue
+    # First PATH dir wins: names already linked stay as they are.
+    ln -s "${entries[@]}" "${masked_dir}/" 2>/dev/null || true
+  done
+  for hidden in "${name}" "${hidden_names[@]}"; do
+    [[ -n ${hidden} ]] && rm -f "${masked_dir}/${hidden}"
+  done
+  EZ_MOCK_PATH_HIDDEN="${EZ_MOCK_PATH_HIDDEN:+${EZ_MOCK_PATH_HIDDEN}:}${name}"
+  export EZ_MOCK_PATH_HIDDEN
+  export PATH="${TEST_TMP_DIR}/bin:${masked_dir}"
+  hash -r 2>/dev/null || true
+  if ! command -v bash >/dev/null 2>&1; then
+    printf 'mock_path_hide: farm %s is incomplete (bash not resolvable)\n' \
+      "${masked_dir}" >&2
+    return 1
+  fi
+  if command -v "${name}" >/dev/null 2>&1; then
+    printf 'mock_path_hide: %s still resolvable at %s\n' \
+      "${name}" "$(command -v "${name}")" >&2
+    return 1
+  fi
+}
+
+#######################################
+# Undo mock_path_hide and restore the PATH captured before the first mask.
+# Globals:
+#   PATH, EZ_MOCK_PATH_SAVED, EZ_MOCK_PATH_HIDDEN
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   0
+#######################################
+mock_path_restore() {
+  if [[ -n ${EZ_MOCK_PATH_SAVED:-} ]]; then
+    PATH="${EZ_MOCK_PATH_SAVED}"
+    export PATH
+    unset EZ_MOCK_PATH_SAVED EZ_MOCK_PATH_HIDDEN
+    hash -r 2>/dev/null || true
+  fi
 }
 
 #######################################

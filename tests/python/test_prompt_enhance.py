@@ -1295,12 +1295,26 @@ def test_sidecar_skipped_when_occupancy_ltx(
 def test_sidecar_base_url_uses_host_gateway_in_container(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    dockerenv = {"present": False}
+
+    class _ProbePath:
+        def __init__(self, path: str) -> None:
+            self.path = path
+
+        def is_file(self) -> bool:
+            return self.path == "/.dockerenv" and dockerenv["present"]
+
+    # The /.dockerenv probe is host state, so the test supplies it both ways.
+    monkeypatch.setattr(client, "Path", _ProbePath)
     monkeypatch.delenv("EZ_LLM_SIDECAR_URL", raising=False)
-    monkeypatch.setenv("MODELS_ROOT", "/models")
     monkeypatch.setenv("EZ_LLM_SIDECAR_PORT", "30000")
-    assert "host.docker.internal" in client.sidecar_base_url()
     monkeypatch.delenv("MODELS_ROOT", raising=False)
+    dockerenv["present"] = True
+    assert "host.docker.internal" in client.sidecar_base_url()
+    dockerenv["present"] = False
     assert "127.0.0.1" in client.sidecar_base_url()
+    monkeypatch.setenv("MODELS_ROOT", "/models")
+    assert "host.docker.internal" in client.sidecar_base_url()
 
 
 def test_lab_graphs_use_model_native_prompts_and_enhance_nodes() -> None:

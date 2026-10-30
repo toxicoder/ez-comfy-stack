@@ -134,10 +134,7 @@ teardown() {
 }
 
 @test "audio-still-video fails when ffmpeg missing" {
-  local saved_path="${PATH}"
-  rm -f "${TEST_TMP_DIR}/bin/ffmpeg"
-  PATH="${TEST_TMP_DIR}/bin:/bin:/usr/bin"
-  export PATH
+  mock_path_hide ffmpeg
   run require_ffmpeg
   [ "${status}" -ne 0 ]
   [[ "${output}" == *"ffmpeg"* ]]
@@ -151,8 +148,7 @@ teardown() {
   DRY_RUN=0
   run cmd_run
   [ "${status}" -ne 0 ]
-  PATH="${saved_path}"
-  export PATH
+  mock_path_restore
 }
 
 @test "audio-still-video does not start docker" {
