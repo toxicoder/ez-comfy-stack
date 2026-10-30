@@ -23,8 +23,7 @@ COMFYUI_MANAGER_REF="${COMFYUI_MANAGER_REF:-4.2.2}"
 COMFYUI_NUNCHAKU_NODE_REF="${COMFYUI_NUNCHAKU_NODE_REF:-v1.2.1}"
 # Empty = clone default branch (main). Set to a tag/branch/SHA branch name when available.
 COMFYUI_VHS_REF="${COMFYUI_VHS_REF:-}"
-# Wave-closeout pins: OpenCut tag; MagCache/Director commit SHAs (no tags upstream).
-COMFYUI_OPENCUT_REF="${COMFYUI_OPENCUT_REF:-0.5.0}"
+# Wave-closeout pins: MagCache/Director commit SHAs (no tags upstream).
 COMFYUI_MAGCACHE_REF="${COMFYUI_MAGCACHE_REF:-47bdd2aca97e568087c4e92d2d2f0426bdce7a37}"
 COMFYUI_LTX_DIRECTOR_REF="${COMFYUI_LTX_DIRECTOR_REF:-a3c809c8b593a74c2ddcd6c1f83ad85ebebe3c64}"
 # Chatterbox helpers live in chatterbox-tts.sh and are sourced from

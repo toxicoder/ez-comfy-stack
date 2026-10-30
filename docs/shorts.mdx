@@ -15,7 +15,7 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 - Model-native Klein / LTX prompts ([Prompting](prompting.md))
 - Spark farm: optional parallel 5s Queues, local concat
 - Shot resume, OTIO export, NVENC proxies, take-promote, Fun InP / SeedVR2 opt-in
-- Optional [studio-ui](reference/studio-ui.md) board (`:8190` profile), LTX Director GPL clone, OpenCut MIT embed
+- Optional [studio-ui](reference/studio-ui.md) board (`:8190` profile), LTX Director GPL clone, host [Vlo](vlo.md) timeline editor
 - Optional 3D sidecars (TRELLIS.2, DA3-BASE, host Blender / SuperSplat) and VACE join
 - Wave 4: `film-accept`, DFR print mode, A14B hero, talking-head, LongCat / DreamX opt-in
 - Go-see show-off loop (identity-first reprint, wordless mix, fail-closed concat)
@@ -154,7 +154,7 @@ LTX Director is a **GPL** clone into the Comfy volume, not this MIT tree:
 LAB_ENABLE_LTX_DIRECTOR=1 ./scripts/manage.sh start
 ```
 
-Refuse MiniMax H3 Director. OpenCut (`jtydhr88/ComfyUI-OpenCut`, MIT) is fail-soft. Not the OpenCut Rust rewrite, not Next.js+Postgres.
+Refuse MiniMax H3 Director. The timeline editor is host-side **Vlo** - a browser app on its own host backend, no ComfyUI node embedded ([Vlo video editor](vlo.md)). Not Next.js+Postgres.
 
 ACE-Step 90 s bed -> `manage.sh stop` / unload -> LTX A2V freeze. Qwen3-TTS is opt-in with operator-owned refs (`download-podcast --tier qwen3tts`); empty refs stay Kokoro. **EZFilmDisclosure** is wired into **EZFilmConcat**; Queue writes `${COMFY_OUTPUT_DIR}/ez_*_90s.disclosure.txt` beside the stitched MP4 (LTX Community License). Do not strip it.
 

@@ -17,9 +17,9 @@ def test_phase_nodes_director_is_opt_in() -> None:
     assert "LAB_ENABLE_LTX_DIRECTOR" in text
     assert "WhatDreamsCost-ComfyUI" in text
     assert "MiniMaxH3-Director" not in text
-    assert "jtydhr88/ComfyUI-OpenCut" in text
+    assert "jtydhr88/ComfyUI-OpenCut" not in text
     assert "WhatDreamsCost-ComfyUI" in text
-    assert "${COMFYUI_OPENCUT_REF}" in text
+    assert "${COMFYUI_OPENCUT_REF}" not in text
     assert "${COMFYUI_MAGCACHE_REF}" in text
     assert "${COMFYUI_LTX_DIRECTOR_REF}" in text
 

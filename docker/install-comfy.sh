@@ -28,7 +28,6 @@
 #   COMFYUI_MANAGER_REF - Manager pin (default 4.2.2)
 #   COMFYUI_NUNCHAKU_NODE_REF - nunchaku node pin (default v1.2.1)
 #   COMFYUI_VHS_REF - VideoHelperSuite git ref (default empty = main; required for LTX MP4)
-#   COMFYUI_OPENCUT_REF - OpenCut tag (default 0.5.0)
 #   COMFYUI_MAGCACHE_REF - MagCache commit SHA
 #   COMFYUI_LTX_DIRECTOR_REF - GPL Director commit SHA (clone only if LAB_ENABLE_LTX_DIRECTOR=1)
 #   CHATTERBOX_TTS_REF - resemble-ai/chatterbox SHA for Multilingual V3 (t3_model)

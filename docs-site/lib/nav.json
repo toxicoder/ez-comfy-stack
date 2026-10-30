@@ -196,6 +196,10 @@
       {
         "title": "Splat sidecar",
         "path": "splat-sidecar.md"
+      },
+      {
+        "title": "Vlo video editor",
+        "path": "vlo.md"
       }
     ]
   },

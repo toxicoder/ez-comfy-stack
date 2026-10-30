@@ -314,8 +314,9 @@ if missing:
   # VideoHelperSuite pin surface + runtime ffmpeg for VHS
   run grep -E 'ARG COMFYUI_VHS_REF=' "${df}"
   [ "$status" -eq 0 ]
-  run grep -E 'ARG COMFYUI_OPENCUT_REF=0\.5\.0' "${df}"
-  [ "$status" -eq 0 ]
+  # OpenCut retired: the image must not carry an in-browser editor node pin.
+  run grep -E 'ARG COMFYUI_OPENCUT_REF' "${df}"
+  [ "$status" -ne 0 ]
   run grep -E 'ARG COMFYUI_MAGCACHE_REF=[0-9a-f]{7,}' "${df}"
   [ "$status" -eq 0 ]
   run grep -E 'ARG COMFYUI_LTX_DIRECTOR_REF=[0-9a-f]{7,}' "${df}"

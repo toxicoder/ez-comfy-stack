@@ -488,10 +488,9 @@ phase_nodes() {
   clone_node "https://github.com/Zehong-Ma/ComfyUI-MagCache.git" "ComfyUI-MagCache" \
     "${COMFYUI_MAGCACHE_REF}" ||
     warn "ComfyUI-MagCache unavailable (Wan 5B draft MagCache extra still documents the pin)"
-  # OpenCut MIT embed (not the Rust rewrite, not a hosted Next.js stack).
-  clone_node "https://github.com/jtydhr88/ComfyUI-OpenCut.git" "ComfyUI-OpenCut" \
-    "${COMFYUI_OPENCUT_REF}" ||
-    warn "ComfyUI-OpenCut unavailable (timeline embed is optional)"
+  # No in-browser timeline node lives here. The recommended editor is PxTicks/vlo
+  # (AGPL-3.0), which runs on the host and drives this ComfyUI over its live
+  # bridge, so the image stays free of editor code. See docs/vlo.mdx.
   # GPL LTX Director: clone into the Comfy volume only when opted in. Not vendored.
   if [[ ${LAB_ENABLE_LTX_DIRECTOR:-0} == "1" ]]; then
     clone_node "https://github.com/WhatDreamsCost/WhatDreamsCost-ComfyUI.git" \
