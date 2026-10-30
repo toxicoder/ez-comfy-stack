@@ -35,6 +35,13 @@ MAX_BODY = 60000
 MAX_FIELD = 300
 """Cap for one interpolated value inside a body line."""
 
+MAX_ERROR_TEXT = 2000
+"""Cap for one ring-buffer error line: the message and its parenthetical detail.
+
+Wider than :data:`MAX_FIELD` because a traceback first line carries the whole
+diagnosis, and the client ring buffer keeps the same budget.
+"""
+
 LABELS: dict[str, str] = {"bug": "bug", "enhancement": "enhancement"}
 """``kind`` -> the GitHub label that actually exists in the repo."""
 
@@ -57,6 +64,30 @@ FILL_HEADINGS: tuple[str, ...] = (
     "## Actual",
 )
 """Narrative sections, always present for ``bug`` reports."""
+
+BUG_NARRATIVE_KEYS: tuple[str, ...] = (
+    "what_happened",
+    "steps",
+    "expected",
+    "actual",
+)
+"""``narrative`` keys, in the order of :data:`FILL_HEADINGS`."""
+
+ENHANCE_NARRATIVE_KEYS: tuple[str, ...] = (
+    "problem",
+    "solution",
+    "alternatives",
+    "unlocks",
+)
+"""``narrative`` keys, in the order of :data:`ENHANCE_HEADINGS`."""
+
+ENHANCE_HEADINGS: tuple[str, ...] = (
+    "## Problem",
+    "## Proposed solution",
+    "## Alternatives",
+    "## What it unlocks",
+)
+"""Narrative sections for ``enhancement`` reports; each is omitted when empty."""
 
 CONTEXT_HEADING = "## Context"
 """Surface-specific facts the caller supplies."""
@@ -102,6 +133,7 @@ SURFACES: tuple[str, ...] = (
     "film-board",
     "watch",
     "model-check",
+    "load-error",
 )
 """Every surface allowed to file a report.
 
@@ -311,6 +343,8 @@ def error_lines(errors: Sequence[Mapping[str, object]] | None, surface: str) -> 
 
     Each entry becomes ``- <iso8601> [<surface>] <message>``, with the entry's
     own surface preferred and ``detail`` appended in parentheses when present.
+    Both texts are clipped to :data:`MAX_ERROR_TEXT`, not :data:`MAX_FIELD`, so
+    a traceback first line survives intact.
 
     Args:
         errors: Ring-buffer entries; may be ``None``.
@@ -328,10 +362,13 @@ def error_lines(errors: Sequence[Mapping[str, object]] | None, surface: str) -> 
             continue
         stamp = _value_text(entry.get("ts")) or "unknown"
         where = _value_text(entry.get("surface")) or _value_text(surface) or GLOBAL_AREA
-        line = f"- {redact(stamp)} [{redact(where)}] {clip(redact(message), MAX_FIELD)}"
+        line = (
+            f"- {redact(stamp)} [{redact(where)}] "
+            f"{clip(redact(message), MAX_ERROR_TEXT)}"
+        )
         detail = _value_text(entry.get("detail"))
         if detail:
-            line += f" ({clip(redact(detail), MAX_FIELD)})"
+            line += f" ({clip(redact(detail), MAX_ERROR_TEXT)})"
         lines.append(line)
     return lines
 
@@ -370,6 +407,23 @@ def _section(heading: str, lines: Sequence[str]) -> str:
     return f"{heading}\n\n" + "\n".join(lines)
 
 
+def _narrative_lines(value: object) -> list[str]:
+    """Render one filled narrative answer as paragraph lines.
+
+    The reporter's own line breaks survive: the value is stripped at its ends,
+    redacted, and split, never collapsed onto one line and never clipped. The
+    narrative is the report, so it keeps every fact the operator typed.
+
+    Args:
+        value: Text under one ``narrative`` key; anything is stringified.
+
+    Returns:
+        Redacted paragraph lines, empty when the value carries no text.
+    """
+    text = redact(str(value if value is not None else "").strip())
+    return text.splitlines() if text else []
+
+
 def build_body(
     kind: str,
     surface: str,
@@ -378,12 +432,16 @@ def build_body(
     errors: Sequence[Mapping[str, object]] | None,
     browser: Mapping[str, object] | None,
     traceback: str,
+    narrative: Mapping[str, object] | None = None,
 ) -> str:
     """Assemble the markdown body in the canonical section order.
 
-    The four narrative sections always appear for a ``bug``; every other block
-    keeps its heading only when it has content. A traceback, when supplied, is
-    a fenced block after ``## Browser``.
+    The four narrative sections always appear for a ``bug``: a filled
+    ``narrative`` value becomes the section text and an empty one keeps
+    :data:`FILL_IN`. An ``enhancement`` renders the :data:`ENHANCE_HEADINGS`
+    block (after the fill region, before ``## Context``) and omits a heading
+    whose value is empty. Every other block keeps its heading only when it has
+    content. A traceback, when supplied, is a fenced block after ``## Browser``.
 
     Args:
         kind: ``bug`` or ``enhancement``.
@@ -393,13 +451,24 @@ def build_body(
         errors: Ring-buffer entries for ``## Recent errors``.
         browser: Browser facts for ``## Browser``.
         traceback: Optional traceback text.
+        narrative: Filled guided answers keyed by :data:`BUG_NARRATIVE_KEYS` or
+            :data:`ENHANCE_NARRATIVE_KEYS`; other keys and a non-mapping are
+            ignored, which is the pre-narrative body exactly.
 
     Returns:
         Markdown body, redacted, without a trailing newline.
     """
     blocks: list[str] = []
+    answers: Mapping[str, object] = narrative if isinstance(narrative, Mapping) else {}
     if kind_key(kind) == "bug":
-        blocks.extend(_section(heading, [FILL_IN]) for heading in FILL_HEADINGS)
+        for heading, key in zip(FILL_HEADINGS, BUG_NARRATIVE_KEYS):
+            filled = _narrative_lines(answers.get(key))
+            blocks.append(_section(heading, filled or [FILL_IN]))
+    else:
+        for heading, key in zip(ENHANCE_HEADINGS, ENHANCE_NARRATIVE_KEYS):
+            filled = _narrative_lines(answers.get(key))
+            if filled:
+                blocks.append(_section(heading, filled))
     blocks.append(_section(CONTEXT_HEADING, context_lines(context)))
     blocks.append(_section(ENVIRONMENT_HEADING, context_lines(environment)))
     blocks.append(_section(ERRORS_HEADING, error_lines(errors, surface)))
