@@ -1,6 +1,6 @@
 ---
 title: Reporting issues and requesting features
-description: Every Report a bug and Request a feature button in the studio, what each one prepopulates, and how EZ_GITHUB_TOKEN turns a prefilled tab into a filed issue.
+description: The Feedback sidebar panel, every Report a bug and Request a feature button in the studio, what each one prepopulates, and how EZ_GITHUB_TOKEN turns a prefilled tab into a filed issue.
 tags: [feedback, github, troubleshooting, studio-ui, safety]
 ---
 
@@ -10,12 +10,17 @@ The studio files its own bug reports. Every surface that can fail has a button t
 already knows what it was doing when it failed, so a report reaches
 [toxicoder/ez-comfy-stack](https://github.com/toxicoder/ez-comfy-stack) with the app id,
 the lane, the model family, the selected media, and the last errors already written. You
-type what happened and press Submit.
+type what happened and press Submit. The **Feedback** panel in the left dock is the guided
+way in, when you have a report to write rather than a failure to hand over.
 
 **What's on this page**
 
-- **Where the buttons are** - global, per app, the Outputs explorer, the film board, Check models
+- **The Feedback panel** - guided fields, live preview, Enhance with LLM, File on GitHub
+- **Where the buttons are** - global, per app, the Outputs explorer, the film board, Check
+  models, the load-abort modal
+- **The load-abort modal** - the **Report this error** button on a failed graph load
 - **What each button prepopulates**
+- **How much text survives** - verbatim filing, the error cap, the clipboard fallback
 - **How a report reaches GitHub** - prefilled tab, or filed directly with a token
 - **`EZ_GITHUB_TOKEN`** - the optional upgrade, and its scope
 - **What is never sent**
@@ -26,8 +31,9 @@ type what happened and press Submit.
 - **Reproducing** a failure for the maintainer without asking three follow-up questions
 - **Deciding** whether the stack may reach `api.github.com` at all
 
-Shared code: `custom_nodes/ez_feedback/` - the report dialog, the error banner, and the
-prefill, listed with the other packs in [Custom nodes](../reference/custom-nodes.mdx).
+Shared code: `custom_nodes/ez_feedback/` - the Feedback panel, the report dialog, the error
+banner, and the prefill, listed with the other packs in
+[Custom nodes](../reference/custom-nodes.mdx).
 When a report is about something you could not get to work, start from
 [Troubleshooting](../troubleshooting.mdx).
 
@@ -35,6 +41,7 @@ When a report is about something you could not get to work, start from
 
 | Surface | Buttons | Where |
 | --- | --- | --- |
+| Feedback panel | **Enhance with LLM**, **File on GitHub**, **Copy markdown** | Left dock, the GitHub tab |
 | Global | **Report a bug**, **Request a feature** | App widgets host, top of the canvas; falls back to a fixed corner bar outside App Mode |
 | Current app | Same two, prefilled with the open app | Same bar, reads the live graph |
 | Outputs explorer | **Report a problem**, **Suggest a feature** | Toolbar, next to Refresh |
@@ -43,9 +50,53 @@ When a report is about something you could not get to work, start from
 | Model check | **Report failure** | Second button on the Check models node |
 | Film board | Bug and feature links | Board header, per film, and per shot cell |
 | Watch page | Bug and feature links | Nav line, beside the Board link |
+| Load-abort modal | **Report this error** | Inside the `Loading aborted due to error reloading workflow data` modal |
+
+Every button this repo creates carries the GitHub mark, including the links on the film
+board and the watch pages. The one exception is **Report failure** on the Check models
+node: it is a LiteGraph widget, and a widget label cannot hold an icon, so it stays text.
 
 Nothing about reporting blocks a run. A captured failure shows a dismissible banner in the
 bottom-right corner; it never opens a modal over a running Queues.
+
+## The Feedback panel
+
+Open **Feedback** from the left dock (the GitHub tab) when you want to write a report
+rather than hand over a failure. It registers as a sidebar tab only when the frontend
+supports them; the buttons elsewhere on this page file the same report on any frontend.
+
+- **Bug or Feature** - the toggle changes the guided fields, the label, and the body
+  headings. A bug asks for **What happened**, **Steps**, **Expected**, **Actual**. A
+  feature request asks for **Problem**, **Proposed solution**, **Alternatives**, **What it
+  unlocks**
+- **Live previews** - the title shows as `[app:lane/id] ...` while you type the summary,
+  and the markdown preview below the fields is the body the report will carry
+- **Attach recent errors** - on by default, labelled with how many failures the ring holds,
+  and disabled at zero
+- **Attach environment and browser facts** - on by default; untick it for a pure
+  feature request
+- **Enhance with LLM** - rewrites the filled guided fields through the local GGUF, using the
+  same `EZ_LLM_*` knobs as prompt enhancement, and reparses the result back into the fields.
+  When the GGUF or the sidecar is unavailable it writes a status line and leaves your text
+  alone; the rest of the panel keeps working
+- **File on GitHub** - opens the shared report dialog: direct submit when `EZ_GITHUB_TOKEN`
+  is present, prefilled handoff otherwise
+- **Copy markdown** - the body on the clipboard, for a blocked popup or another tracker
+
+The panel reads the live graph for its context, so file from the App you were using. It
+never queues, never uploads, and nothing is submitted until you press a button.
+
+## The load-abort modal
+
+When a graph load throws, ComfyUI shows a modal headed
+`Loading aborted due to error reloading workflow data`. It now carries a
+**Report this error** button, which files a bug on the `load-error` surface with the modal
+text, the captured stack, and the graph context already attached, so the report names the
+pack and the line that failed instead of asking you to transcribe a wall of text.
+
+Cause and the usual fix (reseed the pack JS, then hard-refresh) are in
+[Troubleshooting - studio canvas](troubleshooting-canvas.md). The button is additive: the
+modal still dismisses, and the load still fails exactly as it did.
 
 ## What each button prepopulates
 
@@ -62,14 +113,35 @@ The graph and the container are the source of truth, so you rarely type context.
 - **Environment** - ComfyUI ref, image tag, Python, platform, output directory, port, plus
   GPU, torch, and CUDA facts from `/api/system_stats` when reachable
 - **Browser** - user agent, viewport, DPR, language, and whether you were online
-- **Recent errors** - the last five failures, newest first. Execution failures are captured
+- **Your own words** - the guided fields, filed as written and never clipped:
+  `## What happened`, `## Steps`, `## Expected`, `## Actual` for a bug, and `## Problem`,
+  `## Proposed solution`, `## Alternatives`, `## What it unlocks` for a feature request
+- **Recent errors** - the last five failures, newest first, each keeping up to 2000
+  characters of its message. Execution failures are captured
   from `execution_error` and `execution_interrupted` with `node_id`, `node_type`,
   `exception_message`, `exception_type`, and the traceback
+- **Load abort** - the modal text, the stack the load threw, and the graph context, when you
+  file from that modal
 
 Title and labels are set for you: `[app:creator/stills/instagram-story] ...` for an app,
 `[media-explorer] ...` for the explorer, and `bug` or `enhancement` as the label. Only the
 three labels that exist in the repo are ever used, because GitHub silently drops a label it
 does not recognise.
+
+## How much text survives
+
+- **What you typed is what is filed.** **File directly** posts the body from the dialog
+  editor, after redaction, so an edit you make in the dialog reaches GitHub instead of being
+  rebuilt from the payload.
+- **Captured errors keep their text.** A ring-buffer entry and an error line keep up to 2000
+  characters, up from 300, so a long `exception_message` or a traceback line arrives whole.
+- **Narratives are never clipped.** The guided sections - Problem, Proposed solution,
+  Alternatives, What it unlocks on a feature request - are written out as you typed them.
+- **A handoff that will not fit the URL goes to the clipboard.** A prefilled `issues/new`
+  tab has to stay inside the URL budget GitHub answers with `414 URI Too Long`. When the fit
+  ladder has to cut, the dialog copies the full markdown and reports
+  `Full markdown copied - paste it on GitHub if the prefill was shortened.` Direct submit
+  posts a body, not a URL, so it is never affected.
 
 ## How a report reaches GitHub
 
@@ -80,7 +152,8 @@ container, and no token to trust. You press Submit in the tab.
 
 With a token the dialog also offers **File directly**, which posts through
 `POST /ez_feedback/submit` to `api.github.com` and hands back the issue link. **Open on
-GitHub** and **Copy markdown** stay available either way.
+GitHub** and **Copy markdown** stay available either way. The panel's **File on GitHub**
+button opens this same dialog: direct submit with a token, prefilled handoff without one.
 
 ```bash
 # Optional: file from inside ComfyUI instead of opening a tab.
@@ -111,6 +184,16 @@ route reports only whether it is present.
 - **A report looks empty.** The app was opened from a graph with no `extra.lab_rel`, which
   is true of your own saved graphs. Say so in the report; the surface and browser facts are
   still there.
-- **A very long report got cut.** Reports are trimmed to stay under GitHub's URL limit
-  rather than fail with `414 URI Too Long`. The note `[report trimmed to fit the GitHub URL
-  limit]` means the tail was dropped; paste the rest in the tab.
+- **No Feedback tab in the dock.** The frontend has to expose sidebar tabs; on one that does
+  not, the pack registers nothing there and every button above still files the same report.
+  Hard-reload first - the frontend caches extension modules.
+- **Enhance with LLM reports the model is unavailable.** That button uses the same GGUF and
+  the same `EZ_LLM_*` knobs as prompt enhancement, so `download-models` plus a restart fixes
+  it, and the sidecar cases are in
+  [Models and workflows](troubleshooting-models-workflows.md). The status line is advisory:
+  the panel files without it and keeps your own text.
+- **A very long report got cut.** Prefilled handoffs are trimmed to stay under GitHub's URL
+  limit rather than fail with `414 URI Too Long`. The note
+  `[report trimmed to fit the GitHub URL limit]` means the tail was dropped from the URL;
+  the dialog copies the full markdown to the clipboard at the same time, so paste it in the
+  tab. **File directly** and **Copy markdown** never trim.

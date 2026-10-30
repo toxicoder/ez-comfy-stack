@@ -14,16 +14,20 @@ ROOT = Path(__file__).resolve().parents[2]
 PACK = ROOT / "custom_nodes" / "ez_feedback" / "js"
 CORE_JS = PACK / "ez_feedback_core.js"
 CHROME_JS = PACK / "ez_feedback.js"
+PANEL_JS = PACK / "ez_feedback_panel.js"
 CSS = PACK / "ez_feedback.css"
 
 EXPORTS = (
     "REPO",
     "MAX_HREF",
+    "MAX_ERROR_TEXT",
     "clip",
     "labelsFor",
     "buildTitle",
     "buildBody",
     "issueHref",
+    "issueHrefFor",
+    "githubIcon",
     "reportPayload",
     "recordError",
     "recentErrors",
@@ -31,6 +35,7 @@ EXPORTS = (
     "getConfig",
     "openHandoff",
     "fileDirect",
+    "enhanceText",
     "openReport",
     "showBanner",
     "dismissBanner",
@@ -65,8 +70,17 @@ def _sheet() -> str:
     return CSS.read_text(encoding="utf-8")
 
 
+def _panel() -> str:
+    """Panel module source.
+
+    Returns:
+        ``ez_feedback_panel.js`` contents.
+    """
+    return PANEL_JS.read_text(encoding="utf-8")
+
+
 def test_pack_js_files_exist_and_are_banners_first() -> None:
-    for path in (CORE_JS, CHROME_JS, CSS):
+    for path in (CORE_JS, CHROME_JS, PANEL_JS, CSS):
         assert path.is_file(), path
         assert path.read_text(encoding="utf-8").lstrip().startswith(("/*", "/**")), path
 
@@ -185,6 +199,63 @@ def test_core_writes_the_canonical_error_line_and_report_button() -> None:
     assert "openReport(partial)" in body
 
 
+def test_core_gives_every_report_button_the_github_mark() -> None:
+    """One mark, drawn once, in front of every way into a report."""
+    body = _core()
+    assert 'const OCTICON_PATH = "M6.766' in body
+    assert "export function githubIcon" in body
+    assert '"http://www.w3.org/2000/svg"' in body
+    assert 'setAttribute("aria-hidden", "true")' in body
+    assert "function makeButton(label, className, opts)" in body
+    for label in (
+        'makeButton("Open on GitHub"',
+        'makeButton("File directly"',
+        'makeButton("Report"',
+    ):
+        at = body.index(label)
+        assert "{ icon: true }" in body[at : at + 200], label
+    assert 'makeButton(text, "ez-fb-btn", { icon: true })' in body
+
+
+def test_core_error_ring_keeps_a_real_traceback_head() -> None:
+    """A captured error is the report: clipping it at 300 hid the failing op."""
+    body = _core()
+    assert "export const MAX_ERROR_TEXT = 2000" in body
+    assert "clip(message, MAX_ERROR_TEXT)" in body
+    assert "clip(valueText(input.detail), MAX_ERROR_TEXT)" in body
+    assert "clip(message, MAX_FIELD)" not in body
+
+
+def test_core_narrative_mirrors_the_python_vocabulary() -> None:
+    body = _core()
+    assert '"what_happened", "steps", "expected", "actual"' in body
+    assert '"problem", "solution", "alternatives", "unlocks"' in body
+    assert '"## Proposed solution"' in body
+    assert '"## What it unlocks"' in body
+    assert "NARRATIVE_HEADINGS[kind]" in body
+    assert "narrative: narrativeInput(input.narrative, kind)" in body
+    assert "function narrativeLines(value)" in body
+
+
+def test_core_files_the_edited_body_and_says_when_the_url_cut_it() -> None:
+    """Typed text used to be dropped: both paths must honour the textarea."""
+    body = _core()
+    assert "export async function fileDirect(partial, editedBody)" in body
+    assert "fileDirect(payload, body.value)" in body
+    assert "export function issueHrefFor(payload, editedBody)" in body
+    assert "const result = issueHrefFor(payload, body.value);" in body
+    assert "if (!result.trimmed) {" in body
+    assert '"Full markdown copied - paste it on GitHub if the prefill was shortened."' in body
+
+
+def test_core_asks_the_local_model_without_ever_rejecting() -> None:
+    body = _core()
+    assert 'const ENHANCE_PATH = "/ez_feedback/enhance"' in body
+    assert "export async function enhanceText(input)" in body
+    assert "return { ok: true, text: data.text };" in body
+    assert "return { ok: false, error: clip(reason, MAX_FIELD) };" in body
+
+
 def test_chrome_imports_app_only_and_registers_the_extension() -> None:
     body = _chrome()
     assert 'import { app } from "../../scripts/app.js";' in body
@@ -267,6 +338,95 @@ def test_chrome_and_core_are_nodes2_and_queue_safe() -> None:
         assert "beforeQueued = async" not in body
 
 
+def test_chrome_files_an_aborted_workflow_load_once_per_modal() -> None:
+    """The frontend cancels a bad load with one generic modal; the operator
+    needs a way to report it that is not "copy the text by hand"."""
+    body = _chrome()
+    assert (
+        'const LOAD_ABORT_TEXT = "Loading aborted due to error reloading workflow data"'
+        in body
+    )
+    assert '"Report this error"' in body
+    assert "const DIALOG_SELECTOR = " in body
+    assert '.comfy-dialog, .p-dialog' in body
+    assert "function wrapLoadGraphData()" in body
+    assert "wrapLoadGraphData();" in body
+    assert "loadGraphWrapped = true;" in body
+    assert 'detail: "workflow load aborted"' in body
+    assert 'surface: "load-error"' in body
+    assert body.count("throw err;") >= 2
+    assert "function scanLoadErrors()" in body
+    assert "noteAddedNodes(records)" in body
+    assert "scheduleLoadScan()" in body
+    assert "host.dataset[LOAD_FILER_ATTR]" in body
+    assert "window.__ezFeedbackGraphContext = graphContext" in body
+    assert "MESSAGE_MAX = 1000" in body
+    assert "DETAIL_MAX = 1000" in body
+
+
+def test_chrome_bar_buttons_carry_the_github_mark() -> None:
+    body = _chrome()
+    assert "function appendIcon(node)" in body
+    assert "typeof fb.githubIcon === \"function\"" in body
+    assert "appendIcon(node);" in body
+    assert "appendIcon(button);" in body
+
+
+def test_panel_imports_app_only_and_reaches_core_lazily() -> None:
+    body = _panel()
+    assert 'import { app } from "../../scripts/app.js";' in body
+    assert body.count("\nimport ") == 1
+    assert "scripts/api.js" not in body
+    assert "scripts/ui.js" not in body
+    assert 'from "./ez_feedback_core.js"' not in body
+    assert "window.EzFeedback" in body
+
+
+def test_panel_registers_the_sidebar_tab_when_the_frontend_supports_it() -> None:
+    body = _panel()
+    assert 'name: "ez.feedback.panel"' in body
+    assert "async setup()" in body
+    # Guard first, the ez_outputs idiom: an older frontend has no sidebar API.
+    assert "if (!mgr || typeof mgr.registerSidebarTab !== \"function\")" in body
+    assert "mgr.registerSidebarTab({" in body
+    assert 'id: TAB_ID' in body
+    assert 'const TAB_ID = "ez-feedback"' in body
+    assert '"pi pi-github"' in body
+    assert 'title: "Feedback"' in body
+    assert 'tooltip: "File bugs and feature requests"' in body
+    assert 'type: "custom"' in body
+    assert "render: mountPanel" in body
+
+
+def test_panel_is_the_guided_form_and_files_through_the_core() -> None:
+    body = _panel()
+    for needle in (
+        "data-ez-fb-kind",
+        "dataset.ezFbKind",
+        '"What makes a good report"',
+        '"Attach recent errors"',
+        '"Attach environment and browser facts"',
+        "recentErrors()",
+        '"Enhance with LLM"',
+        "fb.enhanceText(",
+        '"File on GitHub"',
+        '"Copy markdown"',
+        'setAttribute("role", "status")',
+        '"ez-fb-preview"',
+        "blanks: false",
+        "window.__ezFeedbackGraphContext",
+        "narrative",
+    ):
+        assert needle in body, needle
+    assert "innerHTML" not in body
+    assert "window.alert" not in body
+
+
+def test_panel_has_no_new_stacking_level() -> None:
+    """The tab renders inside the frontend's own sidebar slot."""
+    assert "z-index" not in _panel()
+
+
 def test_css_is_class_prefixed_and_theme_safe() -> None:
     sheet = _sheet()
     assert ".ez-fb-bar" in sheet
@@ -284,6 +444,26 @@ def test_css_is_class_prefixed_and_theme_safe() -> None:
     assert "var(--comfy-menu-bg" in sheet
     assert "var(--fg-color" in sheet
     assert "var(--border-color" in sheet
+
+
+def test_css_styles_the_panel_without_touching_the_pinned_stack() -> None:
+    sheet = _sheet()
+    for needle in (
+        ".ez-fb-panel",
+        ".ez-fb-panel-chip",
+        ".ez-fb-panel-area",
+        ".ez-fb-panel-tips",
+        ".ez-fb-panel-check",
+        ".ez-fb-panel-btn-primary",
+        ".ez-fb-preview",
+        ".ez-fb-icon",
+    ):
+        assert needle in sheet, needle
+    assert ".ez-fb-panel" in sheet
+    # The panel adds no stacking level: only the four pinned ones exist.
+    assert sheet.count("z-index") == 4
+    assert "var(--comfy-menu-bg" in sheet
+    assert "focus-visible" in sheet
 
 
 def test_secrets_are_scrubbed_before_leaving_the_page() -> None:

@@ -1,22 +1,26 @@
 """Fail-soft PromptServer routes for bug reports and feature requests.
 
-Hermetic: ``aiohttp``, ``server.PromptServer``, ``EZ_GITHUB_TOKEN`` and
-``torch`` are all optional. Tests call :func:`config_payload` and
-:func:`handle_submit` with plain dicts and an injected opener, so nothing
-touches the network.
+Hermetic: ``aiohttp``, ``server.PromptServer``, ``EZ_GITHUB_TOKEN``,
+``ez_prompt_enhance`` and ``torch`` are all optional. Tests call
+:func:`config_payload`, :func:`handle_submit` and :func:`handle_enhance` with
+plain dicts and an injected opener or model, so nothing touches the network.
 
-Two routes only: ``GET /ez_feedback/config`` (does this build have a token,
-what env facts should a report carry) and ``POST /ez_feedback/submit`` (file
-through GitHub). Without a token submit answers 409 and the client falls back
-to the prefilled ``/issues/new`` handoff. The token never crosses the wire and
-never reaches a log line.
+Three routes only: ``GET /ez_feedback/config`` (does this build have a token,
+what env facts should a report carry), ``POST /ez_feedback/submit`` (file
+through GitHub), and ``POST /ez_feedback/enhance`` (rewrite the operator's
+guided notes with the on-box enhancer). Without a token submit answers 409 and
+the client falls back to the prefilled ``/issues/new`` handoff; without a model
+enhance answers 503 and the raw notes file unchanged. The token never crosses
+the wire and never reaches a log line.
 """
 
 from __future__ import annotations
 
+import asyncio
 import inspect
 import json
 import os
+import pathlib
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -45,6 +49,35 @@ USER_AGENT = "ez-comfy-stack-feedback"
 
 NO_TOKEN_ERROR = "no token; use the GitHub link"
 """409 body: the client keeps the GitHub handoff button in that case."""
+
+ENHANCE_PATH = "/ez_feedback/enhance"
+"""Route path for the guided-notes rewrite served by :func:`handle_enhance`."""
+
+ENHANCE_INPUT_MAX = 8000
+"""Cap on the operator notes handed to the model; longer bodies are refused."""
+
+ENHANCE_OUTPUT_MAX = 16000
+"""Cap on the rewritten body handed back to the client."""
+
+LLM_UNAVAILABLE_ERROR = "llm unavailable"
+"""503 body when the enhancer had nothing to say and gave no reason."""
+
+PROMPT_DIR = pathlib.Path(__file__).resolve().parent / "prompts"
+"""Directory holding the system prompts behind :data:`ENHANCE_PROMPTS`."""
+
+ENHANCE_BUG_PROMPT = (PROMPT_DIR / "enhance_bug.txt").read_text(encoding="utf-8")
+"""System prompt for the bug rewrite, read once at import."""
+
+ENHANCE_ENHANCEMENT_PROMPT = (
+    PROMPT_DIR / "enhance_enhancement.txt"
+).read_text(encoding="utf-8")
+"""System prompt for the enhancement rewrite, read once at import."""
+
+ENHANCE_PROMPTS: dict[str, str] = {
+    "bug": ENHANCE_BUG_PROMPT,
+    "enhancement": ENHANCE_ENHANCEMENT_PROMPT,
+}
+"""``kind_key`` -> the system prompt for that kind."""
 
 
 def token(environ: Mapping[str, str] | None = None) -> str:
@@ -261,6 +294,70 @@ def urlopen(request: urllib.request.Request, timeout: float) -> Any:
     return urllib.request.urlopen(request, timeout=timeout)
 
 
+def _default_llm(system: str, user: str) -> tuple[str, str]:
+    """Ask the on-box enhancer, failing soft when it is not installed.
+
+    ``ez_prompt_enhance.client`` pulls the GGUF runtime and the sidecar client,
+    so it is imported here rather than at module load: the pack stays
+    stdlib-at-import on a box with no model.
+
+    Args:
+        system: System prompt for the report kind.
+        user: The operator's notes, already redacted.
+
+    Returns:
+        ``(text, reason)`` from the enhancer, or ``("", "llm unavailable")``
+        when the import or the call raises.
+    """
+    try:
+        from ez_prompt_enhance.client import complete  # noqa: PLC0415 - heavy optional import
+
+        text, reason = complete(system, user)
+    except Exception:  # noqa: BLE001 - the raw notes still file fine
+        return "", LLM_UNAVAILABLE_ERROR
+    return str(text or ""), str(reason or "")
+
+
+def handle_enhance(
+    args: Mapping[str, object],
+    *,
+    llm: Callable[[str, str], tuple[str | None, str | None]] | None = None,
+) -> tuple[int, dict[str, Any]]:
+    """Body for ``POST /ez_feedback/enhance``.
+
+    Pure and injectable, like :func:`handle_submit`: ``llm`` is the model, so
+    no test reaches for a GPU. The notes are redacted before they are handed
+    over and the rewrite is redacted again before it is handed back.
+
+    Args:
+        args: Request body with ``kind`` and ``text``.
+        llm: ``(system, user) -> (text, reason)`` callable; defaults to the
+            on-box enhancer through :func:`_default_llm`.
+
+    Returns:
+        ``(200, {ok, text})`` with the rewrite clipped to
+        :data:`ENHANCE_OUTPUT_MAX`, ``(400, ...)`` when there is nothing to
+        enhance or the notes bust :data:`ENHANCE_INPUT_MAX`, ``(503, ...)``
+        when the model answered with nothing, ``(502, ...)`` when it raised.
+    """
+    body_args: Mapping[str, object] = args if isinstance(args, Mapping) else {}
+    kind = context.kind_key(str(body_args.get("kind") or "bug"))
+    text = context.redact(str(body_args.get("text") or "")).strip()
+    if not text:
+        return 400, {"ok": False, "error": "nothing to enhance"}
+    if len(text) > ENHANCE_INPUT_MAX:
+        return 400, {"ok": False, "error": "text too long"}
+    runner = llm if llm is not None else _default_llm
+    try:
+        raw, reason = runner(ENHANCE_PROMPTS[kind], text)
+    except Exception as exc:  # noqa: BLE001 - never leak a traceback to the client
+        return 502, {"ok": False, "error": context.redact(type(exc).__name__)}
+    enhanced = context.redact(str(raw or "").strip())[: ENHANCE_OUTPUT_MAX]
+    if not enhanced:
+        return 503, {"ok": False, "error": context.redact(str(reason or LLM_UNAVAILABLE_ERROR))}
+    return 200, {"ok": True, "text": enhanced}
+
+
 async def request_json(request: object) -> object:
     """Read a JSON body from an aiohttp-like request.
 
@@ -295,7 +392,7 @@ def register_routes(
             aiohttp ``web.json_response`` when that import works.
 
     Returns:
-        True when both routes were registered.
+        True when all three routes were registered.
     """
     responder = json_response
     if responder is None:
@@ -346,10 +443,27 @@ def register_routes(
         status, payload = handle_submit(body)
         return responder(payload, status=status)
 
+    async def enhance_handler(request: object) -> object:
+        """Serve ``POST /ez_feedback/enhance``.
+
+        Args:
+            request: aiohttp request with a JSON body.
+
+        Returns:
+            JSON response from :func:`handle_enhance`, run off the event loop
+            because the model call blocks.
+        """
+        body = await request_json(request)
+        if not isinstance(body, dict):
+            body = {}
+        status, payload = await asyncio.to_thread(handle_enhance, body)
+        return responder(payload, status=status)
+
     adder_get = getattr(routes, "get", None)
     adder_post = getattr(routes, "post", None)
     if adder_get is None or adder_post is None:
         return False
     adder_get("/ez_feedback/config")(config_handler)
     adder_post("/ez_feedback/submit")(submit_handler)
+    adder_post(ENHANCE_PATH)(enhance_handler)
     return True

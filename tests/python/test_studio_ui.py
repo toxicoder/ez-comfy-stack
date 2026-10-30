@@ -621,6 +621,7 @@ def test_board_header_carries_report_links(
     assert 'rel="noopener"' in header
     assert "Report a bug</a>" in header
     assert "Request a feature</a>" in header
+    assert header.count("<svg") == 2 == header.count("</svg>")
 
     hrefs = [unescape(href) for href in _issue_hrefs(page)]
     assert _params(hrefs[0])["title"] == ["[film-board] Bug report from film-board"]
@@ -677,6 +678,7 @@ def test_watch_page_nav_carries_report_links(
     assert '<a href="/">Board</a>' in nav
     assert "Report a bug</a>" in nav
     assert "Request a feature</a>" in nav
+    assert nav.count("<svg") == 2 == nav.count("</svg>")
     assert 'target="_blank"' in nav
     assert 'rel="noopener"' in nav
 
@@ -858,12 +860,34 @@ def test_report_link_markup_and_defaults() -> None:
     server = _load_server()
     markup = server.report_link("bug", "film-board", [("slug", "gosee")])
     assert markup.startswith('<a href="https://github.com/')
-    assert markup.endswith('" target="_blank" rel="noopener">Report a bug</a>')
+    assert '" target="_blank" rel="noopener">' in markup
+    assert markup.endswith("Report a bug</a>")
+    assert server.GITHUB_ICON in markup
     assert server.report_link("nope", "watch", []).startswith('<a href="https://')
     assert server.report_link("nope", "watch", []).endswith("Report a bug</a>")
     assert server.report_link("enhancement", "watch", []).endswith(
         "Request a feature</a>"
     )
+
+
+def test_report_links_render_the_github_mark_as_static_markup() -> None:
+    """Each anchor opens with the octicon mark, then the escaped label."""
+    server = _load_server()
+    icon = server.GITHUB_ICON
+    assert icon.startswith('<svg viewBox="0 0 16 16" width="14" height="14"')
+    assert 'aria-hidden="true"' in icon
+    assert 'fill="currentColor"' in icon
+    assert icon.startswith("<svg") and icon.endswith("</svg>")
+    mark = re.search(r'<path d="([^"]+)"', icon)
+    assert mark is not None
+    assert mark.group(1).startswith("M6.766 11.328c-2.063")
+    assert mark.group(1).endswith("5.47-.5.657-.656")
+
+    markup = server.report_link("enhancement", "watch", [])
+    anchor, _, label = markup.partition('" target="_blank" rel="noopener">')
+    assert anchor.startswith('<a href="https://github.com/')
+    assert label == icon + "Request a feature</a>"
+    assert "<svg" in markup and "&lt;svg" not in markup
 
 
 def test_report_builder_matches_the_pinned_contract() -> None:
@@ -940,7 +964,18 @@ def test_report_builder_matches_context_py_constants() -> None:
     assert _literal(tree, "REPO") == _CANON_REPO == server.REPO
     assert _literal(tree, "LABELS") == _CANON_LABELS == server.LABELS
     assert _literal(tree, "MAX_HREF") == _CANON_MAX_HREF == server.MAX_HREF
-    assert _headings_in(text) == list(_CANON_HEADINGS) == list(server.BODY_HEADINGS)
+    enhance_headings = _literal(tree, "ENHANCE_HEADINGS")
+    assert isinstance(enhance_headings, tuple), "context.py lost ENHANCE_HEADINGS"
+    assert list(enhance_headings) == [
+        "## Problem",
+        "## Proposed solution",
+        "## Alternatives",
+        "## What it unlocks",
+    ]
+    # The enhancement headings extend feature-request bodies only; the bug body
+    # order pinned against the studio-ui builder must stay the canonical eight.
+    body_headings = [h for h in _headings_in(text) if h not in set(enhance_headings)]
+    assert body_headings == list(_CANON_HEADINGS) == list(server.BODY_HEADINGS)
     for lead in _CANON_LEADS:
         assert f'"{lead}' in text or f"'{lead}" in text or f"{lead} " in text
     for surface in _CANON_SURFACES:

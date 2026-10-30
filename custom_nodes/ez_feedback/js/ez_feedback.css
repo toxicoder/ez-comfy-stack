@@ -157,3 +157,206 @@
   flex: 1;
   overflow-wrap: anywhere;
 }
+
+/* Feedback sidebar tab: hand-rolled DOM, one theme token set, no stacking of
+ * its own (it renders inside the frontend's own sidebar slot). */
+
+.ez-fb-panel {
+  --ez-fb-fg: var(--fg-color, #e8e8e8);
+  --ez-fb-bg: var(--comfy-menu-bg, #24272e);
+  --ez-fb-border: var(--border-color, rgba(255, 255, 255, 0.16));
+  --ez-fb-accent: var(--p-primary-color, #6ea8fe);
+  --ez-fb-muted: var(--descrip-text, #9a9a9a);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+  padding: 10px;
+  color: var(--ez-fb-fg);
+  font: 12px/1.45 ui-sans-serif, system-ui, sans-serif;
+}
+
+.ez-fb-panel-intro {
+  margin: 0;
+  color: var(--ez-fb-muted, #9a9a9a);
+  overflow-wrap: anywhere;
+}
+
+.ez-fb-panel-kinds {
+  display: flex;
+  gap: 6px;
+}
+
+.ez-fb-panel-chip {
+  padding: 4px 10px;
+  border: 1px solid var(--ez-fb-border, rgba(255, 255, 255, 0.16));
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ez-fb-muted, #9a9a9a);
+  font: inherit;
+  cursor: pointer;
+}
+
+.ez-fb-panel-chip[aria-pressed="true"] {
+  border-color: var(--ez-fb-accent, #6ea8fe);
+  background: var(--ez-fb-bg, #24272e);
+  color: var(--ez-fb-fg, #e8e8e8);
+  font-weight: 600;
+}
+
+.ez-fb-panel-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ez-fb-panel-heading {
+  color: var(--ez-fb-muted, #9a9a9a);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ez-fb-panel-title-preview {
+  color: var(--ez-fb-accent, #6ea8fe);
+  overflow-wrap: anywhere;
+}
+
+.ez-fb-panel-fields,
+.ez-fb-panel-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ez-fb-panel-field-label {
+  font-weight: 600;
+}
+
+.ez-fb-panel-input,
+.ez-fb-panel-area {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 7px 8px;
+  border: 1px solid var(--ez-fb-border, rgba(255, 255, 255, 0.14));
+  border-radius: 8px;
+  background: var(--content-bg, rgba(0, 0, 0, 0.25));
+  color: var(--ez-fb-fg, #e8e8e8);
+  font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.ez-fb-panel-area {
+  resize: vertical;
+  min-height: 58px;
+}
+
+.ez-fb-panel-input::placeholder,
+.ez-fb-panel-area::placeholder {
+  color: var(--ez-fb-muted, #9a9a9a);
+  opacity: 1;
+}
+
+.ez-fb-panel-tips {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--ez-fb-muted, #9a9a9a);
+}
+
+.ez-fb-panel-tips li {
+  margin: 2px 0;
+}
+
+.ez-fb-panel-attach {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ez-fb-panel-check-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.ez-fb-panel-check-row:has(.ez-fb-panel-check:disabled) {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.ez-fb-panel-check {
+  accent-color: var(--ez-fb-accent, #6ea8fe);
+}
+
+.ez-fb-preview {
+  margin: 0;
+  max-height: 240px;
+  overflow: auto;
+  box-sizing: border-box;
+  padding: 8px;
+  border: 1px solid var(--ez-fb-border, rgba(255, 255, 255, 0.14));
+  border-radius: 8px;
+  background: var(--content-bg, rgba(0, 0, 0, 0.25));
+  color: var(--ez-fb-fg, #e8e8e8);
+  font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.ez-fb-panel-status {
+  min-height: 16px;
+  color: var(--ez-fb-muted, #9a9a9a);
+  overflow-wrap: anywhere;
+}
+
+.ez-fb-panel-footer {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.ez-fb-panel-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border: 1px solid var(--ez-fb-border, rgba(255, 255, 255, 0.16));
+  border-radius: 8px;
+  background: var(--ez-fb-bg, #24272e);
+  color: var(--ez-fb-fg, #e8e8e8);
+  font: inherit;
+  cursor: pointer;
+}
+
+.ez-fb-panel-btn:hover {
+  border-color: var(--ez-fb-accent, #6ea8fe);
+}
+
+.ez-fb-panel-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.ez-fb-panel-btn-primary {
+  border-color: var(--ez-fb-accent, #6ea8fe);
+  background: var(--ez-fb-accent, #6ea8fe);
+  color: var(--p-primary-contrast-color, #0b0d10);
+  font-weight: 600;
+}
+
+.ez-fb-panel-btn:focus-visible,
+.ez-fb-panel-chip:focus-visible,
+.ez-fb-panel-input:focus-visible,
+.ez-fb-panel-area:focus-visible,
+.ez-fb-panel-check:focus-visible {
+  outline: 2px solid var(--ez-fb-accent, #6ea8fe);
+  outline-offset: 2px;
+}
+
+.ez-fb-icon {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  vertical-align: -2px;
+}
