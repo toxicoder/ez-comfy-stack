@@ -8,6 +8,6 @@ filegroup(
     name = "blender",
     srcs = glob(
         ["blender/*.py"],
-        allow_empty = True,
+        allow_empty = False,
     ),
 )

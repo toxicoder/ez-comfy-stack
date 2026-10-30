@@ -1,5 +1,7 @@
 """Package purpose: Compose, Dockerfile, entrypoint, install-comfy, and Spark patches."""
 
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+
 package(default_visibility = ["//visibility:public"])
 
 filegroup(
@@ -8,10 +10,41 @@ filegroup(
         [
             "**/*.sh",
             "**/*.py",
-            "**/*.yml",
             "Dockerfile",
             ".dockerignore",
         ],
+        allow_empty = False,
+    ) + glob(
+        [
+            "**/*.yml",
+            "**/*.yaml",
+            "**/*.json",
+            "**/*.conf",
+            "**/*.env",
+        ],
         allow_empty = True,
     ),
+)
+
+# docker compose config -q: parse and validate the compose file the stack
+# actually starts. It catches a broken anchor, a duplicate key, or a service
+# that no longer resolves, which no other gate here reads. check_tool skips the
+# run when no docker CLI is installed (this guard is about the file, not the
+# daemon), and //lints gates are the ones that fail loudly on a missing tool.
+sh_test(
+    name = "compose_config",
+    size = "medium",
+    timeout = "short",
+    srcs = ["compose_config_test.sh"],
+    data = [
+        "docker-compose.yml",
+        ":sources",
+        "//scripts:lib/check_tool.sh",
+    ],
+    tags = [
+        "compose",
+        "local",
+        "no-sandbox",
+    ],
+    visibility = ["//visibility:public"],
 )

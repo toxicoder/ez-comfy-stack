@@ -32,33 +32,30 @@ filegroup(
     name = "sources",
     srcs = glob(
         [
+            "*",
+            ".gitignore",
             "app/**",
             "components/**",
             "lib/**",
             "scripts/**",
             "tests/**",
-            "next-env.d.ts",
-            "next.config.ts",
-            "package.json",
-            "package-lock.json",
-            "pages-root-index.html",
-            "playwright.config.mjs",
-            "postcss.config.mjs",
-            "source.config.ts",
-            "tsconfig.json",
-            "vitest.config.ts",
-            "test_*.py",
-            "run_python_test.sh",
         ],
-        allow_empty = True,
-    ) + [
-        "run_npm.sh",
-    ],
+        allow_empty = False,
+    ),
     visibility = ["//visibility:public"],
 )
 
 # Committed screenshot baselines.  Produced on the CI image (Linux Chromium): font metrics
 # differ per platform, so a golden captured on a laptop will not match CI.
+#
+# STATUS: this matches zero files today - no baselines have ever been committed. The
+# companion guard //docs-site:visual_tooling_test asserts a baseline exists for every page
+# the spec captures, so the empty set is not silently accepted; it is the reason that gate
+# is red and the reason :visual-test cannot pass yet. Refresh with
+#   bazelisk run //docs-site:visual-linux -- --update
+# in the pinned Linux image, then commit the PNGs. allow_empty stays True only because an
+# empty golden set is a legitimate state between "baselines removed" and "recaptured"; the
+# guard above is what makes it transient rather than permanent.
 filegroup(
     name = "visual-goldens",
     srcs = glob(
@@ -250,5 +247,22 @@ sh_binary(
     name = "npm",
     srcs = ["run_npm.sh"],
     data = _NPM_DATA,
+    visibility = ["//visibility:public"],
+)
+
+# Every docs-site gate that can run on a host with the pinned npm tree
+# installed. Before this suite existed all six test targets here were
+# reachable from no suite, so nothing ran them by wildcard. //:test-all names
+# them plus the manual Playwright target; //:test-fast deliberately does not,
+# because every one of these needs npm.
+test_suite(
+    name = "suite",
+    tests = [
+        ":codemod_test",
+        ":nav_test",
+        ":typecheck",
+        ":unit",
+        ":visual_tooling_test",
+    ],
     visibility = ["//visibility:public"],
 )

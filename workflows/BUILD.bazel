@@ -10,6 +10,6 @@ filegroup(
             "shorts/*.yaml",
             "quality/**/NOTICE.md",
         ],
-        allow_empty = True,
+        allow_empty = False,
     ),
 )

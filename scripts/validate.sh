@@ -323,7 +323,7 @@ resolve_slices() {
 check_generated_artifacts() {
   local dirty=0
   if ! git diff --quiet -- docs/generated/shell/reference.md 2>/dev/null; then
-    echo "validate: docs/generated/shell/reference.md is dirty - run: bazelisk run //docs:docs" >&2
+    echo "validate: docs/generated/shell/reference.md is dirty - run: bazelisk run //docs:generate, then commit docs/generated/" >&2
     dirty=1
   fi
   if [[ ${dirty} -ne 0 ]]; then

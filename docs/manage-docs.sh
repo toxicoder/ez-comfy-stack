@@ -5,9 +5,10 @@
 # Bazel / local interface for the Fumadocs (Next.js) documentation site.
 #
 # Usage:
-#   bazelisk run //docs:docs     # generate + static export
+#   bazelisk run //docs:docs      # generate + static export
+#   bazelisk run //docs:generate  # generators only, no npm and no export
 #   bazelisk run //docs:serve
-#   ./docs/manage-docs.sh build|serve|status|clean|preview
+#   ./docs/manage-docs.sh build|generate|serve|status|clean|preview   # raw escape hatch
 #
 # Safety: Writes generated markdown and docs-site/out only. No Compose or GPU.
 
@@ -60,7 +61,7 @@ docs_node_is_ready() {
         exit 1
       }
     else
-      echo "docs: docs-site/node_modules is missing. Run ./docs/setup-docs.sh first." >&2
+      echo "docs: docs-site/node_modules is missing. Run bazelisk run //docs-site:install first." >&2
       exit 1
     fi
   fi
@@ -82,6 +83,23 @@ generate_code_docs() {
   python3 "${REPO_ROOT}/docs/generate_workflow_docs.py"
   python3 "${REPO_ROOT}/docs/generate_cinema_docs.py"
   python3 "${REPO_ROOT}/docs/generate_audio_docs.py"
+}
+
+#######################################
+# Regenerate docs/generated/ only, with no npm install and no export.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   None
+# Outputs:
+#   Generator logs, then the count of files under docs/generated/
+# Returns:
+#   0; generator failures are fatal
+#######################################
+docs_generate() {
+  generate_code_docs
+  echo "Regenerated docs/generated/ ($(find "${REPO_ROOT}/docs/generated" -type f | wc -l) files)."
+  echo "Commit the diff; the export gate compares docs/generated/ against the generators."
 }
 
 #######################################
@@ -213,7 +231,7 @@ docs_status() {
   if [[ -x ${SITE_DIR}/node_modules/.bin/next ]]; then
     echo "Dependencies:          installed"
   else
-    echo "Dependencies:          not installed (run ./docs/setup-docs.sh)"
+    echo "Dependencies:          not installed (run bazelisk run //docs-site:install)"
   fi
   echo "Static export:         $([ -f ${SITE_DIR}/out/index.html ] && echo 'docs-site/out/' || echo 'not built')"
 }
@@ -253,6 +271,7 @@ docs_preview() {
 
 case "${CMD}" in
   build | docs) docs_build "$@" ;;
+  generate) docs_generate ;;
   serve) docs_serve "$@" ;;
   status) docs_status ;;
   clean) docs_clean ;;
@@ -266,7 +285,8 @@ case "${CMD}" in
     (cd "${SITE_DIR}" && npm run unit)
     ;;
   -h | --help | help)
-    echo "Usage: docs/manage-docs.sh build|serve|status|clean|preview|typecheck|test"
+    echo "Usage: bazelisk run //docs:docs | //docs:generate | //docs:serve | //docs:status | //docs:clean | //docs:preview"
+    echo "       raw: docs/manage-docs.sh build|generate|serve|status|clean|preview|typecheck|test"
     ;;
   *)
     echo "docs/manage-docs.sh: unknown command: ${CMD}" >&2

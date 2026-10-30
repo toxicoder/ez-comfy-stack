@@ -1,6 +1,13 @@
 """Package purpose: Aggregate lint test suite (shellcheck, shfmt, buildifier, pyright, mypy).
 
 Tagged 'manual' because they depend on host tools being present in PATH.
+
+REQUIRE_LINT_TOOLS=1 is set for every gate here. scripts/lib/check_tool.sh is
+resilient by design off-Bazel (a missing linter prints a hint and exits 0, so
+`bash lints/run_shellcheck.sh` on a bare laptop is not a wall), but a Bazel
+gate that skips itself is worse than no gate: it reports green having checked
+nothing. Under Bazel a missing tool is a hard failure; `bazelisk run
+//:setup-host` installs the set from .devcontainer/tool-versions.env.
 """
 
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
@@ -9,12 +16,15 @@ package(default_visibility = ["//visibility:private"])
 
 sh_test(
     name = "shell",
+    size = "large",
+    timeout = "moderate",
     srcs = ["run_shellcheck.sh"],
     data = [
         "//:fix.sh",
         "//scripts:doc_sources",
         "//scripts:lib/check_tool.sh",
     ],
+    env = {"REQUIRE_LINT_TOOLS": "1"},
     tags = [
         "lint",
         "local",
@@ -22,12 +32,16 @@ sh_test(
         "no-sandbox",
         "shellcheck",
     ],
+    visibility = ["//visibility:public"],
 )
 
 sh_test(
     name = "shfmt",
+    size = "medium",
+    timeout = "short",
     srcs = ["run_shfmt.sh"],
     data = ["//scripts:lib/check_tool.sh"],
+    env = {"REQUIRE_LINT_TOOLS": "1"},
     tags = [
         "lint",
         "local",
@@ -35,12 +49,16 @@ sh_test(
         "no-sandbox",
         "shfmt",
     ],
+    visibility = ["//visibility:public"],
 )
 
 sh_test(
     name = "buildifier",
+    size = "medium",
+    timeout = "short",
     srcs = ["buildifier_check.sh"],
     data = ["//scripts:lib/check_tool.sh"],
+    env = {"REQUIRE_LINT_TOOLS": "1"},
     tags = [
         "buildifier",
         "lint",
@@ -48,15 +66,20 @@ sh_test(
         "manual",
         "no-sandbox",
     ],
+    visibility = ["//visibility:public"],
 )
 
 sh_test(
     name = "pyright",
+    size = "large",
+    timeout = "moderate",
     srcs = ["run_pyright.sh"],
     data = [
         "//:pyrightconfig.json",
         "//scripts:lib/check_tool.sh",
+        "//tests:requirements.txt",
     ],
+    env = {"REQUIRE_LINT_TOOLS": "1"},
     tags = [
         "lint",
         "local",
@@ -64,15 +87,20 @@ sh_test(
         "no-sandbox",
         "pyright",
     ],
+    visibility = ["//visibility:public"],
 )
 
 sh_test(
     name = "mypy",
+    size = "large",
+    timeout = "moderate",
     srcs = ["run_mypy.sh"],
     data = [
         "//:mypy.ini",
         "//scripts:lib/check_tool.sh",
+        "//tests:requirements.txt",
     ],
+    env = {"REQUIRE_LINT_TOOLS": "1"},
     tags = [
         "lint",
         "local",
@@ -80,17 +108,32 @@ sh_test(
         "mypy",
         "no-sandbox",
     ],
+    visibility = ["//visibility:public"],
 )
 
-# Pyright + mypy live in //tests:typecheck (//:test-fast). Keep the
-# individual lint targets for ad-hoc runs; do not double-run them in CI.
+# Shell/formatter lane. Named shell_lint (not `all`) because a target called
+# `all` shadows the //lints:all wildcard pattern and Bazel reports the
+# package as ambiguous on every query.
 test_suite(
-    name = "all",
+    name = "shell_lint",
     tags = ["lint"],
     tests = [
         ":buildifier",
         ":shell",
         ":shfmt",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+# Python type lane. It lived in no suite before, so `bazel test //:lint` never
+# ran it. //tests:typecheck runs the same two checkers in //:test-fast; these
+# are the manual-tagged copies for ad-hoc `bazelisk test //lints:mypy`.
+test_suite(
+    name = "python",
+    tags = ["lint"],
+    tests = [
+        ":mypy",
+        ":pyright",
     ],
     visibility = ["//visibility:public"],
 )

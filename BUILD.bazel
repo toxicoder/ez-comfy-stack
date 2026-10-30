@@ -7,7 +7,10 @@ Common entry points:
   bazelisk run //:validate              # git-aware build + test + lint + docs
   bazelisk test //:test                 # hermetic suite including docs render contract
   bazelisk test //:test-fast            # CI core (BATS + pytest + typecheck + inventory)
+  bazelisk test //:test-all             # every gate, incl. manual lint + visual + compose
   bazelisk test //:lint --test_tag_filters=manual
+  bazelisk test //:owned_files_check    # every tracked file is owned by a BUILD target
+  bazelisk run //:setup-host -- --check # host toolchain the lint gates need
   bazelisk run //:manage -- doctor
   bazelisk run //docs:serve
 
@@ -15,19 +18,37 @@ See docs/contribute/building-with-bazel.md.
 """
 
 load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+load("//tools:exec_shell.bzl", "exec_shell")
 
 package(default_visibility = ["//visibility:private"])
 
 exports_files([
     "fix.sh",
+    "AGENTS.md",
     "CONTRIBUTING.md",
+    "MIGRATION.md",
     "README.md",
+    "SECURITY.md",
     "Makefile",
     "LICENSE",
     "LICENSE-MODELS.md",
+    ".github/scripts/install-lint-tools.sh",
     "mypy.ini",
     "pyrightconfig.json",
 ])
+
+# Repo hygiene dotfiles. Bazel globs never match a dotfile, so these are
+# listed by hand: without this group a change to .gitignore is invisible to
+# every target and `git ls-files` reports the file as unmapped.
+filegroup(
+    name = "repo_meta",
+    srcs = [
+        ".env.example",
+        ".gitattributes",
+        ".gitignore",
+    ],
+    visibility = ["//visibility:public"],
+)
 
 filegroup(
     name = "devcontainer",
@@ -59,6 +80,7 @@ filegroup(
     name = "ci_workflows",
     srcs = [
         ".github/actions/setup-bazel/action.yml",
+        ".github/scripts/install-lint-tools.sh",
         ".github/workflows/ci.yml",
         ".github/workflows/deploy-docs.yml",
         ".github/workflows/publish-devcontainer.yml",
@@ -88,7 +110,9 @@ alias(
 _TEST_FAST = [
     "//scripts:manage_help_test",
     "//tests:bats",
+    "//tests:build_quality_js_check",
     "//tests:js",
+    "//tests:owned_files_check",
     "//tests:pytest",
     "//tests:typecheck",
     "//tests:shell_inventory",
@@ -108,14 +132,40 @@ test_suite(
     visibility = ["//visibility:public"],
 )
 
+# Every gate in the repo, including the ones no wildcard reaches: the
+# manual-tagged linters, the Playwright visual suite, and the Docker Compose
+# config check. NOT hermetic and NOT fast - it needs host linters, the pinned
+# docs-site npm tree, and a Docker CLI. CI runs //:test-fast and
+# //:lint --test_tag_filters=manual; this is the umbrella a human runs before
+# shipping a Bazel-side change.
+test_suite(
+    name = "test-all",
+    tests = _TEST_FAST + [
+        "//docker:compose_config",
+        "//docs:test_docs_site_render",
+        "//docs-site:suite",
+        "//docs-site:visual-test",
+        "//lints:buildifier",
+        "//lints:mypy",
+        "//lints:pyright",
+        "//lints:shell",
+        "//lints:shfmt",
+    ],
+    visibility = ["//visibility:public"],
+)
+
 filegroup(
     name = "first_party_srcs",
     srcs = [
+        "AGENTS.md",
         "LICENSE",
         "LICENSE-MODELS.md",
+        "MIGRATION.md",
         "Makefile",
+        "SECURITY.md",
         ":ci_workflows",
         ":devcontainer",
+        ":repo_meta",
         ":vscode",
         "//config:policy",
         "//custom_nodes:sources",
@@ -135,7 +185,7 @@ filegroup(
 )
 
 filegroup(
-    name = "all",
+    name = "repo_files",
     srcs = [
         ":first_party_srcs",
         ":manage",
@@ -148,7 +198,8 @@ test_suite(
     name = "lint",
     tags = ["lint"],
     tests = [
-        "//lints:all",
+        "//lints:python",
+        "//lints:shell_lint",
     ],
     visibility = ["//visibility:public"],
 )
@@ -192,5 +243,26 @@ alias(
 alias(
     name = "coverage",
     actual = "//tests:coverage",
+    visibility = ["//visibility:public"],
+)
+
+# Host bootstrap: bazelisk plus the lint toolchain the //:lint gates shell
+# out to. This is the one target whose whole job is to make Bazel exist on a
+# bare host, so it is exposed here rather than under //scripts.
+#   bazelisk run //:setup-host -- --check
+exec_shell(
+    name = "setup-host",
+    src = "//scripts:setup-host.sh",
+    data = [
+        "//:devcontainer",
+        "//scripts:doc_sources",
+        "//tests:requirements.txt",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+test_suite(
+    name = "owned_files_check",
+    tests = ["//tests:owned_files_check"],
     visibility = ["//visibility:public"],
 )
