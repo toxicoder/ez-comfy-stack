@@ -45,6 +45,7 @@
       "label": "pytest",
       "type": "shell",
       "command": "bazelisk test //tests:pytest --test_output=errors",
+      "detail": "Test lane for tests/python. The built-in Python Test Explorer is switched off in settings.json; run this task, and use the launch.json pytest configs only to step through a test in the debugger.",
       "group": "test",
       "problemMatcher": [],
       "presentation": {
@@ -90,6 +91,22 @@
       "label": "fix",
       "type": "shell",
       "command": "bazelisk run //:fix",
+      "group": "none",
+      "problemMatcher": [],
+      "presentation": {
+        "clear": true,
+        "echo": true,
+        "focus": false,
+        "panel": "shared",
+        "reveal": "always",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "setup-host",
+      "type": "shell",
+      "command": "bazelisk run //:setup-host",
+      "detail": "Install the host toolchain the lint targets shell out to (shellcheck, shfmt, buildifier, pyright, mypy, node). Without it //:lint skips missing tools and still passes. Add -- --check to report only. If bazelisk itself is missing, bootstrap with: bash scripts/setup-host.sh",
       "group": "none",
       "problemMatcher": [],
       "presentation": {

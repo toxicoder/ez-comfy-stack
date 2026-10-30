@@ -3,7 +3,7 @@ import { defineConfig } from "@playwright/test";
 /**
  * Visual regression gate for the documentation site.
  *
- * Replaces the MkDocs render test (`//docs:test_mkdocs_render`): the exported site is
+ * Replaces the MkDocs render test (`//docs:test_docs_site_render`): the exported site is
  * screenshotted in a real browser and compared against the committed goldens, so a change
  * that breaks layout, theming or one of the ported widgets fails the suite instead of
  * being noticed by a reader.

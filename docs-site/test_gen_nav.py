@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Unit tests for the nav transcriber (docs-site/scripts/gen_nav.py).
 
-Run: bazelisk test //docs-site:gen_nav_test   (or: python3 -m unittest -v test_gen_nav.py)
+Run: bazelisk test //docs-site:nav_test   (or: python3 -m unittest -v test_gen_nav.py)
 
 The transcriber is the bridge between the ``mkdocs.yml`` nav and the Fumadocs sidebar, and
-``//tests:doc_coverage`` trusts its output. These tests pin the parsing rules against
-fixtures plus the real ``mkdocs.yml`` while it still exists.
+the doc-coverage gate (``//tests:pytest`` -> ``tests/python/test_docs_nav_coverage.py``)
+trusts its output. These tests pin the parsing rules against fixtures plus the real
+``mkdocs.yml`` while it still exists.
 """
 
 from __future__ import annotations
@@ -255,7 +256,7 @@ class MainCliTests(unittest.TestCase):
                 self.assertEqual(1, gen_nav.main(["--check"]))
 
     def test_check_accepts_an_up_to_date_nav_json(self) -> None:
-        """The green case for the gate //tests:doc_coverage relies on."""
+        """The green case for the doc-coverage gate in //tests:pytest relies on."""
         with tempfile.TemporaryDirectory() as tmp:
             root = pathlib.Path(tmp)
             self._fixture(root)
