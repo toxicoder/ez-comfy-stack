@@ -964,7 +964,18 @@ def test_report_builder_matches_context_py_constants() -> None:
     assert _literal(tree, "REPO") == _CANON_REPO == server.REPO
     assert _literal(tree, "LABELS") == _CANON_LABELS == server.LABELS
     assert _literal(tree, "MAX_HREF") == _CANON_MAX_HREF == server.MAX_HREF
-    assert _headings_in(text) == list(_CANON_HEADINGS) == list(server.BODY_HEADINGS)
+    enhance_headings = _literal(tree, "ENHANCE_HEADINGS")
+    assert isinstance(enhance_headings, tuple), "context.py lost ENHANCE_HEADINGS"
+    assert list(enhance_headings) == [
+        "## Problem",
+        "## Proposed solution",
+        "## Alternatives",
+        "## What it unlocks",
+    ]
+    # The enhancement headings extend feature-request bodies only; the bug body
+    # order pinned against the studio-ui builder must stay the canonical eight.
+    body_headings = [h for h in _headings_in(text) if h not in set(enhance_headings)]
+    assert body_headings == list(_CANON_HEADINGS) == list(server.BODY_HEADINGS)
     for lead in _CANON_LEADS:
         assert f'"{lead}' in text or f"'{lead}" in text or f"{lead} " in text
     for surface in _CANON_SURFACES:
