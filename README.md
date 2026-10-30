@@ -67,6 +67,16 @@ Non-host verbs lead with the same ingress as everything else, `bazelisk run //:m
 `./scripts/manage.sh <verb>` stays the documented escape hatch for `setup`, `download-models`,
 `start`, and `stop`, which need docker, sudo, the GPU, or `$HOME`.
 
+Cut and grade the result in **[Vlo](docs/vlo.mdx)** - a host-side, AGPL-3.0 timeline editor
+that dials this stack's ComfyUI at `http://127.0.0.1:${COMFY_PORT:-8188}`, so every heavy
+generation still runs on the Spark. It is a host app: never in the image, never a Compose
+service, never a `manage.sh` verb.
+
+```bash
+git clone https://github.com/PxTicks/vlo && cd vlo && ./install.sh && ./run.sh
+# then open http://127.0.0.1:6332 in Chrome or Edge
+```
+
 ## The gates
 
 One-time host bootstrap. Without it `bazelisk test //:lint` passes with no linters installed

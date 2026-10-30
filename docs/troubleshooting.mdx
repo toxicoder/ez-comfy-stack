@@ -13,6 +13,7 @@ tags: [troubleshooting, comfyui, docker]
 - **update-stack refusals** - exit 3 guardrails, exit 5 unprovable repo root, wrong image lane
 - **Symptom decision tree** - common failures in one diagram
 - **Reference stills** - a picked still that does not apply, silent fail-soft loads, and `max_refs`
+- **Vlo (host editor)** - Vlo cannot reach ComfyUI, and the Chromium-only rule
 - **Quality combo** - a tier that drops to `custom`, a combo that moved by itself, muted film acts, and the CLI `--quality` seam
 - **Logs and reset** - compose logs and `cleanup` that keeps `${MODELS_DIR}`
 
@@ -120,6 +121,18 @@ Canvas rows live in [Studio canvas](operate/troubleshooting-canvas.md). The fixt
 | --- | --- | --- |
 | YT preview `ez_dub_yt_*.mp3` is ~source length but has no Spanish (tone, hush, ducked English, or a sliding moan) | Clone failed `is_speech_like` (including an F0-glide vocoder "whale") or ingest `job_slug` became `True` from the upload button | Pull latest. Clone CFG auto is 0.3 (retry 0.5). Check Dub status. Inspect `dubs/<slug>/render/turn_*.raw.wav`. `download-dub --tier asr` then `--tier clone` with compose up. Never treat a duration-matched drone as success. Job dir must be `dubs/episode/`, not `dubs/True/`. |
 | Dub clone does not sound like the speaker | The reference window was clipped, tonal, or off-speaker, or every window was rejected | Open `dubs/<slug>/speakers/spkNN.ref.json` (also under `qc.json` `reference`). `score` is the window rank. `degraded: true` / Dub status `ref: degraded` means the loudness fallback ran; `reject` names the gate (`clip`, `tonal`, `band`, `unvoiced`, `not_speech`). Overlap and quiet turns are still dropped. Re-Queue Stage **render** after the source is one person without a music bed. |
+
+---
+
+## Vlo (host video editor)
+
+Vlo (`PxTicks/vlo`, AGPL-3.0) is a host browser app that queues into this stack's ComfyUI over its bridge. Install and settings: [Vlo video editor](vlo.md).
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| Vlo cannot reach ComfyUI - every generation fails to connect or the app shows ComfyUI offline | Compose is not up, or ComfyUI is published on a port other than the `http://127.0.0.1:8188` Vlo assumes by default | `./scripts/manage.sh start` (type **yes**) and confirm the UI itself loads at `http://127.0.0.1:${COMFY_PORT}` before blaming Vlo. Then set **App settings -> Runtime settings** to `http://127.0.0.1:${COMFY_PORT}` - the shipped default **8188** is only right when `COMFY_PORT=8188`. `backend/.env` `COMFYUI_URL` holds the same value; the in-app setting wins once you change it. Remote Spark: forward the port (`ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" ...`) |
+| Vlo's **Launch ComfyUI** starts a second ComfyUI, or start is refused on headroom | That button drives a folder install Vlo created itself. This stack owns the container lifecycle, so a second ComfyUI means two heavy GPU jobs | Start ComfyUI with `./scripts/manage.sh start` only. On first launch skip **Install ComfyUI** and just set the URL in **App settings -> Runtime settings**. Skip Vlo's model downloader for the same reason - weights stay on `./scripts/manage.sh download-models` |
+| Vlo will not open, or the timeline will not play/render, in Firefox or Safari | The editor needs the File System Access API and WebCodecs (its media renderer wraps mediabunny), which those browsers do not give it | Use a Chromium-based browser: Chrome or Edge (Opera may work). See [Vlo video editor](vlo.md) |
 
 ---
 

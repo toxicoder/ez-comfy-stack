@@ -195,7 +195,9 @@ teardown() {
   run grep -F 'LAB_ENABLE_LTX_DIRECTOR' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
   [ "${status}" -eq 0 ]
   run grep -F 'ComfyUI-OpenCut' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
-  [ "${status}" -eq 0 ]
+  [ "${status}" -ne 0 ]
+  run grep -F 'COMFYUI_OPENCUT_REF' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -ne 0 ]
   run grep -F 'MiniMaxH3-Director' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
   [ "${status}" -ne 0 ]
   run grep -F 'ensure_lab_video_nodes' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
@@ -1427,7 +1429,8 @@ PY
   [[ -n ${COMFYUI_MANAGER_REF} ]]
   [[ -n ${COMFYUI_NUNCHAKU_NODE_REF} ]]
   [[ ${COMFYUI_NUNCHAKU_NODE_REF} == v* ]]
-  [[ ${COMFYUI_OPENCUT_REF} == "0.5.0" ]]
+  # OpenCut is retired: no editor node pin survives in the image build.
+  [[ -z ${COMFYUI_OPENCUT_REF:-} ]]
   [[ ${#COMFYUI_MAGCACHE_REF} -ge 7 ]]
   [[ ${#COMFYUI_LTX_DIRECTOR_REF} -ge 7 ]]
   [[ -n ${TORCH_VERSION} ]]
