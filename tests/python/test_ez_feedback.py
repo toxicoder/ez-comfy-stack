@@ -11,6 +11,7 @@ import asyncio
 import json
 import os
 import sys
+import threading
 import types
 import urllib.error
 import urllib.request
@@ -238,6 +239,27 @@ def test_constants_match_the_contract() -> None:
         "## Browser",
     )
     assert context.DEGRADE_ORDER == ("## Browser", "## Recent errors", "## Environment")
+    assert context.MAX_ERROR_TEXT == 2000
+    assert context.MAX_FIELD == 300
+    assert context.ENHANCE_HEADINGS == (
+        "## Problem",
+        "## Proposed solution",
+        "## Alternatives",
+        "## What it unlocks",
+    )
+    assert context.BUG_NARRATIVE_KEYS == ("what_happened", "steps", "expected", "actual")
+    assert context.ENHANCE_NARRATIVE_KEYS == ("problem", "solution", "alternatives", "unlocks")
+
+
+def test_surfaces_include_the_load_error_surface() -> None:
+    assert "load-error" in context.SURFACES
+    assert context.SURFACES[-1] == "load-error"
+    assert context.title_for("bug", "load-error", "", "") == (
+        "[load-error] Bug report from load-error"
+    )
+    assert context.title_for("enhancement", "load-error", "", "boom") == (
+        "[load-error] boom"
+    )
 
 
 # --- clip / labels / title --------------------------------------------------
@@ -379,6 +401,26 @@ def test_error_lines_redacts_and_defaults_to_global() -> None:
     assert lines == ["- unknown [global] [redacted]"]
 
 
+def test_error_lines_keep_a_long_traceback_first_line() -> None:
+    """The ring buffer renders the whole message, not the 300-char field cap."""
+    message = "RuntimeError: CUDA out of memory " + ("need more memory " * 90)
+    assert 1000 < len(message) < context.MAX_ERROR_TEXT
+    lines = context.error_lines([{"message": message, "detail": "node 7 " * 250}], "app")
+    assert len(lines) == 1
+    assert message in lines[0]
+    assert "..." not in lines[0]
+
+
+def test_error_lines_clip_at_the_error_cap() -> None:
+    lines = context.error_lines([{"message": "m" * 2500, "detail": "d" * 2500}], "app")
+    assert lines[0].startswith("- unknown [app] ")
+    body = lines[0].split("] ", 1)[1]
+    rendered, _, detail = body.partition(" (")
+    assert rendered == "m" * (context.MAX_ERROR_TEXT - 3) + "..."
+    assert detail.rstrip(")") == "d" * (context.MAX_ERROR_TEXT - 3) + "..."
+    assert context.MAX_ERROR_TEXT > context.MAX_FIELD
+
+
 def test_browser_lines_only_present_fields() -> None:
     lines = context.browser_lines(
         {
@@ -485,6 +527,117 @@ def test_build_body_redacts_the_traceback(monkeypatch: pytest.MonkeyPatch) -> No
     body = context.build_body(**_body_args(traceback="KeyError ghp_ABCDEF123456"))
     assert "ghp_" not in body
     assert "[redacted]" in body
+
+
+# --- narrative sections -----------------------------------------------------
+
+
+def test_build_body_bug_narrative_fills_every_section() -> None:
+    narrative = {
+        "what_happened": "KSampler failed on the stills lane.\nSecond paragraph.",
+        "steps": "1. Open still-draft\n2. Queue prompt",
+        "expected": "An image lands in the output dir.",
+        "actual": "ValueError: shape mismatch",
+    }
+    body = context.build_body(**_body_args(narrative=narrative))
+    order = [line for line in body.split("\n") if line.startswith("## ")]
+    assert order == list(context.HEADINGS)
+    assert body.count(context.FILL_IN) == 0
+    assert "## What happened\n\nKSampler failed on the stills lane.\nSecond paragraph.\n\n" in body
+    assert "## Steps\n\n1. Open still-draft\n2. Queue prompt\n\n" in body
+    assert "## Expected\n\nAn image lands in the output dir.\n\n" in body
+    assert "## Actual\n\nValueError: shape mismatch\n\n## Context" in body
+
+
+def test_build_body_bug_narrative_falls_back_on_empties() -> None:
+    body = context.build_body(
+        **_body_args(
+            narrative={"what_happened": "  typed it  ", "steps": "   ", "actual": None}
+        )
+    )
+    assert body.count(context.FILL_IN) == 3
+    assert "## What happened\n\ntyped it\n\n" in body
+    assert f"## Steps\n\n{context.FILL_IN}\n\n" in body
+    assert f"## Expected\n\n{context.FILL_IN}\n\n" in body
+    assert f"## Actual\n\n{context.FILL_IN}" in body
+
+
+def test_build_body_bug_without_narrative_is_the_old_body() -> None:
+    kwargs = _body_args()
+    assert context.build_body(**kwargs) == context.build_body(**kwargs, narrative=None)
+
+
+def test_build_body_narrative_keeps_its_line_breaks_and_is_never_clipped() -> None:
+    text = "\n\n  first line\n  indented line\n\n" + ("x" * 5000) + "\ntail  "
+    body = context.build_body(**_body_args(narrative={"what_happened": text}))
+    assert "x" * 5000 in body
+    assert body.count("...") == 0
+    assert "## What happened\n\nfirst line\n  indented line\n\n" + "x" * 5000 + "\ntail\n\n" in body
+
+
+def test_build_body_narrative_is_redacted(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("HOME", "/home/spark")
+    body = context.build_body(
+        **_body_args(narrative={"steps": "run /home/spark/x.sh with ghp_ABCDEF123456"})
+    )
+    assert "ghp_" not in body
+    assert "/home/spark" not in body
+    assert "## Steps\n\nrun ~/x.sh with [redacted]\n\n" in body
+
+
+def test_build_body_enhancement_narrative_precedes_context() -> None:
+    body = context.build_body(
+        **_body_args(
+            kind="enhancement",
+            narrative={
+                "problem": "wrap is slow\non long clips",
+                "solution": "stream the ffmpeg pass",
+                "alternatives": "  ",
+                "unlocks": None,
+            },
+        )
+    )
+    order = [line for line in body.split("\n") if line.startswith("## ")]
+    assert order == [
+        "## Problem",
+        "## Proposed solution",
+        "## Context",
+        "## Environment",
+        "## Recent errors",
+        "## Browser",
+    ]
+    assert "## Problem\n\nwrap is slow\non long clips\n\n" in body
+    assert "## Proposed solution\n\nstream the ffmpeg pass\n\n" in body
+    assert "## Alternatives" not in body
+    assert "## What it unlocks" not in body
+    assert context.FILL_IN not in body
+
+
+def test_build_body_enhancement_drops_empty_narrative_headings() -> None:
+    empty = context.build_body(**_body_args(kind="enhancement", narrative={"problem": "  "}))
+    assert "## Problem" not in empty
+    assert empty == context.build_body(**_body_args(kind="enhancement"))
+
+
+def test_build_body_narrative_ignores_the_other_kinds_keys() -> None:
+    bug = context.build_body(**_body_args(narrative={"problem": "p", "solution": "s"}))
+    assert bug.count(context.FILL_IN) == 4
+    assert "## Problem" not in bug
+    enhancement = context.build_body(
+        **_body_args(kind="enhancement", narrative={"what_happened": "w", "steps": "s"})
+    )
+    assert "## What happened" not in enhancement
+    assert "## Steps" not in enhancement
+    assert "## Problem" not in enhancement
+
+
+def test_build_body_tolerates_a_non_mapping_narrative() -> None:
+    kwargs = _body_args(narrative=cast(Any, ["nope"]))
+    assert context.build_body(**kwargs) == context.build_body(**_body_args())
+    enhancement = context.build_body(
+        **_body_args(kind="enhancement", narrative=cast(Any, "problem text"))
+    )
+    assert "## Problem" not in enhancement
 
 
 # --- href degradation -------------------------------------------------------
@@ -937,6 +1090,217 @@ def test_gpu_probe_drops_empty_facts() -> None:
     assert routes.gpu_probe(_Torch()) == {}
 
 
+# --- routes: enhance --------------------------------------------------------
+
+
+def _enhance_args(**overrides: Any) -> dict[str, Any]:
+    """A well-formed enhance body.
+
+    Args:
+        **overrides: Field overrides.
+
+    Returns:
+        Request body dict.
+    """
+    args: dict[str, Any] = {"kind": "bug", "text": "KSampler blew up on the stills lane"}
+    args.update(overrides)
+    return args
+
+
+def _no_llm(_system: str, _user: str) -> tuple[str, str]:
+    """Model stand-in that must never be reached.
+
+    Args:
+        _system: Unused system prompt.
+        _user: Unused user text.
+
+    Returns:
+        Never returns.
+
+    Raises:
+        AssertionError: Always, so a refused request cannot call the model.
+    """
+    raise AssertionError("must not call the model")
+
+
+def test_enhance_prompts_are_the_committed_files() -> None:
+    assert routes.ENHANCE_PROMPTS == {
+        "bug": routes.ENHANCE_BUG_PROMPT,
+        "enhancement": routes.ENHANCE_ENHANCEMENT_PROMPT,
+    }
+    assert (routes.PROMPT_DIR / "enhance_bug.txt").is_file()
+    assert (routes.PROMPT_DIR / "enhance_enhancement.txt").is_file()
+    for kind, headings in (
+        ("bug", context.FILL_HEADINGS),
+        ("enhancement", context.ENHANCE_HEADINGS),
+    ):
+        text = routes.ENHANCE_PROMPTS[kind]
+        assert text.strip()
+        assert text.isascii()
+        assert "ez-comfy-stack" in text
+        assert "Never invent" in text or "never invent" in text.lower()
+        positions = [text.index(heading) for heading in headings]
+        assert positions == sorted(positions)
+
+
+def test_handle_enhance_rewrites_with_the_injected_model() -> None:
+    seen: list[tuple[str, str]] = []
+
+    def llm(system: str, user: str) -> tuple[str, str]:
+        seen.append((system, user))
+        return "  ## What happened\n\nboom  ", "ignored"
+
+    status, payload = routes.handle_enhance(_enhance_args(), llm=llm)
+    assert status == 200
+    assert payload == {"ok": True, "text": "## What happened\n\nboom"}
+    assert seen == [(routes.ENHANCE_BUG_PROMPT, "KSampler blew up on the stills lane")]
+
+
+def test_handle_enhance_picks_the_prompt_by_normalized_kind() -> None:
+    seen: list[str] = []
+
+    def llm(system: str, _user: str) -> tuple[str, str | None]:
+        seen.append(system)
+        return "text", None
+
+    for kind in ("Enhancement ", "ENHANCEMENT", "nonsense", "", None):
+        status, _payload = routes.handle_enhance(_enhance_args(kind=kind), llm=llm)
+        assert status == 200
+    assert seen == [
+        routes.ENHANCE_ENHANCEMENT_PROMPT,
+        routes.ENHANCE_ENHANCEMENT_PROMPT,
+        routes.ENHANCE_BUG_PROMPT,
+        routes.ENHANCE_BUG_PROMPT,
+        routes.ENHANCE_BUG_PROMPT,
+    ]
+
+
+def test_handle_enhance_redacts_the_notes_before_the_model(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("HOME", "/home/spark")
+    seen: list[str] = []
+
+    def llm(_system: str, user: str) -> tuple[str, str | None]:
+        seen.append(user)
+        return "fine", None
+
+    status, _payload = routes.handle_enhance(
+        _enhance_args(text="  run /home/spark/x.sh with ghp_ABCDEF123456  "), llm=llm
+    )
+    assert status == 200
+    assert seen == ["run ~/x.sh with [redacted]"]
+
+
+def test_handle_enhance_without_notes_is_400() -> None:
+    for body in ({}, {"text": "   "}, {"text": None}, {"text": 0}, ["not a mapping"], None):
+        status, payload = routes.handle_enhance(cast(Any, body), llm=_no_llm)
+        assert status == 400
+        assert payload == {"ok": False, "error": "nothing to enhance"}
+
+
+def test_handle_enhance_over_the_input_cap_is_400() -> None:
+    status, payload = routes.handle_enhance(
+        _enhance_args(text="x" * (routes.ENHANCE_INPUT_MAX + 1)), llm=_no_llm
+    )
+    assert status == 400
+    assert payload == {"ok": False, "error": "text too long"}
+
+    at_cap = routes.handle_enhance(
+        _enhance_args(text="x" * routes.ENHANCE_INPUT_MAX), llm=lambda s, u: ("ok", None)
+    )
+    assert at_cap[0] == 200
+
+
+def test_handle_enhance_without_an_answer_is_503() -> None:
+    status, payload = routes.handle_enhance(_enhance_args(), llm=lambda s, u: ("", "no gguf"))
+    assert status == 503
+    assert payload == {"ok": False, "error": "no gguf"}
+
+    blank = routes.handle_enhance(_enhance_args(), llm=lambda s, u: ("   ", None))
+    assert blank[0] == 503
+    assert blank[1] == {"ok": False, "error": routes.LLM_UNAVAILABLE_ERROR}
+
+    none = routes.handle_enhance(_enhance_args(), llm=lambda s, u: (cast(Any, None), ""))
+    assert none[0] == 503
+    assert none[1] == {"ok": False, "error": routes.LLM_UNAVAILABLE_ERROR}
+
+
+def test_handle_enhance_model_raise_is_502_with_the_type_name_only() -> None:
+    def llm(_system: str, _user: str) -> tuple[str, str]:
+        raise RuntimeError(f"sidecar said {TOKEN} about the stills lane")
+
+    status, payload = routes.handle_enhance(_enhance_args(), llm=llm)
+    assert status == 502
+    assert payload == {"ok": False, "error": "RuntimeError"}
+    assert TOKEN not in json.dumps(payload)
+
+
+def test_handle_enhance_caps_and_redacts_the_rewrite(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("HOME", "/home/spark")
+    status, payload = routes.handle_enhance(
+        _enhance_args(),
+        llm=lambda s, u: ("y" * 20000 + " ghp_ABCDEF123456 /home/spark/x", None),
+    )
+    assert status == 200
+    text = str(payload["text"])
+    assert len(text) == routes.ENHANCE_OUTPUT_MAX
+    assert set(text) == {"y"}
+
+
+def test_handle_enhance_defaults_to_the_enhance_client(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    seen: list[tuple[str, str]] = []
+
+    def complete(system: str, user: str) -> tuple[str | None, str | None]:
+        seen.append((system, user))
+        return "## Problem\n\nplease", None
+
+    package = types.ModuleType("ez_prompt_enhance")
+    client = types.ModuleType("ez_prompt_enhance.client")
+    client.complete = complete  # type: ignore[attr-defined]
+    monkeypatch.setitem(sys.modules, "ez_prompt_enhance", package)
+    monkeypatch.setitem(sys.modules, "ez_prompt_enhance.client", client)
+
+    status, payload = routes.handle_enhance(_enhance_args(kind="enhancement"))
+    assert status == 200
+    assert payload["text"] == "## Problem\n\nplease"
+    assert seen == [(routes.ENHANCE_ENHANCEMENT_PROMPT, "KSampler blew up on the stills lane")]
+
+
+def test_handle_enhance_without_the_enhance_pack_is_503(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setitem(sys.modules, "ez_prompt_enhance", types.ModuleType("ez_prompt_enhance"))
+    monkeypatch.setitem(sys.modules, "ez_prompt_enhance.client", None)
+    status, payload = routes.handle_enhance(_enhance_args())
+    assert status == 503
+    assert payload == {"ok": False, "error": routes.LLM_UNAVAILABLE_ERROR}
+
+
+def test_default_llm_passes_through_a_reason(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    client = types.ModuleType("ez_prompt_enhance.client")
+
+    def complete(_system: str, _user: str) -> tuple[str | None, str | None]:
+        return None, "gguf missing"
+
+    client.complete = complete  # type: ignore[attr-defined]
+    monkeypatch.setitem(sys.modules, "ez_prompt_enhance", types.ModuleType("ez_prompt_enhance"))
+    monkeypatch.setitem(sys.modules, "ez_prompt_enhance.client", client)
+    assert routes._default_llm("system", "user") == ("", "gguf missing")
+
+    def raiser(_system: str, _user: str) -> tuple[str, str]:
+        raise RuntimeError("no gguf")
+
+    client.complete = raiser  # type: ignore[attr-defined]
+    assert routes._default_llm("system", "user") == ("", routes.LLM_UNAVAILABLE_ERROR)
+
+
 # --- routes: registration ---------------------------------------------------
 
 
@@ -948,6 +1312,22 @@ def test_register_routes_attaches_both_paths() -> None:
     assert registered is True
     assert ("get", "/ez_feedback/config") in adder.recorded
     assert ("post", "/ez_feedback/submit") in adder.recorded
+
+
+def test_register_routes_attaches_the_enhance_path() -> None:
+    adder = _Adder()
+    registered = routes.register_routes(
+        server=types.SimpleNamespace(routes=adder), json_response=_respond
+    )
+    assert registered is True
+    assert ("post", "/ez_feedback/enhance") in adder.recorded
+    assert adder.recorded == [
+        ("get", "/ez_feedback/config"),
+        ("post", "/ez_feedback/submit"),
+        ("post", "/ez_feedback/enhance"),
+    ]
+    assert routes.ENHANCE_PATH == "/ez_feedback/enhance"
+    assert callable(adder.handlers[routes.ENHANCE_PATH])
 
 
 def test_register_routes_without_aiohttp(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -1041,6 +1421,41 @@ def test_handlers_serve_config_and_submit(monkeypatch: pytest.MonkeyPatch) -> No
         assert no_token[0] == 409
 
     asyncio.run(_run())
+
+
+def test_enhance_handler_answers_from_a_worker_thread(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    adder = _Adder()
+    routes.register_routes(
+        server=types.SimpleNamespace(routes=adder), json_response=_respond
+    )
+    seen: list[tuple[str, str]] = []
+
+    def llm(system: str, user: str) -> tuple[str, str | None]:
+        seen.append((system, user))
+        assert threading.current_thread() is not threading.main_thread()
+        return "## What happened\n\nfixed", None
+
+    monkeypatch.setattr(routes, "_default_llm", llm)
+
+    async def _run() -> None:
+        ok = await adder.handlers[routes.ENHANCE_PATH](_Req(body={"kind": "bug", "text": "boom"}))
+        assert ok[0] == 200
+        assert ok[1] == {"ok": True, "text": "## What happened\n\nfixed"}
+
+        blank = await adder.handlers[routes.ENHANCE_PATH](_Req(body={"text": "   "}))
+        assert blank[0] == 400
+        assert blank[1]["error"] == "nothing to enhance"
+
+        broken = await adder.handlers[routes.ENHANCE_PATH](_Req(boom=True))
+        assert broken[0] == 400
+
+        not_dict = await adder.handlers[routes.ENHANCE_PATH](_Req(body=["x"]))
+        assert not_dict[0] == 400
+
+    asyncio.run(_run())
+    assert seen == [(routes.ENHANCE_BUG_PROMPT, "boom")]
 
 
 def test_request_json_shapes() -> None:
