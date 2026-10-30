@@ -52,6 +52,8 @@ Usage:
     Environment:
       See .env.example - MODELS_DIR, HF_TOKEN, MEM_LIMIT, DOWNLOAD_LIMIT,
       LAB_NON_INTERACTIVE, LAB_CONFIRM_TOKEN, MIN_HOST_FREE_GIB, etc.
+      BUILD_WORKSPACE_DIRECTORY - set by `bazel run`; names the git checkout used
+      as REPO_ROOT so compose bind mounts never come from bazel-out.
 
 Exit codes:
   0 - success or interactive user abort on confirm
@@ -1870,6 +1872,11 @@ Usage:
 
   bazelisk run //scripts:run-utility -- download-limit status
   bazelisk run //scripts:run-utility -- occupancy status
+  bash scripts/utilities/runner.sh download-limit status
+
+Environment:
+  BUILD_WORKSPACE_DIRECTORY - set by `bazel run`; names the git checkout the
+  utility runs against. Exported as REPO_ROOT for the utility and its children.
 
 !!! warning
 

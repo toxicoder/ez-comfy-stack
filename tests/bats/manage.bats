@@ -654,3 +654,28 @@ FROZEN_MANAGE_VERBS=(
   [[ "${output}" == *"update-stack"* ]]
   [[ "${output}" == *"Redeploy from the checked-out branch"* ]]
 }
+
+@test "manage: REPO_ROOT is the checkout while SCRIPT_DIR is the exec'd tree" {
+  run bash -c "unset REPO_ROOT BUILD_WORKSPACE_DIRECTORY; source '${MANAGE_SH}'; \
+printf 'REPO_ROOT=%s\nSCRIPT_DIR=%s\n' \"\${REPO_ROOT}\" \"\${SCRIPT_DIR}\""
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"REPO_ROOT=${REPO_ROOT}"* ]]
+  [[ "${output}" == *"SCRIPT_DIR=${REPO_ROOT}/scripts"* ]]
+  [[ -f ${REPO_ROOT}/MODULE.bazel ]]
+}
+
+@test "manage: REPO_ROOT comes from bazel_checkout_root and lib from SCRIPT_DIR" {
+  run grep -F 'REPO_ROOT="$(bazel_checkout_root)"' "${MANAGE_SH}"
+  [ "${status}" -eq 0 ]
+  run grep -F 'source "${SCRIPT_DIR}/lib/common.sh"' "${MANAGE_SH}"
+  [ "${status}" -eq 0 ]
+  run grep -F 'REPO_ROOT="$(cd "${SCRIPT_DIR}/..' "${MANAGE_SH}"
+  [ "${status}" -ne 0 ]
+}
+
+@test "manage: doctor prints the compose file from the checkout" {
+  run bash "${MANAGE_SH}" doctor
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"compose file: ${REPO_ROOT}/docker/docker-compose.yml"* ]]
+  [[ "${output}" != *"bazel-out"* ]]
+}

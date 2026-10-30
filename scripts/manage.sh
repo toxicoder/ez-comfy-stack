@@ -26,6 +26,8 @@
 # Environment:
 #   See .env.example - MODELS_DIR, HF_TOKEN, MEM_LIMIT, DOWNLOAD_LIMIT,
 #   LAB_NON_INTERACTIVE, LAB_CONFIRM_TOKEN, MIN_HOST_FREE_GIB, etc.
+#   BUILD_WORKSPACE_DIRECTORY - set by `bazel run`; names the git checkout used
+#   as REPO_ROOT so compose bind mounts never come from bazel-out.
 #
 # Exit codes:
 #   0 - success or interactive user abort on confirm
@@ -35,18 +37,25 @@
 
 set -euo pipefail
 
-# shellcheck source=lib/paths.sh disable=SC1091
-source "$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)/lib/paths.sh"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
-REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+# shellcheck source=lib/paths.sh disable=SC1091
+source "${SCRIPT_DIR}/lib/paths.sh"
+# shellcheck source=lib/check_tool.sh disable=SC1091
+source "${SCRIPT_DIR}/lib/check_tool.sh"
+# SCRIPT_DIR is the tree the launcher exec'd (the bazel runfiles tree under
+# `bazel run`); REPO_ROOT is the operator's git checkout, which owns .env,
+# docker/, and scripts/utilities/. Deriving REPO_ROOT from SCRIPT_DIR would
+# hand docker bind mounts out of bazel-out.
+REPO_ROOT="$(bazel_checkout_root)"
 export REPO_ROOT
 
 # shellcheck source=lib/common.sh disable=SC1091
-source "${REPO_ROOT}/scripts/lib/common.sh"
+source "${SCRIPT_DIR}/lib/common.sh"
 # shellcheck source=lib/safety.sh disable=SC1091
-source "${REPO_ROOT}/scripts/lib/safety.sh"
+source "${SCRIPT_DIR}/lib/safety.sh"
 # shellcheck source=lib/compose.sh disable=SC1091
-source "${REPO_ROOT}/scripts/lib/compose.sh"
+source "${SCRIPT_DIR}/lib/compose.sh"
 
 load_dotenv "${REPO_ROOT}"
 MODELS_DIR=${MODELS_DIR:-/mnt/models}
