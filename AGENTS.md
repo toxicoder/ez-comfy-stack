@@ -23,18 +23,26 @@ box-drawing banners, U+2713 check marks) are exempt. Enforced by
 
 ## Commands
 
-Prefer Bazelisk. Make targets are shims.
+Bazelisk is the ingress for code, tests, builds, and docs. Make targets are shims.
 
+- host bootstrap: `bash scripts/setup-host.sh` (or `bazelisk run //:setup-host`) - installs
+  bazelisk plus the lint toolchain; the lint lane now fails loudly under Bazel when a tool
+  is missing, so this is the documented repair
 - validate: `bazelisk run //:validate`
 - test (fast): `bazelisk test //:test-fast`
+- test (every gate, incl. manual linters, visual, compose; needs host linters + npm + docker): `bazelisk test //:test-all`
 - one bats suite: `bazelisk test //tests:bats_<suite>_test`
 - lint: `bazelisk test //:lint --test_tag_filters=manual`
 - fmt: `bazelisk run //:fix`  (`make fmt` / `make lint` are shims)
-- types: `make typecheck` (Pyright + mypy; `disallow_untyped_defs`)
+- types: `bazelisk test //tests:typecheck` (Pyright + mypy; `disallow_untyped_defs`)
+- coverage: `bazelisk test //:coverage`
+- file ownership: `bazelisk test //:owned_files_check` (every tracked file is mapped into a target)
+- compose config: `bazelisk test //docker:compose_config`
 - docs serve: `bazelisk run //docs:serve` or `./docs/manage-docs.sh serve`
 - docs export: `bazelisk run //docs:docs`
-- doctor: `./scripts/manage.sh doctor` or `make doctor`
-- stack: `./scripts/manage.sh setup|download-models|start|stop`
+- doctor: `bazelisk run //:manage -- doctor`
+- stack: `bazelisk run //:manage -- setup|download-models|start|stop`; `./scripts/manage.sh <verb>`
+  stays the operator escape hatch for those host-mutating verbs (docker, sudo, GPU, `$HOME`)
 - Python tools: `pip install -r tests/requirements.txt`
 
 Done means `bazelisk run //:validate` is green. Type errors are defects.

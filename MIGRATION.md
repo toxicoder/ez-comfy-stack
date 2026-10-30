@@ -57,6 +57,7 @@ and `localStorage` key `ez-comfy.cmdvars`.
 ## Running it locally
 
 ```bash
+bash scripts/setup-host.sh                      # once per host: bazelisk + the toolchain the gates shell out to
 bazelisk run //docs:serve                       # dev server, hot reload, http://localhost:3005
 bazelisk run //docs:docs                        # generators + static export -> docs-site/out/
 bazelisk run //docs:preview                     # export + serve it
@@ -109,10 +110,10 @@ build artefacts and can be removed - they are gitignored.
 
 | Purpose | Was | Now |
 | --- | --- | --- |
-| Content contract of navigable pages | `//docs:test_mkdocs_render` | `//docs:test_docs_site_render` (in `//:test`) |
+| Content contract of navigable pages | `//docs:test_mkdocs_build` | `//docs:test_docs_site_render` (in `//:test`) |
 | Same checks against the export | (same target) | `bazelisk run //docs:render-check` after `//docs:docs` |
 | Widget behaviour | Material extra JS | `//docs-site:unit` (Vitest), `//docs-site:typecheck` |
-| Nav <-> pages | `mkdocs.yml` vs disk | `docs-site/lib/nav.json` vs disk (`test_docs_nav_coverage.py`, `//docs-site:nav_test`) |
+| Nav <-> pages | `mkdocs.yml` vs disk | `docs-site/lib/nav.json` vs disk (`tests/python/test_docs_nav_coverage.py`, `//docs-site:nav_test`) |
 | Nav transcriber / codemod units | n/a | `//docs-site:nav_test`, `//docs-site:codemod_test` |
 | Python coverage | generators + `hooks.py` | generators + `commands.py` / `glossary.py` / `page_brief.py` (100% gate unchanged) |
 | Public aliases | mike `latest` / `development` | Next exports at the same URL prefixes (one alias per deploy) |
