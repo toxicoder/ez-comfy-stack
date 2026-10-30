@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
@@ -279,6 +280,7 @@ def test_outputs_js_toolbar_report_buttons() -> None:
     """The top chrome carries prefilled bug and feature report buttons."""
     body = _outputs_js()
     assert 'makeButton("Report a problem", "ez-out-btn"' in body
+    assert "  }, { icon: true });" in body
     assert 'makeButton("Suggest a feature", "ez-out-btn"' in body
     assert 'explorerReport("bug")' in body
     assert 'explorerReport("enhancement")' in body
@@ -305,6 +307,60 @@ def test_outputs_js_lightbox_report_is_per_file() -> None:
     # The keyboard cursor and arrow stepping stay owned by el's single handler.
     assert body.count('addEventListener("keydown"') == 1
     assert body.count("window.confirm(") == 1
+
+
+_ICON_LABELS = ("Report a problem", "Suggest a feature", "Report this problem", "Report")
+
+
+def _button_call_flags(body: str) -> dict[str, bool]:
+    """Whether each string-labelled makeButton call asks for the icon.
+
+    Args:
+        body: Contents of ``custom_nodes/ez_outputs/js/ez_outputs.js``.
+
+    Returns:
+        ``label -> icon`` for every ``makeButton("<label>", ...)`` call site, in
+        source order, where a repeated label keeps its last call's value.
+    """
+    starts = [match.start() for match in re.finditer(r'makeButton\(\s*"', body)]
+    flags: dict[str, bool] = {}
+    for index, start in enumerate(starts):
+        end = starts[index + 1] if index + 1 < len(starts) else len(body)
+        chunk = body[start:end]
+        label = re.search(r'makeButton\(\s*"([^"]+)"', chunk)
+        assert label is not None, chunk[:80]
+        flags[label.group(1)] = "{ icon: true }" in chunk
+    return flags
+
+
+def test_outputs_js_report_buttons_carry_the_github_mark() -> None:
+    """Only the report buttons prepend the octicon mark; labels stay plain text."""
+    body = _outputs_js()
+    flags = _button_call_flags(body)
+    for label in _ICON_LABELS:
+        assert flags.get(label) is True, label
+    for label, icon in flags.items():
+        if label not in _ICON_LABELS:
+            assert icon is False, label
+    assert body.count("{ icon: true }") == 4
+    # The mark is hand-built DOM: createElementNS, never innerHTML.
+    assert "function githubIconSvg()" in body
+    assert 'const SVG_NS = "http://www.w3.org/2000/svg";' in body
+    assert 'document.createElementNS(SVG_NS, "svg")' in body
+    assert 'document.createElementNS(SVG_NS, "path")' in body
+    assert 'svg.setAttribute("viewBox", "0 0 16 16");' in body
+    assert 'svg.setAttribute("width", "14");' in body
+    assert 'svg.setAttribute("height", "14");' in body
+    assert 'svg.setAttribute("aria-hidden", "true");' in body
+    assert 'svg.setAttribute("class", "ez-out-icon");' in body
+    assert 'path.setAttribute("fill", "currentColor");' in body
+    assert "button.insertBefore(githubIconSvg(), button.firstChild);" in body
+    assert "opts && opts.icon" in body
+    assert "innerHTML" not in body
+    mark = re.search(r'const GITHUB_MARK_PATH = "([^"]+)";', body)
+    assert mark is not None
+    assert mark.group(1).startswith("M6.766 11.328c-2.063")
+    assert mark.group(1).endswith("5.47-.5.657-.656")
 
 
 def test_outputs_js_reaches_the_core_lazily_with_a_handoff_fallback() -> None:
@@ -387,6 +443,12 @@ def test_outputs_css_styles_the_fail_pane_button() -> None:
     sheet = (pack_js / "ez_outputs.css").read_text(encoding="utf-8")
     assert ".ez-out-fail .ez-out-btn" in sheet
     assert ".ez-out-chip," in sheet
+    # The GitHub mark sits on the label baseline and follows the button colour.
+    assert ".ez-out-btn .ez-out-icon {" in sheet
+    rule = sheet.split(".ez-out-btn .ez-out-icon {", 1)[1].split("}", 1)[0]
+    assert "display: inline-block;" in rule
+    assert "vertical-align: -2px;" in rule
+    assert "fill: currentColor;" in rule
 
 
 def test_output_and_input_root_env(
