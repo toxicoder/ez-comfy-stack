@@ -45,7 +45,7 @@ cmd_help() {
   echo "Usage: blender-install.sh" >&2
   echo "  Host apt install of Ubuntu blender (universe). Never in docker/Dockerfile." >&2
   echo "  occupancy enter blender-desk does not install Blender." >&2
-  echo "  Prefer: ./scripts/manage.sh blender-install" >&2
+  echo "  Prefer: bazelisk run //:manage -- blender-install" >&2
   echo "  See docs/blender-gb10-sidecar.md" >&2
 }
 

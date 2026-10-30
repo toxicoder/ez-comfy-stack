@@ -7,6 +7,7 @@
 # Never GPU-offload. Never in docker/Dockerfile.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- blender-llm "greybox mug on a table"
 #   ./scripts/utilities/blender-llm.sh "greybox mug on a table"
 #
 # @command blender-llm
@@ -70,8 +71,8 @@ llm_gguf_path() {
 print_path_d_hint() {
   err "host llama.cpp not found (llama-cli / llama_cpp)."
   err "Path D: laptop Grok/Cursor MCP client -> SSH tunnel to blender-mcp."
-  err "  ./scripts/manage.sh occupancy enter blender-desk"
-  err "  ./scripts/manage.sh blender-mcp --stdio"
+  err "  bazelisk run //:manage -- occupancy enter blender-desk"
+  err "  bazelisk run //:manage -- blender-mcp --stdio"
 }
 
 #######################################

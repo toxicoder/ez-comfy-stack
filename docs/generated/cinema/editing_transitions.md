@@ -19,7 +19,7 @@ tags: [cinema, prompting, catalog]
 - Opening a technique page to watch a 5s example when the clip is shipped
 - Seeing conflicts, still/motion/AV flags, and the Wan token when present
 
-Do not hand-edit this file. Re-run `python3 docs/generate_cinema_docs.py`.
+Do not hand-edit this file. Re-run `bazelisk run //docs:docs`.
 Operator playbook: [Cinema Rack](../../create/cinema-rack.md).
 
 | Id | Label | Example | Clause | Use on | Conflicts |

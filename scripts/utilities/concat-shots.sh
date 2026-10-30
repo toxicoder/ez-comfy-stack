@@ -12,6 +12,7 @@
 #   faststart (same contract as EZFilmConcat).
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- concat-shots [--dir DIR] [--out FILE] [--dry-run|--yes]
 #   ./scripts/utilities/concat-shots.sh [--dir DIR] [--out FILE] [--dry-run|--yes]
 #   ./scripts/utilities/concat-shots.sh --files a.mp4,b.mp4 [--out FILE]
 #   ./scripts/utilities/concat-shots.sh --film FILM [--yes]

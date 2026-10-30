@@ -9,7 +9,8 @@ Stdlib only (plus the encyclopedia module). Session variables stay
 ``${COMFY_OUTPUT_DIR}``-style. Do not hand-edit generated pages.
 
 Usage:
-  python3 docs/generate_workflow_docs.py
+  bazelisk run //docs:docs                              # regenerate every docs page
+  python3 docs/generate_workflow_docs.py                # escape hatch: this file only
   python3 docs/generate_workflow_docs.py --force
 """
 
@@ -906,7 +907,7 @@ def render_graph_page(
         "",
         "> Generated from `workflows/_lab/"
         + lab_rel
-        + ".json`. Do not hand-edit this file. Re-run `python3 docs/generate_workflow_docs.py` (or `make docs`).",
+        + ".json`. Do not hand-edit this file. Re-run `bazelisk run //docs:docs`.",
         "",
         "## Purpose",
         "",

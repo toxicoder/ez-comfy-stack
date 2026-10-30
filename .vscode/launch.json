@@ -1,5 +1,6 @@
 {
   "version": "0.2.0",
+  "_comment": "Debug-only exception to the Bazel ingress. The test lane is the tasks.json 'pytest' task (bazelisk test //tests:pytest); these module=pytest configs exist so one test can be stepped through in debugpy, and the built-in Test Explorer runner stays off in settings.json.",
   "configurations": [
     {
       "name": "pytest: current file",

@@ -5,6 +5,7 @@
 # Write films/<slug>/publish/<slug>.otio from jobstore state.json.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- film-export-otio go-see|still-here|switchyard
 #   ./scripts/utilities/film-export-otio.sh go-see|still-here|switchyard
 #
 # Environment:

@@ -53,11 +53,11 @@ Author those two lists as **bold + bullets** in source. The Fumadocs remark plug
 
 **Inverted pyramid:** outcome and commands first; theory later. Prefer relative links inside `docs/`.
 
-**Workflow details:** `python3 docs/generate_workflow_docs.py` (also `make docs`) writes `docs/generated/workflows/` and `docs/reference/workflow-nodes.md` from `workflows/_lab/**/*.json` plus `docs/workflow_nodes.py`. Do not hand-edit those generated pages. Combo lists must match ComfyUI v0.43.0 / lab `INPUT_TYPES`. `docs-site/lib/nav.ts` injects the pages under Reference -> Workflow details from `manifest.json`.
+**Workflow details:** `bazelisk run //docs:docs` (escape hatch for this generator alone: `python3 docs/generate_workflow_docs.py`) writes `docs/generated/workflows/` and `docs/reference/workflow-nodes.md` from `workflows/_lab/**/*.json` plus `docs/workflow_nodes.py`. Do not hand-edit those generated pages. Combo lists must match ComfyUI v0.43.0 / lab `INPUT_TYPES`. `docs-site/lib/nav.ts` injects the pages under Reference -> Workflow details from `manifest.json`.
 
-**Cinema catalogs:** `python3 docs/generate_cinema_docs.py` writes `docs/generated/cinema/` from `custom_nodes/ez_prompt_enhance/cinema/*.json`. Illustration clips live at `docs/assets/cinema/<axis_id>/<technique_id>.mp4` (Git LFS) with a JPEG poster; the generator links them when both files exist. Compress with `./scripts/utilities/compress-cinema-clip.sh`. Prompt recipes: `python3 docs/cinema_clip_prompts.py --axis camera_movement`. Playbook: [Cinema Rack](../create/cinema-rack.md).
+**Cinema catalogs:** `bazelisk run //docs:docs` (escape hatch: `python3 docs/generate_cinema_docs.py`) writes `docs/generated/cinema/` from `custom_nodes/ez_prompt_enhance/cinema/*.json`. Illustration clips live at `docs/assets/cinema/<axis_id>/<technique_id>.mp4` (Git LFS) with a JPEG poster; the generator links them when both files exist. Compress with `bazelisk run //scripts:run-utility -- compress-cinema-clip`. Prompt recipes: `python3 docs/cinema_clip_prompts.py --axis camera_movement` (no Bazel target; it prints prompts for the clip render, it does not write a page). Playbook: [Cinema Rack](../create/cinema-rack.md).
 
-**Audio catalogs:** `python3 docs/generate_audio_docs.py` writes `docs/generated/audio/` from `custom_nodes/ez_prompt_enhance/audio/*.json`. Playbook: [Audio Rack](../create/audio-rack.md).
+**Audio catalogs:** `bazelisk run //docs:docs` (escape hatch: `python3 docs/generate_audio_docs.py`) writes `docs/generated/audio/` from `custom_nodes/ez_prompt_enhance/audio/*.json`. Playbook: [Audio Rack](../create/audio-rack.md).
 
 **Source spacing:** no trailing whitespace, at most one blank line between blocks, a single trailing newline, and a blank line around ATX headings and column-0 fences/tables/admonitions (`tests/python/test_docs_markdown.py`).
 
@@ -115,7 +115,7 @@ Fenced blocks and inline `code` follow [nvidia-dgx-spark-lab](https://github.com
 | --- | --- |
 | **Hide the header** (`translateY(-100%)` / autohide) | Sidebar groups must stay on screen while scrolling |
 | **Paint indigo / `--md-primary-fg-color`** | Overeazy Voltage lives in `--color-fd-*` |
-| **Hand-edit `docs/generated/`** | Generators own those pages; `make docs` rewrites them |
+| **Hand-edit `docs/generated/`** | Generators own those pages; `bazelisk run //docs:docs` rewrites them |
 | **Add `display: none` hide rules in `global.css`** | Theme tests reject them |
 
 Testing the docs build: [Testing docs](testing-docs.md). Migration leftovers: repo-root [MIGRATION.md](https://github.com/toxicoder/ez-comfy-stack/blob/__DOCS_GIT_REF__/MIGRATION.md).

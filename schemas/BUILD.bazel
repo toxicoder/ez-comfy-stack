@@ -9,6 +9,6 @@ filegroup(
             "*.yaml",
             "*.json",
         ],
-        allow_empty = True,
+        allow_empty = False,
     ),
 )

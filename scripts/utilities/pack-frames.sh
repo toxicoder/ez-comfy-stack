@@ -6,6 +6,7 @@
 # Not NVENC - may run while Comfy is up because it does not use the GPU.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- pack-frames --in DIR --out FILE [--fps 24] [--pattern '%04d.png']
 #   ./scripts/utilities/pack-frames.sh --in DIR --out FILE [--fps 24] [--pattern '%04d.png']
 #
 # @command pack-frames

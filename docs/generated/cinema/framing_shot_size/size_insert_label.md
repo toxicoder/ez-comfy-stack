@@ -16,7 +16,7 @@ tags: [cinema, prompting, catalog, clip]
 - Seeing the pick before splicing it on Cinema Rack
 - Copying the clause next to a concrete camera example
 
-Do not hand-edit this file. Re-run `python3 docs/generate_cinema_docs.py`.
+Do not hand-edit this file. Re-run `bazelisk run //docs:docs`.
 Axis: [Framing and Shot Size](../framing_shot_size.md). Playbook: [Cinema Rack](../../../create/cinema-rack.md).
 
 <div class="ez-cinema-clip">

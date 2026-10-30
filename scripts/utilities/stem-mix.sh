@@ -6,6 +6,7 @@
 # Occupancy: operator must already have stopped Klein/Wan/LTX. This script is CPU ffmpeg.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- stem-mix --film SLUG --shot ID [--dx PATH] --bg PATH [--fx PATH] [--mx PATH] [--video PATH]
 #   ./scripts/utilities/stem-mix.sh --film SLUG --shot ID [--dx PATH] --bg PATH [--fx PATH] [--mx PATH] [--video PATH]
 #
 # Exit codes:

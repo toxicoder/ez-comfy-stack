@@ -2,6 +2,7 @@
 
 load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
+load("//tools:exec_shell.bzl", "exec_shell")
 load(":bats.bzl", "bats_file_tests")
 
 package(default_visibility = ["//visibility:private"])
@@ -38,11 +39,14 @@ bats_file_tests(
 
 exports_files(
     [
+        "bats.bzl",
         "bats_runner.sh",
+        "bazel_deps.py",
         "coverage.sh",
         "run_all.sh",
         "run_js.sh",
         "run_pytest.sh",
+        "requirements.txt",
         "shell_inventory.sh",
         "typecheck.sh",
     ],
@@ -53,7 +57,7 @@ filegroup(
     name = "python_tests",
     srcs = glob(
         ["python/**/*.py"],
-        allow_empty = True,
+        allow_empty = False,
     ),
     visibility = ["//visibility:public"],
 )
@@ -62,7 +66,20 @@ filegroup(
     name = "fixtures",
     srcs = glob(
         ["fixtures/**"],
-        allow_empty = True,
+        allow_empty = False,
+    ),
+    visibility = ["//visibility:public"],
+)
+
+# The node:test suite. run_js.sh shells out to `node --test tests/js/*.test.mjs`
+# against the checkout, so without this group the five .mjs files were
+# undeclared inputs: editing a test or the frontend stub could not invalidate a
+# cached //tests:js pass.
+filegroup(
+    name = "js_files",
+    srcs = glob(
+        ["js/**"],
+        allow_empty = False,
     ),
     visibility = ["//visibility:public"],
 )
@@ -77,6 +94,7 @@ sh_test(
     data = [
         ".coveragerc",
         "repo_root.sh",
+        "requirements.txt",
         ":fixtures",
         ":python_tests",
         "//custom_nodes:sources",
@@ -99,6 +117,7 @@ sh_test(
     srcs = ["typecheck.sh"],
     data = [
         "repo_root.sh",
+        "requirements.txt",
         "//scripts:doc_sources",
     ],
     tags = [
@@ -123,6 +142,22 @@ sh_test(
     visibility = ["//visibility:public"],
 )
 
+# The mechanical "nothing goes unmapped" guard. py_test rather than sh_test:
+# the BUILD files are parsed with Python's ast, and a nested `bazel query`
+# would deadlock on the output-base lock of the outer invocation.
+py_test(
+    name = "owned_files_check",
+    size = "small",
+    timeout = "short",
+    srcs = ["bazel_deps.py"],
+    main = "bazel_deps.py",
+    tags = [
+        "local",
+        "no-sandbox",
+    ],
+    visibility = ["//visibility:public"],
+)
+
 sh_test(
     name = "js",
     # size small (<60s) is ample: the node:test suite runs in about 1s and
@@ -131,10 +166,52 @@ sh_test(
     srcs = ["run_js.sh"],
     data = [
         "repo_root.sh",
+        ":js_files",
         "//custom_nodes:sources",
         # scripts/manage.sh in runfiles is the marker tests_repo_root resolves
         # under bazel test; the suite itself reads custom_nodes **/*.js and
         # **/*.json (ez_quality overlay, ez_image mode + modes.json).
+        "//scripts:doc_sources",
+    ],
+    tags = [
+        "local",
+        "no-sandbox",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+# The Quality tier codegen. presets.py is the definition and
+# custom_nodes/ez_quality/js/ez_quality_presets.js is derived from it, so the
+# generator gets a target of its own: docs told operators to run a raw
+# `python3 tests/python/_build_quality_js.py` that no BUILD file mapped.
+# exec_shell, not sh_binary: the wrapper sources repo_root.sh from runfiles,
+# and sh_binary only symlinks the wrapper into bazel-bin.
+exec_shell(
+    name = "build_quality_js",
+    src = "build_quality_js.sh",
+    data = [
+        "build_quality_js.sh",
+        "python/_build_quality_js.py",
+        "repo_root.sh",
+        "//custom_nodes:sources",
+        "//scripts:doc_sources",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+# Fails when the committed JS has drifted from presets.py, which is the defect
+# the codegen exists to prevent (hand-editing the generated file, or editing
+# presets.py and forgetting to regenerate).
+sh_test(
+    name = "build_quality_js_check",
+    size = "small",
+    timeout = "short",
+    srcs = ["build_quality_js.sh"],
+    args = ["--check"],
+    data = [
+        "python/_build_quality_js.py",
+        "repo_root.sh",
+        "//custom_nodes:sources",
         "//scripts:doc_sources",
     ],
     tags = [

@@ -13,6 +13,7 @@
 #   Operators on the Spark host. Prefer manage.sh download-music.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- download-music status|run|cleanup [--tier turbo|xl|all] [--json]
 #   ./scripts/utilities/download-music.sh status|run|cleanup [--tier turbo|xl|all] [--json]
 #
 # Environment:

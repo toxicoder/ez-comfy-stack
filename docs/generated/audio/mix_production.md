@@ -17,7 +17,7 @@ tags: [audio, music, prompting, catalog]
 - Picking a professional music-production clause instead of guessing ACE tags
 - Seeing conflicts, vocal/instrumental/podcast flags, and BPM when present
 
-Do not hand-edit this file. Re-run `python3 docs/generate_audio_docs.py`.
+Do not hand-edit this file. Re-run `bazelisk run //docs:docs`.
 Operator playbook: [Audio Rack](../../create/audio-rack.md).
 
 | Id | Label | Tags / clause | Use on | Conflicts |

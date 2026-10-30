@@ -12,6 +12,7 @@
 #   Operators on the Spark host. Prefer manage.sh download-podcast.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- download-podcast status|run|cleanup [--tier analog|acestep|chatterbox|qwen3tts|all] [--json]
 #   ./scripts/utilities/download-podcast.sh status|run|cleanup [--tier analog|acestep|chatterbox|qwen3tts|all] [--json]
 #
 # Environment:

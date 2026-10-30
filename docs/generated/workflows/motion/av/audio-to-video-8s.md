@@ -20,7 +20,7 @@ tags: [workflows, generated, comfyui, motion]
 
 **Who this is for:** studio users who loaded `motion/av/audio-to-video-8s` from Apps or Workflows.
 
-> Generated from `workflows/_lab/motion/av/audio-to-video-8s.json`. Do not hand-edit this file. Re-run `python3 docs/generate_workflow_docs.py` (or `make docs`).
+> Generated from `workflows/_lab/motion/av/audio-to-video-8s.json`. Do not hand-edit this file. Re-run `bazelisk run //docs:docs`.
 
 ## Purpose
 

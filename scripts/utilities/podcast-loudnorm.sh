@@ -8,6 +8,7 @@
 #   Target -16 LUFS (podcast) or -14 LUFS (YouTube). Never silently skip.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- podcast-loudnorm status [--json]
 #   ./scripts/utilities/podcast-loudnorm.sh status [--json]
 #   ./scripts/utilities/podcast-loudnorm.sh run --in FILE [--out FILE] [--target podcast|youtube]
 #

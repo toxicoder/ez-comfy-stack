@@ -1106,7 +1106,7 @@ docs/a.md'
   STUB_MANAGE_RC=1
   run_cli --yes
   [ "${status}" -eq 1 ]
-  [[ "${stderr}" == *"manage.sh restart failed; retry with: ./scripts/manage.sh restart"* ]]
+  [[ "${stderr}" == *"manage.sh restart failed; retry with: bazelisk run //:manage -- restart"* ]]
 }
 @test "update_stack CLI honours BUILD_WORKSPACE_DIRECTORY as the root" {
   local other="${TEST_TMP_DIR}/other"

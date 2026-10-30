@@ -5,6 +5,7 @@
 # Plan/apply/restore model cache cleanup. Never overloaded as manage.sh cleanup.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- reap-models --plan
 #   ./scripts/utilities/reap-models.sh --plan
 #   ./scripts/utilities/reap-models.sh --apply --class junk --yes
 #   ./scripts/utilities/reap-models.sh --apply --class superseded --quarantine --yes

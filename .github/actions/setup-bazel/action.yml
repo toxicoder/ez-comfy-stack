@@ -80,4 +80,8 @@ runs:
       shell: bash
       env:
         LINT_BINS_CACHE_HIT: ${{ steps.lint-tools-cache.outputs.cache-hit }}
-      run: .github/scripts/install-lint-tools.sh
+      # //scripts:ci_install_lint_tools is the source of truth for this script and
+      # the pip cache key above hashes it; it is a filegroup, not a runnable
+      # target, so run that source directly rather than the .github/scripts copy
+      # that only execs it.
+      run: bash "${GITHUB_WORKSPACE}/scripts/ci/install-lint-tools.sh"

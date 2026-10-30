@@ -9,9 +9,10 @@
 #   sync-models: rsync MODELS_DIR/comfy over SPARK_FABRIC_IPS only (not mgmt NIC).
 #   run: refuses MiniMax H3 names; operators Queue motion/silent/still-to-shot / motion/av/still-to-shot
 #   graphs per host, then concat-shots.sh locally.
-#   Never starts compose on a remote node - prints the local manage.sh start.
+#   Never starts compose on a remote node - prints the local //:manage start.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- spark-farm status [--json]
 #   ./scripts/utilities/spark-farm.sh status [--json]
 #   ./scripts/utilities/spark-farm.sh sync-models
 #   ./scripts/utilities/spark-farm.sh run [--film go-see] [--seeds 509201,509211,509221]
@@ -99,7 +100,7 @@ ssh_host() {
 #######################################
 print_remote_start_hint() {
   log "Never starting compose remotely. On each Spark, with confirm:"
-  log "  ./scripts/manage.sh start"
+  log "  bazelisk run //:manage -- start"
 }
 
 #######################################
@@ -247,7 +248,7 @@ dispatch_shot_groups() {
 }
 
 #######################################
-# Remote print-shot only (never compose up / manage.sh start).
+# Remote print-shot only (never compose up / //:manage start).
 # Globals:
 #   SPARK_HOSTS, SPARK_USER, FILM, FARM_SHARE
 #######################################

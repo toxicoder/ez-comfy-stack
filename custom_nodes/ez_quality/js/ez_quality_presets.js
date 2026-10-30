@@ -4,7 +4,7 @@
  *
  * Every number and filename here comes from
  * custom_nodes/ez_quality/presets.py, which is the single definition. Regenerate
- * with `python3 tests/python/_build_quality_js.py` after touching presets.py.
+ * with `bazelisk run //tests:build_quality_js` after touching presets.py.
  *
  * Shapes:
  *   EZ_QUALITY_TABLE[family][tier]  requested value per overlay field, null =

@@ -1,9 +1,17 @@
 #!/usr/bin/env python3
 """Regenerate the frontend Quality tier table from custom_nodes/ez_quality.
 
-Not imported by pytest (leading underscore). Run from repo root:
+Not imported by pytest (leading underscore). Canonical entry point:
 
-  python3 tests/python/_build_quality_js.py
+  bazelisk run //tests:build_quality_js
+
+which writes custom_nodes/ez_quality/js/ez_quality_presets.js in place. Pass
+--check to fail instead of writing when the committed file has drifted from
+presets.py:
+
+  bazelisk test //tests:build_quality_js_check
+
+Direct host use stays available: python3 tests/python/_build_quality_js.py
 
 The generated file is the only Quality tier data the frontend reads. Editing
 custom_nodes/ez_quality/js/ez_quality_presets.js by hand is a defect: rerun this
@@ -29,7 +37,7 @@ _HEADER = """/**
  *
  * Every number and filename here comes from
  * custom_nodes/ez_quality/presets.py, which is the single definition. Regenerate
- * with `python3 tests/python/_build_quality_js.py` after touching presets.py.
+ * with `bazelisk run //tests:build_quality_js` after touching presets.py.
  *
  * Shapes:
  *   EZ_QUALITY_TABLE[family][tier]  requested value per overlay field, null =
@@ -61,16 +69,29 @@ def render() -> str:
     return _HEADER + "\n" + "\n".join(blocks)
 
 
-def main() -> int:
-    """Write the generated module.
+def main(argv: list[str] | None = None) -> int:
+    """Write the generated module, or verify it without writing.
 
     Args:
-        None.
+        argv: Argument list after the program name. ``--check`` switches to
+            verify-only mode, used by //tests:build_quality_js_check.
 
     Returns:
-        Process exit code.
+        Process exit code. 1 in --check mode when the file on disk differs
+        from what presets.py renders.
     """
-    OUTPUT.write_text(render(), encoding="utf-8")
+    args = list(sys.argv[1:] if argv is None else argv)
+    check = "--check" in args
+    body = render()
+    if check:
+        current = OUTPUT.read_text(encoding="utf-8") if OUTPUT.exists() else ""
+        if current != body:
+            print(f"{OUTPUT.relative_to(REPO_ROOT)} is stale; "
+                  "run: bazelisk run //tests:build_quality_js")
+            return 1
+        print(f"{OUTPUT.relative_to(REPO_ROOT)} matches presets.py")
+        return 0
+    OUTPUT.write_text(body, encoding="utf-8")
     print(f"wrote {OUTPUT.relative_to(REPO_ROOT)}")
     return 0
 

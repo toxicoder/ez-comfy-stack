@@ -4,15 +4,21 @@ Thanks for improving **ez-comfy-stack**.
 
 ## Workflow
 
-1. Branch from latest `development`
-2. Prefer TDD (`bazelisk test //:test-fast` / `make test`)
-3. **Commit tests with the production files they cover** (same commit)
-4. Run `bazelisk test //:lint --test_tag_filters=manual` and `bazelisk run //docs:docs` (`make lint` / `make docs` shims)
-5. Open a PR into `development`
+1. Bootstrap the host once: `bash scripts/setup-host.sh` (or `bazelisk run //:setup-host`) - it installs bazelisk plus the linters `//:lint` shells out to, so a skipped linter is a defect, not a silent pass
+2. Branch from latest `development`: fetch, `git checkout development`, `git pull --ff-only`, then `feature/...` `fix/...` `chore/...` `docs/...`
+3. Prefer TDD (`bazelisk test //:test-fast`)
+4. **Commit tests with the production files they cover** (same commit)
+5. Run the gates through bazelisk: `bazelisk run //:validate`, `bazelisk test //:lint --test_tag_filters=manual`, `bazelisk run //:fix`, and `bazelisk run //docs:docs` (the `make` targets are shims over these)
+6. Commit as `<type>: <imperative summary>` using `feat`, `fix`, `docs`, `test`, `chore`, `ci`, `refactor`
+7. Open a PR into `development`
+
+Integrate on `development`; `main` is production promotion only. Do not commit on
+`development` or `main`, and do not base work on `main` except an explicit production hotfix.
+No force-push on either.
 
 How merge commits, squash, rebase, and stacked PRs work: [docs/learn/merges.md](docs/learn/merges.md). Land each PR **into `development`**. A GitHub Merged badge on a PR whose base is another topic branch does not update `development`.
 
-Install Python test tools once: `pip install -r tests/requirements.txt`.
+Install Python test tools once (`bash scripts/setup-host.sh` does this too): `pip install -r tests/requirements.txt`.
 
 To ship a keeper from a live `_user` graph (does **not** commit):
 
@@ -23,7 +29,7 @@ To ship a keeper from a live `_user` graph (does **not** commit):
   --id my-hook
 ```
 
-Destination is `workflows/_lab/<lane>/<id>.json` (optional `--subdir`). Do not repeat lane tokens in the filename. Must not contain MiniMax / Seedance / Kling / z_image_turbo, and must not pin Klein 9B / FLUX.2-dev as the UNETLoader widget. Then stamp App Mode, add or adjust `_build_*.py` / tests, and `make test`. Never copy `_lab` into `_user`.
+Destination is `workflows/_lab/<lane>/<id>.json` (optional `--subdir`). Do not repeat lane tokens in the filename. Must not contain MiniMax / Seedance / Kling / z_image_turbo, and must not pin Klein 9B / FLUX.2-dev as the UNETLoader widget. Then stamp App Mode, add or adjust `_build_*.py` / tests, and `bazelisk test //:test-fast`. Never copy `_lab` into `_user`.
 
 ```mermaid
 flowchart TB
@@ -60,8 +66,10 @@ flowchart LR
 ## PR checklist
 
 - [ ] Tests updated in the same commits as the code they exercise
-- [ ] `bazelisk test //:test-fast` (or `make coverage`) passes (100% first-party Python + Pyright + mypy)
-- [ ] `bazelisk test //:lint --test_tag_filters=manual` clean
+- [ ] `bazelisk run //:validate` passes (the whole gate set, green)
+- [ ] `bazelisk test //:test-fast` (or `bazelisk test //:coverage`) passes (100% first-party Python + Pyright + mypy)
+- [ ] `bazelisk test //:lint --test_tag_filters=manual` clean (a missing tool is a defect: `bash scripts/setup-host.sh --check`)
+- [ ] `bazelisk run //:fix` leaves the tree clean
 - [ ] `bazelisk run //docs:docs` (Fumadocs static export)
 - [ ] Safety impact called out if Docker/resources/download-limit changed
 - [ ] Docs updated for operator-facing changes
@@ -71,7 +79,7 @@ flowchart LR
 
 Public site: [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (`main`) - [development](https://toxicoder.github.io/ez-comfy-stack/development/) (`development`).
 
-- PRs validate with `make docs` / `bazelisk run //docs:docs` (generators + Fumadocs export into `docs-site/out/`).
+- PRs validate with `bazelisk run //docs:docs` (`make docs` shim; generators + Fumadocs export into `docs-site/out/`).
 - After merge to `main` or `development`, `.github/workflows/deploy-docs.yml` publishes one Next export per run -> `gh-pages` (`/latest/` from `main`, `/development/` from `development`). Each alias shows a **Last published** chip stamped at that deploy (`EZ_DOCS_PUBLISHED_AT`).
 - Prefer **relative** in-repo doc links (`docs/...`, same-folder page links) so they work on the branch you are viewing and under each published version path.
 - Docs app: Node 22+ and `./docs/setup-docs.sh` (npm inside `docs-site/`). Python `docs/requirements.txt` is generators only.

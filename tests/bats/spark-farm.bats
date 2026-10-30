@@ -74,7 +74,7 @@ teardown() {
   grep -q 'spark-0.local' "${TEST_TMP_DIR}/ssh_calls.log"
   run print_remote_start_hint
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"manage.sh start"* ]]
+  [[ "${output}" == *"bazelisk run //:manage -- start"* ]]
   JSON_FLAG="--json"
   run cmd_status
   [ "${status}" -eq 0 ]

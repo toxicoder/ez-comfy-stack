@@ -20,7 +20,7 @@ tags: [workflows, generated, comfyui, optional]
 
 **Who this is for:** studio users who loaded `optional/still-to-video-a14b` from Apps or Workflows.
 
-> Generated from `workflows/_lab/optional/still-to-video-a14b.json`. Do not hand-edit this file. Re-run `python3 docs/generate_workflow_docs.py` (or `make docs`).
+> Generated from `workflows/_lab/optional/still-to-video-a14b.json`. Do not hand-edit this file. Re-run `bazelisk run //docs:docs`.
 
 ## Purpose
 

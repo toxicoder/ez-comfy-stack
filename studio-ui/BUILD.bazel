@@ -6,6 +6,6 @@ filegroup(
     name = "sources",
     srcs = glob(
         ["**/*.py"],
-        allow_empty = True,
+        allow_empty = False,
     ),
 )

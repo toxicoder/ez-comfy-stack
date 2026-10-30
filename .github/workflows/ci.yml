@@ -85,6 +85,12 @@ jobs:
         with:
           node-version: "22"
 
+      # //lints:* print "<tool> missing - skipping" and still exit 0, so a runner
+      # that never installed them goes green having checked nothing. Fail here
+      # instead and //:lint keeps meaning something.
+      - name: Host toolchain preflight (lint gate trust)
+        run: bazelisk run //:setup-host -- --check
+
       - name: Bazel test (fast core) and lint
         run: |
           bazelisk test //:test-fast --config=ci
@@ -119,7 +125,10 @@ jobs:
           cache-dependency-path: docs-site/package-lock.json
 
       - name: Install docs site dependencies
-        run: (cd docs-site && npm ci --legacy-peer-deps)
+        # `run`, not `build`: //docs-site:install is an sh_binary and build would
+        # only stage it. The runner cd's into the real docs-site/ tree, so this is
+        # the same `npm ci --legacy-peer-deps` the raw step ran.
+        run: bazelisk run //docs-site:install
 
       - name: Cache Next compile
         uses: actions/cache@v5
@@ -141,6 +150,7 @@ jobs:
 
       - name: Docs export
         env:
+          # Deliberate concession: this build stays raw, Bazel-free.
           # MDX compiles on demand (dynamic: true). bazelisk run keeps a
           # JVM next to Node and 6144 then SIGKILL'd the 7 GB runner. Shut
           # Bazel down and call manage-docs.sh so Next is the only heap.
@@ -148,7 +158,13 @@ jobs:
         run: |
           bazelisk shutdown
           ./docs/manage-docs.sh build
-          python3 docs/test_docs_site_render.py
+          # Same target the no-browser gate above runs. --test_env points it at
+          # the real checkout so the export checks read the docs-site/out/ that
+          # was just built (in the sandbox they skip), and --nocache stops Bazel
+          # answering from the earlier cached pass.
+          bazelisk test //docs:test_docs_site_render --config=ci \
+            --nocache_test_results \
+            --test_env=BUILD_WORKSPACE_DIRECTORY="${GITHUB_WORKSPACE}"
 
   validate-gate:
     needs: [changes, bazel-core, docs-and-render]
@@ -163,4 +179,6 @@ jobs:
           DOCS_RESULT: ${{ needs.docs-and-render.result }}
           RUN_BAZEL_CORE: ${{ needs.changes.outputs.bazel-core == 'true' || needs.changes.outputs.ci-graph == 'true' || needs.changes.outputs.ci-workflow == 'true' }}
           RUN_DOCS: ${{ needs.changes.outputs.docs == 'true' || needs.changes.outputs.ci-graph == 'true' }}
+        # Deliberate concession: this gate only reads the needs.* context above,
+        # so it stays Bazel-free on purpose and never pays a cold start.
         run: bash scripts/ci_check_only.sh

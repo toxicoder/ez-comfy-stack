@@ -20,7 +20,7 @@ tags: [workflows, generated, comfyui, services]
 
 **Who this is for:** studio users who loaded `services/fashion-beauty/get-ready-av` from Apps or Workflows.
 
-> Generated from `workflows/_lab/services/fashion-beauty/get-ready-av.json`. Do not hand-edit this file. Re-run `python3 docs/generate_workflow_docs.py` (or `make docs`).
+> Generated from `workflows/_lab/services/fashion-beauty/get-ready-av.json`. Do not hand-edit this file. Re-run `bazelisk run //docs:docs`.
 
 ## Purpose
 

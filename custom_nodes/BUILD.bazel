@@ -8,10 +8,11 @@ filegroup(
         [
             "**/*.py",
             "**/*.js",
+            "**/*.css",
             "**/*.json",
             "**/*.txt",
             "**/*.md",
         ],
-        allow_empty = True,
+        allow_empty = False,
     ),
 )

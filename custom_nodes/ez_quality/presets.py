@@ -3,7 +3,8 @@ Free Commercial Use / ultra / max / flux3-fast / flux3-quality / flux3-nvfp4).
 
 This module is the only definition of what a tier asks for. The frontend reads
 a table generated from it (``export_table`` -> tests/python/_build_quality_js.py
--> custom_nodes/ez_quality/js/ez_quality_presets.js) and derives the combo from
+-> custom_nodes/ez_quality/js/ez_quality_presets.js, via ``bazelisk run
+//tests:build_quality_js``) and derives the combo from
 that table, so no tier number or weight name lives in JS. ``match_tier`` is the
 mirror of the apply: it names the level the widgets currently sit on.
 

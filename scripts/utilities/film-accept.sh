@@ -5,6 +5,7 @@
 # Fail-closed accept gate before 90s concat (duration, 1280x704, LTX audio).
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- film-accept go-see|still-here|switchyard
 #   ./scripts/utilities/film-accept.sh go-see|still-here|switchyard
 #
 # Environment:

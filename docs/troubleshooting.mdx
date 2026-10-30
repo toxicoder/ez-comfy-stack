@@ -93,6 +93,25 @@ tags: [troubleshooting, comfyui, docker]
 | Models and workflows | [Troubleshooting - models and workflows](operate/troubleshooting-models-workflows.md) |
 | Guide packs | [DCC workflows](dcc-workflows.md) |
 
+---
+
+## Bazel ingress
+
+`bazelisk` is the ingress for every test, lint, build, and docs action
+([Building with Bazel](contribute/building-with-bazel.md)). These are the failures unique to that
+layer, before any stack or model is involved.
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| `bazelisk test //:lint` fails with `shellcheck missing - required in CI/strict mode (apt install shellcheck or brew install shellcheck)` (or `shfmt`, `buildifier`, `pyright`, `mypy`) | Every gate in `lints/BUILD.bazel` sets `REQUIRE_LINT_TOOLS=1`, so a linter that is off `PATH` is fatal instead of printing `missing - skipping` and passing green. The host simply never installed that tool | `bazelisk run //:setup-host`, or `bash scripts/setup-host.sh` on a host with no `bazelisk` yet. Confirm with `bazelisk run //:setup-host -- --check`. Guide: [Set up a contributor host](contribute/host-setup.mdx) |
+| `bazelisk test //:lint` is **green** and you suspect it checked nothing | Outside the `//:lint` gates, `scripts/lib/check_tool.sh` is still resilient by design and exits 0 on a missing tool. A run that never went through `//:lint` can skip silently | Run `bazelisk test //:lint --test_tag_filters=manual` and check it names each tool. If a tool is missing, the strict-mode line above tells you what to install |
+| `exec_shell: cannot locate scripts/manage.sh (RUNFILES_DIR=...)` and exit 1 | The generated launcher from `tools/exec_shell.bzl` searched `RUNFILES_DIR`, `TEST_SRCDIR`, and `<argv0>.runfiles` and found none of them. That happens when the runfiles tree was not materialised - invoking the launcher copy in `bazel-bin/` directly, or a stale output tree after a Bazel or `.bazelversion` change | Invoke it through Bazel (`bazelisk run //:manage -- doctor`), never the file under `bazel-bin/`. If it persists, `bazelisk clean --expunge` and re-run |
+| `scripts/lib/paths.sh: No such file or directory`, or a `bazelisk run //:manage -- <verb>` that dies before printing anything | `manage.sh` sources `lib/paths.sh` by `dirname "$0"`. Under a plain `sh_binary` the executable sits alone in `bazel-bin/` while its `data` is in `<target>.runfiles/`, so the sibling is missing. `//scripts:manage` is an `exec_shell` target precisely so script and `data` land in runfiles side by side | Run via `bazelisk run //:manage -- <verb>` so the launcher resolves the runfiles copy. Do not `bash` the `bazel-bin/` copy. `bazelisk clean --expunge` clears a runfiles tree left stale by a Bazel upgrade |
+| `run-utility: utility name must be a bare name under scripts/utilities/` | `//scripts:run-utility` takes a bare utility name, not a path. A `scripts/utilities/` prefix, a `/` in the name, or a `.sh` suffix is rejected so the target cannot be pointed outside that directory | Drop the path and the suffix: `bazelisk run //scripts:run-utility -- download-limit status`, not `-- scripts/utilities/download-limit.sh status` |
+| `bazelisk test //tests:owned_files_check` fails naming a file | A first-party source file is not claimed by any target's `srcs` / `data` / `filegroup`, so it would silently stop being built and linted | Add the file to the owning package's `BUILD.bazel` (or the filegroup that covers it). The guard is in `//:test-fast`, so it also fails the default gate |
+
+---
+
 ## Dub (clone-translate)
 
 Canvas rows live in [Studio canvas](operate/troubleshooting-canvas.md). The fixture that shipped a 64 s YT tone:
@@ -156,7 +175,7 @@ The **Quality** combo is read back from the widgets, not written and forgotten: 
 | Picking a Klein tier on a FLUX 3 Image still (`stills/still-flux3-fast`, `still-flux3-quality`) does nothing | Those graphs pin flux3-image weights, so only `flux3-fast`, `flux3-quality`, and `flux3-nvfp4` apply. The Klein ladder is a no-op there by design | Pick one of the `flux3-*` tiers. Do not hand-edit the graph to take Klein 4B weights |
 | The combo does nothing on film acts 2-5 | Those graphs ship the copied-in **Quality** node muted (LiteGraph `mode` 4), so it neither drives the overlay nor shows a caption - acts 2+ take the previous act's frame as their image source | Set the tier on **act-01** and re-Queue forward. See [90s shorts](shorts.md) |
 | `print-shot` / `album-render` posted different weights than the browser showed | Both default to the tier the graph records, not the tier last picked in the browser | Pass `--quality TIER` (or `EZ_QUALITY=TIER`) on `./scripts/utilities/print-shot.sh` / `./scripts/utilities/album-render.sh`; the overlay runs before each POST, and an unknown tier name fails the run (`quality_apply: unknown quality tier: ...`, shot marked `failed`) |
-| The browser tiers disagree with the table after someone edited presets | `custom_nodes/ez_quality/js/ez_quality_presets.js` is generated from `custom_nodes/ez_quality/presets.py` and was left stale (or hand-edited, which is a defect) | From the repo root: `python3 tests/python/_build_quality_js.py`, then `./scripts/manage.sh restart` and hard-refresh. Never edit the generated file |
+| The browser tiers disagree with the table after someone edited presets | `custom_nodes/ez_quality/js/ez_quality_presets.js` is generated from `custom_nodes/ez_quality/presets.py` and was left stale (or hand-edited, which is a defect) | From the repo root: `bazelisk run //tests:build_quality_js`, then `bazelisk run //:manage -- restart` and hard-refresh. Never edit the generated file |
 
 ---
 

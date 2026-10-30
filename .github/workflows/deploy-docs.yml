@@ -66,7 +66,10 @@ jobs:
           cache-dependency-path: docs-site/package-lock.json
 
       - name: Install docs site dependencies
-        run: (cd docs-site && npm ci --legacy-peer-deps)
+        # `run`, not `build`: //docs-site:install is an sh_binary and build would
+        # only stage it. The runner cd's into the real docs-site/ tree, so this is
+        # the same `npm ci --legacy-peer-deps` the raw step ran.
+        run: bazelisk run //docs-site:install
 
       - name: Cache Next compile
         uses: actions/cache@v5
@@ -111,6 +114,9 @@ jobs:
 
           rm -rf "_site/${alias}"
           mkdir -p "_site/${alias}"
+          # Deliberate concession: the export runs raw npm, not a Bazel target.
+          # bazelisk keeps a JVM resident next to the webpack export and that
+          # pairing OOMs the 7 GB runner (header above), so Node gets the heap.
           (cd docs-site && npm run "build:${alias}")
           cp -r docs-site/out/. "_site/${alias}/"
 
@@ -118,6 +124,9 @@ jobs:
           cp docs-site/pages-root-index.html _site/index.html
 
       - name: Publish to the gh-pages branch
+        # //scripts:ci_publish_pages_tree is a filegroup over this script, not a
+        # runnable binary, so there is no `bazelisk run` form; the checkout copy
+        # is what publishes.
         run: ./scripts/ci/publish-pages-tree.sh _site
 
       - name: Report the published URLs

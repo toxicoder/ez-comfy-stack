@@ -6,6 +6,7 @@
 # CI has no GPU - this file is the operator timing table. Do not invent seconds.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- spark-timing show [--json]
 #   ./scripts/utilities/spark-timing.sh show [--json]
 #   ./scripts/utilities/spark-timing.sh record --klein N --wan N --ltx N [--json]
 #
@@ -124,7 +125,7 @@ cmd_show() {
   if [[ ! -f ${path} ]]; then
     log "spark-timing: none at ${path}"
     log "Queue klein-still-draft, wan-i2v-5s, ltx-i2v-5s with attention: kitchen, then:"
-    log "  ./scripts/manage.sh spark-timing record --klein N --wan N --ltx N"
+    log "  bazelisk run //:manage -- spark-timing record --klein N --wan N --ltx N"
     log "live attention: ${attn}"
     if [[ ${JSON_FLAG} == "--json" ]]; then
       printf '{"recorded":false,"attention":"%s","path":"%s"}\n' "${attn}" "${path}"

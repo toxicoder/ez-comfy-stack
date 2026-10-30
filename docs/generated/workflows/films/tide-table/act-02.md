@@ -20,7 +20,7 @@ tags: [workflows, generated, comfyui, films]
 
 **Who this is for:** studio users who loaded `films/tide-table/act-02` from Apps or Workflows.
 
-> Generated from `workflows/_lab/films/tide-table/act-02.json`. Do not hand-edit this file. Re-run `python3 docs/generate_workflow_docs.py` (or `make docs`).
+> Generated from `workflows/_lab/films/tide-table/act-02.json`. Do not hand-edit this file. Re-run `bazelisk run //docs:docs`.
 
 ## Purpose
 

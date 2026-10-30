@@ -5,6 +5,7 @@
 # Copy one live operator graph into the repo lab tree. Does not commit.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- promote-workflow \
 #   ./scripts/utilities/promote-workflow.sh \
 #     --from PATH --lane LANE --id STEM [--subdir REL]
 #

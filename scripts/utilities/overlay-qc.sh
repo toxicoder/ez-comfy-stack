@@ -9,6 +9,7 @@
 # directory is absent.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- overlay-qc --film SLUG --shot ID --look PATH [--guides DIR]
 #   ./scripts/utilities/overlay-qc.sh --film SLUG --shot ID --look PATH [--guides DIR]
 #
 # Safety:

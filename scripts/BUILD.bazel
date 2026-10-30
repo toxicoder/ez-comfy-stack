@@ -2,12 +2,13 @@
 
 load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
+load("//tools:exec_shell.bzl", "exec_shell")
 
 package(default_visibility = ["//visibility:private"])
 
-sh_binary(
+exec_shell(
     name = "manage",
-    srcs = ["manage.sh"],
+    src = "manage.sh",
     data = [
         ":doc_sources",
         "//config:policy",
@@ -16,9 +17,9 @@ sh_binary(
     visibility = ["//visibility:public"],
 )
 
-sh_binary(
+exec_shell(
     name = "update-stack",
-    srcs = ["utilities/update-stack.sh"],
+    src = "utilities/update-stack.sh",
     data = [
         ":doc_sources",
         "//config:policy",
@@ -47,20 +48,24 @@ sh_test(
 exports_files(
     [
         "manage.sh",
+        "setup-host.sh",
         "validate.sh",
         "ci_check_only.sh",
     ] + glob(
         ["lib/*.sh"],
-        allow_empty = True,
+        allow_empty = False,
     ) + glob(
         ["lib/*.py"],
-        allow_empty = True,
+        allow_empty = False,
     ) + glob(
         ["utilities/*.sh"],
-        allow_empty = True,
+        allow_empty = False,
+    ) + glob(
+        ["utilities/*.ps1"],
+        allow_empty = False,
     ) + glob(
         ["ci/*.sh"],
-        allow_empty = True,
+        allow_empty = False,
     ),
     visibility = [
         "//docs:__pkg__",
@@ -77,13 +82,13 @@ filegroup(
         "validate.sh",
     ] + glob(
         ["lib/*.sh"],
-        allow_empty = True,
+        allow_empty = False,
     ) + glob(
         ["lib/*.py"],
-        allow_empty = True,
+        allow_empty = False,
     ) + glob(
         ["utilities/*.sh"],
-        allow_empty = True,
+        allow_empty = False,
     ),
     visibility = [
         "//docs:__pkg__",
@@ -97,20 +102,26 @@ filegroup(
     name = "utilities",
     srcs = glob(
         ["utilities/*.sh"],
-        allow_empty = True,
+        allow_empty = False,
+    ) + glob(
+        # The Windows client bootstrap: same lane as setup-client.sh, run from
+        # a PowerShell prompt on a Spark client. It is a payload of the
+        # utility runner, not of manage.sh.
+        ["utilities/*.ps1"],
+        allow_empty = False,
     ) + glob(
         ["lib/*.sh"],
-        allow_empty = True,
+        allow_empty = False,
     ) + glob(
         ["lib/*.py"],
-        allow_empty = True,
+        allow_empty = False,
     ),
     visibility = ["//visibility:public"],
 )
 
-sh_binary(
+exec_shell(
     name = "run-utility",
-    srcs = ["utilities/runner.sh"],
+    src = "utilities/runner.sh",
     data = [":utilities"],
     visibility = ["//visibility:public"],
 )
@@ -128,6 +139,18 @@ sh_binary(
 filegroup(
     name = "ci_install_lint_tools",
     srcs = ["ci/install-lint-tools.sh"],
+    visibility = ["//visibility:public"],
+)
+
+# Both lint-tool installers: the implementation here and the thin
+# .github/scripts wrapper the GitHub action path uses. They are not duplicates
+# (the wrapper execs this script), so both stay and both are mapped.
+filegroup(
+    name = "ci_lint_tools",
+    srcs = [
+        "ci/install-lint-tools.sh",
+        "//:.github/scripts/install-lint-tools.sh",
+    ],
     visibility = ["//visibility:public"],
 )
 

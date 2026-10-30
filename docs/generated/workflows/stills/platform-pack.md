@@ -20,7 +20,7 @@ tags: [workflows, generated, comfyui, stills]
 
 **Who this is for:** studio users who loaded `stills/platform-pack` from Apps or Workflows.
 
-> Generated from `workflows/_lab/stills/platform-pack.json`. Do not hand-edit this file. Re-run `python3 docs/generate_workflow_docs.py` (or `make docs`).
+> Generated from `workflows/_lab/stills/platform-pack.json`. Do not hand-edit this file. Re-run `bazelisk run //docs:docs`.
 
 ## Purpose
 

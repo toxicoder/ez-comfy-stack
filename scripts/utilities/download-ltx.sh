@@ -15,6 +15,7 @@
 #   manage.sh download-models for throttled sequential flux+ltx pulls.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- download-ltx status [--tier 2.5|2.3|balanced|quality|gemma|iclora|all] [--json]
 #   ./scripts/utilities/download-ltx.sh status [--tier 2.5|2.3|balanced|quality|gemma|iclora|all] [--json]
 #   ./scripts/utilities/download-ltx.sh run [--tier ...]
 #   ./scripts/utilities/download-ltx.sh cleanup [--tier ...] [--dry-run|--yes]

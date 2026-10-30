@@ -20,7 +20,7 @@ tags: [workflows, generated, comfyui, services]
 
 **Who this is for:** studio users who loaded `services/podcast-clips/clip-wide` from Apps or Workflows.
 
-> Generated from `workflows/_lab/services/podcast-clips/clip-wide.json`. Do not hand-edit this file. Re-run `python3 docs/generate_workflow_docs.py` (or `make docs`).
+> Generated from `workflows/_lab/services/podcast-clips/clip-wide.json`. Do not hand-edit this file. Re-run `bazelisk run //docs:docs`.
 
 ## Purpose
 

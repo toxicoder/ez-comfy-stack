@@ -16,7 +16,7 @@ SHELL := /bin/bash
 
 BAZEL := $(shell command -v bazelisk 2>/dev/null || command -v bazel 2>/dev/null || echo "")
 
-.PHONY: help test bats python coverage lint typecheck fmt docs doctor clean fix validate
+.PHONY: help test bats python coverage lint typecheck fmt docs doctor clean fix validate setup-host
 
 # @target help - list available Make targets
 help:
@@ -39,6 +39,7 @@ help:
 	@echo "  make docs"
 	@echo "  make validate"
 	@echo "  make doctor"
+	@echo "  make setup-host"
 
 # @target test - full hermetic suite (BATS + pytest + Pyright + mypy)
 test:
@@ -138,6 +139,12 @@ doctor:
 	else \
 	  ./scripts/manage.sh doctor; \
 	fi
+
+# @target setup-host - install the host binaries the Bazel targets shell out to
+# (bazelisk, shellcheck, shfmt, buildifier, pyright, mypy, node, git, python3).
+# The one target that must not delegate to Bazel: it is what makes bazelisk exist.
+setup-host:
+	@bash scripts/setup-host.sh $(SETUP_HOST_ARGS)
 
 # @target clean - remove local build/test artifacts (not models or git state)
 clean:

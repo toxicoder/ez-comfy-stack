@@ -52,7 +52,7 @@ The combo is read from the widgets, not write-only: it is recomputed on graph lo
 
 A tier that cannot be written is a **failed apply**, not a silent skip. If the tier's model file is not in that loader's combo list, or the widget is not built yet, the write is refused, the combo goes to **custom**, and the caption names what diverged. Nothing queues under the tier name with the old weights still in the widgets.
 
-Tiers are named profiles that swap weights, not a step ladder. `custom_nodes/ez_quality/presets.py` is the only definition; `custom_nodes/ez_quality/js/ez_quality_presets.js` is generated from it, so regenerate with `python3 tests/python/_build_quality_js.py` after editing presets.py (hand-editing the generated file is a defect).
+Tiers are named profiles that swap weights, not a step ladder. `custom_nodes/ez_quality/presets.py` is the only definition; `custom_nodes/ez_quality/js/ez_quality_presets.js` is generated from it, so regenerate with `bazelisk run //tests:build_quality_js` after editing presets.py (hand-editing the generated file is a defect).
 
 | Family | What the tiers own | Real rows |
 | --- | --- | --- |

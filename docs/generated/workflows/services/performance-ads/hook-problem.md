@@ -20,7 +20,7 @@ tags: [workflows, generated, comfyui, services]
 
 **Who this is for:** studio users who loaded `services/performance-ads/hook-problem` from Apps or Workflows.
 
-> Generated from `workflows/_lab/services/performance-ads/hook-problem.json`. Do not hand-edit this file. Re-run `python3 docs/generate_workflow_docs.py` (or `make docs`).
+> Generated from `workflows/_lab/services/performance-ads/hook-problem.json`. Do not hand-edit this file. Re-run `bazelisk run //docs:docs`.
 
 ## Purpose
 

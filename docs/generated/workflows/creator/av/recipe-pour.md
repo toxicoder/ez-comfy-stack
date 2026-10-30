@@ -20,7 +20,7 @@ tags: [workflows, generated, comfyui, creator]
 
 **Who this is for:** studio users who loaded `creator/av/recipe-pour` from Apps or Workflows.
 
-> Generated from `workflows/_lab/creator/av/recipe-pour.json`. Do not hand-edit this file. Re-run `python3 docs/generate_workflow_docs.py` (or `make docs`).
+> Generated from `workflows/_lab/creator/av/recipe-pour.json`. Do not hand-edit this file. Re-run `bazelisk run //docs:docs`.
 
 ## Purpose
 

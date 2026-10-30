@@ -6,6 +6,7 @@
 # Occupancy llm-desk is the public path. Never in docker/Dockerfile.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- llm-sidecar status [--json]
 #   ./scripts/utilities/llm-sidecar.sh status [--json]
 #   ./scripts/utilities/llm-sidecar.sh start
 #   ./scripts/utilities/llm-sidecar.sh stop
@@ -55,7 +56,7 @@ readonly LLM_SIDECAR_CTX_DEFAULT="8192"
 cmd_help() {
   echo "Usage: llm-sidecar.sh status [--json] | start | stop" >&2
   echo "  Host llama-server for occupancy llm-desk. Bind 127.0.0.1 only." >&2
-  echo "  Prefer: ./scripts/manage.sh occupancy enter llm-desk --yes" >&2
+  echo "  Prefer: bazelisk run //:manage -- occupancy enter llm-desk --yes" >&2
   echo "  Never in docker/Dockerfile. See docs/occupancy.md." >&2
 }
 
@@ -199,7 +200,7 @@ print_llama_server_hint() {
   err "Install host llama.cpp (aarch64). Do not apt/pip inside the Comfy container."
   err "Never add llama.cpp to docker/Dockerfile."
   err "Path D: ssh -L 30000:127.0.0.1:30000  (laptop client -> Spark sidecar)"
-  err "  ./scripts/manage.sh occupancy enter llm-desk --yes"
+  err "  bazelisk run //:manage -- occupancy enter llm-desk --yes"
 }
 
 #######################################
@@ -307,7 +308,7 @@ sidecar_start_allowed() {
   case "${mode}" in
     klein | trellis | wan | ltx)
       err "occupancy is ${mode} - stop the visual job before llm-sidecar start"
-      err "  ./scripts/manage.sh occupancy enter llm-desk --yes"
+      err "  bazelisk run //:manage -- occupancy enter llm-desk --yes"
       return 2
       ;;
   esac
@@ -322,7 +323,7 @@ sidecar_start_allowed() {
     return 0
   fi
   err "llm-sidecar start requires occupancy llm-desk"
-  err "  ./scripts/manage.sh occupancy enter llm-desk --yes"
+  err "  bazelisk run //:manage -- occupancy enter llm-desk --yes"
   return 2
 }
 
@@ -372,7 +373,7 @@ cmd_start() {
   fi
   if ! sidecar_gguf_path >/dev/null; then
     err "35B GGUF missing. Download the opt-in pack:"
-    err "  ./scripts/manage.sh download-llm --tier qwen36-35b-a3b"
+    err "  bazelisk run //:manage -- download-llm --tier qwen36-35b-a3b"
     return 1
   fi
   gguf="$(sidecar_gguf_path)"

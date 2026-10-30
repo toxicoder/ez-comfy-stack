@@ -6,6 +6,7 @@
 # first+last at 1280x704, 120 frames @ 24 fps). Never in docker/Dockerfile.
 #
 # Usage:
+#   bazelisk run //scripts:run-utility -- blender-guide --film go-see --shot 12 [--blend FILE]
 #   ./scripts/utilities/blender-guide.sh --film go-see --shot 12 [--blend FILE]
 #   ./scripts/utilities/blender-guide.sh --engine blender --film go-see --shot 12
 #
