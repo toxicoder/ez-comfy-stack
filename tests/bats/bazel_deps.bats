@@ -177,7 +177,7 @@ EOF
   grep -q 'name = "js_files"' "${REPO_ROOT}/tests/BUILD.bazel"
   grep -q '":js_files"' "${REPO_ROOT}/tests/BUILD.bazel"
   grep -q '"js/\*\*"' "${REPO_ROOT}/tests/BUILD.bazel"
-  [ "$(find "${REPO_ROOT}/tests/js" -name '*.mjs' | wc -l)" -eq 5 ]
+  [ "$(find "${REPO_ROOT}/tests/js" -name '*.mjs' | wc -l)" -eq 6 ]
 }
 
 @test "the css tree is owned by the custom_nodes filegroup" {

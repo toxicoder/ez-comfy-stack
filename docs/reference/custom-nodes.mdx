@@ -10,9 +10,10 @@ tags: [custom-nodes, comfyui, occupancy, qc]
 
 - **Every pack** under `custom_nodes/` (`ez_common` ... `ez_quality` ... `ez_outputs` ... `ez_studio_blocks`)
 - **Mapped nodes** from `NODE_CLASS_MAPPINGS` / `INPUT_TYPES` / `RETURN_TYPES`
-- **Empty mappings** - helpers, LTX spatial patch, App occupancy chip, Outputs sidebar, subgraphs
+- **Empty mappings** - helpers, LTX spatial patch, App occupancy chip, Outputs sidebar explorer, subgraphs
 - **Frontend JS** under Nodes 2.0 (preview `widget.value`, no LiteGraph `inputEl` / `node_widget`)
 - **Reference stills card** - three pickers, thumbnails, the **References off** mute, and `max_refs` on the Klein canvas node
+- **Outputs explorer** - width tiers, folder rail, keyboard cursor, and the shortcut sheet
 - **QC / rights** notes that ship on the node `DESCRIPTION` (nothing invented)
 
 **What this enables**
@@ -55,7 +56,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 | `ez_research` | 1 node | Creative research chat |
 | `ez_studio_forge` | 1 node | Clone lab graphs into live `_user/` |
 | `ez_studio_app` | empty | App Mode JS occupancy chip |
-| `ez_outputs` | empty | Outputs sidebar: thumbnail grid/list, bulk delete/copy, send-to-LoadImage on `${COMFY_OUTPUT_DIR}` |
+| `ez_outputs` | empty | Outputs sidebar explorer: adaptive grid/list, folder rail, keyboard cursor, bulk delete/copy, send-to-LoadImage on `${COMFY_OUTPUT_DIR}` |
 | `ez_studio_blocks` | empty | Subgraph blueprints |
 
 ---
@@ -260,7 +261,40 @@ This is **not** [studio-ui](studio-ui.md) and not a second frontend. Widget cata
 - Stills use Comfy `/view?preview=webp;80` thumbs; video plays on hover; double-click opens a lightbox
 - **Use as start image** copies into `/inputs` and sets `LoadImage.image` (then `EZOptionalImage.filename`); audio sets `LoadAudio.audio`
 
-Comfy History is in-memory and empty after `start`; these files persist. Sort, view, and thumb size live in `localStorage`. Routes: `GET /ez_outputs/list` (`truncated` when the 500-file cap clips), `POST /ez_outputs/delete`, `POST /ez_outputs/to-input`. Bodies accept a single `rel` or a `rels` list. Path traversal and non-media files are refused.
+Comfy History is in-memory and empty after `start`; these files persist. Routes: `GET /ez_outputs/list` (`truncated` when the page cap clips; `limit` sets the page), `POST /ez_outputs/delete`, `POST /ez_outputs/to-input`. Bodies accept a single `rel` or a `rels` list. Path traversal and non-media files are refused.
+
+**Adaptive layout.** The panel measures its own inline size and names one of three tiers: **compact** (under 380px), **cozy** (380-559px), **wide** (560px and up). The head and the status footer stay pinned and only the file pane scrolls, so tiles get the full height of the panel.
+
+- **Wide** puts a folder rail with a file count per folder on the left; **compact** and **cozy** hide the rail and keep the folder control as chips
+- **Compact** collapses the toolbar: the report buttons go icon-first and the `Size` label hides. **More** holds **Show details** (the size / date / path line on each card), **Reset view**, and **Show intro**
+- A breadcrumb above the pane walks **All files** down through the folder segments; each filter that is on shows as a pill with one-click remove, and **Clear filters** drops all of them
+- **Size** cycles **Auto / 96 / 128 / 160 / 220** px, with **Auto** taking the tile size from the tier. `+` / `-` nudge the size and `0` returns to **Auto**; the slider still sets an exact size in the 80-280px range
+
+**States.** A list call in flight paints skeleton tiles instead of an empty pane, and a Queue step refreshes in the background so new files land without blanking the grid. The empty pane reads three ways: nothing on the output disk, nothing matches the filters, or the folder is empty - the filtered variants offer **Clear filters**. A failed list clears the stale grid and offers **Retry** beside **Report this problem**.
+
+**Progressive pages.** The first page is 200 files and **Load more** doubles it up to 2000, so a large library stays responsive. While capped, the footer reads `Showing N of more files`.
+
+**Keyboard and access.** The **Shortcuts** button (or `?`) opens the sheet. Cards and rows carry a roving tabindex, so `Tab` reaches the pane and the cursor survives a refresh. The preview is a real modal dialog: it traps `Tab` and returns focus to the card you opened it from. The status footer is a live region, so counts, selection, bytes, and action results reach a screen reader. Changing folder, type, search, or view no longer drops the selection.
+
+| Key | Does |
+| --- | --- |
+| `/` | Focus the filter box |
+| `Arrows` | Move the cursor |
+| `Shift` + arrows | Extend the selection additively |
+| `Home` / `End` | First / last file |
+| `Enter` | Open the preview |
+| `Space` | Toggle selection |
+| `Ctrl/Cmd` + `A` | Select all |
+| `Delete` | Delete selected |
+| `+` / `-` / `0` | Size up / down / auto |
+| `G` / `L` | Grid / list |
+| `F` | Focus the folder rail, or the folder chips when the panel is too narrow for the rail |
+| `Esc` | Close preview, then help, then selection, then filters |
+| `?` | Open the shortcut sheet |
+
+`Copy paths` falls back to a selectable offscreen textarea when the browser blocks the clipboard API, and says so in the status line. Video hover-playback and all animation are suppressed when the OS requests reduced motion, and a tile scrolled out of view releases its decoded video.
+
+**Persistence.** `localStorage`: `ez-comfy.outputs.view`, `.thumb` (`auto` or a px size), `.sort`, `.kind`, `.folder`, `.meta` (the per-card details line), and `.hint` (the dismissible intro line).
 
 ---
 

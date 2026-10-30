@@ -231,6 +231,19 @@ same report. Operator guide: [Reporting issues](operate/reporting-issues.md).
 | **Enhance with LLM** in the panel says the model is unavailable | Same GGUF and `EZ_LLM_*` knobs as prompt enhancement: GGUF missing, `llama.cpp unavailable`, or the 35B sidecar is down | `./scripts/manage.sh download-models` then restart; see [Models and workflows](operate/troubleshooting-models-workflows.md). Fail-soft by design - it writes a status line, keeps your text, and the panel files without it. |
 | No **Report this error** on the `Loading aborted due to error reloading workflow data` modal | Old `ez_feedback/js/` in the container - the button is appended when that modal appears | `./scripts/manage.sh restart` so the pack JS recopies, then hard-refresh. The canvas row: [Studio canvas](operate/troubleshooting-canvas.md). |
 
+---
+
+## Outputs sidebar (ez_outputs)
+
+The explorer lists `${COMFY_OUTPUT_DIR}` through the pack's own routes and degrades to a status
+line rather than an exception. Pack reference: [Custom nodes](reference/custom-nodes.md#ez_outputs-outputs-sidebar).
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| Outputs panel shows `Could not list outputs - ...` and the grid is gone | `GET /ez_outputs/list` did not answer: Compose is down, ComfyUI is still booting, or `custom_nodes/ez_outputs/` did not reach the container so the route is not registered. The stale grid is cleared on purpose - a dead list must not leave rows for files that no longer exist | Click **Retry** once the ComfyUI UI itself loads (`./scripts/manage.sh start`, then `./scripts/manage.sh doctor` if it will not come up). `./scripts/manage.sh restart` recopies `custom_nodes/`, then hard-refresh the Comfy tab. **Report this problem** (beside **Retry**) opens a prefilled issue carrying the failing endpoint, HTTP status, and the active filters |
+| **Copy paths** reports `Clipboard blocked - paths are selected, press Ctrl/Cmd+C` | The browser refused `navigator.clipboard` - usual cause is a plain-`http://` origin that is not `127.0.0.1`, or you denied clipboard permission. Nothing is lost: the fallback textarea already holds the paths and keeps them selected | Press **Ctrl/Cmd+C** while the fallback holds the selection. For a real clipboard write, reach ComfyUI over `https://` or `127.0.0.1`, which is a secure context. **Download** and **Copy to input** never touch the clipboard, so bulk work is unaffected |
+| The folder rail with the per-folder counts is missing | The panel is narrower than 560px. The rail appears only in the **wide** tier; below that the layout is **cozy** (380-559px) or **compact** (under 380px), where the folder control is chips by design | Widen the ComfyUI sidebar past 560px and the rail returns with its counts. Below that width, use the folder chips - `F` focuses the rail when it is showing and the chips when it is not, so the keyboard route works at every width |
+
 ## Symptom decision tree
 
 ```mermaid

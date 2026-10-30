@@ -1,4 +1,26 @@
-/* Outputs sidebar: thumbnail grid / list browser. Uses Comfy theme tokens. */
+/* Outputs sidebar: media browser chrome (head, toolbar, folder rail, grid/list
+ * pane, bulk bar, status, lightbox, shortcut sheet).
+ *
+ * Theming: every color comes from a Comfy theme custom property with a dark
+ * fallback, so the panel matches the default dark theme and a light one. The
+ * only literals are neutrals plus the low-saturation status tints below.
+ *
+ * Layout: `.ez-out` is the flex column and the size container. The pane
+ * (`.ez-out-scroll`) is the only scroller; the head, the toolbar and the status
+ * line stay pinned outside it. Tier names come from two sources that must agree:
+ * CSS `@container` queries on the root (thresholds 380px and 560px) and the
+ * `data-tier` attribute the JS publishes from a ResizeObserver. A container
+ * cannot query itself, so the container blocks style the root's children and
+ * only fire when `data-tier` is absent; the `[data-tier]` rules own the root's
+ * own box. Both paths set the same custom properties, so everything else in
+ * this sheet reads tokens rather than tier selectors.
+ *
+ * Motion: every transition and animation lives under
+ * `@media (prefers-reduced-motion: no-preference)`; the reduce block at the
+ * bottom neutralises them.
+ *
+ * Stacking inside the panel: head 3, toolbar 2, bulk 4, status 3, more panel 5,
+ * lightbox 8, help sheet 9. */
 
 .ez-out {
   --ez-out-thumb: 128px;
@@ -7,17 +29,41 @@
   --ez-out-muted: var(--descrip-text, #9a9a9a);
   --ez-out-border: var(--border-color, rgba(255, 255, 255, 0.12));
   --ez-out-accent: var(--p-primary-color, #6ea8fe);
+  --ez-out-accent-fg: var(--p-primary-contrast-color, #0b0d10);
   --ez-out-card: var(--content-bg, rgba(255, 255, 255, 0.04));
+  --ez-out-well: var(--p-form-background, rgba(0, 0, 0, 0.22));
+  --ez-out-ok: var(--p-green-500, #9fd0a8);
+  --ez-out-warn: var(--p-amber-500, #ddc48f);
+  --ez-out-bad: var(--p-red-500, #f0a0a0);
+  --ez-out-scrim: color-mix(in srgb, var(--ez-out-bg) 88%, #000);
+  /* Tier-driven chrome metrics. Cozy is the default; compact and wide
+   * override them below through both tier channels. */
+  --ez-out-thumb-tier: 128px;
+  --ez-out-stack-gap: 8px;
+  --ez-out-pad: 8px;
+  --ez-out-row-gap: 6px;
+  --ez-out-grid-gap: 8px;
+  --ez-out-field-pad: 4px 8px;
+  --ez-out-radius: 8px;
+  --ez-out-radius-sm: 6px;
+  --ez-out-head-pad: 6px 8px;
+  --ez-out-meta-pad: 6px 8px 8px;
+  --ez-out-tree-w: 168px;
+  --ez-out-line: 1.4;
+  container-type: inline-size;
+  container-name: ez-out;
   position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
   min-height: 0;
-  gap: 8px;
-  padding: 8px;
+  gap: var(--ez-out-stack-gap);
+  padding: var(--ez-out-pad);
   box-sizing: border-box;
   color: var(--ez-out-fg);
-  font: 12px/1.4 ui-sans-serif, system-ui, sans-serif;
+  background: var(--ez-out-bg);
+  font: 12px/var(--ez-out-line) ui-sans-serif, system-ui, sans-serif;
+  overflow: hidden;
 }
 
 .ez-out *,
@@ -26,17 +72,246 @@
   box-sizing: border-box;
 }
 
-.ez-out-hint {
-  margin: 0;
-  opacity: 0.8;
+.ez-out [hidden] {
+  display: none;
+}
+
+.ez-out button {
+  font: inherit;
+  color: inherit;
+}
+
+/* --- Tier channel 1: the JS ResizeObserver publishes data-tier ----------- */
+
+.ez-out[data-tier="compact"] {
+  --ez-out-thumb-tier: 96px;
+  --ez-out-stack-gap: 4px;
+  --ez-out-pad: 6px;
+  --ez-out-row-gap: 4px;
+  --ez-out-grid-gap: 6px;
+  --ez-out-field-pad: 2px 6px;
+  --ez-out-radius: 6px;
+  --ez-out-radius-sm: 5px;
+  --ez-out-head-pad: 4px 6px;
+  --ez-out-meta-pad: 4px 6px 5px;
+  --ez-out-tree-w: 0px;
+}
+
+.ez-out[data-tier="cozy"] {
+  --ez-out-thumb-tier: 128px;
+}
+
+.ez-out[data-tier="wide"] {
+  --ez-out-thumb-tier: 160px;
+  --ez-out-stack-gap: 10px;
+  --ez-out-pad: 10px;
+  --ez-out-row-gap: 8px;
+  --ez-out-grid-gap: 10px;
+}
+
+/* Thumb size only follows the tier while the JS has not published a tier, i.e.
+ * while it has not written an explicit/auto `--ez-out-thumb` either. Once the
+ * JS is in charge the inline value on the root must win, so the container
+ * blocks must not re-declare the token over it. */
+.ez-out[data-tier="compact"],
+.ez-out[data-tier="cozy"],
+.ez-out[data-tier="wide"] {
+  --ez-out-thumb: var(--ez-out-thumb-tier);
+}
+
+/* --- Tier channel 2: pure CSS container queries (no JS tier) ------------- */
+
+@container ez-out (width < 380px) {
+  .ez-out:not([data-tier]) > * {
+    --ez-out-thumb: 96px;
+    --ez-out-row-gap: 4px;
+    --ez-out-grid-gap: 6px;
+    --ez-out-field-pad: 2px 6px;
+    --ez-out-radius: 6px;
+    --ez-out-radius-sm: 5px;
+    --ez-out-head-pad: 4px 6px;
+    --ez-out-meta-pad: 4px 6px 5px;
+    --ez-out-tree-w: 0px;
+  }
+
+  .ez-out:not([data-tier]) .ez-out-tree {
+    display: none;
+  }
+
+  .ez-out:not([data-tier]) .ez-out-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .ez-out:not([data-tier]) .ez-out-size-label {
+    display: none;
+  }
+
+  .ez-out:not([data-tier]) .ez-out-search {
+    flex: 1 1 96px;
+    min-width: 88px;
+  }
+
+  .ez-out:not([data-tier]) .ez-out-btn:has(.ez-out-icon) {
+    padding: var(--ez-out-field-pad);
+    font-size: 0;
+  }
+
+  .ez-out:not([data-tier]) .ez-out-btn:has(.ez-out-icon) .ez-out-icon {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+@container ez-out (width >= 560px) {
+  .ez-out:not([data-tier]) > * {
+    --ez-out-thumb: 160px;
+    --ez-out-row-gap: 8px;
+    --ez-out-grid-gap: 10px;
+  }
+
+  .ez-out:not([data-tier]) .ez-out-tree {
+    display: flex;
+  }
+
+  .ez-out:not([data-tier]) .ez-out-chips {
+    display: none;
+  }
+}
+
+/* Tier attribute path for the same structural changes. */
+.ez-out[data-tier="compact"] .ez-out-tree,
+.ez-out[data-tier="cozy"] .ez-out-tree {
+  display: none;
+}
+
+.ez-out[data-tier="compact"] .ez-out-row {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.ez-out[data-tier="compact"] .ez-out-size-label {
+  display: none;
+}
+
+.ez-out[data-tier="compact"] .ez-out-search {
+  flex: 1 1 96px;
+  min-width: 88px;
+}
+
+.ez-out[data-tier="compact"] .ez-out-btn:has(.ez-out-icon) {
+  padding: var(--ez-out-field-pad);
+  font-size: 0;
+}
+
+.ez-out[data-tier="compact"] .ez-out-btn:has(.ez-out-icon) .ez-out-icon {
+  width: 15px;
+  height: 15px;
+}
+
+.ez-out[data-tier="wide"] .ez-out-tree {
+  display: flex;
+}
+
+.ez-out[data-tier="wide"] .ez-out-chips {
+  display: none;
+}
+
+/* --- Head: breadcrumb, summary, shortcut button -------------------------- */
+
+.ez-out-head {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px var(--ez-out-row-gap);
+  align-items: center;
+  margin: calc(var(--ez-out-pad) * -1) calc(var(--ez-out-pad) * -1) 0;
+  padding: var(--ez-out-head-pad);
+  border-bottom: 1px solid var(--ez-out-border);
+  background: var(--ez-out-bg);
+}
+
+.ez-out-crumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.ez-out-crumb-item {
+  appearance: none;
+  max-width: 120px;
+  padding: 1px 4px;
+  border: 1px solid transparent;
+  border-radius: var(--ez-out-radius-sm);
+  background: transparent;
+  color: var(--ez-out-fg);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ez-out-crumb-item:hover {
+  background: color-mix(in srgb, var(--ez-out-accent) 16%, transparent);
+  border-color: var(--ez-out-accent);
+}
+
+.ez-out-crumb-item[aria-current="page"],
+.ez-out-crumb-item.is-current {
+  color: var(--ez-out-accent);
+}
+
+.ez-out-crumb-sep {
   color: var(--ez-out-muted);
+  user-select: none;
+}
+
+.ez-out-summary {
+  flex: 1 1 120px;
+  min-width: 0;
+  color: var(--ez-out-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ez-out-help-btn {
+  flex: 0 0 auto;
+  margin-left: auto;
+  color: var(--ez-out-muted);
+}
+
+/* --- Toolbar: kind row, view row, and the rows they hold ----------------- */
+
+.ez-out-toolbar {
+  position: relative;
+  z-index: 2;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--ez-out-border);
+  background: var(--ez-out-bg);
 }
 
 .ez-out-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: var(--ez-out-row-gap);
   align-items: center;
+  min-width: 0;
 }
 
 .ez-out-chip,
@@ -45,11 +320,13 @@
   border: 1px solid var(--ez-out-border);
   background: transparent;
   color: inherit;
-  border-radius: 6px;
-  padding: 4px 8px;
+  border-radius: var(--ez-out-radius-sm);
+  padding: var(--ez-out-field-pad);
   font: inherit;
   cursor: pointer;
   line-height: 1.3;
+  min-height: 26px;
+  white-space: nowrap;
 }
 
 .ez-out-btn .ez-out-icon {
@@ -58,15 +335,43 @@
   fill: currentColor;
 }
 
+.ez-out-icon {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+}
+
 .ez-out-chip:hover,
 .ez-out-btn:hover {
   border-color: var(--ez-out-accent);
 }
 
+.ez-out-chip:disabled,
+.ez-out-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
 .ez-out-chip[aria-pressed="true"],
+.ez-out-btn[aria-pressed="true"],
 .ez-out-btn.is-active {
   font-weight: 700;
   background: color-mix(in srgb, var(--ez-out-accent) 22%, transparent);
+  border-color: var(--ez-out-accent);
+}
+
+.ez-out-more-btn[aria-expanded="true"] {
+  border-color: var(--ez-out-accent);
+  background: color-mix(in srgb, var(--ez-out-accent) 12%, transparent);
+}
+
+.ez-out-help-btn:hover,
+.ez-out-btn:disabled:hover {
+  border-color: var(--ez-out-border);
+}
+
+.ez-out-help-btn:hover {
+  color: var(--ez-out-fg);
   border-color: var(--ez-out-accent);
 }
 
@@ -75,15 +380,21 @@
 .ez-out-range {
   font: inherit;
   color: inherit;
-  background: var(--ez-out-card);
+  background: var(--ez-out-well);
   border: 1px solid var(--ez-out-border);
-  border-radius: 6px;
-  padding: 4px 8px;
+  border-radius: var(--ez-out-radius-sm);
+  padding: var(--ez-out-field-pad);
+  min-height: 26px;
 }
 
 .ez-out-search {
   flex: 1 1 140px;
   min-width: 120px;
+}
+
+.ez-out-search::placeholder {
+  color: var(--ez-out-muted);
+  opacity: 1;
 }
 
 .ez-out-select {
@@ -104,21 +415,174 @@
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
+  align-items: center;
 }
 
 .ez-out-chip-label {
   color: var(--ez-out-muted);
   padding: 4px 0;
+  font-size: 11px;
+  letter-spacing: 0.02em;
 }
+
+.ez-out-chip {
+  border-radius: 999px;
+  color: var(--ez-out-muted);
+  padding: 2px 9px;
+}
+
+.ez-out-chip[aria-pressed="true"] {
+  color: var(--ez-out-fg);
+}
+
+/* --- Active filter pills ------------------------------------------------- */
+
+.ez-out-active {
+  flex: 0 0 auto;
+  gap: 4px;
+  row-gap: 4px;
+}
+
+.ez-out .ez-out-active:empty {
+  display: none;
+}
+
+.ez-out-pill {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 100%;
+  padding: 2px 4px 2px 8px;
+  border: 1px solid var(--ez-out-accent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ez-out-accent) 14%, transparent);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  line-height: 1.3;
+}
+
+.ez-out-pill:hover {
+  background: color-mix(in srgb, var(--ez-out-accent) 26%, transparent);
+}
+
+.ez-out-pill-label {
+  min-width: 0;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ez-out-pill-x {
+  flex: 0 0 auto;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.28);
+  color: var(--ez-out-fg);
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
+}
+
+.ez-out-pill:hover .ez-out-pill-x {
+  background: var(--ez-out-accent);
+  color: var(--ez-out-accent-fg);
+}
+
+.ez-out-clear {
+  color: var(--ez-out-muted);
+}
+
+/* --- Body: folder rail plus the scrolling pane --------------------------- */
+
+.ez-out-body {
+  display: flex;
+  flex: 1 1 auto;
+  gap: var(--ez-out-row-gap);
+  align-items: stretch;
+  min-height: 0;
+  min-width: 0;
+}
+
+.ez-out-tree {
+  flex: 0 0 var(--ez-out-tree-w);
+  width: var(--ez-out-tree-w);
+  display: none;
+  flex-direction: column;
+  gap: 1px;
+  min-height: 0;
+  overflow: auto;
+  padding: 2px;
+  border: 1px solid var(--ez-out-border);
+  border-radius: var(--ez-out-radius);
+  background: var(--ez-out-well);
+  scrollbar-width: thin;
+}
+
+.ez-out .ez-out-tree:empty {
+  display: none;
+}
+
+.ez-out-tree-item {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 3px 6px;
+  border: 1px solid transparent;
+  border-radius: var(--ez-out-radius-sm);
+  background: transparent;
+  color: var(--ez-out-fg);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ez-out-tree-item:hover {
+  background: color-mix(in srgb, var(--ez-out-accent) 10%, transparent);
+}
+
+.ez-out-tree-item[aria-current="true"],
+.ez-out-tree-item[aria-current="page"],
+.ez-out-tree-item[aria-current="location"] {
+  background: color-mix(in srgb, var(--ez-out-accent) 22%, transparent);
+  border-color: var(--ez-out-accent);
+  font-weight: 700;
+}
+
+.ez-out-tree-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ez-out-tree-count {
+  flex: 0 0 auto;
+  color: var(--ez-out-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Bulk bar ------------------------------------------------------------ */
 
 .ez-out-bulk {
   display: none;
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 4;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 4px var(--ez-out-row-gap);
   align-items: center;
   padding: 6px 8px;
-  border: 1px solid var(--ez-out-border);
-  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--ez-out-accent) 45%, var(--ez-out-border));
+  border-radius: var(--ez-out-radius);
   background: color-mix(in srgb, var(--ez-out-accent) 12%, transparent);
 }
 
@@ -129,32 +593,63 @@
 .ez-out-bulk-count {
   font-weight: 700;
   margin-right: 4px;
+  font-variant-numeric: tabular-nums;
 }
+
+/* --- More disclosure panel ---------------------------------------------- */
+
+.ez-out-more {
+  display: none;
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 5;
+  flex-wrap: wrap;
+  gap: 4px var(--ez-out-row-gap);
+  align-items: center;
+  padding: 6px 8px;
+  border: 1px solid var(--ez-out-border);
+  border-radius: var(--ez-out-radius);
+  background: var(--ez-out-well);
+}
+
+.ez-out-more.is-open,
+.ez-out-more-btn[aria-expanded="true"] + .ez-out-more {
+  display: flex;
+}
+
+/* --- Pane ---------------------------------------------------------------- */
 
 .ez-out-scroll {
   flex: 1 1 auto;
   min-height: 0;
+  min-width: 0;
   overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  padding: 2px;
 }
 
 .ez-out-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(var(--ez-out-thumb), 1fr));
-  gap: 8px;
+  gap: var(--ez-out-grid-gap);
   align-content: start;
 }
 
 .ez-out-list {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
+
+/* Cards (grid mode) */
 
 .ez-out-card {
   position: relative;
   display: flex;
   flex-direction: column;
   border: 1px solid var(--ez-out-border);
-  border-radius: 8px;
+  border-radius: var(--ez-out-radius);
   overflow: hidden;
   background: var(--ez-out-card);
   cursor: pointer;
@@ -245,8 +740,18 @@
 }
 
 .ez-out-card-meta {
-  padding: 6px 8px 8px;
+  padding: var(--ez-out-meta-pad);
   min-width: 0;
+}
+
+/* Details line off (ez-comfy.outputs.meta = off): keep the name, tighten the
+   block so tiles pack tighter vertically. */
+.ez-out-card-meta.is-compact {
+  padding: 2px var(--ez-out-meta-pad) 4px;
+}
+
+.ez-out-card-meta.is-compact .ez-out-sub {
+  font-size: 10px;
 }
 
 .ez-out-name {
@@ -264,16 +769,78 @@
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* List mode: header plus rows */
+
+.ez-out-listhead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  padding: 4px 4px 4px calc(18px + var(--ez-out-row-gap) + 48px + var(--ez-out-row-gap));
+  border-bottom: 1px solid var(--ez-out-border);
+  background: var(--ez-out-bg);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+}
+
+.ez-out-col {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 6px;
+  border: 1px solid transparent;
+  border-radius: var(--ez-out-radius-sm);
+  background: transparent;
+  color: var(--ez-out-muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.ez-out-col:hover {
+  color: var(--ez-out-fg);
+  border-color: var(--ez-out-accent);
+}
+
+.ez-out-col[aria-sort="ascending"]::after,
+.ez-out-col[aria-sort="descending"]::after,
+.ez-out-col[aria-sort="ascending"]:hover::after,
+.ez-out-col[aria-sort="descending"]:hover::after {
+  content: "";
+  width: 0;
+  height: 0;
+  margin-left: 3px;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid currentColor;
+}
+
+.ez-out-col[aria-sort="ascending"]::after {
+  border-top: 0;
+  border-bottom: 5px solid currentColor;
+}
+
+.ez-out-col[aria-sort="ascending"],
+.ez-out-col[aria-sort="descending"] {
+  color: var(--ez-out-fg);
+  font-weight: 700;
 }
 
 .ez-out-row-item {
   display: grid;
   grid-template-columns: 18px 48px minmax(0, 1fr) auto;
-  gap: 8px;
+  gap: var(--ez-out-row-gap);
   align-items: center;
   padding: 6px 4px;
   border-bottom: 1px solid var(--ez-out-border);
   cursor: pointer;
+  min-width: 0;
 }
 
 .ez-out-row-item:hover {
@@ -284,7 +851,7 @@
   aspect-ratio: 1;
   width: 48px;
   height: 48px;
-  border-radius: 6px;
+  border-radius: var(--ez-out-radius-sm);
 }
 
 .ez-out-row-item .ez-out-check {
@@ -298,26 +865,170 @@
   justify-content: flex-end;
 }
 
+/* Loading skeleton */
+
+.ez-out-skeleton {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--ez-out-thumb), 1fr));
+  gap: var(--ez-out-grid-gap);
+  align-content: start;
+}
+
+.ez-out-skeleton-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--ez-out-border);
+  border-radius: var(--ez-out-radius);
+  background: var(--ez-out-card);
+}
+
+.ez-out-skeleton-card::before {
+  content: "";
+  display: block;
+  aspect-ratio: 1;
+}
+
+.ez-out-skeleton-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.07),
+    transparent
+  );
+  transform: translateX(-100%);
+}
+
+/* Empty and failed panes */
+
 .ez-out-empty,
 .ez-out-fail {
   margin: 16px 8px;
   color: var(--ez-out-muted);
 }
 
+.ez-out-empty {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  margin: 16px 4px;
+  padding: 18px 12px;
+  border: 1px dashed var(--ez-out-border);
+  border-radius: var(--ez-out-radius);
+  background: var(--ez-out-card);
+  text-align: center;
+}
+
+.ez-out-empty[data-variant="nofiles"] {
+  border-style: solid;
+}
+
+.ez-out-empty[data-variant="filtered"],
+.ez-out-empty[data-variant="folder"] {
+  border-color: color-mix(in srgb, var(--ez-out-accent) 40%, var(--ez-out-border));
+}
+
+.ez-out-empty .ez-out-btn {
+  margin-top: 4px;
+}
+
 .ez-out-fail {
-  color: #f0a0a0;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--ez-out-bad) 45%, var(--ez-out-border));
+  border-radius: var(--ez-out-radius);
+  background: color-mix(in srgb, var(--ez-out-bad) 10%, transparent);
+  color: var(--ez-out-bad);
 }
 
 .ez-out-fail .ez-out-btn {
   margin-left: 8px;
   color: inherit;
+  border-color: color-mix(in srgb, var(--ez-out-bad) 55%, transparent);
 }
 
+/* Progressive load */
+
+.ez-out-load-more {
+  display: block;
+  width: 100%;
+  margin: 8px 0 2px;
+  padding: 6px 8px;
+  border-style: dashed;
+  color: var(--ez-out-muted);
+  text-align: center;
+}
+
+.ez-out-load-more:hover {
+  color: var(--ez-out-fg);
+}
+
+/* --- Status footer ------------------------------------------------------- */
+
 .ez-out-status {
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: baseline;
   margin: 0;
+  padding: 4px 2px 0;
+  border-top: 1px solid var(--ez-out-border);
+  background: var(--ez-out-bg);
   color: var(--ez-out-muted);
   font-variant-numeric: tabular-nums;
+  min-height: 20px;
+  overflow-wrap: anywhere;
 }
+
+.ez-out-status.is-ok {
+  color: var(--ez-out-ok);
+}
+
+.ez-out-status.is-warn {
+  color: var(--ez-out-warn);
+}
+
+.ez-out-status.is-bad {
+  color: var(--ez-out-bad);
+}
+
+.ez-out-status-action {
+  margin-left: auto;
+  padding: 0 6px;
+  min-height: 20px;
+  border-color: transparent;
+  color: var(--ez-out-accent);
+}
+
+/* --- Intro hint ---------------------------------------------------------- */
+
+.ez-out-hint {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin: 0;
+  padding: 6px 8px;
+  border: 1px solid var(--ez-out-border);
+  border-radius: var(--ez-out-radius);
+  background: var(--ez-out-card);
+  opacity: 0.9;
+  color: var(--ez-out-muted);
+}
+
+.ez-out-hint .ez-out-btn {
+  margin-left: auto;
+}
+
+/* --- Lightbox ------------------------------------------------------------ */
 
 .ez-out-lightbox {
   position: absolute;
@@ -327,7 +1038,7 @@
   flex-direction: column;
   gap: 8px;
   padding: 12px;
-  background: color-mix(in srgb, var(--ez-out-bg) 88%, #000);
+  background: var(--ez-out-scrim);
   backdrop-filter: blur(8px);
 }
 
@@ -370,7 +1081,257 @@
   white-space: nowrap;
 }
 
+/* --- Shortcut sheet ------------------------------------------------------ */
+
+.ez-out-help {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  overflow: auto;
+  background: var(--ez-out-scrim);
+  backdrop-filter: blur(8px);
+}
+
+.ez-out-help.is-open {
+  display: flex;
+}
+
+.ez-out-help-title {
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.ez-out-help-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ez-out-help-row {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--ez-out-border);
+}
+
+.ez-out-help-row:last-child {
+  border-bottom: 0;
+}
+
+.ez-out-help-what {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--ez-out-muted);
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.ez-out-kbd {
+  flex: 0 0 auto;
+  display: inline-block;
+  min-width: 18px;
+  padding: 1px 5px;
+  border: 1px solid var(--ez-out-border);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: var(--ez-out-card);
+  color: var(--ez-out-fg);
+  font: 11px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* --- Utilities ----------------------------------------------------------- */
+
 .ez-out-size-label {
   color: var(--ez-out-muted);
   font-variant-numeric: tabular-nums;
+}
+
+.ez-out-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.ez-out-clipboard {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* --- Focus rings --------------------------------------------------------- */
+
+.ez-out-card:focus-visible,
+.ez-out-row-item:focus-visible,
+.ez-out-card.is-focus,
+.ez-out-row-item.is-focus {
+  outline: 2px solid var(--ez-out-accent);
+  outline-offset: -2px;
+}
+
+.ez-out-btn:focus-visible,
+.ez-out-chip:focus-visible,
+.ez-out-pill:focus-visible,
+.ez-out-col:focus-visible,
+.ez-out-tree-item:focus-visible,
+.ez-out-crumb-item:focus-visible,
+.ez-out-help-btn:focus-visible {
+  outline: 2px solid var(--ez-out-accent);
+  outline-offset: 2px;
+}
+
+.ez-out-search:focus-visible,
+.ez-out-select:focus-visible,
+.ez-out-range:focus-visible,
+.ez-out-check:focus-visible {
+  outline: 2px solid var(--ez-out-accent);
+  outline-offset: 1px;
+}
+
+/* --- Sticky pinning, with a graceful static fallback --------------------- */
+
+@supports (position: sticky) {
+  .ez-out-head,
+  .ez-out-status {
+    position: sticky;
+  }
+}
+
+@supports not (position: sticky) {
+  .ez-out-head,
+  .ez-out-status,
+  .ez-out-listhead {
+    position: static;
+  }
+}
+
+/* --- Motion -------------------------------------------------------------- */
+
+@keyframes ez-out-shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ez-out-skeleton-card::after {
+    animation: ez-out-shimmer 1.4s ease-in-out infinite;
+  }
+
+  .ez-out-card,
+  .ez-out-row-item,
+  .ez-out-btn,
+  .ez-out-chip,
+  .ez-out-pill,
+  .ez-out-col,
+  .ez-out-tree-item,
+  .ez-out-crumb-item {
+    transition:
+      border-color 120ms ease-out,
+      background-color 120ms ease-out,
+      box-shadow 120ms ease-out,
+      color 120ms ease-out;
+  }
+
+  .ez-out-card:hover {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  }
+
+  .ez-out-bulk,
+  .ez-out-more,
+  .ez-out-lightbox,
+  .ez-out-help {
+    transition: opacity 120ms ease-out;
+  }
+
+  .ez-out-thumb {
+    transition: transform 160ms ease-out;
+  }
+
+  .ez-out-card:hover .ez-out-thumb {
+    transform: scale(1.02);
+  }
+
+  .ez-out-scroll {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ez-out-skeleton-card::after {
+    animation: none;
+    transform: none;
+    opacity: 0.5;
+  }
+
+  .ez-out-card,
+  .ez-out-row-item,
+  .ez-out-btn,
+  .ez-out-chip,
+  .ez-out-pill,
+  .ez-out-col,
+  .ez-out-tree-item,
+  .ez-out-crumb-item,
+  .ez-out-thumb,
+  .ez-out-bulk,
+  .ez-out-more,
+  .ez-out-lightbox,
+  .ez-out-help {
+    transition: none;
+  }
+
+  .ez-out-card:hover .ez-out-thumb {
+    transform: none;
+  }
+
+  .ez-out-scroll {
+    scroll-behavior: auto;
+  }
+}
+
+/* --- High contrast ------------------------------------------------------- */
+
+@media (forced-colors: active) {
+  .ez-out-card,
+  .ez-out-btn,
+  .ez-out-chip,
+  .ez-out-tree-item,
+  .ez-out-pill {
+    border-color: CanvasText;
+  }
+
+  .ez-out-card[aria-selected="true"],
+  .ez-out-row-item[aria-selected="true"],
+  .ez-out-card.is-focus,
+  .ez-out-row-item.is-focus {
+    outline: 2px solid Highlight;
+  }
 }
