@@ -349,6 +349,10 @@
         "path": "contribute/devcontainer.md"
       },
       {
+        "title": "Set up a contributor host",
+        "path": "contribute/host-setup.mdx"
+      },
+      {
         "title": "Docs style",
         "path": "contribute/docs-style.md"
       },

@@ -1,0 +1,233 @@
+---
+title: Set up a contributor host
+description: bootstrap a fresh macOS or Linux host for this repo with setup-host.sh - the pinned toolchain it installs, what --check reports, and what it refuses to touch.
+tags: [contributing, setup, bazel, toolchain, host]
+---
+
+# Set up a contributor host
+
+**What's on this page**
+
+- **Why a bootstrap script exists at all** - a host with no `bazelisk` cannot run one target
+- **What it installs** - bazelisk, shellcheck, shfmt, buildifier, pyright, mypy, node, git, python3
+- **The pins it reads** - `.devcontainer/tool-versions.env`, never a version in the script
+- **`--check`, `--dry-run`, `--help`** - probe and plan before it writes anything
+- **Linux and macOS paths** - apt plus pinned releases, or Homebrew
+- **What it deliberately does not touch** - no stack, no models, no GPU, no Docker install
+
+**What this enables**
+
+- **Getting** a clean laptop to a green `bazelisk run //:validate` in one command
+- **Making** `bazelisk test //:lint` mean something, instead of passing with no linters installed
+- **Matching** the exact versions the dev container and CI already use
+- **Diagnosing** a red lint gate on a machine that never had the tools
+- **Keeping** host mutation to the toolchain, and nothing else
+
+**Who this is for:** contributors preparing a build host. Studio operators bringing up a DGX Spark
+for the stack itself stay on [Set up this computer](../start/this-computer.md) - that path installs
+Docker and models; this one installs neither.
+
+```bash
+export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
+export SPARK_USER="${SPARK_USER:-$USER}"
+export MODELS_DIR="${MODELS_DIR:-/mnt/models}"
+export COMFY_OUTPUT_DIR="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
+export COMFY_PORT="${COMFY_PORT:-8188}"
+export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
+```
+
+---
+
+## Why this is the one script that runs from a plain shell
+
+Bazelisk is the ingress for every test, lint, build, and docs action in this repo
+([Building with Bazel](building-with-bazel.md)). That creates a chicken-and-egg problem: the
+command that would install the toolchain is itself a Bazel target.
+
+`scripts/setup-host.sh` is deliberately the exception - the only script meant to run straight from
+a shell, because a host with no `bazelisk` cannot run a single target. Once `bazelisk` exists,
+prefer the Bazel form of the same probe.
+
+```bash
+bash scripts/setup-host.sh --check     # from a bare checkout: what is missing
+bash scripts/setup-host.sh             # install it, then re-probe
+bazelisk run //:setup-host -- --check  # the same probe once bazelisk exists
+bazelisk run //:setup-host             # //:setup-host wraps scripts/setup-host.sh
+```
+
+`//:setup-host` is an `exec_shell` target whose whole job is to make Bazel exist on a bare host,
+so it is exposed at the repo root rather than under `//scripts`.
+
+---
+
+## The hole this closes
+
+`scripts/lib/check_tool.sh` is resilient on purpose: a tool that is off `PATH` prints
+`<tool> missing - skipping (resilient; ...)` and **exits 0**. Right for an optional lint on a
+laptop, wrong for a gate. On a host that never installed the linters, `bazelisk test //:lint` went
+green having checked nothing at all.
+
+Every gate in `lints/BUILD.bazel` now sets `REQUIRE_LINT_TOOLS=1`, so `check_tool` fails instead:
+
+```text
+shellcheck missing - required in CI/strict mode (apt install shellcheck or brew install shellcheck)
+```
+
+A skipped linter is now a red build. `setup-host.sh` is the documented repair, so the fix is one
+command rather than a hunt through CI YAML.
+
+---
+
+## What it installs
+
+Each binary is on this list because a Bazel target shells out to it. The re-probe after an
+install runs over the same list, so a tool that silently failed to install still fails the run.
+
+| Tool | Needed by |
+| --- | --- |
+| `bazelisk` | every entry point (`bazelisk test` / `bazelisk run`); without it nothing runs |
+| `shellcheck` | `//lints:shell`, and `//:fix` |
+| `shfmt` | `//lints:shfmt`, and `//:fix` |
+| `buildifier` | `//lints:buildifier`, and `//:fix` |
+| `pyright` | `//lints:pyright`, and `//tests:typecheck` |
+| `mypy` | `//lints:mypy`, and `//tests:typecheck` |
+| `node` | `//tests:js` (Node 22+) and the `//docs-site:*` targets |
+| `git` | the checkout, and the fetches the docs pins rely on |
+| `python3` | the interpreter the pip tools (`pyright`, `mypy`) install into |
+
+---
+
+## The pins it reads
+
+Every version comes from `.devcontainer/tool-versions.env`, the repo's single source of truth,
+sourced the way `.github/actions/setup-bazel/action.yml` sources it (`set -a` / source / `set +a`).
+**Nothing in the script names a version**: a bump there moves the dev container, CI, and this
+bootstrap together.
+
+| Pin | Used for |
+| --- | --- |
+| `BAZELISK_VERSION` | the `bazelisk` release |
+| `BUILDIFIER_VERSION` | the `buildifier` release |
+| `SHFMT_ASSET_VERSION` | the `shfmt` release |
+| `NODE_VERSION` | the Node tarball |
+| `NODE_SHA256_X64` | checksum for the `linux-amd64` tarball |
+| `NODE_SHA256_ARM64` | checksum for the `linux-arm64` tarball |
+
+A required pin that is absent is a hard error, and the Node tarball is checked against its sha256
+pin before anything is installed, so a swapped or truncated download cannot land on the host.
+
+The Python lane is always `pip` from `tests/requirements.txt` - the same file
+`//tests:pytest` and `//tests:typecheck` read. `pyright` and `mypy` never come from a system
+package manager.
+
+---
+
+## Probe and plan before it writes
+
+```bash
+bash scripts/setup-host.sh --check    # report only; exit 1 when something is missing
+bash scripts/setup-host.sh --dry-run  # print the plan; touch nothing
+bash scripts/setup-host.sh --help     # usage and the tool set
+```
+
+| Flag | Behavior | Exit |
+| --- | --- | --- |
+| *(none)* | install what is missing, then re-probe | `0` when every tool is present after the re-probe |
+| `--check` | probe and report only; writes nothing, naming the source each missing tool would come from | `1` when anything is missing |
+| `--dry-run` | print what would be installed and from where; touch nothing | `0` |
+| `-h`, `--help` | print usage and the tool set | `0` |
+
+Exit `1` also covers a missing pin, an unreadable pin file, or an install that left something
+absent after the re-probe.
+
+`--check` prints one `missing: <tool> - <source>` line per absent tool, which is the fastest way
+to see whether a red lint gate is a code problem or just a host that never had the linter:
+
+```text
+setup-host: host tool report (checkout /home/you/ez-comfy-stack)
+  present: bazelisk git python3 node
+  tools missing (2): shellcheck shfmt
+  missing: shellcheck - apt-get install -y shellcheck
+  missing: shfmt - https://github.com/mvdan/sh/releases/...
+```
+
+---
+
+## Linux and macOS
+
+Both paths install into the first writable candidate of `/usr/local/bin` and `${HOME}/bin`, and
+print which one was chosen.
+
+| Path | How the tools arrive |
+| --- | --- |
+| **Linux** | `apt-get` provides `shellcheck`, `git`, `python3`; the rest are fetched as pinned upstream releases (`bazelisk`, `shfmt`, `buildifier`), and Node is a pinned tarball checked against its sha256 |
+| **macOS** | Homebrew provides all of them (`brew install bazelisk buildifier shfmt shellcheck`); the script drives that for you. No Homebrew on the Mac is an error, not a fallback |
+
+`sudo` is used only for `apt`, and only when it is available.
+
+### Environment hooks
+
+These are also the knobs `tests/bats/setup_host.bats` drives the script with.
+
+| Variable | Default |
+| --- | --- |
+| `SETUP_HOST_ROOT` | checkout root (the script's parent) |
+| `SETUP_HOST_VERSIONS_FILE` | `<root>/.devcontainer/tool-versions.env` |
+| `SETUP_HOST_BIN_DIR` | first writable of `/usr/local/bin`, `${HOME}/bin` |
+| `SETUP_HOST_NODE_PREFIX` | `${HOME}/.local` - prefix the Node tarball extracts into |
+| `LAB_NO_SUDO=1` | never call `sudo` (hermetic tests, restricted hosts) |
+
+---
+
+## What it deliberately does not touch
+
+<Callout type="warning" title="Scope">
+  **Installs pinned release binaries, apt packages, and pip packages only.** It starts no stack,
+  pulls no model weights, touches no model directory, and runs no GPU job. `sudo` is used only for
+  `apt`, and only when it is available.
+</Callout>
+
+Specifically out of scope:
+
+- **No Docker.** Installing Docker is the operator path: `bazelisk run //:manage -- setup --install-docker`
+  (escape hatch: `./scripts/manage.sh setup --install-docker`).
+- **No models and no downloads.** Model weights come from
+  `bazelisk run //:manage -- download-models`; see [Download tiers](../download-tiers.md).
+- **No stack start.** `start`, `stop`, and the heavy confirm on start stay in
+  `bazelisk run //:manage` and keep their safety gates untouched.
+- **No GPU work and no Compose files.** Nothing here touches `docker/docker-compose.yml` or the
+  `restart: "no"` policy.
+- **No version literals** - it reads the pin file or it stops.
+- **No dotfiles, shells, or PATH edits.** It installs into a bin directory and tells you which one;
+  it does not rewrite your shell rc.
+
+---
+
+## Verify the host
+
+```bash
+bazelisk run //:setup-host -- --check   # every tool present
+bazelisk run //:validate                # the done-means gate
+bazelisk test //tests:bats_setup_host_test
+```
+
+`bazelisk test //tests:bats_setup_host_test` runs the script hermetically under
+`SETUP_HOST_ROOT` / `SETUP_HOST_BIN_DIR` / `LAB_NO_SUDO=1`, so the installer itself is covered
+without ever touching a real host.
+
+---
+
+## Failures
+
+| Symptom | Likely cause | Action |
+| --- | --- | --- |
+| `bazelisk test //:lint` fails with `<tool> missing - required in CI/strict mode` | host never installed that linter; strict mode is on, so the skip is fatal | `bazelisk run //:setup-host`, or `bash scripts/setup-host.sh` on a bare host |
+| `setup-host: no Homebrew on this Mac` | macOS with no Homebrew | Install Homebrew, then re-run; the script has no macOS fallback |
+| `setup-host: no apt-get and no Homebrew` | a non-apt, non-macOS host | Install the pinned tools by hand from the URLs `--dry-run` prints |
+| a required pin is missing | `tool-versions.env` edited or unreadable | Restore the pin; the script refuses to guess a version |
+| Node too old, still reported missing | a system Node below 22 shadowing the install | Put `${SETUP_HOST_NODE_PREFIX}/bin` ahead of it on `PATH` |
+| installed binaries not found | the chosen bin dir is not on `PATH` | Add the directory the script printed |
+
+Related: [Building with Bazel](building-with-bazel.md) -
+[Contributor Dev Container](devcontainer.md) - [Contributing](contributing.md) -
+[Troubleshooting](../troubleshooting.md) - [Host and Docker](../operate/troubleshooting-host-docker.md)

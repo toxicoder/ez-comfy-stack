@@ -40,6 +40,8 @@ Bazelisk is the ingress for code, tests, builds, and docs. Make targets are shim
 - compose config: `bazelisk test //docker:compose_config`
 - docs serve: `bazelisk run //docs:serve` or `./docs/manage-docs.sh serve`
 - docs export: `bazelisk run //docs:docs`
+- docs generators only: `bazelisk run //docs:generate`
+- regenerate derived JS: `bazelisk run //tests:build_quality_js`
 - doctor: `bazelisk run //:manage -- doctor`
 - stack: `bazelisk run //:manage -- setup|download-models|start|stop`; `./scripts/manage.sh <verb>`
   stays the operator escape hatch for those host-mutating verbs (docker, sudo, GPU, `$HOME`)

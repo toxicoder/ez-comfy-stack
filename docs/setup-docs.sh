@@ -4,7 +4,8 @@
 # Idempotent setup for the Fumadocs documentation site (npm packages).
 #
 # Usage:
-#   ./docs/setup-docs.sh
+#   bazelisk run //docs-site:install
+#   ./docs/setup-docs.sh                                 # raw escape hatch
 #   QUIET=true ./docs/setup-docs.sh
 #
 # Safety: Installs into docs-site/node_modules. Never publishes.
@@ -64,7 +65,6 @@ docs_install_site_deps
 if [[ ${QUIET} != "true" ]]; then
   echo ""
   echo "=== Setup complete ==="
-  echo "  ./docs/manage-docs.sh serve"
-  echo "  ./docs/manage-docs.sh build"
   echo "  bazelisk run //docs:serve"
+  echo "  bazelisk run //docs:docs"
 fi

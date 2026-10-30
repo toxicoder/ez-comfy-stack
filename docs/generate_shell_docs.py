@@ -16,7 +16,8 @@ Stdlib only. Session variables stay ``${SPARK_HOST}``-style - never lab
 ``{{PLACEHOLDER}}``. No Bazel, TypeDoc, or kubectl examples.
 
 Usage:
-  python3 docs/generate_shell_docs.py
+  bazelisk run //docs:docs                              # regenerate every docs page
+  python3 docs/generate_shell_docs.py                   # escape hatch: this file only
   python3 docs/generate_shell_docs.py --force
 """
 
@@ -61,7 +62,7 @@ tags: [cli, manage, generated, reference]
 - **Keeping** [manage.sh reference](../../manage-cli.md) a scan catalog while this page stays generated
 
 > Generated from structured comments in `scripts/`. Edit the source comments and re-run
-> `python3 docs/generate_shell_docs.py` (or `make docs`). Do not hand-edit this file.
+> `bazelisk run //docs:docs`. Do not hand-edit this file.
 
 """
 
@@ -291,7 +292,7 @@ def extract_from_file(path: Path) -> list[str]:
 
 
 def _iter_script_files() -> list[Path]:
-    """Return shell files to scan, manage.sh first then lib then utilities.
+    """Return shell files to scan, manage.sh and setup-host.sh first, then lib then utilities.
 
     Returns:
         Existing ``.sh`` paths under ``scripts/``.
@@ -299,6 +300,7 @@ def _iter_script_files() -> list[Path]:
     files: list[Path] = []
     priority = [
         SCRIPTS_DIR / "manage.sh",
+        SCRIPTS_DIR / "setup-host.sh",
     ]
     for path in priority:
         if path.is_file():

@@ -62,7 +62,7 @@ Then: `bazelisk run //:validate`.
 
 Pins: `.devcontainer/tool-versions.env`. Dockerfile `ARG` defaults must match (BATS). Do **not** `COPY` that env file before apt - it would bust the package layer.
 
-Docs site: `./docs/setup-docs.sh` (or set `DEVCONTAINER_INSTALL_DOCS_SITE=1` on create). Skipping default `npm ci` keeps create light.
+Docs site: `bazelisk run //docs-site:install` (or set `DEVCONTAINER_INSTALL_DOCS_SITE=1` on create; `./docs/setup-docs.sh` is the raw escape hatch). Skipping default `npm ci` keeps create light.
 
 GHCR cache: `ghcr.io/toxicoder/ez-comfy-devcontainer:development` (published after merge to `development`). A miss on the first pull is expected.
 
@@ -136,7 +136,7 @@ The Docker-outside-of-Docker Feature still mounts the host socket so **you** can
 | --- | --- | --- |
 | Host LLM connection refused | Server bound to `127.0.0.1` on Linux Engine | Listen on `0.0.0.0`; confirm `host.docker.internal` resolves |
 | `grok` refuses to start (sandbox / deny) | bubblewrap missing or sandbox.toml unreadable | Image must include `bubblewrap`; do not delete `~/.grok/sandbox.toml` |
-| Slow create | `docs-site npm ci` running | Leave `DEVCONTAINER_INSTALL_DOCS_SITE` unset; use `./docs/setup-docs.sh` when you need the docs app |
+| Slow create | `docs-site npm ci` running | Leave `DEVCONTAINER_INSTALL_DOCS_SITE` unset; use `bazelisk run //docs-site:install` when you need the docs app |
 | GHCR cache miss | Image not published yet | First merge to `development` publishes `ez-comfy-devcontainer:development`; local Dockerfile still builds |
 
 Related: [Building with Bazel](building-with-bazel.md) - [Contributing](contributing.md) - [Host and Docker](../operate/troubleshooting-host-docker.md)

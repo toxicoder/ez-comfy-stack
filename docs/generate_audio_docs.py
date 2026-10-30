@@ -2,7 +2,8 @@
 
 Run from repo root:
 
-  python3 docs/generate_audio_docs.py
+  bazelisk run //docs:docs                    # regenerate every docs page
+  python3 docs/generate_audio_docs.py         # escape hatch: this file only
 """
 
 from __future__ import annotations
@@ -100,7 +101,7 @@ def write_axis_page(axis_id: str, meta: dict[str, Any], rows: list[dict[str, Any
         "- Picking a professional music-production clause instead of guessing ACE tags",
         "- Seeing conflicts, vocal/instrumental/podcast flags, and BPM when present",
         "",
-        "Do not hand-edit this file. Re-run `python3 docs/generate_audio_docs.py`.",
+        "Do not hand-edit this file. Re-run `bazelisk run //docs:docs`.",
         "Operator playbook: [Audio Rack](../../create/audio-rack.md).",
         "",
         "| Id | Label | Tags / clause | Use on | Conflicts |",

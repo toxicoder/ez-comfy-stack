@@ -138,14 +138,27 @@ Stack health, resolved against the real checkout:
 bazelisk run //:manage -- doctor
 ```
 
-Docs - generators plus static export, and the local dev server:
+Docs - generators plus static export, the generators on their own, and the local
+dev server:
 
 ```bash
 bazelisk run //docs:docs
 ```
 
 ```bash
+bazelisk run //docs:generate
+```
+
+```bash
 bazelisk run //docs:serve
+```
+
+Derived frontend data - the Quality tier table comes from
+`custom_nodes/ez_quality/presets.py`, and `bazelisk test //:test-fast` fails if
+the generated JS drifts from it:
+
+```bash
+bazelisk run //tests:build_quality_js
 ```
 
 ## Safety

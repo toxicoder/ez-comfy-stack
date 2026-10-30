@@ -38,7 +38,7 @@ Session vars are for operator fences. Contributors still branch from **`developm
 ## Workflow (from the root file)
 
 1. Branch from latest `development`
-2. Prefer TDD (`bazelisk test //:test-fast` / `make test`)
+2. Prefer TDD (`bazelisk test //:test-fast`)
 3. **Commit tests with the production files they cover** (same commit)
 4. Run `bazelisk test //:lint --test_tag_filters=manual` and `bazelisk run //docs:docs`
 5. Open a PR into `development`
@@ -62,13 +62,13 @@ flowchart TB
 Promote a live `_user` graph (does **not** commit):
 
 ```bash
-./scripts/manage.sh promote-workflow \
+bazelisk run //:manage -- promote-workflow \
   --from "${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/my-hook.json" \
   --lane stills \
   --id my-hook
 ```
 
-Must not contain MiniMax / Seedance / Kling / z_image_turbo, and must not pin Klein 9B / FLUX.2-dev as the UNETLoader widget. Then stamp App Mode, add or adjust `_build_*.py` / tests, and `make test`. Never copy `_lab` into `_user`.
+Must not contain MiniMax / Seedance / Kling / z_image_turbo, and must not pin Klein 9B / FLUX.2-dev as the UNETLoader widget. Then stamp App Mode, add or adjust `_build_*.py` / tests, and `bazelisk test //:test-fast`. Never copy `_lab` into `_user`.
 
 Commit titles: `feat`, `fix`, `docs`, `test`, `chore`, `ci`, `refactor`.
 
@@ -77,7 +77,7 @@ Commit titles: `feat`, `fix`, `docs`, `test`, `chore`, `ci`, `refactor`.
 ## PR checklist
 
 - [ ] Tests updated in the same commits as the code they exercise
-- [ ] `bazelisk test //:test-fast` (or `make coverage`) passes (100% first-party Python + Pyright + mypy)
+- [ ] `bazelisk test //:test-fast` (or `bazelisk test //:coverage`) passes (100% first-party Python + Pyright + mypy)
 - [ ] `bazelisk test //:lint --test_tag_filters=manual` clean
 - [ ] `bazelisk run //docs:docs` (Fumadocs static export)
 - [ ] Safety impact called out if Docker/resources/download-limit changed

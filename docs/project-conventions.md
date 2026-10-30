@@ -278,7 +278,7 @@ flowchart TB
 - BATS for shell; pytest for Python; **Pyright** (Pylance) and **mypy** for first-party Python
 - **Hermetic by default**: `test_helper.bash` sets `LAB_HERMETIC=1`, speed/probe mocks, and `HF_PROGRESS=0` (no real curl/speedtest, no progress-monitor sleeps)
 - **Parallel BATS**: `bats --jobs` across files when GNU `parallel` is installed (`BATS_JOBS` override); serialize within files
-- `bazelisk test //:test-fast` (and `make coverage`) enforces:
+- `bazelisk test //:test-fast` (and `bazelisk test //:coverage`) enforces:
   - **100% Python line coverage** on all first-party production packages (`custom_nodes`, `docker`, `docs`, `scripts/lib`, `studio-ui`, `tools`)
   - **Pyright** clean at `standard` and **mypy** clean with `disallow_untyped_defs` (`tests/typecheck.sh`; Comfy/torch/bpy imports are not required)
   - **Production docstring inventory**: every production class/function has a Google-style docstring (`Args:` / `Returns:` when the signature needs them); constants have a group comment or attribute docstring (`tests/python/test_production_docstrings.py`)
@@ -325,7 +325,7 @@ flowchart LR
 
 Contributor how-to (scan + voice): [Docs style](contribute/docs-style.md). How docs tests work: [Testing docs](contribute/testing-docs.md). Comment-derived CLI: [Generated shell reference](generated/shell/reference.md). **AI-drafted docs still need a human pass** before merge.
 
-- Local / PR: `bazelisk run //docs:docs` (or `make docs`) - generators then Fumadocs static export into `docs-site/out/`
+- Local / PR: `bazelisk run //docs:docs` - generators then Fumadocs static export into `docs-site/out/`
 - Dev server: `bazelisk run //docs:serve` (or `./docs/manage-docs.sh serve`) at http://localhost:3005
 - Public site (per long-lived branch) via one Next export per GitHub Pages deploy:
   - `main` -> [latest](https://toxicoder.github.io/ez-comfy-stack/latest/)
@@ -341,7 +341,7 @@ Contributor how-to (scan + voice): [Docs style](contribute/docs-style.md). How d
   - This-repo GitHub `blob` / `tree` URLs
   - Operator Setup git ref: write `__DOCS_GIT_REF__` in source (e.g. `git clone -b __DOCS_GIT_REF__`); the app stamps `main` or `development` to match the published alias
 - Operator docs that mean "the branch for **these** docs" must use `__DOCS_GIT_REF__`, not a hardcoded long-lived branch name. Contributor workflow text ("branch from `development`") stays literal.
-- **Last published** chip (`.ez-published-chip`): site-wide build stamp for the published alias, injected beside the page `h1` by `docs-site/components/published-chip.tsx` (not per-page git history, not the site header). Deploy sets `EZ_DOCS_PUBLISHED_AT` (UTC ISO) in `.github/workflows/deploy-docs.yml`; local / PR `make docs` falls back to `SOURCE_DATE_EPOCH` then git HEAD. Invalid or missing stamps omit the chip - never wall-clock `now()`. The chip rewrites the visible `<time>` to a relative label ("2 days ago"); the `datetime` attribute stays absolute UTC. Do not hide the chip with `display: none`.
+- **Last published** chip (`.ez-published-chip`): site-wide build stamp for the published alias, injected beside the page `h1` by `docs-site/components/published-chip.tsx` (not per-page git history, not the site header). Deploy sets `EZ_DOCS_PUBLISHED_AT` (UTC ISO) in `.github/workflows/deploy-docs.yml`; local / PR `bazelisk run //docs:docs` falls back to `SOURCE_DATE_EPOCH` then git HEAD. Invalid or missing stamps omit the chip - never wall-clock `now()`. The chip rewrites the visible `<time>` to a relative label ("2 days ago"); the `datetime` attribute stays absolute UTC. Do not hide the chip with `display: none`.
 
 ### Docs formatting (human readability)
 

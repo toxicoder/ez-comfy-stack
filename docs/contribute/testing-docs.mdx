@@ -8,7 +8,7 @@ tags: [testing, coverage, fumadocs, contributing]
 
 **What's on this page**
 
-- **Bazel / Make targets** - `//:test-fast` / `coverage` / `lint` / `docs` / `typecheck`
+- **Validate lanes** - `bazelisk test //:test-fast` / `//:coverage` / `//:lint` / `bazelisk run //docs:docs` / `bazelisk test //tests:typecheck`
 - **100% Python gate** - all first-party production Python (`custom_nodes`, `docker`, `docs/*.py`, `scripts/lib`, `studio-ui`, `tools`)
 - **Shell function inventory** (invoked by a test, not only named)
 - **`deploy-docs.yml`** - `main` -> `latest`, `development` -> `development` (one Next export per run)
@@ -35,21 +35,23 @@ Hermetic tests do not need a Spark. Docs JS session vars still use those names i
 
 ---
 
-## Make targets
+## Validate lanes
 
 Makefile shims call Bazelisk when present. Canonical commands: [Building with Bazel](building-with-bazel.md).
 
-| Target | What it runs |
+| Lane | What it runs |
 | --- | --- |
-| **`bazelisk test //:test-fast`** / **`make test`** | BATS + node:test (`tests/js/`) + Python (`pytest-xdist` when installed) + Pyright + mypy |
-| **`make coverage`** | Same as `//:test-fast` via Bazel, else `tests/coverage.sh` |
+| **`bazelisk test //:test-fast`** | BATS + node:test (`tests/js/`) + Python (`pytest-xdist` when installed) + Pyright + mypy |
+| **`bazelisk test //:coverage`** | Same as `//:test-fast` via Bazel, plus the kcov report |
 | **`bazelisk test //:lint --test_tag_filters=manual`** | ShellCheck + shfmt + buildifier (Pyright + mypy live in `//:test-fast`) |
-| **`make typecheck`** | Pyright (Pylance) + mypy |
+| **`bazelisk test //tests:typecheck`** | Pyright (Pylance) + mypy |
 | **`bazelisk run //docs:docs`** | generators then Fumadocs static export (`docs-site/out/`) |
+| **`bazelisk run //docs:generate`** | the four `docs/generate_*.py` generators only; no npm, no export |
+| **`bazelisk run //tests:build_quality_js`** | regenerate the Quality tier JS from `presets.py` |
 | **`bazelisk run //:fix`** | buildifier + `shfmt -w` |
-| **`make doctor`** | `bazelisk run //:manage -- doctor` (host; not hermetic) |
+| **`bazelisk run //:manage -- doctor`** | Host health check (not hermetic) |
 
-Install once: `pip install -r tests/requirements.txt` and Node 22+ (`./docs/setup-docs.sh`).
+Install once: `pip install -r tests/requirements.txt` and Node 22+ (`bazelisk run //docs-site:install`).
 
 Pyright errors and mypy errors are **defects**. Do not skip the gate.
 
@@ -57,7 +59,7 @@ Pyright errors and mypy errors are **defects**. Do not skip the gate.
 
 ## 100% Python gate
 
-`make coverage` / `tests/run_pytest.sh` fail-under **100** on every first-party production package:
+`bazelisk test //:coverage` (`tests/run_pytest.sh` underneath) fail-under **100** on every first-party production package:
 
 - `custom_nodes`
 - `docker` (UM patches, `seed_clay_inputs`, `pythonpath/sitecustomize`)
@@ -78,16 +80,21 @@ Every function under `scripts/**/*.sh` and `docker/**/*.sh` must be **invoked by
 
 ---
 
-## make docs
+## Docs build
 
 ```bash
+bazelisk run //docs-site:install               # npm ci --legacy-peer-deps, once
+bazelisk run //docs:generate                    # the four generators only, no npm, no export
+bazelisk run //docs:docs                        # generators, then the Fumadocs export
+
+# Escape hatches: one generator only, when you are iterating on that generator
 python3 docs/generate_shell_docs.py
 python3 docs/generate_workflow_docs.py
 python3 docs/generate_cinema_docs.py
 python3 docs/generate_audio_docs.py
-(cd docs-site && npm ci --legacy-peer-deps && npm run build)
 ```
 
+`//docs:generate` is the loop you want after editing a shell function, a workflow graph, or a Cinema/Audio Rack JSON: no npm install, no webpack, and it prints the file count it wrote. `bazelisk test //tests:pytest` then fails if the committed `docs/generated/` no longer matches the generators, so regenerate and commit in the same change.
 `generate_shell_docs.py` writes `docs/generated/shell/reference.md` from `# ##`, `# @command`, and `# @function` comments. `generate_workflow_docs.py` writes `docs/generated/workflows/` and `docs/reference/workflow-nodes.md` from `_lab` JSON plus `docs/workflow_nodes.py`. `generate_cinema_docs.py` writes `docs/generated/cinema/` from Cinema Rack JSON. `generate_audio_docs.py` writes `docs/generated/audio/` from Audio Rack JSON. Do not hand-edit those files. The Next export fails closed on MDX/TypeScript errors.
 
 Pins: Fumadocs on Next.js 16 (`docs-site/package.json`). Node **22+**. [Docs style](docs-style.md).
@@ -103,10 +110,10 @@ Pins: Fumadocs on Next.js 16 (`docs-site/package.json`). Node **22+**. [Docs sty
 | **`main`** | **`latest`** (default site) |
 | **`development`** | **`development`** |
 
-PR validation is `make docs` in CI only (no Pages push). Each run builds **one** alias and keeps the other from `origin/gh-pages`. The export is `next build --webpack` in-process with one static-generation worker and `NODE_OPTIONS=--max-old-space-size=5120` so the ~850-page site fits GitHub's 7 GB runner. CI calls `./docs/manage-docs.sh build` after `bazelisk shutdown` so Bazel is not resident during the compile. Publish uses `scripts/ci/publish-pages-tree.sh` (a separate git worktree) so Next's rewrite of tracked `docs-site/next-env.d.ts` cannot block the `gh-pages` checkout. The helper refuses any file at GitHub's 100 MiB blob limit. Generated encyclopedias are indexed by title, headings, and tags only so the static `/api/search` export stays under that cap. Deploy sets `EZ_DOCS_PUBLISHED_AT` for the last-published chip. `docs-site/lib/site.ts` stamps `__DOCS_GIT_REF__` and GitHub blob/tree URLs to the long-lived ref.
+PR validation is `bazelisk run //docs:docs` in CI only (no Pages push). Each run builds **one** alias and keeps the other from `origin/gh-pages`. The export is `next build --webpack` in-process with one static-generation worker and `NODE_OPTIONS=--max-old-space-size=5120` so the ~850-page site fits GitHub's 7 GB runner. CI calls `./docs/manage-docs.sh build` after `bazelisk shutdown` so Bazel is not resident during the compile. Publish uses `scripts/ci/publish-pages-tree.sh` (a separate git worktree) so Next's rewrite of tracked `docs-site/next-env.d.ts` cannot block the `gh-pages` checkout. The helper refuses any file at GitHub's 100 MiB blob limit. Generated encyclopedias are indexed by title, headings, and tags only so the static `/api/search` export stays under that cap. Deploy sets `EZ_DOCS_PUBLISHED_AT` for the last-published chip. `docs-site/lib/site.ts` stamps `__DOCS_GIT_REF__` and GitHub blob/tree URLs to the long-lived ref.
 
 Public URLs: [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) - [development](https://toxicoder.github.io/ez-comfy-stack/development/).
 
 <Callout type="warning" title="AI-drafted docs still need a human pass">
-  Green `make docs` does not prove the page matches the code. Read `nodes.py` / compose / occupancy before merge.
+  Green `bazelisk run //docs:docs` does not prove the page matches the code. Read `nodes.py` / compose / occupancy before merge.
 </Callout>
