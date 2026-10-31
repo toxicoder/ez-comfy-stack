@@ -1,29 +1,35 @@
 ---
 title: ComfyUI Apps
-description: App Mode surfaces for the US-safe studio - Lane A Inspire vs Lane B Produce, occupancy, optional reference stills, and handoff chains.
+description: App Mode surfaces, creator widgets, lanes, occupancy, and handoff chains for every seeded lab graph.
 tags: [comfyui, app-mode, workflows, occupancy, klein, wan, ltx]
 ---
 
 # ComfyUI Apps
 
+This page answers one of the four start-creating questions: **what to edit in App
+Mode, which lane a graph belongs to, and what to stop before loading the next one**. It covers the App surface itself. Which graph to pick is on
+[Workflow catalog](studio-workflows.md), the loop a graph sits in is on
+[The still-to-motion-to-AV pipeline](visual-generative-ai.md), and the words you
+type are on [Prompting](prompting.md).
+
 **What's on this page**
 
-- How App Mode relates to the node graph
-- Apps sidebar (`.app.json`) vs Workflows
-- Where operator Apps persist (`_user/`; explicit lab Save or duplicate only)
-- Creator widgets: Quality (Lab / Draft / High / Free Commercial Use), Prompt, Style, Rewrite prompt, Rewrite negative (stays on so the negative cannot fight the final positive; one toggle per family), Seed (unique labels, wired LoadImage / LoadAudio)
-- **Example / reference (optional)** - LoadImage-style pickers (one in the App, three on the node card), a one-click **References off** mute, and `max_refs` on the Klein canvas node
-- Occupancy (one GB10 job) - chip at the top of the widget list, plus App summary and Quality caption. Minimize it to a corner pill or close it; a closed chip returns as a pill on the next run or App load. The choice is remembered in this browser.
-- Lane A (Inspire) vs Lane B (Produce)
-- Handoff chains (still -> motion -> AV)
+- **Graph vs App** - what each surface edits, and what the Quality combo owns
+- **Reference stills (optional)** - the picker, the three slots, and the mute
+- **Occupancy** - the one-heavy-job table and what must be stopped
+- **Lane A - Inspire** - the explore desks
+- **Lane B - Produce** - the ship plates and clips
+- **Lane DCC - clay desk** - the Blender-to-Comfy Apps
+- **Handoff chains** - what to load after each App
+- **Related** - where to go once you know the surface
 
 **What this enables**
 
-- Opening a lab graph from Comfy's **Apps** sidebar, not only Workflows
-- Queueing a lab graph from creator widgets instead of hunting the canvas
-- Knowing which App to stop before you load the next one
-- A/B-ing one setup with the reference stills muted, without clearing what you picked
-- Following Spark Still -> Hero -> Silent 5s -> AV 5s without renaming files
+- **Opening a lab graph** from Comfy's **Apps** sidebar, not only Workflows
+- **Queueing a lab graph** from creator widgets instead of hunting the canvas
+- **Knowing which App to stop** before you load the next one
+- **A/B-ing one setup** with the reference stills muted, without clearing what you picked
+- **Following Spark Still -> Hero -> Silent 5s -> AV 5s** without renaming files
 
 **Who this is for:** studio users after `stills/still-draft` has been loaded once.
 
@@ -72,9 +78,9 @@ Official persist is `extra.linearData` (`inputs` / `outputs`). Each input is `[n
 
 Comfy's **Apps** sidebar lists files whose name ends in `.app.json`. On `start`, the entrypoint seeds every App Mode graph (`default_view: app`) as `_lab/<lane>/*.app.json`. The same stem still appears under **Workflows** in that folder. 90s film graphs stay `default_view: graph` (too many widgets) and keep the `.json` suffix - App Mode is still **enabled**, but they stay Workflows-only. Folders do not add `workflows/apps/`.
 
-Filenames: [Workflow catalog](studio-workflows.md). Playbook: [Still to motion to AV](visual-generative-ai.md). Restart the container after a pull so the `.app.json` copy runs.
+Filenames: [Workflow catalog](studio-workflows.md). Playbook: [The still-to-motion-to-AV pipeline](visual-generative-ai.md). Restart the container after a pull so the `.app.json` copy runs.
 
-Save your own Apps under **`_user/`**. Duplicate a lab graph (App Forge, Save As `_user/`, or a new file under live `_lab/`) and it stays in `_user/`. A Save that overwrites live `_lab/<lane>/*.app.json` is rescued into `_user/_rescued/` on the next `start`. Catalog updates (pull + `start`) do **not** copy shipped `_lab` graphs into `_user/`. Re-open a rescued file - `_lab/` is the shipped catalog. If `_user/_rescued/` is already full of catalog clones from older starts, delete that folder (keep the rest of `_user/`).
+Save your own Apps under **`_user/`**. Duplicate a lab graph (App Forge, Save As `_user/`, or a new file under live `_lab/`) and it stays in `_user/`. A Save that overwrites live `_lab/<lane>/*.app.json` is rescued into `_user/_rescued/` on the next `start` - re-open a rescued file, because `_lab/` is the shipped catalog. If `_user/_rescued/` is already full of catalog clones from older starts, delete that folder (keep the rest of `_user/`). Folder rules and the sidebar tree: [Workflow catalog](studio-workflows.md#where-the-graphs-live).
 
 ---
 
@@ -110,7 +116,7 @@ One GB10 job. Cover art != film != podcast. Every App Note includes a one-line o
 | `film` | 90 s one-click | everything else on that Spark |
 | `audio` | podcast / dub / rap | Klein / Wan / LTX session |
 
-Prompt Enhance GGUF stays CPU-only (`n_gpu_layers=0`). Sidecar occupancy (Comfy XOR Blender) is unchanged: [Studio sidecars](studio-sidecars.md). `export-guides` / `blender-stills` / `house-views` die if compose is up.
+Prompt Enhance GGUF stays CPU-only (`n_gpu_layers=0`). Sidecar occupancy (Comfy XOR Blender) is unchanged: [Host sidecars overview](studio-sidecars.md). `export-guides` / `blender-stills` / `house-views` die if compose is up.
 
 ---
 
@@ -174,7 +180,7 @@ Ship plates and ~5 s clips. Hide UNET/CLIP/VAE except **klein-still-daily**, **s
 
 Creator plates (packshot, end-card, quote, food, bumper, B-roll, orbit, ...) stay in the [catalog](studio-workflows.md). One hundred extra platform Apps live under `_lab/creator/` (YouTube channel art, IG 4:5, Pinterest 2:3, Twitch BRB, Spotify Canvas, merch mocks): [Creator pack](create/workflows-creator.md). Example chain: **creator/stills/instagram-portrait** -> **creator/silent/instagram-story-loop** -> **creator/av/instagram-reel-lifestyle**. Klein stills may use 1280x720; LTX feeders stay **1280x704**. Lab sizes match platform **aspect**; scale in an editor if a host wants more pixels.
 
-Audio Apps (`audio/podcast/two-host-episode`, `audio/podcast/radio-drama`, `audio/podcast/learn-episode`, `dub-*`, `audio/music/rap-draft`, `audio/music/rap-full`, **audio/stem-mix**) are occupancy **audio**. Catalog albums live under `_lab/audio/albums/<artist>/<album>/` with numbered tracks, `cover.json` (klein), and `album.json` (zip). Outputs are FLAC + MP3 tagged with artist/album/title; optional cover is in the tags. One-go: `./scripts/manage.sh album-render --album nill-bye/peer-review`. Mux a still for YouTube with `./scripts/manage.sh audio-still-video --audio FILE --image FILE` (host ffmpeg; compose may stay up). Film graphs under `_lab/films/` are occupancy **film**. DCC Apps live under `_lab/dcc/` (lane **dcc**). Clay-to-finish playbook: [Clay to finish](learn/clay-to-finish.md). Blender stills + video: [Blender creator suite](learn/blender-creator.md).
+Audio Apps (`audio/podcast/two-host-episode`, `audio/podcast/radio-drama`, `audio/podcast/learn-episode`, `dub-*`, `audio/music/rap-draft`, `audio/music/rap-full`, **audio/stem-mix**) are occupancy **audio**. Catalog albums live under `_lab/audio/albums/<artist>/<album>/` with numbered tracks, `cover.json` (klein), and `album.json` (zip). Outputs are FLAC + MP3 tagged with artist/album/title; optional cover is in the tags. One-go: `./scripts/manage.sh album-render --album nill-bye/peer-review`. Mux a still for YouTube with `./scripts/manage.sh audio-still-video --audio FILE --image FILE` (host ffmpeg; compose may stay up). Film graphs under `_lab/films/` are occupancy **film**. DCC Apps live under `_lab/dcc/` (lane **dcc**). Clay-to-finish playbook: [Clay blockout to finished clip](learn/clay-to-finish.md). Blender stills + video: [Blender creator suite](learn/blender-creator.md).
 
 ---
 
@@ -229,3 +235,13 @@ Do **not** Queue Wan and LTX in the same session. Stop the other occupancy first
 <Callout type="warning" title="Do not weaken">
   `restart: "no"`, type **yes** on start, headroom, and download-limit are unchanged. Apps do not add `workflows/apps/`. Optional graphs live under `_lab/optional/`. App Mode graphs seed as `*.app.json` inside `_lab/<lane>/`, not as a second tree.
 </Callout>
+
+---
+
+## Related
+
+1. Choose the graph before you open the App: [Workflow catalog](studio-workflows.md)
+2. Run the loop these Apps chain together: [The still-to-motion-to-AV pipeline](visual-generative-ai.md)
+3. Write the prompt the widgets feed: [Prompting](prompting.md)
+4. Clone an App you can keep: [App Forge](create/app-forge.md)
+5. Splice a look into the Prompt box: [Cinema Rack](create/cinema-rack.md)

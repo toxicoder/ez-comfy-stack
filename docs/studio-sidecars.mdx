@@ -1,27 +1,56 @@
 ---
-title: Studio sidecars
-description: Host-only 3D, DCC, and NLE sidecars on GB10 - Blender, SuperSplat, TRELLIS.2, DA3-BASE, Vlo. Occupancy with Comfy.
+title: Host sidecars overview
+description: "Choose a host-side 3D, DCC, or NLE tool for the Spark: what each does, that it runs outside Docker, and how it shares one GPU."
 tags: [sidecar, blender, splat, trellis, 3d, nle, vlo, occupancy]
 ---
 
-# Studio sidecars
+# Host sidecars overview
 
 **What's on this page**
 
-- What a sidecar is (host process, not Compose)
-- Occupancy: one heavy GPU job
-- TRELLIS.2 native + DA3-BASE opt-in packs
-- Pointers to Blender, SuperSplat, and the host NLE (Vlo in the browser, or Kdenlive / Shotcut on OTIO files)
+- **Which sidecar to pick** - Blender, SuperSplat, TRELLIS.2, DA3-BASE, the host LLM, Vlo, Kdenlive / Shotcut
+- **Occupancy rule** - one heavy GPU job at a time; the two verbs are park and stop
+- **Host, not Dockerfile** - where each sidecar runs and what ships in the image
+- **Host NLE** - Vlo in the browser, or Kdenlive / Shotcut on OTIO files
+- **Not sidecars** - `ez_dcc`, the VACE join, and where generated meshes land
 
 **What this enables**
 
-- Optional 3D stills and depth without putting DCC or splat viewers in the Docker image
-- Timeline edits in a host browser (Vlo) or a host NLE - both outside the Comfy image
-- Unchanged `restart: "no"`, `mem_limit: 90g`, and headroom preflight
+- **Optional 3D stills and depth** without putting DCC or splat viewers in the Docker image
+- **Timeline edits in a host browser** (Vlo) or a host NLE - both outside the Comfy image
+- **Keeping** `restart: "no"`, `mem_limit: 90g`, and the headroom preflight unchanged
+- **Deciding in one table** whether a tool wants Comfy parked, stopped, or neither
 
-<Callout type="warning" title="Occupancy">
+**Question this page answers:** which host tool do I want, and what has to give up the GPU first? This is the index for the 3D, Blender, and host-tools pages; each of those pages links back here.
+
+---
+
+## Which sidecar to pick
+
+| Sidecar | Use it for | Where it runs | GPU: what Comfy must do first | Page |
+| --- | --- | --- | --- | --- |
+| **Blender** | Clay blockout, guide-pack dumps, creator plates, greybox sets | Host binary (`PATH` / `BLENDER_BIN` / `blender-install`) | **Park** Comfy (`occupancy enter blender-desk`); dumps exit 2 if it is still heavy | [Blender GB10 sidecar](blender-gb10-sidecar.md) |
+| **SuperSplat** | Inspect a Gaussian splat on disk | Host static viewer | **Stop** Comfy (compose down) - the encoder is a GPU job too | [Splat sidecar](splat-sidecar.md) |
+| **TRELLIS.2 native** | Still -> mesh, previews | Comfy after `download-3d` | **Stop** Blender and any sidecar before TRELLIS / LTX / Wan | this page |
+| **DA3-BASE** | Depth from a still | Comfy after `download-3d` | Same as TRELLIS.2 | this page |
+| **llama-server 35B** | Host LLM for script and tag work | Host `llama-server` on `127.0.0.1:30000` | **Park** Comfy (`occupancy enter llm-desk`); never a Compose service | [MCP and SSH tunnels](operate/mcp.md) |
+| **Vlo** | Timeline edit that Queues into this stack | Host browser app + its own Node/Python backend on `127.0.0.1:6332` | **Stop** Comfy before a GPU encode; never let Vlo launch a second ComfyUI | [Vlo video editor](vlo.md) |
+| **Kdenlive / Shotcut** | Offline edit of an exported OTIO | Host apt / Flatpak | **Stop** Comfy first if the NLE will use the GPU | this page |
+
+---
+
+## Occupancy rule
+
+This page owns the full wording of the occupancy rule; the other pages link here instead of restating it.
+
+<Callout type="error" title="Occupancy">
   GB10 is one heavy GPU job. Park Comfy (`occupancy enter blender-desk`) for Workbench dumps. Park Comfy (`occupancy enter llm-desk`) for the host 35B llama-server. Stop Blender and the sidecar before TRELLIS / LTX / Wan. SuperSplat and NVENC still want Compose **down**. Sidecars are **not** `docker compose` services. Bind the LLM sidecar on `127.0.0.1` only. [Occupancy desk](occupancy.md).
 </Callout>
+
+The rule is **one heavy GPU job at a time** on the single GB10. There are exactly two verbs, and they are not interchangeable:
+
+- **park** - hand the GPU to a desk with `./scripts/manage.sh occupancy enter <desk>`. Comfy stays up and unloaded, so you can come straight back. Use it for the Blender Workbench dumps and the host 35B llama-server.
+- **stop** - take the stack down with `./scripts/manage.sh stop` (compose down). Use it before TRELLIS / LTX / Wan work, for SuperSplat, and for any NVENC encode.
 
 ```mermaid
 flowchart TB
@@ -31,6 +60,14 @@ flowchart TB
   M --> S["SuperSplat / NVENC"]
   C -.->|park /free| B
 ```
+
+```bash
+./scripts/manage.sh occupancy enter blender-desk   # park Comfy for a host GPU job
+./scripts/manage.sh occupancy idle                 # hand the GPU back to Comfy
+./scripts/manage.sh stop                            # compose down for splat / NVENC
+```
+
+Never `pip install nvdiffrast` / `nvdiffrec`. Never vendor Inria 3DGS or Pixal3D as a default.
 
 ---
 
@@ -45,9 +82,7 @@ flowchart TB
 | llama-server 35B | Host `llama-server` on `127.0.0.1:30000` | Apache 2.0 GGUF | **No** - occupancy `llm-desk`. Never a Compose service |
 | Vlo | Host browser app (Chromium) + its own Node/Python backend on `127.0.0.1:6332` | AGPL-3.0 | **No** - [Vlo video editor](vlo.md) |
 
-Never `pip install nvdiffrast` / `nvdiffrec`. Never vendor Inria 3DGS or Pixal3D as a default.
-
-Generated meshes, previews, and scene instances are **outputs** in the [Asset Bible](asset-bible.md) under `COMFY_OUTPUT_DIR/assets/` - never in `MODELS_DIR` or `guides/`.
+Sidecars are host processes you install and run yourself. None of them is a `docker compose` service, none is cloned into the Comfy image, and none is built by `docker/Dockerfile`.
 
 ```bash
 ./scripts/manage.sh blender-install              # once; never in Dockerfile
@@ -60,16 +95,7 @@ Generated meshes, previews, and scene instances are **outputs** in the [Asset Bi
 ./scripts/manage.sh occupancy enter trellis --yes
 ```
 
-Guide packs: [DCC guide pack](dcc-workflows.md). Clay is Workbench; beauty is Path A. Never 1280x720.
-
-`custom_nodes/ez_dcc` is a **Comfy pack on `:8188`**, not a sidecar. It loads dumped packs and gates occupancy in-canvas. It does not run Blender. Playbook: [Stay in Comfy after a Blender dump](learn/comfy-first-blender.md).
-
-VACE join (Wan 2.1 1.3B Apache, 17 frames = `1+8n`) is a Comfy graph, not a sidecar:
-
-```bash
-./scripts/utilities/download-wan.sh run --tier vace
-# load workflows/_lab/motion/silent/vace-join.json - MagCache off
-```
+---
 
 ## Host NLE (Kdenlive / Shotcut)
 
@@ -96,4 +122,29 @@ git clone https://github.com/PxTicks/vlo && cd vlo && ./install.sh && ./run.sh
 
 Page: [Vlo video editor](vlo.md). Chromium-based browser only (File System Access API + WebCodecs).
 
-See [Model licenses](licenses.md) and [Models & Cache](models-and-cache.md).
+---
+
+## Not sidecars
+
+- **`custom_nodes/ez_dcc`** is a **Comfy pack on `:8188`**, not a sidecar. It loads dumped packs and gates occupancy in-canvas. It does not run Blender. Playbook: [Stay in Comfy after a Blender dump](learn/comfy-first-blender.md).
+- **The VACE join** (Wan 2.1 1.3B Apache, 17 frames = `1+8n`) is a Comfy graph, not a sidecar:
+
+```bash
+./scripts/utilities/download-wan.sh run --tier vace
+# load workflows/_lab/motion/silent/vace-join.json - MagCache off
+```
+
+- **Guide packs** are dumps a host tool writes for Comfy to read: [DCC guide pack](dcc-workflows.md). Clay is Workbench; beauty is Path A. Never 1280x720.
+- **Generated meshes, previews, and scene instances** are **outputs** in the [Asset Bible](asset-bible.md) under `COMFY_OUTPUT_DIR/assets/` - never in `MODELS_DIR` or `guides/`.
+
+---
+
+## Related
+
+- [DCC guide pack](dcc-workflows.md) - block in Blender, print a depth-guided 5.00s hero
+- [Blender GB10 sidecar](blender-gb10-sidecar.md) - install, park, and dump from the host
+- [Asset Bible](asset-bible.md) - where generated meshes and scene instances live
+- [Splat sidecar](splat-sidecar.md) - the host splat viewer
+- [Vlo video editor](vlo.md) - the AGPL browser NLE on the ComfyUI bridge
+
+See [Model licenses](licenses.md) and [Models and cache](models-and-cache.md).

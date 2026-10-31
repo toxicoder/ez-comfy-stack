@@ -1,23 +1,37 @@
 ---
-title: Film and DCC catalog
-description: One-click 90s shorts graphs and clay -> print DCC envelopes on the US-safe local studio.
+title: Film graphs
+description: Reference table of one-click 90s shorts, five-act films, and the clay-to-print DCC envelope graphs.
 tags: [comfyui, workflows, shorts, dcc, ltx, catalog]
 ---
 
-# Film and DCC catalog
+# Film graphs
+
+Pick a film graph. This catalog covers long-form jobs: a one-click 90s short, a
+five-act 7.5 min film, and the DCC envelopes that print a Blender clay study
+through Klein look-dev into an LTX take. Single clips are on
+[Motion graphs](workflows-motion.md) and the stills they start from are on
+[Stills graphs](workflows-stills.md).
 
 **What's on this page**
 
-- **90s shorts** one-click films (go-see, still-here, switchyard)
-- **7.5 min shorts** five-act graphs (tide-table, night-oven, glasshouse, last-lane, breakwater)
-- **DCC (clay -> print)** Klein-from-clay, IC-LoRA envelopes, in-canvas loaders
+- **90s shorts** - one-click films (go-see, still-here, switchyard), the five-act graphs, and the act queue order
+- **DCC (clay -> print)** - Klein-from-clay, IC-LoRA envelopes, in-canvas loaders
+- **Related** - what to load after the film lands
 
 **What this enables**
 
 - **Queuing one file per film** instead of 18 separate 5 s graphs
 - **Printing a Blender clay** through Klein look-dev and an LTX 8.00 s App envelope
+- **Reading one table per group** so you can pick a slug in seconds
 
-**Who this is for:** studio users who already Queued a 5 s LTX clip. Index: [Workflow catalog](../studio-workflows.md). Node-by-node widgets: [Workflow details](workflows-index.md). Full loop: [90s shorts](../shorts.md). Outputs under `${COMFY_OUTPUT_DIR}`.
+**Who this is for:** studio users who already Queued a 5 s LTX clip. Index: [Workflow catalog](../studio-workflows.md). Node-by-node widgets: [Workflow details](workflows-index.md). Full loop: [Short films](../shorts.md).
+
+**How to read these tables.** The **Workflow** column is the lab id you load from
+`_lab/films/` or `_lab/dcc/`, and it links to the generated node page for that
+graph. **What it does** names the story or the guide input, the printer size, the
+seed, the Enhance state, the output prefix, and any opt-in download. Seeds,
+occupancy, and Queue rules are shared with every other catalog:
+[Workflow catalog](../studio-workflows.md#shared-lab-graph-rules).
 
 ---
 
@@ -38,7 +52,7 @@ tags: [comfyui, workflows, shorts, dcc, ltx, catalog]
 
 Act graphs (Queue in order, then `concat-shots.sh --film`): `films/tide-table/act-01` `films/tide-table/act-02` `films/tide-table/act-03` `films/tide-table/act-04` `films/tide-table/act-05` - `films/night-oven/act-01` `films/night-oven/act-02` `films/night-oven/act-03` `films/night-oven/act-04` `films/night-oven/act-05` - `films/glasshouse/act-01` `films/glasshouse/act-02` `films/glasshouse/act-03` `films/glasshouse/act-04` `films/glasshouse/act-05` - `films/last-lane/act-01` `films/last-lane/act-02` `films/last-lane/act-03` `films/last-lane/act-04` `films/last-lane/act-05` - `films/breakwater/act-01` `films/breakwater/act-02` `films/breakwater/act-03` `films/breakwater/act-04` `films/breakwater/act-05`.
 
-Full loop: [90s shorts](../shorts.md). One file per film - Queue once. Leave LTX **1280x704**. Film printers stay **121 frames**. Do **not** Queue a 30/60/90 s latent.
+Full loop: [Short films](../shorts.md). One file per film - Queue once. Leave LTX **1280x704**. Film printers stay **121 frames**. Do **not** Queue a 30/60/90 s latent.
 
 ---
 
@@ -59,4 +73,14 @@ Full loop: [90s shorts](../shorts.md). One file per film - Queue once. Leave LTX
 | **[dcc/still-to-mesh](../generated/workflows/dcc/still-to-mesh.md)** | Still pack `plate=mug` -> native TRELLIS.2 INT8. Output `assets/objects/_lab-mug/`. Occupancy **trellis**. |
 | **[audio/stem-mix](../generated/workflows/audio/stem-mix.md)** | Picture-lock stem mix desk. Occupancy **audio**. Host `stem-mix.sh` (duck -15 dB, YouTube loudnorm). |
 
-Operator loop: [DCC guide pack](../dcc-workflows.md). Stay on `:8188`: [Stay in Comfy after a Blender dump](../learn/comfy-first-blender.md). Playbook: [Clay to finish](../learn/clay-to-finish.md). Stills: [Blender creator suite](../learn/blender-creator.md).
+---
+
+## Related
+
+Run the full loop first: [Short films](../shorts.md). Then:
+
+- Operator loop for the guide pack: [DCC guide pack](../dcc-workflows.md)
+- Stay on `:8188` after a Blender dump: [Stay in Comfy after a Blender dump](../learn/comfy-first-blender.md)
+- Look-dev path from clay to finished clip: [Clay blockout to finished clip](../learn/clay-to-finish.md)
+- Stills in Blender: [Blender creator suite](../learn/blender-creator.md)
+- Pick the graph for a different job: [Workflow catalog](../studio-workflows.md)

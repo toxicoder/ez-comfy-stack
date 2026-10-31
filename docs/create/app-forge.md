@@ -1,23 +1,31 @@
 ---
 title: App Forge
-description: Clone a shipped lab graph into live _user/ as a new App. Occupancy llm. No Queue.
+description: Clone a shipped lab graph into live _user/ as your own App, from a brief, on occupancy llm.
 tags: [app-forge, studio-mcp, inspire, workflows, mcp]
 ---
 
 # App Forge
 
+Use this page when no shipped graph is quite your job: describe the App you
+want, and App Forge clones the closest lab graph into live `_user/` with its
+App Mode widgets, US-safe coords, and occupancy intact. It does not Queue
+Comfy, and it never writes `workflows/_lab/`. Pick the shipped graph first on
+[Workflow catalog](../studio-workflows.md); load the result on
+[ComfyUI Apps](../studio-apps.md).
+
 **What's on this page**
 
-- How App Forge picks a shipped lab graph from a brief
-- Where the new App is written (`_user/`, never `_lab/`)
-- Path D `studio-mcp` tools
-- Occupancy for the generator vs the result
+- **What it writes** - the widgets you fill and the file it produces
+- **How auto picks** - how **Template** `auto` chooses a lab graph
+- **Path D** - the same pipeline from a laptop agent
+- **Related** - what to load next
 
 **What this enables**
 
-- Making a new operator App without editing raw JSON
-- Keeping US-safe coords, App Mode widgets, and occupancy from the template
-- Driving the same pipeline from a laptop agent
+- **Making a new operator App** without editing raw JSON
+- **Keeping US-safe coords**, App Mode widgets, and occupancy from the template
+- **Driving the same pipeline** from a laptop agent
+- **Keeping the shipped catalog clean** - the result lands in `_user/`, never `_lab/`
 
 **Who this is for:** studio users after Prompt Forge. Occupancy **llm**. No UNET.
 
@@ -77,4 +85,12 @@ Official Comfy Cloud MCP / PyPI `comfy-mcp` stay out of the image. This is the i
 
 Same pipeline as the App. Does not Queue Comfy. Does not refuse a GPU session. Does not map `idle` -> `blender-desk`.
 
-Next: open the new App, then [Prompt Forge](../studio-apps.md) or **stills/still-draft**.
+---
+
+## Related
+
+1. Open the new App and Queue it: [ComfyUI Apps](../studio-apps.md)
+2. Choose the template it cloned: [Workflow catalog](../studio-workflows.md)
+3. Write the prompt the new App expects: [Prompting](../prompting.md)
+4. Preview a prompt before you forge an App for it: [Cinema Rack](cinema-rack.md)
+5. Promote a keeper into the lab catalog: `./scripts/manage.sh promote-workflow` ([manage.sh reference](../manage-cli.md))

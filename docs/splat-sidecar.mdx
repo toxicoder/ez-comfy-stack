@@ -1,6 +1,6 @@
 ---
 title: Splat sidecar
-description: SuperSplat MIT host viewer for Gaussian splats. Not in the Dockerfile. Occupancy with Comfy.
+description: "Inspect a Gaussian splat on the Spark in SuperSplat, a MIT host viewer you run after taking Compose down."
 tags: [splat, supersplat, sidecar, occupancy]
 ---
 
@@ -8,28 +8,46 @@ tags: [splat, supersplat, sidecar, occupancy]
 
 **What's on this page**
 
-- SuperSplat as a **host** static viewer (MIT)
-- Why it is not in `docker/Dockerfile`
-- Occupancy with Comfy / TRELLIS
+- **Operator path** - stop Compose, open SuperSplat on the host, load the splat file from disk
+- **Verify** - a smooth orbit means the file and the viewer are both fine
+- **Where splats come from** - the opt-in `triposplat` manifest pack, and the defaults that stay banned
+- **Occupancy** - a splat viewer wants Compose **down**, not parked next to a loaded Comfy job
 
 **What this enables**
 
-- Inspecting a splat on the Spark without baking a viewer into the Comfy image
-- Keeping Pixal3D / Inria 3DGS **out** of the default pack
+- **Inspecting a splat** on the Spark without baking a viewer into the Comfy image
+- **Keeping** `docker/Dockerfile` free of the viewer, Blender, and nvdiffrast
+- **Keeping** Pixal3D / Inria 3DGS **out** of the default pack
 
-<Callout type="warning" title="Host viewer">
-  SuperSplat (`playcanvas/supersplat`, MIT) is a static viewer you run on the host. It is **not** cloned into this MIT tree, **not** a Compose service, and **not** a `manage.sh` verb.
+**Question this page answers:** how do I look at a splat without turning the Comfy image into a 3D viewer? SuperSplat (`playcanvas/supersplat`, MIT) is a static viewer you run on the host. It is **not** cloned into this MIT tree, **not** a Compose service, and **not** a `manage.sh` verb.
+
+<Callout type="warning" title="Occupancy">
+  The encoder is a GPU job too, so SuperSplat wants Compose **down**, not parked. `stop` is the hammer: container down, volumes kept, and the next `start` asks for **yes** again. Full wording of the one-heavy-job rule: [Host sidecars overview](studio-sidecars.md#occupancy-rule).
 </Callout>
 ---
 
 ## Operator path
 
-1. `./scripts/manage.sh stop` - encoder / GPU occupancy
-2. Open SuperSplat on the host (upstream release or local static build)
-3. Load the splat file from disk. Do not point it at the Comfy volume as a live mount while compose is up
+1. `./scripts/manage.sh stop` - take the stack down so the encoder is not fighting a loaded Comfy job.
+2. `./scripts/manage.sh status` - confirm the stack is down before you open the viewer.
+3. Open SuperSplat on the host (upstream release or local static build).
+4. Load the splat file from disk. Do not point it at the Comfy volume as a live mount while compose is up.
 
-TripoSR / TripoSplat weights remain an opt-in manifest pack (`triposplat`) and are **not** a default. `--drop-pack triposplat` cannot eat `flux2-vae`.
+If the viewer loads and the orbit is smooth, the file is fine and the sidecar did its job. If it will not load, check the path first - the viewer reads a file, not the running stack.
+
+---
+
+## Where splats come from
+
+TripoSR / TripoSplat weights remain an opt-in manifest pack (`triposplat`) and are **not** a default. `--drop-pack triposplat` cannot eat `flux2-vae`. TRELLIS.2 output is a mesh, catalogued in the [Asset Bible](asset-bible.md).
 
 Banned as defaults: Inria 3DGS, Pixal3D-as-default, nvdiffrast TRELLIS. See [Model licenses](licenses.md).
 
-Related: [Studio sidecars](studio-sidecars.md) - [Blender GB10 sidecar](blender-gb10-sidecar.md).
+---
+
+## Related
+
+- [Host sidecars overview](studio-sidecars.md) - the host-tools group and the occupancy rule in full
+- [Blender GB10 sidecar](blender-gb10-sidecar.md) - the host DCC that dumps clay and depth
+- [Asset Bible](asset-bible.md) - where generated meshes are catalogued
+- [Vlo video editor](vlo.md) - the host browser NLE

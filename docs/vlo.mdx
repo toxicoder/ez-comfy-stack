@@ -1,6 +1,6 @@
 ---
 title: Vlo video editor
-description: PxTicks/vlo AGPL browser NLE driven over the live ComfyUI bridge. Host app - not a Compose service, not a custom node.
+description: "Edit a timeline in a host browser with Vlo, which queues into this stack over the live ComfyUI bridge. It is not a service."
 tags: [vlo, video-editor, sidecar, browser, agpl, occupancy]
 ---
 
@@ -8,32 +8,46 @@ tags: [vlo, video-editor, sidecar, browser, agpl, occupancy]
 
 **What's on this page**
 
-- Vlo as a **host** browser editor (AGPL-3.0), not a Compose service
-- Install and run on the Spark host (`install.sh` then `run.sh` on `127.0.0.1:6332`)
-- Pointing Vlo's ComfyUI bridge at this stack's `${COMFY_PORT}`
-- What this stack still owns: the container lifecycle and the model weights
+- **When you reach for it** - a live browser timeline instead of the OTIO file handoff
+- **Operator path** - start the studio first, run the editor, then set the URL
+- **Requirements and install (host)** - `git`, then `install.sh` and `run.sh` on `127.0.0.1:6332`
+- **Point the bridge at this stack** - the ComfyUI URL and the `COMFY_PORT` cases
+- **Verify** - what a working bridge looks like, and where the failure rows live
+- **What this stack owns** - container lifecycle, weights, and the one-heavy-job rule
+- **License and placement** - AGPL-3.0, kept outside the MIT tree and the image
 
 **What this enables**
 
-- Timeline editing in a browser while the AI compute stays server-side on the single Spark
-- No editor code in `docker/Dockerfile`, no ComfyUI node, no `manage.sh` verb
-- An in-browser alternative to the Kdenlive / Shotcut OTIO file handoff
+- **Timeline editing in a browser** while the AI compute stays server-side on the single Spark
+- **No editor code** in `docker/Dockerfile`, no ComfyUI node, no `manage.sh` verb
+- **An in-browser alternative** to the Kdenlive / Shotcut OTIO file handoff
+- **Every generation as a normal Queue** you can watch in the Comfy tab or in `manage.sh logs`
+
+**Question this page answers:** how do I cut a timeline on the Spark without a second ComfyUI? Start the studio with `./scripts/manage.sh start`, run the editor on the host, and point it at `${COMFY_PORT}`. For a file handoff instead of a live bridge, export OTIO into Kdenlive / Shotcut: [Host sidecars overview](studio-sidecars.md).
 
 <Callout type="warning" title="Host app, not a service">
   Vlo (`PxTicks/vlo`, **AGPL-3.0**) is a host-side app you install and run yourself. It is **not** a Compose service, **not** a ComfyUI custom node, **not** cloned into the Comfy image, and **not** a `manage.sh` verb. It brings its own Node.js + Python backend on the host, keeps projects on the host disk, and edits in a Chromium-based browser. Every generation is a normal ComfyUI Queue on the Spark.
 </Callout>
 
-## Why Vlo
+---
 
-Vlo drives the existing ComfyUI over its live bridge, so the timeline is local and cheap; each denoise is one Queue on the Spark. The AGPL app stays outside the MIT tree and outside the image, and the one-heavy-GPU-job rule is untouched. For a file handoff instead of a live bridge, use the OTIO export into Kdenlive / Shotcut: [Studio sidecars](studio-sidecars.md).
+## Operator path
 
-## Requirements
+```bash
+./scripts/manage.sh start     # type yes; ComfyUI on ${COMFY_PORT}
+cd vlo && ./run.sh            # editor on http://127.0.0.1:6332
+# then: App settings -> Runtime settings -> http://127.0.0.1:${COMFY_PORT}
+```
+
+Edit on the timeline. Every generation lands as a Queue in ComfyUI at `${COMFY_PORT}` - watch it in the Comfy tab or with `./scripts/manage.sh logs`.
+
+### Requirements
 
 - A **Chromium-based browser** (Chrome, Edge; Opera may work). Firefox and Safari are not supported: the editor needs the File System Access API and WebCodecs, and its media renderer wraps mediabunny
 - `git` on the host. That is the only prerequisite - the installer fetches Node.js, Python, and uv when they are missing
 - ComfyUI from this stack, already up: `./scripts/manage.sh start`
 
-## Install (host)
+### Install (host)
 
 ```bash
 git clone https://github.com/PxTicks/vlo
@@ -48,6 +62,12 @@ cd vlo
 ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
 ```
 
+### Verify
+
+The editor opens on `http://127.0.0.1:6332` and stops reporting ComfyUI offline once the URL in **App settings -> Runtime settings** matches `${COMFY_PORT}`. A Queue from the timeline then shows up in `./scripts/manage.sh logs`. If the app still says ComfyUI offline, confirm the UI itself loads at `http://127.0.0.1:${COMFY_PORT}` before blaming the editor. Failure rows: [Troubleshooting](troubleshooting.md).
+
+---
+
 ## Point the bridge at this stack
 
 Vlo expects ComfyUI at `http://127.0.0.1:8188` by default. Change it in **App settings -> Runtime settings**.
@@ -61,20 +81,12 @@ Vlo expects ComfyUI at `http://127.0.0.1:8188` by default. Change it in **App se
 
 First launch asks how to use ComfyUI: **Install ComfyUI**, **Choose ComfyUI folder**, or skip and set it later in **App settings -> Runtime settings**. Skip it (or set the URL straight away). This stack owns the ComfyUI install inside the container, so there is no folder for Vlo to choose.
 
-## Operator path
-
-```bash
-./scripts/manage.sh start     # type yes; ComfyUI on ${COMFY_PORT}
-cd vlo && ./run.sh            # editor on http://127.0.0.1:6332
-# then: App settings -> Runtime settings -> http://127.0.0.1:${COMFY_PORT}
-```
-
-Edit on the timeline. Every generation lands as a Queue in ComfyUI at `${COMFY_PORT}` - watch it in the Comfy tab or with `./scripts/manage.sh logs`.
+---
 
 ## What this stack owns
 
 <Callout type="error" title="Do not launch ComfyUI from Vlo">
-  Start ComfyUI with `./scripts/manage.sh start`. Do **not** use Vlo's **Launch ComfyUI** button - it is for a folder install Vlo created itself. A second ComfyUI on the Spark means two heavy GPU jobs and a headroom refuse. [Occupancy desk](occupancy.md).
+  Start ComfyUI with `./scripts/manage.sh start`. Do **not** use Vlo's **Launch ComfyUI** button - it is for a folder install Vlo created itself. A second ComfyUI on the Spark means two heavy GPU jobs and a headroom refuse. [Occupancy desk](occupancy.md). The rule and the two verbs, park and stop: [Host sidecars overview](studio-sidecars.md#occupancy-rule).
 </Callout>
 
 | Vlo feature | Use it here? | Why |
@@ -84,8 +96,20 @@ Edit on the timeline. Every generation lands as a Queue in ComfyUI at `${COMFY_P
 | Timeline, edit, export | **Yes** | Host CPU + browser (WebCodecs). Stop Comfy first if the encode will use the GPU |
 | ComfyUI bridge (Queue) | **Yes** | The whole point: heavy AI compute stays server-side on the Spark |
 
+---
+
 ## License and placement
 
-`PxTicks/vlo` is **AGPL-3.0**. It stays an upstream host checkout: never vendored into this MIT tree, never a layer in `docker/Dockerfile`, never a Compose service. Same posture as [SuperSplat](splat-sidecar.md). License row: [Model licenses](licenses.md).
+Operator steps end here; this section is licensing and placement only.
 
-Troubleshooting the handoff: [Troubleshooting](troubleshooting.md). Shot list and OTIO path for the same films: [90s shorts](shorts.md).
+`PxTicks/vlo` is **AGPL-3.0**. It stays an upstream host checkout: never vendored into this MIT tree, never a layer in `docker/Dockerfile`, never a Compose service. Same posture as [Splat sidecar](splat-sidecar.md). License row: [Model licenses](licenses.md).
+
+---
+
+## Related
+
+- [Host sidecars overview](studio-sidecars.md) - the host-tools group, Kdenlive / Shotcut, and the occupancy rule in full
+- [Blender GB10 sidecar](blender-gb10-sidecar.md) - the host DCC that dumps clay and depth
+- [Asset Bible](asset-bible.md) - where generated meshes and scene instances are catalogued
+- [Splat sidecar](splat-sidecar.md) - the host static splat viewer
+- [Short films](shorts.md) - back up to the shot list and OTIO path for the films you are cutting

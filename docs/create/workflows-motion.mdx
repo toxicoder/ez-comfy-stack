@@ -1,24 +1,41 @@
 ---
-title: Motion and AV catalog
-description: Seeded Wan 2.2 silent ~5 s graphs, LTX-2.5 AV ~8 s heroes, GIF/bumper loops, and creator motion plates.
+title: Motion graphs
+description: Reference table of every seeded Wan 2.2 silent clip, LTX-2.5 audio-video take, loop, and creator motion graph.
 tags: [comfyui, workflows, wan, ltx, motion, catalog]
 ---
 
-# Motion and AV catalog
+# Motion graphs
+
+Pick a motion graph. This catalog covers time-based jobs on one loaded still or
+one plain text prompt: a silent ~5 s Wan 2.2 clip, an ~8 s LTX-2.5 audio-video
+take, a loopable GIF or bumper, and the creator motion plates. The still you
+feed them is on [Stills graphs](workflows-stills.md) and the one-click films are
+on [Film graphs](workflows-film.md).
 
 **What's on this page**
 
-- **Motion (Wan 2.2 5B)** silent I2V / T2V, FLF, VACE, A14B, TRELLIS
-- **AV hero (LTX-2.5)** I2V / T2V and the div32 size warning
-- **Showcase (LTX-2.5)** dialogue, native multishot, product hero, first-last-frame, A2V freeze
-- **Creator toolkit** motion and AV plates (orbit, bumper, B-roll, hook)
+- **Motion (Wan 2.2 5B)** - silent I2V / T2V, FLF, VACE, A14B, TRELLIS, GIF loop
+- **AV hero (LTX-2.5)** - I2V / T2V and the div32 size rule
+- **Showcase (LTX-2.5)** - dialogue, native multishot, product hero, first-last-frame, A2V freeze
+- **Creator toolkit** - motion and AV plates (orbit, bumper, B-roll, hook)
+- **Duplicate clip-chain beats** - extending the four-beat chain to 5-24
+- **Related** - what to load after the clip lands
 
 **What this enables**
 
 - **Queuing a silent ~5 s clip** or an AV ~8 s hero from a seeded filename
 - **Keeping LTX widgets** on the native VAE grid so prints do not snap-and-crop
+- **Reading one table per family** so you can pick a row in seconds
+- **Chaining four AV beats** with last-frame continuity instead of copy-pasting nodes
 
-**Who this is for:** studio users after a Klein still. Index: [Workflow catalog](../studio-workflows.md). Node-by-node widgets: [Workflow details](workflows-index.md). Unload the previous family before Queue. Outputs under `${COMFY_OUTPUT_DIR}`.
+**Who this is for:** studio users after a Klein still. Index: [Workflow catalog](../studio-workflows.md). Node-by-node widgets: [Workflow details](workflows-index.md).
+
+**How to read these tables.** The **Workflow** column is the lab id you load from
+`_lab/`, and it links to the generated node page for that graph. **What it does**
+names the job, the default pixels, the frame count, the MagCache state, the
+output prefix, and the occupancy the graph claims. Park the previous family
+before you Queue the next one - rules every lab graph shares are on
+[Workflow catalog](../studio-workflows.md#shared-lab-graph-rules).
 
 ---
 
@@ -67,7 +84,7 @@ Authored recipes. Prompt Enhance **off**. Occupancy **ltx**. Same 8.00 s / 193 /
 
 ## Creator toolkit - motion / AV
 
-Pack 1 motion / AV (stills companions: [Stills catalog](workflows-stills.md)):
+Pack 1 motion / AV (stills companions: [Stills graphs](workflows-stills.md)):
 
 | Workflow | What it does |
 | --- | --- |
@@ -88,7 +105,7 @@ Pack 2 - motion / AV:
 | **[motion/av/interior-ambience](../generated/workflows/motion/av/interior-ambience.md)** | Interior room-tone AV |
 | **[motion/av/hook-av](../generated/workflows/motion/av/hook-av.md)** | ~8 s AV cold open |
 
-90s shot printers (**[motion/silent/still-to-shot](../generated/workflows/motion/silent/still-to-shot.md)**, **[motion/av/still-to-shot](../generated/workflows/motion/av/still-to-shot.md)**) live with the films: [Film catalog](workflows-film.md).
+90s shot printers (**[motion/silent/still-to-shot](../generated/workflows/motion/silent/still-to-shot.md)**, **[motion/av/still-to-shot](../generated/workflows/motion/av/still-to-shot.md)**) live with the films: [Film graphs](workflows-film.md).
 
 ## Duplicate clip-chain beats (5-24)
 
@@ -103,3 +120,13 @@ Shipped **[motion/av/clip-chain](../generated/workflows/motion/av/clip-chain.md)
 7. Save under `_user/` if you want a personal App; shipped `_lab` stays 4 beats.
 
 Past 24 stems: host `./scripts/utilities/concat-shots.sh --files a.mp4,b.mp4 --cap-seconds <sum> --yes` (the default `--files` cap is 90 s).
+
+---
+
+## Related
+
+1. Feed the clip a still: [Stills graphs](workflows-stills.md)
+2. Run the loop it belongs to: [The still-to-motion-to-AV pipeline](../visual-generative-ai.md)
+3. Pick the graph for a different job: [Workflow catalog](../studio-workflows.md)
+4. Write the motion and sound prompt: [Prompting](../prompting.md)
+5. Print 18 of these into a short: [Film graphs](workflows-film.md)

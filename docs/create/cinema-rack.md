@@ -1,24 +1,31 @@
 ---
 title: Cinema Rack
-description: Pick-and-splice cinematography techniques into Klein, Wan, and LTX prompts.
+description: Pick one cinematography technique per axis and splice it into a Klein, Wan, or LTX prompt.
 tags: [cinema, prompting, klein, wan, ltx, inspire]
 ---
 
 # Cinema Rack
 
+Use this page when the picture is right but the shot is not: it turns film
+grammar into thirteen dropdowns and hands you a model-native Klein, Wan, or LTX
+string. It is deterministic - no LLM. For the rewriter that writes the same
+language, see [Prompting](../prompting.md); for the audio equivalent,
+[Audio Rack](audio-rack.md).
+
 **What's on this page**
 
-- Thirteen cinematography axes you pick one-at-a-time
-- How the rack splices Klein / Wan / LTX strings
-- Flavor rules (stills, I2V look-skip, one Wan camera)
-- Recipes, conflicts, and handoff to still-draft
-- 5s muted encyclopedia clips for shipped techniques
+- **Axes** - the thirteen widgets and what each one does on a still
+- **Flavors** - what the rack emits per family
+- **Recipes and conflicts** - how a recipe fills empty axes and which pick wins
+- **Handoff** - where to paste the string it writes
+- **Related** - what to load next
 
 **What this enables**
 
-- Building a professional shot from dropdowns instead of remembering film grammar
-- Copying a family CLIP string into **stills/still-draft**, **motion/silent/text-to-video-5s**, or **motion/av/text-to-video-8s**
-- Watching a 5s example of a pick on the generated technique page
+- **Building a professional shot** from dropdowns instead of remembering film grammar
+- **Copying a family CLIP string** into **stills/still-draft**, **motion/silent/text-to-video-5s**, or **motion/av/text-to-video-8s**
+- **Watching a 5s example** of a pick on the generated technique page
+- **Keeping Wan to one camera verb**, so the clip does not fight itself
 
 **Who this is for:** studio users after Prompt Forge. Occupancy **llm**. No UNET.
 
@@ -88,3 +95,13 @@ Wan never emits two camera verbs. Do not also type `dolly in` in the subject.
 4. Optional: turn Enhance **off** on the destination if the rack string is already model-native.
 
 Safety impact: none. Prompt JSON + CPU node. No Docker, restart, or headroom change.
+
+---
+
+## Related
+
+1. Queue the string you just spliced: [Stills graphs](workflows-stills.md), [Motion graphs](workflows-motion.md)
+2. How the rewriter uses the same catalog language: [Prompting](../prompting.md)
+3. Splice the mix instead of the camera: [Audio Rack](audio-rack.md)
+4. Clone a graph that keeps this look: [App Forge](app-forge.md)
+5. Pick the graph for a different job: [Workflow catalog](../studio-workflows.md)

@@ -1,33 +1,35 @@
 ---
 title: Short films
-description: Queue 90s one-click films, or five 90s acts that concat to a 7.5 min master, all on 5.00s LTX printers.
+description: "Queue three 90-second films, or five 90-second acts that concat to a 7.5-minute master, from 18 independent 5.00s LTX prints."
 tags: [shorts, wan, ltx, klein, youtube, comfyui]
 ---
 
-# 90s shorts
+# Short films
 
 **What's on this page**
 
-- Why 18 x 5.00s shots instead of one 90s (or 7.5 min) denoise
-- One-click Comfy graph per 90s film, or five 90s **acts** for a 7.5 min film
-- Play/download: overlay, HTML sidecar, studio-ui `/watch/<slug>`
-- Shot maps for go-see, still-here, switchyard, and five 7.5 min films
-- Model-native Klein / LTX prompts ([Prompting](prompting.md))
-- Spark farm: optional parallel 5s Queues, local concat
-- Shot resume, OTIO export, NVENC proxies, take-promote, Fun InP / SeedVR2 opt-in
-- Optional [studio-ui](reference/studio-ui.md) board (`:8190` profile), LTX Director GPL clone, host [Vlo](vlo.md) timeline editor
-- Optional 3D sidecars (TRELLIS.2, DA3-BASE, host Blender / SuperSplat) and VACE join
-- Wave 4: `film-accept`, DFR print mode, A14B hero, talking-head, LongCat / DreamX opt-in
-- Go-see show-off loop (identity-first reprint, wordless mix, fail-closed concat)
+- **Operator loop** - load one film graph, Queue once, find the stitched MP4 already on disk
+- **Why not one 90s latent** - 18 independent 5.00s prints, last-frame continuity, the 90s cap
+- **Models** - Klein identity, LTX print plus world audio, `EZFilmConcat` stitch, optional Wan rehearsal
+- **Resume and salvage** - `print-shot`, `film-resume`, `take-promote`, `film-accept`, `concat-shots`
+- **Shot maps** - go-see, still-here, switchyard, and the machine-readable YAML behind them
+- **7.5 minute films** - five 90s acts per title, queued in order, concat-checked at 450.00s
+- **Go-see show-off loop** - identity-first reprint, wordless mix, fail-closed accept
+- **Finish the sound** - hand the locked picture to the podcast, dub, and music lanes
+- **Optional packs** - studio-ui board, LTX Director, IC-LoRA, Fun InP, SeedVR2, VACE, Wave 4, 3D sidecars
+- **Spark farm** - parallel 5s Queues on three Sparks, concat on one host
 
 **What this enables**
 
-- Three continuous ~90s films (go-see, still-here, switchyard) plus five 7.5 min act-composed films on the **US-safe local pack**
-- Last-frame continuity without a 90s denoise
-- A 90.00s publish cap (in-graph `EZFilmConcat` faststart H.264, or host `ffmpeg -t 90`)
-- One Queue per film - identity, 18 prints, stitch, play, download
+- **Three continuous 90s films** (go-see, still-here, switchyard) plus five 7.5 min act-composed films on the **US-safe local pack**
+- **Last-frame continuity** without a 90s denoise - shot N's last frame starts shot N+1
+- **A 90.00s publish cap** enforced in-graph by `EZFilmConcat` (faststart H.264) or by host `ffmpeg -t 90`
+- **One Queue per film** - identity, 18 prints, stitch, play, download
+- **A dropped SSH session that costs minutes**, not two hours, because shot state lives on disk
 
 **Who this is for:** studio users who already Queued a 5 s LTX clip. Concepts: [Klein, Wan, and LTX](learn/pipeline.md).
+
+**Question this page answers:** how do I get a publishable short out of the studio without a 90s denoise that GB10 should not run? Queue one film graph, keep every print at 5.00s, and let the stitch cap the master.
 
 <Callout type="info" title="First 90s film">
   1. Stack is up (`manage.sh start`, type **yes**). LTX-2.5 weights on disk.
@@ -38,12 +40,26 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
   6. The stitched MP4 is **already on disk**: `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4` (container `/outputs`), plus `ez_gosee_90s.html`. A **90s film ready** overlay offers play and download. Optional board: `docker compose --profile studio-ui up studio-ui` then http://localhost:8190/watch/gosee
   7. Copy off the Spark: `scp "${SPARK_USER}@${SPARK_HOST}:${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4" .`
 
-  Do **not** set 241+ frames. Resume after a dropped SSH session: `film-resume` (below).
+  Do **not** set 241+ frames. Resume after a dropped SSH session: [Resume and salvage](#resume-and-salvage).
 </Callout>
 
 <Callout type="warning" title="Not legal advice">
   LTX-2.5 is the audio model and is **not Apache**. Community License: free commercial under **$10M COMPANY** annual revenue (affiliates count); disclose AI-generated media; do not strip provenance; do not distill. Wan 2.2 TI2V-5B is Apache 2.0 and silent. See [Model licenses](licenses.md).
 </Callout>
+---
+
+## Operator loop
+
+Each film graph ships **Klein identity + 18 LTX 5.00s printers + in-graph stitch**. Prompts are baked from `{film}.shots.yaml` (Klein `identity_look`, LTX `ltx_i2v`). Host JSON lives at `workflows/_lab/films/`; YAML shot lists stay at `workflows/shorts/*.shots.yaml` (not copied into Comfy). The entrypoint rsyncs JSON into `user/default/workflows/_lab/films/`. Restart so `custom_nodes/ez_film` is copied with the other in-tree packs.
+
+1. Load one film graph (`films/go-see` / `films/still-here` / `films/switchyard`).
+2. Queue **once**. Klein runs first (4-step). Models unload. Then 18 x **5.00s** LTX prints chain last-frame -> next start. All three films pin Enhance **off** on identity and every LTX shot. Leave LTX **1280x704**.
+3. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10). That is expected, not a hang. Headroom preflight still applies at start.
+4. After Queue, the stitched file is already written to `${COMFY_OUTPUT_DIR}/ez_<slug>_90s.mp4` (H.264 + AAC + faststart) plus `ez_<slug>_90s.html`. A **90s film ready** overlay plays and downloads it. Per-shot files remain as `ez_<slug>_bN_sM_ltx_video_*.mp4`. Copy off the Spark with `scp`. Optional: studio-ui `/watch/<slug>`.
+5. Optional silent rehearsal of one frame: **motion/silent/still-to-shot**. Optional single-shot iterate: **motion/av/still-to-shot**.
+
+Publish names land under `${COMFY_OUTPUT_DIR}` (default `/mnt/comfy-output`): `ez_gosee_90s.mp4`, `ez_stillhere_90s.mp4`, `ez_switchyard_90s.mp4`. YouTube wants AI-generated media disclosed (LTX term). Do not strip provenance.
+
 ---
 
 ## Why not one 90s latent
@@ -97,26 +113,19 @@ LTX-2.5 native multishot (several cuts in one 5-10s clip) is an optional experim
 
 ---
 
-## Operator loop
+## Resume and salvage
 
-Each film graph ships **Klein identity + 18 LTX 5.00s printers + in-graph stitch**. Prompts are baked from `{film}.shots.yaml` (Klein `identity_look`, LTX `ltx_i2v`). Host JSON lives at `workflows/_lab/films/`; YAML shot lists stay at `workflows/shorts/*.shots.yaml` (not copied into Comfy). The entrypoint rsyncs JSON into `user/default/workflows/_lab/films/`. Restart so `custom_nodes/ez_film` is copied with the other in-tree packs.
+Shot-level resume lives under `${COMFY_OUTPUT_DIR}/films/<slug>/` (`state.json`, `shots/NN.mp4`). A dropped SSH session is not a two-hour requeue:
 
-1. Load one film graph (`films/go-see` / `films/still-here` / `films/switchyard`).
-2. Queue **once**. Klein runs first (4-step). Models unload. Then 18 x **5.00s** LTX prints chain last-frame -> next start. All three films pin Enhance **off** on identity and every LTX shot. Leave LTX **1280x704**.
-3. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10). That is expected, not a hang. Headroom preflight still applies at start.
-4. After Queue, the stitched file is already written to `${COMFY_OUTPUT_DIR}/ez_<slug>_90s.mp4` (H.264 + AAC + faststart) plus `ez_<slug>_90s.html`. A **90s film ready** overlay plays and downloads it. Per-shot files remain as `ez_<slug>_bN_sM_ltx_video_*.mp4`. Copy off the Spark with `scp`. Optional: studio-ui `/watch/<slug>`.
-5. Optional silent rehearsal of one frame: **motion/silent/still-to-shot**. Optional single-shot iterate: **motion/av/still-to-shot**.
-   Shot-level resume lives under `${COMFY_OUTPUT_DIR}/films/<slug>/` (`state.json`, `shots/NN.mp4`). A dropped SSH session is not a two-hour requeue:
+```bash
+./scripts/utilities/compile-film.sh go-see
+./scripts/manage.sh print-shot go-see 12
+./scripts/manage.sh start && ./scripts/manage.sh film-resume go-see
+# film-resume skips ok shots whose duration is 5.00 +/- 0.05 s and reprints
+# crashed `running` rows (no MP4) only.
+```
 
-   ```bash
-   ./scripts/utilities/compile-film.sh go-see
-   ./scripts/manage.sh print-shot go-see 12
-   ./scripts/manage.sh start && ./scripts/manage.sh film-resume go-see
-   # film-resume skips ok shots whose duration is 5.00 +/- 0.05 s and reprints
-   # crashed `running` rows (no MP4) only.
-   ```
-
-6. Host / spark-farm fallback (when you printed shots outside the one-click graph):
+Host / spark-farm fallback (when you printed shots outside the one-click graph):
 
 ```bash
 FILM=go-see   # or still-here | switchyard
@@ -140,74 +149,6 @@ FILM=go-see   # or still-here | switchyard
 # world-only speech-band, 90s master when present):
 ./scripts/manage.sh film-accept go-see
 ```
-
-Optional jobstore board (no GPU, 512m, `restart: "no"`). Default `start` does **not** launch it:
-
-```bash
-docker compose --profile studio-ui up studio-ui
-# http://localhost:8190
-```
-
-LTX Director is a **GPL** clone into the Comfy volume, not this MIT tree:
-
-```bash
-LAB_ENABLE_LTX_DIRECTOR=1 ./scripts/manage.sh start
-```
-
-Refuse MiniMax H3 Director. The timeline editor is host-side **Vlo** - a browser app on its own host backend, no ComfyUI node embedded ([Vlo video editor](vlo.md)). Not Next.js+Postgres.
-
-ACE-Step 90 s bed -> `manage.sh stop` / unload -> LTX A2V freeze. Qwen3-TTS is opt-in with operator-owned refs (`download-podcast --tier qwen3tts`); empty refs stay Kokoro. **EZFilmDisclosure** is wired into **EZFilmConcat**; Queue writes `${COMFY_OUTPUT_DIR}/ez_*_90s.disclosure.txt` beside the stitched MP4 (LTX Community License). Do not strip it.
-
-Official LTX-2.5 quality/control graphs (two-stage DFR, A2V freeze, IC-LoRA) live in Comfy **Templates -> LTX-2.5**. Repo note: `workflows/quality/ltx-2.5/NOTICE.md`. Lab printers stay 5.00 s. Depth-guided hybrid (clay dump -> Klein look -> Union Control): [DCC guide pack](dcc-workflows.md). Opt-in `download-ltx --tier iclora` (not `download-models`).
-
-Optional silent **first-last-frame** draft: `motion/silent/first-last-5s` after `./scripts/utilities/download-wan.sh run --tier fun-inp` (~47 GB, Apache). Unload LTX first. MagCache is **draft-only** on `motion/silent/still-to-video-5s` (`extra.lab_magcache`; never on LTX heroes).
-
-Post-concat restore (opt-in Apache SeedVR2-3B):
-
-```bash
-./scripts/manage.sh stop
-./scripts/manage.sh download-restore --tier seedvr2-3b
-# Conservative 1.3-1.5x on the stitched master only. Not download-models.
-```
-
-Optional 17-frame VACE join (`1+8n`, MagCache **off**). Unload LTX first:
-
-```bash
-./scripts/utilities/download-wan.sh run --tier vace
-# load motion/silent/vace-join (Shot A last -> Shot B first)
-```
-
-Host 3D sidecars (Comfy **must be stopped**): [Studio sidecars](studio-sidecars.md), [Blender](blender-gb10-sidecar.md), [SuperSplat](splat-sidecar.md).
-
-Wave 4 hero path (opt-in, occupancy: one heavy job):
-
-```bash
-./scripts/utilities/download-wan.sh run --tier a14b   # A14B FP8 8-step silent hero; MagCache off
-# load optional/still-to-video-a14b - unload 5B first
-./scripts/manage.sh download-longcat --tier video     # MIT; no NCCL
-# load workflows/_lab/optional/longcat-video.json (note, not 90s default)
-./scripts/manage.sh download-dreamx --tier creator    # Apache joint AV; not DreamX-World
-```
-
-Identity sheet: `stills/identity-sheet` (seed **42**, Enhance **on**, identity mode, 1280x704). Talking-head: `stills/talking-head` (I2V smoke) or **`motion/av/audio-to-video-8s`** (LoadAudio freeze; S2V opt-in `--tier s2v`). DFR two-stage stays in Comfy **Templates -> LTX-2.5**; YAML `print: dfr` selects that path. Lab printers stay 5.00 s. Showcase AV: [Motion catalog](create/workflows-motion.md#showcase-ltx-25).
-
-```bash
-./scripts/manage.sh stop
-./scripts/manage.sh download-3d --tier trellis2   # or da3-base | all
-./scripts/manage.sh blender                       # host binary; never in Dockerfile
-```
-
-NVENC preview encode (Comfy **must be stopped** - encoder contention on GB10):
-
-```bash
-./scripts/manage.sh stop
-./scripts/utilities/nvenc-preview.sh --in "${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4" \
-  --out "${COMFY_OUTPUT_DIR}/ez_gosee_90s_preview.mp4" --yes
-```
-
-Publish names under `${COMFY_OUTPUT_DIR}` (default `/mnt/comfy-output`): `ez_gosee_90s.mp4`, `ez_stillhere_90s.mp4`, `ez_switchyard_90s.mp4`.
-
-YouTube: disclose AI-generated media (LTX term). Do not strip provenance.
 
 ---
 
@@ -324,6 +265,91 @@ Optional salvage on a **locked** picture (not the lab default, not in the one-cl
 
 ---
 
+## Finish the sound
+
+Every print arrives with its own LTX world bed: breath, grit, water, and nothing else on the go-see track, whose paragraphs lead with `Wordless mix:` and close `No speech.` That bed is the mix until you replace it, so finish audio after picture lock rather than inside the film Queue.
+
+```bash
+# Picture-lock stems (host ffmpeg; occupancy audio):
+./scripts/manage.sh stem-mix --film go-see --shot 12 --bg /path/to/print.mp4
+```
+
+Stop Klein / Wan / LTX before you load ACE-Step or a TTS engine: the Spark runs **one heavy GPU job** at a time, and the two verbs are park and stop ([Occupancy rule](studio-sidecars.md#occupancy-rule)). Then finish on the lane that matches what the short needs:
+
+- **Voices, beds, and stings** - [Local podcast](podcast.md) (Kokoro hosts, native ACE-Step instrumental beds, loudnorm).
+- **An original song or score** - [Local music](music.md) (ACE-Step rap and EDM lanes; same 10 GB AIO as the podcast pack).
+- **A second language for a recording you hold rights to** - [Local dub](dub.md).
+
+Qwen3-TTS stays opt-in with operator-owned refs (`download-podcast --tier qwen3tts`); empty refs stay Kokoro. An ACE-Step bed over a print means `manage.sh stop` / unload first, then the LTX A2V freeze. `EZFilmDisclosure` is wired into **EZFilmConcat**; Queue writes `${COMFY_OUTPUT_DIR}/ez_*_90s.disclosure.txt` beside the stitched MP4 (LTX Community License). Do not strip it.
+
+---
+
+## Optional packs and boards
+
+Optional jobstore board (no GPU, 512m, `restart: "no"`). Default `start` does **not** launch it:
+
+```bash
+docker compose --profile studio-ui up studio-ui
+# http://localhost:8190
+```
+
+LTX Director is a **GPL** clone into the Comfy volume, not this MIT tree:
+
+```bash
+LAB_ENABLE_LTX_DIRECTOR=1 ./scripts/manage.sh start
+```
+
+Refuse MiniMax H3 Director. The timeline editor is host-side **Vlo** - a browser app on its own host backend, no ComfyUI node embedded ([Vlo video editor](vlo.md)). Not Next.js+Postgres.
+
+Official LTX-2.5 quality/control graphs (two-stage DFR, A2V freeze, IC-LoRA) live in Comfy **Templates -> LTX-2.5**. Repo note: `workflows/quality/ltx-2.5/NOTICE.md`. Lab printers stay 5.00 s. Depth-guided hybrid (clay dump -> Klein look -> Union Control): [DCC guide pack](dcc-workflows.md). Opt-in `download-ltx --tier iclora` (not `download-models`).
+
+Optional silent **first-last-frame** draft: `motion/silent/first-last-5s` after `./scripts/utilities/download-wan.sh run --tier fun-inp` (~47 GB, Apache). Unload LTX first. MagCache is **draft-only** on `motion/silent/still-to-video-5s` (`extra.lab_magcache`; never on LTX heroes).
+
+Post-concat restore (opt-in Apache SeedVR2-3B):
+
+```bash
+./scripts/manage.sh stop
+./scripts/manage.sh download-restore --tier seedvr2-3b
+# Conservative 1.3-1.5x on the stitched master only. Not download-models.
+```
+
+Optional 17-frame VACE join (`1+8n`, MagCache **off**). Unload LTX first:
+
+```bash
+./scripts/utilities/download-wan.sh run --tier vace
+# load motion/silent/vace-join (Shot A last -> Shot B first)
+```
+
+Host 3D sidecars (Comfy **must be stopped**): [Host sidecars overview](studio-sidecars.md), [Blender GB10 sidecar](blender-gb10-sidecar.md), [Splat sidecar](splat-sidecar.md).
+
+Wave 4 hero path (opt-in, occupancy: one heavy job):
+
+```bash
+./scripts/utilities/download-wan.sh run --tier a14b   # A14B FP8 8-step silent hero; MagCache off
+# load optional/still-to-video-a14b - unload 5B first
+./scripts/manage.sh download-longcat --tier video     # MIT; no NCCL
+# load workflows/_lab/optional/longcat-video.json (note, not 90s default)
+./scripts/manage.sh download-dreamx --tier creator    # Apache joint AV; not DreamX-World
+```
+
+Identity sheet: `stills/identity-sheet` (seed **42**, Enhance **on**, identity mode, 1280x704). Talking-head: `stills/talking-head` (I2V smoke) or **`motion/av/audio-to-video-8s`** (LoadAudio freeze; S2V opt-in `--tier s2v`). DFR two-stage stays in Comfy **Templates -> LTX-2.5**; YAML `print: dfr` selects that path. Lab printers stay 5.00 s. Showcase AV: [Motion graphs](create/workflows-motion.md#showcase-ltx-25).
+
+```bash
+./scripts/manage.sh stop
+./scripts/manage.sh download-3d --tier trellis2   # or da3-base | all
+./scripts/manage.sh blender                       # host binary; never in Dockerfile
+```
+
+NVENC preview encode (Comfy **must be stopped** - encoder contention on GB10):
+
+```bash
+./scripts/manage.sh stop
+./scripts/utilities/nvenc-preview.sh --in "${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4" \
+  --out "${COMFY_OUTPUT_DIR}/ez_gosee_90s_preview.mp4" --yes
+```
+
+---
+
 ## Spark farm
 
 The one-click film graph is **sequential on one host**. Three Sparks can still Queue **different beats** in parallel as independent 5s jobs (shared `${MODELS_DIR}`) on **motion/av/still-to-shot**. Concat stays on one host (`concat-shots.sh --film`). `spark-farm.sh run --film go-see` prints that Queue reminder (it does not POST graphs). No NCCL. See [Spark farm](spark-farm.md).
@@ -333,3 +359,14 @@ The one-click film graph is **sequential on one host**. Three Sparks can still Q
 ## Safety
 
 Unchanged: `restart: "no"`, heavy confirm on `start`, headroom preflight, download-limit wrap. The film path does not start Docker. One Queue is long because it runs 18 x 5.00s prints, not because it allocated a 90s latent. Peak VRAM is one LTX 5s print after Klein unloads - do not weaken headroom preflight.
+
+---
+
+## Related
+
+Side-nav order: this page leads **Films, podcasts, and music**, then the host-tools group.
+
+- [Local podcast](podcast.md) - hosts, beds, and stings for the locked picture
+- [Local dub](dub.md) - a second audio track for a recording you hold rights to
+- [Local music](music.md) - the ACE-Step lanes for an original score
+- [Host sidecars overview](studio-sidecars.md) - the 3D, Blender, and host-tools group, and the occupancy rule in full

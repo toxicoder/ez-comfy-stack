@@ -1,6 +1,6 @@
 ---
 title: DCC guide pack
-description: Block in Blender, dump a 1280x704 clay/depth pack, Klein-look the first frame, print a depth-guided LTX 5.00s hero.
+description: "Block a shot in Blender, dump a clay and depth pack, Klein-look the first frame, then print a depth-conditioned 5.00s clip."
 tags: [dcc, blender, guide-pack, klein, ltx, occupancy, ic-lora]
 ---
 
@@ -8,26 +8,27 @@ tags: [dcc, blender, guide-pack, klein, ltx, occupancy, ic-lora]
 
 **What's on this page**
 
-- The DCC \<-> Comfy **print** handshake (`guides/<film-id>/<shot>/`, for example `guides/go-see/12/`)
-- Single-frame still packs (`guides/<slug>/stills/<plate>/`)
-- Occupancy: stop Comfy before a dump
-- Instagram clay stills are a different pack (`house-views`, 1024x1280)
-- Script desk, overlay QC, animatic, stem mix
-- Klein-from-clay / plates / canny Apps
-- Opt-in LTX IC-LoRA Union Control (depth, canny, shorts) and Wan FLF from the pack
-- Path A / B / D
+- **Operator loop (Path B)** - park, dump, Klein the look, print depth-guided, mix stems
+- **Pack contract** - `guides/<film-id>/<shot>/`, the files, and the fail-closed QC
+- **Still packs** - one clay plate -> hero / packshot / IG / shorts (`guides/<slug>/stills/<plate>/`)
+- **Guide pack or house tour** - how this pack differs from the Dream-house clay tour
+- **Lab graphs** - the `dcc/*` printers, their occupancy desk, and the IC-LoRA envelope
+- **Paths** - A engine-final, B hybrid clay -> AI finish, D laptop-DCC / Spark-Comfy
+- **Host gates inside the loop** - script desk, animatic, overlay QC, and stem mix on host ffmpeg
 
 **What this enables**
 
-- A 5.00s LTX print that keeps the camera you blocked
-- Creator stills (hero, packshot, IG, shorts) from one clay plate
-- Fail-closed packs (1280x704 or 768x1280, 120 frames @ 24 fps) before Comfy sees them
-- Laptop DCC / Spark Comfy as the default on one GB10
+- **A 5.00s LTX print that keeps the camera you blocked** in the 3D app
+- **Creator stills (hero, packshot, IG, shorts)** from one clay plate
+- **Fail-closed packs** - 1280x704 or 768x1280, 120 frames @ 24 fps - before Comfy sees them
+- **Laptop DCC / Spark Comfy as the default** on one GB10
 
-This extends `ez_film`. It does **not** replace the 5.00s printer or the sidecar occupancy rule. Blender stays on the host - never in `docker/Dockerfile` or Compose. After a dump, stay on `:8188` with first-party `ez_dcc` loaders: [Stay in Comfy after a Blender dump](learn/comfy-first-blender.md).
+**Question this page answers:** how do I get a 3D blockout into Comfy so the print keeps my camera and timing? This is the contract page: what a pack must contain, what each graph eats, and which verb parks the GPU. The concept and order of operations live in [Clay blockout to finished clip](learn/clay-to-finish.md); the dump itself runs on the host in [Blender GB10 sidecar](blender-gb10-sidecar.md).
+
+This extends `ez_film`. It does **not** replace the 5.00s printer ([Short films](shorts.md)) or the sidecar occupancy rule. Blender stays on the host - never in `docker/Dockerfile` or Compose. After a dump, stay on `:8188` with first-party `ez_dcc` loaders: [Stay in Comfy after a Blender dump](learn/comfy-first-blender.md).
 
 <Callout type="error" title="One heavy GPU job">
-  Pack writing is a host GPU job. `export-guides` **dies** (exit 2) if Compose is up and not parked. Park with `occupancy enter blender-desk`, or `occupancy idle`. `restart: "no"` is unchanged. [Occupancy desk](occupancy.md).
+  Pack writing is a host GPU job. `export-guides` **dies** (exit 2) if Compose is up and not parked. Park with `occupancy enter blender-desk`, or `occupancy idle`. `restart: "no"` is unchanged. [Occupancy desk](occupancy.md). Full wording of the one-heavy-job rule and the park / stop verbs: [Host sidecars overview](studio-sidecars.md#occupancy-rule).
 </Callout>
 ---
 
@@ -63,6 +64,8 @@ rsync -a guides/go-see/12/ spark-0:/mnt/comfy-output/guides/go-see/12/
 ./scripts/manage.sh start
 ```
 
+---
+
 ## Pack contract
 
 `${COMFY_OUTPUT_DIR}/guides/<slug>/<shot_id>/`
@@ -83,6 +86,8 @@ QC is fail-closed: wrong size, wrong frame count, or compose-up -> non-zero, pac
 
 Clay is Workbench. **Beauty MP4 is Path A only** (engine-final ingest in a later PR).
 
+---
+
 ## Still packs (not 120 frames)
 
 `${COMFY_OUTPUT_DIR}/guides/<slug>/stills/<plate>/` - `ez.guide.still.v1`. Allowed sizes: 1280x704, 768x1280, 1024x1280, 1024x1024, 1280x720 (thumb, Klein only).
@@ -96,7 +101,31 @@ Clay is Workbench. **Beauty MP4 is Path A only** (engine-final ingest in a later
 
 `--install-inputs` copies `first.png` into `${COMFY_OUTPUT_DIR}/input` (compose may stay up). Playbook: [Blender creator suite](learn/blender-creator.md).
 
-## Graphs
+---
+
+## Guide pack or house tour
+
+Two clay dumps, two contracts. Do not mix them.
+
+| | DCC guide pack (this page) | Dream-house clay tour |
+| --- | --- | --- |
+| Verb | `export-guides`, `blender-stills` | `house-views` |
+| On disk | `guides/<film-id>/<shot>/` | `assets/sets/<slug>/` |
+| Shape | 120 frames @ 24 fps, **1280x704** or **768x1280** | ten stills, **1024x1280** (Instagram 4:5) |
+| Schema | `ez.guide.shot.v1` / `ez.guide.still.v1` | `ez.house.views.v1` |
+| Then Queue | `dcc/clay-hero`, `dcc/depth-control-8s` | **stills/dream-house-clay** |
+
+`house-views` also writes a greybox GLB beside the ten clay stills. Do not dump Instagram 4:5 into `guides/` or reuse `ez.guide.shot.v1` - that QC is 1280x704 / 120 frames and will refuse. Park the same way (`occupancy enter blender-desk`):
+
+```bash
+./scripts/manage.sh house-views --slug lab-penthouse
+```
+
+Playbook, layout seed, and the language-only door: [Dream-house tours](learn/dream-house.md).
+
+---
+
+## Lab graphs
 
 | Graph | Occupancy | Notes |
 | --- | --- | --- |
@@ -121,6 +150,8 @@ Print modes `wan-vace`, `wan-denk-cn`, and `dcc-final` stay valid on `shot.yaml`
 
 Official 2.5 Union Control distilled widgets `ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors` onto the **distilled** transformer. Distilled-only. **Refuse 19B Union.** MagCache off.
 
+---
+
 ## Paths
 
 | Path | Meaning |
@@ -131,16 +162,7 @@ Official 2.5 Union Control distilled widgets `ltx-2.3-22b-ic-lora-union-control-
 
 Godot is a first-class blocking engine in a later PR, not a second Blender. OpenToonz / Krita are plate emitters into the same pack, not v1 engines.
 
-## Instagram clay stills (not this pack)
-
-`house-views` is a **different** contract: ten 1024x1280 Workbench stills + greybox GLB under `assets/sets/<slug>/`, then **stills/dream-house-clay**. Do not dump Instagram 4:5 into `guides/` or reuse `ez.guide.shot.v1` (that QC is 1280x704 / 120 frames). Playbook: [Dream-house tours](learn/dream-house.md).
-
-```bash
-./scripts/manage.sh occupancy enter blender-desk
-./scripts/manage.sh house-views --slug lab-penthouse
-```
-
-Park Comfy before a live Blender MCP socket (`occupancy enter blender-desk`). Do not run Cycles CUDA next to a loaded denoise.
+---
 
 ## Safety
 
@@ -148,5 +170,15 @@ Park Comfy before a live Blender MCP socket (`occupancy enter blender-desk`). Do
 - Never queue a DCC dump and a print in one session.
 - Unload Klein before LTX. IC-LoRA is not part of `download-models`.
 - `overlay-qc` / `film-animatic` / `stem-mix` do not start Docker and do not weaken occupancy XOR for dumps.
+- Park Comfy before a live Blender MCP socket (`occupancy enter blender-desk`). Do not run Cycles CUDA next to a loaded denoise.
+- LTX-2.5 is the Community License audio model and IC-LoRA is opt-in; Wan is Apache. Weights rows: [Model licenses](licenses.md).
 
-Related: [Blender creator suite](learn/blender-creator.md), [Clay to finish](learn/clay-to-finish.md), [Blender GB10 sidecar](blender-gb10-sidecar.md), [Studio sidecars](studio-sidecars.md), [90s shorts](shorts.md), [Model licenses](licenses.md).
+---
+
+## Related
+
+- [Host sidecars overview](studio-sidecars.md) - pick the host tool, and the occupancy rule in full
+- [Blender GB10 sidecar](blender-gb10-sidecar.md) - install and run the host binary that writes the pack
+- [Asset Bible](asset-bible.md) - where `dcc/still-to-mesh` output is catalogued
+- [Splat sidecar](splat-sidecar.md) - the host splat viewer
+- [Vlo video editor](vlo.md) - the host browser NLE for the printed shots

@@ -1,23 +1,42 @@
 ---
-title: Stills catalog (Klein 4B)
-description: Seeded Klein 4B stills, identity sheets, Apps Lane A Klein, and creator plates.
+title: Stills graphs
+description: Reference table of every seeded Klein 4B still, identity sheet, character desk, and creator plate graph.
 tags: [comfyui, workflows, klein, stills, catalog]
 ---
 
-# Stills catalog (Klein 4B)
+# Stills graphs
+
+Pick a still graph. This catalog covers one-frame jobs on Klein 4B: a first
+draft, a hero print, an identity sheet, a character, an environment edit, and
+every single-plate deliverable that ships empty of lettering. Motion graphs
+are on [Motion graphs](workflows-motion.md) and platform-size jobs are on
+[Creator pack](workflows-creator.md).
 
 **What's on this page**
 
-- **Still (Klein 4B)** draft, hero, identity, and character graphs
-- **Creator toolkit** stills and plates
-- **Apps Lane A** Klein stills (Spark Still, dream-house, hook, character)
+- **Still (Klein 4B)** - draft, hero, studio desks, identity, character, reframe, plus the Lane B plate graphs
+- **FLUX 3 Klein stills** - the gated opt-in twins
+- **Apps Lane A - Klein stills** - the same graphs on the App Mode surface
+- **Creator toolkit** - pack 1 and pack 2 stills and plates
+- **Related** - what to load once the still is right
 
 **What this enables**
 
 - **Queuing a Klein still** from a seeded filename instead of a blank canvas
 - **Locking identity and plates** before Wan / LTX motion
+- **Choosing a still desk** - draft, studio, or the universal image studio
+- **Reading one table per group** so you can find a row in seconds
 
-**Who this is for:** studio users after the first still-draft Queue. Index: [Workflow catalog](../studio-workflows.md). Node-by-node widgets: [Workflow details](workflows-index.md). Occupancy **klein**. Outputs under `${COMFY_OUTPUT_DIR}`.
+**Who this is for:** studio users after the first still-draft Queue. Index: [Workflow catalog](../studio-workflows.md). Node-by-node widgets: [Workflow details](workflows-index.md).
+
+**How to read these tables.** The **Workflow** column is the lab id you load from
+`_lab/`, and it links to the generated node page for that graph. **What it does**
+names the job, the default pixels, the Enhance state, and the output prefix. The
+**Occupancy** column, where a table has one, is the GB10 job the graph claims;
+every graph on this page is occupancy **klein**.
+Size values are widget defaults; **Format / platform** retargets the same graph.
+Rules every lab graph shares (seeds, occupancy, sizes, Queue) are on
+[Workflow catalog](../studio-workflows.md#shared-lab-graph-rules).
 
 ---
 
@@ -64,7 +83,9 @@ Weights missing: **Check models** names the command and Queue keeps the authored
 
 ## Apps Lane A - Klein stills
 
-App Mode (frontend **1.41.13+**) is a widget surface on the same lab JSON. Occupancy and handoff: [ComfyUI Apps](../studio-apps.md). Inspire (no UNET) stays on the [catalog index](../studio-workflows.md#inspire-lane-a).
+Same graphs, opened from Comfy's **Apps** sidebar. Widgets and handoff:
+[ComfyUI Apps](../studio-apps.md). Inspire (no UNET) stays on the
+[catalog index](../studio-workflows.md#inspire-lane-a).
 
 | Workflow | What it does |
 | --- | --- |
@@ -85,7 +106,7 @@ App Mode (frontend **1.41.13+**) is a widget surface on the same lab JSON. Occup
 
 ## Creator toolkit - stills and plates
 
-Pack 1 stills (motion/AV companions: [Motion catalog](workflows-motion.md)):
+Pack 1 stills (motion/AV companions: [Motion graphs](workflows-motion.md)):
 
 | Workflow | What it does |
 | --- | --- |
@@ -114,4 +135,16 @@ Pack 2 - stills and plates:
 | **[stills/camera-angles](../generated/workflows/stills/camera-angles.md)** | Wide / medium / close of one subject, new cameras |
 | **[stills/color-moods](../generated/workflows/stills/color-moods.md)** | Warm plate, then three grade edits |
 
-Klein stills may use 1280x720; LTX feeders stay **1280x704**. See [Troubleshooting](../troubleshooting.md).
+Klein stills may use 1280x720; LTX feeders stay **1280x704** - sizes:
+[shared lab-graph rules](../studio-workflows.md#shared-lab-graph-rules). A
+still that will not load or looks wrong: [Troubleshooting](../troubleshooting.md).
+
+---
+
+## Related
+
+1. Move the still: [Motion graphs](workflows-motion.md)
+2. Run the loop it belongs to: [The still-to-motion-to-AV pipeline](../visual-generative-ai.md)
+3. Pick the graph for a different job: [Workflow catalog](../studio-workflows.md)
+4. Write the prompt: [Prompting](../prompting.md)
+5. Ship a platform size: [Creator pack](workflows-creator.md)

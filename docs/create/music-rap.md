@@ -1,29 +1,33 @@
 ---
-title: RAP-FIRST (Nill Bye)
-description: US-safe ACE-Step rap draft and full-track graphs plus all nine Nill Bye albums (64-210 s, varied form).
+title: RAP-FIRST rap lane
+description: "Browse the RAP-FIRST catalog: rap draft and full-track graphs plus all nine Nill Bye albums with tags, BPM, seeds, and take titles."
 tags: [music, rap, ace-step, nill-bye, us-safe]
 ---
 
-# RAP-FIRST (Nill Bye)
+# RAP-FIRST rap lane
 
 **What's on this page**
 
-- **Draft then full** RAP-FIRST graphs (`audio/music/rap-draft`, `audio/music/rap-full`)
-- **All nine Nill Bye albums** (track tables, tags, BPM, seeds)
+- **Draft, then full track** - the two RAP-FIRST graphs (`audio/music/rap-draft`, `audio/music/rap-full`)
+- **Nine Nill Bye album catalogs** - track tables with tags, BPM, seeds, and take titles
+- **Album rules** - forms, meters, keys, exclusive verses, and the punch-up rule
 - **Occupancy:** do not co-resident ACE-Step with Klein / Wan / LTX
 
 **What this enables**
 
 - **A cold-open boom-bap draft** on one NVIDIA DGX Spark without cloud music APIs
 - **One hundred thirty-five original Nill Bye takes** (64-210 s) with exclusive verses, varied form, and punchlines
+- **Choosing a take from a table** - every row is one graph you Queue on its own
 
-**Who this is for:** studio users after `download-music --tier turbo`. Overview: [Local music](../music.md). Disclosure: [Music disclosure](music-disclosure.md). EDM pack: [Drive-through EDM](music-edm.md).
+**Who this is for:** studio users after `download-music --tier turbo`. This is rung two of the music ladder: pick a lane on [Local music](../music.md), browse the other catalog at [Drive-through EDM lane](music-edm.md), then clear [Music disclosure and QC](music-disclosure.md) before you release anything.
 
-Do **not** load Klein + Wan + LTX + ACE-Step in one session. Cover art is a separate graph. Files land under `${COMFY_OUTPUT_DIR}`.
+**Question this page answers:** which RAP-FIRST take do I Queue? Treat the tables below as a **catalog to browse**, not steps to follow in order. Read an album, pick the row that fits, and Queue that one graph on its own.
+
+<Callout type="error" title="Occupancy">
+  Do **not** load Klein + Wan + LTX + ACE-Step in one session. The Spark runs **one heavy GPU job** at a time - park or stop the other one first ([Occupancy rule](../studio-sidecars.md#occupancy-rule)). Cover art is a separate graph in a later Klein session. Files land under `${COMFY_OUTPUT_DIR}`.
+</Callout>
 
 ## Graphs
-
-Do **not** load Klein + Wan + LTX + ACE-Step in one session. Cover art is a separate graph.
 
 ### Draft - first Queue
 
@@ -52,7 +56,9 @@ Canned style swaps (tags widget only - not extra files):
 
 Graph: **audio/music/rap-full**. App **Duration (seconds)** is the pre-chorus form's bar length at 88 bpm (not a flat 96). Same sampler and model. Prefix `ez_rap_full`. Intro, verse, pre-chorus, chorus, second verse, chorus, `[outro]`. Human rewrite required before any release.
 
-### Nill Bye diss examples
+## Nill Bye album catalog
+
+Browse this catalog; do not run it top to bottom. Each row is a separate graph.
 
 One hundred thirty-five extra full-track graphs under **`_lab/audio/albums/nill-bye/<album>/`**. Same AIO, sampler, occupancy **audio**. App **Duration (seconds)** is the song plan (64-210 s), not a flat 180. Each album mixes forms (hook-each, delayed hook, bridge, pre-chorus, breakdown, half-time chorus, and others), meters, and keys. Dance-bed albums stay 4/4. Authored verses stay in order; a bridge is the last lines of the last verse moved, not new claims. Queue a numbered track **on its own**, or generate the album in one go with `./scripts/manage.sh album-render --album nill-bye/<album-slug> [--quality TIER]` (or `EZ_QUALITY=TIER`); with neither, each take posts at the tier the graph records. SaveAudio stem is **`NN - Song Title`**. FLAC/MP3 tags include artist, album, title, and optional cover. The graph note names the form, meter, and key.
 
@@ -62,7 +68,7 @@ Style and trap/EDM packs keep the same dry-booth voice (`male rap vocals, dry bo
 
 A new album lands in `_lab/audio/albums/<artist>/<album-slug>/` with numbered tracks plus `cover.json` and `album.json`. Do not leave new graphs at the artist folder root.
 
-#### Peer Review (`audio/albums/nill-bye/peer-review/`)
+### Peer Review (`audio/albums/nill-bye/peer-review/`)
 
 Lab catalog. Queue a track on its own. Full album: `./scripts/manage.sh album-render --album nill-bye/peer-review`.
 
@@ -84,7 +90,7 @@ Lab catalog. Queue a track on its own. Full album: `./scripts/manage.sh album-re
 | **14-double-blind** | boom-bap **92**, seed **37** | `14 - Double Blind` | Even the booth knows you are faking |
 | **15-replicate** | boom-bap **88**, seed **7** | `15 - Replicate or Retract` | Cannot reproduce the night |
 
-#### Citation Needed (`audio/albums/nill-bye/citation-needed/`)
+### Citation Needed (`audio/albums/nill-bye/citation-needed/`)
 
 Same invented vocal. Wider beds (jazz hop through folk) and diss angles. Not trap/EDM. Full album: `./scripts/manage.sh album-render --album nill-bye/citation-needed`.
 
@@ -106,7 +112,7 @@ Same invented vocal. Wider beds (jazz hop through folk) and diss angles. Not tra
 | **14-energy-drink** | brass band **120**, seed **101** | `14 - Energy Drink` | Fake fuel |
 | **15-campfire** | folk **82**, seed **103** | `15 - Campfire Rumor` | Campfire rumor |
 
-#### False Drop (`audio/albums/nill-bye/false-drop/`)
+### False Drop (`audio/albums/nill-bye/false-drop/`)
 
 Same dry booth. Rap over club beds (no autotune). Full album: `./scripts/manage.sh album-render --album nill-bye/false-drop`.
 
@@ -128,7 +134,7 @@ Same dry booth. Rap over club beds (no autotune). Full album: `./scripts/manage.
 | **14-kick-split** | hardstyle **150**, seed **179** | `14 - Kick-Split Myth` | Kick-split myth |
 | **15-uplift-rumor** | trance **138**, seed **181** | `15 - Uplifting Rumor` | Uplifting rumor |
 
-#### Frozen Ercot (`audio/albums/nill-bye/frozen-ercot/`)
+### Frozen Ercot (`audio/albums/nill-bye/frozen-ercot/`)
 
 Same dry booth. Non-trap, non-EDM beds. Public-record satire of Abbott (punch up; no disability, race, or faith punch-down). Full album: `./scripts/manage.sh album-render --album nill-bye/frozen-ercot`.
 
@@ -150,7 +156,7 @@ Same dry booth. Non-trap, non-EDM beds. Public-record satire of Abbott (punch up
 | **14-fourth-term** | cinematic **76**, seed **263** | `14 - Fourth Term` | Unprecedented fourth lap |
 | **15-campus-cordon** | rap rock **168**, seed **269** | `15 - Campus Cordon` | UT troopers vs protest |
 
-#### Lone Star Tab (`audio/albums/nill-bye/lone-star-tab/`)
+### Lone Star Tab (`audio/albums/nill-bye/lone-star-tab/`)
 
 Same dry booth. Rap over club beds (no autotune). Same punch-up rule. Full album: `./scripts/manage.sh album-render --album nill-bye/lone-star-tab`.
 
@@ -172,7 +178,7 @@ Same dry booth. Rap over club beds (no autotune). Same punch-up rule. Full album
 | **14-invasion-hymn** | trance **138**, seed **353** | `14 - Invasion Hymn` | War-word as appropriation |
 | **15-demolish-hook** | festival trap **150**, seed **359** | `15 - Demolish Hook` | "Demolish" closer |
 
-#### Thirty Four Counts (`audio/albums/nill-bye/thirty-four-counts/`)
+### Thirty Four Counts (`audio/albums/nill-bye/thirty-four-counts/`)
 
 Same dry booth. Non-trap, non-EDM beds. Public-record satire of Trump (punch up; no disability, race, faith, or children as the joke). Full album: `./scripts/manage.sh album-render --album nill-bye/thirty-four-counts`.
 
@@ -194,7 +200,7 @@ Same dry booth. Non-trap, non-EDM beds. Public-record satire of Trump (punch up;
 | **14-seven-fifty** | cinematic **76**, seed **443** | `14 - Seven Fifty` | Reported $750 federal line |
 | **15-carroll-tab** | rap rock **168**, seed **449** | `15 - Carroll Tab` | Defamation after a finding |
 
-#### Pardon Flood (`audio/albums/nill-bye/pardon-flood/`)
+### Pardon Flood (`audio/albums/nill-bye/pardon-flood/`)
 
 Same dry booth. Rap over club beds (no autotune). Same punch-up rule. Full album: `./scripts/manage.sh album-render --album nill-bye/pardon-flood`.
 
@@ -216,7 +222,7 @@ Same dry booth. Rap over club beds (no autotune). Same punch-up rule. Full album
 | **14-shadow-docket** | trance **138**, seed **547** | `14 - Shadow Docket` | Emergency-petition pile |
 | **15-immunity-hymn** | festival trap **150**, seed **557** | `15 - Immunity Hymn` | Official-act structure |
 
-#### Winterize Wells (`audio/albums/nill-bye/winterize-wells/`)
+### Winterize Wells (`audio/albums/nill-bye/winterize-wells/`)
 
 Same dry booth. Non-trap, non-EDM beds. Builder bars: methods and statutes, no roast target. Full album: `./scripts/manage.sh album-render --album nill-bye/winterize-wells`.
 
@@ -238,7 +244,7 @@ Same dry booth. Non-trap, non-EDM beds. Builder bars: methods and statutes, no r
 | **14-fourteenth-clause** | cinematic **76**, seed **641** | `14 - Fourteenth Clause` | Keep the citizenship sentence |
 | **15-one-college** | rap rock **168**, seed **643** | `15 - One College` | One certified slate |
 
-#### Duty Switch (`audio/albums/nill-bye/duty-switch/`)
+### Duty Switch (`audio/albums/nill-bye/duty-switch/`)
 
 Same dry booth. Rap over club beds (no autotune). Same builder rule. Full album: `./scripts/manage.sh album-render --album nill-bye/duty-switch`.
 
@@ -260,4 +266,13 @@ Same dry booth. Rap over club beds (no autotune). Same builder rule. Full album:
 | **14-open-quad** | trance **138**, seed **739** | `14 - Open Quad` | Forum first |
 | **15-wrench-the-tap** | festival trap **150**, seed **743** | `15 - Wrench the Tap` | Lead-line replacement |
 
-Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
+Cover still in a later Klein session: do not co-resident Klein with ACE-Step ([Occupancy rule](../studio-sidecars.md#occupancy-rule)).
+
+---
+
+## Related
+
+- [Local music](../music.md) - lane chooser, download, and Sequential Queue
+- [Drive-through EDM lane](music-edm.md) - the other catalog: instrumental bass-set arcs
+- [Music disclosure and QC](music-disclosure.md) - the pre-release checklist
+- [Audio graphs](workflows-audio.md) - filenames for every audio graph

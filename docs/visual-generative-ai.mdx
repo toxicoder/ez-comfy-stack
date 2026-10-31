@@ -1,23 +1,34 @@
 ---
-title: Still to motion to AV
-description: Klein 4B still -> Wan 2.2 silent 5 s -> LTX-2.5 AV playbook for the US-safe ComfyUI studio.
+title: The still-to-motion-to-AV pipeline
+description: How a Klein still becomes a silent Wan clip and an LTX audio-video take, and how to iterate on it.
 tags: [comfyui, klein, wan, ltx, visual]
 ---
 
-# Still to motion to AV
+# The still-to-motion-to-AV pipeline
+
+This page answers one of the four start-creating questions: **what the whole
+end-to-end loop is, and how to iterate on it**. You end up with a still, a silent
+~5 s clip, and an ~8 s audio-video take off one seed, in minutes rather than a
+90 s denoise. Which graph to load is on [Workflow catalog](studio-workflows.md),
+what the widgets do is on [ComfyUI Apps](studio-apps.md), and how to word each
+prompt is on [Prompting](prompting.md).
 
 **What's on this page**
 
-- Combined Klein -> Wan -> LTX pipeline
-- Free Commercial Use (\<$10M): Klein 4B -> optional SeedVR2 -> LTX-2.5
-- Iteration loop (change widgets, not JSON)
-- Watching VHS MP4 output
-- Pointers to the workflow catalog and hardware notes
+- **Architecture (one screen)** - the profile, tiers, and memory limits this page assumes
+- **Combined pipeline (Klein -> Wan -> LTX)** - the one-stack handoff and the license-clean path
+- **Iteration loop (YouTube 16:9)** - the ordered Queue list you actually follow
+- **Watch the video (Wan / LTX)** - where the MP4 lands and how long it runs
+- **Commands** - the day-to-day manage.sh verbs
+- **Safety** - what this page never weakens
+- **Related** - what to read next in the Studio tab
 
 **What this enables**
 
-- Running still + silent motion + AV tools in **one** Docker Compose stack
-- Iterating in minutes on ~5 s clips instead of a 90 s denoise
+- **Running still, silent motion, and AV tools** in **one** Docker Compose stack
+- **Iterating in minutes** on ~5 s clips instead of a 90 s denoise
+- **Chaining one seed** from draft still to hero still to clip without renaming files
+- **Knowing what to stop** before the next family Queues
 
 **Who this is for:** studio users after `stills/still-draft` has queued once.
 
@@ -31,7 +42,7 @@ tags: [comfyui, klein, wan, ltx, visual]
 
     Klein still -> Wan 5 s silent -> LTX AV. This playbook.
 
-    [Still to motion to AV](visual-generative-ai.md)
+    [The still-to-motion-to-AV pipeline](visual-generative-ai.md)
   </Card>
   <Card title="A named job">
     ---
@@ -138,7 +149,7 @@ Do **not** edit raw JSON. Change widgets on the canvas.
     # default dir is ${COMFY_OUTPUT_DIR}; writes ez_concat_shots.mp4
     ```
 
-6. **90s films** (go-see first-person parkour / still-here / switchyard): load one **film-*-90s** graph -> Queue **once** -> the MP4 is already at `${COMFY_OUTPUT_DIR}/ez_<slug>_90s.mp4` (faststart). A **90s film ready** overlay plays and downloads it; `ez_<slug>_90s.html` is a local player. See [90s shorts](shorts.md).
+6. **90s films** (go-see first-person parkour / still-here / switchyard): load one **film-*-90s** graph -> Queue **once** -> the MP4 is already at `${COMFY_OUTPUT_DIR}/ez_<slug>_90s.mp4` (faststart). A **90s film ready** overlay plays and downloads it; `ez_<slug>_90s.html` is a local player. See [Short films](shorts.md).
 7. Daily still / GIF / IG pack: **stills/image-studio** (100 creator modes + Format / platform + optional reference; **Iterate** for text-to-image then edit, **This run** for the values Queue will send) or **stills/still-studio** (Format / platform + Style + Rewrite prompt) or **stills/still-daily** -> optional **motion/loops/gif-loop** (LoadImage = the still prefix you just saved, leave ping-pong on) or **stills/dream-house** for a 10-photo virtual tour of one place (type any place; each still a different room or view - tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study). Same walkthrough with 3D persistence: **stills/dream-house-clay** (`start` seeds clay plates; optional `house-views` dump) ([Dream-house tours](learn/dream-house.md)). Character loop: **stills/character-draft** -> **stills/character-tweak** (`ez_character_*.png`). Lettering swap: **stills/text-swap** (output matches the source still). Environment: **stills/background-swap** (new place, including ground) or **stills/background-edit** (restyle in place).
 8. Creator toolkit: vertical Shorts still->I2V, thumbnail, packshot, before/after, style lock, bumper, B-roll, storyboard 6-up - [catalog](studio-workflows.md).
 
@@ -207,3 +218,15 @@ First-run commands live on [Getting Started](getting-started.md). Day-to-day: [m
   - Exclusive use of the GPU for this demo stack
   - Always `stop` before reboot - [Reboot safety](reboot-safety.md)
 </Callout>
+
+---
+
+## Related
+
+Then follow the Studio tab in order:
+
+1. Pick the filename: [Workflow catalog](studio-workflows.md)
+2. Load it from the App surface: [ComfyUI Apps](studio-apps.md)
+3. Write the prompt each node expects: [Prompting](prompting.md)
+4. Stills you can feed the motion graphs: [Stills graphs](create/workflows-stills.md)
+5. The clips and takes themselves: [Motion graphs](create/workflows-motion.md)

@@ -1,6 +1,6 @@
 ---
 title: Workflow details
-description: How to read the generated per-graph node and parameter pages for every _lab workflow.
+description: Read the generated node and parameter page for any shipped lab graph, from purpose down to legal combos.
 tags: [comfyui, workflows, catalog, generated]
 ---
 
@@ -8,16 +8,24 @@ tags: [comfyui, workflows, catalog, generated]
 
 **What's on this page**
 
-- **How to read** a generated workflow page (purpose, graph, node table, parameter reference)
-- **Where pages live** - one page per unique `_lab` graph, one page per album
-- **The node encyclopedia** that inlines at the bottom of every details page
+- **How a details page is laid out** - purpose, Queue steps, graph, node table, parameter reference
+- **Indexes** - where every generated page and every catalog table lives
+- **Lab knobs that are easy to get wrong** - default, and what breaks when you change it
+- **Related** - prompting, generation theory, and the lane catalogs
 
 **What this enables**
 
 - **Opening a filename** and seeing every node, widget, and legal combo without raw JSON
 - **Changing a sampler or latent size** with a documented generation effect
+- **Finding** the right table when you want a scan view instead of a per-graph page
 
 **Who this is for:** studio users who already Queued `stills/still-draft`. Scan tables stay on the [Workflow catalog](../studio-workflows.md).
+
+Open this page when you want to know what a widget on a lab graph does before you move it. The
+per-graph pages are generated, so they are the authority on widget order and legal values; the
+**Lab knobs that are easy to get wrong** table at the bottom is the short list of defaults that
+look wrong but are not. Use the **Indexes** table to pick between the per-graph page, the node
+encyclopedia, and a lane catalog.
 
 After `download-models` + `start`, load graphs from Comfy **Workflows** / **Apps**. These pages document the **seeded JSON**, not a live Queue.
 
@@ -33,9 +41,12 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 <Callout type="warning" title="Generated pages">
   Per-graph pages under `docs/generated/workflows/` are built from `workflows/_lab/**/*.json` plus `docs/workflow_nodes.py`. Do not hand-edit them. Re-run `bazelisk run //docs:docs`. Combo lists are ComfyUI **v0.43.0** and lab `INPUT_TYPES` - not SD1.5 folklore.
 </Callout>
+
 ---
 
 ## How a details page is laid out
+
+Every page follows the same order, so you can skip to the section you need:
 
 1. **Purpose** - occupancy, models, the on-canvas Note
 2. **How to Queue** - Apps vs Workflows, do not edit raw `_lab` JSON
@@ -54,16 +65,18 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 
 ## Indexes
 
+Start from the row that matches what you already have: a filename, a node type, or a lane.
+
 | Page | What it lists |
 | --- | --- |
 | [All generated graphs](../generated/workflows/index.md) | Every details page by lane |
-| [Node parameter encyclopedia](../reference/workflow-nodes.md) | All 79 types used in `_lab`, not tied to one graph |
-| [Stills catalog](workflows-stills.md) | Klein scan table |
-| [Motion catalog](workflows-motion.md) | Wan / LTX scan table |
+| [Workflow node parameters](../reference/workflow-nodes.md) | All 79 types used in `_lab`, not tied to one graph |
+| [Stills graphs](workflows-stills.md) | Klein scan table |
+| [Motion graphs](workflows-motion.md) | Wan / LTX scan table |
 | [Creator pack](workflows-creator.md) | Platform stills, loops, and AV jobs |
 | [Services pack](workflows-services.md) | Agency SKUs (ecommerce, ads, local, courses, ...) |
-| [Film catalog](workflows-film.md) | 90s + DCC |
-| [Audio catalog](workflows-audio.md) | Podcast, dub, albums |
+| [Film graphs](workflows-film.md) | 90s + DCC |
+| [Audio graphs](workflows-audio.md) | Podcast, dub, albums |
 | [Custom nodes](../reference/custom-nodes.md) | `ez_*` pack catalog (`INPUT_TYPES`) |
 
 Album JSON (`cover.json`, `album.json`) is documented on the album page even though the scan catalog skips those filenames.
@@ -71,6 +84,9 @@ Album JSON (`cover.json`, `album.json`) is documented on the album page even tho
 ---
 
 ## Lab knobs that are easy to get wrong
+
+Check your widget against **Lab default** before you change it. **What goes wrong** is what the
+canvas does not tell you.
 
 | Widget | Lab default | What goes wrong |
 | --- | --- | --- |
@@ -83,4 +99,14 @@ Album JSON (`cover.json`, `album.json`) is documented on the album page even tho
 | Prompt **Enhance** | on for lazy printers; **off** for authored recipes / 90s / albums | On will rewrite exclusive verses and film shot cards |
 | Occupancy | one heavy family | Do not co-resident Klein / Wan / LTX / audio |
 
-Prompt shapes: [Prompting](../prompting.md). Generation theory: [Image and video generation](../learn/generation.md).
+---
+
+## Related
+
+| Need | Page |
+| --- | --- |
+| Prompt shapes for these widgets | [Prompting](../prompting.md) |
+| Why the sampler and latent choices behave that way | [Image and video generation](../learn/generation.md) |
+| Lane scan tables instead of per-graph pages | [Workflow catalog](../studio-workflows.md) |
+| The `ez_*` nodes these graphs are built from | [Custom nodes](../reference/custom-nodes.md) |
+| Every widget value across all lab graphs | [Workflow node parameters](../reference/workflow-nodes.md) |
