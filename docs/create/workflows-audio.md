@@ -64,7 +64,7 @@ still-image MP4 is host `audio-still-video` after Queue.
 
 ### Nill Bye albums
 
-Nine Nill Bye albums under `_lab/audio/albums/nill-bye/<album>/`. Queue a numbered track, or `album-render`. RAP-FIRST playbook: [Nill Bye albums](music-rap.md).
+Nine Nill Bye albums under `_lab/audio/albums/nill-bye/<album>/`. Queue a numbered track, or `album-render`. RAP-FIRST playbook: [Nill Bye albums](music-rap.mdx).
 
 | Album | What it does |
 | --- | --- |
@@ -80,7 +80,7 @@ Nine Nill Bye albums under `_lab/audio/albums/nill-bye/<album>/`. Queue a number
 
 ### Drive-through albums
 
-Six Drive-through albums under `_lab/audio/albums/drive-through/<album>/`. Warped hybrid-trap bass set spliced from [Audio Rack](audio-rack.md) (not rap over a club bed). 180-480 s per take, rendered as 3-5 sequential ACE-Step passes joined on the bar grid by **Beat-join passes**, so the build-up and drop cycle repeats three to five times with rising tier, fresh beds, and new leads each time. Each cell is a 2-bar stanza under 3 seconds, tempos 165-176, bass boosted rotating electric beds (FM warp, wavy phase, neuro wobble, bitcrushed 808, ...), no brass or high leads. Headliner / Afterparty / Secret Homage / My Coder vary Comfy node placement. EDM playbook: [Drive-through EDM lane](music-edm.md).
+Six Drive-through albums under `_lab/audio/albums/drive-through/<album>/`. Warped hybrid-trap bass set spliced from [Audio Rack](audio-rack.md) (not rap over a club bed). 180-480 s per take, rendered as 3-5 sequential ACE-Step passes joined on the bar grid by **Beat-join passes**, so the build-up and drop cycle repeats three to five times with rising tier, fresh beds, and new leads each time. Each cell is a 2-bar stanza under 3 seconds, tempos 165-176, bass boosted rotating electric beds (FM warp, wavy phase, neuro wobble, bitcrushed 808, ...), no brass or high leads. Headliner / Afterparty / Secret Homage / My Coder vary Comfy node placement. EDM playbook: [Drive-through EDM lane](music-edm.mdx).
 
 | Album | What it does |
 | --- | --- |
@@ -461,7 +461,7 @@ The coder that writes Drive-through, read as music. Sixteen instrumental takes w
 ## Related
 
 1. Splice the tags first: [Audio Rack](audio-rack.md)
-2. Run the RAP-FIRST lane: [RAP-FIRST rap lane](music-rap.md)
-3. Run the EDM lane: [Drive-through EDM lane](music-edm.md)
+2. Run the RAP-FIRST lane: [RAP-FIRST rap lane](music-rap.mdx)
+3. Run the EDM lane: [Drive-through EDM lane](music-edm.mdx)
 4. Disclosure and QC before you release: [Music disclosure and QC](music-disclosure.md)
 5. Pick the graph for a different job: [Workflow catalog](../studio-workflows.md)

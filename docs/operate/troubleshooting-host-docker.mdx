@@ -28,10 +28,11 @@ tags: [troubleshooting, docker, models-dir, spark-farm]
   Farm nodes still use `restart: "no"` and local heavy confirm. `spark-farm.sh` never starts compose on another Spark.
 </Callout>
 
-Open this page when the host itself blocks the stack: doctor says `docker missing`, `docker permission
-denied`, a nested `mkdir` or `ln` under `${MODELS_DIR}` or `${COMFY_OUTPUT_DIR}` fails with
-`Permission denied`, an `nvcr.io` pull is refused, or farm SSH/rsync is going over the wrong NIC.
-A `start` that simply refuses on headroom is [Start and runtime](troubleshooting-start-runtime.md).
+Open this page when the host itself blocks the stack: doctor says `docker missing`,
+`docker permission denied` fails, a nested `mkdir` or `ln` under `${MODELS_DIR}` or
+`${COMFY_OUTPUT_DIR}` fails with `Permission denied`, an `nvcr.io` pull is refused, or farm
+SSH/rsync is going over the wrong NIC. A `start` that simply refuses on headroom is
+[Start and runtime](troubleshooting-start-runtime.md).
 
 ## Start here
 

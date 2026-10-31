@@ -98,7 +98,7 @@ Shipped Drive-through takes under `_lab/audio/albums/drive-through/` splice thes
 | `rec_drive_festival_trap` | Festival trap |
 | `rec_drive_dj_shout` | Hybrid trap + `voc_dj_shout` |
 
-Instrumental takes use `mix_drive_lock` (808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, electric warp texture, wavy FM layers). The DJ-shout lane keeps `mix_drive_treat` with the same chest-bass lock for manual recipes. Drive recipes leave the sound-design axis empty so a noise riser is not a whole-clip tag. Color bass tags stay `low-mid bass`, not formant. Do not pick `ins_warped_saw` on a Drive-through graph (supersaw is a high-pitch needle). Playbook: [Drive-through EDM lane](music-edm.md).
+Instrumental takes use `mix_drive_lock` (808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, electric warp texture, wavy FM layers). The DJ-shout lane keeps `mix_drive_treat` with the same chest-bass lock for manual recipes. Drive recipes leave the sound-design axis empty so a noise riser is not a whole-clip tag. Color bass tags stay `low-mid bass`, not formant. Do not pick `ins_warped_saw` on a Drive-through graph (supersaw is a high-pitch needle). Playbook: [Drive-through EDM lane](music-edm.mdx).
 
 ## Handoff
 
@@ -116,7 +116,7 @@ Safety impact: none. Prompt JSON + CPU node. No Docker, restart, or headroom cha
 ## Related
 
 1. Queue the tags you just spliced: [Audio graphs](workflows-audio.md)
-2. Run the rap lane: [RAP-FIRST rap lane](music-rap.md)
-3. Run the EDM lane: [Drive-through EDM lane](music-edm.md)
+2. Run the rap lane: [RAP-FIRST rap lane](music-rap.mdx)
+3. Run the EDM lane: [Drive-through EDM lane](music-edm.mdx)
 4. How the ACE rewriter uses the same catalog language: [Prompting](../prompting.md)
 5. Splice the camera instead of the mix: [Cinema Rack](cinema-rack.md)
