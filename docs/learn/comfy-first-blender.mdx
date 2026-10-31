@@ -1,6 +1,6 @@
 ---
 title: Stay in Comfy after a Blender dump
-description: "Load a host Blender guide pack on the Comfy canvas, Klein-look a plate, gate occupancy, and hand off to LTX or TRELLIS without leaving :8188."
+description: "Load a host Blender guide pack on the Comfy canvas, gate occupancy, restyle a plate with Klein, and hand off without leaving :8188."
 tags: [learn, blender, dcc, comfyui, occupancy, klein, ltx, trellis]
 ---
 
@@ -8,21 +8,35 @@ tags: [learn, blender, dcc, comfyui, occupancy, klein, ltx, trellis]
 
 **What's on this page**
 
-- Comfy is the host UI; Blender is a backend dump tool
-- First-party `ez_dcc` loaders (no third-party Blender-in-Comfy packs)
-- Occupancy gate on the canvas
-- The stay-on-`:8188` loop (Klein -> overlay-qc -> TRELLIS)
-- Path D on one GB10
+- **Before you start** - no viewport embed, and the hard bans
+- **Run the operator loop** - dump, gate, Klein, TRELLIS
+- **Graphs under `_lab/dcc/`** - the three first-party loaders
+- **Path D: dump on the laptop** - the default on one GB10
+- **Related** - the sibling pages
 
 **What this enables**
 
-- Loading clay / depth / canny from `guides/<slug>/<shot>/` without `--install-inputs`
-- Failing closed when occupancy is still `blender-desk`
-- Handing a Klein still to TRELLIS.2 INT8 under `output/assets/objects/_lab-mug/`
+- **Loading** clay, depth, and canny from `guides/<slug>/<shot>/` without `--install-inputs`
+- **Failing** closed when occupancy is still `blender-desk`
+- **Handing** a Klein still to TRELLIS.2 INT8 under `output/assets/objects/_lab-mug/`
+- **Staying** on `:8188` for the whole look-dev pass
 
 **Who this is for:** studio users who already dumped a guide pack and want to stay in the ComfyUI canvas.
 
-There is **no** live Blender viewport embed. Blender stays on the host. Do not install GeometryPack, Comfy_BlenderTools, ComfyBlockout, MixLab, IRCSS, or spawn `blender` from a node.
+Use this page when the dump is done and you would rather keep working on the canvas than
+shuffle files. The first-party `ez_dcc` loaders read the guide pack straight off the output
+disk, and the occupancy gate stops you Queuing a Klein edit while Compose is still parked for
+Blender.
+
+---
+
+## Before you start
+
+There is **no** live Blender viewport embed. Blender stays on the host, and no node spawns it.
+
+<Callout type="error" title="Hard bans">
+  No Blender in Docker. No GeometryPack / Comfy_BlenderTools / ComfyBlockout / MixLab / IRCSS. No Pixal3D, nvdiffrast, Flux Dev, or 19B Union. No `asset-new`. TRELLIS stays opt-in `download-3d --tier trellis2`.
+</Callout>
 
 ```mermaid
 flowchart LR
@@ -40,7 +54,7 @@ flowchart LR
 
 ---
 
-## Operator loop
+## Run the operator loop
 
 ```bash
 ./scripts/manage.sh occupancy enter blender-desk
@@ -55,11 +69,11 @@ flowchart LR
 
 Widgets default to `slug=go-see`, `shot_id=12`, `plate=mug`. Depth stays mist 0-1 (near=white, far=black). Do not invert.
 
-`EZDCCOccupancyGate` reads `${COMFY_OUTPUT_DIR}/.occupancy.json`. It does not `POST /free`, start Compose, or spawn Blender. Missing file passes (mode `unknown`). `blender-desk` vs Klein / LTX / Wan / TRELLIS **fails** - park is for dumps.
+`EZDCCOccupancyGate` reads `${COMFY_OUTPUT_DIR}/.occupancy.json`. It does not `POST /free`, start Compose, or spawn Blender. Missing file passes (mode `unknown`). `blender-desk` vs Klein / LTX / Wan / TRELLIS **fails** - park is for dumps. The rule the gate enforces: [Why one heavy job at a time](occupancy.md).
 
 ---
 
-## Graphs (`_lab/dcc/`)
+## Graphs under `_lab/dcc/`
 
 | Graph | Occupancy | What it does |
 | --- | --- | --- |
@@ -71,17 +85,22 @@ The original seven DCC graphs stay on `LoadImage` + `--install-inputs`. After a 
 
 ---
 
-## Path D (default on one GB10)
+## Path D: dump on the laptop
 
-Laptop dump -> rsync `guides/` -> Spark Comfy. Spark does not run Blender.
+Laptop dump -> rsync `guides/` -> Spark Comfy. Spark does not run Blender. This is the
+default on one GB10, because it keeps the GPU on Comfy.
 
 ```bash
 rsync -a guides/go-see/12/ spark-0:/mnt/comfy-output/guides/go-see/12/
 ./scripts/manage.sh start
 ```
 
-Pack contract and print modes: [DCC guide pack](../dcc-workflows.md). Occupancy XOR: [Occupancy desk](../occupancy.md). Stills vs 5.00s: [Blender creator suite](blender-creator.md).
+---
 
-<Callout type="error" title="Hard bans">
-  No Blender in Docker. No GeometryPack / Comfy_BlenderTools / ComfyBlockout / MixLab / IRCSS. No Pixal3D, nvdiffrast, Flux Dev, or 19B Union. No `asset-new`. TRELLIS stays opt-in `download-3d --tier trellis2`.
-</Callout>
+## Related
+
+- **Previous lesson** - [Blender creator suite](blender-creator.md) - the two dump contracts
+- **Next lesson** - [Dream-house tours](dream-house.md) - the ten-camera tour
+- **Pack contract** - [DCC guide pack](../dcc-workflows.md)
+- **The GPU rule** - [Why one heavy job at a time](occupancy.md)
+- **Park it yourself** - [Occupancy desk](../occupancy.md)

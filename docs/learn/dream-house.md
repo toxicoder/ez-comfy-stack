@@ -1,6 +1,6 @@
 ---
 title: Dream-house tours
-description: "Two Instagram 4:5 virtual tours of one place - language-locked T2I, or a Blender greybox that Klein restyles."
+description: "Two Instagram 4:5 tours of one place: a language-locked text-to-image run, or a Blender greybox that Klein restyles."
 tags: [learn, klein, dream-house, blender, clay, instagram]
 ---
 
@@ -8,21 +8,28 @@ tags: [learn, klein, dream-house, blender, clay, instagram]
 
 **What's on this page**
 
-- Two doors to a ten-still Instagram 4:5 walkthrough
-- When to use language persistence vs a 3D greybox
-- Occupancy: stop Comfy before a Blender `house-views` dump (`--install-inputs` / `--seed-inputs` may run while Comfy is up)
-- `start` seeds LoadImage plates so the clay App can Queue without a dump
+- **Choose a door** - language tour or clay tour
+- **Run the clay loop** - seeded plates, then the optional Workbench dump
+- **Skip a stage** - what to drop when Blender is missing
+- **Share the GPU** - what a dump needs from occupancy
+- **Related** - where to go after the tour
 
 **What this enables**
 
-- Keeping **stills/dream-house** as a one-Queue language tour
-- Using a real 3D scene so rooms stay adjacent while Klein only paints materials
+- **Keeping** **stills/dream-house** as a one-Queue language tour
+- **Using** a real 3D scene so rooms stay adjacent while Klein only paints materials
+- **Queuing** ten 1024x1280 plates that read as one walkthrough
+- **Skipping** Blender entirely when `start` can seed the plates
 
 **Who this is for:** studio users who already Queued the T2I dream-house and want the rooms to share a floorplan.
 
+A tour is ten Instagram 4:5 stills of **one** place. The hard part is not the pictures, it is
+keeping the kitchen next to the lounge. This page gives you two ways to do that: remember the
+place in prose, or remember it as geometry.
+
 ---
 
-## Two doors
+## Choose a door
 
 The T2I tour remembers the place in prose (`HOUSE IDENTITY` + Prompt Join `lock=view`). The clay tour remembers it as geometry: Blender dumps ten Workbench stills from named cameras, then Klein **edit** restyles each plate.
 
@@ -51,7 +58,7 @@ TRELLIS.2 is a hero-piece tool, not a walkable house. Do not TRELLIS a full-scen
 
 ---
 
-## Clay loop
+## Run the clay loop
 
 `manage.sh start` seeds `ez_house_clay_01.png` ... `10.png` into `${COMFY_OUTPUT_DIR}/input` (container `/inputs`) so LoadImage can Queue. If a `house-views` pack already exists it is copied; otherwise the shipped `schemas/house_layout.yaml` cameras are rendered (no Blender). Reload the App if it was open before seed.
 
@@ -79,7 +86,7 @@ Default layout is `schemas/house_layout.yaml` (lab penthouse matching the canned
 
 ---
 
-## Skip rules
+## Skip a stage
 
 | If | Skip |
 | --- | --- |
@@ -89,8 +96,21 @@ Default layout is `schemas/house_layout.yaml` (lab penthouse matching the canned
 
 ---
 
-## Occupancy
+## Share the GPU
 
-One GB10 job. A Blender `house-views` dump dies if compose is up (exit 2), same XOR as `export-guides`. `--install-inputs` and `--seed-inputs` are host file writes and may run while Comfy is up. Do not Queue the clay graph and a Blender dump in one session. `restart: "no"`, type **yes** on start, headroom, and download-limit clear-on-exit are unchanged. Blender is never in the Dockerfile.
+A Blender `house-views` dump is a heavy GPU job and dies (exit 2) while compose is up; park
+with `occupancy enter blender-desk` or stop first. Do not Queue the clay graph and a dump in
+one session. `--install-inputs` and `--seed-inputs` are host file writes and may run while
+Comfy is up. `restart: "no"`, type **yes** on start, headroom, and download-limit
+clear-on-exit are unchanged, and Blender is never in the Dockerfile. Full rule:
+[Why one heavy job at a time](occupancy.md).
 
-Related: [Clay to finish](clay-to-finish.md) (film Path B), [DCC guide pack](../dcc-workflows.md) (1280x704 / 120f LTX packs - different contract), [Asset Bible](../asset-bible.md), [Prompting](../prompting.md).
+---
+
+## Related
+
+- **Previous lesson** - [Stay in Comfy after a Blender dump](comfy-first-blender.md)
+- **Film version of the same idea** - [Clay blockout to finished clip](clay-to-finish.md)
+- **1280x704 / 120f LTX packs (different contract)** - [DCC guide pack](../dcc-workflows.md)
+- **Keep the place consistent** - [Asset Bible](../asset-bible.md) - and [Prompting](../prompting.md)
+- **Last stop in Learn** - [Glossary](../glossary.md)

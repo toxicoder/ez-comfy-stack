@@ -1,22 +1,33 @@
 ---
-title: ez-comfy-stack
-description: Lean Visual Generative AI demo stack (ComfyUI US-safe local studio) for a single NVIDIA DGX Spark.
+title: Home
+description: ComfyUI studio for one NVIDIA DGX Spark, with Klein 4B stills, Wan 2.2 silent motion, and LTX-2.5 audio-video clips.
 tags: [comfyui, klein, wan, ltx, dgx-spark, docker]
 ---
 
-# ez-comfy-stack
+# Home
 
 **What's on this page**
 
-- What this project is (and is not)
-- Choose a path: learn, first install, create, recover
-- Default stack and the four SSH-safe guards
-- Documentation map (Learn / Get started / Studio / Operate / Reference / Contribute)
+- **Choose a path** - five cards that send you to the right page now
+- **Documentation map** - the seven tabs and the groups inside each one
+- **What this stack is** - the demo scope, and when to graduate to the lab
+- **Default stack** - models, ports, host paths, and the memory limit
+- **Safety first** - the four SSH-safe guards and why they exist
+- **Related** - the next page from the front door
 
 **What this enables**
 
-- Finding the right page in one screen instead of scrolling a dump
-- Spinning up a **US-safe local studio** (Klein 4B + Wan 2.2 + LTX-2.5) on one Spark
+- **Finding** the right page in one screen instead of scrolling a dump
+- **Starting** in the tab that matches your job, not the one you guessed
+- **Spinning up** a **US-safe local studio** (Klein 4B + Wan 2.2 + LTX-2.5) on one Spark
+- **Knowing** which defaults keep SSH usable before you change anything
+
+**Who this is for:** first-time visitors, and anyone who lost their place in the docs.
+
+This is the front door of **ez-comfy-stack**: ComfyUI in Docker on **one** NVIDIA DGX Spark
+(GB10), tuned for US-safe local work. Read the cards below, pick the one that matches why
+you opened this page, and follow it. Come back here when you want the map of what else
+exists.
 
 ---
 
@@ -42,7 +53,7 @@ tags: [comfyui, klein, wan, ltx, dgx-spark, docker]
 
     Still -> silent 5 s -> AV 8 s, or pick a thumbnail / GIF / 90s film from the catalog.
 
-    [Still to motion to AV](visual-generative-ai.md)
+    [The still-to-motion-to-AV pipeline](visual-generative-ai.md)
   </Card>
   <Card title="Something broke">
     ---
@@ -60,15 +71,59 @@ tags: [comfyui, klein, wan, ltx, dgx-spark, docker]
   </Card>
 </Cards>
 
-Also: [Architecture](learn/architecture.md) - [FAQ](start/faq.md) - [When to use vs spark-lab](start/when-to-use-vs-spark-lab.md). Contributors: [Conventions](project-conventions.md). Licenses before a 30 GB pull: [Model licenses](licenses.md).
+---
+
+## Documentation map
+
+The sidebar has seven tabs. Each tab holds a few short groups, and the pages inside a group
+read in order, so the sidebar is the course outline.
+
+```mermaid
+flowchart TB
+  Home["Home (this page)"]
+  Home --> Learn["Learn<br/>The studio at a glance<br/>Models, hardware, and safety<br/>Look-dev and 3D concepts<br/>Glossary"]
+  Home --> Start["Get started<br/>Install and start<br/>Choose and decide"]
+  Home --> Studio["Studio<br/>Start creating<br/>Recipe racks<br/>Graph catalogs<br/>Films, podcasts, and music<br/>3D, Blender, and host tools"]
+  Home --> Operate["Operate<br/>Everyday loop<br/>GPU occupancy<br/>Models and downloads<br/>Disk, backup, and data<br/>Safety, scale, and feedback<br/>Troubleshooting"]
+  Home --> Ref["Reference<br/>Commands and modes<br/>Workflows and nodes<br/>Config and boards"]
+  Home --> Contribute["Contribute<br/>Before you start<br/>Build, test, and environment<br/>Docs and security"]
+```
+
+| Tab | Groups | Open it when |
+| --- | --- | --- |
+| **Home** | this page | You want the map and a starting point |
+| **Learn** | The studio at a glance - Models, hardware, and safety - Look-dev and 3D concepts - Glossary | You want the ideas before you touch widgets |
+| **Get started** | Install and start - Choose and decide | You are installing, or deciding what to pull |
+| **Studio** | Start creating - Recipe racks - Graph catalogs - Films, podcasts, and music - 3D, Blender, and host tools | You are making media in the browser |
+| **Operate** | Everyday loop - GPU occupancy - Models and downloads - Disk, backup, and data - Safety, scale, and feedback - Troubleshooting | You run the box day to day, or something broke |
+| **Reference** | Commands and modes - Workflows and nodes - Config and boards | You need the exact flag, graph, or schema |
+| **Contribute** | Before you start - Build, test, and environment - Docs and security | You are landing changes in the repo |
+
+Two shortcuts people look for first:
+
+| When | Read |
+| --- | --- |
+| **What is this?** | [How the studio works](learn/index.md) - [Glossary](glossary.md) |
+| **This repo or the lab?** | [This stack or nvidia-dgx-spark-lab](start/when-to-use-vs-spark-lab.md) |
+| **First run** | [Getting Started](getting-started.md) - [FAQ](start/faq.md) |
+| **Licenses before a 30 GB pull** | [Model licenses](licenses.md) |
+| **Still -> silent 5 s -> AV 8 s** | [The still-to-motion-to-AV pipeline](visual-generative-ai.md) |
+| **Something broke** | [Troubleshooting](troubleshooting.md) |
+| **Exact CLI / widgets** | [manage.sh reference](manage-cli.md) - [Workflow details](create/workflows-index.md) |
+| **Contributing** | [Conventions](project-conventions.md) - [Contributing](contribute/contributing.md) |
 
 ---
 
-## Purpose
+## What this stack is
 
-This is a **sample / demo** repository for **Visual Generative AI** on a **single NVIDIA DGX Spark (GB10)**. It is deliberately smaller than [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab): Docker Compose instead of K3s, one unified profile instead of a full lab.
+This is a **sample / demo** repository for **Visual Generative AI** on a **single NVIDIA
+DGX Spark (GB10)**. It is deliberately smaller than
+[nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab): Docker Compose
+instead of K3s, one unified profile instead of a full lab.
 
-Long-term multi-workload operations should use the full lab project. Use **ez-comfy-stack** when you want faster experimentation - [when to use vs spark-lab](start/when-to-use-vs-spark-lab.md).
+Long-term multi-workload operations should use the full lab project. Use
+**ez-comfy-stack** when you want faster experimentation -
+[This stack or nvidia-dgx-spark-lab](start/when-to-use-vs-spark-lab.md).
 
 ```mermaid
 flowchart TB
@@ -107,7 +162,11 @@ flowchart TB
 | UI | port **`${COMFY_PORT}`** (default **8188**) |
 | Memory limit | **90g** (host headroom reserved for SSH) |
 
-Klein 9B and FLUX.2-dev are **opt-in FLUX Non-Commercial** packs (`download-image --tier 9b` / `flux2-dev`), not defaults and not YouTube-ok. Nunchaku 9B and MiniMax H3 stay banned. Session variables and port-forward copy-paste live on [Getting Started](getting-started.md). Opt-in audio: [Local podcast](podcast.md) and [Local music](music.md) (not part of `download-models`).
+Klein 9B and FLUX.2-dev are **opt-in FLUX Non-Commercial** packs (`download-image --tier 9b`
+/ `flux2-dev`), not defaults and not YouTube-ok. Nunchaku 9B and MiniMax H3 stay banned.
+Session variables and port-forward copy-paste live on [Getting Started](getting-started.md).
+Opt-in audio: [Local podcast](podcast.md) and [Local music](music.md) (not part of
+`download-models`).
 
 ---
 
@@ -132,35 +191,17 @@ flowchart LR
   S4 --> Safe["SSH stays usable"]
 ```
 
-Why those exist: [Hardware, memory, and safety](learn/hardware.md). Operator details: [Reboot safety](reboot-safety.md) - [Download limit](download-limit.md).
+Why those exist: [Hardware, memory, and safety](learn/hardware.md). Operator details:
+[Reboot safety](reboot-safety.md) - [Download limit](download-limit.md).
 
 ---
 
-## Documentation map
+## Related
 
-```mermaid
-flowchart TB
-  Home["Home"] --> Learn["Learn"]
-  Home --> Start["Get started"]
-  Home --> Studio["Studio"]
-  Home --> Operate["Operate"]
-  Home --> Ref["Reference"]
-  Home --> Contribute["Contribute"]
-  Learn --> L1["syllabus - ComfyUI - pipeline - occupancy idea - glossary"]
-  Start --> S1["Getting Started - licenses - FAQ"]
-  Studio --> C1["still -> motion -> AV - catalogs - playbooks"]
-  Operate --> O1["daily loop - occupancy desk - troubleshooting"]
-  Ref --> R1["manage.sh - occupancy matrix - node encyclopedia"]
-  Contribute --> N1["conventions - docs-style - tests"]
-```
+Start at the top of the Learn tab and work down; each page names what comes after it.
 
-| When | Read |
-| --- | --- |
-| **What is this?** | [How the studio works](learn/index.md) - [Glossary](glossary.md) |
-| **This repo or the lab?** | [When to use vs spark-lab](start/when-to-use-vs-spark-lab.md) |
-| **First run** | [Getting Started](getting-started.md) - [FAQ](start/faq.md) |
-| **Licenses before a 30 GB pull** | [Model licenses](licenses.md) |
-| **Still -> silent 5 s -> AV 8 s** | [Still to motion to AV](visual-generative-ai.md) |
-| **Something broke** | [Troubleshooting](troubleshooting.md) |
-| **Exact CLI / widgets** | [manage.sh reference](manage-cli.md) - [Workflow details](create/workflows-index.md) |
-| **Contributing** | [Conventions](project-conventions.md) |
+- **Understand the studio** - [How the studio works](learn/index.md)
+- **Learn the canvas** - [ComfyUI basics](learn/comfyui.md)
+- **Install and run it** - [Getting Started](getting-started.md)
+- **Make your first clip** - [The still-to-motion-to-AV pipeline](visual-generative-ai.md)
+- **Look terms up** - [Glossary](glossary.md)

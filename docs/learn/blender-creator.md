@@ -1,6 +1,6 @@
 ---
 title: Blender creator suite
-description: Host Blender dumps clay/depth/canny stills and 5.00s packs; Klein restyles; LTX Union or Wan FLF print motion. Occupancy XOR.
+description: Dump clay, depth, and canny from host Blender, then let Klein restyle the plate and LTX or Wan print the motion.
 tags: [learn, blender, dcc, clay, klein, ltx, wan, stills, video]
 ---
 
@@ -8,20 +8,31 @@ tags: [learn, blender, dcc, clay, klein, ltx, wan, stills, video]
 
 **What's on this page**
 
-- Two dump contracts: 5.00s shot pack vs single-frame still pack
-- Still Apps (clay plates, canny restyle) and video envelopes (depth, canny, shorts, FLF)
-- Occupancy: park Comfy (`blender-desk`) before a dump, or stop Compose
-- Skip rules when Blender is missing
+- **Run Blender on the host** - the two dump contracts and the park step
+- **Dump creator stills** - one camera, one plate
+- **Print a guided 5.00s clip** - depth, canny, shorts, and first-last
+- **Skip a stage** - what to drop when Blender is missing
+- **Related** - the pages this suite feeds
 
 **What this enables**
 
-- Blocking camera and layout in Blender, then finishing look and motion in Comfy
-- Shipping creator plates (hero, packshot, IG, shorts) from one clay still
-- Depth- or edge-guided 5.00s prints that keep the camera you blocked
+- **Blocking** camera and layout in Blender, then finishing look and motion in Comfy
+- **Shipping** creator plates (hero, packshot, IG, shorts) from one clay still
+- **Printing** depth- or edge-guided 5.00s clips that keep the camera you blocked
+- **Choosing** the right dump contract before you spend a Blender session
 
 **Who this is for:** studio users who already Queued Klein-from-clay or a 5 s LTX clip and want a Blender-shaped desk for both stills and video.
 
-Blender stays on the **host**. It is never in `docker/Dockerfile`. Park Comfy (`occupancy enter blender-desk`) for Workbench dumps. Do not run Cycles CUDA next to a loaded denoise. [Occupancy desk](../occupancy.md).
+This is the host-Blender half of the pipeline: you dump geometry-derived plates, then Comfy
+finishes them. Two contracts cover everything below - a single-frame **still pack** for
+creator plates, and a timed **5.00s shot pack** for control-guided prints. Pick the right one
+before you open Blender.
+
+---
+
+## Run Blender on the host
+
+Blender stays on the **host**. It is never in `docker/Dockerfile`. Park Comfy (`occupancy enter blender-desk`) for Workbench dumps. Do not run Cycles CUDA next to a loaded denoise. The rule behind the park step: [Why one heavy job at a time](occupancy.md).
 
 ```mermaid
 flowchart TB
@@ -40,7 +51,7 @@ flowchart TB
 
 ---
 
-## Stills
+## Dump creator stills
 
 Not the 5.00s pack. Not the ten-camera [dream-house tour](dream-house.md). One camera, one plate.
 
@@ -63,7 +74,7 @@ Not the 5.00s pack. Not the ten-camera [dream-house tour](dream-house.md). One c
 
 ---
 
-## Video (Path B)
+## Print a guided 5.00s clip
 
 ```bash
 ./scripts/manage.sh occupancy enter blender-desk
@@ -74,7 +85,7 @@ Not the 5.00s pack. Not the ten-camera [dream-house tour](dream-house.md). One c
 
 Portrait 5.00s: `--width 768 --height 1280`, then **ltx-iclora-depth-shorts**. Silent first-last: **wan-flf-from-guide** after `download-wan --tier fun-inp`.
 
-Pack files and print modes: [DCC guide pack](../dcc-workflows.md). Golden film loop: [Clay to finish](clay-to-finish.md).
+Pack files and print modes: [DCC guide pack](../dcc-workflows.md). Golden film loop: [Clay blockout to finished clip](clay-to-finish.md).
 
 Path D: dump on the laptop, rsync `guides/`, Spark only runs Comfy.
 
@@ -82,7 +93,7 @@ Stay on `:8188` after the dump (no `--install-inputs`): [Stay in Comfy after a B
 
 ---
 
-## Skip rules
+## Skip a stage
 
 | If | Skip |
 | --- | --- |
@@ -91,4 +102,16 @@ Stay on `:8188` after the dump (no `--install-inputs`): [Stay in Comfy after a B
 | Talking-head / VO-locked picture | Union Control. Use A2V freeze (`motion/av/audio-to-video-8s`) |
 | Engine-final Cycles beauty | Path A (`dcc-final`) - not this suite |
 
-Occupancy: one GB10 heavy job. `export-guides` and `blender-stills` die (exit 2) if Compose is up and **not** parked. Safety is unchanged: `restart: "no"`, type **yes** on start, headroom, download-limit clear-on-exit.
+Occupancy: `export-guides` and `blender-stills` die (exit 2) if Compose is up and **not**
+parked. Safety is unchanged: `restart: "no"`, type **yes** on start, headroom, download-limit
+clear-on-exit.
+
+---
+
+## Related
+
+- **Previous lesson** - [Clay blockout to finished clip](clay-to-finish.md) - the golden film loop
+- **Next lesson** - [Stay in Comfy after a Blender dump](comfy-first-blender.md)
+- **Then** - [Dream-house tours](dream-house.md) - the ten-camera tour
+- **Pack contract** - [DCC guide pack](../dcc-workflows.md)
+- **The GPU rule** - [Why one heavy job at a time](occupancy.md)

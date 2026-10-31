@@ -1,6 +1,6 @@
 ---
 title: Glossary
-description: Terms used in the US-safe ComfyUI studio - click a dotted word anywhere in the docs for a short definition.
+description: Every term the US-safe studio uses, with a short definition on hover, a long entry here, and one JSON source.
 tags: [glossary, comfyui, klein, wan, ltx, learning]
 ---
 
@@ -8,14 +8,25 @@ tags: [glossary, comfyui, klein, wan, ltx, learning]
 
 **What's on this page**
 
-- **Dotted words** - hover for a short definition, click for the dialog
-- **Categories** - Models, Modalities, Studio, Downloads, Hardware and safety, Film, Audio, Licenses
-- **See also** - each entry links to the guide that teaches it
+- **How a dotted word works** - hover, click, the dialog, and the eight categories
+- **All terms** - the long entries, generated from one JSON file
+- **Related** - the pages that teach what these words describe
 
 **What this enables**
 
-- **Looking up** Klein, Wan, LTX, `--tier`, Queue, latent, headroom, and the rest without leaving the page
+- **Looking up** Klein, Wan, LTX, `--tier`, Queue, latent, and headroom without leaving the page
 - **Teaching** vocabulary once so Create and Operate pages can stay task-focused
+- **Reading** any docs page and getting a hover definition on first use of a term
+- **Editing** one file to add or rename a term everywhere at once
+
+This is the dictionary, not the course. If you are new to the stack, start at
+[How the studio works](learn/index.md) and come back here when a word stops you. Every
+entry below is generated from a single JSON file, so the wording you read here is the same
+wording that pops up in the hover bubble on any other page.
+
+---
+
+## How a dotted word works
 
 <Callout type="info" title="Dotted words open a definition">
   Across the docs, the **first** time a glossary term appears on a page it is underlined with dots.
@@ -38,6 +49,21 @@ flowchart LR
   Click --> Full["This page: long entry"]
 ```
 
-Add or change a term in `includes/glossary.json` (unique `id` and aliases). Conventions: [Project conventions](project-conventions.md).
+---
+
+## All terms
+
+Add or change a term in `includes/glossary.json` (unique `id` and aliases); the hover bubble
+and this page both read from it. Conventions:
+[Conventions](project-conventions.md).
 
 <GlossaryBody />
+
+---
+
+## Related
+
+- **Start here instead** - [How the studio works](learn/index.md)
+- **The canvas vocabulary** - [ComfyUI basics](learn/comfyui.md)
+- **The model vocabulary** - [Klein, Wan, and LTX](learn/pipeline.md)
+- **Then install** - [Getting Started](getting-started.md)

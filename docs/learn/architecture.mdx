@@ -1,6 +1,6 @@
 ---
 title: Architecture
-description: Compose services, three stores, occupancy XOR, host sidecars, and independent Spark workers on ez-comfy-stack.
+description: Compose services, the three stores, host sidecars, and independent Spark workers, with one heavy GPU job per node.
 tags: [architecture, compose, occupancy, spark, safety]
 ---
 
@@ -8,19 +8,27 @@ tags: [architecture, compose, occupancy, spark, safety]
 
 **What's on this page**
 
-- **Compose services** - `comfyui` plus optional `studio-ui` profile
+- **Compose services** - `comfyui` plus the optional `studio-ui` profile
 - **Three stores** - GHCR image vs `${MODELS_DIR}` vs `comfy-state`
-- **Occupancy XOR** - park vs stop; one heavy GPU job
-- **Host sidecars** vs Compose
-- **Spark farm** - independent workers and a shared `${MODELS_DIR}`; no in-tree NCCL
+- **One heavy GPU job** - pointer to the occupancy rule
+- **Host sidecars vs Compose** - what is a container and what is not
+- **Spark farm** - independent workers sharing one `${MODELS_DIR}`
+- **Related** - the operator and reference pages
 
 **What this enables**
 
 - **Naming** what `start` / `stop` / `cleanup` actually touch
 - **Keeping** SSH-safe defaults (`restart: "no"`, 90g/80g, headroom)
+- **Telling** a Compose service from a host sidecar before you file a bug
 - **Knowing** when to stay on this Compose demo vs [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab)
 
-This is a **sample Compose studio** on one NVIDIA DGX Spark (GB10). It is not K3s and not multi-node NCCL. Bazelisk is the contributor test/lint/docs graph, not a cluster control plane. Graduate to the lab when you outgrow a demo: [When to use vs spark-lab](../start/when-to-use-vs-spark-lab.md).
+**Who this is for:** operators who want the box explained, and contributors about to touch
+compose or the entrypoint.
+
+This is a **sample Compose studio** on one NVIDIA DGX Spark (GB10). It is not K3s and not
+multi-node NCCL. Bazelisk is the contributor test/lint/docs graph, not a cluster control
+plane. Graduate to the lab when you outgrow a demo:
+[This stack or nvidia-dgx-spark-lab](../start/when-to-use-vs-spark-lab.md).
 
 ```bash
 export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
@@ -45,7 +53,8 @@ Source of truth: `docker/docker-compose.yml` (operator entry: `./scripts/manage.
 | **comfyui** (`ez-comfy-studio`) | default | `gpus: all` | `mem_limit` **90g**, `mem_reservation` **80g**, `shm_size` 16gb, `cpus: 16.0` | `"no"` | `${COMFY_PORT}` -> 8188 |
 | **studio-ui** (`ez-comfy-studio-ui`) | `studio-ui` | **none** | `mem_limit` 512m | `"no"` | `${STUDIO_UI_PORT:-8190}` -> 8190 |
 
-Default `./scripts/manage.sh start` starts **comfyui only**. The jobstore board is opt-in: [studio-ui](../reference/studio-ui.md).
+Default `./scripts/manage.sh start` starts **comfyui only**. The jobstore board is opt-in:
+[studio-ui](../reference/studio-ui.md).
 
 ```mermaid
 flowchart TB
@@ -74,7 +83,12 @@ flowchart TB
 | **`${MODELS_DIR}`** | Weights + `comfy/` relative symlinks | You, `reap-models`, or disk-wizard - **not** `cleanup` |
 | **`comfy-state` volume** (`ez-comfy-state`) | Comfy install, venv, lab `ez_*` packs | `cleanup` (type **DELETE**) only |
 
-Generated media, LoadImage inputs, Comfy `user/`, occupancy JSON, and operator `_user` node packs live on **`${COMFY_OUTPUT_DIR}`**. Inside the container that tree is `/outputs` (`COMFY_OUTPUT_DIR=/outputs`) plus the `comfy-user` bind at `/comfy-state/ComfyUI/user`. `cleanup` does not delete the host tree. Layout: [Hardware, memory, and safety](hardware.md) - [Models and cache](../models-and-cache.md) - [Backup and restore](../operate/backup-restore.md).
+Generated media, LoadImage inputs, Comfy `user/`, occupancy JSON, and operator `_user` node
+packs live on **`${COMFY_OUTPUT_DIR}`**. Inside the container that tree is `/outputs`
+(`COMFY_OUTPUT_DIR=/outputs`) plus the `comfy-user` bind at `/comfy-state/ComfyUI/user`.
+`cleanup` does not delete the host tree. Layout:
+[Hardware, memory, and safety](hardware.md) - [Models and cache](../models-and-cache.md) -
+[Backup and restore](../operate/backup-restore.md).
 
 ```mermaid
 flowchart LR
@@ -86,19 +100,14 @@ flowchart LR
 
 ---
 
-## Occupancy XOR and park vs stop
+## One heavy GPU job
 
-GB10 is **one** heavy GPU job. CLI modes: `idle`, `blender-desk`, `llm-desk`, `klein`, `trellis`, `wan`, `ltx`. Matrix: [Occupancy matrix](../operate/occupancy-matrix.md). Narrative: [Occupancy desk](../occupancy.md).
-
-| Action | What it does |
-| --- | --- |
-| **`occupancy enter blender-desk`** (park) | Compose may stay **up**; empty queue; `POST /free` unload. Workbench dumps allowed. |
-| **`stop`** | Container **down**; volumes kept. Use for NVENC, SuperSplat, or a wedged UI. |
-| **`occupancy enter idle`** | Stop sidecars **and** Compose. |
-
-`occupancy enter` **does not** start Compose. Heavy modes tell you to `./scripts/manage.sh start` (type **yes**) when the container is down.
-
-Graph occupancy labels (`none` / `llm` / `film` / `audio` / ...) on App Mode are **not** CLI modes.
+GB10 is **one** GPU, so the stack runs one heavy job at a time. `occupancy enter` parks a job
+by unloading weights; `stop` takes the container down; `occupancy enter idle` clears the
+sidecars and Compose. CLI modes are `idle`, `blender-desk`, `llm-desk`, `klein`, `trellis`,
+`wan`, and `ltx`. The rule, the park and stop table, and the list of what dies when Compose
+is up: [Why one heavy job at a time](occupancy.md). Mode lookup:
+[Occupancy matrix](../operate/occupancy-matrix.md).
 
 ---
 
@@ -114,15 +123,19 @@ Sidecars are **host processes**, not Compose services. They are never in `docker
 | **llama-server 35B** | Host `127.0.0.1:30000` | `llm-desk` **is** the GPU job |
 | **NVENC / SuperSplat** | Host | XOR with **compose-up** (park is not enough) |
 
-MCP stdio servers (`blender-mcp`, `research-mcp`) are host Python, not containers: [MCP](../operate/mcp.md). Sidecar catalog: [Studio sidecars](../studio-sidecars.md).
+MCP stdio servers (`blender-mcp`, `research-mcp`) are host Python, not containers:
+[MCP](../operate/mcp.md). Sidecar catalog: [Host sidecars overview](../studio-sidecars.md).
 
 ---
 
 ## Spark farm (independent workers)
 
-Three Sparks can share **one** `${MODELS_DIR}` (NFS over the fabric, or rsync replicas). Each node still runs **its own** Compose `comfyui` with `restart: "no"` and local **yes** on `start`. That is throughput + one weight copy - **not** slicing one sampler.
+Three Sparks can share **one** `${MODELS_DIR}` (NFS over the fabric, or rsync replicas). Each
+node still runs **its own** Compose `comfyui` with `restart: "no"` and local **yes** on
+`start`. That is throughput + one weight copy - **not** slicing one sampler.
 
-There is **no** in-tree NCCL, no multi-GPU graph, and no MiniMax H3. Tensor-parallel LLMs belong in nvidia-dgx-spark-lab.
+There is **no** in-tree NCCL, no multi-GPU graph, and no MiniMax H3. Tensor-parallel LLMs
+belong in nvidia-dgx-spark-lab.
 
 ```mermaid
 flowchart LR
@@ -143,9 +156,8 @@ Runbook: [Spark farm](../spark-farm.md).
 
 ## Related
 
-| Need | Page |
-| --- | --- |
-| First install | [Getting Started](../getting-started.md) |
-| Mode x legal GPU jobs | [Occupancy matrix](../operate/occupancy-matrix.md) |
-| Compose demo vs K3s lab | [When to use vs spark-lab](../start/when-to-use-vs-spark-lab.md) |
-| FAQ | [FAQ](../start/faq.md) |
+- **Previous lesson** - [Hardware, memory, and safety](hardware.md) - the memory maths
+- **The rule itself** - [Why one heavy job at a time](occupancy.md)
+- **Mode x legal GPU jobs** - [Occupancy matrix](../operate/occupancy-matrix.md)
+- **First install** - [Getting Started](../getting-started.md)
+- **Next in the tab** - [Clay blockout to finished clip](clay-to-finish.md)
