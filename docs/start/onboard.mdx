@@ -1,49 +1,80 @@
 ---
-title: Onboard
-description: One command from the laptop or the Spark to install tools, clone, setup, and doctor - never auto-start.
+title: One-command onboard
+description: Bring the studio up on one Spark with a single manage.sh onboard command, then start it yourself and queue a still.
 tags: [getting-started, setup, onboard, ssh]
 ---
 
-# Onboard
+# One-command onboard
 
 **What's on this page**
 
-- `manage.sh onboard` on a Spark vs on a laptop
-- What it will not do (no `start`, no yes-skip)
-- Optional remote `download-models`
+- **Run the one command** - `manage.sh onboard` on the Spark or from a laptop
+- **What the command does** - the steps it runs for you on each machine
+- **What onboard does not do** - no `start`, no typed **yes**, no `restart` change
+- **Then start the studio** - SSH in, type **yes**, forward the port, Queue a still
+- **Related** - the full walkthrough and the laptop-only page
 
 **What this enables**
 
-- **Skipping** the copy-paste clone -> setup -> doctor sequence
-- **Keeping** SSH-safe defaults: type **yes** on start, headroom, `restart: "no"`
+- **Skipping** the copy-paste clone, setup, and doctor sequence
+- **Keeping** SSH-safe defaults: type **yes** on start, headroom preflight, `restart: "no"`
+- **Reaching** the same end state as [Getting Started](../getting-started.md) in one verb
 
-**Who this is for:** first-time operators. Laptop-only tools: [Set up this computer](this-computer.md). Manual steps: [Getting Started](../getting-started.md).
+**Who this is for:** a first-time operator who wants the stack up with the least reading. Open [Getting Started](../getting-started.md) instead when you want to see and verify each step, or [Set up this computer](this-computer.md) when you only need the laptop side (SSH, port-forward, client packages).
+
+`manage.sh onboard` installs what is missing and stops before the stack runs. Nothing starts until you type **yes** on `start`.
 
 ---
 
-## What runs
-
-On a **Spark** (GB10 / `/mnt/models`): `onboard` is `setup --install-docker` then doctor.
-
-On a **laptop**: `setup-client` (SSH Host ez-spark) then remote clone + `setup --install-docker` + `doctor`. The stack is **not** started.
+## Run the one command
 
 <EzCommand id="onboard" />
 
-Pass `--download` only when you have accepted the LTX license and set `HF_TOKEN`. That pull is multi-GB and throttled.
+Pass `--download` only when you have accepted the LTX-2.5 license and set `HF_TOKEN`. That pull is multi-GB and throttled. Policy first: [Model licenses](../licenses.md).
 
 ---
 
-## Then type yes
+## What the command does
+
+On a **Spark** (GB10, `${MODELS_DIR}` default `/mnt/models`): `onboard` is `setup --install-docker` then `doctor`.
+
+On a **laptop**: `setup-client` writes the `Host ez-spark` SSH block, then the command clones over SSH and runs `setup --install-docker` plus `doctor` on the Spark. The stack is **not** started.
+
+The same `setup` work happens either way: create `.env`, own `${MODELS_DIR}` and `${COMFY_OUTPUT_DIR}`, install Docker CE plus the compose plugin when missing, add your user to the `docker` group, then run `doctor`. Step by step, with what to check after each one: [Getting Started](../getting-started.md).
+
+---
+
+## What onboard does not do
+
+Safety impact: **none**.
+
+- It **never starts the stack**, so Compose `restart: "no"` stays and nothing comes back after a reboot.
+- It **never types `yes` for you**. The heavy confirm on `start` still runs.
+- It **never skips the headroom preflight** or the download-limit **clear-on-exit**.
+
+---
+
+## Then start the studio
 
 ```bash
 ssh ez-spark
 ./scripts/manage.sh start    # type yes
 ```
 
-From the laptop, keep a tunnel open:
+From a laptop, keep a tunnel open in its own terminal:
 
 <EzCommand id="spark-ui" />
 
-Open `http://127.0.0.1:${COMFY_PORT}`. Queue `_lab/stills/still-draft`. Stop before reboot: [Daily loop](../operate/daily.md).
+Open `http://127.0.0.1:${COMFY_PORT}`. Queue **`_lab/stills/still-draft`** and check the PNG lands under `${COMFY_OUTPUT_DIR}`: step 7 of [Getting Started](../getting-started.md). Stop before any reboot: [Daily loop](../operate/daily.md) - [Reboot safety](../reboot-safety.md).
 
-Safety impact: **none**. Onboard never sets Compose `restart` and never types `yes` for you.
+**Fail:** `doctor` did not print `Doctor OK` -> [Host and Docker](../operate/troubleshooting-host-docker.md). Weights are missing -> [Downloads and bandwidth](../operate/troubleshooting-downloads.md).
+
+---
+
+## Related
+
+- [Getting Started](../getting-started.md) - the same install as eight verified steps
+- [Set up this computer](this-computer.md) - laptop SSH, port-forward, and client packages only
+- [Model licenses](../licenses.md) - what to decide before `download-models`
+- [FAQ](faq.md) - short answers after the first run
+- [This stack or nvidia-dgx-spark-lab](when-to-use-vs-spark-lab.md) - whether this is the right repo
