@@ -1,17 +1,10 @@
 ---
-title: Reporting issues and requesting features
-description: The Feedback sidebar panel, every Report a bug and Request a feature button in the studio, what each one prepopulates, and how EZ_GITHUB_TOKEN turns a prefilled tab into a filed issue.
+title: Reporting issues
+description: The studio's Report a bug and Request a feature buttons, what each one prepopulates, and the optional token.
 tags: [feedback, github, troubleshooting, studio-ui, safety]
 ---
 
-# Reporting issues and requesting features
-
-The studio files its own bug reports. Every surface that can fail has a button that
-already knows what it was doing when it failed, so a report reaches
-[toxicoder/ez-comfy-stack](https://github.com/toxicoder/ez-comfy-stack) with the app id,
-the lane, the model family, the selected media, and the last errors already written. You
-type what happened and press Submit. The **Feedback** panel in the left dock is the guided
-way in, when you have a report to write rather than a failure to hand over.
+# Reporting issues
 
 **What's on this page**
 
@@ -30,6 +23,13 @@ way in, when you have a report to write rather than a failure to hand over.
 - **Filing** a useful bug in seconds instead of writing the environment block by hand
 - **Reproducing** a failure for the maintainer without asking three follow-up questions
 - **Deciding** whether the stack may reach `api.github.com` at all
+
+The studio files its own bug reports. Every surface that can fail has a button that
+already knows what it was doing when it failed, so a report reaches
+[toxicoder/ez-comfy-stack](https://github.com/toxicoder/ez-comfy-stack) with the app id,
+the lane, the model family, the selected media, and the last errors already written. You
+type what happened and press Submit. The **Feedback** panel in the left dock is the guided
+way in, when you have a report to write rather than a failure to hand over.
 
 Shared code: `custom_nodes/ez_feedback/` - the Feedback panel, the report dialog, the error
 banner, and the prefill, listed with the other packs in
@@ -197,3 +197,11 @@ route reports only whether it is present.
   `[report trimmed to fit the GitHub URL limit]` means the tail was dropped from the URL;
   the dialog copies the full markdown to the clipboard at the same time, so paste it in the
   tab. **File directly** and **Copy markdown** never trim.
+
+## Next
+
+1. [Troubleshooting](../troubleshooting.md) - find the cause before you file
+2. [Troubleshooting - studio canvas](troubleshooting-canvas.md) - the load-abort modal and pack JS
+3. [Troubleshooting - models and workflows](troubleshooting-models-workflows.md) - a Check models failure
+4. [Daily loop](daily.md) - back to the loop you were reporting on
+5. [Custom nodes](../reference/custom-nodes.mdx) - where `custom_nodes/ez_feedback/` sits

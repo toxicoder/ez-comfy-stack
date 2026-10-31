@@ -18,25 +18,34 @@
 
 **Documentation:** [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (from `main`) - [development](https://toxicoder.github.io/ez-comfy-stack/development/) (from `development`) - Fumadocs (Next.js) with Orama search, glossary tooltips, Mermaid, and live editable command variables. Docs run through bazelisk too: `bazelisk run //docs:serve` locally, `bazelisk run //docs:docs` for the static export, `bazelisk test //docs:test_docs_site_render` for the content gate (`./docs/manage-docs.sh serve` is the no-Bazel path). Migration notes: [MIGRATION.md](MIGRATION.md).
 
-When to use this sample vs [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab): [docs/start/when-to-use-vs-spark-lab.md](docs/start/when-to-use-vs-spark-lab.md). Licenses: [docs/licenses.md](docs/licenses.md).
+## Start here
 
-## Documentation map
+Read the four pages below in order and you will have a running studio and your first still.
 
-```mermaid
-flowchart TB
-  Home["Home"] --> Learn["Learn"]
-  Home --> Start["Get started"]
-  Home --> Studio["Studio"]
-  Home --> Operate["Operate"]
-  Home --> Ref["Reference"]
-  Home --> Contribute["Contribute"]
-  Learn --> L1["syllabus - ComfyUI - pipeline - glossary"]
-  Start --> S1["Getting Started - licenses - FAQ"]
-  Studio --> C1["still -> motion -> AV - catalogs"]
-  Operate --> O1["daily loop - occupancy - troubleshooting"]
-  Ref --> R1["manage.sh - occupancy matrix - nodes"]
-  Contribute --> N1["conventions - docs-style - tests"]
-```
+1. [How the studio works](docs/learn/index.mdx) - what this is, the two roles on one machine, and the vocabulary the rest of the docs assume.
+2. [Getting Started](docs/getting-started.mdx) - install, doctor, download the default pack, start, and Queue a still.
+3. [Quick reference](docs/operate/quick-reference.md) - the commands you come back to every day.
+4. [Troubleshooting overview](docs/troubleshooting.mdx) - the symptom router, when something refuses.
+
+Two questions people ask first: which stack fits the job, and what may be run and published.
+The comparison with the full [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab)
+is on [This stack or nvidia-dgx-spark-lab](docs/start/when-to-use-vs-spark-lab.mdx); the licensing
+rules are on [Model licenses](docs/licenses.mdx).
+
+## What the docs cover
+
+The site has seven tabs. Inside a tab, the sidebar groups the pages in the order you need
+them, so the first page in a group is the one to read first.
+
+| Tab | Groups | Open it when |
+| --- | --- | --- |
+| Home | - | You want the map and the default stack at a glance |
+| Learn | The studio at a glance; Models, hardware, and safety; Look-dev and 3D concepts; Glossary | You want to know why the studio works this way before you fight it |
+| Get started | Install and start; Choose and decide | You are on a fresh Spark and need it up |
+| Studio | Start creating; Recipe racks; Graph catalogs; Films, podcasts, and music; 3D, Blender, and host tools | You have a job to make and need the right graph |
+| Operate | Everyday loop; GPU occupancy; Models and downloads; Disk, backup, and data; Safety, scale, and feedback; Troubleshooting | You run this machine day to day |
+| Reference | Commands and modes; Workflows and nodes; Config and boards | You need an exact flag, node, port, or schema |
+| Contribute | Before you start; Build, test, and environment; Docs and security | You are changing this repo |
 
 ## Quick start
 
@@ -84,99 +93,40 @@ at all, so a skipped linter after this point is a real defect:
 
 ```bash
 bash scripts/setup-host.sh            # or: bazelisk run //:setup-host
+bash scripts/setup-host.sh --check    # prove the toolchain is actually installed
 ```
 
-Everything at once - the green build bar:
+Everything at once is the green build bar:
 
 ```bash
 bazelisk run //:validate
 ```
 
-The fast lane CI runs (bats, pytest, typecheck, JS, inventory):
+Pick a lane from this table; each row runs the whole set for that job.
 
-```bash
-bazelisk test //:test-fast
-```
-
-Every gate in the repo, including the manual linters, the Playwright visual suite, and the
-Compose config check. Needs host linters, the pinned docs-site npm tree, and a Docker CLI:
-
-```bash
-bazelisk test //:test-all
-```
-
-Linters only, and the repair when one of them is missing:
-
-```bash
-bazelisk test //:lint --test_tag_filters=manual
-```
-
-```bash
-bash scripts/setup-host.sh --check
-```
-
-Format what the linters flagged:
-
-```bash
-bazelisk run //:fix
-```
-
-First-party Python coverage (100% fail-under) and types (Pyright + mypy):
-
-```bash
-bazelisk test //:coverage
-```
-
-```bash
-bazelisk test //tests:typecheck
-```
-
-The nothing-goes-unmapped guard (every tracked file is in a Bazel target), and the compose
-file the stack actually starts:
-
-```bash
-bazelisk test //:owned_files_check
-```
-
-```bash
-bazelisk test //docker:compose_config
-```
-
-Stack health, resolved against the real checkout:
-
-```bash
-bazelisk run //:manage -- doctor
-```
-
-Docs - generators plus static export, the generators on their own, and the local
-dev server:
-
-```bash
-bazelisk run //docs:docs
-```
-
-```bash
-bazelisk run //docs:generate
-```
-
-```bash
-bazelisk run //docs:serve
-```
-
-Derived frontend data - the Quality tier table comes from
-`custom_nodes/ez_quality/presets.py`, and `bazelisk test //:test-fast` fails if
-the generated JS drifts from it:
-
-```bash
-bazelisk run //tests:build_quality_js
-```
+| You want to | Command |
+| --- | --- |
+| Run the fast lane CI runs (bats, pytest, typecheck, JS, inventory) | `bazelisk test //:test-fast` |
+| Run every gate, including manual linters, the Playwright visual suite, and the Compose config check (needs host linters, the pinned docs-site npm tree, and a Docker CLI) | `bazelisk test //:test-all` |
+| Run the linters only | `bazelisk test //:lint --test_tag_filters=manual` |
+| Format what the linters flagged | `bazelisk run //:fix` |
+| Check first-party Python coverage (100% fail-under) | `bazelisk test //:coverage` |
+| Check types (Pyright + mypy) | `bazelisk test //tests:typecheck` |
+| Run the nothing-goes-unmapped guard (every tracked file is in a Bazel target) | `bazelisk test //:owned_files_check` |
+| Check the compose file the stack actually starts | `bazelisk test //docker:compose_config` |
+| Check stack health against the real checkout | `bazelisk run //:manage -- doctor` |
+| Build the docs: generators plus static export | `bazelisk run //docs:docs` |
+| Run the docs generators on their own | `bazelisk run //docs:generate` |
+| Serve the docs locally | `bazelisk run //docs:serve` |
+| Rebuild derived frontend data (the Quality tier table comes from `custom_nodes/ez_quality/presets.py`, and `bazelisk test //:test-fast` fails if the generated JS drifts) | `bazelisk run //tests:build_quality_js` |
 
 ## Safety
 
 - Compose `restart: "no"` - manual start only
 - Heavy confirmation + free RAM/disk headroom
 - Download throttle by default; wrap **clears on exit**
-- See [docs/reboot-safety.md](docs/reboot-safety.md)
+- One heavy GPU job at a time - park or stop before another desk takes the chip
+- See [Reboot safety](docs/reboot-safety.mdx) before you reboot a Spark you reach over SSH
 
 ## License
 

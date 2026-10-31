@@ -1,36 +1,46 @@
 ---
-title: Drive-through EDM
-description: One hundred one warped hybrid-trap EDM takes (180-480 s, multi-pass epic arcs, 165-176 BPM) on ACE-Step.
+title: Drive-through EDM lane
+description: "Browse the Drive-through catalog: one hundred one instrumental bass-set EDM takes across six albums, 180-480 s, 165-176 BPM."
 tags: [music, edm, ace-step, drive-through, us-safe]
 ---
 
-# Drive-through EDM
+# Drive-through EDM lane
 
 **What's on this page**
 
-- **Drive-through** live bass-set EDM (not rap over a club bed)
-- **All six albums** (Hour 1, Hour 2, Headliner, Afterparty, Secret Homage, My Coder)
+- **How a take is built** - 3-5 ACE-Step passes joined on the bar grid, then queued
+- **Not the other pack** - dance EDM, not rap over a club bed
+- **Six album catalogs** - Hour 1, Hour 2, Headliner, Afterparty, Secret Homage, My Coder
 - **Occupancy:** do not co-resident ACE-Step with Klein / Wan / LTX
 
 **What this enables**
 
 - **One hundred one original Drive-through EDM takes** (180-480 s, all instrumental, multi-pass epic arcs) without cloud music APIs
+- **Programming a live set from a table** - catalog order is the recommended queue, and every graph still Queues alone
 
-**Who this is for:** studio users after a RAP-FIRST draft. Overview: [Local music](../music.md). RAP-FIRST: [Nill Bye albums](music-rap.md). Disclosure: [Music disclosure](music-disclosure.md).
+**Who this is for:** studio users after a RAP-FIRST draft. This is rung two of the music ladder: pick a lane on [Local music](../music.md), browse the sibling catalog at [RAP-FIRST rap lane](music-rap.mdx), then clear [Music disclosure and QC](music-disclosure.md) before you release anything.
 
-Do **not** load Klein + Wan + LTX + ACE-Step in one session. Cover art is a later Klein session. Files land under `${COMFY_OUTPUT_DIR}`.
+**Question this page answers:** which Drive-through take do I Queue? These tables are a **catalog to browse**, not steps to follow in order. Pick an album, pick a row, and Queue that one graph on its own.
 
-## Drive-through EDM examples
+<Callout type="error" title="Occupancy">
+  Do **not** load Klein + Wan + LTX + ACE-Step in one session. The Spark runs **one heavy GPU job** at a time - park or stop the other one first ([Occupancy rule](../studio-sidecars.md#occupancy-rule)). Cover art is a later Klein session. Files land under `${COMFY_OUTPUT_DIR}`.
+</Callout>
+
+## How a take is built
 
 One hundred one extra full-track graphs under **`_lab/audio/albums/drive-through/<album>/`**. Same AIO, sampler, occupancy **audio**. Each take runs **180-480 s** (mean ~285 s) as **3-5 sequential ACE-Step passes** joined in-graph on the bar grid by **Beat-join passes**: every pass renders 24-32 two-bar cells (63-93 s), and the joiner overlaps whole bars at each seam so the sub hand-off never stacks or nulls. App **Duration (seconds)** sets the first pass; each later pass carries its own clock node, and the join node carries **bpm**, **overlap_bars**, and **crossover_hz**. The arranger does not stretch bars to hit a clock time: a longer take gains whole movements and passes, a shorter one loses them. The structure is dealt from eight archetypes - `slow-burn-arc`, `twin-peak`, `cold-open`, `drop-ladder`, `breakbeat-interlude`, `long-arc`, `night-run`, `finale-climax` - as an ordered run of burn / cycle / break / climax movements, and the build-up and drop repeat once per movement with a rising tier each time: tier 1 is the plain hit, tier 4 is the laser-electric, octave-stacked mountain with a counter-line answering the lead. Every take lands at least eight drops and every pass closes on one, so the peak-and-release cycle repeats three to five times with fresh beds, leads, and drop charge each pass. Stanzas change role, bed, lead, drums, and 3D placement every 2 bars (under 3 seconds at 165-176) so one loop does not sit; sparse downbeat stanzas (downbeat kick, downbeat sub pulse) trade full-time drive for pocket. A five-second gap is not in the score. About one take in five has a single 2-bar breakdown, inside a break movement only, and that cell keeps the bass and the hats. Tempos snap to **165, 168, 170, 172, 174, or 176**. Keys walk fifths so the set still mixes. Meter stays 4/4. Queue a numbered track **on its own**, or `album-render --album drive-through/<album-slug> [--quality TIER]` (or `EZ_QUALITY=TIER`); with neither, each take posts at the tier the graph records. SaveAudio stem is **`NN - Song Title`**. The graph note names the archetype, movements, passes, and key.
 
 Fictional act only: **Drive-through** (hardcore, pure of heart) playing a **live bass DJ set**. Original **warped hybrid-trap EDM** spliced from [Audio Rack](audio-rack.md) catalogs (hybrid trap, riddim, tearout, brostep, wave bass, color bass, drumstep, dirty dubstep, neuro bass, chest/dirty bass, festival trap - not techno, not big room, not progressive house). Named recipes (`rec_drive_through_drop`, `rec_drive_riddim`, ...) fill empty axes; each take overrides tempo, bass, and form. No living-DJ names. No famous-hook paraphrases. All one hundred one takes lock `instrumental, no vocals` via `mix_drive_lock` (App **Vocal / instrumental** = instrumental; encoder language `unknown`). The lock is bass boosted next to the heavy chest bass. It does not ask for a rave tag, a noise riser, formant, or one-shot hits. Those words render as static and screech. The old constant chest-sub bed (the "kazoo") is rotated out: each cell picks one of seven electric beds (FM warp sub, wavy phase sub, neuro wobble sub, bitcrushed 808, phase-distorted sub, octave sub pulse, chest-sub) and layers in a rotating warped or wavy lead, a sub, a low-mid answer line, drums, and a 3D low-mid move as the take deepens. In-score tempo pushes (tempo push, accelerating hats, double-time feel on drops) keep the pulse moving under the fixed BPM. Each rendered score is fitted to ACE-Step's 2048-token lyric window and covers the full take: the plan duration re-syncs to the score, so the latent has no unguided tail to loop. Arrangement scores are empty-body ACE markers (`[build-up - ...]`, `[drop - warped bass, rapid hi-hats]`, `[inst - ...]`, `[breakdown - ...]`, `[outro]`) so ACE does not sing production notes. No brass, horns, trumpets, or high leads. Not a Nill Bye verse/chorus loop. Cover **LoadImage** stays unwired; App **Album art** defaults to skip. Some takes add dual-action pedal bass under rolling hats. Phase2, phase3, phase4, and phase5 graphs keep that ACE topology but vary Comfy node placement across five layouts (`column`, `wide-stage`, `stacked-tower`, `prompt-left`, `output-rail`). ACE-Step timbre is invented. Human selection and edit required before any release. A take renders its 3-5 passes one after another (63-93 s of latent each), so a full Queue runs a few minutes at the long end.
 
-This is **not** the Nill Bye trap/EDM pack. Those graphs are rap **over** club beds with a dry booth. Drive-through is dance EDM (mostly instrumental).
+This is **not** the Nill Bye trap/EDM pack. Those graphs are rap **over** club beds with a dry booth - that is [RAP-FIRST rap lane](music-rap.mdx). Drive-through is dance EDM (mostly instrumental).
+
+---
+
+## Drive-through album catalog
 
 Catalog order is the recommended live-set queue (each graph still Queues alone).
 
-#### Hour 1 (`audio/albums/drive-through/hour-1/`)
+### Hour 1 (`audio/albums/drive-through/hour-1/`)
 
 Hour 1 of the live bass set. Full album: `./scripts/manage.sh album-render --album drive-through/hour-1`.
 
@@ -52,7 +62,7 @@ Hour 1 of the live bass set. Full album: `./scripts/manage.sh album-render --alb
 | **14-heart-lane** | wave bass **168**, seed **223** | `14 - Heart Lane` | Wave bass warp |
 | **15-dawn-receipt** | chest bass **165**, seed **229** | `15 - Dawn Receipt` | Chest bass warp |
 
-#### Hour 2 (`audio/albums/drive-through/hour-2/`)
+### Hour 2 (`audio/albums/drive-through/hour-2/`)
 
 Hour 2 of the live bass set. Full album: `./scripts/manage.sh album-render --album drive-through/hour-2`.
 
@@ -74,7 +84,7 @@ Hour 2 of the live bass set. Full album: `./scripts/manage.sh album-render --alb
 | **14-chest-pass** | dirty bass **168**, seed **353** | `14 - Chest Pass` | Dirty bass warp |
 | **15-sunrise-sub** | wave bass **165**, seed **359** | `15 - Sunrise Sub` | Wave bass warp |
 
-#### Headliner (`audio/albums/drive-through/headliner/`)
+### Headliner (`audio/albums/drive-through/headliner/`)
 
 Hour 3 headliner. Node placement varies across five layouts. Full album: `./scripts/manage.sh album-render --album drive-through/headliner`.
 
@@ -96,7 +106,7 @@ Hour 3 headliner. Node placement varies across five layouts. Full album: `./scri
 | **14-root-chest** | chest bass **168**, seed **443** | `14 - Root Chest` | Chest bass warp |
 | **15-ember-crest** | warped hybrid-trap **172**, seed **449** | `15 - Ember Crest` | Hybrid trap warp |
 
-#### Afterparty (`audio/albums/drive-through/afterparty/`)
+### Afterparty (`audio/albums/drive-through/afterparty/`)
 
 Hour 4 afterparty. Node placement varies across five layouts. Full album: `./scripts/manage.sh album-render --album drive-through/afterparty`.
 
@@ -123,7 +133,7 @@ Hour 4 afterparty. Node placement varies across five layouts. Full album: `./scr
 | **19-clutch-slam** | tearout **174**, seed **577** | `19 - Clutch Slam` | Tearout warp |
 | **20-trailer-hitch** | warped hybrid-trap **172**, seed **587** | `20 - Trailer Hitch` | Hybrid trap warp |
 
-#### Secret Homage (`audio/albums/drive-through/secret-homage/`)
+### Secret Homage (`audio/albums/drive-through/secret-homage/`)
 
 Secret Homage. Node placement varies across five layouts. Full album: `./scripts/manage.sh album-render --album drive-through/secret-homage`.
 
@@ -150,7 +160,7 @@ Secret Homage. Node placement varies across five layouts. Full album: `./scripts
 | **19-cold-cache** | warped hybrid-trap **165**, seed **701** | `19 - Cold Cache` | Hybrid trap warp |
 | **20-secret-homage** | dirty dubstep **165**, seed **709** | `20 - Secret Homage` | Dirty dubstep warp |
 
-#### My Coder (`audio/albums/drive-through/my-coder/`)
+### My Coder (`audio/albums/drive-through/my-coder/`)
 
 The coder that writes Drive-through, read as music. Sixteen instrumental takes walk `drive_arrange.py` then `edm_examples.py` in source order. Each take's cues are palette phrases chosen by that slice of the source. Regenerate this album when either file changes. Node placement varies across five layouts. Full album: `./scripts/manage.sh album-render --album drive-through/my-coder`.
 
@@ -173,4 +183,13 @@ The coder that writes Drive-through, read as music. Sixteen instrumental takes w
 | **15-score-format** | drumstep **174**, seed **821** | `15 - Score Format` | Drumstep warp |
 | **16-finalize-album** | warped hybrid-trap **168**, seed **823** | `16 - Finalize Album` | Hybrid trap warp |
 
-Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
+Cover still in a later Klein session: do not co-resident Klein with ACE-Step ([Occupancy rule](../studio-sidecars.md#occupancy-rule)).
+
+---
+
+## Related
+
+- [Local music](../music.md) - lane chooser, download, and Sequential Queue
+- [RAP-FIRST rap lane](music-rap.mdx) - the other catalog: Nill Bye rap albums
+- [Music disclosure and QC](music-disclosure.md) - the pre-release checklist
+- [Audio Rack](audio-rack.md) - the tag and lyric catalogs these scores are spliced from

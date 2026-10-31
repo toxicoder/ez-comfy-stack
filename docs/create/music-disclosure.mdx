@@ -1,50 +1,35 @@
 ---
-title: Music disclosure
-description: DistroKid, Spotify, YouTube, and USCO disclosure for ACE-Step rap and EDM, plus tags vs lyrics, Hard no, and QC. Not legal advice.
+title: Music disclosure and QC
+description: "Pre-release checklist for ACE-Step rap and EDM: platform disclosure, original-lyrics rules, banned vendors, and the human edit gate."
 tags: [music, disclosure, distrokid, spotify, youtube, usco, us-safe]
 ---
 
-# Music disclosure
+# Music disclosure and QC
 
 **What's on this page**
 
-- **Tags vs lyrics** (vocal hints are not a rights grant)
-- **DistroKid / Spotify / YouTube / USCO Part 2** disclosure
-- **Hard no** vendors and prompts
-- **QC** before any release
+- **Pre-release QC** - the checklist every take passes before anyone calls it a release
+- **Platform disclosure** - DistroKid, Spotify, YouTube, and USCO Part 2
+- **Tags vs lyrics** - vocal hints are not a rights grant
+- **Hard no** - vendors and prompts this lab never defaults to
 
 **What this enables**
 
-- **Keeping RAP-FIRST and Drive-through takes** original, disclosed, and off banned vendors
+- **Releasing** only takes a human rewrote, selected, and disclosed
+- **Keeping RAP-FIRST and Drive-through takes** original and off banned vendors
 - **A human rewrite plus selection** before anyone treats a Queue as a release
 
-**Who this is for:** studio users who already Queued **audio/music/rap-draft**. Overview: [Local music](../music.md). RAP-FIRST: [Nill Bye albums](music-rap.md). EDM: [Drive-through EDM](music-edm.md).
+**Who this is for:** studio users who already Queued **audio/music/rap-draft**. This page is the last rung of the music ladder: pick a lane on [Local music](../music.md), browse the deep catalogs at [RAP-FIRST rap lane](music-rap.mdx) and [Drive-through EDM lane](music-edm.mdx), then run the checklist here.
 
 <Callout type="warning" title="Not legal advice">
   Platform rules and copyright change. Read the current DistroKid, Spotify, YouTube, FTC, and USCO pages before you monetize.
 </Callout>
----
-
-## Tags vs lyrics
-
-- **Tags** describe genre, drums, bass, booth, vocal character, and bpm.
-- **Lyrics** are the bars (rap) or the arrangement **structure** (Drive-through EDM). Section labels `[intro]`, `[verse]`, `[pre-chorus]`, `[chorus]`, `[bridge]`, `[breakdown]`, `[inst]`, `[outro]`, and `[spoken word]` are vocal **hints** operators may add - they are not a rights grant. EDM graphs use empty-body `[drop]` / `[build-up]` / `[breakdown]` / `[inst]` / `[outro]` with production cues **inside the brackets**. ACE-Step sings any free-text line under a marker. All one hundred one Drive-through takes stay instrumental (encoder language `unknown`); the scores carry no `[chorus]` or `[verse]` markers. Do not put the act name in the score - ACE will sing it. Length, meter, and key are encoder fields (one each per take), not a second timeline.
-- **Original lyrics only.** Do not write "in the style of \<living artist\>". No living-MC names. No famous-hook paraphrases.
-- **Short percussive lines** (about 6-10 syllables) slur less. Keep `language=en` on `TextEncodeAceStepAudio1.5` (combo, not free text). The seeded graph stores seed control as **fixed** after the seed; re-open **audio/music/rap-draft** after a pull so those combos stay aligned.
-
-ACE-Step generates the vocal from lyrics + tags. That timbre is an **invented identity**, not a cloned MC. Do not add Kokoro / Chatterbox / TTS-Audio-Suite to these graphs.
 
 ---
 
-## DistroKid, Spotify, YouTube, authorship
+## Pre-release QC
 
-- **DistroKid / Spotify:** you must own the rights. Disclose AI lyrics + vocals + instrumental. If the artist identity is fake, Spotify may treat it as an "AI Persona" - prefer a **human artist name** with disclosed AI production.
-- **YouTube:** use the synthetic-audio / altered-content flag. Mass-upload of near-duplicates is inauthentic content.
-- **USCO Part 2 / Thaler:** edit the lyrics. Prompts are not authorship. A human rewrite plus selection and arrangement can be; raw generations are not registrable.
-
----
-
-## QC
+**Question this section answers:** is this take ready to release?
 
 Do this **before any release**. These graphs are lab takes, not masters.
 
@@ -52,8 +37,31 @@ Do this **before any release**. These graphs are lab takes, not masters.
 - **Human selection and edit** on Drive-through EDM. Arrangement scores are empty-body structure tags. Arcs include intros, builds, and breakdowns, not only back-to-back drops.
 - **Punch up** on diss phases; **build up** on progress phases. Do not roast disability, race, faith, children, or people at the river.
 - **No living-MC names** and no famous-hook paraphrases. Each Nill Bye take owns exclusive verses and punchlines - content bars are not reused across the one hundred thirty-five graphs; choruses stay unique hooks.
-- **ACE-Step vocal** is an invented identity, not a clone. Do not add Kokoro / Chatterbox / TTS-Audio-Suite to these graphs.
-- **Cover still** in a later Klein session. Do not co-resident with LTX / Wan / Klein.
+- **ACE-Step vocal** is an invented identity, not a clone. Do not add Kokoro / Chatterbox / TTS-Audio-Suite to these graphs (why: [Tags vs lyrics](#tags-vs-lyrics)).
+- **Cover still** in a later Klein session. Do not co-resident with LTX / Wan / Klein - the rule is one heavy GPU job at a time, parked or stopped: [Host sidecars overview](../studio-sidecars.md#occupancy-rule).
+
+---
+
+## Platform disclosure
+
+**Question this section answers:** what do I tell each platform?
+
+- **DistroKid / Spotify:** you must own the rights. Disclose AI lyrics + vocals + instrumental. If the artist identity is fake, Spotify may treat it as an "AI Persona" - prefer a **human artist name** with disclosed AI production.
+- **YouTube:** use the synthetic-audio / altered-content flag. Mass-upload of near-duplicates is inauthentic content.
+- **USCO Part 2 / Thaler:** edit the lyrics. Prompts are not authorship. A human rewrite plus selection and arrangement can be; raw generations are not registrable.
+
+---
+
+## Tags vs lyrics
+
+**Question this section answers:** what may a tag or a lyric line actually claim?
+
+- **Tags** describe genre, drums, bass, booth, vocal character, and bpm.
+- **Lyrics** are the bars (rap) or the arrangement **structure** (Drive-through EDM). Section labels `[intro]`, `[verse]`, `[pre-chorus]`, `[chorus]`, `[bridge]`, `[breakdown]`, `[inst]`, `[outro]`, and `[spoken word]` are vocal **hints** operators may add - they are not a rights grant. EDM graphs use empty-body `[drop]` / `[build-up]` / `[breakdown]` / `[inst]` / `[outro]` with production cues **inside the brackets**. ACE-Step sings any free-text line under a marker. All one hundred one Drive-through takes stay instrumental (encoder language `unknown`); the scores carry no `[chorus]` or `[verse]` markers. Do not put the act name in the score - ACE will sing it. Length, meter, and key are encoder fields (one each per take), not a second timeline.
+- **Original lyrics only.** Do not write "in the style of \<living artist\>". No living-MC names. No famous-hook paraphrases.
+- **Short percussive lines** (about 6-10 syllables) slur less. Keep `language=en` on `TextEncodeAceStepAudio1.5` (combo, not free text). The seeded graph stores seed control as **fixed** after the seed; re-open **audio/music/rap-draft** after a pull so those combos stay aligned.
+
+ACE-Step generates the vocal from lyrics + tags. That timbre is an **invented identity**, not a cloned MC.
 
 ---
 
@@ -67,3 +75,12 @@ Do not vendor or default:
 - Required `XAI_API_KEY`
 
 Native ACE-Step 1.5 already ships in `COMFYUI_REF=v0.43.0`.
+
+---
+
+## Related
+
+- [Local music](../music.md) - pick a lane and download the pack
+- [RAP-FIRST rap lane](music-rap.mdx) - draft, full track, and the nine Nill Bye albums
+- [Drive-through EDM lane](music-edm.mdx) - the six bass-set albums
+- [Local podcast](../podcast.md) - the other audio lane: Kokoro voices, instrumental beds

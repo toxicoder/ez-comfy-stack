@@ -1,6 +1,6 @@
 ---
 title: Local music
-description: US-safe RAP-FIRST ACE-Step draft and full-track lane, plus Drive-through EDM, on one DGX Spark.
+description: "Pick the ACE-Step music lane on one DGX Spark: a rap draft, Nill Bye albums, Drive-through EDM sets, or the release checklist."
 tags: [music, rap, edm, ace-step, us-safe, disclosure]
 ---
 
@@ -8,11 +8,12 @@ tags: [music, rap, edm, ace-step, us-safe, disclosure]
 
 **What's on this page**
 
+- **Which lane to pick** - a rap draft, an album body, an EDM set, or the release gate
 - **Occupancy warning:** do not load ACE-Step with Klein / Wan / LTX
 - **First Queue** is **audio/music/rap-draft**, then the full track or an album take
 - **`download-music --tier turbo`** (same ACE-Step AIO as podcast acestep)
 - **Sequential Queue** and album art in a later Klein session
-- **Child pages** for RAP-FIRST albums, Drive-through EDM, and disclosure
+- **Child pages** for the RAP-FIRST albums, the Drive-through EDM albums, and the pre-release checklist
 - **Audio Rack** (`inspire/audio-rack`) splices professional tags/lyrics on occupancy **llm** - copy into rap-draft; do not load ACE-Step on the rack canvas
 
 **What this enables**
@@ -24,16 +25,29 @@ tags: [music, rap, edm, ace-step, us-safe, disclosure]
 - **Keeping** the visual studio bootable when the music pack is missing
 - **Muxing** a cover still + FLAC into a YouTube MP4 without changing the rap graphs
 
-**Who this is for:** studio users after `download-music --tier turbo`. Do not co-resident with LTX / Wan / Klein.
+**Who this is for:** studio users after `download-music --tier turbo`.
+
+**Question this page answers:** which music lane do I want, and what do I Queue first? Pick one lane in [Which lane to pick](#which-lane-to-pick), then open that page. The two lane pages are sample catalogs you browse; the disclosure page is the gate before you release anything.
 
 <Callout type="warning" title="Not legal advice">
-  Platform rules and copyright change. Read the current DistroKid, Spotify, YouTube, FTC, and USCO pages before you monetize. Tags vs lyrics, Hard no, QC, and platform disclosure: [Music disclosure](create/music-disclosure.md).
+  Platform rules and copyright change. Read the current DistroKid, Spotify, YouTube, FTC, and USCO pages before you monetize. Tags vs lyrics, Hard no, QC, and platform disclosure: [Music disclosure and QC](create/music-disclosure.md).
 </Callout>
 
 <Callout type="error" title="Occupancy">
-  Do **not** load Klein + Wan + LTX + ACE-Step in one session. Cover art is a **later** Klein session. Spark: the AIO is ~10 GB VRAM-adjacent work - do **not** co-resident with LTX / Wan / Klein. Start still requires typing `yes`. Compose `restart: "no"` is unchanged.
+  Do **not** load Klein + Wan + LTX + ACE-Step in one session. The Spark runs **one heavy GPU job** at a time - park or stop the other one first ([Occupancy rule](studio-sidecars.md#occupancy-rule)). The AIO is ~10 GB VRAM-adjacent work, so do **not** co-resident it with LTX / Wan / Klein. Cover art is a **later** Klein session. Start still requires typing `yes`. Compose `restart: "no"` is unchanged.
 </Callout>
 ---
+
+## Which lane to pick
+
+| Lane | Pick it when | What you get | Deep page |
+| --- | --- | --- | --- |
+| **RAP-FIRST** draft + full track | You want one original rap take to iterate on | Cold-open `ez_rap_draft` FLAC + MP3, then a pre-chorus full track | [RAP-FIRST rap lane](create/music-rap.mdx#graphs) |
+| **Nill Bye albums** | You want a body of original songs to select from | Nine albums, one hundred thirty-five takes, 64-210 s, varied form | [RAP-FIRST rap lane](create/music-rap.mdx) |
+| **Drive-through EDM** | You want long instrumental bass-set arcs, not rap over a club bed | Six albums, one hundred one takes, 180-480 s, 165-176 BPM; each take is 3-5 ACE-Step passes joined on the bar grid by **Beat-join passes**, so the build-up and drop repeat three to five times with fresh beds, leads, and drop tiers each time | [Drive-through EDM lane](create/music-edm.mdx) |
+| **Release gate** | A take is picked and you are about to publish it | DistroKid / Spotify / YouTube / USCO disclosure, tags vs lyrics, Hard no, QC | [Music disclosure and QC](create/music-disclosure.md) |
+
+The three pages are one ladder: **pick a lane here -> browse the takes there -> clear the checklist before release**.
 
 ```mermaid
 sequenceDiagram
@@ -49,39 +63,13 @@ sequenceDiagram
   U->>C: Queue the pre-chorus full take when the draft is good
 ```
 
-Cover art is a **later** Klein session. Occupancy: do not load LTX + ACE-Step together.
-
-<Cards>
-  <Card title="RAP-FIRST">
-    ---
-
-    Cold-open draft, pre-chorus full take, then nine Nill Bye albums (135 takes, 64-210 s, varied form).
-
-    [Nill Bye albums](create/music-rap.md)
-  </Card>
-  <Card title="Drive-through EDM">
-    ---
-
-    Six bass-set albums (101 takes, 180-480 s). Each take is 3-5 ACE-Step passes joined on the bar grid by **Beat-join passes**, so the build-up and drop repeat three to five times with fresh beds, leads, and drop tiers each time. Tempos 165-176. Not rap over a club bed.
-
-    [Drive-through EDM](create/music-edm.md)
-  </Card>
-  <Card title="Disclosure">
-    ---
-
-    DistroKid / Spotify / YouTube / USCO, tags vs lyrics, Hard no, QC. Not legal advice.
-
-    [Music disclosure](create/music-disclosure.md)
-  </Card>
-</Cards>
-
-Catalog filenames: [Audio catalog](create/workflows-audio.md).
+Catalog filenames: [Audio graphs](create/workflows-audio.md).
 
 ---
 
 ## First Queue
 
-Graph: **audio/music/rap-draft** (`extra.lab_profile` `us-safe-music`). Same role as **klein-still-draft**. App **Duration (seconds)** defaults to **32**. Prefix `ez_rap_draft`. Full stage table: [RAP-FIRST](create/music-rap.md#draft-first-queue).
+Graph: **audio/music/rap-draft** (`extra.lab_profile` `us-safe-music`). Same role as **klein-still-draft**. App **Duration (seconds)** defaults to **32**. Prefix `ez_rap_draft`. Full stage table: [RAP-FIRST](create/music-rap.mdx#graphs).
 
 Then load **audio/music/rap-full** (pre-chorus form), **or** a numbered take under `_lab/audio/albums/nill-bye/<album>/`, **or** `_lab/audio/albums/drive-through/<album>/`.
 
@@ -127,6 +115,13 @@ Relative symlinks only (host `/mnt/models` vs container `/models`).
 # Square covers letterbox onto 1920x1080. Shorts: --size 1080x1920
 ```
 
-Spark: the AIO is ~10 GB VRAM-adjacent work. Do **not** co-resident with LTX / Wan / Klein.
+Queue with the same rails as every other lane: type **yes** at start, Compose `restart: "no"` unchanged, and one heavy GPU job at a time ([Occupancy rule](studio-sidecars.md#occupancy-rule)).
 
-Start still requires typing `yes`. Compose `restart: "no"` is unchanged.
+---
+
+## Related
+
+- [RAP-FIRST rap lane](create/music-rap.mdx) - draft, full track, and the nine Nill Bye albums
+- [Drive-through EDM lane](create/music-edm.mdx) - the six Drive-through bass-set albums
+- [Music disclosure and QC](create/music-disclosure.md) - what to disclose and edit before release
+- [Local podcast](podcast.md) - Kokoro voices and instrumental beds, the other audio lane

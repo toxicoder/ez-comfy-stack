@@ -1,6 +1,6 @@
 ---
 title: Local podcast
-description: US-safe two-host, radio-drama, and learning-episode lanes on one DGX Spark (Kokoro + native ACE-Step).
+description: "Queue a US-safe two-host, radio-drama, or learning-episode podcast on one DGX Spark with Kokoro voices and native ACE-Step beds."
 tags: [podcast, kokoro, ace-step, tts, disclosure, us-safe]
 ---
 
@@ -8,31 +8,33 @@ tags: [podcast, kokoro, ace-step, tts, disclosure, us-safe]
 
 **What's on this page**
 
-- Option A (two-host-episode) vs Option B (radio drama) vs Option C (learning episode)
-- App Mode: script or sources + format/duration, bed/sting tags, Kokoro stock voices (refs stay graph-only)
-- Why TTS-Audio-Suite and OldTimeRadio are not vendored
-- Kokoro default on Spark; Chatterbox / Qwen3-TTS optional (`qwen3tts` is a complete snapshot, not weights-only)
-- Native ACE-Step instrumental beds
-- Voice consent, platform rules, and authorship
-- `download-podcast` usage, sequential Queue, and loudnorm
-- Optional YouTube still-video: host `audio-still-video` after cover (not Apple Podcasts)
-- Clone-and-translate of a recorded show is a different lane: [Local dub](dub.md)
+- **Three operator paths** - Option A (two-host-episode), Option B (radio drama), Option C (learning episode)
+- **App Mode** - script or sources + format/duration, bed and sting tags, Kokoro stock voices (refs stay graph-only)
+- **Engines on Spark** - Kokoro default, Chatterbox / Qwen3-TTS optional, native ACE-Step instrumental beds
+- **Why those packs are not vendored** - no TTS-Audio-Suite, no OldTimeRadio
+- **Voice consent** - original characters, invented voices, operator-owned refs only
+- **Platform and US rules** - the operator checklist for Apple, YouTube, Spotify, FTC, USCO
+- **Download and sequential Queue** - `download-podcast` tiers, loudnorm, and the optional YouTube still video
 
 **What this enables**
 
-- Queue a local two-host or learning episode without cloud TTS or rented music
-- Keep the visual studio bootable when podcast extras are missing
-- Disclose synthetic voices in the mix, not only in a description box
-- Mux a cover still + episode FLAC into a YouTube MP4 without changing the episode graph
+- **Queue a local two-host or learning episode** without cloud TTS or rented music
+- **Keep the visual studio bootable** when podcast extras are missing
+- **Disclose synthetic voices in the mix**, not only in a description box
+- **Mux a cover still + episode FLAC** into a YouTube MP4 without changing the episode graph
+
+**Question this page answers:** how do I make a spoken episode from scratch, with invented hosts? For translating a recording of real speakers in their own voices, use [Local dub](dub.md) instead - it is a different App, a different disclosure, and a different rights gate.
 
 <Callout type="warning" title="Not legal advice">
   Platform rules and copyright change. Read the current Apple, YouTube, Spotify, FTC, and USCO pages before you monetize.
 </Callout>
+
+<Callout type="error" title="Occupancy">
+  Do **not** load Klein + Wan + LTX + ACE-Step + TTS in one session. The Spark runs **one heavy GPU job** at a time - park or stop the other one first ([Occupancy rule](studio-sidecars.md#occupancy-rule)). Cover art is a separate graph in a later Klein session. Start still requires typing `yes`. Compose `restart: "no"` is unchanged.
+</Callout>
 ---
 
 ## Three operator paths
-
-Do **not** load Klein + Wan + LTX + ACE-Step + TTS in one session. Cover art is a separate graph.
 
 ### Option A - two-host-episode commercial episode
 
@@ -118,6 +120,8 @@ Native ACE-Step 1.5 already ships in `COMFYUI_REF=v0.43.0` (`TextEncodeAceStepAu
 
 Empty Chatterbox/Qwen3 refs fall back to Kokoro built-ins. Never drop celebrity WAVs into the graph.
 
+Qwen3-TTS is an **honest opt-in**: its wheel and its weights are separate installs. The entrypoint does **not** pip-install `qwen-tts` on start, because the official wheel pins `transformers==4.57.3` and would fight Comfy 0.43.0 + torch 2.14+cu130. Run `download-podcast --tier qwen3tts` with compose **up** and it installs the extras (`einops`, `soundfile`) first, then `qwen-tts --no-deps`. Never run an unconstrained `pip install qwen-tts`. A weights-only snapshot (`model.safetensors` alone) is **incomplete** - Base needs `config.json`, the text tokenizer files, and the nested `speech_tokenizer/`. The dub lane offers this engine as an alternate clone voice: [Local dub - Engines](dub.md#engines).
+
 `kokoro-onnx` / `onnxruntime` are **optional runtime** installs inside the container venv. They are **not** baked in `phase-nodes.sh` (a new pip would invalidate **venv-extra**, not the multi-GB torch layer). Analog graphs still load if the wheel is missing; Queue fail-softs until you install it and `download-podcast --tier analog`.
 
 ---
@@ -186,8 +190,6 @@ sequenceDiagram
   M->>U: FLAC + MP3 under COMFY_OUTPUT_DIR
 ```
 
-Cover art is a **later** Klein session. Occupancy: do not load LTX + ACE-Step together.
-
 ## Sequential Queue
 
 1. `download-podcast --tier analog` (and `--tier acestep` for beds)
@@ -212,4 +214,11 @@ Cover art is a **later** Klein session. Occupancy: do not load LTX + ACE-Step to
 
 Apple Podcasts still wants the audio master. The MP4 is a YouTube convenience, not a talking-head.
 
-Start still requires typing `yes`. Compose `restart: "no"` is unchanged.
+---
+
+## Related
+
+- [Local dub](dub.md) - clone-and-translate a recording you have rights to
+- [Local music](music.md) - the ACE-Step music lanes, same AIO download
+- [Audio Rack](create/audio-rack.md) - professional tag and lyric catalogs to copy into bed tags
+- [ComfyUI Apps](studio-apps.md) - how App Mode widgets map to graph nodes

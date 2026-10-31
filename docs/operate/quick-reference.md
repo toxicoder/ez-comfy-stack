@@ -1,6 +1,6 @@
 ---
 title: Quick reference
-description: Copy-paste commands for update, start, stop, model downloads, and disk space.
+description: Copy-paste commands for update, start, stop, model downloads, and disk space on one DGX Spark.
 tags: [operate, quick-reference, doctor, start, stop, download, disk]
 ---
 
@@ -10,7 +10,9 @@ tags: [operate, quick-reference, doctor, start, stop, download, disk]
 
 - **Update** - stop, pull the branch these docs describe, start
 - **Run** - doctor, start, stop, status, logs, open the UI
-- **Models and disk** - default download, pack table, wizard, reap, cleanup
+- **Models** - default download and stuck partials
+- **Disk** - free space check, plan-only wizard, plan-only reap
+- **Occupancy** - read who holds the GPU
 
 **What this enables**
 
@@ -18,110 +20,108 @@ tags: [operate, quick-reference, doctor, start, stop, download, disk]
 - **Checking** disk before a pull, and freeing space without deleting the lab keep-set
 - **Jumping** to the page that explains the command when the one-liner is not enough
 
-Run these on the Spark, from the repo root. `start` still asks you to type **yes**. `restart: "no"`, headroom, and download-limit clear-on-exit are unchanged.
-
-Longer write-ups: [Update the stack](update.md), [Daily loop](daily.md), [Download tiers](../download-tiers.md), [Disk wizard](../disk-wizard.md).
+**Who this is for:** operators who have a working Spark and want the command, not the
+prose. Every block below runs on the Spark from the repo root. `start` still asks you to
+type **yes**. `restart: "no"`, headroom, and download-limit clear-on-exit are unchanged.
 
 ---
 
-## Update
+## Update the stack
 
-Stop first. Pull only `__DOCS_GIT_REF__` (the branch these docs were built from). Then start and type **yes**.
+Stop, pull only `__DOCS_GIT_REF__` (the branch these docs were built from), then start and
+type **yes**.
 
-```bash
-./scripts/manage.sh stop
-```
+1. `./scripts/manage.sh stop`
+2. `git fetch origin && git checkout __DOCS_GIT_REF__ && git pull --ff-only origin __DOCS_GIT_REF__`
+3. `./scripts/manage.sh start` - type **yes**
 
-```bash
-git fetch origin && git checkout __DOCS_GIT_REF__ && git pull --ff-only origin __DOCS_GIT_REF__
-```
+**Check it worked:** `git branch --show-current` prints `__DOCS_GIT_REF__` and
+`./scripts/manage.sh doctor` prints `Doctor OK`.
 
-```bash
-./scripts/manage.sh start
-```
-
-Details and what an update does not delete: [Update the stack](update.md).
+An update does not re-download weights. Details: [Update the stack](update.md).
 
 ---
 
 ## Run the studio
 
-```bash
-./scripts/manage.sh doctor
-```
+1. `./scripts/manage.sh doctor` - expect `Doctor OK`
+2. `./scripts/manage.sh start` - type **yes**. Headroom is a hard fail.
+3. `./scripts/manage.sh status` - the project is up
+4. `./scripts/manage.sh logs` - read the container log
+5. `./scripts/manage.sh stop` - container down, volumes kept
 
-```bash
-./scripts/manage.sh start
-```
-
-```bash
-./scripts/manage.sh stop
-```
-
-```bash
-./scripts/manage.sh status
-```
-
-```bash
-./scripts/manage.sh logs
-```
-
-On the Spark, open `http://${SPARK_HOST}:${COMFY_PORT}`. From a laptop:
+On the Spark, open `http://${SPARK_HOST}:${COMFY_PORT}`. From a laptop, forward the port
+first:
 
 ```bash
 ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
 ```
 
-Then open `http://127.0.0.1:${COMFY_PORT}`.
+**Check it worked:** `http://127.0.0.1:${COMFY_PORT}` loads the ComfyUI canvas on the
+laptop. The day as one loop: [Daily loop](daily.md).
 
 ---
 
-## Models
+## Download models
 
-Default Klein 4B + Wan 2.2 5B + LTX-2.5 + prompt GGUF. This does not pull podcast, dub, music, or 3D.
+Default Klein 4B + Wan 2.2 5B + LTX-2.5 + prompt-enhance GGUF. This does not pull podcast,
+dub, music, or 3D.
 
-```bash
-./scripts/manage.sh download-models
-```
+1. `df -h` - confirm free disk before a multi-GB pull
+2. `./scripts/manage.sh download-models` - throttled by `${DOWNLOAD_LIMIT}` (default `auto`)
+3. `./scripts/manage.sh models-status` - the lab basenames are on disk
 
-Every other pack, with rough size and the matching command, is one table: [Download tiers](../download-tiers.md).
-
-Stuck `*.incomplete` files (finished weights stay):
+Stuck `*.incomplete` partials only (finished weights stay):
 
 ```bash
 ./scripts/manage.sh reset-hf-partials
 ```
 
+**Check it worked:** `download-models` exits 0; it exits non-zero until every lab basename
+is present. Every pack, size, and command is one table:
+[Download tiers](../download-tiers.md). Basenames and resume:
+[Model packs by family](models-packs.md).
+
 ---
 
-## Disk
-
-```bash
-df -h
-```
+## Reclaim disk
 
 ```bash
 ./scripts/manage.sh disk-wizard --plan
-```
-
-```bash
 ./scripts/manage.sh reap-models --plan
 ```
 
-`disk-wizard --plan` and `reap-models --plan` only print a plan. Adding `--apply --yes` is what deletes or quarantines. [Disk wizard](../disk-wizard.md) says which tool touches which files.
+`--plan` only prints a plan. Adding `--apply --yes` is what deletes or quarantines.
+`disk-wizard` walks host leftovers; `reap-models` walks `${MODELS_DIR}` classes only.
+[Disk wizard](../disk-wizard.md) says which tool touches which files.
 
-`cleanup` removes the `ez-comfy-state` volume after you type `DELETE`. It does not delete `${MODELS_DIR}` or `${COMFY_OUTPUT_DIR}`.
+`cleanup` removes the `ez-comfy-state` volume after you type `DELETE`. It does not delete
+`${MODELS_DIR}` or `${COMFY_OUTPUT_DIR}`.
 
 ```bash
 ./scripts/manage.sh cleanup
 ```
 
+**Check it worked:** `df -h` shows the space back, and `./scripts/manage.sh models-status`
+still reports the lab weights present.
+
 ---
 
-## Occupancy
+## Read the GPU
 
 ```bash
 ./scripts/manage.sh occupancy status
 ```
 
-One heavy GPU job. The mode list is [Occupancy](../occupancy.md).
+**Check it worked:** the printout names the current mode. One heavy GPU job at a time.
+Modes, park, and stop: [Occupancy desk](../occupancy.md).
+
+---
+
+## Next
+
+1. [Daily loop](daily.md) - the same commands as a numbered working day
+2. [Update the stack](update.md) - what an update does and does not touch
+3. [Download tiers](../download-tiers.md) - every pack with size and command
+4. [Disk wizard](../disk-wizard.md) - plan-first reclaim for host leftovers
+5. [Troubleshooting](../troubleshooting.md) - when a command does not behave

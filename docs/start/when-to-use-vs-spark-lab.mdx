@@ -1,23 +1,26 @@
 ---
-title: When to use ez-comfy-stack vs spark-lab
-description: Compose demo on one Spark vs K3s lab - this repo must not grow K3s, a dashboard, or in-tree NCCL.
+title: This stack or nvidia-dgx-spark-lab
+description: Choose this Compose studio for one Spark, or the lab repo for K3s, dashboards, and tensor-parallel workloads.
 tags: [spark-lab, compose, k3s, nccl, farm]
 ---
 
-# When to use ez-comfy-stack vs spark-lab
+# This stack or nvidia-dgx-spark-lab
 
 **What's on this page**
 
-- **Compose demo vs K3s lab** - what each repo is for
-- **What this sample stack refuses** - K3s, a full dashboard, NCCL-as-a-feature, MiniMax H3
-- **Independent Sparks** may share `${MODELS_DIR}`; still **no NCCL**
-- **How to graduate** without rewriting this tree into the lab
+- **Compose demo vs K3s lab** - the side-by-side table
+- **Independent Sparks, still no NCCL** - one weight copy, no shared sampler
+- **Stay here when** - the four signs this is the right repo
+- **Graduate when** - the three signs you outgrew it
+- **Related** - the pages that carry each rule
 
 **What this enables**
 
-- **Picking** the repo that matches one-box stills / 5 s prints vs long-term multi-workload ops
-- **Avoiding** a "just add K3s" PR in ez-comfy-stack
+- **Picking** the repo that matches one-box stills and 5 s prints versus long-term multi-workload ops
+- **Avoiding** a "just add K3s" pull request in ez-comfy-stack
 - **Sharing** one weight copy across Sparks without pretending it is tensor-parallel
+
+**Who this is for:** anyone deciding between this repo and [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab), or reviewing a proposal to add clustering here. ez-comfy-stack is the **sample / demo** Compose studio on one DGX Spark. Read this before you ask either repo to grow.
 
 ```bash
 export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
@@ -28,7 +31,7 @@ export COMFY_PORT="${COMFY_PORT:-8188}"
 export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 ```
 
-ez-comfy-stack is the **sample / demo** Compose studio. [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab) is the long-term lab. Architecture of this repo: [Architecture](../learn/architecture.md).
+Architecture of this repo: [Architecture](../learn/architecture.md).
 
 ---
 
@@ -62,13 +65,14 @@ flowchart TB
 <Callout type="warning" title="This repo must not grow K3s">
   Do not pull K3s, a full dashboard, or in-tree NCCL into ez-comfy-stack. Bazelisk is the contributor test/lint/docs entry point only. Point long-term cluster users at nvidia-dgx-spark-lab. Independent Sparks may still **share `${MODELS_DIR}`**; that is NFS/rsync, **not** NCCL.
 </Callout>
+
 ---
 
 ## Independent Sparks, still no NCCL
 
 Three boxes can Queue **independent** 5 s Wan/LTX shots against the same `${MODELS_DIR}` (NFS over the 200 GbE fabric, or `spark-farm.sh sync-models` rsync). Each node types **yes** on its own `./scripts/manage.sh start`. `spark-farm.sh` **never** remote-starts Compose.
 
-That is **throughput + one weight copy**, not slicing one sampler across three GB10s. MiniMax H3 is banned ([licenses](../licenses.md)). Runbook: [Spark farm](../spark-farm.md). Occupancy stays per node: [Occupancy](../occupancy.md).
+That is **throughput + one weight copy**, not slicing one sampler across three GB10s. MiniMax H3 is banned ([licenses](../licenses.md)). Runbook: [Spark farm](../spark-farm.md). Occupancy stays per node: [Occupancy desk](../occupancy.md).
 
 ---
 
@@ -86,3 +90,15 @@ That is **throughput + one weight copy**, not slicing one sampler across three G
 - You have outgrown a Compose demo
 
 Safety on this path does not change: `restart: "no"`, type **yes** on `start`, headroom preflight, download-limit clear-on-exit.
+
+---
+
+## Related
+
+| Need | Page |
+| --- | --- |
+| Short answers on the same boundaries | [FAQ](faq.md) |
+| How this repo is put together | [Architecture](../learn/architecture.md) |
+| Independent Sparks sharing one weight copy | [Spark farm](../spark-farm.md) |
+| The one heavy job rule per node | [Occupancy desk](../occupancy.md) |
+| First install on one Spark | [Getting Started](../getting-started.md) |

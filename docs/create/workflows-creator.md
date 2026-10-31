@@ -1,30 +1,49 @@
 ---
-title: Creator pack (platform Apps)
-description: One hundred extra Klein, Wan, and LTX Apps for YouTube, Instagram, TikTok, X, LinkedIn, Pinterest, Twitch, Spotify, merch, and production plates.
+title: Creator pack
+description: Reference table of the one hundred platform Apps for YouTube, Instagram, TikTok, X, LinkedIn, Pinterest, Twitch, Spotify, and merch.
 tags: [comfyui, workflows, creator, klein, wan, ltx, catalog]
 ---
 
-# Creator pack (platform Apps)
+# Creator pack
+
+Pick a platform job. This catalog covers named creator deliverables: channel
+art, feed plates, Shorts thumbs, Canvas loops, BRB screens, merch mocks, and
+the silent or AV loops that sit under them - one hundred Apps nested under
+`_lab/creator/<kind>/`. Generic stills are on
+[Stills graphs](workflows-stills.md) and client SKUs are on
+[Services pack](workflows-services.md).
 
 **What's on this page**
 
-- **One hundred extra Apps** nested under `_lab/creator/<kind>/`
-- **Platform stills** (YouTube, Instagram, TikTok, X, LinkedIn, Pinterest, Twitch, Spotify)
-- **Silent Wan loops / I2V** and **LTX AV** job plates
-- **Lab sizes vs upload pixels** - Size column is the **default**. **Format / platform** retargets the same App (YouTube, Shorts, ...). Match aspect; scale in an editor if a platform wants more pixels
+- **How to read these tables** - Size, Prefix, and the Format / platform retarget
+- **Platform stills** - YouTube, Instagram, TikTok, X, LinkedIn, Pinterest, Facebook and Threads, Twitch, Spotify, podcast, merch, slides, email, production plates
+- **Silent motion (Wan 2.2)** - loops and I2V jobs
+- **AV (LTX-2.5)** - ~5 s takes with world audio
+- **Related** - what to load after the plate lands
 
 **What this enables**
 
 - **Queuing a job-named App** (channel art, 4:5 feed, Canvas loop, BRB screen) instead of restyling a generic still
+- **Reading one table per platform** so you can find the row in seconds
 - **Keeping occupancy XOR** - Klein, Wan, and LTX still do not share a GB10 session
 
 **Who this is for:** studio users after `stills/still-draft`. Index: [Workflow catalog](../studio-workflows.md). Occupancy and widgets: [ComfyUI Apps](../studio-apps.md).
 
-These graphs clone the shipped Klein 4B / Wan 2.2 / LTX-2.5 printers. They do **not** add models. Empty of lettering - composite titles later. LTX feeders stay **div32**. Spotify Canvas is **silent**.
-
-Safety impact: **none**. `restart: "no"`, headroom, and download-limit are unchanged.
+**How to read these tables.** The **Workflow** column is the lab id under
+`_lab/creator/`, and it links to the generated node page for that graph. **Size**
+is the widget default; **Format / platform** retargets the same App, so match the
+platform aspect and scale in an editor when the host wants more pixels. **Prefix**
+is the filename stem the graph writes, and **What it does** names the job and its
+shape. These Apps clone the printers the studio already ships, so they add no
+models and the plates come out empty of lettering - composite titles later.
+Spotify Canvas stays **silent**. Seeds, occupancy, sizes, and Queue rules:
+[Workflow catalog](../studio-workflows.md#shared-lab-graph-rules). Safety impact:
+**none**.
 
 ## YouTube
+
+Seven channel plates: 1:1 icon and Community post, 16:9 art, chapter, subscribe,
+and end-screen, plus one 9:16 Shorts thumb. Occupancy **klein**.
 
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
@@ -37,6 +56,8 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 | **[creator/stills/youtube-end-screen](../generated/workflows/creator/stills/youtube-end-screen.md)** | 1280x720 | `ez_yt_endscreen` | YouTube end-screen plate, left-weighted |
 
 ## Instagram
+
+Eight feed and profile plates: 4:5 portrait, five-slide carousel, reel cover, a 1:1 three-tile grid row, two circle-safe covers, a Story, and a ~1.91:1 landscape. Occupancy **klein**.
 
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
@@ -51,12 +72,16 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 
 ## TikTok
 
+Two plates: the 9:16 video cover and a 1:1 Shop packshot. Occupancy **klein**.
+
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
 | **[creator/stills/tiktok-cover](../generated/workflows/creator/stills/tiktok-cover.md)** | 576x1024 | `ez_tt_cover` | TikTok cover 9:16 |
 | **[creator/stills/tiktok-shop](../generated/workflows/creator/stills/tiktok-shop.md)** | 1024x1024 | `ez_tt_shop` | TikTok Shop packshot 1:1 |
 
 ## X
+
+Three plates: a 16:9 in-stream still, a 3:1 header, and a ~1.91:1 link card. Occupancy **klein**.
 
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
@@ -65,6 +90,8 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 | **[creator/stills/x-card](../generated/workflows/creator/stills/x-card.md)** | 1216x640 | `ez_x_card` | X link-card still ~1.91:1 |
 
 ## LinkedIn
+
+Five plates: square post, landscape post, article cover, a 4:1 personal banner, and a five-square document carousel. Occupancy **klein**.
 
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
@@ -76,6 +103,8 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 
 ## Pinterest
 
+Two plates: the 2:3 standard pin and a 9:16 Idea Pin. Occupancy **klein**.
+
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
 | **[creator/stills/pinterest-pin](../generated/workflows/creator/stills/pinterest-pin.md)** | 768x1152 | `ez_pin` | Pinterest standard pin 2:3 |
@@ -83,12 +112,16 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 
 ## Facebook and Threads
 
+Two plates: a ~1.91:1 shared-image still and a 4:5 Threads portrait. Occupancy **klein**.
+
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
 | **[creator/stills/facebook-post](../generated/workflows/creator/stills/facebook-post.md)** | 1216x640 | `ez_fb_post` | Facebook shared-image still ~1.91:1 |
 | **[creator/stills/threads-portrait](../generated/workflows/creator/stills/threads-portrait.md)** | 1024x1280 | `ez_threads` | Threads 4:5 still |
 
 ## Twitch / stream
+
+Eight stream-furniture plates: offline, starting-soon, BRB, ending, webcam-hole overlay, about panel, profile, and a ~3:1 banner. Occupancy **klein**.
 
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
@@ -103,6 +136,8 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 
 ## Spotify / music visual
 
+Four covers: playlist, album, lyric card, and the 9:16 Canvas still that stands in for the silent loop. Occupancy **klein**.
+
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
 | **[creator/stills/spotify-playlist](../generated/workflows/creator/stills/spotify-playlist.md)** | 1024x1024 | `ez_spot_pl` | Spotify playlist cover 1:1 |
@@ -112,6 +147,8 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 
 ## Podcast visual
 
+Three plates: wide and vertical audiogram backgrounds plus per-episode art. Occupancy **klein**.
+
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
 | **[creator/stills/audiogram-wide](../generated/workflows/creator/stills/audiogram-wide.md)** | 1280x720 | `ez_ag_wide` | Audiogram background 16:9 |
@@ -119,6 +156,8 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 | **[creator/stills/episode-art](../generated/workflows/creator/stills/episode-art.md)** | 1024x1024 | `ez_episode` | Per-episode podcast art 1:1 |
 
 ## Merch / print
+
+Three mocks: unmarked tee, mug, and a 2:3 print poster. Occupancy **klein**.
 
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
@@ -128,12 +167,16 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 
 ## Slides / stream bg
 
+Two 16:9 plates: a course or webinar title card and a webcam-safe background. Occupancy **klein**.
+
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
 | **[creator/stills/slide-title](../generated/workflows/creator/stills/slide-title.md)** | 1280x720 | `ez_slide` | Course / webinar title plate 16:9 |
 | **[creator/stills/zoom-bg](../generated/workflows/creator/stills/zoom-bg.md)** | 1280x720 | `ez_zoom` | Webcam-safe Zoom / Meet background 16:9 |
 
 ## Email / web
+
+Three plates: newsletter header, Substack hero, and a 4:5 membership post. Occupancy **klein**.
 
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
@@ -142,6 +185,8 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 | **[creator/stills/patreon-post](../generated/workflows/creator/stills/patreon-post.md)** | 1024x1280 | `ez_patreon` | Membership post still 4:5 |
 
 ## Production plates
+
+Five plates: lifestyle product, desk setup, a six-still moodboard, four brand plates, and a coming-soon card. Occupancy **klein**.
 
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
@@ -152,6 +197,8 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 | **[creator/stills/coming-soon](../generated/workflows/creator/stills/coming-soon.md)** | 1280x720 | `ez_soon` | Launch / coming-soon plate 16:9 |
 
 ## Silent motion (Wan 2.2)
+
+Twenty-five silent loops and I2V jobs at 832x480 landscape or 480x832 vertical. Park Klein first. Occupancy **wan**.
 
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
@@ -183,6 +230,8 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 
 ## AV (LTX-2.5)
 
+Eighteen ~5 s AV takes with world audio at 1280x704 landscape or 768x1280 vertical, both on the div32 LTX grid. Park Wan first. Occupancy **ltx**.
+
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
 | **[creator/av/youtube-outro-av](../generated/workflows/creator/av/youtube-outro-av.md)** | 1280x704 | `ez_yt_outro` | YouTube outro AV ~5 s with room tone |
@@ -203,3 +252,13 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 | **[creator/av/podcast-set](../generated/workflows/creator/av/podcast-set.md)** | 1280x704 | `ez_pod_set` | Podcast-set AV ~5 s |
 | **[creator/av/workshop-tools](../generated/workflows/creator/av/workshop-tools.md)** | 1280x704 | `ez_tools` | Workshop tools AV ~5 s |
 | **[creator/av/crowd-ambience](../generated/workflows/creator/av/crowd-ambience.md)** | 1280x704 | `ez_crowd` | Distant crowd bed AV ~5 s |
+
+---
+
+## Related
+
+1. Start from a generic plate instead: [Stills graphs](workflows-stills.md)
+2. Move a plate: [Motion graphs](workflows-motion.md)
+3. Client SKUs instead of creator jobs: [Services pack](workflows-services.md)
+4. Pick the graph for a different job: [Workflow catalog](../studio-workflows.md)
+5. Write the prompt: [Prompting](../prompting.md)

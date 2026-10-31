@@ -1,22 +1,24 @@
 ---
-title: Troubleshooting - host and Docker
-description: Docker missing, group/daemon, MODELS_DIR and COMFY_OUTPUT_DIR permissions, and Spark farm SSH on DGX Spark.
+title: Host and Docker
+description: Fix missing Docker, group and daemon problems, unwritable model and output trees, and farm SSH over the wrong NIC.
 tags: [troubleshooting, docker, models-dir, spark-farm]
 ---
 
-# Troubleshooting - host and Docker
+# Host and Docker
 
 **What's on this page**
 
-- **Docker missing** / group / daemon on a reimaged Spark
-- **MODELS_DIR** not writable and nested `comfy/` permission
-- **COMFY_OUTPUT_DIR** nested `comfy-user/` permission (`_user/_rescued` on `start`)
-- **Spark farm SSH** - `SPARK_HOSTS` / `SPARK_FABRIC_IPS` from `config/spark-farm.example.env`
+- **Start here** - the fastest checks before you read a table
+- **Symptom table** - Docker, permissions, NGC pulls, and farm SSH at a glance
+- **Docker missing on DGX Spark** - apt Docker CE, not snap
+- **MODELS_DIR permission denied** - sudo-heal or last-resort chown
+- **COMFY_OUTPUT_DIR nested permission denied** - the `_user/_rescued` chain
 
 **What this enables**
 
 - **Getting** `doctor` green after an OS reimage
 - **Sharing** weights on the fabric without rsync over the mgmt NIC or a remote compose up
+- **Recovering** a root-owned nested layout dir without sudo-ing the whole command
 
 <Callout type="warning" title="Prefer apt Docker CE">
   Snap Docker cannot attach the NVIDIA Container Toolkit. After `./scripts/manage.sh setup --install-docker`, `newgrp docker` or re-login SSH. Prefer `./scripts/manage.sh setup` when Docker or `${MODELS_DIR}` is missing.
@@ -26,7 +28,23 @@ tags: [troubleshooting, docker, models-dir, spark-farm]
   Farm nodes still use `restart: "no"` and local heavy confirm. `spark-farm.sh` never starts compose on another Spark.
 </Callout>
 
-## Host & Docker
+Open this page when the host itself blocks the stack: doctor says `docker missing`,
+`docker permission denied` fails, a nested `mkdir` or `ln` under `${MODELS_DIR}` or
+`${COMFY_OUTPUT_DIR}` fails with `Permission denied`, an `nvcr.io` pull is refused, or farm
+SSH/rsync is going over the wrong NIC. A `start` that simply refuses on headroom is
+[Start and runtime](troubleshooting-start-runtime.md).
+
+## Start here
+
+Run these three checks in order. Each one decides which section below is yours.
+
+- **Run `./scripts/manage.sh doctor`.** It names `docker missing`, an unreachable daemon, and a
+  nested layout dir that is not writable.
+- **Confirm the GPU side.** `nvidia-smi` proves the driver is up before you debug the daemon.
+- **Reach for `./scripts/manage.sh setup` before any `sudo`.** `setup` (and `download-models` /
+  `start`) sudo-heal the layout dirs themselves. Do not prefix the manage verbs with `sudo`.
+
+## Symptom table
 
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
@@ -40,6 +58,8 @@ tags: [troubleshooting, docker, models-dir, spark-farm]
 | Pending / can't start container | Docker/GPU runtime | `nvidia-smi`, Container Toolkit install |
 | `failed to fetch oauth token: denied` / `nvcr.io` Access Denied on `start` | NGC base image pull without login | Pull latest (default bases are **Docker Hub** `nvidia/cuda` **runtime** for builder and final). Rebuild: `./scripts/manage.sh start`. If you set `CUDA_BASE_IMAGE` / `CUDA_RUNTIME_IMAGE` to `nvcr.io/...`, run `docker login nvcr.io` (user `$oauthtoken`, password = NGC API key) |
 | Spark farm SSH / rsync over the wrong NIC | Using management hostnames for weights, or expecting remote compose | Source `config/spark-farm.example.env` (`SPARK_HOSTS` + `${SPARK_USER}` for SSH; `SPARK_FABRIC_IPS` for NFS/rsync). Never rsync weights over the management NIC. `./scripts/utilities/spark-farm.sh` **never** remote `compose up` - run `./scripts/manage.sh start` locally on each node (type **yes**). [Spark farm](../spark-farm.md) |
+
+## Fixes
 
 ### Docker missing on DGX Spark
 
@@ -114,4 +134,8 @@ sudo chown "$USER:$USER" \
 ./scripts/manage.sh start
 ```
 
----
+## Related
+
+- [Troubleshooting overview](../troubleshooting.md) - the symptom router and the doctor-first rule
+- [Docs site widgets](troubleshooting-docs-site.md) - when only the docs page looks broken
+- [Spark farm](../spark-farm.md) - fabric IPs and the no-remote-compose rule

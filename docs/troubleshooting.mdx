@@ -1,26 +1,32 @@
 ---
-title: Troubleshooting
-description: Index of common ez-comfy-stack failures on DGX Spark - doctor first, then the matching symptom table.
+title: Troubleshooting overview
+description: Start here for any failure - run the doctor check, then jump to the topic page that names your symptom.
 tags: [troubleshooting, comfyui, docker]
 ---
 
-# Troubleshooting
+# Troubleshooting overview
 
 **What's on this page**
 
-- **Doctor first** - `./scripts/manage.sh doctor` before hunting rows
-- **Topic pages** - docs site, canvas, host/Docker, downloads, start/runtime, models/workflows, guide packs
-- **update-stack refusals** - exit 3 guardrails, exit 5 unprovable repo root, wrong image lane
-- **Symptom decision tree** - common failures in one diagram
-- **Reference stills** - a picked still that does not apply, silent fail-soft loads, and `max_refs`
-- **Vlo (host editor)** - Vlo cannot reach ComfyUI, and the Chromium-only rule
-- **Quality combo** - a tier that drops to `custom`, a combo that moved by itself, muted film acts, and the CLI `--quality` seam
-- **Logs and reset** - compose logs and `cleanup` that keeps `${MODELS_DIR}`
+- **Doctor first** - `./scripts/manage.sh doctor` before you hunt rows
+- **Find the right page** - symptom router into the six topic pages
+- **Symptom decision tree** - the common failures in one diagram
+- **Bazel ingress** - missing linters, runfiles, and file-ownership failures
+- **Vlo (host video editor)** - Vlo cannot reach ComfyUI, and the Chromium-only rule
+- **Stills (Cubic block world)** - a block study with the people missing
+- **Reference stills (optional refs)** - a picked still that does not apply, and `max_refs`
+- **Prompt goal** - a deliverable the Enhancer ignored
+- **Quality combo** - a tier that drops to `custom` and the CLI `--quality` seam
+- **Dub (clone-translate)** - the rows live on the canvas page
+- **Report buttons (ez_feedback)** and **Outputs sidebar (ez_outputs)**
+- **update-stack (redeploy refusals)** - exit 3 guardrails and exit 5 repo root
+- **Logs** and **Reset Comfy install (keeps models)**
 
 **What this enables**
 
+- **Reaching** the right page in one step from an error string or a failure mode
 - **Recovering** from OOM, stuck bandwidth limits, empty models, and long cold starts
-- **Jumping** to the matching table without scrolling a dump
+- **Jumping** to the matching table instead of scrolling a dump
 
 <Callout type="info" title="Try this first">
   ```bash
@@ -30,69 +36,56 @@ tags: [troubleshooting, comfyui, docker]
   Many rows on the topic pages are hard failures `doctor` already reports. Prefer `./scripts/manage.sh setup` when Docker or `${MODELS_DIR}` is missing.
 </Callout>
 
-## Topics
+Open this page when something failed and you do not yet know which page owns it. Pick your symptom
+in the router below, or read the decision tree. Every topic page is also a collapsible
+**Troubleshooting** folder in the Operate tab.
 
-<Cards>
-  <Card title="Docs site">
-    ---
+## Find the right page
 
-    Copy-paste still showing `${SPARK_HOST}` / `${MODELS_DIR}` chips.
+Find the row that matches what you see. The link takes you straight to the page that owns those
+symptoms. Each row names what that page covers, so one hop is enough.
 
-    [Docs site](operate/troubleshooting-docs-site.md)
-  </Card>
-  <Card title="Studio canvas">
-    ---
-
-    Missing Models, LTX 720, Nodes 2.0 layout, dub (duration-locked YT tone / `job_slug=True`), occupancy XOR, studio-ui `:8190` (not App Mode).
-
-    [Studio canvas](operate/troubleshooting-canvas.md)
-  </Card>
-  <Card title="Host and Docker">
-    ---
-
-    Docker missing, `MODELS_DIR` / `COMFY_OUTPUT_DIR` permission, Spark farm SSH (`SPARK_HOSTS` / `SPARK_FABRIC_IPS`).
-
-    [Host and Docker](operate/troubleshooting-host-docker.md)
-  </Card>
-  <Card title="Downloads">
-    ---
-
-    wondershaper/qdisc, stuck limits, gated LTX (`HF_TOKEN` is not the license click).
-
-    [Downloads](operate/troubleshooting-downloads.md)
-  </Card>
-  <Card title="Start and runtime">
-    ---
-
-    Headroom refuse, Kitchen fallback, cold start, GHCR / layer cache.
-
-    [Start and runtime](operate/troubleshooting-start-runtime.md)
-  </Card>
-  <Card title="Models and workflows">
-    ---
-
-    Empty models, CLIP/VAE links, 90s concat, dream-house, ACE, occupancy gate.
-
-    [Models and workflows](operate/troubleshooting-models-workflows.md)
-  </Card>
-  <Card title="Guide packs">
-    ---
-
-    Animatic or the film board shows missing clay after `blender-guide --film go-see`. Packs live at `guides/go-see/...`.
-
-    [DCC workflows](dcc-workflows.md)
-  </Card>
-</Cards>
-
-| Topic | Page |
+| What you see | Open this page |
 | --- | --- |
-| Docs site chips | [Troubleshooting - docs site](operate/troubleshooting-docs-site.md) |
-| Studio user (canvas) | [Troubleshooting - studio canvas](operate/troubleshooting-canvas.md) |
-| Host and Docker | [Troubleshooting - host and Docker](operate/troubleshooting-host-docker.md) |
-| Downloads and bandwidth | [Troubleshooting - downloads and bandwidth](operate/troubleshooting-downloads.md) |
-| Start and runtime | [Troubleshooting - start and runtime](operate/troubleshooting-start-runtime.md) |
-| Models and workflows | [Troubleshooting - models and workflows](operate/troubleshooting-models-workflows.md) |
-| Guide packs | [DCC workflows](dcc-workflows.md) |
+| `start` is refused, the container dies right after the build, logs still show torch downloading, a `docker pull ghcr.io/...` is denied, or generations run 5-15x slow | [Start and runtime](operate/troubleshooting-start-runtime.md) - headroom refuse, immediate exits, cold start, GHCR / layer cache, Kitchen attention fallback, Nunchaku and VideoHelperSuite boot spam |
+| Queue will not start, a preview stays blank, the graph load aborts, Nodes 2.0 sizes look tiny, a dub mix comes back wrong, the occupancy gate refuses, or the :8190 board is empty | [Canvas and studio UI](operate/troubleshooting-canvas.md) - Queue/history/previews, Nodes 2.0 layout, graph load aborts, Enhance and sample recipes, LTX/Wan guides, local dub, occupancy XOR, studio-ui `:8190` (not App Mode), Missing Inputs pickers |
+| Empty models in the UI, a CLIP/VAE file that links nowhere, a node that will not import, a Queue dies on a CLIP/latent/Triton error, a film that will not stitch, or an audio graph that will not print | [Models and workflows](operate/troubleshooting-models-workflows.md) - missing weights and relative links, refused tiers, `IMPORT FAILED`, CLIP/latent/Triton queue errors, App widgets, lab pins, 90s concat, dream-house, ACE-Step and podcast loudness |
+| `qdisc kind is unknown`, a bandwidth limit stuck after a kill, `Still waiting to acquire lock`, a resume pinned at `0 MiB/s`, or a gated LTX download | [Downloads and bandwidth](operate/troubleshooting-downloads.md) - wondershaper/qdisc soft-fail, stuck limits, HF locks and hung resume, the `hf` CLI, gated LTX (`HF_TOKEN` is not the license click) |
+| `docker missing` in doctor, a nested `Permission denied` under `${MODELS_DIR}` or `${COMFY_OUTPUT_DIR}`, an `nvcr.io` pull refused, or farm SSH over the wrong NIC | [Host and Docker](operate/troubleshooting-host-docker.md) - Docker missing / group / daemon, `MODELS_DIR` and `COMFY_OUTPUT_DIR` permission, NGC oauth, Spark farm SSH (`SPARK_HOSTS` / `SPARK_FABRIC_IPS`) |
+| Copy-paste still shows `${SPARK_HOST}` / `${MODELS_DIR}` chips, a wide table lost its horizontal bar, the pinned header stays after the table has scrolled past, or the docs search returns no results | [Docs site widgets](operate/troubleshooting-docs-site.md) - session chips, table chrome, docs search base path, docs CI heap OOM |
+| The animatic or the film board still shows missing clay after `blender-guide --film go-see` | [DCC guide pack](dcc-workflows.md) - guide packs live at `guides/go-see/...` |
+
+Rows that are not a topic page live here on this page: the Bazel ingress layer, Vlo, the Cubic block
+world, reference stills, **Goal**, the **Quality** combo, `update-stack`, the report buttons, and the
+Outputs sidebar. Each has its own section below.
+
+---
+
+## Symptom decision tree
+
+```mermaid
+flowchart TB
+  Q["What is broken?"]
+  Q --> Docker{"doctor: docker missing?"}
+  Q --> Models{"MODELS_DIR or COMFY_OUTPUT_DIR not writable?"}
+  Q --> Qdisc{"wondershaper / qdisc errors?"}
+  Q --> SSH{"SSH freezes<br/>or host sluggish?"}
+  Q --> Start{"start refused?"}
+  Q --> Empty{"Empty models in UI?"}
+  Q --> Slow{"Extreme thrash<br/>5-15x slow?"}
+  Q --> Cold{"Cold start forever?"}
+  Q --> Limit{"Bandwidth limit stuck?"}
+
+  Docker --> A0["apt docker-ce + compose plugin<br/>docker group - re-login"]
+  Models --> A0b["setup / start sudo-heal layout dirs<br/>or MODELS_DIR / COMFY_OUTPUT_DIR in .env"]
+  Qdisc --> A0c["soft-fail unthrottled warn OK<br/>modprobe sch_htb - clear"]
+  SSH -->|during download| A1["download-models / lower Mbps<br/>or download-limit clear"]
+  Start --> A2["Free RAM/disk<br/>stop other GPU jobs - doctor"]
+  Empty --> A3["download-image / wan / ltx status<br/>check MODELS_DIR mount"]
+  Slow --> A4["Confirm free-memory patch<br/>in logs - restart container"]
+  Cold --> A5["Wait 10-30+ min<br/>manage.sh logs - network"]
+  Limit --> A6["manage.sh download-limit clear"]
+```
 
 ---
 
@@ -110,17 +103,6 @@ layer, before any stack or model is involved.
 | `scripts/lib/paths.sh: No such file or directory`, or a `bazelisk run //:manage -- <verb>` that dies before printing anything | `manage.sh` sources `lib/paths.sh` by `dirname "$0"`. Under a plain `sh_binary` the executable sits alone in `bazel-bin/` while its `data` is in `<target>.runfiles/`, so the sibling is missing. `//scripts:manage` is an `exec_shell` target precisely so script and `data` land in runfiles side by side | Run via `bazelisk run //:manage -- <verb>` so the launcher resolves the runfiles copy. Do not `bash` the `bazel-bin/` copy. `bazelisk clean --expunge` clears a runfiles tree left stale by a Bazel upgrade |
 | `run-utility: utility name must be a bare name under scripts/utilities/` | `//scripts:run-utility` takes a bare utility name, not a path. A `scripts/utilities/` prefix, a `/` in the name, or a `.sh` suffix is rejected so the target cannot be pointed outside that directory | Drop the path and the suffix: `bazelisk run //scripts:run-utility -- download-limit status`, not `-- scripts/utilities/download-limit.sh status` |
 | `bazelisk test //tests:owned_files_check` fails naming a file | A first-party source file is not claimed by any target's `srcs` / `data` / `filegroup`, so it would silently stop being built and linted | Add the file to the owning package's `BUILD.bazel` (or the filegroup that covers it). The guard is in `//:test-fast`, so it also fails the default gate |
-
----
-
-## Dub (clone-translate)
-
-Canvas rows live in [Studio canvas](operate/troubleshooting-canvas.md). The fixture that shipped a 64 s YT tone:
-
-| Symptom | Cause | Fix |
-| --- | --- | --- |
-| YT preview `ez_dub_yt_*.mp3` is ~source length but has no Spanish (tone, hush, ducked English, or a sliding moan) | Clone failed `is_speech_like` (including an F0-glide vocoder "whale") or ingest `job_slug` became `True` from the upload button | Pull latest. Clone CFG auto is 0.3 (retry 0.5). Check Dub status. Inspect `dubs/<slug>/render/turn_*.raw.wav`. `download-dub --tier asr` then `--tier clone` with compose up. Never treat a duration-matched drone as success. Job dir must be `dubs/episode/`, not `dubs/True/`. |
-| Dub clone does not sound like the speaker | The reference window was clipped, tonal, or off-speaker, or every window was rejected | Open `dubs/<slug>/speakers/spkNN.ref.json` (also under `qc.json` `reference`). `score` is the window rank. `degraded: true` / Dub status `ref: degraded` means the loudness fallback ran; `reject` names the gate (`clip`, `tonal`, `band`, `unvoiced`, `not_speech`). Overlap and quiet turns are still dropped. Re-Queue Stage **render** after the source is one person without a music bed. |
 
 ---
 
@@ -186,31 +168,17 @@ The **Quality** combo is read back from the widgets, not written and forgotten: 
 | You put the widgets back on a tier's numbers and the combo still reads **custom** | Only the owned widgets count, and a value left off-tier (an unrounded CFG, a different VAE) keeps the derivation at **custom** | Set every owned widget on that tier's values - the caption under the combo names them - and the tier re-derives. **custom** is not absorbing |
 | One KSampler or loader kept its old value while another moved | Pre-fix extension JS resolved the tier from the first loader only, so extra instances were never written | Pull, `./scripts/manage.sh stop` then `start`, then hard-refresh the tab so the extension bundle reloads. Every instance of every sampler and loader is written now |
 | Picking a Klein tier on a FLUX 3 Image still (`stills/still-flux3-fast`, `still-flux3-quality`) does nothing | Those graphs pin flux3-image weights, so only `flux3-fast`, `flux3-quality`, and `flux3-nvfp4` apply. The Klein ladder is a no-op there by design | Pick one of the `flux3-*` tiers. Do not hand-edit the graph to take Klein 4B weights |
-| The combo does nothing on film acts 2-5 | Those graphs ship the copied-in **Quality** node muted (LiteGraph `mode` 4), so it neither drives the overlay nor shows a caption - acts 2+ take the previous act's frame as their image source | Set the tier on **act-01** and re-Queue forward. See [90s shorts](shorts.md) |
+| The combo does nothing on film acts 2-5 | Those graphs ship the copied-in **Quality** node muted (LiteGraph `mode` 4), so it neither drives the overlay nor shows a caption - acts 2+ take the previous act's frame as their image source | Set the tier on **act-01** and re-Queue forward. See [Short films](shorts.md) |
 | `print-shot` / `album-render` posted different weights than the browser showed | Both default to the tier the graph records, not the tier last picked in the browser | Pass `--quality TIER` (or `EZ_QUALITY=TIER`) on `./scripts/utilities/print-shot.sh` / `./scripts/utilities/album-render.sh`; the overlay runs before each POST, and an unknown tier name fails the run (`quality_apply: unknown quality tier: ...`, shot marked `failed`) |
 | The browser tiers disagree with the table after someone edited presets | `custom_nodes/ez_quality/js/ez_quality_presets.js` is generated from `custom_nodes/ez_quality/presets.py` and was left stale (or hand-edited, which is a defect) | From the repo root: `bazelisk run //tests:build_quality_js`, then `bazelisk run //:manage -- restart` and hard-refresh. Never edit the generated file |
 
 ---
 
-## update-stack (redeploy refusals)
+## Dub (clone-translate)
 
-`./scripts/manage.sh update-stack` (or `bazelisk run //scripts:update-stack --`) redeploys the stack
-from the branch you are standing on, and the image lane follows that branch. Exit codes: `0` success
-or nothing to do, `1` failure, `2` usage error, `3` guardrail refusal, `5` the repo root could not be
-proven. Flags: [manage.sh reference](manage-cli.md#catalog).
-
-| Symptom | Cause | Fix |
-| --- | --- | --- |
-| `update-stack` exits **3** before it touches anything and prints the changed paths (up to 20) | The flow only deploys a checkout it can `git pull --ff-only`. A dirty worktree means the redeploy would ship edits nobody reviewed, so it refuses | `git status`, commit or stash the paths it listed, then re-run. `--dry-run` shows the plan without mutating, but the same guardrails still execute, so it refuses too. `--allow-dirty` is for a deliberate local experiment, never for forcing an unreviewed deploy out |
-| `update-stack` exits **3** naming an image ref that does not match the branch | The image lane must match the branch: `main` -> `us-safe-studio`, any other branch -> `us-safe-studio-development`. An `EZ_COMFY_IMAGE` or `--image` pointing at the other lane, or a stale `LAB_GIT_BRANCH`, breaks that invariant | Drop `--image` and unset `EZ_COMFY_IMAGE` / `LAB_GIT_BRANCH`, then re-run on the branch whose lane you want. Pass `--allow-lane-mismatch` only when you deliberately want the other lane's tag |
-| `update-stack` exits **3** and reports the branch as `unknown` | HEAD is detached, so `stack_git_branch()` cannot name a branch and the image lane cannot be derived from it | `git switch development` (or `main`) and re-run, or pass `--branch NAME`, which switches to NAME first. `--branch` is the only supported way to run on a detached HEAD |
-| In CI, cron, or a detached tmux session, `update-stack` exits **3** at the redeploy step and names `--yes` | The redeploy delegates to `./scripts/manage.sh restart`, or `stop` + `start`, and that start keeps the heavy `yes` confirm and the headroom preflight. With no TTY the confirm cannot be answered, so the flow fails closed instead of assuming | Re-run interactively and type `yes`, or pass `--yes` for automation (it exports `LAB_NON_INTERACTIVE=1` and `LAB_CONFIRM_TOKEN=yes`, the supported path). Do not call `docker compose up` by hand to get around it |
-| `update-stack` exits **5** with `cannot find scripts/lib/paths.sh`, before any git or docker work | The flow needs its own `scripts/lib` and a real checkout. Under `bazel run` the binary lives in Bazel's output tree, where the sibling `../lib` does not exist, so it resolves libraries from `BUILD_WORKSPACE_DIRECTORY`; without that variable, or from outside a checkout, neither the libraries nor the `scripts/manage.sh` + `docker/docker-compose.yml` markers are there | Re-run with `bazelisk run //scripts:update-stack --` from inside the repo (bazel run sets `BUILD_WORKSPACE_DIRECTORY`) or `./scripts/manage.sh update-stack` from the repo root. The error names both entry points. Never `bash` the file under `bazel-bin/` directly |
-| A warning says the image pull failed, but the run carries on and still finishes with the doctor check | Pull failure is a warning by design, not a hard failure: a locally built image stays viable. `--skip-image-pull` and `LAB_STACK_SKIP_PULL=1` skip the pull the same way | Check registry reachability and your GHCR `docker login`, then re-run. To build locally instead, pass `--force-build` (exports `LAB_STACK_FORCE_BUILD=1` for the delegated start) and confirm the result with `./scripts/manage.sh doctor` |
-| After `update-stack` the stack is on the wrong image lane (`status` shows `us-safe-studio-development` where you expected `us-safe-studio`, or the reverse) | The lane follows the checked-out branch, so the run happened on a branch other than `main`. A leftover `EZ_COMFY_IMAGE` / `LAB_GIT_BRANCH`, or `--allow-lane-mismatch`, also lands you on the other lane | Check `git branch --show-current` and `./scripts/manage.sh status` first. Clear `EZ_COMFY_IMAGE` / `LAB_GIT_BRANCH`, then re-run from the branch you want, with `--branch NAME` to switch and `--force-recreate` to force stop + start. `main` deploys the production lane; any other branch deploys the development lane |
-
-`update-stack` never merges, rebases, resets, removes a volume, or calls `docker` directly. If a row
-above does not match, run `./scripts/manage.sh doctor` and read [Start and runtime](operate/troubleshooting-start-runtime.md).
+The dub lane is owned by the canvas page: ingest rights, wheels, clone CFG, mix loudness, and the
+MLA file. Start at [Canvas and studio UI](operate/troubleshooting-canvas.md#local-dub). Vlo, the
+host editor that queues into this stack, has its own rows below.
 
 ---
 
@@ -244,31 +212,27 @@ line rather than an exception. Pack reference: [Custom nodes](reference/custom-n
 | **Copy paths** reports `Clipboard blocked - paths are selected, press Ctrl/Cmd+C` | The browser refused `navigator.clipboard` - usual cause is a plain-`http://` origin that is not `127.0.0.1`, or you denied clipboard permission. Nothing is lost: the fallback textarea already holds the paths and keeps them selected | Press **Ctrl/Cmd+C** while the fallback holds the selection. For a real clipboard write, reach ComfyUI over `https://` or `127.0.0.1`, which is a secure context. **Download** and **Copy to input** never touch the clipboard, so bulk work is unaffected |
 | The folder rail with the per-folder counts is missing | The panel is narrower than 560px. The rail appears only in the **wide** tier; below that the layout is **cozy** (380-559px) or **compact** (under 380px), where the folder control is chips by design | Widen the ComfyUI sidebar past 560px and the rail returns with its counts. Below that width, use the folder chips - `F` focuses the rail when it is showing and the chips when it is not, so the keyboard route works at every width |
 
-## Symptom decision tree
+---
 
-```mermaid
-flowchart TB
-  Q["What is broken?"]
-  Q --> Docker{"doctor: docker missing?"}
-  Q --> Models{"MODELS_DIR or COMFY_OUTPUT_DIR not writable?"}
-  Q --> Qdisc{"wondershaper / qdisc errors?"}
-  Q --> SSH{"SSH freezes<br/>or host sluggish?"}
-  Q --> Start{"start refused?"}
-  Q --> Empty{"Empty models in UI?"}
-  Q --> Slow{"Extreme thrash<br/>5-15x slow?"}
-  Q --> Cold{"Cold start forever?"}
-  Q --> Limit{"Bandwidth limit stuck?"}
+## update-stack (redeploy refusals)
 
-  Docker --> A0["apt docker-ce + compose plugin<br/>docker group - re-login"]
-  Models --> A0b["setup / start sudo-heal layout dirs<br/>or MODELS_DIR / COMFY_OUTPUT_DIR in .env"]
-  Qdisc --> A0c["soft-fail unthrottled warn OK<br/>modprobe sch_htb - clear"]
-  SSH -->|during download| A1["download-models / lower Mbps<br/>or download-limit clear"]
-  Start --> A2["Free RAM/disk<br/>stop other GPU jobs - doctor"]
-  Empty --> A3["download-image / wan / ltx status<br/>check MODELS_DIR mount"]
-  Slow --> A4["Confirm free-memory patch<br/>in logs - restart container"]
-  Cold --> A5["Wait 10-30+ min<br/>manage.sh logs - network"]
-  Limit --> A6["manage.sh download-limit clear"]
-```
+`./scripts/manage.sh update-stack` (or `bazelisk run //scripts:update-stack --`) redeploys the stack
+from the branch you are standing on, and the image lane follows that branch. Exit codes: `0` success
+or nothing to do, `1` failure, `2` usage error, `3` guardrail refusal, `5` the repo root could not be
+proven. Flags: [manage.sh reference](manage-cli.md#catalog).
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| `update-stack` exits **3** before it touches anything and prints the changed paths (up to 20) | The flow only deploys a checkout it can `git pull --ff-only`. A dirty worktree means the redeploy would ship edits nobody reviewed, so it refuses | `git status`, commit or stash the paths it listed, then re-run. `--dry-run` shows the plan without mutating, but the same guardrails still execute, so it refuses too. `--allow-dirty` is for a deliberate local experiment, never for forcing an unreviewed deploy out |
+| `update-stack` exits **3** naming an image ref that does not match the branch | The image lane must match the branch: `main` -> `us-safe-studio`, any other branch -> `us-safe-studio-development`. An `EZ_COMFY_IMAGE` or `--image` pointing at the other lane, or a stale `LAB_GIT_BRANCH`, breaks that invariant | Drop `--image` and unset `EZ_COMFY_IMAGE` / `LAB_GIT_BRANCH`, then re-run on the branch whose lane you want. Pass `--allow-lane-mismatch` only when you deliberately want the other lane's tag |
+| `update-stack` exits **3** and reports the branch as `unknown` | HEAD is detached, so `stack_git_branch()` cannot name a branch and the image lane cannot be derived from it | `git switch development` (or `main`) and re-run, or pass `--branch NAME`, which switches to NAME first. `--branch` is the only supported way to run on a detached HEAD |
+| In CI, cron, or a detached tmux session, `update-stack` exits **3** at the redeploy step and names `--yes` | The redeploy delegates to `./scripts/manage.sh restart`, or `stop` + `start`, and that start keeps the heavy `yes` confirm and the headroom preflight. With no TTY the confirm cannot be answered, so the flow fails closed instead of assuming | Re-run interactively and type `yes`, or pass `--yes` for automation (it exports `LAB_NON_INTERACTIVE=1` and `LAB_CONFIRM_TOKEN=yes`, the supported path). Do not call `docker compose up` by hand to get around it |
+| `update-stack` exits **5** with `cannot find scripts/lib/paths.sh`, before any git or docker work | The flow needs its own `scripts/lib` and a real checkout. Under `bazel run` the binary lives in Bazel's output tree, where the sibling `../lib` does not exist, so it resolves libraries from `BUILD_WORKSPACE_DIRECTORY`; without that variable, or from outside a checkout, neither the libraries nor the `scripts/manage.sh` + `docker/docker-compose.yml` markers are there | Re-run with `bazelisk run //scripts:update-stack --` from inside the repo (bazel run sets `BUILD_WORKSPACE_DIRECTORY`) or `./scripts/manage.sh update-stack` from the repo root. The error names both entry points. Never `bash` the file under `bazel-bin/` directly |
+| A warning says the image pull failed, but the run carries on and still finishes with the doctor check | Pull failure is a warning by design, not a hard failure: a locally built image stays viable. `--skip-image-pull` and `LAB_STACK_SKIP_PULL=1` skip the pull the same way | Check registry reachability and your GHCR `docker login`, then re-run. To build locally instead, pass `--force-build` (exports `LAB_STACK_FORCE_BUILD=1` for the delegated start) and confirm the result with `./scripts/manage.sh doctor` |
+| After `update-stack` the stack is on the wrong image lane (`status` shows `us-safe-studio-development` where you expected `us-safe-studio`, or the reverse) | The lane follows the checked-out branch, so the run happened on a branch other than `main`. A leftover `EZ_COMFY_IMAGE` / `LAB_GIT_BRANCH`, or `--allow-lane-mismatch`, also lands you on the other lane | Check `git branch --show-current` and `./scripts/manage.sh status` first. Clear `EZ_COMFY_IMAGE` / `LAB_GIT_BRANCH`, then re-run from the branch you want, with `--branch NAME` to switch and `--force-recreate` to force stop + start. `main` deploys the production lane; any other branch deploys the development lane |
+
+`update-stack` never merges, rebases, resets, removes a volume, or calls `docker` directly. If a row
+above does not match, run `./scripts/manage.sh doctor` and read [Start and runtime](operate/troubleshooting-start-runtime.md).
 
 ---
 
@@ -303,3 +267,19 @@ flowchart TB
   Models --> Start["manage.sh start"]
   Start --> Reinstall["entrypoint reinstalls ComfyUI<br/>into fresh volume"]
 ```
+
+---
+
+## Related
+
+The six topic pages, in side-nav order:
+
+- [Start and runtime](operate/troubleshooting-start-runtime.md) - refused starts, immediate exits, cold installs, GHCR pulls, attention fallback
+- [Canvas and studio UI](operate/troubleshooting-canvas.md) - canvas, dub, occupancy, and the board
+- [Models and workflows](operate/troubleshooting-models-workflows.md) - weights, nodes, and graphs
+- [Downloads and bandwidth](operate/troubleshooting-downloads.md) - qdisc, stuck limits, HF locks, gated pulls
+- [Host and Docker](operate/troubleshooting-host-docker.md) - Docker install, tree permissions, farm SSH
+- [Docs site widgets](operate/troubleshooting-docs-site.md) - session chips, table chrome, docs search
+
+For app failures worth filing, use the report buttons ([Reporting issues](operate/reporting-issues.md));
+for every verb and flag named above, see the [manage.sh reference](manage-cli.md).

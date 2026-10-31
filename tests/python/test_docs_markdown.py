@@ -17,6 +17,9 @@ CONVENTIONS = DOCS / "project-conventions.md"
 DOCS_STYLE = DOCS / "contribute" / "docs-style.md"
 
 _HEADING_RE = re.compile(r"^#{1,6} \S")
+_FRONTMATTER_RE = re.compile(r"\A---\n(.*?)\n---\n", re.S)
+_FRONTMATTER_LINE_RE = re.compile(r"^([A-Za-z_][A-Za-z0-9_-]*):(?:[ \t]+(.*))?$")
+_QUOTED_STARTS = ('"', "'", "[", "{", "|", ">", "&", "*")
 _TABLE_RE = re.compile(r"^\|")
 _ADMON_RE = re.compile(r"^(!{3}|\?{3}) ")
 _HTML_COMMENT_RE = re.compile(r"^<!-- .* -->$")
@@ -146,6 +149,50 @@ def test_docs_markdown_spacing() -> None:
     for path in _doc_paths():
         hits.extend(_spacing_issues(path))
     assert hits == [], "markdown spacing issues:\n" + "\n".join(hits)
+
+
+def _frontmatter_issues(path: Path) -> list[str]:
+    """Return YAML-safety violations in one page's frontmatter block.
+
+    The Fumadocs loader parses frontmatter as YAML, so a plain scalar that
+    carries a colon and a space aborts the whole site build. PyYAML is not a
+    test dependency, so the check is textual: an unquoted scalar value must
+    not contain ``": "``.
+
+    Args:
+        path: Markdown or MDX page.
+
+    Returns:
+        Issue strings prefixed with path:line, empty when there is no block.
+    """
+    rel = path.relative_to(ROOT).as_posix()
+    text = path.read_text(encoding="utf-8")
+    match = _FRONTMATTER_RE.match(text)
+    if match is None:
+        return []
+    issues: list[str] = []
+    for offset, line in enumerate(match.group(1).splitlines()):
+        if line == "" or line.lstrip().startswith(("#", "-", *("  ", "\t"))):
+            continue
+        entry = _FRONTMATTER_LINE_RE.match(line)
+        if entry is None:
+            issues.append(f"{rel}:{offset + 2}: frontmatter line is not 'key: value': {line}")
+            continue
+        value = (entry.group(2) or "").strip()
+        if value and not value.startswith(_QUOTED_STARTS) and ": " in value:
+            issues.append(
+                f"{rel}:{offset + 2}: quote the {entry.group(1)} value -"
+                f" an unquoted scalar cannot hold ': '"
+            )
+    return issues
+
+
+def test_docs_frontmatter_parses_as_yaml() -> None:
+    """Every page frontmatter block survives the loader's YAML parse."""
+    hits: list[str] = []
+    for path in _doc_paths():
+        hits.extend(_frontmatter_issues(path))
+    assert hits == [], "frontmatter issues:\n" + "\n".join(hits)
 
 
 def test_conventions_document_markdown_spacing() -> None:

@@ -1,6 +1,6 @@
 ---
 title: Set up a contributor host
-description: bootstrap a fresh macOS or Linux host for this repo with setup-host.sh - the pinned toolchain it installs, what --check reports, and what it refuses to touch.
+description: Bootstrap a build host with setup-host.sh, then prove it with a green validate, in one command on Linux or macOS.
 tags: [contributing, setup, bazel, toolchain, host]
 ---
 
@@ -8,12 +8,17 @@ tags: [contributing, setup, bazel, toolchain, host]
 
 **What's on this page**
 
-- **Why a bootstrap script exists at all** - a host with no `bazelisk` cannot run one target
+- **Why this is the one script that runs from a plain shell** - a host with no `bazelisk` cannot run one target
+- **The hole this closes** - a lint lane that went green having checked nothing
 - **What it installs** - bazelisk, shellcheck, shfmt, buildifier, pyright, mypy, node, git, python3
 - **The pins it reads** - `.devcontainer/tool-versions.env`, never a version in the script
-- **`--check`, `--dry-run`, `--help`** - probe and plan before it writes anything
-- **Linux and macOS paths** - apt plus pinned releases, or Homebrew
+- **Probe and plan before it writes** - `--check`, `--dry-run`, `--help`
+- **Linux and macOS** - apt plus pinned releases, or Homebrew
+- **Environment hooks** - the variables the bats suite drives the script with
 - **What it deliberately does not touch** - no stack, no models, no GPU, no Docker install
+- **Verify the host** - the three commands that prove the box is ready
+- **Failures** - symptom, likely cause, action
+- **Related** - the pages that use this toolchain
 
 **What this enables**
 
@@ -26,6 +31,14 @@ tags: [contributing, setup, bazel, toolchain, host]
 **Who this is for:** contributors preparing a build host. Studio operators bringing up a DGX Spark
 for the stack itself stay on [Set up this computer](../start/this-computer.md) - that path installs
 Docker and models; this one installs neither.
+
+Seventh page in Contribute, after [Contributor Dev Container](devcontainer.md). Both install the
+same pinned toolchain: the container does it for you, this script does it on your host. If you are
+already on a green host, skip ahead to [Docs style](docs-style.md) or [Security](security.md).
+
+Open this page when a Bazel gate fails with `<tool> missing` on a machine you have not built on
+before. Run `--check` first: it names each absent tool and where it would come from, before
+anything is written.
 
 ```bash
 export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
@@ -205,6 +218,8 @@ Specifically out of scope:
 
 ## Verify the host
 
+Three commands, in this order, prove the box is ready to build:
+
 ```bash
 bazelisk run //:setup-host -- --check   # every tool present
 bazelisk run //:validate                # the done-means gate
@@ -228,6 +243,12 @@ without ever touching a real host.
 | Node too old, still reported missing | a system Node below 22 shadowing the install | Put `${SETUP_HOST_NODE_PREFIX}/bin` ahead of it on `PATH` |
 | installed binaries not found | the chosen bin dir is not on `PATH` | Add the directory the script printed |
 
-Related: [Building with Bazel](building-with-bazel.md) -
-[Contributor Dev Container](devcontainer.md) - [Contributing](contributing.md) -
-[Troubleshooting](../troubleshooting.md) - [Host and Docker](../operate/troubleshooting-host-docker.md)
+## Related
+
+| Need | Page |
+| --- | --- |
+| The targets that need these tools | [Building with Bazel](building-with-bazel.md) |
+| The same toolchain in a container | [Contributor Dev Container](devcontainer.md) |
+| The PR checklist the gates feed | [Contributing](contributing.md) |
+| A gate that fails for another reason | [Troubleshooting](../troubleshooting.md) |
+| Docker and host problems on the Spark | [Host and Docker](../operate/troubleshooting-host-docker.md) |

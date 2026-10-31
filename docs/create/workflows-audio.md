@@ -1,27 +1,53 @@
 ---
-title: Audio catalog
-description: Seeded podcast, dub, RAP-FIRST, and Drive-through EDM graphs plus every Nill Bye and Drive-through album table.
+title: Audio graphs
+description: Reference table of every seeded podcast, dub, rap, and EDM graph, plus all fifteen album track tables.
 tags: [comfyui, workflows, audio, rap, edm, catalog]
 ---
 
-# Audio catalog
+# Audio graphs
+
+Pick an audio graph. This catalog covers local audio jobs on one GB10 lane: a
+two-host podcast episode, a radio drama, a learning episode, a dub, a RAP-FIRST
+take, and the numbered tracks of the fifteen shipped albums. Splice professional
+ACE tags on occupancy **llm** first: [Audio Rack](audio-rack.md)
+(`inspire/audio-rack`). Then Queue occupancy **audio** graphs below.
 
 **What's on this page**
 
-- **Podcast, dub, and RAP-FIRST** graphs (occupancy **audio**)
-- **Nine Nill Bye albums** (all track tables)
-- **Six Drive-through albums** (all track tables)
+- **Podcast, dub, and rap graphs** - the six Queue graphs on occupancy **audio**
+- **Album catalogs at a glance** - the nine Nill Bye and six Drive-through albums
+- **Nill Bye diss examples** - one track table per album
+- **Drive-through EDM examples** - one track table per album
+- **Related** - what to read before you Queue audio
 
 **What this enables**
 
 - **Queuing local audio** without loading Klein / Wan / LTX in the same session
 - **Finding a numbered take** under `_lab/audio/albums/<artist>/<album>/`
+- **Rendering a whole album** in one go with `album-render`
+- **Reading one table per album** so you can find a take in seconds
 
-**Who this is for:** studio users after `download-podcast` / `download-dub` / `download-music`. Index: [Workflow catalog](../studio-workflows.md). Node-by-node widgets: [Workflow details](workflows-index.md). Playbooks: [Local podcast](../podcast.md), [Local dub](../dub.md), [Local music](../music.md). Outputs under `${COMFY_OUTPUT_DIR}`.
+**Who this is for:** studio users after `download-podcast` / `download-dub` / `download-music`. Index: [Workflow catalog](../studio-workflows.md). Node-by-node widgets: [Workflow details](workflows-index.md). Playbooks: [Local podcast](../podcast.md), [Local dub](../dub.md), [Local music](../music.md).
 
-Splice professional ACE tags on occupancy **llm** first: [Audio Rack](audio-rack.md) (`inspire/audio-rack`). Then Queue occupancy **audio** graphs below.
+**How to read these tables.** The **Graph** column is the lab id under
+`_lab/audio/`, and it links to the generated node page for that graph. **Tags /
+bpm** shows the ACE-Step tags, the tempo, and any fixed seed. **Prefix** is the
+SaveAudio stem the graph writes. **Take** names the subject of that numbered
+track. Album tables list every shipped take in queue order, so a row is one Queue
+on its own. Seeds, occupancy, and Queue rules:
+[Workflow catalog](../studio-workflows.md#shared-lab-graph-rules).
 
-Occupancy **audio**. Opt-in weights (`download-podcast` / `download-dub` / `download-music`). Do not co-resident with Klein / Wan / LTX. Album art is skip (default) / upload / generate (`cover.json` is klein occupancy). Cover LoadImage is **bypassed** (and unwired) so App Queue does not require a file. Upload: graph view, **Ctrl+B** Cover image, then wire. Graphs save tagged FLAC + MP3; `album-render` zips the folder. YouTube still-image MP4 is host `audio-still-video` after Queue.
+---
+
+## Podcast, dub, and rap graphs
+
+Six Queue graphs, occupancy **audio**, from opt-in weights (`download-podcast` /
+`download-dub` / `download-music`). Do not co-resident with Klein / Wan / LTX.
+Album art is skip (default) / upload / generate (`cover.json`
+is klein occupancy). Cover LoadImage is **bypassed** (and unwired) so App Queue
+does not require a file. Upload: graph view, **Ctrl+B** Cover image, then wire.
+Graphs save tagged FLAC + MP3; `album-render` zips the folder. YouTube
+still-image MP4 is host `audio-still-video` after Queue.
 
 | Workflow | What it does |
 | --- | --- |
@@ -32,7 +58,13 @@ Occupancy **audio**. Opt-in weights (`download-podcast` / `download-dub` / `down
 | **[audio/music/rap-draft](../generated/workflows/audio/music/rap-draft.md)** | ACE-Step rap cold-open boom-bap 88 (`ez_rap_draft`) |
 | **[audio/music/rap-full](../generated/workflows/audio/music/rap-full.md)** | ACE-Step rap pre-chorus boom-bap 88 (`ez_rap_full`). Queue draft first |
 
-Nine Nill Bye albums under `_lab/audio/albums/nill-bye/<album>/`. Queue a numbered track, or `album-render`. RAP-FIRST playbook: [Nill Bye albums](music-rap.md).
+---
+
+## Album catalogs at a glance
+
+### Nill Bye albums
+
+Nine Nill Bye albums under `_lab/audio/albums/nill-bye/<album>/`. Queue a numbered track, or `album-render`. RAP-FIRST playbook: [Nill Bye albums](music-rap.mdx).
 
 | Album | What it does |
 | --- | --- |
@@ -46,7 +78,9 @@ Nine Nill Bye albums under `_lab/audio/albums/nill-bye/<album>/`. Queue a number
 | **audio/albums/nill-bye/winterize-wells** | Fifteen tracks. Progress variety - methods and statutes, no roast target. `album-render --album nill-bye/winterize-wells` |
 | **audio/albums/nill-bye/duty-switch** | Fifteen tracks. Progress club beds, same builder rule. `album-render --album nill-bye/duty-switch` |
 
-Six Drive-through albums under `_lab/audio/albums/drive-through/<album>/`. Warped hybrid-trap bass set spliced from [Audio Rack](audio-rack.md) (not rap over a club bed). 180-480 s per take, rendered as 3-5 sequential ACE-Step passes joined on the bar grid by **Beat-join passes**, so the build-up and drop cycle repeats three to five times with rising tier, fresh beds, and new leads each time. Each cell is a 2-bar stanza under 3 seconds, tempos 165-176, bass boosted rotating electric beds (FM warp, wavy phase, neuro wobble, bitcrushed 808, ...), no brass or high leads. Headliner / Afterparty / Secret Homage / My Coder vary Comfy node placement. EDM playbook: [Drive-through EDM](music-edm.md).
+### Drive-through albums
+
+Six Drive-through albums under `_lab/audio/albums/drive-through/<album>/`. Warped hybrid-trap bass set spliced from [Audio Rack](audio-rack.md) (not rap over a club bed). 180-480 s per take, rendered as 3-5 sequential ACE-Step passes joined on the bar grid by **Beat-join passes**, so the build-up and drop cycle repeats three to five times with rising tier, fresh beds, and new leads each time. Each cell is a 2-bar stanza under 3 seconds, tempos 165-176, bass boosted rotating electric beds (FM warp, wavy phase, neuro wobble, bitcrushed 808, ...), no brass or high leads. Headliner / Afterparty / Secret Homage / My Coder vary Comfy node placement. EDM playbook: [Drive-through EDM lane](music-edm.mdx).
 
 | Album | What it does |
 | --- | --- |
@@ -61,7 +95,7 @@ Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
 
 ---
 
-### Nill Bye diss examples
+## Nill Bye diss examples
 
 One hundred thirty-five extra full-track graphs under **`_lab/audio/albums/nill-bye/<album>/`**. Same AIO, sampler, occupancy **audio**. App **Duration (seconds)** is the song plan (64-210 s). Queue a numbered track **on its own**, or generate the album in one go with `./scripts/manage.sh album-render --album nill-bye/<album-slug>`. SaveAudio stem is **`NN - Song Title`**. FLAC/MP3 tags include artist, album, title, and optional cover.
 
@@ -71,7 +105,7 @@ Style and trap/EDM packs keep the same dry-booth voice (`male rap vocals, dry bo
 
 A new album lands in `_lab/audio/albums/<artist>/<album-slug>/` with numbered tracks plus `cover.json` and `album.json`. Do not leave new graphs at the artist folder root.
 
-#### Peer Review (`audio/albums/nill-bye/peer-review/`)
+### Peer Review (`audio/albums/nill-bye/peer-review/`)
 
 Lab catalog. Queue a track on its own. Full album: `./scripts/manage.sh album-render --album nill-bye/peer-review`.
 
@@ -93,7 +127,7 @@ Lab catalog. Queue a track on its own. Full album: `./scripts/manage.sh album-re
 | **[audio/albums/nill-bye/peer-review/14-double-blind](../generated/workflows/audio/albums/nill-bye/peer-review.md)** | boom-bap **92**, seed **37** | `14 - Double Blind` | Even the booth knows you are faking |
 | **[audio/albums/nill-bye/peer-review/15-replicate](../generated/workflows/audio/albums/nill-bye/peer-review.md)** | boom-bap **88**, seed **7** | `15 - Replicate or Retract` | Cannot reproduce the night |
 
-#### Citation Needed (`audio/albums/nill-bye/citation-needed/`)
+### Citation Needed (`audio/albums/nill-bye/citation-needed/`)
 
 Same invented vocal. Wider beds (jazz hop through folk) and diss angles. Not trap/EDM. Full album: `./scripts/manage.sh album-render --album nill-bye/citation-needed`.
 
@@ -115,7 +149,7 @@ Same invented vocal. Wider beds (jazz hop through folk) and diss angles. Not tra
 | **[audio/albums/nill-bye/citation-needed/14-energy-drink](../generated/workflows/audio/albums/nill-bye/citation-needed.md)** | brass band **120**, seed **101** | `14 - Energy Drink` | Fake fuel |
 | **[audio/albums/nill-bye/citation-needed/15-campfire](../generated/workflows/audio/albums/nill-bye/citation-needed.md)** | folk **82**, seed **103** | `15 - Campfire Rumor` | Campfire rumor |
 
-#### False Drop (`audio/albums/nill-bye/false-drop/`)
+### False Drop (`audio/albums/nill-bye/false-drop/`)
 
 Same dry booth. Rap over club beds (no autotune). Full album: `./scripts/manage.sh album-render --album nill-bye/false-drop`.
 
@@ -137,7 +171,7 @@ Same dry booth. Rap over club beds (no autotune). Full album: `./scripts/manage.
 | **[audio/albums/nill-bye/false-drop/14-kick-split](../generated/workflows/audio/albums/nill-bye/false-drop.md)** | hardstyle **150**, seed **179** | `14 - Kick-Split Myth` | Kick-split myth |
 | **[audio/albums/nill-bye/false-drop/15-uplift-rumor](../generated/workflows/audio/albums/nill-bye/false-drop.md)** | trance **138**, seed **181** | `15 - Uplifting Rumor` | Uplifting rumor |
 
-#### Frozen Ercot (`audio/albums/nill-bye/frozen-ercot/`)
+### Frozen Ercot (`audio/albums/nill-bye/frozen-ercot/`)
 
 Same dry booth. Non-trap, non-EDM beds. Public-record satire of Abbott (punch up; no disability, race, or faith punch-down). Full album: `./scripts/manage.sh album-render --album nill-bye/frozen-ercot`.
 
@@ -159,7 +193,7 @@ Same dry booth. Non-trap, non-EDM beds. Public-record satire of Abbott (punch up
 | **[audio/albums/nill-bye/frozen-ercot/14-fourth-term](../generated/workflows/audio/albums/nill-bye/frozen-ercot.md)** | cinematic **76**, seed **263** | `14 - Fourth Term` | Unprecedented fourth lap |
 | **[audio/albums/nill-bye/frozen-ercot/15-campus-cordon](../generated/workflows/audio/albums/nill-bye/frozen-ercot.md)** | rap rock **168**, seed **269** | `15 - Campus Cordon` | UT troopers vs protest |
 
-#### Lone Star Tab (`audio/albums/nill-bye/lone-star-tab/`)
+### Lone Star Tab (`audio/albums/nill-bye/lone-star-tab/`)
 
 Same dry booth. Rap over club beds (no autotune). Same punch-up rule. Full album: `./scripts/manage.sh album-render --album nill-bye/lone-star-tab`.
 
@@ -181,7 +215,7 @@ Same dry booth. Rap over club beds (no autotune). Same punch-up rule. Full album
 | **[audio/albums/nill-bye/lone-star-tab/14-invasion-hymn](../generated/workflows/audio/albums/nill-bye/lone-star-tab.md)** | trance **138**, seed **353** | `14 - Invasion Hymn` | War-word as appropriation |
 | **[audio/albums/nill-bye/lone-star-tab/15-demolish-hook](../generated/workflows/audio/albums/nill-bye/lone-star-tab.md)** | festival trap **150**, seed **359** | `15 - Demolish Hook` | "Demolish" closer |
 
-#### Thirty Four Counts (`audio/albums/nill-bye/thirty-four-counts/`)
+### Thirty Four Counts (`audio/albums/nill-bye/thirty-four-counts/`)
 
 Same dry booth. Non-trap, non-EDM beds. Public-record satire of Trump (punch up; no disability, race, faith, or children as the joke). Full album: `./scripts/manage.sh album-render --album nill-bye/thirty-four-counts`.
 
@@ -203,7 +237,7 @@ Same dry booth. Non-trap, non-EDM beds. Public-record satire of Trump (punch up;
 | **[audio/albums/nill-bye/thirty-four-counts/14-seven-fifty](../generated/workflows/audio/albums/nill-bye/thirty-four-counts.md)** | cinematic **76**, seed **443** | `14 - Seven Fifty` | Reported $750 federal line |
 | **[audio/albums/nill-bye/thirty-four-counts/15-carroll-tab](../generated/workflows/audio/albums/nill-bye/thirty-four-counts.md)** | rap rock **168**, seed **449** | `15 - Carroll Tab` | Defamation after a finding |
 
-#### Pardon Flood (`audio/albums/nill-bye/pardon-flood/`)
+### Pardon Flood (`audio/albums/nill-bye/pardon-flood/`)
 
 Same dry booth. Rap over club beds (no autotune). Same punch-up rule. Full album: `./scripts/manage.sh album-render --album nill-bye/pardon-flood`.
 
@@ -225,7 +259,7 @@ Same dry booth. Rap over club beds (no autotune). Same punch-up rule. Full album
 | **[audio/albums/nill-bye/pardon-flood/14-shadow-docket](../generated/workflows/audio/albums/nill-bye/pardon-flood.md)** | trance **138**, seed **547** | `14 - Shadow Docket` | Emergency-petition pile |
 | **[audio/albums/nill-bye/pardon-flood/15-immunity-hymn](../generated/workflows/audio/albums/nill-bye/pardon-flood.md)** | festival trap **150**, seed **557** | `15 - Immunity Hymn` | Official-act structure |
 
-#### Winterize Wells (`audio/albums/nill-bye/winterize-wells/`)
+### Winterize Wells (`audio/albums/nill-bye/winterize-wells/`)
 
 Same dry booth. Non-trap, non-EDM beds. Builder bars: methods and statutes, no roast target. Full album: `./scripts/manage.sh album-render --album nill-bye/winterize-wells`.
 
@@ -247,7 +281,7 @@ Same dry booth. Non-trap, non-EDM beds. Builder bars: methods and statutes, no r
 | **[audio/albums/nill-bye/winterize-wells/14-fourteenth-clause](../generated/workflows/audio/albums/nill-bye/winterize-wells.md)** | cinematic **76**, seed **641** | `14 - Fourteenth Clause` | Keep the citizenship sentence |
 | **[audio/albums/nill-bye/winterize-wells/15-one-college](../generated/workflows/audio/albums/nill-bye/winterize-wells.md)** | rap rock **168**, seed **643** | `15 - One College` | One certified slate |
 
-#### Duty Switch (`audio/albums/nill-bye/duty-switch/`)
+### Duty Switch (`audio/albums/nill-bye/duty-switch/`)
 
 Same dry booth. Rap over club beds (no autotune). Same builder rule. Full album: `./scripts/manage.sh album-render --album nill-bye/duty-switch`.
 
@@ -269,11 +303,9 @@ Same dry booth. Rap over club beds (no autotune). Same builder rule. Full album:
 | **[audio/albums/nill-bye/duty-switch/14-open-quad](../generated/workflows/audio/albums/nill-bye/duty-switch.md)** | trance **138**, seed **739** | `14 - Open Quad` | Forum first |
 | **[audio/albums/nill-bye/duty-switch/15-wrench-the-tap](../generated/workflows/audio/albums/nill-bye/duty-switch.md)** | festival trap **150**, seed **743** | `15 - Wrench the Tap` | Lead-line replacement |
 
-Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
-
 ---
 
-### Drive-through EDM examples
+## Drive-through EDM examples
 
 One hundred one extra full-track graphs under **`_lab/audio/albums/drive-through/<album>/`**. Same AIO, sampler, occupancy **audio**. Each take runs **180-480 s** as 3-5 sequential ACE-Step passes (63-93 s each) joined in-graph by **Beat-join passes**. App **Duration (seconds)** sets the first pass; the later passes carry their own clock nodes, and the join node holds **bpm**, **overlap_bars**, and **crossover_hz**. The duration is the sum of the pass scores, not a clock the arranger stretches bars to hit. Queue a numbered track **on its own**, or `album-render --album drive-through/<album-slug>`. SaveAudio stem is **`NN - Song Title`**.
 
@@ -283,7 +315,7 @@ This is **not** the Nill Bye trap/EDM pack. Those graphs are rap **over** club b
 
 Catalog order is the recommended live-set queue (each graph still Queues alone).
 
-#### Hour 1 (`audio/albums/drive-through/hour-1/`)
+### Hour 1 (`audio/albums/drive-through/hour-1/`)
 
 Hour 1 of the live bass set. Full album: `./scripts/manage.sh album-render --album drive-through/hour-1`.
 
@@ -305,7 +337,7 @@ Hour 1 of the live bass set. Full album: `./scripts/manage.sh album-render --alb
 | **[audio/albums/drive-through/hour-1/14-heart-lane](../generated/workflows/audio/albums/drive-through/hour-1.md)** | wave bass **168**, seed **223** | `14 - Heart Lane` | Wave bass warp |
 | **[audio/albums/drive-through/hour-1/15-dawn-receipt](../generated/workflows/audio/albums/drive-through/hour-1.md)** | chest bass **165**, seed **229** | `15 - Dawn Receipt` | Chest bass warp |
 
-#### Hour 2 (`audio/albums/drive-through/hour-2/`)
+### Hour 2 (`audio/albums/drive-through/hour-2/`)
 
 Hour 2 of the live bass set. Full album: `./scripts/manage.sh album-render --album drive-through/hour-2`.
 
@@ -327,7 +359,7 @@ Hour 2 of the live bass set. Full album: `./scripts/manage.sh album-render --alb
 | **[audio/albums/drive-through/hour-2/14-chest-pass](../generated/workflows/audio/albums/drive-through/hour-2.md)** | dirty bass **168**, seed **353** | `14 - Chest Pass` | Dirty bass warp |
 | **[audio/albums/drive-through/hour-2/15-sunrise-sub](../generated/workflows/audio/albums/drive-through/hour-2.md)** | wave bass **165**, seed **359** | `15 - Sunrise Sub` | Wave bass warp |
 
-#### Headliner (`audio/albums/drive-through/headliner/`)
+### Headliner (`audio/albums/drive-through/headliner/`)
 
 Hour 3 headliner. Node placement varies across five layouts. Full album: `./scripts/manage.sh album-render --album drive-through/headliner`.
 
@@ -349,7 +381,7 @@ Hour 3 headliner. Node placement varies across five layouts. Full album: `./scri
 | **[audio/albums/drive-through/headliner/14-root-chest](../generated/workflows/audio/albums/drive-through/headliner.md)** | chest bass **168**, seed **443** | `14 - Root Chest` | Chest bass warp |
 | **[audio/albums/drive-through/headliner/15-ember-crest](../generated/workflows/audio/albums/drive-through/headliner.md)** | warped hybrid-trap **172**, seed **449** | `15 - Ember Crest` | Hybrid trap warp |
 
-#### Afterparty (`audio/albums/drive-through/afterparty/`)
+### Afterparty (`audio/albums/drive-through/afterparty/`)
 
 Hour 4 afterparty. Node placement varies across five layouts. Full album: `./scripts/manage.sh album-render --album drive-through/afterparty`.
 
@@ -376,7 +408,7 @@ Hour 4 afterparty. Node placement varies across five layouts. Full album: `./scr
 | **[audio/albums/drive-through/afterparty/19-clutch-slam](../generated/workflows/audio/albums/drive-through/afterparty.md)** | tearout **174**, seed **577** | `19 - Clutch Slam` | Tearout warp |
 | **[audio/albums/drive-through/afterparty/20-trailer-hitch](../generated/workflows/audio/albums/drive-through/afterparty.md)** | warped hybrid-trap **172**, seed **587** | `20 - Trailer Hitch` | Hybrid trap warp |
 
-#### Secret Homage (`audio/albums/drive-through/secret-homage/`)
+### Secret Homage (`audio/albums/drive-through/secret-homage/`)
 
 Secret Homage. Node placement varies across five layouts. Full album: `./scripts/manage.sh album-render --album drive-through/secret-homage`.
 
@@ -403,7 +435,7 @@ Secret Homage. Node placement varies across five layouts. Full album: `./scripts
 | **[audio/albums/drive-through/secret-homage/19-cold-cache](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | warped hybrid-trap **165**, seed **701** | `19 - Cold Cache` | Hybrid trap warp |
 | **[audio/albums/drive-through/secret-homage/20-secret-homage](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | dirty dubstep **165**, seed **709** | `20 - Secret Homage` | Dirty dubstep warp |
 
-#### My Coder (`audio/albums/drive-through/my-coder/`)
+### My Coder (`audio/albums/drive-through/my-coder/`)
 
 The coder that writes Drive-through, read as music. Sixteen instrumental takes walk `drive_arrange.py` then `edm_examples.py` in source order. Each take's cues are palette phrases chosen by that slice of the source. Regenerate this album when either file changes. Node placement varies across five layouts. Full album: `./scripts/manage.sh album-render --album drive-through/my-coder`.
 
@@ -426,6 +458,10 @@ The coder that writes Drive-through, read as music. Sixteen instrumental takes w
 | **[audio/albums/drive-through/my-coder/15-score-format](../generated/workflows/audio/albums/drive-through/my-coder.md)** | drumstep **174**, seed **821** | `15 - Score Format` | Drumstep warp |
 | **[audio/albums/drive-through/my-coder/16-finalize-album](../generated/workflows/audio/albums/drive-through/my-coder.md)** | dirty dubstep **168**, seed **823** | `16 - Finalize Album` | Dirty dubstep warp |
 
-Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
+## Related
 
----
+1. Splice the tags first: [Audio Rack](audio-rack.md)
+2. Run the RAP-FIRST lane: [RAP-FIRST rap lane](music-rap.mdx)
+3. Run the EDM lane: [Drive-through EDM lane](music-edm.mdx)
+4. Disclosure and QC before you release: [Music disclosure and QC](music-disclosure.md)
+5. Pick the graph for a different job: [Workflow catalog](../studio-workflows.md)

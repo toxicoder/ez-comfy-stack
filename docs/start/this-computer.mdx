@@ -1,6 +1,6 @@
 ---
 title: Set up this computer
-description: macOS, Linux, and Windows laptop bootstrap so SSH, port-forward, and manage.sh work against the Spark.
+description: Bootstrap a macOS, Linux, or Windows laptop so SSH, the port-forward, and manage.sh work against the Spark.
 tags: [getting-started, macos, windows, linux, ssh]
 ---
 
@@ -8,24 +8,25 @@ tags: [getting-started, macos, windows, linux, ssh]
 
 **What's on this page**
 
-- What the operator laptop needs (git, OpenSSH, python3)
-- One command: `manage.sh setup-client`
-- macOS (Homebrew), Linux (apt/dnf), Windows (WSL2)
-- SSH `Host ez-spark` with LocalForward
+- **What you end up with** - a working `ssh ez-spark` and a forwarded ComfyUI port
+- **What the laptop needs** - git, OpenSSH, and python3, nothing else
+- **Run one command** - `manage.sh setup-client` on macOS, Linux, WSL, or Windows
+- **Forward the port after the Spark is up** - the foreground tunnel and its URL
+- **Related** - the full walkthrough and the one-command install
 
 **What this enables**
 
-- **Reaching** ComfyUI at `http://127.0.0.1:${COMFY_PORT}` after the Spark is started
-- **Skipping** copy-paste `ssh -L` once the Host block exists
-- **Not** running Comfy on the laptop - the GPU job stays on the Spark
+- **Reaching** the studio at `http://127.0.0.1:${COMFY_PORT}` once the Spark has started
+- **Skipping** copy-paste `ssh -L` flags once the `Host ez-spark` block exists
+- **Keeping** the GPU job on the Spark - nothing here runs Comfy on the laptop
 
-**Who this is for:** you, on a Mac, Linux laptop, or Windows PC. The Spark itself uses [Getting Started](../getting-started.md). One-command path: [Onboard](onboard.md).
+**Who this is for:** you, on a Mac, a Linux laptop, or a Windows PC, before anything works on the Spark. This page does **not** install Docker on the Spark, download weights, or start the stack. Compose keeps `restart: "no"` and you still type **yes** on `start` on the Spark.
 
-This does **not** start the stack. Compose `restart: "no"`. Type **yes** on `start` on the Spark.
+Run this page first when you drive the Spark over SSH. Once the Spark is set up, continue on [Getting Started](../getting-started.md), or let one command do both machines with [One-command onboard](onboard.md).
 
 ---
 
-## You will end here
+## What you end up with
 
 | Goal | Detail |
 | --- | --- |
@@ -33,7 +34,7 @@ This does **not** start the stack. Compose `restart: "no"`. Type **yes** on `sta
 | **Forward** | `LocalForward ${COMFY_PORT} 127.0.0.1:${COMFY_PORT}` in `~/.ssh/config` |
 | **Next** | On the Spark, `./scripts/manage.sh start` (type **yes**), then open `http://127.0.0.1:${COMFY_PORT}` |
 
-Fill Spark IP / user / port in **Your Spark** (docs) or:
+Fill the Spark IP, user, and port in the **Your Spark** panel at the top of any docs page, or export them in your shell:
 
 ```bash
 export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
@@ -43,7 +44,17 @@ export COMFY_PORT="${COMFY_PORT:-8188}"
 
 ---
 
-## One command
+## What the laptop needs
+
+- [ ] **git**, **OpenSSH client**, **python3** - `setup-client` installs what is missing
+- [ ] **Homebrew** on macOS, or **apt** / **dnf** on Linux and WSL, for those installs
+- [ ] **WSL2 Ubuntu** on Windows - the supported path, because `manage.sh` is bash
+
+No Docker, no CUDA, and no weights on the laptop. The GPU job stays on the Spark.
+
+---
+
+## Run one command
 
 <EzCommand id="setup-client" />
 
@@ -64,10 +75,22 @@ Windows: run `scripts/utilities/setup-client.ps1`. The supported path is **WSL2 
 
 ---
 
-## After the Spark is up
+## Forward the port after the Spark is up
 
 <EzCommand id="spark-ui" />
 
 That is a foreground tunnel. Leave it open while you use the UI. Opt-in always-on tunnel services (`launchd` / systemd) are not the default - an always-on LocalForward is easy to forget.
 
-**Fail:** [Host and Docker](../operate/troubleshooting-host-docker.md) - [MCP and SSH tunnels](../operate/mcp.md).
+The one-off form of the same tunnel, for a machine where you did not write the Host block, is step 6 of [Getting Started](../getting-started.md). Tunnel and MCP notes: [MCP and SSH tunnels](../operate/mcp.md).
+
+**Fail:** SSH refused or the wrong user -> [Host and Docker](../operate/troubleshooting-host-docker.md).
+
+---
+
+## Related
+
+- [Getting Started](../getting-started.md) - the full walkthrough to a queued still
+- [One-command onboard](onboard.md) - laptop bootstrap plus remote Spark setup
+- [Model licenses](../licenses.md) - what to decide before `download-models`
+- [FAQ](faq.md) - short answers after the first run
+- [This stack or nvidia-dgx-spark-lab](when-to-use-vs-spark-lab.md) - whether this is the right repo

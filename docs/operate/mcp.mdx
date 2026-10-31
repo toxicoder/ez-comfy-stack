@@ -1,26 +1,30 @@
 ---
-title: MCP
-description: In-tree blender-mcp, research-mcp, and studio-mcp typed tools, Path D SSH tunnels, occupancy, no execute_code.
+title: MCP and SSH tunnels
+description: In-tree blender-mcp, research-mcp, and studio-mcp typed tools, Path D SSH tunnels, and the no execute_code rule.
 tags: [mcp, blender, research, studio, occupancy, ssh]
 ---
 
-# MCP
+# MCP and SSH tunnels
 
 **What's on this page**
 
-- **blender-mcp** typed tools (occupancy + host Blender) - no `execute_code`
-- **research-mcp** typed tools (chat, search, lab apps) - no `execute_code`
-- **studio-mcp** typed tools (clone lab graphs into `_user/`) - no `execute_code`, no Queue
-- **Path D** SSH tunnels with session vars
-- **Occupancy** - bpy needs `blender-desk`; research-mcp is CPU GGUF and does not refuse a GPU session
+- **Path D SSH tunnels** - laptop agent as the MCP client, Spark runs stdio servers
+- **blender-mcp** - typed bpy tools behind `blender-desk`, no `execute_code`
+- **research-mcp** - chat, search, and lab App discovery on CPU GGUF
+- **studio-mcp** - clone lab graphs into `_user/`, never Queue
+- **Discovery without a GPU** - `--list-tools` and `--call` skip bpy and llama
 
 **What this enables**
 
 - **Wiring** a laptop agent as the MCP client while the Spark only runs stdio servers
 - **Dumping** clay stills / guides without a cloud 3D API
 - **Keeping** research briefs on `${COMFY_OUTPUT_DIR}/research/` (never `${MODELS_DIR}`)
+- **Cloning** a shipped `_lab` graph into `_user/` without touching Comfy's queue
 
-Desk narrative: [Occupancy](../occupancy.md). Matrix: [Occupancy matrix](occupancy-matrix.md).
+The occupancy rule that decides which of these tools answer (bpy needs the desk) lives on
+[Occupancy desk](../occupancy.md); the concept is [Why one heavy job](../learn/occupancy.md)
+and the mode-by-job table is [Occupancy matrix](occupancy-matrix.md). This page owns the
+tools and the tunnels.
 
 ```bash
 export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
@@ -34,16 +38,21 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 <Callout type="error" title="No execute_code">
   In-tree MCP is typed-tool stdio (`scripts/lib/blender_mcp.py`, `research_mcp.py`, `studio_mcp.py`). **No** `execute_code`, **no** telemetry, **no** arbitrary `fetch_url`. Official Comfy Cloud MCP / `comfy-mcp` stay out of the image (`manage.sh start` is the Comfy launch path). Host only - never in `docker/Dockerfile`.
 </Callout>
+
 ---
 
-## Path D SSH tunnels
+## Open the Path D tunnels
 
-Laptop agent = MCP client. Spark = `blender-mcp` / `research-mcp` (and optional Comfy / 35B sidecar).
+Laptop agent = MCP client. Spark = `blender-mcp` / `research-mcp` (and optional Comfy / 35B
+sidecar).
 
 ```bash
 ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
 ssh -L 30000:127.0.0.1:30000 "${SPARK_USER}@${SPARK_HOST}"
 ```
+
+**Check it worked:** `http://127.0.0.1:${COMFY_PORT}` serves the canvas on the laptop, and
+`http://127.0.0.1:30000/v1` answers when `llm-desk` is up on the Spark.
 
 Then on the Spark:
 
@@ -59,17 +68,27 @@ Then on the Spark:
 ./scripts/manage.sh research-mcp --call research '{"message":"night rooftop lighting"}'
 ```
 
-`--list-tools` and `--call TOOL [JSON]` work without stdio. Discovery-only calls (`--list-tools`, occupancy/list/describe) skip bpy / llama.
+`--list-tools` and `--call TOOL [JSON]` work without stdio. Discovery-only calls
+(`--list-tools`, occupancy/list/describe) skip bpy / llama.
+
+**Check it worked:** `--list-tools` prints the server's tool list and `--call` prints JSON.
+A bpy tool that answers `occupancy enter blender-desk first (Comfy is a heavy job)` means
+the desk is not up - see [Occupancy desk](../occupancy.md).
 
 ---
 
 ## blender-mcp
 
-Wrappers: `scripts/utilities/blender-mcp.sh` -> `scripts/lib/blender_mcp.py`. Server name `ez-blender`. Protocol `2024-11-05`.
+Wrappers: `scripts/utilities/blender-mcp.sh` -> `scripts/lib/blender_mcp.py`. Server name
+`ez-blender`. Protocol `2024-11-05`.
 
-bpy tools require **blender-desk** (or Compose down). Non-desk returns `occupancy enter blender-desk first (Comfy is a heavy job)`. Starting bpy MCP records `mcp_pid` and maps **idle -> blender-desk**.
+bpy tools require **blender-desk** (or Compose down). Non-desk returns `occupancy enter
+blender-desk first (Comfy is a heavy job)`. Starting bpy MCP records `mcp_pid` and maps
+**idle -> blender-desk**.
 
-`occupancy_enter` **does not start Compose**. Tool description lists `idle|blender-desk|klein|trellis|wan|ltx` (the handler still forwards `mode` to `occupancy.sh enter`).
+`occupancy_enter` **does not start Compose**. Tool description lists
+`idle|blender-desk|klein|trellis|wan|ltx` (the handler still forwards `mode` to
+`occupancy.sh enter`).
 
 | Tool | Args | What |
 | --- | --- | --- |
@@ -90,9 +109,12 @@ No cloud 3D APIs.
 
 ## research-mcp
 
-Wrappers: `scripts/utilities/research-mcp.sh` -> `scripts/lib/research_mcp.py`. Server name `ez-research`.
+Wrappers: `scripts/utilities/research-mcp.sh` -> `scripts/lib/research_mcp.py`. Server name
+`ez-research`.
 
-CPU Qwen3-4B + SSRF-safe HTTPS search (Wikipedia + DuckDuckGo). **Does not refuse a GPU Comfy session.** Recording `mcp_pid` does **not** remap `idle` -> `blender-desk` or `llm-desk`. Same pipeline as **inspire/research-chat**. MCP does **not** Queue Comfy.
+CPU Qwen3-4B + SSRF-safe HTTPS search (Wikipedia + DuckDuckGo). **Does not refuse a GPU Comfy
+session.** Recording `mcp_pid` does **not** remap `idle` -> `blender-desk` or `llm-desk`.
+Same pipeline as **inspire/research-chat**. MCP does **not** Queue Comfy.
 
 | Tool | Args | What |
 | --- | --- | --- |
@@ -103,17 +125,24 @@ CPU Qwen3-4B + SSRF-safe HTTPS search (Wikipedia + DuckDuckGo). **Does not refus
 | `web_search` | `query` (required) | Titles, snippets, URLs (`limit=5`, no body fetch) |
 | `research` | `message` (required), `history`, `web_search` (default true), `subagents` (default 2) | Planner + sequential search subagents + synthesizer |
 
-Briefs: `${COMFY_OUTPUT_DIR}/research/`. Copy prompt ingredients into Prompt Forge, then Spark Still.
+Briefs land under `${COMFY_OUTPUT_DIR}/research/`. Copy prompt ingredients into Prompt Forge,
+then Spark Still.
 
-When `llm-desk` is up, graph occupancy **llm** may use the host sidecar (`http://127.0.0.1:30000/v1`; `host.docker.internal` from Comfy). CPU 4B is the OOM-safe path next to Wan / LTX / TRELLIS. Research-mcp itself does not GPU-offload llama.
+When `llm-desk` is up, graph occupancy **llm** may use the host sidecar
+(`http://127.0.0.1:30000/v1`; `host.docker.internal` from Comfy). CPU 4B is the OOM-safe path
+next to Wan / LTX / TRELLIS. Research-mcp itself does not GPU-offload llama.
 
 ---
 
 ## studio-mcp
 
-Wrappers: `scripts/utilities/studio-mcp.sh` -> `scripts/lib/studio_mcp.py`. Server name `ez-studio`.
+Wrappers: `scripts/utilities/studio-mcp.sh` -> `scripts/lib/studio_mcp.py`. Server name
+`ez-studio`.
 
-Clones shipped `_lab` graphs into live `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/`. **Does not Queue Comfy.** **Does not refuse a GPU session.** Recording `mcp_pid` does **not** remap `idle` -> `blender-desk`. Same pipeline as **inspire/app-forge**. Official Comfy Cloud MCP stays out of tree.
+Clones shipped `_lab` graphs into live `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/`.
+**Does not Queue Comfy.** **Does not refuse a GPU session.** Recording `mcp_pid` does **not**
+remap `idle` -> `blender-desk`. Same pipeline as **inspire/app-forge**. Official Comfy Cloud
+MCP stays out of tree.
 
 | Tool | Args | What |
 | --- | --- | --- |
@@ -133,13 +162,15 @@ Clones shipped `_lab` graphs into live `${COMFY_OUTPUT_DIR}/comfy-user/default/w
 
 Not included: `run_workflow`, `execute_code`, partner APIs, Comfy Cloud.
 
+**Check it worked:** open `_user/<slug>` in Comfy and Queue it under the **source** graph
+occupancy (klein / wan / ltx / ...) - MCP wrote the file, it did not run it.
+
 ---
 
-## Related
+## Next
 
-| Need | Page |
-| --- | --- |
-| Modes table | [Occupancy](../occupancy.md) |
-| Mode x jobs | [Occupancy matrix](occupancy-matrix.md) |
-| App lanes | [ComfyUI Apps](../studio-apps.md) |
-| Host Blender | [Blender GB10 sidecar](../blender-gb10-sidecar.md) |
+1. [Occupancy desk](../occupancy.md) - park Comfy before a bpy tool call
+2. [Occupancy matrix](occupancy-matrix.md) - which mode allows which GPU job
+3. [ComfyUI Apps](../studio-apps.md) - the App lanes an MCP clone comes from
+4. [Blender GB10 sidecar](../blender-gb10-sidecar.md) - the host Blender these tools drive
+5. [Troubleshooting - studio canvas](troubleshooting-canvas.md) - when the canvas does not show the clone

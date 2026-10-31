@@ -1,23 +1,31 @@
 ---
 title: Audio Rack
-description: Pick-and-splice professional audio/music techniques into ACE-Step tags and lyrics form.
+description: Pick one audio or music technique per axis and splice it into ACE-Step tags and lyrics form.
 tags: [audio, music, prompting, ace-step, inspire]
 ---
 
 # Audio Rack
 
+Use this page when the track is right but the tag list is not: it turns music
+grammar into thirteen dropdowns and hands you ACE-Step tags plus a lyrics form.
+It is deterministic - no LLM. For the ACE rewriter that uses the same catalog
+language, see [Prompting](../prompting.md); for the camera equivalent,
+[Cinema Rack](cinema-rack.md).
+
 **What's on this page**
 
-- Thirteen audio/music axes you pick one-at-a-time
-- How the rack splices ACE-Step tags and lyrics form
-- Flavor rules (vocal, instrumental, podcast bed)
-- Recipes, including Drive-through bass-set starters
-- Conflicts, and handoff to rap-draft
+- **Axes** - the thirteen widgets and what each one does on an instrumental or a podcast bed
+- **Flavors** - what the rack emits per family, plus recipe fill and conflict order
+- **Drive-through recipes** - the shipped bass-set starters and their mix locks
+- **Handoff** - where to paste the tags and lyrics it writes
+- **Related** - what to load next
 
 **What this enables**
 
-- Building a professional ACE-Step prompt from dropdowns instead of remembering tag grammar
-- Copying tags and lyrics form into **audio/music/rap-draft**, **audio/music/rap-full**, or a podcast bed
+- **Building a professional ACE-Step prompt** from dropdowns instead of remembering tag grammar
+- **Copying tags and lyrics form** into **audio/music/rap-draft**, **audio/music/rap-full**, or a podcast bed
+- **Starting a Drive-through take** from a shipped recipe instead of a blank tag box
+- **Keeping one BPM token** so the encoder widget and the tags cannot disagree
 
 **Who this is for:** studio users after Prompt Forge / Cinema Rack. Occupancy **llm**. No UNET. Do not load ACE-Step on this canvas.
 
@@ -90,7 +98,7 @@ Shipped Drive-through takes under `_lab/audio/albums/drive-through/` splice thes
 | `rec_drive_festival_trap` | Festival trap |
 | `rec_drive_dj_shout` | Hybrid trap + `voc_dj_shout` |
 
-Instrumental takes use `mix_drive_lock` (808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, electric warp texture, wavy FM layers). The DJ-shout lane keeps `mix_drive_treat` with the same chest-bass lock for manual recipes. Drive recipes leave the sound-design axis empty so a noise riser is not a whole-clip tag. Color bass tags stay `low-mid bass`, not formant. Do not pick `ins_warped_saw` on a Drive-through graph (supersaw is a high-pitch needle). Playbook: [Drive-through EDM](music-edm.md).
+Instrumental takes use `mix_drive_lock` (808, original composition, heavy chest bass, bass boosted, wide low-mid layers, fast switch-ups, deep 3D spatial low-mid, stacked 808 layers, electric warp texture, wavy FM layers). The DJ-shout lane keeps `mix_drive_treat` with the same chest-bass lock for manual recipes. Drive recipes leave the sound-design axis empty so a noise riser is not a whole-clip tag. Color bass tags stay `low-mid bass`, not formant. Do not pick `ins_warped_saw` on a Drive-through graph (supersaw is a high-pitch needle). Playbook: [Drive-through EDM lane](music-edm.mdx).
 
 ## Handoff
 
@@ -102,3 +110,13 @@ Instrumental takes use `mix_drive_lock` (808, original composition, heavy chest 
 Do **not** co-resident ACE-Step with Klein / Wan / LTX. The rack canvas is occupancy **llm** so you can splice without loading the AIO.
 
 Safety impact: none. Prompt JSON + CPU node. No Docker, restart, or headroom change.
+
+---
+
+## Related
+
+1. Queue the tags you just spliced: [Audio graphs](workflows-audio.md)
+2. Run the rap lane: [RAP-FIRST rap lane](music-rap.mdx)
+3. Run the EDM lane: [Drive-through EDM lane](music-edm.mdx)
+4. How the ACE rewriter uses the same catalog language: [Prompting](../prompting.md)
+5. Splice the camera instead of the mix: [Cinema Rack](cinema-rack.md)

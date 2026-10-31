@@ -1,6 +1,6 @@
 ---
 title: Model licenses
-description: US self-host license policy for Klein 4B, Wan 2.2, and LTX-2.5. Not legal advice.
+description: US self-host license policy for Klein 4B, Wan 2.2, and LTX-2.5, with the defaults, gated pulls, and bans. Not legal advice.
 tags: [license, apache, ltx, wan, klein, youtube, us]
 ---
 
@@ -8,23 +8,55 @@ tags: [license, apache, ltx, wan, klein, youtube, us]
 
 **What's on this page**
 
-- Who this policy is for (US casual commercial, local weights only)
-- Canonical table (same rows as repo-root `LICENSE-MODELS.md`)
-- What we download by default vs omit
-- LTX $10M company-revenue cap vs Wan Apache silent video
-- How 90s shorts split Klein still / optional silent Wan / LTX AV print
-- Free Commercial Use (\<$10M) quality: Klein 4B -> optional SeedVR2 -> LTX-2.5
-- What is banned (MiniMax H3, MiniMax Music 3, Suno/Udio, API-only) vs opt-in NC (Klein 9B, FLUX.2-dev) vs opt-in Kommunity (FLUX 3 Image Klein, $5M revenue cap)
+- **Decide before you run `download-models`** - the three questions you answer first
+- **Accept the gated cards** - `HF_TOKEN`, the Lightricks click, and the FLUX 3 click
+- **Defaults vs gated vs banned** - the six buckets, then the shape of the policy
+- **Canonical table** - every model, repo, license, and default flag
+- **Who this policy covers** - US casual commercial, local weights only
+- **Why these defaults** - the reasoning per lane
+- **Banned** - what never enters a lab graph
+- **The default `download-models` pack** - the exact weights in the first pull
+- **Doctor one-liner** - the policy line `doctor` prints
 
 **What this enables**
 
-- A grep-able policy CI can test
-- Honest copy: LTX is the audio model and is **not Apache**; Wan is the legally cleanest motion model and has **no native audio**
-- Operators can Queue the lab graphs without pulling US-excluded or non-commercial defaults
+- **Deciding** in one screen whether your use is a default, a gated opt-in, or banned
+- **Grepping** a policy CI can test against repo-root `LICENSE-MODELS.md`
+- **Queuing** the lab graphs without pulling US-excluded or non-commercial defaults
+- **Reading** honest copy: LTX is the audio model and is **not Apache**; Wan is the legally cleanest motion model and has **no native audio**
+
+**Who this is for:** a US-based creator running this stack for YouTube, client shorts, or small-LLC ads. Open this page before `download-models` and before you publish anything monetized. It states the stack's download and workflow policy; it does not replace the model cards.
 
 <Callout type="warning" title="Not legal advice">
   This page encodes the stack's **download and workflow policy**. It is not legal advice. Read each Hugging Face model card and license before you monetize. Company-revenue caps (LTX) count **affiliates**.
 </Callout>
+
+---
+
+## Decide before you run `download-models`
+
+Three questions decide what you may pull and publish. Answer them here, not after a 30 GB download.
+
+1. **Company revenue.** Is your company (affiliates count) under **$10M annual revenue**? That number gates LTX-2.5, the only audio-video model in the stack. At or over it, LTX is not yours to run and the AV lane is off the table.
+2. **Monetized output.** Is the result going to monetized YouTube, ads, or a client? Stay on the Apache defaults (Klein 4B still + Wan 2.2 silent). FLUX.2 Klein 9B and FLUX.2 [dev] are FLUX Non-Commercial and **not** monetized-YouTube ok. FLUX 3 Image Klein is FLUX Kommunity License (v1.0) and monetized only for **qualifying users under $5M gross annualized revenue**.
+3. **Gated pulls.** LTX-2.5 and FLUX 3 Image Klein are gated on Hugging Face: a token is not acceptance, so the card must be agreed **as the same user as `HF_TOKEN`**.
+
+Then take the gated pulls in the order below. The full operator path is step 4 of [Getting Started](getting-started.md).
+
+---
+
+## Accept the gated cards
+
+LTX-2.5 is gated. Klein 4B and Wan 5B are Apache and do not need a license click. FLUX 3 Image Klein is also gated (Kommunity) - accept the card as the same user as `HF_TOKEN`, then `download-image --tier flux3`.
+
+1. Create or edit `.env` with `HF_TOKEN=hf_...` (or `hf auth login`)
+2. In a browser, as **that same user**, open https://huggingface.co/Lightricks/LTX-2.5 and click **Agree**
+3. Fine-grained tokens need **gated repo** read
+4. `./scripts/manage.sh download-models` (`hf` is auto-installed; token in `.env` is enough - no extra `hf auth login` if `HF_TOKEN` is set)
+
+A token in `.env` is **not** the same as accepting the Lightricks license.
+
+---
 
 ## Defaults vs gated vs banned
 
@@ -44,9 +76,7 @@ flowchart LR
   B["H3 / APIs"] --> No["Not in this lab"]
 ```
 
-## Audience
-
-US-based casual content creators: YouTube, client shorts, ads under a **small LLC**. Run **only locally hosted** models. No fal / Comfy Cloud / MiniMax API / Kling / Seedance / Veo partner nodes in lab graphs.
+---
 
 ## Canonical table
 
@@ -120,16 +150,13 @@ TRELLIS.2 footnote: download `Comfy-Org/TRELLIS.2` (`trellis_2_int8_convrot` + s
 
 The same table is in repo-root `LICENSE-MODELS.md` so tests can grep either file.
 
-## Before `download-models`
+---
 
-LTX-2.5 is gated. Klein 4B and Wan 5B are Apache and do not need a license click. FLUX 3 Image Klein is also gated (Kommunity) - accept the card as the same user as `HF_TOKEN`, then `download-image --tier flux3`.
+## Who this policy covers
 
-1. Create or edit `.env` with `HF_TOKEN=hf_...` (or `hf auth login`)
-2. In a browser, as **that same user**, open https://huggingface.co/Lightricks/LTX-2.5 and click **Agree**
-3. Fine-grained tokens need **gated repo** read
-4. `./scripts/manage.sh download-models` (`hf` is auto-installed; token in `.env` is enough - no extra `hf auth login` if `HF_TOKEN` is set)
+US-based casual content creators: YouTube, client shorts, ads under a **small LLC**. Run **only locally hosted** models. No fal / Comfy Cloud / MiniMax API / Kling / Seedance / Veo partner nodes in lab graphs.
 
-A token in `.env` is **not** the same as accepting the Lightricks license. First-run path: [Getting Started](getting-started.md).
+---
 
 ## Why these defaults
 
@@ -147,9 +174,11 @@ A token in `.env` is **not** the same as accepting the Lightricks license. First
 
 **Free Commercial Use (\<$10M) quality:** Klein **4B** still at LTX feeder size (`1280x704` / `768x1280`) -> optional Apache SeedVR2 polish on that PNG (not 4K) -> LTX-2.5 I2V (motion + sound; LTX 2x / DFR for resolution). Unload Klein before LTX. The Quality combo of that name never selects Klein 9B or FLUX.2-dev. Wan silent 5 s remains the Apache rehearsal (no company-revenue cap, no native audio).
 
-**90s films:** Klein identity still + 18 x LTX 5.00s print (world audio, no score), stitch with a 90s cap. Do not Queue a 90s latent. See [90s shorts](shorts.md).
+**90s films:** Klein identity still + 18 x LTX 5.00s print (world audio, no score), stitch with a 90s cap. Do not Queue a 90s latent. See [Short films](shorts.md).
 
 **Omitted:** LongCat-Video (custom-node risk). HunyuanVideo 1.5 (US-legal but territorial clause for other countries - not the one-stack default).
+
+---
 
 ## Banned
 
@@ -175,7 +204,9 @@ Opt-in local podcast (not in `download-models`): Kokoro-82M Apache TTS, native A
 
 `./scripts/manage.sh download-models` **refuses** MiniMax H3.
 
-## Default `download-models` pack
+---
+
+## The default `download-models` pack
 
 Apache still: `flux-2-klein-4b-fp8.safetensors` + `qwen_3_4b.safetensors` + `flux2-vae.safetensors`
 
@@ -187,8 +218,20 @@ LTX AV (not Apache): `ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safet
 
 Apache prompt-enhance GGUF: `Qwen3-4B-Instruct-2507-Q4_K_M.gguf`
 
+---
+
 ## Doctor one-liner
 
 `manage.sh doctor` prints:
 
 `License policy: Apache Klein 4B still + Apache Wan 2.2 5B silent + LTX-2.5 AV (Community, under 10M company USD). Not legal advice. See docs/licenses.md`
+
+---
+
+## Related
+
+- [Getting Started](getting-started.md) - accept the gated card and pull the default pack
+- [FAQ](start/faq.md) - short answers after the first run
+- [This stack or nvidia-dgx-spark-lab](start/when-to-use-vs-spark-lab.md) - what this repo refuses to grow
+- [Download tiers](download-tiers.md) - the pack ids behind every `--tier`
+- [Short films](shorts.md) - the 90s split that keeps the prints on Apache plus LTX

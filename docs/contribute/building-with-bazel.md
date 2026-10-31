@@ -1,6 +1,6 @@
 ---
 title: Building with Bazel
-description: Bazelisk-first test, lint, build, and docs workflow for ez-comfy-stack - the gate list, the exec_shell launcher, host setup, and CI.
+description: Run every test, lint, build, and docs action through bazelisk, with the gate list and the per-lane commands.
 tags: [bazel, testing, contributing, ci]
 ---
 
@@ -8,12 +8,13 @@ tags: [bazel, testing, contributing, ci]
 
 **What's on this page**
 
-- **One ingress** - `bazelisk` runs every test, lint, build, and docs action here
+- **Host setup** - `//:setup-host` and the vacuous-lint hole it closes
 - **The gate list** - `//:test-fast`, `//:test`, `//:test-all`, `//:lint`, `//:validate`, `//:fix`
 - **Per-lane commands** - one BATS suite, one utility, one pytest loop
+- **Generated files** - the two derived outputs and the target that writes each
 - **`exec_shell`** - the launcher rule every `bazelisk run` target depends on
-- **Host setup** - `//:setup-host` and the vacuous-lint hole it closes
 - **Ownership guards** - `//:owned_files_check` and `//tests:owned_files_check`
+- **CI** - the path-filtered jobs and the one script with no Bazel label
 
 **What this enables**
 
@@ -22,6 +23,13 @@ tags: [bazel, testing, contributing, ci]
 - **Catching** a linter that vanished from `PATH` instead of silently skipping it
 - **Checking** one lane at a time without waiting for the whole gate
 - **Keeping** hermetic BATS via vendored bats-core
+
+Fourth page in Contribute, after [Contributing](contributing.md), [Conventions](../project-conventions.md),
+and [How we land changes](../learn/merges.md). Next: [Testing docs](testing-docs.md), which is
+what those gates check on a docs PR.
+
+Open this page when you need a command, not a concept. Start at **The gate list**, and drop to
+**Per-lane commands** when a whole gate is too slow for the one file you changed.
 
 Runtime stays Docker Compose (`restart: "no"`). Bazel does **not** add K3s, a lab dashboard, or NCCL. Graduate to [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab) for those.
 
@@ -230,5 +238,12 @@ need Docker, `sudo`, the GPU, or `$HOME`, so they cannot run hermetically -
 `./scripts/manage.sh <verb>` stays available as the escape hatch for those, and prints the
 identical behavior.
 
-Related: [Set up a contributor host](host-setup.mdx) - [Contributor Dev Container](devcontainer.md) -
-[Contributing](contributing.md) - [Docs style](docs-style.md) - [Troubleshooting](../troubleshooting.md)
+## Related
+
+| Need | Page |
+| --- | --- |
+| What each gate checks on a docs PR | [Testing docs](testing-docs.md) |
+| Install the toolchain these targets shell out to | [Set up a contributor host](host-setup.mdx) |
+| The same pins in a container | [Contributor Dev Container](devcontainer.md) |
+| The PR checklist these gates feed | [Contributing](contributing.md) |
+| A gate that fails for an unclear reason | [Troubleshooting](../troubleshooting.md) |

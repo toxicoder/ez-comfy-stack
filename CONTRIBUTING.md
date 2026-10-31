@@ -86,4 +86,4 @@ Public site: [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (`main
 
 ## Style
 
-See [docs/project-conventions.md](docs/project-conventions.md), [docs/contribute/docs-style.md](docs/contribute/docs-style.md), and [AGENTS.md](AGENTS.md). **AI-drafted docs still need a human pass** before merge.
+See [docs/project-conventions.md](docs/project-conventions.md), [docs/contribute/docs-style.md](docs/contribute/docs-style.mdx), and [AGENTS.md](AGENTS.md). **AI-drafted docs still need a human pass** before merge.

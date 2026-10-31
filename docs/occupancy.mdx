@@ -1,6 +1,6 @@
 ---
 title: Occupancy desk
-description: One heavy GPU job on GB10 - park Comfy for Blender Workbench or the 35B writing desk, then restore Klein / TRELLIS / Wan / LTX.
+description: One heavy GPU job on GB10 - park Comfy for Blender or the 35B desk, then restore a visual occupant.
 tags: [occupancy, blender, trellis, safety, gb10]
 ---
 
@@ -8,26 +8,44 @@ tags: [occupancy, blender, trellis, safety, gb10]
 
 **What's on this page**
 
-- Why GB10 is still one heavy GPU job
-- Modes: idle, blender-desk, llm-desk, klein, trellis, wan, ltx - matrix: [Occupancy matrix](operate/occupancy-matrix.md)
-- Park Comfy with `POST /free` instead of `stop` for Workbench dumps or the 35B sidecar
-- What stays XOR (NVENC, Cycles CUDA, LTX next to TRELLIS, llm-desk next to blender-desk)
-- Graph occupancy label `llm` (Prompt Forge / App Forge) is **not** a CLI mode
-- In-tree MCP: blender-mcp (desk), research-mcp, and studio-mcp (GPU sidecar when llm-desk; CPU 4B as OOM fallback; Path D) - tools: [MCP](operate/mcp.md)
+- **Modes** - idle, blender-desk, llm-desk, klein, trellis, wan, ltx
+- **Park vs stop** - `POST /free` instead of a full `start` cycle
+- **The 35B writing desk** - the opt-in host sidecar and its one-time pull
+- **What stays XOR** - NVENC, Cycles CUDA, LTX next to TRELLIS, llm-desk next to blender-desk
+- **Occupancy state** - where `.occupancy.json` lives and what reads it
 
 **What this enables**
 
-- Host Blender clay dumps without typing **yes** on a full `start` cycle every time
-- An opt-in 35B writing desk (`llm-desk`) while Comfy weights are parked
-- A later TRELLIS (`optional/trellis2`) or LTX Queue after Blender / the sidecar is stopped
-- Unchanged `restart: "no"`, heavy confirm, `mem_limit: 90g`, headroom 28 GiB
+- **Dumping** host Blender clay without typing **yes** on a full `start` cycle every time
+- **Running** an opt-in 35B writing desk (`llm-desk`) while Comfy weights are parked
+- **Queuing** a later TRELLIS (`optional/trellis2`) or LTX take after Blender or the sidecar is stopped
+- **Keeping** `restart: "no"`, the heavy confirm, `mem_limit: 90g`, and headroom 28 GiB unchanged
 
 <Callout type="error" title="One heavy job">
   Parked Comfy is **not** a second denoise. `blender-desk` is Workbench / CPU after models unload. `llm-desk` is the host 35B llama-server after models unload - that sidecar **is** the GPU job. Cycles CUDA, TRELLIS, Wan, LTX, and llm-desk still XOR with each other. This does **not** weaken `restart: "no"`, headroom, or download-limit clear-on-exit.
 </Callout>
+
+**Who this is for:** operators who need the GPU for something other than a denoise, or who
+want to know who holds it right now. The idea behind the rule is
+[Why one heavy job](learn/occupancy.md); the mode-by-job lookup is
+[Occupancy matrix](operate/occupancy-matrix.md). This page owns the procedure.
+
 ---
 
-## Modes
+## Read who holds the GPU
+
+```bash
+./scripts/manage.sh occupancy status
+```
+
+**Check it worked:** the printout names the current mode, whether Comfy is parked, and the
+tracked PIDs. State lives at `${COMFY_OUTPUT_DIR}/.occupancy.json` (outputs, never
+`${MODELS_DIR}`). The in-canvas **Occupancy gate** (`EZDCCOccupancyGate`) reads that file
+only - it does not start Compose or spawn Blender.
+
+---
+
+## Enter a mode
 
 | Mode | Compose | Comfy weights | 35B sidecar | GPU job |
 | --- | --- | --- | --- | --- |
@@ -38,10 +56,11 @@ tags: [occupancy, blender, trellis, safety, gb10]
 | `trellis` | up, 90g/80g | TRELLIS.2 INT8 | **stopped** | image->mesh |
 | `wan` / `ltx` | up, 90g/80g | video | **stopped** | Wan 5s / LTX App 8s |
 
-App occupancy keys (`none` / `llm` / `klein` / ...) on Prompt Forge and research-chat are **graph labels**. `llm` means nothing GPU. It is not `occupancy enter llm`. Mode x legal GPU jobs: [Occupancy matrix](operate/occupancy-matrix.md).
+App occupancy keys (`none` / `llm` / `klein` / ...) on Prompt Forge and research-chat are
+**graph labels**. `llm` means nothing GPU. It is not `occupancy enter llm`. Mode x legal GPU
+jobs: [Occupancy matrix](operate/occupancy-matrix.md).
 
 ```bash
-./scripts/manage.sh occupancy status
 ./scripts/manage.sh blender-install   # once; occupancy does not install Blender
 ./scripts/manage.sh occupancy enter blender-desk
 ./scripts/manage.sh blender -- --background
@@ -50,27 +69,45 @@ App occupancy keys (`none` / `llm` / `klein` / ...) on Prompt Forge and research
 ./scripts/manage.sh occupancy enter trellis --yes
 ```
 
-One-time 35B pull (throttled; **not** `download-models`):
+`occupancy enter` **does not** start Compose. Heavy modes tell you to
+`./scripts/manage.sh start` (type **yes**) when the container is down.
+
+**Check it worked:** `./scripts/manage.sh occupancy status` reports the mode you entered, and
+the heavy mode's own message confirms the weights for that job are the only ones loaded.
+
+### Start the 35B writing desk
+
+One-time pull (throttled; **not** `download-models`):
 
 ```bash
 ./scripts/manage.sh download-llm --tier qwen36-35b-a3b
 ```
 
-Host `llama-server` must be on `PATH` (aarch64). Missing binary prints a host-install hint and exits 1 - do not apt/pip inside Docker. vLLM + `nvidia/Qwen3.6-35B-A3B-NVFP4` is an operator alternative only (not wired). Path D: `ssh -L 30000:127.0.0.1:30000`.
+Host `llama-server` must be on `PATH` (aarch64). A missing binary prints a host-install hint
+and exits 1 - do not apt/pip inside Docker. vLLM + `nvidia/Qwen3.6-35B-A3B-NVFP4` is an
+operator alternative only (not wired). Reach it from a laptop with
+`ssh -L 30000:127.0.0.1:30000` ([MCP and SSH tunnels](operate/mcp.md)).
 
-`occupancy enter` **does not** start Compose. Heavy modes tell you to `./scripts/manage.sh start` (type **yes**) when the container is down.
-
-State lives at `${COMFY_OUTPUT_DIR}/.occupancy.json` (outputs, never `MODELS_DIR`). In-canvas **Occupancy gate** (`EZDCCOccupancyGate`) reads that file only - it does not start Compose or spawn Blender. [Stay in Comfy after a Blender dump](learn/comfy-first-blender.md).
+**Check it worked:** `http://127.0.0.1:30000/v1` answers and `occupancy status` shows
+`llm-desk` with the sidecar running.
 
 ---
 
-## Park vs stop
+## Park instead of stopping
 
-`stop` is the hammer: container down, volumes kept. Use it for NVENC proxies, SuperSplat, or a wedged UI.
+`stop` is the hammer: container down, volumes kept. Use it for NVENC proxies, SuperSplat, or
+a wedged UI.
 
-`occupancy enter blender-desk` keeps Compose up, waits for an empty queue, then `POST /free` `{unload_models, free_memory}` (the Manager unload). Host Workbench dumps (`export-guides`, `blender-stills`, `house-views`, `blender`) are allowed. NVENC still dies if compose is up.
+`occupancy enter blender-desk` keeps Compose up, waits for an empty queue, then `POST /free`
+`{unload_models, free_memory}` (the Manager unload). Host Workbench dumps
+(`export-guides`, `blender-stills`, `house-views`, `blender`) are allowed. NVENC still dies if
+compose is up.
 
 If `/free` fails, Workbench may still contend for unified memory - `occupancy idle` then.
+
+**Check it worked:** the Blender dump lands under `${COMFY_OUTPUT_DIR}` and Comfy stays up,
+so no **yes** and no headroom check. [Stay in Comfy after a Blender
+dump](learn/comfy-first-blender.md).
 
 ---
 
@@ -84,37 +121,25 @@ If `/free` fails, Workbench may still contend for unified memory - `occupancy id
 
 ---
 
-## MCP (mcp-construct)
+## MCP on the desk
 
-Tool tables and Path D tunnels: [MCP](operate/mcp.md).
+In-tree MCP servers are typed-tool stdio processes: **No** `execute_code`, **no** telemetry.
+Official Comfy Cloud MCP / `comfy-mcp` stay out of the image (`manage.sh start` is the launch
+path). Two desk rules only:
 
-In-tree MCP servers are typed-tool stdio processes. **No** `execute_code`, **no** telemetry. Official Comfy Cloud MCP / `comfy-mcp` stay out of the image (`manage.sh start` is the launch path). **studio-mcp** clones `_lab` graphs into `_user/` and does **not** Queue.
+- **blender-mcp** bpy tools need `blender-desk`; starting it maps **idle -> blender-desk**.
+- **research-mcp** and **studio-mcp** are CPU GGUF; they do not refuse a GPU Comfy session
+  and do not remap `idle`. Neither queues Comfy.
 
-**blender-mcp** wraps occupancy and host Blender (primitives, camera, keyframes, GLB, guide dumps). **No** cloud 3D APIs. bpy tools need blender-desk.
+Tool tables, the `--call` form, and the Path D tunnels: [MCP and
+SSH tunnels](operate/mcp.md).
 
-```bash
-./scripts/manage.sh occupancy enter blender-desk
-./scripts/manage.sh blender-mcp --stdio
-# optional on-box 4B (CPU, same GGUF as prompt-enhance):
-./scripts/manage.sh blender-llm "greybox mug on a table, dump still mug"
-```
+---
 
-Qwen3-4B will place primitives. Cinematic scenes: Path D - laptop Grok/Cursor as the MCP client over SSH, Spark only runs blender-mcp. If `llama-cli` is missing, `blender-llm` prints that hint and exits 1.
+## Next
 
-**research-mcp** is the creative-process desk (chat, web search, sequential research subagents, `list_lab_apps` / `describe_app`). Graph occupancy **llm**: GPU 35B sidecar when `llm-desk` is up (`http://127.0.0.1:30000/v1` on the host; `host.docker.internal` from Comfy). CPU 4B only if the sidecar is down or occupancy is Wan/LTX/TRELLIS. It does **not** refuse a GPU Comfy session and does **not** map `idle` -> `blender-desk` or `llm-desk`. Same pipeline as **inspire/research-chat**. HTTPS search is SSRF-guarded (no arbitrary `fetch_url` tool).
-
-```bash
-./scripts/manage.sh research-mcp --stdio
-./scripts/manage.sh research-mcp --call research '{"message":"night rooftop lighting"}'
-```
-
-Path D: laptop agent is the MCP client; Spark runs `research-mcp`. Briefs land under `${COMFY_OUTPUT_DIR}/research/` (never `MODELS_DIR`). Copy prompt ingredients into Prompt Forge, then Spark Still. MCP does not Queue Comfy.
-
-**studio-mcp** is the App Forge desk (search/clone/stamp lab graphs into live `_user/`). Graph occupancy **llm**. Same GGUF / sidecar rules as research-mcp. Does **not** Queue the cloned graph. Open `_user/<slug>` and Queue under the **source** occupancy (klein / wan / ltx / ...).
-
-```bash
-./scripts/manage.sh studio-mcp --stdio
-./scripts/manage.sh studio-mcp --call generate_app '{"brief":"1:1 IG still of a mug","slug":"mug-ig"}'
-```
-
-Related: [Occupancy matrix](operate/occupancy-matrix.md) - [MCP](operate/mcp.md) - [ComfyUI Apps](studio-apps.md) - [Blender GB10 sidecar](blender-gb10-sidecar.md) - [Studio sidecars](studio-sidecars.md) - [Hardware, memory, and safety](learn/hardware.md) - [Architecture](learn/architecture.md) - [Troubleshooting - studio canvas](operate/troubleshooting-canvas.md).
+1. [Occupancy matrix](operate/occupancy-matrix.md) - the mode x job lookup before you Queue
+2. [MCP and SSH tunnels](operate/mcp.md) - drive the desk from a laptop agent
+3. [Why one heavy job](learn/occupancy.md) - the concept behind the XOR
+4. [Blender GB10 sidecar](blender-gb10-sidecar.md) - the host Blender install the desk drives
+5. [Troubleshooting - studio canvas](operate/troubleshooting-canvas.md) - a wedged UI or gate

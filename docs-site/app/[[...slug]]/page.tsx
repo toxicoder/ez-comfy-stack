@@ -4,22 +4,17 @@ import type { ReactNode } from "react";
 import type { TOCItemType } from "fumadocs-core/toc";
 
 import { DocsLayout } from "fumadocs-ui/layouts/docs";
-import {
-  DocsBody,
-  DocsDescription,
-  DocsPage,
-  DocsTitle,
-  EditOnGitHub
-} from "fumadocs-ui/layouts/docs/page";
+import { DocsBody, DocsPage, EditOnGitHub } from "fumadocs-ui/layouts/docs/page";
 import { Banner } from "fumadocs-ui/components/banner";
 
 import { CommandVarsProvider } from "@/components/command-vars";
 import { DocsPageProvider } from "@/components/docs-heading";
+import { DocsTrail } from "@/components/docs-trail";
 import { mdxComponentsFor } from "@/components/mdx-components";
 import { PublishedChip } from "@/components/published-chip";
 import { TableChrome } from "@/components/table-chrome";
 import { Wordmark } from "@/components/wordmark";
-import { buildPageTree, neighborsOf } from "@/lib/nav";
+import { buildPageTree, neighborsOf, trailFor } from "@/lib/nav";
 import { formatPublishedLabel, publishedAt } from "@/lib/published";
 import { docsAlias, gitRef, isDevelopmentAlias, REPO_URL, repoFileUrl } from "@/lib/site";
 import { source } from "@/lib/source";
@@ -66,6 +61,7 @@ export default async function DocsRoute({ params }: PageProps) {
   const { body: Body, toc } = await data.load();
   const title = data.title ?? page.path;
   const stamp = publishedAt();
+  const trail = trailFor(page.path);
 
   return (
     <DocsLayout
@@ -85,6 +81,19 @@ export default async function DocsRoute({ params }: PageProps) {
       <DocsPage
         toc={toc}
         full={data.full}
+        // The trail is the reader's cue for which tab and which sidebar folder they are in,
+        // and the tab strip collapses into the sidebar on narrow screens. fumadocs restarts
+        // its own breadcrumb at every `root: true` folder - a tab is one - so it can never
+        // name the tab; `component` replaces the slot with a trail that does.
+        breadcrumb={
+          trail
+            ? {
+                component: (
+                  <DocsTrail trail={trail} page={trail.label || title} url={page.url} />
+                )
+              }
+            : { includePage: true }
+        }
         footer={{
           items: neighborsOf(source, page.path),
           children: (
@@ -100,11 +109,12 @@ export default async function DocsRoute({ params }: PageProps) {
           {stamp ? (
             <PublishedChip iso={stamp.toISOString()} label={formatPublishedLabel(stamp)} />
           ) : null}
-          <DocsTitle>{title}</DocsTitle>
-          {data.description && <DocsDescription>{data.description}</DocsDescription>}
+          {/* Title and lead paragraph come from the page's own H1 (see DocsH1), so the
+              header prints neither and the page opens with exactly one title. */}
           <DocsPageProvider
             facts={{
               title,
+              description: data.description ?? "",
               sourcePath: `docs/${page.path}`,
               sourceUrl: editUrl(page.path),
               gitRef: gitRef(),

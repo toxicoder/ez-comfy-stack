@@ -1,14 +1,23 @@
 /**
- * Sidebar and tab structure, transcribed from the information architecture the site shipped
- * with before the migration.
+ * Sidebar and tab structure, hand-maintained in `lib/nav.json`.
  *
- * MkDocs declared the whole navigation in `mkdocs.yml` under `nav:`; `scripts/gen_nav.py`
- * transcribed it into `lib/nav.json`. Generated cinema / audio / workflow children are
- * merged here at build time from the generator manifests - the same job `docs/hooks.py`
- * used to do - so adding a lab graph does not require a hand-edit of nav.json.
+ * The site inherited its seven tabs from the old MkDocs `nav:` block, and
+ * `scripts/gen_nav.py` transcribed that block into `lib/nav.json`. `mkdocs.yml` is long
+ * gone, so `lib/nav.json` is now the single source of truth: edit it by hand and verify
+ * with `npm run nav:check`. The top-level tab titles are pinned by
+ * `docs/test_docs_site_render.py`, and every page under `docs/` has to appear in the tree
+ * exactly once (`tests/python/test_docs_nav_coverage.py` fails an orphan or a stale entry).
  *
- * Nested groups stay nested: Cinema Rack, Audio Rack, and Workflow details are folders
- * inside their tab, not a flattened list of hundreds of siblings.
+ * Inside a tab, pages are grouped into collapsible folders that read as a progression:
+ * Learn runs concept to concept, Operate runs everyday loop to troubleshooting, and so on.
+ * A group is `{ title, pages }` with no `path`; its leaves keep their order and nest to
+ * any depth. Keep each folder short enough to scan in one glance - a flat list of twenty
+ * siblings tells a reader nothing about where they are.
+ *
+ * Generated Cinema / Audio / workflow children are merged in here at build time from the
+ * generator manifests, so adding a lab graph does not require a hand-edit of nav.json.
+ * The injection matches leaf titles, so the "Cinema Rack", "Audio Rack", and
+ * "Workflow details" entries in nav.json keep those exact titles.
  */
 
 import { existsSync, readFileSync } from "node:fs";
@@ -141,10 +150,12 @@ function audioChildren(): NavNode[] {
 
 function workflowChildren(): NavNode[] {
   const pages = loadManifest("workflows");
+  // Only generated pages belong here. `reference/workflow-nodes.md` is listed in
+  // `nav.json` beside this folder, so repeating it would put the same page in the sidebar
+  // twice under one heading.
   const children: NavNode[] = [
     { title: "Overview", path: "create/workflows-index.md" },
-    { title: "All graphs", path: "generated/workflows/index.md" },
-    { title: "Node parameter encyclopedia", path: "reference/workflow-nodes.md" }
+    { title: "All graphs", path: "generated/workflows/index.md" }
   ];
   const byLane = new Map<string, ManifestPage[]>();
   for (const page of pages) {
@@ -173,7 +184,9 @@ function workflowChildren(): NavNode[] {
 
 /**
  * Expand Cinema Rack / Audio Rack / Workflow details leaves into nested folders using
- * the generator manifests. Other nodes are copied as-is.
+ * the generator manifests. Other nodes are copied as-is. The Workflow details leaf names
+ * the authored catalog page, so the folder it expands to is titled "Graphs by lane" -
+ * otherwise the sidebar and the breadcrumb would print that page's name twice.
  */
 export function injectGenerated(tabs: NavTab[]): NavTab[] {
   const walk = (nodes: NavNode[]): NavNode[] =>
@@ -185,12 +198,12 @@ export function injectGenerated(tabs: NavTab[]): NavTab[] {
         return { title: "Audio Rack", pages: audioChildren() };
       }
       if (isPage(node) && node.title === "Workflow details") {
-        return { title: "Workflow details", pages: workflowChildren() };
+        return { title: "Graphs by lane", pages: workflowChildren() };
       }
       if (isGroup(node)) {
         if (node.title === "Cinema Rack") return { title: node.title, pages: cinemaChildren() };
         if (node.title === "Audio Rack") return { title: node.title, pages: audioChildren() };
-        if (node.title === "Workflow details") return { title: node.title, pages: workflowChildren() };
+        if (node.title === "Workflow details") return { title: "Graphs by lane", pages: workflowChildren() };
         return { title: node.title, pages: walk(node.pages) };
       }
       return node;
@@ -300,4 +313,44 @@ export function neighborsOf(
 export interface PageNodeEntry {
   name: ReactNode;
   url: string;
+}
+
+/** Where a page sits in the sidebar: its tab, then each collapsible folder above it. */
+export interface NavTrail {
+  /** Title of the tab the page is filed under. */
+  tab: string;
+  /** Folder titles between the tab and the page, outermost first. */
+  groups: string[];
+  /** Label the sidebar shows for the page, so the trail and the sidebar agree. */
+  label: string;
+}
+
+/**
+ * Sidebar location of one page, for the breadcrumb above the title.
+ *
+ * fumadocs resets the trail at a `root: true` folder, which is exactly what a tab is, so
+ * its own breadcrumb cannot name the tab. This walks the same tree the sidebar renders.
+ *
+ * Arguments: path - page path relative to `docs/`, with or without its extension.
+ * Returns: the tab, folder titles, and sidebar label, or undefined when the page is not
+ * filed in the tree.
+ */
+export function trailFor(path: string): NavTrail | undefined {
+  const wanted = stripExtension(path);
+  const walk = (nodes: NavNode[], groups: string[]): NavTrail | undefined => {
+    for (const node of nodes) {
+      if (isPage(node)) {
+        if (stripExtension(node.path) === wanted) return { tab: "", groups, label: node.title };
+        continue;
+      }
+      const found = walk(node.pages, [...groups, node.title]);
+      if (found) return found;
+    }
+    return undefined;
+  };
+  for (const tab of injectGenerated(STATIC_NAV)) {
+    const found = walk(tab.pages, []);
+    if (found) return { tab: tab.title, groups: found.groups, label: found.label };
+  }
+  return undefined;
 }

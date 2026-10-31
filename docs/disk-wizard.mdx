@@ -1,6 +1,6 @@
 ---
 title: Disk wizard
-description: Guided, plan-first reclaim for leftover AI experiment files on a DGX Spark that also runs other inference backends.
+description: Guided, plan-first reclaim of leftover AI experiment files on a Spark that runs other backends too.
 tags: [disk, wizard, docker, huggingface, ollama, safety]
 ---
 
@@ -8,32 +8,41 @@ tags: [disk, wizard, docker, huggingface, ollama, safety]
 
 **What's on this page**
 
-- What the wizard will and will not touch
-- How it differs from `cleanup` and `reap-models`
-- Plan -> explain -> apply (stderr progress while scanning)
-- Restore from quarantine
+- **When to use this** - residue `reap-models` cannot see
+- **Three tools** - `cleanup`, `reap-models`, and `disk-wizard`, and where each stops
+- **Plan -> explain -> apply** - the numbered guide and the two accept steps
+- **What a row means** - what / why / risk / reclaim
+- **Hard refuses and allowed roots** - what the wizard will not touch
 
 **What this enables**
 
-- Freeing tens of GB of leftover HF blobs, Docker build cache, Ollama pulls, and superseded Comfy packs **without** deleting the lab keep-set
-- Understanding *what a file is*, *why you might have it*, and *the risk of removing it*
-- Keeping `cleanup` as volume-only and `reap-models` as the MODELS_DIR specialist
+- **Freeing** tens of GB of leftover HF blobs, Docker build cache, Ollama pulls, and superseded Comfy packs **without** deleting the lab keep-set
+- **Understanding** *what a file is*, *why you might have it*, and *the risk of removing it*
+- **Keeping** `cleanup` as volume-only and `reap-models` as the `MODELS_DIR` specialist
+- **Undoing** a review-class move with `restore --from`
 
-**Safety impact:** additive. Default is read-only `--plan`. Does not change `restart: "no"`, start `yes`, headroom, or download-limit clear-on-exit.
+**Safety impact:** additive. Default is read-only `--plan`. Does not change `restart: "no"`,
+the start **yes** confirm, headroom, or download-limit clear-on-exit.
 
 ---
 
-## When to use this
+## Use this when the disk fills on a mixed box
 
-You run this studio **and** other experiments on the same Spark (vLLM, Ollama, llama.cpp, extra Compose stacks, ad-hoc `hf download`). Disk fills with residue that `reap-models` cannot see because it only walks `MODELS_DIR`.
+You run this studio **and** other experiments on the same Spark (vLLM, Ollama, llama.cpp,
+extra Compose stacks, ad-hoc `hf download`). Disk fills with residue that `reap-models`
+cannot see because it only walks `${MODELS_DIR}`.
 
 <EzCommand id="disk-wizard-plan" />
 
-TTY with no flags starts a numbered guide, then still writes a plan. Non-interactive (CI, pipes) is `--plan`. `--apply` requires `--yes`.
+TTY with no flags starts a numbered guide, then still writes a plan. Non-interactive (CI,
+pipes) is `--plan`. `--apply` requires `--yes`.
+
+**Check it worked:** the plan prints rows ranked by reclaimable bytes, with a per-root scan
+line on stderr as it walks each allowed root.
 
 ---
 
-## Three tools (do not mix them up)
+## Do not mix these three up
 
 | Tool | Scope | Default | Deletes weights? |
 | --- | --- | --- | --- |
@@ -45,7 +54,14 @@ Never offered: `docker system prune -a --volumes`. That would eat other stacks' 
 
 ---
 
-## Wizard steps
+## Run the wizard
+
+```bash
+./scripts/manage.sh disk-wizard --plan
+./scripts/manage.sh disk-wizard --json
+./scripts/manage.sh disk-wizard --apply --yes
+./scripts/manage.sh disk-wizard restore --from .disk-quarantine/<utc>
+```
 
 1. **Survey** (always read-only) - `df`, Docker `system df` when available, catalog matches, top files under allowed roots.
 2. **Explain + rank** - largest *likely leftover* first. Each row: what / why / risk / reclaim / whether something is running.
@@ -55,18 +71,15 @@ Never offered: `docker system prune -a --volumes`. That would eat other stacks' 
     - **C - Will not touch** - default keep-set weights, `ez-comfy-state` (use `cleanup`), images of running containers, path escape, other users' homes.
 4. **Confirm** - `--apply --yes`. Log: `${MODELS_DIR}/.disk-wizard.log`.
 
-```bash
-./scripts/manage.sh disk-wizard --plan
-./scripts/manage.sh disk-wizard --json
-./scripts/manage.sh disk-wizard --apply --yes
-./scripts/manage.sh disk-wizard restore --from .disk-quarantine/<utc>
-```
-
 `--plan` (and `--json`) print **stderr progress immediately**: start banner, `df`, each allowed root as it is scanned, a heartbeat on large trees, Docker `system df`, then ranking. A full Spark (`~/.cache`, `/tmp`, Docker) can still take a while - it will not sit silent. `--json` keeps a single JSON array on **stdout**; progress stays on stderr. Heartbeat interval: `DISK_WIZARD_PROGRESS_INTERVAL` seconds (default `2`; `0` disables in-root heartbeats, not the per-root lines).
+
+**Check it worked:** `df -h` shows the reclaim, `${MODELS_DIR}/.disk-wizard.log` records what
+moved, and the lab keep-set is intact (`./scripts/manage.sh models-status` still logs every
+lab model present).
 
 ---
 
-## What a row means
+## Read a row
 
 | Field | Meaning |
 | --- | --- |
@@ -75,19 +88,21 @@ Never offered: `docker system prune -a --volumes`. That would eat other stacks' 
 | **risk** | `safe` (junk) / `review` (maybe still wanted) / `dangerous` (refused) |
 | **reclaim** | `delete` / `quarantine` / `hf-prune` / `reap-models` / `none` |
 
-Quarantine dest: `${MODELS_DIR}/.disk-quarantine/<utc>/` when the path is under `MODELS_DIR`, else `${COMFY_OUTPUT_DIR}/.disk-quarantine/<utc>/`. Manifest is JSONL. Restore moves files back.
+Quarantine dest: `${MODELS_DIR}/.disk-quarantine/<utc>/` when the path is under
+`${MODELS_DIR}`, else `${COMFY_OUTPUT_DIR}/.disk-quarantine/<utc>/`. Manifest is JSONL.
+Restore moves files back: [Backup and restore](operate/backup-restore.md).
 
 ---
 
-## Allowed roots
+## Know the bounds
 
-Default: `MODELS_DIR`, `COMFY_OUTPUT_DIR`, `$HOME/.cache`, `$HOME/.ollama`, `/tmp`, `/var/tmp`. Extra colon-separated roots: `DISK_WIZARD_ROOTS`. Paths are realpath-jailed (no `/`, `/boot`, other homes).
+Allowed roots, default: `MODELS_DIR`, `COMFY_OUTPUT_DIR`, `$HOME/.cache`, `$HOME/.ollama`,
+`/tmp`, `/var/tmp`. Extra colon-separated roots: `DISK_WIZARD_ROOTS`. Paths are
+realpath-jailed (no `/`, `/boot`, other homes).
 
 `--i-system` is **not** implemented in v1 (apt/journal stay off).
 
----
-
-## Hard refuses
+Hard refuses:
 
 - Default keep-set basenames (Klein / Wan 5B / LTX-2.5 / GGUF)
 - Docker image **in use**
@@ -97,15 +112,16 @@ Default: `MODELS_DIR`, `COMFY_OUTPUT_DIR`, `$HOME/.cache`, `$HOME/.ollama`, `/tm
 - Path escape after `realpath`
 - Drive-by `rm -rf ~/.cache/huggingface`
 
-MODELS_DIR class work still belongs to `reap-models` for superseded LTX-2.3 / drop-pack; the wizard **explains** those rows and quarantines on apply rather than reimplementing keep-set.
+`MODELS_DIR` class work still belongs to `reap-models` for superseded LTX-2.3 / drop-pack;
+the wizard **explains** those rows and quarantines on apply rather than reimplementing the
+keep-set.
 
 ---
 
-## Related
+## Next
 
-| Need | Page |
-| --- | --- |
-| MODELS_DIR classes only | [Models and cache](models-and-cache.md) |
-| `--tier` pack map | [Download tiers](download-tiers.md) |
-| Verb catalog | [manage.sh reference](manage-cli.md) |
-| Disk-full symptom | [Troubleshooting - models and workflows](operate/troubleshooting-models-workflows.md) |
+1. [Models and cache](models-and-cache.md) - the `MODELS_DIR` tree and the reap classes
+2. [Backup and restore](operate/backup-restore.md) - restore a quarantined file
+3. [Download tiers](download-tiers.md) - the packs that filled the disk in the first place
+4. [manage.sh reference](manage-cli.md) - the full verb catalog
+5. [Troubleshooting - models and workflows](operate/troubleshooting-models-workflows.md) - a disk-full symptom

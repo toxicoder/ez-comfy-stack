@@ -1,6 +1,6 @@
 ---
 title: Blender GB10 sidecar
-description: Host Blender next to the US-safe studio. Refuses if Compose is up. Never in the Dockerfile.
+description: "Run host Blender beside the studio for guide dumps and creator stills, after parking Comfy. It is never built into the Docker image."
 tags: [blender, sidecar, occupancy, gb10]
 ---
 
@@ -8,15 +8,17 @@ tags: [blender, sidecar, occupancy, gb10]
 
 **What's on this page**
 
-- Why Blender stays on the host
-- `manage.sh blender-install` (Ubuntu universe apt; never in the Dockerfile)
-- `manage.sh blender` occupancy refuse
-- Dump verbs: `export-guides` (5.00s pack) and `blender-stills` (creator plates)
+- **Operator path** - `blender-install` (Ubuntu universe apt; never in the Dockerfile), park with `occupancy enter blender-desk`, then dump with `export-guides` or `blender-stills`
+- **Occupancy refuse** - why `manage.sh blender` exits 2 while Compose is a heavy job
+- **What this is not** - no Compose profile, no container layer, no weakened limits
 
 **What this enables**
 
-- Optional DCC pass on the same Spark after Comfy is parked
-- No Blender layer in `docker/Dockerfile` (image stays Comfy + torch)
+- **An optional DCC pass** on the same Spark after Comfy is parked
+- **No Blender layer** in `docker/Dockerfile` (image stays Comfy + torch)
+- **Fail-closed dumps** - exit 2 rather than a fight with the denoise over the GPU
+
+**Question this page answers:** how do I run Blender on the Spark without stealing the GPU from Comfy? Start here if you have not picked a host tool yet: [Host sidecars overview](studio-sidecars.md).
 
 <Callout type="error" title="One heavy GPU job">
   `blender.sh` **dies** if Compose is up and **not** parked. Park first:
@@ -27,7 +29,7 @@ tags: [blender, sidecar, occupancy, gb10]
   ./scripts/manage.sh blender -- --background
   ```
 
-  NVENC proxies still die if compose is up (encoder is a GPU job). Cycles CUDA while Compose is up is refused. `restart: "no"` is unchanged. See [Occupancy desk](occupancy.md).
+  NVENC proxies still die if compose is up (encoder is a GPU job). Cycles CUDA while Compose is up is refused. `restart: "no"` is unchanged. Full wording of the one-heavy-job rule: [Host sidecars overview](studio-sidecars.md#occupancy-rule). Desk commands: [Occupancy desk](occupancy.md).
 </Callout>
 ---
 
@@ -61,8 +63,18 @@ Exit **2** means Compose is a heavy job (not parked, or the queue is busy):
 
 ## What this is not
 
-- Not a Compose profile (unlike optional [studio-ui](shorts.md))
+- Not a Compose profile (unlike the optional [studio-ui](reference/studio-ui.md) board)
 - Not inside the Comfy container
 - Not a reason to weaken `mem_limit: 90g` or headroom `min_host_free_gib: 28`
 
-Guide packs (clay / depth / canny / first+last): [DCC guide pack](dcc-workflows.md) (`manage.sh export-guides`). Creator stills: [Blender creator suite](learn/blender-creator.md) (`manage.sh blender-stills`). Instagram 4:5 greybox stills: [Dream-house tours](learn/dream-house.md) (`manage.sh house-views`). TRELLIS.2 / DA3-BASE weights: [Studio sidecars](studio-sidecars.md). Splat viewer: [Splat sidecar](splat-sidecar.md).
+Playbooks: creator stills at [Blender creator suite](learn/blender-creator.md) (`manage.sh blender-stills`); Instagram 4:5 greybox stills at [Dream-house tours](learn/dream-house.md) (`manage.sh house-views`).
+
+---
+
+## Related
+
+- [Host sidecars overview](studio-sidecars.md) - pick the host tool, and the occupancy rule in full
+- [DCC guide pack](dcc-workflows.md) - the clay / depth / canny / first+last packs (`manage.sh export-guides`)
+- [Asset Bible](asset-bible.md) - where the dumped meshes and plates are catalogued
+- [Splat sidecar](splat-sidecar.md) - the host splat viewer
+- [Vlo video editor](vlo.md) - the host browser NLE

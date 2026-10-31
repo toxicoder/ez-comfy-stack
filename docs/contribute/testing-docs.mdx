@@ -1,6 +1,6 @@
 ---
 title: Testing docs
-description: bazelisk test-fast, coverage, lint, docs, typecheck - 100% Python gate, shell inventory, Fumadocs aliases, generate_shell_docs.py.
+description: "Run the docs gates before you push: coverage, typecheck, lint, and the Fumadocs export, one command each."
 tags: [testing, coverage, fumadocs, contributing]
 ---
 
@@ -8,17 +8,27 @@ tags: [testing, coverage, fumadocs, contributing]
 
 **What's on this page**
 
-- **Validate lanes** - `bazelisk test //:test-fast` / `//:coverage` / `//:lint` / `bazelisk run //docs:docs` / `bazelisk test //tests:typecheck`
-- **100% Python gate** - all first-party production Python (`custom_nodes`, `docker`, `docs/*.py`, `scripts/lib`, `studio-ui`, `tools`)
-- **Shell function inventory** (invoked by a test, not only named)
-- **`deploy-docs.yml`** - `main` -> `latest`, `development` -> `development` (one Next export per run)
-- **`bazelisk run //docs:docs`** - generators then Fumadocs `next build --webpack` into `docs-site/out/` (MDX compiles on demand; webpack does not bundle the ~850-page corpus)
+- **Validate lanes** - one command per gate, and what each one runs
+- **100% Python gate** - the packages it covers and how the GPU paths stay hermetic
+- **Shell function inventory** - invoked by a test, not merely named
+- **Docs build** - generators first, then the Fumadocs export, with the per-generator escape hatches
+- **deploy-docs.yml** - which branch publishes which Pages alias
+- **Related** - the style rules these gates enforce
 
 **What this enables**
 
 - **Running** the same gates CI uses before a docs PR
 - **Knowing** the 100% gate is every first-party production Python module, with GPU/bpy/network branches covered by hermetic fakes
 - **Publishing** versioned docs without mike or MkDocs
+- **Regenerating** `docs/generated/` so the committed tree matches the generators
+
+Fifth page in Contribute, after [Building with Bazel](building-with-bazel.md). Next:
+[Contributor Dev Container](devcontainer.md) if you want these pins in a container, or
+[Docs style](docs-style.md) before you write a page.
+
+Open this page when a docs change has to pass CI and you want the exact command. Take the row
+from **Validate lanes** that matches what you edited; the rest of the page explains what that row
+actually checks. Canonical command list: [Building with Bazel](building-with-bazel.md).
 
 Style: [Docs style](docs-style.md). Root workflow: [Contributing](contributing.md).
 
@@ -95,7 +105,7 @@ python3 docs/generate_audio_docs.py
 ```
 
 `//docs:generate` is the loop you want after editing a shell function, a workflow graph, or a Cinema/Audio Rack JSON: no npm install, no webpack, and it prints the file count it wrote. `bazelisk test //tests:pytest` then fails if the committed `docs/generated/` no longer matches the generators, so regenerate and commit in the same change.
-`generate_shell_docs.py` writes `docs/generated/shell/reference.md` from `# ##`, `# @command`, and `# @function` comments. `generate_workflow_docs.py` writes `docs/generated/workflows/` and `docs/reference/workflow-nodes.md` from `_lab` JSON plus `docs/workflow_nodes.py`. `generate_cinema_docs.py` writes `docs/generated/cinema/` from Cinema Rack JSON. `generate_audio_docs.py` writes `docs/generated/audio/` from Audio Rack JSON. Do not hand-edit those files. The Next export fails closed on MDX/TypeScript errors.
+`generate_shell_docs.py` writes `docs/generated/shell/reference.md` from `# ##`, `# @command`, and `# @function` comments. `generate_workflow_docs.py` writes `docs/generated/workflows/` and `docs/reference/workflow-nodes.md` from `_lab` JSON plus `docs/workflow_nodes.py`. `generate_cinema_docs.py` writes `docs/generated/cinema/` from Cinema Rack JSON. `generate_audio_docs.py` writes `docs/generated/audio/` from Audio Rack JSON. Do not hand-edit those files. The Next export fails closed on MDX/TypeScript errors. MDX compiles on demand (`dynamic: true` in `docs-site/source.config.ts`), so webpack does not bundle the ~850-page corpus.
 
 Pins: Fumadocs on Next.js 16 (`docs-site/package.json`). Node **22+**. [Docs style](docs-style.md).
 
@@ -117,3 +127,12 @@ Public URLs: [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) - [dev
 <Callout type="warning" title="AI-drafted docs still need a human pass">
   Green `bazelisk run //docs:docs` does not prove the page matches the code. Read `nodes.py` / compose / occupancy before merge.
 </Callout>
+
+## Related
+
+| Need | Page |
+| --- | --- |
+| The full gate list and per-lane commands | [Building with Bazel](building-with-bazel.md) |
+| Page template, ezcmd ids, glossary, session vars | [Docs style](docs-style.md) |
+| A host or container with these tools pinned | [Set up a contributor host](host-setup.mdx) |
+| The PR checklist the gates feed | [Contributing](contributing.md) |

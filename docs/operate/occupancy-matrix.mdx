@@ -1,6 +1,6 @@
 ---
 title: Occupancy matrix
-description: Mode x legal GPU jobs on GB10 - idle, blender-desk, llm-desk, klein, trellis, wan, ltx. Graph label llm is not a CLI mode.
+description: Look up which GPU jobs a manage.sh occupancy mode allows, refuses, and leaves parked on the Spark.
 tags: [occupancy, safety, gpu, blender, llm]
 ---
 
@@ -8,19 +8,27 @@ tags: [occupancy, safety, gpu, blender, llm]
 
 **What's on this page**
 
-- **CLI modes** from `scripts/lib/occupancy.sh` - idle, blender-desk, llm-desk, klein, trellis, wan, ltx
-- **Mode x legal GPU jobs**
-- **XOR diagram**, park vs stop
-- **Graph occupancy `llm`** is **not** a CLI mode
-- **Path D MCP**, `EZDCCOccupancyGate`, `${COMFY_OUTPUT_DIR}/.occupancy.json`
+- **Mode x legal GPU jobs** - the table, from `OCCUPANCY_MODE_LIST` in `scripts/lib/occupancy.sh`
+- **Park vs stop** - what each verb leaves up, and when to pick one
+- **Graph occupancy `llm` is not a CLI mode** - the App chip keys vs the CLI verbs
+- **Path D MCP** - the laptop agent, its tunnels, and which tools need `blender-desk`
+- **EZDCCOccupancyGate and state file** - what `${COMFY_OUTPUT_DIR}/.occupancy.json` holds
+- **Related** - the desk, the concept page, and the MCP tool list
 
 **What this enables**
 
-- **Seeing** which job is legal before you Queue or dump
-- **Parking** Comfy (`POST /free`) instead of `stop` for Workbench
+- **Checking** which job is legal before you Queue or dump
+- **Parking** Comfy (`POST /free`) instead of `stop` for a Workbench pass
 - **Remembering** `occupancy enter` does **not** start Compose
 
-Narrative desk: [Occupancy](../occupancy.md). MCP tools: [MCP](mcp.md).
+**Who this is for:** anyone about to run a second heavy job on the GB10.
+
+Three occupancy pages share a name and split the work. This one is the **lookup table**: mode
+by legal GPU job, with what each mode also allows and refuses. For the operator procedure - the
+verbs, in order, with the checks in between - use [Occupancy desk](../occupancy.md). For the
+concept behind the rule and why one job at a time keeps SSH alive, use
+[Why one heavy job at a time](../learn/occupancy.md). Read this page top-down once, then jump
+straight to the table row for the mode you are about to enter.
 
 ```bash
 export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
@@ -30,6 +38,8 @@ export COMFY_OUTPUT_DIR="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
 export COMFY_PORT="${COMFY_PORT:-8188}"
 export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 ```
+
+Ask the host which mode is live and who holds the GPU, then enter the mode you need:
 
 ```bash
 ./scripts/manage.sh occupancy status
@@ -41,9 +51,14 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 <Callout type="error" title="One heavy job">
   Parked Comfy is **not** a second denoise. `blender-desk` is Workbench / CPU after models unload. `llm-desk` is the host 35B llama-server after unload - that sidecar **is** the GPU job. Cycles CUDA, TRELLIS, Wan, LTX, and llm-desk still XOR. This does **not** start Compose and does **not** weaken `restart: "no"`, headroom, or download-limit clear-on-exit.
 </Callout>
+
 ---
 
 ## Mode x legal GPU jobs
+
+Read one row per mode. **Compose** says whether the stack must be up, **Legal GPU job** is the
+one heavy occupant, **Also allowed** is what may run beside it, and **Refused** is what the gate
+turns away.
 
 `OCCUPANCY_MODE_LIST`: `idle` `blender-desk` `llm-desk` `klein` `trellis` `wan` `ltx`.
 
@@ -77,6 +92,9 @@ flowchart TB
 
 ## Park vs stop
 
+Park keeps the container and frees the weights; `stop` takes the process down with them. Pick
+park for a Workbench pass, stop for anything that needs the GPU free outright.
+
 | | Park (`occupancy enter blender-desk`) | `./scripts/manage.sh stop` |
 | --- | --- | --- |
 | **Container** | Stays **up** (or already down) | **Down** |
@@ -84,11 +102,15 @@ flowchart TB
 | **Volume** | Kept | Kept |
 | **Use** | Workbench dumps without a full start cycle | NVENC, SuperSplat, wedged UI, reboot |
 
-If `/free` fails, Workbench may still contend for unified memory - `occupancy idle` then.
+If `/free` fails, Workbench may still contend for unified memory - `occupancy idle` then. The
+verbs, in order: [Occupancy desk](../occupancy.md).
 
 ---
 
 ## Graph occupancy `llm` is not a CLI mode
+
+Two different vocabularies share the word `llm`. The CLI takes only the seven modes above; the
+App chip carries its own keys.
 
 App Mode chips (`custom_nodes/ez_studio_app`) use keys `none` / `llm` / `klein` / `wan` / `ltx` / `film` / `audio`. **`llm` means nothing GPU** on that chip (Prompt Forge / research-chat). There is no `occupancy enter llm`.
 
@@ -98,7 +120,8 @@ The writing-desk CLI mode is **`llm-desk`**. In-canvas **Creative Research** DES
 
 ## Path D MCP
 
-Laptop agent is the MCP client. Spark runs `blender-mcp` / `research-mcp` (stdio). Tunnels:
+The laptop agent is the MCP client; the Spark runs `blender-mcp` / `research-mcp` (stdio). Open
+both tunnels first, then check the mode each tool family needs.
 
 ```bash
 ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
@@ -111,8 +134,23 @@ ssh -L 30000:127.0.0.1:30000 "${SPARK_USER}@${SPARK_HOST}"
 
 ## EZDCCOccupancyGate and state file
 
+The in-canvas gate reads the same state the CLI writes, so a Queue can refuse before a denoise
+starts.
+
 `EZDCCOccupancyGate` reads **JSON only** (`${COMFY_OUTPUT_DIR}/.occupancy.json`). Missing file passes as `unknown` (first-run / pytest). It does **not** start Compose, call Manager unload, or launch Blender.
 
 Default payload when missing: `version`, `mode` (`idle`), `compose`, `parked`, `blender_pid`, `mcp_pid`, `llm_pid`. Live `occupancy status --json` adds `compose_live`, `queue`, `llm_live`.
 
 State lives on **outputs**, never `${MODELS_DIR}`.
+
+---
+
+## Related
+
+| Need | Page |
+| --- | --- |
+| The verbs, in order, with the checks between them | [Occupancy desk](../occupancy.md) |
+| Why the rule exists on GB10 | [Why one heavy job at a time](../learn/occupancy.md) |
+| MCP tool list for Path D | [MCP](mcp.md) |
+| The gate node and its chip | [Custom nodes](../reference/custom-nodes.md) |
+| Symptom -> fix when a mode refuses | [Troubleshooting](../troubleshooting.md) |

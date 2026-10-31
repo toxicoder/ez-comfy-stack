@@ -14,6 +14,7 @@ tags: [docs, contributing, fumadocs, style]
 - **page-brief** (`.ez-page-brief` via Fumadocs remark / `docs/page_brief.py`) and session vars
 - **What not to do** - hide the header, paint indigo, hand-edit `docs/generated/`
 - **Code appearance** - Roboto Mono, fenced line-height from nvidia-dgx-spark-lab, inline terminal green
+- **Related** - the pages that own the gates, the PR, and the generators
 
 **What this enables**
 
@@ -23,7 +24,7 @@ tags: [docs, contributing, fumadocs, style]
 - **Remembering** that **AI-drafted docs still need a human pass**
 - **Regenerating** `_lab` workflow pages from `docs/workflow_nodes.py` (do not hand-edit `docs/generated/workflows/`)
 
-Canonical conventions (shell, Docker, testing): [Project conventions](../project-conventions.md). Workflow: [Contributing](contributing.md).
+Canonical conventions (shell, Docker, testing): [Conventions](../project-conventions.md). Workflow: [Contributing](contributing.md).
 
 ```bash
 export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
@@ -118,4 +119,15 @@ Fenced blocks and inline `code` follow [nvidia-dgx-spark-lab](https://github.com
 | **Hand-edit `docs/generated/`** | Generators own those pages; `bazelisk run //docs:docs` rewrites them |
 | **Add `display: none` hide rules in `global.css`** | Theme tests reject them |
 
-Testing the docs build: [Testing docs](testing-docs.md). Migration leftovers: repo-root [MIGRATION.md](https://github.com/toxicoder/ez-comfy-stack/blob/__DOCS_GIT_REF__/MIGRATION.md).
+---
+
+## Related
+
+| You are here because | Read |
+| --- | --- |
+| You want the shell, Docker, and testing rules behind the chrome | [Conventions](../project-conventions.md) |
+| You want the commands that gate a docs change | [Testing docs](testing-docs.md) |
+| You are about to open the pull request | [Contributing](contributing.md) |
+| A docs page renders wrong and you need the cause | [Docs site widgets](../operate/troubleshooting-docs-site.md) |
+| You need to re-derive a generated page instead of editing it | [Building with Bazel](building-with-bazel.md) |
+| You want the MkDocs-to-Fumadocs history this page assumes | [MIGRATION.md](https://github.com/toxicoder/ez-comfy-stack/blob/__DOCS_GIT_REF__/MIGRATION.md) |

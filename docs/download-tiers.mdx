@@ -1,6 +1,6 @@
 ---
 title: Download tiers
-description: One table of every pack - what it is, rough size on disk, and the command that downloads it.
+description: One table of every pack, what it is, its rough size on disk, and the command that downloads it.
 tags: [download, tier, models, klein, wan, ltx, podcast, dub, music]
 ---
 
@@ -19,15 +19,36 @@ tags: [download, tier, models, klein, wan, ltx, podcast, dub, music]
 - **Copying** the command that actually downloads that pack
 - **Avoiding** a ~47 GB Fun InP pull when you wanted Wan 2.2 5B
 
-`--tier` names a pack id. It is which **pack** that one command pulls, not a quality ladder. `--limit` is Hugging Face bandwidth in Mbps (`auto`, a number, or `off`), not a smaller weight. `download-models` has **no** `--tier`.
+Open this page when a graph asks for weights you do not have and you want the pack id, the
+size, and the one command. `--tier` names a pack id. It is which **pack** that one command
+pulls, not a quality ladder. `--limit` is Hugging Face bandwidth in Mbps (`auto`, a number,
+or `off`), not a smaller weight. `download-models` has **no** `--tier` - it always pulls the
+default still + Wan 5B + LTX-2.5 set.
 
-Basenames on disk and the container image pin: [Download packs](operate/models-packs.md). Throttle: [Download limit](download-limit.md).
+Weights land in a tier dir under `${MODELS_DIR}` and link into `comfy/`: layout and headroom
+live on [Models and cache](models-and-cache.md). Basenames on disk and the container image
+pin: [Model packs by family](operate/models-packs.md). Throttle:
+[Download limit](download-limit.md). Gated packs need a token **and** a license click:
+[Hugging Face tokens](operate/models-tokens.md).
 
-`./scripts/manage.sh download-podcast`, `download-dub`, `download-music`, and `download-llm` already run the pull. 3D, LongCat, DreamX, and SeedVR2 forward to a utility that defaults to a status check, so those commands include the word `run`.
+`./scripts/manage.sh download-podcast`, `download-dub`, `download-music`, and `download-llm`
+already run the pull. 3D, LongCat, DreamX, and SeedVR2 forward to a utility that defaults to
+a status check, so those commands include the word `run`.
 
-Wan `--tier all` is `5b` + `a14b` + `fun-inp`. It does not include `vace` or `s2v`. LTX `--tier all` is `2.5` + `2.3` + `gemma` and does not include `iclora`. Image `--tier all` is the Apache stills (`fast`, `nvfp4`, `base`, `zimage`) and does not include `9b`, `flux2-dev`, or any `flux3` pack. `balanced` is a `2.3` alias, not a 2.5 quality knob. `quality` on LTX is the 2.3 BF16 alias.
+Wan `--tier all` is `5b` + `a14b` + `fun-inp`. It does not include `vace` or `s2v`. LTX
+`--tier all` is `2.5` + `2.3` + `gemma` and does not include `iclora`. Image `--tier all` is
+the Apache stills (`fast`, `nvfp4`, `base`, `zimage`) and does not include `9b`,
+`flux2-dev`, or any `flux3` pack. `balanced` is a `2.3` alias, not a 2.5 quality knob.
+`quality` on LTX is the 2.3 BF16 alias.
 
-**FLUX 3 Image Klein is gated.** The six `flux3*` packs all live in `black-forest-labs/flux-3-image-klein-comfy` (Hugging Face `gated=auto`), so you need `HF_TOKEN` in `.env` **and** license acceptance on the model card by the **same account as that token** - a token alone is not acceptance. Each pull is pinned to HF revision `feef60b0aaf63a4773ace96636ebbcf43b881312`, so a re-run resolves the same commit. License is **FLUX Kommunity License (v1.0)**, not Apache: monetized output is OK only for qualifying users under $5M gross annualized revenue. Klein 4B stays the Apache default and the only still in `download-models`. Read [Model licenses](licenses.md).
+**FLUX 3 Image Klein is gated.** The six `flux3*` packs all live in
+`black-forest-labs/flux-3-image-klein-comfy` (Hugging Face `gated=auto`), so you need
+`HF_TOKEN` in `.env` **and** license acceptance on the model card by the **same account as
+that token** - a token alone is not acceptance. Each pull is pinned to HF revision
+`feef60b0aaf63a4773ace96636ebbcf43b881312`, so a re-run resolves the same commit. License is
+**FLUX Kommunity License (v1.0)**, not Apache: monetized output is OK only for qualifying
+users under $5M gross annualized revenue. Klein 4B stays the Apache default and the only
+still in `download-models`. Read [Model licenses](licenses.md).
 
 ---
 
@@ -109,17 +130,29 @@ The widget below is the same music row with `--tier` and `--limit` filled in. Po
 | DreamX-World | Refused |
 | MiniMax H3 / `download-h3` | Refused |
 
-Read [Model licenses](licenses.md) before a 30 GB pull. One heavy GPU job at a time - do not Queue Klein next to Wan, LTX, TRELLIS, or `llm-desk`.
+Read [Model licenses](licenses.md) before a 30 GB pull. One heavy GPU job at a time - do not
+Queue Klein next to Wan, LTX, TRELLIS, or `llm-desk`
+([Occupancy desk](occupancy.md)).
 
 ---
 
-## Related
+## Check the pull
 
-| Need | Page |
-| --- | --- |
-| First install | [Getting Started](getting-started.md) |
-| Copy-paste operator commands | [Quick reference](operate/quick-reference.md) |
-| Cache layout / reap | [Models and cache](models-and-cache.md) |
-| Basenames on disk and GHCR pins | [Download packs](operate/models-packs.md) |
-| Mbps throttle | [Download limit](download-limit.md) |
-| Hung resume | [Downloads troubleshooting](operate/troubleshooting-downloads.md) |
+```bash
+./scripts/manage.sh models-status
+```
+
+**Check it worked:** every lab basename is reported present. An opt-in pack is not part of
+that check, so confirm its own files landed under `${MODELS_DIR}/<org__repo>_<tier>`:
+[Models and cache](models-and-cache.md#layout). A resume that sits at 0 MiB/s:
+[Downloads and bandwidth](operate/troubleshooting-downloads.md).
+
+---
+
+## Next
+
+1. [Models and cache](models-and-cache.md) - where those bytes land and how to reap them
+2. [Model packs by family](operate/models-packs.md) - basenames, example graphs, resume
+3. [Hugging Face tokens](operate/models-tokens.md) - gated LTX-2.5 and FLUX 3 access
+4. [Download limit](download-limit.md) - the Mbps throttle behind every pull
+5. [Troubleshooting](troubleshooting.md) - when a download does not behave

@@ -1,29 +1,29 @@
 ---
-title: Download Limit
-description: Throttle model downloads with wondershaper; auto mode measures line rate (cached 24h) and caps at 85%.
+title: Download limit
+description: Throttle model downloads with wondershaper; auto mode measures line rate and caps the pull at 85 percent.
 tags: [bandwidth, wondershaper, speedtest, safety]
 ---
 
-# Download Limit
+# Download limit
 
 **What's on this page**
 
-- Why bandwidth limits matter on remote Sparks
-- CLI usage (`status`, `run`, `clear`, `wrap`, `--refresh`)
-- Manual Mbps cap (`download-models --limit N`) vs auto
-- Auto mode (85% of a duration HTTP / speedtest sample, cached 24h) and wrap lifecycle
+- **Commands** - `status`, `run`, `clear`, `wrap`, and the manage verbs
+- **Fixed cap vs auto** - `--limit N` in Mbps, or 85 percent of a measured sample
+- **Auto mode** - the cache, the HTTP probe, and the speedtest fallbacks
+- **No HTB on a Spark kernel** - gentle HF worker mode instead of a hard cap
+- **Clear on exit** - the wrap trap, Ctrl+C, and the emergency clear
 
 **What this enables**
 
-- Downloading multi-GB Klein/Wan/LTX weights without saturating the uplink and freezing SSH
+- **Pulling multi-GB** Klein / Wan / LTX weights without saturating the uplink and freezing SSH
+- **Recovering a host** that feels stuck throttled after a crash
+- **Choosing deliberately** between a kernel Mbps cap and gentle worker throttling
 
----
+**Who this is for:** operators about to pull on a Spark they reach over SSH. Pack ids are not
+bandwidth: `--tier` picks the pack ([Download tiers](download-tiers.md)), `--limit` is Mbps.
 
-## Why
-
-You cannot walk over to a Spark and wiggle the HDMI cable. Bandwidth left for SSH is how you recover a host that is pulling 30 GB of LTX. A full-rate Hugging Face pull can starve interactive SSH. This utility applies kernel-level traffic shaping via **wondershaper** when HTB is available, and falls back to gentler HF client settings when it is not. Wrap **always clears on exit** - do not weaken that.
-
-Inspired by the throttled Ollama downloader in `dgx-spark-it-up`, generalized and improved with **auto** limiting.
+Wrap **always clears on exit** - do not weaken that.
 
 ```mermaid
 flowchart LR
@@ -39,7 +39,19 @@ flowchart LR
 
 ---
 
-## Commands
+## Why this exists
+
+You cannot walk over to a Spark and wiggle the HDMI cable. Bandwidth left for SSH is how you
+recover a host that is pulling 30 GB of LTX. A full-rate Hugging Face pull can starve
+interactive SSH. This utility applies kernel-level traffic shaping via **wondershaper** when
+HTB is available, and falls back to gentler HF client settings when it is not.
+
+Inspired by the throttled Ollama downloader in `dgx-spark-it-up`, generalized and improved
+with **auto** limiting.
+
+---
+
+## Run the commands
 
 | Command | Purpose |
 | --- | --- |
@@ -67,7 +79,12 @@ Via manage:
 ./scripts/manage.sh download-models --limit off     # no throttle (SSH risk)
 ```
 
-`--limit N` is integer **Mbps** (not MB/s). 40 Mbps ~ 5 MB/s. `.env` `DOWNLOAD_LIMIT=40` is the persistent default; the flag wins for one invocation. Wrap still **clears on exit**. `--limit` is not `--tier` - pack ids live on [Download tiers](download-tiers.md).
+`--limit N` is integer **Mbps** (megabits, not megabytes per second). 40 Mbps ~ 5 MB/s. `.env`
+`DOWNLOAD_LIMIT=40` is the persistent default; the flag wins for one invocation. Wrap still
+**clears on exit**.
+
+**Check it worked:** `./scripts/manage.sh download-limit status --json` reports the interface
+and the active limit, and a wrapped pull logs `limit=N Mbps` before its first progress line.
 
 ```mermaid
 flowchart TB
@@ -80,7 +97,7 @@ flowchart TB
 
 ---
 
-## Auto mode (measure real Mbps)
+## How auto mode measures Mbps
 
 When you pass `--limit auto`:
 
@@ -119,13 +136,15 @@ flowchart TB
   J -->|no| L["gentle HF max-workers"]
 ```
 
-Upload is set to a high **legal** "uncapped" rate (clamped for HTB). Extremely large historical defaults (e.g. 100000 Mbps) produced `Illegal "rate"` on some kernels.
+Upload is set to a high **legal** "uncapped" rate (clamped for HTB). Extremely large historical
+defaults (e.g. 100000 Mbps) produced `Illegal "rate"` on some kernels.
 
 ---
 
-## DGX Spark / no HTB
+## On a Spark kernel without HTB
 
-Many Spark kernels lack `sch_htb` / IFB (`qdisc kind is unknown`). The tool **detects** this and **does not** spam wondershaper/RTNETLINK.
+Many Spark kernels lack `sch_htb` / IFB (`qdisc kind is unknown`). The tool **detects** this
+and **does not** spam wondershaper/RTNETLINK.
 
 | Path | Behavior |
 | --- | --- |
@@ -133,7 +152,10 @@ Many Spark kernels lack `sch_htb` / IFB (`qdisc kind is unknown`). The tool **de
 | HTB missing (typical Spark) | **Gentle HF mode**: `HF_DOWNLOAD_MAX_WORKERS` from measured Mbps (floor **2**-4), `HF_HUB_ENABLE_HF_TRANSFER=0` - not a hard Mbps cap |
 | `DOWNLOAD_LIMIT=off` | Full blast (**SSH risk**) |
 
-Model downloads keep a **real TTY** for the stack-owned progress line (no `2>&1 | tee` on interactive sessions). Hub/tqdm file-count bars stay disabled. Cache hits still finish in 0s. Heartbeats every 10s show `du` growth under the target dir. Wrap logs `limit=N Mbps` (kernel HTB or gentle HF workers) before the first `v` line.
+Model downloads keep a **real TTY** for the stack-owned progress line (no `2>&1 | tee` on
+interactive sessions). Hub/tqdm file-count bars stay disabled. Cache hits still finish in 0s.
+Heartbeats every 10s show `du` growth under the target dir. Wrap logs `limit=N Mbps` (kernel
+HTB or gentle HF workers) before the first `v` line.
 
 ---
 
@@ -150,9 +172,13 @@ After wondershaper runs, the utility checks that a shaping qdisc is active (`tc 
 <Callout type="warning" title="Safety impact">
   Gentle mode reduces parallel download stampede but is **not** a kernel Mbps cap. Prefer HTB where available. **Clear-on-exit remains mandatory** for `wrap`.
 </Callout>
+
 ---
 
-## Ctrl+C
+## Clear the limit
+
+`wrap` always clears on `EXIT` / `INT` / `TERM` so a killed download cannot leave the host
+permanently throttled.
 
 Downloads run in a **process group**. ++ctrl+c++ (SIGINT) or SIGTERM:
 
@@ -161,12 +187,6 @@ Downloads run in a **process group**. ++ctrl+c++ (SIGINT) or SIGTERM:
 3. Exits promptly (status 130)
 
 You should not need `kill -9` on leftover download processes after a clean Ctrl+C.
-
----
-
-## Wrap lifecycle
-
-`wrap` always clears on `EXIT` / `INT` / `TERM` so a killed download cannot leave the host permanently throttled.
 
 ```mermaid
 sequenceDiagram
@@ -194,11 +214,7 @@ sequenceDiagram
   Note over W,WS: Always clear even when traps fire on kill
 ```
 
----
-
-## Emergency clear
-
-If the host feels "stuck" throttled after a crash:
+If the host still feels "stuck" throttled after a crash:
 
 ```bash
 ./scripts/utilities/download-limit.sh clear
@@ -206,17 +222,15 @@ If the host feels "stuck" throttled after a crash:
 ./scripts/manage.sh download-limit clear
 ```
 
+**Check it worked:** `./scripts/manage.sh download-limit status` reports no active limit and
+SSH is responsive again. Clearing does not drop the speed cache, so the next `auto` run reuses
+the 24h sample.
+
 ```mermaid
 flowchart TB
   Stuck["Host feels stuck<br/>or trap skipped"] --> Clear["download-limit clear<br/>or manage.sh download-limit clear"]
   Clear --> Resume["Resume SSH / downloads"]
 ```
-
----
-
-## Units
-
-Limits are in **Mbps** (megabits), not MB/s. Example: **40 Mbps ~ 5 MB/s**.
 
 ---
 
@@ -231,3 +245,13 @@ Limits are in **Mbps** (megabits), not MB/s. Example: **40 Mbps ~ 5 MB/s**.
     3. **Download phase**: one **foreground** model download with live tqdm progress
 
     No interactive sudo during this path. Mock/tests: `LAB_MOCK_LIVE_RX_MBPS`.
+
+---
+
+## Next
+
+1. [Download tiers](download-tiers.md) - the pack ids `--tier` takes, and their sizes
+2. [Models and cache](models-and-cache.md) - where the bytes land on `${MODELS_DIR}`
+3. [Model packs by family](operate/models-packs.md) - resume, cache hits, and stuck partials
+4. [Disk wizard](disk-wizard.md) - free space before a multi-GB pull
+5. [Downloads and bandwidth](operate/troubleshooting-downloads.md) - a stalled or refused pull

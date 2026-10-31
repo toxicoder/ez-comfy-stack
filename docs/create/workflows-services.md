@@ -1,30 +1,48 @@
 ---
-title: Services pack (agency Apps)
-description: Two hundred Klein, Wan, and LTX Apps for ecommerce, ads, local business, education, podcasts, real estate, fashion, B2B, events, and travel jobs.
+title: Services pack
+description: Reference table of the two hundred agency Apps for ecommerce, ads, local business, courses, podcasts, listings, fashion, and B2B.
 tags: [comfyui, workflows, services, klein, wan, ltx, catalog]
 ---
 
-# Services pack (agency Apps)
+# Services pack
+
+Pick a client SKU. This catalog covers agency and small-business jobs: product
+photography, paid-social creative, local-business plates, course art, podcast
+clips, listings, fashion, B2B, events, and travel work - two hundred Apps nested
+under `_lab/services/<vertical>/`. Creator platform jobs are on
+[Creator pack](workflows-creator.md) and generic stills are on
+[Stills graphs](workflows-stills.md).
 
 **What's on this page**
 
-- **Two hundred job Apps** nested under `_lab/services/<vertical>/`
-- **Agency SKUs** (product photography, paid-social, local business, courses, podcasts, listings, fashion, B2B, events, fitness/travel)
-- **Silent Wan loops / I2V** and **LTX AV** plates mixed into each vertical
-- **Lab sizes vs upload pixels** - Size column is the **default**. **Format / platform** retargets the same App. Match aspect; scale in an editor if a client wants more pixels
+- **How to read these tables** - Size, Prefix, and the Format / platform retarget
+- **Ten verticals** - ecommerce, performance ads, local business, education, podcast clips, real estate, fashion and beauty, B2B and SaaS, events, fitness and travel
+- **Related** - what to load after the deliverable lands
 
 **What this enables**
 
 - **Queuing a job-named App** (PDP on-white, UGC kitchen AV, listing walkthrough) instead of restyling a generic still
+- **Reading one table per vertical** so you can find the row in seconds
 - **Keeping occupancy XOR** - Klein, Wan, and LTX still do not share a GB10 session
 
 **Who this is for:** studio users after `stills/still-draft`. Index: [Workflow catalog](../studio-workflows.md). Occupancy and widgets: [ComfyUI Apps](../studio-apps.md).
 
-These graphs clone the shipped Klein 4B / Wan 2.2 / LTX-2.5 printers. They do **not** add models. Empty of lettering - composite titles later. LTX feeders stay **div32**.
-
-Safety impact: **none**. `restart: "no"`, headroom, and download-limit are unchanged.
+**How to read these tables.** The **Workflow** column is the lab id under
+`_lab/services/`, and it links to the generated node page for that graph. **Size**
+is the widget default; **Format / platform** retargets the same App, so match the
+client aspect and scale in an editor when the host wants more pixels. **Prefix** is
+the filename stem the graph writes. Each vertical mixes three families - Klein
+stills, silent ~5 s Wan clips, and LTX AV takes - so park the previous family
+between Queues. These Apps clone the printers the studio already ships, so they
+add no models and the plates come out empty of lettering - composite titles later.
+Seeds, occupancy, sizes, and Queue rules:
+[Workflow catalog](../studio-workflows.md#shared-lab-graph-rules). Safety impact:
+**none**.
 
 ## Ecommerce / product
+
+Twenty ecommerce SKUs: 8 stills, 8 silent ~5 s clips, and 4 AV takes under
+`_lab/services/ecommerce/`.
 
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
@@ -51,6 +69,8 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 
 ## Performance ads
 
+Twenty performance-ads SKUs (hooks, UGC setups, ad formats): 10 stills, 4 silent ~5 s clips, and 6 AV takes under `_lab/services/performance-ads/`.
+
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
 | **[services/performance-ads/hook-face](../generated/workflows/services/performance-ads/hook-face.md)** | 480x832 | `ez_svc_hk_face` | Silent hook-face punch 9:16 |
@@ -75,6 +95,8 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 | **[services/performance-ads/bumper-av](../generated/workflows/services/performance-ads/bumper-av.md)** | 768x1280 | `ez_svc_bumper` | Bumper AV 9:16 |
 
 ## Local business
+
+Twenty local-business SKUs (storefront, menu, team, service): 10 stills, 4 silent ~5 s clips, and 6 AV takes under `_lab/services/local-business/`.
 
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
@@ -101,6 +123,8 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 
 ## Education / courses
 
+Twenty education SKUs (course, lesson, cohort, lab): 9 stills, 6 silent ~5 s clips, and 5 AV takes under `_lab/services/education/`.
+
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
 | **[services/education/course-thumb](../generated/workflows/services/education/course-thumb.md)** | 1280x704 | `ez_svc_crs_th` | Course thumbnail 16:9 |
@@ -125,6 +149,8 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 | **[services/education/graduation-av](../generated/workflows/services/education/graduation-av.md)** | 1280x704 | `ez_svc_grad` | Graduation AV ~5 s |
 
 ## Podcast clips
+
+Twenty podcast-clips SKUs (clip stills, quote cards, studio AV): 9 stills, 4 silent ~5 s clips, and 7 AV takes under `_lab/services/podcast-clips/`.
 
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
@@ -151,6 +177,8 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 
 ## Real estate
 
+Twenty real-estate SKUs (listing rooms, aerials, agent art, walkthroughs): 10 stills, 5 silent ~5 s clips, and 5 AV takes under `_lab/services/real-estate/`.
+
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
 | **[services/real-estate/listing-hero](../generated/workflows/services/real-estate/listing-hero.md)** | 832x480 | `ez_svc_list_h` | Silent listing-hero ~5 s |
@@ -175,6 +203,8 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 | **[services/real-estate/handoff-av](../generated/workflows/services/real-estate/handoff-av.md)** | 1280x704 | `ez_svc_handof` | Handoff AV ~5 s |
 
 ## Fashion and beauty
+
+Twenty fashion-beauty SKUs (lookbooks, campaign heroes, swatch macros): 8 stills, 6 silent ~5 s clips, and 6 AV takes under `_lab/services/fashion-beauty/`.
 
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
@@ -201,6 +231,8 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 
 ## B2B / SaaS
 
+Twenty b2b-saas SKUs (UI heroes, case covers, explainer AV): 11 stills, 3 silent ~5 s clips, and 6 AV takes under `_lab/services/b2b-saas/`.
+
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
 | **[services/b2b-saas/ui-hero](../generated/workflows/services/b2b-saas/ui-hero.md)** | 1536x864 | `ez_svc_ui` | UI hero still 16:9 |
@@ -225,6 +257,8 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 | **[services/b2b-saas/ship-day-av](../generated/workflows/services/b2b-saas/ship-day-av.md)** | 1280x704 | `ez_svc_ship` | Ship-day AV ~5 s |
 
 ## Events and wedding
+
+Twenty events-wedding SKUs (invites, signage, ceremony AV): 9 stills, 3 silent ~5 s clips, and 8 AV takes under `_lab/services/events-wedding/`.
 
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
@@ -251,6 +285,8 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 
 ## Fitness and travel
 
+Twenty fitness-travel SKUs (coach plates, resort rooms, tour AV): 7 stills, 7 silent ~5 s clips, and 6 AV takes under `_lab/services/fitness-travel/`.
+
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
 | **[services/fitness-travel/coach-still](../generated/workflows/services/fitness-travel/coach-still.md)** | 480x832 | `ez_svc_coach` | Silent coach motion 9:16 |
@@ -273,3 +309,13 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 | **[services/fitness-travel/tour-av](../generated/workflows/services/fitness-travel/tour-av.md)** | 1280x704 | `ez_svc_tour` | Tour AV ~5 s |
 | **[services/fitness-travel/sunset-av](../generated/workflows/services/fitness-travel/sunset-av.md)** | 1280x704 | `ez_svc_sun` | Sunset AV ~5 s |
 | **[services/fitness-travel/packing-av](../generated/workflows/services/fitness-travel/packing-av.md)** | 768x1280 | `ez_svc_pack` | Packing AV 9:16 |
+
+---
+
+## Related
+
+1. Creator platform jobs instead of client SKUs: [Creator pack](workflows-creator.md)
+2. Start from a generic plate: [Stills graphs](workflows-stills.md)
+3. Move a plate: [Motion graphs](workflows-motion.md)
+4. Pick the graph for a different job: [Workflow catalog](../studio-workflows.md)
+5. Write the prompt: [Prompting](../prompting.md)
