@@ -1,6 +1,6 @@
 ---
 title: Contributor Dev Container
-description: Multi-arch Linux contributor image with Bazel, Node 22, Python 3.12, and Grok Build - host LLM via host.docker.internal, not host networking.
+description: Reopen this repo in a pinned Linux container with Bazel, Node 22, Python 3.12, and Grok Build already installed.
 tags: [contributing, devcontainer, docker, grok]
 ---
 
@@ -8,11 +8,13 @@ tags: [contributing, devcontainer, docker, grok]
 
 **What's on this page**
 
-- **Reopen in Container** on macOS, Windows (WSL2), Linux, and DGX Spark
-- **What is baked** vs post-create vs the Docker-outside-of-Docker Feature
-- **Grok Build** in the image - device-code or `XAI_API_KEY`, optional host LLM
+- **Open it** - Reopen in Container on macOS, Windows (WSL2), Linux, and DGX Spark
+- **What lives where** - what is baked vs post-create vs the Docker-outside-of-Docker Feature
+- **Grok Build** - device-code or `XAI_API_KEY`, plus the optional host LLM
 - **Sandbox** - no host netns; Grok denies the Docker socket
-- **Pin bumps** and the GHCR cache tag
+- **Bump a pin** - the four edits one CLI version change needs
+- **Failures** - symptom, likely cause, action
+- **Related** - the host and gate pages around this one
 
 **What this enables**
 
@@ -21,6 +23,13 @@ tags: [contributing, devcontainer, docker, grok]
 - **Calling** a host Ollama / LM Studio / llama.cpp server without `--network=host`
 
 **Who this is for:** contributors and agents using VS Code / Cursor Dev Containers. Studio operators on the Spark stay on [Set up this computer](../start/this-computer.md) - this image is not the Comfy GPU image.
+
+Sixth page in Contribute, after [Building with Bazel](building-with-bazel.md) and
+[Testing docs](testing-docs.md). If you would rather install the toolchain on the host than run a
+container, use [Set up a contributor host](host-setup.mdx) instead; both read the same pin file.
+
+Open this page when your host is not the machine you want to build on. Start at **Open it**, then
+**What lives where** to see what a rebuild will cost you.
 
 The container OS is always **Linux** (`linux/amd64` or `linux/arm64`). Windows and macOS hosts run that Linux image through Docker Desktop, OrbStack, Colima, or Engine 20.10+.
 
@@ -66,7 +75,7 @@ Docs site: `bazelisk run //docs-site:install` (or set `DEVCONTAINER_INSTALL_DOCS
 
 GHCR cache: `ghcr.io/toxicoder/ez-comfy-devcontainer:development` (published after merge to `development`). A miss on the first pull is expected.
 
-This image is **not** `ghcr.io/toxicoder/ez-comfy:us-safe-studio*` (Comfy CUDA). See [Project conventions](../project-conventions.md).
+This image is **not** `ghcr.io/toxicoder/ez-comfy:us-safe-studio*` (Comfy CUDA). See [Conventions](../project-conventions.md).
 
 ---
 
@@ -139,4 +148,11 @@ The Docker-outside-of-Docker Feature still mounts the host socket so **you** can
 | Slow create | `docs-site npm ci` running | Leave `DEVCONTAINER_INSTALL_DOCS_SITE` unset; use `bazelisk run //docs-site:install` when you need the docs app |
 | GHCR cache miss | Image not published yet | First merge to `development` publishes `ez-comfy-devcontainer:development`; local Dockerfile still builds |
 
-Related: [Building with Bazel](building-with-bazel.md) - [Contributing](contributing.md) - [Host and Docker](../operate/troubleshooting-host-docker.md)
+## Related
+
+| Need | Page |
+| --- | --- |
+| The gates you run inside the container | [Building with Bazel](building-with-bazel.md) |
+| The PR checklist those gates feed | [Contributing](contributing.md) |
+| Install on the host instead of in a container | [Set up a contributor host](host-setup.mdx) |
+| Docker or host trouble outside the container | [Host and Docker](../operate/troubleshooting-host-docker.md) |

@@ -1,29 +1,43 @@
 ---
-title: Project Conventions
-description: Conventions for shell (Google Shell Style Guide), Docker, docs, testing, and safety in ez-comfy-stack.
+title: Conventions
+description: The house rules for shell, Python, Docker, tests, and docs pages, with the Bazel command that enforces each one.
 tags: [conventions, contributing, safety, shell, google-style]
 ---
 
-# Project Conventions
+# Conventions
 
 **What's on this page**
 
-- Core principles
-- Repo layout and ownership
-- Shell style (Google Shell Style Guide + project deviations)
-- Python types and Google-style docstrings; custom-node JSDoc
-- Operator progress (bars, heartbeats, env)
-- Docker, testing, coverage gate, Pyright (Pylance) + mypy, and branching rules
-- Docs publish and **human-readable formatting** patterns
+- **Principles** - the eight rules every other section follows
+- **Bazel-first workflow** - which gate to run after which edit
+- **Repo layout** - what lives where, and what is generated
+- **Shell style** - Google Shell Style Guide, plus the five documented deviations
+- **Docker** - the layer cache contract and the compose policy
+- **Testing** - TDD, the 100% coverage gate, and the shell function inventory
+- **Branches** - branch from `development`, land with a merge commit
+- **Docs publish** - the docs build, the site chrome contract, and page formatting
+- **Related** - the pages that expand each of these
 
 **What this enables**
 
-- Consistent, reviewable contributions with a Bazel-first test/lint/docs graph and without the lab K8s surface
-- Shell that matches industry practice while staying safe on remote DGX Spark hosts
-- First-party Python that is annotated and Google-style documented (JSDoc on custom-node frontends)
-- Fumadocs pages operators can **scan** (not only search)
+- **Writing** a contribution that passes review the first time
+- **Matching** the shell style reviewers expect on remote DGX Spark hosts
+- **Keeping** first-party Python annotated, documented, and fully covered
+- **Building** Fumadocs pages operators can **scan**, not only search
+
+This is the second page in Contribute, after [Contributing](contribute/contributing.md) and
+before [How we land changes](learn/merges.md). Read [Contributing](contribute/contributing.md)
+first if you have not opened a PR here; it is the short checklist, and this page is the reasoning
+behind it.
+
+Open this page when a reviewer or a gate asks you to change something and you want the rule
+behind it. Each section names the gate that enforces it, so you fix the cause rather than the
+symptom. Scan the tables: the left column is the area or the file, the right column is the rule
+and the command that checks it.
 
 ## Principles
+
+Every rule below traces back to one of these eight.
 
 | Principle | Meaning |
 | --- | --- |
@@ -38,7 +52,8 @@ tags: [conventions, contributing, safety, shell, google-style]
 
 ## Bazel-first workflow
 
-Bazel is the **official** test/lint/docs entry point. The `Makefile` is a thin compatibility shim.
+Bazel is the **official** test/lint/docs entry point. The `Makefile` is a thin compatibility
+shim. Run the lane that matches what you just edited; the table below maps edit to command.
 
 ```bash
 bazelisk run //:validate                    # git-aware: core + docs slices
@@ -59,6 +74,9 @@ bazelisk run //docs:docs
 See [Building with Bazel](contribute/building-with-bazel.md). Runtime is still Docker Compose - Bazel does not add K3s, a dashboard, or NCCL.
 
 ## Repo layout
+
+Operator CLI, shared libraries, utilities, image, graphs, and tests all live in one repo.
+Generated output is called out below - never hand-edit it.
 
 ```mermaid
 flowchart TB
@@ -246,6 +264,9 @@ flowchart LR
 
 ## Docker
 
+One Compose service, one multi-stage image. The bullets below are the layer-cache and policy
+contracts; regressing one costs a cold rebuild, or a container that starts itself.
+
 - One compose service for the unified stack
 - Multi-stage image: **runtime** builder stages + **runtime** final (no secrets/models; `CUDA_BASE_IMAGE=...devel` is an override)
 - **Layer cache contract** (do not regress):
@@ -273,6 +294,9 @@ flowchart TB
 ```
 
 ## Testing
+
+Red, green, refactor, and the tests land in the same commit as the code. The gates below are why a
+missing test is a red build rather than a review comment.
 
 - TDD for behavior changes
 - BATS for shell; pytest for Python; **Pyright** (Pylance) and **mypy** for first-party Python
@@ -357,7 +381,7 @@ Readers **scan**. Prefer inverted pyramid: outcome and commands first, theory an
 
 Author those two lists as **bold + bullets** in source. The Fumadocs remark plugin (and hermetic `docs/page_brief.py`) wraps the first pair after the page `h1` into `.ez-page-brief`: a two-column scan card (stacked under `44.99em`). Titles stay `<p>`, not headings, so they do not enter the TOC. Do not rewrite pages as a fence, admonition, or card grid. Trailing `**Who this is for:**` stays outside the card. Quote YAML scalars that contain a colon (`description: "US-safe ...: ..."`).
 
-**Nav (Diátaxis-shaped, task tabs):** Learn (explanation + [glossary](glossary.md)) -> Start (tutorial) -> Create (how-to) -> Operate (how-to + reference) -> Contribute. Do not mix a command catalog into Getting Started (`manage-cli.md`) or a workflow spreadsheet into the playbook (`studio-workflows.md`).
+**Nav (Diátaxis-shaped, task tabs):** seven tabs, in reader order - Home, Learn (explanation + [glossary](glossary.md)), Get started (tutorial), Studio (how-to), Operate (how-to + reference), Reference, Contribute. Each tab holds collapsible groups that read as a progression, so a folder stays scannable in one glance. The tree lives in `docs-site/lib/nav.json`; a new page has to be filed in exactly one group (`tests/python/test_docs_nav_coverage.py`). Keep a page in the tab its task belongs to: do not mix a command catalog into Getting Started (`manage-cli.md`) or a workflow spreadsheet into the playbook (`studio-workflows.md`).
 
 **Glossary (definition modal):**
 
@@ -397,3 +421,13 @@ Generated `docs/generated/**/*.md` may still use `!!! warning`; `remarkAdmonitio
 ```bash
 bazelisk run //docs:docs   # Fumadocs export must stay green
 ```
+
+## Related
+
+| Need | Page |
+| --- | --- |
+| The short PR checklist this page backs | [Contributing](contribute/contributing.md) |
+| Merge commit, squash, rebase, stacked PRs | [How we land changes](learn/merges.md) |
+| Every Bazel target named above | [Building with Bazel](contribute/building-with-bazel.md) |
+| The docs gates in detail | [Testing docs](contribute/testing-docs.md) |
+| Page template, ezcmd, glossary, session vars | [Docs style](contribute/docs-style.md) |

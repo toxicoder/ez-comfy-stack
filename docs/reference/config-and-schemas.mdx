@@ -1,6 +1,6 @@
 ---
 title: Config and schemas
-description: Purpose, consumers, and safety for disk-catalog, model-manifest, resource-policy, farm env, .env.example, and schemas/.
+description: Which config file or schema owns a value, what reads it, and what you must never commit or lower.
 tags: [config, schemas, safety, models, farm]
 ---
 
@@ -9,15 +9,20 @@ tags: [config, schemas, safety, models, farm]
 **What's on this page**
 
 - **Operator config** - disk catalog, model manifest, resource policy, farm example env, `.env.example`
-- **Handshake schemas** - asset, guide packs, house layout, scene, shot card
-- **Who consumes each file** (`manage.sh` verb or library)
-- **Safety** - keep-set, headroom, no secrets in git
+- **Schemas** - asset, guide packs, house layout, scene, shot card
+- **Related** - the tiers, cache, and occupancy pages these files feed
 
 **What this enables**
 
 - **Knowing** which YAML is a disk bible vs a DCC pack vs a farm placeholder
+- **Tracing** a value to the `manage.sh` verb or library that reads it
 - **Avoiding** committing `${HF_TOKEN}` or real Spark hostnames
 - **Leaving** keys and values to the files themselves (this page does not dump them)
+
+Open this page when you are about to edit a file under `config/`, `schemas/`, or `.env` and want
+to know what reads it. Each table has one row per file: **Purpose** says what it is for, **Who
+consumes it** names the verb or library, and **Safety** is the rule that file enforces. Do not
+copy values out of these tables; the files are the source of truth.
 
 ```bash
 export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
@@ -35,9 +40,12 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 <Callout type="warning" title="Do not weaken headroom">
   `config/resource-policy.yaml` documents `min_host_free_gib: 28` and `memory_limit: 90g`. `manage.sh start` mirrors those via `MIN_HOST_FREE_GIB` / `MEM_LIMIT`. Demos do not get a pass.
 </Callout>
+
 ---
 
 ## Operator config
+
+Five files, each read by a `manage.sh` verb or a script under `scripts/`:
 
 | File | Purpose | Who consumes it | Safety |
 | --- | --- | --- | --- |
@@ -64,7 +72,9 @@ MODELS_DIR=/mnt/models
 
 ## Schemas
 
-Restricted YAML (stdlib parsers; no PyYAML). `scene.json` is JSON.
+Restricted YAML (stdlib parsers; no PyYAML). `scene.json` is JSON. Most of these records carry
+their own version key (`ez.asset.v1`, `ez.guide.shot.v1`, ...), which is what the consumer accepts
+or refuses on:
 
 | File | Purpose | Who consumes it | Safety |
 | --- | --- | --- | --- |

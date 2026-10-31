@@ -1,6 +1,6 @@
 ---
 title: Custom nodes
-description: Lab ez_* ComfyUI packs - class names, display names, inputs/outputs, occupancy, and QC/rights notes from NODE_CLASS_MAPPINGS.
+description: Every lab ez_* ComfyUI pack, with class names, widgets, outputs, occupancy, and the rights notes shipped on each node.
 tags: [custom-nodes, comfyui, occupancy, qc]
 ---
 
@@ -8,19 +8,28 @@ tags: [custom-nodes, comfyui, occupancy, qc]
 
 **What's on this page**
 
-- **Every pack** under `custom_nodes/` (`ez_common` ... `ez_quality` ... `ez_outputs` ... `ez_studio_blocks`)
-- **Mapped nodes** from `NODE_CLASS_MAPPINGS` / `INPUT_TYPES` / `RETURN_TYPES`
-- **Empty mappings** - helpers, LTX spatial patch, App occupancy chip, Outputs sidebar explorer, subgraphs
+- **Pack index** - all 16 packs under `custom_nodes/` and their `NODE_CLASS_MAPPINGS` counts
+- **Per-pack node tables** - class, display name, inputs, outputs, occupancy, QC / rights
+- **Helpers and runtime patches** - `ez_common`, `ez_ltx_spatial`, and their empty mappings
 - **Frontend JS** under Nodes 2.0 (preview `widget.value`, no LiteGraph `inputEl` / `node_widget`)
 - **Reference stills card** - three pickers, thumbnails, the **References off** mute, and `max_refs` on the Klein canvas node
 - **Outputs explorer** - width tiers, folder rail, keyboard cursor, and the shortcut sheet
 - **QC / rights** notes that ship on the node `DESCRIPTION` (nothing invented)
+- **Related** - the App widget catalog and the per-graph parameter pages
 
 **What this enables**
 
 - **Looking up** a canvas class without opening `nodes.py`
 - **Seeing** occupancy widgets vs graph labels (`llm` is not a CLI mode)
+- **Checking** whether a Queue refuses, and why, before you type it
 - **Keeping** App Mode widgets on [ComfyUI Apps](../studio-apps.md) (this page is the pack catalog). Per-graph widgets: [Workflow details](../create/workflows-index.md) - [Workflow node parameters](workflow-nodes.md)
+
+Open this page when a node on the canvas is not doing what you expect, or when you want the
+legal values for a widget. Start at the **Pack index**, click through to that pack's section, and
+read one row per class: **Inputs** are the widgets in canvas order, **Outputs** are the sockets,
+**Occupancy** names the heavy job the node belongs to, and **QC / rights** carries the refusals
+and license notes the node itself prints. Rows are the contract; the prose above each table only
+sets context.
 
 Entrypoint copies these packs into `$COMFY_HOME/custom_nodes/` on `start`. Operator-installed packs live on `${COMFY_OUTPUT_DIR}/custom-nodes-user` (`_user/`) and are not overwritten.
 
@@ -312,3 +321,15 @@ Comfy scans `custom_nodes/ez_studio_blocks/subgraphs/*.json` after `start` copie
 | `ltx-film-shot` | film |
 
 US-safe weights only (Klein 4B / Wan 2.2 5B / LTX-2.5 distilled). 90s film lab graphs still expand 18 concat-safe printers on the parent so VHS prefixes stay per-shot.
+
+---
+
+## Related
+
+| Need | Page |
+| --- | --- |
+| App Mode widget catalog and lanes | [ComfyUI Apps](../studio-apps.md) |
+| Every widget value on one specific graph | [Workflow details](../create/workflows-index.md) |
+| All node types across `_lab`, including upstream ones | [Workflow node parameters](workflow-nodes.md) |
+| Which heavy job each mode allows | [Occupancy matrix](../operate/occupancy-matrix.md) |
+| The MCP twins of `ez_research` and `ez_studio_forge` | [MCP](../operate/mcp.md) |

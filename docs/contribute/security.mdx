@@ -1,6 +1,6 @@
 ---
 title: Security
-description: "Docs-chrome summary of repo-root SECURITY.md - private reporting, no public :8188, no committed tokens."
+description: Report a flaw privately, keep Comfy off the public internet, and leave the resource limits alone.
 tags: [security, safety, comfyui, contributing]
 ---
 
@@ -8,16 +8,23 @@ tags: [security, safety, comfyui, contributing]
 
 **What's on this page**
 
-- **Canonical file** - repo-root `SECURITY.md` (this page is a summary)
-- **Private reporting** - GitHub Security Advisories
-- **Do not expose Comfy `:8188`** to the public internet
-- **Operational safety** - headroom, `restart: "no"`, download-limit
+- **Reporting** - private GitHub Security Advisories, not a public issue
+- **Scope notes (from the root file)** - what this stack is, and what it must not face
+- **Operational safety** - headroom, `restart: "no"`, download-limit, and why they count
+- **Related** - the matrix and the reboot rules behind those limits
 
 **What this enables**
 
 - **Reporting** flaws without a public issue for exploitable bugs
 - **Keeping** `HF_TOKEN` and `.env` out of git
 - **Remembering** resource exhaustion on a remote Spark is as bad as a CVE
+
+Last page in Contribute, after [Docs style](docs-style.md). Read [Contributing](contributing.md)
+first for the PR path; this page is what to do when the finding is a hole rather than a bug.
+
+Open this page when you have found something exploitable, or when you are about to expose a port
+or commit a token. The reporting rule is the first section; the rest is what this project does not
+consider a bug to fix, and the limits that keep a remote Spark reachable.
 
 Canonical source: [SECURITY.md on GitHub](https://github.com/toxicoder/ez-comfy-stack/blob/__DOCS_GIT_REF__/SECURITY.md). **AI-drafted docs still need a human pass.**
 
@@ -88,3 +95,12 @@ Resource exhaustion can be as bad as a software CVE when the host is remote-only
 <Callout type="error" title="Do not weaken these for demos">
   Occupancy XOR, `restart: "no"`, headroom preflight, and download-limit clear-on-exit stay in force. [Occupancy matrix](../operate/occupancy-matrix.md) - [Reboot safety](../reboot-safety.md).
 </Callout>
+
+## Related
+
+| Need | Page |
+| --- | --- |
+| Which heavy job each mode may run | [Occupancy matrix](../operate/occupancy-matrix.md) |
+| What a reboot does to a wedged stack | [Reboot safety](../reboot-safety.md) |
+| Why the throttle always clears on exit | [Download limit](../download-limit.md) |
+| The PR path once you have a fix | [Contributing](contributing.md) |

@@ -1,24 +1,29 @@
 ---
-title: studio-ui
-description: Optional Compose profile studio-ui - jobstore lights board on port 8190, no GPU, not ComfyUI App Mode.
+title: studio-ui board
+description: Start the optional jobstore lights board on port 8190, and see which routes and masters it will serve.
 tags: [studio-ui, compose, shorts, jobstore]
 ---
 
-# studio-ui
+# studio-ui board
 
 **What's on this page**
 
-- **Optional profile** `studio-ui` - default `start` does **not** launch it
-- **No GPU** - 512m, `restart: "no"`, port `${STUDIO_UI_PORT:-8190}`
-- **Routes** - `/`, `/watch/<slug>`, `/media`, `/thumb`
-- **Allowlisted masters** - 90s `gosee` / `stillhere` / `switchyard`, and 450s `tidetable` / `nightoven` / `glasshouse` / `lastlane` / `breakwater`
-- **Not App Mode** - Lane A / Lane B live on [ComfyUI Apps](../studio-apps.md)
+- **Not App Mode** - the board vs the ComfyUI widget surface, side by side
+- **Start the board** - the compose command, the port, and what the container mounts
+- **Routes** - `/`, `/watch/<slug>`, `/media`, `/thumb`, and their status codes
+- **Allowlisted masters** - the only eight files the board will stream
+- **Related** - the App widgets, the compose layout, and the empty board
 
 **What this enables**
 
 - **A lights board** for clay / look / overlay / print / audio after `compile-film` / `print-shot`
 - **Watch / download** of an allowlisted MP4 without opening Comfy. Playback is streamed and seekable; the 512m cap stays
 - **Leaving** the widget catalog on App Mode (this page does not duplicate it)
+
+Open this page when you want the film-board view of a 90s or long film and do not want to open
+Comfy. Scan the **Routes** table for the URL you need, and the **Allowlisted masters** table for
+the only slugs the board will serve. The board is a read-only viewer: it queues nothing and owns
+no GPU.
 
 ```bash
 export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
@@ -34,9 +39,12 @@ Source: `studio-ui/server.py`. Compose: `docker/docker-compose.yml` service `stu
 <Callout type="warning" title="Default start skips this profile">
   `./scripts/manage.sh start` (type **yes**) starts **comfyui** only. studio-ui is `profiles: ["studio-ui"]`. It does not weaken `restart: "no"`, headroom, or occupancy XOR. **No GPU.**
 </Callout>
+
 ---
 
 ## Not App Mode
+
+Two surfaces, one `_lab` graph. Only one of them is a second web app:
 
 | | **ComfyUI App Mode** | **studio-ui** |
 | --- | --- | --- |
@@ -66,6 +74,9 @@ Empty films dir is a **page**, not a crash: "No films yet. Run `./scripts/utilit
 ---
 
 ## Routes
+
+Four paths. **Path** is what you type after the host and port; **What** is what it returns and
+which status codes to expect.
 
 | Path | What |
 | --- | --- |
@@ -97,7 +108,7 @@ Resolved under the Comfy output root (`/films` bind = `${COMFY_OUTPUT_DIR}`):
 | `lastlane` | `ez_lastlane_450s.mp4` |
 | `breakwater` | `ez_breakwater_450s.mp4` |
 
-Path is `realpath`-jailed to that root. Stitch still writes those names via `EZFilmConcat` / `concat-shots.sh`. 90s playbook: [90s shorts](../shorts.md).
+Path is `realpath`-jailed to that root. Stitch still writes those names via `EZFilmConcat` / `concat-shots.sh`. 90s playbook: [Short films](../shorts.md).
 
 ---
 
@@ -106,5 +117,6 @@ Path is `realpath`-jailed to that root. Stitch still writes those names via `EZF
 | Need | Page |
 | --- | --- |
 | App widgets / lanes | [ComfyUI Apps](../studio-apps.md) |
+| The job that fills the board | [Short films](../shorts.md) |
 | Compose layout | [Architecture](../learn/architecture.md) |
 | Board empty / port closed | [Troubleshooting](../troubleshooting.md) |

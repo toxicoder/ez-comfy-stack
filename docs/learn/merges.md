@@ -1,25 +1,34 @@
 ---
 title: How we land changes
-description: Merge commit vs squash vs rebase, stacked PRs, and how ez-comfy-stack actually lands work on development.
-tags: [learn, git, merge, contributing, stacked-pr]
+description: Merge commit, not squash, into development. Retarget each stacked PR, then prove the commits actually landed.
+tags: [git, merge, contributing, stacked-pr]
 ---
 
 # How we land changes
 
 **What's on this page**
 
-- What a merge is (and which GitHub button we use)
-- Stacked independently-green PRs as the large-change pattern
-- The landing rule: every merge that counts targets `development`
-- How to prove a PR actually landed
+- **What a merge is** - the three GitHub buttons, and which one we use
+- **This repo's integration shape** - topic branch, `development`, `main`
+- **Stacked independently-green PRs** - the large-change pattern and the landing rule
+- **Overlapping files and conflict order** - bottom of stack first, keep both intents
+- **Local rebase vs landing rebase** - what is fine locally and what is not for landing
+- **Related** - the checklist, the conventions, and the gates
 
 **What this enables**
 
-- Landing a stack without GitHub marking a PR Merged while `development` stays unchanged
-- Resolving overlapping files in the order the commits intended
-- Choosing merge commit, squash, or rebase on purpose instead of by habit
+- **Landing** a stack without GitHub marking a PR Merged while `development` stays unchanged
+- **Resolving** overlapping files in the order the commits intended
+- **Choosing** merge commit, squash, or rebase on purpose instead of by habit
+- **Proving** a merge landed with one `git merge-base` command
 
-**Who this is for:** contributors and agents opening PRs into `development`. Studio users can skip this lesson.
+**Who this is for:** contributors and agents opening PRs into `development`.
+
+This is the third page in Contribute, after [Contributing](../contribute/contributing.md) and
+[Conventions](../project-conventions.md). Read those two first: they carry the branch rules and
+the PR checklist. This page covers the one thing a checklist cannot - what happens when you press
+the green button, and how to tell whether your work actually reached `development`. The failure
+mode is silent: GitHub prints **Merged** even when the base branch was another topic branch.
 
 Canonical contributor checklist: [Contributing](../contribute/contributing.md). Agent workflow: [AGENTS.md](https://github.com/toxicoder/ez-comfy-stack/blob/__DOCS_GIT_REF__/AGENTS.md).
 
@@ -47,6 +56,8 @@ The important noun is **base**. GitHub merges into whatever base the PR currentl
 ---
 
 ## This repo's integration shape
+
+Two long-lived branches, and one direction of flow. Follow these five steps for every change:
 
 ```mermaid
 flowchart LR
@@ -135,5 +146,7 @@ Prefer stacked independently-green PRs over one giant change. Tests ship in the 
 | Need | Page |
 | --- | --- |
 | Branch + TDD + PR checklist | [Contributing](../contribute/contributing.md) |
-| Conventions, including Branches | [Project conventions](../project-conventions.md) |
+| Conventions, including Branches | [Conventions](../project-conventions.md) |
+| The gates each PR must be green on | [Building with Bazel](../contribute/building-with-bazel.md) |
+| The docs gates, when your PR touches `docs/` | [Testing docs](../contribute/testing-docs.md) |
 | First still after clone | [Getting Started](../getting-started.md) |
