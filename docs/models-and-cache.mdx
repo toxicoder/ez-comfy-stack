@@ -1,60 +1,43 @@
 ---
-title: Models & Cache
-description: Shared MODELS_DIR layout for Klein 4B, Wan 2.2, and LTX-2.5 weights, Hugging Face tokens, and multi-stack sharing.
+title: Models and cache
+description: Shared MODELS_DIR layout, three stores, permissions, and disk headroom for the weights this studio pulls.
 tags: [models, huggingface, cache, klein, wan, ltx]
 ---
 
-# Models & Cache
+# Models and cache
 
 **What's on this page**
 
-- **Three stores** (GHCR image, `MODELS_DIR`, comfy-state volume)
-- **Default location** and permissions for `${MODELS_DIR}` and `${COMFY_OUTPUT_DIR}` layout dirs
-- **Layout** (tier dirs, relative `comfy/` symlinks, reap)
-- **Pack map** pointing at download utilities (`download-image.sh`, `download-wan.sh`, `download-ltx.sh`, `download-llm.sh`)
-- **Check models** on every lab App (Queue skips it; click for the host download command)
+- **Three stores** - GHCR image, `MODELS_DIR`, comfy-state volume
+- **Default location** and permissions for `${MODELS_DIR}` and the `${COMFY_OUTPUT_DIR}` layout dirs
+- **Layout** - tier dirs, relative `comfy/` symlinks, reap
+- **Disk headroom** - the free-disk floor `doctor` and `start` enforce
 
 **What this enables**
 
 - **Downloading Klein 4B, Wan 2.2, and LTX-2.5 weights once** and reusing them across stacks
 - **Keeping weights** off the GHCR image (`us-safe-studio`)
 - **Checking the tree** without network access - including **Check models** on every lab App (Queue does not run that node)
+- **Freeing** a superseded pack before the disk fills, not after
 
-**Who this is for:** operators setting `MODELS_DIR` before `download-models`.
+**Who this is for:** operators setting `MODELS_DIR` before `download-models`. This page
+owns the layout and headroom mental model. For the pack list, sizes, and commands, go to
+[Download tiers](download-tiers.md); for per-family basenames and resume, go to
+[Model packs by family](operate/models-packs.md).
 
 <Callout type="info" title="Operator path">
   Most operators only need: set `MODELS_DIR` -> `download-models` -> confirm basenames. Layer pins, gated tokens, and multi-stack sharing are linked below.
 </Callout>
-<Cards>
-  <Card title="Gated models">
-    ---
 
-    LTX-2.5 needs a Hugging Face license click. `HF_TOKEN` is not that click.
+Session variables used on this page:
 
-    [HF_TOKEN](operate/models-tokens.md)
-  </Card>
-  <Card title="Multi-stack sharing">
-    ---
+```bash
+export MODELS_DIR="${MODELS_DIR:-/mnt/models}"
+export COMFY_OUTPUT_DIR="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
+export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
+```
 
-    One `MODELS_DIR` for this Docker stack and nvidia-dgx-spark-lab hostPath.
-
-    [Sharing](operate/models-sharing.md)
-  </Card>
-  <Card title="Which `--tier`">
-    ---
-
-    Pack id per downloader, not a quality ladder. `--limit` is Mbps.
-
-    [Download tiers](download-tiers.md)
-  </Card>
-  <Card title="Download packs">
-    ---
-
-    Basenames, example graphs, LTX selective download, resume, GHCR pins.
-
-    [Packs](operate/models-packs.md)
-  </Card>
-</Cards>
+---
 
 ## Three stores
 
@@ -64,7 +47,13 @@ tags: [models, huggingface, cache, klein, wan, ltx]
 | **MODELS_DIR** | Weights + `comfy/` relative symlinks | The Comfy venv |
 | **comfy-state volume** | Comfy install, lab `ez_*` custom nodes | Host PNGs/MP4s, start images, Comfy `user/`, operator `_user` node packs (`COMFY_OUTPUT_DIR`) |
 
-`cleanup` (type `DELETE`) removes **comfy-state only**. Generated media, LoadImage start frames (`${COMFY_OUTPUT_DIR}/input`), Comfy user workflows (`${COMFY_OUTPUT_DIR}/comfy-user`), and operator custom nodes (`${COMFY_OUTPUT_DIR}/custom-nodes-user`) stay on the host. Concepts: [Hardware, memory, and safety](learn/hardware.md).
+`cleanup` (type `DELETE`) removes **comfy-state only**. Generated media, LoadImage start
+frames (`${COMFY_OUTPUT_DIR}/input`), Comfy user workflows
+(`${COMFY_OUTPUT_DIR}/comfy-user`), and operator custom nodes
+(`${COMFY_OUTPUT_DIR}/custom-nodes-user`) stay on the host. The image is re-pullable, so
+the two things you back up are the weights and the outputs:
+[Backup and restore](operate/backup-restore.md). Concepts:
+[Hardware, memory, and safety](learn/hardware.md).
 
 ### Persistence (survives stop / image pull)
 
@@ -82,7 +71,13 @@ tags: [models, huggingface, cache, klein, wan, ltx]
 | Operator custom nodes | `${COMFY_OUTPUT_DIR}/custom-nodes-user` | `$COMFY_HOME/custom_nodes/_user` | persist (pin refresh excludes this tree) |
 | Comfy install + venv | Docker volume `ez-comfy-state` | `/comfy-state` | persist until `cleanup` |
 
-`seed_from_prebuilt` skips **root-anchored** `/user/`, `/input/`, `/output/`, `/temp/`, `/extra_model_paths.yaml`, and `/custom_nodes/_user/` so a pin refresh cannot delete Manager-installed packs that live on the host bind. Anchoring matters: unanchored `input/` also dropped nested `comfy_api/input` (ComfyUI v0.34+ Curve/Range types) and ComfyUI crashed on import. Stamp-present refresh heals that package from `/opt/comfy-prebuilt` even when `.lab-comfyui-ref` already matches `COMFYUI_REF`. Lab packs named `ez_*` still overwrite from `/opt/ez-comfy/custom_nodes`.
+`seed_from_prebuilt` skips **root-anchored** `/user/`, `/input/`, `/output/`, `/temp/`,
+`/extra_model_paths.yaml`, and `/custom_nodes/_user/` so a pin refresh cannot delete
+Manager-installed packs that live on the host bind. Anchoring matters: unanchored `input/`
+also dropped nested `comfy_api/input` (ComfyUI v0.34+ Curve/Range types) and ComfyUI
+crashed on import. Stamp-present refresh heals that package from `/opt/comfy-prebuilt`
+even when `.lab-comfyui-ref` already matches `COMFYUI_REF`. Lab packs named `ez_*` still
+overwrite from `/opt/ez-comfy/custom_nodes`.
 
 ---
 
@@ -143,11 +138,13 @@ Override in `.env` if needed. Prefer a large, durable disk on the Spark.
     ```
   </Tab>
 </Tabs>
+
 ---
 
 ## Layout
 
-Each utility writes to `${MODELS_DIR}/<org__repo>_<tier>` (`tier_dir`), then **relative** symlinks into `comfy/`:
+Each utility writes to `${MODELS_DIR}/<org__repo>_<tier>` (`tier_dir`), then **relative**
+symlinks into `comfy/`:
 
 ```text
 ${MODELS_DIR}/
@@ -169,20 +166,13 @@ ${MODELS_DIR}/
   hub/                  # HF cache (optional)
 ```
 
-Host-wide leftovers (HF hub, Docker layers, Ollama, other inference backends) are **not** `reap-models` - use [disk-wizard](disk-wizard.md) (`--plan` first). When the default pack moves (LTX 2.3 -> 2.5 already happened), **reap** the old tree - do not wait for disk-full:
-
-```bash
-./scripts/manage.sh models-status
-./scripts/manage.sh reap-models --plan
-./scripts/manage.sh reap-models --apply --class junk --yes
-./scripts/manage.sh reap-models --apply --class superseded --quarantine --yes
-```
-
-`manage.sh cleanup` is **volume-only** (named volume `comfy-state`). It does **not** delete weights. `reap-models --plan` is the default; `--apply` requires `--yes`. Shared files (`flux2-vae`, ACE-Step AIO) stay in the keep-set so `--drop-pack` cannot eat them.
-
-`download-models` links weights into `comfy/*` with **relative** symlinks (e.g. `../../Comfy-Org__flux2-dev_vae/split_files/vae/flux2-vae.safetensors`). That way the same tree resolves on the host (`MODELS_DIR=/mnt/models`) and inside the container (bind-mounted at `/models`). Absolute `/mnt/models/...` file links look fine on the host but break Comfy with "exists but doesn't link anywhere".
-
-This matches the lab hostPath pattern so K8s and Docker demos can share weights.
+`download-models` links weights into `comfy/*` with **relative** symlinks (e.g.
+`../../Comfy-Org__flux2-dev_vae/split_files/vae/flux2-vae.safetensors`). That way the same
+tree resolves on the host (`MODELS_DIR=/mnt/models`) and inside the container
+(bind-mounted at `/models`). Absolute `/mnt/models/...` file links look fine on the host
+but break Comfy with "exists but doesn't link anywhere". The relative links are also what
+lets one tree serve a Docker stack and a K8s hostPath:
+[Sharing MODELS_DIR](operate/models-sharing.md).
 
 ```mermaid
 flowchart TB
@@ -204,15 +194,9 @@ flowchart TB
   Comfy --> Ckpt["checkpoints/ - opt-in ACE-Step AIO"]
 ```
 
----
+### Which utility owns which tier dir
 
-## Pack map
-
-Full download, basename, resume, and pin reference: [Download packs](operate/models-packs.md). `--tier` is a pack id ([Download tiers](download-tiers.md)).
-
-<EzCommand id="download-models" />
-
-| Utility | Default pack | Role |
+| Utility | Default pack | Writes |
 | --- | --- | --- |
 | `scripts/utilities/download-image.sh` | `--tier fast` | Klein 4B distilled + TE + VAE |
 | `scripts/utilities/download-wan.sh` | `--tier 5b` | Wan 2.2 TI2V-5B |
@@ -220,17 +204,58 @@ Full download, basename, resume, and pin reference: [Download packs](operate/mod
 | `scripts/utilities/download-llm.sh` | prompt-enhance GGUF | On-box Qwen3-4B |
 | GHCR image | `us-safe-studio` | ComfyUI + PyTorch; **not** Klein / Wan / LTX weights |
 
+`download-models` has **no** `--tier`; it always pulls the default still + Wan 5B + LTX-2.5
+set. Every other downloader takes `--tier <pack id>`. Sizes and the copy-paste command for
+each pack: [Download tiers](download-tiers.md). Read-only status per family:
+[Model packs by family](operate/models-packs.md).
+
+<EzCommand id="download-models" />
+
+### Check the tree without network
+
 ```bash
-./scripts/utilities/download-image.sh status --tier fast --json
-./scripts/utilities/download-wan.sh status --tier 5b --json
-./scripts/utilities/download-ltx.sh status --tier 2.5 --json
-./scripts/utilities/download-llm.sh run
+./scripts/manage.sh models-status
 ```
 
-`download-models` has **no** `--tier`. It always pulls the default still + Wan 5B + LTX-2.5 set.
+Every lab App also has an isolated **Check models** node (and an occupancy-chip button in
+App Mode). Queue does not run it. Click it to see whether this graph plus the current
+Quality combo is on disk; missing files print the host command. Restart Comfy after a pull
+so `models/*` re-link.
 
-Every lab App also has an isolated **Check models** node (and an occupancy-chip button in App Mode). Queue does not run it. Click it to see whether this graph plus the current Quality combo is on disk; missing files print the host command above. Restart Comfy after a pull so `models/*` re-link.
+---
+
+## Reap a superseded pack
+
+Host-wide leftovers (HF hub, Docker layers, Ollama, other inference backends) are **not**
+`reap-models` - use [disk-wizard](disk-wizard.md) (`--plan` first). When the default pack
+moves (LTX 2.3 -> 2.5 already happened), **reap** the old tree - do not wait for disk-full:
+
+```bash
+./scripts/manage.sh reap-models --plan
+./scripts/manage.sh reap-models --apply --class junk --yes
+./scripts/manage.sh reap-models --apply --class superseded --quarantine --yes
+```
+
+`manage.sh cleanup` is **volume-only** (named volume `comfy-state`). It does **not** delete
+weights. `reap-models --plan` is the default; `--apply` requires `--yes`. Shared files
+(`flux2-vae`, ACE-Step AIO) stay in the keep-set so `--drop-pack` cannot eat them.
+
+---
 
 ## Disk headroom
 
 `manage.sh doctor` / `start` require free disk >= `MIN_DISK_FREE_GIB` (default 40).
+
+**Check it worked:** `df -h` shows the free space you expect, and `doctor` reports the
+disk check passing. When it does not, reclaim with
+[Disk wizard](disk-wizard.md) before you retry a pull.
+
+---
+
+## Next
+
+1. [Download tiers](download-tiers.md) - every pack, size, and download command
+2. [Model packs by family](operate/models-packs.md) - basenames, example graphs, resume
+3. [Hugging Face tokens](operate/models-tokens.md) - gated LTX-2.5 access
+4. [Sharing MODELS_DIR](operate/models-sharing.md) - one tree for Docker and spark-lab
+5. [Disk wizard](disk-wizard.md) - plan-first reclaim for host leftovers

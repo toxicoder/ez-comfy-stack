@@ -1,6 +1,6 @@
 ---
 title: Daily loop
-description: Doctor, start (type yes), Queue, stop - the returning operator path on one Spark.
+description: Doctor, start and type yes, queue one occupant, stop - the returning operator path on one Spark.
 tags: [operate, doctor, start, stop, occupancy]
 ---
 
@@ -8,42 +8,65 @@ tags: [operate, doctor, start, stop, occupancy]
 
 **What's on this page**
 
-- The loop you run on a host that already has models
-- When to `doctor` vs download vs occupancy park
-- Stop before reboot
-- Where troubleshooting lives
+- **The loop** - doctor, start, queue one job, stop
+- **Where each step is proved** - the check after every command
+- **Port forward** - reach the canvas from a laptop
+- **Stop before reboot** - the one rule that keeps SSH recoverable
 
 **What this enables**
 
-- **Opening** ComfyUI without re-reading Getting Started
+- **Opening** the studio without re-reading Getting Started
 - **Leaving** the host in a state SSH can recover
 - **Jumping** to occupancy or troubleshooting when the loop breaks
 
-**Who this is for:** operators after the first successful still. First install: [Getting Started](../getting-started.md).
+**Who this is for:** operators after the first successful still. First install:
+[Getting Started](../getting-started.md).
+
+Run everything from the repo root on the Spark. Do not weaken `restart: "no"`, the **yes**
+confirm on `start`, the headroom preflight, or download-limit **clear-on-exit**.
 
 ---
 
-## You will end here
+## End of the loop
 
-| Goal | Detail |
+| Goal | What you end with |
 | --- | --- |
-| **UI** | ComfyUI at `http://${SPARK_HOST}:${COMFY_PORT}` (or laptop port-forward) |
+| **UI** | ComfyUI at `http://${SPARK_HOST}:${COMFY_PORT}` (or the laptop port forward) |
 | **Job** | One occupant (klein / wan / ltx / desk) |
-| **Stop** | Container down before reboot |
-
-Do not weaken `restart: "no"`, type **yes** on `start`, headroom, or download-limit **clear-on-exit**.
+| **Stop** | Container down before any reboot |
 
 ---
 
-## Loop
+## Run the loop
 
-1. `./scripts/manage.sh doctor` - expect `Doctor OK`. Fail: [Host and Docker](troubleshooting-host-docker.md).
-2. `./scripts/manage.sh start` - type **yes**. Headroom is a hard fail.
-3. Open the UI. Load a `_lab` App. Queue **one** occupancy chip at a time.
-4. Optional: park for Blender or the writing desk - [Occupancy desk](../occupancy.md).
-5. `./scripts/manage.sh stop` before reboot - [Reboot safety](../reboot-safety.md).
+1. `./scripts/manage.sh doctor`
 
-From a laptop, forward the port:
+   **Check it worked:** it prints `Doctor OK`. Missing weights are a warning, not a fail.
+   Fail: [Host and Docker](troubleshooting-host-docker.md).
+
+2. `./scripts/manage.sh start` - type **yes**
+
+   **Check it worked:** `./scripts/manage.sh status` shows the project up. A headroom refuse
+   is a hard fail by design.
+
+3. Open `http://${SPARK_HOST}:${COMFY_PORT}`, load a `_lab` App, and Queue **one**
+   occupancy chip at a time.
+
+   **Check it worked:** the media lands under `${COMFY_OUTPUT_DIR}`.
+
+4. Optional: park for Blender or the writing desk instead of a full stop -
+   [Occupancy desk](../occupancy.md).
+
+   **Check it worked:** `./scripts/manage.sh occupancy status` names the mode you entered.
+
+5. `./scripts/manage.sh stop` before any reboot -
+   [Reboot safety](../reboot-safety.md).
+
+   **Check it worked:** `./scripts/manage.sh status` shows Comfy is not running.
+
+---
+
+## Open the canvas from a laptop
 
 ```bash
 ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
@@ -51,39 +74,23 @@ ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
 
 Then open `http://127.0.0.1:${COMFY_PORT}`.
 
-Weights already on disk? Skip `download-models`. Missing Models on the canvas is a cache problem, not a graph bug - [Models and workflows](troubleshooting-models-workflows.md).
+**Check it worked:** the canvas loads on the laptop. If the port is taken, `status` still
+shows Comfy up on the Spark: [Start and runtime](troubleshooting-start-runtime.md).
+
+---
+
+## When the loop stalls
+
+Weights already on disk? Skip `download-models`. **Missing Models** on the canvas is a
+cache problem, not a graph bug - [Models and workflows](troubleshooting-models-workflows.md).
+One heavy GPU job at a time; a second denoise is how SSH dies.
 
 ---
 
 ## Next
 
-<Cards>
-  <Card title="Occupancy desk">
-    ---
-
-    Park Comfy without a full stop when you need Workbench or the 35B desk.
-
-    [Occupancy desk](../occupancy.md)
-  </Card>
-  <Card title="Something broke">
-    ---
-
-    Doctor first, then the matching troubleshooting page.
-
-    [Troubleshooting](../troubleshooting.md)
-  </Card>
-  <Card title="Update the stack">
-    ---
-
-    Stop, pull the branch these docs describe, then start and type **yes**.
-
-    [Update the stack](update.md)
-  </Card>
-  <Card title="Quick reference">
-    ---
-
-    Copy-paste commands for start, stop, downloads, and disk.
-
-    [Quick reference](quick-reference.md)
-  </Card>
-</Cards>
+1. [Quick reference](quick-reference.md) - the same commands as copy-paste blocks
+2. [Update the stack](update.md) - stop, pull the branch these docs describe, start
+3. [Occupancy desk](../occupancy.md) - park Comfy for Blender or the 35B desk
+4. [Download tiers](../download-tiers.md) - pull the pack a new graph needs
+5. [Troubleshooting](../troubleshooting.md) - doctor first, then the matching page

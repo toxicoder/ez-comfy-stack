@@ -1,6 +1,6 @@
 ---
 title: Spark farm
-description: Three DGX Sparks as independent Comfy workers plus a shared model cache - no NCCL, no MiniMax H3.
+description: Run three DGX Sparks as independent Comfy workers over one shared model cache - no NCCL, no MiniMax H3.
 tags: [spark, farm, fabric, comfyui]
 ---
 
@@ -9,20 +9,24 @@ tags: [spark, farm, fabric, comfyui]
 **What's on this page**
 
 - **Farm vs relay** - independent 5 s Queues, not NCCL
-- **Fabric NFS / rsync** vs management SSH
-- **Numbered runbook** - copy example env -> per-node start -> dispatch -> concat
-- **Three ComfyUI UIs** - Queue seeded lab graphs on each
-- **Optional `sync-models`** - rsync `MODELS_DIR/comfy` over fabric
-- **`dispatch`** - local `print-shot` per host, never remote compose up
+- **Networking** - fabric NFS / rsync vs management SSH
+- **Runbook** - copy example env -> per-node start -> dispatch -> concat
+- **Commands** - `status`, `sync-models`, `run`, `dispatch`
 - **Refusals** - NCCL, K3s, MiniMax H3, H3 Director
 
 **What this enables**
 
-- **Three concurrent 5 s** Wan/LTX shots with **one weight copy**
-- **Copies on the 200 GbE fabric**, not the 10 GbE mgmt NIC
-- **Unchanged `restart: "no"`** and local heavy confirm on `start`
+- **Running three concurrent 5 s** Wan/LTX shots with **one weight copy**
+- **Keeping copies on the 200 GbE fabric**, not the 10 GbE mgmt NIC
+- **Leaving `restart: "no"`** and the local heavy confirm on `start` unchanged
+- **Queueing three ComfyUI UIs** on seeded lab graphs, one per Spark
 
-This remains a **per-node Comfy demo**. Tensor-parallel LLMs belong in [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab). You still have **no NCCL** and **no multi-GPU graph** in this sample stack - three UIs, one weight copy, independent 5 s Queues. Why this repo stays Compose: [When to use vs spark-lab](start/when-to-use-vs-spark-lab.md). Occupancy is **per Spark**: [Occupancy](occupancy.md) - [Occupancy matrix](operate/occupancy-matrix.md).
+This remains a **per-node Comfy demo**. Tensor-parallel LLMs belong in
+[nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab). You still have
+**no NCCL** and **no multi-GPU graph** in this sample stack - three UIs, one weight copy,
+independent 5 s Queues. Why this repo stays Compose:
+[This stack or nvidia-dgx-spark-lab](start/when-to-use-vs-spark-lab.md). Occupancy is **per Spark**:
+[Occupancy desk](occupancy.md) - [Occupancy matrix](operate/occupancy-matrix.md).
 
 ```bash
 export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
@@ -40,9 +44,22 @@ Farm hosts use the example env (placeholders), not a single `${SPARK_HOST}`. Sta
 <Callout type="error" title="Never remote compose up - never NCCL - MiniMax H3 banned">
   `spark-farm.sh` **never** starts compose on a remote node. Type **yes** on each Spark locally. Independent workers may share `${MODELS_DIR}`; that is **not** NCCL. MiniMax H3 names (`*h3*` / `*MiniMax*`) are refused - see [licenses](licenses.md).
 </Callout>
+
 ---
 
-## Runbook (numbered)
+## Choose the mode
+
+| Mode | What the 3 Sparks do | When |
+| --- | --- | --- |
+| **Farm (default)** | Each Spark Queues an independent 5 s Wan or LTX shot. Shared `${MODELS_DIR}`. | Parallel shorts / concat-shots |
+| **Do not implement** | NCCL split of a single denoise across 3 GB10s | Out of scope |
+
+Clustering is **throughput + one weight copy**, not slicing one sampler. MiniMax H3 is
+banned - see [licenses](licenses.md).
+
+---
+
+## Follow the runbook
 
 Placeholders below match `config/spark-farm.example.env`. Do **not** commit real hostnames.
 
@@ -97,7 +114,10 @@ Placeholders below match `config/spark-farm.example.env`. Do **not** commit real
    ./scripts/utilities/spark-farm.sh status [--json]
    ```
 
-7. **Dispatch** `print-shot` (shots **01-06 / 07-12 / 13-18** on three hosts, or an even split on two). SSH-runs **local** `./scripts/manage.sh print-shot` only. `dispatch` builds a fixed remote `print-shot <film> <id>`, so it forwards neither `--quality` nor `EZ_QUALITY` - each shot posts at the tier its graph records. To pin a tier across the farm, run local `./scripts/manage.sh print-shot <film> <id> --quality TIER` on each Spark instead of `dispatch` ([90s shorts](shorts.md)):
+   **Check it worked:** every host in `SPARK_HOSTS` answers, and no compose project was
+   started by the probe.
+
+7. **Dispatch** `print-shot` (shots **01-06 / 07-12 / 13-18** on three hosts, or an even split on two). SSH-runs **local** `./scripts/manage.sh print-shot` only. `dispatch` builds a fixed remote `print-shot <film> <id>`, so it forwards neither `--quality` nor `EZ_QUALITY` - each shot posts at the tier its graph records. To pin a tier across the farm, run local `./scripts/manage.sh print-shot <film> <id> --quality TIER` on each Spark instead of `dispatch` ([Short films](shorts.md)):
 
    ```bash
    ./scripts/utilities/spark-farm.sh dispatch --film go-see
@@ -110,34 +130,75 @@ Placeholders below match `config/spark-farm.example.env`. Do **not** commit real
    ./scripts/utilities/concat-shots.sh --film "${FILM}" --yes
    ```
 
-Director is **off** this path. See [90s shorts](shorts.md).
+   **Check it worked:** the master lands under `${FARM_SHARE}/out` and every shot id from the
+   dispatch is present.
+
+Director is **off** this path. See [Short films](shorts.md).
 
 ---
 
-## Farm vs relay
+## Queue from three UIs
 
-| Mode | What the 3 Sparks do | When |
-| --- | --- | --- |
-| **Farm (default)** | Each Spark Queues an independent 5 s Wan or LTX shot. Shared `${MODELS_DIR}`. | Parallel shorts / concat-shots |
-| **Do not implement** | NCCL split of a single denoise across 3 GB10s | Out of scope |
+The one-click **films/go-see** graph is sequential on one host. For a farm, load
+**motion/av/still-to-shot** (or optional **motion/silent/still-to-shot**) on each UI and
+**Queue** independent **5 s** shots - different beats in parallel. Concat locally:
 
-Clustering is **throughput + one weight copy**, not slicing one sampler. MiniMax H3 is banned - see [licenses](licenses.md).
+```bash
+FILM=go-see   # or still-here | switchyard
+./scripts/utilities/concat-shots.sh --film "${FILM}" --yes
+```
+
+Three UIs (replace hostnames from `SPARK_COMFY_URLS`):
+
+```bash
+# After sourcing spark-farm.example.env
+# http://spark-0.local:8188  http://spark-1.local:8188  http://spark-2.local:8188
+```
+
+See [Short films](shorts.md). MiniMax H3 films are banned (see [licenses](licenses.md)).
 
 ---
 
-## Networking (docs only - no IaC)
+## Run the farm commands
+
+```bash
+./scripts/utilities/spark-farm.sh status [--json]
+./scripts/utilities/spark-farm.sh sync-models
+./scripts/utilities/spark-farm.sh run --film go-see
+./scripts/utilities/spark-farm.sh dispatch --film go-see
+```
+
+Start compose yourself on each node (`./scripts/manage.sh start`, type yes). Then dispatch.
+
+`spark-farm.sh` **never** starts compose remotely. It prints the exact
+`./scripts/manage.sh start` you must run locally (heavy confirm stays on that node).
+Containers still use `restart: "no"`.
+
+The `run` subcommand prints a **films/go-see / motion/silent/still-to-shot /
+motion/av/still-to-shot** Queue reminder for `--film go-see` (or still-here / switchyard). It
+does **not** POST graphs. It refuses MiniMax H3 names (`*h3*` / `*MiniMax*`).
+
+`dispatch` assigns shots **01-06 / 07-12 / 13-18** (or an even split on two hosts) and SSH-runs
+**local** `./scripts/manage.sh print-shot` on each Spark. It **never** remote-starts compose.
+Director is off this path. Concat on spark-0 after gather.
+
+Memory: keep `MEM_LIMIT=90g`, `MEM_RESERVATION=80g`, `MIN_HOST_FREE_GIB=28`,
+`shm_size: 16gb`.
+
+---
+
+## Wire the fabric (docs only - no IaC)
 
 Physical: 3 Sparks, high-bandwidth already up.
 
 - **3-node ring:** 3x QSFP DAC, both CX-7 ports live. NVIDIA Sync -> Cluster Assistant. No switch.
 - **Star via QSFP switch:** each Spark one or two 200 GbE links.
 
-Management SSH stays on 10 GbE / RJ45. Model sync uses **`SPARK_FABRIC_IPS` only**. Do not rsync multi-gig weights over the management NIC.
+Management SSH stays on 10 GbE / RJ45. Model sync uses **`SPARK_FABRIC_IPS` only**. Do not
+rsync multi-gig weights over the management NIC.
 
-Shared `MODELS_DIR` (pick one):
-
-1. **NFS over the fabric subnet (preferred):** Spark-0 exports `${MODELS_DIR}` (default `/mnt/models`); Sparks 1-2 mount it. Compose already bind-mounts `${MODELS_DIR}:/models`.
-2. **Replica:** `./scripts/utilities/spark-farm.sh sync-models` rsyncs `MODELS_DIR/comfy` over fabric IPs.
+Shared `${MODELS_DIR}` options are in runbook step 4. `sync-models` needs at least two fabric
+addresses. Sharing one tree in depth: [Sharing MODELS_DIR](operate/models-sharing.md).
 
 Copy `config/spark-farm.example.env`, edit hostnames/IPs, then:
 
@@ -149,53 +210,10 @@ set +a
 
 ---
 
-## Per-node process
+## Next
 
-On **each** Spark (operator, with confirm):
-
-```bash
-git clone -b __DOCS_GIT_REF__ https://github.com/toxicoder/ez-comfy-stack.git
-cd ez-comfy-stack
-./scripts/manage.sh setup
-# set MODELS_DIR and HF_TOKEN in .env (same MODELS_DIR on every node)
-./scripts/manage.sh doctor
-./scripts/manage.sh download-models      # cache owner, or after NFS is up
-./scripts/manage.sh start                # type yes
-```
-
-Three UIs (replace hostnames from `SPARK_COMFY_URLS`):
-
-```bash
-# After sourcing spark-farm.example.env
-# http://spark-0.local:8188  http://spark-1.local:8188  http://spark-2.local:8188
-```
-
-The one-click **films/go-see** graph is sequential on one host. For a farm, load **motion/av/still-to-shot** (or optional **motion/silent/still-to-shot**) on each UI and **Queue** independent **5 s** shots - different beats in parallel. Concat locally:
-
-```bash
-FILM=go-see   # or still-here | switchyard
-./scripts/utilities/concat-shots.sh --film "${FILM}" --yes
-```
-
-See [90s shorts](shorts.md). MiniMax H3 films are banned (see [licenses](licenses.md)).
-
-`spark-farm.sh` **never** starts compose remotely. It prints the exact `./scripts/manage.sh start` you must run locally (heavy confirm stays on that node). Containers still use `restart: "no"`.
-
-The `run` subcommand prints a **films/go-see / motion/silent/still-to-shot / motion/av/still-to-shot** Queue reminder for `--film go-see` (or still-here / switchyard). It does **not** POST graphs. It refuses MiniMax H3 names (`*h3*` / `*MiniMax*`).
-
-`dispatch` assigns shots **01-06 / 07-12 / 13-18** (or an even split on two hosts) and SSH-runs **local** `./scripts/manage.sh print-shot` on each Spark. It **never** remote-starts compose. Director is off this path. Concat on spark-0 after gather.
-
-Memory: keep `MEM_LIMIT=90g`, `MEM_RESERVATION=80g`, `MIN_HOST_FREE_GIB=28`, `shm_size: 16gb`.
-
----
-
-## Commands
-
-```bash
-./scripts/utilities/spark-farm.sh status [--json]
-./scripts/utilities/spark-farm.sh sync-models
-./scripts/utilities/spark-farm.sh run --film go-see
-./scripts/utilities/spark-farm.sh dispatch --film go-see
-```
-
-Start compose yourself on each node (`./scripts/manage.sh start`, type yes). Then dispatch.
+1. [Daily loop](operate/daily.md) - the single-Spark loop each node runs
+2. [Occupancy desk](occupancy.md) - the one-heavy-job rule, per Spark
+3. [Sharing MODELS_DIR](operate/models-sharing.md) - the shared cache in depth
+4. [Short films](shorts.md) - the films `dispatch` and `concat-shots` serve
+5. [Backup and restore](operate/backup-restore.md) - what to back up on each node

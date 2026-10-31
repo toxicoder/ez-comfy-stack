@@ -1,6 +1,6 @@
 ---
 title: Update the stack
-description: Stop Comfy, pull the git branch these docs were built from, then start again and type yes.
+description: Stop the studio, pull the git branch these docs were built from, then start again and type yes.
 tags: [operate, update, git, start, stop]
 ---
 
@@ -18,23 +18,30 @@ tags: [operate, update, git, start, stop]
 - **Restarting** so bind-mounted workflows and custom nodes match that checkout
 - **Leaving** weights and outputs where they are
 
-These pages were built from git ref `__DOCS_GIT_REF__`. `/latest/` is `main`. `/development/` is `development`. Run the commands below on the Spark, in the repo root. Do not pull the other branch from this page.
+**Who this is for:** operators bringing a working Spark onto the branch these pages
+describe. These pages were built from git ref `__DOCS_GIT_REF__`. `/latest/` is `main`.
+`/development/` is `development`. Run the commands on the Spark, in the repo root. Do not
+pull the other branch from this page.
 
-`restart: "no"` still applies. Type **yes** on `start`. Headroom is still a hard fail. Download-limit wrap still clears on exit.
+`restart: "no"` still applies. Type **yes** on `start`. Headroom is still a hard fail.
+Download-limit wrap still clears on exit.
 
-First clone is [Getting Started](../getting-started.md). Power-off is [Reboot safety](../reboot-safety.md). Copy-paste for the rest of the day is [Quick reference](quick-reference.md).
+First clone is [Getting Started](../getting-started.md). Power-off is
+[Reboot safety](../reboot-safety.md). Copy-paste for the rest of the day is
+[Quick reference](quick-reference.md).
 
 ---
 
-## 1. Stop
+## 1. Stop the studio
 
-The container comes down. `${MODELS_DIR}`, `${COMFY_OUTPUT_DIR}`, and the `ez-comfy-state` volume stay.
+The container comes down. `${MODELS_DIR}`, `${COMFY_OUTPUT_DIR}`, and the `ez-comfy-state`
+volume stay.
 
 ```bash
 ./scripts/manage.sh stop
 ```
 
-**Verify:** `./scripts/manage.sh status` shows Comfy is not running.
+**Check it worked:** `./scripts/manage.sh status` shows Comfy is not running.
 
 ---
 
@@ -52,15 +59,19 @@ git checkout __DOCS_GIT_REF__
 git pull --ff-only origin __DOCS_GIT_REF__
 ```
 
-**Verify:** `git branch --show-current` prints `__DOCS_GIT_REF__`.
+**Check it worked:** `git branch --show-current` prints `__DOCS_GIT_REF__`.
 
-If `--ff-only` refuses, this checkout has local commits. Do not force. Move those commits aside, or stay on them and do not expect these docs to match.
+If `--ff-only` refuses, this checkout has local commits. Do not force. Move those commits
+aside, or stay on them and do not expect these docs to match.
 
 ---
 
-## 3. Start
+## 3. Start again
 
-`start` pulls the image for the branch you just checked out. `main` uses `ghcr.io/toxicoder/ez-comfy:us-safe-studio`. `development` uses `us-safe-studio-development`. The entrypoint recopies `workflows/` and `custom_nodes/` from this checkout. Type **yes**. A headroom refuse is a hard fail.
+`start` pulls the image for the branch you just checked out. `main` uses
+`ghcr.io/toxicoder/ez-comfy:us-safe-studio`. `development` uses
+`us-safe-studio-development`. The entrypoint recopies `workflows/` and `custom_nodes/` from
+this checkout. Type **yes**. A headroom refuse is a hard fail.
 
 ```bash
 ./scripts/manage.sh start
@@ -74,6 +85,23 @@ If `--ff-only` refuses, this checkout has local commits. Do not force. Move thos
 ./scripts/manage.sh status
 ```
 
-**Verify:** doctor prints `Doctor OK` (missing weights are a warning, not a fail). Status shows the project up. Open `http://${SPARK_HOST}:${COMFY_PORT}`.
+**Check it worked:** doctor prints `Doctor OK` (missing weights are a warning, not a fail),
+status shows the project up, and `http://${SPARK_HOST}:${COMFY_PORT}` loads the canvas.
 
-An update does not run `download-models` and does not delete `${MODELS_DIR}`. A new graph may need a pack from [Download tiers](../download-tiers.md).
+---
+
+## What an update does not touch
+
+An update does not run `download-models` and does not delete `${MODELS_DIR}`. Weights,
+generated media, and your `_user/` graphs stay put. A new graph may need a pack from
+[Download tiers](../download-tiers.md).
+
+---
+
+## Next
+
+1. [Daily loop](daily.md) - back to the working loop after the restart
+2. [Quick reference](quick-reference.md) - the copy-paste version of these steps
+3. [Download tiers](../download-tiers.md) - pull the pack a new graph needs
+4. [Models and cache](../models-and-cache.md) - what survives a stop and an image pull
+5. [Troubleshooting](../troubleshooting.md) - if the studio does not come back up

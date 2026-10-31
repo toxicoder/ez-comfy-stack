@@ -1,54 +1,140 @@
 ---
-title: Troubleshooting - studio canvas
-description: "Studio-user failures on the Comfy canvas: Missing Models, LTX size, dub, occupancy XOR, and the studio-ui board."
+title: Canvas and studio UI
+description: Unblock Queue, preview, graph-load, dub, and occupancy failures on the ComfyUI canvas and the studio-ui board.
 tags: [troubleshooting, comfyui, occupancy, studio-ui, dub]
 ---
 
-# Troubleshooting - studio canvas
+# Canvas and studio UI
 
 **What's on this page**
 
-- **Studio-user symptoms** on the Comfy canvas (Missing Models, LTX 720, Nodes 2.0, dub, DCC dumps)
-- **Occupancy XOR** - park vs stop, sidecar contention, splat/Blender park-first
-- **studio-ui board** on :8190 vs App Mode on `${COMFY_PORT}`
+- **Queue, history, and previews** - Missing Models, empty history, and a missing MP4
+- **Layout and Nodes 2.0** - tiny nodes, overlapping groups, blank preview widgets
+- **Graph load aborts** - Loading aborted due to error reloading workflow data
+- **Prompt, Enhance, and sample recipes** - the queue-time widget failures
+- **Video graphs** - LTX size and sound, AddGuide, FLF, and Union Control
+- **Cinema Rack and Audio Rack** - camera verbs, style, ACE tags, and BPM
+- **Missing Inputs and App pickers** - a LoadImage the App cannot see
+- **Local dub** - rights, wheels, clones, mix, and the MLA file
+- **Stills** - the Cubic block world lane
+- **DCC dumps and guide packs** - export-guides, blender-stills, house-views, QC
+- **Occupancy and sidecars** - park vs stop on GB10
+- **studio-ui board** - :8190, not App Mode and not ComfyUI
 
 **What this enables**
 
 - **Unblocking** Queue, preview, and dump failures from the canvas
+- **Recovering** a graph whose load aborted or whose pack JS is stale
 - **Keeping** one heavy GPU job on GB10 (park for dumps; `stop` for SuperSplat/NVENC)
+- **Telling** the studio-ui board apart from App Mode and from ComfyUI itself
 
 <Callout type="error" title="One heavy GPU job">
   GB10 is XOR. Park with `./scripts/manage.sh occupancy enter blender-desk` for Workbench dumps; `./scripts/manage.sh stop` for SuperSplat/NVENC. Do not Queue LTX next to Blender, TRELLIS, ACE-Step, or the 35B sidecar. [Occupancy desk](../occupancy.md).
 </Callout>
 
-## Studio user (canvas)
+Open this page when the graph is on screen and the canvas misbehaves: Queue will not start, a preview
+stays blank, the load aborts, a dub mix comes back wrong, or the board on **:8190** is empty. A
+missing weight, a failed node import, or a stitch that refuses belongs to
+[Models and workflows](troubleshooting-models-workflows.md).
 
-| Symptom | Likely cause | Action |
-| --- | --- | --- |
+## Start here
+
+Three checks settle most canvas rows before you read a table.
+
+- **Hard-refresh the Comfy tab.** A large share of canvas failures are the browser holding an old
+  extension bundle while the pack on disk is current.
+- **Restart so the entrypoint recopies pack JS.** `./scripts/manage.sh stop` then `start` (type
+  **yes**), or `./scripts/manage.sh restart`. A Restart inside the UI does not recopy packs.
+- **Check the desk.** `./scripts/manage.sh occupancy status` names the mode the gate is holding, and
+  [Occupancy and sidecars](#occupancy-and-sidecars) gives the park-vs-stop fix.
+
+## Queue, history, and previews
+
+Queue is refused, or it ran and you cannot see the result. ComfyUI keeps prompt history in memory;
+the files themselves are on the `${COMFY_OUTPUT_DIR}` bind mount.
+
 | **Missing Models** on a seeded lab graph | Weights not on `MODELS_DIR` / broken `comfy/` symlink | Click **Check models** on the App occupancy chip or the isolated canvas node (Queue does not run it). It prints the host command (`download-models` or an opt-in `--tier`). Then restart. [Models and cache](../models-and-cache.md) |
-| Nodes look tiny / groups overlap after load | LiteGraph sizes under Nodes 2.0, or `workflowRendererVersion` stamped `"Vue"` | Confirm Settings **Nodes 2.0** and **Auto-scale layout** are on. Lab JSON must be `Vue-corrected`, not `"Vue"` (that shrinks geometry 1.2x). Seeded graphs are spaced for Vue widget height - re-open the catalog copy after pull. Restart so `start` reseeds settings when those keys are absent. [ComfyUI basics](../learn/comfyui.md) |
-| Preview widgets blank / Upload media missing under Nodes 2.0 | Old `ez_*` JS (`inputEl` / `node_widget`) or a third-party LiteGraph-only pack | Pull latest and restart so `ez_prompt_enhance` / `ez_research` / `ez_dub` JS copies. Toggle Nodes 2.0 off only if a **user** pack is LiteGraph-only. [Custom nodes](../reference/custom-nodes.md) |
-| Invalid input: Sample prompt value (Cliff villa, ...) is not available | Comfy validates `sample` against the node combo, not the App-filtered catalog | Pull latest and restart so `ez_prompt_enhance` recopies. Re-open the seeded graph. [Models and workflows](troubleshooting-models-workflows.md) |
 | History empty after `start` / image pull | PromptServer history is in-memory; files are on the output bind | Open the **Outputs** sidebar (grid or list, thumbnails). Select multiple files for bulk delete / copy to input, or **Use as start image** (copies into `${COMFY_OUTPUT_DIR}/input`). [Custom nodes](../reference/custom-nodes.md) |
 | Start images vanished after `cleanup` | LoadImage files lived on the named volume | Put start frames in `${COMFY_OUTPUT_DIR}/input` (container `/inputs`). `cleanup` does not delete `COMFY_OUTPUT_DIR` |
-| LTX `einops` / divide by 45 | Width/height not div32 (720 or 1080) | Pick **Format / platform -> LTX - 16:9 YouTube (1280x704)**. `ez_ltx_spatial` auto-snaps; prefer 704 over typing 720 |
 | No MP4 preview, only PNGs | Old graph without VHS, or looking at SaveImage | Re-open seeded `wan-*` / `ltx-*`; open **Save video (MP4)** node |
+| VHS node missing | Image/volume predates VideoHelperSuite | Pull/rebuild GHCR image and restart |
+
+## Layout and Nodes 2.0
+
+Geometry and widget rendering after a load. Both rows hinge on the renderer version stamped in the
+graph and on the pack JS the container is serving.
+
+| Nodes look tiny / groups overlap after load | LiteGraph sizes under Nodes 2.0, or `workflowRendererVersion` stamped `"Vue"` | Confirm Settings **Nodes 2.0** and **Auto-scale layout** are on. Lab JSON must be `Vue-corrected`, not `"Vue"` (that shrinks geometry 1.2x). Seeded graphs are spaced for Vue widget height - re-open the catalog copy after pull. Restart so `start` reseeds settings when those keys are absent. [ComfyUI basics](../learn/comfyui.md) |
+| Preview widgets blank / Upload media missing under Nodes 2.0 | Old `ez_*` JS (`inputEl` / `node_widget`) or a third-party LiteGraph-only pack | Pull latest and restart so `ez_prompt_enhance` / `ez_research` / `ez_dub` JS copies. Toggle Nodes 2.0 off only if a **user** pack is LiteGraph-only. [Custom nodes](../reference/custom-nodes.md) |
+
+## Graph load aborts
+
+`Loading aborted due to error reloading workflow data` means some pack JS threw while LiteGraph was
+still configuring the graph. The modal text names the file and the error.
+
+| Opening a graph that has the **Mode** node aborts with `Loading aborted due to error reloading workflow data`, and the report names `ez_image_mode.js` plus `Cannot read properties of undefined (reading 'widgets')` | `ez_image_mode.js` walked the desk's node classes from `onNodeCreated`, which LiteGraph calls while it is still inside the synchronous `LGraph.configure()`. A class later in the graph was not built yet (or is not in the graph at all on a plain text-to-image workflow), so the walk threw and cancelled the whole load. A report whose `ez_image_mode.js` line numbers do not match the tree means the container is still serving the old copy | Pull latest, `./scripts/manage.sh restart` so `ez_image/js/` recopies, then hard-refresh the Comfy tab. The Mode node still binds itself synchronously; the graph-wide watcher walk is deferred one macrotask and runs again on the graph `configured` event, so an absent class is skipped and a late one still binds. Covered by `tests/js/ez_image_mode.test.mjs`, which `bazelisk test //tests:js` runs |
+| **Loading aborted due to error reloading workflow data** on any graph open (not just one with the **Mode** node) | Any pack JS that throws while LiteGraph configures the graph cancels the whole load; the modal text names the file and the error | Press **Report this error** on the modal - it files a bug on the `load-error` surface with the modal text, the captured stack, and the graph context already attached, so the report names the pack and the line instead of you transcribing them. Then pull latest, `./scripts/manage.sh restart` so the pack `js/` recopies, and hard-refresh the tab. [Reporting issues](reporting-issues.md) |
+
+## Prompt, Enhance, and sample recipes
+
+The widget that wins at Queue is the one ComfyUI serializes. A named sample recipe outranks a
+typed prompt until the widget switches to **custom**, and the **CLIP prompt** box is what the
+encoder actually saw.
+
+| Invalid input: Sample prompt value (Cliff villa, ...) is not available | Comfy validates `sample` against the node combo, not the App-filtered catalog | Pull latest and restart so `ez_prompt_enhance` recopies. Re-open the seeded graph. [Models and workflows](troubleshooting-models-workflows.md) |
+| Prompt box is read-only on the canvas | A **Sample prompt** recipe is selected | Type in App Mode (that selects Sample **custom**) or pick **Custom** on the canvas. The last recipe stays in the box. Quality does not lock or replace the prompt. |
+| Queue used the sample recipe, not the typed prompt | Sample combo was still a named recipe (`resolve_prompt` ignores the textarea). The queue-time sample freeze used to await a catalog fetch and landed after serialization, so Python kept the named row (catalog-wins in `resolve_prompt`) | Pull latest and restart so `ez_prompt_enhance` recopies. Typing the prompt selects Sample **custom** before Queue: `ez_prompt_enhance.js` now stores the last applied sample row and freezes Sample to **custom** synchronously in the widget `beforeQueued` when the box diverged. Quality overlay does not replace prompt text. |
+| Graph **Positive** still shows the canned paragraph after editing Prompt or Rewrite prompt | Pack JS not copied, or the browser is holding an old frontend | Pull latest and restart so `ez_prompt_enhance/js` copies. Hard-refresh the Comfy tab. Positive is a linked preview; Queue still encodes the Enhance STRING. |
+| Enhance did nothing | GGUF / llama.cpp missing, or local LLM timed out | Read **Enhance status**. `GGUF missing` -> `download-models` then restart. `llama.cpp unavailable` -> Llama did not import (pip "already satisfied" is not enough). Queue self-heals, then force-reinstalls the GitHub manylinux wheel. If status still has a `docker exec ... pip install --force-reinstall` line, run it (no image rebuild). Confirm: `docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -c 'from llama_cpp import Llama'`. Default timeout is **180s** (`EZ_LLM_TIMEOUT_S`) on **8** CPU threads (`EZ_LLM_N_THREADS`) |
+
+The derived **Quality** combo and the tiers behind it are covered on the overview:
+[Troubleshooting overview](../troubleshooting.md#quality-combo).
+
+## Video graphs: LTX, Wan, and guides
+
+Motion graphs fail on the VAE grid, on the audio leg, or on where the guides were wired.
+
+| LTX `einops` / divide by 45 | Width/height not div32 (720 or 1080) | Pick **Format / platform -> LTX - 16:9 YouTube (1280x704)**. `ez_ltx_spatial` auto-snaps; prefer 704 over typing 720 |
 | LTX MP4 has no sound | Missing audio VAE decode -> VHS (or A2V freeze not on LoadAudio) | Re-open current **ltx/***. **motion/av/audio-to-video-8s** muxes **LoadAudio**, not `LTXVAudioVAEDecode` - pick `ez_a2v_bed.wav` in `/inputs` |
 | LTX AddGuide `combined AV latent is not supported` | First/last guides were wired after `LTXVConcatAVLatent` | Use **motion/av/first-last-8s**. Guides pin the **video** latent, then audio concat |
 | FLF last frame ignored | Second LoadImage unwired or bypassed | App widgets **First frame** and **Last frame** must both be set. Same aspect, 1280x704 |
-| Prompt box is read-only on the canvas | A **Sample prompt** recipe is selected | Type in App Mode (that selects Sample **custom**) or pick **Custom** on the canvas. The last recipe stays in the box. Quality does not lock or replace the prompt. |
-| Queue used the sample recipe, not the typed prompt | Sample combo was still a named recipe (`resolve_prompt` ignores the textarea) | Pull latest and restart so `ez_prompt_enhance` recopies. Typing the prompt selects Sample **custom** before Queue. Quality overlay does not replace prompt text. |
-| Graph **Positive** still shows the canned paragraph after editing Prompt or Rewrite prompt | Pack JS not copied, or the browser is holding an old frontend | Pull latest and restart so `ez_prompt_enhance/js` copies. Hard-refresh the Comfy tab. Positive is a linked preview; Queue still encodes the Enhance STRING. |
-| Opening a graph that has the **Mode** node aborts with `Loading aborted due to error reloading workflow data`, and the report names `ez_image_mode.js` plus `Cannot read properties of undefined (reading 'widgets')` | `ez_image_mode.js` walked the desk's node classes from `onNodeCreated`, which LiteGraph calls while it is still inside the synchronous `LGraph.configure()`. A class later in the graph was not built yet (or is not in the graph at all on a plain text-to-image workflow), so the walk threw and cancelled the whole load. A report whose `ez_image_mode.js` line numbers do not match the tree means the container is still serving the old copy | Pull latest, `./scripts/manage.sh restart` so `ez_image/js/` recopies, then hard-refresh the Comfy tab. The Mode node still binds itself synchronously; the graph-wide watcher walk is deferred one macrotask and runs again on the graph `configured` event, so an absent class is skipped and a late one still binds. Covered by `tests/js/ez_image_mode.test.mjs`, which `bazelisk test //tests:js` runs |
-| **Loading aborted due to error reloading workflow data** on any graph open (not just one with the **Mode** node) | Any pack JS that throws while LiteGraph configures the graph cancels the whole load; the modal text names the file and the error | Press **Report this error** on the modal - it files a bug on the `load-error` surface with the modal text, the captured stack, and the graph context already attached, so the report names the pack and the line instead of you transcribing them. Then pull latest, `./scripts/manage.sh restart` so the pack `js/` recopies, and hard-refresh the tab. [Reporting issues](reporting-issues.md) |
-| **Cubic block world** still looks like the photo, people were cubed, or the horizon drifted from the source | Person-segmentation weights missing (study keeps its people and the paste is skipped), or a weak rebuild | Re-open the seeded **stills/background-swap** after pull. Leave **Cubic block world** selected (named samples skip Rewrite prompt). People are erased from the block study before encoding and pasted back from the full-resolution source, so cubed people mean the BSD-3 DeepLab file is not in `${MODELS_DIR}/comfy/ez-person/` yet (reinsert status `person mask missing`; first cubic Queue can download it; `EZ_PERSON_MASK=off` skips the paste). If the plate is only the flat study, set Quality **High** (Klein base if `download-image --tier base` is on disk). |
 | Wan prompt has two camera verbs | Subject also named a dolly/pan, or Enhance invented a second move | Cinema Rack already emits one `wan_token`. Leave the move out of Subject. Family `wan_t2v` / `wan_i2v`. [Cinema Rack](../create/cinema-rack.md) |
 | Style stripped bleach-bypass / noir grade | Style dropdown is not `none` | Cinema Rack owns camera/light/time. Keep Enhance **style** at `none` on **inspire/cinema-rack** |
+| Union Control missing LoRA | IC-LoRA is opt-in, not `download-models` | `./scripts/manage.sh download-ltx --tier iclora`. Distilled-only; refuse 19B |
+
+## Cinema Rack and Audio Rack on the canvas
+
+The racks own camera, light, tempo, and tags. Most rows here are two sources writing the same widget.
+
 | ACE vocal sings the instrumental bed | Lyrics leaked outside `[inst]` / `[drop]` | Audio Rack instrumental / podcast-bed emits empty-body markers. Keep production cues inside the brackets. [Audio Rack](../create/audio-rack.md) |
 | Tags BPM disagrees with the encoder | Tempo axis set 88 but `TextEncodeAceStepAudio1.5` still 140 | Match encoder BPM to the rack **notes** line (`BPM: 88`) |
 | Living-artist name in the take | Brief named a living MC | Audio Rack catalogs ban living artists. Keep Brief original. Human-edit lyrics before release |
 | Editing pick did nothing on a still | Flavor is `klein` | Editing is omitted on stills (`still_mode: omit`). Use `ltx_t2v` or `wan_t2v` |
-| Enhance did nothing | GGUF / llama.cpp missing, or local LLM timed out | Read **Enhance status**. `GGUF missing` -> `download-models` then restart. `llama.cpp unavailable` -> Llama did not import (pip "already satisfied" is not enough). Queue self-heals, then force-reinstalls the GitHub manylinux wheel. If status still has a `docker exec ... pip install --force-reinstall` line, run it (no image rebuild). Confirm: `docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -c 'from llama_cpp import Llama'`. Default timeout is **180s** (`EZ_LLM_TIMEOUT_S`) on **8** CPU threads (`EZ_LLM_N_THREADS`) |
+
+## Missing Inputs and App pickers
+
+**Missing Inputs** means a required LoadImage has no file. LoadImage reads `${COMFY_OUTPUT_DIR}/input`
+(container `/inputs`), never `/outputs`.
+
+| House clay **Missing Inputs** / "no file selected" on Clay 01-10 | Plates not in `${COMFY_OUTPUT_DIR}/input` (LoadImage does not see `/outputs`) | Restart so the entrypoint backstop writes `ez_house_clay_01.png` ... `10.png` into `/inputs`. `./scripts/manage.sh start` still prefers layout-accurate plates. While compose is up: `./scripts/manage.sh house-views --slug lab-penthouse --seed-inputs` (or `--install-inputs` if the pack exists), then reload the App |
+| Music **Missing Inputs** / Cover image - image | Cover LoadImage was active; Comfy still requires a file even when unwired | Pull latest. Default **Album art** skip bypasses Cover image. Queue without a file. Upload: graph view, **Ctrl+B**, then wire |
+| Talking-head / I2V **Missing Inputs** / Klein identity still - image | Required LoadImage has no file; App Mode used to bury the picker | Pull latest. The still picker is first on Apps that need a start frame. Choose a PNG (Klein identity or I2V plate), then Queue |
+| image-studio **Invalid connection** on Klein Prompt Enhance mode | Old seed wired STRING into the Enhance mode combo | Pull latest and reopen **stills/image-studio**. Creator mode `enhance_mode` is the same combo as Enhance `mode` |
+| image-studio **This run** says preview unavailable | The App could not reach `POST /ez_image/studio-preview` | Queue still runs the nodes. Reload the App after pull. **This run** fills again when the route answers |
+
+## Stills: Cubic block world
+
+The block-study lane on **stills/background-swap**. The people-paste path and the status strings:
+[Troubleshooting overview](../troubleshooting.md#stills-cubic-block-world).
+
+| **Cubic block world** still looks like the photo, people were cubed, or the horizon drifted from the source | Person-segmentation weights missing (study keeps its people and the paste is skipped), or a weak rebuild | Re-open the seeded **stills/background-swap** after pull. Leave **Cubic block world** selected (named samples skip Rewrite prompt). People are erased from the block study before encoding and pasted back from the full-resolution source, so cubed people mean the BSD-3 DeepLab file is not in `${MODELS_DIR}/comfy/ez-person/` yet (reinsert status `person mask missing`; first cubic Queue can download it; `EZ_PERSON_MASK=off` skips the paste). If the plate is only the flat study, set Quality **High** (Klein base if `download-image --tier base` is on disk). |
+
+## Local dub
+
+Ingest, ASR, clone, translate, fit, and mix. Read **Dub status** first - it names the missing wheel,
+snapshot, or gate instead of failing quietly. Every source and rendered file lives under
+`${COMFY_OUTPUT_DIR}/input` and `dubs/<slug>/`.
+
 | Dub Queue says **rights refused** | **I have rights** is off (default) | Turn it on only when you own the recording or have speaker consent. [Local dub](../dub.md) |
 | Dub **Source file** is `(none)` / empty source | Nothing selected in the dropdown | **Upload media**, or pick a file already in `${COMFY_OUTPUT_DIR}/input`. Do not type a host path |
 | Dub file not in the Source dropdown | File is under `/outputs`, or the App was open before `dub-fetch` | Put media in `${COMFY_OUTPUT_DIR}/input` (container `/inputs`). Reload the App. [Local dub](../dub.md) |
@@ -70,7 +156,8 @@ tags: [troubleshooting, comfyui, occupancy, studio-ui, dub]
 | YT preview `ez_dub_yt_*.mp3` is ~source length but has no Spanish (tone, hush, or ducked English) | Clone failed `is_speech_like` (PerTh/Chatterbox leftover) or ingest `job_slug` became `True` from the Upload media button (5-wide widgets: slug leaked into URL, job dir `dubs/True/`). Fixture: `ez_dub_yt_00058.mp3` | Pull latest. Check **Dub status** (`clone unvoiced - empty mix` is the honest miss - Comfy preview is 1-sample empty, not a 64 s tone). Inspect `dubs/<slug>/render/turn_*.raw.wav`. Job dir must be `dubs/episode/`, not `dubs/True/`. `download-dub --tier asr` then `--tier clone` with compose up. Never treat a duration-matched drone as success. |
 | Dub mix / raw wav is a sliding moan ("whale") with no words | Cross-lang Clone CFG auto was `0.0` (T3 CFG off -> looping speech tokens -> HiFT F0-glide). The old speech-like gate only rejected *steady* 90 Hz leftover, so the moan was mixed | Pull latest. Auto CFG is **0.3** (retry **0.5**). F0-glide moans fail `is_speech_like` (speech-band + tonal frames) and skip overlay. If every take is still a moan: Dub status `clone unvoiced - empty mix`, raise **Clone CFG** toward 0.5, or pick **Clone engine** `qwen3tts` after `download-podcast --tier qwen3tts`. Do not disable PerTh |
 | Dub clones sound chipmunked / helium | Old duration lock used linear resample (pitch shift) | Pull latest. Stretch is ffmpeg `atempo` (WSOLA fallback) and never faster than 1.25x. If a line is still cut off, shorten `text_target` (Stage **analyze**) or accept the fade-trim |
-| Dub clone does not sound like the speaker | Mixed or noisy ref wav under `dubs/<slug>/speakers/` | Stage **analyze**, check `spkNN.wav` is one person / no music bed. Read `spkNN.ref.json`: `degraded: true` means every scored window was rejected and the loudest take was used. Overlap and quiet slices are skipped. Re-Queue Stage **render** |
+| Dub clone does not sound like the speaker | Mixed or noisy ref wav under `dubs/<slug>/speakers/`, or the chosen window was clipped, tonal, or off-speaker, or every scored window was rejected | Stage **analyze**, check `spkNN.wav` is one person / no music bed. Open `dubs/<slug>/speakers/spkNN.ref.json` (also under `qc.json` `reference`): `score` is the window rank, `degraded: true` / Dub status `ref: degraded` means every scored window was rejected and the loudest take was used, and `reject` names the gate (`clip`, `tonal`, `band`, `unvoiced`, `not_speech`). Overlap and quiet slices are still skipped. Re-Queue Stage **render** after the source is one person without a music bed |
+| Dub SRT / mix is still in the source language | ASR never filled `text`, or a turn-level GGUF timeout copied one line | Rewrite translation **on**, Stage **analyze**, then edit the JSON. **Dub status** must show `translated N/M`. A full llama.cpp / GGUF miss is **blocking** (empty mix, empty `text_target`), not English cloned as `es`. Chatterbox `language_id` is ISO (`es`, not `Spanish`). Missing engine: empty mix, not the original recording |
 | YouTube rejects the extra audio | Duration mismatch or MLA not enabled | Use `ez_dub_yt.wav` (duration-locked). MLA is rolling out; check Studio -> Languages |
 | Dub mix too quiet / around -30 LUFS | Clone sat well below peak; old limiter did not raise | Pull latest. Render now raise-to-peak. If still quiet, check `dubs/<slug>/qc.json` `quiet_mix` and speaker refs |
 | "i-translated" English bumper crushes t=0 Spanish | Old overlay fitted English disclosure into 3 s on both WAVs | Pull latest. Spoken disclosure defaults **off**. Sidecar only unless you turn it on; bumper never writes onto `ez_dub_yt.wav` |
@@ -78,29 +165,43 @@ tags: [troubleshooting, comfyui, occupancy, studio-ui, dub]
 | `text_target` is `me agradecido` / missing clitics | Length-matching translate prompt dropped grammar | Pull latest. Stage **analyze**, edit JSON, Rewrite **off**, Stage **render**. Default Stage **all** skips that edit pass |
 | Demo-script tail `modelo de voz` / "help you develop" | GGUF leaked instruction text into `text_target` | Pull latest. Sanitize drops that tail. Trim the source wav if the leak is in the recording |
 | Preview MP3 is not 320k / not 48 kHz | Comfy `SaveAudioMP3` is a 24 kHz preview | Expected. MLA master is `dubs/<slug>/ez_dub_yt.wav`. Optional `ez_dub_yt_48k.mp3` in the job dir |
-| VHS node missing | Image/volume predates VideoHelperSuite | Pull/rebuild GHCR image and restart |
+
+## DCC dumps and guide packs
+
+Host tools that want the GPU to themselves. Every `exit 2` here is the occupancy gate: park or stop
+first, then re-run. Never add Blender or SuperSplat to the Dockerfile.
+
 | `export-guides` exit 2 | Compose is up (occupancy) | `./scripts/manage.sh stop` then dump. [DCC guide pack](../dcc-workflows.md) |
 | `blender-stills` exit 2 | Compose is up (occupancy) | `./scripts/manage.sh stop` then dump. [Blender creator suite](../learn/blender-creator.md) |
 | `blender-stills` size refuse | 1920x1080 or other off-contract size | Use 1280x704, 768x1280, 1024x1280, 1024x1024, or 1280x720 (thumb only) |
 | `house-views` exit 2 | Compose is up (occupancy) | `./scripts/manage.sh stop` then dump. [Dream-house tours](../learn/dream-house.md) |
 | `house-views` / `blender` blender not on PATH | Host DCC missing (occupancy is unrelated) | `./scripts/manage.sh blender-install` or `sudo apt-get install -y blender`. Park is still `occupancy enter blender-desk`. Clay App still Queues on `start` / `--seed-inputs`. Language-only tour: **stills/dream-house**. Never add Blender to the Dockerfile |
-| House clay **Missing Inputs** / "no file selected" on Clay 01-10 | Plates not in `${COMFY_OUTPUT_DIR}/input` (LoadImage does not see `/outputs`) | Restart so the entrypoint backstop writes `ez_house_clay_01.png` ... `10.png` into `/inputs`. `./scripts/manage.sh start` still prefers layout-accurate plates. While compose is up: `./scripts/manage.sh house-views --slug lab-penthouse --seed-inputs` (or `--install-inputs` if the pack exists), then reload the App |
-| Music **Missing Inputs** / Cover image - image | Cover LoadImage was active; Comfy still requires a file even when unwired | Pull latest. Default **Album art** skip bypasses Cover image. Queue without a file. Upload: graph view, **Ctrl+B**, then wire |
-| Talking-head / I2V **Missing Inputs** / Klein identity still - image | Required LoadImage has no file; App Mode used to bury the picker | Pull latest. The still picker is first on Apps that need a start frame. Choose a PNG (Klein identity or I2V plate), then Queue |
-| image-studio **Invalid connection** on Klein Prompt Enhance mode | Old seed wired STRING into the Enhance mode combo | Pull latest and reopen **stills/image-studio**. Creator mode `enhance_mode` is the same combo as Enhance `mode` |
-| image-studio **This run** says preview unavailable | The App could not reach `POST /ez_image/studio-preview` | Queue still runs the nodes. Reload the App after pull. **This run** fills again when the route answers |
 | Guide pack QC refuses 1280x720 | LTX VAE grid is **1280x704** (or 768x1280 portrait) | Re-export at 704. `ez_ltx_spatial` is a backstop, not the plan |
 | Guide pack QC missing canny | Dump predates outline pass | Re-run `export-guides`. Canny is Workbench outline, always dumped |
-| `overlay-qc` size mismatch | Look plate not 1280x704 | Re-Queue **klein-from-clay** at 1280x704. Do not stretch. [Clay to finish](../learn/clay-to-finish.md) |
-| `film-animatic` missing sources / film board clay stays off | Pack is missing, or it was expected under `guides/gosee/` after `blender-guide --film go-see` | Dump writes `guides/go-see/<shot>/` (the film id). Pull latest so animatic, overlay QC, and the :8190 board read that directory. A pack already at `guides/gosee/` is still used when `guides/go-see/` is absent. [DCC workflows](../dcc-workflows.md) |
+| `overlay-qc` size mismatch | Look plate not 1280x704 | Re-Queue **klein-from-clay** at 1280x704. Do not stretch. [Clay blockout to finished clip](../learn/clay-to-finish.md) |
+| `film-animatic` missing sources / film board clay stays off | Pack is missing, or it was expected under `guides/gosee/` after `blender-guide --film go-see` | Dump writes `guides/go-see/<shot>/` (the film id). Pull latest so animatic, overlay QC, and the :8190 board read that directory. A pack already at `guides/gosee/` is still used when `guides/go-see/` is absent. [DCC guide pack](../dcc-workflows.md) |
 | `stem-mix` / `film-accept` stem loudness | Missing mix or not -14 +/- 2 LUFS | Pass `--bg` from the LTX print; stop LTX first. Occupancy **audio** |
 | YouTube wants a video, I only have FLAC | Audio graphs save FLAC + MP3 on purpose | `./scripts/manage.sh audio-still-video --audio FILE --image FILE`. Cover from **klein-thumbnail** (16:9) or **klein-podcast-cover** (letterboxed). [Local music](../music.md) |
-| Union Control missing LoRA | IC-LoRA is opt-in, not `download-models` | `./scripts/manage.sh download-ltx --tier iclora`. Distilled-only; refuse 19B |
+
+## Occupancy and sidecars
+
+One heavy GPU job on GB10. Park for a Workbench dump so Compose stays up; `stop` for SuperSplat and
+NVENC. The verbs are **park** and **stop**, and the gate never spawns Blender.
+
 | Occupancy gate refused / occupancy conflict | XOR desk: canvas is `blender-desk` or `llm-desk` (or the wrong heavy mode) while the graph needs klein / wan / ltx / trellis | Park vs stop: dumps use `./scripts/manage.sh occupancy enter blender-desk` (Compose stays up, `POST /free`). Hammer is `./scripts/manage.sh occupancy idle` or `stop`. Then `occupancy enter klein\|ltx\|wan\|trellis --yes` (does **not** start Compose). The gate does not spawn Blender. [Occupancy desk](../occupancy.md) - [Stay in Comfy after a Blender dump](../learn/comfy-first-blender.md) |
-| Sidecar GPU contention (Blender / TRELLIS / ACE next to LTX) | Two heavy jobs on GB10 | Stop Blender and the 35B sidecar before LTX. `occupancy enter ltx --yes` after TRELLIS. ACE-Step bed: `./scripts/manage.sh stop` (or unload) before LTX A2V freeze. Do not Queue Klein + LTX, TRELLIS + LTX, or ACE + LTX together. [Occupancy desk](../occupancy.md) - [Studio sidecars](../studio-sidecars.md) |
+| Sidecar GPU contention (Blender / TRELLIS / ACE next to LTX) | Two heavy jobs on GB10 | Stop Blender and the 35B sidecar before LTX. `occupancy enter ltx --yes` after TRELLIS. ACE-Step bed: `./scripts/manage.sh stop` (or unload) before LTX A2V freeze. Do not Queue Klein + LTX, TRELLIS + LTX, or ACE + LTX together. [Occupancy desk](../occupancy.md) - [Host sidecars overview](../studio-sidecars.md) |
 | Splat / Blender park-first | Dump or SuperSplat ran while Comfy was a heavy job | Before `export-guides` / `blender-stills` / `house-views` / `blender`: `./scripts/manage.sh occupancy enter blender-desk`. SuperSplat and NVENC still want Compose **down**: `./scripts/manage.sh stop`. Never add Blender or SuperSplat to the Dockerfile. [Splat sidecar](../splat-sidecar.md) - [Blender GB10 sidecar](../blender-gb10-sidecar.md) |
-| studio-ui cache / empty board / wrong port | Profile not started; browser holding an old board; looking at App Mode or `${COMFY_PORT}` | `docker compose --profile studio-ui up studio-ui` (default `start` skips it). Board is **:8190**, **not** App Mode and **not** Comfy at `${COMFY_PORT}`. Hard-refresh the board tab. Empty films dir is a page, not a crash - compile a film first. [90s shorts](../shorts.md) |
 
-Concepts: [ComfyUI basics](../learn/comfyui.md). Operator index: [Troubleshooting](../troubleshooting.md).
+## studio-ui board
 
----
+The jobstore board is its own service on **:8190**. The default `start` does not bring it up.
+
+| studio-ui cache / empty board / wrong port | Profile not started; browser holding an old board; looking at App Mode or `${COMFY_PORT}` | `docker compose --profile studio-ui up studio-ui` (default `start` skips it). Board is **:8190**, **not** App Mode and **not** Comfy at `${COMFY_PORT}`. Hard-refresh the board tab. Empty films dir is a page, not a crash - compile a film first. [Short films](../shorts.md) |
+
+## Related
+
+- [Troubleshooting overview](../troubleshooting.md) - the symptom router and the doctor-first rule
+- [Models and workflows](troubleshooting-models-workflows.md) - weights, node packs, and film stitch
+- [Occupancy desk](../occupancy.md) - the XOR matrix and every desk
+- [Local dub](../dub.md) - the dub lane end to end
+- [ComfyUI basics](../learn/comfyui.md) - canvas concepts and App Mode
