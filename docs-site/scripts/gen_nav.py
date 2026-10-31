@@ -136,11 +136,43 @@ def parse_nav(mkdocs_text: str) -> list[dict[str, object]]:
     return tabs
 
 
+def flatten_pages(nodes: object) -> list[dict[str, str]]:
+    """Collect every ``{"title", "path"}`` leaf below ``nodes``, in nav order.
+
+    A node is either a leaf (it carries ``path``) or a group (it carries a ``pages``
+    list). Tabs, sidebar folders, and any deeper nesting all use the group shape, so the
+    walk is recursive rather than fixed to two levels.
+
+    Args:
+        nodes: Tabs, a tab's ``pages`` list, or any nested group's ``pages`` list.
+
+    Returns:
+        The leaves in the order a reader meets them, deepest groups first inside their
+        own position.
+    """
+    leaves: list[dict[str, str]] = []
+    if isinstance(nodes, dict):
+        nodes = [nodes]
+    if not isinstance(nodes, list):
+        return leaves
+    for node in nodes:
+        if not isinstance(node, dict):
+            continue
+        path = node.get("path")
+        if isinstance(path, str) and path:
+            leaves.append({"title": str(node.get("title", "")), "path": path})
+            continue
+        leaves.extend(flatten_pages(node.get("pages")))
+    return leaves
+
+
 def validate(tabs: list[dict[str, object]]) -> list[str]:
     """Check the parsed nav against the files on disk.
 
     Args:
-        tabs: Output of :func:`parse_nav`.
+        tabs: Output of :func:`parse_nav`, or the committed tree once ``mkdocs.yml`` is
+            retired. Sidebar folders nest inside a tab, so the leaves are gathered
+            recursively rather than assumed to sit directly under each tab.
 
     Returns:
         Human-readable problems; empty when the nav is consistent.
@@ -148,16 +180,15 @@ def validate(tabs: list[dict[str, object]]) -> list[str]:
     problems: list[str] = []
     docs = REPO_ROOT / "docs"
     seen: set[str] = set()
-    for tab in tabs:
-        for page in tab["pages"]:  # type: ignore
-            # The nav names pages as MkDocs had them; a page that needed JSX was renamed to
-            # `.mdx` by the codemod, so either suffix counts as present.
-            declared = docs / page["path"]
-            if not declared.is_file() and not declared.with_suffix(".mdx").is_file():
-                problems.append(f"nav page missing on disk: docs/{page['path']}")
-            if page["path"] in seen:
-                problems.append(f"nav page listed twice: docs/{page['path']}")
-            seen.add(page["path"])
+    for page in flatten_pages(tabs):
+        # The nav names pages as MkDocs had them; a page that needed JSX was renamed to
+        # `.mdx` by the codemod, so either suffix counts as present.
+        declared = docs / page["path"]
+        if not declared.is_file() and not declared.with_suffix(".mdx").is_file():
+            problems.append(f"nav page missing on disk: docs/{page['path']}")
+        if page["path"] in seen:
+            problems.append(f"nav page listed twice: docs/{page['path']}")
+        seen.add(page["path"])
     return problems
 
 

@@ -16,6 +16,7 @@ import { docsBugHref, type DocsBugReport } from "@/lib/docs-bug";
 /** Page facts the server knows and every heading bug button needs. */
 export interface DocsPageFacts {
   title: string;
+  description?: string;
   sourcePath: string;
   sourceUrl: string;
   gitRef: string;
@@ -153,10 +154,31 @@ function DocsHeading({
   );
 }
 
-/** MDX heading tags. Named exports so the server component map receives real client components. */
+/**
+ * Page title heading, and the lead paragraph under it.
+ *
+ * The page header used to print the frontmatter title and then the authored `# H1`
+ * printed it again, so every page opened with the same string twice. The authored heading
+ * is the one anchors and the table of contents point at, so it is the only title, and the
+ * frontmatter description becomes its lead paragraph. A page whose first heading is not its
+ * title keeps the plain heading and no lead paragraph.
+ */
 export function DocsH1(props: ComponentPropsWithoutRef<"h1">) {
-  return <DocsHeading as="h1" {...props} />;
+  const facts = useContext(DocsPageContext);
+  const heading = <DocsHeading as="h1" {...props} />;
+  const label = headingText(props.children).replace(/\s+/g, " ").trim();
+  const isPageTitle =
+    Boolean(facts?.title) &&
+    label.localeCompare(facts?.title ?? "", "en", { sensitivity: "accent" }) === 0;
+  if (!isPageTitle || !facts?.description) return heading;
+  return (
+    <>
+      {heading}
+      <p className="mb-6 text-lg text-fd-muted-foreground">{facts.description}</p>
+    </>
+  );
 }
+/** Section headings. Named exports so the server component map receives real client components. */
 export function DocsH2(props: ComponentPropsWithoutRef<"h2">) {
   return <DocsHeading as="h2" {...props} />;
 }

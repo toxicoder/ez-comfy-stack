@@ -12,52 +12,63 @@
     "title": "Learn",
     "pages": [
       {
-        "title": "How the studio works",
-        "path": "learn/index.md"
+        "title": "The studio at a glance",
+        "pages": [
+          {
+            "title": "How the studio works",
+            "path": "learn/index.md"
+          },
+          {
+            "title": "ComfyUI basics",
+            "path": "learn/comfyui.md"
+          },
+          {
+            "title": "Image and video generation",
+            "path": "learn/generation.md"
+          }
+        ]
       },
       {
-        "title": "ComfyUI basics",
-        "path": "learn/comfyui.md"
+        "title": "Models, hardware, and safety",
+        "pages": [
+          {
+            "title": "Klein, Wan, and LTX",
+            "path": "learn/pipeline.md"
+          },
+          {
+            "title": "Why one heavy job at a time",
+            "path": "learn/occupancy.md"
+          },
+          {
+            "title": "Hardware, memory, and safety",
+            "path": "learn/hardware.md"
+          },
+          {
+            "title": "Architecture",
+            "path": "learn/architecture.md"
+          }
+        ]
       },
       {
-        "title": "Image and video generation",
-        "path": "learn/generation.md"
-      },
-      {
-        "title": "Klein, Wan, and LTX",
-        "path": "learn/pipeline.md"
-      },
-      {
-        "title": "Why one heavy job",
-        "path": "learn/occupancy.md"
-      },
-      {
-        "title": "Hardware, memory, and safety",
-        "path": "learn/hardware.md"
-      },
-      {
-        "title": "Architecture",
-        "path": "learn/architecture.md"
-      },
-      {
-        "title": "How we land changes",
-        "path": "learn/merges.md"
-      },
-      {
-        "title": "Clay to finish",
-        "path": "learn/clay-to-finish.md"
-      },
-      {
-        "title": "Blender creator suite",
-        "path": "learn/blender-creator.md"
-      },
-      {
-        "title": "Stay in Comfy after a Blender dump",
-        "path": "learn/comfy-first-blender.md"
-      },
-      {
-        "title": "Dream-house tours",
-        "path": "learn/dream-house.md"
+        "title": "Look-dev and 3D concepts",
+        "pages": [
+          {
+            "title": "Clay blockout to finished clip",
+            "path": "learn/clay-to-finish.md"
+          },
+          {
+            "title": "Blender creator suite",
+            "path": "learn/blender-creator.md"
+          },
+          {
+            "title": "Stay in Comfy after a Blender dump",
+            "path": "learn/comfy-first-blender.md"
+          },
+          {
+            "title": "Dream-house tours",
+            "path": "learn/dream-house.md"
+          }
+        ]
       },
       {
         "title": "Glossary",
@@ -69,28 +80,38 @@
     "title": "Get started",
     "pages": [
       {
-        "title": "Getting Started",
-        "path": "getting-started.md"
+        "title": "Install and start",
+        "pages": [
+          {
+            "title": "Getting Started",
+            "path": "getting-started.md"
+          },
+          {
+            "title": "Set up this computer",
+            "path": "start/this-computer.md"
+          },
+          {
+            "title": "One-command onboard",
+            "path": "start/onboard.md"
+          }
+        ]
       },
       {
-        "title": "Set up this computer",
-        "path": "start/this-computer.md"
-      },
-      {
-        "title": "Onboard",
-        "path": "start/onboard.md"
-      },
-      {
-        "title": "Model licenses",
-        "path": "licenses.md"
-      },
-      {
-        "title": "FAQ",
-        "path": "start/faq.md"
-      },
-      {
-        "title": "When to use vs spark-lab",
-        "path": "start/when-to-use-vs-spark-lab.md"
+        "title": "Choose and decide",
+        "pages": [
+          {
+            "title": "Model licenses",
+            "path": "licenses.md"
+          },
+          {
+            "title": "FAQ",
+            "path": "start/faq.md"
+          },
+          {
+            "title": "This stack or nvidia-dgx-spark-lab",
+            "path": "start/when-to-use-vs-spark-lab.md"
+          }
+        ]
       }
     ]
   },
@@ -98,108 +119,133 @@
     "title": "Studio",
     "pages": [
       {
-        "title": "Still to motion to AV",
-        "path": "visual-generative-ai.md"
+        "title": "Start creating",
+        "pages": [
+          {
+            "title": "The still-to-motion-to-AV pipeline",
+            "path": "visual-generative-ai.md"
+          },
+          {
+            "title": "ComfyUI Apps",
+            "path": "studio-apps.md"
+          },
+          {
+            "title": "Workflow catalog",
+            "path": "studio-workflows.md"
+          },
+          {
+            "title": "Prompting",
+            "path": "prompting.md"
+          }
+        ]
       },
       {
-        "title": "ComfyUI Apps",
-        "path": "studio-apps.md"
+        "title": "Recipe racks",
+        "pages": [
+          {
+            "title": "Cinema Rack",
+            "path": "create/cinema-rack.md"
+          },
+          {
+            "title": "Audio Rack",
+            "path": "create/audio-rack.md"
+          },
+          {
+            "title": "App Forge",
+            "path": "create/app-forge.md"
+          }
+        ]
       },
       {
-        "title": "Prompting",
-        "path": "prompting.md"
+        "title": "Graph catalogs",
+        "pages": [
+          {
+            "title": "Stills graphs",
+            "path": "create/workflows-stills.md"
+          },
+          {
+            "title": "Motion graphs",
+            "path": "create/workflows-motion.md"
+          },
+          {
+            "title": "Creator pack",
+            "path": "create/workflows-creator.md"
+          },
+          {
+            "title": "Services pack",
+            "path": "create/workflows-services.md"
+          },
+          {
+            "title": "Film graphs",
+            "path": "create/workflows-film.md"
+          },
+          {
+            "title": "Audio graphs",
+            "path": "create/workflows-audio.md"
+          }
+        ]
       },
       {
-        "title": "Cinema Rack",
-        "path": "create/cinema-rack.md"
+        "title": "Films, podcasts, and music",
+        "pages": [
+          {
+            "title": "Short films",
+            "path": "shorts.md"
+          },
+          {
+            "title": "Local podcast",
+            "path": "podcast.md"
+          },
+          {
+            "title": "Local dub",
+            "path": "dub.md"
+          },
+          {
+            "title": "Local music",
+            "path": "music.md"
+          },
+          {
+            "title": "RAP-FIRST rap lane",
+            "path": "create/music-rap.md"
+          },
+          {
+            "title": "Drive-through EDM lane",
+            "path": "create/music-edm.md"
+          },
+          {
+            "title": "Music disclosure and QC",
+            "path": "create/music-disclosure.md"
+          }
+        ]
       },
       {
-        "title": "Audio Rack",
-        "path": "create/audio-rack.md"
-      },
-      {
-        "title": "App Forge",
-        "path": "create/app-forge.md"
-      },
-      {
-        "title": "Workflow catalog",
-        "path": "studio-workflows.md"
-      },
-      {
-        "title": "Stills graphs",
-        "path": "create/workflows-stills.md"
-      },
-      {
-        "title": "Motion graphs",
-        "path": "create/workflows-motion.md"
-      },
-      {
-        "title": "Creator pack",
-        "path": "create/workflows-creator.md"
-      },
-      {
-        "title": "Services pack",
-        "path": "create/workflows-services.md"
-      },
-      {
-        "title": "Film graphs",
-        "path": "create/workflows-film.md"
-      },
-      {
-        "title": "Audio graphs",
-        "path": "create/workflows-audio.md"
-      },
-      {
-        "title": "Short films",
-        "path": "shorts.md"
-      },
-      {
-        "title": "Local podcast",
-        "path": "podcast.md"
-      },
-      {
-        "title": "Local dub",
-        "path": "dub.md"
-      },
-      {
-        "title": "Local music",
-        "path": "music.md"
-      },
-      {
-        "title": "RAP-FIRST",
-        "path": "create/music-rap.md"
-      },
-      {
-        "title": "Drive-through EDM",
-        "path": "create/music-edm.md"
-      },
-      {
-        "title": "Music disclosure and QC",
-        "path": "create/music-disclosure.md"
-      },
-      {
-        "title": "Studio sidecars",
-        "path": "studio-sidecars.md"
-      },
-      {
-        "title": "Asset Bible",
-        "path": "asset-bible.md"
-      },
-      {
-        "title": "Blender GB10 sidecar",
-        "path": "blender-gb10-sidecar.md"
-      },
-      {
-        "title": "DCC guide pack",
-        "path": "dcc-workflows.md"
-      },
-      {
-        "title": "Splat sidecar",
-        "path": "splat-sidecar.md"
-      },
-      {
-        "title": "Vlo video editor",
-        "path": "vlo.md"
+        "title": "3D, Blender, and host tools",
+        "pages": [
+          {
+            "title": "Host sidecars overview",
+            "path": "studio-sidecars.md"
+          },
+          {
+            "title": "DCC guide pack",
+            "path": "dcc-workflows.md"
+          },
+          {
+            "title": "Blender GB10 sidecar",
+            "path": "blender-gb10-sidecar.md"
+          },
+          {
+            "title": "Asset Bible",
+            "path": "asset-bible.md"
+          },
+          {
+            "title": "Splat sidecar",
+            "path": "splat-sidecar.md"
+          },
+          {
+            "title": "Vlo video editor",
+            "path": "vlo.md"
+          }
+        ]
       }
     ]
   },
@@ -207,96 +253,126 @@
     "title": "Operate",
     "pages": [
       {
-        "title": "Quick reference",
-        "path": "operate/quick-reference.md"
+        "title": "Everyday loop",
+        "pages": [
+          {
+            "title": "Quick reference",
+            "path": "operate/quick-reference.md"
+          },
+          {
+            "title": "Daily loop",
+            "path": "operate/daily.md"
+          },
+          {
+            "title": "Update the stack",
+            "path": "operate/update.md"
+          }
+        ]
       },
       {
-        "title": "Update the stack",
-        "path": "operate/update.md"
+        "title": "GPU occupancy",
+        "pages": [
+          {
+            "title": "Occupancy desk",
+            "path": "occupancy.md"
+          },
+          {
+            "title": "MCP and SSH tunnels",
+            "path": "operate/mcp.md"
+          }
+        ]
       },
       {
-        "title": "Daily loop",
-        "path": "operate/daily.md"
+        "title": "Models and downloads",
+        "pages": [
+          {
+            "title": "Models and cache",
+            "path": "models-and-cache.md"
+          },
+          {
+            "title": "Download tiers",
+            "path": "download-tiers.md"
+          },
+          {
+            "title": "Download limit",
+            "path": "download-limit.md"
+          },
+          {
+            "title": "Model packs by family",
+            "path": "operate/models-packs.md"
+          },
+          {
+            "title": "Hugging Face tokens",
+            "path": "operate/models-tokens.md"
+          },
+          {
+            "title": "Sharing MODELS_DIR",
+            "path": "operate/models-sharing.md"
+          }
+        ]
       },
       {
-        "title": "Occupancy desk",
-        "path": "occupancy.md"
+        "title": "Disk, backup, and data",
+        "pages": [
+          {
+            "title": "Disk wizard",
+            "path": "disk-wizard.md"
+          },
+          {
+            "title": "Backup and restore",
+            "path": "operate/backup-restore.md"
+          }
+        ]
       },
       {
-        "title": "MCP and SSH tunnels",
-        "path": "operate/mcp.md"
-      },
-      {
-        "title": "Models and cache",
-        "path": "models-and-cache.md"
-      },
-      {
-        "title": "Download tiers",
-        "path": "download-tiers.md"
-      },
-      {
-        "title": "Download limit",
-        "path": "download-limit.md"
-      },
-      {
-        "title": "Per-family packs",
-        "path": "operate/models-packs.md"
-      },
-      {
-        "title": "Hugging Face tokens",
-        "path": "operate/models-tokens.md"
-      },
-      {
-        "title": "Sharing MODELS_DIR",
-        "path": "operate/models-sharing.md"
-      },
-      {
-        "title": "Disk wizard",
-        "path": "disk-wizard.md"
-      },
-      {
-        "title": "Backup and restore",
-        "path": "operate/backup-restore.md"
-      },
-      {
-        "title": "Reporting issues",
-        "path": "operate/reporting-issues.md"
-      },
-      {
-        "title": "Reboot safety",
-        "path": "reboot-safety.md"
-      },
-      {
-        "title": "Spark farm",
-        "path": "spark-farm.md"
+        "title": "Safety, scale, and feedback",
+        "pages": [
+          {
+            "title": "Reboot safety",
+            "path": "reboot-safety.md"
+          },
+          {
+            "title": "Spark farm",
+            "path": "spark-farm.md"
+          },
+          {
+            "title": "Reporting issues",
+            "path": "operate/reporting-issues.md"
+          }
+        ]
       },
       {
         "title": "Troubleshooting",
-        "path": "troubleshooting.md"
-      },
-      {
-        "title": "Docs site",
-        "path": "operate/troubleshooting-docs-site.md"
-      },
-      {
-        "title": "Canvas",
-        "path": "operate/troubleshooting-canvas.md"
-      },
-      {
-        "title": "Host and Docker",
-        "path": "operate/troubleshooting-host-docker.md"
-      },
-      {
-        "title": "Downloads",
-        "path": "operate/troubleshooting-downloads.md"
-      },
-      {
-        "title": "Start and runtime",
-        "path": "operate/troubleshooting-start-runtime.md"
-      },
-      {
-        "title": "Models and workflows",
-        "path": "operate/troubleshooting-models-workflows.md"
+        "pages": [
+          {
+            "title": "Troubleshooting overview",
+            "path": "troubleshooting.md"
+          },
+          {
+            "title": "Start and runtime",
+            "path": "operate/troubleshooting-start-runtime.md"
+          },
+          {
+            "title": "Canvas and studio UI",
+            "path": "operate/troubleshooting-canvas.md"
+          },
+          {
+            "title": "Models and workflows",
+            "path": "operate/troubleshooting-models-workflows.md"
+          },
+          {
+            "title": "Downloads and bandwidth",
+            "path": "operate/troubleshooting-downloads.md"
+          },
+          {
+            "title": "Host and Docker",
+            "path": "operate/troubleshooting-host-docker.md"
+          },
+          {
+            "title": "Docs site widgets",
+            "path": "operate/troubleshooting-docs-site.md"
+          }
+        ]
       }
     ]
   },
@@ -304,36 +380,51 @@
     "title": "Reference",
     "pages": [
       {
-        "title": "manage.sh reference",
-        "path": "manage-cli.md"
+        "title": "Commands and modes",
+        "pages": [
+          {
+            "title": "manage.sh reference",
+            "path": "manage-cli.md"
+          },
+          {
+            "title": "Generated shell reference",
+            "path": "generated/shell/reference.md"
+          },
+          {
+            "title": "Occupancy matrix",
+            "path": "operate/occupancy-matrix.md"
+          }
+        ]
       },
       {
-        "title": "Generated shell reference",
-        "path": "generated/shell/reference.md"
+        "title": "Workflows and nodes",
+        "pages": [
+          {
+            "title": "Workflow details",
+            "path": "create/workflows-index.md"
+          },
+          {
+            "title": "Workflow node parameters",
+            "path": "reference/workflow-nodes.md"
+          },
+          {
+            "title": "Custom nodes",
+            "path": "reference/custom-nodes.md"
+          }
+        ]
       },
       {
-        "title": "Occupancy matrix",
-        "path": "operate/occupancy-matrix.md"
-      },
-      {
-        "title": "Workflow details",
-        "path": "create/workflows-index.md"
-      },
-      {
-        "title": "Node parameter encyclopedia",
-        "path": "reference/workflow-nodes.md"
-      },
-      {
-        "title": "Custom nodes",
-        "path": "reference/custom-nodes.md"
-      },
-      {
-        "title": "Config and schemas",
-        "path": "reference/config-and-schemas.md"
-      },
-      {
-        "title": "studio-ui board",
-        "path": "reference/studio-ui.md"
+        "title": "Config and boards",
+        "pages": [
+          {
+            "title": "Config and schemas",
+            "path": "reference/config-and-schemas.md"
+          },
+          {
+            "title": "studio-ui board",
+            "path": "reference/studio-ui.md"
+          }
+        ]
       }
     ]
   },
@@ -341,36 +432,55 @@
     "title": "Contribute",
     "pages": [
       {
-        "title": "Conventions",
-        "path": "project-conventions.md"
+        "title": "Before you start",
+        "pages": [
+          {
+            "title": "Contributing",
+            "path": "contribute/contributing.md"
+          },
+          {
+            "title": "Conventions",
+            "path": "project-conventions.md"
+          },
+          {
+            "title": "How we land changes",
+            "path": "learn/merges.md"
+          }
+        ]
       },
       {
-        "title": "Building with Bazel",
-        "path": "contribute/building-with-bazel.md"
+        "title": "Build, test, and environment",
+        "pages": [
+          {
+            "title": "Building with Bazel",
+            "path": "contribute/building-with-bazel.md"
+          },
+          {
+            "title": "Testing docs",
+            "path": "contribute/testing-docs.md"
+          },
+          {
+            "title": "Contributor Dev Container",
+            "path": "contribute/devcontainer.md"
+          },
+          {
+            "title": "Set up a contributor host",
+            "path": "contribute/host-setup.mdx"
+          }
+        ]
       },
       {
-        "title": "Contributor Dev Container",
-        "path": "contribute/devcontainer.md"
-      },
-      {
-        "title": "Set up a contributor host",
-        "path": "contribute/host-setup.mdx"
-      },
-      {
-        "title": "Docs style",
-        "path": "contribute/docs-style.md"
-      },
-      {
-        "title": "Testing docs",
-        "path": "contribute/testing-docs.md"
-      },
-      {
-        "title": "Contributing",
-        "path": "contribute/contributing.md"
-      },
-      {
-        "title": "Security",
-        "path": "contribute/security.md"
+        "title": "Docs and security",
+        "pages": [
+          {
+            "title": "Docs style",
+            "path": "contribute/docs-style.md"
+          },
+          {
+            "title": "Security",
+            "path": "contribute/security.md"
+          }
+        ]
       }
     ]
   }

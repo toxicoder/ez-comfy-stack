@@ -263,6 +263,18 @@ class LayoutChromeTests(unittest.TestCase):
         self.assertIn("h2: DocsH2", mdx)
         self.assertIn("docsAlias()", page)
 
+    def test_breadcrumb_names_the_tab_the_page_lives_under(self) -> None:
+        """fumadocs restarts its trail at a root folder, so the tab needs our own component."""
+        page = (SITE_DIR / "app" / "[[...slug]]" / "page.tsx").read_text(encoding="utf-8")
+        trail = (SITE_DIR / "components" / "docs-trail.tsx").read_text(encoding="utf-8")
+        nav = (SITE_DIR / "lib" / "nav.ts").read_text(encoding="utf-8")
+        self.assertIn("trailFor(page.path)", page)
+        self.assertIn("<DocsTrail", page)
+        self.assertIn("trail.label", page)
+        self.assertIn('aria-label="Breadcrumb"', trail)
+        self.assertIn("trail.tab", trail)
+        self.assertIn("export function trailFor", nav)
+
 
 class ThemeTests(unittest.TestCase):
     """Voltage tokens, no Material indigo."""

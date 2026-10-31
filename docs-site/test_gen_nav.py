@@ -127,6 +127,57 @@ class ValidateTests(unittest.TestCase):
         self.assertEqual([], problems)
 
 
+class NestedNavTests(unittest.TestCase):
+    """Sidebar folders nest inside a tab, and the gates still see every leaf.
+
+    ``docs-site/lib/nav.json`` groups pages into collapsible folders (Troubleshooting,
+    Graph catalogs, ...). A group carries ``pages`` and no ``path``, so a validator that
+    only reads one level under a tab would crash on ``page["path"]`` or silently drop the
+    grouped pages from coverage.
+    """
+
+    NESTED = [
+        {"title": "Home", "pages": [{"title": "Home", "path": "index.md"}]},
+        {
+            "title": "Operate",
+            "pages": [
+                {"title": "Daily", "path": "operate/daily.md"},
+                {
+                    "title": "Troubleshooting",
+                    "pages": [
+                        {"title": "Home", "path": "troubleshooting.md"},
+                        {"title": "Deeper", "pages": [{"title": "Deep", "path": "deep.md"}]},
+                    ],
+                },
+            ],
+        },
+    ]
+
+    def test_nested_leaves_flatten_in_reader_order(self) -> None:
+        """Group children keep their position and order; groups themselves are not pages."""
+        paths = [page["path"] for page in gen_nav.flatten_pages(self.NESTED)]
+        self.assertEqual(["index.md", "operate/daily.md", "troubleshooting.md", "deep.md"], paths)
+
+    def test_validate_reports_a_page_missing_inside_a_group(self) -> None:
+        """A leaf buried in a folder is still checked against the tree on disk."""
+        problems = gen_nav.validate(self.NESTED)
+        self.assertEqual(1, len(problems))
+        self.assertIn("deep.md", problems[0])
+
+    def test_validate_reports_a_page_listed_twice_across_groups(self) -> None:
+        """The same page under two folders is a nav bug, not a second reading."""
+        tree = [
+            {
+                "title": "Operate",
+                "pages": [
+                    {"title": "A", "path": "index.md"},
+                    {"title": "Group", "pages": [{"title": "B", "path": "index.md"}]},
+                ],
+            }
+        ]
+        self.assertIn("listed twice", " ".join(gen_nav.validate(tree)))
+
+
 class RepoContractTests(unittest.TestCase):
     """The committed nav.json matches mkdocs.yml and covers every hand-written page."""
 
@@ -144,9 +195,9 @@ class RepoContractTests(unittest.TestCase):
         if not gen_nav.OUT_JSON.is_file():
             self.skipTest("nav.json not generated yet")
         listed = {
-            page["path"]
-            for tab in json.loads(gen_nav.OUT_JSON.read_text(encoding="utf-8"))
-            for page in tab["pages"]
+            page["path"] for page in gen_nav.flatten_pages(
+                json.loads(gen_nav.OUT_JSON.read_text(encoding="utf-8"))
+            )
         }
         docs = gen_nav.REPO_ROOT / "docs"
         on_disk = {
