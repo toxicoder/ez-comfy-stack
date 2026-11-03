@@ -1,7 +1,7 @@
 ---
 title: MCP and SSH tunnels
-description: In-tree blender-mcp, research-mcp, and studio-mcp typed tools, Path D SSH tunnels, and the no execute_code rule.
-tags: [mcp, blender, research, studio, occupancy, ssh]
+description: "In-tree blender-mcp, research-mcp, studio-mcp, and edit-mcp typed tools, Path D SSH tunnels, and the no execute_code rule."
+tags: [mcp, blender, research, studio, edit, occupancy, ssh]
 ---
 
 # MCP and SSH tunnels
@@ -12,6 +12,7 @@ tags: [mcp, blender, research, studio, occupancy, ssh]
 - **blender-mcp** - typed bpy tools behind `blender-desk`, no `execute_code`
 - **research-mcp** - chat, search, and lab App discovery on CPU GGUF
 - **studio-mcp** - clone lab graphs into `_user/`, never Queue
+- **edit-mcp** - typed timeline tools that drive the `/ez_edit` routes
 - **Discovery without a GPU** - `--list-tools` and `--call` skip bpy and llama
 
 **What this enables**
@@ -20,6 +21,7 @@ tags: [mcp, blender, research, studio, occupancy, ssh]
 - **Dumping** clay stills / guides without a cloud 3D API
 - **Keeping** research briefs on `${COMFY_OUTPUT_DIR}/research/` (never `${MODELS_DIR}`)
 - **Cloning** a shipped `_lab` graph into `_user/` without touching Comfy's queue
+- **Driving** the in-browser editing panel from a laptop agent, one typed tool per route
 
 The occupancy rule that decides which of these tools answer (bpy needs the desk) lives on
 [Occupancy desk](../occupancy.md); the concept is [Why one heavy job](../learn/occupancy.md)
@@ -36,7 +38,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 ```
 
 <Callout type="error" title="No execute_code">
-  In-tree MCP is typed-tool stdio (`scripts/lib/blender_mcp.py`, `research_mcp.py`, `studio_mcp.py`). **No** `execute_code`, **no** telemetry, **no** arbitrary `fetch_url`. Official Comfy Cloud MCP / `comfy-mcp` stay out of the image (`manage.sh start` is the Comfy launch path). Host only - never in `docker/Dockerfile`.
+  In-tree MCP is typed-tool stdio (`scripts/lib/blender_mcp.py`, `research_mcp.py`, `studio_mcp.py`, `edit_mcp.py`). **No** `execute_code`, **no** telemetry, **no** arbitrary `fetch_url`. Official Comfy Cloud MCP / `comfy-mcp` stay out of the image (`manage.sh start` is the Comfy launch path). Host only - never in `docker/Dockerfile`.
 </Callout>
 
 ---
@@ -167,10 +169,47 @@ occupancy (klein / wan / ltx / ...) - MCP wrote the file, it did not run it.
 
 ---
 
+## edit-mcp
+
+Wrappers: `scripts/utilities/edit-mcp.sh` -> `scripts/lib/edit_mcp.py`. Server name `ez-edit`.
+
+Thin host client of the editing lane's `/ez_edit` routes: **one typed tool per
+`custom_nodes/ez_edit/protocol.py` catalog name, one HTTP call per tool**. No business logic in
+the MCP layer - the routes own the reducer, the jobstore, and the occupancy gate. ComfyUI from
+this stack must be up: the origin is `EZ_EDIT_COMFY_URL`, else `http://127.0.0.1:${COMFY_PORT:-8188}`.
+
+| Tool | Args | What |
+| --- | --- | --- |
+| `occupancy_status` | - | Read `${COMFY_OUTPUT_DIR}/.occupancy.json` |
+| `edit_get_state` | optional `project_id` | Project (clips, overlays, captions) + recent jobs; empty id = most recent |
+| `edit_import` | `path` (required), optional `label`, `track` | Import a file already under `${COMFY_OUTPUT_DIR}` as a clip (`ffprobe` for duration) |
+| `edit_apply_ops` | `ops` (required), optional `project_id` | Ordered timeline ops through the reducer; an unknown op or id fails the whole call |
+| `edit_render` | `mode` (required: `server` / `client`), optional `project_id`, `client_id` | Queue a render: ffmpeg mp4 on the Spark, or a browser-executed webm |
+| `edit_job_status` | `job_id` (required) | One jobstore row |
+| `edit_generate_clip` | `prompt` (required), optional `duration_s`, `fps` | Queue the `editing/generate-cutaway` graph. **Heavy GPU** - the route refuses unless occupancy allows |
+| `edit_export_edl` | optional `project_id` | EDL JSON under the edit dir, for the Kdenlive / Shotcut handoff |
+
+```bash
+./scripts/manage.sh edit-mcp --stdio
+./scripts/manage.sh edit-mcp --call edit_apply_ops '{"ops":[{"op":"set_title","args":{"title":"cold open"}}]}'
+```
+
+Not included: `execute_code`, telemetry, arbitrary `fetch_url`, and any Queue of its own - the
+heavy print goes through the editing lane's own route, under the same occupancy rule as the
+canvas. Recording `mcp_pid` does **not** remap `idle` -> `blender-desk`.
+
+**Check it worked:** `--list-tools` prints the eight tools above, and `--call edit_get_state`
+returns JSON for the most recent project. A `generate_clip` row that fails naming a heavy mode is
+the XOR gate, not a bug: `./scripts/manage.sh occupancy enter idle` first. Panel and modes:
+[Editing lane](../edit-agent.md).
+
+---
+
 ## Next
 
 1. [Occupancy desk](../occupancy.md) - park Comfy before a bpy tool call
 2. [Occupancy matrix](occupancy-matrix.md) - which mode allows which GPU job
 3. [ComfyUI Apps](../studio-apps.md) - the App lanes an MCP clone comes from
 4. [Blender GB10 sidecar](../blender-gb10-sidecar.md) - the host Blender these tools drive
-5. [Troubleshooting - studio canvas](troubleshooting-canvas.md) - when the canvas does not show the clone
+5. [Editing lane](../edit-agent.md) - the panel `edit-mcp` drives, and its laptop-local MCP
+6. [Troubleshooting - studio canvas](troubleshooting-canvas.md) - when the canvas does not show the clone

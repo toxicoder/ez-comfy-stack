@@ -103,6 +103,8 @@ Columns: model | HF repo | license name | US self-host OK? | monetized YouTube O
 | Wan 2.2 S2V 14B | Wan-AI/Wan2.2-S2V-14B | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
 | SuperSplat | playcanvas/supersplat | MIT | Yes | Yes | none | MIT | Host static viewer. Not in Dockerfile | No |
 | Vlo video editor | PxTicks/vlo (GitHub) | AGPL-3.0 | Yes | Yes | none | AGPL-3.0 covers the app you build and run; upstream host checkout, never vendored into this MIT tree or the image | n/a - not a model, no weights | No - host `./install.sh`, never `download-models` |
+| Qwen3.8-Flash-Next FP4 (editing agent checkpoint) | nvidia/Qwen3.8-Flash-Next-FP4-Local | NVIDIA Open Model License / Qwen Community License 1.0 | Yes | Yes per the model card (commercial use OK - read the card) | none stated on the card | keep the model card license text with the weights you redistribute | card | No - opt-in host sidecar: `./scripts/manage.sh agent-model run`, never `download-models` |
+| TensorFold engine (same recipe repo) | MiaAI-Lab/Qwen3.8-Flash-Next-Single-DGX-Spark-TensorFold (GitHub) | Apache-2.0 | Yes | Yes | none | Apache NOTICE if you redistribute the engine | No extra ban beyond Apache | No - recipe checkout on the host, never in `docker/Dockerfile` |
 | UMT5-XXL text encoder (Wan companion) | Comfy-Org/Wan_2.2_ComfyUI_Repackaged | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | Yes |
 | LTX-2.5 distilled INT8-convrot | Lightricks/LTX-2.5 | LTX Community License | Yes | Yes if company under cap | $10M COMPANY annual revenue (affiliates count) | disclose AI-generated media; do not strip provenance | Yes - do not distill into a competing model | Yes |
 | LTX-2.5 IC-LoRA Union Control | Lightricks/LTX-2.3-22b-IC-LoRA-Union-Control | LTX Community License | Yes | Yes if company under cap | $10M COMPANY annual revenue (affiliates count) | disclose AI-generated media; do not strip provenance | Yes - do not distill into a competing model. Distilled-only. Official 2.5 graph widgets `ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors`. Refuse 19B Union. | No |
@@ -149,6 +151,15 @@ Columns: model | HF repo | license name | US self-host OK? | monetized YouTube O
 TRELLIS.2 footnote: download `Comfy-Org/TRELLIS.2` (`trellis_2_int8_convrot` + shape/texture VAEs + `dino_v3_vit_l`). Original research weights: microsoft/TRELLIS.2. Companion encoder DINOv3 (Meta custom license, commercial-friendly) is not a default download - it ships inside opt-in `download-3d --tier trellis2`. Native TRELLIS Comfy basenames such as `trellis_2_int8_convrot` are opt-in via `download-3d` only - do not treat them as `download-models`.
 
 The same table is in repo-root `LICENSE-MODELS.md` so tests can grep either file.
+
+Editing-agent footnote: the Qwen3.8-Flash-Next checkpoint and the TensorFold engine are an
+**opt-in host sidecar**, not a lab model. `./scripts/manage.sh agent-model` clones the upstream
+recipe and lets that recipe pull its own prebuilt image and public checkpoint (no HF login) into
+`${HF_HOME:-$HOME/.cache/huggingface}`. Nothing enters `download-models`, `docker/Dockerfile`, a
+Compose service, or a promoted graph, and the checkpoint is never pinned beside Klein / Wan / LTX.
+The engine is Apache-2.0; the checkpoint carries the NVIDIA Open Model License / Qwen Community
+License 1.0 and the card states commercial use is OK - verify there before you monetize. Download
+and memory sizing (both the authors' measurements): [Editing lane](edit-agent.md#memory-math).
 
 ---
 
