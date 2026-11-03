@@ -24,6 +24,7 @@ _LIB_MAINS = (
     "scripts/lib/asset_bible.py",
     "scripts/lib/blender_mcp.py",
     "scripts/lib/disk_catalog.py",
+    "scripts/lib/edit_mcp.py",
     "scripts/lib/guide_pack.py",
     "scripts/lib/house_layout.py",
     "scripts/lib/model_manifest.py",
