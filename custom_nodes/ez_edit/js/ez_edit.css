@@ -1,0 +1,345 @@
+/* Editing lane panel: status line, agent chat, timeline tables, preview stage,
+ * laptop-local MCP list, plus the right-docked floating fallback.
+ *
+ * Theming: every color is a Comfy theme custom property with a dark fallback,
+ * so the panel matches the default dark theme and a light one. The only
+ * literals are neutrals and the low-saturation status tints.
+ *
+ * Layout: `.ez-edit` is the flex column; each section owns its own scroller so
+ * a long transcript cannot push the buttons out of reach. The stage is a
+ * positioned box: the <video> is the base plane and the canvas is the overlay
+ * plane pinned over it with pointer-events off, so the preview stays clickable
+ * underneath.
+ *
+ * Stacking: the floating aside (z 9999) sits over the canvas UI and under
+ * Comfy dialogs; the no-command header button (z 9998) sits under the aside.
+ *
+ * Motion: transitions live under `prefers-reduced-motion: no-preference` only. */
+
+/* Tokens are declared on both hosts: the panel root, and the floating aside
+ * (whose button bar sits outside the `.ez-edit` subtree). */
+.ez-edit,
+.ez-edit-floating {
+  --ez-edit-fg: var(--fg-color, #e8e8e8);
+  --ez-edit-bg: var(--comfy-menu-bg, #1e1e1e);
+  --ez-edit-muted: var(--descrip-text, #9a9a9a);
+  --ez-edit-border: var(--border-color, rgba(255, 255, 255, 0.12));
+  --ez-edit-accent: var(--p-primary-color, #6ea8fe);
+  --ez-edit-card: var(--content-bg, rgba(255, 255, 255, 0.04));
+  --ez-edit-well: var(--p-form-background, rgba(0, 0, 0, 0.22));
+  --ez-edit-ok: var(--p-green-500, #9fd0a8);
+  --ez-edit-bad: var(--p-red-500, #f0a0a0);
+}
+
+.ez-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 8px;
+  box-sizing: border-box;
+  height: 100%;
+  overflow: auto;
+  color: var(--ez-edit-fg);
+  background: var(--ez-edit-bg);
+  font: 12px/1.45 ui-sans-serif, system-ui, sans-serif;
+}
+
+.ez-edit [hidden] {
+  display: none;
+}
+
+.ez-edit button,
+.ez-edit input,
+.ez-edit textarea,
+.ez-edit select {
+  font: inherit;
+  color: inherit;
+}
+
+.ez-edit-status {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  margin: 0;
+  padding: 4px 6px;
+  border-radius: 6px;
+  background: var(--ez-edit-card);
+  color: var(--ez-edit-muted);
+  font-size: 11px;
+  word-break: break-word;
+}
+
+.ez-edit-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid var(--ez-edit-border);
+  border-radius: 8px;
+  background: var(--ez-edit-card);
+}
+
+.ez-edit-heading {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.ez-edit-subhead {
+  margin: 6px 0 2px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ez-edit-muted);
+  text-transform: uppercase;
+}
+
+.ez-edit-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ez-edit-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.ez-edit-label {
+  min-width: 5.5rem;
+  color: var(--ez-edit-muted);
+}
+
+.ez-edit-hint {
+  margin: 0;
+  color: var(--ez-edit-muted);
+  font-size: 11px;
+}
+
+.ez-edit-btn {
+  padding: 3px 9px;
+  border: 1px solid var(--ez-edit-border);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+}
+
+.ez-edit-btn:hover {
+  border-color: var(--ez-edit-accent);
+}
+
+.ez-edit-btn-sm {
+  padding: 1px 6px;
+  font-size: 11px;
+}
+
+.ez-edit-chip.is-active {
+  border-color: var(--ez-edit-accent);
+  background: color-mix(in srgb, var(--ez-edit-accent) 26%, transparent);
+}
+
+.ez-edit-input {
+  flex: 1;
+  min-width: 8rem;
+  padding: 3px 6px;
+  border: 1px solid var(--ez-edit-border);
+  border-radius: 6px;
+  background: var(--ez-edit-well);
+}
+
+.ez-edit-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 240px;
+  overflow: auto;
+  padding: 4px;
+  border-radius: 6px;
+  background: var(--ez-edit-well);
+}
+
+.ez-edit-msg {
+  padding: 4px 6px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.ez-edit-msg.is-user {
+  border-left: 2px solid var(--ez-edit-accent);
+}
+
+.ez-edit-msg.is-tool {
+  color: var(--ez-edit-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+}
+
+.ez-edit-msg.is-error {
+  color: var(--ez-edit-bad);
+}
+
+.ez-edit-chat-input {
+  resize: vertical;
+  min-height: 2.4em;
+}
+
+.ez-edit-stage {
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #000;
+  aspect-ratio: 16 / 9;
+}
+
+.ez-edit-video,
+.ez-edit-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.ez-edit-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ez-edit-table-wrap {
+  overflow: auto;
+}
+
+.ez-edit-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.ez-edit-table th,
+.ez-edit-table td {
+  padding: 2px 5px;
+  text-align: left;
+  border-bottom: 1px solid var(--ez-edit-border);
+  word-break: break-word;
+}
+
+.ez-edit-table th {
+  color: var(--ez-edit-muted);
+  font-weight: 600;
+}
+
+.ez-edit-table .is-empty td {
+  color: var(--ez-edit-muted);
+  font-style: italic;
+}
+
+.ez-edit-table .is-ok td {
+  color: var(--ez-edit-ok);
+}
+
+.ez-edit-table .is-bad td {
+  color: var(--ez-edit-bad);
+}
+
+.ez-edit-mcp {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ez-edit-mcp-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border: 1px solid var(--ez-edit-border);
+  border-radius: 6px;
+  background: var(--ez-edit-well);
+}
+
+.ez-edit-mcp-row.is-bad {
+  border-color: var(--ez-edit-bad);
+}
+
+.ez-edit-mcp-url {
+  flex: 1;
+  min-width: 10rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  word-break: break-all;
+}
+
+.ez-edit-mcp-note {
+  width: 100%;
+  color: var(--ez-edit-muted);
+  font-size: 11px;
+  word-break: break-word;
+}
+
+.ez-edit-mcp-row.is-bad .ez-edit-mcp-note {
+  color: var(--ez-edit-bad);
+}
+
+.ez-edit-floating {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  width: min(420px, 100vw);
+  max-width: 100vw;
+  height: 100vh;
+  border-left: 1px solid var(--ez-edit-border);
+  background: var(--ez-edit-bg);
+  box-shadow: -6px 0 18px rgba(0, 0, 0, 0.35);
+}
+
+.ez-edit-float-bar {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--ez-edit-border);
+  justify-content: space-between;
+}
+
+.ez-edit-inner {
+  flex: 1;
+  min-height: 0;
+}
+
+.ez-edit-topbar {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  z-index: 9998;
+}
+
+/* The no-command-API entry button is a direct child of the menu (or the body),
+ * so it carries its own theme fallbacks instead of the panel tokens. */
+.ez-edit-topbar-btn {
+  padding: 3px 9px;
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12));
+  border-radius: 6px;
+  background: var(--comfy-menu-bg, #1e1e1e);
+  color: var(--fg-color, #e8e8e8);
+  cursor: pointer;
+  font: 12px/1.45 ui-sans-serif, system-ui, sans-serif;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ez-edit-btn,
+  .ez-edit-chip {
+    transition: border-color 120ms ease, background-color 120ms ease;
+  }
+}
+
+@media (max-width: 480px) {
+  .ez-edit-label {
+    min-width: 0;
+    width: 100%;
+  }
+}
