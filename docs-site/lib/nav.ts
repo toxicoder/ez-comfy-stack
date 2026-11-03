@@ -1,14 +1,14 @@
 /**
- * Sidebar and tab structure, hand-maintained in `lib/nav.json`.
+ * Sidebar menu structure, hand-maintained in `lib/nav.json`.
  *
- * The site inherited its seven tabs from the old MkDocs `nav:` block, and
+ * The site inherited its seven top-level sections from the old MkDocs `nav:` block, and
  * `scripts/gen_nav.py` transcribed that block into `lib/nav.json`. `mkdocs.yml` is long
  * gone, so `lib/nav.json` is now the single source of truth: edit it by hand and verify
- * with `npm run nav:check`. The top-level tab titles are pinned by
+ * with `npm run nav:check`. The top-level section titles are pinned by
  * `docs/test_docs_site_render.py`, and every page under `docs/` has to appear in the tree
  * exactly once (`tests/python/test_docs_nav_coverage.py` fails an orphan or a stale entry).
  *
- * Inside a tab, pages are grouped into collapsible folders that read as a progression:
+ * Inside a section, pages are grouped into collapsible folders that read as a progression:
  * Learn runs concept to concept, Operate runs everyday loop to troubleshooting, and so on.
  * A group is `{ title, pages }` with no `path`; its leaves keep their order and nest to
  * any depth. Keep each folder short enough to scan in one glance - a flat list of twenty
@@ -55,7 +55,7 @@ export interface NavGroup {
 
 export type NavNode = NavPage | NavGroup;
 
-/** One top-level tab of the transcribed navigation. */
+/** One top-level section of the transcribed navigation (the old MkDocs tab). */
 export interface NavTab {
   title: string;
   pages: NavNode[];
@@ -250,9 +250,13 @@ function toNodes(source: NavSource, tabTitle: string, nodes: NavNode[], idPrefix
 /**
  * Build the page tree the docs layout renders.
  *
- * Every tab becomes a root folder, which is what makes it appear in the tab strip while the
- * sidebar shows only the pages of the tab the reader is currently in - the behaviour the
- * Material theme produced with `navigation.tabs`.
+ * Every section is a plain collapsible folder - deliberately not a root folder.
+ * fumadocs turns each root folder into a layout tab and shows those tabs as a dropdown
+ * selector above the sidebar, which would leave the sidebar holding only the current
+ * section. Without root folders the sidebar is one traditional vertical menu: all seven
+ * sections listed at once, each expandable, the reader's own section opened by fumadocs.
+ * The right-hand table of contents comes from `DocsPage`'s `toc` prop and is untouched by
+ * this choice.
  */
 export function buildPageTree(source: NavSource): Root {
   const nav = injectGenerated(STATIC_NAV);
@@ -262,7 +266,6 @@ export function buildPageTree(source: NavSource): Root {
       $id: `tab:${index}:${tab.title}`,
       type: "folder",
       name: tab.title,
-      root: true,
       defaultOpen: true,
       children: pages
     };
@@ -285,7 +288,7 @@ function flattenPages(nodes: NavNode[]): NavPage[] {
   return out;
 }
 
-/** Paths of every page in the static navigation (no generated injection), in tab order. */
+/** Paths of every page in the static navigation (no generated injection), in menu order. */
 export const NAVIGATED_PATHS: string[] = STATIC_NAV.flatMap((tab) => flattenPages(tab.pages).map((page) => page.path));
 
 /**
@@ -315,11 +318,11 @@ export interface PageNodeEntry {
   url: string;
 }
 
-/** Where a page sits in the sidebar: its tab, then each collapsible folder above it. */
+/** Where a page sits in the sidebar menu: its section, then each collapsible folder above it. */
 export interface NavTrail {
-  /** Title of the tab the page is filed under. */
+  /** Title of the section the page is filed under. */
   tab: string;
-  /** Folder titles between the tab and the page, outermost first. */
+  /** Folder titles between the section and the page, outermost first. */
   groups: string[];
   /** Label the sidebar shows for the page, so the trail and the sidebar agree. */
   label: string;
@@ -328,11 +331,12 @@ export interface NavTrail {
 /**
  * Sidebar location of one page, for the breadcrumb above the title.
  *
- * fumadocs resets the trail at a `root: true` folder, which is exactly what a tab is, so
- * its own breadcrumb cannot name the tab. This walks the same tree the sidebar renders.
+ * fumadocs' own breadcrumb prints page titles, so it cannot name the section the reader is
+ * in or agree with the wording the menu rows use. This walks the same tree the sidebar
+ * renders and returns both.
  *
  * Arguments: path - page path relative to `docs/`, with or without its extension.
- * Returns: the tab, folder titles, and sidebar label, or undefined when the page is not
+ * Returns: the section, folder titles, and sidebar label, or undefined when the page is not
  * filed in the tree.
  */
 export function trailFor(path: string): NavTrail | undefined {

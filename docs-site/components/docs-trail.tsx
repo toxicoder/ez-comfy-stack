@@ -4,13 +4,13 @@ import { ChevronRight } from "lucide-react";
 import type { NavTrail } from "@/lib/nav";
 
 /**
- * Breadcrumb above the page title: tab, then each sidebar folder, then the page.
+ * Breadcrumb above the page title: section, then each sidebar folder, then the page.
  *
- * fumadocs' own breadcrumb drops everything above a `root: true` folder, and a tab is one,
- * so a reader on a narrow screen (where the tab strip collapses into the sidebar) would see
- * only the folder and the page. This names the tab as well, and labels the last step with the
- * sidebar's own wording so the trail and the folder list agree. Folders stay plain text: a
- * trail link that jumped sideways through the sidebar would compete with the sidebar itself.
+ * The left menu keeps every section in the tree beside the reader's own, so the trail is
+ * what says which one they are standing in. fumadocs' own breadcrumb prints page titles: it
+ * would name neither the section nor the leaf the way the menu rows do. Folders stay plain
+ * text: a trail link that jumped sideways through the sidebar would compete with the sidebar
+ * itself.
  */
 export function DocsTrail({ trail, page, url }: { trail: NavTrail; page: string; url: string }) {
   const items: { name: string; url?: string }[] = [
