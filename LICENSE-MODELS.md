@@ -50,6 +50,8 @@ Policy: US-based casual creators (YouTube, client shorts, ads under a small LLC)
 | Qwen3-4B-Instruct-2507 Q4_K_M GGUF | unsloth/Qwen3-4B-Instruct-2507-GGUF | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | Yes |
 | Qwen2.5-VL-3B-Instruct Q4_K_M GGUF | ggml-org/Qwen2.5-VL-3B-Instruct-GGUF | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
 | Qwen3.6-35B-A3B UD-Q4_K_XL GGUF | unsloth/Qwen3.6-35B-A3B-MTP-GGUF | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
+| Qwen3.8-Flash-Next FP4 (editing agent sidecar, opt-in host recipe) | nvidia/Qwen3.8-Flash-Next-FP4-Local | NVIDIA Open Model License (base: Qwen Community License 1.0) | Yes (card: commercial use OK) | Yes per card | none per card | follow card | card | No |
+| TensorFold engine (agent sidecar runtime, opt-in host checkout) | github.com/ashhart/TensorFold | Apache 2.0 | Yes | Yes | none | Apache NOTICE | No extra ban beyond Apache | No |
 | Kokoro-82M | hexgrad/Kokoro-82M (ONNX pack: fastrtc/kokoro-onnx) | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
 | ACE-Step 1.5 turbo AIO | Comfy-Org/ace_step_1.5_ComfyUI_files | MIT upstream / Apache companion pack | Yes | Yes | none | MIT | No extra ban beyond MIT | No |
 | ACE-Step 1.5 XL | Comfy-Org/ace_step_1.5_ComfyUI_files | MIT | Yes | Yes | none | MIT | No extra ban beyond MIT | No |

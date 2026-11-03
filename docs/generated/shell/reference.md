@@ -405,6 +405,14 @@ In-tree creative research MCP (typed tools, occupancy-aware).
 
 In-tree studio MCP (clone lab graphs into _user/; no Queue).
 
+### Command: edit-mcp
+
+In-tree editing MCP (typed timeline tools; drives the /ez_edit routes).
+
+### Command: agent-model
+
+Host Qwen3.8-Flash-Next agent sidecar for the editing lane (127.0.0.1).
+
 ### Command: blender-llm
 
 Optional on-box Qwen3-4B CPU client for blender-mcp.
@@ -873,6 +881,52 @@ Environment (defaults applied if unset):
   MEM_LIMIT           - Docker mem_limit string, e.g. 90g (default 90g)
   LAB_MOCK_FREE_MEM_GIB / LAB_MOCK_DISK_FREE_GIB - hermetic test overrides
   LAB_NON_INTERACTIVE / LAB_CONFIRM_TOKEN - automation confirm path
+
+<!-- source: scripts/utilities/agent-model.sh -->
+## agent-model
+
+Host launcher for the optional Qwen3.8-Flash-Next editing agent: the
+MiaAI-Lab TensorFold recipe pinned to one commit lane, run on a single
+DGX Spark as a unified-memory co-tenant beside ComfyUI.
+
+This utility owns the operator path only: preflight, consent, the pinned
+clone/update, the co-tenant profile env, and the recipe's own start.sh /
+stop.sh. The recipe owns the container and the weights.
+
+```bash
+Usage:
+```
+
+  bazelisk run //scripts:run-utility -- agent-model status [--json]
+
+```bash
+  ./scripts/utilities/agent-model.sh status [--json]
+  ./scripts/utilities/agent-model.sh run
+  ./scripts/utilities/agent-model.sh stop
+
+```
+
+Environment:
+  AGENT_MODEL_HOME, AGENT_MODEL_REPO, AGENT_MODEL_REF, AGENT_MODEL_PORT,
+  AGENT_MODEL_HOST (or HOST), AGENT_MODEL_READY_S, AGENT_MODEL_MIN_DISK_GB,
+  AGENT_MODEL_MIN_MEM_GIB, AGENT_MODEL_MEMINFO_FILE, AGENT_MODEL_ASSUME_YES,
+  AGENT_MODEL_POLL_INTERVAL_S, AGENT_MODEL_CURL_MAX_TIME_S, HF_HOME,
+  COMFY_OUTPUT_DIR, LAB_NON_INTERACTIVE, LAB_CONFIRM_TOKEN, and the external
+  command indirections AGENT_MODEL_{GIT,DOCKER,CURL,DF}_BIN.
+
+!!! warning
+
+    Safety:
+      Bind 127.0.0.1 only - a non-loopback HOST is refused. Heavy confirm before
+      the ~160 GB download. Refuses while a heavy GPU occupancy mode (wan / ltx /
+      trellis / klein) holds the Spark. Does not start Compose. Does not touch
+      restart: "no", mem_limit, or the headroom preflight.
+
+Exit codes:
+  0 ok; 1 usage or general error; 2 occupancy refuse; 4 preflight refuse
+  (tool, bind, disk, memory); 5 the operator declined the heavy confirm.
+
+### Command: agent-model
 
 <!-- source: scripts/utilities/album-render.sh -->
 ## album-render
@@ -1720,6 +1774,31 @@ Exit codes:
   0 success; 1 usage / missing yt-dlp / fetch failure.
 
 ### Command: dub-fetch
+
+<!-- source: scripts/utilities/edit-mcp.sh -->
+## edit-mcp
+
+In-tree editing-lane MCP: host thin client of the ComfyUI /ez_edit routes.
+One typed tool per protocol.TOOL_CATALOG name, one HTTP call per tool.
+No execute_code, no telemetry, no arbitrary fetch_url, no Queue of its own.
+
+```bash
+Usage:
+```
+
+  bazelisk run //scripts:run-utility -- edit-mcp [--stdio]
+
+```bash
+  ./scripts/utilities/edit-mcp.sh [--stdio]
+  ./scripts/utilities/edit-mcp.sh --list-tools
+  ./scripts/utilities/edit-mcp.sh --call TOOL [JSON]
+  ./scripts/utilities/edit-mcp.sh status [--json]
+
+```
+
+The ComfyUI origin is EZ_EDIT_COMFY_URL, else http://127.0.0.1:${COMFY_PORT:-8188}.
+
+### Command: edit-mcp
 
 <!-- source: scripts/utilities/film-accept.sh -->
 ## film-accept

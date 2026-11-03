@@ -82,6 +82,8 @@ Redeploy the stack from the branch you are standing on. The image lane follows t
 | `blender-mcp` | In-tree typed Blender MCP (stdio / `--call`). bpy tools need blender-desk | Vendor ahujasid; `execute_code`; telemetry |
 | `research-mcp` | In-tree creative research MCP (chat, web_search, research, list_lab_apps). CPU GGUF | `execute_code`; arbitrary URL fetch; GPU-offload llama |
 | `studio-mcp` | In-tree studio MCP (clone `_lab` graphs into live `_user/`; `generate_app`). CPU GGUF | `execute_code`; Queue / `run_workflow`; write `_lab`; Comfy Cloud MCP |
+| `edit-mcp` | In-tree editing MCP (typed timeline tools; drives the `/ez_edit` routes on the ComfyUI host). [Editing lane](edit-agent.md) | `execute_code`; telemetry; arbitrary URL fetch; non-loopback ComfyUI URL |
+| `agent-model status\|run\|stop` | Host Qwen3.8-Flash-Next agent sidecar for the editing lane (`127.0.0.1:30001`, opt-in TensorFold recipe; heavy confirm + preflights). [Editing lane](edit-agent.md) | Bind `0.0.0.0`; run beside a heavy GPU mode; treat the checkpoint as part of `download-models` |
 | `blender-llm` | Optional host Qwen3-4B CPU -> blender-mcp. Path D if llama.cpp missing | GPU-offload next to Comfy |
 | `blender` | Host Blender sidecar; Workbench in blender-desk; dies if Comfy is heavy | Cycles GPU while Compose is up |
 | `blender-install` | Host apt install of Ubuntu `blender` (universe). Never in the Dockerfile. Occupancy does not install Blender | Add Blender to `docker/Dockerfile`; unofficial aarch64 CUDA tarballs |
@@ -120,5 +122,6 @@ Safety is unchanged: `restart: "no"`, heavy confirm on `start`, headroom preflig
 | Symptom -> fix | [Troubleshooting](troubleshooting.md) |
 | Occupancy mode x jobs | [Occupancy matrix](operate/occupancy-matrix.md) |
 | blender-mcp / research-mcp / studio-mcp | [MCP](operate/mcp.md) |
+| edit-mcp / agent-model | [Editing lane](edit-agent.md) |
 | What `cleanup` deletes | [Backup and restore](operate/backup-restore.md) |
 | Lab `ez_*` nodes | [Custom nodes](reference/custom-nodes.md) |
