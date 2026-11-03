@@ -1,0 +1,1046 @@
+{
+  "id": "generate-cutaway",
+  "revision": 3,
+  "last_node_id": 16,
+  "last_link_id": 15,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Note",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        960,
+        340
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "## editing/generate-cutaway\n\nSilent Wan 2.2 TI2V-5B text-to-video cutaway the **Edit** agent queues when a\ntimeline needs a generated clip. One GB10 job: the graph refuses to render while\nanother heavy mode holds occupancy.\n\nModels: ``wan2.2_ti2v_5B_fp16.safetensors`` + ``umt5_xxl_fp8_e4m3fn_scaled.safetensors`` (CLIP type wan) + ``wan2.2_vae.safetensors``.\nWeights: ``./scripts/manage.sh download-wan --tier 5b``.\n\nWidgets the agent patches (see ``extra.lab_edit.widgets``):\n- Prompt: the Wan Prompt Enhance ``prompt`` widget - it owns the Positive CLIP,\n  so that is the text UMT5 encodes. Set **Rewrite prompt** off to send it to\n  CLIP verbatim; the 4B rewriter is optional here because the agent authors.\n- Rewrite negative stays on: it keeps the negative from fighting the positive.\n- Video size and length: latent node ``width`` / ``height`` inputs and the frame\n  count in its ``widgets_values[2]``.\n- FPS: frame rate on the MP4 saver. Duration = length / FPS.\n- Seed on the sampler, filename prefix on the saver.\n\nPrimary output: MP4 at ``${COMFY_OUTPUT_DIR}/ez_edit_cutaway_*.mp4`` (container\n``/outputs``). No audio track - the edit timeline owns audio.\n\nThe agent queues the package copy at ``custom_nodes/ez_edit/graphs/generate-cutaway.json``, written byte-identical\nto this lab graph. Edit ``tests/python/_build_editing_workflows.py`` and re-run;\nnever hand-edit either JSON.\n\nOccupancy: wan - stop LTX, podcast, music. One GB10 job.\n"
+      ],
+      "title": "Operator note"
+    },
+    {
+      "id": 2,
+      "type": "UNETLoader",
+      "pos": [
+        40,
+        584
+      ],
+      "size": [
+        360,
+        82
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            3
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "wan2.2_ti2v_5B_fp16.safetensors",
+        "default"
+      ],
+      "title": "Wan 2.2 TI2V-5B"
+    },
+    {
+      "id": 3,
+      "type": "CLIPLoader",
+      "pos": [
+        40,
+        738
+      ],
+      "size": [
+        360,
+        110
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            1,
+            2
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+        "wan",
+        "default"
+      ],
+      "title": "UMT5 CLIP (wan)"
+    },
+    {
+      "id": 4,
+      "type": "VAELoader",
+      "pos": [
+        40,
+        920
+      ],
+      "size": [
+        360,
+        58
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            7,
+            10
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "wan2.2_vae.safetensors"
+      ],
+      "title": "Wan 2.2 VAE"
+    },
+    {
+      "id": 5,
+      "type": "CLIPTextEncode",
+      "pos": [
+        776,
+        1076
+      ],
+      "size": [
+        420,
+        160
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 1
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 13,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            5
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "A clean unmarked product cutaway: a matte graphite desk lamp with a slim articulated arm and a weighted circular base sits on a bare oak workbench beside a stack of unmarked hardcover books. Soft north-window daylight from the left, gentle falloff, shallow depth of field, faint dust motes drifting in the beam. The lamp head tilts two degrees downward across the shot while the dust keeps drifting. 40mm-equivalent lens, locked-off camera, 16:9. Photoreal b-roll. No audio."
+      ],
+      "title": "Prompt (cutaway)"
+    },
+    {
+      "id": 6,
+      "type": "CLIPTextEncode",
+      "pos": [
+        776,
+        1800
+      ],
+      "size": [
+        420,
+        120
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 2
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 14,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text"
+      ],
+      "title": "Negative"
+    },
+    {
+      "id": 7,
+      "type": "Wan22ImageToVideoLatent",
+      "pos": [
+        1244,
+        714
+      ],
+      "size": [
+        280,
+        150
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 7
+        },
+        {
+          "name": "start_image",
+          "type": "IMAGE",
+          "link": null,
+          "shape": 7
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "link": null,
+          "widget": {
+            "name": "width"
+          }
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": null,
+          "widget": {
+            "name": "height"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            8
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Wan22ImageToVideoLatent",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        832,
+        480,
+        121,
+        1
+      ],
+      "title": "Video size & length"
+    },
+    {
+      "id": 8,
+      "type": "ModelSamplingSD3",
+      "pos": [
+        1244,
+        584
+      ],
+      "size": [
+        210,
+        58
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            4
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ModelSamplingSD3",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        8
+      ],
+      "title": "Shift"
+    },
+    {
+      "id": 9,
+      "type": "KSampler",
+      "pos": [
+        1244,
+        936
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 4
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 5
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 6
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 8
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            9
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        20,
+        5,
+        "uni_pc",
+        "simple",
+        1
+      ],
+      "title": "KSampler"
+    },
+    {
+      "id": 10,
+      "type": "VAEDecode",
+      "pos": [
+        1612,
+        584
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 9
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            11
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [],
+      "title": "VAE Decode"
+    },
+    {
+      "id": 11,
+      "type": "EZDCCOccupancyGate",
+      "pos": [
+        448,
+        584
+      ],
+      "size": [
+        280,
+        90
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 11
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            12
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZDCCOccupancyGate"
+      },
+      "widgets_values": [
+        "wan"
+      ],
+      "title": "Occupancy gate (wan)"
+    },
+    {
+      "id": 12,
+      "type": "VHS_VideoCombine",
+      "pos": [
+        1612,
+        702
+      ],
+      "size": [
+        320,
+        420
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 12
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": null,
+          "shape": 7
+        },
+        {
+          "name": "meta_batch",
+          "type": "VHS_BatchManager",
+          "link": null,
+          "shape": 7
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Filenames",
+          "type": "VHS_FILENAMES",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_VideoCombine"
+      },
+      "widgets_values": {
+        "frame_rate": 24,
+        "loop_count": 0,
+        "filename_prefix": "ez_edit_cutaway",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 18,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": true
+      },
+      "title": "Save cutaway (MP4) - open node for preview"
+    },
+    {
+      "id": 13,
+      "type": "EZWanPromptEnhance",
+      "pos": [
+        776,
+        584
+      ],
+      "size": [
+        420,
+        420
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            13,
+            15
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZWanPromptEnhance"
+      },
+      "widgets_values": [
+        "custom",
+        "A clean unmarked product cutaway: a matte graphite desk lamp with a slim articulated arm and a weighted circular base sits on a bare oak workbench beside a stack of unmarked hardcover books. Soft north-window daylight from the left, gentle falloff, shallow depth of field, faint dust motes drifting in the beam. The lamp head tilts two degrees downward across the shot while the dust keeps drifting. 40mm-equivalent lens, locked-off camera, 16:9. Photoreal b-roll. No audio.",
+        true,
+        "t2v",
+        "5 seconds, 24 fps",
+        "none",
+        "editing/generate-cutaway"
+      ],
+      "title": "Wan Prompt Enhance"
+    },
+    {
+      "id": 14,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        776,
+        1308
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 15
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            14
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text",
+        true,
+        "wan"
+      ],
+      "title": "Negative Prompt Enhance"
+    },
+    {
+      "id": 15,
+      "type": "EZQuality",
+      "pos": [
+        1416,
+        80
+      ],
+      "size": [
+        320.0,
+        82.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "quality",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZQuality"
+      },
+      "widgets_values": [
+        "lab"
+      ],
+      "title": "Quality"
+    },
+    {
+      "id": 16,
+      "type": "EZModelCheck",
+      "pos": [
+        1048,
+        80
+      ],
+      "size": [
+        320.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "EZModelCheck"
+      },
+      "widgets_values": [
+        "Click Check models. Queue does not run this node."
+      ],
+      "title": "Check models"
+    }
+  ],
+  "links": [
+    [
+      1,
+      3,
+      0,
+      5,
+      0,
+      "CLIP"
+    ],
+    [
+      2,
+      3,
+      0,
+      6,
+      0,
+      "CLIP"
+    ],
+    [
+      3,
+      2,
+      0,
+      8,
+      0,
+      "MODEL"
+    ],
+    [
+      4,
+      8,
+      0,
+      9,
+      0,
+      "MODEL"
+    ],
+    [
+      5,
+      5,
+      0,
+      9,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      6,
+      6,
+      0,
+      9,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      7,
+      4,
+      0,
+      7,
+      0,
+      "VAE"
+    ],
+    [
+      8,
+      7,
+      0,
+      9,
+      3,
+      "LATENT"
+    ],
+    [
+      9,
+      9,
+      0,
+      10,
+      0,
+      "LATENT"
+    ],
+    [
+      10,
+      4,
+      0,
+      10,
+      1,
+      "VAE"
+    ],
+    [
+      11,
+      10,
+      0,
+      11,
+      0,
+      "IMAGE"
+    ],
+    [
+      12,
+      11,
+      0,
+      12,
+      0,
+      "IMAGE"
+    ],
+    [
+      13,
+      13,
+      0,
+      5,
+      1,
+      "STRING"
+    ],
+    [
+      14,
+      14,
+      0,
+      6,
+      1,
+      "STRING"
+    ],
+    [
+      15,
+      13,
+      0,
+      14,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "NOTE",
+      "bounding": [
+        20,
+        8,
+        1000,
+        456
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        1028,
+        8,
+        728,
+        256
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "MODEL",
+      "bounding": [
+        20,
+        512,
+        400,
+        510
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "INPUT",
+      "bounding": [
+        428,
+        512,
+        320,
+        206
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "PROMPT",
+      "bounding": [
+        756,
+        512,
+        460,
+        1492
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 6,
+      "title": "SETTINGS",
+      "bounding": [
+        1224,
+        512,
+        360,
+        730
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 7,
+      "title": "OUTPUT",
+      "bounding": [
+        1592,
+        512,
+        360,
+        654
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "lab_note": "## editing/generate-cutaway\n\nSilent Wan 2.2 TI2V-5B text-to-video cutaway the **Edit** agent queues when a\ntimeline needs a generated clip. One GB10 job: the graph refuses to render while\nanother heavy mode holds occupancy.\n\nModels: ``wan2.2_ti2v_5B_fp16.safetensors`` + ``umt5_xxl_fp8_e4m3fn_scaled.safetensors`` (CLIP type wan) + ``wan2.2_vae.safetensors``.\nWeights: ``./scripts/manage.sh download-wan --tier 5b``.\n\nWidgets the agent patches (see ``extra.lab_edit.widgets``):\n- Prompt: the Wan Prompt Enhance ``prompt`` widget - it owns the Positive CLIP,\n  so that is the text UMT5 encodes. Set **Rewrite prompt** off to send it to\n  CLIP verbatim; the 4B rewriter is optional here because the agent authors.\n- Rewrite negative stays on: it keeps the negative from fighting the positive.\n- Video size and length: latent node ``width`` / ``height`` inputs and the frame\n  count in its ``widgets_values[2]``.\n- FPS: frame rate on the MP4 saver. Duration = length / FPS.\n- Seed on the sampler, filename prefix on the saver.\n\nPrimary output: MP4 at ``${COMFY_OUTPUT_DIR}/ez_edit_cutaway_*.mp4`` (container\n``/outputs``). No audio track - the edit timeline owns audio.\n\nThe agent queues the package copy at ``custom_nodes/ez_edit/graphs/generate-cutaway.json``, written byte-identical\nto this lab graph. Edit ``tests/python/_build_editing_workflows.py`` and re-run;\nnever hand-edit either JSON.\n\nOccupancy: wan - stop LTX, podcast, music. One GB10 job.\n",
+    "lab_profile": "editing/generate-cutaway",
+    "lab_description": "Wan 2.2 5B silent T2V cutaway for the edit agent, 121 frames @ 24 fps",
+    "lab_edit": {
+      "graph": "custom_nodes/ez_edit/graphs/generate-cutaway.json",
+      "occupancy_mode": "wan",
+      "prefix": "ez_edit_cutaway",
+      "size": [
+        832,
+        480
+      ],
+      "frames": 121,
+      "fps": 24,
+      "widgets": {
+        "prompt": {
+          "node": 13,
+          "widget": "prompt"
+        },
+        "enhance": {
+          "node": 13,
+          "widget": "enhance"
+        },
+        "negative_prompt": {
+          "node": 14,
+          "widget": "prompt"
+        },
+        "negative_enhance": {
+          "node": 14,
+          "widget": "enhance"
+        },
+        "width": {
+          "node": 7,
+          "widget": "width"
+        },
+        "height": {
+          "node": 7,
+          "widget": "height"
+        },
+        "length": {
+          "node": 7,
+          "widget": "length"
+        },
+        "fps": {
+          "node": 12,
+          "widget": "frame_rate"
+        },
+        "seed": {
+          "node": 9,
+          "widget": "seed"
+        },
+        "filename_prefix": {
+          "node": 12,
+          "widget": "filename_prefix"
+        }
+      }
+    },
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "produce",
+      "occupancy": "wan",
+      "enhance_off_identity": false,
+      "handoff": []
+    },
+    "linearData": {
+      "inputs": [
+        [
+          15,
+          "quality",
+          {
+            "label": "Quality",
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
+          }
+        ],
+        [
+          13,
+          "prompt",
+          {
+            "label": "Prompt",
+            "height": 140
+          }
+        ],
+        [
+          13,
+          "enhance",
+          {
+            "label": "Rewrite prompt"
+          }
+        ],
+        [
+          14,
+          "enhance",
+          {
+            "label": "Rewrite negative"
+          }
+        ],
+        [
+          7,
+          "width",
+          {
+            "label": "Width"
+          }
+        ],
+        [
+          7,
+          "height",
+          {
+            "label": "Height"
+          }
+        ],
+        [
+          7,
+          "length",
+          {
+            "label": "Frames"
+          }
+        ],
+        [
+          12,
+          "frame_rate",
+          {
+            "label": "FPS"
+          }
+        ],
+        [
+          9,
+          "seed",
+          {
+            "label": "Seed"
+          }
+        ]
+      ],
+      "outputs": [
+        12
+      ]
+    },
+    "linearMode": true,
+    "lab_quality": {
+      "default": "lab"
+    },
+    "lab_rel": "editing/generate-cutaway",
+    "workflowRendererVersion": "Vue-corrected"
+  },
+  "version": 0.4
+}

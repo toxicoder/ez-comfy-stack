@@ -531,6 +531,7 @@ lab_workflow_lane() {
     ltx/* | ltx-*) printf '%s\n' motion ;;
     audio/* | podcast-* | music-* | dub-*) printf '%s\n' audio ;;
     inspire/* | prompt-forge-* | beat-sheet-* | research-chat-*) printf '%s\n' inspire ;;
+    editing/*) printf '%s\n' editing ;;
     *) return 1 ;;
   esac
 }
@@ -660,7 +661,7 @@ apply_lab_app_json_names() {
 log_lab_seed_counts() {
   local dest_lab="${1:?}"
   local lane n total=0
-  local -a lanes=(stills motion creator services films dcc optional audio inspire)
+  local -a lanes=(stills motion creator services films dcc optional audio inspire editing)
   for lane in "${lanes[@]}"; do
     n=0
     if [[ -d ${dest_lab}/${lane} ]]; then
