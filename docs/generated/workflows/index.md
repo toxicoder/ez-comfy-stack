@@ -169,6 +169,12 @@ tags: [workflows, generated, comfyui]
 | `dcc/guide-still` | [dcc/guide-still.md](dcc/guide-still.md) |
 | `dcc/still-to-mesh` | [dcc/still-to-mesh.md](dcc/still-to-mesh.md) |
 
+## editing
+
+| Graph | Page |
+| --- | --- |
+| `editing/generate-cutaway` | [editing/generate-cutaway.md](editing/generate-cutaway.md) |
+
 ## films
 
 | Graph | Page |

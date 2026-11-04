@@ -13,6 +13,7 @@ tags: [troubleshooting, comfyui, docker]
 - **Symptom decision tree** - the common failures in one diagram
 - **Bazel ingress** - missing linters, runfiles, and file-ownership failures
 - **Vlo (host video editor)** - Vlo cannot reach ComfyUI, and the Chromium-only rule
+- **Editing lane (ez_edit)** - agent offline, a client job stuck `pending`, sidecar preflight refusals
 - **Stills (Cubic block world)** - a block study with the people missing
 - **Reference stills (optional refs)** - a picked still that does not apply, and `max_refs`
 - **Prompt goal** - a deliverable the Enhancer ignored
@@ -55,7 +56,8 @@ symptoms. Each row names what that page covers, so one hop is enough.
 | Copy-paste still shows `${SPARK_HOST}` / `${MODELS_DIR}` chips, a wide table lost its horizontal bar, the pinned header stays after the table has scrolled past, or the docs search returns no results | [Docs site widgets](operate/troubleshooting-docs-site.md) - session chips, table chrome, docs search base path, docs CI heap OOM |
 | The animatic or the film board still shows missing clay after `blender-guide --film go-see` | [DCC guide pack](dcc-workflows.md) - guide packs live at `guides/go-see/...` |
 
-Rows that are not a topic page live here on this page: the Bazel ingress layer, Vlo, the Cubic block
+Rows that are not a topic page live here on this page: the Bazel ingress layer, Vlo, the editing
+lane, the Cubic block
 world, reference stills, **Goal**, the **Quality** combo, `update-stack`, the report buttons, and the
 Outputs sidebar. Each has its own section below.
 
@@ -115,6 +117,24 @@ Vlo (`PxTicks/vlo`, AGPL-3.0) is a host browser app that queues into this stack'
 | Vlo cannot reach ComfyUI - every generation fails to connect or the app shows ComfyUI offline | Compose is not up, or ComfyUI is published on a port other than the `http://127.0.0.1:8188` Vlo assumes by default | `./scripts/manage.sh start` (type **yes**) and confirm the UI itself loads at `http://127.0.0.1:${COMFY_PORT}` before blaming Vlo. Then set **App settings -> Runtime settings** to `http://127.0.0.1:${COMFY_PORT}` - the shipped default **8188** is only right when `COMFY_PORT=8188`. `backend/.env` `COMFYUI_URL` holds the same value; the in-app setting wins once you change it. Remote Spark: forward the port (`ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" ...`) |
 | Vlo's **Launch ComfyUI** starts a second ComfyUI, or start is refused on headroom | That button drives a folder install Vlo created itself. This stack owns the container lifecycle, so a second ComfyUI means two heavy GPU jobs | Start ComfyUI with `./scripts/manage.sh start` only. On first launch skip **Install ComfyUI** and just set the URL in **App settings -> Runtime settings**. Skip Vlo's model downloader for the same reason - weights stay on `./scripts/manage.sh download-models` |
 | Vlo will not open, or the timeline will not play/render, in Firefox or Safari | The editor needs the File System Access API and WebCodecs (its media renderer wraps mediabunny), which those browsers do not give it | Use a Chromium-based browser: Chrome or Edge (Opera may work). See [Vlo video editor](vlo.md) |
+
+---
+
+## Editing lane (ez_edit)
+
+The in-browser editing lane (`custom_nodes/ez_edit/`): panel chat with an agent, server renders on
+the Spark, client renders in the open tab, plus optional laptop-local MCP. Guide:
+[Editing lane](edit-agent.md).
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| The panel says the agent is offline and **Send** returns nothing usable | No OpenAI-compatible server answers `EZ_AGENT_LLM_URL` (the sidecar is stopped, the URL lost its `/v1` suffix, or it points at a non-loopback origin). Import, trim, and render do not need the agent, so the rest of the panel still works | `./scripts/manage.sh agent-model status --json` (expect `state: ready` and `url` on `127.0.0.1:30001`), then `./scripts/manage.sh agent-model run`. Confirm `.env` sets `EZ_AGENT_LLM_URL=http://host.docker.internal:30001/v1` and `EZ_AGENT_MODEL=Qwen3.8-Flash-Next`, then `./scripts/manage.sh restart`. To drive the editor with the 35B desk instead, point `EZ_AGENT_LLM_URL` at `EZ_LLM_SIDECAR_URL`'s server ([MCP and SSH tunnels](operate/mcp.md)) |
+| `http://127.0.0.1:30001/v1/models` does not answer, or answers `404` / connection refused | The sidecar is still doing its first load (weights are tens of GiB and the wait is capped by `AGENT_MODEL_READY_S`, default 900 s), or `start.sh` died after the preflight, or `AGENT_MODEL_PORT` moved and the URL still says `30001` | `./scripts/manage.sh agent-model status --json` for the state, then re-run `agent-model run` and read the refuse/heartbeat lines. Check the container: `docker logs ez-agent-model`. If you set `AGENT_MODEL_PORT`, update `EZ_AGENT_LLM_URL` to the same port and restart Comfy. `30000` is the llm-desk and never serves this model |
+| A client render sits at `pending` forever; the row reads `queued for the browser panel (WebCodecs)` and the panel says to connect the executor | A `mode=client` job is only claimed by the browser tab that owns the `client_id` - the Spark does not render it. No tab is polling `/ez_edit/exec/pending`, the tab was closed or backgrounded, or the browser has no `MediaRecorder` | In the panel press **Connect executor** and keep the tab in the foreground until the row reads `ok` (`claimed by the browser panel` means it is running). Use a Chromium-based browser (Chrome, Edge). Re-press **Render client** if the row is old, or switch to **Render server** for an mp4 ffmpeg pass on the Spark that needs no browser at all |
+| Local MCP **Discover** fails for an endpoint you can curl by hand | The panel fetches MCP from the browser and refuses anything that is not loopback (`127.0.0.1` / `localhost` / `::1`); the bridge answers SSE or WebSocket only instead of Streamable HTTP; or the bridge sends no `Access-Control-Allow-Origin` for the ComfyUI origin, so `initialize` dies on CORS | Add the endpoint as `http://127.0.0.1:<port>/<path>` pointing at a bridge running **on the laptop** (e.g. `npx -y mcp-proxy --port 7231 -- <server-command>`), not at a LAN address. Bind the bridge to loopback, make sure it speaks Streamable HTTP, and let it answer CORS for `http://127.0.0.1:${COMFY_PORT}`. Pattern and rules: [Editing lane - laptop-local MCP](edit-agent.md#laptop-local-mcp-tools) |
+| `agent-model run` refuses before it downloads anything | A preflight: free disk under `AGENT_MODEL_MIN_DISK_GB` (**160 GB**) on `${HF_HOME:-$HOME/.cache/huggingface}`, `MemAvailable` under `AGENT_MODEL_MIN_MEM_GIB` (**110 GiB**), or a heavy occupancy mode (wan / ltx / trellis / klein) holds the Spark, or `docker` / `git` is missing | Read the refuse line. Disk: `df -h "${HF_HOME:-$HOME/.cache/huggingface}"` and clear old HF snapshots. Memory: stop the other tenant (`./scripts/manage.sh occupancy enter idle`, or stop Compose) and re-check `MemAvailable` in `/proc/meminfo`; the sidecar does not shrink the reserve - `MEM_FLOOR_GIB=9` stays. Occupancy: the model is a co-tenant, so heavy modes refuse by design. Only override a preflight when the number is genuinely wrong for this host (`AGENT_MODEL_MIN_DISK_GB` with a different `HF_HOME`), never the memory floor |
+| The agent chat refuses with `occupancy is <mode>; the agent model is a co-tenant` | A heavy GPU job holds the GB10 while the sidecar is up - one heavy tenant at a time | `./scripts/manage.sh occupancy enter idle`, then chat again. The same XOR gates `edit_generate_clip` from the panel; a cutaway row that fails naming the mode needs the same release |
+| **EZ Edit** is missing from the topbar, or the panel shows `Editing lane is disabled` | `EZ_EDIT_ENABLED=0` hides the panel and refuses every `/ez_edit` route, or the frontend is serving a cached extension bundle | Set `EZ_EDIT_ENABLED=1` in `.env`, then `./scripts/manage.sh restart` and hard-refresh the Comfy tab so `custom_nodes/ez_edit/js/` recopies |
 
 ---
 

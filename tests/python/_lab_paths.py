@@ -31,6 +31,7 @@ ALLOWED_LANES = (
     "optional",
     "audio",
     "inspire",
+    "editing",
 )
 
 # ComfyUI frontend ensureCorrectLayoutScale: "Vue" unprojects 1.2x (shrinks

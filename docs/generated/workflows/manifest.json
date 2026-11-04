@@ -709,6 +709,12 @@
       "kind": "graph"
     },
     {
+      "id": "editing/generate-cutaway",
+      "path": "generated/workflows/editing/generate-cutaway.md",
+      "lane": "editing",
+      "kind": "graph"
+    },
+    {
       "id": "films/breakwater/act-01",
       "path": "generated/workflows/films/breakwater/act-01.md",
       "lane": "films",
@@ -2599,6 +2605,6 @@
       "kind": "album"
     }
   ],
-  "graph_count": 683,
-  "page_count": 434
+  "graph_count": 684,
+  "page_count": 435
 }

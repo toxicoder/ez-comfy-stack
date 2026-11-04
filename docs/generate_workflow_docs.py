@@ -1431,6 +1431,7 @@ def inject_nav(nav: list[Any], manifest_pages: list[dict[str, str]]) -> list[Any
         "wan",
         "ltx",
         "shorts",
+        "editing",
         "dcc",
         "optional",
         "inspire",

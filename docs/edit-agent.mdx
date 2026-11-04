@@ -1,0 +1,387 @@
+---
+title: Editing lane (agent + in-browser editor)
+description: "Cut a timeline inside ComfyUI with the EZ Edit panel: agent chat, server ffmpeg mp4 or browser WebCodecs webm, an optional Qwen3.8-Flash-Next sidecar, and laptop-local MCP tools."
+tags: [editing, video-editor, agent, mcp, qwen, sidecar, occupancy]
+---
+
+# Editing lane (agent + in-browser editor)
+
+**What's on this page**
+
+- **Operator path** - start the studio, run the agent model, open **EZ Edit**
+- **Server or client render** - ffmpeg mp4 on the Spark CPU, or WebCodecs webm in the browser
+- **The agent model sidecar** - `manage.sh agent-model run` on `127.0.0.1:30001`, opt-in
+- **Memory math** - the recipe authors' measurements and the co-tenant profile this stack pins
+- **generate-cutaway** - the one graph the agent may Queue, and the occupancy etiquette
+- **Laptop-local MCP** - loopback-only endpoints, and stdio servers wrapped on the laptop
+- **Env knobs** - the `EZ_EDIT_*`, `EZ_AGENT_*`, and `AGENT_MODEL_*` keys
+- **Vlo and other editors** - which editor to reach for, and what never to launch from it
+
+**What this enables**
+
+- **Editing in the browser you already have open** - no second editor app, no second ComfyUI
+- **Handing the cut to an agent** that only has typed timeline tools: no `execute_code`, no telemetry, no arbitrary `fetch_url`
+- **Choosing where pixels move** - the Spark's CPU (mp4) or your laptop's browser (webm)
+- **Keeping the lane out of Compose** - nothing in `docker/Dockerfile`, no service, no `restart:` key
+- **Bringing your own laptop tools** into the agent as `local__<server>__<tool>` calls
+
+**Question this page answers:** how do I cut a clip list on the Spark without leaving ComfyUI? Start the studio with `./scripts/manage.sh start`, optionally bring the agent brain up with `./scripts/manage.sh agent-model run`, then open **EZ Edit** at `http://127.0.0.1:${COMFY_PORT}`. For a full NLE in a separate tab, use [Vlo](vlo.md); for a file handoff, export OTIO to Kdenlive / Shotcut: [Host sidecars overview](studio-sidecars.md).
+
+```bash
+export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
+export SPARK_USER="${SPARK_USER:-$USER}"
+export MODELS_DIR="${MODELS_DIR:-/mnt/models}"
+export COMFY_OUTPUT_DIR="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
+export COMFY_PORT="${COMFY_PORT:-8188}"
+export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
+```
+
+<Callout type="error" title="Opt-in, never a service">
+  The lane ships **inside** the Comfy pack (`custom_nodes/ez_edit/`) as routes plus one sidebar
+  panel. The agent brain is the opposite: an **opt-in host process** you start yourself. It is
+  **not** a Compose service, **not** cloned into `docker/Dockerfile`, **not** pinned in any
+  promoted graph, and it never changes `restart: "no"`, the heavy confirm, or the headroom
+  preflight. Nothing on this page is required to browse the lane: import, trim, arrange, and
+  server-render work with the sidecar down.
+</Callout>
+
+---
+
+## Operator path
+
+1. Start the studio (heavy confirm, type **yes**):
+
+```bash
+./scripts/manage.sh start
+```
+
+2. Bring up the agent brain - optional, and the only step that touches the GPU:
+
+```bash
+./scripts/manage.sh agent-model run      # opt-in; see "The agent model sidecar"
+```
+
+3. Open ComfyUI and the panel:
+
+```bash
+# browser: http://127.0.0.1:${COMFY_PORT}   -> topbar button  EZ Edit
+```
+
+4. In the panel: **New project** -> **Import** a file that already lives under
+   `${COMFY_OUTPUT_DIR}` -> arrange with the timeline buttons -> **Render server** (or **Render
+   client** with the tab left open). **Send** talks to the agent once a model answers
+   `EZ_AGENT_LLM_URL`.
+
+**Check it worked:** the panel status line names the project and the active mode, and a finished
+server job writes `${COMFY_OUTPUT_DIR}/edit/renders/<project_id>-<job_id>.mp4`. With the sidecar
+up, `curl -s http://127.0.0.1:30001/v1/models` lists `Qwen3.8-Flash-Next`. With it down, **Send**
+reports the model is unreachable and everything else keeps working.
+
+Remote Spark: forward the ComfyUI port and open the panel on the laptop, exactly as for the rest
+of the studio:
+
+```bash
+ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
+```
+
+The panel is one ComfyUI frontend extension - if the button is missing, `./scripts/manage.sh
+restart` recopies `custom_nodes/` and a hard refresh reloads the bundle.
+
+---
+
+## Server or client render
+
+The two modes are not quality settings; they decide **which machine** decodes, composites, and
+encodes, and therefore which container you get.
+
+<Tabs groupId="edit-render-server-client" items={["Server (Spark CPU, mp4)", "Client (laptop browser, webm)"]} persist>
+  <Tab value="Server (Spark CPU, mp4)">
+    ```bash
+    # panel: Render server   ==   POST /ez_edit/render {mode:"server"}
+    ```
+    ffmpeg runs on the Spark from the same argv the pack builds for the project (concat, cut,
+    trim, fade, wipe, per-clip `volume`). Text overlays and captions are **not** burned in this
+    pass - the row appends `; 2 text planes render in client mode` and the video plus audio still
+    render. Stop Comfy first (`./scripts/manage.sh stop`) if the encode is long enough to matter;
+    it is a CPU job, but the box is one box. A row that fails with `ffmpeg not found on PATH`
+    means the binary is missing in the container: install it there, or use client mode.
+  </Tab>
+  <Tab value="Client (laptop browser, webm)">
+    ```bash
+    # panel: Render client   ==   POST /ez_edit/render {mode:"client", client_id:"..."}
+    # then leave this tab open: it polls GET /ez_edit/exec/pending every second
+    ```
+    The job stays `pending` on the Spark until **this browser tab** claims it, then the panel
+    draws the timeline on a canvas and records it with `MediaRecorder` (webm vp8/vp9 + opus).
+    Overlays and captions are composited here, so they only appear in a client render. Keep the
+    tab in the foreground until the row reads `ok`. A laptop running Firefox or Safari has no
+    usable `MediaRecorder` path - use a **Chromium-based browser** (Chrome, Edge).
+  </Tab>
+</Tabs>
+
+| | Server | Client |
+| --- | --- | --- |
+| Who renders | ffmpeg on the Spark | the open panel: canvas + `MediaRecorder` |
+| Container | `.mp4` | `.webm` (vp8 / vp9 + opus) |
+| Overlays and captions | not burned; the row carries the message | drawn by the panel |
+| Browser tab must stay open | no | **yes** - or the row sits `pending` forever |
+| Machine that does the work | the Spark (CPU encode) | your laptop |
+| Laptop browser | anything | **Chromium-based only** |
+| Output | `${COMFY_OUTPUT_DIR}/edit/renders/<project_id>-<job_id>.mp4` | same dir, `.webm` |
+| Needs ComfyUI up | yes (the routes live in Comfy) | yes (same) |
+
+Both modes write their rows under `${COMFY_OUTPUT_DIR}/edit/jobs/` and their projects under
+`edit/projects/`. **Export EDL** drops a handoff JSON next to them for the Kdenlive / Shotcut
+path: [Host sidecars overview](studio-sidecars.md).
+
+---
+
+## generate-cutaway and occupancy etiquette
+
+The agent can create one kind of new footage: `edit_generate_clip` Queues the editing-lane graph -
+the pack's own copy at `custom_nodes/ez_edit/graphs/generate-cutaway.json`, the byte-identical
+twin of the promoted lab graph `workflows/_lab/editing/generate-cutaway.json` (a reduced silent
+Wan 2.2 TI2V-5B chain, same weights as the silent motion lane) - and returns a job id. Everything
+else you import from disk.
+
+| Lane action | GPU? | Allowed when occupancy is |
+| --- | --- | --- |
+| Import, trim, move, gain, transitions | no | any mode |
+| Server render | no (CPU ffmpeg) | any mode - expect contention |
+| Client render | no (laptop) | any mode |
+| Agent chat (`/ez_edit/chat`) | yes - co-tenant model | `idle`, unknown, or a desk mode |
+| `edit_generate_clip` | **yes** - a heavy Wan Queue | `idle`, unknown, or `llm-desk` only |
+
+<Callout type="error" title="One heavy job">
+  The GB10 runs **one** heavy GPU job. A cutaway Queue refuses while wan / ltx / trellis / klein
+  hold the Spark, and the agent chat refuses too - the sidecar model is a co-tenant, not a
+  second heavy tenant. Release the desk first: `./scripts/manage.sh occupancy enter idle`. Modes
+  and jobs: [Occupancy desk](occupancy.md), mode-by-job table: [Occupancy matrix](operate/occupancy-matrix.md).
+</Callout>
+
+Etiquette, in the order that avoids a refuse:
+
+1. **Chat and edit first, generate last.** Tool calls and trims are free; a cutaway is a Wan print.
+2. **Release the desk before you generate** - `./scripts/manage.sh occupancy enter idle`, then
+   **Send** the generate request.
+3. **One cutaway at a time.** The tool returns a job id; poll **Refresh** (or
+   `edit_job_status`) instead of queueing a batch.
+4. **Promote deliberately.** The graph is a lab graph in the `editing` lane. To keep a variant,
+   promote it with `./scripts/manage.sh promote-workflow` - never copy `_lab` into `_user`.
+
+---
+
+## The agent model sidecar (opt-in)
+
+<Callout type="warning" title="Host process, not a service">
+  `./scripts/manage.sh agent-model` clones the pinned upstream recipe into
+  `${AGENT_MODEL_HOME:-$HOME/qwen38-flash-next-tf}` and hands the container to the recipe's own
+  `start.sh` / `stop.sh`. It is **not** in `docker-compose.yml`, **not** built by
+  `docker/Dockerfile`, and **not** a `manage.sh start` dependency. Bind stays `127.0.0.1` - a
+  non-loopback `HOST` is refused. The 35B writing desk keeps `127.0.0.1:30000`; this sidecar is
+  `127.0.0.1:30001`.
+</Callout>
+
+```bash
+./scripts/manage.sh agent-model run           # heavy confirm: ~160 GB download + GPU, type yes
+./scripts/manage.sh agent-model status --json # {state,url,model,port,profile,container}
+./scripts/manage.sh agent-model stop
+```
+
+It serves `nvidia/Qwen3.8-Flash-Next-FP4-Local` behind an OpenAI-compatible API with tool calling
+and streaming, which is exactly the shape `EZ_AGENT_LLM_URL` expects. Point the panel at it:
+
+```bash
+# .env  (container view of a host port)
+EZ_AGENT_LLM_URL=http://host.docker.internal:30001/v1
+EZ_AGENT_MODEL=Qwen3.8-Flash-Next
+```
+
+### Memory math
+
+Numbers below are the **recipe authors' measurements** on their single Spark, not this stack's
+benchmarks. Read them as the upstream recipe's own sizing, published by
+[MiaAI-Lab/Qwen3.8-Flash-Next-Single-DGX-Spark-TensorFold](https://github.com/MiaAI-Lab/Qwen3.8-Flash-Next-Single-DGX-Spark-TensorFold).
+
+| What | Number (authors' figure) | This stack's preflight |
+| --- | --- | --- |
+| Checkpoint download (`nvidia/Qwen3.8-Flash-Next-FP4-Local`) | ~96 GiB | free disk >= `AGENT_MODEL_MIN_DISK_GB` = **160 GB** |
+| Weights resident at serve time | ~81 GiB | `MemAvailable` >= `AGENT_MODEL_MIN_MEM_GIB` = **110 GiB** |
+| Free memory the engine keeps | 9 GiB (`MEM_FLOOR_GIB`) | pinned; **never lower it** |
+| Context | 32768 tokens | pinned (`CONTEXT`) |
+| Concurrent requests | 2 (`PARALLEL`) | pinned |
+| Max tokens per response | 4096 | pinned |
+| KV cache | fp8 | pinned |
+| Vision input | off (`VISION=0`) | pinned |
+| First load wait | authors' first boot is slow | `AGENT_MODEL_READY_S` = **900 s** |
+
+The two preflights exist because the download and the load are both bigger than anything else in
+this stack. A refuse at 160 GB or 110 GiB is the launcher protecting an SSH session that is still
+usable, not a bug: free disk, or stop the other tenant, and re-run.
+
+### Shrinking it when you co-tenant
+
+Co-tenanting means something else on the box needs memory (Comfy with a still loaded, Blender,
+the 35B desk). Shrink in this order, each with an env override the launcher passes through:
+
+- `CONTEXT` down first - 32768 is generous for a tool loop; 16384 or 8192 usually suffices
+- `PARALLEL` to `1` when only you are driving the panel
+- `MAX_TOKENS` down if you never ask for long replies
+- keep `KV_DTYPE=fp8` and `VISION=0` - both are already the cheap setting
+
+<Callout type="error" title="Do not lower the 9 GiB reserve">
+  `MEM_FLOOR_GIB=9` is what keeps the unified-memory box from wedging under load. Every other
+  knob above is fair game; that one is not. If the reserve cannot be honoured, the sidecar does
+  not belong on this boot - stop it and use the 35B desk on `:30000` instead
+  ([MCP and SSH tunnels](operate/mcp.md)).
+</Callout>
+
+### Upstream and license
+
+| Piece | Upstream | Terms |
+| --- | --- | --- |
+| Checkpoint | `nvidia/Qwen3.8-Flash-Next-FP4-Local` (public, no HF login) | NVIDIA Open Model License / Qwen Community License 1.0; per the model card, commercial use is OK |
+| Engine | TensorFold (same recipe repo) | Apache-2.0 |
+| Image | prebuilt GHCR image from the recipe | pull is the recipe's own step |
+
+The launcher only pins the recipe checkout (default `AGENT_MODEL_REF=main`); the recipe owns the
+image and the weights. Row: [Model licenses](licenses.md). This stack never vendors the recipe
+into the MIT tree.
+
+---
+
+## Laptop-local MCP tools
+
+The agent can call tools that live on **your laptop**, not the Spark. You add endpoints in the
+panel; it speaks MCP from the browser over Streamable HTTP (`initialize`, `tools/list`,
+`tools/call`), publishes each discovered tool to the agent as `local__<server_id>__<tool>`, and
+relays the call back when the agent uses it (**Relay local tools**).
+
+<Callout type="warning" title="Loopback only">
+  An endpoint URL is refused before any fetch unless the host is loopback: `127.0.0.1`,
+  `localhost`, or `::1`. A panel row reads `refused: only loopback hosts ...`. That is deliberate
+  - this is a local studio, and the browser is the thing doing the fetching.
+</Callout>
+
+```bash
+# laptop: point at a local server on a loopback port
+#   panel endpoint:  http://127.0.0.1:7231/mcp
+```
+
+**Stdio servers** (the shape most desktop MCP apps ship) need a bridge, and the bridge belongs on
+the **laptop**, between the browser and the server - never on the Spark. Any package that exposes
+an MCP stdio server as Streamable HTTP on a loopback port works; the panel does not care which
+one. The pattern:
+
+```bash
+# laptop only: wrap a stdio server as loopback Streamable HTTP
+npx -y mcp-proxy --port 7231 -- <server-command> <args...>
+# then add, in the panel:  http://127.0.0.1:7231/mcp   -> Discover
+```
+
+Two rules keep discovery working:
+
+- **Bind the bridge to loopback.** A bridge listening on a LAN address is refused by the panel's
+  guard, and a bridge bound to `0.0.0.0` is an open MCP server.
+- **Serve Streamable HTTP, and answer CORS for the ComfyUI origin.** Plain SSE-only or
+  WebSocket-only transports will not connect from the browser, and a bridge that omits
+  `Access-Control-Allow-Origin` for `http://127.0.0.1:${COMFY_PORT}` fails at `initialize`.
+
+Discovery and tool calls never leave the laptop's loopback interface; only the **tool names** and
+the call arguments travel to the Spark.
+
+---
+
+## Which editor, and what never to launch from it
+
+| | EZ Edit panel | [Vlo](vlo.md) | Kdenlive / Shotcut |
+| --- | --- | --- | --- |
+| Runs | inside ComfyUI's own tab | host app + its own backend on `127.0.0.1:6332` | host apt / Flatpak |
+| Talks to ComfyUI | its own `/ez_edit/*` routes | the ComfyUI Queue bridge | not at all |
+| Generations | `edit_generate_clip` (one lab graph) | normal Queues from the timeline | none - files only |
+| Handoff in | files under `${COMFY_OUTPUT_DIR}` | files | OTIO / EDL JSON |
+| License posture | first-party, in-tree | AGPL-3.0, host checkout, never vendored | host package |
+
+<Callout type="error" title="Do not launch ComfyUI from a third-party editor">
+  Vlo's **Launch ComfyUI** button (and any equivalent in another editor) is for a folder install
+  that editor created itself. This stack owns the container lifecycle - `restart: "no"`, the heavy
+  confirm, the headroom preflight - so a second ComfyUI means two heavy GPU jobs and a refused
+  start. Start ComfyUI with `./scripts/manage.sh start` only, and keep weights on
+  `./scripts/manage.sh download-models`. Same rule, full wording: [Vlo video editor](vlo.md) and
+  [Host sidecars overview](studio-sidecars.md#occupancy-rule).
+</Callout>
+
+---
+
+## Env knobs
+
+Only these keys belong to the lane. Defaults are right for a single Spark; the `.env.example`
+block is the same list with the "set this when" notes.
+
+| Variable | Default | Set it when |
+| --- | --- | --- |
+| `EZ_EDIT_ENABLED` | `1` | you want the panel hidden and every `/ez_edit` route refused (`0`) while debugging |
+| `EZ_AGENT_LLM_URL` | derived | point the agent at another OpenAI-compatible server, e.g. the 35B desk at `EZ_LLM_SIDECAR_URL` - keep it loopback |
+| `EZ_AGENT_MODEL` | `Qwen3.8-Flash-Next` | the server you point at serves a different model id |
+| `EZ_AGENT_TIMEOUT_S` | `120` | a cold Spark where first-token latency spikes |
+| `EZ_AGENT_MAX_STEPS` | `8` | the tool loop gives up too early on long edits |
+| `EZ_EDIT_COMFY_URL` | `http://host.docker.internal:${COMFY_PORT:-8188}` | the agent must Queue through another origin - keep it loopback |
+| `AGENT_MODEL_HOME` | `$HOME/qwen38-flash-next-tf` | the recipe checkout should live elsewhere |
+| `AGENT_MODEL_PORT` | `30001` | `30001` is taken; `30000` stays the llm-desk |
+| `AGENT_MODEL_REF` | `main` | you need the recipe pinned to a specific ref |
+| `AGENT_MODEL_MIN_DISK_GB` | `160` | your cache disk is elsewhere and genuinely smaller (`HF_HOME`) |
+| `AGENT_MODEL_MIN_MEM_GIB` | `110` | almost never - the reserve protects the box |
+| `AGENT_MODEL_READY_S` | `900` | first load is slower than 15 minutes on your boot |
+
+Everything else the recipe reads (`PARALLEL`, `CONTEXT`, `MAX_TOKENS`, `KV_DTYPE`, `VISION`,
+`MEM_FLOOR_GIB`, `CONTAINER_NAME`) is pinned by the launcher; see the shrink order above before
+you override any of them.
+
+---
+
+## Troubleshooting
+
+Rows live on [Troubleshooting](troubleshooting.md#editing-lane-ez-edit). The short version:
+
+| Symptom | First move |
+| --- | --- |
+| Panel says the agent is offline | `./scripts/manage.sh agent-model status --json`, then check `EZ_AGENT_LLM_URL` ends in `/v1` and stays loopback |
+| `/v1/models` on `:30001` does not answer | the sidecar is still loading (`AGENT_MODEL_READY_S`) or a preflight refused it - re-run `agent-model run` and read the refuse line |
+| Client job sits `pending` | no connected executor: open the panel, press **Connect executor**, keep the tab foregrounded, use a Chromium browser |
+| Local MCP **Discover** fails | non-loopback URL, missing CORS for the ComfyUI origin, or a transport that is not Streamable HTTP |
+| `agent-model run` refuses | disk \< 160 GB, `MemAvailable` \< 110 GiB, or a heavy occupancy mode holds the Spark |
+
+---
+
+### How the lane is wired (routes and files)
+
+The pack registers fail-soft routes on the ComfyUI server; every path argument must resolve
+under `${COMFY_OUTPUT_DIR}` or it is refused.
+
+| Route | Purpose |
+| --- | --- |
+| `GET /ez_edit/state` | project + job rows for the panel |
+| `POST /ez_edit/ops` | apply ordered timeline ops through the reducer |
+| `POST /ez_edit/import` | ffprobe a file under the output dir into a clip |
+| `POST /ez_edit/render`, `GET /ez_edit/job` | start a render, poll a row |
+| `POST /ez_edit/chat` | one agent turn (tool loop, budgeted steps) |
+| `GET /ez_edit/exec/pending`, `POST /ez_edit/exec/result` | browser executor queue |
+| `POST /ez_edit/local_tools/sync`, `GET .../pending`, `POST .../result` | laptop-local MCP relay |
+
+Host-side MCP for a desktop agent: `./scripts/manage.sh edit-mcp --stdio` (same typed tools,
+server name `ez-edit`): [MCP and SSH tunnels](operate/mcp.md#edit-mcp). Jobs, projects, and
+renders all live under `${COMFY_OUTPUT_DIR}/edit/`.
+
+---
+
+## Related
+
+| Need | Page |
+| --- | --- |
+| The AGPL browser NLE and its bridge | [Vlo video editor](vlo.md) |
+| The host-tools group and the occupancy rule in full | [Host sidecars overview](studio-sidecars.md) |
+| In-tree typed MCP servers and the Path D tunnels | [MCP and SSH tunnels](operate/mcp.md) |
+| Which mode allows which GPU job | [Occupancy matrix](operate/occupancy-matrix.md), [Occupancy desk](occupancy.md) |
+| License rows for the checkpoint and the engine | [Model licenses](licenses.md) |
+| Every `manage.sh` verb named here | [manage.sh reference](manage-cli.md) |
+| Where the pack's routes and panel are documented | [Custom nodes](reference/custom-nodes.md) |

@@ -72,6 +72,15 @@ services:
       EZ_LLM_N_GPU_LAYERS: ${EZ_LLM_N_GPU_LAYERS:-0}
       EZ_LLM_UNLOAD: ${EZ_LLM_UNLOAD:-0}
       EZ_LLM_SIDECAR_PORT: ${EZ_LLM_SIDECAR_PORT:-30000}
+      # Editing lane (custom_nodes/ez_edit): agent chat + in-browser editor.
+      # The agent talks to the optional Qwen3.8-Flash-Next sidecar on 30001
+      # (scripts/utilities/agent-model.sh); 30000 stays the llm-desk's.
+      EZ_EDIT_ENABLED: ${EZ_EDIT_ENABLED:-1}
+      EZ_AGENT_LLM_URL: ${EZ_AGENT_LLM_URL:-}
+      EZ_AGENT_MODEL: ${EZ_AGENT_MODEL:-Qwen3.8-Flash-Next}
+      EZ_AGENT_TIMEOUT_S: ${EZ_AGENT_TIMEOUT_S:-120}
+      EZ_AGENT_MAX_STEPS: ${EZ_AGENT_MAX_STEPS:-8}
+      EZ_EDIT_COMFY_URL: ${EZ_EDIT_COMFY_URL:-}
       LAB_PREBUILT_ROOT: /opt/comfy-prebuilt
       LAB_FORCE_COLD_INSTALL: ${LAB_FORCE_COLD_INSTALL:-0}
       # Runtime pin (must match build-arg). Stamp-present refresh syncs the volume when this changes.

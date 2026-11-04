@@ -41,6 +41,7 @@
   "dcc/canny-hero": "klein_clay_edit",
   "dcc/guide-still": "klein_clay_edit",
   "motion/silent/text-to-video-5s": "wan_t2v",
+  "editing/generate-cutaway": "wan_t2v",
   "motion/silent/still-to-video-5s": "wan_i2v",
   "motion/silent/still-to-shot": "wan_i2v",
   "motion/silent/shorts-still-5s": "wan_i2v",

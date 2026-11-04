@@ -625,6 +625,27 @@
       "flags": []
     },
     {
+      "id": "edit-mcp",
+      "title": "edit-mcp",
+      "description": "In-tree editing-lane MCP (typed timeline tools over the /ez_edit routes). Thin stdio client; no execute_code. Refuses a heavy GPU mode.",
+      "argv": [
+        "./scripts/manage.sh",
+        "edit-mcp"
+      ],
+      "flags": []
+    },
+    {
+      "id": "agent-model",
+      "title": "agent-model status",
+      "description": "Host Qwen3.8-Flash-Next agent sidecar for the editing lane (127.0.0.1:30001, opt-in TensorFold recipe). Heavy confirm + preflights; refuses a heavy GPU mode.",
+      "argv": [
+        "./scripts/manage.sh",
+        "agent-model",
+        "status"
+      ],
+      "flags": []
+    },
+    {
       "id": "setup-client",
       "title": "setup-client",
       "description": "Laptop bootstrap: tools, SSH key, Host ez-spark LocalForward. Does not start Comfy.",

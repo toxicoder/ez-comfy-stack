@@ -388,6 +388,8 @@ Commands:
   blender-mcp       In-tree Blender MCP (typed tools; bpy needs blender-desk)
   research-mcp      In-tree research MCP (chat, web search, lab-app list; CPU GGUF)
   studio-mcp        In-tree studio MCP (clone _lab graphs into _user/; no Queue)
+  edit-mcp          In-tree editing MCP (typed timeline tools; drives /ez_edit routes)
+  agent-model       Host Qwen3.8-Flash-Next agent sidecar (127.0.0.1:30001; opt-in)
   blender-llm       Optional host Qwen3-4B CPU client; Path D if llama.cpp missing
   blender           Host Blender sidecar (Workbench in blender-desk; dies if Comfy is heavy)
   blender-install   Host apt install of Ubuntu blender (never in Dockerfile)
@@ -758,6 +760,7 @@ cmd_start() {
     exit 1
   }
   bash "${REPO_ROOT}/scripts/utilities/llm-sidecar.sh" stop || true
+  bash "${REPO_ROOT}/scripts/utilities/agent-model.sh" stop || true
   check_mem_limit_vs_headroom
   check_host_headroom || exit 1
   ensure_prompt_enhance_gguf
@@ -1603,6 +1606,22 @@ cmd_studio_mcp() {
   bash "${REPO_ROOT}/scripts/utilities/studio-mcp.sh" "$@"
 }
 
+# @command edit-mcp
+#######################################
+# In-tree editing MCP (typed timeline tools; drives the /ez_edit routes).
+#######################################
+cmd_edit_mcp() {
+  bash "${REPO_ROOT}/scripts/utilities/edit-mcp.sh" "$@"
+}
+
+# @command agent-model
+#######################################
+# Host Qwen3.8-Flash-Next agent sidecar for the editing lane (127.0.0.1).
+#######################################
+cmd_agent_model() {
+  bash "${REPO_ROOT}/scripts/utilities/agent-model.sh" "$@"
+}
+
 # @command blender-llm
 #######################################
 # Optional on-box Qwen3-4B CPU client for blender-mcp.
@@ -1946,6 +1965,8 @@ main() {
     blender-mcp) cmd_blender_mcp "$@" ;;
     research-mcp) cmd_research_mcp "$@" ;;
     studio-mcp) cmd_studio_mcp "$@" ;;
+    edit-mcp) cmd_edit_mcp "$@" ;;
+    agent-model) cmd_agent_model "$@" ;;
     blender-llm) cmd_blender_llm "$@" ;;
     blender) cmd_blender "$@" ;;
     blender-install) cmd_blender_install "$@" ;;

@@ -327,6 +327,12 @@ FROZEN_MANAGE_VERBS=(
   run cmd_studio_mcp --help
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"execute_code"* ]] || [[ "${output}" == *"No execute_code"* ]]
+  run cmd_edit_mcp --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"execute_code"* ]] || [[ "${output}" == *"No execute_code"* ]]
+  run cmd_agent_model --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"agent-model.sh status"* ]]
   run cmd_blender_llm --help
   [ "${status}" -eq 0 ]
   run cmd_blender --help
