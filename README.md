@@ -34,10 +34,11 @@ rules are on [Model licenses](docs/licenses.mdx).
 
 ## What the docs cover
 
-The site has seven tabs. Inside a tab, the sidebar groups the pages in the order you need
-them, so the first page in a group is the one to read first.
+The site has seven sections. Inside a section, the menu groups the pages in the order you need
+them, so the first page in a group is the one to read first. The left-hand menu lists all seven
+sections at once, and the right-hand "On this page" list tracks the current page.
 
-| Tab | Groups | Open it when |
+| Section | Groups | Open it when |
 | --- | --- | --- |
 | Home | - | You want the map and the default stack at a glance |
 | Learn | The studio at a glance; Models, hardware, and safety; Look-dev and 3D concepts; Glossary | You want to know why the studio works this way before you fight it |

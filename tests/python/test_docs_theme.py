@@ -1,4 +1,4 @@
-"""Docs theme chrome: sticky header tabs, no autohide.
+"""Docs theme chrome: persistent left menu, sticky header, no autohide.
 
 Hermetic: stdlib only. Reads docs-site theme files without Next, network,
 or a browser.
@@ -43,12 +43,21 @@ def test_mkdocs_keeps_cinema_clip_pages_off_nav() -> None:
     assert "framing_shot_size/size_ecu" not in nav
 
 
-def test_mkdocs_enables_sticky_tabs_not_autohide() -> None:
-    """Tabs are root folders; no autohide chrome."""
+def test_sidebar_is_one_menu_with_no_tabs_dropdown() -> None:
+    """Sections are plain folders: the left menu lists them all, no dropdown selector."""
     ts = _read(NAV_TS)
-    assert "root: true" in ts
+    assert "root: true" not in ts
+    assert "defaultOpen: true" in ts
+    page_src = _read(ROOT / "docs-site" / "app" / "[[...slug]]" / "page.tsx")
+    assert "<DocsLayout" in page_src
+    assert "tree={tree}" in page_src
+    assert 'sidebar={{"enabled": false}}' not in page_src
+    trail = _read(ROOT / "docs-site" / "components" / "docs-trail.tsx")
+    assert 'aria-label="Breadcrumb"' in trail
     css = _read(EXTRA_CSS)
     assert "translateY(-100%" not in css.replace(" ", "")
+    assert re.search(r"#nd-sidebar[^{]*\{[^}]*display\s*:\s*none", css) is None
+    assert re.search(r"#nd-sidebar[^{]*\{[^}]*visibility\s*:\s*hidden", css) is None
 
 
 def test_mkdocs_wires_extra_css() -> None:

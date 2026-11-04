@@ -24,7 +24,7 @@ const GOLDENS_DIR = join(import.meta.dirname, "goldens");
 /** CI must never invent a baseline; only a local run may bootstrap one. */
 const CI = Boolean(process.env.CI);
 
-/** Pages whose rendering is worth a baseline: diagrams, tabs, callouts, panels, tables. */
+/** Pages whose rendering is worth a baseline: diagrams, callouts, panels, tables, prose. */
 const KEY_PAGES = [
   ["index", "/"],
   ["getting-started", "/getting-started/"],

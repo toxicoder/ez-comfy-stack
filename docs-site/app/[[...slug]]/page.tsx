@@ -81,10 +81,11 @@ export default async function DocsRoute({ params }: PageProps) {
       <DocsPage
         toc={toc}
         full={data.full}
-        // The trail is the reader's cue for which tab and which sidebar folder they are in,
-        // and the tab strip collapses into the sidebar on narrow screens. fumadocs restarts
-        // its own breadcrumb at every `root: true` folder - a tab is one - so it can never
-        // name the tab; `component` replaces the slot with a trail that does.
+        // The trail is the reader's cue for which section and which sidebar folder they are
+        // in, since the left menu keeps every other section folded beside their own.
+        // fumadocs' own breadcrumb prints page titles, so it names neither the section nor
+        // the menu's wording for the leaf; `component` replaces the slot with a trail that
+        // does both.
         breadcrumb={
           trail
             ? {

@@ -2,9 +2,10 @@
  * Browser verification for the Fumadocs documentation site.
  *
  * Drives a real Chromium through the exported (or dev-served) site and asserts the things
- * a reader would notice: every navigation page renders, search finds pages by title and by
- * tag, the ported MkDocs widgets still work, and both colour schemes use the Overeazy
- * Voltage palette rather than the Material indigo the old theme shipped.
+ * a reader would notice: every navigation page renders, the left menu lists every section as
+ * a folder that opens, search finds pages by title and by tag, the ported MkDocs widgets
+ * still work, and both colour schemes use the Overeazy Voltage palette rather than the
+ * Material indigo the old theme shipped.
  *
  * Run against the dev server or a static export:
  *   node scripts/verify_site.mjs                 # http://localhost:3140
@@ -168,12 +169,22 @@ function urlFor(file) {
 
 // ------------------------------------------------------------------ navigation
 const nav = JSON.parse(await readFile("lib/nav.json", "utf8"));
-const routes = [];
-for (const tab of nav) {
-  for (const pg of tab.pages) routes.push({ tab: tab.title, file: pg.path, title: pg.title, url: urlFor(pg.path) });
+
+/**
+ * Flatten a section's nav tree to its page leaves.
+ *
+ * A group carries `pages` and no `path`, so the top level of a section is a mix of both.
+ */
+function navPages(nodes) {
+  return nodes.flatMap((node) => (Array.isArray(node.pages) ? navPages(node.pages) : node.path ? [node] : []));
 }
 
-console.log(`\n### NAVIGATION  ${routes.length} pages / ${nav.length} tabs`);
+const routes = [];
+for (const tab of nav) {
+  for (const pg of navPages(tab.pages)) routes.push({ tab: tab.title, file: pg.path, title: pg.title, url: urlFor(pg.path) });
+}
+
+console.log(`\n### NAVIGATION  ${routes.length} pages / ${nav.length} menu sections`);
 const badPages = [];
 for (const route of routes) {
   const outcome = await withPage(async (page) => {
@@ -187,36 +198,105 @@ for (const route of routes) {
 }
 check(`every navigation page renders with a heading (${routes.length})`, badPages.length === 0, badPages.slice(0, 5).join(" | "));
 
-// The tab strip is collapsed into a switcher button on this layout; open it to see all six.
-const tabTitles = nav.map((t) => t.title);
+// The left sidebar is one traditional menu: every section of lib/nav.json is a collapsible
+// folder listed at once. It used to be a tab strip collapsed into a dropdown selector, and
+// that selector is what these checks make sure never comes back.
+const sectionTitles = nav.map((t) => t.title);
 const home = await open();
 await goto(home, "/");
-// The switcher is labelled with the tab the reader is on, which on the home page is the
-// first tab rather than any of the others, so match whichever label it currently shows.
-const switcher = home.locator("button").filter({ hasText: new RegExp(`^(${tabTitles.join("|")})`, "u") }).first();
-for (let attempt = 0; attempt < 2; attempt += 1) {
-  if (await count(home, '[role="dialog"]') > 0) break;
-  if ((await switcher.count()) === 0) break;
-  await switcher.click({ timeout: 10000 }).catch(() => undefined);
-  await home.waitForSelector('[role="dialog"]', { state: "attached", timeout: 10000 }).catch(() => undefined);
-  await home.waitForTimeout(900);
+
+const missingSections = [];
+const stuckSections = [];
+for (const want of sectionTitles) {
+  const verdict = await home.evaluate((title) => {
+    const rows = Array.from(document.querySelectorAll("#nd-sidebar a, #nd-sidebar button"));
+    const row = rows.find((el) => (el.textContent ?? "").replace(/\s+/gu, " ").trim() === title);
+    if (!row) return "missing";
+    // A section with an index page is a link whose chevron toggles it; one without is a
+    // CollapsibleTrigger button. Both have to be operable, not just printed.
+    if (row.tagName === "BUTTON") return row.hasAttribute("aria-expanded") ? "ok" : "not a disclosure";
+    return row.querySelector("[data-icon]") ? "ok" : "no toggle";
+  }, want);
+  if (verdict === "missing") missingSections.push(want);
+  else if (verdict !== "ok") stuckSections.push(`${want}=${verdict}`);
 }
-const dialogState = await home.evaluate(() => {
-  const dialog = document.querySelector('[role="dialog"]');
-  if (!dialog) return { items: [], text: null };
-  return {
-    items: Array.from(dialog.querySelectorAll("button, a, [role=\"option\"], [role=\"menuitem\"]"))
-      .map((el) => (el.textContent ?? "").replace(/\s+/gu, " ").trim()),
-    text: (dialog.textContent ?? "").replace(/\s+/gu, "").trim()
-  };
+check(`every section is a row in the left menu (${sectionTitles.length})`, missingSections.length === 0, missingSections.join(" | "));
+check("every section row is expandable", stuckSections.length === 0, stuckSections.join(" | "));
+
+// fumadocs' switcher was a Radix dialog trigger named after the section it opened, and it is
+// gone.  The scan is document-wide: the glossary chips carry the same ARIA on `<span>`s, so
+// both the tag and the accessible name have to match, or a content page reports a phantom.
+const dropdowns = await home.evaluate((titles) => {
+  const norm = (el) => (el.textContent ?? "").replace(/\s+/gu, " ").trim();
+  return Array.from(document.querySelectorAll('button[aria-haspopup="dialog"]'))
+    .filter((el) => titles.includes(norm(el)))
+    .map((el) => norm(el));
+}, sectionTitles);
+check(
+  "no section is reachable through a dropdown dialog",
+  dropdowns.length === 0,
+  `named triggers=${JSON.stringify(dropdowns.slice(0, 8))}`
+);
+
+// A folded group has to unfold: its pages are the only way to most of the corpus, and a
+// menu that prints rows without revealing them reads as a broken sidebar.  Radix unmounts a
+// closed panel, so the test is the group trigger itself: mark the first collapsed group under
+// each section, click it through the mark, and the group's folder has to gain page links.
+const ROWS_SEL = "#nd-sidebar a, #nd-sidebar button";
+
+/** Mark the first collapsed group of one section. Empty string when it has none at all. */
+const markFoldedGroup = (title) =>
+  home.evaluate(
+    ([selector, section]) => {
+      const norm = (el) => (el.textContent ?? "").replace(/\s+/gu, " ").trim();
+      for (const el of document.querySelectorAll("#nd-sidebar [data-ez-probe]")) el.removeAttribute("data-ez-probe");
+      const row = Array.from(document.querySelectorAll(selector)).find((el) => norm(el) === section);
+      const root = row?.parentElement;
+      if (!root || !Array.from(root.children).includes(row)) return null;
+      const groups = Array.from(root.querySelectorAll('button[aria-expanded]'));
+      if (groups.length === 0) return "";
+      const folded = groups.find((el) => el.getAttribute("aria-expanded") === "false" && norm(el).length > 0);
+      if (!folded) return null;
+      folded.setAttribute("data-ez-probe", "");
+      return norm(folded);
+    },
+    [ROWS_SEL, title]
+  );
+
+/** Page links rendered inside the marked group's folder, or -1 when the mark is gone. */
+const markedGroupLinks = () =>
+  home.evaluate(() => {
+    const trigger = document.querySelector('#nd-sidebar [data-ez-probe]');
+    const root = trigger?.parentElement;
+    return root ? root.querySelectorAll("a").length : -1;
+  });
+
+const nothingFolded = [];
+for (const title of sectionTitles) {
+  const label = await markFoldedGroup(title);
+  if (label === "") continue; // a section with no groups of its own has nothing to unfold
+  if (!label) {
+    nothingFolded.push(title);
+    continue;
+  }
+  const before = await markedGroupLinks();
+  await home.locator("#nd-sidebar [data-ez-probe]").click({ timeout: 10000 }).catch(() => undefined);
+  await home.waitForTimeout(500);
+  const after = await markedGroupLinks();
+  check(`group "${label}" under "${title}" opens and lists its pages`, before === 0 && after > 0, `before=${before} after=${after}`);
+}
+check("every section with groups keeps one folded until the reader opens it", nothingFolded.length === 0, `no folded group found under: ${nothingFolded.join(", ")}`);
+
+// The right-hand sub navigation is the other half of the chrome and stays as it was: the
+// page's own headings are listed beside the article on a wide viewport. fumadocs marks that
+// column with the `[grid-area:toc]` utility class; the narrow-screen popover shares the
+// prefix and is excluded.
+const toc = await home.evaluate(() => {
+  const host = Array.from(document.querySelectorAll('[class*="grid-area:toc"]')).find((el) => !el.hasAttribute("data-toc-popover"));
+  if (!host) return null;
+  return { links: host.querySelectorAll("a").length, text: (host.textContent ?? "").replace(/\s+/gu, " ").trim().slice(0, 60) };
 });
-const collapsedDialogText = dialogState.text;
-for (const want of tabTitles) {
-  const seen = dialogState.items.includes(want) || (collapsedDialogText ?? "").includes(want);
-  check(`tab "${want}" is offered`, seen, `items=${JSON.stringify(dialogState.items.slice(0, 8))} dialog=${JSON.stringify(collapsedDialogText)?.slice(0, 90)}`);
-}
-await home.keyboard.press("Escape");
-await home.waitForTimeout(400);
+check("the right-hand table of contents still renders", toc !== null && toc.links > 0, JSON.stringify(toc));
 
 // Every internal link the sidebar offers has to resolve.
 const sidebarLinks = await home.evaluate(() => {
@@ -744,9 +824,10 @@ check("activating a result navigates to that page", okSearch && Boolean(search.n
 // ------------------------------------------------------------------ mobile
 console.log("\n### MOBILE (390px)");
 const mobile = await withPage(async (page) => {
-  // The landing page is a hub with no sidebar tree on desktop either, so measure the drawer
-  // on a content page where the navigation is actually expected to be populated.
-  await goto(page, "/operate/dashboard/");
+  // On a phone the same persistent left menu tucks behind the burger instead of standing in
+  // the column, and the landing page is a hub with no sidebar tree on desktop either, so
+  // measure the tree here on a content page where the menu is expected to be populated.
+  await goto(page, "/operate/daily/");
   const overflow = await page.evaluate(() => {
     const de = document.documentElement;
     let widest = 0;

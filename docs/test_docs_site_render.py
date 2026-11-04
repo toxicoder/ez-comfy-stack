@@ -105,8 +105,8 @@ class NavContractTests(unittest.TestCase):
                 missing.append(rel)
         self.assertEqual([], missing)
 
-    def test_tabs_are_the_mkdocs_groups(self) -> None:
-        """Top-level tabs were not flattened."""
+    def test_menu_sections_are_the_mkdocs_groups(self) -> None:
+        """The left menu's top-level sections were not flattened."""
         tree = json.loads(NAV_JSON.read_text(encoding="utf-8"))
         titles = [tab["title"] for tab in tree]
         self.assertEqual(
@@ -263,8 +263,8 @@ class LayoutChromeTests(unittest.TestCase):
         self.assertIn("h2: DocsH2", mdx)
         self.assertIn("docsAlias()", page)
 
-    def test_breadcrumb_names_the_tab_the_page_lives_under(self) -> None:
-        """fumadocs restarts its trail at a root folder, so the tab needs our own component."""
+    def test_breadcrumb_names_the_section_the_page_lives_under(self) -> None:
+        """The left menu folds every section beside the reader's own, so the trail must name it."""
         page = (SITE_DIR / "app" / "[[...slug]]" / "page.tsx").read_text(encoding="utf-8")
         trail = (SITE_DIR / "components" / "docs-trail.tsx").read_text(encoding="utf-8")
         nav = (SITE_DIR / "lib" / "nav.ts").read_text(encoding="utf-8")
