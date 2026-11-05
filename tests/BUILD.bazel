@@ -134,6 +134,7 @@ filegroup(
         "python/test_cinema_splice.py",
         "python/test_clip_chain_workflow.py",
         "python/test_code_score.py",
+        "python/test_coverage_gate.py",
         "python/test_creator_pack3.py",
         "python/test_creator_workflows.py",
         "python/test_cubic_rebuild.py",
