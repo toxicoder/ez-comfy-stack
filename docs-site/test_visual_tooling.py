@@ -220,21 +220,35 @@ class ImageResolutionTests(unittest.TestCase):
         visual_linux_image.subprocess.run = run
         return calls
 
-    def test_registry_prefix_comes_from_the_dashboard_test_image(self) -> None:
-        """The registry is read out of the file that already names the image."""
+    def test_registry_prefix_is_the_pinned_playwright_publisher(self) -> None:
+        """The registry is a deliberate pin, and the reference is built on top of it."""
         prefix = visual_linux_image.registry_prefix()
+        self.assertEqual(visual_linux_image.REGISTRY, prefix)
         self.assertRegex(prefix, r"^[^/]+(\.[^/]+)+$")
+        self.assertTrue(
+            visual_linux_image.image_reference().startswith(f"{prefix}/playwright:"),
+            visual_linux_image.image_reference(),
+        )
         self.assertIn("playwright", visual_linux_image.image_reference())
 
-    def test_registry_prefix_reports_a_missing_base_image(self) -> None:
-        """A Dockerfile without a Playwright base is an error, not a silent wrong registry."""
-        original = visual_linux_image.DOCKERFILE
+    def test_image_reference_follows_the_registry_pin(self) -> None:
+        """The pin is the single source: retarget it and the reference moves with it.
+
+        The registry used to be scraped out of a sibling package's Dockerfile, which this repo
+        is not allowed to grow, so the whole visual lane died with a FileNotFoundError.
+        """
+        original = visual_linux_image.REGISTRY
         try:
-            visual_linux_image.DOCKERFILE = PACKAGE_DIR / "package.json"
-            with self.assertRaises(LookupError):
-                visual_linux_image.registry_prefix()
+            visual_linux_image.REGISTRY = "mirror.example.test"
+            self.assertTrue(
+                visual_linux_image.image_reference().startswith(
+                    "mirror.example.test/playwright:"
+                ),
+                visual_linux_image.image_reference(),
+            )
         finally:
-            visual_linux_image.DOCKERFILE = original
+            visual_linux_image.REGISTRY = original
+        self.assertFalse(hasattr(visual_linux_image, "DOCKERFILE"))
 
     def test_playwright_version_prefers_the_lockfile(self) -> None:
         """CI installs from the lockfile, so that is the release the container must match."""

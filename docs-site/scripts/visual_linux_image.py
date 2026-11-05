@@ -5,15 +5,15 @@ The visual gate compares screenshots, so the browser that produces a baseline ha
 same build that later compares against it.  Both halves of that pin come from files already in
 the checkout rather than from a second hand-maintained version:
 
-* the registry prefix is read from ``dashboard/Dockerfile.test``, which already names the
-  Playwright image the dashboard's hermetic tests use;
+* the registry is :data:`REGISTRY`, the publisher of the official Playwright image;
 * the release is the version ``docs-site`` actually resolves for ``@playwright/test`` (the
   lockfile entry, falling back to the range in the manifest).
 
 ``scripts/visual_linux.sh`` calls this, and ``test_visual_tooling.py`` asserts the result, so
 the two cannot drift.
 
-Run: python3 docs-site/scripts/visual_linux_image.py
+Run: bazelisk run //docs-site:visual-linux            # compare
+     bazelisk run //docs-site:visual-linux -- --update  # rewrite baselines
 """
 
 from __future__ import annotations
@@ -25,8 +25,11 @@ import sys
 from pathlib import Path
 
 PACKAGE_DIR = Path(__file__).resolve().parent.parent
-REPO_ROOT = PACKAGE_DIR.parent
-DOCKERFILE = REPO_ROOT / "dashboard" / "Dockerfile.test"
+
+# Microsoft publishes the official Playwright image. The reference is pinned here because this
+# package owns the visual pipeline end to end: there is no in-repo Dockerfile for the baseline
+# image, and a repo rule forbids growing a dashboard package just to host one.
+REGISTRY = "mcr.microsoft.com"
 
 # The docs CI job runs on ubuntu-latest; the codename has to match that image family so font
 # packages resolve identically between a refresh and the pipeline.
@@ -35,19 +38,8 @@ PLATFORM = "linux/amd64"
 
 
 def registry_prefix() -> str:
-    """Return the registry path that hosts the Playwright image, e.g. ``mcr.microsoft.com``.
-
-    Raises:
-        LookupError: If the dashboard test image no longer names a Playwright base image.
-    """
-    text = DOCKERFILE.read_text(encoding="utf-8")
-    match = re.search(r"^FROM\s+(\S*playwright\S*):\S+", text, re.M)
-    if match is None:
-        raise LookupError(
-            f"{DOCKERFILE} does not name a Playwright base image; update registry_prefix() "
-            "together with it"
-        )
-    return match.group(1).split("/")[0]
+    """Return the registry path that hosts the Playwright image, e.g. ``mcr.microsoft.com``."""
+    return REGISTRY
 
 
 def playwright_version() -> str:
