@@ -107,6 +107,13 @@ REQUIRED_PINS=(
 # Tools apt owns on Linux; the rest of the Linux set is a pinned release fetch.
 APT_TOOLS=(shellcheck git python3)
 
+# Packages this installer itself needs before it can install anything else:
+# curl fetches the pinned releases, ca-certificates makes that fetch verify
+# against nodejs.org and github.com, tar-xz unpacks the node archive, and
+# python3-pip carries the pyright/mypy lane. A minimal image ships none of
+# them, so they are installed unconditionally rather than probed as tools.
+BOOTSTRAP_APT_TOOLS=(curl ca-certificates xz-utils python3-pip)
+
 # Tools fetched as raw release binaries (node is a tarball, handled apart).
 RELEASE_TOOLS=(bazelisk shfmt buildifier)
 
@@ -118,6 +125,8 @@ SETUP_HOST_SUDO=""
 BIN_DIR=""
 PRESENT_TOOLS=()
 MISSING_TOOLS=()
+# Tools on PATH that are older than their pin; filled by setup_host_probe.
+STALE_TOOLS=()
 
 #######################################
 # Print setup-host usage and the tool set.
@@ -246,9 +255,157 @@ setup_host_node_is_new_enough() {
 }
 
 #######################################
-# Probe every required tool once, filling the present and missing lists.
+# Read one tool's own reported version, normalized to a dotted number.
+# Pure bash, with no sed or sort: this probe runs on a host that may still be
+# missing the very packages the installer goes on to fetch.
 # Globals:
-#   REQUIRED_TOOLS, PRESENT_TOOLS (written), MISSING_TOOLS (written)
+#   None
+# Arguments:
+#   $1 - tool from REQUIRED_TOOLS
+# Outputs:
+#   The version on stdout, as dotted numbers
+# Returns:
+#   1 when the tool does not report a parseable version
+#######################################
+setup_host_reported_version() {
+  local tool="${1:-}" out="" token
+  case "${tool}" in
+    bazelisk) out="$(bazelisk version 2>/dev/null || true)" ;;
+    shellcheck) out="$(shellcheck --version 2>/dev/null || true)" ;;
+    shfmt) out="$(shfmt --version 2>/dev/null || true)" ;;
+    buildifier) out="$(buildifier --version 2>/dev/null || true)" ;;
+    pyright) out="$(pyright --version 2>/dev/null || true)" ;;
+    mypy) out="$(mypy --version 2>/dev/null || true)" ;;
+    node) out="$(node --version 2>/dev/null || true)" ;;
+    *)
+      return 1
+      ;;
+  esac
+  # The first token that carries a dotted number. Requiring the dot skips a
+  # bare integer and buildifier's dotless scm revision hash.
+  for token in ${out}; do
+    token="${token#v}"
+    if [[ ${token} =~ ^([0-9]+(\.[0-9]+)+) ]]; then
+      printf '%s\n' "${BASH_REMATCH[1]}"
+      return 0
+    fi
+  done
+  return 1
+}
+
+#######################################
+# The version a tool must at least reach, from this repo's pins.
+# Globals:
+#   BAZELISK_VERSION, BUILDIFIER_VERSION, SHFMT_ASSET_VERSION, NODE_VERSION,
+#   SETUP_HOST_ROOT, SETUP_HOST_REQUIREMENTS
+# Arguments:
+#   $1 - tool from REQUIRED_TOOLS
+# Outputs:
+#   The floor version on stdout
+# Returns:
+#   1 when the tool has no pin, which means no floor is imposed
+#######################################
+setup_host_pin_version() {
+  local tool="${1:-}" want="" line=""
+  case "${tool}" in
+    bazelisk) want="${BAZELISK_VERSION:-}" ;;
+    buildifier) want="${BUILDIFIER_VERSION:-}" ;;
+    shfmt) want="${SHFMT_ASSET_VERSION:-}" ;;
+    node) want="${NODE_VERSION:-}" ;;
+    pyright | mypy)
+      local req="${SETUP_HOST_ROOT}/${SETUP_HOST_REQUIREMENTS}"
+      [[ -f ${req} ]] || return 1
+      while IFS= read -r line; do
+        if [[ ${line} == "${tool}=="* ]]; then
+          want="${line#"${tool}=="}"
+          break
+        fi
+      done <"${req}"
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+  want="${want#v}"
+  want="${want%%[!0-9.]*}"
+  [[ -n ${want} ]] || return 1
+  printf '%s\n' "${want}"
+}
+
+#######################################
+# Compare two dotted versions, numerically per component.
+# Globals:
+#   None
+# Arguments:
+#   $1 - the version found on the host
+#   $2 - the floor it must reach
+# Outputs:
+#   None
+# Returns:
+#   0 when $1 >= $2, 1 otherwise
+#######################################
+setup_host_version_at_least() {
+  local got="${1:-}" want="${2:-}"
+  [[ -n ${got} && -n ${want} ]] || return 1
+  local -a got_parts=() want_parts=()
+  IFS=. read -r -a got_parts <<<"${got}"
+  IFS=. read -r -a want_parts <<<"${want}"
+  local index have need
+  for ((index = 0; index < ${#want_parts[@]}; index += 1)); do
+    have="${got_parts[index]:-0}"
+    need="${want_parts[index]:-0}"
+    [[ ${have} =~ ^[0-9]+$ ]] || have=0
+    [[ ${need} =~ ^[0-9]+$ ]] || need=0
+    ((have > need)) && return 0
+    ((have < need)) && return 1
+  done
+  return 0
+}
+
+#######################################
+# True when a tool on PATH is older than its pin.
+# Globals:
+#   None
+# Arguments:
+#   $1 - tool from REQUIRED_TOOLS
+# Outputs:
+#   None
+# Returns:
+#   0 when the tool is older than the pin, 1 when it is fine or has no pin
+#######################################
+setup_host_tool_is_stale() {
+  local tool="${1:-}" got want
+  want="$(setup_host_pin_version "${tool}")" || return 1
+  got="$(setup_host_reported_version "${tool}")" || return 1
+  setup_host_version_at_least "${got}" "${want}" && return 1
+  return 0
+}
+
+#######################################
+# Where one tool's version comes from, for the stale line of the report.
+# Globals:
+#   SETUP_HOST_REQUIREMENTS
+# Arguments:
+#   $1 - tool from REQUIRED_TOOLS
+# Outputs:
+#   The source of the pin on stdout
+# Returns:
+#   0
+#######################################
+setup_host_pin_source() {
+  local tool="${1:-}"
+  case "${tool}" in
+    pyright | mypy) printf '%s\n' "${SETUP_HOST_REQUIREMENTS}" ;;
+    *) printf '%s\n' ".devcontainer/tool-versions.env" ;;
+  esac
+  return 0
+}
+
+#######################################
+# Probe every required tool once, filling the present, missing, and stale lists.
+# Globals:
+#   REQUIRED_TOOLS, PRESENT_TOOLS (written), MISSING_TOOLS (written),
+#   STALE_TOOLS (written)
 # Arguments:
 #   None
 # Outputs:
@@ -260,6 +417,7 @@ setup_host_probe() {
   local tool
   PRESENT_TOOLS=()
   MISSING_TOOLS=()
+  STALE_TOOLS=()
   for tool in "${REQUIRED_TOOLS[@]}"; do
     if [[ ${tool} == node ]]; then
       if setup_host_node_is_new_enough; then
@@ -271,6 +429,9 @@ setup_host_probe() {
     fi
     if command -v "${tool}" >/dev/null 2>&1; then
       PRESENT_TOOLS+=("${tool}")
+      if setup_host_tool_is_stale "${tool}"; then
+        STALE_TOOLS+=("${tool}")
+      fi
     else
       MISSING_TOOLS+=("${tool}")
     fi
@@ -279,18 +440,72 @@ setup_host_probe() {
 }
 
 #######################################
-# Print the probe result: present, missing, and where each missing tool comes from.
+# List the BOOTSTRAP_APT_TOOLS entries this host is actually missing.
+# Each is probed by the command that consumes it, not by package name, because
+# the package and the binary are named differently (xz-utils provides xz,
+# python3-pip provides python3 -m pip).
 # Globals:
-#   PRESENT_TOOLS, MISSING_TOOLS, SETUP_HOST_ROOT
+#   BOOTSTRAP_APT_TOOLS
 # Arguments:
 #   None
 # Outputs:
-#   Report on stdout, one "missing: <tool> - <source>" line per absent tool
+#   One apt package name per line on stdout
+# Returns:
+#   0
+#######################################
+setup_host_bootstrap_packages_needed() {
+  local pkg
+  for pkg in "${BOOTSTRAP_APT_TOOLS[@]}"; do
+    case "${pkg}" in
+      curl) command -v curl >/dev/null 2>&1 || printf '%s\n' "${pkg}" ;;
+      xz-utils) command -v xz >/dev/null 2>&1 || printf '%s\n' "${pkg}" ;;
+      python3-pip) python3 -m pip --version >/dev/null 2>&1 || printf '%s\n' "${pkg}" ;;
+      *) printf '%s\n' "${pkg}" ;;
+    esac
+  done
+  return 0
+}
+
+#######################################
+# List the tools this run should install or reinstall: the absent ones plus the
+# present-but-older-than-pin ones. A stale pyright typechecks against the wrong
+# library set and a stale shfmt formats against the wrong grammar, so both are
+# reinstalled rather than reported and left alone.
+# Globals:
+#   MISSING_TOOLS, STALE_TOOLS
+# Arguments:
+#   None
+# Outputs:
+#   One tool name per line on stdout
+# Returns:
+#   0
+#######################################
+setup_host_tools_to_install() {
+  local tool
+  if [[ ${#MISSING_TOOLS[@]} -gt 0 ]]; then
+    printf '%s\n' "${MISSING_TOOLS[@]}"
+  fi
+  if [[ ${#STALE_TOOLS[@]} -gt 0 ]]; then
+    for tool in "${STALE_TOOLS[@]}"; do
+      printf '%s\n' "${tool}"
+    done
+  fi
+}
+
+#######################################
+# Print the probe result: present, missing, stale, and where each comes from.
+# Globals:
+#   PRESENT_TOOLS, MISSING_TOOLS, STALE_TOOLS, SETUP_HOST_ROOT
+# Arguments:
+#   None
+# Outputs:
+#   Report on stdout, one "missing: <tool> - <source>" line per absent tool and
+#   one "stale: <tool> has <got>, pin wants <want> (<source>)" line per old one
 # Returns:
 #   0
 #######################################
 setup_host_report() {
-  local tool
+  local tool got want
   printf 'setup-host: host tool report (checkout %s)\n' "${SETUP_HOST_ROOT}"
   if [[ ${#PRESENT_TOOLS[@]} -gt 0 ]]; then
     printf '  present: %s\n' "${PRESENT_TOOLS[*]}"
@@ -299,6 +514,15 @@ setup_host_report() {
     printf '  tools missing (%d): %s\n' "${#MISSING_TOOLS[@]}" "${MISSING_TOOLS[*]}"
     for tool in "${MISSING_TOOLS[@]}"; do
       printf '  missing: %s - %s\n' "${tool}" "$(setup_host_hint "${tool}")"
+    done
+  fi
+  if [[ ${#STALE_TOOLS[@]} -gt 0 ]]; then
+    printf '  tools below pin (%d): %s\n' "${#STALE_TOOLS[@]}" "${STALE_TOOLS[*]}"
+    for tool in "${STALE_TOOLS[@]}"; do
+      got="$(setup_host_reported_version "${tool}" || printf 'unknown')"
+      want="$(setup_host_pin_version "${tool}" || printf 'unknown')"
+      printf '  stale: %s has %s, pin wants at least %s (%s)\n' \
+        "${tool}" "${got}" "${want}" "$(setup_host_pin_source "${tool}")"
     done
   fi
   return 0
@@ -627,13 +851,21 @@ setup_host_install_plan() {
   printf 'setup-host: install plan (--dry-run writes nothing)\n'
   printf '  install dir: %s\n' "${BIN_DIR}"
   printf '  node prefix: %s\n' "${SETUP_HOST_NODE_PREFIX}"
-  if [[ ${#MISSING_TOOLS[@]} -eq 0 ]]; then
-    printf '  nothing to install: every tool is already on PATH.\n'
+  if command -v apt-get >/dev/null 2>&1; then
+    local -a bootstrap=()
+    mapfile -t bootstrap < <(setup_host_bootstrap_packages_needed)
+    if [[ ${#bootstrap[@]} -gt 0 ]]; then
+      printf '  apt prerequisites for this installer: %s\n' "${bootstrap[*]}"
+    fi
+  fi
+  if [[ ${#MISSING_TOOLS[@]} -eq 0 && ${#STALE_TOOLS[@]} -eq 0 ]]; then
+    printf '  nothing to install: every tool is already on PATH at its pin.\n'
     return 0
   fi
-  for tool in "${MISSING_TOOLS[@]}"; do
+  while IFS= read -r tool; do
+    [[ -z ${tool} ]] && continue
     printf '  would install %s <- %s\n' "${tool}" "$(setup_host_hint "${tool}")"
-  done
+  done < <(setup_host_tools_to_install)
   return 0
 }
 
@@ -651,13 +883,14 @@ setup_host_install_plan() {
 #######################################
 setup_host_install_all() {
   local tool pkg failed=0 tmp=""
-  local -a apt_pkgs=()
+  local -a apt_pkgs=() todo=() bootstrap=()
+  mapfile -t todo < <(setup_host_tools_to_install)
   if [[ "$(uname -s 2>/dev/null || true)" == Darwin ]]; then
     if ! command -v brew >/dev/null 2>&1; then
       err "setup-host: no Homebrew on this Mac; install it, then re-run this script"
       return 0
     fi
-    for tool in "${MISSING_TOOLS[@]}"; do
+    for tool in "${todo[@]}"; do
       [[ ${tool} == pyright || ${tool} == mypy ]] && continue
       log "brew install ${tool} ..."
       if ! brew install "${tool}"; then
@@ -675,17 +908,23 @@ setup_host_install_all() {
     err "  this script can fetch; install the apt packages by hand."
   fi
 
-  for tool in "${MISSING_TOOLS[@]}"; do
+  # The installer's own prerequisites go first: curl fetches the pinned
+  # releases, ca-certificates makes that fetch verify, xz unpacks the node
+  # archive, and python3 -m pip carries the pyright/mypy lane. Without them a
+  # minimal host silently installs nothing.
+  mapfile -t bootstrap < <(setup_host_bootstrap_packages_needed)
+  for tool in "${todo[@]}"; do
     for pkg in "${APT_TOOLS[@]}"; do
       [[ ${tool} == "${pkg}" ]] && apt_pkgs+=("${tool}")
     done
   done
-  if [[ ${#apt_pkgs[@]} -gt 0 ]] && command -v apt-get >/dev/null 2>&1; then
-    log "apt-get install -y ${apt_pkgs[*]} ..."
+  local -a apt_want=("${bootstrap[@]+"${bootstrap[@]}"}" "${apt_pkgs[@]+"${apt_pkgs[@]}"}")
+  if [[ ${#apt_want[@]} -gt 0 ]] && command -v apt-get >/dev/null 2>&1; then
+    log "apt-get install -y ${apt_want[*]} ..."
     setup_host_run_root apt-get update -qq >/dev/null 2>&1 ||
       warn "apt-get update failed; continuing with the cached package list"
-    if ! setup_host_run_root apt-get install -y "${apt_pkgs[@]}"; then
-      warn "apt-get install ${apt_pkgs[*]} did not work; install those by hand"
+    if ! setup_host_run_root apt-get install -y "${apt_want[@]}"; then
+      warn "apt-get install ${apt_want[*]} did not work; install those by hand"
       failed=1
     fi
   fi
@@ -696,22 +935,24 @@ setup_host_install_all() {
     return 0
   fi
   if ! command -v curl >/dev/null 2>&1; then
-    err "setup-host: no curl: the pinned releases cannot be fetched on this host"
+    err "setup-host: no curl even after the apt step: the pinned releases cannot be"
+    err "  fetched on this host. Install curl (or the whole prerequisite set:"
+    err "  ${BOOTSTRAP_APT_TOOLS[*]}) and re-run."
     rm -rf "${tmp}"
     return 0
   fi
   for tool in "${RELEASE_TOOLS[@]}"; do
-    [[ " ${MISSING_TOOLS[*]} " == *" ${tool} "* ]] || continue
+    [[ " ${todo[*]} " == *" ${tool} "* ]] || continue
     if ! setup_host_install_release "${tool}" "${tmp}"; then
       failed=1
     fi
   done
-  if [[ " ${MISSING_TOOLS[*]} " == *" node "* ]]; then
+  if [[ " ${todo[*]} " == *" node "* ]]; then
     setup_host_install_node "${tmp}" || failed=1
   fi
   rm -rf "${tmp}"
 
-  if [[ " ${MISSING_TOOLS[*]} " == *" pyright "* || " ${MISSING_TOOLS[*]} " == *" mypy "* ]]; then
+  if [[ " ${todo[*]} " == *" pyright "* || " ${todo[*]} " == *" mypy "* ]]; then
     setup_host_install_python_tools || failed=1
   fi
   [[ ${failed} == 0 ]] || log "some installs failed; the re-probe below lists what is left."
@@ -783,16 +1024,18 @@ main() {
   setup_host_report
 
   if [[ ${mode} == check ]]; then
-    if [[ ${#MISSING_TOOLS[@]} -gt 0 ]]; then
+    if [[ ${#MISSING_TOOLS[@]} -gt 0 || ${#STALE_TOOLS[@]} -gt 0 ]]; then
       log "setup-host --check installed nothing and wrote nothing."
-      log '  Run "bash scripts/setup-host.sh" (no flags) to install what is missing,'
-      log '  or run "bazelisk test //:lint" knowing that the Bazel lint targets set'
+      log '  Run "bazelisk run //:setup-host" to install what is missing and bring'
+      log '  every tool up to its pin. On a host where bazelisk is not installed'
+      log '  yet, "bash scripts/setup-host.sh" (no flags) is the bootstrap that'
+      log '  installs it. Either way, "bazelisk test //:lint" sets'
       log '  REQUIRE_LINT_TOOLS=1, so a tool missing from PATH turns the gate red'
       log '  here. Running a lint script by hand on the host still skips what it'
       log '  cannot find.'
       return 1
     fi
-    log "setup-host: every tool the Bazel targets need is on PATH."
+    log "setup-host: every tool the Bazel targets need is on PATH at its pin."
     return 0
   fi
 
@@ -802,8 +1045,8 @@ main() {
     return 0
   fi
 
-  if [[ ${#MISSING_TOOLS[@]} -eq 0 ]]; then
-    log "setup-host: every tool the Bazel targets need is on PATH."
+  if [[ ${#MISSING_TOOLS[@]} -eq 0 && ${#STALE_TOOLS[@]} -eq 0 ]]; then
+    log "setup-host: every tool the Bazel targets need is on PATH at its pin."
     return 0
   fi
 
@@ -812,15 +1055,20 @@ main() {
 
   # The re-probe is the point: a partial install must not look like a pass.
   setup_host_probe
-  if [[ ${#MISSING_TOOLS[@]} -gt 0 ]]; then
-    printf 'setup-host: still missing: %s\n' "${MISSING_TOOLS[*]}"
-    for tool in "${MISSING_TOOLS[@]}"; do
-      printf '  still missing: %s - %s\n' "${tool}" "$(setup_host_hint "${tool}")"
-    done
+  if [[ ${#MISSING_TOOLS[@]} -gt 0 || ${#STALE_TOOLS[@]} -gt 0 ]]; then
+    if [[ ${#MISSING_TOOLS[@]} -gt 0 ]]; then
+      printf 'setup-host: still missing: %s\n' "${MISSING_TOOLS[*]}"
+      for tool in "${MISSING_TOOLS[@]}"; do
+        printf '  still missing: %s - %s\n' "${tool}" "$(setup_host_hint "${tool}")"
+      done
+    fi
+    if [[ ${#STALE_TOOLS[@]} -gt 0 ]]; then
+      printf 'setup-host: still below pin: %s\n' "${STALE_TOOLS[*]}"
+    fi
     log "  //:lint will skip those checks instead of running them."
     return 1
   fi
-  log "setup-host: every tool the Bazel targets need is on PATH."
+  log "setup-host: every tool the Bazel targets need is on PATH at its pin."
   return 0
 }
 
