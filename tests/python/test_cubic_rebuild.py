@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 import sys
 import types
 from collections.abc import Iterator
@@ -99,6 +100,25 @@ def _flat(color: tuple[float, float, float], height: int, width: int) -> list[An
     return _frame(height, width, lambda _y, _x: color)
 
 
+class _LatentTensor:
+    """Latent stand-in; ComfyUI only ever calls ``.size()`` on a reference."""
+
+    def __init__(self, name: str = "lat") -> None:
+        self.name = name
+
+    def size(self) -> tuple[int, int, int, int]:
+        return (1, 16, 8, 8)
+
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, _LatentTensor) and other.name == self.name
+
+    def __hash__(self) -> int:
+        return hash(self.name)
+
+    def __repr__(self) -> str:
+        return f"<_LatentTensor {self.name}>"
+
+
 class _Shot:
     """Tensor stand-in with detach/cpu/tolist plus device and dtype."""
 
@@ -177,15 +197,45 @@ def test_read_bhwc_rejects_junk() -> None:
 
 
 def test_attach_reference_fallback_does_not_alias() -> None:
-    cond: list[Any] = [["tok", {"reference_latents": ["old"]}]]
-    out = attach_reference(cond, "photo")
-    assert cond[0][1]["reference_latents"] == ["old"]
-    assert out[0][1]["reference_latents"] == ["old", "photo"]
-    bare = attach_reference([["tok", "meta"], "lonely"], "photo")
+    old = _LatentTensor("old")
+    photo = _LatentTensor("photo")
+    cond: list[Any] = [["tok", {"reference_latents": [old]}]]
+    out = attach_reference(cond, {"samples": photo})
+    assert cond[0][1]["reference_latents"] == [old]
+    assert out[0][1]["reference_latents"] == [old, photo]
+    bare = attach_reference([["tok", "meta"], "lonely"], {"samples": photo})
     assert bare[0] == ["tok", "meta"]
     assert bare[1] == "lonely"
-    assert attach_reference({"samples": 1}, "lat")["reference"] == "lat"
-    assert attach_reference("nope", "lat") == "nope"
+    assert attach_reference({"samples": 1}, {"samples": photo})["reference"] == [photo]
+    assert attach_reference("nope", {"samples": photo}) == "nope"
+
+
+def test_attach_reference_keeps_the_list_tensor_only() -> None:
+    """Issue #351: ComfyUI sizes every reference, so a container kills the run.
+
+    ``Flux.extra_conds_shapes`` runs ``a.size()[2:]`` over the conditioning's
+    ``reference_latents``, which is where a LATENT dict used to land.
+    """
+    photo = _LatentTensor("photo")
+    cond: list[Any] = [[{"txt": "tok"}, {"pooled_output": "p"}]]
+    out = attach_reference(cond, {"samples": photo})
+    refs = out[0][1]["reference_latents"]
+    assert refs == [photo]
+    for entry in refs:
+        assert math.prod(entry.size()[2:]) == 64
+    assert cond[0][0] == {"txt": "tok"}
+    assert cond[0][1] == {"pooled_output": "p"}
+
+
+def test_attach_reference_drops_a_reference_it_cannot_size() -> None:
+    """Junk in, no reference out: the sampler still gets a runnable prompt."""
+    cond: list[Any] = [["tok", {}]]
+    assert attach_reference(cond, {"samples": None}) is cond
+    assert attach_reference(cond, None) is cond
+    assert attach_reference(cond, "photo") is cond
+    assert attach_reference(cond, [None, "photo"]) is cond
+    assert attach_reference(cond, ()) is cond
+    assert cond[0][1] == {}
 
 
 def test_attach_reference_uses_comfy_when_present(
@@ -193,39 +243,38 @@ def test_attach_reference_uses_comfy_when_present(
 ) -> None:
     calls: list[Any] = []
 
-    class _Ref:
-        def append(self, conditioning: list[Any], latent: str) -> tuple[list[Any]]:
-            calls.append(latent)
-            refs = conditioning[0][1].setdefault("reference_latents", [])
-            refs.append(latent)
-            return (conditioning,)
+    def set_values(
+        conditioning: list[Any], values: dict[str, Any], append: bool = False
+    ) -> list[Any]:
+        """Stand in for ``node_helpers.conditioning_set_values``."""
+        calls.append((values, append))
+        out = []
+        for t in conditioning:
+            merged = [t[0], dict(t[1])]
+            for key, val in values.items():
+                prior = merged[1].get(key)
+                merged[1][key] = list(prior) + list(val) if append and prior else val
+            out.append(merged)
+        return out
 
-    pkg = types.ModuleType("comfy_extras")
-    pkg.__path__ = []  # type: ignore[attr-defined]
-    sub = types.ModuleType("comfy_extras.nodes_flux")
-    sub.ReferenceLatent = _Ref  # type: ignore[attr-defined]
-    monkeypatch.setitem(sys.modules, "comfy_extras", pkg)
-    monkeypatch.setitem(sys.modules, "comfy_extras.nodes_flux", sub)
-    out = attach_reference([["tok", {}]], "study")
-    assert calls == ["study"], calls
-    assert out[0][1]["reference_latents"] == ["study"]
+    helpers = types.ModuleType("node_helpers")
+    helpers.conditioning_set_values = set_values  # type: ignore[attr-defined]
+    monkeypatch.setitem(sys.modules, "node_helpers", helpers)
+    study = _LatentTensor("study")
+    out = attach_reference([["tok", {}]], {"samples": study})
+    assert calls == [({"reference_latents": [study]}, True)], calls
+    assert out[0][1]["reference_latents"] == [study]
 
-    class _Bare:
-        def append(self, conditioning: list[Any], latent: str) -> str:
-            del conditioning, latent
-            return "bare"
+    def boom(
+        conditioning: list[Any], values: dict[str, Any], append: bool = False
+    ) -> list[Any]:
+        """Stand in for a helper that rejects a malformed conditioning."""
+        del conditioning, values, append
+        raise RuntimeError("no reference")
 
-    sub.ReferenceLatent = _Bare  # type: ignore[attr-defined]
-    assert attach_reference([["tok", {}]], "study") == "bare"
-
-    class _Boom:
-        def append(self, conditioning: list[Any], latent: str) -> tuple[list[Any]]:
-            del conditioning, latent
-            raise RuntimeError("no reference")
-
-    sub.ReferenceLatent = _Boom  # type: ignore[attr-defined]
-    fallen = attach_reference([["tok", {}]], "study")
-    assert fallen[0][1]["reference_latents"] == ["study"]
+    helpers.conditioning_set_values = boom  # type: ignore[attr-defined]
+    fallen = attach_reference([["tok", {}]], {"samples": study})
+    assert fallen[0][1]["reference_latents"] == [study]
 
 
 def test_cubic_condition_picks_photo_or_study(
@@ -243,30 +292,31 @@ def test_cubic_condition_picks_photo_or_study(
     node = EZCubicCondition()
     assert node.INPUT_TYPES()["required"]["prompt"][1]["forceInput"] is True
     cond = [["tok", {}]]
-    photo = {"samples": "photo"}
+    photo_tensor = _LatentTensor("photo")
+    photo = {"samples": photo_tensor}
     harbor = node.run(cond, photo, [], types.SimpleNamespace(), "fog harbor pier")
-    assert harbor[0][0][1]["reference_latents"] == [photo]
+    assert harbor[0][0][1]["reference_latents"] == [photo_tensor]
     assert cond[0][1] == {}
 
     class _Vae:
-        def encode(self, image: Any) -> dict[str, str]:
+        def encode(self, image: Any) -> _LatentTensor:
             assert image
-            return {"samples": "study"}
+            return _LatentTensor("study")
 
     cubic = node.run(cond, photo, [_flat((0.2, 0.3, 0.4), 12, 12)], _Vae(), CUBIC)
-    assert cubic[0][0][1]["reference_latents"] == [{"samples": "study"}]
+    assert cubic[0][0][1]["reference_latents"] == [_LatentTensor("study")]
 
     class _BadVae:
-        def encode(self, image: Any) -> dict[str, str]:
+        def encode(self, image: Any) -> _LatentTensor:
             del image
             raise RuntimeError("encode")
 
     failed = node.run(cond, photo, [_flat((0.2, 0.2, 0.2), 12, 12)], _BadVae(), CUBIC)
-    assert failed[0][0][1]["reference_latents"] == [photo]
+    assert failed[0][0][1]["reference_latents"] == [photo_tensor]
     missing = node.run(cond, photo, object(), types.SimpleNamespace(), CUBIC)
-    assert missing[0][0][1]["reference_latents"] == [photo]
+    assert missing[0][0][1]["reference_latents"] == [photo_tensor]
     no_encode = node.run(cond, photo, [], types.SimpleNamespace(), CUBIC)
-    assert no_encode[0][0][1]["reference_latents"] == [photo]
+    assert no_encode[0][0][1]["reference_latents"] == [photo_tensor]
 
 
 def test_cubic_condition_fails_closed_to_the_photo_without_a_segmenter(
@@ -301,9 +351,9 @@ def test_cubic_condition_fails_closed_to_the_photo_without_a_segmenter(
 
     node = EZCubicCondition()
     cond = [["tok", {}]]
-    photo = {"samples": "photo"}
+    photo = {"samples": _LatentTensor("photo")}
     guarded = node.run(cond, photo, [_flat((0.2, 0.3, 0.4), 12, 12)], _Vae(), CUBIC)
-    assert guarded[0][0][1]["reference_latents"] == [photo]
+    assert guarded[0][0][1]["reference_latents"] == [_LatentTensor("photo")]
     assert built == []
 
 
@@ -648,7 +698,7 @@ def test_container_state_without_weights_keeps_the_people(
 
     node = EZCubicCondition()
     cond = [["tok", {}]]
-    photo = {"samples": "photo"}
+    photo = {"samples": _LatentTensor("photo")}
 
     class _Vae:
         def encode(self, image: Any) -> dict[str, str]:
@@ -656,7 +706,7 @@ def test_container_state_without_weights_keeps_the_people(
             return {"samples": "study"}
 
     routed = node.run(cond, photo, [_flat((0.2, 0.3, 0.4), 12, 12)], _Vae(), CUBIC)
-    assert routed[0][0][1]["reference_latents"] == [photo]
+    assert routed[0][0][1]["reference_latents"] == [_LatentTensor("photo")]
 
     plate = [_flat((0.0, 0.0, 1.0), 8, 8)]
     source = [_flat((1.0, 0.0, 0.0), 8, 8)]

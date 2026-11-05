@@ -377,15 +377,39 @@ def _clone_conditioning(conditioning: Any) -> Any:
     return cloned
 
 
-def _attach_fallback(conditioning: Any, latent: Any) -> Any:
-    """Record ``latent`` on conditioning when Comfy ReferenceLatent is absent.
+def _reference_tensors(latent: Any) -> list[Any]:
+    """Return the plain tensors a Flux.2 reference list may hold.
+
+    ComfyUI sizes every reference before the sampler runs: the Flux
+    ``extra_conds_shapes`` walks the conditioning ``reference_latents`` list
+    calling ``a.size()[2:]`` on each entry. A LATENT container stored there
+    instead of its tensor fails the whole prompt with ``'dict' object has no
+    attribute 'size'``, so the list stays tensor-only, the way the stock
+    reference nodes keep it.
+
+    Args:
+        latent: LATENT container, bare tensor, sequence of tensors, or junk.
+
+    Returns:
+        Every entry that answers ``.size()``; empty when nothing usable came.
+    """
+    if isinstance(latent, dict):
+        latent = latent.get("samples")
+    if latent is None:
+        return []
+    entries = list(latent) if isinstance(latent, (list, tuple)) else [latent]
+    return [entry for entry in entries if callable(getattr(entry, "size", None))]
+
+
+def _attach_fallback(conditioning: Any, refs: list[Any]) -> Any:
+    """Record ``refs`` on conditioning when Comfy's helper is absent.
 
     Args:
         conditioning: Already cloned conditioning.
-        latent: Photo or block-study latent.
+        refs: Reference tensors, already unwrapped by ``_reference_tensors``.
 
     Returns:
-        Conditioning with the latent attached, or ``conditioning`` unchanged.
+        Conditioning with the tensors attached, or ``conditioning`` unchanged.
     """
     if isinstance(conditioning, list):
         for item in conditioning:
@@ -394,15 +418,36 @@ def _attach_fallback(conditioning: Any, latent: Any) -> Any:
                 and len(item) >= 2
                 and isinstance(item[1], dict)
             ):
-                refs = list(item[1].get("reference_latents") or [])
-                refs.append(latent)
-                item[1]["reference_latents"] = refs
+                prior = list(item[1].get("reference_latents") or [])
+                item[1]["reference_latents"] = prior + refs
         return conditioning
     if isinstance(conditioning, dict):
         out = dict(conditioning)
-        out["reference"] = latent
+        out["reference"] = refs
         return out
     return conditioning
+
+
+def _set_reference_values(conditioning: Any, refs: list[Any]) -> Any | None:
+    """Attach through ComfyUI's own helper, the one its reference nodes call.
+
+    Args:
+        conditioning: Cloned conditioning.
+        refs: Reference tensors to append.
+
+    Returns:
+        Fresh conditioning, or None when the helper is missing or refuses.
+    """
+    try:
+        from node_helpers import conditioning_set_values  # type: ignore[import-not-found]
+    except Exception:  # noqa: BLE001 - hermetic tests / older Comfy
+        return None
+    try:
+        return conditioning_set_values(
+            conditioning, {"reference_latents": refs}, append=True
+        )
+    except Exception:  # noqa: BLE001 - fail-soft to the local attach
+        return None
 
 
 def attach_reference(conditioning: Any, latent: Any) -> Any:
@@ -410,24 +455,19 @@ def attach_reference(conditioning: Any, latent: Any) -> Any:
 
     Args:
         conditioning: Positive conditioning from CLIP.
-        latent: Encoded photo or block study.
+        latent: Encoded photo or block study, container or bare tensor.
 
     Returns:
-        Conditioning that carries ``latent``.
+        Conditioning that carries ``latent`` as reference tensors.
     """
+    refs = _reference_tensors(latent)
+    if not refs:
+        return conditioning
     cloned = _clone_conditioning(conditioning)
-    try:
-        from comfy_extras.nodes_flux import ReferenceLatent  # type: ignore[import-not-found]
-    except Exception:  # noqa: BLE001 - hermetic tests / older Comfy
-        return _attach_fallback(cloned, latent)
-    try:
-        node = ReferenceLatent()
-        result = node.append(cloned, latent)
-    except Exception:  # noqa: BLE001 - fail-soft to the dict attach
-        return _attach_fallback(cloned, latent)
-    if isinstance(result, tuple):
-        return result[0]
-    return result
+    attached = _set_reference_values(cloned, refs)
+    if attached is not None:
+        return attached
+    return _attach_fallback(cloned, refs)
 
 
 def _encode_image(image: Any, vae: Any) -> Any | None:
