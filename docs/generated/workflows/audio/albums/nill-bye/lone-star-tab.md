@@ -8229,7 +8229,7 @@ Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
 | --- | --- | --- | --- |
 | `prompt` | in | `STRING` | Optional override of the widget (usually unwired). |
 | `context` | in | `STRING` | Bible/research. Ignored when Enhance is off. |
-| `image_desc` | in | `STRING` | Optional still caption from EZImageDescribe. |
+| `image_desc` | in | `STRING` | Optional gated caption from EZImageDescribe. Unverified: the still, not the caption, is the authority on who and what i... |
 | `background_cast` | in | `STRING` | Optional compact token from EZBackgroundCast. |
 | `prompt` | out | `STRING` | String CLIP actually encodes. |
 
@@ -8911,16 +8911,16 @@ Upscale mode.
 
 ### `EZImageDescribe` - Describe image
 
-Caption a source still so Prompt Enhance can name inventory and lettering.
+Caption a source still so Prompt Enhance can name inventory and lettering. The caption is gated and unverified.
 
 !!! warning "Lab notes"
 
-    Off (default) returns empty and does not load the describe GGUF. Opt-in: download-llm --tier describe (Qwen2.5-VL-3B Apache).
+    Off (default) returns empty and does not load the describe GGUF. Opt-in: download-llm --tier describe (Qwen2.5-VL-3B Apache). That 3B GGUF invents subjects at temperature 0, so the caption is gated before anything reads it: a sentence naming a person survives only when the DeepLabV3 person mask finds someone in the same still, and when the mask cannot answer (no weights, no torch, or EZ_PERSON_MASK=off) every person sentence is dropped. Hedged and atmosphere prose is cut and what is left is capped at 60 words. The status line names the cut; empty means the caption passed through untouched.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `image` | in | `IMAGE` | Source still. Lazy - skipped when enable is off. |
-| `caption` | out | `STRING` | Short caption, or empty. |
+| `caption` | out | `STRING` | Gated caption - no unconfirmed people, no hedges, 60 words max - or empty. |
 
 #### `enable`
 
@@ -8928,6 +8928,6 @@ Type `BOOLEAN`. Range / default: off.
 
 Run the captioner.
 
-**How it affects generation:** Off skips the VLM. On needs download-llm --tier describe.
+**How it affects generation:** Off skips the VLM. On needs download-llm --tier describe, plus the cubic DeepLabV3 person-mask checkpoint for any person to survive the gate.
 
 **This graph:** `false`
