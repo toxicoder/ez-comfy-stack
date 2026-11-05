@@ -99,7 +99,7 @@ links comes from `EZ_DOCS_VERSION` (override locally with `EZ_DOCS_GIT_REF` or
 
 Material files (`mkdocs.yml`, `docs/hooks.py`, `docs/javascripts/*.js`,
 `docs/stylesheets/extra.css`) are gone. Navigation is hand-maintained in
-`docs-site/lib/nav.json`; `docs-site/scripts/gen_nav.py --check` validates it against
+`docs-site/lib/nav.json`; `bazelisk test //docs-site:nav_test` validates it against
 the tree. Hermetic Python specs that remain: `docs/commands.py`, `docs/glossary.py`,
 `docs/page_brief.py`.
 

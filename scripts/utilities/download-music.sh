@@ -14,7 +14,6 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- download-music status|run|cleanup [--tier turbo|xl|all] [--json]
-#   ./scripts/utilities/download-music.sh status|run|cleanup [--tier turbo|xl|all] [--json]
 #
 # Environment:
 #   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD

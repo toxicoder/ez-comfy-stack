@@ -23,7 +23,7 @@ tags: [workflows, generated, comfyui, audio, album]
 
 ## Purpose
 
-Numbered takes under `audio/albums/nill-bye/citation-needed/`. Queue one track, or `./scripts/manage.sh album-render --album nill-bye/citation-needed`.
+Numbered takes under `audio/albums/nill-bye/citation-needed/`. Queue one track, or `bazelisk run //:manage -- album-render --album nill-bye/citation-needed`.
 
 ```text
 ## 01-citation-needed

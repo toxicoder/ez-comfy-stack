@@ -39,7 +39,7 @@ cd vlo && ./run.sh            # editor on http://127.0.0.1:6332
 # then: App settings -> Runtime settings -> http://127.0.0.1:${COMFY_PORT}
 ```
 
-Edit on the timeline. Every generation lands as a Queue in ComfyUI at `${COMFY_PORT}` - watch it in the Comfy tab or with `./scripts/manage.sh logs`.
+Edit on the timeline. Every generation lands as a Queue in ComfyUI at `${COMFY_PORT}` - watch it in the Comfy tab or with `bazelisk run //:manage -- logs`.
 
 ### Requirements
 
@@ -64,7 +64,7 @@ ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
 
 ### Verify
 
-The editor opens on `http://127.0.0.1:6332` and stops reporting ComfyUI offline once the URL in **App settings -> Runtime settings** matches `${COMFY_PORT}`. A Queue from the timeline then shows up in `./scripts/manage.sh logs`. If the app still says ComfyUI offline, confirm the UI itself loads at `http://127.0.0.1:${COMFY_PORT}` before blaming the editor. Failure rows: [Troubleshooting](troubleshooting.md).
+The editor opens on `http://127.0.0.1:6332` and stops reporting ComfyUI offline once the URL in **App settings -> Runtime settings** matches `${COMFY_PORT}`. A Queue from the timeline then shows up in `bazelisk run //:manage -- logs`. If the app still says ComfyUI offline, confirm the UI itself loads at `http://127.0.0.1:${COMFY_PORT}` before blaming the editor. Failure rows: [Troubleshooting](troubleshooting.md).
 
 ---
 

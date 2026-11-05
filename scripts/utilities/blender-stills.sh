@@ -7,8 +7,7 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- blender-stills --film go-see --plate mug --blend FILE
-#   ./scripts/utilities/blender-stills.sh --film go-see --plate mug --blend FILE
-#   ./scripts/utilities/blender-stills.sh --film go-see --plate mug --size 1024x1024
+#   bazelisk run //scripts:run-utility -- blender-stills --film go-see --plate mug --size 1024x1024
 #
 # Safety:
 #   Host GPU job. Dies with exit 2 if compose is up. Does not start Comfy.

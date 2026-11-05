@@ -7,8 +7,7 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- house-views --slug lab-penthouse
-#   ./scripts/utilities/house-views.sh --slug lab-penthouse
-#   ./scripts/utilities/house-views.sh --slug lab-penthouse --layout FILE
+#   bazelisk run //scripts:run-utility -- house-views --slug lab-penthouse --layout FILE
 #
 # Safety:
 #   Host GPU job. Dies with exit 2 if compose is up. Does not start Comfy.

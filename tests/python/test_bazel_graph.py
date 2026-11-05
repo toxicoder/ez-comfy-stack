@@ -33,15 +33,17 @@ def test_required_packages_have_build_files() -> None:
     assert missing == []
 
 
-def test_schemas_build_globs_yaml_and_json() -> None:
-    """schemas/ is a Bazel package whose glob covers the committed schema files."""
+def test_schemas_build_lists_every_schema_file_explicitly() -> None:
+    """schemas/ names each committed schema file instead of globbing them in."""
     text = (ROOT / "schemas" / "BUILD.bazel").read_text(encoding="utf-8")
-    assert "glob(" in text
+    assert "glob(" not in text
     assert 'name = "schemas"' in text
     files = sorted(p.name for p in (ROOT / "schemas").iterdir() if p.suffix in {".yaml", ".json"})
     assert files
     assert "asset.yaml" in files
     assert "house_layout.yaml" in files
+    for name in files:
+        assert f'"{name}"' in text, name
 
 
 def test_tests_package_declares_python_and_fixture_filegroups() -> None:

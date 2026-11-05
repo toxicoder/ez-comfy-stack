@@ -6,7 +6,6 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- models-manifest status|keep-set|render
-#   ./scripts/utilities/models-manifest.sh status|keep-set|render
 #
 # @command models-manifest
 

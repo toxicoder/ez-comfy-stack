@@ -6,8 +6,10 @@ exports_files(["exec_shell.bzl"])
 
 filegroup(
     name = "blender",
-    srcs = glob(
-        ["blender/*.py"],
-        allow_empty = False,
-    ),
+    srcs = [
+        "blender/export_guide_pack.py",
+        "blender/export_house_views.py",
+        "blender/export_still_pack.py",
+        "blender/workbench_passes.py",
+    ],
 )

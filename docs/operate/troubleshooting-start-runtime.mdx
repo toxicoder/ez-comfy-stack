@@ -36,11 +36,11 @@ container is gone from `docker ps` seconds after the build, logs are still pulli
 
 Run these three checks in order. Each one decides which section below is yours.
 
-- **Run `./scripts/manage.sh doctor`.** Many rows below are hard failures doctor already reports,
+- **Run `bazelisk run //:manage -- doctor`.** Many rows below are hard failures doctor already reports,
   including `attention: pytorch-fallback` on a running Spark.
-- **Read the boot log.** `./scripts/manage.sh logs` (or `docker logs ez-comfy-studio`) shows whether
+- **Read the boot log.** `bazelisk run //:manage -- logs` (or `docker logs ez-comfy-studio`) shows whether
   the container is installing, arguing with argparse, or already dead.
-- **Confirm the container exists.** `docker ps` plus `./scripts/manage.sh status` separate "never
+- **Confirm the container exists.** `docker ps` plus `bazelisk run //:manage -- status` separate "never
   started" from "started and exited" - `restart: "no"` means an early crash stays down.
 
 ## Start refusals and immediate exits
@@ -51,7 +51,7 @@ The container either never comes up or dies within seconds of the build.
 | --- | --- | --- |
 | `start` refused | Headroom check | Free RAM/disk; stop other GPU jobs |
 | `mkdir: .../comfy-user/.../_rescued: Permission denied` then `start` exits | Nested `comfy-user` / `_user` is root-owned; host mkdir of `_rescued` ran without sudo-heal | Pull latest. Re-run `./scripts/manage.sh start` (type **yes**) - start sudo-heals those layout dirs. Details: [Host and Docker](troubleshooting-host-docker.md#comfy_output_dir-nested-permission-denied) |
-| Build OK, `status` empty / not in `docker ps` | Container exited immediately (`restart: "no"`) | Pull latest (workflow no longer mounts into `ComfyUI/` before clone). `./scripts/manage.sh logs` or `docker logs ez-comfy-studio`. Reset poisoned volume: `./scripts/manage.sh stop && docker volume rm ez-comfy-state` then `start` again. Stop other GPU containers if needed |
+| Build OK, `status` empty / not in `docker ps` | Container exited immediately (`restart: "no"`) | Pull latest (workflow no longer mounts into `ComfyUI/` before clone). `bazelisk run //:manage -- logs` or `docker logs ez-comfy-studio`. Reset poisoned volume: `./scripts/manage.sh stop && docker volume rm ez-comfy-state` then `start` again. Stop other GPU containers if needed |
 | `unrecognized arguments: --normalvram` then container exits | Entrypoint still passed `--normalvram`; ComfyUI v0.34+ removed that flag (default VRAM is implied) | Pull latest. `entrypoint.sh` is bind-mounted - no image rebuild. `./scripts/manage.sh stop` then `start`. Confirm logs show Kitchen on :8188, not argparse help |
 | `ModuleNotFoundError: No module named 'comfy_api.input'` then container exit 1 (after Kitchen attention) | Volume seed used unanchored rsync `--exclude input/`, which also dropped ComfyUI v0.34+ `comfy_api/input` | Pull latest (`entrypoint.sh` + `install-comfy` are bind-mounted - no image rebuild). `./scripts/manage.sh stop` then `start` (type **yes**). Stamp-present refresh heals `comfy_api/` from `/opt/comfy-prebuilt`. Do **not** need `LAB_FORCE_COLD_INSTALL`. Last resort: `docker volume rm ez-comfy-state` then start |
 
@@ -61,7 +61,7 @@ The container is up, but the first run spends minutes or hours on installs, pull
 
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
-| `start` returns while logs still downloading torch | Normal cold install; multi-GB wheels | Default: `start` returns after `compose up -d`. Leave the container running; follow: `./scripts/manage.sh logs`. In-shell wait: `LAB_STACK_FOLLOW=1`. Markers: `[comfy-install] ══ step N/12 ══` (or `Docker phase: ...` during image prebuild) |
+| `start` returns while logs still downloading torch | Normal cold install; multi-GB wheels | Default: `start` returns after `compose up -d`. Leave the container running; follow: `bazelisk run //:manage -- logs`. In-shell wait: `LAB_STACK_FOLLOW=1`. Markers: `[comfy-install] ══ step N/12 ══` (or `Docker phase: ...` during image prebuild) |
 | Quiet for minutes on step 4 (PyTorch) | Large cudnn/torch wheel download | Prefer GHCR prebuilt image (seed, no pip). Or wait for pip bars; host heartbeat every 30s |
 | `docker pull ghcr.io/...` denied / not found | Wrong branch tag, package not published, or private | Confirm tag matches branch (`:us-safe-studio` on `main`, `:us-safe-studio-development` on `development`/feature - see `doctor`). Run `publish-image` on that long-lived branch; make GHCR package public; or `EZ_COMFY_IMAGE=...` / force local build: [Getting Started - build locally](../getting-started.md#ghcr-pull-vs-local-build) |
 | Image build: `COPY ... not found` / `failed to calculate checksum` for `patch_*.py` or `seed_clay_inputs.py` | `docker/.dockerignore` is whitelist-only (`*` then `!exceptions`); a new runtime `COPY` was added without a matching `!file` | Add `!the-file.py` next to the other patch allowlists in `docker/.dockerignore`. `tests/bats/safety.bats` asserts every Dockerfile context `COPY` is allowlisted |
@@ -79,8 +79,8 @@ backend or the memory patch is not.
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
 | Extreme model thrash / 5-15x slow | Unpatched free-memory | Confirm patch in container logs; re-run entrypoint install |
-| 10-20x slow / mushy video vs a 4090 | Silent PyTorch attention fallback (Kitchen/Sage not active) | `./scripts/manage.sh doctor` must **not** say `attention: pytorch-fallback` on a running Spark. Logs should contain `Using Comfy Kitchen attention`. Launch uses `--use-ck-attention` (never `--use-sage-attention` next to it). Do **not** `pip install sageattention` from PyPI on aarch64. Do **not** `spark-timing record` on that path (the command refuses) |
-| Empty Kitchen timing table | CI has no GPU; seconds are operator-measured | `attention: kitchen`, Queue the three smokes, then `./scripts/manage.sh spark-timing record --klein N --wan N --ltx N`. File: `${COMFY_OUTPUT_DIR}/spark-timing.json`. Record refuses if compose is up and attention is not `kitchen` |
+| 10-20x slow / mushy video vs a 4090 | Silent PyTorch attention fallback (Kitchen/Sage not active) | `bazelisk run //:manage -- doctor` must **not** say `attention: pytorch-fallback` on a running Spark. Logs should contain `Using Comfy Kitchen attention`. Launch uses `--use-ck-attention` (never `--use-sage-attention` next to it). Do **not** `pip install sageattention` from PyPI on aarch64. Do **not** `spark-timing record` on that path (the command refuses) |
+| Empty Kitchen timing table | CI has no GPU; seconds are operator-measured | `attention: kitchen`, Queue the three smokes, then `bazelisk run //:manage -- spark-timing record --klein N --wan N --ltx N`. File: `${COMFY_OUTPUT_DIR}/spark-timing.json`. Record refuses if compose is up and attention is not `kitchen` |
 
 ## SSH drops and the restart policy
 
@@ -89,7 +89,7 @@ backend or the memory patch is not.
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
 | SSH drop mid-90s film | `restart: "no"` is correct; no jobstore before this change | `./scripts/manage.sh start && ./scripts/manage.sh film-resume go-see` reprints only failed/crashed shots. Ok clips with duration 5.00 +/- 0.05 s are skipped |
-| SSH drop during `start` / after `start` returns | Compose client used to die with the shell; log-follow used to hold the TTY | `start` ignores hangup during pull/`up -d`, then detaches. Container keeps running after logout. Re-attach: `./scripts/manage.sh logs`. Logout is **not** `stop`. Reboot still needs a manual `start` (`restart: "no"`) |
+| SSH drop during `start` / after `start` returns | Compose client used to die with the shell; log-follow used to hold the TTY | `start` ignores hangup during pull/`up -d`, then detaches. Container keeps running after logout. Re-attach: `bazelisk run //:manage -- logs`. Logout is **not** `stop`. Reboot still needs a manual `start` (`restart: "no"`) |
 
 ## Custom-node noise at boot
 
@@ -109,7 +109,7 @@ symptom, not a boot symptom: [Models and workflows](troubleshooting-models-workf
 
 ## Logs and reset
 
-Full `./scripts/manage.sh logs` / `docker logs ez-comfy-studio` fences and `cleanup` (type **DELETE**, keeps `${MODELS_DIR}`) live on the [Troubleshooting overview](../troubleshooting.md#logs).
+Full `bazelisk run //:manage -- logs` / `docker logs ez-comfy-studio` fences and `cleanup` (type **DELETE**, keeps `${MODELS_DIR}`) live on the [Troubleshooting overview](../troubleshooting.md#logs).
 
 ## Related
 

@@ -8,12 +8,13 @@ tags: [bazel, testing, contributing, ci]
 
 **What's on this page**
 
+- **The one command** - `//:everything`, in **The gate list**: its six gates, two flags, exit codes
 - **Host setup** - `//:setup-host` and the vacuous-lint hole it closes
 - **The gate list** - `//:test-fast`, `//:test`, `//:test-all`, `//:lint`, `//:validate`, `//:fix`
 - **Per-lane commands** - one BATS suite, one utility, one pytest loop
-- **Generated files** - the two derived outputs and the target that writes each
+- **Generated files** - the two derived outputs, their targets, and the per-generator loops
 - **`exec_shell`** - the launcher rule every `bazelisk run` target depends on
-- **Ownership guards** - `//:owned_files_check` and `//tests:owned_files_check`
+- **Ownership guards** - the four filemap checks, the glob policy, and `//tests:bazel_docs_check`
 - **CI** - the path-filtered jobs and the one script with no Bazel label
 
 **What this enables**
@@ -98,6 +99,7 @@ On macOS the Homebrew equivalents are `brew install bazelisk buildifier shfmt sh
 ## The gate list
 
 ```bash
+bazelisk run //:everything                          # the whole sweep; stops at the first failure
 bazelisk test //:test-fast                          # hermetic default; what CI runs
 bazelisk test //:test                               # test-fast + the Fumadocs render contract
 bazelisk test //:test-all                           # every gate, incl. manual linters and Playwright
@@ -108,7 +110,8 @@ bazelisk run //:fix                                 # rewrite shfmt/buildifier f
 
 | Gate | What it runs | Needs |
 | --- | --- | --- |
-| `//:test-fast` | `//scripts:manage_help_test`, `//tests:bats`, `//tests:build_quality_js_check`, `//tests:js`, `//tests:owned_files_check`, `//tests:pytest` (100% first-party coverage, `pytest-xdist -n auto` when installed), `//tests:typecheck` (Pyright + mypy), `//tests:shell_inventory` | nothing beyond the checkout |
+| `//:everything` | the six gates in order: `//:setup-host -- --check`, `bazelisk build //... --nobuild`, `//:test-all` (visual lane held back), the `docs-site` visual lane, `//docs:docs`, `//docs:render-check` | bazelisk, plus everything `//:test-all` needs; Docker and committed baselines for gate 4 |
+| `//:test-fast` | `//scripts:manage_help_test`, `//tests:bats`, `//tests:bazel_docs_check`, `//tests:build_quality_js_check`, `//tests:js`, `//tests:owned_files_check`, `//tests:pytest` (100% first-party coverage, `pytest-xdist -n auto` when installed), `//tests:typecheck` (Pyright + mypy), `//tests:shell_inventory` | nothing beyond the checkout |
 | `//:test` | `//:test-fast` + `//docs:test_docs_site_render` | docs-site npm tree |
 | `//:test-all` | `//:test` + `//docker:compose_config`, `//docs-site:suite`, `//:manage`, `//docs` | host linters, `docs-site` npm tree, a Docker CLI |
 | `//:lint` | `//lints:python` + `//lints:shell_lint` (ShellCheck, shfmt, buildifier, Pyright, mypy) | host lint tools; strict mode on |
@@ -120,6 +123,46 @@ bazelisk run //:fix                                 # rewrite shfmt/buildifier f
 
 `//:test-all` is the umbrella a human runs before shipping a Bazel-side change. It is not
 hermetic and not fast; CI runs `//:test-fast` plus `//:lint --test_tag_filters=manual` instead.
+
+### The one command: `//:everything`
+
+`//:everything` is the ingress for "is this checkout healthy?". It runs six gates in order and
+stops at the first failure, printing the Bazel target name that failed. It is read-only
+orchestration: it shells out to `bazelisk` only and touches no `sudo`, the GPU, or `$HOME`, so
+it bypasses no confirmation, restart policy, headroom preflight, or download-limit
+clear-on-exit.
+
+```bash
+bazelisk run //:everything                      # probe, graph, every gate, docs
+bazelisk run //:everything -- --skip-bootstrap  # same, without the toolchain probe
+```
+
+| # | Gate | What it proves |
+| --- | --- | --- |
+| 1 | `//:setup-host -- --check` | the host toolchain the lint and docs gates shell out to is installed |
+| 2 | `bazelisk build //... --nobuild` | every package loads and every target analyzes |
+| 3 | `bazelisk test //:test-all --test_tag_filters=-visual` | every test gate a plain host can run, manual linters and compose config included |
+| 4 | `bazelisk test //docs-site:visual-test //docs-site:visual_tooling_test` | the docs-site screenshots match the committed baselines, rendered in the pinned container |
+| 5 | `bazelisk run //docs:docs` | the generators plus the full static export build |
+| 6 | `bazelisk run //docs:render-check` | the built docs-site tree satisfies the render contract |
+
+Gate 4 is the one gate that needs a container runtime, so it is probed before it is attempted:
+with no reachable Docker daemon, or with no `.png` committed under
+`docs-site/tests/visual/goldens/`, the sweep prints
+`SKIP docs-site visual lane (<reason>)`, names the refresh command, counts the skip in its
+summary, and carries on. An environment the host cannot provide is reported as a skip; a
+baseline that actually differs fails gate 4 by name. `bazelisk test //:test-all` stays the
+unfiltered form that runs both visual targets whatever the host looks like, and
+`//:test-fast` leaves them out entirely.
+
+Two flags: `--skip-bootstrap` drops gate 1, which is what CI or a host you already provisioned
+wants, and `-h` / `--help` prints the usage. Exit codes: `0` when every gate passed, `1` when a
+gate failed (the failing target name is printed), `2` on a bad argument or when `bazelisk` is
+missing. Gate 1 is the one thing this target cannot run for itself, so exit 2 means
+`bazelisk run //:setup-host` is the repair.
+
+Unlike `//:validate`, this sweep does no path filtering. Reach for `//:validate` during the day
+and `//:everything` before you push a Bazel-side change or promote a graph.
 
 ### Per-lane commands
 
@@ -153,6 +196,19 @@ export, which is the loop you want after editing a shell function or a workflow
 graph. `bazelisk run //docs:docs` is the full export and calls the same
 generators first. Hand-editing either generated file is a defect: the check
 target fails and tells you the command to run.
+
+When you touched one generator, run only that generator:
+
+```bash
+bazelisk run //docs:generate_shell     # shell CLI reference, from scripts/**
+bazelisk run //docs:generate_workflow  # workflow pages, from the lab graph tree
+bazelisk run //docs:generate_cinema    # Cinema Rack encyclopedia pages
+bazelisk run //docs:generate_audio     # Audio Rack encyclopedia pages
+```
+
+Each writes only its own slice of the generated tree, so the loop stays short. The umbrella
+`//docs:generate` stays the right call before a commit, because it is what the drift check
+compares the committed tree against as a whole.
 
 Queries:
 
@@ -200,11 +256,69 @@ built, tested, and linted.
 | Guard | What it rejects |
 | --- | --- |
 | `//:owned_files_check` (alias of `//tests:owned_files_check`) | a source file in the repo that no target's `srcs` / `data` / `filegroup` claims |
+| `//tests:bazel_docs_check` | committed text that tells a reader to run a repo script directly while a Bazel target does that job |
 | `tests/python/test_bazel_graph.py` | a first-party package that lost `BUILD.bazel`, or pytest losing xdist / schema filegroups |
 | `//:repo_files` / `//:repo_meta` | the file sets the guards read |
 
-`bazelisk test //tests:owned_files_check` is in `//:test-fast`, so an unmapped file fails the
-default gate rather than waiting for a human.
+`bazelisk test //tests:owned_files_check` and `bazelisk test //tests:bazel_docs_check` are both
+in `//:test-fast`, so an unmapped file or a raw script in the docs fails the default gate rather
+than waiting for a human.
+
+### The four checks in `//tests:owned_files_check`
+
+That target runs the static guard in `tests/bazel_deps.py`. It cannot ask Bazel (a nested query
+deadlocks on the output-base lock of the outer invocation), so it parses every `BUILD.bazel` with
+`ast` and re-derives four facts:
+
+| Check | Fails when | What the person who broke it does |
+| --- | --- | --- |
+| ownership | a tracked file is named by no BUILD target | add the file to the target that uses it, or exempt it in the guard with the reason |
+| payload | a script target's declared `data` does not match what its own source reads, in either direction | fix the `data` list; missing entries break at run time, stale entries mis-invalidate the cache |
+| suites | a test target belongs to no suite | add it to the suite for its lane, so the gate actually runs it |
+| explicit srcs | a `srcs` / `data` / `deps` list is not spelled out | list the files, or earn a sanctioned glob (below) |
+
+A `BUILD.bazel` that gets cleverer than string lists, `+`, and `glob([...])` fails the parse
+loudly instead of silently mapping nothing. That is the point: the guard is a guard, not a Bazel
+reimplementation.
+
+### Build targets list the files they reference
+
+Every `srcs`, `data`, and `deps` list is explicit. `glob()` is allowed in exactly six sanctioned
+clauses, each justified in a table inside `tests/bazel_deps.py`, and they are the generated-output,
+committed-media, and per-file-test-generator cases:
+
+| Sanctioned glob | Why the build cannot list it |
+| --- | --- |
+| `//docs:content` `generated/**` | pages `//docs:generate` writes; the set changes on every run, so it is derived, not authored |
+| `//docs:content` `assets/**` | committed docs media; the payload is the tree and nothing reasons about one asset |
+| `//docs-site:visual-goldens` `tests/visual/goldens/*.png` | screenshot baselines captured by the visual run, not written by hand |
+| `//docs-site:visual-goldens` `tests/visual/goldens/**/*.png` | the same tree in the recursive form the capturer also writes |
+| `//tests:bats_file_tests` `bats/*.bats` | the per-file generator derives one named test target plus the suite from each file |
+| `//workflows:lab_graphs` `_lab/**/*.json` | graphs arrive one file at a time from `bazelisk run //:manage -- promote-workflow`; the tree is the payload |
+
+A new glob fails the gate, and the fix is to list the files. Anything the build can name, it
+should name: an explicit list is what makes a cached action invalidate when it should. If a
+clause genuinely cannot be a list, add a reasoned entry to the guard's sanctioned table and say so
+in the PR. The check runs both ways, so a sanctioned glob that no `BUILD.bazel` uses any more
+fails too.
+
+### What `//tests:bazel_docs_check` rejects
+
+The doc-side twin of the filemap guard. It reads the checkout, plus the note fields ComfyUI graphs
+carry, and fails when text a reader could copy - a fenced block or a backticked span - names a repo
+script directly while a Bazel target does that job. The advice it prints is the copyable target,
+so the repair is usually a cut and paste.
+
+Two things are exempt by policy rather than by exception:
+
+- the `manage.sh` verbs that need Docker, `sudo`, the GPU, or `$HOME` (`setup`,
+  `setup-client`, `onboard`, `start`, `stop`, `restart`, `update-stack`, `blender-install`, and
+  anything `download-*`), because they cannot run hermetically - see **Safety** below
+- the one bootstrap that installs `bazelisk` itself, which no target can be the door for
+
+Everything else is written as its target. A script with no target yet is added to the guard's
+exemption table with the reason it has none; an entry without a reason is the failure the check
+exists to catch. Run the whole checkout with `bazelisk test //tests:bazel_docs_check`.
 
 ---
 

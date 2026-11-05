@@ -23,7 +23,7 @@ tags: [workflows, generated, comfyui, audio, album]
 
 ## Purpose
 
-Numbered takes under `audio/albums/nill-bye/pardon-flood/`. Queue one track, or `./scripts/manage.sh album-render --album nill-bye/pardon-flood`.
+Numbered takes under `audio/albums/nill-bye/pardon-flood/`. Queue one track, or `bazelisk run //:manage -- album-render --album nill-bye/pardon-flood`.
 
 ```text
 ## 01-pardon-flood

@@ -11,8 +11,9 @@ tags: [contributing, setup, bazel, toolchain, host]
 - **Why this is the one script that runs from a plain shell** - a host with no `bazelisk` cannot run one target
 - **The hole this closes** - a lint lane that went green having checked nothing
 - **What it installs** - bazelisk, shellcheck, shfmt, buildifier, pyright, mypy, node, git, python3
+- **The installer's own prerequisites** - `curl`, `ca-certificates`, `xz-utils`, `python3-pip`, apt-installed before anything else
 - **The pins it reads** - `.devcontainer/tool-versions.env`, never a version in the script
-- **Probe and plan before it writes** - `--check`, `--dry-run`, `--help`
+- **Probe and plan before it writes** - `--check`, `--dry-run`, `--help`; a tool present but older than its pin fails the probe too
 - **Linux and macOS** - apt plus pinned releases, or Homebrew
 - **Environment hooks** - the variables the bats suite drives the script with
 - **What it deliberately does not touch** - no stack, no models, no GPU, no Docker install
@@ -24,6 +25,7 @@ tags: [contributing, setup, bazel, toolchain, host]
 
 - **Getting** a clean laptop to a green `bazelisk run //:validate` in one command
 - **Making** `bazelisk test //:lint` mean something, instead of passing with no linters installed
+- **Catching** a tool that is on `PATH` but older than its pin, which a presence-only probe passed
 - **Matching** the exact versions the dev container and CI already use
 - **Diagnosing** a red lint gate on a machine that never had the tools
 - **Keeping** host mutation to the toolchain, and nothing else
@@ -108,6 +110,28 @@ install runs over the same list, so a tool that silently failed to install still
 | `git` | the checkout, and the fetches the docs pins rely on |
 | `python3` | the interpreter the pip tools (`pyright`, `mypy`) install into |
 
+### The installer's own prerequisites
+
+Four packages the installer itself needs go through `apt-get` first, ahead of every tool in the
+table above, because a minimal host ships none of them and the run would otherwise install nothing
+in silence:
+
+| Package | Why the installer needs it |
+| --- | --- |
+| `curl` | fetches the pinned releases (`bazelisk`, `shfmt`, `buildifier`) and the Node tarball |
+| `ca-certificates` | makes that fetch verify against `github.com` and `nodejs.org` |
+| `xz-utils` | unpacks the Node `.tar.xz` |
+| `python3-pip` | carries the `pyright` and `mypy` lane installed from `tests/requirements.txt` |
+
+Each is probed by the command that consumes it (`curl`, `xz`, `python3 -m pip`) rather than by
+package name, because the two are named differently (`xz-utils` provides `xz`), so a host that
+already has one is not asked to install it again. `--dry-run` prints the same set under
+`apt prerequisites for this installer`.
+
+If `curl` is still absent after that apt step, the run stops with a named repair that lists all
+four packages rather than fetching nothing quietly: see the `no curl even after the apt step` row in
+[Failures](#failures).
+
 ---
 
 ## The pins it reads
@@ -145,8 +169,8 @@ bash scripts/setup-host.sh --help     # usage and the tool set
 
 | Flag | Behavior | Exit |
 | --- | --- | --- |
-| *(none)* | install what is missing, then re-probe | `0` when every tool is present after the re-probe |
-| `--check` | probe and report only; writes nothing, naming the source each missing tool would come from | `1` when anything is missing |
+| *(none)* | install what is missing or below its pin, then re-probe | `0` when every tool is present at its pin after the re-probe |
+| `--check` | probe and report only; writes nothing, naming the source each missing tool would come from and the pin each stale tool is behind | `1` when anything is missing or older than its pin |
 | `--dry-run` | print what would be installed and from where; touch nothing | `0` |
 | `-h`, `--help` | print usage and the tool set | `0` |
 
@@ -163,6 +187,44 @@ setup-host: host tool report (checkout /home/you/ez-comfy-stack)
   missing: shellcheck - apt-get install -y shellcheck
   missing: shfmt - https://github.com/mvdan/sh/releases/...
 ```
+
+A tool that is present but **older than its pin** fails the same probe. The report adds a
+`tools below pin (N):` line and one `stale:` line per old tool:
+
+```text
+setup-host: host tool report (checkout /home/you/ez-comfy-stack)
+  present: bazelisk shellcheck git python3 node pyright mypy buildifier
+  tools below pin (1): shfmt
+  stale: shfmt has 3.8.0, pin wants at least 3.10.0 (.devcontainer/tool-versions.env)
+```
+
+That case matters because `scripts/lib/check_tool.sh` only asks whether a tool is on `PATH`: a
+stale `pyright` typechecks against the wrong library set and a stale `shfmt` formats against the
+wrong grammar, and both leave the lint gate green. The installer treats a stale tool like a missing
+one and reinstalls it from the same pins.
+
+Each `stale:` line names where its floor comes from, so the repair is clear without opening the
+script:
+
+| Tool | Pin source | Floor |
+| --- | --- | --- |
+| `bazelisk`, `buildifier`, `shfmt`, `node` | `.devcontainer/tool-versions.env` | the version the dev container and CI use |
+| `pyright`, `mypy` | `tests/requirements.txt` | the `==` pin in that file |
+| `shellcheck`, `git`, `python3` | none | no floor, so these never fail `--check` on version |
+
+A tool with no pin - the distro-supplied `git`, `python3`, and `shellcheck` - is reported `present`
+however old apt installed it, and never turns the probe red. `node` is reported differently again:
+its major is compared against `NODE_VERSION` up front, so a Node that is too old shows up under
+`tools missing` rather than under `tools below pin`.
+
+When the probe is red, the closing lines name the repair first: run `bazelisk run //:setup-host` to
+install what is missing and bring every tool up to its pin, and on a host where `bazelisk` does not
+exist yet, `bash scripts/setup-host.sh` with no flags is the bootstrap that installs it. The same
+text repeats that `bazelisk test //:lint` sets `REQUIRE_LINT_TOOLS=1`, so a tool off `PATH` turns
+that gate red; a lint script run by hand still skips what it cannot find.
+
+The version read is builtins only - no `sed`, no `sort` - so the probe still reports on a scrubbed
+or minimal `PATH`, which is exactly the host missing the packages the installer goes on to fetch.
 
 ---
 
@@ -221,10 +283,13 @@ Specifically out of scope:
 Three commands, in this order, prove the box is ready to build:
 
 ```bash
-bazelisk run //:setup-host -- --check   # every tool present
+bazelisk run //:setup-host -- --check   # every tool present, at its pin
 bazelisk run //:validate                # the done-means gate
 bazelisk test //tests:bats_setup_host_test
 ```
+
+A green probe ends with `every tool the Bazel targets need is on PATH at its pin.` Any other
+ending means something is missing or below its pin, and the report above that line names it.
 
 `bazelisk test //tests:bats_setup_host_test` runs the script hermetically under
 `SETUP_HOST_ROOT` / `SETUP_HOST_BIN_DIR` / `LAB_NO_SUDO=1`, so the installer itself is covered
@@ -237,6 +302,10 @@ without ever touching a real host.
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
 | `bazelisk test //:lint` fails with `<tool> missing - required in CI/strict mode` | host never installed that linter; strict mode is on, so the skip is fatal | `bazelisk run //:setup-host`, or `bash scripts/setup-host.sh` on a bare host |
+| `bazelisk run //:setup-host -- --check` exits 1 listing `tools below pin (N):` with one `stale: <tool> has <got>, pin wants at least <want> (<source>)` line each | that tool is on `PATH` but older than its pin - `.devcontainer/tool-versions.env` for `bazelisk`, `buildifier`, `shfmt` and `node`, `tests/requirements.txt` for `pyright` and `mypy`. The check fails a stale tool, not only a missing one | `bazelisk run //:setup-host` reinstalls the stale tools from those same pins and re-probes; `bash scripts/setup-host.sh` with no flags on a host that has no `bazelisk` yet |
+| `setup-host: still below pin: <tool>` after an install | the new build landed, but an older copy earlier on `PATH` still answers `command -v` for that name | put the bin dir the script printed (`/usr/local/bin` or `${HOME}/bin`) ahead of the old copy on `PATH`, then re-run `bazelisk run //:setup-host -- --check` |
+| `setup-host: no curl even after the apt step` | apt could not install the installer's own prerequisites (`curl`, `ca-certificates`, `xz-utils`, `python3-pip`) - no network, no `apt-get`, or `LAB_NO_SUDO=1` on a non-root host | install those four packages by hand and re-run; without `curl` the pinned releases cannot be fetched at all |
+| `bazelisk run //:setup-host -- --check` is red, but `bazelisk test //:lint` looked green | `scripts/lib/check_tool.sh` tests only that a tool is on `PATH`, never its version, so a stale linter runs and passes against the wrong grammar or library set; a lint script run by hand also skips what it cannot find | fix the toolchain with `bazelisk run //:setup-host`, then re-run `bazelisk test //:lint --test_tag_filters=manual` and confirm it names each tool instead of printing `missing - skipping` |
 | `setup-host: no Homebrew on this Mac` | macOS with no Homebrew | Install Homebrew, then re-run; the script has no macOS fallback |
 | `setup-host: no apt-get and no Homebrew` | a non-apt, non-macOS host | Install the pinned tools by hand from the URLs `--dry-run` prints |
 | a required pin is missing | `tool-versions.env` edited or unreadable | Restore the pin; the script refuses to guess a version |

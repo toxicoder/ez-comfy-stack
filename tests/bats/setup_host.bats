@@ -15,6 +15,7 @@ EXPECTED_TOOLS=(bazelisk shellcheck shfmt buildifier pyright mypy node git pytho
 # requires each name to appear under tests/, so this list is the gate.
 EXPECTED_FUNCS=(
   setup_host_arch
+  setup_host_bootstrap_packages_needed
   setup_host_fetch
   setup_host_hint
   setup_host_install_all
@@ -25,14 +26,20 @@ EXPECTED_FUNCS=(
   setup_host_install_release
   setup_host_load_pins
   setup_host_node_is_new_enough
+  setup_host_pin_source
+  setup_host_pin_version
   setup_host_pick_bin_dir
   setup_host_probe
   setup_host_report
+  setup_host_reported_version
   setup_host_run_root
   setup_host_sha256
+  setup_host_tool_is_stale
+  setup_host_tools_to_install
   setup_host_usage
   setup_host_url
   setup_host_verify_sha256
+  setup_host_version_at_least
 )
 
 # The six pins setup-host.sh must read from .devcontainer/tool-versions.env.
@@ -165,8 +172,8 @@ echo "brew $*" >>"${TEST_TMP_DIR}/brew_calls.log"
 exit 0
 '
   install_mock python3 '
-echo "python3 $*" >>"${TEST_TMP_DIR}/pip_calls.log"
-if [[ ${2:-} == pip ]]; then
+if [[ ${2:-} == pip && ${3:-} == install ]]; then
+  echo "python3 $*" >>"${TEST_TMP_DIR}/pip_calls.log"
   for tool in pyright mypy; do
     printf "#!/bin/bash\nexit 0\n" >"${TEST_TMP_DIR}/bin/${tool}"
     chmod 755 "${TEST_TMP_DIR}/bin/${tool}"
@@ -396,6 +403,115 @@ exit 0
   [[ ${output} == *"missing: node"* ]]
   [[ ${output} == *"sha256"* ]]
   [[ ! -e ${BIN_DIR}/node ]]
+}
+
+@test "--check flags a tool present but older than its pin" {
+  install_core_mocks
+  local tool
+  for tool in "${EXPECTED_TOOLS[@]}"; do
+    install_mock "${tool}" "
+if [[ \${1:-} == '--version' ]]; then
+  echo 'v$(repo_pin NODE_VERSION)'
+fi
+exit 0
+"
+  done
+  install_mock shfmt "echo 'v0.1.0'; exit 0"
+  run env PATH="${TEST_TMP_DIR}/bin" "${BASH_BIN}" "${SCRIPT}" --check
+  [ "$status" -eq 1 ]
+  [[ ${output} == *"below pin"* ]]
+  [[ ${output} == *"stale: shfmt has 0.1.0"* ]]
+  [[ ${output} == *"pin wants at least $(repo_pin SHFMT_ASSET_VERSION)"* ]]
+  [[ ${output} == *"tool-versions.env"* ]]
+}
+
+@test "--check passes when every pinned tool reports at least its pin" {
+  install_core_mocks
+  local tool
+  for tool in "${EXPECTED_TOOLS[@]}"; do
+    install_mock "${tool}" "
+if [[ \${1:-} == '--version' ]]; then
+  echo 'v$(repo_pin NODE_VERSION)'
+fi
+exit 0
+"
+  done
+  # 9.9.9 clears every pin in the table, so this proves the floors are floors.
+  install_mock shfmt "echo 'v9.9.9'; exit 0"
+  install_mock buildifier "echo 'buildifier version: 9.9.9 scm: x'; exit 0"
+  install_mock pyright "echo 'pyright 9.9.9'; exit 0"
+  install_mock mypy "echo 'mypy 9.9.9 (compiled: yes)'; exit 0"
+  install_mock bazelisk "echo 'Bazelisk version: v9.9.9'; exit 0"
+  run env PATH="${TEST_TMP_DIR}/bin" "${BASH_BIN}" "${SCRIPT}" --check
+  [ "$status" -eq 0 ]
+  [[ ${output} == *"at its pin"* ]]
+  [[ ${output} != *"stale:"* ]]
+}
+
+@test "--check leaves an unpinned distro tool without a floor" {
+  install_core_mocks
+  local tool
+  for tool in "${EXPECTED_TOOLS[@]}"; do
+    install_mock "${tool}" "
+if [[ \${1:-} == '--version' ]]; then
+  echo 'v$(repo_pin NODE_VERSION)'
+fi
+exit 0
+"
+  done
+  install_mock shellcheck "printf 'version: 0.0.1\n'; exit 0"
+  run env PATH="${TEST_TMP_DIR}/bin" "${BASH_BIN}" "${SCRIPT}" --check
+  [ "$status" -eq 0 ]
+  [[ ${output} != *"stale: shellcheck"* ]]
+}
+
+@test "the installer apt-installs the packages it needs to install anything" {
+  install_pkg_mocks
+  stage_node
+  # No curl on the scrubbed PATH, and no pip either. Both are things the
+  # installer itself needs before it can fetch a pinned release or install the
+  # Python lane, so they have to come from apt rather than be assumed.
+  rm -f "${TEST_TMP_DIR}/bin/curl"
+  install_mock python3 '
+if [[ ${2:-} == pip ]]; then
+  exit 1
+fi
+exit 0
+'
+  run env PATH="${BIN_DIR}:${TEST_TMP_DIR}/bin:${CORE_BIN}" "${BASH_BIN}" "${SCRIPT}"
+  # One apt invocation, and the installer's own prerequisites lead it: curl has
+  # to be on the host before any pinned release can be fetched.
+  grep -qE 'install -y curl ca-certificates xz-utils python3-pip shellcheck git' \
+    "${TEST_TMP_DIR}/apt_calls.log"
+  # The re-probe is the contract: whatever apt could not supply stays reported.
+  [ "$status" -eq 1 ]
+  [[ ${output} == *"still missing"* ]]
+}
+
+@test "a host apt cannot supply curl with gets a named repair, not silence" {
+  install_pkg_mocks
+  stage_node
+  rm -f "${TEST_TMP_DIR}/bin/curl"
+  # An apt that logs but installs nothing: the pinned releases then have no way
+  # to arrive, and the script must say so instead of quietly installing nothing.
+  install_mock apt-get '
+echo "apt-get $*" >>"${TEST_TMP_DIR}/apt_calls.log"
+exit 0
+'
+  run env PATH="${BIN_DIR}:${TEST_TMP_DIR}/bin:${CORE_BIN}" "${BASH_BIN}" "${SCRIPT}"
+  [ "$status" -eq 1 ]
+  [[ ${output} == *"no curl even after the apt step"* ]]
+  [[ ${output} == *"ca-certificates"* ]]
+  [[ ! -s "${TEST_TMP_DIR}/curl_calls.log" ]]
+}
+
+@test "--dry-run names the installer's own apt prerequisites" {
+  install_pkg_mocks
+  rm -f "${TEST_TMP_DIR}/bin/curl"
+  run env PATH="${TEST_TMP_DIR}/bin" "${BASH_BIN}" "${SCRIPT}" --dry-run
+  [ "$status" -eq 0 ]
+  [[ ${output} == *"apt prerequisites"* ]]
+  [[ ${output} == *"curl"* ]]
 }
 
 @test "setup-host declares every helper the test suite names" {

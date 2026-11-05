@@ -8,7 +8,6 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- blender [--] [blender args]
-#   ./scripts/utilities/blender.sh [--] [blender args]
 #
 # @command blender
 

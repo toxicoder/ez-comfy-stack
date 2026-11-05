@@ -23,7 +23,7 @@ tags: [workflows, generated, comfyui, audio, album]
 
 ## Purpose
 
-Numbered takes under `audio/albums/nill-bye/duty-switch/`. Queue one track, or `./scripts/manage.sh album-render --album nill-bye/duty-switch`.
+Numbered takes under `audio/albums/nill-bye/duty-switch/`. Queue one track, or `bazelisk run //:manage -- album-render --album nill-bye/duty-switch`.
 
 ```text
 ## 01-duty-switch

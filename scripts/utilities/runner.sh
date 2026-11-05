@@ -8,7 +8,6 @@
 # Usage:
 #   bazelisk run //scripts:run-utility -- download-limit status
 #   bazelisk run //scripts:run-utility -- occupancy status
-#   bash scripts/utilities/runner.sh download-limit status
 #
 # Environment:
 #   BUILD_WORKSPACE_DIRECTORY - set by `bazel run`; names the git checkout the

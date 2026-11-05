@@ -1839,7 +1839,7 @@ warn_hf_resume_stall() {
   n="$(count_hf_incomplete "${dest}")"
   warn "resume stall: ${n} incomplete, 0 MiB/s for ${secs}s - live hf holds the lock."
   warn "FORCE-clearing locks will not unstick this. Ctrl+C, then:"
-  warn "  ./scripts/manage.sh reset-hf-partials --yes"
+  warn "  bazelisk run //:manage -- reset-hf-partials --yes"
   warn "  ./scripts/manage.sh download-models"
   warn "or: ./scripts/manage.sh download-models --drop-incomplete"
 }
@@ -2244,7 +2244,7 @@ hf_download() {
         continue
       fi
       err "resume still stalled. Stop if needed, then:"
-      err "  ./scripts/manage.sh reset-hf-partials --yes"
+      err "  bazelisk run //:manage -- reset-hf-partials --yes"
       err "  ./scripts/manage.sh download-models --drop-incomplete"
       rc=1
       break

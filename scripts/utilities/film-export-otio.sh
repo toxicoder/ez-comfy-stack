@@ -6,7 +6,6 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- film-export-otio go-see|still-here|switchyard
-#   ./scripts/utilities/film-export-otio.sh go-see|still-here|switchyard
 #
 # Environment:
 #   COMFY_OUTPUT_DIR

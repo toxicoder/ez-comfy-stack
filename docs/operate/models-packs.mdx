@@ -48,10 +48,10 @@ set. On every other downloader, `--tier` is **which pack**, not a global quality
 Per-utility status (read-only) still uses the default pack ids:
 
 ```bash
-./scripts/utilities/download-image.sh status --tier fast --json
-./scripts/utilities/download-wan.sh status --tier 5b --json
-./scripts/utilities/download-ltx.sh status --tier 2.5 --json
-./scripts/utilities/download-llm.sh run
+bazelisk run //scripts:run-utility -- download-image status --tier fast --json
+bazelisk run //scripts:run-utility -- download-wan status --tier 5b --json
+bazelisk run //scripts:run-utility -- download-ltx status --tier 2.5 --json
+bazelisk run //scripts:run-utility -- download-llm run
 ```
 
 **Check it worked:** each `status --json` reports ready, and the basenames in the tables
@@ -97,7 +97,7 @@ SuperSplat is a [host viewer](../splat-sidecar.md), not a download.
 | `ltx-2.5-audio-vae-bf16.safetensors` | `vae/` | LTX-2.5 audio VAE |
 | `Qwen3-4B-Instruct-2507-Q4_K_M.gguf` | `llm/` | On-box prompt enhance (CPU llama.cpp) |
 
-Opt-in FLUX 3 Image Klein (`./scripts/utilities/download-image.sh run --tier flux3`, **not**
+Opt-in FLUX 3 Image Klein (`bazelisk run //scripts:run-utility -- download-image run --tier flux3`, **not**
 `download-models`). Gated **FLUX Kommunity License (v1.0)** - accept the card as the
 `HF_TOKEN` user. All six weights come from `black-forest-labs/flux-3-image-klein-comfy` at
 pinned HF revision `feef60b0aaf63a4773ace96636ebbcf43b881312`, and land in
@@ -127,7 +127,7 @@ Turbo **reuses** the podcast acestep snapshot - do not pull the ~10 GB AIO twice
 
 ```bash
 ./scripts/manage.sh download-music --tier turbo
-./scripts/utilities/download-music.sh status --tier turbo --json
+bazelisk run //scripts:run-utility -- download-music status --tier turbo --json
 ```
 
 | File | Comfy folder | Role |
@@ -256,7 +256,7 @@ is fallback only - seeded lab JSON still names 2.5 files.
 `status --json` readiness uses `min_gb` 30 (2.5) / 20 (2.3/balanced) / 35 (quality) / 8
 (gemma) as a floor, not the full monorepo size.
 
-**Check it worked:** `./scripts/utilities/download-ltx.sh status --tier <tier> --json`
+**Check it worked:** `bazelisk run //scripts:run-utility -- download-ltx status --tier <tier> --json`
 reports ready at or above the floor above.
 
 ??? tip "Cleanup extra LTX monorepo files"
@@ -265,10 +265,10 @@ reports ready at or above the floor above.
 
     ```bash
     # Preview (default)
-    ./scripts/utilities/download-ltx.sh cleanup --tier 2.3
+    bazelisk run //scripts:run-utility -- download-ltx cleanup --tier 2.3
 
     # Delete extras (keeps FP8 transformer + TE + VAEs only)
-    ./scripts/utilities/download-ltx.sh cleanup --tier 2.3 --yes
+    bazelisk run //scripts:run-utility -- download-ltx cleanup --tier 2.3 --yes
     ```
 
     Does **not** touch Klein, Wan, or other trees under `MODELS_DIR`.
@@ -292,7 +292,7 @@ Downloads are **resumable** and **cacheable** under `MODELS_DIR`:
 | Behavior | Detail |
 | --- | --- |
 | Resume after interrupt | ++ctrl+c++ / crash leaves `*.incomplete` under each tier's `.cache/huggingface/`; re-run the same command to continue |
-| Resume stall (0 MiB/s) | Live `hf` holding a lock with no disk growth. FORCE-clearing locks will not unstick it. ++ctrl+c++, then `./scripts/manage.sh reset-hf-partials --yes` and re-run, or `download-models --drop-incomplete`. After 90s the downloader drops that dest's partials and retries **once**. |
+| Resume stall (0 MiB/s) | Live `hf` holding a lock with no disk growth. FORCE-clearing locks will not unstick it. ++ctrl+c++, then `bazelisk run //:manage -- reset-hf-partials --yes` and re-run, or `download-models --drop-incomplete`. After 90s the downloader drops that dest's partials and retries **once**. |
 | Skip when ready | `download-image` / `download-wan` / `download-ltx` skip tiers that already have required weights (log: `cache hit`) |
 | `HF_HOME` | Set to `MODELS_DIR` so hub metadata lives on the durable model disk |
 | Cleanup | `download-ltx.sh cleanup --yes` removes non-selective monorepo weights but **keeps** `.cache/`, `*.incomplete`, and selective keep-set files |

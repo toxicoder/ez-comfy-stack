@@ -8,7 +8,6 @@
 #   bazelisk run //docs:docs      # generate + static export
 #   bazelisk run //docs:generate  # generators only, no npm and no export
 #   bazelisk run //docs:serve
-#   ./docs/manage-docs.sh build|generate|serve|status|clean|preview   # raw escape hatch
 #
 # Safety: Writes generated markdown and docs-site/out only. No Compose or GPU.
 
@@ -100,6 +99,30 @@ docs_generate() {
   generate_code_docs
   echo "Regenerated docs/generated/ ($(find "${REPO_ROOT}/docs/generated" -type f | wc -l) files)."
   echo "Commit the diff; the export gate compares docs/generated/ against the generators."
+}
+
+#######################################
+# Run exactly one generator, for a tight edit-run-print loop on that one file.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $1 - generator module name without .py, e.g. generate_shell_docs
+# Outputs:
+#   The generator's own log, then a reminder to commit docs/generated/
+# Returns:
+#   0; an unknown generator name exits 2 and a failing generator is fatal
+#######################################
+docs_generate_one() {
+  local name="${1:-}"
+  case "${name}" in
+    generate_shell_docs | generate_workflow_docs | generate_cinema_docs | generate_audio_docs) ;;
+    *)
+      echo "docs/manage-docs.sh: unknown generator: ${name} (try generate_shell_docs)" >&2
+      exit 2
+      ;;
+  esac
+  python3 "${REPO_ROOT}/docs/${name}.py"
+  echo "Regenerated one file through ${name}.py; commit the diff under docs/generated/."
 }
 
 #######################################
@@ -272,6 +295,7 @@ docs_preview() {
 case "${CMD}" in
   build | docs) docs_build "$@" ;;
   generate) docs_generate ;;
+  generate-one) docs_generate_one "$@" ;;
   serve) docs_serve "$@" ;;
   status) docs_status ;;
   clean) docs_clean ;;
@@ -286,7 +310,8 @@ case "${CMD}" in
     ;;
   -h | --help | help)
     echo "Usage: bazelisk run //docs:docs | //docs:generate | //docs:serve | //docs:status | //docs:clean | //docs:preview"
-    echo "       raw: docs/manage-docs.sh build|generate|serve|status|clean|preview|typecheck|test"
+    echo "       one generator only: bazelisk run //docs:generate_shell | //docs:generate_workflow | //docs:generate_cinema | //docs:generate_audio"
+    echo "       raw: docs/manage-docs.sh build|generate|generate-one|serve|status|clean|preview|typecheck|test"
     ;;
   *)
     echo "docs/manage-docs.sh: unknown command: ${CMD}" >&2

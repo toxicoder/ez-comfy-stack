@@ -34,7 +34,7 @@ problem (a remote box with no console), not a Docker quirk.
 
    ```bash
    ./scripts/manage.sh stop
-   ./scripts/manage.sh status
+   bazelisk run //:manage -- status
    ```
 
    **Check it worked:** status shows Comfy is not running.
@@ -44,7 +44,7 @@ problem (a remote box with no console), not a Docker quirk.
 3. After boot, verify Docker and GPU:
 
    ```bash
-   ./scripts/manage.sh doctor
+   bazelisk run //:manage -- doctor
    ```
 
    **Check it worked:** doctor prints `Doctor OK`.
@@ -127,7 +127,7 @@ stateDiagram-v2
    ```bash
    ./scripts/manage.sh download-limit clear
    ./scripts/manage.sh stop
-   ./scripts/manage.sh doctor
+   bazelisk run //:manage -- doctor
    ```
 
    **Check it worked:** `download-limit status` reports no active limit, status shows the

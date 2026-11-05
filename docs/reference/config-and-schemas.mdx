@@ -49,10 +49,10 @@ Five files, each read by a `manage.sh` verb or a script under `scripts/`:
 
 | File | Purpose | Who consumes it | Safety |
 | --- | --- | --- | --- |
-| `config/disk-catalog.yaml` | Leftover signatures for disk-wizard (`risk` / `reclaim`) | `./scripts/manage.sh disk-wizard` -> `scripts/lib/disk_catalog.py` | Keep-set weights and volume `ez-comfy-state` are **dangerous / none**. Never `docker system prune -a --volumes` |
+| `config/disk-catalog.yaml` | Leftover signatures for disk-wizard (`risk` / `reclaim`) | `bazelisk run //:manage -- disk-wizard` -> `scripts/lib/disk_catalog.py` | Keep-set weights and volume `ez-comfy-state` are **dangerous / none**. Never `docker system prune -a --volumes` |
 | `config/model-manifest.yaml` | Disk bible for `${MODELS_DIR}`: keep-set packs + **refuse** list | `reap-models`, `models-status`, `scripts/lib/model_manifest.py` / `models.sh`. License bible stays `LICENSE-MODELS.md` | Refuse includes MiniMax-H3, DA3-LARGE, ... Klein 9B / FLUX.2-dev are opt-in packs (`default: false`) |
 | `config/resource-policy.yaml` | Human-readable GB10 headroom, mem 90g/80g, occupancy mode table, default model tiers | Operators; **mirrored** by `manage.sh` defaults (`MIN_HOST_FREE_GIB`, `MEM_LIMIT`, stack ports) | Do not lower `min_host_free_gib` without measuring SSH under load |
-| `config/spark-farm.example.env` | Copy-and-fill farm variables | `./scripts/utilities/spark-farm.sh` after `set -a; source ...` | Placeholders only. Management SSH is **not** the 200 GbE fabric. MiniMax H3 banned. [Spark farm](../spark-farm.md) |
+| `config/spark-farm.example.env` | Copy-and-fill farm variables | `bazelisk run //scripts:run-utility -- spark-farm` after `set -a; source ...` | Placeholders only. Management SSH is **not** the 200 GbE fabric. MiniMax H3 banned. [Spark farm](../spark-farm.md) |
 | `.env.example` | Template `setup` copies to `.env` | `./scripts/manage.sh setup` / Compose interpolation | `HF_TOKEN=` stays commented. Do not commit a filled `.env` |
 
 `.env.example` session keys used in docs: `MODELS_DIR`, `COMFY_OUTPUT_DIR`, `COMFY_PORT`, `DOWNLOAD_LIMIT`, plus `MEM_LIMIT` / `MEM_RESERVATION` / `MIN_HOST_FREE_GIB`. `SPARK_HOST` / `SPARK_USER` are docs/session (browser **Your Spark** panel and SSH), not required Compose keys.
@@ -78,7 +78,7 @@ or refuses on:
 
 | File | Purpose | Who consumes it | Safety |
 | --- | --- | --- | --- |
-| `schemas/asset.yaml` | `ez.asset.v1` Asset Bible record (outputs under `${COMFY_OUTPUT_DIR}/assets`) | `./scripts/manage.sh asset-ls` -> `scripts/lib/asset_bible.py` | **Never** `${MODELS_DIR}`. `license: operator-output` on the example |
+| `schemas/asset.yaml` | `ez.asset.v1` Asset Bible record (outputs under `${COMFY_OUTPUT_DIR}/assets`) | `bazelisk run //:manage -- asset-ls` -> `scripts/lib/asset_bible.py` | **Never** `${MODELS_DIR}`. `license: operator-output` on the example |
 | `schemas/guide_pack.shot.yaml` | `ez.guide.shot.v1` DCC \<-> Comfy print handshake (120 frames @ 24 fps) | `export-guides` / `scripts/lib/guide_pack.py` | Size is LTX VAE grid **1280x704** or **768x1280**. Never 1280x720 |
 | `schemas/guide_pack.still.yaml` | `ez.guide.still.v1` single-frame clay/depth/canny plates | `blender-stills` | Allowed sizes: 1280x704, 768x1280, 1024x1280, 1024x1024, 1280x720 (**Klein thumb only**, never LTX) |
 | `schemas/house_layout.yaml` | `ez.house.layout.v1` greybox for Instagram 4:5 clay stills | `house-views`, `start` seed-inputs -> `scripts/lib/house_layout.py` | Y-up meters. Occupancy: dump dies if Comfy is a heavy job |

@@ -33,7 +33,7 @@ Prompt Forge - rewrite a lazy sentence for every US-safe CLIP family. No UNET, n
 
 Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
-  ./scripts/manage.sh occupancy enter llm-desk --yes
+  bazelisk run //:manage -- occupancy enter llm-desk --yes
 
 Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.
 
@@ -122,7 +122,7 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## inspire/prompt-forge Prompt Forge - rewrite a lazy sentence for every US-safe CLIP family. No UNET, no VAE, no KSampler. Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B: ./scripts/ma...`
+**This graph:** `## inspire/prompt-forge Prompt Forge - rewrite a lazy sentence for every US-safe CLIP family. No UNET, no VAE, no KSampler. Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B: bazelisk run...`
 
 ```text
 ## inspire/prompt-forge
@@ -131,7 +131,7 @@ Prompt Forge - rewrite a lazy sentence for every US-safe CLIP family. No UNET, n
 
 Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
-  ./scripts/manage.sh occupancy enter llm-desk --yes
+  bazelisk run //:manage -- occupancy enter llm-desk --yes
 
 Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.
 

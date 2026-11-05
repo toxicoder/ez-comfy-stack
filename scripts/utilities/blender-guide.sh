@@ -7,8 +7,7 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- blender-guide --film go-see --shot 12 [--blend FILE]
-#   ./scripts/utilities/blender-guide.sh --film go-see --shot 12 [--blend FILE]
-#   ./scripts/utilities/blender-guide.sh --engine blender --film go-see --shot 12
+#   bazelisk run //scripts:run-utility -- blender-guide --engine blender --film go-see --shot 12
 #
 # Safety:
 #   Host GPU job. Dies with exit 2 if compose is up. Does not start Comfy.

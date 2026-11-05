@@ -41,7 +41,7 @@ LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-genera
 2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) - expected, not a hang.
 3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_tidetable_90s.mp4` (act graphs write `ez_tidetable_actN_90s.mp4`). A **Film ready** overlay plays it. Copy off the Spark with scp.
 4. Optional single-shot iterate: **motion/av/still-to-shot**. Optional silent rehearsal: **motion/silent/still-to-shot**.
-5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film tide-table --yes`
+5. Spark-farm / host stitch fallback: `bazelisk run //scripts:run-utility -- concat-shots --film tide-table --yes`
 
 Do not Queue a 90s denoise (keep 121-frame / 1+8n widgets). US-safe local pack only. No score.
 Prompt enhance is **off** so the pinned identity and each baked LTX I2V paragraph are encoded as written. The identity STRING is wired into each shot enhance as context (used only if you turn Enhance on).
@@ -856,7 +856,7 @@ LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-genera
 2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) - expected, not a hang.
 3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_tidetable_90s.mp4` (act graphs write `ez_tidetable_actN_90s.mp4`). A **Film ready** overlay plays it. Copy off the Spark with scp.
 4. Optional single-shot iterate: **motion/av/still-to-shot**. Optional silent rehearsal: **motion/silent/still-to-shot**.
-5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film tide-table --yes`
+5. Spark-farm / host stitch fallback: `bazelisk run //scripts:run-utility -- concat-shots --film tide-table --yes`
 
 Do not Queue a 90s denoise (keep 121-frame / 1+8n widgets). US-safe local pack only. No score.
 Prompt enhance is **off** so the pinned identity and each baked LTX I2V paragraph are encoded as written. The identity STRING is wired into each shot enhance as context (used only if you turn Enhance on).
@@ -1385,7 +1385,7 @@ Markdown body.
 ```text
 ## tide-table (dawn skiff - Fog and spit)
 
-Queue **once**. Klein identity still -> 18 x 5.00s LTX AV prints (last-frame continuity) -> **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames = 1+8n per shot). Optional silent rehearsal: **motion/silent/still-to-shot**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film tide-table --yes`.
+Queue **once**. Klein identity still -> 18 x 5.00s LTX AV prints (last-frame continuity) -> **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames = 1+8n per shot). Optional silent rehearsal: **motion/silent/still-to-shot**. Optional host stitch: `bazelisk run //scripts:run-utility -- concat-shots --film tide-table --yes`.
 
 18 x 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.
 

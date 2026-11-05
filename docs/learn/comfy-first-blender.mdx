@@ -57,13 +57,13 @@ flowchart LR
 ## Run the operator loop
 
 ```bash
-./scripts/manage.sh occupancy enter blender-desk
-./scripts/manage.sh export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth
-./scripts/manage.sh occupancy enter klein --yes
+bazelisk run //:manage -- occupancy enter blender-desk
+bazelisk run //:manage -- export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth
+bazelisk run //:manage -- occupancy enter klein --yes
 # :8188 -> dcc/guide-still
 # EZDCCLoadGuideStill slug=go-see shot_id=12 layer=first
-./scripts/manage.sh overlay-qc --film go-see --shot 12 --look PATH
-./scripts/manage.sh occupancy enter trellis --yes
+bazelisk run //:manage -- overlay-qc --film go-see --shot 12 --look PATH
+bazelisk run //:manage -- occupancy enter trellis --yes
 # dcc/still-to-mesh - inspect mesh in Load 3D / Preview 3D
 ```
 

@@ -25,8 +25,8 @@ tags: [blender, sidecar, occupancy, gb10]
 
   ```bash
   ./scripts/manage.sh blender-install
-  ./scripts/manage.sh occupancy enter blender-desk
-  ./scripts/manage.sh blender -- --background
+  bazelisk run //:manage -- occupancy enter blender-desk
+  bazelisk run //:manage -- blender -- --background
   ```
 
   NVENC proxies still die if compose is up (encoder is a GPU job). Cycles CUDA while Compose is up is refused. `restart: "no"` is unchanged. Full wording of the one-heavy-job rule: [Host sidecars overview](studio-sidecars.md#occupancy-rule). Desk commands: [Occupancy desk](occupancy.md).
@@ -37,11 +37,11 @@ tags: [blender, sidecar, occupancy, gb10]
 
 ```bash
 ./scripts/manage.sh blender-install
-./scripts/manage.sh occupancy enter blender-desk
-./scripts/manage.sh blender -- --background
+bazelisk run //:manage -- occupancy enter blender-desk
+bazelisk run //:manage -- blender -- --background
 # or: ./scripts/utilities/blender.sh -- /path/to/scene.blend
-./scripts/manage.sh export-guides --film go-see --shot 12 --blend /path/to/shot.blend
-./scripts/manage.sh blender-stills --film go-see --plate mug --blend /path/to/prop.blend --size 1024x1024
+bazelisk run //:manage -- export-guides --film go-see --shot 12 --blend /path/to/shot.blend
+bazelisk run //:manage -- blender-stills --film go-see --plate mug --blend /path/to/prop.blend --size 1024x1024
 # hammer: ./scripts/manage.sh occupancy idle
 ```
 
@@ -57,8 +57,8 @@ Never apt/pip inside the Comfy container or `docker/Dockerfile`. Ubuntu aarch64 
 Exit **2** means Compose is a heavy job (not parked, or the queue is busy):
 
 ```bash
-./scripts/manage.sh occupancy enter blender-desk
-./scripts/manage.sh blender
+bazelisk run //:manage -- occupancy enter blender-desk
+bazelisk run //:manage -- blender
 ```
 
 ## What this is not

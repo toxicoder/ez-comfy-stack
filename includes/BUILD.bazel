@@ -4,9 +4,8 @@ package(default_visibility = ["//visibility:public"])
 
 filegroup(
     name = "includes",
-    srcs = glob(
-        ["*"],
-        allow_empty = False,
-        exclude = ["BUILD.bazel"],
-    ),
+    srcs = [
+        "command-builder.json",
+        "glossary.json",
+    ],
 )

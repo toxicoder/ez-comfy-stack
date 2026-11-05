@@ -9,7 +9,6 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- film-animatic --film SLUG [--yaml PATH] [--guides DIR]
-#   ./scripts/utilities/film-animatic.sh --film SLUG [--yaml PATH] [--guides DIR]
 #
 # Exit codes:
 #   0 written; 1 usage / missing sources / ffmpeg fail.

@@ -200,14 +200,14 @@ sequenceDiagram
 6. Loudness (ffmpeg; Comfy cannot LUFS):
 
 ```bash
-./scripts/utilities/podcast-loudnorm.sh run --in "${COMFY_OUTPUT_DIR}/ez_podcast_ep_00001_.flac"
+bazelisk run //scripts:run-utility -- podcast-loudnorm run --in "${COMFY_OUTPUT_DIR}/ez_podcast_ep_00001_.flac"
 # --target youtube  -> -14 LUFS; default podcast -> -16 LUFS
 ```
 
 7. Optional YouTube still-image video (host ffmpeg; the graph still saves FLAC + MP3). Do this **after** loudnorm if you want -14 LUFS in the MP4; `audio-still-video` does not loudnorm unless `--loudnorm youtube`:
 
 ```bash
-./scripts/manage.sh audio-still-video \
+bazelisk run //:manage -- audio-still-video \
   --audio "${COMFY_OUTPUT_DIR}/ez_podcast_ep_00001_-youtube-lufs.flac" \
   --image "${COMFY_OUTPUT_DIR}/ez_podcast_00001_.png"
 ```

@@ -33,7 +33,7 @@ Lab envelope for Path B depth-guided **portrait** 8.00s print. LTX canvas **768x
 
 Dump the pack with:
 
-  ./scripts/manage.sh export-guides --film SLUG --shot ID --width 768 --height 1280 --print ltx-iclora-depth
+  bazelisk run //:manage -- export-guides --film SLUG --shot ID --width 768 --height 1280 --print ltx-iclora-depth
 
 Queue Templates -> LTX-2.5 -> LTX-2.5_ICLoRA_Union_Control_Distilled.json. Depth default. Opt-in ``download-ltx --tier iclora``. Refuse 19B Union.
 
@@ -666,7 +666,7 @@ Lab envelope for Path B depth-guided **portrait** 8.00s print. LTX canvas **768x
 
 Dump the pack with:
 
-  ./scripts/manage.sh export-guides --film SLUG --shot ID --width 768 --height 1280 --print ltx-iclora-depth
+  bazelisk run //:manage -- export-guides --film SLUG --shot ID --width 768 --height 1280 --print ltx-iclora-depth
 
 Queue Templates -> LTX-2.5 -> LTX-2.5_ICLoRA_Union_Control_Distilled.json. Depth default. Opt-in ``download-ltx --tier iclora``. Refuse 19B Union.
 

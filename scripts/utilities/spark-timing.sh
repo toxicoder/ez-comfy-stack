@@ -7,8 +7,7 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- spark-timing show [--json]
-#   ./scripts/utilities/spark-timing.sh show [--json]
-#   ./scripts/utilities/spark-timing.sh record --klein N --wan N --ltx N [--json]
+#   bazelisk run //scripts:run-utility -- spark-timing record --klein N --wan N --ltx N [--json]
 #
 # Environment:
 #   COMFY_OUTPUT_DIR (JSON lands at spark-timing.json; not git)

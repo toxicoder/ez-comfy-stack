@@ -120,7 +120,7 @@ Shipped **[motion/av/clip-chain](../generated/workflows/motion/av/clip-chain.md)
 6. Keep the shared UNET / VAE / CLIP / Format / Seed / Rewrite / Audio notes wires (do not duplicate loaders).
 7. Save under `_user/` if you want a personal App; shipped `_lab` stays 4 beats.
 
-Past 24 stems: host `./scripts/utilities/concat-shots.sh --files a.mp4,b.mp4 --cap-seconds <sum> --yes` (the default `--files` cap is 90 s).
+Past 24 stems: host `bazelisk run //scripts:run-utility -- concat-shots --files a.mp4,b.mp4 --cap-seconds <sum> --yes` (the default `--files` cap is 90 s).
 
 ---
 

@@ -33,7 +33,7 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 
 <Callout type="info" title="First 90s film">
   1. Stack is up (`manage.sh start`, type **yes**). LTX-2.5 weights on disk.
-  2. Optional: fill **inspire/beat-sheet** (occupancy **none**, no UNET) then `./scripts/manage.sh shot-sheet run --film go-see` - writes `films/<slug>/shots.yaml`. Lab YAML is not copied by the entrypoint.
+  2. Optional: fill **inspire/beat-sheet** (occupancy **none**, no UNET) then `bazelisk run //:manage -- shot-sheet run --film go-see` - writes `films/<slug>/shots.yaml`. Lab YAML is not copied by the entrypoint.
   3. Load **films/go-see** (or still-here / switchyard).
   4. All three films pin Enhance **off** so the identity and each baked LTX paragraph are encoded as written. Leave LTX **1280x704**. Queue **once**.
   5. Wall-clock is 18 sequential 5 s prints (tens of minutes to a couple of hours). That is expected.
@@ -118,8 +118,8 @@ LTX-2.5 native multishot (several cuts in one 5-10s clip) is an optional experim
 Shot-level resume lives under `${COMFY_OUTPUT_DIR}/films/<slug>/` (`state.json`, `shots/NN.mp4`). A dropped SSH session is not a two-hour requeue:
 
 ```bash
-./scripts/utilities/compile-film.sh go-see
-./scripts/manage.sh print-shot go-see 12
+bazelisk run //scripts:run-utility -- compile-film go-see
+bazelisk run //:manage -- print-shot go-see 12
 ./scripts/manage.sh start && ./scripts/manage.sh film-resume go-see
 # film-resume skips ok shots whose duration is 5.00 +/- 0.05 s and reprints
 # crashed `running` rows (no MP4) only.
@@ -129,25 +129,25 @@ Host / spark-farm fallback (when you printed shots outside the one-click graph):
 
 ```bash
 FILM=go-see   # or still-here | switchyard
-./scripts/utilities/concat-shots.sh --film "${FILM}" --dry-run
-./scripts/utilities/concat-shots.sh --film "${FILM}" --yes
+bazelisk run //scripts:run-utility -- concat-shots --film "${FILM}" --dry-run
+bazelisk run //scripts:run-utility -- concat-shots --film "${FILM}" --yes
 # Optional audio acrossfade (0.10 s, overlap off so duration stays on picture).
 # Video is a hard cut (H.264). LTX shots only (Wan-silent has no audio stream -
 # --xfade refuses). go-see in-graph uses 0.08 s.
 # Stitch uses VHS's last/most-complete file per shot (`{prefix}_{n}-audio.mp4`).
-./scripts/utilities/concat-shots.sh --film "${FILM}" --xfade 10 --yes
+bazelisk run //scripts:run-utility -- concat-shots --film "${FILM}" --xfade 10 --yes
 # Listen to go-see with and without --xfade 10; default remains the hard-cut golden.
 
 # OTIO handshake for Kdenlive/Shotcut (host, no GPU; apt notes in studio-sidecars.md):
-./scripts/manage.sh film-export-otio go-see
+bazelisk run //:manage -- film-export-otio go-see
 # NVENC proxies 960x528 ~2 Mbps (Comfy must be stopped):
 ./scripts/manage.sh stop
-./scripts/manage.sh film-proxies go-see --yes
+bazelisk run //:manage -- film-proxies go-see --yes
 # Promote take 3 of shot 12 into the jobstore master:
-./scripts/manage.sh take-promote go-see 12 3
+bazelisk run //:manage -- take-promote go-see 12 3
 # Fail-closed accept gate before concat (5.00s, 1280x704, LTX audio,
 # world-only speech-band, 90s master when present):
-./scripts/manage.sh film-accept go-see
+bazelisk run //:manage -- film-accept go-see
 ```
 
 ---
@@ -210,11 +210,11 @@ Five festival-length titles share the same 5.00s LTX printer. Each film is **5 x
 | **last-lane** | `films/last-lane/act-01` ... `act-05` | Dashboard + blank gloves (POV) | `ez_lastlane_450s.mp4` |
 | **breakwater** | `films/breakwater/act-01` ... `act-05` | Yellow slicker sleeves + blank gloves (chest-cam) | `ez_breakwater_450s.mp4` |
 
-1. `./scripts/utilities/compile-film.sh tide-table` (any of the five ids).
+1. `bazelisk run //scripts:run-utility -- compile-film tide-table` (any of the five ids).
 2. Queue **act-01**. Klein identity, then 18 prints. Overlay writes `ez_<slug>_act1_90s.mp4`.
 3. Queue **act-02** ... **act-05**. Acts 2-5 `LoadImage` the previous act last frame (`ez_<slug>_b6_s3_last_*.png` after act 1, then b12, b18, b24).
-4. `./scripts/manage.sh film-resume tide-table` skips ok 5.00s stems if SSH dropped.
-5. `./scripts/manage.sh film-accept tide-table` then `./scripts/utilities/concat-shots.sh --film tide-table --yes` -> `ez_tidetable_450s.mp4` (fail closed if probe is not 450.00 +/- 0.10s).
+4. `bazelisk run //:manage -- film-resume tide-table` skips ok 5.00s stems if SSH dropped.
+5. `bazelisk run //:manage -- film-accept tide-table` then `bazelisk run //scripts:run-utility -- concat-shots --film tide-table --yes` -> `ez_tidetable_450s.mp4` (fail closed if probe is not 450.00 +/- 0.10s).
 
 Wall-clock is five sequential 90s Queues (hours). Peak VRAM is still one 5s LTX print. Safety unchanged: `restart: "no"`, heavy confirm, headroom, download-limit wrap.
 
@@ -254,9 +254,9 @@ Identity owns every later I2V. Distilled LTX audio talks if the mix is only a pr
 1. Queue identity only if you can isolate it; otherwise Queue the film graph and **stop after the identity PNG** (`ez_gosee_identity_*.png`).
 2. Accept the still only if: chest-cam POV, only the wearer's own arms along the bottom edge, contralateral pump, blank gloves, hands free, **no second person in front of the camera**, no staff or pole, no handlebar, no circular mask, gap already in center.
 3. Re-roll identity (seed **42** is frozen in YAML - if the still is illegal, change **prompt text**, not the seed, then rebuild). If you must explore seeds, do it on `stills/still-hero` off-graph, then paste the winning look back into YAML.
-4. Print b1s1-s3 with `motion/av/still-to-shot` / `./scripts/manage.sh print-shot go-see N` until last frames still show gloves in the lower third.
+4. Print b1s1-s3 with `motion/av/still-to-shot` / `bazelisk run //:manage -- print-shot go-see N` until last frames still show gloves in the lower third.
 5. `take-promote` winners. `film-resume` the rest.
-6. `./scripts/manage.sh film-accept go-see` must exit 0 before anyone calls the file a deliverable. In-graph `EZFilmConcat` refuses missing/short stems and unlinks a master that is not 90.00 +/- 0.10s.
+6. `bazelisk run //:manage -- film-accept go-see` must exit 0 before anyone calls the file a deliverable. In-graph `EZFilmConcat` refuses missing/short stems and unlinks a master that is not 90.00 +/- 0.10s.
 7. Listen on headphones. If you hear words, reprint that shot; do not "EQ the announcer out" unless you are on the stems path and dropping DX.
 
 If b2s1's start frame is a wooden pier, reprint b1s3 first. LTX will not invent maglev steel.
@@ -271,7 +271,7 @@ Every print arrives with its own LTX world bed: breath, grit, water, and nothing
 
 ```bash
 # Picture-lock stems (host ffmpeg; occupancy audio):
-./scripts/manage.sh stem-mix --film go-see --shot 12 --bg /path/to/print.mp4
+bazelisk run //:manage -- stem-mix --film go-see --shot 12 --bg /path/to/print.mp4
 ```
 
 Stop Klein / Wan / LTX before you load ACE-Step or a TTS engine: the Spark runs **one heavy GPU job** at a time, and the two verbs are park and stop ([Occupancy rule](studio-sidecars.md#occupancy-rule)). Then finish on the lane that matches what the short needs:
@@ -337,14 +337,14 @@ Identity sheet: `stills/identity-sheet` (seed **42**, Enhance **on**, identity m
 ```bash
 ./scripts/manage.sh stop
 ./scripts/manage.sh download-3d --tier trellis2   # or da3-base | all
-./scripts/manage.sh blender                       # host binary; never in Dockerfile
+bazelisk run //:manage -- blender                       # host binary; never in Dockerfile
 ```
 
 NVENC preview encode (Comfy **must be stopped** - encoder contention on GB10):
 
 ```bash
 ./scripts/manage.sh stop
-./scripts/utilities/nvenc-preview.sh --in "${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4" \
+bazelisk run //scripts:run-utility -- nvenc-preview --in "${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4" \
   --out "${COMFY_OUTPUT_DIR}/ez_gosee_90s_preview.mp4" --yes
 ```
 

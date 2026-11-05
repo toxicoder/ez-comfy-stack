@@ -1002,7 +1002,7 @@ def build_album(info: AlbumInfo, tracks: list[str]) -> dict:
         "Queue this graph to zip whatever is already in "
         f"`${{COMFY_OUTPUT_DIR}}/{album_output_dir(info['artist'], info['title'])}/`.\n"
         "Generate the full album in one go:\n\n"
-        f"`./scripts/manage.sh album-render --album {info['artist_slug']}/{info['slug']} "
+        f"`bazelisk run //:manage -- album-render --album {info['artist_slug']}/{info['slug']}"
         "--art skip|upload|generate`\n\n"
         "Occupancy: audio for tracks, klein first when --art generate. "
         "Do not co-resident Klein + ACE-Step.\n"

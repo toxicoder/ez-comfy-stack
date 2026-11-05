@@ -14,7 +14,6 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- dub-fetch status|run --url URL [--out DIR]
-#   ./scripts/utilities/dub-fetch.sh status|run --url URL [--out DIR]
 #
 # Environment:
 #   COMFY_OUTPUT_DIR, LAB_MOCK_YT_DLP

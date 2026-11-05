@@ -16,9 +16,8 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- download-image status [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev|flux3|flux3-base|flux3-nvfp4|flux3-bf16|flux3-te|flux3-pup] [--json]
-#   ./scripts/utilities/download-image.sh status [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev|flux3|flux3-base|flux3-nvfp4|flux3-bf16|flux3-te|flux3-pup] [--json]
-#   ./scripts/utilities/download-image.sh run [--tier ...]
-#   ./scripts/utilities/download-image.sh cleanup [--tier ...] [--dry-run|--yes]
+#   bazelisk run //scripts:run-utility -- download-image run [--tier ...]
+#   bazelisk run //scripts:run-utility -- download-image cleanup [--tier ...] [--dry-run|--yes]
 #
 # Environment:
 #   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD

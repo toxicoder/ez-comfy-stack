@@ -7,7 +7,6 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- pack-frames --in DIR --out FILE [--fps 24] [--pattern '%04d.png']
-#   ./scripts/utilities/pack-frames.sh --in DIR --out FILE [--fps 24] [--pattern '%04d.png']
 #
 # @command pack-frames
 

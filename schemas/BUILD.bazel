@@ -4,11 +4,12 @@ package(default_visibility = ["//visibility:public"])
 
 filegroup(
     name = "schemas",
-    srcs = glob(
-        [
-            "*.yaml",
-            "*.json",
-        ],
-        allow_empty = False,
-    ),
+    srcs = [
+        "asset.yaml",
+        "guide_pack.shot.yaml",
+        "guide_pack.still.yaml",
+        "house_layout.yaml",
+        "scene.json",
+        "shot_card.yaml",
+    ],
 )

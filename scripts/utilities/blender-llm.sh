@@ -8,7 +8,6 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- blender-llm "greybox mug on a table"
-#   ./scripts/utilities/blender-llm.sh "greybox mug on a table"
 #
 # @command blender-llm
 

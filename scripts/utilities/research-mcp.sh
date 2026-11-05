@@ -7,9 +7,8 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- research-mcp [--stdio]
-#   ./scripts/utilities/research-mcp.sh [--stdio]
-#   ./scripts/utilities/research-mcp.sh --list-tools
-#   ./scripts/utilities/research-mcp.sh --call TOOL [JSON]
+#   bazelisk run //scripts:run-utility -- research-mcp --list-tools
+#   bazelisk run //scripts:run-utility -- research-mcp --call TOOL [JSON]
 #
 # @command research-mcp
 

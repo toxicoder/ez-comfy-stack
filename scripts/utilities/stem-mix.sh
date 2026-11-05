@@ -7,7 +7,6 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- stem-mix --film SLUG --shot ID [--dx PATH] --bg PATH [--fx PATH] [--mx PATH] [--video PATH]
-#   ./scripts/utilities/stem-mix.sh --film SLUG --shot ID [--dx PATH] --bg PATH [--fx PATH] [--mx PATH] [--video PATH]
 #
 # Exit codes:
 #   0 mix written; 1 usage / missing ffmpeg / mix fail.

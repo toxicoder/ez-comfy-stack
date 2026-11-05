@@ -23,7 +23,7 @@ tags: [workflows, generated, comfyui, audio, album]
 
 ## Purpose
 
-Numbered takes under `audio/albums/drive-through/headliner/`. Queue one track, or `./scripts/manage.sh album-render --album drive-through/headliner`.
+Numbered takes under `audio/albums/drive-through/headliner/`. Queue one track, or `bazelisk run //:manage -- album-render --album drive-through/headliner`.
 
 ```text
 ## 01-lantern-merge

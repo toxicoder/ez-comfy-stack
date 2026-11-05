@@ -70,7 +70,7 @@ Lane B Klein stills (same occupancy **klein**):
 
 ## FLUX 3 Klein stills (opt-in, gated)
 
-Same Klein desk on **FLUX 3 Image Klein** weights: gated Hugging Face, **FLUX Kommunity License (v1.0)**, not Apache, and **not** in `download-models`. Accept the license on `black-forest-labs/flux-3-image-klein-comfy` with the **same HF account as `HF_TOKEN`**, then pull `./scripts/utilities/download-image.sh run --tier flux3` (or `--tier flux3-base`) - each tier auto-includes the `flux3-te` text encoder. Monetized output only for qualifying users under **$5M gross annualized revenue**: [Model licenses](../licenses.md). Klein 4B above stays the Apache default still.
+Same Klein desk on **FLUX 3 Image Klein** weights: gated Hugging Face, **FLUX Kommunity License (v1.0)**, not Apache, and **not** in `download-models`. Accept the license on `black-forest-labs/flux-3-image-klein-comfy` with the **same HF account as `HF_TOKEN`**, then pull `bazelisk run //scripts:run-utility -- download-image run --tier flux3` (or `--tier flux3-base`) - each tier auto-includes the `flux3-te` text encoder. Monetized output only for qualifying users under **$5M gross annualized revenue**: [Model licenses](../licenses.md). Klein 4B above stays the Apache default still.
 
 | Workflow | Occupancy | What it does |
 | --- | --- | --- |

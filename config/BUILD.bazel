@@ -4,9 +4,10 @@ package(default_visibility = ["//visibility:public"])
 
 filegroup(
     name = "policy",
-    srcs = glob(
-        ["*"],
-        allow_empty = False,
-        exclude = ["BUILD.bazel"],
-    ),
+    srcs = [
+        "disk-catalog.yaml",
+        "model-manifest.yaml",
+        "resource-policy.yaml",
+        "spark-farm.example.env",
+    ],
 )

@@ -6,7 +6,6 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- take-promote <film> <id> <take>
-#   ./scripts/utilities/take-promote.sh <film> <id> <take>
 #
 # Environment:
 #   COMFY_OUTPUT_DIR

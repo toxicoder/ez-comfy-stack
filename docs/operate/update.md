@@ -41,7 +41,7 @@ volume stay.
 ./scripts/manage.sh stop
 ```
 
-**Check it worked:** `./scripts/manage.sh status` shows Comfy is not running.
+**Check it worked:** `bazelisk run //:manage -- status` shows Comfy is not running.
 
 ---
 
@@ -78,11 +78,11 @@ this checkout. Type **yes**. A headroom refuse is a hard fail.
 ```
 
 ```bash
-./scripts/manage.sh doctor
+bazelisk run //:manage -- doctor
 ```
 
 ```bash
-./scripts/manage.sh status
+bazelisk run //:manage -- status
 ```
 
 **Check it worked:** doctor prints `Doctor OK` (missing weights are a warning, not a fail),

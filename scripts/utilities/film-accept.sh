@@ -6,7 +6,6 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- film-accept go-see|still-here|switchyard
-#   ./scripts/utilities/film-accept.sh go-see|still-here|switchyard
 #
 # Environment:
 #   COMFY_OUTPUT_DIR

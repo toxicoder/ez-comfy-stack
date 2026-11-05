@@ -23,7 +23,7 @@ tags: [workflows, generated, comfyui, audio, album]
 
 ## Purpose
 
-Numbered takes under `audio/albums/nill-bye/false-drop/`. Queue one track, or `./scripts/manage.sh album-render --album nill-bye/false-drop`.
+Numbered takes under `audio/albums/nill-bye/false-drop/`. Queue one track, or `bazelisk run //:manage -- album-render --album nill-bye/false-drop`.
 
 ```text
 ## 01-false-drop

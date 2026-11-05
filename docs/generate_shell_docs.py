@@ -16,9 +16,8 @@ Stdlib only. Session variables stay ``${SPARK_HOST}``-style - never lab
 ``{{PLACEHOLDER}}``. No Bazel, TypeDoc, or kubectl examples.
 
 Usage:
+  bazelisk run //docs:generate_shell                    # this file only
   bazelisk run //docs:docs                              # regenerate every docs page
-  python3 docs/generate_shell_docs.py                   # escape hatch: this file only
-  python3 docs/generate_shell_docs.py --force
 """
 
 from __future__ import annotations
@@ -103,7 +102,17 @@ def _format_body(body_lines: list[str]) -> str:
         s = s.strip()
         if not s:
             return False
-        if s.startswith(("Usage:", "./scripts/manage.sh", "./scripts/utilities/")):
+        if s.startswith(
+            (
+                "Usage:",
+                "./scripts/manage.sh",
+                "./scripts/utilities/",
+                "bazelisk run ",
+                "bazelisk test ",
+                "bazel run ",
+                "bazel test ",
+            )
+        ):
             return True
         if re.match(r"^\./[a-z]", s):
             return True

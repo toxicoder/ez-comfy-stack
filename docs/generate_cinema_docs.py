@@ -2,8 +2,8 @@
 
 Run from repo root:
 
-  bazelisk run //docs:docs                    # regenerate every docs page
-  python3 docs/generate_cinema_docs.py        # escape hatch: this file only
+  bazelisk run //docs:generate_cinema       # this file only
+  bazelisk run //docs:docs                  # regenerate every docs page
 """
 
 from __future__ import annotations

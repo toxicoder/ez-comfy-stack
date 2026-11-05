@@ -6,7 +6,6 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- film-proxies go-see|still-here|switchyard [--yes]
-#   ./scripts/utilities/film-proxies.sh go-see|still-here|switchyard [--yes]
 #
 # Safety:
 #   Refuses if compose comfyui is running. Dry-run by default.

@@ -66,8 +66,8 @@ Optional Workbench dump (higher quality) - host Blender, then park or stop Comfy
 
 ```bash
 ./scripts/manage.sh blender-install
-./scripts/manage.sh occupancy enter blender-desk
-./scripts/manage.sh house-views --slug lab-penthouse
+bazelisk run //:manage -- occupancy enter blender-desk
+bazelisk run //:manage -- house-views --slug lab-penthouse
 # optional: --layout /path/to/house_layout.yaml
 ./scripts/manage.sh start   # type yes
 # Queue workflows/_lab/stills/dream-house-clay.json
@@ -78,8 +78,8 @@ Dump lives under `${COMFY_OUTPUT_DIR}/assets/sets/<slug>/` (layout, `mesh/house.
 Already dumped but Clay 01-10 show **Missing Inputs** / "no file selected"? Copy or reseed without Blender (compose may stay up), then reload the graph:
 
 ```bash
-./scripts/manage.sh house-views --slug lab-penthouse --install-inputs
-./scripts/manage.sh house-views --slug lab-penthouse --seed-inputs
+bazelisk run //:manage -- house-views --slug lab-penthouse --install-inputs
+bazelisk run //:manage -- house-views --slug lab-penthouse --seed-inputs
 ```
 
 Default layout is `schemas/house_layout.yaml` (lab penthouse matching the canned bible). `--layout` overrides. v1 does not invent a unique floorplan from prose.

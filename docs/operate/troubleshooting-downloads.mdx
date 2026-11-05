@@ -80,8 +80,8 @@ growing. Read the second row before you reach for the FORCE clear.
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
 | ++ctrl+c++ does not stop download | Old tee pipeline orphan | Pull latest; wrap/hf use process groups - Ctrl+C should stop `hf` within seconds |
-| `Still waiting to acquire lock` on `*.lock` | Stale HF locks from killed downloads | `./scripts/manage.sh clear-hf-locks` or auto-clear on download-models; if stuck **and no hf is running**: `HF_LOCK_CLEAR_FORCE=1 ./scripts/manage.sh clear-hf-locks` |
-| `v ... 0 MiB/s` + `found N incomplete` + lock still held | Hung **resume** - live `hf` holds the lock, partial not growing | ++ctrl+c++. Do **not** FORCE-clear locks while it runs. Then `./scripts/manage.sh reset-hf-partials --yes` and re-run, or `./scripts/manage.sh download-models --drop-incomplete`. Finished `.safetensors` are kept |
+| `Still waiting to acquire lock` on `*.lock` | Stale HF locks from killed downloads | `bazelisk run //:manage -- clear-hf-locks` or auto-clear on download-models; if stuck **and no hf is running**: `HF_LOCK_CLEAR_FORCE=1 ./scripts/manage.sh clear-hf-locks` |
+| `v ... 0 MiB/s` + `found N incomplete` + lock still held | Hung **resume** - live `hf` holds the lock, partial not growing | ++ctrl+c++. Do **not** FORCE-clear locks while it runs. Then `bazelisk run //:manage -- reset-hf-partials --yes` and re-run, or `./scripts/manage.sh download-models --drop-incomplete`. Finished `.safetensors` are kept |
 
 ## CLI, progress, and gated pulls
 

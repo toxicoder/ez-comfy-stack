@@ -6,12 +6,11 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- reap-models --plan
-#   ./scripts/utilities/reap-models.sh --plan
-#   ./scripts/utilities/reap-models.sh --apply --class junk --yes
-#   ./scripts/utilities/reap-models.sh --apply --class superseded --quarantine --yes
-#   ./scripts/utilities/reap-models.sh --drop-pack triposplat --quarantine --yes
-#   ./scripts/utilities/reap-models.sh restore --from .reap-quarantine/<utc>
-#   ./scripts/utilities/reap-models.sh drop-quarantine --older-than 14d --yes
+#   bazelisk run //scripts:run-utility -- reap-models --apply --class junk --yes
+#   bazelisk run //scripts:run-utility -- reap-models --apply --class superseded --quarantine --yes
+#   bazelisk run //scripts:run-utility -- reap-models --drop-pack triposplat --quarantine --yes
+#   bazelisk run //scripts:run-utility -- reap-models restore --from .reap-quarantine/<utc>
+#   bazelisk run //scripts:run-utility -- reap-models drop-quarantine --older-than 14d --yes
 #
 # Safety:
 #   --plan is default. --apply requires --yes.

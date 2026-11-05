@@ -56,9 +56,9 @@ flowchart TB
 Not the 5.00s pack. Not the ten-camera [dream-house tour](dream-house.md). One camera, one plate.
 
 ```bash
-./scripts/manage.sh occupancy enter blender-desk
-./scripts/manage.sh blender-stills --film go-see --plate mug --blend /path/to/prop.blend --size 1024x1024
-./scripts/manage.sh occupancy enter klein --yes
+bazelisk run //:manage -- occupancy enter blender-desk
+bazelisk run //:manage -- blender-stills --film go-see --plate mug --blend /path/to/prop.blend --size 1024x1024
+bazelisk run //:manage -- occupancy enter klein --yes
 # Apps -> klein-from-clay-plates  (or klein-from-canny)
 ```
 
@@ -77,9 +77,9 @@ Not the 5.00s pack. Not the ten-camera [dream-house tour](dream-house.md). One c
 ## Print a guided 5.00s clip
 
 ```bash
-./scripts/manage.sh occupancy enter blender-desk
-./scripts/manage.sh export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth
-./scripts/manage.sh occupancy enter klein --yes
+bazelisk run //:manage -- occupancy enter blender-desk
+bazelisk run //:manage -- export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth
+bazelisk run //:manage -- occupancy enter klein --yes
 # klein-from-clay -> overlay-qc -> occupancy enter ltx --yes -> ltx-iclora-depth
 ```
 

@@ -25,7 +25,7 @@ tags: [editing, video-editor, agent, mcp, qwen, sidecar, occupancy]
 - **Keeping the lane out of Compose** - nothing in `docker/Dockerfile`, no service, no `restart:` key
 - **Bringing your own laptop tools** into the agent as `local__<server>__<tool>` calls
 
-**Question this page answers:** how do I cut a clip list on the Spark without leaving ComfyUI? Start the studio with `./scripts/manage.sh start`, optionally bring the agent brain up with `./scripts/manage.sh agent-model run`, then open **EZ Edit** at `http://127.0.0.1:${COMFY_PORT}`. For a full NLE in a separate tab, use [Vlo](vlo.md); for a file handoff, export OTIO to Kdenlive / Shotcut: [Host sidecars overview](studio-sidecars.md).
+**Question this page answers:** how do I cut a clip list on the Spark without leaving ComfyUI? Start the studio with `./scripts/manage.sh start`, optionally bring the agent brain up with `bazelisk run //:manage -- agent-model run`, then open **EZ Edit** at `http://127.0.0.1:${COMFY_PORT}`. For a full NLE in a separate tab, use [Vlo](vlo.md); for a file handoff, export OTIO to Kdenlive / Shotcut: [Host sidecars overview](studio-sidecars.md).
 
 ```bash
 export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
@@ -58,7 +58,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 2. Bring up the agent brain - optional, and the only step that touches the GPU:
 
 ```bash
-./scripts/manage.sh agent-model run      # opt-in; see "The agent model sidecar"
+bazelisk run //:manage -- agent-model run      # opt-in; see "The agent model sidecar"
 ```
 
 3. Open ComfyUI and the panel:
@@ -155,26 +155,26 @@ else you import from disk.
 <Callout type="error" title="One heavy job">
   The GB10 runs **one** heavy GPU job. A cutaway Queue refuses while wan / ltx / trellis / klein
   hold the Spark, and the agent chat refuses too - the sidecar model is a co-tenant, not a
-  second heavy tenant. Release the desk first: `./scripts/manage.sh occupancy enter idle`. Modes
+  second heavy tenant. Release the desk first: `bazelisk run //:manage -- occupancy enter idle`. Modes
   and jobs: [Occupancy desk](occupancy.md), mode-by-job table: [Occupancy matrix](operate/occupancy-matrix.md).
 </Callout>
 
 Etiquette, in the order that avoids a refuse:
 
 1. **Chat and edit first, generate last.** Tool calls and trims are free; a cutaway is a Wan print.
-2. **Release the desk before you generate** - `./scripts/manage.sh occupancy enter idle`, then
+2. **Release the desk before you generate** - `bazelisk run //:manage -- occupancy enter idle`, then
    **Send** the generate request.
 3. **One cutaway at a time.** The tool returns a job id; poll **Refresh** (or
    `edit_job_status`) instead of queueing a batch.
 4. **Promote deliberately.** The graph is a lab graph in the `editing` lane. To keep a variant,
-   promote it with `./scripts/manage.sh promote-workflow` - never copy `_lab` into `_user`.
+   promote it with `bazelisk run //:manage -- promote-workflow` - never copy `_lab` into `_user`.
 
 ---
 
 ## The agent model sidecar (opt-in)
 
 <Callout type="warning" title="Host process, not a service">
-  `./scripts/manage.sh agent-model` clones the pinned upstream recipe into
+  `bazelisk run //:manage -- agent-model` clones the pinned upstream recipe into
   `${AGENT_MODEL_HOME:-$HOME/qwen38-flash-next-tf}` and hands the container to the recipe's own
   `start.sh` / `stop.sh`. It is **not** in `docker-compose.yml`, **not** built by
   `docker/Dockerfile`, and **not** a `manage.sh start` dependency. Bind stays `127.0.0.1` - a
@@ -183,9 +183,9 @@ Etiquette, in the order that avoids a refuse:
 </Callout>
 
 ```bash
-./scripts/manage.sh agent-model run           # heavy confirm: ~160 GB download + GPU, type yes
-./scripts/manage.sh agent-model status --json # {state,url,model,port,profile,container}
-./scripts/manage.sh agent-model stop
+bazelisk run //:manage -- agent-model run           # heavy confirm: ~160 GB download + GPU, type yes
+bazelisk run //:manage -- agent-model status --json # {state,url,model,port,profile,container}
+bazelisk run //:manage -- agent-model stop
 ```
 
 It serves `nvidia/Qwen3.8-Flash-Next-FP4-Local` behind an OpenAI-compatible API with tool calling
@@ -345,7 +345,7 @@ Rows live on [Troubleshooting](troubleshooting.md#editing-lane-ez-edit). The sho
 
 | Symptom | First move |
 | --- | --- |
-| Panel says the agent is offline | `./scripts/manage.sh agent-model status --json`, then check `EZ_AGENT_LLM_URL` ends in `/v1` and stays loopback |
+| Panel says the agent is offline | `bazelisk run //:manage -- agent-model status --json`, then check `EZ_AGENT_LLM_URL` ends in `/v1` and stays loopback |
 | `/v1/models` on `:30001` does not answer | the sidecar is still loading (`AGENT_MODEL_READY_S`) or a preflight refused it - re-run `agent-model run` and read the refuse line |
 | Client job sits `pending` | no connected executor: open the panel, press **Connect executor**, keep the tab foregrounded, use a Chromium browser |
 | Local MCP **Discover** fails | non-loopback URL, missing CORS for the ComfyUI origin, or a transport that is not Streamable HTTP |
@@ -368,7 +368,7 @@ under `${COMFY_OUTPUT_DIR}` or it is refused.
 | `GET /ez_edit/exec/pending`, `POST /ez_edit/exec/result` | browser executor queue |
 | `POST /ez_edit/local_tools/sync`, `GET .../pending`, `POST .../result` | laptop-local MCP relay |
 
-Host-side MCP for a desktop agent: `./scripts/manage.sh edit-mcp --stdio` (same typed tools,
+Host-side MCP for a desktop agent: `bazelisk run //:manage -- edit-mcp --stdio` (same typed tools,
 server name `ez-edit`): [MCP and SSH tunnels](operate/mcp.md#edit-mcp). Jobs, projects, and
 renders all live under `${COMFY_OUTPUT_DIR}/edit/`.
 

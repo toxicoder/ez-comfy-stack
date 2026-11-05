@@ -27,7 +27,12 @@ Bazelisk is the ingress for code, tests, builds, and docs. Make targets are shim
 
 - host bootstrap: `bash scripts/setup-host.sh` (or `bazelisk run //:setup-host`) - installs
   bazelisk plus the lint toolchain; the lint lane now fails loudly under Bazel when a tool
-  is missing, so this is the documented repair
+  is missing, so this is the documented repair. `--check` also flags a tool that is present
+  but below its pin
+- everything (one command, every gate): `bazelisk run //:everything` - host probe, `build
+  //... --nobuild`, `//:test-all` minus the container visual lane, that visual lane (skipped
+  with a stated reason when Docker or the committed baselines are absent), then the docs build
+  and render check; `--skip-bootstrap` for CI or an already-provisioned host
 - validate: `bazelisk run //:validate`
 - test (fast): `bazelisk test //:test-fast`
 - test (every gate, incl. manual linters, visual, compose; needs host linters + npm + docker): `bazelisk test //:test-all`
@@ -36,11 +41,15 @@ Bazelisk is the ingress for code, tests, builds, and docs. Make targets are shim
 - fmt: `bazelisk run //:fix`  (`make fmt` / `make lint` are shims)
 - types: `bazelisk test //tests:typecheck` (Pyright + mypy; `disallow_untyped_defs`)
 - coverage: `bazelisk test //:coverage`
-- file ownership: `bazelisk test //:owned_files_check` (every tracked file is mapped into a target)
+- file ownership: `bazelisk test //:owned_files_check` (every tracked file is mapped into a target,
+  and every `srcs` / `data` / `deps` list names its files instead of globbing)
+- doc command references: `bazelisk test //:bazel_docs_check` (docs, comments, printed strings, and
+  lab-graph notes name Bazel targets rather than raw scripts)
 - compose config: `bazelisk test //docker:compose_config`
-- docs serve: `bazelisk run //docs:serve` or `./docs/manage-docs.sh serve`
+- docs serve: `bazelisk run //docs:serve`
 - docs export: `bazelisk run //docs:docs`
 - docs generators only: `bazelisk run //docs:generate`
+- one docs generator only: `bazelisk run //docs:generate_shell|generate_workflow|generate_cinema|generate_audio`
 - regenerate derived JS: `bazelisk run //tests:build_quality_js`
 - doctor: `bazelisk run //:manage -- doctor`
 - stack: `bazelisk run //:manage -- setup|download-models|start|stop`; `./scripts/manage.sh <verb>`
@@ -94,7 +103,7 @@ Do not weaken, and state impact if you touch any of:
 Models stay US-safe: Klein 4B stills, Wan 2.2 silent motion, LTX-2.5 distilled AV.
 Do not pin MiniMax, Seedance, or other non-catalog models in promoted workflows.
 
-Promote a live graph with `./scripts/manage.sh promote-workflow` into
+Promote a live graph with `bazelisk run //:manage -- promote-workflow` into
 `workflows/_lab/<lane>/<id>.json`, then update `_build_*.py` + tests. Never copy `_lab` -> `_user`.
 
 ## Docs

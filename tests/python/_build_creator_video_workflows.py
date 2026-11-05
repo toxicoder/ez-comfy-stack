@@ -425,7 +425,7 @@ def build_shot_map_markdown(film: str, label: str, parsed: dict) -> str:
         "**motion/silent/still-to-shot**.",
         "",
         "18 x 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. Last frame of shot N is LoadImage of shot N+1.",
-        f"Concat: `./scripts/utilities/concat-shots.sh --film {film} --yes`",
+        f"Concat: `bazelisk run //scripts:run-utility -- concat-shots --film {film} --yes`",
         "",
         "Do not Queue a 90s denoise in one graph. US-safe local pack only. No score "
         "(breath and world only).",
@@ -463,7 +463,7 @@ LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-genera
 2. Bypass Identity; enable Shot print. Set LoadImage to the identity PNG (shot 1) or previous `*_last`.
 3. Paste Motion + Audio from the on-canvas shot map. Set VHS prefix `ez_{slug}_bN_sM_ltx_video` and last-frame `ez_{slug}_bN_sM_last`. Queue **5.00s** AV.
 4. Repeat 18 times. Optional silent rehearsal: **motion/silent/still-to-shot**.
-5. `./scripts/utilities/concat-shots.sh --film {film} --yes`
+5. `bazelisk run //scripts:run-utility -- concat-shots --film {film} --yes`
 
 Do not Queue a 90s denoise. US-safe local pack only. No score.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin canned identity.

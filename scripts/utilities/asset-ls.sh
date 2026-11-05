@@ -7,7 +7,6 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- asset-ls [--json] [--output-dir DIR]
-#   ./scripts/utilities/asset-ls.sh [--json] [--output-dir DIR]
 #
 # Environment:
 #   COMFY_OUTPUT_DIR - default catalog is ${COMFY_OUTPUT_DIR}/assets

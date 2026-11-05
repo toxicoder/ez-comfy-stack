@@ -9,9 +9,8 @@ Stdlib only (plus the encyclopedia module). Session variables stay
 ``${COMFY_OUTPUT_DIR}``-style. Do not hand-edit generated pages.
 
 Usage:
+  bazelisk run //docs:generate_workflow                 # this file only
   bazelisk run //docs:docs                              # regenerate every docs page
-  python3 docs/generate_workflow_docs.py                # escape hatch: this file only
-  python3 docs/generate_workflow_docs.py --force
 """
 
 from __future__ import annotations
@@ -1066,7 +1065,7 @@ def render_album_page(
         "## Purpose",
         "",
         f"Numbered takes under `{album_id}/`. Queue one track, or "
-        f"`./scripts/manage.sh album-render --album {album_id.removeprefix('audio/albums/')}`.",
+        f"`bazelisk run //:manage -- album-render --album {album_id.removeprefix('audio/albums/')}`.",
         "",
     ]
     if note:

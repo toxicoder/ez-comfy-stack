@@ -6,6 +6,104 @@ load("//tools:exec_shell.bzl", "exec_shell")
 
 package(default_visibility = ["//visibility:private"])
 
+# Every first-party shell and Python helper, listed by hand: adding a
+# helper is a deliberate BUILD edit, so no helper can go unmapped.
+_LIB_SH = [
+    "lib/blender_host.sh",
+    "lib/check_tool.sh",
+    "lib/client_os.sh",
+    "lib/common.sh",
+    "lib/compose.sh",
+    "lib/disk_scan.sh",
+    "lib/films.sh",
+    "lib/models.sh",
+    "lib/occupancy.sh",
+    "lib/paths.sh",
+    "lib/progress.sh",
+    "lib/safety.sh",
+]
+
+_LIB_PY = [
+    "lib/asset_bible.py",
+    "lib/blender_mcp.py",
+    "lib/disk_catalog.py",
+    "lib/edit_mcp.py",
+    "lib/guide_pack.py",
+    "lib/house_clay_render.py",
+    "lib/house_layout.py",
+    "lib/mcp_runtime.py",
+    "lib/model_manifest.py",
+    "lib/operator_log.py",
+    "lib/quality_apply.py",
+    "lib/research_mcp.py",
+    "lib/studio_mcp.py",
+]
+
+_UTILITIES_SH = [
+    "utilities/agent-model.sh",
+    "utilities/album-render.sh",
+    "utilities/asset-ls.sh",
+    "utilities/audio-still-video.sh",
+    "utilities/blender-guide.sh",
+    "utilities/blender-install.sh",
+    "utilities/blender-llm.sh",
+    "utilities/blender-mcp.sh",
+    "utilities/blender-stills.sh",
+    "utilities/blender.sh",
+    "utilities/compile-film.sh",
+    "utilities/compress-cinema-clip.sh",
+    "utilities/concat-shots.sh",
+    "utilities/disk-wizard.sh",
+    "utilities/download-3d.sh",
+    "utilities/download-dreamx.sh",
+    "utilities/download-dub.sh",
+    "utilities/download-image.sh",
+    "utilities/download-limit.sh",
+    "utilities/download-llm.sh",
+    "utilities/download-longcat.sh",
+    "utilities/download-ltx.sh",
+    "utilities/download-music.sh",
+    "utilities/download-podcast.sh",
+    "utilities/download-restore.sh",
+    "utilities/download-wan.sh",
+    "utilities/dub-fetch.sh",
+    "utilities/edit-mcp.sh",
+    "utilities/film-accept.sh",
+    "utilities/film-animatic.sh",
+    "utilities/film-export-otio.sh",
+    "utilities/film-proxies.sh",
+    "utilities/house-views.sh",
+    "utilities/llm-sidecar.sh",
+    "utilities/models-manifest.sh",
+    "utilities/nvenc-preview.sh",
+    "utilities/occupancy.sh",
+    "utilities/overlay-qc.sh",
+    "utilities/pack-frames.sh",
+    "utilities/podcast-loudnorm.sh",
+    "utilities/print-shot.sh",
+    "utilities/promote-workflow.sh",
+    "utilities/reap-models.sh",
+    "utilities/research-mcp.sh",
+    "utilities/runner.sh",
+    "utilities/setup-client.sh",
+    "utilities/shot-sheet.sh",
+    "utilities/spark-farm.sh",
+    "utilities/spark-timing.sh",
+    "utilities/stem-mix.sh",
+    "utilities/studio-mcp.sh",
+    "utilities/take-promote.sh",
+    "utilities/update-stack.sh",
+]
+
+_UTILITIES_PS1 = [
+    "utilities/setup-client.ps1",
+]
+
+_CI_SH = [
+    "ci/install-lint-tools.sh",
+    "ci/publish-pages-tree.sh",
+]
+
 exec_shell(
     name = "manage",
     src = "manage.sh",
@@ -49,24 +147,10 @@ exports_files(
     [
         "manage.sh",
         "setup-host.sh",
+        "everything.sh",
         "validate.sh",
         "ci_check_only.sh",
-    ] + glob(
-        ["lib/*.sh"],
-        allow_empty = False,
-    ) + glob(
-        ["lib/*.py"],
-        allow_empty = False,
-    ) + glob(
-        ["utilities/*.sh"],
-        allow_empty = False,
-    ) + glob(
-        ["utilities/*.ps1"],
-        allow_empty = False,
-    ) + glob(
-        ["ci/*.sh"],
-        allow_empty = False,
-    ),
+    ] + _LIB_SH + _LIB_PY + _UTILITIES_SH + _UTILITIES_PS1 + _CI_SH,
     visibility = [
         "//docs:__pkg__",
         "//lints:__pkg__",
@@ -80,16 +164,7 @@ filegroup(
     srcs = [
         "manage.sh",
         "validate.sh",
-    ] + glob(
-        ["lib/*.sh"],
-        allow_empty = False,
-    ) + glob(
-        ["lib/*.py"],
-        allow_empty = False,
-    ) + glob(
-        ["utilities/*.sh"],
-        allow_empty = False,
-    ),
+    ] + _LIB_SH + _LIB_PY + _UTILITIES_SH,
     visibility = [
         "//docs:__pkg__",
         "//lints:__pkg__",
@@ -100,22 +175,12 @@ filegroup(
 
 filegroup(
     name = "utilities",
-    srcs = glob(
-        ["utilities/*.sh"],
-        allow_empty = False,
-    ) + glob(
+    srcs = _UTILITIES_SH + [
         # The Windows client bootstrap: same lane as setup-client.sh, run from
         # a PowerShell prompt on a Spark client. It is a payload of the
         # utility runner, not of manage.sh.
-        ["utilities/*.ps1"],
-        allow_empty = False,
-    ) + glob(
-        ["lib/*.sh"],
-        allow_empty = False,
-    ) + glob(
-        ["lib/*.py"],
-        allow_empty = False,
-    ),
+        "utilities/setup-client.ps1",
+    ] + _LIB_SH + _LIB_PY,
     visibility = ["//visibility:public"],
 )
 
@@ -133,6 +198,14 @@ sh_binary(
         "ci_check_only.sh",
         "lib/paths.sh",
     ],
+    visibility = ["//visibility:public"],
+)
+
+# The full-sweep orchestrator behind //:everything. It shells out to bazelisk
+# only, so it carries no runfiles: every input it needs is a Bazel target.
+exec_shell(
+    name = "everything",
+    src = "everything.sh",
     visibility = ["//visibility:public"],
 )
 

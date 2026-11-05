@@ -97,11 +97,11 @@ bazelisk run //docs-site:install               # npm ci --legacy-peer-deps, once
 bazelisk run //docs:generate                    # the four generators only, no npm, no export
 bazelisk run //docs:docs                        # generators, then the Fumadocs export
 
-# Escape hatches: one generator only, when you are iterating on that generator
-python3 docs/generate_shell_docs.py
-python3 docs/generate_workflow_docs.py
-python3 docs/generate_cinema_docs.py
-python3 docs/generate_audio_docs.py
+# One generator only, when you are iterating on that generator
+bazelisk run //docs:generate_shell              # docs/generated/shell/reference.md
+bazelisk run //docs:generate_workflow           # docs/generated/workflows/ + workflow-nodes.md
+bazelisk run //docs:generate_cinema             # docs/generated/cinema/
+bazelisk run //docs:generate_audio              # docs/generated/audio/
 ```
 
 `//docs:generate` is the loop you want after editing a shell function, a workflow graph, or a Cinema/Audio Rack JSON: no npm install, no webpack, and it prints the file count it wrote. `bazelisk test //tests:pytest` then fails if the committed `docs/generated/` no longer matches the generators, so regenerate and commit in the same change.

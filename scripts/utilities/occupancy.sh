@@ -7,8 +7,7 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- occupancy status [--json]
-#   ./scripts/utilities/occupancy.sh status [--json]
-#   ./scripts/utilities/occupancy.sh enter blender-desk|llm-desk|klein|trellis|wan|ltx|idle [--yes]
+#   bazelisk run //scripts:run-utility -- occupancy enter blender-desk|llm-desk|klein|trellis|wan|ltx|idle [--yes]
 #
 # Safety:
 #   Does not start Compose (start still types yes). Does not weaken

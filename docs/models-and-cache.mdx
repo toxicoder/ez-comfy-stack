@@ -214,7 +214,7 @@ each pack: [Download tiers](download-tiers.md). Read-only status per family:
 ### Check the tree without network
 
 ```bash
-./scripts/manage.sh models-status
+bazelisk run //:manage -- models-status
 ```
 
 Every lab App also has an isolated **Check models** node (and an occupancy-chip button in
@@ -231,9 +231,9 @@ Host-wide leftovers (HF hub, Docker layers, Ollama, other inference backends) ar
 moves (LTX 2.3 -> 2.5 already happened), **reap** the old tree - do not wait for disk-full:
 
 ```bash
-./scripts/manage.sh reap-models --plan
-./scripts/manage.sh reap-models --apply --class junk --yes
-./scripts/manage.sh reap-models --apply --class superseded --quarantine --yes
+bazelisk run //:manage -- reap-models --plan
+bazelisk run //:manage -- reap-models --apply --class junk --yes
+bazelisk run //:manage -- reap-models --apply --class superseded --quarantine --yes
 ```
 
 `manage.sh cleanup` is **volume-only** (named volume `comfy-state`). It does **not** delete

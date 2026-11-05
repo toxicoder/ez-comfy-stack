@@ -23,7 +23,7 @@ tags: [workflows, generated, comfyui, audio, album]
 
 ## Purpose
 
-Numbered takes under `audio/albums/drive-through/my-coder/`. Queue one track, or `./scripts/manage.sh album-render --album drive-through/my-coder`.
+Numbered takes under `audio/albums/drive-through/my-coder/`. Queue one track, or `bazelisk run //:manage -- album-render --album drive-through/my-coder`.
 
 ```text
 ## 01-lift-tempo

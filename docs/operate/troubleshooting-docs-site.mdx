@@ -25,7 +25,7 @@ tags: [troubleshooting, docs, session-variables]
 Open this page when the docs site itself looks wrong and the Spark is fine: a copied command still
 shows `${SPARK_HOST}` / `${MODELS_DIR}` chips, a wide table lost its horizontal scrollbar or its
 pinned header stays after the table has scrolled past, or every docs search says no results. Nothing
-here is fixed by `./scripts/manage.sh doctor`.
+here is fixed by `bazelisk run //:manage -- doctor`.
 
 ## Start here
 

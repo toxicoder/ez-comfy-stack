@@ -19,10 +19,94 @@ package(default_visibility = ["//visibility:private"])
 
 filegroup(
     name = "content",
-    srcs = glob(
+    srcs = [
+        "asset-bible.mdx",
+        "blender-gb10-sidecar.mdx",
+        "contribute/building-with-bazel.md",
+        "contribute/contributing.md",
+        "contribute/devcontainer.md",
+        "contribute/docs-style.mdx",
+        "contribute/host-setup.mdx",
+        "contribute/security.mdx",
+        "contribute/testing-docs.mdx",
+        "create/app-forge.md",
+        "create/audio-rack.md",
+        "create/cinema-rack.md",
+        "create/music-disclosure.mdx",
+        "create/music-edm.mdx",
+        "create/music-rap.mdx",
+        "create/workflows-audio.md",
+        "create/workflows-creator.md",
+        "create/workflows-film.md",
+        "create/workflows-index.mdx",
+        "create/workflows-motion.mdx",
+        "create/workflows-services.md",
+        "create/workflows-stills.md",
+        "dcc-workflows.mdx",
+        "disk-wizard.mdx",
+        "download-limit.mdx",
+        "download-tiers.mdx",
+        "dub.mdx",
+        "edit-agent.mdx",
+        "getting-started.mdx",
+        "glossary.mdx",
+        "index.mdx",
+        "learn/architecture.mdx",
+        "learn/blender-creator.md",
+        "learn/clay-to-finish.md",
+        "learn/comfy-first-blender.mdx",
+        "learn/comfyui.mdx",
+        "learn/dream-house.md",
+        "learn/generation.mdx",
+        "learn/hardware.mdx",
+        "learn/index.mdx",
+        "learn/merges.md",
+        "learn/occupancy.mdx",
+        "learn/pipeline.mdx",
+        "licenses.mdx",
+        "manage-cli.mdx",
+        "models-and-cache.mdx",
+        "music.mdx",
+        "occupancy.mdx",
+        "operate/backup-restore.mdx",
+        "operate/daily.mdx",
+        "operate/mcp.mdx",
+        "operate/models-packs.mdx",
+        "operate/models-sharing.md",
+        "operate/models-tokens.md",
+        "operate/occupancy-matrix.mdx",
+        "operate/quick-reference.md",
+        "operate/reporting-issues.mdx",
+        "operate/troubleshooting-canvas.mdx",
+        "operate/troubleshooting-docs-site.mdx",
+        "operate/troubleshooting-downloads.mdx",
+        "operate/troubleshooting-host-docker.mdx",
+        "operate/troubleshooting-models-workflows.mdx",
+        "operate/troubleshooting-start-runtime.mdx",
+        "operate/update.md",
+        "podcast.mdx",
+        "project-conventions.md",
+        "prompting.mdx",
+        "reboot-safety.mdx",
+        "reference/config-and-schemas.mdx",
+        "reference/custom-nodes.mdx",
+        "reference/studio-ui.mdx",
+        "reference/workflow-nodes.md",
+        "shorts.mdx",
+        "spark-farm.mdx",
+        "splat-sidecar.mdx",
+        "start/faq.mdx",
+        "start/onboard.mdx",
+        "start/this-computer.mdx",
+        "start/when-to-use-vs-spark-lab.mdx",
+        "studio-apps.mdx",
+        "studio-sidecars.mdx",
+        "studio-workflows.mdx",
+        "troubleshooting.mdx",
+        "visual-generative-ai.mdx",
+        "vlo.mdx",
+    ] + glob(
         [
-            "**/*.md",
-            "**/*.mdx",
             "assets/**",
             "generated/**",
         ],
@@ -45,10 +129,15 @@ _DOCS_COMMON_DATA = [
     ":content",
     "//includes",
     "//scripts:doc_sources",
-] + glob(
-    ["workflow_nodes*.py"],
-    allow_empty = False,
-)
+    "workflow_nodes.py",
+    "workflow_nodes_core.py",
+    "workflow_nodes_enhance.py",
+    "workflow_nodes_lib.py",
+    "workflow_nodes_ltx.py",
+    "workflow_nodes_packs.py",
+    "workflow_nodes_trellis.py",
+    "workflow_nodes_vhs_ace.py",
+]
 
 sh_binary(
     name = "serve",
@@ -74,6 +163,53 @@ sh_binary(
     name = "generate",
     srcs = ["manage-docs.sh"],
     args = ["generate"],
+    data = _DOCS_COMMON_DATA,
+    visibility = ["//visibility:public"],
+)
+
+# One generator per target, so the edit-run-print loop over a single derived
+# file stays Bazel-first. Each forwards `generate-one <module>` to
+# manage-docs.sh, which names the module it runs.
+sh_binary(
+    name = "generate_shell",
+    srcs = ["manage-docs.sh"],
+    args = [
+        "generate-one",
+        "generate_shell_docs",
+    ],
+    data = _DOCS_COMMON_DATA,
+    visibility = ["//visibility:public"],
+)
+
+sh_binary(
+    name = "generate_workflow",
+    srcs = ["manage-docs.sh"],
+    args = [
+        "generate-one",
+        "generate_workflow_docs",
+    ],
+    data = _DOCS_COMMON_DATA,
+    visibility = ["//visibility:public"],
+)
+
+sh_binary(
+    name = "generate_cinema",
+    srcs = ["manage-docs.sh"],
+    args = [
+        "generate-one",
+        "generate_cinema_docs",
+    ],
+    data = _DOCS_COMMON_DATA,
+    visibility = ["//visibility:public"],
+)
+
+sh_binary(
+    name = "generate_audio",
+    srcs = ["manage-docs.sh"],
+    args = [
+        "generate-one",
+        "generate_audio_docs",
+    ],
     data = _DOCS_COMMON_DATA,
     visibility = ["//visibility:public"],
 )

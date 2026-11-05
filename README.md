@@ -14,9 +14,9 @@
 | Occupancy | One heavy GPU job (XOR) |
 | Downloads | `download-limit auto` = **85%** of measured Mbps (24h host cache) |
 | Restart | `restart: "no"` - type **yes** on start |
-| Tests | **Bazelisk** is the only ingress - hermetic **100%** coverage gate via `bazelisk run //:validate` |
+| Tests | **Bazelisk** is the only ingress - `bazelisk run //:everything` runs the whole sweep, `bazelisk run //:validate` is the fast gate (hermetic **100%** coverage) |
 
-**Documentation:** [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (from `main`) - [development](https://toxicoder.github.io/ez-comfy-stack/development/) (from `development`) - Fumadocs (Next.js) with Orama search, glossary tooltips, Mermaid, and live editable command variables. Docs run through bazelisk too: `bazelisk run //docs:serve` locally, `bazelisk run //docs:docs` for the static export, `bazelisk test //docs:test_docs_site_render` for the content gate (`./docs/manage-docs.sh serve` is the no-Bazel path). Migration notes: [MIGRATION.md](MIGRATION.md).
+**Documentation:** [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (from `main`) - [development](https://toxicoder.github.io/ez-comfy-stack/development/) (from `development`) - Fumadocs (Next.js) with Orama search, glossary tooltips, Mermaid, and live editable command variables. Docs run through bazelisk too: `bazelisk run //docs:serve` locally, `bazelisk run //docs:docs` for the static export, `bazelisk test //docs:test_docs_site_render` for the content gate. Migration notes: [MIGRATION.md](MIGRATION.md).
 
 ## Start here
 
@@ -77,6 +77,10 @@ Non-host verbs lead with the same ingress as everything else, `bazelisk run //:m
 `./scripts/manage.sh <verb>` stays the documented escape hatch for `setup`, `download-models`,
 `start`, and `stop`, which need docker, sudo, the GPU, or `$HOME`.
 
+Changed something and want the whole sweep in one command? `bazelisk run //:everything` runs the
+host-toolchain probe, the load/analysis pass, every test, and the docs build in order, and names
+the target that failed. Pick a single lane from the table in **The gates** below.
+
 Cut and grade the result in **[Vlo](docs/vlo.mdx)** - a host-side, AGPL-3.0 timeline editor
 that dials this stack's ComfyUI at `http://127.0.0.1:${COMFY_PORT:-8188}`, so every heavy
 generation still runs on the Spark. It is a host app: never in the image, never a Compose
@@ -97,7 +101,19 @@ bash scripts/setup-host.sh            # or: bazelisk run //:setup-host
 bash scripts/setup-host.sh --check    # prove the toolchain is actually installed
 ```
 
-Everything at once is the green build bar:
+Start here: one command runs the whole sweep, in order. It probes the host toolchain
+(`bazelisk run //:setup-host -- --check`), load/analysis-checks the graph
+(`bazelisk run //... --nobuild`), runs every gate (`bazelisk test //:test-all`), then builds and
+render-checks the docs (`bazelisk run //docs:docs`, `bazelisk run //docs:render-check`). Exit 0
+means every gate passed, 1 means one failed and it prints the failing target name, 2 means a bad
+argument or bazelisk is missing. `--skip-bootstrap` drops the probe for CI or an already-provisioned
+host; `-h` / `--help` prints the same list.
+
+```bash
+bazelisk run //:everything
+```
+
+The fast "am I done" gate is the green build bar:
 
 ```bash
 bazelisk run //:validate
@@ -107,6 +123,7 @@ Pick a lane from this table; each row runs the whole set for that job.
 
 | You want to | Command |
 | --- | --- |
+| Run everything reasonable in one go - toolchain probe, load/analysis, every gate, the docs-site visual lane (skipped with the reason printed when Docker or the committed baselines are absent), then the docs build and render check (add `--skip-bootstrap` on CI or an already-provisioned host) | `bazelisk run //:everything` |
 | Run the fast lane CI runs (bats, pytest, typecheck, JS, inventory) | `bazelisk test //:test-fast` |
 | Run every gate, including manual linters, the Playwright visual suite, and the Compose config check (needs host linters, the pinned docs-site npm tree, and a Docker CLI) | `bazelisk test //:test-all` |
 | Run the linters only | `bazelisk test //:lint --test_tag_filters=manual` |

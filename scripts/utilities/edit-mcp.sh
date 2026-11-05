@@ -8,10 +8,9 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- edit-mcp [--stdio]
-#   ./scripts/utilities/edit-mcp.sh [--stdio]
-#   ./scripts/utilities/edit-mcp.sh --list-tools
-#   ./scripts/utilities/edit-mcp.sh --call TOOL [JSON]
-#   ./scripts/utilities/edit-mcp.sh status [--json]
+#   bazelisk run //scripts:run-utility -- edit-mcp --list-tools
+#   bazelisk run //scripts:run-utility -- edit-mcp --call TOOL [JSON]
+#   bazelisk run //scripts:run-utility -- edit-mcp status [--json]
 #
 # The ComfyUI origin is EZ_EDIT_COMFY_URL, else http://127.0.0.1:${COMFY_PORT:-8188}.
 #

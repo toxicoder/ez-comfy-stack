@@ -34,7 +34,7 @@ subagents. No UNET, no VAE, no KSampler.
 
 Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
-  ./scripts/manage.sh occupancy enter llm-desk --yes
+  bazelisk run //:manage -- occupancy enter llm-desk --yes
 
 Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.
 Web search is SSRF-safe HTTPS (Wikipedia + DuckDuckGo HTML). Fail-soft if the
@@ -45,7 +45,7 @@ network or GGUF is missing.
 3. Queue. Read **Reply** and **Sources**. Copy prompt ingredients into
    **inspire/prompt-forge**, then **stills/still-draft**.
 
-Laptop agents: `./scripts/manage.sh research-mcp --stdio` (Path D). Same
+Laptop agents: `bazelisk run //:manage -- research-mcp --stdio` (Path D). Same
 pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 ```
@@ -107,7 +107,7 @@ subagents. No UNET, no VAE, no KSampler.
 
 Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
-  ./scripts/manage.sh occupancy enter llm-desk --yes
+  bazelisk run //:manage -- occupancy enter llm-desk --yes
 
 Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.
 Web search is SSRF-safe HTTPS (Wikipedia + DuckDuckGo HTML). Fail-soft if the
@@ -118,7 +118,7 @@ network or GGUF is missing.
 3. Queue. Read **Reply** and **Sources**. Copy prompt ingredients into
    **inspire/prompt-forge**, then **stills/still-draft**.
 
-Laptop agents: `./scripts/manage.sh research-mcp --stdio` (Path D). Same
+Laptop agents: `bazelisk run //:manage -- research-mcp --stdio` (Path D). Same
 pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 ```

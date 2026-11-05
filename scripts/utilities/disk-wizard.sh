@@ -7,10 +7,9 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- disk-wizard --plan
-#   ./scripts/utilities/disk-wizard.sh --plan
-#   ./scripts/utilities/disk-wizard.sh --json
-#   ./scripts/utilities/disk-wizard.sh --apply --yes
-#   ./scripts/utilities/disk-wizard.sh restore --from .disk-quarantine/<utc>
+#   bazelisk run //scripts:run-utility -- disk-wizard --json
+#   bazelisk run //scripts:run-utility -- disk-wizard --apply --yes
+#   bazelisk run //scripts:run-utility -- disk-wizard restore --from .disk-quarantine/<utc>
 #
 # Safety:
 #   Default is --plan (read-only). --apply requires --yes.

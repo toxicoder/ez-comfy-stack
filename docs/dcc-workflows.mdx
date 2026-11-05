@@ -35,26 +35,26 @@ This extends `ez_film`. It does **not** replace the 5.00s printer ([Short films]
 ## Operator loop (Path B)
 
 ```bash
-./scripts/manage.sh occupancy enter blender-desk
-./scripts/manage.sh export-guides --engine blender --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth
-./scripts/manage.sh occupancy enter klein --yes
+bazelisk run //:manage -- occupancy enter blender-desk
+bazelisk run //:manage -- export-guides --engine blender --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth
+bazelisk run //:manage -- occupancy enter klein --yes
 # Queue workflows/_lab/dcc/clay-hero.json on first.png
-./scripts/manage.sh overlay-qc --film go-see --shot 12 --look /path/to/ez_clay_hero.png
+bazelisk run //:manage -- overlay-qc --film go-see --shot 12 --look /path/to/ez_clay_hero.png
 # After download-ltx --tier iclora: Templates -> LTX-2.5 Union Control, depth from depth.mp4
 # Stop LTX. Stem mix (occupancy audio):
-./scripts/manage.sh stem-mix --film go-see --shot 12 --bg /path/to/print.mp4
+bazelisk run //:manage -- stem-mix --film go-see --shot 12 --bg /path/to/print.mp4
 ```
 
 Cheap pacing gate (host ffmpeg; compose may stay up):
 
 ```bash
-./scripts/manage.sh film-animatic --film go-see
+bazelisk run //:manage -- film-animatic --film go-see
 ```
 
 Script desk writes `films/<slug>/shots.yaml` (does not clobber lab YAML):
 
 ```bash
-./scripts/manage.sh shot-sheet run --film go-see
+bazelisk run //:manage -- shot-sheet run --film go-see
 ```
 
 Default on one GB10 is **Path D**: block and MCP on the laptop, rsync `guides/` to the Spark, Spark only runs Comfy.
@@ -93,9 +93,9 @@ Clay is Workbench. **Beauty MP4 is Path A only** (engine-final ingest in a later
 `${COMFY_OUTPUT_DIR}/guides/<slug>/stills/<plate>/` - `ez.guide.still.v1`. Allowed sizes: 1280x704, 768x1280, 1024x1280, 1024x1024, 1280x720 (thumb, Klein only).
 
 ```bash
-./scripts/manage.sh occupancy enter blender-desk
-./scripts/manage.sh blender-stills --film go-see --plate mug --blend /path/to/prop.blend --size 1024x1024
-./scripts/manage.sh occupancy enter klein --yes
+bazelisk run //:manage -- occupancy enter blender-desk
+bazelisk run //:manage -- blender-stills --film go-see --plate mug --blend /path/to/prop.blend --size 1024x1024
+bazelisk run //:manage -- occupancy enter klein --yes
 # Queue klein-from-clay-plates or klein-from-canny
 ```
 
@@ -118,7 +118,7 @@ Two clay dumps, two contracts. Do not mix them.
 `house-views` also writes a greybox GLB beside the ten clay stills. Do not dump Instagram 4:5 into `guides/` or reuse `ez.guide.shot.v1` - that QC is 1280x704 / 120 frames and will refuse. Park the same way (`occupancy enter blender-desk`):
 
 ```bash
-./scripts/manage.sh house-views --slug lab-penthouse
+bazelisk run //:manage -- house-views --slug lab-penthouse
 ```
 
 Playbook, layout seed, and the language-only door: [Dream-house tours](learn/dream-house.md).

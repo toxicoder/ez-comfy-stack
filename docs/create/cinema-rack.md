@@ -61,7 +61,7 @@ Pick **none** or one id per axis. Splicing is across axes, not two dollies on on
 | Genre | Genre Looks | clause |
 | Viral look | Viral Looks | freeze |
 
-Catalog encyclopedia (generated, do not hand-edit): [Cinema technique catalogs](../generated/cinema/index.md). When a 5s muted illustration is shipped, the axis table links a poster to a technique page. Clips live under `docs/assets/cinema/<axis_id>/<technique_id>.mp4` (Git LFS) with a JPEG poster; compress with `./scripts/utilities/compress-cinema-clip.sh`.
+Catalog encyclopedia (generated, do not hand-edit): [Cinema technique catalogs](../generated/cinema/index.md). When a 5s muted illustration is shipped, the axis table links a poster to a technique page. Clips live under `docs/assets/cinema/<axis_id>/<technique_id>.mp4` (Git LFS) with a JPEG poster; compress with `bazelisk run //scripts:run-utility -- compress-cinema-clip`.
 
 Klein sentence order is cinematic grammar, not widget order: shot size -> angle -> lens -> composition -> lighting -> color -> weather -> genre -> viral -> time -> move -> optical -> edit.
 

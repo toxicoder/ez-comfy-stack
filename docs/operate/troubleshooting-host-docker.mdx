@@ -38,7 +38,7 @@ SSH/rsync is going over the wrong NIC. A `start` that simply refuses on headroom
 
 Run these three checks in order. Each one decides which section below is yours.
 
-- **Run `./scripts/manage.sh doctor`.** It names `docker missing`, an unreachable daemon, and a
+- **Run `bazelisk run //:manage -- doctor`.** It names `docker missing`, an unreachable daemon, and a
   nested layout dir that is not writable.
 - **Confirm the GPU side.** `nvidia-smi` proves the driver is up before you debug the daemon.
 - **Reach for `./scripts/manage.sh setup` before any `sudo`.** `setup` (and `download-models` /
@@ -57,7 +57,7 @@ Run these three checks in order. Each one decides which section below is yours.
 | `ln: ... comfy/llm/....gguf: Permission denied` then `GGUF ready` | Relink into a nested dir the user cannot write; the GGUF is already present | Start is OK - Enhance works if that path exists. Heal: `./scripts/manage.sh download-models` **or** `setup` / `start` (sudo-chown `comfy/`). Do not abort start |
 | Pending / can't start container | Docker/GPU runtime | `nvidia-smi`, Container Toolkit install |
 | `failed to fetch oauth token: denied` / `nvcr.io` Access Denied on `start` | NGC base image pull without login | Pull latest (default bases are **Docker Hub** `nvidia/cuda` **runtime** for builder and final). Rebuild: `./scripts/manage.sh start`. If you set `CUDA_BASE_IMAGE` / `CUDA_RUNTIME_IMAGE` to `nvcr.io/...`, run `docker login nvcr.io` (user `$oauthtoken`, password = NGC API key) |
-| Spark farm SSH / rsync over the wrong NIC | Using management hostnames for weights, or expecting remote compose | Source `config/spark-farm.example.env` (`SPARK_HOSTS` + `${SPARK_USER}` for SSH; `SPARK_FABRIC_IPS` for NFS/rsync). Never rsync weights over the management NIC. `./scripts/utilities/spark-farm.sh` **never** remote `compose up` - run `./scripts/manage.sh start` locally on each node (type **yes**). [Spark farm](../spark-farm.md) |
+| Spark farm SSH / rsync over the wrong NIC | Using management hostnames for weights, or expecting remote compose | Source `config/spark-farm.example.env` (`SPARK_HOSTS` + `${SPARK_USER}` for SSH; `SPARK_FABRIC_IPS` for NFS/rsync). Never rsync weights over the management NIC. `bazelisk run //scripts:run-utility -- spark-farm` **never** remote `compose up` - run `./scripts/manage.sh start` locally on each node (type **yes**). [Spark farm](../spark-farm.md) |
 
 ## Fixes
 
@@ -69,7 +69,7 @@ Docker is usually pre-installed on DGX Spark, but updates or OS reimages can rem
 ./scripts/manage.sh setup --install-docker
 # sudo password + type yes if prompted
 newgrp docker   # if permission denied in this shell
-./scripts/manage.sh doctor
+bazelisk run //:manage -- doctor
 ```
 
 <Tabs groupId="interactive-non-interactive" items={["Interactive", "Non-interactive"]} persist>
@@ -104,7 +104,7 @@ sudo mkdir -p "${MODELS_DIR:-/mnt/models}/comfy"
 sudo chown -R "$USER:$USER" "${MODELS_DIR:-/mnt/models}"
 # or in .env:
 # MODELS_DIR=$HOME/models
-./scripts/manage.sh doctor
+bazelisk run //:manage -- doctor
 ```
 
 ### COMFY_OUTPUT_DIR nested permission denied
