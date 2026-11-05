@@ -143,6 +143,54 @@ class SnippetTests(unittest.TestCase):
         self.assertIn("--8<--", codemod.transform_text(source))
 
 
+class EzCommandTests(unittest.TestCase):
+    """`` ```ezcmd `` recipe fences collapse into one ``<EzCommand id="..." />`` line."""
+
+    RECIPE = "```ezcmd\nid: manage-start\nargs:\n  - start\n```\n"
+
+    def test_fence_with_an_id_becomes_the_component(self) -> None:
+        """The id is the recipe's only wording; the argument body is generator input."""
+        result = codemod.transform_text(f"intro\n\n{self.RECIPE}\noutro\n")
+        self.assertIn('<EzCommand id="manage-start" />', result)
+        self.assertNotIn("ezcmd", result)
+        self.assertNotIn("args:", result)
+        self.assertIn("intro", result)
+        self.assertIn("outro", result)
+
+    def test_recipe_id_survives_the_prose_projection(self) -> None:
+        """The guard has to read the fence and the component as the same wording."""
+        projection = codemod.prose_projection(self.RECIPE)
+        self.assertIn("manage-start", projection)
+        self.assertEqual(projection, codemod.prose_projection(codemod.transform_text(self.RECIPE)))
+
+    def test_fence_without_an_id_is_left_verbatim(self) -> None:
+        """No id means no component to name; the recipe stays for a human to fix."""
+        source = "```ezcmd\nargs:\n  - start\n```\n"
+        self.assertEqual(source, codemod.transform_text(source))
+
+    def test_fence_that_never_closes_is_left_verbatim(self) -> None:
+        """An unterminated fence has an unknown extent, so nothing is swallowed."""
+        source = "```ezcmd\nid: manage-start\n"
+        self.assertEqual(source, codemod.transform_text(source))
+
+    def test_indented_fence_keeps_its_indent_on_the_component(self) -> None:
+        """A recipe written under a list item lands back at that item's indent."""
+        source = "    ```ezcmd\n    id: manage-stop\n```\n"
+        result = codemod.transform_text(source)
+        self.assertIn('    <EzCommand id="manage-stop" />', result)
+        self.assertNotIn("```", result)
+
+    def test_indented_fence_with_an_indented_closer_is_left_verbatim(self) -> None:
+        """Only a column-0 closer ends the fence, so this one never ends and is kept."""
+        source = "    ```ezcmd\n    id: manage-stop\n    ```\n"
+        self.assertEqual(source, codemod.transform_text(source))
+
+    def test_fence_inside_a_code_example_is_left_verbatim(self) -> None:
+        """A page documenting the ezcmd syntax keeps its example intact."""
+        source = "````markdown\n```ezcmd\nid: manage-start\n```\n````\n"
+        self.assertEqual(source, codemod.transform_text(source))
+
+
 class CardGridTests(unittest.TestCase):
     """The ``grid cards`` md_in_html block becomes ``<Cards>``/``<Card>``."""
 
@@ -215,6 +263,23 @@ class CardGridTests(unittest.TestCase):
             codemod.prose_projection(self.ICON_SOURCE),
             codemod.prose_projection(converted),
         )
+
+    def test_card_body_that_is_only_an_icon_drops_out(self) -> None:
+        """A body line carrying just an icon and its size classes is chrome, not prose."""
+        source = (
+            '<div class="grid cards" markdown>\n\n'
+            "-   **Cluster basics**\n\n"
+            "    ---\n\n"
+            "    :material-server:{ .lg .middle }\n\n"
+            "    Boot the stack.\n\n"
+            "</div>\n"
+        )
+        result = codemod.transform_text(source)
+        self.assertIn('<Card title="Cluster basics">', result)
+        self.assertNotIn(":material-server:", result)
+        self.assertNotIn(".lg .middle", result)
+        self.assertIn("Boot the stack.", result)
+        self.assertEqual(codemod.prose_projection(source), codemod.prose_projection(result))
 
     def test_escaped_empty_grid_is_still_pending(self) -> None:
         """A declined escaped grid stays visible to pending_markers."""
