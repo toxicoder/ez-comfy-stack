@@ -266,7 +266,7 @@ _COVERING_SUITES: dict[str, list[str]] = {
     "docs-site": ["//docs-site:suite", "//:test-all"],
     "lints": ["//lints:shell_lint", "//lints:python", "//:test-all"],
     "scripts": ["//:test-fast", "//:test-all"],
-    "tests": ["//tests:bats", "//:test-fast", "//:test-all"],
+    "tests": ["//tests:bats", "//:test-fast", "//:test-all", "//:coverage"],
 }
 
 _TEST_RULES = ("sh_test", "py_test")
@@ -854,6 +854,11 @@ _SANCTIONED_GLOBS: dict[str, dict[str, str]] = {
         "bats/*.bats": "the macro derives one bats_<stem>_test target plus the "
         "//tests:bats suite from each file, so the glob is generator input and "
         "every file it matches still becomes a named target",
+    },
+    "//tests:coverage": {
+        "bats/*.bats": "the sweep runs the suite directory in one bats process, "
+        "so it reads the same tree the macro above globs; each file it matches "
+        "is also its own bats_<stem>_test target, so nothing goes unmapped",
     },
     "//workflows:lab_graphs": {
         "_lab/**/*.json": "graphs arrive one file at a time from "
