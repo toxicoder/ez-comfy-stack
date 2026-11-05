@@ -1,6 +1,5 @@
 """Package purpose: Hermetic BATS, node:test JS, pytest coverage, typecheck, and shell inventory."""
 
-load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//tools:exec_shell.bzl", "exec_shell")
 load(":bats.bzl", "bats_file_tests")
@@ -135,6 +134,7 @@ filegroup(
         "python/test_cinema_splice.py",
         "python/test_clip_chain_workflow.py",
         "python/test_code_score.py",
+        "python/test_coverage_gate.py",
         "python/test_creator_pack3.py",
         "python/test_creator_workflows.py",
         "python/test_cubic_rebuild.py",
@@ -466,8 +466,43 @@ sh_test(
     visibility = ["//visibility:public"],
 )
 
-sh_binary(
+# The operator-facing coverage sweep, in one command:
+#   bazelisk test //:coverage
+# It chains the 100% Python gate, Pyright + mypy, the strict shell inventory,
+# the whole BATS suite, and the optional kcov report.
+#
+# sh_test rather than sh_binary: the contributing docs have always told the
+# operator to `bazelisk test //:coverage`, and as a binary that invocation
+# analyzed, built, and exited 0 without ever executing the gate. `manual` keeps
+# it out of a wildcard run because //:test-fast already executes each of those
+# gates as its own cached target; naming this label is what spends the single
+# combined pass. `local` + `no-sandbox` for the same reason as :pytest - the
+# host's pytest, pytest-cov, mypy, pyright, and bats are what run.
+sh_test(
     name = "coverage",
+    size = "large",
+    timeout = "long",
     srcs = ["coverage.sh"],
+    data = [
+        ".coveragerc",
+        "repo_root.sh",
+        "requirements.txt",
+        "run_pytest.sh",
+        "shell_inventory.sh",
+        "typecheck.sh",
+        ":fixtures",
+        ":python_tests",
+        "//custom_nodes:sources",
+        "//docker:sources",
+        "//schemas",
+        "//scripts:doc_sources",
+        "//studio-ui:sources",
+        "//tools:blender",
+    ] + glob(["bats/*.bats"]),
+    tags = [
+        "local",
+        "manual",
+        "no-sandbox",
+    ],
     visibility = ["//visibility:public"],
 )

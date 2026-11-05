@@ -117,9 +117,20 @@ bazelisk run //:fix                                 # rewrite shfmt/buildifier f
 | `//:lint` | `//lints:python` + `//lints:shell_lint` (ShellCheck, shfmt, buildifier, Pyright, mypy) | host lint tools; strict mode on |
 | `//:validate` | Git-aware core + docs slices (`scripts/validate.sh`) | the checkout |
 | `//:fix` | `fix.sh` - in-place shfmt / buildifier | host lint tools |
-| `//:coverage` | Coverage report over the first-party Python tree | nothing beyond the checkout |
+| `//:coverage` | the whole coverage sweep as one gate: the 100% Python floor, Pyright + mypy, the strict shell inventory, the full BATS suite, then the optional kcov report | `bats` on the host; kcov is optional and non-fatal |
 
 **Done means `bazelisk run //:validate` is green.** Type errors are defects.
+
+**The 100% floor cannot be skipped.** `//tests:pytest` measures the trees listed in
+`COV_SCOPE` (`custom_nodes`, `docker`, `docs`, `scripts/lib`, `studio-ui`, `tools`) with
+`--cov-fail-under=100`. A host that never installed `pytest` or `pytest-cov` fails the target
+with the repair command rather than running the suite unmeasured and reporting green -
+`bazelisk run //:setup-host`, or `python3 -m pip install -r tests/requirements.txt`, fixes it.
+`//tests:python/test_coverage_gate.py` audits the runner, the omit list, and the target wiring,
+so a tree cannot drift out of scope, an omit rule cannot name production code, and `//:coverage`
+cannot revert to a rule that `bazelisk test` would build without running. The docs-site scripts
+carry the same floor under `//docs-site:nav_test`, `:codemod_test`, `:audit_hazards_test`, and
+`:visual_tooling_test`, each measuring its own module.
 
 `//:test-all` is the umbrella a human runs before shipping a Bazel-side change. It is not
 hermetic and not fast; CI runs `//:test-fast` plus `//:lint --test_tag_filters=manual` instead.
@@ -329,7 +340,7 @@ Path-filtered jobs in `.github/workflows/ci.yml`:
 | Job | When | What |
 | --- | --- | --- |
 | **bazel-core** | scripts/tests/docker/docs generators/typecheck pins or CI graph | `//:test-fast` then `//:lint --test_tag_filters=manual` (shellcheck/shfmt/buildifier) |
-| **docs-and-render** | docs/**, docs-site/**, or CI graph | Node 22 + `//docs:test_docs_site_render` + `//docs-site:unit|typecheck|nav_test|codemod_test`, then `bazelisk shutdown` and the static export outside Bazel. Export is `next build --webpack` in-process, one static-generation worker, `NODE_OPTIONS=--max-old-space-size=5120` (same as deploy-docs). MDX is compiled on demand (`dynamic: true` in `docs-site/source.config.ts`) so webpack does not ingest ~850 pages. Turbopack or a 6 GB heap plus Bazel SIGKILL the 7 GB runner. `docs-site/.next/cache` is cached between runs |
+| **docs-and-render** | docs/**, docs-site/**, or CI graph | Node 22 + the pinned `tests/requirements.txt` Python lane (the docs-site python gates measure coverage with pytest-cov) + `//docs:test_docs_site_render` + `//docs-site:suite` with `--test_tag_filters=-visual`, then `bazelisk shutdown` and the static export outside Bazel. Export is `next build --webpack` in-process, one static-generation worker, `NODE_OPTIONS=--max-old-space-size=5120` (same as deploy-docs). MDX is compiled on demand (`dynamic: true` in `docs-site/source.config.ts`) so webpack does not ingest ~850 pages. Turbopack or a 6 GB heap plus Bazel SIGKILL the 7 GB runner. `docs-site/.next/cache` is cached between runs |
 | **validate-gate** | always | `bash scripts/ci_check_only.sh` (CI-only script; no Bazel target - see the note below) |
 
 Topic-branch CI runs on **pull_request** only (push is `development`/`main`). Disk cache keys

@@ -19,6 +19,7 @@ import pathlib
 import sys
 import tempfile
 import unittest
+from collections.abc import Iterator
 from itertools import chain
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent / "scripts"))
@@ -176,6 +177,58 @@ class NestedNavTests(unittest.TestCase):
             }
         ]
         self.assertIn("listed twice", " ".join(gen_nav.validate(tree)))
+
+
+class MalformedTreeTests(unittest.TestCase):
+    """``nav.json`` is hand-edited, so the leaf walk tolerates the shapes YAML can produce.
+
+    A folder whose ``pages`` is a single mapping rather than a list, a folder that lost its
+    ``pages`` key, and a stray scalar between entries are all states the committed file can
+    reach in a review round. The walk keeps the leaves it can read and ignores what it
+    cannot, so the docs-coverage gate gets a short list instead of a crash or a phantom
+    "missing page" for a folder that was never a page.
+    """
+
+    def test_a_bare_mapping_is_read_as_one_node(self) -> None:
+        """A caller may hand the walk one leaf or one folder instead of a sequence."""
+        self.assertEqual(
+            [{"title": "Home", "path": "index.md"}],
+            gen_nav.flatten_pages({"title": "Home", "path": "index.md"}),
+        )
+
+    def test_a_folder_whose_pages_is_a_bare_mapping_yields_its_leaf(self) -> None:
+        tree: list[dict[str, object]] = [
+            {"title": "Operate", "pages": {"title": "Daily", "path": "operate/daily.md"}}
+        ]
+        self.assertEqual(
+            [{"title": "Daily", "path": "operate/daily.md"}], gen_nav.flatten_pages(tree)
+        )
+
+    def test_a_folder_without_pages_contributes_no_leaves(self) -> None:
+        """An emptied folder is not read as a page whose path went missing."""
+        tree: list[dict[str, object]] = [
+            {
+                "title": "Operate",
+                "pages": [
+                    {"title": "Daily", "path": "nope/daily.md"},
+                    {"title": "Troubleshooting"},
+                ],
+            }
+        ]
+        self.assertEqual([{"title": "Daily", "path": "nope/daily.md"}], gen_nav.flatten_pages(tree))
+        self.assertEqual(
+            ["nav page missing on disk: docs/nope/daily.md"], gen_nav.validate(tree)
+        )
+
+    def test_a_scalar_among_the_entries_is_skipped(self) -> None:
+        """A string or number slipped into the list has no leaf to give."""
+        tree: list[object] = ["Home", {"title": "Home", "path": "index.md"}, None, 4]
+        self.assertEqual([{"title": "Home", "path": "index.md"}], gen_nav.flatten_pages(tree))
+
+    def test_a_tree_that_is_not_a_sequence_yields_no_leaves(self) -> None:
+        for nodes in (None, "", 4, True):
+            with self.subTest(nodes=nodes):
+                self.assertEqual([], gen_nav.flatten_pages(nodes))
 
 
 class RepoContractTests(unittest.TestCase):
@@ -349,7 +402,7 @@ class MainCliTests(unittest.TestCase):
 
 
 @contextlib.contextmanager
-def _captured_args(argv: list[str]):
+def _captured_args(argv: list[str]) -> Iterator[None]:
     """Pin ``sys.argv`` so a module run as ``__main__`` sees a known command line."""
     original = sys.argv
     sys.argv = ["gen_nav.py", *argv]

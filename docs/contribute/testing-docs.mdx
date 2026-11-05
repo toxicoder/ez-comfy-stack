@@ -78,6 +78,17 @@ Pyright errors and mypy errors are **defects**. Do not skip the gate.
 - `studio-ui`
 - `tools` (Blender exporters; `bpy` is faked)
 
+The docs-site scripts carry the same floor under their own suites, each measuring its own
+module: `//docs-site:nav_test` (the nav transcriber), `//docs-site:codemod_test` (the MkDocs
+to MDX codemod), `//docs-site:audit_hazards_test` (the MDX hazard auditor), and
+`//docs-site:visual_tooling_test` (the capture-image pin).
+
+Nothing skips the floor. `//tests:pytest` fails the target when `pytest` or `pytest-cov`
+cannot be imported, naming `bazelisk run //:setup-host` as the repair, and
+`//tests:python/test_coverage_gate.py` audits the runner, the omit list, and the target wiring
+so a first-party tree cannot leave the measured scope and an omit rule cannot name production
+code.
+
 Vendored `custom_nodes/ez_dcc/_guide_pack.py` is included (same tests as `scripts/lib/guide_pack.py`). GPU loaders, llama.cpp, and host Blender are exercised with `sys.modules` fakes - tests stay hermetic.
 
 `PYTHONPATH=docker:docker/pythonpath:custom_nodes:scripts/lib:studio-ui:docs:tools`.

@@ -85,6 +85,7 @@ filegroup(
         "scripts/visual_linux_image.py",
         "scripts/visual_linux_in_container.sh",
         "source.config.ts",
+        "test_audit_hazards.py",
         "test_codemod.py",
         "test_gen_nav.py",
         "test_visual_tooling.py",
@@ -211,13 +212,23 @@ sh_test(
     visibility = ["//visibility:public"],
 )
 
-# Navigation transcriber tests (python unittest over docs-site/scripts/gen_nav.py).
+# Navigation transcriber tests (python unittest over docs-site/scripts/gen_nav.py).  Each
+# of these four targets measures its own module and fails below 100% statement coverage, so
+# an untested branch in a docs script cannot land silently.  `local`/`no-sandbox` match
+# //tests:pytest: the host pytest + pytest-cov have to be importable inside the action.
 sh_test(
     name = "nav_test",
     size = "small",
     srcs = ["run_python_test.sh"],
-    args = ["test_gen_nav.py"],
+    args = [
+        "test_gen_nav.py",
+        "--cov=scripts/gen_nav.py",
+    ],
     data = _NPM_DATA,
+    tags = [
+        "local",
+        "no-sandbox",
+    ],
     visibility = ["//visibility:public"],
 )
 
@@ -226,8 +237,33 @@ sh_test(
     name = "codemod_test",
     size = "small",
     srcs = ["run_python_test.sh"],
-    args = ["test_codemod.py"],
+    args = [
+        "test_codemod.py",
+        "--cov=scripts/codemod_mkdocs_to_mdx.py",
+    ],
     data = _NPM_DATA,
+    tags = [
+        "local",
+        "no-sandbox",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+# MDX hazard audit: guards the reporter that tells the migration which lines MDX would
+# misread as JSX or an expression, including what fenced code and inline spans exempt.
+sh_test(
+    name = "audit_hazards_test",
+    size = "small",
+    srcs = ["run_python_test.sh"],
+    args = [
+        "test_audit_hazards.py",
+        "--cov=scripts/audit_mdx_hazards.py",
+    ],
+    data = _NPM_DATA,
+    tags = [
+        "local",
+        "no-sandbox",
+    ],
     visibility = ["//visibility:public"],
 )
 
@@ -238,9 +274,14 @@ sh_test(
     name = "visual_tooling_test",
     size = "small",
     srcs = ["run_python_test.sh"],
-    args = ["test_visual_tooling.py"],
+    args = [
+        "test_visual_tooling.py",
+        "--cov=scripts/visual_linux_image.py",
+    ],
     data = _NPM_DATA,
     tags = [
+        "local",
+        "no-sandbox",
         "visual",
     ],
     visibility = ["//visibility:public"],
@@ -323,6 +364,7 @@ sh_binary(
 test_suite(
     name = "suite",
     tests = [
+        ":audit_hazards_test",
         ":codemod_test",
         ":nav_test",
         ":typecheck",

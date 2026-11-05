@@ -257,9 +257,14 @@ alias(
     visibility = ["//visibility:public"],
 )
 
-alias(
+# The coverage sweep, as a gate. This was an alias to an sh_binary, so the
+# `bazelisk test //:coverage` the contributing docs print analyzed, built, and
+# exited 0 without ever executing the gate. One-member test_suite, the same
+# shape as :owned_files_check below: naming it runs the sweep, and Bazel caches
+# the verdict like any other test.
+test_suite(
     name = "coverage",
-    actual = "//tests:coverage",
+    tests = ["//tests:coverage"],
     visibility = ["//visibility:public"],
 )
 

@@ -368,10 +368,8 @@ run_docs_slice() {
   echo "==> validate: docs (Fumadocs gates + generate + export + render-check)"
   "${BAZEL}" test \
     //docs:test_docs_site_render \
-    //docs-site:unit \
-    //docs-site:typecheck \
-    //docs-site:nav_test \
-    //docs-site:codemod_test
+    //docs-site:suite \
+    --test_tag_filters=-visual
   "${BAZEL}" run //docs:docs
   "${BAZEL}" run //docs:render-check
 }

@@ -14,9 +14,15 @@
 #
 # Hermetic: no Docker daemon, GPU, sudo, or network required.
 #
+# Usage:
+#   bazelisk test //:coverage   # the Bazel gate (tagged manual; name it to run it)
+#   make coverage               # the same gate without Bazel, through the shim
+#
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "${0}")/.." && pwd)"
+# shellcheck source=repo_root.sh disable=SC1091
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/repo_root.sh"
+ROOT="$(tests_repo_root)"
 cd "${ROOT}"
 FAIL=0
 
@@ -61,11 +67,18 @@ main() {
   # Optional kcov - never fail the gate (CI/mac may lack paths kcov expects)
   if command -v kcov >/dev/null 2>&1; then
     echo "=== kcov line coverage (optional; non-fatal) ==="
-    rm -rf coverage/kcov
-    mkdir -p coverage/kcov
-    if kcov --bash-dont-parse-binary-dir coverage/kcov \
+    # Under `bazelisk test` the checkout is an input, not a scratch dir, so the
+    # report lands in the test's own TEST_TMPDIR. `make coverage` keeps writing
+    # the coverage/kcov path the operator docs point at.
+    local kcov_dir="coverage/kcov"
+    if [[ -n ${TEST_TMPDIR:-} ]]; then
+      kcov_dir="${TEST_TMPDIR}/kcov"
+    fi
+    rm -rf "${kcov_dir}"
+    mkdir -p "${kcov_dir}"
+    if kcov --bash-dont-parse-binary-dir "${kcov_dir}" \
       bash scripts/manage.sh help 2>/dev/null; then
-      echo "kcov report: coverage/kcov"
+      echo "kcov report: ${kcov_dir}"
     else
       echo "kcov skipped or failed (non-fatal)"
     fi
