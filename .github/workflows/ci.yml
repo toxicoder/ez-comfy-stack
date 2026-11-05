@@ -114,6 +114,14 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install the pinned Python test lane
+        # The docs-site python gates measure their own module with pytest-cov at
+        # --cov-fail-under=100, so this job needs the pin //tests:pytest runs on.
+        # A runner that never installed it now fails the target rather than
+        # reporting a green it did not earn, which is why the install is explicit
+        # here instead of being inherited from install-lint-tools.
+        run: python3 -m pip install -r tests/requirements.txt
+
       - uses: ./.github/actions/setup-bazel
         with:
           install-lint-tools: "false"
@@ -139,13 +147,14 @@ jobs:
             next-${{ runner.os }}-
 
       - name: Docs gates (no browser)
+        # //docs-site:suite is the umbrella, so a gate added to the suite lands in
+        # CI without editing this workflow. -visual holds back the Playwright
+        # guard, the same filter //:everything uses for the same reason.
         run: |
           bazelisk test \
             //docs:test_docs_site_render \
-            //docs-site:unit \
-            //docs-site:typecheck \
-            //docs-site:nav_test \
-            //docs-site:codemod_test \
+            //docs-site:suite \
+            --test_tag_filters=-visual \
             --config=ci
 
       - name: Docs export

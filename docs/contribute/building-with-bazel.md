@@ -340,7 +340,7 @@ Path-filtered jobs in `.github/workflows/ci.yml`:
 | Job | When | What |
 | --- | --- | --- |
 | **bazel-core** | scripts/tests/docker/docs generators/typecheck pins or CI graph | `//:test-fast` then `//:lint --test_tag_filters=manual` (shellcheck/shfmt/buildifier) |
-| **docs-and-render** | docs/**, docs-site/**, or CI graph | Node 22 + `//docs:test_docs_site_render` + `//docs-site:unit|typecheck|nav_test|codemod_test`, then `bazelisk shutdown` and the static export outside Bazel. Export is `next build --webpack` in-process, one static-generation worker, `NODE_OPTIONS=--max-old-space-size=5120` (same as deploy-docs). MDX is compiled on demand (`dynamic: true` in `docs-site/source.config.ts`) so webpack does not ingest ~850 pages. Turbopack or a 6 GB heap plus Bazel SIGKILL the 7 GB runner. `docs-site/.next/cache` is cached between runs |
+| **docs-and-render** | docs/**, docs-site/**, or CI graph | Node 22 + the pinned `tests/requirements.txt` Python lane (the docs-site python gates measure coverage with pytest-cov) + `//docs:test_docs_site_render` + `//docs-site:suite` with `--test_tag_filters=-visual`, then `bazelisk shutdown` and the static export outside Bazel. Export is `next build --webpack` in-process, one static-generation worker, `NODE_OPTIONS=--max-old-space-size=5120` (same as deploy-docs). MDX is compiled on demand (`dynamic: true` in `docs-site/source.config.ts`) so webpack does not ingest ~850 pages. Turbopack or a 6 GB heap plus Bazel SIGKILL the 7 GB runner. `docs-site/.next/cache` is cached between runs |
 | **validate-gate** | always | `bash scripts/ci_check_only.sh` (CI-only script; no Bazel target - see the note below) |
 
 Topic-branch CI runs on **pull_request** only (push is `development`/`main`). Disk cache keys
