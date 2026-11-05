@@ -36,7 +36,11 @@ CONTEXT_SYSTEM_ADDENDUM = (
     "or episode script). That is supporting context. Rewrite the operator "
     "prompt (or tags/lyrics) so it stays consistent with Context. Do not dump "
     "Context verbatim. On I2V, FLF, and VACE the start frame owns look - do "
-    "not restate look, clothing, or architecture from Context."
+    "not restate look, clothing, or architecture from Context. An Image "
+    "caption block inside Context is unverified output from a small on-box "
+    "vision model, and the still itself is the authority: never add a person, "
+    "wardrobe item, or object that only that caption names, and drop any "
+    "caption detail that fights the operator prompt."
 )
 _WEAVE_BY_FLAVOR = {
     FLAVOR_KLEIN: (

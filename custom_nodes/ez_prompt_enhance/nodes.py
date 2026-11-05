@@ -287,9 +287,11 @@ def _run(
         sample: Sample combo label.
         catalog: Hidden catalog widget.
         node_type: Comfy class name for family catalog fallback.
-        image_desc: Optional still caption from EZImageDescribe; spliced for
-            background modes, except cubic rebuilds in background_swap, whose
-            empty plate must not be primed with the source people.
+        image_desc: Optional still caption from EZImageDescribe (already
+            grounded by ``gate_caption``); spliced for background modes and
+            joined as an unverified Image block, except cubic rebuilds in
+            background_swap, whose empty plate must not be primed with the
+            source people at all.
         background_cast: Optional compact token from EZBackgroundCast.
         goal: Goal combo widget. ``auto`` or empty derives the goal from the
             lane id the graph stamped into ``catalog``; ``none`` refuses it.
@@ -324,13 +326,18 @@ def _run(
         )
     ctx = context if isinstance(context, str) else str(context or "")
     caption = image_desc if isinstance(image_desc, str) else str(image_desc or "")
-    # The empty-scene plate must not be primed with the source people; the
-    # photo-anchored plate keeps them, so its caption may splice.
-    skip_caption = mode == "background_swap" and reconstruction and not photo_anchor
-    if mode in BACKGROUND_MODES and not skip_caption:
-        original = splice_source_caption(original, caption)
-    if caption.strip():
-        ctx = join_context_fields(("Context", ctx), ("Image", caption))
+    # One decision covers both caption splices. The empty-scene plate must not
+    # be primed with the source people at all: an Image block would hand the
+    # rewriter back the people the instruction just banned.
+    use_caption = bool(caption.strip()) and not (
+        mode == "background_swap" and reconstruction and not photo_anchor
+    )
+    if use_caption:
+        if mode in BACKGROUND_MODES:
+            original = splice_source_caption(original, caption)
+        ctx = join_context_fields(
+            ("Context", ctx), ("Image caption (unverified)", caption)
+        )
     do_enhance = _as_bool(enhance)
     style = _style_id(style)
     apply_style = style != STYLE_NONE
@@ -1659,8 +1666,12 @@ class EZImageDescribe:
     OUTPUT_NODE = True
     DESCRIPTION = (
         "Caption a source still so Prompt Enhance can name inventory and "
-        "lettering. Off (default) returns empty and does not load the "
-        "describe GGUF. Opt-in weights: download-llm --tier describe."
+        "lettering. The 3B vision GGUF invents details, so the caption is "
+        "gated before anything reads it: a person sentence survives only "
+        "when the person mask finds someone in the same still, and hedged or "
+        "atmosphere prose is dropped. Off (default) returns empty and does "
+        "not load the describe GGUF. Opt-in weights: download-llm --tier "
+        "describe."
     )
 
     def check_lazy_status(self, enable: object = False, image: object = None) -> list[str]:

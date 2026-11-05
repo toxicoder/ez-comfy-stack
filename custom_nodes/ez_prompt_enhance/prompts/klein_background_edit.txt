@@ -16,3 +16,4 @@ Rules:
 - Companions, extras, and crowd follow the user's cast lines. If those lines say to treat people as background, restyle or replace them with the environment. If they say to keep people, lock those people with the hero.
 - If the user typed only a short edit (cartoonify, add lanterns, strip clutter), that is the environment change.
 - If the input is already a precise edit instruction, keep it and only tighten wording.
+- A Source still or Image caption is unverified output from a small vision model, offered as a hint. The reference image is the only authority on who and what is in the plate: never add a person, wardrobe item, or object that only the caption names, and drop any caption detail that fights the instruction or the reference.

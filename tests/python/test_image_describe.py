@@ -354,7 +354,265 @@ def test_enhance_splices_image_desc_into_context() -> None:
             "unmarked ceramic mug, teal rim light",
         )
     user = mock.call_args[0][1]
-    assert "Image:" in user
+    assert "Image caption (unverified):" in user
     assert "unmarked ceramic mug" in user
     optional = EZKleinPromptEnhance.INPUT_TYPES()["optional"]
     assert "image_desc" in optional
+
+
+# The real 3B GGUF output that motivated the gate: a whole invented subject on
+# a still that holds no person, plus an atmosphere clause nobody can see.
+HALLUCINATED_PEOPLE = (
+    "A young woman in a vibrant red dress sits gracefully on a bench, her "
+    "hands gently resting on her lap. The background features a serene garden "
+    "with lush greenery and blooming flowers, creating a peaceful and "
+    "contemplative atmosphere."
+)
+GARDEN_INVENTORY_ONLY = (
+    "The background features a serene garden with lush greenery and blooming "
+    "flowers."
+)
+
+
+def _stub_person_mask(monkeypatch: pytest.MonkeyPatch, mask: Any) -> None:
+    """Point the person segmenter at a fixed mask.
+
+    Args:
+        monkeypatch: Pytest attr helper.
+        mask: Value ``segment_people`` should answer for any still.
+    """
+    monkeypatch.setattr("ez_image.person_mask.segment_people", lambda _image: mask)
+
+
+def test_gate_drops_invented_people_from_an_ungrounded_still(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A caption nobody can ground loses its subject and its mood prose.
+
+    Args:
+        monkeypatch: Pytest attr helper.
+    """
+    _stub_person_mask(monkeypatch, [[0.0, 0.0]])
+    caption, reason = desc.gate_caption(HALLUCINATED_PEOPLE, object())
+    assert caption == GARDEN_INVENTORY_ONLY
+    assert desc.REASON_PEOPLE_DROPPED in reason
+    assert desc.REASON_MOOD_DROPPED in reason
+    assert desc.REASON_TRIMMED not in reason
+    assert reason == f"{desc.REASON_PEOPLE_DROPPED} + {desc.REASON_MOOD_DROPPED}"
+    assert "woman" not in caption.casefold()
+    assert "red dress" not in caption.casefold()
+    assert "atmosphere" not in caption.casefold()
+    # No pixels at all is an unanswerable mask, which gates the same way.
+    assert desc.gate_caption(HALLUCINATED_PEOPLE) == (caption, reason)
+
+
+def test_gate_keeps_the_person_when_the_mask_grounds_it(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A lit person mask vouches for the sentence that names them.
+
+    Args:
+        monkeypatch: Pytest attr helper.
+    """
+    _stub_person_mask(monkeypatch, [[0.9, 0.1]])
+    caption, reason = desc.gate_caption(HALLUCINATED_PEOPLE, object())
+    assert "A young woman in a vibrant red dress sits gracefully on a bench" in caption
+    assert "her hands gently resting on her lap" in caption
+    assert caption.endswith(GARDEN_INVENTORY_ONLY)
+    assert reason == desc.REASON_MOOD_DROPPED
+    assert desc.REASON_PEOPLE_DROPPED not in reason
+
+
+def test_has_person_claim_matches_the_person_lexicon() -> None:
+    """The lexicon fires on people words and stays quiet on inventory."""
+    assert desc.has_person_claim("A young woman sits on a bench.") is True
+    assert desc.has_person_claim("someone, a crowd, a silhouette") is True
+    assert desc.has_person_claim("a red mug on a teak desk") is False
+    assert desc.has_person_claim("the featured tile figure") is True
+    assert desc.has_person_claim(["a woman on a bench"]) is True
+    assert desc.has_person_claim(42) is False
+    assert desc.has_person_claim(None) is False
+    assert desc.has_person_claim("   ") is False
+    assert desc.has_person_claim(object()) is False
+
+
+def test_caption_without_people_keeps_environment_sentences() -> None:
+    """Only the sentences that name a person are cut.
+
+    Returns:
+        None.
+    """
+    kept = desc.caption_without_people(
+        "A young woman sits on a bench. The plaza holds a stone fountain. "
+        "She wears a red dress."
+    )
+    assert kept == "The plaza holds a stone fountain."
+    assert desc.caption_without_people("A young woman sits on a bench.") == ""
+    assert desc.caption_without_people("") == ""
+    assert desc.caption_without_people(None) == ""
+    assert desc.caption_without_people("   ") == ""
+
+
+def test_still_has_people_answers_true_flat_and_unanswerable(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The mask answers True, False, or nothing at all.
+
+    Args:
+        monkeypatch: Pytest attr helper.
+    """
+    assert desc.still_has_people(None) is None
+    _stub_person_mask(monkeypatch, [[0.9, 0.1]])
+    assert desc.still_has_people(object()) is True
+    _stub_person_mask(monkeypatch, [[desc.PERSON_MASK_THRESHOLD]])
+    assert desc.still_has_people(object()) is True
+    _stub_person_mask(monkeypatch, [[desc.PERSON_MASK_THRESHOLD - 0.01, 0.0]])
+    assert desc.still_has_people(object()) is False
+    _stub_person_mask(monkeypatch, [[0.0] * 8 for _ in range(8)])
+    assert desc.still_has_people(object()) is False
+    _stub_person_mask(monkeypatch, None)
+    assert desc.still_has_people(object()) is None
+    _stub_person_mask(monkeypatch, [["bright"]])
+    assert desc.still_has_people(object()) is None
+    _stub_person_mask(monkeypatch, [[None]])
+    assert desc.still_has_people(object()) is None
+    _stub_person_mask(monkeypatch, [0.9])
+    assert desc.still_has_people(object()) is None
+
+    def _boom(_image: Any) -> None:
+        raise RuntimeError("segmenter exploded")
+
+    monkeypatch.setattr("ez_image.person_mask.segment_people", _boom)
+    assert desc.still_has_people(object()) is None
+    with patch.dict("sys.modules", {"ez_image.person_mask": None}):
+        assert desc.still_has_people(object()) is None
+
+
+def test_strip_mood_prose_cuts_atmosphere_and_hedges() -> None:
+    """Atmosphere clauses and hedged sentences are not inventory."""
+    kept, dropped = desc._strip_mood_prose(
+        "A red mug sits on the table, giving the scene a cozy mood."
+    )
+    assert kept == "A red mug sits on the table."
+    assert dropped is True
+
+    kept, dropped = desc._strip_mood_prose(
+        "There appears to be a bench. A red mug sits on the table."
+    )
+    assert kept == "A red mug sits on the table."
+    assert dropped is True
+
+    kept, dropped = desc._strip_mood_prose(
+        "Creating a peaceful atmosphere. A red mug sits on the table."
+    )
+    assert kept == "A red mug sits on the table."
+    assert dropped is True
+
+    kept, dropped = desc._strip_mood_prose("a red mug on a teak desk")
+    assert kept == "a red mug on a teak desk"
+    assert dropped is False
+
+    kept, dropped = desc._strip_mood_prose("   ")
+    assert kept == ""
+    assert dropped is False
+
+
+def test_trim_caption_caps_the_word_count() -> None:
+    """A long caption is cut at the cap and closed with a period."""
+    short = "a red mug on a teak desk"
+    assert desc._trim_caption(short) == (short, False)
+
+    at_cap = " ".join(f"tile{i}" for i in range(desc.MAX_CAPTION_WORDS))
+    assert desc._trim_caption(at_cap) == (at_cap, False)
+
+    over = " ".join(f"tile{i}" for i in range(desc.MAX_CAPTION_WORDS + 12))
+    trimmed, was_trimmed = desc._trim_caption(over)
+    assert was_trimmed is True
+    assert len(trimmed.split()) == desc.MAX_CAPTION_WORDS
+    assert trimmed.startswith("tile0 ")
+    assert trimmed.endswith("tile59.")
+
+
+def test_gate_joins_reasons_in_people_mood_trim_order() -> None:
+    """Every cut is reported once, in people, mood, trim order."""
+    clean = "a red mug on a teak desk beside an open notebook"
+    assert desc.gate_caption(clean) == (clean, "")
+
+    filler = " ".join(f"brick{i}" for i in range(desc.MAX_CAPTION_WORDS + 10))
+    combo = (
+        "A young woman in a red dress sits on a bench. The stone plaza "
+        f"stretches wide with {filler}, creating a solemn and quiet mood."
+    )
+    caption, reason = desc.gate_caption(combo)
+    assert reason == " + ".join(
+        (desc.REASON_PEOPLE_DROPPED, desc.REASON_MOOD_DROPPED, desc.REASON_TRIMMED)
+    )
+    assert len(caption.split()) == desc.MAX_CAPTION_WORDS
+    assert caption.endswith(".")
+    assert "woman" not in caption.casefold()
+    assert "mood" not in caption.casefold()
+
+    over = " ".join(f"tile{i}" for i in range(desc.MAX_CAPTION_WORDS + 3))
+    assert desc.gate_caption(over) == (
+        " ".join(f"tile{i}" for i in range(desc.MAX_CAPTION_WORDS)) + ".",
+        desc.REASON_TRIMMED,
+    )
+
+
+def test_gate_drops_a_caption_with_nothing_grounded_left() -> None:
+    """A caption that gates down to nothing never reaches a prompt."""
+    assert desc.gate_caption("A young woman in a red dress sits on a bench.") == (
+        "",
+        desc.REASON_GATE_EMPTY,
+    )
+    assert desc.gate_caption("It looks like it might be raining, perhaps.") == (
+        "",
+        desc.REASON_GATE_EMPTY,
+    )
+    assert desc.gate_caption("Creating a peaceful atmosphere.") == (
+        "",
+        desc.REASON_GATE_EMPTY,
+    )
+    assert desc.gate_caption("") == ("", "")
+    assert desc.gate_caption(None) == ("", "")
+
+
+def test_describe_image_surfaces_the_gate_reason_in_last_status(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The gated caption and its reason are what callers see.
+
+    Args:
+        monkeypatch: Pytest attr helper.
+    """
+    _stub_person_mask(monkeypatch, [[0.0, 0.0]])
+    desc.reset_describe_for_tests()
+    with patch.object(desc, "_image_to_png_b64", return_value="abc"):
+        with patch.object(
+            desc, "_vision_complete", return_value=(HALLUCINATED_PEOPLE, None)
+        ):
+            text = desc.describe_image(enable=True, image=object())
+    assert text == GARDEN_INVENTORY_ONLY
+    assert desc.last_status() == (
+        f"{desc.REASON_PEOPLE_DROPPED} + {desc.REASON_MOOD_DROPPED}"
+    )
+
+    desc.reset_describe_for_tests()
+    with patch.object(desc, "_image_to_png_b64", return_value="abc"):
+        with patch.object(
+            desc, "_vision_complete", return_value=("a red mug on a teak desk", None)
+        ):
+            text = desc.describe_image(enable=True, image=object())
+    assert text == "a red mug on a teak desk"
+    assert desc.last_status() == ""
+
+    desc.reset_describe_for_tests()
+    with patch.object(desc, "_image_to_png_b64", return_value="abc"):
+        with patch.object(
+            desc,
+            "_vision_complete",
+            return_value=("A young woman in a red dress sits on a bench.", None),
+        ):
+            text = desc.describe_image(enable=True, image=object())
+    assert text == ""
+    assert desc.last_status() == desc.REASON_GATE_EMPTY
