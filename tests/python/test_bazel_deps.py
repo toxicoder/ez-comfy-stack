@@ -275,8 +275,14 @@ class TestRepoWiring:
         rule = self._root_rules().get("//tests:js")
         assert rule is not None
         assert ":js_files" in rule.attrs.get("data", [])
-        js = bazel_deps.build_files(ROOT)["tests"]
-        assert '"js/**"' in js
+        rules = bazel_deps.parse_build(bazel_deps.build_files(ROOT)["tests"], "tests")
+        group = next(r for r in rules if r.kind == "filegroup" and r.name == "js_files")
+        # The filegroup names each .mjs file: a glob would let a new test file
+        # join the suite without anyone editing the target.
+        assert group.globs == {}
+        want = sorted(f"js/{p.name}" for p in (ROOT / "tests" / "js").glob("*.mjs"))
+        assert want
+        assert sorted(group.attrs.get("srcs", [])) == want
 
     def test_the_lint_gates_run_strict_under_bazel(self) -> None:
         for name in ("shell", "shfmt", "buildifier", "pyright", "mypy"):

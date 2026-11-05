@@ -34,7 +34,7 @@ No UNET, no VAE, no KSampler. Does not Queue the result.
 
 Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
-  ./scripts/manage.sh occupancy enter llm-desk --yes
+  bazelisk run //:manage -- occupancy enter llm-desk --yes
 
 Falls back to on-box Qwen3-4B if the sidecar is down, then a keyword
 heuristic if the GGUF is missing. CPU 4B is required next to Wan/LTX/TRELLIS.
@@ -46,7 +46,7 @@ heuristic if the GGUF is missing. CPU 4B is required next to Wan/LTX/TRELLIS.
 4. Open `_user/<slug>` from the Apps sidebar. Queue that graph when GB10
    occupancy matches the result (klein / wan / ltx / ...).
 
-Laptop agents: `./scripts/manage.sh studio-mcp --stdio` (Path D). Same
+Laptop agents: `bazelisk run //:manage -- studio-mcp --stdio` (Path D). Same
 pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
 Does not write `workflows/_lab/`. Keepers: `promote-workflow`.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
@@ -109,7 +109,7 @@ No UNET, no VAE, no KSampler. Does not Queue the result.
 
 Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
-  ./scripts/manage.sh occupancy enter llm-desk --yes
+  bazelisk run //:manage -- occupancy enter llm-desk --yes
 
 Falls back to on-box Qwen3-4B if the sidecar is down, then a keyword
 heuristic if the GGUF is missing. CPU 4B is required next to Wan/LTX/TRELLIS.
@@ -121,7 +121,7 @@ heuristic if the GGUF is missing. CPU 4B is required next to Wan/LTX/TRELLIS.
 4. Open `_user/<slug>` from the Apps sidebar. Queue that graph when GB10
    occupancy matches the result (klein / wan / ltx / ...).
 
-Laptop agents: `./scripts/manage.sh studio-mcp --stdio` (Path D). Same
+Laptop agents: `bazelisk run //:manage -- studio-mcp --stdio` (Path D). Same
 pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
 Does not write `workflows/_lab/`. Keepers: `promote-workflow`.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.

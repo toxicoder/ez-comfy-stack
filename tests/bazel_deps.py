@@ -9,13 +9,15 @@ declares, and for test targets that belong to no suite.
 
 A nested ``bazel query`` is not available from inside a test action (it
 deadlocks on the output-base lock of the outer invocation), so this module
-re-derives the three facts statically by parsing the BUILD files with ``ast``:
+re-derives the four facts statically by parsing the BUILD files with ``ast``:
 
 1. ownership - every ``git ls-files`` path is named by some BUILD file, or is
    exempted by ``_ALLOW`` / the repo's own ``.bazelignore``.
 2. payload - the ``data`` labels a script target declares match what its own
    source reads, in both directions (missing runfiles and stale runfiles).
 3. suites - every test target is a member of at least one suite.
+4. explicit srcs - every ``srcs``/``data`` entry is spelled out, and the only
+   ``glob([...])`` clauses left are the ones in ``_SANCTIONED_GLOBS``.
 
 It is a guard, not a Bazel reimplementation: the parser understands string
 lists, ``+`` concatenation, and ``glob([...])`` patterns, which is everything
@@ -23,8 +25,9 @@ this repo's BUILD files use. A BUILD file that gets cleverer than that fails
 loudly here rather than silently mapping nothing.
 
 Usage:
-    python3 tests/bazel_deps.py                 # all three checks
+    python3 tests/bazel_deps.py                 # all four checks
     python3 tests/bazel_deps.py --check-ownership
+    python3 tests/bazel_deps.py --check-explicit-srcs
     python3 tests/bazel_deps.py --root /path/to/checkout
 """
 
@@ -824,6 +827,88 @@ def uncovered_tests(files: dict[str, str], tracked: Sequence[str]) -> list[str]:
 
 
 # --------------------------------------------------------------------------
+# Check 4: explicit srcs
+# --------------------------------------------------------------------------
+
+# The only ``glob([...])`` clauses this repo keeps, keyed by target label then
+# pattern, each with the reason a hand-written list would be worse than the
+# glob. Three kinds earn a place here: output a generator writes, committed
+# media a target carries as a whole tree, and the input a macro turns into one
+# target per file. Anything else is first-party source the build should name.
+_SANCTIONED_GLOBS: dict[str, dict[str, str]] = {
+    "//docs:content": {
+        "generated/**": "pages emitted by //docs:generate; the set changes on "
+        "every generator run, so it is derived rather than authored",
+        "assets/**": "committed jpg/mp4 media; the payload is the tree, and no "
+        "target reasons about an individual asset",
+    },
+    "//docs-site:visual-goldens": {
+        "tests/visual/goldens/*.png": "screenshot baselines captured by "
+        "//docs-site:visual-linux in the pinned browser; the set is whatever "
+        "that capture produced, and //docs-site:visual_tooling_test guards the "
+        "emptiness instead of this guard",
+        "tests/visual/goldens/**/*.png": "the same tree in the recursive form "
+        "the capturer also writes",
+    },
+    "//tests:bats_file_tests": {
+        "bats/*.bats": "the macro derives one bats_<stem>_test target plus the "
+        "//tests:bats suite from each file, so the glob is generator input and "
+        "every file it matches still becomes a named target",
+    },
+    "//workflows:lab_graphs": {
+        "_lab/**/*.json": "graphs arrive one file at a time from "
+        "`./scripts/manage.sh promote-workflow`; the tree is the payload and a "
+        "graph is addressed by its id, not by a BUILD entry",
+    },
+}
+
+
+def _rule_label(rule: Rule) -> str:
+    """The guard's key for a rule; a nameless call is keyed by its rule kind."""
+    if rule.name:
+        return rule.label
+    return f"//{rule.pkg}:{rule.kind}" if rule.pkg else f"//:{rule.kind}"
+
+
+def _glob_clauses(
+    files: dict[str, str], problems: list[str] | None = None
+) -> set[tuple[str, str]]:
+    """Every ``(label, pattern)`` glob clause the BUILD files declare."""
+    clauses: set[tuple[str, str]] = set()
+    for pkg, text in files.items():
+        for rule in _safe_parse(text, pkg, problems):
+            for patterns in rule.globs.values():
+                for pattern in patterns:
+                    clauses.add((_rule_label(rule), pattern))
+    return clauses
+
+
+def explicit_srcs_report(files: dict[str, str]) -> list[str]:
+    """Globs outside _SANCTIONED_GLOBS, plus sanctioned entries gone stale.
+
+    Checked in both directions on purpose: an unsanctioned glob means a target
+    stopped naming what it references, and a sanctioned entry nobody uses means
+    the allowlist has outlived the tree it excused.
+    """
+    problems: list[str] = []
+    clauses = _glob_clauses(files, problems)
+    for label, pattern in sorted(clauses):
+        if pattern not in _SANCTIONED_GLOBS.get(label, {}):
+            problems.append(
+                f"{label}: glob({pattern}) is not sanctioned - list the files "
+                "explicitly, or add a reasoned entry to _SANCTIONED_GLOBS"
+            )
+    for label, patterns in sorted(_SANCTIONED_GLOBS.items()):
+        for pattern in sorted(patterns):
+            if (label, pattern) not in clauses:
+                problems.append(
+                    f"{label}: sanctioned glob({pattern}) matches no BUILD "
+                    "clause - the allowlist entry is stale"
+                )
+    return problems
+
+
+# --------------------------------------------------------------------------
 # CLI
 # --------------------------------------------------------------------------
 
@@ -844,10 +929,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--check-ownership", action="store_true")
     parser.add_argument("--check-payloads", action="store_true")
     parser.add_argument("--check-suites", action="store_true")
+    parser.add_argument("--check-explicit-srcs", action="store_true")
     args = parser.parse_args(argv)
 
     root = Path(args.root).resolve() if args.root else repo_root()
-    run_all = not (args.check_ownership or args.check_payloads or args.check_suites)
+    run_all = not (
+        args.check_ownership
+        or args.check_payloads
+        or args.check_suites
+        or args.check_explicit_srcs
+    )
     files = build_files(root)
     tracked = tracked_files(root)
 
@@ -858,6 +949,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         problems += payload_report(root)
     if run_all or args.check_suites:
         problems += uncovered_tests(files, tracked)
+    if run_all or args.check_explicit_srcs:
+        problems += explicit_srcs_report(files)
 
     for line in problems:
         print(line)

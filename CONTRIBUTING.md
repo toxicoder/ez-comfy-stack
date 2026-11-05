@@ -9,8 +9,9 @@ Thanks for improving **ez-comfy-stack**.
 3. Prefer TDD (`bazelisk test //:test-fast`)
 4. **Commit tests with the production files they cover** (same commit)
 5. Run the gates through bazelisk: `bazelisk run //:validate`, `bazelisk test //:lint --test_tag_filters=manual`, `bazelisk run //:fix`, and `bazelisk run //docs:docs` (the `make` targets are shims over these)
-6. Commit as `<type>: <imperative summary>` using `feat`, `fix`, `docs`, `test`, `chore`, `ci`, `refactor`
-7. Open a PR into `development`
+6. Before you ship a Bazel-side change, run the whole sweep once: `bazelisk run //:everything` probes the host toolchain, load/analysis-checks every target, runs every gate plus the docs-site visual lane, then builds and render-checks the docs, and prints the failing target name. The visual lane is the one gate that needs a container runtime: without a reachable Docker daemon or committed baselines it is reported as a `SKIP` with the reason, and `bazelisk test //:test-all` stays the unfiltered form
+7. Commit as `<type>: <imperative summary>` using `feat`, `fix`, `docs`, `test`, `chore`, `ci`, `refactor`
+8. Open a PR into `development`
 
 Integrate on `development`; `main` is production promotion only. Do not commit on
 `development` or `main`, and do not base work on `main` except an explicit production hotfix.
@@ -23,7 +24,7 @@ Install Python test tools once (`bash scripts/setup-host.sh` does this too): `pi
 To ship a keeper from a live `_user` graph (does **not** commit):
 
 ```bash
-./scripts/manage.sh promote-workflow \
+bazelisk run //:manage -- promote-workflow \
   --from "${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/my-hook.json" \
   --lane stills \
   --id my-hook
@@ -71,6 +72,8 @@ flowchart LR
 - [ ] `bazelisk test //:lint --test_tag_filters=manual` clean (a missing tool is a defect: `bash scripts/setup-host.sh --check`)
 - [ ] `bazelisk run //:fix` leaves the tree clean
 - [ ] `bazelisk run //docs:docs` (Fumadocs static export)
+- [ ] `bazelisk test //tests:owned_files_check` passes - a file you added is mapped into a build target, and a target you touched lists the files it references instead of reaching for a `glob()`
+- [ ] `bazelisk test //tests:bazel_docs_check` passes - docs, comments, printed strings, and graph notes name Bazel targets, not raw scripts
 - [ ] Safety impact called out if Docker/resources/download-limit changed
 - [ ] Docs updated for operator-facing changes
 - [ ] AI-drafted docs still received a human pass
@@ -82,7 +85,7 @@ Public site: [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (`main
 - PRs validate with `bazelisk run //docs:docs` (`make docs` shim; generators + Fumadocs export into `docs-site/out/`).
 - After merge to `main` or `development`, `.github/workflows/deploy-docs.yml` publishes one Next export per run -> `gh-pages` (`/latest/` from `main`, `/development/` from `development`). Each alias shows a **Last published** chip stamped at that deploy (`EZ_DOCS_PUBLISHED_AT`).
 - Prefer **relative** in-repo doc links (`docs/...`, same-folder page links) so they work on the branch you are viewing and under each published version path.
-- Docs app: Node 22+ and `./docs/setup-docs.sh` (npm inside `docs-site/`). Python `docs/requirements.txt` is generators only.
+- Docs app: Node 22+ and `bazelisk run //docs-site:install` (npm inside `docs-site/`). Python `docs/requirements.txt` is generators only.
 
 ## Style
 

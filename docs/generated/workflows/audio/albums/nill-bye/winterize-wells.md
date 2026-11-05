@@ -23,7 +23,7 @@ tags: [workflows, generated, comfyui, audio, album]
 
 ## Purpose
 
-Numbered takes under `audio/albums/nill-bye/winterize-wells/`. Queue one track, or `./scripts/manage.sh album-render --album nill-bye/winterize-wells`.
+Numbered takes under `audio/albums/nill-bye/winterize-wells/`. Queue one track, or `bazelisk run //:manage -- album-render --album nill-bye/winterize-wells`.
 
 ```text
 ## 01-winterize-wells

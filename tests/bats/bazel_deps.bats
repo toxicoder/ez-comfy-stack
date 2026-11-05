@@ -5,9 +5,10 @@
 #
 # Purpose:
 #   Prove the guard runs from a shell, passes on this checkout, and - the part
-#   that matters - fails on the three drift classes it exists to catch: a
+#   that matters - fails on the four drift classes it exists to catch: a
 #   tracked file no BUILD file names, a payload the contract requires but the
-#   BUILD data dropped, and a test target no suite claims.
+#   BUILD data dropped, a test target no suite claims, and a srcs list that
+#   reached for a glob instead of naming its files.
 #
 # Safety: no Bazel invocation (a nested bazel call would contend with the
 #   output-base lock of the //tests:bats_* action running this suite), no
@@ -173,15 +174,20 @@ EOF
   [ "$status" -eq 1 ]
 }
 
-@test "the js gate declares the mjs tree" {
+@test "the js gate declares every mjs file by name" {
   grep -q 'name = "js_files"' "${REPO_ROOT}/tests/BUILD.bazel"
   grep -q '":js_files"' "${REPO_ROOT}/tests/BUILD.bazel"
-  grep -q '"js/\*\*"' "${REPO_ROOT}/tests/BUILD.bazel"
+  # Explicit srcs: a glob would let a new test file join the suite silently.
+  local f
+  for f in "${REPO_ROOT}"/tests/js/*.mjs; do
+    grep -q "\"js/$(basename "${f}")\"" "${REPO_ROOT}/tests/BUILD.bazel"
+  done
   [ "$(find "${REPO_ROOT}/tests/js" -name '*.mjs' | wc -l)" -eq 6 ]
 }
 
 @test "the css tree is owned by the custom_nodes filegroup" {
-  grep -q '"\*\*/\*.css"' "${REPO_ROOT}/custom_nodes/BUILD.bazel"
+  grep -q '"ez_feedback/js/ez_feedback.css"' "${REPO_ROOT}/custom_nodes/BUILD.bazel"
+  grep -q '"ez_outputs/js/ez_outputs.css"' "${REPO_ROOT}/custom_nodes/BUILD.bazel"
   [ -f "${REPO_ROOT}/custom_nodes/ez_feedback/js/ez_feedback.css" ]
   [ -f "${REPO_ROOT}/custom_nodes/ez_outputs/js/ez_outputs.css" ]
 }

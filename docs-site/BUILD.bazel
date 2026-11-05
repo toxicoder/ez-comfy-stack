@@ -30,18 +30,77 @@ _NPM_DATA = [
 
 filegroup(
     name = "sources",
-    srcs = glob(
-        [
-            "*",
-            ".gitignore",
-            "app/**",
-            "components/**",
-            "lib/**",
-            "scripts/**",
-            "tests/**",
-        ],
-        allow_empty = False,
-    ),
+    srcs = [
+        ".gitignore",
+        "BUILD.bazel",
+        "app/[[...slug]]/page.tsx",
+        "app/api/search/route.ts",
+        "app/global.css",
+        "app/icon.svg",
+        "app/layout.tsx",
+        "app/not-found.tsx",
+        "components/command-vars.tsx",
+        "components/docs-heading.tsx",
+        "components/docs-trail.tsx",
+        "components/ez-term.tsx",
+        "components/glossary-body.tsx",
+        "components/mdx-components.ts",
+        "components/mermaid.tsx",
+        "components/page-brief.tsx",
+        "components/provider.tsx",
+        "components/published-chip.tsx",
+        "components/search-dialog.tsx",
+        "components/search-from.tsx",
+        "components/table-chrome.tsx",
+        "components/wordmark.tsx",
+        "lib/command-vars.ts",
+        "lib/content.ts",
+        "lib/docs-bug.ts",
+        "lib/href.ts",
+        "lib/nav.json",
+        "lib/nav.ts",
+        "lib/published.ts",
+        "lib/remark-git-ref.ts",
+        "lib/remark-glossary.ts",
+        "lib/remark-media.ts",
+        "lib/remark-page-brief.ts",
+        "lib/search-index.ts",
+        "lib/site.ts",
+        "lib/source.ts",
+        "next.config.ts",
+        "next-env.d.ts",
+        "package.json",
+        "package-lock.json",
+        "pages-root-index.html",
+        "playwright.config.mjs",
+        "postcss.config.mjs",
+        "run_npm.sh",
+        "run_python_test.sh",
+        "scripts/audit_mdx_hazards.py",
+        "scripts/codemod_mkdocs_to_mdx.py",
+        "scripts/gen_nav.py",
+        "scripts/serve_static.mjs",
+        "scripts/verify_site.mjs",
+        "scripts/visual_linux.sh",
+        "scripts/visual_linux_image.py",
+        "scripts/visual_linux_in_container.sh",
+        "source.config.ts",
+        "test_codemod.py",
+        "test_gen_nav.py",
+        "test_visual_tooling.py",
+        "tests/unit/command-vars.test.ts",
+        "tests/unit/docs-bug.test.ts",
+        "tests/unit/href.test.ts",
+        "tests/unit/mermaid.test.ts",
+        "tests/unit/nav.test.ts",
+        "tests/unit/page-footer.test.ts",
+        "tests/unit/remark-glossary.test.ts",
+        "tests/unit/search-index.test.ts",
+        "tests/unit/site.test.ts",
+        "tests/visual/site.spec.mjs",
+        "tsconfig.json",
+        "vitest.config.ts",
+    ],
     visibility = ["//visibility:public"],
 )
 
@@ -181,6 +240,9 @@ sh_test(
     srcs = ["run_python_test.sh"],
     args = ["test_visual_tooling.py"],
     data = _NPM_DATA,
+    tags = [
+        "visual",
+    ],
     visibility = ["//visibility:public"],
 )
 
@@ -189,8 +251,10 @@ sh_test(
 # The baselines are rendered by the pinned container (see //docs-site:visual-linux), so a host
 # run is only meaningful on a machine whose Chromium matches that image.  These two targets are
 # the escape hatch for debugging a rendering difference inside one environment; `//:validate`
-# and CI use the container path.  Marked manual for the same reason as //dashboard:visual-test:
-# the sandboxed test action cannot install or launch a browser reliably.
+# and CI use the container path.  Marked manual because the sandboxed test action cannot
+# install or launch a browser reliably, and tagged `visual` because both halves need a
+# container runtime and committed baselines - //:everything probes those and skips when this
+# host has neither.
 sh_test(
     name = "visual-test",
     size = "large",
@@ -203,6 +267,7 @@ sh_test(
     tags = [
         "docs",
         "manual",
+        "visual",
     ],
     visibility = ["//visibility:public"],
 )

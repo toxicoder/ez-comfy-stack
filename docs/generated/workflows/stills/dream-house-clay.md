@@ -38,16 +38,16 @@ Ten Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence
 Workbench dump (optional, higher quality) - stop Comfy first:
 
   ./scripts/manage.sh stop
-  ./scripts/manage.sh house-views --slug lab-penthouse
+  bazelisk run //:manage -- house-views --slug lab-penthouse
   ./scripts/manage.sh start
 
 Copy an existing dump without Blender (compose may stay up):
 
-  ./scripts/manage.sh house-views --slug lab-penthouse --install-inputs
+  bazelisk run //:manage -- house-views --slug lab-penthouse --install-inputs
 
 Reseed LoadImage plates without Blender (compose may stay up):
 
-  ./scripts/manage.sh house-views --slug lab-penthouse --seed-inputs
+  bazelisk run //:manage -- house-views --slug lab-penthouse --seed-inputs
 
 HOUSE IDENTITY is the same camera-free world bible as stills/dream-house. Shot cards are camera stations from place_10 (lens, camera height, a distinct room program, near/far planes, and which room). Prompt Join lock=view. Each shot VAEEncodes its clay plate into ReferenceLatent. Shot cards are not Klein-t2i-enhanced.
 
@@ -884,16 +884,16 @@ Ten Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence
 Workbench dump (optional, higher quality) - stop Comfy first:
 
   ./scripts/manage.sh stop
-  ./scripts/manage.sh house-views --slug lab-penthouse
+  bazelisk run //:manage -- house-views --slug lab-penthouse
   ./scripts/manage.sh start
 
 Copy an existing dump without Blender (compose may stay up):
 
-  ./scripts/manage.sh house-views --slug lab-penthouse --install-inputs
+  bazelisk run //:manage -- house-views --slug lab-penthouse --install-inputs
 
 Reseed LoadImage plates without Blender (compose may stay up):
 
-  ./scripts/manage.sh house-views --slug lab-penthouse --seed-inputs
+  bazelisk run //:manage -- house-views --slug lab-penthouse --seed-inputs
 
 HOUSE IDENTITY is the same camera-free world bible as stills/dream-house. Shot cards are camera stations from place_10 (lens, camera height, a distinct room program, near/far planes, and which room). Prompt Join lock=view. Each shot VAEEncodes its clay plate into ReferenceLatent. Shot cards are not Klein-t2i-enhanced.
 

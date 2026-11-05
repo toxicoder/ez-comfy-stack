@@ -23,7 +23,7 @@ tags: [workflows, generated, comfyui, audio, album]
 
 ## Purpose
 
-Numbered takes under `audio/albums/drive-through/hour-1/`. Queue one track, or `./scripts/manage.sh album-render --album drive-through/hour-1`.
+Numbered takes under `audio/albums/drive-through/hour-1/`. Queue one track, or `bazelisk run //:manage -- album-render --album drive-through/hour-1`.
 
 ```text
 ## 01-night-window

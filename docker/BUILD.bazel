@@ -6,24 +6,30 @@ package(default_visibility = ["//visibility:public"])
 
 filegroup(
     name = "sources",
-    srcs = glob(
-        [
-            "**/*.sh",
-            "**/*.py",
-            "Dockerfile",
-            ".dockerignore",
-        ],
-        allow_empty = False,
-    ) + glob(
-        [
-            "**/*.yml",
-            "**/*.yaml",
-            "**/*.json",
-            "**/*.conf",
-            "**/*.env",
-        ],
-        allow_empty = True,
-    ),
+    srcs = [
+        ".dockerignore",
+        "Dockerfile",
+        "compose_config_test.sh",
+        "docker-compose.yml",
+        "entrypoint.sh",
+        "install-comfy.sh",
+        "install-comfy/chatterbox-tts.sh",
+        "install-comfy/common.sh",
+        "install-comfy/core.sh",
+        "install-comfy/llama-cpp-cpu.sh",
+        "install-comfy/phase-comfy.sh",
+        "install-comfy/phase-finalize.sh",
+        "install-comfy/phase-nodes.sh",
+        "install-comfy/phase-venv-torch.sh",
+        "install-comfy/qwen-tts.sh",
+        "patch_common.py",
+        "patch_get_free_memory.py",
+        "patch_magcache_compat.py",
+        "patch_unified_memory_copy.py",
+        "patch_vhs_widget_inputs.py",
+        "pythonpath/sitecustomize.py",
+        "seed_clay_inputs.py",
+    ],
 )
 
 # docker compose config -q: parse and validate the compose file the stack

@@ -36,7 +36,7 @@ fields are packed into Context Join and condition every card rewrite. Then fill 
 (`action | camera | world SFX | dialogue`). Audio policy also feeds LTX audio notes.
 Write YAML on the host:
 
-  ./scripts/manage.sh shot-sheet run --film <slug>
+  bazelisk run //:manage -- shot-sheet run --film <slug>
 
 That writes `${COMFY_OUTPUT_DIR}/films/<slug>/shots.yaml`. The entrypoint does **not**
 copy YAML. Do not overwrite `workflows/shorts/*.shots.yaml` unless `--lab-example`.
@@ -163,7 +163,7 @@ fields are packed into Context Join and condition every card rewrite. Then fill 
 (`action | camera | world SFX | dialogue`). Audio policy also feeds LTX audio notes.
 Write YAML on the host:
 
-  ./scripts/manage.sh shot-sheet run --film <slug>
+  bazelisk run //:manage -- shot-sheet run --film <slug>
 
 That writes `${COMFY_OUTPUT_DIR}/films/<slug>/shots.yaml`. The entrypoint does **not**
 copy YAML. Do not overwrite `workflows/shorts/*.shots.yaml` unless `--lab-example`.

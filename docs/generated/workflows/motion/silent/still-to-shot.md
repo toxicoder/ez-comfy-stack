@@ -38,7 +38,7 @@ Models: wan2.2_ti2v_5B_fp16 + umt5_xxl_fp8_e4m3fn_scaled (CLIP wan) + wan2.2_vae
 
 90s films: optional silent rehearsal. Copy `wan_i2v` from `{film}.shots.yaml`, set LoadImage to the previous last PNG, VHS prefix ez_<slug>_bN_sM_wan_video. Prefer the one-click **film-*-90s** LTX path for the deliverable.
 
-Six-shot concat demo: Queue this six times with VHS prefix ez_shot_01 .. ez_shot_06, then ./scripts/utilities/concat-shots.sh --yes
+Six-shot concat demo: Queue this six times with VHS prefix ez_shot_01 .. ez_shot_06, then bazelisk run //scripts:run-utility -- concat-shots --yes
 
 Do not Queue a 90s denoise. US-safe local pack only. No score.
 90s films: prefer the one-click **films/go-see** graphs (Queue once). This graph remains the silent 5.00s rehearsal.
@@ -769,7 +769,7 @@ Models: wan2.2_ti2v_5B_fp16 + umt5_xxl_fp8_e4m3fn_scaled (CLIP wan) + wan2.2_vae
 
 90s films: optional silent rehearsal. Copy `wan_i2v` from `{film}.shots.yaml`, set LoadImage to the previous last PNG, VHS prefix ez_<slug>_bN_sM_wan_video. Prefer the one-click **film-*-90s** LTX path for the deliverable.
 
-Six-shot concat demo: Queue this six times with VHS prefix ez_shot_01 .. ez_shot_06, then ./scripts/utilities/concat-shots.sh --yes
+Six-shot concat demo: Queue this six times with VHS prefix ez_shot_01 .. ez_shot_06, then bazelisk run //scripts:run-utility -- concat-shots --yes
 
 Do not Queue a 90s denoise. US-safe local pack only. No score.
 90s films: prefer the one-click **films/go-see** graphs (Queue once). This graph remains the silent 5.00s rehearsal.

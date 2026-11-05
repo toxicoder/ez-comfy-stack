@@ -39,7 +39,7 @@ US-safe 5.00s AV I2V print (121 frames = 1+8n @ 24 fps) with last-frame SaveImag
 Models: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot (CLIP ltxv) + ltx-2.5-video-vae-bf16 + ltx-2.5-audio-vae-bf16.
 LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
 
-90s films: prefer the one-click **films/go-see** graphs (Queue once). This graph is the generic 5.00s printer / spark-farm shot. Paste an `ltx_i2v` paragraph from `{film}.shots.yaml` if you iterate a single beat. VHS prefix ez_<slug>_bN_sM_ltx_video. Host stitch: ./scripts/utilities/concat-shots.sh --film go-see --yes
+90s films: prefer the one-click **films/go-see** graphs (Queue once). This graph is the generic 5.00s printer / spark-farm shot. Paste an `ltx_i2v` paragraph from `{film}.shots.yaml` if you iterate a single beat. VHS prefix ez_<slug>_bN_sM_ltx_video. Host stitch: bazelisk run //scripts:run-utility -- concat-shots --film go-see --yes
 
 Do not Queue a 90s denoise. US-safe local pack only. No score.
 90s films: prefer the one-click **films/go-see** graphs (Queue once). This graph remains the generic 5.00s printer / spark-farm shot.
@@ -685,7 +685,7 @@ US-safe 5.00s AV I2V print (121 frames = 1+8n @ 24 fps) with last-frame SaveImag
 Models: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot (CLIP ltxv) + ltx-2.5-video-vae-bf16 + ltx-2.5-audio-vae-bf16.
 LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
 
-90s films: prefer the one-click **films/go-see** graphs (Queue once). This graph is the generic 5.00s printer / spark-farm shot. Paste an `ltx_i2v` paragraph from `{film}.shots.yaml` if you iterate a single beat. VHS prefix ez_<slug>_bN_sM_ltx_video. Host stitch: ./scripts/utilities/concat-shots.sh --film go-see --yes
+90s films: prefer the one-click **films/go-see** graphs (Queue once). This graph is the generic 5.00s printer / spark-farm shot. Paste an `ltx_i2v` paragraph from `{film}.shots.yaml` if you iterate a single beat. VHS prefix ez_<slug>_bN_sM_ltx_video. Host stitch: bazelisk run //scripts:run-utility -- concat-shots --film go-see --yes
 
 Do not Queue a 90s denoise. US-safe local pack only. No score.
 90s films: prefer the one-click **films/go-see** graphs (Queue once). This graph remains the generic 5.00s printer / spark-farm shot.

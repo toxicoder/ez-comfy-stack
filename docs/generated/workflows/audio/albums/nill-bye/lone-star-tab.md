@@ -23,7 +23,7 @@ tags: [workflows, generated, comfyui, audio, album]
 
 ## Purpose
 
-Numbered takes under `audio/albums/nill-bye/lone-star-tab/`. Queue one track, or `./scripts/manage.sh album-render --album nill-bye/lone-star-tab`.
+Numbered takes under `audio/albums/nill-bye/lone-star-tab/`. Queue one track, or `bazelisk run //:manage -- album-render --album nill-bye/lone-star-tab`.
 
 ```text
 ## 01-lone-star-tab

@@ -23,7 +23,7 @@ tags: [workflows, generated, comfyui, audio, album]
 
 ## Purpose
 
-Numbered takes under `audio/albums/nill-bye/thirty-four-counts/`. Queue one track, or `./scripts/manage.sh album-render --album nill-bye/thirty-four-counts`.
+Numbered takes under `audio/albums/nill-bye/thirty-four-counts/`. Queue one track, or `bazelisk run //:manage -- album-render --album nill-bye/thirty-four-counts`.
 
 ```text
 ## 01-thirty-four-counts

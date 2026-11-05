@@ -33,7 +33,7 @@ Cinema Rack - pick one cinematography technique per axis and splice a Klein / Wa
 
 Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
-  ./scripts/manage.sh occupancy enter llm-desk --yes
+  bazelisk run //:manage -- occupancy enter llm-desk --yes
 
 Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.
 
@@ -115,7 +115,7 @@ Cinema Rack - pick one cinematography technique per axis and splice a Klein / Wa
 
 Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
-  ./scripts/manage.sh occupancy enter llm-desk --yes
+  bazelisk run //:manage -- occupancy enter llm-desk --yes
 
 Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.
 

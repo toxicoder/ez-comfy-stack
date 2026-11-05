@@ -33,7 +33,7 @@ Still pack plate -> native TRELLIS.2 INT8 mesh (Comfy core nodes). Occupancy: **
 
 ```bash
 ./scripts/manage.sh download-3d --tier trellis2
-./scripts/manage.sh occupancy enter trellis --yes
+bazelisk run //:manage -- occupancy enter trellis --yes
 ```
 
 EZDCCLoadStillPack slug ``go-see`` plate ``mug`` -> OccupancyGate -> EZUnloadModels -> TRELLIS.2 INT8. Save under ``assets/objects/_lab-mug/`` (output tree, never MODELS_DIR). Do not mint an Asset Bible row from this graph.
@@ -158,7 +158,7 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## dcc/still-to-mesh Still pack plate -> native TRELLIS.2 INT8 mesh (Comfy core nodes). Occupancy: **trellis**. ```bash ./scripts/manage.sh download-3d --tier trellis2 ./scripts/manage.sh occupancy e...`
+**This graph:** `## dcc/still-to-mesh Still pack plate -> native TRELLIS.2 INT8 mesh (Comfy core nodes). Occupancy: **trellis**. ```bash ./scripts/manage.sh download-3d --tier trellis2 bazelisk run //:manage -- occup...`
 
 ````text
 ## dcc/still-to-mesh
@@ -167,7 +167,7 @@ Still pack plate -> native TRELLIS.2 INT8 mesh (Comfy core nodes). Occupancy: **
 
 ```bash
 ./scripts/manage.sh download-3d --tier trellis2
-./scripts/manage.sh occupancy enter trellis --yes
+bazelisk run //:manage -- occupancy enter trellis --yes
 ```
 
 EZDCCLoadStillPack slug ``go-see`` plate ``mug`` -> OccupancyGate -> EZUnloadModels -> TRELLIS.2 INT8. Save under ``assets/objects/_lab-mug/`` (output tree, never MODELS_DIR). Do not mint an Asset Bible row from this graph.

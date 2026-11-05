@@ -4,7 +4,7 @@ Tagged 'manual' because they depend on host tools being present in PATH.
 
 REQUIRE_LINT_TOOLS=1 is set for every gate here. scripts/lib/check_tool.sh is
 resilient by design off-Bazel (a missing linter prints a hint and exits 0, so
-`bash lints/run_shellcheck.sh` on a bare laptop is not a wall), but a Bazel
+`lints/run_shellcheck.sh` on a bare laptop is not a wall), but a Bazel
 gate that skips itself is worse than no gate: it reports green having checked
 nothing. Under Bazel a missing tool is a hard failure; `bazelisk run
 //:setup-host` installs the set from .devcontainer/tool-versions.env.

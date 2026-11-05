@@ -2,6 +2,10 @@
 
 Bazel is the primary entry point: test, lint, docs, and operational scripts.
 
+The one command that runs everything:
+
+  bazelisk run //:everything            # bootstrap probe + graph + every gate + docs
+
 Common entry points:
 
   bazelisk run //:validate              # git-aware build + test + lint + docs
@@ -10,6 +14,7 @@ Common entry points:
   bazelisk test //:test-all             # every gate, incl. manual lint + visual + compose
   bazelisk test //:lint --test_tag_filters=manual
   bazelisk test //:owned_files_check    # every tracked file is owned by a BUILD target
+  bazelisk test //:bazel_docs_check     # every documented command names a target
   bazelisk run //:setup-host -- --check # host toolchain the lint gates need
   bazelisk run //:manage -- doctor
   bazelisk run //docs:serve
@@ -110,6 +115,7 @@ alias(
 _TEST_FAST = [
     "//scripts:manage_help_test",
     "//tests:bats",
+    "//tests:bazel_docs_check",
     "//tests:build_quality_js_check",
     "//tests:js",
     "//tests:owned_files_check",
@@ -234,6 +240,17 @@ alias(
     visibility = ["//visibility:public"],
 )
 
+# The one entry point for "run everything". //:validate is the fast, git-aware
+# slice for a working day; this is the whole sweep - host bootstrap probe,
+# graph load, //:test-all, and the docs build - and it names the Bazel target
+# that failed. Run it before shipping a Bazel-side change or promoting a graph.
+#   bazelisk run //:everything
+alias(
+    name = "everything",
+    actual = "//scripts:everything",
+    visibility = ["//visibility:public"],
+)
+
 alias(
     name = "check",
     actual = ":validate",
@@ -264,5 +281,12 @@ exec_shell(
 test_suite(
     name = "owned_files_check",
     tests = ["//tests:owned_files_check"],
+    visibility = ["//visibility:public"],
+)
+
+# Every committed command reference names a Bazel target rather than a script.
+test_suite(
+    name = "bazel_docs_check",
+    tests = ["//tests:bazel_docs_check"],
     visibility = ["//visibility:public"],
 )

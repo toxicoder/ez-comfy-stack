@@ -35,7 +35,7 @@ LoadImage: clay ``first.png`` from ``guides/<slug>/<shot>/``. Prefix ``ez_clay_h
 
 After Queue, overlay-qc the look against clay (host ffmpeg; compose may stay up):
 
-  ./scripts/manage.sh overlay-qc --film <slug> --shot <id> --look PATH
+  bazelisk run //:manage -- overlay-qc --film <slug> --shot <id> --look PATH
 
 Unload before LTX. Do not Queue this graph and a DCC dump in one session (occupancy).
 
@@ -556,7 +556,7 @@ LoadImage: clay ``first.png`` from ``guides/<slug>/<shot>/``. Prefix ``ez_clay_h
 
 After Queue, overlay-qc the look against clay (host ffmpeg; compose may stay up):
 
-  ./scripts/manage.sh overlay-qc --film <slug> --shot <id> --look PATH
+  bazelisk run //:manage -- overlay-qc --film <slug> --shot <id> --look PATH
 
 Unload before LTX. Do not Queue this graph and a DCC dump in one session (occupancy).
 

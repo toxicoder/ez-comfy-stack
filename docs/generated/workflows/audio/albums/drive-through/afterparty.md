@@ -23,7 +23,7 @@ tags: [workflows, generated, comfyui, audio, album]
 
 ## Purpose
 
-Numbered takes under `audio/albums/drive-through/afterparty/`. Queue one track, or `./scripts/manage.sh album-render --album drive-through/afterparty`.
+Numbered takes under `audio/albums/drive-through/afterparty/`. Queue one track, or `bazelisk run //:manage -- album-render --album drive-through/afterparty`.
 
 ```text
 ## 01-brake-fade

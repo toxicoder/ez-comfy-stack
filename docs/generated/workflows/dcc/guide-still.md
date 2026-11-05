@@ -34,9 +34,9 @@ Klein 4B **edit** of a guide-pack still loaded in-canvas (no LoadImage / --insta
 Occupancy: **klein**. Wire: EZDCCLoadGuideStill ``layer=first`` -> OccupancyGate -> Klein envelope. Defaults: slug ``go-see``, shot_id ``12``.
 
 ```bash
-./scripts/manage.sh occupancy enter blender-desk
-./scripts/manage.sh export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth
-./scripts/manage.sh occupancy enter klein --yes
+bazelisk run //:manage -- occupancy enter blender-desk
+bazelisk run //:manage -- export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth
+bazelisk run //:manage -- occupancy enter klein --yes
 ```
 
 blender-desk fails the gate (park is for dumps). After Queue, overlay-qc. Path D: laptop dump, rsync ``guides/``, Spark Comfy. Stay on :8188.
@@ -550,9 +550,9 @@ Klein 4B **edit** of a guide-pack still loaded in-canvas (no LoadImage / --insta
 Occupancy: **klein**. Wire: EZDCCLoadGuideStill ``layer=first`` -> OccupancyGate -> Klein envelope. Defaults: slug ``go-see``, shot_id ``12``.
 
 ```bash
-./scripts/manage.sh occupancy enter blender-desk
-./scripts/manage.sh export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth
-./scripts/manage.sh occupancy enter klein --yes
+bazelisk run //:manage -- occupancy enter blender-desk
+bazelisk run //:manage -- export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth
+bazelisk run //:manage -- occupancy enter klein --yes
 ```
 
 blender-desk fails the gate (park is for dumps). After Queue, overlay-qc. Path D: laptop dump, rsync ``guides/``, Spark Comfy. Stay on :8188.

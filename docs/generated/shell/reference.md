@@ -34,8 +34,13 @@ Purpose:
 
 ```bash
 Usage:
-  ./scripts/manage.sh help|setup|doctor|status|start|stop|restart|logs|download-models [--limit auto|N|off] [--drop-incomplete]|download-podcast [--tier analog|acestep|chatterbox|qwen3tts|all] [--limit auto|N|off]|download-dub [--tier asr|clone|all] [--limit auto|N|off]|download-music [--tier turbo|xl|all] [--limit auto|N|off]|download-llm [--tier enhance|qwen36-35b-a3b|all] [--limit auto|N|off]|cleanup
-  ./scripts/manage.sh reset-hf-partials [--yes] [--force]
+  bazelisk run //:manage -- help|doctor|status|logs|cleanup
+  ./scripts/manage.sh setup
+  ./scripts/manage.sh start
+  ./scripts/manage.sh stop
+  ./scripts/manage.sh restart
+  ./scripts/manage.sh download-models [--limit auto|N|off] [--drop-incomplete]|download-podcast [--tier analog|acestep|chatterbox|qwen3tts|all] [--limit auto|N|off]|download-dub [--tier asr|clone|all] [--limit auto|N|off]|download-music [--tier turbo|xl|all] [--limit auto|N|off]|download-llm [--tier enhance|qwen36-35b-a3b|all] [--limit auto|N|off]
+  bazelisk run //:manage -- reset-hf-partials [--yes] [--force]
   ./scripts/manage.sh download-limit status|run|clear|wrap ...
 
 ```
@@ -895,14 +900,9 @@ stop.sh. The recipe owns the container and the weights.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- agent-model status [--json]
-
-```bash
-  ./scripts/utilities/agent-model.sh status [--json]
-  ./scripts/utilities/agent-model.sh run
-  ./scripts/utilities/agent-model.sh stop
+  bazelisk run //scripts:run-utility -- agent-model run
+  bazelisk run //scripts:run-utility -- agent-model stop
 
 ```
 
@@ -941,20 +941,15 @@ Purpose:
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- album-render status [--json]
-
-```bash
-  ./scripts/utilities/album-render.sh status [--json]
-  ./scripts/utilities/album-render.sh run --album ARTIST/SLUG
+  bazelisk run //scripts:run-utility -- album-render run --album ARTIST/SLUG
 ```
 
       [--art skip|upload|generate] [--image FILE] [--out DIR]
       [--quality TIER] [--dry-run]
 
 ```bash
-  ./scripts/utilities/album-render.sh pack --album ARTIST/SLUG [--out DIR]
+  bazelisk run //scripts:run-utility -- album-render pack --album ARTIST/SLUG [--out DIR]
 
 ```
 
@@ -983,12 +978,7 @@ COMFY_OUTPUT_DIR/assets. Does not download, Queue, or write.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- asset-ls [--json] [--output-dir DIR]
-
-```bash
-  ./scripts/utilities/asset-ls.sh [--json] [--output-dir DIR]
 
 ```
 
@@ -1014,13 +1004,8 @@ Purpose:
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- audio-still-video status [--json]
-
-```bash
-  ./scripts/utilities/audio-still-video.sh status [--json]
-  ./scripts/utilities/audio-still-video.sh run --audio FILE --image FILE [--out FILE]
+  bazelisk run //scripts:run-utility -- audio-still-video run --audio FILE --image FILE [--out FILE]
 ```
 
       [--size 1920x1080|1280x720|1080x1920] [--fit letterbox|crop|stretch]
@@ -1048,13 +1033,8 @@ first+last at 1280x704, 120 frames @ 24 fps). Never in docker/Dockerfile.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- blender-guide --film go-see --shot 12 [--blend FILE]
-
-```bash
-  ./scripts/utilities/blender-guide.sh --film go-see --shot 12 [--blend FILE]
-  ./scripts/utilities/blender-guide.sh --engine blender --film go-see --shot 12
+  bazelisk run //scripts:run-utility -- blender-guide --engine blender --film go-see --shot 12
 
 ```
 
@@ -1077,7 +1057,7 @@ docker/Dockerfile. Occupancy does not install Blender.
 
 ```bash
 Usage:
-  ./scripts/utilities/blender-install.sh
+  bazelisk run //scripts:run-utility -- blender-install
   ./scripts/manage.sh blender-install
 
 ```
@@ -1103,12 +1083,7 @@ Never GPU-offload. Never in docker/Dockerfile.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- blender-llm "greybox mug on a table"
-
-```bash
-  ./scripts/utilities/blender-llm.sh "greybox mug on a table"
 ```
 
 ### Command: blender-llm
@@ -1121,14 +1096,9 @@ Host only - never in docker/Dockerfile. bpy tools require blender-desk.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- blender-mcp [--stdio]
-
-```bash
-  ./scripts/utilities/blender-mcp.sh [--stdio]
-  ./scripts/utilities/blender-mcp.sh --list-tools
-  ./scripts/utilities/blender-mcp.sh --call TOOL [JSON]
+  bazelisk run //scripts:run-utility -- blender-mcp --list-tools
+  bazelisk run //scripts:run-utility -- blender-mcp --call TOOL [JSON]
 ```
 
 ### Command: blender-mcp
@@ -1141,13 +1111,8 @@ clay / depth / canny at creator sizes). Never in docker/Dockerfile.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- blender-stills --film go-see --plate mug --blend FILE
-
-```bash
-  ./scripts/utilities/blender-stills.sh --film go-see --plate mug --blend FILE
-  ./scripts/utilities/blender-stills.sh --film go-see --plate mug --size 1024x1024
+  bazelisk run //scripts:run-utility -- blender-stills --film go-see --plate mug --size 1024x1024
 
 ```
 
@@ -1171,12 +1136,7 @@ docker/Dockerfile - GB10 DCC stays on the host. See docs/occupancy.md.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- blender [--] [blender args]
-
-```bash
-  ./scripts/utilities/blender.sh [--] [blender args]
 ```
 
 ### Command: blender
@@ -1192,12 +1152,7 @@ Purpose:
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- compile-film FILM
-
-```bash
-  ./scripts/utilities/compile-film.sh FILM
 
 ```
 
@@ -1220,12 +1175,7 @@ Purpose:
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- compress-cinema-clip --in FILE --out FILE
-
-```bash
-  ./scripts/utilities/compress-cinema-clip.sh --in FILE --out FILE
 ```
 
       [--poster FILE] [--crf 28] [--max-bytes 524288] [--dry-run]
@@ -1255,15 +1205,10 @@ Purpose:
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- concat-shots [--dir DIR] [--out FILE] [--dry-run|--yes]
-
-```bash
-  ./scripts/utilities/concat-shots.sh [--dir DIR] [--out FILE] [--dry-run|--yes]
-  ./scripts/utilities/concat-shots.sh --files a.mp4,b.mp4 [--out FILE]
-  ./scripts/utilities/concat-shots.sh --film FILM [--yes]
-  ./scripts/utilities/concat-shots.sh --film go-see --xfade 10 --yes
+  bazelisk run //scripts:run-utility -- concat-shots --files a.mp4,b.mp4 [--out FILE]
+  bazelisk run //scripts:run-utility -- concat-shots --film FILM [--yes]
+  bazelisk run //scripts:run-utility -- concat-shots --film go-see --xfade 10 --yes
 
 ```
 
@@ -1291,15 +1236,10 @@ Does not overload manage.sh cleanup (volume-only) or reap-models (MODELS_DIR).
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- disk-wizard --plan
-
-```bash
-  ./scripts/utilities/disk-wizard.sh --plan
-  ./scripts/utilities/disk-wizard.sh --json
-  ./scripts/utilities/disk-wizard.sh --apply --yes
-  ./scripts/utilities/disk-wizard.sh restore --from .disk-quarantine/<utc>
+  bazelisk run //scripts:run-utility -- disk-wizard --json
+  bazelisk run //scripts:run-utility -- disk-wizard --apply --yes
+  bazelisk run //scripts:run-utility -- disk-wizard restore --from .disk-quarantine/<utc>
 
 ```
 
@@ -1322,12 +1262,7 @@ first (unload LTX). SuperSplat is a host viewer (docs/splat-sidecar.md).
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- download-3d status|run [--tier trellis2|da3-base|all] [--json]
-
-```bash
-  ./scripts/utilities/download-3d.sh status|run [--tier trellis2|da3-base|all] [--json]
 
 ```
 
@@ -1349,12 +1284,7 @@ Not download-models. Unload LTX first.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- download-dreamx status|run [--tier creator|all] [--json]
-
-```bash
-  ./scripts/utilities/download-dreamx.sh status|run [--tier creator|all] [--json]
 ```
 
 ### Command: download-dreamx
@@ -1374,12 +1304,7 @@ Audience:
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- download-dub status|run|cleanup [--tier asr|clone|all] [--json]
-
-```bash
-  ./scripts/utilities/download-dub.sh status|run|cleanup [--tier asr|clone|all] [--json]
 
 ```
 
@@ -1415,14 +1340,9 @@ Audience:
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- download-image status [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev|flux3|flux3-base|flux3-nvfp4|flux3-bf16|flux3-te|flux3-pup] [--json]
-
-```bash
-  ./scripts/utilities/download-image.sh status [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev|flux3|flux3-base|flux3-nvfp4|flux3-bf16|flux3-te|flux3-pup] [--json]
-  ./scripts/utilities/download-image.sh run [--tier ...]
-  ./scripts/utilities/download-image.sh cleanup [--tier ...] [--dry-run|--yes]
+  bazelisk run //scripts:run-utility -- download-image run [--tier ...]
+  bazelisk run //scripts:run-utility -- download-image cleanup [--tier ...] [--dry-run|--yes]
 
 ```
 
@@ -1508,12 +1428,7 @@ Audience:
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- download-llm status|run|cleanup|link [--tier enhance|qwen36-35b-a3b|describe|all] [--json]
-
-```bash
-  ./scripts/utilities/download-llm.sh status|run|cleanup|link [--tier enhance|qwen36-35b-a3b|describe|all] [--json]
 
 ```
 
@@ -1541,12 +1456,7 @@ NCCL is out of this sample stack.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- download-longcat status|run [--tier video|avatar|all] [--json]
-
-```bash
-  ./scripts/utilities/download-longcat.sh status|run [--tier video|avatar|all] [--json]
 ```
 
 ### Command: download-longcat
@@ -1568,14 +1478,9 @@ Audience:
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- download-ltx status [--tier 2.5|2.3|balanced|quality|gemma|iclora|all] [--json]
-
-```bash
-  ./scripts/utilities/download-ltx.sh status [--tier 2.5|2.3|balanced|quality|gemma|iclora|all] [--json]
-  ./scripts/utilities/download-ltx.sh run [--tier ...]
-  ./scripts/utilities/download-ltx.sh cleanup [--tier ...] [--dry-run|--yes]
+  bazelisk run //scripts:run-utility -- download-ltx run [--tier ...]
+  bazelisk run //scripts:run-utility -- download-ltx cleanup [--tier ...] [--dry-run|--yes]
 
 ```
 
@@ -1610,12 +1515,7 @@ Audience:
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- download-music status|run|cleanup [--tier turbo|xl|all] [--json]
-
-```bash
-  ./scripts/utilities/download-music.sh status|run|cleanup [--tier turbo|xl|all] [--json]
 
 ```
 
@@ -1647,12 +1547,7 @@ Audience:
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- download-podcast status|run|cleanup [--tier analog|acestep|chatterbox|qwen3tts|all] [--json]
-
-```bash
-  ./scripts/utilities/download-podcast.sh status|run|cleanup [--tier analog|acestep|chatterbox|qwen3tts|all] [--json]
 
 ```
 
@@ -1678,13 +1573,8 @@ download-models. Unload Comfy denoise first (occupancy).
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- download-restore status [--tier seedvr2-3b] [--json]
-
-```bash
-  ./scripts/utilities/download-restore.sh status [--tier seedvr2-3b] [--json]
-  ./scripts/utilities/download-restore.sh run [--tier seedvr2-3b]
+  bazelisk run //scripts:run-utility -- download-restore run [--tier seedvr2-3b]
 
 ```
 
@@ -1713,14 +1603,9 @@ Audience:
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- download-wan status [--tier 5b|a14b|fun-inp|all] [--json]
-
-```bash
-  ./scripts/utilities/download-wan.sh status [--tier 5b|a14b|fun-inp|all] [--json]
-  ./scripts/utilities/download-wan.sh run [--tier ...]
-  ./scripts/utilities/download-wan.sh cleanup [--tier ...] [--dry-run|--yes]
+  bazelisk run //scripts:run-utility -- download-wan run [--tier ...]
+  bazelisk run //scripts:run-utility -- download-wan cleanup [--tier ...] [--dry-run|--yes]
 
 ```
 
@@ -1752,12 +1637,7 @@ Audience:
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- dub-fetch status|run --url URL [--out DIR]
-
-```bash
-  ./scripts/utilities/dub-fetch.sh status|run --url URL [--out DIR]
 
 ```
 
@@ -1784,15 +1664,10 @@ No execute_code, no telemetry, no arbitrary fetch_url, no Queue of its own.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- edit-mcp [--stdio]
-
-```bash
-  ./scripts/utilities/edit-mcp.sh [--stdio]
-  ./scripts/utilities/edit-mcp.sh --list-tools
-  ./scripts/utilities/edit-mcp.sh --call TOOL [JSON]
-  ./scripts/utilities/edit-mcp.sh status [--json]
+  bazelisk run //scripts:run-utility -- edit-mcp --list-tools
+  bazelisk run //scripts:run-utility -- edit-mcp --call TOOL [JSON]
+  bazelisk run //scripts:run-utility -- edit-mcp status [--json]
 
 ```
 
@@ -1807,12 +1682,7 @@ Fail-closed accept gate before 90s concat (duration, 1280x704, LTX audio).
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- film-accept go-see|still-here|switchyard
-
-```bash
-  ./scripts/utilities/film-accept.sh go-see|still-here|switchyard
 
 ```
 
@@ -1831,12 +1701,7 @@ when the film-id directory is absent. films/<prefix>/ is unchanged.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- film-animatic --film SLUG [--yaml PATH] [--guides DIR]
-
-```bash
-  ./scripts/utilities/film-animatic.sh --film SLUG [--yaml PATH] [--guides DIR]
 
 ```
 
@@ -1852,12 +1717,7 @@ Write films/<slug>/publish/<slug>.otio from jobstore state.json.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- film-export-otio go-see|still-here|switchyard
-
-```bash
-  ./scripts/utilities/film-export-otio.sh go-see|still-here|switchyard
 
 ```
 
@@ -1873,12 +1733,7 @@ Host h264_nvenc proxies for a film jobstore. Never rewrite masters.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- film-proxies go-see|still-here|switchyard [--yes]
-
-```bash
-  ./scripts/utilities/film-proxies.sh go-see|still-here|switchyard [--yes]
 
 ```
 
@@ -1898,13 +1753,8 @@ Occupancy-gated Blender dump of an ez.house.views.v1 pack (ten Instagram
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- house-views --slug lab-penthouse
-
-```bash
-  ./scripts/utilities/house-views.sh --slug lab-penthouse
-  ./scripts/utilities/house-views.sh --slug lab-penthouse --layout FILE
+  bazelisk run //scripts:run-utility -- house-views --slug lab-penthouse --layout FILE
 
 ```
 
@@ -1927,14 +1777,9 @@ Occupancy llm-desk is the public path. Never in docker/Dockerfile.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- llm-sidecar status [--json]
-
-```bash
-  ./scripts/utilities/llm-sidecar.sh status [--json]
-  ./scripts/utilities/llm-sidecar.sh start
-  ./scripts/utilities/llm-sidecar.sh stop
+  bazelisk run //scripts:run-utility -- llm-sidecar start
+  bazelisk run //scripts:run-utility -- llm-sidecar stop
 
 ```
 
@@ -1957,12 +1802,7 @@ status | keep-set | render for config/model-manifest.yaml
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- models-manifest status|keep-set|render
-
-```bash
-  ./scripts/utilities/models-manifest.sh status|keep-set|render
 ```
 
 ### Command: models-manifest
@@ -1978,12 +1818,7 @@ Purpose:
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- nvenc-preview --in MASTER.mp4 --out PREVIEW.mp4 [--yes]
-
-```bash
-  ./scripts/utilities/nvenc-preview.sh --in MASTER.mp4 --out PREVIEW.mp4 [--yes]
 
 ```
 
@@ -2006,13 +1841,8 @@ heavy graph family (klein / trellis / wan / ltx). One GB10 GPU job.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- occupancy status [--json]
-
-```bash
-  ./scripts/utilities/occupancy.sh status [--json]
-  ./scripts/utilities/occupancy.sh enter blender-desk|llm-desk|klein|trellis|wan|ltx|idle [--yes]
+  bazelisk run //scripts:run-utility -- occupancy enter blender-desk|llm-desk|klein|trellis|wan|ltx|idle [--yes]
 
 ```
 
@@ -2037,12 +1867,7 @@ directory is absent.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- overlay-qc --film SLUG --shot ID --look PATH [--guides DIR]
-
-```bash
-  ./scripts/utilities/overlay-qc.sh --film SLUG --shot ID --look PATH [--guides DIR]
 
 ```
 
@@ -2064,12 +1889,7 @@ Not NVENC - may run while Comfy is up because it does not use the GPU.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- pack-frames --in DIR --out FILE [--fps 24] [--pattern '%04d.png']
-
-```bash
-  ./scripts/utilities/pack-frames.sh --in DIR --out FILE [--fps 24] [--pattern '%04d.png']
 ```
 
 ### Command: pack-frames
@@ -2084,13 +1904,8 @@ Purpose:
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- podcast-loudnorm status [--json]
-
-```bash
-  ./scripts/utilities/podcast-loudnorm.sh status [--json]
-  ./scripts/utilities/podcast-loudnorm.sh run --in FILE [--out FILE] [--target podcast|youtube]
+  bazelisk run //scripts:run-utility -- podcast-loudnorm run --in FILE [--out FILE] [--target podcast|youtube]
 
 ```
 
@@ -2120,13 +1935,8 @@ Purpose:
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- print-shot <film> <id> [--quality TIER]
-
-```bash
-  ./scripts/utilities/print-shot.sh <film> <id> [--quality TIER]
-  ./scripts/utilities/print-shot.sh --resume <film> [--quality TIER]
+  bazelisk run //scripts:run-utility -- print-shot --resume <film> [--quality TIER]
 
 ```
 
@@ -2153,12 +1963,7 @@ Copy one live operator graph into the repo lab tree. Does not commit.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- promote-workflow \
-
-```bash
-  ./scripts/utilities/promote-workflow.sh \
     --from PATH --lane LANE --id STEM [--subdir REL]
 
 ```
@@ -2184,17 +1989,12 @@ Plan/apply/restore model cache cleanup. Never overloaded as manage.sh cleanup.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- reap-models --plan
-
-```bash
-  ./scripts/utilities/reap-models.sh --plan
-  ./scripts/utilities/reap-models.sh --apply --class junk --yes
-  ./scripts/utilities/reap-models.sh --apply --class superseded --quarantine --yes
-  ./scripts/utilities/reap-models.sh --drop-pack triposplat --quarantine --yes
-  ./scripts/utilities/reap-models.sh restore --from .reap-quarantine/<utc>
-  ./scripts/utilities/reap-models.sh drop-quarantine --older-than 14d --yes
+  bazelisk run //scripts:run-utility -- reap-models --apply --class junk --yes
+  bazelisk run //scripts:run-utility -- reap-models --apply --class superseded --quarantine --yes
+  bazelisk run //scripts:run-utility -- reap-models --drop-pack triposplat --quarantine --yes
+  bazelisk run //scripts:run-utility -- reap-models restore --from .reap-quarantine/<utc>
+  bazelisk run //scripts:run-utility -- reap-models drop-quarantine --older-than 14d --yes
 
 ```
 
@@ -2215,14 +2015,9 @@ CPU GGUF + SSRF-safe HTTPS search. Does not refuse a GPU Comfy session.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- research-mcp [--stdio]
-
-```bash
-  ./scripts/utilities/research-mcp.sh [--stdio]
-  ./scripts/utilities/research-mcp.sh --list-tools
-  ./scripts/utilities/research-mcp.sh --call TOOL [JSON]
+  bazelisk run //scripts:run-utility -- research-mcp --list-tools
+  bazelisk run //scripts:run-utility -- research-mcp --call TOOL [JSON]
 ```
 
 ### Command: research-mcp
@@ -2236,11 +2031,10 @@ Dispatches to `scripts/utilities/<name>.sh`.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- download-limit status
   bazelisk run //scripts:run-utility -- occupancy status
-  bash scripts/utilities/runner.sh download-limit status
+
+```
 
 Environment:
   BUILD_WORKSPACE_DIRECTORY - set by `bazel run`; names the git checkout the
@@ -2260,9 +2054,9 @@ setup. Never auto-starts Comfy (restart: "no", type yes on start).
 
 ```bash
 Usage:
-  ./scripts/utilities/setup-client.sh [--host H] [--user U] [--port N]
-  ./scripts/utilities/setup-client.sh --onboard [...]
-  ./scripts/utilities/setup-client.sh --ui
+  bazelisk run //scripts:run-utility -- setup-client [--host H] [--user U] [--port N]
+  bazelisk run //scripts:run-utility -- setup-client --onboard [...]
+  bazelisk run //scripts:run-utility -- setup-client --ui
 ```
 
 ### Command: setup-client
@@ -2275,13 +2069,8 @@ Does not mutate workflows/shorts/*.shots.yaml unless --lab-example.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- shot-sheet status [--json] [--film SLUG]
-
-```bash
-  ./scripts/utilities/shot-sheet.sh status [--json] [--film SLUG]
-  ./scripts/utilities/shot-sheet.sh run --film SLUG [--from PATH] [--out PATH] [--lab-example]
+  bazelisk run //scripts:run-utility -- shot-sheet run --film SLUG [--from PATH] [--out PATH] [--lab-example]
 
 ```
 
@@ -2309,15 +2098,10 @@ Purpose:
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- spark-farm status [--json]
-
-```bash
-  ./scripts/utilities/spark-farm.sh status [--json]
-  ./scripts/utilities/spark-farm.sh sync-models
-  ./scripts/utilities/spark-farm.sh run [--film go-see] [--seeds 509201,509211,509221]
-  ./scripts/utilities/spark-farm.sh dispatch [--film go-see]
+  bazelisk run //scripts:run-utility -- spark-farm sync-models
+  bazelisk run //scripts:run-utility -- spark-farm run [--film go-see] [--seeds 509201,509211,509221]
+  bazelisk run //scripts:run-utility -- spark-farm dispatch [--film go-see]
 ```
 
     Assign shots 01-06 / 07-12 / 13-18 (or even split). Each host runs
@@ -2346,13 +2130,8 @@ CI has no GPU - this file is the operator timing table. Do not invent seconds.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- spark-timing show [--json]
-
-```bash
-  ./scripts/utilities/spark-timing.sh show [--json]
-  ./scripts/utilities/spark-timing.sh record --klein N --wan N --ltx N [--json]
+  bazelisk run //scripts:run-utility -- spark-timing record --klein N --wan N --ltx N [--json]
 
 ```
 
@@ -2369,12 +2148,7 @@ Occupancy: operator must already have stopped Klein/Wan/LTX. This script is CPU 
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- stem-mix --film SLUG --shot ID [--dx PATH] --bg PATH [--fx PATH] [--mx PATH] [--video PATH]
-
-```bash
-  ./scripts/utilities/stem-mix.sh --film SLUG --shot ID [--dx PATH] --bg PATH [--fx PATH] [--mx PATH] [--video PATH]
 
 ```
 
@@ -2392,14 +2166,9 @@ Does not refuse a GPU Comfy session.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- studio-mcp [--stdio]
-
-```bash
-  ./scripts/utilities/studio-mcp.sh [--stdio]
-  ./scripts/utilities/studio-mcp.sh --list-tools
-  ./scripts/utilities/studio-mcp.sh --call TOOL [JSON]
+  bazelisk run //scripts:run-utility -- studio-mcp --list-tools
+  bazelisk run //scripts:run-utility -- studio-mcp --call TOOL [JSON]
 ```
 
 ### Command: studio-mcp
@@ -2411,12 +2180,7 @@ Promote a take from films/<slug>/takes/<id>/tNNN.mp4 to shots/<id>.mp4.
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- take-promote <film> <id> <take>
-
-```bash
-  ./scripts/utilities/take-promote.sh <film> <id> <take>
 
 ```
 
@@ -2472,18 +2236,13 @@ What this script never does:
 
 ```bash
 Usage:
-```
-
   bazelisk run //scripts:run-utility -- update-stack --branch development --yes
-
-```bash
   ./scripts/manage.sh update-stack
   ./scripts/manage.sh update-stack --yes
   ./scripts/manage.sh update-stack --dry-run
-  ./scripts/utilities/update-stack.sh --branch development --yes
-```
-
   bazelisk run //scripts:update-stack -- --dry-run
+
+```
 
 Options:
   -h, --help               Print usage and exit 0.

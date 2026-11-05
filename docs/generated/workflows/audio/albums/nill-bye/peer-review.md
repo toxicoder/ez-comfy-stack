@@ -23,7 +23,7 @@ tags: [workflows, generated, comfyui, audio, album]
 
 ## Purpose
 
-Numbered takes under `audio/albums/nill-bye/peer-review/`. Queue one track, or `./scripts/manage.sh album-render --album nill-bye/peer-review`.
+Numbered takes under `audio/albums/nill-bye/peer-review/`. Queue one track, or `bazelisk run //:manage -- album-render --album nill-bye/peer-review`.
 
 ```text
 ## 01-lab-coat

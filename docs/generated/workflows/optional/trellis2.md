@@ -33,7 +33,7 @@ Klein still -> native TRELLIS.2 INT8 mesh (Comfy core nodes).
 
 ```bash
 ./scripts/manage.sh download-3d --tier trellis2
-./scripts/manage.sh occupancy enter trellis --yes
+bazelisk run //:manage -- occupancy enter trellis --yes
 ```
 
 LoadImage: a Klein still (`ez_still_*.png` or a clay plate). Unload models first (EZUnloadModels).
@@ -157,7 +157,7 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## optional/trellis2 Klein still -> native TRELLIS.2 INT8 mesh (Comfy core nodes). ```bash ./scripts/manage.sh download-3d --tier trellis2 ./scripts/manage.sh occupancy enter trellis --yes ``` LoadIm...`
+**This graph:** `## optional/trellis2 Klein still -> native TRELLIS.2 INT8 mesh (Comfy core nodes). ```bash ./scripts/manage.sh download-3d --tier trellis2 bazelisk run //:manage -- occupancy enter trellis --yes ``` ...`
 
 ````text
 ## optional/trellis2
@@ -166,7 +166,7 @@ Klein still -> native TRELLIS.2 INT8 mesh (Comfy core nodes).
 
 ```bash
 ./scripts/manage.sh download-3d --tier trellis2
-./scripts/manage.sh occupancy enter trellis --yes
+bazelisk run //:manage -- occupancy enter trellis --yes
 ```
 
 LoadImage: a Klein still (`ez_still_*.png` or a clay plate). Unload models first (EZUnloadModels).

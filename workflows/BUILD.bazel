@@ -4,11 +4,19 @@ package(default_visibility = ["//visibility:public"])
 
 filegroup(
     name = "lab_graphs",
-    srcs = glob(
+    srcs = [
+        "quality/ltx-2.5/NOTICE.md",
+        "shorts/breakwater.shots.yaml",
+        "shorts/glasshouse.shots.yaml",
+        "shorts/go-see.shots.yaml",
+        "shorts/last-lane.shots.yaml",
+        "shorts/night-oven.shots.yaml",
+        "shorts/still-here.shots.yaml",
+        "shorts/switchyard.shots.yaml",
+        "shorts/tide-table.shots.yaml",
+    ] + glob(
         [
             "_lab/**/*.json",
-            "shorts/*.yaml",
-            "quality/**/NOTICE.md",
         ],
         allow_empty = False,
     ),

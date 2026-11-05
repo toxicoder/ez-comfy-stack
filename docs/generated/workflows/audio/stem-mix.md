@@ -34,7 +34,7 @@ score is a later session if `score: acestep-instrumental`.
 
 This canvas does not denoise video. Mix on the host:
 
-  ./scripts/manage.sh stem-mix --film <slug> --shot <id> --bg PATH [--dx PATH]
+  bazelisk run //:manage -- stem-mix --film <slug> --shot <id> --bg PATH [--dx PATH]
 
 Stems: BG = demuxed LTX world bed, FX = optional Templates LTX-2.5 T2A (same distilled
 transformer; not a vendored subgraph), DX = Kokoro / Qwen3-TTS, MX = ACE-Step
@@ -116,7 +116,7 @@ score is a later session if `score: acestep-instrumental`.
 
 This canvas does not denoise video. Mix on the host:
 
-  ./scripts/manage.sh stem-mix --film <slug> --shot <id> --bg PATH [--dx PATH]
+  bazelisk run //:manage -- stem-mix --film <slug> --shot <id> --bg PATH [--dx PATH]
 
 Stems: BG = demuxed LTX world bed, FX = optional Templates LTX-2.5 T2A (same distilled
 transformer; not a vendored subgraph), DX = Kokoro / Qwen3-TTS, MX = ACE-Step
