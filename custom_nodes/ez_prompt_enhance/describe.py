@@ -8,6 +8,7 @@ from __future__ import annotations
 import base64
 import io
 import os
+import re
 import threading
 from typing import Any
 
@@ -20,15 +21,27 @@ REASON_NO_IMAGE = "no image"
 REASON_GGUF_MISSING = "describe GGUF missing"
 REASON_LLAMA_UNAVAILABLE = "llama.cpp vision unavailable"
 REASON_EMPTY = "empty vision output"
+REASON_PEOPLE_DROPPED = "caption people dropped (no person in still)"
+REASON_MOOD_DROPPED = "caption guesswork dropped"
+REASON_TRIMMED = "caption trimmed to the visible inventory"
+REASON_GATE_EMPTY = "caption dropped (nothing grounded left)"
 MAX_LONG_EDGE = 768
 DEFAULT_MAX_TOKENS = 220
+MAX_CAPTION_WORDS = 60
+"""Word cap on caption text allowed to reach a prompt or a text encoder."""
+PERSON_MASK_THRESHOLD = 0.5
+"""Mask cell that counts as a person, matching the cubic erase convention."""
 
 DESCRIBE_SYSTEM = (
     "Return only a caption of this still. No preface, no markdown, no wrapping "
-    "quotes. Name inventory, lettering (spell it), colors, layout, and where "
-    "the subject sits. SFW. No real-person names. Stay under 80 words. This "
-    "caption will be supporting context for a prompt rewriter - do not write "
-    "a new scene."
+    "quotes. Name visible inventory, lettering (spell it), colors, materials, "
+    "and layout. SFW. No real-person names. Stay under 60 words. This caption "
+    "is supporting context for a prompt rewriter, and the still itself stays "
+    "the authority. Name people only when at least one person is clearly "
+    "visible; when none is, do not mention people and do not invent a subject, "
+    "a wardrobe, or a pose. Describe only what a viewer can see: no mood, "
+    "atmosphere, story, or reasoning about why something is there. Omit an "
+    "object you are unsure of instead of guessing."
 )
 
 _VISION: Any = None
@@ -53,6 +66,240 @@ def _as_bool(value: object) -> bool:
     if isinstance(value, str):
         return value.strip().lower() in {"1", "true", "yes", "on"}
     return False
+
+
+_PERSON_TERMS = (
+    "man",
+    "men",
+    "woman",
+    "women",
+    "person",
+    "persons",
+    "people",
+    "human",
+    "humans",
+    "humanoid",
+    "individual",
+    "individuals",
+    "someone",
+    "somebody",
+    "anyone",
+    "everyone",
+    "guy",
+    "guys",
+    "boy",
+    "boys",
+    "girl",
+    "girls",
+    "child",
+    "children",
+    "kid",
+    "kids",
+    "baby",
+    "babies",
+    "toddler",
+    "toddlers",
+    "gentleman",
+    "gentlemen",
+    "gentlewoman",
+    "lady",
+    "ladies",
+    "figure",
+    "figures",
+    "silhouette",
+    "silhouettes",
+    "crowd",
+    "crowds",
+    "audience",
+    "pedestrian",
+    "pedestrians",
+    "passerby",
+    "passersby",
+    "passer-by",
+    "passers-by",
+    "subject",
+    "subjects",
+    "he",
+    "him",
+    "his",
+    "she",
+    "her",
+    "hers",
+    "they",
+    "them",
+    "their",
+    "theirs",
+)
+"""Lexicon that marks a caption sentence as a claim about a person."""
+
+_PERSON_TERM_RE = re.compile(
+    r"\b(?:" + "|".join(re.escape(term) for term in _PERSON_TERMS) + r")\b",
+    re.IGNORECASE,
+)
+"""Compiled :data:`_PERSON_TERMS` word match."""
+
+_SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?])\s+")
+"""Split a caption into sentences without eating the terminator."""
+
+_GUESS_RE = re.compile(
+    r"\b(?:seems|seem|seemingly|appears|appear|looks like|looked like|likely|"
+    r"possibly|probably|presumably|suggests|suggesting|perhaps|maybe|as if|"
+    r"as though|imagine|imagined)\b",
+    re.IGNORECASE,
+)
+"""Hedges: a hedged sentence is a guess, and a guess is not inventory."""
+
+_MOOD_CLAUSE_RE = re.compile(
+    r"[,;]?\s*\b(?:creating|creates|giving|gives|evoking|evokes|conveying|"
+    r"conveys|adding|adds)\b[^.;]*?"
+    r"\b(?:atmosphere|ambience|ambiance|mood|vibe|vibes|calm|serenity|"
+    r"coziness|tension|nostalgia|feeling|feel)\b[^.;]*",
+    re.IGNORECASE,
+)
+"""Atmosphere clause: prose about what a scene feels like is not visible."""
+
+
+def has_person_claim(caption: object) -> bool:
+    """True when ``caption`` asserts a person is in the still.
+
+    Args:
+        caption: Raw or gated caption text.
+
+    Returns:
+        Whether any :data:`_PERSON_TERMS` word appears.
+    """
+    text = str(caption or "").strip()
+    if not text:
+        return False
+    return bool(_PERSON_TERM_RE.search(text))
+
+
+def caption_without_people(caption: object) -> str:
+    """Drop every sentence in ``caption`` that claims a person.
+
+    Environment sentences survive. The check is a lexicon, so a sentence
+    about a statue ("a bronze figure") or an art subject is dropped too: the
+    gate errs toward keeping invented people out of the prompt.
+
+    Args:
+        caption: Raw caption text.
+
+    Returns:
+        Caption with person sentences removed, possibly empty.
+    """
+    text = str(caption or "").strip()
+    if not text:
+        return ""
+    kept = [
+        sentence.strip()
+        for sentence in _SENTENCE_SPLIT_RE.split(text)
+        if sentence.strip() and not _PERSON_TERM_RE.search(sentence)
+    ]
+    return " ".join(kept)
+
+
+def still_has_people(image: Any) -> bool | None:
+    """Ask the person mask whether ``image`` actually contains a person.
+
+    Args:
+        image: Comfy IMAGE tensor, or None.
+
+    Returns:
+        True when the mask lights up, False when it stays flat, and None when
+        the segmenter cannot answer (off, no weights, no torch, bad tensor).
+    """
+    if image is None:
+        return None
+    try:
+        from ez_image.person_mask import segment_people
+
+        mask = segment_people(image)
+    except Exception:  # noqa: BLE001 - hermetic tests, no torch, no ez_image
+        return None
+    if mask is None:
+        return None
+    try:
+        return any(
+            float(cell) >= PERSON_MASK_THRESHOLD for row in mask for cell in row
+        )
+    except (TypeError, ValueError):
+        return None
+
+
+def _strip_mood_prose(text: str) -> tuple[str, bool]:
+    """Cut atmosphere clauses and hedged sentences out of a caption.
+
+    Args:
+        text: Caption without person sentences.
+
+    Returns:
+        ``(kept text, whether anything was cut)``.
+    """
+    kept: list[str] = []
+    dropped = False
+    for sentence in _SENTENCE_SPLIT_RE.split(text):
+        item = sentence.strip()
+        if not item:
+            continue
+        slimmed = re.sub(r"\s+([.!?])", r"\1", _MOOD_CLAUSE_RE.sub("", item)).strip()
+        if slimmed != item:
+            dropped = True
+        if _GUESS_RE.search(slimmed):
+            dropped = True
+            continue
+        if not slimmed.strip(" .!?"):
+            continue
+        kept.append(slimmed)
+    return " ".join(kept), dropped
+
+
+def _trim_caption(text: str) -> tuple[str, bool]:
+    """Cap a caption so it cannot out-shout the operator instruction.
+
+    Args:
+        text: Gated caption.
+
+    Returns:
+        ``(caption, whether it was cut)``.
+    """
+    words = text.split()
+    if len(words) <= MAX_CAPTION_WORDS:
+        return text, False
+    return " ".join(words[:MAX_CAPTION_WORDS]).rstrip(" ,;:.") + ".", True
+
+
+def gate_caption(caption: object, image: Any = None) -> tuple[str, str]:
+    """Filter a raw VLM caption down to what the still can actually support.
+
+    The on-box 3B vision GGUF invents whole subjects at temperature 0, so the
+    caption is an unverified claim rather than inventory. A sentence that
+    names a person survives only when the person mask finds someone in the
+    same still; a hedged sentence is a guess; atmosphere prose is not
+    visible. What survives is word-capped before it can reach a prompt.
+
+    Args:
+        caption: Raw VLM caption.
+        image: The still the caption came from, used for person grounding.
+
+    Returns:
+        ``(usable caption, reason)``; reason is empty when nothing was cut.
+    """
+    text = str(caption or "").strip()
+    if not text:
+        return "", ""
+    reasons: list[str] = []
+    if has_person_claim(text) and still_has_people(image) is not True:
+        text = caption_without_people(text)
+        reasons.append(REASON_PEOPLE_DROPPED)
+    text, mood_cut = _strip_mood_prose(text)
+    if mood_cut:
+        reasons.append(REASON_MOOD_DROPPED)
+    text, trimmed = _trim_caption(text)
+    if trimmed:
+        reasons.append(REASON_TRIMMED)
+    if not text:
+        return "", REASON_GATE_EMPTY
+    return text, " + ".join(reasons)
 
 
 def last_status() -> str:
@@ -253,7 +500,12 @@ def _vision_complete(png_b64: str) -> tuple[str, str | None]:
 
 
 def describe_image(*, enable: object, image: Any = None) -> str:
-    """Return a still caption, or empty when disabled / fail-soft.
+    """Return a gated still caption, or empty when disabled / fail-soft.
+
+    The raw VLM text passes through :func:`gate_caption` here, at the one
+    place that still has the pixels, so every consumer of the caption
+    (the CLIP trailer, the rewriter Image block, the negative lane) sees the
+    same grounded string.
 
     Args:
         enable: Comfy BOOLEAN; off skips the VLM.
@@ -277,8 +529,9 @@ def describe_image(*, enable: object, image: Any = None) -> str:
     if not text:
         _LAST_STATUS = reason or REASON_EMPTY
         return ""
-    _LAST_STATUS = ""
-    return text
+    safe, gate_reason = gate_caption(text, image)
+    _LAST_STATUS = gate_reason
+    return safe
 
 
 def reset_describe_for_tests() -> None:

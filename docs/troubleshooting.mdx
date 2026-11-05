@@ -15,6 +15,7 @@ tags: [troubleshooting, comfyui, docker]
 - **Vlo (host video editor)** - Vlo cannot reach ComfyUI, and the Chromium-only rule
 - **Editing lane (ez_edit)** - agent offline, a client job stuck `pending`, sidecar preflight refusals
 - **Stills (Cubic block world)** - a block study with the people missing
+- **Still caption (EZImageDescribe)** - a person or a detail in the prompt that is not in the photo
 - **Reference stills (optional refs)** - a picked still that does not apply, and `max_refs`
 - **Prompt goal** - a deliverable the Enhancer ignored
 - **Quality combo** - a tier that drops to `custom` and the CLI `--quality` seam
@@ -58,8 +59,8 @@ symptoms. Each row names what that page covers, so one hop is enough.
 
 Rows that are not a topic page live here on this page: the Bazel ingress layer, Vlo, the editing
 lane, the Cubic block
-world, reference stills, **Goal**, the **Quality** combo, `update-stack`, the report buttons, and the
-Outputs sidebar. Each has its own section below.
+world, the still caption, reference stills, **Goal**, the **Quality** combo, `update-stack`, the
+report buttons, and the Outputs sidebar. Each has its own section below.
 
 ---
 
@@ -151,6 +152,23 @@ the Spark, client renders in the open tab, plus optional laptop-local MCP. Guide
 | --- | --- | --- |
 | **stills/background-swap** Cubic block world output has no people at all | The optional BSD-3 DeepLabV3 person mask could not load (weights missing, torch/torchvision missing, or `EZ_PERSON_MASK=off`), so the swap failed closed to the photo-anchored people-kept rebuild instead of erasing and pasting. Check the Enhance status: `photo-anchored block world (person mask unavailable)` means that mode ran | `bazelisk run //:manage -- doctor` or canvas **Check models** shows a `person-mask` row. Stage the checkpoint with the printed curl command into `$MODELS_DIR/comfy/ez-person/` (the first cubic Queue also auto-downloads it), then re-Queue with **Cubic block world** selected - the Enhance status should read `precise background instruction` and the paste reinserts the people. Set `EZ_PERSON_MASK=off` deliberately only if you want the people-kept rebuild. |
 | Queue dies on the **KSampler** with `'dict' object has no attribute 'size'` (App `stills/background-swap`, any prompt) | **Cubic or photo reference** (`EZCubicCondition`) handed the whole LATENT container (`{"samples": ...}`) to the conditioning `reference_latents` list. ComfyUI measures every entry with `.size()` in its pre-flight memory estimate, so a container there aborts the run before the first step. The node now stores the tensor itself, the way the stock reference nodes do | Update the stack, then `./scripts/manage.sh restart` and hard-refresh the Comfy tab (the entrypoint copies `custom_nodes/` on start). The node keeps its name and sockets, so a graph saved from the old pack loads unchanged - re-Queue the same prompt |
+
+---
+
+## Still caption (EZImageDescribe)
+
+**Describe image** (`EZImageDescribe`) captions the source still with the opt-in Qwen2.5-VL-3B GGUF and hands
+the text to Enhance `image_desc`. Only **stills/background-swap** defaults it On. That small vision model
+invents whole subjects at temperature 0, so the caption is an unverified claim: it is gated before anything
+reads it, and the rewriter is told the still - not the caption - is the authority on who and what is in the
+plate (`Image caption (unverified)`). Node row: [Custom nodes](reference/custom-nodes.md#ez_prompt_enhance).
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| Enhance or Describe put a person, a wardrobe, or a scene detail in the prompt that is not in the photo | The caption invented it. A sentence that names a person survives only when the optional BSD-3 DeepLabV3 person mask finds someone in the same still (any mask cell `>= 0.5`); hedged sentences (`appears`, `seems`, `looks like`, `possibly`) and atmosphere clauses (`creating a peaceful atmosphere`) are cut, and what is left is capped at 60 words. When the mask cannot answer (weights absent, `EZ_PERSON_MASK=off`, no torch) the gate is fail-closed and no person survives at all | Read the **Describe** status line - it names which cut it made: `caption people dropped (no person in still)`, `caption guesswork dropped`, `caption trimmed to the visible inventory`, `caption dropped (nothing grounded left)`. Multiple cuts join with ` + `, and an empty status means the caption passed through untouched. Turn **Describe image** **Off** when your own sentence is enough, or install the weights (next row) so the mask can confirm a real person. If the status is empty and a person still shows up, the name came from the **Prompt** textarea, a **Sample** recipe, or **Context** - fix it there |
+| The caption lost my subject - the photo has a person in it and nothing names them | Expected fail-closed default: with no person-mask weights the gate cannot confirm anyone, so it drops every person sentence. Status reads `caption people dropped (no person in still)`, or `caption dropped (nothing grounded left)` when the caption was only people prose | Install both halves: `./scripts/manage.sh download-llm --tier describe` for the caption GGUF, and the same opt-in DeepLabV3 checkpoint the Cubic block world paste uses (canvas **Check models** shows the `person-mask` row and prints the curl into `$MODELS_DIR/comfy/ez-person/`; the first cubic Queue also fetches it). Restart, re-Queue, and the status must stop naming the people cut. Or leave **Describe image** **Off** and name the subject yourself in **Prompt** |
+| The caption reads as a bare inventory list, or much shorter than the still | Working as intended: hedges, mood prose, and everything past 60 words are cut so the caption cannot out-shout the operator instruction. Status reads `caption guesswork dropped` or `caption trimmed to the visible inventory` | Keep the cut. Anything you want in the picture that the caption cannot see belongs in the **Prompt** textarea (or the **Style** dropdown), not in the caption |
+| **stills/background-swap** **Cubic block world** has a person you never asked for, with **Describe image** On | Not the caption on that route: when the mask runs, people are erased and pasted back, and the caption is deliberately withheld from both the CLIP line and the rewriter so the empty block plate is never primed with the source people | Check the Enhance status. `photo-anchored block world (person mask unavailable)` means the mask could not run, so the photo-anchored people-kept rebuild ran and the `Source still:` caption trailer was appended - stage the person-mask weights (row above). That lane's own rows: [Stills (Cubic block world)](#stills-cubic-block-world) |
 
 ---
 

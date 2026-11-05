@@ -296,7 +296,7 @@ Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
 | --- | --- | --- | --- |
 | `prompt` | in | `STRING` | Optional override of the widget (usually unwired). |
 | `context` | in | `STRING` | Bible/research. Ignored when Enhance is off. |
-| `image_desc` | in | `STRING` | Optional still caption from EZImageDescribe. |
+| `image_desc` | in | `STRING` | Optional gated caption from EZImageDescribe. Unverified: the still, not the caption, is the authority on who and what i... |
 | `background_cast` | in | `STRING` | Optional compact token from EZBackgroundCast. |
 | `prompt` | out | `STRING` | String CLIP actually encodes. |
 

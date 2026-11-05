@@ -32,15 +32,15 @@ def enhance_nodes() -> dict[str, Any]:
     )
     nodes["EZImageDescribe"] = _n(
         "Describe image",
-        "Caption a source still so Prompt Enhance can name inventory and lettering.",
+        "Caption a source still so Prompt Enhance can name inventory and lettering. The caption is gated and unverified.",
         origin="ez_prompt_enhance",
-        lab="Off (default) returns empty and does not load the describe GGUF. Opt-in: download-llm --tier describe (Qwen2.5-VL-3B Apache).",
+        lab="Off (default) returns empty and does not load the describe GGUF. Opt-in: download-llm --tier describe (Qwen2.5-VL-3B Apache). That 3B GGUF invents subjects at temperature 0, so the caption is gated before anything reads it: a sentence naming a person survives only when the DeepLabV3 person mask finds someone in the same still, and when the mask cannot answer (no weights, no torch, or EZ_PERSON_MASK=off) every person sentence is dropped. Hedged and atmosphere prose is cut and what is left is capped at 60 words. The status line names the cut; empty means the caption passed through untouched.",
         sockets=[
             _s("image", "IMAGE", "in", "Source still. Lazy - skipped when enable is off."),
-            _s("caption", "STRING", "out", "Short caption, or empty."),
+            _s("caption", "STRING", "out", "Gated caption - no unconfirmed people, no hedges, 60 words max - or empty."),
         ],
         widgets=[
-            _w("enable", index=0, typ="BOOLEAN", rng="off", desc="Run the captioner.", gen="Off skips the VLM. On needs download-llm --tier describe."),
+            _w("enable", index=0, typ="BOOLEAN", rng="off", desc="Run the captioner.", gen="Off skips the VLM. On needs download-llm --tier describe, plus the cubic DeepLabV3 person-mask checkpoint for any person to survive the gate."),
         ],
     )
     nodes["EZKleinPromptEnhance"] = _n(
@@ -51,7 +51,7 @@ def enhance_nodes() -> dict[str, Any]:
         sockets=[
             _s("prompt", "STRING", "in", "Optional override of the widget (usually unwired)."),
             _s("context", "STRING", "in", "Bible/research. Ignored when Enhance is off."),
-            _s("image_desc", "STRING", "in", "Optional still caption from EZImageDescribe."),
+            _s("image_desc", "STRING", "in", "Optional gated caption from EZImageDescribe. Unverified: the still, not the caption, is the authority on who and what is in the plate."),
             _s("background_cast", "STRING", "in", "Optional compact token from EZBackgroundCast."),
             _s("prompt", "STRING", "out", "String CLIP actually encodes."),
         ],

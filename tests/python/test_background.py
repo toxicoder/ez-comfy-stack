@@ -408,6 +408,83 @@ def test_klein_cubic_swap_without_a_segmenter_is_photo_anchored(
     assert edit["ui"]["passthrough"][0] == "enhance off"
 
 
+def test_cubic_swap_route_keeps_the_caption_out_of_both_lanes(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Erase-and-paste gets no source people; the photo route still does.
+
+    Args:
+        monkeypatch: Pytest attr helper.
+    """
+    monkeypatch.setattr("ez_image.person_mask.segmenter_available", lambda: True)
+    klein = EZKleinPromptEnhance()
+    cubic = next(
+        item
+        for item in load_catalog("klein_background_swap")
+        if item.id == "voxel-block-world"
+    )
+    caption = "A young woman in a red dress stands on the pier"
+    with patch.object(
+        client, "complete", return_value=("rewritten-cubic", None)
+    ) as mock:
+        erased = klein.run(
+            cubic.prompt,
+            True,
+            "background_swap",
+            "match the source still",
+            "none",
+            image_desc=caption,
+        )
+    mock.assert_not_called()
+    text = erased["result"][0]
+    assert cubic.prompt in text
+    assert "empty of people" in text.casefold()
+    assert "Source still:" not in text
+    assert caption not in text
+    assert caption.casefold() not in text.casefold()
+    assert caption not in repr(erased)
+    assert erased["ui"]["passthrough"][0] == REASON_PRECISE_BACKGROUND
+
+    monkeypatch.setattr("ez_image.person_mask.segmenter_available", lambda: False)
+    anchored = klein.run(
+        cubic.prompt,
+        True,
+        "background_swap",
+        "match the source still",
+        "none",
+        image_desc=caption,
+    )
+    assert f"Source still: {caption}" in anchored["result"][0]
+    assert anchored["ui"]["passthrough"][0] == REASON_PHOTO_ANCHOR
+
+    # Control: the same caption reaches both lanes on every route the cubic
+    # gate does not cover, so its absence above is the gate and not a skipped
+    # rewriter.
+    with patch.object(
+        client, "complete", return_value=("rewritten-pier", None)
+    ) as mock:
+        klein.run(
+            "fog harbor pier",
+            True,
+            "background_swap",
+            "match the source still",
+            "none",
+            image_desc=caption,
+        )
+    user = mock.call_args[0][1]
+    assert "Image caption (unverified):" in user
+    assert caption in user
+    assert f"Source still: {caption}" in user
+    edit = klein.run(
+        cubic.prompt,
+        False,
+        "background_edit",
+        "match the source still",
+        image_desc=caption,
+    )
+    assert f"Source still: {caption}" in edit["result"][0]
+
+
 def test_studio_preview_mirrors_the_photo_anchor_gate(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
