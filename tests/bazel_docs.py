@@ -276,7 +276,7 @@ _ALLOW: dict[str, str] = {
     # Both of these sentences are about the escape hatch itself. Rewriting them
     # into the wrapper form would make the sentence describe something that no
     # longer exists.
-    "docs/contribute/testing-docs.mdx:123": "CI runs the docs build after "
+    "docs/contribute/testing-docs.mdx:134": "CI runs the docs build after "
     "'bazelisk shutdown', so the page has to name the script it really calls",
     # MIGRATION.md carries one block headed "Without Bazel". Naming the scripts
     # is the entire point of that block; the Bazel forms are documented above it.
