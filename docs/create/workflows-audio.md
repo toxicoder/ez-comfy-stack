@@ -97,7 +97,7 @@ Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
 
 ## Nill Bye diss examples
 
-One hundred thirty-five extra full-track graphs under **`_lab/audio/albums/nill-bye/<album>/`**. Same AIO, sampler, occupancy **audio**. App **Duration (seconds)** is the song plan (64-210 s). Queue a numbered track **on its own**, or generate the album in one go with `./scripts/manage.sh album-render --album nill-bye/<album-slug>`. SaveAudio stem is **`NN - Song Title`**. FLAC/MP3 tags include artist, album, title, and optional cover.
+One hundred thirty-five extra full-track graphs under **`_lab/audio/albums/nill-bye/<album>/`**. Same AIO, sampler, occupancy **audio**. App **Duration (seconds)** is the song plan (64-210 s). Queue a numbered track **on its own**, or generate the album in one go with `bazelisk run //:manage -- album-render --album nill-bye/<album-slug>`. SaveAudio stem is **`NN - Song Title`**. FLAC/MP3 tags include artist, album, title, and optional cover.
 
 **Nill Bye** (science guy, mad) is a fictional MC with an invented ACE-Step vocal. Phases 0-2 roast fictional MC **Rake** (in his feels; club-talk and fake-cool as a brand). Phases 3-4 are civic satire of Texas Gov. **Greg Abbott** as a public-record target, not a vocal identity. Phases 5-6 are civic satire of **Donald Trump** as a public-record target, not a vocal identity. Phases 7-8 are **progress** takes: methods, statutes, and measurement with **no roast target** (winterize, preregister, hearings, NDCs, Article I, lead-line replacement). Original lyrics. No living-MC names. No famous-hook paraphrases. Punch **up** on diss phases; **build up** on progress phases. Do not roast disability, race, faith, children, or people at the river. Shipped bars stay short and SFW. Each take owns exclusive verses and punchlines - content bars are not reused across the one hundred thirty-five graphs; choruses stay unique hooks. Human rewrite required before any release.
 
@@ -107,7 +107,7 @@ A new album lands in `_lab/audio/albums/<artist>/<album-slug>/` with numbered tr
 
 ### Peer Review (`audio/albums/nill-bye/peer-review/`)
 
-Lab catalog. Queue a track on its own. Full album: `./scripts/manage.sh album-render --album nill-bye/peer-review`.
+Lab catalog. Queue a track on its own. Full album: `bazelisk run //:manage -- album-render --album nill-bye/peer-review`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -129,7 +129,7 @@ Lab catalog. Queue a track on its own. Full album: `./scripts/manage.sh album-re
 
 ### Citation Needed (`audio/albums/nill-bye/citation-needed/`)
 
-Same invented vocal. Wider beds (jazz hop through folk) and diss angles. Not trap/EDM. Full album: `./scripts/manage.sh album-render --album nill-bye/citation-needed`.
+Same invented vocal. Wider beds (jazz hop through folk) and diss angles. Not trap/EDM. Full album: `bazelisk run //:manage -- album-render --album nill-bye/citation-needed`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -151,7 +151,7 @@ Same invented vocal. Wider beds (jazz hop through folk) and diss angles. Not tra
 
 ### False Drop (`audio/albums/nill-bye/false-drop/`)
 
-Same dry booth. Rap over club beds (no autotune). Full album: `./scripts/manage.sh album-render --album nill-bye/false-drop`.
+Same dry booth. Rap over club beds (no autotune). Full album: `bazelisk run //:manage -- album-render --album nill-bye/false-drop`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -173,7 +173,7 @@ Same dry booth. Rap over club beds (no autotune). Full album: `./scripts/manage.
 
 ### Frozen Ercot (`audio/albums/nill-bye/frozen-ercot/`)
 
-Same dry booth. Non-trap, non-EDM beds. Public-record satire of Abbott (punch up; no disability, race, or faith punch-down). Full album: `./scripts/manage.sh album-render --album nill-bye/frozen-ercot`.
+Same dry booth. Non-trap, non-EDM beds. Public-record satire of Abbott (punch up; no disability, race, or faith punch-down). Full album: `bazelisk run //:manage -- album-render --album nill-bye/frozen-ercot`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -195,7 +195,7 @@ Same dry booth. Non-trap, non-EDM beds. Public-record satire of Abbott (punch up
 
 ### Lone Star Tab (`audio/albums/nill-bye/lone-star-tab/`)
 
-Same dry booth. Rap over club beds (no autotune). Same punch-up rule. Full album: `./scripts/manage.sh album-render --album nill-bye/lone-star-tab`.
+Same dry booth. Rap over club beds (no autotune). Same punch-up rule. Full album: `bazelisk run //:manage -- album-render --album nill-bye/lone-star-tab`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -217,7 +217,7 @@ Same dry booth. Rap over club beds (no autotune). Same punch-up rule. Full album
 
 ### Thirty Four Counts (`audio/albums/nill-bye/thirty-four-counts/`)
 
-Same dry booth. Non-trap, non-EDM beds. Public-record satire of Trump (punch up; no disability, race, faith, or children as the joke). Full album: `./scripts/manage.sh album-render --album nill-bye/thirty-four-counts`.
+Same dry booth. Non-trap, non-EDM beds. Public-record satire of Trump (punch up; no disability, race, faith, or children as the joke). Full album: `bazelisk run //:manage -- album-render --album nill-bye/thirty-four-counts`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -239,7 +239,7 @@ Same dry booth. Non-trap, non-EDM beds. Public-record satire of Trump (punch up;
 
 ### Pardon Flood (`audio/albums/nill-bye/pardon-flood/`)
 
-Same dry booth. Rap over club beds (no autotune). Same punch-up rule. Full album: `./scripts/manage.sh album-render --album nill-bye/pardon-flood`.
+Same dry booth. Rap over club beds (no autotune). Same punch-up rule. Full album: `bazelisk run //:manage -- album-render --album nill-bye/pardon-flood`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -261,7 +261,7 @@ Same dry booth. Rap over club beds (no autotune). Same punch-up rule. Full album
 
 ### Winterize Wells (`audio/albums/nill-bye/winterize-wells/`)
 
-Same dry booth. Non-trap, non-EDM beds. Builder bars: methods and statutes, no roast target. Full album: `./scripts/manage.sh album-render --album nill-bye/winterize-wells`.
+Same dry booth. Non-trap, non-EDM beds. Builder bars: methods and statutes, no roast target. Full album: `bazelisk run //:manage -- album-render --album nill-bye/winterize-wells`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -283,7 +283,7 @@ Same dry booth. Non-trap, non-EDM beds. Builder bars: methods and statutes, no r
 
 ### Duty Switch (`audio/albums/nill-bye/duty-switch/`)
 
-Same dry booth. Rap over club beds (no autotune). Same builder rule. Full album: `./scripts/manage.sh album-render --album nill-bye/duty-switch`.
+Same dry booth. Rap over club beds (no autotune). Same builder rule. Full album: `bazelisk run //:manage -- album-render --album nill-bye/duty-switch`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -317,7 +317,7 @@ Catalog order is the recommended live-set queue (each graph still Queues alone).
 
 ### Hour 1 (`audio/albums/drive-through/hour-1/`)
 
-Hour 1 of the live bass set. Full album: `./scripts/manage.sh album-render --album drive-through/hour-1`.
+Hour 1 of the live bass set. Full album: `bazelisk run //:manage -- album-render --album drive-through/hour-1`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -339,7 +339,7 @@ Hour 1 of the live bass set. Full album: `./scripts/manage.sh album-render --alb
 
 ### Hour 2 (`audio/albums/drive-through/hour-2/`)
 
-Hour 2 of the live bass set. Full album: `./scripts/manage.sh album-render --album drive-through/hour-2`.
+Hour 2 of the live bass set. Full album: `bazelisk run //:manage -- album-render --album drive-through/hour-2`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -361,7 +361,7 @@ Hour 2 of the live bass set. Full album: `./scripts/manage.sh album-render --alb
 
 ### Headliner (`audio/albums/drive-through/headliner/`)
 
-Hour 3 headliner. Node placement varies across five layouts. Full album: `./scripts/manage.sh album-render --album drive-through/headliner`.
+Hour 3 headliner. Node placement varies across five layouts. Full album: `bazelisk run //:manage -- album-render --album drive-through/headliner`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -383,7 +383,7 @@ Hour 3 headliner. Node placement varies across five layouts. Full album: `./scri
 
 ### Afterparty (`audio/albums/drive-through/afterparty/`)
 
-Hour 4 afterparty. Node placement varies across five layouts. Full album: `./scripts/manage.sh album-render --album drive-through/afterparty`.
+Hour 4 afterparty. Node placement varies across five layouts. Full album: `bazelisk run //:manage -- album-render --album drive-through/afterparty`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -410,7 +410,7 @@ Hour 4 afterparty. Node placement varies across five layouts. Full album: `./scr
 
 ### Secret Homage (`audio/albums/drive-through/secret-homage/`)
 
-Secret Homage. Node placement varies across five layouts. Full album: `./scripts/manage.sh album-render --album drive-through/secret-homage`.
+Secret Homage. Node placement varies across five layouts. Full album: `bazelisk run //:manage -- album-render --album drive-through/secret-homage`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -437,7 +437,7 @@ Secret Homage. Node placement varies across five layouts. Full album: `./scripts
 
 ### My Coder (`audio/albums/drive-through/my-coder/`)
 
-The coder that writes Drive-through, read as music. Sixteen instrumental takes walk `drive_arrange.py` then `edm_examples.py` in source order. Each take's cues are palette phrases chosen by that slice of the source. Regenerate this album when either file changes. Node placement varies across five layouts. Full album: `./scripts/manage.sh album-render --album drive-through/my-coder`.
+The coder that writes Drive-through, read as music. Sixteen instrumental takes walk `drive_arrange.py` then `edm_examples.py` in source order. Each take's cues are palette phrases chosen by that slice of the source. Regenerate this album when either file changes. Node placement varies across five layouts. Full album: `bazelisk run //:manage -- album-render --album drive-through/my-coder`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |

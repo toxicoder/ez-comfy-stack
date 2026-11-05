@@ -33,7 +33,7 @@ Prompt Forge - rewrite a lazy sentence for every US-safe CLIP family. No UNET, n
 
 Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
-  ./scripts/manage.sh occupancy enter llm-desk --yes
+  bazelisk run //:manage -- occupancy enter llm-desk --yes
 
 Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.
 
@@ -57,7 +57,7 @@ fields are packed into Context Join and condition every card rewrite. Then fill 
 (`action | camera | world SFX | dialogue`). Audio policy also feeds LTX audio notes.
 Write YAML on the host:
 
-  ./scripts/manage.sh shot-sheet run --film <slug>
+  bazelisk run //:manage -- shot-sheet run --film <slug>
 
 That writes `${COMFY_OUTPUT_DIR}/films/<slug>/shots.yaml`. The entrypoint does **not**
 copy YAML. Do not overwrite `workflows/shorts/*.shots.yaml` unless `--lab-example`.
@@ -85,7 +85,7 @@ subagents. No UNET, no VAE, no KSampler.
 
 Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
-  ./scripts/manage.sh occupancy enter llm-desk --yes
+  bazelisk run //:manage -- occupancy enter llm-desk --yes
 
 Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.
 Web search is SSRF-safe HTTPS (Wikipedia + DuckDuckGo HTML). Fail-soft if the
@@ -96,7 +96,7 @@ network or GGUF is missing.
 3. Queue. Read **Reply** and **Sources**. Copy prompt ingredients into
    **inspire/prompt-forge**, then **stills/still-draft**.
 
-Laptop agents: `./scripts/manage.sh research-mcp --stdio` (Path D). Same
+Laptop agents: `bazelisk run //:manage -- research-mcp --stdio` (Path D). Same
 pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
 """
 
@@ -107,7 +107,7 @@ No UNET, no VAE, no KSampler. Does not Queue the result.
 
 Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
-  ./scripts/manage.sh occupancy enter llm-desk --yes
+  bazelisk run //:manage -- occupancy enter llm-desk --yes
 
 Falls back to on-box Qwen3-4B if the sidecar is down, then a keyword
 heuristic if the GGUF is missing. CPU 4B is required next to Wan/LTX/TRELLIS.
@@ -119,7 +119,7 @@ heuristic if the GGUF is missing. CPU 4B is required next to Wan/LTX/TRELLIS.
 4. Open `_user/<slug>` from the Apps sidebar. Queue that graph when GB10
    occupancy matches the result (klein / wan / ltx / ...).
 
-Laptop agents: `./scripts/manage.sh studio-mcp --stdio` (Path D). Same
+Laptop agents: `bazelisk run //:manage -- studio-mcp --stdio` (Path D). Same
 pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
 Does not write `workflows/_lab/`. Keepers: `promote-workflow`.
 """
@@ -130,7 +130,7 @@ Cinema Rack - pick one cinematography technique per axis and splice a Klein / Wa
 
 Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
-  ./scripts/manage.sh occupancy enter llm-desk --yes
+  bazelisk run //:manage -- occupancy enter llm-desk --yes
 
 Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.
 
@@ -151,7 +151,7 @@ Audio Rack - pick one audio/music technique per axis and splice ACE-Step tags an
 
 Occupancy: llm - graph label (not a CLI mode). Prefer GPU 35B:
 
-  ./scripts/manage.sh occupancy enter llm-desk --yes
+  bazelisk run //:manage -- occupancy enter llm-desk --yes
 
 Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.
 

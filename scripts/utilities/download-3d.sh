@@ -8,7 +8,6 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- download-3d status|run [--tier trellis2|da3-base|all] [--json]
-#   ./scripts/utilities/download-3d.sh status|run [--tier trellis2|da3-base|all] [--json]
 #
 # Environment:
 #   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD

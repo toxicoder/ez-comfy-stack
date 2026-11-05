@@ -63,11 +63,11 @@ with **auto** limiting.
 | `manage.sh download-models --limit N` | Same wrap; **N** is a standing Mbps cap for this download |
 
 ```bash
-./scripts/utilities/download-limit.sh status [--json] [--refresh]
-./scripts/utilities/download-limit.sh run --limit 50
-./scripts/utilities/download-limit.sh run --limit auto [--refresh]
-./scripts/utilities/download-limit.sh clear
-./scripts/utilities/download-limit.sh wrap --limit auto [--refresh] -- <command...>
+bazelisk run //scripts:run-utility -- download-limit status [--json] [--refresh]
+bazelisk run //scripts:run-utility -- download-limit run --limit 50
+bazelisk run //scripts:run-utility -- download-limit run --limit auto [--refresh]
+bazelisk run //scripts:run-utility -- download-limit clear
+bazelisk run //scripts:run-utility -- download-limit wrap --limit auto [--refresh] -- <command...>
 ```
 
 Via manage:
@@ -217,7 +217,7 @@ sequenceDiagram
 If the host still feels "stuck" throttled after a crash:
 
 ```bash
-./scripts/utilities/download-limit.sh clear
+bazelisk run //scripts:run-utility -- download-limit clear
 # or:
 ./scripts/manage.sh download-limit clear
 ```

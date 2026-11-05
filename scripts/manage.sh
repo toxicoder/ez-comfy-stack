@@ -12,8 +12,13 @@
 #   remote-SSH operation.
 #
 # Usage:
-#   ./scripts/manage.sh help|setup|doctor|status|start|stop|restart|logs|download-models [--limit auto|N|off] [--drop-incomplete]|download-podcast [--tier analog|acestep|chatterbox|qwen3tts|all] [--limit auto|N|off]|download-dub [--tier asr|clone|all] [--limit auto|N|off]|download-music [--tier turbo|xl|all] [--limit auto|N|off]|download-llm [--tier enhance|qwen36-35b-a3b|all] [--limit auto|N|off]|cleanup
-#   ./scripts/manage.sh reset-hf-partials [--yes] [--force]
+#   bazelisk run //:manage -- help|doctor|status|logs|cleanup
+#   ./scripts/manage.sh setup
+#   ./scripts/manage.sh start
+#   ./scripts/manage.sh stop
+#   ./scripts/manage.sh restart
+#   ./scripts/manage.sh download-models [--limit auto|N|off] [--drop-incomplete]|download-podcast [--tier analog|acestep|chatterbox|qwen3tts|all] [--limit auto|N|off]|download-dub [--tier asr|clone|all] [--limit auto|N|off]|download-music [--tier turbo|xl|all] [--limit auto|N|off]|download-llm [--tier enhance|qwen36-35b-a3b|all] [--limit auto|N|off]
+#   bazelisk run //:manage -- reset-hf-partials [--yes] [--force]
 #   ./scripts/manage.sh download-limit status|run|clear|wrap ...
 #
 # Safety:

@@ -145,7 +145,7 @@ Do **not** edit raw JSON. Change widgets on the canvas.
 5. Short six-shot demo: Queue **motion/silent/still-to-shot** six times (`ez_shot_01` ... `06`) then:
 
     ```bash
-    ./scripts/utilities/concat-shots.sh --yes
+    bazelisk run //scripts:run-utility -- concat-shots --yes
     # default dir is ${COMFY_OUTPUT_DIR}; writes ez_concat_shots.mp4
     ```
 
@@ -201,10 +201,10 @@ If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so inst
 First-run commands live on [Getting Started](getting-started.md). Day-to-day: [manage.sh reference](manage-cli.md).
 
 ```bash
-./scripts/manage.sh doctor
-./scripts/manage.sh status
-./scripts/manage.sh logs
-./scripts/manage.sh spark-timing show
+bazelisk run //:manage -- doctor
+bazelisk run //:manage -- status
+bazelisk run //:manage -- logs
+bazelisk run //:manage -- spark-timing show
 ./scripts/manage.sh stop
 ```
 

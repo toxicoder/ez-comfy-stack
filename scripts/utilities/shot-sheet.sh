@@ -7,8 +7,7 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- shot-sheet status [--json] [--film SLUG]
-#   ./scripts/utilities/shot-sheet.sh status [--json] [--film SLUG]
-#   ./scripts/utilities/shot-sheet.sh run --film SLUG [--from PATH] [--out PATH] [--lab-example]
+#   bazelisk run //scripts:run-utility -- shot-sheet run --film SLUG [--from PATH] [--out PATH] [--lab-example]
 #
 # Safety:
 #   Host only. Does not start Docker. No GPU.

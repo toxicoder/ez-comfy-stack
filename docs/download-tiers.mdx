@@ -57,35 +57,35 @@ still in `download-models`. Read [Model licenses](licenses.md).
 | Pack | What you get | ~size on disk | Command |
 | --- | --- | --- | --- |
 | Default studio | Klein 4B + Wan 2.2 5B + LTX-2.5 + prompt-enhance GGUF. Not podcast, dub, music, 3D, LongCat, DreamX, or SeedVR2 | ~50 GB | `./scripts/manage.sh download-models` |
-| `fast` | Klein 4B distilled FP8 still, plus the Qwen text encoder and flux2 VAE. Already in the default pack | 3-4 GB + companions | `./scripts/utilities/download-image.sh run --tier fast` |
-| `nvfp4` | Optional Klein 4B NVFP4, plus companions | ~2 GB + companions | `./scripts/utilities/download-image.sh run --tier nvfp4` |
-| `base` | Optional Klein 4B base FP8, plus companions | ~3 GB + companions | `./scripts/utilities/download-image.sh run --tier base` |
-| `zimage` | Z-Image Turbo. No Klein text encoder or VAE | ~4 GB | `./scripts/utilities/download-image.sh run --tier zimage` |
-| image `all` | `fast` + `nvfp4` + `base` + `zimage`. Not Klein 9B or FLUX.2-dev | sum of those four | `./scripts/utilities/download-image.sh run --tier all` |
-| `9b` | FLUX Non-Commercial Klein 9B distilled. Gated. Not YouTube-ok | ~8 GB + 8B text encoder + small VAE | `./scripts/utilities/download-image.sh run --tier 9b` |
-| `9b-base` | FLUX Non-Commercial Klein 9B base. Gated. Not YouTube-ok | ~8 GB + companions | `./scripts/utilities/download-image.sh run --tier 9b-base` |
-| `9b-nvfp4` | FLUX Non-Commercial Klein 9B NVFP4. Gated. Not YouTube-ok | ~5 GB + companions | `./scripts/utilities/download-image.sh run --tier 9b-nvfp4` |
-| `small-vae` | Apache `full_encoder_small_decoder.safetensors` used with Klein 9B | small | `./scripts/utilities/download-image.sh run --tier small-vae` |
-| `flux2-dev` | FLUX Non-Commercial FLUX.2 [dev] FP8. Gated. Not YouTube-ok | ~20 GB+ | `./scripts/utilities/download-image.sh run --tier flux2-dev` |
-| `flux3` | FLUX 3 Image Klein distilled INT8-convrot still. Auto-includes `flux3-te`. Gated **FLUX Kommunity License (v1.0)**. Not in `--tier all`. Not the default - Klein 4B is | ~6 GB + TE | `./scripts/utilities/download-image.sh run --tier flux3` |
-| `flux3-base` | FLUX 3 Image Klein base INT8 (no distillation). Auto-includes `flux3-te`. Gated Kommunity. Not in `--tier all` | ~6 GB + TE | `./scripts/utilities/download-image.sh run --tier flux3-base` |
-| `flux3-nvfp4` | FLUX 3 Image Klein base NVFP4. Auto-includes `flux3-te`. Gated Kommunity. Not in `--tier all` | ~6 GB + TE | `./scripts/utilities/download-image.sh run --tier flux3-nvfp4` |
-| `flux3-bf16` | FLUX 3 Image Klein base BF16 - the largest FLUX 3 pull. Auto-includes `flux3-te`. Gated Kommunity. Not in `--tier all` | ~12 GB + TE | `./scripts/utilities/download-image.sh run --tier flux3-bf16` |
-| `flux3-te` | Qwen3VL-4B INT8 text encoder for any FLUX 3 pack (`qwen3vl_4b_int8_convrot.safetensors`). Gated Kommunity. Not in `--tier all` | ~5 GB | `./scripts/utilities/download-image.sh run --tier flux3-te` |
-| `flux3-pup` | Optional Qwen3.5-9B FLUX 3 prompt upsampler (`qwen3.5_9b_flux3_prompt_upsampler_int8_convrot.safetensors`). Gated Kommunity. Not in `--tier all` | ~10 GB | `./scripts/utilities/download-image.sh run --tier flux3-pup` |
-| `5b` | Wan 2.2 TI2V-5B silent shots. Already in the default pack | ~12 GB | `./scripts/utilities/download-wan.sh run --tier 5b` |
-| `a14b` | Wan 2.2 I2V 14B FP8 silent hero. Unload 5B first | ~20 GB | `./scripts/utilities/download-wan.sh run --tier a14b` |
-| `fun-inp` | Wan 2.2 Fun InP first-last-frame. Unload LTX first | ~47 GB | `./scripts/utilities/download-wan.sh run --tier fun-inp` |
-| `vace` | Wan 2.1 VACE join. Not in Wan `--tier all`. Unload LTX first | ~6 GB | `./scripts/utilities/download-wan.sh run --tier vace` |
-| `s2v` | Wan S2V talking-head. Not in Wan `--tier all`. Unload LTX first | ~20 GB | `./scripts/utilities/download-wan.sh run --tier s2v` |
-| Wan `all` | `5b` + `a14b` + `fun-inp`. Does not include `vace` or `s2v` | sum of those three | `./scripts/utilities/download-wan.sh run --tier all` |
-| `2.5` | LTX-2.5 distilled AV (Gemma 4). Gated. Already in the default pack | ~30 GB | `./scripts/utilities/download-ltx.sh run --tier 2.5` |
-| `2.3` | Retired LTX-2.3 FP8 fallback. Auto-includes `gemma` | ~28-30 GB | `./scripts/utilities/download-ltx.sh run --tier 2.3` |
-| `balanced` | Alias of `2.3`, not a 2.5 quality knob. Auto-includes `gemma` | ~28-30 GB | `./scripts/utilities/download-ltx.sh run --tier balanced` |
-| `quality` | LTX 2.3 BF16 alias, not 2.5. Auto-includes `gemma` | ~45-48 GB | `./scripts/utilities/download-ltx.sh run --tier quality` |
-| `gemma` | Gemma 3 DualCLIP companion for LTX 2.3. Lab 2.5 uses Gemma 4 instead | ~8-9.5 GB | `./scripts/utilities/download-ltx.sh run --tier gemma` |
-| `iclora` | LTX Union Control LoRA. Not in LTX `--tier all` | ~1 GB | `./scripts/utilities/download-ltx.sh run --tier iclora` |
-| LTX `all` | `2.5` + `2.3` + `gemma`. Does not include `iclora` | sum of those three | `./scripts/utilities/download-ltx.sh run --tier all` |
+| `fast` | Klein 4B distilled FP8 still, plus the Qwen text encoder and flux2 VAE. Already in the default pack | 3-4 GB + companions | `bazelisk run //scripts:run-utility -- download-image run --tier fast` |
+| `nvfp4` | Optional Klein 4B NVFP4, plus companions | ~2 GB + companions | `bazelisk run //scripts:run-utility -- download-image run --tier nvfp4` |
+| `base` | Optional Klein 4B base FP8, plus companions | ~3 GB + companions | `bazelisk run //scripts:run-utility -- download-image run --tier base` |
+| `zimage` | Z-Image Turbo. No Klein text encoder or VAE | ~4 GB | `bazelisk run //scripts:run-utility -- download-image run --tier zimage` |
+| image `all` | `fast` + `nvfp4` + `base` + `zimage`. Not Klein 9B or FLUX.2-dev | sum of those four | `bazelisk run //scripts:run-utility -- download-image run --tier all` |
+| `9b` | FLUX Non-Commercial Klein 9B distilled. Gated. Not YouTube-ok | ~8 GB + 8B text encoder + small VAE | `bazelisk run //scripts:run-utility -- download-image run --tier 9b` |
+| `9b-base` | FLUX Non-Commercial Klein 9B base. Gated. Not YouTube-ok | ~8 GB + companions | `bazelisk run //scripts:run-utility -- download-image run --tier 9b-base` |
+| `9b-nvfp4` | FLUX Non-Commercial Klein 9B NVFP4. Gated. Not YouTube-ok | ~5 GB + companions | `bazelisk run //scripts:run-utility -- download-image run --tier 9b-nvfp4` |
+| `small-vae` | Apache `full_encoder_small_decoder.safetensors` used with Klein 9B | small | `bazelisk run //scripts:run-utility -- download-image run --tier small-vae` |
+| `flux2-dev` | FLUX Non-Commercial FLUX.2 [dev] FP8. Gated. Not YouTube-ok | ~20 GB+ | `bazelisk run //scripts:run-utility -- download-image run --tier flux2-dev` |
+| `flux3` | FLUX 3 Image Klein distilled INT8-convrot still. Auto-includes `flux3-te`. Gated **FLUX Kommunity License (v1.0)**. Not in `--tier all`. Not the default - Klein 4B is | ~6 GB + TE | `bazelisk run //scripts:run-utility -- download-image run --tier flux3` |
+| `flux3-base` | FLUX 3 Image Klein base INT8 (no distillation). Auto-includes `flux3-te`. Gated Kommunity. Not in `--tier all` | ~6 GB + TE | `bazelisk run //scripts:run-utility -- download-image run --tier flux3-base` |
+| `flux3-nvfp4` | FLUX 3 Image Klein base NVFP4. Auto-includes `flux3-te`. Gated Kommunity. Not in `--tier all` | ~6 GB + TE | `bazelisk run //scripts:run-utility -- download-image run --tier flux3-nvfp4` |
+| `flux3-bf16` | FLUX 3 Image Klein base BF16 - the largest FLUX 3 pull. Auto-includes `flux3-te`. Gated Kommunity. Not in `--tier all` | ~12 GB + TE | `bazelisk run //scripts:run-utility -- download-image run --tier flux3-bf16` |
+| `flux3-te` | Qwen3VL-4B INT8 text encoder for any FLUX 3 pack (`qwen3vl_4b_int8_convrot.safetensors`). Gated Kommunity. Not in `--tier all` | ~5 GB | `bazelisk run //scripts:run-utility -- download-image run --tier flux3-te` |
+| `flux3-pup` | Optional Qwen3.5-9B FLUX 3 prompt upsampler (`qwen3.5_9b_flux3_prompt_upsampler_int8_convrot.safetensors`). Gated Kommunity. Not in `--tier all` | ~10 GB | `bazelisk run //scripts:run-utility -- download-image run --tier flux3-pup` |
+| `5b` | Wan 2.2 TI2V-5B silent shots. Already in the default pack | ~12 GB | `bazelisk run //scripts:run-utility -- download-wan run --tier 5b` |
+| `a14b` | Wan 2.2 I2V 14B FP8 silent hero. Unload 5B first | ~20 GB | `bazelisk run //scripts:run-utility -- download-wan run --tier a14b` |
+| `fun-inp` | Wan 2.2 Fun InP first-last-frame. Unload LTX first | ~47 GB | `bazelisk run //scripts:run-utility -- download-wan run --tier fun-inp` |
+| `vace` | Wan 2.1 VACE join. Not in Wan `--tier all`. Unload LTX first | ~6 GB | `bazelisk run //scripts:run-utility -- download-wan run --tier vace` |
+| `s2v` | Wan S2V talking-head. Not in Wan `--tier all`. Unload LTX first | ~20 GB | `bazelisk run //scripts:run-utility -- download-wan run --tier s2v` |
+| Wan `all` | `5b` + `a14b` + `fun-inp`. Does not include `vace` or `s2v` | sum of those three | `bazelisk run //scripts:run-utility -- download-wan run --tier all` |
+| `2.5` | LTX-2.5 distilled AV (Gemma 4). Gated. Already in the default pack | ~30 GB | `bazelisk run //scripts:run-utility -- download-ltx run --tier 2.5` |
+| `2.3` | Retired LTX-2.3 FP8 fallback. Auto-includes `gemma` | ~28-30 GB | `bazelisk run //scripts:run-utility -- download-ltx run --tier 2.3` |
+| `balanced` | Alias of `2.3`, not a 2.5 quality knob. Auto-includes `gemma` | ~28-30 GB | `bazelisk run //scripts:run-utility -- download-ltx run --tier balanced` |
+| `quality` | LTX 2.3 BF16 alias, not 2.5. Auto-includes `gemma` | ~45-48 GB | `bazelisk run //scripts:run-utility -- download-ltx run --tier quality` |
+| `gemma` | Gemma 3 DualCLIP companion for LTX 2.3. Lab 2.5 uses Gemma 4 instead | ~8-9.5 GB | `bazelisk run //scripts:run-utility -- download-ltx run --tier gemma` |
+| `iclora` | LTX Union Control LoRA. Not in LTX `--tier all` | ~1 GB | `bazelisk run //scripts:run-utility -- download-ltx run --tier iclora` |
+| LTX `all` | `2.5` + `2.3` + `gemma`. Does not include `iclora` | sum of those three | `bazelisk run //scripts:run-utility -- download-ltx run --tier all` |
 | `analog` | Podcast Kokoro-82M ONNX and voices. Not in `download-models` | tiny | `./scripts/manage.sh download-podcast --tier analog` |
 | `acestep` | ACE-Step 1.5 turbo AIO for podcast beds. Same file as music `turbo` | ~10 GB | `./scripts/manage.sh download-podcast --tier acestep` |
 | `chatterbox` | Optional Chatterbox Turbo TTS for podcast | small | `./scripts/manage.sh download-podcast --tier chatterbox` |
@@ -139,7 +139,7 @@ Queue Klein next to Wan, LTX, TRELLIS, or `llm-desk`
 ## Check the pull
 
 ```bash
-./scripts/manage.sh models-status
+bazelisk run //:manage -- models-status
 ```
 
 **Check it worked:** every lab basename is reported present. An opt-in pack is not part of

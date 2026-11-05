@@ -71,7 +71,7 @@ Then: `bazelisk run //:validate`.
 
 Pins: `.devcontainer/tool-versions.env`. Dockerfile `ARG` defaults must match (BATS). Do **not** `COPY` that env file before apt - it would bust the package layer.
 
-Docs site: `bazelisk run //docs-site:install` (or set `DEVCONTAINER_INSTALL_DOCS_SITE=1` on create; `./docs/setup-docs.sh` is the raw escape hatch). Skipping default `npm ci` keeps create light.
+Docs site: `bazelisk run //docs-site:install` (or set `DEVCONTAINER_INSTALL_DOCS_SITE=1` on create). Skipping default `npm ci` keeps create light.
 
 GHCR cache: `ghcr.io/toxicoder/ez-comfy-devcontainer:development` (published after merge to `development`). A miss on the first pull is expected.
 

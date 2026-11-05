@@ -69,7 +69,7 @@ docker compose -f docker/docker-compose.yml --project-name ez-comfy --profile st
 
 Compose maps `${STUDIO_UI_PORT:-8190}:8190`. The process inside the container listens on **8190** (`ThreadingHTTPServer(("0.0.0.0", 8190), ...)`). Image `python:3.12-alpine`. Bind-mount `${COMFY_OUTPUT_DIR}:/films:ro` plus `studio-ui/` read-only. `mem_limit: 512m`. `restart: "no"`.
 
-Empty films dir is a **page**, not a crash: "No films yet. Run `./scripts/utilities/compile-film.sh go-see` then `print-shot`."
+Empty films dir is a **page**, not a crash: "No films yet. Run `bazelisk run //scripts:run-utility -- compile-film go-see` then `print-shot`."
 
 ---
 

@@ -140,7 +140,7 @@ cd ez-comfy-stack
 
     ```bash
     newgrp docker   # or re-login SSH
-    ./scripts/manage.sh doctor
+    bazelisk run //:manage -- doctor
     ```
 
 ---
@@ -216,7 +216,7 @@ Download the default pack only: Klein 4B + Wan 2.2 5B + LTX-2.5 + prompt-enhance
 | `ltx-2.5-audio-vae-bf16.safetensors` | `vae/` |
 | `Qwen3-4B-Instruct-2507-Q4_K_M.gguf` | `llm/` |
 
-**Verify:** `./scripts/manage.sh models-status` and a second `doctor` - pack JSON should no longer warn that lab models are incomplete.
+**Verify:** `bazelisk run //:manage -- models-status` and a second `doctor` - pack JSON should no longer warn that lab models are incomplete.
 
 **Fail:** [Downloads](operate/troubleshooting-downloads.md) - [Models and workflows](operate/troubleshooting-models-workflows.md). Cache layout: [Models and cache](models-and-cache.md).
 
@@ -293,7 +293,7 @@ Next: [Prompting](prompting.md), then the still -> Wan -> LTX loop on [The still
 
 `stop` keeps `${MODELS_DIR}`, `${COMFY_OUTPUT_DIR}`, and the `ez-comfy-state` volume.
 
-**Verify:** `./scripts/manage.sh status` shows comfyui is not running. Then reboot if you need to.
+**Verify:** `bazelisk run //:manage -- status` shows comfyui is not running. Then reboot if you need to.
 
 ---
 
@@ -318,7 +318,7 @@ Next: [Prompting](prompting.md), then the still -> Wan -> LTX loop on [The still
 
     No tokens or host secrets are baked into the image. Pull is public for public packages.
 
-    `./scripts/manage.sh doctor` prints the resolved default image before you start.
+    `bazelisk run //:manage -- doctor` prints the resolved default image before you start.
 
 ??? tip "Build the image locally (optional)"
 
@@ -370,7 +370,7 @@ Next: [Prompting](prompting.md), then the still -> Wan -> LTX loop on [The still
 
     Compose bind-mounts `docker/entrypoint.sh`, `docker/install-comfy.sh`, `docker/install-comfy/`, `docker/patch_get_free_memory.py`, and `docker/patch_unified_memory_copy.py` into the container.
 
-    Default attention is **Comfy Kitchen** (`--use-ck-attention`). `doctor` reports `attention: kitchen|sage|pytorch-fallback|unknown`. On a running Spark, `pytorch-fallback` means a 10-20x slow path - [Start and runtime](operate/troubleshooting-start-runtime.md). After Kitchen is live, Queue the three smokes and `./scripts/manage.sh spark-timing record --klein N --wan N --ltx N` (CI does not invent seconds).
+    Default attention is **Comfy Kitchen** (`--use-ck-attention`). `doctor` reports `attention: kitchen|sage|pytorch-fallback|unknown`. On a running Spark, `pytorch-fallback` means a 10-20x slow path - [Start and runtime](operate/troubleshooting-start-runtime.md). After Kitchen is live, Queue the three smokes and `bazelisk run //:manage -- spark-timing record --klein N --wan N --ltx N` (CI does not invent seconds).
 
     Change those files on the host, then restart the stack - **no multi-GB image rebuild**.
 
@@ -382,7 +382,7 @@ Next: [Prompting](prompting.md), then the still -> Wan -> LTX loop on [The still
 
     If GHCR pull fails or you force a thin/local build without prebuild, first start can take **10-30+ minutes** of pip.
 
-    `manage.sh start` returns after `compose up -d` verifies the container is running. Closing SSH / this shell does **not** stop Comfy (dockerd owns it). Follow install: `./scripts/manage.sh logs`. Wait in this shell until port `${COMFY_PORT}` responds: `LAB_STACK_FOLLOW=1` (++ctrl+c++ detaches the view only).
+    `manage.sh start` returns after `compose up -d` verifies the container is running. Closing SSH / this shell does **not** stop Comfy (dockerd owns it). Follow install: `bazelisk run //:manage -- logs`. Wait in this shell until port `${COMFY_PORT}` responds: `LAB_STACK_FOLLOW=1` (++ctrl+c++ detaches the view only).
 
     ```mermaid
     flowchart TB

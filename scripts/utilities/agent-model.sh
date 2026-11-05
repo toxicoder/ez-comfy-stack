@@ -12,9 +12,8 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- agent-model status [--json]
-#   ./scripts/utilities/agent-model.sh status [--json]
-#   ./scripts/utilities/agent-model.sh run
-#   ./scripts/utilities/agent-model.sh stop
+#   bazelisk run //scripts:run-utility -- agent-model run
+#   bazelisk run //scripts:run-utility -- agent-model stop
 #
 # Environment:
 #   AGENT_MODEL_HOME, AGENT_MODEL_REPO, AGENT_MODEL_REF, AGENT_MODEL_PORT,

@@ -46,7 +46,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 
 ## Compose services
 
-Source of truth: `docker/docker-compose.yml` (operator entry: `./scripts/manage.sh`).
+Source of truth: `docker/docker-compose.yml` (operator entry: `bazelisk run //:manage -- <verb>`).
 
 | Service | Profile | GPU | Memory | Restart | Port |
 | --- | --- | --- | --- | --- | --- |

@@ -12,8 +12,7 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- print-shot <film> <id> [--quality TIER]
-#   ./scripts/utilities/print-shot.sh <film> <id> [--quality TIER]
-#   ./scripts/utilities/print-shot.sh --resume <film> [--quality TIER]
+#   bazelisk run //scripts:run-utility -- print-shot --resume <film> [--quality TIER]
 #
 # Environment:
 #   COMFY_OUTPUT_DIR, COMFY_PORT (default 8188), MODELS_DIR

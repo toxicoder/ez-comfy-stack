@@ -13,7 +13,6 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- download-podcast status|run|cleanup [--tier analog|acestep|chatterbox|qwen3tts|all] [--json]
-#   ./scripts/utilities/download-podcast.sh status|run|cleanup [--tier analog|acestep|chatterbox|qwen3tts|all] [--json]
 #
 # Environment:
 #   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD

@@ -7,7 +7,6 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- download-dreamx status|run [--tier creator|all] [--json]
-#   ./scripts/utilities/download-dreamx.sh status|run [--tier creator|all] [--json]
 #
 # @command download-dreamx
 

@@ -9,8 +9,7 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- podcast-loudnorm status [--json]
-#   ./scripts/utilities/podcast-loudnorm.sh status [--json]
-#   ./scripts/utilities/podcast-loudnorm.sh run --in FILE [--out FILE] [--target podcast|youtube]
+#   bazelisk run //scripts:run-utility -- podcast-loudnorm run --in FILE [--out FILE] [--target podcast|youtube]
 #
 # Environment:
 #   COMFY_OUTPUT_DIR

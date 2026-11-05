@@ -6,9 +6,9 @@
 # setup. Never auto-starts Comfy (restart: "no", type yes on start).
 #
 # Usage:
-#   ./scripts/utilities/setup-client.sh [--host H] [--user U] [--port N]
-#   ./scripts/utilities/setup-client.sh --onboard [...]
-#   ./scripts/utilities/setup-client.sh --ui
+#   bazelisk run //scripts:run-utility -- setup-client [--host H] [--user U] [--port N]
+#   bazelisk run //scripts:run-utility -- setup-client --onboard [...]
+#   bazelisk run //scripts:run-utility -- setup-client --ui
 #
 # @command setup-client
 

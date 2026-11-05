@@ -12,11 +12,10 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- album-render status [--json]
-#   ./scripts/utilities/album-render.sh status [--json]
-#   ./scripts/utilities/album-render.sh run --album ARTIST/SLUG
+#   bazelisk run //scripts:run-utility -- album-render run --album ARTIST/SLUG
 #       [--art skip|upload|generate] [--image FILE] [--out DIR]
 #       [--quality TIER] [--dry-run]
-#   ./scripts/utilities/album-render.sh pack --album ARTIST/SLUG [--out DIR]
+#   bazelisk run //scripts:run-utility -- album-render pack --album ARTIST/SLUG [--out DIR]
 #
 # Environment:
 #   COMFY_OUTPUT_DIR, COMFY_PORT (default 8188), COMFY_URL, REPO_ROOT

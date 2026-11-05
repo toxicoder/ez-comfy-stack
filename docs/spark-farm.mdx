@@ -94,7 +94,7 @@ Placeholders below match `config/spark-farm.example.env`. Do **not** commit real
 4. **Share weights: NFS vs rsync over fabric** (pick one)
 
    - **NFS over the fabric subnet (preferred):** Spark-0 exports `${MODELS_DIR}` (default `/mnt/models`); Sparks 1-2 mount it. Compose already bind-mounts `${MODELS_DIR}:/models`.
-   - **Replica:** `./scripts/utilities/spark-farm.sh sync-models` rsyncs `MODELS_DIR/comfy` over **`SPARK_FABRIC_IPS` only** (not the management NIC). Needs at least two fabric addresses.
+   - **Replica:** `bazelisk run //scripts:run-utility -- spark-farm sync-models` rsyncs `MODELS_DIR/comfy` over **`SPARK_FABRIC_IPS` only** (not the management NIC). Needs at least two fabric addresses.
 
 5. **Per-node setup / doctor / download / start** - on **each** Spark, operator, with confirm. Type **yes** locally. Never `ssh ... compose up`.
 
@@ -103,7 +103,7 @@ Placeholders below match `config/spark-farm.example.env`. Do **not** commit real
    cd ez-comfy-stack
    ./scripts/manage.sh setup
    # set MODELS_DIR and HF_TOKEN in .env (same MODELS_DIR on every node)
-   ./scripts/manage.sh doctor
+   bazelisk run //:manage -- doctor
    ./scripts/manage.sh download-models      # cache owner, or after NFS is up
    ./scripts/manage.sh start                # type yes
    ```
@@ -111,23 +111,23 @@ Placeholders below match `config/spark-farm.example.env`. Do **not** commit real
 6. **Probe** (does not start compose):
 
    ```bash
-   ./scripts/utilities/spark-farm.sh status [--json]
+   bazelisk run //scripts:run-utility -- spark-farm status [--json]
    ```
 
    **Check it worked:** every host in `SPARK_HOSTS` answers, and no compose project was
    started by the probe.
 
-7. **Dispatch** `print-shot` (shots **01-06 / 07-12 / 13-18** on three hosts, or an even split on two). SSH-runs **local** `./scripts/manage.sh print-shot` only. `dispatch` builds a fixed remote `print-shot <film> <id>`, so it forwards neither `--quality` nor `EZ_QUALITY` - each shot posts at the tier its graph records. To pin a tier across the farm, run local `./scripts/manage.sh print-shot <film> <id> --quality TIER` on each Spark instead of `dispatch` ([Short films](shorts.md)):
+7. **Dispatch** `print-shot` (shots **01-06 / 07-12 / 13-18** on three hosts, or an even split on two). SSH-runs **local** `bazelisk run //:manage -- print-shot` only. `dispatch` builds a fixed remote `print-shot <film> <id>`, so it forwards neither `--quality` nor `EZ_QUALITY` - each shot posts at the tier its graph records. To pin a tier across the farm, run local `bazelisk run //:manage -- print-shot <film> <id> --quality TIER` on each Spark instead of `dispatch` ([Short films](shorts.md)):
 
    ```bash
-   ./scripts/utilities/spark-farm.sh dispatch --film go-see
+   bazelisk run //scripts:run-utility -- spark-farm dispatch --film go-see
    ```
 
 8. **Concat locally** (gather is under `${FARM_SHARE}/out`; concat on spark-0):
 
    ```bash
    FILM=go-see   # or still-here | switchyard
-   ./scripts/utilities/concat-shots.sh --film "${FILM}" --yes
+   bazelisk run //scripts:run-utility -- concat-shots --film "${FILM}" --yes
    ```
 
    **Check it worked:** the master lands under `${FARM_SHARE}/out` and every shot id from the
@@ -145,7 +145,7 @@ The one-click **films/go-see** graph is sequential on one host. For a farm, load
 
 ```bash
 FILM=go-see   # or still-here | switchyard
-./scripts/utilities/concat-shots.sh --film "${FILM}" --yes
+bazelisk run //scripts:run-utility -- concat-shots --film "${FILM}" --yes
 ```
 
 Three UIs (replace hostnames from `SPARK_COMFY_URLS`):
@@ -162,10 +162,10 @@ See [Short films](shorts.md). MiniMax H3 films are banned (see [licenses](licens
 ## Run the farm commands
 
 ```bash
-./scripts/utilities/spark-farm.sh status [--json]
-./scripts/utilities/spark-farm.sh sync-models
-./scripts/utilities/spark-farm.sh run --film go-see
-./scripts/utilities/spark-farm.sh dispatch --film go-see
+bazelisk run //scripts:run-utility -- spark-farm status [--json]
+bazelisk run //scripts:run-utility -- spark-farm sync-models
+bazelisk run //scripts:run-utility -- spark-farm run --film go-see
+bazelisk run //scripts:run-utility -- spark-farm dispatch --film go-see
 ```
 
 Start compose yourself on each node (`./scripts/manage.sh start`, type yes). Then dispatch.
@@ -179,7 +179,7 @@ motion/av/still-to-shot** Queue reminder for `--film go-see` (or still-here / sw
 does **not** POST graphs. It refuses MiniMax H3 names (`*h3*` / `*MiniMax*`).
 
 `dispatch` assigns shots **01-06 / 07-12 / 13-18** (or an even split on two hosts) and SSH-runs
-**local** `./scripts/manage.sh print-shot` on each Spark. It **never** remote-starts compose.
+**local** `bazelisk run //:manage -- print-shot` on each Spark. It **never** remote-starts compose.
 Director is off this path. Concat on spark-0 after gather.
 
 Memory: keep `MEM_LIMIT=90g`, `MEM_RESERVATION=80g`, `MIN_HOST_FREE_GIB=28`,

@@ -59,15 +59,15 @@ ssh -L 30000:127.0.0.1:30000 "${SPARK_USER}@${SPARK_HOST}"
 Then on the Spark:
 
 ```bash
-./scripts/manage.sh occupancy enter blender-desk
-./scripts/manage.sh blender-mcp --stdio
+bazelisk run //:manage -- occupancy enter blender-desk
+bazelisk run //:manage -- blender-mcp --stdio
 # optional on-box 4B (CPU, same GGUF as prompt-enhance):
-./scripts/manage.sh blender-llm "greybox mug on a table, dump still mug"
+bazelisk run //:manage -- blender-llm "greybox mug on a table, dump still mug"
 ```
 
 ```bash
-./scripts/manage.sh research-mcp --stdio
-./scripts/manage.sh research-mcp --call research '{"message":"night rooftop lighting"}'
+bazelisk run //:manage -- research-mcp --stdio
+bazelisk run //:manage -- research-mcp --call research '{"message":"night rooftop lighting"}'
 ```
 
 `--list-tools` and `--call TOOL [JSON]` work without stdio. Discovery-only calls
@@ -158,8 +158,8 @@ MCP stays out of tree.
 | `generate_app` | `brief`, optional `template`, `slug` | Planner or keyword heuristic -> clone -> save |
 
 ```bash
-./scripts/manage.sh studio-mcp --stdio
-./scripts/manage.sh studio-mcp --call generate_app '{"brief":"1:1 IG still of a mug","slug":"mug-ig"}'
+bazelisk run //:manage -- studio-mcp --stdio
+bazelisk run //:manage -- studio-mcp --call generate_app '{"brief":"1:1 IG still of a mug","slug":"mug-ig"}'
 ```
 
 Not included: `run_workflow`, `execute_code`, partner APIs, Comfy Cloud.
@@ -190,8 +190,8 @@ this stack must be up: the origin is `EZ_EDIT_COMFY_URL`, else `http://127.0.0.1
 | `edit_export_edl` | optional `project_id` | EDL JSON under the edit dir, for the Kdenlive / Shotcut handoff |
 
 ```bash
-./scripts/manage.sh edit-mcp --stdio
-./scripts/manage.sh edit-mcp --call edit_apply_ops '{"ops":[{"op":"set_title","args":{"title":"cold open"}}]}'
+bazelisk run //:manage -- edit-mcp --stdio
+bazelisk run //:manage -- edit-mcp --call edit_apply_ops '{"ops":[{"op":"set_title","args":{"title":"cold open"}}]}'
 ```
 
 Not included: `execute_code`, telemetry, arbitrary `fetch_url`, and any Queue of its own - the
@@ -200,7 +200,7 @@ canvas. Recording `mcp_pid` does **not** remap `idle` -> `blender-desk`.
 
 **Check it worked:** `--list-tools` prints the eight tools above, and `--call edit_get_state`
 returns JSON for the most recent project. A `generate_clip` row that fails naming a heavy mode is
-the XOR gate, not a bug: `./scripts/manage.sh occupancy enter idle` first. Panel and modes:
+the XOR gate, not a bug: `bazelisk run //:manage -- occupancy enter idle` first. Panel and modes:
 [Editing lane](../edit-agent.md).
 
 ---

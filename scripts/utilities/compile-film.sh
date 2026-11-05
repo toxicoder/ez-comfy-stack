@@ -10,7 +10,6 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- compile-film FILM
-#   ./scripts/utilities/compile-film.sh FILM
 #
 # Environment:
 #   COMFY_OUTPUT_DIR - default /mnt/comfy-output

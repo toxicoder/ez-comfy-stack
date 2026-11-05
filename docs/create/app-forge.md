@@ -64,7 +64,7 @@ The generator App is occupancy **llm** (nothing GPU unless `llm-desk` is the wri
 | **As app** | On writes `*.app.json` (Apps sidebar) |
 | **Overwrite** | Off refuses an existing `_user` file |
 
-Dest: `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/<slug>.app.json`. Never `workflows/_lab/`. Keepers: `./scripts/manage.sh promote-workflow`.
+Dest: `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/<slug>.app.json`. Never `workflows/_lab/`. Keepers: `bazelisk run //:manage -- promote-workflow`.
 
 ---
 
@@ -79,8 +79,8 @@ Official Comfy Cloud MCP / PyPI `comfy-mcp` stay out of the image. This is the i
 ## Path D
 
 ```bash
-./scripts/manage.sh studio-mcp --stdio
-./scripts/manage.sh studio-mcp --call generate_app '{"brief":"1:1 IG still of a mug","slug":"mug-ig"}'
+bazelisk run //:manage -- studio-mcp --stdio
+bazelisk run //:manage -- studio-mcp --call generate_app '{"brief":"1:1 IG still of a mug","slug":"mug-ig"}'
 ```
 
 Same pipeline as the App. Does not Queue Comfy. Does not refuse a GPU session. Does not map `idle` -> `blender-desk`.
@@ -93,4 +93,4 @@ Same pipeline as the App. Does not Queue Comfy. Does not refuse a GPU session. D
 2. Choose the template it cloned: [Workflow catalog](../studio-workflows.md)
 3. Write the prompt the new App expects: [Prompting](../prompting.md)
 4. Preview a prompt before you forge an App for it: [Cinema Rack](cinema-rack.md)
-5. Promote a keeper into the lab catalog: `./scripts/manage.sh promote-workflow` ([manage.sh reference](../manage-cli.md))
+5. Promote a keeper into the lab catalog: `bazelisk run //:manage -- promote-workflow` ([manage.sh reference](../manage-cli.md))

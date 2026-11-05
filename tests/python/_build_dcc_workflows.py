@@ -24,7 +24,7 @@ LoadImage: clay ``first.png`` from ``guides/<slug>/<shot>/``. Prefix ``ez_clay_h
 
 After Queue, overlay-qc the look against clay (host ffmpeg; compose may stay up):
 
-  ./scripts/manage.sh overlay-qc --film <slug> --shot <id> --look PATH
+  bazelisk run //:manage -- overlay-qc --film <slug> --shot <id> --look PATH
 
 Unload before LTX. Do not Queue this graph and a DCC dump in one session (occupancy).
 
@@ -105,7 +105,7 @@ Lab envelope for Path B depth-guided **portrait** 8.00s print. LTX canvas **768x
 
 Dump the pack with:
 
-  ./scripts/manage.sh export-guides --film SLUG --shot ID --width 768 --height 1280 --print ltx-iclora-depth
+  bazelisk run //:manage -- export-guides --film SLUG --shot ID --width 768 --height 1280 --print ltx-iclora-depth
 
 Queue Templates -> LTX-2.5 -> LTX-2.5_ICLoRA_Union_Control_Distilled.json. Depth default. Opt-in ``download-ltx --tier iclora``. Refuse 19B Union.
 
@@ -145,9 +145,9 @@ Klein 4B **edit** of a guide-pack still loaded in-canvas (no LoadImage / --insta
 Occupancy: **klein**. Wire: EZDCCLoadGuideStill ``layer=first`` -> OccupancyGate -> Klein envelope. Defaults: slug ``go-see``, shot_id ``12``.
 
 ```bash
-./scripts/manage.sh occupancy enter blender-desk
-./scripts/manage.sh export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth
-./scripts/manage.sh occupancy enter klein --yes
+bazelisk run //:manage -- occupancy enter blender-desk
+bazelisk run //:manage -- export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth
+bazelisk run //:manage -- occupancy enter klein --yes
 ```
 
 blender-desk fails the gate (park is for dumps). After Queue, overlay-qc. Path D: laptop dump, rsync ``guides/``, Spark Comfy. Stay on :8188.
@@ -172,7 +172,7 @@ Still pack plate -> native TRELLIS.2 INT8 mesh (Comfy core nodes). Occupancy: **
 
 ```bash
 ./scripts/manage.sh download-3d --tier trellis2
-./scripts/manage.sh occupancy enter trellis --yes
+bazelisk run //:manage -- occupancy enter trellis --yes
 ```
 
 EZDCCLoadStillPack slug ``go-see`` plate ``mug`` -> OccupancyGate -> EZUnloadModels -> TRELLIS.2 INT8. Save under ``assets/objects/_lab-mug/`` (output tree, never MODELS_DIR). Do not mint an Asset Bible row from this graph.

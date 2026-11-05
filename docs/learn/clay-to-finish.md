@@ -57,7 +57,7 @@ flowchart TB
 ## Golden path (script door)
 
 1. Load **inspire/beat-sheet**. Fill logline, script, audio policy, 18 cards. Occupancy **none**.
-2. `./scripts/manage.sh shot-sheet run --film go-see` writes `films/gosee/shots.yaml`. Does not overwrite lab YAML.
+2. `bazelisk run //:manage -- shot-sheet run --film go-see` writes `films/gosee/shots.yaml`. Does not overwrite lab YAML.
 3. Optional board: **stills/identity-sheet** then **stills/storyboard-6up** (seed 42, 1280x704).
 4. Optional clay: `manage.sh stop` then `export-guides --film go-see --shot 12`. Workbench clay + depth + canny, not Cycles beauty. Path D: dump on the laptop, rsync `guides/`. Creator plates (not 5.00s): `blender-stills` then **klein-from-clay-plates** - [Blender creator suite](blender-creator.md).
 5. `manage.sh film-animatic --film go-see` - clay.mp4 or 5.00 s still holds, cap 90 s. Compose may stay up.

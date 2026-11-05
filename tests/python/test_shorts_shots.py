@@ -572,7 +572,7 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         note = next(n for n in graph["nodes"] if n.get("type") == "Note")
         body = note["widgets_values"][0]
         assert "Queue once" in body or "Queue **once**" in body
-        assert "concat-shots.sh" in body
+        assert "concat-shots" in body
         assert "already on disk" in body
         assert f"ez_{slug}_90s.mp4" in body
         mmap = next(n for n in graph["nodes"] if n.get("type") == "MarkdownNote")

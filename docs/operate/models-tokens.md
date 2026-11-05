@@ -73,7 +73,7 @@ hf auth whoami
 account, that account has no access no matter what the first one agreed to.
 
 ```bash
-./scripts/utilities/download-ltx.sh status --tier 2.5 --json
+bazelisk run //scripts:run-utility -- download-ltx status --tier 2.5 --json
 ```
 
 **Check it worked:** the pack reports ready once the LTX-2.5 files are under `${MODELS_DIR}`.

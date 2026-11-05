@@ -15,7 +15,6 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- download-llm status|run|cleanup|link [--tier enhance|qwen36-35b-a3b|describe|all] [--json]
-#   ./scripts/utilities/download-llm.sh status|run|cleanup|link [--tier enhance|qwen36-35b-a3b|describe|all] [--json]
 #
 # Environment:
 #   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD

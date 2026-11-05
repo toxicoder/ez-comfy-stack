@@ -41,7 +41,7 @@ Because `doctor` treats missing weights as a **warning**, not a hard fail. Missi
 `doctor` checks Docker, GPU, RAM and disk headroom, writable dirs, and the `hf` CLI. Klein / Wan / LTX files are a separate download.
 
 ```bash
-./scripts/manage.sh doctor
+bazelisk run //:manage -- doctor
 ./scripts/manage.sh download-models
 ./scripts/manage.sh start   # type: yes
 ```

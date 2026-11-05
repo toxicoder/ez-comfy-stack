@@ -42,7 +42,7 @@ Catalog order is the recommended live-set queue (each graph still Queues alone).
 
 ### Hour 1 (`audio/albums/drive-through/hour-1/`)
 
-Hour 1 of the live bass set. Full album: `./scripts/manage.sh album-render --album drive-through/hour-1`.
+Hour 1 of the live bass set. Full album: `bazelisk run //:manage -- album-render --album drive-through/hour-1`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -64,7 +64,7 @@ Hour 1 of the live bass set. Full album: `./scripts/manage.sh album-render --alb
 
 ### Hour 2 (`audio/albums/drive-through/hour-2/`)
 
-Hour 2 of the live bass set. Full album: `./scripts/manage.sh album-render --album drive-through/hour-2`.
+Hour 2 of the live bass set. Full album: `bazelisk run //:manage -- album-render --album drive-through/hour-2`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -86,7 +86,7 @@ Hour 2 of the live bass set. Full album: `./scripts/manage.sh album-render --alb
 
 ### Headliner (`audio/albums/drive-through/headliner/`)
 
-Hour 3 headliner. Node placement varies across five layouts. Full album: `./scripts/manage.sh album-render --album drive-through/headliner`.
+Hour 3 headliner. Node placement varies across five layouts. Full album: `bazelisk run //:manage -- album-render --album drive-through/headliner`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -108,7 +108,7 @@ Hour 3 headliner. Node placement varies across five layouts. Full album: `./scri
 
 ### Afterparty (`audio/albums/drive-through/afterparty/`)
 
-Hour 4 afterparty. Node placement varies across five layouts. Full album: `./scripts/manage.sh album-render --album drive-through/afterparty`.
+Hour 4 afterparty. Node placement varies across five layouts. Full album: `bazelisk run //:manage -- album-render --album drive-through/afterparty`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -135,7 +135,7 @@ Hour 4 afterparty. Node placement varies across five layouts. Full album: `./scr
 
 ### Secret Homage (`audio/albums/drive-through/secret-homage/`)
 
-Secret Homage. Node placement varies across five layouts. Full album: `./scripts/manage.sh album-render --album drive-through/secret-homage`.
+Secret Homage. Node placement varies across five layouts. Full album: `bazelisk run //:manage -- album-render --album drive-through/secret-homage`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -162,7 +162,7 @@ Secret Homage. Node placement varies across five layouts. Full album: `./scripts
 
 ### My Coder (`audio/albums/drive-through/my-coder/`)
 
-The coder that writes Drive-through, read as music. Sixteen instrumental takes walk `drive_arrange.py` then `edm_examples.py` in source order. Each take's cues are palette phrases chosen by that slice of the source. Regenerate this album when either file changes. Node placement varies across five layouts. Full album: `./scripts/manage.sh album-render --album drive-through/my-coder`.
+The coder that writes Drive-through, read as music. Sixteen instrumental takes walk `drive_arrange.py` then `edm_examples.py` in source order. Each take's cues are palette phrases chosen by that slice of the source. Regenerate this album when either file changes. Node placement varies across five layouts. Full album: `bazelisk run //:manage -- album-render --album drive-through/my-coder`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |

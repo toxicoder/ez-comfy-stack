@@ -130,7 +130,7 @@ FLUX 3 Image Klein {weights} still on the Klein still desk. Opt-in, gated, Kommu
 
 Profile: Quality `{profile}` writes UNET `{unet}`, {steps} steps, CFG {cfg}. This graph ships those same values, so Queue matches with Quality left on lab. Quality never changes pixels - Format / platform does (Custom uses Width x Height).
 Models: {unet} + {FLUX3_TE} (CLIP type flux2) + {FLUX3_VAE}.
-Gated pull: {FLUX3_HF_REPO} on Hugging Face is gated, so accept the FLUX Kommunity License (v1.0) on the model card with the **same HF account as HF_TOKEN** (a token alone is not acceptance), then run `./scripts/utilities/download-image.sh run --tier {tier}` - it auto-includes the `flux3-te` text encoder. Every pull is pinned to HF revision {FLUX3_REVISION}.
+Gated pull: {FLUX3_HF_REPO} on Hugging Face is gated, so accept the FLUX Kommunity License (v1.0) on the model card with the **same HF account as HF_TOKEN** (a token alone is not acceptance), then run `bazelisk run //scripts:run-utility -- download-image run --tier {tier}` - it auto-includes the `flux3-te` text encoder. Every pull is pinned to HF revision {FLUX3_REVISION}.
 License: FLUX Kommunity License (v1.0), not Apache. Monetized output only for qualifying users under $5M gross annualized revenue. Not in `download-models` and not in image `--tier all`.
 Weights missing: click Check models - it names the command, and Queue keeps the authored loaders (nothing swaps in weights you have not accepted).
 Save prefix `{prefix}`. Empty of lettering - composite titles later.
@@ -173,16 +173,16 @@ Ten Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence
 Workbench dump (optional, higher quality) - stop Comfy first:
 
   ./scripts/manage.sh stop
-  ./scripts/manage.sh house-views --slug lab-penthouse
+  bazelisk run //:manage -- house-views --slug lab-penthouse
   ./scripts/manage.sh start
 
 Copy an existing dump without Blender (compose may stay up):
 
-  ./scripts/manage.sh house-views --slug lab-penthouse --install-inputs
+  bazelisk run //:manage -- house-views --slug lab-penthouse --install-inputs
 
 Reseed LoadImage plates without Blender (compose may stay up):
 
-  ./scripts/manage.sh house-views --slug lab-penthouse --seed-inputs
+  bazelisk run //:manage -- house-views --slug lab-penthouse --seed-inputs
 
 HOUSE IDENTITY is the same camera-free world bible as stills/dream-house. Shot cards are camera stations from place_10 (lens, camera height, a distinct room program, near/far planes, and which room). Prompt Join lock=view. Each shot VAEEncodes its clay plate into ReferenceLatent. Shot cards are not Klein-t2i-enhanced.
 

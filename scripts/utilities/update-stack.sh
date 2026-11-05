@@ -41,7 +41,6 @@
 #   ./scripts/manage.sh update-stack
 #   ./scripts/manage.sh update-stack --yes
 #   ./scripts/manage.sh update-stack --dry-run
-#   ./scripts/utilities/update-stack.sh --branch development --yes
 #   bazelisk run //scripts:update-stack -- --dry-run
 #
 # Options:

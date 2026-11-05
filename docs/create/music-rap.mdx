@@ -60,7 +60,7 @@ Graph: **audio/music/rap-full**. App **Duration (seconds)** is the pre-chorus fo
 
 Browse this catalog; do not run it top to bottom. Each row is a separate graph.
 
-One hundred thirty-five extra full-track graphs under **`_lab/audio/albums/nill-bye/<album>/`**. Same AIO, sampler, occupancy **audio**. App **Duration (seconds)** is the song plan (64-210 s), not a flat 180. Each album mixes forms (hook-each, delayed hook, bridge, pre-chorus, breakdown, half-time chorus, and others), meters, and keys. Dance-bed albums stay 4/4. Authored verses stay in order; a bridge is the last lines of the last verse moved, not new claims. Queue a numbered track **on its own**, or generate the album in one go with `./scripts/manage.sh album-render --album nill-bye/<album-slug> [--quality TIER]` (or `EZ_QUALITY=TIER`); with neither, each take posts at the tier the graph records. SaveAudio stem is **`NN - Song Title`**. FLAC/MP3 tags include artist, album, title, and optional cover. The graph note names the form, meter, and key.
+One hundred thirty-five extra full-track graphs under **`_lab/audio/albums/nill-bye/<album>/`**. Same AIO, sampler, occupancy **audio**. App **Duration (seconds)** is the song plan (64-210 s), not a flat 180. Each album mixes forms (hook-each, delayed hook, bridge, pre-chorus, breakdown, half-time chorus, and others), meters, and keys. Dance-bed albums stay 4/4. Authored verses stay in order; a bridge is the last lines of the last verse moved, not new claims. Queue a numbered track **on its own**, or generate the album in one go with `bazelisk run //:manage -- album-render --album nill-bye/<album-slug> [--quality TIER]` (or `EZ_QUALITY=TIER`); with neither, each take posts at the tier the graph records. SaveAudio stem is **`NN - Song Title`**. FLAC/MP3 tags include artist, album, title, and optional cover. The graph note names the form, meter, and key.
 
 **Nill Bye** (science guy, mad) is a fictional MC with an invented ACE-Step vocal. Phases 0-2 roast fictional MC **Rake** (in his feels; club-talk and fake-cool as a brand). Phases 3-4 are civic satire of Texas Gov. **Greg Abbott** as a public-record target, not a vocal identity. Phases 5-6 are civic satire of **Donald Trump** as a public-record target, not a vocal identity. Phases 7-8 are **progress** takes: methods, statutes, and measurement with **no roast target** (winterize, preregister, hearings, NDCs, Article I, lead-line replacement). Original lyrics. No living-MC names. No famous-hook paraphrases. Punch **up** on diss phases; **build up** on progress phases. Do not roast disability, race, faith, children, or people at the river. Shipped bars stay short and SFW. Each take owns exclusive verses and punchlines - content bars are not reused across the one hundred thirty-five graphs; choruses stay unique hooks. Human rewrite required before any release.
 
@@ -70,7 +70,7 @@ A new album lands in `_lab/audio/albums/<artist>/<album-slug>/` with numbered tr
 
 ### Peer Review (`audio/albums/nill-bye/peer-review/`)
 
-Lab catalog. Queue a track on its own. Full album: `./scripts/manage.sh album-render --album nill-bye/peer-review`.
+Lab catalog. Queue a track on its own. Full album: `bazelisk run //:manage -- album-render --album nill-bye/peer-review`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -92,7 +92,7 @@ Lab catalog. Queue a track on its own. Full album: `./scripts/manage.sh album-re
 
 ### Citation Needed (`audio/albums/nill-bye/citation-needed/`)
 
-Same invented vocal. Wider beds (jazz hop through folk) and diss angles. Not trap/EDM. Full album: `./scripts/manage.sh album-render --album nill-bye/citation-needed`.
+Same invented vocal. Wider beds (jazz hop through folk) and diss angles. Not trap/EDM. Full album: `bazelisk run //:manage -- album-render --album nill-bye/citation-needed`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -114,7 +114,7 @@ Same invented vocal. Wider beds (jazz hop through folk) and diss angles. Not tra
 
 ### False Drop (`audio/albums/nill-bye/false-drop/`)
 
-Same dry booth. Rap over club beds (no autotune). Full album: `./scripts/manage.sh album-render --album nill-bye/false-drop`.
+Same dry booth. Rap over club beds (no autotune). Full album: `bazelisk run //:manage -- album-render --album nill-bye/false-drop`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -136,7 +136,7 @@ Same dry booth. Rap over club beds (no autotune). Full album: `./scripts/manage.
 
 ### Frozen Ercot (`audio/albums/nill-bye/frozen-ercot/`)
 
-Same dry booth. Non-trap, non-EDM beds. Public-record satire of Abbott (punch up; no disability, race, or faith punch-down). Full album: `./scripts/manage.sh album-render --album nill-bye/frozen-ercot`.
+Same dry booth. Non-trap, non-EDM beds. Public-record satire of Abbott (punch up; no disability, race, or faith punch-down). Full album: `bazelisk run //:manage -- album-render --album nill-bye/frozen-ercot`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -158,7 +158,7 @@ Same dry booth. Non-trap, non-EDM beds. Public-record satire of Abbott (punch up
 
 ### Lone Star Tab (`audio/albums/nill-bye/lone-star-tab/`)
 
-Same dry booth. Rap over club beds (no autotune). Same punch-up rule. Full album: `./scripts/manage.sh album-render --album nill-bye/lone-star-tab`.
+Same dry booth. Rap over club beds (no autotune). Same punch-up rule. Full album: `bazelisk run //:manage -- album-render --album nill-bye/lone-star-tab`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -180,7 +180,7 @@ Same dry booth. Rap over club beds (no autotune). Same punch-up rule. Full album
 
 ### Thirty Four Counts (`audio/albums/nill-bye/thirty-four-counts/`)
 
-Same dry booth. Non-trap, non-EDM beds. Public-record satire of Trump (punch up; no disability, race, faith, or children as the joke). Full album: `./scripts/manage.sh album-render --album nill-bye/thirty-four-counts`.
+Same dry booth. Non-trap, non-EDM beds. Public-record satire of Trump (punch up; no disability, race, faith, or children as the joke). Full album: `bazelisk run //:manage -- album-render --album nill-bye/thirty-four-counts`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -202,7 +202,7 @@ Same dry booth. Non-trap, non-EDM beds. Public-record satire of Trump (punch up;
 
 ### Pardon Flood (`audio/albums/nill-bye/pardon-flood/`)
 
-Same dry booth. Rap over club beds (no autotune). Same punch-up rule. Full album: `./scripts/manage.sh album-render --album nill-bye/pardon-flood`.
+Same dry booth. Rap over club beds (no autotune). Same punch-up rule. Full album: `bazelisk run //:manage -- album-render --album nill-bye/pardon-flood`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -224,7 +224,7 @@ Same dry booth. Rap over club beds (no autotune). Same punch-up rule. Full album
 
 ### Winterize Wells (`audio/albums/nill-bye/winterize-wells/`)
 
-Same dry booth. Non-trap, non-EDM beds. Builder bars: methods and statutes, no roast target. Full album: `./scripts/manage.sh album-render --album nill-bye/winterize-wells`.
+Same dry booth. Non-trap, non-EDM beds. Builder bars: methods and statutes, no roast target. Full album: `bazelisk run //:manage -- album-render --album nill-bye/winterize-wells`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -246,7 +246,7 @@ Same dry booth. Non-trap, non-EDM beds. Builder bars: methods and statutes, no r
 
 ### Duty Switch (`audio/albums/nill-bye/duty-switch/`)
 
-Same dry booth. Rap over club beds (no autotune). Same builder rule. Full album: `./scripts/manage.sh album-render --album nill-bye/duty-switch`.
+Same dry booth. Rap over club beds (no autotune). Same builder rule. Full album: `bazelisk run //:manage -- album-render --album nill-bye/duty-switch`.
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |

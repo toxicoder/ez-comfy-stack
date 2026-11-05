@@ -6,7 +6,7 @@
 # docker/Dockerfile. Occupancy does not install Blender.
 #
 # Usage:
-#   ./scripts/utilities/blender-install.sh
+#   bazelisk run //scripts:run-utility -- blender-install
 #   ./scripts/manage.sh blender-install
 #
 # Safety:

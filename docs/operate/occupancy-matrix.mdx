@@ -42,10 +42,10 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 Ask the host which mode is live and who holds the GPU, then enter the mode you need:
 
 ```bash
-./scripts/manage.sh occupancy status
-./scripts/manage.sh occupancy enter blender-desk
-./scripts/manage.sh occupancy enter llm-desk --yes
-./scripts/manage.sh occupancy enter klein --yes
+bazelisk run //:manage -- occupancy status
+bazelisk run //:manage -- occupancy enter blender-desk
+bazelisk run //:manage -- occupancy enter llm-desk --yes
+bazelisk run //:manage -- occupancy enter klein --yes
 ```
 
 <Callout type="error" title="One heavy job">

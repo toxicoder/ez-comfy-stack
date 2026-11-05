@@ -129,7 +129,7 @@ Duplicate Beat groups on canvas for beats 5-24:
 6. Keep the shared UNET / VAE / CLIP / Format / Seed / Rewrite / Audio notes wires (do not duplicate loaders).
 7. Save under `_user/` if you want a personal App; shipped `_lab` stays 4 beats.
 
-Past 24 stems: host `./scripts/utilities/concat-shots.sh --files a.mp4,b.mp4 --cap-seconds <sum> --yes` (default `--files` cap is 90 s).
+Past 24 stems: `bazelisk run //scripts:run-utility -- concat-shots --files a.mp4,b.mp4 --cap-seconds <sum> --yes` (default `--files` cap is 90 s).
 
 LTX-2.5 distilled AV. LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
 

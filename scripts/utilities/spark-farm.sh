@@ -13,10 +13,9 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- spark-farm status [--json]
-#   ./scripts/utilities/spark-farm.sh status [--json]
-#   ./scripts/utilities/spark-farm.sh sync-models
-#   ./scripts/utilities/spark-farm.sh run [--film go-see] [--seeds 509201,509211,509221]
-#   ./scripts/utilities/spark-farm.sh dispatch [--film go-see]
+#   bazelisk run //scripts:run-utility -- spark-farm sync-models
+#   bazelisk run //scripts:run-utility -- spark-farm run [--film go-see] [--seeds 509201,509211,509221]
+#   bazelisk run //scripts:run-utility -- spark-farm dispatch [--film go-see]
 #     Assign shots 01-06 / 07-12 / 13-18 (or even split). Each host runs
 #     local manage.sh print-shot. Never SSH-starts compose.
 #

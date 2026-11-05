@@ -55,7 +55,7 @@ US-safe two-host-episode episode (Option A). Sequential Queue - do not load Klei
 4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. The script STRING is wired into ACE enhance as context (used if you turn Enhance on). Duck -15 dB under speech.
 5. Saves: `ez_podcast_ep` FLAC master + `ez_podcast_mix` 320 kbps MP3.
 6. Cover separately: Queue **{COVER_GRAPH}** (prefix `ez_podcast`, 1024^2). Do not embed Klein here.
-7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (-16 LUFS podcast / `--youtube` -14). Comfy cannot loudnorm.
+7. Loudness: `bazelisk run //scripts:run-utility -- podcast-loudnorm run --in FILE` (-16 LUFS podcast / `--youtube` -14). Comfy cannot loudnorm.
 
 Weights: `./scripts/manage.sh download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).
 """
@@ -83,7 +83,7 @@ US-safe learning episode (Option C). Sequential Queue - do not load Klein + Wan 
 5. Kokoro-82M built-in voices (Apache). ACE-Step 1.5 native bed: 30 s instrumental, looped under the speech, duck -15 dB.
 6. Saves: `ez_learn_ep` FLAC master + `ez_learn_mix` 320 kbps MP3.
 7. Cover separately: Queue **{COVER_GRAPH}** (prefix `ez_podcast`, 1024^2). Do not embed Klein here.
-8. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (-16 LUFS podcast / `--youtube` -14). Comfy cannot loudnorm.
+8. Loudness: `bazelisk run //scripts:run-utility -- podcast-loudnorm run --in FILE` (-16 LUFS podcast / `--youtube` -14). Comfy cannot loudnorm.
 
 25 min seminar is the slow CPU-TTS path. Weights: `./scripts/manage.sh download-podcast --tier analog` then `--tier acestep`.
 """

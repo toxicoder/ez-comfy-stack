@@ -7,8 +7,7 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- download-restore status [--tier seedvr2-3b] [--json]
-#   ./scripts/utilities/download-restore.sh status [--tier seedvr2-3b] [--json]
-#   ./scripts/utilities/download-restore.sh run [--tier seedvr2-3b]
+#   bazelisk run //scripts:run-utility -- download-restore run [--tier seedvr2-3b]
 #
 # Environment:
 #   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD

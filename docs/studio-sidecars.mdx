@@ -49,7 +49,7 @@ This page owns the full wording of the occupancy rule; the other pages link here
 
 The rule is **one heavy GPU job at a time** on the single GB10. There are exactly two verbs, and they are not interchangeable:
 
-- **park** - hand the GPU to a desk with `./scripts/manage.sh occupancy enter <desk>`. Comfy stays up and unloaded, so you can come straight back. Use it for the Blender Workbench dumps and the host 35B llama-server.
+- **park** - hand the GPU to a desk with `bazelisk run //:manage -- occupancy enter <desk>`. Comfy stays up and unloaded, so you can come straight back. Use it for the Blender Workbench dumps and the host 35B llama-server.
 - **stop** - take the stack down with `./scripts/manage.sh stop` (compose down). Use it before TRELLIS / LTX / Wan work, for SuperSplat, and for any NVENC encode.
 
 ```mermaid
@@ -62,8 +62,8 @@ flowchart TB
 ```
 
 ```bash
-./scripts/manage.sh occupancy enter blender-desk   # park Comfy for a host GPU job
-./scripts/manage.sh occupancy idle                 # hand the GPU back to Comfy
+bazelisk run //:manage -- occupancy enter blender-desk   # park Comfy for a host GPU job
+bazelisk run //:manage -- occupancy idle                 # hand the GPU back to Comfy
 ./scripts/manage.sh stop                            # compose down for splat / NVENC
 ```
 
@@ -86,20 +86,20 @@ Sidecars are host processes you install and run yourself. None of them is a `doc
 
 ```bash
 ./scripts/manage.sh blender-install              # once; never in Dockerfile
-./scripts/manage.sh occupancy enter blender-desk
+bazelisk run //:manage -- occupancy enter blender-desk
 ./scripts/manage.sh download-3d --tier trellis2   # or da3-base | all
-./scripts/manage.sh blender                      # Workbench; dies if Comfy is heavy
-./scripts/manage.sh export-guides --film go-see --shot 12   # same occupancy
-./scripts/manage.sh blender-stills --film go-see --plate mug --size 1024x1024
-./scripts/manage.sh house-views --slug lab-penthouse        # Instagram 4:5 clay; same occupancy
-./scripts/manage.sh occupancy enter trellis --yes
+bazelisk run //:manage -- blender                      # Workbench; dies if Comfy is heavy
+bazelisk run //:manage -- export-guides --film go-see --shot 12   # same occupancy
+bazelisk run //:manage -- blender-stills --film go-see --plate mug --size 1024x1024
+bazelisk run //:manage -- house-views --slug lab-penthouse        # Instagram 4:5 clay; same occupancy
+bazelisk run //:manage -- occupancy enter trellis --yes
 ```
 
 ---
 
 ## Host NLE (Kdenlive / Shotcut)
 
-OTIO from `./scripts/manage.sh film-export-otio go-see` is stdlib JSON under `films/<slug>/publish/`. Import on the Spark host or a laptop - never in the Docker image.
+OTIO from `bazelisk run //:manage -- film-export-otio go-see` is stdlib JSON under `films/<slug>/publish/`. Import on the Spark host or a laptop - never in the Docker image.
 
 On DGX Spark (Ubuntu aarch64):
 

@@ -93,14 +93,14 @@ farm, pick NFS over the fabric subnet or run `sync-models`: [Spark farm](../spar
    ```
 
 3. Mount or replicate for the other consumers: NFS from the owner (preferred), or
-   `./scripts/utilities/spark-farm.sh sync-models` to rsync `MODELS_DIR/comfy` over
+   `bazelisk run //scripts:run-utility -- spark-farm sync-models` to rsync `MODELS_DIR/comfy` over
    `SPARK_FABRIC_IPS` only.
 
 4. Do not prefix `download-models` with `sudo` - download-limit uses sudo internally and
    `hf` must stay on the login user's PATH.
 
 **Check it worked:** the second stack starts with no pull of its own, and
-`./scripts/manage.sh doctor` is clean.
+`bazelisk run //:manage -- doctor` is clean.
 
 ---
 
@@ -117,11 +117,11 @@ flowchart TB
 ```
 
 ```bash
-./scripts/manage.sh doctor
-./scripts/manage.sh models-status
-./scripts/utilities/download-image.sh status --tier fast --json
-./scripts/utilities/download-wan.sh status --tier 5b --json
-./scripts/utilities/download-ltx.sh status --tier 2.5 --json
+bazelisk run //:manage -- doctor
+bazelisk run //:manage -- models-status
+bazelisk run //scripts:run-utility -- download-image status --tier fast --json
+bazelisk run //scripts:run-utility -- download-wan status --tier 5b --json
+bazelisk run //scripts:run-utility -- download-ltx status --tier 2.5 --json
 ```
 
 **Check it worked:** `doctor` reports `MODELS_DIR` writable by your user, and `models-status`

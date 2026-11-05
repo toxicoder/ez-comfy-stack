@@ -35,7 +35,7 @@ want to know who holds it right now. The idea behind the rule is
 ## Read who holds the GPU
 
 ```bash
-./scripts/manage.sh occupancy status
+bazelisk run //:manage -- occupancy status
 ```
 
 **Check it worked:** the printout names the current mode, whether Comfy is parked, and the
@@ -62,17 +62,17 @@ jobs: [Occupancy matrix](operate/occupancy-matrix.md).
 
 ```bash
 ./scripts/manage.sh blender-install   # once; occupancy does not install Blender
-./scripts/manage.sh occupancy enter blender-desk
-./scripts/manage.sh blender -- --background
-./scripts/manage.sh occupancy enter llm-desk --yes
+bazelisk run //:manage -- occupancy enter blender-desk
+bazelisk run //:manage -- blender -- --background
+bazelisk run //:manage -- occupancy enter llm-desk --yes
 # OpenAI-compatible: http://127.0.0.1:30000/v1
-./scripts/manage.sh occupancy enter trellis --yes
+bazelisk run //:manage -- occupancy enter trellis --yes
 ```
 
 `occupancy enter` **does not** start Compose. Heavy modes tell you to
 `./scripts/manage.sh start` (type **yes**) when the container is down.
 
-**Check it worked:** `./scripts/manage.sh occupancy status` reports the mode you entered, and
+**Check it worked:** `bazelisk run //:manage -- occupancy status` reports the mode you entered, and
 the heavy mode's own message confirms the weights for that job are the only ones loaded.
 
 ### Start the 35B writing desk

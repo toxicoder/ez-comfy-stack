@@ -5,7 +5,6 @@
 #
 # Usage:
 #   bazelisk run //docs-site:install
-#   ./docs/setup-docs.sh                                 # raw escape hatch
 #   QUIET=true ./docs/setup-docs.sh
 #
 # Safety: Installs into docs-site/node_modules. Never publishes.

@@ -14,7 +14,6 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- download-dub status|run|cleanup [--tier asr|clone|all] [--json]
-#   ./scripts/utilities/download-dub.sh status|run|cleanup [--tier asr|clone|all] [--json]
 #
 # Environment:
 #   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD

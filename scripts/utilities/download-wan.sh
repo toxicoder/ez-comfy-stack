@@ -14,9 +14,8 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- download-wan status [--tier 5b|a14b|fun-inp|all] [--json]
-#   ./scripts/utilities/download-wan.sh status [--tier 5b|a14b|fun-inp|all] [--json]
-#   ./scripts/utilities/download-wan.sh run [--tier ...]
-#   ./scripts/utilities/download-wan.sh cleanup [--tier ...] [--dry-run|--yes]
+#   bazelisk run //scripts:run-utility -- download-wan run [--tier ...]
+#   bazelisk run //scripts:run-utility -- download-wan cleanup [--tier ...] [--dry-run|--yes]
 #
 # Environment:
 #   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD

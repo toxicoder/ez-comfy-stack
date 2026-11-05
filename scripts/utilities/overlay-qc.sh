@@ -10,7 +10,6 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- overlay-qc --film SLUG --shot ID --look PATH [--guides DIR]
-#   ./scripts/utilities/overlay-qc.sh --film SLUG --shot ID --look PATH [--guides DIR]
 #
 # Safety:
 #   Does not start Docker. Fail-closed on 1280x704 mismatch.

@@ -22,7 +22,7 @@ Klein still -> native TRELLIS.2 INT8 mesh (Comfy core nodes).
 
 ```bash
 ./scripts/manage.sh download-3d --tier trellis2
-./scripts/manage.sh occupancy enter trellis --yes
+bazelisk run //:manage -- occupancy enter trellis --yes
 ```
 
 LoadImage: a Klein still (`ez_still_*.png` or a clay plate). Unload models first (EZUnloadModels).

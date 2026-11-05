@@ -15,9 +15,9 @@
 # so the host's export directory must not be reused.
 #
 # Usage (from the repository root):
-#   bash docs-site/scripts/visual_linux.sh              # compare against committed baselines
-#   bash docs-site/scripts/visual_linux.sh --update     # rewrite baselines, then review diffs
-#   bash docs-site/scripts/visual_linux.sh -- --project desktop
+#   bazelisk run //docs-site:visual-linux              # compare against committed baselines
+#   bazelisk run //docs-site:visual-linux -- --update  # rewrite baselines, then review diffs
+#   bazelisk run //docs-site:visual-linux -- --project desktop
 #
 # Baselines land in docs-site/tests/visual/goldens/ in the checkout; review the image diff
 # before committing them.

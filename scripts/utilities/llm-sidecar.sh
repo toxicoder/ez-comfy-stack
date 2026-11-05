@@ -7,9 +7,8 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- llm-sidecar status [--json]
-#   ./scripts/utilities/llm-sidecar.sh status [--json]
-#   ./scripts/utilities/llm-sidecar.sh start
-#   ./scripts/utilities/llm-sidecar.sh stop
+#   bazelisk run //scripts:run-utility -- llm-sidecar start
+#   bazelisk run //scripts:run-utility -- llm-sidecar stop
 #
 # Environment:
 #   MODELS_DIR, COMFY_OUTPUT_DIR, EZ_LLM_SIDECAR_PORT, EZ_LLM_SIDECAR_CTX,

@@ -136,13 +136,13 @@ Graph: **audio/dub/clone-translate** (`extra.lab_profile` `us-safe-dub`). Occupa
 7. Loudness is in-graph raise-to-peak plus optional ffmpeg -14 LUFS. Operator fallback (not required):
 
 ```bash
-./scripts/utilities/podcast-loudnorm.sh run --in "${COMFY_OUTPUT_DIR}/dubs/episode/ez_dub_yt.wav" --target youtube
+bazelisk run //scripts:run-utility -- podcast-loudnorm run --in "${COMFY_OUTPUT_DIR}/dubs/episode/ez_dub_yt.wav" --target youtube
 ```
 
 URL helper (host, writes `${COMFY_OUTPUT_DIR}/input`, survives `cleanup`):
 
 ```bash
-./scripts/utilities/dub-fetch.sh run --url 'https://www.youtube.com/watch?v=YOUR_VIDEO'
+bazelisk run //scripts:run-utility -- dub-fetch run --url 'https://www.youtube.com/watch?v=YOUR_VIDEO'
 ```
 
 Reload the App if it was already open, then pick that wav/mp4 in **Source file**.
@@ -165,7 +165,7 @@ Optional local mux (VLC/archive, not the documented YouTube upload) can use ffmp
 When there is **no** source video and you want a still-image YouTube file (cover + dubbed audio), keep the graph as FLAC/MP3 and mux on the host:
 
 ```bash
-./scripts/manage.sh audio-still-video \
+bazelisk run //:manage -- audio-still-video \
   --audio "${COMFY_OUTPUT_DIR}/dubs/episode/ez_dub_yt.wav" \
   --image "${COMFY_OUTPUT_DIR}/ez_podcast_00001_.png"
 ```

@@ -36,7 +36,7 @@ type **yes**.
 3. `./scripts/manage.sh start` - type **yes**
 
 **Check it worked:** `git branch --show-current` prints `__DOCS_GIT_REF__` and
-`./scripts/manage.sh doctor` prints `Doctor OK`.
+`bazelisk run //:manage -- doctor` prints `Doctor OK`.
 
 An update does not re-download weights. Details: [Update the stack](update.md).
 
@@ -44,10 +44,10 @@ An update does not re-download weights. Details: [Update the stack](update.md).
 
 ## Run the studio
 
-1. `./scripts/manage.sh doctor` - expect `Doctor OK`
+1. `bazelisk run //:manage -- doctor` - expect `Doctor OK`
 2. `./scripts/manage.sh start` - type **yes**. Headroom is a hard fail.
-3. `./scripts/manage.sh status` - the project is up
-4. `./scripts/manage.sh logs` - read the container log
+3. `bazelisk run //:manage -- status` - the project is up
+4. `bazelisk run //:manage -- logs` - read the container log
 5. `./scripts/manage.sh stop` - container down, volumes kept
 
 On the Spark, open `http://${SPARK_HOST}:${COMFY_PORT}`. From a laptop, forward the port
@@ -69,12 +69,12 @@ dub, music, or 3D.
 
 1. `df -h` - confirm free disk before a multi-GB pull
 2. `./scripts/manage.sh download-models` - throttled by `${DOWNLOAD_LIMIT}` (default `auto`)
-3. `./scripts/manage.sh models-status` - the lab basenames are on disk
+3. `bazelisk run //:manage -- models-status` - the lab basenames are on disk
 
 Stuck `*.incomplete` partials only (finished weights stay):
 
 ```bash
-./scripts/manage.sh reset-hf-partials
+bazelisk run //:manage -- reset-hf-partials
 ```
 
 **Check it worked:** `download-models` exits 0; it exits non-zero until every lab basename
@@ -87,8 +87,8 @@ is present. Every pack, size, and command is one table:
 ## Reclaim disk
 
 ```bash
-./scripts/manage.sh disk-wizard --plan
-./scripts/manage.sh reap-models --plan
+bazelisk run //:manage -- disk-wizard --plan
+bazelisk run //:manage -- reap-models --plan
 ```
 
 `--plan` only prints a plan. Adding `--apply --yes` is what deletes or quarantines.
@@ -99,10 +99,10 @@ is present. Every pack, size, and command is one table:
 `${MODELS_DIR}` or `${COMFY_OUTPUT_DIR}`.
 
 ```bash
-./scripts/manage.sh cleanup
+bazelisk run //:manage -- cleanup
 ```
 
-**Check it worked:** `df -h` shows the space back, and `./scripts/manage.sh models-status`
+**Check it worked:** `df -h` shows the space back, and `bazelisk run //:manage -- models-status`
 still reports the lab weights present.
 
 ---
@@ -110,7 +110,7 @@ still reports the lab weights present.
 ## Read the GPU
 
 ```bash
-./scripts/manage.sh occupancy status
+bazelisk run //:manage -- occupancy status
 ```
 
 **Check it worked:** the printout names the current mode. One heavy GPU job at a time.

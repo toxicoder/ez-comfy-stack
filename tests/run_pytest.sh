@@ -5,7 +5,6 @@
 # Hermetic pytest + 100% coverage gate on first-party production Python.
 #
 # Usage:
-#   bash tests/run_pytest.sh
 #   bazelisk test //tests:pytest
 #
 # Safety: No Docker daemon, GPU, or network.

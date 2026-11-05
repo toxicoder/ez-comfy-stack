@@ -7,9 +7,8 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- blender-mcp [--stdio]
-#   ./scripts/utilities/blender-mcp.sh [--stdio]
-#   ./scripts/utilities/blender-mcp.sh --list-tools
-#   ./scripts/utilities/blender-mcp.sh --call TOOL [JSON]
+#   bazelisk run //scripts:run-utility -- blender-mcp --list-tools
+#   bazelisk run //scripts:run-utility -- blender-mcp --call TOOL [JSON]
 #
 # @command blender-mcp
 

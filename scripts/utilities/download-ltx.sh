@@ -16,9 +16,8 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- download-ltx status [--tier 2.5|2.3|balanced|quality|gemma|iclora|all] [--json]
-#   ./scripts/utilities/download-ltx.sh status [--tier 2.5|2.3|balanced|quality|gemma|iclora|all] [--json]
-#   ./scripts/utilities/download-ltx.sh run [--tier ...]
-#   ./scripts/utilities/download-ltx.sh cleanup [--tier ...] [--dry-run|--yes]
+#   bazelisk run //scripts:run-utility -- download-ltx run [--tier ...]
+#   bazelisk run //scripts:run-utility -- download-ltx cleanup [--tier ...] [--dry-run|--yes]
 #
 # Environment:
 #   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD - same semantics as download-flux.

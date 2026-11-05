@@ -12,7 +12,6 @@
 #   document, which no text-level gate here reproduces.
 #
 # Usage:
-#   bash docker/compose_config_test.sh
 #   bazelisk test //docker:compose_config
 #
 # Safety: Read-only. It renders the configuration and writes nothing: no

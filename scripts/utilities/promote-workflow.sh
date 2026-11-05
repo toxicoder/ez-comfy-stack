@@ -6,7 +6,6 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- promote-workflow \
-#   ./scripts/utilities/promote-workflow.sh \
 #     --from PATH --lane LANE --id STEM [--subdir REL]
 #
 # Environment:

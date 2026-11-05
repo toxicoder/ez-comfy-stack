@@ -13,10 +13,9 @@
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- concat-shots [--dir DIR] [--out FILE] [--dry-run|--yes]
-#   ./scripts/utilities/concat-shots.sh [--dir DIR] [--out FILE] [--dry-run|--yes]
-#   ./scripts/utilities/concat-shots.sh --files a.mp4,b.mp4 [--out FILE]
-#   ./scripts/utilities/concat-shots.sh --film FILM [--yes]
-#   ./scripts/utilities/concat-shots.sh --film go-see --xfade 10 --yes
+#   bazelisk run //scripts:run-utility -- concat-shots --files a.mp4,b.mp4 [--out FILE]
+#   bazelisk run //scripts:run-utility -- concat-shots --film FILM [--yes]
+#   bazelisk run //scripts:run-utility -- concat-shots --film go-see --xfade 10 --yes
 #
 # Environment:
 #   COMFY_OUTPUT_DIR - default /mnt/comfy-output
