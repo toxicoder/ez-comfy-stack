@@ -49,12 +49,56 @@ function fakeSource(): NavSource {
   };
 }
 
-/** A folder as it appears in the built tree, with how far below the root it sits. */
+/**
+ * A folder as it appears in the built tree, with how far below the root it sits.
+ *
+ * The optionals are written `| undefined` on purpose: the values are read off an untyped
+ * tree node and may arrive as an explicit `undefined`, which `exactOptionalPropertyTypes`
+ * treats as different from a missing key.
+ */
 interface BuiltFolder {
   name: string;
   depth: number;
-  root?: boolean | string;
-  defaultOpen?: boolean;
+  root?: boolean | string | undefined;
+  defaultOpen?: boolean | undefined;
+}
+
+/** A page leaf in the built tree, as the walker reports it. */
+interface BuiltLeaf {
+  /** Stable reference of the page; absent on a node that carries none. */
+  ref?: string | undefined;
+  url: string;
+}
+
+/**
+ * The fields the walkers read off a tree node before narrowing it by `type`.
+ *
+ * Every value but `type` is `unknown` on purpose: `buildPageTree` hands back a mixed
+ * `Node[]`, so each read gets an explicit check instead of an asserted shape.
+ */
+interface RawTreeNode {
+  type?: string | undefined;
+  name?: unknown;
+  root?: unknown;
+  defaultOpen?: unknown;
+  $ref?: unknown;
+  url?: unknown;
+  children?: unknown;
+}
+
+/** View a tree child as a record of the fields above, or nothing when it is not an object. */
+function asNode(value: unknown): RawTreeNode | undefined {
+  return typeof value === "object" && value !== null ? (value as RawTreeNode) : undefined;
+}
+
+/** A `children` array, or empty when the node has none. */
+function childrenOf(node: RawTreeNode): unknown[] {
+  return Array.isArray(node.children) ? node.children : [];
+}
+
+/** The string fields of a node, `undefined` for anything that is not a string. */
+function asString(value: unknown): string | undefined {
+  return typeof value === "string" ? value : undefined;
 }
 
 /** Every folder in the tree, outermost first. */
@@ -62,11 +106,16 @@ function folders(node: { children?: unknown[] }): BuiltFolder[] {
   const out: BuiltFolder[] = [];
   const walk = (children: unknown[], depth: number): void => {
     for (const child of children) {
-      const entry = child as BuiltFolder & { type: string; children?: unknown[] };
-      if (entry.type === "folder") {
-        out.push({ name: entry.name, depth, root: entry.root, defaultOpen: entry.defaultOpen });
-        walk(entry.children ?? [], depth + 1);
+      const entry = asNode(child);
+      const name = entry ? asString(entry.name) : undefined;
+      if (!entry || entry.type !== "folder" || name === undefined) continue;
+      const folder: BuiltFolder = { name, depth };
+      if (typeof entry.root === "boolean" || typeof entry.root === "string") {
+        folder.root = entry.root;
       }
+      if (typeof entry.defaultOpen === "boolean") folder.defaultOpen = entry.defaultOpen;
+      out.push(folder);
+      walk(childrenOf(entry), depth + 1);
     }
   };
   walk(node.children ?? [], 1);
@@ -74,13 +123,19 @@ function folders(node: { children?: unknown[] }): BuiltFolder[] {
 }
 
 /** Every page leaf in the tree, as `{ ref, url }`. */
-function leaves(node: { children?: unknown[] }): { ref?: string; url: string }[] {
-  const out: { ref?: string; url: string }[] = [];
+function leaves(node: { children?: unknown[] }): BuiltLeaf[] {
+  const out: BuiltLeaf[] = [];
   const walk = (children: unknown[]): void => {
     for (const child of children) {
-      const entry = child as { type: string; $ref?: string; url: string; children?: unknown[] };
-      if (entry.type === "page") out.push({ ref: entry.$ref, url: entry.url });
-      else if (entry.type === "folder") walk(entry.children ?? []);
+      const entry = asNode(child);
+      if (!entry) continue;
+      const url = asString(entry.url);
+      if (entry.type === "page" && url !== undefined) {
+        const ref = asString(entry.$ref);
+        out.push(ref === undefined ? { url } : { ref, url });
+      } else if (entry.type === "folder") {
+        walk(childrenOf(entry));
+      }
     }
   };
   walk(node.children ?? []);

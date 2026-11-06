@@ -7,25 +7,69 @@
  */
 
 import { visit } from "unist-util-visit";
+import { z } from "zod";
 
 import glossaryJson from "../../includes/glossary.json";
 
-export interface GlossaryTerm {
-  id: string;
-  title: string;
-  aliases: string[];
-  category: string;
-  short: string;
-  long?: string;
-}
+/**
+ * One glossary entry, as authored in `includes/glossary.json`.
+ *
+ * The shape mirrors the `Term` record in `docs/glossary.py`, which validates the same file
+ * and raises on a bad entry, so both halves of the site fail on the same defect instead of
+ * the MDX side silently dropping the term.
+ */
+export const glossaryTermSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  aliases: z.array(z.string()),
+  category: z.string(),
+  short: z.string(),
+  long: z.string().optional(),
+  see_also: z.array(z.string()).optional()
+});
 
-const SKIPPED_PARENTS = new Set(["link", "heading", "inlineCode", "code", "abbr", "mdxJsxTextElement", "mdxJsxFlowElement"]);
+export type GlossaryTerm = z.infer<typeof glossaryTermSchema>;
+
+/** The whole `includes/glossary.json` payload. */
+export const glossaryTermsSchema = z.array(glossaryTermSchema);
 
 export function loadGlossaryTerms(): GlossaryTerm[] {
-  const raw = glossaryJson as GlossaryTerm[];
-  return Array.isArray(raw)
-    ? raw.filter((term) => term && typeof term.id === "string" && Array.isArray(term.aliases))
-    : [];
+  return glossaryTermsSchema.parse(glossaryJson);
+}
+
+/** Node types whose text must not be wrapped (code, headings, links, ...). */
+const SKIPPED_PARENTS = new Set(["link", "heading", "inlineCode", "code", "abbr", "mdxJsxTextElement", "mdxJsxFlowElement"]);
+
+/**
+ * The mdast fields this plugin reads.
+ *
+ * `remark` hands the transformer an untyped tree, so each read goes through one of the
+ * guards below instead of an asserted node shape: a node that does not match is skipped.
+ */
+interface ParentNodeLike {
+  type: string;
+  children: unknown[];
+}
+
+/** The `file` argument remark passes, narrowed to the two path sources it uses. */
+interface RemarkFile {
+  path?: string;
+  history?: string[];
+}
+
+/** A node with the two fields a parent must have, or nothing when it is not a parent. */
+function asParent(value: unknown): ParentNodeLike | undefined {
+  if (typeof value !== "object" || value === null) return undefined;
+  const candidate = value as { type?: unknown; children?: unknown };
+  if (typeof candidate.type !== "string" || !Array.isArray(candidate.children)) return undefined;
+  return { type: candidate.type, children: candidate.children };
+}
+
+/** The `value` of a text node, or the empty string when the node carries none. */
+function textValue(node: unknown): string {
+  if (typeof node !== "object" || node === null) return "";
+  const value = (node as { value?: unknown }).value;
+  return typeof value === "string" ? value : "";
 }
 
 const REGEX_METACHARACTERS = new Set([".", "*", "+", "?", "^", "$", "{", "}", "(", ")", "|", "[", "]"]);
@@ -44,8 +88,8 @@ function isGlossaryPage(filePath: string | undefined): boolean {
  *
  * @returns A remark transformer.
  */
-export function remarkGlossaryTooltips() {
-  return (tree: Parameters<typeof visit>[0], file?: { path?: string; history?: string[] }) => {
+export function remarkGlossaryTooltips(): (tree: Parameters<typeof visit>[0], file?: RemarkFile) => void {
+  return (tree, file) => {
     const filePath = file?.path ?? file?.history?.[0];
     if (isGlossaryPage(filePath)) return;
 
@@ -66,11 +110,11 @@ export function remarkGlossaryTooltips() {
     const seen = new Set<string>();
 
     visit(tree, "text", (node, index, rawParent) => {
-      const parent = rawParent as { type: string; children: unknown[] } | undefined;
+      const parent = asParent(rawParent);
       if (!parent || typeof index !== "number") return;
       if (SKIPPED_PARENTS.has(parent.type)) return;
 
-      const text = String((node as { value?: string }).value ?? "");
+      const text = textValue(node);
       if (text.length === 0) return;
       matcher.lastIndex = 0;
       if (!matcher.test(text)) {
