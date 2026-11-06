@@ -96,7 +96,8 @@ export function TableChrome() {
         } else {
           const theadRect = thead.getBoundingClientRect();
           const bodies = table.tBodies;
-          const rows = bodies.length ? bodies[bodies.length - 1].rows : [];
+          const body = bodies[bodies.length - 1];
+          const rows = body ? body.rows : [];
           const last = rows[rows.length - 1];
           const prev = rows.length > 1 ? rows[rows.length - 2] : last;
           let desired = pin;
@@ -123,11 +124,15 @@ export function TableChrome() {
             const dst = overlay.querySelector("thead")?.rows[0]?.cells ?? [];
             const n = Math.min(src.length, dst.length);
             for (let i = 0; i < n; i += 1) {
-              (dst[i] as HTMLElement).style.width = `${src[i].getBoundingClientRect().width}px`;
+              const dstCell = dst[i];
+              const srcCell = src[i];
+              if (dstCell && srcCell) {
+                dstCell.style.width = `${srcCell.getBoundingClientRect().width}px`;
+              }
             }
             const inner = overlay.querySelector("table");
             if (inner) {
-              (inner as HTMLElement).style.transform = `translateX(${tableRect.left - wrapRect.left}px)`;
+              inner.style.transform = `translateX(${tableRect.left - wrapRect.left}px)`;
             }
           }
         }

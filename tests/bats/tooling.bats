@@ -57,6 +57,21 @@ teardown() {
   [ "$status" -ne 0 ]
 }
 
+@test "JS type lane prefers the pinned tsc and falls back to the PATH" {
+  local js="${REPO_ROOT}/lints/run_js_types.sh"
+  grep -qF 'TSC="docs-site/node_modules/.bin/tsc"' "${js}"
+  grep -qF 'command -v tsc' "${js}"
+  # A missing compiler stays fatal under CI and strict mode, never a silent pass.
+  grep -qF 'tsc missing - required in CI/strict mode' "${js}"
+  # Order matters: the checkout's pinned compiler has to be tried first, or a
+  # stray global TypeScript would move the counts the ratchet records.
+  local pinned_at path_at
+  pinned_at="$(grep -n 'docs-site/node_modules/.bin/tsc' "${js}" | head -1 | cut -d: -f1)"
+  path_at="$(grep -n 'command -v tsc' "${js}" | head -1 | cut -d: -f1)"
+  [ -n "${pinned_at}" ] && [ -n "${path_at}" ]
+  [ "${pinned_at}" -lt "${path_at}" ]
+}
+
 @test "shfmt allowlist includes docs-site and setup-docs shell" {
   local shfmt="${REPO_ROOT}/lints/run_shfmt.sh"
   grep -qF 'docs/setup-docs.sh' "${shfmt}"

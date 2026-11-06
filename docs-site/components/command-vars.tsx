@@ -10,24 +10,27 @@ import {
   useState,
   type ReactNode
 } from "react";
+import { z } from "zod";
 
 import builderJson from "../../includes/command-builder.json";
 import {
+  commandBuilderSchema,
   commandById,
   defaultVarValues,
   FLAGS_PREFIX,
   flagValue,
   renderCommand,
   splitVarTemplate,
-  substituteVars,
   templateHasVars,
   VARS_KEY,
-  type BuilderCommand,
   type BuilderFlag,
   type CommandBuilder
 } from "@/lib/command-vars";
 
-const builder = builderJson as CommandBuilder;
+/** Shape of a `localStorage` blob before each value is narrowed by the reader. */
+const storedRecordSchema = z.record(z.string(), z.unknown());
+
+const builder = commandBuilderSchema.parse(builderJson);
 
 interface CommandVarsContextValue {
   values: Record<string, string>;
@@ -44,7 +47,7 @@ function loadStoredVars(defaults: Record<string, string>): Record<string, string
   try {
     const raw = localStorage.getItem(VARS_KEY);
     if (!raw) return merged;
-    const stored = JSON.parse(raw) as Record<string, unknown>;
+    const stored = storedRecordSchema.parse(JSON.parse(raw));
     for (const id of Object.keys(merged)) {
       const value = stored[id];
       if (typeof value === "string" && value !== "") merged[id] = value;
@@ -59,8 +62,7 @@ function loadFlags(cmdId: string): Record<string, unknown> {
   try {
     const raw = localStorage.getItem(FLAGS_PREFIX + cmdId);
     if (!raw) return {};
-    const parsed = JSON.parse(raw) as Record<string, unknown>;
-    return parsed && typeof parsed === "object" ? parsed : {};
+    return storedRecordSchema.parse(JSON.parse(raw));
   } catch {
     return {};
   }
@@ -190,7 +192,8 @@ function CodeVarBinder() {
 
   useEffect(() => {
     const onInput = (event: Event) => {
-      const chip = (event.target as HTMLElement | null)?.closest?.("span.ez-var[data-ez-var]");
+      const source = event.target instanceof HTMLElement ? event.target : null;
+      const chip = source?.closest("span.ez-var[data-ez-var]");
       if (!chip) return;
       const name = chip.getAttribute("data-ez-var");
       if (!name) return;

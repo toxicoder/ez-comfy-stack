@@ -4,7 +4,10 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ez_common import ImageTensor, MaskTensor
 
 # Guide-pack layer names and muxed video filenames under a shot directory.
 SHOT_STILL_LAYERS = ("first", "last", "clay", "depth", "canny")
@@ -34,7 +37,7 @@ def output_directory() -> Path:
         if env:
             return Path(env)
         try:
-            import folder_paths  # type: ignore[import-not-found]
+            import folder_paths
 
             return Path(folder_paths.get_output_directory())
         except Exception:  # noqa: BLE001 - Comfy optional in unit tests
@@ -149,7 +152,7 @@ def still_pack_path(pack_dir: Path, layer: str) -> Path:
     raise ValueError(f"unknown still pack layer {layer!r}")
 
 
-def decode_png(path: Path) -> tuple[Any, Any]:
+def decode_png(path: Path) -> tuple[ImageTensor, MaskTensor]:
     """Decode a PNG to Comfy IMAGE + MASK. Torch is imported here only.
 
     Depth pixels are returned as dumped (mist 0-1, near=white, far=black).

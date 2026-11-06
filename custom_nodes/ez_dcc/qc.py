@@ -4,9 +4,13 @@ from __future__ import annotations
 
 import importlib.util
 import sys
+from collections.abc import Mapping
 from pathlib import Path
 from types import ModuleType
-from typing import Any
+from typing import TYPE_CHECKING, cast
+
+if TYPE_CHECKING:
+    from ez_dcc._guide_pack import ShotMap, ShotValue, StillRecord
 
 
 def _load_from_path(path: Path, name: str) -> ModuleType:
@@ -40,7 +44,7 @@ def _load_guide_pack() -> ModuleType:
         ImportError: Neither scripts/lib nor the vendored file is available.
     """
     try:
-        import guide_pack as gp  # type: ignore[import-not-found]
+        import guide_pack as gp
 
         return gp
     except ImportError:
@@ -61,7 +65,7 @@ _GP = _load_guide_pack()
 GuidePackError = _GP.GuidePackError
 
 
-def validate_shot(data: dict[str, Any]) -> list[str]:
+def validate_shot(data: Mapping[str, ShotValue]) -> list[str]:
     """Return shot-yaml defect strings (empty means ok).
 
     Args:
@@ -86,7 +90,7 @@ def validate_pack(pack_dir: Path, *, require_full_seq: bool = True) -> list[str]
     return list(_GP.validate_pack(pack_dir, require_full_seq=require_full_seq))
 
 
-def validate_still(data: dict[str, Any]) -> list[str]:
+def validate_still(data: Mapping[str, ShotValue]) -> list[str]:
     """Return still-yaml defect strings (empty means ok).
 
     Args:
@@ -110,7 +114,7 @@ def validate_still_pack(pack_dir: Path) -> list[str]:
     return list(_GP.validate_still_pack(pack_dir))
 
 
-def load_shot(path: Path) -> dict[str, Any]:
+def load_shot(path: Path) -> ShotMap:
     """Read shot.yaml from a pack directory or file.
 
     Args:
@@ -119,10 +123,10 @@ def load_shot(path: Path) -> dict[str, Any]:
     Returns:
         Parsed shot mapping.
     """
-    return dict(_GP.load_shot(path))
+    return cast("ShotMap", _GP.load_shot(path))
 
 
-def load_still(path: Path) -> dict[str, Any]:
+def load_still(path: Path) -> StillRecord:
     """Read still.yaml from a pack directory or file.
 
     Args:
@@ -131,7 +135,7 @@ def load_still(path: Path) -> dict[str, Any]:
     Returns:
         Parsed still mapping.
     """
-    return dict(_GP.load_still(path))
+    return cast("StillRecord", _GP.load_still(path))
 
 
 def raise_defects(defects: list[str]) -> None:

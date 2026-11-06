@@ -7,29 +7,51 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from typing import TypedDict
+from typing import TypedDict, cast
 
 
 class PackRecord(TypedDict):
     """One pack row from the restricted model-manifest schema."""
 
     default: bool
+    """Whether its files are in the default keep-set."""
+
     retired: bool
+    """Whether the pack is retired (still keep-set protected)."""
+
     superseded_by: str
+    """Pack id that replaced this one, or empty."""
+
     min_gb: int
+    """Disk the pack needs, for the download budget."""
+
     tier_dir: str
+    """Model-dir tier the files live under."""
+
     files: list[str]
+    """Basenames the pack owns."""
+
     shares: list[str]
+    """Basenames shared with another pack."""
+
     cmd: str
+    """Operator fetch command, or empty."""
+
     cleanup: str
+    """Cleanup note, or empty."""
 
 
 class Manifest(TypedDict):
     """Parsed config/model-manifest.yaml."""
 
     schema: int
+    """Manifest schema version."""
+
     refuse: list[str]
+    """Tokens that must never appear in a reap plan."""
+
     packs: dict[str, PackRecord]
+    """Pack rows keyed by pack id."""
 
 
 def load_manifest(path: Path) -> Manifest:
@@ -90,7 +112,9 @@ def load_manifest(path: Path) -> Manifest:
             list_key = stripped[:-1]
             continue
         if list_key and stripped.startswith("- "):
-            packs[pack][list_key].append(stripped[2:].strip())  # type: ignore[literal-required]
+            bucket = cast("dict[str, object]", packs[pack])[list_key]
+            if isinstance(bucket, list):
+                bucket.append(stripped[2:].strip())
             continue
         if ":" in stripped and not stripped.startswith("- "):
             list_key = ""
@@ -104,7 +128,8 @@ def load_manifest(path: Path) -> Manifest:
             elif key == "min_gb":
                 packs[pack]["min_gb"] = int(val or "0")
             elif key in packs[pack]:
-                packs[pack][key] = val  # type: ignore[literal-required]
+                fields = cast("dict[str, object]", packs[pack])
+                fields[key] = val
     return {"schema": schema, "refuse": refuse, "packs": packs}
 
 

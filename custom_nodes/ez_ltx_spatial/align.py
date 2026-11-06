@@ -7,7 +7,10 @@ divisible by 32. Broadcast 720 and 1080 are not (720/16=45, then the next
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ez_common import Tensor
 
 # LTX video VAE spatial alignment and Comfy widget floor.
 SPATIAL_MULTIPLE = 32
@@ -60,9 +63,9 @@ def snap_hw(
 
 
 def center_crop_bcthw(
-    x: Any,
+    x: Tensor,
     multiple: int = SPATIAL_MULTIPLE,
-) -> Any:
+) -> Tensor:
     """Center-crop the last two axes of a ``B,C,T,H,W`` (or ``...,H,W``) tensor.
 
     Never grows a side. If a side is already aligned, or too small to yield a

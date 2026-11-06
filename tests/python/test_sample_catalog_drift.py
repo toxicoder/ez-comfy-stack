@@ -49,14 +49,14 @@ def _generated() -> dict[str, list[dict[str, str]]]:
         captured[name] = rows
 
     original = builder._write
-    builder._write = _capture  # type: ignore[assignment]
+    builder._write = _capture
     try:
         try:
             builder.main()
         except SystemExit:
             pass
     finally:
-        builder._write = original  # type: ignore[assignment]
+        builder._write = original
 
     import _build_hand_catalogs as hand
 

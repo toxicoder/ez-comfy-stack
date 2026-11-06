@@ -45,7 +45,7 @@ import json
 import sys
 import urllib.request
 from pathlib import Path
-from typing import Any, Mapping, NamedTuple
+from typing import TYPE_CHECKING, Mapping, NamedTuple, cast
 
 from ez_quality.presets import (
     QUALITY_CHOICES,
@@ -54,6 +54,9 @@ from ez_quality.presets import (
     QUALITY_LAB,
     apply_to_graph,
 )
+
+if TYPE_CHECKING:
+    from ez_common import Json, JsonObject
 
 # Node type plus widget slot that records the graph's own Quality choice.
 QUALITY_NODE_TYPE = "EZQuality"
@@ -79,7 +82,7 @@ class Availability(NamedTuple):
     vaes: list[str] | None = None
 
 
-def _fetch_object_info(comfy_url: str) -> dict[str, Any] | None:
+def _fetch_object_info(comfy_url: str) -> JsonObject | None:
     """GET ``{comfy_url}/object_info``.
 
     Globals:
@@ -100,7 +103,7 @@ def _fetch_object_info(comfy_url: str) -> dict[str, Any] | None:
     return payload if isinstance(payload, dict) else None
 
 
-def _object_info_field(info: Mapping[str, Any], node_type: str, field: str) -> Any:
+def _object_info_field(info: Mapping[str, Json], node_type: str, field: str) -> Json:
     """Pull one widget spec out of object_info.
 
     Globals:
@@ -114,13 +117,13 @@ def _object_info_field(info: Mapping[str, Any], node_type: str, field: str) -> A
     Returns:
       The raw widget spec, or None when any level is absent.
     """
-    entry = info.get(node_type) or {}
-    inputs = entry.get("input") or {}
-    required = inputs.get("required") or {}
+    entry = cast("JsonObject", info.get(node_type) or {})
+    inputs = cast("JsonObject", entry.get("input") or {})
+    required = cast("JsonObject", inputs.get("required") or {})
     return required.get(field)
 
 
-def _loader_options(info: Mapping[str, Any], node_type: str, field: str) -> list[str] | None:
+def _loader_options(info: Mapping[str, Json], node_type: str, field: str) -> list[str] | None:
     """Read one loader combo option list out of object_info.
 
     Globals:
@@ -165,7 +168,7 @@ def resolve_availability(comfy_url: str) -> Availability:
     )
 
 
-def recorded_quality(graph: Mapping[str, Any]) -> str:
+def recorded_quality(graph: Mapping[str, Json]) -> str:
     """Return the tier the graph records on its own EZQuality node.
 
     Globals:
@@ -178,7 +181,7 @@ def recorded_quality(graph: Mapping[str, Any]) -> str:
       The raw EZQuality widget value, or an empty string when the graph carries
       no usable EZQuality widget.
     """
-    for node in graph.get("nodes") or []:
+    for node in cast("list[Json]", graph.get("nodes") or []):
         if not isinstance(node, dict) or node.get("type") != QUALITY_NODE_TYPE:
             continue
         values = node.get("widgets_values") or []
@@ -202,7 +205,7 @@ def canonical_tier(value: str) -> str | None:
     return _ACCEPTED_TIERS.get(str(value or "").strip().casefold())
 
 
-def resolve_quality(graph: Mapping[str, Any], requested: str) -> str:
+def resolve_quality(graph: Mapping[str, Json], requested: str) -> str:
     """Pick the tier to overlay: --quality, then the graph, then lab.
 
     Globals:
@@ -225,7 +228,7 @@ def resolve_quality(graph: Mapping[str, Any], requested: str) -> str:
     return canonical_tier(recorded_quality(graph)) or QUALITY_LAB
 
 
-def load_graph(path: Path) -> dict[str, Any]:
+def load_graph(path: Path) -> JsonObject:
     """Read a serialized graph off disk.
 
     Globals:
@@ -254,7 +257,7 @@ def load_graph(path: Path) -> dict[str, Any]:
     return graph
 
 
-def write_graph(graph: Mapping[str, Any], path: Path) -> None:
+def write_graph(graph: Mapping[str, Json], path: Path) -> None:
     """Write the overlaid graph.
 
     Globals:

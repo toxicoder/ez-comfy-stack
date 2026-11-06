@@ -32,8 +32,10 @@ import { useSearchFrom } from "@/components/search-from";
 export function SearchDialog(props: SharedProps) {
   const { locale } = useI18n();
   const from = useSearchFrom();
+  // exactOptionalPropertyTypes: `locale` is genuinely absent when no locale is set, so
+  // the two option shapes are written out instead of passing an explicit `undefined`.
   const { search, setSearch, query } = useDocsSearch({
-    client: staticClient({ locale, from })
+    client: locale === undefined ? staticClient({ from }) : staticClient({ locale, from }),
   });
 
   return (

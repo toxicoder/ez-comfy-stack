@@ -7,7 +7,7 @@ import sys
 import types
 from pathlib import Path
 from types import SimpleNamespace
-from typing import Any
+from typing import Any, override
 
 import pytest
 
@@ -62,7 +62,8 @@ class _Scene:
 
 
 class _ObjMap(dict):
-    def get(self, name: str, default: object = None) -> object:  # type: ignore[override]
+    @override
+    def get(self, name: str, default: object = None) -> object:
         return super().get(name, default)
 
     def new(self, name: str, data: object = None) -> _Obj:
@@ -175,7 +176,7 @@ def test_guide_pack_export_with_fake_bpy(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     fake = FakeBpy()
-    fake.data.objects["Camera"] = fake.context.scene.camera  # type: ignore[index]
+    fake.data.objects["Camera"] = fake.context.scene.camera
     monkeypatch.setitem(sys.modules, "bpy", fake)
     dest = tmp_path / "pack"
     rgb = dest / "rgb"
@@ -213,7 +214,7 @@ def test_still_pack_resolve_size_and_export(
     with pytest.raises(SystemExit, match="invalid --size"):
         esp.resolve_size(SimpleNamespace(size="nope", width=1, height=1))
     fake = FakeBpy()
-    fake.data.objects["Camera"] = fake.context.scene.camera  # type: ignore[index]
+    fake.data.objects["Camera"] = fake.context.scene.camera
     monkeypatch.setitem(sys.modules, "bpy", fake)
     ns = esp.parse_export_args(
         [
@@ -418,7 +419,7 @@ def test_guide_pack_validate_and_normal_pass(
 ) -> None:
     fake = FakeBpy()
     fake.context.view_layer = SimpleNamespace(use_pass_normal=False)
-    fake.data.objects["Camera"] = fake.context.scene.camera  # type: ignore[index]
+    fake.data.objects["Camera"] = fake.context.scene.camera
     monkeypatch.setitem(sys.modules, "bpy", fake)
     monkeypatch.setattr(egp, "validate_shot", lambda _p: ["bad"])
     ns = egp.parse_export_args(
@@ -504,7 +505,7 @@ def test_still_pack_render_suffix_and_main(
         candidate.write_bytes(b"png")
 
     fake.ops.render.render = _render_plain
-    fake.data.objects["Camera"] = fake.context.scene.camera  # type: ignore[index]
+    fake.data.objects["Camera"] = fake.context.scene.camera
     monkeypatch.setitem(sys.modules, "bpy", fake)
     dest = tmp_path / "still"
     ns = esp.parse_export_args(
@@ -678,7 +679,7 @@ def test_look_at_zero_length_and_alt_png(
         scene.render.filepath = str(alt)
 
     fake.ops.render.render = _render_alt
-    fake.data.objects["Camera"] = fake.context.scene.camera  # type: ignore[index]
+    fake.data.objects["Camera"] = fake.context.scene.camera
     monkeypatch.setitem(sys.modules, "bpy", fake)
     dest = tmp_path / "still-alt"
     ns = esp.parse_export_args(

@@ -12,9 +12,15 @@ import os
 import shutil
 import subprocess
 from pathlib import Path
-from typing import Any
+from typing import NotRequired, TypedDict, cast
 
 from mcp_runtime import (
+    JsonRpcRequest,
+    JsonRpcResponse,
+    ToolArgs,
+    ToolCatalogEntry,
+    ToolNumber,
+    ToolResult,
     ToolSpec,
     call_tool as _runtime_call_tool,
     handle_rpc as _runtime_handle_rpc,
@@ -27,6 +33,37 @@ from mcp_runtime import (
 PROTOCOL_VERSION = "2024-11-05"
 SERVER_NAME = "ez-blender"
 SERVER_VERSION = "1"
+
+
+class BlenderRunResult(TypedDict):
+    """One host subprocess payload returned by a Blender MCP tool."""
+
+    ok: bool
+    """True when the subprocess exited 0."""
+
+    returncode: NotRequired[int]
+    """Process exit status (absent on a refusal that never ran)."""
+
+    stdout: NotRequired[str]
+    """Stripped stdout."""
+
+    stderr: NotRequired[str]
+    """Stripped stderr."""
+
+    error: NotRequired[str]
+    """Refusal text when the tool never ran."""
+
+    mode: NotRequired[str]
+    """Occupancy mode entered (``occupancy_enter``)."""
+
+    name: NotRequired[str]
+    """Object name added (``create_primitive``)."""
+
+    kind: NotRequired[str]
+    """Primitive kind added (``create_primitive``)."""
+
+    path: NotRequired[str]
+    """Export destination (``export_glb``)."""
 
 
 def _repo_root() -> Path:
@@ -59,7 +96,7 @@ def _occupancy_bin() -> Path:
     return _repo_root() / "scripts" / "utilities" / "occupancy.sh"
 
 
-def occupancy_status() -> dict[str, Any]:
+def occupancy_status() -> dict[str, object]:
     """Read occupancy JSON (file, or occupancy.sh --json).
 
     Returns:
@@ -68,7 +105,7 @@ def occupancy_status() -> dict[str, Any]:
     path = _output_dir() / ".occupancy.json"
     if path.is_file():
         try:
-            data = json.loads(path.read_text(encoding="utf-8"))
+            data: object = json.loads(path.read_text(encoding="utf-8"))
             if isinstance(data, dict):
                 return data
         except json.JSONDecodeError:
@@ -83,7 +120,7 @@ def occupancy_status() -> dict[str, Any]:
         )
         if proc.returncode == 0 and proc.stdout.strip():
             try:
-                parsed = json.loads(proc.stdout)
+                parsed: object = json.loads(proc.stdout)
                 if isinstance(parsed, dict):
                     return parsed
             except json.JSONDecodeError:
@@ -115,7 +152,7 @@ def desk_allowed() -> bool:
     return False
 
 
-def _require_desk() -> dict[str, Any] | None:
+def _require_desk() -> BlenderRunResult | None:
     """Return an error payload when blender-desk is not occupied.
 
     Returns:
@@ -129,7 +166,7 @@ def _require_desk() -> dict[str, Any] | None:
     }
 
 
-def _run_occupancy_enter(mode: str, yes: bool) -> dict[str, Any]:
+def _run_occupancy_enter(mode: str, yes: bool) -> BlenderRunResult:
     """Run ``occupancy.sh enter MODE``.
 
     Args:
@@ -210,7 +247,7 @@ def _blender_bin() -> str | None:
     return None
 
 
-def _run_blender(script: str, blend: str | None = None) -> dict[str, Any]:
+def _run_blender(script: str, blend: str | None = None) -> BlenderRunResult:
     """Run ``blender --background [--python-expr]``.
 
     Args:
@@ -239,7 +276,7 @@ def _run_blender(script: str, blend: str | None = None) -> dict[str, Any]:
     }
 
 
-def tool_occupancy_status(_args: dict[str, Any]) -> dict[str, Any]:
+def tool_occupancy_status(_args: ToolArgs) -> ToolResult:
     """MCP tool: read occupancy JSON.
 
     Args:
@@ -251,7 +288,7 @@ def tool_occupancy_status(_args: dict[str, Any]) -> dict[str, Any]:
     return {"ok": True, "occupancy": occupancy_status()}
 
 
-def tool_occupancy_enter(args: dict[str, Any]) -> dict[str, Any]:
+def tool_occupancy_enter(args: ToolArgs) -> ToolResult:
     """MCP tool: enter an occupancy mode (does not start Compose).
 
     Args:
@@ -267,7 +304,7 @@ def tool_occupancy_enter(args: dict[str, Any]) -> dict[str, Any]:
     return _run_occupancy_enter(mode, yes)
 
 
-def tool_scene_info(args: dict[str, Any]) -> dict[str, Any]:
+def tool_scene_info(args: ToolArgs) -> ToolResult:
     """MCP tool: list object names in the current Blender scene.
 
     Args:
@@ -287,7 +324,7 @@ def tool_scene_info(args: dict[str, Any]) -> dict[str, Any]:
     return _run_blender(script, str(blend) if blend else None)
 
 
-def tool_create_primitive(args: dict[str, Any]) -> dict[str, Any]:
+def tool_create_primitive(args: ToolArgs) -> ToolResult:
     """MCP tool: add a Workbench primitive.
 
     Args:
@@ -324,7 +361,7 @@ def tool_create_primitive(args: dict[str, Any]) -> dict[str, Any]:
     return result
 
 
-def tool_set_camera(args: dict[str, Any]) -> dict[str, Any]:
+def tool_set_camera(args: ToolArgs) -> ToolResult:
     """MCP tool: set Camera location.
 
     Args:
@@ -348,7 +385,7 @@ def tool_set_camera(args: dict[str, Any]) -> dict[str, Any]:
     return _run_blender(script)
 
 
-def tool_keyframe_object(args: dict[str, Any]) -> dict[str, Any]:
+def tool_keyframe_object(args: ToolArgs) -> ToolResult:
     """MCP tool: insert a location keyframe on a named object.
 
     Args:
@@ -361,7 +398,7 @@ def tool_keyframe_object(args: dict[str, Any]) -> dict[str, Any]:
     if blocked:
         return blocked
     name = str(args.get("name") or "")
-    frame = int(args.get("frame") or 1)
+    frame = int(cast(ToolNumber, args.get("frame") or 1))
     if not name:
         return {"ok": False, "error": "name is required"}
     script = (
@@ -374,7 +411,7 @@ def tool_keyframe_object(args: dict[str, Any]) -> dict[str, Any]:
     return _run_blender(script)
 
 
-def tool_export_glb(args: dict[str, Any]) -> dict[str, Any]:
+def tool_export_glb(args: ToolArgs) -> ToolResult:
     """MCP tool: export GLB under COMFY_OUTPUT_DIR/assets.
 
     Args:
@@ -402,7 +439,7 @@ def tool_export_glb(args: dict[str, Any]) -> dict[str, Any]:
     return result
 
 
-def _run_utility(script_name: str, extra: list[str]) -> dict[str, Any]:
+def _run_utility(script_name: str, extra: list[str]) -> BlenderRunResult:
     """Run a host utility under ``scripts/utilities``.
 
     Args:
@@ -430,7 +467,7 @@ def _run_utility(script_name: str, extra: list[str]) -> dict[str, Any]:
     }
 
 
-def tool_export_guides(args: dict[str, Any]) -> dict[str, Any]:
+def tool_export_guides(args: ToolArgs) -> ToolResult:
     """MCP tool: dump a 5.00s clay/depth/canny guide pack.
 
     Args:
@@ -447,7 +484,7 @@ def tool_export_guides(args: dict[str, Any]) -> dict[str, Any]:
     return _run_utility("blender-guide.sh", extra)
 
 
-def tool_blender_stills(args: dict[str, Any]) -> dict[str, Any]:
+def tool_blender_stills(args: ToolArgs) -> ToolResult:
     """MCP tool: dump a creator still pack.
 
     Args:
@@ -466,7 +503,7 @@ def tool_blender_stills(args: dict[str, Any]) -> dict[str, Any]:
     return _run_utility("blender-stills.sh", extra)
 
 
-def tool_house_views(args: dict[str, Any]) -> dict[str, Any]:
+def tool_house_views(args: ToolArgs) -> ToolResult:
     """MCP tool: dump Instagram 4:5 greybox stills + GLB.
 
     Args:
@@ -586,7 +623,7 @@ TOOLS: dict[str, ToolSpec] = {
 }
 
 
-def list_tools() -> list[dict[str, Any]]:
+def list_tools() -> list[ToolCatalogEntry]:
     """List MCP tools without handlers.
 
     Returns:
@@ -595,9 +632,7 @@ def list_tools() -> list[dict[str, Any]]:
     return _runtime_list_tools(TOOLS)
 
 
-def call_tool(
-    name: str, arguments: dict[str, Any] | None = None
-) -> dict[str, Any]:
+def call_tool(name: str, arguments: ToolArgs | None = None) -> ToolResult:
     """Dispatch a named MCP tool.
 
     Args:
@@ -610,7 +645,7 @@ def call_tool(
     return _runtime_call_tool(TOOLS, name, arguments)
 
 
-def handle_rpc(message: dict[str, Any]) -> dict[str, Any] | None:
+def handle_rpc(message: JsonRpcRequest) -> JsonRpcResponse | None:
     """Handle one JSON-RPC message. Notifications return None.
 
     Args:

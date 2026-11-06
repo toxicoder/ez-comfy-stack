@@ -14,7 +14,6 @@ import sys
 from functools import partial
 from pathlib import Path
 from types import ModuleType
-from typing import Any
 
 import pytest
 
@@ -258,7 +257,9 @@ def test_nill_output_prefix_clamps_tracks_below_one() -> None:
 def test_shared_constants_match_the_catalog_values() -> None:
     assert diss_rows.DISS_DURATION_S == DISS_DURATION_S == 180.0
     assert diss_rows.NILL_VOICE == NILL_VOICE
-    assert diss_rows.DissExampleRow == dict[str, Any]
+    # The runtime form of the row alias: a finalized row is a plain dict, and
+    # ``object`` (not ``Any``) is what the album keys are widened to.
+    assert diss_rows.DissExampleRow == dict[str, object]
 
 
 def test_diss_examples_reexports_the_shared_objects() -> None:

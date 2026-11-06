@@ -27,6 +27,7 @@ import { fileURLToPath } from "node:url";
 import type { Folder, Item, Node, Root } from "fumadocs-core/page-tree";
 import type { ReactNode } from "react";
 import type { LoaderOutput } from "fumadocs-core/source";
+import { z } from "zod";
 
 import navData from "./nav.json";
 
@@ -61,23 +62,48 @@ export interface NavTab {
   pages: NavNode[];
 }
 
+/**
+ * The runtime shape `lib/nav.json` has to satisfy.
+ *
+ * `nav.json` is a JSON import, so TypeScript sees only the inferred literal shape and a
+ * wrong key would surface as `undefined` deep in the sidebar. These schemas parse it once
+ * at import time instead, and the `z.ZodType<...>` annotations tie the schema to the
+ * declared interfaces above: a field added to one side and not the other fails
+ * `npm run typecheck`.
+ */
+const navPageSchema = z.object({ title: z.string(), path: z.string() });
+
+const navNodeSchema: z.ZodType<NavNode> = z.lazy(() =>
+  z.union([navPageSchema, z.object({ title: z.string(), pages: z.array(navNodeSchema) })])
+);
+
+export const navTabsSchema: z.ZodType<NavTab[]> = z.array(
+  z.object({ title: z.string(), pages: z.array(navNodeSchema) })
+);
+
+/** A page entry of a generator manifest under `docs/generated/<kind>/manifest.json`. */
+const manifestPageSchema = z.object({
+  id: z.string().optional(),
+  path: z.string().optional(),
+  kind: z.string().optional(),
+  label: z.string().optional(),
+  lane: z.string().optional()
+});
+
+const manifestSchema = z.object({ pages: z.array(manifestPageSchema).optional() });
+
+type ManifestPage = z.infer<typeof manifestPageSchema>;
+
+/** A folder is the variant that carries `pages`; a leaf is the one that carries `path`. */
 function isGroup(node: NavNode): node is NavGroup {
-  return Array.isArray((node as NavGroup).pages) && !("path" in node && typeof (node as NavPage).path === "string");
+  return "pages" in node;
 }
 
 function isPage(node: NavNode): node is NavPage {
-  return typeof (node as NavPage).path === "string";
+  return "path" in node;
 }
 
-const STATIC_NAV = navData as NavTab[];
-
-interface ManifestPage {
-  id?: string;
-  path?: string;
-  kind?: string;
-  label?: string;
-  lane?: string;
-}
+const STATIC_NAV: NavTab[] = navTabsSchema.parse(navData);
 
 function findRepoFile(segments: string[]): string | undefined {
   const here = dirname(fileURLToPath(import.meta.url));
@@ -98,8 +124,8 @@ function loadManifest(kind: "workflows" | "cinema" | "audio"): ManifestPage[] {
   const file = findRepoFile(["docs", "generated", kind, "manifest.json"]);
   if (!file) return [];
   try {
-    const payload = JSON.parse(readFileSync(file, "utf8")) as { pages?: ManifestPage[] };
-    return Array.isArray(payload.pages) ? payload.pages : [];
+    const payload = manifestSchema.parse(JSON.parse(readFileSync(file, "utf8")));
+    return payload.pages ?? [];
   } catch {
     return [];
   }
@@ -309,7 +335,11 @@ export function neighborsOf(
     const item = toItem(source, entry.tab, entry.page.path, entry.page.title);
     return { name: item.name, url: item.url };
   };
-  return { previous: at(-1), next: at(1) };
+  const previous = at(-1);
+  const next = at(1);
+  // exactOptionalPropertyTypes: omit the key when there is no neighbour so consumers can
+  // pass this straight into a footer slot that declares `previous?: PageNodeEntry`.
+  return { ...(previous ? { previous } : {}), ...(next ? { next } : {}) };
 }
 
 /** A prev/next footer entry shaped the way the footer slot expects. */

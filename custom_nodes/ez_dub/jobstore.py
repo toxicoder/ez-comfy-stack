@@ -7,7 +7,10 @@ import os
 import re
 from pathlib import Path
 from collections.abc import Mapping
-from typing import Any, NotRequired, TypedDict, cast
+from typing import TYPE_CHECKING, NotRequired, TypedDict, cast
+
+if TYPE_CHECKING:
+    from ez_common import Json
 
 # Job-dir stage names and slug sanitizer.
 STAGES = ("ingest", "analyze", "translate", "render", "export")
@@ -70,7 +73,7 @@ def output_root() -> Path:
     except Exception:  # noqa: BLE001 - Comfy is optional in unit tests
         pass
     try:
-        import folder_paths  # type: ignore[import-not-found]
+        import folder_paths
 
         raw = folder_paths.get_output_directory()
         if raw:
@@ -170,7 +173,7 @@ def load_state(dest: Path) -> JobState:
     return cast(JobState, data)
 
 
-def save_state(dest: Path, state: Mapping[str, Any]) -> None:
+def save_state(dest: Path, state: Mapping[str, object]) -> None:
     """Write state.json atomically enough for a single operator.
 
     Args:
@@ -195,7 +198,7 @@ def write_json(path: Path, payload: object) -> None:
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def read_json(path: Path) -> Any:
+def read_json(path: Path) -> Json:
     """Load JSON from path.
 
     Args:
@@ -207,4 +210,4 @@ def read_json(path: Path) -> Any:
     Raises:
         FileNotFoundError: missing file.
     """
-    return json.loads(path.read_text(encoding="utf-8"))
+    return cast("Json", json.loads(path.read_text(encoding="utf-8")))

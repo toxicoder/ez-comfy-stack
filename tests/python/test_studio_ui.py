@@ -79,10 +79,10 @@ def _bind_handler(server: ModuleType, path: str) -> tuple[Any, dict[str, object]
         assert isinstance(headers, list)
         headers.append((key, value))
 
-    handler.send_response = send_response  # type: ignore[method-assign]
-    handler.send_header = send_header  # type: ignore[method-assign]
-    handler.end_headers = lambda: None  # type: ignore[method-assign]
-    handler.headers = {}  # type: ignore[method-assign]
+    handler.send_response = send_response
+    handler.send_header = send_header
+    handler.end_headers = lambda: None
+    handler.headers = {}
     return handler, captured
 
 

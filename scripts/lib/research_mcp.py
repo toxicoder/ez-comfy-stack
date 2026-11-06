@@ -10,10 +10,16 @@ from __future__ import annotations
 import json
 import os
 import sys
+from collections.abc import Iterable, Mapping
 from pathlib import Path
-from typing import Any, Mapping
+from typing import cast
 
 from mcp_runtime import (
+    JsonRpcRequest,
+    JsonRpcResponse,
+    ToolArgs,
+    ToolCatalogEntry,
+    ToolResult,
     ToolSpec,
     call_tool as _runtime_call_tool,
     handle_rpc as _runtime_handle_rpc,
@@ -65,7 +71,7 @@ def _lab_root() -> Path:
     return _repo_root() / "workflows" / "_lab"
 
 
-def occupancy_status() -> dict[str, Any]:
+def occupancy_status() -> dict[str, object]:
     """Read occupancy JSON from COMFY_OUTPUT_DIR.
 
     Returns:
@@ -74,7 +80,7 @@ def occupancy_status() -> dict[str, Any]:
     path = _output_dir() / ".occupancy.json"
     if path.is_file():
         try:
-            data = json.loads(path.read_text(encoding="utf-8"))
+            data: object = json.loads(path.read_text(encoding="utf-8"))
             if isinstance(data, dict):
                 return data
         except json.JSONDecodeError:
@@ -90,7 +96,7 @@ def occupancy_status() -> dict[str, Any]:
     }
 
 
-def _linear_labels(extra: Mapping[str, Any]) -> list[str]:
+def _linear_labels(extra: Mapping[str, object]) -> list[str]:
     """Collect App widget labels from extra.linearData.inputs.
 
     Args:
@@ -113,7 +119,7 @@ def _linear_labels(extra: Mapping[str, Any]) -> list[str]:
     return labels
 
 
-def _load_lab_graph(stem: str) -> tuple[Path, dict[str, Any]] | None:
+def _load_lab_graph(stem: str) -> tuple[Path, dict[str, object]] | None:
     """Load one unique lab graph by stem or _lab-relative id.
 
     Args:
@@ -138,7 +144,7 @@ def _load_lab_graph(stem: str) -> tuple[Path, dict[str, Any]] | None:
     if len(hits) != 1:
         return None
     try:
-        data = json.loads(hits[0].read_text(encoding="utf-8"))
+        data: object = json.loads(hits[0].read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return None
     if not isinstance(data, dict):
@@ -146,7 +152,7 @@ def _load_lab_graph(stem: str) -> tuple[Path, dict[str, Any]] | None:
     return hits[0], data
 
 
-def tool_occupancy_status(_args: dict[str, Any]) -> dict[str, Any]:
+def tool_occupancy_status(_args: ToolArgs) -> ToolResult:
     """MCP tool: read occupancy JSON.
 
     Args:
@@ -158,7 +164,7 @@ def tool_occupancy_status(_args: dict[str, Any]) -> dict[str, Any]:
     return {"ok": True, "occupancy": occupancy_status()}
 
 
-def tool_list_lab_apps(_args: dict[str, Any]) -> dict[str, Any]:
+def tool_list_lab_apps(_args: ToolArgs) -> ToolResult:
     """MCP tool: list shipped lab Apps.
 
     Args:
@@ -167,13 +173,13 @@ def tool_list_lab_apps(_args: dict[str, Any]) -> dict[str, Any]:
     Returns:
         ``{ok, apps, count}``.
     """
-    apps: list[dict[str, Any]] = []
+    apps: list[dict[str, object]] = []
     root = _lab_root()
     if not root.is_dir():
         return {"ok": True, "apps": [], "count": 0}
     for path in sorted(root.rglob("*.json")):
         try:
-            data = json.loads(path.read_text(encoding="utf-8"))
+            data: object = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             continue
         if not isinstance(data, dict):
@@ -192,14 +198,14 @@ def tool_list_lab_apps(_args: dict[str, Any]) -> dict[str, Any]:
                 "id": lab_rel,
                 "lane": lane,
                 "occupancy": mode.get("occupancy"),
-                "handoff": list(mode.get("handoff") or []),
+                "handoff": list(cast(Iterable[object], mode.get("handoff") or [])),
                 "description": str(extra.get("lab_description") or ""),
             }
         )
     return {"ok": True, "apps": apps, "count": len(apps)}
 
 
-def tool_describe_app(args: dict[str, Any]) -> dict[str, Any]:
+def tool_describe_app(args: ToolArgs) -> ToolResult:
     """MCP tool: describe one lab App.
 
     Args:
@@ -230,13 +236,13 @@ def tool_describe_app(args: dict[str, Any]) -> dict[str, Any]:
         "description": str(extra.get("lab_description") or ""),
         "occupancy": mode.get("occupancy"),
         "lane": mode.get("lane"),
-        "handoff": list(mode.get("handoff") or []),
+        "handoff": list(cast(Iterable[object], mode.get("handoff") or [])),
         "widgets": _linear_labels(extra),
         "lab_mcp": mcp,
     }
 
 
-def tool_chat(args: dict[str, Any]) -> dict[str, Any]:
+def tool_chat(args: ToolArgs) -> ToolResult:
     """MCP tool: one-turn creative-process chat.
 
     Args:
@@ -262,7 +268,7 @@ def tool_chat(args: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def tool_web_search(args: dict[str, Any]) -> dict[str, Any]:
+def tool_web_search(args: ToolArgs) -> ToolResult:
     """MCP tool: SSRF-safe HTTPS search.
 
     Args:
@@ -286,7 +292,7 @@ def tool_web_search(args: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def tool_research(args: dict[str, Any]) -> dict[str, Any]:
+def tool_research(args: ToolArgs) -> ToolResult:
     """MCP tool: planner + search subagents + synthesizer.
 
     Args:
@@ -389,7 +395,7 @@ TOOLS: dict[str, ToolSpec] = {
 }
 
 
-def list_tools() -> list[dict[str, Any]]:
+def list_tools() -> list[ToolCatalogEntry]:
     """List MCP tools without handlers.
 
     Returns:
@@ -398,9 +404,7 @@ def list_tools() -> list[dict[str, Any]]:
     return _runtime_list_tools(TOOLS)
 
 
-def call_tool(
-    name: str, arguments: dict[str, Any] | None = None
-) -> dict[str, Any]:
+def call_tool(name: str, arguments: ToolArgs | None = None) -> ToolResult:
     """Dispatch a named MCP tool.
 
     Args:
@@ -413,7 +417,7 @@ def call_tool(
     return _runtime_call_tool(TOOLS, name, arguments)
 
 
-def handle_rpc(message: dict[str, Any]) -> dict[str, Any] | None:
+def handle_rpc(message: JsonRpcRequest) -> JsonRpcResponse | None:
     """Handle one JSON-RPC message. Notifications return None.
 
     Args:

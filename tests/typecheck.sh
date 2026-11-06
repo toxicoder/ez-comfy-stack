@@ -5,7 +5,9 @@
 # Hermetic Pyright (Pylance) + mypy gate for first-party Python.
 #
 # Purpose:
-#   Run Pyright with pyrightconfig.json and mypy with mypy.ini so local
+#   Run Pyright with pyrightconfig.json and mypy twice - mypy.ini over the
+#   production tree (strong-types law: explicit Any only at a declared
+#   boundary) and mypy-tests.ini over the pytest tree - so local
 #   make test / coverage / lint and CI fail on type errors. Does not require
 #   GPU, ComfyUI, or Docker.
 #
@@ -82,7 +84,13 @@ require_mypy() {
 }
 
 #######################################
-# Run mypy from the repo root using mypy.ini.
+# Run mypy from the repo root.
+#
+# mypy.ini carries the production strong-types law (explicit Any is a declared
+# boundary only) and is absolute: zero errors. The pytest tree is checked by
+# lints/run_mypy_tests.sh instead, which applies mypy-tests.ini against a
+# committed per-file ledger - that tree owes a four-figure backlog, and a
+# hard gate there would be a gate that gets deleted.
 # Globals:
 #   None
 # Arguments:
@@ -90,10 +98,11 @@ require_mypy() {
 # Outputs:
 #   mypy diagnostics on stdout/stderr
 # Returns:
-#   mypy exit status
+#   0 only when mypy.ini reports no errors
 #######################################
 run_mypy() {
-  python3 -m mypy
+  echo "--- mypy: production (mypy.ini) ---"
+  python3 -m mypy --config-file mypy.ini
 }
 
 #######################################

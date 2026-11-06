@@ -5,7 +5,13 @@ Caches and monkeypatch targets stay on :mod:`ez_prompt_enhance.client`.
 
 from __future__ import annotations
 
-from typing import Any, Protocol
+from typing import TYPE_CHECKING, Protocol, TypeAlias
+
+if TYPE_CHECKING:
+    import llama_cpp
+
+LlamaModel: TypeAlias = "llama_cpp.Llama"
+"""Process-cached llama.cpp handle held by :class:`ez_prompt_enhance.client`."""
 
 
 class ChatCompleter(Protocol):
@@ -91,7 +97,7 @@ class SystemPrompts(Protocol):
 class LlamaLoader(Protocol):
     """Process-cached llama.cpp GGUF loader."""
 
-    def get(self) -> tuple[Any, str | None]:
+    def get(self) -> tuple[LlamaModel | None, str | None]:
         """Return the cached Llama or a fail-soft reason.
 
         Returns:

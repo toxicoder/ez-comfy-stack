@@ -7,7 +7,7 @@ module is the contract those callables must match.
 
 from __future__ import annotations
 
-from typing import Any, Callable, Protocol, TypeAlias
+from typing import Callable, Protocol, TypeAlias
 
 
 class FfmpegRun(Protocol):
@@ -27,8 +27,21 @@ class FfmpegRun(Protocol):
         ...
 
 
-FfmpegRunner: TypeAlias = FfmpegRun | Callable[..., Any]
-"""``FfmpegRun`` plus ``subprocess.run`` overloads and test lambdas."""
+# mypy models a ``...`` parameter list as ``Any[]``, so disallow_any_explicit
+# flags the alias even though every value that crosses it is an ``object``.
+# The alternative arms all fail: no Protocol shape admits the overloaded
+# ``subprocess.run`` (mypy rejects an overloaded callable as a Protocol
+# implementation), and ``Callable[..., Any]`` would make every ``run(...)``
+# call return ``Any``.
+RunFn: TypeAlias = Callable[..., object]  # type: ignore[explicit-any]
+"""Any callable shaped like ``subprocess.run``.
+
+The return is ``object``: a call site has to narrow before it reads
+``returncode`` / ``stdout``, which is what keeps the seam checked.
+"""
+
+FfmpegRunner: TypeAlias = FfmpegRun | RunFn
+"""``subprocess.run``, a test double, or any ffmpeg runner."""
 
 
 class FfmpegTools(Protocol):

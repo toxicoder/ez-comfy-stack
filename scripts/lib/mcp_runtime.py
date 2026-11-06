@@ -3,7 +3,9 @@
 Each ``*_mcp.py`` keeps ``SERVER_NAME``, ``TOOLS``, and tool functions.
 This module owns list/call/handle/stdio/CLI so the three servers do not
 copy the same 155 lines. ``ToolSpec`` stays a TypedDict (dict literals);
-``ToolHandler`` is a Protocol (the behavioral seam).
+``ToolHandler`` is a Protocol (the behavioral seam). The JSON-RPC
+vocabulary (``JsonRpcRequest`` / ``JsonRpcResponse``) is declared once
+here so every server speaks one pinned wire type.
 """
 
 from __future__ import annotations
@@ -11,19 +13,32 @@ from __future__ import annotations
 import json
 import sys
 from collections.abc import Callable, Mapping
-from typing import Any, Protocol, TypedDict, cast
+from typing import Protocol, TypeAlias, TypedDict, cast
 
 # MCP protocol identity (JSON-RPC initialize.serverInfo).
 PROTOCOL_VERSION = "2024-11-05"
 SERVER_VERSION = "1"
 
-RpcId = str | int | None
+RpcId: TypeAlias = str | int | None
+"""JSON-RPC request id: a string, a number, or null for notifications."""
+
+JsonSchema: TypeAlias = Mapping[str, object]
+"""One JSON Schema body. Open by design: keys are named, values are not."""
+
+ToolArgs: TypeAlias = Mapping[str, object]
+"""One ``tools/call`` arguments object as it came off the wire."""
+
+ToolResult: TypeAlias = Mapping[str, object]
+"""One tool payload: ``ok`` plus whatever that tool chose to return."""
+
+ToolNumber: TypeAlias = str | int | float
+"""A parsed JSON value that ``int()`` and ``float()`` can coerce."""
 
 
 class ToolHandler(Protocol):
     """One MCP tool implementation."""
 
-    def __call__(self, args: dict[str, Any], /) -> dict[str, Any]:
+    def __call__(self, args: ToolArgs, /) -> ToolResult:
         """Handle a tools/call arguments object.
 
         Args:
@@ -40,11 +55,120 @@ class ToolSpec(TypedDict):
     """One MCP tool: description, JSON Schema, handler."""
 
     description: str
-    inputSchema: dict[str, Any]
+    """Human-facing summary shown by ``tools/list``."""
+
+    inputSchema: JsonSchema
+    """JSON Schema body for the tool arguments."""
+
     handler: ToolHandler
+    """Implementation dispatched by ``tools/call``."""
 
 
-def list_tools(tools: Mapping[str, ToolSpec]) -> list[dict[str, Any]]:
+class ToolCatalogEntry(TypedDict):
+    """One ``tools/list`` row (a tool spec without its handler)."""
+
+    name: str
+    """Public tool id."""
+
+    description: str
+    """Human-facing summary."""
+
+    inputSchema: JsonSchema
+    """JSON Schema body for the tool arguments."""
+
+
+class JsonRpcRequest(TypedDict, total=False):
+    """One inbound JSON-RPC 2.0 message (every key is optional per spec)."""
+
+    jsonrpc: str
+    """Protocol marker; the loop does not gate on it."""
+
+    id: RpcId
+    """Request id. Absent or null means a notification."""
+
+    method: str
+    """Method name (``initialize``, ``ping``, ``tools/*``, notifications)."""
+
+    params: Mapping[str, object]
+    """Method parameters (``name``/``arguments`` for tools/call)."""
+
+
+class RpcError(TypedDict):
+    """One JSON-RPC error object."""
+
+    code: int
+    """JSON-RPC error code (``-32601`` here for method not found)."""
+
+    message: str
+    """Error text."""
+
+
+class RpcServerInfo(TypedDict):
+    """The ``initialize`` ``serverInfo`` block."""
+
+    name: str
+    """Server id (``ez-edit``, ``ez-blender``, ...)."""
+
+    version: str
+    """Server version string."""
+
+
+class RpcCapabilities(TypedDict):
+    """The ``initialize`` ``capabilities`` block (only tools is offered)."""
+
+    tools: dict[str, object]
+    """Empty object: tool discovery carries no options."""
+
+
+class RpcContent(TypedDict):
+    """One MCP content block inside a ``tools/call`` result."""
+
+    type: str
+    """Content kind (``text`` here)."""
+
+    text: str
+    """JSON-encoded tool payload."""
+
+
+class RpcResultSet(TypedDict, total=False):
+    """Every ``result`` key this loop emits; one method fills one group."""
+
+    protocolVersion: str
+    """Negotiated MCP protocol version (initialize)."""
+
+    capabilities: RpcCapabilities
+    """Advertised capabilities (initialize)."""
+
+    serverInfo: RpcServerInfo
+    """Server identity (initialize)."""
+
+    tools: list[ToolCatalogEntry]
+    """Tool rows (tools/list)."""
+
+    content: list[RpcContent]
+    """Content blocks (tools/call)."""
+
+    isError: bool
+    """True when the tool payload reported ``ok`` false (tools/call)."""
+
+
+class JsonRpcResponse(TypedDict, total=False):
+    """One outbound JSON-RPC 2.0 response."""
+
+    jsonrpc: str
+    """Protocol marker (always ``2.0``)."""
+
+    id: RpcId
+    """Echoed request id."""
+
+    result: RpcResultSet
+    """Success payload (absent on error)."""
+
+    error: RpcError
+    """Error object (absent on success)."""
+
+
+def list_tools(tools: Mapping[str, ToolSpec]) -> list[ToolCatalogEntry]:
     """List MCP tools without handlers.
 
     Args:
@@ -66,8 +190,8 @@ def list_tools(tools: Mapping[str, ToolSpec]) -> list[dict[str, Any]]:
 def call_tool(
     tools: Mapping[str, ToolSpec],
     name: str,
-    arguments: Mapping[str, Any] | None = None,
-) -> dict[str, Any]:
+    arguments: ToolArgs | None = None,
+) -> ToolResult:
     """Dispatch a named MCP tool.
 
     Args:
@@ -85,7 +209,7 @@ def call_tool(
     return handler(dict(arguments or {}))
 
 
-def rpc_result(msg_id: RpcId, result: object) -> dict[str, Any]:
+def rpc_result(msg_id: RpcId, result: RpcResultSet) -> JsonRpcResponse:
     """Build a JSON-RPC 2.0 success envelope.
 
     Args:
@@ -98,7 +222,7 @@ def rpc_result(msg_id: RpcId, result: object) -> dict[str, Any]:
     return {"jsonrpc": "2.0", "id": msg_id, "result": result}
 
 
-def rpc_error(msg_id: RpcId, code: int, message: str) -> dict[str, Any]:
+def rpc_error(msg_id: RpcId, code: int, message: str) -> JsonRpcResponse:
     """Build a JSON-RPC 2.0 error envelope.
 
     Args:
@@ -113,17 +237,17 @@ def rpc_error(msg_id: RpcId, code: int, message: str) -> dict[str, Any]:
 
 
 def handle_rpc(
-    message: dict[str, Any],
+    message: JsonRpcRequest,
     *,
     tools: Mapping[str, ToolSpec],
     server_name: str,
     server_version: str = SERVER_VERSION,
     protocol_version: str = PROTOCOL_VERSION,
-) -> dict[str, Any] | None:
+) -> JsonRpcResponse | None:
     """Handle one JSON-RPC message. Notifications return None.
 
     Args:
-        message: Parsed JSON-RPC request (JSON boundary).
+        message: Parsed JSON-RPC request (JSON boundary; read with ``get``).
         tools: Server tool table.
         server_name: ``serverInfo.name`` for initialize.
         server_version: ``serverInfo.version``.
@@ -133,7 +257,7 @@ def handle_rpc(
         Response object, or None for notifications.
     """
     method = str(message.get("method") or "")
-    msg_id = cast(RpcId, message.get("id"))
+    msg_id = message.get("id")
     params = message.get("params") or {}
     if method == "notifications/initialized":
         return None
@@ -170,7 +294,7 @@ def handle_rpc(
 
 
 def serve_stdio(
-    handle: Callable[[dict[str, Any]], dict[str, Any] | None],
+    handle: Callable[[JsonRpcRequest], JsonRpcResponse | None],
 ) -> None:
     """Serve JSON-RPC on stdin/stdout (one JSON object per line).
 
@@ -182,12 +306,14 @@ def serve_stdio(
         if not line:
             continue
         try:
-            message = json.loads(line)
+            parsed: object = json.loads(line)
         except json.JSONDecodeError:
             continue
-        if not isinstance(message, dict):
+        if not isinstance(parsed, dict):
             continue
-        reply = handle(message)
+        # The line is unvalidated JSON; the handler reads every key with
+        # .get(), so the object is a request record for this loop's purposes.
+        reply = handle(cast(JsonRpcRequest, parsed))
         if reply is not None:
             sys.stdout.write(json.dumps(reply) + "\n")
             sys.stdout.flush()
@@ -199,7 +325,7 @@ def main_cli(
     tools: Mapping[str, ToolSpec],
     prog: str,
     usage_extra: str,
-    handle: Callable[[dict[str, Any]], dict[str, Any] | None],
+    handle: Callable[[JsonRpcRequest], JsonRpcResponse | None],
 ) -> int:
     """CLI: --stdio | --list-tools | --call TOOL [JSON].
 
@@ -231,7 +357,7 @@ def main_cli(
         if len(args) < 2:
             sys.stderr.write(f"{prog} --call TOOL [JSON args]\n")
             return 1
-        payload: dict[str, Any] = {}
+        payload: ToolArgs = {}
         if len(args) >= 3:
             payload = json.loads(args[2])
         result = call_tool(tools, args[1], payload)

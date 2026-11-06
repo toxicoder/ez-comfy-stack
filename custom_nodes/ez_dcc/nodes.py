@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from . import pack as dcc_pack
 from .occupancy_gate import HEAVY_MODES, check_occupancy
@@ -28,7 +28,7 @@ from .qc import (
 )
 
 if TYPE_CHECKING:
-    from ez_common import ComfyInputTypes
+    from ez_common import ComfyInputTypes, ImageTensor, MaskTensor
 
 # Comfy menu category for every node in this pack.
 CATEGORY = "ez-comfy/dcc"
@@ -62,7 +62,7 @@ class EZDCCLoadGuideStill:
         "Fail-closed QC. Depth stays mist 0-1 (near=white, far=black)."
     )
 
-    def run(self, slug: str, shot_id: str, layer: str) -> tuple[Any, Any, str]:
+    def run(self, slug: str, shot_id: str, layer: str) -> tuple[ImageTensor, MaskTensor, str]:
         """Decode one guide-pack still after fail-closed QC.
 
         Args:
@@ -153,7 +153,7 @@ class EZDCCLoadStillPack:
         "Load a blender-stills plate. Allowed sizes match guide_pack.STILL_SIZES."
     )
 
-    def run(self, slug: str, plate: str, layer: str) -> tuple[Any, Any, str]:
+    def run(self, slug: str, plate: str, layer: str) -> tuple[ImageTensor, MaskTensor, str]:
         """Decode one still-pack layer after fail-closed QC.
 
         Args:

@@ -5,13 +5,29 @@ Torch stays lazy. Hermetic tests pass nested-list AUDIO dicts.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, TypeAlias, TypedDict, cast
+
+if TYPE_CHECKING:
+    from ez_common import PcmTensor
 
 # Fallback sample rate when an AUDIO dict omits it (Kokoro default).
 DEFAULT_SAMPLE_RATE = 24000
 
+WaveformSource: TypeAlias = "PcmTensor | None"
+"""Whatever an AUDIO dict carries in ``waveform``; absent is ``None``."""
 
-def _as_pcm(waveform: Any) -> list[float]:
+
+class AudioPayload(TypedDict):
+    """Comfy AUDIO mapping: one waveform plus the rate it plays at."""
+
+    waveform: PcmTensor
+    """Torch tensor when torch is present, else the nested-list stand-in."""
+
+    sample_rate: int
+    """Rate stamped on the waveform."""
+
+
+def _as_pcm(waveform: WaveformSource) -> list[float]:
     """Flatten a Comfy waveform to a 1-D float list.
 
     Args:
@@ -22,27 +38,28 @@ def _as_pcm(waveform: Any) -> list[float]:
     """
     if waveform is None:
         return []
-    if hasattr(waveform, "detach") and hasattr(waveform, "cpu"):
-        waveform = waveform.detach().cpu()
-    if hasattr(waveform, "numpy"):
+    probe = cast("PcmTensor", waveform)
+    if hasattr(probe, "detach") and hasattr(probe, "cpu"):
+        probe = probe.detach().cpu()
+    if hasattr(probe, "numpy"):
         try:
-            waveform = waveform.numpy()
+            probe = probe.numpy()
         except Exception:  # noqa: BLE001 - keep walking
             pass
-    if hasattr(waveform, "reshape"):
+    if hasattr(probe, "reshape"):
         try:
-            return [float(x) for x in waveform.reshape(-1).tolist()]
+            return [float(x) for x in probe.reshape(-1).tolist()]
         except Exception:  # noqa: BLE001 - fall through
             pass
-    if isinstance(waveform, (int, float)):
-        return [float(waveform)]
-    if isinstance(waveform, (list, tuple)):
+    if isinstance(probe, (int, float)):
+        return [float(probe)]
+    if isinstance(probe, (list, tuple)):
         out: list[float] = []
-        for item in waveform:
+        for item in probe:
             out.extend(_as_pcm(item))
         return out
     try:
-        return [float(waveform)]
+        return [float(probe)]
     except (TypeError, ValueError):
         return []
 
@@ -67,7 +84,7 @@ def _sample_rate(audio: object) -> int:
     return DEFAULT_SAMPLE_RATE
 
 
-def _waveform(audio: object) -> Any:
+def _waveform(audio: object) -> WaveformSource:
     """Return the waveform payload from an AUDIO dict.
 
     Args:
@@ -81,7 +98,7 @@ def _waveform(audio: object) -> Any:
     return None
 
 
-def pack_audio(samples: list[float], sample_rate: int) -> dict[str, Any]:
+def pack_audio(samples: list[float], sample_rate: int) -> AudioPayload:
     """Pack PCM into a Comfy AUDIO dict. Torch is imported here only.
 
     Args:
@@ -106,7 +123,7 @@ def pack_audio(samples: list[float], sample_rate: int) -> dict[str, Any]:
         return {"waveform": [[[float(x) for x in body]]], "sample_rate": rate}
 
 
-def loop_to_match(speech: object, bed: object) -> dict[str, Any]:
+def loop_to_match(speech: object, bed: object) -> AudioPayload:
     """Repeat ``bed`` until it covers ``speech``, then trim.
 
     Args:

@@ -12,7 +12,6 @@ import json
 import os
 from collections.abc import Mapping
 from pathlib import Path
-from typing import Any
 
 FLAC_SUFFIXES = (".flac",)
 """Masters the Vorbis tagger writes."""
@@ -50,14 +49,15 @@ def output_dir(*, default: str | Path) -> Path:
     if env:
         return Path(env)
     try:
-        import folder_paths  # type: ignore[import-not-found]
+        import folder_paths
+
 
         return Path(folder_paths.get_output_directory())
     except Exception:  # noqa: BLE001 - pytest / missing Comfy
         return Path(default)
 
 
-def write_json(path: Path, payload: Mapping[str, Any]) -> Path:
+def write_json(path: Path, payload: Mapping[str, object]) -> Path:
     """Write a JSON document in the pack's sidecar formatting.
 
     Args:

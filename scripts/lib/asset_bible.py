@@ -12,7 +12,7 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import Any, TypedDict
+from typing import NotRequired, TypeAlias, TypedDict, cast
 
 # ez.asset.v1 / index contract (slug, size, and refuse-embedded-mesh limits).
 SCHEMA = "ez.asset.v1"
@@ -80,6 +80,60 @@ MAX_SCENE_BYTES = 256_000
 MAX_STRING_CHARS = 4096
 MAX_NUMERIC_ARRAY = 16
 
+YamlScalar: TypeAlias = str | int | float | bool | None
+"""One scalar the restricted YAML reader produces."""
+
+YamlValue: TypeAlias = "YamlScalar | list[YamlValue] | dict[str, YamlValue]"
+"""One value (scalar, list, or mapping) the restricted YAML reader produces."""
+
+AssetFile: TypeAlias = YamlValue
+"""One entry of an asset ``files`` map: presence flag, path, or nested map."""
+
+
+class SceneInstance(TypedDict):
+    """One instanced asset row of a scene.json document."""
+
+    ref: str
+    """Asset id the row instances (never an embedded mesh)."""
+
+    t: NotRequired[list[float]]
+    """Translation triple."""
+
+    r: NotRequired[list[float]]
+    """Rotation triple in degrees."""
+
+    s: NotRequired[float]
+    """Uniform scale."""
+
+
+class SceneCamera(TypedDict, total=False):
+    """The optional camera block of a scene.json document."""
+
+    pos: list[float]
+    """Camera position triple."""
+
+    look: list[float]
+    """Look-at triple."""
+
+    fov: float
+    """Vertical field of view in degrees."""
+
+
+class SceneRecord(TypedDict):
+    """A validated scene.json that instances catalog slugs."""
+
+    id: str
+    """Scene id."""
+
+    instances: list[SceneInstance]
+    """Non-empty instance rows."""
+
+    camera: NotRequired[SceneCamera]
+    """Optional camera block."""
+
+    hdri: NotRequired[str]
+    """Optional HDRI reference (``polyhaven:<name>``)."""
+
 
 class AssetRecord(TypedDict):
     """Normalized ez.asset.v1 mapping."""
@@ -92,7 +146,7 @@ class AssetRecord(TypedDict):
     pipeline: str
     parent: str | None
     takes: list[str]
-    files: dict[str, Any]
+    files: dict[str, AssetFile]
     tags: list[str]
     license: str
     ready: bool
@@ -315,7 +369,7 @@ def _split_flow(inner: str) -> list[str]:
     return parts
 
 
-def _parse_scalar(text: str) -> Any:
+def _parse_scalar(text: str) -> YamlValue:
     """Parse a restricted YAML scalar / flow collection.
 
     Args:
@@ -349,7 +403,7 @@ def _parse_scalar(text: str) -> Any:
         inner = text[1:-1].strip()
         if not inner:
             return {}
-        mapping: dict[str, Any] = {}
+        mapping: dict[str, YamlValue] = {}
         for part in _split_flow(inner):
             if ":" in part:
                 key, rest = _split_key(part)
@@ -388,7 +442,7 @@ def _tokenize(text: str) -> list[tuple[int, str]]:
 
 def _parse_mapping(
     lines: list[tuple[int, str]], start: int, min_indent: int
-) -> tuple[dict[str, Any], int]:
+) -> tuple[dict[str, YamlValue], int]:
     """Parse a block mapping starting at min_indent.
 
     Args:
@@ -399,7 +453,7 @@ def _parse_mapping(
     Returns:
         Mapping and the next unconsumed index.
     """
-    result: dict[str, Any] = {}
+    result: dict[str, YamlValue] = {}
     i = start
     while i < len(lines):
         indent, content = lines[i]
@@ -426,7 +480,7 @@ def _parse_mapping(
 
 def _parse_list(
     lines: list[tuple[int, str]], start: int, min_indent: int
-) -> tuple[list[Any], int]:
+) -> tuple[list[YamlValue], int]:
     """Parse a block list starting at min_indent.
 
     Args:
@@ -437,7 +491,7 @@ def _parse_list(
     Returns:
         List and the next unconsumed index.
     """
-    result: list[Any] = []
+    result: list[YamlValue] = []
     i = start
     while i < len(lines):
         indent, content = lines[i]
@@ -460,7 +514,7 @@ def _parse_list(
             and not (item_text.startswith("'") or item_text[0] == '"')
         ):
             first_key, rest = _split_key(item_text)
-            mapping: dict[str, Any] = {}
+            mapping: dict[str, YamlValue] = {}
             rest = rest.strip()
             mapping[first_key] = _parse_scalar(rest) if rest else None
             i += 1
@@ -476,7 +530,7 @@ def _parse_list(
 
 def _parse_value_block(
     lines: list[tuple[int, str]], start: int, min_indent: int
-) -> tuple[Any, int]:
+) -> tuple[YamlValue, int]:
     """Parse a nested mapping or list at or above min_indent.
 
     Args:
@@ -497,7 +551,7 @@ def _parse_value_block(
     return _parse_mapping(lines, start, indent)
 
 
-def parse_restricted_yaml(text: str) -> Any:
+def parse_restricted_yaml(text: str) -> YamlValue:
     """Parse the Asset Bible YAML subset (indent-2, flow collections, comments).
 
     Args:
@@ -554,7 +608,7 @@ def _as_str_list(value: object, field: str) -> list[str]:
     return list(value)
 
 
-def _normalize_files(value: object) -> dict[str, Any]:
+def _normalize_files(value: object) -> dict[str, AssetFile]:
     """Accept a file-role mapping or list of role names.
 
     Args:
@@ -573,7 +627,7 @@ def _normalize_files(value: object) -> dict[str, Any]:
     if isinstance(value, dict):
         if not value:
             raise AssetBibleError("files mapping must not be empty")
-        out: dict[str, Any] = {}
+        out: dict[str, AssetFile] = {}
         for key, item in value.items():
             if not isinstance(key, str) or not key:
                 raise AssetBibleError("files keys must be non-empty strings")
@@ -582,7 +636,7 @@ def _normalize_files(value: object) -> dict[str, Any]:
     raise AssetBibleError("files must be a mapping or list of roles")
 
 
-def validate_asset(data: object) -> dict[str, Any]:
+def validate_asset(data: object) -> AssetRecord:
     """Validate an ez.asset.v1 mapping (fail closed).
 
     Args:
@@ -644,7 +698,7 @@ def validate_asset(data: object) -> dict[str, Any]:
     }
 
 
-def load_asset(path: str | Path) -> dict[str, Any]:
+def load_asset(path: str | Path) -> AssetRecord:
     """Parse and validate an asset.yaml file.
 
     Args:
@@ -700,7 +754,7 @@ def _refuse_embedded(value: object, loc: str) -> None:
             )
 
 
-def validate_scene(data: object) -> dict[str, Any]:
+def validate_scene(data: object) -> SceneRecord:
     """Validate a scene.json that instances slugs (no embedded meshes).
 
     Args:
@@ -727,10 +781,10 @@ def validate_scene(data: object) -> dict[str, Any]:
         if not isinstance(ref, str) or not ref.strip():
             raise AssetBibleError(f"instances[{idx}].ref is required")
     _refuse_embedded(data, "$")
-    return data
+    return cast(SceneRecord, data)
 
 
-def load_scene(path: str | Path) -> dict[str, Any]:
+def load_scene(path: str | Path) -> SceneRecord:
     """Load and validate scene.json.
 
     Args:
@@ -750,13 +804,13 @@ def load_scene(path: str | Path) -> dict[str, Any]:
             f"(limit {MAX_SCENE_BYTES})"
         )
     try:
-        data = json.loads(scene_path.read_text(encoding="utf-8"))
+        data: object = json.loads(scene_path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
         raise AssetBibleError(f"invalid scene JSON: {exc}") from exc
     return validate_scene(data)
 
 
-def validate_file(path: str | Path) -> dict[str, Any]:
+def validate_file(path: str | Path) -> AssetRecord | SceneRecord:
     """Validate an asset.yaml or scene.json by suffix.
 
     Args:
@@ -802,7 +856,7 @@ def iter_asset_yaml(output_dir: str | Path) -> list[Path]:
     return found
 
 
-def list_assets(output_dir: str | Path) -> list[dict[str, Any]]:
+def list_assets(output_dir: str | Path) -> list[AssetListRecord]:
     """Load every asset.yaml under the catalog (fail closed on defects).
 
     Args:
@@ -816,7 +870,7 @@ def list_assets(output_dir: str | Path) -> list[dict[str, Any]]:
     """
     root = Path(output_dir)
     refuse_models_dir(root)
-    records: list[dict[str, Any]] = []
+    records: list[AssetListRecord] = []
     for yaml_path in iter_asset_yaml(root):
         asset = load_asset(yaml_path)
         slug = yaml_path.parent.name
@@ -825,7 +879,7 @@ def list_assets(output_dir: str | Path) -> list[dict[str, Any]]:
                 f"{yaml_path}: directory slug {slug!r} != id {asset['id']!r}"
             )
         rel = yaml_path.parent.relative_to(root).as_posix()
-        rec: dict[str, Any] = {**asset, "slug": slug, "path": rel}
+        rec: AssetListRecord = {**asset, "slug": slug, "path": rel}
         records.append(rec)
     records.sort(key=lambda item: item["id"])
     return records
@@ -919,7 +973,7 @@ def ensure_layout(output_dir: str | Path, kind: str, slug: str) -> Path:
     return dest
 
 
-def _print_human(records: list[dict[str, Any]], output_dir: Path) -> None:
+def _print_human(records: list[AssetListRecord], output_dir: Path) -> None:
     """Print a status-like catalog listing.
 
     Args:
@@ -945,7 +999,7 @@ def _print_human(records: list[dict[str, Any]], output_dir: Path) -> None:
         )
 
 
-def _json_ready(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def _json_ready(records: list[AssetListRecord]) -> list[dict[str, object]]:
     """Drop non-JSON-friendly values (already primitives).
 
     Args:
@@ -954,9 +1008,9 @@ def _json_ready(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
     Returns:
         JSON-serializable copies.
     """
-    out: list[dict[str, Any]] = []
+    out: list[dict[str, object]] = []
     for rec in records:
-        item = dict(rec)
+        item: dict[str, object] = dict(rec)
         files = item.get("files")
         if isinstance(files, dict):
             item["files"] = {

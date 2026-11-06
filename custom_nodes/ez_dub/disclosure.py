@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
-from typing import Any
+from collections.abc import Mapping, Sequence
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ez_common import JsonScalar
 
 from .align import fit_turn, resample_linear
 from .hooks import SynthesizeFn
@@ -161,7 +165,7 @@ def _crop_bumper_hush(bumper: list[float], rate: int) -> list[float]:
     return speech_onset_slice(bumper, rate)
 
 
-def _first_t0(turns: list[dict[str, Any]] | None) -> float:
+def _first_t0(turns: Sequence[Mapping[str, JsonScalar]] | None) -> float:
     """Earliest turn start, used as the leading non-speech gap.
 
     Args:
@@ -190,7 +194,7 @@ def apply_spoken_disclosure(
     language: str,
     engine: str,
     ref_wav: str,
-    turns: list[dict[str, Any]] | None,
+    turns: Sequence[Mapping[str, JsonScalar]] | None,
     synthesize: SynthesizeFn,
 ) -> tuple[list[float], str]:
     """Overlay a short localized bumper onto leading non-speech.

@@ -13,12 +13,13 @@ import struct
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, cast
+
+from .protocols import RunFn
 
 # LTX VAE grid used for clay/look overlay QC.
 PACK_WIDTH = 1280
 PACK_HEIGHT = 704
-RunFn = Callable[..., Any]
 
 
 def png_size(path: Path) -> tuple[int, int] | None:
@@ -65,7 +66,10 @@ def _run(
     Returns:
         Completed process (not checked).
     """
-    return run(argv, check=False, capture_output=True, text=True)
+    return cast(
+        subprocess.CompletedProcess[str],
+        run(argv, check=False, capture_output=True, text=True),
+    )
 
 
 def blend_argv(clay: Path, look: Path, overlay: Path) -> list[str]:

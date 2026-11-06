@@ -9,9 +9,28 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
-from typing import Any
+from typing import TypedDict
 
 from .ingest import SourceRecord, format_sources_block, format_status
+
+
+class LearnResult(TypedDict):
+    """Digest + script bundle returned by :func:`run_learn`."""
+
+    digest: str
+    """Mapped/reduced study digest text."""
+
+    script: str
+    """Speaker A/B script sized to the duration widget."""
+
+    status: str
+    """Pipe-joined ingest, digest, and script statuses."""
+
+    format: str
+    """Resolved format id from the format widget."""
+
+    duration: str
+    """Resolved duration id from the duration widget."""
 
 # Writer prompts, format/duration catalogs, and spoken-word budget (~150 wpm).
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
@@ -415,7 +434,7 @@ def run_learn(
     fmt: object,
     duration: object,
     enhance: object,
-) -> dict[str, Any]:
+) -> LearnResult:
     """Digest + script payload for ``EZPodcastLearn``.
 
     Args:

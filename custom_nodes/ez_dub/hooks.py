@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, Protocol
+from typing import Protocol
 
 
 class FetchHook(Protocol):
@@ -31,7 +31,9 @@ class FetchHook(Protocol):
 class AsrHook(Protocol):
     """ASR stand-in (faster-whisper in production)."""
 
-    def __call__(self, wav_path: object, language: str, /) -> Sequence[Any]:
+    def __call__(
+        self, wav_path: object, language: str, /
+    ) -> Sequence[Mapping[str, object]]:
         """Transcribe a wav.
 
         Args:
@@ -64,8 +66,8 @@ class TranslateHook(Protocol):
     """Turn-translation stand-in (GGUF in production)."""
 
     def __call__(
-        self, turns: Sequence[Any], target: str, source: str, /
-    ) -> Sequence[Any]:
+        self, turns: Sequence[Mapping[str, object]], target: str, source: str, /
+    ) -> Sequence[Mapping[str, object]]:
         """Translate ``turns`` into ``target``.
 
         Args:
@@ -123,7 +125,7 @@ class SynthesizeFn(Protocol):
 
     def __call__(
         self, text: str, language: str, ref_wav: str, engine: str, /
-    ) -> Any:
+    ) -> tuple[list[float], int] | tuple[list[float], int, str] | None:
         """Synthesize one line.
 
         Args:
@@ -133,6 +135,7 @@ class SynthesizeFn(Protocol):
             engine: Clone engine id.
 
         Returns:
-            ``(pcm, rate)`` or ``(pcm, rate, err)``.
+            ``(pcm, rate)``, ``(pcm, rate, err)``, or ``None`` when the hook
+            declined to synthesize.
         """
         ...

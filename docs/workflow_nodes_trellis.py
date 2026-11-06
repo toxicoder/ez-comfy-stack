@@ -5,11 +5,10 @@ Helpers and combo catalogs live in :mod:`workflow_nodes_lib`.
 
 from __future__ import annotations
 
-from typing import Any
 
-from workflow_nodes_lib import _n, _s, _w
+from workflow_nodes_lib import NodeSpecs, _n, _s, _w
 
-def trellis_nodes() -> dict[str, Any]:
+def trellis_nodes() -> NodeSpecs:
     """TRELLIS-2 structure/texture/mesh nodes.
 
     Returns:

@@ -11,7 +11,11 @@ import json
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
-from typing import Any, Mapping
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, TypedDict, cast
+
+if TYPE_CHECKING:
+    from ez_common import Json
 
 # Catalog path, combo sentinels, Klein VAE limits, default canvas.
 FORMATS_PATH = Path(__file__).resolve().parent / "js" / "formats.json"
@@ -36,6 +40,47 @@ MAX_DIM = 2048
 MIN_BATCH = 1
 MAX_BATCH = 4
 DEFAULT_BATCH = 1
+
+
+class FormatRow(TypedDict):
+    """One ``formats.json`` entry (the raw shape ``load_formats`` validates)."""
+
+    id: str
+    """Stable snake_case id."""
+
+    label: str
+    """Combo value shown in the App."""
+
+    group: str
+    """Catalog section (aspect, youtube, ...)."""
+
+    width: int
+    """Latent width, or 0 for Custom."""
+
+    height: int
+    """Latent height, or 0 for Custom."""
+
+    prefix: str
+    """SaveImage filename prefix."""
+
+    hint: str
+    """Enhance duration_hint framing line."""
+
+    lock: str
+    """Job-specific empty-of-lettering / safe-area clause."""
+
+
+class FormatCatalog(TypedDict):
+    """The parsed ``js/formats.json`` document."""
+
+    default_id: str
+    """Format id the App preselects."""
+
+    custom_prefix: str
+    """SaveImage prefix used for Custom canvases."""
+
+    formats: list[FormatRow]
+    """Canvas presets in file order."""
 
 
 @dataclass(frozen=True)
@@ -209,7 +254,7 @@ def default_format_id() -> str:
     Returns:
         Id from JSON ``default_id``, or ``DEFAULT_FORMAT_ID``.
     """
-    raw = json.loads(FORMATS_PATH.read_text(encoding="utf-8"))
+    raw: Json = json.loads(FORMATS_PATH.read_text(encoding="utf-8"))
     if isinstance(raw, dict):
         value = str(raw.get("default_id") or "").strip()
         if value:
@@ -223,7 +268,7 @@ def custom_prefix() -> str:
     Returns:
         Prefix string.
     """
-    raw = json.loads(FORMATS_PATH.read_text(encoding="utf-8"))
+    raw: Json = json.loads(FORMATS_PATH.read_text(encoding="utf-8"))
     if isinstance(raw, dict):
         value = str(raw.get("custom_prefix") or "").strip()
         if value:
@@ -318,7 +363,7 @@ def _compose_hint(spec: FormatSpec, width: int, height: int) -> str:
     return ". ".join(parts)
 
 
-def _cinema_recipes() -> Mapping[str, Any] | None:
+def _cinema_recipes() -> Mapping[str, object] | None:
     """Load Cinema Rack recipes, or None when the pack is missing.
 
     Returns:
@@ -542,13 +587,16 @@ def reset_format_cache_for_tests() -> None:
     load_formats.cache_clear()
 
 
-def catalog_payload() -> dict[str, Any]:
+def catalog_payload() -> FormatCatalog:
     """Return the raw JSON object (docs / tests).
 
     Returns:
         Parsed formats.json mapping.
+
+    Raises:
+        ValueError: catalog is not a JSON object.
     """
-    raw = json.loads(FORMATS_PATH.read_text(encoding="utf-8"))
+    raw: Json = json.loads(FORMATS_PATH.read_text(encoding="utf-8"))
     if not isinstance(raw, dict):
         raise ValueError("formats.json must be an object")
-    return raw
+    return cast(FormatCatalog, raw)

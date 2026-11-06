@@ -1,0 +1,10 @@
+{
+  "extends": "./pyrightconfig.json",
+  "include": [
+    "tests/python"
+  ],
+  "exclude": [
+    "**/__pycache__",
+    "**/node_modules"
+  ]
+}

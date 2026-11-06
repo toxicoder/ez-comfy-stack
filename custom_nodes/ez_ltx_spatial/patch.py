@@ -4,7 +4,31 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
-from typing import Any, Callable
+from typing import TYPE_CHECKING, Protocol, TypeAlias
+
+if TYPE_CHECKING:
+    from ez_common import Tensor
+
+# Values this pack reads out of a wrapped node call: Comfy sends spatial
+# widgets as int and the frontend sometimes sends the string form.
+WidgetArg: TypeAlias = "int | float | str"
+"""One widget value handed to a wrapped LTX node."""
+
+
+class OriginalFn(Protocol):
+    """The unwrapped Comfy implementation a wrap forwards to."""
+
+    def __call__(self, *args: object, **kwargs: object) -> object:
+        """Call the original implementation.
+
+        Args:
+            *args: Positional arguments, ``cls`` / ``self`` first.
+            **kwargs: Keyword arguments.
+
+        Returns:
+            Whatever the original implementation returns.
+        """
+        ...
 
 
 def _ensure_lab_custom_nodes_path() -> None:
@@ -48,7 +72,7 @@ def log(message: str) -> None:
     print(f"[ez_ltx_spatial] {message}", file=sys.stderr)
 
 
-def _is_wrapped(fn: Any) -> bool:
+def _is_wrapped(fn: object) -> bool:
     """True when this pack already wrapped ``fn``.
 
     Args:
@@ -61,7 +85,7 @@ def _is_wrapped(fn: Any) -> bool:
     return bool(getattr(raw, WRAPPED_ATTR, False))
 
 
-def _mark_wrapped(fn: Callable[..., Any]) -> Callable[..., Any]:
+def _mark_wrapped(fn: object) -> object:
     """Stamp ``WRAPPED_ATTR`` so a second apply is a no-op.
 
     Args:
@@ -75,10 +99,10 @@ def _mark_wrapped(fn: Callable[..., Any]) -> Callable[..., Any]:
 
 
 def snap_width_height_in_call(
-    args: tuple[Any, ...],
-    kwargs: dict[str, Any],
+    args: tuple[WidgetArg, ...],
+    kwargs: dict[str, WidgetArg],
     width_index: int,
-) -> tuple[tuple[Any, ...], dict[str, Any]]:
+) -> tuple[tuple[WidgetArg, ...], dict[str, WidgetArg]]:
     """Replace width/height in a node ``execute`` call with div32 snaps.
 
     Args:
@@ -103,7 +127,7 @@ def snap_width_height_in_call(
         height = args_list[width_index + 1]
     else:
         return args, kwargs
-    new_w, new_h = snap_hw(width, height)
+    new_w, new_h = snap_hw(int(width), int(height))
     old_w, old_h = int(width), int(height)
     if (new_w, new_h) != (old_w, old_h):
         log(f"{old_w}x{old_h} -> {new_w}x{new_h} (LTX VAE requires spatial div32)")
@@ -119,11 +143,11 @@ def snap_width_height_in_call(
 
 
 def snap_length_in_call(
-    args: tuple[Any, ...],
-    kwargs: dict[str, Any],
+    args: tuple[WidgetArg, ...],
+    kwargs: dict[str, WidgetArg],
     length_index: int,
     length_kwarg: str = "length",
-) -> tuple[tuple[Any, ...], dict[str, Any]]:
+) -> tuple[tuple[WidgetArg, ...], dict[str, WidgetArg]]:
     """Replace an LTX frame-count widget with the nearest ``1+8n``.
 
     Args:
@@ -179,9 +203,11 @@ def _wrap_classmethod_wh(
     orig = getattr(cls, name, None)
     if orig is None or _is_wrapped(orig):
         return False
-    orig_fn = getattr(orig, "__func__", orig)
+    orig_fn: OriginalFn = getattr(orig, "__func__", orig)
 
-    def execute(inner_cls: type, *args: Any, **kwargs: Any) -> Any:
+    def execute(
+        inner_cls: type, /, *args: WidgetArg, **kwargs: WidgetArg
+    ) -> object:
         """Snap width/height/length then call the original classmethod.
 
         Args:
@@ -207,7 +233,7 @@ def _wrap_classmethod_wh(
     return True
 
 
-def _wrap_video_vae_encode(cls: Any) -> bool:
+def _wrap_video_vae_encode(cls: type) -> bool:
     """Center-crop VideoVAE.encode inputs to a div32 spatial window.
 
     Args:
@@ -219,9 +245,9 @@ def _wrap_video_vae_encode(cls: Any) -> bool:
     orig = getattr(cls, "encode", None)
     if orig is None or _is_wrapped(orig):
         return False
-    orig_fn = getattr(orig, "__func__", orig)
+    orig_fn: OriginalFn = getattr(orig, "__func__", orig)
 
-    def encode(self: Any, x: Any, device: Any = None) -> Any:
+    def encode(self: object, x: Tensor, device: object = None) -> object:
         """Crop ``x`` to div32 then call the original encode.
 
         Args:

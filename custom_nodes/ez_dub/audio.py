@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import struct
 import wave
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Any
 
 from .align import SAMPLE_RATE
 
@@ -73,7 +73,7 @@ def read_wav(path: Path | str) -> tuple[list[float], int]:
     return mono, int(rate)
 
 
-def empty_audio(sample_rate: int = SAMPLE_RATE) -> dict[str, Any]:
+def empty_audio(sample_rate: int = SAMPLE_RATE) -> dict[str, object]:
     """Minimal AUDIO dict without importing torch at module load.
 
     Args:
@@ -92,12 +92,13 @@ def empty_audio(sample_rate: int = SAMPLE_RATE) -> dict[str, Any]:
         return {"waveform": [[[0.0]]], "sample_rate": int(sample_rate)}
 
 
-def audio_from_pcm(samples: Any, sample_rate: int) -> dict[str, Any]:
+def audio_from_pcm(
+    samples: Sequence[float] | Sequence[Sequence[float]], sample_rate: int
+) -> dict[str, object]:
     """Pack a 1-D PCM sequence as Comfy AUDIO.
 
     Args:
-        samples: 1-D PCM sequence (list or tensor). Typed ``Any`` so torch
-            is not imported at module load.
+        samples: 1-D PCM sequence, or a nested 2-D waveform.
         sample_rate: Waveform sample rate.
 
     Returns:

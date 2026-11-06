@@ -255,6 +255,7 @@ filegroup(
         "python/test_song_plan.py",
         "python/test_stems.py",
         "python/test_still_studio_workflow.py",
+        "python/test_strong_types.py",
         "python/test_studio_blocks.py",
         "python/test_studio_mcp.py",
         "python/test_studio_preview.py",

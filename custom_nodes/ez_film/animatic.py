@@ -8,13 +8,13 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, cast
 
+from .protocols import RunFn
 from .shots import DEFAULT_CAP_SECONDS, SHOT_COUNT, parse_shots_yaml
 
 # Still-hold duration matching the 5.00 s picture contract.
 HOLD_SECONDS = 5.00
-RunFn = Callable[..., Any]
 
 
 def find_ffmpeg() -> str | None:
@@ -40,7 +40,10 @@ def _run(
     Returns:
         Completed process (not checked).
     """
-    return run(argv, check=False, capture_output=True, text=True)
+    return cast(
+        subprocess.CompletedProcess[str],
+        run(argv, check=False, capture_output=True, text=True),
+    )
 
 
 def shot_sources(

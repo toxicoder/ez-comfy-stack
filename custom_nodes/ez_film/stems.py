@@ -8,7 +8,9 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, cast
+
+from .protocols import RunFn
 
 # Stem mix: DX duck, YouTube loudnorm, AAC 48 kHz.
 DUCK_DB = -15.0
@@ -17,7 +19,6 @@ AAC_BITRATE = "192k"
 AAC_RATE = "48000"
 LUFS_TARGET = -14.0
 LUFS_TOL = 2.0
-RunFn = Callable[..., Any]
 
 
 def find_ffmpeg() -> str | None:
@@ -43,7 +44,10 @@ def _run(
     Returns:
         Completed process (not checked).
     """
-    return run(argv, check=False, capture_output=True, text=True)
+    return cast(
+        subprocess.CompletedProcess[str],
+        run(argv, check=False, capture_output=True, text=True),
+    )
 
 
 def mix_filter(

@@ -10,7 +10,7 @@ import sys
 import time
 from collections.abc import Iterator, Mapping
 from pathlib import Path
-from typing import Any, TypedDict
+from typing import TypedDict, cast
 
 from operator_log import PREFIX as PROGRESS_PREFIX
 from operator_log import emit as _ol_emit
@@ -89,24 +89,63 @@ class DiskCatalog(TypedDict):
     """Parsed config/disk-catalog.yaml."""
 
     schema: int
+    """Catalog schema version."""
+
     signatures: dict[str, CatalogSignature]
+    """Signature rows keyed by signature id."""
 
 
 class DiskCandidate(TypedDict):
     """Rankable leftover candidate."""
 
     id: str
+    """Signature id that matched (``unknown`` when none did)."""
+
     path: str
+    """Absolute path or ``docker://`` synthetic id."""
+
     size_bytes: int
+    """File size, 0 when unknown."""
+
     risk: str
+    """safe | review | dangerous."""
+
     reclaim: str
+    """How the space comes back."""
+
     what: str
+    """Human description of the leftover."""
+
     why: str
+    """Why it is a leftover."""
+
     leftover_when: str
+    """When it became a leftover."""
+
     docker_type: str
+    """Docker object kind (image | volume | ...) or empty."""
+
     refuse_if: list[str]
+    """Tokens that must keep this path out of a reap plan."""
+
     score: float
+    """Rank score (higher shows first)."""
+
     step: str
+    """Reap step letter (A safe, B review, C dangerous)."""
+
+
+class WalkRow(TypedDict):
+    """One filesystem row emitted by the depth-capped walk."""
+
+    path: str
+    """File or symlink path."""
+
+    size_bytes: int
+    """Size from stat, 0 for a broken symlink."""
+
+    broken_symlink: bool
+    """True when the entry is a link with no target."""
 
 
 def _empty_sig() -> CatalogSignature:
@@ -136,7 +175,7 @@ def _empty_sig() -> CatalogSignature:
     return row
 
 
-def load_catalog(path: Path) -> dict[str, Any]:
+def load_catalog(path: Path) -> DiskCatalog:
     """Parse the restricted disk-catalog YAML subset.
 
     Args:
@@ -177,21 +216,22 @@ def load_catalog(path: Path) -> dict[str, Any]:
             list_key = stripped[:-1]
             continue
         if list_key and stripped.startswith("- "):
-            signatures[sig][list_key].append(  # type: ignore[literal-required]
-                stripped[2:].strip().strip('"').strip("'")
-            )
+            bucket = cast("dict[str, object]", signatures[sig])[list_key]
+            if isinstance(bucket, list):
+                bucket.append(stripped[2:].strip().strip('"').strip("'"))
             continue
         if ":" in stripped and not stripped.startswith("- "):
             list_key = ""
             key, val = stripped.split(":", 1)
             key = key.strip()
             val = val.strip().strip('"').strip("'")
+            fields = cast("dict[str, object]", signatures[sig])
             if key in _BOOL_KEYS:
-                signatures[sig][key] = val.lower() == "true"  # type: ignore[literal-required]
+                fields[key] = val.lower() == "true"
             elif key in _INT_KEYS:
-                signatures[sig][key] = int(val or "0")  # type: ignore[literal-required]
+                fields[key] = int(val or "0")
             elif key in _STR_KEYS:
-                signatures[sig][key] = val  # type: ignore[literal-required]
+                fields[key] = val
     for sid, row in signatures.items():
         if row["risk"] not in VALID_RISK:
             raise ValueError(f"{sid}: bad risk {row['risk']!r}")
@@ -243,7 +283,7 @@ def rank_score(size_bytes: int, leftover_weight: int, risk: str) -> float:
 
 
 def _path_matches(
-    path: str, sig: Mapping[str, Any], keep_set: set[str], refuse: list[str]
+    path: str, sig: CatalogSignature, keep_set: set[str], refuse: list[str]
 ) -> bool:
     """True when a signature applies to path.
 
@@ -287,13 +327,13 @@ def _path_matches(
 
 def classify_path(
     path: str,
-    catalog: dict[str, Any],
+    catalog: DiskCatalog,
     *,
     keep_set: set[str] | None = None,
     refuse: list[str] | None = None,
     size_bytes: int = 0,
     broken_symlink: bool | None = None,
-) -> dict[str, Any]:
+) -> DiskCandidate:
     """Classify one path against signatures (first match in file order).
 
     Args:
@@ -336,8 +376,8 @@ def classify_path(
 
 
 def _candidate(
-    sid: str, path: str, size_bytes: int, sig: Mapping[str, Any]
-) -> dict[str, Any]:
+    sid: str, path: str, size_bytes: int, sig: CatalogSignature
+) -> DiskCandidate:
     """Build a rankable candidate dict.
 
     Args:
@@ -369,7 +409,7 @@ def _candidate(
     }
 
 
-def rank_candidates(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def rank_candidates(rows: list[DiskCandidate]) -> list[DiskCandidate]:
     """Sort by score descending, then size, then path.
 
     Args:
@@ -414,7 +454,7 @@ def emit_walk_progress(msg: str, *, rewrite: bool = False) -> None:
     _ol_emit(msg, rewrite=rewrite)
 
 
-def _file_row(path: str) -> dict[str, Any]:
+def _file_row(path: str) -> WalkRow:
     """JSONL row for one walked path.
 
     Args:
@@ -439,7 +479,7 @@ def walk_root_files(
     *,
     skip_dirs: frozenset[str] | None = None,
     skip_basenames: frozenset[str] | None = None,
-) -> Iterator[dict[str, Any]]:
+) -> Iterator[WalkRow]:
     """Yield file/symlink rows under root, depth-capped, with skip-dir prune.
 
     Matches ``find ROOT -maxdepth N \\( -type f -o -type l \\)`` and does not
@@ -462,7 +502,7 @@ def walk_root_files(
     if max_depth < 1 or not os.path.isdir(root):
         return
 
-    def rec(dirpath: str, depth: int) -> Iterator[dict[str, Any]]:
+    def rec(dirpath: str, depth: int) -> Iterator[WalkRow]:
         """Walk one directory at the given depth.
 
         Args:
@@ -602,7 +642,7 @@ def _cli(argv: list[str] | None = None) -> int:
         )
         print(json.dumps(row, sort_keys=True))
         return 0
-    rows: list[dict[str, Any]] = []
+    rows: list[DiskCandidate] = []
     for line in sys.stdin:
         line = line.strip()
         if not line:

@@ -12,8 +12,21 @@ import json
 import struct
 import sys
 import zlib
+from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, TypedDict
+from typing import TypeAlias, TypedDict, cast
+
+ShotScalar: TypeAlias = str | int | float | bool
+"""Scalar a restricted-YAML line can carry."""
+
+ShotList: TypeAlias = list[str | int]
+"""Inline ``[a, b]`` list a restricted-YAML line can carry."""
+
+ShotValue: TypeAlias = ShotScalar | ShotList
+"""One value the restricted-YAML reader produces for any key."""
+
+ShotMap: TypeAlias = dict[str, ShotValue]
+"""Parsed shot/still mapping before validation (open key set)."""
 
 # Guide-pack / still-pack contract (LTX VAE grid and layer names).
 SCHEMA = "ez.guide.shot.v1"
@@ -70,33 +83,71 @@ def layers_for_print(print_mode: str, *, include_normal: bool = False) -> list[s
 
 
 class ShotRecord(TypedDict, total=False):
-    """Restricted ez.guide.shot.v1 mapping."""
+    """Restricted ez.guide.shot.v1 mapping after ``load_shot``."""
 
     schema: str
+    """Schema id, always :data:`SCHEMA` for a valid pack."""
+
     slug: str
+    """Film / project slug (directory name under ``guides/``)."""
+
     shot_id: str
+    """Shot directory name."""
+
     engine: str
+    """Authoring DCC, one of :data:`ENGINES`."""
+
     print: str
+    """Print recipe id, one of :data:`PRINTS`."""
+
     frames: int
+    """Frame count the dump must carry."""
+
     fps: int
-    size: list[int]
+    """Frame rate the dump must carry."""
+
+    size: ShotList
+    """``[width, height]`` on the LTX VAE grid."""
+
     layers: list[str]
+    """Layer names the dump writes, a subset of :data:`LAYER_KEYS`."""
+
     identity_ref: str
+    """Optional identity-reference image name."""
+
     blend: str
+    """Optional blend mode name."""
+
     camera: str
+    """Optional camera rig name."""
 
 
 class StillRecord(TypedDict, total=False):
-    """Restricted ez.guide.still.v1 mapping."""
+    """Restricted ez.guide.still.v1 mapping after ``load_still``."""
 
     schema: str
+    """Schema id, always :data:`STILL_SCHEMA` for a valid pack."""
+
     slug: str
+    """Film / project slug (directory name under ``guides/``)."""
+
     plate: str
+    """Still-pack plate id."""
+
     engine: str
+    """Authoring DCC, one of :data:`ENGINES`."""
+
     print: str
-    size: list[int]
+    """Print recipe id, one of :data:`STILL_PRINTS`."""
+
+    size: ShotList
+    """``[width, height]``, one of :data:`STILL_SIZES`."""
+
     layers: list[str]
+    """Layer names, a subset of :data:`STILL_LAYER_KEYS`."""
+
     blend: str
+    """Optional blend mode name."""
     camera: str
 
 
@@ -193,7 +244,7 @@ def _unquote(value: str) -> str:
     return text
 
 
-def parse_shot_yaml(text: str) -> dict[str, Any]:
+def parse_shot_yaml(text: str) -> ShotMap:
     """Parse restricted ez.guide.shot.v1 YAML (indent-2, no PyYAML).
 
     Args:
@@ -202,7 +253,7 @@ def parse_shot_yaml(text: str) -> dict[str, Any]:
     Returns:
         Flat mapping (JSON/YAML boundary).
     """
-    data: dict[str, Any] = {}
+    data: ShotMap = {}
     for raw in text.splitlines():
         line = raw.split("#", 1)[0].rstrip()
         if not line.strip() or line.startswith(" "):
@@ -218,7 +269,7 @@ def parse_shot_yaml(text: str) -> dict[str, Any]:
             continue
         if val.startswith("[") and val.endswith("]"):
             inner = val[1:-1].strip()
-            items: list[Any] = []
+            items: ShotList = []
             if inner:
                 for part in inner.split(","):
                     token = _unquote(part.strip())
@@ -244,7 +295,7 @@ def parse_shot_yaml(text: str) -> dict[str, Any]:
     return data
 
 
-def load_shot(path: Path) -> dict[str, Any]:
+def load_shot(path: Path) -> ShotMap:
     """Read shot.yaml from a pack directory or file.
 
     Args:
@@ -262,7 +313,7 @@ def load_shot(path: Path) -> dict[str, Any]:
     return parse_shot_yaml(shot_path.read_text(encoding="utf-8"))
 
 
-def validate_shot(data: dict[str, Any]) -> list[str]:
+def validate_shot(data: Mapping[str, ShotValue]) -> list[str]:
     """Return defect strings (empty means ok).
 
     Args:
@@ -330,7 +381,7 @@ def _count_frames(folder: Path) -> int:
     return sum(1 for p in folder.iterdir() if p.suffix.lower() in {".png", ".exr"})
 
 
-def _pack_size(shot: dict[str, Any]) -> tuple[int, int]:
+def _pack_size(shot: Mapping[str, ShotValue]) -> tuple[int, int]:
     """Return pack pixel size from shot.yaml, defaulting to the LTX grid.
 
     Args:
@@ -408,8 +459,8 @@ def validate_pack(pack_dir: Path, *, require_full_seq: bool = True) -> list[str]
         if size != (expect_w, expect_h):
             defects.append(f"{name} size {size} is not {expect_w}x{expect_h}")
     raw_layers = shot.get("layers")
-    layers: list[Any] = raw_layers if isinstance(raw_layers, list) else []
-    frames = int(shot.get("frames") or PACK_FRAMES)
+    layers: ShotList = raw_layers if isinstance(raw_layers, list) else []
+    frames = int(cast(ShotScalar, shot.get("frames")) or PACK_FRAMES)
     for layer in ("rgb", "depth", "canny", "normal"):
         if layer in layers:
             defects.extend(
@@ -420,7 +471,7 @@ def validate_pack(pack_dir: Path, *, require_full_seq: bool = True) -> list[str]
     return defects
 
 
-def dump_shot_yaml(data: dict[str, Any]) -> str:
+def dump_shot_yaml(data: Mapping[str, ShotValue]) -> str:
     """Serialize a validated shot dict to restricted YAML.
 
     Args:
@@ -429,8 +480,8 @@ def dump_shot_yaml(data: dict[str, Any]) -> str:
     Returns:
         Restricted YAML document text.
     """
-    size = data.get("size") or [PACK_WIDTH, PACK_HEIGHT]
-    layers = data.get("layers") or list(DEFAULT_LAYERS)
+    size = cast(ShotList, data.get("size") or [PACK_WIDTH, PACK_HEIGHT])
+    layers = cast(ShotList, data.get("layers") or list(DEFAULT_LAYERS))
     layer_s = ", ".join(str(x) for x in layers)
     size_s = f"[{int(size[0])}, {int(size[1])}]"
     lines = [
@@ -451,7 +502,7 @@ def dump_shot_yaml(data: dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def write_shot_yaml(path: Path, data: dict[str, Any]) -> None:
+def write_shot_yaml(path: Path, data: Mapping[str, ShotValue]) -> None:
     """Write shot.yaml after validating fields.
 
     Args:
@@ -468,7 +519,7 @@ def write_shot_yaml(path: Path, data: dict[str, Any]) -> None:
     path.write_text(dump_shot_yaml(data), encoding="utf-8")
 
 
-def dump_still_yaml(data: dict[str, Any]) -> str:
+def dump_still_yaml(data: Mapping[str, ShotValue]) -> str:
     """Serialize a validated still dict to restricted YAML.
 
     Args:
@@ -477,8 +528,8 @@ def dump_still_yaml(data: dict[str, Any]) -> str:
     Returns:
         Restricted YAML document text.
     """
-    size = data.get("size") or [PACK_WIDTH, PACK_HEIGHT]
-    layers = data.get("layers") or ["rgb", "depth", "canny", "first"]
+    size = cast(ShotList, data.get("size") or [PACK_WIDTH, PACK_HEIGHT])
+    layers = cast(ShotList, data.get("layers") or ["rgb", "depth", "canny", "first"])
     layer_s = ", ".join(str(x) for x in layers)
     size_s = f"[{int(size[0])}, {int(size[1])}]"
     lines = [
@@ -497,7 +548,7 @@ def dump_still_yaml(data: dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def write_still_yaml(path: Path, data: dict[str, Any]) -> None:
+def write_still_yaml(path: Path, data: Mapping[str, ShotValue]) -> None:
     """Write still.yaml after validating fields.
 
     Args:
@@ -514,7 +565,7 @@ def write_still_yaml(path: Path, data: dict[str, Any]) -> None:
     path.write_text(dump_still_yaml(data), encoding="utf-8")
 
 
-def load_still(path: Path) -> dict[str, Any]:
+def load_still(path: Path) -> ShotMap:
     """Read still.yaml from a pack directory or file.
 
     Args:
@@ -532,7 +583,7 @@ def load_still(path: Path) -> dict[str, Any]:
     return parse_shot_yaml(still_path.read_text(encoding="utf-8"))
 
 
-def validate_still(data: dict[str, Any]) -> list[str]:
+def validate_still(data: Mapping[str, ShotValue]) -> list[str]:
     """Return defect strings for ez.guide.still.v1 (empty means ok).
 
     Args:
@@ -609,7 +660,7 @@ def validate_still_pack(pack_dir: Path) -> list[str]:
         if got != expect:
             defects.append(f"first.png size {got} is not {expect[0]}x{expect[1]}")
     raw_layers = still.get("layers")
-    layers: list[Any] = raw_layers if isinstance(raw_layers, list) else []
+    layers: ShotList = raw_layers if isinstance(raw_layers, list) else []
     for layer, filename in (("depth", "depth.png"), ("canny", "canny.png"), ("normal", "normal.png")):
         if layer not in layers:
             continue

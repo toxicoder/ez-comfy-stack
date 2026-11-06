@@ -7,6 +7,7 @@ No API keys. Fail-soft: empty hits on any network or parse error.
 from __future__ import annotations
 
 import html as html_module
+import http.client
 import ipaddress
 import json
 import re
@@ -17,7 +18,69 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass
-from typing import Any, Callable, Sequence
+from typing import TYPE_CHECKING, Protocol, Sequence, TypeAlias, cast
+
+if TYPE_CHECKING:
+    from ez_common import Json
+
+AddrInfoRows: TypeAlias = Sequence[Sequence[object]]
+"""``getaddrinfo`` rows; each row's fifth entry is the socket address."""
+
+SocketAddress: TypeAlias = Sequence[object]
+"""The ``sockaddr`` tuple at row index 4; entry 0 is the address string."""
+
+
+class UrlOpener(Protocol):
+    """``urllib.request.urlopen`` seam (tests inject a stand-in response)."""
+
+    def __call__(
+        self,
+        request: urllib.request.Request,
+        /,
+        *,
+        timeout: float = ...,
+        context: ssl.SSLContext | None = ...,
+    ) -> http.client.HTTPResponse:
+        """Open ``request`` and return the HTTP response.
+
+        Args:
+            request: Prepared request (already SSRF-gated by the caller).
+            timeout: Socket timeout in seconds.
+            context: TLS context.
+
+        Returns:
+            The response, whose final URL the caller re-gates.
+        """
+        ...
+
+
+class AddrInfoResolver(Protocol):
+    """``socket.getaddrinfo`` seam (tests inject a fake resolver)."""
+
+    def __call__(
+        self,
+        host: str,
+        port: int,
+        /,
+        family: int = ...,
+        type: int = ...,
+        proto: int = ...,
+        flags: int = ...,
+    ) -> AddrInfoRows:
+        """Resolve ``host``:``port``.
+
+        Args:
+            host: Hostname to look up.
+            port: Port number.
+            family: Address family filter.
+            type: Socket type filter.
+            proto: Protocol filter.
+            flags: Lookup flags.
+
+        Returns:
+            Address-info rows; the fifth entry of each is the socket address.
+        """
+        ...
 
 # Fetch limits, SSRF denylist, Wikipedia/DDG endpoints, and HTML scrapers.
 USER_AGENT = "ez-comfy-research/1.0"
@@ -63,8 +126,8 @@ _SNIPPET_RE = re.compile(
 _TAG_RE = re.compile(r"<[^>]+>")
 _SPACE_RE = re.compile(r"\s+")
 
-_urlopen: Callable[..., Any] = urllib.request.urlopen
-_getaddrinfo: Callable[..., list[tuple[Any, ...]]] = socket.getaddrinfo
+_urlopen: UrlOpener = urllib.request.urlopen
+_getaddrinfo: AddrInfoResolver = socket.getaddrinfo
 
 
 @dataclass
@@ -109,7 +172,7 @@ def _ip_blocked(ip: ipaddress.IPv4Address | ipaddress.IPv6Address) -> bool:
 def is_blocked_url(
     url: str,
     *,
-    resolver: Callable[..., list[tuple[Any, ...]]] | None = None,
+    resolver: AddrInfoResolver | None = None,
 ) -> str | None:
     """Return a reason string when ``url`` must not be fetched.
 
@@ -146,7 +209,7 @@ def is_blocked_url(
     except OSError:
         return "dns failed"
     for info in infos:
-        sockaddr = info[4] if len(info) > 4 else ()
+        sockaddr = cast(SocketAddress, info[4] if len(info) > 4 else ())
         addr = sockaddr[0] if sockaddr else ""
         if not isinstance(addr, str) or not addr:
             continue
@@ -363,7 +426,7 @@ def wikipedia_search(query: str, *, limit: int = 3, fetch_bodies: bool = True) -
     if not blob:
         return []
     try:
-        payload: Any = json.loads(blob)
+        payload: Json = json.loads(blob)
     except json.JSONDecodeError:
         return []
     hits = parse_wikipedia_opensearch(payload)[:cap]

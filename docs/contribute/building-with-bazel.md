@@ -114,7 +114,7 @@ bazelisk run //:fix                                 # rewrite shfmt/buildifier f
 | `//:test-fast` | `//scripts:manage_help_test`, `//tests:bats`, `//tests:bazel_docs_check`, `//tests:build_quality_js_check`, `//tests:js`, `//tests:owned_files_check`, `//tests:pytest` (100% first-party coverage, `pytest-xdist -n auto` when installed), `//tests:typecheck` (Pyright + mypy), `//tests:shell_inventory` | nothing beyond the checkout |
 | `//:test` | `//:test-fast` + `//docs:test_docs_site_render` | docs-site npm tree |
 | `//:test-all` | `//:test` + `//docker:compose_config`, `//docs-site:suite`, `//:manage`, `//docs` | host linters, `docs-site` npm tree, a Docker CLI |
-| `//:lint` | `//lints:python` + `//lints:shell_lint` (ShellCheck, shfmt, buildifier, Pyright, mypy) | host lint tools; strict mode on |
+| `//:lint` | `//lints:python` + `//lints:shell_lint` (ShellCheck, shfmt, buildifier, Pyright, mypy, `tsc --checkJs` on the custom-node frontends) | host lint tools; strict mode on |
 | `//:validate` | Git-aware core + docs slices (`scripts/validate.sh`) | the checkout |
 | `//:fix` | `fix.sh` - in-place shfmt / buildifier | host lint tools |
 | `//:coverage` | the whole coverage sweep as one gate: the 100% Python floor, Pyright + mypy, the strict shell inventory, the full BATS suite, then the optional kcov report | `bats` on the host; kcov is optional and non-fatal |

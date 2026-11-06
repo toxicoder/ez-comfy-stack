@@ -3,7 +3,14 @@
  *
  * Keep in sync with `docs/commands.py` (`split_var_template`, `substitute_vars`,
  * `render_command`). Vitest asserts the TypeScript port against the same fixtures.
+ *
+ * `command-builder.json` is a build-time import, so its shape is checked here with the
+ * same Zod vocabulary `lib/content.ts` uses for frontmatter: `commandBuilderSchema`
+ * parses the file, and the `satisfies z.ZodType<...>` line below proves the schema still
+ * produces the declared `CommandBuilder` shape if either side drifts.
  */
+
+import { z } from "zod";
 
 export const VAR_TOKEN = /\$\{([A-Z][A-Z0-9_]*)(?::-([^}]*))?\}/g;
 
@@ -30,29 +37,70 @@ export interface BuilderFlagChoice {
   label: string;
 }
 
+/**
+ * One flag of a builder command.
+ *
+ * The optionals are written `| undefined` because the values come out of
+ * `commandBuilderSchema`, whose `.optional()` fields are present-and-undefined as far as
+ * `exactOptionalPropertyTypes` is concerned.
+ */
 export interface BuilderFlag {
   name: string;
   kind: "bool" | "choice" | "choice-or-int";
-  required?: boolean;
+  required?: boolean | undefined;
   default?: unknown;
-  bind_var?: string;
-  label?: string;
-  int_label?: string;
-  choices?: BuilderFlagChoice[];
+  bind_var?: string | undefined;
+  label?: string | undefined;
+  int_label?: string | undefined;
+  choices?: BuilderFlagChoice[] | undefined;
 }
 
 export interface BuilderCommand {
   id: string;
   title: string;
-  description?: string;
+  description?: string | undefined;
   argv: string[];
-  flags?: BuilderFlag[];
+  flags?: BuilderFlag[] | undefined;
 }
 
 export interface CommandBuilder {
   variables: BuilderVariable[];
   commands: BuilderCommand[];
 }
+
+/** A flag choice as the builder JSON declares it. */
+const builderFlagChoiceSchema = z.object({ value: z.string(), label: z.string() });
+
+/** One flag of a builder command; `default` is whatever JSON the author wrote. */
+const builderFlagSchema = z.object({
+  name: z.string(),
+  kind: z.enum(["bool", "choice", "choice-or-int"]),
+  required: z.boolean().optional(),
+  default: z.unknown().optional(),
+  bind_var: z.string().optional(),
+  label: z.string().optional(),
+  int_label: z.string().optional(),
+  choices: z.array(builderFlagChoiceSchema).optional()
+});
+
+/** One command row of the builder. */
+const builderCommandSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  description: z.string().optional(),
+  argv: z.array(z.string()),
+  flags: z.array(builderFlagSchema).optional()
+});
+
+/** The whole `command-builder.json` payload. */
+export const commandBuilderSchema = z.object({
+  variables: z.array(z.object({ id: z.string(), label: z.string(), default: z.string() })),
+  commands: z.array(builderCommandSchema)
+});
+
+// Compile-time proof that the runtime schema and the declared types above stay together:
+// a field added to one side and not the other fails `tsc --noEmit`.
+commandBuilderSchema satisfies z.ZodType<CommandBuilder>;
 
 export function defaultVarValues(builder: CommandBuilder): Record<string, string> {
   const out: Record<string, string> = {};

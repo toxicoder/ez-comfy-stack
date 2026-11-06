@@ -445,7 +445,7 @@ def _ingest_url(url: str, *, fetch_links: bool) -> SourceRecord:
         }
     if page_fetch_hook is None:
         _ensure_lab_custom_nodes_path()
-        check_blocked: Callable[..., str | None] | None
+        check_blocked: Callable[[str], str | None] | None
         try:
             from ez_research.search import is_blocked_url as check_blocked
         except Exception:  # noqa: BLE001 - treat as fetch miss

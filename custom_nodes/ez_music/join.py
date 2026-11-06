@@ -15,7 +15,24 @@ only when packing the master back into a Comfy AUDIO dict.
 from __future__ import annotations
 
 import math
-from typing import Any
+from collections.abc import Mapping, Sequence
+from typing import TYPE_CHECKING, TypedDict, TypeAlias, cast
+
+if TYPE_CHECKING:
+    from ez_common import PcmTensor
+
+WaveformSource: TypeAlias = "PcmTensor | None"
+"""Waveform value from an AUDIO dict: tensor, array, nested lists, or absent."""
+
+
+class AudioPayload(TypedDict):
+    """Comfy AUDIO mapping: one waveform plus the rate it plays at."""
+
+    waveform: PcmTensor
+    """Torch tensor when torch is present, else the nested-list stand-in."""
+
+    sample_rate: int
+    """Rate stamped on the waveform."""
 
 # One bar is four quarter-note beats, so a bar lasts 4 * 60 / bpm
 # seconds: near 1.4 s at the Drive-through tempos. This is the same bar
@@ -64,7 +81,7 @@ def overlap_seconds(bars: float, bpm: float) -> float:
     return float(bars) * bar_seconds(bpm)
 
 
-def _as_pcm(payload: Any) -> list[float]:
+def _as_pcm(payload: WaveformSource) -> list[float]:
     """Flatten any Comfy waveform shape to 1-D PCM.
 
     Handles torch and numpy tensors (through ``detach``/``cpu`` and
@@ -81,23 +98,24 @@ def _as_pcm(payload: Any) -> list[float]:
     """
     if payload is None:
         return []
-    if hasattr(payload, "detach") and hasattr(payload, "cpu"):
-        payload = payload.detach().cpu()
-    if hasattr(payload, "tolist"):
-        payload = payload.tolist()
-    if isinstance(payload, (list, tuple)):
+    probe = cast("PcmTensor", payload)
+    if hasattr(probe, "detach") and hasattr(probe, "cpu"):
+        probe = probe.detach().cpu()
+    if hasattr(probe, "tolist"):
+        probe = probe.tolist()
+    if isinstance(probe, (list, tuple)):
         out: list[float] = []
-        for item in payload:
+        for item in probe:
             out.extend(_as_pcm(item))
         return out
-    if isinstance(payload, bool):
-        raise ValueError(f"waveform is not audio: {payload!r}")
-    if isinstance(payload, (int, float)):
-        return [float(payload)]
-    raise ValueError(f"waveform is not audio: {payload!r}")
+    if isinstance(probe, bool):
+        raise ValueError(f"waveform is not audio: {probe!r}")
+    if isinstance(probe, (int, float)):
+        return [float(probe)]
+    raise ValueError(f"waveform is not audio: {probe!r}")
 
 
-def pack_audio(samples: list[float], sample_rate: int) -> dict[str, Any]:
+def pack_audio(samples: list[float], sample_rate: int) -> AudioPayload:
     """Wrap PCM in a Comfy AUDIO dict, using torch when it is present.
 
     The waveform is always one batch of mono ``[channels, samples]`` PCM,
@@ -391,12 +409,12 @@ def join_pcm(
 
 
 def join_audio(
-    segments: list[dict[str, Any]],
+    segments: Sequence[Mapping[str, object]],
     *,
     bpm: float,
     overlap_bars: int | list[int],
     crossover_hz: float = 120.0,
-) -> dict[str, Any]:
+) -> AudioPayload:
     """Join Comfy AUDIO dicts into one master AUDIO.
 
     Args:
@@ -415,16 +433,16 @@ def join_audio(
     """
     if not segments:
         return pack_audio([0.0], FALLBACK_SAMPLE_RATE)
-    rates = set()
+    rates: set[int] = set()
     for segment in segments:
         try:
-            rates.add(int(segment["sample_rate"]))
+            rates.add(int(cast("int | str", segment["sample_rate"])))
         except (KeyError, TypeError):
             raise ValueError("every segment needs a sample_rate") from None
     if len(rates) > 1:
         raise ValueError(f"segments must share one sample rate: {sorted(rates)}")
     if len(segments) == 1:
-        return segments[0]
+        return cast("AudioPayload", segments[0])
     rate = rates.pop()
     parts = [_as_pcm(segment.get("waveform")) for segment in segments]
     master = join_pcm(parts, rate, bpm, overlap_bars, crossover_hz=crossover_hz)

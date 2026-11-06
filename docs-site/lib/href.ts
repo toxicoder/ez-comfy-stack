@@ -54,7 +54,7 @@ export function resolveHrefWith(
   find: (segments: string[]) => HrefTarget | undefined
 ): { href: string | undefined; external?: boolean } {
   if (!href) return { href };
-  const [target, hash] = href.split("#", 2);
+  const [target = "", hash] = href.split("#", 2);
   if (target.length === 0) return { href };
   if (/^[a-z][\w+.-]*:/iu.test(target) || target.startsWith("//")) return { href, external: true };
 

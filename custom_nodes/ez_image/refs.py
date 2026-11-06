@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, TypeAlias, TypedDict, cast
 
 from .nodes import CATEGORY, snap_dim
 
 if TYPE_CHECKING:
-    from ez_common import ComfyInputTypes
+    from collections.abc import Mapping
+
+    from ez_common import ComfyInputTypes, ImageTensor, LatentTensor, NodeRegistry
 
 DEFAULT_MAX_REFS = 3
 """Reference frames taken from a wired batch when the widget is unset."""
@@ -17,6 +19,32 @@ MIN_MAX_REFS = 1
 
 MAX_MAX_REFS = 4
 """Highest accepted ``max_refs`` widget value (Klein reference budget)."""
+
+LimitToken: TypeAlias = str | int | float | bool
+"""``max_refs`` value ``int()`` can parse before the clamp."""
+
+Latent: TypeAlias = "Mapping[str, LatentTensor]"
+"""Comfy LATENT payload (``samples``, plus ``reference`` once attached)."""
+
+
+class OptionalImageResult(TypedDict):
+    """``OUTPUT_NODE`` payload returned by :meth:`EZOptionalImage.run`."""
+
+    ui: dict[str, tuple[str, ...]]
+    """Frontend display blocks; ``text`` carries the still count."""
+
+    result: tuple[ImageTensor, int, bool]
+    """Collected still (None when nothing is present), frame count, presence."""
+
+
+class DescribeImageResult(TypedDict):
+    """``OUTPUT_NODE`` payload returned by :meth:`EZDescribeImage.run`."""
+
+    ui: dict[str, tuple[str, ...]]
+    """Frontend display blocks; ``text`` carries the fail-soft reason."""
+
+    result: tuple[str]
+    """Caption STRING (empty until a VL backend is wired)."""
 
 
 def _as_bool(value: object) -> bool:
@@ -85,9 +113,8 @@ def _ref_limit(value: object) -> int:
     Returns:
         Reference count between ``MIN_MAX_REFS`` and ``MAX_MAX_REFS``.
     """
-    raw: Any = value
     try:
-        limit = int(raw)
+        limit = int(cast(LimitToken, value))
     except (TypeError, ValueError):
         return DEFAULT_MAX_REFS
     if limit < MIN_MAX_REFS:
@@ -139,7 +166,7 @@ def input_still_choices() -> list[str]:
     """
     names: list[str] = [""]
     try:
-        import folder_paths  # type: ignore[import-not-found]
+        import folder_paths
 
         found = folder_paths.get_filename_list("input")
     except Exception:  # noqa: BLE001 - hermetic tests / missing Comfy
@@ -149,7 +176,7 @@ def input_still_choices() -> list[str]:
     return names
 
 
-def load_input_still(filename: object) -> object | None:
+def load_input_still(filename: object) -> ImageTensor | None:
     """Load a still from Comfy ``input/`` when ``filename`` is set.
 
     Args:
@@ -165,7 +192,7 @@ def load_input_still(filename: object) -> object | None:
         import numpy as np
         from PIL import Image
 
-        import folder_paths  # type: ignore[import-not-found]
+        import folder_paths
     except Exception:  # noqa: BLE001 - hermetic tests / missing deps
         return None
     try:
@@ -185,7 +212,7 @@ def load_input_still(filename: object) -> object | None:
     return arr[None, ...]
 
 
-def _concat_frames(frames: list[Any]) -> Any:
+def _concat_frames(frames: list[ImageTensor]) -> ImageTensor:
     """Join several BHWC stills on the batch axis with torch.
 
     Args:
@@ -264,7 +291,7 @@ class EZOptionalImage:
         filename_2: object = "",
         filename_3: object = "",
         image: object = None,
-    ) -> dict[str, Any]:
+    ) -> OptionalImageResult:
         """Collect the present stills. Never raise on empty or missing files.
 
         Args:
@@ -280,7 +307,7 @@ class EZOptionalImage:
         """
         if not _as_bool(use_references):
             return {"ui": {"text": ("references off",)}, "result": (None, 0, False)}
-        frames: list[Any] = []
+        frames: list[ImageTensor] = []
         count = 0
         if _image_present(image):
             frames.append(image)
@@ -295,7 +322,7 @@ class EZOptionalImage:
             if _image_present(loaded):
                 frames.append(loaded)
                 count += _batch_len(loaded)
-        first: Any = None
+        first: ImageTensor | None = None
         if len(frames) == 1:
             first = frames[0]
         elif len(frames) > 1:
@@ -351,12 +378,12 @@ class EZKleinRefCanvas:
 
     def run(
         self,
-        latent: Any,
-        vae: Any,
+        latent: Latent,
+        vae: object,
         image: object = None,
         has_image: object = False,
         max_refs: object = DEFAULT_MAX_REFS,
-    ) -> tuple[Any, Any]:
+    ) -> tuple[Latent, object]:
         """Attach Klein reference latents when a still is present.
 
         Args:
@@ -412,7 +439,7 @@ class EZDescribeImage:
         self,
         image: object = None,
         has_image: object = False,
-    ) -> dict[str, Any]:
+    ) -> DescribeImageResult:
         """Return an empty caption unless a VL backend is wired later.
 
         Args:
@@ -430,7 +457,7 @@ class EZDescribeImage:
         }
 
 
-def _encode_ref(image: Any, vae: Any) -> Any | None:
+def _encode_ref(image: ImageTensor, vae: object) -> LatentTensor | None:
     """VAE-encode a still snapped to the Klein grid.
 
     Args:
@@ -457,7 +484,7 @@ def _encode_ref(image: Any, vae: Any) -> Any | None:
         return None
 
 
-def _encoded_frames(encoded: Any, max_refs: int) -> list[Any]:
+def _encoded_frames(encoded: object, max_refs: int) -> list[LatentTensor]:
     """Split an encoded still into per-frame reference pieces.
 
     Args:
@@ -467,12 +494,16 @@ def _encoded_frames(encoded: Any, max_refs: int) -> list[Any]:
     Returns:
         One piece per frame capped at ``max_refs``, or ``[encoded]`` whole
         when the batch cannot be split (single frame, or unsliciable data).
+        Each piece keeps the shape it came in with: a latent dict mirrors the
+        incoming keys, a bare tensor slice is returned as is.
     """
-    samples = encoded.get("samples") if isinstance(encoded, dict) else encoded
+    samples: LatentTensor | None = (
+        encoded.get("samples") if isinstance(encoded, dict) else encoded
+    )
     frames = _batch_len(samples)
     if frames <= 1 or samples is None:
         return [encoded]
-    pieces: list[Any] = []
+    pieces: list[LatentTensor] = []
     for index in range(min(frames, max_refs)):
         try:
             piece = samples[index : index + 1]
@@ -487,7 +518,7 @@ def _encoded_frames(encoded: Any, max_refs: int) -> list[Any]:
     return pieces if pieces else [encoded]
 
 
-def _reference_latent_chain(empty: Any, frames: list[Any]) -> Any:
+def _reference_latent_chain(empty: object, frames: list[LatentTensor]) -> Latent:
     """Attach every encoded frame by chaining ``ReferenceLatent.append``.
 
     One frame behaves exactly like a single :func:`_reference_latent` call.
@@ -501,16 +532,16 @@ def _reference_latent_chain(empty: Any, frames: list[Any]) -> Any:
     Returns:
         Combined latent, or the last good latent when a step fails.
     """
-    current = empty
+    current: object = empty
     for frame in frames:
         try:
             current = _reference_latent(current, frame)
         except Exception:  # noqa: BLE001 - fail soft with what attached so far
             break
-    return current
+    return cast(Latent, current)
 
 
-def _reference_latent(empty: Any, encoded: Any) -> Any:
+def _reference_latent(empty: object, encoded: object) -> Latent:
     """Attach ``encoded`` as a Flux2 reference onto ``empty`` when possible.
 
     Args:
@@ -521,21 +552,21 @@ def _reference_latent(empty: Any, encoded: Any) -> Any:
         Combined latent, or ``empty`` when the helper is missing.
     """
     try:
-        from comfy_extras.nodes_flux import ReferenceLatent  # type: ignore[import-not-found]
+        from comfy_extras.nodes_flux import ReferenceLatent
     except Exception:  # noqa: BLE001 - hermetic tests / older Comfy
         if isinstance(empty, dict):
             merged = dict(empty)
             merged["reference"] = encoded
-            return merged
-        return empty
+            return cast(Latent, merged)
+        return cast(Latent, empty)
     node = ReferenceLatent()
     result = node.append(empty, encoded)
     if isinstance(result, tuple):
-        return result[0]
-    return result
+        return cast(Latent, result[0])
+    return cast(Latent, result)
 
 
-NODE_CLASS_MAPPINGS: dict[str, type] = {
+NODE_CLASS_MAPPINGS: NodeRegistry = {
     "EZOptionalImage": EZOptionalImage,
     "EZKleinRefCanvas": EZKleinRefCanvas,
     "EZDescribeImage": EZDescribeImage,

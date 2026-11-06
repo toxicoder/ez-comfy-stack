@@ -38,7 +38,7 @@ def input_directory() -> Path:
         Directory path (may not exist yet).
     """
     try:
-        import folder_paths  # type: ignore[import-not-found]
+        import folder_paths
 
         path = Path(folder_paths.get_input_directory())
         if str(path):
@@ -135,7 +135,7 @@ def resolve_media_source(
     if candidate.is_file():
         return str(candidate)
     try:
-        import folder_paths  # type: ignore[import-not-found]
+        import folder_paths
 
         annotated = folder_paths.get_annotated_filepath(text)
         if annotated:

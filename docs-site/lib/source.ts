@@ -123,13 +123,16 @@ export async function buildSearchIndex(page: Page): Promise<AdvancedIndex> {
     typeof data.structuredData === "function" ? await data.structuredData() : data.structuredData;
   if (!structured) throw new Error(`cannot build a search index for ${page.path}: no structured data`);
 
+  const tags = toTagList(data.tags);
   return {
     id: page.url,
     title: data.title ?? page.path,
-    description: data.description,
+    // exactOptionalPropertyTypes: `AdvancedIndex` declares these optional, not
+    // undefined-able, so an absent frontmatter key stays absent here too.
+    ...(data.description === undefined ? {} : { description: data.description }),
     url: page.url,
     structuredData: slimSearchStructuredData(page.path, structured),
-    tag: toTagList(data.tags)
+    ...(tags ? { tag: tags } : {})
   };
 }
 

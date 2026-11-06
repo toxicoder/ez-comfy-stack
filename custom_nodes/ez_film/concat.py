@@ -94,7 +94,7 @@ def output_directory() -> Path:
         return output_root(default="output")
     except Exception:  # noqa: BLE001 - Comfy is optional in unit tests
         try:
-            import folder_paths  # type: ignore[import-not-found]
+            import folder_paths
 
             return Path(folder_paths.get_output_directory())
         except Exception:  # noqa: BLE001 - Comfy is optional in unit tests
@@ -138,7 +138,7 @@ def find_ffmpeg() -> str:
     if found:
         return found
     try:
-        import imageio_ffmpeg  # type: ignore[import-not-found]
+        import imageio_ffmpeg
 
         exe = imageio_ffmpeg.get_ffmpeg_exe()
         if exe:

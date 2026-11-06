@@ -214,7 +214,7 @@ def _deeplab_tools() -> tuple[Any, Any, Any] | None:
     """
     try:
         import torch
-        from torchvision.models.segmentation import (  # type: ignore[import-not-found]
+        from torchvision.models.segmentation import (
             DeepLabV3_ResNet50_Weights,
             deeplabv3_resnet50,
         )

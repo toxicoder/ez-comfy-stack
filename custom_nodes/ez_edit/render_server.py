@@ -23,7 +23,7 @@ import uuid
 from collections.abc import Callable, Mapping
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, cast, get_args
+from typing import cast, get_args
 
 from ez_common.protocols import CompletedProc, SubprocessRunner
 
@@ -156,7 +156,7 @@ def render_path(edit_dir: Path | str, project_id: str, job_id: str) -> Path:
     return renders_dir(edit_dir) / name
 
 
-def _as_row(data: Mapping[str, Any]) -> JobRecord:
+def _as_row(data: Mapping[str, object]) -> JobRecord:
     """Coerce a parsed row file into a :class:`~ez_edit.protocol.JobRecord`.
 
     Args:
@@ -325,7 +325,7 @@ def _new_row(
     )
 
 
-def _count(project: Mapping[str, Any], field: str) -> int:
+def _count(project: Mapping[str, object], field: str) -> int:
     """Size of a project list field, tolerating junk.
 
     Args:
@@ -339,7 +339,7 @@ def _count(project: Mapping[str, Any], field: str) -> int:
     return len(raw) if isinstance(raw, (list, tuple)) else 0
 
 
-def _deferred_text_planes(project: Mapping[str, Any]) -> str:
+def _deferred_text_planes(project: Mapping[str, object]) -> str:
     """Message suffix naming the text planes the browser draws.
 
     Args:
@@ -380,7 +380,7 @@ def _safe_source(raw: object, root: Path) -> Path:
     return resolved
 
 
-def _vetted_project(project: Mapping[str, Any], root: Path) -> EditProject:
+def _vetted_project(project: Mapping[str, object], root: Path) -> EditProject:
     """Copy a project with every clip source resolved inside ``root``.
 
     Args:
@@ -402,7 +402,7 @@ def _vetted_project(project: Mapping[str, Any], root: Path) -> EditProject:
         clip = dict(entry)
         clip["source"] = str(_safe_source(entry.get("source"), root))
         clips.append(cast(Clip, clip))
-    out: dict[str, Any] = dict(project)
+    out: dict[str, object] = dict(project)
     out["clips"] = clips
     return cast(EditProject, out)
 
@@ -450,7 +450,7 @@ def _default_runner(
 
 def _run_server_render(
     edit_dir: Path | str,
-    project: Mapping[str, Any],
+    project: Mapping[str, object],
     job_id: str,
     *,
     runner: SubprocessRunner | None,
@@ -526,7 +526,7 @@ def _run_server_render(
 
 def start_render(
     edit_dir: Path | str,
-    project: Mapping[str, Any],
+    project: Mapping[str, object],
     *,
     mode: ExecMode,
     client_id: str = "",

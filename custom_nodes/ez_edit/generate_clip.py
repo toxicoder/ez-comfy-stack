@@ -34,13 +34,47 @@ import uuid
 from collections.abc import Mapping
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable, TypeAlias
+from typing import TYPE_CHECKING, Callable, Protocol, TypeAlias, cast
 
 from . import agent, protocol, render_server
 from .protocol import JobKind, JobRecord
 
-UrlopenFn: TypeAlias = Callable[..., Any]
+if TYPE_CHECKING:
+    from ez_common import Json
+
+UrlopenFn: TypeAlias = Callable[[urllib.request.Request, float], object]
 """``urllib.request.urlopen``-shaped seam (tests inject a fake transport)."""
+
+
+class HttpReply(Protocol):
+    """One HTTP response the transport seam hands back."""
+
+    def read(self) -> bytes | str:
+        """Read the whole body.
+
+        Returns:
+            Response bytes or text.
+        """
+        ...
+
+    def __enter__(self) -> "HttpReply":
+        """Enter the response context.
+
+        Returns:
+            The readable response.
+        """
+        ...
+
+    def __exit__(self, *args: object) -> bool | None:
+        """Leave the response context.
+
+        Args:
+            *args: Exception detail the context manager receives.
+
+        Returns:
+            Whether an exception was swallowed.
+        """
+        ...
 
 SleeperFn: TypeAlias = Callable[[float], None]
 """``time.sleep``-shaped seam (tests inject a no-op counter)."""
@@ -245,7 +279,7 @@ def _stamp(now: ClockFn | None) -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
-def _nodes(graph: Mapping[str, Any]) -> list[dict[str, Any]]:
+def _nodes(graph: Mapping[str, object]) -> list[dict[str, object]]:
     """Frontend-format node list of a graph, safe to patch in place.
 
     Widget containers are copied so a patch never mutates the caller's graph
@@ -260,19 +294,19 @@ def _nodes(graph: Mapping[str, Any]) -> list[dict[str, Any]]:
     raw = graph.get("nodes")
     if not isinstance(raw, (list, tuple)):
         return []
-    nodes: list[dict[str, Any]] = []
+    nodes: list[dict[str, object]] = []
     for node in raw:
         if not isinstance(node, dict):
             continue
         copy = dict(node)
         widgets = copy.get("widgets_values")
         if isinstance(widgets, (dict, list)):
-            copy["widgets_values"] = type(widgets)(widgets)  # type: ignore[call-arg]
+            copy["widgets_values"] = type(widgets)(widgets)
         nodes.append(copy)
     return nodes
 
 
-def _title(node: Mapping[str, Any]) -> str:
+def _title(node: Mapping[str, object]) -> str:
     """Lower-cased title of a node (type as the fallback).
 
     Args:
@@ -285,7 +319,7 @@ def _title(node: Mapping[str, Any]) -> str:
     return text
 
 
-def _is_negative(node: Mapping[str, Any]) -> bool:
+def _is_negative(node: Mapping[str, object]) -> bool:
     """Whether a node title marks the negative prompt.
 
     Args:
@@ -298,7 +332,7 @@ def _is_negative(node: Mapping[str, Any]) -> bool:
     return any(hint in title for hint in NEGATIVE_HINTS)
 
 
-def _find_prompt_node(nodes: list[dict[str, Any]]) -> dict[str, Any] | None:
+def _find_prompt_node(nodes: list[dict[str, object]]) -> dict[str, object] | None:
     """Pick the node whose first widget carries the prompt text.
 
     Titles win (``Prompt (cutaway)`` in the shipped graph); otherwise the
@@ -325,7 +359,7 @@ def _find_prompt_node(nodes: list[dict[str, Any]]) -> dict[str, Any] | None:
     return None
 
 
-def _find_length_node(nodes: list[dict[str, Any]]) -> dict[str, Any] | None:
+def _find_length_node(nodes: list[dict[str, object]]) -> dict[str, object] | None:
     """Pick the node that carries the frame count.
 
     Args:
@@ -343,7 +377,7 @@ def _find_length_node(nodes: list[dict[str, Any]]) -> dict[str, Any] | None:
     return None
 
 
-def _find_fps_node(nodes: list[dict[str, Any]]) -> dict[str, Any] | None:
+def _find_fps_node(nodes: list[dict[str, object]]) -> dict[str, object] | None:
     """Pick the node that carries the output frame rate.
 
     Args:
@@ -358,7 +392,7 @@ def _find_fps_node(nodes: list[dict[str, Any]]) -> dict[str, Any] | None:
     return None
 
 
-def _set_length(node: dict[str, Any], frames: int) -> bool:
+def _set_length(node: dict[str, object], frames: int) -> bool:
     """Write ``frames`` into a length node's widgets.
 
     Dict widgets use the named keys; list widgets use
@@ -385,7 +419,7 @@ def _set_length(node: dict[str, Any], frames: int) -> bool:
     return False
 
 
-def _set_fps(node: dict[str, Any], fps: float) -> bool:
+def _set_fps(node: dict[str, object], fps: float) -> bool:
     """Write ``fps`` into a mux node's widgets.
 
     Args:
@@ -410,7 +444,7 @@ def _set_fps(node: dict[str, Any], fps: float) -> bool:
     return False
 
 
-def _widgets_map(graph: Mapping[str, Any]) -> Mapping[str, Any] | None:
+def _widgets_map(graph: Mapping[str, object]) -> Mapping[str, object] | None:
     """The graph's agent patch map (``extra.lab_edit.widgets``).
 
     Args:
@@ -427,7 +461,9 @@ def _widgets_map(graph: Mapping[str, Any]) -> Mapping[str, Any] | None:
     return widgets if isinstance(widgets, Mapping) and widgets else None
 
 
-def _node_by_id(nodes: list[dict[str, Any]], node_id: object) -> dict[str, Any] | None:
+def _node_by_id(
+    nodes: list[dict[str, object]], node_id: object
+) -> dict[str, object] | None:
     """Find one node by the id the patch map wrote (int or text).
 
     Args:
@@ -446,7 +482,7 @@ def _node_by_id(nodes: list[dict[str, Any]], node_id: object) -> dict[str, Any] 
     return None
 
 
-def _write_widget(node: dict[str, Any], widget: str, value: Any) -> bool:
+def _write_widget(node: dict[str, object], widget: str, value: object) -> bool:
     """Write one widget by name, indexed through :data:`WIDGET_SCHEMA`.
 
     Dict widgets are written by key; list widgets at the index the node type's
@@ -481,7 +517,10 @@ def _write_widget(node: dict[str, Any], widget: str, value: Any) -> bool:
 
 
 def _patch_from_map(
-    nodes: list[dict[str, Any]], widget_map: Mapping[str, Any], key: str, value: Any
+    nodes: list[dict[str, object]],
+    widget_map: Mapping[str, object],
+    key: str,
+    value: object,
 ) -> bool:
     """Apply the patch one map key names, if the graph can resolve it.
 
@@ -504,8 +543,8 @@ def _patch_from_map(
 
 
 def patch_graph(
-    graph: Mapping[str, Any], *, prompt_text: str, duration_s: float, fps: float
-) -> dict[str, Any]:
+    graph: Mapping[str, object], *, prompt_text: str, duration_s: float, fps: float
+) -> dict[str, object]:
     """Patch prompt text, frame count, and frame rate into a graph copy.
 
     The graph's own ``extra.lab_edit.widgets`` map is authoritative: each key
@@ -525,7 +564,7 @@ def patch_graph(
     """
     frames = max(MIN_FRAMES, int(round(float(duration_s) * float(fps))))
     nodes = _nodes(graph)
-    patched: dict[str, Any] = dict(graph)
+    patched: dict[str, object] = dict(graph)
     widget_map = _widgets_map(patched)
     if widget_map is not None:
         _patch_from_map(nodes, widget_map, MAP_PROMPT_KEY, prompt_text)
@@ -545,7 +584,7 @@ def patch_graph(
     return patched
 
 
-def _write_prompt(node: dict[str, Any], prompt_text: str) -> bool:
+def _write_prompt(node: dict[str, object], prompt_text: str) -> bool:
     """Write the prompt text into a prompt node's widgets.
 
     Args:
@@ -573,7 +612,7 @@ def _write_prompt(node: dict[str, Any], prompt_text: str) -> bool:
     return False
 
 
-def load_graph(*, path: Path | None = None) -> dict[str, Any]:
+def load_graph(*, path: Path | None = None) -> dict[str, object]:
     """Read the package graph file.
 
     Args:
@@ -590,7 +629,7 @@ def load_graph(*, path: Path | None = None) -> dict[str, Any]:
     if not target.is_file():
         raise GraphUnavailable(GRAPH_MISSING_FMT.format(path=target))
     try:
-        raw = json.loads(target.read_text(encoding="utf-8"))
+        raw: object = json.loads(target.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, ValueError) as exc:
         raise GraphUnavailable(GRAPH_INVALID_FMT.format(path=target)) from exc
     if not isinstance(raw, dict) or not isinstance(raw.get("nodes"), list):
@@ -598,7 +637,7 @@ def load_graph(*, path: Path | None = None) -> dict[str, Any]:
     return raw
 
 
-def _urlopen(request: urllib.request.Request, timeout: float) -> Any:
+def _urlopen(request: urllib.request.Request, timeout: float) -> object:
     """Open one request (indirection so pytest can stub the transport).
 
     Args:
@@ -620,7 +659,7 @@ def _sleep(seconds: float) -> None:
     time.sleep(seconds)
 
 
-def _decode(raw: bytes | str) -> Any:
+def _decode(raw: bytes | str) -> Json:
     """Decode one JSON response body.
 
     Args:
@@ -633,17 +672,17 @@ def _decode(raw: bytes | str) -> Any:
         ValueError: The body is not JSON.
     """
     text = raw.decode("utf-8", "replace") if isinstance(raw, bytes) else str(raw)
-    data = json.loads(text)
+    data: Json = json.loads(text)
     return data
 
 
 def _open_json(
     url: str,
     *,
-    payload: Mapping[str, Any] | None,
+    payload: Mapping[str, object] | None,
     urlopen: UrlopenFn | None,
     timeout: float,
-) -> Any:
+) -> Json:
     """Open one URL and decode its JSON body.
 
     Args:
@@ -665,7 +704,7 @@ def _open_json(
     request = urllib.request.Request(url, data=data, headers=headers, method="GET" if data is None else "POST")
     opener = _urlopen if urlopen is None else urlopen
     try:
-        with opener(request, timeout) as response:
+        with cast(HttpReply, opener(request, timeout)) as response:
             body = response.read()
     except (urllib.error.URLError, OSError, ValueError) as exc:
         raise GenerateClipError(f"{url}: {exc}") from exc
@@ -676,7 +715,7 @@ def _open_json(
 
 
 def queue_prompt(
-    graph: Mapping[str, Any],
+    graph: Mapping[str, object],
     *,
     client_id: str = "",
     base_url: str | None = None,
@@ -699,7 +738,7 @@ def queue_prompt(
         GenerateClipError: The queue failed or named no prompt id.
     """
     origin = comfy_base(environ) if base_url is None else base_url.rstrip("/")
-    body: dict[str, Any] = {"prompt": dict(graph)}
+    body: dict[str, object] = {"prompt": dict(graph)}
     if client_id:
         body["client_id"] = client_id
     data = _open_json(
@@ -722,7 +761,7 @@ def poll_history(
     poll_s: float = DEFAULT_POLL_S,
     timeout_s: float = DEFAULT_POLL_TIMEOUT_S,
     environ: Mapping[str, str] | None = None,
-) -> dict[str, Any]:
+) -> dict[str, Json]:
     """Poll ``/history/<prompt_id>`` until the entry shows up.
 
     Args:
@@ -755,7 +794,7 @@ def poll_history(
     return {}
 
 
-def _artefact_name(entry: Mapping[str, Any]) -> str:
+def _artefact_name(entry: Mapping[str, Json]) -> str:
     """First saved-file name a history entry reports.
 
     Args:

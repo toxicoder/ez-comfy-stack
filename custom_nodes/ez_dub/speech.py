@@ -96,7 +96,7 @@ def cosine(left: list[float], right: list[float]) -> float:
         nb += b * b
     if na <= 0.0 or nb <= 0.0:
         return 0.0
-    return dot / ((na ** 0.5) * (nb ** 0.5))
+    return dot / (math.sqrt(na) * math.sqrt(nb))
 
 
 def cluster_embeddings(
@@ -371,7 +371,7 @@ def envelope_cv(pcm: list[float], rate: int, frame_ms: int = 20) -> float:
     for value in frames:
         delta = value - mean
         acc += delta * delta
-    return (acc / len(frames)) ** 0.5 / mean
+    return math.sqrt(acc / len(frames)) / mean
 
 
 def _trim_bounds(
@@ -1414,7 +1414,7 @@ def speech_band_ratio(pcm: list[float], rate: int) -> float:
         prev_x = x
         lp_y = lp_y + lp_a * (hp_y - lp_y)
         acc += lp_y * lp_y
-    band = (acc / len(pcm)) ** 0.5
+    band = math.sqrt(acc / len(pcm))
     return band / full
 
 
@@ -1475,7 +1475,7 @@ def zc_interval_cv(pcm: list[float]) -> float:
     for gap in gaps:
         delta = gap - mean
         acc += delta * delta
-    return (acc / len(gaps)) ** 0.5 / mean
+    return math.sqrt(acc / len(gaps)) / mean
 
 
 def voiced_fraction(

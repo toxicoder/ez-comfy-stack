@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, TypeAlias, TypedDict
 
 from .client import (
     LOCK_IDS,
@@ -85,7 +85,50 @@ KLEIN_MODE_COMBO = [
 """Klein Prompt Enhance mode combo; EZImageMode.enhance_mode must match."""
 
 if TYPE_CHECKING:
-    from ez_common import ComfyInputTypes
+    from collections.abc import Mapping
+
+    from ez_common import ComfyInputTypes, ImageTensor, NodeRegistry
+
+WidgetConstraintValue: TypeAlias = (
+    "str | int | float | bool | list[str] | list[int] | Mapping[str, object]"
+)
+"""One widget's constraint map or combo list."""
+
+InputWidget: TypeAlias = "tuple[str | list[str], WidgetConstraintValue]"
+"""One ``INPUT_TYPES`` entry; the first slot is a type name or combo list."""
+
+WidgetSection: TypeAlias = dict[str, InputWidget]
+"""A ``required`` / ``optional`` section assembled before the payload wrap."""
+
+
+class EnhanceUiResult(TypedDict):
+    """``OUTPUT_NODE`` payload returned by the Enhance nodes and ``_pack``."""
+
+    ui: dict[str, tuple[str, ...]]
+    """Frontend display blocks; ``text`` and ``passthrough``."""
+
+    result: tuple[str]
+    """The rewritten CLIP text that continues the graph."""
+
+
+class AceUiResult(TypedDict):
+    """``OUTPUT_NODE`` payload returned by :meth:`EZAceStepPromptEnhance.run`."""
+
+    ui: dict[str, tuple[str, ...]]
+    """Frontend display blocks; ``text`` previews both fields together."""
+
+    result: tuple[str, str]
+    """Tags and lyrics strings that continue the graph."""
+
+
+class CaptionUiResult(TypedDict):
+    """``OUTPUT_NODE`` payload returned by :meth:`EZImageDescribe.run`."""
+
+    ui: dict[str, tuple[str, ...]]
+    """Frontend display blocks; ``passthrough`` carries the describe status."""
+
+    result: tuple[str]
+    """Gated caption STRING (empty when describe is off)."""
 
 # Shared Comfy widget specs (boolean, optional context, hidden catalog).
 _ENHANCE_BOOL = (
@@ -117,7 +160,7 @@ def _visual_input_types(
     Returns:
         Comfy ``INPUT_TYPES`` payload.
     """
-    required: dict[str, Any] = {
+    required: WidgetSection = {
         "sample": _sample_input(catalog_id),
         "prompt": (
             "STRING",
@@ -239,7 +282,7 @@ def _compose_user(
     return "\n\n".join(parts)
 
 
-def _pack(result: EnhanceResult) -> dict[str, Any]:
+def _pack(result: EnhanceResult) -> EnhanceUiResult:
     """Pack a single-string Enhance result for Comfy.
 
     Args:
@@ -272,7 +315,7 @@ def _run(
     image_desc: str = "",
     background_cast: str = "",
     goal: object = GOAL_AUTO,
-) -> dict[str, Any]:
+) -> EnhanceUiResult:
     """Resolve sample, optionally rewrite, and pack CLIP text.
 
     Args:
@@ -438,7 +481,7 @@ class EZKleinPromptEnhance:
         image_desc: str = "",
         background_cast: str = "",
         goal: object = GOAL_AUTO,
-    ) -> dict[str, Any]:
+    ) -> EnhanceUiResult:
         """Rewrite a Klein still/edit/identity prompt.
 
         Args:
@@ -529,7 +572,7 @@ class EZWanPromptEnhance:
         catalog: object = "",
         image_desc: str = "",
         goal: object = GOAL_AUTO,
-    ) -> dict[str, Any]:
+    ) -> EnhanceUiResult:
         """Rewrite a Wan video prompt.
 
         Args:
@@ -615,7 +658,7 @@ class EZLTXPromptEnhance:
         catalog: object = "",
         image_desc: str = "",
         goal: object = GOAL_AUTO,
-    ) -> dict[str, Any]:
+    ) -> EnhanceUiResult:
         """Rewrite an LTX joint-AV prompt.
 
         Args:
@@ -845,7 +888,7 @@ def sanitize_instrumental_lyrics(lyrics: str) -> str:
     return "\n\n".join(kept) if kept else "[inst]"
 
 
-def _pack_ace(tags: str, lyrics: str, status: str) -> dict[str, Any]:
+def _pack_ace(tags: str, lyrics: str, status: str) -> AceUiResult:
     """Pack ACE-Step tags and lyrics for Comfy.
 
     Args:
@@ -922,7 +965,7 @@ class EZAceStepPromptEnhance:
         context: str = "",
         sample: object = CUSTOM,
         catalog: object = "",
-    ) -> dict[str, Any]:
+    ) -> AceUiResult:
         """Rewrite ACE-Step tags and lyrics.
 
         Args:
@@ -1055,7 +1098,7 @@ class EZZimagePromptEnhance:
         catalog: object = "",
         image_desc: str = "",
         goal: object = GOAL_AUTO,
-    ) -> dict[str, Any]:
+    ) -> EnhanceUiResult:
         """Rewrite a Z-Image Turbo still prompt.
 
         Args:
@@ -1128,7 +1171,7 @@ class EZLongCatPromptEnhance:
         catalog: object = "",
         image_desc: str = "",
         goal: object = GOAL_AUTO,
-    ) -> dict[str, Any]:
+    ) -> EnhanceUiResult:
         """Rewrite a LongCat-Video prompt.
 
         Args:
@@ -1208,7 +1251,7 @@ class EZDreamXPromptEnhance:
         catalog: object = "",
         image_desc: str = "",
         goal: object = GOAL_AUTO,
-    ) -> dict[str, Any]:
+    ) -> EnhanceUiResult:
         """Rewrite a DreamX first-frame+text prompt.
 
         Args:
@@ -1347,7 +1390,7 @@ class EZNegativePromptEnhance:
         enhance: object,
         family: object = "klein",
         positive: object = "",
-    ) -> dict[str, Any]:
+    ) -> EnhanceUiResult:
         """Rewrite a negative CLIP seed against the positive.
 
         Args:
@@ -1689,7 +1732,7 @@ class EZImageDescribe:
             return ["image"]
         return []
 
-    def run(self, enable: object = False, image: Any = None) -> dict[str, Any]:
+    def run(self, enable: object = False, image: ImageTensor | None = None) -> CaptionUiResult:
         """Caption ``image`` when enable is on.
 
         Args:
@@ -1711,7 +1754,7 @@ class EZImageDescribe:
 
 
 # Comfy node registries.
-NODE_CLASS_MAPPINGS: dict[str, type] = {
+NODE_CLASS_MAPPINGS: NodeRegistry = {
     "EZImageDescribe": EZImageDescribe,
     "EZBackgroundCast": EZBackgroundCast,
     "EZKleinPromptEnhance": EZKleinPromptEnhance,

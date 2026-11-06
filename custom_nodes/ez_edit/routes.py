@@ -24,15 +24,40 @@ from __future__ import annotations
 import inspect
 import os
 import shutil
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, Callable, NamedTuple, TypeAlias
+from typing import (
+    TYPE_CHECKING,
+    Callable,
+    NamedTuple,
+    Protocol,
+    TypedDict,
+    TypeAlias,
+    cast,
+)
 
 from . import agent, dispatch, generate_clip, render_server, timeline
-from .protocol import EDIT_DIR_NAME, ENV_ENABLED, JobRecord
+from .protocol import EDIT_DIR_NAME, ENV_ENABLED, ChatMessage, JobRecord
 
-JsonResponder: TypeAlias = Callable[..., Any]
-"""``aiohttp.web.json_response``-shaped ``(payload, status=)`` factory."""
+if TYPE_CHECKING:
+    from ez_common import Json
+    from ez_common.protocols import SubprocessRunner
+
+
+class JsonResponder(Protocol):
+    """aiohttp ``web.json_response`` or a test stand-in for it."""
+
+    def __call__(self, payload: object, *, status: int = ...) -> object:
+        """Build one route response.
+
+        Args:
+            payload: JSON-serialisable body.
+            status: HTTP status code.
+
+        Returns:
+            Whatever the server framework expects.
+        """
+        ...
 
 DEFAULT_OUTPUT_DIR = "/outputs"
 """Container output bind used when ``COMFY_OUTPUT_DIR`` is unset."""
@@ -46,10 +71,32 @@ DISABLED_STATUS = 403
 MAX_CLAIMS_PER_POLL = 8
 """Most browser exec rows claimed by one ``exec/pending`` poll."""
 
-TurnFn: TypeAlias = Callable[..., agent.AgentTurn]
-"""``agent.run_turn``-shaped seam (tests inject a fake turn)."""
+class TurnFn(Protocol):
+    """``agent.run_turn``-shaped seam (tests inject a fake turn)."""
 
-Payload = tuple[int, dict[str, Any]]
+    def __call__(
+        self,
+        user_text: str,
+        *,
+        history: list[ChatMessage] | None = ...,
+        llm: agent.CompletionClient | None = ...,
+        dispatch: dispatch.DispatchFn | None = ...,
+    ) -> agent.AgentTurn:
+        """Run one agent turn with the route's seams.
+
+        Args:
+            user_text: The operator message.
+            history: Prior transcript (system prompt excluded).
+            llm: Completion client seam.
+            dispatch: Tool dispatcher seam.
+
+        Returns:
+            Reply, trace rows, and the transcript for the next turn.
+        """
+        ...
+
+
+Payload: TypeAlias = tuple[int, dict[str, object]]
 """One ``(status, payload)`` route reply."""
 
 ROUTE_METHODS: dict[str, str] = {
@@ -86,7 +133,7 @@ class LaneDeps(NamedTuple):
     """Injectable seams (``subprocess``, ``which``, ``urlopen``, ``sleeper``,
     ``occupancy``, ``generate``, ``graph_file``, ``local_timeout_s``)."""
 
-    llm: Any | None = None
+    llm: agent.CompletionClient | None = None
     """Agent completion client; ``None`` lets :mod:`ez_edit.agent` build one."""
 
     dispatch_fn: dispatch.DispatchFn | None = None
@@ -97,6 +144,43 @@ class LaneDeps(NamedTuple):
 
     now: dispatch.ClockFn | None = None
     """ISO-8601 stamp seam handed to the reducer and the jobstore."""
+
+
+class LaneDepsOverrides(TypedDict, total=False):
+    """Field replacements :func:`make_deps` may hand to ``_replace``."""
+
+    environ: Mapping[str, str]
+    """Environ override."""
+    edit_dir: Path
+    """Edit directory override."""
+    registry: dispatch.ClientRegistry
+    """Local-tool registry override."""
+    runners: dispatch.RunnerKit
+    """Injectable-seam bundle override."""
+    llm: agent.CompletionClient | None
+    """Completion client override."""
+    dispatch_fn: dispatch.DispatchFn | None
+    """Tool dispatcher override."""
+    turn_fn: TurnFn | None
+    """Agent turn callable override."""
+    now: dispatch.ClockFn | None
+    """Clock override."""
+
+
+class HandlerFn(Protocol):
+    """Pure ``handle_*`` shape: request fields plus the seam bundle."""
+
+    def __call__(self, args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
+        """Answer one request.
+
+        Args:
+            args: Query or body fields.
+            deps: Seam bundle.
+
+        Returns:
+            ``(status, payload)``.
+        """
+        ...
 
 
 def lane_enabled(environ: Mapping[str, str]) -> bool:
@@ -112,7 +196,7 @@ def lane_enabled(environ: Mapping[str, str]) -> bool:
 
 
 def make_deps(
-    environ: Mapping[str, str] | None = None, **overrides: Any
+    environ: Mapping[str, str] | None = None, **overrides: object
 ) -> LaneDeps:
     """Build the handler seam bundle.
 
@@ -135,10 +219,10 @@ def make_deps(
     )
     if not overrides:
         return deps
-    return deps._replace(**overrides)
+    return deps._replace(**cast("LaneDepsOverrides", overrides))
 
 
-def _ok(**payload: Any) -> Payload:
+def _ok(**payload: object) -> Payload:
     """Successful reply.
 
     Args:
@@ -150,7 +234,7 @@ def _ok(**payload: Any) -> Payload:
     return 200, {"ok": True, **payload}
 
 
-def _err(message: str, *, status: int = 400, **extra: Any) -> Payload:
+def _err(message: str, *, status: int = 400, **extra: object) -> Payload:
     """Refused reply.
 
     Args:
@@ -173,7 +257,7 @@ def _disabled() -> Payload:
     return _err(DISABLED_ERROR, status=DISABLED_STATUS)
 
 
-def _text(args: Mapping[str, Any], key: str, default: str = "") -> str:
+def _text(args: Mapping[str, object], key: str, default: str = "") -> str:
     """One string field of a request mapping.
 
     Args:
@@ -188,7 +272,7 @@ def _text(args: Mapping[str, Any], key: str, default: str = "") -> str:
     return str(raw if raw is not None else default).strip()
 
 
-def _number(args: Mapping[str, Any], key: str, default: float) -> float:
+def _number(args: Mapping[str, object], key: str, default: float) -> float:
     """One numeric field of a request mapping.
 
     Args:
@@ -200,12 +284,12 @@ def _number(args: Mapping[str, Any], key: str, default: float) -> float:
         Float value.
     """
     try:
-        return float(args.get(key, default))  # type: ignore[arg-type]
+        return float(cast("float | str", args.get(key, default)))
     except (TypeError, ValueError):
         return default
 
 
-def _flag(args: Mapping[str, Any], key: str, default: bool = True) -> bool:
+def _flag(args: Mapping[str, object], key: str, default: bool = True) -> bool:
     """One boolean field of a request mapping.
 
     Args:
@@ -239,7 +323,7 @@ def _row_reply(row: JobRecord) -> Payload:
     return _ok(job=row)
 
 
-def handle_state(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
+def handle_state(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
     """Serve ``GET /ez_edit/state``.
 
     Args:
@@ -259,7 +343,7 @@ def handle_state(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
     return _ok(project=state["project"], jobs=state["jobs"], enabled=True)
 
 
-def handle_ops(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
+def handle_ops(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
     """Serve ``POST /ez_edit/ops``.
 
     Args:
@@ -287,7 +371,7 @@ def handle_ops(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
     return _ok(project=project)
 
 
-def handle_import(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
+def handle_import(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
     """Serve ``POST /ez_edit/import``.
 
     The file is probed with ffprobe through the injected runner seam, and the
@@ -309,8 +393,9 @@ def handle_import(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
             path=args.get("path"),
             label=_text(args, "label"),
             track=int(_number(args, "track", 0.0)),
-            runner=deps.runners.get("subprocess"),
-            which=deps.runners.get("which") or shutil.which,
+            runner=cast("SubprocessRunner | None", deps.runners.get("subprocess")),
+            which=cast("dispatch.WhichFn | None", deps.runners.get("which"))
+            or shutil.which,
             clock=deps.now,
         )
     except (dispatch.DispatchError, timeline.TimelineError, OSError) as exc:
@@ -318,7 +403,7 @@ def handle_import(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
     return _ok(clip=clip)
 
 
-def handle_render(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
+def handle_render(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
     """Serve ``POST /ez_edit/render``.
 
     ``mode=server`` runs ffmpeg inline through the injected runner seam;
@@ -340,8 +425,9 @@ def handle_render(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
             project_id=_text(args, "project_id"),
             mode=_text(args, "mode", "server"),
             client_id=_text(args, "client_id"),
-            runner=deps.runners.get("subprocess"),
-            which=deps.runners.get("which") or shutil.which,
+            runner=cast("SubprocessRunner | None", deps.runners.get("subprocess")),
+            which=cast("dispatch.WhichFn | None", deps.runners.get("which"))
+            or shutil.which,
             clock=deps.now,
         )
     except (dispatch.DispatchError, timeline.TimelineError, ValueError) as exc:
@@ -349,7 +435,7 @@ def handle_render(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
     return _row_reply(row)
 
 
-def handle_job(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
+def handle_job(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
     """Serve ``GET /ez_edit/job``.
 
     Args:
@@ -372,7 +458,7 @@ def handle_job(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
     return _ok(job=row)
 
 
-def handle_chat(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
+def handle_chat(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
     """Serve ``POST /ez_edit/chat`` (one agent turn).
 
     Args:
@@ -391,7 +477,11 @@ def handle_chat(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
         return _err("message is required")
     raw_history = args.get("history")
     history = (
-        [dict(row) for row in raw_history if isinstance(row, Mapping)]
+        [
+            cast("ChatMessage", dict(row))
+            for row in raw_history
+            if isinstance(row, Mapping)
+        ]
         if isinstance(raw_history, list)
         else None
     )
@@ -423,7 +513,7 @@ def handle_chat(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
     )
 
 
-def handle_exec_pending(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
+def handle_exec_pending(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
     """Serve ``GET /ez_edit/exec/pending`` (claim this panel's render rows).
 
     Args:
@@ -448,7 +538,7 @@ def handle_exec_pending(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
     return _ok(jobs=claimed)
 
 
-def handle_exec_result(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
+def handle_exec_result(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
     """Serve ``POST /ez_edit/exec/result``.
 
     Args:
@@ -478,7 +568,7 @@ def handle_exec_result(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
     return _ok(job=row)
 
 
-def handle_local_sync(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
+def handle_local_sync(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
     """Serve ``POST /ez_edit/local_tools/sync``.
 
     Args:
@@ -495,13 +585,15 @@ def handle_local_sync(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
     if not client_id:
         return _err("client_id is required")
     try:
-        count = deps.registry.sync(client_id, args.get("tools") or [])
+        count = deps.registry.sync(
+            client_id, cast("Sequence[object]", args.get("tools") or [])
+        )
     except dispatch.DispatchError as exc:
         return _err(str(exc))
     return _ok(client_id=client_id, count=count)
 
 
-def handle_local_pending(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
+def handle_local_pending(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
     """Serve ``GET /ez_edit/local_tools/pending``.
 
     Args:
@@ -524,7 +616,7 @@ def handle_local_pending(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
     return _ok(calls=calls)
 
 
-def handle_local_result(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
+def handle_local_result(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
     """Serve ``POST /ez_edit/local_tools/result`` (unblocks the dispatcher).
 
     Args:
@@ -547,7 +639,7 @@ def handle_local_result(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
     return _ok(call_id=call_id)
 
 
-def handle_generate_clip(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
+def handle_generate_clip(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
     """Serve ``POST /ez_edit/generate_clip`` (queue the cutaway graph).
 
     Args:
@@ -572,21 +664,30 @@ def handle_generate_clip(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
         fps=_number(args, "fps", 24.0),
         project_id=_text(args, "project_id"),
         client_id=_text(args, "client_id"),
-        urlopen=deps.runners.get("urlopen"),
-        sleeper=deps.runners.get("sleeper"),
-        occupancy=deps.runners.get("occupancy"),
+        urlopen=cast(
+            "generate_clip.UrlopenFn | None", deps.runners.get("urlopen")
+        ),
+        sleeper=cast("generate_clip.SleeperFn | None", deps.runners.get("sleeper")),
+        occupancy=cast(
+            "generate_clip.OccupancyFn | None", deps.runners.get("occupancy")
+        ),
         environ=deps.environ,
-        graph_file=deps.runners.get("graph_file"),
-        poll_s=float(deps.runners.get("poll_s", generate_clip.DEFAULT_POLL_S)),
+        graph_file=cast("Path | None", deps.runners.get("graph_file")),
+        poll_s=float(
+            cast("float | str", deps.runners.get("poll_s", generate_clip.DEFAULT_POLL_S))
+        ),
         timeout_s=float(
-            deps.runners.get("poll_timeout_s", generate_clip.DEFAULT_POLL_TIMEOUT_S)
+            cast(
+                "float | str",
+                deps.runners.get("poll_timeout_s", generate_clip.DEFAULT_POLL_TIMEOUT_S),
+            )
         ),
         now=deps.now,
     )
     return _row_reply(row)
 
 
-def handle_export_edl(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
+def handle_export_edl(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
     """Serve ``POST /ez_edit/export_edl``.
 
     Args:
@@ -606,7 +707,7 @@ def handle_export_edl(args: Mapping[str, Any], *, deps: LaneDeps) -> Payload:
     return _ok(**payload)
 
 
-async def _read_json_body(request: object) -> Any:
+async def _read_json_body(request: object) -> Json:
     """Read a JSON body from an aiohttp-like request.
 
     Args:
@@ -621,8 +722,8 @@ async def _read_json_body(request: object) -> Any:
     try:
         raw = json_fn()
         if inspect.isawaitable(raw):
-            return await raw  # type: ignore[misc]
-        return raw
+            return cast("Json", await raw)
+        return cast("Json", raw)
     except Exception:  # noqa: BLE001 - empty or invalid body reads as {}
         return {}
 
@@ -630,7 +731,7 @@ async def _read_json_body(request: object) -> Any:
 def register_routes(
     *,
     server: object | None = None,
-    json_response: Any | None = None,
+    json_response: JsonResponder | None = None,
 ) -> bool:
     """Attach ``/ez_edit/*`` when PromptServer (or a stand-in) exists.
 
@@ -642,8 +743,8 @@ def register_routes(
     Returns:
         True when routes were registered.
     """
-    responder = json_response
-    if responder is None:
+    responder = cast(JsonResponder, json_response)
+    if json_response is None:
         try:
             from aiohttp import web
 
@@ -664,7 +765,7 @@ def register_routes(
     if routes is None:
         return False
 
-    def make_get(handler: Callable[..., Payload]) -> Callable[[object], Any]:
+    def make_get(handler: HandlerFn) -> Callable[[object], object]:
         """Bind one pure handler to a ``async def(request)`` GET endpoint.
 
         Args:
@@ -689,7 +790,7 @@ def register_routes(
 
         return endpoint
 
-    def make_post(handler: Callable[..., Payload]) -> Callable[[object], Any]:
+    def make_post(handler: HandlerFn) -> Callable[[object], object]:
         """Bind one pure handler to a ``async def(request)`` POST endpoint.
 
         Args:
@@ -715,7 +816,7 @@ def register_routes(
 
         return endpoint
 
-    handlers: dict[str, Callable[..., Payload]] = {
+    handlers: dict[str, HandlerFn] = {
         "/ez_edit/state": handle_state,
         "/ez_edit/ops": handle_ops,
         "/ez_edit/import": handle_import,

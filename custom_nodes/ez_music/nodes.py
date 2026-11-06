@@ -3,16 +3,40 @@
 from __future__ import annotations
 
 import sys
+from collections.abc import Mapping
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, TypedDict, cast
+from typing import TYPE_CHECKING, TypeAlias, TypedDict, cast
 
 if TYPE_CHECKING:
-    from ez_common import ComfyInputTypes
+    from ez_common import ComfyInputTypes, ComfyReturn, NdArray, NodeRegistry
 
     from .metadata import AudioMeta
 
 from .fs import AUDIO_SUFFIXES, output_dir
 from .song_plan import demo_draft_lyrics, demo_full_lyrics
+
+ComboSpec: TypeAlias = tuple[list[str], dict[str, str]]
+"""Comfy combo widget spec: ``(labels, options)``."""
+
+
+class MusicUiBlocks(TypedDict, total=False):
+    """Preview blocks an ez_music output node renders."""
+
+    text: tuple[str, ...]
+    """Lyrics or status body shown in the text preview."""
+
+    passthrough: tuple[str, ...]
+    """Status token shown under the preview."""
+
+
+class MusicUiResult(TypedDict):
+    """``OUTPUT_NODE`` payload shared by the ez_music STRING nodes."""
+
+    ui: MusicUiBlocks
+    """Frontend display blocks."""
+
+    result: ComfyReturn
+    """STRING values that continue the graph."""
 
 # Prompt path, flavor id, and canned lyrics widgets.
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
@@ -37,7 +61,7 @@ def _log(message: str) -> None:
         print(f"[ez_music] {message}", file=sys.stderr)
 
 
-def _sample_combo() -> tuple:
+def _sample_combo() -> ComboSpec:
     """Rap-draft sample combo widget for EZRapLyrics.
 
     Returns:
@@ -104,7 +128,7 @@ def _pack_text(
     status: str | None = None,
     *,
     result: tuple[object, ...] | None = None,
-) -> dict[str, Any]:
+) -> MusicUiResult:
     """Build an output-node payload with a UI line and a result pin.
 
     Args:
@@ -115,7 +139,7 @@ def _pack_text(
     Returns:
         Comfy ``ui`` plus ``result`` dict.
     """
-    ui: dict[str, Any] = {"text": (text,)}
+    ui: MusicUiBlocks = {"text": (text,)}
     if status is not None:
         ui["passthrough"] = (status,)
     return {
@@ -179,7 +203,7 @@ class EZRapLyrics:
         context: str = "",
         sample: str = "custom",
         catalog: str = "",
-    ) -> dict[str, Any]:
+    ) -> MusicUiResult:
         """Rewrite widget lyrics via the on-box GGUF when enhance is on.
 
         Args:
@@ -207,7 +231,7 @@ class EZRapLyrics:
         return _rewrite_via_gguf(original, ctx)
 
 
-def _rewrite_via_gguf(original: str, ctx: str) -> dict[str, Any]:
+def _rewrite_via_gguf(original: str, ctx: str) -> MusicUiResult:
     """Rewrite lyrics with the on-box GGUF, passing text through on failure.
 
     Args:
@@ -295,7 +319,7 @@ class EZAudioMetadata:
         art_mode: str = "skip",
         prefix: str = "",
         cover: object | None = None,
-    ) -> dict[str, Any]:
+    ) -> MusicUiResult:
         """Copy SaveAudio masters into the album folder and stamp tags.
 
         Args:
@@ -435,7 +459,7 @@ class EZAlbumPack:
         "Queue tracks first (or album-render). CPU only."
     )
 
-    def run(self, artist: str = "", album: str = "") -> dict[str, Any]:
+    def run(self, artist: str = "", album: str = "") -> MusicUiResult:
         """Zip the album output folder.
 
         Args:
@@ -471,10 +495,10 @@ def _save_cover_tensor(image: object, dest: Path) -> Path:
         ``dest``.
     """
     dest.parent.mkdir(parents=True, exist_ok=True)
-    array: Any = image
+    array: NdArray = cast("NdArray", image)
     cpu = getattr(image, "cpu", None)
     if callable(cpu):
-        array = cast(Any, cpu()).numpy()
+        array = cast("NdArray", cpu()).numpy()
     import numpy as np
     from PIL import Image
 
@@ -611,13 +635,13 @@ class EZAudioBeatJoin:
         """
         from .join import MAX_JOIN_SEGMENTS, join_audio
 
-        wired: list[dict[str, Any]] = []
+        wired: list[Mapping[str, object]] = []
         for index in range(1, MAX_JOIN_SEGMENTS + 1):
             name = f"audio_{index:02d}"
             value = segments.get(name)
             if value is None:
                 break
-            wired.append(cast("dict[str, Any]", value))
+            wired.append(cast("Mapping[str, object]", value))
         for name in segments:
             if name.startswith("audio_") and segments[name] is not None:
                 position = int(name.removeprefix("audio_"))
@@ -663,7 +687,7 @@ def _parse_overlap(value: str | int | list[int]) -> int | list[int]:
 
 
 # Comfy registry.
-NODE_CLASS_MAPPINGS = {
+NODE_CLASS_MAPPINGS: NodeRegistry = {
     "EZRapLyrics": EZRapLyrics,
     "EZAudioMetadata": EZAudioMetadata,
     "EZAlbumPack": EZAlbumPack,

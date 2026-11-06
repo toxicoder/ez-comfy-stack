@@ -60,7 +60,7 @@ async def request_json(request: object) -> object:
     try:
         raw = json_fn()
         if inspect.isawaitable(raw):
-            return await raw  # type: ignore[misc]
+            return await raw
         return raw
     except Exception:  # noqa: BLE001 - empty/invalid body
         return {}

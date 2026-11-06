@@ -168,11 +168,11 @@ _TOKEN_RE = re.compile(r"(?:ghp|gho|github_pat|hf)_[A-Za-z0-9][A-Za-z0-9_-]{3,}"
 """Shape of the secrets that must never reach a report."""
 
 
-def clip(value: str, max_len: int) -> str:
+def clip(value: str | None, max_len: int) -> str:
     """Collapse whitespace and cap a field so the issue URL stays openable.
 
     Args:
-        value: Raw text.
+        value: Raw text; ``None`` reads as empty.
         max_len: Maximum length, including the trailing dots when trimmed.
 
     Returns:
@@ -338,7 +338,7 @@ def context_lines(pairs: Sequence[tuple[str, object]] | None) -> list[str]:
     return lines
 
 
-def error_lines(errors: Sequence[Mapping[str, object]] | None, surface: str) -> list[str]:
+def error_lines(errors: Sequence[object] | None, surface: str) -> list[str]:
     """Render the ``## Recent errors`` block from the client ring buffer.
 
     Each entry becomes ``- <iso8601> [<surface>] <message>``, with the entry's
@@ -592,7 +592,7 @@ def _lookup(environ: Mapping[str, str], key: str) -> str:
         return ""
 
 
-def _probe_facts(probe: Callable[[], Mapping[str, str]] | None) -> dict[str, str]:
+def _probe_facts(probe: Callable[[], object] | None) -> dict[str, str]:
     """Run the injected torch/GPU probe defensively.
 
     Args:

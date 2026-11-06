@@ -25,9 +25,13 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from collections.abc import Callable, Mapping
-from typing import Any
+from types import ModuleType
+from typing import TYPE_CHECKING, Protocol, TypedDict, cast
 
 from . import context
+
+if TYPE_CHECKING:
+    from ez_common import Json
 
 TOKEN_ENV = "EZ_GITHUB_TOKEN"
 """Name of the optional GitHub token; its value is never read out."""
@@ -80,6 +84,54 @@ ENHANCE_PROMPTS: dict[str, str] = {
 """``kind_key`` -> the system prompt for that kind."""
 
 
+class FeedbackConfig(TypedDict):
+    """Body for ``GET /ez_feedback/config``."""
+
+    repoUrl: str
+    """``https://github.com/<repo>`` the handoff button opens."""
+
+    tokenPresent: bool
+    """Whether a token exists; the value itself never crosses the wire."""
+
+    labels: list[str]
+    """Labels the client may offer, from :data:`context.ALLOWED_LABELS`."""
+
+    env: dict[str, str]
+    """Environment facts for the report, from :func:`context.env_snapshot`."""
+
+
+class HttpResponder(Protocol):
+    """The parts of a GitHub response this module reads."""
+
+    def read(self) -> object:
+        """Read the response body.
+
+        Returns:
+            Body bytes or text.
+        """
+        ...
+
+    def close(self) -> None:
+        """Release the connection."""
+        ...
+
+
+class JsonResponder(Protocol):
+    """aiohttp ``web.json_response`` or a test stand-in for it."""
+
+    def __call__(self, payload: object, *, status: int = ...) -> object:
+        """Build one route response.
+
+        Args:
+            payload: JSON-serialisable body.
+            status: HTTP status code.
+
+        Returns:
+            Whatever the server framework expects.
+        """
+        ...
+
+
 def token(environ: Mapping[str, str] | None = None) -> str:
     """Optional GitHub token, or ``""``.
 
@@ -126,7 +178,7 @@ def api_url(repo: str, environ: Mapping[str, str] | None = None) -> str:
     return f"{base}/{repo}/issues"
 
 
-def gpu_probe(module: Any | None = None) -> dict[str, str]:
+def gpu_probe(module: object | None = None) -> dict[str, str]:
     """Torch / CUDA / GPU facts for :func:`context.env_snapshot`.
 
     torch is imported here, never at module import, so the pack still loads
@@ -154,7 +206,7 @@ def gpu_probe(module: Any | None = None) -> dict[str, str]:
     return {key: value for key, value in facts.items() if value}
 
 
-def _import_torch() -> Any | None:
+def _import_torch() -> ModuleType | None:
     """Import torch lazily.
 
     Returns:
@@ -163,7 +215,7 @@ def _import_torch() -> Any | None:
     try:
         import torch  # noqa: PLC0415 - optional heavy import, never at module load
 
-        return torch
+        return cast(ModuleType, torch)
     except Exception:  # noqa: BLE001 - absent or broken CUDA stack
         return None
 
@@ -171,7 +223,7 @@ def _import_torch() -> Any | None:
 def config_payload(
     environ: Mapping[str, str] | None = None,
     probe: Callable[[], Mapping[str, str]] | None = None,
-) -> tuple[int, dict[str, Any]]:
+) -> tuple[int, FeedbackConfig]:
     """Body for ``GET /ez_feedback/config``.
 
     Args:
@@ -196,8 +248,8 @@ def handle_submit(
     args: Mapping[str, object],
     *,
     environ: Mapping[str, str] | None = None,
-    opener: Callable[[urllib.request.Request, float], Any] | None = None,
-) -> tuple[int, dict[str, Any]]:
+    opener: Callable[[urllib.request.Request, float], HttpResponder] | None = None,
+) -> tuple[int, dict[str, Json]]:
     """Body for ``POST /ez_feedback/submit``.
 
     The body is redacted and clipped to :data:`context.MAX_BODY` before it is
@@ -254,7 +306,7 @@ def handle_submit(
     return 200, {"ok": True, **_issue_fields(raw)}
 
 
-def _issue_fields(raw: object) -> dict[str, Any]:
+def _issue_fields(raw: object) -> dict[str, Json]:
     """Pull ``url`` and ``number`` out of a GitHub create-issue response.
 
     Args:
@@ -281,7 +333,7 @@ def _issue_fields(raw: object) -> dict[str, Any]:
     }
 
 
-def urlopen(request: urllib.request.Request, timeout: float) -> Any:
+def urlopen(request: urllib.request.Request, timeout: float) -> HttpResponder:
     """Indirection so pytest can mock GitHub without touching the network.
 
     Args:
@@ -291,7 +343,7 @@ def urlopen(request: urllib.request.Request, timeout: float) -> Any:
     Returns:
         Opened HTTP response (caller reads and closes it).
     """
-    return urllib.request.urlopen(request, timeout=timeout)
+    return cast(HttpResponder, urllib.request.urlopen(request, timeout=timeout))
 
 
 def _default_llm(system: str, user: str) -> tuple[str, str]:
@@ -322,7 +374,7 @@ def handle_enhance(
     args: Mapping[str, object],
     *,
     llm: Callable[[str, str], tuple[str | None, str | None]] | None = None,
-) -> tuple[int, dict[str, Any]]:
+) -> tuple[int, dict[str, Json]]:
     """Body for ``POST /ez_feedback/enhance``.
 
     Pure and injectable, like :func:`handle_submit`: ``llm`` is the model, so
@@ -373,7 +425,7 @@ async def request_json(request: object) -> object:
     try:
         raw = json_fn()
         if inspect.isawaitable(raw):
-            return await raw  # type: ignore[misc]
+            return await raw
         return raw
     except Exception:  # noqa: BLE001 - empty or invalid body
         return {}
@@ -382,7 +434,7 @@ async def request_json(request: object) -> object:
 def register_routes(
     *,
     server: object | None = None,
-    json_response: Any | None = None,
+    json_response: object | None = None,
 ) -> bool:
     """Attach ``/ez_feedback/*`` when PromptServer (or a stand-in) exists.
 
@@ -394,8 +446,8 @@ def register_routes(
     Returns:
         True when all three routes were registered.
     """
-    responder = json_response
-    if responder is None:
+    responder = cast(JsonResponder, json_response)
+    if json_response is None:
         try:
             from aiohttp import web
 

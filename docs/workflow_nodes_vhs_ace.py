@@ -5,9 +5,9 @@ Helpers and combo catalogs live in :mod:`workflow_nodes_lib`.
 
 from __future__ import annotations
 
-from typing import Any
 
 from workflow_nodes_lib import (
+    NodeSpecs,
     _SEED_CONTROL,
     _n,
     _s,
@@ -16,7 +16,7 @@ from workflow_nodes_lib import (
     vhs_short,
 )
 
-def vhs_ace_nodes() -> dict[str, Any]:
+def vhs_ace_nodes() -> NodeSpecs:
     """VHS Video Combine and ACE-Step text encode.
 
     Returns:

@@ -7,12 +7,15 @@ server renders, agent completions) is lazy and occupancy-gated.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING
 
-NODE_CLASS_MAPPINGS: dict[str, Any] = {}
+if TYPE_CHECKING:
+    from ez_common import NodeRegistry
+
+NODE_CLASS_MAPPINGS: NodeRegistry = {}
 """No canvas nodes yet - the lane runs on routes, the panel, and MCP."""
 
-NODE_DISPLAY_NAME_MAPPINGS: dict[str, Any] = {}
+NODE_DISPLAY_NAME_MAPPINGS: dict[str, str] = {}
 """Display names for :data:`NODE_CLASS_MAPPINGS`."""
 
 WEB_DIRECTORY = "./js"

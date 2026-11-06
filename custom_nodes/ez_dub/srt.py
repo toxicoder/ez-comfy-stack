@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
-from typing import Any
+from collections.abc import Mapping, Sequence
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ez_common import JsonScalar
 
 
 def format_ts(seconds: float) -> str:
@@ -21,7 +25,9 @@ def format_ts(seconds: float) -> str:
     return f"{hours:02d}:{minutes:02d}:{secs:02d},{ms:03d}"
 
 
-def turns_to_srt(turns: list[dict[str, Any]], *, field: str = "text") -> str:
+def turns_to_srt(
+    turns: Sequence[Mapping[str, JsonScalar]], *, field: str = "text"
+) -> str:
     """Build an SRT body.
 
     Args:

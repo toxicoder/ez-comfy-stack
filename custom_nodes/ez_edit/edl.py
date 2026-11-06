@@ -23,7 +23,7 @@ from __future__ import annotations
 import math
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, NamedTuple, get_args
+from typing import NamedTuple, TypedDict, get_args
 
 from .protocol import TransitionKind
 
@@ -54,6 +54,87 @@ OUTPUT_ARGS: tuple[str, ...] = (
 
 class EdlError(ValueError):
     """Refusal for a project that cannot render (bad shapes, bad trims)."""
+
+
+class EdlTransition(TypedDict):
+    """Transition block written into one EDL clip row."""
+
+    kind: str
+    """``fade`` or ``wipe`` (``cut`` clips carry no transition block)."""
+
+    duration_s: float
+    """Overlap seconds the editor should apply."""
+
+
+class EdlClip(TypedDict):
+    """One clip row of the EDL handoff document, in project order."""
+
+    id: str
+    """Clip id."""
+
+    label: str
+    """Human label."""
+
+    source: str
+    """Source path under the Comfy output dir."""
+
+    in_s: float
+    """Source in-point seconds."""
+
+    out_s: float
+    """Source out-point seconds."""
+
+    duration_s: float
+    """Timeline length this clip occupies."""
+
+    track: int
+    """Video track index (0 = base plane)."""
+
+    gain: float
+    """Audio gain multiplier."""
+
+    timeline_start_s: float
+    """Where the clip lands on the rendered timeline."""
+
+    transition: EdlTransition | None
+    """Transition entering this clip, or ``None`` for a hard cut."""
+
+
+class EdlDocument(TypedDict):
+    """The EDL handoff document a Kdenlive/Shotcut or client render reads."""
+
+    version: int
+    """Document version (always 1 today)."""
+
+    id: str
+    """Project id."""
+
+    title: str
+    """Project title."""
+
+    fps: float
+    """Project frame rate."""
+
+    width: int
+    """Project frame width."""
+
+    height: int
+    """Project frame height."""
+
+    duration_s: float
+    """Base-plane length in seconds."""
+
+    clips: list[EdlClip]
+    """Clip rows in project order."""
+
+    overlays: list[dict[str, object]]
+    """Text/image overlay records the browser draws (client mode only)."""
+
+    captions: list[dict[str, object]]
+    """Caption records the browser draws (client mode only)."""
+
+    client_only: list[str]
+    """Fields a server render ignores, so an editor can flag them."""
 
 
 class _Clip(NamedTuple):
@@ -99,9 +180,9 @@ class _Model(NamedTuple):
 
     clips: list[_Clip]
     """Every clip, in project order."""
-    overlays: list[dict[str, Any]]
+    overlays: list[dict[str, object]]
     """Text/image overlay records (client-mode planes; handoff only)."""
-    captions: list[dict[str, Any]]
+    captions: list[dict[str, object]]
     """Caption records (client-mode planes; handoff only)."""
     fps: float
     """Project frame rate."""
@@ -265,7 +346,7 @@ def _validated_clip(order: int, raw: object) -> _Clip:
     )
 
 
-def _record_list(raw: object, field: str) -> list[dict[str, Any]]:
+def _record_list(raw: object, field: str) -> list[dict[str, object]]:
     """Copy a text-plane list (``overlays`` / ``captions``).
 
     Args:
@@ -288,11 +369,12 @@ def _record_list(raw: object, field: str) -> list[dict[str, Any]]:
     return [dict(item) for item in raw]
 
 
-def _prepare(project: Mapping[str, Any]) -> _Model:
+def _prepare(project: object) -> _Model:
     """Validate the whole project once, for both builders.
 
     Args:
-        project: Edit project record.
+        project: Edit project record; anything that is not a mapping is
+            refused.
 
     Returns:
         Validated model.
@@ -464,7 +546,7 @@ def _base_filters(placed: Sequence[tuple[_Clip, float]]) -> tuple[list[str], str
 
 
 def ffmpeg_command(
-    project: Mapping[str, Any],
+    project: Mapping[str, object],
     out_path: str | Path,
     *,
     ffmpeg_bin: str = "ffmpeg",
@@ -554,7 +636,7 @@ def ffmpeg_command(
     return argv
 
 
-def edl_payload(project: Mapping[str, Any]) -> dict[str, Any]:
+def edl_payload(project: Mapping[str, object]) -> EdlDocument:
     """Build the EDL handoff dict (Kdenlive/Shotcut and client-render path).
 
     Args:
@@ -571,7 +653,7 @@ def edl_payload(project: Mapping[str, Any]) -> dict[str, Any]:
     base = [clip for clip in model.clips if clip.track == 0]
     placed, total = _base_plan(base) if base else ([], 0.0)
     starts = _starts_by_order(placed)
-    clips: list[dict[str, Any]] = []
+    clips: list[EdlClip] = []
     for clip in model.clips:
         start = (
             starts[clip.order]

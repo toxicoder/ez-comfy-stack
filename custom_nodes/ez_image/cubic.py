@@ -7,7 +7,23 @@ Klein is not locked to photoreal surfaces.
 
 from __future__ import annotations
 
-from typing import Any
+from types import ModuleType
+from typing import TYPE_CHECKING, TypeAlias, cast
+
+if TYPE_CHECKING:
+    from ez_common import ComfyInputTypes, ImageTensor, LatentTensor, NodeRegistry
+
+Pixel: TypeAlias = "list[float]"
+"""One RGB pixel as ``0..1`` channel floats."""
+
+Frame: TypeAlias = "list[list[Pixel]]"
+"""One HWC still as nested Python lists."""
+
+Bhwc: TypeAlias = "list[Frame]"
+"""Batch of HWC stills; the JSON-able shape of a Comfy IMAGE tensor."""
+
+PixelTree: TypeAlias = "Frame | Bhwc"
+"""Nested pixel lists: one HWC still or a BHWC batch."""
 
 CATEGORY = "ez-comfy/image"
 """Comfy menu category for the cubic reference router."""
@@ -47,7 +63,7 @@ def cell_size(height: int, width: int) -> int:
     return raw
 
 
-def _try_torch() -> Any:
+def _try_torch() -> ModuleType | None:
     """Import torch when the Comfy environment has it.
 
     Returns:
@@ -57,10 +73,10 @@ def _try_torch() -> Any:
         import torch
     except Exception:  # noqa: BLE001 - hermetic tests
         return None
-    return torch
+    return cast("ModuleType", torch)
 
 
-def _is_hwc(data: list[Any]) -> bool:
+def _is_hwc(data: PixelTree) -> bool:
     """True when ``data`` is HWC (a pixel is numbers, not a list).
 
     Args:
@@ -75,7 +91,7 @@ def _is_hwc(data: list[Any]) -> bool:
         return False
 
 
-def read_bhwc(image: Any) -> list[Any]:
+def read_bhwc(image: ImageTensor | PixelTree) -> Bhwc:
     """Copy a Comfy IMAGE or nested list into BHWC Python lists.
 
     Args:
@@ -88,7 +104,7 @@ def read_bhwc(image: Any) -> list[Any]:
         TypeError: ``image`` has no readable pixels.
     """
     if isinstance(image, list):
-        data: Any = image
+        data: object = image
     else:
         current = image
         detach = getattr(current, "detach", None)
@@ -106,11 +122,11 @@ def read_bhwc(image: Any) -> list[Any]:
     if not data:
         return []
     if _is_hwc(data):
-        return [data]
-    return data
+        return cast("Bhwc", [data])
+    return cast("Bhwc", data)
 
 
-def write_bhwc(data: list[Any], like: Any) -> Any:
+def write_bhwc(data: Bhwc, like: ImageTensor | PixelTree) -> ImageTensor | Bhwc:
     """Return ``data`` as a tensor when ``like`` is one, else the lists.
 
     Args:
@@ -147,7 +163,7 @@ def _quantize_channel(value: float) -> float:
     return round(clamped * QUANT_STEPS) / QUANT_STEPS
 
 
-def _mean_color(image: list[Any], y0: int, y1: int, x0: int, x1: int) -> list[float]:
+def _mean_color(image: Frame, y0: int, y1: int, x0: int, x1: int) -> list[float]:
     """Average the pixels in a cell.
 
     Args:
@@ -194,7 +210,7 @@ def _shade(color: list[float], scale: float, lift: float) -> list[float]:
 
 
 def _paint_cell(
-    frame: list[Any],
+    frame: Frame,
     color: list[float],
     y0: int,
     y1: int,
@@ -228,7 +244,7 @@ def _paint_cell(
             row[x] = list(face)
 
 
-def block_study_frame(image: list[Any]) -> list[Any]:
+def block_study_frame(image: Frame) -> Frame:
     """Rebuild one HWC frame as a coarse beveled cube grid.
 
     Args:
@@ -242,7 +258,7 @@ def block_study_frame(image: list[Any]) -> list[Any]:
     height = len(image)
     width = len(image[0])
     channels = len(image[0][0])
-    frame: list[Any] = [
+    frame: Frame = [
         [[0.0] * channels for _x in range(width)] for _y in range(height)
     ]
     cell = cell_size(height, width)
@@ -259,7 +275,7 @@ def block_study_frame(image: list[Any]) -> list[Any]:
     return frame
 
 
-def block_study(image: Any) -> Any:
+def block_study(image: ImageTensor | PixelTree) -> ImageTensor | Bhwc:
     """Return a coarse cube picture of ``image`` (same layout, cube faces).
 
     Args:
@@ -274,8 +290,8 @@ def block_study(image: Any) -> Any:
 
 
 def _erase_frame(
-    frame: list[Any], mask: list[list[float]], radius: int
-) -> list[Any]:
+    frame: Frame, mask: list[list[float]], radius: int
+) -> Frame:
     """Fill one frame's masked pixels with blurred, re-quantized colors.
 
     Args:
@@ -300,9 +316,9 @@ def _erase_frame(
             for y in range(height)
         ]
         planes.append(feather_mask(plane, radius))
-    out: list[Any] = []
+    out: Frame = []
     for y in range(height):
-        row: list[Any] = []
+        row: list[Pixel] = []
         for x in range(width):
             if mask[y][x] >= 0.5:
                 row.append([_quantize_channel(planes[c][y][x]) for c in range(channels)])
@@ -312,7 +328,9 @@ def _erase_frame(
     return out
 
 
-def erase_people(study: Any, image: Any) -> Any:
+def erase_people(
+    study: ImageTensor | PixelTree, image: ImageTensor
+) -> ImageTensor | PixelTree:
     """Erase the source's people from a block study.
 
     Person pixels of ``study`` are filled with a large-kernel blur of the
@@ -349,7 +367,7 @@ def erase_people(study: Any, image: Any) -> Any:
     return write_bhwc(painted, study)
 
 
-def _clone_conditioning(conditioning: Any) -> Any:
+def _clone_conditioning(conditioning: object) -> object:
     """Copy a conditioning list so a reference attach cannot alias it.
 
     Args:
@@ -360,7 +378,7 @@ def _clone_conditioning(conditioning: Any) -> Any:
     """
     if not isinstance(conditioning, list):
         return conditioning
-    cloned: list[Any] = []
+    cloned: list[object] = []
     for item in conditioning:
         if isinstance(item, (list, tuple)) and len(item) >= 2:
             meta = item[1]
@@ -377,7 +395,7 @@ def _clone_conditioning(conditioning: Any) -> Any:
     return cloned
 
 
-def _reference_tensors(latent: Any) -> list[Any]:
+def _reference_tensors(latent: object) -> list[object]:
     """Return the plain tensors a Flux.2 reference list may hold.
 
     ComfyUI sizes every reference before the sampler runs: the Flux
@@ -397,11 +415,13 @@ def _reference_tensors(latent: Any) -> list[Any]:
         latent = latent.get("samples")
     if latent is None:
         return []
-    entries = list(latent) if isinstance(latent, (list, tuple)) else [latent]
+    entries: list[object] = (
+        list(latent) if isinstance(latent, (list, tuple)) else [latent]
+    )
     return [entry for entry in entries if callable(getattr(entry, "size", None))]
 
 
-def _attach_fallback(conditioning: Any, refs: list[Any]) -> Any:
+def _attach_fallback(conditioning: object, refs: list[object]) -> object:
     """Record ``refs`` on conditioning when Comfy's helper is absent.
 
     Args:
@@ -428,7 +448,7 @@ def _attach_fallback(conditioning: Any, refs: list[Any]) -> Any:
     return conditioning
 
 
-def _set_reference_values(conditioning: Any, refs: list[Any]) -> Any | None:
+def _set_reference_values(conditioning: object, refs: list[object]) -> object | None:
     """Attach through ComfyUI's own helper, the one its reference nodes call.
 
     Args:
@@ -439,18 +459,21 @@ def _set_reference_values(conditioning: Any, refs: list[Any]) -> Any | None:
         Fresh conditioning, or None when the helper is missing or refuses.
     """
     try:
-        from node_helpers import conditioning_set_values  # type: ignore[import-not-found]
+        from node_helpers import conditioning_set_values
     except Exception:  # noqa: BLE001 - hermetic tests / older Comfy
         return None
     try:
-        return conditioning_set_values(
-            conditioning, {"reference_latents": refs}, append=True
+        return cast(
+            "object",
+            conditioning_set_values(
+                conditioning, {"reference_latents": refs}, append=True
+            ),
         )
     except Exception:  # noqa: BLE001 - fail-soft to the local attach
         return None
 
 
-def attach_reference(conditioning: Any, latent: Any) -> Any:
+def attach_reference(conditioning: object, latent: object) -> object:
     """Attach ``latent`` as a Flux.2 reference without mutating the input.
 
     Args:
@@ -470,7 +493,7 @@ def attach_reference(conditioning: Any, latent: Any) -> Any:
     return _attach_fallback(cloned, refs)
 
 
-def _encode_image(image: Any, vae: Any) -> Any | None:
+def _encode_image(image: ImageTensor | PixelTree, vae: object) -> LatentTensor | None:
     """VAE-encode ``image``.
 
     Args:
@@ -484,7 +507,7 @@ def _encode_image(image: Any, vae: Any) -> Any | None:
     if not callable(encode):
         return None
     try:
-        return encode(image)
+        return cast("LatentTensor | None", encode(image))
     except Exception:  # noqa: BLE001 - fail-soft to the photo reference
         return None
 
@@ -493,7 +516,7 @@ class EZCubicCondition:
     """Photo reference for place swaps; block-study reference for cube rebuilds."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict[str, Any]:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
         """Return Comfy sockets. Prompt is a link, not an App widget.
 
         Returns:
@@ -523,12 +546,12 @@ class EZCubicCondition:
 
     def run(
         self,
-        conditioning: Any,
-        latent: Any,
-        image: Any,
-        vae: Any,
+        conditioning: object,
+        latent: object,
+        image: ImageTensor,
+        vae: object,
         prompt: str,
-    ) -> tuple[Any]:
+    ) -> tuple[object]:
         """Pick the photo latent or a block-study latent.
 
         Args:
@@ -564,7 +587,7 @@ class EZCubicCondition:
         return (attach_reference(conditioning, encoded),)
 
 
-NODE_CLASS_MAPPINGS: dict[str, type] = {
+NODE_CLASS_MAPPINGS: NodeRegistry = {
     "EZCubicCondition": EZCubicCondition,
 }
 """Comfy class-name registry for the cubic reference router."""

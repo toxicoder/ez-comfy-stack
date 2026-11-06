@@ -6,7 +6,74 @@ modules. The façade `workflow_nodes.encyclopedia()` concatenates families.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import NotRequired, TypeAlias, TypedDict
+
+__all__ = [
+    "EncyclopediaChoice",
+    "EncyclopediaNode",
+    "EncyclopediaSocket",
+    "EncyclopediaVariant",
+    "EncyclopediaWidget",
+    "NodeSpecs",
+]
+
+
+class EncyclopediaChoice(TypedDict):
+    """One combo entry: the id the graph stores plus its operator-facing text."""
+
+    id: str
+    description: str
+
+
+class EncyclopediaSocket(TypedDict):
+    """One in/out socket row of an encyclopedia node entry."""
+
+    name: str
+    type: str
+    dir: str
+    description: str
+
+
+class EncyclopediaWidget(TypedDict):
+    """One widget row of the encyclopedia.
+
+    `storage` says how the live graph keeps the value: ``list`` means positionally,
+    so `index` is set; ``dict`` means by name, so `key` is set and `choices` may
+    follow either directly or through the `choices_from` catalog name.
+    """
+
+    name: str
+    type: str
+    description: str
+    generation: str
+    storage: NotRequired[str]
+    index: NotRequired[int]
+    key: NotRequired[str]
+    range: NotRequired[str]
+    choices: NotRequired[list[EncyclopediaChoice]]
+    choices_from: NotRequired[str]
+
+
+class EncyclopediaVariant(TypedDict):
+    """An alternate widget layout for a node that ships more than one shape."""
+
+    widgets: list[EncyclopediaWidget]
+
+
+class EncyclopediaNode(TypedDict):
+    """One Comfy node type as the encyclopedia stores it."""
+
+    display_name: str
+    origin: str
+    summary: str
+    lab_notes: str
+    sockets: list[EncyclopediaSocket]
+    widgets: list[EncyclopediaWidget]
+    variants: NotRequired[list[EncyclopediaVariant]]
+
+
+NodeSpecs: TypeAlias = dict[str, EncyclopediaNode]
+"""Encyclopedia entries keyed by the Comfy ``class_type`` they document."""
 
 # ComfyUI v0.43.0 combo catalogs, ACE language/key, and image scale/crop.
 _SAMPLER_CHOICES: list[tuple[str, str]] = [
@@ -204,7 +271,7 @@ _CROP: list[tuple[str, str]] = [
 ]
 
 
-def _s(name: str, typ: str, direction: str, desc: str) -> dict[str, str]:
+def _s(name: str, typ: str, direction: str, desc: str) -> EncyclopediaSocket:
     """Build a socket spec.
 
     Args:
@@ -230,7 +297,7 @@ def _w(
     gen: str = "",
     choices: list[tuple[str, str]] | None = None,
     choices_from: str | None = None,
-) -> dict[str, Any]:
+) -> EncyclopediaWidget:
     """Build a widget spec.
 
     Args:
@@ -247,7 +314,7 @@ def _w(
     Returns:
         Encyclopedia widget mapping.
     """
-    item: dict[str, Any] = {
+    item: EncyclopediaWidget = {
         "name": name,
         "type": typ,
         "description": desc,
@@ -273,11 +340,11 @@ def _n(
     summary: str,
     *,
     lab: str = "",
-    sockets: list[dict[str, str]] | None = None,
-    widgets: list[dict[str, Any]] | None = None,
+    sockets: list[EncyclopediaSocket] | None = None,
+    widgets: list[EncyclopediaWidget] | None = None,
     origin: str = "comfy-core",
-    variants: list[dict[str, Any]] | None = None,
-) -> dict[str, Any]:
+    variants: list[EncyclopediaVariant] | None = None,
+) -> EncyclopediaNode:
     """Build a node spec.
 
     Args:
@@ -292,7 +359,7 @@ def _n(
     Returns:
         Encyclopedia node mapping.
     """
-    spec: dict[str, Any] = {
+    spec: EncyclopediaNode = {
         "display_name": display,
         "origin": origin,
         "summary": summary,
@@ -305,7 +372,7 @@ def _n(
     return spec
 
 
-def ksampler_widgets() -> list[dict[str, Any]]:
+def ksampler_widgets() -> list[EncyclopediaWidget]:
     """KSampler widget row shared by every sampler node spec.
 
     Returns:
@@ -374,7 +441,7 @@ def ksampler_widgets() -> list[dict[str, Any]]:
     ]
 
 
-def vhs_full() -> list[dict[str, Any]]:
+def vhs_full() -> list[EncyclopediaWidget]:
     """Full VHS_VideoCombine widget row (lab MP4 printers).
 
     Returns:
@@ -394,7 +461,7 @@ def vhs_full() -> list[dict[str, Any]]:
     ]
 
 
-def vhs_short() -> list[dict[str, Any]]:
+def vhs_short() -> list[EncyclopediaWidget]:
     """Short VHS variant used on unused bumper groups.
 
     Returns:

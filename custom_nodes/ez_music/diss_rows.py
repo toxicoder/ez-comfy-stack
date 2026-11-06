@@ -13,7 +13,7 @@ module never starts the catalog build in ``diss_examples``.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Protocol, TypeAlias, TypedDict
+from typing import TYPE_CHECKING, Protocol, TypeAlias, TypedDict
 
 from .naming import music_output_prefix
 
@@ -24,7 +24,9 @@ if TYPE_CHECKING:
     DissExampleRow: TypeAlias = DissExample
 else:
     # At runtime a finalized row is a plain dict (``DissExample`` is a TypedDict).
-    DissExampleRow: TypeAlias = dict[str, Any]
+    # ``object`` is the value type: the album keys are written by
+    # ``diss_examples.finalize_nill_album``, and nothing reads them here.
+    DissExampleRow: TypeAlias = dict[str, object]
 
 # Take length and the locked dry-booth vocal for every Nill Bye row.
 DISS_DURATION_S = 180.0

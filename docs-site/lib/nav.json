@@ -447,6 +447,10 @@
             "path": "project-conventions.md"
           },
           {
+            "title": "Strong types",
+            "path": "contribute/typing.md"
+          },
+          {
             "title": "How we land changes",
             "path": "learn/merges.md"
           }

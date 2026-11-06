@@ -11,7 +11,15 @@ import json
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, TypeAlias
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+
+    from ez_common import Json
+
+GoalEntry: TypeAlias = "Mapping[str, Json]"
+"""One ``goals.json`` row (``label``, ``llm_block``, ``sample_clause``...)."""
 
 # Sample catalog paths, combo sentinel, and node-type -> family mapping.
 CUSTOM = "custom"
@@ -36,7 +44,7 @@ GOAL_NONE = "none"
 """Combo value meaning "no goal language"; the prompt stays model-only."""
 
 
-def load_goals() -> dict[str, dict[str, Any]]:
+def load_goals() -> dict[str, GoalEntry]:
     """Read the goal registry.
 
     Globals:

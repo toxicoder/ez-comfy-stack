@@ -8,12 +8,15 @@ body, and issue URL.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING
 
 from .context import REPO
 from .routes import register_routes
 
-NODE_CLASS_MAPPINGS: dict[str, type[Any]] = {}
+if TYPE_CHECKING:
+    from ez_common import NodeRegistry
+
+NODE_CLASS_MAPPINGS: NodeRegistry = {}
 """Comfy registry (empty - JS + routes only)."""
 
 NODE_DISPLAY_NAME_MAPPINGS: dict[str, str] = {}

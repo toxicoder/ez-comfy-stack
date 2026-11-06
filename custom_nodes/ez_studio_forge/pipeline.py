@@ -708,12 +708,12 @@ def _set_widget_value(node: dict[str, Any], index: int, value: Any) -> None:
         values[index] = _as_bool(value)
     elif isinstance(current, int) and not isinstance(current, bool):
         try:
-            values[index] = int(value)  # type: ignore[arg-type]
+            values[index] = int(value)
         except (TypeError, ValueError):
             values[index] = value
     elif isinstance(current, float):
         try:
-            values[index] = float(value)  # type: ignore[arg-type]
+            values[index] = float(value)
         except (TypeError, ValueError):
             values[index] = value
     else:

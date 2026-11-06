@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, TypedDict
 
 _root = str(Path(__file__).resolve().parent.parent)
 if _root not in sys.path:
@@ -47,7 +47,30 @@ def _as_bool(value: object) -> bool:
     return False
 
 
-def _pack(result: ResearchResult) -> dict[str, Any]:
+class ResearchUiBlocks(TypedDict):
+    """Preview blocks the research node renders in the canvas widget."""
+
+    text: tuple[str, ...]
+    """Reply body shown in the text preview."""
+
+    sources: tuple[str, ...]
+    """Numbered source lines under the reply."""
+
+    passthrough: tuple[str, ...]
+    """Status token carried through the graph."""
+
+
+class ResearchUiResult(TypedDict):
+    """``OUTPUT_NODE`` payload for :class:`EZCreativeResearch`."""
+
+    ui: ResearchUiBlocks
+    """Frontend display blocks."""
+
+    result: tuple[str, ...]
+    """Reply STRING that continues the graph."""
+
+
+def _pack(result: ResearchResult) -> ResearchUiResult:
     """Build the Comfy output-node payload for a research result.
 
     Args:
@@ -119,7 +142,7 @@ class EZCreativeResearch:
         history: object = "",
         sample: object = CUSTOM,
         catalog: object = "",
-    ) -> dict[str, Any]:
+    ) -> ResearchUiResult:
         """Run chat or planner->search->synth and write a research brief.
 
         Args:

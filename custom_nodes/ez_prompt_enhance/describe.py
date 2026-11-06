@@ -10,7 +10,15 @@ import io
 import os
 import re
 import threading
-from typing import Any
+from typing import TYPE_CHECKING, TypeAlias
+
+if TYPE_CHECKING:
+    import llama_cpp
+
+    from ez_common import ImageTensor
+
+VisionModel: TypeAlias = "llama_cpp.Llama"
+"""Cached llama.cpp vision handle held in :data:`_VISION`."""
 
 # Opt-in Qwen2.5-VL 3B (Apache). Not part of download-models.
 DESCRIBE_GGUF = "Qwen2.5-VL-3B-Instruct-Q4_K_M.gguf"
@@ -44,7 +52,7 @@ DESCRIBE_SYSTEM = (
     "object you are unsure of instead of guessing."
 )
 
-_VISION: Any = None
+_VISION: VisionModel | None = None
 _VISION_PATH = ""
 _VISION_LOCK = threading.Lock()
 _LAST_STATUS = REASON_DISABLED
@@ -198,7 +206,7 @@ def caption_without_people(caption: object) -> str:
     return " ".join(kept)
 
 
-def still_has_people(image: Any) -> bool | None:
+def still_has_people(image: ImageTensor | None) -> bool | None:
     """Ask the person mask whether ``image`` actually contains a person.
 
     Args:
@@ -268,7 +276,7 @@ def _trim_caption(text: str) -> tuple[str, bool]:
     return " ".join(words[:MAX_CAPTION_WORDS]).rstrip(" ,;:.") + ".", True
 
 
-def gate_caption(caption: object, image: Any = None) -> tuple[str, str]:
+def gate_caption(caption: object, image: ImageTensor | None = None) -> tuple[str, str]:
     """Filter a raw VLM caption down to what the still can actually support.
 
     The on-box 3B vision GGUF invents whole subjects at temperature 0, so the
@@ -360,7 +368,7 @@ def _gguf_ready() -> bool:
         return False
 
 
-def _image_to_png_b64(image: Any) -> str:
+def _image_to_png_b64(image: ImageTensor) -> str:
     """Encode a Comfy IMAGE tensor as PNG base64.
 
     Args:
@@ -415,7 +423,7 @@ def _image_to_png_b64(image: Any) -> str:
         return ""
 
 
-def _get_vision() -> tuple[Any, str | None]:
+def _get_vision() -> tuple[VisionModel | None, str | None]:
     """Load llama.cpp with mmproj, or return a fail-soft reason.
 
     Returns:
@@ -434,7 +442,7 @@ def _get_vision() -> tuple[Any, str | None]:
         except Exception as exc:  # noqa: BLE001
             _log(f"llama.cpp import failed for describe: {exc}")
             return None, REASON_LLAMA_UNAVAILABLE
-        kwargs: dict[str, Any] = {
+        kwargs: dict[str, str | int | bool] = {
             "model_path": path,
             "n_ctx": 4096,
             "n_threads": int(os.environ.get("EZ_LLM_THREADS", "8") or 8),
@@ -474,7 +482,7 @@ def _vision_complete(png_b64: str) -> tuple[str, str | None]:
     if llm is None:
         return "", reason or REASON_LLAMA_UNAVAILABLE
     data_url = f"data:image/png;base64,{png_b64}"
-    user: Any = [
+    user: list[dict[str, object]] = [
         {"type": "image_url", "image_url": {"url": data_url}},
         {"type": "text", "text": "Caption this still for a prompt rewriter."},
     ]
@@ -499,7 +507,7 @@ def _vision_complete(png_b64: str) -> tuple[str, str | None]:
     return content.strip(), None
 
 
-def describe_image(*, enable: object, image: Any = None) -> str:
+def describe_image(*, enable: object, image: ImageTensor | None = None) -> str:
     """Return a gated still caption, or empty when disabled / fail-soft.
 
     The raw VLM text passes through :func:`gate_caption` here, at the one

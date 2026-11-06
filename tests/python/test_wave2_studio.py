@@ -66,7 +66,7 @@ def test_studio_ui_empty_state(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) 
     import sys
 
     sys.path.insert(0, str(ROOT / "studio-ui"))
-    import server as studio_server  # type: ignore[import-not-found]
+    import server as studio_server
 
     monkeypatch.setattr(studio_server, "FILMS", tmp_path / "missing")
     html = studio_server._page().decode("utf-8")

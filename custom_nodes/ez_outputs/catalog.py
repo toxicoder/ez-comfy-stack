@@ -102,7 +102,7 @@ def output_directory() -> Path:
         if env:
             return Path(env)
         try:
-            import folder_paths  # type: ignore[import-not-found]
+            import folder_paths
 
             return Path(folder_paths.get_output_directory())
         except Exception:  # noqa: BLE001 - Comfy optional in unit tests
@@ -119,7 +119,7 @@ def input_root(*, default: Path | None = None) -> Path:
         Input directory (may not exist yet).
     """
     try:
-        import folder_paths  # type: ignore[import-not-found]
+        import folder_paths
 
         raw = folder_paths.get_input_directory()
         if raw:

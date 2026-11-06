@@ -56,6 +56,7 @@ from .speech import (
 from . import speech as _speech
 
 from .align import (
+    CloneWindow,
     MAX_SPEED,
     SAMPLE_RATE,
     build_timeline,
@@ -122,12 +123,13 @@ AUDIO_SUFFIXES = (".wav", ".mp3", ".flac", ".ogg", ".m4a", ".aac")
 VIDEO_SUFFIXES = (".mp4", ".mkv", ".mov", ".webm")
 MEDIA_SUFFIXES = AUDIO_SUFFIXES + VIDEO_SUFFIXES
 
-# Tests inject these (often untyped lambdas). Production stays None (fail-soft).
-fetch_hook: FetchHook | Callable[..., Any] | None = None
-asr_hook: AsrHook | Callable[..., Any] | None = None
-embed_hook: EmbedHook | Callable[..., Any] | None = None
-translate_hook: TranslateHook | Callable[..., Any] | None = None
-tts_hook: TtsHook | Callable[..., Any] | None = None
+# Tests inject these (a ``lambda *a, **k`` satisfies each Protocol). Production
+# stays None, which is the fail-soft path.
+fetch_hook: FetchHook | None = None
+asr_hook: AsrHook | None = None
+embed_hook: EmbedHook | None = None
+translate_hook: TranslateHook | None = None
+tts_hook: TtsHook | None = None
 
 
 def _log(message: str) -> None:
@@ -549,7 +551,7 @@ def _import_qwen3_model() -> tuple[Any | None, str]:
         because qwen-tts is an optional runtime dep.
     """
     try:
-        from qwen_tts import Qwen3TTSModel  # type: ignore[import-not-found]
+        from qwen_tts import Qwen3TTSModel
     except ImportError as exc:
         return None, f"{QWEN3_WHEEL_STATUS} ({exc})"
     except Exception:  # noqa: BLE001 - optional runtime
@@ -1483,7 +1485,7 @@ def _chatterbox_local_only(ckpt: Path) -> Iterator[None]:
             os.environ["PKUSEG_HOME"] = prev_pkuseg
 
 
-def _from_local_multilingual(loader: Callable[..., Any], ckpt: str, device: str) -> Any:
+def _from_local_multilingual(loader: Callable[..., object], ckpt: str, device: str) -> object:
     """Call ``from_local`` with T3 V3. Older wheels cannot load our snapshot.
 
     Only remap a missing ``t3_model`` parameter. Inner TypeError (PerTh
@@ -1670,7 +1672,7 @@ def _cap_t3_tokens(model: Any, budget: int) -> Iterator[None]:
 
 
 def _run_prepare_conditionals(
-    prepare: Callable[..., Any],
+    prepare: Callable[..., object],
     ref: str,
     exaggeration: float,
     ckpt: Path | None,
@@ -1894,7 +1896,7 @@ def qwen3_ckpt_dir() -> Path | None:
     return None
 
 
-def _from_pretrained_local(loader: Callable[..., Any], ckpt: str) -> Any:
+def _from_pretrained_local(loader: Callable[..., object], ckpt: str) -> object:
     """Call ``from_pretrained`` with ``local_files_only=True`` when supported.
 
     Args:
@@ -1902,7 +1904,7 @@ def _from_pretrained_local(loader: Callable[..., Any], ckpt: str) -> Any:
         ckpt: Snapshot path string.
 
     Returns:
-        Loaded model handle (optional qwen-tts type).
+        Loaded model handle, opaque here because qwen-tts is an optional dep.
     """
     try:
         return loader(ckpt, local_files_only=True)
@@ -2384,7 +2386,7 @@ def render_mix(
     src_lang = str(payload.get("source_language") or "en")
     tgt_lang = str(payload.get("target_language") or "es")
     cross_lang = not _same_language(src_lang, tgt_lang)
-    clones: list[dict[str, Any]] = []
+    clones: list[CloneWindow] = []
     render_dir = dest / "render"
     render_dir.mkdir(parents=True, exist_ok=True)
     flags: list[str] = []

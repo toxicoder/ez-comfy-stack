@@ -11,9 +11,13 @@ import json
 import os
 import sys
 from pathlib import Path
-from typing import Any
 
 from mcp_runtime import (
+    JsonRpcRequest,
+    JsonRpcResponse,
+    ToolArgs,
+    ToolCatalogEntry,
+    ToolResult,
     ToolSpec,
     call_tool as _runtime_call_tool,
     handle_rpc as _runtime_handle_rpc,
@@ -56,7 +60,7 @@ def _output_dir() -> Path:
     return Path(os.environ.get("COMFY_OUTPUT_DIR", "/mnt/comfy-output"))
 
 
-def occupancy_status() -> dict[str, Any]:
+def occupancy_status() -> dict[str, object]:
     """Read occupancy JSON from COMFY_OUTPUT_DIR.
 
     Returns:
@@ -65,7 +69,7 @@ def occupancy_status() -> dict[str, Any]:
     path = _output_dir() / ".occupancy.json"
     if path.is_file():
         try:
-            data = json.loads(path.read_text(encoding="utf-8"))
+            data: object = json.loads(path.read_text(encoding="utf-8"))
             if isinstance(data, dict):
                 return data
         except json.JSONDecodeError:
@@ -81,7 +85,7 @@ def occupancy_status() -> dict[str, Any]:
     }
 
 
-def tool_occupancy_status(_args: dict[str, Any]) -> dict[str, Any]:
+def tool_occupancy_status(_args: ToolArgs) -> ToolResult:
     """MCP tool: read occupancy JSON.
 
     Args:
@@ -93,7 +97,7 @@ def tool_occupancy_status(_args: dict[str, Any]) -> dict[str, Any]:
     return {"ok": True, "occupancy": occupancy_status()}
 
 
-def tool_search_templates(args: dict[str, Any]) -> dict[str, Any]:
+def tool_search_templates(args: ToolArgs) -> ToolResult:
     """MCP tool: search shipped lab Apps and studio-block ids.
 
     Args:
@@ -112,7 +116,7 @@ def tool_search_templates(args: dict[str, Any]) -> dict[str, Any]:
     return {"ok": True, "templates": rows, "count": len(rows)}
 
 
-def tool_get_template(args: dict[str, Any]) -> dict[str, Any]:
+def tool_get_template(args: ToolArgs) -> ToolResult:
     """MCP tool: describe one lab App or studio-block.
 
     Args:
@@ -127,7 +131,7 @@ def tool_get_template(args: dict[str, Any]) -> dict[str, Any]:
     return describe_template(stem)
 
 
-def tool_describe_app(args: dict[str, Any]) -> dict[str, Any]:
+def tool_describe_app(args: ToolArgs) -> ToolResult:
     """MCP tool: alias of get_template for lab Apps.
 
     Args:
@@ -139,7 +143,7 @@ def tool_describe_app(args: dict[str, Any]) -> dict[str, Any]:
     return tool_get_template(args)
 
 
-def tool_apply_slots(args: dict[str, Any]) -> dict[str, Any]:
+def tool_apply_slots(args: ToolArgs) -> ToolResult:
     """MCP tool: clone a lab graph and patch named slots (no disk write).
 
     Args:
@@ -170,7 +174,7 @@ def tool_apply_slots(args: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def tool_validate_workflow(args: dict[str, Any]) -> dict[str, Any]:
+def tool_validate_workflow(args: ToolArgs) -> ToolResult:
     """MCP tool: check banned strings, Vue-corrected renderer, linear ids.
 
     Args:
@@ -197,7 +201,7 @@ def tool_validate_workflow(args: dict[str, Any]) -> dict[str, Any]:
     return {"ok": not errors, "errors": errors}
 
 
-def _save_from_args(args: dict[str, Any], *, force_app: bool | None) -> dict[str, Any]:
+def _save_from_args(args: ToolArgs, *, force_app: bool | None) -> ToolResult:
     """Clone, stamp, and write a lab graph into live ``_user/``.
 
     Args:
@@ -219,7 +223,8 @@ def _save_from_args(args: dict[str, Any], *, force_app: bool | None) -> dict[str
 
     stem = str(args.get("stem") or args.get("template") or "")
     slug = str(args.get("slug") or "")
-    slots = args.get("slots") if isinstance(args.get("slots"), dict) else {}
+    raw_slots = args.get("slots")
+    slots = raw_slots if isinstance(raw_slots, dict) else {}
     overwrite = bool(args.get("overwrite") or False)
     try:
         origin, graph = clone_template(stem)
@@ -252,7 +257,7 @@ def _save_from_args(args: dict[str, Any], *, force_app: bool | None) -> dict[str
     }
 
 
-def tool_save_workflow(args: dict[str, Any]) -> dict[str, Any]:
+def tool_save_workflow(args: ToolArgs) -> ToolResult:
     """MCP tool: clone a lab graph into live ``_user/`` (never writes ``_lab``).
 
     Args:
@@ -264,7 +269,7 @@ def tool_save_workflow(args: dict[str, Any]) -> dict[str, Any]:
     return _save_from_args(args, force_app=None)
 
 
-def tool_create_app(args: dict[str, Any]) -> dict[str, Any]:
+def tool_create_app(args: ToolArgs) -> ToolResult:
     """MCP tool: clone a lab graph into live ``_user/`` as an App.
 
     Args:
@@ -276,7 +281,7 @@ def tool_create_app(args: dict[str, Any]) -> dict[str, Any]:
     return _save_from_args(args, force_app=True)
 
 
-def tool_generate_app(args: dict[str, Any]) -> dict[str, Any]:
+def tool_generate_app(args: ToolArgs) -> ToolResult:
     """MCP tool: pick a lab template from a brief and write ``_user/``.
 
     Args:
@@ -292,7 +297,8 @@ def tool_generate_app(args: dict[str, Any]) -> dict[str, Any]:
     slug = str(args.get("slug") or "")
     as_app = args.get("as_app")
     overwrite = bool(args.get("overwrite") or False)
-    slots = args.get("slots") if isinstance(args.get("slots"), dict) else None
+    raw_slots = args.get("slots")
+    slots = raw_slots if isinstance(raw_slots, dict) else None
     result = generate_app(
         brief,
         template=template,
@@ -301,7 +307,7 @@ def tool_generate_app(args: dict[str, Any]) -> dict[str, Any]:
         overwrite=overwrite,
         slots=slots,
     )
-    payload: dict[str, Any] = {
+    payload: dict[str, object] = {
         "ok": result.ok,
         "path": result.path,
         "template": result.template,
@@ -443,7 +449,7 @@ TOOLS: dict[str, ToolSpec] = {
 }
 
 
-def list_tools() -> list[dict[str, Any]]:
+def list_tools() -> list[ToolCatalogEntry]:
     """List MCP tools without handlers.
 
     Returns:
@@ -452,9 +458,7 @@ def list_tools() -> list[dict[str, Any]]:
     return _runtime_list_tools(TOOLS)
 
 
-def call_tool(
-    name: str, arguments: dict[str, Any] | None = None
-) -> dict[str, Any]:
+def call_tool(name: str, arguments: ToolArgs | None = None) -> ToolResult:
     """Dispatch a named MCP tool.
 
     Args:
@@ -467,7 +471,7 @@ def call_tool(
     return _runtime_call_tool(TOOLS, name, arguments)
 
 
-def handle_rpc(message: dict[str, Any]) -> dict[str, Any] | None:
+def handle_rpc(message: JsonRpcRequest) -> JsonRpcResponse | None:
     """Handle one JSON-RPC message. Notifications return None.
 
     Args:
