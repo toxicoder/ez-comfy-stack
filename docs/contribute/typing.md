@@ -246,6 +246,13 @@ exist in this repo, so module resolution is skipped and the ComfyUI objects
 arrive untyped, exactly as they do in the browser. `lints/js_types_baseline.json`
 records what each file still owes - a number may fall, never rise.
 
+The compiler is the one the docs-site lockfile pins, which is why the gate looks
+for `docs-site/node_modules/.bin/tsc` first and a `tsc` on the `PATH` only after
+that: one TypeScript checks both trees, so a version bump moves the site build
+and this ledger together. Provision it with `bazelisk run //docs-site:install`;
+the CI core job runs that step before `//:lint`, because `//:lint` sets
+`REQUIRE_LINT_TOOLS=1` and a lane that could not find its tool has to fail.
+
 ### When a cast is the honest answer
 
 `cast()` asserts a type instead of proving one, so it is ratcheted

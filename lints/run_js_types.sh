@@ -12,8 +12,9 @@
 # each file still owes. A file may go down, never up, and a new file must be
 # listed. Lower a number by replacing a JSDoc `{object}` with a real @typedef.
 #
-# Requires node + the pinned TypeScript in docs-site/node_modules (same tool the
-# docs-site typecheck target uses).
+# Requires node plus a TypeScript compiler: the pinned one in
+# docs-site/node_modules (same tool the docs-site typecheck target uses), or a
+# tsc on the PATH when the checkout has none.
 set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 if [[ -n ${TEST_SRCDIR:-} && -f ${TEST_SRCDIR}/_main/scripts/lib/check_tool.sh ]]; then
@@ -30,13 +31,21 @@ ROOT="$(bazel_checkout_root)"
 check_tool python3 "install Python 3"
 cd "${ROOT}"
 
+# The pinned compiler is the one the docs-site lockfile carries, so the JSDoc
+# types are checked by the same TypeScript that compiles the site. A tsc on the
+# PATH is only consulted when the checkout has none: a stray global version would
+# move the diagnostic counts the ratchet records for reasons no diff explains.
 TSC="docs-site/node_modules/.bin/tsc"
 if [[ ! -x ${TSC} ]]; then
+  TSC="$(command -v tsc || true)"
+fi
+if [[ -z ${TSC} ]]; then
+  hint="install the pinned toolchain (bazelisk run //docs-site:install, or cd docs-site && npm ci --legacy-peer-deps)"
   if [[ ${CI:-} == "true" || ${REQUIRE_LINT_TOOLS:-} == "1" ]]; then
-    echo "tsc missing - required in CI/strict mode (cd docs-site && npm ci --legacy-peer-deps)" >&2
+    echo "tsc missing - required in CI/strict mode (${hint})" >&2
     exit 1
   fi
-  echo "tsc missing - skipping JS typecheck (cd docs-site && npm ci --legacy-peer-deps)"
+  echo "tsc missing - skipping JS typecheck (${hint})"
   exit 0
 fi
 

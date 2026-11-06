@@ -84,6 +84,15 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: "22"
+          cache: npm
+          cache-dependency-path: docs-site/package-lock.json
+
+      # //lints:js_types checks the custom-node frontends with the TypeScript the
+      # docs-site lockfile pins - one compiler for both trees - so this runner has
+      # to carry that install as well. The gate fails loudly on a missing tsc, so
+      # a runner that skipped this step reds the lane instead of skipping it.
+      - name: Install docs site dependencies (JS type lane)
+        run: bazelisk run //docs-site:install
 
       # //lints:* print "<tool> missing - skipping" and still exit 0, so a runner
       # that never installed them goes green having checked nothing. Fail here
