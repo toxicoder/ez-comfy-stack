@@ -111,6 +111,73 @@ sh_test(
     visibility = ["//visibility:public"],
 )
 
+sh_test(
+    name = "pyright_tests",
+    size = "large",
+    timeout = "moderate",
+    srcs = ["run_pyright_tests.sh"],
+    data = [
+        "pyright_tests_baseline.json",
+        "//:pyrightconfig.json",
+        "//:pyrightconfig-tests.json",
+        "//scripts:lib/check_tool.sh",
+        "//tests:requirements.txt",
+    ],
+    env = {"REQUIRE_LINT_TOOLS": "1"},
+    tags = [
+        "lint",
+        "local",
+        "manual",
+        "no-sandbox",
+        "pyright",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+sh_test(
+    name = "mypy_tests",
+    size = "large",
+    timeout = "moderate",
+    srcs = ["run_mypy_tests.sh"],
+    data = [
+        "mypy_tests_baseline.json",
+        "//:mypy-tests.ini",
+        "//scripts:lib/check_tool.sh",
+        "//tests:requirements.txt",
+    ],
+    env = {"REQUIRE_LINT_TOOLS": "1"},
+    tags = [
+        "lint",
+        "local",
+        "manual",
+        "mypy",
+        "no-sandbox",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+sh_test(
+    name = "js_types",
+    size = "large",
+    timeout = "moderate",
+    srcs = ["run_js_types.sh"],
+    data = [
+        "js_types_baseline.json",
+        "//custom_nodes:sources",
+        "//scripts:lib/check_tool.sh",
+    ],
+    env = {"REQUIRE_LINT_TOOLS": "1"},
+    tags = [
+        "js",
+        "lint",
+        "local",
+        "manual",
+        "no-sandbox",
+        "tsc",
+    ],
+    visibility = ["//visibility:public"],
+)
+
 # Shell/formatter lane. Named shell_lint (not `all`) because a target called
 # `all` shadows the //lints:all wildcard pattern and Bazel reports the
 # package as ambiguous on every query.
@@ -125,15 +192,21 @@ test_suite(
     visibility = ["//visibility:public"],
 )
 
-# Python type lane. It lived in no suite before, so `bazel test //:lint` never
+# Type lane for every language: Pyright + mypy for first-party Python, the
+# ratcheted pytest-tree mypy ledger, and tsc --checkJs (a ratcheted baseline)
+# for the custom-node JSDoc frontends.
+# It lived in no suite before, so `bazel test //:lint` never
 # ran it. //tests:typecheck runs the same two checkers in //:test-fast; these
 # are the manual-tagged copies for ad-hoc `bazelisk test //lints:mypy`.
 test_suite(
     name = "python",
     tags = ["lint"],
     tests = [
+        ":js_types",
         ":mypy",
+        ":mypy_tests",
         ":pyright",
+        ":pyright_tests",
     ],
     visibility = ["//visibility:public"],
 )

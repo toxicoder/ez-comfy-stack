@@ -23,6 +23,6 @@ if ! python3 -m mypy --version >/dev/null 2>&1; then
   echo "mypy missing - skipping (resilient; pip install -r tests/requirements.txt)"
   exit 0
 fi
-echo "Running mypy..."
-python3 -m mypy
+echo "Running mypy (production law)..."
+python3 -m mypy --config-file mypy.ini
 echo "mypy passed."

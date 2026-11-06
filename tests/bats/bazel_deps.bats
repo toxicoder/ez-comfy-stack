@@ -193,7 +193,14 @@ EOF
 }
 
 @test "the lint gates fail loudly under bazel" {
-  [ "$(grep -c 'REQUIRE_LINT_TOOLS": "1"' "${REPO_ROOT}/lints/BUILD.bazel")" -eq 5 ]
+  # Every lint gate must set the strict-mode flag, so a missing host tool is
+  # a failure under Bazel rather than a silent skip. Counted from the file so
+  # adding a gate cannot slip past this guard.
+  local gates envs
+  gates="$(grep -c '^sh_test(' "${REPO_ROOT}/lints/BUILD.bazel")"
+  envs="$(grep -c 'REQUIRE_LINT_TOOLS": "1"' "${REPO_ROOT}/lints/BUILD.bazel")"
+  [ "${gates}" -gt 0 ]
+  [ "${gates}" -eq "${envs}" ]
 }
 
 @test "every docs-site test belongs to the docs-site suite or test-all" {

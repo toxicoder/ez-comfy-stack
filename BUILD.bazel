@@ -39,7 +39,9 @@ exports_files([
     "LICENSE-MODELS.md",
     ".github/scripts/install-lint-tools.sh",
     "mypy.ini",
+    "mypy-tests.ini",
     "pyrightconfig.json",
+    "pyrightconfig-tests.json",
 ])
 
 # Repo hygiene dotfiles. Bazel globs never match a dotfile, so these are
@@ -152,8 +154,11 @@ test_suite(
         "//docs-site:suite",
         "//docs-site:visual-test",
         "//lints:buildifier",
+        "//lints:js_types",
         "//lints:mypy",
+        "//lints:mypy_tests",
         "//lints:pyright",
+        "//lints:pyright_tests",
         "//lints:shell",
         "//lints:shfmt",
     ],
