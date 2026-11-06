@@ -131,6 +131,70 @@ packs:
     files:
       - qwen3.5_9b_flux3_prompt_upsampler_int8_convrot.safetensors
     cmd: download-image --tier flux3-pup
+  # Qwen-Image-2.1 stills (opt-in). Upstream prose names are Qwen/Qwen-Image-2.1
+  # and Qwen/Qwen-Image-2.1-Turbo. The two official int8-convrot stills, the
+  # shared Qwen3VL-8B text encoder, and the qwen_image_2.1_vae_bf16 VAE come
+  # from Comfy-Org/Qwen-Image-2.1 (revisions are pinned in the downloader, not
+  # here); BennyDaBall/Qwen-Image-2.1-NVFP4 and
+  # BennyDaBall/Qwen-Image-2.1-Turbo-NVFP4 are independent NVFP4 conversions of
+  # that same Comfy-Org release. All six are covered by the
+  # Qwen RESEARCH LICENSE AGREEMENT, which forbids commercial use without a
+  # separate paid license, so none of them is a default; Klein 4B stays the
+  # Apache default still.
+  qwen-image:
+    default: false
+    min_gb: 8
+    tier_dir: Comfy-Org__Qwen-Image-2.1_qwen-image
+    files:
+      - qwen_image_2.1_int8_convrot.safetensors
+    shares:
+      - qwen-image-te
+      - qwen-image-vae
+    cmd: download-image --tier qwen-image
+  qwen-image-turbo:
+    default: false
+    min_gb: 8
+    tier_dir: Comfy-Org__Qwen-Image-2.1_qwen-image-turbo
+    files:
+      - qwen_image_2.1_turbo_int8_convrot.safetensors
+    shares:
+      - qwen-image-te
+      - qwen-image-vae
+    cmd: download-image --tier qwen-image-turbo
+  qwen-image-nvfp4:
+    default: false
+    min_gb: 12
+    tier_dir: BennyDaBall__Qwen-Image-2.1-NVFP4_qwen-image-nvfp4
+    files:
+      - qwen_image_2.1_nvfp4.safetensors
+      - qwen3vl_8b_nvfp4.safetensors
+    shares:
+      - qwen-image-vae
+    cmd: download-image --tier qwen-image-nvfp4
+  qwen-image-turbo-nvfp4:
+    default: false
+    min_gb: 15
+    tier_dir: BennyDaBall__Qwen-Image-2.1-Turbo-NVFP4_qwen-image-turbo-nvfp4
+    files:
+      - qwen_image_2.1_turbo_nvfp4.safetensors
+      - qwen3vl_8b_turbo_nvfp4.safetensors
+    shares:
+      - qwen-image-vae
+    cmd: download-image --tier qwen-image-turbo-nvfp4
+  qwen-image-te:
+    default: false
+    min_gb: 10
+    tier_dir: Comfy-Org__Qwen-Image-2.1_qwen-image-te
+    files:
+      - qwen3vl_8b_int8_convrot.safetensors
+    cmd: download-image --tier qwen-image-te
+  qwen-image-vae:
+    default: false
+    min_gb: 1
+    tier_dir: Comfy-Org__Qwen-Image-2.1_qwen-image-vae
+    files:
+      - qwen_image_2.1_vae_bf16.safetensors
+    cmd: download-image --tier qwen-image-vae
   wan-fun-inp:
     default: false
     min_gb: 40
