@@ -10,12 +10,16 @@
 #   Opt-in FLUX Non-Commercial: 9b / 9b-base / 9b-nvfp4 / flux2-dev (gated, not YouTube-ok).
 #   Opt-in FLUX 3 Image Klein (Kommunity, gated, revision-pinned):
 #   flux3 / flux3-base / flux3-nvfp4 / flux3-bf16 / flux3-te / flux3-pup.
+#   Opt-in Qwen Image 2.1 (Qwen Research License, public ungated repos, revision-pinned):
+#   qwen-image / qwen-image-turbo / qwen-image-nvfp4 / qwen-image-turbo-nvfp4 plus the
+#   shared companions qwen-image-te / qwen-image-vae. Klein 4B stays the Apache default;
+#   the pinned ComfyUI (v0.43.0) loads these natively (upstream support landed in v0.37.0).
 #
 # Audience:
 #   Operators on the Spark host. Prefer manage.sh download-models.
 #
 # Usage:
-#   bazelisk run //scripts:run-utility -- download-image status [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev|flux3|flux3-base|flux3-nvfp4|flux3-bf16|flux3-te|flux3-pup] [--json]
+#   bazelisk run //scripts:run-utility -- download-image status [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev|flux3|flux3-base|flux3-nvfp4|flux3-bf16|flux3-te|flux3-pup|qwen-image|qwen-image-turbo|qwen-image-nvfp4|qwen-image-turbo-nvfp4|qwen-image-te|qwen-image-vae] [--json]
 #   bazelisk run //scripts:run-utility -- download-image run [--tier ...]
 #   bazelisk run //scripts:run-utility -- download-image cleanup [--tier ...] [--dry-run|--yes]
 #
@@ -47,6 +51,13 @@ CLEANUP_YES=0
 # Pinned HF commit for the gated FLUX 3 Image Klein monorepo (all six tiers share
 # one repo). Public sha, not a secret. Verify against the model card before a bump.
 FLUX3_KLEIN_HF_REVISION="feef60b0aaf63a4773ace96636ebbcf43b881312"
+# Pinned HF commits for the opt-in Qwen Image 2.1 packs (public, ungated repos).
+# The four Comfy-Org tiers (both int8 convrot stills, the shared TE, the shared VAE)
+# share one repo sha; each BennyDaBall NVFP4 pack is its own repo. Public shas, not
+# secrets. Verify against each model card before a bump.
+QWEN_IMAGE_21_HF_REVISION="aacf31a6d48e707f352ecba714cee0680da3479b"
+QWEN_IMAGE_21_NVFP4_HF_REVISION="b0e954a1ba86f00e30f76bac2494f45b0a221948"
+QWEN_IMAGE_21_TURBO_NVFP4_HF_REVISION="82226d8cadaf20a678338f8faf5e5a0cfc3e1dfd"
 
 #######################################
 # tier_repo helper.
@@ -76,6 +87,11 @@ tier_repo() {
     flux3 | flux3-base | flux3-nvfp4 | flux3-bf16 | flux3-te | flux3-pup)
       echo "black-forest-labs/flux-3-image-klein-comfy"
       ;;
+    qwen-image | qwen-image-turbo | qwen-image-te | qwen-image-vae)
+      echo "Comfy-Org/Qwen-Image-2.1"
+      ;;
+    qwen-image-nvfp4) echo "BennyDaBall/Qwen-Image-2.1-NVFP4" ;;
+    qwen-image-turbo-nvfp4) echo "BennyDaBall/Qwen-Image-2.1-Turbo-NVFP4" ;;
     *) echo "" ;;
   esac
 }
@@ -111,6 +127,12 @@ tier_min_gb() {
     flux3-bf16) echo 12 ;;
     flux3-te) echo 5 ;;
     flux3-pup) echo 10 ;;
+    qwen-image) echo 8 ;;
+    qwen-image-turbo) echo 8 ;;
+    qwen-image-nvfp4) echo 12 ;;
+    qwen-image-turbo-nvfp4) echo 15 ;;
+    qwen-image-te) echo 10 ;;
+    qwen-image-vae) echo 1 ;;
     *) echo 0 ;;
   esac
 }
@@ -187,6 +209,30 @@ tier_include_patterns() {
     flux3-pup)
       printf '%s\n' "text_encoders/qwen3.5_9b_flux3_prompt_upsampler_int8_convrot.safetensors"
       ;;
+    # Exact names only: BennyDaBall ships a .manifest.json sidecar beside each
+    # safetensors, and a *.json glob would pull it into the pack.
+    qwen-image)
+      printf '%s\n' "diffusion_models/qwen_image_2.1_int8_convrot.safetensors"
+      ;;
+    qwen-image-turbo)
+      printf '%s\n' "diffusion_models/qwen_image_2.1_turbo_int8_convrot.safetensors"
+      ;;
+    qwen-image-nvfp4)
+      printf '%s\n' \
+        "diffusion_models/qwen_image_2.1_nvfp4.safetensors" \
+        "text_encoders/qwen3vl_8b_nvfp4.safetensors"
+      ;;
+    qwen-image-turbo-nvfp4)
+      printf '%s\n' \
+        "diffusion_models/qwen_image_2.1_turbo_nvfp4.safetensors" \
+        "text_encoders/qwen3vl_8b_turbo_nvfp4.safetensors"
+      ;;
+    qwen-image-te)
+      printf '%s\n' "text_encoders/qwen3vl_8b_int8_convrot.safetensors"
+      ;;
+    qwen-image-vae)
+      printf '%s\n' "vae/qwen_image_2.1_vae_bf16.safetensors"
+      ;;
     *)
       return 0
       ;;
@@ -212,10 +258,12 @@ tier_dir() {
 
 #######################################
 # Pinned Hugging Face revision (commit sha) for a tier.
-# Only the gated FLUX 3 Image Klein monorepo is pinned; every other tier follows
-# the moving default branch and gets an empty string (no --revision is passed).
+# Only the gated FLUX 3 Image Klein monorepo and the opt-in Qwen Image 2.1 packs are
+# pinned; every other tier follows the moving default branch and gets an empty string
+# (no --revision is passed).
 # Globals:
-#   FLUX3_KLEIN_HF_REVISION
+#   FLUX3_KLEIN_HF_REVISION, QWEN_IMAGE_21_HF_REVISION,
+#   QWEN_IMAGE_21_NVFP4_HF_REVISION, QWEN_IMAGE_21_TURBO_NVFP4_HF_REVISION
 # Arguments:
 #   $1  Tier name
 # Outputs:
@@ -228,6 +276,11 @@ tier_revision() {
     flux3 | flux3-base | flux3-nvfp4 | flux3-bf16 | flux3-te | flux3-pup)
       echo "${FLUX3_KLEIN_HF_REVISION}"
       ;;
+    qwen-image | qwen-image-turbo | qwen-image-te | qwen-image-vae)
+      echo "${QWEN_IMAGE_21_HF_REVISION}"
+      ;;
+    qwen-image-nvfp4) echo "${QWEN_IMAGE_21_NVFP4_HF_REVISION}" ;;
+    qwen-image-turbo-nvfp4) echo "${QWEN_IMAGE_21_TURBO_NVFP4_HF_REVISION}" ;;
     *) echo "" ;;
   esac
 }
@@ -283,14 +336,25 @@ tiers_to_process() {
       echo "${TIER} flux3-te"
       ;;
     flux3-te | flux3-pup) echo "${TIER}" ;;
+    # Qwen Image 2.1: the Comfy-Org stills need the shared int8 Qwen3VL TE + VAE;
+    # each NVFP4 pack carries its own NVFP4 text encoder, so it needs only the VAE.
+    # Never in `all`.
+    qwen-image | qwen-image-turbo)
+      echo "${TIER} qwen-image-te qwen-image-vae"
+      ;;
+    qwen-image-nvfp4 | qwen-image-turbo-nvfp4)
+      echo "${TIER} qwen-image-vae"
+      ;;
+    qwen-image-te | qwen-image-vae) echo "${TIER}" ;;
     te | vae | te8b) echo "${TIER}" ;;
     *) echo "${TIER}" ;;
   esac
 }
 
 #######################################
-# True when this image pack is gated and not a casual-commercial default
-# (FLUX Non-Commercial 9B family, or the FLUX 3 Kommunity family).
+# True when this image pack is not a casual-commercial default (FLUX Non-Commercial
+# 9B family, the FLUX 3 Kommunity family, or the Qwen Image 2.1 research family).
+# Qwen packs are public and ungated, but still research-license only.
 # Globals:
 #   None
 # Arguments:
@@ -304,12 +368,18 @@ is_nc_image_tier() {
   case "${1}" in
     9b | 9b-base | 9b-nvfp4 | flux2-dev) return 0 ;;
     flux3 | flux3-base | flux3-nvfp4 | flux3-bf16 | flux3-te | flux3-pup) return 0 ;;
+    qwen-image | qwen-image-turbo | qwen-image-nvfp4 | qwen-image-turbo-nvfp4 | qwen-image-te | qwen-image-vae)
+      return 0
+      ;;
     *) return 1 ;;
   esac
 }
 
 #######################################
-# Warn that an NC image pack is not a casual-commercial default.
+# Warn that a non-Apache image pack is not a casual-commercial default.
+# FLUX packs are gated and BFL-licensed; Qwen Image 2.1 packs are public and ungated
+# but sit under the Qwen Research License Agreement (commercial use needs a paid Qwen
+# license), so each family gets its own wording.
 # Globals:
 #   None
 # Arguments:
@@ -320,12 +390,26 @@ is_nc_image_tier() {
 #   0
 #######################################
 warn_flux_nc_image_tier() {
-  warn "FLUX Non-Commercial (${1}): not monetized YouTube without a paid BFL commercial license."
-  warn "Gated Hugging Face card - accept as the same user as HF_TOKEN. Not legal advice. See docs/licenses.md"
+  case "${1}" in
+    qwen-image*)
+      warn "Qwen Image 2.1 (${1}): Qwen Research License Agreement (2026-09-20), Non-Commercial. Not Apache."
+      warn "Commercial use needs a separate paid license from Qwen (Hangzhou Tongyi Laboratory); section 2.b"
+      warn "  forbids it otherwise. Governing law: China. Public ungated repo - no HF_TOKEN accept needed."
+      warn "Klein 4B stays the Apache default still. Not legal advice. See docs/licenses.md"
+      ;;
+    *)
+      warn "FLUX Non-Commercial (${1}): not monetized YouTube without a paid BFL commercial license."
+      warn "Gated Hugging Face card - accept as the same user as HF_TOKEN. Not legal advice. See docs/licenses.md"
+      ;;
+  esac
   case "${1}" in
     flux3*)
       warn "FLUX 3 Image Klein (${1}): FLUX Kommunity License v1.0, not Apache. Monetized output is for"
       warn "  qualifying users only, under 5M USD gross annualized revenue. Klein 4B stays the Apache default."
+      ;;
+    qwen-image-nvfp4 | qwen-image-turbo-nvfp4)
+      warn "Qwen Image 2.1 NVFP4 (${1}): third-party conversion of Comfy-Org/Qwen-Image-2.1, not an official"
+      warn "  Qwen or Comfy-Org release. Same Qwen research license, still revision-pinned."
       ;;
   esac
 }
@@ -352,7 +436,7 @@ parse_args() {
             err "Banned image tier: ${TIER}. See docs/licenses.md"
             exit 1
             ;;
-          fast | nvfp4 | base | te | vae | zimage | all | 9b | 9b-base | 9b-nvfp4 | te8b | small-vae | flux2-dev | flux3 | flux3-base | flux3-nvfp4 | flux3-bf16 | flux3-te | flux3-pup) ;;
+          fast | nvfp4 | base | te | vae | zimage | all | 9b | 9b-base | 9b-nvfp4 | te8b | small-vae | flux2-dev | flux3 | flux3-base | flux3-nvfp4 | flux3-bf16 | flux3-te | flux3-pup | qwen-image | qwen-image-turbo | qwen-image-nvfp4 | qwen-image-turbo-nvfp4 | qwen-image-te | qwen-image-vae) ;;
           *)
             err "Unknown image tier: ${TIER}. See docs/licenses.md"
             exit 1
@@ -372,12 +456,15 @@ parse_args() {
         exit 1
         ;;
       -h | --help)
-        echo "Usage: $0 status|run|cleanup [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev|flux3|flux3-base|flux3-nvfp4|flux3-bf16|flux3-te|flux3-pup] [--json]" >&2
+        echo "Usage: $0 status|run|cleanup [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev|flux3|flux3-base|flux3-nvfp4|flux3-bf16|flux3-te|flux3-pup|qwen-image|qwen-image-turbo|qwen-image-nvfp4|qwen-image-turbo-nvfp4|qwen-image-te|qwen-image-vae] [--json]" >&2
         echo "  Default fast = Klein 4B distilled FP8 + qwen_3_4b + flux2-vae (Apache 2.0)" >&2
         echo "  9b / 9b-base / 9b-nvfp4 / flux2-dev = FLUX Non-Commercial opt-in (not YouTube-ok, not in download-models)" >&2
         echo "  small-vae = Apache FLUX.2 small decoder (full_encoder_small_decoder.safetensors)" >&2
         echo "  flux3 / flux3-base / flux3-nvfp4 / flux3-bf16 / flux3-te / flux3-pup = FLUX 3 Image Klein opt-in" >&2
         echo "    (FLUX Kommunity License v1.0, gated, revision-pinned, not in download-models; Klein 4B stays the Apache default)" >&2
+        echo "  qwen-image / qwen-image-turbo / qwen-image-nvfp4 / qwen-image-turbo-nvfp4 = Qwen Image 2.1 opt-in" >&2
+        echo "    (Qwen Research License Agreement - commercial use needs a paid Qwen license; public ungated repos," >&2
+        echo "    revision-pinned, not in download-models. Companions qwen-image-te / qwen-image-vae pull with them.)" >&2
         echo "  cleanup options: --dry-run (default) | --yes" >&2
         exit 0
         ;;
@@ -751,7 +838,7 @@ main() {
     run) cmd_run ;;
     cleanup) cmd_cleanup ;;
     *)
-      err "Usage: $0 status|run|cleanup [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev|flux3|flux3-base|flux3-nvfp4|flux3-bf16|flux3-te|flux3-pup] [--json] [--yes]"
+      err "Usage: $0 status|run|cleanup [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev|flux3|flux3-base|flux3-nvfp4|flux3-bf16|flux3-te|flux3-pup|qwen-image|qwen-image-turbo|qwen-image-nvfp4|qwen-image-turbo-nvfp4|qwen-image-te|qwen-image-vae] [--json] [--yes]"
       exit 1
       ;;
   esac
