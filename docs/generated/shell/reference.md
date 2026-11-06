@@ -1334,13 +1334,17 @@ Purpose:
   Opt-in FLUX Non-Commercial: 9b / 9b-base / 9b-nvfp4 / flux2-dev (gated, not YouTube-ok).
   Opt-in FLUX 3 Image Klein (Kommunity, gated, revision-pinned):
   flux3 / flux3-base / flux3-nvfp4 / flux3-bf16 / flux3-te / flux3-pup.
+  Opt-in Qwen Image 2.1 (Qwen Research License, public ungated repos, revision-pinned):
+  qwen-image / qwen-image-turbo / qwen-image-nvfp4 / qwen-image-turbo-nvfp4 plus the
+  shared companions qwen-image-te / qwen-image-vae. Klein 4B stays the Apache default;
+  the pinned ComfyUI (v0.43.0) loads these natively (upstream support landed in v0.37.0).
 
 Audience:
   Operators on the Spark host. Prefer manage.sh download-models.
 
 ```bash
 Usage:
-  bazelisk run //scripts:run-utility -- download-image status [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev|flux3|flux3-base|flux3-nvfp4|flux3-bf16|flux3-te|flux3-pup] [--json]
+  bazelisk run //scripts:run-utility -- download-image status [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev|flux3|flux3-base|flux3-nvfp4|flux3-bf16|flux3-te|flux3-pup|qwen-image|qwen-image-turbo|qwen-image-nvfp4|qwen-image-turbo-nvfp4|qwen-image-te|qwen-image-vae] [--json]
   bazelisk run //scripts:run-utility -- download-image run [--tier ...]
   bazelisk run //scripts:run-utility -- download-image cleanup [--tier ...] [--dry-run|--yes]
 

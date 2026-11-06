@@ -25,7 +25,11 @@ export const EZ_QUALITY_CHOICES = [
   "max",
   "flux3-fast",
   "flux3-quality",
-  "flux3-nvfp4"
+  "flux3-nvfp4",
+  "qwen-image",
+  "qwen-image-turbo",
+  "qwen-image-nvfp4",
+  "qwen-image-turbo-nvfp4"
 ];
 
 export const EZ_QUALITY_NAMED = [
@@ -37,12 +41,17 @@ export const EZ_QUALITY_NAMED = [
   "max",
   "flux3-fast",
   "flux3-quality",
-  "flux3-nvfp4"
+  "flux3-nvfp4",
+  "qwen-image",
+  "qwen-image-turbo",
+  "qwen-image-nvfp4",
+  "qwen-image-turbo-nvfp4"
 ];
 
 export const EZ_QUALITY_FAMILIES = [
   "klein",
   "klein3",
+  "qwen",
   "wan",
   "ltx",
   "film",
@@ -134,6 +143,38 @@ export const EZ_QUALITY_TABLE = {
       "clip_name": null,
       "vae_name": null,
       "clip_type": null
+    },
+    "qwen-image": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-turbo": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-nvfp4": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-turbo-nvfp4": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
     }
   },
   "klein3": {
@@ -208,6 +249,144 @@ export const EZ_QUALITY_TABLE = {
       "clip_name": "qwen3vl_4b_int8_convrot.safetensors",
       "vae_name": "flux2-vae.safetensors",
       "clip_type": "flux2"
+    },
+    "qwen-image": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-turbo": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-nvfp4": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-turbo-nvfp4": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    }
+  },
+  "qwen": {
+    "draft": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "standard": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "high": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "Free Commercial Use (<$10M)": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "ultra": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "max": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "flux3-fast": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "flux3-quality": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "flux3-nvfp4": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image": {
+      "steps": 50,
+      "cfg": 3.5,
+      "unet_name": "qwen_image_2.1_int8_convrot.safetensors",
+      "clip_name": "qwen3vl_8b_int8_convrot.safetensors",
+      "vae_name": "qwen_image_2.1_vae_bf16.safetensors",
+      "clip_type": null
+    },
+    "qwen-image-turbo": {
+      "steps": 16,
+      "cfg": 1.0,
+      "unet_name": "qwen_image_2.1_turbo_int8_convrot.safetensors",
+      "clip_name": "qwen3vl_8b_int8_convrot.safetensors",
+      "vae_name": "qwen_image_2.1_vae_bf16.safetensors",
+      "clip_type": null
+    },
+    "qwen-image-nvfp4": {
+      "steps": 50,
+      "cfg": 3.5,
+      "unet_name": "qwen_image_2.1_nvfp4.safetensors",
+      "clip_name": "qwen3vl_8b_nvfp4.safetensors",
+      "vae_name": "qwen_image_2.1_vae_bf16.safetensors",
+      "clip_type": null
+    },
+    "qwen-image-turbo-nvfp4": {
+      "steps": 16,
+      "cfg": 1.0,
+      "unet_name": "qwen_image_2.1_turbo_nvfp4.safetensors",
+      "clip_name": "qwen3vl_8b_turbo_nvfp4.safetensors",
+      "vae_name": "qwen_image_2.1_vae_bf16.safetensors",
+      "clip_type": null
     }
   },
   "wan": {
@@ -276,6 +455,38 @@ export const EZ_QUALITY_TABLE = {
       "clip_type": null
     },
     "flux3-nvfp4": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-turbo": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-nvfp4": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-turbo-nvfp4": {
       "steps": null,
       "cfg": null,
       "unet_name": null,
@@ -356,6 +567,38 @@ export const EZ_QUALITY_TABLE = {
       "clip_name": null,
       "vae_name": null,
       "clip_type": null
+    },
+    "qwen-image": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-turbo": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-nvfp4": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-turbo-nvfp4": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
     }
   },
   "film": {
@@ -424,6 +667,38 @@ export const EZ_QUALITY_TABLE = {
       "clip_type": null
     },
     "flux3-nvfp4": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-turbo": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-nvfp4": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-turbo-nvfp4": {
       "steps": null,
       "cfg": null,
       "unet_name": null,
@@ -504,6 +779,38 @@ export const EZ_QUALITY_TABLE = {
       "clip_name": null,
       "vae_name": null,
       "clip_type": null
+    },
+    "qwen-image": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-turbo": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-nvfp4": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-turbo-nvfp4": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
     }
   },
   "trellis": {
@@ -578,6 +885,38 @@ export const EZ_QUALITY_TABLE = {
       "clip_name": null,
       "vae_name": null,
       "clip_type": null
+    },
+    "qwen-image": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-turbo": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-nvfp4": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-turbo-nvfp4": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
     }
   },
   "none": {
@@ -646,6 +985,38 @@ export const EZ_QUALITY_TABLE = {
       "clip_type": null
     },
     "flux3-nvfp4": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-turbo": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-nvfp4": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-turbo-nvfp4": {
       "steps": null,
       "cfg": null,
       "unet_name": null,
@@ -726,6 +1097,38 @@ export const EZ_QUALITY_TABLE = {
       "clip_name": null,
       "vae_name": null,
       "clip_type": null
+    },
+    "qwen-image": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-turbo": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-nvfp4": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
+    },
+    "qwen-image-turbo-nvfp4": {
+      "steps": null,
+      "cfg": null,
+      "unet_name": null,
+      "clip_name": null,
+      "vae_name": null,
+      "clip_type": null
     }
   }
 };
@@ -746,6 +1149,13 @@ export const EZ_QUALITY_OWNED = {
     "clip_name",
     "vae_name",
     "clip_type"
+  ],
+  "qwen": [
+    "steps",
+    "cfg",
+    "unet_name",
+    "clip_name",
+    "vae_name"
   ],
   "wan": [
     "steps"
@@ -776,7 +1186,11 @@ export const EZ_QUALITY_LABELS = {
     "max": "flux-2-klein-base-9b-fp8, 20 steps, CFG 5.0",
     "flux3-fast": "",
     "flux3-quality": "",
-    "flux3-nvfp4": ""
+    "flux3-nvfp4": "",
+    "qwen-image": "",
+    "qwen-image-turbo": "",
+    "qwen-image-nvfp4": "",
+    "qwen-image-turbo-nvfp4": ""
   },
   "klein3": {
     "draft": "",
@@ -787,7 +1201,26 @@ export const EZ_QUALITY_LABELS = {
     "max": "",
     "flux3-fast": "flux3-image-klein-int8-convrot, 16 steps, CFG 1.0",
     "flux3-quality": "flux3-image-klein-base-int8-convrot, 50 steps, CFG 3.5",
-    "flux3-nvfp4": "flux3-image-klein-base-nvfp4, 50 steps, CFG 3.5"
+    "flux3-nvfp4": "flux3-image-klein-base-nvfp4, 50 steps, CFG 3.5",
+    "qwen-image": "",
+    "qwen-image-turbo": "",
+    "qwen-image-nvfp4": "",
+    "qwen-image-turbo-nvfp4": ""
+  },
+  "qwen": {
+    "draft": "",
+    "standard": "",
+    "high": "",
+    "Free Commercial Use (<$10M)": "",
+    "ultra": "",
+    "max": "",
+    "flux3-fast": "",
+    "flux3-quality": "",
+    "flux3-nvfp4": "",
+    "qwen-image": "qwen_image_2.1_int8_convrot, 50 steps, CFG 3.5",
+    "qwen-image-turbo": "qwen_image_2.1_turbo_int8_convrot, 16 steps, CFG 1.0",
+    "qwen-image-nvfp4": "qwen_image_2.1_nvfp4, 50 steps, CFG 3.5",
+    "qwen-image-turbo-nvfp4": "qwen_image_2.1_turbo_nvfp4, 16 steps, CFG 1.0"
   },
   "wan": {
     "draft": "12 steps",
@@ -798,7 +1231,11 @@ export const EZ_QUALITY_LABELS = {
     "max": "32 steps",
     "flux3-fast": "",
     "flux3-quality": "",
-    "flux3-nvfp4": ""
+    "flux3-nvfp4": "",
+    "qwen-image": "",
+    "qwen-image-turbo": "",
+    "qwen-image-nvfp4": "",
+    "qwen-image-turbo-nvfp4": ""
   },
   "ltx": {
     "draft": "12 steps",
@@ -809,7 +1246,11 @@ export const EZ_QUALITY_LABELS = {
     "max": "32 steps",
     "flux3-fast": "",
     "flux3-quality": "",
-    "flux3-nvfp4": ""
+    "flux3-nvfp4": "",
+    "qwen-image": "",
+    "qwen-image-turbo": "",
+    "qwen-image-nvfp4": "",
+    "qwen-image-turbo-nvfp4": ""
   },
   "film": {
     "draft": "12 steps",
@@ -820,7 +1261,11 @@ export const EZ_QUALITY_LABELS = {
     "max": "32 steps",
     "flux3-fast": "",
     "flux3-quality": "",
-    "flux3-nvfp4": ""
+    "flux3-nvfp4": "",
+    "qwen-image": "",
+    "qwen-image-turbo": "",
+    "qwen-image-nvfp4": "",
+    "qwen-image-turbo-nvfp4": ""
   },
   "audio": {
     "draft": "4 steps",
@@ -831,7 +1276,11 @@ export const EZ_QUALITY_LABELS = {
     "max": "24 steps",
     "flux3-fast": "",
     "flux3-quality": "",
-    "flux3-nvfp4": ""
+    "flux3-nvfp4": "",
+    "qwen-image": "",
+    "qwen-image-turbo": "",
+    "qwen-image-nvfp4": "",
+    "qwen-image-turbo-nvfp4": ""
   },
   "trellis": {
     "draft": "8 steps",
@@ -842,7 +1291,11 @@ export const EZ_QUALITY_LABELS = {
     "max": "28 steps",
     "flux3-fast": "",
     "flux3-quality": "",
-    "flux3-nvfp4": ""
+    "flux3-nvfp4": "",
+    "qwen-image": "",
+    "qwen-image-turbo": "",
+    "qwen-image-nvfp4": "",
+    "qwen-image-turbo-nvfp4": ""
   },
   "none": {
     "draft": "",
@@ -853,7 +1306,11 @@ export const EZ_QUALITY_LABELS = {
     "max": "",
     "flux3-fast": "",
     "flux3-quality": "",
-    "flux3-nvfp4": ""
+    "flux3-nvfp4": "",
+    "qwen-image": "",
+    "qwen-image-turbo": "",
+    "qwen-image-nvfp4": "",
+    "qwen-image-turbo-nvfp4": ""
   },
   "llm": {
     "draft": "",
@@ -864,7 +1321,11 @@ export const EZ_QUALITY_LABELS = {
     "max": "",
     "flux3-fast": "",
     "flux3-quality": "",
-    "flux3-nvfp4": ""
+    "flux3-nvfp4": "",
+    "qwen-image": "",
+    "qwen-image-turbo": "",
+    "qwen-image-nvfp4": "",
+    "qwen-image-turbo-nvfp4": ""
   }
 };
 

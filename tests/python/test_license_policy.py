@@ -41,6 +41,33 @@ REQUIRED_SNIPPETS = (
     "qwen3vl_4b_int8_convrot.safetensors",
     "qwen3.5_9b_flux3_prompt_upsampler_int8_convrot.safetensors",
     "download-image --tier flux3",
+    "Qwen RESEARCH LICENSE AGREEMENT",
+    "Qwen-Image 2.1 INT8-convrot",
+    "Qwen-Image 2.1 Turbo INT8-convrot",
+    "Qwen-Image 2.1 NVFP4",
+    "Qwen-Image 2.1 Turbo NVFP4",
+    "Qwen3VL-8B text encoder (Qwen-Image 2.1 companion)",
+    "Qwen-Image 2.1 VAE BF16",
+    "Comfy-Org/Qwen-Image-2.1",
+    "Qwen/Qwen-Image-2.1",
+    "Qwen/Qwen-Image-2.1-Turbo",
+    "BennyDaBall/Qwen-Image-2.1-NVFP4",
+    "BennyDaBall/Qwen-Image-2.1-Turbo-NVFP4",
+    "aacf31a6d48e707f352ecba714cee0680da3479b",
+    "b0e954a1ba86f00e30f76bac2494f45b0a221948",
+    "82226d8cadaf20a678338f8faf5e5a0cfc3e1dfd",
+    "qwen_image_2.1_int8_convrot.safetensors",
+    "qwen_image_2.1_turbo_int8_convrot.safetensors",
+    "qwen_image_2.1_nvfp4.safetensors",
+    "qwen_image_2.1_turbo_nvfp4.safetensors",
+    "qwen3vl_8b_int8_convrot.safetensors",
+    "qwen3vl_8b_nvfp4.safetensors",
+    "qwen3vl_8b_turbo_nvfp4.safetensors",
+    "qwen_image_2.1_vae_bf16.safetensors",
+    "download-image --tier qwen-image",
+    "Built with Qwen",
+    "Hangzhou Tongyi Laboratory",
+    "diffusers",
     "Z-Image Turbo",
     "Wan 2.2 TI2V-5B",
     "Comfy-Org/Wan_2.2_ComfyUI_Repackaged",
@@ -192,6 +219,12 @@ DEFAULT_NO_MODELS = (
     "Higgs Boson",
     "TTS-Audio-Suite",
     "OldTimeRadio",
+    "Qwen-Image 2.1 INT8-convrot",
+    "Qwen-Image 2.1 Turbo INT8-convrot",
+    "Qwen-Image 2.1 NVFP4",
+    "Qwen-Image 2.1 Turbo NVFP4",
+    "Qwen3VL-8B text encoder (Qwen-Image 2.1 companion)",
+    "Qwen-Image 2.1 VAE BF16",
 )
 
 
@@ -282,6 +315,32 @@ def test_flux3_klein_is_not_the_default_still() -> None:
         lower = text.lower()
         assert "opt-in" in lower, path
         assert "not legal advice" in lower, path
+
+
+def test_qwen_image_21_is_research_license_not_apache() -> None:
+    """Qwen-Image 2.1 rows carry the research license and never claim Apache 2.0."""
+    for path in (LICENSE_ROOT, LICENSE_DOCS):
+        rows = []
+        for row in _table_rows(_read(path)):
+            cells = [c.strip() for c in row.strip("|").split("|")]
+            if len(cells) >= 9 and "Qwen-Image 2.1" in cells[0]:
+                rows.append((row, cells))
+        assert len(rows) >= 6, f"{path.name} expected the six Qwen-Image 2.1 rows"
+        for row, cells in rows:
+            assert "Qwen RESEARCH LICENSE AGREEMENT" in row, row
+            assert "Apache 2.0" not in row, row
+            assert cells[3].startswith("Yes"), row
+            assert cells[4] == "No", row
+            assert cells[8] == "No", row
+
+
+def test_qwen_image_21_is_not_the_default_still() -> None:
+    """Apache Klein 4B stays the default still; Qwen-Image 2.1 stays opt-in research weights."""
+    for path in (LICENSE_ROOT, LICENSE_DOCS):
+        lower = _read(path).lower()
+        assert "qwen research license agreement" in lower, path
+        assert "commercial use" in lower, path
+        assert "klein 4b remains the apache default still" in lower, path
 
 
 def test_banned_podcast_rows_us_not_ok() -> None:

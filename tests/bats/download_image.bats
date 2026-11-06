@@ -288,6 +288,234 @@ exit 0
   export LAB_MOCK_HF_DOWNLOAD=1
 }
 
+@test "download-image qwen image tiers are opt-in research-license on pinned repos" {
+  local t
+  for t in qwen-image qwen-image-turbo qwen-image-te qwen-image-vae; do
+    run tier_repo "${t}"
+    [[ "${output}" == *"Comfy-Org/Qwen-Image-2.1"* ]]
+  done
+  run tier_repo qwen-image-nvfp4
+  [[ "${output}" == *"BennyDaBall/Qwen-Image-2.1-NVFP4"* ]]
+  run tier_repo qwen-image-turbo-nvfp4
+  [[ "${output}" == *"BennyDaBall/Qwen-Image-2.1-Turbo-NVFP4"* ]]
+  for t in qwen-image qwen-image-turbo qwen-image-nvfp4 qwen-image-turbo-nvfp4 qwen-image-te qwen-image-vae; do
+    run is_nc_image_tier "${t}"
+    [ "${status}" -eq 0 ]
+    run warn_flux_nc_image_tier "${t}"
+    [ "${status}" -eq 0 ]
+    [[ "${output}" == *"Qwen Research License"* ]]
+    [[ "${output}" == *"Non-Commercial"* ]]
+    [[ "${output}" == *"Commercial use needs a separate paid license from Qwen"* ]]
+    [[ "${output}" == *"Klein 4B"* ]]
+    [[ "${output}" == *"docs/licenses.md"* ]]
+    [[ "${output}" != *"Gated Hugging Face card"* ]]
+  done
+  for t in qwen-image-nvfp4 qwen-image-turbo-nvfp4; do
+    run warn_flux_nc_image_tier "${t}"
+    [[ "${output}" == *"conversion"* ]]
+  done
+  run is_nc_image_tier fast
+  [ "${status}" -ne 0 ]
+}
+
+@test "download-image qwen image repo min dir and includes are selective" {
+  run tier_include_patterns qwen-image
+  [ "${output}" = "diffusion_models/qwen_image_2.1_int8_convrot.safetensors" ]
+  run tier_include_patterns qwen-image-turbo
+  [ "${output}" = "diffusion_models/qwen_image_2.1_turbo_int8_convrot.safetensors" ]
+  run tier_include_patterns qwen-image-te
+  [ "${output}" = "text_encoders/qwen3vl_8b_int8_convrot.safetensors" ]
+  run tier_include_patterns qwen-image-vae
+  [ "${output}" = "vae/qwen_image_2.1_vae_bf16.safetensors" ]
+  run tier_include_patterns qwen-image-nvfp4
+  [ "${lines[0]}" = "diffusion_models/qwen_image_2.1_nvfp4.safetensors" ]
+  [ "${lines[1]}" = "text_encoders/qwen3vl_8b_nvfp4.safetensors" ]
+  run tier_include_patterns qwen-image-turbo-nvfp4
+  [ "${lines[0]}" = "diffusion_models/qwen_image_2.1_turbo_nvfp4.safetensors" ]
+  [ "${lines[1]}" = "text_encoders/qwen3vl_8b_turbo_nvfp4.safetensors" ]
+  run tier_min_gb qwen-image
+  [ "${output}" = "8" ]
+  run tier_min_gb qwen-image-turbo
+  [ "${output}" = "8" ]
+  run tier_min_gb qwen-image-nvfp4
+  [ "${output}" = "12" ]
+  run tier_min_gb qwen-image-turbo-nvfp4
+  [ "${output}" = "15" ]
+  run tier_min_gb qwen-image-te
+  [ "${output}" = "10" ]
+  run tier_min_gb qwen-image-vae
+  [ "${output}" = "1" ]
+  run tier_dir qwen-image
+  [ "${output}" = "${MODELS_DIR}/Comfy-Org__Qwen-Image-2.1_qwen-image" ]
+  run tier_dir qwen-image-nvfp4
+  [ "${output}" = "${MODELS_DIR}/BennyDaBall__Qwen-Image-2.1-NVFP4_qwen-image-nvfp4" ]
+}
+
+@test "download-image qwen image never enters tier all" {
+  local t
+  TIER=all
+  run tiers_to_process
+  [[ "${output}" != *"qwen"* ]]
+  [[ "${output}" == *"fast"* ]]
+  for t in qwen-image qwen-image-turbo qwen-image-nvfp4 qwen-image-turbo-nvfp4 qwen-image-te qwen-image-vae; do
+    TIER="${t}"
+    run tiers_to_process
+    [[ "${output}" != *"all"* ]]
+  done
+}
+
+@test "download-image qwen image companions pull te plus vae and nvfp4 pulls vae only" {
+  TIER=qwen-image
+  run tiers_to_process
+  [ "${output}" = "qwen-image qwen-image-te qwen-image-vae" ]
+  TIER=qwen-image-turbo
+  run tiers_to_process
+  [ "${output}" = "qwen-image-turbo qwen-image-te qwen-image-vae" ]
+  TIER=qwen-image-nvfp4
+  run tiers_to_process
+  [ "${output}" = "qwen-image-nvfp4 qwen-image-vae" ]
+  [[ "${output}" != *"qwen-image-te"* ]]
+  TIER=qwen-image-turbo-nvfp4
+  run tiers_to_process
+  [ "${output}" = "qwen-image-turbo-nvfp4 qwen-image-vae" ]
+  [[ "${output}" != *"qwen-image-te"* ]]
+  TIER=qwen-image-te
+  run tiers_to_process
+  [ "${output}" = "qwen-image-te" ]
+  TIER=qwen-image-vae
+  run tiers_to_process
+  [ "${output}" = "qwen-image-vae" ]
+}
+
+@test "download-image qwen image parse_args accepts tiers still rejects unknown" {
+  local t
+  for t in qwen-image qwen-image-turbo qwen-image-nvfp4 qwen-image-turbo-nvfp4 qwen-image-te qwen-image-vae; do
+    run bash -c "MODELS_DIR=\"${MODELS_DIR}\" bash \"${DI}\" status --tier ${t} --json"
+    [ "${status}" -eq 0 ]
+    [[ "${output}" == *"tiers"* ]]
+  done
+  run bash "${DI}" status --tier qwen-image-bogus
+  [ "${status}" -ne 0 ]
+  run bash "${DI}" status --tier qwen
+  [ "${status}" -ne 0 ]
+  run bash "${DI}" run --tier quality
+  [ "${status}" -ne 0 ]
+  run bash "${DI}" --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"qwen-image-te"* ]]
+  [[ "${output}" == *"Qwen Research License"* ]]
+}
+
+@test "download-image qwen image nvfp4 includes never match manifest sidecars" {
+  local tdir sidecar
+  for t in qwen-image-nvfp4 qwen-image-turbo-nvfp4; do
+    run tier_include_patterns "${t}"
+    [[ "${output}" != *".manifest.json"* ]]
+    run is_ltx_keep_relpath "${t}" "diffusion_models/qwen_image_2.1_nvfp4.manifest.json"
+    [ "${status}" -ne 0 ]
+  done
+  tdir="$(tier_dir qwen-image-nvfp4)"
+  mkdir -p "${tdir}/diffusion_models"
+  echo keep >"${tdir}/diffusion_models/qwen_image_2.1_nvfp4.safetensors"
+  sidecar="${tdir}/diffusion_models/qwen_image_2.1_nvfp4.manifest.json"
+  echo waste >"${sidecar}"
+  run list_extra_ltx_files qwen-image-nvfp4
+  [[ "${output}" == *"${sidecar}"* ]]
+  CLEANUP_YES=1
+  TIER=qwen-image-nvfp4
+  run cmd_cleanup
+  [ "${status}" -eq 0 ]
+  [[ ! -f ${sidecar} ]]
+  [[ -f ${tdir}/diffusion_models/qwen_image_2.1_nvfp4.safetensors ]]
+}
+
+@test "download-image qwen image pins HF revisions 9b does not" {
+  local t sha
+  run tier_revision qwen-image
+  [ "${output}" = "aacf31a6d48e707f352ecba714cee0680da3479b" ]
+  run tier_revision qwen-image-turbo
+  [ "${output}" = "aacf31a6d48e707f352ecba714cee0680da3479b" ]
+  run tier_revision qwen-image-te
+  [ "${output}" = "aacf31a6d48e707f352ecba714cee0680da3479b" ]
+  run tier_revision qwen-image-vae
+  [ "${output}" = "aacf31a6d48e707f352ecba714cee0680da3479b" ]
+  run tier_revision qwen-image-nvfp4
+  [ "${output}" = "b0e954a1ba86f00e30f76bac2494f45b0a221948" ]
+  run tier_revision qwen-image-turbo-nvfp4
+  [ "${output}" = "82226d8cadaf20a678338f8faf5e5a0cfc3e1dfd" ]
+  for t in qwen-image qwen-image-turbo qwen-image-nvfp4 qwen-image-turbo-nvfp4 qwen-image-te qwen-image-vae; do
+    run tier_revision "${t}"
+    sha="${output}"
+    [ "${#sha}" -eq 40 ]
+    printf '%s' "${sha}" | grep -Eq '^[0-9a-f]{40}$'
+  done
+  run tier_revision fast
+  [ "${output}" = "" ]
+  run tier_revision 9b
+  [ "${output}" = "" ]
+  unset LAB_MOCK_HF_DOWNLOAD
+  export HF_PROGRESS=0
+  install_mock_bin hf '
+if [[ ${2:-} == "--help" ]]; then
+  echo "Usage: hf download [OPTIONS] REPO_ID"
+  echo "  --revision TEXT   Git revision id"
+  echo "  --token TEXT"
+  echo "  --local-dir PATH"
+  exit 0
+fi
+echo "hf $*" >>"${TEST_TMP_DIR}/hf_calls.log"
+echo "hf $*"
+exit 0
+'
+  : >"${TEST_TMP_DIR}/hf_calls.log"
+  run hf_download "BennyDaBall/Qwen-Image-2.1-NVFP4" \
+    --local-dir "${MODELS_DIR}/rev" --include "diffusion_models/x.safetensors" \
+    --revision "$(tier_revision qwen-image-nvfp4)"
+  [ "${status}" -eq 0 ]
+  grep -q -- '--revision b0e954a1ba86f00e30f76bac2494f45b0a221948' "${TEST_TMP_DIR}/hf_calls.log"
+  export LAB_MOCK_HF_DOWNLOAD=1
+}
+
+@test "download-image run --tier qwen image links all three model dirs" {
+  run bash -c "MODELS_DIR=\"${MODELS_DIR}\" LAB_MOCK_HF_DOWNLOAD=1 bash \"${DI}\" run --tier qwen-image"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Qwen Research License"* ]]
+  [[ -e "${MODELS_DIR}/comfy/diffusion_models/qwen_image_2.1_int8_convrot.safetensors" ]]
+  [[ -e "${MODELS_DIR}/comfy/text_encoders/qwen3vl_8b_int8_convrot.safetensors" ]]
+  [[ -e "${MODELS_DIR}/comfy/vae/qwen_image_2.1_vae_bf16.safetensors" ]]
+  [[ ! -e "${MODELS_DIR}/comfy/diffusion_models/qwen_image_2.1_turbo_int8_convrot.safetensors" ]]
+  [[ ! -d "$(tier_dir qwen-image-nvfp4)" ]]
+}
+
+@test "download-image run --tier qwen image turbo nvfp4 carries its own text encoder" {
+  run bash -c "MODELS_DIR=\"${MODELS_DIR}\" LAB_MOCK_HF_DOWNLOAD=1 bash \"${DI}\" run --tier qwen-image-turbo-nvfp4"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Qwen Research License"* ]]
+  [[ "${output}" == *"conversion"* ]]
+  [[ -e "${MODELS_DIR}/comfy/diffusion_models/qwen_image_2.1_turbo_nvfp4.safetensors" ]]
+  [[ -e "${MODELS_DIR}/comfy/text_encoders/qwen3vl_8b_turbo_nvfp4.safetensors" ]]
+  [[ -e "${MODELS_DIR}/comfy/vae/qwen_image_2.1_vae_bf16.safetensors" ]]
+  [[ ! -e "${MODELS_DIR}/comfy/text_encoders/qwen3vl_8b_int8_convrot.safetensors" ]]
+  [[ ! -d "$(tier_dir qwen-image-te)" ]]
+}
+
+@test "download-image qwen image usage tier lists match the accepted tiers" {
+  local a b c t
+  a=$(grep -m1 -oE '\[--tier fast\|[^]]*\]' "${DI}")
+  b=$(grep -m2 -oE '\[--tier fast\|[^]]*\]' "${DI}" | sed -n '2p')
+  c=$(grep -m3 -oE '\[--tier fast\|[^]]*\]' "${DI}" | sed -n '3p')
+  [ -n "${a}" ]
+  [ "${a}" = "${b}" ]
+  [ "${b}" = "${c}" ]
+  for t in qwen-image qwen-image-turbo qwen-image-nvfp4 qwen-image-turbo-nvfp4 qwen-image-te qwen-image-vae; do
+    [[ "${a}" == *"${t}"* ]]
+    run bash "${DI}" --help
+    [[ "${output}" == *"${t}"* ]]
+  done
+  run bash "${DI}" --help
+  [[ "${output}" == *"kitchen-sink"* || "${output}" == *"all"* ]]
+}
+
 @test "download-image cleanup keep selective and prune" {
   local tdir extra
   tdir="$(tier_dir fast)"

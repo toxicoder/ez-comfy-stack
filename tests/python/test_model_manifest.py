@@ -72,6 +72,62 @@ FLUX3_PACKS: dict[str, tuple[int, str, list[str], str]] = {
     ),
 }
 
+QWEN_ORG_REPO_DIR = "Comfy-Org__Qwen-Image-2.1"
+QWEN_NVFP4_REPO_DIR = "BennyDaBall__Qwen-Image-2.1-NVFP4"
+QWEN_TURBO_NVFP4_REPO_DIR = "BennyDaBall__Qwen-Image-2.1-Turbo-NVFP4"
+
+# pack name -> (min_gb, tier dir, basenames, shares, cmd)
+QWEN_PACKS: dict[str, tuple[int, str, list[str], list[str], str]] = {
+    "qwen-image": (
+        8,
+        f"{QWEN_ORG_REPO_DIR}_qwen-image",
+        ["qwen_image_2.1_int8_convrot.safetensors"],
+        ["qwen-image-te", "qwen-image-vae"],
+        "download-image --tier qwen-image",
+    ),
+    "qwen-image-turbo": (
+        8,
+        f"{QWEN_ORG_REPO_DIR}_qwen-image-turbo",
+        ["qwen_image_2.1_turbo_int8_convrot.safetensors"],
+        ["qwen-image-te", "qwen-image-vae"],
+        "download-image --tier qwen-image-turbo",
+    ),
+    "qwen-image-nvfp4": (
+        12,
+        f"{QWEN_NVFP4_REPO_DIR}_qwen-image-nvfp4",
+        [
+            "qwen_image_2.1_nvfp4.safetensors",
+            "qwen3vl_8b_nvfp4.safetensors",
+        ],
+        ["qwen-image-vae"],
+        "download-image --tier qwen-image-nvfp4",
+    ),
+    "qwen-image-turbo-nvfp4": (
+        15,
+        f"{QWEN_TURBO_NVFP4_REPO_DIR}_qwen-image-turbo-nvfp4",
+        [
+            "qwen_image_2.1_turbo_nvfp4.safetensors",
+            "qwen3vl_8b_turbo_nvfp4.safetensors",
+        ],
+        ["qwen-image-vae"],
+        "download-image --tier qwen-image-turbo-nvfp4",
+    ),
+    "qwen-image-te": (
+        10,
+        f"{QWEN_ORG_REPO_DIR}_qwen-image-te",
+        ["qwen3vl_8b_int8_convrot.safetensors"],
+        [],
+        "download-image --tier qwen-image-te",
+    ),
+    "qwen-image-vae": (
+        1,
+        f"{QWEN_ORG_REPO_DIR}_qwen-image-vae",
+        ["qwen_image_2.1_vae_bf16.safetensors"],
+        [],
+        "download-image --tier qwen-image-vae",
+    ),
+}
+
 
 def test_flux3_klein_packs_are_opt_in() -> None:
     """FLUX 3 Image Klein packs exist, are opt-in, and pin their tier dir."""
@@ -100,6 +156,60 @@ def test_flux3_klein_files_stay_out_of_default_keep_set() -> None:
     assert "flux-2-klein-4b-fp8.safetensors" in default_keep
     keep = mm.keep_set(man)
     assert "flux3-image-klein-int8-convrot.safetensors" in keep
+
+
+def test_qwen_image_21_packs_are_opt_in() -> None:
+    """Qwen-Image-2.1 packs exist, are opt-in, and pin their tier dir.
+
+    All six carry the Qwen RESEARCH LICENSE AGREEMENT (no commercial use
+    without a separate paid license), so none may be a default pack.
+    """
+    man = mm.load_manifest(MANIFEST)
+    packs = man["packs"]
+    for name, (min_gb, tier_dir, files, shares, cmd) in QWEN_PACKS.items():
+        assert name in packs, name
+        pack = packs[name]
+        assert pack["default"] is False, name
+        assert pack["min_gb"] == min_gb, name
+        assert pack["tier_dir"] == tier_dir, name
+        assert pack["files"] == files, name
+        assert pack["shares"] == shares, name
+        assert pack["cmd"] == cmd, name
+
+
+def test_qwen_image_21_files_stay_out_of_default_keep_set() -> None:
+    """Nothing Qwen-Image-2.1 ships in download-models; Klein 4B stays the default."""
+    man = mm.load_manifest(MANIFEST)
+    default_keep = mm.default_keep_set(man)
+    for name, (_, _, files, _, _) in QWEN_PACKS.items():
+        for filename in files:
+            assert filename not in default_keep, f"{name}:{filename}"
+    assert "flux-2-klein-4b-fp8.safetensors" in default_keep
+    keep = mm.keep_set(man)
+    assert "qwen_image_2.1_int8_convrot.safetensors" in keep
+
+
+def test_qwen_image_21_shares_resolve_to_real_packs() -> None:
+    """Every shares: target names a pack that actually exists."""
+    man = mm.load_manifest(MANIFEST)
+    packs = man["packs"]
+    for name, (_, _, _, shares, _) in QWEN_PACKS.items():
+        for target in shares:
+            assert target in packs, f"{name} shares {target}"
+
+
+def test_qwen_image_21_upstream_names_are_recorded() -> None:
+    """The pack comments name the upstream prose models and both repo owners."""
+    text = MANIFEST.read_text(encoding="utf-8")
+    for needle in (
+        "Comfy-Org/Qwen-Image-2.1",
+        "BennyDaBall/Qwen-Image-2.1-NVFP4",
+        "BennyDaBall/Qwen-Image-2.1-Turbo-NVFP4",
+        "Qwen/Qwen-Image-2.1",
+        "Qwen/Qwen-Image-2.1-Turbo",
+        "RESEARCH LICENSE",
+    ):
+        assert needle in text, needle
 
 
 def test_default_filenames_in_keep_set() -> None:

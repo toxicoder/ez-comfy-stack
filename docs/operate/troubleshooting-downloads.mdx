@@ -1,6 +1,6 @@
 ---
 title: Downloads and bandwidth
-description: Fix wondershaper qdisc errors, bandwidth limits stuck after a kill, hung Hugging Face resumes, and gated LTX pulls.
+description: Fix wondershaper qdisc errors, bandwidth limits stuck after a kill, hung Hugging Face resumes, and gated LTX or missing opt-in Qwen-Image pulls.
 tags: [troubleshooting, downloads, bandwidth, huggingface, ltx]
 ---
 
@@ -12,6 +12,7 @@ tags: [troubleshooting, downloads, bandwidth, huggingface, ltx]
 - **Bandwidth limits and qdisc** - soft-fail, stuck limits, and wrong caps
 - **Hugging Face locks and hung resume** - `Still waiting to acquire lock` and `0 MiB/s`
 - **CLI, progress, and gated pulls** - the `hf` tool, progress lines, and the LTX license
+- **Opt-in Qwen-Image 2.1 pulls** - the missing-checkpoint error and the diffusers trap
 
 **What this enables**
 
@@ -95,6 +96,21 @@ The modern `hf` CLI, its progress line, and the one license the token cannot gra
 | Long Python `GatedRepoError` traceback | CLI stderr was leaking (should be a short checklist) | Pull latest; traceback is captured to a log. `LAB_DEBUG=1` still dumps the last 40 lines |
 | No `v` / `══ n/m ══` progress line | Piped SSH, `EZ_COMFY_PROGRESS=0`, or `HF_PROGRESS=0` | Progress rewrites a TTY line; pipes get a newline every interval. Unset those env vars. `LAB_DEBUG=1` for extra traces |
 | Command looks hung (ffmpeg / Blender / compose build) | Heartbeat interval or no TTY | Wait for `... still running` / `elapsed m:ss`. `EZ_COMFY_PROGRESS_INTERVAL=2` is the default tick |
+
+### Opt-in Qwen-Image 2.1 pulls
+
+The six `qwen-image*` packs are **opt-in**: never in `download-models`, never in image
+`--tier all`. Both rows below therefore mean "nobody pulled the pack", not "the download
+broke". Pack ids, sizes, and the license are on [Download tiers](../download-tiers.md).
+
+| Symptom | Likely cause | Action |
+| --- | --- | --- |
+| A queued Qwen-Image-2.1 graph stops with a missing-checkpoint / UNET-not-found error and the loader list has no `qwen_image_2.1_*` entry | The tier was never pulled - these packs are opt-in and `download-models` does not fetch them | `bazelisk run //scripts:run-utility -- download-image run --tier qwen-image` (or `qwen-image-turbo`, `qwen-image-nvfp4`, `qwen-image-turbo-nvfp4`), then reload ComfyUI. The command pulls the `qwen-image-te` / `qwen-image-vae` companions with it |
+| A checkpoint loader shows nothing for `Qwen/Qwen-Image-2.1`, or a manual `hf download` of it fills the cache and ComfyUI still lists no model | The official `Qwen/*` Hugging Face repos are **diffusers** folders - ComfyUI cannot load one in this stack | Pull the Comfy-Org repack instead: `Comfy-Org/Qwen-Image-2.1` (revision-pinned), which is what the downloader always uses. Those repos are public and ungated - no `HF_TOKEN`, no license-accept click |
+
+All six packs carry the **Qwen RESEARCH LICENSE AGREEMENT** - research and personal use only,
+no commercial use until you hold a separate paid Qwen license. Klein 4B stays the Apache
+default still: [Model licenses](../licenses.md).
 
 ## Related
 

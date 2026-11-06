@@ -76,3 +76,32 @@ teardown() {
   [[ "${output}" == *"qwen3vl_4b_int8_convrot.safetensors"* ]]
   [[ "${output}" == *"download-image --tier flux3-te"* ]]
 }
+
+@test "models-manifest includes opt-in qwen image 2.1 packs default false" {
+  run cmd_render
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"qwen-image"* ]]
+  [[ "${output}" == *"qwen-image-turbo-nvfp4"* ]]
+  [[ "${output}" == *"qwen-image-te"* ]]
+  [[ "${output}" == *"qwen-image-vae"* ]]
+  run models_default_keep_set
+  [ "${status}" -eq 0 ]
+  [[ "${output}" != *"qwen_image_2.1"* ]]
+  [[ "${output}" != *"qwen3vl_8b"* ]]
+  run grep -A10 '  qwen-image:$' "${REPO_ROOT}/config/model-manifest.yaml"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"default: false"* ]]
+  [[ "${output}" == *"qwen_image_2.1_int8_convrot.safetensors"* ]]
+  [[ "${output}" == *"download-image --tier qwen-image"* ]]
+  run grep -A10 '  qwen-image-nvfp4:$' "${REPO_ROOT}/config/model-manifest.yaml"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"default: false"* ]]
+  [[ "${output}" == *"qwen_image_2.1_nvfp4.safetensors"* ]]
+  [[ "${output}" == *"qwen3vl_8b_nvfp4.safetensors"* ]]
+  [[ "${output}" == *"download-image --tier qwen-image-nvfp4"* ]]
+  run grep -A6 '  qwen-image-vae:$' "${REPO_ROOT}/config/model-manifest.yaml"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"default: false"* ]]
+  [[ "${output}" == *"qwen_image_2.1_vae_bf16.safetensors"* ]]
+  [[ "${output}" == *"download-image --tier qwen-image-vae"* ]]
+}

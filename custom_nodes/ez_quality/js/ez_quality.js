@@ -35,6 +35,9 @@ const QUALITY_FREE_COMMERCIAL_ALIAS = "free_commercial";
 const FAMILY_NOOP = "none";
 const FAMILY_LLM = "llm";
 const FAMILY_KLEIN3 = "klein3";
+// Opt-in Qwen-Image 2.1 stills: own family, so the Klein ladder and the FLUX 3
+// profiles cannot drop their weights onto a Qwen graph. Never a default.
+const FAMILY_QWEN = "qwen";
 
 const CLIP_16_9_LABEL = "16:9 LTX feeder (1280x704)";
 const CLIP_9_16_LABEL = "9:16 LTX feeder (768x1280)";
@@ -230,6 +233,45 @@ function isKlein3Clip(name) {
 }
 
 /**
+ * Fold separators so the Qwen-Image needles match either filename style.
+ * @param {string} name
+ * @returns {string}
+ */
+function qwenBlob(name) {
+  return String(name || "").toLowerCase().replaceAll(".", "-").replaceAll("_", "-");
+}
+
+/**
+ * True when a UNET filename is an opt-in Qwen-Image 2.1 weight (INT8/NVFP4,
+ * both twins). Qwen research-licensed, so no tier here is ever a default.
+ * @param {string} name
+ * @returns {boolean}
+ */
+function isQwenImageUnet(name) {
+  const blob = qwenBlob(name);
+  const quantized = blob.includes("convrot") || blob.includes("nvfp4");
+  return blob.includes("qwen-image-2-1") && quantized;
+}
+
+/**
+ * True when a CLIP filename is a Qwen-Image 2.1 Qwen3VL-8B text encoder.
+ * @param {string} name
+ * @returns {boolean}
+ */
+function isQwenImageClip(name) {
+  return qwenBlob(name).includes("qwen3vl-8b");
+}
+
+/**
+ * True when a VAE filename is the Qwen-Image 2.1 VAE.
+ * @param {string} name
+ * @returns {boolean}
+ */
+function isQwenImageVae(name) {
+  return qwenBlob(name).includes("qwen-image-2-1-vae");
+}
+
+/**
  * True when a UNET filename looks like Wan 14B.
  * @param {*} name
  * @returns {boolean}
@@ -305,13 +347,19 @@ function isSwappableTarget(field, current) {
     return true;
   }
   if (field === "unet_name") {
-    return isKlein4b(name) || isKlein9b(name) || isFlux2Dev(name) || isKlein3Unet(name);
+    return (
+      isKlein4b(name) ||
+      isKlein9b(name) ||
+      isFlux2Dev(name) ||
+      isKlein3Unet(name) ||
+      isQwenImageUnet(name)
+    );
   }
   if (field === "clip_name") {
-    return isFlux2Clip(name) || isKlein3Clip(name);
+    return isFlux2Clip(name) || isKlein3Clip(name) || isQwenImageClip(name);
   }
   if (field === "vae_name") {
-    return isFlux2Vae(name);
+    return isFlux2Vae(name) || isQwenImageVae(name);
   }
   return true;
 }
@@ -331,6 +379,51 @@ function graphHasKlein3Weights(graph) {
       return true;
     }
     if (ntype === "CLIPLoader" && isKlein3Clip(widgetByName(node, "clip_name")?.value)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Widget as the family pins read it. LiteGraph owns the whole shape at runtime,
+ * so the pin only claims the value it compares.
+ * @typedef {Object<string, *>} EzWidget
+ */
+
+/**
+ * Node as the family pins read it: class, type, and loader widgets.
+ * @typedef {Object<string, *>} EzNode
+ * @property {Array<EzWidget>=} widgets Widgets LiteGraph carries on the node.
+ */
+
+/**
+ * Graph as the family pins read it, muted lanes included.
+ * @typedef {Object<string, *>} EzGraph
+ * @property {Array<EzNode>=} nodes Nodes on the graph.
+ */
+
+/**
+ * True when any live loader pins opt-in Qwen-Image 2.1 weights.
+ * @param {EzGraph|undefined} graph
+ * @returns {boolean}
+ */
+function graphHasQwenWeights(graph) {
+  for (const node of graph?.nodes || []) {
+    if (!isLiveNode(node)) {
+      continue;
+    }
+    const ntype = nodeType(node);
+    const unetWidget = /** @type {EzWidget|undefined} */ (
+      widgetByName(node, "unet_name")
+    );
+    if (ntype === "UNETLoader" && isQwenImageUnet(unetWidget?.value)) {
+      return true;
+    }
+    const clipWidget = /** @type {EzWidget|undefined} */ (
+      widgetByName(node, "clip_name")
+    );
+    if (ntype === "CLIPLoader" && isQwenImageClip(clipWidget?.value)) {
       return true;
     }
   }
@@ -437,8 +530,9 @@ function occupancy(graph) {
 }
 
 /**
- * Tier family the graph belongs to: its occupancy, Klein 3 when its weights
- * say so, and a no-op family for anything this table does not cover.
+ * Tier family the graph belongs to: its occupancy, Klein 3 or opt-in Qwen when
+ * its weights say so, and a no-op family for anything this table does not
+ * cover.
  * @param {object|undefined} graph
  * @returns {string}
  */
@@ -450,6 +544,9 @@ function graphFamily(graph) {
   const noOverlay = occ === FAMILY_NOOP || occ === FAMILY_LLM;
   if (!noOverlay && graphHasKlein3Weights(graph)) {
     return FAMILY_KLEIN3;
+  }
+  if (!noOverlay && graphHasQwenWeights(graph)) {
+    return FAMILY_QWEN;
   }
   return occ;
 }
