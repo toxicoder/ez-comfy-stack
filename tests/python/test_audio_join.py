@@ -680,14 +680,14 @@ def test_quiet_index_clamps_at_both_ends() -> None:
 def test_node_is_registered() -> None:
     """The joiner ships in the ez_music pack with the music category."""
     assert NODE_CLASS_MAPPINGS["EZAudioBeatJoin"] is EZAudioBeatJoin
-    assert EZAudioBeatJoin.CATEGORY == "ez-comfy/music"  # type: ignore[attr-defined]
-    assert EZAudioBeatJoin.RETURN_TYPES == ("AUDIO",)  # type: ignore[attr-defined]
-    assert EZAudioBeatJoin.FUNCTION == "run"  # type: ignore[attr-defined]
+    assert EZAudioBeatJoin.CATEGORY == "ez-comfy/music"
+    assert EZAudioBeatJoin.RETURN_TYPES == ("AUDIO",)
+    assert EZAudioBeatJoin.FUNCTION == "run"
 
 
 def test_node_declares_widgets_and_sockets() -> None:
     """Widget list and the N-segment socket scheme."""
-    spec = EZAudioBeatJoin.INPUT_TYPES()  # type: ignore[attr-defined]
+    spec = EZAudioBeatJoin.INPUT_TYPES()
     required = spec["required"]
     assert required["audio_01"] == ("AUDIO",)
     assert required["bpm"][1]["default"] == 172

@@ -27,7 +27,7 @@ from ez_edit.routes import ROUTE_METHODS, LaneDeps, make_deps
 FAKE_FFMPEG = "/usr/bin/ffmpeg"
 FAKE_FFPROBE = "/usr/bin/ffprobe"
 PROMPT = "a brass desk lamp turning slowly on a concrete plinth"
-ALL_HANDLERS: tuple[tuple[str, Callable[..., Any]], ...] = (
+ALL_HANDLERS: tuple[tuple[str, Callable[..., tuple[int, object]]], ...] = (
     ("state", routes.handle_state),
     ("ops", routes.handle_ops),
     ("import", routes.handle_import),

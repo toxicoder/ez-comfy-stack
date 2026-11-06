@@ -10,8 +10,9 @@ from __future__ import annotations
 import argparse
 import shutil
 import sys
+from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, TypedDict
+from typing import TypedDict
 
 from asset_bible import (  # noqa: E402
     KIND_DIRS,
@@ -220,7 +221,7 @@ def seed_clay_to_input_dir(
         if candidate.is_dir():
             pack = candidate
     layout_file = Path(layout_path) if layout_path else default_layout_path()
-    layout: dict[str, Any] | None = None
+    layout: HouseLayout | None = None
     written: list[Path] = []
     for index in range(len(PLACE_10_IDS)):
         name = clay_copy_name(index)
@@ -367,7 +368,7 @@ def _refuse_embedded(value: object, loc: str) -> None:
             raise HouseLayoutError(f"refusing embedded base64 at {loc}")
 
 
-def _validate_room(item: object, index: int) -> dict[str, Any]:
+def _validate_room(item: object, index: int) -> HouseRoom:
     """Normalize one room mapping.
 
     Args:
@@ -401,7 +402,7 @@ def _validate_room(item: object, index: int) -> dict[str, Any]:
     }
 
 
-def _validate_prop(item: object, index: int) -> dict[str, Any]:
+def _validate_prop(item: object, index: int) -> HouseProp:
     """Normalize one prop mapping.
 
     Args:
@@ -441,7 +442,7 @@ def _validate_prop(item: object, index: int) -> dict[str, Any]:
     }
 
 
-def _validate_camera(item: object, index: int, expected_id: str) -> dict[str, Any]:
+def _validate_camera(item: object, index: int, expected_id: str) -> HouseCamera:
     """Normalize one camera mapping in place_10 order.
 
     Args:
@@ -484,7 +485,7 @@ def _validate_camera(item: object, index: int, expected_id: str) -> dict[str, An
     }
 
 
-def validate_layout(data: object) -> dict[str, Any]:
+def validate_layout(data: object) -> HouseLayout:
     """Validate an ez.house.layout.v1 mapping.
 
     Args:
@@ -556,7 +557,7 @@ def validate_layout(data: object) -> dict[str, Any]:
     }
 
 
-def load_layout(path: str | Path) -> dict[str, Any]:
+def load_layout(path: str | Path) -> HouseLayout:
     """Parse and validate a layout YAML file.
 
     Args:
@@ -577,7 +578,7 @@ def load_layout(path: str | Path) -> dict[str, Any]:
     return validate_layout(parsed)
 
 
-def dump_views_yaml(data: dict[str, Any]) -> str:
+def dump_views_yaml(data: HouseViews) -> str:
     """Serialize ez.house.views.v1 to restricted YAML.
 
     Args:
@@ -601,7 +602,7 @@ def dump_views_yaml(data: dict[str, Any]) -> str:
     )
 
 
-def validate_views(data: object) -> dict[str, Any]:
+def validate_views(data: object) -> HouseViews:
     """Validate an ez.house.views.v1 mapping.
 
     Args:
@@ -644,7 +645,7 @@ def validate_views(data: object) -> dict[str, Any]:
     }
 
 
-def load_views(path: str | Path) -> dict[str, Any]:
+def load_views(path: str | Path) -> HouseViews:
     """Parse and validate views.yaml.
 
     Args:
@@ -661,7 +662,7 @@ def load_views(path: str | Path) -> dict[str, Any]:
     return validate_views(parsed)
 
 
-def write_views_yaml(path: Path, data: dict[str, Any]) -> None:
+def write_views_yaml(path: Path, data: Mapping[str, object]) -> None:
     """Write views.yaml after validating.
 
     Args:
@@ -713,7 +714,7 @@ def validate_views_dir(
     require_glb: bool = True,
     require_depth: bool = True,
     input_dir: str | Path | None = None,
-) -> dict[str, Any]:
+) -> HouseViews:
     """Fail-closed QC of a house-views dump.
 
     Args:

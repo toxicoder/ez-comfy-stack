@@ -11,7 +11,7 @@ import re
 import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from typing import Any, BinaryIO, TypedDict
+from typing import BinaryIO, TypedDict, cast, override
 from urllib.parse import parse_qs, urlencode, urlparse
 
 # Film ids and output prefixes used as a single path segment under guides/.
@@ -37,7 +37,9 @@ class FilmRow(TypedDict):
         ok: Count of shots with status ``ok`` (decimal string).
         total: Shot count (decimal string).
         audio_policy: Mix policy, default ``world-only``.
-        shots: Per-shot light dicts (id, clay, look, overlay, print, audio, thumb).
+        shots: Per-shot light dicts (id, clay, look, overlay, print, audio,
+            thumb). Untrusted jobstore data, so entries are screened with
+            :func:`isinstance` where they are read.
     """
 
     slug: str
@@ -45,7 +47,19 @@ class FilmRow(TypedDict):
     ok: str
     total: str
     audio_policy: str
-    shots: list[dict[str, str]]
+    shots: list[object]
+
+
+class ShotLightRow(TypedDict, total=False):
+    """One shot object from jobstore ``state.json`` (unvalidated).
+
+    Attributes:
+        id: Shot id as stored by the render pipeline.
+        status: Shot status; ``ok`` means the print landed.
+    """
+
+    id: str
+    status: str
 
 
 # Allowlisted 90s masters under the Comfy output root (slug -> filename).
@@ -204,7 +218,7 @@ def _light(on: bool) -> str:
 
 
 def _shot_lights(
-    dest: Path, slug: str, sid: str, row: dict[str, Any]
+    dest: Path, slug: str, sid: str, row: ShotLightRow
 ) -> dict[str, str]:
     """Build one shot's clay/look/overlay/print/audio lights and thumb URL.
 
@@ -268,13 +282,15 @@ def _rows() -> list[FilmRow]:
         film = str(data.get("film") or "")
         shots = data.get("shots") or []
         ok = sum(1 for s in shots if isinstance(s, dict) and s.get("status") == "ok")
-        lights = []
+        lights: list[object] = []
         for index, shot in enumerate(shots, start=1):
             if not isinstance(shot, dict):
                 continue
             sid = str(shot.get("id") or f"{index:02d}")
             guide = guide_shot_id(film, slug, sid)
-            lights.append(_shot_lights(dest, guide, sid, shot))
+            # state.json is unvalidated; the guard above proves the row is a
+            # mapping and the reader only reaches for it with .get().
+            lights.append(_shot_lights(dest, guide, sid, cast(ShotLightRow, shot)))
         rows.append(
             {
                 "slug": slug,
@@ -941,7 +957,8 @@ class Handler(BaseHTTPRequestHandler):
             return
         self._serve_board()
 
-    def log_message(self, format: str, *args: Any) -> None:
+    @override
+    def log_message(self, format: str, *args: object) -> None:
         """Swallow request logs (board is a sidecar, not an access log).
 
         Args:

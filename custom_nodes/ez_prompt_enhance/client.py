@@ -23,7 +23,7 @@ from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FuturesTimeout
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Protocol, TypeAlias, cast
 
 from ._styles import (
     CONTEXT_SYSTEM_ADDENDUM,
@@ -55,6 +55,43 @@ from ._styles import (  # noqa: F401 - coverage/monkeypatch façade
     _strip_phrases,
     _style_entry,
 )
+
+if TYPE_CHECKING:
+    import llama_cpp
+
+    from ._styles import StyleEntry
+
+LlamaModel: TypeAlias = "llama_cpp.Llama"
+"""Process-cached llama.cpp handle held in :data:`_LLM`."""
+
+
+class SidecarResponse(Protocol):
+    """Opened HTTP response handed back by :func:`_urlopen_sidecar`."""
+
+    def read(self) -> bytes:
+        """Read the whole body.
+
+        Returns:
+            Response body bytes.
+        """
+        ...
+
+    def __enter__(self) -> "SidecarResponse":
+        """Enter the response context.
+
+        Returns:
+            The response itself.
+        """
+        ...
+
+    def __exit__(self, *args: object) -> None:
+        """Close the response.
+
+        Args:
+            *args: Exception type, value, and traceback from the ``with`` body.
+        """
+        ...
+
 
 # Paths, GGUF defaults, occupancy, heal, style, and rewrite constants.
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
@@ -132,7 +169,7 @@ LLAMA_CPP_OPERATOR_PYTHON = (
 )
 HEAL_PIP_TIMEOUT_S = 120
 
-_LLM: Any = None
+_LLM: LlamaModel | None = None
 _LLM_PATH = ""
 _HEAL_LOCK = threading.Lock()
 _HEAL_TRIED = False
@@ -161,7 +198,7 @@ STYLE_IGNORED_MODES = {
     "background_swap": REASON_STYLE_IGNORED_BG_SWAP,
 }
 
-_STYLES: dict[str, dict[str, Any]] | None = None
+_STYLES: dict[str, StyleEntry] | None = None
 _VIEWS: dict[str, list[dict[str, str]]] | None = None
 
 _THINK_BLOCKS = (
@@ -323,7 +360,7 @@ def _forget_llama_module() -> None:
     importlib.invalidate_caches()
 
 
-def _load_llama_class() -> Any | None:
+def _load_llama_class() -> type[LlamaModel] | None:
     """Return llama_cpp.Llama, or None when the CPU wheel is missing.
 
     Returns:
@@ -337,7 +374,7 @@ def _load_llama_class() -> Any | None:
         _log(f"llama_cpp import failed: {_LAST_IMPORT_ERROR}")
         return None
     _LAST_IMPORT_ERROR = ""
-    return Llama
+    return cast("type[LlamaModel]", Llama)
 
 
 def _heal_llama_cpp_cpu() -> str:
@@ -918,7 +955,7 @@ def _sidecar_timeout_s() -> float:
     return value
 
 
-def _urlopen_sidecar(request: urllib.request.Request, timeout: float) -> Any:
+def _urlopen_sidecar(request: urllib.request.Request, timeout: float) -> SidecarResponse:
     """Indirection so pytest can mock sidecar HTTP without touching search.
 
     Args:
@@ -928,7 +965,7 @@ def _urlopen_sidecar(request: urllib.request.Request, timeout: float) -> Any:
     Returns:
         Opened HTTP response (caller closes it).
     """
-    return urllib.request.urlopen(request, timeout=timeout)
+    return cast("SidecarResponse", urllib.request.urlopen(request, timeout=timeout))
 
 
 def _complete_via_sidecar(
@@ -1113,7 +1150,7 @@ def _close_llm() -> None:
             _log(f"llama close failed: {exc}")
 
 
-def _get_llama() -> tuple[Any | None, str | None]:
+def _get_llama() -> tuple[LlamaModel | None, str | None]:
     """Load llama.cpp once. Returns (handle, fail_reason).
 
     Returns:
@@ -1137,7 +1174,7 @@ def _get_llama() -> tuple[Any | None, str | None]:
         if llama_cls is None:
             _log("llama-cpp-python not installed - passing prompt through")
             return None, REASON_LLAMA_UNAVAILABLE
-    kwargs: dict[str, Any] = {
+    kwargs: dict[str, str | int | bool] = {
         "model_path": path,
         "n_ctx": _n_ctx(),
         "n_threads": _n_threads(),
@@ -1168,7 +1205,7 @@ def _get_llama() -> tuple[Any | None, str | None]:
 
 
 def _generate(
-    llm: Any,
+    llm: LlamaModel,
     system: str,
     user: str,
     max_tokens: int = DEFAULT_MAX_TOKENS,

@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, TypedDict
+from collections.abc import Mapping, Sequence
+from typing import TYPE_CHECKING, TypedDict
 
 from .align import SAMPLE_RATE
 from .audio import audio_from_pcm, empty_audio, read_wav
@@ -31,7 +32,7 @@ from .rights import RightsError
 from .turns import Turn, dumps_payload, parse_payload
 
 if TYPE_CHECKING:
-    from ez_common import ComfyInputTypes
+    from ez_common import ComfyInputTypes, ComfyReturn, JsonScalar, NodeRegistry
 
 # Empty widget seed so the App translation field is valid JSON on first load.
 SEED_TURNS: list[Turn] = []
@@ -52,8 +53,8 @@ class ComfyUiResult(TypedDict):
     ``result`` may hold AUDIO tensors; torch is not imported at pack load.
     """
 
-    ui: dict[str, Any]
-    result: tuple[Any, ...]
+    ui: dict[str, object]
+    result: ComfyReturn
 
 
 def _pack_text(text: str, status: str) -> ComfyUiResult:
@@ -72,12 +73,13 @@ def _pack_text(text: str, status: str) -> ComfyUiResult:
     }
 
 
-def _pack_audio(samples: Any, rate: int, status: str) -> ComfyUiResult:
+def _pack_audio(
+    samples: Sequence[float], rate: int, status: str
+) -> ComfyUiResult:
     """Pack an AUDIO OUTPUT_NODE result.
 
     Args:
-        samples: Mono PCM or empty. Typed ``Any`` so torch is not imported
-            at module load.
+        samples: Mono PCM or empty.
         rate: Sample rate.
         status: Short Dub status for the passthrough UI.
 
@@ -350,7 +352,7 @@ class EZDubRender:
         keep_bed: bool = True,
         spoken_disclosure: bool = False,
         speed: float = 1.0,
-        cfg_weight: float = -1.0,
+        cfg_weight: float | None = -1.0,
         exaggeration: float = 0.5,
         job_id: str = "",
     ) -> ComfyUiResult:
@@ -399,7 +401,7 @@ class EZDubRender:
         engine: str,
         language: str = "es",
         ref_wav: str = "",
-        turns: list[dict[str, Any]] | None = None,
+        turns: Sequence[Mapping[str, JsonScalar]] | None = None,
     ) -> tuple[list[float], str]:
         """Overlay a localized bumper without changing duration (mix wav only).
 
@@ -426,7 +428,7 @@ class EZDubRender:
 
 
 # Comfy pack registry.
-NODE_CLASS_MAPPINGS: dict[str, type[Any]] = {
+NODE_CLASS_MAPPINGS: NodeRegistry = {
     "EZDubIngest": EZDubIngest,
     "EZDubScript": EZDubScript,
     "EZDubRender": EZDubRender,

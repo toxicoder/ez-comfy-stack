@@ -17,16 +17,23 @@ fetch_url. This server never queues a graph itself.
 
 from __future__ import annotations
 
+import http.client
 import json
 import os
 import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
-from typing import Any, Mapping
+from typing import TypedDict, cast
 
 from mcp_runtime import (
+    JsonRpcRequest,
+    JsonRpcResponse,
+    ToolArgs,
+    ToolCatalogEntry,
     ToolHandler,
+    ToolNumber,
+    ToolResult,
     ToolSpec,
     call_tool as _runtime_call_tool,
     handle_rpc as _runtime_handle_rpc,
@@ -73,10 +80,33 @@ INVALID_JSON_ERROR = "comfyui returned invalid JSON"
 NON_OBJECT_ERROR = "comfyui returned a non-object reply"
 """Error text when a route replies with JSON that is not an object."""
 
+class CatalogSchema(TypedDict, total=False):
+    """One parameter schema authored alongside the mirrored catalog."""
+
+    type: str
+    """Always ``object`` for a tool argument object."""
+
+    properties: dict[str, object]
+    """Per-parameter JSON Schema bodies."""
+
+    required: list[str]
+    """Parameter names a call must carry."""
+
+
+class ProtocolCatalogEntry(TypedDict):
+    """One mirrored row of ``custom_nodes/ez_edit/protocol.py::TOOL_CATALOG``."""
+
+    description: str
+    """Human-facing tool summary."""
+
+    parameters: CatalogSchema
+    """JSON Schema for the tool arguments."""
+
+
 # Mirror of custom_nodes/ez_edit/protocol.py::TOOL_CATALOG (pinned seam).
 # tests/python/test_edit_mcp.py parses the protocol file with ast and fails
 # on any drift; never edit one side alone.
-_TOOL_CATALOG: dict[str, dict[str, Any]] = {
+_TOOL_CATALOG: dict[str, ProtocolCatalogEntry] = {
     "edit_get_state": {
         "description": "Return the current edit project (clips, overlays, "
         "captions) and its recent jobs. Pass project_id or empty for the "
@@ -212,7 +242,7 @@ def occupancy_mode() -> str:
     """
     path = _output_dir() / OCCUPANCY_FILE_NAME
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
+        data: object = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return UNKNOWN_OCCUPANCY
     if not isinstance(data, dict):
@@ -221,7 +251,9 @@ def occupancy_mode() -> str:
     return mode or UNKNOWN_OCCUPANCY
 
 
-def _urlopen(request: urllib.request.Request, timeout: float) -> Any:
+def _urlopen(
+    request: urllib.request.Request, timeout: float
+) -> http.client.HTTPResponse:
     """Indirection so pytest can stub HTTP (mirrors ``agent.AgentLLM._urlopen``).
 
     Args:
@@ -231,10 +263,13 @@ def _urlopen(request: urllib.request.Request, timeout: float) -> Any:
     Returns:
         Opened HTTP response (caller closes it).
     """
-    return urllib.request.urlopen(request, timeout=timeout)
+    # mypy's bundled typeshed leaves module-level urlopen untyped; an
+    # http/https origin always yields an HTTPResponse.
+    opened = urllib.request.urlopen(request, timeout=timeout)
+    return cast(http.client.HTTPResponse, opened)
 
 
-def _decode(raw: bytes | str) -> dict[str, Any]:
+def _decode(raw: bytes | str) -> ToolResult:
     """Decode one route reply body.
 
     Args:
@@ -244,15 +279,15 @@ def _decode(raw: bytes | str) -> dict[str, Any]:
         The JSON object, or an ``ok`` false payload when it is not one.
     """
     try:
-        payload = json.loads(raw)
+        parsed: object = json.loads(raw)
     except ValueError:
         return {"ok": False, "error": INVALID_JSON_ERROR}
-    if not isinstance(payload, dict):
+    if not isinstance(parsed, dict):
         return {"ok": False, "error": NON_OBJECT_ERROR}
-    return payload
+    return parsed
 
 
-def _http_error_payload(path: str, exc: urllib.error.HTTPError) -> dict[str, Any]:
+def _http_error_payload(path: str, exc: urllib.error.HTTPError) -> ToolResult:
     """Turn an HTTP error status into a tool payload.
 
     The route's own JSON body wins when it carries one (a disabled lane answers
@@ -267,11 +302,11 @@ def _http_error_payload(path: str, exc: urllib.error.HTTPError) -> dict[str, Any
         ``ok`` false payload (JSON boundary).
     """
     try:
-        body = json.loads(exc.read())
+        body: object = json.loads(exc.read())
     except (OSError, ValueError):
         body = None
     if isinstance(body, dict) and body:
-        payload = dict(body)
+        payload: dict[str, object] = dict(body)
         payload["ok"] = False
         payload["error"] = str(payload.get("error") or f"{path} -> HTTP {exc.code}")
         return payload
@@ -279,8 +314,8 @@ def _http_error_payload(path: str, exc: urllib.error.HTTPError) -> dict[str, Any
 
 
 def _http(
-    method: str, path: str, body: dict[str, Any] | None = None
-) -> dict[str, Any]:
+    method: str, path: str, body: dict[str, object] | None = None
+) -> ToolResult:
     """Open one socket to one route and decode its reply.
 
     Args:
@@ -307,7 +342,7 @@ def _http(
     return _decode(raw)
 
 
-def _int_arg(args: Mapping[str, Any], key: str, default: int) -> int:
+def _int_arg(args: ToolArgs, key: str, default: int) -> int:
     """Read one integer argument across the loose JSON boundary.
 
     Args:
@@ -319,12 +354,12 @@ def _int_arg(args: Mapping[str, Any], key: str, default: int) -> int:
         Integer value for the request body.
     """
     try:
-        return int(args.get(key, default))
+        return int(cast(ToolNumber, args.get(key, default)))
     except (TypeError, ValueError):
         return default
 
 
-def _float_arg(args: Mapping[str, Any], key: str, default: float) -> float:
+def _float_arg(args: ToolArgs, key: str, default: float) -> float:
     """Read one number argument across the loose JSON boundary.
 
     Args:
@@ -336,12 +371,12 @@ def _float_arg(args: Mapping[str, Any], key: str, default: float) -> float:
         Float value for the request body.
     """
     try:
-        return float(args.get(key, default))
+        return float(cast(ToolNumber, args.get(key, default)))
     except (TypeError, ValueError):
         return default
 
 
-def _is_empty(value: Any) -> bool:
+def _is_empty(value: object) -> bool:
     """True when a required parameter carries no usable value.
 
     Args:
@@ -359,7 +394,7 @@ def _is_empty(value: Any) -> bool:
     return False
 
 
-def _missing_required(name: str, payload: Mapping[str, Any]) -> list[str]:
+def _missing_required(name: str, payload: ToolArgs) -> list[str]:
     """Catalog-required keys that one call leaves empty.
 
     Args:
@@ -369,13 +404,13 @@ def _missing_required(name: str, payload: Mapping[str, Any]) -> list[str]:
     Returns:
         Missing key names in catalog order (empty when the call is complete).
     """
-    entry = _TOOL_CATALOG.get(name) or {}
-    parameters = entry.get("parameters") or {}
+    entry = _TOOL_CATALOG.get(name)
+    parameters: CatalogSchema = entry["parameters"] if entry is not None else {}
     required = parameters.get("required") or []
     return [str(key) for key in required if _is_empty(payload.get(key))]
 
 
-def _call_route(name: str, payload: Mapping[str, Any]) -> dict[str, Any]:
+def _call_route(name: str, payload: ToolArgs) -> ToolResult:
     """Call the single route bound to a thin tool (the one HTTP funnel).
 
     Args:
@@ -400,7 +435,7 @@ def _call_route(name: str, payload: Mapping[str, Any]) -> dict[str, Any]:
     return _http("POST", path, body=dict(payload))
 
 
-def tool_edit_get_state(args: dict[str, Any]) -> dict[str, Any]:
+def tool_edit_get_state(args: ToolArgs) -> ToolResult:
     """MCP tool: current project plus its recent jobs.
 
     Args:
@@ -414,7 +449,7 @@ def tool_edit_get_state(args: dict[str, Any]) -> dict[str, Any]:
     )
 
 
-def tool_edit_import(args: dict[str, Any]) -> dict[str, Any]:
+def tool_edit_import(args: ToolArgs) -> ToolResult:
     """MCP tool: import an output-dir media file as a clip.
 
     Args:
@@ -433,7 +468,7 @@ def tool_edit_import(args: dict[str, Any]) -> dict[str, Any]:
     )
 
 
-def tool_edit_apply_ops(args: dict[str, Any]) -> dict[str, Any]:
+def tool_edit_apply_ops(args: ToolArgs) -> ToolResult:
     """MCP tool: apply ordered timeline ops to a project.
 
     Args:
@@ -452,7 +487,7 @@ def tool_edit_apply_ops(args: dict[str, Any]) -> dict[str, Any]:
     )
 
 
-def tool_edit_render(args: dict[str, Any]) -> dict[str, Any]:
+def tool_edit_render(args: ToolArgs) -> ToolResult:
     """MCP tool: queue a server or client render.
 
     Args:
@@ -472,7 +507,7 @@ def tool_edit_render(args: dict[str, Any]) -> dict[str, Any]:
     )
 
 
-def tool_edit_job_status(args: dict[str, Any]) -> dict[str, Any]:
+def tool_edit_job_status(args: ToolArgs) -> ToolResult:
     """MCP tool: read one jobstore row.
 
     Args:
@@ -484,7 +519,7 @@ def tool_edit_job_status(args: dict[str, Any]) -> dict[str, Any]:
     return _call_route("edit_job_status", {"job_id": str(args.get("job_id") or "")})
 
 
-def tool_edit_generate_clip(args: dict[str, Any]) -> dict[str, Any]:
+def tool_edit_generate_clip(args: ToolArgs) -> ToolResult:
     """MCP tool: queue the generate-cutaway graph (heavy GPU, route-gated).
 
     Args:
@@ -503,7 +538,7 @@ def tool_edit_generate_clip(args: dict[str, Any]) -> dict[str, Any]:
     )
 
 
-def tool_edit_export_edl(args: dict[str, Any]) -> dict[str, Any]:
+def tool_edit_export_edl(args: ToolArgs) -> ToolResult:
     """MCP tool: write the project EDL for an external editor.
 
     Args:
@@ -517,7 +552,7 @@ def tool_edit_export_edl(args: dict[str, Any]) -> dict[str, Any]:
     )
 
 
-def tool_occupancy_status(_args: dict[str, Any]) -> dict[str, Any]:
+def tool_occupancy_status(_args: ToolArgs) -> ToolResult:
     """MCP tool: read the GPU occupancy mode (no HTTP).
 
     Args:
@@ -560,7 +595,7 @@ TOOLS: dict[str, ToolSpec] = {
 }
 
 
-def list_tools() -> list[dict[str, Any]]:
+def list_tools() -> list[ToolCatalogEntry]:
     """List MCP tools without handlers.
 
     Returns:
@@ -569,9 +604,7 @@ def list_tools() -> list[dict[str, Any]]:
     return _runtime_list_tools(TOOLS)
 
 
-def call_tool(
-    name: str, arguments: dict[str, Any] | None = None
-) -> dict[str, Any]:
+def call_tool(name: str, arguments: ToolArgs | None = None) -> ToolResult:
     """Dispatch a named MCP tool.
 
     Args:
@@ -584,7 +617,7 @@ def call_tool(
     return _runtime_call_tool(TOOLS, name, arguments)
 
 
-def handle_rpc(message: dict[str, Any]) -> dict[str, Any] | None:
+def handle_rpc(message: JsonRpcRequest) -> JsonRpcResponse | None:
     """Handle one JSON-RPC message. Notifications return None.
 
     Args:

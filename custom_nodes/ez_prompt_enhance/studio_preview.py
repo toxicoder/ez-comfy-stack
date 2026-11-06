@@ -7,7 +7,7 @@ this module lazily.
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, replace
-from typing import Any
+from typing import TypedDict, cast
 
 from ez_image.formats import resolve_canvas
 from ez_image.modes import ITERATE_EDIT_LINE, resolve_studio_mode
@@ -83,6 +83,82 @@ class StudioPreview:
     unet: str
     seed: str
     seed_note: str
+
+
+class StudioPreviewPayload(TypedDict):
+    """JSON body for ``POST /ez_image/studio-preview`` (``asdict`` of a preview)."""
+
+    ok: bool
+    """False only when the composer itself fails (route wrapper)."""
+
+    summary: str
+    """Multiline text for the This run box."""
+
+    enhance_mode: str
+    """Klein mode linked into Prompt Enhance."""
+
+    prefix: str
+    """SaveImage prefix."""
+
+    context: str
+    """Enhance context STRING (look splice, plus edit line or instruction)."""
+
+    prompt: str
+    """Rewriter source, or the CLIP text when Rewrite is off."""
+
+    prompt_source: str
+    """``sample recipe`` or ``prompt box``."""
+
+    style_note: str
+    """Applied style id, ``style none``, or the ignore reason."""
+
+    rewrite: bool
+    """True when Rewrite prompt is on."""
+
+    width: int
+    """Latent width Python will emit."""
+
+    height: int
+    """Latent height Python will emit."""
+
+    batch: int
+    """Batch size."""
+
+    hint: str
+    """Enhance duration / framing line."""
+
+    format_label: str
+    """Format combo label after Match input."""
+
+    has_image: bool
+    """True when a reference still will be attached."""
+
+    filename: str
+    """Reference filename, or empty."""
+
+    missing_file: bool
+    """True when a filename was set but did not load."""
+
+    next_pass: str
+    """Short pass name (``text to image`` or ``edit <file>``)."""
+
+    iterate: bool
+    """Iterate switch."""
+
+    steps: str
+    """KSampler steps as displayed."""
+
+    cfg: str
+    """KSampler CFG as displayed."""
+
+    unet: str
+    """UNET filename as displayed."""
+
+    seed: str
+    """Seed as displayed."""
+
+    seed_note: str
+    """Fixed, or a note that the seed changes at Run."""
 
 
 def _as_str(value: object) -> str:
@@ -410,7 +486,7 @@ def preview_studio_run(
     return replace(preview, summary=_summary(preview))
 
 
-def preview_payload(body: object) -> dict[str, Any]:
+def preview_payload(body: object) -> StudioPreviewPayload:
     """Build the JSON object for ``POST /ez_image/studio-preview``.
 
     Args:
@@ -419,7 +495,7 @@ def preview_payload(body: object) -> dict[str, Any]:
     Returns:
         Preview fields plus ``summary``. ``ok`` is true.
     """
-    raw: dict[str, Any] = body if isinstance(body, dict) else {}
+    raw: dict[str, object] = body if isinstance(body, dict) else {}
     preview = preview_studio_run(
         category=raw.get("category", ""),
         mode=raw.get("mode", ""),
@@ -445,4 +521,4 @@ def preview_payload(body: object) -> dict[str, Any]:
     )
     payload = asdict(preview)
     payload["ok"] = True
-    return payload
+    return cast(StudioPreviewPayload, payload)

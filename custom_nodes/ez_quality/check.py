@@ -9,7 +9,10 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import TYPE_CHECKING, Mapping, Sequence, cast
+
+if TYPE_CHECKING:
+    from ez_common import Json
 
 from .presets import (
     CLIP_4B,
@@ -294,7 +297,7 @@ def _as_str_tuple(value: object) -> tuple[str, ...]:
     return tuple(seen)
 
 
-def _first_bool(values: Sequence[Any]) -> bool | None:
+def _first_bool(values: Sequence[Json]) -> bool | None:
     """Return the first boolean in a widgets_values list.
 
     Args:
@@ -332,7 +335,7 @@ def _loader_name(values: object) -> str:
     return str(first).strip()
 
 
-def hints_from_args(args: Mapping[str, Any]) -> CheckHints:
+def hints_from_args(args: Mapping[str, Json]) -> CheckHints:
     """Build hints from a POST body.
 
     Args:
@@ -363,7 +366,7 @@ def hints_from_args(args: Mapping[str, Any]) -> CheckHints:
     )
 
 
-def hints_from_graph(graph: Mapping[str, Any]) -> CheckHints:
+def hints_from_graph(graph: Mapping[str, Json]) -> CheckHints:
     """Build hints from a serialized Comfy graph.
 
     Args:
@@ -373,9 +376,12 @@ def hints_from_graph(graph: Mapping[str, Any]) -> CheckHints:
         Normalized hints.
     """
     raw_extra = graph.get("extra")
-    extra: dict[str, Any] = dict(raw_extra) if isinstance(raw_extra, dict) else {}
-    safe_nodes = [n for n in graph.get("nodes") or [] if isinstance(n, Mapping)]
-    occupancy = infer_occupancy({**dict(graph), "nodes": safe_nodes})
+    extra: dict[str, Json] = dict(raw_extra) if isinstance(raw_extra, dict) else {}
+    node_rows = cast("list[Json]", graph.get("nodes") or [])
+    safe_nodes = [n for n in node_rows if isinstance(n, Mapping)]
+    occupancy = infer_occupancy(
+        {**dict(graph), "nodes": cast("Json", safe_nodes)}
+    )
     lab_rel = str(extra.get("lab_rel") or graph.get("id") or "").strip()
     quality = QUALITY_LAB
     types: list[str] = []
@@ -798,7 +804,7 @@ def _folder_paths_has(name: str) -> bool:
     if not name:
         return False
     try:
-        import folder_paths  # type: ignore[import-not-found]
+        import folder_paths
     except Exception:  # noqa: BLE001 - optional in pytest
         return False
     getter = getattr(folder_paths, "get_filename_list", None)
@@ -1054,10 +1060,10 @@ def format_report(result: CheckResult) -> str:
 
 
 def run_check(
-    args: Mapping[str, Any],
+    args: Mapping[str, Json],
     *,
     roots: Sequence[Path] | None = None,
-) -> dict[str, Any]:
+) -> dict[str, Json]:
     """Scan and return a JSON-ready payload.
 
     Args:
@@ -1069,7 +1075,7 @@ def run_check(
     """
     hints = hints_from_args(args)
     result = scan(hints, list(roots) if roots is not None else models_roots())
-    return {
+    payload: dict[str, object] = {
         "ok": result.ok,
         "message": format_report(result),
         "lab_rel": result.lab_rel,
@@ -1085,3 +1091,4 @@ def run_check(
         ],
         "commands": result.commands,
     }
+    return cast("dict[str, Json]", payload)

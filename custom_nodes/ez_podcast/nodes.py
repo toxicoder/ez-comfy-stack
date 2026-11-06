@@ -6,7 +6,7 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Callable, Protocol
+from typing import TYPE_CHECKING, Protocol, TypeAlias, TypedDict
 
 from .digest import (
     DEFAULT_DURATION,
@@ -16,10 +16,36 @@ from .digest import (
     run_learn,
 )
 from .ingest import ingest_paste
-from .loop import loop_to_match
+from .loop import AudioPayload, loop_to_match
 
 if TYPE_CHECKING:
-    from ez_common import ComfyInputTypes
+    from ez_common import ComfyInputTypes, ComfyReturn, NodeRegistry, PcmTensor
+
+ComboSpec: TypeAlias = tuple[list[str], dict[str, str]]
+"""Comfy combo widget spec: ``(labels, options)``."""
+
+
+class PodcastUiBlocks(TypedDict, total=False):
+    """Preview blocks an ez_podcast output node renders."""
+
+    text: tuple[str, ...]
+    """Digest or script body shown in the text preview."""
+
+    script: tuple[str, ...]
+    """Script body shown beside a digest."""
+
+    passthrough: tuple[str, ...]
+    """Status token shown under the preview."""
+
+
+class PodcastUiResult(TypedDict):
+    """``OUTPUT_NODE`` payload shared by the ez_podcast STRING nodes."""
+
+    ui: PodcastUiBlocks
+    """Frontend display blocks."""
+
+    result: ComfyReturn
+    """STRING values that continue the graph."""
 
 # Writer prompts, disclosure bumper, seed scripts, flavors, and TTS backends.
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
@@ -59,7 +85,7 @@ BACKENDS = (BACKEND_KOKORO, BACKEND_CHATTERBOX, BACKEND_QWEN3TTS)
 class OptionalBackendHook(Protocol):
     """Test/production extra TTS backend (Chatterbox / Qwen3)."""
 
-    def __call__(self, text: str, backend: str, path: str, /) -> Any:
+    def __call__(self, text: str, backend: str, path: str, /) -> PcmTensor:
         """Synthesize one line with an extra backend.
 
         Args:
@@ -68,13 +94,13 @@ class OptionalBackendHook(Protocol):
             path: Operator-owned reference wav.
 
         Returns:
-            PCM samples (tensor boundary stays ``Any``).
+            PCM samples for the turn.
         """
         ...
 
 
 # Tests inject a synthesizer. Production stays None (fail-soft to Kokoro).
-optional_backend_hook: OptionalBackendHook | Callable[..., Any] | None = None
+optional_backend_hook: OptionalBackendHook | None = None
 # Kokoro voice ids, default hosts, ONNX filenames, speaker-line regex, sample rate.
 KOKORO_VOICES = (
     "af_heart",
@@ -108,7 +134,7 @@ def _log(message: str) -> None:
     print(f"[ez_podcast] {message}", file=sys.stderr)
 
 
-def _sample_combo(preferred: str = "podcast_two_host") -> tuple[Any, ...]:
+def _sample_combo(preferred: str = "podcast_two_host") -> ComboSpec:
     """Prompt-enhance sample combo for a podcast writer.
 
     Args:
@@ -297,7 +323,7 @@ def resolve_kokoro_paths() -> tuple[str, str]:
     return onnx, voices
 
 
-def _pack_text(text: str, status: str) -> dict[str, Any]:
+def _pack_text(text: str, status: str) -> PodcastUiResult:
     """Build the Comfy output-node payload for a script STRING.
 
     Args:
@@ -313,7 +339,7 @@ def _pack_text(text: str, status: str) -> dict[str, Any]:
     }
 
 
-def _empty_audio(sample_rate: int = SAMPLE_RATE_KOKORO) -> dict[str, Any]:
+def _empty_audio(sample_rate: int = SAMPLE_RATE_KOKORO) -> AudioPayload:
     """Minimal AUDIO dict without importing torch at module load.
 
     Args:
@@ -331,7 +357,7 @@ def _empty_audio(sample_rate: int = SAMPLE_RATE_KOKORO) -> dict[str, Any]:
         return {"waveform": [[[0.0]]], "sample_rate": int(sample_rate)}
 
 
-def _audio_from_pcm(samples: Any, sample_rate: int) -> dict[str, Any]:
+def _audio_from_pcm(samples: PcmTensor, sample_rate: int) -> AudioPayload:
     """Pack PCM samples into a Comfy AUDIO dict.
 
     Args:
@@ -354,7 +380,7 @@ def _audio_from_pcm(samples: Any, sample_rate: int) -> dict[str, Any]:
         return {"waveform": samples, "sample_rate": int(sample_rate)}
 
 
-def _concat_pcm(chunks: list[Any]) -> Any:
+def _concat_pcm(chunks: list[PcmTensor]) -> PcmTensor:
     """Concatenate per-turn PCM chunks.
 
     Args:
@@ -436,7 +462,7 @@ class EZPodcastScript:
         context: str = "",
         sample: str = "custom",
         catalog: str = "",
-    ) -> dict[str, Any]:
+    ) -> PodcastUiResult:
         """Rewrite a two-host or radio-drama script, fail-soft without a GGUF.
 
         Args:
@@ -589,7 +615,7 @@ class EZKokoroTTS:
         speaker_a_ref: str = "",
         speaker_b_ref: str = "",
         speed: float = 1.0,
-    ) -> tuple[dict[str, Any]]:
+    ) -> tuple[AudioPayload]:
         """Synthesize speaker turns to one AUDIO clip.
 
         Args:
@@ -623,7 +649,7 @@ class EZKokoroTTS:
                 f"{chosen} requested with operator refs; analog path still "
                 "uses Kokoro when extras are missing"
             )
-        chunks: list[Any] = []
+        chunks: list[PcmTensor] = []
         rate = SAMPLE_RATE_KOKORO
         _log(f"TTS {len(turns)} turns ({chosen})")
         try:
@@ -657,7 +683,7 @@ class EZKokoroTTS:
         backend: str,
         speed: float,
         ref_wav: object,
-    ) -> tuple[Any | None, int]:
+    ) -> tuple[PcmTensor | None, int]:
         """Synthesize one turn, falling back to Kokoro when extras miss.
 
         Args:
@@ -678,7 +704,7 @@ class EZKokoroTTS:
 
     def _try_optional_backend(
         self, text: str, backend: str, ref_wav: object
-    ) -> Any | None:
+    ) -> PcmTensor | None:
         """Call the test hook or refuse extras without a runtime install.
 
         Args:
@@ -705,7 +731,7 @@ class EZKokoroTTS:
 
     def _synthesize_kokoro(
         self, text: str, voice: str, speed: float
-    ) -> tuple[Any | None, int]:
+    ) -> tuple[PcmTensor | None, int]:
         """Run Kokoro-ONNX for one turn.
 
         Args:
@@ -740,7 +766,7 @@ class EZKokoroTTS:
         return samples, int(rate or SAMPLE_RATE_KOKORO)
 
 
-def _pack_learn(digest: str, script: str, status: str) -> dict[str, Any]:
+def _pack_learn(digest: str, script: str, status: str) -> PodcastUiResult:
     """Build the Comfy output-node payload for a learn episode.
 
     Args:
@@ -819,7 +845,7 @@ class EZPodcastLearn:
         enhance: object = True,
         sample: object = "custom",
         catalog: object = "",
-    ) -> dict[str, Any]:
+    ) -> PodcastUiResult:
         """Ingest sources, write digest + script, fail-soft without a GGUF.
 
         Args:
@@ -882,7 +908,7 @@ class EZAudioLoopToMatch:
         "bed can sit under a longer study episode. Empty speech stays empty."
     )
 
-    def run(self, speech: object, bed: object) -> tuple[dict[str, Any]]:
+    def run(self, speech: object, bed: object) -> tuple[AudioPayload]:
         """Loop ``bed`` to match ``speech``.
 
         Args:
@@ -896,7 +922,7 @@ class EZAudioLoopToMatch:
 
 
 # Comfy custom-node registries.
-NODE_CLASS_MAPPINGS: dict[str, Any] = {
+NODE_CLASS_MAPPINGS: NodeRegistry = {
     "EZPodcastScript": EZPodcastScript,
     "EZPodcastDisclosure": EZPodcastDisclosure,
     "EZKokoroTTS": EZKokoroTTS,

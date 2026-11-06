@@ -10,10 +10,13 @@ from __future__ import annotations
 import math
 from array import array
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import TYPE_CHECKING, Mapping, Sequence
 
 from guide_pack import write_rgb_png
 from operator_log import log as ol_log
+
+if TYPE_CHECKING:
+    from house_layout import HouseLayout
 
 # Instagram 4:5 clay plate (internal raster is smaller, then nearest upsample).
 PACK_WIDTH = 1024
@@ -317,7 +320,7 @@ def _center_size_box(center: Sequence[float], size: Sequence[float]) -> tuple[Ve
     )
 
 
-def layout_boxes(layout: Mapping[str, Any]) -> list[tuple[Vec3, Vec3, Rgb]]:
+def layout_boxes(layout: HouseLayout) -> list[tuple[Vec3, Vec3, Rgb]]:
     """Return (min, max, rgb) AABBs matching the Blender greybox (thin walls).
 
     Args:
@@ -414,7 +417,7 @@ def _fill_sky(pixels: bytearray, width: int, height: int) -> None:
 
 
 def render_clay_rgb(
-    layout: Mapping[str, Any],
+    layout: HouseLayout,
     camera_index: int,
     *,
     width: int = RENDER_WIDTH,
@@ -477,7 +480,7 @@ def render_clay_rgb(
 
 
 def render_clay_plate(
-    layout: Mapping[str, Any],
+    layout: HouseLayout,
     camera_index: int,
     dest: str | Path,
 ) -> Path:

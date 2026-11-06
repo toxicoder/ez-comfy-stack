@@ -457,11 +457,11 @@ def test_align_resample_stretch_fit_room_timeline() -> None:
             return monkey_got if out_len == 50 else None
 
         orig = align._ffmpeg_atempo
-        align._ffmpeg_atempo = _atempo  # type: ignore[method-assign]
+        align._ffmpeg_atempo = _atempo
         try:
             got = align.pitch_preserving_stretch([0.1] * 80, 50, 24000)
         finally:
-            align._ffmpeg_atempo = orig  # type: ignore[method-assign]
+            align._ffmpeg_atempo = orig
         assert got == monkey_got
     finally:
         align.stretch_hook = None
@@ -1312,7 +1312,7 @@ def test_model_roots_pkuseg_and_chatterbox_context(tmp_path: Path, monkeypatch: 
 
 def test_from_local_signature_and_load_chatterbox(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     with pytest.raises(RuntimeError, match="t3_model"):
-        pipeline._from_local_multilingual(len, "/ckpt", "cpu")  # type: ignore[arg-type]
+        pipeline._from_local_multilingual(len, "/ckpt", "cpu")
 
     class _TTS:
         pass
@@ -2176,7 +2176,7 @@ def test_remaining_pipeline_preflight_and_helpers(tmp_path: Path, monkeypatch: p
     assert pipeline.input_directory() == Path("input")
 
     with pytest.raises(RuntimeError, match="t3_model"):
-        pipeline._from_local_multilingual(min, "/ckpt", "cpu")  # type: ignore[arg-type]
+        pipeline._from_local_multilingual(min, "/ckpt", "cpu")
 
     def _loader(ckpt: str) -> str:
         return ckpt

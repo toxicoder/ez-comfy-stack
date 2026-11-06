@@ -9,7 +9,7 @@ Row building, the tag join, and the SaveAudio prefix live in
 
 from __future__ import annotations
 
-from typing import Any, Literal, Mapping, Sequence, TypedDict
+from typing import Literal, Mapping, Sequence, TypedDict, cast
 
 from .albums import album_rel, nill_album_for_series
 from .diss_rows import (
@@ -186,7 +186,7 @@ def nill_slug_from_stem(stem: str) -> str:
     return text
 
 
-def finalize_nill_album(rows: Sequence[Mapping[str, Any]]) -> tuple[DissExample, ...]:
+def finalize_nill_album(rows: Sequence[Mapping[str, object]]) -> tuple[DissExample, ...]:
     """Number tracks, set album metadata, and rewrite stems for one series.
 
     Args:
@@ -197,11 +197,11 @@ def finalize_nill_album(rows: Sequence[Mapping[str, Any]]) -> tuple[DissExample,
     """
     if not rows:
         return ()
-    info = nill_album_for_series(rows[0]["series"])
+    info = nill_album_for_series(cast("str", rows[0]["series"]))
     plans = assign_album_plans(
         family=str(rows[0]["series"]),
         album_slug=str(info["slug"]),
-        bpms=[int(row["bpm"]) for row in rows],
+        bpms=[int(cast("int", row["bpm"])) for row in rows],
         tags=[str(row["tags"]) for row in rows],
         lyrics=[str(row["lyrics"]) for row in rows],
         kind="vocal",
@@ -212,7 +212,7 @@ def finalize_nill_album(rows: Sequence[Mapping[str, Any]]) -> tuple[DissExample,
         plan = plans[index - 1]
         slug = nill_slug_from_stem(str(row.get("slug") or row["stem"]))
         stem = f"{index:02d}-{slug}"
-        payload: dict[str, Any] = dict(row)
+        payload: dict[str, object] = dict(row)
         payload.update(
             {
                 "slug": slug,
@@ -235,7 +235,7 @@ def finalize_nill_album(rows: Sequence[Mapping[str, Any]]) -> tuple[DissExample,
                 "keyscale": plan["keyscale"],
             }
         )
-        out.append(payload)  # type: ignore[arg-type]
+        out.append(cast("DissExample", payload))
     return tuple(out)
 
 
@@ -268,7 +268,7 @@ def _catalog() -> tuple[DissExample, ...]:
     )
     out: list[DissExample] = []
     for group in groups:
-        out.extend(finalize_nill_album(group))  # type: ignore[arg-type]
+        out.extend(finalize_nill_album(group))
     return tuple(out)
 
 

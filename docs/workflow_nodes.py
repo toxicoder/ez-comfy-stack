@@ -12,11 +12,10 @@ Family tables live in ``workflow_nodes_*.py``; this module concatenates them.
 
 from __future__ import annotations
 
-from typing import Any
 
 from workflow_nodes_core import core_nodes
 from workflow_nodes_enhance import enhance_nodes
-from workflow_nodes_lib import ACE_KEYSCALE_CHOICES, ACE_LANGUAGE_CHOICES
+from workflow_nodes_lib import ACE_KEYSCALE_CHOICES, ACE_LANGUAGE_CHOICES, NodeSpecs
 from workflow_nodes_ltx import ltx_nodes
 from workflow_nodes_packs import pack_nodes
 from workflow_nodes_trellis import trellis_nodes
@@ -29,13 +28,13 @@ __all__ = [
 ]
 
 
-def encyclopedia() -> dict[str, Any]:
+def encyclopedia() -> NodeSpecs:
     """Return the node encyclopedia keyed by Comfy type.
 
     Returns:
         Mapping of node type -> spec.
     """
-    nodes: dict[str, Any] = {}
+    nodes: NodeSpecs = {}
     nodes.update(core_nodes())
     nodes.update(vhs_ace_nodes())
     nodes.update(ltx_nodes())

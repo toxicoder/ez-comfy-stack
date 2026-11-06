@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import importlib
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, TypedDict, cast
 
 from .formats import (
     DEFAULT_BATCH,
@@ -38,7 +38,7 @@ from .video_formats import (
 )
 
 if TYPE_CHECKING:
-    from ez_common import ComfyInputTypes
+    from ez_common import ComfyInputTypes, ImageTensor, LatentTensor, NodeRegistry
 
 CATEGORY = "ez-comfy/image"
 """Comfy menu category for Klein canvas helpers."""
@@ -52,6 +52,33 @@ _EMPTY_FLUX2_MODULES = (
     "comfy_extras.nodes_flux2",
 )
 """Import paths that may define EmptyFlux2LatentImage."""
+
+
+class Flux2Latent(TypedDict):
+    """Comfy LATENT payload for one empty Flux.2 canvas."""
+
+    samples: LatentTensor | _LatentShape
+    """Zeros tensor, or the shape-only stand-in when torch is missing."""
+
+
+class FormatUiResult(TypedDict):
+    """``OUTPUT_NODE`` payload returned by :meth:`EZImageFormat.run`."""
+
+    ui: dict[str, tuple[str, ...]]
+    """Frontend display blocks; ``text`` carries the one-line summary."""
+
+    result: tuple[int, int, int, str, str, str]
+    """Width, height, batch, hint, SaveImage prefix, Enhance context."""
+
+
+class VideoFormatUiResult(TypedDict):
+    """``OUTPUT_NODE`` payload returned by :meth:`EZVideoFormat.run`."""
+
+    ui: dict[str, tuple[str, ...]]
+    """Frontend display blocks; ``text`` carries the one-line summary."""
+
+    result: tuple[int, int, str, str]
+    """Width, height, Enhance hint, and filename prefix."""
 
 
 def snap_dim(n: int, multiple: int = GRID) -> int:
@@ -70,7 +97,7 @@ def snap_dim(n: int, multiple: int = GRID) -> int:
     return (value // multiple) * multiple
 
 
-def _resize_bhwc(image: Any, height: int, width: int) -> Any:
+def _resize_bhwc(image: ImageTensor, height: int, width: int) -> ImageTensor:
     """Resize a Comfy IMAGE tensor (BHWC) with lanczos when Comfy is present.
 
     Args:
@@ -85,7 +112,7 @@ def _resize_bhwc(image: Any, height: int, width: int) -> Any:
         RuntimeError: Neither Comfy ``common_upscale`` nor torch is importable.
     """
     try:
-        from comfy.utils import common_upscale  # type: ignore[import-not-found]
+        from comfy.utils import common_upscale
     except Exception:  # noqa: BLE001 - hermetic tests / missing Comfy
         common_upscale = None
     if common_upscale is not None:
@@ -118,7 +145,7 @@ class _LatentShape:
         self.shape = shape
 
 
-def _call_empty_flux2(width: int, height: int, batch_size: int) -> Any | None:
+def _call_empty_flux2(width: int, height: int, batch_size: int) -> Flux2Latent | None:
     """Ask Comfy EmptyFlux2LatentImage for a zeros latent when the class exists.
 
     Args:
@@ -155,12 +182,12 @@ def _call_empty_flux2(width: int, height: int, batch_size: int) -> Any | None:
             except Exception:  # noqa: BLE001 - fail-soft to zeros fallback
                 continue
             if isinstance(result, tuple):
-                return result[0]
-            return result
+                return cast(Flux2Latent, result[0])
+            return cast(Flux2Latent, result)
     return None
 
 
-def _zeros_flux2_latent(width: int, height: int, batch_size: int) -> dict[str, Any]:
+def _zeros_flux2_latent(width: int, height: int, batch_size: int) -> Flux2Latent:
     """Build a zeros Flux.2 latent dict without requiring Comfy.
 
     Args:
@@ -185,7 +212,7 @@ def _zeros_flux2_latent(width: int, height: int, batch_size: int) -> dict[str, A
     return {"samples": _LatentShape(shape)}
 
 
-def empty_flux2_latent(width: int, height: int, batch_size: int = 1) -> dict[str, Any]:
+def empty_flux2_latent(width: int, height: int, batch_size: int = 1) -> Flux2Latent:
     """Return an empty Flux.2 latent for ``width``x``height``.
 
     Prefers Comfy ``EmptyFlux2LatentImage``. Falls back to zeros (torch when
@@ -232,7 +259,7 @@ class EZSnapImage:
         "the exact source pixels."
     )
 
-    def run(self, image: Any) -> tuple[Any]:
+    def run(self, image: ImageTensor) -> tuple[ImageTensor]:
         """Snap ``image`` to the Klein VAE grid.
 
         Args:
@@ -273,7 +300,7 @@ class EZEmptyFlux2FromImage:
         "the encoded source is only a ReferenceLatent, not the denoise start."
     )
 
-    def run(self, image: Any) -> tuple[Any]:
+    def run(self, image: ImageTensor) -> tuple[Flux2Latent]:
         """Build an empty Flux.2 latent for ``image``.
 
         Args:
@@ -315,7 +342,7 @@ class EZMatchImageSize:
         "uploaded still, including odd sizes such as 1920x1080."
     )
 
-    def run(self, image: Any, size_src: Any) -> tuple[Any]:
+    def run(self, image: ImageTensor, size_src: ImageTensor) -> tuple[ImageTensor]:
         """Match ``image`` to ``size_src`` spatial size.
 
         Args:
@@ -409,7 +436,7 @@ class EZImageFormat:
         batch_size: object = DEFAULT_BATCH,
         size_mode: object = SIZE_MODE_MATCH,
         image: object = None,
-    ) -> dict[str, Any]:
+    ) -> FormatUiResult:
         """Resolve format widgets to a Klein canvas.
 
         Args:
@@ -524,7 +551,7 @@ class EZVideoFormat:
         size_mode: object = SIZE_MODE_MATCH,
         duration_s: object = DURATION_DEFAULT,
         image: object = None,
-    ) -> dict[str, Any]:
+    ) -> VideoFormatUiResult:
         """Resolve family and format widgets to a clip canvas.
 
         Args:
@@ -591,7 +618,7 @@ class EZImageUpscale:
         "EZImageUpscale nodes so one App dropdown drives every SaveImage."
     )
 
-    def run(self, image: Any, upscale: object = DEFAULT_UPSCALE) -> tuple[Any, str]:
+    def run(self, image: ImageTensor, upscale: object = DEFAULT_UPSCALE) -> tuple[ImageTensor, str]:
         """Resize ``image`` when the combo is not none.
 
         Args:
@@ -611,7 +638,7 @@ class EZImageUpscale:
         return (_resize_bhwc(image, out_h, out_w), kind)
 
 
-NODE_CLASS_MAPPINGS: dict[str, type] = {
+NODE_CLASS_MAPPINGS: NodeRegistry = {
     "EZSnapImage": EZSnapImage,
     "EZEmptyFlux2FromImage": EZEmptyFlux2FromImage,
     "EZMatchImageSize": EZMatchImageSize,

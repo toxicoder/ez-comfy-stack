@@ -33,11 +33,11 @@ def test_output_dir_prefers_shared_ez_common(tmp_path: Path) -> None:
         assert default == str(tmp_path)
         return dest
 
-    ez_common.output_root = _shared  # type: ignore[assignment]
+    ez_common.output_root = _shared
     try:
         assert output_dir(default=tmp_path) == dest
     finally:
-        ez_common.output_root = original  # type: ignore[assignment]
+        ez_common.output_root = original
 
 
 def test_output_dir_falls_back_to_env(

@@ -2,13 +2,49 @@
 
 from __future__ import annotations
 
-from typing import Any
+from collections.abc import Mapping, Sequence
+from typing import TYPE_CHECKING, NotRequired, TypedDict
 
 from .sanitize import LEAK_PATTERNS, looks_like_target
+
+if TYPE_CHECKING:
+    from ez_common import JsonScalar
 
 # Mix QC thresholds (interior gap and quiet peak).
 GAP_LIMIT_S = 0.80
 QUIET_PEAK = 0.25
+
+
+class QcCheck(TypedDict):
+    """One QC rule result.
+
+    Attributes:
+        id: Stable check id.
+        level: ``warn`` or ``fail``.
+        rule: Human-readable rule text.
+    """
+
+    id: str
+    level: str
+    rule: str
+
+
+class QcReport(TypedDict):
+    """Sidecar written to ``qc.json``.
+
+    Attributes:
+        ok: False when any check failed.
+        flags: Unique check ids, in report order.
+        checks: One row per rule that fired.
+        rate: Sample rate the mix was measured at.
+        reference: Per-speaker reference-window sidecars.
+    """
+
+    ok: bool
+    flags: list[str]
+    checks: list[QcCheck]
+    rate: NotRequired[int]
+    reference: NotRequired[dict[str, object]]
 
 
 def _cross_lang(target_language: str) -> bool:
@@ -26,7 +62,7 @@ def _cross_lang(target_language: str) -> bool:
     return lang not in {"", "en", "auto"}
 
 
-def _spoken(turn: dict[str, Any]) -> bool:
+def _spoken(turn: Mapping[str, JsonScalar]) -> bool:
     """True when a JSON turn has source text.
 
     Args:
@@ -41,13 +77,13 @@ def _spoken(turn: dict[str, Any]) -> bool:
 def evaluate_qc(
     mix: list[float],
     rate: int,
-    turns: list[dict[str, Any]],
+    turns: Sequence[Mapping[str, JsonScalar]],
     *,
     target_language: str,
     peak: float,
     extra_flags: list[str] | None = None,
-    reference: dict[str, Any] | None = None,
-) -> dict[str, Any]:
+    reference: Mapping[str, object] | None = None,
+) -> QcReport:
     """Return a JSON-able dict. Never raises.
 
     Args:
@@ -63,7 +99,7 @@ def evaluate_qc(
         ``{ok, flags, checks, rate}`` mapping (JSON boundary).
     """
     del peak
-    checks: list[dict[str, str]] = []
+    checks: list[QcCheck] = []
     try:
         samples = [float(x) for x in (mix or [])]
         mag = max((abs(x) for x in samples), default=0.0)
@@ -81,7 +117,7 @@ def evaluate_qc(
                     "rule": "mix is not speech-like (drone, hush, or tone)",
                 }
             )
-        ordered = []
+        ordered: list[Mapping[str, JsonScalar]] = []
         for raw in turns or []:
             if not isinstance(raw, dict):
                 continue

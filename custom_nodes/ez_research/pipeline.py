@@ -13,9 +13,12 @@ import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING
 
 from .search import SearchHit, format_sources, search_web
+
+if TYPE_CHECKING:
+    from ez_common import ProgressReporter
 
 # Prompt files, subagent clamp, and filesystem slug sanitizer.
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
@@ -43,7 +46,7 @@ def _log(message: str) -> None:
     print(f"[ez_research] {message}", file=sys.stderr)
 
 
-def _progress(total: int) -> Any:
+def _progress(total: int) -> ProgressReporter | None:
     """Comfy ProgressBar when importable.
 
     Args:
@@ -408,7 +411,7 @@ def write_brief(
                 output_dir = output_root()
             else:
                 try:
-                    import folder_paths  # type: ignore[import-not-found]
+                    import folder_paths
 
                     raw = folder_paths.get_output_directory()
                     output_dir = Path(raw) if raw else None

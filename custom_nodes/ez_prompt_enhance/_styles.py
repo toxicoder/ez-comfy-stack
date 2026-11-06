@@ -4,7 +4,15 @@ from __future__ import annotations
 
 import json
 import re
-from typing import Any
+from typing import TYPE_CHECKING, TypeAlias
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+
+    from ez_common import Json
+
+StyleEntry: TypeAlias = "Mapping[str, Json]"
+"""One ``styles.json`` row: look fields keyed by ``medium``, ``suffix``, ..."""
 
 # Style catalog knobs (re-exported from client).
 STYLE_NONE = "none"
@@ -72,7 +80,7 @@ _WEAVE_BY_FLAVOR = {
     ),
 }
 
-def load_styles() -> dict[str, dict[str, Any]]:
+def load_styles() -> dict[str, StyleEntry]:
     """Load the style catalog (id -> structured look fields).
 
     Returns:
@@ -84,7 +92,7 @@ def load_styles() -> dict[str, dict[str, Any]]:
         raw = json.loads(_c.STYLES_PATH.read_text(encoding="utf-8"))
         if not isinstance(raw, dict):
             raise ValueError("styles.json must be an object")
-        styles: dict[str, dict[str, Any]] = {}
+        styles: dict[str, StyleEntry] = {}
         for key, value in raw.items():
             if not isinstance(value, dict):
                 raise ValueError(f"style {key} must be an object")
@@ -102,7 +110,7 @@ def style_ids() -> list[str]:
     return [STYLE_NONE, *load_styles().keys()]
 
 
-def _style_entry(style_id: str) -> dict[str, Any]:
+def _style_entry(style_id: str) -> StyleEntry:
     """Look up one style catalog row.
 
     Args:
@@ -116,7 +124,7 @@ def _style_entry(style_id: str) -> dict[str, Any]:
     return load_styles().get(style_id) or {}
 
 
-def _string_list(entry: dict[str, Any], field: str) -> list[str]:
+def _string_list(entry: StyleEntry, field: str) -> list[str]:
     """Read a string or list-of-strings style field.
 
     Args:

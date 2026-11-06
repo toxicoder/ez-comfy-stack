@@ -6,8 +6,11 @@ filegroup(
     name = "sources",
     srcs = [
         "ez_common/__init__.py",
+        "ez_common/comfy_graph.py",
+        "ez_common/json_value.py",
         "ez_common/path.py",
         "ez_common/protocols.py",
+        "ez_common/tensors.py",
         "ez_dcc/__init__.py",
         "ez_dcc/_guide_pack.py",
         "ez_dcc/nodes.py",

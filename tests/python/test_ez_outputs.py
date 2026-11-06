@@ -203,7 +203,7 @@ def test_register_routes_fail_soft_and_fake_server(tmp_path: Path) -> None:
         def _in() -> Any:
             return monkey_root / "in"
 
-        routes_mod.output_directory = _out  # type: ignore[assignment]
+        routes_mod.output_directory = _out
         routes_mod.input_root = _in  # type: ignore[assignment]
         try:
             listed = await handlers["/ez_outputs/list"](_Req(query={"kind": "image"}))

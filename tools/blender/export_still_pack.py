@@ -149,7 +149,7 @@ def export_with_bpy(ns: argparse.Namespace) -> None:
         ns: Parsed export arguments.
     """
     try:
-        import bpy  # type: ignore[import-not-found]
+        import bpy
     except ImportError as exc:
         raise SystemExit("bpy required (run via host blender --background -P)") from exc
 

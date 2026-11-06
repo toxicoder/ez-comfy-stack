@@ -24,7 +24,7 @@ import uuid
 from collections.abc import Callable, Mapping, Sequence
 from datetime import datetime, timezone
 from pathlib import Path, PurePosixPath
-from typing import Any, TypeAlias, cast, get_args
+from typing import TypeAlias, TypeVar, cast, get_args
 
 from .protocol import (
     PROJECTS_SUBDIR,
@@ -149,10 +149,18 @@ class TimelineError(ValueError):
     """
 
 
+_Row = TypeVar("_Row", bound=Mapping[str, object])
+"""One record of a project row list (clip, overlay, or caption).
+
+The list is mutated in place, so the helpers that filter it stay generic
+instead of widening every caller to a common row type.
+"""
+
+
 # --- Small validators --------------------------------------------------------
 
 
-def _require(value: Mapping[str, Any], key: str, where: str) -> Any:
+def _require(value: Mapping[str, object], key: str, where: str) -> object:
     """Return ``value[key]`` or refuse.
 
     Args:
@@ -172,7 +180,7 @@ def _require(value: Mapping[str, Any], key: str, where: str) -> Any:
 
 
 def _check_keys(
-    value: Mapping[str, Any], allowed: frozenset[str], where: str
+    value: Mapping[str, object], allowed: frozenset[str], where: str
 ) -> None:
     """Refuse unknown keys in one argument mapping.
 
@@ -189,7 +197,7 @@ def _check_keys(
         raise TimelineError(f"{where}: unknown argument(s) {', '.join(extra)}")
 
 
-def _as_str(value: Any, field: str, where: str) -> str:
+def _as_str(value: object, field: str, where: str) -> str:
     """Coerce a required string argument.
 
     Args:
@@ -208,7 +216,7 @@ def _as_str(value: Any, field: str, where: str) -> str:
     return value
 
 
-def _as_float(value: Any, field: str, where: str) -> float:
+def _as_float(value: object, field: str, where: str) -> float:
     """Coerce a required numeric argument to ``float``.
 
     Args:
@@ -227,7 +235,7 @@ def _as_float(value: Any, field: str, where: str) -> float:
     return float(value)
 
 
-def _as_int(value: Any, field: str, where: str) -> int:
+def _as_int(value: object, field: str, where: str) -> int:
     """Coerce a required integer argument.
 
     Args:
@@ -310,7 +318,7 @@ def _check_unit(value: float, field: str, where: str) -> None:
         raise TimelineError(f"{where}: {field} must be within 0..1 (got {value})")
 
 
-def _safe_project_id(project_id: Any, where: str) -> str:
+def _safe_project_id(project_id: object, where: str) -> str:
     """Validate a project id before it becomes part of a filename.
 
     Args:
@@ -467,7 +475,7 @@ def new_project(
     )
 
 
-def _transition_from(value: Any, where: str) -> Transition:
+def _transition_from(value: object, where: str) -> Transition:
     """Validate a nested transition record.
 
     Args:
@@ -494,7 +502,7 @@ def _transition_from(value: Any, where: str) -> Transition:
     return {"kind": cast(TransitionKind, kind), "duration_s": duration}
 
 
-def _clip_from(value: Any, where: str) -> Clip:
+def _clip_from(value: object, where: str) -> Clip:
     """Validate a clip argument and fill optional fields.
 
     Args:
@@ -537,7 +545,7 @@ def _clip_from(value: Any, where: str) -> Clip:
     return clip
 
 
-def _overlay_from(value: Any, where: str) -> Overlay:
+def _overlay_from(value: object, where: str) -> Overlay:
     """Validate an overlay argument and fill optional fields.
 
     Args:
@@ -597,7 +605,7 @@ def _overlay_from(value: Any, where: str) -> Overlay:
     return overlay
 
 
-def _caption_from(value: Any, where: str) -> Caption:
+def _caption_from(value: object, where: str) -> Caption:
     """Validate a caption argument.
 
     Args:
@@ -653,7 +661,7 @@ def _clip_at(project: EditProject, clip_id: str, where: str) -> int:
     raise TimelineError(f"{where}: unknown clip id {clip_id!r}")
 
 
-def _drop_by_id(items: list[Any], item_id: str, where: str, noun: str) -> None:
+def _drop_by_id(items: list[_Row], item_id: str, where: str, noun: str) -> None:
     """Remove one row by id, in place.
 
     Args:
@@ -675,7 +683,7 @@ def _drop_by_id(items: list[Any], item_id: str, where: str, noun: str) -> None:
 # --- Op handlers -------------------------------------------------------------
 
 
-def _op_create(args: dict[str, Any], where: str) -> EditProject:
+def _op_create(args: dict[str, object], where: str) -> EditProject:
     """Handle ``project_create``.
 
     Args:
@@ -706,7 +714,7 @@ def _op_create(args: dict[str, Any], where: str) -> EditProject:
     )
 
 
-def _op_add_clip(project: EditProject, args: dict[str, Any], where: str) -> None:
+def _op_add_clip(project: EditProject, args: dict[str, object], where: str) -> None:
     """Handle ``add_clip``.
 
     Args:
@@ -724,7 +732,7 @@ def _op_add_clip(project: EditProject, args: dict[str, Any], where: str) -> None
     project["clips"].append(clip)
 
 
-def _op_remove_clip(project: EditProject, args: dict[str, Any], where: str) -> None:
+def _op_remove_clip(project: EditProject, args: dict[str, object], where: str) -> None:
     """Handle ``remove_clip``.
 
     Args:
@@ -744,7 +752,7 @@ def _op_remove_clip(project: EditProject, args: dict[str, Any], where: str) -> N
     )
 
 
-def _op_trim_clip(project: EditProject, args: dict[str, Any], where: str) -> None:
+def _op_trim_clip(project: EditProject, args: dict[str, object], where: str) -> None:
     """Handle ``trim_clip`` (``in_s`` and/or ``out_s``).
 
     Args:
@@ -770,7 +778,7 @@ def _op_trim_clip(project: EditProject, args: dict[str, Any], where: str) -> Non
     clip["out_s"] = out_s
 
 
-def _op_move_clip(project: EditProject, args: dict[str, Any], where: str) -> None:
+def _op_move_clip(project: EditProject, args: dict[str, object], where: str) -> None:
     """Handle ``move_clip`` (reorder the clip strip).
 
     Args:
@@ -793,7 +801,7 @@ def _op_move_clip(project: EditProject, args: dict[str, Any], where: str) -> Non
 
 
 def _op_set_transition(
-    project: EditProject, args: dict[str, Any], where: str
+    project: EditProject, args: dict[str, object], where: str
 ) -> None:
     """Handle ``set_transition`` (the transition entering a clip).
 
@@ -818,7 +826,7 @@ def _op_set_transition(
     )
 
 
-def _op_set_gain(project: EditProject, args: dict[str, Any], where: str) -> None:
+def _op_set_gain(project: EditProject, args: dict[str, object], where: str) -> None:
     """Handle ``set_gain``.
 
     Args:
@@ -838,7 +846,7 @@ def _op_set_gain(project: EditProject, args: dict[str, Any], where: str) -> None
     clip["gain"] = gain
 
 
-def _op_add_overlay(project: EditProject, args: dict[str, Any], where: str) -> None:
+def _op_add_overlay(project: EditProject, args: dict[str, object], where: str) -> None:
     """Handle ``add_overlay``.
 
     Args:
@@ -857,7 +865,7 @@ def _op_add_overlay(project: EditProject, args: dict[str, Any], where: str) -> N
 
 
 def _op_remove_overlay(
-    project: EditProject, args: dict[str, Any], where: str
+    project: EditProject, args: dict[str, object], where: str
 ) -> None:
     """Handle ``remove_overlay``.
 
@@ -878,7 +886,7 @@ def _op_remove_overlay(
     )
 
 
-def _op_add_caption(project: EditProject, args: dict[str, Any], where: str) -> None:
+def _op_add_caption(project: EditProject, args: dict[str, object], where: str) -> None:
     """Handle ``add_caption``.
 
     Args:
@@ -897,7 +905,7 @@ def _op_add_caption(project: EditProject, args: dict[str, Any], where: str) -> N
 
 
 def _op_remove_caption(
-    project: EditProject, args: dict[str, Any], where: str
+    project: EditProject, args: dict[str, object], where: str
 ) -> None:
     """Handle ``remove_caption``.
 
@@ -918,7 +926,7 @@ def _op_remove_caption(
     )
 
 
-def _op_set_title(project: EditProject, args: dict[str, Any], where: str) -> None:
+def _op_set_title(project: EditProject, args: dict[str, object], where: str) -> None:
     """Handle ``set_title``.
 
     Args:
@@ -936,7 +944,7 @@ def _op_set_title(project: EditProject, args: dict[str, Any], where: str) -> Non
     project["title"] = title
 
 
-def _op_clear(project: EditProject, args: dict[str, Any], where: str) -> None:
+def _op_clear(project: EditProject, args: dict[str, object], where: str) -> None:
     """Handle ``clear`` (drop clips, overlays, and captions).
 
     Args:
@@ -953,7 +961,7 @@ def _op_clear(project: EditProject, args: dict[str, Any], where: str) -> None:
     project["captions"] = []
 
 
-HANDLERS: dict[str, Callable[[EditProject, dict[str, Any], str], None]] = {
+HANDLERS: dict[str, Callable[[EditProject, dict[str, object], str], None]] = {
     "add_clip": _op_add_clip,
     "remove_clip": _op_remove_clip,
     "trim_clip": _op_trim_clip,
@@ -972,7 +980,7 @@ it replaces the project instead of editing one)."""
 
 
 def _apply_one(
-    project: EditProject | None, op: Mapping[str, Any], *, position: int
+    project: EditProject | None, op: Mapping[str, object], *, position: int
 ) -> EditProject:
     """Apply a single op and return the project.
 
@@ -999,7 +1007,7 @@ def _apply_one(
     if not isinstance(raw_args, dict):
         got = type(raw_args).__name__
         raise TimelineError(f"{where}: args must be an object (got {got})")
-    args: dict[str, Any] = dict(raw_args)
+    args: dict[str, object] = dict(raw_args)
     if name == "project_create":
         if project is not None:
             raise TimelineError(
@@ -1016,7 +1024,7 @@ def _apply_one(
 
 def apply_ops(
     project: EditProject | None,
-    ops: Sequence[Mapping[str, Any]],
+    ops: Sequence[Mapping[str, object]],
     *,
     clock: Clock | None = None,
 ) -> EditProject:
@@ -1076,7 +1084,7 @@ def _project_path(edit_dir: Path, project_id: str) -> Path:
     return _projects_dir(edit_dir) / f"{safe}.json"
 
 
-def _require_unique_ids(rows: list[Any], where: str, noun: str) -> None:
+def _require_unique_ids(rows: list[_Row], where: str, noun: str) -> None:
     """Refuse duplicate ids within one row list.
 
     Args:
@@ -1095,7 +1103,7 @@ def _require_unique_ids(rows: list[Any], where: str, noun: str) -> None:
         seen.add(row_id)
 
 
-def _project_from(data: Any, where: str) -> EditProject:
+def _project_from(data: object, where: str) -> EditProject:
     """Validate one parsed project record.
 
     Args:
@@ -1201,7 +1209,7 @@ def _read_project_file(path: Path, where: str) -> EditProject:
             UTF-8 text, or the record is malformed.
     """
     try:
-        data: Any = json.loads(path.read_text(encoding="utf-8"))
+        data: object = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
         raise TimelineError(f"invalid project json {path}: {exc}") from exc
     except (OSError, UnicodeDecodeError) as exc:

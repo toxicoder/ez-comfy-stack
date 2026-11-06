@@ -23,7 +23,13 @@ ladder is a no-op too rather than a Klein 4B downgrade.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Mapping, Sequence
+from typing import TYPE_CHECKING, Mapping, Sequence, TypeAlias, cast
+
+if TYPE_CHECKING:
+    from ez_common import Json, JsonObject
+
+QualityGraphNode: TypeAlias = "Mapping[str, Json]"
+"""One ``nodes`` row as parsed from a graph document, before any shaping."""
 
 # Quality ids, Klein filenames, family step/CFG overlays, widget indexes.
 QUALITY_CUSTOM = "custom"
@@ -771,7 +777,7 @@ def _klein_high(
     )
 
 
-def infer_occupancy(graph: Mapping[str, Any]) -> str:
+def infer_occupancy(graph: Mapping[str, Json]) -> str:
     """Occupancy from extra, else a coarse type heuristic.
 
     Args:
@@ -786,7 +792,8 @@ def infer_occupancy(graph: Mapping[str, Any]) -> str:
         occ = str(mode.get("occupancy") or "").strip()
         if occ:
             return occ
-    types = {str(node.get("type") or "") for node in graph.get("nodes") or []}
+    nodes = cast("list[QualityGraphNode]", graph.get("nodes") or [])
+    types = {str(node.get("type") or "") for node in nodes}
     if "EZFilmConcat" in types:
         return "film"
     if "MeshToFile3D" in types:
@@ -794,10 +801,10 @@ def infer_occupancy(graph: Mapping[str, Any]) -> str:
     if "SaveAudio" in types or "SaveAudioMP3" in types:
         return "audio"
     if "VHS_VideoCombine" in types or "SaveVideo" in types:
-        for node in graph.get("nodes") or []:
+        for node in nodes:
             if node.get("type") != "UNETLoader":
                 continue
-            values = node.get("widgets_values") or []
+            values = cast("list[object]", node.get("widgets_values") or [])
             name = str(values[0]) if values else ""
             if "ltx" in name.lower():
                 return "ltx"
@@ -809,7 +816,7 @@ def infer_occupancy(graph: Mapping[str, Any]) -> str:
     return ""
 
 
-def _first_loader_name(graph: Mapping[str, Any], node_type: str) -> str:
+def _first_loader_name(graph: Mapping[str, Json], node_type: str) -> str:
     """First loader filename of ``node_type``.
 
     Args:
@@ -819,16 +826,16 @@ def _first_loader_name(graph: Mapping[str, Any], node_type: str) -> str:
     Returns:
         Filename, or empty string when none is present.
     """
-    for node in graph.get("nodes") or []:
+    for node in cast("list[QualityGraphNode]", graph.get("nodes") or []):
         if node.get("type") != node_type:
             continue
-        values = node.get("widgets_values") or []
+        values = cast("list[object]", node.get("widgets_values") or [])
         if values:
             return str(values[0])
     return ""
 
 
-def graph_has_wan14(graph: Mapping[str, Any]) -> bool:
+def graph_has_wan14(graph: Mapping[str, Json]) -> bool:
     """True when any UNETLoader is a Wan 14B file.
 
     Args:
@@ -837,23 +844,23 @@ def graph_has_wan14(graph: Mapping[str, Any]) -> bool:
     Returns:
         True when a 14B UNET is present.
     """
-    for node in graph.get("nodes") or []:
+    for node in cast("list[QualityGraphNode]", graph.get("nodes") or []):
         if node.get("type") != "UNETLoader":
             continue
-        values = node.get("widgets_values") or []
+        values = cast("list[object]", node.get("widgets_values") or [])
         if values and is_wan_14b_unet(str(values[0])):
             return True
     return False
 
 
 def apply_to_graph(
-    graph: dict[str, Any],
+    graph: JsonObject,
     quality: str,
     *,
     available_unets: Sequence[str] | None = None,
     available_clips: Sequence[str] | None = None,
     available_vaes: Sequence[str] | None = None,
-) -> dict[str, Any]:
+) -> JsonObject:
     """Mutate KSampler / loader widgets_values in place.
 
     Does not touch latent size or frames. Lab and custom are no-ops.
@@ -887,19 +894,19 @@ def apply_to_graph(
         vae_name=vae_name,
         available_vaes=available_vaes,
     )
-    for node in graph.get("nodes") or []:
+    for node in cast("list[QualityGraphNode]", graph.get("nodes") or []):
         ntype = node.get("type")
         values = node.get("widgets_values")
         if not isinstance(values, list):
             continue
         if ntype == "KSampler":
             authored_steps = (
-                int(values[KSAMPLER_STEPS_INDEX])
+                int(cast("int", values[KSAMPLER_STEPS_INDEX]))
                 if len(values) > KSAMPLER_STEPS_INDEX
                 else 0
             )
             authored_cfg = (
-                float(values[KSAMPLER_CFG_INDEX])
+                float(cast("float", values[KSAMPLER_CFG_INDEX]))
                 if len(values) > KSAMPLER_CFG_INDEX
                 else 1.0
             )
@@ -1240,7 +1247,7 @@ def tier_label(family: str, quality: str) -> str:
     return ", ".join(parts)
 
 
-def export_table() -> dict[str, Any]:
+def export_table() -> dict[str, Json]:
     """Return the full tier table in JSON-safe form.
 
     Args:
@@ -1249,7 +1256,7 @@ def export_table() -> dict[str, Any]:
     Returns:
         Mapping with the tier table, owned fields, labels, and tier order.
     """
-    table: dict[str, dict[str, dict[str, Any]]] = {}
+    table: dict[str, dict[str, dict[str, Json]]] = {}
     owned: dict[str, list[str]] = {}
     labels: dict[str, dict[str, str]] = {}
     for family in QUALITY_FAMILIES:
@@ -1262,7 +1269,7 @@ def export_table() -> dict[str, Any]:
             }
             labels[family][choice] = tier_label(family, choice)
         owned[family] = list(family_owned_fields(family))
-    return {
+    payload: dict[str, object] = {
         "choices": list(QUALITY_CHOICES),
         "named": list(NAMED_QUALITY_CHOICES),
         "families": list(QUALITY_FAMILIES),
@@ -1273,3 +1280,4 @@ def export_table() -> dict[str, Any]:
         "custom": QUALITY_CUSTOM,
         "lab": QUALITY_LAB,
     }
+    return cast("dict[str, Json]", payload)

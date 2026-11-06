@@ -5,9 +5,9 @@ Helpers and combo catalogs live in :mod:`workflow_nodes_lib`.
 
 from __future__ import annotations
 
-from typing import Any
 
 from workflow_nodes_lib import (
+    NodeSpecs,
     _CLIP_TYPES,
     _CROP,
     _DEVICE,
@@ -20,7 +20,7 @@ from workflow_nodes_lib import (
     ksampler_widgets,
 )
 
-def core_nodes() -> dict[str, Any]:
+def core_nodes() -> NodeSpecs:
     """Comfy-core loaders, latents, VAE, image I/O, notes.
 
     Returns:

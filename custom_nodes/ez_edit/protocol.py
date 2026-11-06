@@ -13,7 +13,7 @@ only - pack import stays hermetic for pytest.
 
 from __future__ import annotations
 
-from typing import Any, Literal, TypedDict
+from typing import Literal, TypedDict
 
 # --- Storage layout (all under ${COMFY_OUTPUT_DIR}) -------------------------
 
@@ -182,7 +182,7 @@ class EditOp(TypedDict):
     """One reducer instruction: op name plus op-specific args."""
 
     op: OpName
-    args: dict[str, Any]
+    args: dict[str, object]
 
 
 class JobRecord(TypedDict):
@@ -212,7 +212,7 @@ class LocalToolDef(TypedDict):
     """Streamable-HTTP MCP endpoint, always laptop-loopback for the user."""
     name: str
     description: str
-    input_schema: dict[str, Any]
+    input_schema: dict[str, object]
 
 
 class LocalCall(TypedDict):
@@ -221,7 +221,7 @@ class LocalCall(TypedDict):
     call_id: str
     server_url: str
     name: str
-    args: dict[str, Any]
+    args: dict[str, object]
 
 
 class ChatMessage(TypedDict, total=False):
@@ -229,7 +229,7 @@ class ChatMessage(TypedDict, total=False):
 
     role: str
     content: str
-    tool_calls: list[dict[str, Any]]
+    tool_calls: list[dict[str, object]]
     tool_call_id: str
 
 
@@ -237,14 +237,14 @@ class ToolCallTrace(TypedDict):
     """One agent-loop step surfaced to the panel and logs."""
 
     name: str
-    args: dict[str, Any]
+    args: dict[str, object]
     ok: bool
     summary: str
 
 
 # --- Tool catalog (single source for agent + host MCP) ----------------------
 
-TOOL_CATALOG: dict[str, dict[str, Any]] = {
+TOOL_CATALOG: dict[str, dict[str, object]] = {
     "edit_get_state": {
         "description": "Return the current edit project (clips, overlays, "
         "captions) and its recent jobs. Pass project_id or empty for the "

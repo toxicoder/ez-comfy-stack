@@ -174,7 +174,8 @@ def get_shot(state: dict[str, Any], sid: str) -> dict[str, Any]:
     Returns:
         Shot row dict.
     """
-    for row in state["shots"]:
+    rows: list[dict[str, Any]] = state["shots"]
+    for row in rows:
         if row.get("id") == sid:
             return row
     raise KeyError(f"unknown shot id {sid}")

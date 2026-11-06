@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from collections.abc import Mapping, Sequence
-from typing import Any, NotRequired, TypedDict, cast
+from typing import NotRequired, TypedDict, cast
 
 # Analyze / render stage widget values.
 STAGES = ("all", "analyze", "render")
@@ -156,7 +156,7 @@ def parse_payload(raw: object) -> ScriptPayload:
         else:
             return empty_payload(status="invalid json")
     raw_turns = data.get("turns")
-    turns_raw: list[Any] = raw_turns if isinstance(raw_turns, list) else []
+    turns_raw: list[object] = raw_turns if isinstance(raw_turns, list) else []
     turns: list[Turn] = [
         normalize_turn(item, i + 1) for i, item in enumerate(turns_raw)
     ]
@@ -172,7 +172,7 @@ def parse_payload(raw: object) -> ScriptPayload:
     }
 
 
-def dumps_payload(payload: Mapping[str, Any]) -> str:
+def dumps_payload(payload: Mapping[str, object]) -> str:
     """Pretty-print a payload for the App widget.
 
     Args:
@@ -184,7 +184,7 @@ def dumps_payload(payload: Mapping[str, Any]) -> str:
     return json.dumps(payload, indent=2, ensure_ascii=False)
 
 
-def _copy_turn(turn: Mapping[str, Any]) -> Turn:
+def _copy_turn(turn: Mapping[str, object]) -> Turn:
     """Shallow-copy a JSON turn mapping.
 
     Args:
@@ -196,7 +196,7 @@ def _copy_turn(turn: Mapping[str, Any]) -> Turn:
     return cast(Turn, dict(turn))
 
 
-def assign_overlap(turns: Sequence[Mapping[str, Any]]) -> list[Turn]:
+def assign_overlap(turns: Sequence[Turn]) -> list[Turn]:
     """When two turns overlap, keep the louder one and mark overlap.
 
     Args:
@@ -247,7 +247,7 @@ def _join_turn_text(left: str, right: str) -> str:
 
 
 def merge_adjacent_turns(
-    turns: Sequence[Mapping[str, Any]],
+    turns: Sequence[Turn],
     *,
     gap_s: float = MERGE_GAP_S,
 ) -> list[Turn]:

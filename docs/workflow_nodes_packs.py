@@ -5,17 +5,16 @@ Helpers and combo catalogs live in :mod:`workflow_nodes_lib`.
 
 from __future__ import annotations
 
-from typing import Any
 
-from workflow_nodes_lib import _n, _s, _w
+from workflow_nodes_lib import NodeSpecs, _n, _s, _w
 
-def pack_nodes() -> dict[str, Any]:
+def pack_nodes() -> NodeSpecs:
     """Podcast, dub, film, DCC, research, quality, forge.
 
     Returns:
         Node specs keyed by type.
     """
-    nodes: dict[str, Any] = {}
+    nodes: NodeSpecs = {}
     nodes["EZPodcastScript"] = _n(
         "Podcast Script",
         "Draft Speaker A/B (and Announcer) lines via the on-box GGUF.",

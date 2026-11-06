@@ -10,7 +10,10 @@ from __future__ import annotations
 
 import re
 from collections.abc import Mapping, Sequence
-from typing import Any, Literal, TypedDict
+from typing import TYPE_CHECKING, Literal, TypedDict
+
+if TYPE_CHECKING:
+    from ez_common import Json
 
 # Duration clamp, meters, and ACE marker roles.
 DURATION_MIN = 64
@@ -1480,7 +1483,7 @@ def _rack_skeleton(roles: list[tuple[str, str]], *, bars: int) -> str:
     return "\n\n".join(lines)
 
 
-def rack_form_entries() -> list[dict[str, Any]]:
+def rack_form_entries() -> list[dict[str, Json]]:
     """Real form techniques that replace ``frm_fill_*`` color pockets.
 
     Each row is one archetype crossed with a bar budget and a meter.
@@ -1493,7 +1496,7 @@ def rack_form_entries() -> list[dict[str, Any]]:
     budgets = (("short", 8), ("standard", 12), ("long", 16))
     meters = ("2", "3", "4", "6")
     meter_name = {"2": "two-four", "3": "three-four", "4": "four-four", "6": "six-eight"}
-    rows: list[dict[str, Any]] = []
+    rows: list[dict[str, Json]] = []
     serial = 0
     for form_id in VOCAL_FORMS:
         roles = _expand_vocal_roles(form_id, 3, half_time=form_id == "v_half")

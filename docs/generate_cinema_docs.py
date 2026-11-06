@@ -12,7 +12,7 @@ import html
 import json
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, Sequence
 
 # Repo root, Cinema Rack JSON catalogs, generated markdown, and clip assets.
 ROOT = Path(__file__).resolve().parents[1]
@@ -197,13 +197,14 @@ def write_technique_page(axis_id: str, axis_label: str, row: dict[str, Any]) -> 
     return rel
 
 
-def write_axis_page(axis_id: str, meta: dict[str, Any], rows: list[dict[str, Any]]) -> str:
+def write_axis_page(axis_id: str, meta: dict[str, Any], rows: Sequence[object]) -> str:
     """Write one axis markdown page and any shipped technique pages.
 
     Args:
         axis_id: Axis key.
         meta: axes.json entry.
-        rows: Technique objects.
+        rows: Technique objects; a non-dict entry is skipped, which is why the
+            element type is ``object`` and the loop narrows with ``isinstance``.
 
     Returns:
         Relative docs path.

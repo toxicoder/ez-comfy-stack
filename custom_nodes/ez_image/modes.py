@@ -10,12 +10,12 @@ import json
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, TypedDict, cast
 
 from .nodes import CATEGORY
 
 if TYPE_CHECKING:
-    from ez_common import ComfyInputTypes
+    from ez_common import ComfyInputTypes, NodeRegistry
 
 MODES_PATH = Path(__file__).resolve().parent / "js" / "modes.json"
 """Catalog path shared with the frontend WEB_DIRECTORY."""
@@ -40,6 +40,64 @@ ITERATE_EDIT_LINE = (
     "Edit the reference still. Apply the prompt as the change and keep everything else."
 )
 """Context line for an Iterate edit pass. No creator-mode instruction."""
+
+
+class ModeCategoryRow(TypedDict):
+    """One ``modes.json`` ``categories`` entry."""
+
+    id: str
+    """Stable snake_case category id."""
+
+    label: str
+    """Combo value shown in the App."""
+
+
+class ModeRow(TypedDict):
+    """One ``modes.json`` ``modes`` entry (the raw JSON shape)."""
+
+    id: str
+    """Stable snake_case mode id."""
+
+    label: str
+    """Combo value shown in the App."""
+
+    category: str
+    """Category id this mode belongs to."""
+
+    enhance_mode: str
+    """Klein Enhance mode (``t2i`` / ``edit`` / ...)."""
+
+    needs_ref: int
+    """How many optional stills the mode prefers (0-2)."""
+
+    instruction: str
+    """Splice prepended to Enhance context."""
+
+    prefix: str
+    """SaveImage filename prefix."""
+
+
+class ModesCatalog(TypedDict):
+    """The parsed ``js/modes.json`` document."""
+
+    default_id: str
+    """Mode id the App preselects."""
+
+    categories: list[ModeCategoryRow]
+    """Category rows in file order (empty when derived from modes)."""
+
+    modes: list[ModeRow]
+    """Creator-mode rows in file order."""
+
+
+class ModeUiResult(TypedDict):
+    """``OUTPUT_NODE`` payload returned by :meth:`EZImageMode.run`."""
+
+    ui: dict[str, tuple[str, ...]]
+    """Frontend display blocks; ``text`` carries the one-line summary."""
+
+    result: tuple[str, str, str]
+    """Context, Enhance mode, and SaveImage prefix for the graph."""
 
 
 @dataclass(frozen=True)
@@ -195,7 +253,7 @@ def _normalize_enhance_mode(value: object) -> str:
 
 
 @lru_cache(maxsize=1)
-def _catalog_payload() -> dict[str, Any]:
+def _catalog_payload() -> dict[str, object]:
     """Load the raw modes.json object.
 
     Returns:
@@ -214,13 +272,13 @@ def _catalog_payload() -> dict[str, Any]:
     return raw
 
 
-def catalog_payload() -> dict[str, Any]:
+def catalog_payload() -> ModesCatalog:
     """Return the raw JSON object (docs / tests).
 
     Returns:
         Parsed modes.json mapping.
     """
-    return dict(_catalog_payload())
+    return cast(ModesCatalog, dict(_catalog_payload()))
 
 
 @lru_cache(maxsize=1)
@@ -599,7 +657,7 @@ class EZImageMode:
         run_summary: object = "",
         context: object = "",
         has_image: object = False,
-    ) -> dict[str, Any]:
+    ) -> ModeUiResult:
         """Resolve category/mode widgets, or the Iterate override.
 
         Args:
@@ -629,7 +687,7 @@ class EZImageMode:
         }
 
 
-NODE_CLASS_MAPPINGS: dict[str, type] = {
+NODE_CLASS_MAPPINGS: NodeRegistry = {
     "EZImageMode": EZImageMode,
 }
 """Comfy class-name registry for creator-mode nodes."""

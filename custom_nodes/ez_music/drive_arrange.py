@@ -31,7 +31,7 @@ import hashlib
 import math
 from collections import Counter
 from collections.abc import Mapping, Sequence
-from typing import Any, Literal, TypedDict
+from typing import Literal, TypedDict, cast
 
 from ez_music.song_plan import (
     SongPlan,
@@ -435,7 +435,7 @@ def fit_drive_sections(
 
 def plan_drive_album(
     album_slug: str,
-    rows: Sequence[Mapping[str, Any]],
+    rows: Sequence[Mapping[str, object]],
 ) -> list[DrivePlan]:
     """Plan one Drive-through album. Shapes are unique inside the album.
 
@@ -458,8 +458,8 @@ def plan_drive_album(
             plan = _plan_one(
                 album_slug=album_slug,
                 track_number=index,
-                bpm=int(row["bpm"]),
-                seed=int(row["seed"]),
+                bpm=int(cast("int", row["bpm"])),
+                seed=int(cast("int", row["seed"])),
                 lyrics=str(row["lyrics"]),
                 recipe=str(row.get("recipe") or ""),
                 extra=extra,
@@ -1828,7 +1828,7 @@ def _compose_pass(
     body = max(2, int(cells) - 2)
     break_pass = role == "break"
     sections: list[SongSection] = []
-    prev_role = ""
+    prev_role: str = ""
     prev_sparse = False
     drop_deals = 0
     head_identity = identity if first_pass else ""

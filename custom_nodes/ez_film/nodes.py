@@ -35,7 +35,7 @@ def _unload_models() -> str:
     """
     status = "gc"
     try:
-        import comfy.model_management as mm  # type: ignore[import-not-found]
+        import comfy.model_management as mm
 
         mm.unload_all_models()
         if hasattr(mm, "soft_empty_cache"):

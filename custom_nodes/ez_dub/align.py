@@ -6,9 +6,13 @@ import math
 import shutil
 import struct
 import subprocess
-from typing import Any, TypedDict
+from collections.abc import Mapping, Sequence
+from typing import TYPE_CHECKING, TypedDict
 
 from .hooks import StretchHook
+
+if TYPE_CHECKING:
+    from ez_common import JsonScalar
 
 # Duration-lock knobs (24 kHz PCM, atempo bounds, WSOLA window).
 SAMPLE_RATE = 24000
@@ -42,6 +46,18 @@ class FitFlags(TypedDict):
     spill: bool
 
 
+class CloneWindow(TypedDict):
+    """One cloned line placed back on the timeline.
+
+    Attributes:
+        t0: Window start in seconds.
+        pcm: Mono PCM for the window.
+    """
+
+    t0: float
+    pcm: list[float]
+
+
 class LockFlags(TypedDict):
     """Flags from :func:`lock_duration`.
 
@@ -68,7 +84,7 @@ def rms(samples: list[float]) -> float:
     acc = 0.0
     for value in samples:
         acc += float(value) * float(value)
-    return (acc / len(samples)) ** 0.5
+    return float((acc / len(samples)) ** 0.5)
 
 
 def resample_linear(samples: list[float], out_len: int) -> list[float]:
@@ -393,7 +409,7 @@ def lock_duration(
 
 def collect_room_tone(
     source: list[float],
-    turns: list[dict[str, Any]],
+    turns: Sequence[Mapping[str, JsonScalar]],
     rate: int,
     want: int | None = None,
 ) -> list[float]:
@@ -434,7 +450,7 @@ def collect_room_tone(
 
 def build_timeline(
     source: list[float],
-    clones: list[dict[str, Any]],
+    clones: Sequence[CloneWindow],
     rate: int,
     keep_bed: bool = True,
     xfade_ms: int = XFADE_MS,

@@ -11,7 +11,7 @@ import json
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
-from typing import Any
+from typing import TypedDict, cast
 
 from .formats import (
     CUSTOM_ID,
@@ -38,6 +38,75 @@ DURATION_SECONDS = {
     "10 seconds": 10.00,
     "12 seconds": 12.00,
 }
+
+
+class VideoFamilyRow(TypedDict):
+    """One ``video_formats.json`` ``families`` entry (raw JSON shape)."""
+
+    label: str
+    """Combo value shown in the graph."""
+
+    grid: int
+    """VAE spatial multiple (16 or 32)."""
+
+    min: int
+    """Smallest legal side."""
+
+    max: int
+    """Largest legal side (Spark-safe)."""
+
+    default_id: str
+    """Default format id for this family."""
+
+    custom_prefix: str
+    """Save / VHS prefix for Custom."""
+
+    custom_width: int
+    """Default Custom width."""
+
+    custom_height: int
+    """Default Custom height."""
+
+
+class VideoFormatRow(TypedDict):
+    """One ``video_formats.json`` ``formats`` entry (raw JSON shape)."""
+
+    id: str
+    """Stable snake_case id."""
+
+    label: str
+    """Combo value shown in the App."""
+
+    family: str
+    """``wan``, ``ltx``, or empty for Custom."""
+
+    group: str
+    """Catalog section."""
+
+    width: int
+    """Latent width, or 0 for Custom."""
+
+    height: int
+    """Latent height, or 0 for Custom."""
+
+    prefix: str
+    """Optional filename prefix."""
+
+    hint: str
+    """Enhance duration_hint framing line."""
+
+    lock: str
+    """Job-specific safe-area clause."""
+
+
+class VideoFormatCatalog(TypedDict):
+    """The parsed ``js/video_formats.json`` document."""
+
+    formats: list[VideoFormatRow]
+    """Clip presets in file order."""
+
+    families: dict[str, VideoFamilyRow]
+    """Family id -> snap rules (``wan`` and ``ltx``)."""
 
 
 @dataclass(frozen=True)
@@ -217,7 +286,7 @@ def load_video_formats() -> tuple[VideoFormatSpec, ...]:
     return tuple(out)
 
 
-def _load_payload() -> dict[str, Any]:
+def _load_payload() -> dict[str, object]:
     """Read and parse the video catalog object.
 
     Returns:
@@ -487,13 +556,13 @@ def resolve_video_canvas(
     )
 
 
-def catalog_payload() -> dict[str, Any]:
+def catalog_payload() -> VideoFormatCatalog:
     """Return the raw JSON object (docs / tests).
 
     Returns:
         Parsed video_formats.json mapping.
     """
-    return _load_payload()
+    return cast(VideoFormatCatalog, _load_payload())
 
 
 def reset_video_format_cache_for_tests() -> None:

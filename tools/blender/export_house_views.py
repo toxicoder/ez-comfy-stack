@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import shutil
 import sys
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
@@ -28,7 +29,11 @@ from house_layout import (  # noqa: E402
     PACK_HEIGHT,
     PACK_WIDTH,
     PLACE_10_IDS,
+    HouseCamera,
+    HouseLayout,
     HouseLayoutError,
+    HouseProp,
+    HouseRoom,
     clay_copy_name,
     copy_clay_to_input_dir,
     dump_asset_yaml,
@@ -69,13 +74,14 @@ def parse_export_args(argv: list[str] | None = None) -> argparse.Namespace:
     return parser.parse_args(raw)
 
 
-def _look_at(bpy: Any, obj: Any, target: tuple[float, float, float]) -> None:
+def _look_at(bpy: Any, obj: Any, target: Sequence[float]) -> None:
     """Point ``obj`` so its local -Z aims at ``target``.
 
     Args:
         bpy: Blender Python module (unused; kept for call-site symmetry).
         obj: Object whose ``rotation_euler`` is set.
-        target: World-space look-at point.
+        target: World-space look-at point: x, y, z. A sequence because it arrives
+            straight from the layout YAML, where a place_10 camera stores a list.
     """
     mathutils = __import__("mathutils")
     loc = obj.location
@@ -89,9 +95,9 @@ def _new_mesh(
     bpy: Any,
     name: str,
     primitive: str,
-    location: tuple[float, float, float],
-    scale: tuple[float, float, float],
-    color: tuple[float, float, float],
+    location: Sequence[float],
+    scale: Sequence[float],
+    color: Sequence[float],
 ) -> Any:
     """Create a primitive mesh, assign a solid material, and return it.
 
@@ -142,7 +148,7 @@ def _wall_on(
     return wall not in openings
 
 
-def _add_room(bpy: Any, room: dict[str, Any]) -> None:
+def _add_room(bpy: Any, room: HouseRoom) -> None:
     """Mesh floor, ceiling, and closed walls for one layout room.
 
     Args:
@@ -211,7 +217,7 @@ def _add_room(bpy: Any, room: dict[str, Any]) -> None:
         )
 
 
-def construct_scene(bpy: Any, layout: dict[str, Any]) -> None:
+def construct_scene(bpy: Any, layout: HouseLayout) -> None:
     """Build greybox rooms, props, and named cameras from a layout.
 
     Args:
@@ -318,7 +324,7 @@ def export_with_bpy(ns: argparse.Namespace) -> None:
         ns: Parsed export arguments.
     """
     try:
-        import bpy  # type: ignore[import-not-found]
+        import bpy
     except ImportError as exc:
         raise SystemExit("bpy required (run via host blender --background -P)") from exc
 

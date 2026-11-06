@@ -8,7 +8,6 @@ from __future__ import annotations
 import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any
 
 from .fs import FLAC_SUFFIXES, ID3_SUFFIXES, output_dir as resolve_output_dir
 from .fs import write_json
@@ -92,7 +91,7 @@ def write_sidecar(audio_path: Path, meta: AudioMeta, *, cover: Path | None) -> P
     Returns:
         Sidecar path.
     """
-    payload: dict[str, Any] = asdict(meta)
+    payload: dict[str, object] = asdict(meta)
     payload["cover"] = str(cover) if cover is not None else None
     return write_json(sidecar_path(audio_path), payload)
 

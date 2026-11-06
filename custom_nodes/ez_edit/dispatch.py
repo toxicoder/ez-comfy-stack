@@ -28,7 +28,9 @@ import uuid
 from collections.abc import Mapping, Sequence
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable, NamedTuple, TypeAlias, cast, get_args
+from typing import Callable, NamedTuple, Protocol, TypeAlias, cast, get_args
+
+from ez_common.protocols import CompletedProc, SubprocessRunner
 
 from . import agent, edl, generate_clip, protocol, render_server, timeline
 from .protocol import (
@@ -42,10 +44,10 @@ from .protocol import (
     LocalToolDef,
 )
 
-DispatchFn: TypeAlias = Callable[[str, dict[str, Any]], dict[str, Any]]
+DispatchFn: TypeAlias = Callable[[str, dict[str, object]], dict[str, object]]
 """``(name, args) -> {"ok", "text"}`` executor handed to the agent loop."""
 
-RunnerKit: TypeAlias = Mapping[str, Any]
+RunnerKit: TypeAlias = Mapping[str, object]
 """Injectable seams: ``subprocess``, ``which``, ``urlopen``, ``sleeper``,
 ``occupancy``, ``clock``, ``environ``, ``generate``, ``local_timeout_s``,
 ``local_poll_s`` (all optional; production defaults when absent)."""
@@ -56,8 +58,24 @@ ClockFn: TypeAlias = Callable[[], str]
 SleeperFn: TypeAlias = Callable[[float], None]
 """``time.sleep``-shaped seam."""
 
-GenerateFn: TypeAlias = Callable[..., JobRecord]
-"""``generate_clip``-shaped seam (``kit["generate"]`` override in tests)."""
+class GenerateFn(Protocol):
+    """``generate_clip``-shaped seam (``kit["generate"]`` override in tests).
+
+    The kit hands the keyword arguments through untouched, so the seam only
+    has to accept the lane defaults :func:`_tool_generate_clip` passes.
+    """
+
+    def __call__(self, edit_dir: Path | str, **kwargs: object) -> JobRecord:
+        """Queue one cutaway and land its row.
+
+        Args:
+            edit_dir: ``${COMFY_OUTPUT_DIR}/edit`` directory.
+            **kwargs: ``generate_clip`` keyword seams.
+
+        Returns:
+            The landed jobstore row.
+        """
+        ...
 
 WhichFn: TypeAlias = Callable[[str], "str | None"]
 """``shutil.which``-shaped PATH lookup."""
@@ -171,7 +189,7 @@ class ClientRegistry:
         """
         return self.client_dir(client_id) / TOOLS_FILE_NAME
 
-    def sync(self, client_id: str, tools: Sequence[Any]) -> int:
+    def sync(self, client_id: str, tools: Sequence[object]) -> int:
         """Store the tools one panel discovered.
 
         Args:
@@ -274,7 +292,12 @@ class ClientRegistry:
         return self.client_dir(client_id) / CALLS_SUBDIR
 
     def enqueue(
-        self, client_id: str, *, server_url: str, name: str, args: Mapping[str, Any]
+        self,
+        client_id: str,
+        *,
+        server_url: str,
+        name: str,
+        args: Mapping[str, object],
     ) -> LocalCall:
         """Queue one call for the browser panel to execute.
 
@@ -290,12 +313,13 @@ class ClientRegistry:
         folder = self._calls_dir(client_id)
         folder.mkdir(parents=True, exist_ok=True)
         stamp = _stamp(self.clock)
-        row: dict[str, Any] = {
+        call_args: dict[str, object] = dict(args or {})
+        row: dict[str, object] = {
             "call_id": uuid.uuid4().hex[:12],
             "client_id": str(client_id),
             "server_url": str(server_url or ""),
             "name": str(name or ""),
-            "args": dict(args or {}),
+            "args": call_args,
             "state": CALL_PENDING,
             "ok": False,
             "text": "",
@@ -308,7 +332,7 @@ class ClientRegistry:
             call_id=str(row["call_id"]),
             server_url=str(row["server_url"]),
             name=str(row["name"]),
-            args=dict(row["args"]),
+            args=dict(call_args),
         )
 
     def pending(self, client_id: str) -> list[LocalCall]:
@@ -335,7 +359,7 @@ class ClientRegistry:
                         call_id=str(data.get("call_id") or path.stem),
                         server_url=str(data.get("server_url") or ""),
                         name=str(data.get("name") or ""),
-                        args=dict(data.get("args") or {}),
+                        args=dict(cast("Mapping[str, object]", data.get("args") or {})),
                     ),
                 )
             )
@@ -486,7 +510,7 @@ def _sleep(seconds: float) -> None:
     time.sleep(seconds)
 
 
-def _read_json(path: Path) -> dict[str, Any] | None:
+def _read_json(path: Path) -> dict[str, object] | None:
     """Read one JSON object file, tolerating junk.
 
     Args:
@@ -496,13 +520,13 @@ def _read_json(path: Path) -> dict[str, Any] | None:
         Parsed object, or ``None`` when missing/unreadable/not an object.
     """
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
+        data: object = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, ValueError):
         return None
     return data if isinstance(data, dict) else None
 
 
-def _as_tool_def(raw: Any) -> LocalToolDef | None:
+def _as_tool_def(raw: object) -> LocalToolDef | None:
     """Coerce one synced row into a :data:`~ez_edit.protocol.LocalToolDef`.
 
     Args:
@@ -527,7 +551,7 @@ def _as_tool_def(raw: Any) -> LocalToolDef | None:
 
 def _run(
     argv: list[str], *, check: bool, capture_output: bool, text: bool
-) -> Any:
+) -> CompletedProc:
     """Run one command (indirection so pytest never spawns anything).
 
     Args:
@@ -539,8 +563,9 @@ def _run(
     Returns:
         Completed process.
     """
-    return subprocess.run(
-        argv, check=check, capture_output=capture_output, text=text
+    return cast(
+        CompletedProc,
+        subprocess.run(argv, check=check, capture_output=capture_output, text=text),
     )
 
 
@@ -598,7 +623,7 @@ def require_project(edit_dir: Path | str, project_id: str = "") -> EditProject:
     return project
 
 
-def project_state(edit_dir: Path | str, project_id: str = "") -> dict[str, Any]:
+def project_state(edit_dir: Path | str, project_id: str = "") -> dict[str, object]:
     """Project plus its jobstore rows (the state route payload).
 
     Args:
@@ -623,7 +648,7 @@ def apply_ops_to(
     edit_dir: Path | str,
     *,
     project_id: str = "",
-    ops: Sequence[Mapping[str, Any]],
+    ops: Sequence[Mapping[str, object]],
     clock: ClockFn | None = None,
 ) -> EditProject:
     """Apply ops to a project and persist the result.
@@ -649,7 +674,7 @@ def apply_ops_to(
 def probe_duration(
     path: Path | str,
     *,
-    runner: Any | None = None,
+    runner: SubprocessRunner | None = None,
     which: WhichFn = shutil.which,
 ) -> float:
     """Media duration seconds through ffprobe.
@@ -724,7 +749,7 @@ def import_clip(
     path: object,
     label: str = "",
     track: int = 0,
-    runner: Any | None = None,
+    runner: SubprocessRunner | None = None,
     which: WhichFn = shutil.which,
     clock: ClockFn | None = None,
 ) -> Clip:
@@ -777,7 +802,7 @@ def start_render_job(
     project_id: str = "",
     mode: str = "server",
     client_id: str = "",
-    runner: Any | None = None,
+    runner: SubprocessRunner | None = None,
     which: WhichFn = shutil.which,
     clock: ClockFn | None = None,
 ) -> JobRecord:
@@ -870,7 +895,7 @@ def _edl_path(edit_dir: Path | str, project_id: str) -> Path:
     return Path(edit_dir) / PROJECTS_SUBDIR / f"{text}.edl.json"
 
 
-def export_edl(edit_dir: Path | str, project_id: str = "") -> dict[str, Any]:
+def export_edl(edit_dir: Path | str, project_id: str = "") -> dict[str, object]:
     """Write the project as an EDL handoff JSON file.
 
     Args:
@@ -900,7 +925,7 @@ def export_edl(edit_dir: Path | str, project_id: str = "") -> dict[str, Any]:
         "ok": True,
         "path": relative,
         "project_id": str(project["id"]),
-        "clips": len(payload.get("clips") or []),
+        "clips": len(payload["clips"]),
     }
 
 
@@ -919,11 +944,13 @@ def read_occupancy(
     reader = kit.get("occupancy")
     if callable(reader):
         return str(reader() or "").strip() or "unknown"
-    env = environ if environ is not None else kit.get("environ")
+    env = environ if environ is not None else cast(
+        "Mapping[str, str] | None", kit.get("environ")
+    )
     return agent.read_occupancy_mode(environ=env)
 
 
-def _done(value: Any) -> dict[str, Any]:
+def _done(value: object) -> dict[str, object]:
     """Successful tool result the model can read.
 
     Args:
@@ -935,7 +962,7 @@ def _done(value: Any) -> dict[str, Any]:
     return {"ok": True, "text": json.dumps(value, default=str)}
 
 
-def _fail(message: str) -> dict[str, Any]:
+def _fail(message: str) -> dict[str, object]:
     """Refused tool result the model can read.
 
     Args:
@@ -947,7 +974,7 @@ def _fail(message: str) -> dict[str, Any]:
     return {"ok": False, "text": str(message)}
 
 
-def _text(args: Mapping[str, Any], key: str, default: str = "") -> str:
+def _text(args: Mapping[str, object], key: str, default: str = "") -> str:
     """One string argument.
 
     Args:
@@ -962,7 +989,7 @@ def _text(args: Mapping[str, Any], key: str, default: str = "") -> str:
     return str(raw if raw is not None else default)
 
 
-def _number(args: Mapping[str, Any], key: str, default: float) -> float:
+def _number(args: Mapping[str, object], key: str, default: float) -> float:
     """One number argument, tolerant of stringified JSON.
 
     Args:
@@ -979,7 +1006,7 @@ def _number(args: Mapping[str, Any], key: str, default: float) -> float:
         return default
 
 
-def _tool_get_state(edit_dir: Path | str, args: Mapping[str, Any], kit: RunnerKit) -> dict[str, Any]:
+def _tool_get_state(edit_dir: Path | str, args: Mapping[str, object], kit: RunnerKit) -> dict[str, object]:
     """``edit_get_state``: project plus recent jobs.
 
     Args:
@@ -994,7 +1021,7 @@ def _tool_get_state(edit_dir: Path | str, args: Mapping[str, Any], kit: RunnerKi
     return _done(project_state(edit_dir, _text(args, "project_id")))
 
 
-def _tool_import(edit_dir: Path | str, args: Mapping[str, Any], kit: RunnerKit) -> dict[str, Any]:
+def _tool_import(edit_dir: Path | str, args: Mapping[str, object], kit: RunnerKit) -> dict[str, object]:
     """``edit_import``: probe a file and add it as a clip.
 
     Args:
@@ -1010,14 +1037,14 @@ def _tool_import(edit_dir: Path | str, args: Mapping[str, Any], kit: RunnerKit) 
         path=args.get("path"),
         label=_text(args, "label"),
         track=int(_number(args, "track", 0.0)),
-        runner=kit.get("subprocess"),
-        which=kit.get("which") or shutil.which,
-        clock=kit.get("clock"),
+        runner=cast("SubprocessRunner | None", kit.get("subprocess")),
+        which=cast("WhichFn | None", kit.get("which")) or shutil.which,
+        clock=cast("ClockFn | None", kit.get("clock")),
     )
     return _done({"clip": clip, "source": clip["source"], "duration_s": clip["out_s"]})
 
 
-def _tool_apply_ops(edit_dir: Path | str, args: Mapping[str, Any], kit: RunnerKit) -> dict[str, Any]:
+def _tool_apply_ops(edit_dir: Path | str, args: Mapping[str, object], kit: RunnerKit) -> dict[str, object]:
     """``edit_apply_ops``: run the reducer and persist.
 
     Args:
@@ -1034,12 +1061,12 @@ def _tool_apply_ops(edit_dir: Path | str, args: Mapping[str, Any], kit: RunnerKi
         edit_dir,
         project_id=_text(args, "project_id"),
         ops=ops,
-        clock=kit.get("clock"),
+        clock=cast("ClockFn | None", kit.get("clock")),
     )
     return _done({"project": project, "clips": len(project["clips"])})
 
 
-def _tool_render(edit_dir: Path | str, args: Mapping[str, Any], kit: RunnerKit) -> dict[str, Any]:
+def _tool_render(edit_dir: Path | str, args: Mapping[str, object], kit: RunnerKit) -> dict[str, object]:
     """``edit_render``: server or browser render.
 
     Args:
@@ -1055,14 +1082,14 @@ def _tool_render(edit_dir: Path | str, args: Mapping[str, Any], kit: RunnerKit) 
         project_id=_text(args, "project_id"),
         mode=_text(args, "mode", "server"),
         client_id=_text(args, "client_id"),
-        runner=kit.get("subprocess"),
-        which=kit.get("which") or shutil.which,
-        clock=kit.get("clock"),
+        runner=cast("SubprocessRunner | None", kit.get("subprocess")),
+        which=cast("WhichFn | None", kit.get("which")) or shutil.which,
+        clock=cast("ClockFn | None", kit.get("clock")),
     )
     return {"ok": row["state"] != "failed", "text": json.dumps(row, default=str)}
 
 
-def _tool_job_status(edit_dir: Path | str, args: Mapping[str, Any], kit: RunnerKit) -> dict[str, Any]:
+def _tool_job_status(edit_dir: Path | str, args: Mapping[str, object], kit: RunnerKit) -> dict[str, object]:
     """``edit_job_status``: read one row.
 
     Args:
@@ -1078,8 +1105,8 @@ def _tool_job_status(edit_dir: Path | str, args: Mapping[str, Any], kit: RunnerK
 
 
 def _tool_generate_clip(
-    edit_dir: Path | str, args: Mapping[str, Any], kit: RunnerKit
-) -> dict[str, Any]:
+    edit_dir: Path | str, args: Mapping[str, object], kit: RunnerKit
+) -> dict[str, object]:
     """``edit_generate_clip``: queue the cutaway graph.
 
     Args:
@@ -1094,7 +1121,7 @@ def _tool_generate_clip(
     run_generate: GenerateFn = (
         cast("GenerateFn", injected)
         if callable(injected)
-        else generate_clip.generate_clip
+        else cast("GenerateFn", generate_clip.generate_clip)
     )
     row: JobRecord = run_generate(
         edit_dir,
@@ -1103,16 +1130,16 @@ def _tool_generate_clip(
         fps=_number(args, "fps", 24.0),
         project_id=_text(args, "project_id"),
         client_id=_text(args, "client_id"),
-        urlopen=kit.get("urlopen"),
-        sleeper=kit.get("sleeper"),
+        urlopen=cast("generate_clip.UrlopenFn | None", kit.get("urlopen")),
+        sleeper=cast("SleeperFn | None", kit.get("sleeper")),
         occupancy=None if "occupancy" not in kit else lambda: read_occupancy(kit),
-        environ=kit.get("environ"),
-        now=kit.get("clock"),
+        environ=cast("Mapping[str, str] | None", kit.get("environ")),
+        now=cast("ClockFn | None", kit.get("clock")),
     )
     return {"ok": row["state"] != "failed", "text": json.dumps(row, default=str)}
 
 
-def _tool_export_edl(edit_dir: Path | str, args: Mapping[str, Any], kit: RunnerKit) -> dict[str, Any]:
+def _tool_export_edl(edit_dir: Path | str, args: Mapping[str, object], kit: RunnerKit) -> dict[str, object]:
     """``edit_export_edl``: write the handoff JSON.
 
     Args:
@@ -1128,8 +1155,8 @@ def _tool_export_edl(edit_dir: Path | str, args: Mapping[str, Any], kit: RunnerK
 
 
 def _tool_occupancy(
-    edit_dir: Path | str, args: Mapping[str, Any], kit: RunnerKit
-) -> dict[str, Any]:
+    edit_dir: Path | str, args: Mapping[str, object], kit: RunnerKit
+) -> dict[str, object]:
     """``occupancy_status``: report the GPU mode string.
 
     Args:
@@ -1144,7 +1171,9 @@ def _tool_occupancy(
     return _done({"mode": read_occupancy(kit)})
 
 
-STATIC_TOOLS: dict[str, Callable[[Path | str, Mapping[str, Any], RunnerKit], dict[str, Any]]] = {
+STATIC_TOOLS: dict[
+    str, Callable[[Path | str, Mapping[str, object], RunnerKit], dict[str, object]]
+] = {
     "edit_get_state": _tool_get_state,
     "edit_import": _tool_import,
     "edit_apply_ops": _tool_apply_ops,
@@ -1176,8 +1205,8 @@ def _parse_local_name(name: str) -> tuple[str, str] | None:
 
 
 def _run_local(
-    registry: ClientRegistry, name: str, args: dict[str, Any], kit: RunnerKit
-) -> dict[str, Any]:
+    registry: ClientRegistry, name: str, args: dict[str, object], kit: RunnerKit
+) -> dict[str, object]:
     """Queue one laptop-local MCP call on its browser panel and await the answer.
 
     Args:
@@ -1204,9 +1233,13 @@ def _run_local(
     )
     answer = registry.wait(
         call["call_id"],
-        sleeper=kit.get("sleeper"),
-        timeout_s=float(kit.get("local_timeout_s", LOCAL_CALL_TIMEOUT_S)),
-        poll_s=float(kit.get("local_poll_s", LOCAL_POLL_S)),
+        sleeper=cast("SleeperFn | None", kit.get("sleeper")),
+        timeout_s=float(
+            cast("float | str", kit.get("local_timeout_s", LOCAL_CALL_TIMEOUT_S))
+        ),
+        poll_s=float(
+            cast("float | str", kit.get("local_poll_s", LOCAL_POLL_S))
+        ),
     )
     if answer is None:
         return _fail(UNANSWERED_MESSAGE.format(timeout=LOCAL_CALL_TIMEOUT_S, name=name))
@@ -1233,9 +1266,11 @@ def build_dispatch(
         the agent loop would have to guess about.
     """
     kit: RunnerKit = runners if runners is not None else {}
-    registry = client_registry or ClientRegistry(edit_dir, clock=kit.get("clock"))
+    registry = client_registry or ClientRegistry(
+        edit_dir, clock=cast("ClockFn | None", kit.get("clock"))
+    )
 
-    def handler(name: str, args: dict[str, Any]) -> dict[str, Any]:
+    def handler(name: str, args: dict[str, object]) -> dict[str, object]:
         """Execute one tool call.
 
         Args:

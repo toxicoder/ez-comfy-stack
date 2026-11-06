@@ -212,7 +212,8 @@ def command_by_id(
         KeyError: Unknown id.
     """
     data = builder if builder is not None else load_builder()
-    for cmd in data["commands"]:
+    commands: list[dict[str, Any]] = data["commands"]
+    for cmd in commands:
         if cmd["id"] == cmd_id:
             return cmd
     raise KeyError(cmd_id)

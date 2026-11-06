@@ -1,9 +1,14 @@
-"""Shared operator progress and output-dir resolution for in-canvas ez_* packs.
+"""Shared operator progress, output-dir resolution, and type vocabulary.
 
 No nodes. Other packs must lazy-import this module inside functions (Comfy 0.34
 does not register sibling folder names at load). Type-only imports of
-``ComfyInputTypes`` under ``TYPE_CHECKING`` are safe because every pack uses
-``from __future__ import annotations``.
+``ComfyInputTypes`` and the graph / tensor aliases under ``TYPE_CHECKING`` are
+safe because every pack uses ``from __future__ import annotations``.
+
+The re-exports below are the shared vocabulary every ``ez_*`` pack reaches for
+before it invents a local record: Comfy graph shapes from ``comfy_graph``,
+parse-boundary shapes from ``json_value``, and the torch / numpy boundary from
+``tensors``.
 """
 
 from __future__ import annotations
@@ -11,10 +16,33 @@ from __future__ import annotations
 import os
 import sys
 from pathlib import Path
-from typing import Any, TypeAlias
+from typing import cast
 
+from .comfy_graph import (
+    ComfyApiGraph,
+    ComfyApiNode,
+    ComfyGraphExtra,
+    ComfyReturn,
+    ComfyUiGraph,
+    ComfyUiNode,
+    ComfyUiResult,
+    InputTypeSections,
+    NodeClass,
+    NodeId,
+    NodeInput,
+    NodeRegistry,
+    SocketName,
+    WidgetSpec,
+    WidgetsValues,
+    api_link_parts,
+    api_link_ref,
+    as_node_id,
+    ui_nodes_by_id,
+)
+from .json_value import Json, JsonArray, JsonObject, JsonScalar
 from .path import ensure_custom_nodes_path
 from .protocols import (
+    ComfyInputTypes,
     ComfyNode,
     CompletedProc,
     FileSystem,
@@ -24,8 +52,16 @@ from .protocols import (
     StatusSink,
     SubprocessRunner,
 )
+from .tensors import (
+    ImageTensor,
+    LatentTensor,
+    MaskTensor,
+    NdArray,
+    PcmTensor,
+    Tensor,
+)
 
-NODE_CLASS_MAPPINGS: dict[str, type[Any]] = {}
+NODE_CLASS_MAPPINGS: NodeRegistry = {}
 """Comfy registry (empty - this pack has no nodes)."""
 
 NODE_DISPLAY_NAME_MAPPINGS: dict[str, str] = {}
@@ -36,15 +72,6 @@ _DEFAULT_OUTPUT = "/mnt/comfy-output"
 
 _CONTAINER_OUTPUT = "/outputs"
 """In-container compose bind; used when that directory exists."""
-
-
-ComfyInputTypes: TypeAlias = dict[str, Any]
-"""ComfyUI ``INPUT_TYPES`` payload (required/optional/hidden widget specs).
-
-Widget values stay ``Any``: combo lists and option dicts mix str/int/bool.
-Tensor types are not imported here. TypedDict is avoided so tests can index
-``optional`` when a node omits that key.
-"""
 
 
 class NullProgress:
@@ -111,9 +138,12 @@ def node_progress(total: int) -> ProgressReporter:
     if n < 1:
         n = 1
     try:
-        from comfy.utils import ProgressBar  # type: ignore[import-not-found]
+        from comfy.utils import ProgressBar
 
-        return ProgressBar(n)
+        # Comfy is untyped here, so the ProgressBar class arrives as ``Any``.
+        # It structurally satisfies ProgressReporter (``__init__(total)`` plus
+        # ``update``), which is what the Comfy runtime guarantees.
+        return cast(ProgressReporter, ProgressBar(n))
     except Exception:  # noqa: BLE001 - fail-soft in tests / missing Comfy
         return NullProgress()
 
@@ -133,7 +163,7 @@ def output_root(*, default: str | Path | None = _DEFAULT_OUTPUT) -> Path:
         Directory path (may not exist yet).
     """
     try:
-        import folder_paths  # type: ignore[import-not-found]
+        import folder_paths
 
         raw = folder_paths.get_output_directory()
         if raw:

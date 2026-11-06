@@ -528,7 +528,7 @@ class _BackendsProxy(types.ModuleType):
 
     def __init__(self, wrapped: types.ModuleType) -> None:
         types.ModuleType.__init__(self, "torch.backends")
-        self.m = wrapped  # type: ignore[attr-defined]
+        self.m = wrapped
 
     def __getattr__(self, name: str) -> Any:
         return getattr(self.m, name)

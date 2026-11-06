@@ -8,10 +8,15 @@ with plain dicts. Delete and copy accept a single ``rel`` or a ``rels`` list.
 from __future__ import annotations
 
 import inspect
-from typing import Any
+from collections.abc import Mapping
+from pathlib import Path
+from typing import TYPE_CHECKING, Protocol, TypedDict, TypeVar, cast
 
 from .catalog import (
+    BatchError,
     CatalogError,
+    CopyRow,
+    OutputRow,
     copy_many_to_input,
     copy_to_input,
     delete_many,
@@ -21,8 +26,86 @@ from .catalog import (
     output_directory,
 )
 
+if TYPE_CHECKING:
+    from ez_common import Json
 
-def _json_ok(payload: dict[str, Any], *, status: int = 200) -> tuple[int, dict[str, Any]]:
+
+class ListPayload(TypedDict):
+    """Body for ``GET /ez_outputs/list``."""
+
+    items: list[OutputRow]
+    """Newest-first media rows within the cap."""
+
+    truncated: bool
+    """True when more rows existed than the cap allowed."""
+
+    count: int
+    """Rows returned."""
+
+
+class DeletePayload(TypedDict, total=False):
+    """Body for ``POST /ez_outputs/delete`` (single or bulk)."""
+
+    ok: bool
+    """True on any accepted request."""
+
+    rel: str
+    """Single-file path the request removed."""
+
+    error: str
+    """Operator-facing refuse reason."""
+
+    deleted: list[str]
+    """Relative paths removed in a bulk request."""
+
+    errors: list[BatchError]
+    """Refused rows in a bulk request."""
+
+
+class CopyPayload(TypedDict, total=False):
+    """Body for ``POST /ez_outputs/to-input`` (single or bulk)."""
+
+    ok: bool
+    """True on any accepted request."""
+
+    name: str
+    """LoadImage combo value for the copied file."""
+
+    rel: str
+    """Source path relative to the output root."""
+
+    error: str
+    """Operator-facing refuse reason."""
+
+    copied: list[CopyRow]
+    """Rows copied into the input directory in a bulk request."""
+
+    errors: list[BatchError]
+    """Refused rows in a bulk request."""
+
+
+class JsonResponder(Protocol):
+    """aiohttp ``web.json_response`` or a test stand-in for it."""
+
+    def __call__(self, payload: object, *, status: int = ...) -> object:
+        """Build one route response.
+
+        Args:
+            payload: JSON-serialisable body.
+            status: HTTP status code.
+
+        Returns:
+            Whatever the server framework expects.
+        """
+        ...
+
+
+_PayloadT = TypeVar("_PayloadT", bound=Mapping[str, object])
+
+
+def _json_ok(
+    payload: _PayloadT, *, status: int = 200
+) -> tuple[int, _PayloadT]:
     """Return an HTTP status and JSON object.
 
     Args:
@@ -35,7 +118,7 @@ def _json_ok(payload: dict[str, Any], *, status: int = 200) -> tuple[int, dict[s
     return status, payload
 
 
-def rels_from_args(args: dict[str, Any]) -> list[str]:
+def rels_from_args(args: Mapping[str, Json]) -> list[str]:
     """Collect ``rel`` or ``rels`` from a request body.
 
     Prefers a non-empty ``rels`` list. Falls back to a single ``rel`` string
@@ -58,7 +141,9 @@ def rels_from_args(args: dict[str, Any]) -> list[str]:
     return [rel] if rel else []
 
 
-def handle_list(args: dict[str, Any], *, root: Any | None = None) -> tuple[int, dict[str, Any]]:
+def handle_list(
+    args: Mapping[str, Json], *, root: Path | None = None
+) -> tuple[int, ListPayload]:
     """List media files.
 
     Args:
@@ -71,18 +156,26 @@ def handle_list(args: dict[str, Any], *, root: Any | None = None) -> tuple[int, 
     base = output_directory() if root is None else root
     kind = str(args.get("kind") or "all")
     query = str(args.get("q") or args.get("query") or "")
+    raw_limit = args.get("limit")
     try:
-        limit = int(args.get("limit") or 0)
+        limit = int(raw_limit) if isinstance(raw_limit, (str, int, float)) else 0
     except (TypeError, ValueError):
         limit = 0
     cap = limit if limit > 0 else 500
     items = list_outputs(base, kind=kind, query=query, limit=cap + 1)
     truncated = len(items) > cap
     clipped = items[:cap]
-    return _json_ok({"items": clipped, "truncated": truncated, "count": len(clipped)})
+    body: ListPayload = {
+        "items": clipped,
+        "truncated": truncated,
+        "count": len(clipped),
+    }
+    return _json_ok(body)
 
 
-def handle_delete(args: dict[str, Any], *, root: Any | None = None) -> tuple[int, dict[str, Any]]:
+def handle_delete(
+    args: Mapping[str, Json], *, root: Path | None = None
+) -> tuple[int, DeletePayload]:
     """Delete one media file, or many when ``rels`` is a list.
 
     Args:
@@ -100,25 +193,27 @@ def handle_delete(args: dict[str, Any], *, root: Any | None = None) -> tuple[int
         try:
             delete_output(base, rel)
         except CatalogError as exc:
-            return _json_ok({"error": str(exc)}, status=400)
-        return _json_ok({"ok": True, "rel": rel})
+            return _json_ok(DeletePayload(error=str(exc)), status=400)
+        return _json_ok(DeletePayload(ok=True, rel=rel))
     try:
         deleted, errors = delete_many(base, rels)
     except CatalogError as exc:
-        return _json_ok({"error": str(exc)}, status=400)
-    payload = {"ok": True, "deleted": deleted, "errors": errors}
+        return _json_ok(DeletePayload(error=str(exc)), status=400)
+    payload = DeletePayload(ok=True, deleted=deleted, errors=errors)
     if not deleted:
         first = errors[0]["error"] if errors else "invalid output path"
-        return _json_ok({"error": first, "deleted": deleted, "errors": errors}, status=400)
+        return _json_ok(
+            DeletePayload(error=first, deleted=deleted, errors=errors), status=400
+        )
     return _json_ok(payload)
 
 
 def handle_to_input(
-    args: dict[str, Any],
+    args: Mapping[str, Json],
     *,
-    root: Any | None = None,
-    input_dir: Any | None = None,
-) -> tuple[int, dict[str, Any]]:
+    root: Path | None = None,
+    input_dir: Path | None = None,
+) -> tuple[int, CopyPayload]:
     """Copy one media file (or many) into the LoadImage input directory.
 
     Args:
@@ -138,16 +233,18 @@ def handle_to_input(
         try:
             dest = copy_to_input(base, rel, input_dir=dest_root)
         except CatalogError as exc:
-            return _json_ok({"error": str(exc)}, status=400)
-        return _json_ok({"ok": True, "name": dest.name, "rel": dest.name})
+            return _json_ok(CopyPayload(error=str(exc)), status=400)
+        return _json_ok(CopyPayload(ok=True, name=dest.name, rel=dest.name))
     try:
         copied, errors = copy_many_to_input(base, rels, input_dir=dest_root)
     except CatalogError as exc:
-        return _json_ok({"error": str(exc)}, status=400)
+        return _json_ok(CopyPayload(error=str(exc)), status=400)
     if not copied:
         first = errors[0]["error"] if errors else "invalid output path"
-        return _json_ok({"error": first, "copied": copied, "errors": errors}, status=400)
-    return _json_ok({"ok": True, "copied": copied, "errors": errors})
+        return _json_ok(
+            CopyPayload(error=first, copied=copied, errors=errors), status=400
+        )
+    return _json_ok(CopyPayload(ok=True, copied=copied, errors=errors))
 
 
 async def request_json(request: object) -> object:
@@ -165,7 +262,7 @@ async def request_json(request: object) -> object:
     try:
         raw = json_fn()
         if inspect.isawaitable(raw):
-            return await raw  # type: ignore[misc]
+            return await raw
         return raw
     except Exception:  # noqa: BLE001 - empty/invalid body
         return {}
@@ -174,7 +271,7 @@ async def request_json(request: object) -> object:
 def register_routes(
     *,
     server: object | None = None,
-    json_response: Any | None = None,
+    json_response: object | None = None,
 ) -> bool:
     """Attach ``/ez_outputs/*`` when PromptServer (or a stand-in) exists.
 
@@ -186,8 +283,8 @@ def register_routes(
     Returns:
         True when routes were registered.
     """
-    responder = json_response
-    if responder is None:
+    responder = cast(JsonResponder, json_response)
+    if json_response is None:
         try:
             from aiohttp import web
 

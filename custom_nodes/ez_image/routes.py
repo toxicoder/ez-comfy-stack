@@ -8,7 +8,8 @@ composer lazily so this pack does not import ``ez_prompt_enhance`` at startup.
 from __future__ import annotations
 
 import inspect
-from typing import Any
+from collections.abc import Mapping
+from typing import Protocol, cast
 
 
 PREVIEW_UNAVAILABLE = (
@@ -17,20 +18,38 @@ PREVIEW_UNAVAILABLE = (
 """Shown when the preview composer cannot run. Queue is unchanged."""
 
 
-def _json_ok(payload: dict[str, Any], *, status: int = 200) -> tuple[int, dict[str, Any]]:
+class JsonResponse(Protocol):
+    """aiohttp ``web.json_response`` (or the test stand-in) call shape."""
+
+    def __call__(self, payload: dict[str, object], *, status: int = 200) -> object:
+        """Build a response for one JSON body.
+
+        Args:
+            payload: Response body.
+            status: HTTP status.
+
+        Returns:
+            Whatever PromptServer / aiohttp expects for a handler return.
+        """
+        ...
+
+
+def _json_ok(
+    payload: Mapping[str, object], *, status: int = 200
+) -> tuple[int, dict[str, object]]:
     """Return an HTTP status and JSON object.
 
     Args:
-        payload: Response body.
+        payload: Response body (a plain dict or a record TypedDict).
         status: HTTP status.
 
     Returns:
         ``(status, payload)``.
     """
-    return status, payload
+    return status, cast("dict[str, object]", payload)
 
 
-def handle_preview(args: dict[str, Any]) -> tuple[int, dict[str, Any]]:
+def handle_preview(args: object) -> tuple[int, dict[str, object]]:
     """Resolve the image-studio values Queue will send.
 
     Args:
@@ -67,7 +86,7 @@ async def request_json(request: object) -> object:
     try:
         raw = json_fn()
         if inspect.isawaitable(raw):
-            return await raw  # type: ignore[misc]
+            return await raw
         return raw
     except Exception:  # noqa: BLE001 - empty/invalid body
         return {}
@@ -76,7 +95,7 @@ async def request_json(request: object) -> object:
 def register_routes(
     *,
     server: object | None = None,
-    json_response: Any | None = None,
+    json_response: JsonResponse | None = None,
 ) -> bool:
     """Attach ``POST /ez_image/studio-preview`` when PromptServer exists.
 

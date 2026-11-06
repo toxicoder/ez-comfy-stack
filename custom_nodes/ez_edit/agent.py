@@ -25,7 +25,6 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 from typing import (
-    Any,
     Callable,
     Mapping,
     NamedTuple,
@@ -33,16 +32,48 @@ from typing import (
     Sequence,
     TypedDict,
     TypeAlias,
+    cast,
 )
 
 from . import protocol
 from .protocol import ChatMessage, ToolCallTrace
 
-DispatchFn: TypeAlias = Callable[[str, dict[str, Any]], dict[str, Any]]
+DispatchFn: TypeAlias = Callable[[str, dict[str, object]], dict[str, object]]
 """``(name, args) -> {"ok": bool, "text": str}`` tool executor (injected)."""
 
 OccupancyReader: TypeAlias = Callable[[Path], str]
 """``(path) -> mode`` reader injected by tests in place of the file."""
+
+
+class HttpReply(Protocol):
+    """Opened ``/chat/completions`` response (``urllib``, or a test double)."""
+
+    def read(self) -> bytes | str:
+        """Body of the response.
+
+        Returns:
+            Raw response bytes or text.
+        """
+        ...
+
+    def __enter__(self) -> "HttpReply":
+        """Enter the context manager.
+
+        Returns:
+            The response itself.
+        """
+        ...
+
+    def __exit__(self, *args: object) -> object:
+        """Close the response.
+
+        Args:
+            *args: Exception triple handed in by ``with``.
+
+        Returns:
+            Truthy to swallow the exception.
+        """
+        ...
 
 OCCUPANCY_FILE_NAME = ".occupancy.json"
 """Occupancy state file name under the Comfy output dir."""
@@ -84,7 +115,7 @@ class CompletionClient(Protocol):
     """Anything that can complete a chat turn (``AgentLLM`` or a double)."""
 
     def chat(
-        self, messages: list[ChatMessage], tools: list[dict[str, Any]] | None = None
+        self, messages: list[ChatMessage], tools: list[dict[str, object]] | None = None
     ) -> ChatMessage:
         """Return the next assistant message.
 
@@ -103,7 +134,7 @@ class _Call(NamedTuple):
 
     call_id: str
     name: str
-    args: dict[str, Any]
+    args: dict[str, object]
     error: str
 
 
@@ -306,7 +337,7 @@ def require_occupancy(
 
 
 def _add_tool(
-    tools: list[dict[str, Any]],
+    tools: list[dict[str, object]],
     seen: set[str],
     name: object,
     description: object,
@@ -339,8 +370,8 @@ def _add_tool(
 
 
 def build_tools(
-    extra: Sequence[Mapping[str, Any]] | None = None,
-) -> list[dict[str, Any]]:
+    extra: Sequence[Mapping[str, object]] | None = None,
+) -> list[dict[str, object]]:
     """OpenAI ``tools`` payload: the static catalog plus any extra tools.
 
     Extras may be catalog-shaped (``{name, description, parameters}``) or
@@ -352,7 +383,7 @@ def build_tools(
     Returns:
         Deduplicated list of ``{"type": "function", "function": {...}}``.
     """
-    tools: list[dict[str, Any]] = []
+    tools: list[dict[str, object]] = []
     seen: set[str] = set()
     for name, entry in protocol.TOOL_CATALOG.items():
         _add_tool(
@@ -377,7 +408,7 @@ def build_tools(
     return tools
 
 
-def tool_names(tools: list[dict[str, Any]]) -> set[str]:
+def tool_names(tools: list[dict[str, object]]) -> set[str]:
     """Names the loop may dispatch without the ``local__`` pass-through.
 
     Args:
@@ -485,7 +516,7 @@ class AgentLLM:
             return float(self.timeout)
         return timeout_s(self._environ)
 
-    def _urlopen(self, request: urllib.request.Request, timeout: float) -> Any:
+    def _urlopen(self, request: urllib.request.Request, timeout: float) -> object:
         """Indirection so pytest can stub HTTP (mirrors ``_urlopen_sidecar``).
 
         Args:
@@ -498,7 +529,7 @@ class AgentLLM:
         return urllib.request.urlopen(request, timeout=timeout)
 
     def chat(
-        self, messages: list[ChatMessage], tools: list[dict[str, Any]] | None = None
+        self, messages: list[ChatMessage], tools: list[dict[str, object]] | None = None
     ) -> ChatMessage:
         """One completion: occupancy gate, POST, parse ``choices[0].message``.
 
@@ -515,7 +546,7 @@ class AgentLLM:
             AgentRefused: occupancy does not allow a co-tenant completion.
         """
         require_occupancy(environ=self._environ)
-        payload: dict[str, Any] = {
+        payload: dict[str, object] = {
             "model": self._model(),
             "messages": [dict(message) for message in messages],
             "tools": list(tools or []),
@@ -529,7 +560,7 @@ class AgentLLM:
             headers={"Content-Type": "application/json", "Accept": "application/json"},
         )
         try:
-            with self._urlopen(request, self._timeout()) as response:
+            with cast(HttpReply, self._urlopen(request, self._timeout())) as response:
                 raw = response.read()
         except (urllib.error.URLError, TimeoutError, OSError, ValueError) as exc:
             return ChatMessage(
@@ -575,7 +606,7 @@ def _parse_completion(raw: bytes | str) -> ChatMessage:
 # --- Tool loop --------------------------------------------------------------
 
 
-def _parse_call(entry: Mapping[str, Any], step: int, index: int) -> _Call:
+def _parse_call(entry: Mapping[str, object], step: int, index: int) -> _Call:
     """Normalize one raw tool_call object.
 
     Args:
@@ -592,7 +623,7 @@ def _parse_call(entry: Mapping[str, Any], step: int, index: int) -> _Call:
     name = str(fn.get("name") or entry.get("name") or "").strip()
     call_id = str(entry.get("id") or f"call_{step}_{index}")
     fn_args = fn.get("arguments")
-    raw_args: Any = fn_args if fn_args is not None else entry.get("args")
+    raw_args: object = fn_args if fn_args is not None else entry.get("args")
     if raw_args is None or raw_args == "":
         return _Call(call_id, name, {}, "")
     if isinstance(raw_args, dict):
@@ -608,7 +639,7 @@ def _parse_call(entry: Mapping[str, Any], step: int, index: int) -> _Call:
     return _Call(call_id, name, {}, "arguments must be a JSON object")
 
 
-def _copy_message(row: Mapping[str, Any]) -> ChatMessage:
+def _copy_message(row: Mapping[str, object]) -> ChatMessage:
     """Copy one caller-supplied transcript row into a fresh message record.
 
     History round-trips through JSON in the panel, so rows may be plain dicts
@@ -635,7 +666,7 @@ def _copy_message(row: Mapping[str, Any]) -> ChatMessage:
     return message
 
 
-def _unknown_dispatch(name: str, args: dict[str, Any]) -> dict[str, Any]:
+def _unknown_dispatch(name: str, args: dict[str, object]) -> dict[str, object]:
     """Dispatch used when the caller supplies none.
 
     Args:
@@ -649,7 +680,7 @@ def _unknown_dispatch(name: str, args: dict[str, Any]) -> dict[str, Any]:
     return {"ok": False, "text": f"unknown tool: {name} (no dispatcher wired)"}
 
 
-def _normalize_result(result: Any) -> tuple[bool, str]:
+def _normalize_result(result: object) -> tuple[bool, str]:
     """Coerce a dispatch result into ``(ok, text)``.
 
     Args:
@@ -694,7 +725,7 @@ def run_turn(
     user_text: str,
     *,
     history: list[ChatMessage] | None = None,
-    tools: list[dict[str, Any]] | None = None,
+    tools: list[dict[str, object]] | None = None,
     llm: CompletionClient | None = None,
     dispatch: DispatchFn | None = None,
     max_steps: int | None = None,
