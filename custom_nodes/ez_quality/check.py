@@ -34,7 +34,20 @@ from .presets import (
     QUALITY_FREE_COMMERCIAL,
     QUALITY_LAB,
     QUALITY_MAX,
+    QUALITY_QWEN_IMAGE,
+    QUALITY_QWEN_IMAGE_NVFP4,
+    QUALITY_QWEN_IMAGE_TURBO,
+    QUALITY_QWEN_IMAGE_TURBO_NVFP4,
     QUALITY_ULTRA,
+    QWEN_IMAGE_INT8,
+    QWEN_IMAGE_NVFP4,
+    QWEN_IMAGE_TURBO_INT8,
+    QWEN_IMAGE_TURBO_NVFP4,
+    QWEN_QUALITY_CHOICES,
+    QWEN_TE,
+    QWEN_TE_NVFP4,
+    QWEN_TE_TURBO_NVFP4,
+    QWEN_VAE,
     VAE_FULL,
     VAE_SMALL,
     infer_occupancy,
@@ -43,6 +56,9 @@ from .presets import (
     is_klein3_unet,
     is_klein3_upsampler,
     is_klein_9b_unet,
+    is_qwen_image_clip,
+    is_qwen_image_unet,
+    is_qwen_image_vae,
     normalize_quality,
 )
 
@@ -56,6 +72,20 @@ CMD_IMAGE_FLUX3_BASE = "./scripts/utilities/download-image.sh run --tier flux3-b
 CMD_IMAGE_FLUX3_NVFP4 = "./scripts/utilities/download-image.sh run --tier flux3-nvfp4"
 CMD_IMAGE_FLUX3_TE = "./scripts/utilities/download-image.sh run --tier flux3-te"
 CMD_IMAGE_FLUX3_PUP = "./scripts/utilities/download-image.sh run --tier flux3-pup"
+# Opt-in Qwen-Image 2.1 packs (Qwen RESEARCH LICENSE AGREEMENT, section 2.b
+# bars commercial use without a paid Qwen license). None is a default, none is
+# in image --tier all, none is in download-models; Klein 4B stays the Apache
+# default still.
+CMD_IMAGE_QWEN = "./scripts/utilities/download-image.sh run --tier qwen-image"
+CMD_IMAGE_QWEN_TURBO = (
+    "./scripts/utilities/download-image.sh run --tier qwen-image-turbo"
+)
+CMD_IMAGE_QWEN_NVFP4 = "./scripts/utilities/download-image.sh run --tier qwen-image-nvfp4"
+CMD_IMAGE_QWEN_TURBO_NVFP4 = (
+    "./scripts/utilities/download-image.sh run --tier qwen-image-turbo-nvfp4"
+)
+CMD_IMAGE_QWEN_TE = "./scripts/utilities/download-image.sh run --tier qwen-image-te"
+CMD_IMAGE_QWEN_VAE = "./scripts/utilities/download-image.sh run --tier qwen-image-vae"
 CMD_WAN_FUN = "./scripts/utilities/download-wan.sh run --tier fun-inp"
 CMD_WAN_VACE = "./scripts/utilities/download-wan.sh run --tier vace"
 CMD_WAN_S2V = "./scripts/utilities/download-wan.sh run --tier s2v"
@@ -481,6 +511,22 @@ def command_for_filename(name: str) -> str:
         return CMD_IMAGE_FLUX3_PUP
     if is_klein3_clip(name):
         return CMD_IMAGE_FLUX3_TE
+    if is_qwen_image_unet(name):
+        if "turbo" in blob and "nvfp4" in blob:
+            return CMD_IMAGE_QWEN_TURBO_NVFP4
+        if "nvfp4" in blob:
+            return CMD_IMAGE_QWEN_NVFP4
+        if "turbo" in blob:
+            return CMD_IMAGE_QWEN_TURBO
+        return CMD_IMAGE_QWEN
+    if is_qwen_image_clip(name):
+        if "turbo" in blob and "nvfp4" in blob:
+            return CMD_IMAGE_QWEN_TURBO_NVFP4
+        if "nvfp4" in blob:
+            return CMD_IMAGE_QWEN_NVFP4
+        return CMD_IMAGE_QWEN_TE
+    if is_qwen_image_vae(name):
+        return CMD_IMAGE_QWEN_VAE
     if is_klein_9b_unet(name):
         if "base" in blob:
             return CMD_IMAGE_9B_BASE
@@ -667,6 +713,69 @@ def requirements_for(hints: CheckHints) -> list[Need]:
         )
         needs.append(
             _need("flux3-vae", CMD_DOWNLOAD_MODELS, FileSpec(SUB_VAE, VAE_FULL))
+        )
+
+    # Opt-in Qwen-Image 2.1: the tier names the pack, so the row is only
+    # required when the operator picked one of the four qwen tiers. The VAE and
+    # the INT8 encoder are companion tiers; each NVFP4 pack ships its own.
+    qwen_pinned = any(is_qwen_image_unet(name) for name in hints.unets) or any(
+        is_qwen_image_clip(name) for name in hints.clips
+    )
+    if quality in QWEN_QUALITY_CHOICES and (occ == "klein" or qwen_pinned):
+        if quality == QUALITY_QWEN_IMAGE:
+            needs.append(
+                _need(
+                    "qwen-image-unet",
+                    CMD_IMAGE_QWEN,
+                    FileSpec(SUB_UNET, QWEN_IMAGE_INT8),
+                )
+            )
+            needs.append(
+                _need("qwen-image-te", CMD_IMAGE_QWEN_TE, FileSpec(SUB_CLIP, QWEN_TE))
+            )
+        elif quality == QUALITY_QWEN_IMAGE_TURBO:
+            needs.append(
+                _need(
+                    "qwen-image-turbo-unet",
+                    CMD_IMAGE_QWEN_TURBO,
+                    FileSpec(SUB_UNET, QWEN_IMAGE_TURBO_INT8),
+                )
+            )
+            needs.append(
+                _need("qwen-image-te", CMD_IMAGE_QWEN_TE, FileSpec(SUB_CLIP, QWEN_TE))
+            )
+        elif quality == QUALITY_QWEN_IMAGE_NVFP4:
+            needs.append(
+                _need(
+                    "qwen-image-nvfp4-unet",
+                    CMD_IMAGE_QWEN_NVFP4,
+                    FileSpec(SUB_UNET, QWEN_IMAGE_NVFP4),
+                )
+            )
+            needs.append(
+                _need(
+                    "qwen-image-nvfp4-te",
+                    CMD_IMAGE_QWEN_NVFP4,
+                    FileSpec(SUB_CLIP, QWEN_TE_NVFP4),
+                )
+            )
+        elif quality == QUALITY_QWEN_IMAGE_TURBO_NVFP4:
+            needs.append(
+                _need(
+                    "qwen-image-turbo-nvfp4-unet",
+                    CMD_IMAGE_QWEN_TURBO_NVFP4,
+                    FileSpec(SUB_UNET, QWEN_IMAGE_TURBO_NVFP4),
+                )
+            )
+            needs.append(
+                _need(
+                    "qwen-image-turbo-nvfp4-te",
+                    CMD_IMAGE_QWEN_TURBO_NVFP4,
+                    FileSpec(SUB_CLIP, QWEN_TE_TURBO_NVFP4),
+                )
+            )
+        needs.append(
+            _need("qwen-image-vae", CMD_IMAGE_QWEN_VAE, FileSpec(SUB_VAE, QWEN_VAE))
         )
 
     if hints.enhance_on or (types & RESEARCH_TYPES):

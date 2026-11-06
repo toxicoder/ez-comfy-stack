@@ -70,7 +70,7 @@
     {
       "id": "download-image",
       "title": "download-image --tier",
-      "description": "Still UNET pack. fast is the lab default and also pulls TE + flux2-vae companions. Not a video quality ladder. flux3* = FLUX 3 Image Klein opt-in (FLUX Kommunity v1.0, gated, revision-pinned, never in all).",
+      "description": "Still UNET pack. fast is the lab default and also pulls TE + flux2-vae companions. Not a video quality ladder. flux3* = FLUX 3 Image Klein opt-in (FLUX Kommunity v1.0, gated, revision-pinned, never in all). qwen-image* = opt-in Qwen-Image 2.1 stills (Qwen RESEARCH LICENSE, ungated, revision-pinned, never in all).",
       "argv": [
         "./scripts/utilities/download-image.sh",
         "run"
@@ -145,6 +145,30 @@
             {
               "value": "flux3-pup",
               "label": "flux3-pup - Qwen3.5-9B FLUX 3 prompt upsampler (optional, gated)"
+            },
+            {
+              "value": "qwen-image",
+              "label": "qwen-image - Qwen-Image 2.1 INT8-convrot still + Qwen3VL-8B TE + BF16 VAE (Qwen RESEARCH LICENSE, ungated, pinned revision, opt-in, never in --tier all)"
+            },
+            {
+              "value": "qwen-image-turbo",
+              "label": "qwen-image-turbo - Qwen-Image 2.1 Turbo INT8-convrot distilled still (Qwen RESEARCH LICENSE, ungated, pinned revision, opt-in)"
+            },
+            {
+              "value": "qwen-image-nvfp4",
+              "label": "qwen-image-nvfp4 - Qwen-Image 2.1 NVFP4 + matching Qwen3VL-8B NVFP4 TE (BennyDaBall conversion, Qwen RESEARCH LICENSE, opt-in)"
+            },
+            {
+              "value": "qwen-image-turbo-nvfp4",
+              "label": "qwen-image-turbo-nvfp4 - Qwen-Image 2.1 Turbo NVFP4 + matching Qwen3VL-8B NVFP4 TE (BennyDaBall conversion, Qwen RESEARCH LICENSE, opt-in)"
+            },
+            {
+              "value": "qwen-image-te",
+              "label": "qwen-image-te - Qwen3VL-8B INT8 text encoder for Qwen-Image 2.1 (Qwen RESEARCH LICENSE, pulled by the INT8 tiers)"
+            },
+            {
+              "value": "qwen-image-vae",
+              "label": "qwen-image-vae - Qwen-Image 2.1 BF16 VAE (Qwen RESEARCH LICENSE, pulled by the INT8 tiers)"
             }
           ]
         }

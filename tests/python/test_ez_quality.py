@@ -36,6 +36,12 @@ from ez_quality.check import (  # noqa: E402
     CMD_IMAGE_FLUX3_NVFP4,
     CMD_IMAGE_FLUX3_PUP,
     CMD_IMAGE_FLUX3_TE,
+    CMD_IMAGE_QWEN,
+    CMD_IMAGE_QWEN_NVFP4,
+    CMD_IMAGE_QWEN_TURBO,
+    CMD_IMAGE_QWEN_TURBO_NVFP4,
+    CMD_IMAGE_QWEN_TE,
+    CMD_IMAGE_QWEN_VAE,
     CMD_PERSON_MASK,
     PERSON_WEIGHT,
     SUB_CLIP,
@@ -103,6 +109,7 @@ from ez_quality.presets import (  # noqa: E402
     QUALITY_DRAFT,
     QUALITY_FAMILIES,
     QUALITY_FAMILY_KLEIN3,
+    QUALITY_FAMILY_QWEN,
     QUALITY_FLUX3_FAST,
     QUALITY_FLUX3_NVFP4,
     QUALITY_FLUX3_QUALITY,
@@ -110,8 +117,29 @@ from ez_quality.presets import (  # noqa: E402
     QUALITY_HIGH,
     QUALITY_LAB,
     QUALITY_MAX,
+    QUALITY_QWEN_IMAGE,
+    QUALITY_QWEN_IMAGE_NVFP4,
+    QUALITY_QWEN_IMAGE_TURBO,
+    QUALITY_QWEN_IMAGE_TURBO_NVFP4,
     QUALITY_STANDARD,
     QUALITY_ULTRA,
+    QWEN_IMAGE_INT8,
+    QWEN_IMAGE_NVFP4,
+    QWEN_IMAGE_TURBO_INT8,
+    QWEN_IMAGE_TURBO_NVFP4,
+    QWEN_NVFP4_CFG,
+    QWEN_NVFP4_STEPS,
+    QWEN_QUALITY_CFG,
+    QWEN_QUALITY_CHOICES,
+    QWEN_QUALITY_STEPS,
+    QWEN_TE,
+    QWEN_TE_NVFP4,
+    QWEN_TE_TURBO_NVFP4,
+    QWEN_TURBO_CFG,
+    QWEN_TURBO_NVFP4_CFG,
+    QWEN_TURBO_NVFP4_STEPS,
+    QWEN_TURBO_STEPS,
+    QWEN_VAE,
     OVERLAY_FIELDS,
     QualityOverlay,
     TRELLIS_DRAFT_STEPS,
@@ -133,11 +161,16 @@ from ez_quality.presets import (  # noqa: E402
     family_owned_fields,
     infer_occupancy,
     is_banned_unet,
+    is_flux2_clip,
+    is_flux2_vae,
     is_klein3_clip,
     is_klein3_unet,
     is_klein3_upsampler,
     is_klein_4b_unet,
     is_klein_9b_unet,
+    is_qwen_image_clip,
+    is_qwen_image_unet,
+    is_qwen_image_vae,
     match_tier,
     normalize_quality,
     resolve_overlay,
@@ -790,6 +823,13 @@ def test_owned_fields_are_the_family_tier_footprint() -> None:
     """A family owns only the fields its own tiers ever write."""
     assert family_owned_fields("klein") == OVERLAY_FIELDS
     assert family_owned_fields(QUALITY_FAMILY_KLEIN3) == OVERLAY_FIELDS
+    assert family_owned_fields(QUALITY_FAMILY_QWEN) == (
+        "steps",
+        "cfg",
+        "unet_name",
+        "clip_name",
+        "vae_name",
+    )
     for family in ("wan", "ltx", "film", "audio", "trellis"):
         assert family_owned_fields(family) == ("steps",), family
     for family in ("none", "llm"):
@@ -801,7 +841,7 @@ def _observed_for(family: str, choice: str) -> dict[str, Any]:
     """Overlay values a graph must hold to read back as one tier.
 
     Args:
-        family: Occupancy id, or QUALITY_FAMILY_KLEIN3.
+        family: Occupancy id, QUALITY_FAMILY_KLEIN3, or QUALITY_FAMILY_QWEN.
         choice: Named quality.
 
     Returns:
@@ -811,7 +851,9 @@ def _observed_for(family: str, choice: str) -> dict[str, Any]:
     return {field: getattr(profile, field) for field in OVERLAY_FIELDS}
 
 
-@pytest.mark.parametrize("family", ["klein", QUALITY_FAMILY_KLEIN3])
+@pytest.mark.parametrize(
+    "family", ["klein", QUALITY_FAMILY_KLEIN3, QUALITY_FAMILY_QWEN]
+)
 @pytest.mark.parametrize("choice", NAMED_QUALITY_CHOICES)
 def test_match_tier_recognises_a_graph_sitting_on_a_tier(
     family: str, choice: str
@@ -1530,7 +1572,7 @@ def test_flux3_quality_choices_are_additive() -> None:
         QUALITY_ULTRA,
         QUALITY_MAX,
     )
-    assert QUALITY_CHOICES[8:] == FLUX3_QUALITY_CHOICES
+    assert QUALITY_CHOICES[8:11] == FLUX3_QUALITY_CHOICES
     spec = EZQuality.INPUT_TYPES()["required"]["quality"]
     assert list(spec[0]) == list(QUALITY_CHOICES)
     assert spec[1]["default"] == QUALITY_LAB
@@ -1960,3 +2002,656 @@ def test_js_mirrors_flux3_constants_and_predicates() -> None:
     assert nvfp4["steps"] == KLEIN3_NVFP4_STEPS
     assert nvfp4["cfg"] == KLEIN3_NVFP4_CFG
 
+
+
+# ---------------------------------------------------------------------------
+# Opt-in Qwen-Image 2.1 stills (Qwen RESEARCH LICENSE AGREEMENT, never default).
+# ---------------------------------------------------------------------------
+
+QWEN_IMAGE_ALL: tuple[str, ...] = (
+    QWEN_IMAGE_INT8,
+    QWEN_IMAGE_TURBO_INT8,
+    QWEN_IMAGE_NVFP4,
+    QWEN_IMAGE_TURBO_NVFP4,
+)
+QWEN_TE_ALL: tuple[str, ...] = (QWEN_TE, QWEN_TE_NVFP4, QWEN_TE_TURBO_NVFP4)
+QWEN_ALL_FILES: tuple[str, ...] = (*QWEN_IMAGE_ALL, *QWEN_TE_ALL, QWEN_VAE)
+# The six opt-in image tiers exactly as download-image.sh --tier names them.
+QWEN_IMAGE_TIERS: tuple[str, ...] = (
+    "qwen-image",
+    "qwen-image-turbo",
+    "qwen-image-nvfp4",
+    "qwen-image-turbo-nvfp4",
+    "qwen-image-te",
+    "qwen-image-vae",
+)
+
+
+def _qwen_image_graph(
+    unet: str = QWEN_IMAGE_INT8,
+    clip: str = QWEN_TE,
+    vae: str = QWEN_VAE,
+    clip_type: str = "qwen3vl",
+) -> dict[str, Any]:
+    return {
+        "extra": {"lab_app_mode": {"occupancy": "klein"}},
+        "nodes": [
+            {"type": "UNETLoader", "widgets_values": [unet, "default"]},
+            {"type": "CLIPLoader", "widgets_values": [clip, clip_type, "default"]},
+            {"type": "VAELoader", "widgets_values": [vae]},
+            {
+                "type": "KSampler",
+                "widgets_values": [42, "fixed", 20, 2.5, "euler", "simple", 1.0],
+            },
+            {"type": "EmptySD3LatentImage", "widgets_values": [1024, 1024, 1]},
+        ],
+    }
+
+
+def test_qwen_image_constants_are_the_pinned_hf_filenames() -> None:
+    assert QWEN_IMAGE_INT8 == "qwen_image_2.1_int8_convrot.safetensors"
+    assert QWEN_IMAGE_TURBO_INT8 == "qwen_image_2.1_turbo_int8_convrot.safetensors"
+    assert QWEN_IMAGE_NVFP4 == "qwen_image_2.1_nvfp4.safetensors"
+    assert QWEN_IMAGE_TURBO_NVFP4 == "qwen_image_2.1_turbo_nvfp4.safetensors"
+    assert QWEN_TE == "qwen3vl_8b_int8_convrot.safetensors"
+    assert QWEN_TE_NVFP4 == "qwen3vl_8b_nvfp4.safetensors"
+    assert QWEN_TE_TURBO_NVFP4 == "qwen3vl_8b_turbo_nvfp4.safetensors"
+    assert QWEN_VAE == "qwen_image_2.1_vae_bf16.safetensors"
+    # Turbo follows the FLUX 3 fast recipe; the non-Turbo pair FLUX 3's base.
+    assert (QWEN_TURBO_STEPS, QWEN_TURBO_CFG) == (16, 1.0)
+    assert (QWEN_TURBO_NVFP4_STEPS, QWEN_TURBO_NVFP4_CFG) == (16, 1.0)
+    assert (QWEN_QUALITY_STEPS, QWEN_QUALITY_CFG) == (50, 3.5)
+    assert (QWEN_NVFP4_STEPS, QWEN_NVFP4_CFG) == (50, 3.5)
+    for name in QWEN_ALL_FILES:
+        assert is_banned_unet(name) is False
+        assert name not in _DEFAULT_FILES
+
+
+def test_qwen_image_quality_choices_are_additive() -> None:
+    """One combo row per opt-in tier, spelled the way the CLI tier is spelled."""
+    assert QWEN_QUALITY_CHOICES == QWEN_IMAGE_TIERS[:4]
+    assert QUALITY_CHOICES[:8] == (
+        QUALITY_CUSTOM,
+        QUALITY_DRAFT,
+        QUALITY_LAB,
+        QUALITY_STANDARD,
+        QUALITY_HIGH,
+        QUALITY_FREE_COMMERCIAL,
+        QUALITY_ULTRA,
+        QUALITY_MAX,
+    )
+    assert QUALITY_CHOICES[8:11] == FLUX3_QUALITY_CHOICES
+    assert QUALITY_CHOICES[11:] == QWEN_QUALITY_CHOICES
+    spec = EZQuality.INPUT_TYPES()["required"]["quality"]
+    assert list(spec[0]) == list(QUALITY_CHOICES)
+    assert spec[1]["default"] == QUALITY_LAB
+    assert normalize_quality("Qwen-Image") == QUALITY_QWEN_IMAGE
+    assert normalize_quality("  qwen-image-turbo ") == QUALITY_QWEN_IMAGE_TURBO
+    assert normalize_quality("qwen-image-nvfp4") == QUALITY_QWEN_IMAGE_NVFP4
+    assert (
+        normalize_quality("QWEN-IMAGE-TURBO-NVFP4")
+        == QUALITY_QWEN_IMAGE_TURBO_NVFP4
+    )
+    assert normalize_quality("qwen_image") == QUALITY_LAB
+    assert EZQuality().report("qwen-image-turbo")["result"] == (
+        QUALITY_QWEN_IMAGE_TURBO,
+    )
+
+
+def test_is_qwen_image_predicates() -> None:
+    for name in QWEN_IMAGE_ALL:
+        assert is_qwen_image_unet(name) is True
+        assert is_qwen_image_vae(name) is False
+        assert is_klein3_unet(name) is False
+        assert is_klein_4b_unet(name) is False
+        assert is_klein_9b_unet(name) is False
+    for name in QWEN_TE_ALL:
+        assert is_qwen_image_clip(name) is True
+        assert is_qwen_image_unet(name) is False
+        assert is_klein3_clip(name) is False
+        assert is_flux2_clip(name) is False
+    assert is_qwen_image_vae(QWEN_VAE) is True
+    assert is_flux2_vae(QWEN_VAE) is False
+    for name in (*QWEN_IMAGE_ALL, *QWEN_TE_ALL, ""):
+        assert is_qwen_image_vae(name) is False, name
+    for name in (
+        KLEIN_DISTILLED,
+        KLEIN_9B,
+        FLUX2_DEV,
+        KLEIN3_DISTILLED,
+        KLEIN3_TE,
+        KLEIN3_UPSAMPLER,
+        CLIP_4B,
+        CLIP_8B,
+        VAE_FULL,
+        VAE_SMALL,
+        "",
+    ):
+        assert is_qwen_image_unet(name) is False, name
+        assert is_qwen_image_clip(name) is False, name
+        assert is_qwen_image_vae(name) is False, name
+
+
+def test_js_mirrors_qwen_image_gates() -> None:
+    """The frontend gates the Qwen family the way presets.py does."""
+    body = JS.read_text(encoding="utf-8")
+    blob = _js_blob()
+    payload = _presets_payload()
+    table = payload["table"]
+    for name in QWEN_ALL_FILES:
+        assert name in blob
+    for choice in QWEN_QUALITY_CHOICES:
+        assert choice in blob
+    assert "function isQwenImageUnet" in body
+    assert "function isQwenImageClip" in body
+    assert "function isQwenImageVae" in body
+    assert 'widgetByName(node, "unet_name")' in body
+    assert 'widgetByName(node, "clip_name")' in body
+    assert "isQwenImageUnet(unetWidget?.value)" in body
+    assert "isQwenImageClip(clipWidget?.value)" in body
+    # Same gate shape as FLUX 3: the family comes from the pinned weights, and
+    # the swap guard names the Qwen predicates so the Qwen VAE can be written.
+    assert "function graphHasQwenWeights" in body
+    assert "return FAMILY_QWEN;" in body
+    assert "isQwenImageUnet(name)" in body
+    assert "isQwenImageClip(name)" in body
+    assert "isQwenImageVae(name)" in body
+    qwen = table[QUALITY_FAMILY_QWEN]
+    assert qwen[QUALITY_QWEN_IMAGE]["steps"] == QWEN_QUALITY_STEPS
+    assert qwen[QUALITY_QWEN_IMAGE]["cfg"] == QWEN_QUALITY_CFG
+    assert qwen[QUALITY_QWEN_IMAGE_TURBO]["steps"] == QWEN_TURBO_STEPS
+    assert qwen[QUALITY_QWEN_IMAGE_TURBO]["cfg"] == QWEN_TURBO_CFG
+    assert qwen[QUALITY_QWEN_IMAGE_NVFP4]["steps"] == QWEN_NVFP4_STEPS
+    assert qwen[QUALITY_QWEN_IMAGE_NVFP4]["cfg"] == QWEN_NVFP4_CFG
+    assert qwen[QUALITY_QWEN_IMAGE_TURBO_NVFP4]["steps"] == QWEN_TURBO_NVFP4_STEPS
+    assert qwen[QUALITY_QWEN_IMAGE_TURBO_NVFP4]["cfg"] == QWEN_TURBO_NVFP4_CFG
+    # The CLIPLoader type stays authored; only the Klein / FLUX 3 rows stamp it.
+    assert all(qwen[choice]["clip_type"] is None for choice in QWEN_QUALITY_CHOICES)
+    # Cross-family rows are no-ops, so neither ladder drops weights on the
+    # other family's graph.
+    for choice in (*FLUX3_QUALITY_CHOICES, QUALITY_DRAFT, QUALITY_HIGH):
+        assert all(qwen[choice][field] is None for field in payload["fields"])
+    for choice in QWEN_QUALITY_CHOICES:
+        assert all(table["klein"][choice][field] is None for field in payload["fields"])
+
+
+def test_qwen_image_profile_binds_unet_te_and_vae() -> None:
+    """One tier writes the transformer, its encoder, and the family VAE."""
+    overlay = resolve_overlay(
+        occupancy="klein",
+        quality=QUALITY_QWEN_IMAGE,
+        authored_steps=20,
+        authored_cfg=2.5,
+        unet_name=QWEN_IMAGE_TURBO_INT8,
+        available_unets=QWEN_IMAGE_ALL,
+        clip_name=CLIP_4B,
+        available_clips=(CLIP_4B, *QWEN_TE_ALL),
+        vae_name=VAE_SMALL,
+        available_vaes=(VAE_SMALL, QWEN_VAE),
+    )
+    assert overlay == QualityOverlay(
+        steps=QWEN_QUALITY_STEPS,
+        cfg=QWEN_QUALITY_CFG,
+        unet_name=QWEN_IMAGE_INT8,
+        clip_name=QWEN_TE,
+        vae_name=QWEN_VAE,
+    )
+
+
+@pytest.mark.parametrize(
+    ("quality", "unet", "te", "steps", "cfg"),
+    [
+        (
+            QUALITY_QWEN_IMAGE,
+            QWEN_IMAGE_INT8,
+            QWEN_TE,
+            QWEN_QUALITY_STEPS,
+            QWEN_QUALITY_CFG,
+        ),
+        (
+            QUALITY_QWEN_IMAGE_TURBO,
+            QWEN_IMAGE_TURBO_INT8,
+            QWEN_TE,
+            QWEN_TURBO_STEPS,
+            QWEN_TURBO_CFG,
+        ),
+        (
+            QUALITY_QWEN_IMAGE_NVFP4,
+            QWEN_IMAGE_NVFP4,
+            QWEN_TE_NVFP4,
+            QWEN_NVFP4_STEPS,
+            QWEN_NVFP4_CFG,
+        ),
+        (
+            QUALITY_QWEN_IMAGE_TURBO_NVFP4,
+            QWEN_IMAGE_TURBO_NVFP4,
+            QWEN_TE_TURBO_NVFP4,
+            QWEN_TURBO_NVFP4_STEPS,
+            QWEN_TURBO_NVFP4_CFG,
+        ),
+    ],
+)
+def test_qwen_image_profile_writes_its_own_tier(
+    quality: str, unet: str, te: str, steps: int, cfg: float
+) -> None:
+    overlay = resolve_overlay(
+        occupancy="klein",
+        quality=quality,
+        authored_steps=20,
+        authored_cfg=2.5,
+        unet_name=QWEN_IMAGE_NVFP4 if unet != QWEN_IMAGE_NVFP4 else QWEN_IMAGE_INT8,
+        available_unets=QWEN_IMAGE_ALL,
+        clip_name=QWEN_TE_NVFP4 if te != QWEN_TE_NVFP4 else QWEN_TE,
+        available_clips=QWEN_TE_ALL,
+        vae_name=VAE_FULL,
+        available_vaes=(VAE_FULL, QWEN_VAE),
+    )
+    assert overlay.unet_name == unet
+    assert overlay.clip_name == te
+    assert overlay.vae_name == QWEN_VAE
+    assert overlay.steps == steps
+    assert overlay.cfg == cfg
+    # The graph authors the Qwen3VL clip type; the tier never stamps flux2 on it.
+    assert overlay.clip_type is None
+
+
+def test_qwen_image_profile_keeps_authored_files_when_weights_are_missing() -> None:
+    overlay = resolve_overlay(
+        occupancy="klein",
+        quality=QUALITY_QWEN_IMAGE_NVFP4,
+        authored_steps=12,
+        authored_cfg=2.0,
+        unet_name=QWEN_IMAGE_INT8,
+        available_unets=(QWEN_IMAGE_INT8,),
+        clip_name=QWEN_TE,
+        available_clips=(QWEN_TE,),
+        vae_name=VAE_FULL,
+        available_vaes=(VAE_FULL,),
+    )
+    assert overlay == QualityOverlay(
+        steps=QWEN_NVFP4_STEPS,
+        cfg=QWEN_NVFP4_CFG,
+    )
+
+
+def test_qwen_image_profile_applies_when_only_the_te_pins_the_family() -> None:
+    overlay = resolve_overlay(
+        occupancy="klein",
+        quality=QUALITY_QWEN_IMAGE_TURBO,
+        authored_steps=20,
+        authored_cfg=2.5,
+        unet_name="",
+        available_unets=QWEN_IMAGE_ALL,
+        clip_name=QWEN_TE,
+        available_clips=(CLIP_4B, QWEN_TE),
+        vae_name=QWEN_VAE,
+        available_vaes=(QWEN_VAE,),
+    )
+    assert overlay.unet_name == QWEN_IMAGE_TURBO_INT8
+    assert overlay.steps == QWEN_TURBO_STEPS
+    assert overlay.clip_name is None
+    assert overlay.vae_name is None
+
+
+@pytest.mark.parametrize("quality", QWEN_QUALITY_CHOICES)
+@pytest.mark.parametrize("unet_name", OTHER_FAMILY_UNETS)
+def test_qwen_image_profiles_never_touch_other_families(
+    quality: str, unet_name: str
+) -> None:
+    overlay = resolve_overlay(
+        occupancy="klein",
+        quality=quality,
+        authored_steps=20,
+        authored_cfg=2.5,
+        unet_name=unet_name,
+        available_unets=(
+            *QWEN_IMAGE_ALL,
+            KLEIN_DISTILLED,
+            KLEIN_BASE,
+            KLEIN_9B,
+            FLUX2_DEV,
+            KLEIN3_DISTILLED,
+        ),
+        clip_name=CLIP_4B,
+        available_clips=(CLIP_4B, CLIP_8B, KLEIN3_TE, *QWEN_TE_ALL),
+        vae_name=VAE_FULL,
+        available_vaes=(VAE_FULL, VAE_SMALL, QWEN_VAE),
+    )
+    assert overlay == QualityOverlay()
+
+
+@pytest.mark.parametrize("quality", FLUX3_QUALITY_CHOICES)
+@pytest.mark.parametrize("unet_name", QWEN_IMAGE_ALL)
+def test_flux3_profiles_never_write_on_qwen_image_graphs(
+    quality: str, unet_name: str
+) -> None:
+    overlay = resolve_overlay(
+        occupancy="klein",
+        quality=quality,
+        authored_steps=20,
+        authored_cfg=2.5,
+        unet_name=unet_name,
+        available_unets=(*QWEN_IMAGE_ALL, KLEIN3_DISTILLED, KLEIN3_NVFP4),
+        clip_name=QWEN_TE,
+        available_clips=(*QWEN_TE_ALL, KLEIN3_TE),
+        vae_name=QWEN_VAE,
+        available_vaes=(QWEN_VAE, VAE_FULL),
+    )
+    assert overlay == QualityOverlay()
+
+
+@pytest.mark.parametrize("choice", NAMED_QUALITY_CHOICES)
+def test_qwen_image_guard_keeps_the_klein_ladder_off_qwen_graphs(
+    choice: str,
+) -> None:
+    """Only the four Qwen tiers write on a Qwen-Image graph; Klein 4B never lands."""
+    qwen = set(QWEN_QUALITY_CHOICES)
+    assert qwen <= set(NAMED_QUALITY_CHOICES)
+    owned = family_owned_fields(QUALITY_FAMILY_QWEN)
+    profile = tier_profile(QUALITY_FAMILY_QWEN, choice)
+    if choice in qwen:
+        assert all(getattr(profile, field) is not None for field in owned), choice
+        assert profile.clip_type is None, choice
+    else:
+        assert not any(
+            getattr(profile, field) is not None for field in OVERLAY_FIELDS
+        ), choice
+
+
+def test_qwen_image_tier_label_names_the_weight_and_recipe() -> None:
+    label = tier_label(QUALITY_FAMILY_QWEN, QUALITY_QWEN_IMAGE_TURBO)
+    assert QWEN_IMAGE_TURBO_INT8.rsplit(".", 1)[0] in label
+    assert f"{QWEN_TURBO_STEPS} steps" in label
+    assert f"CFG {QWEN_TURBO_CFG}" in label
+    assert tier_label("klein", QUALITY_QWEN_IMAGE) == ""
+    assert tier_label(QUALITY_FAMILY_KLEIN3, QUALITY_QWEN_IMAGE_TURBO_NVFP4) == ""
+    assert tier_label(QUALITY_FAMILY_QWEN, QUALITY_DRAFT) == ""
+
+
+def test_apply_qwen_image_profile_writes_every_loader_and_sampler() -> None:
+    graph = _qwen_image_graph(
+        unet=QWEN_IMAGE_NVFP4, clip=QWEN_TE_NVFP4, vae=VAE_FULL
+    )
+    latent = _values(_graph_node(graph, 4))
+    apply_to_graph(
+        graph,
+        QUALITY_QWEN_IMAGE,
+        available_unets=QWEN_IMAGE_ALL,
+        available_clips=(CLIP_4B, *QWEN_TE_ALL),
+        available_vaes=(VAE_FULL, QWEN_VAE),
+    )
+    assert _values(_graph_node(graph, 0))[UNET_NAME_INDEX] == QWEN_IMAGE_INT8
+    assert _values(_graph_node(graph, 1))[CLIP_NAME_INDEX] == QWEN_TE
+    assert _values(_graph_node(graph, 1))[1] == "qwen3vl"
+    assert _values(_graph_node(graph, 2))[VAE_NAME_INDEX] == QWEN_VAE
+    assert _values(_graph_node(graph, 3))[KSAMPLER_STEPS_INDEX] == (
+        QWEN_QUALITY_STEPS
+    )
+    assert _values(_graph_node(graph, 3))[KSAMPLER_CFG_INDEX] == QWEN_QUALITY_CFG
+    assert _values(_graph_node(graph, 4)) == latent
+
+
+def test_apply_qwen_image_profile_skips_foreign_clip_and_vae() -> None:
+    graph = _qwen_image_graph(
+        unet=QWEN_IMAGE_INT8, clip="umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+    )
+    graph["nodes"][2]["widgets_values"] = ["wan2.2_vae.safetensors"]
+    apply_to_graph(
+        graph,
+        QUALITY_QWEN_IMAGE_TURBO,
+        available_unets=QWEN_IMAGE_ALL,
+        available_clips=QWEN_TE_ALL,
+        available_vaes=(QWEN_VAE,),
+    )
+    assert _values(_graph_node(graph, 0))[UNET_NAME_INDEX] == QWEN_IMAGE_TURBO_INT8
+    assert _values(_graph_node(graph, 1))[CLIP_NAME_INDEX] == (
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+    )
+    assert _values(_graph_node(graph, 1))[1] == "qwen3vl"
+    assert _values(_graph_node(graph, 2))[VAE_NAME_INDEX] == "wan2.2_vae.safetensors"
+    assert _values(_graph_node(graph, 3))[KSAMPLER_STEPS_INDEX] == QWEN_TURBO_STEPS
+
+
+@pytest.mark.parametrize("quality", QWEN_QUALITY_CHOICES)
+def test_apply_qwen_image_profile_leaves_klein_graph_authored(quality: str) -> None:
+    graph = copy.deepcopy(_load("stills/still-draft.json"))
+    sampler_before = list(_values(_sampler(graph)))
+    loaders_before = {
+        node["type"]: list(node["widgets_values"])
+        for node in graph["nodes"]
+        if node.get("type") in {"UNETLoader", "CLIPLoader", "VAELoader"}
+    }
+    latent = next(n for n in graph["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
+    latent_before = list(latent["widgets_values"])
+    apply_to_graph(
+        graph,
+        quality,
+        available_unets=QWEN_IMAGE_ALL,
+        available_clips=(CLIP_4B, CLIP_8B, *QWEN_TE_ALL),
+        available_vaes=(VAE_FULL, VAE_SMALL, QWEN_VAE),
+    )
+    assert list(_values(_sampler(graph))) == sampler_before
+    assert latent["widgets_values"] == latent_before
+    for node in graph["nodes"]:
+        ntype = node.get("type")
+        if ntype in loaders_before:
+            assert list(node["widgets_values"]) == loaders_before[ntype], ntype
+
+
+def test_existing_families_are_unchanged_by_qwen_image() -> None:
+    """The Klein ladder and the FLUX 3 rows resolve exactly as before."""
+    klein = resolve_overlay(
+        occupancy="klein",
+        quality=QUALITY_ULTRA,
+        authored_steps=20,
+        authored_cfg=2.5,
+        unet_name=KLEIN_DISTILLED,
+        available_unets=(KLEIN_DISTILLED, KLEIN_9B),
+        clip_name=CLIP_4B,
+        available_clips=(CLIP_4B, CLIP_8B),
+        vae_name=VAE_FULL,
+        available_vaes=(VAE_FULL,),
+    )
+    assert klein == QualityOverlay(
+        steps=KLEIN_9B_STEPS,
+        cfg=KLEIN_9B_CFG,
+        unet_name=KLEIN_9B,
+        clip_name=CLIP_8B,
+        clip_type=CLIP_TYPE_FLUX2,
+    )
+    flux3 = resolve_overlay(
+        occupancy="klein",
+        quality=QUALITY_FLUX3_FAST,
+        authored_steps=20,
+        authored_cfg=2.5,
+        unet_name=KLEIN3_NVFP4,
+        available_unets=KLEIN3_ALL,
+        clip_name=CLIP_4B,
+        available_clips=(CLIP_4B, KLEIN3_TE),
+        vae_name=VAE_SMALL,
+        available_vaes=(VAE_SMALL, VAE_FULL),
+    )
+    assert flux3 == QualityOverlay(
+        steps=KLEIN3_FAST_STEPS,
+        cfg=KLEIN3_FAST_CFG,
+        unet_name=KLEIN3_DISTILLED,
+        clip_name=KLEIN3_TE,
+        vae_name=VAE_FULL,
+        clip_type=CLIP_TYPE_FLUX2,
+    )
+
+
+@pytest.mark.parametrize(
+    ("quality", "unet_pack", "unet_cmd", "unet", "te_pack", "te_cmd", "te"),
+    [
+        (
+            QUALITY_QWEN_IMAGE,
+            "qwen-image-unet",
+            CMD_IMAGE_QWEN,
+            QWEN_IMAGE_INT8,
+            "qwen-image-te",
+            CMD_IMAGE_QWEN_TE,
+            QWEN_TE,
+        ),
+        (
+            QUALITY_QWEN_IMAGE_TURBO,
+            "qwen-image-turbo-unet",
+            CMD_IMAGE_QWEN_TURBO,
+            QWEN_IMAGE_TURBO_INT8,
+            "qwen-image-te",
+            CMD_IMAGE_QWEN_TE,
+            QWEN_TE,
+        ),
+        (
+            QUALITY_QWEN_IMAGE_NVFP4,
+            "qwen-image-nvfp4-unet",
+            CMD_IMAGE_QWEN_NVFP4,
+            QWEN_IMAGE_NVFP4,
+            "qwen-image-nvfp4-te",
+            CMD_IMAGE_QWEN_NVFP4,
+            QWEN_TE_NVFP4,
+        ),
+        (
+            QUALITY_QWEN_IMAGE_TURBO_NVFP4,
+            "qwen-image-turbo-nvfp4-unet",
+            CMD_IMAGE_QWEN_TURBO_NVFP4,
+            QWEN_IMAGE_TURBO_NVFP4,
+            "qwen-image-turbo-nvfp4-te",
+            CMD_IMAGE_QWEN_TURBO_NVFP4,
+            QWEN_TE_TURBO_NVFP4,
+        ),
+    ],
+)
+def test_qwen_image_check_needs_are_per_profile(
+    quality: str,
+    unet_pack: str,
+    unet_cmd: str,
+    unet: str,
+    te_pack: str,
+    te_cmd: str,
+    te: str,
+) -> None:
+    rows = {
+        need.pack: need
+        for need in requirements_for(
+            CheckHints(
+                lab_rel="stills/qwen-image", occupancy="klein", quality=quality
+            )
+        )
+    }
+    assert rows[unet_pack].cmd == unet_cmd
+    assert rows[unet_pack].files == (FileSpec(SUB_UNET, unet),)
+    assert rows[te_pack].cmd == te_cmd
+    assert rows[te_pack].files == (FileSpec(SUB_CLIP, te),)
+    assert rows["qwen-image-vae"].cmd == CMD_IMAGE_QWEN_VAE
+    assert rows["qwen-image-vae"].files == (FileSpec(SUB_VAE, QWEN_VAE),)
+
+
+@pytest.mark.parametrize(
+    "probe",
+    [
+        QUALITY_LAB,
+        QUALITY_ULTRA,
+        QUALITY_MAX,
+        QUALITY_FREE_COMMERCIAL,
+        QUALITY_FLUX3_FAST,
+    ],
+)
+def test_qwen_image_needs_stay_off_other_rows(probe: str) -> None:
+    packs = [
+        need.pack
+        for need in requirements_for(CheckHints(occupancy="klein", quality=probe))
+    ]
+    assert not [pack for pack in packs if pack.startswith("qwen-image")], probe
+    other_occ = requirements_for(CheckHints(occupancy="wan", quality=QUALITY_QWEN_IMAGE))
+    assert not [need for need in other_occ if need.pack.startswith("qwen-image")]
+
+
+def test_qwen_image_needs_follow_pinned_weights_without_klein_occupancy() -> None:
+    pinned = requirements_for(
+        CheckHints(quality=QUALITY_QWEN_IMAGE_TURBO_NVFP4, unets=(QWEN_IMAGE_TURBO_NVFP4,))
+    )
+    assert [need.pack for need in pinned if need.pack.startswith("qwen-image")] == [
+        "qwen-image-turbo-nvfp4-unet",
+        "qwen-image-turbo-nvfp4-te",
+        "qwen-image-vae",
+    ]
+
+
+def test_command_for_filename_maps_qwen_image_files_without_moving_others() -> None:
+    assert command_for_filename(QWEN_IMAGE_INT8) == CMD_IMAGE_QWEN
+    assert command_for_filename(QWEN_IMAGE_TURBO_INT8) == CMD_IMAGE_QWEN_TURBO
+    assert command_for_filename(QWEN_IMAGE_NVFP4) == CMD_IMAGE_QWEN_NVFP4
+    assert command_for_filename(QWEN_IMAGE_TURBO_NVFP4) == CMD_IMAGE_QWEN_TURBO_NVFP4
+    assert command_for_filename(QWEN_TE) == CMD_IMAGE_QWEN_TE
+    assert command_for_filename(QWEN_TE_NVFP4) == CMD_IMAGE_QWEN_NVFP4
+    assert command_for_filename(QWEN_TE_TURBO_NVFP4) == CMD_IMAGE_QWEN_TURBO_NVFP4
+    assert command_for_filename(QWEN_VAE) == CMD_IMAGE_QWEN_VAE
+    for name in QWEN_ALL_FILES:
+        cmd = command_for_filename(name)
+        assert cmd != CMD_DOWNLOAD_MODELS, name
+        assert cmd.startswith(
+            "./scripts/utilities/download-image.sh run --tier qwen-image"
+        ), name
+    assert command_for_filename(KLEIN3_TE) == CMD_IMAGE_FLUX3_TE
+    assert command_for_filename(KLEIN3_UPSAMPLER) == CMD_IMAGE_FLUX3_PUP
+    assert command_for_filename(CLIP_4B) == CMD_DOWNLOAD_MODELS
+    assert command_for_filename(CLIP_8B) == CMD_IMAGE_9B
+    assert command_for_filename(VAE_FULL) == CMD_DOWNLOAD_MODELS
+
+
+def test_scan_qwen_image_profile_missing_then_present(tmp_path: Path) -> None:
+    hints = CheckHints(
+        lab_rel="stills/qwen-image",
+        occupancy="klein",
+        quality=QUALITY_QWEN_IMAGE_NVFP4,
+        unets=(QWEN_IMAGE_NVFP4,),
+        clips=(QWEN_TE_NVFP4,),
+        vaes=(QWEN_VAE,),
+    )
+    missing = scan(hints, (tmp_path,))
+    missing_names = {row.name for row in missing.missing}
+    assert QWEN_IMAGE_NVFP4 in missing_names
+    assert QWEN_TE_NVFP4 in missing_names
+    assert QWEN_VAE in missing_names
+    assert CMD_IMAGE_QWEN_NVFP4 in missing.commands
+    assert CMD_IMAGE_QWEN_VAE in missing.commands
+    for subdir, name in (
+        (SUB_UNET, QWEN_IMAGE_NVFP4),
+        (SUB_UNET, KLEIN_DISTILLED),
+        (SUB_CLIP, QWEN_TE_NVFP4),
+        (SUB_CLIP, CLIP_4B),
+        (SUB_VAE, QWEN_VAE),
+        (SUB_VAE, VAE_FULL),
+    ):
+        folder = tmp_path / "comfy" / subdir
+        folder.mkdir(parents=True, exist_ok=True)
+        (folder / name).write_bytes(b"x")
+    found = scan(hints, (tmp_path,))
+    present_names = {row.name for row in found.present}
+    assert QWEN_IMAGE_NVFP4 in present_names
+    assert QWEN_TE_NVFP4 in present_names
+    assert QWEN_VAE in present_names
+    assert not [row for row in found.missing if row.pack.startswith("qwen-image")]
+    assert found.ok
+
+
+def test_command_builder_lists_every_qwen_image_tier() -> None:
+    """The real CLI dropdown offers all six opt-in tiers, research-licensed."""
+    data = json.loads((ROOT / "includes" / "command-builder.json").read_text(
+        encoding="utf-8"
+    ))
+    commands = {row["id"]: row for row in data["commands"]}
+    tier_flag = next(
+        flag for flag in commands["download-image"]["flags"] if flag["name"] == "tier"
+    )
+    choices = {row["value"]: row["label"] for row in tier_flag["choices"]}
+    for tier in QWEN_IMAGE_TIERS:
+        assert tier in choices, f"download-image widget missing {tier}"
+        label = choices[tier]
+        assert label.startswith(tier), label
+        assert "Qwen RESEARCH LICENSE" in label, label
+        assert "apache" not in label.lower(), label
+    assert "all" in choices
+    for tier in QWEN_IMAGE_TIERS:
+        assert tier not in choices["all"], f"image all claims {tier}"

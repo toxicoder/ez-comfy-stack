@@ -1,5 +1,6 @@
 """Family-specific Quality overlays (custom / draft / lab / standard / high /
-Free Commercial Use / ultra / max / flux3-fast / flux3-quality / flux3-nvfp4).
+Free Commercial Use / ultra / max / flux3-fast / flux3-quality / flux3-nvfp4 /
+qwen-image / qwen-image-turbo / qwen-image-nvfp4 / qwen-image-turbo-nvfp4).
 
 This module is the only definition of what a tier asks for. The frontend reads
 a table generated from it (``export_table`` -> tests/python/_build_quality_js.py
@@ -18,6 +19,12 @@ Klein 9B or FLUX.2-dev. Wan / audio / trellis are no-ops for that choice.
 The flux3-* profiles apply only to graphs that pin FLUX 3 Image Klein
 weights; on any other graph they are no-ops, and on such a graph the Klein
 ladder is a no-op too rather than a Klein 4B downgrade.
+The qwen-image* profiles apply only to graphs that pin opt-in Qwen-Image 2.1
+weights. Those are the Qwen RESEARCH LICENSE AGREEMENT (section 2.b bars
+commercial use without a separate paid Qwen license), so no qwen tier is a
+default or a recommended profile and Klein 4B stays the Apache still; on any
+other graph they are no-ops, and on such a graph the Klein ladder and the
+flux3-* profiles are no-ops too.
 """
 
 from __future__ import annotations
@@ -44,6 +51,12 @@ QUALITY_MAX = "max"
 QUALITY_FLUX3_FAST = "flux3-fast"
 QUALITY_FLUX3_QUALITY = "flux3-quality"
 QUALITY_FLUX3_NVFP4 = "flux3-nvfp4"
+# Opt-in Qwen-Image 2.1 tiers: one combo row per download-image --tier, so the
+# combo, the checker, and the CLI all name the same opt-in pack.
+QUALITY_QWEN_IMAGE = "qwen-image"
+QUALITY_QWEN_IMAGE_TURBO = "qwen-image-turbo"
+QUALITY_QWEN_IMAGE_NVFP4 = "qwen-image-nvfp4"
+QUALITY_QWEN_IMAGE_TURBO_NVFP4 = "qwen-image-turbo-nvfp4"
 QUALITY_CHOICES: tuple[str, ...] = (
     QUALITY_CUSTOM,
     QUALITY_DRAFT,
@@ -56,6 +69,10 @@ QUALITY_CHOICES: tuple[str, ...] = (
     QUALITY_FLUX3_FAST,
     QUALITY_FLUX3_QUALITY,
     QUALITY_FLUX3_NVFP4,
+    QUALITY_QWEN_IMAGE,
+    QUALITY_QWEN_IMAGE_TURBO,
+    QUALITY_QWEN_IMAGE_NVFP4,
+    QUALITY_QWEN_IMAGE_TURBO_NVFP4,
 )
 # casefold(widget value) -> canonical QUALITY_CHOICES entry (incl. alias).
 _QUALITY_NORMALIZE: dict[str, str] = {
@@ -67,6 +84,14 @@ FLUX3_QUALITY_CHOICES: tuple[str, ...] = (
     QUALITY_FLUX3_FAST,
     QUALITY_FLUX3_QUALITY,
     QUALITY_FLUX3_NVFP4,
+)
+# Profiles that only ever write on a graph pinning Qwen-Image 2.1 weights.
+# Opt-in only: none of them is a default or a recommended profile.
+QWEN_QUALITY_CHOICES: tuple[str, ...] = (
+    QUALITY_QWEN_IMAGE,
+    QUALITY_QWEN_IMAGE_TURBO,
+    QUALITY_QWEN_IMAGE_NVFP4,
+    QUALITY_QWEN_IMAGE_TURBO_NVFP4,
 )
 
 # Klein filenames, family step/CFG overlays, widget indexes.
@@ -81,6 +106,12 @@ FLUX2_DEV = "flux2_dev_fp8mixed.safetensors"
 KLEIN3_DISTILLED = "flux3-image-klein-int8-convrot.safetensors"
 KLEIN3_BASE = "flux3-image-klein-base-int8-convrot.safetensors"
 KLEIN3_NVFP4 = "flux3-image-klein-base-nvfp4.safetensors"
+# Qwen-Image 2.1 stills (Comfy-Org repack plus the BennyDaBall NVFP4
+# conversions). Opt-in only, Qwen RESEARCH LICENSE AGREEMENT, never a default.
+QWEN_IMAGE_INT8 = "qwen_image_2.1_int8_convrot.safetensors"
+QWEN_IMAGE_TURBO_INT8 = "qwen_image_2.1_turbo_int8_convrot.safetensors"
+QWEN_IMAGE_NVFP4 = "qwen_image_2.1_nvfp4.safetensors"
+QWEN_IMAGE_TURBO_NVFP4 = "qwen_image_2.1_turbo_nvfp4.safetensors"
 
 CLIP_4B = "qwen_3_4b.safetensors"
 CLIP_8B = "qwen_3_8b_fp8mixed.safetensors"
@@ -89,9 +120,16 @@ CLIP_TYPE_FLUX2 = "flux2"
 # KLEIN3 text encoder (Qwen3-VL) plus the optional prompt upsampler.
 KLEIN3_TE = "qwen3vl_4b_int8_convrot.safetensors"
 KLEIN3_UPSAMPLER = "qwen3.5_9b_flux3_prompt_upsampler_int8_convrot.safetensors"
+# Qwen-Image 2.1 text encoders: the Qwen3VL-8B companion, plus the encoder each
+# BennyDaBall NVFP4 pack ships with.
+QWEN_TE = "qwen3vl_8b_int8_convrot.safetensors"
+QWEN_TE_NVFP4 = "qwen3vl_8b_nvfp4.safetensors"
+QWEN_TE_TURBO_NVFP4 = "qwen3vl_8b_turbo_nvfp4.safetensors"
 
 VAE_FULL = "flux2-vae.safetensors"
 VAE_SMALL = "full_encoder_small_decoder.safetensors"
+# Qwen-Image 2.1 VAE, shared by all four opt-in tiers.
+QWEN_VAE = "qwen_image_2.1_vae_bf16.safetensors"
 
 KLEIN_DRAFT_STEPS = 4
 KLEIN_DRAFT_CFG = 1.0
@@ -115,6 +153,18 @@ KLEIN3_QUALITY_STEPS = 50
 KLEIN3_QUALITY_CFG = 3.5
 KLEIN3_NVFP4_STEPS = 50
 KLEIN3_NVFP4_CFG = 3.5
+# Qwen-Image 2.1: the Turbo pair is the distilled sibling, so it takes the same
+# guidance-free low-step recipe FLUX 3 fast uses (16 at CFG 1.0); the non-Turbo
+# pair takes FLUX 3's base recipe (50 at CFG 3.5), and each NVFP4 conversion
+# follows the recipe of the INT8 weight it converts.
+QWEN_QUALITY_STEPS = 50
+QWEN_QUALITY_CFG = 3.5
+QWEN_TURBO_STEPS = 16
+QWEN_TURBO_CFG = 1.0
+QWEN_NVFP4_STEPS = 50
+QWEN_NVFP4_CFG = 3.5
+QWEN_TURBO_NVFP4_STEPS = 16
+QWEN_TURBO_NVFP4_CFG = 1.0
 
 WAN_DRAFT_STEPS = 12
 WAN_STANDARD_STEPS = 20
@@ -279,6 +329,55 @@ def is_klein3_upsampler(name: str) -> bool:
     return "flux3-prompt-upsampler" in _klein3_blob(name)
 
 
+def _qwen_blob(name: str) -> str:
+    """Fold separators in a Qwen-Image filename so needles match either style.
+
+    Args:
+        name: Candidate filename.
+
+    Returns:
+        Lowercased name with dots and underscores folded to dashes.
+    """
+    return name.lower().replace(".", "-").replace("_", "-")
+
+
+def is_qwen_image_unet(name: str) -> bool:
+    """True for opt-in Qwen-Image 2.1 UNET filenames (INT8/NVFP4, both twins).
+
+    Args:
+        name: UNET filename.
+
+    Returns:
+        True when the name is a Qwen-Image 2.1 diffusion weight.
+    """
+    blob = _qwen_blob(name)
+    return "qwen-image-2-1" in blob and ("convrot" in blob or "nvfp4" in blob)
+
+
+def is_qwen_image_clip(name: str) -> bool:
+    """True for the Qwen-Image 2.1 Qwen3VL-8B text-encoder filenames.
+
+    Args:
+        name: CLIP filename.
+
+    Returns:
+        True when the name is a Qwen-Image 2.1 text encoder.
+    """
+    return "qwen3vl-8b" in _qwen_blob(name)
+
+
+def is_qwen_image_vae(name: str) -> bool:
+    """True for the Qwen-Image 2.1 VAE filename.
+
+    Args:
+        name: VAE filename.
+
+    Returns:
+        True when the name is the Qwen-Image 2.1 VAE.
+    """
+    return "qwen-image-2-1-vae" in _qwen_blob(name)
+
+
 def is_wan_14b_unet(name: str) -> bool:
     """True for Wan 14B / A14B filenames (not the 5B lab default).
 
@@ -422,6 +521,13 @@ def resolve_overlay(
         is_klein3_unet(unet_name) or is_klein3_clip(clip_name)
     ):
         return QualityOverlay()
+    # Same for a graph that pins opt-in Qwen-Image 2.1 weights: neither the
+    # Klein ladder nor the FLUX 3 profiles may drop other vendors' weights
+    # onto them, and the reverse guard below keeps the qwen tiers off them.
+    if choice not in QWEN_QUALITY_CHOICES and (
+        is_qwen_image_unet(unet_name) or is_qwen_image_clip(clip_name)
+    ):
+        return QualityOverlay()
     available = _available(available_unets)
     clips = _available(available_clips)
     vaes = _available(available_vaes)
@@ -440,6 +546,11 @@ def resolve_overlay(
 
     if choice in FLUX3_QUALITY_CHOICES:
         return _flux3_overlay(
+            choice, unet_name, clip_name, vae_name, available, clips, vaes
+        )
+
+    if choice in QWEN_QUALITY_CHOICES:
+        return _qwen_image_overlay(
             choice, unet_name, clip_name, vae_name, available, clips, vaes
         )
 
@@ -619,6 +730,58 @@ def _flux3_overlay(
         clip_name=_changed(clip_name, _pick_file(KLEIN3_TE, clips)),
         vae_name=_changed(vae_name, _pick_file(VAE_FULL, vaes)),
         clip_type=CLIP_TYPE_FLUX2,
+    )
+
+
+def _qwen_image_overlay(
+    choice: str,
+    unet_name: str,
+    clip_name: str,
+    vae_name: str,
+    available: set[str],
+    clips: set[str],
+    vaes: set[str],
+) -> QualityOverlay:
+    """Qwen-Image 2.1 profile, or empty when the graph pins other weights.
+
+    Opt-in only: these weights are the Qwen RESEARCH LICENSE AGREEMENT
+    (section 2.b bars commercial use without a separate paid Qwen license), so
+    no tier here is a default or a recommended profile and Klein 4B stays the
+    Apache still. The CLIPLoader type is left authored - the graph authors the
+    Qwen3VL type, and this tier has nothing to rewrite it to.
+
+    Args:
+        choice: One of QWEN_QUALITY_CHOICES.
+        unet_name: Current UNET filename.
+        clip_name: Current CLIP filename.
+        vae_name: Current VAE filename.
+        available: UNET combo options.
+        clips: CLIP combo options.
+        vaes: VAE combo options.
+
+    Returns:
+        Overlay for the pinned Qwen-Image family, or empty for any other family.
+    """
+    if not (is_qwen_image_unet(unet_name) or is_qwen_image_clip(clip_name)):
+        return QualityOverlay()
+    if choice == QUALITY_QWEN_IMAGE:
+        unet, te = QWEN_IMAGE_INT8, QWEN_TE
+        steps, cfg = QWEN_QUALITY_STEPS, QWEN_QUALITY_CFG
+    elif choice == QUALITY_QWEN_IMAGE_TURBO:
+        unet, te = QWEN_IMAGE_TURBO_INT8, QWEN_TE
+        steps, cfg = QWEN_TURBO_STEPS, QWEN_TURBO_CFG
+    elif choice == QUALITY_QWEN_IMAGE_NVFP4:
+        unet, te = QWEN_IMAGE_NVFP4, QWEN_TE_NVFP4
+        steps, cfg = QWEN_NVFP4_STEPS, QWEN_NVFP4_CFG
+    else:
+        unet, te = QWEN_IMAGE_TURBO_NVFP4, QWEN_TE_TURBO_NVFP4
+        steps, cfg = QWEN_TURBO_NVFP4_STEPS, QWEN_TURBO_NVFP4_CFG
+    return QualityOverlay(
+        steps=steps,
+        cfg=cfg,
+        unet_name=_changed(unet_name, _pick_unet(unet, available)),
+        clip_name=_changed(clip_name, _pick_file(te, clips)),
+        vae_name=_changed(vae_name, _pick_file(QWEN_VAE, vaes)),
     )
 
 
@@ -937,6 +1100,7 @@ def apply_to_graph(
                 or is_klein_9b_unet(current)
                 or is_flux2_dev_unet(current)
                 or is_klein3_unet(current)
+                or is_qwen_image_unet(current)
             ):
                 continue
             values[UNET_NAME_INDEX] = overlay.unet_name
@@ -944,7 +1108,11 @@ def apply_to_graph(
             if overlay.clip_name is None or len(values) <= CLIP_NAME_INDEX:
                 continue
             current = str(values[CLIP_NAME_INDEX])
-            if current and not (is_flux2_clip(current) or is_klein3_clip(current)):
+            if current and not (
+                is_flux2_clip(current)
+                or is_klein3_clip(current)
+                or is_qwen_image_clip(current)
+            ):
                 continue
             values[CLIP_NAME_INDEX] = overlay.clip_name
             if overlay.clip_type is not None and len(values) > 1:
@@ -953,7 +1121,7 @@ def apply_to_graph(
             if overlay.vae_name is None or len(values) <= VAE_NAME_INDEX:
                 continue
             current = str(values[VAE_NAME_INDEX])
-            if current and not is_flux2_vae(current):
+            if current and not (is_flux2_vae(current) or is_qwen_image_vae(current)):
                 continue
             values[VAE_NAME_INDEX] = overlay.vae_name
     return graph
@@ -973,6 +1141,9 @@ TRELLIS_UNET = "trellis_2_int8_convrot.safetensors"
 # Graphs that pin FLUX 3 Image Klein still stamp occupancy "klein", so the
 # table needs a family of its own to record their profiles separately.
 QUALITY_FAMILY_KLEIN3 = "klein3"
+# Opt-in Qwen-Image 2.1 stills stamp occupancy "klein" too, and are opt-in (not
+# Apache), so they get their own family rather than riding the Klein ladder.
+QUALITY_FAMILY_QWEN = "qwen"
 
 # resolve_overlay reports only the widgets it would actually change, so the
 # family fixture must classify as the family while differing from every value
@@ -984,10 +1155,14 @@ _KLEIN_TABLE_VAE = VAE_FULL
 _KLEIN3_TABLE_UNET = "flux3-image-klein-distilled-int8-convrot.safetensors"
 _KLEIN3_TABLE_CLIP = "qwen3vl_4b_table_sentinel.safetensors"
 _KLEIN3_TABLE_VAE = VAE_SMALL
+_QWEN_TABLE_UNET = "qwen_image_2.1_base_int8_convrot.safetensors"
+_QWEN_TABLE_CLIP = "qwen3vl_8b_table_sentinel.safetensors"
+_QWEN_TABLE_VAE = VAE_FULL
 
 QUALITY_FAMILIES: tuple[str, ...] = (
     "klein",
     QUALITY_FAMILY_KLEIN3,
+    QUALITY_FAMILY_QWEN,
     "wan",
     "ltx",
     "film",
@@ -1007,6 +1182,11 @@ _FAMILY_PINNED: dict[str, dict[str, str]] = {
         "unet": _KLEIN3_TABLE_UNET,
         "clip": _KLEIN3_TABLE_CLIP,
         "vae": _KLEIN3_TABLE_VAE,
+    },
+    QUALITY_FAMILY_QWEN: {
+        "unet": _QWEN_TABLE_UNET,
+        "clip": _QWEN_TABLE_CLIP,
+        "vae": _QWEN_TABLE_VAE,
     },
     "wan": {"unet": WAN_5B_UNET, "clip": "", "vae": ""},
     "ltx": {"unet": LTX_UNET, "clip": "", "vae": ""},
@@ -1047,6 +1227,14 @@ _ALL_CATALOG_WEIGHTS: frozenset[str] = frozenset(
         KLEIN3_TE,
         VAE_FULL,
         VAE_SMALL,
+        QWEN_IMAGE_INT8,
+        QWEN_IMAGE_TURBO_INT8,
+        QWEN_IMAGE_NVFP4,
+        QWEN_IMAGE_TURBO_NVFP4,
+        QWEN_TE,
+        QWEN_TE_NVFP4,
+        QWEN_TE_TURBO_NVFP4,
+        QWEN_VAE,
         WAN_5B_UNET,
         LTX_UNET,
         TRELLIS_UNET,
@@ -1070,7 +1258,7 @@ def _profile(
     """Resolve one family row against a loader availability set.
 
     Args:
-        family: Occupancy id, or QUALITY_FAMILY_KLEIN3.
+        family: Occupancy id, QUALITY_FAMILY_KLEIN3, or QUALITY_FAMILY_QWEN.
         quality: Combo value.
         available_unets: UNET combo options, None for the whole catalog.
         available_clips: CLIP combo options.
@@ -1085,7 +1273,11 @@ def _profile(
         return QualityOverlay()
     everything = sorted(_ALL_CATALOG_WEIGHTS)
     return resolve_overlay(
-        occupancy="klein" if family == QUALITY_FAMILY_KLEIN3 else family,
+        occupancy=(
+            "klein"
+            if family in (QUALITY_FAMILY_KLEIN3, QUALITY_FAMILY_QWEN)
+            else family
+        ),
         quality=quality,
         authored_steps=authored_steps,
         authored_cfg=1.0,
@@ -1110,7 +1302,7 @@ def tier_profile(
     """Return what one tier asks one family to change.
 
     Args:
-        family: Occupancy id, or QUALITY_FAMILY_KLEIN3.
+        family: Occupancy id, QUALITY_FAMILY_KLEIN3, or QUALITY_FAMILY_QWEN.
         quality: Combo value.
         available_unets: UNET combo options, None for the whole catalog.
         available_clips: CLIP combo options.
@@ -1137,7 +1329,7 @@ def family_owned_fields(family: str) -> tuple[str, ...]:
     one of them does not leave the pre-configured level.
 
     Args:
-        family: Occupancy id, or QUALITY_FAMILY_KLEIN3.
+        family: Occupancy id, QUALITY_FAMILY_KLEIN3, or QUALITY_FAMILY_QWEN.
 
     Returns:
         Field names in OVERLAY_FIELDS order, empty for a no-op family.
@@ -1189,7 +1381,7 @@ def match_tier(
 
     Args:
         observed: Current value per overlay field name.
-        family: Occupancy id, or QUALITY_FAMILY_KLEIN3.
+        family: Occupancy id, QUALITY_FAMILY_KLEIN3, or QUALITY_FAMILY_QWEN.
         authored: Load-time values per overlay field name, when known.
         available_unets: UNET combo options.
         available_clips: CLIP combo options.
@@ -1230,7 +1422,7 @@ def tier_label(family: str, quality: str) -> str:
     names the transformer and the sampler settings it pins.
 
     Args:
-        family: Occupancy id, or QUALITY_FAMILY_KLEIN3.
+        family: Occupancy id, QUALITY_FAMILY_KLEIN3, or QUALITY_FAMILY_QWEN.
         quality: Combo value.
 
     Returns:
