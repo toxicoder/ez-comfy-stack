@@ -29,6 +29,7 @@ filegroup(
         "contribute/host-setup.mdx",
         "contribute/security.mdx",
         "contribute/testing-docs.mdx",
+        "contribute/typing.md",
         "create/app-forge.md",
         "create/audio-rack.md",
         "create/cinema-rack.md",

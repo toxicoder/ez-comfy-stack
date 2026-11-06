@@ -48,7 +48,7 @@ Every rule below traces back to one of these eight.
 | Docs as code | Fumadocs pages with required sections |
 | Keep it small | No K8s/Ansible/dashboard/NCCL |
 | Bazel-first | `bazelisk run //:validate`; Makefile is a shim |
-| Style as gate | ShellCheck + shfmt + Pyright (Pylance) + mypy on every change |
+| Style as gate | ShellCheck + shfmt + Pyright (Pylance) + mypy + `tsc --checkJs` on every change |
 
 ## Bazel-first workflow
 
@@ -127,8 +127,8 @@ This project follows that guide for executables and libraries, with the **intent
 | Libraries | `scripts/lib/*.sh` - `.sh` extension, **not** executable |
 | Entry scripts | `*.sh`, executable, `set -euo pipefail` |
 | ShellCheck | Clean at warning level (`bazelisk test //:lint --test_tag_filters=manual`) |
-| Pyright | Clean at `standard` (`bazelisk test //tests:typecheck`) |
-| mypy | Clean with `disallow_untyped_defs` + `disallow_incomplete_defs` (`bazelisk test //tests:typecheck`; `mypy.ini`) |
+| Pyright | Clean at `standard` plus the extra rules in `pyrightconfig.json` over production (`bazelisk test //tests:typecheck`); the pytest tree ratchets against `lints/pyright_tests_baseline.json` (`bazelisk test //lints:pyright_tests`) |
+| mypy | Clean under `mypy.ini` (production, incl. `disallow_any_explicit`) (`bazelisk test //tests:typecheck`); the pytest tree ratchets under `mypy-tests.ini` against `lints/mypy_tests_baseline.json` (`bazelisk test //lints:mypy_tests`) |
 | SUID/SGID | Forbidden |
 
 ### Intentional deviations from Google
@@ -169,16 +169,18 @@ First-party Python (`custom_nodes`, `docker`, `docs/*.py`, `scripts/lib/*.py`, `
 | Rule | Detail |
 | --- | --- |
 | Annotations | Every def, including `_private` and nested. `from __future__ import annotations` |
-| mypy | `disallow_untyped_defs` and `disallow_incomplete_defs` |
-| Pyright | `standard` (not `strict` - Comfy/torch/bpy stay optional) |
-| `Any` | Only at tensor / `bpy` / optional-import boundaries, with a one-line reason |
-| Behavioral seams | `typing.Protocol` (PEP 544). Small capability interfaces (`ProgressReporter`, `ToolHandler`, `ChatCompleter`, `MediaProbe`). Classes satisfy them structurally - do not inherit |
+| mypy | Production: `mypy.ini` - `disallow_untyped_defs`, `disallow_incomplete_defs`, `disallow_any_generics`, **`disallow_any_explicit`**, `warn_return_any`, `warn_unused_ignores`, `ignore-without-code`. Pytest tree: `mypy-tests.ini` (same, minus `disallow_any_explicit`) under a committed ledger |
+| Pyright | `standard` plus `reportMissingTypeArgument`, `reportUnreachable`, `reportUnnecessaryComparison`, `reportImplicitOverride` (not the `reportUnknown*` family - Comfy/torch/bpy ship no stubs here; and not `reportUnnecessaryTypeIgnoreComment`, which scores mypy-coded ignores against Pyright's own rule names - mypy's `warn_unused_ignores` owns that) |
+| `Any` | Only inside a module `mypy.ini` declares as a boundary (a third-party edge, each with a stated reason) or lists as debt (unfinished first-party work, counted by `DEBT_MODULE_BUDGET`). Elsewhere it is a defect: use a `TypedDict`, a `Literal`, `object`, or a `TYPE_CHECKING` alias of the real third-party class |
+| Tensors and optional deps | `TYPE_CHECKING` alias of the real class (`ImageTensor: TypeAlias = "torch.Tensor"`), never `Any` - the hermetic lane installs no torch, numpy, or bpy |
+| Behavioral seams | `typing.Protocol` (PEP 544). Small capability interfaces (`ProgressReporter`, `ToolHandler`, `ChatCompleter`, `MediaProbe`). Classes satisfy them structurally - do not inherit. `Callable[..., Any]` is banned |
 | Data records | `TypedDict` for JSON/YAML shapes (`Turn`, `JobState`, `ToolSpec`, `HouseLayout`). Do not wrap records in a Protocol |
 | ABC | Not used. Prefer Protocol over `abc.ABC` |
 | Comfy `INPUT_TYPES` | Return `ComfyInputTypes` from `ez_common` via `TYPE_CHECKING` import (no runtime sibling import at module load) |
+| Comfy graphs | `ComfyUiGraph` for shipped `_lab` JSON, `ComfyApiGraph` for `/prompt` payloads, `NodeId` for ids (`ez_common/comfy_graph.py`) |
 | Docstrings | Module + class + every non-dunder function. `Args:` when there are params besides `self`/`cls`; `Returns:` when the annotation is not `None` |
 | Constants | PEP 257 attribute docstring, or one `#` group comment above a contiguous `UPPER_SNAKE` block |
-| Inventory | `tests/python/test_production_docstrings.py` |
+| Inventory | `tests/python/test_production_docstrings.py`; broad-type boundaries: `tests/python/test_strong_types.py` ([Strong types](contribute/typing.md)) |
 
 ```python
 def output_root(*, default: str | Path | None = _DEFAULT_OUTPUT) -> Path:
@@ -192,7 +194,7 @@ def output_root(*, default: str | Path | None = _DEFAULT_OUTPUT) -> Path:
     """
 ```
 
-Custom-node frontends under `custom_nodes/*/js/` use a file `/**` banner and JSDoc `@param` / `@returns` on every `function` (`tests/python/test_jsdoc.py`). Docs site widgets live in `docs-site/components/`.
+Custom-node frontends under `custom_nodes/*/js/` use a file `/**` banner and JSDoc `@param` / `@returns` on every `function`, each carrying a **type expression** (`@param {NodeId} id`), and each pack declares its record shapes with `@typedef {object}` (`tests/python/test_jsdoc.py`, `bazelisk test //lints:js_types`). `{object}` and `{*}` are counted as debt. Docs site widgets live in `docs-site/components/` and are plain TypeScript under `tsconfig.json` `strict`. Policy and recipes: [Strong types](contribute/typing.md).
 
 ### Entry script skeleton
 
@@ -299,14 +301,15 @@ Red, green, refactor, and the tests land in the same commit as the code. The gat
 missing test is a red build rather than a review comment.
 
 - TDD for behavior changes
-- BATS for shell; pytest for Python; **Pyright** (Pylance) and **mypy** for first-party Python
+- BATS for shell; pytest for Python; **Pyright** (Pylance) and **mypy** for first-party Python; **`tsc --checkJs`** for the custom-node JSDoc frontends
 - **Hermetic by default**: `test_helper.bash` sets `LAB_HERMETIC=1`, speed/probe mocks, and `HF_PROGRESS=0` (no real curl/speedtest, no progress-monitor sleeps)
 - **Parallel BATS**: `bats --jobs` across files when GNU `parallel` is installed (`BATS_JOBS` override); serialize within files
 - `bazelisk test //:test-fast` (and `bazelisk test //:coverage`) enforces:
   - **100% Python line coverage** on all first-party production packages (`custom_nodes`, `docker`, `docs`, `scripts/lib`, `studio-ui`, `tools`)
-  - **Pyright** clean at `standard` and **mypy** clean with `disallow_untyped_defs` (`bazelisk test //tests:typecheck`; Comfy/torch/bpy imports are not required)
+  - **Pyright** clean at `standard` plus the extra rules, and **mypy** clean under `mypy.ini` (production - `disallow_untyped_defs` **and** `disallow_any_explicit`) (`bazelisk test //tests:typecheck`; Comfy/torch/bpy imports are not required). The pytest tree runs both checkers under the same rules against committed ledgers that only shrink (`bazelisk test //lints:mypy_tests //lints:pyright_tests`)
   - **Production docstring inventory**: every production class/function has a Google-style docstring (`Args:` / `Returns:` when the signature needs them); constants have a group comment or attribute docstring (`tests/python/test_production_docstrings.py`)
-  - **Custom-node JSDoc**: file banner + JSDoc on `function` declarations (`tests/python/test_jsdoc.py`)
+  - **Custom-node JSDoc**: file banner + JSDoc on `function` declarations, a type expression on every `@param` / `@returns`, and one `@typedef` vocabulary per pack (`tests/python/test_jsdoc.py`, `bazelisk test //lints:js_types`)
+  - **No broad types**: `Any` in production Python only inside a module `mypy.ini` declares as a boundary (stated reason) or lists as debt (budgeted), with `PRODUCTION_ANY_BUDGET`, `PRODUCTION_CAST_BUDGET`, and `DEBT_MODULE_BUDGET` all ratcheted down (`tests/python/test_strong_types.py`); policy in [Strong types](contribute/typing.md)
   - **Strict shell inventory**: every function in `scripts/**/*.sh` and `docker/**/*.sh` must be **invoked by a test** under `tests/` (production-only references do not count)
   - Full BATS suite green
 - **Tests ship with production code** - same commit as the files under test
@@ -323,8 +326,9 @@ flowchart LR
 ```mermaid
 flowchart TB
   Cov["bazelisk test //:test-fast"] --> Py["100% line - first-party Python"]
-  Cov --> Pyright["Pyright standard + mypy untyped-defs - first-party Python"]
+  Cov --> Pyright["Pyright + mypy: production zero-error,<br/>pytest tree ratcheted"]
   Cov --> DocsInv["Production Google docs + JSDoc inventory"]
+  Cov --> JsTypes["tsc --checkJs on custom_nodes/**/*.js<br/>ratcheted baseline"]
   Cov --> Shell["Every scripts/** + docker/** function<br/>invoked under tests/"]
   Cov --> Bats["Full BATS suite green"]
   Lint["bazelisk test //:lint"] --> SC["ShellCheck warnings = defects"]
