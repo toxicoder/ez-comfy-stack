@@ -115,6 +115,39 @@ pinned HF revision `feef60b0aaf63a4773ace96636ebbcf43b881312`, and land in
 Apache Klein 4B (`flux-2-klein-4b-fp8.safetensors`) stays the default still; FLUX 3 is
 opt-in and is never in image `--tier all`. License: [Model licenses](../licenses.md).
 
+Opt-in Qwen-Image 2.1 (`bazelisk run //scripts:run-utility -- download-image run --tier qwen-image`, **not**
+`download-models`). The repos are public and ungated - no `HF_TOKEN`, no license click - but
+every weight below is the **Qwen RESEARCH LICENSE AGREEMENT** (2026-09-20, Hangzhou Tongyi
+Laboratory): section 2.b bars commercial use until you hold a separate paid Qwen license, so
+treat it as a research still, never a monetized-YouTube pick. Redistributing the weights
+means shipping the agreement plus the "Qwen is licensed under the Qwen RESEARCH LICENSE
+AGREEMENT..." attribution, and a product built on the outputs has to show **Built with Qwen**
+in its documentation. The source is the ComfyUI repack `Comfy-Org/Qwen-Image-2.1` at pinned
+HF revision `aacf31a6d48e707f352ecba714cee0680da3479b` - the official
+`Qwen/Qwen-Image-2.1` and `Qwen/Qwen-Image-2.1-Turbo` are diffusers trees ComfyUI cannot load
+here - and the NVFP4 pair comes from the independent BennyDaBall conversions
+`BennyDaBall/Qwen-Image-2.1-NVFP4` (`b0e954a1ba86f00e30f76bac2494f45b0a221948`) and
+`BennyDaBall/Qwen-Image-2.1-Turbo-NVFP4` (`82226d8cadaf20a678338f8faf5e5a0cfc3e1dfd`).
+Weights land in `MODELS_DIR/Comfy-Org__Qwen-Image-2.1_<tier>`, or
+`MODELS_DIR/BennyDaBall__Qwen-Image-2.1-NVFP4_<tier>` /
+`MODELS_DIR/BennyDaBall__Qwen-Image-2.1-Turbo-NVFP4_<tier>` for the conversions:
+
+| File | Comfy folder | Role |
+| --- | --- | --- |
+| `qwen_image_2.1_int8_convrot.safetensors` | `diffusion_models/` | Qwen-Image 2.1 INT8-convrot still UNET (`--tier qwen-image`) |
+| `qwen_image_2.1_turbo_int8_convrot.safetensors` | `diffusion_models/` | Qwen-Image 2.1 Turbo INT8-convrot distilled still (`--tier qwen-image-turbo`) |
+| `qwen_image_2.1_nvfp4.safetensors` | `diffusion_models/` | Qwen-Image 2.1 NVFP4 (`--tier qwen-image-nvfp4`) |
+| `qwen3vl_8b_nvfp4.safetensors` | `text_encoders/` | Qwen3VL-8B NVFP4 TE shipped with that NVFP4 still |
+| `qwen_image_2.1_turbo_nvfp4.safetensors` | `diffusion_models/` | Qwen-Image 2.1 Turbo NVFP4 (`--tier qwen-image-turbo-nvfp4`) |
+| `qwen3vl_8b_turbo_nvfp4.safetensors` | `text_encoders/` | Qwen3VL-8B NVFP4 TE shipped with that Turbo NVFP4 still |
+| `qwen3vl_8b_int8_convrot.safetensors` | `text_encoders/` | Qwen3VL-8B INT8 TE (`--tier qwen-image-te`, auto-included by the two Comfy-Org tiers) |
+| `qwen_image_2.1_vae_bf16.safetensors` | `vae/` | Qwen-Image 2.1 VAE BF16 (`--tier qwen-image-vae`, auto-included by all four still tiers) |
+
+Apache Klein 4B stays the recommended still for anything you publish for money; Qwen-Image
+2.1 is opt-in, is never in `download-models`, and is never in image `--tier all`. The pinned
+ComfyUI (`COMFYUI_REF=v0.43.0`) loads these graphs natively - Qwen-Image-2.1 support landed
+upstream in v0.37.0. License: [Model licenses](../licenses.md).
+
 Opt-in 35B writing desk (`./scripts/manage.sh download-llm --tier qwen36-35b-a3b`, **not**
 `download-models`):
 

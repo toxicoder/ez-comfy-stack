@@ -17,6 +17,7 @@ BUILDER = ROOT / "includes" / "command-builder.json"
 GLOSSARY = ROOT / "includes" / "glossary.json"
 MODELS_PACKS = DOCS / "operate" / "models-packs.md"
 SHORTS = DOCS / "shorts.md"
+TROUBLESHOOTING_DOWNLOADS = DOCS / "operate" / "troubleshooting-downloads.md"
 
 # Usage echo lines list operator-facing pack ids. Companion-only ids (te/vae)
 # stay off this set on purpose. Ignore comment prose ("not in --tier all.").
@@ -37,6 +38,48 @@ FLUX3_IMAGE_TIERS = (
     "flux3-bf16",
     "flux3-te",
     "flux3-pup",
+)
+# Qwen-Image 2.1: opt-in research-licensed stills plus their two companions.
+# Never a default, never in image --tier all, never in download-models.
+QWEN_IMAGE_TIERS = (
+    "qwen-image",
+    "qwen-image-turbo",
+    "qwen-image-nvfp4",
+    "qwen-image-turbo-nvfp4",
+    "qwen-image-te",
+    "qwen-image-vae",
+)
+# Weight basenames the six tiers pull, from the Comfy-Org repack and the two
+# BennyDaBall NVFP4 conversions.
+QWEN_IMAGE_WEIGHTS = (
+    "qwen_image_2.1_int8_convrot.safetensors",
+    "qwen_image_2.1_turbo_int8_convrot.safetensors",
+    "qwen_image_2.1_nvfp4.safetensors",
+    "qwen_image_2.1_turbo_nvfp4.safetensors",
+    "qwen3vl_8b_int8_convrot.safetensors",
+    "qwen3vl_8b_nvfp4.safetensors",
+    "qwen3vl_8b_turbo_nvfp4.safetensors",
+    "qwen_image_2.1_vae_bf16.safetensors",
+)
+# Source repos with their pinned HF revisions. The official Qwen/* repos are
+# diffusers trees the stack never pulls.
+QWEN_IMAGE_SOURCES = (
+    "Comfy-Org/Qwen-Image-2.1",
+    "aacf31a6d48e707f352ecba714cee0680da3479b",
+    "BennyDaBall/Qwen-Image-2.1-NVFP4",
+    "b0e954a1ba86f00e30f76bac2494f45b0a221948",
+    "BennyDaBall/Qwen-Image-2.1-Turbo-NVFP4",
+    "82226d8cadaf20a678338f8faf5e5a0cfc3e1dfd",
+)
+# Per-weight sizes on disk, as advertised on the tiers page.
+QWEN_IMAGE_SIZES = (
+    "7.26 GB",
+    "4.20 GB",
+    "7.55 GB",
+    "5.69 GB",
+    "9.33 GB",
+    "9.35 GB",
+    "0.68 GB",
 )
 LTX_BUILDER_CHOICES = (
     "2.5",
@@ -62,6 +105,21 @@ def _read(path: Path) -> str:
         path = path.with_suffix(".mdx")
     assert path.is_file(), path
     return path.read_text(encoding="utf-8")
+
+
+def _flat(path: Path) -> str:
+    """Return file text lowercased with every run of whitespace collapsed.
+
+    Prose needles are matched against this so a page can rewrap a sentence
+    without breaking the assertion.
+
+    Args:
+        path: Existing file.
+
+    Returns:
+        Lowercased, single-spaced whole-file text.
+    """
+    return " ".join(_read(path).lower().split())
 
 
 def public_tiers_from_script(text: str) -> set[str]:
@@ -230,6 +288,128 @@ def test_command_builder_download_image_choices_cover_flux3() -> None:
     for expected in (*FLUX3_IMAGE_TIERS, "all", "fast"):
         assert expected in values, f"download-image widget missing {expected}"
     assert "all" not in FLUX3_IMAGE_TIERS
+
+
+def test_qwen_image_tiers_are_documented_and_not_in_all() -> None:
+    """Qwen-Image 2.1 packs are opt-in, ungated, and absent from image `all`."""
+    text = _read(DOWNLOAD_TIERS)
+    for tier in QWEN_IMAGE_TIERS:
+        assert f"`{tier}`" in text, f"download-tiers.md missing {tier}"
+        assert f"run --tier {tier}" in text, tier
+        assert "download-image" in text, tier
+    lower = _flat(DOWNLOAD_TIERS)
+    assert "not in `--tier all`" in lower
+    assert "not in `download-models`" in lower or "not in download-models" in lower
+    assert "auto-includes `qwen-image-te`" in lower
+    assert "auto-includes `qwen-image-vae`" in lower
+    for tier in QWEN_IMAGE_TIERS:
+        assert tier in text
+
+
+def test_qwen_image_tiers_are_research_licensed_not_apache() -> None:
+    """The page names the Qwen RESEARCH LICENSE AGREEMENT, never Apache."""
+    text = _read(DOWNLOAD_TIERS)
+    lower = _flat(DOWNLOAD_TIERS)
+    for needle in (
+        "qwen research license agreement",
+        "2026-09-20",
+        "hangzhou tongyi laboratory",
+        "section 2.b",
+        "governing law",
+        "china",
+        "hangzhou",
+        "commercial",
+        "paid qwen license",
+        "built with qwen",
+        "qwen is licensed under the qwen research license agreement",
+    ):
+        assert needle in lower, f"download-tiers.md missing {needle!r}"
+    assert "not apache" in lower
+    assert "klein 4b" in lower
+    for line in text.splitlines():
+        if line.lower().startswith("| `qwen-image"):
+            assert "apache" not in line.lower(), f"qwen row reads as Apache: {line}"
+
+
+def test_qwen_image_weights_sources_and_sizes_are_named() -> None:
+    """Each Qwen-Image row names its file, its repo pin, and its size."""
+    lower = _flat(DOWNLOAD_TIERS)
+    for name in QWEN_IMAGE_WEIGHTS:
+        assert name in lower, f"download-tiers.md missing weight {name}"
+    for source in QWEN_IMAGE_SOURCES:
+        assert source.lower() in lower, f"download-tiers.md missing source {source}"
+    for size in QWEN_IMAGE_SIZES:
+        assert size.lower() in lower, f"download-tiers.md missing size {size}"
+    assert "qwen/qwen-image-2.1" in lower, "official upstream repos must be named"
+    assert "independent" in lower and "conversion" in lower
+
+
+def test_qwen_image_tiers_are_ungated() -> None:
+    """The Qwen-Image repos are public: no token, no license click."""
+    lower = _flat(DOWNLOAD_TIERS)
+    assert "ungated" in lower
+    assert "no `hf_token`" in lower
+    assert "license-accept" in lower or "license accept" in lower
+
+
+def test_image_all_still_excludes_qwen_image_packs() -> None:
+    """Image --tier all never pulls a Qwen-Image 2.1 pack."""
+    text = _read(DOWNLOAD_TIERS)
+    prose = [line for line in text.splitlines() if "--tier all" in line]
+    assert any("qwen-image" in line.lower() for line in prose), (
+        "the image --tier all sentence must name the qwen-image exclusion"
+    )
+    for line in text.splitlines():
+        if line.startswith("| image `all`"):
+            for tier in QWEN_IMAGE_TIERS:
+                assert f"`{tier}`" not in line, f"image all row lists {tier}: {line}"
+
+
+def test_command_builder_download_image_choices_cover_qwen_image() -> None:
+    """The download-image ezcmd widget lists every Qwen-Image pack id."""
+    data = json.loads(_read(BUILDER))
+    commands = {row["id"]: row for row in data["commands"]}
+    assert "download-image" in commands
+    flags = commands["download-image"]["flags"]
+    tier_flag = next(flag for flag in flags if flag["name"] == "tier")
+    values = [choice["value"] for choice in tier_flag["choices"]]
+    for expected in QWEN_IMAGE_TIERS:
+        assert expected in values, f"download-image widget missing {expected}"
+    assert "all" not in QWEN_IMAGE_TIERS
+
+
+def test_models_packs_lists_qwen_image_basenames() -> None:
+    """The packs page names every Qwen-Image basename and its Comfy folder."""
+    lower = _flat(MODELS_PACKS)
+    for name in QWEN_IMAGE_WEIGHTS:
+        assert name in lower, f"models-packs.md missing basename {name}"
+    for needle in (
+        "qwen research license agreement",
+        "commercial",
+        "built with qwen",
+        "klein 4b",
+        "comfy-org/qwen-image-2.1",
+        "bennydaball",
+        "download-models",
+        "diffusion_models/",
+        "text_encoders/",
+        "vae/",
+    ):
+        assert needle in lower, f"models-packs.md missing {needle!r}"
+
+
+def test_troubleshooting_downloads_names_the_qwen_image_symptoms() -> None:
+    """The downloads page covers the two Qwen-Image operator traps."""
+    text = _read(TROUBLESHOOTING_DOWNLOADS)
+    for needle in ("title:", "description:", "tags:"):
+        assert needle in text, needle
+    lower = _flat(TROUBLESHOOTING_DOWNLOADS)
+    assert "qwen-image" in lower
+    assert "run --tier qwen-image" in lower
+    assert "opt-in" in lower
+    assert "checkpoint" in lower
+    assert "diffusers" in lower
+    assert "comfy-org/qwen-image-2.1" in lower
 
 
 def test_download_models_has_no_tier() -> None:
