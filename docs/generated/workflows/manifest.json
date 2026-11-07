@@ -7,6 +7,18 @@
       "kind": "index"
     },
     {
+      "id": "3d/still-to-mesh",
+      "path": "generated/workflows/3d/still-to-mesh.md",
+      "lane": "3d",
+      "kind": "graph"
+    },
+    {
+      "id": "3d/trellis2",
+      "path": "generated/workflows/3d/trellis2.md",
+      "lane": "3d",
+      "kind": "graph"
+    },
+    {
       "id": "audio/dub/clone-translate",
       "path": "generated/workflows/audio/dub/clone-translate.md",
       "lane": "audio",
@@ -49,2469 +61,2457 @@
       "kind": "graph"
     },
     {
-      "id": "creator/av/asmr-macro",
-      "path": "generated/workflows/creator/av/asmr-macro.md",
-      "lane": "creator",
+      "id": "business/b2b-saas/case-cover",
+      "path": "generated/workflows/business/b2b-saas/case-cover.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/av/crowd-ambience",
-      "path": "generated/workflows/creator/av/crowd-ambience.md",
-      "lane": "creator",
+      "id": "business/b2b-saas/changelog-card",
+      "path": "generated/workflows/business/b2b-saas/changelog-card.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/av/desk-work",
-      "path": "generated/workflows/creator/av/desk-work.md",
-      "lane": "creator",
+      "id": "business/b2b-saas/culture-still",
+      "path": "generated/workflows/business/b2b-saas/culture-still.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/av/fashion-turn",
-      "path": "generated/workflows/creator/av/fashion-turn.md",
-      "lane": "creator",
+      "id": "business/b2b-saas/cursor-demo-av",
+      "path": "generated/workflows/business/b2b-saas/cursor-demo-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/av/fireplace",
-      "path": "generated/workflows/creator/av/fireplace.md",
-      "lane": "creator",
+      "id": "business/b2b-saas/customer-story-av",
+      "path": "generated/workflows/business/b2b-saas/customer-story-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/av/instagram-reel-lifestyle",
-      "path": "generated/workflows/creator/av/instagram-reel-lifestyle.md",
-      "lane": "creator",
+      "id": "business/b2b-saas/diagram-bed",
+      "path": "generated/workflows/business/b2b-saas/diagram-bed.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/av/interior-walk",
-      "path": "generated/workflows/creator/av/interior-walk.md",
-      "lane": "creator",
+      "id": "business/b2b-saas/ebook-cover",
+      "path": "generated/workflows/business/b2b-saas/ebook-cover.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/av/music-visual",
-      "path": "generated/workflows/creator/av/music-visual.md",
-      "lane": "creator",
+      "id": "business/b2b-saas/explainer-av",
+      "path": "generated/workflows/business/b2b-saas/explainer-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/av/podcast-set",
-      "path": "generated/workflows/creator/av/podcast-set.md",
-      "lane": "creator",
+      "id": "business/b2b-saas/feature-card",
+      "path": "generated/workflows/business/b2b-saas/feature-card.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/av/product-unbox-av",
-      "path": "generated/workflows/creator/av/product-unbox-av.md",
-      "lane": "creator",
+      "id": "business/b2b-saas/founder-still",
+      "path": "generated/workflows/business/b2b-saas/founder-still.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/av/rain-window",
-      "path": "generated/workflows/creator/av/rain-window.md",
-      "lane": "creator",
+      "id": "business/b2b-saas/keynote-still",
+      "path": "generated/workflows/business/b2b-saas/keynote-still.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/av/recipe-pour",
-      "path": "generated/workflows/creator/av/recipe-pour.md",
-      "lane": "creator",
+      "id": "business/b2b-saas/launch-still",
+      "path": "generated/workflows/business/b2b-saas/launch-still.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/av/tiktok-broll",
-      "path": "generated/workflows/creator/av/tiktok-broll.md",
-      "lane": "creator",
+      "id": "business/b2b-saas/office-broll-av",
+      "path": "generated/workflows/business/b2b-saas/office-broll-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/av/travel-establishing",
-      "path": "generated/workflows/creator/av/travel-establishing.md",
-      "lane": "creator",
+      "id": "business/b2b-saas/office-wide",
+      "path": "generated/workflows/business/b2b-saas/office-wide.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/av/twitch-starting-av",
-      "path": "generated/workflows/creator/av/twitch-starting-av.md",
-      "lane": "creator",
+      "id": "business/b2b-saas/pricing-bed",
+      "path": "generated/workflows/business/b2b-saas/pricing-bed.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/av/workout-rep",
-      "path": "generated/workflows/creator/av/workout-rep.md",
-      "lane": "creator",
+      "id": "business/b2b-saas/report-cover",
+      "path": "generated/workflows/business/b2b-saas/report-cover.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/av/workshop-tools",
-      "path": "generated/workflows/creator/av/workshop-tools.md",
-      "lane": "creator",
+      "id": "business/b2b-saas/ship-day-av",
+      "path": "generated/workflows/business/b2b-saas/ship-day-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/av/youtube-outro-av",
-      "path": "generated/workflows/creator/av/youtube-outro-av.md",
-      "lane": "creator",
+      "id": "business/b2b-saas/ui-hero",
+      "path": "generated/workflows/business/b2b-saas/ui-hero.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/candle-loop",
-      "path": "generated/workflows/creator/silent/candle-loop.md",
-      "lane": "creator",
+      "id": "business/b2b-saas/webinar-open-av",
+      "path": "generated/workflows/business/b2b-saas/webinar-open-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/city-night",
-      "path": "generated/workflows/creator/silent/city-night.md",
-      "lane": "creator",
+      "id": "business/b2b-saas/webinar-thumb",
+      "path": "generated/workflows/business/b2b-saas/webinar-thumb.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/confetti-loop",
-      "path": "generated/workflows/creator/silent/confetti-loop.md",
-      "lane": "creator",
+      "id": "business/ecommerce/assemble-av",
+      "path": "generated/workflows/business/ecommerce/assemble-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/fabric-breeze",
-      "path": "generated/workflows/creator/silent/fabric-breeze.md",
-      "lane": "creator",
+      "id": "business/ecommerce/bundle-flatlay",
+      "path": "generated/workflows/business/ecommerce/bundle-flatlay.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/handheld-vlog",
-      "path": "generated/workflows/creator/silent/handheld-vlog.md",
-      "lane": "creator",
+      "id": "business/ecommerce/cart-upsell-bg",
+      "path": "generated/workflows/business/ecommerce/cart-upsell-bg.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/instagram-story-loop",
-      "path": "generated/workflows/creator/silent/instagram-story-loop.md",
-      "lane": "creator",
+      "id": "business/ecommerce/collection-banner",
+      "path": "generated/workflows/business/ecommerce/collection-banner.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/ken-burns",
-      "path": "generated/workflows/creator/silent/ken-burns.md",
-      "lane": "creator",
+      "id": "business/ecommerce/drape-loop",
+      "path": "generated/workflows/business/ecommerce/drape-loop.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/light-leak-loop",
-      "path": "generated/workflows/creator/silent/light-leak-loop.md",
-      "lane": "creator",
+      "id": "business/ecommerce/drop-tease",
+      "path": "generated/workflows/business/ecommerce/drop-tease.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/logo-sting",
-      "path": "generated/workflows/creator/silent/logo-sting.md",
-      "lane": "creator",
+      "id": "business/ecommerce/gift-set-still",
+      "path": "generated/workflows/business/ecommerce/gift-set-still.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/lyric-bg-loop",
-      "path": "generated/workflows/creator/silent/lyric-bg-loop.md",
-      "lane": "creator",
+      "id": "business/ecommerce/marketplace-lifestyle",
+      "path": "generated/workflows/business/ecommerce/marketplace-lifestyle.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/macro-product",
-      "path": "generated/workflows/creator/silent/macro-product.md",
-      "lane": "creator",
+      "id": "business/ecommerce/marketplace-square",
+      "path": "generated/workflows/business/ecommerce/marketplace-square.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/pan-left",
-      "path": "generated/workflows/creator/silent/pan-left.md",
-      "lane": "creator",
+      "id": "business/ecommerce/pdp-hand-scale",
+      "path": "generated/workflows/business/ecommerce/pdp-hand-scale.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/paper-flip",
-      "path": "generated/workflows/creator/silent/paper-flip.md",
-      "lane": "creator",
+      "id": "business/ecommerce/pdp-in-use",
+      "path": "generated/workflows/business/ecommerce/pdp-in-use.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/product-spin",
-      "path": "generated/workflows/creator/silent/product-spin.md",
-      "lane": "creator",
+      "id": "business/ecommerce/pdp-on-white",
+      "path": "generated/workflows/business/ecommerce/pdp-on-white.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/screen-bg-loop",
-      "path": "generated/workflows/creator/silent/screen-bg-loop.md",
-      "lane": "creator",
+      "id": "business/ecommerce/pdp-pack-back",
+      "path": "generated/workflows/business/ecommerce/pdp-pack-back.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/spotify-canvas",
-      "path": "generated/workflows/creator/silent/spotify-canvas.md",
-      "lane": "creator",
+      "id": "business/ecommerce/pdp-texture-macro",
+      "path": "generated/workflows/business/ecommerce/pdp-texture-macro.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/steam-loop",
-      "path": "generated/workflows/creator/silent/steam-loop.md",
-      "lane": "creator",
+      "id": "business/ecommerce/pour-fill-loop",
+      "path": "generated/workflows/business/ecommerce/pour-fill-loop.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/tiktok-hook",
-      "path": "generated/workflows/creator/silent/tiktok-hook.md",
-      "lane": "creator",
+      "id": "business/ecommerce/restock-story",
+      "path": "generated/workflows/business/ecommerce/restock-story.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/tilt-reveal",
-      "path": "generated/workflows/creator/silent/tilt-reveal.md",
-      "lane": "creator",
+      "id": "business/ecommerce/shelf-scan-av",
+      "path": "generated/workflows/business/ecommerce/shelf-scan-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/twitch-brb-loop",
-      "path": "generated/workflows/creator/silent/twitch-brb-loop.md",
-      "lane": "creator",
+      "id": "business/ecommerce/table-unbox-av",
+      "path": "generated/workflows/business/ecommerce/table-unbox-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/twitch-starting-loop",
-      "path": "generated/workflows/creator/silent/twitch-starting-loop.md",
-      "lane": "creator",
+      "id": "business/ecommerce/turntable-loop",
+      "path": "generated/workflows/business/ecommerce/turntable-loop.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/unbox-hands",
-      "path": "generated/workflows/creator/silent/unbox-hands.md",
-      "lane": "creator",
+      "id": "business/ecommerce/wear-test-av",
+      "path": "generated/workflows/business/ecommerce/wear-test-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/x-post-5s",
-      "path": "generated/workflows/creator/silent/x-post-5s.md",
-      "lane": "creator",
+      "id": "business/education/board-still",
+      "path": "generated/workflows/business/education/board-still.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/youtube-subscribe-bump",
-      "path": "generated/workflows/creator/silent/youtube-subscribe-bump.md",
-      "lane": "creator",
+      "id": "business/education/campus-wide",
+      "path": "generated/workflows/business/education/campus-wide.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/silent/zoom-punch",
-      "path": "generated/workflows/creator/silent/zoom-punch.md",
-      "lane": "creator",
+      "id": "business/education/certificate-bed",
+      "path": "generated/workflows/business/education/certificate-bed.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/album-cover",
-      "path": "generated/workflows/creator/stills/album-cover.md",
-      "lane": "creator",
+      "id": "business/education/cohort-announce",
+      "path": "generated/workflows/business/education/cohort-announce.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/audiogram-vert",
-      "path": "generated/workflows/creator/stills/audiogram-vert.md",
-      "lane": "creator",
+      "id": "business/education/course-thumb",
+      "path": "generated/workflows/business/education/course-thumb.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/audiogram-wide",
-      "path": "generated/workflows/creator/stills/audiogram-wide.md",
-      "lane": "creator",
+      "id": "business/education/course-trailer-av",
+      "path": "generated/workflows/business/education/course-trailer-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/brand-kit-4",
-      "path": "generated/workflows/creator/stills/brand-kit-4.md",
-      "lane": "creator",
+      "id": "business/education/graduation-av",
+      "path": "generated/workflows/business/education/graduation-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/coming-soon",
-      "path": "generated/workflows/creator/stills/coming-soon.md",
-      "lane": "creator",
+      "id": "business/education/instructor-still",
+      "path": "generated/workflows/business/education/instructor-still.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/desk-setup",
-      "path": "generated/workflows/creator/stills/desk-setup.md",
-      "lane": "creator",
+      "id": "business/education/lab-bench",
+      "path": "generated/workflows/business/education/lab-bench.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/email-header",
-      "path": "generated/workflows/creator/stills/email-header.md",
-      "lane": "creator",
+      "id": "business/education/lab-demo-av",
+      "path": "generated/workflows/business/education/lab-demo-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/episode-art",
-      "path": "generated/workflows/creator/stills/episode-art.md",
-      "lane": "creator",
+      "id": "business/education/lecture-av",
+      "path": "generated/workflows/business/education/lecture-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/facebook-post",
-      "path": "generated/workflows/creator/stills/facebook-post.md",
-      "lane": "creator",
+      "id": "business/education/lesson-title",
+      "path": "generated/workflows/business/education/lesson-title.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/instagram-carousel-5",
-      "path": "generated/workflows/creator/stills/instagram-carousel-5.md",
-      "lane": "creator",
+      "id": "business/education/module-card",
+      "path": "generated/workflows/business/education/module-card.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/instagram-grid-3up",
-      "path": "generated/workflows/creator/stills/instagram-grid-3up.md",
-      "lane": "creator",
+      "id": "business/education/office-hours-av",
+      "path": "generated/workflows/business/education/office-hours-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/instagram-highlight",
-      "path": "generated/workflows/creator/stills/instagram-highlight.md",
-      "lane": "creator",
+      "id": "business/education/recap-sting",
+      "path": "generated/workflows/business/education/recap-sting.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/instagram-landscape",
-      "path": "generated/workflows/creator/stills/instagram-landscape.md",
-      "lane": "creator",
+      "id": "business/education/screencast-loop",
+      "path": "generated/workflows/business/education/screencast-loop.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/instagram-portrait",
-      "path": "generated/workflows/creator/stills/instagram-portrait.md",
-      "lane": "creator",
+      "id": "business/education/slide-break",
+      "path": "generated/workflows/business/education/slide-break.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/instagram-profile",
-      "path": "generated/workflows/creator/stills/instagram-profile.md",
-      "lane": "creator",
+      "id": "business/education/student-desk",
+      "path": "generated/workflows/business/education/student-desk.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/instagram-reel-cover",
-      "path": "generated/workflows/creator/stills/instagram-reel-cover.md",
-      "lane": "creator",
+      "id": "business/education/syllabus-header",
+      "path": "generated/workflows/business/education/syllabus-header.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/instagram-story",
-      "path": "generated/workflows/creator/stills/instagram-story.md",
-      "lane": "creator",
+      "id": "business/education/waitlist-cover",
+      "path": "generated/workflows/business/education/waitlist-cover.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/linkedin-article",
-      "path": "generated/workflows/creator/stills/linkedin-article.md",
-      "lane": "creator",
+      "id": "business/events-wedding/aftermovie-hook-av",
+      "path": "generated/workflows/business/events-wedding/aftermovie-hook-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/linkedin-banner",
-      "path": "generated/workflows/creator/stills/linkedin-banner.md",
-      "lane": "creator",
+      "id": "business/events-wedding/badge-bed",
+      "path": "generated/workflows/business/events-wedding/badge-bed.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/linkedin-carousel-5",
-      "path": "generated/workflows/creator/stills/linkedin-carousel-5.md",
-      "lane": "creator",
+      "id": "business/events-wedding/conference-av",
+      "path": "generated/workflows/business/events-wedding/conference-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/linkedin-landscape",
-      "path": "generated/workflows/creator/stills/linkedin-landscape.md",
-      "lane": "creator",
+      "id": "business/events-wedding/dance-floor-av",
+      "path": "generated/workflows/business/events-wedding/dance-floor-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/linkedin-post",
-      "path": "generated/workflows/creator/stills/linkedin-post.md",
-      "lane": "creator",
+      "id": "business/events-wedding/details-flatlay",
+      "path": "generated/workflows/business/events-wedding/details-flatlay.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/lyric-card",
-      "path": "generated/workflows/creator/stills/lyric-card.md",
-      "lane": "creator",
+      "id": "business/events-wedding/first-look",
+      "path": "generated/workflows/business/events-wedding/first-look.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/merch-mug",
-      "path": "generated/workflows/creator/stills/merch-mug.md",
-      "lane": "creator",
+      "id": "business/events-wedding/highlight-still",
+      "path": "generated/workflows/business/events-wedding/highlight-still.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/merch-tee",
-      "path": "generated/workflows/creator/stills/merch-tee.md",
-      "lane": "creator",
+      "id": "business/events-wedding/invite-bed",
+      "path": "generated/workflows/business/events-wedding/invite-bed.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/moodboard-6up",
-      "path": "generated/workflows/creator/stills/moodboard-6up.md",
-      "lane": "creator",
+      "id": "business/events-wedding/processional-av",
+      "path": "generated/workflows/business/events-wedding/processional-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/patreon-post",
-      "path": "generated/workflows/creator/stills/patreon-post.md",
-      "lane": "creator",
+      "id": "business/events-wedding/program-cover",
+      "path": "generated/workflows/business/events-wedding/program-cover.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/pinterest-pin",
-      "path": "generated/workflows/creator/stills/pinterest-pin.md",
-      "lane": "creator",
+      "id": "business/events-wedding/recap-av",
+      "path": "generated/workflows/business/events-wedding/recap-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/pinterest-story",
-      "path": "generated/workflows/creator/stills/pinterest-story.md",
-      "lane": "creator",
+      "id": "business/events-wedding/rehearsal-av",
+      "path": "generated/workflows/business/events-wedding/rehearsal-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/poster-portrait",
-      "path": "generated/workflows/creator/stills/poster-portrait.md",
-      "lane": "creator",
+      "id": "business/events-wedding/save-the-date",
+      "path": "generated/workflows/business/events-wedding/save-the-date.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/product-lifestyle",
-      "path": "generated/workflows/creator/stills/product-lifestyle.md",
-      "lane": "creator",
+      "id": "business/events-wedding/sparkler-exit-av",
+      "path": "generated/workflows/business/events-wedding/sparkler-exit-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/slide-title",
-      "path": "generated/workflows/creator/stills/slide-title.md",
-      "lane": "creator",
+      "id": "business/events-wedding/speaker-still",
+      "path": "generated/workflows/business/events-wedding/speaker-still.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/spotify-canvas-still",
-      "path": "generated/workflows/creator/stills/spotify-canvas-still.md",
-      "lane": "creator",
+      "id": "business/events-wedding/sponsor-slate",
+      "path": "generated/workflows/business/events-wedding/sponsor-slate.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/spotify-playlist",
-      "path": "generated/workflows/creator/stills/spotify-playlist.md",
-      "lane": "creator",
+      "id": "business/events-wedding/table-bed",
+      "path": "generated/workflows/business/events-wedding/table-bed.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/substack-hero",
-      "path": "generated/workflows/creator/stills/substack-hero.md",
-      "lane": "creator",
+      "id": "business/events-wedding/trailer-av",
+      "path": "generated/workflows/business/events-wedding/trailer-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/threads-portrait",
-      "path": "generated/workflows/creator/stills/threads-portrait.md",
-      "lane": "creator",
+      "id": "business/events-wedding/venue-wide",
+      "path": "generated/workflows/business/events-wedding/venue-wide.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/tiktok-cover",
-      "path": "generated/workflows/creator/stills/tiktok-cover.md",
-      "lane": "creator",
+      "id": "business/events-wedding/welcome-sign",
+      "path": "generated/workflows/business/events-wedding/welcome-sign.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/tiktok-shop",
-      "path": "generated/workflows/creator/stills/tiktok-shop.md",
-      "lane": "creator",
+      "id": "business/fashion-beauty/beauty-pack",
+      "path": "generated/workflows/business/fashion-beauty/beauty-pack.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/twitch-banner",
-      "path": "generated/workflows/creator/stills/twitch-banner.md",
-      "lane": "creator",
+      "id": "business/fashion-beauty/beauty-unbox-av",
+      "path": "generated/workflows/business/fashion-beauty/beauty-unbox-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/twitch-brb",
-      "path": "generated/workflows/creator/stills/twitch-brb.md",
-      "lane": "creator",
+      "id": "business/fashion-beauty/campaign-av",
+      "path": "generated/workflows/business/fashion-beauty/campaign-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/twitch-ending",
-      "path": "generated/workflows/creator/stills/twitch-ending.md",
-      "lane": "creator",
+      "id": "business/fashion-beauty/campaign-hero",
+      "path": "generated/workflows/business/fashion-beauty/campaign-hero.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/twitch-offline",
-      "path": "generated/workflows/creator/stills/twitch-offline.md",
-      "lane": "creator",
+      "id": "business/fashion-beauty/editorial-still",
+      "path": "generated/workflows/business/fashion-beauty/editorial-still.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/twitch-overlay",
-      "path": "generated/workflows/creator/stills/twitch-overlay.md",
-      "lane": "creator",
+      "id": "business/fashion-beauty/fabric-twirl-av",
+      "path": "generated/workflows/business/fashion-beauty/fabric-twirl-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/twitch-panel",
-      "path": "generated/workflows/creator/stills/twitch-panel.md",
-      "lane": "creator",
+      "id": "business/fashion-beauty/fitting-av",
+      "path": "generated/workflows/business/fashion-beauty/fitting-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/twitch-profile",
-      "path": "generated/workflows/creator/stills/twitch-profile.md",
-      "lane": "creator",
+      "id": "business/fashion-beauty/get-ready-av",
+      "path": "generated/workflows/business/fashion-beauty/get-ready-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/twitch-starting",
-      "path": "generated/workflows/creator/stills/twitch-starting.md",
-      "lane": "creator",
+      "id": "business/fashion-beauty/glow-loop",
+      "path": "generated/workflows/business/fashion-beauty/glow-loop.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/x-card",
-      "path": "generated/workflows/creator/stills/x-card.md",
-      "lane": "creator",
+      "id": "business/fashion-beauty/hair-loop",
+      "path": "generated/workflows/business/fashion-beauty/hair-loop.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/x-header",
-      "path": "generated/workflows/creator/stills/x-header.md",
-      "lane": "creator",
+      "id": "business/fashion-beauty/look-back",
+      "path": "generated/workflows/business/fashion-beauty/look-back.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/x-post",
-      "path": "generated/workflows/creator/stills/x-post.md",
-      "lane": "creator",
+      "id": "business/fashion-beauty/look-detail",
+      "path": "generated/workflows/business/fashion-beauty/look-detail.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/youtube-channel-art",
-      "path": "generated/workflows/creator/stills/youtube-channel-art.md",
-      "lane": "creator",
+      "id": "business/fashion-beauty/look-full",
+      "path": "generated/workflows/business/fashion-beauty/look-full.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/youtube-channel-icon",
-      "path": "generated/workflows/creator/stills/youtube-channel-icon.md",
-      "lane": "creator",
+      "id": "business/fashion-beauty/lookbook-cover",
+      "path": "generated/workflows/business/fashion-beauty/lookbook-cover.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/youtube-chapter-card",
-      "path": "generated/workflows/creator/stills/youtube-chapter-card.md",
-      "lane": "creator",
+      "id": "business/fashion-beauty/makeup-step",
+      "path": "generated/workflows/business/fashion-beauty/makeup-step.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/youtube-community",
-      "path": "generated/workflows/creator/stills/youtube-community.md",
-      "lane": "creator",
+      "id": "business/fashion-beauty/nail-loop",
+      "path": "generated/workflows/business/fashion-beauty/nail-loop.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/youtube-end-screen",
-      "path": "generated/workflows/creator/stills/youtube-end-screen.md",
-      "lane": "creator",
+      "id": "business/fashion-beauty/street-look",
+      "path": "generated/workflows/business/fashion-beauty/street-look.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/youtube-shorts-thumb",
-      "path": "generated/workflows/creator/stills/youtube-shorts-thumb.md",
-      "lane": "creator",
+      "id": "business/fashion-beauty/swatch-macro",
+      "path": "generated/workflows/business/fashion-beauty/swatch-macro.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/youtube-subscribe-plate",
-      "path": "generated/workflows/creator/stills/youtube-subscribe-plate.md",
-      "lane": "creator",
+      "id": "business/fashion-beauty/texture-fill",
+      "path": "generated/workflows/business/fashion-beauty/texture-fill.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "creator/stills/zoom-bg",
-      "path": "generated/workflows/creator/stills/zoom-bg.md",
-      "lane": "creator",
+      "id": "business/fashion-beauty/walk-av",
+      "path": "generated/workflows/business/fashion-beauty/walk-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "dcc/canny-control-8s",
-      "path": "generated/workflows/dcc/canny-control-8s.md",
-      "lane": "dcc",
+      "id": "business/fitness-travel/check-in-av",
+      "path": "generated/workflows/business/fitness-travel/check-in-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "dcc/canny-hero",
-      "path": "generated/workflows/dcc/canny-hero.md",
-      "lane": "dcc",
+      "id": "business/fitness-travel/city-arrive",
+      "path": "generated/workflows/business/fitness-travel/city-arrive.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "dcc/clay-hero",
-      "path": "generated/workflows/dcc/clay-hero.md",
-      "lane": "dcc",
+      "id": "business/fitness-travel/class-av",
+      "path": "generated/workflows/business/fitness-travel/class-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "dcc/clay-plates",
-      "path": "generated/workflows/dcc/clay-plates.md",
-      "lane": "dcc",
+      "id": "business/fitness-travel/coach-still",
+      "path": "generated/workflows/business/fitness-travel/coach-still.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "dcc/depth-control-8s",
-      "path": "generated/workflows/dcc/depth-control-8s.md",
-      "lane": "dcc",
+      "id": "business/fitness-travel/gym-wide",
+      "path": "generated/workflows/business/fitness-travel/gym-wide.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "dcc/depth-control-shorts",
-      "path": "generated/workflows/dcc/depth-control-shorts.md",
-      "lane": "dcc",
+      "id": "business/fitness-travel/home-gym",
+      "path": "generated/workflows/business/fitness-travel/home-gym.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "dcc/depth-from-loader",
-      "path": "generated/workflows/dcc/depth-from-loader.md",
-      "lane": "dcc",
+      "id": "business/fitness-travel/meal-prep",
+      "path": "generated/workflows/business/fitness-travel/meal-prep.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "dcc/first-last-from-guide",
-      "path": "generated/workflows/dcc/first-last-from-guide.md",
-      "lane": "dcc",
+      "id": "business/fitness-travel/move-still",
+      "path": "generated/workflows/business/fitness-travel/move-still.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "dcc/guide-still",
-      "path": "generated/workflows/dcc/guide-still.md",
-      "lane": "dcc",
+      "id": "business/fitness-travel/packing-av",
+      "path": "generated/workflows/business/fitness-travel/packing-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "dcc/still-to-mesh",
-      "path": "generated/workflows/dcc/still-to-mesh.md",
-      "lane": "dcc",
+      "id": "business/fitness-travel/pool-still",
+      "path": "generated/workflows/business/fitness-travel/pool-still.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "editing/generate-cutaway",
-      "path": "generated/workflows/editing/generate-cutaway.md",
-      "lane": "editing",
+      "id": "business/fitness-travel/recovery-still",
+      "path": "generated/workflows/business/fitness-travel/recovery-still.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/breakwater/act-01",
-      "path": "generated/workflows/films/breakwater/act-01.md",
-      "lane": "films",
+      "id": "business/fitness-travel/rep-loop",
+      "path": "generated/workflows/business/fitness-travel/rep-loop.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/breakwater/act-02",
-      "path": "generated/workflows/films/breakwater/act-02.md",
-      "lane": "films",
+      "id": "business/fitness-travel/resort-hero",
+      "path": "generated/workflows/business/fitness-travel/resort-hero.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/breakwater/act-03",
-      "path": "generated/workflows/films/breakwater/act-03.md",
-      "lane": "films",
+      "id": "business/fitness-travel/room-still",
+      "path": "generated/workflows/business/fitness-travel/room-still.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/breakwater/act-04",
-      "path": "generated/workflows/films/breakwater/act-04.md",
-      "lane": "films",
+      "id": "business/fitness-travel/stretch-loop",
+      "path": "generated/workflows/business/fitness-travel/stretch-loop.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/breakwater/act-05",
-      "path": "generated/workflows/films/breakwater/act-05.md",
-      "lane": "films",
+      "id": "business/fitness-travel/sunset-av",
+      "path": "generated/workflows/business/fitness-travel/sunset-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/glasshouse/act-01",
-      "path": "generated/workflows/films/glasshouse/act-01.md",
-      "lane": "films",
+      "id": "business/fitness-travel/tour-av",
+      "path": "generated/workflows/business/fitness-travel/tour-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/glasshouse/act-02",
-      "path": "generated/workflows/films/glasshouse/act-02.md",
-      "lane": "films",
+      "id": "business/fitness-travel/trail-still",
+      "path": "generated/workflows/business/fitness-travel/trail-still.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/glasshouse/act-03",
-      "path": "generated/workflows/films/glasshouse/act-03.md",
-      "lane": "films",
+      "id": "business/fitness-travel/waves-loop",
+      "path": "generated/workflows/business/fitness-travel/waves-loop.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/glasshouse/act-04",
-      "path": "generated/workflows/films/glasshouse/act-04.md",
-      "lane": "films",
+      "id": "business/fitness-travel/workout-av",
+      "path": "generated/workflows/business/fitness-travel/workout-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/glasshouse/act-05",
-      "path": "generated/workflows/films/glasshouse/act-05.md",
-      "lane": "films",
+      "id": "business/local-business/class-in-session-av",
+      "path": "generated/workflows/business/local-business/class-in-session-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/go-see",
-      "path": "generated/workflows/films/go-see.md",
-      "lane": "films",
+      "id": "business/local-business/close-up-av",
+      "path": "generated/workflows/business/local-business/close-up-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/last-lane/act-01",
-      "path": "generated/workflows/films/last-lane/act-01.md",
-      "lane": "films",
+      "id": "business/local-business/gym-floor",
+      "path": "generated/workflows/business/local-business/gym-floor.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/last-lane/act-02",
-      "path": "generated/workflows/films/last-lane/act-02.md",
-      "lane": "films",
+      "id": "business/local-business/hours-bed",
+      "path": "generated/workflows/business/local-business/hours-bed.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/last-lane/act-03",
-      "path": "generated/workflows/films/last-lane/act-03.md",
-      "lane": "films",
+      "id": "business/local-business/interior-detail",
+      "path": "generated/workflows/business/local-business/interior-detail.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/last-lane/act-04",
-      "path": "generated/workflows/films/last-lane/act-04.md",
-      "lane": "films",
+      "id": "business/local-business/interior-wide",
+      "path": "generated/workflows/business/local-business/interior-wide.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/last-lane/act-05",
-      "path": "generated/workflows/films/last-lane/act-05.md",
-      "lane": "films",
+      "id": "business/local-business/kitchen-pass-av",
+      "path": "generated/workflows/business/local-business/kitchen-pass-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/night-oven/act-01",
-      "path": "generated/workflows/films/night-oven/act-01.md",
-      "lane": "films",
+      "id": "business/local-business/maps-cover",
+      "path": "generated/workflows/business/local-business/maps-cover.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/night-oven/act-02",
-      "path": "generated/workflows/films/night-oven/act-02.md",
-      "lane": "films",
+      "id": "business/local-business/maps-post",
+      "path": "generated/workflows/business/local-business/maps-post.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/night-oven/act-03",
-      "path": "generated/workflows/films/night-oven/act-03.md",
-      "lane": "films",
+      "id": "business/local-business/menu-item",
+      "path": "generated/workflows/business/local-business/menu-item.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/night-oven/act-04",
-      "path": "generated/workflows/films/night-oven/act-04.md",
-      "lane": "films",
+      "id": "business/local-business/owner-portrait",
+      "path": "generated/workflows/business/local-business/owner-portrait.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/night-oven/act-05",
-      "path": "generated/workflows/films/night-oven/act-05.md",
-      "lane": "films",
+      "id": "business/local-business/parking-approach",
+      "path": "generated/workflows/business/local-business/parking-approach.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/still-here",
-      "path": "generated/workflows/films/still-here.md",
-      "lane": "films",
+      "id": "business/local-business/plated-special",
+      "path": "generated/workflows/business/local-business/plated-special.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/switchyard",
-      "path": "generated/workflows/films/switchyard.md",
-      "lane": "films",
+      "id": "business/local-business/service-broll-av",
+      "path": "generated/workflows/business/local-business/service-broll-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/tide-table/act-01",
-      "path": "generated/workflows/films/tide-table/act-01.md",
-      "lane": "films",
+      "id": "business/local-business/staff-greet-av",
+      "path": "generated/workflows/business/local-business/staff-greet-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/tide-table/act-02",
-      "path": "generated/workflows/films/tide-table/act-02.md",
-      "lane": "films",
+      "id": "business/local-business/storefront-day",
+      "path": "generated/workflows/business/local-business/storefront-day.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/tide-table/act-03",
-      "path": "generated/workflows/films/tide-table/act-03.md",
-      "lane": "films",
+      "id": "business/local-business/storefront-night",
+      "path": "generated/workflows/business/local-business/storefront-night.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/tide-table/act-04",
-      "path": "generated/workflows/films/tide-table/act-04.md",
-      "lane": "films",
+      "id": "business/local-business/team-headshot",
+      "path": "generated/workflows/business/local-business/team-headshot.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "films/tide-table/act-05",
-      "path": "generated/workflows/films/tide-table/act-05.md",
-      "lane": "films",
+      "id": "business/local-business/treatment-room",
+      "path": "generated/workflows/business/local-business/treatment-room.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "inspire/app-forge",
-      "path": "generated/workflows/inspire/app-forge.md",
-      "lane": "inspire",
+      "id": "business/local-business/walk-in-av",
+      "path": "generated/workflows/business/local-business/walk-in-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "inspire/audio-rack",
-      "path": "generated/workflows/inspire/audio-rack.md",
-      "lane": "inspire",
+      "id": "business/performance-ads/bumper-av",
+      "path": "generated/workflows/business/performance-ads/bumper-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "inspire/beat-sheet",
-      "path": "generated/workflows/inspire/beat-sheet.md",
-      "lane": "inspire",
+      "id": "business/performance-ads/demo-hands-av",
+      "path": "generated/workflows/business/performance-ads/demo-hands-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "inspire/cinema-rack",
-      "path": "generated/workflows/inspire/cinema-rack.md",
-      "lane": "inspire",
+      "id": "business/performance-ads/hook-face",
+      "path": "generated/workflows/business/performance-ads/hook-face.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "inspire/prompt-forge",
-      "path": "generated/workflows/inspire/prompt-forge.md",
-      "lane": "inspire",
+      "id": "business/performance-ads/hook-problem",
+      "path": "generated/workflows/business/performance-ads/hook-problem.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "inspire/research-chat",
-      "path": "generated/workflows/inspire/research-chat.md",
-      "lane": "inspire",
+      "id": "business/performance-ads/hook-result",
+      "path": "generated/workflows/business/performance-ads/hook-result.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/av/audio-to-video-8s",
-      "path": "generated/workflows/motion/av/audio-to-video-8s.md",
-      "lane": "motion",
+      "id": "business/performance-ads/offer-bed",
+      "path": "generated/workflows/business/performance-ads/offer-bed.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/av/broll-ambient",
-      "path": "generated/workflows/motion/av/broll-ambient.md",
-      "lane": "motion",
+      "id": "business/performance-ads/problem-spot-av",
+      "path": "generated/workflows/business/performance-ads/problem-spot-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/av/clip-chain",
-      "path": "generated/workflows/motion/av/clip-chain.md",
-      "lane": "motion",
+      "id": "business/performance-ads/reaction-still",
+      "path": "generated/workflows/business/performance-ads/reaction-still.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/av/dialogue-8s",
-      "path": "generated/workflows/motion/av/dialogue-8s.md",
-      "lane": "motion",
+      "id": "business/performance-ads/split-board",
+      "path": "generated/workflows/business/performance-ads/split-board.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/av/first-last-8s",
-      "path": "generated/workflows/motion/av/first-last-8s.md",
-      "lane": "motion",
+      "id": "business/performance-ads/square-ad",
+      "path": "generated/workflows/business/performance-ads/square-ad.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/av/hook-av",
-      "path": "generated/workflows/motion/av/hook-av.md",
-      "lane": "motion",
+      "id": "business/performance-ads/stitch-setup",
+      "path": "generated/workflows/business/performance-ads/stitch-setup.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/av/interior-ambience",
-      "path": "generated/workflows/motion/av/interior-ambience.md",
-      "lane": "motion",
+      "id": "business/performance-ads/story-safe-ad",
+      "path": "generated/workflows/business/performance-ads/story-safe-ad.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/av/multishot-8s",
-      "path": "generated/workflows/motion/av/multishot-8s.md",
-      "lane": "motion",
+      "id": "business/performance-ads/talent-plain-wall",
+      "path": "generated/workflows/business/performance-ads/talent-plain-wall.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/av/product-hero",
-      "path": "generated/workflows/motion/av/product-hero.md",
-      "lane": "motion",
+      "id": "business/performance-ads/testimonial-still",
+      "path": "generated/workflows/business/performance-ads/testimonial-still.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/av/shorts-still-8s",
-      "path": "generated/workflows/motion/av/shorts-still-8s.md",
-      "lane": "motion",
+      "id": "business/performance-ads/ugc-car-av",
+      "path": "generated/workflows/business/performance-ads/ugc-car-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/av/still-to-shot",
-      "path": "generated/workflows/motion/av/still-to-shot.md",
-      "lane": "motion",
+      "id": "business/performance-ads/ugc-kitchen-av",
+      "path": "generated/workflows/business/performance-ads/ugc-kitchen-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/av/still-to-video-8s",
-      "path": "generated/workflows/motion/av/still-to-video-8s.md",
-      "lane": "motion",
+      "id": "business/performance-ads/ugc-mirror-av",
+      "path": "generated/workflows/business/performance-ads/ugc-mirror-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/av/text-to-video-8s",
-      "path": "generated/workflows/motion/av/text-to-video-8s.md",
-      "lane": "motion",
+      "id": "business/performance-ads/ugc-selfie",
+      "path": "generated/workflows/business/performance-ads/ugc-selfie.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/av/weather-broll",
-      "path": "generated/workflows/motion/av/weather-broll.md",
-      "lane": "motion",
+      "id": "business/performance-ads/vertical-ad",
+      "path": "generated/workflows/business/performance-ads/vertical-ad.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/loops/bumper-loop",
-      "path": "generated/workflows/motion/loops/bumper-loop.md",
-      "lane": "motion",
+      "id": "business/performance-ads/wide-ad",
+      "path": "generated/workflows/business/performance-ads/wide-ad.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/loops/gif-loop",
-      "path": "generated/workflows/motion/loops/gif-loop.md",
-      "lane": "motion",
+      "id": "business/podcast-clips/chapter-art",
+      "path": "generated/workflows/business/podcast-clips/chapter-art.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/loops/sticker-loop",
-      "path": "generated/workflows/motion/loops/sticker-loop.md",
-      "lane": "motion",
+      "id": "business/podcast-clips/clip-montage-av",
+      "path": "generated/workflows/business/podcast-clips/clip-montage-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/silent/first-last-5s",
-      "path": "generated/workflows/motion/silent/first-last-5s.md",
-      "lane": "motion",
+      "id": "business/podcast-clips/clip-push-loop",
+      "path": "generated/workflows/business/podcast-clips/clip-push-loop.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/silent/orbit-still-5s",
-      "path": "generated/workflows/motion/silent/orbit-still-5s.md",
-      "lane": "motion",
+      "id": "business/podcast-clips/clip-vertical",
+      "path": "generated/workflows/business/podcast-clips/clip-vertical.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/silent/parallax-still-5s",
-      "path": "generated/workflows/motion/silent/parallax-still-5s.md",
-      "lane": "motion",
+      "id": "business/podcast-clips/clip-wide",
+      "path": "generated/workflows/business/podcast-clips/clip-wide.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/silent/push-in-still-5s",
-      "path": "generated/workflows/motion/silent/push-in-still-5s.md",
-      "lane": "motion",
+      "id": "business/podcast-clips/desk-mic-av",
+      "path": "generated/workflows/business/podcast-clips/desk-mic-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/silent/shorts-still-5s",
-      "path": "generated/workflows/motion/silent/shorts-still-5s.md",
-      "lane": "motion",
+      "id": "business/podcast-clips/end-slate",
+      "path": "generated/workflows/business/podcast-clips/end-slate.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/silent/still-to-shot",
-      "path": "generated/workflows/motion/silent/still-to-shot.md",
-      "lane": "motion",
+      "id": "business/podcast-clips/guest-intro",
+      "path": "generated/workflows/business/podcast-clips/guest-intro.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/silent/still-to-video-5s",
-      "path": "generated/workflows/motion/silent/still-to-video-5s.md",
-      "lane": "motion",
+      "id": "business/podcast-clips/host-solo",
+      "path": "generated/workflows/business/podcast-clips/host-solo.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/silent/text-to-video-5s",
-      "path": "generated/workflows/motion/silent/text-to-video-5s.md",
-      "lane": "motion",
+      "id": "business/podcast-clips/laugh-bed-av",
+      "path": "generated/workflows/business/podcast-clips/laugh-bed-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "motion/silent/vace-join",
-      "path": "generated/workflows/motion/silent/vace-join.md",
-      "lane": "motion",
+      "id": "business/podcast-clips/live-badge-bed",
+      "path": "generated/workflows/business/podcast-clips/live-badge-bed.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "optional/longcat-video",
-      "path": "generated/workflows/optional/longcat-video.md",
-      "lane": "optional",
+      "id": "business/podcast-clips/lower-third-loop",
+      "path": "generated/workflows/business/podcast-clips/lower-third-loop.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "optional/still-to-video-a14b",
-      "path": "generated/workflows/optional/still-to-video-a14b.md",
-      "lane": "optional",
+      "id": "business/podcast-clips/quote-vert",
+      "path": "generated/workflows/business/podcast-clips/quote-vert.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "optional/trellis2",
-      "path": "generated/workflows/optional/trellis2.md",
-      "lane": "optional",
+      "id": "business/podcast-clips/quote-wide",
+      "path": "generated/workflows/business/podcast-clips/quote-wide.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/b2b-saas/case-cover",
-      "path": "generated/workflows/services/b2b-saas/case-cover.md",
-      "lane": "services",
+      "id": "business/podcast-clips/remote-guest-av",
+      "path": "generated/workflows/business/podcast-clips/remote-guest-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/b2b-saas/changelog-card",
-      "path": "generated/workflows/services/b2b-saas/changelog-card.md",
-      "lane": "services",
+      "id": "business/podcast-clips/season-trailer-av",
+      "path": "generated/workflows/business/podcast-clips/season-trailer-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/b2b-saas/culture-still",
-      "path": "generated/workflows/services/b2b-saas/culture-still.md",
-      "lane": "services",
+      "id": "business/podcast-clips/studio-walk-av",
+      "path": "generated/workflows/business/podcast-clips/studio-walk-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/b2b-saas/cursor-demo-av",
-      "path": "generated/workflows/services/b2b-saas/cursor-demo-av.md",
-      "lane": "services",
+      "id": "business/podcast-clips/talk-clip-av",
+      "path": "generated/workflows/business/podcast-clips/talk-clip-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/b2b-saas/customer-story-av",
-      "path": "generated/workflows/services/b2b-saas/customer-story-av.md",
-      "lane": "services",
+      "id": "business/podcast-clips/two-shot",
+      "path": "generated/workflows/business/podcast-clips/two-shot.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/b2b-saas/diagram-bed",
-      "path": "generated/workflows/services/b2b-saas/diagram-bed.md",
-      "lane": "services",
+      "id": "business/podcast-clips/waveform-bed",
+      "path": "generated/workflows/business/podcast-clips/waveform-bed.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/b2b-saas/ebook-cover",
-      "path": "generated/workflows/services/b2b-saas/ebook-cover.md",
-      "lane": "services",
+      "id": "business/real-estate/aerial-push-av",
+      "path": "generated/workflows/business/real-estate/aerial-push-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/b2b-saas/explainer-av",
-      "path": "generated/workflows/services/b2b-saas/explainer-av.md",
-      "lane": "services",
+      "id": "business/real-estate/aerial-still",
+      "path": "generated/workflows/business/real-estate/aerial-still.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/b2b-saas/feature-card",
-      "path": "generated/workflows/services/b2b-saas/feature-card.md",
-      "lane": "services",
+      "id": "business/real-estate/agent-headshot",
+      "path": "generated/workflows/business/real-estate/agent-headshot.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/b2b-saas/founder-still",
-      "path": "generated/workflows/services/b2b-saas/founder-still.md",
-      "lane": "services",
+      "id": "business/real-estate/amenity-loop",
+      "path": "generated/workflows/business/real-estate/amenity-loop.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/b2b-saas/keynote-still",
-      "path": "generated/workflows/services/b2b-saas/keynote-still.md",
-      "lane": "services",
+      "id": "business/real-estate/dressed-room",
+      "path": "generated/workflows/business/real-estate/dressed-room.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/b2b-saas/launch-still",
-      "path": "generated/workflows/services/b2b-saas/launch-still.md",
-      "lane": "services",
+      "id": "business/real-estate/empty-room",
+      "path": "generated/workflows/business/real-estate/empty-room.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/b2b-saas/office-broll-av",
-      "path": "generated/workflows/services/b2b-saas/office-broll-av.md",
-      "lane": "services",
+      "id": "business/real-estate/handoff-av",
+      "path": "generated/workflows/business/real-estate/handoff-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/b2b-saas/office-wide",
-      "path": "generated/workflows/services/b2b-saas/office-wide.md",
-      "lane": "services",
+      "id": "business/real-estate/just-listed",
+      "path": "generated/workflows/business/real-estate/just-listed.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/b2b-saas/pricing-bed",
-      "path": "generated/workflows/services/b2b-saas/pricing-bed.md",
-      "lane": "services",
+      "id": "business/real-estate/key-turn-loop",
+      "path": "generated/workflows/business/real-estate/key-turn-loop.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/b2b-saas/report-cover",
-      "path": "generated/workflows/services/b2b-saas/report-cover.md",
-      "lane": "services",
+      "id": "business/real-estate/listing-bath",
+      "path": "generated/workflows/business/real-estate/listing-bath.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/b2b-saas/ship-day-av",
-      "path": "generated/workflows/services/b2b-saas/ship-day-av.md",
-      "lane": "services",
+      "id": "business/real-estate/listing-bedroom",
+      "path": "generated/workflows/business/real-estate/listing-bedroom.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/b2b-saas/ui-hero",
-      "path": "generated/workflows/services/b2b-saas/ui-hero.md",
-      "lane": "services",
+      "id": "business/real-estate/listing-hero",
+      "path": "generated/workflows/business/real-estate/listing-hero.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/b2b-saas/webinar-open-av",
-      "path": "generated/workflows/services/b2b-saas/webinar-open-av.md",
-      "lane": "services",
+      "id": "business/real-estate/listing-kitchen",
+      "path": "generated/workflows/business/real-estate/listing-kitchen.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/b2b-saas/webinar-thumb",
-      "path": "generated/workflows/services/b2b-saas/webinar-thumb.md",
-      "lane": "services",
+      "id": "business/real-estate/listing-twilight",
+      "path": "generated/workflows/business/real-estate/listing-twilight.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/ecommerce/assemble-av",
-      "path": "generated/workflows/services/ecommerce/assemble-av.md",
-      "lane": "services",
+      "id": "business/real-estate/listing-yard",
+      "path": "generated/workflows/business/real-estate/listing-yard.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/ecommerce/bundle-flatlay",
-      "path": "generated/workflows/services/ecommerce/bundle-flatlay.md",
-      "lane": "services",
+      "id": "business/real-estate/neighborhood-av",
+      "path": "generated/workflows/business/real-estate/neighborhood-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/ecommerce/cart-upsell-bg",
-      "path": "generated/workflows/services/ecommerce/cart-upsell-bg.md",
-      "lane": "services",
+      "id": "business/real-estate/open-house-bed",
+      "path": "generated/workflows/business/real-estate/open-house-bed.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/ecommerce/collection-banner",
-      "path": "generated/workflows/services/ecommerce/collection-banner.md",
-      "lane": "services",
+      "id": "business/real-estate/sold-slate",
+      "path": "generated/workflows/business/real-estate/sold-slate.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/ecommerce/drape-loop",
-      "path": "generated/workflows/services/ecommerce/drape-loop.md",
-      "lane": "services",
+      "id": "business/real-estate/twilight-av",
+      "path": "generated/workflows/business/real-estate/twilight-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/ecommerce/drop-tease",
-      "path": "generated/workflows/services/ecommerce/drop-tease.md",
-      "lane": "services",
+      "id": "business/real-estate/walkthrough-av",
+      "path": "generated/workflows/business/real-estate/walkthrough-av.md",
+      "lane": "business",
       "kind": "graph"
     },
     {
-      "id": "services/ecommerce/gift-set-still",
-      "path": "generated/workflows/services/ecommerce/gift-set-still.md",
-      "lane": "services",
+      "id": "film/breakwater/act-01",
+      "path": "generated/workflows/film/breakwater/act-01.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/ecommerce/marketplace-lifestyle",
-      "path": "generated/workflows/services/ecommerce/marketplace-lifestyle.md",
-      "lane": "services",
+      "id": "film/breakwater/act-02",
+      "path": "generated/workflows/film/breakwater/act-02.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/ecommerce/marketplace-square",
-      "path": "generated/workflows/services/ecommerce/marketplace-square.md",
-      "lane": "services",
+      "id": "film/breakwater/act-03",
+      "path": "generated/workflows/film/breakwater/act-03.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/ecommerce/pdp-hand-scale",
-      "path": "generated/workflows/services/ecommerce/pdp-hand-scale.md",
-      "lane": "services",
+      "id": "film/breakwater/act-04",
+      "path": "generated/workflows/film/breakwater/act-04.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/ecommerce/pdp-in-use",
-      "path": "generated/workflows/services/ecommerce/pdp-in-use.md",
-      "lane": "services",
+      "id": "film/breakwater/act-05",
+      "path": "generated/workflows/film/breakwater/act-05.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/ecommerce/pdp-on-white",
-      "path": "generated/workflows/services/ecommerce/pdp-on-white.md",
-      "lane": "services",
+      "id": "film/generate-cutaway",
+      "path": "generated/workflows/film/generate-cutaway.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/ecommerce/pdp-pack-back",
-      "path": "generated/workflows/services/ecommerce/pdp-pack-back.md",
-      "lane": "services",
+      "id": "film/glasshouse/act-01",
+      "path": "generated/workflows/film/glasshouse/act-01.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/ecommerce/pdp-texture-macro",
-      "path": "generated/workflows/services/ecommerce/pdp-texture-macro.md",
-      "lane": "services",
+      "id": "film/glasshouse/act-02",
+      "path": "generated/workflows/film/glasshouse/act-02.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/ecommerce/pour-fill-loop",
-      "path": "generated/workflows/services/ecommerce/pour-fill-loop.md",
-      "lane": "services",
+      "id": "film/glasshouse/act-03",
+      "path": "generated/workflows/film/glasshouse/act-03.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/ecommerce/restock-story",
-      "path": "generated/workflows/services/ecommerce/restock-story.md",
-      "lane": "services",
+      "id": "film/glasshouse/act-04",
+      "path": "generated/workflows/film/glasshouse/act-04.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/ecommerce/shelf-scan-av",
-      "path": "generated/workflows/services/ecommerce/shelf-scan-av.md",
-      "lane": "services",
+      "id": "film/glasshouse/act-05",
+      "path": "generated/workflows/film/glasshouse/act-05.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/ecommerce/table-unbox-av",
-      "path": "generated/workflows/services/ecommerce/table-unbox-av.md",
-      "lane": "services",
+      "id": "film/go-see",
+      "path": "generated/workflows/film/go-see.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/ecommerce/turntable-loop",
-      "path": "generated/workflows/services/ecommerce/turntable-loop.md",
-      "lane": "services",
+      "id": "film/last-lane/act-01",
+      "path": "generated/workflows/film/last-lane/act-01.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/ecommerce/wear-test-av",
-      "path": "generated/workflows/services/ecommerce/wear-test-av.md",
-      "lane": "services",
+      "id": "film/last-lane/act-02",
+      "path": "generated/workflows/film/last-lane/act-02.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/education/board-still",
-      "path": "generated/workflows/services/education/board-still.md",
-      "lane": "services",
+      "id": "film/last-lane/act-03",
+      "path": "generated/workflows/film/last-lane/act-03.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/education/campus-wide",
-      "path": "generated/workflows/services/education/campus-wide.md",
-      "lane": "services",
+      "id": "film/last-lane/act-04",
+      "path": "generated/workflows/film/last-lane/act-04.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/education/certificate-bed",
-      "path": "generated/workflows/services/education/certificate-bed.md",
-      "lane": "services",
+      "id": "film/last-lane/act-05",
+      "path": "generated/workflows/film/last-lane/act-05.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/education/cohort-announce",
-      "path": "generated/workflows/services/education/cohort-announce.md",
-      "lane": "services",
+      "id": "film/night-oven/act-01",
+      "path": "generated/workflows/film/night-oven/act-01.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/education/course-thumb",
-      "path": "generated/workflows/services/education/course-thumb.md",
-      "lane": "services",
+      "id": "film/night-oven/act-02",
+      "path": "generated/workflows/film/night-oven/act-02.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/education/course-trailer-av",
-      "path": "generated/workflows/services/education/course-trailer-av.md",
-      "lane": "services",
+      "id": "film/night-oven/act-03",
+      "path": "generated/workflows/film/night-oven/act-03.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/education/graduation-av",
-      "path": "generated/workflows/services/education/graduation-av.md",
-      "lane": "services",
+      "id": "film/night-oven/act-04",
+      "path": "generated/workflows/film/night-oven/act-04.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/education/instructor-still",
-      "path": "generated/workflows/services/education/instructor-still.md",
-      "lane": "services",
+      "id": "film/night-oven/act-05",
+      "path": "generated/workflows/film/night-oven/act-05.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/education/lab-bench",
-      "path": "generated/workflows/services/education/lab-bench.md",
-      "lane": "services",
+      "id": "film/still-here",
+      "path": "generated/workflows/film/still-here.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/education/lab-demo-av",
-      "path": "generated/workflows/services/education/lab-demo-av.md",
-      "lane": "services",
+      "id": "film/switchyard",
+      "path": "generated/workflows/film/switchyard.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/education/lecture-av",
-      "path": "generated/workflows/services/education/lecture-av.md",
-      "lane": "services",
+      "id": "film/tide-table/act-01",
+      "path": "generated/workflows/film/tide-table/act-01.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/education/lesson-title",
-      "path": "generated/workflows/services/education/lesson-title.md",
-      "lane": "services",
+      "id": "film/tide-table/act-02",
+      "path": "generated/workflows/film/tide-table/act-02.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/education/module-card",
-      "path": "generated/workflows/services/education/module-card.md",
-      "lane": "services",
+      "id": "film/tide-table/act-03",
+      "path": "generated/workflows/film/tide-table/act-03.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/education/office-hours-av",
-      "path": "generated/workflows/services/education/office-hours-av.md",
-      "lane": "services",
+      "id": "film/tide-table/act-04",
+      "path": "generated/workflows/film/tide-table/act-04.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/education/recap-sting",
-      "path": "generated/workflows/services/education/recap-sting.md",
-      "lane": "services",
+      "id": "film/tide-table/act-05",
+      "path": "generated/workflows/film/tide-table/act-05.md",
+      "lane": "film",
       "kind": "graph"
     },
     {
-      "id": "services/education/screencast-loop",
-      "path": "generated/workflows/services/education/screencast-loop.md",
-      "lane": "services",
+      "id": "guides/canny-control-8s",
+      "path": "generated/workflows/guides/canny-control-8s.md",
+      "lane": "guides",
       "kind": "graph"
     },
     {
-      "id": "services/education/slide-break",
-      "path": "generated/workflows/services/education/slide-break.md",
-      "lane": "services",
+      "id": "guides/canny-hero",
+      "path": "generated/workflows/guides/canny-hero.md",
+      "lane": "guides",
       "kind": "graph"
     },
     {
-      "id": "services/education/student-desk",
-      "path": "generated/workflows/services/education/student-desk.md",
-      "lane": "services",
+      "id": "guides/clay-hero",
+      "path": "generated/workflows/guides/clay-hero.md",
+      "lane": "guides",
       "kind": "graph"
     },
     {
-      "id": "services/education/syllabus-header",
-      "path": "generated/workflows/services/education/syllabus-header.md",
-      "lane": "services",
+      "id": "guides/clay-plates",
+      "path": "generated/workflows/guides/clay-plates.md",
+      "lane": "guides",
       "kind": "graph"
     },
     {
-      "id": "services/education/waitlist-cover",
-      "path": "generated/workflows/services/education/waitlist-cover.md",
-      "lane": "services",
+      "id": "guides/depth-control-8s",
+      "path": "generated/workflows/guides/depth-control-8s.md",
+      "lane": "guides",
       "kind": "graph"
     },
     {
-      "id": "services/events-wedding/aftermovie-hook-av",
-      "path": "generated/workflows/services/events-wedding/aftermovie-hook-av.md",
-      "lane": "services",
+      "id": "guides/depth-control-shorts",
+      "path": "generated/workflows/guides/depth-control-shorts.md",
+      "lane": "guides",
       "kind": "graph"
     },
     {
-      "id": "services/events-wedding/badge-bed",
-      "path": "generated/workflows/services/events-wedding/badge-bed.md",
-      "lane": "services",
+      "id": "guides/depth-from-loader",
+      "path": "generated/workflows/guides/depth-from-loader.md",
+      "lane": "guides",
       "kind": "graph"
     },
     {
-      "id": "services/events-wedding/conference-av",
-      "path": "generated/workflows/services/events-wedding/conference-av.md",
-      "lane": "services",
+      "id": "guides/first-last-from-guide",
+      "path": "generated/workflows/guides/first-last-from-guide.md",
+      "lane": "guides",
       "kind": "graph"
     },
     {
-      "id": "services/events-wedding/dance-floor-av",
-      "path": "generated/workflows/services/events-wedding/dance-floor-av.md",
-      "lane": "services",
+      "id": "guides/guide-still",
+      "path": "generated/workflows/guides/guide-still.md",
+      "lane": "guides",
       "kind": "graph"
     },
     {
-      "id": "services/events-wedding/details-flatlay",
-      "path": "generated/workflows/services/events-wedding/details-flatlay.md",
-      "lane": "services",
+      "id": "labs/assist/app-forge",
+      "path": "generated/workflows/labs/assist/app-forge.md",
+      "lane": "labs",
       "kind": "graph"
     },
     {
-      "id": "services/events-wedding/first-look",
-      "path": "generated/workflows/services/events-wedding/first-look.md",
-      "lane": "services",
+      "id": "labs/assist/audio-rack",
+      "path": "generated/workflows/labs/assist/audio-rack.md",
+      "lane": "labs",
       "kind": "graph"
     },
     {
-      "id": "services/events-wedding/highlight-still",
-      "path": "generated/workflows/services/events-wedding/highlight-still.md",
-      "lane": "services",
+      "id": "labs/assist/beat-sheet",
+      "path": "generated/workflows/labs/assist/beat-sheet.md",
+      "lane": "labs",
       "kind": "graph"
     },
     {
-      "id": "services/events-wedding/invite-bed",
-      "path": "generated/workflows/services/events-wedding/invite-bed.md",
-      "lane": "services",
+      "id": "labs/assist/cinema-rack",
+      "path": "generated/workflows/labs/assist/cinema-rack.md",
+      "lane": "labs",
       "kind": "graph"
     },
     {
-      "id": "services/events-wedding/processional-av",
-      "path": "generated/workflows/services/events-wedding/processional-av.md",
-      "lane": "services",
+      "id": "labs/assist/prompt-forge",
+      "path": "generated/workflows/labs/assist/prompt-forge.md",
+      "lane": "labs",
       "kind": "graph"
     },
     {
-      "id": "services/events-wedding/program-cover",
-      "path": "generated/workflows/services/events-wedding/program-cover.md",
-      "lane": "services",
+      "id": "labs/assist/research-chat",
+      "path": "generated/workflows/labs/assist/research-chat.md",
+      "lane": "labs",
       "kind": "graph"
     },
     {
-      "id": "services/events-wedding/recap-av",
-      "path": "generated/workflows/services/events-wedding/recap-av.md",
-      "lane": "services",
+      "id": "labs/opt-in/longcat-video",
+      "path": "generated/workflows/labs/opt-in/longcat-video.md",
+      "lane": "labs",
       "kind": "graph"
     },
     {
-      "id": "services/events-wedding/rehearsal-av",
-      "path": "generated/workflows/services/events-wedding/rehearsal-av.md",
-      "lane": "services",
+      "id": "labs/opt-in/still-flux3-fast",
+      "path": "generated/workflows/labs/opt-in/still-flux3-fast.md",
+      "lane": "labs",
       "kind": "graph"
     },
     {
-      "id": "services/events-wedding/save-the-date",
-      "path": "generated/workflows/services/events-wedding/save-the-date.md",
-      "lane": "services",
+      "id": "labs/opt-in/still-flux3-quality",
+      "path": "generated/workflows/labs/opt-in/still-flux3-quality.md",
+      "lane": "labs",
       "kind": "graph"
     },
     {
-      "id": "services/events-wedding/sparkler-exit-av",
-      "path": "generated/workflows/services/events-wedding/sparkler-exit-av.md",
-      "lane": "services",
+      "id": "labs/opt-in/still-to-video-a14b",
+      "path": "generated/workflows/labs/opt-in/still-to-video-a14b.md",
+      "lane": "labs",
       "kind": "graph"
     },
     {
-      "id": "services/events-wedding/speaker-still",
-      "path": "generated/workflows/services/events-wedding/speaker-still.md",
-      "lane": "services",
+      "id": "photos/background-edit",
+      "path": "generated/workflows/photos/background-edit.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/events-wedding/sponsor-slate",
-      "path": "generated/workflows/services/events-wedding/sponsor-slate.md",
-      "lane": "services",
+      "id": "photos/background-swap",
+      "path": "generated/workflows/photos/background-swap.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/events-wedding/table-bed",
-      "path": "generated/workflows/services/events-wedding/table-bed.md",
-      "lane": "services",
+      "id": "photos/banner-wide",
+      "path": "generated/workflows/photos/banner-wide.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/events-wedding/trailer-av",
-      "path": "generated/workflows/services/events-wedding/trailer-av.md",
-      "lane": "services",
+      "id": "photos/before-after",
+      "path": "generated/workflows/photos/before-after.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/events-wedding/venue-wide",
-      "path": "generated/workflows/services/events-wedding/venue-wide.md",
-      "lane": "services",
+      "id": "photos/camera-angles",
+      "path": "generated/workflows/photos/camera-angles.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/events-wedding/welcome-sign",
-      "path": "generated/workflows/services/events-wedding/welcome-sign.md",
-      "lane": "services",
+      "id": "photos/character-draft",
+      "path": "generated/workflows/photos/character-draft.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fashion-beauty/beauty-pack",
-      "path": "generated/workflows/services/fashion-beauty/beauty-pack.md",
-      "lane": "services",
+      "id": "photos/character-tweak",
+      "path": "generated/workflows/photos/character-tweak.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fashion-beauty/beauty-unbox-av",
-      "path": "generated/workflows/services/fashion-beauty/beauty-unbox-av.md",
-      "lane": "services",
+      "id": "photos/color-moods",
+      "path": "generated/workflows/photos/color-moods.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fashion-beauty/campaign-av",
-      "path": "generated/workflows/services/fashion-beauty/campaign-av.md",
-      "lane": "services",
+      "id": "photos/dream-house-clay",
+      "path": "generated/workflows/photos/dream-house-clay.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fashion-beauty/campaign-hero",
-      "path": "generated/workflows/services/fashion-beauty/campaign-hero.md",
-      "lane": "services",
+      "id": "photos/dream-house",
+      "path": "generated/workflows/photos/dream-house.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fashion-beauty/editorial-still",
-      "path": "generated/workflows/services/fashion-beauty/editorial-still.md",
-      "lane": "services",
+      "id": "photos/endcard-cta",
+      "path": "generated/workflows/photos/endcard-cta.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fashion-beauty/fabric-twirl-av",
-      "path": "generated/workflows/services/fashion-beauty/fabric-twirl-av.md",
-      "lane": "services",
+      "id": "photos/food-tabletop",
+      "path": "generated/workflows/photos/food-tabletop.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fashion-beauty/fitting-av",
-      "path": "generated/workflows/services/fashion-beauty/fitting-av.md",
-      "lane": "services",
+      "id": "photos/hook-still",
+      "path": "generated/workflows/photos/hook-still.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fashion-beauty/get-ready-av",
-      "path": "generated/workflows/services/fashion-beauty/get-ready-av.md",
-      "lane": "services",
+      "id": "photos/identity-sheet",
+      "path": "generated/workflows/photos/identity-sheet.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fashion-beauty/glow-loop",
-      "path": "generated/workflows/services/fashion-beauty/glow-loop.md",
-      "lane": "services",
+      "id": "photos/image-studio",
+      "path": "generated/workflows/photos/image-studio.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fashion-beauty/hair-loop",
-      "path": "generated/workflows/services/fashion-beauty/hair-loop.md",
-      "lane": "services",
+      "id": "photos/instagram-square",
+      "path": "generated/workflows/photos/instagram-square.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fashion-beauty/look-back",
-      "path": "generated/workflows/services/fashion-beauty/look-back.md",
-      "lane": "services",
+      "id": "photos/lighting-trio",
+      "path": "generated/workflows/photos/lighting-trio.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fashion-beauty/look-detail",
-      "path": "generated/workflows/services/fashion-beauty/look-detail.md",
-      "lane": "services",
+      "id": "photos/lower-third-bg",
+      "path": "generated/workflows/photos/lower-third-bg.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fashion-beauty/look-full",
-      "path": "generated/workflows/services/fashion-beauty/look-full.md",
-      "lane": "services",
+      "id": "photos/open-graph",
+      "path": "generated/workflows/photos/open-graph.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fashion-beauty/lookbook-cover",
-      "path": "generated/workflows/services/fashion-beauty/lookbook-cover.md",
-      "lane": "services",
+      "id": "photos/platform-pack",
+      "path": "generated/workflows/photos/platform-pack.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fashion-beauty/makeup-step",
-      "path": "generated/workflows/services/fashion-beauty/makeup-step.md",
-      "lane": "services",
+      "id": "photos/podcast-cover",
+      "path": "generated/workflows/photos/podcast-cover.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fashion-beauty/nail-loop",
-      "path": "generated/workflows/services/fashion-beauty/nail-loop.md",
-      "lane": "services",
+      "id": "photos/product-packshot",
+      "path": "generated/workflows/photos/product-packshot.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fashion-beauty/street-look",
-      "path": "generated/workflows/services/fashion-beauty/street-look.md",
-      "lane": "services",
+      "id": "photos/quote-bg",
+      "path": "generated/workflows/photos/quote-bg.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fashion-beauty/swatch-macro",
-      "path": "generated/workflows/services/fashion-beauty/swatch-macro.md",
-      "lane": "services",
+      "id": "photos/shorts-still",
+      "path": "generated/workflows/photos/shorts-still.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fashion-beauty/texture-fill",
-      "path": "generated/workflows/services/fashion-beauty/texture-fill.md",
-      "lane": "services",
+      "id": "photos/still-daily",
+      "path": "generated/workflows/photos/still-daily.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fashion-beauty/walk-av",
-      "path": "generated/workflows/services/fashion-beauty/walk-av.md",
-      "lane": "services",
+      "id": "photos/still-draft",
+      "path": "generated/workflows/photos/still-draft.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fitness-travel/check-in-av",
-      "path": "generated/workflows/services/fitness-travel/check-in-av.md",
-      "lane": "services",
+      "id": "photos/still-hero",
+      "path": "generated/workflows/photos/still-hero.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fitness-travel/city-arrive",
-      "path": "generated/workflows/services/fitness-travel/city-arrive.md",
-      "lane": "services",
+      "id": "photos/still-studio",
+      "path": "generated/workflows/photos/still-studio.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fitness-travel/class-av",
-      "path": "generated/workflows/services/fitness-travel/class-av.md",
-      "lane": "services",
+      "id": "photos/storyboard-6up",
+      "path": "generated/workflows/photos/storyboard-6up.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fitness-travel/coach-still",
-      "path": "generated/workflows/services/fitness-travel/coach-still.md",
-      "lane": "services",
+      "id": "photos/style-lock",
+      "path": "generated/workflows/photos/style-lock.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fitness-travel/gym-wide",
-      "path": "generated/workflows/services/fitness-travel/gym-wide.md",
-      "lane": "services",
+      "id": "photos/text-swap",
+      "path": "generated/workflows/photos/text-swap.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fitness-travel/home-gym",
-      "path": "generated/workflows/services/fitness-travel/home-gym.md",
-      "lane": "services",
+      "id": "photos/thumbnail",
+      "path": "generated/workflows/photos/thumbnail.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fitness-travel/meal-prep",
-      "path": "generated/workflows/services/fitness-travel/meal-prep.md",
-      "lane": "services",
+      "id": "photos/time-of-day",
+      "path": "generated/workflows/photos/time-of-day.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fitness-travel/move-still",
-      "path": "generated/workflows/services/fitness-travel/move-still.md",
-      "lane": "services",
+      "id": "photos/upscale-reframe",
+      "path": "generated/workflows/photos/upscale-reframe.md",
+      "lane": "photos",
       "kind": "graph"
     },
     {
-      "id": "services/fitness-travel/packing-av",
-      "path": "generated/workflows/services/fitness-travel/packing-av.md",
-      "lane": "services",
+      "id": "social/av/asmr-macro",
+      "path": "generated/workflows/social/av/asmr-macro.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/fitness-travel/pool-still",
-      "path": "generated/workflows/services/fitness-travel/pool-still.md",
-      "lane": "services",
+      "id": "social/av/crowd-ambience",
+      "path": "generated/workflows/social/av/crowd-ambience.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/fitness-travel/recovery-still",
-      "path": "generated/workflows/services/fitness-travel/recovery-still.md",
-      "lane": "services",
+      "id": "social/av/desk-work",
+      "path": "generated/workflows/social/av/desk-work.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/fitness-travel/rep-loop",
-      "path": "generated/workflows/services/fitness-travel/rep-loop.md",
-      "lane": "services",
+      "id": "social/av/fashion-turn",
+      "path": "generated/workflows/social/av/fashion-turn.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/fitness-travel/resort-hero",
-      "path": "generated/workflows/services/fitness-travel/resort-hero.md",
-      "lane": "services",
+      "id": "social/av/fireplace",
+      "path": "generated/workflows/social/av/fireplace.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/fitness-travel/room-still",
-      "path": "generated/workflows/services/fitness-travel/room-still.md",
-      "lane": "services",
+      "id": "social/av/instagram-reel-lifestyle",
+      "path": "generated/workflows/social/av/instagram-reel-lifestyle.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/fitness-travel/stretch-loop",
-      "path": "generated/workflows/services/fitness-travel/stretch-loop.md",
-      "lane": "services",
+      "id": "social/av/interior-walk",
+      "path": "generated/workflows/social/av/interior-walk.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/fitness-travel/sunset-av",
-      "path": "generated/workflows/services/fitness-travel/sunset-av.md",
-      "lane": "services",
+      "id": "social/av/music-visual",
+      "path": "generated/workflows/social/av/music-visual.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/fitness-travel/tour-av",
-      "path": "generated/workflows/services/fitness-travel/tour-av.md",
-      "lane": "services",
+      "id": "social/av/podcast-set",
+      "path": "generated/workflows/social/av/podcast-set.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/fitness-travel/trail-still",
-      "path": "generated/workflows/services/fitness-travel/trail-still.md",
-      "lane": "services",
+      "id": "social/av/product-unbox-av",
+      "path": "generated/workflows/social/av/product-unbox-av.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/fitness-travel/waves-loop",
-      "path": "generated/workflows/services/fitness-travel/waves-loop.md",
-      "lane": "services",
+      "id": "social/av/rain-window",
+      "path": "generated/workflows/social/av/rain-window.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/fitness-travel/workout-av",
-      "path": "generated/workflows/services/fitness-travel/workout-av.md",
-      "lane": "services",
+      "id": "social/av/recipe-pour",
+      "path": "generated/workflows/social/av/recipe-pour.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/local-business/class-in-session-av",
-      "path": "generated/workflows/services/local-business/class-in-session-av.md",
-      "lane": "services",
+      "id": "social/av/tiktok-broll",
+      "path": "generated/workflows/social/av/tiktok-broll.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/local-business/close-up-av",
-      "path": "generated/workflows/services/local-business/close-up-av.md",
-      "lane": "services",
+      "id": "social/av/travel-establishing",
+      "path": "generated/workflows/social/av/travel-establishing.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/local-business/gym-floor",
-      "path": "generated/workflows/services/local-business/gym-floor.md",
-      "lane": "services",
+      "id": "social/av/twitch-starting-av",
+      "path": "generated/workflows/social/av/twitch-starting-av.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/local-business/hours-bed",
-      "path": "generated/workflows/services/local-business/hours-bed.md",
-      "lane": "services",
+      "id": "social/av/workout-rep",
+      "path": "generated/workflows/social/av/workout-rep.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/local-business/interior-detail",
-      "path": "generated/workflows/services/local-business/interior-detail.md",
-      "lane": "services",
+      "id": "social/av/workshop-tools",
+      "path": "generated/workflows/social/av/workshop-tools.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/local-business/interior-wide",
-      "path": "generated/workflows/services/local-business/interior-wide.md",
-      "lane": "services",
+      "id": "social/av/youtube-outro-av",
+      "path": "generated/workflows/social/av/youtube-outro-av.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/local-business/kitchen-pass-av",
-      "path": "generated/workflows/services/local-business/kitchen-pass-av.md",
-      "lane": "services",
+      "id": "social/silent/candle-loop",
+      "path": "generated/workflows/social/silent/candle-loop.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/local-business/maps-cover",
-      "path": "generated/workflows/services/local-business/maps-cover.md",
-      "lane": "services",
+      "id": "social/silent/city-night",
+      "path": "generated/workflows/social/silent/city-night.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/local-business/maps-post",
-      "path": "generated/workflows/services/local-business/maps-post.md",
-      "lane": "services",
+      "id": "social/silent/confetti-loop",
+      "path": "generated/workflows/social/silent/confetti-loop.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/local-business/menu-item",
-      "path": "generated/workflows/services/local-business/menu-item.md",
-      "lane": "services",
+      "id": "social/silent/fabric-breeze",
+      "path": "generated/workflows/social/silent/fabric-breeze.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/local-business/owner-portrait",
-      "path": "generated/workflows/services/local-business/owner-portrait.md",
-      "lane": "services",
+      "id": "social/silent/handheld-vlog",
+      "path": "generated/workflows/social/silent/handheld-vlog.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/local-business/parking-approach",
-      "path": "generated/workflows/services/local-business/parking-approach.md",
-      "lane": "services",
+      "id": "social/silent/instagram-story-loop",
+      "path": "generated/workflows/social/silent/instagram-story-loop.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/local-business/plated-special",
-      "path": "generated/workflows/services/local-business/plated-special.md",
-      "lane": "services",
+      "id": "social/silent/ken-burns",
+      "path": "generated/workflows/social/silent/ken-burns.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/local-business/service-broll-av",
-      "path": "generated/workflows/services/local-business/service-broll-av.md",
-      "lane": "services",
+      "id": "social/silent/light-leak-loop",
+      "path": "generated/workflows/social/silent/light-leak-loop.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/local-business/staff-greet-av",
-      "path": "generated/workflows/services/local-business/staff-greet-av.md",
-      "lane": "services",
+      "id": "social/silent/logo-sting",
+      "path": "generated/workflows/social/silent/logo-sting.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/local-business/storefront-day",
-      "path": "generated/workflows/services/local-business/storefront-day.md",
-      "lane": "services",
+      "id": "social/silent/lyric-bg-loop",
+      "path": "generated/workflows/social/silent/lyric-bg-loop.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/local-business/storefront-night",
-      "path": "generated/workflows/services/local-business/storefront-night.md",
-      "lane": "services",
+      "id": "social/silent/macro-product",
+      "path": "generated/workflows/social/silent/macro-product.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/local-business/team-headshot",
-      "path": "generated/workflows/services/local-business/team-headshot.md",
-      "lane": "services",
+      "id": "social/silent/pan-left",
+      "path": "generated/workflows/social/silent/pan-left.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/local-business/treatment-room",
-      "path": "generated/workflows/services/local-business/treatment-room.md",
-      "lane": "services",
+      "id": "social/silent/paper-flip",
+      "path": "generated/workflows/social/silent/paper-flip.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/local-business/walk-in-av",
-      "path": "generated/workflows/services/local-business/walk-in-av.md",
-      "lane": "services",
+      "id": "social/silent/product-spin",
+      "path": "generated/workflows/social/silent/product-spin.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/performance-ads/bumper-av",
-      "path": "generated/workflows/services/performance-ads/bumper-av.md",
-      "lane": "services",
+      "id": "social/silent/screen-bg-loop",
+      "path": "generated/workflows/social/silent/screen-bg-loop.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/performance-ads/demo-hands-av",
-      "path": "generated/workflows/services/performance-ads/demo-hands-av.md",
-      "lane": "services",
+      "id": "social/silent/spotify-canvas",
+      "path": "generated/workflows/social/silent/spotify-canvas.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/performance-ads/hook-face",
-      "path": "generated/workflows/services/performance-ads/hook-face.md",
-      "lane": "services",
+      "id": "social/silent/steam-loop",
+      "path": "generated/workflows/social/silent/steam-loop.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/performance-ads/hook-problem",
-      "path": "generated/workflows/services/performance-ads/hook-problem.md",
-      "lane": "services",
+      "id": "social/silent/tiktok-hook",
+      "path": "generated/workflows/social/silent/tiktok-hook.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/performance-ads/hook-result",
-      "path": "generated/workflows/services/performance-ads/hook-result.md",
-      "lane": "services",
+      "id": "social/silent/tilt-reveal",
+      "path": "generated/workflows/social/silent/tilt-reveal.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/performance-ads/offer-bed",
-      "path": "generated/workflows/services/performance-ads/offer-bed.md",
-      "lane": "services",
+      "id": "social/silent/twitch-brb-loop",
+      "path": "generated/workflows/social/silent/twitch-brb-loop.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/performance-ads/problem-spot-av",
-      "path": "generated/workflows/services/performance-ads/problem-spot-av.md",
-      "lane": "services",
+      "id": "social/silent/twitch-starting-loop",
+      "path": "generated/workflows/social/silent/twitch-starting-loop.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/performance-ads/reaction-still",
-      "path": "generated/workflows/services/performance-ads/reaction-still.md",
-      "lane": "services",
+      "id": "social/silent/unbox-hands",
+      "path": "generated/workflows/social/silent/unbox-hands.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/performance-ads/split-board",
-      "path": "generated/workflows/services/performance-ads/split-board.md",
-      "lane": "services",
+      "id": "social/silent/x-post-5s",
+      "path": "generated/workflows/social/silent/x-post-5s.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/performance-ads/square-ad",
-      "path": "generated/workflows/services/performance-ads/square-ad.md",
-      "lane": "services",
+      "id": "social/silent/youtube-subscribe-bump",
+      "path": "generated/workflows/social/silent/youtube-subscribe-bump.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/performance-ads/stitch-setup",
-      "path": "generated/workflows/services/performance-ads/stitch-setup.md",
-      "lane": "services",
+      "id": "social/silent/zoom-punch",
+      "path": "generated/workflows/social/silent/zoom-punch.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/performance-ads/story-safe-ad",
-      "path": "generated/workflows/services/performance-ads/story-safe-ad.md",
-      "lane": "services",
+      "id": "social/stills/album-cover",
+      "path": "generated/workflows/social/stills/album-cover.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/performance-ads/talent-plain-wall",
-      "path": "generated/workflows/services/performance-ads/talent-plain-wall.md",
-      "lane": "services",
+      "id": "social/stills/audiogram-vert",
+      "path": "generated/workflows/social/stills/audiogram-vert.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/performance-ads/testimonial-still",
-      "path": "generated/workflows/services/performance-ads/testimonial-still.md",
-      "lane": "services",
+      "id": "social/stills/audiogram-wide",
+      "path": "generated/workflows/social/stills/audiogram-wide.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/performance-ads/ugc-car-av",
-      "path": "generated/workflows/services/performance-ads/ugc-car-av.md",
-      "lane": "services",
+      "id": "social/stills/brand-kit-4",
+      "path": "generated/workflows/social/stills/brand-kit-4.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/performance-ads/ugc-kitchen-av",
-      "path": "generated/workflows/services/performance-ads/ugc-kitchen-av.md",
-      "lane": "services",
+      "id": "social/stills/coming-soon",
+      "path": "generated/workflows/social/stills/coming-soon.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/performance-ads/ugc-mirror-av",
-      "path": "generated/workflows/services/performance-ads/ugc-mirror-av.md",
-      "lane": "services",
+      "id": "social/stills/desk-setup",
+      "path": "generated/workflows/social/stills/desk-setup.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/performance-ads/ugc-selfie",
-      "path": "generated/workflows/services/performance-ads/ugc-selfie.md",
-      "lane": "services",
+      "id": "social/stills/email-header",
+      "path": "generated/workflows/social/stills/email-header.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/performance-ads/vertical-ad",
-      "path": "generated/workflows/services/performance-ads/vertical-ad.md",
-      "lane": "services",
+      "id": "social/stills/episode-art",
+      "path": "generated/workflows/social/stills/episode-art.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/performance-ads/wide-ad",
-      "path": "generated/workflows/services/performance-ads/wide-ad.md",
-      "lane": "services",
+      "id": "social/stills/facebook-post",
+      "path": "generated/workflows/social/stills/facebook-post.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/podcast-clips/chapter-art",
-      "path": "generated/workflows/services/podcast-clips/chapter-art.md",
-      "lane": "services",
+      "id": "social/stills/instagram-carousel-5",
+      "path": "generated/workflows/social/stills/instagram-carousel-5.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/podcast-clips/clip-montage-av",
-      "path": "generated/workflows/services/podcast-clips/clip-montage-av.md",
-      "lane": "services",
+      "id": "social/stills/instagram-grid-3up",
+      "path": "generated/workflows/social/stills/instagram-grid-3up.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/podcast-clips/clip-push-loop",
-      "path": "generated/workflows/services/podcast-clips/clip-push-loop.md",
-      "lane": "services",
+      "id": "social/stills/instagram-highlight",
+      "path": "generated/workflows/social/stills/instagram-highlight.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/podcast-clips/clip-vertical",
-      "path": "generated/workflows/services/podcast-clips/clip-vertical.md",
-      "lane": "services",
+      "id": "social/stills/instagram-landscape",
+      "path": "generated/workflows/social/stills/instagram-landscape.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/podcast-clips/clip-wide",
-      "path": "generated/workflows/services/podcast-clips/clip-wide.md",
-      "lane": "services",
+      "id": "social/stills/instagram-portrait",
+      "path": "generated/workflows/social/stills/instagram-portrait.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/podcast-clips/desk-mic-av",
-      "path": "generated/workflows/services/podcast-clips/desk-mic-av.md",
-      "lane": "services",
+      "id": "social/stills/instagram-profile",
+      "path": "generated/workflows/social/stills/instagram-profile.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/podcast-clips/end-slate",
-      "path": "generated/workflows/services/podcast-clips/end-slate.md",
-      "lane": "services",
+      "id": "social/stills/instagram-reel-cover",
+      "path": "generated/workflows/social/stills/instagram-reel-cover.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/podcast-clips/guest-intro",
-      "path": "generated/workflows/services/podcast-clips/guest-intro.md",
-      "lane": "services",
+      "id": "social/stills/instagram-story",
+      "path": "generated/workflows/social/stills/instagram-story.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/podcast-clips/host-solo",
-      "path": "generated/workflows/services/podcast-clips/host-solo.md",
-      "lane": "services",
+      "id": "social/stills/linkedin-article",
+      "path": "generated/workflows/social/stills/linkedin-article.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/podcast-clips/laugh-bed-av",
-      "path": "generated/workflows/services/podcast-clips/laugh-bed-av.md",
-      "lane": "services",
+      "id": "social/stills/linkedin-banner",
+      "path": "generated/workflows/social/stills/linkedin-banner.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/podcast-clips/live-badge-bed",
-      "path": "generated/workflows/services/podcast-clips/live-badge-bed.md",
-      "lane": "services",
+      "id": "social/stills/linkedin-carousel-5",
+      "path": "generated/workflows/social/stills/linkedin-carousel-5.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/podcast-clips/lower-third-loop",
-      "path": "generated/workflows/services/podcast-clips/lower-third-loop.md",
-      "lane": "services",
+      "id": "social/stills/linkedin-landscape",
+      "path": "generated/workflows/social/stills/linkedin-landscape.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/podcast-clips/quote-vert",
-      "path": "generated/workflows/services/podcast-clips/quote-vert.md",
-      "lane": "services",
+      "id": "social/stills/linkedin-post",
+      "path": "generated/workflows/social/stills/linkedin-post.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/podcast-clips/quote-wide",
-      "path": "generated/workflows/services/podcast-clips/quote-wide.md",
-      "lane": "services",
+      "id": "social/stills/lyric-card",
+      "path": "generated/workflows/social/stills/lyric-card.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/podcast-clips/remote-guest-av",
-      "path": "generated/workflows/services/podcast-clips/remote-guest-av.md",
-      "lane": "services",
+      "id": "social/stills/merch-mug",
+      "path": "generated/workflows/social/stills/merch-mug.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/podcast-clips/season-trailer-av",
-      "path": "generated/workflows/services/podcast-clips/season-trailer-av.md",
-      "lane": "services",
+      "id": "social/stills/merch-tee",
+      "path": "generated/workflows/social/stills/merch-tee.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/podcast-clips/studio-walk-av",
-      "path": "generated/workflows/services/podcast-clips/studio-walk-av.md",
-      "lane": "services",
+      "id": "social/stills/moodboard-6up",
+      "path": "generated/workflows/social/stills/moodboard-6up.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/podcast-clips/talk-clip-av",
-      "path": "generated/workflows/services/podcast-clips/talk-clip-av.md",
-      "lane": "services",
+      "id": "social/stills/patreon-post",
+      "path": "generated/workflows/social/stills/patreon-post.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/podcast-clips/two-shot",
-      "path": "generated/workflows/services/podcast-clips/two-shot.md",
-      "lane": "services",
+      "id": "social/stills/pinterest-pin",
+      "path": "generated/workflows/social/stills/pinterest-pin.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/podcast-clips/waveform-bed",
-      "path": "generated/workflows/services/podcast-clips/waveform-bed.md",
-      "lane": "services",
+      "id": "social/stills/pinterest-story",
+      "path": "generated/workflows/social/stills/pinterest-story.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/real-estate/aerial-push-av",
-      "path": "generated/workflows/services/real-estate/aerial-push-av.md",
-      "lane": "services",
+      "id": "social/stills/poster-portrait",
+      "path": "generated/workflows/social/stills/poster-portrait.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/real-estate/aerial-still",
-      "path": "generated/workflows/services/real-estate/aerial-still.md",
-      "lane": "services",
+      "id": "social/stills/product-lifestyle",
+      "path": "generated/workflows/social/stills/product-lifestyle.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/real-estate/agent-headshot",
-      "path": "generated/workflows/services/real-estate/agent-headshot.md",
-      "lane": "services",
+      "id": "social/stills/slide-title",
+      "path": "generated/workflows/social/stills/slide-title.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/real-estate/amenity-loop",
-      "path": "generated/workflows/services/real-estate/amenity-loop.md",
-      "lane": "services",
+      "id": "social/stills/spotify-canvas-still",
+      "path": "generated/workflows/social/stills/spotify-canvas-still.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/real-estate/dressed-room",
-      "path": "generated/workflows/services/real-estate/dressed-room.md",
-      "lane": "services",
+      "id": "social/stills/spotify-playlist",
+      "path": "generated/workflows/social/stills/spotify-playlist.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/real-estate/empty-room",
-      "path": "generated/workflows/services/real-estate/empty-room.md",
-      "lane": "services",
+      "id": "social/stills/substack-hero",
+      "path": "generated/workflows/social/stills/substack-hero.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/real-estate/handoff-av",
-      "path": "generated/workflows/services/real-estate/handoff-av.md",
-      "lane": "services",
+      "id": "social/stills/threads-portrait",
+      "path": "generated/workflows/social/stills/threads-portrait.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/real-estate/just-listed",
-      "path": "generated/workflows/services/real-estate/just-listed.md",
-      "lane": "services",
+      "id": "social/stills/tiktok-cover",
+      "path": "generated/workflows/social/stills/tiktok-cover.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/real-estate/key-turn-loop",
-      "path": "generated/workflows/services/real-estate/key-turn-loop.md",
-      "lane": "services",
+      "id": "social/stills/tiktok-shop",
+      "path": "generated/workflows/social/stills/tiktok-shop.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/real-estate/listing-bath",
-      "path": "generated/workflows/services/real-estate/listing-bath.md",
-      "lane": "services",
+      "id": "social/stills/twitch-banner",
+      "path": "generated/workflows/social/stills/twitch-banner.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/real-estate/listing-bedroom",
-      "path": "generated/workflows/services/real-estate/listing-bedroom.md",
-      "lane": "services",
+      "id": "social/stills/twitch-brb",
+      "path": "generated/workflows/social/stills/twitch-brb.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/real-estate/listing-hero",
-      "path": "generated/workflows/services/real-estate/listing-hero.md",
-      "lane": "services",
+      "id": "social/stills/twitch-ending",
+      "path": "generated/workflows/social/stills/twitch-ending.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/real-estate/listing-kitchen",
-      "path": "generated/workflows/services/real-estate/listing-kitchen.md",
-      "lane": "services",
+      "id": "social/stills/twitch-offline",
+      "path": "generated/workflows/social/stills/twitch-offline.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/real-estate/listing-twilight",
-      "path": "generated/workflows/services/real-estate/listing-twilight.md",
-      "lane": "services",
+      "id": "social/stills/twitch-overlay",
+      "path": "generated/workflows/social/stills/twitch-overlay.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/real-estate/listing-yard",
-      "path": "generated/workflows/services/real-estate/listing-yard.md",
-      "lane": "services",
+      "id": "social/stills/twitch-panel",
+      "path": "generated/workflows/social/stills/twitch-panel.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/real-estate/neighborhood-av",
-      "path": "generated/workflows/services/real-estate/neighborhood-av.md",
-      "lane": "services",
+      "id": "social/stills/twitch-profile",
+      "path": "generated/workflows/social/stills/twitch-profile.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/real-estate/open-house-bed",
-      "path": "generated/workflows/services/real-estate/open-house-bed.md",
-      "lane": "services",
+      "id": "social/stills/twitch-starting",
+      "path": "generated/workflows/social/stills/twitch-starting.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/real-estate/sold-slate",
-      "path": "generated/workflows/services/real-estate/sold-slate.md",
-      "lane": "services",
+      "id": "social/stills/x-card",
+      "path": "generated/workflows/social/stills/x-card.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/real-estate/twilight-av",
-      "path": "generated/workflows/services/real-estate/twilight-av.md",
-      "lane": "services",
+      "id": "social/stills/x-header",
+      "path": "generated/workflows/social/stills/x-header.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "services/real-estate/walkthrough-av",
-      "path": "generated/workflows/services/real-estate/walkthrough-av.md",
-      "lane": "services",
+      "id": "social/stills/x-post",
+      "path": "generated/workflows/social/stills/x-post.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "stills/background-edit",
-      "path": "generated/workflows/stills/background-edit.md",
-      "lane": "stills",
+      "id": "social/stills/youtube-channel-art",
+      "path": "generated/workflows/social/stills/youtube-channel-art.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "stills/background-swap",
-      "path": "generated/workflows/stills/background-swap.md",
-      "lane": "stills",
+      "id": "social/stills/youtube-channel-icon",
+      "path": "generated/workflows/social/stills/youtube-channel-icon.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "stills/banner-wide",
-      "path": "generated/workflows/stills/banner-wide.md",
-      "lane": "stills",
+      "id": "social/stills/youtube-chapter-card",
+      "path": "generated/workflows/social/stills/youtube-chapter-card.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "stills/before-after",
-      "path": "generated/workflows/stills/before-after.md",
-      "lane": "stills",
+      "id": "social/stills/youtube-community",
+      "path": "generated/workflows/social/stills/youtube-community.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "stills/camera-angles",
-      "path": "generated/workflows/stills/camera-angles.md",
-      "lane": "stills",
+      "id": "social/stills/youtube-end-screen",
+      "path": "generated/workflows/social/stills/youtube-end-screen.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "stills/character-draft",
-      "path": "generated/workflows/stills/character-draft.md",
-      "lane": "stills",
+      "id": "social/stills/youtube-shorts-thumb",
+      "path": "generated/workflows/social/stills/youtube-shorts-thumb.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "stills/character-tweak",
-      "path": "generated/workflows/stills/character-tweak.md",
-      "lane": "stills",
+      "id": "social/stills/youtube-subscribe-plate",
+      "path": "generated/workflows/social/stills/youtube-subscribe-plate.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "stills/color-moods",
-      "path": "generated/workflows/stills/color-moods.md",
-      "lane": "stills",
+      "id": "social/stills/zoom-bg",
+      "path": "generated/workflows/social/stills/zoom-bg.md",
+      "lane": "social",
       "kind": "graph"
     },
     {
-      "id": "stills/dream-house-clay",
-      "path": "generated/workflows/stills/dream-house-clay.md",
-      "lane": "stills",
+      "id": "video/av/audio-to-video-8s",
+      "path": "generated/workflows/video/av/audio-to-video-8s.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/dream-house",
-      "path": "generated/workflows/stills/dream-house.md",
-      "lane": "stills",
+      "id": "video/av/broll-ambient",
+      "path": "generated/workflows/video/av/broll-ambient.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/endcard-cta",
-      "path": "generated/workflows/stills/endcard-cta.md",
-      "lane": "stills",
+      "id": "video/av/clip-chain",
+      "path": "generated/workflows/video/av/clip-chain.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/food-tabletop",
-      "path": "generated/workflows/stills/food-tabletop.md",
-      "lane": "stills",
+      "id": "video/av/dialogue-8s",
+      "path": "generated/workflows/video/av/dialogue-8s.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/hook-still",
-      "path": "generated/workflows/stills/hook-still.md",
-      "lane": "stills",
+      "id": "video/av/first-last-8s",
+      "path": "generated/workflows/video/av/first-last-8s.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/identity-sheet",
-      "path": "generated/workflows/stills/identity-sheet.md",
-      "lane": "stills",
+      "id": "video/av/hook-av",
+      "path": "generated/workflows/video/av/hook-av.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/image-studio",
-      "path": "generated/workflows/stills/image-studio.md",
-      "lane": "stills",
+      "id": "video/av/interior-ambience",
+      "path": "generated/workflows/video/av/interior-ambience.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/instagram-square",
-      "path": "generated/workflows/stills/instagram-square.md",
-      "lane": "stills",
+      "id": "video/av/multishot-8s",
+      "path": "generated/workflows/video/av/multishot-8s.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/lighting-trio",
-      "path": "generated/workflows/stills/lighting-trio.md",
-      "lane": "stills",
+      "id": "video/av/product-hero",
+      "path": "generated/workflows/video/av/product-hero.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/lower-third-bg",
-      "path": "generated/workflows/stills/lower-third-bg.md",
-      "lane": "stills",
+      "id": "video/av/shorts-still-8s",
+      "path": "generated/workflows/video/av/shorts-still-8s.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/open-graph",
-      "path": "generated/workflows/stills/open-graph.md",
-      "lane": "stills",
+      "id": "video/av/still-to-shot",
+      "path": "generated/workflows/video/av/still-to-shot.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/platform-pack",
-      "path": "generated/workflows/stills/platform-pack.md",
-      "lane": "stills",
+      "id": "video/av/still-to-video-8s",
+      "path": "generated/workflows/video/av/still-to-video-8s.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/podcast-cover",
-      "path": "generated/workflows/stills/podcast-cover.md",
-      "lane": "stills",
+      "id": "video/av/talking-head",
+      "path": "generated/workflows/video/av/talking-head.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/product-packshot",
-      "path": "generated/workflows/stills/product-packshot.md",
-      "lane": "stills",
+      "id": "video/av/text-to-video-8s",
+      "path": "generated/workflows/video/av/text-to-video-8s.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/quote-bg",
-      "path": "generated/workflows/stills/quote-bg.md",
-      "lane": "stills",
+      "id": "video/av/weather-broll",
+      "path": "generated/workflows/video/av/weather-broll.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/shorts-still",
-      "path": "generated/workflows/stills/shorts-still.md",
-      "lane": "stills",
+      "id": "video/loops/bumper-loop",
+      "path": "generated/workflows/video/loops/bumper-loop.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/still-daily",
-      "path": "generated/workflows/stills/still-daily.md",
-      "lane": "stills",
+      "id": "video/loops/gif-loop",
+      "path": "generated/workflows/video/loops/gif-loop.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/still-draft",
-      "path": "generated/workflows/stills/still-draft.md",
-      "lane": "stills",
+      "id": "video/loops/sticker-loop",
+      "path": "generated/workflows/video/loops/sticker-loop.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/still-flux3-fast",
-      "path": "generated/workflows/stills/still-flux3-fast.md",
-      "lane": "stills",
+      "id": "video/silent/first-last-5s",
+      "path": "generated/workflows/video/silent/first-last-5s.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/still-flux3-quality",
-      "path": "generated/workflows/stills/still-flux3-quality.md",
-      "lane": "stills",
+      "id": "video/silent/orbit-still-5s",
+      "path": "generated/workflows/video/silent/orbit-still-5s.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/still-hero",
-      "path": "generated/workflows/stills/still-hero.md",
-      "lane": "stills",
+      "id": "video/silent/parallax-still-5s",
+      "path": "generated/workflows/video/silent/parallax-still-5s.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/still-studio",
-      "path": "generated/workflows/stills/still-studio.md",
-      "lane": "stills",
+      "id": "video/silent/push-in-still-5s",
+      "path": "generated/workflows/video/silent/push-in-still-5s.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/storyboard-6up",
-      "path": "generated/workflows/stills/storyboard-6up.md",
-      "lane": "stills",
+      "id": "video/silent/shorts-still-5s",
+      "path": "generated/workflows/video/silent/shorts-still-5s.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/style-lock",
-      "path": "generated/workflows/stills/style-lock.md",
-      "lane": "stills",
+      "id": "video/silent/still-to-shot",
+      "path": "generated/workflows/video/silent/still-to-shot.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/talking-head",
-      "path": "generated/workflows/stills/talking-head.md",
-      "lane": "stills",
+      "id": "video/silent/still-to-video-5s",
+      "path": "generated/workflows/video/silent/still-to-video-5s.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/text-swap",
-      "path": "generated/workflows/stills/text-swap.md",
-      "lane": "stills",
+      "id": "video/silent/text-to-video-5s",
+      "path": "generated/workflows/video/silent/text-to-video-5s.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
-      "id": "stills/thumbnail",
-      "path": "generated/workflows/stills/thumbnail.md",
-      "lane": "stills",
-      "kind": "graph"
-    },
-    {
-      "id": "stills/time-of-day",
-      "path": "generated/workflows/stills/time-of-day.md",
-      "lane": "stills",
-      "kind": "graph"
-    },
-    {
-      "id": "stills/upscale-reframe",
-      "path": "generated/workflows/stills/upscale-reframe.md",
-      "lane": "stills",
+      "id": "video/silent/vace-join",
+      "path": "generated/workflows/video/silent/vace-join.md",
+      "lane": "video",
       "kind": "graph"
     },
     {
@@ -2606,5 +2606,17 @@
     }
   ],
   "graph_count": 684,
-  "page_count": 435
+  "page_count": 435,
+  "lanes": [
+    "photos",
+    "video",
+    "social",
+    "business",
+    "film",
+    "audio",
+    "audio-albums",
+    "3d",
+    "guides",
+    "labs"
+  ]
 }

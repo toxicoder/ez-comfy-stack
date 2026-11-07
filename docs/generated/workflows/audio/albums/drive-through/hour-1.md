@@ -37,7 +37,7 @@ US-safe EDM **288 s** take: **night window**. Fictional act **Drive-through** (h
 5. ACE-Step timbre is **invented**, not a cloned act.
 6. Sampler: 8 steps, cfg 1, euler, simple. Duration 288 s across 4 passes, bpm 168, language unknown, timesignature 4, key B minor, form drv-d8aba0ba44, generate_audio_codes true. Seed 193.
 7. Saves: `01 - Night Window` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.
-8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.
+8. Cover separately: Queue **photos/thumbnail.json** or **photos/podcast-cover.json**. Do not embed Klein here.
 9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).
 10. Do not co-resident with LTX / Wan / Klein on this Spark.
 
@@ -10193,7 +10193,7 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | 3 | `t2i` |
 | 4 | `YouTube 16:9 still` |
 | 5 | `none` |
-| 6 | `stills/instagram-square` |
+| 6 | `photos/instagram-square` |
 
 ```text
 square album cover, graphic print, night highway overpass, warped neon bass, wet asphalt, fictional act Drive-through, album Hour 1, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
@@ -12319,7 +12319,7 @@ Type `COMBO`. Range / default: custom.
 
 Lab sample prompt or Custom.
 
-**How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 30 recipes plus Custom (place recipes such as Cliff villa on stills/dream-house).
+**How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 30 recipes plus Custom (place recipes such as Cliff villa on photos/dream-house).
 
 **This graph:** `square album cover, graphic print, night highway overpass, warped neon bass, wet asphalt, fictional act Drive-through, album Hour 1, no text, no letters, no logos, no living person likeness, no celeb...`
 
@@ -12706,7 +12706,7 @@ Sample-catalog id (graph stem).
 
 **How it affects generation:** Internal. Leave as stamped so sample dropdowns resolve.
 
-**This graph:** `stills/instagram-square`
+**This graph:** `photos/instagram-square`
 
 ### `EZNegativePromptEnhance` - Negative Prompt Enhance
 
@@ -12769,7 +12769,7 @@ Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack
 
 !!! warning "Lab notes"
 
-    stills/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size. Match input snaps aspect to a loaded still.
+    photos/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size. Match input snaps aspect to a loaded still.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -12882,7 +12882,7 @@ Type `COMBO`. Range / default: none.
 
 Optional Cinema Rack starter.
 
-**How it affects generation:** none leaves look to Style + Prompt. A pick splices Klein still language into Enhance context. Full 13-axis desk is inspire/cinema-rack.
+**How it affects generation:** none leaves look to Style + Prompt. A pick splices Klein still language into Enhance context. Full 13-axis desk is labs/assist/cinema-rack.
 
 **This graph:** `none`
 

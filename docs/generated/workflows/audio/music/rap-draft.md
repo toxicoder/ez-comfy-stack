@@ -38,7 +38,7 @@ US-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-
 5. ACE-Step vocal is an **invented** identity, not a cloned MC.
 6. Sampler: 8 steps, cfg 1, euler, simple. Duration 49 s, bpm 88, language en, timesignature 4, key C minor, generate_audio_codes true. Form is a cold open (verse, lift, hook). Album takes use the full form catalog.
 7. Saves: `ez_rap_draft` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.
-8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.
+8. Cover separately: Queue **photos/thumbnail.json** or **photos/podcast-cover.json**. Do not embed Klein here.
 9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).
 
 Beat-only pass: keep boom-bap tags, append instrumental, no vocals, and replace lyrics with [inst].
@@ -986,7 +986,7 @@ US-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-
 5. ACE-Step vocal is an **invented** identity, not a cloned MC.
 6. Sampler: 8 steps, cfg 1, euler, simple. Duration 49 s, bpm 88, language en, timesignature 4, key C minor, generate_audio_codes true. Form is a cold open (verse, lift, hook). Album takes use the full form catalog.
 7. Saves: `ez_rap_draft` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.
-8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.
+8. Cover separately: Queue **photos/thumbnail.json** or **photos/podcast-cover.json**. Do not embed Klein here.
 9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).
 
 Beat-only pass: keep boom-bap tags, append instrumental, no vocals, and replace lyrics with [inst].

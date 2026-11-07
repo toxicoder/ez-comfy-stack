@@ -37,7 +37,7 @@ US-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1,
 4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No 'in the style of <living artist>'.
 5. ACE-Step vocal is an invented timbre, not a clone.
 6. Saves: `ez_rap_full` FLAC + 320 kbps MP3.
-7. Cover: sequential Queue **stills/thumbnail.json** / **stills/podcast-cover.json**. Do not embed Klein.
+7. Cover: sequential Queue **photos/thumbnail.json** / **photos/podcast-cover.json**. Do not embed Klein.
 8. Do not co-resident with LTX / Wan / Klein on this Spark.
 
 Canned style swaps (tags widget only):
@@ -1045,7 +1045,7 @@ US-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1,
 4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No 'in the style of <living artist>'.
 5. ACE-Step vocal is an invented timbre, not a clone.
 6. Saves: `ez_rap_full` FLAC + 320 kbps MP3.
-7. Cover: sequential Queue **stills/thumbnail.json** / **stills/podcast-cover.json**. Do not embed Klein.
+7. Cover: sequential Queue **photos/thumbnail.json** / **photos/podcast-cover.json**. Do not embed Klein.
 8. Do not co-resident with LTX / Wan / Klein on this Spark.
 
 Canned style swaps (tags widget only):
