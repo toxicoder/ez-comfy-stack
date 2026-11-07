@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build motion/av/clip-chain from motion/av/still-to-video-8s.
+"""Build video/av/clip-chain from video/av/still-to-video-8s.
 
 Not imported by pytest (leading underscore). Run from repo root:
 
@@ -36,8 +36,8 @@ from ez_film.concat import (  # noqa: E402
     CLIP_PREFIX_DEFAULT,
 )
 
-REL = "motion/av/clip-chain"
-SOURCE_REL = "motion/av/still-to-video-8s"
+REL = "video/av/clip-chain"
+SOURCE_REL = "video/av/still-to-video-8s"
 BEAT_COUNT = 4
 BEAT_BASE = 100
 BEAT_STRIDE = 40
@@ -816,7 +816,7 @@ def build_clip_chain() -> dict[str, Any]:
 def main() -> None:
     """Build and write the clip-chain lab graph."""
     graph = build_clip_chain()
-    path = LAB_ROOT / "motion" / "av" / "clip-chain.json"
+    path = LAB_ROOT / "video" / "av" / "clip-chain.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {path.relative_to(ROOT)}")

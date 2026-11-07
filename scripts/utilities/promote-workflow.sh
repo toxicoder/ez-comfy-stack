@@ -29,7 +29,7 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 # shellcheck source=../lib/common.sh disable=SC1091
 source "${REPO_ROOT}/scripts/lib/common.sh"
 
-readonly PROMOTE_LANES=(stills motion creator services films dcc optional audio inspire editing)
+readonly PROMOTE_LANES=(photos video social business film audio 3d guides labs)
 readonly PROMOTE_BANNED=(
   MiniMax
   Seedance
@@ -58,6 +58,7 @@ readonly PROMOTE_BANNED_UNET=(
 #######################################
 promote_usage() {
   err "Usage: promote-workflow.sh --from PATH --lane LANE --id STEM [--subdir REL]"
+  err "       LANE is one of: photos video social business film audio 3d guides labs"
 }
 
 #######################################
@@ -182,7 +183,7 @@ promote_run() {
     return 1
   fi
   promote_lane_ok "${lane}" || {
-    err "unknown lane ${lane} (stills|motion|creator|services|films|dcc|optional|audio|inspire|editing)"
+    err "unknown lane ${lane} (photos|video|social|business|film|audio|3d|guides|labs)"
     return 1
   }
   if [[ ! -f ${from} ]]; then

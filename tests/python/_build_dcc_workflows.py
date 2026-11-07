@@ -16,7 +16,7 @@ from _lab_layout import GROUP_TITLE_INSET, group as _group, finalize_layout
 from _lab_paths import lab_dest, lab_json
 from _stamp_app_mode import stamp_suite_graph
 
-KLEIN_NOTE = """## dcc/clay-hero
+KLEIN_NOTE = """## guides/clay-hero
 
 Klein 4B **edit** of a DCC clay first frame (guide pack ``first.png``). Enhance **on**. Seed **42**. Size **1280x704** (LTX VAE grid - not 1280x720).
 
@@ -31,7 +31,7 @@ Unload before LTX. Do not Queue this graph and a DCC dump in one session (occupa
 Prompt: inventory + look. Motion comes later from the pack. Official clay is Workbench / unshaded, not Cycles beauty.
 """
 
-LTX_NOTE = """## dcc/depth-control-8s
+LTX_NOTE = """## guides/depth-control-8s
 
 Lab envelope for Path B depth-guided 8.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **193 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
 
@@ -54,7 +54,7 @@ Stop Klein first. After print, stop LTX and run audio-finish / stem-mix (occupan
 LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.
 """
 
-CANNY_STILL_NOTE = """## dcc/canny-hero
+CANNY_STILL_NOTE = """## guides/canny-hero
 
 Klein 4B **edit** of a DCC line-art plate (guide pack ``canny/`` first frame, or still ``canny.png``). Enhance **on**. Seed **42**. Size **1280x704**.
 
@@ -65,7 +65,7 @@ Keep the silhouette and camera from the line art. Finish materials and light. Do
 Unload before LTX. Occupancy: klein. Handoff: ltx-iclora-canny-5s.
 """
 
-CLAY_PLATES_NOTE = """## dcc/clay-plates
+CLAY_PLATES_NOTE = """## guides/clay-plates
 
 One clay still, four Klein **edit** plates. Enhance **on**. Seed **42**. Ctrl+B unused SHOT groups.
 
@@ -79,7 +79,7 @@ LoadImage: clay ``first.png``. Each plate scales the clay to its latent. Occupan
 Handoff: wan-i2v-5s / wan-shorts-i2v / ltx-iclora-depth-shorts.
 """
 
-LTX_CANNY_NOTE = """## dcc/canny-control-8s
+LTX_CANNY_NOTE = """## guides/canny-control-8s
 
 Lab envelope for Path B **canny**-guided 8.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **193 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
 
@@ -99,7 +99,7 @@ LoadImage: guide ``first.png``. Stop Klein first. After print, audio-finish / st
 LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.
 """
 
-LTX_SHORTS_NOTE = """## dcc/depth-control-shorts
+LTX_SHORTS_NOTE = """## guides/depth-control-shorts
 
 Lab envelope for Path B depth-guided **portrait** 8.00s print. LTX canvas **768x1280** (width/height must be divisible by 32; 720 and 1080 are invalid). **193 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
 
@@ -112,7 +112,7 @@ Queue Templates -> LTX-2.5 -> LTX-2.5_ICLoRA_Union_Control_Distilled.json. Depth
 Prefix ``ez_iclora_depth_shorts``. Occupancy: ltx. Handoff: audio-finish.
 """
 
-WAN_FLF_GUIDE_NOTE = """## dcc/first-last-from-guide
+WAN_FLF_GUIDE_NOTE = """## guides/first-last-from-guide
 
 Silent Fun InP first-last-frame from a DCC guide pack. LoadImage ``first.png`` and ``last.png``. MagCache **off**. Opt-in:
 
@@ -124,8 +124,8 @@ Prefix ``ez_flf_guide``. 832x480, 121 frames (Wan 5B / Fun InP default). The pac
 """
 
 STAY_IN_COMFY = (
-    "Stay on :8188 after a dump: dcc/guide-still / "
-    "dcc/depth-from-loader / dcc/still-to-mesh "
+    "Stay on :8188 after a dump: guides/guide-still / "
+    "guides/depth-from-loader / 3d/still-to-mesh "
     "(EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path "
     "on this graph still works."
 )
@@ -138,7 +138,7 @@ LTX_CANNY_NOTE = LTX_CANNY_NOTE.rstrip() + "\n\n" + STAY_IN_COMFY + "\n"
 LTX_SHORTS_NOTE = LTX_SHORTS_NOTE.rstrip() + "\n\n" + STAY_IN_COMFY + "\n"
 WAN_FLF_GUIDE_NOTE = WAN_FLF_GUIDE_NOTE.rstrip() + "\n\n" + STAY_IN_COMFY + "\n"
 
-KLEIN_LOADER_NOTE = """## dcc/guide-still
+KLEIN_LOADER_NOTE = """## guides/guide-still
 
 Klein 4B **edit** of a guide-pack still loaded in-canvas (no LoadImage / --install-inputs). Enhance **on**. Seed **42**. Size **1280x704**. Prefix ``ez_guide_hero``.
 
@@ -153,7 +153,7 @@ bazelisk run //:manage -- occupancy enter klein --yes
 blender-desk fails the gate (park is for dumps). After Queue, overlay-qc. Path D: laptop dump, rsync ``guides/``, Spark Comfy. Stay on :8188.
 """
 
-LTX_LOADER_NOTE = """## dcc/depth-from-loader
+LTX_LOADER_NOTE = """## guides/depth-from-loader
 
 Lab envelope for Path B depth-guided 8.00s print from in-canvas loaders. LTX canvas **1280x704** (width/height must be divisible by 32; 720 and 1080 are invalid). **193 frames @ 24 fps**. MagCache **off**. Distilled transformer only. Prefix ``ez_iclora_guide``.
 
@@ -166,7 +166,7 @@ Opt-in: ``./scripts/manage.sh download-ltx --tier iclora``. Refuse 19B Union. No
 LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.
 """
 
-TRELLIS_LOADER_NOTE = """## dcc/still-to-mesh
+TRELLIS_LOADER_NOTE = """## 3d/still-to-mesh
 
 Still pack plate -> native TRELLIS.2 INT8 mesh (Comfy core nodes). Occupancy: **trellis**.
 
@@ -339,10 +339,10 @@ def _add_guide_video_node(graph: dict, *, layer: str = "depth") -> dict:
 
 
 def build_klein_from_clay() -> dict:
-    graph = _load("stills/still-hero.json")
-    graph["id"] = "dcc/clay-hero"
+    graph = _load("photos/still-hero.json")
+    graph["id"] = "guides/clay-hero"
     extra = graph.setdefault("extra", {})
-    extra["lab_profile"] = "dcc/clay-hero"
+    extra["lab_profile"] = "guides/clay-hero"
     extra["lab_note"] = KLEIN_NOTE
     extra["lab_description"] = "Klein 4B edit of DCC clay first.png. Enhance on. 1280x704. Seed 42."
     extra["lab_dcc"] = {
@@ -484,10 +484,10 @@ def build_klein_from_clay() -> dict:
 
 
 def build_ltx_iclora() -> dict:
-    graph = copy.deepcopy(_load("motion/av/still-to-shot.json"))
-    graph["id"] = "dcc/depth-control-8s"
+    graph = copy.deepcopy(_load("video/av/still-to-shot.json"))
+    graph["id"] = "guides/depth-control-8s"
     extra = graph.setdefault("extra", {})
-    extra["lab_profile"] = "dcc/depth-control-8s"
+    extra["lab_profile"] = "guides/depth-control-8s"
     extra["lab_note"] = LTX_NOTE
     extra["lab_description"] = "LTX-2.5 IC-LoRA Union Control envelope, 193 frames, depth default"
     extra["lab_iclora"] = {
@@ -554,9 +554,9 @@ def _retitle_note(graph: dict, text: str) -> None:
 
 def build_klein_from_canny() -> dict:
     graph = build_klein_from_clay()
-    graph["id"] = "dcc/canny-hero"
+    graph["id"] = "guides/canny-hero"
     extra = graph.setdefault("extra", {})
-    extra["lab_profile"] = "dcc/canny-hero"
+    extra["lab_profile"] = "guides/canny-hero"
     extra["lab_description"] = (
         "Klein 4B edit of DCC canny.png. Enhance on. 1280x704. Seed 42."
     )
@@ -853,9 +853,9 @@ def _append_clay_plate(
 
 def build_klein_from_clay_plates() -> dict:
     graph = build_klein_from_clay()
-    graph["id"] = "dcc/clay-plates"
+    graph["id"] = "guides/clay-plates"
     extra = graph.setdefault("extra", {})
-    extra["lab_profile"] = "dcc/clay-plates"
+    extra["lab_profile"] = "guides/clay-plates"
     extra["lab_description"] = (
         "Klein 4B edit of one clay still into four creator plates. Enhance on. Seed 42."
     )
@@ -920,9 +920,9 @@ def _set_vhs_prefix(graph: dict, prefix: str) -> None:
 
 def build_ltx_iclora_canny() -> dict:
     graph = build_ltx_iclora()
-    graph["id"] = "dcc/canny-control-8s"
+    graph["id"] = "guides/canny-control-8s"
     extra = graph.setdefault("extra", {})
-    extra["lab_profile"] = "dcc/canny-control-8s"
+    extra["lab_profile"] = "guides/canny-control-8s"
     extra["lab_description"] = (
         "LTX-2.5 IC-LoRA Union Control envelope, 193 frames, canny default"
     )
@@ -937,9 +937,9 @@ def build_ltx_iclora_canny() -> dict:
 
 def build_ltx_iclora_depth_shorts() -> dict:
     graph = build_ltx_iclora()
-    graph["id"] = "dcc/depth-control-shorts"
+    graph["id"] = "guides/depth-control-shorts"
     extra = graph.setdefault("extra", {})
-    extra["lab_profile"] = "dcc/depth-control-shorts"
+    extra["lab_profile"] = "guides/depth-control-shorts"
     extra["lab_description"] = (
         "LTX-2.5 IC-LoRA Union Control envelope, 768x1280, 193 frames, depth default"
     )
@@ -954,10 +954,10 @@ def build_ltx_iclora_depth_shorts() -> dict:
 
 
 def build_wan_flf_from_guide() -> dict:
-    graph = copy.deepcopy(_load("motion/silent/first-last-5s.json"))
-    graph["id"] = "dcc/first-last-from-guide"
+    graph = copy.deepcopy(_load("video/silent/first-last-5s.json"))
+    graph["id"] = "guides/first-last-from-guide"
     extra = graph.setdefault("extra", {})
-    extra["lab_profile"] = "dcc/first-last-from-guide"
+    extra["lab_profile"] = "guides/first-last-from-guide"
     extra["lab_description"] = (
         "Wan Fun InP first-last-frame from guide first.png + last.png. MagCache off."
     )
@@ -1041,9 +1041,9 @@ def _set_filename_prefix(graph: dict, prefix: str) -> None:
 
 def build_klein_from_guide_loader() -> dict:
     graph = build_klein_from_clay()
-    graph["id"] = "dcc/guide-still"
+    graph["id"] = "guides/guide-still"
     extra = graph.setdefault("extra", {})
-    extra["lab_profile"] = "dcc/guide-still"
+    extra["lab_profile"] = "guides/guide-still"
     extra["lab_description"] = (
         "Klein 4B edit of EZDCCLoadGuideStill first.png. Enhance on. 1280x704. Seed 42."
     )
@@ -1073,9 +1073,9 @@ def build_klein_from_guide_loader() -> dict:
 
 def build_ltx_iclora_from_guide_loader() -> dict:
     graph = build_ltx_iclora()
-    graph["id"] = "dcc/depth-from-loader"
+    graph["id"] = "guides/depth-from-loader"
     extra = graph.setdefault("extra", {})
-    extra["lab_profile"] = "dcc/depth-from-loader"
+    extra["lab_profile"] = "guides/depth-from-loader"
     extra["lab_description"] = (
         "LTX-2.5 IC-LoRA envelope from EZDCCLoadGuideStill + depth video path."
     )
@@ -1112,9 +1112,9 @@ def build_trellis_from_klein_still() -> dict:
     from _build_trellis_workflow import build_trellis
 
     graph = build_trellis()
-    graph["id"] = "dcc/still-to-mesh"
+    graph["id"] = "3d/still-to-mesh"
     extra = graph.setdefault("extra", {})
-    extra["lab_profile"] = "dcc/still-to-mesh"
+    extra["lab_profile"] = "3d/still-to-mesh"
     extra["lab_description"] = (
         "EZDCCLoadStillPack mug plate to native TRELLIS.2 INT8. Occupancy trellis."
     )
@@ -1158,19 +1158,19 @@ def main() -> int:
     ltx_loader = build_ltx_iclora_from_guide_loader()
     trellis_loader = build_trellis_from_klein_still()
     written = [
-        ("dcc/clay-hero.json", klein),
-        ("dcc/canny-hero.json", canny),
-        ("dcc/clay-plates.json", plates),
-        ("dcc/depth-control-8s.json", ltx),
-        ("dcc/canny-control-8s.json", ltx_canny),
-        ("dcc/depth-control-shorts.json", ltx_shorts),
-        ("dcc/first-last-from-guide.json", flf),
-        ("dcc/guide-still.json", klein_loader),
-        ("dcc/depth-from-loader.json", ltx_loader),
-        ("dcc/still-to-mesh.json", trellis_loader),
+        ("guides/clay-hero.json", klein),
+        ("guides/canny-hero.json", canny),
+        ("guides/clay-plates.json", plates),
+        ("guides/depth-control-8s.json", ltx),
+        ("guides/canny-control-8s.json", ltx_canny),
+        ("guides/depth-control-shorts.json", ltx_shorts),
+        ("guides/first-last-from-guide.json", flf),
+        ("guides/guide-still.json", klein_loader),
+        ("guides/depth-from-loader.json", ltx_loader),
+        ("3d/still-to-mesh.json", trellis_loader),
     ]
     for name, graph in written:
-        dest = lab_dest(name, lane="dcc")
+        dest = lab_dest(name, lane="guides")
         _save(graph, dest)
         print(f"wrote {dest}")
     return 0

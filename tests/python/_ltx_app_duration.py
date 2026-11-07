@@ -28,31 +28,31 @@ from ez_film.ltx_timing import (  # noqa: E402
 LTX_LENGTH_TYPES = frozenset(
     {"LTXVImgToVideo", "EmptyLTXVLatentVideo", "LTXVEmptyLatentAudio"}
 )
-FILM_KEEP_RELS = frozenset({"motion/av/still-to-shot"})
+FILM_KEEP_RELS = frozenset({"video/av/still-to-shot"})
 SUBGRAPH_APP = ROOT / "custom_nodes" / "ez_studio_blocks" / "subgraphs" / "ltx-av-8s.json"
 SUBGRAPH_APP_OLD = ROOT / "custom_nodes" / "ez_studio_blocks" / "subgraphs" / "ltx-av-12s.json"
 SUBGRAPH_APP_LEGACY = ROOT / "custom_nodes" / "ez_studio_blocks" / "subgraphs" / "ltx-av-5s.json"
 
 # Old lab-rel -> 8s lab-rel (full paths only; do not stem-rewrite Wan twins).
 APP_REL_RENAMES: dict[str, str] = {
-    "motion/av/still-to-video-12s": "motion/av/still-to-video-8s",
-    "motion/av/text-to-video-12s": "motion/av/text-to-video-8s",
-    "motion/av/shorts-still-12s": "motion/av/shorts-still-8s",
-    "motion/av/dialogue-12s": "motion/av/dialogue-8s",
-    "motion/av/multishot-12s": "motion/av/multishot-8s",
-    "motion/av/first-last-12s": "motion/av/first-last-8s",
-    "motion/av/audio-to-video-12s": "motion/av/audio-to-video-8s",
-    "dcc/canny-control-12s": "dcc/canny-control-8s",
-    "dcc/depth-control-12s": "dcc/depth-control-8s",
-    "motion/av/still-to-video-5s": "motion/av/still-to-video-8s",
-    "motion/av/text-to-video-5s": "motion/av/text-to-video-8s",
-    "motion/av/shorts-still-5s": "motion/av/shorts-still-8s",
-    "motion/av/dialogue-5s": "motion/av/dialogue-8s",
-    "motion/av/multishot-5s": "motion/av/multishot-8s",
-    "motion/av/first-last-5s": "motion/av/first-last-8s",
-    "motion/av/audio-to-video-5s": "motion/av/audio-to-video-8s",
-    "dcc/canny-control-5s": "dcc/canny-control-8s",
-    "dcc/depth-control-5s": "dcc/depth-control-8s",
+    "video/av/still-to-video-12s": "video/av/still-to-video-8s",
+    "video/av/text-to-video-12s": "video/av/text-to-video-8s",
+    "video/av/shorts-still-12s": "video/av/shorts-still-8s",
+    "video/av/dialogue-12s": "video/av/dialogue-8s",
+    "video/av/multishot-12s": "video/av/multishot-8s",
+    "video/av/first-last-12s": "video/av/first-last-8s",
+    "video/av/audio-to-video-12s": "video/av/audio-to-video-8s",
+    "guides/canny-control-12s": "guides/canny-control-8s",
+    "guides/depth-control-12s": "guides/depth-control-8s",
+    "video/av/still-to-video-5s": "video/av/still-to-video-8s",
+    "video/av/text-to-video-5s": "video/av/text-to-video-8s",
+    "video/av/shorts-still-5s": "video/av/shorts-still-8s",
+    "video/av/dialogue-5s": "video/av/dialogue-8s",
+    "video/av/multishot-5s": "video/av/multishot-8s",
+    "video/av/first-last-5s": "video/av/first-last-8s",
+    "video/av/audio-to-video-5s": "video/av/audio-to-video-8s",
+    "guides/canny-control-5s": "guides/canny-control-8s",
+    "guides/depth-control-5s": "guides/depth-control-8s",
 }
 
 _HINT_RE = re.compile(r"\b(?:5|12) seconds, 24 fps")
@@ -93,9 +93,9 @@ def is_film_rel(rel: str) -> bool:
         rel: ``_lab``-relative id.
 
     Returns:
-        True for ``films/`` trees.
+        True for ``film/`` trees.
     """
-    return rel.startswith("films/")
+    return rel.startswith("film/")
 
 
 def is_standalone_ltx_app(graph: MappingLike, rel: str) -> bool:

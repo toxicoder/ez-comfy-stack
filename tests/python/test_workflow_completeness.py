@@ -248,9 +248,9 @@ def _source_of(graph: dict, node: dict, name: str) -> dict | None:
 
 
 def test_prompt_forge_shares_one_prompt_and_context() -> None:
-    graph = _load(lab_json("inspire/prompt-forge.json"))
+    graph = _load(lab_json("labs/assist/prompt-forge.json"))
     extra = graph.get("extra") or {}
-    assert extra.get("lab_rel") == "inspire/prompt-forge"
+    assert extra.get("lab_rel") == "labs/assist/prompt-forge"
     prims = {
         str(n.get("title")): n
         for n in graph["nodes"]
@@ -272,7 +272,7 @@ def test_prompt_forge_shares_one_prompt_and_context() -> None:
 
 
 def test_beat_sheet_desk_reaches_every_ltx_enhance() -> None:
-    graph = _load(lab_json("inspire/beat-sheet.json"))
+    graph = _load(lab_json("labs/assist/beat-sheet.json"))
     prims = {
         str(n.get("title")): n
         for n in graph["nodes"]
@@ -296,7 +296,7 @@ def test_beat_sheet_desk_reaches_every_ltx_enhance() -> None:
 
 
 def test_film_identity_is_context_for_every_ltx_shot() -> None:
-    for rel in ("films/go-see.json", "films/still-here.json", "films/switchyard.json"):
+    for rel in ("film/go-see.json", "film/still-here.json", "film/switchyard.json"):
         graph = _load(lab_json(rel))
         klein = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
         ltx = [n for n in graph["nodes"] if n.get("type") == "EZLTXPromptEnhance"]
@@ -336,12 +336,12 @@ def test_learn_episode_ace_bed_reads_digest_context() -> None:
 
 
 FLUX3_STILL_PROFILE = {
-    "stills/still-flux3-fast": {
+    "labs/opt-in/still-flux3-fast": {
         "unet": "flux3-image-klein-int8-convrot.safetensors",
         "steps": 16,
         "cfg": 1.0,
     },
-    "stills/still-flux3-quality": {
+    "labs/opt-in/still-flux3-quality": {
         "unet": "flux3-image-klein-base-int8-convrot.safetensors",
         "steps": 50,
         "cfg": 3.5,

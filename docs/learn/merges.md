@@ -117,7 +117,7 @@ When two PRs touch the same file, merge **bottom of stack first**. Keep **both**
 
 Examples that did this correctly:
 
-- **#253** then **#254**: `docs/getting-started.md` kept job-folder paths (`stills/still-draft`) **and** the Outputs sidebar sentence.
+- **#253** then **#254**: `docs/getting-started.md` kept job-folder paths (`photos/still-draft`) **and** the Outputs sidebar sentence.
 - **#270** / **#269** then **#271** / **#272**: docs IA and setup-client / services pack. #271 and #272 were retargeted to `development` before merge. The `nav.json` conflict was additive.
 
 ```mermaid

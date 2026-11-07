@@ -53,7 +53,7 @@ def test_audio_first_podcast_graph() -> None:
     ):
         assert prefix in blob, prefix
     assert DISCLOSURE in blob
-    assert "stills/podcast-cover" in blob
+    assert "photos/podcast-cover" in blob
     titles = {n.get("title") for n in graph["nodes"]}
     assert "MODEL" in {g["title"] for g in graph["groups"]}
     assert "PROMPT" in {g["title"] for g in graph["groups"]}
@@ -67,7 +67,9 @@ def test_audio_first_podcast_graph() -> None:
     ace = list(iter_ace_encoders(graph))
     assert ace
     for node in ace:
-        assert_ace_encoder_widgets(node, where=f"podcast-audio-first:{node.get('title')}")
+        assert_ace_encoder_widgets(
+            node, where=f"podcast-two-host-episode:{node.get('title')}"
+        )
     pos = next(n for n in ace if "bed" in (n.get("title") or "").lower())
     tags, lyrics = pos["widgets_values"][0], pos["widgets_values"][1]
     assert "instrumental" in tags.lower()
@@ -193,7 +195,7 @@ def test_learn_episode_podcast_graph() -> None:
     ):
         assert prefix in blob, prefix
     assert DISCLOSURE in blob
-    assert "stills/podcast-cover" in blob
+    assert "photos/podcast-cover" in blob
     learn = next(n for n in graph["nodes"] if n["type"] == "EZPodcastLearn")
     lw = learn["widgets_values"]
     assert (lw[5] if len(lw) >= 7 else lw[4]) is True

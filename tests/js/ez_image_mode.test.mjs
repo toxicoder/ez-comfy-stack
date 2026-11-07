@@ -46,7 +46,7 @@ const MODES_JSON = path.join(
   "modes.json",
 );
 
-const STUDIO_LAB = "stills/image-studio";
+const STUDIO_LAB = "photos/image-studio";
 const PREVIEW_ROUTE = "/ez_image/studio-preview";
 /** Longer than the extension's 200ms preview debounce. */
 const DEBOUNCE_WAIT_MS = 400;
@@ -217,7 +217,7 @@ describe("ez_image_mode graph load", () => {
       const { ext, app } = await loadExtension(MODE_JS, "ez_image.mode");
       // The reported bare z-image workflow: no EZImageMode, no desk stamp.
       const graph = makeGraph({
-        lab_rel: "stills/z-image-turbo.json",
+        lab_rel: "photos/z-image-turbo.json",
         nodes: [makeUnetLoader(), makeSampler()],
       });
       app.graph = graph;

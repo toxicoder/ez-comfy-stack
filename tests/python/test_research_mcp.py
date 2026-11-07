@@ -61,20 +61,20 @@ def test_list_lab_apps_includes_inspire() -> None:
     assert result["ok"] is True
     assert result["count"] >= 2
     ids = {row["id"] for row in result["apps"]}
-    assert "inspire/prompt-forge" in ids
-    assert "inspire/cinema-rack" in ids
-    assert "inspire/audio-rack" in ids
-    assert "inspire/research-chat" in ids
-    research = next(r for r in result["apps"] if r["id"] == "inspire/research-chat")
-    assert research["lane"] == "inspire"
+    assert "labs/assist/prompt-forge" in ids
+    assert "labs/assist/cinema-rack" in ids
+    assert "labs/assist/audio-rack" in ids
+    assert "labs/assist/research-chat" in ids
+    research = next(r for r in result["apps"] if r["id"] == "labs/assist/research-chat")
+    assert research["lane"] == "labs"
     assert research["occupancy"] == "llm"
 
 
 def test_describe_app_research_chat() -> None:
-    result = mcp.call_tool("describe_app", {"stem": "inspire/research-chat"})
+    result = mcp.call_tool("describe_app", {"stem": "labs/assist/research-chat"})
     assert result["ok"] is True
     assert result["occupancy"] == "llm"
-    assert "inspire/prompt-forge" in result["handoff"]
+    assert "labs/assist/prompt-forge" in result["handoff"]
     assert "Message" in result["widgets"]
     assert result["lab_mcp"]["server"] == "research-mcp"
     assert "research" in result["lab_mcp"]["tools"]
@@ -222,7 +222,7 @@ def test_lab_app_discovery_edges(
     monkeypatch.setattr(mcp, "_lab_root", lambda: tmp_path / "missing-lab")
     empty = mcp.call_tool("list_lab_apps", {})
     assert empty["apps"] == []
-    lab = tmp_path / "lab" / "inspire"
+    lab = tmp_path / "lab" / "labs" / "assist"
     lab.mkdir(parents=True)
     (lab / "bad.json").write_text("{", encoding="utf-8")
     (lab / "array.json").write_text("[1]", encoding="utf-8")
@@ -236,7 +236,7 @@ def test_lab_app_discovery_edges(
                 "extra": {
                     "lab_app_mode": [1],
                     "lab_mcp": [1],
-                    "lab_rel": "inspire/y",
+                    "lab_rel": "labs/assist/y",
                 },
             }
         ),
@@ -247,8 +247,8 @@ def test_lab_app_discovery_edges(
             {
                 "id": "ok",
                 "extra": {
-                    "lab_rel": "inspire/ok",
-                    "lab_app_mode": {"lane": "inspire", "occupancy": "llm"},
+                    "lab_rel": "labs/assist/ok",
+                    "lab_app_mode": {"lane": "labs", "occupancy": "llm"},
                     "linearData": {
                         "inputs": [
                             "skip",
@@ -268,20 +268,20 @@ def test_lab_app_discovery_edges(
     monkeypatch.setattr(mcp, "_repo_root", lambda: tmp_path)
     listed = mcp.call_tool("list_lab_apps", {})
     ids = {row["id"] for row in listed["apps"]}
-    assert "inspire/ok" in ids
+    assert "labs/assist/ok" in ids
     assert mcp._load_lab_graph("") is None
-    assert mcp._load_lab_graph("inspire/ok.json") is not None
-    assert mcp._load_lab_graph("_lab/inspire/ok") is not None
+    assert mcp._load_lab_graph("labs/assist/ok.json") is not None
+    assert mcp._load_lab_graph("_lab/labs/assist/ok") is not None
     assert mcp._load_lab_graph("ok") is not None
     assert mcp._load_lab_graph("bad") is None
     assert mcp._load_lab_graph("array") is None
-    described = mcp.call_tool("describe_app", {"stem": "inspire/ok"})
+    described = mcp.call_tool("describe_app", {"stem": "labs/assist/ok"})
     assert described["ok"] is True
     assert "Hi" in described["widgets"]
     assert "Message" in described["widgets"]
-    extra_list = mcp.call_tool("describe_app", {"id": "inspire/extra-list"})
+    extra_list = mcp.call_tool("describe_app", {"id": "labs/assist/extra-list"})
     assert extra_list["ok"] is True
-    mode_list = mcp.call_tool("describe_app", {"stem": "inspire/mode-list"})
+    mode_list = mcp.call_tool("describe_app", {"stem": "labs/assist/mode-list"})
     assert mode_list["ok"] is True
     no_linear = mcp._linear_labels({"linearData": {"inputs": "nope"}})
     assert no_linear == []

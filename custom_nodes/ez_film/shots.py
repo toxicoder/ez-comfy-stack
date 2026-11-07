@@ -41,10 +41,10 @@ META_KEYS = (
 )
 PRINT_MODES = ("ltx", "dfr", "ltx-iclora-depth", "wan-flf", "dcc-final")
 IDENTITY_SEED = "42"
-LTX_PRINT_TEMPLATE = "motion/av/still-to-shot.json"
+LTX_PRINT_TEMPLATE = "video/av/still-to-shot.json"
 DFR_TEMPLATE = "templates/ltx-2.5/t2v-i2v-two-stage-distilled"
-ICLORA_TEMPLATE = "dcc/depth-control-8s.json"
-WAN_FLF_TEMPLATE = "motion/silent/first-last-5s.json"
+ICLORA_TEMPLATE = "guides/depth-control-8s.json"
+WAN_FLF_TEMPLATE = "video/silent/first-last-5s.json"
 DCC_FINAL_TEMPLATE = "dcc-final"
 AUDIO_POLICIES = ("world-only", "stems", "a2v-lock")
 SCORE_MODES = ("none", "acestep-instrumental")

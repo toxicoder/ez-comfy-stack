@@ -30,7 +30,7 @@ prompt is on [Prompting](prompting.md).
 - **Chaining one seed** from draft still to hero still to clip without renaming files
 - **Knowing what to stop** before the next family Queues
 
-**Who this is for:** studio users after `stills/still-draft` has queued once.
+**Who this is for:** studio users after `photos/still-draft` has queued once.
 
 <Callout type="info" title="First run?">
   For install and first UI open, use [Getting Started](getting-started.md). For canvas nouns, [ComfyUI basics](learn/comfyui.md). For why these three models, [Klein, Wan, and LTX](learn/pipeline.md). Filenames: [Workflow catalog](studio-workflows.md).
@@ -108,7 +108,7 @@ flowchart LR
   LTX --> Mp4["MP4 + world audio<br/>VHS_VideoCombine"]
 ```
 
-**Handoff (start in App Mode):** load **stills/still-draft** -> enter App Mode -> Queue Spark Still -> open **stills/still-hero** (same seed) -> set **motion/silent/still-to-video-5s** LoadImage to `ez_still_draft_*.png` or `ez_still_hero_*.png` -> Queue ~5 s silent -> optional **motion/av/still-to-video-8s** for native audio. Showcase: **motion/av/dialogue-8s** (quoted speech), **motion/av/multishot-8s** (named cuts), **motion/av/product-hero** (packshot), **motion/av/first-last-8s** (two stills), **motion/av/audio-to-video-8s** (freeze a wav). Platform jobs (channel art, 4:5 feed, Canvas, BRB): [Creator pack](create/workflows-creator.md) - same occupancy XOR, e.g. **creator/stills/youtube-shorts-thumb** -> **creator/silent/zoom-punch**. Stop Wan before LTX (occupancy). I2V graphs also Queue on Comfy's default **example.png**. Apps catalog: [ComfyUI Apps](studio-apps.md).
+**Handoff (start in App Mode):** load **photos/still-draft** -> enter App Mode -> Queue Spark Still -> open **photos/still-hero** (same seed) -> set **video/silent/still-to-video-5s** LoadImage to `ez_still_draft_*.png` or `ez_still_hero_*.png` -> Queue ~5 s silent -> optional **video/av/still-to-video-8s** for native audio. Showcase: **video/av/dialogue-8s** (quoted speech), **video/av/multishot-8s** (named cuts), **video/av/product-hero** (packshot), **video/av/first-last-8s** (two stills), **video/av/audio-to-video-8s** (freeze a wav). Platform jobs (channel art, 4:5 feed, Canvas, BRB): [Creator pack](create/workflows-creator.md) - same occupancy XOR, e.g. **social/stills/youtube-shorts-thumb** -> **social/silent/zoom-punch**. Stop Wan before LTX (occupancy). I2V graphs also Queue on Comfy's default **example.png**. Apps catalog: [ComfyUI Apps](studio-apps.md).
 
 LTX-2.5 is a **joint audio/video** transformer. Seeded LTX graphs load the **audio VAE**, create matching empty audio latents, concat them with video latents before `KSampler`, then decode audio with **`LTXVAudioVAEDecode`** into **`VHS_VideoCombine`** so the MP4 includes world audio. Text conditioning is a single **CLIPLoader** (`gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot`, type **`ltxv`**).
 
@@ -118,7 +118,7 @@ License-clean AV path for a company under the LTX Community License revenue cap.
 
 1. **Still** - Klein **4B** at clip size. Landscape **1280x704**. Portrait **768x1280**. Pick a seed on **Draft** (4-step, Klein 4B nvfp4), then Queue this quality at the **same** pixels - it swaps the weights and steps only, never Width / Height. Generic 16:9 / 9:16 **Format** rows retarget to **16:9 LTX feeder (1280x704)** / **9:16 LTX feeder (768x1280)**; named platform jobs, **Custom**, and rows already on a feeder stay put.
 2. **Optional polish** - SeedVR2 on that PNG (`download-restore --tier seedvr2-3b`). Add detail at ~1.3-1.5x. Do not jump to 4K. Stop Comfy first.
-3. **Motion** - same PNG into **motion/av/still-to-video-8s** (LTX-2.5 I2V). Prompt only the motion and sound. Let LTX's own 2x upscaler / DFR Templates handle resolution.
+3. **Motion** - same PNG into **video/av/still-to-video-8s** (LTX-2.5 I2V). Prompt only the motion and sound. Let LTX's own 2x upscaler / DFR Templates handle resolution.
 4. **Unload Klein before LTX.** Occupancy chip; one GB10 job. 90s films already pass the identity still through **Unload models**.
 
 Wan silent 5 s stays the Apache rehearsal path (no $10M cap, no native audio). On Wan / audio / TRELLIS graphs Free Commercial Use writes nothing, and every tier there sets steps only - never CFG, never weights - with `ultra` repeating `high`.
@@ -138,11 +138,11 @@ Which filename: [Workflow catalog](studio-workflows.md).
 
 Do **not** edit raw JSON. Change widgets on the canvas.
 
-1. Load **stills/still-draft** -> set Positive prompt + seed (fixed) -> Queue (minutes, 4-step).
+1. Load **photos/still-draft** -> set Positive prompt + seed (fixed) -> Queue (minutes, 4-step).
 2. Pick a frame under `${COMFY_OUTPUT_DIR}` (`ez_still_draft_*.png`).
-3. Load **motion/silent/still-to-video-5s** -> set LoadImage to that PNG (or leave `example.png` to smoke-test) -> edit **Motion / prompt** only -> Queue ~5 s silent.
-4. Optional audio: **motion/av/still-to-video-8s**, same first frame, same seed note, Queue ~5 s AV at **1280x704**.
-5. Short six-shot demo: Queue **motion/silent/still-to-shot** six times (`ez_shot_01` ... `06`) then:
+3. Load **video/silent/still-to-video-5s** -> set LoadImage to that PNG (or leave `example.png` to smoke-test) -> edit **Motion / prompt** only -> Queue ~5 s silent.
+4. Optional audio: **video/av/still-to-video-8s**, same first frame, same seed note, Queue ~5 s AV at **1280x704**.
+5. Short six-shot demo: Queue **video/silent/still-to-shot** six times (`ez_shot_01` ... `06`) then:
 
     ```bash
     bazelisk run //scripts:run-utility -- concat-shots --yes
@@ -150,7 +150,7 @@ Do **not** edit raw JSON. Change widgets on the canvas.
     ```
 
 6. **90s films** (go-see first-person parkour / still-here / switchyard): load one **film-*-90s** graph -> Queue **once** -> the MP4 is already at `${COMFY_OUTPUT_DIR}/ez_<slug>_90s.mp4` (faststart). A **90s film ready** overlay plays and downloads it; `ez_<slug>_90s.html` is a local player. See [Short films](shorts.md).
-7. Daily still / GIF / IG pack: **stills/image-studio** (100 creator modes + Format / platform + optional reference; **Iterate** for text-to-image then edit, **This run** for the values Queue will send) or **stills/still-studio** (Format / platform + Style + Rewrite prompt) or **stills/still-daily** -> optional **motion/loops/gif-loop** (LoadImage = the still prefix you just saved, leave ping-pong on) or **stills/dream-house** for a 10-photo virtual tour of one place (type any place; each still a different room or view - tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study). Same walkthrough with 3D persistence: **stills/dream-house-clay** (`start` seeds clay plates; optional `house-views` dump) ([Dream-house tours](learn/dream-house.md)). Character loop: **stills/character-draft** -> **stills/character-tweak** (`ez_character_*.png`). Lettering swap: **stills/text-swap** (output matches the source still). Environment: **stills/background-swap** (new place, including ground) or **stills/background-edit** (restyle in place).
+7. Daily still / GIF / IG pack: **photos/image-studio** (100 creator modes + Format / platform + optional reference; **Iterate** for text-to-image then edit, **This run** for the values Queue will send) or **photos/still-studio** (Format / platform + Style + Rewrite prompt) or **photos/still-daily** -> optional **video/loops/gif-loop** (LoadImage = the still prefix you just saved, leave ping-pong on) or **photos/dream-house** for a 10-photo virtual tour of one place (type any place; each still a different room or view - tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study). Same walkthrough with 3D persistence: **photos/dream-house-clay** (`start` seeds clay plates; optional `house-views` dump) ([Dream-house tours](learn/dream-house.md)). Character loop: **photos/character-draft** -> **photos/character-tweak** (`ez_character_*.png`). Lettering swap: **photos/text-swap** (output matches the source still). Environment: **photos/background-swap** (new place, including ground) or **photos/background-edit** (restyle in place).
 8. Creator toolkit: vertical Shorts still->I2V, thumbnail, packshot, before/after, style lock, bumper, B-roll, storyboard 6-up - [catalog](studio-workflows.md).
 
 Do not Queue a 90s denoise. Default graphs iterate in minutes; one-click films are 18 x 5s prints.

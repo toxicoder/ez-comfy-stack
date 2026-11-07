@@ -645,46 +645,137 @@ teardown() {
 @test "lab_workflow_lane maps _lab and legacy globs" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/entrypoint.sh"
-  run lab_workflow_lane "_lab/stills/still-draft.json"
-  [ "${status}" -eq 0 ]
-  [ "${output}" = "stills" ]
-  run lab_workflow_lane "stills/still-draft.json"
-  [ "${status}" -eq 0 ]
-  [ "${output}" = "stills" ]
-  run lab_workflow_lane "films/go-see.json"
-  [ "${status}" -eq 0 ]
-  [ "${output}" = "films" ]
-  run lab_workflow_lane "dcc/clay-hero.json"
-  [ "${status}" -eq 0 ]
-  [ "${output}" = "dcc" ]
-  run lab_workflow_lane "optional/still-to-video-a14b.json"
-  [ "${status}" -eq 0 ]
-  [ "${output}" = "optional" ]
-  run lab_workflow_lane "audio/podcast/two-host-episode.json"
-  [ "${status}" -eq 0 ]
-  [ "${output}" = "audio" ]
-  run lab_workflow_lane "audio/music/rap-draft.json"
-  [ "${status}" -eq 0 ]
-  [ "${output}" = "audio" ]
-  run lab_workflow_lane "_lab/audio/nill-bye/phase0/music-rap-nill-bye-lab-coat-lab-example.json"
-  [ "${status}" -eq 0 ]
-  [ "${output}" = "audio" ]
-  run lab_workflow_lane "_lab/audio/drive-through/phase0/music-edm-drive-through-open-lane-lab-example.json"
-  [ "${status}" -eq 0 ]
-  [ "${output}" = "audio" ]
-  run lab_workflow_lane "inspire/prompt-forge.json"
-  [ "${status}" -eq 0 ]
-  [ "${output}" = "inspire" ]
-  run lab_workflow_lane "inspire/beat-sheet.json"
-  [ "${status}" -eq 0 ]
-  [ "${output}" = "inspire" ]
-  run lab_workflow_lane "inspire/research-chat.json"
-  [ "${status}" -eq 0 ]
-  [ "${output}" = "inspire" ]
+  local -a cases=(
+    "_lab/photos/still-draft.json photos"
+    "_lab/video/av/talking-head.json video"
+    "_lab/social/stills/ig-story.json social"
+    "_lab/business/ecommerce/pdp.json business"
+    "_lab/film/go-see.json film"
+    "_lab/3d/trellis2.json 3d"
+    "_lab/guides/clay-hero.json guides"
+    "_lab/labs/opt-in/still-flux3-fast.json labs"
+    "_lab/stills/still-draft.json stills"
+    "stills/still-draft.json photos"
+    "stills/talking-head.json video/av"
+    "stills/still-flux3-fast.json labs/opt-in"
+    "photos/still-draft.json photos"
+    "motion/silent/still-to-shot.json video/silent"
+    "motion/av/still-to-shot.json video/av"
+    "motion/loops/gif-loop.json video/loops"
+    "motion/bumper-loop.json video"
+    "video/silent/still-to-shot.json video/silent"
+    "creator/stills/ig-story.json social/stills"
+    "creator/silent/shorts.json social/silent"
+    "creator/av/hook.json social/av"
+    "creator/loose.json social"
+    "social/stills/ig-story.json social/stills"
+    "services/ecommerce/pdp.json business"
+    "business/ecommerce/pdp.json business"
+    "films/go-see.json film"
+    "editing/cutaway.json film"
+    "shorts/go-see.json film"
+    "film/go-see.json film"
+    "dcc/clay-hero.json guides"
+    "dcc/still-to-mesh.json 3d"
+    "guides/clay-hero.json guides"
+    "optional/still-to-video-a14b.json labs/opt-in"
+    "optional/trellis2.json 3d"
+    "3d/trellis2.json 3d"
+    "labs/assist/prompt-forge.json labs"
+    "audio/podcast/two-host-episode.json audio"
+    "audio/music/rap-draft.json audio"
+    "_lab/audio/nill-bye/phase0/music-rap-nill-bye-lab-coat-lab-example.json audio"
+    "_lab/audio/drive-through/phase0/music-edm-drive-through-open-lane-lab-example.json audio"
+    "inspire/prompt-forge.json labs/assist"
+    "inspire/beat-sheet.json labs/assist"
+    "inspire/research-chat.json labs/assist"
+    "prompt-forge-lab-example.json labs/assist"
+    "klein-still-hero-lab-example.json photos"
+    "wan-bumper-loop.json video"
+    "ltx-hook-av.json video"
+  )
+  local case rel want
+  for case in "${cases[@]}"; do
+    rel="${case%% *}"
+    want="${case#* }"
+    run lab_workflow_lane "${rel}"
+    if [[ ${status} -ne 0 ]]; then
+      echo "refused: ${rel}" >&2
+      return 1
+    fi
+    if [[ ${output} != "${want}" ]]; then
+      echo "lane for ${rel}: want ${want}, got ${output}" >&2
+      return 1
+    fi
+  done
   run lab_workflow_lane "_lab/_user/keep-me.json"
   [ "${status}" -ne 0 ]
   run lab_workflow_lane "quality/NOTICE.md"
   [ "${status}" -ne 0 ]
+}
+
+@test "lab_rel_lane_aliases bridges the pre-re-home lane folders" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local -a cases=(
+    "stills/still-draft.json photos/still-draft.json"
+    "photos/still-draft.json stills/still-draft.json"
+    "stills/talking-head.json video/av/talking-head.json"
+    "video/av/talking-head.json stills/talking-head.json"
+    "stills/still-flux3-quality.json labs/opt-in/still-flux3-quality.json"
+    "motion/silent/still-to-video-5s.json video/silent/still-to-video-5s.json"
+    "video/loops/gif-loop.json motion/loops/gif-loop.json"
+    "creator/stills/ig-story.json social/stills/ig-story.json"
+    "services/ecommerce/pdp.json business/ecommerce/pdp.json"
+    "film/go-see.json films/go-see.json"
+    "dcc/clay-hero.json guides/clay-hero.json"
+    "dcc/still-to-mesh.json 3d/still-to-mesh.json"
+    "optional/trellis2.json 3d/trellis2.json"
+    "optional/longcat-video.json labs/opt-in/longcat-video.json"
+    "inspire/prompt-forge.json labs/assist/prompt-forge.json"
+  )
+  local case rel want
+  for case in "${cases[@]}"; do
+    rel="${case%% *}"
+    want="${case#* }"
+    run lab_rel_lane_aliases "${rel}"
+    [[ ${output} == *"${want}"* ]] || {
+      echo "alias for ${rel}: want ${want}, got ${output}" >&2
+      return 1
+    }
+  done
+  run lab_rel_lane_aliases "audio/music/rap-draft.json"
+  [ "${status}" -eq 0 ]
+  [ -z "${output}" ]
+}
+
+@test "install_lab_workflows keeps pre-re-home graphs out of _user" {
+  # An operator whose _lab still uses the old lane folders must not have the
+  # whole catalog cloned into _user when the catalog re-homed under new names.
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local src dest manifest
+  src="${TEST_TMP_DIR}/wf_upgrade"
+  dest="${TEST_TMP_DIR}/user_wf_upgrade"
+  mkdir -p "${src}/_lab/photos" "${src}/_lab/film" "${dest}/_lab/stills" "${dest}/_lab/films"
+  printf '%s\n' '{"extra":{"lab_rel":"photos/still-draft"}}' >"${src}/_lab/photos/still-draft.json"
+  printf '%s\n' '{"extra":{"lab_rel":"film/go-see"}}' >"${src}/_lab/film/go-see.json"
+  printf '%s\n' '{"extra":{"lab_rel":"stills/still-draft"}}' >"${dest}/_lab/stills/still-draft.json"
+  printf '%s\n' '{"extra":{"lab_rel":"films/go-see"}}' >"${dest}/_lab/films/go-see.json"
+  run install_lab_workflows "${src}" "${dest}"
+  [ "${status}" -eq 0 ]
+  [[ ${output} != *"rescued"* ]]
+  [ -f "${dest}/_lab/photos/still-draft.json" ]
+  [ -f "${dest}/_lab/film/go-see.json" ]
+  [ ! -d "${dest}/_lab/stills" ]
+  [ ! -d "${dest}/_lab/films" ]
+  [ ! -d "${dest}/_user/stills" ]
+  [ ! -d "${dest}/_user/films" ]
+  manifest="$(lab_seed_manifest_path "${dest}")"
+  [ -f "${manifest}" ]
+  run lab_manifest_digest_for_rel "${manifest}" "stills/still-draft.json"
+  [ "${status}" -eq 0 ]
+  [ -n "${output}" ]
 }
 
 @test "install_lab_workflows seeds nested _lab and preserves _user" {
@@ -694,52 +785,52 @@ teardown() {
   src="${TEST_TMP_DIR}/wf"
   dest="${TEST_TMP_DIR}/user_wf"
   mkdir -p \
-    "${src}/_lab/stills" \
-    "${src}/_lab/films" \
-    "${src}/_lab/dcc" \
-    "${src}/_lab/optional" \
+    "${src}/_lab/photos" \
+    "${src}/_lab/film" \
+    "${src}/_lab/guides" \
+    "${src}/_lab/labs/opt-in" \
     "${src}/_lab/audio/nill-bye/phase0" \
     "${src}/_lab/audio/drive-through/phase0" \
     "${src}/_user" \
     "${src}/shorts" \
-    "${src}/films" \
+    "${src}/film" \
     "${src}/quality/ltx-2.5" \
-    "${dest}/_lab/stills" \
-    "${dest}/stills" \
+    "${dest}/_lab/photos" \
+    "${dest}/photos" \
     "${dest}/_user"
-  mkdir -p "${src}/_lab/dcc" "${src}/_lab/optional"
-  echo '{}' >"${src}/_lab/stills/still-draft.json"
-  echo '{}' >"${src}/_lab/films/go-see.json"
-  echo '{}' >"${src}/_lab/dcc/clay-hero.json"
-  echo '{}' >"${src}/_lab/optional/still-to-video-a14b.json"
+  mkdir -p "${src}/_lab/guides" "${src}/_lab/labs/opt-in"
+  echo '{}' >"${src}/_lab/photos/still-draft.json"
+  echo '{}' >"${src}/_lab/film/go-see.json"
+  echo '{}' >"${src}/_lab/guides/clay-hero.json"
+  echo '{}' >"${src}/_lab/labs/opt-in/still-to-video-a14b.json"
   echo '{}' >"${src}/_lab/audio/nill-bye/phase0/music-rap-nill-bye-lab-coat-lab-example.json"
   echo '{}' >"${src}/_lab/audio/drive-through/phase0/music-edm-drive-through-open-lane-lab-example.json"
   echo '{}' >"${src}/_user/keep-me.json"
-  echo 'film: go-see' >"${src}/films/go-see.shots.yaml"
+  echo 'film: go-see' >"${src}/film/go-see.shots.yaml"
   echo 'notice' >"${src}/quality/ltx-2.5/NOTICE.md"
   echo poison >"${dest}/_user/keep-me.json"
-  echo leftover >"${dest}/stills/still-draft.json"
-  echo stale >"${dest}/_lab/stills/stale-gone-lab-example.json"
+  echo leftover >"${dest}/photos/still-draft.json"
+  echo stale >"${dest}/_lab/photos/stale-gone-lab-example.json"
   run sync_lab_json_dir "${src}/_lab" "${dest}/_lab"
   [ "${status}" -eq 0 ]
   run install_lab_workflows "${src}" "${dest}"
   [ "${status}" -eq 0 ]
-  [[ -f ${dest}/_lab/stills/still-draft.json ]]
-  [[ -f ${dest}/_lab/films/go-see.json ]]
-  [[ -f ${dest}/_lab/dcc/clay-hero.json ]]
-  [[ -f ${dest}/_lab/optional/still-to-video-a14b.json ]]
+  [[ -f ${dest}/_lab/photos/still-draft.json ]]
+  [[ -f ${dest}/_lab/film/go-see.json ]]
+  [[ -f ${dest}/_lab/guides/clay-hero.json ]]
+  [[ -f ${dest}/_lab/labs/opt-in/still-to-video-a14b.json ]]
   [[ -f ${dest}/_lab/audio/nill-bye/phase0/music-rap-nill-bye-lab-coat-lab-example.json ]]
   [[ -f ${dest}/_lab/audio/drive-through/phase0/music-edm-drive-through-open-lane-lab-example.json ]]
-  [[ ! -f ${dest}/films/go-see.json ]]
+  [[ ! -f ${dest}/film/go-see.json ]]
   [[ ! -f ${dest}/go-see.shots.yaml ]]
-  [[ ! -f ${dest}/_lab/films/go-see.shots.yaml ]]
+  [[ ! -f ${dest}/_lab/film/go-see.shots.yaml ]]
   [[ ! -f ${dest}/NOTICE.md ]]
-  [[ ! -f ${dest}/_lab/stills/stale-gone-lab-example.json ]]
+  [[ ! -f ${dest}/_lab/photos/stale-gone-lab-example.json ]]
   [[ -f ${dest}/_user/keep-me.json ]]
   [[ "$(cat "${dest}/_user/keep-me.json")" == poison ]]
-  [[ -f ${dest}/stills/still-draft.json ]]
-  [[ "$(cat "${dest}/stills/still-draft.json")" == leftover ]]
-  [[ ${output} == *"in _lab/stills"* ]]
+  [[ -f ${dest}/photos/still-draft.json ]]
+  [[ "$(cat "${dest}/photos/still-draft.json")" == leftover ]]
+  [[ ${output} == *"in _lab/photos"* ]]
   run log_lab_seed_counts "${dest}/_lab"
   [ "${status}" -eq 0 ]
   run install_lab_workflows "${src}" "${dest}"
@@ -767,13 +858,13 @@ teardown() {
   [ "${status}" -eq 0 ]
   run install_lab_workflows "${src}" "${dest}"
   [ "${status}" -eq 0 ]
-  [[ -f ${dest}/_lab/stills/still-draft.json ]]
-  [[ -f ${dest}/_lab/stills/klein-still-hero-lab-example.json ]]
+  [[ -f ${dest}/_lab/photos/still-draft.json ]]
+  [[ -f ${dest}/_lab/photos/klein-still-hero-lab-example.json ]]
   [[ -f ${dest}/_lab/audio/podcast-audio-first.json ]]
-  [[ -f ${dest}/_lab/films/go-see.json ]]
-  [[ -f ${dest}/_lab/dcc/clay-hero.json ]]
-  [[ -f ${dest}/_lab/optional/still-to-video-a14b.json ]]
-  [[ ! -f ${dest}/stills/still-draft.json ]]
+  [[ -f ${dest}/_lab/film/go-see.json ]]
+  [[ -f ${dest}/_lab/guides/clay-hero.json ]]
+  [[ -f ${dest}/_lab/labs/opt-in/still-to-video-a14b.json ]]
+  [[ ! -f ${dest}/photos/still-draft.json ]]
   [[ ! -f ${dest}/go-see.shots.yaml ]]
   [[ -d ${dest}/_user ]]
 }
@@ -784,45 +875,45 @@ teardown() {
   local src dest
   src="${TEST_TMP_DIR}/wf_apps"
   dest="${TEST_TMP_DIR}/user_wf_apps"
-  mkdir -p "${src}/_lab/stills" "${src}/_lab/inspire" "${src}/_lab/films" "${src}/_lab/klein" "${dest}"
+  mkdir -p "${src}/_lab/photos" "${src}/_lab/labs/assist" "${src}/_lab/film" "${src}/_lab/video" "${dest}"
   printf '%s\n' '{"extra":{"linearMode":true,"lab_app_mode":{"enabled":true,"default_view":"app"}}}' \
-    >"${src}/_lab/stills/still-draft.json"
+    >"${src}/_lab/photos/still-draft.json"
   printf '%s\n' '{"extra":{"lab_app_mode":{"enabled":true,"default_view":"app"}}}' \
-    >"${src}/_lab/inspire/prompt-forge.json"
+    >"${src}/_lab/labs/assist/prompt-forge.json"
   printf '%s\n' '{"extra":{"lab_app_mode":{"enabled":true,"default_view":"graph"}}}' \
-    >"${src}/_lab/films/go-see.json"
-  echo '{}' >"${src}/_lab/klein/plain-lab-example.json"
-  echo 'not json' >"${src}/_lab/klein/broken-lab-example.json"
-  mkdir -p "${dest}/_lab/stills"
-  echo '{}' >"${dest}/_lab/stills/still-draft.json"
-  run lab_workflow_is_app "${src}/_lab/stills/still-draft.json"
+    >"${src}/_lab/film/go-see.json"
+  echo '{}' >"${src}/_lab/video/plain-lab-example.json"
+  echo 'not json' >"${src}/_lab/video/broken-lab-example.json"
+  mkdir -p "${dest}/_lab/photos"
+  echo '{}' >"${dest}/_lab/photos/still-draft.json"
+  run lab_workflow_is_app "${src}/_lab/photos/still-draft.json"
   [ "${status}" -eq 0 ]
-  run lab_workflow_is_app "${src}/_lab/inspire/prompt-forge.json"
+  run lab_workflow_is_app "${src}/_lab/labs/assist/prompt-forge.json"
   [ "${status}" -eq 0 ]
-  run lab_workflow_is_app "${src}/_lab/films/go-see.json"
+  run lab_workflow_is_app "${src}/_lab/film/go-see.json"
   [ "${status}" -eq 1 ]
-  run lab_workflow_is_app "${src}/_lab/klein/plain-lab-example.json"
+  run lab_workflow_is_app "${src}/_lab/video/plain-lab-example.json"
   [ "${status}" -eq 1 ]
-  run lab_workflow_is_app "${src}/_lab/klein/broken-lab-example.json"
+  run lab_workflow_is_app "${src}/_lab/video/broken-lab-example.json"
   [ "${status}" -eq 1 ]
   run install_lab_workflows "${src}" "${dest}"
   [ "${status}" -eq 0 ]
-  [ -f "${dest}/_lab/stills/still-draft.app.json" ]
-  [ ! -f "${dest}/_lab/stills/still-draft.json" ]
-  [ -f "${dest}/_lab/inspire/prompt-forge.app.json" ]
-  [ ! -f "${dest}/_lab/inspire/prompt-forge.json" ]
-  [ -f "${dest}/_lab/films/go-see.json" ]
-  [ ! -f "${dest}/_lab/films/go-see.app.json" ]
-  [ -f "${dest}/_lab/klein/plain-lab-example.json" ]
-  [ ! -f "${dest}/_lab/klein/plain-lab-example.app.json" ]
-  [ -f "${dest}/_lab/klein/broken-lab-example.json" ]
-  [ ! -f "${dest}/_lab/klein/broken-lab-example.app.json" ]
+  [ -f "${dest}/_lab/photos/still-draft.app.json" ]
+  [ ! -f "${dest}/_lab/photos/still-draft.json" ]
+  [ -f "${dest}/_lab/labs/assist/prompt-forge.app.json" ]
+  [ ! -f "${dest}/_lab/labs/assist/prompt-forge.json" ]
+  [ -f "${dest}/_lab/film/go-see.json" ]
+  [ ! -f "${dest}/_lab/film/go-see.app.json" ]
+  [ -f "${dest}/_lab/video/plain-lab-example.json" ]
+  [ ! -f "${dest}/_lab/video/plain-lab-example.app.json" ]
+  [ -f "${dest}/_lab/video/broken-lab-example.json" ]
+  [ ! -f "${dest}/_lab/video/broken-lab-example.app.json" ]
   run apply_lab_app_json_names "${dest}/_lab"
   [ "${status}" -eq 0 ]
   run install_lab_workflows "${src}" "${dest}"
   [ "${status}" -eq 0 ]
-  [ -f "${dest}/_lab/stills/still-draft.app.json" ]
-  [ ! -f "${dest}/_lab/stills/still-draft.json" ]
+  [ -f "${dest}/_lab/photos/still-draft.app.json" ]
+  [ ! -f "${dest}/_lab/photos/still-draft.json" ]
 }
 
 @test "install_lab_workflows rescues operator _lab JSON into _user" {
@@ -831,20 +922,20 @@ teardown() {
   local src dest manifest app_json i
   src="${TEST_TMP_DIR}/wf_rescue"
   dest="${TEST_TMP_DIR}/user_wf_rescue"
-  app_json='{"extra":{"linearMode":true,"lab_app_mode":{"enabled":true,"default_view":"app"},"lab_rel":"stills/still-draft"}}'
-  mkdir -p "${src}/_lab/stills" "${src}/_lab/klein" "${dest}/_lab/stills" "${dest}/_lab/klein" "${dest}/_user/klein"
-  printf '%s\n' "${app_json}" >"${src}/_lab/stills/still-draft.json"
-  echo '{}' >"${src}/_lab/klein/plain.json"
-  echo 'user-hook' >"${dest}/_lab/klein/my-hook.app.json"
-  echo 'edited-lab' >"${dest}/_lab/stills/still-draft.app.json"
-  echo 'stale' >"${dest}/_lab/klein/stale-gone.json"
+  app_json='{"extra":{"linearMode":true,"lab_app_mode":{"enabled":true,"default_view":"app"},"lab_rel":"photos/still-draft"}}'
+  mkdir -p "${src}/_lab/photos" "${src}/_lab/video" "${dest}/_lab/photos" "${dest}/_lab/video" "${dest}/_user/video"
+  printf '%s\n' "${app_json}" >"${src}/_lab/photos/still-draft.json"
+  echo '{}' >"${src}/_lab/video/plain.json"
+  echo 'user-hook' >"${dest}/_lab/video/my-hook.app.json"
+  echo 'edited-lab' >"${dest}/_lab/photos/still-draft.app.json"
+  echo 'stale' >"${dest}/_lab/video/stale-gone.json"
   echo 'poison' >"${dest}/_user/keep-me.json"
-  echo 'mine' >"${dest}/_user/klein/my-hook.app.json"
-  printf '%s\n' '{"extra":{"lab_rel":"stills/still-draft"}}' \
-    >"${dest}/_lab/stills/moved-catalog.app.json"
-  run lab_src_json_for_dest "${src}/_lab" "stills/still-draft.app.json"
+  echo 'mine' >"${dest}/_user/video/my-hook.app.json"
+  printf '%s\n' '{"extra":{"lab_rel":"photos/still-draft"}}' \
+    >"${dest}/_lab/photos/moved-catalog.app.json"
+  run lab_src_json_for_dest "${src}/_lab" "photos/still-draft.app.json"
   [ "${status}" -eq 0 ]
-  [[ ${output} == *"/stills/still-draft.json" ]]
+  [[ ${output} == *"/photos/still-draft.json" ]]
   run lab_src_json_for_dest "${src}/_lab" "klein/missing.json"
   [ "${status}" -ne 0 ]
   run rescue_unique_path "${dest}/_user/keep-me.json" "${dest}/_user/keep-me.json"
@@ -859,17 +950,17 @@ teardown() {
   [ "${output}" = "${dest}/.lab-seed-manifest" ]
   run lab_json_index "${src}/_lab"
   [ "${status}" -eq 0 ]
-  [[ ${output} == *"stills/still-draft.json"* ]]
-  run lab_index_has_lab_rel "${TEST_TMP_DIR}/missing.idx" "stills/still-draft"
+  [[ ${output} == *"photos/still-draft.json"* ]]
+  run lab_index_has_lab_rel "${TEST_TMP_DIR}/missing.idx" "photos/still-draft"
   [ "${status}" -ne 0 ]
   lab_json_index "${src}/_lab" >"${TEST_TMP_DIR}/src.idx"
-  run lab_index_has_lab_rel "${TEST_TMP_DIR}/src.idx" "stills/still-draft"
+  run lab_index_has_lab_rel "${TEST_TMP_DIR}/src.idx" "photos/still-draft"
   [ "${status}" -eq 0 ]
   run lab_index_has_lab_rel "${TEST_TMP_DIR}/src.idx" "missing/id"
   [ "${status}" -ne 0 ]
-  run lab_manifest_digest "${TEST_TMP_DIR}/missing-manifest" "stills/still-draft.app.json"
+  run lab_manifest_digest "${TEST_TMP_DIR}/missing-manifest" "photos/still-draft.app.json"
   [ "${status}" -ne 0 ]
-  run lab_manifest_digest_for_rel "${TEST_TMP_DIR}/missing-manifest" "stills/still-draft.app.json"
+  run lab_manifest_digest_for_rel "${TEST_TMP_DIR}/missing-manifest" "photos/still-draft.app.json"
   [ "${status}" -ne 0 ]
   run rescue_operator_lab_json "${src}/_lab" "${TEST_TMP_DIR}/missing_dest_lab" "${dest}/_user"
   [ "${status}" -eq 0 ]
@@ -881,69 +972,69 @@ teardown() {
   [[ ${output} == *"no .lab-seed-manifest"* ]]
   [[ ${output} == *"rescued"* ]]
   [[ ${output} != *"copied "* ]]
-  [ ! -f "${dest}/_lab/klein/my-hook.app.json" ]
-  [ ! -f "${dest}/_lab/klein/stale-gone.json" ]
-  [ ! -f "${dest}/_lab/stills/moved-catalog.app.json" ]
-  [ ! -d "${dest}/_user/_rescued" ] || [ ! -f "${dest}/_user/_rescued/stills/still-draft.app.json" ]
-  [ ! -f "${dest}/_user/stills/moved-catalog.app.json" ]
-  [ -f "${dest}/_lab/stills/still-draft.app.json" ]
-  [ "$(cat "${dest}/_lab/stills/still-draft.app.json")" = "$(cat "${src}/_lab/stills/still-draft.json")" ]
-  [ -f "${dest}/_user/klein/stale-gone.json" ]
-  [ "$(cat "${dest}/_user/klein/stale-gone.json")" = "stale" ]
+  [ ! -f "${dest}/_lab/video/my-hook.app.json" ]
+  [ ! -f "${dest}/_lab/video/stale-gone.json" ]
+  [ ! -f "${dest}/_lab/photos/moved-catalog.app.json" ]
+  [ ! -d "${dest}/_user/_rescued" ] || [ ! -f "${dest}/_user/_rescued/photos/still-draft.app.json" ]
+  [ ! -f "${dest}/_user/photos/moved-catalog.app.json" ]
+  [ -f "${dest}/_lab/photos/still-draft.app.json" ]
+  [ "$(cat "${dest}/_lab/photos/still-draft.app.json")" = "$(cat "${src}/_lab/photos/still-draft.json")" ]
+  [ -f "${dest}/_user/video/stale-gone.json" ]
+  [ "$(cat "${dest}/_user/video/stale-gone.json")" = "stale" ]
   [ "$(cat "${dest}/_user/keep-me.json")" = "poison" ]
-  [ "$(cat "${dest}/_user/klein/my-hook.app.json")" = "mine" ]
+  [ "$(cat "${dest}/_user/video/my-hook.app.json")" = "mine" ]
   shopt -s nullglob
-  local -a collided=("${dest}/_user/klein/my-hook.rescued-"*.app.json)
+  local -a collided=("${dest}/_user/video/my-hook.rescued-"*.app.json)
   [ "${#collided[@]}" -eq 1 ]
   [ "$(cat "${collided[0]}")" = "user-hook" ]
   manifest="$(lab_seed_manifest_path "${dest}")"
   [ -f "${manifest}" ]
-  run lab_manifest_digest "${manifest}" "stills/still-draft.app.json"
+  run lab_manifest_digest "${manifest}" "photos/still-draft.app.json"
   [ "${status}" -eq 0 ]
   [ -n "${output}" ]
-  run lab_manifest_digest_for_rel "${manifest}" "stills/still-draft.json"
+  run lab_manifest_digest_for_rel "${manifest}" "photos/still-draft.json"
   [ "${status}" -eq 0 ]
   run write_lab_seed_manifest "${dest}/_lab" "${manifest}"
   [ "${status}" -eq 0 ]
 
-  printf '%s\n' '{"extra":{"linearMode":true,"lab_app_mode":{"enabled":true,"default_view":"app"},"lab_rel":"stills/still-draft","stamp":"v2"}}' \
-    >"${src}/_lab/stills/still-draft.json"
+  printf '%s\n' '{"extra":{"linearMode":true,"lab_app_mode":{"enabled":true,"default_view":"app"},"lab_rel":"photos/still-draft","stamp":"v2"}}' \
+    >"${src}/_lab/photos/still-draft.json"
   run install_lab_workflows "${src}" "${dest}"
   [ "${status}" -eq 0 ]
   [[ ${output} != *"copied "* ]]
-  [ ! -f "${dest}/_user/_rescued/stills/still-draft.app.json" ]
-  [ "$(cat "${dest}/_lab/stills/still-draft.app.json")" = "$(cat "${src}/_lab/stills/still-draft.json")" ]
+  [ ! -f "${dest}/_user/_rescued/photos/still-draft.app.json" ]
+  [ "$(cat "${dest}/_lab/photos/still-draft.app.json")" = "$(cat "${src}/_lab/photos/still-draft.json")" ]
   [ "$(cat "${dest}/_user/keep-me.json")" = "poison" ]
 
-  echo 'edited-lab' >"${dest}/_lab/stills/still-draft.app.json"
-  printf '%s\n' '{"extra":{"linearMode":true,"lab_app_mode":{"enabled":true,"default_view":"app"},"lab_rel":"stills/still-draft","stamp":"v3"}}' \
-    >"${src}/_lab/stills/still-draft.json"
+  echo 'edited-lab' >"${dest}/_lab/photos/still-draft.app.json"
+  printf '%s\n' '{"extra":{"linearMode":true,"lab_app_mode":{"enabled":true,"default_view":"app"},"lab_rel":"photos/still-draft","stamp":"v3"}}' \
+    >"${src}/_lab/photos/still-draft.json"
   run install_lab_workflows "${src}" "${dest}"
   [ "${status}" -eq 0 ]
   [[ ${output} == *"_rescued"* ]]
-  [ -f "${dest}/_user/_rescued/stills/still-draft.app.json" ]
-  [ "$(cat "${dest}/_user/_rescued/stills/still-draft.app.json")" = "edited-lab" ]
-  [ "$(cat "${dest}/_lab/stills/still-draft.app.json")" = "$(cat "${src}/_lab/stills/still-draft.json")" ]
+  [ -f "${dest}/_user/_rescued/photos/still-draft.app.json" ]
+  [ "$(cat "${dest}/_user/_rescued/photos/still-draft.app.json")" = "edited-lab" ]
+  [ "$(cat "${dest}/_lab/photos/still-draft.app.json")" = "$(cat "${src}/_lab/photos/still-draft.json")" ]
   run install_lab_workflows "${src}" "${dest}"
   [ "${status}" -eq 0 ]
-  local -a rescued_edits=("${dest}/_user/_rescued/stills/still-draft.app.json")
+  local -a rescued_edits=("${dest}/_user/_rescued/photos/still-draft.app.json")
   [ "${#rescued_edits[@]}" -eq 1 ]
-  local -a collided2=("${dest}/_user/klein/my-hook.rescued-"*.app.json)
+  local -a collided2=("${dest}/_user/video/my-hook.rescued-"*.app.json)
   [ "${#collided2[@]}" -eq 1 ]
 
-  echo 'dup' >"${dest}/_lab/stills/still-draft-copy.app.json"
+  echo 'dup' >"${dest}/_lab/photos/still-draft-copy.app.json"
   run install_lab_workflows "${src}" "${dest}"
   [ "${status}" -eq 0 ]
-  [ ! -f "${dest}/_lab/stills/still-draft-copy.app.json" ]
-  [ -f "${dest}/_user/stills/still-draft-copy.app.json" ]
-  [ "$(cat "${dest}/_user/stills/still-draft-copy.app.json")" = "dup" ]
+  [ ! -f "${dest}/_lab/photos/still-draft-copy.app.json" ]
+  [ -f "${dest}/_user/photos/still-draft-copy.app.json" ]
+  [ "$(cat "${dest}/_user/photos/still-draft-copy.app.json")" = "dup" ]
 
-  [ -f "${dest}/_lab/klein/plain.json" ]
-  rm -f "${src}/_lab/klein/plain.json"
+  [ -f "${dest}/_lab/video/plain.json" ]
+  rm -f "${src}/_lab/video/plain.json"
   run install_lab_workflows "${src}" "${dest}"
   [ "${status}" -eq 0 ]
-  [ ! -f "${dest}/_lab/klein/plain.json" ]
-  [ ! -f "${dest}/_user/klein/plain.json" ]
+  [ ! -f "${dest}/_lab/video/plain.json" ]
+  [ ! -f "${dest}/_user/video/plain.json" ]
 
   mkdir -p "${dest}/_user/_rescued/dump"
   for i in $(seq 1 21); do

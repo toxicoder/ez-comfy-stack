@@ -12,13 +12,13 @@ BANNED = ("Pixal3D", "pixal3d", "MiniMax", "MagCache")
 
 
 def test_klein_trellis2_graph_contract() -> None:
-    graph = json.loads(lab_json("optional/trellis2.json").read_text(encoding="utf-8"))
+    graph = json.loads(lab_json("3d/trellis2.json").read_text(encoding="utf-8"))
     assert graph["id"] == "trellis2"
-    assert graph["extra"].get("lab_rel") == "optional/trellis2"
-    assert "optional" in lab_json("optional/trellis2.json").parts
+    assert graph["extra"].get("lab_rel") == "3d/trellis2"
+    assert "3d" in lab_json("3d/trellis2.json").parts
     extra = graph["extra"]
     assert extra["lab_app_mode"]["occupancy"] == "trellis"
-    assert extra["lab_app_mode"]["lane"] == "optional"
+    assert extra["lab_app_mode"]["lane"] == "3d"
     assert extra["lab_trellis"]["unet"] == "trellis_2_int8_convrot.safetensors"
     assert extra["lab_trellis"]["resolution"] == 512
     assert extra["lab_trellis"]["native_only"] is True

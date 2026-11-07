@@ -296,7 +296,7 @@ class EZEmptyFlux2FromImage:
     CATEGORY = CATEGORY
     DESCRIPTION = (
         "Empty Flux.2 noise canvas at the still's width and height snapped to "
-        "div16. stills/background-swap uses this as KSampler.latent_image so "
+        "div16. photos/background-swap uses this as KSampler.latent_image so "
         "the encoded source is only a ReferenceLatent, not the denoise start."
     )
 
@@ -338,7 +338,7 @@ class EZMatchImageSize:
     CATEGORY = CATEGORY
     DESCRIPTION = (
         "Lanczos-resize ``image`` to ``size_src`` width and height. No-op when "
-        "they already match. stills/text-swap uses this so the PNG matches the "
+        "they already match. photos/text-swap uses this so the PNG matches the "
         "uploaded still, including odd sizes such as 1920x1080."
     )
 

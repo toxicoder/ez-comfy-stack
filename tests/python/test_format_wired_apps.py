@@ -56,7 +56,7 @@ def test_in_scope_apps_wire_format_and_app_widgets() -> None:
         assert "height" in names, rel
         if kind == "video":
             assert "duration_s" in names, rel
-        if rel in {"stills/still-studio", "stills/image-studio"}:
+        if rel in {"photos/still-studio", "photos/image-studio"}:
             assert "look" in names
         else:
             assert "look" not in names, rel
@@ -84,14 +84,14 @@ def test_in_scope_apps_wire_format_and_app_widgets() -> None:
 
 def test_locked_apps_do_not_gain_a_format_picker() -> None:
     locked = (
-        "stills/text-swap",
-        "stills/platform-pack",
-        "stills/character-tweak",
-        "stills/background-swap",
-        "stills/background-edit",
-        "motion/silent/vace-join",
-        "films/go-see",
-        "inspire/prompt-forge",
+        "photos/text-swap",
+        "photos/platform-pack",
+        "photos/character-tweak",
+        "photos/background-swap",
+        "photos/background-edit",
+        "video/silent/vace-join",
+        "film/go-see",
+        "labs/assist/prompt-forge",
     )
     for rel in locked:
         graph = _load(rel)

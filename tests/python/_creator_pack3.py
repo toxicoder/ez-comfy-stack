@@ -14,7 +14,7 @@ class Pack3Spec:
     """One creator-pack graph.
 
     Attributes:
-        rel: ``extra.lab_rel`` (``creator/stills/youtube-channel-icon``).
+        rel: ``extra.lab_rel`` (``social/stills/youtube-channel-icon``).
         kind: ``klein_single`` | ``klein_pack`` | ``wan_i2v`` | ``wan_loop`` | ``ltx_av``.
         group: Catalog section id.
         size: Width x height latent pixels.
@@ -74,7 +74,7 @@ def _k(
     if template is None:
         template = "draft" if h >= 960 or (h > w) else "hero"
     return Pack3Spec(
-        rel=f"creator/stills/{stem}",
+        rel=f"social/stills/{stem}",
         kind="klein_single",
         group=group,
         size=(w, h),
@@ -105,7 +105,7 @@ def _pack(
 ) -> Pack3Spec:
     """Klein multi-save pack."""
     return Pack3Spec(
-        rel=f"creator/stills/{stem}",
+        rel=f"social/stills/{stem}",
         kind="klein_pack",
         group=group,
         size=(w, h),
@@ -139,7 +139,7 @@ def _w(
     """Wan silent I2V or ping-pong loop."""
     portrait = h > w
     return Pack3Spec(
-        rel=f"creator/silent/{stem}",
+        rel=f"social/silent/{stem}",
         kind="wan_loop" if loop else "wan_i2v",
         group=group,
         size=(w, h),
@@ -151,7 +151,7 @@ def _w(
         handoff=handoff,
         enhance_pin=True,
         portrait=portrait,
-        template="motion/loops/gif-loop" if loop else ("motion/silent/shorts-still-5s" if portrait else "motion/silent/still-to-video-5s"),
+        template="video/loops/gif-loop" if loop else ("video/silent/shorts-still-5s" if portrait else "video/silent/still-to-video-5s"),
     )
 
 
@@ -173,9 +173,9 @@ def _l(
     portrait = h > w
     if catalog is None:
         catalog = "ltx_broll" if mode == "t2v" else "ltx_i2v"
-    src = "motion/av/shorts-still-8s" if portrait else ("motion/av/text-to-video-8s" if mode == "t2v" else "motion/av/still-to-video-8s")
+    src = "video/av/shorts-still-8s" if portrait else ("video/av/text-to-video-8s" if mode == "t2v" else "video/av/still-to-video-8s")
     return Pack3Spec(
-        rel=f"creator/av/{stem}",
+        rel=f"social/av/{stem}",
         kind="ltx_av",
         group=group,
         size=(w, h),
@@ -282,7 +282,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "youtube",
         "YouTube Shorts thumbnail 9:16",
         _UI_916,
-        handoff=("creator/silent/zoom-punch",),
+        handoff=("social/silent/zoom-punch",),
     ),
     _k(
         "youtube-community",
@@ -313,7 +313,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "Subscribe-safe end plate 16:9",
         _CTA,
         template="hero",
-        handoff=("creator/silent/youtube-subscribe-bump",),
+        handoff=("social/silent/youtube-subscribe-bump",),
     ),
     _k(
         "youtube-end-screen",
@@ -324,7 +324,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "YouTube end-screen plate, left-weighted",
         _LEFT,
         template="hero",
-        handoff=("creator/av/youtube-outro-av",),
+        handoff=("social/av/youtube-outro-av",),
     ),
     _k(
         "instagram-portrait",
@@ -334,7 +334,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "instagram",
         "Instagram 4:5 feed still",
         "Instagram 4:5 portrait. Subject large, warm key. Empty of lettering.",
-        handoff=("creator/silent/instagram-story-loop", "creator/av/instagram-reel-lifestyle"),
+        handoff=("social/silent/instagram-story-loop", "social/av/instagram-reel-lifestyle"),
     ),
     _k(
         "instagram-landscape",
@@ -354,7 +354,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "instagram",
         "Instagram Story 9:16 with UI-safe edges",
         _UI_916,
-        handoff=("creator/silent/instagram-story-loop",),
+        handoff=("social/silent/instagram-story-loop",),
     ),
     _k(
         "instagram-reel-cover",
@@ -364,7 +364,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "instagram",
         "Instagram Reel cover, center-weighted for the grid crop",
         "Vertical 9:16 Reel cover. Subject centered vertically so a 3:4 grid crop keeps the face.",
-        handoff=("creator/av/instagram-reel-lifestyle",),
+        handoff=("social/av/instagram-reel-lifestyle",),
     ),
     _k(
         "instagram-highlight",
@@ -394,7 +394,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "instagram",
         "Instagram 4:5 carousel, five slides",
         _IG_CAROUSEL,
-        handoff=("creator/silent/paper-flip",),
+        handoff=("social/silent/paper-flip",),
     ),
     _pack(
         "instagram-grid-3up",
@@ -413,7 +413,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "tiktok",
         "TikTok cover 9:16",
         _UI_916,
-        handoff=("creator/silent/tiktok-hook", "creator/av/tiktok-broll"),
+        handoff=("social/silent/tiktok-hook", "social/av/tiktok-broll"),
     ),
     _k(
         "tiktok-shop",
@@ -426,7 +426,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         catalog="klein_product",
         identity="product",
         template="hero",
-        handoff=("creator/silent/product-spin",),
+        handoff=("social/silent/product-spin",),
     ),
     _k(
         "x-post",
@@ -437,7 +437,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "X in-stream still 16:9",
         "Landscape in-feed still. Subject large, readable at small sizes. Empty of lettering.",
         template="hero",
-        handoff=("creator/silent/x-post-5s",),
+        handoff=("social/silent/x-post-5s",),
     ),
     _k(
         "x-header",
@@ -566,7 +566,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         _TYPE,
         template="hero",
         identity="stream",
-        handoff=("creator/silent/twitch-starting-loop", "creator/av/twitch-starting-av"),
+        handoff=("social/silent/twitch-starting-loop", "social/av/twitch-starting-av"),
     ),
     _k(
         "twitch-brb",
@@ -578,7 +578,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         _TYPE,
         template="hero",
         identity="stream",
-        handoff=("creator/silent/twitch-brb-loop",),
+        handoff=("social/silent/twitch-brb-loop",),
     ),
     _k(
         "twitch-ending",
@@ -652,7 +652,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "spotify",
         "Spotify Canvas still 9:16 (silent JPG stand-in)",
         "Vertical 9:16 Canvas still. No talking, no lettering. Subject in the middle third.",
-        handoff=("creator/silent/spotify-canvas",),
+        handoff=("social/silent/spotify-canvas",),
     ),
     _k(
         "album-cover",
@@ -673,7 +673,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "Lyric-card background 1:1",
         _TYPE,
         template="hero",
-        handoff=("creator/silent/lyric-bg-loop",),
+        handoff=("social/silent/lyric-bg-loop",),
     ),
     _k(
         "audiogram-wide",
@@ -800,7 +800,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "Lifestyle still of an unmarked ceramic mug in use on a sunlit table. No cyclorama.",
         catalog="klein_product",
         identity="product",
-        handoff=("creator/silent/unbox-hands",),
+        handoff=("social/silent/unbox-hands",),
     ),
     _k(
         "desk-setup",
@@ -812,7 +812,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "Photoreal desk setup, oak and linen, unmarked screens. Empty of lettering.",
         template="hero",
         identity="desk",
-        handoff=("creator/silent/screen-bg-loop", "creator/av/desk-work"),
+        handoff=("social/silent/screen-bg-loop", "social/av/desk-work"),
     ),
     _pack(
         "moodboard-6up",
@@ -862,7 +862,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "Silent Instagram Story loop 9:16",
         "Locked-camera breeze in fabric and palms. Ping-pong friendly. No walk.",
         loop=True,
-        handoff=("creator/av/instagram-reel-lifestyle",),
+        handoff=("social/av/instagram-reel-lifestyle",),
     ),
     _w(
         "tiktok-hook",
@@ -872,7 +872,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "wan",
         "Silent TikTok hook punch 9:16",
         "Fast push-in toward the start-image face. One continuous take. No cut.",
-        handoff=("creator/av/tiktok-broll",),
+        handoff=("social/av/tiktok-broll",),
     ),
     _w(
         "x-post-5s",
@@ -892,7 +892,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "Silent starting-soon loop 16:9",
         "Slow cyclic light pulse on a quiet set. Ping-pong friendly. No walk.",
         loop=True,
-        handoff=("creator/av/twitch-starting-av",),
+        handoff=("social/av/twitch-starting-av",),
     ),
     _w(
         "twitch-brb-loop",
@@ -932,7 +932,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "wan",
         "Silent product orbit ~5 s",
         "Slow orbit around the start-image product. Table holds. No cut.",
-        handoff=("motion/av/product-hero",),
+        handoff=("video/av/product-hero",),
     ),
     _w(
         "unbox-hands",
@@ -942,7 +942,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "wan",
         "Silent unbox / hands motion ~5 s",
         "Hands ease a box open. Slow, locked identity. One continuous take.",
-        handoff=("creator/av/product-unbox-av",),
+        handoff=("social/av/product-unbox-av",),
     ),
     _w(
         "steam-loop",
@@ -1045,7 +1045,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "wan",
         "Silent 9:16 hook zoom punch",
         "Punch-in toward the start-image subject in the first second, then hold.",
-        handoff=("motion/av/shorts-still-8s",),
+        handoff=("video/av/shorts-still-8s",),
     ),
     _w(
         "screen-bg-loop",

@@ -1,6 +1,6 @@
 {
   "id": "ez-studio-blocks-ltx-film-shot",
-  "revision": 4,
+  "revision": 1,
   "last_node_id": 1,
   "last_link_id": 0,
   "nodes": [
@@ -8,8 +8,8 @@
       "id": 1,
       "type": "7c3e9b10-6a21-4f0a-9c11-00000000aa04",
       "pos": [
-        40,
-        204
+        100,
+        100
       ],
       "size": [
         280,
@@ -65,28 +65,14 @@
     }
   ],
   "links": [],
-  "groups": [
-    {
-      "id": 1,
-      "title": "SETTINGS",
-      "bounding": [
-        20,
-        132,
-        320,
-        276
-      ],
-      "color": "#a1309b",
-      "font_size": 24,
-      "flags": {}
-    }
-  ],
+  "groups": [],
   "definitions": {
     "subgraphs": [
       {
         "id": "7c3e9b10-6a21-4f0a-9c11-00000000aa04",
         "name": "ltx-film-shot",
         "version": 1,
-        "revision": 8,
+        "revision": 14,
         "config": {},
         "extra": {
           "lab_occupancy": "film",
@@ -108,25 +94,25 @@
           },
           {
             "id": 2,
-            "title": "MODEL",
+            "title": "QUALITY",
             "bounding": [
-              20,
-              576,
-              560,
-              640
+              1028,
+              8,
+              728,
+              256
             ],
-            "color": "#3f789e",
+            "color": "#a1309b",
             "font_size": 24,
             "flags": {}
           },
           {
             "id": 3,
-            "title": "INPUT",
+            "title": "MODEL",
             "bounding": [
-              588,
-              576,
-              360,
-              430
+              20,
+              592,
+              560,
+              640
             ],
             "color": "#a1309b",
             "font_size": 24,
@@ -134,12 +120,12 @@
           },
           {
             "id": 4,
-            "title": "PROMPT",
+            "title": "INPUT",
             "bounding": [
-              956,
-              576,
-              460,
-              1492
+              588,
+              592,
+              360,
+              592
             ],
             "color": "#3f789e",
             "font_size": 24,
@@ -147,12 +133,12 @@
           },
           {
             "id": 5,
-            "title": "SETTINGS",
+            "title": "PROMPT",
             "bounding": [
-              1424,
-              576,
-              360,
-              1282
+              956,
+              592,
+              460,
+              1492
             ],
             "color": "#a1309b",
             "font_size": 24,
@@ -160,14 +146,27 @@
           },
           {
             "id": 6,
+            "title": "SETTINGS",
+            "bounding": [
+              1424,
+              592,
+              400,
+              1534
+            ],
+            "color": "#3f789e",
+            "font_size": 24,
+            "flags": {}
+          },
+          {
+            "id": 7,
             "title": "OUTPUT",
             "bounding": [
-              1792,
-              576,
+              1832,
+              592,
               360,
               1628
             ],
-            "color": "#3f789e",
+            "color": "#a1309b",
             "font_size": 24,
             "flags": {}
           }
@@ -211,7 +210,7 @@
             "type": "UNETLoader",
             "pos": [
               40,
-              648
+              664
             ],
             "size": [
               520,
@@ -245,7 +244,7 @@
             "type": "VAELoader",
             "pos": [
               40,
-              802
+              818
             ],
             "size": [
               360,
@@ -279,7 +278,7 @@
             "type": "CLIPLoader",
             "pos": [
               40,
-              932
+              948
             ],
             "size": [
               400,
@@ -315,7 +314,7 @@
             "type": "LoadImage",
             "pos": [
               608,
-              648
+              664
             ],
             "size": [
               320,
@@ -330,14 +329,15 @@
                 "name": "IMAGE",
                 "type": "IMAGE",
                 "links": [
-                  5
+                  5,
+                  43
                 ],
                 "slot_index": 0
               },
               {
                 "name": "MASK",
                 "type": "MASK",
-                "links": null,
+                "links": [],
                 "slot_index": 0
               }
             ],
@@ -355,7 +355,7 @@
             "type": "CLIPTextEncode",
             "pos": [
               976,
-              1140
+              1156
             ],
             "size": [
               420,
@@ -402,7 +402,7 @@
             "type": "CLIPTextEncode",
             "pos": [
               976,
-              1864
+              1880
             ],
             "size": [
               420,
@@ -449,7 +449,7 @@
             "type": "LTXVImgToVideo",
             "pos": [
               1444,
-              850
+              1118
             ],
             "size": [
               320,
@@ -478,6 +478,22 @@
                 "name": "image",
                 "type": "IMAGE",
                 "link": 5
+              },
+              {
+                "name": "width",
+                "type": "INT",
+                "link": 34,
+                "widget": {
+                  "name": "width"
+                }
+              },
+              {
+                "name": "height",
+                "type": "INT",
+                "link": 35,
+                "widget": {
+                  "name": "height"
+                }
               }
             ],
             "outputs": [
@@ -522,7 +538,7 @@
             "type": "LTXVConditioning",
             "pos": [
               1444,
-              1122
+              1528
             ],
             "size": [
               280,
@@ -574,7 +590,7 @@
             "type": "KSampler",
             "pos": [
               1444,
-              1414
+              1682
             ],
             "size": [
               320,
@@ -633,8 +649,8 @@
             "id": 10,
             "type": "VAEDecode",
             "pos": [
-              1812,
-              648
+              1852,
+              664
             ],
             "size": [
               240,
@@ -677,8 +693,8 @@
             "id": 12,
             "type": "SaveImage",
             "pos": [
-              1812,
-              1396
+              1852,
+              1412
             ],
             "size": [
               280,
@@ -708,7 +724,7 @@
             "type": "VAELoader",
             "pos": [
               40,
-              1114
+              1130
             ],
             "size": [
               360,
@@ -742,7 +758,7 @@
             "type": "LTXVEmptyLatentAudio",
             "pos": [
               1444,
-              648
+              916
             ],
             "size": [
               300,
@@ -783,7 +799,7 @@
             "type": "LTXVConcatAVLatent",
             "pos": [
               1444,
-              1276
+              1390
             ],
             "size": [
               280,
@@ -825,7 +841,7 @@
             "type": "LTXVSeparateAVLatent",
             "pos": [
               1444,
-              1748
+              2016
             ],
             "size": [
               280,
@@ -885,7 +901,7 @@
               "Node name for S&R": "Note"
             },
             "widgets_values": [
-              "## motion/av/still-to-shot\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) - open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nUS-safe 5.00s AV I2V print (121 frames = 1+8n @ 24 fps) with last-frame SaveImage.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot (CLIP ltxv) + ltx-2.5-video-vae-bf16 + ltx-2.5-audio-vae-bf16.\nLTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n90s films: prefer the one-click **films/go-see** graphs (Queue once). This graph is the generic 5.00s printer / spark-farm shot. Paste an `ltx_i2v` paragraph from `{film}.shots.yaml` if you iterate a single beat. VHS prefix ez_<slug>_bN_sM_ltx_video. Host stitch: ./scripts/utilities/concat-shots.sh --film go-see --yes\n\nDo not Queue a 90s denoise. US-safe local pack only. No score.\n90s films: prefer the one-click **films/go-see** graphs (Queue once). This graph remains the generic 5.00s printer / spark-farm shot.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\n90s films: prefer the one-click **films/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.\n90s films: prefer the one-click **films/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.\n90s films: prefer the one-click **films/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.\n90s films: prefer the one-click **films/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.\n90s films: prefer the one-click **films/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.\n90s films: prefer the one-click **films/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.\n90s films: prefer the one-click **films/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.\n90s films: prefer the one-click **films/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.\n"
+              "## video/av/still-to-shot\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) - open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nUS-safe 5.00s AV I2V print (121 frames = 1+8n @ 24 fps) with last-frame SaveImage.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot (CLIP ltxv) + ltx-2.5-video-vae-bf16 + ltx-2.5-audio-vae-bf16.\nLTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n90s films: prefer the one-click **film/go-see** graphs (Queue once). This graph is the generic 5.00s printer / spark-farm shot. Paste an `ltx_i2v` paragraph from `{film}.shots.yaml` if you iterate a single beat. VHS prefix ez_<slug>_bN_sM_ltx_video. Host stitch: bazelisk run //scripts:run-utility -- concat-shots --film go-see --yes\n\nDo not Queue a 90s denoise. US-safe local pack only. No score.\n90s films: prefer the one-click **film/go-see** graphs (Queue once). This graph remains the generic 5.00s printer / spark-farm shot.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\n90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.\n90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.\n90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.\n90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.\n90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.\n90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.\n90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.\n90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.\n"
             ],
             "title": "Operator note"
           },
@@ -893,8 +909,8 @@
             "id": 18,
             "type": "VHS_VideoCombine",
             "pos": [
-              1812,
-              904
+              1852,
+              920
             ],
             "size": [
               320,
@@ -932,7 +948,7 @@
               {
                 "name": "Filenames",
                 "type": "VHS_FILENAMES",
-                "links": null,
+                "links": [],
                 "slot_index": 0
               }
             ],
@@ -957,8 +973,8 @@
             "id": 19,
             "type": "ImageFromBatch",
             "pos": [
-              1812,
-              1738
+              1852,
+              1754
             ],
             "size": [
               240,
@@ -998,8 +1014,8 @@
             "id": 20,
             "type": "SaveImage",
             "pos": [
-              1812,
-              1890
+              1852,
+              1906
             ],
             "size": [
               280,
@@ -1029,7 +1045,7 @@
             "type": "EZLTXPromptEnhance",
             "pos": [
               976,
-              648
+              664
             ],
             "size": [
               420,
@@ -1038,7 +1054,21 @@
             "flags": {},
             "order": 4,
             "mode": 0,
-            "inputs": [],
+            "inputs": [
+              {
+                "name": "duration_hint",
+                "type": "STRING",
+                "link": 36,
+                "widget": {
+                  "name": "duration_hint"
+                }
+              },
+              {
+                "name": "image_desc",
+                "type": "STRING",
+                "link": 38
+              }
+            ],
             "outputs": [
               {
                 "name": "prompt",
@@ -1054,12 +1084,14 @@
               "Node name for S&R": "EZLTXPromptEnhance"
             },
             "widgets_values": [
+              "custom",
               "The start image holds as the first frame. Wordless mix: silent mouth. Race-pace footfalls strike terrace stone as the dead sprint continues, warm wind and grit ticks with each stride, close-mic breath on the contralateral pump. First-person eye-level body-cam tracks forward, horizon bobbing, no cut. The wearer's own ink-black sleeves and blank matte-black gloves stay along the bottom edge, empty palms. The rooftop gap already in the start frame grows dead ahead. Last frames hold the gap in the center until it fills the frame. No speech. No music and no score.",
               true,
               "i2v",
               "5 seconds, 24 fps",
               "world SFX matching the start image, no score",
-              "none"
+              "none",
+              "video/av/still-to-shot"
             ],
             "title": "LTX Prompt Enhance"
           },
@@ -1067,8 +1099,8 @@
             "id": 22,
             "type": "LTXVAudioVAEDecode",
             "pos": [
-              1812,
-              766
+              1852,
+              782
             ],
             "size": [
               320,
@@ -1110,7 +1142,7 @@
             "type": "EZNegativePromptEnhance",
             "pos": [
               976,
-              1372
+              1388
             ],
             "size": [
               420,
@@ -1145,6 +1177,168 @@
               "ltx"
             ],
             "title": "Negative Prompt Enhance"
+          },
+          {
+            "id": 24,
+            "type": "EZQuality",
+            "pos": [
+              1416,
+              80
+            ],
+            "size": [
+              320.0,
+              82.0
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [],
+            "outputs": [
+              {
+                "name": "quality",
+                "type": "STRING",
+                "links": [],
+                "slot_index": 0
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "EZQuality"
+            },
+            "widgets_values": [
+              "lab"
+            ],
+            "title": "Quality"
+          },
+          {
+            "id": 25,
+            "type": "EZVideoFormat",
+            "pos": [
+              1444,
+              664
+            ],
+            "size": [
+              360,
+              180
+            ],
+            "flags": {},
+            "order": 25,
+            "mode": 0,
+            "inputs": [],
+            "outputs": [
+              {
+                "name": "width",
+                "type": "INT",
+                "links": [
+                  34
+                ],
+                "slot_index": 0
+              },
+              {
+                "name": "height",
+                "type": "INT",
+                "links": [
+                  35
+                ],
+                "slot_index": 1
+              },
+              {
+                "name": "hint",
+                "type": "STRING",
+                "links": [
+                  36
+                ],
+                "slot_index": 2
+              },
+              {
+                "name": "prefix",
+                "type": "STRING",
+                "links": [],
+                "slot_index": 3
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "EZVideoFormat"
+            },
+            "widgets_values": [
+              "LTX-2.5",
+              "LTX - 16:9 YouTube (1280x704)",
+              1280,
+              704,
+              "Match input",
+              "8 seconds"
+            ],
+            "title": "Format / platform"
+          },
+          {
+            "id": 26,
+            "type": "EZImageDescribe",
+            "pos": [
+              608,
+              1050
+            ],
+            "size": [
+              280,
+              90
+            ],
+            "flags": {},
+            "order": 26,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "enable",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "enable"
+                }
+              },
+              {
+                "name": "image",
+                "type": "IMAGE",
+                "link": 43
+              }
+            ],
+            "outputs": [
+              {
+                "name": "caption",
+                "type": "STRING",
+                "links": [
+                  38
+                ],
+                "slot_index": 0
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "EZImageDescribe"
+            },
+            "widgets_values": [
+              false
+            ],
+            "title": "Describe image"
+          },
+          {
+            "id": 27,
+            "type": "EZModelCheck",
+            "pos": [
+              1048,
+              80
+            ],
+            "size": [
+              320.0,
+              140.0
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [],
+            "outputs": [],
+            "properties": {
+              "Node name for S&R": "EZModelCheck"
+            },
+            "widgets_values": [
+              "Click Check models. Queue does not run this node."
+            ],
+            "title": "Check models"
           }
         ],
         "links": [
@@ -1371,6 +1565,46 @@
             23,
             0,
             "STRING"
+          ],
+          [
+            34,
+            25,
+            0,
+            7,
+            4,
+            "INT"
+          ],
+          [
+            35,
+            25,
+            1,
+            7,
+            5,
+            "INT"
+          ],
+          [
+            36,
+            25,
+            2,
+            21,
+            0,
+            "STRING"
+          ],
+          [
+            38,
+            26,
+            0,
+            21,
+            1,
+            "STRING"
+          ],
+          [
+            43,
+            4,
+            0,
+            26,
+            1,
+            "IMAGE"
           ]
         ]
       }

@@ -30,6 +30,22 @@ LAB_DIR = REPO_ROOT / "workflows" / "_lab"
 OUT_DIR = DOCS_DIR / "generated" / "workflows"
 ENCYCLOPEDIA_PAGE = DOCS_DIR / "reference" / "workflow-nodes.md"
 MANIFEST_FILE = OUT_DIR / "manifest.json"
+# Browse order for the generated workflow pages, mirrored in
+# ``docs-site/lib/nav.ts`` through the manifest ``lanes`` key rather than a
+# second hand-kept list. ``audio-albums`` is a docs grouping, not a ``_lab``
+# lane, so it sits right after the ``audio`` lane it expands.
+LANE_ORDER = [
+    "photos",
+    "video",
+    "social",
+    "business",
+    "film",
+    "audio",
+    "audio-albums",
+    "3d",
+    "guides",
+    "labs",
+]
 STYLES_FILE = REPO_ROOT / "custom_nodes" / "ez_prompt_enhance" / "styles.json"
 FORMATS_FILE = REPO_ROOT / "custom_nodes" / "ez_image" / "js" / "formats.json"
 MODES_FILE = REPO_ROOT / "custom_nodes" / "ez_image" / "js" / "modes.json"
@@ -127,7 +143,7 @@ def lab_rel_of(path: Path, data: dict[str, Any], lab_root: Path) -> str:
         lab_root: ``workflows/_lab`` root.
 
     Returns:
-        Catalog id such as ``stills/still-draft``.
+        Catalog id such as ``photos/still-draft``.
     """
     extra = data.get("extra") or {}
     lab_rel = extra.get("lab_rel")
@@ -1267,6 +1283,26 @@ def _partition_lab_graphs(
     return albums, singles
 
 
+def _lane_sequence(manifest_pages: list[dict[str, str]]) -> list[str]:
+    """Lanes present in the manifest, in browse order.
+
+    A lane the registry does not know still surfaces, sorted at the end, so a
+    new ``_lab`` folder shows up in the docs instead of silently vanishing.
+
+    Args:
+        manifest_pages: Manifest rows, each carrying a ``lane``.
+
+    Returns:
+        The lane ids to render, in order.
+    """
+    present = {str(row.get("lane") or "") for row in manifest_pages}
+    present.discard("")
+    present.discard("index")
+    ordered = [lane for lane in LANE_ORDER if lane in present]
+    ordered += sorted(lane for lane in present if lane not in LANE_ORDER)
+    return ordered
+
+
 def _write_generated_pages(
     pages: dict[str, str],
     dest: Path,
@@ -1302,6 +1338,7 @@ def _write_generated_pages(
                 "pages": manifest_pages,
                 "graph_count": graph_count,
                 "page_count": len(pages),
+                "lanes": _lane_sequence(manifest_pages),
             },
             indent=2,
         )
@@ -1425,22 +1462,7 @@ def inject_nav(nav: list[Any], manifest_pages: list[dict[str, str]]) -> list[Any
         {"All graphs": "generated/workflows/index.md"},
         {"Node parameter encyclopedia": "reference/workflow-nodes.md"},
     ]
-    lane_order = [
-        "klein",
-        "wan",
-        "ltx",
-        "shorts",
-        "editing",
-        "dcc",
-        "optional",
-        "inspire",
-        "audio",
-        "audio-albums",
-    ]
-    seen_lanes = [lane for lane in lane_order if lane in by_lane]
-    for lane in sorted(by_lane):
-        if lane not in seen_lanes:
-            seen_lanes.append(lane)
+    seen_lanes = _lane_sequence(manifest_pages)
     for lane in seen_lanes:
         items = []
         for page in by_lane[lane]:

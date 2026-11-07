@@ -88,8 +88,8 @@ teardown() {
   SEEDS="509201,509211"
   run cmd_run
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"motion/silent/still-to-shot"* ]]
-  [[ "${output}" == *"motion/av/still-to-shot"* ]]
+  [[ "${output}" == *"video/silent/still-to-shot"* ]]
+  [[ "${output}" == *"video/av/still-to-shot"* ]]
   [[ "${output}" == *"concat-shots"* ]]
   FILM=h3-go-see
   run cmd_run

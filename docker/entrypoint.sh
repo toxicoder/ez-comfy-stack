@@ -494,13 +494,17 @@ PY
 #######################################
 # Map a workflow path relative to the workflows root onto a sidebar lane.
 # Prefers _lab/<lane>/...; else filename/dir globs used during the flat-tree
-# transition (deleted after git mv into workflows/_lab).
+# transition (deleted after git mv into workflows/_lab). The catalog was later
+# re-homed into nine use-case lanes, so every legacy glob lands in the lane
+# that owns the graph now (stills/* -> photos, motion/silent/* -> video/silent,
+# dcc/* -> guides, optional/* -> labs/opt-in, inspire/* -> labs/assist). The
+# one-graph moves are matched ahead of their old lane wildcard.
 # Globals:
 #   None
 # Arguments:
-#   $1  relative path (e.g. _lab/stills/foo.json or stills-foo.json)
+#   $1  relative path (e.g. _lab/photos/foo.json or stills-foo.json)
 # Outputs:
-#   Lane name on stdout
+#   Lane directory path on stdout (lane id, or lane id plus its sub-lane)
 # Returns:
 #   0 when mapped; 1 when the path must not be seeded
 #######################################
@@ -518,20 +522,42 @@ lab_workflow_lane() {
       printf '%s\n' "${rest}"
       return 0
       ;;
-    stills/*) printf '%s\n' stills ;;
-    motion/*) printf '%s\n' motion ;;
-    creator/*) printf '%s\n' creator ;;
-    services/*) printf '%s\n' services ;;
-    films/*) printf '%s\n' films ;;
-    shorts/*) printf '%s\n' films ;;
-    dcc/*) printf '%s\n' dcc ;;
-    optional/*) printf '%s\n' optional ;;
-    klein/* | klein-*) printf '%s\n' stills ;;
-    wan/* | wan-*) printf '%s\n' motion ;;
-    ltx/* | ltx-*) printf '%s\n' motion ;;
+    stills/talking-head*) printf '%s\n' video/av ;;
+    stills/still-flux3-fast* | stills/still-flux3-quality*) printf '%s\n' labs/opt-in ;;
+    stills/*) printf '%s\n' photos ;;
+    photos/*) printf '%s\n' photos ;;
+    motion/silent/*) printf '%s\n' video/silent ;;
+    motion/av/*) printf '%s\n' video/av ;;
+    motion/loops/*) printf '%s\n' video/loops ;;
+    motion/*) printf '%s\n' video ;;
+    video/silent/*) printf '%s\n' video/silent ;;
+    video/av/*) printf '%s\n' video/av ;;
+    video/loops/*) printf '%s\n' video/loops ;;
+    video/*) printf '%s\n' video ;;
+    creator/stills/*) printf '%s\n' social/stills ;;
+    creator/silent/*) printf '%s\n' social/silent ;;
+    creator/av/*) printf '%s\n' social/av ;;
+    creator/*) printf '%s\n' social ;;
+    social/stills/*) printf '%s\n' social/stills ;;
+    social/silent/*) printf '%s\n' social/silent ;;
+    social/av/*) printf '%s\n' social/av ;;
+    social/*) printf '%s\n' social ;;
+    services/*) printf '%s\n' business ;;
+    business/*) printf '%s\n' business ;;
+    films/* | editing/* | shorts/*) printf '%s\n' film ;;
+    film/*) printf '%s\n' film ;;
+    dcc/still-to-mesh*) printf '%s\n' 3d ;;
+    dcc/*) printf '%s\n' guides ;;
+    guides/*) printf '%s\n' guides ;;
+    optional/trellis2*) printf '%s\n' 3d ;;
+    optional/*) printf '%s\n' labs/opt-in ;;
+    3d/*) printf '%s\n' 3d ;;
+    labs/*) printf '%s\n' labs ;;
     audio/* | podcast-* | music-* | dub-*) printf '%s\n' audio ;;
-    inspire/* | prompt-forge-* | beat-sheet-* | research-chat-*) printf '%s\n' inspire ;;
-    editing/*) printf '%s\n' editing ;;
+    inspire/* | prompt-forge-* | beat-sheet-* | research-chat-*) printf '%s\n' labs/assist ;;
+    klein/* | klein-*) printf '%s\n' photos ;;
+    wan/* | wan-*) printf '%s\n' video ;;
+    ltx/* | ltx-*) printf '%s\n' video ;;
     *) return 1 ;;
   esac
 }
@@ -661,7 +687,7 @@ apply_lab_app_json_names() {
 log_lab_seed_counts() {
   local dest_lab="${1:?}"
   local lane n total=0
-  local -a lanes=(stills motion creator services films dcc optional audio inspire editing)
+  local -a lanes=(photos video social business film audio 3d guides labs)
   for lane in "${lanes[@]}"; do
     n=0
     if [[ -d ${dest_lab}/${lane} ]]; then
@@ -680,8 +706,69 @@ log_lab_seed_counts() {
 }
 
 #######################################
+# Old-lane twin of a dest _lab-relative JSON path or extra.lab_rel id.
+# The catalog was re-homed into nine use-case lanes (stills -> photos, motion
+# -> video, creator -> social, services -> business, films/editing -> film,
+# dcc -> guides, optional -> labs/opt-in, inspire -> labs/assist), so a
+# pre-upgrade seeded _lab tree or a pre-upgrade .lab-seed-manifest can name a
+# graph under its old lane while git already carries the new one. Both
+# directions are emitted so the src lookup, the manifest lookup, and the
+# lab_rel index agree whichever side of the upgrade they were written on.
+# Globals:
+#   None
+# Arguments:
+#   $1  path relative to dest _lab, or an extra.lab_rel id (suffix kept)
+# Outputs:
+#   One alternate id per line; nothing when the id has no old-lane twin
+# Returns:
+#   0
+#######################################
+lab_rel_lane_aliases() {
+  local rel="${1:?}"
+  case "${rel}" in
+    stills/talking-head*) printf '%s\n' "video/av/${rel#stills/}" ;;
+    stills/still-flux3-fast* | stills/still-flux3-quality*)
+      printf '%s\n' "labs/opt-in/${rel#stills/}"
+      ;;
+    video/av/talking-head*) printf '%s\n' "stills/${rel#video/av/}" ;;
+    labs/opt-in/still-flux3-fast* | labs/opt-in/still-flux3-quality*)
+      printf '%s\n' "stills/${rel#labs/opt-in/}"
+      ;;
+    stills/*) printf '%s\n' "photos/${rel#stills/}" ;;
+    photos/*) printf '%s\n' "stills/${rel#photos/}" ;;
+    motion/silent/*) printf '%s\n' "video/silent/${rel#motion/silent/}" ;;
+    motion/av/*) printf '%s\n' "video/av/${rel#motion/av/}" ;;
+    motion/loops/*) printf '%s\n' "video/loops/${rel#motion/loops/}" ;;
+    motion/*) printf '%s\n' "video/${rel#motion/}" ;;
+    video/silent/*) printf '%s\n' "motion/silent/${rel#video/silent/}" ;;
+    video/av/*) printf '%s\n' "motion/av/${rel#video/av/}" ;;
+    video/loops/*) printf '%s\n' "motion/loops/${rel#video/loops/}" ;;
+    video/*) printf '%s\n' "motion/${rel#video/}" ;;
+    creator/*) printf '%s\n' "social/${rel#creator/}" ;;
+    social/*) printf '%s\n' "creator/${rel#social/}" ;;
+    services/*) printf '%s\n' "business/${rel#services/}" ;;
+    business/*) printf '%s\n' "services/${rel#business/}" ;;
+    films/* | editing/* | shorts/*) printf '%s\n' "film/${rel#*/}" ;;
+    film/*) printf '%s\n' "films/${rel#film/}" "editing/${rel#film/}" "shorts/${rel#film/}" ;;
+    dcc/still-to-mesh*) printf '%s\n' "3d/${rel#dcc/}" ;;
+    3d/still-to-mesh*) printf '%s\n' "dcc/${rel#3d/}" ;;
+    optional/trellis2*) printf '%s\n' "3d/${rel#optional/}" ;;
+    3d/trellis2*) printf '%s\n' "optional/${rel#3d/}" ;;
+    dcc/*) printf '%s\n' "guides/${rel#dcc/}" ;;
+    guides/*) printf '%s\n' "dcc/${rel#guides/}" ;;
+    optional/*) printf '%s\n' "labs/opt-in/${rel#optional/}" ;;
+    labs/opt-in/*) printf '%s\n' "optional/${rel#labs/opt-in/}" ;;
+    inspire/*) printf '%s\n' "labs/assist/${rel#inspire/}" ;;
+    labs/assist/*) printf '%s\n' "inspire/${rel#labs/assist/}" ;;
+  esac
+  return 0
+}
+
+#######################################
 # Map a dest _lab relative JSON path onto the matching src file.
-# Accepts stem.app.json <-> stem.json so App Mode renames still match git.
+# Accepts stem.app.json <-> stem.json so App Mode renames still match git, and
+# the old-lane twin of the path so a graph seeded before the lane re-home still
+# matches the catalog file that moved out from under it.
 # Globals:
 #   None
 # Arguments:
@@ -695,26 +782,28 @@ log_lab_seed_counts() {
 lab_src_json_for_dest() {
   local src_lab="${1:?}"
   local rel="${2:?}"
-  local alt
-  if [[ -f ${src_lab}/${rel} ]]; then
-    printf '%s\n' "${src_lab}/${rel}"
-    return 0
-  fi
-  case "${rel}" in
-    *.app.json)
-      alt="${rel%.app.json}.json"
-      ;;
-    *.json)
-      alt="${rel%.json}.app.json"
-      ;;
-    *)
-      return 1
-      ;;
-  esac
-  if [[ -f ${src_lab}/${alt} ]]; then
-    printf '%s\n' "${src_lab}/${alt}"
-    return 0
-  fi
+  local alt candidate alias_line
+  local -a candidates=("${rel}")
+  while IFS= read -r alias_line; do
+    if [[ -n ${alias_line} ]]; then
+      candidates+=("${alias_line}")
+    fi
+  done < <(lab_rel_lane_aliases "${rel}")
+  for candidate in "${candidates[@]}"; do
+    if [[ -f ${src_lab}/${candidate} ]]; then
+      printf '%s\n' "${src_lab}/${candidate}"
+      return 0
+    fi
+    case "${candidate}" in
+      *.app.json) alt="${candidate%.app.json}.json" ;;
+      *.json) alt="${candidate%.json}.app.json" ;;
+      *) alt="" ;;
+    esac
+    if [[ -n ${alt} && -f ${src_lab}/${alt} ]]; then
+      printf '%s\n' "${src_lab}/${alt}"
+      return 0
+    fi
+  done
   return 1
 }
 
@@ -809,7 +898,9 @@ lab_manifest_digest() {
 }
 
 #######################################
-# Manifest digest for a dest rel, accepting stem.app.json <-> stem.json.
+# Manifest digest for a dest rel, accepting stem.app.json <-> stem.json and
+# the old-lane twin of the path, so a manifest written before the lane
+# re-home still recognises the graph after its folder changed.
 # Globals:
 #   None
 # Arguments:
@@ -823,28 +914,38 @@ lab_manifest_digest() {
 lab_manifest_digest_for_rel() {
   local manifest="${1:?}"
   local rel="${2:?}"
-  local digest alt
-  digest="$(lab_manifest_digest "${manifest}" "${rel}" || true)"
-  if [[ -n ${digest} ]]; then
-    printf '%s\n' "${digest}"
-    return 0
-  fi
-  case "${rel}" in
-    *.app.json)
-      alt="${rel%.app.json}.json"
-      ;;
-    *.json)
-      alt="${rel%.json}.app.json"
-      ;;
-    *)
-      return 1
-      ;;
-  esac
-  lab_manifest_digest "${manifest}" "${alt}"
+  local digest alt candidate alias_line
+  local -a candidates=("${rel}")
+  while IFS= read -r alias_line; do
+    if [[ -n ${alias_line} ]]; then
+      candidates+=("${alias_line}")
+    fi
+  done < <(lab_rel_lane_aliases "${rel}")
+  for candidate in "${candidates[@]}"; do
+    digest="$(lab_manifest_digest "${manifest}" "${candidate}" || true)"
+    if [[ -n ${digest} ]]; then
+      printf '%s\n' "${digest}"
+      return 0
+    fi
+    case "${candidate}" in
+      *.app.json) alt="${candidate%.app.json}.json" ;;
+      *.json) alt="${candidate%.json}.app.json" ;;
+      *) alt="" ;;
+    esac
+    if [[ -n ${alt} ]]; then
+      digest="$(lab_manifest_digest "${manifest}" "${alt}" || true)"
+      if [[ -n ${digest} ]]; then
+        printf '%s\n' "${digest}"
+        return 0
+      fi
+    fi
+  done
+  return 1
 }
 
 #######################################
-# True when an index from lab_json_index lists extra.lab_rel.
+# True when an index from lab_json_index lists extra.lab_rel, under either the
+# current lane id or the lane that owned the graph before the re-home.
 # Globals:
 #   None
 # Arguments:
@@ -858,10 +959,22 @@ lab_manifest_digest_for_rel() {
 lab_index_has_lab_rel() {
   local index="${1:?}"
   local lab_rel="${2:?}"
+  local candidate alias_line
+  local -a candidates=("${lab_rel}")
   if [[ ! -f ${index} || -z ${lab_rel} ]]; then
     return 1
   fi
-  awk -F '\t' -v id="${lab_rel}" '$3 == id { found=1; exit } END { exit !found }' "${index}"
+  while IFS= read -r alias_line; do
+    if [[ -n ${alias_line} ]]; then
+      candidates+=("${alias_line}")
+    fi
+  done < <(lab_rel_lane_aliases "${lab_rel}")
+  for candidate in "${candidates[@]}"; do
+    if awk -F '\t' -v id="${candidate}" '$3 == id { found=1; exit } END { exit !found }' "${index}"; then
+      return 0
+    fi
+  done
+  return 1
 }
 
 #######################################

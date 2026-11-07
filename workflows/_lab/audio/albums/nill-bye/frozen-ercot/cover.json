@@ -505,7 +505,7 @@
         "t2i",
         "YouTube 16:9 still",
         "none",
-        "stills/instagram-square"
+        "photos/instagram-square"
       ],
       "title": "Klein Prompt Enhance"
     },
@@ -1028,7 +1028,7 @@
       "enabled": true,
       "default_view": "app",
       "frontend_min": "1.41.13",
-      "lane": "produce",
+      "lane": "audio",
       "occupancy": "klein",
       "enhance_off_identity": false,
       "handoff": []

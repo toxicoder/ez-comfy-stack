@@ -45,9 +45,9 @@ def test_ltx_enhance_defaults_to_eight_seconds() -> None:
 
 
 def test_film_print_template_stays_concat_safe_five_seconds() -> None:
-    assert LTX_PRINT_TEMPLATE == "motion/av/still-to-shot.json"
-    assert ICLORA_TEMPLATE == "dcc/depth-control-8s.json"
-    shot = json.loads(lab_json("motion/av/still-to-shot.json").read_text(encoding="utf-8"))
+    assert LTX_PRINT_TEMPLATE == "video/av/still-to-shot.json"
+    assert ICLORA_TEMPLATE == "guides/depth-control-8s.json"
+    shot = json.loads(lab_json("video/av/still-to-shot.json").read_text(encoding="utf-8"))
     lengths = [ltx_length(n) for n in iter_nodes(shot)]
     assert FRAMES_DEFAULT in lengths
     assert FRAMES_APP not in {v for v in lengths if v is not None}
@@ -70,10 +70,10 @@ def test_standalone_ltx_apps_are_eight_seconds() -> None:
         assert "8 seconds, 24 fps" in blob or "Eight seconds." in blob or rel.endswith(
             "-8s"
         )
-    assert "stills/talking-head" in apps
-    assert "motion/av/still-to-video-8s" in apps
-    assert "motion/av/still-to-shot" not in apps
-    assert not any(rel.startswith("films/") for rel in apps)
+    assert "video/av/talking-head" in apps
+    assert "video/av/still-to-video-8s" in apps
+    assert "video/av/still-to-shot" not in apps
+    assert not any(rel.startswith("film/") for rel in apps)
     assert len(apps) >= 30
 
 

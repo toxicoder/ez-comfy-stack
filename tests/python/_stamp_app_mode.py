@@ -22,9 +22,12 @@ from collections import Counter
 from typing import Any, Mapping, Sequence
 
 from _enhance_schema import enhance_mode
+from _lab_paths import LANE_REGISTRY
 
 FRONTEND_MIN = "1.41.13"
-LANES = ("inspire", "produce", "audio", "film", "dcc", "optional")
+# The stamped lane must be a real browse lane, so it comes from the one lane
+# registry rather than a second list that can drift from the folders.
+LANES = tuple(spec.id for spec in LANE_REGISTRY)
 OCCUPANCIES = ("llm", "klein", "wan", "ltx", "trellis", "audio", "film", "none")
 DEFAULT_VIEWS = ("app", "graph")
 BANNED = (
@@ -131,7 +134,7 @@ def stamp_app_mode(
         inputs: (node title|id|unique type, widgetName[, config]).
             Persisted as [int(node.id), widgetName, config?].
         outputs: Node title|id|unique type for SaveImage / VHS_VideoCombine.
-        lane: inspire | produce | audio | film | dcc.
+        lane: A registered browse lane id (see ``LANES``).
         occupancy: llm | klein | wan | ltx | audio | film | none.
         handoff: Downstream app ids (workflow stems).
         default_view: app | graph.
@@ -954,7 +957,7 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
             ),
             "look": (
                 "Optional Cinema Rack starter. none leaves look to Style + Prompt. "
-                "Full 13-axis desk is inspire/cinema-rack."
+                "Full 13-axis desk is labs/assist/cinema-rack."
             ),
             "width": "Latent width in pixels. Used when Format is Custom; otherwise the preset wins.",
             "height": "Latent height in pixels. Used when Format is Custom; otherwise the preset wins.",
@@ -1153,7 +1156,6 @@ def order_app_inputs(
 
 
 def _spec(
-    lane: str,
     occupancy: str,
     *handoff: str,
     default_view: str = "app",
@@ -1175,7 +1177,6 @@ def _spec(
     clip_chain_widgets: bool = False,
 ) -> dict[str, Any]:
     return {
-        "lane": lane,
         "occupancy": occupancy,
         "handoff": handoff,
         "default_view": default_view,
@@ -1200,95 +1201,78 @@ def _spec(
 
 STAMP_SPECS: dict[str, dict[str, Any]] = {
     "stills/still-draft": _spec(
-        "inspire",
         "klein",
         "stills/still-hero",
         "motion/silent/still-to-video-5s",
         "stills/platform-pack",
     ),
-    "stills/identity-sheet": _spec(
-        "inspire", "klein"
-    ),
+    "stills/identity-sheet": _spec("klein"),
     "stills/storyboard-6up": _spec(
-        "inspire",
         "klein",
         "motion/silent/still-to-shot",
         "motion/av/still-to-shot",
     ),
     "stills/dream-house": _spec(
-        "inspire",
         "klein",
         "motion/loops/gif-loop",
         "motion/loops/bumper-loop",
         "motion/loops/sticker-loop",
     ),
     "stills/dream-house-clay": _spec(
-        "inspire",
         "klein",
         "motion/loops/gif-loop",
         "motion/loops/bumper-loop",
         "motion/loops/sticker-loop",
         hide_images=True,
     ),
-    "stills/style-lock": _spec(
-        "inspire", "klein"
-    ),
-    "stills/lighting-trio": _spec("inspire", "klein"),
-    "stills/camera-angles": _spec("inspire", "klein"),
-    "stills/color-moods": _spec("inspire", "klein"),
-    "stills/time-of-day": _spec("inspire", "klein"),
-    "stills/hook-still": _spec(
-        "inspire", "klein", "motion/silent/shorts-still-5s"
+    "stills/style-lock": _spec("klein"),
+    "stills/lighting-trio": _spec("klein"),
+    "stills/camera-angles": _spec("klein"),
+    "stills/color-moods": _spec("klein"),
+    "stills/time-of-day": _spec("klein"),
+    "stills/hook-still": _spec("klein", "motion/silent/shorts-still-5s"
     ),
     "stills/character-draft": _spec(
-        "inspire",
         "klein",
         "stills/character-tweak",
         "stills/identity-sheet",
         "motion/silent/still-to-video-5s",
     ),
     "stills/character-tweak": _spec(
-        "inspire",
         "klein",
         "stills/identity-sheet",
         "motion/silent/still-to-video-5s",
     ),
     "inspire/prompt-forge": _spec(
-        "inspire",
         "llm",
         "stills/still-draft",
         forge_widgets=True,
     ),
     "inspire/cinema-rack": _spec(
-        "inspire",
         "llm",
         "inspire/prompt-forge",
         "stills/still-draft",
         cinema_widgets=True,
     ),
     "inspire/audio-rack": _spec(
-        "inspire",
         "llm",
         "audio/music/rap-draft",
         "audio/podcast/learn-episode",
         audio_widgets=True,
     ),
     "inspire/research-chat": _spec(
-        "inspire",
         "llm",
         "inspire/prompt-forge",
         "stills/still-draft",
         research_widgets=True,
     ),
     "inspire/app-forge": _spec(
-        "inspire",
         "llm",
         "inspire/prompt-forge",
         "stills/still-draft",
         app_forge_widgets=True,
     ),
     "inspire/beat-sheet": _spec(
-        "inspire",
         "none",
         "stills/identity-sheet",
         "dcc/clay-hero",
@@ -1296,13 +1280,11 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         primitive_strings=True,
     ),
     "stills/still-daily": _spec(
-        "produce",
         "klein",
         expose_unet=True,
         sampler_steps_cfg=True,
     ),
     "stills/still-studio": _spec(
-        "produce",
         "klein",
         "motion/silent/still-to-video-5s",
         "motion/av/still-to-video-8s",
@@ -1312,7 +1294,6 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         sampler_steps_cfg=True,
     ),
     "stills/image-studio": _spec(
-        "produce",
         "klein",
         "motion/silent/still-to-video-5s",
         "motion/av/still-to-video-8s",
@@ -1323,14 +1304,12 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         sampler_steps_cfg=True,
     ),
     "stills/still-hero": _spec(
-        "produce",
         "klein",
         "motion/silent/still-to-video-5s",
         "motion/av/still-to-video-8s",
         "motion/av/first-last-8s",
     ),
     "stills/still-flux3-fast": _spec(
-        "produce",
         "klein",
         "motion/silent/still-to-video-5s",
         "motion/av/still-to-video-8s",
@@ -1338,21 +1317,18 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         sampler_steps_cfg=True,
     ),
     "stills/still-flux3-quality": _spec(
-        "produce",
         "klein",
         "motion/silent/still-to-video-5s",
         "motion/av/still-to-video-8s",
         "stills/text-swap",
         sampler_steps_cfg=True,
     ),
-    "stills/thumbnail": _spec("produce", "klein"),
+    "stills/thumbnail": _spec("klein"),
     "stills/text-swap": _spec(
-        "produce",
         "klein",
         "motion/silent/still-to-video-5s",
     ),
     "stills/background-swap": _spec(
-        "produce",
         "klein",
         "stills/background-edit",
         "motion/silent/still-to-video-5s",
@@ -1361,68 +1337,62 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         hide_style=True,
     ),
     "stills/background-edit": _spec(
-        "produce",
         "klein",
         "stills/background-swap",
         "motion/silent/still-to-video-5s",
         "motion/av/still-to-video-8s",
         "stills/text-swap",
     ),
-    "stills/product-packshot": _spec("produce", "klein", "motion/av/product-hero"),
-    "stills/instagram-square": _spec("produce", "klein"),
-    "stills/open-graph": _spec("produce", "klein"),
-    "stills/banner-wide": _spec("produce", "klein"),
-    "stills/podcast-cover": _spec("produce", "klein"),
-    "stills/endcard-cta": _spec("produce", "klein"),
-    "stills/quote-bg": _spec("produce", "klein"),
-    "stills/lower-third-bg": _spec("produce", "klein"),
-    "stills/food-tabletop": _spec("produce", "klein"),
-    "stills/shorts-still": _spec("produce", "klein"),
-    "stills/before-after": _spec("produce", "klein"),
+    "stills/product-packshot": _spec("klein", "motion/av/product-hero"),
+    "stills/instagram-square": _spec("klein"),
+    "stills/open-graph": _spec("klein"),
+    "stills/banner-wide": _spec("klein"),
+    "stills/podcast-cover": _spec("klein"),
+    "stills/endcard-cta": _spec("klein"),
+    "stills/quote-bg": _spec("klein"),
+    "stills/lower-third-bg": _spec("klein"),
+    "stills/food-tabletop": _spec("klein"),
+    "stills/shorts-still": _spec("klein"),
+    "stills/before-after": _spec("klein"),
     "stills/upscale-reframe": _spec(
-        "produce",
         "klein",
         "motion/silent/still-to-video-5s",
     ),
     "stills/platform-pack": _spec(
-        "produce",
         "klein",
         "motion/silent/still-to-video-5s",
         "motion/av/hook-av",
     ),
-    "stills/talking-head": _spec("produce", "ltx", "motion/av/audio-to-video-8s"),
-    "motion/silent/still-to-video-5s": _spec(
-        "produce", "wan", "motion/av/still-to-video-8s"
+    "stills/talking-head": _spec("ltx", "motion/av/audio-to-video-8s"),
+    "motion/silent/still-to-video-5s": _spec("wan", "motion/av/still-to-video-8s"
     ),
-    "motion/silent/text-to-video-5s": _spec("produce", "wan"),
-    "motion/silent/first-last-5s": _spec("produce", "wan"),
-    "motion/silent/vace-join": _spec("produce", "wan"),
-    "motion/silent/still-to-shot": _spec("produce", "wan"),
-    "motion/loops/gif-loop": _spec("produce", "wan"),
-    "motion/loops/bumper-loop": _spec("produce", "wan"),
-    "motion/loops/sticker-loop": _spec("produce", "wan"),
-    "motion/silent/shorts-still-5s": _spec(
-        "produce", "wan", "motion/av/shorts-still-8s"
+    "motion/silent/text-to-video-5s": _spec("wan"),
+    "motion/silent/first-last-5s": _spec("wan"),
+    "motion/silent/vace-join": _spec("wan"),
+    "motion/silent/still-to-shot": _spec("wan"),
+    "motion/loops/gif-loop": _spec("wan"),
+    "motion/loops/bumper-loop": _spec("wan"),
+    "motion/loops/sticker-loop": _spec("wan"),
+    "motion/silent/shorts-still-5s": _spec("wan", "motion/av/shorts-still-8s"
     ),
-    "motion/silent/orbit-still-5s": _spec("produce", "wan"),
-    "motion/silent/push-in-still-5s": _spec("produce", "wan"),
-    "motion/silent/parallax-still-5s": _spec("produce", "wan"),
-    "motion/av/still-to-video-8s": _spec("produce", "ltx"),
-    "motion/av/text-to-video-8s": _spec("produce", "ltx"),
-    "motion/av/still-to-shot": _spec("produce", "ltx"),
-    "motion/av/shorts-still-8s": _spec("produce", "ltx"),
-    "motion/av/hook-av": _spec("produce", "ltx"),
-    "motion/av/broll-ambient": _spec("produce", "ltx"),
-    "motion/av/weather-broll": _spec("produce", "ltx"),
-    "motion/av/interior-ambience": _spec("produce", "ltx"),
-    "motion/av/dialogue-8s": _spec("produce", "ltx"),
-    "motion/av/multishot-8s": _spec("produce", "ltx"),
-    "motion/av/product-hero": _spec("produce", "ltx"),
-    "motion/av/first-last-8s": _spec("produce", "ltx"),
-    "motion/av/audio-to-video-8s": _spec("produce", "ltx"),
-    "motion/av/clip-chain": _spec("produce", "ltx", clip_chain_widgets=True),
+    "motion/silent/orbit-still-5s": _spec("wan"),
+    "motion/silent/push-in-still-5s": _spec("wan"),
+    "motion/silent/parallax-still-5s": _spec("wan"),
+    "motion/av/still-to-video-8s": _spec("ltx"),
+    "motion/av/text-to-video-8s": _spec("ltx"),
+    "motion/av/still-to-shot": _spec("ltx"),
+    "motion/av/shorts-still-8s": _spec("ltx"),
+    "motion/av/hook-av": _spec("ltx"),
+    "motion/av/broll-ambient": _spec("ltx"),
+    "motion/av/weather-broll": _spec("ltx"),
+    "motion/av/interior-ambience": _spec("ltx"),
+    "motion/av/dialogue-8s": _spec("ltx"),
+    "motion/av/multishot-8s": _spec("ltx"),
+    "motion/av/product-hero": _spec("ltx"),
+    "motion/av/first-last-8s": _spec("ltx"),
+    "motion/av/audio-to-video-8s": _spec("ltx"),
+    "motion/av/clip-chain": _spec("ltx", clip_chain_widgets=True),
     "films/go-see": _spec(
-        "film",
         "film",
         default_view="graph",
         film_minimal=True,
@@ -1430,13 +1400,11 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     ),
     "films/still-here": _spec(
         "film",
-        "film",
         default_view="graph",
         film_minimal=True,
         enhance_off_identity=True,
     ),
     "films/switchyard": _spec(
-        "film",
         "film",
         default_view="graph",
         film_minimal=True,
@@ -1444,7 +1412,6 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     ),
     **{
         f"films/{film}/act-0{act}": _spec(
-            "film",
             "film",
             default_view="graph",
             film_minimal=True,
@@ -1459,72 +1426,61 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         )
         for act in range(1, 6)
     },
-    "audio/podcast/two-host-episode": _spec("audio", "audio"),
-    "audio/podcast/radio-drama": _spec("audio", "audio"),
-    "audio/podcast/learn-episode": _spec("audio", "audio"),
-    "audio/dub/clone-translate": _spec("audio", "audio"),
-    "audio/music/rap-draft": _spec("audio", "audio"),
-    "audio/music/rap-full": _spec("audio", "audio"),
+    "audio/podcast/two-host-episode": _spec("audio"),
+    "audio/podcast/radio-drama": _spec("audio"),
+    "audio/podcast/learn-episode": _spec("audio"),
+    "audio/dub/clone-translate": _spec("audio"),
+    "audio/music/rap-draft": _spec("audio"),
+    "audio/music/rap-full": _spec("audio"),
     "dcc/clay-hero": _spec(
-        "dcc",
         "klein",
         "dcc/depth-control-8s",
         "motion/silent/still-to-video-5s",
     ),
     "dcc/canny-hero": _spec(
-        "dcc",
         "klein",
         "dcc/canny-control-8s",
     ),
     "dcc/clay-plates": _spec(
-        "dcc",
         "klein",
         "motion/silent/still-to-video-5s",
         "motion/silent/shorts-still-5s",
         "dcc/depth-control-shorts",
     ),
     "dcc/depth-control-8s": _spec(
-        "dcc",
         "ltx",
         "audio/stem-mix",
     ),
     "dcc/canny-control-8s": _spec(
-        "dcc",
         "ltx",
         "audio/stem-mix",
     ),
     "dcc/depth-control-shorts": _spec(
-        "dcc",
         "ltx",
         "audio/stem-mix",
     ),
     "dcc/first-last-from-guide": _spec(
-        "dcc",
         "wan",
         "dcc/depth-control-8s",
     ),
     "dcc/guide-still": _spec(
-        "dcc",
         "klein",
         "dcc/depth-from-loader",
         "dcc/still-to-mesh",
     ),
     "dcc/depth-from-loader": _spec(
-        "dcc",
         "ltx",
         "audio/stem-mix",
     ),
     "dcc/still-to-mesh": _spec(
-        "dcc",
         "trellis",
         default_view="graph",
     ),
     "audio/stem-mix": _spec(
         "audio",
-        "audio",
         primitive_strings=True,
     ),
-    "optional/still-to-video-a14b": _spec("produce", "wan", default_view="graph"),
+    "optional/still-to-video-a14b": _spec("wan", default_view="graph"),
 }
 
 def _nill_bye_stems() -> tuple[str, ...]:
@@ -1541,7 +1497,7 @@ def _nill_bye_stems() -> tuple[str, ...]:
 
 NILL_BYE_STAMP_STEMS = _nill_bye_stems()
 for _nill_bye_stem in NILL_BYE_STAMP_STEMS:
-    STAMP_SPECS[_nill_bye_stem] = _spec("audio", "audio")
+    STAMP_SPECS[_nill_bye_stem] = _spec("audio")
 
 
 def _drive_through_stems() -> tuple[str, ...]:
@@ -1558,8 +1514,7 @@ def _drive_through_stems() -> tuple[str, ...]:
 
 DRIVE_THROUGH_STAMP_STEMS = _drive_through_stems()
 for _drive_through_stem in DRIVE_THROUGH_STAMP_STEMS:
-    STAMP_SPECS[_drive_through_stem] = _spec(
-        "audio", "audio", ace_instrumental_score=True
+    STAMP_SPECS[_drive_through_stem] = _spec("audio", ace_instrumental_score=True
     )
 
 STUB_IDS = frozenset({"optional/longcat-video"})
@@ -1628,8 +1583,8 @@ def _register_album_stamps() -> None:
     for info in shipped_albums():
         cover = album_rel(info["artist_slug"], info["slug"], "cover")
         album = album_rel(info["artist_slug"], info["slug"], "album")
-        STAMP_SPECS[cover] = _spec("produce", "klein")
-        STAMP_SPECS[album] = _spec("audio", "none")
+        STAMP_SPECS[cover] = _spec("klein")
+        STAMP_SPECS[album] = _spec("none")
 
 
 _register_album_stamps()
@@ -1640,7 +1595,6 @@ def _register_pack3_stamps() -> None:
 
     for rel, occupancy, handoff, pin in pack3_stamp_rows():
         STAMP_SPECS[rel] = _spec(
-            "produce",
             occupancy,
             *handoff,
             enhance_off_identity=pin,
@@ -1655,7 +1609,6 @@ def _register_services_stamps() -> None:
 
     for rel, occupancy, handoff, pin in services_stamp_rows():
         STAMP_SPECS[rel] = _spec(
-            "produce",
             occupancy,
             *handoff,
             enhance_off_identity=pin,
@@ -2428,6 +2381,28 @@ def apply_lab_completeness_flags(graph: dict) -> dict:
     return graph
 
 
+def _lane_for(rel: str) -> str:
+    """Browse lane a graph belongs to, read off its own ``_lab``-relative id.
+
+    The folder is the single source of truth: an author cannot stamp a lane
+    that disagrees with where the graph actually lives, and moving a graph
+    between lanes retargets the sidebar entry with it.
+
+    Args:
+        rel: Resolved ``_lab``-relative id, such as ``photos/still-draft``.
+
+    Returns:
+        The top-level lane segment, such as ``photos``.
+
+    Raises:
+        ValueError: the id has no lane segment.
+    """
+    lane = rel.split("/", 1)[0]
+    if not lane or "/" in lane:
+        raise ValueError(f"cannot derive a lane from {rel!r}")
+    return lane
+
+
 def stamp_suite_graph(graph: dict) -> dict:
     """Stamp a known suite graph. No-op when graph id is not in STAMP_SPECS."""
     from _lab_ids import rel_id
@@ -2440,7 +2415,8 @@ def stamp_suite_graph(graph: dict) -> dict:
     key = rel_id(str(extra.get("lab_rel") or graph.get("id") or ""))
     spec = STAMP_SPECS.get(key)
     if spec is None:
-        spec = STAMP_SPECS.get(str(graph.get("id") or ""))
+        key = str(graph.get("id") or "")
+        spec = STAMP_SPECS.get(key)
     if spec is None:
         from _wire_prompt_enhance import apply_enhance_policy, normalize_enhance_widgets
 
@@ -2458,7 +2434,7 @@ def stamp_suite_graph(graph: dict) -> dict:
         graph,
         inputs=inputs,
         outputs=outputs,
-        lane=spec["lane"],
+        lane=_lane_for(key),
         occupancy=spec["occupancy"],
         handoff=spec["handoff"],
         default_view=spec["default_view"],

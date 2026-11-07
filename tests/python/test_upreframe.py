@@ -1,4 +1,4 @@
-"""stills/upscale-reframe: Klein 4B upscale + aspect reframe of a loaded still.
+"""photos/upscale-reframe: Klein 4B upscale + aspect reframe of a loaded still.
 
 Hermetic: stdlib + JSON + in-tree test helpers. No Comfy, Docker, or GPU. The
 graph reframes by regenerating a blank Format-sized canvas guided by the
@@ -32,6 +32,7 @@ from _lab_layout import (  # noqa: E402
 from _lab_paths import lab_json, load_lab_graph  # noqa: E402
 from _stamp_app_mode import (  # noqa: E402
     STAMP_SPECS,
+    _lane_for,
     infer_suite_inputs,
     infer_suite_outputs,
     stamp_suite_graph,
@@ -50,7 +51,7 @@ from _wire_upscale import (  # noqa: E402
 )
 from ez_image.formats import CUSTOM_ID, SIZE_MODE_MATCH  # noqa: E402
 
-REL = "stills/upscale-reframe"
+REL = "photos/upscale-reframe"
 SAVE_PREFIX = "ez_reframe"
 CANVAS = (1280, 704)
 PLUMBING_WIDGETS = ("steps", "cfg", "scheduler", "denoise", "sample_type")
@@ -91,11 +92,11 @@ def test_upreframe_identity_occupancy_and_stamp_spec() -> None:
     assert extra["lab_rel"] == REL
     assert extra["workflowRendererVersion"] == "Vue-corrected"
     mode = extra["lab_app_mode"]
-    assert mode["lane"] == "produce"
+    assert mode["lane"] == "photos"
     assert mode["occupancy"] == "klein"
     assert mode["default_view"] == "app"
     spec = STAMP_SPECS[REL]
-    assert spec["lane"] == "produce"
+    assert _lane_for(REL) == "photos"
     assert spec["occupancy"] == "klein"
 
 

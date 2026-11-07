@@ -381,7 +381,7 @@ Type `COMBO`. Range / default: auto.
 
 Lab graph to clone.
 
-**How it affects generation:** auto uses the GGUF planner or a keyword heuristic. Pin stills/instagram-square to skip.
+**How it affects generation:** auto uses the GGUF planner or a keyword heuristic. Pin photos/instagram-square to skip.
 
 #### `slug`
 
@@ -708,7 +708,7 @@ Choose whether companions and extras count as background on Klein background App
 
 !!! warning "Lab notes"
 
-    stills/background-swap and stills/background-edit. On treats people as environment. Off keeps them locked with the hero. Defaults on.
+    photos/background-swap and photos/background-edit. On treats people as environment. Off keeps them locked with the hero. Defaults on.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1084,7 +1084,7 @@ Attach the photo latent, or a people-erased block-study latent when the prompt r
 
 !!! warning "Lab notes"
 
-    stills/background-swap. Ordinary place swaps keep the encoded photo. Cubic block world erases the source people from the coarse block study before VAE-encoding, so Klein is not locked to photoreal surfaces and is not primed to cube the people. When the person segmenter cannot run, the encoded photograph is attached instead (photo-anchored people-kept rebuild), so the block world never deletes the people.
+    photos/background-swap. Ordinary place swaps keep the encoded photo. Cubic block world erases the source people from the coarse block study before VAE-encoding, so Klein is not locked to photoreal surfaces and is not primed to cube the people. When the person segmenter cannot run, the encoded photograph is attached instead (photo-anchored people-kept rebuild), so the block world never deletes the people.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1887,7 +1887,7 @@ Allocate an empty Flux.2 latent matching a still's snapped width and height.
 
 !!! warning "Lab notes"
 
-    stills/background-swap uses this as KSampler.latent_image. The encoded source is a reference (photo, or a block study for Cubic block world), not the denoise start.
+    photos/background-swap uses this as KSampler.latent_image. The encoded source is a reference (photo, or a block study for Cubic block world), not the denoise start.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -2015,7 +2015,7 @@ Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack
 
 !!! warning "Lab notes"
 
-    stills/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size. Match input snaps aspect to a loaded still.
+    photos/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size. Match input snaps aspect to a loaded still.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -2126,7 +2126,7 @@ Type `COMBO`. Range / default: none.
 
 Optional Cinema Rack starter.
 
-**How it affects generation:** none leaves look to Style + Prompt. A pick splices Klein still language into Enhance context. Full 13-axis desk is inspire/cinema-rack.
+**How it affects generation:** none leaves look to Style + Prompt. A pick splices Klein still language into Enhance context. Full 13-axis desk is labs/assist/cinema-rack.
 
 **Other choices**
 
@@ -2196,7 +2196,7 @@ Pick one of 100 creator modes. Category filters Mode. Queue splices an instructi
 
 !!! warning "Lab notes"
 
-    stills/image-studio wires context into EZKleinPromptEnhance, enhance_mode into the Enhance mode widget, and prefix into SaveImage. Optional references stay optional. Iterate forces text-to-image, then edit once has_image is set.
+    photos/image-studio wires context into EZKleinPromptEnhance, enhance_mode into the Enhance mode widget, and prefix into SaveImage. Optional references stay optional. Iterate forces text-to-image, then edit once has_image is set.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -2411,7 +2411,7 @@ Type `COMBO`. Range / default: custom.
 
 Lab sample prompt or Custom.
 
-**How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 30 recipes plus Custom (place recipes such as Cliff villa on stills/dream-house).
+**How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 30 recipes plus Custom (place recipes such as Cliff villa on photos/dream-house).
 
 #### `prompt`
 
@@ -3292,7 +3292,7 @@ Rewrite a lazy prompt for LongCat-Video (T2V / I2V / continuation).
 
 !!! warning "Lab notes"
 
-    No native audio. Standard CFG ~4; distilled CFG 1 ignores negatives. Optional stub preview on optional/longcat-video.
+    No native audio. Standard CFG ~4; distilled CFG 1 ignores negatives. Optional stub preview on labs/opt-in/longcat-video.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -3676,7 +3676,7 @@ Resize a still to another image's exact width and height.
 
 !!! warning "Lab notes"
 
-    stills/text-swap restores the decode to the uploaded still's pixel size.
+    photos/text-swap restores the decode to the uploaded still's pixel size.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -4087,7 +4087,7 @@ Paste detected people from the source photo onto a cubic rebuild.
 
 !!! warning "Lab notes"
 
-    stills/background-swap, between decode and match-to-source. Paste dilates the person mask ~2 px and feathers ~6 px, so people own their full silhouette and blend onto the plate. source is the full-resolution LoadImage still. Other prompts pass the plate through. When the segmenter cannot run (weights or torch missing, or `EZ_PERSON_MASK=off`) the plate passes through untouched and the swap stays photo-anchored (status `person mask missing`); people are never deleted.
+    photos/background-swap, between decode and match-to-source. Paste dilates the person mask ~2 px and feathers ~6 px, so people own their full silhouette and blend onto the plate. source is the full-resolution LoadImage still. Other prompts pass the plate through. When the segmenter cannot run (weights or torch missing, or `EZ_PERSON_MASK=off`) the plate passes through untouched and the swap stays photo-anchored (status `person mask missing`); people are never deleted.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -4126,7 +4126,7 @@ Custom textarea.
 
 Type `STRING`.
 
-Catalog id (inspire/prompt-forge).
+Catalog id (labs/assist/prompt-forge).
 
 **How it affects generation:** Leave as stamped.
 
@@ -4136,7 +4136,7 @@ Scale a still to the largest width and height that fit inside the source and are
 
 !!! warning "Lab notes"
 
-    stills/text-swap snaps the start image to the Flux.2 Klein VAE grid before VAEEncode. stills/background-swap also feeds EZEmptyFlux2FromImage.
+    photos/text-swap snaps the start image to the Flux.2 Klein VAE grid before VAEEncode. photos/background-swap also feeds EZEmptyFlux2FromImage.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -5151,7 +5151,7 @@ Resize a still to a target width/height.
 
 !!! warning "Lab notes"
 
-    dcc/clay-plates scales one clay into 704 / 1:1 / 4:5 / 9:16.
+    guides/clay-plates scales one clay into 704 / 1:1 / 4:5 / 9:16.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -5358,7 +5358,7 @@ Pin a still onto a latent frame (first-last-frame).
 
 !!! warning "Lab notes"
 
-    motion/av/first-last-8s uses index 0 then -1 on the video latent before audio concat.
+    video/av/first-last-8s uses index 0 then -1 on the video latent before audio concat.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -5393,7 +5393,7 @@ Decode LTX audio latent to AUDIO for the MP4 mux.
 
 !!! warning "Lab notes"
 
-    Skipped on motion/av/audio-to-video-8s (original wav is muxed).
+    Skipped on video/av/audio-to-video-8s (original wav is muxed).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -5550,7 +5550,7 @@ Couple audio and video during sampling (dialogue graphs).
 
 !!! warning "Lab notes"
 
-    motion/av/dialogue-8s uses 3.0 / 0 / 1. Mouths still will not lip-sync; this only tightens A/V coupling.
+    video/av/dialogue-8s uses 3.0 / 0 / 1. Mouths still will not lip-sync; this only tightens A/V coupling.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -5599,7 +5599,7 @@ Load a wav/mp3 from input/.
 
 !!! warning "Lab notes"
 
-    motion/av/audio-to-video-8s defaults ez_a2v_bed.wav. Drop the file in ${COMFY_OUTPUT_DIR}/input.
+    video/av/audio-to-video-8s defaults ez_a2v_bed.wav. Drop the file in ${COMFY_OUTPUT_DIR}/input.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -5660,7 +5660,7 @@ Write a GLB/mesh file.
 
 !!! warning "Lab notes"
 
-    optional/trellis2 may leave the path empty (Comfy default). dcc/still-to-mesh writes assets/objects/_lab-mug/mesh.
+    3d/trellis2 may leave the path empty (Comfy default). 3d/still-to-mesh writes assets/objects/_lab-mug/mesh.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -6300,7 +6300,7 @@ Type `FLOAT`. Range / default: lab 24 (GIF 12/16).
 
 Output frames per second.
 
-**How it affects generation:** 24 fps is the lab motion/AV printer. GIF loops use 12. Changing fps without changing frame count changes duration.
+**How it affects generation:** 24 fps is the lab video/AV printer. GIF loops use 12. Changing fps without changing frame count changes duration.
 
 #### `loop_count`
 
@@ -6324,14 +6324,14 @@ Type `COMBO`.
 
 Container / codec.
 
-**How it affects generation:** video/h264-mp4 is every lab clip except motion/loops/gif-loop (image/gif).
+**How it affects generation:** video/h264-mp4 is every lab clip except video/loops/gif-loop (image/gif).
 
 **Other choices**
 
 | Choice | What it does |
 | --- | --- |
 | `video/h264-mp4` | H.264 MP4. Lab default; save_output must stay true. |
-| `image/gif` | Animated GIF. motion/loops/gif-loop only. |
+| `image/gif` | Animated GIF. video/loops/gif-loop only. |
 
 #### `pix_fmt`
 
@@ -6371,7 +6371,7 @@ Type `BOOLEAN`.
 
 Play frames forward then reverse.
 
-**How it affects generation:** true on motion/loops/gif-loop, bumper-loop, sticker-loop. false on 5 s narrative prints.
+**How it affects generation:** true on video/loops/gif-loop, bumper-loop, sticker-loop. false on 5 s narrative prints.
 
 #### `save_output`
 

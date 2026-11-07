@@ -19,7 +19,7 @@ teardown() {
 #######################################
 # Resolve a shipped lab JSON under workflows/_lab.
 # Arguments:
-#   $1  basename (e.g. stills/still-draft.json)
+#   $1  basename (e.g. photos/still-draft.json)
 # Outputs:
 #   Absolute path on stdout
 #######################################
@@ -71,9 +71,9 @@ lab_wf() {
   [ "${status}" -eq 1 ]
   run git check-ignore -q workflows/_user/README.md
   [ "${status}" -eq 1 ]
-  run git check-ignore -q workflows/stills/still-draft.json
+  run git check-ignore -q workflows/photos/still-draft.json
   [ "${status}" -eq 1 ]
-  run git check-ignore -q workflows/_lab/stills/still-draft.json
+  run git check-ignore -q workflows/_lab/photos/still-draft.json
   [ "${status}" -eq 1 ]
   run git check-ignore -q workflows/klein/_user/secret.json
   [ "${status}" -eq 0 ]
@@ -152,11 +152,11 @@ lab_wf() {
   local lab="${REPO_ROOT}/workflows/_lab"
   local dir="${REPO_ROOT}/workflows"
   local wf wan ltx
-  [[ -f $(lab_wf films/go-see.json) ]]
-  [[ -f $(lab_wf films/still-here.json) ]]
-  [[ -f $(lab_wf films/switchyard.json) ]]
-  [[ -f $(lab_wf motion/silent/still-to-shot.json) ]]
-  [[ -f $(lab_wf motion/av/still-to-shot.json) ]]
+  [[ -f $(lab_wf film/go-see.json) ]]
+  [[ -f $(lab_wf film/still-here.json) ]]
+  [[ -f $(lab_wf film/switchyard.json) ]]
+  [[ -f $(lab_wf video/silent/still-to-shot.json) ]]
+  [[ -f $(lab_wf video/av/still-to-shot.json) ]]
   [[ ! -f ${dir}/still-studio-lab-example.json ]]
   [[ ! -f ${dir}/wan-shot-lab-example.json ]]
   [[ ! -f ${shorts_yaml}/bridge-wan-lab-example.json ]]
@@ -171,8 +171,8 @@ for wf in sorted(lab.glob('*.json')):
     d = json.loads(wf.read_text(encoding='utf-8'))
     assert d.get('id') == os.path.splitext(wf.name)[0], wf
 "
-  wan="$(lab_wf motion/silent/still-to-shot.json)"
-  ltx="$(lab_wf motion/av/still-to-shot.json)"
+  wan="$(lab_wf video/silent/still-to-shot.json)"
+  ltx="$(lab_wf video/av/still-to-shot.json)"
   run python3 -c "
 import json
 w=json.load(open('${wan}'))
@@ -243,7 +243,7 @@ for path in paths:
 
 @test "still lab graphs use Klein 4B Apache weights and flux2 CLIP" {
   local wf path draft hero
-  for wf in stills/still-draft.json stills/still-hero.json stills/still-daily.json stills/still-studio.json; do
+  for wf in photos/still-draft.json photos/still-hero.json photos/still-daily.json photos/still-studio.json; do
     path="$(lab_wf "${wf}")"
     [[ -f ${path} ]]
     run grep -F 'flux-2-klein-4b-fp8.safetensors' "${path}"
@@ -259,8 +259,8 @@ for path in paths:
     run grep -F 'SaveImage' "${path}"
     [ "${status}" -eq 0 ]
   done
-  draft="$(lab_wf stills/still-draft.json)"
-  hero="$(lab_wf stills/still-hero.json)"
+  draft="$(lab_wf photos/still-draft.json)"
+  hero="$(lab_wf photos/still-hero.json)"
   run grep -F 'ez_still_draft' "${draft}"
   [ "${status}" -eq 0 ]
   run grep -F '768' "${draft}"
@@ -288,7 +288,7 @@ assert any(n.get('type')=='EZKleinPromptEnhance' and (n['widgets_values'][2] if 
 
 @test "wan lab graphs use 5B Apache weights, 121 frames, VHS" {
   local wf path i2v t2v shot
-  for wf in motion/silent/still-to-video-5s.json motion/silent/text-to-video-5s.json; do
+  for wf in video/silent/still-to-video-5s.json video/silent/text-to-video-5s.json; do
     path="$(lab_wf "${wf}")"
     [[ -f ${path} ]]
     run grep -F 'wan2.2_ti2v_5B_fp16.safetensors' "${path}"
@@ -313,9 +313,9 @@ assert vhs[0]['widgets_values']['save_output'] is True
 "
     [ "${status}" -eq 0 ]
   done
-  i2v="$(lab_wf motion/silent/still-to-video-5s.json)"
-  t2v="$(lab_wf motion/silent/text-to-video-5s.json)"
-  shot="$(lab_wf motion/silent/still-to-shot.json)"
+  i2v="$(lab_wf video/silent/still-to-video-5s.json)"
+  t2v="$(lab_wf video/silent/text-to-video-5s.json)"
+  shot="$(lab_wf video/silent/still-to-shot.json)"
   run grep -F 'ez_shot_01' "${shot}"
   [ "${status}" -eq 0 ]
   run grep -F 'Motion / prompt' "${i2v}"
@@ -350,7 +350,7 @@ assert 'score' not in tt.lower()
 
 @test "ltx hero graphs use 2.5 distilled pack, 193 frames, VHS, CLIP ltxv" {
   local wf path i2v t2v
-  for wf in motion/av/still-to-video-8s.json motion/av/text-to-video-8s.json; do
+  for wf in video/av/still-to-video-8s.json video/av/text-to-video-8s.json; do
     path="$(lab_wf "${wf}")"
     [[ -f ${path} ]]
     run grep -F 'ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors' "${path}"
@@ -386,8 +386,8 @@ assert 'preview' in (vhs[0].get('title') or '').lower()
 "
     [ "${status}" -eq 0 ]
   done
-  i2v="$(lab_wf motion/av/still-to-video-8s.json)"
-  t2v="$(lab_wf motion/av/text-to-video-8s.json)"
+  i2v="$(lab_wf video/av/still-to-video-8s.json)"
+  t2v="$(lab_wf video/av/text-to-video-8s.json)"
   run python3 -c "
 import json
 d=json.load(open('${i2v}'))
@@ -428,23 +428,23 @@ for p in sorted((root / '_lab').rglob('*.json')):
         assert s not in blob, (p.name, s)
     seen.append(p.stem)
     rel = p.relative_to(root / '_lab').with_suffix('').as_posix()
-    if rel == 'motion/silent/still-to-video-5s':
+    if rel == 'video/silent/still-to-video-5s':
         assert '121' in desc
-        assert 'motion/silent/still-to-shot' in note
-    if rel == 'motion/silent/text-to-video-5s':
+        assert 'video/silent/still-to-shot' in note
+    if rel == 'video/silent/text-to-video-5s':
         assert 'T2V' in desc
         assert 'bypassed' in note.lower()
-    if rel == 'motion/silent/still-to-shot':
+    if rel == 'video/silent/still-to-shot':
         assert '120' in desc
         assert 'ez_shot_01' in note
-    if rel == 'motion/av/still-to-shot':
+    if rel == 'video/av/still-to-shot':
         assert '121' in desc
-    if rel == 'stills/still-draft':
-        assert 'stills/still-hero' in note
-    if rel == 'stills/still-studio':
+    if rel == 'photos/still-draft':
+        assert 'photos/still-hero' in note
+    if rel == 'photos/still-studio':
         assert 'Format' in note or 'format' in note.lower()
         assert '1280' in note
-    if rel == 'films/go-see':
+    if rel == 'film/go-see':
         assert 'parkour' in desc
         assert 'one-click' in desc.lower() or 'queue once' in note.lower()
 assert 'still-draft' in seen
@@ -489,41 +489,41 @@ assert video >= 7, video
   local dir="${REPO_ROOT}/workflows"
   local wf
   for wf in \
-    stills/shorts-still.json \
-    motion/silent/shorts-still-5s.json \
-    motion/av/shorts-still-8s.json \
-    stills/thumbnail.json \
-    stills/product-packshot.json \
-    stills/before-after.json \
-    stills/style-lock.json \
-    motion/loops/bumper-loop.json \
-    motion/av/broll-ambient.json \
-    stills/storyboard-6up.json \
-    stills/endcard-cta.json \
-    stills/quote-bg.json \
-    stills/open-graph.json \
-    stills/podcast-cover.json \
-    stills/banner-wide.json \
-    stills/instagram-square.json \
-    stills/hook-still.json \
-    stills/lower-third-bg.json \
-    stills/food-tabletop.json \
-    stills/lighting-trio.json \
-    stills/time-of-day.json \
-    stills/camera-angles.json \
-    stills/color-moods.json \
-    motion/silent/orbit-still-5s.json \
-    motion/silent/push-in-still-5s.json \
-    motion/silent/parallax-still-5s.json \
-    motion/loops/sticker-loop.json \
-    motion/av/weather-broll.json \
-    motion/av/interior-ambience.json \
-    motion/av/hook-av.json \
-    motion/av/dialogue-8s.json \
-    motion/av/multishot-8s.json \
-    motion/av/product-hero.json \
-    motion/av/first-last-8s.json \
-    motion/av/audio-to-video-8s.json; do
+    photos/shorts-still.json \
+    video/silent/shorts-still-5s.json \
+    video/av/shorts-still-8s.json \
+    photos/thumbnail.json \
+    photos/product-packshot.json \
+    photos/before-after.json \
+    photos/style-lock.json \
+    video/loops/bumper-loop.json \
+    video/av/broll-ambient.json \
+    photos/storyboard-6up.json \
+    photos/endcard-cta.json \
+    photos/quote-bg.json \
+    photos/open-graph.json \
+    photos/podcast-cover.json \
+    photos/banner-wide.json \
+    photos/instagram-square.json \
+    photos/hook-still.json \
+    photos/lower-third-bg.json \
+    photos/food-tabletop.json \
+    photos/lighting-trio.json \
+    photos/time-of-day.json \
+    photos/camera-angles.json \
+    photos/color-moods.json \
+    video/silent/orbit-still-5s.json \
+    video/silent/push-in-still-5s.json \
+    video/silent/parallax-still-5s.json \
+    video/loops/sticker-loop.json \
+    video/av/weather-broll.json \
+    video/av/interior-ambience.json \
+    video/av/hook-av.json \
+    video/av/dialogue-8s.json \
+    video/av/multishot-8s.json \
+    video/av/product-hero.json \
+    video/av/first-last-8s.json \
+    video/av/audio-to-video-8s.json; do
     [[ -f $(lab_wf "${wf}") ]]
   done
 }
@@ -569,10 +569,10 @@ assert isinstance(d.get('extra',{}).get('lab_note'), str) and d['extra']['lab_no
 
 @test "operator app graphs: still settings, gif ping-pong loop, dream-house pack" {
   local daily gif house clay studio
-  daily="$(lab_wf stills/still-daily.json)"
-  gif="$(lab_wf motion/loops/gif-loop.json)"
-  house="$(lab_wf stills/dream-house.json)"
-  clay="$(lab_wf stills/dream-house-clay.json)"
+  daily="$(lab_wf photos/still-daily.json)"
+  gif="$(lab_wf video/loops/gif-loop.json)"
+  house="$(lab_wf photos/dream-house.json)"
+  clay="$(lab_wf photos/dream-house-clay.json)"
   [[ -f ${daily} ]]
   [[ -f ${gif} ]]
   [[ -f ${house} ]]
@@ -599,7 +599,7 @@ assert any(g.get('title','').upper().startswith('MODEL') for g in s.get('groups'
 assert any('SETTING' in g.get('title','').upper() for g in s.get('groups',[]))
 "
   [ "${status}" -eq 0 ]
-  studio="$(lab_wf stills/still-studio.json)"
+  studio="$(lab_wf photos/still-studio.json)"
   [[ -f ${studio} ]]
   run python3 -c "
 import json
@@ -612,7 +612,7 @@ fmt=next(n for n in s['nodes'] if n.get('type')=='EZImageFormat')
 assert fmt['widgets_values'][0].startswith('16:9')
 enh=next(n for n in s['nodes'] if n.get('type')=='EZKleinPromptEnhance')
 assert enh['widgets_values'][2] is True
-assert enh['widgets_values'][6]=='stills/still-studio'
+assert enh['widgets_values'][6]=='photos/still-studio'
 assert any('FORMAT' in g.get('title','').upper() for g in s.get('groups',[]))
 "
   [ "${status}" -eq 0 ]

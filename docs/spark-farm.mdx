@@ -139,8 +139,8 @@ Director is **off** this path. See [Short films](shorts.md).
 
 ## Queue from three UIs
 
-The one-click **films/go-see** graph is sequential on one host. For a farm, load
-**motion/av/still-to-shot** (or optional **motion/silent/still-to-shot**) on each UI and
+The one-click **film/go-see** graph is sequential on one host. For a farm, load
+**video/av/still-to-shot** (or optional **video/silent/still-to-shot**) on each UI and
 **Queue** independent **5 s** shots - different beats in parallel. Concat locally:
 
 ```bash
@@ -174,8 +174,8 @@ Start compose yourself on each node (`./scripts/manage.sh start`, type yes). The
 `./scripts/manage.sh start` you must run locally (heavy confirm stays on that node).
 Containers still use `restart: "no"`.
 
-The `run` subcommand prints a **films/go-see / motion/silent/still-to-shot /
-motion/av/still-to-shot** Queue reminder for `--film go-see` (or still-here / switchyard). It
+The `run` subcommand prints a **film/go-see / video/silent/still-to-shot /
+video/av/still-to-shot** Queue reminder for `--film go-see` (or still-here / switchyard). It
 does **not** POST graphs. It refuses MiniMax H3 names (`*h3*` / `*MiniMax*`).
 
 `dispatch` assigns shots **01-06 / 07-12 / 13-18** (or an even split on two hosts) and SSH-runs

@@ -739,7 +739,7 @@ class EZReinsertPeople:
     CATEGORY = CATEGORY
     OUTPUT_NODE = True
     DESCRIPTION = (
-        "stills/background-swap. Cubic block world pastes detected people "
+        "photos/background-swap. Cubic block world pastes detected people "
         "from the source photo onto the rebuilt plate. Other prompts return "
         "the plate unchanged. Missing person weights fail soft."
     )

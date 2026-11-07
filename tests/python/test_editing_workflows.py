@@ -36,7 +36,7 @@ def _load() -> dict:
     """Parse the shipped lab graph.
 
     Returns:
-        Graph dict for ``editing/generate-cutaway``.
+        Graph dict for ``film/generate-cutaway``.
     """
     path = lab_json(f"{LAB_REL}.json")
     assert path.is_file(), path
@@ -104,11 +104,11 @@ def _node_of(graph: dict, links: dict[int, list], link_id: int) -> dict:
 
 
 def test_editing_lane_dir_and_graph_exist() -> None:
-    """The promoted lane folder holds the one cutaway graph."""
-    lane = LAB_ROOT / "editing"
+    """The promoted lane folder holds the cutaway graph."""
+    lane = LAB_ROOT / "film"
     assert lane.is_dir(), lane
-    assert sorted(path.name for path in lane.glob("*.json")) == ["generate-cutaway.json"]
-    assert lane_for_stem(LAB_REL) == "editing"
+    assert "generate-cutaway.json" in sorted(path.name for path in lane.glob("*.json"))
+    assert lane_for_stem(LAB_REL) == "film"
 
 
 def test_graph_identity_and_audit_pass() -> None:
@@ -291,11 +291,11 @@ def test_prompt_size_and_fps_widgets_are_agent_patchable() -> None:
 
 
 def test_app_mode_stamp_matches_sibling_lane() -> None:
-    """App Mode stamps like the produce/wan motion lane the graph came from."""
+    """App Mode stamps like the wan film lane the graph came from."""
     extra = _load()["extra"]
     mode = extra["lab_app_mode"]
     assert mode["enabled"] is True
-    assert mode["lane"] == "produce"
+    assert mode["lane"] == "film"
     assert mode["occupancy"] == "wan"
     assert mode["default_view"] == "app"
     assert mode["handoff"] == []
@@ -321,18 +321,18 @@ def test_shipped_graph_stays_clear_of_banned_needles() -> None:
             assert needle.lower() not in values, (ntype, needle)
 
 
-def test_lane_registries_know_editing() -> None:
+def test_lane_registries_know_film() -> None:
     """The lane is registered in the tree helper, the promoter, and the docs."""
     from _lab_paths import ALLOWED_LANES
 
-    assert "editing" in ALLOWED_LANES
+    assert "film" in ALLOWED_LANES
     promoter = (ROOT / "scripts" / "utilities" / "promote-workflow.sh").read_text(
         encoding="utf-8"
     )
     lane_line = (
-        "readonly PROMOTE_LANES=(stills motion creator services films dcc "
-        "optional audio inspire editing)"
+        "readonly PROMOTE_LANES=(photos video social business film audio "
+        "3d guides labs)"
     )
     assert lane_line in promoter
     doc_gen = (ROOT / "docs" / "generate_workflow_docs.py").read_text(encoding="utf-8")
-    assert '"editing",' in doc_gen
+    assert '"film",' in doc_gen

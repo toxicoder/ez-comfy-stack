@@ -3,8 +3,8 @@
 Not collected by pytest (leading underscore). Builders and tests import
 ``lab_json`` instead of hardcoding a folder.
 
-Ids are ``_lab``-relative paths without ``.json`` (``stills/still-draft``,
-``motion/silent/still-to-video-5s``). Basenames may collide across lanes; pass the relative
+Ids are ``_lab``-relative paths without ``.json`` (``photos/still-draft``,
+``video/silent/still-to-video-5s``). Basenames may collide across lanes; pass the relative
 id when they do.
 
 ``LANE_REGISTRY`` is the one definition of what a lane is: its id, its position
@@ -43,64 +43,58 @@ class LaneSpec:
 
 LANE_REGISTRY: tuple[LaneSpec, ...] = (
     LaneSpec(
-        id="stills",
+        id="photos",
         order=10,
-        title="Stills",
+        title="Photos",
         description="Single images: drafts, edits, product shots, and channel art.",
     ),
     LaneSpec(
-        id="motion",
+        id="video",
         order=20,
-        title="Motion",
+        title="Video",
         description="Short clips, silent or with audio, from a still you already like.",
     ),
     LaneSpec(
-        id="creator",
+        id="social",
         order=30,
-        title="Creator",
+        title="Social",
         description="Platform-shaped posts for a channel or shop, sized per surface.",
     ),
     LaneSpec(
-        id="services",
+        id="business",
         order=40,
-        title="Services",
+        title="Business",
         description="Client work by vertical, from listing photos to ad packs.",
     ),
     LaneSpec(
-        id="films",
+        id="film",
         order=50,
-        title="Films",
-        description="Narrative shorts, staged act by act.",
-    ),
-    LaneSpec(
-        id="dcc",
-        order=60,
-        title="Control guides",
-        description="Depth, canny, clay, and mesh guides that steer a generation.",
-    ),
-    LaneSpec(
-        id="optional",
-        order=70,
-        title="Opt-in models",
-        description="Extra model families you download on purpose, off by default.",
+        title="Film",
+        description="Narrative shorts, act by act, plus the cut tools that finish them.",
     ),
     LaneSpec(
         id="audio",
-        order=80,
+        order=60,
         title="Audio",
         description="Music, podcasts, dubbing, and whole albums.",
     ),
     LaneSpec(
-        id="inspire",
-        order=90,
-        title="Writers' room",
-        description="Prompt, research, and planning tools that draw nothing.",
+        id="3d",
+        order=70,
+        title="3D",
+        description="Meshes and turntables built from a still you already like.",
     ),
     LaneSpec(
-        id="editing",
-        order=100,
-        title="Editing",
-        description="Cut tools that work on footage you already shot.",
+        id="guides",
+        order=80,
+        title="Control guides",
+        description="Depth, canny, and clay passes that steer a generation.",
+    ),
+    LaneSpec(
+        id="labs",
+        order=90,
+        title="Labs",
+        description="Writers' room tools, and opt-in model families you add on purpose.",
     ),
 )
 
@@ -269,7 +263,7 @@ def lab_json(stem: str, *, root: Path | None = None) -> Path:
     """Return the unique ``_lab/**/<stem>.json`` path.
 
     ``stem`` may be a basename (``still-draft``), a file name, an old
-    leftover relative path, or a lab-relative id (``motion/silent/still-to-video-5s``).
+    leftover relative path, or a lab-relative id (``video/silent/still-to-video-5s``).
     """
     from _lab_ids import rel_id
 
@@ -319,7 +313,7 @@ def _subdir_parts(subdir: str) -> tuple[str, ...]:
 def lab_dest(stem: str, *, lane: str | None = None, subdir: str | None = None) -> Path:
     """Path to write a lab graph. Creates the lane directory.
 
-    ``stem`` may be a lab-relative id (``stills/still-draft``) or a
+    ``stem`` may be a lab-relative id (``photos/still-draft``) or a
     basename. ``subdir`` is an optional relative path under the lane.
     """
     from _lab_ids import rel_id
@@ -429,7 +423,7 @@ def lane_for_stem(stem: str) -> str:
         or name.startswith("audio-rack")
         or name.startswith("app-forge")
     ):
-        return "inspire"
+        return "labs"
     raise ValueError(f"cannot map {stem!r} to a lab lane")
 
 

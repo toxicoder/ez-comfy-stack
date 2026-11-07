@@ -43,16 +43,16 @@ CAMERA_IP = (
 SKIP_SAMPLE_PREFIXES = (
     "audio/dub/",
     "audio/stem-mix",
-    "dcc/still-to-mesh",
-    "optional/trellis2",
-    "optional/longcat",
-    "inspire/cinema-rack",
-    "inspire/audio-rack",
-    "films/tide-table/",
-    "films/night-oven/",
-    "films/glasshouse/",
-    "films/last-lane/",
-    "films/breakwater/",
+    "3d/still-to-mesh",
+    "3d/trellis2",
+    "labs/opt-in/longcat",
+    "labs/assist/cinema-rack",
+    "labs/assist/audio-rack",
+    "film/tide-table/",
+    "film/night-oven/",
+    "film/glasshouse/",
+    "film/last-lane/",
+    "film/breakwater/",
 )
 
 
@@ -89,7 +89,7 @@ def test_album_tracks_hide_sample_covers_do_not() -> None:
     assert album_hides_sample("audio/albums/drive-through/hour-1/album")
     assert not album_hides_sample("audio/albums/nill-bye/peer-review/cover")
     assert not album_hides_sample("audio/music/rap-draft")
-    assert not album_hides_sample("stills/still-draft")
+    assert not album_hides_sample("photos/still-draft")
     assert catalog_for_rel("audio/albums/nill-bye/peer-review/cover") == "klein_t2i"
     assert catalog_for_rel("audio/albums/nill-bye/peer-review/01-lab-coat") == ""
 
@@ -127,7 +127,7 @@ def test_resolve_prompt_custom_and_sample() -> None:
         resolve_prompt("klein_t2i", first.label, "stale textarea") == first.prompt
     )
     assert resolve_prompt("klein_t2i", "not-a-real-sample", custom) == custom
-    assert resolve_prompt("stills/still-draft", first.label, custom) == first.prompt
+    assert resolve_prompt("photos/still-draft", first.label, custom) == first.prompt
 
 
 def test_resolve_ace_sample_fills_tags_and_lyrics() -> None:
@@ -206,7 +206,7 @@ def test_klein_t2i_sample_one_matches_lab_canned() -> None:
 def test_klein_sample_combo_accepts_place_catalog_labels() -> None:
     """Comfy validates sample against INPUT_TYPES, not the JS-filtered dropdown.
 
-    HOUSE IDENTITY on stills/dream-house uses klein_place (Cliff villa). The
+    HOUSE IDENTITY on photos/dream-house uses klein_place (Cliff villa). The
     Python combo used to be klein_t2i only, so Queue failed with
     'The value Cliff villa for HOUSE IDENTITY's sample is not available.'
     """
@@ -234,7 +234,7 @@ def test_klein_sample_combo_accepts_place_catalog_labels() -> None:
     assert rap_full in ace_labels
 
     cliff = resolve_prompt(
-        "stills/dream-house",
+        "photos/dream-house",
         "Cliff villa",
         "stale textarea",
         node_type="EZKleinPromptEnhance",
@@ -272,11 +272,11 @@ def test_index_graphs_visible_labels_match_catalog() -> None:
 
 
 def test_catalog_for_rel_specialized_graphs() -> None:
-    assert catalog_for_rel("stills/dream-house") == "klein_place"
-    assert catalog_for_rel("stills/still-draft") == "klein_t2i"
-    assert catalog_for_rel("stills/text-swap") == "klein_text_swap"
-    assert catalog_for_rel("motion/loops/gif-loop") == "wan_loop"
-    assert catalog_for_rel("inspire/app-forge") == "app_forge"
+    assert catalog_for_rel("photos/dream-house") == "klein_place"
+    assert catalog_for_rel("photos/still-draft") == "klein_t2i"
+    assert catalog_for_rel("photos/text-swap") == "klein_text_swap"
+    assert catalog_for_rel("video/loops/gif-loop") == "wan_loop"
+    assert catalog_for_rel("labs/assist/app-forge") == "app_forge"
 
 
 def test_enhance_node_sample_overrides_textarea() -> None:

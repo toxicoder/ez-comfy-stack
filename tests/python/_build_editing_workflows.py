@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Build the ``editing`` lane lab graph the ez_edit agent queues for cutaways.
+"""Build the ``film`` lane lab graph the ez_edit agent queues for cutaways.
 
 A reduced Wan 2.2 TI2V-5B silent text-to-video chain (same weights and node
-chain as ``motion/silent/text-to-video-5s``) sized for one generated cutaway
+chain as ``video/silent/text-to-video-5s``) sized for one generated cutaway
 clip. The graph ships twice: the promoted lab graph under
-``workflows/_lab/editing/`` and a byte-identical package copy under
+``workflows/_lab/film/`` and a byte-identical package copy under
 ``custom_nodes/ez_edit/graphs/`` that the editing agent queues by path.
 
 Run from repo root:
@@ -30,7 +30,7 @@ from _wire_prompt_enhance import (
     wire_enhance,
 )
 
-LAB_REL = "editing/generate-cutaway"
+LAB_REL = "film/generate-cutaway"
 PACKAGE_SUBPATH = "custom_nodes/ez_edit/graphs/generate-cutaway.json"
 
 WAN_UNET = "wan2.2_ti2v_5B_fp16.safetensors"
@@ -246,7 +246,7 @@ def _widgets_map(by_title: dict[str, dict[str, Any]]) -> dict[str, dict[str, Any
 
 
 def build_generate_cutaway() -> dict[str, Any]:
-    """Build the ``editing/generate-cutaway`` lab graph.
+    """Build the ``film/generate-cutaway`` lab graph.
 
     Returns:
         Serialized Comfy graph, stamped and laid out.
@@ -502,7 +502,7 @@ def build_generate_cutaway() -> dict[str, Any]:
             (SAMPLER_TITLE, "seed", {"label": "Seed"}),
         ],
         outputs=[SAVER_TITLE],
-        lane="produce",
+        lane="film",
         occupancy=OCCUPANCY_MODE,
         handoff=(),
         default_view="app",
@@ -537,7 +537,7 @@ def main() -> int:
         Process exit code.
     """
     graph = build_generate_cutaway()
-    lab_path = lab_dest(LAB_REL, lane="editing")
+    lab_path = lab_dest(LAB_REL, lane="film")
     _write(graph, lab_path)
     package_path = ROOT / PACKAGE_SUBPATH
     _write(graph, package_path)

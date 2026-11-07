@@ -8,7 +8,7 @@ from pathlib import Path
 
 from _creator_pack3 import PACK3, pack3_pin_off, pack3_stamp_rows
 from _lab_paths import LAB_ROOT, lab_json, load_lab_graph
-from _stamp_app_mode import STAMP_SPECS, linear_input_node_id
+from _stamp_app_mode import STAMP_SPECS, _lane_for, linear_input_node_id
 
 BANNED = (
     "MiniMax",
@@ -55,7 +55,7 @@ def test_pack3_files_identity_and_prefixes() -> None:
         mode = extra.get("lab_app_mode") or {}
         assert mode.get("enabled") is True
         assert mode.get("occupancy") == spec.occupancy
-        assert mode.get("lane") == "produce"
+        assert mode.get("lane") == "social"
         linear = extra.get("linearData") or {}
         live = {int(node["id"]) for node in graph.get("nodes") or []}
         for entry in linear.get("inputs") or []:
@@ -112,7 +112,7 @@ def test_pack3_registered_in_stamp_specs() -> None:
     for rel, occupancy, _handoff, pin in rows:
         spec = STAMP_SPECS[rel]
         assert spec["occupancy"] == occupancy
-        assert spec["lane"] == "produce"
+        assert _lane_for(rel) == "social"
         assert spec["enhance_off_identity"] is pin
     assert pack3_pin_off() == frozenset(spec.rel for spec in PACK3 if spec.enhance_pin)
-    assert Path(LAB_ROOT / "creator" / "stills").is_dir()
+    assert Path(LAB_ROOT / "social" / "stills").is_dir()

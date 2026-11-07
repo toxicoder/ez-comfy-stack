@@ -56,24 +56,24 @@ PIN_OFF_BLURB = (
 )
 PIN_ENHANCE_OFF = frozenset(
     {
-        "films/go-see",
-        "films/still-here",
-        "films/switchyard",
-        "stills/talking-head",
-        "motion/av/dialogue-8s",
-        "motion/av/multishot-8s",
-        "motion/av/product-hero",
-        "motion/av/first-last-8s",
-        "motion/av/audio-to-video-8s",
-        "motion/loops/gif-loop",
-        "motion/loops/bumper-loop",
-        "motion/loops/sticker-loop",
-        "motion/silent/orbit-still-5s",
-        "motion/silent/push-in-still-5s",
-        "motion/silent/parallax-still-5s",
-        "dcc/depth-control-8s",
-        "dcc/canny-control-8s",
-        "dcc/depth-control-shorts",
+        "film/go-see",
+        "film/still-here",
+        "film/switchyard",
+        "video/av/talking-head",
+        "video/av/dialogue-8s",
+        "video/av/multishot-8s",
+        "video/av/product-hero",
+        "video/av/first-last-8s",
+        "video/av/audio-to-video-8s",
+        "video/loops/gif-loop",
+        "video/loops/bumper-loop",
+        "video/loops/sticker-loop",
+        "video/silent/orbit-still-5s",
+        "video/silent/push-in-still-5s",
+        "video/silent/parallax-still-5s",
+        "guides/depth-control-8s",
+        "guides/canny-control-8s",
+        "guides/depth-control-shorts",
         "audio/podcast/two-host-episode",
         "audio/podcast/radio-drama",
         "audio/music/rap-draft",
@@ -87,7 +87,7 @@ def enhance_pin_off(graph_id: str) -> bool:
     gid = str(graph_id or "")
     if gid in PIN_ENHANCE_OFF:
         return True
-    if gid.startswith("films/") and "/act-0" in gid:
+    if gid.startswith("film/") and "/act-0" in gid:
         return True
     if gid.startswith("music-rap-nill-bye-") or gid.startswith(
         "music-edm-drive-through-"
@@ -1753,7 +1753,7 @@ def _bundle_film_ltx(graph: dict[str, Any]) -> bool:
     """Point the shared film LTX negative at every shot's final prompt."""
     extra = graph.get("extra") or {}
     gid = str(extra.get("lab_rel") or graph.get("id") or "")
-    if not gid.startswith("films/"):
+    if not gid.startswith("film/"):
         return False
     sources: list[dict[str, Any]] = []
     seen: set[int] = set()
@@ -1908,33 +1908,33 @@ def enable_lab_graph(graph: dict[str, Any]) -> None:
 
 
 def main() -> None:
-    klein(lab_json("stills/still-draft.json"), KLEIN_STILL, neg=KLEIN_NEG_STILL)
-    klein(lab_json("stills/still-hero.json"), KLEIN_STILL, neg=KLEIN_NEG_STILL)
-    klein(lab_json("stills/still-flux3-fast.json"), KLEIN_STILL, neg=KLEIN_NEG_STILL)
+    klein(lab_json("photos/still-draft.json"), KLEIN_STILL, neg=KLEIN_NEG_STILL)
+    klein(lab_json("photos/still-hero.json"), KLEIN_STILL, neg=KLEIN_NEG_STILL)
+    klein(lab_json("labs/opt-in/still-flux3-fast.json"), KLEIN_STILL, neg=KLEIN_NEG_STILL)
     klein(
-        lab_json("stills/still-flux3-quality.json"), KLEIN_STILL, neg=KLEIN_NEG_STILL
+        lab_json("labs/opt-in/still-flux3-quality.json"), KLEIN_STILL, neg=KLEIN_NEG_STILL
     )
-    wan_i2v(lab_json("motion/silent/still-to-video-5s.json"), WAN_I2V)
-    wan_t2v(lab_json("motion/silent/text-to-video-5s.json"))
-    wan_i2v(lab_json("motion/silent/still-to-shot.json"), GOSEE_WAN_I2V_01)
-    wan_i2v(lab_json("motion/silent/first-last-5s.json"), WAN_I2V)
-    wan_i2v(lab_json("motion/silent/vace-join.json"), WAN_VACE)
-    wan_i2v(lab_json("optional/still-to-video-a14b.json"), WAN_I2V)
+    wan_i2v(lab_json("video/silent/still-to-video-5s.json"), WAN_I2V)
+    wan_t2v(lab_json("video/silent/text-to-video-5s.json"))
+    wan_i2v(lab_json("video/silent/still-to-shot.json"), GOSEE_WAN_I2V_01)
+    wan_i2v(lab_json("video/silent/first-last-5s.json"), WAN_I2V)
+    wan_i2v(lab_json("video/silent/vace-join.json"), WAN_VACE)
+    wan_i2v(lab_json("labs/opt-in/still-to-video-a14b.json"), WAN_I2V)
     ltx_i2v(
-        lab_json("motion/av/still-to-video-8s.json"),
+        lab_json("video/av/still-to-video-8s.json"),
         LTX_I2V,
         LTX_AUDIO_HINT,
         "Motion / prompt",
     )
-    ltx_t2v(lab_json("motion/av/text-to-video-8s.json"))
+    ltx_t2v(lab_json("video/av/text-to-video-8s.json"))
     ltx_i2v(
-        lab_json("motion/av/still-to-shot.json"),
+        lab_json("video/av/still-to-shot.json"),
         GOSEE_LTX_I2V_01,
         LTX_AUDIO_HINT,
         "Motion + audio",
     )
     ltx_i2v(
-        lab_json("stills/talking-head.json"),
+        lab_json("video/av/talking-head.json"),
         LTX_TALKING_HEAD,
         LTX_TALKING_AUDIO,
         "Motion / prompt",

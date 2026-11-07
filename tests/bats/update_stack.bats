@@ -216,7 +216,7 @@ stderr_line_of() {
   [ "${output}" = "none" ]
   run changed_deploy_paths "docs/a.md" "README.md"
   [ "${output}" = "none" ]
-  run changed_deploy_paths "scripts/lib/compose.sh" "workflows/_lab/stills/x.json"
+  run changed_deploy_paths "scripts/lib/compose.sh" "workflows/_lab/photos/x.json"
   [ "${output}" = "scripts" ]
   run changed_deploy_paths "docker/docker-compose.yml" "scripts/manage.sh"
   [ "${output}" = "compose" ]

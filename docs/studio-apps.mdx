@@ -17,7 +17,7 @@ type are on [Prompting](prompting.md).
 - **Graph vs App** - what each surface edits, and what the Quality combo owns
 - **Reference stills (optional)** - the picker, the three slots, and the mute
 - **Occupancy** - the one-heavy-job table and what must be stopped
-- **Lane A - Inspire** - the explore desks
+- **Lane A - Labs** - the explore desks
 - **Lane B - Produce** - the ship plates and clips
 - **Lane DCC - clay desk** - the Blender-to-Comfy Apps
 - **Handoff chains** - what to load after each App
@@ -31,7 +31,7 @@ type are on [Prompting](prompting.md).
 - **A/B-ing one setup** with the reference stills muted, without clearing what you picked
 - **Following Spark Still -> Hero -> Silent 5s -> AV 5s** without renaming files
 
-**Who this is for:** studio users after `stills/still-draft` has been loaded once.
+**Who this is for:** studio users after `photos/still-draft` has been loaded once.
 
 Lab graphs are the host `_lab/<lane>/*.json` files (folder-scoped ids). On `start` they seed into Comfy as `*.app.json` when App Mode is the default view, so they appear under **Apps** as well as **Workflows**. [App Mode](learn/comfyui.md#graph-and-app) is a widget surface on that JSON (ComfyUI frontend **1.41.13+**). It is **not** a second frontend and not [`studio-ui`](reference/studio-ui.md). A small occupancy chip sits at the top of the App widget list (under the menu if you are in graph view) and shows which family is running, a one-line summary of what the App does (`extra.lab_description`), the active Quality overlay, still N of M on multi-plate Apps, and the next handoff. Widget help text wraps so the full description stays readable. It does not cover Run. **Minimize** collapses the chip to an **App - family** pill (click the pill to expand). **Close** hides it until the next run or App load, when it returns as that pill. The choice is stored in this browser. Restart the container after a pull so `custom_nodes/ez_studio_app` is copied.
 
@@ -49,7 +49,7 @@ flowchart LR
 
 | Surface | What you edit | When |
 | --- | --- | --- |
-| **App** | Unique creator widgets. When the graph needs a still, **Start image** (or **First frame** / **Last frame**) is first so Queue cannot hide a missing file. Then **Quality** (Lab / Draft / High), **Sample prompt** (30 lab recipes + **Custom**), **Prompt**, **Format / platform** (on Apps that own a canvas), **Output size** (Match input uses a loaded still's aspect; Force format keeps the Format pick), **Duration** (LTX 5/8/10/12 s, default 8 s; Wan stays 5 s), **Style** (`none` = off), **Rewrite prompt**, then **Seed**, then Width / Height (and Batch on Klein stills). Format sets pixels and Rewrite prompt framing; Custom uses the size widgets (Klein div16, Wan div16, LTX div32 - pick **LTX - 16:9 YouTube (1280x704)**, never type 720). Filename / LoadImage / LoadAudio widgets upload a file or choose one already on the output disk. **Start image** only when that LoadImage is wired (I2V, talking-head, character tweak, clay, text-swap). Optional references stay empty by default. The App surfaces **Example / reference (optional)** (one LoadImage-style picker) and the **Use reference stills** mute; the node card adds the two extra pickers, thumbnails, and the drop zone. Blank is the default and Queues as text-to-image. **motion/av/first-last-8s** exposes **First frame** and **Last frame**. **motion/av/audio-to-video-8s** exposes **Audio file**. **motion/av/clip-chain** keeps Start image first, then Quality, Sample prompt (Beat 1), four **Beat N prompt** boxes, Format, Output size (Match input), Duration (default 8 s), Describe image, shared Rewrite / Audio notes / Logline, Seed, then Width / Height (Custom only). Occupancy stays on the chip, not as an App combo. Style is hidden on I2V (the start frame owns look). **stills/still-studio** also adds **Look recipe**, Image model, and Steps / CFG - prefix follows Format. **stills/image-studio** adds **Mode category**, **Creator mode** (100 presets), Look recipe, Image model, Steps / CFG, and **Example / reference (optional)** - prefix follows Creator mode. **stills/still-daily** keeps Image model + steps/CFG. Music adds duration + vocal/instrumental; podcast adds bed length + Kokoro stock voices; **audio/podcast/learn-episode** adds **Sources**, **Format**, and **Duration** (ACE bed stays 30 s and loops); dub adds source file + upload, optional URL, rights, and target language. Duplicate widgets get distinct labels (Klein prompt / Wan prompt, Beat 1 prompt, Bed tags). | Daily Queue |
+| **App** | Unique creator widgets. When the graph needs a still, **Start image** (or **First frame** / **Last frame**) is first so Queue cannot hide a missing file. Then **Quality** (Lab / Draft / High), **Sample prompt** (30 lab recipes + **Custom**), **Prompt**, **Format / platform** (on Apps that own a canvas), **Output size** (Match input uses a loaded still's aspect; Force format keeps the Format pick), **Duration** (LTX 5/8/10/12 s, default 8 s; Wan stays 5 s), **Style** (`none` = off), **Rewrite prompt**, then **Seed**, then Width / Height (and Batch on Klein stills). Format sets pixels and Rewrite prompt framing; Custom uses the size widgets (Klein div16, Wan div16, LTX div32 - pick **LTX - 16:9 YouTube (1280x704)**, never type 720). Filename / LoadImage / LoadAudio widgets upload a file or choose one already on the output disk. **Start image** only when that LoadImage is wired (I2V, talking-head, character tweak, clay, text-swap). Optional references stay empty by default. The App surfaces **Example / reference (optional)** (one LoadImage-style picker) and the **Use reference stills** mute; the node card adds the two extra pickers, thumbnails, and the drop zone. Blank is the default and Queues as text-to-image. **video/av/first-last-8s** exposes **First frame** and **Last frame**. **video/av/audio-to-video-8s** exposes **Audio file**. **video/av/clip-chain** keeps Start image first, then Quality, Sample prompt (Beat 1), four **Beat N prompt** boxes, Format, Output size (Match input), Duration (default 8 s), Describe image, shared Rewrite / Audio notes / Logline, Seed, then Width / Height (Custom only). Occupancy stays on the chip, not as an App combo. Style is hidden on I2V (the start frame owns look). **photos/still-studio** also adds **Look recipe**, Image model, and Steps / CFG - prefix follows Format. **photos/image-studio** adds **Mode category**, **Creator mode** (100 presets), Look recipe, Image model, Steps / CFG, and **Example / reference (optional)** - prefix follows Creator mode. **photos/still-daily** keeps Image model + steps/CFG. Music adds duration + vocal/instrumental; podcast adds bed length + Kokoro stock voices; **audio/podcast/learn-episode** adds **Sources**, **Format**, and **Duration** (ACE bed stays 30 s and loops); dub adds source file + upload, optional URL, rights, and target language. Duplicate widgets get distinct labels (Klein prompt / Wan prompt, Beat 1 prompt, Bed tags). | Daily Queue |
 | **Graph** | Groups, bypass (Ctrl+B), VHS preview, UNET/CLIP/VAE, hidden shot cards, unwired placeholders (Fun InP end frame, VACE shot B), voice-clone refs | Debug, film one-click, unused plates |
 
 **Quality** is a workflow-global combo (`EZQuality`) near the top of `linearData` (first on graphs with no required still; second when a LoadImage picker leads). Picking a tier writes Steps / CFG / Image model (and CLIP / VAE) on **every** sampler and loader instance in the open App (Vue-safe widget writes) and does not live-link other open tabs. Newly opened Apps default to the last named Quality you picked in this browser.
@@ -63,15 +63,15 @@ Tiers are named profiles that swap weights, not a step ladder. `custom_nodes/ez_
 | Family | What the tiers own | Real rows |
 | --- | --- | --- |
 | Klein stills | steps, CFG, UNET, CLIP, VAE, CLIP type | draft 4 steps (Klein 4B nvfp4, CFG 1.0), standard 8 (Klein 4B fp8), `high` and **Free Commercial Use (\<$10M)** are the same profile - Klein 4B base, 24 steps, CFG 3.5. `ultra` is only 4 steps because it swaps to Klein 9B distilled; `max` is 20 steps on Klein 9B base |
-| FLUX 3 Image stills (`stills/still-flux3-*`) | steps, CFG, UNET, CLIP, VAE, CLIP type | only `flux3-fast` (16 steps, CFG 1.0) and `flux3-quality` / `flux3-nvfp4` (50 steps, CFG 3.5) apply. The Klein ladder is a no-op there |
+| FLUX 3 Image stills (`labs/opt-in/still-flux3-*`) | steps, CFG, UNET, CLIP, VAE, CLIP type | only `flux3-fast` (16 steps, CFG 1.0) and `flux3-quality` / `flux3-nvfp4` (50 steps, CFG 3.5) apply. The Klein ladder is a no-op there |
 | Qwen-Image 2.1 stills (a graph pinning `qwen_image_2.1_*` weights, occupancy `klein`) | steps, CFG, UNET, CLIP, VAE - the CLIP type stays authored | only `qwen-image` / `qwen-image-nvfp4` (50 steps, CFG 3.5) and `qwen-image-turbo` / `qwen-image-turbo-nvfp4` (16 steps, CFG 1.0) apply. The Klein ladder and the `flux3-*` rows are a no-op there. Opt-in **Qwen RESEARCH LICENSE AGREEMENT** weights, not Apache - no commercial use of the weights or their output without a separate paid Qwen license |
 | Wan / LTX / film | steps only - never CFG, never weights | draft 12, standard 20, `high` 28, `max` 32. **Free Commercial Use (\<$10M)** is 28 on LTX / film and is not offered on Wan |
 | Audio (ACE-Step) | steps only | draft 4, standard 8, `high` 16, `max` 24 |
 | TRELLIS | steps only | draft 8, standard 12, `high` 20, `max` 28 |
 
-Quality does not touch the Width / Height or Duration widgets, and Quality is not `--tier quality` (that flag is a download pack id - [Download tiers](download-tiers.md)). The one size effect is **Free Commercial Use (\<$10M)** on Klein stills: a generic 16:9 / 9:16 **Format** row retargets to **16:9 LTX feeder (1280x704)** / **9:16 LTX feeder (768x1280)**; named platform jobs, **Custom**, and rows already on a feeder stay put. ultra/max may select opt-in Non-Commercial weights (gated, not YouTube-ok). The `qwen-image*` tiers select opt-in **Qwen RESEARCH LICENSE AGREEMENT** weights (ungated, no `HF_TOKEN`, still not YouTube-ok - section 2.b bars commercial use until you hold a separate paid Qwen license). Inspire desks (no UNET) still show the combo as a no-op.
+Quality does not touch the Width / Height or Duration widgets, and Quality is not `--tier quality` (that flag is a download pack id - [Download tiers](download-tiers.md)). The one size effect is **Free Commercial Use (\<$10M)** on Klein stills: a generic 16:9 / 9:16 **Format** row retargets to **16:9 LTX feeder (1280x704)** / **9:16 LTX feeder (768x1280)**; named platform jobs, **Custom**, and rows already on a feeder stay put. ultra/max may select opt-in Non-Commercial weights (gated, not YouTube-ok). The `qwen-image*` tiers select opt-in **Qwen RESEARCH LICENSE AGREEMENT** weights (ungated, no `HF_TOKEN`, still not YouTube-ok - section 2.b bars commercial use until you hold a separate paid Qwen license). Labs desks (no UNET) still show the combo as a no-op.
 
-`EZQuality` nodes that are muted or bypassed (LiteGraph `mode` other than 0) are ignored by the overlay and wear no caption. The 90s film acts (`workflows/_lab/films/<slug>/act-02.json` .. `act-05.json`) mute the copied-in Klein lane, the combo included, on purpose - acts 2+ take the previous act's frame as their image source, so set the tier on **act-01**.
+`EZQuality` nodes that are muted or bypassed (LiteGraph `mode` other than 0) are ignored by the overlay and wear no caption. The 90s film acts (`workflows/_lab/film/<slug>/act-02.json` .. `act-05.json`) mute the copied-in Klein lane, the combo included, on purpose - acts 2+ take the previous act's frame as their image source, so set the tier on **act-01**.
 
 The CLI submits the same table: `bazelisk run //scripts:run-utility -- print-shot <film> <id> --quality TIER` and `bazelisk run //scripts:run-utility -- album-render run --album ARTIST/SLUG --quality TIER` (or `EZ_QUALITY=TIER`) overlay the graph before each POST; with neither, the tier the graph records is used.
 
@@ -121,67 +121,67 @@ Prompt Enhance GGUF stays CPU-only (`n_gpu_layers=0`). Sidecar occupancy (Comfy 
 
 ---
 
-## Lane A - Inspire
+## Lane A - Labs
 
 Explore identity, cameras, and world bibles. Occupancy **klein** unless noted.
 
 | App | What it does |
 | --- | --- |
-| **stills/still-draft** | Spark Still. Default 768x432; **Format / platform** retargets (YouTube, Shorts, ...). Prefix `ez_still_draft` |
-| **stills/identity-sheet** | Front / three-quarter / profile. 1280x704, Enhance on (identity mode) |
-| **stills/storyboard-6up** | Six new cameras of one scene (`ez_board_01`...`06`) |
-| **stills/dream-house** | Virtual tour. Ten 4:5 stills of **one place**, each a different room or view (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study; default placeholder is a full-floor penthouse in a dense city) |
-| **stills/dream-house-clay** | Same walkthrough as Klein edit of clay plates (`ez_house_clay_01`...`10`). `start` seeds LoadImage; optional `house-views` dump. Prefix `ez_dream_house_clay_01`...`10` |
-| **stills/style-lock** | One place, four cameras |
-| **stills/lighting-trio** | Same subject, three lights |
-| **stills/camera-angles** | Wide / medium / close |
-| **stills/color-moods** | Warm plate plus three grades |
-| **stills/time-of-day** | Dusk plate, then dawn / noon / night |
-| **stills/hook-still** | Vertical 9:16 first-frame hook (`ez_hook_still`) |
-| **stills/character-draft** | Character still. Prompt + style, 1024x1280, prefix `ez_character` |
-| **stills/character-tweak** | Edit that still. LoadImage + change prompt, ReferenceLatent, prefix `ez_character_tweak` |
-| **inspire/prompt-forge** | No UNET. One Prompt + optional Context, then Klein / Wan / LTX / Z-Image / LongCat / DreamX enhance preview. Occupancy **llm** (CPU GGUF) |
-| **inspire/cinema-rack** | No UNET. Pick cinematography axes (shot size, move, light, ...) and splice Klein / Wan / LTX prompts. Occupancy **llm** (CPU GGUF). [Cinema Rack](create/cinema-rack.md) |
-| **inspire/audio-rack** | No UNET. Pick audio/music axes (genre, tempo, drums, ...) and splice ACE-Step tags / lyrics form. Occupancy **llm** (CPU GGUF). Do not load ACE-Step on this canvas. [Audio Rack](create/audio-rack.md) |
-| **inspire/research-chat** | Creative-process chat with web search and sequential research subagents. Occupancy **llm** (CPU GGUF). Laptop agents: `research-mcp` |
-| **inspire/app-forge** | No UNET. Clone a shipped lab graph into live `_user/` as a new App. Occupancy **llm** (CPU GGUF). Laptop agents: `studio-mcp`. [App Forge](create/app-forge.md) |
-| **inspire/beat-sheet** | Script desk. Logline / script / audio policy / score pack into every card rewrite. 18 cards (`action \| camera \| world SFX \| dialogue`). `shot-sheet` writes `films/<slug>/shots.yaml`. Occupancy **none** |
+| **photos/still-draft** | Spark Still. Default 768x432; **Format / platform** retargets (YouTube, Shorts, ...). Prefix `ez_still_draft` |
+| **photos/identity-sheet** | Front / three-quarter / profile. 1280x704, Enhance on (identity mode) |
+| **photos/storyboard-6up** | Six new cameras of one scene (`ez_board_01`...`06`) |
+| **photos/dream-house** | Virtual tour. Ten 4:5 stills of **one place**, each a different room or view (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study; default placeholder is a full-floor penthouse in a dense city) |
+| **photos/dream-house-clay** | Same walkthrough as Klein edit of clay plates (`ez_house_clay_01`...`10`). `start` seeds LoadImage; optional `house-views` dump. Prefix `ez_dream_house_clay_01`...`10` |
+| **photos/style-lock** | One place, four cameras |
+| **photos/lighting-trio** | Same subject, three lights |
+| **photos/camera-angles** | Wide / medium / close |
+| **photos/color-moods** | Warm plate plus three grades |
+| **photos/time-of-day** | Dusk plate, then dawn / noon / night |
+| **photos/hook-still** | Vertical 9:16 first-frame hook (`ez_hook_still`) |
+| **photos/character-draft** | Character still. Prompt + style, 1024x1280, prefix `ez_character` |
+| **photos/character-tweak** | Edit that still. LoadImage + change prompt, ReferenceLatent, prefix `ez_character_tweak` |
+| **labs/assist/prompt-forge** | No UNET. One Prompt + optional Context, then Klein / Wan / LTX / Z-Image / LongCat / DreamX enhance preview. Occupancy **llm** (CPU GGUF) |
+| **labs/assist/cinema-rack** | No UNET. Pick cinematography axes (shot size, move, light, ...) and splice Klein / Wan / LTX prompts. Occupancy **llm** (CPU GGUF). [Cinema Rack](create/cinema-rack.md) |
+| **labs/assist/audio-rack** | No UNET. Pick audio/music axes (genre, tempo, drums, ...) and splice ACE-Step tags / lyrics form. Occupancy **llm** (CPU GGUF). Do not load ACE-Step on this canvas. [Audio Rack](create/audio-rack.md) |
+| **labs/assist/research-chat** | Creative-process chat with web search and sequential research subagents. Occupancy **llm** (CPU GGUF). Laptop agents: `research-mcp` |
+| **labs/assist/app-forge** | No UNET. Clone a shipped lab graph into live `_user/` as a new App. Occupancy **llm** (CPU GGUF). Laptop agents: `studio-mcp`. [App Forge](create/app-forge.md) |
+| **labs/assist/beat-sheet** | Script desk. Logline / script / audio policy / score pack into every card rewrite. 18 cards (`action \| camera \| world SFX \| dialogue`). `shot-sheet` writes `films/<slug>/shots.yaml`. Occupancy **none** |
 
 ---
 
 ## Lane B - Produce
 
-Ship plates and ~5 s clips. Hide UNET/CLIP/VAE except **klein-still-daily**, **stills/still-studio**, and **stills/image-studio** (swap table).
+Ship plates and ~5 s clips. Hide UNET/CLIP/VAE except **klein-still-daily**, **photos/still-studio**, and **photos/image-studio** (swap table).
 
 | App | Occupancy | Prefix / output |
 | --- | --- | --- |
-| **stills/still-daily** | klein | `ez_still_app` - Format / platform + click UNET to swap distilled / NVFP4 / base |
-| **stills/still-studio** | klein | Format / platform desk. Prefix follows Format (`ez_still_studio` when Custom). Default 1280x704 |
-| **stills/image-studio** | klein | Universal still desk. **Iterate** (first control, off by default) does text-to-image, then edits that still. **This run** shows the values Queue will send. 100 creator modes + Format / platform + optional reference. Prefix follows Creator mode unless Iterate is on (`ez_iterate`). Default 1280x704 |
-| **stills/still-hero** | klein | `ez_still_hero` - default 1280x704 LTX feeder; Format / platform retargets |
-| **stills/thumbnail** | klein | `ez_thumbnail` 1280x720 |
-| **stills/instagram-square** | klein | `ez_ig_square` 1:1 |
-| **stills/open-graph** | klein | `ez_og` 1216x640 |
-| **stills/banner-wide** | klein | `ez_banner` ~3:1 |
-| **stills/shorts-still** | klein | `ez_shorts_still` 432x768 |
-| **motion/silent/still-to-video-5s** | wan | Silent 5 s, 121 frames, MagCache draft-only |
-| **motion/loops/gif-loop** | wan | 49-frame ping-pong GIF |
-| **motion/av/still-to-video-8s** | ltx | AV 8 s, 1280x704 |
-| **motion/av/clip-chain** | ltx | Four 8 s AV beats, last-frame continuity, `ez_clip_chain.mp4`. Prefix `ez_clip_b01`...`b04` |
-| **motion/av/hook-av** | ltx | AV cold open |
-| **motion/av/dialogue-8s** | ltx | Quoted speech + world SFX. Prefix `ez_ltx_dialogue` |
-| **motion/av/multishot-8s** | ltx | Native multishot (named cuts). Prefix `ez_ltx_multishot` |
-| **motion/av/product-hero** | ltx | Packshot I2V orbit. Prefix `ez_ltx_product` |
-| **motion/av/first-last-8s** | ltx | First + last still -> one AV take. Prefix `ez_ltx_flf` |
-| **motion/av/audio-to-video-8s** | ltx | Freeze a ~8 s wav; mux original audio. Prefix `ez_ltx_a2v` |
-| **stills/platform-pack** | klein | Six plates from one identity (`ez_pack_thumb` / ig / portrait / shorts / og / banner). Ctrl+B unused groups |
-| **stills/text-swap** | klein | `ez_text_swap` - replace lettering, lock type/angle/look, match source size |
-| **stills/background-swap** | klein | `ez_bg_swap` - replace backdrop, ground, and nearby set dressing; empty Flux.2 canvas; photo reference for place swaps; Cubic block world erases the people from a block study and pastes them back at full resolution, or (person mask unavailable) keeps them photoreal on the photo-anchored rebuild. Other/background character toggles |
-| **stills/background-edit** | klein | `ez_bg_edit` - restyle the environment in place (cartoon, add/remove, weather); match source size. Other/background character toggles |
+| **photos/still-daily** | klein | `ez_still_app` - Format / platform + click UNET to swap distilled / NVFP4 / base |
+| **photos/still-studio** | klein | Format / platform desk. Prefix follows Format (`ez_still_studio` when Custom). Default 1280x704 |
+| **photos/image-studio** | klein | Universal still desk. **Iterate** (first control, off by default) does text-to-image, then edits that still. **This run** shows the values Queue will send. 100 creator modes + Format / platform + optional reference. Prefix follows Creator mode unless Iterate is on (`ez_iterate`). Default 1280x704 |
+| **photos/still-hero** | klein | `ez_still_hero` - default 1280x704 LTX feeder; Format / platform retargets |
+| **photos/thumbnail** | klein | `ez_thumbnail` 1280x720 |
+| **photos/instagram-square** | klein | `ez_ig_square` 1:1 |
+| **photos/open-graph** | klein | `ez_og` 1216x640 |
+| **photos/banner-wide** | klein | `ez_banner` ~3:1 |
+| **photos/shorts-still** | klein | `ez_shorts_still` 432x768 |
+| **video/silent/still-to-video-5s** | wan | Silent 5 s, 121 frames, MagCache draft-only |
+| **video/loops/gif-loop** | wan | 49-frame ping-pong GIF |
+| **video/av/still-to-video-8s** | ltx | AV 8 s, 1280x704 |
+| **video/av/clip-chain** | ltx | Four 8 s AV beats, last-frame continuity, `ez_clip_chain.mp4`. Prefix `ez_clip_b01`...`b04` |
+| **video/av/hook-av** | ltx | AV cold open |
+| **video/av/dialogue-8s** | ltx | Quoted speech + world SFX. Prefix `ez_ltx_dialogue` |
+| **video/av/multishot-8s** | ltx | Native multishot (named cuts). Prefix `ez_ltx_multishot` |
+| **video/av/product-hero** | ltx | Packshot I2V orbit. Prefix `ez_ltx_product` |
+| **video/av/first-last-8s** | ltx | First + last still -> one AV take. Prefix `ez_ltx_flf` |
+| **video/av/audio-to-video-8s** | ltx | Freeze a ~8 s wav; mux original audio. Prefix `ez_ltx_a2v` |
+| **photos/platform-pack** | klein | Six plates from one identity (`ez_pack_thumb` / ig / portrait / shorts / og / banner). Ctrl+B unused groups |
+| **photos/text-swap** | klein | `ez_text_swap` - replace lettering, lock type/angle/look, match source size |
+| **photos/background-swap** | klein | `ez_bg_swap` - replace backdrop, ground, and nearby set dressing; empty Flux.2 canvas; photo reference for place swaps; Cubic block world erases the people from a block study and pastes them back at full resolution, or (person mask unavailable) keeps them photoreal on the photo-anchored rebuild. Other/background character toggles |
+| **photos/background-edit** | klein | `ez_bg_edit` - restyle the environment in place (cartoon, add/remove, weather); match source size. Other/background character toggles |
 
-Creator plates (packshot, end-card, quote, food, bumper, B-roll, orbit, ...) stay in the [catalog](studio-workflows.md). One hundred extra platform Apps live under `_lab/creator/` (YouTube channel art, IG 4:5, Pinterest 2:3, Twitch BRB, Spotify Canvas, merch mocks): [Creator pack](create/workflows-creator.md). Example chain: **creator/stills/instagram-portrait** -> **creator/silent/instagram-story-loop** -> **creator/av/instagram-reel-lifestyle**. Klein stills may use 1280x720; LTX feeders stay **1280x704**. Lab sizes match platform **aspect**; scale in an editor if a host wants more pixels.
+Creator plates (packshot, end-card, quote, food, bumper, B-roll, orbit, ...) stay in the [catalog](studio-workflows.md). One hundred extra platform Apps live under `_lab/social/` (YouTube channel art, IG 4:5, Pinterest 2:3, Twitch BRB, Spotify Canvas, merch mocks): [Creator pack](create/workflows-creator.md). Example chain: **social/stills/instagram-portrait** -> **social/silent/instagram-story-loop** -> **social/av/instagram-reel-lifestyle**. Klein stills may use 1280x720; LTX feeders stay **1280x704**. Lab sizes match platform **aspect**; scale in an editor if a host wants more pixels.
 
-Audio Apps (`audio/podcast/two-host-episode`, `audio/podcast/radio-drama`, `audio/podcast/learn-episode`, `dub-*`, `audio/music/rap-draft`, `audio/music/rap-full`, **audio/stem-mix**) are occupancy **audio**. Catalog albums live under `_lab/audio/albums/<artist>/<album>/` with numbered tracks, `cover.json` (klein), and `album.json` (zip). Outputs are FLAC + MP3 tagged with artist/album/title; optional cover is in the tags. One-go: `bazelisk run //:manage -- album-render --album nill-bye/peer-review`. Mux a still for YouTube with `bazelisk run //:manage -- audio-still-video --audio FILE --image FILE` (host ffmpeg; compose may stay up). Film graphs under `_lab/films/` are occupancy **film**. DCC Apps live under `_lab/dcc/` (lane **dcc**). Clay-to-finish playbook: [Clay blockout to finished clip](learn/clay-to-finish.md). Blender stills + video: [Blender creator suite](learn/blender-creator.md).
+Audio Apps (`audio/podcast/two-host-episode`, `audio/podcast/radio-drama`, `audio/podcast/learn-episode`, `dub-*`, `audio/music/rap-draft`, `audio/music/rap-full`, **audio/stem-mix**) are occupancy **audio**. Catalog albums live under `_lab/audio/albums/<artist>/<album>/` with numbered tracks, `cover.json` (klein), and `album.json` (zip). Outputs are FLAC + MP3 tagged with artist/album/title; optional cover is in the tags. One-go: `bazelisk run //:manage -- album-render --album nill-bye/peer-review`. Mux a still for YouTube with `bazelisk run //:manage -- audio-still-video --audio FILE --image FILE` (host ffmpeg; compose may stay up). Film graphs under `_lab/film/` are occupancy **film**. Control-guide Apps live under `_lab/guides/` (lane **guides**) and the meshes under `_lab/3d/` (lane **3d**). Clay-to-finish playbook: [Clay blockout to finished clip](learn/clay-to-finish.md). Blender stills + video: [Blender creator suite](learn/blender-creator.md).
 
 ---
 
@@ -191,16 +191,16 @@ Block in host Blender (Comfy **down**), then Queue these Apps. Occupancy XOR wit
 
 | App | Occupancy | What it does |
 | --- | --- | --- |
-| **dcc/clay-hero** | klein | Klein edit of guide `first.png`, 1280x704, prefix `ez_clay_hero` |
-| **dcc/clay-plates** | klein | One clay still -> hero 704 / packshot 1:1 / IG 4:5 / shorts 9:16 (`ez_clay_pack_*`) |
-| **dcc/canny-hero** | klein | Klein edit of `canny.png`, 1280x704, prefix `ez_canny_hero` |
-| **dcc/depth-control-8s** | ltx | Union Control envelope, depth from `depth.mp4` |
-| **dcc/canny-control-8s** | ltx | Same envelope, canny from `canny.mp4` |
-| **dcc/depth-control-shorts** | ltx | Depth envelope at **768x1280** |
-| **dcc/first-last-from-guide** | wan | Fun InP `first.png` + `last.png` (opt-in `download-wan --tier fun-inp`) |
-| **dcc/guide-still** | klein | In-canvas loaders + occupancy gate. Prefix `ez_guide_hero` |
-| **dcc/depth-from-loader** | ltx | Envelope from loaders. MagCache off. Prefix `ez_iclora_guide` |
-| **dcc/still-to-mesh** | trellis | Still pack `mug` -> TRELLIS.2 INT8 under `assets/objects/_lab-mug/` |
+| **guides/clay-hero** | klein | Klein edit of guide `first.png`, 1280x704, prefix `ez_clay_hero` |
+| **guides/clay-plates** | klein | One clay still -> hero 704 / packshot 1:1 / IG 4:5 / shorts 9:16 (`ez_clay_pack_*`) |
+| **guides/canny-hero** | klein | Klein edit of `canny.png`, 1280x704, prefix `ez_canny_hero` |
+| **guides/depth-control-8s** | ltx | Union Control envelope, depth from `depth.mp4` |
+| **guides/canny-control-8s** | ltx | Same envelope, canny from `canny.mp4` |
+| **guides/depth-control-shorts** | ltx | Depth envelope at **768x1280** |
+| **guides/first-last-from-guide** | wan | Fun InP `first.png` + `last.png` (opt-in `download-wan --tier fun-inp`) |
+| **guides/guide-still** | klein | In-canvas loaders + occupancy gate. Prefix `ez_guide_hero` |
+| **guides/depth-from-loader** | ltx | Envelope from loaders. MagCache off. Prefix `ez_iclora_guide` |
+| **3d/still-to-mesh** | trellis | Still pack `mug` -> TRELLIS.2 INT8 under `assets/objects/_lab-mug/` |
 
 ---
 
@@ -208,9 +208,9 @@ Block in host Blender (Comfy **down**), then Queue these Apps. Occupancy XOR wit
 
 | From | To |
 | --- | --- |
-| Spark Still | Hero Still -> Silent 5s (`wan-i2v-5s`) -> AV 8s (`ltx-i2v-5s`) or FLF (`motion/av/first-last-8s`) |
-| Product packshot | `motion/av/product-hero` |
-| Talking-head still | `motion/av/audio-to-video-8s` (real freeze; two-stage stays Templates) |
+| Spark Still | Hero Still -> Silent 5s (`wan-i2v-5s`) -> AV 8s (`ltx-i2v-5s`) or FLF (`video/av/first-last-8s`) |
+| Product packshot | `video/av/product-hero` |
+| Talking-head still | `video/av/audio-to-video-8s` (real freeze; two-stage stays Templates) |
 | Spark Still | Platform Pack (`klein-platform-pack`) -> Silent 5s / Hook AV |
 | Character Draft | Character Tweak -> Identity Sheet -> Silent 5s |
 | Hook Still | `wan-shorts-i2v` -> `ltx-shorts-i2v` |
@@ -223,18 +223,18 @@ Block in host Blender (Comfy **down**), then Queue these Apps. Occupancy XOR wit
 | Klein-from-canny | `ltx-iclora-canny` |
 | Guide pack first+last | `wan-flf-from-guide` |
 | World bible (dream-house) | Loop kit (GIF / bumper / sticker) |
-| Clay dream-house | `start` (or `house-views` dump) -> **stills/dream-house-clay** -> same loop kit |
-| IG 4:5 (`creator/stills/instagram-portrait`) | `creator/silent/instagram-story-loop` -> `creator/av/instagram-reel-lifestyle` |
-| Shorts thumb (`creator/stills/youtube-shorts-thumb`) | `creator/silent/zoom-punch` -> `motion/av/shorts-still-8s` |
-| Canvas still (`creator/stills/spotify-canvas-still`) | `creator/silent/spotify-canvas` (silent rebound) |
-| Twitch starting (`creator/stills/twitch-starting`) | `creator/silent/twitch-starting-loop` -> `creator/av/twitch-starting-av` |
+| Clay dream-house | `start` (or `house-views` dump) -> **photos/dream-house-clay** -> same loop kit |
+| IG 4:5 (`social/stills/instagram-portrait`) | `social/silent/instagram-story-loop` -> `social/av/instagram-reel-lifestyle` |
+| Shorts thumb (`social/stills/youtube-shorts-thumb`) | `social/silent/zoom-punch` -> `video/av/shorts-still-8s` |
+| Canvas still (`social/stills/spotify-canvas-still`) | `social/silent/spotify-canvas` (silent rebound) |
+| Twitch starting (`social/stills/twitch-starting`) | `social/silent/twitch-starting-loop` -> `social/av/twitch-starting-av` |
 
 Set I2V **LoadImage** to the still prefix you just saved (`ez_still_draft_*.png`, `ez_hook_still_*.png`, ...). I2V graphs also Queue on Comfy's `example.png`.
 
 Do **not** Queue Wan and LTX in the same session. Stop the other occupancy first.
 
 <Callout type="warning" title="Do not weaken">
-  `restart: "no"`, type **yes** on start, headroom, and download-limit are unchanged. Apps do not add `workflows/apps/`. Optional graphs live under `_lab/optional/`. App Mode graphs seed as `*.app.json` inside `_lab/<lane>/`, not as a second tree.
+  `restart: "no"`, type **yes** on start, headroom, and download-limit are unchanged. Apps do not add `workflows/apps/`. Optional graphs live under `_lab/labs/opt-in/`. App Mode graphs seed as `*.app.json` inside `_lab/<lane>/`, not as a second tree.
 </Callout>
 
 ---

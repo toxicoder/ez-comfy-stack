@@ -304,7 +304,7 @@ def test_handle_preview_fail_soft(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 def test_image_studio_wires_iterate_and_shows_it_first() -> None:
-    graph = load_lab_graph(lab_json("stills/image-studio.json"))
+    graph = load_lab_graph(lab_json("photos/image-studio.json"))
     mode = next(node for node in graph["nodes"] if node.get("type") == "EZImageMode")
     fmt = next(node for node in graph["nodes"] if node.get("type") == "EZImageFormat")
     opt = next(node for node in graph["nodes"] if node.get("type") == "EZOptionalImage")

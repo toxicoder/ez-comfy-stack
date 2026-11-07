@@ -34,9 +34,9 @@ def _assert_no_overlap(graph: dict, pad: float = 20) -> None:
 
 
 def test_prompt_forge_has_no_unet_and_stamps_llm() -> None:
-    graph = _load("inspire/prompt-forge")
+    graph = _load("labs/assist/prompt-forge")
     assert graph["id"] == "prompt-forge"
-    assert graph["extra"].get("lab_rel") == "inspire/prompt-forge"
+    assert graph["extra"].get("lab_rel") == "labs/assist/prompt-forge"
     types = {n.get("type") for n in graph["nodes"]}
     for heavy in HEAVY:
         assert heavy not in types, heavy
@@ -53,9 +53,9 @@ def test_prompt_forge_has_no_unet_and_stamps_llm() -> None:
     assert "MODELS_DIR" not in blob
     extra = graph["extra"]
     assert extra["lab_app_mode"]["enabled"] is True
-    assert extra["lab_app_mode"]["lane"] == "inspire"
+    assert extra["lab_app_mode"]["lane"] == "labs"
     assert extra["lab_app_mode"]["occupancy"] == "llm"
-    assert "stills/still-draft" in extra["lab_app_mode"]["handoff"]
+    assert "photos/still-draft" in extra["lab_app_mode"]["handoff"]
     labels = []
     for entry in extra["linearData"]["inputs"]:
         config = entry[2] if len(entry) > 2 else {}
@@ -73,9 +73,9 @@ def test_prompt_forge_has_no_unet_and_stamps_llm() -> None:
 
 
 def test_cinema_rack_has_no_unet_and_stamps_llm() -> None:
-    graph = _load("inspire/cinema-rack")
+    graph = _load("labs/assist/cinema-rack")
     assert graph["id"] == "cinema-rack"
-    assert graph["extra"].get("lab_rel") == "inspire/cinema-rack"
+    assert graph["extra"].get("lab_rel") == "labs/assist/cinema-rack"
     types = {n.get("type") for n in graph["nodes"]}
     for heavy in HEAVY:
         assert heavy not in types, heavy
@@ -88,9 +88,9 @@ def test_cinema_rack_has_no_unet_and_stamps_llm() -> None:
         assert needle not in blob
     extra = graph["extra"]
     assert extra["lab_app_mode"]["enabled"] is True
-    assert extra["lab_app_mode"]["lane"] == "inspire"
+    assert extra["lab_app_mode"]["lane"] == "labs"
     assert extra["lab_app_mode"]["occupancy"] == "llm"
-    assert "stills/still-draft" in extra["lab_app_mode"]["handoff"]
+    assert "photos/still-draft" in extra["lab_app_mode"]["handoff"]
     names = [entry[1] for entry in extra["linearData"]["inputs"]]
     assert names[0] == "quality"
     assert names[1] == "subject"
@@ -100,9 +100,9 @@ def test_cinema_rack_has_no_unet_and_stamps_llm() -> None:
 
 
 def test_audio_rack_has_no_unet_and_stamps_llm() -> None:
-    graph = _load("inspire/audio-rack")
+    graph = _load("labs/assist/audio-rack")
     assert graph["id"] == "audio-rack"
-    assert graph["extra"].get("lab_rel") == "inspire/audio-rack"
+    assert graph["extra"].get("lab_rel") == "labs/assist/audio-rack"
     types = {n.get("type") for n in graph["nodes"]}
     for heavy in HEAVY:
         assert heavy not in types, heavy
@@ -113,7 +113,7 @@ def test_audio_rack_has_no_unet_and_stamps_llm() -> None:
         assert needle not in blob
     extra = graph["extra"]
     assert extra["lab_app_mode"]["enabled"] is True
-    assert extra["lab_app_mode"]["lane"] == "inspire"
+    assert extra["lab_app_mode"]["lane"] == "labs"
     assert extra["lab_app_mode"]["occupancy"] == "llm"
     assert "audio/music/rap-draft" in extra["lab_app_mode"]["handoff"]
     names = [entry[1] for entry in extra["linearData"]["inputs"]]
@@ -125,9 +125,9 @@ def test_audio_rack_has_no_unet_and_stamps_llm() -> None:
 
 
 def test_research_chat_has_no_unet_and_stamps_llm() -> None:
-    graph = _load("inspire/research-chat")
+    graph = _load("labs/assist/research-chat")
     assert graph["id"] == "research-chat"
-    assert graph["extra"].get("lab_rel") == "inspire/research-chat"
+    assert graph["extra"].get("lab_rel") == "labs/assist/research-chat"
     types = {n.get("type") for n in graph["nodes"]}
     for heavy in HEAVY:
         assert heavy not in types, heavy
@@ -137,10 +137,10 @@ def test_research_chat_has_no_unet_and_stamps_llm() -> None:
         assert needle not in blob
     extra = graph["extra"]
     assert extra["lab_app_mode"]["enabled"] is True
-    assert extra["lab_app_mode"]["lane"] == "inspire"
+    assert extra["lab_app_mode"]["lane"] == "labs"
     assert extra["lab_app_mode"]["occupancy"] == "llm"
-    assert "inspire/prompt-forge" in extra["lab_app_mode"]["handoff"]
-    assert "stills/still-draft" in extra["lab_app_mode"]["handoff"]
+    assert "labs/assist/prompt-forge" in extra["lab_app_mode"]["handoff"]
+    assert "photos/still-draft" in extra["lab_app_mode"]["handoff"]
     assert extra["lab_mcp"]["server"] == "research-mcp"
     assert extra["lab_mcp"]["tools"] == ["chat", "web_search", "research"]
     labels = []
@@ -168,9 +168,9 @@ def test_research_chat_has_no_unet_and_stamps_llm() -> None:
 
 
 def test_app_forge_has_no_unet_and_stamps_llm() -> None:
-    graph = _load("inspire/app-forge")
+    graph = _load("labs/assist/app-forge")
     assert graph["id"] == "app-forge"
-    assert graph["extra"].get("lab_rel") == "inspire/app-forge"
+    assert graph["extra"].get("lab_rel") == "labs/assist/app-forge"
     types = {n.get("type") for n in graph["nodes"]}
     for heavy in HEAVY:
         assert heavy not in types, heavy
@@ -180,10 +180,10 @@ def test_app_forge_has_no_unet_and_stamps_llm() -> None:
         assert needle not in blob
     extra = graph["extra"]
     assert extra["lab_app_mode"]["enabled"] is True
-    assert extra["lab_app_mode"]["lane"] == "inspire"
+    assert extra["lab_app_mode"]["lane"] == "labs"
     assert extra["lab_app_mode"]["occupancy"] == "llm"
-    assert "inspire/prompt-forge" in extra["lab_app_mode"]["handoff"]
-    assert "stills/still-draft" in extra["lab_app_mode"]["handoff"]
+    assert "labs/assist/prompt-forge" in extra["lab_app_mode"]["handoff"]
+    assert "photos/still-draft" in extra["lab_app_mode"]["handoff"]
     assert extra["lab_mcp"]["server"] == "studio-mcp"
     assert "generate_app" in extra["lab_mcp"]["tools"]
     labels = []
@@ -212,10 +212,10 @@ def test_app_forge_has_no_unet_and_stamps_llm() -> None:
 
 
 def test_character_draft_is_t2i_without_reference() -> None:
-    graph = _load("stills/character-draft")
-    assert graph["extra"]["lab_app_mode"]["lane"] == "inspire"
+    graph = _load("photos/character-draft")
+    assert graph["extra"]["lab_app_mode"]["lane"] == "photos"
     assert graph["extra"]["lab_app_mode"]["occupancy"] == "klein"
-    assert "stills/character-tweak" in graph["extra"]["lab_app_mode"]["handoff"]
+    assert "photos/character-tweak" in graph["extra"]["lab_app_mode"]["handoff"]
     enh = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     values = enh["widgets_values"]
     if len(values) >= 7:
@@ -239,7 +239,7 @@ def test_character_draft_is_t2i_without_reference() -> None:
 
 
 def test_character_tweak_wires_reference_latent() -> None:
-    graph = _load("stills/character-tweak")
+    graph = _load("photos/character-tweak")
     assert graph["extra"]["lab_app_mode"]["occupancy"] == "klein"
     enh = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     values = enh["widgets_values"]
@@ -266,9 +266,9 @@ def test_character_tweak_wires_reference_latent() -> None:
 
 
 def test_beat_sheet_documents_yaml_contract_and_has_no_unet() -> None:
-    graph = _load("inspire/beat-sheet")
+    graph = _load("labs/assist/beat-sheet")
     assert graph["id"] == "beat-sheet"
-    assert graph["extra"].get("lab_rel") == "inspire/beat-sheet"
+    assert graph["extra"].get("lab_rel") == "labs/assist/beat-sheet"
     types = {n.get("type") for n in graph["nodes"]}
     for heavy in HEAVY:
         assert heavy not in types, heavy
@@ -292,11 +292,11 @@ def test_beat_sheet_documents_yaml_contract_and_has_no_unet() -> None:
     assert "shot-sheet" in note
     assert "audio_policy" in note
     assert graph["extra"]["lab_app_mode"]["occupancy"] == "none"
-    assert graph["extra"]["lab_app_mode"]["lane"] == "inspire"
+    assert graph["extra"]["lab_app_mode"]["lane"] == "labs"
     handoff = graph["extra"]["lab_app_mode"]["handoff"]
-    assert "films/go-see" in handoff
-    assert "dcc/clay-hero" in handoff
-    assert "stills/identity-sheet" in handoff
+    assert "film/go-see" in handoff
+    assert "guides/clay-hero" in handoff
+    assert "photos/identity-sheet" in handoff
     assert "1280x720" not in blob and "1280x720" not in blob
     assert "MODELS_DIR" not in blob
     for needle in BANNED:

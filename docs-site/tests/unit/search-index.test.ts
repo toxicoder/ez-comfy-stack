@@ -30,7 +30,7 @@ function bulky(count: number): SearchStructuredData {
 
 describe("isHeavySearchPath", () => {
   it("treats generated encyclopedias as heavy", () => {
-    expect(isHeavySearchPath("generated/workflows/films/breakwater/act-01.md")).toBe(true);
+    expect(isHeavySearchPath("generated/workflows/film/breakwater/act-01.md")).toBe(true);
     expect(isHeavySearchPath("generated/cinema/camera_movement.md")).toBe(true);
   });
 
@@ -48,7 +48,7 @@ describe("isHeavySearchPath", () => {
 describe("slimSearchStructuredData", () => {
   it("drops body blocks on generated pages and caps headings", () => {
     const slim = slimSearchStructuredData(
-      "generated/workflows/films/breakwater/act-01.md",
+      "generated/workflows/film/breakwater/act-01.md",
       bulky(200)
     );
     expect(slim.contents).toEqual([]);

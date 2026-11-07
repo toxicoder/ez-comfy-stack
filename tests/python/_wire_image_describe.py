@@ -38,12 +38,12 @@ ENHANCE_TYPES = (
 )
 SKIP_RELS = frozenset(
     {
-        "inspire/prompt-forge",
-        "inspire/cinema-rack",
-        "inspire/audio-rack",
-        "inspire/research-chat",
-        "inspire/app-forge",
-        "inspire/beat-sheet",
+        "labs/assist/prompt-forge",
+        "labs/assist/cinema-rack",
+        "labs/assist/audio-rack",
+        "labs/assist/research-chat",
+        "labs/assist/app-forge",
+        "labs/assist/beat-sheet",
     }
 )
 
@@ -77,7 +77,7 @@ def describe_in_scope(graph: dict[str, Any]) -> bool:
         Whether to insert the node.
     """
     rel = _lab_rel(graph)
-    if rel in SKIP_RELS or rel.startswith("audio/") or rel.startswith("films/"):
+    if rel in SKIP_RELS or rel.startswith("audio/") or rel.startswith("film/"):
         return False
     if _nodes_of(graph, DESCRIBE_TYPE):
         return False

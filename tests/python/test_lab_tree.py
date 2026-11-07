@@ -29,18 +29,22 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def test_rel_id_maps_old_stems() -> None:
-    assert rel_id("klein-still-draft-lab-example") == "stills/still-draft"
-    assert rel_id("klein-still-draft-lab-example.json") == "stills/still-draft"
-    assert rel_id("wan-i2v-5s-lab-example") == "motion/silent/still-to-video-5s"
-    assert rel_id("ltx-i2v-5s-lab-example") == "motion/av/still-to-video-8s"
-    assert rel_id("stills/still-draft") == "stills/still-draft"
+    assert rel_id("klein-still-draft-lab-example") == "photos/still-draft"
+    assert rel_id("klein-still-draft-lab-example.json") == "photos/still-draft"
+    assert rel_id("wan-i2v-5s-lab-example") == "video/silent/still-to-video-5s"
+    assert rel_id("ltx-i2v-5s-lab-example") == "video/av/still-to-video-8s"
+    assert rel_id("stills/still-draft") == "photos/still-draft"
+    assert rel_id("photos/still-draft") == "photos/still-draft"
     assert rel_id("audio/music/rap-draft") == "audio/music/rap-draft"
+    assert rel_id("stills/talking-head") == "video/av/talking-head"
+    assert rel_id("dcc/still-to-mesh") == "3d/still-to-mesh"
+    assert rel_id("inspire/app-forge") == "labs/assist/app-forge"
     assert len(OLD_TO_REL) >= 60
 
 
 def test_lab_graph_paths_ignores_untracked_scratch() -> None:
-    """Pytest must not collect BATS leftovers such as ``stills/my-hook.json``."""
-    scratch = LAB_ROOT / "stills" / "ci-scratch-hook.json"
+    """Pytest must not collect BATS leftovers such as ``photos/my-hook.json``."""
+    scratch = LAB_ROOT / "photos" / "ci-scratch-hook.json"
     scratch.write_text("{}\n", encoding="utf-8")
     try:
         paths = lab_graph_paths()
@@ -92,10 +96,62 @@ def test_every_shipped_lane_is_registered() -> None:
 
 def test_lane_meta_resolves_and_rejects_unknown() -> None:
     """The registry answers for a known lane and says nothing for a stray."""
-    assert lane_meta("stills") is LANE_BY_ID["stills"]
-    assert lane_meta("  stills  ") is LANE_BY_ID["stills"]
+    assert lane_meta("photos") is LANE_BY_ID["photos"]
+    assert lane_meta("  photos  ") is LANE_BY_ID["photos"]
     assert lane_meta("no-such-lane") is None
     assert lane_meta("") is None
+
+
+def test_app_mode_lane_agrees_with_the_folder() -> None:
+    """``lab_app_mode.lane`` is the folder, never a stale second opinion.
+
+    App Forge and the report panel read the stamped lane and only fall back to
+    the directory, so a lane that disagrees with the folder shows the operator
+    an app under a use case it is not in.
+    """
+    for path, graph in cached_lab_graph_map().items():
+        rel = path.relative_to(LAB_ROOT)
+        mode = (graph.get("extra") or {}).get("lab_app_mode") or {}
+        stamped = mode.get("lane")
+        if stamped:
+            assert stamped == rel.parts[0], rel
+            assert lane_meta(str(rel.parts[0])) is not None, rel
+
+
+def test_stamp_specs_take_their_lane_from_the_folder() -> None:
+    """The generator has no lane to author, so it cannot drift from the tree.
+
+    ``STAMP_SPECS`` used to carry an authored ``lane`` per app, and it disagreed
+    with the directory (a graph under ``stills/`` stamped ``inspire``), and
+    App Forge plus the report panel show the stamped value. The lane is now read
+    off the resolved id, so the only way to retarget an app is to move its file.
+    """
+    from _stamp_app_mode import STAMP_SPECS, _lane_for
+
+    assert STAMP_SPECS, "the spec table fills in at import"
+    for key, spec in STAMP_SPECS.items():
+        assert "lane" not in spec, key
+        assert lane_meta(_lane_for(key)) is not None, key
+
+    assert _lane_for("photos/still-draft") == "photos"
+    assert _lane_for("labs/opt-in/still-flux3-fast") == "labs"
+    with pytest.raises(ValueError):
+        _lane_for("")
+
+
+def test_every_stamped_spec_names_a_real_graph() -> None:
+    """A spec keyed to a folder the generator never wrote would stamp nothing.
+
+    Stamping is a lookup by ``_lab``-relative id, so a spec whose key drifts
+    from where the builder writes the file silently loses its App Mode panel.
+    """
+    from _stamp_app_mode import STAMP_SPECS
+
+    shipped = {
+        path.relative_to(LAB_ROOT).with_suffix("").as_posix() for path in cached_lab_graph_map()
+    }
+    for key in STAMP_SPECS:
+        assert key in shipped, key
 
 
 def test_no_lab_example_suffix() -> None:
@@ -204,12 +260,19 @@ def test_lab_dest_rejects_bad_subdir() -> None:
 
 
 def test_lab_json_ambiguous_i2v() -> None:
+    """Basenames, current ids, and pre-rename ids all resolve to one file.
+
+    The old ``motion/...`` and family-prefixed spellings stay valid: a seeded
+    ``workflows/_user`` graph still carries them, and the entrypoint rescue has
+    to find the shipped graph behind them.
+    """
     assert lab_json("still-to-video-5s").parent.name == "silent"
     assert lab_json("still-to-video-8s").parent.name == "av"
     assert lab_json("motion/silent/still-to-video-5s").parent.name == "silent"
     assert lab_json("motion/av/still-to-video-8s").parent.name == "av"
-    assert lab_json("still-draft").parent.name == "stills"
-    assert lab_json("klein/still-draft").parent.name == "stills"
+    assert lab_json("video/silent/still-to-video-5s").parent.name == "silent"
+    assert lab_json("still-draft").parent.name == "photos"
+    assert lab_json("klein/still-draft").parent.name == "photos"
     assert lab_json("wan/still-to-video-5s").parent.name == "silent"
 
 

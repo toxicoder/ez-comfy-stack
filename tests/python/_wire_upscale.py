@@ -23,15 +23,15 @@ DEFAULT_UPSCALE = "none"
 
 # Produce stills + DCC still plates. Skip audio albums, film acts, VHS.
 UPSCALE_PREFIXES = (
-    "stills/",
-    "creator/stills/",
+    "photos/",
+    "social/stills/",
 )
 UPSCALE_RELS = frozenset(
     {
-        "dcc/clay-hero",
-        "dcc/clay-plates",
-        "dcc/canny-hero",
-        "dcc/guide-still",
+        "guides/clay-hero",
+        "guides/clay-plates",
+        "guides/canny-hero",
+        "guides/guide-still",
     }
 )
 

@@ -191,10 +191,10 @@ def test_nodes_do_not_overlap(path: Path) -> None:
 _TOPLEFT_EPS = 0.5
 
 _NAMED_TITLE_NEEDLES: dict[str, tuple[str, ...]] = {
-    "films/go-see.json": ("1. Identity", "Beat", "Publish"),
-    "motion/av/clip-chain.json": ("Beat", "LTX models"),
-    "stills/dream-house.json": ("SHOT", "HOUSE IDENTITY"),
-    "inspire/cinema-rack.json": ("RACK", "KLEIN", "WAN", "LTX"),
+    "film/go-see.json": ("1. Identity", "Beat", "Publish"),
+    "video/av/clip-chain.json": ("Beat", "LTX models"),
+    "photos/dream-house.json": ("SHOT", "HOUSE IDENTITY"),
+    "labs/assist/cinema-rack.json": ("RACK", "KLEIN", "WAN", "LTX"),
 }
 
 

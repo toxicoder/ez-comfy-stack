@@ -7,8 +7,8 @@
 # Purpose:
 #   status: SSH each SPARK_HOSTS entry (docker ps, disk, nvidia-smi, fabric ping).
 #   sync-models: rsync MODELS_DIR/comfy over SPARK_FABRIC_IPS only (not mgmt NIC).
-#   run: refuses MiniMax H3 names; operators Queue motion/silent/still-to-shot / motion/av/still-to-shot
-#   graphs per host, then concat-shots.sh locally.
+#   run: refuses MiniMax H3 names; operators Queue video/silent/still-to-shot /
+#   video/av/still-to-shot graphs per host, then concat-shots.sh locally.
 #   Never starts compose on a remote node - prints the local //:manage start.
 #
 # Usage:
@@ -202,7 +202,8 @@ cmd_run() {
   fi
   print_remote_start_hint
   mkdir -p "${FARM_SHARE}/out"
-  log "On each host, open Comfy, Queue motion/silent/still-to-shot.json then motion/av/still-to-shot.json (5.00s shots)"
+  log "On each host, open Comfy, Queue video/silent/still-to-shot.json (5.00s shots)"
+  log "Then Queue video/av/still-to-shot.json on each host"
   log "Then run scripts/utilities/concat-shots.sh --film ${FILM:-go-see} against ${FARM_SHARE}"
   local url
   for url in "${urls[@]}"; do

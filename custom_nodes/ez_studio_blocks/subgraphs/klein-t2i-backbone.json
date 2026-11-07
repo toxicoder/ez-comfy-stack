@@ -1,6 +1,6 @@
 {
   "id": "ez-studio-blocks-klein-t2i-backbone",
-  "revision": 4,
+  "revision": 1,
   "last_node_id": 1,
   "last_link_id": 0,
   "nodes": [
@@ -8,8 +8,8 @@
       "id": 1,
       "type": "7c3e9b10-6a21-4f0a-9c11-00000000aa01",
       "pos": [
-        40,
-        204
+        100,
+        100
       ],
       "size": [
         280,
@@ -70,28 +70,14 @@
     }
   ],
   "links": [],
-  "groups": [
-    {
-      "id": 1,
-      "title": "SETTINGS",
-      "bounding": [
-        20,
-        132,
-        320,
-        276
-      ],
-      "color": "#a1309b",
-      "font_size": 24,
-      "flags": {}
-    }
-  ],
+  "groups": [],
   "definitions": {
     "subgraphs": [
       {
         "id": "7c3e9b10-6a21-4f0a-9c11-00000000aa01",
         "name": "klein-t2i-backbone",
         "version": 1,
-        "revision": 5,
+        "revision": 11,
         "config": {},
         "extra": {
           "lab_occupancy": "klein",
@@ -113,6 +99,19 @@
           },
           {
             "id": 2,
+            "title": "QUALITY",
+            "bounding": [
+              1028,
+              8,
+              728,
+              256
+            ],
+            "color": "#a1309b",
+            "font_size": 24,
+            "flags": {}
+          },
+          {
+            "id": 3,
             "title": "MODEL",
             "bounding": [
               20,
@@ -120,15 +119,28 @@
               400,
               506
             ],
+            "color": "#a1309b",
+            "font_size": 24,
+            "flags": {}
+          },
+          {
+            "id": 4,
+            "title": "INPUT",
+            "bounding": [
+              428,
+              436,
+              400,
+              610
+            ],
             "color": "#3f789e",
             "font_size": 24,
             "flags": {}
           },
           {
-            "id": 3,
+            "id": 5,
             "title": "PROMPT",
             "bounding": [
-              428,
+              836,
               436,
               460,
               1492
@@ -138,26 +150,26 @@
             "flags": {}
           },
           {
-            "id": 4,
+            "id": 6,
             "title": "SETTINGS",
             "bounding": [
-              896,
+              1304,
               436,
-              360,
-              556
+              400,
+              848
             ],
             "color": "#3f789e",
             "font_size": 24,
             "flags": {}
           },
           {
-            "id": 5,
+            "id": 7,
             "title": "OUTPUT",
             "bounding": [
-              1264,
+              1712,
               436,
               320,
-              504
+              656
             ],
             "color": "#a1309b",
             "font_size": 24,
@@ -292,7 +304,8 @@
                 "name": "VAE",
                 "type": "VAE",
                 "links": [
-                  7
+                  7,
+                  18
                 ],
                 "slot_index": 0
               }
@@ -309,7 +322,7 @@
             "id": 4,
             "type": "CLIPTextEncode",
             "pos": [
-              448,
+              856,
               1000
             ],
             "size": [
@@ -356,7 +369,7 @@
             "id": 5,
             "type": "CLIPTextEncode",
             "pos": [
-              448,
+              856,
               1724
             ],
             "size": [
@@ -403,8 +416,8 @@
             "id": 6,
             "type": "EmptyFlux2LatentImage",
             "pos": [
-              916,
-              508
+              1324,
+              800
             ],
             "size": [
               280,
@@ -413,7 +426,32 @@
             "flags": {},
             "order": 5,
             "mode": 0,
-            "inputs": [],
+            "inputs": [
+              {
+                "name": "width",
+                "type": "INT",
+                "link": 13,
+                "widget": {
+                  "name": "width"
+                }
+              },
+              {
+                "name": "height",
+                "type": "INT",
+                "link": 14,
+                "widget": {
+                  "name": "height"
+                }
+              },
+              {
+                "name": "batch_size",
+                "type": "INT",
+                "link": 15,
+                "widget": {
+                  "name": "batch_size"
+                }
+              }
+            ],
             "outputs": [
               {
                 "name": "LATENT",
@@ -432,14 +470,14 @@
               432,
               2
             ],
-            "title": "Latent 768x432 batch 2"
+            "title": "Latent (wired from Format)"
           },
           {
             "id": 7,
             "type": "KSampler",
             "pos": [
-              916,
-              686
+              1324,
+              978
             ],
             "size": [
               320,
@@ -467,7 +505,7 @@
               {
                 "name": "latent_image",
                 "type": "LATENT",
-                "link": 6
+                "link": 21
               }
             ],
             "outputs": [
@@ -498,7 +536,7 @@
             "id": 8,
             "type": "VAEDecode",
             "pos": [
-              1284,
+              1732,
               508
             ],
             "size": [
@@ -525,7 +563,7 @@
                 "name": "IMAGE",
                 "type": "IMAGE",
                 "links": [
-                  9
+                  22
                 ],
                 "slot_index": 0
               }
@@ -540,8 +578,8 @@
             "id": 9,
             "type": "SaveImage",
             "pos": [
-              1284,
-              626
+              1732,
+              778
             ],
             "size": [
               280,
@@ -554,7 +592,7 @@
               {
                 "name": "images",
                 "type": "IMAGE",
-                "link": 9
+                "link": 23
               }
             ],
             "outputs": [],
@@ -586,7 +624,7 @@
               "Node name for S&R": "Note"
             },
             "widgets_values": [
-              "## stills/still-draft\n\nFirst-run Klein 4B still (Apache 2.0 distilled FP8).\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed - CFG 1.0 - 4 steps - 768x432 - batch 2.\nSaveImage prefix: ez_still_draft.\n\nQueue this first. Then open stills/still-hero with the same seed for 1280x720.\nAspect widgets: YouTube 16:9 default; Shorts 9:16 = 432x768; 1:1 = 768x768.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n"
+              "## photos/still-draft\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nFirst-run Klein 4B still (Apache 2.0 distilled FP8).\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed - CFG 1.0 - 4 steps - 768x432 - batch 2.\nSaveImage prefix: ez_still_draft.\n\nQueue this first. Then open photos/still-hero with the same seed for 1280x720.\nAspect widgets: YouTube 16:9 default; Shorts 9:16 = 432x768; 1:1 = 768x768.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n"
             ],
             "title": "Operator note"
           },
@@ -594,7 +632,7 @@
             "id": 11,
             "type": "EZKleinPromptEnhance",
             "pos": [
-              448,
+              856,
               508
             ],
             "size": [
@@ -604,7 +642,21 @@
             "flags": {},
             "order": 2,
             "mode": 0,
-            "inputs": [],
+            "inputs": [
+              {
+                "name": "duration_hint",
+                "type": "STRING",
+                "link": 16,
+                "widget": {
+                  "name": "duration_hint"
+                }
+              },
+              {
+                "name": "image_desc",
+                "type": "STRING",
+                "link": 25
+              }
+            ],
             "outputs": [
               {
                 "name": "prompt",
@@ -620,11 +672,13 @@
               "Node name for S&R": "EZKleinPromptEnhance"
             },
             "widgets_values": [
+              "custom",
               "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace, warm gold-cyan holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Hold a wide environmental terrace so palms and unmarked glass towers recede toward a bright bay. Match a standing eyeline. 24mm-equivalent wide. Rake amber sidelight along fabric and terrace grit so long shadows stripe the terrace and highlights go honey. Locked as if a crawl dolly-in frozen. Framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.",
               true,
               "t2i",
               "YouTube 16:9 still",
-              "none"
+              "none",
+              "photos/still-draft"
             ],
             "title": "Klein Prompt Enhance"
           },
@@ -632,7 +686,7 @@
             "id": 12,
             "type": "EZNegativePromptEnhance",
             "pos": [
-              448,
+              856,
               1232
             ],
             "size": [
@@ -668,6 +722,339 @@
               "klein"
             ],
             "title": "Negative Prompt Enhance"
+          },
+          {
+            "id": 13,
+            "type": "EZQuality",
+            "pos": [
+              1416,
+              80
+            ],
+            "size": [
+              320.0,
+              82.0
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [],
+            "outputs": [
+              {
+                "name": "quality",
+                "type": "STRING",
+                "links": [],
+                "slot_index": 0
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "EZQuality"
+            },
+            "widgets_values": [
+              "lab"
+            ],
+            "title": "Quality"
+          },
+          {
+            "id": 14,
+            "type": "EZImageFormat",
+            "pos": [
+              1324,
+              508
+            ],
+            "size": [
+              360,
+              220
+            ],
+            "flags": {},
+            "order": 14,
+            "mode": 0,
+            "inputs": [],
+            "outputs": [
+              {
+                "name": "width",
+                "type": "INT",
+                "links": [
+                  13
+                ],
+                "slot_index": 0
+              },
+              {
+                "name": "height",
+                "type": "INT",
+                "links": [
+                  14
+                ],
+                "slot_index": 1
+              },
+              {
+                "name": "batch",
+                "type": "INT",
+                "links": [
+                  15
+                ],
+                "slot_index": 2
+              },
+              {
+                "name": "hint",
+                "type": "STRING",
+                "links": [
+                  16
+                ],
+                "slot_index": 3
+              },
+              {
+                "name": "prefix",
+                "type": "STRING",
+                "links": [],
+                "slot_index": 4
+              },
+              {
+                "name": "context",
+                "type": "STRING",
+                "links": [],
+                "slot_index": 5
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "EZImageFormat"
+            },
+            "widgets_values": [
+              "16:9 draft (768x432)",
+              "none",
+              768,
+              432,
+              2,
+              "Match input"
+            ],
+            "title": "Format / platform"
+          },
+          {
+            "id": 15,
+            "type": "EZOptionalImage",
+            "pos": [
+              448,
+              508
+            ],
+            "size": [
+              360.0,
+              120.0
+            ],
+            "flags": {},
+            "order": 6,
+            "mode": 0,
+            "inputs": [],
+            "outputs": [
+              {
+                "name": "image",
+                "type": "IMAGE",
+                "links": [
+                  19,
+                  30
+                ],
+                "slot_index": 0
+              },
+              {
+                "name": "count",
+                "type": "INT",
+                "links": [],
+                "slot_index": 1
+              },
+              {
+                "name": "has_image",
+                "type": "BOOLEAN",
+                "links": [
+                  20
+                ],
+                "slot_index": 2
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "EZOptionalImage"
+            },
+            "widgets_values": [
+              "",
+              true,
+              "",
+              ""
+            ],
+            "title": "Example / reference (optional)"
+          },
+          {
+            "id": 16,
+            "type": "EZKleinRefCanvas",
+            "pos": [
+              448,
+              862
+            ],
+            "size": [
+              360.0,
+              140.0
+            ],
+            "flags": {},
+            "order": 7,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "latent",
+                "type": "LATENT",
+                "link": 6
+              },
+              {
+                "name": "vae",
+                "type": "VAE",
+                "link": 18
+              },
+              {
+                "name": "image",
+                "type": "IMAGE",
+                "link": 19
+              },
+              {
+                "name": "has_image",
+                "type": "BOOLEAN",
+                "link": 20
+              }
+            ],
+            "outputs": [
+              {
+                "name": "latent",
+                "type": "LATENT",
+                "links": [
+                  21
+                ],
+                "slot_index": 0
+              },
+              {
+                "name": "image",
+                "type": "IMAGE",
+                "links": [],
+                "slot_index": 1
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "EZKleinRefCanvas"
+            },
+            "widgets_values": [
+              false,
+              3
+            ],
+            "title": "Optional Klein ref"
+          },
+          {
+            "id": 17,
+            "type": "EZImageUpscale",
+            "pos": [
+              1732,
+              626
+            ],
+            "size": [
+              280,
+              80
+            ],
+            "flags": {},
+            "order": 17,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "image",
+                "type": "IMAGE",
+                "link": 22
+              }
+            ],
+            "outputs": [
+              {
+                "name": "image",
+                "type": "IMAGE",
+                "links": [
+                  23
+                ],
+                "slot_index": 0
+              },
+              {
+                "name": "upscale",
+                "type": "STRING",
+                "links": [],
+                "slot_index": 1
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "EZImageUpscale"
+            },
+            "widgets_values": [
+              "none"
+            ],
+            "title": "Upscale still"
+          },
+          {
+            "id": 18,
+            "type": "EZImageDescribe",
+            "pos": [
+              448,
+              700
+            ],
+            "size": [
+              280,
+              90
+            ],
+            "flags": {},
+            "order": 18,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "enable",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "enable"
+                }
+              },
+              {
+                "name": "image",
+                "type": "IMAGE",
+                "link": 30
+              }
+            ],
+            "outputs": [
+              {
+                "name": "caption",
+                "type": "STRING",
+                "links": [
+                  25
+                ],
+                "slot_index": 0
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "EZImageDescribe"
+            },
+            "widgets_values": [
+              false
+            ],
+            "title": "Describe image"
+          },
+          {
+            "id": 19,
+            "type": "EZModelCheck",
+            "pos": [
+              1048,
+              80
+            ],
+            "size": [
+              320.0,
+              140.0
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [],
+            "outputs": [],
+            "properties": {
+              "Node name for S&R": "EZModelCheck"
+            },
+            "widgets_values": [
+              "Click Check models. Queue does not run this node."
+            ],
+            "title": "Check models"
           }
         ],
         "links": [
@@ -715,8 +1102,8 @@
             6,
             6,
             0,
-            7,
-            3,
+            16,
+            0,
             "LATENT"
           ],
           [
@@ -734,14 +1121,6 @@
             8,
             0,
             "LATENT"
-          ],
-          [
-            9,
-            8,
-            0,
-            9,
-            0,
-            "IMAGE"
           ],
           [
             10,
@@ -766,6 +1145,102 @@
             12,
             0,
             "STRING"
+          ],
+          [
+            13,
+            14,
+            0,
+            6,
+            0,
+            "INT"
+          ],
+          [
+            14,
+            14,
+            1,
+            6,
+            1,
+            "INT"
+          ],
+          [
+            15,
+            14,
+            2,
+            6,
+            2,
+            "INT"
+          ],
+          [
+            16,
+            14,
+            3,
+            11,
+            0,
+            "STRING"
+          ],
+          [
+            18,
+            3,
+            0,
+            16,
+            1,
+            "VAE"
+          ],
+          [
+            19,
+            15,
+            0,
+            16,
+            2,
+            "IMAGE"
+          ],
+          [
+            20,
+            15,
+            2,
+            16,
+            3,
+            "BOOLEAN"
+          ],
+          [
+            21,
+            16,
+            0,
+            7,
+            3,
+            "LATENT"
+          ],
+          [
+            22,
+            8,
+            0,
+            17,
+            0,
+            "IMAGE"
+          ],
+          [
+            23,
+            17,
+            0,
+            9,
+            0,
+            "IMAGE"
+          ],
+          [
+            25,
+            18,
+            0,
+            11,
+            1,
+            "STRING"
+          ],
+          [
+            30,
+            15,
+            0,
+            18,
+            1,
+            "IMAGE"
           ]
         ]
       }

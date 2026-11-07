@@ -23,7 +23,7 @@ from _wire_upscale import wire_upscale  # noqa: E402
 
 def main() -> None:
     """Patch every shipped lab graph in place."""
-    skip_prefixes = ("audio/", "films/", "inspire/", "optional/")
+    skip_prefixes = ("audio/", "film/", "labs/", "3d/trellis2")
     counts = {"format": 0, "upscale": 0, "describe": 0, "wrote": 0}
     for path in lab_graph_paths():
         rel = lab_rel_of(path)

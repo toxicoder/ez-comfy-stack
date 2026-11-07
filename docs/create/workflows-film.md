@@ -27,7 +27,7 @@ through Klein look-dev into an LTX take. Single clips are on
 **Who this is for:** studio users who already Queued a 5 s LTX clip. Index: [Workflow catalog](../studio-workflows.md). Node-by-node widgets: [Workflow details](workflows-index.md). Full loop: [Short films](../shorts.md).
 
 **How to read these tables.** The **Workflow** column is the lab id you load from
-`_lab/films/` or `_lab/dcc/`, and it links to the generated node page for that
+`_lab/film/`, `_lab/guides/`, or `_lab/3d/`, and it links to the generated node page for that
 graph. **What it does** names the story or the guide input, the printer size, the
 seed, the Enhance state, the output prefix, and any opt-in download. Seeds,
 occupancy, and Queue rules are shared with every other catalog:
@@ -39,18 +39,18 @@ occupancy, and Queue rules are shared with every other catalog:
 
 | Workflow | What it does |
 | --- | --- |
-| **[films/go-see](../generated/workflows/films/go-see.md)** | **One-click** first-person parkour 90s: Klein identity + 18 LTX 5.00s AV prints + stitch |
-| **[films/still-here](../generated/workflows/films/still-here.md)** | **One-click** household morning 90s (same shape) |
-| **[films/switchyard](../generated/workflows/films/switchyard.md)** | **One-click** night freight-yard 90s (same shape) |
-| **[films/tide-table/act-01](../generated/workflows/films/tide-table/act-01.md)** | Dawn skiff 7.5 min, act 1 of 5 (then act-02...05; concat 450s) |
-| **[films/night-oven/act-01](../generated/workflows/films/night-oven/act-01.md)** | Overnight bakery 7.5 min, act 1 of 5 |
-| **[films/glasshouse/act-01](../generated/workflows/films/glasshouse/act-01.md)** | Storm glasshouse 7.5 min, act 1 of 5 |
-| **[films/last-lane/act-01](../generated/workflows/films/last-lane/act-01.md)** | Night two-lane 7.5 min, act 1 of 5 |
-| **[films/breakwater/act-01](../generated/workflows/films/breakwater/act-01.md)** | Storm-wall walk 7.5 min, act 1 of 5 |
-| **[motion/silent/still-to-shot](../generated/workflows/motion/silent/still-to-shot.md)** | Optional silent rehearsal / six-shot concat demo |
-| **[motion/av/still-to-shot](../generated/workflows/motion/av/still-to-shot.md)** | Generic 5.00 s AV print (non-film) |
+| **[film/go-see](../generated/workflows/film/go-see.md)** | **One-click** first-person parkour 90s: Klein identity + 18 LTX 5.00s AV prints + stitch |
+| **[film/still-here](../generated/workflows/film/still-here.md)** | **One-click** household morning 90s (same shape) |
+| **[film/switchyard](../generated/workflows/film/switchyard.md)** | **One-click** night freight-yard 90s (same shape) |
+| **[film/tide-table/act-01](../generated/workflows/film/tide-table/act-01.md)** | Dawn skiff 7.5 min, act 1 of 5 (then act-02...05; concat 450s) |
+| **[film/night-oven/act-01](../generated/workflows/film/night-oven/act-01.md)** | Overnight bakery 7.5 min, act 1 of 5 |
+| **[film/glasshouse/act-01](../generated/workflows/film/glasshouse/act-01.md)** | Storm glasshouse 7.5 min, act 1 of 5 |
+| **[film/last-lane/act-01](../generated/workflows/film/last-lane/act-01.md)** | Night two-lane 7.5 min, act 1 of 5 |
+| **[film/breakwater/act-01](../generated/workflows/film/breakwater/act-01.md)** | Storm-wall walk 7.5 min, act 1 of 5 |
+| **[video/silent/still-to-shot](../generated/workflows/video/silent/still-to-shot.md)** | Optional silent rehearsal / six-shot concat demo |
+| **[video/av/still-to-shot](../generated/workflows/video/av/still-to-shot.md)** | Generic 5.00 s AV print (non-film) |
 
-Act graphs (Queue in order, then `concat-shots.sh --film`): `films/tide-table/act-01` `films/tide-table/act-02` `films/tide-table/act-03` `films/tide-table/act-04` `films/tide-table/act-05` - `films/night-oven/act-01` `films/night-oven/act-02` `films/night-oven/act-03` `films/night-oven/act-04` `films/night-oven/act-05` - `films/glasshouse/act-01` `films/glasshouse/act-02` `films/glasshouse/act-03` `films/glasshouse/act-04` `films/glasshouse/act-05` - `films/last-lane/act-01` `films/last-lane/act-02` `films/last-lane/act-03` `films/last-lane/act-04` `films/last-lane/act-05` - `films/breakwater/act-01` `films/breakwater/act-02` `films/breakwater/act-03` `films/breakwater/act-04` `films/breakwater/act-05`.
+Act graphs (Queue in order, then `concat-shots.sh --film`): `film/tide-table/act-01` `film/tide-table/act-02` `film/tide-table/act-03` `film/tide-table/act-04` `film/tide-table/act-05` - `film/night-oven/act-01` `film/night-oven/act-02` `film/night-oven/act-03` `film/night-oven/act-04` `film/night-oven/act-05` - `film/glasshouse/act-01` `film/glasshouse/act-02` `film/glasshouse/act-03` `film/glasshouse/act-04` `film/glasshouse/act-05` - `film/last-lane/act-01` `film/last-lane/act-02` `film/last-lane/act-03` `film/last-lane/act-04` `film/last-lane/act-05` - `film/breakwater/act-01` `film/breakwater/act-02` `film/breakwater/act-03` `film/breakwater/act-04` `film/breakwater/act-05`.
 
 Full loop: [Short films](../shorts.md). One file per film - Queue once. Leave LTX **1280x704**. Film printers stay **121 frames**. Do **not** Queue a 30/60/90 s latent.
 
@@ -60,17 +60,17 @@ Full loop: [Short films](../shorts.md). One file per film - Queue once. Leave LT
 
 | Workflow | What it does |
 | --- | --- |
-| **[dcc/clay-hero](../generated/workflows/dcc/clay-hero.md)** | Klein 4B edit of a guide-pack `first.png`. Enhance **on**, seed **42**, **1280x704**. Prefix `ez_clay_hero`. Then `overlay-qc`. Occupancy: dump while Comfy is **down**. |
-| **[dcc/clay-plates](../generated/workflows/dcc/clay-plates.md)** | One clay still -> four plates (hero 704, packshot 1:1, IG 4:5, shorts 9:16). Prefix `ez_clay_pack_*`. |
-| **[dcc/canny-hero](../generated/workflows/dcc/canny-hero.md)** | Klein 4B edit of `canny.png`. Prefix `ez_canny_hero`. Handoff: `ltx-iclora-canny`. |
-| **[stills/dream-house-clay](../generated/workflows/stills/dream-house-clay.md)** | Instagram 4:5 Path B: ten Klein edits of `house-views` clay (1024x1280). Not an LTX pack. |
-| **[dcc/depth-control-8s](../generated/workflows/dcc/depth-control-8s.md)** | Lab envelope for an 8.00s depth-guided LTX print. Official Union Control graph is **Templates -> LTX-2.5**. Opt-in `download-ltx --tier iclora`. MagCache off. Distilled-only. Joint AV is a world bed. |
-| **[dcc/canny-control-8s](../generated/workflows/dcc/canny-control-8s.md)** | Same envelope; wire `canny.mp4`. |
-| **[dcc/depth-control-shorts](../generated/workflows/dcc/depth-control-shorts.md)** | Depth envelope at **768x1280**. Dump with `export-guides --width 768 --height 1280`. |
-| **[dcc/first-last-from-guide](../generated/workflows/dcc/first-last-from-guide.md)** | Fun InP first+last from the pack. Opt-in `download-wan --tier fun-inp`. MagCache off. |
-| **[dcc/guide-still](../generated/workflows/dcc/guide-still.md)** | Stay on `:8188`. `EZDCCLoadGuideStill` + occupancy gate. Prefix `ez_guide_hero`. |
-| **[dcc/depth-from-loader](../generated/workflows/dcc/depth-from-loader.md)** | Envelope from loaders + `depth.mp4` path. MagCache off. Distilled-only. Prefix `ez_iclora_guide`. |
-| **[dcc/still-to-mesh](../generated/workflows/dcc/still-to-mesh.md)** | Still pack `plate=mug` -> native TRELLIS.2 INT8. Output `assets/objects/_lab-mug/`. Occupancy **trellis**. |
+| **[guides/clay-hero](../generated/workflows/guides/clay-hero.md)** | Klein 4B edit of a guide-pack `first.png`. Enhance **on**, seed **42**, **1280x704**. Prefix `ez_clay_hero`. Then `overlay-qc`. Occupancy: dump while Comfy is **down**. |
+| **[guides/clay-plates](../generated/workflows/guides/clay-plates.md)** | One clay still -> four plates (hero 704, packshot 1:1, IG 4:5, shorts 9:16). Prefix `ez_clay_pack_*`. |
+| **[guides/canny-hero](../generated/workflows/guides/canny-hero.md)** | Klein 4B edit of `canny.png`. Prefix `ez_canny_hero`. Handoff: `ltx-iclora-canny`. |
+| **[photos/dream-house-clay](../generated/workflows/photos/dream-house-clay.md)** | Instagram 4:5 Path B: ten Klein edits of `house-views` clay (1024x1280). Not an LTX pack. |
+| **[guides/depth-control-8s](../generated/workflows/guides/depth-control-8s.md)** | Lab envelope for an 8.00s depth-guided LTX print. Official Union Control graph is **Templates -> LTX-2.5**. Opt-in `download-ltx --tier iclora`. MagCache off. Distilled-only. Joint AV is a world bed. |
+| **[guides/canny-control-8s](../generated/workflows/guides/canny-control-8s.md)** | Same envelope; wire `canny.mp4`. |
+| **[guides/depth-control-shorts](../generated/workflows/guides/depth-control-shorts.md)** | Depth envelope at **768x1280**. Dump with `export-guides --width 768 --height 1280`. |
+| **[guides/first-last-from-guide](../generated/workflows/guides/first-last-from-guide.md)** | Fun InP first+last from the pack. Opt-in `download-wan --tier fun-inp`. MagCache off. |
+| **[guides/guide-still](../generated/workflows/guides/guide-still.md)** | Stay on `:8188`. `EZDCCLoadGuideStill` + occupancy gate. Prefix `ez_guide_hero`. |
+| **[guides/depth-from-loader](../generated/workflows/guides/depth-from-loader.md)** | Envelope from loaders + `depth.mp4` path. MagCache off. Distilled-only. Prefix `ez_iclora_guide`. |
+| **[3d/still-to-mesh](../generated/workflows/3d/still-to-mesh.md)** | Still pack `plate=mug` -> native TRELLIS.2 INT8. Output `assets/objects/_lab-mug/`. Occupancy **trellis**. |
 | **[audio/stem-mix](../generated/workflows/audio/stem-mix.md)** | Picture-lock stem mix desk. Occupancy **audio**. Host `stem-mix.sh` (duck -15 dB, YouTube loudnorm). |
 
 ---

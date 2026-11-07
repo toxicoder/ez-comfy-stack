@@ -37,7 +37,7 @@ def _load(name: str) -> dict:
 
 
 def test_klein_still_draft_stamp_keeps_lab_profile_and_note() -> None:
-    graph = _load("stills/still-draft.json")
+    graph = _load("photos/still-draft.json")
     profile = graph["extra"]["lab_profile"]
     note = graph["extra"]["lab_note"]
     stamped = stamp_app_mode(
@@ -52,10 +52,10 @@ def test_klein_still_draft_stamp_keeps_lab_profile_and_note() -> None:
             ("KSampler", "seed"),
         ],
         outputs=["Save"],
-        lane="inspire",
+        lane="photos",
         occupancy="klein",
         enhance_off_identity=False,
-        handoff=("stills/still-hero", "motion/silent/still-to-video-5s"),
+        handoff=("photos/still-hero", "video/silent/still-to-video-5s"),
     )
     extra = stamped["extra"]
     assert extra["lab_profile"] == profile
@@ -64,12 +64,12 @@ def test_klein_still_draft_stamp_keeps_lab_profile_and_note() -> None:
     assert mode["enabled"] is True
     assert mode["default_view"] == "app"
     assert mode["frontend_min"] == "1.41.13"
-    assert mode["lane"] == "inspire"
+    assert mode["lane"] == "photos"
     assert mode["occupancy"] == "klein"
     assert mode["enhance_off_identity"] is False
     assert mode["handoff"] == [
-        "stills/still-hero",
-        "motion/silent/still-to-video-5s",
+        "photos/still-hero",
+        "video/silent/still-to-video-5s",
     ]
     linear = extra["linearData"]
     by_id = {int(n["id"]): n for n in stamped["nodes"]}
@@ -87,7 +87,7 @@ def test_klein_still_draft_stamp_keeps_lab_profile_and_note() -> None:
 
 
 def test_wan_video_stamp_resolves_vhs_output() -> None:
-    graph = _load("motion/silent/still-to-video-5s.json")
+    graph = _load("video/silent/still-to-video-5s.json")
     stamped = stamp_app_mode(
         copy.deepcopy(graph),
         inputs=[
@@ -96,7 +96,7 @@ def test_wan_video_stamp_resolves_vhs_output() -> None:
             ("First frame", "image"),
         ],
         outputs=["VHS_VideoCombine"],
-        lane="produce",
+        lane="video",
         occupancy="wan",
     )
     vhs = next(n for n in stamped["nodes"] if n.get("type") == "VHS_VideoCombine")
@@ -107,19 +107,19 @@ def test_wan_video_stamp_resolves_vhs_output() -> None:
 
 
 def test_missing_node_stamp_raises() -> None:
-    graph = _load("stills/still-draft.json")
+    graph = _load("photos/still-draft.json")
     with pytest.raises(ValueError, match="missing"):
         stamp_app_mode(
             graph,
             inputs=[("No Such Node", "prompt")],
             outputs=["Save"],
-            lane="inspire",
+            lane="photos",
             occupancy="klein",
         )
 
 
 def test_banned_string_in_label_is_rejected() -> None:
-    graph = _load("stills/still-draft.json")
+    graph = _load("photos/still-draft.json")
     with pytest.raises(ValueError, match="banned"):
         stamp_app_mode(
             copy.deepcopy(graph),
@@ -131,7 +131,7 @@ def test_banned_string_in_label_is_rejected() -> None:
                 )
             ],
             outputs=["Save"],
-            lane="inspire",
+            lane="photos",
             occupancy="klein",
         )
     with pytest.raises(ValueError, match="banned"):
@@ -139,7 +139,7 @@ def test_banned_string_in_label_is_rejected() -> None:
             copy.deepcopy(graph),
             inputs=[("Klein Prompt Enhance", "prompt")],
             outputs=["Save"],
-            lane="inspire",
+            lane="photos",
             occupancy="klein",
             handoff=("klein-9b-lab-example",),
         )
@@ -152,7 +152,7 @@ def _widget_names(graph: dict) -> list[str]:
 
 
 def test_still_draft_app_inputs_are_prompt_first_with_format() -> None:
-    names = _widget_names(_load("stills/still-draft.json"))
+    names = _widget_names(_load("photos/still-draft.json"))
     assert names[:9] == [
         "quality",
         "sample",
@@ -174,7 +174,7 @@ def test_still_draft_app_inputs_are_prompt_first_with_format() -> None:
 
 
 def test_image_studio_exposes_mode_look_size_and_unet() -> None:
-    names = _widget_names(_load("stills/image-studio.json"))
+    names = _widget_names(_load("photos/image-studio.json"))
     assert names[:11] == [
         "iterate",
         "run_summary",
@@ -196,7 +196,7 @@ def test_image_studio_exposes_mode_look_size_and_unet() -> None:
 
 
 def test_still_studio_exposes_format_look_size_and_unet() -> None:
-    names = _widget_names(_load("stills/still-studio.json"))
+    names = _widget_names(_load("photos/still-studio.json"))
     assert names[:11] == [
         "quality",
         "sample",
@@ -227,7 +227,7 @@ def test_expose_unet_graphs_also_stamp_sampler_steps() -> None:
 
 
 def test_daily_still_exposes_latent_and_unet_after_prompt() -> None:
-    names = _widget_names(_load("stills/still-daily.json"))
+    names = _widget_names(_load("photos/still-daily.json"))
     assert names[0] == "quality"
     assert names[1] == "sample"
     assert names[2] == "prompt"
@@ -241,7 +241,7 @@ def test_daily_still_exposes_latent_and_unet_after_prompt() -> None:
 
 
 def test_dream_house_hides_join_shots_and_keeps_one_prompt() -> None:
-    names = _widget_names(_load("stills/dream-house.json"))
+    names = _widget_names(_load("photos/dream-house.json"))
     assert names.count("prompt") == 1
     assert names[0] == "quality"
     assert names[1] == "sample"
@@ -254,7 +254,7 @@ def test_dream_house_hides_join_shots_and_keeps_one_prompt() -> None:
 
 
 def test_dream_house_clay_hides_images_and_keeps_one_prompt() -> None:
-    names = _widget_names(_load("stills/dream-house-clay.json"))
+    names = _widget_names(_load("photos/dream-house-clay.json"))
     assert names.count("prompt") == 1
     assert names[0] == "quality"
     assert names[1] == "sample"
@@ -265,7 +265,7 @@ def test_dream_house_clay_hides_images_and_keeps_one_prompt() -> None:
 
 
 def test_beat_sheet_exposes_only_shot_cards() -> None:
-    names = _widget_names(_load("inspire/beat-sheet.json"))
+    names = _widget_names(_load("labs/assist/beat-sheet.json"))
     assert names[0] == "quality"
     assert names[1] == "sample"
     assert names[2] == "prompt"
@@ -273,7 +273,7 @@ def test_beat_sheet_exposes_only_shot_cards() -> None:
 
 
 def test_research_chat_exposes_message_mode_search() -> None:
-    names = _widget_names(_load("inspire/research-chat.json"))
+    names = _widget_names(_load("labs/assist/research-chat.json"))
     assert names == [
         "quality",
         "sample",
@@ -283,7 +283,7 @@ def test_research_chat_exposes_message_mode_search() -> None:
         "subagents",
         "history",
     ]
-    labels = _labels(_load("inspire/research-chat.json"))
+    labels = _labels(_load("labs/assist/research-chat.json"))
     assert labels[0] == "Quality"
     assert labels[1] == "Sample prompt"
     assert labels[2] == "Message"
@@ -292,14 +292,14 @@ def test_research_chat_exposes_message_mode_search() -> None:
 
 
 def test_cinema_rack_exposes_subject_and_axes() -> None:
-    names = _widget_names(_load("inspire/cinema-rack.json"))
+    names = _widget_names(_load("labs/assist/cinema-rack.json"))
     assert names[0] == "quality"
     assert names[1] == "subject"
     assert "recipe" in names
     assert "camera_movement" in names
     assert names.count("style") == 3
     assert names.count("enhance") == 3
-    labels = _labels(_load("inspire/cinema-rack.json"))
+    labels = _labels(_load("labs/assist/cinema-rack.json"))
     assert labels[0] == "Quality"
     assert labels[1] == "Subject"
     assert "Camera move" in labels
@@ -307,13 +307,13 @@ def test_cinema_rack_exposes_subject_and_axes() -> None:
 
 
 def test_audio_rack_exposes_brief_and_axes() -> None:
-    names = _widget_names(_load("inspire/audio-rack.json"))
+    names = _widget_names(_load("labs/assist/audio-rack.json"))
     assert names[0] == "quality"
     assert names[1] == "brief"
     assert "recipe" in names
     assert "genre_style" in names
     assert names.count("enhance") == 2
-    labels = _labels(_load("inspire/audio-rack.json"))
+    labels = _labels(_load("labs/assist/audio-rack.json"))
     assert labels[0] == "Quality"
     assert labels[1] == "Brief"
     assert "Tempo" in labels
@@ -323,7 +323,7 @@ def test_audio_rack_exposes_brief_and_axes() -> None:
 
 
 def test_prompt_forge_keeps_three_family_prompts_first() -> None:
-    names = _widget_names(_load("inspire/prompt-forge.json"))
+    names = _widget_names(_load("labs/assist/prompt-forge.json"))
     assert names[:4] == ["quality", "sample", "prompt", "value"]
     assert names.count("prompt") == 1
     assert names.count("style") == 6
@@ -351,44 +351,44 @@ def _labels(graph: dict) -> list[str]:
 
 
 def test_unwired_or_bypassed_loadimage_is_not_an_app_input() -> None:
-    hero = _widget_names(_load("stills/still-hero.json"))
+    hero = _widget_names(_load("photos/still-hero.json"))
     assert "image" not in hero
-    thumb = _widget_names(_load("stills/thumbnail.json"))
+    thumb = _widget_names(_load("photos/thumbnail.json"))
     assert "image" not in thumb
-    t2v = _widget_names(_load("motion/silent/text-to-video-5s.json"))
+    t2v = _widget_names(_load("video/silent/text-to-video-5s.json"))
     assert "image" not in t2v
-    flf = _widget_names(_load("motion/silent/first-last-5s.json"))
+    flf = _widget_names(_load("video/silent/first-last-5s.json"))
     assert flf.count("image") == 1
-    vace = _widget_names(_load("motion/silent/vace-join.json"))
+    vace = _widget_names(_load("video/silent/vace-join.json"))
     assert vace.count("image") == 1
 
 
 def test_wired_edit_and_i2v_keep_image() -> None:
-    tweak = _widget_names(_load("stills/character-tweak.json"))
+    tweak = _widget_names(_load("photos/character-tweak.json"))
     assert "image" in tweak
-    swap = _widget_names(_load("stills/text-swap.json"))
+    swap = _widget_names(_load("photos/text-swap.json"))
     assert "image" in swap
     assert "style" not in swap
-    i2v = _widget_names(_load("motion/silent/still-to-video-5s.json"))
+    i2v = _widget_names(_load("video/silent/still-to-video-5s.json"))
     assert "image" in i2v
-    clay = _widget_names(_load("dcc/clay-hero.json"))
+    clay = _widget_names(_load("guides/clay-hero.json"))
     assert "image" in clay
 
 
 def test_required_loadimage_is_first_app_widget() -> None:
-    talking = _load("stills/talking-head.json")
+    talking = _load("video/av/talking-head.json")
     assert _widget_names(talking)[0] == "image"
     assert _labels(talking)[0] == "Klein identity still"
-    assert _widget_names(_load("stills/character-tweak.json"))[0] == "image"
-    assert _widget_names(_load("stills/text-swap.json"))[0] == "image"
-    assert _widget_names(_load("motion/silent/still-to-video-5s.json"))[0] == "image"
-    assert _widget_names(_load("dcc/clay-hero.json"))[0] == "image"
-    flf = _widget_names(_load("motion/av/first-last-8s.json"))
+    assert _widget_names(_load("photos/character-tweak.json"))[0] == "image"
+    assert _widget_names(_load("photos/text-swap.json"))[0] == "image"
+    assert _widget_names(_load("video/silent/still-to-video-5s.json"))[0] == "image"
+    assert _widget_names(_load("guides/clay-hero.json"))[0] == "image"
+    flf = _widget_names(_load("video/av/first-last-8s.json"))
     assert flf[0] == "image"
     assert flf[1] == "image"
-    still = _widget_names(_load("stills/still-draft.json"))
+    still = _widget_names(_load("photos/still-draft.json"))
     assert still[0] == "quality"
-    studio = _widget_names(_load("stills/image-studio.json"))
+    studio = _widget_names(_load("photos/image-studio.json"))
     assert studio[:3] == ["iterate", "run_summary", "quality"]
     assert "image" not in studio
 
@@ -421,7 +421,7 @@ def test_text_swap_prompt_help_allows_missing_node() -> None:
     assert display_label(None, "prompt") == "Prompt"
     enh = next(
         node
-        for node in _load("stills/text-swap.json")["nodes"]
+        for node in _load("photos/text-swap.json")["nodes"]
         if node.get("type") == "EZKleinPromptEnhance"
     )
     help_text = widget_description("prompt", enh) or ""
@@ -430,7 +430,7 @@ def test_text_swap_prompt_help_allows_missing_node() -> None:
 
 
 def test_background_swap_prompt_help_and_describe_default() -> None:
-    graph = _load("stills/background-swap.json")
+    graph = _load("photos/background-swap.json")
     enh = next(
         node
         for node in graph["nodes"]
@@ -449,27 +449,27 @@ def test_background_swap_prompt_help_and_describe_default() -> None:
 
 
 def test_ltx_showcase_app_widgets() -> None:
-    flf = _load("motion/av/first-last-8s.json")
+    flf = _load("video/av/first-last-8s.json")
     names = _widget_names(flf)
     labels = _labels(flf)
     assert names.count("image") == 2
     assert "First frame" in labels
     assert "Last frame" in labels
-    a2v = _load("motion/av/audio-to-video-8s.json")
+    a2v = _load("video/av/audio-to-video-8s.json")
     assert "audio" in _widget_names(a2v)
     assert any("audio" in label.lower() for label in _labels(a2v))
 
 
 def test_i2v_hides_style_t2v_keeps_it() -> None:
-    i2v = _widget_names(_load("motion/silent/still-to-video-5s.json"))
+    i2v = _widget_names(_load("video/silent/still-to-video-5s.json"))
     assert "style" not in i2v
-    ltx_i2v = _widget_names(_load("motion/av/still-to-video-8s.json"))
+    ltx_i2v = _widget_names(_load("video/av/still-to-video-8s.json"))
     assert "style" not in ltx_i2v
-    t2v = _widget_names(_load("motion/silent/text-to-video-5s.json"))
+    t2v = _widget_names(_load("video/silent/text-to-video-5s.json"))
     assert "style" in t2v
-    ltx_t2v = _widget_names(_load("motion/av/text-to-video-8s.json"))
+    ltx_t2v = _widget_names(_load("video/av/text-to-video-8s.json"))
     assert "style" in ltx_t2v
-    still = _widget_names(_load("stills/still-draft.json"))
+    still = _widget_names(_load("photos/still-draft.json"))
     assert "style" in still
     assert still[0] == "quality"
     assert still[1] == "sample"
@@ -477,9 +477,9 @@ def test_i2v_hides_style_t2v_keeps_it() -> None:
 
 
 def test_prompt_forge_keeps_style_on_i2v_family_encoders() -> None:
-    names = _widget_names(_load("inspire/prompt-forge.json"))
+    names = _widget_names(_load("labs/assist/prompt-forge.json"))
     assert names.count("style") == 6
-    labels = _labels(_load("inspire/prompt-forge.json"))
+    labels = _labels(_load("labs/assist/prompt-forge.json"))
     assert labels[0] == "Quality"
     assert labels[1] == "Sample prompt"
     assert "Prompt" in labels
@@ -490,7 +490,7 @@ def test_prompt_forge_keeps_style_on_i2v_family_encoders() -> None:
 
 
 def test_beat_sheet_labels_are_node_titles() -> None:
-    graph = _load("inspire/beat-sheet.json")
+    graph = _load("labs/assist/beat-sheet.json")
     labels = _labels(graph)
     assert labels[0] == "Quality"
     titles = [
@@ -589,7 +589,7 @@ def test_linear_input_node_id_accepts_int_and_rejects_colon_join() -> None:
 
 
 def test_frontend_1496_drops_two_part_widget_ids() -> None:
-    graph = _load("stills/still-draft.json")
+    graph = _load("photos/still-draft.json")
     node_ids = {int(n["id"]) for n in graph["nodes"]}
     enhance = next(
         n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance"
@@ -601,7 +601,7 @@ def test_frontend_1496_drops_two_part_widget_ids() -> None:
 
 
 def test_stamped_inputs_survive_frontend_1496_prune() -> None:
-    graph = copy.deepcopy(_load("stills/still-draft.json"))
+    graph = copy.deepcopy(_load("photos/still-draft.json"))
     stamped = stamp_app_mode(
         graph,
         inputs=[
@@ -611,7 +611,7 @@ def test_stamped_inputs_survive_frontend_1496_prune() -> None:
             ("KSampler", "seed"),
         ],
         outputs=["Save"],
-        lane="inspire",
+        lane="photos",
         occupancy="klein",
     )
     node_ids = {int(n["id"]) for n in stamped["nodes"]}

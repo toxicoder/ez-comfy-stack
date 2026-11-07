@@ -538,7 +538,7 @@ class EZCubicCondition:
     FUNCTION = "run"
     CATEGORY = CATEGORY
     DESCRIPTION = (
-        "stills/background-swap. Ordinary place prompts attach the encoded "
+        "photos/background-swap. Ordinary place prompts attach the encoded "
         "photo. Cube, voxel, and block-world prompts attach a coarse block "
         "study of that photo so Klein rebuilds the place instead of copying "
         "it. Without a usable person segmenter the photo anchors the rebuild."

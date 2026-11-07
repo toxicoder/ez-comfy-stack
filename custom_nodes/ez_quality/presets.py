@@ -668,7 +668,7 @@ def _free_commercial_overlay(
 ) -> QualityOverlay:
     """Apache Klein 4B stills + LTX-2.5 steps. Never 9B / FLUX.2-dev.
 
-    Wan, audio, trellis, and inspire are no-ops. Python never writes size.
+    Wan, audio, trellis, and labs/assist graphs are no-ops. Python never writes size.
 
     Args:
         occupancy: Graph occupancy id.

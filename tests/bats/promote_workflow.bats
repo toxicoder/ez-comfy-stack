@@ -15,7 +15,7 @@ setup() {
 teardown() {
   # These copies land in the live repo tree. Pytest is no-sandbox and
   # parametrizes lab JSON at collection time, so leftovers race CI.
-  rm -f "${REPO_ROOT}/workflows/_lab/stills/my-hook.json"
+  rm -f "${REPO_ROOT}/workflows/_lab/photos/my-hook.json"
   rm -rf "${REPO_ROOT}/workflows/_lab/audio/albums/demo"
   teardown_repo_env
 }
@@ -26,10 +26,19 @@ teardown() {
   run promote_usage
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"Usage:"* ]]
-  run promote_lane_ok stills
+  run promote_lane_ok photos
   [ "${status}" -eq 0 ]
   run promote_lane_ok nope
   [ "${status}" -ne 0 ]
+  local lane
+  for lane in photos video social business film audio 3d guides labs; do
+    run promote_lane_ok "${lane}"
+    [ "${status}" -eq 0 ]
+  done
+  for lane in stills motion creator services films dcc optional inspire editing; do
+    run promote_lane_ok "${lane}"
+    [ "${status}" -ne 0 ]
+  done
   local src="${TEST_TMP_DIR}/ok.json"
   printf '%s\n' '{"id":"ok"}' >"${src}"
   run promote_refuse_banned "${src}"
@@ -44,16 +53,16 @@ teardown() {
   sh="${REPO_ROOT}/scripts/utilities/promote-workflow.sh"
   src="${TEST_TMP_DIR}/bad.json"
   printf '%s\n' '{"id":"x","note":"MiniMax"}' >"${src}"
-  run bash "${sh}" --from "${src}" --lane stills --id my-hook
+  run bash "${sh}" --from "${src}" --lane photos --id my-hook
   [ "${status}" -ne 0 ]
   [[ "${output}" == *"MiniMax"* ]]
   printf '%s\n' '{"id":"ok"}' >"${src}"
-  run bash "${sh}" --from "${src}" --lane stills --id '..'
+  run bash "${sh}" --from "${src}" --lane photos --id '..'
   [ "${status}" -ne 0 ]
   run bash "${sh}" --from "${src}" --lane nope --id my-hook
   [ "${status}" -ne 0 ]
   [[ "${output}" == *"unknown lane"* ]]
-  run bash "${sh}" --from "${TEST_TMP_DIR}/missing.json" --lane stills --id my-hook
+  run bash "${sh}" --from "${TEST_TMP_DIR}/missing.json" --lane photos --id my-hook
   [ "${status}" -ne 0 ]
   run bash "${sh}" --help
   [ "${status}" -ne 0 ]
@@ -78,8 +87,8 @@ teardown() {
   sh="${REPO_ROOT}/scripts/utilities/promote-workflow.sh"
   src="${TEST_TMP_DIR}/keep-me.json"
   printf '%s\n' '{"id":"my-hook","nodes":[]}' >"${src}"
-  dest="${REPO_ROOT}/workflows/_lab/stills/my-hook.json"
-  run bash "${sh}" --from "${src}" --lane stills --id my-hook
+  dest="${REPO_ROOT}/workflows/_lab/photos/my-hook.json"
+  run bash "${sh}" --from "${src}" --lane photos --id my-hook
   [ "${status}" -eq 0 ]
   [[ -f ${dest} ]]
   grep -F 'my-hook' "${dest}"
@@ -90,8 +99,8 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ -f ${dest} ]]
   rm -rf "${REPO_ROOT}/workflows/_lab/audio/albums/demo"
-  run bash "${sh}" --from "${REPO_ROOT}/workflows/_lab/stills/still-draft.json" \
-    --lane stills --id cloned
+  run bash "${sh}" --from "${REPO_ROOT}/workflows/_lab/photos/still-draft.json" \
+    --lane photos --id cloned
   [ "${status}" -ne 0 ]
   [[ "${output}" == *"never copy _lab"* ]]
 }

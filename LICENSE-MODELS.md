@@ -73,7 +73,7 @@ Policy: US-based casual creators (YouTube, client shorts, ads under a small LLC)
 | Fish Audio S2 | Fish Audio S2 | research/NC | No | No | n/a | n/a | n/a | No |
 | Higgs Boson | Higgs v2/v3 | community/commercial traps | No | No | n/a | n/a | n/a | No |
 | TTS-Audio-Suite | diodiogod/TTS-Audio-Suite | mixed NC / research pack | No | No | n/a | n/a | n/a | No |
-| OldTimeRadio | jbrick2070/ComfyUI-OldTimeRadio | H3 / FLUX-dev / NC optional lanes | No | No | n/a | n/a | n/a | No |
+| OldTimeRadio | jbrick2070/ComfyUI-OldTimeRadio | H3 / FLUX-dev / NC opt-in lanes | No | No | n/a | n/a | n/a | No |
 
 TRELLIS.2 footnote: download `Comfy-Org/TRELLIS.2` (`trellis_2_int8_convrot` + shape/texture VAEs + `dino_v3_vit_l`). Original research weights: microsoft/TRELLIS.2. Companion encoder DINOv3 (Meta custom license, commercial-friendly) is not a default download - it ships inside opt-in `download-3d --tier trellis2`. Native TRELLIS Comfy basenames such as `trellis_2_int8_convrot` are opt-in via `download-3d` only - do not treat them as `download-models`.
 
@@ -84,7 +84,7 @@ TRELLIS.2 footnote: download `Comfy-Org/TRELLIS.2` (`trellis_2_int8_convrot` + s
 - Suno / Udio partner APIs
 - FLUX.2 [dev] as any default or "quality" image `--tier` alias (opt-in is `download-image --tier flux2-dev`)
 - FLUX.2 Klein 9B (`flux-2-klein-9b-fp8`, `FLUX.2-klein-9b-nvfp4`, Nunchaku 9B) as the **default** image model or a pinned lab UNET (opt-in is `download-image --tier 9b`)
-- FLUX 3 Image Klein (`flux3`, `flux3-base`, `flux3-nvfp4`, `flux3-bf16`, `flux3-te`, `flux3-pup`) as the **default** image model or in the flagship still lanes - FLUX Kommunity License (v1.0), opt-in only via `download-image --tier flux3`; the opt-in `stills/still-flux3-*` lab graphs are allowed and never default
+- FLUX 3 Image Klein (`flux3`, `flux3-base`, `flux3-nvfp4`, `flux3-bf16`, `flux3-te`, `flux3-pup`) as the **default** image model or promoted into the `photos/` lane - FLUX Kommunity License (v1.0), opt-in only via `download-image --tier flux3`; the opt-in `labs/opt-in/still-flux3-*` lab graphs are allowed and never default
 - Qwen-Image 2.1 (`qwen-image`, `qwen-image-turbo`, `qwen-image-nvfp4`, `qwen-image-turbo-nvfp4`, plus the `qwen-image-te` / `qwen-image-vae` companions) as the **default** image model, a pinned lab UNET, or a monetized-output pick - Qwen RESEARCH LICENSE AGREEMENT bars commercial use until you hold a separate paid Qwen license; opt-in only via `download-image --tier qwen-image*`, and **Klein 4B stays the Apache default still**
 - The raw `Qwen/Qwen-Image-2.1` and `Qwen/Qwen-Image-2.1-Turbo` diffusers folders as a download source - ComfyUI cannot load a diffusers tree in this stack; pull `Comfy-Org/Qwen-Image-2.1` instead
 - Nunchaku 9B packs

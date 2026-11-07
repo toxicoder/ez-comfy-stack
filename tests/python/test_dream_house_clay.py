@@ -1,4 +1,4 @@
-"""stills/dream-house-clay: 3D clay persistence + Klein edit."""
+"""photos/dream-house-clay: 3D clay persistence + Klein edit."""
 
 from __future__ import annotations
 
@@ -11,18 +11,18 @@ BANNED = ("MiniMax", "MiniMaxH3", "minimax_h3", "klein-9b", "FLUX.2-dev", "Wav2L
 
 
 def _load() -> dict:
-    path = lab_json("stills/dream-house-clay.json")
+    path = lab_json("photos/dream-house-clay.json")
     return json.loads(path.read_text(encoding="utf-8"))
 
 
 def test_dream_house_clay_contract() -> None:
     graph = _load()
     assert graph["id"] == "dream-house-clay"
-    assert graph["extra"].get("lab_rel") == "stills/dream-house-clay"
+    assert graph["extra"].get("lab_rel") == "photos/dream-house-clay"
     extra = graph["extra"]
-    assert extra["lab_profile"] == "stills/dream-house-clay"
+    assert extra["lab_profile"] == "photos/dream-house-clay"
     assert extra["lab_app_mode"]["occupancy"] == "klein"
-    assert extra["lab_app_mode"]["lane"] == "inspire"
+    assert extra["lab_app_mode"]["lane"] == "photos"
     blob = json.dumps(graph)
     for needle in BANNED:
         assert needle not in blob
@@ -57,17 +57,17 @@ def test_dream_house_clay_contract() -> None:
     assert "install-inputs" in note
     assert "seed-inputs" in note
     assert "start" in note
-    assert "stills/dream-house" in extra["lab_note"]
+    assert "photos/dream-house" in extra["lab_note"]
     assert extra["lab_app_mode"]["handoff"] == [
-        "motion/loops/gif-loop",
-        "motion/loops/bumper-loop",
-        "motion/loops/sticker-loop",
+        "video/loops/gif-loop",
+        "video/loops/bumper-loop",
+        "video/loops/sticker-loop",
     ]
 
 
 def test_dream_house_clay_hides_shots_and_images() -> None:
     graph = _load()
-    spec = STAMP_SPECS["stills/dream-house-clay"]
+    spec = STAMP_SPECS["photos/dream-house-clay"]
     assert spec.get("hide_images") is True
     names = [item[1] for item in infer_suite_inputs(graph, spec)]
     assert names.count("prompt") == 1

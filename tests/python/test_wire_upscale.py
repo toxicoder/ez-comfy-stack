@@ -17,10 +17,10 @@ from _wire_upscale import upscale_in_scope, wire_upscale  # noqa: E402
 
 
 def test_upscale_scope() -> None:
-    assert upscale_in_scope("stills/still-draft") is True
-    assert upscale_in_scope("creator/stills/youtube-channel-icon") is True
-    assert upscale_in_scope("dcc/clay-hero") is True
-    assert upscale_in_scope("motion/silent/still-to-video-5s") is False
+    assert upscale_in_scope("photos/still-draft") is True
+    assert upscale_in_scope("social/stills/youtube-channel-icon") is True
+    assert upscale_in_scope("guides/clay-hero") is True
+    assert upscale_in_scope("video/silent/still-to-video-5s") is False
     assert upscale_in_scope("audio/albums/nill-bye/peer-review/cover") is False
 
 
@@ -28,7 +28,7 @@ def test_wire_upscale_inserts_passthrough_node() -> None:
     graph: dict[str, Any] = {
         "last_node_id": 2,
         "last_link_id": 1,
-        "extra": {"lab_rel": "stills/still-draft"},
+        "extra": {"lab_rel": "photos/still-draft"},
         "nodes": [
             {
                 "id": 1,
@@ -50,7 +50,7 @@ def test_wire_upscale_inserts_passthrough_node() -> None:
         ],
         "links": [[1, 1, 0, 2, 0, "IMAGE"]],
     }
-    assert wire_upscale(graph, "stills/still-draft") is True
+    assert wire_upscale(graph, "photos/still-draft") is True
     types = [node.get("type") for node in graph["nodes"]]
     assert types.count("EZImageUpscale") == 1
     up = next(node for node in graph["nodes"] if node.get("type") == "EZImageUpscale")
@@ -63,7 +63,7 @@ def test_wire_upscale_inserts_passthrough_node() -> None:
         row for row in graph["links"] if int(row[0]) == int(src_link["link"])
     )
     assert int(origin[1]) == int(up["id"])
-    assert wire_upscale(graph, "stills/still-draft") is False
+    assert wire_upscale(graph, "photos/still-draft") is False
 
 
 def _save_image_source(graph: dict[str, Any], save: dict[str, Any]) -> dict[str, Any] | None:
@@ -85,7 +85,7 @@ def test_wire_upscale_reuses_orphan_between_match_and_save() -> None:
     graph: dict[str, Any] = {
         "last_node_id": 4,
         "last_link_id": 3,
-        "extra": {"lab_rel": "stills/background-swap"},
+        "extra": {"lab_rel": "photos/background-swap"},
         "nodes": [
             {
                 "id": 1,
@@ -136,7 +136,7 @@ def test_wire_upscale_reuses_orphan_between_match_and_save() -> None:
             [3, 3, 0, 2, 0, "IMAGE"],
         ],
     }
-    assert wire_upscale(graph, "stills/background-swap") is True
+    assert wire_upscale(graph, "photos/background-swap") is True
     ups = [node for node in graph["nodes"] if node.get("type") == "EZImageUpscale"]
     assert len(ups) == 1
     up = cast(dict[str, Any], ups[0])
@@ -154,7 +154,7 @@ def test_wire_upscale_reuses_orphan_between_match_and_save() -> None:
     for lid in decode_links:
         dest = cast(dict[str, Any], nodes[int(links[int(lid)][3])])
         assert dest["type"] != "EZImageUpscale"
-    assert wire_upscale(graph, "stills/background-swap") is False
+    assert wire_upscale(graph, "photos/background-swap") is False
 
 
 def test_lab_saves_run_through_upscale() -> None:

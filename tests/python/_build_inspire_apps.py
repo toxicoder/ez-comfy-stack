@@ -27,7 +27,7 @@ WF = ROOT / "workflows"
 
 LAZY = LAZY_FORGE
 
-FORGE_NOTE = """## inspire/prompt-forge
+FORGE_NOTE = """## labs/assist/prompt-forge
 
 Prompt Forge - rewrite a lazy sentence for every US-safe CLIP family. No UNET, no VAE, no KSampler.
 
@@ -41,14 +41,14 @@ Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to
 2. Optional **Context**: paste a research brief or bible. Empty is fine.
 3. Set family mode (t2i / i2v / t2v / s2v / iclora / vc), style, and aspect / duration hint on each enhance node.
 4. Queue. Each Enhance node previews the rewritten STRING. Klein, Wan, LTX, Z-Image, LongCat, and DreamX read the same Prompt and Context.
-5. Copy the family you need into **stills/still-draft** (Spark Still) or an opt-in graph.
+5. Copy the family you need into **photos/still-draft** (Spark Still) or an opt-in graph.
 
 Turn Enhance off to pin the widget text. Context is ignored when Enhance is off.
 Z-Image Turbo ignores a separate negative - exclusions stay in the positive.
 Wan S2V: wav owns lip-sync. DreamX: first frame owns look; paragraph is AV.
 """
 
-BEAT_NOTE = """## inspire/beat-sheet
+BEAT_NOTE = """## labs/assist/beat-sheet
 
 Script desk - 6 beats x enter / traverse / exit. Occupancy: none - stop nothing GPU.
 
@@ -62,8 +62,8 @@ Write YAML on the host:
 That writes `${COMFY_OUTPUT_DIR}/films/<slug>/shots.yaml`. The entrypoint does **not**
 copy YAML. Do not overwrite `workflows/shorts/*.shots.yaml` unless `--lab-example`.
 
-Next: stills/identity-sheet, or export-guides if clay is required, then
-dcc/clay-hero.
+Next: photos/identity-sheet, or export-guides if clay is required, then
+guides/clay-hero.
 
 Shot-card keys (defaults fail-closed):
 
@@ -78,7 +78,7 @@ Shot 1 of beat 1 load_from: identity. Later shots load_from: <prev_prefix>_last.
 Do not type a 30/60/90 s denoise. Standalone LTX Apps default to 8.00 s (193 frames = 1+8n @ 24 fps); film printers stay 5.00 s.
 """
 
-RESEARCH_NOTE = """## inspire/research-chat
+RESEARCH_NOTE = """## labs/assist/research-chat
 
 Creative research desk - chat LLM with web search and sequential research
 subagents. No UNET, no VAE, no KSampler.
@@ -94,13 +94,13 @@ network or GGUF is missing.
 1. Type a question (look, camera, lighting, world, reference).
 2. Mode **research** (planner + search subagents) or **chat** (one turn).
 3. Queue. Read **Reply** and **Sources**. Copy prompt ingredients into
-   **inspire/prompt-forge**, then **stills/still-draft**.
+   **labs/assist/prompt-forge**, then **photos/still-draft**.
 
 Laptop agents: `bazelisk run //:manage -- research-mcp --stdio` (Path D). Same
 pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
 """
 
-APP_FORGE_NOTE = """## inspire/app-forge
+APP_FORGE_NOTE = """## labs/assist/app-forge
 
 App Forge - clone a shipped lab graph into live `_user/` as a new App.
 No UNET, no VAE, no KSampler. Does not Queue the result.
@@ -113,7 +113,7 @@ Falls back to on-box Qwen3-4B if the sidecar is down, then a keyword
 heuristic if the GGUF is missing. CPU 4B is required next to Wan/LTX/TRELLIS.
 
 1. Type a **Brief** (or pick a sample). Leave **Template** on auto, or pin
-   a lab id such as stills/instagram-square.
+   a lab id such as photos/instagram-square.
 2. Set **Slug** (lowercase, hyphen). **As app** on writes `*.app.json`.
 3. Queue. Read **Path**, **Picked template**, and **Result occupancy**.
 4. Open `_user/<slug>` from the Apps sidebar. Queue that graph when GB10
@@ -124,7 +124,7 @@ pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
 Does not write `workflows/_lab/`. Keepers: `promote-workflow`.
 """
 
-CINEMA_NOTE = """## inspire/cinema-rack
+CINEMA_NOTE = """## labs/assist/cinema-rack
 
 Cinema Rack - pick one cinematography technique per axis and splice a Klein / Wan / LTX prompt. No UNET, no VAE, no KSampler.
 
@@ -139,13 +139,13 @@ Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to
 3. Pick at most one technique per axis (shot size, angle, move, lens, ...).
 4. Set **Family** (klein, wan_t2v, ltx_t2v, or the i2v / identity flavors).
 5. Queue. Each Enhance node previews the rewritten STRING. Style stays **none** so cinema clauses are not stripped.
-6. Copy the family you need into **stills/still-draft** or an I2V graph.
+6. Copy the family you need into **photos/still-draft** or an I2V graph.
 
 Wan emits **one** camera verb. I2V drops look axes (start image owns grade). Editing is omitted on stills.
 Cinema Rack is deterministic (no LLM). Enhance is optional downstream.
 """
 
-AUDIO_NOTE = """## inspire/audio-rack
+AUDIO_NOTE = """## labs/assist/audio-rack
 
 Audio Rack - pick one audio/music technique per axis and splice ACE-Step tags and lyrics form. No UNET, no VAE, no KSampler.
 
@@ -271,7 +271,7 @@ def build_prompt_forge() -> dict:
     row2_y = row2_group_top + GROUP_TITLE_INSET
     prompt_links = [1, 2, 3, 7, 8, 9]
     ctx_links = [4, 5, 6, 10, 11, 12]
-    cat = "inspire/prompt-forge"
+    cat = "labs/assist/prompt-forge"
     note = _node(
         1,
         "Note",
@@ -383,7 +383,7 @@ def build_prompt_forge() -> dict:
         [12, 6, 0, 9, 1, "STRING"],
     ]
     graph = {
-        "id": "inspire/prompt-forge",
+        "id": "labs/assist/prompt-forge",
         "revision": 1,
         "last_node_id": 9,
         "last_link_id": 12,
@@ -409,7 +409,7 @@ def build_prompt_forge() -> dict:
         ],
         "config": {},
         "extra": {
-            "lab_profile": "inspire/prompt-forge",
+            "lab_profile": "labs/assist/prompt-forge",
             "lab_note": FORGE_NOTE,
             "lab_description": (
                 "No-UNET Prompt Forge: shared prompt + Klein / Wan / LTX / "
@@ -481,7 +481,7 @@ def build_beat_sheet() -> dict:
                     [x, desk_y],
                     [card_w, desk_h],
                     title,
-                    ["custom", placeholder, "inspire/beat-sheet"],
+                    ["custom", placeholder, "labs/assist/beat-sheet"],
                     nid - 1,
                     _str_out("prompt"),
                 )
@@ -623,7 +623,7 @@ def build_beat_sheet() -> dict:
     policy = next(n for n in nodes if n["id"] == 4)
     policy["outputs"][0]["links"] = [policy_lid, *policy_audio_links]
     graph = {
-        "id": "inspire/beat-sheet",
+        "id": "labs/assist/beat-sheet",
         "revision": 1,
         "last_node_id": nid - 1,
         "last_link_id": lid - 1,
@@ -632,7 +632,7 @@ def build_beat_sheet() -> dict:
         "groups": groups,
         "config": {},
         "extra": {
-            "lab_profile": "inspire/beat-sheet",
+            "lab_profile": "labs/assist/beat-sheet",
             "lab_note": BEAT_NOTE,
             "lab_description": "Script desk: logline, audio policy, 18 shot cards -> shot-sheet YAML",
             "ds": {"scale": 1, "offset": [0, 0]},
@@ -663,12 +663,12 @@ def build_research_chat() -> dict:
         [40, desk_y],
         [720, desk_h],
         "Creative research",
-        ["custom", RESEARCH_MESSAGE, "research", True, 2, "", "inspire/research-chat"],
+        ["custom", RESEARCH_MESSAGE, "research", True, 2, "", "labs/assist/research-chat"],
         1,
         [{"name": "reply", "type": "STRING", "links": None, "slot_index": 0}],
     )
     graph = {
-        "id": "inspire/research-chat",
+        "id": "labs/assist/research-chat",
         "revision": 1,
         "last_node_id": 2,
         "last_link_id": 0,
@@ -688,7 +688,7 @@ def build_research_chat() -> dict:
         ],
         "config": {},
         "extra": {
-            "lab_profile": "inspire/research-chat",
+            "lab_profile": "labs/assist/research-chat",
             "lab_note": RESEARCH_NOTE,
             "lab_description": (
                 "No-UNET creative research chat: web search + sequential subagents"
@@ -728,12 +728,12 @@ def build_app_forge() -> dict:
         [40, desk_y],
         [720, desk_h],
         "App Forge",
-        ["custom", APP_FORGE_BRIEF, "auto", "mug-ig", True, False, "inspire/app-forge"],
+        ["custom", APP_FORGE_BRIEF, "auto", "mug-ig", True, False, "labs/assist/app-forge"],
         1,
         [{"name": "path", "type": "STRING", "links": None, "slot_index": 0}],
     )
     graph = {
-        "id": "inspire/app-forge",
+        "id": "labs/assist/app-forge",
         "revision": 1,
         "last_node_id": 2,
         "last_link_id": 0,
@@ -753,7 +753,7 @@ def build_app_forge() -> dict:
         ],
         "config": {},
         "extra": {
-            "lab_profile": "inspire/app-forge",
+            "lab_profile": "labs/assist/app-forge",
             "lab_note": APP_FORGE_NOTE,
             "lab_description": (
                 "No-UNET App Forge: clone a lab graph into live _user/"
@@ -817,7 +817,7 @@ def build_cinema_rack() -> dict:
         [40, enh_y],
         [420, 300],
         "Klein family",
-        ["custom", LAZY, True, "t2i", "YouTube 16:9 still", "none", "inspire/cinema-rack"],
+        ["custom", LAZY, True, "t2i", "YouTube 16:9 still", "none", "labs/assist/cinema-rack"],
         2,
         _str_out(),
     )
@@ -828,7 +828,7 @@ def build_cinema_rack() -> dict:
         [500, enh_y],
         [420, 300],
         "Wan family",
-        ["custom", LAZY, True, "t2v", "5 seconds, 24 fps", "none", "inspire/cinema-rack"],
+        ["custom", LAZY, True, "t2v", "5 seconds, 24 fps", "none", "labs/assist/cinema-rack"],
         3,
         _str_out(),
     )
@@ -847,7 +847,7 @@ def build_cinema_rack() -> dict:
             "5 seconds, 24 fps",
             "world SFX, no score",
             "none",
-            "inspire/cinema-rack",
+            "labs/assist/cinema-rack",
         ],
         4,
         _str_out(),
@@ -859,7 +859,7 @@ def build_cinema_rack() -> dict:
         [3, 5, 0, 4, 0, "STRING"],
     ]
     graph = {
-        "id": "inspire/cinema-rack",
+        "id": "labs/assist/cinema-rack",
         "revision": 1,
         "last_node_id": 5,
         "last_link_id": 3,
@@ -882,7 +882,7 @@ def build_cinema_rack() -> dict:
         ],
         "config": {},
         "extra": {
-            "lab_profile": "inspire/cinema-rack",
+            "lab_profile": "labs/assist/cinema-rack",
             "lab_note": CINEMA_NOTE,
             "lab_description": (
                 "No-UNET Cinema Rack: splice cinematography axes into Klein / Wan / LTX"
@@ -933,7 +933,7 @@ def build_audio_rack() -> dict:
         [40, enh_y],
         [640, 360],
         "Vocal family",
-        ["custom", "", "", True, "vocal", "inspire/audio-rack"],
+        ["custom", "", "", True, "vocal", "labs/assist/audio-rack"],
         2,
         [
             {"name": "tags", "type": "STRING", "links": [], "slot_index": 0},
@@ -947,7 +947,7 @@ def build_audio_rack() -> dict:
         [720, enh_y],
         [640, 360],
         "Instrumental family",
-        ["custom", "", "", True, "instrumental", "inspire/audio-rack"],
+        ["custom", "", "", True, "instrumental", "labs/assist/audio-rack"],
         3,
         [
             {"name": "tags", "type": "STRING", "links": [], "slot_index": 0},
@@ -962,7 +962,7 @@ def build_audio_rack() -> dict:
         [4, 5, 1, 3, 1, "STRING"],
     ]
     graph = {
-        "id": "inspire/audio-rack",
+        "id": "labs/assist/audio-rack",
         "revision": 1,
         "last_node_id": 5,
         "last_link_id": 4,
@@ -986,7 +986,7 @@ def build_audio_rack() -> dict:
         ],
         "config": {},
         "extra": {
-            "lab_profile": "inspire/audio-rack",
+            "lab_profile": "labs/assist/audio-rack",
             "lab_note": AUDIO_NOTE,
             "lab_description": (
                 "No-UNET Audio Rack: splice music axes into ACE-Step tags / lyrics"
@@ -998,7 +998,7 @@ def build_audio_rack() -> dict:
     return graph
 
 
-LONGCAT_NOTE = """## optional/longcat-video
+LONGCAT_NOTE = """## labs/opt-in/longcat-video
 
 Opt-in LongCat-Video (MIT) prompt preview. Not download-models. No UNET on this canvas.
 
@@ -1014,7 +1014,7 @@ Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Enhance of
 
 def build_longcat_stub() -> dict:
     note_h = 360.0
-    cat = "optional/longcat-video"
+    cat = "labs/opt-in/longcat-video"
     note = _node(
         1,
         "Note",
@@ -1077,7 +1077,7 @@ def build_longcat_stub() -> dict:
         "config": {},
         "extra": {
             "lab_note": LONGCAT_NOTE,
-            "lab_profile": "optional/longcat-video",
+            "lab_profile": "labs/opt-in/longcat-video",
             "lab_description": "LongCat-Video MIT opt-in prompt preview. No NCCL. Not a 90s default.",
             "lab_longcat": {
                 "enabled": True,
@@ -1085,7 +1085,7 @@ def build_longcat_stub() -> dict:
                 "context_parallel": "LAB_ALLOW_CONTEXT_PARALLEL=1",
             },
             "lab_stub": True,
-            "lab_rel": "optional/longcat-video",
+            "lab_rel": "labs/opt-in/longcat-video",
             "ds": {"scale": 1, "offset": [0, 0]},
         },
         "version": 0.4,
@@ -1094,13 +1094,13 @@ def build_longcat_stub() -> dict:
 
 
 def main() -> None:
-    _dump(lab_json("inspire/prompt-forge.json"), build_prompt_forge())
-    _dump(lab_json("inspire/beat-sheet.json"), build_beat_sheet())
-    _dump(lab_dest("inspire/research-chat.json"), build_research_chat())
-    _dump(lab_dest("inspire/cinema-rack.json"), build_cinema_rack())
-    _dump(lab_dest("inspire/audio-rack.json"), build_audio_rack())
-    _dump(lab_dest("inspire/app-forge.json"), build_app_forge())
-    _dump(lab_json("optional/longcat-video.json"), build_longcat_stub())
+    _dump(lab_json("labs/assist/prompt-forge.json"), build_prompt_forge())
+    _dump(lab_json("labs/assist/beat-sheet.json"), build_beat_sheet())
+    _dump(lab_dest("labs/assist/research-chat.json"), build_research_chat())
+    _dump(lab_dest("labs/assist/cinema-rack.json"), build_cinema_rack())
+    _dump(lab_dest("labs/assist/audio-rack.json"), build_audio_rack())
+    _dump(lab_dest("labs/assist/app-forge.json"), build_app_forge())
+    _dump(lab_json("labs/opt-in/longcat-video.json"), build_longcat_stub())
 
 
 if __name__ == "__main__":

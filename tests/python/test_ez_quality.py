@@ -468,7 +468,7 @@ def test_audio_and_trellis_and_inspire() -> None:
 
 
 def test_apply_klein_draft_does_not_change_latent_size() -> None:
-    graph = copy.deepcopy(_load("stills/still-draft.json"))
+    graph = copy.deepcopy(_load("photos/still-draft.json"))
     latent = next(n for n in graph["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
     before = list(latent["widgets_values"])
     apply_to_graph(graph, QUALITY_DRAFT, available_unets=(KLEIN_DISTILLED,))
@@ -479,7 +479,7 @@ def test_apply_klein_draft_does_not_change_latent_size() -> None:
 
 
 def test_apply_klein_high_fallback_keeps_distilled() -> None:
-    graph = copy.deepcopy(_load("stills/still-draft.json"))
+    graph = copy.deepcopy(_load("photos/still-draft.json"))
     apply_to_graph(graph, QUALITY_HIGH, available_unets=(KLEIN_DISTILLED,))
     assert _unet(graph)["widgets_values"][UNET_NAME_INDEX] == KLEIN_DISTILLED
     sampler = _sampler(graph)
@@ -488,7 +488,7 @@ def test_apply_klein_high_fallback_keeps_distilled() -> None:
 
 
 def test_apply_klein_high_swaps_when_base_listed() -> None:
-    graph = copy.deepcopy(_load("stills/still-draft.json"))
+    graph = copy.deepcopy(_load("photos/still-draft.json"))
     apply_to_graph(
         graph, QUALITY_HIGH, available_unets=(KLEIN_DISTILLED, KLEIN_BASE)
     )
@@ -501,7 +501,7 @@ def test_apply_klein_high_swaps_when_base_listed() -> None:
 
 
 def test_apply_wan_does_not_change_frames_or_unet() -> None:
-    graph = copy.deepcopy(_load("motion/silent/still-to-video-5s.json"))
+    graph = copy.deepcopy(_load("video/silent/still-to-video-5s.json"))
     unet_before = _unet(graph)["widgets_values"][UNET_NAME_INDEX]
     latent = next(
         n for n in graph["nodes"] if n.get("type") == "Wan22ImageToVideoLatent"
@@ -516,7 +516,7 @@ def test_apply_wan_does_not_change_frames_or_unet() -> None:
 
 
 def test_apply_ltx_does_not_change_length() -> None:
-    graph = copy.deepcopy(_load("motion/av/still-to-video-8s.json"))
+    graph = copy.deepcopy(_load("video/av/still-to-video-8s.json"))
     video = next(n for n in graph["nodes"] if n.get("type") == "LTXVImgToVideo")
     before = list(video["widgets_values"])
     apply_to_graph(graph, QUALITY_HIGH)
@@ -526,7 +526,7 @@ def test_apply_ltx_does_not_change_length() -> None:
 
 
 def test_apply_a14b_is_noop() -> None:
-    graph = copy.deepcopy(_load("optional/still-to-video-a14b.json"))
+    graph = copy.deepcopy(_load("labs/opt-in/still-to-video-a14b.json"))
     sampler_before = list(_sampler(graph)["widgets_values"])
     unets_before = [
         n["widgets_values"][0]
@@ -548,7 +548,7 @@ def test_apply_a14b_is_noop() -> None:
 
 
 def test_ensure_quality_node_is_idempotent() -> None:
-    graph = copy.deepcopy(_load("stills/still-draft.json"))
+    graph = copy.deepcopy(_load("photos/still-draft.json"))
     ensure_quality_node(graph)
     first = find_quality_node(graph)
     assert first is not None
@@ -567,7 +567,7 @@ def test_ensure_quality_node_is_idempotent() -> None:
 
 
 def test_ensure_quality_keeps_required_still_first() -> None:
-    graph = copy.deepcopy(_load("stills/talking-head.json"))
+    graph = copy.deepcopy(_load("video/av/talking-head.json"))
     ensure_quality_node(graph)
     names = [row[1] for row in graph["extra"]["linearData"]["inputs"]]
     assert names[0] == "image"
@@ -578,7 +578,7 @@ def test_ensure_quality_keeps_required_still_first() -> None:
 
 
 def test_ensure_quality_places_without_overlap() -> None:
-    graph = copy.deepcopy(_load("films/go-see.json"))
+    graph = copy.deepcopy(_load("film/go-see.json"))
     ensure_quality_node(graph)
     quality = find_quality_node(graph)
     assert quality is not None
@@ -748,7 +748,7 @@ def test_apply_with_no_unet_loader() -> None:
 
 
 def test_apply_refuses_banned_unet_overlay(monkeypatch: pytest.MonkeyPatch) -> None:
-    graph = copy.deepcopy(_load("stills/still-draft.json"))
+    graph = copy.deepcopy(_load("photos/still-draft.json"))
     before = _unet(graph)["widgets_values"][UNET_NAME_INDEX]
 
     def _banned(**_kwargs: object) -> QualityOverlay:
@@ -1088,7 +1088,7 @@ def test_model_check_report_forwards_canonical_pack_ids(
 ) -> None:
     """Missing packs are named by Need.pack from the payload, never re-derived."""
     payload = run_check(
-        {"lab_rel": "stills/x.json", "occupancy": occupancy, "quality": quality},
+        {"lab_rel": "photos/x.json", "occupancy": occupancy, "quality": quality},
         roots=[],
     )
     assert payload["ok"] is False
@@ -1110,7 +1110,7 @@ def test_custom_and_lab_are_noop() -> None:
         available_unets=(KLEIN_DISTILLED, KLEIN_BASE, KLEIN_9B),
     )
     assert overlay == QualityOverlay()
-    graph = copy.deepcopy(_load("stills/still-draft.json"))
+    graph = copy.deepcopy(_load("photos/still-draft.json"))
     before = _values(_sampler(graph))[KSAMPLER_STEPS_INDEX]
     apply_to_graph(
         graph,
@@ -1475,7 +1475,7 @@ def test_free_commercial_ltx_is_high_steps_wan_audio_are_noop() -> None:
 
 
 def test_apply_free_commercial_keeps_size_and_skips_wan() -> None:
-    still = copy.deepcopy(_load("stills/still-draft.json"))
+    still = copy.deepcopy(_load("photos/still-draft.json"))
     latent = next(n for n in still["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
     before = list(latent["widgets_values"])
     apply_to_graph(
@@ -1486,13 +1486,13 @@ def test_apply_free_commercial_keeps_size_and_skips_wan() -> None:
     assert latent["widgets_values"] == before
     assert _unet(still)["widgets_values"][UNET_NAME_INDEX] == KLEIN_BASE
     assert _sampler(still)["widgets_values"][KSAMPLER_STEPS_INDEX] == KLEIN_HIGH_BASE_STEPS
-    ltx_graph = copy.deepcopy(_load("motion/av/still-to-video-8s.json"))
+    ltx_graph = copy.deepcopy(_load("video/av/still-to-video-8s.json"))
     video = next(n for n in ltx_graph["nodes"] if n.get("type") == "LTXVImgToVideo")
     length_before = list(video["widgets_values"])
     apply_to_graph(ltx_graph, QUALITY_FREE_COMMERCIAL)
     assert video["widgets_values"] == length_before
     assert _sampler(ltx_graph)["widgets_values"][KSAMPLER_STEPS_INDEX] == LTX_HIGH_STEPS
-    wan_graph = copy.deepcopy(_load("motion/silent/still-to-video-5s.json"))
+    wan_graph = copy.deepcopy(_load("video/silent/still-to-video-5s.json"))
     wan_steps = list(_sampler(wan_graph)["widgets_values"])
     wan_unet = _unet(wan_graph)["widgets_values"][UNET_NAME_INDEX]
     apply_to_graph(wan_graph, QUALITY_FREE_COMMERCIAL)
@@ -1508,7 +1508,7 @@ def test_person_mask_need_follows_the_reinsert_node(tmp_path: Path) -> None:
     """
     with_node = requirements_for(
         CheckHints(
-            lab_rel="stills/background-swap",
+            lab_rel="photos/background-swap",
             occupancy="none",
             types=("EZCubicCondition", "EZReinsertPeople"),
         )
@@ -1519,7 +1519,7 @@ def test_person_mask_need_follows_the_reinsert_node(tmp_path: Path) -> None:
     assert PERSON_WEIGHT == "deeplabv3_resnet50_coco-cd0a2569.pth"
     without_node = requirements_for(
         CheckHints(
-            lab_rel="stills/background-edit",
+            lab_rel="photos/background-edit",
             occupancy="none",
             types=("EZKleinPromptEnhance",),
         )
@@ -1528,7 +1528,7 @@ def test_person_mask_need_follows_the_reinsert_node(tmp_path: Path) -> None:
 
     missing = scan(
         CheckHints(
-            lab_rel="stills/background-swap",
+            lab_rel="photos/background-swap",
             occupancy="none",
             types=("EZReinsertPeople",),
         ),
@@ -1543,7 +1543,7 @@ def test_person_mask_need_follows_the_reinsert_node(tmp_path: Path) -> None:
     weight.write_bytes(b"x")
     found = scan(
         CheckHints(
-            lab_rel="stills/background-swap",
+            lab_rel="photos/background-swap",
             occupancy="none",
             types=("EZReinsertPeople",),
         ),
@@ -1835,7 +1835,7 @@ def test_apply_flux3_profile_skips_foreign_clip_and_vae() -> None:
 
 @pytest.mark.parametrize("quality", FLUX3_QUALITY_CHOICES)
 def test_apply_flux3_profile_leaves_klein_graph_authored(quality: str) -> None:
-    graph = copy.deepcopy(_load("stills/still-draft.json"))
+    graph = copy.deepcopy(_load("photos/still-draft.json"))
     sampler_before = list(_values(_sampler(graph)))
     loaders_before = {
         node["type"]: list(node["widgets_values"])
@@ -1959,7 +1959,7 @@ def test_flux3_check_needs_are_per_profile() -> None:
         quality: {
             need.pack: need
             for need in requirements_for(
-                CheckHints(lab_rel="stills/flux3", occupancy="klein", quality=quality)
+                CheckHints(lab_rel="photos/flux3", occupancy="klein", quality=quality)
             )
         }
         for quality in FLUX3_QUALITY_CHOICES
@@ -2015,7 +2015,7 @@ def test_command_for_filename_maps_flux3_files_without_moving_others() -> None:
 
 def test_scan_flux3_quality_profile_missing_then_present(tmp_path: Path) -> None:
     hints = CheckHints(
-        lab_rel="stills/flux3",
+        lab_rel="photos/flux3",
         occupancy="klein",
         quality=QUALITY_FLUX3_QUALITY,
         unets=(KLEIN3_BASE,),
@@ -2491,7 +2491,7 @@ def test_apply_qwen_image_profile_skips_foreign_clip_and_vae() -> None:
 
 @pytest.mark.parametrize("quality", QWEN_QUALITY_CHOICES)
 def test_apply_qwen_image_profile_leaves_klein_graph_authored(quality: str) -> None:
-    graph = copy.deepcopy(_load("stills/still-draft.json"))
+    graph = copy.deepcopy(_load("photos/still-draft.json"))
     sampler_before = list(_values(_sampler(graph)))
     loaders_before = {
         node["type"]: list(node["widgets_values"])
@@ -2612,7 +2612,7 @@ def test_qwen_image_check_needs_are_per_profile(
         need.pack: need
         for need in requirements_for(
             CheckHints(
-                lab_rel="stills/qwen-image", occupancy="klein", quality=quality
+                lab_rel="photos/qwen-image", occupancy="klein", quality=quality
             )
         )
     }
@@ -2679,7 +2679,7 @@ def test_command_for_filename_maps_qwen_image_files_without_moving_others() -> N
 
 def test_scan_qwen_image_profile_missing_then_present(tmp_path: Path) -> None:
     hints = CheckHints(
-        lab_rel="stills/qwen-image",
+        lab_rel="photos/qwen-image",
         occupancy="klein",
         quality=QUALITY_QWEN_IMAGE_NVFP4,
         unets=(QWEN_IMAGE_NVFP4,),

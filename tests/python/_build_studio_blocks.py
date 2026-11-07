@@ -26,7 +26,7 @@ SPECS = (
         "klein-t2i-backbone",
         KLEIN_UUID,
         "klein",
-        "stills/still-draft.json",
+        "photos/still-draft.json",
         (
             ("prompt", "STRING"),
             ("negative", "STRING"),
@@ -42,7 +42,7 @@ SPECS = (
         "wan-i2v-5s",
         WAN_UUID,
         "wan",
-        "motion/silent/still-to-video-5s.json",
+        "video/silent/still-to-video-5s.json",
         (
             ("image", "IMAGE"),
             ("prompt", "STRING"),
@@ -56,7 +56,7 @@ SPECS = (
         "ltx-av-8s",
         LTX_AV_UUID,
         "ltx",
-        "motion/av/still-to-video-8s.json",
+        "video/av/still-to-video-8s.json",
         (
             ("image", "IMAGE"),
             ("prompt", "STRING"),
@@ -71,7 +71,7 @@ SPECS = (
         "ltx-film-shot",
         LTX_SHOT_UUID,
         "film",
-        "motion/av/still-to-shot.json",
+        "video/av/still-to-shot.json",
         (
             ("image", "IMAGE"),
             ("prompt", "STRING"),
