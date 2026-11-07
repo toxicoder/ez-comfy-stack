@@ -10,6 +10,8 @@ import pytest
 from _lab_ids import OLD_TO_REL, rel_id
 from _lab_paths import (
     ALLOWED_LANES,
+    LANE_BY_ID,
+    LANE_REGISTRY,
     LAB_ROOT,
     WF,
     cached_lab_graph_map,
@@ -17,6 +19,8 @@ from _lab_paths import (
     lab_graph_paths,
     lab_json,
     lane_for_stem,
+    lane_meta,
+    lane_specs,
     load_lab_graph,
 )
 from _audit_lab_graphs import audit_lab_graphs
@@ -59,6 +63,39 @@ def test_every_lab_graph_lives_under_allowed_lane() -> None:
         extra = load_lab_graph(path).get("extra") or {}
         if extra.get("lab_rel"):
             assert extra["lab_rel"] == rel.with_suffix("").as_posix()
+
+
+def test_lane_registry_is_the_one_lane_list() -> None:
+    """Every browsable lane comes from LANE_REGISTRY, in a stated order."""
+    assert tuple(spec.id for spec in LANE_REGISTRY) == ALLOWED_LANES
+    assert [spec.id for spec in lane_specs()] == sorted(
+        (spec.id for spec in LANE_REGISTRY),
+        key=lambda lane: (LANE_BY_ID[lane].order, lane),
+    )
+    assert len({spec.id for spec in LANE_REGISTRY}) == len(LANE_REGISTRY)
+    assert len({spec.order for spec in LANE_REGISTRY}) == len(LANE_REGISTRY)
+    for spec in LANE_REGISTRY:
+        assert spec.title.strip() == spec.title and spec.title
+        assert spec.description.strip() == spec.description and spec.description
+        assert spec.id == spec.id.strip().lower()
+        assert "/" not in spec.id and spec.id not in {".", ".."}
+
+
+def test_every_shipped_lane_is_registered() -> None:
+    """A folder under ``_lab`` with no registry entry is a navigation defect."""
+    lanes = {path.relative_to(LAB_ROOT).parts[0] for path in lab_graph_paths()}
+    assert lanes, "no lab graphs found"
+    for lane in sorted(lanes):
+        assert lane_meta(lane) is not None, lane
+        assert lane in ALLOWED_LANES, lane
+
+
+def test_lane_meta_resolves_and_rejects_unknown() -> None:
+    """The registry answers for a known lane and says nothing for a stray."""
+    assert lane_meta("stills") is LANE_BY_ID["stills"]
+    assert lane_meta("  stills  ") is LANE_BY_ID["stills"]
+    assert lane_meta("no-such-lane") is None
+    assert lane_meta("") is None
 
 
 def test_no_lab_example_suffix() -> None:

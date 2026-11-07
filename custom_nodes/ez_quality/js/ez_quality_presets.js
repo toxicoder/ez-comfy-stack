@@ -12,6 +12,10 @@
  *   EZ_QUALITY_OWNED[family]        fields that family's tiers ever set; a
  *                                   change outside this list keeps the level.
  *   EZ_QUALITY_LABELS[family][tier] caption naming the swap, for the combo.
+ *   EZ_QUALITY_TIERS[family]        the only tiers that family can honor; a
+ *                                   tier outside this list has an all-null
+ *                                   overlay, so the combo drops it and keeps
+ *                                   lab and custom.
  */
 
 export const EZ_QUALITY_CHOICES = [
@@ -423,7 +427,7 @@ export const EZ_QUALITY_TABLE = {
       "clip_type": null
     },
     "ultra": {
-      "steps": 28,
+      "steps": null,
       "cfg": null,
       "unet_name": null,
       "clip_name": null,
@@ -529,7 +533,7 @@ export const EZ_QUALITY_TABLE = {
       "clip_type": null
     },
     "ultra": {
-      "steps": 28,
+      "steps": null,
       "cfg": null,
       "unet_name": null,
       "clip_name": null,
@@ -635,7 +639,7 @@ export const EZ_QUALITY_TABLE = {
       "clip_type": null
     },
     "ultra": {
-      "steps": 28,
+      "steps": null,
       "cfg": null,
       "unet_name": null,
       "clip_name": null,
@@ -741,7 +745,7 @@ export const EZ_QUALITY_TABLE = {
       "clip_type": null
     },
     "ultra": {
-      "steps": 16,
+      "steps": null,
       "cfg": null,
       "unet_name": null,
       "clip_name": null,
@@ -847,7 +851,7 @@ export const EZ_QUALITY_TABLE = {
       "clip_type": null
     },
     "ultra": {
-      "steps": 20,
+      "steps": null,
       "cfg": null,
       "unet_name": null,
       "clip_name": null,
@@ -1227,7 +1231,7 @@ export const EZ_QUALITY_LABELS = {
     "standard": "20 steps",
     "high": "28 steps",
     "Free Commercial Use (<$10M)": "",
-    "ultra": "28 steps",
+    "ultra": "",
     "max": "32 steps",
     "flux3-fast": "",
     "flux3-quality": "",
@@ -1242,7 +1246,7 @@ export const EZ_QUALITY_LABELS = {
     "standard": "20 steps",
     "high": "28 steps",
     "Free Commercial Use (<$10M)": "28 steps",
-    "ultra": "28 steps",
+    "ultra": "",
     "max": "32 steps",
     "flux3-fast": "",
     "flux3-quality": "",
@@ -1257,7 +1261,7 @@ export const EZ_QUALITY_LABELS = {
     "standard": "20 steps",
     "high": "28 steps",
     "Free Commercial Use (<$10M)": "28 steps",
-    "ultra": "28 steps",
+    "ultra": "",
     "max": "32 steps",
     "flux3-fast": "",
     "flux3-quality": "",
@@ -1272,7 +1276,7 @@ export const EZ_QUALITY_LABELS = {
     "standard": "8 steps",
     "high": "16 steps",
     "Free Commercial Use (<$10M)": "",
-    "ultra": "16 steps",
+    "ultra": "",
     "max": "24 steps",
     "flux3-fast": "",
     "flux3-quality": "",
@@ -1287,7 +1291,7 @@ export const EZ_QUALITY_LABELS = {
     "standard": "12 steps",
     "high": "20 steps",
     "Free Commercial Use (<$10M)": "",
-    "ultra": "20 steps",
+    "ultra": "",
     "max": "28 steps",
     "flux3-fast": "",
     "flux3-quality": "",
@@ -1327,6 +1331,62 @@ export const EZ_QUALITY_LABELS = {
     "qwen-image-nvfp4": "",
     "qwen-image-turbo-nvfp4": ""
   }
+};
+
+export const EZ_QUALITY_TIERS = {
+  "klein": [
+    "draft",
+    "standard",
+    "high",
+    "Free Commercial Use (<$10M)",
+    "ultra",
+    "max"
+  ],
+  "klein3": [
+    "flux3-fast",
+    "flux3-quality",
+    "flux3-nvfp4"
+  ],
+  "qwen": [
+    "qwen-image",
+    "qwen-image-turbo",
+    "qwen-image-nvfp4",
+    "qwen-image-turbo-nvfp4"
+  ],
+  "wan": [
+    "draft",
+    "standard",
+    "high",
+    "max"
+  ],
+  "ltx": [
+    "draft",
+    "standard",
+    "high",
+    "Free Commercial Use (<$10M)",
+    "max"
+  ],
+  "film": [
+    "draft",
+    "standard",
+    "high",
+    "Free Commercial Use (<$10M)",
+    "max"
+  ],
+  "audio": [
+    "draft",
+    "standard",
+    "high",
+    "max"
+  ],
+  "trellis": [
+    "draft",
+    "standard",
+    "high",
+    "max"
+  ],
+  "none": [],
+  "llm": []
 };
 
 export const EZ_QUALITY_CUSTOM = "custom";

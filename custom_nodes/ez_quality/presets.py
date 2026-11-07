@@ -576,76 +576,84 @@ def resolve_overlay(
     return QualityOverlay()
 
 
-def _wan_steps(choice: str) -> int:
+def _wan_steps(choice: str) -> int | None:
     """Wan 5B step overlay.
 
     Args:
         choice: Named quality (not custom/lab).
 
     Returns:
-        Step count.
+        Step count, or None when Wan has no level by that name.
     """
     if choice == QUALITY_DRAFT:
         return WAN_DRAFT_STEPS
     if choice == QUALITY_STANDARD:
         return WAN_STANDARD_STEPS
+    if choice == QUALITY_HIGH:
+        return WAN_HIGH_STEPS
     if choice == QUALITY_MAX:
         return WAN_MAX_STEPS
-    return WAN_HIGH_STEPS
+    return None
 
 
-def _ltx_steps(choice: str) -> int:
+def _ltx_steps(choice: str) -> int | None:
     """LTX / film step overlay.
 
     Args:
         choice: Named quality.
 
     Returns:
-        Step count.
+        Step count, or None when LTX has no level by that name.
     """
     if choice == QUALITY_DRAFT:
         return LTX_DRAFT_STEPS
     if choice == QUALITY_STANDARD:
         return LTX_STANDARD_STEPS
+    if choice == QUALITY_HIGH:
+        return LTX_HIGH_STEPS
     if choice == QUALITY_MAX:
         return LTX_MAX_STEPS
-    return LTX_HIGH_STEPS
+    return None
 
 
-def _audio_steps(choice: str) -> int:
+def _audio_steps(choice: str) -> int | None:
     """ACE / audio step overlay.
 
     Args:
         choice: Named quality.
 
     Returns:
-        Step count.
+        Step count, or None when audio has no level by that name.
     """
     if choice == QUALITY_DRAFT:
         return AUDIO_DRAFT_STEPS
     if choice == QUALITY_STANDARD:
         return AUDIO_STANDARD_STEPS
+    if choice == QUALITY_HIGH:
+        return AUDIO_HIGH_STEPS
     if choice == QUALITY_MAX:
         return AUDIO_MAX_STEPS
-    return AUDIO_HIGH_STEPS
+    return None
 
 
-def _trellis_steps(choice: str) -> int:
+def _trellis_steps(choice: str) -> int | None:
     """TRELLIS step overlay.
 
     Args:
         choice: Named quality.
 
     Returns:
-        Step count.
+        Step count, or None when TRELLIS has no level by that name.
     """
     if choice == QUALITY_DRAFT:
         return TRELLIS_DRAFT_STEPS
     if choice == QUALITY_STANDARD:
         return TRELLIS_STANDARD_STEPS
+    if choice == QUALITY_HIGH:
+        return TRELLIS_HIGH_STEPS
     if choice == QUALITY_MAX:
         return TRELLIS_MAX_STEPS
-    return TRELLIS_HIGH_STEPS
+    return None
 
 
 def _free_commercial_overlay(
@@ -1343,6 +1351,30 @@ def family_owned_fields(family: str) -> tuple[str, ...]:
     return tuple(f for f in OVERLAY_FIELDS if f in owned)
 
 
+def tiers_for_family(family: str) -> tuple[str, ...]:
+    """Return the named tiers one family can actually honor.
+
+    A tier belongs to a family when its profile writes at least one overlay
+    field for that family. A tier whose overlay is all-None changes no widget,
+    yet the combo still stamps it as applied, so those tiers stay out of the
+    family's list and the graph keeps only ``lab`` and ``custom``. That is what
+    keeps a Klein graph from offering the FLUX 3 and Qwen-Image ladders and a
+    Wan graph from offering a weight swap it has no loader for.
+
+    Args:
+        family: Occupancy id, QUALITY_FAMILY_KLEIN3, or QUALITY_FAMILY_QWEN.
+
+    Returns:
+        Tier ids in QUALITY_CHOICES order; empty for a no-op family.
+    """
+    honored: list[str] = []
+    for choice in NAMED_QUALITY_CHOICES:
+        profile = tier_profile(family, choice)
+        if any(getattr(profile, field) is not None for field in OVERLAY_FIELDS):
+            honored.append(choice)
+    return tuple(honored)
+
+
 def _same_value(left: object, right: object) -> bool:
     """Compare two widget values the way the combo and KSampler report them.
 
@@ -1446,11 +1478,13 @@ def export_table() -> dict[str, Json]:
         None.
 
     Returns:
-        Mapping with the tier table, owned fields, labels, and tier order.
+        Mapping with the tier table, owned fields, per-family tier lists,
+        labels, and tier order.
     """
     table: dict[str, dict[str, dict[str, Json]]] = {}
     owned: dict[str, list[str]] = {}
     labels: dict[str, dict[str, str]] = {}
+    tiers: dict[str, list[str]] = {}
     for family in QUALITY_FAMILIES:
         table[family] = {}
         labels[family] = {}
@@ -1461,6 +1495,7 @@ def export_table() -> dict[str, Json]:
             }
             labels[family][choice] = tier_label(family, choice)
         owned[family] = list(family_owned_fields(family))
+        tiers[family] = list(tiers_for_family(family))
     payload: dict[str, object] = {
         "choices": list(QUALITY_CHOICES),
         "named": list(NAMED_QUALITY_CHOICES),
@@ -1469,6 +1504,7 @@ def export_table() -> dict[str, Json]:
         "table": table,
         "owned": owned,
         "labels": labels,
+        "tiers": tiers,
         "custom": QUALITY_CUSTOM,
         "lab": QUALITY_LAB,
     }

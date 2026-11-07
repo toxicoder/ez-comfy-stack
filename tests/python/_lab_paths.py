@@ -1,4 +1,4 @@
-"""Resolve shipped lab JSON under workflows/_lab/<lane>/.
+"""Resolve shipped lab JSON under workflows/_lab/<lane>/ and name the lanes.
 
 Not collected by pytest (leading underscore). Builders and tests import
 ``lab_json`` instead of hardcoding a folder.
@@ -6,11 +6,19 @@ Not collected by pytest (leading underscore). Builders and tests import
 Ids are ``_lab``-relative paths without ``.json`` (``stills/still-draft``,
 ``motion/silent/still-to-video-5s``). Basenames may collide across lanes; pass the relative
 id when they do.
+
+``LANE_REGISTRY`` is the one definition of what a lane is: its id, its position
+in any browsed list, and the label and one-line summary an operator reads. The
+Comfy sidebar can only order folders the way the filesystem does, so every
+surface that *can* order and label (docs, the docs site, App Forge, the report
+panel) reads these fields instead of keeping its own list. A lane id outside the
+registry is a defect, and ``test_lab_tree.py`` fails the drift.
 """
 
 from __future__ import annotations
 
 import json
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -21,18 +29,84 @@ SHORTS_YAML = WF / "shorts"
 _LAB_GRAPH_CACHE: dict[Path, dict[str, Any]] | None = None
 _TRACKED_LAB_JSON: frozenset[str] | None = None
 _TRACKED_LAB_JSON_LOADED = False
-ALLOWED_LANES = (
-    "stills",
-    "motion",
-    "creator",
-    "services",
-    "films",
-    "dcc",
-    "optional",
-    "audio",
-    "inspire",
-    "editing",
+
+
+@dataclass(frozen=True)
+class LaneSpec:
+    """One browsable ``_lab`` lane and how it should read to an operator."""
+
+    id: str
+    order: int
+    title: str
+    description: str
+
+
+LANE_REGISTRY: tuple[LaneSpec, ...] = (
+    LaneSpec(
+        id="stills",
+        order=10,
+        title="Stills",
+        description="Single images: drafts, edits, product shots, and channel art.",
+    ),
+    LaneSpec(
+        id="motion",
+        order=20,
+        title="Motion",
+        description="Short clips, silent or with audio, from a still you already like.",
+    ),
+    LaneSpec(
+        id="creator",
+        order=30,
+        title="Creator",
+        description="Platform-shaped posts for a channel or shop, sized per surface.",
+    ),
+    LaneSpec(
+        id="services",
+        order=40,
+        title="Services",
+        description="Client work by vertical, from listing photos to ad packs.",
+    ),
+    LaneSpec(
+        id="films",
+        order=50,
+        title="Films",
+        description="Narrative shorts, staged act by act.",
+    ),
+    LaneSpec(
+        id="dcc",
+        order=60,
+        title="Control guides",
+        description="Depth, canny, clay, and mesh guides that steer a generation.",
+    ),
+    LaneSpec(
+        id="optional",
+        order=70,
+        title="Opt-in models",
+        description="Extra model families you download on purpose, off by default.",
+    ),
+    LaneSpec(
+        id="audio",
+        order=80,
+        title="Audio",
+        description="Music, podcasts, dubbing, and whole albums.",
+    ),
+    LaneSpec(
+        id="inspire",
+        order=90,
+        title="Writers' room",
+        description="Prompt, research, and planning tools that draw nothing.",
+    ),
+    LaneSpec(
+        id="editing",
+        order=100,
+        title="Editing",
+        description="Cut tools that work on footage you already shot.",
+    ),
 )
+
+LANE_BY_ID: dict[str, LaneSpec] = {spec.id: spec for spec in LANE_REGISTRY}
+
+ALLOWED_LANES: tuple[str, ...] = tuple(spec.id for spec in LANE_REGISTRY)
 
 # ComfyUI frontend ensureCorrectLayoutScale: "Vue" unprojects 1.2x (shrinks
 # LiteGraph coords). "Vue-corrected" keeps canonical geometry; Vue scales in CSS.
@@ -357,3 +431,27 @@ def lane_for_stem(stem: str) -> str:
     ):
         return "inspire"
     raise ValueError(f"cannot map {stem!r} to a lab lane")
+
+
+def lane_specs() -> tuple[LaneSpec, ...]:
+    """Return every lane in browse order, lowest ``order`` first.
+
+    The Comfy sidebar cannot sort, so anything that can (docs, the docs site,
+    App Forge, the report panel) walks this order instead of its own list.
+
+    Returns:
+        Lane specs sorted by ``order``, then id.
+    """
+    return tuple(sorted(LANE_REGISTRY, key=lambda spec: (spec.order, spec.id)))
+
+
+def lane_meta(lane: str) -> LaneSpec | None:
+    """Return the registry entry behind one lane id.
+
+    Args:
+        lane: Lane id, usually the first segment of a ``_lab``-relative id.
+
+    Returns:
+        The spec, or None when the lane is not in the registry.
+    """
+    return LANE_BY_ID.get(str(lane).strip())

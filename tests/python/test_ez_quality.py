@@ -176,6 +176,7 @@ from ez_quality.presets import (  # noqa: E402
     resolve_overlay,
     tier_label,
     tier_profile,
+    tiers_for_family,
 )
 
 JS = CUSTOM / "ez_quality" / "js" / "ez_quality.js"
@@ -789,6 +790,82 @@ def test_generated_presets_module_is_the_preset_table() -> None:
     assert payload["table"]["wan"][QUALITY_HIGH]["steps"] == WAN_HIGH_STEPS
     assert payload["table"]["klein"][QUALITY_HIGH]["vae_name"] == VAE_SMALL
     assert payload["owned"]["klein"] == list(OVERLAY_FIELDS)
+
+
+def test_tiers_for_family_offers_only_writable_tiers() -> None:
+    """A family's list holds exactly the tiers whose overlay writes something.
+
+    A tier whose overlay is all-None would be stamped as applied while changing
+    no widget, which is the failure the per-family list exists to prevent.
+    """
+    for family in QUALITY_FAMILIES:
+        tiers = tiers_for_family(family)
+        for choice in tiers:
+            profile = tier_profile(family, choice)
+            assert any(
+                getattr(profile, field) is not None for field in OVERLAY_FIELDS
+            ), (family, choice)
+        for choice in NAMED_QUALITY_CHOICES:
+            if choice in tiers:
+                continue
+            profile = tier_profile(family, choice)
+            assert all(
+                getattr(profile, field) is None for field in OVERLAY_FIELDS
+            ), (family, choice)
+
+
+def test_tiers_for_family_matches_the_planned_ladder() -> None:
+    """Each family offers the subset an operator can actually reason about."""
+    assert tiers_for_family("klein") == (
+        QUALITY_DRAFT,
+        QUALITY_STANDARD,
+        QUALITY_HIGH,
+        QUALITY_FREE_COMMERCIAL,
+        QUALITY_ULTRA,
+        QUALITY_MAX,
+    )
+    assert tiers_for_family(QUALITY_FAMILY_KLEIN3) == FLUX3_QUALITY_CHOICES
+    assert tiers_for_family(QUALITY_FAMILY_QWEN) == QWEN_QUALITY_CHOICES
+    ladder = (QUALITY_DRAFT, QUALITY_STANDARD, QUALITY_HIGH, QUALITY_MAX)
+    assert tiers_for_family("wan") == ladder
+    assert tiers_for_family("audio") == ladder
+    assert tiers_for_family("trellis") == ladder
+    av = (
+        QUALITY_DRAFT,
+        QUALITY_STANDARD,
+        QUALITY_HIGH,
+        QUALITY_FREE_COMMERCIAL,
+        QUALITY_MAX,
+    )
+    assert tiers_for_family("ltx") == av
+    assert tiers_for_family("film") == av
+
+
+def test_tiers_for_family_is_empty_for_a_no_op_family() -> None:
+    """A graph with nothing to overlay gets no tiers, so it needs no combo."""
+    assert tiers_for_family("none") == ()
+    assert tiers_for_family("llm") == ()
+    assert tiers_for_family("") == ()
+    assert tiers_for_family("longcat") == ()
+
+
+def test_tiers_for_family_keeps_each_vendor_ladder_in_its_own_family() -> None:
+    """A Klein or Wan graph never offers FLUX 3 or Qwen-Image weights."""
+    foreign = set(FLUX3_QUALITY_CHOICES) | set(QWEN_QUALITY_CHOICES)
+    for family in ("klein", "wan", "ltx", "film", "audio", "trellis", "none", "llm"):
+        assert not set(tiers_for_family(family)) & foreign, family
+    assert not set(tiers_for_family(QUALITY_FAMILY_KLEIN3)) & set(QWEN_QUALITY_CHOICES)
+    assert not set(tiers_for_family(QUALITY_FAMILY_QWEN)) & set(FLUX3_QUALITY_CHOICES)
+
+
+def test_generated_presets_module_carries_per_family_tiers() -> None:
+    """The browser reads the same per-family list Python resolves."""
+    payload = _presets_payload()
+    assert payload["tiers"] == {
+        family: list(tiers_for_family(family)) for family in QUALITY_FAMILIES
+    }
+    assert payload["tiers"]["klein3"] == list(FLUX3_QUALITY_CHOICES)
+    assert payload["tiers"]["llm"] == []
 
 
 def test_generated_presets_module_is_up_to_date() -> None:
