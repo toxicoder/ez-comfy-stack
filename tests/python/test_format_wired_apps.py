@@ -83,15 +83,19 @@ def test_in_scope_apps_wire_format_and_app_widgets() -> None:
 
 
 def test_locked_apps_do_not_gain_a_format_picker() -> None:
-    locked = (
+    locked = [
         "photos/text-swap",
         "photos/platform-pack",
         "photos/character-tweak",
         "photos/background-swap",
         "photos/background-edit",
         "video/silent/vace-join",
-        "film/go-see",
         "labs/assist/prompt-forge",
+    ]
+    # Every film app renders at locked pixels: the plate is the input frame for
+    # an LTX pass that stays at 1280x704, so neither side gets a size picker.
+    locked += sorted(
+        lab_rel_of(path) for path in lab_graph_paths() if lab_rel_of(path).startswith("film/")
     )
     for rel in locked:
         graph = _load(rel)

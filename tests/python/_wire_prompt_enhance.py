@@ -87,7 +87,9 @@ def enhance_pin_off(graph_id: str) -> bool:
     gid = str(graph_id or "")
     if gid in PIN_ENHANCE_OFF:
         return True
-    if gid.startswith("film/") and "/act-0" in gid:
+    if gid.startswith("film/") and (
+        "/act-0" in gid or gid.endswith(("/00-plate", "/feature"))
+    ):
         return True
     if gid.startswith("music-rap-nill-bye-") or gid.startswith(
         "music-edm-drive-through-"

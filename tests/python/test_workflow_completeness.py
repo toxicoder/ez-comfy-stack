@@ -295,14 +295,48 @@ def test_beat_sheet_desk_reaches_every_ltx_enhance() -> None:
         assert audio_src is prims["Audio policy"]
 
 
+SERIES_FILMS = (
+    "tide-table",
+    "night-oven",
+    "glasshouse",
+    "last-lane",
+    "breakwater",
+)
+"""Five-act festival shorts; each series is one plate plus five print passes."""
+
+
 def test_film_identity_is_context_for_every_ltx_shot() -> None:
-    for rel in ("film/go-see.json", "film/still-here.json", "film/switchyard.json"):
+    """Every LTX shot reads the authored identity from its own graph.
+
+    The Klein enhance node used to cross the plate -> shot seam. Each print
+    pass now carries an EZSamplePrompt so the shot app needs no Klein node.
+    """
+    print_passes = (
+        "film/go-see/feature",
+        "film/still-here/feature",
+        "film/switchyard/feature",
+        *(f"film/{film}/act-01" for film in SERIES_FILMS),
+    )
+    for rel in print_passes:
         graph = _load(lab_json(rel))
-        klein = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
+        source = next(
+            n
+            for n in graph["nodes"]
+            if n.get("type") == "EZSamplePrompt"
+            and n.get("title") == "Identity context"
+        )
+        identity = str((source.get("widgets_values") or ["", ""])[1])
+        assert identity.strip(), rel
         ltx = [n for n in graph["nodes"] if n.get("type") == "EZLTXPromptEnhance"]
         assert len(ltx) == 18, rel
         for node in ltx:
-            assert _source_of(graph, node, "context") is klein, (rel, node.get("title"))
+            assert _source_of(graph, node, "context") is source, (rel, node.get("title"))
+        plate_rel = f"{rel.rsplit('/', 1)[0]}/00-plate"
+        plate = _load(lab_json(plate_rel))
+        klein = next(
+            n for n in plate["nodes"] if n.get("type") == "EZKleinPromptEnhance"
+        )
+        assert str((klein.get("widgets_values") or ["", ""])[1]) == identity, plate_rel
 
 
 def test_rap_draft_and_full_wire_lyrics_writer() -> None:

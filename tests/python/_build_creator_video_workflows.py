@@ -299,6 +299,42 @@ def polish_video_graph(graph: dict, *, gif: bool = False) -> dict:
     return graph
 
 
+POINTER_PREFIX = "90s films: prefer the one-click"
+TIP_PREFIX = "90s films: Queue **film/"
+
+
+def set_film_shot_tip(text: str) -> str:
+    """Rewrite the 90s-films pointer in a shot printer's operator note.
+
+    Drops every legacy copy of the pointer first so the note converges on one
+    sentence no matter how many times the builder runs.
+
+    Args:
+        text: Existing operator-note markdown.
+
+    Returns:
+        The note with exactly one current pointer line appended.
+    """
+    kept = [
+        line
+        for line in text.split("\n")
+        if not line.startswith((POINTER_PREFIX, TIP_PREFIX))
+    ]
+    body = "\n".join(kept).replace(
+        "Prefer the one-click **film-*-90s** LTX path for the deliverable.",
+        "Prefer the split film apps below for the deliverable.",
+    )
+    tip = (
+        "90s films: Queue **film/<slug>/00-plate** once (Klein identity still), "
+        "then **film/<slug>/act-01** or **film/<slug>/feature** - that pair prints "
+        "the 18 beats and stitches them. To iterate one beat here, paste its "
+        "`ltx_i2v` / `wan_i2v` paragraph from `{film}.shots.yaml`, keep the VHS "
+        "prefix ez_<slug>_bN_sM_<engine>_video, and stitch on the host with "
+        "bazelisk run //scripts:run-utility -- concat-shots --film <slug> --yes."
+    )
+    return body.rstrip() + "\n" + tip + "\n"
+
+
 def patch_existing_video_graphs() -> None:
     video_files = [
         lab_json("video/silent/still-to-video-5s.json"),
@@ -327,21 +363,15 @@ def patch_existing_video_graphs() -> None:
                         vals[0] = 120
         polish_video_graph(graph, gif=gif)
         normalize_enhance_widgets(graph)
-        # Point shot notes at unified films
-        if path.name in (
+        # Point shot notes at the split film apps (plate, then print pass).
+        if path.relative_to(WF / "_lab").as_posix() in (
             "video/silent/still-to-shot.json",
             "video/av/still-to-shot.json",
         ):
             note = next(n for n in graph["nodes"] if n.get("type") == "Note")
-            text = note["widgets_values"][0]
-            tip = (
-                "\n90s films: prefer the one-click **film/go-see** graphs "
-                "(Queue once: identity + 18 LTX prints + stitch). This graph remains the "
-                "generic 5.00s printer / spark-farm shot / Wan rehearsal.\n"
-            )
-            if "unified" not in text:
-                note["widgets_values"][0] = text.rstrip() + tip
-                graph["extra"]["lab_note"] = note["widgets_values"][0]
+            text = set_film_shot_tip(note["widgets_values"][0])
+            note["widgets_values"][0] = text
+            graph["extra"]["lab_note"] = text
         _dump(path, graph)
 
 

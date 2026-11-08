@@ -42,9 +42,9 @@ def test_identity_enhance_on() -> None:
 def test_klein_i2v_feeders_are_1280x704() -> None:
     for name in (
         "photos/still-hero.json",
-        "film/go-see.json",
-        "film/still-here.json",
-        "film/switchyard.json",
+        "film/go-see/00-plate.json",
+        "film/still-here/00-plate.json",
+        "film/switchyard/00-plate.json",
     ):
         graph = _load(name)
         hits = [

@@ -2040,13 +2040,15 @@ def test_negative_enhance_reads_final_positive_and_stays_on() -> None:
     from _wire_prompt_enhance import _linked_node, _sampler_pairs
 
     missing: list[str] = []
-    # The film lane also carries the cut tools, which are not one-click shorts.
-    cut_tools = frozenset({"film/generate-cutaway"})
+    # A film print pass is the film-lane graph that actually runs LTX printers.
+    # The Klein plate and the Wan cut tools share the lane and print nothing.
     for path in lab_graph_paths():
         graph = load_lab_graph(path)
         extra = graph.get("extra") or {}
         gid = str(extra.get("lab_rel") or path.stem)
-        is_short = gid.startswith("film/") and gid not in cut_tools
+        is_short = gid.startswith("film/") and any(
+            node.get("type") == "LTXVImgToVideo" for node in graph["nodes"]
+        )
         families: set[str] = set()
         neg_nodes = [
             node

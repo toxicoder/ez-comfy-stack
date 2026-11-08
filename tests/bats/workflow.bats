@@ -152,9 +152,16 @@ lab_wf() {
   local lab="${REPO_ROOT}/workflows/_lab"
   local dir="${REPO_ROOT}/workflows"
   local wf wan ltx
-  [[ -f $(lab_wf film/go-see.json) ]]
-  [[ -f $(lab_wf film/still-here.json) ]]
-  [[ -f $(lab_wf film/switchyard.json) ]]
+  [[ -f $(lab_wf film/go-see/feature.json) ]]
+  [[ -f $(lab_wf film/still-here/feature.json) ]]
+  [[ -f $(lab_wf film/switchyard/feature.json) ]]
+  local slug
+  for slug in go-see still-here switchyard tide-table night-oven glasshouse last-lane breakwater; do
+    [[ -f ${lab}/film/${slug}/00-plate.json ]]
+  done
+  for slug in tide-table night-oven glasshouse last-lane breakwater; do
+    [[ -f ${lab}/film/${slug}/act-01.json ]]
+  done
   [[ -f $(lab_wf video/silent/still-to-shot.json) ]]
   [[ -f $(lab_wf video/av/still-to-shot.json) ]]
   [[ ! -f ${dir}/still-studio-lab-example.json ]]
@@ -444,11 +451,15 @@ for p in sorted((root / '_lab').rglob('*.json')):
     if rel == 'photos/still-studio':
         assert 'Format' in note or 'format' in note.lower()
         assert '1280' in note
-    if rel == 'film/go-see':
-        assert 'parkour' in desc
+    if rel == 'film/go-see/feature':
+        assert 'parkour' in desc or 'parkour' in note.lower()
         assert 'one-click' in desc.lower() or 'queue once' in note.lower()
+    if rel == 'film/go-see/00-plate':
+        assert 'identity plate' in desc.lower()
+        assert 'ez_gosee_plate' in note
 assert 'still-draft' in seen
-assert 'go-see' in seen
+assert 'feature' in seen
+assert '00-plate' in seen
 assert 'shorts-still' in seen
 assert 'broll-ambient' in seen
 "

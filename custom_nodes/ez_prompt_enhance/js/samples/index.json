@@ -73,9 +73,6 @@
   "guides/canny-control-8s": "ltx_iclora",
   "guides/depth-control-shorts": "ltx_iclora",
   "guides/depth-from-loader": "ltx_iclora",
-  "film/go-see": "film_gosee",
-  "film/still-here": "film_still_here",
-  "film/switchyard": "film_switchyard",
   "audio/podcast/two-host-episode": "podcast_two_host",
   "audio/podcast/radio-drama": "podcast_radio",
   "audio/podcast/learn-episode": "podcast_learn",
@@ -385,5 +382,11 @@
   "business/fitness-travel/check-in-av": "ltx_i2v",
   "business/fitness-travel/tour-av": "ltx_broll",
   "business/fitness-travel/sunset-av": "ltx_broll",
-  "business/fitness-travel/packing-av": "ltx_i2v"
+  "business/fitness-travel/packing-av": "ltx_i2v",
+  "film/go-see/00-plate": "film_gosee",
+  "film/go-see/feature": "film_gosee",
+  "film/still-here/00-plate": "film_still_here",
+  "film/still-here/feature": "film_still_here",
+  "film/switchyard/00-plate": "film_switchyard",
+  "film/switchyard/feature": "film_switchyard"
 }

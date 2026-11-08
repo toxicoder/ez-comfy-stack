@@ -64,7 +64,8 @@ flowchart TB
   Motion --> W["video/silent/still-to-video-5s or shot"]
   AV --> L["video/av/still-to-video-8s, clip-chain, or shorts"]
   Loop --> G["video/loops/gif-loop or bumper-loop"]
-  Film --> F["film/go-see one-click"]
+  Film --> PL["film/go-see/00-plate (Klein 4B identity)"]
+  PL --> F["film/go-see/feature (LTX print pass) or act-01..act-05"]
   Plate --> C["photos/thumbnail / packshot / cover"]
 ```
 
@@ -102,7 +103,7 @@ App Mode (frontend **1.41.13+**) is a widget surface on the same lab JSON. Surfa
   <Card title="90s film and DCC">
     ---
 
-    One-click 90s shorts, five-act 7.5 min films, plus clay -> print, IC-LoRA envelopes, and in-canvas guide loaders.
+    Plate + print-pass 90s shorts, five-act 7.5 min films, plus clay -> print, IC-LoRA envelopes, and in-canvas guide loaders.
 
     [Film graphs](create/workflows-film.md)
   </Card>
@@ -161,7 +162,7 @@ user/default/workflows/
       silent/  Wan loops and I2V jobs
       av/      LTX AV jobs
     business/  "Business" - agency SKUs by vertical (ecommerce, ads, local, education, podcasts, listings, fashion, B2B, events, travel)
-    film/      "Film" - go-see, still-here, switchyard (90s); tide-table / night-oven / glasshouse / last-lane / breakwater act-01...05; generate-cutaway
+    film/      "Film" - per title a plate app + a print app: go-see / still-here / switchyard plate, feature (90s); tide-table / night-oven / glasshouse / last-lane / breakwater plate, act-01...05; generate-cutaway
     audio/     "Audio" - podcast, dub, music/rap-draft, music/rap-full, stem-mix
       albums/nill-bye/<album>/     nine Nill Bye albums (numbered tracks + cover + album)
       albums/drive-through/<album>/  six Drive-through albums

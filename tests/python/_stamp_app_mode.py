@@ -1276,7 +1276,7 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "none",
         "stills/identity-sheet",
         "dcc/clay-hero",
-        "films/go-see",
+        "film/go-see/feature",
         primitive_strings=True,
     ),
     "stills/still-daily": _spec(
@@ -1392,27 +1392,38 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "motion/av/first-last-8s": _spec("ltx"),
     "motion/av/audio-to-video-8s": _spec("ltx"),
     "motion/av/clip-chain": _spec("ltx", clip_chain_widgets=True),
-    "films/go-see": _spec(
-        "film",
-        default_view="graph",
-        film_minimal=True,
-        enhance_off_identity=True,
-    ),
-    "films/still-here": _spec(
-        "film",
-        default_view="graph",
-        film_minimal=True,
-        enhance_off_identity=True,
-    ),
-    "films/switchyard": _spec(
-        "film",
-        default_view="graph",
-        film_minimal=True,
-        enhance_off_identity=True,
-    ),
     **{
-        f"films/{film}/act-0{act}": _spec(
-            "film",
+        f"film/{slug}/00-plate": _spec(
+            "klein",
+            f"film/{slug}/{next_stem}",
+            default_view="app",
+            film_minimal=True,
+            enhance_off_identity=True,
+        )
+        for slug, next_stem in (
+            ("go-see", "feature"),
+            ("still-here", "feature"),
+            ("switchyard", "feature"),
+            ("tide-table", "act-01"),
+            ("night-oven", "act-01"),
+            ("glasshouse", "act-01"),
+            ("last-lane", "act-01"),
+            ("breakwater", "act-01"),
+        )
+    },
+    **{
+        f"film/{slug}/feature": _spec(
+            "ltx",
+            default_view="graph",
+            film_minimal=True,
+            enhance_off_identity=True,
+        )
+        for slug in ("go-see", "still-here", "switchyard")
+    },
+    **{
+        f"film/{film}/act-0{act}": _spec(
+            "ltx",
+            *([] if act == 5 else [f"film/{film}/act-0{act + 1}"]),
             default_view="graph",
             film_minimal=True,
             enhance_off_identity=True,
@@ -1642,6 +1653,12 @@ def ensure_occupancy_note(graph: dict, occupancy: str) -> None:
 def _collect_film_minimal(
     graph: dict, hide_sample: bool
 ) -> list[tuple[NodeRef, str, dict]]:
+    """Rows for the single prompt family a film app actually carries.
+
+    A plate rewrites its identity through ``EZKleinPromptEnhance``. A print
+    pass carries no Klein node at all and edits the ``EZSamplePrompt`` that
+    feeds every shot enhance's context instead.
+    """
     raw: list[tuple[NodeRef, str, dict]] = []
     for node in graph.get("nodes") or []:
         if node.get("type") == "EZKleinPromptEnhance":
@@ -1655,6 +1672,11 @@ def _collect_film_minimal(
                     (nid, "enhance", node),
                 )
             )
+        elif node.get("type") == "EZSamplePrompt":
+            nid = node["id"]
+            if not hide_sample:
+                raw.append((nid, "sample", node))
+            raw.append((nid, "prompt", node))
     sampler = next(
         (n for n in graph.get("nodes") or [] if n.get("type") == "KSampler"),
         None,

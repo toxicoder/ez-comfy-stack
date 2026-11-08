@@ -634,8 +634,8 @@ def test_trellis_ladder_leaves_the_unguided_texture_stage_authored() -> None:
 
 def test_is_trellis_guidance_free_stage_reads_only_the_trellis_recipe() -> None:
     """The exemption belongs to TRELLIS samplers and to CFG 1.0 alone."""
-    stage = {"type": "KSampler", "widgets_values": [0, "fixed", 12, 1.0]}
-    guided = {"type": "KSampler", "widgets_values": [0, "fixed", 12, 7.5]}
+    stage: dict[str, Any] = {"type": "KSampler", "widgets_values": [0, "fixed", 12, 1.0]}
+    guided: dict[str, Any] = {"type": "KSampler", "widgets_values": [0, "fixed", 12, 7.5]}
     assert is_trellis_guidance_free_stage(stage, "trellis") is True
     assert is_trellis_guidance_free_stage(guided, "trellis") is False
     assert is_trellis_guidance_free_stage(stage, "wan") is False
@@ -703,7 +703,7 @@ def test_strip_quality_node_clears_the_widget_and_its_row() -> None:
 
 def test_ensure_quality_strips_a_combo_no_tier_can_move() -> None:
     """An audio graph with no loader or sampler ships without a combo."""
-    graph = {
+    graph: dict[str, Any] = {
         "nodes": [
             {"id": 2, "type": "SaveAudio", "pos": [0, 0], "size": [200, 80]},
             {"id": 3, "type": "Note", "pos": [0, 0], "size": [200, 80]},

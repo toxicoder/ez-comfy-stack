@@ -14,7 +14,7 @@ through Klein look-dev into an LTX take. Single clips are on
 
 **What's on this page**
 
-- **90s shorts** - one-click films (go-see, still-here, switchyard), the five-act graphs, and the act queue order
+- **90s shorts** - the three one-title pairs (go-see, still-here, switchyard), the five-act series, and the plate -> print queue order
 - **DCC (clay -> print)** - Klein-from-clay, IC-LoRA envelopes, in-canvas loaders
 - **Related** - what to load after the film lands
 
@@ -39,20 +39,30 @@ occupancy, and Queue rules are shared with every other catalog:
 
 | Workflow | What it does |
 | --- | --- |
-| **[film/go-see](../generated/workflows/film/go-see.md)** | **One-click** first-person parkour 90s: Klein identity + 18 LTX 5.00s AV prints + stitch |
-| **[film/still-here](../generated/workflows/film/still-here.md)** | **One-click** household morning 90s (same shape) |
-| **[film/switchyard](../generated/workflows/film/switchyard.md)** | **One-click** night freight-yard 90s (same shape) |
+| **[film/go-see/00-plate](../generated/workflows/film/go-see/00-plate.md)** | **Queue first.** Klein 4B identity still for the first-person parkour 90s. Prefix `ez_gosee_plate` |
+| **[film/go-see/feature](../generated/workflows/film/go-see/feature.md)** | **One-click** first-person parkour 90s: 18 LTX 5.00s AV prints + stitch, from `ez_gosee_plate.png` |
+| **[film/still-here/00-plate](../generated/workflows/film/still-here/00-plate.md)** | **Queue first.** Klein 4B identity still for the household morning 90s. Prefix `ez_stillhere_plate` |
+| **[film/still-here/feature](../generated/workflows/film/still-here/feature.md)** | **One-click** household morning 90s (same shape) |
+| **[film/switchyard/00-plate](../generated/workflows/film/switchyard/00-plate.md)** | **Queue first.** Klein 4B identity still for the night freight-yard 90s. Prefix `ez_switchyard_plate` |
+| **[film/switchyard/feature](../generated/workflows/film/switchyard/feature.md)** | **One-click** night freight-yard 90s (same shape) |
+| **[film/tide-table/00-plate](../generated/workflows/film/tide-table/00-plate.md)** | **Queue first.** Klein 4B identity still for the dawn skiff film. Prefix `ez_tidetable_plate` |
 | **[film/tide-table/act-01](../generated/workflows/film/tide-table/act-01.md)** | Dawn skiff 7.5 min, act 1 of 5 (then act-02...05; concat 450s) |
+| **[film/night-oven/00-plate](../generated/workflows/film/night-oven/00-plate.md)** | **Queue first.** Klein 4B identity still for the overnight bakery film. Prefix `ez_nightoven_plate` |
 | **[film/night-oven/act-01](../generated/workflows/film/night-oven/act-01.md)** | Overnight bakery 7.5 min, act 1 of 5 |
+| **[film/glasshouse/00-plate](../generated/workflows/film/glasshouse/00-plate.md)** | **Queue first.** Klein 4B identity still for the storm glasshouse film. Prefix `ez_glasshouse_plate` |
 | **[film/glasshouse/act-01](../generated/workflows/film/glasshouse/act-01.md)** | Storm glasshouse 7.5 min, act 1 of 5 |
+| **[film/last-lane/00-plate](../generated/workflows/film/last-lane/00-plate.md)** | **Queue first.** Klein 4B identity still for the night two-lane film. Prefix `ez_lastlane_plate` |
 | **[film/last-lane/act-01](../generated/workflows/film/last-lane/act-01.md)** | Night two-lane 7.5 min, act 1 of 5 |
+| **[film/breakwater/00-plate](../generated/workflows/film/breakwater/00-plate.md)** | **Queue first.** Klein 4B identity still for the storm-wall walk film. Prefix `ez_breakwater_plate` |
 | **[film/breakwater/act-01](../generated/workflows/film/breakwater/act-01.md)** | Storm-wall walk 7.5 min, act 1 of 5 |
 | **[video/silent/still-to-shot](../generated/workflows/video/silent/still-to-shot.md)** | Optional silent rehearsal / six-shot concat demo |
 | **[video/av/still-to-shot](../generated/workflows/video/av/still-to-shot.md)** | Generic 5.00 s AV print (non-film) |
 
+Plate graphs (Queue one first - its `SaveImage` writes `ez_<slug>_plate.png`, which the act-01 / feature app's `LoadImage` reads): `film/tide-table/00-plate` `film/night-oven/00-plate` `film/glasshouse/00-plate` `film/last-lane/00-plate` `film/breakwater/00-plate` `film/go-see/00-plate` `film/still-here/00-plate` `film/switchyard/00-plate`.
+
 Act graphs (Queue in order, then `concat-shots.sh --film`): `film/tide-table/act-01` `film/tide-table/act-02` `film/tide-table/act-03` `film/tide-table/act-04` `film/tide-table/act-05` - `film/night-oven/act-01` `film/night-oven/act-02` `film/night-oven/act-03` `film/night-oven/act-04` `film/night-oven/act-05` - `film/glasshouse/act-01` `film/glasshouse/act-02` `film/glasshouse/act-03` `film/glasshouse/act-04` `film/glasshouse/act-05` - `film/last-lane/act-01` `film/last-lane/act-02` `film/last-lane/act-03` `film/last-lane/act-04` `film/last-lane/act-05` - `film/breakwater/act-01` `film/breakwater/act-02` `film/breakwater/act-03` `film/breakwater/act-04` `film/breakwater/act-05`.
 
-Full loop: [Short films](../shorts.md). One file per film - Queue once. Leave LTX **1280x704**. Film printers stay **121 frames**. Do **not** Queue a 30/60/90 s latent.
+Full loop: [Short films](../shorts.md). Two apps per film - Queue the **plate**, then the act / feature app. Leave LTX **1280x704**. Film printers stay **121 frames**. Do **not** Queue a 30/60/90 s latent.
 
 ---
 

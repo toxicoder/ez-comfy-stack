@@ -8,12 +8,12 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 
 **What's on this page**
 
-- **Operator loop** - load one film graph, Queue once, find the stitched MP4 already on disk
+- **Operator loop** - Queue the plate app, then the film app, find the stitched MP4 already on disk
 - **Why not one 90s latent** - 18 independent 5.00s prints, last-frame continuity, the 90s cap
 - **Models** - Klein identity, LTX print plus world audio, `EZFilmConcat` stitch, optional Wan rehearsal
 - **Resume and salvage** - `print-shot`, `film-resume`, `take-promote`, `film-accept`, `concat-shots`
 - **Shot maps** - go-see, still-here, switchyard, and the machine-readable YAML behind them
-- **7.5 minute films** - five 90s acts per title, queued in order, concat-checked at 450.00s
+- **7.5 minute films** - a Klein plate plus five 90s acts per title, queued in order, concat-checked at 450.00s
 - **Go-see show-off loop** - identity-first reprint, wordless mix, fail-closed accept
 - **Finish the sound** - hand the locked picture to the podcast, dub, and music lanes
 - **Optional packs** - studio-ui board, LTX Director, IC-LoRA, Fun InP, SeedVR2, VACE, Wave 4, 3D sidecars
@@ -24,18 +24,18 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 - **Three continuous 90s films** (go-see, still-here, switchyard) plus five 7.5 min act-composed films on the **US-safe local pack**
 - **Last-frame continuity** without a 90s denoise - shot N's last frame starts shot N+1
 - **A 90.00s publish cap** enforced in-graph by `EZFilmConcat` (faststart H.264) or by host `ffmpeg -t 90`
-- **One Queue per film** - identity, 18 prints, stitch, play, download
+- **Two Queues per film** - a cheap Klein plate, then 18 prints, stitch, play, download
 - **A dropped SSH session that costs minutes**, not two hours, because shot state lives on disk
 
 **Who this is for:** studio users who already Queued a 5 s LTX clip. Concepts: [Klein, Wan, and LTX](learn/pipeline.md).
 
-**Question this page answers:** how do I get a publishable short out of the studio without a 90s denoise that GB10 should not run? Queue one film graph, keep every print at 5.00s, and let the stitch cap the master.
+**Question this page answers:** how do I get a publishable short out of the studio without a 90s denoise that GB10 should not run? Queue the plate, then the film's print app, keep every print at 5.00s, and let the stitch cap the master.
 
 <Callout type="info" title="First 90s film">
   1. Stack is up (`manage.sh start`, type **yes**). LTX-2.5 weights on disk.
   2. Optional: fill **labs/assist/beat-sheet** (occupancy **none**, no UNET) then `bazelisk run //:manage -- shot-sheet run --film go-see` - writes `films/<slug>/shots.yaml`. Lab YAML is not copied by the entrypoint.
-  3. Load **film/go-see** (or still-here / switchyard).
-  4. All three films pin Enhance **off** so the identity and each baked LTX paragraph are encoded as written. Leave LTX **1280x704**. Queue **once**.
+  3. Load **film/go-see/00-plate** (or still-here / switchyard), Queue it, then load **film/go-see/feature**.
+  4. All three films pin Enhance **off** so the identity and each baked LTX paragraph are encoded as written. Leave LTX **1280x704**. Queue the **plate** first (one 4-step Klein still), then the **feature** app.
   5. Wall-clock is 18 sequential 5 s prints (tens of minutes to a couple of hours). That is expected.
   6. The stitched MP4 is **already on disk**: `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4` (container `/outputs`), plus `ez_gosee_90s.html`. A **90s film ready** overlay offers play and download. Optional board: `docker compose --profile studio-ui up studio-ui` then http://localhost:8190/watch/gosee
   7. Copy off the Spark: `scp "${SPARK_USER}@${SPARK_HOST}:${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4" .`
@@ -50,12 +50,12 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 
 ## Operator loop
 
-Each film graph ships **Klein identity + 18 LTX 5.00s printers + in-graph stitch**. Prompts are baked from `{film}.shots.yaml` (Klein `identity_look`, LTX `ltx_i2v`). Host JSON lives at `workflows/_lab/film/`; YAML shot lists stay at `workflows/shorts/*.shots.yaml` (not copied into Comfy). The entrypoint rsyncs JSON into `user/default/workflows/_lab/film/`. Restart so `custom_nodes/ez_film` is copied with the other in-tree packs.
+Each film ships **two apps** that hand off through a PNG on disk. The plate app `workflows/_lab/film/<slug>/00-plate.json` is the Klein 4B identity still (one UNET, 17 nodes, occupancy **klein**, App view). The print pass `feature.json` (90s titles) or `act-01.json` .. `act-05.json` (7.5 min titles) is the LTX print stack (one UNET, 232 nodes, occupancy **ltx**, Graph view). The plate's `SaveImage` writes `ez_<slug>_plate_00001_.png`; **Load identity plate** on the print pass reads it back. Prompts are baked from `{film}.shots.yaml` (Klein `identity_look`, LTX `ltx_i2v`). Host JSON lives at `workflows/_lab/film/`; YAML shot lists stay at `workflows/shorts/*.shots.yaml` (not copied into Comfy). The entrypoint rsyncs JSON into `user/default/workflows/_lab/film/`. Restart so `custom_nodes/ez_film` is copied with the other in-tree packs.
 
-1. Load one film graph (`film/go-see` / `film/still-here` / `film/switchyard`).
-2. Queue **once**. Klein runs first (4-step). Models unload. Then 18 x **5.00s** LTX prints chain last-frame -> next start. All three films pin Enhance **off** on identity and every LTX shot. Leave LTX **1280x704**.
-3. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10). That is expected, not a hang. Headroom preflight still applies at start.
-4. After Queue, the stitched file is already written to `${COMFY_OUTPUT_DIR}/ez_<slug>_90s.mp4` (H.264 + AAC + faststart) plus `ez_<slug>_90s.html`. A **90s film ready** overlay plays and downloads it. Per-shot files remain as `ez_<slug>_bN_sM_ltx_video_*.mp4`. Copy off the Spark with `scp`. Optional: studio-ui `/watch/<slug>`.
+1. Load the plate app (`film/go-see/00-plate` / `film/still-here/00-plate` / `film/switchyard/00-plate`) and Queue it **once** - one 4-step Klein still at **1280x704**, prefix `ez_<slug>_plate`. Pixels are locked there because that plate is the print pass's start frame.
+2. Load the print app (`film/go-see/feature` / `film/still-here/feature` / `film/switchyard/feature`) and Queue it. 18 x **5.00s** LTX prints chain last-frame -> next start, then stitch. All three films pin Enhance **off** in both apps; each print app carries its own `EZSamplePrompt` **Identity context** feeding the LTX prompt enhancer's `context`. Leave LTX **1280x704**.
+3. Wall-clock is one plate still plus 18 sequential 5s prints (tens of minutes to a couple of hours on GB10). That is expected, not a hang. Headroom preflight still applies at start.
+4. After the print Queue, the stitched file is already written to `${COMFY_OUTPUT_DIR}/ez_<slug>_90s.mp4` (H.264 + AAC + faststart) plus `ez_<slug>_90s.html`. A **90s film ready** overlay plays and downloads it. Per-shot files remain as `ez_<slug>_bN_sM_ltx_video_*.mp4`. Copy off the Spark with `scp`. Optional: studio-ui `/watch/<slug>`.
 5. Optional silent rehearsal of one frame: **video/silent/still-to-shot**. Optional single-shot iterate: **video/av/still-to-shot**.
 
 Publish names land under `${COMFY_OUTPUT_DIR}` (default `/mnt/comfy-output`): `ez_gosee_90s.mp4`, `ez_stillhere_90s.mp4`, `ez_switchyard_90s.mp4`. YouTube wants AI-generated media disclosed (LTX term). Do not strip provenance.
@@ -66,7 +66,7 @@ Publish names land under `${COMFY_OUTPUT_DIR}` (default `/mnt/comfy-output`): `e
 
 Default lab graphs iterate in **minutes**. A 90s (or 30-60s) **denoise** on GB10 is the wrong default - keep LTX widgets at **121 frames** (`1+8n`).
 
-The one-click film graph still prints **18 independent 5.00s latents**. Continuity is **last frame of shot N -> start image of shot N+1**. One Queue runs them in order because each printer depends on the previous last frame.
+The print app still prints **18 independent 5.00s latents**. Continuity is **last frame of shot N -> start image of shot N+1**. One Queue on the print app runs them in order because each printer depends on the previous last frame. The Klein plate is its own short Queue on its own app.
 
 | | |
 | --- | --- |
@@ -82,10 +82,9 @@ Do **not** set 241+ frames or a single 90s latent. **Do not set 120** - the LTX 
 
 ```mermaid
 flowchart LR
-  Load["Load film-*-90s graph"] --> Q["Queue once"]
-  Q --> Klein["Klein identity 4-step"]
-  Klein --> Unload["Unload models"]
-  Unload --> Shot["LTX 5.00s AV x18 last-frame chain"]
+  Plate["Queue film/go-see/00-plate - one Klein UNET"] --> PNG["ez_gosee_plate.png on disk"]
+  PNG --> Q["Queue film/go-see/feature - one LTX UNET"]
+  Q --> Shot["LTX 5.00s AV x18 last-frame chain"]
   Shot --> Concat["EZFilmConcat - cap 90s"]
   Concat --> Preview["Overlay - HTML sidecar - /watch"]
 ```
@@ -96,16 +95,18 @@ flowchart LR
 
 | Job | Where | Model | License |
 | --- | --- | --- | --- |
-| Identity still | Group **1. Identity (Klein)** | Klein 4B distilled FP8 | Apache 2.0 |
-| Print + synced world audio | Groups **3-8** (beats) | LTX-2.5 distilled I2V | Community License (not Apache) |
-| Stitch + preview | Group **9. Publish 90s MP4** (left column) | `EZFilmConcat` (H.264 CRF 18 + AAC + YouTube loudnorm + faststart) | - |
+| Identity still | plate app, Group **1. Identity (Klein)** | Klein 4B distilled FP8 | Apache 2.0 |
+| Print + synced world audio | print app, Groups **3-8** (beats) | LTX-2.5 distilled I2V | Community License (not Apache) |
+| Stitch + preview | print app, Group **9. Publish 90s MP4** (left column) | `EZFilmConcat` (H.264 CRF 18 + AAC + YouTube loudnorm + faststart) | - |
 | Optional silent rehearsal | `workflows/_lab/video/silent/still-to-shot` | Wan 2.2 TI2V-5B I2V | Apache 2.0, silent |
 
-One-click film files:
+Each app loads exactly one UNET, so Klein and LTX never sit down together. Film apps (Queue the plate, then the print app):
 
-- `workflows/_lab/film/go-see.json`
-- `workflows/_lab/film/still-here.json`
-- `workflows/_lab/film/switchyard.json`
+- `workflows/_lab/film/go-see/00-plate.json` -> `workflows/_lab/film/go-see/feature.json`
+- `workflows/_lab/film/still-here/00-plate.json` -> `workflows/_lab/film/still-here/feature.json`
+- `workflows/_lab/film/switchyard/00-plate.json` -> `workflows/_lab/film/switchyard/feature.json`
+- `workflows/_lab/film/<slug>/00-plate.json` -> `act-01.json` .. `act-05.json` for the five 7.5 min titles (same packs; see **7.5 minute films** below)
+- `workflows/_lab/film/generate-cutaway.json` - unchanged single app (Wan 2.2 T2V b-roll)
 
 Deliverable MP4s are **LTX I2V heroes** (breath, world objects, **no score**) with audio muxed per shot via `LTXVAudioVAEDecode` -> `VHS_VideoCombine`, then stitched. Wan is an optional cheap motion draft - skip it if you already like the camera.
 
@@ -125,7 +126,7 @@ bazelisk run //:manage -- print-shot go-see 12
 # crashed `running` rows (no MP4) only.
 ```
 
-Host / spark-farm fallback (when you printed shots outside the one-click graph):
+Host / spark-farm fallback (when you printed shots outside the print app):
 
 ```bash
 FILM=go-see   # or still-here | switchyard
@@ -202,21 +203,24 @@ Prefixes: `ez_gosee_b{1..6}_s{1..3}`, `ez_stillhere_...`, `ez_switchyard_...`. M
 
 Five festival-length titles share the same 5.00s LTX printer. Each film is **5 x 90s acts** (90 shots, `publish_cap_s: 450.00`). Do **not** put 90 printers on one canvas and do **not** Queue a 7.5 min latent.
 
-| Film | Graph | Identity | Master |
+| Film | Apps (Queue in this order) | Identity | Master |
 | --- | --- | --- | --- |
-| **tide-table** | `film/tide-table/act-01` ... `act-05` | Unmarked skiff bow | `ez_tidetable_450s.mp4` |
-| **night-oven** | `film/night-oven/act-01` ... `act-05` | Flour-dusted linen apron | `ez_nightoven_450s.mp4` |
-| **glasshouse** | `film/glasshouse/act-01` ... `act-05` | Unmarked copper watering can | `ez_glasshouse_450s.mp4` |
-| **last-lane** | `film/last-lane/act-01` ... `act-05` | Dashboard + blank gloves (POV) | `ez_lastlane_450s.mp4` |
-| **breakwater** | `film/breakwater/act-01` ... `act-05` | Yellow slicker sleeves + blank gloves (chest-cam) | `ez_breakwater_450s.mp4` |
+| **tide-table** | `film/tide-table/00-plate` then `film/tide-table/act-01` ... `act-05` | Unmarked skiff bow | `ez_tidetable_450s.mp4` |
+| **night-oven** | `film/night-oven/00-plate` then `film/night-oven/act-01` ... `act-05` | Flour-dusted linen apron | `ez_nightoven_450s.mp4` |
+| **glasshouse** | `film/glasshouse/00-plate` then `film/glasshouse/act-01` ... `act-05` | Unmarked copper watering can | `ez_glasshouse_450s.mp4` |
+| **last-lane** | `film/last-lane/00-plate` then `film/last-lane/act-01` ... `act-05` | Dashboard + blank gloves (POV) | `ez_lastlane_450s.mp4` |
+| **breakwater** | `film/breakwater/00-plate` then `film/breakwater/act-01` ... `act-05` | Yellow slicker sleeves + blank gloves (chest-cam) | `ez_breakwater_450s.mp4` |
 
 1. `bazelisk run //scripts:run-utility -- compile-film tide-table` (any of the five ids).
-2. Queue **act-01**. Klein identity, then 18 prints. Overlay writes `ez_<slug>_act1_90s.mp4`.
-3. Queue **act-02** ... **act-05**. Acts 2-5 `LoadImage` the previous act last frame (`ez_<slug>_b6_s3_last_*.png` after act 1, then b12, b18, b24).
-4. `bazelisk run //:manage -- film-resume tide-table` skips ok 5.00s stems if SSH dropped.
-5. `bazelisk run //:manage -- film-accept tide-table` then `bazelisk run //scripts:run-utility -- concat-shots --film tide-table --yes` -> `ez_tidetable_450s.mp4` (fail closed if probe is not 450.00 +/- 0.10s).
+2. Queue **film/tide-table/00-plate** (occupancy **klein**). One 4-step Klein still, prefix `ez_tidetable_plate`. Cheap - Queue it first, before any act.
+3. Queue **act-01** (occupancy **ltx**). **Load identity plate** reads `ez_<slug>_plate.png` off disk, then 18 prints. Overlay writes `ez_<slug>_act1_90s.mp4`.
+4. Queue **act-02** ... **act-05**. Acts 2-5 `LoadImage` the previous act last frame (`ez_<slug>_b6_s3_last_*.png` after act 1, then b12, b18, b24) - not the plate.
+5. `bazelisk run //:manage -- film-resume tide-table` skips ok 5.00s stems if SSH dropped.
+6. `bazelisk run //:manage -- film-accept tide-table` then `bazelisk run //scripts:run-utility -- concat-shots --film tide-table --yes` -> `ez_tidetable_450s.mp4` (fail closed if probe is not 450.00 +/- 0.10s).
 
-Wall-clock is five sequential 90s Queues (hours). Peak VRAM is still one 5s LTX print. Safety unchanged: `restart: "no"`, heavy confirm, headroom, download-limit wrap.
+The seam between the two apps is a file on disk. Change the plate seed and re-Queue the plate before you re-Queue the print pass, or the acts keep opening on the older plate.
+
+Wall-clock is five sequential 90s Queues plus one 4-step still per film (hours). Peak VRAM is still one 5s LTX print: each app loads exactly one UNET, so Klein and LTX never sit down together. Safety unchanged: `restart: "no"`, heavy confirm, headroom, download-limit wrap.
 
 <Tabs groupId="tide-table-night-oven-glasshouse-last-lane-breakwater" items={["tide-table", "night-oven", "glasshouse", "last-lane", "breakwater"]} persist>
   <Tab value="tide-table">
@@ -251,9 +255,9 @@ YAML: `workflows/shorts/tide-table.shots.yaml` (and the other four). 30 beats x 
 
 Identity owns every later I2V. Distilled LTX audio talks if the mix is only a prohibition. Concat used to publish 17 stems. Do this before calling `ez_gosee_90s.mp4` a deliverable:
 
-1. Queue identity only if you can isolate it; otherwise Queue the film graph and **stop after the identity PNG** (`ez_gosee_identity_*.png`).
+1. Queue **film/go-see/00-plate** - identity is its own app now, so you can isolate it without stopping a long Queue halfway. It writes `ez_gosee_plate_*.png`.
 2. Accept the still only if: chest-cam POV, only the wearer's own arms along the bottom edge, contralateral pump, blank gloves, hands free, **no second person in front of the camera**, no staff or pole, no handlebar, no circular mask, gap already in center.
-3. Re-roll identity (seed **42** is frozen in YAML - if the still is illegal, change **prompt text**, not the seed, then rebuild). If you must explore seeds, do it on `photos/still-hero` off-graph, then paste the winning look back into YAML.
+3. Re-roll identity (seed **42** is frozen in YAML - if the still is illegal, change **prompt text**, not the seed, then rebuild and re-Queue **film/go-see/00-plate** before you re-Queue the print app). If you must explore seeds, do it on `photos/still-hero` off-graph, then paste the winning look back into YAML.
 4. Print b1s1-s3 with `video/av/still-to-shot` / `bazelisk run //:manage -- print-shot go-see N` until last frames still show gloves in the lower third.
 5. `take-promote` winners. `film-resume` the rest.
 6. `bazelisk run //:manage -- film-accept go-see` must exit 0 before anyone calls the file a deliverable. In-graph `EZFilmConcat` refuses missing/short stems and unlinks a master that is not 90.00 +/- 0.10s.
@@ -261,7 +265,7 @@ Identity owns every later I2V. Distilled LTX audio talks if the mix is only a pr
 
 If b2s1's start frame is a wooden pier, reprint b1s3 first. LTX will not invent maglev steel.
 
-Optional salvage on a **locked** picture (not the lab default, not in the one-click graph): dual-condition last-frame + identity still (IC-LoRA / reference latent); per-shot `print_mode: wan-flf`; DFR two-stage; SeedVR2; VACE 17-frame joins; ACE-Step score; distilled->base LTX. Go-see stays world-only, `score: none`.
+Optional salvage on a **locked** picture (not the lab default, not in the print app): dual-condition last-frame + identity still (IC-LoRA / reference latent); per-shot `print_mode: wan-flf`; DFR two-stage; SeedVR2; VACE 17-frame joins; ACE-Step score; distilled->base LTX. Go-see stays world-only, `score: none`.
 
 ---
 
@@ -352,13 +356,13 @@ bazelisk run //scripts:run-utility -- nvenc-preview --in "${COMFY_OUTPUT_DIR}/ez
 
 ## Spark farm
 
-The one-click film graph is **sequential on one host**. Three Sparks can still Queue **different beats** in parallel as independent 5s jobs (shared `${MODELS_DIR}`) on **video/av/still-to-shot**. Concat stays on one host (`concat-shots.sh --film`). `spark-farm.sh run --film go-see` prints that Queue reminder (it does not POST graphs). No NCCL. See [Spark farm](spark-farm.md).
+The print app is **sequential on one host** - each 5s print starts from the previous last frame. The plate is one cheap Klein Queue on one host that every act and every Spark shares. Three Sparks can still Queue **different beats** in parallel as independent 5s jobs (shared `${MODELS_DIR}`) on **video/av/still-to-shot**, or split by act on the print apps. Concat stays on one host (`concat-shots.sh --film`). `spark-farm.sh run --film go-see` prints that Queue reminder (it does not POST graphs). No NCCL. See [Spark farm](spark-farm.md).
 
 ---
 
 ## Safety
 
-Unchanged: `restart: "no"`, heavy confirm on `start`, headroom preflight, download-limit wrap. The film path does not start Docker. One Queue is long because it runs 18 x 5.00s prints, not because it allocated a 90s latent. Peak VRAM is one LTX 5s print after Klein unloads - do not weaken headroom preflight.
+Unchanged: `restart: "no"`, heavy confirm on `start`, headroom preflight, download-limit wrap. The film path does not start Docker. The print Queue is long because it runs 18 x 5.00s prints, not because it allocated a 90s latent. Peak VRAM is one LTX 5s print - the plate app and the print app are separate Queues and each loads exactly one UNET; do not weaken headroom preflight.
 
 ---
 

@@ -436,3 +436,45 @@ def test_app_input_labels_are_unique_and_i2v_hides_noop_style() -> None:
     assert dead_image == []
     assert style_on_i2v == []
 
+
+
+def test_shot_printer_notes_carry_one_film_pointer() -> None:
+    """Each 5s printer note points at the split film apps exactly once."""
+    import _build_creator_video_workflows as cv
+
+    paths = [
+        lab_json("video/av/still-to-shot"),
+        lab_json("video/silent/still-to-shot"),
+        ROOT / "custom_nodes/ez_studio_blocks/subgraphs/ltx-film-shot.json",
+    ]
+    # The builder guards on the _lab-relative path, so the guard has to match.
+    for rel in ("video/av/still-to-shot", "video/silent/still-to-shot"):
+        assert lab_json(rel).relative_to(cv.WF / "_lab").as_posix() == f"{rel}.json"
+    for path in paths:
+        graph = json.loads(path.read_text(encoding="utf-8"))
+        strings: list[str] = []
+
+        def _collect(value: object) -> None:
+            if isinstance(value, str):
+                strings.append(value)
+            elif isinstance(value, dict):
+                for item in value.values():
+                    _collect(item)
+            elif isinstance(value, list):
+                for item in value:
+                    _collect(item)
+
+        _collect(graph)
+        assert not [text for text in strings if cv.POINTER_PREFIX in text], path
+        carried = [text for text in strings if cv.TIP_PREFIX in text]
+        assert carried, path
+        for text in carried:
+            assert text.count(cv.TIP_PREFIX) == 1, path
+            assert cv.set_film_shot_tip(text) == text, path
+        blob = "\n".join(strings)
+        for needle in (
+            "film/<slug>/00-plate",
+            "film/<slug>/act-01",
+            "film/<slug>/feature",
+        ):
+            assert needle in blob, (path, needle)

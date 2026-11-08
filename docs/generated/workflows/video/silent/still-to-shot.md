@@ -36,23 +36,15 @@ After Queue, click **Save video (MP4) - open node for preview** for an inline pr
 US-safe 5.00s silent I2V shot (120 frames @ 24 fps) with last-frame SaveImage.
 Models: wan2.2_ti2v_5B_fp16 + umt5_xxl_fp8_e4m3fn_scaled (CLIP wan) + wan2.2_vae. Apache 2.0. Silent.
 
-90s films: optional silent rehearsal. Copy `wan_i2v` from `{film}.shots.yaml`, set LoadImage to the previous last PNG, VHS prefix ez_<slug>_bN_sM_wan_video. Prefer the one-click **film-*-90s** LTX path for the deliverable.
+90s films: optional silent rehearsal. Copy `wan_i2v` from `{film}.shots.yaml`, set LoadImage to the previous last PNG, VHS prefix ez_<slug>_bN_sM_wan_video. Prefer the split film apps below for the deliverable.
 
 Six-shot concat demo: Queue this six times with VHS prefix ez_shot_01 .. ez_shot_06, then bazelisk run //scripts:run-utility -- concat-shots --yes
 
 Do not Queue a 90s denoise. US-safe local pack only. No score.
-90s films: prefer the one-click **film/go-see** graphs (Queue once). This graph remains the silent 5.00s rehearsal.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 
 Occupancy: wan - stop LTX, podcast, music. One GB10 job.
-90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.
-90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.
-90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.
-90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.
-90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.
-90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.
-90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.
-90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.
+90s films: Queue **film/<slug>/00-plate** once (Klein identity still), then **film/<slug>/act-01** or **film/<slug>/feature** - that pair prints the 18 beats and stitches them. To iterate one beat here, paste its `ltx_i2v` / `wan_i2v` paragraph from `{film}.shots.yaml`, keep the VHS prefix ez_<slug>_bN_sM_<engine>_video, and stitch on the host with bazelisk run //scripts:run-utility -- concat-shots --film <slug> --yes.
 ```
 
 ## How to Queue
@@ -767,23 +759,15 @@ After Queue, click **Save video (MP4) - open node for preview** for an inline pr
 US-safe 5.00s silent I2V shot (120 frames @ 24 fps) with last-frame SaveImage.
 Models: wan2.2_ti2v_5B_fp16 + umt5_xxl_fp8_e4m3fn_scaled (CLIP wan) + wan2.2_vae. Apache 2.0. Silent.
 
-90s films: optional silent rehearsal. Copy `wan_i2v` from `{film}.shots.yaml`, set LoadImage to the previous last PNG, VHS prefix ez_<slug>_bN_sM_wan_video. Prefer the one-click **film-*-90s** LTX path for the deliverable.
+90s films: optional silent rehearsal. Copy `wan_i2v` from `{film}.shots.yaml`, set LoadImage to the previous last PNG, VHS prefix ez_<slug>_bN_sM_wan_video. Prefer the split film apps below for the deliverable.
 
 Six-shot concat demo: Queue this six times with VHS prefix ez_shot_01 .. ez_shot_06, then bazelisk run //scripts:run-utility -- concat-shots --yes
 
 Do not Queue a 90s denoise. US-safe local pack only. No score.
-90s films: prefer the one-click **film/go-see** graphs (Queue once). This graph remains the silent 5.00s rehearsal.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 
 Occupancy: wan - stop LTX, podcast, music. One GB10 job.
-90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.
-90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.
-90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.
-90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.
-90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.
-90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.
-90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.
-90s films: prefer the one-click **film/go-see** graphs (Queue once: identity + 18 LTX prints + stitch). This graph remains the generic 5.00s printer / spark-farm shot / Wan rehearsal.
+90s films: Queue **film/<slug>/00-plate** once (Klein identity still), then **film/<slug>/act-01** or **film/<slug>/feature** - that pair prints the 18 beats and stitches them. To iterate one beat here, paste its `ltx_i2v` / `wan_i2v` paragraph from `{film}.shots.yaml`, keep the VHS prefix ez_<slug>_bN_sM_<engine>_video, and stitch on the host with bazelisk run //scripts:run-utility -- concat-shots --film <slug> --yes.
 ```
 
 ### `ImageFromBatch` - Image From Batch

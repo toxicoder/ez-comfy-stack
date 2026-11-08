@@ -229,7 +229,8 @@ REL_RENAMES: dict[str, str] = {
     "shorts/glasshouse/act-03": "film/glasshouse/act-03",
     "shorts/glasshouse/act-04": "film/glasshouse/act-04",
     "shorts/glasshouse/act-05": "film/glasshouse/act-05",
-    "shorts/go-see": "film/go-see",
+    "shorts/go-see": "film/go-see/feature",
+    "film/go-see": "film/go-see/feature",
     "shorts/last-lane/act-01": "film/last-lane/act-01",
     "shorts/last-lane/act-02": "film/last-lane/act-02",
     "shorts/last-lane/act-03": "film/last-lane/act-03",
@@ -240,8 +241,10 @@ REL_RENAMES: dict[str, str] = {
     "shorts/night-oven/act-03": "film/night-oven/act-03",
     "shorts/night-oven/act-04": "film/night-oven/act-04",
     "shorts/night-oven/act-05": "film/night-oven/act-05",
-    "shorts/still-here": "film/still-here",
-    "shorts/switchyard": "film/switchyard",
+    "shorts/still-here": "film/still-here/feature",
+    "film/still-here": "film/still-here/feature",
+    "shorts/switchyard": "film/switchyard/feature",
+    "film/switchyard": "film/switchyard/feature",
     "shorts/tide-table/act-01": "film/tide-table/act-01",
     "shorts/tide-table/act-02": "film/tide-table/act-02",
     "shorts/tide-table/act-03": "film/tide-table/act-03",
@@ -296,6 +299,13 @@ REL_RENAMES: dict[str, str] = {
     "wan/text-to-video-5s": "video/silent/text-to-video-5s",
     "wan/vace-join": "video/silent/vace-join",
 }
+
+PLATE_STEM = "00-plate"
+"""Basename of a film series' Klein identity plate.
+
+The Apps sidebar lists graphs by sorted path, so the number prefix keeps the
+plate the operator must Queue first directly above ``act-01``.
+"""
 
 # Old unique stem (no .json) -> _lab-relative id (no .json).
 OLD_TO_REL: dict[str, str] = {

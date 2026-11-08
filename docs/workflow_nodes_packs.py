@@ -185,7 +185,7 @@ def pack_nodes() -> NodeSpecs:
         "Unload models",
         "Pass-through IMAGE that unloads diffusion models first.",
         origin="ez_film",
-        lab="Keeps Klein 4B and LTX-2.5 from sitting in memory together on 90s one-click films.",
+        lab="Frees the previous UNET before the Trellis load, so two model families never share the GB10.",
         sockets=[
             _s("image", "IMAGE", "in", "Identity still."),
             _s("image", "IMAGE", "out", "Same still after unload."),

@@ -139,9 +139,14 @@ Director is **off** this path. See [Short films](shorts.md).
 
 ## Queue from three UIs
 
-The one-click **film/go-see** graph is sequential on one host. For a farm, load
-**video/av/still-to-shot** (or optional **video/silent/still-to-shot**) on each UI and
-**Queue** independent **5 s** shots - different beats in parallel. Concat locally:
+Queue **film/go-see/00-plate** once on one host (one Klein still, occupancy **klein**) -
+every print pass reads that PNG off the share. The print app (**film/go-see/feature**, or
+**film/tide-table/act-01** .. **act-05** on a 7.5 min title) is sequential on one host: each
+5 s print starts from the previous last frame, and each act beyond the first starts from the
+previous act's last frame. For a farm, load **video/av/still-to-shot** (or optional
+**video/silent/still-to-shot**) on each UI and **Queue** independent **5 s** shots -
+different beats in parallel - or put a different title's print pass on each host. Concat
+locally:
 
 ```bash
 FILM=go-see   # or still-here | switchyard
@@ -174,9 +179,11 @@ Start compose yourself on each node (`./scripts/manage.sh start`, type yes). The
 `./scripts/manage.sh start` you must run locally (heavy confirm stays on that node).
 Containers still use `restart: "no"`.
 
-The `run` subcommand prints a **film/go-see / video/silent/still-to-shot /
-video/av/still-to-shot** Queue reminder for `--film go-see` (or still-here / switchyard). It
-does **not** POST graphs. It refuses MiniMax H3 names (`*h3*` / `*MiniMax*`).
+The `run` subcommand prints a Queue reminder (**video/silent/still-to-shot**, then
+**video/av/still-to-shot**, then a `concat-shots` pass against the film slug) for
+`--film go-see` (or still-here / switchyard). It does **not** POST graphs, and it does not
+Queue the plate - load **film/go-see/00-plate** once yourself before any print pass. It
+refuses MiniMax H3 names (`*h3*` / `*MiniMax*`).
 
 `dispatch` assigns shots **01-06 / 07-12 / 13-18** (or an even split on two hosts) and SSH-runs
 **local** `bazelisk run //:manage -- print-shot` on each Spark. It **never** remote-starts compose.

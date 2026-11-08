@@ -288,7 +288,7 @@ def test_beat_sheet_documents_yaml_contract_and_has_no_unet() -> None:
     assert graph["extra"]["lab_app_mode"]["occupancy"] == "none"
     assert graph["extra"]["lab_app_mode"]["lane"] == "labs"
     handoff = graph["extra"]["lab_app_mode"]["handoff"]
-    assert "film/go-see" in handoff
+    assert "film/go-see/feature" in handoff
     assert "guides/clay-hero" in handoff
     assert "photos/identity-sheet" in handoff
     assert "1280x720" not in blob and "1280x720" not in blob

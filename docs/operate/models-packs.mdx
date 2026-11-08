@@ -225,7 +225,8 @@ lists and `quality/` NOTICE files are not copied. Catalog and iteration loop:
 | `video/av/still-to-video-8s` | LTX-2.5 I2V ~5 s with audio muxed into MP4 (121) |
 | `video/av/text-to-video-8s` | LTX-2.5 T2V ~5 s with audio muxed into MP4 |
 | `video/av/still-to-shot` | 5.00 s LTX I2V print + last-frame SaveImage |
-| `_lab/film/go-see.json` (also still-here, switchyard) | **One-click** Klein identity + 18 LTX 5.00s AV prints + stitch ([Short films](../shorts.md)) |
+| `_lab/film/go-see/00-plate.json` (also still-here, switchyard, and the five series) | **Queue first.** Klein 4B identity still (17 nodes, 1280x704, prefix `ez_<slug>_plate`). Pack: Klein 4B distilled FP8 UNET from `download-models` ([Short films](../shorts.md)) |
+| `_lab/film/go-see/feature.json` (also still-here, switchyard; `act-01.json` .. `act-05.json` on the series) | **One-click** LTX print pass: 18 LTX 5.00s AV prints + stitch, read from `ez_<slug>_plate.png`. Pack: LTX-2.5 distilled UNET + Gemma text encoder + video/audio VAEs from `download-models` ([Short films](../shorts.md)) |
 | `photos/shorts-still.json` | Vertical 9:16 Shorts still |
 | `video/silent/shorts-still-5s` | Vertical silent Shorts I2V |
 | `video/av/shorts-still-8s` | Vertical AV Shorts I2V |

@@ -231,7 +231,7 @@ Pass-through IMAGE that unloads diffusion models first.
 
 !!! warning "Lab notes"
 
-    Keeps Klein 4B and LTX-2.5 from sitting in memory together on 90s one-click films.
+    Frees the previous UNET before the Trellis load, so two model families never share the GB10.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |

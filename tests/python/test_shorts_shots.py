@@ -9,6 +9,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from typing import Any
 
 from _lab_layout import node_overlap_hits
 from _lab_paths import lab_json
@@ -45,10 +46,16 @@ KLEIN_NEGATION = ("no logos", "no violence", "without text", "no people")
 SHOT_INDEX_RE = re.compile(r"Shot \d+ of 18")
 WAN_AUDIO_WORDS = ("score", "music", "audio", "sound", "breath")
 LTX_CLOSE = "No music and no score."
+# One-click film print pass (LTX only); the Klein still is its own graph.
 BIBLES = {
-    "go-see": "film/go-see.json",
-    "still-here": "film/still-here.json",
-    "switchyard": "film/switchyard.json",
+    "go-see": "film/go-see/feature",
+    "still-here": "film/still-here/feature",
+    "switchyard": "film/switchyard/feature",
+}
+PLATES = {
+    "go-see": "film/go-see/00-plate",
+    "still-here": "film/still-here/00-plate",
+    "switchyard": "film/switchyard/00-plate",
 }
 # Cut tools share the film lane but are not one-click shorts.
 CUT_TOOLS = frozenset({"film/generate-cutaway"})
@@ -365,19 +372,19 @@ def _json_files() -> list[Path]:
     return files
 
 
-def _overlap_hits(graph: dict) -> list[str]:
+def _overlap_hits(graph: dict[str, Any]) -> list[str]:
     return node_overlap_hits(graph)
 
 
 def test_shorts_json_parse_ids_and_banned_strings() -> None:
     from _lab_paths import lab_rel_of
 
-    expected = {
-        "film/go-see",
-        "film/still-here",
-        "film/switchyard",
-    }
+    expected: set[str] = set()
+    for film, _slug in FILMS:
+        expected.add(f"film/{film}/00-plate")
+        expected.add(f"film/{film}/feature")
     for film in LONG:
+        expected.add(f"film/{film[0]}/00-plate")
         for act in range(1, 6):
             expected.add(f"film/{film[0]}/act-0{act}")
     names = {lab_rel_of(p) for p in _json_files()}
@@ -401,10 +408,19 @@ def test_shorts_json_parse_ids_and_banned_strings() -> None:
             for n in notes
         )
         clips = [n for n in graph["nodes"] if n.get("type") == "CLIPTextEncode"]
-        assert len(clips) >= 20, path.name
+        if any(n.get("type") == "LTXVImgToVideo" for n in graph["nodes"]):
+            # Print pass bakes 18 LTX I2V paragraphs plus the shared LTX negative.
+            assert len(clips) >= 19, path.name
+        else:
+            # Klein plate carries only its own positive/negative pair.
+            assert len(clips) == 2, path.name
         lab_note = graph.get("extra", {}).get("lab_note")
         assert isinstance(lab_note, str) and lab_note.strip()
-        assert "Queue once" in lab_note or "Queue **once**" in lab_note
+        assert (
+            "Queue once" in lab_note
+            or "Queue **once**" in lab_note
+            or "Queue this app once" in lab_note
+        ), path.name
 
 
 def test_shot_graphs_are_five_second_i2v() -> None:
@@ -463,15 +479,82 @@ def test_no_long_latents_in_shorts() -> None:
 
 def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
     for film, slug in FILMS:
+        parsed = parse_shots_yaml(_path(film).read_text(encoding="utf-8"))
+        plate_path = lab_json(PLATES[film])
+        plate = json.loads(plate_path.read_text(encoding="utf-8"))
+        plate_text = plate_path.read_text(encoding="utf-8")
         path = lab_json(BIBLES[film])
         graph = json.loads(path.read_text(encoding="utf-8"))
         text = path.read_text(encoding="utf-8")
-        parsed = parse_shots_yaml(_path(film).read_text(encoding="utf-8"))
-        assert "flux-2-klein-4b-fp8.safetensors" in text
-        assert "qwen_3_4b.safetensors" in text
-        assert "flux2-vae.safetensors" in text
-        assert '"flux2"' in text
+
+        # Klein identity plate: the only graph of the pair that loads Klein.
+        assert "flux-2-klein-4b-fp8.safetensors" in plate_text
+        assert "qwen_3_4b.safetensors" in plate_text
+        assert "flux2-vae.safetensors" in plate_text
+        assert '"flux2"' in plate_text
+        assert (
+            "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors"
+            not in plate_text
+        )
+        plate_unets = [n["widgets_values"][0] for n in plate["nodes"] if n.get("type") == "UNETLoader"]
+        assert plate_unets == ["flux-2-klein-4b-fp8.safetensors"], plate_path.name
+        assert not any(
+            n.get("type")
+            in ("LTXVImgToVideo", "VHS_VideoCombine", "EZFilmConcat", "LoadImage")
+            for n in plate["nodes"]
+        ), plate_path.name
+        latent = next(n for n in plate["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
+        assert latent["widgets_values"][0] == 1280
+        assert latent["widgets_values"][1] == 704
+        assert latent["widgets_values"][2] == 1
+        klein_sampler = next(
+            n
+            for n in plate["nodes"]
+            if n.get("type") == "KSampler" and n["widgets_values"][2] == 4
+        )
+        assert klein_sampler["widgets_values"][0] == 42
+        assert klein_sampler["widgets_values"][3] == 1.0
+        enhance = next(n for n in plate["nodes"] if n.get("type") == "EZKleinPromptEnhance")
+        ev = enhance["widgets_values"]
+        ident = ev[1] if len(ev) >= 7 else ev[0]
+        eflag = ev[2] if len(ev) >= 7 else ev[1]
+        emode = ev[3] if len(ev) >= 7 else ev[2]
+        assert ident == parsed["identity"]
+        assert eflag is False
+        if film == "go-see":
+            assert emode == "t2i"
+            assert "staff" not in str(ident).lower()
+        else:
+            assert emode == "identity"
+        plate_neg = [n for n in plate["nodes"] if n.get("type") == "EZNegativePromptEnhance"]
+        assert len(plate_neg) == 1, plate_path.name
+        assert all(n["widgets_values"][1] is True for n in plate_neg)
+        identity = next(
+            n
+            for n in plate["nodes"]
+            if n.get("type") == "SaveImage"
+            and n["widgets_values"][0] == f"ez_{slug}_plate"
+        )
+        assert identity["widgets_values"][0] == f"ez_{slug}_plate"
+        plate_note = next(n for n in plate["nodes"] if n.get("type") == "Note")
+        plate_note_body = plate_note["widgets_values"][0]
+        assert "Queue **once**" in plate_note_body
+        assert f"ez_{slug}_plate_00001_.png" in plate_note_body
+        if film == "go-see":
+            klein_neg = next(
+                n
+                for n in plate["nodes"]
+                if n.get("type") == "CLIPTextEncode" and n.get("title") == "Negative"
+            )
+            klein_neg_text = str(klein_neg["widgets_values"][0])
+            assert "handlebar grip" in klein_neg_text
+            assert "staff" in klein_neg_text
+            assert "carried object" in klein_neg_text
+
+        # LTX print pass: the only graph of the pair that loads LTX.
         assert "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors" in text
+        assert "flux-2-klein-4b-fp8.safetensors" not in text
+        assert len([n for n in graph["nodes"] if n.get("type") == "UNETLoader"]) == 1, path.name
         printers = [n for n in graph["nodes"] if n.get("type") == "LTXVImgToVideo"]
         assert len(printers) == 18, (path.name, len(printers))
         assert all(n.get("mode") == 0 for n in printers)
@@ -479,7 +562,10 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         assert all(n["widgets_values"][1] == 704 for n in printers)
         assert all(n["widgets_values"][2] == 121 for n in printers)
         assert any(n.get("type") == "LTXVAudioVAEDecode" for n in graph["nodes"])
-        assert any(n.get("type") == "EZUnloadModels" for n in graph["nodes"])
+        assert not any(n.get("type") == "EZUnloadModels" for n in graph["nodes"]), path.name
+        assert not any(
+            n.get("type") == "EZKleinPromptEnhance" for n in graph["nodes"]
+        ), path.name
         concat = next(n for n in graph["nodes"] if n.get("type") == "EZFilmConcat")
         assert concat["widgets_values"][0] == film
         assert len(concat["widgets_values"]) >= 4
@@ -497,26 +583,8 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
             assert "wingsuit handlebar" in neg
             assert "staff" in neg
             assert "carried object" in neg
-            klein_neg = next(
-                n
-                for n in graph["nodes"]
-                if n.get("type") == "CLIPTextEncode"
-                and n.get("title") == "Negative"
-                and n.get("id") != 104
-            )
-            klein_neg_text = str(klein_neg["widgets_values"][0])
-            assert "handlebar grip" in klein_neg_text
-            assert "staff" in klein_neg_text
-            assert "carried object" in klein_neg_text
         else:
             assert "wingsuit handlebar" not in neg
-        identity = next(
-            n
-            for n in graph["nodes"]
-            if n.get("type") == "SaveImage"
-            and n["widgets_values"][0] == f"ez_{slug}_identity"
-        )
-        assert identity["widgets_values"][0] == f"ez_{slug}_identity"
         vhs_nodes = [n for n in graph["nodes"] if n.get("type") == "VHS_VideoCombine"]
         assert len(vhs_nodes) == 18
         prefixes = {n["widgets_values"]["filename_prefix"] for n in vhs_nodes}
@@ -526,36 +594,40 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
             assert node["widgets_values"]["save_output"] is True
             audio = next(i for i in node["inputs"] if i.get("name") == "audio")
             assert audio.get("link") is not None
-        assert not any(n.get("type") == "LoadImage" for n in graph["nodes"])
+        # Plate -> shot seam is one file on disk: the plate's SaveImage prefix is
+        # the PNG this pass loads as the start image of shot 1.
+        loads = [n for n in graph["nodes"] if n.get("type") == "LoadImage"]
+        assert len(loads) == 1, path.name
+        load = loads[0]
+        assert load.get("title") == "Load identity plate"
+        assert load["id"] == 51
+        assert load["widgets_values"][0] == f"ez_{slug}_plate.png"
+        assert load["widgets_values"][0] == f"{identity['widgets_values'][0]}.png"
         ltx_enh = [n for n in graph["nodes"] if n.get("type") == "EZLTXPromptEnhance"]
         assert len(ltx_enh) == 18
-        klein_sampler = next(
-            n
-            for n in graph["nodes"]
-            if n.get("type") == "KSampler" and n["widgets_values"][2] == 4
-        )
-        assert klein_sampler["widgets_values"][0] == 42
-        assert klein_sampler["widgets_values"][3] == 1.0
-        enhance = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
-        ev = enhance["widgets_values"]
-        ident = ev[1] if len(ev) >= 7 else ev[0]
-        eflag = ev[2] if len(ev) >= 7 else ev[1]
-        emode = ev[3] if len(ev) >= 7 else ev[2]
-        assert ident == parsed["identity"]
         assert all(
             (n["widgets_values"][2] if len(n["widgets_values"]) >= 8 else n["widgets_values"][1])
             is False
             for n in ltx_enh
         )
-        assert eflag is False
+        # The Klein enhance node stayed on the plate, so the identity paragraph
+        # rides into every shot enhance as context from EZSamplePrompt instead.
+        context = next(n for n in graph["nodes"] if n.get("type") == "EZSamplePrompt")
+        assert context.get("title") == "Identity context"
+        assert context["widgets_values"][1] == parsed["identity"]
+        context_links = {
+            int(link)
+            for out in (context.get("outputs") or [])
+            for link in (out.get("links") or [])
+        }
+        for node in ltx_enh:
+            ctx_input = next(
+                i for i in node.get("inputs") or [] if i.get("name") == "context"
+            )
+            assert ctx_input.get("link") in context_links, (path.name, node.get("title"))
         neg_enh = [n for n in graph["nodes"] if n.get("type") == "EZNegativePromptEnhance"]
-        assert len(neg_enh) >= 2
+        assert len(neg_enh) == 1, path.name
         assert all(n["widgets_values"][1] is True for n in neg_enh)
-        if film == "go-see":
-            assert emode == "t2i"
-            assert "staff" not in str(ident).lower()
-        else:
-            assert emode == "identity"
         ltx_pos = [
             n
             for n in graph["nodes"]
@@ -565,10 +637,6 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         baked = {n["widgets_values"][0] for n in ltx_pos}
         expected_ltx = {s["ltx_i2v"] for s in parsed["shots"]}
         assert baked == expected_ltx
-        latent = next(n for n in graph["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
-        assert latent["widgets_values"][0] == 1280
-        assert latent["widgets_values"][1] == 704
-        assert latent["widgets_values"][2] == 1
         last_saves = [
             n
             for n in graph["nodes"]
@@ -577,7 +645,8 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         assert len(last_saves) == 18
         note = next(n for n in graph["nodes"] if n.get("type") == "Note")
         body = note["widgets_values"][0]
-        assert "Queue once" in body or "Queue **once**" in body
+        assert f"Queue **{PLATES[film]}** once" in body
+        assert "Queue this app once" in body
         assert "concat-shots" in body
         assert "already on disk" in body
         assert f"ez_{slug}_90s.mp4" in body
@@ -593,6 +662,15 @@ def test_long_film_act_graphs() -> None:
         for act in range(1, 6):
             rel = f"film/{film}/act-0{act}"
             graph = json.loads(lab_json(rel).read_text(encoding="utf-8"))
+            unets = [n for n in graph["nodes"] if n.get("type") == "UNETLoader"]
+            assert [n["widgets_values"][0] for n in unets] == [
+                "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors"
+            ], rel
+            assert not any(
+                n.get("type") in ("EZUnloadModels", "EZKleinPromptEnhance")
+                for n in graph["nodes"]
+            ), rel
+            assert all((n.get("mode") or 0) == 0 for n in graph["nodes"]), rel
             printers = [n for n in graph["nodes"] if n.get("type") == "LTXVImgToVideo"]
             assert len(printers) == 18, rel
             concat = next(n for n in graph["nodes"] if n.get("type") == "EZFilmConcat")
@@ -605,13 +683,45 @@ def test_long_film_act_graphs() -> None:
                 f"{s['prefix']}_ltx_video" for s in parsed["shots"][offset : offset + 18]
             }
             assert prefixes == expected, rel
+            ltx_enh = [n for n in graph["nodes"] if n.get("type") == "EZLTXPromptEnhance"]
+            assert len(ltx_enh) == 18, rel
+            context = next(n for n in graph["nodes"] if n.get("type") == "EZSamplePrompt")
+            assert context.get("title") == "Identity context", rel
+            assert context["widgets_values"][1] == parsed["identity"], rel
+            context_links = {
+                int(link)
+                for out in (context.get("outputs") or [])
+                for link in (out.get("links") or [])
+            }
+            for node in ltx_enh:
+                ctx_input = next(
+                    i for i in node.get("inputs") or [] if i.get("name") == "context"
+                )
+                assert ctx_input.get("link") in context_links, (rel, node.get("title"))
             loads = [n for n in graph["nodes"] if n.get("type") == "LoadImage"]
+            assert len(loads) == 1, rel
+            load = loads[0]
+            assert load["id"] == 51, rel
             if act == 1:
-                assert not loads
+                # Act 1 starts from the Klein still film/<series>/plate writes.
+                assert load["title"] == "Load identity plate", rel
+                assert load["widgets_values"][0] == f"ez_{slug}_plate.png", rel
+                plate = json.loads(
+                    lab_json(f"film/{film}/00-plate").read_text(encoding="utf-8")
+                )
+                plate_saves = [n for n in plate["nodes"] if n.get("type") == "SaveImage"]
+                assert [n["widgets_values"][0] for n in plate_saves] == [
+                    f"ez_{slug}_plate"
+                ], rel
             else:
-                assert len(loads) == 1
+                assert load["title"] == "Load previous act last frame", rel
                 prev = parsed["shots"][offset - 1]["prefix"]
-                assert prev in str(loads[0]["widgets_values"][0])
+                assert load["widgets_values"][0] == f"{prev}_last.png", rel
             extra = graph.get("extra") or {}
             assert extra.get("lab_rel") == rel
             assert extra.get("lab_act") == act
+            app_mode = extra.get("lab_app_mode") or {}
+            assert app_mode.get("occupancy") == "ltx", rel
+            assert app_mode.get("handoff") == (
+                [f"film/{film}/act-0{act + 1}"] if act < 5 else []
+            ), rel
