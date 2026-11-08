@@ -245,6 +245,14 @@ def test_mkdocs_wires_commands_js(cmd: ModuleType) -> None:
     assert ".ez-spark-panel" in css
     assert ".ez-var" in css
     assert "cursor: text" in css
+    # A chip has to stay inline: fumadocs marks every child of a code block as its own flex
+    # row, which would split `export SPARK_HOST="value"` across three lines.
+    assert re.search(r"\.ez-var\s*\{[^}]*display:\s*inline-block", css, re.S)
+    assert re.search(
+        r"pre:has\(\s*>\s*code\[data-ez-src\]\)\s*>\s*code\[data-ez-src\]\s*\{[^}]*white-space:\s*pre-wrap",
+        css,
+        re.S,
+    )
     assert CONVENTIONS.read_text(encoding="utf-8").find("ezcmd") != -1
     conventions = CONVENTIONS.read_text(encoding="utf-8")
     assert "${VAR:-" in conventions or "${NAME:-" in conventions or "session" in conventions.lower()
