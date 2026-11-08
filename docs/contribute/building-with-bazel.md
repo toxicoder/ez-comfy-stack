@@ -320,6 +320,14 @@ carry, and fails when text a reader could copy - a fenced block or a backticked 
 script directly while a Bazel target does that job. The advice it prints is the copyable target,
 so the repair is usually a cut and paste.
 
+The site's command widgets are held to the same line. `includes/command-builder.json` is JSON, so the
+text sweep skips it as data, but each recipe's `argv` is exactly what a copy button puts on the
+clipboard, so the guard joins that list and runs the identical policy over the rendered line - same
+rules, same host-verb exemption, same advice shape - and names the recipe `id` so the contributor
+knows which recipe to edit. A recipe is therefore written as its target too, the verbs below stay raw
+there as they do in prose, and a recipe with no target at all (an `ssh` tunnel, an `echo` of a URL)
+is legal as written.
+
 Two things are exempt by policy rather than by exception:
 
 - the `manage.sh` verbs that need Docker, `sudo`, the GPU, or `$HOME` (`setup`,

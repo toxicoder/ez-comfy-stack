@@ -7,6 +7,13 @@ The guard reads every committed text file, looks only at **command position**
 (a fenced block line or a backticked span, where a reader actually copies from),
 and fails when such a command has a Bazel target.
 
+Two committed formats are JSON, so the text sweep skips them as data and each
+gets its own pass over the text an operator really copies: the note fields of
+the lab graphs (ComfyUI renders them on the canvas), and the ``argv`` of the
+site's command-builder recipes (the docs-site widgets join it into the line a
+reader pastes). Both reuse the same ``RULES``, the same host-verb exemption, and
+the same report shape as the text sweep.
+
 Two escapes exist, both explicit tables rather than a comment a reader can
 forget to delete:
 
@@ -86,6 +93,12 @@ _SKIP_FILES = ("docs-site/package-lock.json",)
 # ComfyUI graphs are JSON, so the text sweep skips them as data. Their note
 # fields are prose an operator reads on the canvas, so they get their own pass.
 _LAB_DIR = "workflows/_lab"
+# The command widgets are JSON too, and sweeping arbitrary JSON as prose is not
+# the policy. The file is the source the site's copy buttons draw from -
+# docs-site/components/command-vars.tsx imports it and
+# docs-site/lib/command-vars.ts joins each recipe's argv into the line the reader
+# pastes - so the recipes get their own pass over that rendered line.
+_COMMAND_BUILDER_FILE = "includes/command-builder.json"
 
 # --------------------------------------------------------------------------
 # The policy
@@ -678,12 +691,100 @@ def lab_graph_violations(root: Path, paths: Sequence[str]) -> list[str]:
     return problems
 
 
+def builder_recipe_commands(builder: Mapping[str, object]) -> list[tuple[str, str]]:
+    """The ``(recipe id, copied line)`` pair for each command-builder recipe.
+
+    The widget renders the argv list it is handed as ``" ".join(argv)`` plus the
+    selected flags, and that is the line the reader pastes, so the join is what
+    the policy reads rather than the raw JSON. Prose fields such as
+    ``description`` stay out of it, and a script path sitting inside an argument
+    is an argument, not the command the recipe runs.
+
+    Globals: none.
+    Arguments:
+      builder - a parsed includes/command-builder.json.
+    Outputs:
+      None; returns the pairs only.
+    Returns:
+      ``(id, command)`` per recipe carrying a non-empty argv, in document order.
+      A row that is not an object, or one whose argv is missing or not a list of
+      strings, yields no pair rather than raising.
+    """
+    recipes = builder.get("commands")
+    if not isinstance(recipes, list):
+        return []
+    out: list[tuple[str, str]] = []
+    for recipe in recipes:
+        if not isinstance(recipe, Mapping):
+            continue
+        argv = recipe.get("argv")
+        if not isinstance(argv, list):
+            continue
+        command = " ".join(item for item in argv if isinstance(item, str)).strip()
+        if not command:
+            continue
+        out.append((str(recipe.get("id", "")).strip(), command))
+    return out
+
+
+def command_builder_violations(root: Path, paths: Sequence[str]) -> list[str]:
+    """Sweep the command-builder recipes, which the doc sweep skips as JSON.
+
+    A recipe's argv is the clipboard text behind every command widget on the
+    published pages, so it is operator-facing exactly like a fenced block, and it
+    has to name the same targets the docs name. The host-mutating verbs stay raw
+    here as they do in prose: a recipe for one of them cannot run hermetically,
+    and the widget would otherwise copy a command that cannot work. A recipe whose
+    argv is a plain shell line (an ``ssh`` tunnel, an ``echo`` of a URL, a
+    ``docker compose`` call) names no repo entry point, so ``classify`` returns
+    None and the recipe is legal as written; if that ever stops being true, the
+    exemption belongs in ``_IGNORED_COMMANDS`` with its reason.
+
+    Globals: _ALLOW, _COMMAND_BUILDER_FILE.
+    Arguments:
+      root - checkout root.
+      paths - repo-relative tracked paths to consider.
+    Outputs:
+      None; returns the violations only.
+    Returns:
+      One string per recipe whose rendered line names a repo script directly.
+    """
+    problems: list[str] = []
+    for path in paths:
+        if path != _COMMAND_BUILDER_FILE:
+            continue
+        file_path = root / path
+        if not file_path.is_file():
+            continue
+        try:
+            builder = json.loads(file_path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+            continue
+        if not isinstance(builder, Mapping):
+            continue
+        for recipe_id, command in builder_recipe_commands(builder):
+            found = classify(command)
+            if found is None:
+                continue
+            offending, suggestion = found
+            # A recipe has no line to point at, so only a bare `path` key in
+            # _ALLOW can exempt one; a line-keyed entry cannot reach this pass.
+            if allowed(path, 0, offending):
+                continue
+            label = recipe_id or "(recipe with no id)"
+            problems.append(f"{path}: recipe {label}: {offending} -> {suggestion}")
+    return problems
+
+
 def violations(root: Path, paths: Sequence[str] | None = None) -> list[str]:
     """Every command-position script reference that should name a Bazel target."""
     tracked = candidate_files(tracked_files(root)) if paths is None else list(paths)
-    graph_paths = tracked_files(root) if paths is None else list(paths)
+    # The two JSON passes read files the prose sweep drops, so they see the
+    # unfiltered tracked list.
+    data_paths = tracked_files(root) if paths is None else list(paths)
     problems: list[str] = []
-    problems += lab_graph_violations(root, graph_paths)
+    problems += lab_graph_violations(root, data_paths)
+    problems += command_builder_violations(root, data_paths)
     for path, line, offending, suggestion in findings(root, tracked):
         problems.append(f"{path}:{line}: {offending} -> {suggestion}")
     return problems

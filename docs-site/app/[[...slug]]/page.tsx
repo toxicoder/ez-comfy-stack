@@ -9,6 +9,7 @@ import { Banner } from "fumadocs-ui/components/banner";
 
 import { CommandVarsProvider } from "@/components/command-vars";
 import { DocsPageProvider } from "@/components/docs-heading";
+import { DocsTocBar } from "@/components/docs-toc-bar";
 import { DocsTrail } from "@/components/docs-trail";
 import { mdxComponentsFor } from "@/components/mdx-components";
 import { PublishedChip } from "@/components/published-chip";
@@ -81,6 +82,11 @@ export default async function DocsRoute({ params }: PageProps) {
       <DocsPage
         toc={toc}
         full={data.full}
+        // The progress-ring popover is replaced by a heading row in its own slot: a ring plus
+        // a page title tells the reader they are somewhere, the row says where, in one click.
+        // The slot is a grid area of the layout, which is what lets the row stick under the
+        // header while the article scrolls.
+        tableOfContentPopover={{ component: <DocsTocBar /> }}
         // The trail is the reader's cue for which section and which sidebar folder they are
         // in, since the left menu keeps every other section folded beside their own.
         // fumadocs' own breadcrumb prints page titles, so it names neither the section nor

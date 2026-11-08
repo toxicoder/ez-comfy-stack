@@ -41,8 +41,8 @@ export default defineConfig({
   forbidOnly: Boolean(process.env.CI),
   snapshotPathTemplate: "./tests/visual/goldens/{projectName}/{arg}{ext}",
   // The export is a plain directory of index.html files, so the same static server that
-  // `npm run serve` uses is what the suite points at.  An already-running server (a
-  // developer's own) is reused rather than treated as a port clash.
+  // `bazelisk run //docs-site:serve` starts is what the suite points at.  An
+  // already-running server (a developer's own) is reused rather than treated as a port clash.
   webServer: {
     command: `node scripts/serve_static.mjs ${new URL(BASE_URL).port || PORT} ${EXPORT_DIR}`,
     url: BASE_URL,

@@ -222,7 +222,8 @@ def main(argv: list[str] | None = None) -> int:
         print(
             f"missing {MKDOCS_YML}: the nav is hand-maintained in "
             f"{OUT_JSON.relative_to(REPO_ROOT)} now - edit that file, then run "
-            "scripts/gen_nav.py --check (or npm run nav:check)",
+            "bazelisk test //docs-site:nav_test (the target behind the nav:check "
+            "npm script, which runs this script's --check mode)",
             file=sys.stderr,
         )
         return 1

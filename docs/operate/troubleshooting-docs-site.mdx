@@ -19,7 +19,7 @@ tags: [troubleshooting, docs, session-variables]
 - **Getting** the pinned table header and floating horizontal bar back on a wide table
 
 <Callout type="info" title="Not a Spark failure">
-  Highlighted chips (dotted underline) are the same session fields as **Your Spark** - click to edit. Values stay in this browser only. Stack issues: [Troubleshooting](../troubleshooting.md).
+  Highlighted chips (tinted boxes) are the same session fields as **Your Spark** - click to edit. Values stay in this browser only. Stack issues: [Troubleshooting](../troubleshooting.md).
 </Callout>
 
 Open this page when the docs site itself looks wrong and the Spark is fine: a copied command still
@@ -40,7 +40,8 @@ If a refresh does not clear your row, the table below names the remaining causes
 
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
-| Copy still shows `${SPARK_HOST}` / `${MODELS_DIR}` | Docs JS blocked, or a hard-cached command-vars bundle | Hard-refresh the docs tab. Highlighted chips (dotted underline) are the same session fields as **Your Spark** - click to edit. Not a Spark/`doctor` failure. Values stay in this browser only |
+| Copy still shows `${SPARK_HOST}` / `${MODELS_DIR}` | Docs JS blocked, or a hard-cached command-vars bundle | Hard-refresh the docs tab. Highlighted chips (tinted boxes) are the same session fields as **Your Spark** - click to edit. Not a Spark/`doctor` failure. Values stay in this browser only |
+| No row of heading names above the article, or the row shows no chip highlighted while you scroll | The heading row is `docs-toc-bar.tsx`, which reads the page's own headings after hydration; a blocked or stale bundle leaves it empty | Hard-refresh the docs tab. The row is the top-of-page sub navigation - the right-hand **On this page** column is separate and still renders without it. Not a Spark/`doctor` failure |
 | Wide table has no on-screen horizontal bar, or the pinned header does not pan with columns | Docs JS blocked, or a hard-cached table-chrome bundle | Hard-refresh the docs tab. `.ez-table-hscroll` is a `table-chrome.tsx` mirror of the wrap `scrollLeft` (native bar sits at the table bottom). Not a Spark/`doctor` failure |
 | Pinned table header or bottom scrollbar stays after the table has scrolled past | Stale table-chrome bundle (pin must hide once the table leaves the viewport) | Hard-refresh the docs tab. `.ez-table-pin` and `.ez-table-hscroll` release when the table is fully above the navbar. Not a Spark/`doctor` failure |
 | Search opens and every query says no results on the published site | The browser asked the host root for `/api/search`. The index is under the alias (`/ez-comfy-stack/development/api/search` or `/latest/...`) | Hard-refresh the docs tab. A local `next dev` preview uses `/api/search` and is a different build |

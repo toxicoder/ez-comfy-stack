@@ -5,7 +5,7 @@ import { defineConfig } from "vitest/config";
  *
  * Vitest's default include also matches `*.spec.*`, which would sweep up the Playwright
  * visual specs under `tests/visual/` and fail them outside a browser runner.  Those specs
- * belong to `npm run visual`; this runner only takes the unit tests.
+ * belong to `bazelisk test //docs-site:visual-test`; this runner only takes the unit tests.
  */
 export default defineConfig({
   test: {
