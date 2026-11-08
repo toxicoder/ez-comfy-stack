@@ -585,7 +585,10 @@
       "title": "occupancy enter",
       "description": "Park Comfy for blender-desk (POST /free) or llm-desk (35B sidecar), or enter a heavy family. Does not start Compose. NVENC stays XOR with compose-up. Graph occupancy label llm is not a CLI mode.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "occupancy",
         "enter"
       ],
@@ -633,7 +636,10 @@
       "title": "research-mcp",
       "description": "In-tree creative research MCP (chat, web_search, research, list_lab_apps). CPU GGUF. No execute_code. Does not refuse a GPU session.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "research-mcp"
       ],
       "flags": []
@@ -643,7 +649,10 @@
       "title": "studio-mcp",
       "description": "In-tree studio MCP (clone _lab graphs into live _user/; generate_app). CPU GGUF. No execute_code. Does not Queue.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "studio-mcp"
       ],
       "flags": []
@@ -653,7 +662,10 @@
       "title": "edit-mcp",
       "description": "In-tree editing-lane MCP (typed timeline tools over the /ez_edit routes). Thin stdio client; no execute_code. Refuses a heavy GPU mode.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "edit-mcp"
       ],
       "flags": []
@@ -663,7 +675,10 @@
       "title": "agent-model status",
       "description": "Host Qwen3.8-Flash-Next agent sidecar for the editing lane (127.0.0.1:30001, opt-in TensorFold recipe). Heavy confirm + preflights; refuses a heavy GPU mode.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "agent-model",
         "status"
       ],
@@ -706,7 +721,10 @@
       "title": "spark-ui",
       "description": "Foreground ssh -N -L to Host ez-spark. Start the stack first (type yes).",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "spark-ui"
       ],
       "flags": []
@@ -738,7 +756,10 @@
       "title": "doctor",
       "description": "Preflight. Missing weights are a warning, not a hard fail.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "doctor"
       ],
       "flags": []
@@ -768,7 +789,10 @@
       "title": "reap-models --plan",
       "description": "MODELS_DIR class plan only. Does not delete. cleanup does not delete weights.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "reap-models",
         "--plan"
       ],
@@ -779,7 +803,10 @@
       "title": "disk-wizard --plan",
       "description": "Host-wide leftover survey. Read-only. Never docker system prune -a --volumes.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "disk-wizard",
         "--plan"
       ],
@@ -790,7 +817,10 @@
       "title": "help",
       "description": "Print the manage.sh command list.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "help"
       ],
       "flags": []
@@ -817,7 +847,10 @@
       "title": "status",
       "description": "Compose project status. Prints MODELS_DIR, COMFY_OUTPUT_DIR, port.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "status"
       ],
       "flags": []
@@ -901,7 +934,10 @@
       "title": "logs",
       "description": "Follow compose logs.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "logs"
       ],
       "flags": []
@@ -922,7 +958,10 @@
       "title": "clear-hf-locks",
       "description": "Remove stale Hugging Face .lock files under MODELS_DIR.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "clear-hf-locks"
       ],
       "flags": []
@@ -932,7 +971,10 @@
       "title": "reset-hf-partials",
       "description": "Delete *.incomplete under MODELS_DIR. Finished weights kept.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "reset-hf-partials"
       ],
       "flags": []
@@ -942,7 +984,10 @@
       "title": "print-shot",
       "description": "Queue one compiled 90s shot into films/<slug>/shots/.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "print-shot"
       ],
       "flags": []
@@ -952,7 +997,10 @@
       "title": "film-resume",
       "description": "Reprint failed 90s shots only. Skip ok 5.00s takes.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "film-resume"
       ],
       "flags": []
@@ -962,7 +1010,10 @@
       "title": "film-export-otio",
       "description": "Write films/<slug>/publish OTIO from the jobstore. Host-side.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "film-export-otio"
       ],
       "flags": []
@@ -972,7 +1023,10 @@
       "title": "film-proxies",
       "description": "NVENC proxies. Refuse if compose is up. Never rewrite masters.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "film-proxies"
       ],
       "flags": []
@@ -982,7 +1036,10 @@
       "title": "take-promote",
       "description": "Copy a take into shots/NN.mp4 and mark the shot ok.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "take-promote"
       ],
       "flags": []
@@ -992,7 +1049,10 @@
       "title": "promote-workflow",
       "description": "Copy a live _user graph into workflows/_lab/<lane>/. Does not commit.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "promote-workflow"
       ],
       "flags": []
@@ -1002,7 +1062,10 @@
       "title": "album-render",
       "description": "Queue one shipped album then zip. Compose must already be up.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "album-render"
       ],
       "flags": []
@@ -1012,7 +1075,10 @@
       "title": "llm-sidecar",
       "description": "Host llama-server for occupancy llm-desk (127.0.0.1:30000). Prefer occupancy enter llm-desk.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "llm-sidecar",
         "status"
       ],
@@ -1023,7 +1089,10 @@
       "title": "blender-mcp",
       "description": "In-tree typed Blender MCP. bpy tools need blender-desk. No execute_code.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "blender-mcp"
       ],
       "flags": []
@@ -1033,7 +1102,10 @@
       "title": "blender-llm",
       "description": "Optional host Qwen3-4B CPU client for blender-mcp. Path D if llama.cpp missing.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "blender-llm"
       ],
       "flags": []
@@ -1043,7 +1115,10 @@
       "title": "blender",
       "description": "Host Blender sidecar. Workbench in blender-desk. Dies if Comfy is a heavy job.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "blender"
       ],
       "flags": []
@@ -1063,7 +1138,10 @@
       "title": "export-guides",
       "description": "Dump a 1280x704 (or 768x1280) / 120f clay+depth+canny pack. Dies if Comfy is heavy.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "export-guides"
       ],
       "flags": []
@@ -1073,7 +1151,10 @@
       "title": "blender-stills",
       "description": "Dump a single-frame clay/depth/canny still. Dies if Comfy is heavy.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "blender-stills"
       ],
       "flags": []
@@ -1083,7 +1164,10 @@
       "title": "house-views",
       "description": "Dump 1024x1280 Instagram clay stills + GLB. Dies if Comfy is heavy.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "house-views"
       ],
       "flags": []
@@ -1093,7 +1177,10 @@
       "title": "asset-ls",
       "description": "Read-only Asset Bible catalog under COMFY_OUTPUT_DIR/assets.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "asset-ls"
       ],
       "flags": []
@@ -1103,7 +1190,10 @@
       "title": "film-accept",
       "description": "Fail-closed 90s gate: 5.00s, 1280x704, LTX audio.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "film-accept"
       ],
       "flags": []
@@ -1113,7 +1203,10 @@
       "title": "shot-sheet",
       "description": "Write films/<slug>/shots.yaml with shot-card defaults.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "shot-sheet"
       ],
       "flags": []
@@ -1123,7 +1216,10 @@
       "title": "overlay-qc",
       "description": "50% clay/look overlay. Host ffmpeg; compose may stay up.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "overlay-qc"
       ],
       "flags": []
@@ -1133,7 +1229,10 @@
       "title": "film-animatic",
       "description": "Cheap 90s animatic from clay.mp4 or stills. Host ffmpeg.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "film-animatic"
       ],
       "flags": []
@@ -1143,7 +1242,10 @@
       "title": "stem-mix",
       "description": "Picture-lock stems; duck -15 dB; YouTube loudnorm. Occupancy audio.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "stem-mix"
       ],
       "flags": []
@@ -1153,7 +1255,10 @@
       "title": "audio-still-video",
       "description": "Mux a still + audio master to YouTube MP4. Host ffmpeg; compose may stay up.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "audio-still-video"
       ],
       "flags": []
@@ -1163,7 +1268,10 @@
       "title": "spark-timing",
       "description": "Kitchen wall-clock table. Do not record on pytorch-fallback.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "spark-timing",
         "show"
       ],
@@ -1174,7 +1282,10 @@
       "title": "models-status",
       "description": "Disk bible: keep-set + refuse list. Does not delete.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "models-status"
       ],
       "flags": []
@@ -1184,7 +1295,10 @@
       "title": "cleanup",
       "description": "Type DELETE. Removes ez-comfy-state only. Keeps MODELS_DIR and COMFY_OUTPUT_DIR.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "cleanup"
       ],
       "flags": []
@@ -1194,7 +1308,11 @@
       "title": "spark-farm status",
       "description": "Probe independent Spark workers. Never starts compose remotely. No NCCL.",
       "argv": [
-        "./scripts/utilities/spark-farm.sh",
+        "bazelisk",
+        "run",
+        "//scripts:run-utility",
+        "--",
+        "spark-farm",
         "status"
       ],
       "flags": []

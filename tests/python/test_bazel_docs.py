@@ -338,6 +338,160 @@ class TestLabGraphNotes:
         assert rel not in bazel_docs.candidate_files([rel])
 
 
+class TestCommandBuilderRecipes:
+    """The command widgets copy straight out of JSON the text sweep skips.
+
+    ``docs-site/components/command-vars.tsx`` imports ``includes/command-builder.json``
+    and ``docs-site/lib/command-vars.ts`` joins each ``recipe.argv`` into the line the
+    reader pastes, so a raw script in a recipe teaches the wrong door to everyone who
+    clicks Copy. The file carries ``.json``, so ``_SKIP_SUFFIX`` keeps it out of the
+    prose sweep: like the lab graphs, it gets its own pass over the rendered text.
+    """
+
+    BUILDER_REL = "includes/command-builder.json"
+
+    def _recipe(self, recipe_id: str, argv: list[str], **extra: object) -> dict[str, object]:
+        """One recipe in the shipped shape: id, title, description, argv, flags."""
+        row: dict[str, object] = {
+            "id": recipe_id,
+            "title": recipe_id,
+            "description": f"{recipe_id} fixture recipe",
+            "argv": list(argv),
+            "flags": [],
+        }
+        row.update(extra)
+        return row
+
+    def _builder(self, *recipes: dict[str, object]) -> dict[str, object]:
+        """A builder payload with the shipped file's two top-level keys."""
+        return {
+            "variables": [{"id": "SPARK_HOST", "label": "Spark IP / DNS", "default": "127.0.0.1"}],
+            "commands": [dict(recipe) for recipe in recipes],
+        }
+
+    def _write(self, root: Path, payload: object, rel: str | None = None) -> str:
+        """Write a builder payload at its shipped path; return that path."""
+        target = rel or self.BUILDER_REL
+        path = root / target
+        path.parent.mkdir(parents=True, exist_ok=True)
+        text = payload if isinstance(payload, str) else json.dumps(payload)
+        path.write_text(text, encoding="utf-8")
+        return target
+
+    def test_argv_is_read_as_the_rendered_line(self) -> None:
+        builder = self._builder(self._recipe("doctor", ["./scripts/manage.sh", "doctor"]))
+        assert bazel_docs.builder_recipe_commands(builder) == [
+            ("doctor", "./scripts/manage.sh doctor")
+        ]
+
+    def test_a_raw_manage_recipe_is_reported_with_its_target(self, tmp_path: Path) -> None:
+        rel = self._write(tmp_path, self._builder(self._recipe("doctor", ["./scripts/manage.sh", "doctor"])))
+        problems = bazel_docs.command_builder_violations(tmp_path, [rel])
+        assert len(problems) == 1, problems
+        assert "bazelisk run //:manage -- doctor" in problems[0]
+        assert rel in problems[0]
+
+    def test_the_report_names_the_recipe_id(self, tmp_path: Path) -> None:
+        argv = ["./scripts/manage.sh", "agent-model", "status"]
+        rel = self._write(tmp_path, self._builder(self._recipe("agent-model", argv)))
+        problems = bazel_docs.command_builder_violations(tmp_path, [rel])
+        assert len(problems) == 1, problems
+        assert "agent-model" in problems[0]
+        assert "bazelisk run //:manage -- agent-model status" in problems[0]
+
+    def test_violations_reports_a_raw_recipe_end_to_end(self, tmp_path: Path) -> None:
+        rel = self._write(tmp_path, self._builder(self._recipe("doctor", ["./scripts/manage.sh", "doctor"])))
+        problems = bazel_docs.violations(tmp_path, [rel])
+        assert len(problems) == 1, problems
+        assert "bazelisk run //:manage -- doctor" in problems[0]
+
+    @pytest.mark.parametrize("verb", ["download-models", "download-podcast", "start", "stop", "setup", "onboard"])
+    def test_a_host_verb_recipe_stays_raw(self, tmp_path: Path, verb: str) -> None:
+        rel = self._write(tmp_path, self._builder(self._recipe(verb, ["./scripts/manage.sh", verb])))
+        assert bazel_docs.command_builder_violations(tmp_path, [rel]) == []
+
+    def test_a_raw_download_utility_recipe_stays_raw(self, tmp_path: Path) -> None:
+        recipe = self._recipe("download-wan", ["./scripts/utilities/download-wan.sh", "run"])
+        rel = self._write(tmp_path, self._builder(recipe))
+        assert bazel_docs.command_builder_violations(tmp_path, [rel]) == []
+
+    @pytest.mark.parametrize(
+        "argv",
+        [
+            ["ssh", "-L", "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}", "${SPARK_USER}@${SPARK_HOST}"],
+            ["echo", "http://${SPARK_HOST}:${COMFY_PORT}"],
+            ["docker", "compose", "-f", "docker/docker-compose.yml", "ps"],
+        ],
+    )
+    def test_a_recipe_with_no_target_at_all_passes(self, tmp_path: Path, argv: list[str]) -> None:
+        rel = self._write(tmp_path, self._builder(self._recipe("plain", argv)))
+        assert bazel_docs.command_builder_violations(tmp_path, [rel]) == []
+
+    def test_a_target_recipe_is_clean(self, tmp_path: Path) -> None:
+        recipe = self._recipe("doctor", ["bazelisk", "run", "//:manage", "--", "doctor"])
+        rel = self._write(tmp_path, self._builder(recipe))
+        assert bazel_docs.command_builder_violations(tmp_path, [rel]) == []
+
+    def test_only_argv_is_matched_not_the_whole_json(self, tmp_path: Path) -> None:
+        """Prose fields and argv arguments are not the copied line."""
+        quoted = self._recipe(
+            "echo-it",
+            ["echo", "run ./scripts/manage.sh doctor"],
+            description="Older pages said `./scripts/manage.sh doctor` here.",
+        )
+        rel = self._write(tmp_path, self._builder(quoted))
+        assert bazel_docs.command_builder_violations(tmp_path, [rel]) == []
+
+    def test_a_file_level_allow_entry_silences_the_pass(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        recipe = self._recipe("doctor", ["./scripts/manage.sh", "doctor"])
+        rel = self._write(tmp_path, self._builder(recipe))
+        monkeypatch.setattr(bazel_docs, "_ALLOW", {rel: "the widget is the documented door"})
+        assert bazel_docs.command_builder_violations(tmp_path, [rel]) == []
+
+    def test_only_the_builder_file_gets_this_pass(self, tmp_path: Path) -> None:
+        recipe = self._recipe("doctor", ["./scripts/manage.sh", "doctor"])
+        rel = self._write(tmp_path, self._builder(recipe), rel="config/other.json")
+        assert bazel_docs.command_builder_violations(tmp_path, [rel]) == []
+
+    def test_broken_shapes_and_missing_files_are_tolerated(self, tmp_path: Path) -> None:
+        """A payload the guard cannot read is not a doc violation."""
+        payloads: list[object] = [
+            "{nope",
+            "[]",
+            {"variables": []},
+            {"commands": {}},
+            {
+                "variables": [],
+                "commands": [
+                    "scalar",
+                    {"id": "no-argv"},
+                    {"id": "argv-not-a-list", "argv": "not-a-list"},
+                    {"id": "argv-all-blank", "argv": ["", "  "]},
+                ],
+            },
+        ]
+        for index, payload in enumerate(payloads):
+            root = tmp_path / f"case{index}"
+            rel = self._write(root, payload)
+            assert bazel_docs.command_builder_violations(root, [rel]) == [], payload
+        # A checkout that carries no builder file at all is silent too.
+        assert bazel_docs.command_builder_violations(tmp_path / "empty", [self.BUILDER_REL]) == []
+
+    def test_a_recipe_without_argv_is_skipped(self) -> None:
+        builder = {"variables": [], "commands": [{"id": "empty"}, {"id": "ok", "argv": ["ls", "-la"]}]}
+        assert bazel_docs.builder_recipe_commands(builder) == [("ok", "ls -la")]
+
+    def test_the_shipped_builder_passes_the_pass_today(self) -> None:
+        """Regression net: every copied line in the shipped file names a target."""
+        payload = json.loads((ROOT / self.BUILDER_REL).read_text(encoding="utf-8"))
+        recipes = bazel_docs.builder_recipe_commands(payload)
+        # Non-vacuous: a loader that silently matched nothing would also pass
+        # the assert below, so pin that the real file really yields recipes.
+        assert len(recipes) >= 50, recipes
+        assert all(recipe_id and command for recipe_id, command in recipes), recipes
+        assert bazel_docs.command_builder_violations(ROOT, [self.BUILDER_REL]) == []
+
+
 class TestDocstringPositions:
     """A docstring is a page: pydoc and the editor tooltip show it verbatim."""
 
