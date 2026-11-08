@@ -283,7 +283,7 @@ bazelisk test //tests:typecheck          # Pyright + mypy over production Python
 bazelisk test //lints:mypy_tests         # pytest-tree mypy, against its committed ledger
 bazelisk test //lints:pyright_tests      # pytest-tree Pyright, against its committed ledger
 bazelisk test //lints:js_types           # JSDoc frontends, against their committed ledger
-python3 -m pytest tests/python/test_strong_types.py -q   # the inventory gate alone
+bazelisk test //tests:pytest             # pytest lane; inventory gate (no per-file target)
 bazelisk test //docs-site:typecheck      # tsc --noEmit over the docs site
 bazelisk test //:validate                # everything a PR has to satisfy
 ```

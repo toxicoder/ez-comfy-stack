@@ -6,9 +6,9 @@
  * GitHub Pages publishes.
  *
  * Goldens are produced on the CI image.  Font metrics differ per platform, so a screenshot
- * taken on a laptop never matches one taken on Linux: generate or refresh baselines in the
- * same container CI uses (`npm run visual:update`), never from a workstation, and review the
- * resulting diffs before committing them.
+ * taken on a laptop never matches one taken on Linux: refresh baselines in the container
+ * that matches CI (`bazelisk run //docs-site:visual-linux -- --update`), never from a
+ * workstation, and review the resulting diffs before committing them.
  *
  * A page with no baseline yet gets one written on the spot, so the set bootstraps itself on
  * the first green run instead of failing until somebody remembers to capture it.  That is a

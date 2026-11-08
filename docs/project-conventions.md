@@ -317,7 +317,7 @@ missing test is a red build rather than a review comment.
   - Full BATS suite green
 - **Tests ship with production code** - same commit as the files under test
 - **Test shell style**: `tests/bats/*.bats`, `tests/bats/*.bash`, and `tests/*.sh` follow the Google Shell Style Guide where applicable (quoted `"${var}"`, `[[ ... ]]`, Google-style helper comments in `test_helper.bash`, 2-space indent / shfmt for `.sh` runners)
-- Install test tools: `pip install -r tests/requirements.txt` (pytest, pytest-cov, pyright, mypy)
+- **Host test tools**: `bazelisk run //:setup-host` first - it installs bazelisk plus the lint toolchain. `pip install -r tests/requirements.txt` (pytest, pytest-cov, pyright, mypy) is the bare-host fallback for the Python tools when Bazel cannot run
 
 ```mermaid
 flowchart LR

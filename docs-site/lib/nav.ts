@@ -4,9 +4,11 @@
  * The site inherited its seven top-level sections from the old MkDocs `nav:` block, and
  * `scripts/gen_nav.py` transcribed that block into `lib/nav.json`. `mkdocs.yml` is long
  * gone, so `lib/nav.json` is now the single source of truth: edit it by hand and verify
- * with `npm run nav:check`. The top-level section titles are pinned by
- * `docs/test_docs_site_render.py`, and every page under `docs/` has to appear in the tree
- * exactly once (`tests/python/test_docs_nav_coverage.py` fails an orphan or a stale entry).
+ * with `bazelisk test //docs-site:nav_test`, the target that gates `scripts/gen_nav.py`
+ * (its `--check` mode is what the `nav:check` npm script wraps). The top-level section
+ * titles are pinned by `docs/test_docs_site_render.py`, and every page under `docs/` has
+ * to appear in the tree exactly once (`tests/python/test_docs_nav_coverage.py` fails an
+ * orphan or a stale entry).
  *
  * Inside a section, pages are grouped into collapsible folders that read as a progression:
  * Learn runs concept to concept, Operate runs everyday loop to troubleshooting, and so on.
@@ -69,7 +71,7 @@ export interface NavTab {
  * wrong key would surface as `undefined` deep in the sidebar. These schemas parse it once
  * at import time instead, and the `z.ZodType<...>` annotations tie the schema to the
  * declared interfaces above: a field added to one side and not the other fails
- * `npm run typecheck`.
+ * `bazelisk test //docs-site:typecheck`.
  */
 const navPageSchema = z.object({ title: z.string(), path: z.string() });
 
