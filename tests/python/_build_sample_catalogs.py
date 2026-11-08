@@ -1894,6 +1894,7 @@ def main() -> None:
         "photos/still-hero": "klein_thumbnail",
         "labs/opt-in/still-flux3-fast": "klein_t2i",
         "labs/opt-in/still-flux3-quality": "klein_t2i",
+        "labs/opt-in/still-qwen-image": "klein_t2i",
         "photos/thumbnail": "klein_thumbnail",
         "photos/instagram-square": "klein_t2i",
         "photos/open-graph": "klein_t2i",

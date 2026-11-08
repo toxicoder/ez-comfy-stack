@@ -78,6 +78,9 @@ PIN_ENHANCE_OFF = frozenset(
         "audio/podcast/radio-drama",
         "audio/music/rap-draft",
         "audio/music/rap-full",
+        # The Qwen app carries a sample picker and a negative rewriter only; it
+        # has no prompt rewriter, so nothing may claim one in its note.
+        "labs/opt-in/still-qwen-image",
     }
 )
 

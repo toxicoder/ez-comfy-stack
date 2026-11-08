@@ -97,6 +97,9 @@ def test_locked_apps_do_not_gain_a_format_picker() -> None:
     locked += sorted(
         lab_rel_of(path) for path in lab_graph_paths() if lab_rel_of(path).startswith("film/")
     )
+    # Qwen-Image 2.1 builds its own square latent from one Resolution widget, so a
+    # Format / platform picker on that app would write pixels nothing reads.
+    locked.append("labs/opt-in/still-qwen-image")
     for rel in locked:
         graph = _load(rel)
         types = {node.get("type") for node in graph["nodes"]}

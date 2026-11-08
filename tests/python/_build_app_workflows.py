@@ -27,6 +27,7 @@ from _lab_theme import (
     KLEIN_STILL_DAILY,
     TEXT_SWAP,
 )
+from _lab_graph import Graph
 from _lab_paths import apply_lab_identity, lab_dest, lab_json, lab_rel_of
 from _stamp_app_mode import stamp_suite_graph
 from _wire_format import wire_lab_graph
@@ -45,6 +46,13 @@ from ez_image.modes import (  # noqa: E402
     default_mode_label,
 )
 from ez_prompt_enhance.client import join_prompt, load_view_pack  # noqa: E402
+from ez_quality.presets import (  # noqa: E402
+    QWEN_IMAGE_INT8,
+    QWEN_QUALITY_CFG,
+    QWEN_QUALITY_STEPS,
+    QWEN_TE,
+    QWEN_VAE,
+)
 
 WF = ROOT / "workflows"
 
@@ -110,6 +118,40 @@ FLUX3_BASE_UNET = "flux3-image-klein-base-int8-convrot.safetensors"
 FLUX3_HANDOFF = (
     "video/silent/still-to-video-5s, video/av/still-to-video-8s, photos/text-swap"
 )
+
+# Qwen-Image 2.1 opt-in stills. The weight names come from ez_quality.presets so
+# the graph and the Quality ladder can never drift apart.
+QWEN_HF_REPO = "Comfy-Org/Qwen-Image-2.1"
+QWEN_CLIP_TYPE = "qwen_image"
+"""CLIPLoader type that maps the Qwen3VL-8B TE onto the Qwen-Image 2.1 encoder."""
+QWEN_RESOLUTION = 1024
+"""Square side in pixels. TextEncodeQwenImage21 builds one square 64-channel
+latent from this single widget, so the app has no aspect-ratio picker."""
+QWEN_HANDOFF = FLUX3_HANDOFF
+QWEN_STILL_PROMPT = (
+    "A photoreal still of a tropical coastal city rooftop terrace at golden hour, "
+    "shot on a 50 mm lens. Warm rim light on the railing, palm fronds moving in a "
+    "sea breeze, hazy skyline behind. Natural skin tones, true-to-life texture, no "
+    "lettering."
+)
+
+
+def _qwen_note(rel: str, *, prefix: str) -> str:
+    """Return the operator note for the opt-in Qwen-Image 2.1 still graph."""
+    return f"""## {rel}
+
+Qwen-Image 2.1 square still. Opt-in only - Qwen RESEARCH LICENSE AGREEMENT, so Klein 4B (photos/still-draft) stays the Apache default still and this graph is never in `download-models`.
+
+Pixels: `Resolution` sets one square side (default {QWEN_RESOLUTION}, steps of 32). The Qwen 2.1 encoder builds the latent itself from that one number, so this app has **no Format / platform picker** - a wide or tall frame needs a reference image, which is an edit pass and a different app.
+Quality: the combo offers only the four Qwen tiers this graph can honor - {QWEN_IMAGE_INT8} plus the turbo, NVFP4, and turbo-NVFP4 twins. It rewrites the UNET, the Qwen3VL text encoder, the VAE, steps, and CFG. It never touches pixels. Quality never swaps to Klein, FLUX 3, or any other family: those live in their own apps.
+Models: {QWEN_IMAGE_INT8} + {QWEN_TE} (CLIP type {QWEN_CLIP_TYPE}) + {QWEN_VAE}.
+Pull: `bazelisk run //scripts:run-utility -- download-image run --tier qwen-image` - it auto-includes the `qwen-image-te` text encoder and `qwen-image-vae`. The weights come from `{QWEN_HF_REPO}` on Hugging Face (the NVFP4 twins from the community quantization repos under `--tier qwen-image-nvfp4` / `--tier qwen-image-turbo-nvfp4`).
+License: Qwen RESEARCH LICENSE AGREEMENT, not Apache. Research and personal use only; commercial use needs a separate paid Qwen license. Ship the license text plus the NOTICE with the weights, keep "Built with Qwen" in product docs, and do not name a product after Qwen.
+Weights missing: click Check models - it names the command, and Queue keeps the authored loaders (nothing swaps in weights you have not pulled).
+Prompt enhance is **off** here: this app carries no prompt rewriter, so **Sample prompt** reaches the Qwen3VL encoder exactly as written. **Rewrite negative** stays - it rewrites the negative list so it cannot fight the positive.
+Save prefix `{prefix}`. Empty of lettering - composite titles later.
+Handoff: {QWEN_HANDOFF}.
+"""
 
 
 def _flux3_note(
@@ -2375,6 +2417,167 @@ def build_still_flux3_quality() -> dict:
     )
 
 
+def build_still_qwen_image() -> dict[str, Any]:
+    """Opt-in Qwen-Image 2.1 square still on the weights the qwen Quality tiers write.
+
+    Built from scratch rather than cloned off the Klein desk: Qwen 2.1 samples from
+    a 64-channel / 16x latent that ``TextEncodeQwenImage21`` builds itself, so the
+    Klein ``EmptyFlux2LatentImage`` (128ch / 16x) and the format picker that drives
+    it are both wrong here, and an unwired picker is the thing this lane is meant
+    to stop shipping.
+    """
+    rel = "labs/opt-in/still-qwen-image"
+    prefix = "ez_still_qwen_image"
+    g = Graph(rel, pop_lab_rel=False, enable_lab=True)
+    g.add(
+        1,
+        "Note",
+        [20, 80],
+        [440, 560],
+        "Operator note",
+        [_qwen_note(rel, prefix=prefix)],
+    )
+    g.add(
+        2,
+        "UNETLoader",
+        [500, 80],
+        [360, 82],
+        "Qwen-Image 2.1 UNET (opt-in)",
+        [QWEN_IMAGE_INT8, "default"],
+        outputs=[g.out("MODEL", "MODEL", [])],
+    )
+    g.add(
+        3,
+        "CLIPLoader",
+        [500, 220],
+        [360, 110],
+        "Qwen3VL-8B TE (opt-in)",
+        [QWEN_TE, QWEN_CLIP_TYPE, "default"],
+        outputs=[g.out("CLIP", "CLIP", [])],
+    )
+    g.add(
+        4,
+        "VAELoader",
+        [500, 400],
+        [360, 82],
+        "Qwen-Image 2.1 VAE",
+        [QWEN_VAE],
+        outputs=[g.out("VAE", "VAE", [])],
+    )
+    g.add(
+        5,
+        "EZSamplePrompt",
+        [940, 80],
+        [380, 280],
+        "",
+        ["custom", QWEN_STILL_PROMPT, rel],
+        outputs=[g.out("prompt", "STRING", [])],
+    )
+    g.add(
+        6,
+        "EZNegativePromptEnhance",
+        [940, 420],
+        [380, 240],
+        "Negative enhance (stills)",
+        [KLEIN_NEG_STILL, True, "klein"],
+        inputs=[g.inp("positive", "STRING")],
+        outputs=[g.out("prompt", "STRING", [])],
+    )
+    g.add(
+        7,
+        "TextEncodeQwenImage21",
+        [1400, 80],
+        [420, 260],
+        "Prompt + latent (Qwen 2.1)",
+        [QWEN_STILL_PROMPT, KLEIN_NEG_STILL, QWEN_RESOLUTION],
+        inputs=[
+            g.inp("clip", "CLIP"),
+            g.inp("prompt", "STRING", widget="prompt"),
+            g.inp("negative_prompt", "STRING", widget="negative_prompt"),
+            g.inp("vae", "VAE", widget=None),
+            g.inp("resolution", "INT", widget="resolution"),
+        ],
+        outputs=[
+            g.out("positive", "CONDITIONING", []),
+            g.out("negative", "CONDITIONING", []),
+            g.out("latent", "LATENT", []),
+        ],
+    )
+    g.add(
+        8,
+        "KSampler",
+        [1400, 420],
+        [340, 300],
+        "Sampler (profile steps / CFG)",
+        [42, "fixed", QWEN_QUALITY_STEPS, QWEN_QUALITY_CFG, "euler", "simple", 1.0],
+        inputs=[
+            g.inp("model", "MODEL"),
+            g.inp("positive", "CONDITIONING"),
+            g.inp("negative", "CONDITIONING"),
+            g.inp("latent_image", "LATENT"),
+        ],
+        outputs=[g.out("LATENT", "LATENT", [])],
+    )
+    g.add(
+        9,
+        "VAEDecode",
+        [1840, 80],
+        [280, 80],
+        "Decode",
+        [],
+        inputs=[g.inp("samples", "LATENT"), g.inp("vae", "VAE")],
+        outputs=[g.out("IMAGE", "IMAGE", [])],
+    )
+    g.add(
+        10,
+        "SaveImage",
+        [1840, 240],
+        [340, 300],
+        "Save",
+        [prefix],
+        inputs=[g.inp("images", "IMAGE")],
+    )
+    g.add(
+        11,
+        "EZModelCheck",
+        [500, 560],
+        [360, 140],
+        "Check models",
+        ["Click Check models. Queue does not run this node."],
+    )
+    g.link(2, 0, 8, 0, "MODEL")
+    g.link(3, 0, 7, 0, "CLIP")
+    g.link(4, 0, 7, 3, "VAE")
+    g.link(4, 0, 9, 1, "VAE")
+    g.link(5, 0, 6, 0, "STRING")
+    g.link(5, 0, 7, 1, "STRING")
+    g.link(6, 0, 7, 2, "STRING")
+    g.link(7, 0, 8, 1, "CONDITIONING")
+    g.link(7, 1, 8, 2, "CONDITIONING")
+    g.link(7, 2, 8, 3, "LATENT")
+    g.link(8, 0, 9, 0, "LATENT")
+    g.link(9, 0, 10, 0, "IMAGE")
+    return g.dump(
+        {
+            "lab_profile": "qwen-image-2-1",
+            "lab_note": _qwen_note(rel, prefix=prefix),
+            "lab_description": (
+                "Opt-in Qwen-Image 2.1 square still; the only graph the Qwen "
+                "Quality tiers can honor. Klein 4B stays the Apache default"
+            ),
+            "lab_qwen_image": True,
+            "ds": {"scale": 1, "offset": [0, 0]},
+            "groups": [
+                _group(1, "NOTE", 20, 8, 440, 640, "#223"),
+                _group(2, "MODEL", 480, 8, 400, 720, "#3f789e"),
+                _group(3, "PROMPT", 920, 8, 420, 680, "#3f789e"),
+                _group(4, "SETTINGS", 1380, 8, 460, 720, "#a1309b"),
+                _group(5, "OUTPUT", 1820, 8, 380, 560, "#3f789e"),
+            ],
+        }
+    )
+
+
 def main() -> None:
     still = build_still_app()
     studio = build_still_studio()
@@ -2390,6 +2593,7 @@ def main() -> None:
     bg_edit = build_background_edit()
     flux3_fast = build_still_flux3_fast()
     flux3_quality = build_still_flux3_quality()
+    qwen = build_still_qwen_image()
     _dump(lab_json("photos/still-daily.json"), still)
     _dump(lab_dest("photos/still-studio"), studio)
     _dump(lab_dest("photos/image-studio"), image_studio)
@@ -2404,10 +2608,11 @@ def main() -> None:
     _dump(lab_dest("photos/background-edit"), bg_edit)
     _dump(lab_dest("labs/opt-in/still-flux3-fast"), flux3_fast)
     _dump(lab_dest("labs/opt-in/still-flux3-quality"), flux3_quality)
+    _dump(lab_dest("labs/opt-in/still-qwen-image"), qwen)
     print(
         "wrote still-app, still-studio, image-studio, gif-loop, dream-house, dream-house-clay, "
         "platform-pack, character draft/tweak, text-swap, background-swap, background-edit, "
-        "still-flux3-fast, still-flux3-quality"
+        "still-flux3-fast, still-flux3-quality, still-qwen-image"
     )
 
 

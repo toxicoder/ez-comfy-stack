@@ -1323,6 +1323,16 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "stills/text-swap",
         sampler_steps_cfg=True,
     ),
+    # Opt-in Qwen-Image 2.1 rides the Klein occupancy (one stills UNET at a
+    # time) but carries its own Quality family, so the combo stays on the four
+    # Qwen tiers instead of the Klein ladder.
+    "labs/opt-in/still-qwen-image": _spec(
+        "klein",
+        "video/silent/still-to-video-5s",
+        "video/av/still-to-video-8s",
+        "photos/text-swap",
+        sampler_steps_cfg=True,
+    ),
     "stills/thumbnail": _spec("klein"),
     "stills/text-swap": _spec(
         "klein",
@@ -1539,7 +1549,6 @@ OPTIONAL_UNWIRED: dict[str, tuple[str, ...]] = {
     ),
     "audio/stem-mix": ("SaveAudio", "PrimitiveNode"),
     "optional/still-to-video-a14b": ("UNETLoader",),
-    "audio/podcast/radio-drama": ("UNETLoader", "VHS_VideoCombine"),
     "inspire/prompt-forge": (
         "EZKleinPromptEnhance",
         "EZWanPromptEnhance",
@@ -2002,6 +2011,10 @@ def _collect_raw_inputs(
                     (nid, "batch_size", node),
                 )
             )
+        elif ntype == "TextEncodeQwenImage21":
+            # The Qwen 2.1 encoder builds the 64-channel latent from this one
+            # square widget, so it is the only pixel control on the graph.
+            raw.append((nid, "resolution", node))
         elif ntype == "KSampler" and not saw_seed:
             raw.append((nid, "seed", node))
             if spec.get("sampler_steps_cfg"):

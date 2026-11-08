@@ -2874,3 +2874,48 @@ def test_command_builder_lists_every_qwen_image_tier() -> None:
     assert "all" in choices
     for tier in QWEN_IMAGE_TIERS:
         assert tier not in choices["all"], f"image all claims {tier}"
+
+
+def test_qwen_lab_graph_is_the_home_of_the_qwen_tier_ladder() -> None:
+    """Every tier the combo can list has to have a graph that honors it.
+
+    A tier with no graph behind it is a dead option: it queues the graph
+    unchanged, which is how the Qwen ladder sat unreachable before this app
+    pinned the weights. The combo narrows itself to the family the graph's own
+    loaders name, so pinning the weights is what makes the ladder real.
+    """
+    rel = "labs/opt-in/still-qwen-image"
+    graph = json.loads(lab_json(rel).read_text(encoding="utf-8"))
+    unets = [
+        str((node.get("widgets_values") or [""])[0])
+        for node in graph["nodes"]
+        if node.get("type") == "UNETLoader"
+    ]
+    assert len(unets) == 1, rel
+    # This is the predicate the frontend reads to pick the qwen family.
+    assert is_qwen_image_unet(unets[0]), rel
+    assert family_honors_tiers(graph), rel
+
+    # The family owns four tiers and shares none of them with the Klein ladder.
+    assert tiers_for_family(QUALITY_FAMILY_QWEN) == QWEN_QUALITY_CHOICES, rel
+    assert not set(QWEN_QUALITY_CHOICES) & set(tiers_for_family("klein")), rel
+
+    for tier, want_unet in (
+        (QUALITY_QWEN_IMAGE, QWEN_IMAGE_INT8),
+        (QUALITY_QWEN_IMAGE_TURBO, QWEN_IMAGE_TURBO_INT8),
+    ):
+        moved = copy.deepcopy(graph)
+        apply_to_graph(
+            moved,
+            tier,
+            available_unets=(QWEN_IMAGE_INT8, QWEN_IMAGE_TURBO_INT8),
+        )
+        got_unet = next(
+            str((node.get("widgets_values") or [""])[0])
+            for node in moved["nodes"]
+            if node.get("type") == "UNETLoader"
+        )
+        assert got_unet == want_unet, (rel, tier)
+        sampler = next(node for node in moved["nodes"] if node.get("type") == "KSampler")
+        steps = int((sampler.get("widgets_values") or [0, 0, 0])[2])
+        assert steps != 0, (rel, tier)

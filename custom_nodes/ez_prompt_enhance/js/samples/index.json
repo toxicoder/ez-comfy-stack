@@ -388,5 +388,6 @@
   "film/still-here/00-plate": "film_still_here",
   "film/still-here/feature": "film_still_here",
   "film/switchyard/00-plate": "film_switchyard",
-  "film/switchyard/feature": "film_switchyard"
+  "film/switchyard/feature": "film_switchyard",
+  "labs/opt-in/still-qwen-image": "klein_t2i"
 }

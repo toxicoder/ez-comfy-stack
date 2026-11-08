@@ -330,6 +330,7 @@ tags: [workflows, generated, comfyui]
 | `labs/opt-in/longcat-video` | [labs/opt-in/longcat-video.md](labs/opt-in/longcat-video.md) |
 | `labs/opt-in/still-flux3-fast` | [labs/opt-in/still-flux3-fast.md](labs/opt-in/still-flux3-fast.md) |
 | `labs/opt-in/still-flux3-quality` | [labs/opt-in/still-flux3-quality.md](labs/opt-in/still-flux3-quality.md) |
+| `labs/opt-in/still-qwen-image` | [labs/opt-in/still-qwen-image.md](labs/opt-in/still-qwen-image.md) |
 | `labs/opt-in/still-to-video-a14b` | [labs/opt-in/still-to-video-a14b.md](labs/opt-in/still-to-video-a14b.md) |
 
 ## photos

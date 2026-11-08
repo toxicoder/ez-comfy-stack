@@ -6109,6 +6109,48 @@ Minimum probability floor.
 
 **How it affects generation:** 0.0 disables min-p (lab).
 
+### `TextEncodeQwenImage21` - Text Encode Qwen Image 2.1
+
+Encode prompt and negative for Qwen-Image 2.1 and build its square latent.
+
+!!! warning "Lab notes"
+
+    Labs opt-in only (labs/opt-in/still-qwen-image). This one node replaces the CLIP boxes plus the empty-latent node: Qwen 2.1 samples from a 64-channel latent at 16x, so nothing else on the graph can size the frame. Resolution is the only pixel control.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `clip` | in | `CLIP` | Qwen3VL-8B text encoder (CLIPLoader type qwen_image). |
+| `prompt` | in | `STRING` | Wired from the sample-prompt node so the widget is a preview. |
+| `negative_prompt` | in | `STRING` | Wired from Rewrite negative. |
+| `vae` | in | `VAE` | Only used to encode reference images; a plain t2i Queue ignores it. |
+| `positive` | out | `CONDITIONING` | Positive cond for KSampler. |
+| `negative` | out | `CONDITIONING` | Negative cond for KSampler. |
+| `latent` | out | `LATENT` | Square 64-channel noise canvas at resolution. |
+
+#### `prompt`
+
+Type `STRING`.
+
+Prompt the Qwen3VL encoder sees.
+
+**How it affects generation:** Plain sentences. Qwen 2.1 renders lettering poorly, so leave titles to a composite pass.
+
+#### `negative_prompt`
+
+Type `STRING`.
+
+Negative list.
+
+**How it affects generation:** Keep the stills negative; Rewrite negative rewrites it against the final positive.
+
+#### `resolution`
+
+Type `INT`. Range / default: 32 - 4096, step 32.
+
+Square side in pixels; the latent is resolution // 16.
+
+**How it affects generation:** 1024 is the published default. Multiples of 32 only. One number makes a square frame - there is no aspect-ratio widget on this node.
+
 ### `Trellis2Conditioning` - TRELLIS.2 Conditioning
 
 Encode a still with CLIP Vision into TRELLIS positive/negative.

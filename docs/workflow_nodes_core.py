@@ -98,6 +98,25 @@ def core_nodes() -> NodeSpecs:
             ],
             widgets=[_w("text", index=0, typ="STRING", desc="Prompt encoded by CLIP.", gen="Klein: sentences, subject -> place -> light -> camera. Wan I2V: motion + one camera only. LTX: present-tense paragraph with audio interleaved. Distilled Klein quality lives here, not in CFG.")],
         ),
+        "TextEncodeQwenImage21": _n(
+            "Text Encode Qwen Image 2.1",
+            "Encode prompt and negative for Qwen-Image 2.1 and build its square latent.",
+            lab="Labs opt-in only (labs/opt-in/still-qwen-image). This one node replaces the CLIP boxes plus the empty-latent node: Qwen 2.1 samples from a 64-channel latent at 16x, so nothing else on the graph can size the frame. Resolution is the only pixel control.",
+            sockets=[
+                _s("clip", "CLIP", "in", "Qwen3VL-8B text encoder (CLIPLoader type qwen_image)."),
+                _s("prompt", "STRING", "in", "Wired from the sample-prompt node so the widget is a preview."),
+                _s("negative_prompt", "STRING", "in", "Wired from Rewrite negative."),
+                _s("vae", "VAE", "in", "Only used to encode reference images; a plain t2i Queue ignores it."),
+                _s("positive", "CONDITIONING", "out", "Positive cond for KSampler."),
+                _s("negative", "CONDITIONING", "out", "Negative cond for KSampler."),
+                _s("latent", "LATENT", "out", "Square 64-channel noise canvas at resolution."),
+            ],
+            widgets=[
+                _w("prompt", index=0, typ="STRING", desc="Prompt the Qwen3VL encoder sees.", gen="Plain sentences. Qwen 2.1 renders lettering poorly, so leave titles to a composite pass."),
+                _w("negative_prompt", index=1, typ="STRING", desc="Negative list.", gen="Keep the stills negative; Rewrite negative rewrites it against the final positive."),
+                _w("resolution", index=2, typ="INT", rng="32 - 4096, step 32", desc="Square side in pixels; the latent is resolution // 16.", gen="1024 is the published default. Multiples of 32 only. One number makes a square frame - there is no aspect-ratio widget on this node."),
+            ],
+        ),
         "EmptyFlux2LatentImage": _n(
             "Empty Flux.2 Latent",
             "Allocate a Klein / Flux.2 still latent (width x height x batch).",

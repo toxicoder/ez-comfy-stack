@@ -1,6 +1,6 @@
 ---
 title: "audio/podcast/radio-drama"
-description: "US-safe radio drama: Kokoro cast + ACE-Step sting/bed; Wan/LTX bumpers off Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or fil"
+description: "US-safe radio drama: Kokoro cast + ACE-Step sting/bed; bumpers are separate apps Prompt enhance is **off** so authored text (recipe, script labels, ACE tags,"
 tags: [workflows, generated, comfyui, audio]
 ---
 
@@ -33,7 +33,7 @@ US-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engin
 
 - Writer flavor `radio_drama` (enhance **off** so Speaker A/B / Announcer labels stay parser input). Announcer + two Kokoro stock voices.
 - ACE-Step sting + bed, instrumental only, empty lyrics. Script STRING is wired into both ACE enhance nodes as context. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).
-- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **video/loops/bumper-loop** / **video/av/hook-av** in a later session - not a one-graph film.
+- Wan silent bumper and LTX 5s hook are **separate apps** - Queue **video/loops/bumper-loop** / **video/av/hook-av** in a later session - not a one-graph film. They load Wan and LTX UNETs, which this audio graph's Quality cannot drive, so they are not parked on this canvas.
 - Cover: Queue **photos/podcast-cover.json** separately.
 
 Voices and music on this show are synthesized. The hosts are original characters, not recordings of real people.
@@ -53,15 +53,58 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 ## Graph
 
 ```mermaid
-flowchart TB
-  GNOTE["NOTE"]
-  GQUALITY["QUALITY"]
-  GMODEL["MODEL"]
-  GPROMPT["PROMPT"]
-  GSETTINGS["SETTINGS"]
-  GOUTPUT["OUTPUT"]
-  GWAN_BUMPER__off_["WAN BUMPER (off)"]
-  GLTX_HOOK__off_["LTX HOOK (off)"]
+flowchart LR
+  N1["ACE-Step 1.5 turbo AIO"]
+  N2["ez_radio_script"]
+  N3["Disclosure bumper"]
+  N4["ez_radio_voice"]
+  N5["ez_radio_sting"]
+  N6["ez_radio_bed"]
+  N7["ACE negative"]
+  N8["Sting length"]
+  N9["Bed length"]
+  N10["Sting sampler"]
+  N11["Bed sampler"]
+  N12["Sting decode"]
+  N13["Bed decode"]
+  N14["Sting then bed"]
+  N15["Duck -15 dB"]
+  N16["48 kHz-class mix"]
+  N17["FLAC master"]
+  N18["MP3 320k"]
+  N19["Operator note"]
+  N20["ez_radio_sting enhance"]
+  N21["ez_radio_bed enhance"]
+  N22["Quality"]
+  N23["Check models"]
+  N1 --> N10
+  N1 --> N11
+  N1 --> N5
+  N1 --> N6
+  N1 --> N7
+  N1 --> N12
+  N1 --> N13
+  N2 --> N3
+  N2 --> N20
+  N2 --> N21
+  N3 --> N4
+  N4 --> N16
+  N5 --> N10
+  N6 --> N11
+  N7 --> N10
+  N7 --> N11
+  N8 --> N10
+  N9 --> N11
+  N10 --> N12
+  N11 --> N13
+  N12 --> N14
+  N13 --> N14
+  N14 --> N15
+  N15 --> N16
+  N16 --> N17
+  N16 --> N18
+  N20 --> N5
+  N21 --> N6
 ```
 
 ## Nodes on this graph
@@ -87,14 +130,10 @@ flowchart TB
 | 17 | FLAC master | `SaveAudio` | OUTPUT |
 | 18 | MP3 320k | `SaveAudioMP3` | OUTPUT |
 | 19 | Operator note | `Note` | NOTE |
-| 30 | Wan bumper (off) | `UNETLoader` | WAN BUMPER (off) |
-| 31 | ez_radio_bumper preview (off) | `VHS_VideoCombine` | WAN BUMPER (off) |
-| 32 | LTX hook (off) | `UNETLoader` | LTX HOOK (off) |
-| 33 | ez_radio_hook preview (off) | `VHS_VideoCombine` | LTX HOOK (off) |
-| 34 | ez_radio_sting enhance | `EZAceStepPromptEnhance` | PROMPT |
-| 35 | ez_radio_bed enhance | `EZAceStepPromptEnhance` | PROMPT |
-| 36 | Quality | `EZQuality` | QUALITY |
-| 37 | Check models | `EZModelCheck` | QUALITY |
+| 20 | ez_radio_sting enhance | `EZAceStepPromptEnhance` | PROMPT |
+| 21 | ez_radio_bed enhance | `EZAceStepPromptEnhance` | PROMPT |
+| 22 | Quality | `EZQuality` | QUALITY |
+| 23 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 
@@ -966,7 +1005,7 @@ US-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engin
 
 - Writer flavor `radio_drama` (enhance **off** so Speaker A/B / Announcer labels stay parser input). Announcer + two Kokoro stock voices.
 - ACE-Step sting + bed, instrumental only, empty lyrics. Script STRING is wired into both ACE enhance nodes as context. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).
-- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **video/loops/bumper-loop** / **video/av/hook-av** in a later session - not a one-graph film.
+- Wan silent bumper and LTX 5s hook are **separate apps** - Queue **video/loops/bumper-loop** / **video/av/hook-av** in a later session - not a one-graph film. They load Wan and LTX UNETs, which this audio graph's Quality cannot drive, so they are not parked on this canvas.
 - Cover: Queue **photos/podcast-cover.json** separately.
 
 Voices and music on this show are synthesized. The hosts are original characters, not recordings of real people.
@@ -974,145 +1013,6 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
 ```
-
-### `UNETLoader` - Load Diffusion Model
-
-Load a standalone transformer/UNET from diffusion_models/.
-
-!!! warning "Lab notes"
-
-    Lab files: flux-2-klein-4b-fp8.safetensors, wan2.2_ti2v_5B_fp16.safetensors, ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors. weight_dtype stays default.
-
-| Socket | Dir | Type | What it carries |
-| --- | --- | --- | --- |
-| `MODEL` | out | `MODEL` | Denoiser weights. |
-
-#### `unet_name`
-
-Type `STRING`.
-
-Checkpoint filename under MODELS_DIR diffusion_models.
-
-**How it affects generation:** Wrong family = Queue error or a melted picture. Lab pins Apache Klein 4B. Klein 9B / FLUX.2-dev are opt-in NC. MiniMax is banned.
-
-| Instance | Value |
-| --- | --- |
-| Wan bumper (off) | `wan2.2_ti2v_5B_fp16.safetensors` |
-| LTX hook (off) | `ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors` |
-
-#### `weight_dtype`
-
-Type `COMBO`. Range / default: default.
-
-Cast at load.
-
-**How it affects generation:** default keeps the file's dtype (Klein FP8, LTX INT8-convrot, Wan FP16).
-
-**This graph (all 2 instances):** `default`
-
-**Other choices**
-
-| Choice | What it does |
-| --- | --- |
-| `default` | Load weights as stored. Lab UNETLoader always uses this. |
-| `fp8_e4m3fn` | Cast to FP8 e4m3fn. Can save memory; may shift Klein/LTX quality. |
-| `fp8_e4m3fn_fast` | FP8 e4m3fn with fast optimizations. |
-| `fp8_e5m2` | Cast to FP8 e5m2. |
-
-### `VHS_VideoCombine` - VHS Video Combine
-
-Encode frames (and optional audio) to MP4 or GIF.
-
-!!! warning "Lab notes"
-
-    Lab clips set save_output true. After Queue open the node for preview. GIF graphs use image/gif + pingpong.
-
-| Socket | Dir | Type | What it carries |
-| --- | --- | --- | --- |
-| `images` | in | `IMAGE` | Decoded frames. |
-| `audio` | in | `AUDIO` | LTX decoded audio or unused. |
-| `meta_batch` | in | `VHS_BatchManager` | Optional batch manager (unwired). |
-| `vae` | in | `VAE` | Optional (unwired). |
-| `Filenames` | out | `VHS_FILENAMES` | Path list for EZFilmConcat. |
-
-#### `frame_rate`
-
-Type `FLOAT`.
-
-Output fps.
-
-**How it affects generation:** Unused bumper previews on podcast graphs may sit at 16.
-
-| Instance | Value |
-| --- | --- |
-| ez_radio_bumper preview (off) | `16` |
-| ez_radio_hook preview (off) | `24` |
-
-#### `loop_count`
-
-Type `INT`.
-
-Loop count.
-
-**How it affects generation:** 0 default.
-
-| Instance | Value |
-| --- | --- |
-| ez_radio_bumper preview (off) | `0` |
-| ez_radio_hook preview (off) | `1` |
-
-#### `filename_prefix`
-
-Type `STRING`.
-
-Save prefix.
-
-**How it affects generation:** Preview-only groups can stay unwired.
-
-| Instance | Value |
-| --- | --- |
-| ez_radio_bumper preview (off) | `ez_radio_bumper` |
-| ez_radio_hook preview (off) | `ez_radio_hook` |
-
-#### `format`
-
-Type `COMBO`.
-
-Container.
-
-**How it affects generation:** video/h264-mp4 on unused bumper groups.
-
-**This graph (all 2 instances):** `video/h264-mp4`
-
-**Other choices**
-
-| Choice | What it does |
-| --- | --- |
-| `video/h264-mp4` | H.264 MP4. |
-| `image/gif` | GIF. |
-
-#### `pingpong`
-
-Type `BOOLEAN`.
-
-Ping-pong.
-
-**How it affects generation:** true on unused bumper groups so a later enable still loops.
-
-| Instance | Value |
-| --- | --- |
-| ez_radio_bumper preview (off) | `true` |
-| ez_radio_hook preview (off) | `false` |
-
-#### `save_output`
-
-Type `BOOLEAN`.
-
-Write the file.
-
-**How it affects generation:** Keep true if you enable the group.
-
-**This graph (all 2 instances):** `true`
 
 ### `EZAceStepPromptEnhance` - ACE-Step Prompt Enhance
 

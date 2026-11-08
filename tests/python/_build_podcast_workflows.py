@@ -66,7 +66,7 @@ US-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engin
 
 - Writer flavor `radio_drama` (enhance **off** so Speaker A/B / Announcer labels stay parser input). Announcer + two Kokoro stock voices.
 - ACE-Step sting + bed, instrumental only, empty lyrics. Script STRING is wired into both ACE enhance nodes as context. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).
-- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **video/loops/bumper-loop** / **video/av/hook-av** in a later session - not a one-graph film.
+- Wan silent bumper and LTX 5s hook are **separate apps** - Queue **video/loops/bumper-loop** / **video/av/hook-av** in a later session - not a one-graph film. They load Wan and LTX UNETs, which this audio graph's Quality cannot drive, so they are not parked on this canvas.
 - Cover: Queue **{COVER_GRAPH}** separately.
 
 {DISCLOSURE_TEXT}
@@ -492,59 +492,6 @@ def build_radio_drama() -> dict:
         "Operator note",
         [AUDIO_NOTE_B],
     )
-    # Optional Wan bumper (never). Reuse silent-bumper pattern; Queue separately.
-    g.add(
-        30,
-        "UNETLoader",
-        [2720, 80],
-        [360, 82],
-        "Wan bumper (off)",
-        ["wan2.2_ti2v_5B_fp16.safetensors", "default"],
-        outputs=[g.out("MODEL", "MODEL", [])],
-        mode=4,
-    )
-    g.add(
-        31,
-        "VHS_VideoCombine",
-        [2720, 220],
-        [320, 200],
-        "ez_radio_bumper preview (off)",
-        {
-            "frame_rate": 16,
-            "loop_count": 0,
-            "filename_prefix": "ez_radio_bumper",
-            "format": "video/h264-mp4",
-            "pingpong": True,
-            "save_output": True,
-        },
-        mode=4,
-    )
-    g.add(
-        32,
-        "UNETLoader",
-        [2720, 480],
-        [360, 82],
-        "LTX hook (off)",
-        ["ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors", "default"],
-        outputs=[g.out("MODEL", "MODEL", [])],
-        mode=4,
-    )
-    g.add(
-        33,
-        "VHS_VideoCombine",
-        [2720, 620],
-        [320, 200],
-        "ez_radio_hook preview (off)",
-        {
-            "frame_rate": 24,
-            "loop_count": 1,
-            "filename_prefix": "ez_radio_hook",
-            "format": "video/h264-mp4",
-            "pingpong": False,
-            "save_output": True,
-        },
-        mode=4,
-    )
     g.link(2, 0, 3, 0, "STRING")
     g.link(3, 0, 4, 0, "STRING")
     g.link(1, 1, 5, 0, "CLIP")
@@ -573,15 +520,13 @@ def build_radio_drama() -> dict:
         {
             "lab_profile": "us-safe-radio",
             "lab_note": AUDIO_NOTE_B,
-            "lab_description": "US-safe radio drama: Kokoro cast + ACE-Step sting/bed; Wan/LTX bumpers off",
+            "lab_description": "US-safe radio drama: Kokoro cast + ACE-Step sting/bed; bumpers are separate apps",
             "ds": {"scale": 1, "offset": [0, 0]},
             "groups": [
                 _group(1, "MODEL", 20, LAB_GROUP_Y0, 440, 1240, "#3f789e"),
                 _group(2, "PROMPT", 480, LAB_GROUP_Y0, 460, 860, "#3f789e"),
                 _group(3, "SETTINGS", 1420, LAB_GROUP_Y0, 400, 920, "#a1309b"),
                 _group(4, "OUTPUT", 1840, LAB_GROUP_Y0, 820, 800, "#3f789e"),
-                _group(5, "WAN BUMPER (off)", 2700, LAB_GROUP_Y0, 400, 400, "#232"),
-                _group(6, "LTX HOOK (off)", 2700, 480 - GROUP_TITLE_INSET, 400, 400, "#232"),
             ],
         }
     )

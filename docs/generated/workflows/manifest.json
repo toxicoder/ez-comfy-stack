@@ -1591,6 +1591,12 @@
       "kind": "graph"
     },
     {
+      "id": "labs/opt-in/still-qwen-image",
+      "path": "generated/workflows/labs/opt-in/still-qwen-image.md",
+      "lane": "labs",
+      "kind": "graph"
+    },
+    {
       "id": "labs/opt-in/still-to-video-a14b",
       "path": "generated/workflows/labs/opt-in/still-to-video-a14b.md",
       "lane": "labs",
@@ -2653,8 +2659,8 @@
       "kind": "album"
     }
   ],
-  "graph_count": 692,
-  "page_count": 443,
+  "graph_count": 693,
+  "page_count": 444,
   "lanes": [
     "photos",
     "video",
