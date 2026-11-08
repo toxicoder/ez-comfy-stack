@@ -21,9 +21,9 @@ import {
   EZ_QUALITY_FIELDS,
   EZ_QUALITY_LABELS,
   EZ_QUALITY_LAB,
-  EZ_QUALITY_NAMED,
   EZ_QUALITY_OWNED,
   EZ_QUALITY_TABLE,
+  EZ_QUALITY_TIERS,
 } from "./ez_quality_presets.js";
 
 // Combo ids this build still has to accept from saved graphs. The option list
@@ -562,6 +562,70 @@ function ownedFields(family) {
 }
 
 /**
+ * The tiers one family can actually honor, in the order the combo lists them.
+ *
+ * A tier outside this list has an all-null overlay row for the family, so
+ * offering it would let the operator pick a level that changes nothing and
+ * still stamps as applied. ``custom`` and ``lab`` are always offered: one keeps
+ * whatever is live, the other restores what the graph shipped with.
+ * @param {string} family
+ * @returns {string[]}
+ */
+function tiersForFamily(family) {
+  const honored = new Set(
+    Array.isArray(EZ_QUALITY_TIERS[family]) ? EZ_QUALITY_TIERS[family].map(String) : [],
+  );
+  return EZ_QUALITY_CHOICES.filter(
+    (choice) =>
+      choice === EZ_QUALITY_CUSTOM || choice === EZ_QUALITY_LAB || honored.has(choice),
+  );
+}
+
+/**
+ * Named tiers only, for matching observed widget values against a tier row.
+ * @param {string} family
+ * @returns {string[]}
+ */
+function namedTiersForFamily(family) {
+  return tiersForFamily(family).filter(
+    (choice) => choice !== EZ_QUALITY_CUSTOM && choice !== EZ_QUALITY_LAB,
+  );
+}
+
+/**
+ * Narrow every Quality combo in the graph to what this family can honor.
+ *
+ * The combo is built once from the global tier list, so without this a Klein
+ * tier sits in the dropdown of a Wan graph and reading it across writes nothing.
+ * @param {EzGraph|undefined} graph
+ * @param {string} family
+ * @returns {void}
+ */
+function scopeComboToFamily(graph, family) {
+  if (!graph) {
+    return;
+  }
+  const allowed = tiersForFamily(family);
+  for (const node of graph.nodes || []) {
+    if (!isQualityNode(node)) {
+      continue;
+    }
+    const widget = /** @type {EzWidget} */ (widgetByName(node, "quality"));
+    if (!widget?.options) {
+      continue;
+    }
+    const current = comboValues(widget);
+    if (
+      current.length === allowed.length &&
+      current.every((value, index) => value === allowed[index])
+    ) {
+      continue;
+    }
+    widget.options.values = [...allowed];
+  }
+}
+
+/**
  * Requested value per overlay field for one tier, or null for an unknown row.
  * @param {string} family
  * @param {string} tier
@@ -623,17 +687,42 @@ function sameTierValue(left, right) {
 }
 
 /**
+ * True when one TRELLIS KSampler is the unguided texture pass.
+ *
+ * A TRELLIS graph runs three guided stages at CFG 7.5 plus one texture stage
+ * at CFG 1.0. The step ladder is tuned against the guided stages and the
+ * texture stage's step count belongs to its own recipe, so the overlay leaves
+ * that sampler alone. Mirrors presets.is_trellis_guidance_free_stage.
+ * @param {EzNode} node
+ * @param {string} family
+ * @returns {boolean}
+ */
+function isTrellisGuidanceFreeStage(node, family) {
+  if (family !== "trellis" || nodeType(node) !== "KSampler") {
+    return false;
+  }
+  const cfg = /** @type {EzWidget} */ (widgetByName(node, "cfg"));
+  const values = Array.isArray(node.widgets_values) ? node.widgets_values : [];
+  const held = cfg ? cfg.value : values[3];
+  return held !== undefined && Number(held) === 1;
+}
+
+/**
  * Live widget per targeted instance of each overlay field, muted nodes skipped.
  * @param {object|undefined} graph
+ * @param {string} [family] When given, the family whose overlay is being read.
  * @returns {object} field -> Array of {node, widget}
  */
-function collectOverlayInstances(graph) {
+function collectOverlayInstances(graph, family) {
   const out = {};
   for (const field of EZ_QUALITY_FIELDS) {
     out[field] = [];
   }
   for (const node of graph?.nodes || []) {
     if (!isLiveNode(node)) {
+      continue;
+    }
+    if (family && isTrellisGuidanceFreeStage(node, family)) {
       continue;
     }
     const ntype = nodeType(node);
@@ -720,9 +809,9 @@ function deriveQualityTier(graph, family) {
   if (!owned.length) {
     return EZ_QUALITY_LAB;
   }
-  const instances = collectOverlayInstances(graph);
+  const instances = collectOverlayInstances(graph, family);
   const seen = overlayValues(graph, family, instances);
-  for (const tier of EZ_QUALITY_NAMED) {
+  for (const tier of namedTiersForFamily(family)) {
     const row = tierRow(family, tier);
     if (row && owned.every((field) => sameTierValue(seen.observed[field], row[field]))) {
       return tier;
@@ -784,7 +873,7 @@ function writeBlockReason(field, entry, wanted, refused) {
  */
 function planTierWrites(graph, family, tier) {
   const row = tierRow(family, tier);
-  const instances = collectOverlayInstances(graph);
+  const instances = collectOverlayInstances(graph, family);
   const refused = graphHasWan14(graph);
   const writes = [];
   const failures = [];
@@ -1033,7 +1122,7 @@ function divergedFields(graph, family) {
   }
   const snap = snapshots.get(graph);
   const writes = overlayWrites.get(graph);
-  const instances = collectOverlayInstances(graph);
+  const instances = collectOverlayInstances(graph, family);
   for (const field of ownedFields(family)) {
     const name = FIELD_WIDGET_NAMES[field];
     const dirty = (instances[field] || []).some((entry) => {
@@ -1323,6 +1412,7 @@ function syncQualityFromGraph(graph) {
   syncingByGraph.set(graph, true);
   try {
     const family = graphFamily(graph);
+    scopeComboToFamily(graph, family);
     const tier = deriveQualityTier(graph, family);
     setQualityOnAll(graph, tier);
     if (tier === EZ_QUALITY_CUSTOM) {

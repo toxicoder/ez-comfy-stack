@@ -657,7 +657,7 @@ def test_request_json_sync_and_missing() -> None:
 def test_ensure_model_check_node_is_idempotent() -> None:
     graph: dict[str, Any] = {
         "id": "probe",
-        "last_node_id": 1,
+        "last_node_id": 2,
         "nodes": [
             {
                 "id": 1,
@@ -666,7 +666,18 @@ def test_ensure_model_check_node_is_idempotent() -> None:
                 "size": [320, 270],
                 "inputs": [],
                 "outputs": [],
-            }
+            },
+            # A sampler the overlay can write, so this graph earns a Quality
+            # combo; a graph with nothing to write would ship without one.
+            {
+                "id": 2,
+                "type": "KSampler",
+                "pos": [40, 400],
+                "size": [300, 270],
+                "inputs": [],
+                "outputs": [],
+                "widgets_values": [0, "fixed", 20, 3.5, "euler", "normal", 1],
+            },
         ],
         "extra": {"linearData": {"inputs": [[1, "filename_prefix"]], "outputs": [1]}},
     }
@@ -725,14 +736,21 @@ def test_stamp_all_model_check_writes(tmp_path: Path) -> None:
     lab.mkdir(parents=True)
     graph = {
         "id": "still-draft",
-        "last_node_id": 1,
+        "last_node_id": 2,
         "nodes": [
             {
                 "id": 1,
                 "type": "SaveImage",
                 "pos": [40, 80],
                 "size": [320, 270],
-            }
+            },
+            {
+                "id": 2,
+                "type": "KSampler",
+                "pos": [40, 400],
+                "size": [300, 270],
+                "widgets_values": [0, "fixed", 20, 3.5, "euler", "normal", 1],
+            },
         ],
         "extra": {},
     }

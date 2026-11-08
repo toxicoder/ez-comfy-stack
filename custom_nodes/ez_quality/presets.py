@@ -183,11 +183,23 @@ TRELLIS_STANDARD_STEPS = 12
 TRELLIS_HIGH_STEPS = 20
 TRELLIS_MAX_STEPS = 28
 
+# A TRELLIS stage authored at this CFG runs without guidance: it is the texture
+# pass, not one of the three guided stages. The TRELLIS ladder is tuned against
+# the guided stages, so it leaves this one on its authored step count.
+TRELLIS_GUIDANCE_FREE_CFG = 1.0
+
 KSAMPLER_STEPS_INDEX = 2
 KSAMPLER_CFG_INDEX = 3
 UNET_NAME_INDEX = 0
 CLIP_NAME_INDEX = 0
 VAE_NAME_INDEX = 0
+
+# The only node types apply_to_graph can write. A graph that carries none of
+# them has nothing for a tier to change, so it gets no Quality combo; keep this
+# in step with the node dispatch in apply_to_graph.
+OVERLAY_NODE_TYPES: frozenset[str] = frozenset(
+    {"KSampler", "UNETLoader", "CLIPLoader", "VAELoader"}
+)
 
 BANNED_UNET_NEEDLES: tuple[str, ...] = (
     "MiniMax",
@@ -656,6 +668,32 @@ def _trellis_steps(choice: str) -> int | None:
     return None
 
 
+def is_trellis_guidance_free_stage(node: Mapping[str, Json], family: str) -> bool:
+    """True when one TRELLIS KSampler is the unguided texture pass.
+
+    The TRELLIS graph runs three guided stages at CFG 7.5 and one texture
+    stage at CFG 1.0. The step ladder is tuned against the guided stages, and
+    the texture stage's own step count is part of its recipe, so the overlay
+    leaves that sampler alone and reads the tier off the guided stages.
+
+    Args:
+        node: One graph node.
+        family: Inferred family for the graph the node belongs to.
+
+    Returns:
+        True when the overlay must not write this sampler's steps.
+    """
+    if family != "trellis" or str(node.get("type") or "") != "KSampler":
+        return False
+    values = node.get("widgets_values")
+    if not isinstance(values, list) or len(values) <= KSAMPLER_CFG_INDEX:
+        return False
+    held = values[KSAMPLER_CFG_INDEX]
+    if isinstance(held, bool) or not isinstance(held, (int, float)):
+        return False
+    return float(held) == TRELLIS_GUIDANCE_FREE_CFG
+
+
 def _free_commercial_overlay(
     occupancy: str,
     authored_steps: int,
@@ -1071,6 +1109,8 @@ def apply_to_graph(
         if not isinstance(values, list):
             continue
         if ntype == "KSampler":
+            if is_trellis_guidance_free_stage(node, occupancy):
+                continue
             authored_steps = (
                 int(cast("int", values[KSAMPLER_STEPS_INDEX]))
                 if len(values) > KSAMPLER_STEPS_INDEX
@@ -1469,6 +1509,27 @@ def tier_label(family: str, quality: str) -> str:
     if profile.cfg is not None:
         parts.append(f"CFG {profile.cfg}")
     return ", ".join(parts)
+
+
+def tier_is_honored(family: str, quality: str) -> bool:
+    """True when one family can actually carry one tier.
+
+    ``custom`` and ``lab`` always pass: one leaves the graph alone and the other
+    restores what it shipped with. Any other tier must have at least one field
+    the family writes, or applying it changes nothing and the operator would be
+    told a level was reached that the graph never had.
+
+    Args:
+        family: Occupancy id, such as ``wan``.
+        quality: Raw tier as typed, any case.
+
+    Returns:
+        True when applying the tier writes something, or it is a freeze tier.
+    """
+    choice = normalize_quality(quality)
+    if choice in _FREEZE_QUALITIES:
+        return True
+    return choice in tiers_for_family(family)
 
 
 def export_table() -> dict[str, Json]:

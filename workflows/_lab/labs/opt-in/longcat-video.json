@@ -151,37 +151,6 @@
       "title": "Negative Prompt Enhance"
     },
     {
-      "id": 5,
-      "type": "EZQuality",
-      "pos": [
-        1796,
-        80
-      ],
-      "size": [
-        320.0,
-        82.0
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "quality",
-          "type": "STRING",
-          "links": null,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "EZQuality"
-      },
-      "widgets_values": [
-        "lab"
-      ],
-      "title": "Quality"
-    },
-    {
       "id": 6,
       "type": "EZModelCheck",
       "pos": [
@@ -284,10 +253,7 @@
         0
       ]
     },
-    "workflowRendererVersion": "Vue-corrected",
-    "lab_quality": {
-      "default": "lab"
-    }
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

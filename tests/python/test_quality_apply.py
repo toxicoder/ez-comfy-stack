@@ -28,6 +28,7 @@ sys.path.insert(0, str(ROOT / "scripts" / "lib"))
 import quality_apply as qa  # noqa: E402
 
 WAN_14B_UNET = "wan2.2_t2v_14B_fp16.safetensors"
+WAN_5B_UNET = "wan2.2_ti2v_5B_fp16.safetensors"
 
 
 def _graph(
@@ -295,6 +296,37 @@ def test_wan_14b_graph_is_left_untouched(tmp_path: Path) -> None:
     out = tmp_path / "out.json"
     assert qa._cli(["--graph", str(src), "--out", str(out), "--quality", "max"]) == 0  # noqa: SLF001
     assert json.loads(out.read_text(encoding="utf-8")) == before
+
+
+def test_a_tier_the_family_cannot_honor_is_stated(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The CLI says so instead of writing a graph that never changed."""
+    graph = _graph("draft", occupancy="wan", unet=WAN_5B_UNET)
+    src = _write(tmp_path / "g.json", graph)
+    out = tmp_path / "out.json"
+    assert (
+        qa._cli(["--graph", str(src), "--out", str(out), "--quality", "ultra"])  # noqa: SLF001
+        == 0
+    )
+    err = capsys.readouterr().err
+    assert "cannot honor" in err, err
+    assert "wan" in err, err
+    assert json.loads(out.read_text(encoding="utf-8")) == graph
+
+
+def test_a_tier_the_family_can_honor_stays_quiet(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """An honored tier still prints nothing, so scripts can chain on it."""
+    graph = _graph("draft", occupancy="wan", unet=WAN_5B_UNET)
+    src = _write(tmp_path / "g.json", graph)
+    out = tmp_path / "out.json"
+    assert (
+        qa._cli(["--graph", str(src), "--out", str(out), "--quality", "max"])  # noqa: SLF001
+        == 0
+    )
+    assert capsys.readouterr().err == ""
 
 
 def test_recorded_quality_skips_foreign_nodes() -> None:

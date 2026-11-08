@@ -66,37 +66,6 @@
       "title": "App Forge"
     },
     {
-      "id": 3,
-      "type": "EZQuality",
-      "pos": [
-        1176,
-        80
-      ],
-      "size": [
-        320.0,
-        82.0
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "quality",
-          "type": "STRING",
-          "links": null,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "EZQuality"
-      },
-      "widgets_values": [
-        "lab"
-      ],
-      "title": "Quality"
-    },
-    {
       "id": 4,
       "type": "EZModelCheck",
       "pos": [
@@ -205,14 +174,6 @@
     "linearData": {
       "inputs": [
         [
-          3,
-          "quality",
-          {
-            "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
-          }
-        ],
-        [
           2,
           "sample",
           {
@@ -268,10 +229,7 @@
     "linearMode": true,
     "lab_optional_unwired": [
       "EZAppForge"
-    ],
-    "lab_quality": {
-      "default": "lab"
-    }
+    ]
   },
   "version": 0.4
 }

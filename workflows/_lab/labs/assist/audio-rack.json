@@ -211,37 +211,6 @@
       "title": "Instrumental family"
     },
     {
-      "id": 6,
-      "type": "EZQuality",
-      "pos": [
-        1796,
-        80
-      ],
-      "size": [
-        320.0,
-        82.0
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "quality",
-          "type": "STRING",
-          "links": null,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "EZQuality"
-      },
-      "widgets_values": [
-        "lab"
-      ],
-      "title": "Quality"
-    },
-    {
       "id": 7,
       "type": "EZModelCheck",
       "pos": [
@@ -381,9 +350,6 @@
     },
     "lab_rel": "labs/assist/audio-rack",
     "workflowRendererVersion": "Vue-corrected",
-    "lab_quality": {
-      "default": "lab"
-    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -398,14 +364,6 @@
     },
     "linearData": {
       "inputs": [
-        [
-          6,
-          "quality",
-          {
-            "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
-          }
-        ],
         [
           5,
           "brief",

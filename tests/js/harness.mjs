@@ -280,6 +280,23 @@ export function comboValue(qualityNode) {
 }
 
 /**
+ * The tier strings the Quality combo currently offers.
+ * Returns:
+ *   [] when the combo has no option list at all.
+ */
+export function comboOptions(qualityNode) {
+  const raw = qualityNode.widgets?.find((w) => w.name === "quality")?.options?.values;
+  if (typeof raw === "function") {
+    try {
+      return Array.isArray(raw()) ? raw().map(String) : [];
+    } catch {
+      return [];
+    }
+  }
+  return Array.isArray(raw) ? raw.map(String) : [];
+}
+
+/**
  * The live quality caption, from the graph stamp or the combo label.
  * Returns:
  *   "" when the extension stamped no caption at all.

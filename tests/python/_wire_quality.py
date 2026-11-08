@@ -19,7 +19,13 @@ from _lab_layout import (
     operator_note,
 )
 from _lab_paths import lab_graph_paths
-from ez_quality.presets import QUALITY_LAB
+from ez_quality.presets import (
+    OVERLAY_NODE_TYPES,
+    QUALITY_LAB,
+    infer_occupancy,
+    is_trellis_guidance_free_stage,
+    tiers_for_family,
+)
 
 QUALITY_TYPE = "EZQuality"
 QUALITY_TITLE = "Quality"
@@ -221,6 +227,69 @@ def find_quality_node(graph: dict[str, Any]) -> dict[str, Any] | None:
     return hits[0]
 
 
+def family_honors_tiers(graph: dict[str, Any]) -> bool:
+    """True when some tier would actually change this graph.
+
+    Two things have to hold. The family inferred from the graph's loaders has
+    a tier ladder of its own, and the graph carries at least one node type the
+    overlay can write. An audio graph with no KSampler and no loader passes the
+    first test and fails the second, and every tier on it queues unchanged.
+
+    Args:
+        graph: Serialized Comfy graph.
+
+    Returns:
+        False when every tier would be a no-op, so a combo belongs nowhere.
+    """
+    if not tiers_for_family(infer_occupancy(graph)):
+        return False
+    family = infer_occupancy(graph)
+    return any(
+        node.get("type") in OVERLAY_NODE_TYPES
+        and not is_trellis_guidance_free_stage(node, family)
+        for node in (graph.get("nodes") or [])
+    )
+
+
+def strip_quality_node(graph: dict[str, Any]) -> bool:
+    """Remove every EZQuality node, its App widget row, and its default stamp.
+
+    A selector that cannot change anything is worse than none: it offers levels
+    that queue unchanged and read as applied. Graphs whose family owns no
+    overlay field get the node taken back out.
+
+    Args:
+        graph: Serialized Comfy graph (mutated).
+
+    Returns:
+        True when the graph held a Quality node to remove.
+    """
+    nodes = graph.get("nodes") or []
+    kept = [node for node in nodes if node.get("type") != QUALITY_TYPE]
+    if len(kept) == len(nodes):
+        return False
+    graph["nodes"] = kept
+    extra = graph.get("extra")
+    if isinstance(extra, dict):
+        extra.pop("lab_quality", None)
+        linear = extra.get("linearData")
+        if isinstance(linear, dict):
+            quality_ids = {int(n["id"]) for n in nodes if n.get("type") == QUALITY_TYPE}
+            linear["inputs"] = [
+                entry
+                for entry in (linear.get("inputs") or [])
+                if not (
+                    isinstance(entry, (list, tuple))
+                    and entry
+                    and (
+                        entry[0] in quality_ids
+                        or (len(entry) >= 2 and entry[1] == QUALITY_WIDGET)
+                    )
+                )
+            ]
+    return True
+
+
 def ensure_quality_node(graph: dict[str, Any]) -> dict[str, Any]:
     """Add EZQuality when missing and stamp extra.lab_quality + linearData.
 
@@ -228,12 +297,18 @@ def ensure_quality_node(graph: dict[str, Any]) -> dict[str, Any]:
     Draft/High overlays (shipped JSON stays Lab). ``linearData`` keeps
     required still pickers first, then Quality.
 
+    A graph whose family has no tier to write gets the node removed instead:
+    see ``strip_quality_node``.
+
     Args:
         graph: Serialized Comfy graph (mutated).
 
     Returns:
         The same graph dict.
     """
+    if not family_honors_tiers(graph):
+        strip_quality_node(graph)
+        return graph
     extra = graph.setdefault("extra", {})
     extra["lab_quality"] = {"default": QUALITY_DEFAULT}
     existing = find_quality_node(graph)

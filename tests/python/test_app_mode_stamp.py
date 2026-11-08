@@ -266,16 +266,14 @@ def test_dream_house_clay_hides_images_and_keeps_one_prompt() -> None:
 
 def test_beat_sheet_exposes_only_shot_cards() -> None:
     names = _widget_names(_load("labs/assist/beat-sheet.json"))
-    assert names[0] == "quality"
-    assert names[1] == "sample"
-    assert names[2] == "prompt"
+    assert names[0] == "sample"
+    assert names[1] == "prompt"
     assert names.count("value") == 21
 
 
 def test_research_chat_exposes_message_mode_search() -> None:
     names = _widget_names(_load("labs/assist/research-chat.json"))
     assert names == [
-        "quality",
         "sample",
         "prompt",
         "mode",
@@ -284,38 +282,34 @@ def test_research_chat_exposes_message_mode_search() -> None:
         "history",
     ]
     labels = _labels(_load("labs/assist/research-chat.json"))
-    assert labels[0] == "Quality"
-    assert labels[1] == "Sample prompt"
-    assert labels[2] == "Message"
+    assert labels[0] == "Sample prompt"
+    assert labels[1] == "Message"
     assert "Web search" in labels
     assert len(labels) == len(set(labels)), labels
 
 
 def test_cinema_rack_exposes_subject_and_axes() -> None:
     names = _widget_names(_load("labs/assist/cinema-rack.json"))
-    assert names[0] == "quality"
-    assert names[1] == "subject"
+    assert names[0] == "subject"
+    assert names[1] == "recipe"
     assert "recipe" in names
     assert "camera_movement" in names
     assert names.count("style") == 3
     assert names.count("enhance") == 3
     labels = _labels(_load("labs/assist/cinema-rack.json"))
-    assert labels[0] == "Quality"
-    assert labels[1] == "Subject"
+    assert labels[0] == "Subject"
     assert "Camera move" in labels
     assert len(labels) == len(set(labels)), labels
 
 
 def test_audio_rack_exposes_brief_and_axes() -> None:
     names = _widget_names(_load("labs/assist/audio-rack.json"))
-    assert names[0] == "quality"
-    assert names[1] == "brief"
+    assert names[0] == "brief"
     assert "recipe" in names
     assert "genre_style" in names
     assert names.count("enhance") == 2
     labels = _labels(_load("labs/assist/audio-rack.json"))
-    assert labels[0] == "Quality"
-    assert labels[1] == "Brief"
+    assert labels[0] == "Brief"
     assert "Tempo" in labels
     assert "Rewrite vocal" in labels
     assert "Rewrite instrumental" in labels
@@ -324,7 +318,7 @@ def test_audio_rack_exposes_brief_and_axes() -> None:
 
 def test_prompt_forge_keeps_three_family_prompts_first() -> None:
     names = _widget_names(_load("labs/assist/prompt-forge.json"))
-    assert names[:4] == ["quality", "sample", "prompt", "value"]
+    assert names[:3] == ["sample", "prompt", "value"]
     assert names.count("prompt") == 1
     assert names.count("style") == 6
     assert names.count("enhance") == 6
@@ -480,8 +474,7 @@ def test_prompt_forge_keeps_style_on_i2v_family_encoders() -> None:
     names = _widget_names(_load("labs/assist/prompt-forge.json"))
     assert names.count("style") == 6
     labels = _labels(_load("labs/assist/prompt-forge.json"))
-    assert labels[0] == "Quality"
-    assert labels[1] == "Sample prompt"
+    assert labels[0] == "Sample prompt"
     assert "Prompt" in labels
     assert "Context" in labels
     assert "Klein prompt" not in labels
@@ -492,7 +485,7 @@ def test_prompt_forge_keeps_style_on_i2v_family_encoders() -> None:
 def test_beat_sheet_labels_are_node_titles() -> None:
     graph = _load("labs/assist/beat-sheet.json")
     labels = _labels(graph)
-    assert labels[0] == "Quality"
+    assert labels[0] == "Sample prompt"
     titles = [
         n.get("title")
         for n in graph["nodes"]

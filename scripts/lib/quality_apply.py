@@ -24,7 +24,8 @@ Arguments:
                default) skips the on-disk presence check entirely.
 
 Outputs:
-  Nothing on success. One line on stderr when the run fails.
+  Nothing on success. One line on stderr when the run fails, and one naming a
+  tier this graph's model family cannot honor.
 
 Returns:
   0 when --out holds the overlaid graph; 1 when --graph is missing or is not a
@@ -53,6 +54,8 @@ from ez_quality.presets import (
     QUALITY_FREE_COMMERCIAL_ALIAS,
     QUALITY_LAB,
     apply_to_graph,
+    infer_occupancy,
+    tier_is_honored,
 )
 
 if TYPE_CHECKING:
@@ -298,7 +301,8 @@ def apply_quality_file(
       quality: --quality value, or empty to use the graph's own tier.
       comfy_url: ComfyUI base URL for loader options, or empty to skip.
     Outputs:
-      The overlaid graph at ``out_path``. Prints nothing on success.
+      The overlaid graph at ``out_path``. Prints nothing on success, or one line
+      on stderr naming a tier this graph's family cannot honor.
     Returns:
       None
     Raises:
@@ -307,6 +311,13 @@ def apply_quality_file(
     graph = load_graph(graph_path)
     tier = resolve_quality(graph, quality)
     availability = resolve_availability(comfy_url)
+    family = infer_occupancy(graph)
+    if not tier_is_honored(family, tier):
+        print(
+            f"quality_apply: {graph_path} is a {family} graph and cannot honor"
+            f" '{tier}'; the graph is written unchanged",
+            file=sys.stderr,
+        )
     apply_to_graph(
         graph,
         tier,

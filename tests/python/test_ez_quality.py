@@ -17,7 +17,9 @@ from _wire_quality import (
     QUALITY_TYPE,
     QUALITY_WIDGET,
     ensure_quality_node,
+    family_honors_tiers,
     find_quality_node,
+    strip_quality_node,
 )
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -165,6 +167,7 @@ from ez_quality.presets import (  # noqa: E402
     is_flux2_vae,
     is_klein3_clip,
     is_klein3_unet,
+    is_trellis_guidance_free_stage,
     is_klein3_upsampler,
     is_klein_4b_unet,
     is_klein_9b_unet,
@@ -176,6 +179,7 @@ from ez_quality.presets import (  # noqa: E402
     resolve_overlay,
     tier_label,
     tier_profile,
+    tier_is_honored,
     tiers_for_family,
 )
 
@@ -605,10 +609,126 @@ def test_ensure_quality_places_without_overlap() -> None:
         assert not hit, (node.get("id"), node.get("type"))
 
 
+def test_trellis_ladder_leaves_the_unguided_texture_stage_authored() -> None:
+    """Four TRELLIS stages share one graph; the CFG 1.0 pass is its own recipe.
+
+    The ladder is tuned against the three guided stages. Stamping max on the
+    unguided texture stage would rewrite a step count the author set with it.
+    """
+    graph = copy.deepcopy(_load("3d/trellis2.json"))
+    guided = [n for n in graph["nodes"] if n.get("type") == "KSampler" and n["id"] != 18]
+    texture = next(n for n in graph["nodes"] if n["id"] == 18)
+    assert texture.get("title") == "KSampler (texture)"
+    for node in guided:
+        node["widgets_values"][KSAMPLER_STEPS_INDEX] = 12
+    texture["widgets_values"][KSAMPLER_STEPS_INDEX] = 12
+
+    apply_to_graph(graph, QUALITY_MAX)
+
+    for node in guided:
+        assert node["widgets_values"][KSAMPLER_STEPS_INDEX] == TRELLIS_MAX_STEPS
+    assert texture["widgets_values"][KSAMPLER_STEPS_INDEX] == 12, (
+        "the unguided stage keeps the steps its author set"
+    )
+
+
+def test_is_trellis_guidance_free_stage_reads_only_the_trellis_recipe() -> None:
+    """The exemption belongs to TRELLIS samplers and to CFG 1.0 alone."""
+    stage = {"type": "KSampler", "widgets_values": [0, "fixed", 12, 1.0]}
+    guided = {"type": "KSampler", "widgets_values": [0, "fixed", 12, 7.5]}
+    assert is_trellis_guidance_free_stage(stage, "trellis") is True
+    assert is_trellis_guidance_free_stage(guided, "trellis") is False
+    assert is_trellis_guidance_free_stage(stage, "wan") is False
+    assert (
+        is_trellis_guidance_free_stage({"type": "VAELoader", "widgets_values": ["x", 1]}, "trellis")
+        is False
+    )
+    assert is_trellis_guidance_free_stage({"type": "KSampler"}, "trellis") is False
+    assert (
+        is_trellis_guidance_free_stage(
+            {"type": "KSampler", "widgets_values": [0, "fixed", 12, "warm"]}, "trellis"
+        )
+        is False
+    )
+
+
+def test_family_honors_tiers_needs_a_writable_node() -> None:
+    """A combo belongs only where a tier has a widget to write.
+
+    The family ladder is one half of the answer. An audio graph with no
+    KSampler and no loader infers a family that owns a ladder, yet every tier
+    on it queues the graph unchanged.
+    """
+    sampler = {
+        "id": 1,
+        "type": "KSampler",
+        "pos": [0, 0],
+        "size": [300, 200],
+        "widgets_values": [0, "fixed", 20, 3.5, "eps", None, None],
+    }
+    audio_graph = {
+        "nodes": [
+            {"id": 2, "type": "SaveAudio", "pos": [0, 0], "size": [200, 80]},
+            sampler,
+        ],
+        "extra": {"lab_app_mode": {"occupancy": "audio"}},
+    }
+    assert family_honors_tiers(audio_graph) is True
+
+    no_host = {
+        "nodes": [{"id": 2, "type": "SaveAudio", "pos": [0, 0], "size": [200, 80]}],
+        "extra": {"lab_app_mode": {"occupancy": "audio"}},
+    }
+    assert family_honors_tiers(no_host) is False
+
+    ladderless = {"nodes": [sampler], "extra": {"lab_app_mode": {"occupancy": "llm"}}}
+    assert family_honors_tiers(ladderless) is False
+
+
+def test_strip_quality_node_clears_the_widget_and_its_row() -> None:
+    """Stripping removes the node, its App widget row, and its default stamp."""
+    graph = copy.deepcopy(_load("photos/still-draft.json"))
+    ensure_quality_node(graph)
+    assert find_quality_node(graph) is not None
+    assert graph["extra"]["lab_quality"] == {"default": QUALITY_LAB}
+
+    assert strip_quality_node(graph) is True
+    assert [n for n in graph["nodes"] if n.get("type") == QUALITY_TYPE] == []
+    assert "lab_quality" not in graph["extra"]
+    rows = graph["extra"]["linearData"]["inputs"]
+    assert QUALITY_WIDGET not in [row[1] for row in rows]
+    assert find_quality_node(graph) is None
+    assert strip_quality_node(graph) is False
+
+
+def test_ensure_quality_strips_a_combo_no_tier_can_move() -> None:
+    """An audio graph with no loader or sampler ships without a combo."""
+    graph = {
+        "nodes": [
+            {"id": 2, "type": "SaveAudio", "pos": [0, 0], "size": [200, 80]},
+            {"id": 3, "type": "Note", "pos": [0, 0], "size": [200, 80]},
+        ],
+        "extra": {"lab_app_mode": {"occupancy": "audio", "enabled": True}},
+    }
+    ensure_quality_node(graph)
+    assert [n for n in graph["nodes"] if n.get("type") == QUALITY_TYPE] == []
+    assert "lab_quality" not in graph["extra"]
+    assert (graph["extra"].get("linearData") or {}).get("inputs", []) == []
+
+
 @pytest.mark.parametrize("path", lab_graph_paths(), ids=lambda p: p.name)
 def test_every_lab_graph_has_one_quality_node(path: Path) -> None:
+    """One combo per tier-movable graph; none where no tier can write.
+
+    A graph whose family owns no ladder, or that holds no node the overlay can
+    write, ships without the combo: ``_wire_quality`` strips it so the App does
+    not offer levels that queue unchanged.
+    """
     graph = json.loads(path.read_text(encoding="utf-8"))
     hits = [n for n in graph.get("nodes") or [] if n.get("type") == QUALITY_TYPE]
+    if not family_honors_tiers(graph):
+        assert hits == [], path
+        return
     assert len(hits) == 1, path
     extra = graph.get("extra") or {}
     assert extra.get("lab_quality", {}).get("default") == QUALITY_LAB
@@ -847,6 +967,28 @@ def test_tiers_for_family_is_empty_for_a_no_op_family() -> None:
     assert tiers_for_family("llm") == ()
     assert tiers_for_family("") == ()
     assert tiers_for_family("longcat") == ()
+
+
+def test_tier_is_honored_refuses_a_tier_the_family_cannot_write() -> None:
+    """A tier only counts as applied when the family actually writes a field.
+
+    Before the combo was scoped, ``ultra`` on a Wan graph resolved to an all-null
+    overlay and still stamped as applied, so the operator saw a level the graph
+    never reached.
+    """
+    assert tier_is_honored("klein", "ultra")
+    assert not tier_is_honored("wan", "ultra")
+    assert not tier_is_honored("audio", "ultra")
+    assert not tier_is_honored("trellis", "ultra")
+    assert tier_is_honored("wan", "standard")
+    assert tier_is_honored("klein", "ULTRA")
+    # The two freeze levels never write, and are always honest.
+    for family in ("klein", "wan", "audio", "none", "llm", ""):
+        assert tier_is_honored(family, QUALITY_LAB), family
+        assert tier_is_honored(family, QUALITY_CUSTOM), family
+    # A family with nothing to overlay honors no named tier at all.
+    for family in ("none", "llm", "longcat"):
+        assert not tier_is_honored(family, "draft"), family
 
 
 def test_tiers_for_family_keeps_each_vendor_ladder_in_its_own_family() -> None:

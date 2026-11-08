@@ -60,9 +60,8 @@ def test_prompt_forge_has_no_unet_and_stamps_llm() -> None:
     for entry in extra["linearData"]["inputs"]:
         config = entry[2] if len(entry) > 2 else {}
         labels.append((config or {}).get("label") or entry[1])
-    assert labels[0] == "Quality"
-    assert labels[1] == "Sample prompt"
-    assert labels[2] == "Prompt"
+    assert labels[0] == "Sample prompt"
+    assert labels[1] == "Prompt"
     assert "Context" in labels
     assert "Klein prompt" not in labels
     assert "Wan prompt" not in labels
@@ -92,8 +91,8 @@ def test_cinema_rack_has_no_unet_and_stamps_llm() -> None:
     assert extra["lab_app_mode"]["occupancy"] == "llm"
     assert "photos/still-draft" in extra["lab_app_mode"]["handoff"]
     names = [entry[1] for entry in extra["linearData"]["inputs"]]
-    assert names[0] == "quality"
-    assert names[1] == "subject"
+    assert names[0] == "subject"
+    assert names[1] == "recipe"
     assert "recipe" in names
     assert "camera_movement" in names
     _assert_no_overlap(graph)
@@ -117,8 +116,7 @@ def test_audio_rack_has_no_unet_and_stamps_llm() -> None:
     assert extra["lab_app_mode"]["occupancy"] == "llm"
     assert "audio/music/rap-draft" in extra["lab_app_mode"]["handoff"]
     names = [entry[1] for entry in extra["linearData"]["inputs"]]
-    assert names[0] == "quality"
-    assert names[1] == "brief"
+    assert names[0] == "brief"
     assert "recipe" in names
     assert "genre_style" in names
     _assert_no_overlap(graph)
@@ -150,7 +148,6 @@ def test_research_chat_has_no_unet_and_stamps_llm() -> None:
         labels.append((config or {}).get("label") or entry[1])
         names.append(entry[1])
     assert names == [
-        "quality",
         "sample",
         "prompt",
         "mode",
@@ -158,9 +155,8 @@ def test_research_chat_has_no_unet_and_stamps_llm() -> None:
         "subagents",
         "history",
     ]
-    assert labels[0] == "Quality"
-    assert labels[1] == "Sample prompt"
-    assert labels[2] == "Message"
+    assert labels[0] == "Sample prompt"
+    assert labels[1] == "Message"
     assert "Web search" in labels
     assert "Subagents" in labels
     assert len(labels) == len(set(labels)), labels
@@ -193,7 +189,6 @@ def test_app_forge_has_no_unet_and_stamps_llm() -> None:
         labels.append((config or {}).get("label") or entry[1])
         names.append(entry[1])
     assert names == [
-        "quality",
         "sample",
         "prompt",
         "template",
@@ -201,9 +196,8 @@ def test_app_forge_has_no_unet_and_stamps_llm() -> None:
         "as_app",
         "overwrite",
     ]
-    assert labels[0] == "Quality"
-    assert labels[1] == "Sample prompt"
-    assert labels[2] == "Brief"
+    assert labels[0] == "Sample prompt"
+    assert labels[1] == "Brief"
     assert "Template" in labels
     assert "Slug" in labels
     assert "As app" in labels

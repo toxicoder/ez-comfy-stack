@@ -234,37 +234,6 @@
       "title": "Save stem mix (host stem-mix.sh)"
     },
     {
-      "id": 8,
-      "type": "EZQuality",
-      "pos": [
-        1796,
-        80
-      ],
-      "size": [
-        320.0,
-        82.0
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "quality",
-          "type": "STRING",
-          "links": null,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "EZQuality"
-      },
-      "widgets_values": [
-        "lab"
-      ],
-      "title": "Quality"
-    },
-    {
       "id": 9,
       "type": "EZModelCheck",
       "pos": [
@@ -368,14 +337,6 @@
     "linearData": {
       "inputs": [
         [
-          8,
-          "quality",
-          {
-            "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
-          }
-        ],
-        [
           2,
           "value",
           {
@@ -431,10 +392,7 @@
       "SaveAudio"
     ],
     "lab_rel": "audio/stem-mix",
-    "workflowRendererVersion": "Vue-corrected",
-    "lab_quality": {
-      "default": "lab"
-    }
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }
