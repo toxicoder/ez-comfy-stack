@@ -298,6 +298,44 @@ const toc = await home.evaluate(() => {
 });
 check("the right-hand table of contents still renders", toc !== null && toc.links > 0, JSON.stringify(toc));
 
+// The top-of-page heading row is the other half of the sub navigation, and the one that
+// replaced the theme's progress-ring popover. It has to be present at this width (the ring
+// only showed below xl), stay one line tall, and follow the reader when they jump.
+const tocBar = await home.evaluate(() => {
+  const host = document.querySelector("[data-ez-tocbar]");
+  if (!host) return null;
+  const links = Array.from(host.querySelectorAll("a"));
+  return {
+    links: links.length,
+    height: Math.round(host.getBoundingClientRect().height),
+    current: host.querySelector('[aria-current="location"]')?.textContent?.trim() ?? null,
+    first: links[0]?.textContent?.trim().slice(0, 40) ?? ""
+  };
+});
+check(
+  "the heading row lists the page's own headings in one line",
+  tocBar !== null && tocBar.links > 0 && tocBar.height > 0 && tocBar.height <= 48,
+  JSON.stringify(tocBar)
+);
+check("the heading row marks where the reader is", tocBar !== null && Boolean(tocBar.current), JSON.stringify(tocBar));
+
+const jumped = await (async () => {
+  const links = home.locator("[data-ez-tocbar] a");
+  const total = await links.count();
+  if (total < 2) return { total, current: null };
+  await links.nth(total - 1).click();
+  await home.waitForTimeout(700);
+  const current = await home.evaluate(
+    () => document.querySelector('[data-ez-tocbar] [aria-current="location"]')?.textContent?.trim() ?? null
+  );
+  return { total, current };
+})();
+check(
+  "clicking a heading chip moves the marker",
+  jumped.total >= 2 && jumped.current !== null,
+  `${jumped.total} chips, current=${JSON.stringify(jumped.current)}`
+);
+
 // Every internal link the sidebar offers has to resolve.
 const sidebarLinks = await home.evaluate(() => {
   const seen = new Set();

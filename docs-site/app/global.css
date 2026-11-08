@@ -157,6 +157,141 @@ article table:not([class]) {
   background-color: var(--color-fd-background);
 }
 
+/*
+ * Top-of-page sub navigation: the page's own headings as one horizontal, clickable row.
+ *
+ * It takes Fumadocs' narrow-screen TOC popover slot, which is a grid area of
+ * `#nd-docs-layout` - being a grid item is what lets the row stick under the header for the
+ * whole article instead of unsticking at the end of a short wrapper. The theme only reserves
+ * that row below the `xl` breakpoint, so the height is reserved here at every width; a page
+ * with no headings renders no bar, and the row collapses to the theme's own 0px.
+ */
+#nd-docs-layout:has(.ez-tocbar) {
+  --fd-toc-popover-height: 2.5rem;
+}
+
+.ez-tocbar {
+  grid-area: toc-popover;
+  position: sticky;
+  top: var(--fd-docs-row-2, 0px);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-sizing: border-box;
+  height: var(--fd-toc-popover-height, 2.5rem);
+  padding: 0 1rem 0 1.25rem;
+  border-bottom: 1px solid var(--color-fd-border);
+  background: color-mix(in srgb, var(--color-fd-background) 88%, transparent);
+  backdrop-filter: blur(6px);
+  font-size: 0.78rem;
+}
+
+.ez-tocbar__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex: 0 0 auto;
+  color: var(--color-fd-muted-foreground);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ez-tocbar__label svg {
+  width: 0.8rem;
+  height: 0.8rem;
+}
+
+.ez-tocbar__list {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  flex: 1 1 auto;
+  margin: 0;
+  padding: 0 0.15rem;
+  list-style: none;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  /* The row scrolls sideways, so fade both ends to say there is more off-screen. */
+  mask-image: linear-gradient(to right, transparent, #000 0.75rem, #000 calc(100% - 0.75rem), transparent);
+}
+
+/* Sized to zero, which is how this file hides things: tests/python/test_docs_theme.py
+   keeps the chrome always present in the layout. */
+.ez-tocbar__list::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.ez-tocbar__item {
+  display: flex;
+  flex: 0 0 auto;
+}
+
+/* A third-level heading reads as a step down without costing an extra line. */
+.ez-tocbar__item[data-depth="3"] .ez-tocbar__link {
+  padding-left: 0.4rem;
+  font-size: 0.72rem;
+}
+
+.ez-tocbar__item[data-depth="3"] .ez-tocbar__link::before {
+  content: "-";
+  margin-right: 0.25rem;
+  color: color-mix(in srgb, var(--color-fd-muted-foreground) 60%, transparent);
+}
+
+.ez-tocbar__link {
+  display: inline-block;
+  max-width: 15rem;
+  overflow: hidden;
+  padding: 0.18rem 0.55rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: var(--color-fd-muted-foreground);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.ez-tocbar__link:hover {
+  background: var(--color-fd-muted);
+  color: var(--color-fd-foreground);
+}
+
+.ez-tocbar__link:focus-visible {
+  outline: 2px solid var(--color-fd-ring);
+  outline-offset: 1px;
+}
+
+/* The chip the reader is standing in: filled with the brand copper in both schemes. */
+.ez-tocbar__link[aria-current="location"] {
+  background: var(--color-fd-primary);
+  border-color: color-mix(in srgb, var(--color-fd-primary) 65%, var(--color-fd-foreground));
+  color: var(--color-fd-primary-foreground);
+  font-weight: 600;
+}
+
+.ez-tocbar__count {
+  flex: 0 0 auto;
+  color: var(--color-fd-muted-foreground);
+  font-size: 0.68rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ez-tocbar__link {
+    transition: none;
+  }
+}
+
 .ez-term {
   position: relative;
   border-bottom: 1px dotted var(--color-fd-teal);

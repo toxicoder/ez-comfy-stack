@@ -55,3 +55,4 @@ If a refresh does not clear your row, the table below names the remaining causes
 
 - [Troubleshooting overview](../troubleshooting.md) - the symptom router and the doctor-first rule
 - [Docs style](../contribute/docs-style.mdx) - the widgets these rows describe, and how to edit them
+| No row of heading names above the article, or the row shows no chip highlighted while you scroll | The heading row is `docs-toc-bar.tsx`, which reads the page's own headings after hydration; a blocked or stale bundle leaves it empty | Hard-refresh the docs tab. The row is the top-of-page sub navigation - the right-hand **On this page** column is separate and still renders without it. Not a Spark/`doctor` failure |

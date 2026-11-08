@@ -100,6 +100,21 @@ Defaults match `.env.example`. Do not hardcode `<spark-ip>` or real IPs. `docs-s
 
 ---
 
+## On this page row
+
+Every article gets one sticky row of its own heading names above the body: `docs-site/components/docs-toc-bar.tsx`,
+mounted through the `tableOfContentPopover` slot in `docs-site/app/[[...slug]]/page.tsx`. The slot is the layout's
+`toc-popover` grid area, which is what lets the row stick, and it replaces fumadocs' progress circle. The active
+heading is filled with `--color-fd-primary`; a counter at the right edge shows `n/m`.
+
+Keep it one horizontal line: `.ez-tocbar` in `docs-site/app/global.css` sets the height through
+`#nd-docs-layout:has(.ez-tocbar) { --fd-toc-popover-height: 2.5rem }`, scrolls sideways with `overflow-x: auto`, and
+never hides chrome with `display: none` (theme tests reject that). The right-hand **On this page** column is a separate
+fumadocs slot and stays. Headings come from `useItems()`, so a heading only appears when it is a real `##` / `###`;
+titles built from JSX are flattened by `tocBarTitle`. Unit lane: `bazelisk test //docs-site:unit`.
+
+---
+
 ## Code appearance
 
 Fenced blocks and inline `code` follow [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab) (`docs-site/app/global.css`, **Roboto Mono** / `ui-monospace`):
