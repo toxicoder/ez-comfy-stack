@@ -17,27 +17,40 @@ and how to word the prompt lives on [Prompting](prompting.md).
 - **Choose a graph** - the need-to-lane decision, then the filename
 - **Catalogs by job family** - the six graph catalogs, one table family each
 - **Where the graphs live** - the `_lab/<lane>/` tree after `start`, plus `_user/`
-- **Inspire (Lane A)** - the no-UNET desks
+- **Labs (Lane A)** - the no-UNET desks
 - **Shared lab-graph rules** - outputs, seeds, occupancy, sizes, and Queue rules
 - **Notes on every lab graph** - the on-canvas Note, MP4 output, the reference pair, optional A14B
 
 **What this enables**
 
 - **Picking a filename** instead of starting from a blank canvas
-- **Reading one table** per family: stills, motion, creator, services, film, audio
+- **Reading one table** per family: photos, video, social, business, film, audio
 - **Skipping repetition** - the rules every catalog repeats are written once here
 - **Keeping** the [playbook](visual-generative-ai.md) a how-to, not a spreadsheet
 
 **Who this is for:** studio users after the first still-draft Queue. Node-by-node widgets: [Workflow details](create/workflows-index.md). Encyclopedia: [Workflow node parameters](reference/workflow-nodes.md).
 
-After `download-models` + `start`, load from Comfy's **Workflows** sidebar under **`_lab/<lane>/`** (seeded from host `workflows/_lab/`). Filenames are short stems in lane folders (`stills/still-draft.json`); the unique id is `extra.lab_rel`. Every shipped graph is Nodes 2.0 native (`extra.workflowRendererVersion` = `Vue-corrected`). App Mode graphs also appear under Comfy's **Apps** sidebar (`*.app.json` on disk under the same lane folder; same stem). Do **not** edit raw JSON - change widgets on the canvas. Toggle Nodes 2.0 from the Comfy logo menu if you need classic LiteGraph; the JSON still loads.
+After `download-models` + `start`, load from Comfy's **Workflows** sidebar under **`_lab/<lane>/`** (seeded from host `workflows/_lab/`). Filenames are short stems in lane folders (`photos/still-draft.json`); the unique id is `extra.lab_rel`. Every shipped graph is Nodes 2.0 native (`extra.workflowRendererVersion` = `Vue-corrected`). App Mode graphs also appear under Comfy's **Apps** sidebar (`*.app.json` on disk under the same lane folder; same stem). Do **not** edit raw JSON - change widgets on the canvas. Toggle Nodes 2.0 from the Comfy logo menu if you need classic LiteGraph; the JSON still loads.
 
 ---
 
 ## Choose a graph
 
 Name the deliverable first, then open that lane's catalog. The decision below
-is the same one the sidebar folders make for you.
+is the same one the sidebar folders make for you. There are nine lanes; the
+title and the one-liner are what the sidebar and the App surfaces print.
+
+| Lane | Title | Make this when you are making |
+| --- | --- | --- |
+| `photos/` | Photos | Single images: drafts, edits, product shots, and channel art. |
+| `video/` | Video | Short clips, silent or with audio, from a still you already like. |
+| `social/` | Social | Platform-shaped posts for a channel or shop, sized per surface. |
+| `business/` | Business | Client work by vertical, from listing photos to ad packs. |
+| `film/` | Film | Narrative shorts, act by act, plus the cut tools that finish them. |
+| `audio/` | Audio | Music, podcasts, dubbing, and whole albums. |
+| `3d/` | 3D | Meshes and turntables built from a still you already like. |
+| `guides/` | Control guides | Depth, canny, and clay passes that steer a generation. |
+| `labs/` | Labs | Writers' room tools, and opt-in model families you add on purpose. |
 
 ```mermaid
 flowchart TB
@@ -47,20 +60,24 @@ flowchart TB
   Need --> Loop["Loop / GIF / bumper"]
   Need --> Film["~90 s short"]
   Need --> Plate["Thumbnail / packshot / cover"]
-  Still --> K["stills/still-draft, still-studio, image-studio, reframe, daily / hero"]
-  Motion --> W["motion/silent/still-to-video-5s or shot"]
-  AV --> L["motion/av/still-to-video-8s, clip-chain, or shorts"]
-  Loop --> G["motion/loops/gif-loop or bumper-loop"]
-  Film --> F["films/go-see one-click"]
-  Plate --> C["stills/thumbnail / packshot / cover"]
+  Still --> K["photos/still-draft, still-studio, image-studio, reframe, daily / hero"]
+  Motion --> W["video/silent/still-to-video-5s or shot"]
+  AV --> L["video/av/still-to-video-8s, clip-chain, or shorts"]
+  Loop --> G["video/loops/gif-loop or bumper-loop"]
+  Film --> PL["film/go-see/00-plate (Klein 4B identity)"]
+  PL --> F["film/go-see/feature (LTX print pass) or act-01..act-05"]
+  Plate --> C["photos/thumbnail / packshot / cover"]
 ```
 
-- **A still, a plate, or a cover** - [Stills graphs](create/workflows-stills.md)
-- **A silent ~5 s clip or an AV ~8 s take** - [Motion graphs](create/workflows-motion.md)
-- **A named platform job** - [Creator pack](create/workflows-creator.md)
-- **A client or agency SKU** - [Services pack](create/workflows-services.md)
-- **A 90s film or a clay print** - [Film graphs](create/workflows-film.md)
-- **A podcast, dub, rap, or EDM take** - [Audio graphs](create/workflows-audio.md)
+- **A still, a plate, or a cover** - [Stills graphs](create/workflows-stills.md) (`photos/`)
+- **A silent ~5 s clip or an AV ~8 s take** - [Motion graphs](create/workflows-motion.md) (`video/`)
+- **A named platform job** - [Creator pack](create/workflows-creator.md) (`social/`)
+- **A client or agency SKU** - [Services pack](create/workflows-services.md) (`business/`)
+- **A 90s film or a clay print** - [Film graphs](create/workflows-film.md) (`film/`, `guides/`)
+- **A podcast, dub, rap, or EDM take** - [Audio graphs](create/workflows-audio.md) (`audio/`)
+- **A mesh or turntable from a still** - [Blender + ComfyUI](dcc-workflows.md) (`3d/`)
+- **A depth, canny, or clay pass to steer a run** - [Control guides](dcc-workflows.md) (`guides/`)
+- **A prompt, rack, beat sheet, or an opt-in model** - [Labs](#labs-lane-a) (`labs/`)
 
 ---
 
@@ -86,7 +103,7 @@ App Mode (frontend **1.41.13+**) is a widget surface on the same lab JSON. Surfa
   <Card title="90s film and DCC">
     ---
 
-    One-click 90s shorts, five-act 7.5 min films, plus clay -> print, IC-LoRA envelopes, and in-canvas guide loaders.
+    Plate + print-pass 90s shorts, five-act 7.5 min films, plus clay -> print, IC-LoRA envelopes, and in-canvas guide loaders.
 
     [Film graphs](create/workflows-film.md)
   </Card>
@@ -129,26 +146,31 @@ Save your own graphs in **`_user/`**. Live `_lab/` is the git catalog (overwritt
 
 Sidebar tree after start:
 
+Nine lanes, in browse order. The title in quotes is what an operator reads;
+each lane answers a different "what am I making" question.
+
 ```text
 user/default/workflows/
   _lab/
-    stills/    draft, hero, studio, identity, character, plates, dream-house, reframe
-    motion/
-      silent/  Wan I2V / T2V, first-last, vace, shot
+    photos/    "Photos" - draft, hero, studio, identity, character, plates, dream-house, reframe
+    video/     "Video" - short clips, silent or with audio, from a still you already like
+      silent/  Wan I2V / T2V, first-last, vace, shot, parallax / orbit / push-in
       loops/   gif, bumper, sticker
-      av/      LTX I2V / T2V, clip-chain, hook, b-roll, dialogue, A2V
-    creator/
+      av/      LTX I2V / T2V, clip-chain, hook, b-roll, dialogue, A2V, talking-head
+    social/    "Social" - platform-shaped posts for a channel or shop, sized per surface
       stills/  YouTube / IG / Twitch / merch plates
       silent/  Wan loops and I2V jobs
       av/      LTX AV jobs
-    services/  agency SKUs (ecommerce, ads, local, education, podcasts, listings, fashion, B2B, events, travel)
-    films/     go-see, still-here, switchyard (90s); tide-table / night-oven / glasshouse / last-lane / breakwater act-01...05
-    dcc/       clay -> print, plates, canny, depth/canny control, first-last from guide
-    optional/  a14b, longcat stub, trellis2
-    audio/     podcast, dub, music/rap-draft, music/rap-full
+    business/  "Business" - agency SKUs by vertical (ecommerce, ads, local, education, podcasts, listings, fashion, B2B, events, travel)
+    film/      "Film" - per title a plate app + a print app: go-see / still-here / switchyard plate, feature (90s); tide-table / night-oven / glasshouse / last-lane / breakwater plate, act-01...05; generate-cutaway
+    audio/     "Audio" - podcast, dub, music/rap-draft, music/rap-full, stem-mix
       albums/nill-bye/<album>/     nine Nill Bye albums (numbered tracks + cover + album)
       albums/drive-through/<album>/  six Drive-through albums
-    inspire/   prompt-forge, cinema-rack, audio-rack, research-chat, app-forge, beat-sheet
+    3d/        "3D" - still-to-mesh, trellis2
+    guides/    "Control guides" - clay -> print, plates, canny, depth/canny control, first-last from guide
+    labs/      "Labs" - writers' room tools, and opt-in model families you add on purpose
+      assist/  prompt-forge, cinema-rack, audio-rack, research-chat, app-forge, beat-sheet
+      opt-in/  still-to-video-a14b, longcat-video, still-flux3-fast, still-flux3-quality
   _user/       your graphs (never overwritten; `_rescued/` holds explicit in-place lab Saves, not catalog updates)
 ```
 
@@ -156,18 +178,18 @@ Reusable printer blocks live in the node library after start (`custom_nodes/ez_s
 
 ---
 
-## Inspire (Lane A)
+## Labs (Lane A)
 
 No UNET still. Occupancy **llm** or **none**. Full Apps Lane A Klein stills: [Stills graphs](create/workflows-stills.md).
 
 | Workflow | What it does |
 | --- | --- |
-| **[inspire/prompt-forge](generated/workflows/inspire/prompt-forge.md)** | No UNET. Shared Prompt + Context, then Klein / Wan / LTX / Z-Image / LongCat / DreamX enhance preview (occupancy **llm**) |
-| **[inspire/cinema-rack](generated/workflows/inspire/cinema-rack.md)** | No UNET. Splice cinematography axes into Klein / Wan / LTX (occupancy **llm**). [Cinema Rack](create/cinema-rack.md) |
-| **[inspire/audio-rack](generated/workflows/inspire/audio-rack.md)** | No UNET. Splice audio/music axes into ACE-Step tags / lyrics (occupancy **llm**). [Audio Rack](create/audio-rack.md) |
-| **[inspire/research-chat](generated/workflows/inspire/research-chat.md)** | Creative-process chat + web search + research subagents (occupancy **llm**). Handoff Prompt Forge |
-| **[inspire/app-forge](generated/workflows/inspire/app-forge.md)** | No UNET. Clone a lab graph into live `_user/` (occupancy **llm**). [App Forge](create/app-forge.md) |
-| **[inspire/beat-sheet](generated/workflows/inspire/beat-sheet.md)** | Script desk. Logline + audio policy + 18 cards. `shot-sheet` writes `films/<slug>/shots.yaml` (occupancy **none**) |
+| **[labs/assist/prompt-forge](generated/workflows/labs/assist/prompt-forge.md)** | No UNET. Shared Prompt + Context, then Klein / Wan / LTX / Z-Image / LongCat / DreamX enhance preview (occupancy **llm**) |
+| **[labs/assist/cinema-rack](generated/workflows/labs/assist/cinema-rack.md)** | No UNET. Splice cinematography axes into Klein / Wan / LTX (occupancy **llm**). [Cinema Rack](create/cinema-rack.md) |
+| **[labs/assist/audio-rack](generated/workflows/labs/assist/audio-rack.md)** | No UNET. Splice audio/music axes into ACE-Step tags / lyrics (occupancy **llm**). [Audio Rack](create/audio-rack.md) |
+| **[labs/assist/research-chat](generated/workflows/labs/assist/research-chat.md)** | Creative-process chat + web search + research subagents (occupancy **llm**). Handoff Prompt Forge |
+| **[labs/assist/app-forge](generated/workflows/labs/assist/app-forge.md)** | No UNET. Clone a lab graph into live `_user/` (occupancy **llm**). [App Forge](create/app-forge.md) |
+| **[labs/assist/beat-sheet](generated/workflows/labs/assist/beat-sheet.md)** | Script desk. Logline + audio policy + 18 cards. `shot-sheet` writes `films/<slug>/shots.yaml` (occupancy **none**) |
 
 ---
 
@@ -202,11 +224,11 @@ catalogs link back, so a rule change lands in one place.
 
 ## Notes that apply to every lab graph
 
-Every seeded lab graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS with **`save_output: true`**; after Queue, open **Save video (MP4) - open node for preview**. LTX graphs decode audio (`LTXVAudioVAEDecode`) into the MP4. **[motion/loops/gif-loop](generated/workflows/motion/loops/gif-loop.md)** emits `image/gif`.
+Every seeded lab graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS with **`save_output: true`**; after Queue, open **Save video (MP4) - open node for preview**. LTX graphs decode audio (`LTXVAudioVAEDecode`) into the MP4. **[video/loops/gif-loop](generated/workflows/video/loops/gif-loop.md)** emits `image/gif`.
 
 Every Klein T2I graph also carries the optional reference pair: **Optional reference stills** (`EZOptionalImage`) plus **Klein canvas (optional ref)** (`EZKleinRefCanvas`). Both ship inert - the picker node saves `[""]`, so a fresh Queue is text-to-image. Pick up to three stills (drag-and-drop, upload, or a name from `input/`) and they reach Klein / Flux.2 as real reference latents, along with any wired IMAGE batch; the node's **Use reference stills** / **References off** mute stops them without clearing your picks, and **max_refs** on the canvas node caps how many attach (1-4, default 3). Widgets: [ComfyUI Apps](studio-apps.md#reference-stills-optional). Nodes: [Custom nodes](reference/custom-nodes.md#ez_image).
 
-Optional Wan A14B is a Queue graph (`workflows/_lab/optional/still-to-video-a14b.json`): **both** high-noise and low-noise FP8 UNETs on the canvas. Queue uses the high-noise expert at 8 Lightning-style steps (MagCache **off**) so the graph loads. Dual-expert KSampler split is the full I2V recipe after both weights exist (Comfy Templates / operator). Download `download-wan.sh run --tier a14b` and unload 5B first.
+Optional Wan A14B is a Queue graph (`workflows/_lab/labs/opt-in/still-to-video-a14b.json`): **both** high-noise and low-noise FP8 UNETs on the canvas. Queue uses the high-noise expert at 8 Lightning-style steps (MagCache **off**) so the graph loads. Dual-expert KSampler split is the full I2V recipe after both weights exist (Comfy Templates / operator). Download `download-wan.sh run --tier a14b` and unload 5B first.
 
 ---
 

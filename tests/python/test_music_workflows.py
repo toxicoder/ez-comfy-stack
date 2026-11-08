@@ -16,6 +16,7 @@ from _stamp_app_mode import (
     NILL_BYE_STAMP_STEMS,
     NODE_MODE_BYPASS,
     STAMP_SPECS,
+    _lane_for,
 )
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -170,8 +171,8 @@ def _assert_shared(
             assert ace_w[0] == tags
         assert widgets[0] == tags
     assert "Note" in {n["type"] for n in graph["nodes"]}
-    assert "stills/thumbnail" in extra["lab_note"]
-    assert "stills/podcast-cover" in extra["lab_note"]
+    assert "photos/thumbnail" in extra["lab_note"]
+    assert "photos/podcast-cover" in extra["lab_note"]
     assert extra.get("lab_album")
     assert extra["lab_album"]["art_mode"] in {"skip", "upload", "generate"}
     assert any(n["type"] == "EZAudioMetadata" for n in graph["nodes"])
@@ -329,7 +330,7 @@ def test_nill_bye_stems_are_stamped_audio() -> None:
     stems = {ex["rel"] for ex in DISS_EXAMPLES}
     assert stems <= set(STAMP_SPECS)
     for stem in stems:
-        assert STAMP_SPECS[stem]["lane"] == "audio"
+        assert _lane_for(stem) == "audio"
         assert STAMP_SPECS[stem]["occupancy"] == "audio"
 
 
@@ -458,7 +459,7 @@ def test_drive_through_stems_are_stamped_audio() -> None:
     stems = {ex["rel"] for ex in EDM_EXAMPLES}
     assert stems <= set(STAMP_SPECS)
     for stem in stems:
-        assert STAMP_SPECS[stem]["lane"] == "audio"
+        assert _lane_for(stem) == "audio"
         assert STAMP_SPECS[stem]["occupancy"] == "audio"
         assert STAMP_SPECS[stem]["ace_instrumental_score"] is True
 

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -248,9 +249,9 @@ def _source_of(graph: dict, node: dict, name: str) -> dict | None:
 
 
 def test_prompt_forge_shares_one_prompt_and_context() -> None:
-    graph = _load(lab_json("inspire/prompt-forge.json"))
+    graph = _load(lab_json("labs/assist/prompt-forge.json"))
     extra = graph.get("extra") or {}
-    assert extra.get("lab_rel") == "inspire/prompt-forge"
+    assert extra.get("lab_rel") == "labs/assist/prompt-forge"
     prims = {
         str(n.get("title")): n
         for n in graph["nodes"]
@@ -272,7 +273,7 @@ def test_prompt_forge_shares_one_prompt_and_context() -> None:
 
 
 def test_beat_sheet_desk_reaches_every_ltx_enhance() -> None:
-    graph = _load(lab_json("inspire/beat-sheet.json"))
+    graph = _load(lab_json("labs/assist/beat-sheet.json"))
     prims = {
         str(n.get("title")): n
         for n in graph["nodes"]
@@ -295,14 +296,48 @@ def test_beat_sheet_desk_reaches_every_ltx_enhance() -> None:
         assert audio_src is prims["Audio policy"]
 
 
+SERIES_FILMS = (
+    "tide-table",
+    "night-oven",
+    "glasshouse",
+    "last-lane",
+    "breakwater",
+)
+"""Five-act festival shorts; each series is one plate plus five print passes."""
+
+
 def test_film_identity_is_context_for_every_ltx_shot() -> None:
-    for rel in ("films/go-see.json", "films/still-here.json", "films/switchyard.json"):
+    """Every LTX shot reads the authored identity from its own graph.
+
+    The Klein enhance node used to cross the plate -> shot seam. Each print
+    pass now carries an EZSamplePrompt so the shot app needs no Klein node.
+    """
+    print_passes = (
+        "film/go-see/feature",
+        "film/still-here/feature",
+        "film/switchyard/feature",
+        *(f"film/{film}/act-01" for film in SERIES_FILMS),
+    )
+    for rel in print_passes:
         graph = _load(lab_json(rel))
-        klein = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
+        source = next(
+            n
+            for n in graph["nodes"]
+            if n.get("type") == "EZSamplePrompt"
+            and n.get("title") == "Identity context"
+        )
+        identity = str((source.get("widgets_values") or ["", ""])[1])
+        assert identity.strip(), rel
         ltx = [n for n in graph["nodes"] if n.get("type") == "EZLTXPromptEnhance"]
         assert len(ltx) == 18, rel
         for node in ltx:
-            assert _source_of(graph, node, "context") is klein, (rel, node.get("title"))
+            assert _source_of(graph, node, "context") is source, (rel, node.get("title"))
+        plate_rel = f"{rel.rsplit('/', 1)[0]}/00-plate"
+        plate = _load(lab_json(plate_rel))
+        klein = next(
+            n for n in plate["nodes"] if n.get("type") == "EZKleinPromptEnhance"
+        )
+        assert str((klein.get("widgets_values") or ["", ""])[1]) == identity, plate_rel
 
 
 def test_rap_draft_and_full_wire_lyrics_writer() -> None:
@@ -336,17 +371,97 @@ def test_learn_episode_ace_bed_reads_digest_context() -> None:
 
 
 FLUX3_STILL_PROFILE = {
-    "stills/still-flux3-fast": {
+    "labs/opt-in/still-flux3-fast": {
         "unet": "flux3-image-klein-int8-convrot.safetensors",
         "steps": 16,
         "cfg": 1.0,
     },
-    "stills/still-flux3-quality": {
+    "labs/opt-in/still-flux3-quality": {
         "unet": "flux3-image-klein-base-int8-convrot.safetensors",
         "steps": 50,
         "cfg": 3.5,
     },
 }
+
+
+QWEN_STILL_REL = "labs/opt-in/still-qwen-image"
+"""The one lab graph that pins Qwen-Image 2.1, so the qwen tiers have a target."""
+
+QWEN_UNET = "qwen_image_2.1_int8_convrot.safetensors"
+QWEN_TE = "qwen3vl_8b_int8_convrot.safetensors"
+QWEN_VAE = "qwen_image_2.1_vae_bf16.safetensors"
+
+
+def test_qwen_still_pins_the_weights_its_quality_family_writes() -> None:
+    """The opt-in Qwen app carries its own family's weights and no dead picker.
+
+    Qwen-Image 2.1 samples from a 64-channel / 16x latent that the encoder node
+    builds itself, so the Klein empty-latent node and the format picker that
+    drives it would both sit on this graph writing pixels nothing reads.
+    """
+    graph = _load(lab_json(QWEN_STILL_REL))
+    extra = graph.get("extra") or {}
+    assert graph.get("id") == "still-qwen-image", QWEN_STILL_REL
+    assert extra.get("lab_rel") == QWEN_STILL_REL, QWEN_STILL_REL
+    app_mode = extra.get("lab_app_mode") or {}
+    assert app_mode.get("occupancy") == "klein", QWEN_STILL_REL
+    assert app_mode.get("lane") == "labs", QWEN_STILL_REL
+
+    by_type: dict[str, list[dict[str, Any]]] = {}
+    for node in graph["nodes"]:
+        by_type.setdefault(str(node.get("type")), []).append(node)
+    assert len(by_type.get("EZQuality", [])) == 1, QWEN_STILL_REL
+    assert len(by_type.get("EZModelCheck", [])) == 1, QWEN_STILL_REL
+    assert by_type["EZQuality"][0].get("widgets_values") == ["lab"], QWEN_STILL_REL
+
+    assert len(by_type.get("UNETLoader", [])) == 1, QWEN_STILL_REL
+    assert by_type["UNETLoader"][0]["widgets_values"][0] == QWEN_UNET, QWEN_STILL_REL
+    clip = by_type["CLIPLoader"][0]["widgets_values"]
+    assert clip[0] == QWEN_TE, QWEN_STILL_REL
+    # CLIPType.QWEN_IMAGE plus the qwen3vl_8b name is what ComfyUI routes to the
+    # 2.1 text encoder; there is no qwen_image21 type in the CLIPLoader combo.
+    assert clip[1] == "qwen_image", QWEN_STILL_REL
+    assert by_type["VAELoader"][0]["widgets_values"][0] == QWEN_VAE, QWEN_STILL_REL
+
+    assert len(by_type.get("TextEncodeQwenImage21", [])) == 1, QWEN_STILL_REL
+    encoder = by_type["TextEncodeQwenImage21"][0]
+    assert "EmptyFlux2LatentImage" not in by_type, QWEN_STILL_REL
+    assert "EZImageFormat" not in by_type, QWEN_STILL_REL
+    for name in ("clip", "prompt", "negative_prompt", "vae"):
+        inp = next(i for i in encoder.get("inputs") or [] if i.get("name") == name)
+        assert inp.get("link") is not None, (QWEN_STILL_REL, name)
+
+    sampler = by_type["KSampler"][0]
+    values = sampler.get("widgets_values") or []
+    assert int(values[2]) == 50, QWEN_STILL_REL
+    assert float(values[3]) == 3.5, QWEN_STILL_REL
+    assert str(values[4]) == "euler" and str(values[5]) == "simple", QWEN_STILL_REL
+    sampler_inputs = {
+        str(i.get("name")): i.get("link") for i in sampler.get("inputs") or []
+    }
+    for name in ("model", "positive", "negative", "latent_image"):
+        assert sampler_inputs.get(name) is not None, (QWEN_STILL_REL, name)
+    # The encoder owns the latent on this graph, so no third node feeds it.
+    latent_link = sampler_inputs["latent_image"]
+    latent_src = next(l for l in graph["links"] if l[0] == latent_link)
+    src_node = next(n for n in graph["nodes"] if n["id"] == latent_src[1])
+    assert src_node["type"] == "TextEncodeQwenImage21", QWEN_STILL_REL
+
+    # Resolution is the only pixel control, so App Mode has to surface it.
+    exposed = [
+        entry
+        for entry in (extra.get("linearData") or {}).get("inputs") or []
+        if len(entry) > 1 and entry[1] == "resolution"
+    ]
+    assert [entry[0] for entry in exposed] == [encoder["id"]], QWEN_STILL_REL
+
+    note_blob = " ".join(
+        str((node.get("widgets_values") or [""])[0])
+        for node in graph["nodes"]
+        if node.get("type") in NOTE_TYPES
+    )
+    assert "Comfy-Org/Qwen-Image-2.1" in note_blob, QWEN_STILL_REL
+    assert "RESEARCH LICENSE" in note_blob, QWEN_STILL_REL
 
 
 @pytest.mark.parametrize("rel", sorted(FLUX3_STILL_PROFILE))

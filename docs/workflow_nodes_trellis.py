@@ -114,7 +114,7 @@ def trellis_nodes() -> NodeSpecs:
         "MeshToFile3D": _n(
             "Mesh to File 3D",
             "Write a GLB/mesh file.",
-            lab="optional/trellis2 may leave the path empty (Comfy default). dcc/still-to-mesh writes assets/objects/_lab-mug/mesh.",
+            lab="3d/trellis2 may leave the path empty (Comfy default). 3d/still-to-mesh writes assets/objects/_lab-mug/mesh.",
             origin="comfy-extras",
             sockets=[
                 _s("mesh", "MESH", "in", "Painted mesh."),

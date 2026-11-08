@@ -17,7 +17,9 @@ from _wire_quality import (
     QUALITY_TYPE,
     QUALITY_WIDGET,
     ensure_quality_node,
+    family_honors_tiers,
     find_quality_node,
+    strip_quality_node,
 )
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -165,6 +167,7 @@ from ez_quality.presets import (  # noqa: E402
     is_flux2_vae,
     is_klein3_clip,
     is_klein3_unet,
+    is_trellis_guidance_free_stage,
     is_klein3_upsampler,
     is_klein_4b_unet,
     is_klein_9b_unet,
@@ -176,6 +179,8 @@ from ez_quality.presets import (  # noqa: E402
     resolve_overlay,
     tier_label,
     tier_profile,
+    tier_is_honored,
+    tiers_for_family,
 )
 
 JS = CUSTOM / "ez_quality" / "js" / "ez_quality.js"
@@ -467,7 +472,7 @@ def test_audio_and_trellis_and_inspire() -> None:
 
 
 def test_apply_klein_draft_does_not_change_latent_size() -> None:
-    graph = copy.deepcopy(_load("stills/still-draft.json"))
+    graph = copy.deepcopy(_load("photos/still-draft.json"))
     latent = next(n for n in graph["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
     before = list(latent["widgets_values"])
     apply_to_graph(graph, QUALITY_DRAFT, available_unets=(KLEIN_DISTILLED,))
@@ -478,7 +483,7 @@ def test_apply_klein_draft_does_not_change_latent_size() -> None:
 
 
 def test_apply_klein_high_fallback_keeps_distilled() -> None:
-    graph = copy.deepcopy(_load("stills/still-draft.json"))
+    graph = copy.deepcopy(_load("photos/still-draft.json"))
     apply_to_graph(graph, QUALITY_HIGH, available_unets=(KLEIN_DISTILLED,))
     assert _unet(graph)["widgets_values"][UNET_NAME_INDEX] == KLEIN_DISTILLED
     sampler = _sampler(graph)
@@ -487,7 +492,7 @@ def test_apply_klein_high_fallback_keeps_distilled() -> None:
 
 
 def test_apply_klein_high_swaps_when_base_listed() -> None:
-    graph = copy.deepcopy(_load("stills/still-draft.json"))
+    graph = copy.deepcopy(_load("photos/still-draft.json"))
     apply_to_graph(
         graph, QUALITY_HIGH, available_unets=(KLEIN_DISTILLED, KLEIN_BASE)
     )
@@ -500,7 +505,7 @@ def test_apply_klein_high_swaps_when_base_listed() -> None:
 
 
 def test_apply_wan_does_not_change_frames_or_unet() -> None:
-    graph = copy.deepcopy(_load("motion/silent/still-to-video-5s.json"))
+    graph = copy.deepcopy(_load("video/silent/still-to-video-5s.json"))
     unet_before = _unet(graph)["widgets_values"][UNET_NAME_INDEX]
     latent = next(
         n for n in graph["nodes"] if n.get("type") == "Wan22ImageToVideoLatent"
@@ -515,7 +520,7 @@ def test_apply_wan_does_not_change_frames_or_unet() -> None:
 
 
 def test_apply_ltx_does_not_change_length() -> None:
-    graph = copy.deepcopy(_load("motion/av/still-to-video-8s.json"))
+    graph = copy.deepcopy(_load("video/av/still-to-video-8s.json"))
     video = next(n for n in graph["nodes"] if n.get("type") == "LTXVImgToVideo")
     before = list(video["widgets_values"])
     apply_to_graph(graph, QUALITY_HIGH)
@@ -525,7 +530,7 @@ def test_apply_ltx_does_not_change_length() -> None:
 
 
 def test_apply_a14b_is_noop() -> None:
-    graph = copy.deepcopy(_load("optional/still-to-video-a14b.json"))
+    graph = copy.deepcopy(_load("labs/opt-in/still-to-video-a14b.json"))
     sampler_before = list(_sampler(graph)["widgets_values"])
     unets_before = [
         n["widgets_values"][0]
@@ -547,7 +552,7 @@ def test_apply_a14b_is_noop() -> None:
 
 
 def test_ensure_quality_node_is_idempotent() -> None:
-    graph = copy.deepcopy(_load("stills/still-draft.json"))
+    graph = copy.deepcopy(_load("photos/still-draft.json"))
     ensure_quality_node(graph)
     first = find_quality_node(graph)
     assert first is not None
@@ -566,7 +571,7 @@ def test_ensure_quality_node_is_idempotent() -> None:
 
 
 def test_ensure_quality_keeps_required_still_first() -> None:
-    graph = copy.deepcopy(_load("stills/talking-head.json"))
+    graph = copy.deepcopy(_load("video/av/talking-head.json"))
     ensure_quality_node(graph)
     names = [row[1] for row in graph["extra"]["linearData"]["inputs"]]
     assert names[0] == "image"
@@ -577,7 +582,7 @@ def test_ensure_quality_keeps_required_still_first() -> None:
 
 
 def test_ensure_quality_places_without_overlap() -> None:
-    graph = copy.deepcopy(_load("films/go-see.json"))
+    graph = copy.deepcopy(_load("film/go-see.json"))
     ensure_quality_node(graph)
     quality = find_quality_node(graph)
     assert quality is not None
@@ -604,10 +609,126 @@ def test_ensure_quality_places_without_overlap() -> None:
         assert not hit, (node.get("id"), node.get("type"))
 
 
+def test_trellis_ladder_leaves_the_unguided_texture_stage_authored() -> None:
+    """Four TRELLIS stages share one graph; the CFG 1.0 pass is its own recipe.
+
+    The ladder is tuned against the three guided stages. Stamping max on the
+    unguided texture stage would rewrite a step count the author set with it.
+    """
+    graph = copy.deepcopy(_load("3d/trellis2.json"))
+    guided = [n for n in graph["nodes"] if n.get("type") == "KSampler" and n["id"] != 18]
+    texture = next(n for n in graph["nodes"] if n["id"] == 18)
+    assert texture.get("title") == "KSampler (texture)"
+    for node in guided:
+        node["widgets_values"][KSAMPLER_STEPS_INDEX] = 12
+    texture["widgets_values"][KSAMPLER_STEPS_INDEX] = 12
+
+    apply_to_graph(graph, QUALITY_MAX)
+
+    for node in guided:
+        assert node["widgets_values"][KSAMPLER_STEPS_INDEX] == TRELLIS_MAX_STEPS
+    assert texture["widgets_values"][KSAMPLER_STEPS_INDEX] == 12, (
+        "the unguided stage keeps the steps its author set"
+    )
+
+
+def test_is_trellis_guidance_free_stage_reads_only_the_trellis_recipe() -> None:
+    """The exemption belongs to TRELLIS samplers and to CFG 1.0 alone."""
+    stage: dict[str, Any] = {"type": "KSampler", "widgets_values": [0, "fixed", 12, 1.0]}
+    guided: dict[str, Any] = {"type": "KSampler", "widgets_values": [0, "fixed", 12, 7.5]}
+    assert is_trellis_guidance_free_stage(stage, "trellis") is True
+    assert is_trellis_guidance_free_stage(guided, "trellis") is False
+    assert is_trellis_guidance_free_stage(stage, "wan") is False
+    assert (
+        is_trellis_guidance_free_stage({"type": "VAELoader", "widgets_values": ["x", 1]}, "trellis")
+        is False
+    )
+    assert is_trellis_guidance_free_stage({"type": "KSampler"}, "trellis") is False
+    assert (
+        is_trellis_guidance_free_stage(
+            {"type": "KSampler", "widgets_values": [0, "fixed", 12, "warm"]}, "trellis"
+        )
+        is False
+    )
+
+
+def test_family_honors_tiers_needs_a_writable_node() -> None:
+    """A combo belongs only where a tier has a widget to write.
+
+    The family ladder is one half of the answer. An audio graph with no
+    KSampler and no loader infers a family that owns a ladder, yet every tier
+    on it queues the graph unchanged.
+    """
+    sampler = {
+        "id": 1,
+        "type": "KSampler",
+        "pos": [0, 0],
+        "size": [300, 200],
+        "widgets_values": [0, "fixed", 20, 3.5, "eps", None, None],
+    }
+    audio_graph = {
+        "nodes": [
+            {"id": 2, "type": "SaveAudio", "pos": [0, 0], "size": [200, 80]},
+            sampler,
+        ],
+        "extra": {"lab_app_mode": {"occupancy": "audio"}},
+    }
+    assert family_honors_tiers(audio_graph) is True
+
+    no_host = {
+        "nodes": [{"id": 2, "type": "SaveAudio", "pos": [0, 0], "size": [200, 80]}],
+        "extra": {"lab_app_mode": {"occupancy": "audio"}},
+    }
+    assert family_honors_tiers(no_host) is False
+
+    ladderless = {"nodes": [sampler], "extra": {"lab_app_mode": {"occupancy": "llm"}}}
+    assert family_honors_tiers(ladderless) is False
+
+
+def test_strip_quality_node_clears_the_widget_and_its_row() -> None:
+    """Stripping removes the node, its App widget row, and its default stamp."""
+    graph = copy.deepcopy(_load("photos/still-draft.json"))
+    ensure_quality_node(graph)
+    assert find_quality_node(graph) is not None
+    assert graph["extra"]["lab_quality"] == {"default": QUALITY_LAB}
+
+    assert strip_quality_node(graph) is True
+    assert [n for n in graph["nodes"] if n.get("type") == QUALITY_TYPE] == []
+    assert "lab_quality" not in graph["extra"]
+    rows = graph["extra"]["linearData"]["inputs"]
+    assert QUALITY_WIDGET not in [row[1] for row in rows]
+    assert find_quality_node(graph) is None
+    assert strip_quality_node(graph) is False
+
+
+def test_ensure_quality_strips_a_combo_no_tier_can_move() -> None:
+    """An audio graph with no loader or sampler ships without a combo."""
+    graph: dict[str, Any] = {
+        "nodes": [
+            {"id": 2, "type": "SaveAudio", "pos": [0, 0], "size": [200, 80]},
+            {"id": 3, "type": "Note", "pos": [0, 0], "size": [200, 80]},
+        ],
+        "extra": {"lab_app_mode": {"occupancy": "audio", "enabled": True}},
+    }
+    ensure_quality_node(graph)
+    assert [n for n in graph["nodes"] if n.get("type") == QUALITY_TYPE] == []
+    assert "lab_quality" not in graph["extra"]
+    assert (graph["extra"].get("linearData") or {}).get("inputs", []) == []
+
+
 @pytest.mark.parametrize("path", lab_graph_paths(), ids=lambda p: p.name)
 def test_every_lab_graph_has_one_quality_node(path: Path) -> None:
+    """One combo per tier-movable graph; none where no tier can write.
+
+    A graph whose family owns no ladder, or that holds no node the overlay can
+    write, ships without the combo: ``_wire_quality`` strips it so the App does
+    not offer levels that queue unchanged.
+    """
     graph = json.loads(path.read_text(encoding="utf-8"))
     hits = [n for n in graph.get("nodes") or [] if n.get("type") == QUALITY_TYPE]
+    if not family_honors_tiers(graph):
+        assert hits == [], path
+        return
     assert len(hits) == 1, path
     extra = graph.get("extra") or {}
     assert extra.get("lab_quality", {}).get("default") == QUALITY_LAB
@@ -747,7 +868,7 @@ def test_apply_with_no_unet_loader() -> None:
 
 
 def test_apply_refuses_banned_unet_overlay(monkeypatch: pytest.MonkeyPatch) -> None:
-    graph = copy.deepcopy(_load("stills/still-draft.json"))
+    graph = copy.deepcopy(_load("photos/still-draft.json"))
     before = _unet(graph)["widgets_values"][UNET_NAME_INDEX]
 
     def _banned(**_kwargs: object) -> QualityOverlay:
@@ -789,6 +910,104 @@ def test_generated_presets_module_is_the_preset_table() -> None:
     assert payload["table"]["wan"][QUALITY_HIGH]["steps"] == WAN_HIGH_STEPS
     assert payload["table"]["klein"][QUALITY_HIGH]["vae_name"] == VAE_SMALL
     assert payload["owned"]["klein"] == list(OVERLAY_FIELDS)
+
+
+def test_tiers_for_family_offers_only_writable_tiers() -> None:
+    """A family's list holds exactly the tiers whose overlay writes something.
+
+    A tier whose overlay is all-None would be stamped as applied while changing
+    no widget, which is the failure the per-family list exists to prevent.
+    """
+    for family in QUALITY_FAMILIES:
+        tiers = tiers_for_family(family)
+        for choice in tiers:
+            profile = tier_profile(family, choice)
+            assert any(
+                getattr(profile, field) is not None for field in OVERLAY_FIELDS
+            ), (family, choice)
+        for choice in NAMED_QUALITY_CHOICES:
+            if choice in tiers:
+                continue
+            profile = tier_profile(family, choice)
+            assert all(
+                getattr(profile, field) is None for field in OVERLAY_FIELDS
+            ), (family, choice)
+
+
+def test_tiers_for_family_matches_the_planned_ladder() -> None:
+    """Each family offers the subset an operator can actually reason about."""
+    assert tiers_for_family("klein") == (
+        QUALITY_DRAFT,
+        QUALITY_STANDARD,
+        QUALITY_HIGH,
+        QUALITY_FREE_COMMERCIAL,
+        QUALITY_ULTRA,
+        QUALITY_MAX,
+    )
+    assert tiers_for_family(QUALITY_FAMILY_KLEIN3) == FLUX3_QUALITY_CHOICES
+    assert tiers_for_family(QUALITY_FAMILY_QWEN) == QWEN_QUALITY_CHOICES
+    ladder = (QUALITY_DRAFT, QUALITY_STANDARD, QUALITY_HIGH, QUALITY_MAX)
+    assert tiers_for_family("wan") == ladder
+    assert tiers_for_family("audio") == ladder
+    assert tiers_for_family("trellis") == ladder
+    av = (
+        QUALITY_DRAFT,
+        QUALITY_STANDARD,
+        QUALITY_HIGH,
+        QUALITY_FREE_COMMERCIAL,
+        QUALITY_MAX,
+    )
+    assert tiers_for_family("ltx") == av
+    assert tiers_for_family("film") == av
+
+
+def test_tiers_for_family_is_empty_for_a_no_op_family() -> None:
+    """A graph with nothing to overlay gets no tiers, so it needs no combo."""
+    assert tiers_for_family("none") == ()
+    assert tiers_for_family("llm") == ()
+    assert tiers_for_family("") == ()
+    assert tiers_for_family("longcat") == ()
+
+
+def test_tier_is_honored_refuses_a_tier_the_family_cannot_write() -> None:
+    """A tier only counts as applied when the family actually writes a field.
+
+    Before the combo was scoped, ``ultra`` on a Wan graph resolved to an all-null
+    overlay and still stamped as applied, so the operator saw a level the graph
+    never reached.
+    """
+    assert tier_is_honored("klein", "ultra")
+    assert not tier_is_honored("wan", "ultra")
+    assert not tier_is_honored("audio", "ultra")
+    assert not tier_is_honored("trellis", "ultra")
+    assert tier_is_honored("wan", "standard")
+    assert tier_is_honored("klein", "ULTRA")
+    # The two freeze levels never write, and are always honest.
+    for family in ("klein", "wan", "audio", "none", "llm", ""):
+        assert tier_is_honored(family, QUALITY_LAB), family
+        assert tier_is_honored(family, QUALITY_CUSTOM), family
+    # A family with nothing to overlay honors no named tier at all.
+    for family in ("none", "llm", "longcat"):
+        assert not tier_is_honored(family, "draft"), family
+
+
+def test_tiers_for_family_keeps_each_vendor_ladder_in_its_own_family() -> None:
+    """A Klein or Wan graph never offers FLUX 3 or Qwen-Image weights."""
+    foreign = set(FLUX3_QUALITY_CHOICES) | set(QWEN_QUALITY_CHOICES)
+    for family in ("klein", "wan", "ltx", "film", "audio", "trellis", "none", "llm"):
+        assert not set(tiers_for_family(family)) & foreign, family
+    assert not set(tiers_for_family(QUALITY_FAMILY_KLEIN3)) & set(QWEN_QUALITY_CHOICES)
+    assert not set(tiers_for_family(QUALITY_FAMILY_QWEN)) & set(FLUX3_QUALITY_CHOICES)
+
+
+def test_generated_presets_module_carries_per_family_tiers() -> None:
+    """The browser reads the same per-family list Python resolves."""
+    payload = _presets_payload()
+    assert payload["tiers"] == {
+        family: list(tiers_for_family(family)) for family in QUALITY_FAMILIES
+    }
+    assert payload["tiers"]["klein3"] == list(FLUX3_QUALITY_CHOICES)
+    assert payload["tiers"]["llm"] == []
 
 
 def test_generated_presets_module_is_up_to_date() -> None:
@@ -1011,7 +1230,7 @@ def test_model_check_report_forwards_canonical_pack_ids(
 ) -> None:
     """Missing packs are named by Need.pack from the payload, never re-derived."""
     payload = run_check(
-        {"lab_rel": "stills/x.json", "occupancy": occupancy, "quality": quality},
+        {"lab_rel": "photos/x.json", "occupancy": occupancy, "quality": quality},
         roots=[],
     )
     assert payload["ok"] is False
@@ -1033,7 +1252,7 @@ def test_custom_and_lab_are_noop() -> None:
         available_unets=(KLEIN_DISTILLED, KLEIN_BASE, KLEIN_9B),
     )
     assert overlay == QualityOverlay()
-    graph = copy.deepcopy(_load("stills/still-draft.json"))
+    graph = copy.deepcopy(_load("photos/still-draft.json"))
     before = _values(_sampler(graph))[KSAMPLER_STEPS_INDEX]
     apply_to_graph(
         graph,
@@ -1398,7 +1617,7 @@ def test_free_commercial_ltx_is_high_steps_wan_audio_are_noop() -> None:
 
 
 def test_apply_free_commercial_keeps_size_and_skips_wan() -> None:
-    still = copy.deepcopy(_load("stills/still-draft.json"))
+    still = copy.deepcopy(_load("photos/still-draft.json"))
     latent = next(n for n in still["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
     before = list(latent["widgets_values"])
     apply_to_graph(
@@ -1409,13 +1628,13 @@ def test_apply_free_commercial_keeps_size_and_skips_wan() -> None:
     assert latent["widgets_values"] == before
     assert _unet(still)["widgets_values"][UNET_NAME_INDEX] == KLEIN_BASE
     assert _sampler(still)["widgets_values"][KSAMPLER_STEPS_INDEX] == KLEIN_HIGH_BASE_STEPS
-    ltx_graph = copy.deepcopy(_load("motion/av/still-to-video-8s.json"))
+    ltx_graph = copy.deepcopy(_load("video/av/still-to-video-8s.json"))
     video = next(n for n in ltx_graph["nodes"] if n.get("type") == "LTXVImgToVideo")
     length_before = list(video["widgets_values"])
     apply_to_graph(ltx_graph, QUALITY_FREE_COMMERCIAL)
     assert video["widgets_values"] == length_before
     assert _sampler(ltx_graph)["widgets_values"][KSAMPLER_STEPS_INDEX] == LTX_HIGH_STEPS
-    wan_graph = copy.deepcopy(_load("motion/silent/still-to-video-5s.json"))
+    wan_graph = copy.deepcopy(_load("video/silent/still-to-video-5s.json"))
     wan_steps = list(_sampler(wan_graph)["widgets_values"])
     wan_unet = _unet(wan_graph)["widgets_values"][UNET_NAME_INDEX]
     apply_to_graph(wan_graph, QUALITY_FREE_COMMERCIAL)
@@ -1431,7 +1650,7 @@ def test_person_mask_need_follows_the_reinsert_node(tmp_path: Path) -> None:
     """
     with_node = requirements_for(
         CheckHints(
-            lab_rel="stills/background-swap",
+            lab_rel="photos/background-swap",
             occupancy="none",
             types=("EZCubicCondition", "EZReinsertPeople"),
         )
@@ -1442,7 +1661,7 @@ def test_person_mask_need_follows_the_reinsert_node(tmp_path: Path) -> None:
     assert PERSON_WEIGHT == "deeplabv3_resnet50_coco-cd0a2569.pth"
     without_node = requirements_for(
         CheckHints(
-            lab_rel="stills/background-edit",
+            lab_rel="photos/background-edit",
             occupancy="none",
             types=("EZKleinPromptEnhance",),
         )
@@ -1451,7 +1670,7 @@ def test_person_mask_need_follows_the_reinsert_node(tmp_path: Path) -> None:
 
     missing = scan(
         CheckHints(
-            lab_rel="stills/background-swap",
+            lab_rel="photos/background-swap",
             occupancy="none",
             types=("EZReinsertPeople",),
         ),
@@ -1466,7 +1685,7 @@ def test_person_mask_need_follows_the_reinsert_node(tmp_path: Path) -> None:
     weight.write_bytes(b"x")
     found = scan(
         CheckHints(
-            lab_rel="stills/background-swap",
+            lab_rel="photos/background-swap",
             occupancy="none",
             types=("EZReinsertPeople",),
         ),
@@ -1758,7 +1977,7 @@ def test_apply_flux3_profile_skips_foreign_clip_and_vae() -> None:
 
 @pytest.mark.parametrize("quality", FLUX3_QUALITY_CHOICES)
 def test_apply_flux3_profile_leaves_klein_graph_authored(quality: str) -> None:
-    graph = copy.deepcopy(_load("stills/still-draft.json"))
+    graph = copy.deepcopy(_load("photos/still-draft.json"))
     sampler_before = list(_values(_sampler(graph)))
     loaders_before = {
         node["type"]: list(node["widgets_values"])
@@ -1882,7 +2101,7 @@ def test_flux3_check_needs_are_per_profile() -> None:
         quality: {
             need.pack: need
             for need in requirements_for(
-                CheckHints(lab_rel="stills/flux3", occupancy="klein", quality=quality)
+                CheckHints(lab_rel="photos/flux3", occupancy="klein", quality=quality)
             )
         }
         for quality in FLUX3_QUALITY_CHOICES
@@ -1938,7 +2157,7 @@ def test_command_for_filename_maps_flux3_files_without_moving_others() -> None:
 
 def test_scan_flux3_quality_profile_missing_then_present(tmp_path: Path) -> None:
     hints = CheckHints(
-        lab_rel="stills/flux3",
+        lab_rel="photos/flux3",
         occupancy="klein",
         quality=QUALITY_FLUX3_QUALITY,
         unets=(KLEIN3_BASE,),
@@ -2414,7 +2633,7 @@ def test_apply_qwen_image_profile_skips_foreign_clip_and_vae() -> None:
 
 @pytest.mark.parametrize("quality", QWEN_QUALITY_CHOICES)
 def test_apply_qwen_image_profile_leaves_klein_graph_authored(quality: str) -> None:
-    graph = copy.deepcopy(_load("stills/still-draft.json"))
+    graph = copy.deepcopy(_load("photos/still-draft.json"))
     sampler_before = list(_values(_sampler(graph)))
     loaders_before = {
         node["type"]: list(node["widgets_values"])
@@ -2535,7 +2754,7 @@ def test_qwen_image_check_needs_are_per_profile(
         need.pack: need
         for need in requirements_for(
             CheckHints(
-                lab_rel="stills/qwen-image", occupancy="klein", quality=quality
+                lab_rel="photos/qwen-image", occupancy="klein", quality=quality
             )
         )
     }
@@ -2602,7 +2821,7 @@ def test_command_for_filename_maps_qwen_image_files_without_moving_others() -> N
 
 def test_scan_qwen_image_profile_missing_then_present(tmp_path: Path) -> None:
     hints = CheckHints(
-        lab_rel="stills/qwen-image",
+        lab_rel="photos/qwen-image",
         occupancy="klein",
         quality=QUALITY_QWEN_IMAGE_NVFP4,
         unets=(QWEN_IMAGE_NVFP4,),
@@ -2655,3 +2874,48 @@ def test_command_builder_lists_every_qwen_image_tier() -> None:
     assert "all" in choices
     for tier in QWEN_IMAGE_TIERS:
         assert tier not in choices["all"], f"image all claims {tier}"
+
+
+def test_qwen_lab_graph_is_the_home_of_the_qwen_tier_ladder() -> None:
+    """Every tier the combo can list has to have a graph that honors it.
+
+    A tier with no graph behind it is a dead option: it queues the graph
+    unchanged, which is how the Qwen ladder sat unreachable before this app
+    pinned the weights. The combo narrows itself to the family the graph's own
+    loaders name, so pinning the weights is what makes the ladder real.
+    """
+    rel = "labs/opt-in/still-qwen-image"
+    graph = json.loads(lab_json(rel).read_text(encoding="utf-8"))
+    unets = [
+        str((node.get("widgets_values") or [""])[0])
+        for node in graph["nodes"]
+        if node.get("type") == "UNETLoader"
+    ]
+    assert len(unets) == 1, rel
+    # This is the predicate the frontend reads to pick the qwen family.
+    assert is_qwen_image_unet(unets[0]), rel
+    assert family_honors_tiers(graph), rel
+
+    # The family owns four tiers and shares none of them with the Klein ladder.
+    assert tiers_for_family(QUALITY_FAMILY_QWEN) == QWEN_QUALITY_CHOICES, rel
+    assert not set(QWEN_QUALITY_CHOICES) & set(tiers_for_family("klein")), rel
+
+    for tier, want_unet in (
+        (QUALITY_QWEN_IMAGE, QWEN_IMAGE_INT8),
+        (QUALITY_QWEN_IMAGE_TURBO, QWEN_IMAGE_TURBO_INT8),
+    ):
+        moved = copy.deepcopy(graph)
+        apply_to_graph(
+            moved,
+            tier,
+            available_unets=(QWEN_IMAGE_INT8, QWEN_IMAGE_TURBO_INT8),
+        )
+        got_unet = next(
+            str((node.get("widgets_values") or [""])[0])
+            for node in moved["nodes"]
+            if node.get("type") == "UNETLoader"
+        )
+        assert got_unet == want_unet, (rel, tier)
+        sampler = next(node for node in moved["nodes"] if node.get("type") == "KSampler")
+        steps = int((sampler.get("widgets_values") or [0, 0, 0])[2])
+        assert steps != 0, (rel, tier)

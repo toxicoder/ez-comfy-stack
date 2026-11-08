@@ -12,15 +12,18 @@ import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
 import {
+  EZ_QUALITY_CHOICES,
   EZ_QUALITY_CUSTOM,
   EZ_QUALITY_LAB,
   EZ_QUALITY_NAMED,
   EZ_QUALITY_OWNED,
   EZ_QUALITY_TABLE,
+  EZ_QUALITY_TIERS,
 } from "../../custom_nodes/ez_quality/js/ez_quality_presets.js";
 import {
   FIELD_NODE_TYPE,
   FIELD_WIDGET,
+  comboOptions,
   comboValue,
   editWidget,
   loadOverlay,
@@ -376,5 +379,76 @@ describe("EZQuality overlay", () => {
 
     assert.equal(comboValue(combo), "flux3-fast", "combo shows the flux3 tier");
     assertTierApplied(graph, "klein3", "flux3-fast", "flux3-fast pick");
+  });
+  test("the combo offers only the tiers this family can honor", async () => {
+    const { ext } = await loadOverlay();
+    for (const family of ["klein", "wan", "ltx", "audio", "trellis"]) {
+      const graph = makeStudioGraph({ occupancy: family });
+      await mountGraph(graph, ext);
+      const combo = graph.qualityNodes[0];
+      const options = comboOptions(combo);
+      const wanted = EZ_QUALITY_CHOICES.filter(
+        (choice) =>
+          choice === EZ_QUALITY_CUSTOM ||
+          choice === EZ_QUALITY_LAB ||
+          EZ_QUALITY_TIERS[family].includes(choice),
+      );
+      assert.deepEqual(options, wanted, `${family} combo lists its own ladder`);
+      assert.ok(options.includes(EZ_QUALITY_LAB), `${family} keeps lab`);
+      assert.ok(options.includes(EZ_QUALITY_CUSTOM), `${family} keeps custom`);
+      for (const tier of EZ_QUALITY_NAMED) {
+        if (EZ_QUALITY_TIERS[family].includes(tier)) {
+          continue;
+        }
+        assert.ok(!options.includes(tier), `${family} drops the no-op tier ${tier}`);
+      }
+    }
+  });
+
+  test("a Klein-only tier never reads back on a graph that cannot honor it", async () => {
+    const { ext } = await loadOverlay();
+    const graph = makeStudioGraph({ occupancy: "wan" });
+    await mountGraph(graph, ext);
+    const combo = graph.qualityNodes[0];
+    const options = comboOptions(combo);
+
+    assert.ok(!options.includes("ultra"), "ultra is Klein-only and must not be offered");
+    assert.ok(
+      !EZ_QUALITY_TIERS.wan.includes("ultra"),
+      "the generated table agrees ultra is not a Wan tier",
+    );
+    assert.ok(
+      options.includes(EZ_QUALITY_TIERS.wan[0]),
+      "the Wan ladder is still offered",
+    );
+  });
+
+  test("a TRELLIS tier leaves the unguided texture stage authored", async () => {
+    const { ext } = await loadOverlay();
+    const graph = makeStudioGraph({ occupancy: "trellis", samplers: 4, loaders: 0 });
+    // Three guided stages at CFG 7.5 plus the texture stage at CFG 1, the way
+    // the shipped TRELLIS graph is authored.
+    const samplers = nodesOfType(graph, "KSampler");
+    for (const sampler of samplers.slice(0, 3)) {
+      editWidget(sampler, "cfg", 7.5);
+    }
+    editWidget(samplers[3], "cfg", 1);
+    await mountGraph(graph, ext);
+    const combo = graph.qualityNodes[0];
+
+    pickTier(combo, "max");
+
+    const wanted = tierField("trellis", "max", "steps");
+    assert.ok(wanted, "the table gives TRELLIS a max step count");
+    for (const sampler of samplers.slice(0, 3)) {
+      assert.equal(widgetValue(sampler, "steps"), wanted);
+      assert.equal(widgetValue(sampler, "cfg"), 7.5, "CFG stays authored");
+    }
+    assert.equal(
+      widgetValue(samplers[3], "steps"),
+      20,
+      "the unguided stage keeps its authored steps",
+    );
+    assert.equal(comboValue(combo), "max", "the tier still reads back off the guided stages");
   });
 });

@@ -1,4 +1,4 @@
-"""stills/background-swap and stills/background-edit: Klein source-sized edits."""
+"""photos/background-swap and photos/background-edit: Klein source-sized edits."""
 
 from __future__ import annotations
 
@@ -25,7 +25,7 @@ from ez_prompt_enhance.samples import (  # noqa: E402
 )
 
 
-def _load(rel: str = "stills/background-swap.json") -> dict[str, Any]:
+def _load(rel: str = "photos/background-swap.json") -> dict[str, Any]:
     return load_lab_graph(lab_json(rel))
 
 
@@ -47,10 +47,10 @@ def _src(graph: dict[str, Any], node: dict[str, Any], name: str) -> dict[str, An
 def test_background_swap_identity_and_app_mode() -> None:
     graph = _load()
     extra = graph["extra"]
-    assert extra.get("lab_rel") == "stills/background-swap"
+    assert extra.get("lab_rel") == "photos/background-swap"
     assert graph.get("id") == "background-swap"
     mode = extra["lab_app_mode"]
-    assert mode["lane"] == "produce"
+    assert mode["lane"] == "photos"
     assert mode["occupancy"] == "klein"
     save = next(node for node in graph["nodes"] if node.get("type") == "SaveImage")
     assert save["widgets_values"][0] == "ez_bg_swap"
@@ -140,11 +140,11 @@ def test_background_swap_is_size_matched_klein_edit() -> None:
 
 
 def test_background_swap_catalog_has_one_hundred_recipes() -> None:
-    assert catalog_for_rel("stills/background-swap") == "klein_background_swap"
+    assert catalog_for_rel("photos/background-swap") == "klein_background_swap"
     rows = load_catalog("klein_background_swap")
     assert len(rows) == BACKGROUND_SWAP_COUNT
     assert sample_labels("klein_background_swap")[-1] == "custom"
-    spec = STAMP_SPECS["stills/background-swap"]
+    spec = STAMP_SPECS["photos/background-swap"]
     graph = _load()
     labels: list[str] = []
     for entry in infer_suite_inputs(graph, spec):
@@ -159,12 +159,12 @@ def test_background_swap_catalog_has_one_hundred_recipes() -> None:
 
 
 def test_background_edit_identity_style_and_samples() -> None:
-    graph = _load("stills/background-edit.json")
+    graph = _load("photos/background-edit.json")
     extra = graph["extra"]
-    assert extra.get("lab_rel") == "stills/background-edit"
+    assert extra.get("lab_rel") == "photos/background-edit"
     assert graph.get("id") == "background-edit"
     mode = extra["lab_app_mode"]
-    assert mode["lane"] == "produce"
+    assert mode["lane"] == "photos"
     assert mode["occupancy"] == "klein"
     save = next(node for node in graph["nodes"] if node.get("type") == "SaveImage")
     assert save["widgets_values"][0] == "ez_bg_edit"
@@ -188,11 +188,11 @@ def test_background_edit_identity_style_and_samples() -> None:
     values = list(enh["widgets_values"] or [])
     enhance_mode = values[3] if len(values) >= 7 else values[2]
     assert enhance_mode == "background_edit"
-    assert catalog_for_rel("stills/background-edit") == "klein_background_edit"
+    assert catalog_for_rel("photos/background-edit") == "klein_background_edit"
     rows = load_catalog("klein_background_edit")
     assert len(rows) == 30
     assert sample_labels("klein_background_edit")[-1] == "custom"
-    spec = STAMP_SPECS["stills/background-edit"]
+    spec = STAMP_SPECS["photos/background-edit"]
     labels: list[str] = []
     for entry in infer_suite_inputs(graph, spec):
         config = entry[2] if len(entry) > 2 else {}
@@ -204,7 +204,7 @@ def test_background_edit_identity_style_and_samples() -> None:
 
 def test_background_apps_save_the_upscaled_still() -> None:
     """Upscale sits between match-to-source and SaveImage on both apps."""
-    for rel in ("stills/background-swap.json", "stills/background-edit.json"):
+    for rel in ("photos/background-swap.json", "photos/background-edit.json"):
         graph = _load(rel)
         save = next(node for node in graph["nodes"] if node.get("type") == "SaveImage")
         upscale = _src(graph, save, "images")
@@ -216,6 +216,6 @@ def test_background_apps_save_the_upscaled_still() -> None:
 
 
 def test_background_swap_json_roundtrip() -> None:
-    path = lab_json("stills/background-swap.json")
+    path = lab_json("photos/background-swap.json")
     raw = json.loads(path.read_text(encoding="utf-8"))
     assert raw["extra"]["workflowRendererVersion"] == "Vue-corrected"

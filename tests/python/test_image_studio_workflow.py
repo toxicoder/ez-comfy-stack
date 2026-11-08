@@ -1,4 +1,4 @@
-"""stills/image-studio graph: creator modes wired into enhance, prefix, optional ref."""
+"""photos/image-studio graph: creator modes wired into enhance, prefix, optional ref."""
 
 from __future__ import annotations
 
@@ -26,7 +26,7 @@ from ez_image.modes import (  # noqa: E402
 
 
 def _load() -> dict[str, Any]:
-    return load_lab_graph(lab_json("stills/image-studio.json"))
+    return load_lab_graph(lab_json("photos/image-studio.json"))
 
 
 def _by_id(graph: dict[str, Any]) -> dict[int, dict[str, Any]]:
@@ -47,13 +47,13 @@ def _src(graph: dict[str, Any], node: dict[str, Any], name: str) -> dict[str, An
 def test_image_studio_identity_and_app_mode() -> None:
     graph = _load()
     extra = graph["extra"]
-    assert extra.get("lab_rel") == "stills/image-studio"
+    assert extra.get("lab_rel") == "photos/image-studio"
     assert graph.get("id") == "image-studio"
     mode = extra["lab_app_mode"]
-    assert mode["lane"] == "produce"
+    assert mode["lane"] == "photos"
     assert mode["occupancy"] == "klein"
     assert mode["default_view"] == "app"
-    assert "stills/still-studio" in mode["handoff"]
+    assert "photos/still-studio" in mode["handoff"]
     save = next(node for node in graph["nodes"] if node.get("type") == "SaveImage")
     assert save["widgets_values"][0] == "ez_gen_photoreal"
 
@@ -103,7 +103,7 @@ def test_image_studio_empty_ref_is_valid() -> None:
 
 def test_image_studio_catalog_has_one_hundred_modes() -> None:
     assert len(load_modes()) == 100
-    spec = STAMP_SPECS["stills/image-studio"]
+    spec = STAMP_SPECS["photos/image-studio"]
     graph = _load()
     labels: list[str] = []
     for entry in infer_suite_inputs(graph, spec):
@@ -115,10 +115,10 @@ def test_image_studio_catalog_has_one_hundred_modes() -> None:
 
 
 def test_image_studio_json_roundtrip() -> None:
-    path = lab_json("stills/image-studio.json")
+    path = lab_json("photos/image-studio.json")
     raw = json.loads(path.read_text(encoding="utf-8"))
     assert raw["extra"]["workflowRendererVersion"] == "Vue-corrected"
-    assert raw["extra"]["lab_rel"] == "stills/image-studio"
+    assert raw["extra"]["lab_rel"] == "photos/image-studio"
     blob = json.dumps(raw)
     assert "MiniMax" not in blob
     unet = next(node for node in raw["nodes"] if node.get("type") == "UNETLoader")

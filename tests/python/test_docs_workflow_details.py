@@ -224,7 +224,7 @@ def test_manifest_lists_generated_pages_when_written(tmp_path: Path) -> None:
     assert manifest["graph_count"] >= 300
     assert (tmp_path / "generated" / "workflows" / "index.md").is_file()
     assert (tmp_path / "reference" / "workflow-nodes.md").is_file()
-    still = tmp_path / "generated" / "workflows" / "stills" / "still-draft.md"
+    still = tmp_path / "generated" / "workflows" / "photos" / "still-draft.md"
     assert still.is_file()
     text = still.read_text(encoding="utf-8")
     assert "Node parameter reference" in text

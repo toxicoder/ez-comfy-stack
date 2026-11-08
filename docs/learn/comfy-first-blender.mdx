@@ -10,7 +10,7 @@ tags: [learn, blender, dcc, comfyui, occupancy, klein, ltx, trellis]
 
 - **Before you start** - no viewport embed, and the hard bans
 - **Run the operator loop** - dump, gate, Klein, TRELLIS
-- **Graphs under `_lab/dcc/`** - the three first-party loaders
+- **Graphs under `_lab/guides/`** - the three first-party loaders
 - **Path D: dump on the laptop** - the default on one GB10
 - **Related** - the sibling pages
 
@@ -60,11 +60,11 @@ flowchart LR
 bazelisk run //:manage -- occupancy enter blender-desk
 bazelisk run //:manage -- export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth
 bazelisk run //:manage -- occupancy enter klein --yes
-# :8188 -> dcc/guide-still
+# :8188 -> guides/guide-still
 # EZDCCLoadGuideStill slug=go-see shot_id=12 layer=first
 bazelisk run //:manage -- overlay-qc --film go-see --shot 12 --look PATH
 bazelisk run //:manage -- occupancy enter trellis --yes
-# dcc/still-to-mesh - inspect mesh in Load 3D / Preview 3D
+# 3d/still-to-mesh - inspect mesh in Load 3D / Preview 3D
 ```
 
 Widgets default to `slug=go-see`, `shot_id=12`, `plate=mug`. Depth stays mist 0-1 (near=white, far=black). Do not invert.
@@ -73,13 +73,13 @@ Widgets default to `slug=go-see`, `shot_id=12`, `plate=mug`. Depth stays mist 0-
 
 ---
 
-## Graphs under `_lab/dcc/`
+## Graphs under `_lab/guides/`
 
 | Graph | Occupancy | What it does |
 | --- | --- | --- |
-| **dcc/guide-still** | klein | Gate + `EZDCCLoadGuideStill(first)` -> Klein 4B edit. 1280x704. Seed 42. Prefix `ez_guide_hero` |
-| **dcc/depth-from-loader** | ltx | Gate + still + `depth.mp4` path. Envelope only (Templates -> Union Control). MagCache off. Distilled-only. Prefix `ez_iclora_guide` |
-| **dcc/still-to-mesh** | trellis | Gate + still pack `plate=mug` -> native TRELLIS.2 INT8. Output `assets/objects/_lab-mug/` under `output/` |
+| **guides/guide-still** | klein | Gate + `EZDCCLoadGuideStill(first)` -> Klein 4B edit. 1280x704. Seed 42. Prefix `ez_guide_hero` |
+| **guides/depth-from-loader** | ltx | Gate + still + `depth.mp4` path. Envelope only (Templates -> Union Control). MagCache off. Distilled-only. Prefix `ez_iclora_guide` |
+| **3d/still-to-mesh** | trellis | Gate + still pack `plate=mug` -> native TRELLIS.2 INT8. Output `assets/objects/_lab-mug/` under `output/` |
 
 The original seven DCC graphs stay on `LoadImage` + `--install-inputs`. After a dump you can keep using those, or stay on `:8188` with the loaders.
 

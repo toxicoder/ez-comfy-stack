@@ -20,10 +20,10 @@ def test_dockerfile_has_no_nvdiffrast_blender_or_supersplat() -> None:
 
 
 def test_vace_join_graph_is_17_frames_magcache_off() -> None:
-    path = lab_json("motion/silent/vace-join.json")
+    path = lab_json("video/silent/vace-join.json")
     graph = json.loads(path.read_text(encoding="utf-8"))
     assert graph["id"] == "vace-join"
-    assert graph["extra"].get("lab_rel") == "motion/silent/vace-join"
+    assert graph["extra"].get("lab_rel") == "video/silent/vace-join"
     extra = graph["extra"]
     assert extra["lab_vace"]["frames"] == 17
     assert extra["lab_vace"]["rule"] == "1+8n"

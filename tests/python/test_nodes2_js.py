@@ -218,7 +218,7 @@ def test_quality_js_overlay_writes_are_node_type_bound() -> None:
         "EZ_QUALITY_TABLE",
         "EZ_QUALITY_OWNED",
         "EZ_QUALITY_LABELS",
-        "EZ_QUALITY_NAMED",
+        "EZ_QUALITY_TIERS",
         "EZ_QUALITY_FIELDS",
     ):
         assert name in body, name
@@ -244,7 +244,9 @@ def test_quality_js_combo_matches_the_queued_prompt() -> None:
     body = QUALITY_JS.read_text(encoding="utf-8")
     # the tier is read back out of the live widgets, per instance
     assert "function deriveQualityTier(graph, family)" in body
-    assert "function collectOverlayInstances(graph)" in body
+    assert "function collectOverlayInstances(graph, family)" in body
+    assert "function isTrellisGuidanceFreeStage(node, family)" in body
+    assert "function scopeComboToFamily(graph, family)" in body
     assert "function agreeOn(entries, read)" in body
     assert "function overlayValues(graph, family, instances)" in body
     assert "function planTierWrites(graph, family, tier)" in body

@@ -1,12 +1,14 @@
 """Shipped-graph drift check for the Quality tier table.
 
-Every ``workflows/_lab`` graph carries one EZQuality combo. The tier table in
-custom_nodes/ez_quality/presets.py is what that combo writes, so a graph can
-drift two ways: it records a combo value the node no longer offers, or it holds
-widgets no tier would produce and the operator sees a level the graph is not
-actually on. This walks the tree once (parsed a single time per process) and
-checks the recorded value, the family the node infers, and the loaders the
-family's tiers would write.
+Every ``workflows/_lab`` graph that a tier could actually change carries one
+EZQuality combo, and a graph no tier could change carries none. The tier table
+in custom_nodes/ez_quality/presets.py is what that combo writes, so a graph can
+drift three ways: it holds a combo that no tier can move, it records a combo
+value the node no longer offers, or it holds widgets no tier would produce and
+the operator sees a level the graph is not actually on. This walks the tree once
+(parsed a single time per process) and checks which graphs carry the combo, the
+recorded value, the family the node infers, and the loaders the family's tiers
+would write.
 """
 
 from __future__ import annotations
@@ -17,7 +19,7 @@ from pathlib import Path
 from typing import Any
 
 from _lab_paths import lab_graph_paths, lab_rel_of
-from _wire_quality import QUALITY_TYPE
+from _wire_quality import QUALITY_TYPE, family_honors_tiers
 
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
@@ -186,11 +188,23 @@ def test_lab_tree_is_populated() -> None:
 
 
 def test_every_graph_records_a_legal_quality() -> None:
-    """Each shipped graph records one combo value the node still offers."""
+    """Each tier-movable graph carries one combo, and it records a legal value.
+
+    A graph whose family owns no ladder, or that holds no node the overlay can
+    write, ships without a combo at all; ``_wire_quality`` strips it so the App
+    never offers levels that queue unchanged.
+    """
     misses: list[str] = []
     for rel, _path, graph in _lab_rows():
         nodes = _nodes(graph)
         hits = [node for node in nodes if node.get("type") == QUALITY_TYPE]
+        if not family_honors_tiers(graph):
+            if hits:
+                misses.append(
+                    f"{rel}: {len(hits)} {QUALITY_TYPE} nodes on a graph "
+                    "no tier can change"
+                )
+            continue
         if len(hits) != 1:
             misses.append(f"{rel}: {len(hits)} {QUALITY_TYPE} nodes")
             continue

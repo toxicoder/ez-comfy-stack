@@ -1663,7 +1663,7 @@ def test_remaining_one_liners(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -
     assert samp.load_catalog("custom") == ()
     assert samp.load_catalog("missing-catalog-xyz") == ()
     assert samp._lookup("klein_t2i", samp.CUSTOM) is None
-    assert samp.resolve_catalog("", lab_rel="stills/still-draft") in {"", "klein_t2i"}
+    assert samp.resolve_catalog("", lab_rel="photos/still-draft") in {"", "klein_t2i"}
     monkeypatch.setattr(
         samp,
         "load_catalog",

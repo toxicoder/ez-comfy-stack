@@ -12,11 +12,17 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from _lab_ids import PLATE_STEM as _PLATE_STEM
 from _lab_layout import GROUP_TITLE_INSET, finalize_layout, group as _group
 from _lab_paths import apply_lab_identity, lab_dest, lab_json, lab_rel_of
 from _long_film_bibles import ACT_TITLES, SPECS
 from _stamp_app_mode import stamp_suite_graph
-from _wire_prompt_enhance import enable_lab_graph
+from _wire_prompt_enhance import (
+    _link_string,
+    enable_lab_graph,
+    remove_node,
+    repair_negative_sources,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
@@ -67,7 +73,7 @@ FILMS = (
     (
         "go-see",
         "gosee",
-        "films/go-see",
+        "film/go-see",
         "go-see.shots.yaml",
         "first-person parkour",
         (
@@ -82,7 +88,7 @@ FILMS = (
     (
         "still-here",
         "stillhere",
-        "films/still-here",
+        "film/still-here",
         "still-here.shots.yaml",
         "household morning",
         (
@@ -97,7 +103,7 @@ FILMS = (
     (
         "switchyard",
         "switchyard",
-        "films/switchyard",
+        "film/switchyard",
         "switchyard.shots.yaml",
         "night freight yard",
         (
@@ -118,11 +124,16 @@ ID_LTX_CLIP = 102
 ID_LTX_AUDIO_VAE = 103
 ID_LTX_NEG = 104
 ID_LTX_EMPTY_AUDIO = 105
-ID_UNLOAD = 50
+PLATE_ID_CEILING = 50
+PLATE_STEM = _PLATE_STEM
+# The plate is fed straight into the LTX print pass, which renders at a locked
+# 1280x704. A size or upscale picker on the plate would only desync the two.
+_LOCKED_PIXEL_NODES = frozenset({"EZImageFormat", "EZImageUpscale"})
 ID_LOAD = 51
 ID_MARKDOWN = 52
 ID_CONCAT = 900
 ID_DISCLOSURE = 901
+ID_IDENTITY = 905
 
 LONG_LABELS = {
     "tide-table": "dawn skiff",
@@ -235,7 +246,7 @@ def build_shot_map_markdown(film: str, label: str, parsed: dict, beats: tuple) -
         "",
         "Queue **once**. Klein identity still -> 18 x 5.00s LTX AV prints (last-frame "
         "continuity) -> **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames "
-        "= 1+8n per shot). Optional silent rehearsal: **motion/silent/still-to-shot**. Optional "
+        "= 1+8n per shot). Optional silent rehearsal: **video/silent/still-to-shot**. Optional "
         f"host stitch: `bazelisk run //scripts:run-utility -- concat-shots --film {film} --yes`.",
         "",
         "18 x 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. "
@@ -266,9 +277,13 @@ def build_film_operator_note(
         "shot enhance as context (used only if you turn Enhance on)."
     )
     klein_line = (
-        "Models: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, "
-        "t2i mode) - LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + "
-        "video/audio VAEs (print)."
+        "Models: LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio "
+        "VAEs. The Klein 4B identity plate is its own app (**00-plate** in this "
+        "series); Queue it first."
+    )
+    queue_line = (
+        f"1. Queue **{stem.rsplit('/', 1)[0]}/{PLATE_STEM}** once (one Klein still), then "
+        "Queue this app once: 18 x 5.00s LTX prints chain last-frame -> next start."
     )
     note = f"""## {stem}
 
@@ -276,14 +291,14 @@ def build_film_operator_note(
 
 {PREVIEW_BULLET}
 
-One-click 90s unit ({label}): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.
+LTX print pass ({label}): 18 sequential LTX 5.00s AV prints + in-graph stitch.
 {klein_line}
 LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
 
-1. Queue **once**. Klein runs first; models unload; then 18 x 5.00s LTX prints chain last-frame -> next start.
+{queue_line}
 2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) - expected, not a hang.
 3. The MP4 is already on disk at `${{COMFY_OUTPUT_DIR}}/ez_{slug}_90s.mp4` (act graphs write `ez_{slug}_actN_90s.mp4`). A **Film ready** overlay plays it. Copy off the Spark with scp.
-4. Optional single-shot iterate: **motion/av/still-to-shot**. Optional silent rehearsal: **motion/silent/still-to-shot**.
+4. Optional single-shot iterate: **video/av/still-to-shot**. Optional silent rehearsal: **video/silent/still-to-shot**.
 5. Spark-farm / host stitch fallback: `bazelisk run //scripts:run-utility -- concat-shots --film {film} --yes`
 
 Do not Queue a 90s denoise (keep 121-frame / 1+8n widgets). US-safe local pack only. No score.
@@ -291,7 +306,7 @@ Do not Queue a 90s denoise (keep 121-frame / 1+8n widgets). US-safe local pack o
 """
     if act > 0:
         prev = (
-            "Act 1 starts from Klein identity. "
+            "Act 1 starts from the identity plate. "
             if act == 1
             else (
                 f"Act {act} LoadImage should be the previous act last frame "
@@ -507,7 +522,8 @@ def build_one_click_film(
 ) -> dict:
     parsed = parse_shots_yaml((SHORTS / yaml_name).read_text(encoding="utf-8"))
     identity = parsed["identity"]
-    graph = copy.deepcopy(_load(lab_json("stills/still-draft.json")))
+    plate_prefix = f"ez_{slug}_plate"
+    graph = copy.deepcopy(_load(lab_json("photos/still-draft.json")))
     graph["id"] = stem
     graph["revision"] = int(graph.get("revision", 1)) + 1
     graph["links"] = [list(link) for link in graph.get("links") or []]
@@ -522,8 +538,8 @@ def build_one_click_film(
         if node.get("type") == "KSampler":
             node["widgets_values"] = [42, "fixed", 4, 1.0, "euler", "simple", 1.0]
         if node.get("type") == "SaveImage":
-            node["widgets_values"] = [f"ez_{slug}_identity"]
-            node["title"] = "Save identity PNG"
+            node["widgets_values"] = [plate_prefix]
+            node["title"] = "Save identity plate"
         if node.get("type") == "Note":
             node["widgets_values"] = [op_note]
             node["title"] = "Operator note - one-click film"
@@ -554,16 +570,6 @@ def build_one_click_film(
         [shot_md],
         [],
         [],
-    )
-    unload = _mk(
-        ID_UNLOAD,
-        "EZUnloadModels",
-        [1840, 500],
-        [320, 80],
-        "Unload models (pass IMAGE)",
-        [],
-        [_inp("image", "IMAGE")],
-        [_out("image", "IMAGE", 0)],
     )
     ltx_unet = _mk(
         ID_LTX_UNET,
@@ -677,7 +683,6 @@ def build_one_click_film(
     graph["nodes"].extend(
         [
             markdown,
-            unload,
             ltx_unet,
             ltx_video_vae,
             ltx_clip,
@@ -690,33 +695,28 @@ def build_one_click_film(
         ]
     )
 
-    klein_decode = _by_id(graph, 8)
     if act >= 2:
         prev_shot = parsed["shots"][shot_offset - 1]
-        load = _mk(
-            ID_LOAD,
-            "LoadImage",
-            [1480.0, 400.0],
-            [320.0, 314.0],
-            "Load previous act last frame",
-            [f"{prev_shot['prefix']}_last.png", "image"],
-            [],
-            [
-                _out("IMAGE", "IMAGE", 0),
-                _out("MASK", "MASK", 1),
-            ],
-            extra_props={"cnr_id": "comfy-core"},
-        )
-        graph["nodes"].append(load)
-        for node in graph["nodes"]:
-            if int(node["id"]) < ID_UNLOAD and node.get("type") not in {
-                "Note",
-                "MarkdownNote",
-            }:
-                node["mode"] = 4
-        _add_link(graph, load, 0, unload, "image", "IMAGE")
+        start_frame = f"{prev_shot['prefix']}_last.png"
+        load_title = "Load previous act last frame"
     else:
-        _add_link(graph, klein_decode, 0, unload, "image", "IMAGE")
+        start_frame = f"{plate_prefix}.png"
+        load_title = "Load identity plate"
+    load = _mk(
+        ID_LOAD,
+        "LoadImage",
+        [1480.0, 1500.0],
+        [320.0, 314.0],
+        load_title,
+        [start_frame, "image"],
+        [],
+        [
+            _out("IMAGE", "IMAGE", 0),
+            _out("MASK", "MASK", 1),
+        ],
+        extra_props={"cnr_id": "comfy-core"},
+    )
+    graph["nodes"].append(load)
     _add_link(graph, ltx_clip, 0, ltx_neg, "clip", "CLIP")
     _add_link(graph, ltx_audio_vae, 0, ltx_empty, "audio_vae", "VAE")
 
@@ -742,7 +742,7 @@ def build_one_click_film(
         _add_link(graph, ltx_neg, 0, i2v, "negative", "CONDITIONING")
         _add_link(graph, ltx_video_vae, 0, i2v, "vae", "VAE")
         if index == 0:
-            _add_link(graph, unload, 0, i2v, "image", "IMAGE")
+            _add_link(graph, load, 0, i2v, "image", "IMAGE")
         else:
             assert prev_last is not None
             _add_link(graph, prev_last, 0, i2v, "image", "IMAGE")
@@ -815,7 +815,6 @@ def build_one_click_film(
         },
     }
     graph["version"] = 0.4
-    enable_lab_graph(graph)
     return graph
 
 
@@ -839,18 +838,213 @@ def _act_beat_table(film: str, act: int) -> tuple:
     return tuple(rows), title
 
 
+def build_plate_note(stem: str, film: str, slug: str, label: str) -> str:
+    """Operator note for the Klein identity-plate app of one film or series."""
+    return f"""## {stem}
+
+Identity plate ({label}): one Klein 4B still that every print in this series
+starts from.
+
+Models: Klein 4B distilled FP8 - 4-step, Enhance **off**, t2i mode. This app
+loads no LTX model, so the Quality combo moves Klein tiers only.
+
+1. Queue **once**. The still lands at `${{COMFY_OUTPUT_DIR}}/ez_{slug}_plate_00001_.png`.
+2. Check the face, the wardrobe, and the location read before you Queue a print
+   pass. Re-Queue here until the plate is right; it is 4 steps and cheap.
+3. Next: **{stem.rsplit('/', 1)[0]}/act-01** (or **feature** for a one-film
+   title). Its LoadImage reads `ez_{slug}_plate.png`, so change the seed here
+   and re-Queue the plate before you re-Queue a print.
+4. Optional still-only iterate: **photos/still-draft**. Optional silent
+   rehearsal: **video/silent/still-to-shot**.
+
+US-safe local pack only. Klein 4B stills are the promoted image family.
+"""
+
+
+PLATE_GROUP_TITLE = "1. Identity (Klein)"
+
+
+def _image_producer(
+    graph: dict[str, Any],
+    links: dict[int, list[Any]],
+    node: dict[str, Any],
+    input_name: str,
+) -> dict[str, Any] | None:
+    """Return the node feeding ``node``'s named IMAGE input, skipping stripped pickers.
+
+    Args:
+        graph: Plate graph under construction.
+        links: Link-id to link-row map for ``graph``.
+        node: Consumer node whose input starts the walk.
+        input_name: Input name to follow (``images`` / ``image``).
+
+    Returns:
+        The nearest upstream node that survives the picker strip, or ``None``.
+    """
+    entry = next(
+        (item for item in node.get("inputs") or [] if item.get("name") == input_name),
+        None,
+    )
+    if entry is None or entry.get("link") is None:
+        return None
+    producer = _by_id(graph, int(links[int(entry["link"])][1]))
+    while producer.get("type") in _LOCKED_PIXEL_NODES:
+        found = next(
+            (
+                item
+                for item in producer.get("inputs") or []
+                if item.get("name") in {"image", "images"} and item.get("link") is not None
+            ),
+            None,
+        )
+        if found is None:
+            return None
+        producer = _by_id(graph, int(links[int(found["link"])][1]))
+    return producer
+
+
+def _plate_view(graph: dict[str, Any], *, stem: str, note: str, description: str) -> dict[str, Any]:
+    """Keep the Klein identity stack; the saved PNG is this app's whole output.
+
+    Args:
+        graph: Combined act graph (mutated; pass a copy).
+        stem: ``_lab``-relative id this app is written under.
+        note: Operator-note markdown for this app.
+        description: ``extra.lab_description`` for the Apps sidebar.
+
+    Returns:
+        The graph with every LTX-side node removed.
+    """
+    link_rows = {int(link[0]): link for link in graph.get("links") or []}
+    # Snapshot before the strip: the plate's saver hangs off EZImageUpscale, so
+    # its producer has to be resolved while the picker chain is still present.
+    savers = [
+        node
+        for node in graph["nodes"]
+        if node.get("type") == "SaveImage" and int(node["id"]) < PLATE_ID_CEILING
+    ]
+    plate_sources = {
+        int(saver["id"]): _image_producer(graph, link_rows, saver, "images")
+        for saver in savers
+    }
+    for node in list(graph["nodes"]):
+        if int(node["id"]) >= PLATE_ID_CEILING or node.get("type") in _LOCKED_PIXEL_NODES:
+            remove_node(graph, int(node["id"]))
+    for saver in savers:
+        source = plate_sources[int(saver["id"])]
+        if source is not None:
+            _add_link(graph, source, 0, saver, "images", "IMAGE")
+    graph["groups"] = [
+        group
+        for group in graph.get("groups") or []
+        if group.get("title") == PLATE_GROUP_TITLE
+    ]
+    for node in graph["nodes"]:
+        if node.get("type") == "Note":
+            node["widgets_values"] = [note]
+            node["title"] = "Operator note - identity plate"
+    graph["id"] = stem
+    graph["last_node_id"] = max(int(node["id"]) for node in graph["nodes"])
+    graph["mode"] = 0
+    extra = graph["extra"]
+    extra["lab_rel"] = stem
+    extra["lab_note"] = note
+    extra["lab_description"] = description
+    extra["lab_ltx_av"] = False
+    extra["lab_one_click"] = False
+    extra.pop("lab_dfr", None)
+    finalize_layout(graph)
+    enable_lab_graph(graph)
+    return graph
+
+
+def _shot_view(
+    graph: dict[str, Any], *, stem: str, identity: str, note: str, description: str
+) -> dict[str, Any]:
+    """Keep the LTX print stack; the plate arrives as a PNG on disk.
+
+    Args:
+        graph: Combined act graph (mutated; pass a copy).
+        stem: ``_lab``-relative id this app is written under.
+        identity: Parsed identity paragraph, authored into the context source.
+        note: Operator-note markdown for this app.
+        description: ``extra.lab_description`` for the Apps sidebar.
+
+    Returns:
+        The graph with every Klein-side node removed.
+    """
+    for node in list(graph["nodes"]):
+        if int(node["id"]) < PLATE_ID_CEILING and node.get("type") != "Note":
+            remove_node(graph, int(node["id"]))
+    context_src = _mk(
+        ID_IDENTITY,
+        "EZSamplePrompt",
+        [40.0, 1560.0],
+        [420.0, 200.0],
+        "Identity context",
+        ["custom", identity, stem],
+        [],
+        [_out("prompt", "STRING", 0)],
+    )
+    graph["nodes"].append(context_src)
+    for node in graph["nodes"]:
+        if node.get("type") == "EZLTXPromptEnhance":
+            _link_string(graph, context_src, node, "context")
+    graph["groups"] = [
+        group
+        for group in graph.get("groups") or []
+        if group.get("title") != PLATE_GROUP_TITLE
+    ]
+    for node in graph["nodes"]:
+        if node.get("type") == "Note":
+            node["widgets_values"] = [note]
+    graph["id"] = stem
+    graph["last_node_id"] = max(int(node["id"]) for node in graph["nodes"])
+    graph["mode"] = 0
+    extra = graph["extra"]
+    extra["lab_rel"] = stem
+    extra["lab_note"] = note
+    extra["lab_description"] = description
+    finalize_layout(graph)
+    enable_lab_graph(graph)
+    repair_negative_sources(graph)
+    return graph
+
+
 def build_all_films() -> None:
     for film, slug, stem, yaml_name, label, beats in FILMS:
-        graph = build_one_click_film(film, slug, stem, yaml_name, label, beats)
-        _dump(lab_json(stem), graph)
+        combined = build_one_click_film(film, slug, stem, yaml_name, label, beats)
+        parsed = parse_shots_yaml((SHORTS / yaml_name).read_text(encoding="utf-8"))
+        _dump(
+            lab_dest(f"{stem}/{PLATE_STEM}"),
+            _plate_view(
+                copy.deepcopy(combined),
+                stem=f"{stem}/{PLATE_STEM}",
+                note=build_plate_note(f"{stem}/{PLATE_STEM}", film, slug, label),
+                description=f"Klein identity plate for {label}",
+            ),
+        )
+        _dump(
+            lab_dest(f"{stem}/feature"),
+            _shot_view(
+                copy.deepcopy(combined),
+                stem=f"{stem}/feature",
+                identity=parsed["identity"],
+                note=build_film_operator_note(f"{stem}/feature", film, slug, label),
+                description="One-click 90s print pass: 18 LTX 5.00s AV shots + stitch",
+            ),
+        )
     for film, spec in SPECS.items():
         slug = spec["slug"]
         yaml_name = f"{film}.shots.yaml"
+        parsed = parse_shots_yaml((SHORTS / yaml_name).read_text(encoding="utf-8"))
+        series_label = LONG_LABELS[film]
+        plate_stem = f"film/{film}/{PLATE_STEM}"
         for act in range(1, 6):
             beats, act_title = _act_beat_table(film, act)
-            label = f"{LONG_LABELS[film]} - {act_title}"
-            stem = f"films/{film}/act-0{act}"
-            graph = build_one_click_film(
+            label = f"{series_label} - {act_title}"
+            stem = f"film/{film}/act-0{act}"
+            combined = build_one_click_film(
                 film,
                 slug,
                 stem,
@@ -860,7 +1054,35 @@ def build_all_films() -> None:
                 act=act,
                 shot_offset=(act - 1) * 18,
             )
-            _dump(lab_dest(stem), graph)
+            _dump(
+                lab_dest(stem),
+                _shot_view(
+                    combined,
+                    stem=stem,
+                    identity=parsed["identity"],
+                    note=build_film_operator_note(stem, film, slug, label, act=act),
+                    description=(
+                        f"Act {act} print pass: 18 LTX 5.00s AV shots + stitch"
+                    ),
+                ),
+            )
+        beats, _ = _act_beat_table(film, 1)
+        _dump(
+            lab_dest(plate_stem),
+            _plate_view(
+                build_one_click_film(
+                    film,
+                    slug,
+                    plate_stem,
+                    yaml_name,
+                    series_label,
+                    beats,
+                ),
+                stem=plate_stem,
+                note=build_plate_note(plate_stem, film, slug, series_label),
+                description=f"Klein identity plate for {series_label}",
+            ),
+        )
 
 
 if __name__ == "__main__":

@@ -90,7 +90,10 @@ const manifestPageSchema = z.object({
   lane: z.string().optional()
 });
 
-const manifestSchema = z.object({ pages: z.array(manifestPageSchema).optional() });
+const manifestSchema = z.object({
+  pages: z.array(manifestPageSchema).optional(),
+  lanes: z.array(z.string()).optional()
+});
 
 type ManifestPage = z.infer<typeof manifestPageSchema>;
 
@@ -120,32 +123,36 @@ function findRepoFile(segments: string[]): string | undefined {
   return undefined;
 }
 
-function loadManifest(kind: "workflows" | "cinema" | "audio"): ManifestPage[] {
+function loadManifestPayload(kind: "workflows" | "cinema" | "audio") {
   const file = findRepoFile(["docs", "generated", kind, "manifest.json"]);
-  if (!file) return [];
+  if (!file) return undefined;
   try {
-    const payload = manifestSchema.parse(JSON.parse(readFileSync(file, "utf8")));
-    return payload.pages ?? [];
+    return manifestSchema.parse(JSON.parse(readFileSync(file, "utf8")));
   } catch {
-    return [];
+    return undefined;
   }
 }
 
+function loadManifest(kind: "workflows" | "cinema" | "audio"): ManifestPage[] {
+  return loadManifestPayload(kind)?.pages ?? [];
+}
+
+/**
+ * Fallback browse order, used only before the docs are generated. The generated
+ * manifest carries `lanes`, which is the order `docs/generate_workflow_docs.py`
+ * publishes, so the sidebar cannot drift from the catalog it lists.
+ */
 const WORKFLOW_LANE_ORDER = [
-  "stills",
-  "motion",
-  "creator",
-  "services",
-  "films",
-  "dcc",
-  "optional",
-  "inspire",
+  "photos",
+  "video",
+  "social",
+  "business",
+  "film",
   "audio",
-  "klein",
-  "wan",
-  "ltx",
-  "shorts",
-  "audio-albums"
+  "audio-albums",
+  "3d",
+  "guides",
+  "labs"
 ];
 
 function cinemaChildren(): NavNode[] {
@@ -175,7 +182,9 @@ function audioChildren(): NavNode[] {
 }
 
 function workflowChildren(): NavNode[] {
-  const pages = loadManifest("workflows");
+  const payload = loadManifestPayload("workflows");
+  const pages = payload?.pages ?? [];
+  const laneOrder = payload?.lanes?.length ? payload.lanes : WORKFLOW_LANE_ORDER;
   // Only generated pages belong here. `reference/workflow-nodes.md` is listed in
   // `nav.json` beside this folder, so repeating it would put the same page in the sidebar
   // twice under one heading.
@@ -191,7 +200,7 @@ function workflowChildren(): NavNode[] {
     list.push(page);
     byLane.set(lane, list);
   }
-  const seen = WORKFLOW_LANE_ORDER.filter((lane) => byLane.has(lane));
+  const seen = laneOrder.filter((lane) => byLane.has(lane));
   for (const lane of [...byLane.keys()].sort()) {
     if (!seen.includes(lane)) seen.push(lane);
   }

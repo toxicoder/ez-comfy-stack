@@ -39,7 +39,7 @@ def _graph_id(path: Path) -> str:
         path: Shipped lab JSON path under workflows/_lab.
 
     Returns:
-        Catalog id such as ``stills/still-draft``.
+        Catalog id such as ``photos/still-draft``.
     """
     extra = load_lab_graph(path).get("extra") or {}
     lab_rel = extra.get("lab_rel")

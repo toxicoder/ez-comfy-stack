@@ -16,7 +16,7 @@ from _wire_format import (
 
 CAST_TYPE = "EZBackgroundCast"
 ENHANCE_TYPE = "EZKleinPromptEnhance"
-CAST_RELS = frozenset({"stills/background-swap", "stills/background-edit"})
+CAST_RELS = frozenset({"photos/background-swap", "photos/background-edit"})
 
 
 def _lab_rel(graph: dict[str, Any]) -> str:

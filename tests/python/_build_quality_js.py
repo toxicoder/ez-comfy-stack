@@ -45,6 +45,10 @@ _HEADER = """/**
  *   EZ_QUALITY_OWNED[family]        fields that family's tiers ever set; a
  *                                   change outside this list keeps the level.
  *   EZ_QUALITY_LABELS[family][tier] caption naming the swap, for the combo.
+ *   EZ_QUALITY_TIERS[family]        the only tiers that family can honor; a
+ *                                   tier outside this list has an all-null
+ *                                   overlay, so the combo drops it and keeps
+ *                                   lab and custom.
  */
 """
 
@@ -60,7 +64,16 @@ def render() -> str:
     """
     table = export_table()
     blocks = []
-    for key in ("choices", "named", "families", "fields", "table", "owned", "labels"):
+    for key in (
+        "choices",
+        "named",
+        "families",
+        "fields",
+        "table",
+        "owned",
+        "labels",
+        "tiers",
+    ):
         const = "EZ_QUALITY_" + key.upper()
         body = json.dumps(table[key], indent=2, ensure_ascii=True, sort_keys=False)
         blocks.append(f"export const {const} = {body};\n")

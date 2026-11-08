@@ -66,7 +66,7 @@ def _graph(*, loads: int = 1, enhance: bool = True) -> dict:
     return {
         "last_node_id": nid + 50,
         "last_link_id": lid,
-        "extra": {"lab_rel": "stills/character-tweak"},
+        "extra": {"lab_rel": "photos/character-tweak"},
         "nodes": nodes,
         "links": links,
     }
@@ -77,7 +77,7 @@ def test_describe_scope_needs_one_still() -> None:
     assert describe_in_scope(_graph(loads=2)) is False
     assert describe_in_scope(_graph(loads=1, enhance=False)) is False
     skipped = _graph()
-    skipped["extra"]["lab_rel"] = "inspire/prompt-forge"
+    skipped["extra"]["lab_rel"] = "labs/assist/prompt-forge"
     assert describe_in_scope(skipped) is False
 
 

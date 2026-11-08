@@ -59,19 +59,19 @@ def test_occupancy_status_reads_state_file(tmp_path: Path, monkeypatch: pytest.M
 
 
 def test_search_templates_includes_inspire() -> None:
-    result = mcp.call_tool("search_templates", {"query": "inspire"})
+    result = mcp.call_tool("search_templates", {"query": "labs/assist"})
     assert result["ok"] is True
     ids = {row["id"] for row in result["templates"]}
-    assert "inspire/prompt-forge" in ids
-    assert "inspire/research-chat" in ids
-    assert "inspire/app-forge" in ids
+    assert "labs/assist/prompt-forge" in ids
+    assert "labs/assist/research-chat" in ids
+    assert "labs/assist/app-forge" in ids
     blocks = mcp.call_tool("search_templates", {"query": "klein-t2i"})
     block_ids = {row["id"] for row in blocks["templates"]}
     assert "klein-t2i-backbone" in block_ids
 
 
 def test_get_template_still_draft() -> None:
-    result = mcp.call_tool("get_template", {"stem": "stills/still-draft"})
+    result = mcp.call_tool("get_template", {"stem": "photos/still-draft"})
     assert result["ok"] is True
     assert result["occupancy"] == "klein"
     assert "Prompt" in result["widgets"]
@@ -85,14 +85,14 @@ def test_generate_app_tool(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> N
         "generate_app",
         {
             "brief": "a chipped cobalt mug",
-            "template": "stills/still-draft",
+            "template": "photos/still-draft",
             "slug": "mcp-mug",
             "as_app": True,
         },
     )
     assert result["ok"] is True, result
     assert Path(result["path"]).is_file()
-    assert result["template"] == "stills/still-draft"
+    assert result["template"] == "photos/still-draft"
     assert result["occupancy"] == "klein"
 
 
@@ -101,14 +101,14 @@ def test_create_app_and_validate(tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     created = mcp.call_tool(
         "create_app",
         {
-            "stem": "stills/instagram-square",
+            "stem": "photos/instagram-square",
             "slug": "mcp-ig",
             "slots": {"prompt": "square mug still"},
         },
     )
     assert created["ok"] is True, created
     assert created["path"].endswith("mcp-ig.app.json")
-    valid = mcp.call_tool("validate_workflow", {"stem": "stills/still-draft"})
+    valid = mcp.call_tool("validate_workflow", {"stem": "photos/still-draft"})
     assert valid["ok"] is True
 
 
@@ -189,12 +189,12 @@ def test_apply_slots_and_validate_errors(
 ) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     bad_slots = mcp.call_tool(
-        "apply_slots", {"stem": "stills/still-draft", "slots": [1]}
+        "apply_slots", {"stem": "photos/still-draft", "slots": [1]}
     )
     assert bad_slots["ok"] is False
     ok_slots = mcp.call_tool(
         "apply_slots",
-        {"stem": "stills/still-draft", "slots": {"prompt": "mcp slot"}},
+        {"stem": "photos/still-draft", "slots": {"prompt": "mcp slot"}},
     )
     assert ok_slots["ok"] is True
     err = mcp.call_tool("apply_slots", {"stem": "no-such", "slots": {}})
@@ -219,7 +219,7 @@ def test_save_and_generate_errors(
     saved = mcp.call_tool(
         "save_workflow",
         {
-            "stem": "stills/still-draft",
+            "stem": "photos/still-draft",
             "slug": "save-mug",
             "as_app": False,
             "slots": {"prompt": "saved"},
@@ -228,7 +228,7 @@ def test_save_and_generate_errors(
     assert saved["ok"] is True
     assert saved["as_app"] is False
     forced = mcp._save_from_args(
-        {"stem": "stills/still-draft", "slug": "force-graph"},
+        {"stem": "photos/still-draft", "slug": "force-graph"},
         force_app=False,
     )
     assert forced["ok"] is True
@@ -278,7 +278,7 @@ def test_main_call_with_json_and_stdio(monkeypatch: pytest.MonkeyPatch, capsys: 
     assert mcp.main(["--stdio"]) == 0
     assert mcp.main(["stdio"]) == 0
     assert (
-        mcp.main(["--call", "get_template", json.dumps({"stem": "stills/still-draft"})])
+        mcp.main(["--call", "get_template", json.dumps({"stem": "photos/still-draft"})])
         == 0
     )
     payload = json.loads(capsys.readouterr().out.strip().splitlines()[-1])

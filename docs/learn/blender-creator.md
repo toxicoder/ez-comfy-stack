@@ -89,7 +89,7 @@ Pack files and print modes: [DCC guide pack](../dcc-workflows.md). Golden film l
 
 Path D: dump on the laptop, rsync `guides/`, Spark only runs Comfy.
 
-Stay on `:8188` after the dump (no `--install-inputs`): [Stay in Comfy after a Blender dump](comfy-first-blender.md) - **dcc/guide-still**.
+Stay on `:8188` after the dump (no `--install-inputs`): [Stay in Comfy after a Blender dump](comfy-first-blender.md) - **guides/guide-still**.
 
 ---
 
@@ -99,7 +99,7 @@ Stay on `:8188` after the dump (no `--install-inputs`): [Stay in Comfy after a B
 | --- | --- |
 | No Blender / Path D not ready | Dumps. Queue language stills (`klein-still-draft`, `klein-dream-house`). Overlay QC is skipped, not faked |
 | Need a walkable house | `blender-stills`. Use [house-views](dream-house.md) |
-| Talking-head / VO-locked picture | Union Control. Use A2V freeze (`motion/av/audio-to-video-8s`) |
+| Talking-head / VO-locked picture | Union Control. Use A2V freeze (`video/av/audio-to-video-8s`) |
 | Engine-final Cycles beauty | Path A (`dcc-final`) - not this suite |
 
 Occupancy: `export-guides` and `blender-stills` die (exit 2) if Compose is up and **not**

@@ -98,6 +98,25 @@ def core_nodes() -> NodeSpecs:
             ],
             widgets=[_w("text", index=0, typ="STRING", desc="Prompt encoded by CLIP.", gen="Klein: sentences, subject -> place -> light -> camera. Wan I2V: motion + one camera only. LTX: present-tense paragraph with audio interleaved. Distilled Klein quality lives here, not in CFG.")],
         ),
+        "TextEncodeQwenImage21": _n(
+            "Text Encode Qwen Image 2.1",
+            "Encode prompt and negative for Qwen-Image 2.1 and build its square latent.",
+            lab="Labs opt-in only (labs/opt-in/still-qwen-image). This one node replaces the CLIP boxes plus the empty-latent node: Qwen 2.1 samples from a 64-channel latent at 16x, so nothing else on the graph can size the frame. Resolution is the only pixel control.",
+            sockets=[
+                _s("clip", "CLIP", "in", "Qwen3VL-8B text encoder (CLIPLoader type qwen_image)."),
+                _s("prompt", "STRING", "in", "Wired from the sample-prompt node so the widget is a preview."),
+                _s("negative_prompt", "STRING", "in", "Wired from Rewrite negative."),
+                _s("vae", "VAE", "in", "Only used to encode reference images; a plain t2i Queue ignores it."),
+                _s("positive", "CONDITIONING", "out", "Positive cond for KSampler."),
+                _s("negative", "CONDITIONING", "out", "Negative cond for KSampler."),
+                _s("latent", "LATENT", "out", "Square 64-channel noise canvas at resolution."),
+            ],
+            widgets=[
+                _w("prompt", index=0, typ="STRING", desc="Prompt the Qwen3VL encoder sees.", gen="Plain sentences. Qwen 2.1 renders lettering poorly, so leave titles to a composite pass."),
+                _w("negative_prompt", index=1, typ="STRING", desc="Negative list.", gen="Keep the stills negative; Rewrite negative rewrites it against the final positive."),
+                _w("resolution", index=2, typ="INT", rng="32 - 4096, step 32", desc="Square side in pixels; the latent is resolution // 16.", gen="1024 is the published default. Multiples of 32 only. One number makes a square frame - there is no aspect-ratio widget on this node."),
+            ],
+        ),
         "EmptyFlux2LatentImage": _n(
             "Empty Flux.2 Latent",
             "Allocate a Klein / Flux.2 still latent (width x height x batch).",
@@ -238,7 +257,7 @@ def core_nodes() -> NodeSpecs:
         "LoadAudio": _n(
             "Load Audio",
             "Load a wav/mp3 from input/.",
-            lab="motion/av/audio-to-video-8s defaults ez_a2v_bed.wav. Drop the file in ${COMFY_OUTPUT_DIR}/input.",
+            lab="video/av/audio-to-video-8s defaults ez_a2v_bed.wav. Drop the file in ${COMFY_OUTPUT_DIR}/input.",
             sockets=[_s("AUDIO", "AUDIO", "out", "Waveform for LTXVAudioVAEEncode.")],
             widgets=[_w("audio", index=0, desc="Filename in input/.", gen="The original wav is muxed into the MP4 (no audio VAE decode on a2v).")],
         ),
@@ -268,7 +287,7 @@ def core_nodes() -> NodeSpecs:
             "Snap image (div 16)",
             "Scale a still to the largest width and height that fit inside the source and are multiples of 16.",
             origin="ez_image",
-            lab="stills/text-swap snaps the start image to the Flux.2 Klein VAE grid before VAEEncode. stills/background-swap also feeds EZEmptyFlux2FromImage.",
+            lab="photos/text-swap snaps the start image to the Flux.2 Klein VAE grid before VAEEncode. photos/background-swap also feeds EZEmptyFlux2FromImage.",
             sockets=[
                 _s("image", "IMAGE", "in", "Source still."),
                 _s("IMAGE", "IMAGE", "out", "Snapped still."),
@@ -279,7 +298,7 @@ def core_nodes() -> NodeSpecs:
             "Empty Flux.2 from image",
             "Allocate an empty Flux.2 latent matching a still's snapped width and height.",
             origin="ez_image",
-            lab="stills/background-swap uses this as KSampler.latent_image. The encoded source is a reference (photo, or a block study for Cubic block world), not the denoise start.",
+            lab="photos/background-swap uses this as KSampler.latent_image. The encoded source is a reference (photo, or a block study for Cubic block world), not the denoise start.",
             sockets=[
                 _s("image", "IMAGE", "in", "Snapped still."),
                 _s("LATENT", "LATENT", "out", "Empty Flux.2 noise canvas (div16, 128 channels)."),
@@ -304,7 +323,7 @@ def core_nodes() -> NodeSpecs:
             "Match image size",
             "Resize a still to another image's exact width and height.",
             origin="ez_image",
-            lab="stills/text-swap restores the decode to the uploaded still's pixel size.",
+            lab="photos/text-swap restores the decode to the uploaded still's pixel size.",
             sockets=[
                 _s("image", "IMAGE", "in", "Edited still."),
                 _s("size_src", "IMAGE", "in", "Source still whose HxW is the target."),
@@ -316,7 +335,7 @@ def core_nodes() -> NodeSpecs:
             "Cubic or photo reference",
             "Attach the photo latent, or a people-erased block-study latent when the prompt rebuilds the place as cubes.",
             origin="ez_image",
-            lab="stills/background-swap. Ordinary place swaps keep the encoded photo. Cubic block world erases the source people from the coarse block study before VAE-encoding, so Klein is not locked to photoreal surfaces and is not primed to cube the people. When the person segmenter cannot run, the encoded photograph is attached instead (photo-anchored people-kept rebuild), so the block world never deletes the people.",
+            lab="photos/background-swap. Ordinary place swaps keep the encoded photo. Cubic block world erases the source people from the coarse block study before VAE-encoding, so Klein is not locked to photoreal surfaces and is not primed to cube the people. When the person segmenter cannot run, the encoded photograph is attached instead (photo-anchored people-kept rebuild), so the block world never deletes the people.",
             sockets=[
                 _s("conditioning", "CONDITIONING", "in", "Positive CLIP conditioning before any reference."),
                 _s("latent", "LATENT", "in", "VAE encode of the snapped photograph."),
@@ -331,7 +350,7 @@ def core_nodes() -> NodeSpecs:
             "Reinsert people",
             "Paste detected people from the source photo onto a cubic rebuild.",
             origin="ez_image",
-            lab="stills/background-swap, between decode and match-to-source. Paste dilates the person mask ~2 px and feathers ~6 px, so people own their full silhouette and blend onto the plate. source is the full-resolution LoadImage still. Other prompts pass the plate through. When the segmenter cannot run (weights or torch missing, or `EZ_PERSON_MASK=off`) the plate passes through untouched and the swap stays photo-anchored (status `person mask missing`); people are never deleted.",
+            lab="photos/background-swap, between decode and match-to-source. Paste dilates the person mask ~2 px and feathers ~6 px, so people own their full silhouette and blend onto the plate. source is the full-resolution LoadImage still. Other prompts pass the plate through. When the segmenter cannot run (weights or torch missing, or `EZ_PERSON_MASK=off`) the plate passes through untouched and the swap stays photo-anchored (status `person mask missing`); people are never deleted.",
             sockets=[
                 _s("plate", "IMAGE", "in", "Decoded still."),
                 _s("source", "IMAGE", "in", "Full-resolution source still from LoadImage."),
@@ -344,7 +363,7 @@ def core_nodes() -> NodeSpecs:
             "Format / platform",
             "Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack look recipe.",
             origin="ez_image",
-            lab="stills/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size. Match input snaps aspect to a loaded still.",
+            lab="photos/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size. Match input snaps aspect to a loaded still.",
             sockets=[
                 _s("image", "IMAGE", "in", "Optional still used when Output size is Match input."),
                 _s("width", "INT", "out", "Latent width (div16)."),
@@ -356,7 +375,7 @@ def core_nodes() -> NodeSpecs:
             ],
             widgets=[
                 _w("format", index=0, typ="COMBO", rng="16:9 LTX feeder / platform jobs / Custom", desc="Aspect or named platform job.", gen="Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (snapped to div16, max 2048). Does not change Quality, CLIP, or VAE.", choices_from="image_formats"),
-                _w("look", index=1, typ="COMBO", rng="none", desc="Optional Cinema Rack starter.", gen="none leaves look to Style + Prompt. A pick splices Klein still language into Enhance context. Full 13-axis desk is inspire/cinema-rack.", choices_from="cinema_recipes"),
+                _w("look", index=1, typ="COMBO", rng="none", desc="Optional Cinema Rack starter.", gen="none leaves look to Style + Prompt. A pick splices Klein still language into Enhance context. Full 13-axis desk is labs/assist/cinema-rack.", choices_from="cinema_recipes"),
                 _w("width", index=2, typ="INT", rng="16-2048, step 16", desc="Custom width.", gen="Used when Format is Custom. Presets ignore this widget at Queue."),
                 _w("height", index=3, typ="INT", rng="16-2048, step 16", desc="Custom height.", gen="Used when Format is Custom. Presets ignore this widget at Queue."),
                 _w("batch_size", index=4, typ="INT", rng="1-4", desc="How many stills in one Run.", gen="Large canvases stay at 1."),
@@ -367,7 +386,7 @@ def core_nodes() -> NodeSpecs:
             "Creator mode",
             "Pick one of 100 creator modes. Category filters Mode. Queue splices an instruction into Enhance context and selects t2i/edit/text_swap/identity/background_swap/background_edit plus a save prefix.",
             origin="ez_image",
-            lab="stills/image-studio wires context into EZKleinPromptEnhance, enhance_mode into the Enhance mode widget, and prefix into SaveImage. Optional references stay optional. Iterate forces text-to-image, then edit once has_image is set.",
+            lab="photos/image-studio wires context into EZKleinPromptEnhance, enhance_mode into the Enhance mode widget, and prefix into SaveImage. Optional references stay optional. Iterate forces text-to-image, then edit once has_image is set.",
             sockets=[
                 _s("context", "STRING", "in", "Optional look-recipe splice from EZImageFormat."),
                 _s("has_image", "BOOLEAN", "in", "Presence flag from EZOptionalImage. Force input. Off while Iterate is on means the next Run is text-to-image."),
@@ -455,7 +474,7 @@ def core_nodes() -> NodeSpecs:
         "ImageScale": _n(
             "Upscale Image",
             "Resize a still to a target width/height.",
-            lab="dcc/clay-plates scales one clay into 704 / 1:1 / 4:5 / 9:16.",
+            lab="guides/clay-plates scales one clay into 704 / 1:1 / 4:5 / 9:16.",
             sockets=[
                 _s("image", "IMAGE", "in", "Source still."),
                 _s("IMAGE", "IMAGE", "out", "Scaled still."),

@@ -45,18 +45,18 @@ OLD_LOOK = (
 )
 LOCK = ("photoreal still", "techno wizard")
 
-# Packs that already use a different subject (house is wizard-home; mug, 90s still-here/switchyard, DCC).
+# Packs that already use a different subject (house is wizard-home; mug, 90s still-here/switchyard, guides).
 EXEMPT = {
-    "stills/product-packshot",
-    "stills/podcast-cover",
-    "stills/food-tabletop",
-    "stills/before-after",
-    "stills/text-swap",
-    "motion/av/interior-ambience",
-    "films/still-here",
-    "films/switchyard",
-    "dcc/clay-hero",
-    "dcc/depth-control-8s",
+    "photos/product-packshot",
+    "photos/podcast-cover",
+    "photos/food-tabletop",
+    "photos/before-after",
+    "photos/text-swap",
+    "video/av/interior-ambience",
+    "film/still-here",
+    "film/switchyard",
+    "guides/clay-hero",
+    "guides/depth-control-8s",
 }
 
 
@@ -111,8 +111,8 @@ def test_theme_module_house_bible_is_camera_free_penthouse() -> None:
 
 
 def test_klein_draft_and_hero_lock_cutscene_identity() -> None:
-    draft = load_lab_graph(lab_json("stills/still-draft.json"))
-    hero = load_lab_graph(lab_json("stills/still-hero.json"))
+    draft = load_lab_graph(lab_json("photos/still-draft.json"))
+    hero = load_lab_graph(lab_json("photos/still-hero.json"))
 
     def pos(graph: dict) -> str:
         node = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
@@ -134,7 +134,7 @@ def test_lab_example_graphs_drop_bicycle_theme() -> None:
     hits: list[str] = []
     for path in _graphs():
         rel = _rel(path)
-        if rel in EXEMPT or rel.startswith("services/"):
+        if rel in EXEMPT or rel.startswith("business/"):
             continue
         blob = path.read_text(encoding="utf-8").lower()
         for banned in BANNED:
@@ -147,7 +147,7 @@ def test_lab_example_graphs_drop_superhero_theme() -> None:
     hits: list[str] = []
     for path in _graphs():
         rel = _rel(path)
-        if rel in EXEMPT or rel.startswith("services/"):
+        if rel in EXEMPT or rel.startswith("business/"):
             continue
         blob = path.read_text(encoding="utf-8")
         lower = blob.lower()
@@ -158,15 +158,15 @@ def test_lab_example_graphs_drop_superhero_theme() -> None:
 
 
 def test_lab_identity_graphs_lock_techno_wizard() -> None:
-    draft = lab_json("stills/still-draft.json").read_text(encoding="utf-8")
+    draft = lab_json("photos/still-draft.json").read_text(encoding="utf-8")
     for needle in LOCK:
         assert needle in draft
 
 
 def test_exempt_packs_keep_their_own_subjects() -> None:
-    house = lab_json("stills/dream-house.json").read_text(encoding="utf-8").lower()
-    clay = lab_json("stills/dream-house-clay.json").read_text(encoding="utf-8").lower()
-    style = lab_json("stills/style-lock.json").read_text(encoding="utf-8").lower()
+    house = lab_json("photos/dream-house.json").read_text(encoding="utf-8").lower()
+    clay = lab_json("photos/dream-house-clay.json").read_text(encoding="utf-8").lower()
+    style = lab_json("photos/style-lock.json").read_text(encoding="utf-8").lower()
     for blob in (house, clay, style):
         assert "warm-glass" in blob
         assert "crown penthouse" in blob
@@ -177,7 +177,7 @@ def test_exempt_packs_keep_their_own_subjects() -> None:
         assert "cedar" not in blob
         assert "alpine" not in blob
         assert "charcoal-glass" not in blob
-    film = lab_json("films/go-see.json").read_text(encoding="utf-8").lower()
+    film = lab_json("film/go-see.json").read_text(encoding="utf-8").lower()
     assert "storm-cloak" in film
     assert "ink-black" in film
     assert "parkour" in film
@@ -196,9 +196,9 @@ def test_wizard_graphs_drop_dusk_cutscene_look() -> None:
     hits: list[str] = []
     for path in _graphs():
         rel = _rel(path)
-        if rel in EXEMPT or rel.startswith("services/"):
+        if rel in EXEMPT or rel.startswith("business/"):
             continue
-        if "dcc" in str(path.relative_to(WF)):
+        if "guides" in str(path.relative_to(WF)):
             continue
         blob = path.read_text(encoding="utf-8").lower()
         for banned in OLD_LOOK:

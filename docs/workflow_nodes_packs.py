@@ -185,7 +185,7 @@ def pack_nodes() -> NodeSpecs:
         "Unload models",
         "Pass-through IMAGE that unloads diffusion models first.",
         origin="ez_film",
-        lab="Keeps Klein 4B and LTX-2.5 from sitting in memory together on 90s one-click films.",
+        lab="Frees the previous UNET before the Trellis load, so two model families never share the GB10.",
         sockets=[
             _s("image", "IMAGE", "in", "Identity still."),
             _s("image", "IMAGE", "out", "Same still after unload."),
@@ -310,9 +310,9 @@ def pack_nodes() -> NodeSpecs:
     )
     nodes["EZQuality"] = _n(
         "Quality",
-        "Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.",
+        "Per-graph quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.",
         origin="ez_quality",
-        lab="Workflow-global quality combo. presets.py is the only tier definition and the frontend reads a table generated from it. The combo is DERIVED from the widgets, not typed: it names the tier whose owned parameters the widgets actually hold, lab when they match the load-time authored values, custom otherwise, and it re-derives on load, graph change, widget edit, and Queue. custom is not absorbing - putting the owned widgets back on a tier's values re-derives that tier. A tier value that cannot be written (weight not installed, widget not built) is a FAILED apply: the combo drops to custom and the caption names what diverged. Writes resolve per node instance, so every sampler and loader in a graph is written. Only parameters the family's tiers own are compared, so a CFG edit on a steps-only family keeps the level. A combo whose node mode is nonzero is ignored. Never --tier quality.",
+        lab="Per-graph quality combo. presets.py is the only tier definition and the frontend reads a table generated from it. The combo lists only the tiers this graph's family can honor (presets.tiers_for_family) plus lab and custom, so a Klein graph never offers the FLUX 3 or Qwen-Image rows and a Wan graph never offers a weight swap it has no loader for; a graph with no sampler and no loader to write carries no combo at all. The combo is DERIVED from the widgets, not typed: it names the tier whose owned parameters the widgets actually hold, lab when they match the load-time authored values, custom otherwise, and it re-derives on load, graph change, widget edit, and Queue. custom is not absorbing - putting the owned widgets back on a tier's values re-derives that tier. A tier value that cannot be written (weight not installed, widget not built, a tier outside the family) is a FAILED apply: the combo drops to custom and the caption names what diverged, and the CLI states the refusal on stderr and writes the graph unchanged. Writes resolve per node instance, so every sampler and loader the family reaches in a graph is written. Only parameters the family's tiers own are compared, so a CFG edit on a steps-only family keeps the level. A combo whose node mode is nonzero is ignored. Never --tier quality.",
         sockets=[_s("quality", "STRING", "out", "Selected quality id.")],
         widgets=[
             _w(
@@ -321,7 +321,7 @@ def pack_nodes() -> NodeSpecs:
                 typ="COMBO",
                 rng="lab",
                 desc="Derived from the widgets: the named tier they match, lab for the authored values, custom otherwise.",
-                gen="Named qualities may swap UNET, CLIP, and VAE, per node instance. A tier value that cannot be written is a failed apply, so the combo drops to custom rather than claiming a swap the prompt does not contain. Quality does not touch the Width / Height or Duration widgets; the one size effect is Free Commercial Use (<$10M) on Klein stills, where a generic 16:9 / 9:16 Format row retargets to the LTX feeder size (1280x704 / 768x1280). On Klein, high and Free Commercial Use (<$10M) are the same profile (Apache Klein 4B base, 24 steps, CFG 3.5 - never 9B / FLUX.2-dev) and ultra/max swap in Klein 9B or FLUX.2-dev when those files are on disk (FLUX Non-Commercial, not YouTube-ok); ultra/max are no-ops on audio and trellis. Wan / LTX / film / audio / trellis tiers set steps only, never CFG or weights. flux3-* need the gated FLUX 3 pull (download-image --tier flux3 / flux3-base / flux3-nvfp4) and are the only tiers that write on a graph pinning FLUX 3 Klein weights.",
+                gen="Named qualities may swap UNET, CLIP, and VAE, per node instance. A tier value that cannot be written is a failed apply, so the combo drops to custom rather than claiming a swap the prompt does not contain. The combo lists only the tiers this family can honor, so a tier that would write no widget here is never offered. Quality does not touch the Width / Height or Duration widgets; the one size effect is Free Commercial Use (<$10M) on Klein stills, where a generic 16:9 / 9:16 Format row retargets to the LTX feeder size (1280x704 / 768x1280). On Klein, high and Free Commercial Use (<$10M) are the same profile (Apache Klein 4B base, 24 steps, CFG 3.5 - never 9B / FLUX.2-dev) and ultra/max swap in Klein 9B or FLUX.2-dev when those files are on disk (FLUX Non-Commercial, not YouTube-ok); ultra/max are not offered on audio and trellis. Wan / LTX / film / audio / trellis tiers set steps only, never CFG or weights, and the trellis ladder writes the three guided stages, leaving the unguided texture stage (CFG 1) on its authored steps. flux3-* need the gated FLUX 3 pull (download-image --tier flux3 / flux3-base / flux3-nvfp4) and are the only tiers that write on a graph pinning FLUX 3 Klein weights.",
                 choices=[
                     ("custom", "Widgets match no tier, so they queue as they are. No overlay."),
                     ("draft", "Faster Apache Klein 4B (NVFP4 if on disk)."),
@@ -362,7 +362,7 @@ def pack_nodes() -> NodeSpecs:
         widgets=[
             _w("sample", index=0, typ="COMBO", rng="custom", desc="Sample brief or Custom.", gen="Custom uses the Brief box."),
             _w("prompt", index=1, desc="Brief.", gen="What the new App should make. Template auto picks a lab graph."),
-            _w("template", index=2, typ="COMBO", rng="auto", desc="Lab graph to clone.", gen="auto uses the GGUF planner or a keyword heuristic. Pin stills/instagram-square to skip."),
+            _w("template", index=2, typ="COMBO", rng="auto", desc="Lab graph to clone.", gen="auto uses the GGUF planner or a keyword heuristic. Pin photos/instagram-square to skip."),
             _w("slug", index=3, desc="Filename stem.", gen="Live _user/<slug>.app.json. Lowercase letters, digits, hyphen."),
             _w("as_app", index=4, typ="BOOLEAN", rng="true", desc="Write an App.", gen="true writes *.app.json for the Apps sidebar."),
             _w("overwrite", index=5, typ="BOOLEAN", rng="false", desc="Replace existing.", gen="false refuses an existing _user file."),

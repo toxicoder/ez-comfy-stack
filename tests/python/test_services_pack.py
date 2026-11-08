@@ -8,7 +8,7 @@ from pathlib import Path
 
 from _lab_paths import LAB_ROOT, lab_json, load_lab_graph
 from _services_pack import SERVICES, services_pin_off, services_stamp_rows
-from _stamp_app_mode import STAMP_SPECS, linear_input_node_id
+from _stamp_app_mode import STAMP_SPECS, _lane_for, linear_input_node_id
 
 BANNED = (
     "MiniMax",
@@ -42,7 +42,7 @@ def test_services_count_and_unique_ids() -> None:
     assert 55 <= counts["ltx"] <= 65
     assert sum(counts.values()) == 200
     for spec in SERVICES:
-        assert spec.rel.startswith("services/")
+        assert spec.rel.startswith("business/")
         assert spec.rel.split("/")[1] == spec.group
         assert spec.prefix.startswith("ez_svc_")
         assert spec.occupancy in {"klein", "wan", "ltx"}
@@ -65,7 +65,7 @@ def test_services_files_identity_and_prefixes() -> None:
         mode = extra.get("lab_app_mode") or {}
         assert mode.get("enabled") is True
         assert mode.get("occupancy") == spec.occupancy
-        assert mode.get("lane") == "produce"
+        assert mode.get("lane") == "business"
         linear = extra.get("linearData") or {}
         live = {int(node["id"]) for node in graph.get("nodes") or []}
         for entry in linear.get("inputs") or []:
@@ -122,12 +122,12 @@ def test_services_registered_in_stamp_specs() -> None:
     for rel, occupancy, _handoff, pin in rows:
         spec = STAMP_SPECS[rel]
         assert spec["occupancy"] == occupancy
-        assert spec["lane"] == "produce"
+        assert _lane_for(rel) == "business"
         assert spec["enhance_off_identity"] is pin
     assert services_pin_off() == frozenset(
         spec.rel for spec in SERVICES if spec.enhance_pin
     )
-    assert Path(LAB_ROOT / "services" / "ecommerce").is_dir()
+    assert Path(LAB_ROOT / "business" / "ecommerce").is_dir()
 
 
 def test_services_catalog_names_every_lab_rel() -> None:

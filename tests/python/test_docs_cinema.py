@@ -136,7 +136,7 @@ def test_nav_ts_injects_cinema_rack_from_manifest() -> None:
     assert "injectGenerated" in ts
     assert 'title === "Cinema Rack"' in ts
     assert 'page.kind === "index" || !page.path' in ts
-    assert "if (!file) return []" in ts
+    assert "if (!file) return undefined" in ts
     payload = json.loads(
         (ROOT / "docs" / "generated" / "cinema" / "manifest.json").read_text(
             encoding="utf-8"

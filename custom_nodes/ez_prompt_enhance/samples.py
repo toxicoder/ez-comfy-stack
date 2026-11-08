@@ -28,7 +28,7 @@ INDEX_NAME = "index.json"
 SAMPLE_COUNT = 30
 """Default recipe count for family catalogs (plus Custom)."""
 BACKGROUND_SWAP_COUNT = 100
-"""Recipe count for stills/background-swap."""
+"""Recipe count for photos/background-swap."""
 
 # Goal registry. A goal says what a lane's output is FOR, so the sample text
 # and the Enhance system prompt can optimize for the job and not only the
@@ -130,7 +130,7 @@ def goal_for_rel(lab_rel: str) -> str:
     ``GOAL_NONE`` so their prompts keep today's model-only shape.
 
     Args:
-        lab_rel: Lane path such as ``stills/thumbnail``, or empty.
+        lab_rel: Lane path such as ``photos/thumbnail``, or empty.
 
     Returns:
         Goal id, or ``GOAL_NONE`` when no goal is registered.
@@ -331,7 +331,7 @@ def catalog_for_rel(lab_rel: str) -> str:
     """Map a lab-relative id (or a catalog id) to a catalog file stem.
 
     Args:
-        lab_rel: ``stills/still-draft``, ``klein_t2i``, or empty.
+        lab_rel: ``photos/still-draft``, ``klein_t2i``, or empty.
 
     Returns:
         Catalog id, or empty when this graph has no sample catalog.
@@ -524,7 +524,7 @@ def sample_combo_labels(preferred: str = "") -> list[str]:
 
     JS binds ``widget.options.values`` to one catalog so App Mode cannot
     show foreign recipes. The Python combo is the union of every catalog so
-    a graph like ``stills/dream-house`` (``klein_place``) does not fail
+    a graph like ``photos/dream-house`` (``klein_place``) does not fail
     frontend validation when the App picks a place recipe such as Cliff villa.
 
     Args:

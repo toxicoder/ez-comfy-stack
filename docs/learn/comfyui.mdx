@@ -38,7 +38,7 @@ pack. If the stack is not running yet, go to
 ComfyUI is a **node graph**. Each box is a step (load weights, encode text, sample, decode,
 save). Wires carry images, latents, and strings. You do not type a prompt into a single
 streaming chat field and hope - you change **widgets** on the nodes the lab already wired.
-**inspire/research-chat** is still that graph: one **Message** widget, then Queue (occupancy
+**labs/assist/research-chat** is still that graph: one **Message** widget, then Queue (occupancy
 **llm**). It is not Comfy Cloud's In-App Agent.
 
 ```mermaid
@@ -77,7 +77,7 @@ and **Seed** show first in the App panel. Pick a lab recipe or **Custom** to typ
 LoadImage / LoadAudio upload a file or choose one already on the output disk. **Start image**
 appears only when that LoadImage is wired (I2V / character tweak / clay). Style is a dropdown
 (`none` = off) and is hidden on I2V - the start frame owns look. Size and UNET stay hidden
-except on **klein-still-daily**, **stills/still-studio**, and **stills/image-studio**
+except on **klein-still-daily**, **photos/still-studio**, and **photos/image-studio**
 (Format / platform also sets size; image-studio also exposes Creator mode, **Iterate**, and
 **This run**). Multi-shot Apps expose one identity prompt - not ten shot cards. Duplicate
 widgets get unique labels (Klein / Wan / LTX on Prompt Forge; Beat 1 enter on the beat sheet).
@@ -100,7 +100,7 @@ Saves into `_user/_rescued/`, then restores the git catalog in `_lab/`. A pull t
 editing `_lab/`.
 
 1. Open `http://${SPARK_HOST}:${COMFY_PORT}` (port-forward from a laptop if needed)
-2. Load **stills/still-draft** from **Apps** or **Workflows**
+2. Load **photos/still-draft** from **Apps** or **Workflows**
 3. Read the on-canvas **Note node** (top-left) - purpose, models, sampler, prompting, run
    steps. **Check models** and **Quality** sit on that same row; the rest of the graph reads
    left-to-right (models -> prompt -> sample -> save) below the note.

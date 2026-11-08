@@ -29,7 +29,7 @@ Comfy, and it never writes `workflows/_lab/`. Pick the shipped graph first on
 
 **Who this is for:** studio users after Prompt Forge. Occupancy **llm**. No UNET.
 
-Load **inspire/app-forge**. Type a **Brief**, leave **Template** on auto (or pin `stills/instagram-square`), set **Slug**, Queue.
+Load **labs/assist/app-forge**. Type a **Brief**, leave **Template** on auto (or pin `photos/instagram-square`), set **Slug**, Queue.
 
 ```bash
 export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
@@ -42,7 +42,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 
 ```mermaid
 flowchart LR
-  B["Brief"] --> F["inspire/app-forge"]
+  B["Brief"] --> F["labs/assist/app-forge"]
   T["Template auto or pin"] --> F
   F --> C["Clone _lab graph"]
   C --> U["_user/<slug>.app.json"]
@@ -59,7 +59,7 @@ The generator App is occupancy **llm** (nothing GPU unless `llm-desk` is the wri
 | Widget | Role |
 | --- | --- |
 | **Brief** | What the new App should make |
-| **Template** | `auto` or a lab id (`stills/still-draft`, `motion/silent/still-to-video-5s`, ...) |
+| **Template** | `auto` or a lab id (`photos/still-draft`, `video/silent/still-to-video-5s`, ...) |
 | **Slug** | Live filename stem (`mug-ig`) |
 | **As app** | On writes `*.app.json` (Apps sidebar) |
 | **Overwrite** | Off refuses an existing `_user` file |
@@ -70,7 +70,7 @@ Dest: `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/<slug>.app.json`. 
 
 ## How auto picks
 
-When Template is **auto**, App Forge asks the on-box GGUF (or the 35B sidecar when `llm-desk` is up) for `{template, slug, slots}`. If the GGUF is missing it uses a keyword heuristic: `1:1` / square -> `stills/instagram-square`, silent / i2v -> `motion/silent/still-to-video-5s`, ltx / foley -> `motion/av/still-to-video-8s`, default `stills/still-draft`. It never invents node types.
+When Template is **auto**, App Forge asks the on-box GGUF (or the 35B sidecar when `llm-desk` is up) for `{template, slug, slots}`. If the GGUF is missing it uses a keyword heuristic: `1:1` / square -> `photos/instagram-square`, silent / i2v -> `video/silent/still-to-video-5s`, ltx / foley -> `video/av/still-to-video-8s`, default `photos/still-draft`. It never invents node types.
 
 Official Comfy Cloud MCP / PyPI `comfy-mcp` stay out of the image. This is the in-tree analog: templates first, typed tools, no `execute_code`.
 

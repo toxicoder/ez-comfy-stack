@@ -38,7 +38,7 @@ US-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-
 5. ACE-Step vocal is an **invented** identity, not a cloned MC.
 6. Sampler: 8 steps, cfg 1, euler, simple. Duration 49 s, bpm 88, language en, timesignature 4, key C minor, generate_audio_codes true. Form is a cold open (verse, lift, hook). Album takes use the full form catalog.
 7. Saves: `ez_rap_draft` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.
-8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.
+8. Cover separately: Queue **photos/thumbnail.json** or **photos/podcast-cover.json**. Do not embed Klein here.
 9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).
 
 Beat-only pass: keep boom-bap tags, append instrumental, no vocals, and replace lyrics with [inst].
@@ -986,7 +986,7 @@ US-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-
 5. ACE-Step vocal is an **invented** identity, not a cloned MC.
 6. Sampler: 8 steps, cfg 1, euler, simple. Duration 49 s, bpm 88, language en, timesignature 4, key C minor, generate_audio_codes true. Form is a cold open (verse, lift, hook). Album takes use the full form catalog.
 7. Saves: `ez_rap_draft` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.
-8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.
+8. Cover separately: Queue **photos/thumbnail.json** or **photos/podcast-cover.json**. Do not embed Klein here.
 9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).
 
 Beat-only pass: keep boom-bap tags, append instrumental, no vocals, and replace lyrics with [inst].
@@ -1131,11 +1131,11 @@ SaveAudio stem to stamp.
 
 ### `EZQuality` - Quality
 
-Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
+Per-graph quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
 !!! warning "Lab notes"
 
-    Workflow-global quality combo. presets.py is the only tier definition and the frontend reads a table generated from it. The combo is DERIVED from the widgets, not typed: it names the tier whose owned parameters the widgets actually hold, lab when they match the load-time authored values, custom otherwise, and it re-derives on load, graph change, widget edit, and Queue. custom is not absorbing - putting the owned widgets back on a tier's values re-derives that tier. A tier value that cannot be written (weight not installed, widget not built) is a FAILED apply: the combo drops to custom and the caption names what diverged. Writes resolve per node instance, so every sampler and loader in a graph is written. Only parameters the family's tiers own are compared, so a CFG edit on a steps-only family keeps the level. A combo whose node mode is nonzero is ignored. Never --tier quality.
+    Per-graph quality combo. presets.py is the only tier definition and the frontend reads a table generated from it. The combo lists only the tiers this graph's family can honor (presets.tiers_for_family) plus lab and custom, so a Klein graph never offers the FLUX 3 or Qwen-Image rows and a Wan graph never offers a weight swap it has no loader for; a graph with no sampler and no loader to write carries no combo at all. The combo is DERIVED from the widgets, not typed: it names the tier whose owned parameters the widgets actually hold, lab when they match the load-time authored values, custom otherwise, and it re-derives on load, graph change, widget edit, and Queue. custom is not absorbing - putting the owned widgets back on a tier's values re-derives that tier. A tier value that cannot be written (weight not installed, widget not built, a tier outside the family) is a FAILED apply: the combo drops to custom and the caption names what diverged, and the CLI states the refusal on stderr and writes the graph unchanged. Writes resolve per node instance, so every sampler and loader the family reaches in a graph is written. Only parameters the family's tiers own are compared, so a CFG edit on a steps-only family keeps the level. A combo whose node mode is nonzero is ignored. Never --tier quality.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1147,7 +1147,7 @@ Type `COMBO`. Range / default: lab.
 
 Derived from the widgets: the named tier they match, lab for the authored values, custom otherwise.
 
-**How it affects generation:** Named qualities may swap UNET, CLIP, and VAE, per node instance. A tier value that cannot be written is a failed apply, so the combo drops to custom rather than claiming a swap the prompt does not contain. Quality does not touch the Width / Height or Duration widgets; the one size effect is Free Commercial Use (<$10M) on Klein stills, where a generic 16:9 / 9:16 Format row retargets to the LTX feeder size (1280x704 / 768x1280). On Klein, high and Free Commercial Use (<$10M) are the same profile (Apache Klein 4B base, 24 steps, CFG 3.5 - never 9B / FLUX.2-dev) and ultra/max swap in Klein 9B or FLUX.2-dev when those files are on disk (FLUX Non-Commercial, not YouTube-ok); ultra/max are no-ops on audio and trellis. Wan / LTX / film / audio / trellis tiers set steps only, never CFG or weights. flux3-* need the gated FLUX 3 pull (download-image --tier flux3 / flux3-base / flux3-nvfp4) and are the only tiers that write on a graph pinning FLUX 3 Klein weights.
+**How it affects generation:** Named qualities may swap UNET, CLIP, and VAE, per node instance. A tier value that cannot be written is a failed apply, so the combo drops to custom rather than claiming a swap the prompt does not contain. The combo lists only the tiers this family can honor, so a tier that would write no widget here is never offered. Quality does not touch the Width / Height or Duration widgets; the one size effect is Free Commercial Use (<$10M) on Klein stills, where a generic 16:9 / 9:16 Format row retargets to the LTX feeder size (1280x704 / 768x1280). On Klein, high and Free Commercial Use (<$10M) are the same profile (Apache Klein 4B base, 24 steps, CFG 3.5 - never 9B / FLUX.2-dev) and ultra/max swap in Klein 9B or FLUX.2-dev when those files are on disk (FLUX Non-Commercial, not YouTube-ok); ultra/max are not offered on audio and trellis. Wan / LTX / film / audio / trellis tiers set steps only, never CFG or weights, and the trellis ladder writes the three guided stages, leaving the unguided texture stage (CFG 1) on its authored steps. flux3-* need the gated FLUX 3 pull (download-image --tier flux3 / flux3-base / flux3-nvfp4) and are the only tiers that write on a graph pinning FLUX 3 Klein weights.
 
 **This graph:** `lab`
 

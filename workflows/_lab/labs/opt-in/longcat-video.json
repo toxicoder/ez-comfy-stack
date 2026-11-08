@@ -1,0 +1,259 @@
+{
+  "id": "longcat-video",
+  "revision": 3,
+  "last_node_id": 6,
+  "last_link_id": 2,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Note",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        1340,
+        360.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## labs/opt-in/longcat-video\n\nOpt-in LongCat-Video (MIT) prompt preview. Not download-models. No UNET on this canvas.\n\nDownload: ./scripts/manage.sh download-longcat --tier video\nContext-parallel two-Spark only with LAB_ALLOW_CONTEXT_PARALLEL=1. NCCL is out of this sample - tensor-parallel LLMs belong in nvidia-dgx-spark-lab.\nUnload LTX first. Occupancy: one heavy job when you Queue a real LongCat printer.\n\nThis canvas rewrites a lazy sentence with LongCat Prompt Enhance (T2V / I2V / continuation). Copy the CLIP box into your LongCat graph. Distilled LongCat is CFG 1 (negatives ignored); standard CFG is about 4.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Enhance off to pin the widget text.\n"
+      ],
+      "title": "Operator note"
+    },
+    {
+      "id": 2,
+      "type": "EZSamplePrompt",
+      "pos": [
+        40,
+        588
+      ],
+      "size": [
+        420,
+        200
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            1
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZSamplePrompt"
+      },
+      "widgets_values": [
+        "custom",
+        "A techno wizard on a sunny tropical city rooftop.",
+        "labs/opt-in/longcat-video"
+      ],
+      "title": "Prompt"
+    },
+    {
+      "id": 3,
+      "type": "EZLongCatPromptEnhance",
+      "pos": [
+        40,
+        1080
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 1,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            2
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLongCatPromptEnhance"
+      },
+      "widgets_values": [
+        "custom",
+        "A techno wizard on a sunny tropical city rooftop.",
+        true,
+        "t2v",
+        "5 seconds, 30 fps",
+        "none",
+        "labs/opt-in/longcat-video"
+      ],
+      "title": "LongCat Prompt Enhance"
+    },
+    {
+      "id": 4,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        40,
+        1572
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "overexposed, static, subtitles, extra fingers, still picture, watermark",
+        true,
+        "longcat"
+      ],
+      "title": "Negative Prompt Enhance"
+    },
+    {
+      "id": 6,
+      "type": "EZModelCheck",
+      "pos": [
+        1428,
+        80
+      ],
+      "size": [
+        320.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "EZModelCheck"
+      },
+      "widgets_values": [
+        "Click Check models. Queue does not run this node."
+      ],
+      "title": "Check models"
+    }
+  ],
+  "links": [
+    [
+      1,
+      2,
+      0,
+      3,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      3,
+      0,
+      4,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "NOTE",
+      "bounding": [
+        20,
+        8,
+        1380,
+        476
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        1408,
+        8,
+        728,
+        256
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "PROMPT",
+      "bounding": [
+        20,
+        516,
+        460,
+        1520
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "lab_note": "## labs/opt-in/longcat-video\n\nOpt-in LongCat-Video (MIT) prompt preview. Not download-models. No UNET on this canvas.\n\nDownload: ./scripts/manage.sh download-longcat --tier video\nContext-parallel two-Spark only with LAB_ALLOW_CONTEXT_PARALLEL=1. NCCL is out of this sample - tensor-parallel LLMs belong in nvidia-dgx-spark-lab.\nUnload LTX first. Occupancy: one heavy job when you Queue a real LongCat printer.\n\nThis canvas rewrites a lazy sentence with LongCat Prompt Enhance (T2V / I2V / continuation). Copy the CLIP box into your LongCat graph. Distilled LongCat is CFG 1 (negatives ignored); standard CFG is about 4.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Enhance off to pin the widget text.\n",
+    "lab_profile": "labs/opt-in/longcat-video",
+    "lab_description": "LongCat-Video MIT opt-in prompt preview. No NCCL. Not a 90s default.",
+    "lab_longcat": {
+      "enabled": true,
+      "nccl": false,
+      "context_parallel": "LAB_ALLOW_CONTEXT_PARALLEL=1"
+    },
+    "lab_stub": true,
+    "lab_rel": "labs/opt-in/longcat-video",
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    "workflowRendererVersion": "Vue-corrected"
+  },
+  "version": 0.4
+}

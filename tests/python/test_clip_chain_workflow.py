@@ -1,4 +1,4 @@
-"""motion/av/clip-chain: four LTX beats, last-frame continuity, occupancy ltx."""
+"""video/av/clip-chain: four LTX beats, last-frame continuity, occupancy ltx."""
 
 from __future__ import annotations
 
@@ -22,7 +22,7 @@ from _stamp_app_mode import (  # noqa: E402
     stamp_suite_graph,
 )
 
-REL = "motion/av/clip-chain"
+REL = "video/av/clip-chain"
 
 
 def _load() -> dict[str, Any]:
@@ -56,13 +56,12 @@ def test_clip_chain_identity_occupancy_and_stamp_spec() -> None:
     assert extra.get("lab_rel") == REL
     assert graph.get("id") == "clip-chain"
     mode = extra["lab_app_mode"]
-    assert mode["lane"] == "produce"
+    assert mode["lane"] == "video"
     assert mode["occupancy"] == "ltx"
     assert mode["default_view"] == "app"
     spec = STAMP_SPECS[REL]
     assert spec["clip_chain_widgets"] is True
     assert spec["occupancy"] == "ltx"
-    assert spec["lane"] == "produce"
     assert REL not in FILM_KEEP_RELS
 
 

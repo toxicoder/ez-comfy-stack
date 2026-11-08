@@ -23,13 +23,13 @@ language, see [Prompting](../prompting.md); for the audio equivalent,
 **What this enables**
 
 - **Building a professional shot** from dropdowns instead of remembering film grammar
-- **Copying a family CLIP string** into **stills/still-draft**, **motion/silent/text-to-video-5s**, or **motion/av/text-to-video-8s**
+- **Copying a family CLIP string** into **photos/still-draft**, **video/silent/text-to-video-5s**, or **video/av/text-to-video-8s**
 - **Watching a 5s example** of a pick on the generated technique page
 - **Keeping Wan to one camera verb**, so the clip does not fight itself
 
 **Who this is for:** studio users after Prompt Forge. Occupancy **llm**. No UNET.
 
-Load **inspire/cinema-rack**. Type a **Subject**, pick techniques, Queue, then read the three Enhance CLIP boxes.
+Load **labs/assist/cinema-rack**. Type a **Subject**, pick techniques, Queue, then read the three Enhance CLIP boxes.
 
 ```mermaid
 flowchart LR
@@ -89,9 +89,9 @@ Wan never emits two camera verbs. Do not also type `dolly in` in the subject.
 
 ## Handoff
 
-1. Queue **inspire/cinema-rack** (occupancy **llm**).
+1. Queue **labs/assist/cinema-rack** (occupancy **llm**).
 2. Copy the Klein / Wan / LTX CLIP box.
-3. Paste into **stills/still-draft**, **motion/silent/text-to-video-5s**, or **motion/av/text-to-video-8s**. For I2V, set Family to `wan_i2v` / `ltx_i2v` first so look axes are already omitted.
+3. Paste into **photos/still-draft**, **video/silent/text-to-video-5s**, or **video/av/text-to-video-8s**. For I2V, set Family to `wan_i2v` / `ltx_i2v` first so look axes are already omitted.
 4. Optional: turn Enhance **off** on the destination if the rack string is already model-native.
 
 Safety impact: none. Prompt JSON + CPU node. No Docker, restart, or headroom change.

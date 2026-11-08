@@ -1,0 +1,768 @@
+{
+  "id": "still-qwen-image",
+  "revision": 2,
+  "last_node_id": 12,
+  "last_link_id": 12,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Note",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        440,
+        560
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## labs/opt-in/still-qwen-image\n\nQwen-Image 2.1 square still. Opt-in only - Qwen RESEARCH LICENSE AGREEMENT, so Klein 4B (photos/still-draft) stays the Apache default still and this graph is never in `download-models`.\n\nPixels: `Resolution` sets one square side (default 1024, steps of 32). The Qwen 2.1 encoder builds the latent itself from that one number, so this app has **no Format / platform picker** - a wide or tall frame needs a reference image, which is an edit pass and a different app.\nQuality: the combo offers only the four Qwen tiers this graph can honor - qwen_image_2.1_int8_convrot.safetensors plus the turbo, NVFP4, and turbo-NVFP4 twins. It rewrites the UNET, the Qwen3VL text encoder, the VAE, steps, and CFG. It never touches pixels. Quality never swaps to Klein, FLUX 3, or any other family: those live in their own apps.\nModels: qwen_image_2.1_int8_convrot.safetensors + qwen3vl_8b_int8_convrot.safetensors (CLIP type qwen_image) + qwen_image_2.1_vae_bf16.safetensors.\nPull: `bazelisk run //scripts:run-utility -- download-image run --tier qwen-image` - it auto-includes the `qwen-image-te` text encoder and `qwen-image-vae`. The weights come from `Comfy-Org/Qwen-Image-2.1` on Hugging Face (the NVFP4 twins from the community quantization repos under `--tier qwen-image-nvfp4` / `--tier qwen-image-turbo-nvfp4`).\nLicense: Qwen RESEARCH LICENSE AGREEMENT, not Apache. Research and personal use only; commercial use needs a separate paid Qwen license. Ship the license text plus the NOTICE with the weights, keep \"Built with Qwen\" in product docs, and do not name a product after Qwen.\nWeights missing: click Check models - it names the command, and Queue keeps the authored loaders (nothing swaps in weights you have not pulled).\nPrompt enhance is **off** here: this app carries no prompt rewriter, so **Sample prompt** reaches the Qwen3VL encoder exactly as written. **Rewrite negative** stays - it rewrites the negative list so it cannot fight the positive.\nSave prefix `ez_still_qwen_image`. Empty of lettering - composite titles later.\nHandoff: video/silent/still-to-video-5s, video/av/still-to-video-8s, photos/text-swap.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n"
+      ],
+      "title": "Operator note"
+    },
+    {
+      "id": 2,
+      "type": "UNETLoader",
+      "pos": [
+        500,
+        804
+      ],
+      "size": [
+        360,
+        82
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            1
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader"
+      },
+      "widgets_values": [
+        "qwen_image_2.1_int8_convrot.safetensors",
+        "default"
+      ],
+      "title": "Qwen-Image 2.1 UNET (opt-in)"
+    },
+    {
+      "id": 3,
+      "type": "CLIPLoader",
+      "pos": [
+        500,
+        958
+      ],
+      "size": [
+        360,
+        110
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            2
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": [
+        "qwen3vl_8b_int8_convrot.safetensors",
+        "qwen_image",
+        "default"
+      ],
+      "title": "Qwen3VL-8B TE (opt-in)"
+    },
+    {
+      "id": 4,
+      "type": "VAELoader",
+      "pos": [
+        500,
+        1276
+      ],
+      "size": [
+        360,
+        82
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            3,
+            4
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "qwen_image_2.1_vae_bf16.safetensors"
+      ],
+      "title": "Qwen-Image 2.1 VAE"
+    },
+    {
+      "id": 5,
+      "type": "EZSamplePrompt",
+      "pos": [
+        940,
+        804
+      ],
+      "size": [
+        380,
+        280
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            5,
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZSamplePrompt"
+      },
+      "widgets_values": [
+        "custom",
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour, shot on a 50 mm lens. Warm rim light on the railing, palm fronds moving in a sea breeze, hazy skyline behind. Natural skin tones, true-to-life texture, no lettering.",
+        "labs/opt-in/still-qwen-image"
+      ],
+      "title": ""
+    },
+    {
+      "id": 6,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        940,
+        1296
+      ],
+      "size": [
+        380,
+        240
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 5
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            7
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks",
+        true,
+        "klein"
+      ],
+      "title": "Negative enhance (stills)"
+    },
+    {
+      "id": 7,
+      "type": "TextEncodeQwenImage21",
+      "pos": [
+        1400,
+        804
+      ],
+      "size": [
+        420,
+        260
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 2
+        },
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 6,
+          "widget": {
+            "name": "prompt"
+          }
+        },
+        {
+          "name": "negative_prompt",
+          "type": "STRING",
+          "link": 7,
+          "widget": {
+            "name": "negative_prompt"
+          }
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 3
+        },
+        {
+          "name": "resolution",
+          "type": "INT",
+          "link": null,
+          "widget": {
+            "name": "resolution"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            8
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            9
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            10
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "TextEncodeQwenImage21"
+      },
+      "widgets_values": [
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour, shot on a 50 mm lens. Warm rim light on the railing, palm fronds moving in a sea breeze, hazy skyline behind. Natural skin tones, true-to-life texture, no lettering.",
+        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks",
+        1024
+      ],
+      "title": "Prompt + latent (Qwen 2.1)"
+    },
+    {
+      "id": 8,
+      "type": "KSampler",
+      "pos": [
+        1400,
+        1296
+      ],
+      "size": [
+        340,
+        300
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 1
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 8
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 9
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            11
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        50,
+        3.5,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "Sampler (profile steps / CFG)"
+    },
+    {
+      "id": 9,
+      "type": "VAEDecode",
+      "pos": [
+        1868,
+        804
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 11
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            12
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": [],
+      "title": "Decode"
+    },
+    {
+      "id": 10,
+      "type": "SaveImage",
+      "pos": [
+        1868,
+        978
+      ],
+      "size": [
+        340,
+        300
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 12
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_still_qwen_image"
+      ],
+      "title": "Save"
+    },
+    {
+      "id": 11,
+      "type": "EZModelCheck",
+      "pos": [
+        528,
+        80
+      ],
+      "size": [
+        360,
+        140
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "EZModelCheck"
+      },
+      "widgets_values": [
+        "Click Check models. Queue does not run this node."
+      ],
+      "title": "Check models"
+    },
+    {
+      "id": 12,
+      "type": "EZQuality",
+      "pos": [
+        936,
+        80
+      ],
+      "size": [
+        320.0,
+        82.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "quality",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZQuality"
+      },
+      "widgets_values": [
+        "lab"
+      ],
+      "title": "Quality"
+    }
+  ],
+  "links": [
+    [
+      1,
+      2,
+      0,
+      8,
+      0,
+      "MODEL"
+    ],
+    [
+      2,
+      3,
+      0,
+      7,
+      0,
+      "CLIP"
+    ],
+    [
+      3,
+      4,
+      0,
+      7,
+      3,
+      "VAE"
+    ],
+    [
+      4,
+      4,
+      0,
+      9,
+      1,
+      "VAE"
+    ],
+    [
+      5,
+      5,
+      0,
+      6,
+      0,
+      "STRING"
+    ],
+    [
+      6,
+      5,
+      0,
+      7,
+      1,
+      "STRING"
+    ],
+    [
+      7,
+      6,
+      0,
+      7,
+      2,
+      "STRING"
+    ],
+    [
+      8,
+      7,
+      0,
+      8,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      9,
+      7,
+      1,
+      8,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      10,
+      7,
+      2,
+      8,
+      3,
+      "LATENT"
+    ],
+    [
+      11,
+      8,
+      0,
+      9,
+      0,
+      "LATENT"
+    ],
+    [
+      12,
+      9,
+      0,
+      10,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "NOTE",
+      "bounding": [
+        20,
+        8,
+        480,
+        676
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        508,
+        8,
+        768,
+        256
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "MODEL",
+      "bounding": [
+        480,
+        732,
+        400,
+        670
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "PROMPT",
+      "bounding": [
+        920,
+        732,
+        420,
+        1028
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "SETTINGS",
+      "bounding": [
+        1380,
+        732,
+        460,
+        908
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 6,
+      "title": "OUTPUT",
+      "bounding": [
+        1848,
+        732,
+        380,
+        590
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "lab_profile": "qwen-image-2-1",
+    "lab_note": "## labs/opt-in/still-qwen-image\n\nQwen-Image 2.1 square still. Opt-in only - Qwen RESEARCH LICENSE AGREEMENT, so Klein 4B (photos/still-draft) stays the Apache default still and this graph is never in `download-models`.\n\nPixels: `Resolution` sets one square side (default 1024, steps of 32). The Qwen 2.1 encoder builds the latent itself from that one number, so this app has **no Format / platform picker** - a wide or tall frame needs a reference image, which is an edit pass and a different app.\nQuality: the combo offers only the four Qwen tiers this graph can honor - qwen_image_2.1_int8_convrot.safetensors plus the turbo, NVFP4, and turbo-NVFP4 twins. It rewrites the UNET, the Qwen3VL text encoder, the VAE, steps, and CFG. It never touches pixels. Quality never swaps to Klein, FLUX 3, or any other family: those live in their own apps.\nModels: qwen_image_2.1_int8_convrot.safetensors + qwen3vl_8b_int8_convrot.safetensors (CLIP type qwen_image) + qwen_image_2.1_vae_bf16.safetensors.\nPull: `bazelisk run //scripts:run-utility -- download-image run --tier qwen-image` - it auto-includes the `qwen-image-te` text encoder and `qwen-image-vae`. The weights come from `Comfy-Org/Qwen-Image-2.1` on Hugging Face (the NVFP4 twins from the community quantization repos under `--tier qwen-image-nvfp4` / `--tier qwen-image-turbo-nvfp4`).\nLicense: Qwen RESEARCH LICENSE AGREEMENT, not Apache. Research and personal use only; commercial use needs a separate paid Qwen license. Ship the license text plus the NOTICE with the weights, keep \"Built with Qwen\" in product docs, and do not name a product after Qwen.\nWeights missing: click Check models - it names the command, and Queue keeps the authored loaders (nothing swaps in weights you have not pulled).\nPrompt enhance is **off** here: this app carries no prompt rewriter, so **Sample prompt** reaches the Qwen3VL encoder exactly as written. **Rewrite negative** stays - it rewrites the negative list so it cannot fight the positive.\nSave prefix `ez_still_qwen_image`. Empty of lettering - composite titles later.\nHandoff: video/silent/still-to-video-5s, video/av/still-to-video-8s, photos/text-swap.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_description": "Opt-in Qwen-Image 2.1 square still; the only graph the Qwen Quality tiers can honor. Klein 4B stays the Apache default\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "lab_qwen_image": true,
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    "lab_rel": "labs/opt-in/still-qwen-image",
+    "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "labs",
+      "occupancy": "klein",
+      "enhance_off_identity": false,
+      "handoff": [
+        "video/silent/still-to-video-5s",
+        "video/av/still-to-video-8s",
+        "photos/text-swap"
+      ]
+    },
+    "linearData": {
+      "inputs": [
+        [
+          12,
+          "quality",
+          {
+            "label": "Quality",
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
+          }
+        ],
+        [
+          5,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
+        [
+          5,
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model.",
+            "label": "Prompt",
+            "height": 140
+          }
+        ],
+        [
+          6,
+          "enhance",
+          {
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs.",
+            "label": "Rewrite negative"
+          }
+        ],
+        [
+          8,
+          "seed",
+          {
+            "description": "Fix to iterate; randomize to explore.",
+            "label": "Seed"
+          }
+        ],
+        [
+          8,
+          "steps",
+          {
+            "description": "Sampler steps. Distilled Klein stays at 4 unless you swapped to base.",
+            "label": "Steps"
+          }
+        ],
+        [
+          8,
+          "cfg",
+          {
+            "description": "Guidance. Distilled Klein stays at 1.0 unless you swapped to base.",
+            "label": "CFG"
+          }
+        ],
+        [
+          7,
+          "resolution",
+          {
+            "label": "Resolution"
+          }
+        ]
+      ],
+      "outputs": [
+        10
+      ]
+    },
+    "linearMode": true
+  },
+  "version": 0.4
+}

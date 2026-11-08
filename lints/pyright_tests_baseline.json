@@ -66,7 +66,7 @@
     "tests/python/test_prompt_enhance.py": 10,
     "tests/python/test_remainder_coverage.py": 10,
     "tests/python/test_research_mcp.py": 20,
-    "tests/python/test_shorts_shots.py": 1,
+    "tests/python/test_shorts_shots.py": 0,
     "tests/python/test_sitecustomize_tts_compat.py": 1,
     "tests/python/test_song_plan.py": 9,
     "tests/python/test_strong_types.py": 6,

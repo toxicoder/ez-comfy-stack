@@ -25,7 +25,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "## editing/generate-cutaway\n\nSilent Wan 2.2 TI2V-5B text-to-video cutaway the **Edit** agent queues when a\ntimeline needs a generated clip. One GB10 job: the graph refuses to render while\nanother heavy mode holds occupancy.\n\nModels: ``wan2.2_ti2v_5B_fp16.safetensors`` + ``umt5_xxl_fp8_e4m3fn_scaled.safetensors`` (CLIP type wan) + ``wan2.2_vae.safetensors``.\nWeights: ``./scripts/manage.sh download-wan --tier 5b``.\n\nWidgets the agent patches (see ``extra.lab_edit.widgets``):\n- Prompt: the Wan Prompt Enhance ``prompt`` widget - it owns the Positive CLIP,\n  so that is the text UMT5 encodes. Set **Rewrite prompt** off to send it to\n  CLIP verbatim; the 4B rewriter is optional here because the agent authors.\n- Rewrite negative stays on: it keeps the negative from fighting the positive.\n- Video size and length: latent node ``width`` / ``height`` inputs and the frame\n  count in its ``widgets_values[2]``.\n- FPS: frame rate on the MP4 saver. Duration = length / FPS.\n- Seed on the sampler, filename prefix on the saver.\n\nPrimary output: MP4 at ``${COMFY_OUTPUT_DIR}/ez_edit_cutaway_*.mp4`` (container\n``/outputs``). No audio track - the edit timeline owns audio.\n\nThe agent queues the package copy at ``custom_nodes/ez_edit/graphs/generate-cutaway.json``, written byte-identical\nto this lab graph. Edit ``tests/python/_build_editing_workflows.py`` and re-run;\nnever hand-edit either JSON.\n\nOccupancy: wan - stop LTX, podcast, music. One GB10 job.\n"
+        "## film/generate-cutaway\n\nSilent Wan 2.2 TI2V-5B text-to-video cutaway the **Edit** agent queues when a\ntimeline needs a generated clip. One GB10 job: the graph refuses to render while\nanother heavy mode holds occupancy.\n\nModels: ``wan2.2_ti2v_5B_fp16.safetensors`` + ``umt5_xxl_fp8_e4m3fn_scaled.safetensors`` (CLIP type wan) + ``wan2.2_vae.safetensors``.\nWeights: ``./scripts/manage.sh download-wan --tier 5b``.\n\nWidgets the agent patches (see ``extra.lab_edit.widgets``):\n- Prompt: the Wan Prompt Enhance ``prompt`` widget - it owns the Positive CLIP,\n  so that is the text UMT5 encodes. Set **Rewrite prompt** off to send it to\n  CLIP verbatim; the 4B rewriter is optional here because the agent authors.\n- Rewrite negative stays on: it keeps the negative from fighting the positive.\n- Video size and length: latent node ``width`` / ``height`` inputs and the frame\n  count in its ``widgets_values[2]``.\n- FPS: frame rate on the MP4 saver. Duration = length / FPS.\n- Seed on the sampler, filename prefix on the saver.\n\nPrimary output: MP4 at ``${COMFY_OUTPUT_DIR}/ez_edit_cutaway_*.mp4`` (container\n``/outputs``). No audio track - the edit timeline owns audio.\n\nThe agent queues the package copy at ``custom_nodes/ez_edit/graphs/generate-cutaway.json``, written byte-identical\nto this lab graph. Edit ``tests/python/_build_editing_workflows.py`` and re-run;\nnever hand-edit either JSON.\n\nOccupancy: wan - stop LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -580,7 +580,7 @@
         "t2v",
         "5 seconds, 24 fps",
         "none",
-        "editing/generate-cutaway"
+        "film/generate-cutaway"
       ],
       "title": "Wan Prompt Enhance"
     },
@@ -898,8 +898,8 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## editing/generate-cutaway\n\nSilent Wan 2.2 TI2V-5B text-to-video cutaway the **Edit** agent queues when a\ntimeline needs a generated clip. One GB10 job: the graph refuses to render while\nanother heavy mode holds occupancy.\n\nModels: ``wan2.2_ti2v_5B_fp16.safetensors`` + ``umt5_xxl_fp8_e4m3fn_scaled.safetensors`` (CLIP type wan) + ``wan2.2_vae.safetensors``.\nWeights: ``./scripts/manage.sh download-wan --tier 5b``.\n\nWidgets the agent patches (see ``extra.lab_edit.widgets``):\n- Prompt: the Wan Prompt Enhance ``prompt`` widget - it owns the Positive CLIP,\n  so that is the text UMT5 encodes. Set **Rewrite prompt** off to send it to\n  CLIP verbatim; the 4B rewriter is optional here because the agent authors.\n- Rewrite negative stays on: it keeps the negative from fighting the positive.\n- Video size and length: latent node ``width`` / ``height`` inputs and the frame\n  count in its ``widgets_values[2]``.\n- FPS: frame rate on the MP4 saver. Duration = length / FPS.\n- Seed on the sampler, filename prefix on the saver.\n\nPrimary output: MP4 at ``${COMFY_OUTPUT_DIR}/ez_edit_cutaway_*.mp4`` (container\n``/outputs``). No audio track - the edit timeline owns audio.\n\nThe agent queues the package copy at ``custom_nodes/ez_edit/graphs/generate-cutaway.json``, written byte-identical\nto this lab graph. Edit ``tests/python/_build_editing_workflows.py`` and re-run;\nnever hand-edit either JSON.\n\nOccupancy: wan - stop LTX, podcast, music. One GB10 job.\n",
-    "lab_profile": "editing/generate-cutaway",
+    "lab_note": "## film/generate-cutaway\n\nSilent Wan 2.2 TI2V-5B text-to-video cutaway the **Edit** agent queues when a\ntimeline needs a generated clip. One GB10 job: the graph refuses to render while\nanother heavy mode holds occupancy.\n\nModels: ``wan2.2_ti2v_5B_fp16.safetensors`` + ``umt5_xxl_fp8_e4m3fn_scaled.safetensors`` (CLIP type wan) + ``wan2.2_vae.safetensors``.\nWeights: ``./scripts/manage.sh download-wan --tier 5b``.\n\nWidgets the agent patches (see ``extra.lab_edit.widgets``):\n- Prompt: the Wan Prompt Enhance ``prompt`` widget - it owns the Positive CLIP,\n  so that is the text UMT5 encodes. Set **Rewrite prompt** off to send it to\n  CLIP verbatim; the 4B rewriter is optional here because the agent authors.\n- Rewrite negative stays on: it keeps the negative from fighting the positive.\n- Video size and length: latent node ``width`` / ``height`` inputs and the frame\n  count in its ``widgets_values[2]``.\n- FPS: frame rate on the MP4 saver. Duration = length / FPS.\n- Seed on the sampler, filename prefix on the saver.\n\nPrimary output: MP4 at ``${COMFY_OUTPUT_DIR}/ez_edit_cutaway_*.mp4`` (container\n``/outputs``). No audio track - the edit timeline owns audio.\n\nThe agent queues the package copy at ``custom_nodes/ez_edit/graphs/generate-cutaway.json``, written byte-identical\nto this lab graph. Edit ``tests/python/_build_editing_workflows.py`` and re-run;\nnever hand-edit either JSON.\n\nOccupancy: wan - stop LTX, podcast, music. One GB10 job.\n",
+    "lab_profile": "film/generate-cutaway",
     "lab_description": "Wan 2.2 5B silent T2V cutaway for the edit agent, 121 frames @ 24 fps",
     "lab_edit": {
       "graph": "custom_nodes/ez_edit/graphs/generate-cutaway.json",
@@ -958,7 +958,7 @@
       "enabled": true,
       "default_view": "app",
       "frontend_min": "1.41.13",
-      "lane": "produce",
+      "lane": "film",
       "occupancy": "wan",
       "enhance_off_identity": false,
       "handoff": []
@@ -1039,7 +1039,7 @@
     "lab_quality": {
       "default": "lab"
     },
-    "lab_rel": "editing/generate-cutaway",
+    "lab_rel": "film/generate-cutaway",
     "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4

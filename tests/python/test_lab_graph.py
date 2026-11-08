@@ -50,6 +50,18 @@ def _tiny(g: Graph) -> None:
         inputs=[g.inp("audio", "AUDIO")],
         outputs=[],
     )
+    # A sampler the overlay can write, so the tiny graph still earns a Quality
+    # combo and the stamper has a creator input to find.
+    g.add(
+        2,
+        "KSampler",
+        [40.0, 400.0],
+        [300.0, 270.0],
+        "Sample",
+        [0, "fixed", 20, 3.5, "euler", "normal", 1],
+        inputs=[],
+        outputs=[],
+    )
 
 
 def test_graph_dump_flags_keep_identity() -> None:

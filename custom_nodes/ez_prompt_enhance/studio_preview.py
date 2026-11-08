@@ -23,7 +23,7 @@ from ez_prompt_enhance.lettering import wrap_text_swap_prompt
 from ez_prompt_enhance.samples import is_custom, resolve_prompt
 
 # Default lab graph when the preview body omits lab_rel.
-_LAB_REL = "stills/image-studio"
+_LAB_REL = "photos/image-studio"
 # Enhance class whose sample catalog image-studio uses.
 _NODE_TYPE = "EZKleinPromptEnhance"
 

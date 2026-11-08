@@ -97,11 +97,11 @@ The derived **Quality** combo and the tiers behind it are covered on the overvie
 Motion graphs fail on the VAE grid, on the audio leg, or on where the guides were wired.
 
 | LTX `einops` / divide by 45 | Width/height not div32 (720 or 1080) | Pick **Format / platform -> LTX - 16:9 YouTube (1280x704)**. `ez_ltx_spatial` auto-snaps; prefer 704 over typing 720 |
-| LTX MP4 has no sound | Missing audio VAE decode -> VHS (or A2V freeze not on LoadAudio) | Re-open current **ltx/***. **motion/av/audio-to-video-8s** muxes **LoadAudio**, not `LTXVAudioVAEDecode` - pick `ez_a2v_bed.wav` in `/inputs` |
-| LTX AddGuide `combined AV latent is not supported` | First/last guides were wired after `LTXVConcatAVLatent` | Use **motion/av/first-last-8s**. Guides pin the **video** latent, then audio concat |
+| LTX MP4 has no sound | Missing audio VAE decode -> VHS (or A2V freeze not on LoadAudio) | Re-open current **ltx/***. **video/av/audio-to-video-8s** muxes **LoadAudio**, not `LTXVAudioVAEDecode` - pick `ez_a2v_bed.wav` in `/inputs` |
+| LTX AddGuide `combined AV latent is not supported` | First/last guides were wired after `LTXVConcatAVLatent` | Use **video/av/first-last-8s**. Guides pin the **video** latent, then audio concat |
 | FLF last frame ignored | Second LoadImage unwired or bypassed | App widgets **First frame** and **Last frame** must both be set. Same aspect, 1280x704 |
 | Wan prompt has two camera verbs | Subject also named a dolly/pan, or Enhance invented a second move | Cinema Rack already emits one `wan_token`. Leave the move out of Subject. Family `wan_t2v` / `wan_i2v`. [Cinema Rack](../create/cinema-rack.md) |
-| Style stripped bleach-bypass / noir grade | Style dropdown is not `none` | Cinema Rack owns camera/light/time. Keep Enhance **style** at `none` on **inspire/cinema-rack** |
+| Style stripped bleach-bypass / noir grade | Style dropdown is not `none` | Cinema Rack owns camera/light/time. Keep Enhance **style** at `none` on **labs/assist/cinema-rack** |
 | Union Control missing LoRA | IC-LoRA is opt-in, not `download-models` | `./scripts/manage.sh download-ltx --tier iclora`. Distilled-only; refuse 19B |
 
 ## Cinema Rack and Audio Rack on the canvas
@@ -121,15 +121,15 @@ The racks own camera, light, tempo, and tags. Most rows here are two sources wri
 | House clay **Missing Inputs** / "no file selected" on Clay 01-10 | Plates not in `${COMFY_OUTPUT_DIR}/input` (LoadImage does not see `/outputs`) | Restart so the entrypoint backstop writes `ez_house_clay_01.png` ... `10.png` into `/inputs`. `./scripts/manage.sh start` still prefers layout-accurate plates. While compose is up: `bazelisk run //:manage -- house-views --slug lab-penthouse --seed-inputs` (or `--install-inputs` if the pack exists), then reload the App |
 | Music **Missing Inputs** / Cover image - image | Cover LoadImage was active; Comfy still requires a file even when unwired | Pull latest. Default **Album art** skip bypasses Cover image. Queue without a file. Upload: graph view, **Ctrl+B**, then wire |
 | Talking-head / I2V **Missing Inputs** / Klein identity still - image | Required LoadImage has no file; App Mode used to bury the picker | Pull latest. The still picker is first on Apps that need a start frame. Choose a PNG (Klein identity or I2V plate), then Queue |
-| image-studio **Invalid connection** on Klein Prompt Enhance mode | Old seed wired STRING into the Enhance mode combo | Pull latest and reopen **stills/image-studio**. Creator mode `enhance_mode` is the same combo as Enhance `mode` |
+| image-studio **Invalid connection** on Klein Prompt Enhance mode | Old seed wired STRING into the Enhance mode combo | Pull latest and reopen **photos/image-studio**. Creator mode `enhance_mode` is the same combo as Enhance `mode` |
 | image-studio **This run** says preview unavailable | The App could not reach `POST /ez_image/studio-preview` | Queue still runs the nodes. Reload the App after pull. **This run** fills again when the route answers |
 
 ## Stills: Cubic block world
 
-The block-study lane on **stills/background-swap**. The people-paste path and the status strings:
+The block-study lane on **photos/background-swap**. The people-paste path and the status strings:
 [Troubleshooting overview](../troubleshooting.md#stills-cubic-block-world).
 
-| **Cubic block world** still looks like the photo, people were cubed, or the horizon drifted from the source | Person-segmentation weights missing (study keeps its people and the paste is skipped), or a weak rebuild | Re-open the seeded **stills/background-swap** after pull. Leave **Cubic block world** selected (named samples skip Rewrite prompt). People are erased from the block study before encoding and pasted back from the full-resolution source, so cubed people mean the BSD-3 DeepLab file is not in `${MODELS_DIR}/comfy/ez-person/` yet (reinsert status `person mask missing`; first cubic Queue can download it; `EZ_PERSON_MASK=off` skips the paste). If the plate is only the flat study, set Quality **High** (Klein base if `download-image --tier base` is on disk). |
+| **Cubic block world** still looks like the photo, people were cubed, or the horizon drifted from the source | Person-segmentation weights missing (study keeps its people and the paste is skipped), or a weak rebuild | Re-open the seeded **photos/background-swap** after pull. Leave **Cubic block world** selected (named samples skip Rewrite prompt). People are erased from the block study before encoding and pasted back from the full-resolution source, so cubed people mean the BSD-3 DeepLab file is not in `${MODELS_DIR}/comfy/ez-person/` yet (reinsert status `person mask missing`; first cubic Queue can download it; `EZ_PERSON_MASK=off` skips the paste). If the plate is only the flat study, set Quality **High** (Klein base if `download-image --tier base` is on disk). |
 
 ## Local dub
 
@@ -177,7 +177,7 @@ first, then re-run. Never add Blender or SuperSplat to the Dockerfile.
 | `blender-stills` exit 2 | Compose is up (occupancy) | `./scripts/manage.sh stop` then dump. [Blender creator suite](../learn/blender-creator.md) |
 | `blender-stills` size refuse | 1920x1080 or other off-contract size | Use 1280x704, 768x1280, 1024x1280, 1024x1024, or 1280x720 (thumb only) |
 | `house-views` exit 2 | Compose is up (occupancy) | `./scripts/manage.sh stop` then dump. [Dream-house tours](../learn/dream-house.md) |
-| `house-views` / `blender` blender not on PATH | Host DCC missing (occupancy is unrelated) | `./scripts/manage.sh blender-install` or `sudo apt-get install -y blender`. Park is still `occupancy enter blender-desk`. Clay App still Queues on `start` / `--seed-inputs`. Language-only tour: **stills/dream-house**. Never add Blender to the Dockerfile |
+| `house-views` / `blender` blender not on PATH | Host DCC missing (occupancy is unrelated) | `./scripts/manage.sh blender-install` or `sudo apt-get install -y blender`. Park is still `occupancy enter blender-desk`. Clay App still Queues on `start` / `--seed-inputs`. Language-only tour: **photos/dream-house**. Never add Blender to the Dockerfile |
 | Guide pack QC refuses 1280x720 | LTX VAE grid is **1280x704** (or 768x1280 portrait) | Re-export at 704. `ez_ltx_spatial` is a backstop, not the plan |
 | Guide pack QC missing canny | Dump predates outline pass | Re-run `export-guides`. Canny is Workbench outline, always dumped |
 | `overlay-qc` size mismatch | Look plate not 1280x704 | Re-Queue **klein-from-clay** at 1280x704. Do not stretch. [Clay blockout to finished clip](../learn/clay-to-finish.md) |

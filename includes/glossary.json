@@ -221,7 +221,7 @@
     "aliases": ["Fun InP"],
     "category": "Models",
     "short": "Optional Wan first-last-frame pack (~47 GB Apache). MagCache off.",
-    "long": "`download-wan --tier fun-inp` then load `motion/silent/first-last-5s`. Unload LTX first. About **~47 GB** on disk (status floor 40 GB). This is a continuity draft, not the 90s LTX print path. See [90s shorts](shorts.md).",
+    "long": "`download-wan --tier fun-inp` then load `video/silent/first-last-5s`. Unload LTX first. About **~47 GB** on disk (status floor 40 GB). This is a continuity draft, not the 90s LTX print path. See [90s shorts](shorts.md).",
     "see_also": ["flf", "wan", "vace"]
   },
   {
@@ -239,7 +239,7 @@
     "aliases": ["Z-Image Turbo", "Z-Image"],
     "category": "Models",
     "short": "Optional Apache still runner-up. Not the default Klein path.",
-    "long": "Z-Image Turbo uses different weights (`ae`, `z_image_turbo_*`). Seeded lab stills are Klein 4B. If a template asks for `ae.safetensors`, you loaded the wrong graph - open `stills/still-draft`. Optional: `download-image --tier zimage`. See [Model licenses](licenses.md).",
+    "long": "Z-Image Turbo uses different weights (`ae`, `z_image_turbo_*`). Seeded lab stills are Klein 4B. If a template asks for `ae.safetensors`, you loaded the wrong graph - open `photos/still-draft`. Optional: `download-image --tier zimage`. See [Model licenses](licenses.md).",
     "see_also": ["klein", "t2i"]
   },
   {
@@ -284,7 +284,7 @@
     "aliases": ["text-to-image", "T2I"],
     "category": "Modalities",
     "short": "Text-to-image: a prompt becomes a still (PNG). Klein's job.",
-    "long": "Text-to-image is the first studio move. Queue `stills/still-draft`, then feed a PNG into Wan or LTX I2V if you want motion. See [ComfyUI basics](learn/comfyui.md).",
+    "long": "Text-to-image is the first studio move. Queue `photos/still-draft`, then feed a PNG into Wan or LTX I2V if you want motion. See [ComfyUI basics](learn/comfyui.md).",
     "see_also": ["klein", "i2v", "queue"]
   },
   {
@@ -311,7 +311,7 @@
     "aliases": ["audio-to-video", "A2V"],
     "category": "Modalities",
     "short": "Audio-to-video: picture follows a soundtrack (audio freeze, not lip-sync OSS).",
-    "long": "`motion/av/audio-to-video-8s` encodes a ~5 s wav and muxes the original waveform. `stills/talking-head` is I2V smoke. Banned lip-sync OSS (Wav2Lip) stays out. Two-stage freeze lives in Comfy Templates -> LTX-2.5. See [Motion catalog](create/workflows-motion.md).",
+    "long": "`video/av/audio-to-video-8s` encodes a ~5 s wav and muxes the original waveform. `video/av/talking-head` is I2V smoke. Banned lip-sync OSS (Wav2Lip) stays out. Two-stage freeze lives in Comfy Templates -> LTX-2.5. See [Motion catalog](create/workflows-motion.md).",
     "see_also": ["s2v", "ltx"]
   },
   {
@@ -347,7 +347,7 @@
     "aliases": ["ping-pong"],
     "category": "Modalities",
     "short": "Play a clip forward then reverse so the join frame equals the start (GIF/bumper loops).",
-    "long": "`motion/loops/gif-loop` leaves VHS ping-pong on. Prompt cyclic motion (breeze, curtains), not a walk or one-way dolly, or reverse playback looks wrong. See [Prompting](prompting.md).",
+    "long": "`video/loops/gif-loop` leaves VHS ping-pong on. Prompt cyclic motion (breeze, curtains), not a walk or one-way dolly, or reverse playback looks wrong. See [Prompting](prompting.md).",
     "see_also": ["wan", "vhs"]
   },
   {
@@ -419,7 +419,7 @@
     "aliases": ["lab_app_mode"],
     "category": "Studio",
     "short": "Lab extra on shipped graphs: lane, occupancy, handoff, frontend_min.",
-    "long": "`extra.lab_app_mode` marks a seeded graph as an App (`enabled`, `default_view`, `lane` inspire/produce/audio/film/dcc/optional, `occupancy`, `handoff`). `default_view: app` seeds as `*.app.json` (Apps + Workflows sidebars). Do not require `extra.linearMode` - Comfy upstream does not write it. See [ComfyUI Apps](studio-apps.md).",
+    "long": "`extra.lab_app_mode` marks a seeded graph as an App (`enabled`, `default_view`, `lane` photos/video/social/business/film/audio/3d/guides/labs, `occupancy`, `handoff`). `default_view: app` seeds as `*.app.json` (Apps + Workflows sidebars). Do not require `extra.linearMode` - Comfy upstream does not write it. See [ComfyUI Apps](studio-apps.md).",
     "see_also": ["app-mode", "occupancy", "lab-example"]
   },
   {
@@ -491,7 +491,7 @@
     "aliases": ["lab-example", "lab-example graphs"],
     "category": "Studio",
     "short": "A seeded `_lab/<lane>/` graph. Load these; do not start from a blank canvas.",
-    "long": "Shipped smokes live under `workflows/_lab/<lane>/` with short stems (`stills/still-draft.json`). The unique id is `extra.lab_rel`. The old `*-lab-example` filename suffix is gone. Optional packs live under `workflows/_lab/optional/` and shot YAML under `workflows/shorts/`. See [Workflow catalog](studio-workflows.md) and [Still workflows](create/workflows-stills.md).",
+    "long": "Shipped smokes live under `workflows/_lab/<lane>/` with short stems (`photos/still-draft.json`). The unique id is `extra.lab_rel`. The old `*-lab-example` filename suffix is gone. Optional packs live under `workflows/_lab/labs/opt-in/` and shot YAML under `workflows/shorts/`. See [Workflow catalog](studio-workflows.md) and [Still workflows](create/workflows-stills.md).",
     "see_also": ["workflow", "note-node"]
   },
   {
@@ -911,10 +911,10 @@
   {
     "id": "research-chat",
     "title": "Research Chat",
-    "aliases": ["Research Chat", "research-chat", "inspire/research-chat"],
+    "aliases": ["Research Chat", "research-chat", "labs/assist/research-chat"],
     "category": "Studio",
     "short": "Inspire App: CPU chat + web search + sequential research subagents. Occupancy llm.",
-    "long": "No-UNET creative-process desk (`inspire/research-chat`). Queue a Message; read Reply and Sources. Mode research runs a planner plus 1-3 sequential search workers, then a synthesizer brief (prompt ingredients -> Prompt Forge -> Spark Still). Same on-box Qwen3-4B GGUF as Prompt Enhance (`n_gpu_layers=0`). HTTPS search is SSRF-safe. Laptop Path D: `./scripts/manage.sh research-mcp --stdio`. See [ComfyUI Apps](studio-apps.md) and [Occupancy desk](occupancy.md).",
+    "long": "No-UNET creative-process desk (`labs/assist/research-chat`). Queue a Message; read Reply and Sources. Mode research runs a planner plus 1-3 sequential search workers, then a synthesizer brief (prompt ingredients -> Prompt Forge -> Spark Still). Same on-box Qwen3-4B GGUF as Prompt Enhance (`n_gpu_layers=0`). HTTPS search is SSRF-safe. Laptop Path D: `./scripts/manage.sh research-mcp --stdio`. See [ComfyUI Apps](studio-apps.md) and [Occupancy desk](occupancy.md).",
     "see_also": ["prompt-enhance", "occupancy", "qwen"]
   },
   {
@@ -929,10 +929,10 @@
   {
     "id": "app-forge",
     "title": "App Forge",
-    "aliases": ["App Forge", "inspire/app-forge"],
+    "aliases": ["App Forge", "labs/assist/app-forge"],
     "category": "Studio",
     "short": "No-UNET Inspire App that clones a shipped lab graph into live _user/ as a new App.",
-    "long": "Load inspire/app-forge. Type a Brief, leave Template on auto (or pin stills/instagram-square), set Slug, Queue. Writes ${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/<slug>.app.json. Occupancy llm for the generator; the result keeps the source occupancy. Does not Queue the clone. Path D: ./scripts/manage.sh studio-mcp --stdio. See [App Forge](create/app-forge.md).",
+    "long": "Load labs/assist/app-forge. Type a Brief, leave Template on auto (or pin photos/instagram-square), set Slug, Queue. Writes ${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/<slug>.app.json. Occupancy llm for the generator; the result keeps the source occupancy. Does not Queue the clone. Path D: ./scripts/manage.sh studio-mcp --stdio. See [App Forge](create/app-forge.md).",
     "see_also": ["studio-mcp", "app-mode", "prompt-forge", "occupancy"]
   },
   {
@@ -968,7 +968,7 @@
     "aliases": ["house-views", "dream-house clay", "clay tour"],
     "category": "Studio",
     "short": "Blender greybox + ten 1024x1280 Instagram clay stills. Occupancy XOR.",
-    "long": "Host Blender constructs a `bpy-primitive` set under `${COMFY_OUTPUT_DIR}/assets/sets/<slug>/` (layout, GLB, clay, depth). Size is Instagram 4:5 (**1024x1280**), not the LTX guide pack. Stop Comfy first for the dump. `manage.sh start` seeds LoadImage plates (copy pack or render layout) so **stills/dream-house-clay** can Queue without Blender. Language-only tour -> **stills/dream-house**. See [Dream-house tours](learn/dream-house.md).",
+    "long": "Host Blender constructs a `bpy-primitive` set under `${COMFY_OUTPUT_DIR}/assets/sets/<slug>/` (layout, GLB, clay, depth). Size is Instagram 4:5 (**1024x1280**), not the LTX guide pack. Stop Comfy first for the dump. `manage.sh start` seeds LoadImage plates (copy pack or render layout) so **photos/dream-house-clay** can Queue without Blender. Language-only tour -> **photos/dream-house**. See [Dream-house tours](learn/dream-house.md).",
     "see_also": ["guide-pack", "occupancy", "sidecar", "klein"]
   },
   {
@@ -1343,7 +1343,7 @@
   {
     "id": "prompt-forge",
     "title": "Prompt Forge",
-    "aliases": ["Prompt Forge", "inspire/prompt-forge"],
+    "aliases": ["Prompt Forge", "labs/assist/prompt-forge"],
     "category": "Studio",
     "short": "Inspire App that turns a research brief or lazy sentence into Klein/Wan/LTX prompts.",
     "long": "Shared Prompt box plus family-specific CLIP strings. Context from Research Chat is ignored when Enhance is off. Occupancy llm. See [ComfyUI Apps](studio-apps.md).",
@@ -1352,7 +1352,7 @@
   {
     "id": "cinema-rack",
     "title": "Cinema Rack",
-    "aliases": ["Cinema Rack", "inspire/cinema-rack"],
+    "aliases": ["Cinema Rack", "labs/assist/cinema-rack"],
     "category": "Studio",
     "short": "Inspire App that splices cinematography dropdowns into Klein, Wan, and LTX prompts.",
     "long": "One pick per axis (shot size, angle, move, lens, light, color, time, optical, edit, weather, genre, viral). Deterministic - no LLM. Wan emits one camera verb. I2V drops look axes. Editing is omitted on stills. Occupancy llm. See [Cinema Rack](create/cinema-rack.md).",
@@ -1370,7 +1370,7 @@
   {
     "id": "beat-sheet",
     "title": "Beat Sheet",
-    "aliases": ["Beat Sheet", "inspire/beat-sheet"],
+    "aliases": ["Beat Sheet", "labs/assist/beat-sheet"],
     "category": "Studio",
     "short": "Inspire App: logline / script / audio policy / score packed into shot cards.",
     "long": "Feeds film and podcast rewrites so every card shares one episode spine. Occupancy llm. See [ComfyUI Apps](studio-apps.md) and [90s shorts](shorts.md).",

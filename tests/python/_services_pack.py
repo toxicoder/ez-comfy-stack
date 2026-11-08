@@ -29,7 +29,7 @@ class ServiceSpec:
     """One services-pack graph.
 
     Attributes:
-        rel: ``extra.lab_rel`` (``services/ecommerce/pdp-on-white``).
+        rel: ``extra.lab_rel`` (``business/ecommerce/pdp-on-white``).
         kind: ``klein_single`` | ``wan_i2v`` | ``wan_loop`` | ``ltx_av``.
         group: Vertical folder / catalog section id.
         size: Width x height latent pixels.
@@ -91,7 +91,7 @@ def _k(
     """Klein single-plate spec."""
     width, height = size
     return ServiceSpec(
-        rel=f"services/{vertical}/{stem}",
+        rel=f"business/{vertical}/{stem}",
         kind="klein_single",
         group=vertical,
         size=size,
@@ -119,7 +119,7 @@ def _w(
     width, height = size
     portrait = height > width
     return ServiceSpec(
-        rel=f"services/{vertical}/{stem}",
+        rel=f"business/{vertical}/{stem}",
         kind="wan_loop" if loop else "wan_i2v",
         group=vertical,
         size=size,
@@ -131,12 +131,12 @@ def _w(
         enhance_pin=True,
         portrait=portrait,
         template=(
-            "motion/loops/gif-loop"
+            "video/loops/gif-loop"
             if loop
             else (
-                "motion/silent/shorts-still-5s"
+                "video/silent/shorts-still-5s"
                 if portrait
-                else "motion/silent/still-to-video-5s"
+                else "video/silent/still-to-video-5s"
             )
         ),
     )
@@ -160,16 +160,16 @@ def _l(
     if catalog is None:
         catalog = "ltx_broll" if mode == "t2v" else "ltx_i2v"
     src = (
-        "motion/av/shorts-still-8s"
+        "video/av/shorts-still-8s"
         if portrait
         else (
-            "motion/av/text-to-video-8s"
+            "video/av/text-to-video-8s"
             if mode == "t2v"
-            else "motion/av/still-to-video-8s"
+            else "video/av/still-to-video-8s"
         )
     )
     return ServiceSpec(
-        rel=f"services/{vertical}/{stem}",
+        rel=f"business/{vertical}/{stem}",
         kind="ltx_av",
         group=vertical,
         size=size,

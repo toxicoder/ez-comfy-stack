@@ -226,7 +226,7 @@ def test_klein_lab_ready_and_ultra_missing(tmp_path: Path) -> None:
     _comfy(tmp_path, "llm", LLM_GGUF)
     lab = run_check(
         {
-            "lab_rel": "stills/still-draft",
+            "lab_rel": "photos/still-draft",
             "occupancy": "klein",
             "quality": "lab",
             "enhance_on": True,
@@ -234,10 +234,10 @@ def test_klein_lab_ready_and_ultra_missing(tmp_path: Path) -> None:
         roots=(tmp_path,),
     )
     assert lab["ok"] is True
-    assert "Ready for stills/still-draft @ lab" in lab["message"]
+    assert "Ready for photos/still-draft @ lab" in lab["message"]
     ultra = run_check(
         {
-            "lab_rel": "stills/still-draft",
+            "lab_rel": "photos/still-draft",
             "occupancy": "klein",
             "quality": QUALITY_ULTRA,
             "enhance_on": False,
@@ -304,7 +304,7 @@ def test_occupancy_packs_and_extras(tmp_path: Path) -> None:
     assert any(need.pack == "ltx-iclora" for need in iclora)
     vace = requirements_for(CheckHints(flags=("vace",)))
     assert any(need.cmd == CMD_WAN_VACE for need in vace)
-    fun = requirements_for(CheckHints(lab_rel="motion/silent/first-last-fun-inp"))
+    fun = requirements_for(CheckHints(lab_rel="video/silent/first-last-fun-inp"))
     assert any(need.cmd == CMD_WAN_FUN for need in fun)
     s2v = requirements_for(CheckHints(flags=("s2v",)))
     assert any(need.cmd == CMD_WAN_S2V for need in s2v)
@@ -399,7 +399,7 @@ def test_hints_from_graph_and_args() -> None:
     graph = {
         "id": "still-draft",
         "extra": {
-            "lab_rel": "stills/still-draft",
+            "lab_rel": "photos/still-draft",
             "lab_app_mode": {"occupancy": "klein"},
             "lab_iclora": {"enabled": True},
             "lab_vace": {"enabled": True},
@@ -428,24 +428,24 @@ def test_hints_from_graph_and_args() -> None:
     assert "vace" in hints.flags
     assert KLEIN_DISTILLED in hints.unets
     from_args = hints_from_args({"graph": graph})
-    assert from_args.lab_rel == "stills/still-draft"
+    assert from_args.lab_rel == "photos/still-draft"
     rel_flags = hints_from_graph(
         {
-            "extra": {"lab_rel": "dcc/depth-iclora"},
+            "extra": {"lab_rel": "guides/depth-iclora"},
             "nodes": [{"type": "SaveImage"}],
         }
     )
     assert "iclora" in rel_flags.flags
     vace_rel = hints_from_graph(
-        {"extra": {"lab_rel": "motion/silent/vace-join"}, "nodes": [{"type": "VHS_VideoCombine"}, {"type": "UNETLoader", "widgets_values": [WAN_5B]}]}
+        {"extra": {"lab_rel": "video/silent/vace-join"}, "nodes": [{"type": "VHS_VideoCombine"}, {"type": "UNETLoader", "widgets_values": [WAN_5B]}]}
     )
     assert "vace" in vace_rel.flags
     fun_rel = hints_from_graph(
-        {"extra": {"lab_rel": "dcc/first-last-fun-inp"}, "nodes": []}
+        {"extra": {"lab_rel": "guides/first-last-fun-inp"}, "nodes": []}
     )
     assert "fun-inp" in fun_rel.flags
     s2v_rel = hints_from_graph(
-        {"extra": {"lab_rel": "motion/av/speech-to-video"}, "nodes": []}
+        {"extra": {"lab_rel": "video/av/speech-to-video"}, "nodes": []}
     )
     assert "s2v" in s2v_rel.flags
     off = hints_from_graph(
@@ -487,12 +487,12 @@ def test_scan_any_group_and_report(tmp_path: Path) -> None:
     _comfy(tmp_path, "diffusion_models", KLEIN_9B)
     _comfy(tmp_path, "text_encoders", CLIP_8B)
     result = scan(
-        CheckHints(lab_rel="stills/hero", occupancy="klein", quality=QUALITY_ULTRA),
+        CheckHints(lab_rel="photos/hero", occupancy="klein", quality=QUALITY_ULTRA),
         (tmp_path,),
     )
     assert result.ok is True
     text = format_report(result)
-    assert text.startswith("Ready for stills/hero @ ultra")
+    assert text.startswith("Ready for photos/hero @ ultra")
     missing = scan(CheckHints(occupancy="audio"), (tmp_path,))
     assert missing.ok is False
     report = format_report(missing)
@@ -657,7 +657,7 @@ def test_request_json_sync_and_missing() -> None:
 def test_ensure_model_check_node_is_idempotent() -> None:
     graph: dict[str, Any] = {
         "id": "probe",
-        "last_node_id": 1,
+        "last_node_id": 2,
         "nodes": [
             {
                 "id": 1,
@@ -666,7 +666,18 @@ def test_ensure_model_check_node_is_idempotent() -> None:
                 "size": [320, 270],
                 "inputs": [],
                 "outputs": [],
-            }
+            },
+            # A sampler the overlay can write, so this graph earns a Quality
+            # combo; a graph with nothing to write would ship without one.
+            {
+                "id": 2,
+                "type": "KSampler",
+                "pos": [40, 400],
+                "size": [300, 270],
+                "inputs": [],
+                "outputs": [],
+                "widgets_values": [0, "fixed", 20, 3.5, "euler", "normal", 1],
+            },
         ],
         "extra": {"linearData": {"inputs": [[1, "filename_prefix"]], "outputs": [1]}},
     }
@@ -721,18 +732,25 @@ def test_stamper_places_without_overlap() -> None:
 
 
 def test_stamp_all_model_check_writes(tmp_path: Path) -> None:
-    lab = tmp_path / "_lab" / "stills"
+    lab = tmp_path / "_lab" / "photos"
     lab.mkdir(parents=True)
     graph = {
         "id": "still-draft",
-        "last_node_id": 1,
+        "last_node_id": 2,
         "nodes": [
             {
                 "id": 1,
                 "type": "SaveImage",
                 "pos": [40, 80],
                 "size": [320, 270],
-            }
+            },
+            {
+                "id": 2,
+                "type": "KSampler",
+                "pos": [40, 400],
+                "size": [300, 270],
+                "widgets_values": [0, "fixed", 20, 3.5, "euler", "normal", 1],
+            },
         ],
         "extra": {},
     }

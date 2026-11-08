@@ -65,14 +65,14 @@ def _mini_graph() -> dict[str, Any]:
                 "type": "Note",
                 "title": "Operator note",
                 "pos": [40, 400],
-                "widgets_values": ["## stills/still-draft\n\nOccupancy: klein.\n"],
+                "widgets_values": ["## photos/still-draft\n\nOccupancy: klein.\n"],
                 "inputs": [],
                 "outputs": [],
             },
         ],
         "groups": [],
         "extra": {
-            "lab_rel": "stills/still-draft",
+            "lab_rel": "photos/still-draft",
             "lab_description": "Draft still",
             "lab_app_mode": {"occupancy": "klein"},
         },
@@ -149,7 +149,7 @@ def test_render_graph_page_chrome_and_params() -> None:
     from workflow_nodes import ACE_KEYSCALE_CHOICES, ACE_LANGUAGE_CHOICES, encyclopedia
 
     page = gen.render_graph_page(
-        "stills/still-draft",
+        "photos/still-draft",
         _mini_graph(),
         encyclopedia(),
         styles={},
@@ -157,7 +157,7 @@ def test_render_graph_page_chrome_and_params() -> None:
         ace_keyscale=ACE_KEYSCALE_CHOICES,
     )
     assert page.startswith("---\n")
-    assert "# stills/still-draft\n" in page
+    assert "# photos/still-draft\n" in page
     assert "**What's on this page**" in page
     assert "**What this enables**" in page
     assert "## Node parameter reference" in page
@@ -186,7 +186,7 @@ def test_inject_nav_nests_workflow_details() -> None:
         nav,
         [
             {"id": "index", "path": "generated/workflows/index.md", "lane": "index", "kind": "index"},
-            {"id": "stills/still-draft", "path": "generated/workflows/stills/still-draft.md", "lane": "klein", "kind": "graph"},
+            {"id": "photos/still-draft", "path": "generated/workflows/photos/still-draft.md", "lane": "klein", "kind": "graph"},
         ],
     )
     create = out[1]["Create"]
@@ -194,7 +194,7 @@ def test_inject_nav_nests_workflow_details() -> None:
     children = details["Workflow details"]
     assert any("Overview" in item for item in children if isinstance(item, dict))
     klein = next(item for item in children if isinstance(item, dict) and "klein" in item)
-    assert klein["klein"][0]["still-draft"] == "generated/workflows/stills/still-draft.md"
+    assert klein["klein"][0]["still-draft"] == "generated/workflows/photos/still-draft.md"
 
 
 def test_main_calls_generate(monkeypatch: Any) -> None:
@@ -338,3 +338,30 @@ def test_format_choice_helpers_missing_files(tmp_path: Path, monkeypatch: pytest
     (tmp_path / "no-modes.json").write_text('{"modes": {}}', encoding="utf-8")
     assert gen._image_mode_choices() == []
     assert gen._image_mode_category_choices() == []
+
+
+def test_lane_order_follows_the_registry() -> None:
+    """Neither the generator nor the site may keep a private lane order.
+
+    ``LANE_REGISTRY`` in ``tests/python/_lab_paths.py`` is the browse order. The
+    generator mirrors it because it is a separate Bazel target, and
+    ``docs-site/lib/nav.ts`` only falls back to its own copy before the docs are
+    generated. Both mirrors are pinned here so a lane cannot appear in one
+    surface and sit at the bottom of another.
+    """
+    import re
+
+    from _lab_paths import lane_specs
+
+    expected: list[str] = []
+    for spec in lane_specs():
+        expected.append(spec.id)
+        if spec.id == "audio":
+            expected.append("audio-albums")  # a docs grouping, not a _lab lane
+    assert _load().LANE_ORDER == expected
+
+    nav_ts = (ROOT / "docs-site" / "lib" / "nav.ts").read_text(encoding="utf-8")
+    block = re.search(r"const WORKFLOW_LANE_ORDER = \[(.*?)\];", nav_ts, re.DOTALL)
+    assert block is not None, "nav.ts lost its fallback lane order"
+    listed = re.findall(r'"([^"]+)"', block.group(1))
+    assert listed == expected

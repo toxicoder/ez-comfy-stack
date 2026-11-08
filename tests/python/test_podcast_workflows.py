@@ -53,7 +53,7 @@ def test_audio_first_podcast_graph() -> None:
     ):
         assert prefix in blob, prefix
     assert DISCLOSURE in blob
-    assert "stills/podcast-cover" in blob
+    assert "photos/podcast-cover" in blob
     titles = {n.get("title") for n in graph["nodes"]}
     assert "MODEL" in {g["title"] for g in graph["groups"]}
     assert "PROMPT" in {g["title"] for g in graph["groups"]}
@@ -67,7 +67,9 @@ def test_audio_first_podcast_graph() -> None:
     ace = list(iter_ace_encoders(graph))
     assert ace
     for node in ace:
-        assert_ace_encoder_widgets(node, where=f"podcast-audio-first:{node.get('title')}")
+        assert_ace_encoder_widgets(
+            node, where=f"podcast-two-host-episode:{node.get('title')}"
+        )
     pos = next(n for n in ace if "bed" in (n.get("title") or "").lower())
     tags, lyrics = pos["widgets_values"][0], pos["widgets_values"][1]
     assert "instrumental" in tags.lower()
@@ -105,10 +107,15 @@ def test_radio_drama_graph() -> None:
         "ez_radio_sting",
         "ez_radio_mix",
         "ez_radio_ep",
-        "ez_radio_bumper",
-        "ez_radio_hook",
     ):
         assert prefix in blob, prefix
+    # The Wan bumper and the LTX hook are their own apps now. Parked on this
+    # canvas they were two foreign UNETs an audio Quality can never drive.
+    for prefix in ("ez_radio_bumper", "ez_radio_hook"):
+        assert prefix not in blob, prefix
+    assert not [n for n in graph["nodes"] if n.get("type") == "UNETLoader"]
+    assert "**video/loops/bumper-loop**" in blob
+    assert "**video/av/hook-av**" in blob
     assert DISCLOSURE in blob
     script = next(n for n in graph["nodes"] if n["type"] == "EZPodcastScript")
     sw = script["widgets_values"]
@@ -124,14 +131,12 @@ def test_radio_drama_graph() -> None:
         assert "instrumental" in tags.lower()
         assert "no vocals" in tags.lower()
         assert lyrics == ""
-    bumper = [
-        n
+    # Nothing waits on the canvas muted or bypassed: every node here queues.
+    assert not [n for n in graph["nodes"] if n.get("mode") != 0], [
+        (n.get("id"), n.get("type"), n.get("title"))
         for n in graph["nodes"]
-        if n.get("title", "").endswith("(off)") or "preview (off)" in n.get("title", "")
+        if n.get("mode") != 0
     ]
-    assert bumper
-    for n in bumper:
-        assert n["mode"] == 4, n.get("title")
     flac = next(n for n in graph["nodes"] if n["type"] == "SaveAudio")
     assert flac["widgets_values"][0] == "ez_radio_ep"
     for needle in BANNED:
@@ -193,7 +198,7 @@ def test_learn_episode_podcast_graph() -> None:
     ):
         assert prefix in blob, prefix
     assert DISCLOSURE in blob
-    assert "stills/podcast-cover" in blob
+    assert "photos/podcast-cover" in blob
     learn = next(n for n in graph["nodes"] if n["type"] == "EZPodcastLearn")
     lw = learn["widgets_values"]
     assert (lw[5] if len(lw) >= 7 else lw[4]) is True

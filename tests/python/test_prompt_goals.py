@@ -80,24 +80,24 @@ def test_goal_ids_leads_with_auto_then_none() -> None:
 
 def test_goal_for_resolves_the_named_deliverables() -> None:
     cases = {
-        "stills/thumbnail": "thumbnail_cover_hero",
-        "creator/stills/youtube-shorts-thumb": "vertical_caption_headroom",
-        "creator/stills/pinterest-pin": "vertical_caption_headroom",
-        "services/ecommerce/pdp-on-white": "packshot_conversion",
-        "services/b2b-saas/webinar-thumb": "thumbnail_cover_hero",
-        "services/real-estate/listing-hero": "place_credibility",
+        "photos/thumbnail": "thumbnail_cover_hero",
+        "social/stills/youtube-shorts-thumb": "vertical_caption_headroom",
+        "social/stills/pinterest-pin": "vertical_caption_headroom",
+        "business/ecommerce/pdp-on-white": "packshot_conversion",
+        "business/b2b-saas/webinar-thumb": "thumbnail_cover_hero",
+        "business/real-estate/listing-hero": "place_credibility",
     }
     for rel, want in cases.items():
         assert samples.goal_for_rel(rel) == want, rel
 
 
 def test_goal_for_leaves_tools_and_motion_goalless() -> None:
-    for rel in ("", "motion/av/hook-av", "audio/music/rap-draft", "nope/nope"):
+    for rel in ("", "video/av/hook-av", "audio/music/rap-draft", "nope/nope"):
         assert samples.goal_for_rel(rel) == samples.GOAL_NONE, rel
 
 
 def test_goal_for_normalises_separators() -> None:
-    assert samples.goal_for_rel("stills\\thumbnail") == "thumbnail_cover_hero"
+    assert samples.goal_for_rel("photos\\thumbnail") == "thumbnail_cover_hero"
 
 
 def test_goal_label_variants() -> None:
@@ -121,7 +121,7 @@ def test_goal_field_variants() -> None:
 def test_resolve_goal_prefers_the_explicit_pick() -> None:
     assert (
         samples.resolve_goal(
-            "packshot_conversion", catalog="stills/thumbnail"
+            "packshot_conversion", catalog="photos/thumbnail"
         )
         == "packshot_conversion"
     )
@@ -129,25 +129,25 @@ def test_resolve_goal_prefers_the_explicit_pick() -> None:
 
 def test_resolve_goal_falls_back_to_the_stamped_lane() -> None:
     assert (
-        samples.resolve_goal("", catalog="stills/thumbnail")
+        samples.resolve_goal("", catalog="photos/thumbnail")
         == "thumbnail_cover_hero"
     )
     assert (
-        samples.resolve_goal("", catalog="", lab_rel="stills/thumbnail")
+        samples.resolve_goal("", catalog="", lab_rel="photos/thumbnail")
         == "thumbnail_cover_hero"
     )
 
 
 def test_resolve_goal_ignores_an_unknown_pick() -> None:
     assert (
-        samples.resolve_goal("invented-goal", catalog="stills/thumbnail")
+        samples.resolve_goal("invented-goal", catalog="photos/thumbnail")
         == "thumbnail_cover_hero"
     )
 
 
 def test_resolve_goal_defaults_to_none() -> None:
     assert samples.resolve_goal("") == samples.GOAL_NONE
-    assert samples.resolve_goal("", catalog="motion/av/hook-av") == samples.GOAL_NONE
+    assert samples.resolve_goal("", catalog="video/av/hook-av") == samples.GOAL_NONE
 
 
 def test_resolve_goal_auto_derives_and_none_opts_out() -> None:
@@ -157,7 +157,7 @@ def test_resolve_goal_auto_derives_and_none_opts_out() -> None:
     goal layer would never fire. ``none`` has to refuse, or an operator has no
     way back to a model-only prompt on a lane that carries a deliverable.
     """
-    lane = "stills/thumbnail"
+    lane = "photos/thumbnail"
     assert samples.goal_for_rel(lane) == "thumbnail_cover_hero"
     assert samples.resolve_goal(samples.GOAL_AUTO, catalog=lane) == (
         "thumbnail_cover_hero"
@@ -184,21 +184,21 @@ def test_with_goal_system_appends_and_passthrough() -> None:
 
 
 def test_thumbnail_lane_gets_readable_at_small_language() -> None:
-    system = _system_for("stills/thumbnail")
+    system = _system_for("photos/thumbnail")
     lowered = system.lower()
     assert "read at that size" in lowered
     assert "title can sit later" in lowered
 
 
 def test_vertical_lane_gets_caption_headroom_language() -> None:
-    system = _system_for("creator/stills/pinterest-pin")
+    system = _system_for("social/stills/pinterest-pin")
     lowered = system.lower()
     assert "middle third" in lowered
     assert "captions" in lowered
 
 
 def test_goalless_lane_stays_model_only() -> None:
-    system = _system_for("stills/still-draft")
+    system = _system_for("photos/still-draft")
     assert "Deliverable goal" not in system
 
 
@@ -211,7 +211,7 @@ def test_goal_block_sits_after_template_and_before_style() -> None:
             "t2i",
             "16:9",
             style="photorealistic",
-            catalog="stills/thumbnail",
+            catalog="photos/thumbnail",
         )
     system = str(mock.call_args[0][0])
     assert system.index("Qwen3-4B") < system.index("Deliverable goal")
@@ -219,7 +219,7 @@ def test_goal_block_sits_after_template_and_before_style() -> None:
 
 
 def test_explicit_goal_widget_overrides_the_lane() -> None:
-    system = _system_for("stills/thumbnail", goal="packshot_conversion")
+    system = _system_for("photos/thumbnail", goal="packshot_conversion")
     assert "seamless field" in system.lower()
 
 
@@ -229,7 +229,7 @@ def test_missing_goal_files_degrade_to_model_only(
     monkeypatch.setattr(samples, "PACKAGE_DIR", tmp_path)
     assert samples.load_goals() == {}
     assert samples.load_goal_index() == {}
-    assert samples.goal_for_rel("stills/thumbnail") == samples.GOAL_NONE
+    assert samples.goal_for_rel("photos/thumbnail") == samples.GOAL_NONE
 
 
 def test_non_object_goal_json_is_treated_as_empty(
@@ -270,7 +270,7 @@ def test_goal_widget_is_optional_so_graphs_need_no_rewrite() -> None:
 
 def test_none_widget_reaches_a_model_only_prompt_end_to_end() -> None:
     """The documented opt-out has to survive the whole node path."""
-    with_goal = _system_for("stills/thumbnail")
-    without_goal = _system_for("stills/thumbnail", goal=samples.GOAL_NONE)
+    with_goal = _system_for("photos/thumbnail")
+    without_goal = _system_for("photos/thumbnail", goal=samples.GOAL_NONE)
     assert "Deliverable goal" in with_goal
     assert "Deliverable goal" not in without_goal

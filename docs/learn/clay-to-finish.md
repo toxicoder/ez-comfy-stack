@@ -56,13 +56,13 @@ flowchart TB
 
 ## Golden path (script door)
 
-1. Load **inspire/beat-sheet**. Fill logline, script, audio policy, 18 cards. Occupancy **none**.
+1. Load **labs/assist/beat-sheet**. Fill logline, script, audio policy, 18 cards. Occupancy **none**.
 2. `bazelisk run //:manage -- shot-sheet run --film go-see` writes `films/gosee/shots.yaml`. Does not overwrite lab YAML.
-3. Optional board: **stills/identity-sheet** then **stills/storyboard-6up** (seed 42, 1280x704).
+3. Optional board: **photos/identity-sheet** then **photos/storyboard-6up** (seed 42, 1280x704).
 4. Optional clay: `manage.sh stop` then `export-guides --film go-see --shot 12`. Workbench clay + depth + canny, not Cycles beauty. Path D: dump on the laptop, rsync `guides/`. Creator plates (not 5.00s): `blender-stills` then **klein-from-clay-plates** - [Blender creator suite](blender-creator.md).
 5. `manage.sh film-animatic --film go-see` - clay.mp4 or 5.00 s still holds, cap 90 s. Compose may stay up.
-6. Start Comfy. Queue **dcc/clay-hero** on `first.png`, or stay on `:8188` with **dcc/guide-still** ([Stay in Comfy after a Blender dump](comfy-first-blender.md)). Then `overlay-qc --film go-see --shot 12 --look PATH`. Iterate the look, not the print.
-7. Stop Klein. `download-ltx --tier iclora` if needed. Queue **dcc/depth-control-8s** or Templates -> LTX-2.5 Union Control (depth from `depth.mp4`). MagCache off. Distilled-only. Refuse 19B Union.
+6. Start Comfy. Queue **guides/clay-hero** on `first.png`, or stay on `:8188` with **guides/guide-still** ([Stay in Comfy after a Blender dump](comfy-first-blender.md)). Then `overlay-qc --film go-see --shot 12 --look PATH`. Iterate the look, not the print.
+7. Stop Klein. `download-ltx --tier iclora` if needed. Queue **guides/depth-control-8s** or Templates -> LTX-2.5 Union Control (depth from `depth.mp4`). MagCache off. Distilled-only. Refuse 19B Union.
 8. Stop LTX. Occupancy **audio**. `stem-mix --film go-see --shot 12 --bg PATH` (optional `--dx`). Duck -15 dB, YouTube loudnorm I=-14. App: **audio/stem-mix**.
 9. `film-accept` then concat. Disclosure sidecar stays.
 
@@ -75,10 +75,10 @@ Do not type 120 (VAE floors to 113 frames).
 
 | If | Skip |
 | --- | --- |
-| No Blender / Path D not ready | Film clay dump. Look plate owns composition. Overlay QC is skipped, not faked. Instagram clay tour still Queues on `start` / `--seed-inputs` layout plates; language-only -> **stills/dream-house**. |
+| No Blender / Path D not ready | Film clay dump. Look plate owns composition. Overlay QC is skipped, not faked. Instagram clay tour still Queues on `start` / `--seed-inputs` layout plates; language-only -> **photos/dream-house**. |
 | Empty dialogue | DX stem |
 | Shorts "world SFX, no score" | MX. Do not load ACE-Step next to LTX. |
-| Talking-head / VO-locked picture | Union Control. Use A2V freeze (`motion/av/audio-to-video-8s`). Mouths will not match. |
+| Talking-head / VO-locked picture | Union Control. Use A2V freeze (`video/av/audio-to-video-8s`). Mouths will not match. |
 
 ---
 

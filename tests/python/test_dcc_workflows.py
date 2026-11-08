@@ -20,18 +20,18 @@ def _load(name: str) -> dict:
 
 
 EXISTING_LOADIMAGE_STEMS = (
-    "dcc/clay-hero",
-    "dcc/canny-hero",
-    "dcc/clay-plates",
-    "dcc/depth-control-8s",
-    "dcc/canny-control-8s",
-    "dcc/depth-control-shorts",
-    "dcc/first-last-from-guide",
+    "guides/clay-hero",
+    "guides/canny-hero",
+    "guides/clay-plates",
+    "guides/depth-control-8s",
+    "guides/canny-control-8s",
+    "guides/depth-control-shorts",
+    "guides/first-last-from-guide",
 )
 LOADER_STEMS = (
-    "dcc/guide-still",
-    "dcc/depth-from-loader",
-    "dcc/still-to-mesh",
+    "guides/guide-still",
+    "guides/depth-from-loader",
+    "3d/still-to-mesh",
 )
 DCC_STEMS = EXISTING_LOADIMAGE_STEMS + LOADER_STEMS
 
@@ -43,15 +43,15 @@ def test_dcc_graphs_exist_and_ids() -> None:
         assert (graph.get("extra") or {}).get("lab_rel") == stem
         extra = graph.get("extra") or {}
         assert extra.get("lab_note", "").strip()
-        assert extra.get("lab_app_mode", {}).get("lane") == "dcc"
+        assert extra.get("lab_app_mode", {}).get("lane") == Path(stem).parts[0]
         blob = json.dumps(graph)
         for needle in BANNED:
             assert needle not in blob, (stem, needle)
-        assert lab_json(f"{stem}.json").relative_to(LAB_ROOT).parts[0] == "dcc"
+        assert lab_json(f"{stem}.json").relative_to(LAB_ROOT).parts[0] == Path(stem).parts[0]
 
 
 def test_klein_from_clay_contract() -> None:
-    graph = _load("dcc/clay-hero.json")
+    graph = _load("guides/clay-hero.json")
     extra = graph["extra"]
     assert extra["lab_dcc"]["enhance"] is True
     assert extra["lab_dcc"]["seed"] == 42
@@ -76,13 +76,13 @@ def test_klein_from_clay_contract() -> None:
     assert "1280" in note and "704" in note
     assert "overlay-qc" in extra["lab_note"]
     assert extra["lab_app_mode"]["handoff"] == [
-        "dcc/depth-control-8s",
-        "motion/silent/still-to-video-5s",
+        "guides/depth-control-8s",
+        "video/silent/still-to-video-5s",
     ]
 
 
 def test_ltx_iclora_envelope_contract() -> None:
-    graph = _load("dcc/depth-control-8s.json")
+    graph = _load("guides/depth-control-8s.json")
     extra = graph["extra"]
     ic = extra["lab_iclora"]
     assert ic["templates"] == "LTX-2.5_ICLoRA_Union_Control_Distilled.json"
@@ -110,7 +110,7 @@ def test_dockerfile_still_has_no_dcc_binaries() -> None:
 
 
 def test_klein_from_canny_contract() -> None:
-    graph = _load("dcc/canny-hero.json")
+    graph = _load("guides/canny-hero.json")
     extra = graph["extra"]
     assert extra["lab_dcc"]["prefix"] == "ez_canny_hero"
     assert extra["lab_dcc"]["guide"] == "canny"
@@ -119,11 +119,11 @@ def test_klein_from_canny_contract() -> None:
     load = next(n for n in graph["nodes"] if n.get("type") == "LoadImage")
     assert load["widgets_values"][0] == "canny.png"
     assert extra["lab_app_mode"]["occupancy"] == "klein"
-    assert extra["lab_app_mode"]["handoff"] == ["dcc/canny-control-8s"]
+    assert extra["lab_app_mode"]["handoff"] == ["guides/canny-control-8s"]
 
 
 def test_klein_from_clay_plates_contract() -> None:
-    graph = _load("dcc/clay-plates.json")
+    graph = _load("guides/clay-plates.json")
     extra = graph["extra"]
     plates = extra["lab_dcc"]["plates"]
     assert [p["id"] for p in plates] == ["hero", "packshot", "ig", "shorts"]
@@ -150,14 +150,14 @@ def test_klein_from_clay_plates_contract() -> None:
 
 
 def test_ltx_iclora_canny_and_shorts_contract() -> None:
-    canny = _load("dcc/canny-control-8s.json")
+    canny = _load("guides/canny-control-8s.json")
     ic = canny["extra"]["lab_iclora"]
     assert ic["canny_default"] is True
     assert ic["depth_default"] is False
     assert ic["distilled_only"] is True
     assert ic["magcache"] is False
     assert not any(n.get("type") == "MagCache" for n in canny["nodes"])
-    shorts = _load("dcc/depth-control-shorts.json")
+    shorts = _load("guides/depth-control-shorts.json")
     sic = shorts["extra"]["lab_iclora"]
     assert sic["size"] == [768, 1280]
     latent = next(n for n in shorts["nodes"] if n.get("type") == "LTXVImgToVideo")
@@ -167,7 +167,7 @@ def test_ltx_iclora_canny_and_shorts_contract() -> None:
 
 
 def test_wan_flf_from_guide_contract() -> None:
-    graph = _load("dcc/first-last-from-guide.json")
+    graph = _load("guides/first-last-from-guide.json")
     extra = graph["extra"]
     assert extra["lab_dcc"]["first"] == "first.png"
     assert extra["lab_dcc"]["last"] == "last.png"
@@ -183,7 +183,7 @@ def test_wan_flf_from_guide_contract() -> None:
     end = next(inp for inp in latent["inputs"] if inp.get("name") == "end_image")
     assert end.get("link") is not None
     assert extra["lab_app_mode"]["occupancy"] == "wan"
-    assert extra["lab_app_mode"]["lane"] == "dcc"
+    assert extra["lab_app_mode"]["lane"] == "guides"
 
 
 def test_export_script_parses() -> None:
@@ -210,17 +210,17 @@ def test_existing_seven_keep_loadimage_and_point_at_loaders() -> None:
         assert "LoadImage" in types, stem
         assert "EZDCCLoadGuideStill" not in types, stem
         note = (graph.get("extra") or {}).get("lab_note", "")
-        assert "dcc/guide-still" in note, stem
+        assert "guides/guide-still" in note, stem
 
 
 def test_klein_from_guide_loader_contract() -> None:
-    graph = _load("dcc/guide-still.json")
+    graph = _load("guides/guide-still.json")
     extra = graph["extra"]
     assert extra["lab_dcc"]["prefix"] == "ez_guide_hero"
     assert extra["lab_dcc"]["size"] == [1280, 704]
     assert extra["lab_dcc"]["seed"] == 42
     assert extra["lab_app_mode"]["occupancy"] == "klein"
-    assert extra["lab_app_mode"]["lane"] == "dcc"
+    assert extra["lab_app_mode"]["lane"] == "guides"
     types = {n.get("type") for n in graph["nodes"]}
     assert "EZDCCLoadGuideStill" in types
     assert "EZDCCOccupancyGate" in types
@@ -238,7 +238,7 @@ def test_klein_from_guide_loader_contract() -> None:
 
 
 def test_ltx_iclora_from_guide_loader_contract() -> None:
-    graph = _load("dcc/depth-from-loader.json")
+    graph = _load("guides/depth-from-loader.json")
     extra = graph["extra"]
     assert extra["lab_iclora"]["magcache"] is False
     assert extra["lab_iclora"]["distilled_only"] is True
@@ -270,10 +270,10 @@ def test_ltx_iclora_from_guide_loader_contract() -> None:
 
 
 def test_trellis_from_klein_still_contract() -> None:
-    graph = _load("dcc/still-to-mesh.json")
+    graph = _load("3d/still-to-mesh.json")
     extra = graph["extra"]
     assert extra["lab_app_mode"]["occupancy"] == "trellis"
-    assert extra["lab_app_mode"]["lane"] == "dcc"
+    assert extra["lab_app_mode"]["lane"] == "3d"
     assert extra["lab_dcc"]["plate"] == "mug"
     assert extra["lab_dcc"]["prefix"] == "assets/objects/_lab-mug/"
     types = {n.get("type") for n in graph["nodes"]}

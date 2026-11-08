@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the stills/upscale-reframe lab App (Upscale & Reframe image utility).
+"""Build the photos/upscale-reframe lab App (Upscale & Reframe image utility).
 
 Not imported by pytest (leading underscore). Run from repo root:
 
@@ -9,7 +9,7 @@ Writes only ``workflows/_lab/stills/upscale-reframe.json``. The loaded still
 enters the sampler as a ReferenceLatent and the canvas comes from
 EZImageFormat, so a narrower or taller aspect generates the missing area
 instead of stretching the source. The source is snapped to the Flux.2 Klein
-div16 VAE grid (EZSnapImage) before VAEEncode, like stills/text-swap.
+div16 VAE grid (EZSnapImage) before VAEEncode, like photos/text-swap.
 Format / upscale / describe / quality / check-models nodes are inserted by the
 shared wiring helpers in ``dump_wired_graph`` (identity -> format -> upscale ->
 describe -> stamp -> layout), so this module only authors the chain around
@@ -27,7 +27,7 @@ from _wire_format import dump_wired_graph
 
 ROOT = Path(__file__).resolve().parents[2]
 
-REL = "stills/upscale-reframe"
+REL = "photos/upscale-reframe"
 SAVE_PREFIX = "ez_reframe"
 CANVAS = (1280, 704)
 
@@ -49,7 +49,7 @@ DESCRIPTION = (
     "aspect, Upscale (default none) is lanczos on the finished PNG. "
     "Prefix ez_reframe."
 )
-NOTE = f"""## stills/upscale-reframe
+NOTE = f"""## photos/upscale-reframe
 
 Klein 4B **Upscale & Reframe**. Load a still, choose the aspect the result must land in on **Format / platform** (or type Custom Width x Height), set **Output size** to **Force format** so that canvas wins over the input's own aspect, then pick **Upscale** when the result also has to be bigger.
 

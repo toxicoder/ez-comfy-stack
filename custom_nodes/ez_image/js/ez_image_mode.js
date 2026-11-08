@@ -325,7 +325,7 @@ function widgetValue(typeName, widgetName) {
  * @returns {boolean}
  */
 function isImageStudio() {
-  if ((app.graph?.extra?.lab_rel || "") === "stills/image-studio") {
+  if ((app.graph?.extra?.lab_rel || "") === "photos/image-studio") {
     return true;
   }
   return Boolean(nodeByType("EZImageMode"));
@@ -356,7 +356,7 @@ function previewBody() {
     unet: widgetValue("UNETLoader", "unet_name"),
     seed: widgetValue("KSampler", "seed"),
     seed_control: widgetValue("KSampler", "control_after_generate"),
-    lab_rel: app.graph?.extra?.lab_rel || "stills/image-studio",
+    lab_rel: app.graph?.extra?.lab_rel || "photos/image-studio",
   };
 }
 

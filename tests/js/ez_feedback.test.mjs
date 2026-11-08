@@ -442,7 +442,7 @@ async function mountPanel(core, pairs) {
 }
 
 const STUDIO_PAIRS = [
-  ["App", "stills/image-studio.json"],
+  ["App", "photos/image-studio.json"],
   ["Workflow", "image-studio"],
   ["Nodes", 9],
 ];
@@ -526,7 +526,7 @@ describe("ez_feedback panel form", () => {
     const report = core.reports[0];
     assert.equal(report.kind, "bug");
     assert.equal(report.surface, "app");
-    assert.equal(report.app, "stills/image-studio.json");
+    assert.equal(report.app, "photos/image-studio.json");
     assert.equal(report.blanks, false, "a filled form files no placeholders");
     assert.equal(report.summary, "KSampler dies on the second pass");
     assert.deepEqual(report.narrative, {

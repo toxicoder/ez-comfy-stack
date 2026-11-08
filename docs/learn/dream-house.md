@@ -16,7 +16,7 @@ tags: [learn, klein, dream-house, blender, clay, instagram]
 
 **What this enables**
 
-- **Keeping** **stills/dream-house** as a one-Queue language tour
+- **Keeping** **photos/dream-house** as a one-Queue language tour
 - **Using** a real 3D scene so rooms stay adjacent while Klein only paints materials
 - **Queuing** ten 1024x1280 plates that read as one walkthrough
 - **Skipping** Blender entirely when `start` can seed the plates
@@ -36,21 +36,21 @@ The T2I tour remembers the place in prose (`HOUSE IDENTITY` + Prompt Join `lock=
 ```mermaid
 flowchart TB
   subgraph Language["Language tour"]
-    A["HOUSE IDENTITY"] --> B["stills/dream-house"]
+    A["HOUSE IDENTITY"] --> B["photos/dream-house"]
     B --> C["ez_dream_house_01..10"]
   end
   subgraph Clay["Clay tour"]
     D["Same HOUSE IDENTITY"] --> E["house-views greybox"]
     E --> F["ez_house_clay_01..10"]
-    F --> G["stills/dream-house-clay"]
+    F --> G["photos/dream-house-clay"]
     G --> H["ez_dream_house_clay_01..10"]
   end
 ```
 
 | Graph | Persistence | When |
 | --- | --- | --- |
-| **stills/dream-house** | Prompt Join `lock=view`. Independent T2I | No Blender, or you want a one-Queue draft |
-| **stills/dream-house-clay** | One greybox + ten cameras. Klein edit + `ReferenceLatent` | You want the kitchen to stay next to the lounge. `start` seeds plates; Blender dump is optional Workbench quality |
+| **photos/dream-house** | Prompt Join `lock=view`. Independent T2I | No Blender, or you want a one-Queue draft |
+| **photos/dream-house-clay** | One greybox + ten cameras. Klein edit + `ReferenceLatent` | You want the kitchen to stay next to the lounge. `start` seeds plates; Blender dump is optional Workbench quality |
 
 Same ten cameras (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study). Same 1024x1280 Instagram 4:5. Same optional style dropdown on the bible. Prefixes do **not** collide. Language-tour shot cards are walkthrough cameras (lens, height, a distinct room program, near/far, which room); type the place - materials, time of day, architecture - in **HOUSE IDENTITY**. Each still names its own room (entrance hall, living hall, cook line, dining hall, sleep chamber, wet room, open-air terrace, writing room) so a Queue reads as a tour, not one volume with different finishes.
 
@@ -70,7 +70,7 @@ bazelisk run //:manage -- occupancy enter blender-desk
 bazelisk run //:manage -- house-views --slug lab-penthouse
 # optional: --layout /path/to/house_layout.yaml
 ./scripts/manage.sh start   # type yes
-# Queue workflows/_lab/stills/dream-house-clay.json
+# Queue workflows/_lab/photos/dream-house-clay.json
 ```
 
 Dump lives under `${COMFY_OUTPUT_DIR}/assets/sets/<slug>/` (layout, `mesh/house.glb`, `views/`, `depth/`). Clay copies `ez_house_clay_01.png` ... `10.png` land in that folder and in `${COMFY_OUTPUT_DIR}/input`. LoadImage does **not** list the output root.
@@ -90,9 +90,9 @@ Default layout is `schemas/house_layout.yaml` (lab penthouse matching the canned
 
 | If | Skip |
 | --- | --- |
-| No host Blender | Workbench dump. `start` / `--seed-inputs` still render layout cameras. Language-only tour -> **stills/dream-house**. Do not substitute T2I stills or `example.png` as clay |
+| No host Blender | Workbench dump. `start` / `--seed-inputs` still render layout cameras. Language-only tour -> **photos/dream-house**. Do not substitute T2I stills or `example.png` as clay |
 | Compose is up | Blender `house-views` dump (exit 2). `./scripts/manage.sh stop` first. `--install-inputs` and `--seed-inputs` may run while compose is up |
-| You only needed a language bible | Clay dump. Queue **stills/dream-house** |
+| You only needed a language bible | Clay dump. Queue **photos/dream-house** |
 
 ---
 

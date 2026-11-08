@@ -159,7 +159,7 @@ def _report_args(**overrides: Any) -> dict[str, Any]:
     """
     args: dict[str, Any] = {
         "kind": "bug",
-        "title": "[app:stills/still-draft] KSampler blew up",
+        "title": "[app:photos/still-draft] KSampler blew up",
         "body": "## What happened\n\nit did\n",
         "labels": ["bug"],
     }
@@ -282,7 +282,7 @@ def test_kind_and_label_mapping() -> None:
 
 
 def test_area_for_surfaces() -> None:
-    assert context.area_for("app", "stills/still-draft") == "app:stills/still-draft"
+    assert context.area_for("app", "photos/still-draft") == "app:photos/still-draft"
     assert context.area_for("app", "") == "app"
     assert context.area_for("film-board", "ignored") == "film-board"
     assert context.area_for("", "") == "global"
@@ -290,8 +290,8 @@ def test_area_for_surfaces() -> None:
 
 def test_title_prefixes_and_defaults() -> None:
     assert (
-        context.title_for("bug", "app", "stills/still-draft", "boom")
-        == "[app:stills/still-draft] boom"
+        context.title_for("bug", "app", "photos/still-draft", "boom")
+        == "[app:photos/still-draft] boom"
     )
     assert context.title_for("bug", "media-explorer", "", "boom") == "[media-explorer] boom"
     assert context.title_for("bug", "global", "", "boom") == "boom"
@@ -350,7 +350,7 @@ def test_redact_leaves_root_home_alone(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_context_lines_renders_skips_and_survives_junk() -> None:
     rows: Any = [
 
-        ("App", "stills/still-draft"),
+        ("App", "photos/still-draft"),
         ("Note", "  spaced   out "),
         ("Empty", ""),
         ("Nada", None),
@@ -361,7 +361,7 @@ def test_context_lines_renders_skips_and_survives_junk() -> None:
         ("only one",),
     ]
     lines = context.context_lines(rows)
-    assert lines[0] == "- App: stills/still-draft"
+    assert lines[0] == "- App: photos/still-draft"
     assert lines[1] == "- Note: spaced out"
     assert "- Zero: 0" in lines
     assert "- Offline: no" in lines
@@ -457,7 +457,7 @@ def _body_args(**overrides: Any) -> dict[str, Any]:
     kwargs: dict[str, Any] = {
         "kind": "bug",
         "surface": "app",
-        "context": [("App", "stills/still-draft")],
+        "context": [("App", "photos/still-draft")],
         "environment": [("comfyui_ref", "v0.43.0")],
         "errors": [{"ts": "2026-10-28T09:00:00Z", "message": "boom"}],
         "browser": {"viewport": "1600x900", "ua": "Mozilla/5.0"},

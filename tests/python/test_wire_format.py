@@ -48,34 +48,34 @@ def _src(graph: dict[str, Any], node: dict[str, Any], name: str) -> dict[str, An
 
 
 def test_format_scope_covers_printers_and_skips_locked() -> None:
-    assert format_kind("stills/still-draft") == "still"
-    assert format_kind("stills/still-studio") == "still"
-    assert format_kind("stills/image-studio") == "still"
-    assert format_kind("motion/silent/still-to-video-5s") == "video"
-    assert format_kind("motion/av/text-to-video-8s") == "video"
-    assert format_kind("creator/stills/youtube-channel-icon") == "still"
-    assert format_kind("creator/silent/tiktok-hook") == "video"
-    assert format_kind("stills/text-swap") is None
-    assert format_kind("stills/platform-pack") is None
-    assert format_kind("films/go-see") is None
-    assert format_kind("motion/av/audio-to-video-8s") == "video"
-    assert format_kind("stills/talking-head") == "video"
-    assert format_kind("stills/lighting-trio") == "still"
-    assert format_kind("stills/background-swap") is None
-    assert format_kind("stills/background-edit") is None
-    assert "stills/still-draft" in STILL_SCOPE
-    assert "motion/loops/gif-loop" in VIDEO_SCOPE
+    assert format_kind("photos/still-draft") == "still"
+    assert format_kind("photos/still-studio") == "still"
+    assert format_kind("photos/image-studio") == "still"
+    assert format_kind("video/silent/still-to-video-5s") == "video"
+    assert format_kind("video/av/text-to-video-8s") == "video"
+    assert format_kind("social/stills/youtube-channel-icon") == "still"
+    assert format_kind("social/silent/tiktok-hook") == "video"
+    assert format_kind("photos/text-swap") is None
+    assert format_kind("photos/platform-pack") is None
+    assert format_kind("film/go-see") is None
+    assert format_kind("video/av/audio-to-video-8s") == "video"
+    assert format_kind("video/av/talking-head") == "video"
+    assert format_kind("photos/lighting-trio") == "still"
+    assert format_kind("photos/background-swap") is None
+    assert format_kind("photos/background-edit") is None
+    assert "photos/still-draft" in STILL_SCOPE
+    assert "video/loops/gif-loop" in VIDEO_SCOPE
     assert format_kind("audio/albums/drive-through/afterparty/cover") == "still"
     assert format_kind("audio/albums/nill-bye/peer-review/cover") == "still"
     assert FORMAT_SCOPE == STILL_SCOPE | VIDEO_SCOPE
 
 
 def test_pick_still_and_video_defaults() -> None:
-    draft = pick_still_format("stills/still-draft", 768, 432, "ez_still_draft")
+    draft = pick_still_format("photos/still-draft", 768, 432, "ez_still_draft")
     assert draft.id == "aspect_16_9_draft"
-    thumb = pick_still_format("creator/stills/youtube-channel-icon", 768, 768, "ez_yt_icon")
+    thumb = pick_still_format("social/stills/youtube-channel-icon", 768, 768, "ez_yt_icon")
     assert thumb.id == "youtube_channel_icon"
-    custom = pick_still_format("stills/style-lock", 768, 960, "ez_style_lock")
+    custom = pick_still_format("photos/style-lock", 768, 960, "ez_style_lock")
     assert custom.id == "custom"
     wan = pick_video_format("wan", 832, 480)
     assert wan.id == "wan_16_9"
@@ -111,7 +111,7 @@ def _strip_format(graph: dict[str, Any], ntype: str) -> None:
 
 
 def test_wire_still_draft_links_latent_and_hint() -> None:
-    graph = copy.deepcopy(_load("stills/still-draft"))
+    graph = copy.deepcopy(_load("photos/still-draft"))
     assert wire_still_format(graph) is False
     fmt = next(node for node in graph["nodes"] if node.get("type") == "EZImageFormat")
     latent = next(
@@ -133,7 +133,7 @@ def test_wire_still_draft_links_latent_and_hint() -> None:
 
 
 def test_wire_video_links_wan_latent() -> None:
-    graph = copy.deepcopy(_load("motion/silent/still-to-video-5s"))
+    graph = copy.deepcopy(_load("video/silent/still-to-video-5s"))
     assert wire_video_format(graph) is False
     fmt = next(node for node in graph["nodes"] if node.get("type") == "EZVideoFormat")
     latent = next(
@@ -154,14 +154,14 @@ def test_wire_video_links_wan_latent() -> None:
 
 
 def test_ensure_format_widgets_is_idempotent() -> None:
-    graph = copy.deepcopy(_load("stills/still-draft"))
+    graph = copy.deepcopy(_load("photos/still-draft"))
     assert ensure_format_widgets(graph) is True or "Match input" in next(
         node["widgets_values"]
         for node in graph["nodes"]
         if node.get("type") == "EZImageFormat"
     )
     assert ensure_format_widgets(graph) is False
-    video = copy.deepcopy(_load("motion/av/text-to-video-8s"))
+    video = copy.deepcopy(_load("video/av/text-to-video-8s"))
     ensure_format_widgets(video)
     values = next(
         node["widgets_values"]
@@ -174,15 +174,15 @@ def test_ensure_format_widgets_is_idempotent() -> None:
 
 
 def test_wire_skips_out_of_scope_and_mixed_pack() -> None:
-    swap = copy.deepcopy(_load("stills/text-swap"))
+    swap = copy.deepcopy(_load("photos/text-swap"))
     assert wire_lab_graph(swap) is False
-    pack = copy.deepcopy(_load("stills/platform-pack"))
+    pack = copy.deepcopy(_load("photos/platform-pack"))
     assert wire_lab_graph(pack) is False
     assert not any(node.get("type") == "EZImageFormat" for node in pack["nodes"])
 
 
 def test_gif_loop_skips_hint_link() -> None:
-    graph = copy.deepcopy(_load("motion/loops/gif-loop"))
+    graph = copy.deepcopy(_load("video/loops/gif-loop"))
     assert wire_video_format(graph) is False
     fmt = next(node for node in graph["nodes"] if node.get("type") == "EZVideoFormat")
     enh = next(

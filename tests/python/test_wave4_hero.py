@@ -14,9 +14,9 @@ WF = ROOT / "workflows"
 
 def test_film_graphs_carry_dfr_extra() -> None:
     for name in (
-        "films/go-see.json",
-        "films/still-here.json",
-        "films/switchyard.json",
+        "film/go-see.json",
+        "film/still-here.json",
+        "film/switchyard.json",
     ):
         extra = json.loads(lab_json(name).read_text(encoding="utf-8"))["extra"]
         assert extra["lab_dfr"]["print"] == "ltx"
@@ -28,9 +28,9 @@ def _overlap_hits(graph: dict) -> list[str]:
 
 
 def test_a14b_hero_is_eight_step_magcache_off() -> None:
-    graph = json.loads(lab_json("optional/still-to-video-a14b.json").read_text(encoding="utf-8"))
+    graph = json.loads(lab_json("labs/opt-in/still-to-video-a14b.json").read_text(encoding="utf-8"))
     assert graph["id"] == "still-to-video-a14b"
-    assert graph["extra"].get("lab_rel") == "optional/still-to-video-a14b"
+    assert graph["extra"].get("lab_rel") == "labs/opt-in/still-to-video-a14b"
     assert graph["extra"]["lab_a14b"]["steps"] == 8
     assert graph["extra"]["lab_a14b"]["magcache"] is False
     assert "lab_magcache" not in graph["extra"]
@@ -48,9 +48,9 @@ def test_a14b_hero_is_eight_step_magcache_off() -> None:
 
 
 def test_talking_head_graph() -> None:
-    graph = json.loads(lab_json("stills/talking-head.json").read_text(encoding="utf-8"))
+    graph = json.loads(lab_json("video/av/talking-head.json").read_text(encoding="utf-8"))
     assert graph["id"] == "talking-head"
-    assert graph["extra"].get("lab_rel") == "stills/talking-head"
+    assert graph["extra"].get("lab_rel") == "video/av/talking-head"
     assert graph["extra"]["lab_talking_head"]["s2v_tier"] == "s2v"
     blob = json.dumps(graph)
     assert "Wav2Lip" not in blob
@@ -62,7 +62,7 @@ def test_talking_head_graph() -> None:
 
 
 def test_identity_sheet_seed_and_size() -> None:
-    graph = json.loads(lab_json("stills/identity-sheet.json").read_text(encoding="utf-8"))
+    graph = json.loads(lab_json("photos/identity-sheet.json").read_text(encoding="utf-8"))
     assert graph["extra"]["lab_identity"]["seed"] == 42
     assert graph["extra"]["lab_identity"]["enhance"] is True
     prefixes = [n["widgets_values"][0] for n in graph["nodes"] if n.get("type") == "SaveImage"]
@@ -87,10 +87,10 @@ def test_identity_sheet_seed_and_size() -> None:
 
 
 def test_longcat_lab_note_refuses_nccl() -> None:
-    path = lab_json("optional/longcat-video.json")
+    path = lab_json("labs/opt-in/longcat-video.json")
     graph = json.loads(path.read_text(encoding="utf-8"))
     assert graph["id"] == "longcat-video"
-    assert graph["extra"].get("lab_rel") == "optional/longcat-video"
+    assert graph["extra"].get("lab_rel") == "labs/opt-in/longcat-video"
     note = graph["extra"]["lab_note"]
     assert "NCCL" in note
     assert "nvidia-dgx-spark-lab" in note

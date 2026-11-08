@@ -10,7 +10,7 @@ Pick an audio graph. This catalog covers local audio jobs on one GB10 lane: a
 two-host podcast episode, a radio drama, a learning episode, a dub, a RAP-FIRST
 take, and the numbered tracks of the fifteen shipped albums. Splice professional
 ACE tags on occupancy **llm** first: [Audio Rack](audio-rack.md)
-(`inspire/audio-rack`). Then Queue occupancy **audio** graphs below.
+(`labs/assist/audio-rack`). Then Queue occupancy **audio** graphs below.
 
 **What's on this page**
 

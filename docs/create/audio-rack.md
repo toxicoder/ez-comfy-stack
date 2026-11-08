@@ -29,7 +29,7 @@ language, see [Prompting](../prompting.md); for the camera equivalent,
 
 **Who this is for:** studio users after Prompt Forge / Cinema Rack. Occupancy **llm**. No UNET. Do not load ACE-Step on this canvas.
 
-Load **inspire/audio-rack**. Optional **Brief**, pick techniques, Queue, then read the vocal and instrumental Enhance boxes.
+Load **labs/assist/audio-rack**. Optional **Brief**, pick techniques, Queue, then read the vocal and instrumental Enhance boxes.
 
 ```mermaid
 flowchart LR
@@ -102,7 +102,7 @@ Instrumental takes use `mix_drive_lock` (808, original composition, heavy chest 
 
 ## Handoff
 
-1. Queue **inspire/audio-rack** (occupancy **llm**).
+1. Queue **labs/assist/audio-rack** (occupancy **llm**).
 2. Copy the tags / lyrics boxes.
 3. Paste into **audio/music/rap-draft** (or a Drive-through / podcast bed graph). Set Family to `ace_instrumental` / `podcast_bed` first if you want those filters already applied.
 4. Optional: turn Enhance **off** on the destination if the rack string is already ACE-native.

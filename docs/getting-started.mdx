@@ -19,7 +19,7 @@ tags: [getting-started, docker, comfyui]
 
 - **Opening** the studio at `http://${SPARK_HOST}:${COMFY_PORT}` (default **8188**)
 - **Downloading** multi-GB weights that still leave bandwidth for SSH
-- **Queuing** one **`_lab/stills/still-draft`** PNG under `${COMFY_OUTPUT_DIR}`
+- **Queuing** one **`_lab/photos/still-draft`** PNG under `${COMFY_OUTPUT_DIR}`
 - **Knowing** why you typed `yes` and where the PNG went - [How the studio works](learn/index.md)
 - **Continuing** after first run on [FAQ](start/faq.md) and [Daily loop](operate/daily.md)
 
@@ -34,7 +34,7 @@ Open this page when the Spark is in front of you (or reachable over SSH) and not
 | Goal | Detail |
 | --- | --- |
 | **UI** | ComfyUI at `http://${SPARK_HOST}:${COMFY_PORT}` |
-| **Workflow** | **`_lab/stills/still-draft`** queued without missing-weight errors |
+| **Workflow** | **`_lab/photos/still-draft`** queued without missing-weight errors |
 | **Weights** | Klein 4B + Wan 2.2 5B + LTX-2.5 distilled under `${MODELS_DIR}` (default `/mnt/models`) |
 | **Output** | `ez_still_draft_*.png` under `${COMFY_OUTPUT_DIR}` (default `/mnt/comfy-output`) |
 
@@ -271,9 +271,9 @@ The two image sources, and why both keep the same `start` path and the same safe
 
 ---
 
-### 7. Queue `_lab/stills/still-draft`
+### 7. Queue `_lab/photos/still-draft`
 
-In ComfyUI, load **stills/still-draft** from the **Apps** sidebar (or **Workflows -> `_lab/stills/`**). Host file: `workflows/_lab/stills/still-draft.json`. It is seeded as `*.app.json` under `_lab/stills/`. Leave **Enhance** off. Queue.
+In ComfyUI, load **photos/still-draft** from the **Apps** sidebar (or **Workflows -> `_lab/photos/`**). Host file: `workflows/_lab/photos/still-draft.json`. It is seeded as `*.app.json` under `_lab/photos/`. Leave **Enhance** off. Queue.
 
 **Verify:** PNG lands at `${COMFY_OUTPUT_DIR}/ez_still_draft_*.png` (container `/outputs`). Missing Models on this graph -> re-run download and `doctor` ([Models and workflows](operate/troubleshooting-models-workflows.md)). After `stop` / image pull / `start`, Comfy **History** is empty - open the **Outputs** sidebar (thumbnail grid or list; select multiple for bulk delete / copy) to preview, delete, or send a still to LoadImage. Files on `${COMFY_OUTPUT_DIR}` persist.
 
