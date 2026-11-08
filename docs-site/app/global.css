@@ -690,6 +690,33 @@ article table:not([class]) {
   }
 }
 
+/*
+ * Mermaid diagrams sit in the same framed box as a code figure rather than floating on the
+ * page background, so a diagram reads as one more artefact of the article. The palette
+ * itself comes from `mermaidConfig()` in `components/mermaid.tsx`: Mermaid bakes its
+ * `themeVariables` into the SVG, which is why only the frame lives here.
+ */
+.ez-mermaid {
+  margin: 1rem 0 1.25rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--color-fd-border);
+  border-radius: 0.5rem;
+  /* The page paper, not the card: Mermaid fills its nodes with the card tone, and a card
+     frame would leave each box defined by its border alone. */
+  background: var(--color-fd-background);
+  overflow: auto;
+  text-align: center;
+}
+
+.ez-mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.ez-mermaid :where(text) {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
 .ez-cinema-clip {
   display: block;
   max-width: 42rem;
