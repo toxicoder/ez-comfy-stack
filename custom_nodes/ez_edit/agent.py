@@ -25,6 +25,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 from typing import (
+    TYPE_CHECKING,
     Callable,
     Mapping,
     NamedTuple,
@@ -38,7 +39,12 @@ from typing import (
 from . import protocol
 from .protocol import ChatMessage, ToolCallTrace
 
-DispatchFn: TypeAlias = Callable[[str, dict[str, object]], dict[str, object]]
+if TYPE_CHECKING:
+    from types import TracebackType
+
+    from ez_common import Json, JsonMap, JsonObject
+
+DispatchFn: TypeAlias = Callable[[str, "JsonMap"], "JsonObject"]
 """``(name, args) -> {"ok": bool, "text": str}`` tool executor (injected)."""
 
 OccupancyReader: TypeAlias = Callable[[Path], str]
@@ -64,11 +70,18 @@ class HttpReply(Protocol):
         """
         ...
 
-    def __exit__(self, *args: object) -> object:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: TracebackType | None,
+    ) -> bool | None:
         """Close the response.
 
         Args:
-            *args: Exception triple handed in by ``with``.
+            exc_type: Exception class handed in by ``with``.
+            exc: Exception instance handed in by ``with``.
+            tb: Exception traceback handed in by ``with``.
 
         Returns:
             Truthy to swallow the exception.
@@ -115,7 +128,7 @@ class CompletionClient(Protocol):
     """Anything that can complete a chat turn (``AgentLLM`` or a double)."""
 
     def chat(
-        self, messages: list[ChatMessage], tools: list[dict[str, object]] | None = None
+        self, messages: list[ChatMessage], tools: list[JsonObject] | None = None
     ) -> ChatMessage:
         """Return the next assistant message.
 
@@ -134,7 +147,7 @@ class _Call(NamedTuple):
 
     call_id: str
     name: str
-    args: dict[str, object]
+    args: JsonObject
     error: str
 
 
@@ -337,11 +350,11 @@ def require_occupancy(
 
 
 def _add_tool(
-    tools: list[dict[str, object]],
+    tools: list[JsonObject],
     seen: set[str],
-    name: object,
-    description: object,
-    parameters: object,
+    name: Json | None,
+    description: Json | None,
+    parameters: Json | None,
 ) -> None:
     """Append one OpenAI function tool when its name is new and non-empty.
 
@@ -370,8 +383,8 @@ def _add_tool(
 
 
 def build_tools(
-    extra: Sequence[Mapping[str, object]] | None = None,
-) -> list[dict[str, object]]:
+    extra: Sequence[JsonMap] | None = None,
+) -> list[JsonObject]:
     """OpenAI ``tools`` payload: the static catalog plus any extra tools.
 
     Extras may be catalog-shaped (``{name, description, parameters}``) or
@@ -383,7 +396,7 @@ def build_tools(
     Returns:
         Deduplicated list of ``{"type": "function", "function": {...}}``.
     """
-    tools: list[dict[str, object]] = []
+    tools: list[JsonObject] = []
     seen: set[str] = set()
     for name, entry in protocol.TOOL_CATALOG.items():
         _add_tool(
@@ -408,7 +421,7 @@ def build_tools(
     return tools
 
 
-def tool_names(tools: list[dict[str, object]]) -> set[str]:
+def tool_names(tools: Sequence[JsonMap]) -> set[str]:
     """Names the loop may dispatch without the ``local__`` pass-through.
 
     Args:
@@ -529,7 +542,7 @@ class AgentLLM:
         return urllib.request.urlopen(request, timeout=timeout)
 
     def chat(
-        self, messages: list[ChatMessage], tools: list[dict[str, object]] | None = None
+        self, messages: list[ChatMessage], tools: list[JsonObject] | None = None
     ) -> ChatMessage:
         """One completion: occupancy gate, POST, parse ``choices[0].message``.
 
@@ -606,7 +619,7 @@ def _parse_completion(raw: bytes | str) -> ChatMessage:
 # --- Tool loop --------------------------------------------------------------
 
 
-def _parse_call(entry: Mapping[str, object], step: int, index: int) -> _Call:
+def _parse_call(entry: JsonMap, step: int, index: int) -> _Call:
     """Normalize one raw tool_call object.
 
     Args:
@@ -623,7 +636,7 @@ def _parse_call(entry: Mapping[str, object], step: int, index: int) -> _Call:
     name = str(fn.get("name") or entry.get("name") or "").strip()
     call_id = str(entry.get("id") or f"call_{step}_{index}")
     fn_args = fn.get("arguments")
-    raw_args: object = fn_args if fn_args is not None else entry.get("args")
+    raw_args: Json = fn_args if fn_args is not None else entry.get("args")
     if raw_args is None or raw_args == "":
         return _Call(call_id, name, {}, "")
     if isinstance(raw_args, dict):
@@ -646,7 +659,8 @@ def _copy_message(row: Mapping[str, object]) -> ChatMessage:
     (or carry junk tool fields); only the pinned keys survive the copy.
 
     Args:
-        row: Transcript entry from a previous :func:`run_turn`.
+        row: Transcript entry from a previous :func:`run_turn` - a
+            :class:`~ez_edit.protocol.ChatMessage` or any wire dict.
 
     Returns:
         New :class:`~ez_edit.protocol.ChatMessage` carrying role, content, and
@@ -666,7 +680,7 @@ def _copy_message(row: Mapping[str, object]) -> ChatMessage:
     return message
 
 
-def _unknown_dispatch(name: str, args: dict[str, object]) -> dict[str, object]:
+def _unknown_dispatch(name: str, args: JsonMap) -> JsonObject:
     """Dispatch used when the caller supplies none.
 
     Args:
@@ -725,7 +739,7 @@ def run_turn(
     user_text: str,
     *,
     history: list[ChatMessage] | None = None,
-    tools: list[dict[str, object]] | None = None,
+    tools: list[JsonObject] | None = None,
     llm: CompletionClient | None = None,
     dispatch: DispatchFn | None = None,
     max_steps: int | None = None,

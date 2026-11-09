@@ -13,7 +13,10 @@ only - pack import stays hermetic for pytest.
 
 from __future__ import annotations
 
-from typing import Literal, TypedDict
+from typing import TYPE_CHECKING, Literal, TypedDict
+
+if TYPE_CHECKING:
+    from ez_common import JsonObject
 
 # --- Storage layout (all under ${COMFY_OUTPUT_DIR}) -------------------------
 
@@ -178,11 +181,21 @@ class EditProject(TypedDict):
     """ISO-8601 UTC stamp written by the reducer on every apply."""
 
 
+class ProjectState(TypedDict):
+    """Project plus its jobstore rows (the ``GET /ez_edit/state`` payload)."""
+
+    project: EditProject | None
+    """The resolved project, or ``None`` on a fresh install."""
+    jobs: list[JobRecord]
+    """Jobstore rows belonging to the project."""
+
+
 class EditOp(TypedDict):
     """One reducer instruction: op name plus op-specific args."""
 
     op: OpName
     args: dict[str, object]
+    """Op-specific arguments; carries pack records (a ``Clip``) beside scalars."""
 
 
 class JobRecord(TypedDict):
@@ -212,7 +225,7 @@ class LocalToolDef(TypedDict):
     """Streamable-HTTP MCP endpoint, always laptop-loopback for the user."""
     name: str
     description: str
-    input_schema: dict[str, object]
+    input_schema: JsonObject
 
 
 class LocalCall(TypedDict):
@@ -221,7 +234,7 @@ class LocalCall(TypedDict):
     call_id: str
     server_url: str
     name: str
-    args: dict[str, object]
+    args: JsonObject
 
 
 class ChatMessage(TypedDict, total=False):
@@ -229,7 +242,7 @@ class ChatMessage(TypedDict, total=False):
 
     role: str
     content: str
-    tool_calls: list[dict[str, object]]
+    tool_calls: list[JsonObject]
     tool_call_id: str
 
 
@@ -237,14 +250,14 @@ class ToolCallTrace(TypedDict):
     """One agent-loop step surfaced to the panel and logs."""
 
     name: str
-    args: dict[str, object]
+    args: JsonObject
     ok: bool
     summary: str
 
 
 # --- Tool catalog (single source for agent + host MCP) ----------------------
 
-TOOL_CATALOG: dict[str, dict[str, object]] = {
+TOOL_CATALOG: dict[str, JsonObject] = {
     "edit_get_state": {
         "description": "Return the current edit project (clips, overlays, "
         "captions) and its recent jobs. Pass project_id or empty for the "
