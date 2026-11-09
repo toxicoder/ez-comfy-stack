@@ -223,6 +223,7 @@ OUTPUT_TYPES = (
     "EZAlbumPack",
     "EZAudioMetadata",
     "MeshToFile3D",
+    "SaveGLB",
     "EZClipConcat",
 )
 
@@ -1493,10 +1494,10 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "ltx",
         "audio/stem-mix",
     ),
-    "dcc/still-to-mesh": _spec(
-        "trellis",
-        default_view="graph",
-    ),
+    # 3d/* is absent on purpose: the TRELLIS graphs are stamped by their own
+    # builders (_build_trellis_workflow, _build_3d_apps, _build_dcc_workflows)
+    # and skipped by _patch_lab_apps, so a re-stamp here would rewrite
+    # lab_app_mode from a spec that cannot express the mesh chain.
     "audio/stem-mix": _spec(
         "audio",
         primitive_strings=True,

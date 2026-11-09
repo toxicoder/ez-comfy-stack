@@ -13,8 +13,8 @@ import sys
 from pathlib import Path
 
 from _lab_layout import GROUP_TITLE_INSET, group as _group, finalize_layout
-from _lab_paths import lab_dest, lab_json
-from _stamp_app_mode import stamp_suite_graph
+from _lab_paths import lab_dest, lab_json, write_lab_graph
+from _stamp_app_mode import stamp_app_mode, stamp_suite_graph
 
 KLEIN_NOTE = """## guides/clay-hero
 
@@ -175,7 +175,7 @@ Still pack plate -> native TRELLIS.2 INT8 mesh (Comfy core nodes). Occupancy: **
 bazelisk run //:manage -- occupancy enter trellis --yes
 ```
 
-EZDCCLoadStillPack slug ``go-see`` plate ``mug`` -> OccupancyGate -> EZUnloadModels -> TRELLIS.2 INT8. Save under ``assets/objects/_lab-mug/`` (output tree, never MODELS_DIR). Do not mint an Asset Bible row from this graph.
+EZDCCLoadStillPack slug ``go-see`` plate ``mug`` -> OccupancyGate -> EZUnloadModels -> TRELLIS.2 INT8 (upsample ``target_resolution`` 1024 - ComfyUI only accepts 1024-2048 in steps of 128). PaintMesh -> MeshToFile3D only converts in memory; SaveGLB is the node that writes ``assets/objects/_lab-mug/mesh`` (output tree, never MODELS_DIR). Do not mint an Asset Bible row from this graph.
 
 No Preview3D / Load3D / Save3D types in-tree - inspect the GLB with core Load 3D / Preview 3D after Queue. Native INT8 only.
 """
@@ -204,10 +204,13 @@ def _load(name: str) -> dict:
     return json.loads(lab_json(name).read_text(encoding="utf-8"))
 
 
-def _save(graph: dict, dest: Path) -> None:
+def _save(graph: dict, dest: Path, *, lab_identity: bool = False) -> None:
     dest.parent.mkdir(parents=True, exist_ok=True)
     stamp_suite_graph(graph)
     finalize_layout(graph)
+    if lab_identity:
+        write_lab_graph(dest, graph)
+        return
     dest.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
 
 
@@ -1112,7 +1115,6 @@ def build_trellis_from_klein_still() -> dict:
     from _build_trellis_workflow import build_trellis
 
     graph = build_trellis()
-    graph["id"] = "3d/still-to-mesh"
     extra = graph.setdefault("extra", {})
     extra["lab_profile"] = "3d/still-to-mesh"
     extra["lab_description"] = (
@@ -1137,10 +1139,23 @@ def build_trellis_from_klein_still() -> dict:
         widgets=["go-see", "mug", "first"],
     )
     _insert_occupancy_gate(graph, source=load, required_mode="trellis")
+    # MeshToFile3D has no widgets at all: the prefix belongs on SaveGLB, which
+    # is the output node that actually writes the .glb.
     for node in graph["nodes"]:
-        if node.get("type") == "MeshToFile3D":
+        if node.get("type") == "SaveGLB":
             node["widgets_values"] = ["assets/objects/_lab-mug/mesh"]
-            node["title"] = "Save GLB (_lab-mug)"
+    # The loader swap replaced the Klein LoadImage, so re-stamp against the
+    # pack loader's real widgets instead of the image widget build_trellis used.
+    stamp_app_mode(
+        graph,
+        inputs=[("Load still pack", "plate")],
+        outputs=["Save GLB"],
+        lane="3d",
+        occupancy="trellis",
+        handoff=("3d/prop-variants",),
+        default_view="app",
+        enhance_off_identity=True,
+    )
     if any(str(n.get("type") or "").lower().startswith("pixal") for n in graph["nodes"]):
         raise SystemExit("trellis loader must not include Pixal nodes")
     return graph
@@ -1171,7 +1186,7 @@ def main() -> int:
     ]
     for name, graph in written:
         dest = lab_dest(name, lane="guides")
-        _save(graph, dest)
+        _save(graph, dest, lab_identity=name.startswith("3d/"))
         print(f"wrote {dest}")
     return 0
 

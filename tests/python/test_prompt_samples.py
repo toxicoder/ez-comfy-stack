@@ -43,8 +43,9 @@ CAMERA_IP = (
 SKIP_SAMPLE_PREFIXES = (
     "audio/dub/",
     "audio/stem-mix",
-    "3d/still-to-mesh",
-    "3d/trellis2",
+    # TRELLIS graphs condition on CLIP vision over an image; none carries a
+    # sample-prompt widget, so a catalog would be dead weight on every one.
+    "3d/",
     "labs/opt-in/longcat",
     "labs/assist/cinema-rack",
     "labs/assist/audio-rack",

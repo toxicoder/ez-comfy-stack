@@ -1256,6 +1256,27 @@ Heavy GPU mode that must already be entered.
 | `wan` | Wan 5B. |
 | `ltx` | LTX-2.5. |
 
+### `EZDCCPreviewGuideLayer` - Preview guide layer
+
+Identity IMAGE pass-through so a guide layer can sit on the canvas.
+
+!!! warning "Lab notes"
+
+    No GPU cost. Used by 3d/shot-to-prop to show the guide frame being turned into geometry.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Guide still to preview. |
+| `image` | out | `IMAGE` | Same still, onward to the gate. |
+
+#### `label`
+
+Type `STRING`. Range / default: guide.
+
+Canvas label; the node ignores it.
+
+**How it affects generation:** Name the layer you are looking at, e.g. hero still.
+
 ### `EZDescribeImage` - Describe reference still
 
 Fail-soft caption for models that are not multimodal. Empty without VL weights.
@@ -5656,16 +5677,16 @@ Markdown body.
 
 ### `MeshToFile3D` - Mesh to File 3D
 
-Write a GLB/mesh file.
+Build the GLB payload in memory. No widgets; writes nothing.
 
 !!! warning "Lab notes"
 
-    3d/trellis2 may leave the path empty (Comfy default). 3d/still-to-mesh writes assets/objects/_lab-mug/mesh.
+    A graph must end MeshToFile3D -> SaveGLB to get a file on disk: this node only builds the payload, SaveGLB writes it.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `mesh` | in | `MESH` | Painted mesh. |
-| `model_3d` | out | `MODEL_3D` | File handle. |
+| `model_3d` | out | `FILE_3D_GLB` | GLB payload for SaveGLB. |
 
 No widgets. Sockets only.
 
@@ -5734,7 +5755,7 @@ Apply voxel colors onto the mesh.
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `mesh` | in | `MESH` | Shape mesh. |
-| `voxel_colors` | in | `VOXEL_COLORS` | Decoded colors. |
+| `voxel_colors` | in | `VOXEL` | Decoded colors. |
 | `mesh` | out | `MESH` | Painted mesh. |
 
 No widgets. Sockets only.
@@ -5843,6 +5864,26 @@ Bitrate preset.
 | `320k` | Lab default. |
 | `192k` | Smaller, more artifacts. |
 | `128k` | Preview only. |
+
+### `SaveGLB` - Save 3D Model
+
+Write the .glb under the output folder. Output node; no output sockets.
+
+!!! warning "Lab notes"
+
+    3d/trellis2 uses prefix 3d/trellis2. The DCC pack graphs use assets/objects/_lab-<name>/<stem>. Needs MeshToFile3D upstream.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `mesh` | in | `MESH` | MultiType socket: accepts MESH or any FILE_3D_* payload. Lab wires MeshToFile3D's model_3d into it. |
+
+#### `filename_prefix`
+
+Type `STRING`.
+
+Output stem under the ComfyUI output folder.
+
+**How it affects generation:** 3d/trellis2 lands the .glb under <output>/3d/, the DCC pack graphs under <output>/assets/objects/... The directory part of the prefix is created on demand. Hidden prompt and extra_pnginfo are injected by the backend and are not widgets.
 
 ### `SaveImage` - Save Image
 
@@ -6172,7 +6213,7 @@ Sample structure from a voxel latent.
 | --- | --- | --- | --- |
 | `positive` | in | `CONDITIONING` | Vision cond. |
 | `negative` | in | `CONDITIONING` | Negative. |
-| `voxel` | in | `LATENT` | Structure decode voxels. |
+| `voxel` | in | `VOXEL` | Structure decode voxels. |
 | `positive` | out | `CONDITIONING` | Pass-through. |
 | `negative` | out | `CONDITIONING` | Pass-through. |
 | `LATENT` | out | `LATENT` | Shape latent. |
@@ -6196,11 +6237,11 @@ No widgets. Sockets only.
 
 ### `Trellis2UpsampleStage` - TRELLIS.2 Upsample Stage
 
-Upsample the shape latent toward 512.
+Upsample the shape latent toward 1024.
 
 !!! warning "Lab notes"
 
-    Lab widget 512. download-3d --tier trellis2.
+    Lab queues the 1024 floor. download-3d --tier trellis2.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -6212,20 +6253,13 @@ Upsample the shape latent toward 512.
 | `negative` | out | `CONDITIONING` | Cond. |
 | `LATENT` | out | `LATENT` | Upsampled shape. |
 
-#### `resolution`
+#### `target_resolution`
 
-Type `COMBO`. Range / default: 512.
+Type `INT`. Range / default: 1024-2048 step 128; lab 1024.
 
-Target structure resolution.
+Structure resolution the upsampled shape stage renders at.
 
-**How it affects generation:** 512 is the lab INT8 mesh. Lower is faster and blockier.
-
-**Other choices**
-
-| Choice | What it does |
-| --- | --- |
-| `512` | Lab default. |
-| `256` | Faster, coarser. |
+**How it affects generation:** ComfyUI accepts only 1024-2048 in steps of 128 and defaults to 1024; every lab 3D graph queues that floor. There is no 512 or 256 on this widget (the old lab note about 512 predates the rename).
 
 ### `UNETLoader` - Load Diffusion Model
 
@@ -6444,21 +6478,22 @@ Decode structure latent to voxels.
 | --- | --- | --- | --- |
 | `samples` | in | `LATENT` | Structure latent. |
 | `vae` | in | `VAE` | TRELLIS VAE. |
-| `voxel` | out | `LATENT` | Voxel grid. |
+| `voxel` | out | `VOXEL` | Voxel grid. |
 
 #### `resolution`
 
-Type `COMBO`. Range / default: 32.
+Type `COMBO`. Range / default: 32 or 64; lab 32.
 
 Voxel grid size.
 
-**How it affects generation:** 32 is the lab structure decode.
+**How it affects generation:** 32 is the lab structure decode. 64 is the only other upstream option and is the finer grid.
 
 **Other choices**
 
 | Choice | What it does |
 | --- | --- |
 | `32` | Lab default. |
+| `64` | Finer voxel grid; slower. |
 
 ### `VaeDecodeTextureTrellis` - TRELLIS Decode Texture
 
@@ -6469,7 +6504,7 @@ Decode texture latent to voxel colors.
 | `samples` | in | `LATENT` | Texture latent. |
 | `vae` | in | `VAE` | VAE. |
 | `shape_subdivides` | in | `SHAPE_SUBDIVIDES` | From shape decode. |
-| `voxel_colors` | out | `VOXEL_COLORS` | Colors for PaintMesh. |
+| `voxel_colors` | out | `VOXEL` | Colors for PaintMesh. |
 
 No widgets. Sockets only.
 

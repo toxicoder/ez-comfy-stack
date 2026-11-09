@@ -7,14 +7,16 @@ Run from repo root:
 
 from __future__ import annotations
 
-import json
 from typing import Any
 
 from _lab_layout import finalize_layout
 from _lab_paths import lab_dest
+from _lab_paths import write_lab_graph
 from _stamp_app_mode import apply_lab_completeness_flags
 from _stamp_app_mode import ensure_occupancy_note
 from _stamp_app_mode import stamp_app_mode
+
+SAVE_PREFIX = "3d/trellis2"
 
 NOTE = """## 3d/trellis2
 
@@ -27,7 +29,10 @@ bazelisk run //:manage -- occupancy enter trellis --yes
 
 LoadImage: a Klein still (`ez_still_*.png` or a clay plate). Unload models first (EZUnloadModels).
 UNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack).
-Lab upsample **512** (not 1536). TRELLIS-only canvas. Occupancy: trellis.
+Upsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this lab
+graph runs the 1024 floor. Structure decode stays at 32. MeshToFile3D only converts in memory, so
+SaveGLB is the node that writes `output/3d/trellis2_NNNNN_.glb`. TRELLIS-only canvas. Do not mint an
+Asset Bible row from this graph.
 
 DINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.
 """
@@ -70,28 +75,44 @@ def _in(name: str, typ: str, link: int | None = None) -> dict[str, Any]:
     return entry
 
 
-def _out(name: str, typ: str, links: list[int] | None = None) -> dict[str, Any]:
-    return {"name": name, "type": typ, "links": list(links or [])}
+def _out(name: str, typ: str, links: list[int] | None = None, slot: int = 0) -> dict[str, Any]:
+    """One output slot, carrying the ``slot_index`` the Vue renderer reads."""
+    return {"name": name, "type": typ, "links": list(links or []), "slot_index": slot}
 
 
-def build_trellis() -> dict[str, Any]:
-    links: list[list[Any]] = []
-    lid = 1
+class _Wires:
+    """Link table that keeps node slot back-references in sync.
+
+    Shared by every 3d builder so a hand-assembled graph serializes the same
+    way ``_lab_graph.Graph.link`` does.
+    """
+
+    def __init__(self) -> None:
+        self.links: list[list[Any]] = []
+        self._lid = 0
+
+    @property
+    def last_link_id(self) -> int:
+        return self._lid
 
     def wire(
+        self,
         frm: dict[str, Any],
         fslot: int,
         to: dict[str, Any],
         tslot: int,
         ltype: str,
     ) -> int:
-        nonlocal lid
-        link_id = lid
-        lid += 1
-        links.append([link_id, int(frm["id"]), fslot, int(to["id"]), tslot, ltype])
+        self._lid += 1
+        link_id = self._lid
+        self.links.append([link_id, int(frm["id"]), fslot, int(to["id"]), tslot, ltype])
         frm["outputs"][fslot]["links"].append(link_id)
         to["inputs"][tslot]["link"] = link_id
         return link_id
+
+
+def build_trellis() -> dict[str, Any]:
+    wires = _Wires()
 
     note = _node(
         1,
@@ -263,8 +284,8 @@ def build_trellis() -> dict[str, Any]:
             _out("negative", "CONDITIONING"),
             _out("LATENT", "LATENT"),
         ],
-        widgets=["512"],
-        title="Upsample 512",
+        widgets=[1024],
+        title="Upsample 1024",
         order=13,
     )
     ks_up = _node(
@@ -280,7 +301,7 @@ def build_trellis() -> dict[str, Any]:
         ],
         outputs=[_out("LATENT", "LATENT")],
         widgets=[42, "fixed", 12, 7.5, "euler", "simple", 1],
-        title="KSampler (512)",
+        title="KSampler (1024)",
         order=14,
     )
     decode_shape = _node(
@@ -354,49 +375,61 @@ def build_trellis() -> dict[str, Any]:
         size=(240, 60),
         inputs=[_in("mesh", "MESH")],
         outputs=[_out("model_3d", "FILE_3D_GLB")],
-        title="Save GLB",
+        title="To GLB bytes",
         order=20,
     )
+    save = _node(
+        22,
+        "SaveGLB",
+        pos=(4360, 440),
+        size=(280, 80),
+        inputs=[_in("mesh", "FILE_3D_GLB")],
+        outputs=[],
+        widgets=[SAVE_PREFIX],
+        title="Save GLB",
+        order=21,
+    )
 
-    wire(load, 0, unload, 0, "IMAGE")
-    wire(unload, 0, cond, 1, "IMAGE")
-    wire(clip, 0, cond, 0, "CLIP_VISION")
-    wire(unet, 0, ks_struct, 0, "MODEL")
-    wire(cond, 0, ks_struct, 1, "CONDITIONING")
-    wire(cond, 1, ks_struct, 2, "CONDITIONING")
-    wire(empty, 0, ks_struct, 3, "LATENT")
-    wire(ks_struct, 0, decode_struct, 0, "LATENT")
-    wire(vae_shape, 0, decode_struct, 1, "VAE")
-    wire(cond, 0, shape_stage, 0, "CONDITIONING")
-    wire(cond, 1, shape_stage, 1, "CONDITIONING")
-    wire(decode_struct, 0, shape_stage, 2, "VOXEL")
-    wire(unet, 0, ks_shape, 0, "MODEL")
-    wire(shape_stage, 0, ks_shape, 1, "CONDITIONING")
-    wire(shape_stage, 1, ks_shape, 2, "CONDITIONING")
-    wire(shape_stage, 2, ks_shape, 3, "LATENT")
-    wire(shape_stage, 0, upsample, 0, "CONDITIONING")
-    wire(shape_stage, 1, upsample, 1, "CONDITIONING")
-    wire(ks_shape, 0, upsample, 2, "LATENT")
-    wire(vae_shape, 0, upsample, 3, "VAE")
-    wire(unet, 0, ks_up, 0, "MODEL")
-    wire(upsample, 0, ks_up, 1, "CONDITIONING")
-    wire(upsample, 1, ks_up, 2, "CONDITIONING")
-    wire(upsample, 2, ks_up, 3, "LATENT")
-    wire(ks_up, 0, decode_shape, 0, "LATENT")
-    wire(vae_shape, 0, decode_shape, 1, "VAE")
-    wire(upsample, 0, tex_stage, 0, "CONDITIONING")
-    wire(upsample, 1, tex_stage, 1, "CONDITIONING")
-    wire(ks_up, 0, tex_stage, 2, "LATENT")
-    wire(unet, 0, ks_tex, 0, "MODEL")
-    wire(tex_stage, 0, ks_tex, 1, "CONDITIONING")
-    wire(tex_stage, 1, ks_tex, 2, "CONDITIONING")
-    wire(tex_stage, 2, ks_tex, 3, "LATENT")
-    wire(ks_tex, 0, decode_tex, 0, "LATENT")
-    wire(vae_tex, 0, decode_tex, 1, "VAE")
-    wire(decode_shape, 1, decode_tex, 2, "SHAPE_SUBDIVIDES")
-    wire(decode_shape, 0, paint, 0, "MESH")
-    wire(decode_tex, 0, paint, 1, "VOXEL")
-    wire(paint, 0, glb, 0, "MESH")
+    wires.wire(load, 0, unload, 0, "IMAGE")
+    wires.wire(unload, 0, cond, 1, "IMAGE")
+    wires.wire(clip, 0, cond, 0, "CLIP_VISION")
+    wires.wire(unet, 0, ks_struct, 0, "MODEL")
+    wires.wire(cond, 0, ks_struct, 1, "CONDITIONING")
+    wires.wire(cond, 1, ks_struct, 2, "CONDITIONING")
+    wires.wire(empty, 0, ks_struct, 3, "LATENT")
+    wires.wire(ks_struct, 0, decode_struct, 0, "LATENT")
+    wires.wire(vae_shape, 0, decode_struct, 1, "VAE")
+    wires.wire(cond, 0, shape_stage, 0, "CONDITIONING")
+    wires.wire(cond, 1, shape_stage, 1, "CONDITIONING")
+    wires.wire(decode_struct, 0, shape_stage, 2, "VOXEL")
+    wires.wire(unet, 0, ks_shape, 0, "MODEL")
+    wires.wire(shape_stage, 0, ks_shape, 1, "CONDITIONING")
+    wires.wire(shape_stage, 1, ks_shape, 2, "CONDITIONING")
+    wires.wire(shape_stage, 2, ks_shape, 3, "LATENT")
+    wires.wire(shape_stage, 0, upsample, 0, "CONDITIONING")
+    wires.wire(shape_stage, 1, upsample, 1, "CONDITIONING")
+    wires.wire(ks_shape, 0, upsample, 2, "LATENT")
+    wires.wire(vae_shape, 0, upsample, 3, "VAE")
+    wires.wire(unet, 0, ks_up, 0, "MODEL")
+    wires.wire(upsample, 0, ks_up, 1, "CONDITIONING")
+    wires.wire(upsample, 1, ks_up, 2, "CONDITIONING")
+    wires.wire(upsample, 2, ks_up, 3, "LATENT")
+    wires.wire(ks_up, 0, decode_shape, 0, "LATENT")
+    wires.wire(vae_shape, 0, decode_shape, 1, "VAE")
+    wires.wire(upsample, 0, tex_stage, 0, "CONDITIONING")
+    wires.wire(upsample, 1, tex_stage, 1, "CONDITIONING")
+    wires.wire(ks_up, 0, tex_stage, 2, "LATENT")
+    wires.wire(unet, 0, ks_tex, 0, "MODEL")
+    wires.wire(tex_stage, 0, ks_tex, 1, "CONDITIONING")
+    wires.wire(tex_stage, 1, ks_tex, 2, "CONDITIONING")
+    wires.wire(tex_stage, 2, ks_tex, 3, "LATENT")
+    wires.wire(ks_tex, 0, decode_tex, 0, "LATENT")
+    wires.wire(vae_tex, 0, decode_tex, 1, "VAE")
+    wires.wire(decode_shape, 1, decode_tex, 2, "SHAPE_SUBDIVIDES")
+    wires.wire(decode_shape, 0, paint, 0, "MESH")
+    wires.wire(decode_tex, 0, paint, 1, "VOXEL")
+    wires.wire(paint, 0, glb, 0, "MESH")
+    wires.wire(glb, 0, save, 0, "FILE_3D_GLB")
 
     nodes = [
         note,
@@ -420,24 +453,26 @@ def build_trellis() -> dict[str, Any]:
         decode_tex,
         paint,
         glb,
+        save,
     ]
     graph: dict[str, Any] = {
-        "id": "3d/trellis2",
-        "revision": 1,
-        "last_node_id": 21,
-        "last_link_id": lid - 1,
+        "id": "trellis2",
+        "revision": 4,
+        "last_node_id": 22,
+        "last_link_id": wires.last_link_id,
         "nodes": nodes,
-        "links": links,
+        "links": wires.links,
         "groups": [],
         "config": {},
         "extra": {
             "lab_note": NOTE,
             "lab_profile": "3d/trellis2",
-            "lab_description": "Klein still to native TRELLIS.2 INT8 mesh. 512. TRELLIS-only.",
+            "lab_description": "Klein still to native TRELLIS.2 INT8 mesh. Upsample 1024. TRELLIS-only.",
             "lab_trellis": {
                 "unet": "trellis_2_int8_convrot.safetensors",
-                "resolution": 512,
+                "resolution": 1024,
                 "native_only": True,
+                "save_prefix": SAVE_PREFIX,
             },
         },
         "version": 0.4,
@@ -449,7 +484,8 @@ def build_trellis() -> dict[str, Any]:
         outputs=["Save GLB"],
         lane="3d",
         occupancy="trellis",
-        default_view="graph",
+        handoff=("3d/prop-variants",),
+        default_view="app",
         enhance_off_identity=True,
     )
     return apply_lab_completeness_flags(graph)
@@ -459,7 +495,7 @@ def main() -> None:
     dest = lab_dest("3d/trellis2", lane="3d")
     graph = build_trellis()
     finalize_layout(graph)
-    dest.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
+    write_lab_graph(dest, graph)
     print(dest)
 
 

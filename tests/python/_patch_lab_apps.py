@@ -23,7 +23,10 @@ from _wire_upscale import wire_upscale  # noqa: E402
 
 def main() -> None:
     """Patch every shipped lab graph in place."""
-    skip_prefixes = ("audio/", "film/", "labs/", "3d/trellis2")
+    # The 3d lane prints GLB meshes off a TRELLIS chain: no image or video
+    # output to format, upscale, or describe, and re-wiring it would splice
+    # image nodes into a mesh graph.
+    skip_prefixes = ("audio/", "film/", "labs/", "3d/")
     counts = {"format": 0, "upscale": 0, "describe": 0, "wrote": 0}
     for path in lab_graph_paths():
         rel = lab_rel_of(path)
