@@ -13,7 +13,10 @@ from __future__ import annotations
 import json
 import sys
 from collections.abc import Callable, Mapping
-from typing import Protocol, TypeAlias, TypedDict, cast
+from typing import TYPE_CHECKING, Protocol, TypeAlias, TypedDict, cast
+
+if TYPE_CHECKING:
+    from ez_common import Json, JsonMap, JsonObject
 
 # MCP protocol identity (JSON-RPC initialize.serverInfo).
 PROTOCOL_VERSION = "2024-11-05"
@@ -23,13 +26,26 @@ RpcId: TypeAlias = str | int | None
 """JSON-RPC request id: a string, a number, or null for notifications."""
 
 JsonSchema: TypeAlias = Mapping[str, object]
-"""One JSON Schema body. Open by design: keys are named, values are not."""
+"""One JSON Schema body.
+
+Stays an open map (rung 4): ``edit_mcp._spec`` copies it out of the pinned
+``CatalogSchema`` TypedDict with ``dict()``, whose member join is ``object``.
+"""
 
 ToolArgs: TypeAlias = Mapping[str, object]
-"""One ``tools/call`` arguments object as it came off the wire."""
+"""One ``tools/call`` arguments object as it came off the wire.
+
+Stays an open map (rung 4): handlers hand members straight to ``int()`` /
+``float()``, which no ``Json`` member satisfies, so a ``JsonMap`` alias would
+cost a new ``cast`` at :data:`PRODUCTION_CAST_BUDGET`.
+"""
 
 ToolResult: TypeAlias = Mapping[str, object]
-"""One tool payload: ``ok`` plus whatever that tool chose to return."""
+"""One tool payload: ``ok`` plus whatever that tool chose to return.
+
+Stays an open map (rung 4): handlers return values that are not JSON nodes,
+including ``list[str]`` and TypedDict records such as ``BlenderRunResult``.
+"""
 
 ToolNumber: TypeAlias = str | int | float
 """A parsed JSON value that ``int()`` and ``float()`` can coerce."""
@@ -89,7 +105,7 @@ class JsonRpcRequest(TypedDict, total=False):
     method: str
     """Method name (``initialize``, ``ping``, ``tools/*``, notifications)."""
 
-    params: Mapping[str, object]
+    params: JsonMap
     """Method parameters (``name``/``arguments`` for tools/call)."""
 
 
@@ -116,7 +132,7 @@ class RpcServerInfo(TypedDict):
 class RpcCapabilities(TypedDict):
     """The ``initialize`` ``capabilities`` block (only tools is offered)."""
 
-    tools: dict[str, object]
+    tools: JsonObject
     """Empty object: tool discovery carries no options."""
 
 
@@ -306,7 +322,7 @@ def serve_stdio(
         if not line:
             continue
         try:
-            parsed: object = json.loads(line)
+            parsed: Json = json.loads(line)
         except json.JSONDecodeError:
             continue
         if not isinstance(parsed, dict):

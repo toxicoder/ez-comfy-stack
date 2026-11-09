@@ -27,6 +27,132 @@ const ENHANCE = new Set([
 ]);
 
 /**
+ * One slot in widgets_values: a scalar, or a record the widget owns.
+ * @typedef {string|number|boolean|null|Object} EzSlotValue
+ */
+
+/**
+ * Widget as this file reads it: a name to match and a value to post.
+ * @typedef {Object} EzWidget
+ * @property {string=} name Name widgetValue and setStatus match on.
+ * @property {string|number|boolean|null=} value Value the node carries.
+ * @property {(text: string) => void=} callback Fired after a value write.
+ */
+
+/**
+ * Graph node as this file reads it, muted lanes and the EZModelCheck node
+ * itself included. LiteGraph owns the rest of the shape.
+ * @typedef {Object} EzNode
+ * @property {string=} type Node class as LiteGraph names it.
+ * @property {string=} comfyClass Nodes 2.0 alias for type.
+ * @property {number=} mode 0 runs; any other mode is muted or bypassed.
+ * @property {Array<EzWidget>=} widgets Widgets LiteGraph carries.
+ * @property {Array<EzSlotValue>=} widgets_values Values in widget order.
+ * @property {EzCheckPayload=} _ezLastCheck Last verdict, cached by runOnNode.
+ * @property {EzCheckHints=} _ezLastHints Hints that check posted.
+ */
+
+/**
+ * Per-graph extras bag Comfy carries beside the node list.
+ * @typedef {Object} EzGraphExtra
+ * @property {string=} lab_rel App folder the graph belongs to.
+ * @property {boolean=} lab_iclora Iclora hint collectHints forwards.
+ * @property {boolean=} lab_vace Vace hint collectHints forwards.
+ * @property {EzAppMode=} lab_app_mode Studio app mode block.
+ */
+
+/**
+ * Studio app mode block inside graph extra; only occupancy is read here.
+ * @typedef {Object} EzAppMode
+ * @property {string=} occupancy Heavy job the host holds, or "".
+ */
+
+/**
+ * Graph as this file reads it: the node list plus the extras bag.
+ * @typedef {Object} EzGraph
+ * @property {Array<EzNode>=} nodes Nodes on the graph.
+ * @property {EzGraphExtra=} extra Comfy's per-graph extras bag.
+ */
+
+/**
+ * Snapshot POSTed to /ez_quality/check; mirrors CheckHints in check.py.
+ * @typedef {Object} EzCheckHints
+ * @property {string=} lab_rel App folder the graph belongs to.
+ * @property {string=} occupancy Occupancy the overlay reports.
+ * @property {string=} quality Quality tier the overlay reports.
+ * @property {Array<string>=} types Every node class on the graph.
+ * @property {Array<string>=} unets UNETLoader filenames.
+ * @property {Array<string>=} clips CLIPLoader filenames.
+ * @property {Array<string>=} vaes VAELoader filenames.
+ * @property {Array<string>=} loras LoraLoader filenames.
+ * @property {Array<string>=} checkpoints CheckpointLoaderSimple filenames.
+ * @property {boolean=} enhance_on A prompt enhancer runs on this graph.
+ * @property {boolean=} describe_on EZImageDescribe runs on this graph.
+ * @property {Array<string>=} flags Extra hints: iclora and vace.
+ */
+
+/**
+ * One scanned file row of the check payload; mirrors FileRow in check.py.
+ * @typedef {Object} EzCheckRow
+ * @property {string=} name Filename the scan looked for.
+ * @property {string=} pack Pack that owns the file.
+ * @property {string=} cmd Operator command that fetches it.
+ * @property {string=} state Scan verdict for the row.
+ */
+
+/**
+ * Verdict POST /ez_quality/check returns, cached on the node.
+ * @typedef {Object} EzCheckPayload
+ * @property {boolean=} ok True when every named pack is on disk.
+ * @property {string=} message Report head, painted on the status widget.
+ * @property {string=} lab_rel App the scan ran against.
+ * @property {string=} occupancy Occupancy the hints carried.
+ * @property {string=} quality Quality tier the hints carried.
+ * @property {Array<EzCheckRow>=} present Rows the box has.
+ * @property {Array<EzCheckRow>=} missing Rows the box lacks.
+ * @property {Array<string>=} commands Operator commands to run.
+ * @property {boolean=} _ezRecorded Set when the failure is already logged.
+ */
+
+/**
+ * Report draft reportFailure hands ez_feedback, or the issues URL.
+ * @typedef {Object} EzReportDraft
+ * @property {string=} kind Issue kind the repo labels the issue with.
+ * @property {string=} surface Surface that filed it, model-check here.
+ * @property {string=} summary One-line verdict shown at the top.
+ * @property {Array<Array<string>>=} context [label, value] rows.
+ */
+
+/**
+ * One line pushed into the ez_feedback ring buffer.
+ * @typedef {Object} EzErrorRecord
+ * @property {string=} ts ISO timestamp of the failure.
+ * @property {string=} surface Surface that failed.
+ * @property {string=} message Status line, first line only.
+ * @property {string=} detail Command hint, first line only.
+ */
+
+/**
+ * The ez_feedback client off window, reached lazily at click time.
+ * @typedef {Object} EzFeedbackClient
+ * @property {(draft: EzReportDraft) => void=} openReport Open the dialog.
+ * @property {(record: EzErrorRecord) => void=} recordError Push one line.
+ * @property {string=} REPO Repo the direct-to-GitHub link points at.
+ */
+
+/**
+ * Node class LiteGraph is registering. LiteGraph owns the whole shape, so the
+ * button mount only reaches through its prototype at runtime.
+ * @typedef {Object} EzNodeType
+ */
+
+/**
+ * Node definition beforeRegisterNodeDef is called with.
+ * @typedef {Object} EzNodeDef
+ * @property {string=} name Class name the registry keys the node under.
+ */
+
+/**
  * Backend URL, honoring Comfy's api prefix when present.
  * @param {string} path
  * @returns {string}
@@ -40,10 +166,10 @@ function apiUrl(path) {
 
 /**
  * Widget value by name, else widgets_values[index].
- * @param {object} node
+ * @param {EzNode} node
  * @param {string} name
  * @param {number} [index]
- * @returns {*}
+ * @returns {string|number|boolean|null|undefined} Live value, else the slot.
  */
 function widgetValue(node, name, index) {
   const widgets = node.widgets || [];
@@ -60,7 +186,7 @@ function widgetValue(node, name, index) {
 
 /**
  * First string widget (loader filename).
- * @param {object} node
+ * @param {EzNode} node
  * @returns {string}
  */
 function firstName(node) {
@@ -78,7 +204,7 @@ function firstName(node) {
 /**
  * Tier the overlay reports, read off the same combo the overlay acts on: the
  * first visible EZQuality. A muted copy drives nothing, so it reports nothing.
- * @param {object} [graph]
+ * @param {EzGraph} [graph]
  * @returns {string}
  */
 function tierFromGraph(graph) {
@@ -103,8 +229,8 @@ function tierFromGraph(graph) {
 
 /**
  * Compact graph snapshot for POST /ez_quality/check.
- * @param {object} [graph]
- * @returns {object}
+ * @param {EzGraph} [graph]
+ * @returns {EzCheckHints}
  */
 function collectHints(graph) {
   const g = graph || app.graph || {};
@@ -170,7 +296,7 @@ function collectHints(graph) {
 
 /**
  * Reach the ez_feedback client lazily; extension load order cannot break this.
- * @returns {object|null} window.EzFeedback when it can file a report.
+ * @returns {EzFeedbackClient|null} window.EzFeedback when it can file a report.
  */
 function feedbackApi() {
   const fb = typeof window === "undefined" ? null : window.EzFeedback;
@@ -218,7 +344,7 @@ function recordCheckError(message, detail) {
 
 /**
  * Pack ids the last check could not satisfy, payload order, de-duplicated.
- * @param {object} result Cached /ez_quality/check payload.
+ * @param {EzCheckPayload} result Cached /ez_quality/check payload.
  * @returns {string[]} Need.pack values from check.py.
  */
 function missingPacks(result) {
@@ -235,7 +361,7 @@ function missingPacks(result) {
 /**
  * Context rows for the report. The operator commands stay out of it because
  * they are host paths; the pack names carry the same identity safely.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {Array<Array<string>>} [label, value] pairs for ez_feedback.
  */
 function reportContext(node) {
@@ -256,7 +382,7 @@ function reportContext(node) {
 
 /**
  * One-line summary that states the last verdict, ready or not.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {string}
  */
 function reportSummary(node) {
@@ -276,7 +402,7 @@ function reportSummary(node) {
 
 /**
  * Open the repo issues page when the ez_feedback pack is not loaded.
- * @param {object} partial Report fields built by reportFailure.
+ * @param {EzReportDraft} partial Report fields built by reportFailure.
  * @returns {void}
  */
 function openIssuesFallback(partial) {
@@ -295,7 +421,7 @@ function openIssuesFallback(partial) {
 
 /**
  * File the last verdict. Fire and forget: no await, no focus, no alert.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {void}
  */
 function reportFailure(node) {
@@ -319,8 +445,8 @@ function reportFailure(node) {
 
 /**
  * POST a hints snapshot and return the JSON payload.
- * @param {object} hints Snapshot built by collectHints.
- * @returns {Promise<object>}
+ * @param {EzCheckHints} hints Snapshot built by collectHints.
+ * @returns {Promise<EzCheckPayload>}
  */
 async function postCheckHints(hints) {
   const response = await fetch(apiUrl(CHECK_ENDPOINT), {
@@ -340,8 +466,8 @@ async function postCheckHints(hints) {
 
 /**
  * POST hints and return the JSON payload.
- * @param {object} [graph]
- * @returns {Promise<object>}
+ * @param {EzGraph} [graph]
+ * @returns {Promise<EzCheckPayload>}
  */
 function postCheck(graph) {
   return postCheckHints(collectHints(graph));
@@ -349,7 +475,7 @@ function postCheck(graph) {
 
 /**
  * Write the status STRING on an EZModelCheck node.
- * @param {object} node
+ * @param {EzNode} node
  * @param {string} text
  * @returns {void}
  */
@@ -369,7 +495,7 @@ function setStatus(node, text) {
 
 /**
  * Run the check, cache the verdict + hints on the node, paint the node.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {Promise<void>}
  */
 async function runOnNode(node) {
@@ -407,8 +533,8 @@ app.registerExtension({
   name: "ez_quality.model_check",
   /**
    * Add the Check models button on create.
-   * @param {object} nodeType
-   * @param {object} nodeData
+   * @param {EzNodeType} nodeType
+   * @param {EzNodeDef} nodeData
    * @returns {Promise<void>}
    */
   async beforeRegisterNodeDef(nodeType, nodeData) {

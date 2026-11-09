@@ -1161,7 +1161,7 @@ def generate_app(
     template: str = AUTO,
     slug: str = "",
     as_app: object = None,
-    overwrite: object = False,
+    overwrite: bool = False,
     slots: Mapping[str, Any] | None = None,
     use_llm: bool = True,
 ) -> ForgeResult:

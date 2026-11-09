@@ -47,13 +47,28 @@ SEED_SCRIPT = dumps_payload(
 )
 
 
+class DubUiBlocks(TypedDict):
+    """Preview blocks an ez_dub output node renders.
+
+    Attributes:
+        text: Status body shown in the text preview.
+        passthrough: Status token shown under the preview.
+    """
+
+    text: tuple[str, ...]
+    """Status body shown in the text preview."""
+
+    passthrough: tuple[str, ...]
+    """Status token shown under the preview."""
+
+
 class ComfyUiResult(TypedDict):
     """OUTPUT_NODE payload Comfy shows in the UI.
 
     ``result`` may hold AUDIO tensors; torch is not imported at pack load.
     """
 
-    ui: dict[str, object]
+    ui: DubUiBlocks
     result: ComfyReturn
 
 

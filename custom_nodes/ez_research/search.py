@@ -26,8 +26,9 @@ if TYPE_CHECKING:
 AddrInfoRows: TypeAlias = Sequence[Sequence[object]]
 """``getaddrinfo`` rows; each row's fifth entry is the socket address."""
 
-SocketAddress: TypeAlias = Sequence[object]
-"""The ``sockaddr`` tuple at row index 4; entry 0 is the address string."""
+SocketAddress: TypeAlias = Sequence[str | int]
+"""The ``sockaddr`` tuple at row index 4: ``(host, port)`` or the IPv6
+``(host, port, flowinfo, scope_id)``; entry 0 is the address string."""
 
 
 class UrlOpener(Protocol):
@@ -264,7 +265,8 @@ def parse_wikipedia_opensearch(payload: object) -> list[SearchHit]:
     """Parse MediaWiki opensearch JSON into hits.
 
     Args:
-        payload: Decoded opensearch JSON.
+        payload: Decoded opensearch JSON, or whatever else the endpoint
+            answered with; every arm is validated here.
 
     Returns:
         Hits with blocked URLs dropped.

@@ -85,12 +85,11 @@ KLEIN_MODE_COMBO = [
 """Klein Prompt Enhance mode combo; EZImageMode.enhance_mode must match."""
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
-
-    from ez_common import ComfyInputTypes, ImageTensor, NodeRegistry
+    from ez_common import ComfyInputTypes, ImageTensor, JsonMap, NodeRegistry
+    from ez_common.comfy_graph import WidgetValue
 
 WidgetConstraintValue: TypeAlias = (
-    "str | int | float | bool | list[str] | list[int] | Mapping[str, object]"
+    "str | int | float | bool | list[str] | list[int] | JsonMap"
 )
 """One widget's constraint map or combo list."""
 
@@ -131,15 +130,15 @@ class CaptionUiResult(TypedDict):
     """Gated caption STRING (empty when describe is off)."""
 
 # Shared Comfy widget specs (boolean, optional context, hidden catalog).
-_ENHANCE_BOOL = (
+_ENHANCE_BOOL: InputWidget = (
     "BOOLEAN",
     {"default": True, "label_on": "On", "label_off": "Off"},
 )
-_CONTEXT_INPUT = (
+_CONTEXT_INPUT: InputWidget = (
     "STRING",
     {"forceInput": True, "dynamicPrompts": False},
 )
-_CATALOG_INPUT = ("STRING", {"default": "", "multiline": False})
+_CATALOG_INPUT: InputWidget = ("STRING", {"default": "", "multiline": False})
 
 
 def _visual_input_types(
@@ -221,7 +220,7 @@ def _as_bool(value: object) -> bool:
     return False
 
 
-def _family_id(value: object) -> str:
+def _family_id(value: WidgetValue) -> str:
     """Normalize a negative-prompt family combo.
 
     Args:
@@ -237,7 +236,7 @@ def _family_id(value: object) -> str:
     return "klein"
 
 
-def _style_id(value: object) -> str:
+def _style_id(value: WidgetValue) -> str:
     """Normalize a style combo.
 
     Args:
@@ -303,14 +302,14 @@ def _pack(result: EnhanceResult) -> EnhanceUiResult:
 def _run(
     system_name: str,
     prompt: str,
-    enhance: object,
+    enhance: WidgetValue,
     duration_hint: str,
     audio_notes: str = "",
-    style: object = STYLE_NONE,
+    style: WidgetValue = STYLE_NONE,
     mode: str = "",
     context: str = "",
-    sample: object = CUSTOM,
-    catalog: object = "",
+    sample: WidgetValue = CUSTOM,
+    catalog: WidgetValue = "",
     node_type: str = "",
     image_desc: str = "",
     background_cast: str = "",
@@ -471,15 +470,16 @@ class EZKleinPromptEnhance:
     def run(
         self,
         prompt: str,
-        enhance: object,
+        enhance: WidgetValue,
         mode: str,
         duration_hint: str,
-        style: object = STYLE_NONE,
+        style: WidgetValue = STYLE_NONE,
         context: str = "",
-        sample: object = CUSTOM,
-        catalog: object = "",
+        sample: WidgetValue = CUSTOM,
+        catalog: WidgetValue = "",
         image_desc: str = "",
         background_cast: str = "",
+        # Opaque: a caller outside this pack forwards its own widget value.
         goal: object = GOAL_AUTO,
     ) -> EnhanceUiResult:
         """Rewrite a Klein still/edit/identity prompt.
@@ -563,15 +563,15 @@ class EZWanPromptEnhance:
     def run(
         self,
         prompt: str,
-        enhance: object,
+        enhance: WidgetValue,
         mode: str,
         duration_hint: str,
-        style: object = STYLE_NONE,
+        style: WidgetValue = STYLE_NONE,
         context: str = "",
-        sample: object = CUSTOM,
-        catalog: object = "",
+        sample: WidgetValue = CUSTOM,
+        catalog: WidgetValue = "",
         image_desc: str = "",
-        goal: object = GOAL_AUTO,
+        goal: WidgetValue = GOAL_AUTO,
     ) -> EnhanceUiResult:
         """Rewrite a Wan video prompt.
 
@@ -648,16 +648,16 @@ class EZLTXPromptEnhance:
     def run(
         self,
         prompt: str,
-        enhance: object,
+        enhance: WidgetValue,
         mode: str,
         duration_hint: str,
         audio_notes: str = "",
-        style: object = STYLE_NONE,
+        style: WidgetValue = STYLE_NONE,
         context: str = "",
-        sample: object = CUSTOM,
-        catalog: object = "",
+        sample: WidgetValue = CUSTOM,
+        catalog: WidgetValue = "",
         image_desc: str = "",
-        goal: object = GOAL_AUTO,
+        goal: WidgetValue = GOAL_AUTO,
     ) -> EnhanceUiResult:
         """Rewrite an LTX joint-AV prompt.
 
@@ -801,14 +801,14 @@ class EZContextJoin:
 
     def run(
         self,
-        a: object,
-        label_a: object = "Logline",
-        label_b: object = "Script",
-        label_c: object = "Audio policy",
-        label_d: object = "Score",
-        b: object = "",
-        c: object = "",
-        d: object = "",
+        a: WidgetValue,
+        label_a: WidgetValue = "Logline",
+        label_b: WidgetValue = "Script",
+        label_c: WidgetValue = "Audio policy",
+        label_d: WidgetValue = "Score",
+        b: WidgetValue = "",
+        c: WidgetValue = "",
+        d: WidgetValue = "",
     ) -> tuple[str]:
         """Join up to four labeled STRING fields.
 
@@ -960,11 +960,11 @@ class EZAceStepPromptEnhance:
         self,
         tags: str,
         lyrics: str,
-        enhance: object = True,
+        enhance: WidgetValue = True,
         mode: str = "vocal",
         context: str = "",
-        sample: object = CUSTOM,
-        catalog: object = "",
+        sample: WidgetValue = CUSTOM,
+        catalog: WidgetValue = "",
     ) -> AceUiResult:
         """Rewrite ACE-Step tags and lyrics.
 
@@ -1090,14 +1090,14 @@ class EZZimagePromptEnhance:
     def run(
         self,
         prompt: str,
-        enhance: object,
+        enhance: WidgetValue,
         duration_hint: str,
-        style: object = STYLE_NONE,
+        style: WidgetValue = STYLE_NONE,
         context: str = "",
-        sample: object = CUSTOM,
-        catalog: object = "",
+        sample: WidgetValue = CUSTOM,
+        catalog: WidgetValue = "",
         image_desc: str = "",
-        goal: object = GOAL_AUTO,
+        goal: WidgetValue = GOAL_AUTO,
     ) -> EnhanceUiResult:
         """Rewrite a Z-Image Turbo still prompt.
 
@@ -1162,15 +1162,15 @@ class EZLongCatPromptEnhance:
     def run(
         self,
         prompt: str,
-        enhance: object,
+        enhance: WidgetValue,
         mode: str,
         duration_hint: str,
-        style: object = STYLE_NONE,
+        style: WidgetValue = STYLE_NONE,
         context: str = "",
-        sample: object = CUSTOM,
-        catalog: object = "",
+        sample: WidgetValue = CUSTOM,
+        catalog: WidgetValue = "",
         image_desc: str = "",
-        goal: object = GOAL_AUTO,
+        goal: WidgetValue = GOAL_AUTO,
     ) -> EnhanceUiResult:
         """Rewrite a LongCat-Video prompt.
 
@@ -1242,15 +1242,15 @@ class EZDreamXPromptEnhance:
     def run(
         self,
         prompt: str,
-        enhance: object,
+        enhance: WidgetValue,
         duration_hint: str,
         audio_notes: str = "",
-        style: object = STYLE_NONE,
+        style: WidgetValue = STYLE_NONE,
         context: str = "",
-        sample: object = CUSTOM,
-        catalog: object = "",
+        sample: WidgetValue = CUSTOM,
+        catalog: WidgetValue = "",
         image_desc: str = "",
-        goal: object = GOAL_AUTO,
+        goal: WidgetValue = GOAL_AUTO,
     ) -> EnhanceUiResult:
         """Rewrite a DreamX first-frame+text prompt.
 
@@ -1319,8 +1319,8 @@ class EZSamplePrompt:
     def run(
         self,
         prompt: str,
-        catalog: object = "",
-        sample: object = CUSTOM,
+        catalog: WidgetValue = "",
+        sample: WidgetValue = CUSTOM,
     ) -> tuple[str]:
         """Resolve a sample combo or Custom textarea.
 
@@ -1386,10 +1386,10 @@ class EZNegativePromptEnhance:
 
     def run(
         self,
-        prompt: object,
-        enhance: object,
-        family: object = "klein",
-        positive: object = "",
+        prompt: WidgetValue,
+        enhance: WidgetValue,
+        family: WidgetValue = "klein",
+        positive: WidgetValue = "",
     ) -> EnhanceUiResult:
         """Rewrite a negative CLIP seed against the positive.
 
@@ -1448,7 +1448,7 @@ class EZPromptBundle:
         Returns:
             Optional widget map. Unconnected sockets are omitted at run time.
         """
-        optional: dict[str, tuple[object, ...]] = {}
+        optional: WidgetSection = {}
         for index in range(1, BUNDLE_INPUTS + 1):
             optional[f"text_{index:02d}"] = (
                 "STRING",
@@ -1466,7 +1466,7 @@ class EZPromptBundle:
         "Empty inputs are skipped. Wire each shot's CLIP source here."
     )
 
-    def run(self, **texts: object) -> tuple[str]:
+    def run(self, **texts: WidgetValue) -> tuple[str]:
         """Join non-empty prompt strings in slot order.
 
         Args:
@@ -1495,7 +1495,7 @@ class EZCinemaRack:
         Returns:
             Required widget map (subject, flavor, recipe, 13 axes).
         """
-        required: dict[str, tuple[object, ...]] = {
+        required: WidgetSection = {
             "subject": (
                 "STRING",
                 {
@@ -1526,10 +1526,10 @@ class EZCinemaRack:
 
     def run(
         self,
-        subject: object,
-        flavor: object = FLAVOR_KLEIN,
-        recipe: object = CINEMA_NONE,
-        **axes: object,
+        subject: WidgetValue,
+        flavor: WidgetValue = FLAVOR_KLEIN,
+        recipe: WidgetValue = CINEMA_NONE,
+        **axes: WidgetValue,
     ) -> tuple[str, str]:
         """Splice axis picks into a model-native CLIP string.
 
@@ -1565,7 +1565,7 @@ class EZAudioRack:
         Returns:
             Required widget map (brief, flavor, recipe, 13 axes).
         """
-        required: dict[str, tuple[object, ...]] = {
+        required: WidgetSection = {
             "brief": (
                 "STRING",
                 {
@@ -1596,10 +1596,10 @@ class EZAudioRack:
 
     def run(
         self,
-        brief: object,
-        flavor: object = FLAVOR_ACE_VOCAL,
-        recipe: object = AUDIO_NONE,
-        **axes: object,
+        brief: WidgetValue,
+        flavor: WidgetValue = FLAVOR_ACE_VOCAL,
+        recipe: WidgetValue = AUDIO_NONE,
+        **axes: WidgetValue,
     ) -> tuple[str, str, str]:
         """Splice axis picks into ACE tags and lyrics form.
 
@@ -1659,8 +1659,8 @@ class EZBackgroundCast:
 
     def run(
         self,
-        other_characters: object = True,
-        background_characters: object = True,
+        other_characters: WidgetValue = True,
+        background_characters: WidgetValue = True,
     ) -> tuple[str]:
         """Serialize the two flags into a compact cast token.
 
@@ -1717,7 +1717,9 @@ class EZImageDescribe:
         "describe."
     )
 
-    def check_lazy_status(self, enable: object = False, image: object = None) -> list[str]:
+    def check_lazy_status(
+        self, enable: WidgetValue = False, image: ImageTensor | None = None
+    ) -> list[str]:
         """Request the IMAGE only when the toggle is on.
 
         Args:
@@ -1732,7 +1734,9 @@ class EZImageDescribe:
             return ["image"]
         return []
 
-    def run(self, enable: object = False, image: ImageTensor | None = None) -> CaptionUiResult:
+    def run(
+        self, enable: WidgetValue = False, image: ImageTensor | None = None
+    ) -> CaptionUiResult:
         """Caption ``image`` when enable is on.
 
         Args:

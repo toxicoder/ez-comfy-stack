@@ -10,6 +10,7 @@ import shutil
 import struct
 import sys
 import types
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
@@ -18,6 +19,7 @@ CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
     sys.path.insert(0, str(CUSTOM))
 
+from ez_common import JsonScalar  # noqa: E402
 import ez_dub  # noqa: E402
 from ez_dub import align  # noqa: E402
 from ez_dub import audio as dub_audio  # noqa: E402
@@ -184,7 +186,9 @@ def test_apply_spoken_disclosure_does_not_change_length() -> None:
 
     rate = 24000
     mix = [0.05] * (rate * 8)
-    turns = [{"t0": 0.4, "t1": 2.0, "speaker": "spk00"}]
+    turns: list[Mapping[str, JsonScalar]] = [
+        {"t0": 0.4, "t1": 2.0, "speaker": "spk00"}
+    ]
 
     def _synth(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int, str]:
         del text, language, ref_wav, engine
@@ -234,7 +238,9 @@ def test_apply_spoken_disclosure_crops_leading_bumper_hush() -> None:
 
     rate = 24000
     mix = [0.05] * (rate * 8)
-    turns = [{"t0": 2.0, "t1": 4.0, "speaker": "spk00"}]
+    turns: list[Mapping[str, JsonScalar]] = [
+        {"t0": 2.0, "t1": 4.0, "speaker": "spk00"}
+    ]
 
     def _synth(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int, str]:
         del text, language, ref_wav, engine
@@ -923,7 +929,7 @@ def test_qc_flags_leak_and_empty_target() -> None:
     from ez_dub.qc import evaluate_qc
 
     mix = [0.5] * 24000
-    turns = [
+    turns: list[Mapping[str, JsonScalar]] = [
         {
             "t0": 0.0,
             "t1": 1.0,
@@ -971,7 +977,7 @@ def test_qc_flags_gap_passthrough_quiet_and_english() -> None:
     from ez_dub.qc import evaluate_qc
 
     mix = [0.05] * 24000
-    turns = [
+    turns: list[Mapping[str, JsonScalar]] = [
         {
             "t0": 0.0,
             "t1": 0.5,
@@ -2224,12 +2230,14 @@ def test_queue_once_e2e_hooks(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -
     pipeline.tts_hook = _tts
     try:
         scripted = EZDubScript().run(SEED_SCRIPT, True, "es", "en", 0, "all", "ep")
-        payload = dub_turns.parse_payload(scripted["result"][0])
+        script_json = scripted["result"][0]
+        assert isinstance(script_json, str)
+        payload = dub_turns.parse_payload(script_json)
         assert payload["turns"]
         assert payload["turns"][0]["text"] != payload["turns"][0]["text_target"]
         assert "Bienvenidos" in payload["turns"][0]["text_target"]
         rendered = EZDubRender().run(
-            scripted["result"][0],
+            script_json,
             ENGINE_CHATTERBOX,
             True,
             False,
@@ -2279,11 +2287,13 @@ def test_script_render_surface_rights_refuse(tmp_path: Path, monkeypatch: pytest
     assert ingested["result"][0] == "match-day"
     scripted = EZDubScript().run(SEED_SCRIPT, True, "es", "auto", 0, "all", "match-day")
     assert scripted["ui"]["passthrough"][0] == "rights refused"
-    payload = dub_turns.parse_payload(scripted["result"][0])
+    script_json = scripted["result"][0]
+    assert isinstance(script_json, str)
+    payload = dub_turns.parse_payload(script_json)
     assert payload["turns"] == []
     assert payload["status"] == "rights refused"
     rendered = EZDubRender().run(
-        scripted["result"][0],
+        script_json,
         ENGINE_CHATTERBOX,
         True,
         False,

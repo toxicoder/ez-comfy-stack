@@ -27,7 +27,7 @@ from __future__ import annotations
 
 from typing import NewType, NotRequired, TypedDict, TypeAlias
 
-from .json_value import JsonScalar
+from .json_value import Json, JsonObject, JsonScalar
 
 NodeId = NewType("NodeId", str)
 """Node id as it appears in a graph file (always the string form)."""
@@ -108,7 +108,7 @@ class ComfyUiSocket(TypedDict, total=False):
     slot_index: int
     """Slot position when the frontend records it."""
 
-    widget: dict[str, object]
+    widget: JsonObject
     """Inline widget descriptor for converted input-widget slots."""
 
 
@@ -136,10 +136,10 @@ class ComfyUiNode(TypedDict, total=False):
     size: list[float]
     """``[width, height]`` canvas size."""
 
-    flags: dict[str, object]
+    flags: JsonObject
     """LiteGraph boolean flags."""
 
-    properties: dict[str, object]
+    properties: JsonObject
     """LiteGraph node properties."""
 
     inputs: list[ComfyUiSocket]
@@ -170,7 +170,7 @@ class ComfyUiGroup(TypedDict, total=False):
     font_size: int
     """Title font size."""
 
-    flags: dict[str, object]
+    flags: JsonObject
     """LiteGraph group flags."""
 
 
@@ -206,16 +206,16 @@ class ComfyGraphExtra(TypedDict, total=False):
     lab_optional_unwired: str
     """Marker for intentionally unwired optional inputs."""
 
-    linearData: object
+    linearData: Json
     """linearData widget payload written by the clip builders."""
 
-    linearMode: object
+    linearMode: Json
     """linearData mode marker."""
 
     workflowRendererVersion: str
     """Renderer stamp; ``Vue-corrected`` is the canonical value."""
 
-    ds: object
+    ds: Json
     """Designer state blob the frontend round-trips."""
 
 
@@ -246,7 +246,7 @@ class ComfyUiGraph(TypedDict, total=False):
     groups: list[ComfyUiGroup]
     """Named group boxes."""
 
-    config: dict[str, object]
+    config: JsonObject
     """Frontend per-graph config."""
 
     extra: ComfyGraphExtra
@@ -260,7 +260,7 @@ ComfyReturn: TypeAlias = tuple[object, ...]
 class ComfyUiResult(TypedDict):
     """An ``OUTPUT_NODE`` payload (preview images, text, audio)."""
 
-    ui: list[dict[str, object]]
+    ui: list[JsonObject]
     """Frontend display blocks."""
 
     result: ComfyReturn
@@ -268,7 +268,7 @@ class ComfyUiResult(TypedDict):
 
 
 WidgetConstraint: TypeAlias = (
-    str | int | float | bool | list[str] | list[int] | dict[str, object]
+    str | int | float | bool | list[str] | list[int] | JsonObject
 )
 """One widget's constraint map or combo list, per Comfy's widget tuple."""
 

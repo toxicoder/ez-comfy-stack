@@ -212,6 +212,8 @@ def finalize_nill_album(rows: Sequence[Mapping[str, object]]) -> tuple[DissExamp
         plan = plans[index - 1]
         slug = nill_slug_from_stem(str(row.get("slug") or row["stem"]))
         stem = f"{index:02d}-{slug}"
+        # Mid-build row: it carries only some of DissExample's keys until
+        # the album fields below are stamped in, so no record type fits yet.
         payload: dict[str, object] = dict(row)
         payload.update(
             {

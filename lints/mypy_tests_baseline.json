@@ -43,12 +43,9 @@
     "tests/python/test_editing_workflows.py": 9,
     "tests/python/test_edm_album.py": 2,
     "tests/python/test_ez_dcc.py": 4,
-    "tests/python/test_ez_dub.py": 33,
-    "tests/python/test_ez_dub_coverage.py": 8,
-    "tests/python/test_ez_dub_ref_select.py": 1,
-    "tests/python/test_ez_edit_agent.py": 10,
+    "tests/python/test_ez_dub.py": 16,
+    "tests/python/test_ez_dub_coverage.py": 6,
     "tests/python/test_ez_edit_dispatch.py": 4,
-    "tests/python/test_ez_edit_generate.py": 18,
     "tests/python/test_ez_edit_routes.py": 51,
     "tests/python/test_ez_feedback.py": 10,
     "tests/python/test_ez_image.py": 5,
@@ -57,7 +54,6 @@
     "tests/python/test_ez_podcast.py": 2,
     "tests/python/test_ez_podcast_learn.py": 4,
     "tests/python/test_ez_quality.py": 32,
-    "tests/python/test_ez_refs.py": 1,
     "tests/python/test_ez_studio_forge.py": 2,
     "tests/python/test_format_wired_apps.py": 1,
     "tests/python/test_guide_pack.py": 4,
@@ -86,5 +82,5 @@
     "tests/python/test_wire_optional_ref.py": 1,
     "tests/python/test_workflow_completeness.py": 6
   },
-  "total": 720
+  "total": 671
 }

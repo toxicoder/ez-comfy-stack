@@ -11,8 +11,46 @@ const ACCEPT =
   "audio/*,video/*,.wav,.mp3,.flac,.ogg,.m4a,.aac,.mp4,.mkv,.mov,.webm";
 
 /**
+ * Widget on an EZDubIngest node, as this file touches it: the source combo it
+ * selects into, and the button widget it inserts beside it. LiteGraph owns the
+ * rest of the shape, so every field stays optional.
+ * @typedef {Object} EzWidget
+ * @property {string=} name Widget name as the node lists it.
+ * @property {string=} value Media path the combo has selected.
+ * @property {string=} label Text shown on the button widget.
+ * @property {boolean=} serialize Kept out of the saved graph.
+ * @property {(() => Promise<undefined>)=} serializeValue Empty saved value.
+ * @property {{values?: string[]}=} options Combo choices; push appends one.
+ * @property {((value: string) => unknown)=} callback Fired on a value change.
+ */
+
+/**
+ * EZDubIngest node while it is being created. Only the members this file
+ * touches are named; the LiteGraph node class owns the rest.
+ * @typedef {Object} EzNode
+ * @property {EzWidget[]=} widgets Widgets on the node, in graph order.
+ * @property {((kind: string, label: string, value: string,
+ *   onClick: () => void) => EzWidget)} addWidget Adds one widget.
+ * @property {(() => void)=} onRemoved Hook wrapped to drop the file input.
+ */
+
+/**
+ * Node definition Comfy hands to beforeRegisterNodeDef.
+ * @typedef {Object} EzNodeDef
+ * @property {string=} name Class name this file matches on.
+ */
+
+/**
+ * Node class handed to beforeRegisterNodeDef; only the hook this file wraps
+ * is named, LiteGraph owns the class itself.
+ * @typedef {Object} EzNodeType
+ * @property {{onNodeCreated?: (this: EzNode) => void}} prototype
+ *   Per-instance hooks.
+ */
+
+/**
  * POST a local file to Comfy /upload/image and select it on the source combo.
- * @param {object} sourceWidget
+ * @param {EzWidget} sourceWidget
  * @param {File} file
  * @returns {Promise<void>}
  */
@@ -43,8 +81,8 @@ app.registerExtension({
   name: "ez_dub.ingestUpload",
   /**
    * Wrap EZDubIngest so the source combo gets an Upload media button.
-   * @param {object} nodeType
-   * @param {object} nodeData
+   * @param {EzNodeType} nodeType
+   * @param {EzNodeDef} nodeData
    * @returns {Promise<void>}
    */
   async beforeRegisterNodeDef(nodeType, nodeData) {

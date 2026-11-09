@@ -31,7 +31,7 @@ from typing import TYPE_CHECKING, Protocol, TypedDict, cast
 from . import context
 
 if TYPE_CHECKING:
-    from ez_common import Json
+    from ez_common import Json, JsonMap
 
 TOKEN_ENV = "EZ_GITHUB_TOKEN"
 """Name of the optional GitHub token; its value is never read out."""
@@ -103,7 +103,7 @@ class FeedbackConfig(TypedDict):
 class HttpResponder(Protocol):
     """The parts of a GitHub response this module reads."""
 
-    def read(self) -> object:
+    def read(self) -> bytes | str:
         """Read the response body.
 
         Returns:
@@ -245,7 +245,7 @@ def config_payload(
 
 
 def handle_submit(
-    args: Mapping[str, object],
+    args: JsonMap,
     *,
     environ: Mapping[str, str] | None = None,
     opener: Callable[[urllib.request.Request, float], HttpResponder] | None = None,
@@ -266,7 +266,7 @@ def handle_submit(
         GitHub cannot be reached.
     """
     source: Mapping[str, str] = os.environ if environ is None else environ
-    body_args: Mapping[str, object] = args if isinstance(args, Mapping) else {}
+    body_args: JsonMap = args if isinstance(args, Mapping) else {}
     kind = context.kind_key(str(body_args.get("kind") or "bug"))
     title = context.clip(str(body_args.get("title") or "").strip(), context.MAX_TITLE)
     if not title:
@@ -371,7 +371,7 @@ def _default_llm(system: str, user: str) -> tuple[str, str]:
 
 
 def handle_enhance(
-    args: Mapping[str, object],
+    args: JsonMap,
     *,
     llm: Callable[[str, str], tuple[str | None, str | None]] | None = None,
 ) -> tuple[int, dict[str, Json]]:
@@ -392,7 +392,7 @@ def handle_enhance(
         enhance or the notes bust :data:`ENHANCE_INPUT_MAX`, ``(503, ...)``
         when the model answered with nothing, ``(502, ...)`` when it raised.
     """
-    body_args: Mapping[str, object] = args if isinstance(args, Mapping) else {}
+    body_args: JsonMap = args if isinstance(args, Mapping) else {}
     kind = context.kind_key(str(body_args.get("kind") or "bug"))
     text = context.redact(str(body_args.get("text") or "")).strip()
     if not text:

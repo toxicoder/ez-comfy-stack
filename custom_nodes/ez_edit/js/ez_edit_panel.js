@@ -20,6 +20,315 @@
  */
 import { app } from "../../scripts/app.js";
 
+/**
+ * Transition entering a clip, as the server stores it.
+ * @typedef {Object} EzTransition
+ * @property {string=} kind cut, fade, or wipe.
+ * @property {number=} duration_s Seconds the transition takes.
+ */
+
+/**
+ * One clip of an edit project, as the state route returns it.
+ * @typedef {Object} EzClip
+ * @property {string=} id Clip id the video pool keys on.
+ * @property {string=} label Name shown in the timeline table.
+ * @property {string=} source Output-relative path of the clip media.
+ * @property {number=} in_s First source second the clip uses.
+ * @property {number=} out_s Last source second the clip uses.
+ * @property {number=} track Compositing plane; 0 is the base.
+ * @property {number=} gain Clip audio gain; 1 when absent.
+ * @property {EzTransition=} transition Transition entering this clip.
+ */
+
+/**
+ * Text or image overlay the client renderer paints over the timeline.
+ * @typedef {Object} EzOverlay
+ * @property {string=} kind text or image.
+ * @property {string=} text Words to draw when kind is text.
+ * @property {string=} source Output-relative path when kind is image.
+ * @property {number=} at_s Timeline second it appears.
+ * @property {number=} dur_s Seconds it stays up.
+ * @property {number=} x Left edge, 0..1 of the frame width.
+ * @property {number=} y Top edge, 0..1 of the frame height.
+ * @property {number=} size Height as a fraction of the frame.
+ */
+
+/**
+ * One caption line of the caption band.
+ * @typedef {Object} EzCaption
+ * @property {number=} at_s Timeline second it appears.
+ * @property {number=} dur_s Seconds it stays up.
+ * @property {string=} text Words to draw.
+ */
+
+/**
+ * Edit project as /ez_edit/state returns it. The panel never writes a field
+ * back, so all of them stay optional.
+ * @typedef {Object} EzProject
+ * @property {string=} id Project id the panel pins to the URL.
+ * @property {string=} title Title; slugged into the download filename.
+ * @property {number=} fps Frame rate the client renderer records at.
+ * @property {number=} width Stage width in px.
+ * @property {number=} height Stage height in px.
+ * @property {EzClip[]=} clips Clips in timeline order.
+ * @property {EzOverlay[]=} overlays Overlays to paint per frame.
+ * @property {EzCaption[]=} captions Caption band lines.
+ */
+
+/**
+ * One plan segment buildPlan laid out on the timeline.
+ * @typedef {Object} EzPlanSeg
+ * @property {EzClip=} clip The clip this segment came from.
+ * @property {number=} inS First source second, floored at 0.
+ * @property {number=} outS Last source second, never below inS.
+ * @property {number=} dur Timeline seconds the segment occupies.
+ * @property {number=} start Timeline second the segment starts.
+ * @property {number=} track Compositing plane; 0 is the base.
+ * @property {number=} gain Clip audio gain.
+ */
+
+/**
+ * Normalized transition transitionOf hands back to the renderer.
+ * @typedef {Object} EzTransitionSpec
+ * @property {string} kind cut, fade, or wipe.
+ * @property {number} duration_s Non-negative seconds the transition takes.
+ */
+
+/**
+ * One chat transcript row the panel keeps in memory.
+ * @typedef {Object} EzThreadRow
+ * @property {string=} kind user, assistant, tool, or error.
+ * @property {string=} text Row text, rendered with textContent only.
+ */
+
+/**
+ * One chat history turn posted to /ez_edit/chat.
+ * @typedef {Object} EzHistoryTurn
+ * @property {string=} role user or assistant.
+ * @property {string=} content Turn text.
+ */
+
+/**
+ * One job row the state route lists.
+ * @typedef {Object} EzJob
+ * @property {string=} id Job id the executor claims and reports on.
+ * @property {string=} project_id Project the job renders.
+ * @property {string=} kind Job kind shown in the jobs table.
+ * @property {string=} state pending, ok, or failed.
+ * @property {string=} mode server or client renderer.
+ * @property {string=} message Failure or result text.
+ */
+
+/**
+ * One tool the laptop-local MCP endpoint exposed, ready for the sync route.
+ * @typedef {Object} EzDiscoveredTool
+ * @property {string=} server_id host-port id the tool came from.
+ * @property {string=} server_url endpoint it was discovered on.
+ * @property {string=} name Tool name.
+ * @property {string=} description Tool description.
+ * @property {EzJsonMap=} input_schema JSON Schema for the arguments.
+ */
+
+/**
+ * One laptop-local MCP server row stored under the MCP pref.
+ * @typedef {Object} EzServerRow
+ * @property {string} url Streamable-HTTP endpoint, loopback only.
+ * @property {string=} id host-port id shown in the list.
+ * @property {boolean=} enabled Whether the relay may call this server.
+ * @property {EzDiscoveredTool[]=} tools Last discovered tool list.
+ * @property {string=} error Reason the last discovery failed, or "".
+ * @property {string=} updated_at ISO stamp of the last discovery.
+ */
+
+/**
+ * One local tool call the relay route handed this browser.
+ * @typedef {Object} EzToolCall
+ * @property {string=} call_id Id to report the result against.
+ * @property {string=} server_url Endpoint to call.
+ * @property {string=} name Tool to invoke.
+ * @property {EzJsonMap=} args Tool arguments.
+ */
+
+/**
+ * One tool call the agent loop traced back from /ez_edit/chat.
+ * @typedef {Object} EzToolTrace
+ * @property {string=} name Tool name.
+ * @property {boolean=} ok Whether the call returned without error.
+ * @property {string=} summary One-line result, truncated for the chat row.
+ */
+
+/**
+ * Error apiError raises for any route failure, so a catch can report where it
+ * came from.
+ * @typedef {Object} EzCallError
+ * @property {string=} message Human-readable failure.
+ * @property {string=} endpoint Route that failed.
+ * @property {number=} status HTTP status, 0 when the route never answered.
+ */
+
+/**
+ * JSON body this panel POSTs to an ez_edit route. Each route documents its own
+ * keys, so the map stays open and is serialized straight to the route.
+ * @typedef {Object<string, *>} EzJsonBody
+ */
+
+/**
+ * Open JSON object a route or MCP endpoint round-trips; the panel reads a
+ * couple of keys and hands the rest back untouched.
+ * @typedef {Object<string, *>} EzJsonMap
+ */
+
+/**
+ * Parsed body of an ez_edit route. Every route fills only its own keys, so all
+ * of them stay optional.
+ * @typedef {Object} EzRouteBody
+ * @property {boolean=} ok false when the route refused.
+ * @property {string=} error Reason the route refused.
+ * @property {EzProject=} project Project /ez_edit/state loaded.
+ * @property {EzJob[]=} jobs Jobs /ez_edit/state listed.
+ * @property {EzHistoryTurn[]=} history Chat history to carry forward.
+ * @property {string=} reply Assistant text from /ez_edit/chat.
+ * @property {EzToolTrace[]=} trace Tool calls the agent loop made.
+ * @property {EzToolCall[]=} calls Local tool calls awaiting this browser.
+ * @property {EzClip=} clip Clip /ez_edit/import added.
+ * @property {EzJob=} job Job /ez_edit/render queued.
+ */
+
+/**
+ * One JSON-RPC message this panel sends a local MCP endpoint.
+ * @typedef {Object} EzMcpRequest
+ * @property {string=} jsonrpc Protocol marker, always "2.0".
+ * @property {number|string=} id Request id to match the answer on.
+ * @property {string=} method Method to run.
+ * @property {EzJsonMap=} params Method parameters.
+ */
+
+/**
+ * One JSON-RPC answer parsed out of a JSON or SSE body.
+ * @typedef {Object} EzMcpPayload
+ * @property {number|string=} id Request id this payload answers.
+ * @property {EzJsonMap=} result Success payload.
+ * @property {EzJsonMap=} error Failure payload.
+ */
+
+/**
+ * mcpPost result: the JSON-RPC answer plus the session header to reuse.
+ * @typedef {Object} EzMcpReply
+ * @property {EzMcpPayload} body The matching JSON-RPC payload.
+ * @property {string} sessionId Mcp-Session-Id to send next time.
+ */
+
+/**
+ * Clip media the renderer draws: an HTMLVideoElement or an HTMLImageElement,
+ * read for videoWidth/naturalWidth, so the open map shape is the honest one.
+ * @typedef {Object<string, *>} EzMediaSource
+ */
+
+/**
+ * One tool a local MCP endpoint listed in tools/list.
+ * @typedef {Object} EzMcpTool
+ * @property {string=} name Tool name.
+ * @property {string=} description Tool description.
+ * @property {EzJsonMap=} inputSchema JSON Schema for the arguments.
+ */
+
+/**
+ * One per-clip gain node the audio rig holds while a run plays.
+ * @typedef {Object} EzGainEntry
+ * @property {EzPlanSeg} seg Segment this gain belongs to.
+ * @property {GainNode} gain Gain node driving that clip.
+ */
+
+/**
+ * Audio graph attachAudio builds for one run, kept so gains can follow the
+ * playing clip.
+ * @typedef {Object} EzAudioRig
+ * @property {AudioContext} ctx Context the nodes live in.
+ * @property {MediaStreamAudioDestinationNode} dest Recorder destination.
+ * @property {EzGainEntry[]} gains One gain per clip with audio.
+ */
+
+/**
+ * Options stepTimeline takes for one play or record pass.
+ * @typedef {Object} EzStepOpts
+ * @property {number=} token playToken this pass must still own to continue.
+ * @property {((seg: EzPlanSeg) => void)=} onSegment Called as each starts.
+ * @property {number=} fps Frames per second to pace against.
+ */
+
+/**
+ * Options refreshState takes.
+ * @typedef {Object} EzRefreshOpts
+ * @property {boolean=} quiet Keep the status line as it is.
+ */
+
+/**
+ * Labelled input row makeField built.
+ * @typedef {Object} EzField
+ * @property {HTMLElement} row Row wrapper holding label and input.
+ * @property {HTMLInputElement} input The input element.
+ */
+
+/**
+ * Titled section makeSection built.
+ * @typedef {Object} EzSection
+ * @property {HTMLElement} section The section element.
+ * @property {HTMLElement} body Body the caller fills.
+ */
+
+/**
+ * Captioned key/value table makeTable built.
+ * @typedef {Object} EzTable
+ * @property {HTMLElement} wrap Wrapper holding the caption and table.
+ * @property {HTMLElement} body The tbody rows go into.
+ */
+
+/**
+ * Mounted UI references the panel paints into. mount() fills the fields one at
+ * a time, so each of them is absent until the mount reaches it.
+ * @typedef {Object} EzUi
+ * @property {HTMLElement=} root Panel element the mount built.
+ * @property {HTMLElement=} status Status line.
+ * @property {HTMLElement=} chatList Chat transcript list.
+ * @property {HTMLTextAreaElement=} chatInput Chat box.
+ * @property {HTMLElement=} stage Stage the video and canvas sit in.
+ * @property {HTMLCanvasElement=} canvas Timeline canvas the renderer draws on.
+ * @property {HTMLElement=} clipsBody tbody of the clips table.
+ * @property {HTMLElement=} overlaysBody tbody of the overlays table.
+ * @property {HTMLElement=} captionsBody tbody of the captions table.
+ * @property {HTMLElement=} jobsBody tbody of the jobs table.
+ * @property {HTMLElement=} mcpList Local MCP server list.
+ * @property {HTMLButtonElement[]=} modeButtons Server/client chips.
+ */
+
+/**
+ * Panel state, shared by every mounted copy of the panel.
+ * @typedef {Object} EzPanelState
+ * @property {string} projectId Project the panel shows.
+ * @property {EzProject|null} project Loaded project, or null.
+ * @property {EzJob[]} jobs Jobs the state route listed.
+ * @property {boolean} enabled Editing lane on for this ComfyUI.
+ * @property {string} mode server or client renderer for this project.
+ * @property {EzHistoryTurn[]} history Chat history carried to the route.
+ * @property {EzThreadRow[]} thread Chat transcript in memory.
+ * @property {boolean} chatBusy A chat turn is in flight.
+ * @property {string} busy Label of the action in flight, "" when idle.
+ * @property {string} note Last status note.
+ * @property {boolean} execConnected A client executor is polling.
+ * @property {boolean} execBusy This browser is rendering a job.
+ * @property {boolean} relayOn The local-tool relay is running.
+ * @property {boolean} relayBusy A relay poll is in flight.
+ * @property {EzServerRow[]} servers Laptop-local MCP servers.
+ * @property {boolean} playing A preview is running.
+ * @property {number} playToken Owner token of the current play pass.
+ * @property {boolean} docked Panel docked in the sidebar.
+ * @property {number} tick Poll counter.
+ * @property {number} timer Poll interval handle.
+ * @property {string} clientId Stable per-tab client id.
+ * @property {AudioContext=} audioCtx Audio context, made on first render.
+ * @property {Set<string>=} seenJobs Job ids already claimed.
+ */
+
 const TAB_ID = "ez-edit";
 const STYLE_ID = "ez-edit-css";
 const FLOAT_ID = "ez-edit-floating";
@@ -65,7 +374,7 @@ const FALLBACK_CSS = `
 
 /**
  * Panel state, shared by every mounted copy of the panel.
- * @type {object}
+ * @type {EzPanelState}
  */
 const state = {
   projectId: "",
@@ -93,7 +402,7 @@ const state = {
 
 /**
  * The mounted UI references, or null while unmounted.
- * @type {object|null}
+ * @type {EzUi|null}
  */
 let ui = null;
 
@@ -181,8 +490,9 @@ function readPref(key) {
 /**
  * Read a JSON preference with a fallback.
  * @param {string} key Storage key.
- * @param {*} fallback Value when absent or unparsable.
- * @returns {*} The parsed value.
+ * @template T Value shape the caller expects.
+ * @param {T} fallback Value when absent or unparsable.
+ * @returns {T} The parsed value.
  */
 function readJsonPref(key, fallback) {
   const raw = readPref(key);
@@ -200,7 +510,7 @@ function readJsonPref(key, fallback) {
 /**
  * Write a JSON preference.
  * @param {string} key Storage key.
- * @param {*} value Value to serialize.
+ * @param {EzServerRow[]} value Value to serialize.
  * @returns {void}
  */
 function writeJsonPref(key, value) {
@@ -282,7 +592,7 @@ function saveMode(projectId, mode) {
 
 /**
  * Seconds as "12.3s".
- * @param {*} value Seconds.
+ * @param {string|number|null|undefined} value Seconds.
  * @returns {string} Display text.
  */
 function formatSeconds(value) {
@@ -295,7 +605,7 @@ function formatSeconds(value) {
 
 /**
  * Clamp a size read from user input.
- * @param {*} value Requested size.
+ * @param {string|number|null|undefined} value Requested size.
  * @param {number} min Lower bound.
  * @param {number} max Upper bound.
  * @param {number} fallback Value when unusable.
@@ -428,7 +738,7 @@ function makeEl(tag, className, text) {
  * @param {string} type Input type.
  * @param {string} value Initial value.
  * @param {string} placeholder Placeholder text.
- * @returns {object} `{row, input}` elements.
+ * @returns {EzField} `{row, input}` elements.
  */
 function makeField(label, type, value, placeholder) {
   const row = makeEl("div", "ez-edit-row");
@@ -450,7 +760,7 @@ function makeField(label, type, value, placeholder) {
 /**
  * Create a titled section.
  * @param {string} title Heading text.
- * @returns {object} `{section, body}` elements.
+ * @returns {EzSection} `{section, body}` elements.
  */
 function makeSection(title) {
   const section = makeEl("section", "ez-edit-section");
@@ -463,7 +773,7 @@ function makeSection(title) {
 
 /**
  * Normalize a route failure into an Error with the endpoint attached.
- * @param {object} data Parsed body.
+ * @param {EzRouteBody} data Parsed body.
  * @param {string} path Route path.
  * @param {number} [status] HTTP status.
  * @returns {Error} The error to throw.
@@ -480,7 +790,7 @@ function apiError(data, path, status) {
  * Fetch JSON from an ez_edit route.
  * @param {string} path Root-relative route.
  * @param {RequestInit} [init] Fetch init.
- * @returns {Promise<object>} The parsed body.
+ * @returns {Promise<EzRouteBody>} The parsed body.
  */
 async function fetchJson(path, init) {
   const response = await fetch(apiUrl(path), init);
@@ -499,8 +809,8 @@ async function fetchJson(path, init) {
 /**
  * POST a JSON body to an ez_edit route.
  * @param {string} path Root-relative route.
- * @param {object} body Request body.
- * @returns {Promise<object>} The parsed body.
+ * @param {EzJsonBody} body Request body.
+ * @returns {Promise<EzRouteBody>} The parsed body.
  */
 function postJson(path, body) {
   return fetchJson(path, {
@@ -512,7 +822,7 @@ function postJson(path, body) {
 
 /**
  * One-line rendering of a caught error.
- * @param {*} err The caught value.
+ * @param {EzCallError|null|undefined} err The caught value.
  * @returns {string} Display text.
  */
 function errLine(err) {
@@ -524,7 +834,7 @@ function errLine(err) {
 
 /**
  * One tool-trace line from the agent loop.
- * @param {object} trace A ToolCallTrace.
+ * @param {EzToolTrace} trace A ToolCallTrace.
  * @returns {string} Display text.
  */
 function traceLine(trace) {
@@ -548,8 +858,8 @@ function setStatus(text) {
  * Lay the clips out sequentially for preview and client render.
  *
  * One lane, array order; `track` is the compositing order (0 = base plane).
- * @param {object} project The edit project.
- * @returns {object[]} Segments `{clip, inS, outS, dur, start, track, gain}`.
+ * @param {EzProject} project The edit project.
+ * @returns {EzPlanSeg[]} Segments `{clip, inS, outS, dur, start, track, gain}`.
  */
 function buildPlan(project) {
   const clips = project && Array.isArray(project.clips) ? project.clips : [];
@@ -576,8 +886,8 @@ function buildPlan(project) {
 
 /**
  * Transition entering a clip, normalized.
- * @param {object} seg A plan segment.
- * @returns {object} `{kind, duration_s}`.
+ * @param {EzPlanSeg} seg A plan segment.
+ * @returns {EzTransitionSpec} `{kind, duration_s}`.
  */
 function transitionOf(seg) {
   const raw = (seg && seg.clip && seg.clip.transition) || {};
@@ -588,9 +898,9 @@ function transitionOf(seg) {
 
 /**
  * Segments visible at a timeline second, base plane first.
- * @param {object[]} plan Segments from buildPlan.
+ * @param {EzPlanSeg[]} plan Segments from buildPlan.
  * @param {number} t Timeline seconds.
- * @returns {object[]} Active segments, ascending track.
+ * @returns {EzPlanSeg[]} Active segments, ascending track.
  */
 function activeSegments(plan, t) {
   const active = plan.filter((seg) => t >= seg.start && t < seg.start + seg.dur);
@@ -611,7 +921,7 @@ function activeSegments(plan, t) {
 
 /**
  * The pooled <video> for a segment, created once per clip id.
- * @param {object} seg A plan segment.
+ * @param {EzPlanSeg} seg A plan segment.
  * @returns {HTMLVideoElement|null} The element, or null without a source.
  */
 function videoFor(seg) {
@@ -776,7 +1086,7 @@ function imageFor(source) {
 /**
  * Draw media letterboxed into the frame.
  * @param {CanvasRenderingContext2D} ctx The context.
- * @param {object} media A video or image with videoWidth/naturalWidth.
+ * @param {EzMediaSource} media A video or image with videoWidth/naturalWidth.
  * @param {number} w Frame width.
  * @param {number} h Frame height.
  * @returns {void}
@@ -800,8 +1110,8 @@ function drawCover(ctx, media, w, h) {
 /**
  * Build the painter closure for a run.
  * @param {CanvasRenderingContext2D} ctx The context.
- * @param {object} project The edit project.
- * @param {object[]} plan Segments from buildPlan.
+ * @param {EzProject} project The edit project.
+ * @param {EzPlanSeg[]} plan Segments from buildPlan.
  * @returns {function(number): void} Painter taking timeline seconds.
  */
 function makePainter(ctx, project, plan) {
@@ -811,8 +1121,8 @@ function makePainter(ctx, project, plan) {
 /**
  * Draw a single frame of the timeline.
  * @param {CanvasRenderingContext2D} ctx The context.
- * @param {object} project The edit project.
- * @param {object[]} plan Segments from buildPlan.
+ * @param {EzProject} project The edit project.
+ * @param {EzPlanSeg[]} plan Segments from buildPlan.
  * @param {number} t Timeline seconds.
  * @returns {void}
  */
@@ -859,7 +1169,7 @@ function paintTime(ctx, project, plan, t) {
 /**
  * Draw the text/image overlays visible at a timeline second.
  * @param {CanvasRenderingContext2D} ctx The context.
- * @param {object} project The edit project.
+ * @param {EzProject} project The edit project.
  * @param {number} t Timeline seconds.
  * @param {number} w Frame width.
  * @param {number} h Frame height.
@@ -909,7 +1219,7 @@ function drawOverlays(ctx, project, t, w, h) {
 /**
  * Draw the caption band visible at a timeline second.
  * @param {CanvasRenderingContext2D} ctx The context.
- * @param {object} project The edit project.
+ * @param {EzProject} project The edit project.
  * @param {number} t Timeline seconds.
  * @param {number} w Frame width.
  * @param {number} h Frame height.
@@ -966,7 +1276,7 @@ function audioCtx() {
  * MediaElementSource for a clip, created at most once per element.
  * @param {HTMLVideoElement} video The element.
  * @param {AudioContext} ctx The audio context.
- * @returns {object|null} The source node, or null on failure.
+ * @returns {MediaElementAudioSourceNode|null} The source node.
  */
 function elementSource(video, ctx) {
   if (video._ezEditSource && video._ezEditSourceCtx === ctx) {
@@ -986,9 +1296,9 @@ function elementSource(video, ctx) {
 
 /**
  * Route clip audio through per-clip gains into the recorder and the speakers.
- * @param {object[]} plan Segments from buildPlan.
+ * @param {EzPlanSeg[]} plan Segments from buildPlan.
  * @param {MediaStream|null} stream Recorder stream to add audio tracks to.
- * @returns {object|null} `{ctx, dest, gains}` for later gain changes.
+ * @returns {EzAudioRig|null} `{ctx, dest, gains}` for gains.
  */
 function attachAudio(plan, stream) {
   const ctx = audioCtx();
@@ -1038,8 +1348,8 @@ function attachAudio(plan, stream) {
 
 /**
  * Silence every clip but the one now playing.
- * @param {object|null} rig The rig from attachAudio.
- * @param {object} seg The active segment.
+ * @param {EzAudioRig|null} rig The rig from attachAudio.
+ * @param {EzPlanSeg} seg The active segment.
  * @returns {void}
  */
 function setSegmentGain(rig, seg) {
@@ -1059,7 +1369,7 @@ function setSegmentGain(rig, seg) {
 
 /**
  * Tear down the gain nodes of a finished run.
- * @param {object|null} rig The rig from attachAudio.
+ * @param {EzAudioRig|null} rig The rig from attachAudio.
  * @returns {void}
  */
 function detachAudio(rig) {
@@ -1104,7 +1414,7 @@ function pickMime() {
 
 /**
  * Size the stage canvas to the project and return its context.
- * @param {object} project The edit project.
+ * @param {EzProject} project The edit project.
  * @returns {CanvasRenderingContext2D|null} The 2d context, or null.
  */
 function ensureStage(project) {
@@ -1135,10 +1445,10 @@ function ensureStage(project) {
  *
  * Clips that never load are skipped after the wait window: the frame keeps
  * painting (black plane plus overlays) so preview and render never throw.
- * @param {object[]} plan Segments from buildPlan.
- * @param {object} project The edit project.
+ * @param {EzPlanSeg[]} plan Segments from buildPlan.
+ * @param {EzProject} project The edit project.
  * @param {function(number): void} paint Draws one timeline second.
- * @param {object} opts `{token, onSegment, fps}`.
+ * @param {EzStepOpts} opts `{token, onSegment, fps}`.
  * @returns {Promise<boolean>} False when cancelled or over budget.
  */
 async function stepTimeline(plan, project, paint, opts) {
@@ -1193,8 +1503,8 @@ async function stepTimeline(plan, project, paint, opts) {
 
 /**
  * Record the timeline to a webm Blob using canvas + MediaRecorder.
- * @param {object[]} plan Segments from buildPlan.
- * @param {object} project The edit project.
+ * @param {EzPlanSeg[]} plan Segments from buildPlan.
+ * @param {EzProject} project The edit project.
  * @returns {Promise<Blob>} The recorded blob.
  */
 async function recordTimeline(plan, project) {
@@ -1285,7 +1595,7 @@ function downloadBlob(blob, name) {
 
 /**
  * Filesystem-safe stem for a project title.
- * @param {object} project The edit project.
+ * @param {EzProject} project The edit project.
  * @returns {string} A slug.
  */
 function slugFor(project) {
@@ -1336,7 +1646,7 @@ function serverIdFromUrl(raw) {
 /**
  * Split an SSE body into its JSON payloads.
  * @param {string} text Raw response text.
- * @returns {object[]} Parsed payloads, in arrival order.
+ * @returns {EzMcpPayload[]} Parsed payloads, in arrival order.
  */
 function parseSse(text) {
   const payloads = [];
@@ -1365,7 +1675,7 @@ function parseSse(text) {
  * @param {string} text Raw response text.
  * @param {string} contentType Content-Type header.
  * @param {number|string} id Request id to match.
- * @returns {object} The matching payload, or `{}`.
+ * @returns {EzMcpPayload} The matching payload, or `{}`.
  */
 function parseMcpBody(text, contentType, id) {
   const raw = String(text || "");
@@ -1392,9 +1702,9 @@ function parseMcpBody(text, contentType, id) {
 /**
  * POST one JSON-RPC message to a local MCP endpoint.
  * @param {string} url The Streamable-HTTP endpoint.
- * @param {object} payload The JSON-RPC message.
+ * @param {EzMcpRequest} payload The JSON-RPC message.
  * @param {string} sessionId Mcp-Session-Id from initialize, when any.
- * @returns {Promise<object>} `{body, sessionId}`.
+ * @returns {Promise<EzMcpReply>} `{body, sessionId}`.
  */
 async function mcpPost(url, payload, sessionId) {
   const headers = {
@@ -1466,7 +1776,7 @@ async function mcpInitialize(url) {
  * tools/list against a local MCP endpoint.
  * @param {string} url The MCP endpoint.
  * @param {string} sessionId Session id from initialize.
- * @returns {Promise<object[]>} The tool descriptors.
+ * @returns {Promise<EzMcpTool[]>} The tool descriptors.
  */
 async function mcpListTools(url, sessionId) {
   const reply = await mcpPost(url, { jsonrpc: "2.0", id: 2, method: "tools/list", params: {} }, sessionId);
@@ -1481,7 +1791,7 @@ async function mcpListTools(url, sessionId) {
  * tools/call against a local MCP endpoint and flatten the answer to text.
  * @param {string} url The MCP endpoint.
  * @param {string} name Tool name.
- * @param {object} args Tool arguments.
+ * @param {EzJsonMap} args Tool arguments.
  * @returns {Promise<string>} The tool output as text.
  */
 async function mcpCallTool(url, name, args) {
@@ -1513,7 +1823,7 @@ async function mcpCallTool(url, name, args) {
 
 /**
  * Stored local MCP servers.
- * @returns {object[]} Rows of `{url, id, enabled, tools, error, updated_at}`.
+ * @returns {EzServerRow[]} Rows of `{url, id, enabled, tools}`.
  */
 function loadServers() {
   const rows = readJsonPref(PREF_SERVERS, []);
@@ -1625,7 +1935,7 @@ function pushThread(kind, text) {
 /**
  * Append a table row of plain text cells.
  * @param {HTMLElement} body The tbody.
- * @param {string[]} cells Cell texts.
+ * @param {Array<string|number>} cells Cell texts.
  * @param {string} [className] Extra class.
  * @returns {void}
  */
@@ -1814,7 +2124,7 @@ function endAction() {
 
 /**
  * Load state for the current (or most recent) project.
- * @param {object} [opts] `{quiet: true}` keeps the status line untouched.
+ * @param {EzRefreshOpts} [opts] `{quiet: true}` keeps the note.
  * @returns {Promise<void>} Resolves once painted.
  */
 async function refreshState(opts) {
@@ -2039,7 +2349,7 @@ function showStageVideo(video) {
 
 /**
  * Render one exec_client job in this browser and report it back.
- * @param {object} job The JobRecord claimed from /ez_edit/exec/pending.
+ * @param {EzJob} job The JobRecord claimed from /ez_edit/exec/pending.
  * @returns {Promise<void>} Resolves once the result is posted.
  */
 async function runClientJob(job) {
@@ -2120,7 +2430,7 @@ async function handleExecJobs() {
 
 /**
  * Run the handshake + tools/list for one server, then sync the tool list.
- * @param {object} server The server row.
+ * @param {EzServerRow} server The server row.
  * @returns {Promise<void>} Resolves when synced or refused.
  */
 async function discoverServer(server) {
@@ -2377,7 +2687,7 @@ function setMode(mode) {
  * Build a small key/value table with a caption.
  * @param {string} caption Heading shown above the table.
  * @param {string[]} heads Column headers.
- * @returns {object} `{wrap, body}` where body is the tbody.
+ * @returns {EzTable} `{wrap, body}` where body is the tbody.
  */
 function makeTable(caption, heads) {
   const wrap = makeEl("div", "ez-edit-table-wrap");
@@ -2413,7 +2723,7 @@ function mount(el) {
   el.classList.add("ez-edit");
   el.tabIndex = 0;
 
-  /** @type {object} */
+  /** @type {EzUi} */
   const local = { root: el };
 
   local.status = makeEl("p", "ez-edit-status", "loading...");

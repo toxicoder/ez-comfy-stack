@@ -25,6 +25,43 @@ const NARRATIVE_HEADINGS = {
   bug: ["## What happened", "## Steps", "## Expected", "## Actual"],
   enhancement: ["## Problem", "## Proposed solution", "## Alternatives", "## What it unlocks"],
 };
+/**
+ * Narrative text keyed by the narrative key of the report's kind.
+ * @typedef {Object<string, string>} EzNarrative
+ */
+
+/**
+ * Opaque handle on `window.EzFeedback`; the core is loaded lazily.
+ * @typedef {Object<string, *>} EzFeedbackCore
+ */
+
+/**
+ * Options for a labelled button.
+ * @typedef {Object} EzButtonOpts
+ * @property {boolean} [icon] Prepend the core's GitHub mark.
+ */
+
+/**
+ * Shell of the Feedback tab: the scroll block and its heading.
+ * @typedef {Object} EzPanelShell
+ * @property {HTMLElement} block Container children are appended to.
+ * @property {HTMLElement} heading Heading shown above the block.
+ */
+
+/**
+ * Narrative textareas of the current kind, keyed by narrative key.
+ * @typedef {Object<string, HTMLTextAreaElement>} EzFieldMap
+ */
+
+/**
+ * Report as the core's dialog takes it in; every field is optional.
+ * @typedef {Object} EzReportPartial
+ * @property {string} [kind] `bug` or `enhancement`.
+ * @property {string} [surface] Shared surface id; `global` when omitted.
+ * @property {string} [app] `extra.lab_rel` when the surface is the App.
+ * @property {string} [summary] One-line issue summary.
+ */
+
 /** Per-kind prompt shown as the textarea placeholder: guidance lives here. */
 const NARRATIVE_GUIDANCE = {
   bug: {
@@ -59,7 +96,7 @@ const TIPS = {
 
 /**
  * The shared machinery, resolved lazily so load order cannot break the tab.
- * @returns {object|null} `window.EzFeedback`, or null before it loads.
+ * @returns {EzFeedbackCore|null} `window.EzFeedback`, or null before it loads.
  */
 function core() {
   return (typeof window !== "undefined" && window.EzFeedback) || null;
@@ -98,7 +135,7 @@ function appRelFrom(pairs) {
  * Create a button, optionally led by the core's GitHub mark.
  * @param {string} label Button text.
  * @param {string} className `ez-fb-panel*` class list.
- * @param {object} [opts] `{icon: true}` prepends the core's GitHub mark.
+ * @param {EzButtonOpts} [opts] `{icon: true}` prepends the core's GitHub mark.
  * @returns {HTMLButtonElement} The button.
  */
 function makeButton(label, className, opts) {
@@ -122,7 +159,7 @@ function makeButton(label, className, opts) {
  * One labelled block: heading, then the nodes.
  * @param {string} label Heading text.
  * @param {string} className `ez-fb-panel*` class list for the block.
- * @returns {object} `{block, heading}` elements to append children to.
+ * @returns {EzPanelShell} `{block, heading}` elements to append children to.
  */
 function makeBlock(label, className) {
   const block = document.createElement("div");
@@ -136,9 +173,9 @@ function makeBlock(label, className) {
 
 /**
  * Narrative as the operator filled it, trimmed to the kind's non-empty keys.
- * @param {object} values Field elements by narrative key.
+ * @param {EzFieldMap} values Field elements by narrative key.
  * @param {string[]} keys The kind's narrative keys.
- * @returns {object|null} `{key: text}`, or null when every field is blank.
+ * @returns {EzNarrative|null} `{key: text}`, or null when every field is blank.
  */
 function filledNarrative(values, keys) {
   const out = {};
@@ -155,7 +192,7 @@ function filledNarrative(values, keys) {
 
 /**
  * Text sent to the LLM: the filled narrative, marked up by its own headings.
- * @param {object} narrative Filled narrative, or null.
+ * @param {EzNarrative|null} narrative Filled narrative, or null.
  * @param {string[]} keys The kind's narrative keys.
  * @param {string[]} headings The kind's headings, same order as keys.
  * @returns {string} Markdown text, empty when there is nothing filled.
@@ -175,7 +212,7 @@ function narrativeText(narrative, keys, headings) {
 
 /**
  * Read an LLM answer back into the fields, keyed by its `## ` headings.
- * @param {object} values Field elements by narrative key.
+ * @param {EzFieldMap} values Field elements by narrative key.
  * @param {string[]} keys The kind's narrative keys.
  * @param {string[]} headings The kind's headings, same order as keys.
  * @param {string} text Enhanced markdown.
@@ -209,7 +246,7 @@ function applyNarrativeText(values, keys, headings, text) {
  * Unchecking the box has to beat `reportPayload`, which fills any label the
  * caller leaves out from the server config, so every config label is handed
  * back as an empty pair: seen, and rendered as nothing.
- * @param {object|null} fb The core.
+ * @param {EzFeedbackCore|null} fb The core.
  * @param {boolean} attach Whether the operator asked for environment facts.
  * @returns {Array<Array<string>>} Pairs for the payload.
  */
@@ -249,7 +286,7 @@ function mountPanel(el) {
 
   /** @type {"bug"|"enhancement"} */
   let kind = "bug";
-  /** @type {object} Field elements for the current kind, by narrative key. */
+  /** @type {EzFieldMap} Field elements for the current kind, by narrative key. */
   let values = {};
   /** Entered text is kept per kind so flipping the toggle loses nothing. */
   const drafts = { bug: {}, enhancement: {} };
@@ -407,7 +444,7 @@ function mountPanel(el) {
 
   /**
    * The partial report the current form describes.
-   * @returns {object} Partial report for the core dialog.
+   * @returns {EzReportPartial} Partial report for the core dialog.
    */
   function reportPartial() {
     const fb = core();

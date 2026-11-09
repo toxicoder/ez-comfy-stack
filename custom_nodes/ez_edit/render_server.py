@@ -23,7 +23,7 @@ import uuid
 from collections.abc import Callable, Mapping
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import cast, get_args
+from typing import TYPE_CHECKING, cast, get_args
 
 from ez_common.protocols import CompletedProc, SubprocessRunner
 
@@ -38,6 +38,9 @@ from .protocol import (
     JobRecord,
     JobState,
 )
+
+if TYPE_CHECKING:
+    from ez_common import JsonMap
 
 JOB_STATES: tuple[JobState, ...] = get_args(JobState)
 """Runtime vocabulary for the row lifecycle."""
@@ -156,7 +159,7 @@ def render_path(edit_dir: Path | str, project_id: str, job_id: str) -> Path:
     return renders_dir(edit_dir) / name
 
 
-def _as_row(data: Mapping[str, object]) -> JobRecord:
+def _as_row(data: JsonMap) -> JobRecord:
     """Coerce a parsed row file into a :class:`~ez_edit.protocol.JobRecord`.
 
     Args:

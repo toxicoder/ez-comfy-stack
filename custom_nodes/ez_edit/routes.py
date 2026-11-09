@@ -24,7 +24,7 @@ from __future__ import annotations
 import inspect
 import os
 import shutil
-from collections.abc import Mapping, Sequence
+from collections.abc import Mapping
 from pathlib import Path
 from typing import (
     TYPE_CHECKING,
@@ -40,7 +40,7 @@ from . import agent, dispatch, generate_clip, render_server, timeline
 from .protocol import EDIT_DIR_NAME, ENV_ENABLED, ChatMessage, JobRecord
 
 if TYPE_CHECKING:
-    from ez_common import Json
+    from ez_common import Json, JsonList, JsonMap
     from ez_common.protocols import SubprocessRunner
 
 
@@ -170,7 +170,7 @@ class LaneDepsOverrides(TypedDict, total=False):
 class HandlerFn(Protocol):
     """Pure ``handle_*`` shape: request fields plus the seam bundle."""
 
-    def __call__(self, args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
+    def __call__(self, args: JsonMap, *, deps: LaneDeps) -> Payload:
         """Answer one request.
 
         Args:
@@ -257,7 +257,7 @@ def _disabled() -> Payload:
     return _err(DISABLED_ERROR, status=DISABLED_STATUS)
 
 
-def _text(args: Mapping[str, object], key: str, default: str = "") -> str:
+def _text(args: JsonMap, key: str, default: str = "") -> str:
     """One string field of a request mapping.
 
     Args:
@@ -272,7 +272,7 @@ def _text(args: Mapping[str, object], key: str, default: str = "") -> str:
     return str(raw if raw is not None else default).strip()
 
 
-def _number(args: Mapping[str, object], key: str, default: float) -> float:
+def _number(args: JsonMap, key: str, default: float) -> float:
     """One numeric field of a request mapping.
 
     Args:
@@ -289,7 +289,7 @@ def _number(args: Mapping[str, object], key: str, default: float) -> float:
         return default
 
 
-def _flag(args: Mapping[str, object], key: str, default: bool = True) -> bool:
+def _flag(args: JsonMap, key: str, default: bool = True) -> bool:
     """One boolean field of a request mapping.
 
     Args:
@@ -323,7 +323,7 @@ def _row_reply(row: JobRecord) -> Payload:
     return _ok(job=row)
 
 
-def handle_state(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
+def handle_state(args: JsonMap, *, deps: LaneDeps) -> Payload:
     """Serve ``GET /ez_edit/state``.
 
     Args:
@@ -343,7 +343,7 @@ def handle_state(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
     return _ok(project=state["project"], jobs=state["jobs"], enabled=True)
 
 
-def handle_ops(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
+def handle_ops(args: JsonMap, *, deps: LaneDeps) -> Payload:
     """Serve ``POST /ez_edit/ops``.
 
     Args:
@@ -371,7 +371,7 @@ def handle_ops(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
     return _ok(project=project)
 
 
-def handle_import(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
+def handle_import(args: JsonMap, *, deps: LaneDeps) -> Payload:
     """Serve ``POST /ez_edit/import``.
 
     The file is probed with ffprobe through the injected runner seam, and the
@@ -403,7 +403,7 @@ def handle_import(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
     return _ok(clip=clip)
 
 
-def handle_render(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
+def handle_render(args: JsonMap, *, deps: LaneDeps) -> Payload:
     """Serve ``POST /ez_edit/render``.
 
     ``mode=server`` runs ffmpeg inline through the injected runner seam;
@@ -435,7 +435,7 @@ def handle_render(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
     return _row_reply(row)
 
 
-def handle_job(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
+def handle_job(args: JsonMap, *, deps: LaneDeps) -> Payload:
     """Serve ``GET /ez_edit/job``.
 
     Args:
@@ -458,7 +458,7 @@ def handle_job(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
     return _ok(job=row)
 
 
-def handle_chat(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
+def handle_chat(args: JsonMap, *, deps: LaneDeps) -> Payload:
     """Serve ``POST /ez_edit/chat`` (one agent turn).
 
     Args:
@@ -513,7 +513,7 @@ def handle_chat(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
     )
 
 
-def handle_exec_pending(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
+def handle_exec_pending(args: JsonMap, *, deps: LaneDeps) -> Payload:
     """Serve ``GET /ez_edit/exec/pending`` (claim this panel's render rows).
 
     Args:
@@ -538,7 +538,7 @@ def handle_exec_pending(args: Mapping[str, object], *, deps: LaneDeps) -> Payloa
     return _ok(jobs=claimed)
 
 
-def handle_exec_result(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
+def handle_exec_result(args: JsonMap, *, deps: LaneDeps) -> Payload:
     """Serve ``POST /ez_edit/exec/result``.
 
     Args:
@@ -568,7 +568,7 @@ def handle_exec_result(args: Mapping[str, object], *, deps: LaneDeps) -> Payload
     return _ok(job=row)
 
 
-def handle_local_sync(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
+def handle_local_sync(args: JsonMap, *, deps: LaneDeps) -> Payload:
     """Serve ``POST /ez_edit/local_tools/sync``.
 
     Args:
@@ -586,14 +586,14 @@ def handle_local_sync(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
         return _err("client_id is required")
     try:
         count = deps.registry.sync(
-            client_id, cast("Sequence[object]", args.get("tools") or [])
+            client_id, cast("JsonList", args.get("tools") or [])
         )
     except dispatch.DispatchError as exc:
         return _err(str(exc))
     return _ok(client_id=client_id, count=count)
 
 
-def handle_local_pending(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
+def handle_local_pending(args: JsonMap, *, deps: LaneDeps) -> Payload:
     """Serve ``GET /ez_edit/local_tools/pending``.
 
     Args:
@@ -616,7 +616,7 @@ def handle_local_pending(args: Mapping[str, object], *, deps: LaneDeps) -> Paylo
     return _ok(calls=calls)
 
 
-def handle_local_result(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
+def handle_local_result(args: JsonMap, *, deps: LaneDeps) -> Payload:
     """Serve ``POST /ez_edit/local_tools/result`` (unblocks the dispatcher).
 
     Args:
@@ -639,7 +639,7 @@ def handle_local_result(args: Mapping[str, object], *, deps: LaneDeps) -> Payloa
     return _ok(call_id=call_id)
 
 
-def handle_generate_clip(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
+def handle_generate_clip(args: JsonMap, *, deps: LaneDeps) -> Payload:
     """Serve ``POST /ez_edit/generate_clip`` (queue the cutaway graph).
 
     Args:
@@ -687,7 +687,7 @@ def handle_generate_clip(args: Mapping[str, object], *, deps: LaneDeps) -> Paylo
     return _row_reply(row)
 
 
-def handle_export_edl(args: Mapping[str, object], *, deps: LaneDeps) -> Payload:
+def handle_export_edl(args: JsonMap, *, deps: LaneDeps) -> Payload:
     """Serve ``POST /ez_edit/export_edl``.
 
     Args:

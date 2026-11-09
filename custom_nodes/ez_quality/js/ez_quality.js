@@ -26,6 +26,79 @@ import {
   EZ_QUALITY_TIERS,
 } from "./ez_quality_presets.js";
 
+/**
+ * Value a widget can hold: combo text, a seeded number, a toggle, or the
+ * DIVERGENT sentinel the agree-on helpers use when instances of one class
+ * contradict each other.
+ * @typedef {string|number|boolean|null|undefined|symbol|Object} EzWidgetValue
+ */
+
+/**
+ * One overlay field on one live node: the widget a write lands on.
+ * @typedef {Object} EzOverlayEntry
+ * @property {EzNode=} node Node the field belongs to.
+ * @property {EzWidget=} widget Widget that carries the field.
+ */
+
+/**
+ * Overlay fields mapped to their live instances, keyed by field id.
+ * @typedef {Object<string, Array<EzOverlayEntry>>} EzOverlayInstances
+ */
+
+/**
+ * One row of the generated quality table: field id to the value the tier pins.
+ * @typedef {Object<string, EzWidgetValue>} EzTierRow
+ */
+
+/**
+ * Value per owned field, undefined for a field the read knows nothing about.
+ * @typedef {Object<string, EzWidgetValue|undefined>} EzFieldValues
+ */
+
+/**
+ * The two maps presets.match_tier compares for one graph.
+ * @typedef {Object} EzOverlayValuePair
+ * @property {EzFieldValues=} observed Values the graph holds now.
+ * @property {EzFieldValues=} authored Values the overlay last wrote.
+ */
+
+/**
+ * One value the overlay wrote, kept so Queue can spot a later user edit.
+ * @typedef {Object} EzSnapshotRow
+ * @property {EzNode=} node Node the write landed on.
+ * @property {string=} name Widget name the write targeted.
+ * @property {EzWidgetValue=} value Value the overlay authored.
+ */
+
+/**
+ * One write a tier asks for, resolved to its node and widget.
+ * @typedef {Object} EzOverlayWrite
+ * @property {EzNode=} node Node to write.
+ * @property {EzWidget=} widget Widget to write.
+ * @property {string=} field Field id the write carries.
+ * @property {EzWidgetValue=} value Value the tier pins.
+ */
+
+/**
+ * Everything one tier apply decides, writes plus what stood in the way.
+ * @typedef {Object} EzWritePlan
+ * @property {Array<EzOverlayWrite>=} writes Writes the overlay performs.
+ * @property {Array<string>=} failures Reasons a write cannot land.
+ * @property {Array<string>=} missing Fields with no live instance.
+ */
+
+/**
+ * LiteGraph node class handed to beforeRegisterNodeDef; the overlay only
+ * touches the prototype, so LiteGraph owns the rest of the shape.
+ * @typedef {Object<string, *>} EzNodeType
+ */
+
+/**
+ * Comfy node definition the registerExtension hook filters by class name.
+ * @typedef {Object} EzNodeDef
+ * @property {string=} name Node class the hook matches.
+ */
+
 // Combo ids this build still has to accept from saved graphs. The option list
 // itself and every value behind it come from the generated table.
 const QUALITY_FREE_COMMERCIAL = "Free Commercial Use (<$10M)";
@@ -100,9 +173,9 @@ const LAST_QUALITY_KEY = "ez-comfy.quality.last";
 
 /**
  * Find a widget by name on a node.
- * @param {object} node
+ * @param {EzNode} node
  * @param {string} name
- * @returns {object|undefined}
+ * @returns {EzWidget|undefined}
  */
 function widgetByName(node, name) {
   return node.widgets?.find((w) => w.name === name);
@@ -110,7 +183,7 @@ function widgetByName(node, name) {
 
 /**
  * Node type, honoring the Nodes 2.0 comfyClass alias.
- * @param {object|undefined} node
+ * @param {EzNode|undefined} node
  * @returns {string}
  */
 function nodeType(node) {
@@ -119,7 +192,7 @@ function nodeType(node) {
 
 /**
  * True for the Quality combo node.
- * @param {object|undefined} node
+ * @param {EzNode|undefined} node
  * @returns {boolean}
  */
 function isQualityNode(node) {
@@ -129,7 +202,7 @@ function isQualityNode(node) {
 /**
  * True when a node is mode 0. Muted and bypassed lanes are not in the queued
  * prompt, so they neither drive the overlay nor wear its caption.
- * @param {object|undefined} node
+ * @param {EzNode|undefined} node
  * @returns {boolean}
  */
 function isLiveNode(node) {
@@ -138,8 +211,8 @@ function isLiveNode(node) {
 
 /**
  * First Quality combo the overlay should act on, ignoring muted copies.
- * @param {object|undefined} graph
- * @returns {object|null}
+ * @param {EzGraph|undefined} graph
+ * @returns {EzNode|null}
  */
 function firstLiveQualityNode(graph) {
   for (const node of graph?.nodes || []) {
@@ -152,7 +225,7 @@ function firstLiveQualityNode(graph) {
 
 /**
  * Combo option strings from widget.options.values (array or getter).
- * @param {object|undefined} widget
+ * @param {EzWidget|undefined} widget
  * @returns {string[]}
  */
 function comboValues(widget) {
@@ -273,7 +346,7 @@ function isQwenImageVae(name) {
 
 /**
  * True when a UNET filename looks like Wan 14B.
- * @param {*} name
+ * @param {EzWidgetValue} name
  * @returns {boolean}
  */
 function isWan14(name) {
@@ -284,7 +357,7 @@ function isWan14(name) {
 
 /**
  * True when any live UNETLoader holds Wan 14B, which the overlay never touches.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @returns {boolean}
  */
 function graphHasWan14(graph) {
@@ -338,7 +411,7 @@ function isFlux2Vae(name) {
  * True when a loader still holds a weight the overlay may replace, the same
  * swap guard presets.apply_to_graph applies server-side.
  * @param {string} field
- * @param {*} current
+ * @param {EzWidgetValue} current
  * @returns {boolean}
  */
 function isSwappableTarget(field, current) {
@@ -366,7 +439,7 @@ function isSwappableTarget(field, current) {
 
 /**
  * True when any live loader pins FLUX 3 Image Klein weights.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @returns {boolean}
  */
 function graphHasKlein3Weights(graph) {
@@ -432,7 +505,7 @@ function graphHasQwenWeights(graph) {
 
 /**
  * Return a combo value this build knows, defaulting to lab.
- * @param {*} value
+ * @param {EzWidgetValue} value
  * @returns {string}
  */
 function normalizeQuality(value) {
@@ -462,7 +535,7 @@ function formatMatches(value, ids) {
 /**
  * Snap generic 16:9 / 9:16 still formats to LTX feeder sizes.
  * Named platform jobs, Custom, and already-feeder rows stay put.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @returns {void}
  */
 function retargetClipFormat(graph) {
@@ -488,7 +561,7 @@ function retargetClipFormat(graph) {
 
 /**
  * Infer graph occupancy from extra.lab_app_mode or node types.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @returns {string}
  */
 function occupancy(graph) {
@@ -533,7 +606,7 @@ function occupancy(graph) {
  * Tier family the graph belongs to: its occupancy, Klein 3 or opt-in Qwen when
  * its weights say so, and a no-op family for anything this table does not
  * cover.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @returns {string}
  */
 function graphFamily(graph) {
@@ -629,7 +702,7 @@ function scopeComboToFamily(graph, family) {
  * Requested value per overlay field for one tier, or null for an unknown row.
  * @param {string} family
  * @param {string} tier
- * @returns {object|null}
+ * @returns {EzTierRow|null}
  */
 function tierRow(family, tier) {
   return EZ_QUALITY_TABLE[family]?.[tier] || null;
@@ -647,7 +720,7 @@ function tierLabelFor(family, tier) {
 
 /**
  * String form of a widget value for edit detection (numbers compare as text).
- * @param {*} value
+ * @param {EzWidgetValue} value
  * @returns {string}
  */
 function widgetValueText(value) {
@@ -656,8 +729,8 @@ function widgetValueText(value) {
 
 /**
  * True when two widget values are the same text.
- * @param {*} a
- * @param {*} b
+ * @param {EzWidgetValue} a
+ * @param {EzWidgetValue} b
  * @returns {boolean}
  */
 function sameWidgetValue(a, b) {
@@ -667,8 +740,8 @@ function sameWidgetValue(a, b) {
 /**
  * Compare an observed widget value with a tier value the way presets.match_tier
  * does: numbers numerically, everything else as text, null equal only to null.
- * @param {*} left
- * @param {*} right
+ * @param {EzWidgetValue} left
+ * @param {EzWidgetValue} right
  * @returns {boolean}
  */
 function sameTierValue(left, right) {
@@ -709,9 +782,9 @@ function isTrellisGuidanceFreeStage(node, family) {
 
 /**
  * Live widget per targeted instance of each overlay field, muted nodes skipped.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @param {string} [family] When given, the family whose overlay is being read.
- * @returns {object} field -> Array of {node, widget}
+ * @returns {EzOverlayInstances} field -> entries per live instance
  */
 function collectOverlayInstances(graph, family) {
   const out = {};
@@ -742,10 +815,10 @@ function collectOverlayInstances(graph, family) {
 
 /**
  * Collapse one field's instances to the single value they agree on.
- * @param {object[]} entries
+ * @param {Array<EzOverlayEntry>} entries
  * @param {function} read reads one entry; undefined when it knows nothing
- * @returns {*} the shared value, null when the graph holds none, DIVERGENT
- * when the instances of the class hold different values
+ * @returns {EzWidgetValue} the shared value, null when the graph holds none,
+ * DIVERGENT when the instances of the class hold different values
  */
 function agreeOn(entries, read) {
   let shared = null;
@@ -771,10 +844,10 @@ function agreeOn(entries, read) {
  * observed / authored pair per owned field, the two maps presets.match_tier
  * compares. A field its instances disagree on matches nothing, so a graph
  * whose samplers contradict each other is custom rather than a tier.
- * @param {object} graph
+ * @param {EzGraph} graph
  * @param {string} family
- * @param {object} instances
- * @returns {object} {observed, authored}
+ * @param {EzOverlayInstances} instances
+ * @returns {EzOverlayValuePair} observed and authored maps
  */
 function overlayValues(graph, family, instances) {
   const snap = snapshots.get(graph);
@@ -797,7 +870,7 @@ function overlayValues(graph, family, instances) {
  * Widgets still at their authored values read as lab; anything else, including
  * instances that contradict each other, is custom, so a graph that never
  * matched a tier cannot keep displaying one.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @param {string} family
  * @returns {string}
  */
@@ -828,7 +901,7 @@ function deriveQualityTier(graph, family) {
 
 /**
  * True when the load-time snapshot covers every field it was asked about.
- * @param {object} authored
+ * @param {EzFieldValues} authored
  * @returns {boolean}
  */
 function snapHasValues(authored) {
@@ -839,8 +912,8 @@ function snapHasValues(authored) {
  * Why one write cannot land, or empty when it can. An empty answer means the
  * queued prompt will really hold the tier value.
  * @param {string} field
- * @param {object} entry
- * @param {*} wanted
+ * @param {EzOverlayEntry} entry
+ * @param {EzWidgetValue} wanted
  * @param {boolean} refused true when a Wan 14B loader pins the graph
  * @returns {string}
  */
@@ -866,10 +939,10 @@ function writeBlockReason(field, entry, wanted, refused) {
 
 /**
  * Decide every write one tier asks for, and record what cannot land.
- * @param {object} graph
+ * @param {EzGraph} graph
  * @param {string} family
  * @param {string} tier
- * @returns {object} {writes, failures, missing}
+ * @returns {EzWritePlan} writes, failures, and missing fields
  */
 function planTierWrites(graph, family, tier) {
   const row = tierRow(family, tier);
@@ -907,7 +980,7 @@ function planTierWrites(graph, family, tier) {
 
 /**
  * True when LiteGraph serializes this widget into widgets_values.
- * @param {object|undefined} widget
+ * @param {EzWidget|undefined} widget
  * @returns {boolean}
  */
 function isSerializedWidget(widget) {
@@ -921,8 +994,8 @@ function isSerializedWidget(widget) {
  * widgets_values slot a widget serializes into. LiteGraph skips widgets it does
  * not serialize, so count only those; fall back to the raw position. -1 when no
  * slot can be trusted, which fails the write instead of diverging the prompt.
- * @param {object|undefined} node
- * @param {object|undefined} widget
+ * @param {EzNode|undefined} node
+ * @param {EzWidget|undefined} widget
  * @returns {number}
  */
 function widgetSlotIndex(node, widget) {
@@ -955,9 +1028,9 @@ function widgetSlotIndex(node, widget) {
 /**
  * Write the value and that widget's own widgets_values slot, so the shown value
  * and the serialized prompt can never disagree.
- * @param {object|undefined} node
- * @param {object|undefined} widget
- * @param {*} value
+ * @param {EzNode|undefined} node
+ * @param {EzWidget|undefined} widget
+ * @param {EzWidgetValue} value
  * @returns {void}
  */
 function writeWidgetSlot(node, widget, value) {
@@ -972,7 +1045,7 @@ function writeWidgetSlot(node, widget, value) {
 
 /**
  * Notify Vue / App Mode that a graph moved.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @returns {void}
  */
 function markGraphDirty(graph) {
@@ -989,9 +1062,9 @@ function markGraphDirty(graph) {
 
 /**
  * Set a widget value, its prompt slot, and notify Vue / App Mode (Nodes 2.0).
- * @param {object|undefined} node
- * @param {object|undefined} widget
- * @param {*} value
+ * @param {EzNode|undefined} node
+ * @param {EzWidget|undefined} widget
+ * @param {EzWidgetValue} value
  * @returns {void}
  */
 function setWidgetValue(node, widget, value) {
@@ -1007,9 +1080,9 @@ function setWidgetValue(node, widget, value) {
 
 /**
  * Remember the value the overlay wrote so Queue can spot later user edits.
- * @param {object|undefined} graph
- * @param {object|undefined} widget
- * @param {*} value
+ * @param {EzGraph|undefined} graph
+ * @param {EzWidget|undefined} widget
+ * @param {EzWidgetValue} value
  * @returns {void}
  */
 function recordOverlayWrite(graph, widget, value) {
@@ -1026,8 +1099,8 @@ function recordOverlayWrite(graph, widget, value) {
 
 /**
  * Forget overlay-write records for widgets being (re)written or restored.
- * @param {object|undefined} graph
- * @param {object[]} widgets
+ * @param {EzGraph|undefined} graph
+ * @param {Array<EzWidget>} widgets
  * @returns {void}
  */
 function clearOverlayWrites(graph, widgets) {
@@ -1042,7 +1115,7 @@ function clearOverlayWrites(graph, widgets) {
 
 /**
  * True when any overlay-written widget now holds a different (user-edited) value.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @returns {boolean}
  */
 function hasOverlayEdits(graph) {
@@ -1060,10 +1133,10 @@ function hasOverlayEdits(graph) {
 
 /**
  * Write one overlay value and record it as overlay-authored for this graph.
- * @param {object|undefined} graph
- * @param {object} node
- * @param {object} widget
- * @param {*} value
+ * @param {EzGraph|undefined} graph
+ * @param {EzNode} node
+ * @param {EzWidget} widget
+ * @param {EzWidgetValue} value
  * @returns {void}
  */
 function applyOverlayWrite(graph, node, widget, value) {
@@ -1073,10 +1146,10 @@ function applyOverlayWrite(graph, node, widget, value) {
 
 /**
  * Authored value for one widget of one node, or undefined when unrecorded.
- * @param {object[]|undefined} snap
- * @param {object} node
+ * @param {Array<EzSnapshotRow>|undefined} snap
+ * @param {EzNode} node
  * @param {string} name
- * @returns {*}
+ * @returns {EzWidgetValue|undefined}
  */
 function snapshotValueOf(snap, node, name) {
   for (const row of snap || []) {
@@ -1091,7 +1164,7 @@ function snapshotValueOf(snap, node, name) {
  * True when a widget now holds a value the user typed over the authored one.
  * Lab restores this snapshot at Queue, so an edit that skipped the widget
  * callback (App Mode panel writes) must freeze Quality instead.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @returns {boolean}
  */
 function hasSnapshotEdits(graph) {
@@ -1111,7 +1184,7 @@ function hasSnapshotEdits(graph) {
 /**
  * Owned fields whose live widgets no longer hold what the overlay or the author
  * last put there. Names what diverged, for the custom caption.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @param {string} family
  * @returns {string[]}
  */
@@ -1170,7 +1243,7 @@ function customCaption(reasons) {
 
 /**
  * Caption for custom chosen because the widgets left the tier behind.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @param {string} family
  * @returns {string}
  */
@@ -1182,7 +1255,7 @@ function keptEditsCaption(graph, family) {
 
 /**
  * Remember a tier that missed a widget so the next graph configure retries once.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @param {string} choice
  * @param {string[]} fields
  * @returns {void}
@@ -1198,7 +1271,7 @@ function recordPendingApply(graph, choice, fields) {
 
 /**
  * Drop the retry record once a tier has fully landed.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @returns {void}
  */
 function clearPendingApply(graph) {
@@ -1209,7 +1282,7 @@ function clearPendingApply(graph) {
 
 /**
  * Retry once a tier that was blocked by a widget that did not exist yet.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @returns {boolean} true when a retry ran
  */
 function retryPendingApply(graph) {
@@ -1230,7 +1303,7 @@ function retryPendingApply(graph) {
  * Stamp a live Quality caption onto the graph extra and every visible combo.
  * With no visible Quality combo there is nothing to caption, so a muted lane
  * cannot leave a stamp on the graph either.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @param {string} caption
  * @returns {void}
  */
@@ -1255,7 +1328,7 @@ function stampQualityCaption(graph, caption) {
  * Put one value on every Quality combo, so a second combo cannot keep showing a
  * tier another one dropped. The combo callback stays quiet; the caller decides
  * whether to apply, so setting the value cannot re-enter the overlay.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @param {string} value
  * @returns {void}
  */
@@ -1282,7 +1355,7 @@ function setQualityOnAll(graph, value) {
 
 /**
  * Snapshot authored steps/cfg/loader names so lab can restore them.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @returns {void}
  */
 function snapshotGraph(graph) {
@@ -1311,7 +1384,7 @@ function snapshotGraph(graph) {
 
 /**
  * Restore the last authored snapshot onto one graph.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @returns {void}
  */
 function restoreSnapshot(graph) {
@@ -1339,7 +1412,7 @@ function restoreSnapshot(graph) {
  * loader holding a weight the overlay may not replace, a Wan 14B graph, no
  * prompt slot) fails the apply to custom with a caption saying what diverged.
  * @param {string} choice
- * @param {object|undefined} qualityNode
+ * @param {EzNode|undefined} qualityNode
  * @returns {void}
  */
 function applyQuality(choice, qualityNode) {
@@ -1399,7 +1472,7 @@ function applyQuality(choice, qualityNode) {
 
 /**
  * Read the tier back out of the live widgets and show it on every combo.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @returns {void}
  */
 function syncQualityFromGraph(graph) {
@@ -1428,7 +1501,7 @@ function syncQualityFromGraph(graph) {
 /**
  * Caption for a freeze: name the fields the operator moved, else say plainly
  * that no tier describes this graph.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @returns {string}
  */
 function customEditCaption(graph) {
@@ -1441,7 +1514,7 @@ function customEditCaption(graph) {
 
 /**
  * True when the graph carries a Quality combo at all.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @returns {boolean}
  */
 function hasQualityNode(graph) {
@@ -1456,7 +1529,7 @@ function hasQualityNode(graph) {
 /**
  * Select Quality custom on every combo so Queue keeps live overlay-widget
  * values. Skips overlay/seed writes. Does not persist custom as last named.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @param {string[]} [reasons] what stopped the overlay, for the caption
  * @returns {void}
  */
@@ -1477,8 +1550,8 @@ function freezeQualityToCustom(graph, reasons) {
 
 /**
  * True when this widget is a Quality overlay field on this node.
- * @param {object} node
- * @param {object|undefined} widget
+ * @param {EzNode} node
+ * @param {EzWidget|undefined} widget
  * @returns {boolean}
  */
 function isOverlayWidget(node, widget) {
@@ -1495,8 +1568,8 @@ function isOverlayWidget(node, widget) {
 
 /**
  * Chain a user-edit callback so an overlay-widget edit re-reads the tier.
- * @param {object} node
- * @param {object|undefined} widget
+ * @param {EzNode} node
+ * @param {EzWidget|undefined} widget
  * @returns {void}
  */
 function bindOverlayWidget(node, widget) {
@@ -1519,7 +1592,7 @@ function bindOverlayWidget(node, widget) {
 
 /**
  * Bind overlay-widget watchers on one node.
- * @param {object|undefined} node
+ * @param {EzNode|undefined} node
  * @returns {void}
  */
 function bindOverlayWatchersForNode(node) {
@@ -1533,7 +1606,7 @@ function bindOverlayWatchersForNode(node) {
 
 /**
  * Bind overlay-widget watchers on every node of a graph.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @returns {void}
  */
 function bindOverlayWatchers(graph) {
@@ -1545,7 +1618,7 @@ function bindOverlayWatchers(graph) {
 /**
  * Bind the quality combo once so changes and Queue keep it in step with the
  * widgets.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {void}
  */
 function bindQualityNode(node) {
@@ -1558,7 +1631,7 @@ function bindQualityNode(node) {
   const prior = widget.callback;
   /**
    * Chain the prior callback then overlay the chosen quality.
-   * @param {*} value
+   * @param {EzWidgetValue} value
    * @returns {void}
    */
   widget.callback = function (value) {
@@ -1607,7 +1680,7 @@ function bindQualityNode(node) {
 
 /**
  * Persist the last named quality for newly opened Apps.
- * @param {*} value
+ * @param {EzWidgetValue} value
  * @returns {void}
  */
 function persistLastQuality(value) {
@@ -1636,7 +1709,7 @@ function readLastQuality() {
 
 /**
  * True when this graph object is a newly opened App (or a different lab_rel).
- * @param {object} graph
+ * @param {EzGraph} graph
  * @returns {boolean}
  */
 function isNewlyOpenedGraph(graph) {
@@ -1652,9 +1725,9 @@ function isNewlyOpenedGraph(graph) {
 
 /**
  * Apply last-chosen quality to a newly opened App still at lab, else current.
- * @param {object} graph
- * @param {object} node
- * @param {object|undefined} widget
+ * @param {EzGraph} graph
+ * @param {EzNode} node
+ * @param {EzWidget|undefined} widget
  * @returns {boolean} true when an overlay ran
  */
 function applyDefaultOrCurrent(graph, node, widget) {
@@ -1722,8 +1795,8 @@ app.registerExtension({
   name: "ez_quality.overlay",
   /**
    * Wrap EZQuality so the combo applies overlays on create.
-   * @param {object} nodeTypeArg
-   * @param {object} nodeData
+   * @param {EzNodeType} nodeTypeArg
+   * @param {EzNodeDef} nodeData
    * @returns {Promise<void>}
    */
   async beforeRegisterNodeDef(nodeTypeArg, nodeData) {
@@ -1750,7 +1823,7 @@ app.registerExtension({
   },
   /**
    * Watch overlay widgets when a node is created after graph load.
-   * @param {object} node
+   * @param {EzNode} node
    * @returns {void}
    */
   nodeCreated(node) {
@@ -1759,7 +1832,7 @@ app.registerExtension({
   },
   /**
    * Keep the combo honest while the operator edits the graph.
-   * @param {object} graph
+   * @param {EzGraph} graph
    * @returns {void}
    */
   graphChanged(graph) {

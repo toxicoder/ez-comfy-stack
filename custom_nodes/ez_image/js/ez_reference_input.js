@@ -9,6 +9,81 @@
 import { app } from "../../scripts/app.js";
 import { api } from "../../scripts/api.js";
 
+/**
+ * Widget on the reference node. ComfyUI invokes callback with the widget as
+ * ``this`` and hands back (value, canvas, node); computeSize is what this file
+ * swaps to take a hidden slot out of the canvas layout.
+ * @typedef {{
+ *   name: string,
+ *   value?: unknown,
+ *   options?: {values?: unknown[], hidden?: boolean},
+ *   callback?: (this: EzWidget, ...args: unknown[]) => unknown,
+ *   computeSize?: () => number[],
+ *   _ezRefComputeSize?: (() => number[]) | null,
+ *   _ezRefWatched?: boolean,
+ *   inputEl?: HTMLElement,
+ *   parentEl?: HTMLElement
+ * }} EzWidget
+ */
+
+/**
+ * One node input socket; LiteGraph keeps a single link id or a link list.
+ * @typedef {{name?: string, link?: number|null, links?: unknown[]}} EzNodeInput
+ */
+
+/**
+ * Button widget addWidget returns; serialize=false keeps it out of
+ * widgets_values.
+ * @typedef {{serialize?: boolean}} EzButtonWidget
+ */
+
+/**
+ * Graph handle used to walk nodes and dirty the canvas.
+ * @typedef {{
+ *   nodes?: EzRefNode[],
+ *   setDirtyCanvas?: (dirtyCanvas: boolean, dirty: boolean) => void
+ * }} EzGraph
+ */
+
+/**
+ * EZOptionalImage node. --noResolve leaves the ComfyUI frontend untyped, so
+ * only the members this file reads or writes are named.
+ * @typedef {{
+ *   id?: number|string,
+ *   type?: string,
+ *   comfyClass?: string,
+ *   widgets?: EzWidget[],
+ *   widgets_values?: unknown[],
+ *   inputs?: EzNodeInput[],
+ *   graph?: EzGraph,
+ *   addWidget?: (
+ *     type: string,
+ *     name: string,
+ *     value: unknown,
+ *     callback: () => void
+ *   ) => EzButtonWidget,
+ *   onRemoved?: (this: EzRefNode) => void,
+ *   _ezRefRevealed?: number,
+ *   _ezRefNote?: string,
+ *   _ezReferenceInputBound?: boolean,
+ *   _ezReferenceAddWidget?: EzButtonWidget|null
+ * }} EzRefNode
+ */
+
+/**
+ * Registered node definition, seen before ComfyUI registers it.
+ * @typedef {{
+ *   prototype: {
+ *     onNodeCreated?: (this: EzRefNode, ...args: unknown[]) => void;
+ *   }
+ * }} EzNodeType
+ */
+
+/**
+ * Node definition metadata; only the class name is read here.
+ * @typedef {{name?: string}} EzNodeDef
+ */
+
 const NODE_CLASS = "EZOptionalImage";
 const SLOT_NAMES = ["filename", "filename_2", "filename_3"];
 const MUTE_WIDGET = "use_references";
@@ -101,7 +176,7 @@ let remountScheduled = false;
 
 /**
  * Escape text for the one innerHTML line this card renders.
- * @param {*} value
+ * @param {string} value
  * @returns {string}
  */
 function escapeHtml(value) {
@@ -114,9 +189,9 @@ function escapeHtml(value) {
 
 /**
  * Find a widget by name on a node.
- * @param {object|undefined} node
+ * @param {EzRefNode|undefined} node
  * @param {string} name
- * @returns {object|undefined}
+ * @returns {EzWidget|undefined}
  */
 function widgetByName(node, name) {
   return node?.widgets?.find((item) => item.name === name);
@@ -124,9 +199,9 @@ function widgetByName(node, name) {
 
 /**
  * Set a combo value and notify Vue / App Mode.
- * @param {object} node
- * @param {object|undefined} widget
- * @param {*} value
+ * @param {EzRefNode} node
+ * @param {EzWidget|undefined} widget
+ * @param {string|boolean} value
  * @returns {void}
  */
 function setWidgetValue(node, widget, value) {
@@ -152,7 +227,7 @@ function setWidgetValue(node, widget, value) {
 
 /**
  * Trimmed pick for one slot, or "" when the slot is empty or missing.
- * @param {object|undefined} node
+ * @param {EzRefNode|undefined} node
  * @param {string} name
  * @returns {string}
  */
@@ -162,7 +237,7 @@ function slotValue(node, name) {
 
 /**
  * Slots this node actually has; an older saved graph has only the first.
- * @param {object|undefined} node
+ * @param {EzRefNode|undefined} node
  * @returns {string[]}
  */
 function existingSlots(node) {
@@ -171,7 +246,7 @@ function existingSlots(node) {
 
 /**
  * How many slots the card shows: filled slots plus any the operator revealed.
- * @param {object} node
+ * @param {EzRefNode} node
  * @param {string[]} slots
  * @returns {number}
  */
@@ -188,7 +263,7 @@ function revealCount(node, slots) {
 
 /**
  * use_references is the single mute; an absent toggle is never muted.
- * @param {object} node
+ * @param {EzRefNode} node
  * @returns {boolean}
  */
 function isMuted(node) {
@@ -202,7 +277,7 @@ function isMuted(node) {
 
 /**
  * True when the batch socket carries a link, so the readout stays honest.
- * @param {object} node
+ * @param {EzRefNode} node
  * @returns {boolean}
  */
 function hasWiredBatch(node) {
@@ -216,7 +291,7 @@ function hasWiredBatch(node) {
 
 /**
  * One-line state readout for the operator.
- * @param {object} node
+ * @param {EzRefNode} node
  * @param {string[]} slots
  * @returns {string}
  */
@@ -272,7 +347,7 @@ function transferImages(transfer) {
 
 /**
  * Stable DOM id for one node's card.
- * @param {object|undefined} node
+ * @param {EzRefNode|undefined} node
  * @returns {string}
  */
 function cardId(node) {
@@ -281,7 +356,7 @@ function cardId(node) {
 
 /**
  * Every EZOptionalImage on the live graph.
- * @returns {object[]}
+ * @returns {EzRefNode[]}
  */
 function refNodes() {
   return (app.graph?.nodes || []).filter(
@@ -374,7 +449,7 @@ function renderThumb(thumb, name) {
 
 /**
  * Collapse one widget on the canvas path while its slot stays unrevealed.
- * @param {object} widget
+ * @param {EzWidget} widget
  * @param {boolean} show
  * @returns {void}
  */
@@ -409,7 +484,7 @@ function collapseWidget(widget, show) {
 
 /**
  * Hide the widget for a slot the operator has not revealed; never a filled one.
- * @param {object} node
+ * @param {EzRefNode} node
  * @param {string[]} slots
  * @param {number} revealed
  * @returns {void}
@@ -433,7 +508,7 @@ function applyRevealToWidgets(node, slots, revealed) {
 
 /**
  * Redraw the card for one node from the current widget values.
- * @param {object|undefined} node
+ * @param {EzRefNode|undefined} node
  * @returns {void}
  */
 function refreshCard(node) {
@@ -519,7 +594,7 @@ function pruneCards() {
 
 /**
  * Show the next empty slot; a filled slot is never left hidden.
- * @param {object} node
+ * @param {EzRefNode} node
  * @returns {void}
  */
 function revealNext(node) {
@@ -534,7 +609,7 @@ function revealNext(node) {
 
 /**
  * One-line operator note shown until the next pick, clear, or reveal.
- * @param {object} node
+ * @param {EzRefNode} node
  * @param {string} text
  * @returns {void}
  */
@@ -545,8 +620,8 @@ function note(node, text) {
 
 /**
  * Write a slot; a pick always un-mutes so the readout stays honest.
- * @param {object} node
- * @param {object|undefined} widget
+ * @param {EzRefNode} node
+ * @param {EzWidget|undefined} widget
  * @param {string} value
  * @returns {void}
  */
@@ -567,7 +642,7 @@ function setSlotValue(node, widget, value) {
 
 /**
  * Clear one slot back to empty. The mute control never calls this.
- * @param {object} node
+ * @param {EzRefNode} node
  * @param {string} name
  * @returns {void}
  */
@@ -577,8 +652,8 @@ function clearSlot(node, name) {
 
 /**
  * POST a local file to Comfy /upload/image and select the returned path.
- * @param {object} node
- * @param {object} widget
+ * @param {EzRefNode} node
+ * @param {EzWidget} widget
  * @param {File} file
  * @returns {Promise<void>}
  */
@@ -599,7 +674,7 @@ async function uploadToInput(node, widget, file) {
 
 /**
  * Fill consecutive slots from a multi-file drop, skipping absent slots.
- * @param {object} node
+ * @param {EzRefNode} node
  * @param {string} fromName
  * @param {File[]} files
  * @returns {Promise<void>}
@@ -618,7 +693,7 @@ async function uploadIntoSlots(node, fromName, files) {
 
 /**
  * Wire drop, open, and remove on one slot row.
- * @param {object} node
+ * @param {EzRefNode} node
  * @param {HTMLElement} row
  * @param {HTMLElement} thumb
  * @param {string} name
@@ -681,7 +756,7 @@ function bindRow(node, row, thumb, name) {
 
 /**
  * Build one card row: thumbnail, filename, and a Remove control.
- * @param {object} node
+ * @param {EzRefNode} node
  * @param {string} name
  * @returns {HTMLElement}
  */
@@ -706,7 +781,7 @@ function buildRow(node, name) {
 
 /**
  * Build and mount the card for one node, replacing any stale copy first.
- * @param {object} node
+ * @param {EzRefNode} node
  * @returns {HTMLElement}
  */
 function ensureCard(node) {
@@ -741,7 +816,7 @@ function ensureCard(node) {
 
 /**
  * Watch widget callbacks so canvas and ez_outputs writes repaint the card.
- * @param {object} node
+ * @param {EzRefNode} node
  * @returns {void}
  */
 function bindWidgetWatchers(node) {
@@ -754,9 +829,9 @@ function bindWidgetWatchers(node) {
     const inner = widget.callback;
     /**
      * Pass the widget callback on, then repaint the readout.
-     * @param {*} value
-     * @param {object} canvas
-     * @param {object} target
+     * @param {unknown} value the new widget value
+     * @param {unknown} canvas ComfyUI canvas, passed straight through
+     * @param {EzRefNode|undefined} target the node that owns the widget
      * @returns {void}
      */
     widget.callback = function (value, canvas, target) {
@@ -768,7 +843,7 @@ function bindWidgetWatchers(node) {
 
 /**
  * Add the node-level reveal control once. Buttons stay out of widgets_values.
- * @param {object} node
+ * @param {EzRefNode} node
  * @returns {void}
  */
 function addRevealButton(node) {
@@ -786,7 +861,7 @@ function addRevealButton(node) {
 
 /**
  * Bind the reference card once per node instance; safe on older graphs.
- * @param {object} node
+ * @param {EzRefNode} node
  * @returns {void}
  */
 function bindReferenceCard(node) {
@@ -821,8 +896,8 @@ app.registerExtension({
   name: "ez_image.referenceInput",
   /**
    * Wrap EZOptionalImage so every created node gets the reference card.
-   * @param {object} nodeType
-   * @param {object} nodeData
+   * @param {EzNodeType} nodeType
+   * @param {EzNodeDef} nodeData
    * @returns {Promise<void>}
    */
   async beforeRegisterNodeDef(nodeType, nodeData) {
@@ -841,7 +916,7 @@ app.registerExtension({
   },
   /**
    * Bind nodes that appear after a load without a reload.
-   * @param {object} node
+   * @param {EzRefNode} node
    * @returns {void}
    */
   nodeCreated(node) {

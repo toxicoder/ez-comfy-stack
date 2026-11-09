@@ -5,10 +5,14 @@ from __future__ import annotations
 import os
 import shutil
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from .align import SAMPLE_RATE
 from .jobstore import dub_dir, save_state
 from .rights import require_rights
+
+if TYPE_CHECKING:
+    from ez_common.comfy_graph import WidgetValue
 
 # Ingest widgets and media suffixes.
 SOURCE_NONE = "(none)"
@@ -103,8 +107,8 @@ def _strip_annotated_name(name: str) -> str:
 
 
 def resolve_media_source(
-    source: object,
-    source_url: object = "",
+    source: WidgetValue,
+    source_url: WidgetValue = "",
     *,
     input_dir: Path | None = None,
 ) -> str:

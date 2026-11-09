@@ -11,9 +11,39 @@ const OVERLAY_ID = "ez-film-preview-overlay";
 const PREVIEW_TYPES = new Set(["EZFilmConcat", "EZClipConcat"]);
 
 /**
+ * One VHS-style media entry an executed concat node reports.
+ * @typedef {Object} EzMediaItem
+ * @property {string=} filename File the node saved, the one field that must
+ *   hold for the overlay to render.
+ * @property {string=} type Output folder the file lives in.
+ * @property {string=} subfolder Subfolder beneath that output root.
+ */
+
+/**
+ * Payload Comfy hands onExecuted; the concat nodes post only gifs.
+ * @typedef {Object} EzExecutedMessage
+ * @property {EzMediaItem[]=} gifs Media this node just wrote.
+ */
+
+/**
+ * Node definition Comfy hands to beforeRegisterNodeDef.
+ * @typedef {Object} EzNodeDef
+ * @property {string=} name Class name this file matches on.
+ */
+
+/**
+ * Node class handed to beforeRegisterNodeDef; only the hook this file wraps is
+ * named, LiteGraph owns the class itself.
+ * @typedef {Object} EzNodeType
+ * @property {{
+ *   onExecuted?: (this: Object, message: EzExecutedMessage) => void
+ * }} prototype Per-instance hooks.
+ */
+
+/**
  * First VHS gif payload with a filename, or null.
- * @param {object} message
- * @returns {object|null}
+ * @param {EzExecutedMessage} message
+ * @returns {EzMediaItem|null}
  */
 function firstGif(message) {
   const gifs = message?.gifs;
@@ -29,7 +59,7 @@ function firstGif(message) {
 
 /**
  * Comfy /view URL for a saved gif/mp4 payload.
- * @param {object} item
+ * @param {EzMediaItem} item
  * @returns {string}
  */
 function viewUrl(item) {
@@ -72,7 +102,7 @@ function ensureOverlay() {
 
 /**
  * Fill the overlay with a video player and download link.
- * @param {object} item
+ * @param {EzMediaItem} item
  * @param {string} heading
  * @returns {void}
  */
@@ -114,8 +144,8 @@ app.registerExtension({
   name: "ez_film.preview",
   /**
    * Wrap EZFilmConcat / EZClipConcat so Queue shows a play/download overlay.
-   * @param {object} nodeType
-   * @param {object} nodeData
+   * @param {EzNodeType} nodeType
+   * @param {EzNodeDef} nodeData
    * @returns {Promise<void>}
    */
   async beforeRegisterNodeDef(nodeType, nodeData) {
@@ -126,7 +156,7 @@ app.registerExtension({
     const onExecuted = nodeType.prototype.onExecuted;
     /**
      * Show the overlay when the concat node returns a gif payload.
-     * @param {object} message
+     * @param {EzExecutedMessage} message
      * @returns {void}
      */
     nodeType.prototype.onExecuted = function (message) {

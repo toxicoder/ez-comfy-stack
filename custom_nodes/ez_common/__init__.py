@@ -39,7 +39,7 @@ from .comfy_graph import (
     as_node_id,
     ui_nodes_by_id,
 )
-from .json_value import Json, JsonArray, JsonObject, JsonScalar
+from .json_value import Json, JsonArray, JsonList, JsonMap, JsonObject, JsonScalar
 from .path import ensure_custom_nodes_path
 from .protocols import (
     ComfyInputTypes,

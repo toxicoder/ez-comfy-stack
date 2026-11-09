@@ -7,6 +7,59 @@
 import { app } from "../../scripts/app.js";
 import { api } from "../../scripts/api.js";
 
+/**
+ * Widget on a load node; only the members this picker reads or writes.
+ * @typedef {{
+ *   name: string,
+ *   value?: unknown,
+ *   options?: {values?: unknown[]},
+ *   callback?: (value: unknown, canvas: unknown, node: unknown) => void
+ * }} EzWidget
+ */
+
+/**
+ * Graph handle used only to mark the node dirty.
+ * @typedef {{
+ *   setDirtyCanvas?: (dirtyCanvas: boolean, dirty: boolean) => void
+ * }} EzGraph
+ */
+
+/**
+ * ComfyUI node handle. --noResolve leaves the frontend untyped, so only the
+ * members this file touches are named.
+ * @typedef {{
+ *   widgets?: EzWidget[],
+ *   widgets_values?: unknown[],
+ *   graph?: EzGraph,
+ *   _ezMediaPickBound?: boolean,
+ *   addWidget?: (
+ *     type: string,
+ *     name: string,
+ *     value: unknown,
+ *     callback: () => void
+ *   ) => void
+ * }} EzNode
+ */
+
+/**
+ * One row from the outputs listing, as returned by /ez_outputs/list.
+ * @typedef {{rel?: string, name?: string}} EzOutputRow
+ */
+
+/**
+ * Registered node definition, seen before ComfyUI registers it.
+ * @typedef {{
+ *   prototype: {
+ *     onNodeCreated?: (this: EzNode, ...args: unknown[]) => void;
+ *   }
+ * }} EzNodeType
+ */
+
+/**
+ * Node definition metadata; only the class name is read here.
+ * @typedef {{name?: string}} EzNodeDef
+ */
+
 const TARGETS = {
   EZOptionalImage: {
     widgets: ["filename", "filename_2", "filename_3"],
@@ -31,9 +84,9 @@ function apiUrl(path) {
 
 /**
  * Find a widget by name on a node.
- * @param {object} node
+ * @param {EzNode} node
  * @param {string} name
- * @returns {object|undefined}
+ * @returns {EzWidget|undefined}
  */
 function widgetByName(node, name) {
   return node.widgets?.find((item) => item.name === name);
@@ -41,9 +94,9 @@ function widgetByName(node, name) {
 
 /**
  * Set a combo value and notify Vue / App Mode.
- * @param {object} node
- * @param {object|undefined} widget
- * @param {*} value
+ * @param {EzNode} node
+ * @param {EzWidget|undefined} widget
+ * @param {string} value
  * @returns {void}
  */
 function setWidgetValue(node, widget, value) {
@@ -69,8 +122,8 @@ function setWidgetValue(node, widget, value) {
 
 /**
  * POST a local file to Comfy /upload/image and select it on the combo.
- * @param {object} node
- * @param {object} widget
+ * @param {EzNode} node
+ * @param {EzWidget} widget
  * @param {File} file
  * @returns {Promise<void>}
  */
@@ -94,8 +147,8 @@ async function uploadToInput(node, widget, file) {
 
 /**
  * Copy an output-disk file into input/ and select it.
- * @param {object} node
- * @param {object} widget
+ * @param {EzNode} node
+ * @param {EzWidget} widget
  * @param {string} rel
  * @returns {Promise<void>}
  */
@@ -115,7 +168,7 @@ async function chooseOutput(node, widget, rel) {
 /**
  * List recent output-disk media of one kind.
  * @param {string} kind
- * @returns {Promise<object[]>}
+ * @returns {Promise<EzOutputRow[]>}
  */
 async function listOutputs(kind) {
   const resp = await fetch(
@@ -130,7 +183,7 @@ async function listOutputs(kind) {
 
 /**
  * Mount upload + choose-from-outputs buttons on one or more load slots.
- * @param {object} node
+ * @param {EzNode} node
  * @param {{widget?: string, widgets?: string[], kind: string, accept: string}} spec
  * @returns {void}
  */
@@ -209,8 +262,8 @@ app.registerExtension({
   name: "ez_image.mediaPick",
   /**
    * Wrap load/filename nodes with upload + outputs browse.
-   * @param {object} nodeType
-   * @param {object} nodeData
+   * @param {EzNodeType} nodeType
+   * @param {EzNodeDef} nodeData
    * @returns {Promise<void>}
    */
   async beforeRegisterNodeDef(nodeType, nodeData) {

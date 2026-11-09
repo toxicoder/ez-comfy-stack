@@ -7,6 +7,89 @@
  */
 import { app } from "../../scripts/app.js";
 
+/**
+ * One row from video_formats.json. The file reads every field defensively with
+ * String() / Number(), so all of them stay optional.
+ * @typedef {{
+ *   id?: string,
+ *   label?: string,
+ *   family?: string,
+ *   width?: number,
+ *   height?: number
+ * }} EzFormatRow
+ */
+
+/**
+ * One families entry from video_formats.json, keyed by family id.
+ * @typedef {{label?: string, default_id?: string}} EzFamilySpec
+ */
+
+/**
+ * Preset values a named format row last applied to a node.
+ * @typedef {{
+ *   width: number,
+ *   height: number,
+ *   duration_s: string,
+ *   frames: string
+ * }} EzAppliedSize
+ */
+
+/**
+ * Family/format/size widget. ComfyUI invokes callback with the widget as
+ * ``this`` and beforeQueued at Queue time.
+ * @typedef {{
+ *   name: string,
+ *   value?: string|number|null,
+ *   options?: {values?: string[]},
+ *   callback?: (
+ *     this: EzWidget,
+ *     value: unknown,
+ *     canvas?: unknown,
+ *     node?: EzFormatNode
+ *   ) => unknown,
+ *   beforeQueued?: (this: EzWidget) => void
+ * }} EzWidget
+ */
+
+/**
+ * Graph handle used to walk nodes, read App Mode occupancy, and dirty the
+ * canvas.
+ * @typedef {{
+ *   nodes?: EzFormatNode[],
+ *   extra?: {lab_app_mode?: {occupancy?: string}},
+ *   setDirtyCanvas?: (dirtyCanvas: boolean, dirty: boolean) => void,
+ *   change?: () => void
+ * }} EzGraph
+ */
+
+/**
+ * EZVideoFormat node. --noResolve leaves the ComfyUI frontend untyped, so only
+ * the members this file reads or writes are named.
+ * @typedef {{
+ *   type?: string,
+ *   comfyClass?: string,
+ *   widgets?: EzWidget[],
+ *   widgets_values?: unknown[],
+ *   graph?: EzGraph,
+ *   _ezVideoFormatBound?: boolean,
+ *   _ezFormatApplied?: EzAppliedSize|null
+ * }} EzFormatNode
+ */
+
+/**
+ * Registered node definition, seen before ComfyUI registers it.
+ * @typedef {{
+ *   prototype: {
+ *     onNodeCreated?: (this: EzFormatNode, ...args: unknown[]) => void;
+ *   }
+ * }} EzNodeType
+ */
+
+/**
+ * Node definition metadata; only the class name is read here.
+ * @typedef {{name: string}} EzNodeDef
+ */
+
 const CUSTOM_LABEL = "Custom";
 const CUSTOM_ID = "custom";
 let catalog = null;
@@ -14,9 +97,9 @@ let applying = false;
 
 /**
  * Find a widget by name on a node.
- * @param {object} node
+ * @param {EzFormatNode} node
  * @param {string} name
- * @returns {object|undefined}
+ * @returns {EzWidget|undefined}
  */
 function widgetByName(node, name) {
   return node.widgets?.find((w) => w.name === name);
@@ -24,9 +107,9 @@ function widgetByName(node, name) {
 
 /**
  * Set a widget value and notify Vue / App Mode (Nodes 2.0).
- * @param {object|undefined} node
- * @param {object|undefined} widget
- * @param {*} value
+ * @param {EzFormatNode|undefined} node
+ * @param {EzWidget|undefined} widget
+ * @param {string|number} value
  * @returns {void}
  */
 function setWidgetValue(node, widget, value) {
@@ -54,7 +137,7 @@ function setWidgetValue(node, widget, value) {
 
 /**
  * Catalog rows from the last successful fetch, or an empty list.
- * @returns {object[]}
+ * @returns {EzFormatRow[]}
  */
 function formatRows() {
   const rows = catalog?.formats;
@@ -62,8 +145,8 @@ function formatRows() {
 }
 
 /**
- * Family specs from the last successful fetch.
- * @returns {object}
+ * Family specs from the last successful fetch, keyed by family id.
+ * @returns {Record<string, EzFamilySpec>}
  */
 function families() {
   const rows = catalog?.families;
@@ -72,7 +155,7 @@ function families() {
 
 /**
  * Resolve a family combo value to a catalog id.
- * @param {string} value
+ * @param {string|number|null|undefined} value
  * @returns {string}
  */
 function familyId(value) {
@@ -92,7 +175,7 @@ function familyId(value) {
 
 /**
  * Visible format labels for a family (Custom plus that family's rows).
- * @param {string} family
+ * @param {string|number|null|undefined} family
  * @returns {string[]}
  */
 function labelsForFamily(family) {
@@ -110,7 +193,7 @@ function labelsForFamily(family) {
 
 /**
  * Default format label for a family.
- * @param {string} family
+ * @param {string|number|null|undefined} family
  * @returns {string}
  */
 function defaultLabelForFamily(family) {
@@ -128,8 +211,8 @@ function defaultLabelForFamily(family) {
 
 /**
  * Resolve a combo value to a catalog row.
- * @param {string} value
- * @returns {object|null}
+ * @param {string|number|null|undefined} value
+ * @returns {EzFormatRow|null}
  */
 function findFormat(value) {
   const raw = String(value || "").trim();
@@ -147,7 +230,7 @@ function findFormat(value) {
 
 /**
  * True when the row is the Custom sentinel.
- * @param {object|null} row
+ * @param {EzFormatRow|null} row
  * @returns {boolean}
  */
 function isCustom(row) {
@@ -156,7 +239,7 @@ function isCustom(row) {
 
 /**
  * Restrict the format combo to the current family.
- * @param {object} node
+ * @param {EzFormatNode} node
  * @returns {void}
  */
 function syncFormatOptions(node) {
@@ -182,8 +265,8 @@ function syncFormatOptions(node) {
  * The snapshot is the baseline the queue-time check compares against and is
  * keyed by widget name, so it covers the duration field this pack also
  * manages. Custom clears it because the widgets are then the user's own.
- * @param {object|undefined} node
- * @param {object|null} row
+ * @param {EzFormatNode|undefined} node
+ * @param {EzFormatRow|null} row
  * @returns {void}
  */
 function recordAppliedFormat(node, row) {
@@ -205,7 +288,7 @@ function recordAppliedFormat(node, row) {
 
 /**
  * Write width/height from a non-custom format row.
- * @param {object} node
+ * @param {EzFormatNode} node
  * @returns {void}
  */
 function applyFormat(node) {
@@ -230,7 +313,7 @@ function applyFormat(node) {
 
 /**
  * If width/height no longer match the preset, switch Format to Custom.
- * @param {object} node
+ * @param {EzFormatNode} node
  * @returns {void}
  */
 function maybeMarkCustom(node) {
@@ -269,7 +352,7 @@ function maybeMarkCustom(node) {
  * so Python encodes the user's numbers; untouched sizes re-apply the preset.
  * A Duration move re-runs applyDuration instead of leaving the LTX latents on
  * the old length, because Python keeps using duration_s whatever Format says.
- * @param {object|undefined} node
+ * @param {EzFormatNode|undefined} node
  * @returns {void}
  */
 function queueTimeFormatSync(node) {
@@ -315,7 +398,7 @@ function queueTimeFormatSync(node) {
 
 /**
  * Bind family/format/width/height callbacks on one EZVideoFormat node.
- * @param {object} node
+ * @param {EzFormatNode} node
  * @returns {void}
  */
 function bindFormatNode(node) {
@@ -338,8 +421,8 @@ function bindFormatNode(node) {
   if (familyWidget) {
     /**
      * Filter Format when Family changes.
-     * @param {*} value
-     * @returns {void}
+     * @param {string|number|null|undefined} value
+     * @returns {string|number|null|undefined}
      */
     familyWidget.callback = function (value) {
       familyCb?.apply(this, arguments);
@@ -352,8 +435,8 @@ function bindFormatNode(node) {
   if (formatWidget) {
     /**
      * Apply catalog size when Format changes.
-     * @param {*} value
-     * @returns {void}
+     * @param {string|number|null|undefined} value
+     * @returns {string|number|null|undefined}
      */
     formatWidget.callback = function (value) {
       formatCb?.apply(this, arguments);
@@ -373,8 +456,8 @@ function bindFormatNode(node) {
   if (widthWidget) {
     /**
      * Mark Custom when Width leaves the preset.
-     * @param {*} value
-     * @returns {void}
+     * @param {string|number|null|undefined} value
+     * @returns {string|number|null|undefined}
      */
     widthWidget.callback = function (value) {
       widthCb?.apply(this, arguments);
@@ -385,8 +468,8 @@ function bindFormatNode(node) {
   if (heightWidget) {
     /**
      * Mark Custom when Height leaves the preset.
-     * @param {*} value
-     * @returns {void}
+     * @param {string|number|null|undefined} value
+     * @returns {string|number|null|undefined}
      */
     heightWidget.callback = function (value) {
       heightCb?.apply(this, arguments);
@@ -399,8 +482,8 @@ function bindFormatNode(node) {
   if (durationWidget) {
     /**
      * Write LTX latent length when Duration changes.
-     * @param {*} value
-     * @returns {void}
+     * @param {string|number|null|undefined} value
+     * @returns {string|number|null|undefined}
      */
     durationWidget.callback = function (value) {
       durationCb?.apply(this, arguments);
@@ -414,7 +497,7 @@ function bindFormatNode(node) {
 
 /**
  * Legal LTX frame count for a duration combo (1+8n).
- * @param {*} value
+ * @param {string|number|null|undefined} value
  * @returns {number|null}
  */
 function ltxFramesForDuration(value) {
@@ -430,7 +513,7 @@ function ltxFramesForDuration(value) {
 
 /**
  * True when this graph is LTX occupancy / family.
- * @param {object} node
+ * @param {EzFormatNode} node
  * @returns {boolean}
  */
 function isLtxGraph(node) {
@@ -444,7 +527,7 @@ function isLtxGraph(node) {
 
 /**
  * Write Duration onto LTX length widgets. Wan stays put.
- * @param {object} node
+ * @param {EzFormatNode} node
  * @returns {void}
  */
 function applyDuration(node) {
@@ -511,8 +594,8 @@ app.registerExtension({
   name: "ez_image.video_format",
   /**
    * Wrap EZVideoFormat so Family filters Format on create.
-   * @param {object} nodeType
-   * @param {object} nodeData
+   * @param {EzNodeType} nodeType
+   * @param {EzNodeDef} nodeData
    * @returns {Promise<void>}
    */
   async beforeRegisterNodeDef(nodeType, nodeData) {

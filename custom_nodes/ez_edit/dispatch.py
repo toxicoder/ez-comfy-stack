@@ -28,7 +28,7 @@ import uuid
 from collections.abc import Mapping, Sequence
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Callable, NamedTuple, Protocol, TypeAlias, cast, get_args
+from typing import TYPE_CHECKING, Callable, NamedTuple, Protocol, TypeAlias, cast, get_args
 
 from ez_common.protocols import CompletedProc, SubprocessRunner
 
@@ -42,9 +42,13 @@ from .protocol import (
     JobRecord,
     LocalCall,
     LocalToolDef,
+    ProjectState,
 )
 
-DispatchFn: TypeAlias = Callable[[str, dict[str, object]], dict[str, object]]
+if TYPE_CHECKING:
+    from ez_common import Json, JsonList, JsonMap, JsonObject
+
+DispatchFn: TypeAlias = Callable[[str, "JsonMap"], "JsonObject"]
 """``(name, args) -> {"ok", "text"}`` executor handed to the agent loop."""
 
 RunnerKit: TypeAlias = Mapping[str, object]
@@ -189,7 +193,7 @@ class ClientRegistry:
         """
         return self.client_dir(client_id) / TOOLS_FILE_NAME
 
-    def sync(self, client_id: str, tools: Sequence[object]) -> int:
+    def sync(self, client_id: str, tools: JsonList) -> int:
         """Store the tools one panel discovered.
 
         Args:
@@ -297,7 +301,7 @@ class ClientRegistry:
         *,
         server_url: str,
         name: str,
-        args: Mapping[str, object],
+        args: JsonMap,
     ) -> LocalCall:
         """Queue one call for the browser panel to execute.
 
@@ -313,8 +317,8 @@ class ClientRegistry:
         folder = self._calls_dir(client_id)
         folder.mkdir(parents=True, exist_ok=True)
         stamp = _stamp(self.clock)
-        call_args: dict[str, object] = dict(args or {})
-        row: dict[str, object] = {
+        call_args: JsonObject = dict(args or {})
+        row: JsonObject = {
             "call_id": uuid.uuid4().hex[:12],
             "client_id": str(client_id),
             "server_url": str(server_url or ""),
@@ -359,7 +363,7 @@ class ClientRegistry:
                         call_id=str(data.get("call_id") or path.stem),
                         server_url=str(data.get("server_url") or ""),
                         name=str(data.get("name") or ""),
-                        args=dict(cast("Mapping[str, object]", data.get("args") or {})),
+                        args=dict(cast("JsonMap", data.get("args") or {})),
                     ),
                 )
             )
@@ -510,7 +514,7 @@ def _sleep(seconds: float) -> None:
     time.sleep(seconds)
 
 
-def _read_json(path: Path) -> dict[str, object] | None:
+def _read_json(path: Path) -> JsonObject | None:
     """Read one JSON object file, tolerating junk.
 
     Args:
@@ -520,7 +524,7 @@ def _read_json(path: Path) -> dict[str, object] | None:
         Parsed object, or ``None`` when missing/unreadable/not an object.
     """
     try:
-        data: object = json.loads(path.read_text(encoding="utf-8"))
+        data: Json = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, ValueError):
         return None
     return data if isinstance(data, dict) else None
@@ -623,7 +627,7 @@ def require_project(edit_dir: Path | str, project_id: str = "") -> EditProject:
     return project
 
 
-def project_state(edit_dir: Path | str, project_id: str = "") -> dict[str, object]:
+def project_state(edit_dir: Path | str, project_id: str = "") -> ProjectState:
     """Project plus its jobstore rows (the state route payload).
 
     Args:
@@ -648,7 +652,7 @@ def apply_ops_to(
     edit_dir: Path | str,
     *,
     project_id: str = "",
-    ops: Sequence[Mapping[str, object]],
+    ops: Sequence[object],
     clock: ClockFn | None = None,
 ) -> EditProject:
     """Apply ops to a project and persist the result.
@@ -895,7 +899,7 @@ def _edl_path(edit_dir: Path | str, project_id: str) -> Path:
     return Path(edit_dir) / PROJECTS_SUBDIR / f"{text}.edl.json"
 
 
-def export_edl(edit_dir: Path | str, project_id: str = "") -> dict[str, object]:
+def export_edl(edit_dir: Path | str, project_id: str = "") -> JsonObject:
     """Write the project as an EDL handoff JSON file.
 
     Args:
@@ -950,7 +954,7 @@ def read_occupancy(
     return agent.read_occupancy_mode(environ=env)
 
 
-def _done(value: object) -> dict[str, object]:
+def _done(value: object) -> JsonObject:
     """Successful tool result the model can read.
 
     Args:
@@ -962,7 +966,7 @@ def _done(value: object) -> dict[str, object]:
     return {"ok": True, "text": json.dumps(value, default=str)}
 
 
-def _fail(message: str) -> dict[str, object]:
+def _fail(message: str) -> JsonObject:
     """Refused tool result the model can read.
 
     Args:
@@ -974,7 +978,7 @@ def _fail(message: str) -> dict[str, object]:
     return {"ok": False, "text": str(message)}
 
 
-def _text(args: Mapping[str, object], key: str, default: str = "") -> str:
+def _text(args: JsonMap, key: str, default: str = "") -> str:
     """One string argument.
 
     Args:
@@ -989,7 +993,7 @@ def _text(args: Mapping[str, object], key: str, default: str = "") -> str:
     return str(raw if raw is not None else default)
 
 
-def _number(args: Mapping[str, object], key: str, default: float) -> float:
+def _number(args: JsonMap, key: str, default: float) -> float:
     """One number argument, tolerant of stringified JSON.
 
     Args:
@@ -1006,7 +1010,7 @@ def _number(args: Mapping[str, object], key: str, default: float) -> float:
         return default
 
 
-def _tool_get_state(edit_dir: Path | str, args: Mapping[str, object], kit: RunnerKit) -> dict[str, object]:
+def _tool_get_state(edit_dir: Path | str, args: JsonMap, kit: RunnerKit) -> JsonObject:
     """``edit_get_state``: project plus recent jobs.
 
     Args:
@@ -1021,7 +1025,7 @@ def _tool_get_state(edit_dir: Path | str, args: Mapping[str, object], kit: Runne
     return _done(project_state(edit_dir, _text(args, "project_id")))
 
 
-def _tool_import(edit_dir: Path | str, args: Mapping[str, object], kit: RunnerKit) -> dict[str, object]:
+def _tool_import(edit_dir: Path | str, args: JsonMap, kit: RunnerKit) -> JsonObject:
     """``edit_import``: probe a file and add it as a clip.
 
     Args:
@@ -1044,7 +1048,7 @@ def _tool_import(edit_dir: Path | str, args: Mapping[str, object], kit: RunnerKi
     return _done({"clip": clip, "source": clip["source"], "duration_s": clip["out_s"]})
 
 
-def _tool_apply_ops(edit_dir: Path | str, args: Mapping[str, object], kit: RunnerKit) -> dict[str, object]:
+def _tool_apply_ops(edit_dir: Path | str, args: JsonMap, kit: RunnerKit) -> JsonObject:
     """``edit_apply_ops``: run the reducer and persist.
 
     Args:
@@ -1066,7 +1070,7 @@ def _tool_apply_ops(edit_dir: Path | str, args: Mapping[str, object], kit: Runne
     return _done({"project": project, "clips": len(project["clips"])})
 
 
-def _tool_render(edit_dir: Path | str, args: Mapping[str, object], kit: RunnerKit) -> dict[str, object]:
+def _tool_render(edit_dir: Path | str, args: JsonMap, kit: RunnerKit) -> JsonObject:
     """``edit_render``: server or browser render.
 
     Args:
@@ -1089,7 +1093,7 @@ def _tool_render(edit_dir: Path | str, args: Mapping[str, object], kit: RunnerKi
     return {"ok": row["state"] != "failed", "text": json.dumps(row, default=str)}
 
 
-def _tool_job_status(edit_dir: Path | str, args: Mapping[str, object], kit: RunnerKit) -> dict[str, object]:
+def _tool_job_status(edit_dir: Path | str, args: JsonMap, kit: RunnerKit) -> JsonObject:
     """``edit_job_status``: read one row.
 
     Args:
@@ -1105,8 +1109,8 @@ def _tool_job_status(edit_dir: Path | str, args: Mapping[str, object], kit: Runn
 
 
 def _tool_generate_clip(
-    edit_dir: Path | str, args: Mapping[str, object], kit: RunnerKit
-) -> dict[str, object]:
+    edit_dir: Path | str, args: JsonMap, kit: RunnerKit
+) -> JsonObject:
     """``edit_generate_clip``: queue the cutaway graph.
 
     Args:
@@ -1139,7 +1143,7 @@ def _tool_generate_clip(
     return {"ok": row["state"] != "failed", "text": json.dumps(row, default=str)}
 
 
-def _tool_export_edl(edit_dir: Path | str, args: Mapping[str, object], kit: RunnerKit) -> dict[str, object]:
+def _tool_export_edl(edit_dir: Path | str, args: JsonMap, kit: RunnerKit) -> JsonObject:
     """``edit_export_edl``: write the handoff JSON.
 
     Args:
@@ -1155,8 +1159,8 @@ def _tool_export_edl(edit_dir: Path | str, args: Mapping[str, object], kit: Runn
 
 
 def _tool_occupancy(
-    edit_dir: Path | str, args: Mapping[str, object], kit: RunnerKit
-) -> dict[str, object]:
+    edit_dir: Path | str, args: JsonMap, kit: RunnerKit
+) -> JsonObject:
     """``occupancy_status``: report the GPU mode string.
 
     Args:
@@ -1172,7 +1176,7 @@ def _tool_occupancy(
 
 
 STATIC_TOOLS: dict[
-    str, Callable[[Path | str, Mapping[str, object], RunnerKit], dict[str, object]]
+    str, Callable[[Path | str, JsonMap, RunnerKit], JsonObject]
 ] = {
     "edit_get_state": _tool_get_state,
     "edit_import": _tool_import,
@@ -1205,8 +1209,8 @@ def _parse_local_name(name: str) -> tuple[str, str] | None:
 
 
 def _run_local(
-    registry: ClientRegistry, name: str, args: dict[str, object], kit: RunnerKit
-) -> dict[str, object]:
+    registry: ClientRegistry, name: str, args: JsonMap, kit: RunnerKit
+) -> JsonObject:
     """Queue one laptop-local MCP call on its browser panel and await the answer.
 
     Args:
@@ -1270,7 +1274,7 @@ def build_dispatch(
         edit_dir, clock=cast("ClockFn | None", kit.get("clock"))
     )
 
-    def handler(name: str, args: dict[str, object]) -> dict[str, object]:
+    def handler(name: str, args: JsonMap) -> JsonObject:
         """Execute one tool call.
 
         Args:

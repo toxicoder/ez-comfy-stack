@@ -12,7 +12,10 @@ import shutil
 import sys
 from collections.abc import Mapping
 from pathlib import Path
-from typing import TypedDict
+from typing import TYPE_CHECKING, TypedDict
+
+if TYPE_CHECKING:
+    from ez_common import JsonMap
 
 from asset_bible import (  # noqa: E402
     KIND_DIRS,
@@ -662,7 +665,7 @@ def load_views(path: str | Path) -> HouseViews:
     return validate_views(parsed)
 
 
-def write_views_yaml(path: Path, data: Mapping[str, object]) -> None:
+def write_views_yaml(path: Path, data: JsonMap) -> None:
     """Write views.yaml after validating.
 
     Args:

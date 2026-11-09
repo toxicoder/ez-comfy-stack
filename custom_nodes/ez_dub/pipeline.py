@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any, Callable, cast
 
 if TYPE_CHECKING:
+    from ez_common.comfy_graph import WidgetValue
     from ez_common.protocols import ProgressReporter
 
 from .hooks import AsrHook, EmbedHook, FetchHook, TranslateHook, TtsHook
@@ -311,7 +312,7 @@ _QWEN3_PROMPT: Any = None
 _QWEN3_PROMPT_KEY = ""
 
 
-def language_code(code: object) -> str:
+def language_code(code: WidgetValue) -> str:
     """Map a widget value to an ISO 639-1 code (Chatterbox ``language_id``).
 
     Args:
@@ -332,7 +333,7 @@ def language_code(code: object) -> str:
     return "en"
 
 
-def language_name(code: object) -> str:
+def language_name(code: WidgetValue) -> str:
     """Map a widget code to an English language name (display only).
 
     Args:
@@ -348,7 +349,7 @@ def language_name(code: object) -> str:
 
 
 def clone_cfg_weight(
-    source: object, target: object, override: object = CFG_AUTO
+    source: WidgetValue, target: WidgetValue, override: WidgetValue = CFG_AUTO
 ) -> float:
     """CFG for Chatterbox generate. Auto is 0.3 on language transfer.
 
@@ -2032,6 +2033,8 @@ def _try_qwen3tts(
         wavs, sr = packed
     except Exception as exc:  # noqa: BLE001 - fail-soft
         return [], SAMPLE_RATE, f"qwen3tts failed: {exc}"
+    # Opaque until _pcm_list screens it: qwen-tts is an optional dep, so
+    # the batch shape (tensor, list, or nested list) is not knowable here.
     first: object = wavs
     if isinstance(wavs, (list, tuple)) and wavs:
         first = wavs[0]

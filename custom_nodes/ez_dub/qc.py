@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, NotRequired, TypedDict
 from .sanitize import LEAK_PATTERNS, looks_like_target
 
 if TYPE_CHECKING:
-    from ez_common import JsonScalar
+    from ez_common import JsonMap, JsonObject, JsonScalar
 
 # Mix QC thresholds (interior gap and quiet peak).
 GAP_LIMIT_S = 0.80
@@ -44,7 +44,7 @@ class QcReport(TypedDict):
     flags: list[str]
     checks: list[QcCheck]
     rate: NotRequired[int]
-    reference: NotRequired[dict[str, object]]
+    reference: NotRequired[JsonObject]
 
 
 def _cross_lang(target_language: str) -> bool:
@@ -82,7 +82,7 @@ def evaluate_qc(
     target_language: str,
     peak: float,
     extra_flags: list[str] | None = None,
-    reference: Mapping[str, object] | None = None,
+    reference: JsonMap | None = None,
 ) -> QcReport:
     """Return a JSON-able dict. Never raises.
 

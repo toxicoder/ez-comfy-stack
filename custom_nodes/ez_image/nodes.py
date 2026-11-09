@@ -39,6 +39,7 @@ from .video_formats import (
 
 if TYPE_CHECKING:
     from ez_common import ComfyInputTypes, ImageTensor, LatentTensor, NodeRegistry
+    from ez_common.comfy_graph import WidgetValue
 
 CATEGORY = "ez-comfy/image"
 """Comfy menu category for Klein canvas helpers."""
@@ -429,13 +430,13 @@ class EZImageFormat:
 
     def run(
         self,
-        format: object,
-        look: object = LOOK_NONE,
-        width: object = 1280,
-        height: object = 704,
-        batch_size: object = DEFAULT_BATCH,
-        size_mode: object = SIZE_MODE_MATCH,
-        image: object = None,
+        format: WidgetValue,
+        look: WidgetValue = LOOK_NONE,
+        width: WidgetValue = 1280,
+        height: WidgetValue = 704,
+        batch_size: WidgetValue = DEFAULT_BATCH,
+        size_mode: WidgetValue = SIZE_MODE_MATCH,
+        image: ImageTensor | None = None,
     ) -> FormatUiResult:
         """Resolve format widgets to a Klein canvas.
 
@@ -544,13 +545,13 @@ class EZVideoFormat:
 
     def run(
         self,
-        family: object,
-        format: object,
-        width: object = 832,
-        height: object = 480,
-        size_mode: object = SIZE_MODE_MATCH,
-        duration_s: object = DURATION_DEFAULT,
-        image: object = None,
+        family: WidgetValue,
+        format: WidgetValue,
+        width: WidgetValue = 832,
+        height: WidgetValue = 480,
+        size_mode: WidgetValue = SIZE_MODE_MATCH,
+        duration_s: WidgetValue = DURATION_DEFAULT,
+        image: ImageTensor | None = None,
     ) -> VideoFormatUiResult:
         """Resolve family and format widgets to a clip canvas.
 
@@ -618,7 +619,9 @@ class EZImageUpscale:
         "EZImageUpscale nodes so one App dropdown drives every SaveImage."
     )
 
-    def run(self, image: ImageTensor, upscale: object = DEFAULT_UPSCALE) -> tuple[ImageTensor, str]:
+    def run(
+        self, image: ImageTensor, upscale: WidgetValue = DEFAULT_UPSCALE
+    ) -> tuple[ImageTensor, str]:
         """Resize ``image`` when the combo is not none.
 
         Args:

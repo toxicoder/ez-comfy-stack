@@ -162,6 +162,7 @@ sh_test(
     timeout = "moderate",
     srcs = ["run_js_types.sh"],
     data = [
+        "js_object_baseline.json",
         "js_types_baseline.json",
         "//custom_nodes:sources",
         "//scripts:lib/check_tool.sh",

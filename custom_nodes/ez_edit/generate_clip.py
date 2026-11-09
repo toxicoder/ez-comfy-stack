@@ -40,7 +40,9 @@ from . import agent, protocol, render_server
 from .protocol import JobKind, JobRecord
 
 if TYPE_CHECKING:
-    from ez_common import Json
+    from types import TracebackType
+
+    from ez_common import Json, JsonObject, JsonMap
 
 UrlopenFn: TypeAlias = Callable[[urllib.request.Request, float], object]
 """``urllib.request.urlopen``-shaped seam (tests inject a fake transport)."""
@@ -65,11 +67,18 @@ class HttpReply(Protocol):
         """
         ...
 
-    def __exit__(self, *args: object) -> bool | None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: TracebackType | None,
+    ) -> bool | None:
         """Leave the response context.
 
         Args:
-            *args: Exception detail the context manager receives.
+            exc_type: Exception class the context manager receives.
+            exc: Exception instance the context manager receives.
+            tb: Exception traceback the context manager receives.
 
         Returns:
             Whether an exception was swallowed.
@@ -279,7 +288,7 @@ def _stamp(now: ClockFn | None) -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
-def _nodes(graph: Mapping[str, object]) -> list[dict[str, object]]:
+def _nodes(graph: Mapping[str, object]) -> list[JsonObject]:
     """Frontend-format node list of a graph, safe to patch in place.
 
     Widget containers are copied so a patch never mutates the caller's graph
@@ -294,7 +303,7 @@ def _nodes(graph: Mapping[str, object]) -> list[dict[str, object]]:
     raw = graph.get("nodes")
     if not isinstance(raw, (list, tuple)):
         return []
-    nodes: list[dict[str, object]] = []
+    nodes: list[JsonObject] = []
     for node in raw:
         if not isinstance(node, dict):
             continue
@@ -306,7 +315,7 @@ def _nodes(graph: Mapping[str, object]) -> list[dict[str, object]]:
     return nodes
 
 
-def _title(node: Mapping[str, object]) -> str:
+def _title(node: JsonMap) -> str:
     """Lower-cased title of a node (type as the fallback).
 
     Args:
@@ -319,7 +328,7 @@ def _title(node: Mapping[str, object]) -> str:
     return text
 
 
-def _is_negative(node: Mapping[str, object]) -> bool:
+def _is_negative(node: JsonMap) -> bool:
     """Whether a node title marks the negative prompt.
 
     Args:
@@ -332,7 +341,7 @@ def _is_negative(node: Mapping[str, object]) -> bool:
     return any(hint in title for hint in NEGATIVE_HINTS)
 
 
-def _find_prompt_node(nodes: list[dict[str, object]]) -> dict[str, object] | None:
+def _find_prompt_node(nodes: list[JsonObject]) -> JsonObject | None:
     """Pick the node whose first widget carries the prompt text.
 
     Titles win (``Prompt (cutaway)`` in the shipped graph); otherwise the
@@ -359,7 +368,7 @@ def _find_prompt_node(nodes: list[dict[str, object]]) -> dict[str, object] | Non
     return None
 
 
-def _find_length_node(nodes: list[dict[str, object]]) -> dict[str, object] | None:
+def _find_length_node(nodes: list[JsonObject]) -> JsonObject | None:
     """Pick the node that carries the frame count.
 
     Args:
@@ -377,7 +386,7 @@ def _find_length_node(nodes: list[dict[str, object]]) -> dict[str, object] | Non
     return None
 
 
-def _find_fps_node(nodes: list[dict[str, object]]) -> dict[str, object] | None:
+def _find_fps_node(nodes: list[JsonObject]) -> JsonObject | None:
     """Pick the node that carries the output frame rate.
 
     Args:
@@ -392,7 +401,7 @@ def _find_fps_node(nodes: list[dict[str, object]]) -> dict[str, object] | None:
     return None
 
 
-def _set_length(node: dict[str, object], frames: int) -> bool:
+def _set_length(node: JsonObject, frames: int) -> bool:
     """Write ``frames`` into a length node's widgets.
 
     Dict widgets use the named keys; list widgets use
@@ -419,7 +428,7 @@ def _set_length(node: dict[str, object], frames: int) -> bool:
     return False
 
 
-def _set_fps(node: dict[str, object], fps: float) -> bool:
+def _set_fps(node: JsonObject, fps: float) -> bool:
     """Write ``fps`` into a mux node's widgets.
 
     Args:
@@ -444,7 +453,7 @@ def _set_fps(node: dict[str, object], fps: float) -> bool:
     return False
 
 
-def _widgets_map(graph: Mapping[str, object]) -> Mapping[str, object] | None:
+def _widgets_map(graph: JsonMap) -> JsonMap | None:
     """The graph's agent patch map (``extra.lab_edit.widgets``).
 
     Args:
@@ -462,8 +471,8 @@ def _widgets_map(graph: Mapping[str, object]) -> Mapping[str, object] | None:
 
 
 def _node_by_id(
-    nodes: list[dict[str, object]], node_id: object
-) -> dict[str, object] | None:
+    nodes: list[JsonObject], node_id: Json
+) -> JsonObject | None:
     """Find one node by the id the patch map wrote (int or text).
 
     Args:
@@ -482,7 +491,7 @@ def _node_by_id(
     return None
 
 
-def _write_widget(node: dict[str, object], widget: str, value: object) -> bool:
+def _write_widget(node: JsonObject, widget: str, value: Json) -> bool:
     """Write one widget by name, indexed through :data:`WIDGET_SCHEMA`.
 
     Dict widgets are written by key; list widgets at the index the node type's
@@ -517,10 +526,10 @@ def _write_widget(node: dict[str, object], widget: str, value: object) -> bool:
 
 
 def _patch_from_map(
-    nodes: list[dict[str, object]],
-    widget_map: Mapping[str, object],
+    nodes: list[JsonObject],
+    widget_map: JsonMap,
     key: str,
-    value: object,
+    value: Json,
 ) -> bool:
     """Apply the patch one map key names, if the graph can resolve it.
 
@@ -543,8 +552,8 @@ def _patch_from_map(
 
 
 def patch_graph(
-    graph: Mapping[str, object], *, prompt_text: str, duration_s: float, fps: float
-) -> dict[str, object]:
+    graph: JsonMap, *, prompt_text: str, duration_s: float, fps: float
+) -> JsonObject:
     """Patch prompt text, frame count, and frame rate into a graph copy.
 
     The graph's own ``extra.lab_edit.widgets`` map is authoritative: each key
@@ -564,7 +573,7 @@ def patch_graph(
     """
     frames = max(MIN_FRAMES, int(round(float(duration_s) * float(fps))))
     nodes = _nodes(graph)
-    patched: dict[str, object] = dict(graph)
+    patched: JsonObject = dict(graph)
     widget_map = _widgets_map(patched)
     if widget_map is not None:
         _patch_from_map(nodes, widget_map, MAP_PROMPT_KEY, prompt_text)
@@ -580,11 +589,11 @@ def patch_graph(
             _set_length(length_node, frames)
         if fps_node is not None:
             _set_fps(fps_node, float(fps))
-    patched["nodes"] = nodes
+    patched["nodes"] = list(nodes)  # copy: Json wants list[Json], not list[JsonObject]
     return patched
 
 
-def _write_prompt(node: dict[str, object], prompt_text: str) -> bool:
+def _write_prompt(node: JsonObject, prompt_text: str) -> bool:
     """Write the prompt text into a prompt node's widgets.
 
     Args:
@@ -612,7 +621,7 @@ def _write_prompt(node: dict[str, object], prompt_text: str) -> bool:
     return False
 
 
-def load_graph(*, path: Path | None = None) -> dict[str, object]:
+def load_graph(*, path: Path | None = None) -> JsonObject:
     """Read the package graph file.
 
     Args:
@@ -629,7 +638,7 @@ def load_graph(*, path: Path | None = None) -> dict[str, object]:
     if not target.is_file():
         raise GraphUnavailable(GRAPH_MISSING_FMT.format(path=target))
     try:
-        raw: object = json.loads(target.read_text(encoding="utf-8"))
+        raw: Json = json.loads(target.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, ValueError) as exc:
         raise GraphUnavailable(GRAPH_INVALID_FMT.format(path=target)) from exc
     if not isinstance(raw, dict) or not isinstance(raw.get("nodes"), list):
@@ -679,7 +688,7 @@ def _decode(raw: bytes | str) -> Json:
 def _open_json(
     url: str,
     *,
-    payload: Mapping[str, object] | None,
+    payload: JsonMap | None,
     urlopen: UrlopenFn | None,
     timeout: float,
 ) -> Json:
@@ -715,7 +724,7 @@ def _open_json(
 
 
 def queue_prompt(
-    graph: Mapping[str, object],
+    graph: JsonMap,
     *,
     client_id: str = "",
     base_url: str | None = None,
@@ -738,7 +747,7 @@ def queue_prompt(
         GenerateClipError: The queue failed or named no prompt id.
     """
     origin = comfy_base(environ) if base_url is None else base_url.rstrip("/")
-    body: dict[str, object] = {"prompt": dict(graph)}
+    body: JsonObject = {"prompt": dict(graph)}
     if client_id:
         body["client_id"] = client_id
     data = _open_json(

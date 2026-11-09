@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Mapping, Sequence, cast
 
 if TYPE_CHECKING:
-    from ez_common import Json
+    from ez_common import Json, JsonArray, JsonObject
 
 from .presets import (
     CLIP_4B,
@@ -276,7 +276,7 @@ def models_roots() -> list[Path]:
     return found
 
 
-def _as_bool(value: object, *, default: bool = False) -> bool:
+def _as_bool(value: Json, *, default: bool = False) -> bool:
     """Coerce JSON / widget values to bool.
 
     Args:
@@ -302,11 +302,11 @@ def _as_bool(value: object, *, default: bool = False) -> bool:
     return default
 
 
-def _as_str_tuple(value: object) -> tuple[str, ...]:
+def _as_str_tuple(value: Json) -> tuple[str, ...]:
     """Normalize a JSON list or single string to unique stripped names.
 
     Args:
-        value: List, string, or other.
+        value: Parsed list, string, or other JSON value.
 
     Returns:
         Unique non-empty strings.
@@ -342,11 +342,11 @@ def _first_bool(values: Sequence[Json]) -> bool | None:
     return None
 
 
-def _loader_name(values: object) -> str:
+def _loader_name(values: Json) -> str:
     """First string widget (UNET/CLIP/VAE filename).
 
     Args:
-        values: widgets_values list or dict.
+        values: Parsed widgets_values list or dict.
 
     Returns:
         Filename, or empty.
@@ -1184,7 +1184,8 @@ def run_check(
     """
     hints = hints_from_args(args)
     result = scan(hints, list(roots) if roots is not None else models_roots())
-    payload: dict[str, object] = {
+    commands: JsonArray = list(result.commands)
+    payload: JsonObject = {
         "ok": result.ok,
         "message": format_report(result),
         "lab_rel": result.lab_rel,
@@ -1198,6 +1199,6 @@ def run_check(
             {"name": row.name, "pack": row.pack, "cmd": row.cmd, "state": row.state}
             for row in result.missing
         ],
-        "commands": result.commands,
+        "commands": commands,
     }
-    return cast("dict[str, Json]", payload)
+    return payload

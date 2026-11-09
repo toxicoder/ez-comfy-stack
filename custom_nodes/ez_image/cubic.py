@@ -395,7 +395,7 @@ def _clone_conditioning(conditioning: object) -> object:
     return cloned
 
 
-def _reference_tensors(latent: object) -> list[object]:
+def _reference_tensors(latent: object) -> list[LatentTensor]:
     """Return the plain tensors a Flux.2 reference list may hold.
 
     ComfyUI sizes every reference before the sampler runs: the Flux
@@ -421,7 +421,7 @@ def _reference_tensors(latent: object) -> list[object]:
     return [entry for entry in entries if callable(getattr(entry, "size", None))]
 
 
-def _attach_fallback(conditioning: object, refs: list[object]) -> object:
+def _attach_fallback(conditioning: object, refs: list[LatentTensor]) -> object:
     """Record ``refs`` on conditioning when Comfy's helper is absent.
 
     Args:
@@ -448,7 +448,7 @@ def _attach_fallback(conditioning: object, refs: list[object]) -> object:
     return conditioning
 
 
-def _set_reference_values(conditioning: object, refs: list[object]) -> object | None:
+def _set_reference_values(conditioning: object, refs: list[LatentTensor]) -> object | None:
     """Attach through ComfyUI's own helper, the one its reference nodes call.
 
     Args:

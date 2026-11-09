@@ -431,9 +431,9 @@ def write_script(
 def run_learn(
     records: list[SourceRecord],
     *,
-    fmt: object,
-    duration: object,
-    enhance: object,
+    fmt: str,
+    duration: str,
+    enhance: bool,
 ) -> LearnResult:
     """Digest + script payload for ``EZPodcastLearn``.
 

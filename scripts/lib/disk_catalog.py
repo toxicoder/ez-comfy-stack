@@ -10,7 +10,10 @@ import sys
 import time
 from collections.abc import Iterator, Mapping
 from pathlib import Path
-from typing import TypedDict, cast
+from typing import TYPE_CHECKING, TypedDict, cast
+
+if TYPE_CHECKING:
+    from ez_common import Json
 
 from operator_log import PREFIX as PROGRESS_PREFIX
 from operator_log import emit as _ol_emit
@@ -216,7 +219,7 @@ def load_catalog(path: Path) -> DiskCatalog:
             list_key = stripped[:-1]
             continue
         if list_key and stripped.startswith("- "):
-            bucket = cast("dict[str, object]", signatures[sig])[list_key]
+            bucket = cast("dict[str, Json]", signatures[sig])[list_key]
             if isinstance(bucket, list):
                 bucket.append(stripped[2:].strip().strip('"').strip("'"))
             continue
@@ -225,7 +228,7 @@ def load_catalog(path: Path) -> DiskCatalog:
             key, val = stripped.split(":", 1)
             key = key.strip()
             val = val.strip().strip('"').strip("'")
-            fields = cast("dict[str, object]", signatures[sig])
+            fields = cast("dict[str, Json]", signatures[sig])
             if key in _BOOL_KEYS:
                 fields[key] = val.lower() == "true"
             elif key in _INT_KEYS:

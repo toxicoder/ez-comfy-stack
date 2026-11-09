@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any, cast
 
 import pytest
-
+from ez_common import Json, JsonMap, JsonObject
 from ez_edit import agent, protocol
 from ez_edit.agent import AgentLLM, AgentRefused
 from ez_edit.protocol import ChatMessage
@@ -131,6 +131,52 @@ def _raw(value: object) -> Any:
         The same value.
     """
     return value
+
+
+def _function(spec: JsonMap) -> JsonObject:
+    """Narrow one tool spec's ``function`` block.
+
+    Args:
+        spec: OpenAI-shaped tool payload the loop built.
+
+    Returns:
+        The function object.
+
+    Raises:
+        AssertionError: The spec has no function object.
+    """
+    block = spec["function"]
+    assert isinstance(block, dict)
+    return block
+
+
+def _function_name(spec: JsonMap) -> str:
+    """Read one tool spec's function name.
+
+    Args:
+        spec: OpenAI-shaped tool payload the loop built.
+
+    Returns:
+        The ``function.name`` field.
+
+    Raises:
+        AssertionError: The name is missing or not a string.
+    """
+    name = _function(spec)["name"]
+    assert isinstance(name, str)
+    return name
+
+
+def _parameters(spec: JsonMap) -> Json:
+    """Read one tool spec's JSON-schema block.
+
+    Args:
+        spec: OpenAI-shaped tool payload the loop built.
+
+    Returns:
+        The ``function.parameters`` value.
+    """
+    return _function(spec)["parameters"]
 
 
 class FakeLLM:
@@ -393,12 +439,12 @@ def test_require_occupancy_missing_file_passes(tmp_path: Path) -> None:
 def test_build_tools_uses_openai_function_shape() -> None:
     """Every catalog entry is a deduped ``{"type":"function", ...}`` spec."""
     tools = agent.build_tools()
-    names = {spec["function"]["name"] for spec in tools}
+    names = {_function_name(spec) for spec in tools}
     assert names == set(protocol.TOOL_CATALOG)
     for spec in tools:
         assert spec["type"] == "function"
-        assert set(spec["function"]) == {"name", "description", "parameters"}
-        assert isinstance(spec["function"]["parameters"], dict)
+        assert set(_function(spec)) == {"name", "description", "parameters"}
+        assert isinstance(_parameters(spec), dict)
 
 
 def test_build_tools_merges_extras_and_drops_junk() -> None:
@@ -421,15 +467,15 @@ def test_build_tools_merges_extras_and_drops_junk() -> None:
             ]
         )
     )
-    names = [spec["function"]["name"] for spec in tools]
+    names = [_function_name(spec) for spec in tools]
     assert "local__desk__open" in names
     assert "local__desk__save" in names
     assert names.count("edit_get_state") == 1
     assert "" not in names
-    open_spec = next(s for s in tools if s["function"]["name"] == "local__desk__open")
-    assert open_spec["function"]["parameters"] == {}
-    save_spec = next(s for s in tools if s["function"]["name"] == "local__desk__save")
-    assert save_spec["function"]["parameters"] == {"type": "object"}
+    open_spec = next(s for s in tools if _function_name(s) == "local__desk__open")
+    assert _parameters(open_spec) == {}
+    save_spec = next(s for s in tools if _function_name(s) == "local__desk__save")
+    assert _parameters(save_spec) == {"type": "object"}
 
 
 def test_tool_names_skips_malformed_specs() -> None:
@@ -510,6 +556,7 @@ def test_urlopen_indirection_delegates_to_urllib(
         "http://x.test/v1/chat/completions", data=b"{}", method="POST"
     )
     response = AgentLLM()._urlopen(request, 3.5)
+    assert isinstance(response, _Response)
     assert response.read() == b'{"ok": true}'
     assert seen["request"] is request
     assert seen["timeout"] == 3.5
@@ -718,9 +765,9 @@ def test_run_turn_threads_tool_call_ids_across_steps() -> None:
             _assistant("all set"),
         ]
     )
-    dispatched: list[tuple[str, dict[str, Any]]] = []
+    dispatched: list[tuple[str, JsonMap]] = []
 
-    def _dispatch(name: str, args: dict[str, Any]) -> dict[str, Any]:
+    def _dispatch(name: str, args: JsonMap) -> JsonObject:
         dispatched.append((name, args))
         return {"ok": True, "text": f"{name} said hi"}
 
@@ -763,7 +810,7 @@ def test_run_turn_local_tool_names_pass_through() -> None:
     """``local__`` tools are not in the catalog but still dispatch."""
     seen: list[str] = []
 
-    def _dispatch(name: str, args: dict[str, Any]) -> dict[str, Any]:
+    def _dispatch(name: str, args: JsonMap) -> JsonObject:
         del args
         seen.append(name)
         return {"ok": True, "text": "opened"}
@@ -785,7 +832,7 @@ def test_run_turn_local_tool_names_pass_through() -> None:
 
 def test_run_turn_unknown_tool_records_a_failed_trace() -> None:
     """A tool the model invented never reaches dispatch."""
-    def _dispatch(name: str, args: dict[str, Any]) -> dict[str, Any]:
+    def _dispatch(name: str, args: JsonMap) -> JsonObject:
         raise AssertionError(f"must not dispatch {name}")
 
     out = agent.run_turn(
@@ -831,7 +878,7 @@ def test_run_turn_dispatch_crash_does_not_kill_the_turn() -> None:
     """A raising tool becomes an ok=False trace row and the loop continues."""
     calls: list[str] = []
 
-    def _dispatch(name: str, args: dict[str, Any]) -> dict[str, Any]:
+    def _dispatch(name: str, args: JsonMap) -> JsonObject:
         del args
         calls.append(name)
         raise RuntimeError("tool exploded")
@@ -854,7 +901,7 @@ def test_run_turn_dispatch_crash_does_not_kill_the_turn() -> None:
 
 def test_run_turn_non_dict_dispatch_result_is_a_failure() -> None:
     """A dispatcher that ignores the contract reads as ok False."""
-    def _dispatch(name: str, args: dict[str, Any]) -> dict[str, Any]:
+    def _dispatch(name: str, args: JsonMap) -> Any:
         del name, args
         return _raw("just a string")
 
@@ -874,7 +921,7 @@ def test_run_turn_non_dict_dispatch_result_is_a_failure() -> None:
 
 def test_run_turn_ok_false_from_dispatch_continues_the_loop() -> None:
     """A failed tool result is fed back so the model can correct itself."""
-    def _dispatch(name: str, args: dict[str, Any]) -> dict[str, Any]:
+    def _dispatch(name: str, args: JsonMap) -> JsonObject:
         del name, args
         return {"ok": False}
 
@@ -897,7 +944,7 @@ def test_run_turn_ok_false_from_dispatch_continues_the_loop() -> None:
 
 def test_run_turn_reports_bad_tool_arguments() -> None:
     """Unparsable arguments never reach dispatch and name the problem."""
-    def _dispatch(name: str, args: dict[str, Any]) -> dict[str, Any]:
+    def _dispatch(name: str, args: JsonMap) -> JsonObject:
         raise AssertionError(f"must not dispatch {name}")
 
     out = agent.run_turn(

@@ -9,7 +9,15 @@ from .nodes import CATEGORY, snap_dim
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
-    from ez_common import ComfyInputTypes, ImageTensor, LatentTensor, NodeRegistry
+    from ez_common import (
+        ComfyInputTypes,
+        ImageTensor,
+        Json,
+        JsonScalar,
+        LatentTensor,
+        NodeRegistry,
+    )
+    from ez_common.comfy_graph import WidgetValue
 
 DEFAULT_MAX_REFS = 3
 """Reference frames taken from a wired batch when the widget is unset."""
@@ -47,7 +55,7 @@ class DescribeImageResult(TypedDict):
     """Caption STRING (empty until a VL backend is wired)."""
 
 
-def _as_bool(value: object) -> bool:
+def _as_bool(value: Json | WidgetValue) -> bool:
     """Parse a Comfy BOOLEAN or presence flag.
 
     Args:
@@ -140,7 +148,7 @@ def _count_note(count: int) -> str:
     return f"{count} reference stills"
 
 
-def _filename_str(value: object) -> str:
+def _filename_str(value: WidgetValue) -> str:
     """Strip a filename widget to a path string.
 
     Args:
@@ -176,7 +184,7 @@ def input_still_choices() -> list[str]:
     return names
 
 
-def load_input_still(filename: object) -> ImageTensor | None:
+def load_input_still(filename: WidgetValue) -> ImageTensor | None:
     """Load a still from Comfy ``input/`` when ``filename`` is set.
 
     Args:
@@ -286,11 +294,11 @@ class EZOptionalImage:
 
     def run(
         self,
-        filename: object = "",
-        use_references: object = True,
-        filename_2: object = "",
-        filename_3: object = "",
-        image: object = None,
+        filename: WidgetValue = "",
+        use_references: WidgetValue = True,
+        filename_2: WidgetValue = "",
+        filename_3: WidgetValue = "",
+        image: ImageTensor | None = None,
     ) -> OptionalImageResult:
         """Collect the present stills. Never raise on empty or missing files.
 
@@ -380,10 +388,10 @@ class EZKleinRefCanvas:
         self,
         latent: Latent,
         vae: object,
-        image: object = None,
-        has_image: object = False,
-        max_refs: object = DEFAULT_MAX_REFS,
-    ) -> tuple[Latent, object]:
+        image: ImageTensor | None = None,
+        has_image: JsonScalar = False,
+        max_refs: LimitToken | None = DEFAULT_MAX_REFS,
+    ) -> tuple[Latent, ImageTensor | None]:
         """Attach Klein reference latents when a still is present.
 
         Args:
@@ -437,8 +445,8 @@ class EZDescribeImage:
 
     def run(
         self,
-        image: object = None,
-        has_image: object = False,
+        image: ImageTensor | None = None,
+        has_image: JsonScalar = False,
     ) -> DescribeImageResult:
         """Return an empty caption unless a VL backend is wired later.
 
@@ -484,7 +492,9 @@ def _encode_ref(image: ImageTensor, vae: object) -> LatentTensor | None:
         return None
 
 
-def _encoded_frames(encoded: object, max_refs: int) -> list[LatentTensor]:
+def _encoded_frames(
+    encoded: Latent | LatentTensor, max_refs: int
+) -> list[LatentTensor]:
     """Split an encoded still into per-frame reference pieces.
 
     Args:
@@ -518,7 +528,7 @@ def _encoded_frames(encoded: object, max_refs: int) -> list[LatentTensor]:
     return pieces if pieces else [encoded]
 
 
-def _reference_latent_chain(empty: object, frames: list[LatentTensor]) -> Latent:
+def _reference_latent_chain(empty: Latent, frames: list[LatentTensor]) -> Latent:
     """Attach every encoded frame by chaining ``ReferenceLatent.append``.
 
     One frame behaves exactly like a single :func:`_reference_latent` call.
@@ -532,7 +542,7 @@ def _reference_latent_chain(empty: object, frames: list[LatentTensor]) -> Latent
     Returns:
         Combined latent, or the last good latent when a step fails.
     """
-    current: object = empty
+    current: Latent = empty
     for frame in frames:
         try:
             current = _reference_latent(current, frame)
@@ -541,7 +551,7 @@ def _reference_latent_chain(empty: object, frames: list[LatentTensor]) -> Latent
     return cast(Latent, current)
 
 
-def _reference_latent(empty: object, encoded: object) -> Latent:
+def _reference_latent(empty: Latent, encoded: Latent | LatentTensor) -> Latent:
     """Attach ``encoded`` as a Flux2 reference onto ``empty`` when possible.
 
     Args:

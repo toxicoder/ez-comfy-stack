@@ -6,8 +6,28 @@ import struct
 import wave
 from collections.abc import Sequence
 from pathlib import Path
+from typing import TYPE_CHECKING, TypedDict
 
 from .align import SAMPLE_RATE
+
+if TYPE_CHECKING:
+    from ez_common import PcmTensor
+
+
+class AudioPayload(TypedDict):
+    """Comfy AUDIO mapping: one waveform plus the rate it plays at.
+
+    Attributes:
+        waveform: Torch tensor when torch is present, else the nested
+            list the caller packed.
+        sample_rate: Rate stamped on the waveform.
+    """
+
+    waveform: PcmTensor
+    """Torch tensor when torch is present, else the nested-list stand-in."""
+
+    sample_rate: int
+    """Rate stamped on the waveform."""
 
 
 def write_wav(path: Path | str, samples: list[float], rate: int) -> None:
@@ -73,7 +93,7 @@ def read_wav(path: Path | str) -> tuple[list[float], int]:
     return mono, int(rate)
 
 
-def empty_audio(sample_rate: int = SAMPLE_RATE) -> dict[str, object]:
+def empty_audio(sample_rate: int = SAMPLE_RATE) -> AudioPayload:
     """Minimal AUDIO dict without importing torch at module load.
 
     Args:
@@ -94,7 +114,7 @@ def empty_audio(sample_rate: int = SAMPLE_RATE) -> dict[str, object]:
 
 def audio_from_pcm(
     samples: Sequence[float] | Sequence[Sequence[float]], sample_rate: int
-) -> dict[str, object]:
+) -> AudioPayload:
     """Pack a 1-D PCM sequence as Comfy AUDIO.
 
     Args:

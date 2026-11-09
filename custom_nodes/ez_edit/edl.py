@@ -23,9 +23,12 @@ from __future__ import annotations
 import math
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import NamedTuple, TypedDict, get_args
+from typing import TYPE_CHECKING, NamedTuple, TypedDict, get_args
 
 from .protocol import TransitionKind
+
+if TYPE_CHECKING:
+    from ez_common import JsonObject
 
 SAMPLE_RATE = 48000
 """Audio sample rate every clip is resampled to before mixing."""
@@ -127,10 +130,10 @@ class EdlDocument(TypedDict):
     clips: list[EdlClip]
     """Clip rows in project order."""
 
-    overlays: list[dict[str, object]]
+    overlays: list[JsonObject]
     """Text/image overlay records the browser draws (client mode only)."""
 
-    captions: list[dict[str, object]]
+    captions: list[JsonObject]
     """Caption records the browser draws (client mode only)."""
 
     client_only: list[str]
@@ -180,9 +183,9 @@ class _Model(NamedTuple):
 
     clips: list[_Clip]
     """Every clip, in project order."""
-    overlays: list[dict[str, object]]
+    overlays: list[JsonObject]
     """Text/image overlay records (client-mode planes; handoff only)."""
-    captions: list[dict[str, object]]
+    captions: list[JsonObject]
     """Caption records (client-mode planes; handoff only)."""
     fps: float
     """Project frame rate."""
@@ -346,7 +349,7 @@ def _validated_clip(order: int, raw: object) -> _Clip:
     )
 
 
-def _record_list(raw: object, field: str) -> list[dict[str, object]]:
+def _record_list(raw: object, field: str) -> list[JsonObject]:
     """Copy a text-plane list (``overlays`` / ``captions``).
 
     Args:

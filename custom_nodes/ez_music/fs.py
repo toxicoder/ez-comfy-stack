@@ -62,7 +62,9 @@ def write_json(path: Path, payload: Mapping[str, object]) -> Path:
 
     Args:
         path: Destination file.
-        payload: JSON-serializable mapping.
+        payload: JSON-serializable mapping. Left open: callers hand in
+            ``dict[str, object]`` catalogs, which the ``JsonMap`` alias does
+            not admit.
 
     Returns:
         ``path``.

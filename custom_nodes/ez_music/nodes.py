@@ -8,7 +8,13 @@ from pathlib import Path
 from typing import TYPE_CHECKING, TypeAlias, TypedDict, cast
 
 if TYPE_CHECKING:
-    from ez_common import ComfyInputTypes, ComfyReturn, NdArray, NodeRegistry
+    from ez_common import (
+        ComfyInputTypes,
+        ComfyReturn,
+        ImageTensor,
+        NdArray,
+        NodeRegistry,
+    )
 
     from .metadata import AudioMeta
 
@@ -127,7 +133,7 @@ def _pack_text(
     text: str,
     status: str | None = None,
     *,
-    result: tuple[object, ...] | None = None,
+    result: ComfyReturn | None = None,
 ) -> MusicUiResult:
     """Build an output-node payload with a UI line and a result pin.
 
@@ -318,7 +324,7 @@ class EZAudioMetadata:
         year: int = 2026,
         art_mode: str = "skip",
         prefix: str = "",
-        cover: object | None = None,
+        cover: ImageTensor | None = None,
     ) -> MusicUiResult:
         """Copy SaveAudio masters into the album folder and stamp tags.
 
@@ -369,7 +375,9 @@ class _AlbumArt(TypedDict):
     error: str | None
 
 
-def _resolve_album_art(meta: AudioMeta, dest: Path, cover: object | None) -> _AlbumArt:
+def _resolve_album_art(
+    meta: AudioMeta, dest: Path, cover: ImageTensor | None
+) -> _AlbumArt:
     """Pick cover art for one album folder and normalise it into that folder.
 
     Args:
@@ -484,7 +492,7 @@ class EZAlbumPack:
         return _pack_text(str(zip_path))
 
 
-def _save_cover_tensor(image: object, dest: Path) -> Path:
+def _save_cover_tensor(image: ImageTensor, dest: Path) -> Path:
     """Write a Comfy IMAGE tensor as PNG. Best-effort.
 
     Args:
@@ -615,7 +623,7 @@ class EZAudioBeatJoin:
         overlap_bars: str | int,
         crossover_hz: float,
         **segments: object,
-    ) -> tuple[object]:
+    ) -> ComfyReturn:
         """Join the wired AUDIO passes in render order.
 
         Args:
@@ -635,6 +643,8 @@ class EZAudioBeatJoin:
         """
         from .join import MAX_JOIN_SEGMENTS, join_audio
 
+        # Open mapping on purpose: join_audio screens the AUDIO sockets
+        # itself and must see a payload missing ``sample_rate``.
         wired: list[Mapping[str, object]] = []
         for index in range(1, MAX_JOIN_SEGMENTS + 1):
             name = f"audio_{index:02d}"

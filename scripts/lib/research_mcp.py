@@ -10,9 +10,9 @@ from __future__ import annotations
 import json
 import os
 import sys
-from collections.abc import Iterable, Mapping
+from collections.abc import Iterable
 from pathlib import Path
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
 from mcp_runtime import (
     JsonRpcRequest,
@@ -27,6 +27,9 @@ from mcp_runtime import (
     main_cli,
     serve_stdio as _runtime_serve_stdio,
 )
+
+if TYPE_CHECKING:
+    from ez_common import Json, JsonMap, JsonObject
 
 # MCP protocol identity (JSON-RPC initialize.serverInfo).
 PROTOCOL_VERSION = "2024-11-05"
@@ -71,7 +74,7 @@ def _lab_root() -> Path:
     return _repo_root() / "workflows" / "_lab"
 
 
-def occupancy_status() -> dict[str, object]:
+def occupancy_status() -> JsonObject:
     """Read occupancy JSON from COMFY_OUTPUT_DIR.
 
     Returns:
@@ -80,7 +83,7 @@ def occupancy_status() -> dict[str, object]:
     path = _output_dir() / ".occupancy.json"
     if path.is_file():
         try:
-            data: object = json.loads(path.read_text(encoding="utf-8"))
+            data: Json = json.loads(path.read_text(encoding="utf-8"))
             if isinstance(data, dict):
                 return data
         except json.JSONDecodeError:
@@ -96,7 +99,7 @@ def occupancy_status() -> dict[str, object]:
     }
 
 
-def _linear_labels(extra: Mapping[str, object]) -> list[str]:
+def _linear_labels(extra: JsonMap) -> list[str]:
     """Collect App widget labels from extra.linearData.inputs.
 
     Args:
@@ -119,7 +122,7 @@ def _linear_labels(extra: Mapping[str, object]) -> list[str]:
     return labels
 
 
-def _load_lab_graph(stem: str) -> tuple[Path, dict[str, object]] | None:
+def _load_lab_graph(stem: str) -> tuple[Path, JsonObject] | None:
     """Load one unique lab graph by stem or _lab-relative id.
 
     Args:
@@ -144,7 +147,7 @@ def _load_lab_graph(stem: str) -> tuple[Path, dict[str, object]] | None:
     if len(hits) != 1:
         return None
     try:
-        data: object = json.loads(hits[0].read_text(encoding="utf-8"))
+        data: Json = json.loads(hits[0].read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return None
     if not isinstance(data, dict):
@@ -173,13 +176,13 @@ def tool_list_lab_apps(_args: ToolArgs) -> ToolResult:
     Returns:
         ``{ok, apps, count}``.
     """
-    apps: list[dict[str, object]] = []
+    apps: list[JsonObject] = []
     root = _lab_root()
     if not root.is_dir():
         return {"ok": True, "apps": [], "count": 0}
     for path in sorted(root.rglob("*.json")):
         try:
-            data: object = json.loads(path.read_text(encoding="utf-8"))
+            data: Json = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             continue
         if not isinstance(data, dict):
@@ -198,7 +201,7 @@ def tool_list_lab_apps(_args: ToolArgs) -> ToolResult:
                 "id": lab_rel,
                 "lane": lane,
                 "occupancy": mode.get("occupancy"),
-                "handoff": list(cast(Iterable[object], mode.get("handoff") or [])),
+                "handoff": list(cast("Iterable[Json]", mode.get("handoff") or [])),
                 "description": str(extra.get("lab_description") or ""),
             }
         )
@@ -236,7 +239,7 @@ def tool_describe_app(args: ToolArgs) -> ToolResult:
         "description": str(extra.get("lab_description") or ""),
         "occupancy": mode.get("occupancy"),
         "lane": mode.get("lane"),
-        "handoff": list(cast(Iterable[object], mode.get("handoff") or [])),
+        "handoff": list(cast("Iterable[Json]", mode.get("handoff") or [])),
         "widgets": _linear_labels(extra),
         "lab_mcp": mcp,
     }

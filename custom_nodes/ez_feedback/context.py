@@ -15,7 +15,11 @@ import os
 import platform
 import re
 from collections.abc import Callable, Mapping, Sequence
+from typing import TYPE_CHECKING
 from urllib.parse import urlencode
+
+if TYPE_CHECKING:
+    from ez_common import Json, JsonMap
 
 REPO = "toxicoder/ez-comfy-stack"
 """Repository every surface files against."""
@@ -312,7 +316,7 @@ def _value_text(value: object) -> str:
     return " ".join(str(value).split())
 
 
-def context_lines(pairs: Sequence[tuple[str, object]] | None) -> list[str]:
+def context_lines(pairs: Sequence[tuple[str, Json]] | None) -> list[str]:
     """Render ``- label: value`` lines for a Context or Environment block.
 
     Pairs with no value are omitted, values are redacted and clipped, and a
@@ -338,7 +342,7 @@ def context_lines(pairs: Sequence[tuple[str, object]] | None) -> list[str]:
     return lines
 
 
-def error_lines(errors: Sequence[object] | None, surface: str) -> list[str]:
+def error_lines(errors: Sequence[Json] | None, surface: str) -> list[str]:
     """Render the ``## Recent errors`` block from the client ring buffer.
 
     Each entry becomes ``- <iso8601> [<surface>] <message>``, with the entry's
@@ -407,7 +411,7 @@ def _section(heading: str, lines: Sequence[str]) -> str:
     return f"{heading}\n\n" + "\n".join(lines)
 
 
-def _narrative_lines(value: object) -> list[str]:
+def _narrative_lines(value: Json) -> list[str]:
     """Render one filled narrative answer as paragraph lines.
 
     The reporter's own line breaks survive: the value is stripped at its ends,
@@ -415,7 +419,7 @@ def _narrative_lines(value: object) -> list[str]:
     narrative is the report, so it keeps every fact the operator typed.
 
     Args:
-        value: Text under one ``narrative`` key; anything is stringified.
+        value: Text under one ``narrative`` key; a non-string is stringified.
 
     Returns:
         Redacted paragraph lines, empty when the value carries no text.
@@ -427,12 +431,12 @@ def _narrative_lines(value: object) -> list[str]:
 def build_body(
     kind: str,
     surface: str,
-    context: Sequence[tuple[str, object]] | None,
-    environment: Sequence[tuple[str, object]] | None,
-    errors: Sequence[Mapping[str, object]] | None,
+    context: Sequence[tuple[str, Json]] | None,
+    environment: Sequence[tuple[str, Json]] | None,
+    errors: Sequence[Json] | None,
     browser: Mapping[str, object] | None,
     traceback: str,
-    narrative: Mapping[str, object] | None = None,
+    narrative: JsonMap | None = None,
 ) -> str:
     """Assemble the markdown body in the canonical section order.
 
@@ -459,7 +463,7 @@ def build_body(
         Markdown body, redacted, without a trailing newline.
     """
     blocks: list[str] = []
-    answers: Mapping[str, object] = narrative if isinstance(narrative, Mapping) else {}
+    answers: JsonMap = narrative if isinstance(narrative, Mapping) else {}
     if kind_key(kind) == "bug":
         for heading, key in zip(FILL_HEADINGS, BUG_NARRATIVE_KEYS):
             filled = _narrative_lines(answers.get(key))

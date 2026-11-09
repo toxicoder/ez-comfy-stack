@@ -24,7 +24,7 @@ import uuid
 from collections.abc import Callable, Mapping, Sequence
 from datetime import datetime, timezone
 from pathlib import Path, PurePosixPath
-from typing import TypeAlias, TypeVar, cast, get_args
+from typing import TYPE_CHECKING, TypeAlias, TypeVar, cast, get_args
 
 from .protocol import (
     PROJECTS_SUBDIR,
@@ -37,6 +37,9 @@ from .protocol import (
     Transition,
     TransitionKind,
 )
+
+if TYPE_CHECKING:
+    from ez_common import Json, JsonMap
 
 Clock: TypeAlias = Callable[[], datetime] | str
 """Injected time source: zero-arg callable returning a datetime, or a stamp."""
@@ -683,7 +686,7 @@ def _drop_by_id(items: list[_Row], item_id: str, where: str, noun: str) -> None:
 # --- Op handlers -------------------------------------------------------------
 
 
-def _op_create(args: dict[str, object], where: str) -> EditProject:
+def _op_create(args: JsonMap, where: str) -> EditProject:
     """Handle ``project_create``.
 
     Args:
@@ -714,7 +717,7 @@ def _op_create(args: dict[str, object], where: str) -> EditProject:
     )
 
 
-def _op_add_clip(project: EditProject, args: dict[str, object], where: str) -> None:
+def _op_add_clip(project: EditProject, args: JsonMap, where: str) -> None:
     """Handle ``add_clip``.
 
     Args:
@@ -732,7 +735,7 @@ def _op_add_clip(project: EditProject, args: dict[str, object], where: str) -> N
     project["clips"].append(clip)
 
 
-def _op_remove_clip(project: EditProject, args: dict[str, object], where: str) -> None:
+def _op_remove_clip(project: EditProject, args: JsonMap, where: str) -> None:
     """Handle ``remove_clip``.
 
     Args:
@@ -752,7 +755,7 @@ def _op_remove_clip(project: EditProject, args: dict[str, object], where: str) -
     )
 
 
-def _op_trim_clip(project: EditProject, args: dict[str, object], where: str) -> None:
+def _op_trim_clip(project: EditProject, args: JsonMap, where: str) -> None:
     """Handle ``trim_clip`` (``in_s`` and/or ``out_s``).
 
     Args:
@@ -778,7 +781,7 @@ def _op_trim_clip(project: EditProject, args: dict[str, object], where: str) -> 
     clip["out_s"] = out_s
 
 
-def _op_move_clip(project: EditProject, args: dict[str, object], where: str) -> None:
+def _op_move_clip(project: EditProject, args: JsonMap, where: str) -> None:
     """Handle ``move_clip`` (reorder the clip strip).
 
     Args:
@@ -801,7 +804,7 @@ def _op_move_clip(project: EditProject, args: dict[str, object], where: str) -> 
 
 
 def _op_set_transition(
-    project: EditProject, args: dict[str, object], where: str
+    project: EditProject, args: JsonMap, where: str
 ) -> None:
     """Handle ``set_transition`` (the transition entering a clip).
 
@@ -826,7 +829,7 @@ def _op_set_transition(
     )
 
 
-def _op_set_gain(project: EditProject, args: dict[str, object], where: str) -> None:
+def _op_set_gain(project: EditProject, args: JsonMap, where: str) -> None:
     """Handle ``set_gain``.
 
     Args:
@@ -846,7 +849,7 @@ def _op_set_gain(project: EditProject, args: dict[str, object], where: str) -> N
     clip["gain"] = gain
 
 
-def _op_add_overlay(project: EditProject, args: dict[str, object], where: str) -> None:
+def _op_add_overlay(project: EditProject, args: JsonMap, where: str) -> None:
     """Handle ``add_overlay``.
 
     Args:
@@ -865,7 +868,7 @@ def _op_add_overlay(project: EditProject, args: dict[str, object], where: str) -
 
 
 def _op_remove_overlay(
-    project: EditProject, args: dict[str, object], where: str
+    project: EditProject, args: JsonMap, where: str
 ) -> None:
     """Handle ``remove_overlay``.
 
@@ -886,7 +889,7 @@ def _op_remove_overlay(
     )
 
 
-def _op_add_caption(project: EditProject, args: dict[str, object], where: str) -> None:
+def _op_add_caption(project: EditProject, args: JsonMap, where: str) -> None:
     """Handle ``add_caption``.
 
     Args:
@@ -905,7 +908,7 @@ def _op_add_caption(project: EditProject, args: dict[str, object], where: str) -
 
 
 def _op_remove_caption(
-    project: EditProject, args: dict[str, object], where: str
+    project: EditProject, args: JsonMap, where: str
 ) -> None:
     """Handle ``remove_caption``.
 
@@ -926,7 +929,7 @@ def _op_remove_caption(
     )
 
 
-def _op_set_title(project: EditProject, args: dict[str, object], where: str) -> None:
+def _op_set_title(project: EditProject, args: JsonMap, where: str) -> None:
     """Handle ``set_title``.
 
     Args:
@@ -944,7 +947,7 @@ def _op_set_title(project: EditProject, args: dict[str, object], where: str) -> 
     project["title"] = title
 
 
-def _op_clear(project: EditProject, args: dict[str, object], where: str) -> None:
+def _op_clear(project: EditProject, args: JsonMap, where: str) -> None:
     """Handle ``clear`` (drop clips, overlays, and captions).
 
     Args:
@@ -961,7 +964,7 @@ def _op_clear(project: EditProject, args: dict[str, object], where: str) -> None
     project["captions"] = []
 
 
-HANDLERS: dict[str, Callable[[EditProject, dict[str, object], str], None]] = {
+HANDLERS: dict[str, Callable[[EditProject, JsonMap, str], None]] = {
     "add_clip": _op_add_clip,
     "remove_clip": _op_remove_clip,
     "trim_clip": _op_trim_clip,
@@ -980,7 +983,7 @@ it replaces the project instead of editing one)."""
 
 
 def _apply_one(
-    project: EditProject | None, op: Mapping[str, object], *, position: int
+    project: EditProject | None, op: object, *, position: int
 ) -> EditProject:
     """Apply a single op and return the project.
 
@@ -1007,7 +1010,7 @@ def _apply_one(
     if not isinstance(raw_args, dict):
         got = type(raw_args).__name__
         raise TimelineError(f"{where}: args must be an object (got {got})")
-    args: dict[str, object] = dict(raw_args)
+    args: JsonMap = dict(raw_args)
     if name == "project_create":
         if project is not None:
             raise TimelineError(
@@ -1024,7 +1027,7 @@ def _apply_one(
 
 def apply_ops(
     project: EditProject | None,
-    ops: Sequence[Mapping[str, object]],
+    ops: Sequence[object],
     *,
     clock: Clock | None = None,
 ) -> EditProject:
@@ -1209,7 +1212,7 @@ def _read_project_file(path: Path, where: str) -> EditProject:
             UTF-8 text, or the record is malformed.
     """
     try:
-        data: object = json.loads(path.read_text(encoding="utf-8"))
+        data: Json = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
         raise TimelineError(f"invalid project json {path}: {exc}") from exc
     except (OSError, UnicodeDecodeError) as exc:

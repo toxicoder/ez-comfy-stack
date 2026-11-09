@@ -35,7 +35,7 @@ build when the two are confused.
 | Python (myPy) | `disallow_untyped_defs`, `disallow_any_generics`, **`disallow_any_explicit`**, `warn_return_any`, `warn_unused_ignores`, `ignore-without-code` | `mypy.ini` over production (`bazelisk test //tests:typecheck`, zero errors); `mypy-tests.ini` over the pytest tree, ratcheted by `bazelisk test //lints:mypy_tests` (`lints/mypy_tests_baseline.json`) |
 | Python (Pyright) | `standard` plus `reportMissingTypeArgument`, `reportUnreachable`, `reportUnnecessaryComparison`, `reportImplicitOverride` | `pyrightconfig.json` over production (zero errors); `pyrightconfig-tests.json` over the pytest tree, ratcheted by `bazelisk test //lints:pyright_tests` (`lints/pyright_tests_baseline.json`) |
 | TypeScript (`docs-site/`) | `strict` plus `noUncheckedIndexedAccess`, `noImplicitOverride`, `noUnusedLocals`, `noUnusedParameters`, `exactOptionalPropertyTypes`; `zod` for data that enters at runtime | `bazelisk test //docs-site:typecheck` |
-| JavaScript (`custom_nodes/*/js/`) | JSDoc with a **type expression** on every `@param` / `@returns`, `{object}` counted as debt, one `@typedef` vocabulary per pack | `bazelisk test //lints:js_types` (`tsc --checkJs`, ratcheted by `lints/js_types_baseline.json`) + `tests/python/test_jsdoc.py` |
+| JavaScript (`custom_nodes/*/js/`) | JSDoc with a **type expression** on every `@param` / `@returns`, `{object}` counted as debt, one `@typedef` vocabulary per pack | `bazelisk test //lints:js_types` (`tsc --checkJs`, ratcheted by `lints/js_types_baseline.json`, with unnamed slots ratcheted by `lints/js_object_baseline.json`) + `tests/python/test_jsdoc.py` |
 | Shell | Google-style `Globals` / `Arguments` / `Outputs` / `Returns` header per function; `set -euo pipefail`; ShellCheck at warning level | `bazelisk test //:lint --test_tag_filters=manual` |
 | YAML / JSON data | A record type in the reader that loads it, plus a schema file in `schemas/` when the file is authored by hand | `tests/python/test_strong_types.py` |
 
@@ -63,9 +63,20 @@ Reach down this ladder and stop at the first rung that describes the value.
    imported value where it is not, so the hermetic lane needs no CUDA.
 5. **`object`.** The value is opaque and only passes through. `object` is honest
    and it forces any consumer that inspects it to narrow first, which is the
-   whole point.
+   whole point. It is also the last rung that is free to reach for without a
+   conversation, because the alternative at that seam is usually `Any`: a
+   validator takes `object` on purpose (`def parse_x(raw: object) -> X`), and so
+   does a widget value a node hands straight back. It is ratcheted, not banned -
+   see :data:`PRODUCTION_OBJECT_BUDGET` - so a type that *could* have been named
+   and was not still shows up in the build.
 6. **`Json`.** A parsed document whose shape is genuinely not known yet - see
-   `ez_common/json_value.py`. Narrow it one level at a time.
+   `ez_common/json_value.py`. Narrow it one level at a time. This outranks
+   `object` for anything that came off disk or off the wire: `Mapping[str,
+   object]` says "a map I never looked inside", `JsonMap` says "a JSON object
+   whose leaves are still unknown", and only the second one is checkable. The
+   read-only spellings are `JsonMap` (`Mapping[str, Json]`) and `JsonList`
+   (`Sequence[Json]`); the mutable ones a builder writes into are `JsonObject`
+   and `JsonArray`.
 7. **`Any`, declared.** Last rung, and only inside a module that
    `mypy.ini` lists as a boundary. A new boundary is a review conversation.
 
@@ -101,7 +112,7 @@ pattern whose module no longer uses `Any` fails until you delete it.
 vocabulary is the honest type. It is the block at the bottom of `mypy.ini`, each
 section keyed on `disable_error_code = explicit-any` - a different option than a
 boundary uses, on purpose, so a to-do cannot be laundered into a documented
-exemption. Three ratchets in `tests/python/test_strong_types.py` keep the
+exemption. Four ratchets in `tests/python/test_strong_types.py` keep the
 ledger shrinking:
 
 | Ratchet | What may not rise |
@@ -109,6 +120,7 @@ ledger shrinking:
 | `PRODUCTION_ANY_BUDGET` | total `Any` tokens across production code |
 | `DEBT_MODULE_BUDGET` | number of modules listed as debt |
 | `PRODUCTION_CAST_BUDGET` | number of `cast()` calls |
+| `PRODUCTION_OBJECT_BUDGET` | total `object` tokens in a type position |
 
 A debt section whose module has gone clean fails the build, which is how the
 list empties: narrow one module, delete its section, and the budgets drop. New
@@ -210,6 +222,31 @@ install PyYAML, pydantic, or jsonschema, and the container image does not gain a
 dependency to save typing. A validator is a function that takes `object` and
 returns the record, so the type system sees the narrowing.
 
+The signature *before* the validator is a different question, and
+`Mapping[str, object]` is usually the wrong answer to it. A reader that walks a
+parsed document takes :data:`JsonMap`, and a sequence of them takes
+:data:`JsonList`:
+
+```python
+def read_rows(body: JsonMap) -> list[ShotCard]:
+    """Narrow one parsed document into records, one level at a time."""
+    raw = body.get("rows")
+    rows = raw if isinstance(raw, list) else []
+    return [validate_row(row) for row in rows if isinstance(row, dict)]
+```
+
+`Mapping[str, object]` there would accept a map of anything, so a caller handing
+over `dict[str, Path]` would be accepted and then crash the first `.isoformat()`.
+`Mapping` and `Sequence` are covariant, which is what keeps `JsonMap` practical:
+a caller holding `dict[str, str]` satisfies it, and a `dict[str, object]` does
+not - that is the checker telling you the caller still owes a type.
+
+Two ways this goes wrong. `dict` and `list` are **invariant**, so a `TypedDict`
+that carries a `list[OtherTypedDict]` does not satisfy `Mapping[str, Json]`; the
+record itself is then the parameter type, not the alias. And a document that
+travels with real Python objects in it (a `Path`, a tensor, an open handle) is
+not JSON: name the record or say `object`, and say which in the docstring.
+
 ### A behavioral seam
 
 Small capability interfaces are `typing.Protocol` and classes satisfy them
@@ -245,6 +282,19 @@ frontend at runtime-only relative paths (`../../scripts/app.js`) that do not
 exist in this repo, so module resolution is skipped and the ComfyUI objects
 arrive untyped, exactly as they do in the browser. `lints/js_types_baseline.json`
 records what each file still owes - a number may fall, never rise.
+
+That ledger counts what `tsc` happens to complain about, so it moves when
+unrelated glue changes shape. `lints/js_object_baseline.json` counts the debt
+itself: every `{object}`, `{Object}`, `{*}`, and every one of their
+`{object[]}` / `{object|null}` variants sitting in a `@param`, `@returns`,
+`@type`, or `@property` slot. Same law, down only, and a new file has to be
+listed. An `@typedef` line is not counted, because that line is the act of
+naming; its base being `{Object<string, *>}` is the same honest answer as an
+opaque `Mapping[str, object]` in Python - a map whose keys the file cannot
+enumerate. `{any}` is not a way out: the policy's last rung is a declared `Any`
+inside a registered boundary, and no frontend is one. `--write-types-baseline`
+and `--write-object-baseline` regenerate one ledger each, and only inside a
+reviewed decrease.
 
 The compiler is the one the docs-site lockfile pins, which is why the gate looks
 for `docs-site/node_modules/.bin/tsc` first and a `tsc` on the `PATH` only after
@@ -282,7 +332,7 @@ number on it.
 bazelisk test //tests:typecheck          # Pyright + mypy over production Python (zero errors)
 bazelisk test //lints:mypy_tests         # pytest-tree mypy, against its committed ledger
 bazelisk test //lints:pyright_tests      # pytest-tree Pyright, against its committed ledger
-bazelisk test //lints:js_types           # JSDoc frontends, against their committed ledger
+bazelisk test //lints:js_types           # JSDoc frontends: tsc ledger + unnamed-type ledger
 bazelisk test //tests:pytest             # pytest lane; inventory gate (no per-file target)
 bazelisk test //docs-site:typecheck      # tsc --noEmit over the docs site
 bazelisk test //:validate                # everything a PR has to satisfy
@@ -293,8 +343,17 @@ bazelisk test //:validate                # everything a PR has to satisfy
 fails when a file outside the declared boundaries and the debt ledger mentions
 `Any`, when `Callable[..., Any]` appears anywhere, when a `# type: ignore` has
 no code, when a boundary or a debt module stops carrying `Any`, or when the
-production `Any`, `cast()`, or debt-module count climbs above its recorded
-budget. All three budgets only move down.
+production `Any`, `cast()`, `object`, or debt-module count climbs above its
+recorded budget. All four budgets only move down.
+
+The `object` count walks the syntax tree rather than the text, and counts a name
+wherever a checker would read it as a type: a parameter or return annotation, an
+annotated assignment, the value of a `TypeAlias`, a `cast()` target, a `TypeVar`
+bound, and the same spellings written inside quotes. It skips `object()` used as
+a value and `object.__init__` used as an attribute, and it deliberately excludes
+the result slot of a `Callable[...]` - `Callable[..., Any]` is banned outright,
+so scoring the compliant `Callable[..., object]` as debt would push authors
+toward the spelling the policy forbids.
 
 When the typecheck lane is red, fix the type at the line that produced the
 value. Widening a signature to accept what a caller already passes, or adding a
