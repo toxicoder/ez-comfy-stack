@@ -590,7 +590,7 @@ def _finish(
     ensure_occupancy_note(graph, "trellis")
     stamp_app_mode(
         graph,
-        inputs=inputs,  # type: ignore[arg-type]
+        inputs=inputs,
         outputs=["Save GLB"],
         lane="3d",
         occupancy="trellis",
