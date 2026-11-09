@@ -252,7 +252,9 @@ def parse_speaker_turns(script: str) -> list[tuple[str, str]]:
     return turns
 
 
-def resolve_tts_backend(backend: object, ref_a: object = "", ref_b: object = "") -> str:
+def resolve_tts_backend(
+    backend: str, ref_a: str | None = "", ref_b: str | None = ""
+) -> str:
     """Pick a backend. Empty operator refs always fall back to Kokoro built-ins.
 
     Args:
@@ -457,7 +459,7 @@ class EZPodcastScript:
     def run(
         self,
         prompt: str,
-        enhance: object,
+        enhance: bool,
         flavor: str = FLAVOR_PODCAST,
         context: str = "",
         sample: str = "custom",
@@ -610,7 +612,7 @@ class EZKokoroTTS:
         speaker_a_voice: str = DEFAULT_VOICE_A,
         speaker_b_voice: str = DEFAULT_VOICE_B,
         announcer_voice: str = DEFAULT_ANNOUNCER,
-        include_announcer: object = False,
+        include_announcer: bool = False,
         backend: str = BACKEND_KOKORO,
         speaker_a_ref: str = "",
         speaker_b_ref: str = "",
@@ -682,7 +684,7 @@ class EZKokoroTTS:
         voice: str,
         backend: str,
         speed: float,
-        ref_wav: object,
+        ref_wav: str,
     ) -> tuple[PcmTensor | None, int]:
         """Synthesize one turn, falling back to Kokoro when extras miss.
 
@@ -703,7 +705,7 @@ class EZKokoroTTS:
         return self._synthesize_kokoro(text, voice, speed)
 
     def _try_optional_backend(
-        self, text: str, backend: str, ref_wav: object
+        self, text: str, backend: str, ref_wav: str
     ) -> PcmTensor | None:
         """Call the test hook or refuse extras without a runtime install.
 
@@ -838,13 +840,13 @@ class EZPodcastLearn:
 
     def run(
         self,
-        sources: object,
-        format: object = DEFAULT_FORMAT,
-        duration: object = DEFAULT_DURATION,
-        fetch_links: object = True,
-        enhance: object = True,
-        sample: object = "custom",
-        catalog: object = "",
+        sources: str,
+        format: str = DEFAULT_FORMAT,
+        duration: str = DEFAULT_DURATION,
+        fetch_links: bool = True,
+        enhance: bool = True,
+        sample: str = "custom",
+        catalog: str = "",
     ) -> PodcastUiResult:
         """Ingest sources, write digest + script, fail-soft without a GGUF.
 

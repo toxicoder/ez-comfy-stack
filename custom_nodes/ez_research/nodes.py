@@ -135,13 +135,13 @@ class EZCreativeResearch:
 
     def run(
         self,
-        prompt: object,
-        mode: object = "research",
-        web_search: object = True,
-        subagents: object = 2,
-        history: object = "",
-        sample: object = CUSTOM,
-        catalog: object = "",
+        prompt: str,
+        mode: str = "research",
+        web_search: bool = True,
+        subagents: int = 2,
+        history: str = "",
+        sample: str = CUSTOM,
+        catalog: str = "",
     ) -> ResearchUiResult:
         """Run chat or planner->search->synth and write a research brief.
 
