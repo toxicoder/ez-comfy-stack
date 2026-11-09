@@ -84,6 +84,33 @@ const DESC_STYLE_ID = "ez-studio-app-desc-wrap";
 const CHECK_STYLE_ID = "ez-studio-app-check-models";
 const CHIP_STATE_KEY = "ez-comfy.studio-app-chip";
 const CHIP_STATES = new Set(["open", "min", "closed"]);
+
+/**
+ * Widget on a graph node, as the relabeller reads it. LiteGraph owns the rest.
+ * @typedef {Object} EzWidget
+ * @property {string=} name Widget name LABELS maps onto a friendly label.
+ * @property {string=} label Text shown beside the widget.
+ */
+
+/**
+ * Graph node as the relabeller reads it: a class to switch on and widgets to
+ * stamp. LiteGraph owns everything else on the node.
+ * @typedef {Object} EzNode
+ * @property {string|number=} id Node id, keyed with the widget name to find a
+ *   stamped label.
+ * @property {string=} type Node class as LiteGraph names it.
+ * @property {string=} comfyClass Nodes 2.0 alias for type.
+ * @property {EzWidget[]=} widgets Widgets on the node, in graph order.
+ */
+
+/**
+ * extra.lab_app_mode block on the loaded graph: the chip renders occupancy and
+ * the handoff lines out of it.
+ * @typedef {Object} EzAppMode
+ * @property {boolean=} enabled App Mode chrome on for this graph.
+ * @property {string=} occupancy Heavy job the host holds for this graph.
+ * @property {string[]=} handoff Next steps; the chip shows the first three.
+ */
 let modelCheckText = "";
 let lastStatus = "";
 
@@ -143,7 +170,7 @@ const CHIP = [
 
 /**
  * extra.lab_app_mode from the loaded graph, or null.
- * @returns {object|null}
+ * @returns {EzAppMode|null}
  */
 function labAppMode() {
   return app.graph?.extra?.lab_app_mode || null;
@@ -171,7 +198,7 @@ function stampedLabels() {
 
 /**
  * Apply stamped or generic labels onto a node's widgets.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {void}
  */
 function relabelWidgets(node) {
@@ -275,7 +302,7 @@ function mountBanner(el) {
 
 /**
  * Escape text for innerHTML banner lines.
- * @param {*} value
+ * @param {string|number|null|undefined} value
  * @returns {string}
  */
 function escapeHtml(value) {
@@ -502,7 +529,7 @@ app.registerExtension({
   name: "ez_studio_app.chrome",
   /**
    * Relabel widgets as each node is created.
-   * @param {object} node
+   * @param {EzNode} node
    * @returns {Promise<void>}
    */
   async nodeCreated(node) {

@@ -292,7 +292,9 @@ listed. An `@typedef` line is not counted, because that line is the act of
 naming; its base being `{Object<string, *>}` is the same honest answer as an
 opaque `Mapping[str, object]` in Python - a map whose keys the file cannot
 enumerate. `{any}` is not a way out: the policy's last rung is a declared `Any`
-inside a registered boundary, and no frontend is one.
+inside a registered boundary, and no frontend is one. `--write-types-baseline`
+and `--write-object-baseline` regenerate one ledger each, and only inside a
+reviewed decrease.
 
 The compiler is the one the docs-site lockfile pins, which is why the gate looks
 for `docs-site/node_modules/.bin/tsc` first and a `tsc` on the `PATH` only after

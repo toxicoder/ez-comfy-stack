@@ -16,8 +16,55 @@ const WIDGETS = "Widgets";
 const STATUS = "Forge status";
 
 /**
+ * Canvas textarea a STRING widget owns; absent on the Vue STRING widgets
+ * Nodes 2.0 renders.
+ * @typedef {Object} EzInputEl
+ * @property {boolean=} readOnly Locks the field; the text is output only.
+ * @property {{opacity?: string}=} style Inline style, dimmed when read-only.
+ */
+
+/**
+ * Widget on a forge node, as this file touches it. LiteGraph owns the rest of
+ * the shape, so every field stays optional.
+ * @typedef {Object} EzWidget
+ * @property {string=} name Widget name upsertWidget matches on.
+ * @property {string=} value Text painted into the widget.
+ * @property {boolean=} serialize Kept out of the saved graph.
+ * @property {(() => Promise<undefined>)=} serializeValue Empty saved value.
+ * @property {EzInputEl=} inputEl Canvas textarea, only on legacy widgets.
+ */
+
+/**
+ * Node this file paints. LiteGraph owns everything the file never reads.
+ * @typedef {Object} EzNode
+ * @property {EzWidget[]=} widgets Widgets on the node, in graph order.
+ */
+
+/**
+ * Node definition Comfy hands to beforeRegisterNodeDef.
+ * @typedef {Object} EzNodeDef
+ * @property {string=} name Class name this file matches on.
+ */
+
+/**
+ * Node class handed to beforeRegisterNodeDef; only the hooks this file wraps
+ * are named, LiteGraph owns the class itself.
+ * @typedef {Object} EzNodeType
+ * @property {{
+ *   onNodeCreated?: (this: EzNode) => void,
+ *   onExecuted?: (this: EzNode, message: EzExecutedMessage) => void
+ * }} prototype Per-instance hooks.
+ */
+
+/**
+ * Payload Comfy hands onExecuted: the node's UI fields, each one text or a
+ * list of lines this file joins.
+ * @typedef {Object<string, string|string[]>} EzExecutedMessage
+ */
+
+/**
  * Join a UI message field into a display string.
- * @param {object} message
+ * @param {EzExecutedMessage} message
  * @param {string} key
  * @returns {string}
  */
@@ -34,7 +81,7 @@ function textFromMessage(message, key) {
 
 /**
  * Create or update a non-serialized STRING widget.
- * @param {object} node
+ * @param {EzNode} node
  * @param {string} name
  * @param {string} text
  * @param {boolean} multiline
@@ -65,7 +112,7 @@ function upsertWidget(node, name, text, multiline) {
 
 /**
  * Fill path, template, occupancy, widgets, and status on a forge node.
- * @param {object} node
+ * @param {EzNode} node
  * @param {string} path
  * @param {string} template
  * @param {string} occupancy
@@ -85,8 +132,8 @@ app.registerExtension({
   name: "ez_studio_forge.preview",
   /**
    * Wrap EZAppForge with preview widgets.
-   * @param {object} nodeType
-   * @param {object} nodeData
+   * @param {EzNodeType} nodeType
+   * @param {EzNodeDef} nodeData
    * @returns {Promise<void>}
    */
   async beforeRegisterNodeDef(nodeType, nodeData) {
@@ -105,7 +152,7 @@ app.registerExtension({
     const onExecuted = nodeType.prototype.onExecuted;
     /**
      * Refresh preview widgets from the last execution payload.
-     * @param {object} message
+     * @param {EzExecutedMessage} message
      * @returns {void}
      */
     nodeType.prototype.onExecuted = function (message) {

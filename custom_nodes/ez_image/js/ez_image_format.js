@@ -6,6 +6,75 @@
  */
 import { app } from "../../scripts/app.js";
 
+/**
+ * One row from formats.json. The file reads every field defensively with
+ * String() / Number(), so all of them stay optional.
+ * @typedef {{
+ *   id?: string,
+ *   label?: string,
+ *   group?: string,
+ *   width?: number,
+ *   height?: number
+ * }} EzFormatRow
+ */
+
+/**
+ * Preset size a named format row last applied to a node.
+ * @typedef {{width: number, height: number}} EzAppliedSize
+ */
+
+/**
+ * Format/size widget. ComfyUI invokes callback with the widget as ``this``.
+ * @typedef {{
+ *   name: string,
+ *   value?: string|number|null,
+ *   callback?: (
+ *     this: EzWidget,
+ *     value: unknown,
+ *     canvas?: unknown,
+ *     node?: EzFormatNode
+ *   ) => unknown,
+ *   beforeQueued?: (this: EzWidget) => void
+ * }} EzWidget
+ */
+
+/**
+ * Graph handle used to walk nodes and dirty the canvas.
+ * @typedef {{
+ *   nodes?: EzFormatNode[],
+ *   setDirtyCanvas?: (dirtyCanvas: boolean, dirty: boolean) => void,
+ *   change?: () => void
+ * }} EzGraph
+ */
+
+/**
+ * EZImageFormat node. --noResolve leaves the ComfyUI frontend untyped, so only
+ * the members this file reads or writes are named.
+ * @typedef {{
+ *   type?: string,
+ *   comfyClass?: string,
+ *   widgets?: EzWidget[],
+ *   widgets_values?: unknown[],
+ *   graph?: EzGraph,
+ *   _ezFormatBound?: boolean,
+ *   _ezFormatApplied?: EzAppliedSize|null
+ * }} EzFormatNode
+ */
+
+/**
+ * Registered node definition, seen before ComfyUI registers it.
+ * @typedef {{
+ *   prototype: {
+ *     onNodeCreated?: (this: EzFormatNode, ...args: unknown[]) => void;
+ *   }
+ * }} EzNodeType
+ */
+
+/**
+ * Node definition metadata; only the class name is read here.
+ * @typedef {{name: string}} EzNodeDef
+ */
+
 const CUSTOM_LABEL = "Custom";
 const CUSTOM_ID = "custom";
 let catalog = null;
@@ -13,9 +82,9 @@ let applying = false;
 
 /**
  * Find a widget by name on a node.
- * @param {object} node
+ * @param {EzFormatNode} node
  * @param {string} name
- * @returns {object|undefined}
+ * @returns {EzWidget|undefined}
  */
 function widgetByName(node, name) {
   return node.widgets?.find((w) => w.name === name);
@@ -23,9 +92,9 @@ function widgetByName(node, name) {
 
 /**
  * Set a widget value and notify Vue / App Mode (Nodes 2.0).
- * @param {object|undefined} node
- * @param {object|undefined} widget
- * @param {*} value
+ * @param {EzFormatNode|undefined} node
+ * @param {EzWidget|undefined} widget
+ * @param {string|number} value
  * @returns {void}
  */
 function setWidgetValue(node, widget, value) {
@@ -53,7 +122,7 @@ function setWidgetValue(node, widget, value) {
 
 /**
  * Catalog rows from the last successful fetch, or an empty list.
- * @returns {object[]}
+ * @returns {EzFormatRow[]}
  */
 function formatRows() {
   const rows = catalog?.formats;
@@ -62,8 +131,8 @@ function formatRows() {
 
 /**
  * Resolve a combo value to a catalog row.
- * @param {string} value
- * @returns {object|null}
+ * @param {string|number|null|undefined} value
+ * @returns {EzFormatRow|null}
  */
 function findFormat(value) {
   const raw = String(value || "").trim();
@@ -81,7 +150,7 @@ function findFormat(value) {
 
 /**
  * True when the row is the Custom sentinel.
- * @param {object|null} row
+ * @param {EzFormatRow|null} row
  * @returns {boolean}
  */
 function isCustom(row) {
@@ -92,7 +161,7 @@ const SIZE_MATCH = "Match input";
 
 /**
  * True when Output size is Match input (default).
- * @param {*} value
+ * @param {string|number|null|undefined} value
  * @returns {boolean}
  */
 function isMatchInput(value) {
@@ -107,8 +176,8 @@ function isMatchInput(value) {
  * Nearest aspect catalog row for a source size, preferring current area.
  * @param {number} srcW
  * @param {number} srcH
- * @param {object|null} current
- * @returns {object|null}
+ * @param {EzFormatRow|null} current
+ * @returns {EzFormatRow|null}
  */
 function nearestAspectRow(srcW, srcH, current) {
   const rows = formatRows().filter(
@@ -137,7 +206,7 @@ function nearestAspectRow(srcW, srcH, current) {
 
 /**
  * First LoadImage / EZOptionalImage filename on the graph.
- * @param {object|undefined} graph
+ * @param {EzGraph|undefined} graph
  * @returns {string}
  */
 function firstImageName(graph) {
@@ -164,7 +233,7 @@ function firstImageName(graph) {
 /**
  * Probe natural size of an input-folder still.
  * @param {string} name
- * @param {function(number, number): void} onSize
+ * @param {(width: number, height: number) => void} onSize
  * @returns {void}
  */
 function probeInputSize(name, onSize) {
@@ -183,7 +252,7 @@ function probeInputSize(name, onSize) {
 
 /**
  * When Output size is Match input, snap Format to the loaded still's aspect.
- * @param {object} node
+ * @param {EzFormatNode} node
  * @returns {void}
  */
 function applyMatchInput(node) {
@@ -218,8 +287,8 @@ function applyMatchInput(node) {
  *
  * The snapshot is the baseline the queue-time check compares against; Custom
  * clears it because the INT widgets are then the user's own.
- * @param {object|undefined} node
- * @param {object|null} row
+ * @param {EzFormatNode|undefined} node
+ * @param {EzFormatRow|null} row
  * @returns {void}
  */
 function recordAppliedFormat(node, row) {
@@ -233,7 +302,7 @@ function recordAppliedFormat(node, row) {
 
 /**
  * Write width/height from a non-custom format row.
- * @param {object} node
+ * @param {EzFormatNode} node
  * @returns {void}
  */
 function applyFormat(node) {
@@ -257,7 +326,7 @@ function applyFormat(node) {
 
 /**
  * If width/height no longer match the preset, switch Format to Custom.
- * @param {object} node
+ * @param {EzFormatNode} node
  * @returns {void}
  */
 function maybeMarkCustom(node) {
@@ -296,7 +365,7 @@ function maybeMarkCustom(node) {
  * Format to Custom so Python encodes the user's numbers; untouched sizes
  * re-apply the preset, which is what the never-invoked extension-level hook
  * used to promise.
- * @param {object|undefined} node
+ * @param {EzFormatNode|undefined} node
  * @returns {void}
  */
 function queueTimeFormatSync(node) {
@@ -333,7 +402,7 @@ function queueTimeFormatSync(node) {
 
 /**
  * Bind format/width/height callbacks on one EZImageFormat node.
- * @param {object} node
+ * @param {EzFormatNode} node
  * @returns {void}
  */
 function bindFormatNode(node) {
@@ -356,8 +425,8 @@ function bindFormatNode(node) {
   if (formatWidget) {
     /**
      * Apply catalog size when Format changes.
-     * @param {*} value
-     * @returns {void}
+     * @param {string|number|null|undefined} value
+     * @returns {string|number|null|undefined}
      */
     formatWidget.callback = function (value) {
       formatCb?.apply(this, arguments);
@@ -377,8 +446,8 @@ function bindFormatNode(node) {
   if (modeWidget) {
     /**
      * Re-apply Match input or Force format.
-     * @param {*} value
-     * @returns {void}
+     * @param {string|number|null|undefined} value
+     * @returns {string|number|null|undefined}
      */
     modeWidget.callback = function (value) {
       modeCb?.apply(this, arguments);
@@ -391,8 +460,8 @@ function bindFormatNode(node) {
   if (widthWidget) {
     /**
      * Mark Custom when Width leaves the preset.
-     * @param {*} value
-     * @returns {void}
+     * @param {string|number|null|undefined} value
+     * @returns {string|number|null|undefined}
      */
     widthWidget.callback = function (value) {
       widthCb?.apply(this, arguments);
@@ -403,8 +472,8 @@ function bindFormatNode(node) {
   if (heightWidget) {
     /**
      * Mark Custom when Height leaves the preset.
-     * @param {*} value
-     * @returns {void}
+     * @param {string|number|null|undefined} value
+     * @returns {string|number|null|undefined}
      */
     heightWidget.callback = function (value) {
       heightCb?.apply(this, arguments);
@@ -451,8 +520,8 @@ app.registerExtension({
   name: "ez_image.format",
   /**
    * Wrap EZImageFormat so Format writes width/height on create.
-   * @param {object} nodeType
-   * @param {object} nodeData
+   * @param {EzNodeType} nodeType
+   * @param {EzNodeDef} nodeData
    * @returns {Promise<void>}
    */
   async beforeRegisterNodeDef(nodeType, nodeData) {

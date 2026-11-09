@@ -16,6 +16,115 @@
 import { app } from "../../scripts/app.js";
 import { ComfyWidgets } from "../../scripts/widgets.js";
 
+/**
+ * Catalog sample row from a stem's samples JSON. Every field is display text
+ * the picker copies onto a matching widget.
+ * @typedef {Object} EzCatalogRow
+ * @property {string} [id] Stable id the combo can also match on.
+ * @property {string} [label] Label shown in the sample combo.
+ * @property {string} [prompt] Recipe copied into prompt and sources.
+ * @property {string} [tags] Tags copied into the tags widget.
+ * @property {string} [lyrics] Lyrics copied into the lyrics widget.
+ */
+
+/**
+ * Encoder widget holding the CLIP preview, so an unlink can un-pin it.
+ * @typedef {Object} EzClipDest
+ * @property {number|string} nodeId Encoder node id the preview sits on.
+ * @property {string} widgetName Widget name the preview sits on.
+ */
+
+/**
+ * Options bag on a widget. App Mode rewrites values, so the pack names the
+ * two keys it drives.
+ * @typedef {Object} EzWidgetOptions
+ * @property {Array<string>} [values] Entries shown in a combo widget.
+ * @property {boolean} [serialize] Whether the widget rides in the queue.
+ */
+
+/**
+ * LiteGraph widget the pack drives. ComfyUI owns the class, so only the
+ * members read or written here are named.
+ * @typedef {Object} EzWidget
+ * @property {string} [name] Widget name from the node definition.
+ * @property {string|number|boolean|null} [value] Live widget value.
+ * @property {EzWidgetOptions} [options] Options bag LiteGraph passes through.
+ * @property {HTMLTextAreaElement} [inputEl] Canvas textarea, absent in App Mode.
+ * @property {Function} [callback] Fired by LiteGraph when the value is set.
+ * @property {Function} [beforeQueued] Run just before the queue payload.
+ * @property {boolean} [serialize] Whether the value persists in the graph.
+ * @property {Function} [serializeValue] Override for the persisted value.
+ * @property {boolean} [_ezValuesBound] options.values getter is installed.
+ * @property {boolean} [_ezSampleBound] Sample combo hooks are installed.
+ * @property {boolean} [_ezPromptWatch] Text watcher is attached.
+ * @property {boolean} [_ezClipWatch] Unlink watcher is attached.
+ */
+
+/**
+ * Node instance the extension wraps. LiteGraph owns the class, so only the
+ * members read or written here are named.
+ * @typedef {Object} EzNode
+ * @property {string} [comfyClass] Comfy class name once registered.
+ * @property {string} [type] LiteGraph type string used before that.
+ * @property {number|string} [id] Node id inside the graph.
+ * @property {Array<EzWidget>} [widgets] Widgets in definition order.
+ * @property {Array<string|number|boolean|null>} [widgets_values] Serialized widget values by index.
+ * @property {Array<EzSocket>} [inputs] Input sockets.
+ * @property {Array<EzSocket>} [outputs] Output sockets.
+ * @property {EzGraph} [graph] Graph that owns the node.
+ * @property {EzCatalogRow|null} [_ezSampleRow] Sample row currently applied.
+ * @property {Array<string>} [_ezSampleLabels] Combo labels this node owns.
+ * @property {Array<EzClipDest>} [_ezClipPreviewDests] Encoders holding the preview.
+ * @property {boolean} [_ezApplyingSample] Set while a sample copies onto widgets.
+ * @property {string} [_ezSampleCatalog] Catalog stem last loaded for the combo.
+ * @property {boolean} [_ezNegSync] Set while the negative family syncs.
+ */
+
+/**
+ * Socket on a node. ComfyUI owns the shape; the pack only reads names and
+ * the widget a socket stands for.
+ * @typedef {Object<string, *>} EzSocket
+ */
+
+/**
+ * Live graph. The class lives in LiteGraph, unresolvable under --noResolve.
+ * @typedef {Object<string, *>} EzGraph
+ */
+
+/**
+ * Link between two sockets, in either the LiteGraph array form or the
+ * serialized object form.
+ * @typedef {Object} EzLink
+ * @property {number|string} [id] Link id.
+ * @property {number|string} [target_id] Destination node id, serialized form.
+ * @property {number|string} [targetId] Destination node id, live form.
+ * @property {number} [target_slot] Destination slot, serialized form.
+ * @property {number} [targetSlot] Destination slot, live form.
+ */
+
+/**
+ * Payload the server hands to onExecuted, keyed by output name.
+ * @typedef {Object<string, *>} EzExecutedMessage
+ */
+
+/**
+ * Hooks ComfyUI hangs off a node definition; the class is untyped here.
+ * @typedef {Object<string, *>} EzNodeHooks
+ */
+
+/**
+ * LiteGraph node definition handed to beforeRegisterNodeDef.
+ * @typedef {Object} EzNodeType
+ * @property {EzNodeHooks} prototype Hooks shared by every instance.
+ */
+
+/**
+ * Node definition metadata from the server registry.
+ * @typedef {Object} EzNodeData
+ * @property {string} [name] Comfy class name the definition registers under.
+ */
+
+
 const NODE_CLASSES = new Set([
   "EZKleinPromptEnhance",
   "EZWanPromptEnhance",
@@ -93,9 +202,9 @@ const FAMILY_FOR_MODE = {
 
 /**
  * Find a widget by name on a node.
- * @param {object} node
+ * @param {EzNode} node
  * @param {string} name
- * @returns {object|undefined}
+ * @returns {EzWidget|undefined}
  */
 function widgetByName(node, name) {
   return node.widgets?.find((w) => w.name === name);
@@ -103,7 +212,7 @@ function widgetByName(node, name) {
 
 /**
  * Write text onto a STRING widget and optionally lock the textarea.
- * @param {object|undefined} widget
+ * @param {EzWidget|undefined} widget
  * @param {string} text
  * @param {boolean} readOnly
  * @returns {void}
@@ -121,7 +230,7 @@ function setTextWidget(widget, text, readOnly) {
 
 /**
  * Family catalog stem from node type and mode/flavor widgets.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {string}
  */
 function familyCatalog(node) {
@@ -141,7 +250,7 @@ function familyCatalog(node) {
 
 /**
  * Catalog id from the catalog widget, extra.lab_rel, or node family.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {string}
  */
 function catalogIdFromNode(node) {
@@ -159,7 +268,7 @@ function catalogIdFromNode(node) {
 
 /**
  * Combo labels for one catalog: row labels then Custom.
- * @param {object[]} rows
+ * @param {Array<EzCatalogRow>} rows
  * @returns {string[]}
  */
 function catalogLabels(rows) {
@@ -180,8 +289,8 @@ function catalogLabels(rows) {
 
 /**
  * Bind options.values to this node's catalog labels (ignore union overwrites).
- * @param {object} widget
- * @param {object} node
+ * @param {EzWidget} widget
+ * @param {EzNode} node
  * @returns {void}
  */
 function installValuesGetter(widget, node) {
@@ -268,9 +377,9 @@ async function loadCatalog(catalogId) {
 
 /**
  * Match a sample combo value to a catalog row, or null for custom.
- * @param {object[]} rows
- * @param {string} sample
- * @returns {object|null}
+ * @param {Array<EzCatalogRow>} rows
+ * @param {string|number|boolean|null} sample
+ * @returns {EzCatalogRow|null}
  */
 function lookupSample(rows, sample) {
   const key = String(sample || "").trim().toLowerCase();
@@ -288,8 +397,8 @@ function lookupSample(rows, sample) {
 
 /**
  * Copy prompt/tags/lyrics from a sample row onto matching widgets.
- * @param {object} node
- * @param {object} row
+ * @param {EzNode} node
+ * @param {EzCatalogRow} row
  * @param {boolean} readOnly
  * @returns {void}
  */
@@ -310,8 +419,8 @@ function applySampleRow(node, row, readOnly) {
 
 /**
  * True when the live widget text differs from the catalog field.
- * @param {object|undefined} widget
- * @param {*} catalogText
+ * @param {EzWidget|undefined} widget
+ * @param {string|number|null} catalogText
  * @returns {boolean}
  */
 function textDiverged(widget, catalogText) {
@@ -323,7 +432,7 @@ function textDiverged(widget, catalogText) {
 
 /**
  * Unlock prompt-like textareas on a node.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {void}
  */
 function unlockTextWidgets(node) {
@@ -338,7 +447,7 @@ function unlockTextWidgets(node) {
 
 /**
  * Select Sample custom so Queue encodes the textarea, not the catalog row.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {void}
  */
 function freezeSampleToCustom(node) {
@@ -379,7 +488,7 @@ function freezeSampleToCustom(node) {
 
 /**
  * Chain prompt/tags/lyrics/sources callbacks so typing selects Sample custom.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {void}
  */
 function bindTextWatchers(node) {
@@ -408,7 +517,7 @@ function bindTextWatchers(node) {
  * Sample custom when live text diverged from the last applied row.
  * Runs inside widget.beforeQueued, so it must stay synchronous: an async body
  * suspends and its effect lands after graphToPrompt has serialized the payload.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {void}
  */
 function freezeSampleIfPromptDivergedSync(node) {
@@ -439,7 +548,7 @@ function freezeSampleIfPromptDivergedSync(node) {
 /**
  * If live text diverged from the selected sample, select Sample custom.
  * Uses the row syncSample applied when available; otherwise fetches the catalog.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {Promise<void>}
  */
 async function freezeSampleIfPromptDiverged(node) {
@@ -474,7 +583,7 @@ async function freezeSampleIfPromptDiverged(node) {
 
 /**
  * Refresh sample combo values and apply or unlock the chosen sample.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {Promise<void>}
  */
 async function syncSample(node) {
@@ -509,7 +618,7 @@ async function syncSample(node) {
 
 /**
  * Bind the sample combo; re-sync after graph load even if already bound.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {void}
  */
 function bindSamplePicker(node) {
@@ -562,7 +671,7 @@ const STATUS = "Enhance status";
 
 /**
  * Join a UI message field into a display string.
- * @param {object} message
+ * @param {EzExecutedMessage} message
  * @param {string} key
  * @returns {string}
  */
@@ -579,7 +688,7 @@ function textFromMessage(message, key) {
 
 /**
  * Create or update a non-serialized STRING widget.
- * @param {object} node
+ * @param {EzNode} node
  * @param {string} name
  * @param {string} text
  * @param {boolean} multiline
@@ -610,7 +719,7 @@ function upsertWidget(node, name, text, multiline) {
 
 /**
  * Fill CLIP prompt and enhance-status widgets.
- * @param {object} node
+ * @param {EzNode} node
  * @param {string} text
  * @param {string} status
  * @returns {void}
@@ -622,9 +731,9 @@ function populate(node, text, status) {
 
 /**
  * Resolve a graph link by id (array, map, or object keyed by id).
- * @param {object|undefined} graph
- * @param {*} lid
- * @returns {object|Array|null}
+ * @param {EzGraph|undefined} graph
+ * @param {number|string} lid
+ * @returns {EzLink|Array<*>|null}
  */
 function linkById(graph, lid) {
   const links = graph?.links;
@@ -647,7 +756,7 @@ function linkById(graph, lid) {
 
 /**
  * Destination node id and slot from a serialized or live link.
- * @param {object|Array|null} link
+ * @param {EzLink|Array<*>|null} link
  * @returns {{nodeId: *, slot: number}|null}
  */
 function linkDest(link) {
@@ -667,9 +776,9 @@ function linkDest(link) {
 
 /**
  * Live graph node by id.
- * @param {object|undefined} graph
- * @param {*} nid
- * @returns {object|undefined}
+ * @param {EzGraph|undefined} graph
+ * @param {number|string} nid
+ * @returns {EzNode|undefined}
  */
 function nodeById(graph, nid) {
   if (graph && typeof graph.getNodeById === "function") {
@@ -680,9 +789,9 @@ function nodeById(graph, nid) {
 
 /**
  * CLIP / ACE encoder nodes wired from one STRING output slot.
- * @param {object} node
+ * @param {EzNode} node
  * @param {number} slot
- * @returns {{node: object, widgetName: string}[]}
+ * @returns {Array<{node: EzNode, widgetName: string}>}
  */
 function linkedDestinations(node, slot) {
   const output = node.outputs?.[slot];
@@ -711,7 +820,7 @@ function linkedDestinations(node, slot) {
 
 /**
  * Write a linked CLIP/ACE preview widget. Queue uses the STRING link.
- * @param {object} dest
+ * @param {EzNode} dest
  * @param {string} widgetName
  * @param {string} text
  * @returns {void}
@@ -747,8 +856,8 @@ function setLinkedClipWidget(dest, widgetName, text) {
 /**
  * Copy slot text onto linked CLIPTextEncode / ACE encoder widgets and record
  * the destinations so an unlink can un-pin the widget afterwards.
- * @param {object} node
- * @param {Object<number, string>} slotTexts
+ * @param {EzNode} node
+ * @param {Record<number, string>} slotTexts
  * @returns {void}
  */
 function pushClipPreview(node, slotTexts) {
@@ -779,7 +888,7 @@ function pushClipPreview(node, slotTexts) {
 /**
  * Source text this node pushes into an encoder widget of this name.
  * Mirrors the tag/lyrics/prompt selection in syncLinkedClipFromWidgets.
- * @param {object} node
+ * @param {EzNode} node
  * @param {string} widgetName
  * @returns {string}
  */
@@ -795,7 +904,7 @@ function sourceTextForWidget(node, widgetName) {
  * Un-pin encoder widgets whose link the user deleted: a widget left with
  * options.serialize false is dropped from the queue payload entirely, so it
  * goes back to serializing and carries the current source text.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {void}
  */
 function restoreUnlinkedClipWidgets(node) {
@@ -842,8 +951,8 @@ function restoreUnlinkedClipWidgets(node) {
 
 /**
  * After Queue, copy the rewritten CLIP string onto linked encoder widgets.
- * @param {object} node
- * @param {object} message
+ * @param {EzNode} node
+ * @param {EzExecutedMessage} message
  * @returns {void}
  */
 function pushClipPreviewFromMessage(node, message) {
@@ -863,7 +972,7 @@ function pushClipPreviewFromMessage(node, message) {
 
 /**
  * True when the Enhance / Rewrite prompt widget is on.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {boolean}
  */
 function enhanceIsOn(node) {
@@ -886,14 +995,14 @@ function enhanceIsOn(node) {
 
 /**
  * Prompt / tags / lyrics text this node feeds into the encoder slots.
- * @param {object} node
- * @returns {Object<number, string>}
+ * @param {EzNode} node
+ * @returns {Record<number, string>}
  */
 function slotTextsFromWidgets(node) {
   const tags = widgetByName(node, "tags");
   const lyrics = widgetByName(node, "lyrics");
   const prompt = widgetByName(node, "prompt");
-  /** @type {Object<number, string>} */
+  /** @type {Record<number, string>} */
   const slotTexts = {};
   if (tags) {
     slotTexts[0] = String(tags.value ?? "");
@@ -910,7 +1019,7 @@ function slotTextsFromWidgets(node) {
 
 /**
  * Push current prompt/tags/lyrics onto linked CLIP widgets.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {void}
  */
 function syncLinkedClipFromWidgets(node) {
@@ -938,7 +1047,7 @@ function syncLinkedClipFromWidgets(node) {
 
 /**
  * Family id on a Negative Prompt Enhance node.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {string}
  */
 function negativeFamily(node) {
@@ -949,9 +1058,9 @@ function negativeFamily(node) {
 /**
  * Set one widget and sync only its own widgets_values slot.
  * Mirrors ez_quality.js setWidgetValue so App Mode sees the new state.
- * @param {object} node
- * @param {object} widget
- * @param {*} value
+ * @param {EzNode} node
+ * @param {EzWidget} widget
+ * @param {string|number|boolean|null} value
  * @returns {void}
  */
 function setNodeWidgetValue(node, widget, value) {
@@ -970,7 +1079,7 @@ function setNodeWidgetValue(node, widget, value) {
 /**
  * Copy Rewrite negative onto the other nodes of the same family.
  * One App toggle drives every shot. The guard stops the callback loop.
- * @param {object} source
+ * @param {EzNode} source
  * @returns {void}
  */
 function syncNegativeFamily(source) {
@@ -1004,7 +1113,7 @@ function syncNegativeFamily(source) {
 /**
  * Chain the Enhance / Rewrite prompt widget onto the CLIP preview.
  * Rewrite negative also copies across the same family.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {void}
  */
 function bindEnhanceWatcher(node) {
@@ -1039,7 +1148,7 @@ function bindEnhanceWatcher(node) {
 
 /**
  * Bind prompt/enhance watchers and seed the linked CLIP preview.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {void}
  */
 function bindClipPreview(node) {
@@ -1056,8 +1165,8 @@ app.registerExtension({
   name: "ez_prompt_enhance.preview",
   /**
    * Wrap enhance/sample nodes with preview widgets and the sample picker.
-   * @param {object} nodeType
-   * @param {object} nodeData
+   * @param {EzNodeType} nodeType
+   * @param {EzNodeData} nodeData
    * @returns {Promise<void>}
    */
   async beforeRegisterNodeDef(nodeType, nodeData) {
@@ -1090,7 +1199,7 @@ app.registerExtension({
     const onExecuted = nodeType.prototype.onExecuted;
     /**
      * Refresh CLIP preview widgets from the last execution payload.
-     * @param {object} message
+     * @param {EzExecutedMessage} message
      * @returns {void}
      */
     nodeType.prototype.onExecuted = function (message) {

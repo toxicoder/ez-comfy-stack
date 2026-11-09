@@ -17,6 +17,89 @@
  * and rethrows, so an aborted load aborts exactly as it did before.
  */
 import { app } from "../../scripts/app.js";
+/**
+ * Raw value a report field may carry before the core stringifies it.
+ * @typedef {string|number|boolean|null|undefined} EzFieldValue
+ */
+
+/**
+ * Context or Environment input: `[[label, value], ...]` or a plain object.
+ * @typedef {Array<Array<*>>|Object<string, *>} EzPairSource
+ */
+
+/**
+ * Opaque handle on `window.EzFeedback`; the core is loaded lazily.
+ * @typedef {Object<string, *>} EzFeedbackCore
+ */
+
+/**
+ * ComfyUI `app.api`, untyped under `--noResolve`.
+ * @typedef {Object<string, *>} EzApi
+ */
+
+/**
+ * `node.graph.extra`: keys the frontend owns, this pack only reads.
+ * @typedef {Object<string, *>} EzGraphExtra
+ */
+
+/**
+ * The App Mode block stamped on the graph (`extra.lab_app_mode`).
+ * @typedef {Object<string, *>} EzAppMode
+ */
+
+/**
+ * Parsed `/system_stats` response; the frontend owns its shape.
+ * @typedef {Object<string, *>} EzSystemStats
+ */
+
+/**
+ * Environment facts a report carries, one string per fact.
+ * @typedef {Object<string, string>} EzSystemFacts
+ */
+
+/**
+ * ComfyUI event or its `detail`; the frontend owns the shape.
+ * @typedef {Object<string, *>} EzComfyEvent
+ */
+
+/**
+ * Failure detail normalized out of a ComfyUI execution error.
+ * @typedef {Object} EzFailureDetail
+ * @property {string} [prompt_id] Prompt the failure belongs to.
+ * @property {string|number} [node_id] Failing node id.
+ * @property {string} [node_type] Failing node type.
+ * @property {string} [exception_type] Exception class name.
+ * @property {string} [exception_message] Exception message.
+ * @property {string} [traceback] Traceback text.
+ * @property {EzJsonMap} [current_inputs] Widget values of the failing node.
+ * @property {EzJsonMap} [current_outputs] Outputs of the failing node.
+ */
+
+/**
+ * Open-ended JSON bag; the sender owns keys this file cannot pin down.
+ * @typedef {Object<string, *>} EzJsonMap
+ */
+
+/**
+ * Overrides a caller layers onto an auto-built report.
+ * @typedef {Object} EzReportOverrides
+ * @property {string} [summary] One-line issue summary.
+ * @property {EzPairSource} [context] Context pairs.
+ * @property {string} [traceback] Traceback text.
+ */
+
+/**
+ * Report as the core's dialog takes it in; every field is optional.
+ * @typedef {Object} EzReportPartial
+ * @property {string} [kind] `bug` or `enhancement`.
+ * @property {string} [surface] Shared surface id; `global` when omitted.
+ * @property {string} [app] `extra.lab_rel` when the surface is the App.
+ * @property {string} [summary] One-line issue summary.
+ * @property {EzPairSource} [context] Caller-supplied context pairs.
+ * @property {EzPairSource} [environment] Caller-supplied environment pairs.
+ * @property {string} [traceback] Traceback rendered as a fenced block.
+ */
+
 
 const BAR_ID = "ez-fb-bar";
 const HOST_SELECTOR = "[data-testid=linear-widgets]";
@@ -41,7 +124,7 @@ const ERROR_KEYS = [
 
 /**
  * The shared machinery, resolved lazily so load order cannot break us.
- * @returns {object|null} `window.EzFeedback`, or null before it loads.
+ * @returns {EzFeedbackCore|null} `window.EzFeedback`, or null before it loads.
  */
 function core() {
   return (typeof window !== "undefined" && window.EzFeedback) || null;
@@ -49,7 +132,7 @@ function core() {
 
 /**
  * Comfy API client when the frontend exposes one.
- * @returns {object|null} `app.api`.
+ * @returns {EzApi|null} `app.api`.
  */
 function apiClient() {
   return (app && app.api) || null;
@@ -71,7 +154,7 @@ function apiUrl(path, unprefixed) {
 
 /**
  * Collapse whitespace and cap a field so a report line stays short.
- * @param {*} value Raw text.
+ * @param {EzFieldValue} value Raw text.
  * @param {number} max Maximum length, including the trailing dots when trimmed.
  * @returns {string} Single-line text.
  */
@@ -91,7 +174,7 @@ function clip(value, max) {
 
 /**
  * `extra` of the graph that is open right now.
- * @returns {object} Graph extra, or `{}`.
+ * @returns {EzGraphExtra} Graph extra, or `{}`.
  */
 function graphExtra() {
   return (app && app.graph && app.graph.extra) || {};
@@ -117,7 +200,7 @@ function nodeCount() {
 
 /**
  * The App Mode block stamped on the graph.
- * @returns {object} `{lane, occupancy, default_view}` shaped data.
+ * @returns {EzAppMode} `{lane, occupancy, default_view}` shaped data.
  */
 function appMode() {
   const mode = graphExtra().lab_app_mode;
@@ -133,8 +216,8 @@ const pendingLoadNodes = [];
 
 /**
  * Pick the torch / CUDA / GPU / OS facts a report should carry.
- * @param {object} data Parsed `/system_stats` payload.
- * @returns {object} Fact map; empty keys are dropped later.
+ * @param {EzSystemStats} data Parsed `/system_stats` payload.
+ * @returns {EzSystemFacts} Fact map; empty keys are dropped later.
  */
 function pickSystemFacts(data) {
   const payload = data && typeof data === "object" ? data : {};
@@ -239,8 +322,8 @@ function graphContext() {
 /**
  * Build the partial report a click should open.
  * @param {string} kind "bug" or "enhancement".
- * @param {object} [extra] `{summary, context, traceback}` overrides.
- * @returns {object} Partial report for the core dialog.
+ * @param {EzReportOverrides} [extra] `{summary, context, traceback}` overrides.
+ * @returns {EzReportPartial} Partial report for the core dialog.
  */
 function reportFor(kind, extra) {
   const options = extra && typeof extra === "object" ? extra : {};
@@ -259,8 +342,8 @@ function reportFor(kind, extra) {
 
 /**
  * Pull the fields the frontend sends on an execution event.
- * @param {object} event Comfy event, or its `detail`.
- * @returns {object} Normalized failure detail.
+ * @param {EzComfyEvent} event Comfy event, or its `detail`.
+ * @returns {EzFailureDetail} Normalized failure detail.
  */
 function failureDetail(event) {
   const raw = (event && event.detail) || event || {};
@@ -278,7 +361,7 @@ function failureDetail(event) {
 
 /**
  * One-line detail for the ring buffer entry.
- * @param {object} detail Normalized failure detail.
+ * @param {EzFailureDetail} detail Normalized failure detail.
  * @returns {string} Compact text.
  */
 function failureLine(detail) {
@@ -300,7 +383,7 @@ function failureLine(detail) {
 
 /**
  * Textual traceback for the report, from the event's `traceback` field.
- * @param {object} detail Normalized failure detail.
+ * @param {EzFailureDetail} detail Normalized failure detail.
  * @returns {string} Traceback text, or `""`.
  */
 function failureTraceback(detail) {
@@ -313,7 +396,7 @@ function failureTraceback(detail) {
 
 /**
  * JSON dump of the failing node inputs and outputs for `## Context`.
- * @param {object} detail Normalized failure detail.
+ * @param {EzFailureDetail} detail Normalized failure detail.
  * @returns {Array<Array<string>>} Context pairs from the event.
  */
 function failureContext(detail) {
@@ -341,7 +424,7 @@ function failureContext(detail) {
  * queue path, so a run cannot be blocked by report machinery.
  * @param {string} kind Report kind, "bug" for both failure events.
  * @param {string} headline Banner line.
- * @param {object} event Comfy execution event.
+ * @param {EzComfyEvent} event Comfy execution event.
  * @returns {void}
  */
 function captureFailure(kind, headline, event) {

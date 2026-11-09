@@ -7,15 +7,139 @@
  */
 import { app } from "../../scripts/app.js";
 
+/**
+ * One mode from the modes half of modes.json. The file reads every field
+ * defensively with String(), so all of them stay optional.
+ * @typedef {{id?: string, label?: string, category?: string}} EzModeRow
+ */
+
+/**
+ * One category from the categories half of modes.json.
+ * @typedef {{id?: string, label?: string}} EzCategoryRow
+ */
+
+/**
+ * Widget on a desk node. ComfyUI invokes callback with the widget as ``this``
+ * and beforeQueued right before the queue payload is serialized.
+ * @typedef {{
+ *   name: string,
+ *   value?: string|number|null|undefined,
+ *   options?: {values?: unknown[]},
+ *   callback?: (
+ *     this: EzWidget,
+ *     value: unknown,
+ *     canvas?: unknown,
+ *     node?: EzNode
+ *   ) => unknown,
+ *   beforeQueued?: (this: EzWidget) => void,
+ *   inputEl?: {readOnly?: boolean},
+ *   _ezModeValuesBound?: boolean,
+ *   _ezStudioWatch?: boolean
+ * }} EzWidget
+ */
+
+/**
+ * Graph handle used to walk nodes and dirty the canvas.
+ * @typedef {{
+ *   nodes?: EzNode[],
+ *   setDirtyCanvas?: (dirtyCanvas: boolean, dirty: boolean) => void
+ * }} EzGraph
+ */
+
+/**
+ * Node on the still desk. --noResolve leaves the ComfyUI frontend untyped, so
+ * only the members this file reads or writes are named.
+ * @typedef {{
+ *   type?: string,
+ *   comfyClass?: string,
+ *   widgets?: EzWidget[],
+ *   widgets_values?: unknown[],
+ *   graph?: EzGraph,
+ *   _ezModeBound?: boolean,
+ *   _ezModeLabels?: string[],
+ *   _ezPreviewWrite?: boolean
+ * }} EzNode
+ */
+
+/**
+ * Widget values the preview route resolves, sent as the request body.
+ * @typedef {{
+ *   category: string|number|null|undefined,
+ *   mode: string|number|null|undefined,
+ *   iterate: string|number|null|undefined,
+ *   filename: string|number|null|undefined,
+ *   format: string|number|null|undefined,
+ *   width: string|number|null|undefined,
+ *   height: string|number|null|undefined,
+ *   batch: string|number|null|undefined,
+ *   size_mode: string|number|null|undefined,
+ *   look: string|number|null|undefined,
+ *   prompt: string|number|null|undefined,
+ *   sample: string|number|null|undefined,
+ *   style: string|number|null|undefined,
+ *   rewrite: string|number|null|undefined,
+ *   steps: string|number|null|undefined,
+ *   cfg: string|number|null|undefined,
+ *   unet: string|number|null|undefined,
+ *   seed: string|number|null|undefined,
+ *   seed_control: string|number|null|undefined,
+ *   lab_rel: string
+ * }} EzPreviewBody
+ */
+
+/**
+ * Reply from /ez_image/studio-preview, or the local unavailable stub.
+ * @typedef {{
+ *   ok?: boolean,
+ *   summary?: string,
+ *   format_label?: string|number|null,
+ *   width?: string|number|null,
+ *   height?: string|number|null,
+ *   batch?: string|number|null,
+ *   enhance_mode?: string|number|null,
+ *   hint?: string|number|null,
+ *   prefix?: string|number|null
+ * }} EzPreviewPayload
+ */
+
+/**
+ * One file SaveImage reported in its execution message.
+ * @typedef {{
+ *   filename?: string,
+ *   subfolder?: string,
+ *   type?: string
+ * }} EzSavedImage
+ */
+
+/**
+ * Execution message handed to SaveImage's onExecuted hook.
+ * @typedef {{images?: EzSavedImage[]}} EzExecutedMessage
+ */
+
+/**
+ * Registered node definition, seen before ComfyUI registers it.
+ * @typedef {{
+ *   prototype: {
+ *     onNodeCreated?: (this: EzNode, ...args: unknown[]) => void;
+ *     onExecuted?: (this: EzNode, message: EzExecutedMessage) => void;
+ *   }
+ * }} EzNodeType
+ */
+
+/**
+ * Node definition metadata; only the class name is read here.
+ * @typedef {{name: string}} EzNodeDef
+ */
+
 let catalog = null;
 
 /**
  * Find a widget by name on a node. A missing node is a miss, not a throw:
  * LiteGraph creates nodes one at a time, so a class this file walks can be
  * absent from the graph (or not built yet) while these bindings run.
- * @param {object|undefined} node
+ * @param {EzNode|undefined} node
  * @param {string} name
- * @returns {object|undefined}
+ * @returns {EzWidget|undefined}
  */
 function widgetByName(node, name) {
   return node?.widgets?.find((w) => w.name === name);
@@ -23,7 +147,7 @@ function widgetByName(node, name) {
 
 /**
  * Catalog mode rows from the last successful fetch, or an empty list.
- * @returns {object[]}
+ * @returns {EzModeRow[]}
  */
 function modeRows() {
   const rows = catalog?.modes;
@@ -32,7 +156,7 @@ function modeRows() {
 
 /**
  * Catalog category rows, or an empty list.
- * @returns {object[]}
+ * @returns {EzCategoryRow[]}
  */
 function categoryRows() {
   const rows = catalog?.categories;
@@ -41,7 +165,7 @@ function categoryRows() {
 
 /**
  * Resolve a combo value to a category id.
- * @param {string} value
+ * @param {string|number|null|undefined} value
  * @returns {string}
  */
 function categoryId(value) {
@@ -63,7 +187,7 @@ function categoryId(value) {
 
 /**
  * Mode labels in one category, file order.
- * @param {string} category
+ * @param {string|number|null|undefined} category
  * @returns {string[]}
  */
 function labelsForCategory(category) {
@@ -75,8 +199,8 @@ function labelsForCategory(category) {
 
 /**
  * Bind a getter-only values list so refreshComboInNodes cannot restore the union.
- * @param {object} widget
- * @param {object} node
+ * @param {EzWidget} widget
+ * @param {EzNode} node
  * @returns {void}
  */
 function bindModeValues(widget, node) {
@@ -113,7 +237,7 @@ function bindModeValues(widget, node) {
 /**
  * Filter Mode to the selected Category; pick the first row when the current
  * value is not in that category.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {void}
  */
 function applyCategory(node) {
@@ -141,7 +265,7 @@ function applyCategory(node) {
 
 /**
  * Bind category/mode callbacks on one EZImageMode node.
- * @param {object} node
+ * @param {EzNode} node
  * @returns {void}
  */
 function bindModeNode(node) {
@@ -159,8 +283,8 @@ function bindModeNode(node) {
   if (categoryWidget) {
     /**
      * Filter Mode when Category changes.
-     * @param {*} value
-     * @returns {*}
+     * @param {string|number|null|undefined} value
+     * @returns {string|number|null|undefined}
      */
     categoryWidget.callback = function (value) {
       categoryCb?.apply(this, arguments);
@@ -243,7 +367,7 @@ function apiUrl(path) {
 /**
  * First node of a Comfy class on the open graph.
  * @param {string} typeName
- * @returns {object|undefined}
+ * @returns {EzNode|undefined}
  */
 function nodeByType(typeName) {
   return (app.graph?.nodes || []).find((node) => {
@@ -254,7 +378,7 @@ function nodeByType(typeName) {
 
 /**
  * True for Comfy booleans and yes/on strings.
- * @param {*} value
+ * @param {unknown} value
  * @returns {boolean}
  */
 function isOn(value) {
@@ -272,9 +396,9 @@ function isOn(value) {
 
 /**
  * Write one widget slot. Does not rebuild the whole widgets_values list.
- * @param {object|undefined} node
- * @param {object|undefined} widget
- * @param {*} value
+ * @param {EzNode|undefined} node
+ * @param {EzWidget|undefined} widget
+ * @param {string|number|null|undefined} value
  * @returns {void}
  */
 function slotWrite(node, widget, value) {
@@ -313,7 +437,7 @@ function slotWrite(node, widget, value) {
  * Widget value by node class and widget name.
  * @param {string} typeName
  * @param {string} widgetName
- * @returns {*}
+ * @returns {string|number|null|undefined}
  */
 function widgetValue(typeName, widgetName) {
   const node = nodeByType(typeName);
@@ -333,7 +457,7 @@ function isImageStudio() {
 
 /**
  * Snapshot of the widgets the preview route resolves.
- * @returns {object}
+ * @returns {EzPreviewBody}
  */
 function previewBody() {
   return {
@@ -362,7 +486,7 @@ function previewBody() {
 
 /**
  * Copy resolved values onto the widgets Queue's links would otherwise hide.
- * @param {object} payload
+ * @param {EzPreviewPayload} payload
  * @returns {void}
  */
 function applyPreview(payload) {
@@ -440,7 +564,7 @@ function schedulePreview() {
  * Chain a widget callback so edits refresh This run. A missing node is a
  * no-op taken before the closure captures anything, so the chained callback
  * can never run against a class that is not on the graph.
- * @param {object|undefined} node
+ * @param {EzNode|undefined} node
  * @param {string} widgetName
  * @returns {void}
  */
@@ -456,7 +580,7 @@ function watchWidget(node, widgetName) {
   const prior = widget.callback;
   /**
    * Chain the prior callback, then refresh unless a preview write caused it.
-   * @returns {*}
+   * @returns {unknown}
    */
   widget.callback = function () {
     const value = prior?.apply(this, arguments);
@@ -529,7 +653,7 @@ function deferStudioBindings() {
 
 /**
  * Copy the first saved still into the reference when Iterate is on.
- * @param {object|undefined} message
+ * @param {EzExecutedMessage|undefined} message
  * @returns {Promise<void>}
  */
 async function feedLastStill(message) {
@@ -582,8 +706,8 @@ app.registerExtension({
   name: "ez_image.mode",
   /**
    * Wrap EZImageMode so Category filters Mode on create.
-   * @param {object} nodeType
-   * @param {object} nodeData
+   * @param {EzNodeType} nodeType
+   * @param {EzNodeDef} nodeData
    * @returns {Promise<void>}
    */
   async beforeRegisterNodeDef(nodeType, nodeData) {
@@ -591,7 +715,7 @@ app.registerExtension({
       const onExecuted = nodeType.prototype.onExecuted;
       /**
        * After a save, feed the still back when Iterate is on.
-       * @param {object} message
+       * @param {EzExecutedMessage} message
        * @returns {void}
        */
       nodeType.prototype.onExecuted = function (message) {

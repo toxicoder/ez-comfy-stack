@@ -15,6 +15,115 @@
  * `/issues/new` handoff.
  */
 
+/**
+ * Raw value a report field may carry before it is stringified for markdown.
+ * @typedef {string|number|boolean|null|undefined} EzFieldValue
+ */
+
+/**
+ * Context or Environment input: `[[label, value], ...]` or a plain object.
+ * @typedef {Array<Array<*>>|Object<string, *>} EzPairSource
+ */
+
+/**
+ * Narrative text keyed by the narrative key of the report's kind.
+ * @typedef {Object<string, string>} EzNarrative
+ */
+
+/**
+ * Open-ended JSON bag from the server; keys this file cannot pin down.
+ * @typedef {Object<string, *>} EzJsonMap
+ */
+
+/**
+ * Browser facts for the `## Browser` block.
+ * @typedef {Object} EzBrowserFacts
+ * @property {string} ua User agent string.
+ * @property {string} viewport Viewport as `WxH`.
+ * @property {string} dpr Device pixel ratio, stringified.
+ * @property {string} lang Browser language tag.
+ * @property {boolean} online Whether the browser reports itself online.
+ * @property {string} pageUrl Full URL of the page that reported.
+ */
+
+/**
+ * One failure handed to `recordError`; only `message` is required.
+ * @typedef {Object} EzErrorEntry
+ * @property {string|number|null} [ts] Stamp for the row; now when omitted.
+ * @property {string} [surface] Surface the failure came from.
+ * @property {string} message Error message, clipped when it is stored.
+ * @property {string} [detail] Error detail, clipped when it is stored.
+ */
+
+/**
+ * One row kept in the client ring buffer.
+ * @typedef {Object} EzErrorRow
+ * @property {string} ts ISO stamp, or `unknown` when none could be read.
+ * @property {string} surface Surface id, `global` when the entry had none.
+ * @property {string} message Clipped error message.
+ * @property {string} detail Clipped error detail.
+ */
+
+/**
+ * Report as a caller hands it in; `reportPayload` fills what is missing.
+ * @typedef {Object} EzReportPartial
+ * @property {string} [kind] `bug` or `enhancement`.
+ * @property {string} [surface] Shared surface id; `global` when omitted.
+ * @property {string} [app] `extra.lab_rel` when the surface is the App.
+ * @property {string} [summary] One-line issue summary.
+ * @property {EzPairSource} [context] Caller-supplied context pairs.
+ * @property {EzPairSource} [environment] Caller-supplied environment pairs.
+ * @property {Array<EzErrorEntry>} [errors] Errors to list; the ring otherwise.
+ * @property {EzBrowserFacts} [browser] Browser facts; this page's otherwise.
+ * @property {string} [traceback] Traceback rendered as a fenced block.
+ * @property {EzNarrative} [narrative] Narrative text by narrative key.
+ * @property {boolean} [blanks] Render `FILL_IN` placeholders; default true.
+ */
+
+/**
+ * Report normalized by `reportPayload`: every field carries a value.
+ * @typedef {Object} EzReport
+ * @property {string} kind `bug` or `enhancement`.
+ * @property {string} surface Shared surface id, `global` when none was given.
+ * @property {string} app `extra.lab_rel` when the surface is the App.
+ * @property {string} summary One-line issue summary.
+ * @property {Array<Array<string>>} context Context pairs, redacted.
+ * @property {Array<Array<string>>} environment Environment pairs.
+ * @property {Array<EzErrorEntry>} errors Errors listed under Recent errors.
+ * @property {EzBrowserFacts} browser Browser facts for the Browser block.
+ * @property {string} traceback Traceback text, empty when none was given.
+ * @property {EzNarrative|null} narrative Filled narrative, null when blank.
+ * @property {boolean} blanks Whether `FILL_IN` placeholders render.
+ */
+
+/**
+ * Server config from `GET /ez_feedback/config`; `{}` before the first fetch.
+ * @typedef {Object} EzConfig
+ * @property {string} [repoUrl] Repository issues are filed against.
+ * @property {boolean} [tokenPresent] Whether the server holds a token.
+ * @property {EzJsonMap} [env] Server-side environment facts.
+ * @property {EzJsonMap} [labels] Label names by report kind.
+ */
+
+/**
+ * Text the operator asks the local model to rewrite.
+ * @typedef {Object} EzEnhanceInput
+ * @property {string} [kind] `bug` or `enhancement`.
+ * @property {string} [text] Rough text to rewrite.
+ */
+
+/**
+ * Options for a labelled button.
+ * @typedef {Object} EzButtonOpts
+ * @property {boolean} [icon] Prepend the GitHub mark.
+ */
+
+/**
+ * Options for the status banner.
+ * @typedef {Object} EzBannerOpts
+ * @property {string} [message] Banner line that replaces the default text.
+ */
+
 export const REPO = "toxicoder/ez-comfy-stack";
 /** Repository reports are filed against. */
 
@@ -117,7 +226,7 @@ const TOKEN_RE = /(?:ghp|gho|github_pat|hf)_[A-Za-z0-9][A-Za-z0-9_-]{3,}/g;
  * Every report field is operator- or graph-controlled, including captured
  * `current_inputs`, so a token can arrive through a widget value or a
  * traceback. The server redacts its own path; this closes the client path.
- * @param {*} value Raw text; stringified.
+ * @param {EzFieldValue} value Raw text; stringified.
  * @returns {string} Text with secret-shaped runs replaced by `[redacted]`.
  */
 export function redact(value) {
@@ -129,7 +238,7 @@ export function redact(value) {
 
 /**
  * Collapse whitespace and cap a field so the issue URL stays openable.
- * @param {*} value Raw text.
+ * @param {EzFieldValue} value Raw text.
  * @param {number} max Maximum length, including the trailing dots when trimmed.
  * @returns {string} A single-line string.
  */
@@ -149,7 +258,7 @@ export function clip(value, max) {
 
 /**
  * Normalize a caller-supplied kind.
- * @param {*} value Anything; only "enhancement" is distinct.
+ * @param {EzFieldValue} value Anything; only "enhancement" is distinct.
  * @returns {string} "bug" or "enhancement".
  */
 function kindKey(value) {
@@ -184,7 +293,7 @@ export function githubIcon() {
 
 /**
  * GitHub labels for a kind - only labels that exist in the repo.
- * @param {*} value "bug" or "enhancement".
+ * @param {string} value "bug" or "enhancement".
  * @returns {string[]} One label.
  */
 export function labelsFor(value) {
@@ -193,8 +302,8 @@ export function labelsFor(value) {
 
 /**
  * Title area for a surface: `app:<lab_rel>`, the bare surface id, or global.
- * @param {*} surface One of the shared surface ids.
- * @param {*} app `extra.lab_rel` when the surface is the running App.
+ * @param {string|null|undefined} surface One of the shared surface ids.
+ * @param {string|null|undefined} app `extra.lab_rel` when the surface is the running App.
  * @returns {string} The area token.
  */
 function areaFor(surface, app) {
@@ -208,7 +317,7 @@ function areaFor(surface, app) {
 
 /**
  * Stringify one report value for a markdown line; booleans render yes / no.
- * @param {*} value Field value.
+ * @param {EzFieldValue} value Field value.
  * @returns {string} Single-line text, empty when there is nothing to show.
  */
 function valueText(value) {
@@ -260,7 +369,7 @@ function browserFacts() {
 
 /**
  * Accept `[[label, value], ...]` or a plain object as label/value pairs.
- * @param {*} value Pairs array or object.
+ * @param {EzPairSource|null} value Pairs array or object.
  * @returns {Array<Array<string>>} Well-formed pairs only.
  */
 function toPairs(value) {
@@ -281,7 +390,7 @@ function toPairs(value) {
 
 /**
  * Render `- label: value` lines for a Context or Environment block.
- * @param {Array<Array<*>>|null} pairs Pairs; may be missing.
+ * @param {EzPairSource|null} pairs Pairs; may be missing.
  * @returns {string[]} Markdown bullets, values redacted and clipped.
  */
 function contextLines(pairs) {
@@ -299,7 +408,7 @@ function contextLines(pairs) {
 
 /**
  * Render the `## Recent errors` block from the client ring buffer.
- * @param {Array<object>|null} entries Ring-buffer entries.
+ * @param {Array<EzErrorEntry>|null} entries Ring-buffer entries.
  * @param {string} surface Report surface used when an entry carries none.
  * @returns {string[]} Markdown bullets, newest first as supplied.
  */
@@ -327,9 +436,9 @@ function errorLines(entries, surface) {
 
 /**
  * Narrative as the caller supplied it, reduced to the kind's keys.
- * @param {*} value Candidate narrative object.
+ * @param {EzNarrative|null} value Candidate narrative object.
  * @param {string} kind "bug" or "enhancement".
- * @returns {object|null} `{key: string}` for the kind, or null when empty.
+ * @returns {EzNarrative|null} `{key: string}` for the kind, or null when empty.
  */
 function narrativeInput(value, kind) {
   if (!value || typeof value !== "object") {
@@ -352,7 +461,7 @@ function narrativeInput(value, kind) {
  *
  * Unlike a context value this text is the operator's own report: it is
  * redacted and trimmed line by line, but never collapsed and never clipped.
- * @param {*} value Narrative value.
+ * @param {EzFieldValue} value Narrative value.
  * @returns {string[]} Lines, empty when the value carries no text.
  */
 function narrativeLines(value) {
@@ -372,7 +481,7 @@ function narrativeLines(value) {
 
 /**
  * Render the `## Browser` block.
- * @param {object|null} browser Browser facts.
+ * @param {EzBrowserFacts|null} browser Browser facts.
  * @returns {string[]} Markdown bullets for the fields that carry a value.
  */
 function browserLines(browser) {
@@ -401,7 +510,7 @@ function section(heading, lines) {
 
 /**
  * Merge caller context with server-reported environment facts.
- * @param {Array<Array<*>>|object|null} own Caller-supplied pairs.
+ * @param {EzPairSource|null} own Caller-supplied pairs.
  * @returns {Array<Array<*>>} Caller pairs first, server env filling the rest.
  */
 function mergeEnvironment(own) {
@@ -421,8 +530,8 @@ function mergeEnvironment(own) {
  * Everything is optional except `kind` and `surface`. Missing browser facts,
  * environment pairs, and errors are filled from this page, the server config,
  * and the ring buffer.
- * @param {object} partial Partial report.
- * @returns {object} `{kind, surface, app, summary, context, environment,
+ * @param {EzReportPartial} partial Partial report.
+ * @returns {EzReport} `{kind, surface, app, summary, context, environment,
  *   errors, browser, traceback, narrative, blanks}`.
  */
 export function reportPayload(partial) {
@@ -445,7 +554,7 @@ export function reportPayload(partial) {
 
 /**
  * Issue title `[<area>] <summary>`, clipped to 140 chars, no prefix for global.
- * @param {object} report `{kind, surface, app, summary}`.
+ * @param {EzReportPartial} report `{kind, surface, app, summary}`.
  * @returns {string} Single-line title.
  */
 export function buildTitle(report) {
@@ -466,7 +575,7 @@ export function buildTitle(report) {
  * for an `enhancement`. Every other block keeps its heading only when it
  * carries content. A traceback, when supplied, is a fenced block after
  * `## Browser`.
- * @param {object} report Full or partial report.
+ * @param {EzReportPartial} report Full or partial report.
  * @returns {string} Markdown body without a trailing newline.
  */
 export function buildBody(report) {
@@ -540,7 +649,7 @@ function dropTraceback(body) {
  *
  * Drop order is `## Browser`, then `## Recent errors`, then `## Environment`,
  * then the traceback. Title and labels never drop.
- * @param {object} payload Full report shape.
+ * @param {EzReport} payload Full report shape.
  * @param {string} body Body text to encode.
  * @returns {string} Prefilled new-issue URL.
  */
@@ -574,7 +683,7 @@ function hrefFor(payload, body) {
  *
  * The dialog needs the flag to tell the operator that the prefilled body is
  * shorter than what they typed; `issueHref` keeps its plain-string contract.
- * @param {object} payload Full report shape.
+ * @param {EzReport} payload Full report shape.
  * @param {string} body Body text to encode.
  * @returns {{href: string, trimmed: boolean}} Prefilled URL and cut flag.
  */
@@ -618,7 +727,7 @@ function fit(build, body) {
 
 /**
  * Prefilled GitHub issue URL for a report.
- * @param {object} partial Report or partial report.
+ * @param {EzReportPartial} partial Report or partial report.
  * @returns {string} `https://github.com/<repo>/issues/new?title=&body=&labels=`.
  */
 export function issueHref(partial) {
@@ -633,7 +742,7 @@ export function issueHref(partial) {
  * offered; a blank edit falls back to the built body. `trimmed` is true when
  * the URL ladder no longer fit and `fit` cut the tail, which is the signal to
  * copy the full markdown instead of trusting the prefill.
- * @param {object} payload Report or partial report.
+ * @param {EzReportPartial} payload Report or partial report.
  * @param {string} [editedBody] Edited body text, used verbatim when non-empty.
  * @returns {{href: string, trimmed: boolean}} Prefilled URL and cut flag.
  */
@@ -651,8 +760,8 @@ export function issueHrefFor(payload, editedBody) {
  * Message and detail carry up to `MAX_ERROR_TEXT`: a real traceback head is
  * longer than a context field, and clipping it at 300 hid the one line that
  * named the failing op.
- * @param {object} entry `{ts, surface, message, detail}`; message is required.
- * @returns {object|null} The stored row, or null when there was no message.
+ * @param {EzErrorEntry} entry `{ts, surface, message, detail}`; message is required.
+ * @returns {EzErrorRow|null} The stored row, or null when there was no message.
  */
 export function recordError(entry) {
   const input = entry && typeof entry === "object" ? entry : {};
@@ -675,7 +784,7 @@ export function recordError(entry) {
 
 /**
  * Copy of the ring buffer, newest first.
- * @returns {Array<object>} Recorded errors.
+ * @returns {Array<EzErrorRow>} Recorded errors.
  */
 export function recentErrors() {
   return ring.slice();
@@ -683,8 +792,8 @@ export function recentErrors() {
 
 /**
  * Store the server config from `GET /ez_feedback/config`.
- * @param {object} cfg `{repoUrl, tokenPresent, env, labels}`.
- * @returns {object} The stored config.
+ * @param {EzConfig} cfg `{repoUrl, tokenPresent, env, labels}`.
+ * @returns {EzConfig} The stored config.
  */
 export function configure(cfg) {
   config = cfg && typeof cfg === "object" ? Object.assign({}, cfg) : {};
@@ -693,7 +802,7 @@ export function configure(cfg) {
 
 /**
  * Current server config.
- * @returns {object} The config, or `{}` before the first fetch.
+ * @returns {EzConfig} The config, or `{}` before the first fetch.
  */
 export function getConfig() {
   return config ? Object.assign({}, config) : {};
@@ -736,7 +845,7 @@ async function fetchConfig() {
 
 /**
  * Open the prefilled GitHub issue in a new tab.
- * @param {object} partial Report or partial report.
+ * @param {EzReportPartial} partial Report or partial report.
  * @returns {boolean} True when the tab opened.
  */
 export function openHandoff(partial) {
@@ -750,7 +859,7 @@ export function openHandoff(partial) {
 
 /**
  * File the report through the server when it holds a token.
- * @param {object} partial Report or partial report.
+ * @param {EzReportPartial} partial Report or partial report.
  * @param {string} [editedBody] Body as edited in the dialog; posted verbatim
  *   (the server redacts it) instead of the rebuilt one, so typed text survives.
  * @returns {Promise<object>} `{ok, url?, error?}`.
@@ -791,7 +900,7 @@ export async function fileDirect(partial, editedBody) {
  * Never rejects: an offline model, a missing route, or a 5xx all resolve
  * `{ok: false, error}` so the panel can show a line and keep the operator's
  * own text.
- * @param {object} input `{kind, text}`.
+ * @param {EzEnhanceInput} input `{kind, text}`.
  * @returns {Promise<object>} `{ok: true, text}` or `{ok: false, error}`.
  */
 export async function enhanceText(input) {
@@ -819,7 +928,7 @@ export async function enhanceText(input) {
  * Create a labelled button and set its type and class.
  * @param {string} label Button text.
  * @param {string} className `ez-fb-*` class list.
- * @param {object} [opts] `{icon: true}` prepends the GitHub mark.
+ * @param {EzButtonOpts} [opts] `{icon: true}` prepends the GitHub mark.
  * @returns {HTMLButtonElement} The button.
  */
 function makeButton(label, className, opts) {
@@ -913,7 +1022,7 @@ function onDialogKeydown(event) {
  *
  * The dialog opens synchronously so a click is never blocked on the network;
  * the token-gated button is added when the lazy config resolves.
- * @param {object} partial Report or partial report.
+ * @param {EzReportPartial} partial Report or partial report.
  * @returns {boolean} True when the dialog opened.
  */
 export function openReport(partial) {
@@ -1025,7 +1134,7 @@ export function openReport(partial) {
 
 /**
  * Report button wired to `openReport`, for any surface to drop in.
- * @param {object} partial Report or partial report.
+ * @param {EzReportPartial} partial Report or partial report.
  * @param {string} label Button text; defaults from the kind.
  * @returns {HTMLButtonElement} The button.
  */
@@ -1045,8 +1154,8 @@ export function button(partial, label) {
  *
  * Additive only: it never blocks or delays a queue, and one banner element is
  * reused so repeated failures cannot stack.
- * @param {object} partial Report or partial report used by the Report button.
- * @param {object} [opts] `{message}` override for the banner line.
+ * @param {EzReportPartial} partial Report or partial report used by the Report button.
+ * @param {EzBannerOpts} [opts] `{message}` override for the banner line.
  * @returns {HTMLElement|null} The banner element.
  */
 export function showBanner(partial, opts) {

@@ -15,6 +15,9 @@
 # A second ratchet scores the debt that fix retires directly: the count of
 # unnamed JSDoc types the source still claims, against
 # lints/js_object_baseline.json. Same law - down only, new file must be listed.
+# `--write-types-baseline` and `--write-object-baseline` regenerate one ledger
+# each from the current run; use them only inside a deliberate, reviewed
+# decrease.
 #
 # Requires node plus a TypeScript compiler: the pinned one in
 # docs-site/node_modules (same tool the docs-site typecheck target uses), or a
@@ -60,9 +63,12 @@ if [[ ! -f ${BASELINE} ]]; then
 fi
 
 WRITE=""
+WRITE_TYPES=""
 for arg in "$@"; do
   if [[ ${arg} == "--write-object-baseline" ]]; then
     WRITE="${arg}"
+  elif [[ ${arg} == "--write-types-baseline" ]]; then
+    WRITE_TYPES="${arg}"
   fi
 done
 
@@ -80,15 +86,15 @@ trap 'rm -f "${ERRS}"' EXIT
 "${TSC}" --ignoreConfig --noEmit --allowJs --checkJs --noResolve \
   --target es2022 --module esnext --strict false "${JS_FILES[@]}" >"${ERRS}" 2>&1 || true
 
-python3 - "${BASELINE}" "${ERRS}" <<'PY' || exit 1
+python3 - "${BASELINE}" "${ERRS}" "${WRITE_TYPES}" <<'PY' || exit 1
 """Compare per-file tsc diagnostics against the committed ratchet baseline."""
 import collections
 import json
+import os
 import re
 import sys
 
-baseline_path, errors_path = sys.argv[1], sys.argv[2]
-allowed = json.load(open(baseline_path, encoding="utf-8"))
+baseline_path, errors_path, write_types = sys.argv[1], sys.argv[2], sys.argv[3]
 pattern = re.compile(r"^(?P<path>custom_nodes/[^ :(]+\.js)\((?P<line>\d+),\d+\): error TS\d+")
 
 counts: collections.Counter[str] = collections.Counter()
@@ -96,6 +102,19 @@ for text in open(errors_path, encoding="utf-8"):
     match = pattern.match(text)
     if match:
         counts[match.group("path")] += 1
+
+if write_types == "--write-types-baseline":
+    payload = dict(sorted(counts.items()))
+    tmp = baseline_path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as handle:
+        json.dump(payload, handle, indent=2, sort_keys=True)
+        handle.write("\n")
+    os.replace(tmp, baseline_path)
+    total_w = sum(counts.values())
+    print(f"wrote {baseline_path}: {total_w} diagnostics across {len(counts)} files")
+    raise SystemExit(0)
+
+allowed = json.load(open(baseline_path, encoding="utf-8"))
 
 problems: list[str] = []
 for path, count in sorted(counts.items()):

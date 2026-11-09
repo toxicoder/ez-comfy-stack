@@ -12,6 +12,110 @@
  */
 import { app } from "../../scripts/app.js";
 
+/**
+ * One file the list route returned; the explorer's grid and list both render
+ * it. Every field is read defensively, so all stay optional.
+ * @typedef {Object} EzOutRow
+ * @property {string=} rel Path under the output root.
+ * @property {string=} name Filename the row shows.
+ * @property {string=} kind Still, video, or audio.
+ * @property {number=} size Bytes on disk, summed into the status line.
+ * @property {number=} mtime Unix seconds the file was last written.
+ * @property {string=} parent Folder the row belongs to; "" at the root.
+ * @property {string=} suffix Extension the prefix chips group on.
+ */
+
+/**
+ * One per-file failure a bulk route rejected while handling the rest.
+ * @typedef {Object} EzErrorRow
+ * @property {string=} rel File the route could not handle.
+ * @property {string=} error Why the route said no.
+ */
+
+/**
+ * Parsed JSON body an ez_outputs route answers with. Each route fills in only
+ * the fields it owns, so the rest stay optional.
+ * @typedef {Object} EzRouteResponse
+ * @property {string=} error Message sent with a non-2xx reply.
+ * @property {EzOutRow[]=} items Files the list route returned.
+ * @property {boolean=} truncated True when the list hit its page cap.
+ * @property {string[]=} deleted Rels the delete route removed.
+ * @property {EzErrorRow[]=} errors Per-file the delete route rejected.
+ * @property {EzOutRow[]=} copied Rows to-input staged in /inputs.
+ * @property {string=} name Filename to-input copied for a single rel.
+ */
+
+/**
+ * Body a bulk POST sends: one rel, or the list of them.
+ * @typedef {Object} EzRelBody
+ * @property {string=} rel Single file the call acts on.
+ * @property {string[]=} rels Files the call acts on at once.
+ */
+
+/**
+ * Error a route call threw, as fetchJson re-throws it with the route and the
+ * HTTP status stuck on so a catch can report both.
+ * @typedef {Object} EzCallError
+ * @property {string=} message Human-readable failure.
+ * @property {string=} endpoint Route that failed.
+ * @property {number|string=} status HTTP status the route answered with.
+ */
+
+/**
+ * Report a report button hands the ez_feedback core, or encodes into the
+ * prefilled issues URL when that core never loaded.
+ * @typedef {Object} EzReport
+ * @property {string=} kind "bug" or "enhancement".
+ * @property {string=} surface Pane the button sat in.
+ * @property {string=} summary One-line summary for the issue title.
+ * @property {Array<Array<string>>=} context Label/value pairs for the body.
+ */
+
+/**
+ * One failure the ez_feedback core ring-buffers.
+ * @typedef {Object} EzErrorEntry
+ * @property {string=} ts ISO timestamp the pane stamped.
+ * @property {string=} surface Pane that caught the failure.
+ * @property {string=} message One-line summary.
+ * @property {string=} detail Context line: endpoint, status, active filters.
+ */
+
+/**
+ * ez_feedback core hung on window. Only the two entry points this pane calls
+ * are named, and both stay optional: load order can leave the core absent.
+ * @typedef {Object} EzFeedbackCore
+ * @property {((report: EzReport) => void)=} openReport Open the core dialog.
+ * @property {((entry: EzErrorEntry) => void)=} recordError Ring-buffer one.
+ */
+
+/**
+ * Graph handle a node points back at; only the repaint call is used here.
+ * @typedef {Object} EzGraphHandle
+ * @property {((always?: boolean, liteMode?: boolean) => void)=} setDirtyCanvas
+ *   Ask LiteGraph to repaint.
+ */
+
+/**
+ * Widget on a LoadImage / LoadAudio node this pane selects a file into.
+ * LiteGraph owns the rest of the shape.
+ * @typedef {Object} EzWidget
+ * @property {string=} name Widget name setNamedWidget matches on.
+ * @property {string|number=} value Value the widget holds.
+ * @property {{values?: string[]=}=} options Combo choices; push appends one.
+ * @property {((value: string, canvas?: unknown, node?: EzGraphNode) => unknown)=} callback
+ *   Fired after a value write.
+ */
+
+/**
+ * Graph node this pane writes a filename into. LiteGraph owns everything the
+ * file never reads.
+ * @typedef {Object} EzGraphNode
+ * @property {string=} type Node class as LiteGraph names it.
+ * @property {EzWidget[]=} widgets Widgets on the node, in graph order.
+ * @property {Array<string|number>=} widgets_values Values in widget order.
+ * @property {EzGraphHandle=} graph Graph the node belongs to.
+ */
+
 const TAB_ID = "ez-outputs";
 const STYLE_ID = "ez-outputs-css";
 const PREFS_VIEW = "ez-comfy.outputs.view";
@@ -291,7 +395,7 @@ function prefixOf(name) {
 
 /**
  * Parent directory of a list row.
- * @param {object} row
+ * @param {EzOutRow} row
  * @returns {string}
  */
 function parentOf(row) {
@@ -307,9 +411,9 @@ function parentOf(row) {
 
 /**
  * Sort rows by the saved mode.
- * @param {object[]} rows
+ * @param {EzOutRow[]} rows
  * @param {string} mode
- * @returns {object[]}
+ * @returns {EzOutRow[]}
  */
 function sortItems(rows, mode) {
   const out = rows.slice();
@@ -333,9 +437,9 @@ function sortItems(rows, mode) {
 
 /**
  * Vue-safe widget write (Nodes 2.0). Treats inputEl as optional.
- * @param {object} node
- * @param {object|undefined} widget
- * @param {*} value
+ * @param {EzGraphNode} node
+ * @param {EzWidget|undefined} widget
+ * @param {string} value
  * @returns {void}
  */
 function setWidgetValue(node, widget, value) {
@@ -403,7 +507,7 @@ function applyToGraph(kind, filename) {
  * Fetch JSON from an ez_outputs route.
  * @param {string} path
  * @param {RequestInit} [init]
- * @returns {Promise<object>}
+ * @returns {Promise<EzRouteResponse>}
  */
 async function fetchJson(path, init) {
   const response = await fetch(apiUrl(path), init);
@@ -421,8 +525,8 @@ async function fetchJson(path, init) {
 /**
  * POST JSON with rel or rels.
  * @param {string} path
- * @param {object} body
- * @returns {Promise<object>}
+ * @param {EzRelBody} body
+ * @returns {Promise<EzRouteResponse>}
  */
 async function postJson(path, body) {
   return fetchJson(path, {
@@ -503,7 +607,7 @@ function makeButton(label, className, onClick, opts) {
 
 /**
  * Collapse whitespace and cap text so a handoff URL stays openable.
- * @param {*} value
+ * @param {string|number|null|undefined} value
  * @param {number} max
  * @returns {string}
  */
@@ -521,7 +625,7 @@ function clipText(value, max) {
 /**
  * Reach the ez_feedback core lazily so extension load order cannot break us.
  * @param {string} method Member the caller needs, e.g. "openReport"
- * @returns {object|null} The core, or null when it is absent or too old
+ * @returns {EzFeedbackCore|null} The core, or null when it is absent or too old
  */
 function feedbackCore(method) {
   const fb = window.EzFeedback;
@@ -534,7 +638,7 @@ function feedbackCore(method) {
 /**
  * Prefilled /issues/new URL for the no-core fallback (same builder shape the
  * core uses: title prefix is the bare surface id, context is `- label: value`).
- * @param {object} report {kind, surface, summary, context}
+ * @param {EzReport} report {kind, surface, summary, context}
  * @returns {string}
  */
 function issuesHandoffUrl(report) {
@@ -583,7 +687,7 @@ function issuesHandoffUrl(report) {
 
 /**
  * Open the core report dialog, falling back to the prefilled issues tab.
- * @param {object} report {kind, surface, summary, context}
+ * @param {EzReport} report {kind, surface, summary, context}
  * @returns {void}
  */
 function openFeedbackReport(report) {
@@ -605,7 +709,7 @@ function openFeedbackReport(report) {
 
 /**
  * Compact one-line summary of route-level per-file rejections.
- * @param {object[]} errors Rows from the route, shape {rel, error}
+ * @param {EzErrorRow[]} errors Rows from the route, shape {rel, error}
  * @returns {string}
  */
 function errorDetail(errors) {
@@ -742,7 +846,7 @@ function mount(el) {
   let folder = readPref(PREFS_FOLDER) || "";
   /** @type {string} */
   let prefix = "";
-  /** @type {object[]} */
+  /** @type {EzOutRow[]} */
   let items = [];
   /** @type {Set<string>} */
   let selected = new Set();
@@ -1484,7 +1588,7 @@ function mount(el) {
 
   /**
    * Rows after folder / prefix filters, sorted.
-   * @returns {object[]}
+   * @returns {EzOutRow[]}
    */
   function visibleItems() {
     let out = items.slice();
@@ -1626,7 +1730,7 @@ function mount(el) {
   /**
    * Prefilled report for the toolbar: kind/surface/summary/context only.
    * @param {string} reportKind "bug" or "enhancement"
-   * @returns {object}
+   * @returns {EzReport}
    */
   function explorerReport(reportKind) {
     const isFeature = reportKind === "enhancement";
@@ -1652,7 +1756,7 @@ function mount(el) {
 
   /**
    * Context pairs for one file: only the relative fields the catalog returns.
-   * @param {object} row
+   * @param {EzOutRow} row
    * @returns {Array<Array<string>>}
    */
   function fileContext(row) {
@@ -1670,7 +1774,7 @@ function mount(el) {
   /**
    * Record a caught route failure with endpoint, status, and active filters.
    * @param {string} endpoint Route that failed
-   * @param {object} err Caught error, maybe carrying status/endpoint
+   * @param {EzCallError} err Caught error, maybe carrying status/endpoint
    * @param {string} message Human summary
    * @returns {void}
    */
@@ -1794,7 +1898,7 @@ function mount(el) {
 
   /**
    * Media element for a row (img / video / audio placeholder).
-   * @param {object} row
+   * @param {EzOutRow} row
    * @param {boolean} forThumb
    * @returns {HTMLElement}
    */
@@ -1852,7 +1956,7 @@ function mount(el) {
 
   /**
    * One grid card or list row.
-   * @param {object} row
+   * @param {EzOutRow} row
    * @returns {HTMLElement}
    */
   function itemEl(row) {
