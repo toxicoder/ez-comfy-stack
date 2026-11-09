@@ -178,7 +178,8 @@ def save_state(dest: Path, state: Mapping[str, object]) -> None:
 
     Args:
         dest: Job directory.
-        state: JSON-able job-state mapping.
+        state: JSON-able job-state mapping. Open on purpose: two packs call
+            this with their own state records, so no single TypedDict fits.
     """
     dest.mkdir(parents=True, exist_ok=True)
     path = state_path(dest)
@@ -192,7 +193,9 @@ def write_json(path: Path, payload: object) -> None:
 
     Args:
         path: Destination path.
-        payload: JSON-serializable value.
+        payload: JSON-serializable value. Left open: callers hand in
+            TypedDict records and lists of them, which the ``Json`` aliases
+            do not admit, and ``json.dumps`` accepts all of it.
     """
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")

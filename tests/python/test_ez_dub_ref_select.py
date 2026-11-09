@@ -487,7 +487,9 @@ def test_qc_report_includes_reference() -> None:
         peak=0.5,
         reference={"spk00": {"degraded": False, "score": 0.5}},
     )
-    assert report["reference"]["spk00"]["score"] == 0.5
+    sidecar = report["reference"]["spk00"]
+    assert isinstance(sidecar, dict)
+    assert sidecar["score"] == 0.5
     plain = evaluate_qc(
         [0.5] * 8000,
         8000,

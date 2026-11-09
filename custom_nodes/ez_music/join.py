@@ -418,7 +418,9 @@ def join_audio(
     """Join Comfy AUDIO dicts into one master AUDIO.
 
     Args:
-        segments: AUDIO payloads in render order.
+        segments: AUDIO payloads in render order. Left open: this is the
+            socket screen, so a payload missing ``sample_rate`` has to reach
+            the ``KeyError`` guard below rather than be rejected upstream.
         bpm: Tempo that defines the bar grid and the overlaps.
         overlap_bars: Whole bars overlapped at each seam.
         crossover_hz: Sub/mid split for the hand-off.

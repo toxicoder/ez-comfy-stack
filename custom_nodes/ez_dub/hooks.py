@@ -32,7 +32,7 @@ class AsrHook(Protocol):
     """ASR stand-in (faster-whisper in production)."""
 
     def __call__(
-        self, wav_path: object, language: str, /
+        self, wav_path: Path, language: str, /
     ) -> Sequence[Mapping[str, object]]:
         """Transcribe a wav.
 
@@ -42,6 +42,8 @@ class AsrHook(Protocol):
 
         Returns:
             Turn-like mappings (``t0`` / ``t1`` / ``text`` / ``speaker``).
+            Open mapping on purpose: a hook fills four of :class:`Turn`'s
+            keys, and :func:`ez_dub.turns.normalize_turn` fills the rest.
         """
         ...
 
@@ -76,7 +78,8 @@ class TranslateHook(Protocol):
             source: ISO source or ``auto``.
 
         Returns:
-            Turns with ``text_target`` filled.
+            Turns with ``text_target`` filled. Open mapping on purpose: a
+            hook may hand back a subset of the keys it was given.
         """
         ...
 

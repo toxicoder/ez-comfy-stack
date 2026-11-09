@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 import json
-from collections.abc import Mapping, Sequence
-from typing import NotRequired, TypedDict, cast
+from collections.abc import Sequence
+from typing import TYPE_CHECKING, NotRequired, TypedDict, cast
+
+if TYPE_CHECKING:
+    from ez_common import Json
 
 # Analyze / render stage widget values.
 STAGES = ("all", "analyze", "render")
@@ -156,7 +159,7 @@ def parse_payload(raw: object) -> ScriptPayload:
         else:
             return empty_payload(status="invalid json")
     raw_turns = data.get("turns")
-    turns_raw: list[object] = raw_turns if isinstance(raw_turns, list) else []
+    turns_raw: list[Json] = raw_turns if isinstance(raw_turns, list) else []
     turns: list[Turn] = [
         normalize_turn(item, i + 1) for i, item in enumerate(turns_raw)
     ]
@@ -172,7 +175,7 @@ def parse_payload(raw: object) -> ScriptPayload:
     }
 
 
-def dumps_payload(payload: Mapping[str, object]) -> str:
+def dumps_payload(payload: ScriptPayload) -> str:
     """Pretty-print a payload for the App widget.
 
     Args:
@@ -184,7 +187,7 @@ def dumps_payload(payload: Mapping[str, object]) -> str:
     return json.dumps(payload, indent=2, ensure_ascii=False)
 
 
-def _copy_turn(turn: Mapping[str, object]) -> Turn:
+def _copy_turn(turn: Turn) -> Turn:
     """Shallow-copy a JSON turn mapping.
 
     Args:
