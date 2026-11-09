@@ -21,7 +21,10 @@ import re
 import sys
 from collections import defaultdict
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from ez_common import Json
 
 # Repo paths for lab graphs, generated pages, encyclopedia, and style catalog.
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -573,7 +576,7 @@ def widget_layouts(spec: dict[str, Any]) -> list[list[dict[str, Any]]]:
 
 
 def match_layout(
-    spec: dict[str, Any], values: object
+    spec: dict[str, Any], values: Json | None
 ) -> list[dict[str, Any]] | None:
     """Pick the encyclopedia widget layout that matches stored values.
 
@@ -623,8 +626,8 @@ def match_layout(
 
 
 def read_widget_value(
-    values: object, widget: dict[str, Any]
-) -> object:
+    values: Json | None, widget: dict[str, Any]
+) -> Json | None:
     """Read one widget value from list or dict storage.
 
     Args:
@@ -778,7 +781,7 @@ def render_param_reference(
             if gen:
                 parts.append(f"**How it affects generation:** {gen}")
                 parts.append("")
-            values: list[tuple[str, object]] = []
+            values: list[tuple[str, Json]] = []
             for inst in instances:
                 label = str(inst.get("title") or inst.get("id") or name)
                 values.append(
