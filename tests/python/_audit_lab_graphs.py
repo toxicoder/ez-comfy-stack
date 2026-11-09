@@ -1,7 +1,8 @@
 """One-process auditor for shipped lab JSON (used by workflow.bats).
 
 Hermetic: stdlib only. Walks workflows/_lab once and checks parse, id stem,
-banned model needles, and estimated Vue AABB overlaps (every lane, including DCC).
+banned model needles, the one-model-stack-per-App rule, and estimated Vue AABB
+overlaps (every lane, including DCC).
 """
 
 from __future__ import annotations
@@ -16,6 +17,7 @@ _PY = Path(__file__).resolve().parent
 if str(_PY) not in sys.path:
     sys.path.insert(0, str(_PY))
 
+from _lab_families import stack_violations  # noqa: E402
 from _lab_layout import node_overlap_hits  # noqa: E402
 
 # Whole-file needles (US-excluded / API / never mention in lab JSON).
@@ -74,6 +76,8 @@ def audit_lab_graphs(lab_root: Path) -> int:
         hit = _overlap_hit(data)
         if hit:
             raise SystemExit(f"{path}: {hit}")
+        for problem in stack_violations(data):
+            raise SystemExit(f"{path}: {problem}")
     return len(files)
 
 
