@@ -69,6 +69,27 @@ Tiers are named profiles that swap weights, not a step ladder. `custom_nodes/ez_
 | Audio (ACE-Step) | steps only | draft 4, standard 8, `high` 16, `max` 24 |
 | TRELLIS | steps only | draft 8, standard 12, `high` 20, `max` 28 - on the three guided stages only. The unguided texture stage (`KSampler (texture)`, authored CFG 1) keeps its own step count: the ladder is tuned against the guided stages, so it leaves that recipe alone |
 
+### One App per model stack
+
+An App drives one model stack, and **Quality** is the only weight swap it offers. Every tier an App lists loads a weight from that App's own stack: the Klein Apps move between Klein 4B and Klein 9B, the FLUX 3 Image App between its distilled, base, and NVFP4 builds, the Qwen App between Qwen-Image and its turbo and NVFP4 builds, the Wan and LTX Apps between step counts on the transformer they already pin.
+
+That scoping is why the selector is reliable. A loader combo lists every `.safetensors` in the mounted `models/` tree, so an App that showed one let a single Queue pair a Klein UNET with a Qwen text encoder and fail on CLIP type or VAE. For that reason **UNET / CLIP / VAE stay off every App surface** - the stamper refuses an App spec that exposes a loader widget, so the leak cannot come back through a new App.
+
+Reaching another stack is a second App authored for that stack, and several objectives deliberately ship twice. The still desk is the clearest case:
+
+| Objective | Klein App (Apache, default) | Other stacks, separate Apps |
+| --- | --- | --- |
+| One hero still | `photos/still-daily`, `photos/still-studio`, `photos/image-studio` | `labs/opt-in/still-flux3-fast`, `labs/opt-in/still-flux3-quality` (FLUX 3 Image Klein), `labs/opt-in/still-qwen-image` (Qwen-Image 2.1) |
+
+Those Apps share a purpose and differ in weights, so they stay apart: the CLIP type, the VAE, the latent channel count, and the license all change with the stack, and an App that carried two of them would need a combo that reaches both. Adding a stack means adding an App (register it in the matching `tests/python/_build_*.py` builder and pin its family in `custom_nodes/ez_quality/presets.py`), never widening an existing App's ladder.
+
+The FLUX 3 Image pair is the one place two Apps share a stack. Each App authors one build and walks the operator through its own gated Hugging Face acceptance (`bazelisk run //scripts:run-utility -- download-image run --tier flux3` for the distilled INT8, `--tier flux3-base` for the base INT8), so the App you open names the pull you most likely still owe. The separation is a prompt toward the right license click, and nothing more: the `flux3-*` ladder is family-wide, so either App can write either build, and **Check models** names the command for whichever weight is missing.
+
+Two gates hold the line, and both run in CI:
+
+- `bazelisk test //tests:pytest` runs `tests/python/test_lab_model_stack.py`, which classifies every weight pin in every shipped graph and fails a graph that pins two stacks, pins a weight no stack claims, or claims a heavy occupancy with nothing loaded.
+- `bazelisk test //tests:bats_workflow_test` runs `tests/python/_audit_lab_graphs.py`, which applies the same rule per graph and also fails a note that tells the operator to load a graph the catalog does not ship.
+
 Quality does not touch the Width / Height or Duration widgets, and Quality is not `--tier quality` (that flag is a download pack id - [Download tiers](download-tiers.md)). The one size effect is **Free Commercial Use (\<$10M)** on Klein stills: a generic 16:9 / 9:16 **Format** row retargets to **16:9 LTX feeder (1280x704)** / **9:16 LTX feeder (768x1280)**; named platform jobs, **Custom**, and rows already on a feeder stay put. ultra/max may select opt-in Non-Commercial weights (gated, not YouTube-ok). The `qwen-image*` tiers select opt-in **Qwen RESEARCH LICENSE AGREEMENT** weights (ungated, no `HF_TOKEN`, still not YouTube-ok - section 2.b bars commercial use until you hold a separate paid Qwen license). A graph with no sampler and no loader to write - the Labs desks, an album render, a dub - carries no combo at all, so there is no level there to misread.
 
 `EZQuality` nodes that are muted or bypassed (LiteGraph `mode` other than 0) are ignored by the overlay and wear no caption. No film graph ships one muted: each film app carries a single model family, so the plate App (`workflows/_lab/film/<slug>/00-plate.json`) moves Klein tiers only and the act / feature App (`act-01.json` .. `act-05.json`, `feature.json`) moves LTX tiers only. Set the tier in the App you are about to Queue - the plate's combo has no effect on the print pass, because they are two separate Queues over a file on disk.
