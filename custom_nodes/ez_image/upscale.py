@@ -2,6 +2,11 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ez_common.comfy_graph import WidgetValue
+
 # Combo ids (widget values). none is a tensor passthrough.
 UPSCALE_NONE = "none"
 UPSCALE_2X = "2x"
@@ -23,7 +28,7 @@ BOX_LANDSCAPE: tuple[int, int] = (3840, 2160)
 BOX_PORTRAIT: tuple[int, int] = (2160, 3840)
 
 
-def _as_str(value: object) -> str:
+def _as_str(value: WidgetValue) -> str:
     """Coerce a combo widget to a stripped string.
 
     Args:
@@ -39,7 +44,7 @@ def _as_str(value: object) -> str:
     return str(value).strip()
 
 
-def normalize_upscale(value: object) -> str:
+def normalize_upscale(value: WidgetValue) -> str:
     """Return a known upscale id, defaulting to none.
 
     Args:
@@ -94,7 +99,7 @@ def _fit_box(width: int, height: int, box_w: int, box_h: int) -> tuple[int, int]
 
 
 def resolve_upscale_hw(
-    width: int, height: int, mode: object
+    width: int, height: int, mode: WidgetValue
 ) -> tuple[int, int] | None:
     """Return target HxW, or ``None`` when the still should pass through.
 

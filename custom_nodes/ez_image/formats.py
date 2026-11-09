@@ -15,7 +15,9 @@ from collections.abc import Mapping
 from typing import TYPE_CHECKING, TypedDict, cast
 
 if TYPE_CHECKING:
-    from ez_common import Json
+    from ez_common import Json, JsonMap
+    from ez_common.comfy_graph import WidgetValue
+    from ez_common.tensors import ImageTensor
 
 # Catalog path, combo sentinels, Klein VAE limits, default canvas.
 FORMATS_PATH = Path(__file__).resolve().parent / "js" / "formats.json"
@@ -133,11 +135,11 @@ class FormatResult:
     label: str
 
 
-def _as_str(value: object) -> str:
-    """Coerce a widget value to a stripped string.
+def _as_str(value: Json | WidgetValue) -> str:
+    """Coerce a widget value or a parsed JSON node to a stripped string.
 
     Args:
-        value: Combo, textarea, or None.
+        value: Combo, textarea, catalog scalar, or None.
 
     Returns:
         Stripped string, or empty.
@@ -149,11 +151,11 @@ def _as_str(value: object) -> str:
     return str(value).strip()
 
 
-def _as_int(value: object, default: int) -> int:
-    """Parse an INT widget, falling back to ``default``.
+def _as_int(value: Json | WidgetValue, default: int) -> int:
+    """Parse an INT widget or catalog number, falling back to ``default``.
 
     Args:
-        value: Widget value.
+        value: Widget value or parsed JSON node.
         default: Fallback when missing or invalid.
 
     Returns:
@@ -298,7 +300,7 @@ def default_format_label() -> str:
     return load_formats()[0].label
 
 
-def get_format(value: object) -> FormatSpec:
+def get_format(value: WidgetValue) -> FormatSpec:
     """Resolve a combo value to a catalog row.
 
     Args:
@@ -324,7 +326,7 @@ def get_format(value: object) -> FormatSpec:
     return by_id.get(default_format_id(), rows[0])
 
 
-def ltx_clip_format_id(value: object) -> str | None:
+def ltx_clip_format_id(value: WidgetValue) -> str | None:
     """Return the LTX feeder id for a generic 16:9 or 9:16 aspect.
 
     Custom, named platform jobs, already-feeder rows, and other aspects
@@ -363,7 +365,7 @@ def _compose_hint(spec: FormatSpec, width: int, height: int) -> str:
     return ". ".join(parts)
 
 
-def _cinema_recipes() -> Mapping[str, object] | None:
+def _cinema_recipes() -> JsonMap | None:
     """Load Cinema Rack recipes, or None when the pack is missing.
 
     Returns:
@@ -418,7 +420,7 @@ def look_combo_labels() -> list[str]:
     return labels
 
 
-def resolve_look(value: object) -> str:
+def resolve_look(value: WidgetValue) -> str:
     """Return a Cinema Rack recipe id, or ``none``.
 
     Args:
@@ -445,7 +447,7 @@ def resolve_look(value: object) -> str:
     return LOOK_NONE
 
 
-def splice_look(value: object) -> str:
+def splice_look(value: WidgetValue) -> str:
     """Splice a Cinema Rack recipe as Klein still context, or empty.
 
     Args:
@@ -460,7 +462,7 @@ def splice_look(value: object) -> str:
     return _cinema_splice(recipe_id)
 
 
-def is_match_input(value: object) -> bool:
+def is_match_input(value: WidgetValue) -> bool:
     """True when Output size is Match input.
 
     Args:
@@ -475,7 +477,7 @@ def is_match_input(value: object) -> bool:
     return raw in {"match input", "match"}
 
 
-def image_hw(image: object) -> tuple[int, int] | None:
+def image_hw(image: ImageTensor | None) -> tuple[int, int] | None:
     """Return ``(width, height)`` from a Comfy IMAGE tensor, if present.
 
     Args:
@@ -534,14 +536,14 @@ def nearest_aspect_format(src_w: int, src_h: int, current: FormatSpec) -> Format
 
 
 def resolve_canvas(
-    format_value: object,
+    format_value: WidgetValue,
     *,
-    width: object = 0,
-    height: object = 0,
-    batch: object = DEFAULT_BATCH,
-    look: object = LOOK_NONE,
-    size_mode: object = SIZE_MODE_MATCH,
-    image: object = None,
+    width: WidgetValue = 0,
+    height: WidgetValue = 0,
+    batch: WidgetValue = DEFAULT_BATCH,
+    look: WidgetValue = LOOK_NONE,
+    size_mode: WidgetValue = SIZE_MODE_MATCH,
+    image: ImageTensor | None = None,
 ) -> FormatResult:
     """Resolve widgets to a Queue canvas.
 

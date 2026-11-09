@@ -15,7 +15,8 @@ from typing import TYPE_CHECKING, TypedDict, cast
 from .nodes import CATEGORY
 
 if TYPE_CHECKING:
-    from ez_common import ComfyInputTypes, NodeRegistry
+    from ez_common import ComfyInputTypes, Json, JsonObject, JsonScalar, NodeRegistry
+    from ez_common.comfy_graph import WidgetValue
 
 MODES_PATH = Path(__file__).resolve().parent / "js" / "modes.json"
 """Catalog path shared with the frontend WEB_DIRECTORY."""
@@ -161,11 +162,11 @@ class ModeResult:
     needs_ref: int
 
 
-def _as_str(value: object) -> str:
-    """Coerce a widget value to a stripped string.
+def _as_str(value: Json | WidgetValue) -> str:
+    """Coerce a widget value or a parsed JSON node to a stripped string.
 
     Args:
-        value: Combo, textarea, or None.
+        value: Combo, textarea, catalog scalar, or None.
 
     Returns:
         Stripped string, or empty.
@@ -177,11 +178,11 @@ def _as_str(value: object) -> str:
     return str(value).strip()
 
 
-def _as_int(value: object, default: int) -> int:
-    """Parse an INT widget, falling back to ``default``.
+def _as_int(value: Json | WidgetValue, default: int) -> int:
+    """Parse an INT widget or catalog number, falling back to ``default``.
 
     Args:
-        value: Widget value.
+        value: Widget value or parsed JSON node.
         default: Fallback when missing or invalid.
 
     Returns:
@@ -202,7 +203,7 @@ def _as_int(value: object, default: int) -> int:
         return default
 
 
-def _clamp_needs_ref(value: object) -> int:
+def _clamp_needs_ref(value: Json) -> int:
     """Clamp a preferred-reference count to 0-2.
 
     Args:
@@ -237,7 +238,7 @@ def _as_bool(value: object) -> bool:
     return False
 
 
-def _normalize_enhance_mode(value: object) -> str:
+def _normalize_enhance_mode(value: Json) -> str:
     """Return a legal Klein Enhance mode.
 
     Args:
@@ -253,7 +254,7 @@ def _normalize_enhance_mode(value: object) -> str:
 
 
 @lru_cache(maxsize=1)
-def _catalog_payload() -> dict[str, object]:
+def _catalog_payload() -> JsonObject:
     """Load the raw modes.json object.
 
     Returns:
@@ -427,7 +428,7 @@ def category_label(category_id: str) -> str:
     return "Generate"
 
 
-def get_category(value: object) -> CategorySpec:
+def get_category(value: WidgetValue) -> CategorySpec:
     """Resolve a combo value to a category row.
 
     Args:
@@ -453,7 +454,7 @@ def get_category(value: object) -> CategorySpec:
     return by_id.get(get_mode(default_mode_id()).category, rows[0])
 
 
-def get_mode(value: object, *, category: object = None) -> ModeSpec:
+def get_mode(value: WidgetValue, *, category: WidgetValue | None = None) -> ModeSpec:
     """Resolve a combo value to a catalog row.
 
     Args:
@@ -481,7 +482,7 @@ def get_mode(value: object, *, category: object = None) -> ModeSpec:
     return by_id.get(default_mode_id(), rows[0])
 
 
-def modes_for_category(value: object) -> tuple[ModeSpec, ...]:
+def modes_for_category(value: WidgetValue) -> tuple[ModeSpec, ...]:
     """Return modes in one category, file order.
 
     Args:
@@ -494,7 +495,7 @@ def modes_for_category(value: object) -> tuple[ModeSpec, ...]:
     return tuple(row for row in load_modes() if row.category == cat.id)
 
 
-def splice_mode_context(instruction: str, extra: object = "") -> str:
+def splice_mode_context(instruction: str, extra: WidgetValue = "") -> str:
     """Join a mode instruction with optional incoming Enhance context.
 
     Args:
@@ -509,10 +510,10 @@ def splice_mode_context(instruction: str, extra: object = "") -> str:
 
 
 def resolve_mode(
-    mode_value: object,
+    mode_value: WidgetValue,
     *,
-    category: object = None,
-    extra_context: object = "",
+    category: WidgetValue | None = None,
+    extra_context: WidgetValue = "",
 ) -> ModeResult:
     """Resolve widgets to a Queue mode.
 
@@ -539,12 +540,12 @@ def resolve_mode(
 
 
 def resolve_studio_mode(
-    mode_value: object,
+    mode_value: WidgetValue,
     *,
-    category: object = None,
-    extra_context: object = "",
+    category: WidgetValue | None = None,
+    extra_context: WidgetValue = "",
     iterate: object = False,
-    has_image: object = False,
+    has_image: JsonScalar = False,
 ) -> ModeResult:
     """Resolve creator mode, or the Iterate text-then-edit override.
 
@@ -651,12 +652,12 @@ class EZImageMode:
 
     def run(
         self,
-        category: object,
-        mode: object,
+        category: WidgetValue,
+        mode: WidgetValue,
         iterate: object = False,
-        run_summary: object = "",
-        context: object = "",
-        has_image: object = False,
+        run_summary: WidgetValue = "",
+        context: WidgetValue = "",
+        has_image: JsonScalar = False,
     ) -> ModeUiResult:
         """Resolve category/mode widgets, or the Iterate override.
 

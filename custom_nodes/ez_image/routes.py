@@ -9,7 +9,10 @@ from __future__ import annotations
 
 import inspect
 from collections.abc import Mapping
-from typing import Protocol, cast
+from typing import TYPE_CHECKING, Protocol, cast
+
+if TYPE_CHECKING:
+    from ez_common import JsonMap, JsonObject
 
 
 PREVIEW_UNAVAILABLE = (
@@ -21,7 +24,7 @@ PREVIEW_UNAVAILABLE = (
 class JsonResponse(Protocol):
     """aiohttp ``web.json_response`` (or the test stand-in) call shape."""
 
-    def __call__(self, payload: dict[str, object], *, status: int = 200) -> object:
+    def __call__(self, payload: JsonObject, *, status: int = 200) -> object:
         """Build a response for one JSON body.
 
         Args:
@@ -36,20 +39,22 @@ class JsonResponse(Protocol):
 
 def _json_ok(
     payload: Mapping[str, object], *, status: int = 200
-) -> tuple[int, dict[str, object]]:
+) -> tuple[int, JsonObject]:
     """Return an HTTP status and JSON object.
 
     Args:
-        payload: Response body (a plain dict or a record TypedDict).
+        payload: Response body (a plain dict or a record TypedDict whose
+            fields are JSON scalars; the mapping is opaque here so any
+            record type can be handed straight to the responder).
         status: HTTP status.
 
     Returns:
         ``(status, payload)``.
     """
-    return status, cast("dict[str, object]", payload)
+    return status, cast("JsonObject", payload)
 
 
-def handle_preview(args: object) -> tuple[int, dict[str, object]]:
+def handle_preview(args: JsonMap) -> tuple[int, JsonObject]:
     """Resolve the image-studio values Queue will send.
 
     Args:
@@ -78,7 +83,9 @@ async def request_json(request: object) -> object:
         request: Object with optional ``json`` callable (async or sync).
 
     Returns:
-        Parsed body, or ``{}`` when missing/invalid.
+        Parsed body, or ``{}`` when missing/invalid. Opaque on purpose: the
+        body comes off a duck-typed ``json`` callable, so the caller narrows
+        it with ``isinstance`` before use.
     """
     json_fn = getattr(request, "json", None)
     if not callable(json_fn):

@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import inspect
 import sys
+from collections.abc import Mapping
 from pathlib import Path
-from types import SimpleNamespace
+from types import MappingProxyType, SimpleNamespace
 from typing import Any
 
 import pytest
@@ -789,7 +790,8 @@ def test_reference_latent_helpers(monkeypatch: pytest.MonkeyPatch) -> None:
     encoded = {"samples": "ref"}
     merged = _reference_latent({"samples": "empty"}, encoded)
     assert merged["reference"] is encoded
-    assert _reference_latent("not-a-dict", encoded) == "not-a-dict"
+    read_only: Mapping[str, str] = MappingProxyType({"samples": "empty"})
+    assert _reference_latent(read_only, encoded) is read_only
 
     class _Ref:
         def append(self, empty: object, encoded_lat: object) -> object:

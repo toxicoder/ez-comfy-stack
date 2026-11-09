@@ -11,7 +11,11 @@ import json
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
-from typing import TypedDict, cast
+from typing import TYPE_CHECKING, TypedDict, cast
+
+if TYPE_CHECKING:
+    from ez_common import ImageTensor, JsonObject
+    from ez_common.comfy_graph import WidgetValue
 
 from .formats import (
     CUSTOM_ID,
@@ -235,13 +239,13 @@ def load_families() -> dict[str, FamilySpec]:
         spec = FamilySpec(
             id=fid,
             label=str(item.get("label") or "").strip(),
-            grid=int(item.get("grid") or 0),
-            min_dim=int(item.get("min") or 0),
-            max_dim=int(item.get("max") or 0),
+            grid=_as_int(item.get("grid"), 0),
+            min_dim=_as_int(item.get("min"), 0),
+            max_dim=_as_int(item.get("max"), 0),
             default_id=str(item.get("default_id") or "").strip(),
             custom_prefix=str(item.get("custom_prefix") or "").strip(),
-            custom_width=int(item.get("custom_width") or 0),
-            custom_height=int(item.get("custom_height") or 0),
+            custom_width=_as_int(item.get("custom_width"), 0),
+            custom_height=_as_int(item.get("custom_height"), 0),
         )
         if not spec.id or not spec.label or spec.grid < 1:
             raise ValueError("video family needs id, label, and grid")
@@ -274,8 +278,8 @@ def load_video_formats() -> tuple[VideoFormatSpec, ...]:
             label=str(item.get("label") or "").strip(),
             family=str(item.get("family") or "").strip(),
             group=str(item.get("group") or "").strip(),
-            width=int(item.get("width") or 0),
-            height=int(item.get("height") or 0),
+            width=_as_int(item.get("width"), 0),
+            height=_as_int(item.get("height"), 0),
             prefix=str(item.get("prefix") or "").strip(),
             hint=str(item.get("hint") or "").strip(),
             lock=str(item.get("lock") or "").strip(),
@@ -286,7 +290,7 @@ def load_video_formats() -> tuple[VideoFormatSpec, ...]:
     return tuple(out)
 
 
-def _load_payload() -> dict[str, object]:
+def _load_payload() -> JsonObject:
     """Read and parse the video catalog object.
 
     Returns:
@@ -322,7 +326,7 @@ def video_format_combo_labels() -> list[str]:
     return [row.label for row in load_video_formats()]
 
 
-def family_format_labels(family: object) -> list[str]:
+def family_format_labels(family: WidgetValue) -> list[str]:
     """Format labels visible for one family (Custom + that family's rows).
 
     Args:
@@ -339,7 +343,7 @@ def family_format_labels(family: object) -> list[str]:
     return labels
 
 
-def resolve_family(value: object) -> str:
+def resolve_family(value: WidgetValue) -> str:
     """Resolve a family combo to ``wan`` or ``ltx``.
 
     Args:
@@ -359,7 +363,7 @@ def resolve_family(value: object) -> str:
     return DEFAULT_FAMILY
 
 
-def get_family(value: object) -> FamilySpec:
+def get_family(value: WidgetValue) -> FamilySpec:
     """Return the family spec for a combo value.
 
     Args:
@@ -371,7 +375,7 @@ def get_family(value: object) -> FamilySpec:
     return load_families()[resolve_family(value)]
 
 
-def default_video_format_id(family: object = DEFAULT_FAMILY) -> str:
+def default_video_format_id(family: WidgetValue = DEFAULT_FAMILY) -> str:
     """Default format id for a family.
 
     Args:
@@ -389,7 +393,7 @@ def default_video_format_id(family: object = DEFAULT_FAMILY) -> str:
     return CUSTOM_ID
 
 
-def default_video_format_label(family: object = DEFAULT_FAMILY) -> str:
+def default_video_format_label(family: WidgetValue = DEFAULT_FAMILY) -> str:
     """Default format label for a family.
 
     Args:
@@ -406,7 +410,9 @@ def default_video_format_label(family: object = DEFAULT_FAMILY) -> str:
     return labels[0] if labels else CUSTOM_LABEL
 
 
-def get_video_format(value: object, *, family: object = DEFAULT_FAMILY) -> VideoFormatSpec:
+def get_video_format(
+    value: WidgetValue, *, family: WidgetValue = DEFAULT_FAMILY
+) -> VideoFormatSpec:
     """Resolve a combo value to a catalog row for ``family``.
 
     Args:
@@ -491,13 +497,13 @@ def nearest_video_format(
 
 
 def resolve_video_canvas(
-    family: object,
-    format_value: object,
+    family: WidgetValue,
+    format_value: WidgetValue,
     *,
-    width: object = 0,
-    height: object = 0,
-    size_mode: object = SIZE_MODE_MATCH,
-    image: object = None,
+    width: WidgetValue = 0,
+    height: WidgetValue = 0,
+    size_mode: WidgetValue = SIZE_MODE_MATCH,
+    image: ImageTensor | None = None,
 ) -> VideoFormatResult:
     """Resolve widgets to a Queue clip canvas.
 
