@@ -19,6 +19,7 @@ import ast
 import configparser
 import re
 import sys
+from collections.abc import Mapping, Sequence
 from fnmatch import fnmatch
 from pathlib import Path
 from typing import Iterable
@@ -81,6 +82,23 @@ somewhere, and the 100% line-coverage gate rules out the ``isinstance`` guard
 that would do it honestly. ``cast`` is the sanctioned trade at that seam - and
 this ratchet is what keeps it a boundary rather than a habit. It only ever goes
 down.
+"""
+
+PRODUCTION_OBJECT_BUDGET = 674
+"""Highest number of ``object`` tokens allowed in a type position in production.
+
+``object`` is the honest answer when a value is opaque and only passes through,
+and it is the documented shape of a validator (``def parse_x(raw: object) ->
+X``), so this is a ratchet and not a ban. It counts everything the checkers read
+as a type - parameter and return annotations, ``AnnAssign`` annotations, the
+value of a ``TypeAlias``, a ``cast()`` target, a ``TypeVar`` bound - and it
+excludes the one place the policy *requires* the spelling: the result of a
+``Callable[...]``, where ``Callable[..., Any]`` is banned outright and
+``Callable[..., object]`` is the prescribed alternative.
+
+It moves down the same way the ``Any`` budget does: name the record, reach for
+:data:`ez_common.json_value.JsonMap` or :data:`~ez_common.json_value.JsonList`
+for a parsed document, or justify the opacity in the PR.
 """
 
 MYPY_INI = REPO / "mypy.ini"
@@ -413,6 +431,155 @@ def _any_lines(path: Path) -> list[int]:
     return sorted(lines)
 
 
+def _type_positions(tree: ast.AST) -> list[ast.expr]:
+    """Collect every expression the checkers read as a type.
+
+    A name used as a type hides in more places than an annotation: an alias
+    value, a ``cast`` target, and a ``TypeVar`` bound are all type positions the
+    checkers honour, and each is a place ``object`` can stand in for a record
+    nobody named.
+
+    Args:
+        tree: Parsed module.
+
+    Returns:
+        Expressions in type position, in source order.
+    """
+    found: list[ast.expr] = []
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            args = [*node.args.posonlyargs, *node.args.args, *node.args.kwonlyargs]
+            if node.args.vararg is not None:
+                args.append(node.args.vararg)
+            if node.args.kwarg is not None:
+                args.append(node.args.kwarg)
+            found.extend(arg.annotation for arg in args if arg.annotation is not None)
+            if node.returns is not None:
+                found.append(node.returns)
+        elif isinstance(node, ast.AnnAssign):
+            found.append(node.annotation)
+            if _is_type_alias(node) and isinstance(node.value, ast.expr):
+                found.append(node.value)
+        elif isinstance(node, ast.Call):
+            found.extend(_call_type_args(node))
+    return found
+
+
+def _is_type_alias(node: ast.AnnAssign) -> bool:
+    """Return whether an annotated assignment declares a ``TypeAlias``.
+
+    Args:
+        node: An annotated assignment from a production module.
+
+    Returns:
+        True when the annotation is ``TypeAlias`` or ``typing.TypeAlias``.
+    """
+    annotation = node.annotation
+    return (isinstance(annotation, ast.Name) and annotation.id == "TypeAlias") or (
+        isinstance(annotation, ast.Attribute) and annotation.attr == "TypeAlias"
+    )
+
+
+def _call_type_args(node: ast.Call) -> list[ast.expr]:
+    """Return the type arguments a call passes to ``cast`` / ``TypeVar`` / ``NewType``.
+
+    Args:
+        node: A call expression from a production module.
+
+    Returns:
+        The arguments the checkers read as types, empty for any other call.
+    """
+    func = node.func
+    name = func.id if isinstance(func, ast.Name) else getattr(func, "attr", "")
+    if name == "cast" and node.args:
+        return [node.args[0]]
+    if name == "TypeVar":
+        return [kw.value for kw in node.keywords if kw.arg == "bound"]
+    if name == "NewType" and len(node.args) > 2:
+        return [node.args[2]]
+    return []
+
+
+def _callable_object_result_lines(expr: ast.expr) -> set[int]:
+    """Find ``object`` written as the *result* of a ``Callable[...]``.
+
+    ``Callable[..., Any]`` is banned outright, so an opaque callable has to name
+    some result type and ``object`` is the prescribed one. Counting it would
+    score a policy-compliant signature as debt and nudge the author toward the
+    banned spelling.
+
+    Args:
+        expr: One expression in type position.
+
+    Returns:
+        Lines whose ``object`` sits in a ``Callable`` result slot.
+    """
+    lines: set[int] = set()
+    for node in ast.walk(expr):
+        if not isinstance(node, ast.Subscript):
+            continue
+        base = node.value
+        name = base.id if isinstance(base, ast.Name) else getattr(base, "attr", "")
+        if name != "Callable" or not isinstance(node.slice, ast.Tuple):
+            continue
+        for item in node.slice.elts[1:]:
+            lines.update(
+                sub.lineno
+                for sub in ast.walk(item)
+                if isinstance(sub, ast.Name) and sub.id == "object"
+            )
+    return lines
+
+
+def _type_position_names(exprs: list[ast.expr]) -> set[int]:
+    """Find ``object`` in a type position, quotes and all.
+
+    A type written as text (``"Mapping[str, object]"``) is a real type to the
+    checker, so it is parsed and walked the same way. A name that is the callee
+    of a call (``object()``) or the owner of an attribute (``object.__init__``)
+    is used as a value and does not count.
+
+    Args:
+        exprs: Expressions in type position.
+
+    Returns:
+        Line numbers (1-based) holding an ``object`` type reference.
+    """
+    lines: set[int] = set()
+    for expr in exprs:
+        queue: list[ast.expr] = [expr]
+        index = 0
+        while index < len(queue):
+            current = queue[index]
+            index += 1
+            if isinstance(current, ast.Constant) and isinstance(current.value, str):
+                try:
+                    queue.append(ast.parse(current.value, mode="eval").body)
+                except SyntaxError:
+                    continue
+            for sub in ast.walk(current):
+                if (
+                    isinstance(sub, ast.Name)
+                    and sub.id == "object"
+                    and sub.lineno not in _callable_object_result_lines(current)
+                ):
+                    lines.add(sub.lineno)
+    return lines
+
+
+def _object_lines(path: Path) -> list[int]:
+    """Find lines that use ``object`` as a type.
+
+    Args:
+        path: File to inspect.
+
+    Returns:
+        Line numbers (1-based) holding an ``object`` type reference.
+    """
+    tree = ast.parse(path.read_text(encoding="utf-8"))
+    return sorted(_type_position_names(_type_positions(tree)))
+
+
 def _production_files() -> list[Path]:
     """Every production Python file the gate walks.
 
@@ -504,6 +671,30 @@ def test_production_cast_count_stays_under_budget() -> None:
     )
 
 
+def test_production_object_count_stays_under_budget() -> None:
+    """The third half of the ratchet: production ``object`` never grows either.
+
+    ``object`` in a type position says "a value whose shape nobody wrote down".
+    It is legal - it is what a validator takes and what an opaque pass-through
+    is - but it is the rung below a ``TypedDict``, a closed union, and the
+    :mod:`ez_common.json_value` vocabulary, so the total is ratcheted beside
+    ``Any`` and ``cast`` and only ever goes down.
+    """
+    counts = {
+        str(path.relative_to(REPO)): len(_object_lines(path))
+        for path in _production_files()
+        if _object_lines(path)
+    }
+    total = sum(counts.values())
+    assert total <= PRODUCTION_OBJECT_BUDGET, (
+        f"production code carries {total} object types in annotations; the "
+        f"budget is {PRODUCTION_OBJECT_BUDGET}. Name the record (TypedDict, "
+        f"dataclass, Literal) or reach for ez_common.json_value (JsonMap, "
+        f"JsonList, Json) - heaviest files first: "
+        f"{sorted(counts.items(), key=lambda item: -item[1])[:5]}"
+    )
+
+
 def test_no_ellipsis_callable_any() -> None:
     """``Callable[..., Any]`` is banned outright, tests included.
 
@@ -590,6 +781,10 @@ def test_shared_vocabulary_is_importable() -> None:
 
     assert getattr(ez_common.ComfyInputTypes, "__origin__", None) is dict
     assert getattr(json_value.JsonArray, "__origin__", None) is list
+    assert getattr(json_value.JsonObject, "__origin__", None) is dict
+    assert getattr(json_value.JsonMap, "__origin__", None) is Mapping
+    assert getattr(json_value.JsonList, "__origin__", None) is Sequence
+    assert getattr(ez_common.JsonMap, "__origin__", None) is Mapping
     assert tensors.ImageTensor == "torch.Tensor"
     assert comfy_graph.NodeId.__supertype__ is str
 

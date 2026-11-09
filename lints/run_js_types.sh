@@ -12,6 +12,10 @@
 # each file still owes. A file may go down, never up, and a new file must be
 # listed. Lower a number by replacing a JSDoc `{object}` with a real @typedef.
 #
+# A second ratchet scores the debt that fix retires directly: the count of
+# unnamed JSDoc types the source still claims, against
+# lints/js_object_baseline.json. Same law - down only, new file must be listed.
+#
 # Requires node plus a TypeScript compiler: the pinned one in
 # docs-site/node_modules (same tool the docs-site typecheck target uses), or a
 # tsc on the PATH when the checkout has none.
@@ -54,6 +58,13 @@ if [[ ! -f ${BASELINE} ]]; then
   echo "missing ${BASELINE} - the JS typecheck baseline is committed; restore it" >&2
   exit 1
 fi
+
+WRITE=""
+for arg in "$@"; do
+  if [[ ${arg} == "--write-object-baseline" ]]; then
+    WRITE="${arg}"
+  fi
+done
 
 mapfile -t JS_FILES < <(git ls-files 'custom_nodes/**/*.js')
 if [[ ${#JS_FILES[@]} -eq 0 ]]; then
@@ -109,4 +120,89 @@ if problems:
     )
     raise SystemExit(1)
 print(f"JS typecheck passed: {total} diagnostics across {len(counts)} files (within baseline).")
+PY
+
+# The second ratchet scores the unnamed types themselves rather than the
+# diagnostics tsc happens to emit, so the number stays put when untyped
+# frontend glue changes shape and only moves when someone names a type.
+# `--write-object-baseline` regenerates it; use it only as part of a
+# deliberate, reviewed decrease.
+JSDOC_BASELINE="lints/js_object_baseline.json"
+if [[ ! -f ${JSDOC_BASELINE} && -z ${WRITE} ]]; then
+  echo "missing ${JSDOC_BASELINE} - the JSDoc object baseline is committed; restore it" >&2
+  exit 1
+fi
+
+python3 - "${JSDOC_BASELINE}" "${WRITE}" "${JS_FILES[@]}" <<'PY' || exit 1
+"""Ratchet the unnamed JSDoc types the first-party frontends still claim."""
+import collections
+import json
+import os
+import re
+import sys
+
+baseline_path, write = sys.argv[1], sys.argv[2]
+paths = sys.argv[3:]
+
+# A JSDoc type only ever follows a block tag, so prose inside a comment cannot
+# move the count. The token has to lead its brace group: `{object|null}` and
+# `{object[]}` are the debt, while `{row|null}`, where a name already leads,
+# is not. `{Object}` and `{*}` join `{object}` so no spelling is an escape.
+# `@typedef` is deliberately absent: that line *is* the act of naming, and its
+# base is the Object constructor (`{Object<string, *>}` for a map whose keys the
+# file cannot enumerate), which the same policy accepts as an opaque pass-through.
+TAG_RE = re.compile(
+    r"@(?:param|returns?|type|property|prop|arg|argument|var|dict"
+    r"|this|throws?|raises?)\b"
+)
+UNNAMED_RE = re.compile(r"\{\s*(?:object|Object|\*)(?![\w$])")
+
+counts: collections.Counter[str] = collections.Counter()
+for rel in paths:
+    with open(rel, encoding="utf-8") as handle:
+        for line in handle:
+            if TAG_RE.search(line):
+                counts[rel] += len(UNNAMED_RE.findall(line))
+
+total = sum(counts.values())
+if write == "--write-object-baseline":
+    payload = {"total": total, "files": dict(sorted(counts.items()))}
+    tmp = baseline_path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as handle:
+        json.dump(payload, handle, indent=2, sort_keys=True)
+        handle.write("\n")
+    os.replace(tmp, baseline_path)
+    print(f"wrote {baseline_path}: {total} unnamed JSDoc types in {len(counts)} files")
+    raise SystemExit(0)
+
+with open(baseline_path, encoding="utf-8") as handle:
+    allowed = json.load(handle)["files"]
+
+problems: list[str] = []
+for path, count in sorted(counts.items()):
+    limit = allowed.get(path)
+    if limit is None:
+        problems.append(f"{path}: {count} unnamed and no baseline entry (add it)")
+    elif count > limit:
+        problems.append(f"{path}: {count} unnamed JSDoc types, baseline allows {limit}")
+for path, limit in sorted(allowed.items()):
+    if path not in counts and limit != 0:
+        problems.append(f"{path}: baseline says {limit} but the file is now clean - set it to 0")
+
+if problems:
+    print("JSDoc object ratchet failed:", file=sys.stderr)
+    for problem in problems:
+        print(f"  {problem}", file=sys.stderr)
+    print(
+        f"\nTotal unnamed JSDoc types: {total}. Name the record with an @typedef "
+        "instead of raising the baseline.",
+        file=sys.stderr,
+    )
+    raise SystemExit(1)
+
+slack = sum(allowed.values()) - total
+print(
+    f"JSDoc object ratchet passed: {total} unnamed types in {len(counts)} files "
+    f"(within baseline{f'; {slack} to reclaim' if slack else ''})."
+)
 PY

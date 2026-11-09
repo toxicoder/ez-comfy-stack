@@ -175,6 +175,7 @@ First-party Python (`custom_nodes`, `docker`, `docs/*.py`, `scripts/lib/*.py`, `
 | mypy | Production: `mypy.ini` - `disallow_untyped_defs`, `disallow_incomplete_defs`, `disallow_any_generics`, **`disallow_any_explicit`**, `warn_return_any`, `warn_unused_ignores`, `ignore-without-code`. Pytest tree: `mypy-tests.ini` (same, minus `disallow_any_explicit`) under a committed ledger |
 | Pyright | `standard` plus `reportMissingTypeArgument`, `reportUnreachable`, `reportUnnecessaryComparison`, `reportImplicitOverride` (not the `reportUnknown*` family - Comfy/torch/bpy ship no stubs here; and not `reportUnnecessaryTypeIgnoreComment`, which scores mypy-coded ignores against Pyright's own rule names - mypy's `warn_unused_ignores` owns that) |
 | `Any` | Only inside a module `mypy.ini` declares as a boundary (a third-party edge, each with a stated reason) or lists as debt (unfinished first-party work, counted by `DEBT_MODULE_BUDGET`). Elsewhere it is a defect: use a `TypedDict`, a `Literal`, `object`, or a `TYPE_CHECKING` alias of the real third-party class |
+| `object` | Legal where a value is opaque and only passes through, and it is the documented shape of a validator (`def parse_x(raw: object) -> X`). Not free: counted by `PRODUCTION_OBJECT_BUDGET`, so a shape that could have been named and was not still fails. Prefer a `TypedDict`, a frozen `dataclass`, a `Literal`, a closed union, or the `ez_common.json_value` vocabulary - `JsonMap` / `JsonList` to read a parsed document, `JsonObject` / `JsonArray` to build one |
 | Tensors and optional deps | `TYPE_CHECKING` alias of the real class (`ImageTensor: TypeAlias = "torch.Tensor"`), never `Any` - the hermetic lane installs no torch, numpy, or bpy |
 | Behavioral seams | `typing.Protocol` (PEP 544). Small capability interfaces (`ProgressReporter`, `ToolHandler`, `ChatCompleter`, `MediaProbe`). Classes satisfy them structurally - do not inherit. `Callable[..., Any]` is banned |
 | Data records | `TypedDict` for JSON/YAML shapes (`Turn`, `JobState`, `ToolSpec`, `HouseLayout`). Do not wrap records in a Protocol |
@@ -197,7 +198,7 @@ def output_root(*, default: str | Path | None = _DEFAULT_OUTPUT) -> Path:
     """
 ```
 
-Custom-node frontends under `custom_nodes/*/js/` use a file `/**` banner and JSDoc `@param` / `@returns` on every `function`, each carrying a **type expression** (`@param {NodeId} id`), and each pack declares its record shapes with `@typedef {object}` (`tests/python/test_jsdoc.py`, `bazelisk test //lints:js_types`). `{object}` and `{*}` are counted as debt. Docs site widgets live in `docs-site/components/` and are plain TypeScript under `tsconfig.json` `strict`. Policy and recipes: [Strong types](contribute/typing.md).
+Custom-node frontends under `custom_nodes/*/js/` use a file `/**` banner and JSDoc `@param` / `@returns` on every `function`, each carrying a **type expression** (`@param {NodeId} id`), and each pack declares its record shapes with `@typedef {object}` (`tests/python/test_jsdoc.py`, `bazelisk test //lints:js_types`). A `{object}` or `{*}` left in a `@param` / `@returns` / `@type` / `@property` slot is counted as debt by `lints/js_object_baseline.json`; the `@typedef` line that names a shape is not, because naming is the fix. Docs site widgets live in `docs-site/components/` and are plain TypeScript under `tsconfig.json` `strict`. Policy and recipes: [Strong types](contribute/typing.md).
 
 ### Entry script skeleton
 
@@ -312,7 +313,7 @@ missing test is a red build rather than a review comment.
   - **Pyright** clean at `standard` plus the extra rules, and **mypy** clean under `mypy.ini` (production - `disallow_untyped_defs` **and** `disallow_any_explicit`) (`bazelisk test //tests:typecheck`; Comfy/torch/bpy imports are not required). The pytest tree runs both checkers under the same rules against committed ledgers that only shrink (`bazelisk test //lints:mypy_tests //lints:pyright_tests`)
   - **Production docstring inventory**: every production class/function has a Google-style docstring (`Args:` / `Returns:` when the signature needs them); constants have a group comment or attribute docstring (`tests/python/test_production_docstrings.py`)
   - **Custom-node JSDoc**: file banner + JSDoc on `function` declarations, a type expression on every `@param` / `@returns`, and one `@typedef` vocabulary per pack (`tests/python/test_jsdoc.py`, `bazelisk test //lints:js_types`)
-  - **No broad types**: `Any` in production Python only inside a module `mypy.ini` declares as a boundary (stated reason) or lists as debt (budgeted), with `PRODUCTION_ANY_BUDGET`, `PRODUCTION_CAST_BUDGET`, and `DEBT_MODULE_BUDGET` all ratcheted down (`tests/python/test_strong_types.py`); policy in [Strong types](contribute/typing.md)
+  - **No broad types**: `Any` in production Python only inside a module `mypy.ini` declares as a boundary (stated reason) or lists as debt (budgeted), and `object` only where a value is genuinely opaque, with `PRODUCTION_ANY_BUDGET`, `PRODUCTION_CAST_BUDGET`, `PRODUCTION_OBJECT_BUDGET`, and `DEBT_MODULE_BUDGET` all ratcheted down (`tests/python/test_strong_types.py`); policy in [Strong types](contribute/typing.md)
   - **Strict shell inventory**: every function in `scripts/**/*.sh` and `docker/**/*.sh` must be **invoked by a test** under `tests/` (production-only references do not count)
   - Full BATS suite green
 - **Tests ship with production code** - same commit as the files under test
@@ -331,7 +332,7 @@ flowchart TB
   Cov["bazelisk test //:test-fast"] --> Py["100% line - first-party Python"]
   Cov --> Pyright["Pyright + mypy: production zero-error,<br/>pytest tree ratcheted"]
   Cov --> DocsInv["Production Google docs + JSDoc inventory"]
-  Cov --> JsTypes["tsc --checkJs on custom_nodes/**/*.js<br/>ratcheted baseline"]
+  Cov --> JsTypes["tsc --checkJs on custom_nodes/**/*.js<br/>ratcheted baselines"]
   Cov --> Shell["Every scripts/** + docker/** function<br/>invoked under tests/"]
   Cov --> Bats["Full BATS suite green"]
   Lint["bazelisk test //:lint"] --> SC["ShellCheck warnings = defects"]

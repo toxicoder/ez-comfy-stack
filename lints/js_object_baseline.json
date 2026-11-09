@@ -1,0 +1,24 @@
+{
+  "files": {
+    "custom_nodes/ez_dub/js/ez_dub_ingest.js": 3,
+    "custom_nodes/ez_dub/js/ez_dub_status.js": 6,
+    "custom_nodes/ez_edit/js/ez_edit_panel.js": 50,
+    "custom_nodes/ez_feedback/js/ez_feedback.js": 16,
+    "custom_nodes/ez_feedback/js/ez_feedback_core.js": 33,
+    "custom_nodes/ez_feedback/js/ez_feedback_panel.js": 10,
+    "custom_nodes/ez_film/js/ez_film_preview.js": 7,
+    "custom_nodes/ez_image/js/ez_image_format.js": 25,
+    "custom_nodes/ez_image/js/ez_image_mode.js": 24,
+    "custom_nodes/ez_image/js/ez_media_pick.js": 12,
+    "custom_nodes/ez_image/js/ez_reference_input.js": 37,
+    "custom_nodes/ez_image/js/ez_video_format.js": 26,
+    "custom_nodes/ez_outputs/js/ez_outputs.js": 19,
+    "custom_nodes/ez_prompt_enhance/js/ez_prompt_enhance.js": 54,
+    "custom_nodes/ez_quality/js/ez_model_check.js": 18,
+    "custom_nodes/ez_quality/js/ez_quality.js": 90,
+    "custom_nodes/ez_research/js/ez_research.js": 6,
+    "custom_nodes/ez_studio_app/js/ez_studio_app.js": 4,
+    "custom_nodes/ez_studio_forge/js/ez_studio_forge.js": 6
+  },
+  "total": 446
+}
