@@ -24,7 +24,10 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
-from typing import TypedDict, cast
+from typing import TYPE_CHECKING, TypedDict, cast
+
+if TYPE_CHECKING:
+    from ez_common import Json, JsonObject
 
 from mcp_runtime import (
     JsonRpcRequest,
@@ -86,7 +89,7 @@ class CatalogSchema(TypedDict, total=False):
     type: str
     """Always ``object`` for a tool argument object."""
 
-    properties: dict[str, object]
+    properties: JsonObject
     """Per-parameter JSON Schema bodies."""
 
     required: list[str]
@@ -242,7 +245,7 @@ def occupancy_mode() -> str:
     """
     path = _output_dir() / OCCUPANCY_FILE_NAME
     try:
-        data: object = json.loads(path.read_text(encoding="utf-8"))
+        data: Json = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return UNKNOWN_OCCUPANCY
     if not isinstance(data, dict):
@@ -279,7 +282,7 @@ def _decode(raw: bytes | str) -> ToolResult:
         The JSON object, or an ``ok`` false payload when it is not one.
     """
     try:
-        parsed: object = json.loads(raw)
+        parsed: Json = json.loads(raw)
     except ValueError:
         return {"ok": False, "error": INVALID_JSON_ERROR}
     if not isinstance(parsed, dict):
@@ -302,11 +305,11 @@ def _http_error_payload(path: str, exc: urllib.error.HTTPError) -> ToolResult:
         ``ok`` false payload (JSON boundary).
     """
     try:
-        body: object = json.loads(exc.read())
+        body: Json = json.loads(exc.read())
     except (OSError, ValueError):
         body = None
     if isinstance(body, dict) and body:
-        payload: dict[str, object] = dict(body)
+        payload: JsonObject = dict(body)
         payload["ok"] = False
         payload["error"] = str(payload.get("error") or f"{path} -> HTTP {exc.code}")
         return payload

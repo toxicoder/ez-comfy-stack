@@ -11,6 +11,7 @@ import json
 import os
 import sys
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from mcp_runtime import (
     JsonRpcRequest,
@@ -25,6 +26,9 @@ from mcp_runtime import (
     main_cli,
     serve_stdio as _runtime_serve_stdio,
 )
+
+if TYPE_CHECKING:
+    from ez_common import Json, JsonObject
 
 # MCP protocol identity (JSON-RPC initialize.serverInfo).
 PROTOCOL_VERSION = "2024-11-05"
@@ -60,7 +64,7 @@ def _output_dir() -> Path:
     return Path(os.environ.get("COMFY_OUTPUT_DIR", "/mnt/comfy-output"))
 
 
-def occupancy_status() -> dict[str, object]:
+def occupancy_status() -> JsonObject:
     """Read occupancy JSON from COMFY_OUTPUT_DIR.
 
     Returns:
@@ -69,7 +73,7 @@ def occupancy_status() -> dict[str, object]:
     path = _output_dir() / ".occupancy.json"
     if path.is_file():
         try:
-            data: object = json.loads(path.read_text(encoding="utf-8"))
+            data: Json = json.loads(path.read_text(encoding="utf-8"))
             if isinstance(data, dict):
                 return data
         except json.JSONDecodeError:

@@ -12,7 +12,7 @@ import os
 import shutil
 import subprocess
 from pathlib import Path
-from typing import NotRequired, TypedDict, cast
+from typing import TYPE_CHECKING, NotRequired, TypedDict, cast
 
 from mcp_runtime import (
     JsonRpcRequest,
@@ -28,6 +28,9 @@ from mcp_runtime import (
     main_cli,
     serve_stdio as _runtime_serve_stdio,
 )
+
+if TYPE_CHECKING:
+    from ez_common import Json, JsonObject
 
 # MCP protocol identity (JSON-RPC initialize.serverInfo).
 PROTOCOL_VERSION = "2024-11-05"
@@ -96,7 +99,7 @@ def _occupancy_bin() -> Path:
     return _repo_root() / "scripts" / "utilities" / "occupancy.sh"
 
 
-def occupancy_status() -> dict[str, object]:
+def occupancy_status() -> JsonObject:
     """Read occupancy JSON (file, or occupancy.sh --json).
 
     Returns:
@@ -105,7 +108,7 @@ def occupancy_status() -> dict[str, object]:
     path = _output_dir() / ".occupancy.json"
     if path.is_file():
         try:
-            data: object = json.loads(path.read_text(encoding="utf-8"))
+            data: Json = json.loads(path.read_text(encoding="utf-8"))
             if isinstance(data, dict):
                 return data
         except json.JSONDecodeError:
@@ -120,7 +123,7 @@ def occupancy_status() -> dict[str, object]:
         )
         if proc.returncode == 0 and proc.stdout.strip():
             try:
-                parsed: object = json.loads(proc.stdout)
+                parsed: Json = json.loads(proc.stdout)
                 if isinstance(parsed, dict):
                     return parsed
             except json.JSONDecodeError:

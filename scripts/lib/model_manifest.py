@@ -7,7 +7,10 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from typing import TypedDict, cast
+from typing import TYPE_CHECKING, TypedDict, cast
+
+if TYPE_CHECKING:
+    from ez_common import Json
 
 
 class PackRecord(TypedDict):
@@ -112,7 +115,7 @@ def load_manifest(path: Path) -> Manifest:
             list_key = stripped[:-1]
             continue
         if list_key and stripped.startswith("- "):
-            bucket = cast("dict[str, object]", packs[pack])[list_key]
+            bucket = cast("dict[str, Json]", packs[pack])[list_key]
             if isinstance(bucket, list):
                 bucket.append(stripped[2:].strip())
             continue
@@ -128,7 +131,7 @@ def load_manifest(path: Path) -> Manifest:
             elif key == "min_gb":
                 packs[pack]["min_gb"] = int(val or "0")
             elif key in packs[pack]:
-                fields = cast("dict[str, object]", packs[pack])
+                fields = cast("dict[str, Json]", packs[pack])
                 fields[key] = val
     return {"schema": schema, "refuse": refuse, "packs": packs}
 

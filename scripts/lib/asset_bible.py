@@ -12,7 +12,10 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import NotRequired, TypeAlias, TypedDict, cast
+from typing import TYPE_CHECKING, NotRequired, TypeAlias, TypedDict, cast
+
+if TYPE_CHECKING:
+    from ez_common import JsonObject
 
 # ez.asset.v1 / index contract (slug, size, and refuse-embedded-mesh limits).
 SCHEMA = "ez.asset.v1"
