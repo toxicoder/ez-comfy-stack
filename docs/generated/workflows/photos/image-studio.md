@@ -40,6 +40,7 @@ Quality ultra/max may select opt-in Non-Commercial weights when those files are 
 Save prefix follows Creator mode (`ez_gen_photoreal` for Photoreal still). Empty of lettering unless the mode is a text job.
 Iterate is the first App control (off by default). On: the first Run is text-to-image with prefix `ez_iterate`. The saved still is copied into the reference and the next Run edits that file. Clear the reference to start from text again. This run lists the mode, prompt, size, prefix, and sampler values Queue will send. Creator mode is not used while Iterate is on.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.
+Quality is the only weight swap this App offers, and it stays inside the Klein stack: standard = Klein 4B fp8 (8 steps, CFG 1.0), draft = Klein 4B nvfp4 (4 steps, CFG 1.0), high and Free Commercial Use (<$10M) = Klein 4B base (24 steps, CFG 3.5), ultra = Klein 9B distilled, max = Klein 9B base. The App lists no disk models; another stack is a different App.
 Handoff: video/silent/still-to-video-5s, video/av/still-to-video-8s, photos/text-swap, photos/still-studio.
 
 Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.
@@ -57,7 +58,7 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 
 ```mermaid
 flowchart LR
-  N1["Image model - click filename to swap"]
+  N1["Image model - Quality swaps within the Klein stack"]
   N2["Qwen3-4B TE"]
   N3["Flux2 VAE"]
   N4["Positive"]
@@ -108,7 +109,7 @@ flowchart LR
 
 | Id | Title | Type | Group |
 | --- | --- | --- | --- |
-| 1 | Image model - click filename to swap | `UNETLoader` | MODEL |
+| 1 | Image model - Quality swaps within the ... | `UNETLoader` | MODEL |
 | 2 | Qwen3-4B TE | `CLIPLoader` | MODEL |
 | 3 | Flux2 VAE | `VAELoader` | MODEL |
 | 4 | Positive | `CLIPTextEncode` | PROMPT |
@@ -568,6 +569,7 @@ Quality ultra/max may select opt-in Non-Commercial weights when those files are 
 Save prefix follows Creator mode (`ez_gen_photoreal` for Photoreal still). Empty of lettering unless the mode is a text job.
 Iterate is the first App control (off by default). On: the first Run is text-to-image with prefix `ez_iterate`. The saved still is copied into the reference and the next Run edits that file. Clear the reference to start from text again. This run lists the mode, prompt, size, prefix, and sampler values Queue will send. Creator mode is not used while Iterate is on.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.
+Quality is the only weight swap this App offers, and it stays inside the Klein stack: standard = Klein 4B fp8 (8 steps, CFG 1.0), draft = Klein 4B nvfp4 (4 steps, CFG 1.0), high and Free Commercial Use (<$10M) = Klein 4B base (24 steps, CFG 3.5), ultra = Klein 9B distilled, max = Klein 9B base. The App lists no disk models; another stack is a different App.
 Handoff: video/silent/still-to-video-5s, video/av/still-to-video-8s, photos/text-swap, photos/still-studio.
 
 Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.

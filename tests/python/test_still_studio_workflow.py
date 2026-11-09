@@ -106,7 +106,7 @@ def test_still_studio_enhance_and_app_widgets() -> None:
     assert "width" in names
     assert "height" in names
     assert "batch_size" in names
-    assert "unet_name" in names
+    assert "unet_name" not in names
     assert names.index("width") > names.index("seed")
     fmt = next(n for n in graph["nodes"] if n.get("type") == "EZImageFormat")
     latent = next(n for n in graph["nodes"] if n.get("type") == "EmptyFlux2LatentImage")

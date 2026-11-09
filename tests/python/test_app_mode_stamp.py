@@ -190,12 +190,12 @@ def test_image_studio_exposes_mode_look_size_and_unet() -> None:
     ]
     assert "look" in names
     assert "filename" in names
-    assert "unet_name" in names
+    assert "unet_name" not in names
     assert names.index("category") < names.index("mode")
     assert names.index("mode") < names.index("style")
 
 
-def test_still_studio_exposes_format_look_size_and_unet() -> None:
+def test_still_studio_exposes_format_look_and_size() -> None:
     names = _widget_names(_load("photos/still-studio.json"))
     assert names[:11] == [
         "quality",
@@ -214,19 +214,22 @@ def test_still_studio_exposes_format_look_size_and_unet() -> None:
     assert "width" in names
     assert "height" in names
     assert "batch_size" in names
-    assert "unet_name" in names
+    assert "unet_name" not in names
     assert "steps" in names
     assert "cfg" in names
     assert names.index("look") < names.index("seed")
 
 
-def test_expose_unet_graphs_also_stamp_sampler_steps() -> None:
+def test_no_app_spec_exposes_a_loader_widget() -> None:
+    # A loader combo lists every weight on disk, so an App that showed it could
+    # point one graph at another stack's weights. Quality is the swap.
+    for rel in ("photos/still-daily", "photos/still-studio", "photos/image-studio"):
+        assert rel in STAMP_SPECS, rel
     for rel, spec in STAMP_SPECS.items():
-        if spec.get("expose_unet"):
-            assert spec.get("sampler_steps_cfg"), rel
+        assert not spec.get("expose_unet"), rel
 
 
-def test_daily_still_exposes_latent_and_unet_after_prompt() -> None:
+def test_daily_still_exposes_sampler_and_size_after_prompt() -> None:
     names = _widget_names(_load("photos/still-daily.json"))
     assert names[0] == "quality"
     assert names[1] == "sample"
@@ -235,7 +238,7 @@ def test_daily_still_exposes_latent_and_unet_after_prompt() -> None:
     assert names.index("style") < names.index("enhance")
     assert "width" in names
     assert "height" in names
-    assert "unet_name" in names
+    assert "unet_name" not in names
     assert "steps" in names
     assert "cfg" in names
 

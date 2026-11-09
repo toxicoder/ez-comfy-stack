@@ -1,6 +1,6 @@
 ---
 title: "photos/still-daily"
-description: "Daily Klein 4B still; click UNET to swap distilled / NVFP4 / base"
+description: "Daily Klein 4B still; Quality swaps within the Klein stack"
 tags: [workflows, generated, comfyui, photos]
 ---
 
@@ -31,13 +31,10 @@ Occupancy **klein**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fa
 
 Format / platform sets pixels (Custom uses Width x Height). Quality does not change size.
 
-Daily Klein 4B still app. Click the UNET filename to swap Apache Klein 4B weights.
+Daily Klein 4B still app.
 CLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for every Klein 4B UNET.
 
-Swap table:
-- flux-2-klein-4b-fp8.safetensors - daily default, 4 steps, CFG 1.0
-- flux-2-klein-4b-nvfp4.safetensors - Spark NVFP4 (download-image --tier nvfp4), 4 steps, CFG 1.0
-- flux-2-klein-base-4b-fp8.safetensors - more quality (download-image --tier base), raise steps to 20-28 and CFG to about 3.5
+Quality is the only weight swap this App offers, and it stays inside the Klein stack: standard = Klein 4B fp8 (8 steps, CFG 1.0), draft = Klein 4B nvfp4 (4 steps, CFG 1.0), high and Free Commercial Use (<$10M) = Klein 4B base (24 steps, CFG 3.5), ultra = Klein 9B distilled, max = Klein 9B base. The App lists no disk models; another stack is a different App.
 
 SETTINGS: width/height on EmptyFlux2LatentImage (default 1024x576 16:9). 1:1 = 768x768. 9:16 = 576x1024. Instagram 4:5 = 1024x1280. Seed, steps, CFG on KSampler.
 Save prefix: ez_still_app.
@@ -546,20 +543,17 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## photos/still-daily Format / platform sets pixels (Custom uses Width x Height). Quality does not change size. Daily Klein 4B still app. Click the UNET filename to swap Apache Klein 4B weights. CLIP...`
+**This graph:** `## photos/still-daily Format / platform sets pixels (Custom uses Width x Height). Quality does not change size. Daily Klein 4B still app. CLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for ...`
 
 ```text
 ## photos/still-daily
 
 Format / platform sets pixels (Custom uses Width x Height). Quality does not change size.
 
-Daily Klein 4B still app. Click the UNET filename to swap Apache Klein 4B weights.
+Daily Klein 4B still app.
 CLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for every Klein 4B UNET.
 
-Swap table:
-- flux-2-klein-4b-fp8.safetensors - daily default, 4 steps, CFG 1.0
-- flux-2-klein-4b-nvfp4.safetensors - Spark NVFP4 (download-image --tier nvfp4), 4 steps, CFG 1.0
-- flux-2-klein-base-4b-fp8.safetensors - more quality (download-image --tier base), raise steps to 20-28 and CFG to about 3.5
+Quality is the only weight swap this App offers, and it stays inside the Klein stack: standard = Klein 4B fp8 (8 steps, CFG 1.0), draft = Klein 4B nvfp4 (4 steps, CFG 1.0), high and Free Commercial Use (<$10M) = Klein 4B base (24 steps, CFG 3.5), ultra = Klein 9B distilled, max = Klein 9B base. The App lists no disk models; another stack is a different App.
 
 SETTINGS: width/height on EmptyFlux2LatentImage (default 1024x576 16:9). 1:1 = 768x768. 9:16 = 576x1024. Instagram 4:5 = 1024x1280. Seed, steps, CFG on KSampler.
 Save prefix: ez_still_app.

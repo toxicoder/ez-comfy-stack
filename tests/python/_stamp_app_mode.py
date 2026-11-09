@@ -1161,7 +1161,6 @@ def _spec(
     *handoff: str,
     default_view: str = "app",
     enhance_off_identity: bool = False,
-    expose_unet: bool = False,
     expose_latent: bool = False,
     sampler_steps_cfg: bool = False,
     film_minimal: bool = False,
@@ -1182,7 +1181,6 @@ def _spec(
         "handoff": handoff,
         "default_view": default_view,
         "enhance_off_identity": enhance_off_identity,
-        "expose_unet": expose_unet,
         "expose_latent": expose_latent,
         "sampler_steps_cfg": sampler_steps_cfg,
         "film_minimal": film_minimal,
@@ -1282,7 +1280,6 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     ),
     "stills/still-daily": _spec(
         "klein",
-        expose_unet=True,
         sampler_steps_cfg=True,
     ),
     "stills/still-studio": _spec(
@@ -1290,7 +1287,6 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "motion/silent/still-to-video-5s",
         "motion/av/still-to-video-8s",
         "stills/text-swap",
-        expose_unet=True,
         expose_look=True,
         sampler_steps_cfg=True,
     ),
@@ -1300,7 +1296,6 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "motion/av/still-to-video-8s",
         "stills/text-swap",
         "stills/still-studio",
-        expose_unet=True,
         expose_look=True,
         sampler_steps_cfg=True,
     ),
@@ -2052,8 +2047,9 @@ def _collect_raw_inputs(
         elif ntype == "LoadAudio":
             if _node_always(node) and _audio_output_linked(node):
                 raw.append((nid, "audio", node))
-        elif ntype == "UNETLoader" and spec.get("expose_unet"):
-            raw.append((nid, "unet_name", node))
+        # A loader widget is never an App input. Its combo lists every weight in
+        # the models dir, so an App that showed it would let one graph reach
+        # another stack's weights; the Quality combo is the stack-scoped swap.
         elif ntype == "EZDubIngest":
             raw.extend(
                 (
