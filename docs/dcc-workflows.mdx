@@ -12,7 +12,7 @@ tags: [dcc, blender, guide-pack, klein, ltx, occupancy, ic-lora]
 - **Pack contract** - `guides/<film-id>/<shot>/`, the files, and the fail-closed QC
 - **Still packs** - one clay plate -> hero / packshot / IG / shorts (`guides/<slug>/stills/<plate>/`)
 - **Guide pack or house tour** - how this pack differs from the Dream-house clay tour
-- **Lab graphs** - the `guides/*` printers, their occupancy desk, and the IC-LoRA envelope
+- **Lab graphs** - the `guides/*` printers and the five `3d/*` mesh Apps, their occupancy desk, and the IC-LoRA envelope
 - **Paths** - A engine-final, B hybrid clay -> AI finish, D laptop-DCC / Spark-Comfy
 - **Host gates inside the loop** - script desk, animatic, overlay QC, and stem mix on host ffmpeg
 
@@ -139,7 +139,11 @@ Playbook, layout seed, and the language-only door: [Dream-house tours](learn/dre
 | **guides/first-last-from-guide** | wan | Fun InP `first.png` + `last.png`. Opt-in `download-wan --tier fun-inp`. MagCache off. |
 | **guides/guide-still** | klein | In-canvas `EZDCCLoadGuideStill` + occupancy gate. Prefix `ez_guide_hero`. Stay on `:8188`. |
 | **guides/depth-from-loader** | ltx | Envelope from loaders + `depth.mp4` path. MagCache off. Distilled-only. Prefix `ez_iclora_guide`. |
-| **3d/still-to-mesh** | trellis | Still pack `plate=mug` -> native TRELLIS.2 INT8. Output `assets/objects/_lab-mug/`. |
+| **3d/trellis2** | trellis | Klein still via `LoadImage` -> native TRELLIS.2 INT8 textured mesh. `SaveGLB` prefix `3d/trellis2`. Opt-in `download-3d --tier trellis2`. |
+| **3d/still-to-mesh** | trellis | Still pack `plate=mug` via `EZDCCLoadStillPack` -> textured mesh. `SaveGLB` writes `assets/objects/_lab-mug/mesh`. |
+| **3d/blockout-mesh** | trellis | Still pack via `EZDCCLoadStillPack` -> **untextured gray-box blockout**: structure + shape stages only, no upsample, no texture VAE, no `PaintMesh`. The fast layout proxy. `SaveGLB` writes `assets/objects/_lab-blockout/blockout`. |
+| **3d/shot-to-prop** | trellis | DCC guide still via `EZDCCLoadGuideStill` (`slug=go-see`, `shot_id=12`, `layer=first`) -> textured mesh of one hero object, for re-compositing that object into other shots. `SaveGLB` writes `assets/objects/_lab-shot-prop/prop`. |
+| **3d/prop-variants** | trellis | Klein still via `LoadImage` with `EmptyTrellis2LatentStructure` `batch_size=4` -> four candidate meshes from one still in a single occupancy session. `SaveGLB` writes `assets/objects/_lab-variants/prop`. |
 | **audio/stem-mix** | audio | Stem mix desk. Host `stem-mix.sh`. ACE-Step group stays off. |
 
 Print modes `wan-vace`, `wan-denk-cn`, and `dcc-final` stay valid on `shot.yaml` but are **not** lab printers in this suite (VACE stays 17-frame join; Fun Control / Path A beauty are later).
@@ -149,6 +153,26 @@ Print modes `wan-vace`, `wan-denk-cn`, and `dcc-final` stay valid on `shot.yaml`
 ```
 
 Official 2.5 Union Control distilled widgets `ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors` onto the **distilled** transformer. Distilled-only. **Refuse 19B Union.** MagCache off.
+
+### TRELLIS.2 chain
+
+All five `3d/*` graphs are lane **3d**, occupancy **trellis** - one heavy 3D job at a time. What each one consumes and where the `.glb` lands is the table above; how the mesh is built is this:
+
+| Fact | Detail |
+| --- | --- |
+| Chain | `Trellis2Conditioning` -> structure -> shape -> upsample -> texture -> `PaintMesh` -> `MeshToFile3D` -> `SaveGLB` |
+| Upsample | `Trellis2UpsampleStage` takes an **INT** `target_resolution`. Legal range is **1024 to 2048, step 128**; default **1024**. There is no 512 and no 256 - a "512 upsample" note is stale |
+| Save | `MeshToFile3D` has **no widgets and writes nothing**. `SaveGLB` is the node that puts the `.glb` on disk, under the output prefix named above |
+| Blockout | `3d/blockout-mesh` stops after the shape stage - no upsample, no texture VAE, no `PaintMesh` - so it returns an untextured gray box. Queue it for layout, then re-run the full chain on the take you keep |
+| Variants | `3d/prop-variants` sets `EmptyTrellis2LatentStructure` `batch_size=4`, so four candidates come off one Klein still in a single occupancy session |
+
+Pull the weights with the opt-in pack (never part of `download-models`):
+
+```bash
+bazelisk run //:manage -- download-3d --tier trellis2
+```
+
+Pins from `config/model-manifest.yaml` (trellis2 tier): UNET `trellis_2_int8_convrot.safetensors`, CLIP vision `dino_v3_vit_l.safetensors`, shape VAE `trellis_2_shape_vae_bf16.safetensors`, texture VAE `trellis_2_texture_vae_bf16.safetensors`. DINOv3 ships under Meta's commercial-friendly license, **not** Apache - the pack is opt-in and TRELLIS without it cannot Queue.
 
 ---
 
@@ -179,6 +203,6 @@ Godot is a first-class blocking engine in a later PR, not a second Blender. Open
 
 - [Host sidecars overview](studio-sidecars.md) - pick the host tool, and the occupancy rule in full
 - [Blender GB10 sidecar](blender-gb10-sidecar.md) - install and run the host binary that writes the pack
-- [Asset Bible](asset-bible.md) - where `3d/still-to-mesh` output is catalogued
+- [Asset Bible](asset-bible.md) - the mesh catalogue; the `3d/*` graphs mint no row in it
 - [Splat sidecar](splat-sidecar.md) - the host splat viewer
 - [Vlo video editor](vlo.md) - the host browser NLE for the printed shots

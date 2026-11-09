@@ -292,6 +292,19 @@ def pack_nodes() -> NodeSpecs:
             _w("required_mode", index=0, typ="COMBO", desc="Heavy GPU mode that must already be entered.", gen="klein / wan / ltx / trellis. Pick the family you are about to Queue.", choices=[("klein", "Klein 4B stills."), ("trellis", "TRELLIS.2."), ("wan", "Wan 5B."), ("ltx", "LTX-2.5.")]),
         ],
     )
+    nodes["EZDCCPreviewGuideLayer"] = _n(
+        "Preview guide layer",
+        "Identity IMAGE pass-through so a guide layer can sit on the canvas.",
+        origin="ez_dcc",
+        lab="No GPU cost. Used by 3d/shot-to-prop to show the guide frame being turned into geometry.",
+        sockets=[
+            _s("image", "IMAGE", "in", "Guide still to preview."),
+            _s("image", "IMAGE", "out", "Same still, onward to the gate."),
+        ],
+        widgets=[
+            _w("label", index=0, rng="guide", desc="Canvas label; the node ignores it.", gen="Name the layer you are looking at, e.g. hero still."),
+        ],
+    )
     nodes["EZCreativeResearch"] = _n(
         "Creative research",
         "Creative-process chat with optional web search and sequential research subagents. No UNET.",

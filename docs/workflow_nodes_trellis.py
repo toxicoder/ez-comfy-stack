@@ -33,7 +33,7 @@ def trellis_nodes() -> NodeSpecs:
             sockets=[
                 _s("positive", "CONDITIONING", "in", "Vision cond."),
                 _s("negative", "CONDITIONING", "in", "Negative."),
-                _s("voxel", "LATENT", "in", "Structure decode voxels."),
+                _s("voxel", "VOXEL", "in", "Structure decode voxels."),
                 _s("positive", "CONDITIONING", "out", "Pass-through."),
                 _s("negative", "CONDITIONING", "out", "Pass-through."),
                 _s("LATENT", "LATENT", "out", "Shape latent."),
@@ -41,8 +41,8 @@ def trellis_nodes() -> NodeSpecs:
         ),
         "Trellis2UpsampleStage": _n(
             "TRELLIS.2 Upsample Stage",
-            "Upsample the shape latent toward 512.",
-            lab="Lab widget 512. download-3d --tier trellis2.",
+            "Upsample the shape latent toward 1024.",
+            lab="Lab queues the 1024 floor. download-3d --tier trellis2.",
             origin="comfy-extras",
             sockets=[
                 _s("positive", "CONDITIONING", "in", "Cond."),
@@ -53,7 +53,7 @@ def trellis_nodes() -> NodeSpecs:
                 _s("negative", "CONDITIONING", "out", "Cond."),
                 _s("LATENT", "LATENT", "out", "Upsampled shape."),
             ],
-            widgets=[_w("resolution", index=0, typ="COMBO", rng="512", desc="Target structure resolution.", gen="512 is the lab INT8 mesh. Lower is faster and blockier.", choices=[("512", "Lab default."), ("256", "Faster, coarser.")])],
+            widgets=[_w("target_resolution", index=0, typ="INT", rng="1024-2048 step 128; lab 1024", desc="Structure resolution the upsampled shape stage renders at.", gen="ComfyUI accepts only 1024-2048 in steps of 128 and defaults to 1024; every lab 3D graph queues that floor. There is no 512 or 256 on this widget (the old lab note about 512 predates the rename).")],
         ),
         "Trellis2TextureStage": _n(
             "TRELLIS.2 Texture Stage",
@@ -75,9 +75,9 @@ def trellis_nodes() -> NodeSpecs:
             sockets=[
                 _s("samples", "LATENT", "in", "Structure latent."),
                 _s("vae", "VAE", "in", "TRELLIS VAE."),
-                _s("voxel", "LATENT", "out", "Voxel grid."),
+                _s("voxel", "VOXEL", "out", "Voxel grid."),
             ],
-            widgets=[_w("resolution", index=0, typ="COMBO", rng="32", desc="Voxel grid size.", gen="32 is the lab structure decode.", choices=[("32", "Lab default.")])],
+            widgets=[_w("resolution", index=0, typ="COMBO", rng="32 or 64; lab 32", desc="Voxel grid size.", gen="32 is the lab structure decode. 64 is the only other upstream option and is the finer grid.", choices=[("32", "Lab default."), ("64", "Finer voxel grid; slower.")])],
         ),
         "VaeDecodeShapeTrellis": _n(
             "TRELLIS Decode Shape",
@@ -98,7 +98,7 @@ def trellis_nodes() -> NodeSpecs:
                 _s("samples", "LATENT", "in", "Texture latent."),
                 _s("vae", "VAE", "in", "VAE."),
                 _s("shape_subdivides", "SHAPE_SUBDIVIDES", "in", "From shape decode."),
-                _s("voxel_colors", "VOXEL_COLORS", "out", "Colors for PaintMesh."),
+                _s("voxel_colors", "VOXEL", "out", "Colors for PaintMesh."),
             ],
         ),
         "PaintMesh": _n(
@@ -107,26 +107,36 @@ def trellis_nodes() -> NodeSpecs:
             origin="comfy-extras",
             sockets=[
                 _s("mesh", "MESH", "in", "Shape mesh."),
-                _s("voxel_colors", "VOXEL_COLORS", "in", "Decoded colors."),
+                _s("voxel_colors", "VOXEL", "in", "Decoded colors."),
                 _s("mesh", "MESH", "out", "Painted mesh."),
             ],
         ),
         "MeshToFile3D": _n(
             "Mesh to File 3D",
-            "Write a GLB/mesh file.",
-            lab="3d/trellis2 may leave the path empty (Comfy default). 3d/still-to-mesh writes assets/objects/_lab-mug/mesh.",
+            "Build the GLB payload in memory. No widgets; writes nothing.",
+            lab="A graph must end MeshToFile3D -> SaveGLB to get a file on disk: this node only builds the payload, SaveGLB writes it.",
             origin="comfy-extras",
             sockets=[
                 _s("mesh", "MESH", "in", "Painted mesh."),
-                _s("model_3d", "MODEL_3D", "out", "File handle."),
+                _s("model_3d", "FILE_3D_GLB", "out", "GLB payload for SaveGLB."),
             ],
             widgets=[],
             variants=[
                 {
                     "widgets": [
-                        _w("filename_prefix", index=0, desc="Output stem under the output folder.", gen="Lab mug pack uses assets/objects/_lab-mug/mesh."),
+                        _w("filename_prefix", index=0, desc="Not a widget on this node. Graphs authored before SaveGLB was split out still store a save prefix here; the node ignores it and writes nothing.", gen="3d/still-to-mesh keeps assets/objects/_lab-mug/mesh here. The live prefix lives on SaveGLB."),
                     ]
                 }
             ],
+        ),
+        "SaveGLB": _n(
+            "Save 3D Model",
+            "Write the .glb under the output folder. Output node; no output sockets.",
+            lab="3d/trellis2 uses prefix 3d/trellis2. The DCC pack graphs use assets/objects/_lab-<name>/<stem>. Needs MeshToFile3D upstream.",
+            origin="comfy-extras",
+            sockets=[
+                _s("mesh", "MESH", "in", "MultiType socket: accepts MESH or any FILE_3D_* payload. Lab wires MeshToFile3D's model_3d into it."),
+            ],
+            widgets=[_w("filename_prefix", index=0, desc="Output stem under the ComfyUI output folder.", gen="3d/trellis2 lands the .glb under <output>/3d/, the DCC pack graphs under <output>/assets/objects/... The directory part of the prefix is created on demand. Hidden prompt and extra_pnginfo are injected by the backend and are not widgets.")],
         )
     }

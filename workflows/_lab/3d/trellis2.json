@@ -1,8 +1,8 @@
 {
   "id": "trellis2",
-  "revision": 3,
-  "last_node_id": 23,
-  "last_link_id": 39,
+  "revision": 4,
+  "last_node_id": 24,
+  "last_link_id": 40,
   "nodes": [
     {
       "id": 1,
@@ -25,7 +25,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "## 3d/trellis2\n\nKlein still -> native TRELLIS.2 INT8 mesh (Comfy core nodes).\n\n```bash\n./scripts/manage.sh download-3d --tier trellis2\nbazelisk run //:manage -- occupancy enter trellis --yes\n```\n\nLoadImage: a Klein still (`ez_still_*.png` or a clay plate). Unload models first (EZUnloadModels).\nUNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack).\nLab upsample **512** (not 1536). TRELLIS-only canvas. Occupancy: trellis.\n\nDINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.\n"
+        "## 3d/trellis2\n\nKlein still -> native TRELLIS.2 INT8 mesh (Comfy core nodes).\n\n```bash\n./scripts/manage.sh download-3d --tier trellis2\nbazelisk run //:manage -- occupancy enter trellis --yes\n```\n\nLoadImage: a Klein still (`ez_still_*.png` or a clay plate). Unload models first (EZUnloadModels).\nUNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack).\nUpsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this lab\ngraph runs the 1024 floor. Structure decode stays at 32. MeshToFile3D only converts in memory, so\nSaveGLB is the node that writes `output/3d/trellis2_NNNNN_.glb`. TRELLIS-only canvas. Do not mint an\nAsset Bible row from this graph.\n\nDINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.\n\nOccupancy: trellis - stop Blender desk, LTX, Wan, Klein denoise. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -34,7 +34,7 @@
       "type": "LoadImage",
       "pos": [
         448,
-        588
+        604
       ],
       "size": [
         320,
@@ -50,12 +50,14 @@
           "type": "IMAGE",
           "links": [
             1
-          ]
+          ],
+          "slot_index": 0
         },
         {
           "name": "MASK",
           "type": "MASK",
-          "links": []
+          "links": [],
+          "slot_index": 0
         }
       ],
       "properties": {
@@ -73,7 +75,7 @@
       "type": "EZUnloadModels",
       "pos": [
         1124,
-        740
+        756
       ],
       "size": [
         280,
@@ -95,7 +97,8 @@
           "type": "IMAGE",
           "links": [
             2
-          ]
+          ],
+          "slot_index": 0
         }
       ],
       "properties": {
@@ -110,7 +113,7 @@
       "type": "CLIPVisionLoader",
       "pos": [
         40,
-        588
+        604
       ],
       "size": [
         360,
@@ -126,7 +129,8 @@
           "type": "CLIP_VISION",
           "links": [
             3
-          ]
+          ],
+          "slot_index": 0
         }
       ],
       "properties": {
@@ -143,7 +147,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        740
+        756
       ],
       "size": [
         360,
@@ -162,7 +166,8 @@
             13,
             21,
             30
-          ]
+          ],
+          "slot_index": 0
         }
       ],
       "properties": {
@@ -180,7 +185,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        902
+        918
       ],
       "size": [
         360,
@@ -198,7 +203,8 @@
             9,
             20,
             26
-          ]
+          ],
+          "slot_index": 0
         }
       ],
       "properties": {
@@ -215,7 +221,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        1044
+        1060
       ],
       "size": [
         360,
@@ -231,7 +237,8 @@
           "type": "VAE",
           "links": [
             35
-          ]
+          ],
+          "slot_index": 0
         }
       ],
       "properties": {
@@ -248,7 +255,7 @@
       "type": "Trellis2Conditioning",
       "pos": [
         816,
-        588
+        604
       ],
       "size": [
         260,
@@ -276,7 +283,8 @@
           "links": [
             5,
             10
-          ]
+          ],
+          "slot_index": 0
         },
         {
           "name": "negative",
@@ -284,7 +292,8 @@
           "links": [
             6,
             11
-          ]
+          ],
+          "slot_index": 0
         }
       ],
       "properties": {
@@ -298,7 +307,7 @@
       "type": "EmptyTrellis2LatentStructure",
       "pos": [
         1124,
-        588
+        604
       ],
       "size": [
         260,
@@ -314,7 +323,8 @@
           "type": "LATENT",
           "links": [
             7
-          ]
+          ],
+          "slot_index": 0
         }
       ],
       "properties": {
@@ -330,7 +340,7 @@
       "type": "KSampler",
       "pos": [
         1124,
-        892
+        908
       ],
       "size": [
         280,
@@ -367,7 +377,8 @@
           "type": "LATENT",
           "links": [
             8
-          ]
+          ],
+          "slot_index": 0
         }
       ],
       "properties": {
@@ -390,7 +401,7 @@
       "type": "VaeDecodeStructureTrellis2",
       "pos": [
         1452,
-        588
+        604
       ],
       "size": [
         280,
@@ -417,7 +428,8 @@
           "type": "VOXEL",
           "links": [
             12
-          ]
+          ],
+          "slot_index": 0
         }
       ],
       "properties": {
@@ -433,7 +445,7 @@
       "type": "Trellis2ShapeStage",
       "pos": [
         1452,
-        750
+        766
       ],
       "size": [
         280,
@@ -466,7 +478,8 @@
           "links": [
             14,
             17
-          ]
+          ],
+          "slot_index": 0
         },
         {
           "name": "negative",
@@ -474,14 +487,16 @@
           "links": [
             15,
             18
-          ]
+          ],
+          "slot_index": 0
         },
         {
           "name": "LATENT",
           "type": "LATENT",
           "links": [
             16
-          ]
+          ],
+          "slot_index": 0
         }
       ],
       "properties": {
@@ -495,7 +510,7 @@
       "type": "KSampler",
       "pos": [
         1124,
-        1234
+        1250
       ],
       "size": [
         280,
@@ -532,7 +547,8 @@
           "type": "LATENT",
           "links": [
             19
-          ]
+          ],
+          "slot_index": 0
         }
       ],
       "properties": {
@@ -555,7 +571,7 @@
       "type": "Trellis2UpsampleStage",
       "pos": [
         1452,
-        902
+        918
       ],
       "size": [
         300,
@@ -593,7 +609,8 @@
           "links": [
             22,
             27
-          ]
+          ],
+          "slot_index": 0
         },
         {
           "name": "negative",
@@ -601,14 +618,16 @@
           "links": [
             23,
             28
-          ]
+          ],
+          "slot_index": 0
         },
         {
           "name": "LATENT",
           "type": "LATENT",
           "links": [
             24
-          ]
+          ],
+          "slot_index": 0
         }
       ],
       "properties": {
@@ -616,16 +635,16 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "512"
+        1024
       ],
-      "title": "Upsample 512"
+      "title": "Upsample 1024"
     },
     {
       "id": 15,
       "type": "KSampler",
       "pos": [
         1124,
-        1576
+        1592
       ],
       "size": [
         280,
@@ -663,7 +682,8 @@
           "links": [
             25,
             29
-          ]
+          ],
+          "slot_index": 0
         }
       ],
       "properties": {
@@ -686,7 +706,7 @@
       "type": "VaeDecodeShapeTrellis",
       "pos": [
         1452,
-        1104
+        1120
       ],
       "size": [
         280,
@@ -713,14 +733,16 @@
           "type": "MESH",
           "links": [
             37
-          ]
+          ],
+          "slot_index": 0
         },
         {
           "name": "shape_subdivides",
           "type": "SHAPE_SUBDIVIDES",
           "links": [
             36
-          ]
+          ],
+          "slot_index": 0
         }
       ],
       "properties": {
@@ -734,7 +756,7 @@
       "type": "Trellis2TextureStage",
       "pos": [
         1452,
-        1256
+        1272
       ],
       "size": [
         280,
@@ -766,21 +788,24 @@
           "type": "CONDITIONING",
           "links": [
             31
-          ]
+          ],
+          "slot_index": 0
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
           "links": [
             32
-          ]
+          ],
+          "slot_index": 0
         },
         {
           "name": "LATENT",
           "type": "LATENT",
           "links": [
             33
-          ]
+          ],
+          "slot_index": 0
         }
       ],
       "properties": {
@@ -794,7 +819,7 @@
       "type": "KSampler",
       "pos": [
         1124,
-        1918
+        1934
       ],
       "size": [
         280,
@@ -831,7 +856,8 @@
           "type": "LATENT",
           "links": [
             34
-          ]
+          ],
+          "slot_index": 0
         }
       ],
       "properties": {
@@ -854,7 +880,7 @@
       "type": "VaeDecodeTextureTrellis",
       "pos": [
         1452,
-        1428
+        1444
       ],
       "size": [
         280,
@@ -886,7 +912,8 @@
           "type": "VOXEL",
           "links": [
             38
-          ]
+          ],
+          "slot_index": 0
         }
       ],
       "properties": {
@@ -900,7 +927,7 @@
       "type": "PaintMesh",
       "pos": [
         1452,
-        1600
+        1616
       ],
       "size": [
         240,
@@ -927,7 +954,8 @@
           "type": "MESH",
           "links": [
             39
-          ]
+          ],
+          "slot_index": 0
         }
       ],
       "properties": {
@@ -941,7 +969,7 @@
       "type": "MeshToFile3D",
       "pos": [
         1452,
-        1752
+        1768
       ],
       "size": [
         240,
@@ -961,7 +989,10 @@
         {
           "name": "model_3d",
           "type": "FILE_3D_GLB",
-          "links": []
+          "links": [
+            40
+          ],
+          "slot_index": 0
         }
       ],
       "properties": {
@@ -969,10 +1000,41 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [],
-      "title": "Save GLB"
+      "title": "To GLB bytes"
     },
     {
       "id": 22,
+      "type": "SaveGLB",
+      "pos": [
+        1452,
+        1900
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 21,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mesh",
+          "type": "FILE_3D_GLB",
+          "link": 40
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveGLB",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "3d/trellis2"
+      ],
+      "title": "Save GLB"
+    },
+    {
+      "id": 23,
       "type": "EZQuality",
       "pos": [
         1176,
@@ -1003,7 +1065,7 @@
       "title": "Quality"
     },
     {
-      "id": 23,
+      "id": 24,
       "type": "EZModelCheck",
       "pos": [
         808,
@@ -1339,6 +1401,14 @@
       21,
       0,
       "MESH"
+    ],
+    [
+      40,
+      21,
+      0,
+      22,
+      0,
+      "FILE_3D_GLB"
     ]
   ],
   "groups": [
@@ -1373,7 +1443,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        516,
+        532,
         400,
         642
       ],
@@ -1386,7 +1456,7 @@
       "title": "INPUT",
       "bounding": [
         428,
-        516,
+        532,
         360,
         430
       ],
@@ -1399,7 +1469,7 @@
       "title": "PROMPT",
       "bounding": [
         796,
-        516,
+        532,
         300,
         196
       ],
@@ -1412,7 +1482,7 @@
       "title": "SETTINGS",
       "bounding": [
         1104,
-        516,
+        532,
         320,
         1716
       ],
@@ -1425,9 +1495,9 @@
       "title": "OUTPUT",
       "bounding": [
         1432,
-        516,
+        532,
         340,
-        1340
+        1492
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1436,22 +1506,25 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## 3d/trellis2\n\nKlein still -> native TRELLIS.2 INT8 mesh (Comfy core nodes).\n\n```bash\n./scripts/manage.sh download-3d --tier trellis2\nbazelisk run //:manage -- occupancy enter trellis --yes\n```\n\nLoadImage: a Klein still (`ez_still_*.png` or a clay plate). Unload models first (EZUnloadModels).\nUNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack).\nLab upsample **512** (not 1536). TRELLIS-only canvas. Occupancy: trellis.\n\nDINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.\n",
+    "lab_note": "## 3d/trellis2\n\nKlein still -> native TRELLIS.2 INT8 mesh (Comfy core nodes).\n\n```bash\n./scripts/manage.sh download-3d --tier trellis2\nbazelisk run //:manage -- occupancy enter trellis --yes\n```\n\nLoadImage: a Klein still (`ez_still_*.png` or a clay plate). Unload models first (EZUnloadModels).\nUNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack).\nUpsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this lab\ngraph runs the 1024 floor. Structure decode stays at 32. MeshToFile3D only converts in memory, so\nSaveGLB is the node that writes `output/3d/trellis2_NNNNN_.glb`. TRELLIS-only canvas. Do not mint an\nAsset Bible row from this graph.\n\nDINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.\n\nOccupancy: trellis - stop Blender desk, LTX, Wan, Klein denoise. One GB10 job.\n",
     "lab_profile": "3d/trellis2",
-    "lab_description": "Klein still to native TRELLIS.2 INT8 mesh. 512. TRELLIS-only.",
+    "lab_description": "Klein still to native TRELLIS.2 INT8 mesh. Upsample 1024. TRELLIS-only.",
     "lab_trellis": {
       "unet": "trellis_2_int8_convrot.safetensors",
-      "resolution": 512,
-      "native_only": true
+      "resolution": 1024,
+      "native_only": true,
+      "save_prefix": "3d/trellis2"
     },
     "lab_app_mode": {
       "enabled": true,
-      "default_view": "graph",
+      "default_view": "app",
       "frontend_min": "1.41.13",
       "lane": "3d",
       "occupancy": "trellis",
       "enhance_off_identity": true,
-      "handoff": []
+      "handoff": [
+        "3d/prop-variants"
+      ]
     },
     "linearData": {
       "inputs": [
@@ -1460,7 +1533,7 @@
           "image"
         ],
         [
-          22,
+          23,
           "quality",
           {
             "label": "Quality",
@@ -1469,14 +1542,15 @@
         ]
       ],
       "outputs": [
-        21
+        22
       ]
     },
-    "lab_rel": "3d/trellis2",
-    "workflowRendererVersion": "Vue-corrected",
+    "linearMode": true,
     "lab_quality": {
       "default": "lab"
-    }
+    },
+    "lab_rel": "3d/trellis2",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

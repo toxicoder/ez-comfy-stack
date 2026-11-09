@@ -7,6 +7,24 @@
       "kind": "index"
     },
     {
+      "id": "3d/blockout-mesh",
+      "path": "generated/workflows/3d/blockout-mesh.md",
+      "lane": "3d",
+      "kind": "graph"
+    },
+    {
+      "id": "3d/prop-variants",
+      "path": "generated/workflows/3d/prop-variants.md",
+      "lane": "3d",
+      "kind": "graph"
+    },
+    {
+      "id": "3d/shot-to-prop",
+      "path": "generated/workflows/3d/shot-to-prop.md",
+      "lane": "3d",
+      "kind": "graph"
+    },
+    {
       "id": "3d/still-to-mesh",
       "path": "generated/workflows/3d/still-to-mesh.md",
       "lane": "3d",
@@ -2659,8 +2677,8 @@
       "kind": "album"
     }
   ],
-  "graph_count": 693,
-  "page_count": 444,
+  "graph_count": 696,
+  "page_count": 447,
   "lanes": [
     "photos",
     "video",
