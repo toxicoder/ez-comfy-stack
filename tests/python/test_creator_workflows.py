@@ -320,7 +320,7 @@ def test_platform_pack_prefixes_sizes_and_independent_t2i() -> None:
     assert "241" not in blob
 
 
-def test_only_daily_still_exposes_unet_in_app_inputs() -> None:
+def test_no_app_exposes_a_disk_model_list() -> None:
     unet_stems = []
     for path in suite_json_paths(WF):
         graph = json.loads(path.read_text(encoding="utf-8"))
@@ -328,7 +328,7 @@ def test_only_daily_still_exposes_unet_in_app_inputs() -> None:
         hits = [entry for entry in linear.get("inputs") or [] if entry[1] == "unet_name"]
         if hits:
             unet_stems.append(graph["id"])
-    assert set(unet_stems) == {"still-daily", "still-studio", "image-studio"}
+    assert unet_stems == []
 
 
 def test_app_inputs_are_prompt_first_and_hide_join_shots() -> None:
@@ -368,7 +368,7 @@ def test_app_inputs_are_prompt_first_and_hide_join_shots() -> None:
             assert "format" in names, graph["id"]
             latent_stems.append(graph["id"])
         if "unet_name" in names:
-            assert graph["id"] in {"still-daily", "still-studio", "image-studio"}
+            raise AssertionError(f"{graph['id']} exposes a disk model list in App Mode")
     assert latent_stems
     assert "still-studio" in latent_stems
     assert "still-draft" in latent_stems

@@ -74,7 +74,7 @@ Klein 4B still desk. Pick Format / platform for pixels, save prefix, and Rewrite
 Look recipe is an optional Cinema Rack starter (Enhance context). Style stays on Rewrite prompt. Quality does not change size.
 Default canvas: 1280x704 (LTX I2V feeder). 1280x720 platform rows are stills-only - scale in an editor if a host wants more pixels.
 Models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.
-Click Image model to swap distilled / NVFP4 / base. High quality may swap Klein base when download-image --tier base is on disk.
+Quality is the only weight swap this App offers, and it stays inside the Klein stack: standard = Klein 4B fp8 (8 steps, CFG 1.0), draft = Klein 4B nvfp4 (4 steps, CFG 1.0), high and Free Commercial Use (<$10M) = Klein 4B base (24 steps, CFG 3.5), ultra = Klein 9B distilled, max = Klein 9B base. The App lists no disk models; another stack is a different App.
 Save prefix follows Format (Custom keeps ez_still_studio). Empty of lettering - composite titles later.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.
 Handoff: video/silent/still-to-video-5s, video/av/still-to-video-8s, photos/text-swap.
@@ -96,13 +96,10 @@ Handoff: video/silent/still-to-video-5s, video/av/still-to-video-8s, photos/text
 
 STILL_NOTE = """## photos/still-daily
 
-Daily Klein 4B still app. Click the UNET filename to swap Apache Klein 4B weights.
+Daily Klein 4B still app.
 CLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for every Klein 4B UNET.
 
-Swap table:
-- flux-2-klein-4b-fp8.safetensors - daily default, 4 steps, CFG 1.0
-- flux-2-klein-4b-nvfp4.safetensors - Spark NVFP4 (download-image --tier nvfp4), 4 steps, CFG 1.0
-- flux-2-klein-base-4b-fp8.safetensors - more quality (download-image --tier base), raise steps to 20-28 and CFG to about 3.5
+Quality is the only weight swap this App offers, and it stays inside the Klein stack: standard = Klein 4B fp8 (8 steps, CFG 1.0), draft = Klein 4B nvfp4 (4 steps, CFG 1.0), high and Free Commercial Use (<$10M) = Klein 4B base (24 steps, CFG 3.5), ultra = Klein 9B distilled, max = Klein 9B base. The App lists no disk models; another stack is a different App.
 
 SETTINGS: Format / platform sets pixels (default 1024x576 16:9 mid). Custom uses Width x Height. Seed, steps, CFG on KSampler.
 Save prefix: ez_still_app.
@@ -398,7 +395,7 @@ def build_still_app() -> dict:
     graph["id"] = "photos/still-daily"
     graph["revision"] = 1
     unet = _node(graph, "UNETLoader")
-    unet["title"] = "Image model - click filename to swap"
+    unet["title"] = "Image model - Quality swaps within the Klein stack"
     latent = _node(graph, "EmptyFlux2LatentImage")
     latent["widgets_values"] = [1024, 576, 1]
     latent["title"] = "Size (width x height x batch)"
@@ -412,7 +409,7 @@ def build_still_app() -> dict:
     note["widgets_values"] = [STILL_NOTE]
     graph["extra"]["lab_profile"] = "photos/still-daily"
     graph["extra"]["lab_note"] = STILL_NOTE
-    graph["extra"]["lab_description"] = "Daily Klein 4B still; click UNET to swap distilled / NVFP4 / base"
+    graph["extra"]["lab_description"] = "Daily Klein 4B still; Quality swaps within the Klein stack"
     enh = _node(graph, "EZKleinPromptEnhance")
     enh["widgets_values"][0] = KLEIN_STILL_DAILY
     enh["widgets_values"][1] = True
@@ -478,7 +475,7 @@ def build_still_studio() -> dict:
     graph["last_node_id"] = nid
     graph["revision"] = 1
     unet = _node(graph, "UNETLoader")
-    unet["title"] = "Image model - click filename to swap"
+    unet["title"] = "Image model - Quality swaps within the Klein stack"
     latent = _node(graph, "EmptyFlux2LatentImage")
     latent["widgets_values"] = [1280, 704, 1]
     latent["title"] = "Latent (wired from Format)"

@@ -38,9 +38,8 @@ loads no LTX model, so the Quality combo moves Klein tiers only.
 1. Queue **once**. The still lands at `${COMFY_OUTPUT_DIR}/ez_gosee_plate_00001_.png`.
 2. Check the face, the wardrobe, and the location read before you Queue a print
    pass. Re-Queue here until the plate is right; it is 4 steps and cheap.
-3. Next: **film/go-see/act-01** (or **feature** for a one-film
-   title). Its LoadImage reads `ez_gosee_plate.png`, so change the seed here
-   and re-Queue the plate before you re-Queue a print.
+3. Next: **film/go-see/feature**. Its LoadImage reads `ez_gosee_plate.png`, so change
+   the seed here and re-Queue the plate before you re-Queue a print.
 4. Optional still-only iterate: **photos/still-draft**. Optional silent
    rehearsal: **video/silent/still-to-shot**.
 
@@ -556,9 +555,8 @@ loads no LTX model, so the Quality combo moves Klein tiers only.
 1. Queue **once**. The still lands at `${COMFY_OUTPUT_DIR}/ez_gosee_plate_00001_.png`.
 2. Check the face, the wardrobe, and the location read before you Queue a print
    pass. Re-Queue here until the plate is right; it is 4 steps and cheap.
-3. Next: **film/go-see/act-01** (or **feature** for a one-film
-   title). Its LoadImage reads `ez_gosee_plate.png`, so change the seed here
-   and re-Queue the plate before you re-Queue a print.
+3. Next: **film/go-see/feature**. Its LoadImage reads `ez_gosee_plate.png`, so change
+   the seed here and re-Queue the plate before you re-Queue a print.
 4. Optional still-only iterate: **photos/still-draft**. Optional silent
    rehearsal: **video/silent/still-to-shot**.
 

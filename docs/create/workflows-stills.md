@@ -58,7 +58,7 @@ Lane B Klein stills (same occupancy **klein**):
 
 | Workflow | Occupancy | What it does |
 | --- | --- | --- |
-| **[photos/still-daily](../generated/workflows/photos/still-daily.md)** | klein | Daily still. Format / platform + click UNET to swap distilled / NVFP4 / base. Prefix `ez_still_app` |
+| **[photos/still-daily](../generated/workflows/photos/still-daily.md)** | klein | Daily still. Format / platform; Quality swaps Klein 4B fp8 / NVFP4 / base. Prefix `ez_still_app` |
 | **[photos/still-studio](../generated/workflows/photos/still-studio.md)** | klein | Still desk. Format / platform sets pixels + prefix + framing; Style + Rewrite prompt + Look recipe. Prefix follows Format (`ez_still_studio` when Custom) |
 | **[photos/image-studio](../generated/workflows/photos/image-studio.md)** | klein | Universal still desk. 100 creator modes + Format / platform + optional reference. **Iterate** / **This run**. Prefix follows Creator mode (`ez_gen_photoreal` default; `ez_iterate` while Iterate is on) |
 | **[photos/platform-pack](../generated/workflows/photos/platform-pack.md)** | klein | Six plates, one identity (`ez_pack_*`). Independent T2I; Ctrl+B unused groups |
