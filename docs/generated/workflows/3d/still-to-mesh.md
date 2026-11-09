@@ -36,7 +36,7 @@ Still pack plate -> native TRELLIS.2 INT8 mesh (Comfy core nodes). Occupancy: **
 bazelisk run //:manage -- occupancy enter trellis --yes
 ```
 
-EZDCCLoadStillPack slug ``go-see`` plate ``mug`` -> OccupancyGate -> EZUnloadModels -> TRELLIS.2 INT8. Save under ``assets/objects/_lab-mug/`` (output tree, never MODELS_DIR). Do not mint an Asset Bible row from this graph.
+EZDCCLoadStillPack slug ``go-see`` plate ``mug`` -> OccupancyGate -> EZUnloadModels -> TRELLIS.2 INT8 (upsample ``target_resolution`` 1024 - ComfyUI only accepts 1024-2048 in steps of 128). PaintMesh -> MeshToFile3D only converts in memory; SaveGLB is the node that writes ``assets/objects/_lab-mug/mesh`` (output tree, never MODELS_DIR). Do not mint an Asset Bible row from this graph.
 
 No Preview3D / Load3D / Save3D types in-tree - inspect the GLB with core Load 3D / Preview 3D after Queue. Native INT8 only.
 ````
@@ -66,18 +66,19 @@ flowchart LR
   N11["VaeDecodeStructureTrellis2"]
   N12["Trellis2ShapeStage"]
   N13["KSampler (shape)"]
-  N14["Upsample 512"]
-  N15["KSampler (512)"]
+  N14["Upsample 1024"]
+  N15["KSampler (1024)"]
   N16["VaeDecodeShapeTrellis"]
   N17["Trellis2TextureStage"]
   N18["KSampler (texture)"]
   N19["VaeDecodeTextureTrellis"]
   N20["PaintMesh"]
-  N21["Save GLB (_lab-mug)"]
-  N22["Occupancy gate (trellis)"]
+  N21["To GLB bytes"]
+  N22["Save GLB"]
   N23["Quality"]
   N24["Check models"]
-  N2 --> N22
+  N25["Occupancy gate (trellis)"]
+  N2 --> N25
   N3 --> N8
   N4 --> N8
   N5 --> N10
@@ -106,7 +107,8 @@ flowchart LR
   N18 --> N19
   N19 --> N20
   N20 --> N21
-  N22 --> N3
+  N21 --> N22
+  N25 --> N3
 ```
 
 ## Nodes on this graph
@@ -126,17 +128,18 @@ flowchart LR
 | 11 | VaeDecodeStructureTrellis2 | `VaeDecodeStructureTrellis2` | OUTPUT |
 | 12 | Trellis2ShapeStage | `Trellis2ShapeStage` | OUTPUT |
 | 13 | KSampler (shape) | `KSampler` | SETTINGS |
-| 14 | Upsample 512 | `Trellis2UpsampleStage` | OUTPUT |
-| 15 | KSampler (512) | `KSampler` | SETTINGS |
+| 14 | Upsample 1024 | `Trellis2UpsampleStage` | OUTPUT |
+| 15 | KSampler (1024) | `KSampler` | SETTINGS |
 | 16 | VaeDecodeShapeTrellis | `VaeDecodeShapeTrellis` | OUTPUT |
 | 17 | Trellis2TextureStage | `Trellis2TextureStage` | OUTPUT |
 | 18 | KSampler (texture) | `KSampler` | SETTINGS |
 | 19 | VaeDecodeTextureTrellis | `VaeDecodeTextureTrellis` | OUTPUT |
 | 20 | PaintMesh | `PaintMesh` | OUTPUT |
-| 21 | Save GLB (_lab-mug) | `MeshToFile3D` | OUTPUT |
-| 22 | Occupancy gate (trellis) | `EZDCCOccupancyGate` | INPUT |
+| 21 | To GLB bytes | `MeshToFile3D` | OUTPUT |
+| 22 | Save GLB | `SaveGLB` | OUTPUT |
 | 23 | Quality | `EZQuality` | QUALITY |
 | 24 | Check models | `EZModelCheck` | QUALITY |
+| 25 | Occupancy gate (trellis) | `EZDCCOccupancyGate` | INPUT |
 
 ## Node parameter reference
 
@@ -170,7 +173,7 @@ Still pack plate -> native TRELLIS.2 INT8 mesh (Comfy core nodes). Occupancy: **
 bazelisk run //:manage -- occupancy enter trellis --yes
 ```
 
-EZDCCLoadStillPack slug ``go-see`` plate ``mug`` -> OccupancyGate -> EZUnloadModels -> TRELLIS.2 INT8. Save under ``assets/objects/_lab-mug/`` (output tree, never MODELS_DIR). Do not mint an Asset Bible row from this graph.
+EZDCCLoadStillPack slug ``go-see`` plate ``mug`` -> OccupancyGate -> EZUnloadModels -> TRELLIS.2 INT8 (upsample ``target_resolution`` 1024 - ComfyUI only accepts 1024-2048 in steps of 128). PaintMesh -> MeshToFile3D only converts in memory; SaveGLB is the node that writes ``assets/objects/_lab-mug/mesh`` (output tree, never MODELS_DIR). Do not mint an Asset Bible row from this graph.
 
 No Preview3D / Load3D / Save3D types in-tree - inspect the GLB with core Load 3D / Preview 3D after Queue. Native INT8 only.
 ````
@@ -391,7 +394,7 @@ Random seed for the noise tensor.
 | --- | --- |
 | KSampler (structure) | `42` |
 | KSampler (shape) | `42` |
-| KSampler (512) | `42` |
+| KSampler (1024) | `42` |
 | KSampler (texture) | `43` |
 
 #### `control_after_generate`
@@ -435,7 +438,7 @@ Classifier-free guidance scale.
 | --- | --- |
 | KSampler (structure) | `7.5` |
 | KSampler (shape) | `7.5` |
-| KSampler (512) | `7.5` |
+| KSampler (1024) | `7.5` |
 | KSampler (texture) | `1` |
 
 #### `sampler_name`
@@ -510,7 +513,7 @@ How sigmas are spaced across steps.
 | --- | --- |
 | KSampler (structure) | `normal` |
 | KSampler (shape) | `normal` |
-| KSampler (512) | `simple` |
+| KSampler (1024) | `simple` |
 | KSampler (texture) | `normal` |
 
 **Other choices**
@@ -545,15 +548,15 @@ Decode structure latent to voxels.
 | --- | --- | --- | --- |
 | `samples` | in | `LATENT` | Structure latent. |
 | `vae` | in | `VAE` | TRELLIS VAE. |
-| `voxel` | out | `LATENT` | Voxel grid. |
+| `voxel` | out | `VOXEL` | Voxel grid. |
 
 #### `resolution`
 
-Type `COMBO`. Range / default: 32.
+Type `COMBO`. Range / default: 32 or 64; lab 32.
 
 Voxel grid size.
 
-**How it affects generation:** 32 is the lab structure decode.
+**How it affects generation:** 32 is the lab structure decode. 64 is the only other upstream option and is the finer grid.
 
 **This graph:** `32`
 
@@ -562,6 +565,7 @@ Voxel grid size.
 | Choice | What it does |
 | --- | --- |
 | `32` | Lab default. |
+| `64` | Finer voxel grid; slower. |
 
 ### `Trellis2ShapeStage` - TRELLIS.2 Shape Stage
 
@@ -571,7 +575,7 @@ Sample structure from a voxel latent.
 | --- | --- | --- | --- |
 | `positive` | in | `CONDITIONING` | Vision cond. |
 | `negative` | in | `CONDITIONING` | Negative. |
-| `voxel` | in | `LATENT` | Structure decode voxels. |
+| `voxel` | in | `VOXEL` | Structure decode voxels. |
 | `positive` | out | `CONDITIONING` | Pass-through. |
 | `negative` | out | `CONDITIONING` | Pass-through. |
 | `LATENT` | out | `LATENT` | Shape latent. |
@@ -580,11 +584,11 @@ No widgets. Sockets only.
 
 ### `Trellis2UpsampleStage` - TRELLIS.2 Upsample Stage
 
-Upsample the shape latent toward 512.
+Upsample the shape latent toward 1024.
 
 !!! warning "Lab notes"
 
-    Lab widget 512. download-3d --tier trellis2.
+    Lab queues the 1024 floor. download-3d --tier trellis2.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -596,22 +600,15 @@ Upsample the shape latent toward 512.
 | `negative` | out | `CONDITIONING` | Cond. |
 | `LATENT` | out | `LATENT` | Upsampled shape. |
 
-#### `resolution`
+#### `target_resolution`
 
-Type `COMBO`. Range / default: 512.
+Type `INT`. Range / default: 1024-2048 step 128; lab 1024.
 
-Target structure resolution.
+Structure resolution the upsampled shape stage renders at.
 
-**How it affects generation:** 512 is the lab INT8 mesh. Lower is faster and blockier.
+**How it affects generation:** ComfyUI accepts only 1024-2048 in steps of 128 and defaults to 1024; every lab 3D graph queues that floor. There is no 512 or 256 on this widget (the old lab note about 512 predates the rename).
 
-**This graph:** `512`
-
-**Other choices**
-
-| Choice | What it does |
-| --- | --- |
-| `512` | Lab default. |
-| `256` | Faster, coarser. |
+**This graph:** `1024`
 
 ### `VaeDecodeShapeTrellis` - TRELLIS Decode Shape
 
@@ -650,7 +647,7 @@ Decode texture latent to voxel colors.
 | `samples` | in | `LATENT` | Texture latent. |
 | `vae` | in | `VAE` | VAE. |
 | `shape_subdivides` | in | `SHAPE_SUBDIVIDES` | From shape decode. |
-| `voxel_colors` | out | `VOXEL_COLORS` | Colors for PaintMesh. |
+| `voxel_colors` | out | `VOXEL` | Colors for PaintMesh. |
 
 No widgets. Sockets only.
 
@@ -661,65 +658,47 @@ Apply voxel colors onto the mesh.
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `mesh` | in | `MESH` | Shape mesh. |
-| `voxel_colors` | in | `VOXEL_COLORS` | Decoded colors. |
+| `voxel_colors` | in | `VOXEL` | Decoded colors. |
 | `mesh` | out | `MESH` | Painted mesh. |
 
 No widgets. Sockets only.
 
 ### `MeshToFile3D` - Mesh to File 3D
 
-Write a GLB/mesh file.
+Build the GLB payload in memory. No widgets; writes nothing.
 
 !!! warning "Lab notes"
 
-    3d/trellis2 may leave the path empty (Comfy default). 3d/still-to-mesh writes assets/objects/_lab-mug/mesh.
+    A graph must end MeshToFile3D -> SaveGLB to get a file on disk: this node only builds the payload, SaveGLB writes it.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `mesh` | in | `MESH` | Painted mesh. |
-| `model_3d` | out | `MODEL_3D` | File handle. |
+| `model_3d` | out | `FILE_3D_GLB` | GLB payload for SaveGLB. |
+
+No widgets. Sockets only.
+
+### `SaveGLB` - Save 3D Model
+
+Write the .glb under the output folder. Output node; no output sockets.
+
+!!! warning "Lab notes"
+
+    3d/trellis2 uses prefix 3d/trellis2. The DCC pack graphs use assets/objects/_lab-<name>/<stem>. Needs MeshToFile3D upstream.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `mesh` | in | `MESH` | MultiType socket: accepts MESH or any FILE_3D_* payload. Lab wires MeshToFile3D's model_3d into it. |
 
 #### `filename_prefix`
 
 Type `STRING`.
 
-Output stem under the output folder.
+Output stem under the ComfyUI output folder.
 
-**How it affects generation:** Lab mug pack uses assets/objects/_lab-mug/mesh.
+**How it affects generation:** 3d/trellis2 lands the .glb under <output>/3d/, the DCC pack graphs under <output>/assets/objects/... The directory part of the prefix is created on demand. Hidden prompt and extra_pnginfo are injected by the backend and are not widgets.
 
 **This graph:** `assets/objects/_lab-mug/mesh`
-
-### `EZDCCOccupancyGate` - Occupancy gate
-
-Pass-through IMAGE that fail-closes on occupancy XOR. Does not start Compose.
-
-!!! warning "Lab notes"
-
-    Missing .occupancy.json passes. idle / blender-desk / llm-desk / mismatch fail.
-
-| Socket | Dir | Type | What it carries |
-| --- | --- | --- | --- |
-| `image` | in | `IMAGE` | Still to gate. |
-| `image` | out | `IMAGE` | Same still if occupancy matches. |
-
-#### `required_mode`
-
-Type `COMBO`.
-
-Heavy GPU mode that must already be entered.
-
-**How it affects generation:** klein / wan / ltx / trellis. Pick the family you are about to Queue.
-
-**This graph:** `trellis`
-
-**Other choices**
-
-| Choice | What it does |
-| --- | --- |
-| `klein` | Klein 4B stills. |
-| `trellis` | TRELLIS.2. |
-| `wan` | Wan 5B. |
-| `ltx` | LTX-2.5. |
 
 ### `EZQuality` - Quality
 
@@ -776,3 +755,35 @@ Last check result.
 **How it affects generation:** JS overwrites after Check models. Queue ignores this node.
 
 **This graph:** `Click Check models. Queue does not run this node.`
+
+### `EZDCCOccupancyGate` - Occupancy gate
+
+Pass-through IMAGE that fail-closes on occupancy XOR. Does not start Compose.
+
+!!! warning "Lab notes"
+
+    Missing .occupancy.json passes. idle / blender-desk / llm-desk / mismatch fail.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Still to gate. |
+| `image` | out | `IMAGE` | Same still if occupancy matches. |
+
+#### `required_mode`
+
+Type `COMBO`.
+
+Heavy GPU mode that must already be entered.
+
+**How it affects generation:** klein / wan / ltx / trellis. Pick the family you are about to Queue.
+
+**This graph:** `trellis`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `klein` | Klein 4B stills. |
+| `trellis` | TRELLIS.2. |
+| `wan` | Wan 5B. |
+| `ltx` | LTX-2.5. |

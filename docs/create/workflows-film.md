@@ -15,7 +15,7 @@ through Klein look-dev into an LTX take. Single clips are on
 **What's on this page**
 
 - **90s shorts** - the three one-title pairs (go-see, still-here, switchyard), the five-act series, and the plate -> print queue order
-- **DCC (clay -> print)** - Klein-from-clay, IC-LoRA envelopes, in-canvas loaders
+- **DCC (clay -> print)** - Klein-from-clay, IC-LoRA envelopes, in-canvas loaders, and the five `_lab/3d/` mesh Apps
 - **Related** - what to load after the film lands
 
 **What this enables**
@@ -80,7 +80,11 @@ Full loop: [Short films](../shorts.md). Two apps per film - Queue the **plate**,
 | **[guides/first-last-from-guide](../generated/workflows/guides/first-last-from-guide.md)** | Fun InP first+last from the pack. Opt-in `download-wan --tier fun-inp`. MagCache off. |
 | **[guides/guide-still](../generated/workflows/guides/guide-still.md)** | Stay on `:8188`. `EZDCCLoadGuideStill` + occupancy gate. Prefix `ez_guide_hero`. |
 | **[guides/depth-from-loader](../generated/workflows/guides/depth-from-loader.md)** | Envelope from loaders + `depth.mp4` path. MagCache off. Distilled-only. Prefix `ez_iclora_guide`. |
-| **[3d/still-to-mesh](../generated/workflows/3d/still-to-mesh.md)** | Still pack `plate=mug` -> native TRELLIS.2 INT8. Output `assets/objects/_lab-mug/`. Occupancy **trellis**. |
+| **[3d/trellis2](../generated/workflows/3d/trellis2.md)** | Klein still via `LoadImage` -> native TRELLIS.2 INT8 textured mesh. `SaveGLB` writes the `.glb` under prefix `3d/trellis2`. Opt-in `download-3d --tier trellis2`. Occupancy **trellis**. |
+| **[3d/still-to-mesh](../generated/workflows/3d/still-to-mesh.md)** | Still pack `plate=mug` via `EZDCCLoadStillPack` -> native TRELLIS.2 INT8 textured mesh. `SaveGLB` writes `assets/objects/_lab-mug/mesh`. Occupancy **trellis**. |
+| **[3d/blockout-mesh](../generated/workflows/3d/blockout-mesh.md)** | Still pack via `EZDCCLoadStillPack` -> **untextured gray-box blockout**: structure + shape stages only, no upsample, no texture VAE, no `PaintMesh` - the fast layout proxy. `SaveGLB` writes `assets/objects/_lab-blockout/blockout`. Occupancy **trellis**. |
+| **[3d/shot-to-prop](../generated/workflows/3d/shot-to-prop.md)** | DCC guide still via `EZDCCLoadGuideStill` (`slug=go-see`, `shot_id=12`, `layer=first`) -> textured mesh of one hero object, for re-compositing that object into other shots. `SaveGLB` writes `assets/objects/_lab-shot-prop/prop`. Occupancy **trellis**. |
+| **[3d/prop-variants](../generated/workflows/3d/prop-variants.md)** | Klein still via `LoadImage` with `EmptyTrellis2LatentStructure` `batch_size=4` -> four candidate meshes from one still in a single occupancy session. `SaveGLB` writes `assets/objects/_lab-variants/prop`. Occupancy **trellis**. |
 | **[audio/stem-mix](../generated/workflows/audio/stem-mix.md)** | Picture-lock stem mix desk. Occupancy **audio**. Host `stem-mix.sh` (duck -15 dB, YouTube loudnorm). |
 
 ---

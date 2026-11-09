@@ -58,6 +58,7 @@ filegroup(
     srcs = [
         "python/_ace_widgets_contract.py",
         "python/_audit_lab_graphs.py",
+        "python/_build_3d_apps.py",
         "python/_build_app_workflows.py",
         "python/_build_audio_catalogs.py",
         "python/_build_audio_finish.py",
@@ -119,6 +120,7 @@ filegroup(
         "python/test_audio_language.py",
         "python/test_audio_metadata.py",
         "python/test_audio_splice.py",
+        "python/test_3d_apps.py",
         "python/test_background.py",
         "python/test_background_swap_workflow.py",
         "python/test_banned_camera_ip.py",

@@ -21,6 +21,9 @@ tags: [workflows, generated, comfyui]
 
 | Graph | Page |
 | --- | --- |
+| `3d/blockout-mesh` | [3d/blockout-mesh.md](3d/blockout-mesh.md) |
+| `3d/prop-variants` | [3d/prop-variants.md](3d/prop-variants.md) |
+| `3d/shot-to-prop` | [3d/shot-to-prop.md](3d/shot-to-prop.md) |
 | `3d/still-to-mesh` | [3d/still-to-mesh.md](3d/still-to-mesh.md) |
 | `3d/trellis2` | [3d/trellis2.md](3d/trellis2.md) |
 
