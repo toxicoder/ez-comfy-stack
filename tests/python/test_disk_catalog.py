@@ -16,6 +16,7 @@ sys.path.insert(0, str(ROOT / "scripts" / "lib"))
 
 import disk_catalog as dc  # noqa: E402
 import model_manifest as mm  # noqa: E402
+from ez_common import Json  # noqa: E402
 
 CATALOG = ROOT / "config" / "disk-catalog.yaml"
 MANIFEST = ROOT / "config" / "model-manifest.yaml"
@@ -493,14 +494,14 @@ DOCKER_DF_JSON = "\n".join(
     ],
 )
 def test_parse_size_bytes_accepts_int_and_human_sizes(
-    raw: object, expected: int
+    raw: Json, expected: int
 ) -> None:
     """Bytes, floats, and docker / du style suffixes all reach an int."""
     assert dc.parse_size_bytes(raw) == expected
 
 
 @pytest.mark.parametrize("raw", ["5XB", "abc", "GB", "1.2.3", "1GB2", ["1GB"], {"a": 1}])
-def test_parse_size_bytes_rejects_garbage(raw: object) -> None:
+def test_parse_size_bytes_rejects_garbage(raw: Json) -> None:
     """Unparseable input raises instead of silently becoming 0."""
     with pytest.raises(ValueError, match="unparseable size"):
         dc.parse_size_bytes(raw)
