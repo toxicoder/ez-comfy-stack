@@ -16,6 +16,7 @@ sys.path.insert(0, str(ROOT / "scripts" / "lib"))
 
 import disk_catalog as dc  # noqa: E402
 import model_manifest as mm  # noqa: E402
+from ez_common import Json  # noqa: E402
 
 CATALOG = ROOT / "config" / "disk-catalog.yaml"
 MANIFEST = ROOT / "config" / "model-manifest.yaml"
@@ -460,3 +461,137 @@ def test_cli_rank_and_keep_refuse(
         )
         == 0
     )
+
+
+# docker system df --format '{{json .}}' answers with human sizes ("597GB"),
+# which int() rejects. These pin the parser the survey now runs on.
+DOCKER_DF_JSON = "\n".join(
+    (
+        '{"Active":"1","Reclaimable":"591MB","Size":"597GB","TotalCount":"9","Type":"Images"}',
+        '{"Active":"0","Reclaimable":"0B","Size":"1.054kB","TotalCount":"5","Type":"Containers"}',
+        '{"Active":"0","Reclaimable":"0B","Size":"0B","TotalCount":"0","Type":"Build Cache"}',
+    )
+)
+
+
+@pytest.mark.parametrize(
+    ("raw", "expected"),
+    [
+        ("597GB", 597_000_000_000),
+        ("591MB", 591_000_000),
+        ("1.054kB", 1054),
+        ("0B", 0),
+        ("1.5GiB", 1_610_612_736),
+        ("512M", 536_870_912),
+        ("2T", 2_199_023_255_552),
+        ("3pib", 3_377_699_720_527_872),
+        ("12345", 12345),
+        ("  42  ", 42),
+        (5_000_000, 5_000_000),
+        (12.9, 13),
+        (None, 0),
+        ("", 0),
+    ],
+)
+def test_parse_size_bytes_accepts_int_and_human_sizes(
+    raw: Json, expected: int
+) -> None:
+    """Bytes, floats, and docker / du style suffixes all reach an int."""
+    assert dc.parse_size_bytes(raw) == expected
+
+
+@pytest.mark.parametrize("raw", ["5XB", "abc", "GB", "1.2.3", "1GB2", ["1GB"], {"a": 1}])
+def test_parse_size_bytes_rejects_garbage(raw: Json) -> None:
+    """Unparseable input raises instead of silently becoming 0."""
+    with pytest.raises(ValueError, match="unparseable size"):
+        dc.parse_size_bytes(raw)
+
+
+def test_docker_rows_parse_human_sizes() -> None:
+    """Real docker system df rows survey with byte sizes (no int() crash)."""
+    assert list(dc.docker_rows(DOCKER_DF_JSON)) == [
+        {
+            "path": "docker://Images/Images",
+            "size_bytes": 597_000_000_000,
+            "broken_symlink": False,
+        },
+        {
+            "path": "docker://Containers/Containers",
+            "size_bytes": 1054,
+            "broken_symlink": False,
+        },
+        {
+            "path": "docker://Build Cache/Build Cache",
+            "size_bytes": 0,
+            "broken_symlink": False,
+        },
+    ]
+
+
+def test_docker_rows_honors_explicit_ids_and_bytes() -> None:
+    """Pre-shaped mock rows keep their id, type, and numeric size."""
+    rows = list(
+        dc.docker_rows(
+            json.dumps(
+                {"type": "volume", "id": "ez-comfy-state", "size_bytes": 4_000_000_000}
+            )
+        )
+    )
+    assert rows[0]["path"] == "docker://volume/ez-comfy-state"
+    assert rows[0]["size_bytes"] == 4_000_000_000
+    cat = dc.load_catalog(CATALOG)
+    assert dc.classify_path(rows[0]["path"], cat)["id"] == "docker-volume-ez-comfy-state"
+
+
+def test_docker_rows_skips_blank_and_non_object_lines() -> None:
+    """Blank, malformed, and non-object JSON lines are dropped, not fatal."""
+    blob = "\n".join(("", "   ", "not json", "null", "5", '[{"Size":"1GB"}]'))
+    assert list(dc.docker_rows(blob)) == []
+
+
+def test_docker_rows_defaults_missing_type_and_size(capsys: pytest.CaptureFixture[str]) -> None:
+    """A row with no type lands in build-cache; a bad size warns on stderr."""
+    rows = list(dc.docker_rows('{"Size":"lots"}\n{"docker_type":"dangling-image"}'))
+    assert rows[0]["path"] == "docker://build-cache/docker"
+    assert rows[0]["size_bytes"] == 0
+    assert rows[1]["path"] == "docker://dangling-image/dangling-image"
+    err = capsys.readouterr().err
+    assert "unparseable size" in err
+    assert "lots" in err
+
+
+def test_cli_docker_rows_emits_jsonl(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The docker-rows subcommand reads the blob on stdin, JSONL on stdout."""
+    monkeypatch.setattr(sys, "stdin", io.StringIO(DOCKER_DF_JSON + "\n"))
+    assert dc._cli(["--catalog", str(CATALOG), "docker-rows"]) == 0  # noqa: SLF001
+    lines = [json.loads(x) for x in capsys.readouterr().out.splitlines() if x.strip()]
+    assert len(lines) == 3
+    assert lines[0]["size_bytes"] == 597_000_000_000
+
+
+def test_cli_rank_accepts_human_size_strings(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Ranking survives a human size instead of aborting the whole plan."""
+    payload = json.dumps({"path": "/mnt/models/x.incomplete", "size_bytes": "2GB"}) + "\n"
+    monkeypatch.setattr(sys, "stdin", io.StringIO(payload))
+    assert dc._cli(["--catalog", str(CATALOG), "rank"]) == 0  # noqa: SLF001
+    ranked = json.loads(capsys.readouterr().out)
+    assert ranked[0]["id"] == "hf-incomplete"
+    assert ranked[0]["size_bytes"] == 2_000_000_000
+
+
+def test_cli_rank_unparseable_size_counts_zero(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A size nobody can read sinks the row and reports on stderr."""
+    payload = json.dumps({"path": "/mnt/models/y.incomplete", "size_bytes": "n/a"}) + "\n"
+    monkeypatch.setattr(sys, "stdin", io.StringIO(payload))
+    assert dc._cli(["--catalog", str(CATALOG), "rank"]) == 0  # noqa: SLF001
+    captured = capsys.readouterr()
+    ranked = json.loads(captured.out)
+    assert ranked[0]["size_bytes"] == 0
+    assert "unparseable size" in captured.err
+    assert "/mnt/models/y.incomplete" in captured.err
