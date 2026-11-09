@@ -39,7 +39,7 @@ If the viewer loads and the orbit is smooth, the file is fine and the sidecar di
 
 ## Where splats come from
 
-TripoSR / TripoSplat weights remain an opt-in manifest pack (`triposplat`) and are **not** a default. `--drop-pack triposplat` cannot eat `flux2-vae`. TRELLIS.2 output is a mesh, catalogued in the [Asset Bible](asset-bible.md).
+TripoSR / TripoSplat weights remain an opt-in manifest pack (`triposplat`) and are **not** a default. `--drop-pack triposplat` cannot eat `flux2-vae`. TRELLIS.2 output is a mesh: the graph's `SaveGLB` writes the `.glb` under its own output prefix on the output disk and mints no [Asset Bible](asset-bible.md) row.
 
 Banned as defaults: Inria 3DGS, Pixal3D-as-default, nvdiffrast TRELLIS. See [Model licenses](licenses.md).
 
@@ -49,5 +49,5 @@ Banned as defaults: Inria 3DGS, Pixal3D-as-default, nvdiffrast TRELLIS. See [Mod
 
 - [Host sidecars overview](studio-sidecars.md) - the host-tools group and the occupancy rule in full
 - [Blender GB10 sidecar](blender-gb10-sidecar.md) - the host DCC that dumps clay and depth
-- [Asset Bible](asset-bible.md) - where generated meshes are catalogued
+- [Asset Bible](asset-bible.md) - the mesh catalogue; a lab `3d/*` graph writes no row in it
 - [Vlo video editor](vlo.md) - the host browser NLE
