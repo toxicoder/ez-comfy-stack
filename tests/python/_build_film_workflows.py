@@ -838,8 +838,21 @@ def _act_beat_table(film: str, act: int) -> tuple:
     return tuple(rows), title
 
 
-def build_plate_note(stem: str, film: str, slug: str, label: str) -> str:
-    """Operator note for the Klein identity-plate app of one film or series."""
+def build_plate_note(stem: str, film: str, slug: str, label: str, next_stem: str) -> str:
+    """Operator note for the Klein identity-plate app of one film or series.
+
+    Args:
+        stem: This plate graph's lane-relative id.
+        film: Film or series slug the note is written for.
+        slug: Short name used in the saved-plate prefix.
+        label: Human title for the film or series.
+        next_stem: Lane-relative id of the print pass the operator loads next.
+            It must be a graph that ships: series slugs have ``act-01`` and no
+            ``feature``, one-film slugs have ``feature`` and no acts.
+
+    Returns:
+        The note markdown for the plate graph.
+    """
     return f"""## {stem}
 
 Identity plate ({label}): one Klein 4B still that every print in this series
@@ -851,9 +864,8 @@ loads no LTX model, so the Quality combo moves Klein tiers only.
 1. Queue **once**. The still lands at `${{COMFY_OUTPUT_DIR}}/ez_{slug}_plate_00001_.png`.
 2. Check the face, the wardrobe, and the location read before you Queue a print
    pass. Re-Queue here until the plate is right; it is 4 steps and cheap.
-3. Next: **{stem.rsplit('/', 1)[0]}/act-01** (or **feature** for a one-film
-   title). Its LoadImage reads `ez_{slug}_plate.png`, so change the seed here
-   and re-Queue the plate before you re-Queue a print.
+3. Next: **{next_stem}**. Its LoadImage reads `ez_{slug}_plate.png`, so change
+   the seed here and re-Queue the plate before you re-Queue a print.
 4. Optional still-only iterate: **photos/still-draft**. Optional silent
    rehearsal: **video/silent/still-to-shot**.
 
@@ -1020,7 +1032,9 @@ def build_all_films() -> None:
             _plate_view(
                 copy.deepcopy(combined),
                 stem=f"{stem}/{PLATE_STEM}",
-                note=build_plate_note(f"{stem}/{PLATE_STEM}", film, slug, label),
+                note=build_plate_note(
+                    f"{stem}/{PLATE_STEM}", film, slug, label, f"{stem}/feature"
+                ),
                 description=f"Klein identity plate for {label}",
             ),
         )
@@ -1079,7 +1093,9 @@ def build_all_films() -> None:
                     beats,
                 ),
                 stem=plate_stem,
-                note=build_plate_note(plate_stem, film, slug, series_label),
+                note=build_plate_note(
+                    plate_stem, film, slug, series_label, f"film/{film}/act-01"
+                ),
                 description=f"Klein identity plate for {series_label}",
             ),
         )
