@@ -17,6 +17,7 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
 
     from ez_common import Json
+    from ez_common.comfy_graph import WidgetValue
 
 GoalEntry: TypeAlias = "Mapping[str, Json]"
 """One ``goals.json`` row (``label``, ``llm_block``, ``sample_clause``...)."""
@@ -145,7 +146,7 @@ def goal_for_rel(lab_rel: str) -> str:
 def resolve_goal(
     goal: object = "",
     *,
-    catalog: object = "",
+    catalog: WidgetValue = "",
     lab_rel: str = "",
 ) -> str:
     """Pick a goal from an explicit widget, then the lane the graph stamped.
@@ -609,10 +610,10 @@ def resolve_prompt(
 
 
 def resolve_ace_sample(
-    catalog: object,
-    sample: object,
-    tags: object,
-    lyrics: object,
+    catalog: WidgetValue,
+    sample: WidgetValue,
+    tags: WidgetValue,
+    lyrics: WidgetValue,
     *,
     node_type: str = "EZAceStepPromptEnhance",
     mode: str = "",

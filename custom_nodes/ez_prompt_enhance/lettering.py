@@ -3,6 +3,10 @@
 from __future__ import annotations
 
 import re
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ez_common.comfy_graph import WidgetValue
 
 # Lock clause appended when the operator typed only the new string.
 LETTERING_LOCK = (
@@ -23,7 +27,7 @@ _LETTERING_WITH_RE = re.compile(
 )
 
 
-def _as_str(value: object) -> str:
+def _as_str(value: WidgetValue) -> str:
     """Coerce a widget value to a stripped string.
 
     Args:
@@ -59,7 +63,7 @@ def is_lettering_instruction(text: str) -> bool:
     return "typeface" in folded and "every other pixel" in folded
 
 
-def wrap_text_swap_prompt(text: object) -> str:
+def wrap_text_swap_prompt(text: WidgetValue) -> str:
     """Return a glyph-lock instruction for Klein text_swap.
 
     Bare strings such as ``HELLO`` become a replace-and-lock paragraph.

@@ -7,7 +7,7 @@ this module lazily.
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, replace
-from typing import TypedDict, cast
+from typing import TYPE_CHECKING, TypedDict, cast
 
 from ez_image.formats import resolve_canvas
 from ez_image.modes import ITERATE_EDIT_LINE, resolve_studio_mode
@@ -21,6 +21,10 @@ from ez_prompt_enhance.background import (
 from ez_prompt_enhance.client import STYLE_IGNORED_MODES, STYLE_NONE, style_ids
 from ez_prompt_enhance.lettering import wrap_text_swap_prompt
 from ez_prompt_enhance.samples import is_custom, resolve_prompt
+
+if TYPE_CHECKING:
+    from ez_common import ImageTensor
+    from ez_common.comfy_graph import WidgetValue
 
 # Default lab graph when the preview body omits lab_rel.
 _LAB_REL = "photos/image-studio"
@@ -198,7 +202,7 @@ def _as_bool(value: object, *, default: bool = False) -> bool:
     return False
 
 
-def _style_id(value: object) -> str:
+def _style_id(value: WidgetValue) -> str:
     """Return a catalog style id, or ``none``.
 
     Args:
@@ -213,7 +217,7 @@ def _style_id(value: object) -> str:
     return raw
 
 
-def _seed_note(seed: str, control: object) -> str:
+def _seed_note(seed: str, control: WidgetValue) -> str:
     """Describe whether the displayed seed is the one Queue will use.
 
     Args:
@@ -256,7 +260,9 @@ def _next_pass(
     return enhance_mode
 
 
-def _reference(filename: object, image: object) -> tuple[object, str, bool]:
+def _reference(
+    filename: WidgetValue, image: ImageTensor | None
+) -> tuple[ImageTensor | None, str, bool]:
     """Load the reference still the same way EZOptionalImage does.
 
     Args:
@@ -358,28 +364,28 @@ def _summary(preview: StudioPreview) -> str:
 
 def preview_studio_run(
     *,
-    category: object = "",
-    mode: object = "",
-    iterate: object = False,
-    filename: object = "",
-    format_value: object = "",
-    width: object = 1280,
-    height: object = 704,
-    batch: object = 1,
-    size_mode: object = "Match input",
-    look: object = "none",
-    prompt: object = "",
-    sample: object = "custom",
-    style: object = "none",
-    rewrite: object = True,
-    steps: object = "",
-    cfg: object = "",
-    unet: object = "",
-    seed: object = "",
-    seed_control: object = "fixed",
+    category: WidgetValue = "",
+    mode: WidgetValue = "",
+    iterate: WidgetValue = False,
+    filename: WidgetValue = "",
+    format_value: WidgetValue = "",
+    width: WidgetValue = 1280,
+    height: WidgetValue = 704,
+    batch: WidgetValue = 1,
+    size_mode: WidgetValue = "Match input",
+    look: WidgetValue = "none",
+    prompt: WidgetValue = "",
+    sample: WidgetValue = "custom",
+    style: WidgetValue = "none",
+    rewrite: WidgetValue = True,
+    steps: WidgetValue = "",
+    cfg: WidgetValue = "",
+    unet: WidgetValue = "",
+    seed: WidgetValue = "",
+    seed_control: WidgetValue = "fixed",
     lab_rel: str = _LAB_REL,
-    catalog: object = "",
-    image: object = None,
+    catalog: WidgetValue = "",
+    image: ImageTensor | None = None,
 ) -> StudioPreview:
     """Resolve the image-studio widgets to the values Queue will send.
 
@@ -495,7 +501,7 @@ def preview_payload(body: object) -> StudioPreviewPayload:
     Returns:
         Preview fields plus ``summary``. ``ok`` is true.
     """
-    raw: dict[str, object] = body if isinstance(body, dict) else {}
+    raw: dict[str, WidgetValue] = body if isinstance(body, dict) else {}
     preview = preview_studio_run(
         category=raw.get("category", ""),
         mode=raw.get("mode", ""),

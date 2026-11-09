@@ -20,6 +20,9 @@ if TYPE_CHECKING:
 VisionModel: TypeAlias = "llama_cpp.Llama"
 """Cached llama.cpp vision handle held in :data:`_VISION`."""
 
+ChatContentPart: TypeAlias = dict[str, "str | dict[str, str]"]
+"""One llama.cpp chat content part: a ``text`` string or an ``image_url`` map."""
+
 # Opt-in Qwen2.5-VL 3B (Apache). Not part of download-models.
 DESCRIBE_GGUF = "Qwen2.5-VL-3B-Instruct-Q4_K_M.gguf"
 DESCRIBE_MMPROJ = "mmproj-Qwen2.5-VL-3B-Instruct-Q8_0.gguf"
@@ -482,7 +485,7 @@ def _vision_complete(png_b64: str) -> tuple[str, str | None]:
     if llm is None:
         return "", reason or REASON_LLAMA_UNAVAILABLE
     data_url = f"data:image/png;base64,{png_b64}"
-    user: list[dict[str, object]] = [
+    user: list[ChatContentPart] = [
         {"type": "image_url", "image_url": {"url": data_url}},
         {"type": "text", "text": "Caption this still for a prompt rewriter."},
     ]

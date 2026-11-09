@@ -10,7 +10,10 @@ import json
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from ez_common.comfy_graph import WidgetValue
 
 # Catalog paths, combo sentinels, flavor ids, widget axes, and lazy JSON caches.
 CINEMA_DIR = Path(__file__).resolve().parent
@@ -364,7 +367,7 @@ def reset_cinema_caches_for_tests() -> None:
     _RECIPES = None
 
 
-def _normalize_pick(value: object) -> str:
+def _normalize_pick(value: WidgetValue) -> str:
     """Coerce a combo pick to a catalog id or ``none``.
 
     Args:

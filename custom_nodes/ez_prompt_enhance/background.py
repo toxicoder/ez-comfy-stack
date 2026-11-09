@@ -3,6 +3,10 @@
 from __future__ import annotations
 
 import re
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ez_common.comfy_graph import WidgetValue
 
 BACKGROUND_MODES = frozenset({"background_swap", "background_edit"})
 """Klein Enhance modes that wrap a background lock."""
@@ -249,7 +253,7 @@ def _already_has_cast(text: str) -> bool:
     return "companions and group members" in folded or "extras, crowd" in folded
 
 
-def strengthen_swap_instruction(text: object) -> str:
+def strengthen_swap_instruction(text: WidgetValue) -> str:
     """Upgrade backdrop-only wording to an entire-environment clause.
 
     Args:
@@ -264,7 +268,7 @@ def strengthen_swap_instruction(text: object) -> str:
     return _ONLY_BG_RE.sub(ENTIRE_ENV_VERB, raw)
 
 
-def is_reconstruction(text: object) -> bool:
+def is_reconstruction(text: WidgetValue) -> bool:
     """True when ``text`` asks to rebuild the plate as cubes or voxels.
 
     Args:
@@ -303,7 +307,7 @@ def _is_rebuild_instruction(text: str) -> bool:
     return bool(_REBUILD_LEAD_RE.search(text))
 
 
-def splice_source_caption(text: object, caption: object = "") -> str:
+def splice_source_caption(text: WidgetValue, caption: WidgetValue = "") -> str:
     """Append a Describe caption so CLIP sees source inventory.
 
     No-op when ``caption`` is empty or the line already has ``Source still:``.
@@ -377,7 +381,7 @@ def _with_people_kept(body: str) -> str:
 
 
 def wrap_background_prompt(
-    text: object, mode: str, cast: object = "", *, erase_scene: bool = True
+    text: WidgetValue, mode: str, cast: WidgetValue = "", *, erase_scene: bool = True
 ) -> str:
     """Return a subject-lock instruction for Klein background modes.
 
