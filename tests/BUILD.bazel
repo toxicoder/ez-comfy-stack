@@ -122,6 +122,7 @@ filegroup(
         "python/test_audio_language.py",
         "python/test_audio_metadata.py",
         "python/test_audio_splice.py",
+        "python/test_audit_lab_graphs.py",
         "python/test_background.py",
         "python/test_background_swap_workflow.py",
         "python/test_banned_camera_ip.py",
