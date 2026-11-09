@@ -84,7 +84,7 @@ this ratchet is what keeps it a boundary rather than a habit. It only ever goes
 down.
 """
 
-PRODUCTION_OBJECT_BUDGET = 674
+PRODUCTION_OBJECT_BUDGET = 253
 """Highest number of ``object`` tokens allowed in a type position in production.
 
 ``object`` is the honest answer when a value is opaque and only passes through,
