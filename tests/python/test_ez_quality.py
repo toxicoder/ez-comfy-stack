@@ -7,7 +7,7 @@ import json
 import re
 import sys
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pytest
 
@@ -182,6 +182,9 @@ from ez_quality.presets import (  # noqa: E402
     tier_is_honored,
     tiers_for_family,
 )
+
+if TYPE_CHECKING:
+    from ez_common import JsonMap
 
 JS = CUSTOM / "ez_quality" / "js" / "ez_quality.js"
 QUALITY_PRESETS_JS = CUSTOM / "ez_quality" / "js" / "ez_quality_presets.js"
@@ -1118,7 +1121,7 @@ def test_match_tier_keeps_a_wan_cfg_edit_on_its_tier() -> None:
 
 def test_match_tier_reports_lab_for_the_authored_widgets() -> None:
     """Widgets matching no tier but equal to what shipped read as lab."""
-    observed = {
+    observed: JsonMap = {
         "steps": 13,
         "cfg": 2.75,
         "unet_name": KLEIN_BASE,
@@ -1133,7 +1136,7 @@ def test_match_tier_reports_lab_for_the_authored_widgets() -> None:
 @pytest.mark.parametrize("family", ["none", "llm"])
 def test_match_tier_on_a_no_op_family_is_lab(family: str) -> None:
     """A family with no tier footprint can only report lab."""
-    observed = {
+    observed: JsonMap = {
         "steps": 3,
         "cfg": 9.5,
         "unet_name": "whatever.safetensors",

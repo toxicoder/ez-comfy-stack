@@ -133,7 +133,7 @@ def test_route_handlers_ok_and_errors(tmp_path: Path) -> None:
 def test_register_routes_fail_soft_and_fake_server(tmp_path: Path) -> None:
     import asyncio
 
-    def _respond_early(payload: dict[str, Any], *, status: int = 200) -> tuple[int, dict[str, Any]]:
+    def _respond_early(payload: object, *, status: int = 200) -> tuple[int, object]:
         return status, payload
 
     assert register_routes(server=object()) is False
@@ -167,7 +167,7 @@ def test_register_routes_fail_soft_and_fake_server(tmp_path: Path) -> None:
 
             return deco
 
-    def _respond(payload: dict[str, Any], *, status: int = 200) -> tuple[int, dict[str, Any]]:
+    def _respond(payload: object, *, status: int = 200) -> tuple[int, object]:
         return status, payload
 
     fake = SimpleNamespace(routes=_Adder())

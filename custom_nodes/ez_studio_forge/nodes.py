@@ -119,13 +119,13 @@ class EZAppForge:
 
     def run(
         self,
-        prompt: object,
-        template: object = AUTO,
-        slug: object = "mug-ig",
-        as_app: object = True,
-        overwrite: object = False,
-        sample: object = CUSTOM,
-        catalog: object = "",
+        prompt: str,
+        template: str = AUTO,
+        slug: str = "mug-ig",
+        as_app: bool = True,
+        overwrite: bool = False,
+        sample: str = CUSTOM,
+        catalog: str = "",
     ) -> dict[str, Any]:
         """Clone a lab graph into live `_user/` from a brief.
 

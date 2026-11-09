@@ -479,8 +479,8 @@ def test_node_input_types_and_bools(
         prompt="x",
         template="no-such",
         slug="x",
-        as_app="yes",
-        overwrite="no",
+        as_app=True,
+        overwrite=False,
         sample="custom",
         catalog="",
     )

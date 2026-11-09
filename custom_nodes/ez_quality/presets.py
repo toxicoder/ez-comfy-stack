@@ -33,7 +33,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Mapping, Sequence, TypeAlias, cast
 
 if TYPE_CHECKING:
-    from ez_common import Json, JsonObject
+    from ez_common import Json, JsonMap, JsonObject, WidgetsValues
 
 QualityGraphNode: TypeAlias = "Mapping[str, Json]"
 """One ``nodes`` row as parsed from a graph document, before any shaping."""
@@ -225,11 +225,11 @@ class QualityOverlay:
     clip_type: str | None = None
 
 
-def normalize_quality(value: object) -> str:
+def normalize_quality(value: Json) -> str:
     """Return a legal quality id, defaulting to lab.
 
     Args:
-        value: Combo widget value.
+        value: Combo widget value or parsed body value.
 
     Returns:
         One of QUALITY_CHOICES.
@@ -1013,7 +1013,7 @@ def infer_occupancy(graph: Mapping[str, Json]) -> str:
         for node in nodes:
             if node.get("type") != "UNETLoader":
                 continue
-            values = cast("list[object]", node.get("widgets_values") or [])
+            values = cast("WidgetsValues", node.get("widgets_values") or [])
             name = str(values[0]) if values else ""
             if "ltx" in name.lower():
                 return "ltx"
@@ -1038,7 +1038,7 @@ def _first_loader_name(graph: Mapping[str, Json], node_type: str) -> str:
     for node in cast("list[QualityGraphNode]", graph.get("nodes") or []):
         if node.get("type") != node_type:
             continue
-        values = cast("list[object]", node.get("widgets_values") or [])
+        values = cast("WidgetsValues", node.get("widgets_values") or [])
         if values:
             return str(values[0])
     return ""
@@ -1056,7 +1056,7 @@ def graph_has_wan14(graph: Mapping[str, Json]) -> bool:
     for node in cast("list[QualityGraphNode]", graph.get("nodes") or []):
         if node.get("type") != "UNETLoader":
             continue
-        values = cast("list[object]", node.get("widgets_values") or [])
+        values = cast("WidgetsValues", node.get("widgets_values") or [])
         if values and is_wan_14b_unet(str(values[0])):
             return True
     return False
@@ -1415,7 +1415,7 @@ def tiers_for_family(family: str) -> tuple[str, ...]:
     return tuple(honored)
 
 
-def _same_value(left: object, right: object) -> bool:
+def _same_value(left: Json, right: Json) -> bool:
     """Compare two widget values the way the combo and KSampler report them.
 
     Args:
@@ -1436,10 +1436,10 @@ def _same_value(left: object, right: object) -> bool:
 
 
 def match_tier(
-    observed: Mapping[str, object],
+    observed: JsonMap,
     *,
     family: str,
-    authored: Mapping[str, object] | None = None,
+    authored: JsonMap | None = None,
     available_unets: Sequence[str] | None = None,
     available_clips: Sequence[str] | None = None,
     available_vaes: Sequence[str] | None = None,
@@ -1542,22 +1542,24 @@ def export_table() -> dict[str, Json]:
         Mapping with the tier table, owned fields, per-family tier lists,
         labels, and tier order.
     """
-    table: dict[str, dict[str, dict[str, Json]]] = {}
-    owned: dict[str, list[str]] = {}
-    labels: dict[str, dict[str, str]] = {}
-    tiers: dict[str, list[str]] = {}
+    table: JsonObject = {}
+    owned: JsonObject = {}
+    labels: JsonObject = {}
+    tiers: JsonObject = {}
     for family in QUALITY_FAMILIES:
-        table[family] = {}
-        labels[family] = {}
+        per_choice: JsonObject = {}
+        per_label: JsonObject = {}
         for choice in NAMED_QUALITY_CHOICES:
             profile = tier_profile(family, choice)
-            table[family][choice] = {
+            per_choice[choice] = {
                 field: getattr(profile, field) for field in OVERLAY_FIELDS
             }
-            labels[family][choice] = tier_label(family, choice)
+            per_label[choice] = tier_label(family, choice)
+        table[family] = per_choice
+        labels[family] = per_label
         owned[family] = list(family_owned_fields(family))
         tiers[family] = list(tiers_for_family(family))
-    payload: dict[str, object] = {
+    payload: JsonObject = {
         "choices": list(QUALITY_CHOICES),
         "named": list(NAMED_QUALITY_CHOICES),
         "families": list(QUALITY_FAMILIES),
@@ -1569,4 +1571,4 @@ def export_table() -> dict[str, Json]:
         "custom": QUALITY_CUSTOM,
         "lab": QUALITY_LAB,
     }
-    return cast("dict[str, Json]", payload)
+    return payload

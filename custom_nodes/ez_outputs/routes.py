@@ -10,7 +10,7 @@ from __future__ import annotations
 import inspect
 from collections.abc import Mapping
 from pathlib import Path
-from typing import TYPE_CHECKING, Protocol, TypedDict, TypeVar, cast
+from typing import TYPE_CHECKING, Protocol, TypedDict, TypeVar
 
 from .catalog import (
     BatchError,
@@ -271,7 +271,7 @@ async def request_json(request: object) -> object:
 def register_routes(
     *,
     server: object | None = None,
-    json_response: object | None = None,
+    json_response: JsonResponder | None = None,
 ) -> bool:
     """Attach ``/ez_outputs/*`` when PromptServer (or a stand-in) exists.
 
@@ -283,8 +283,8 @@ def register_routes(
     Returns:
         True when routes were registered.
     """
-    responder = cast(JsonResponder, json_response)
-    if json_response is None:
+    responder = json_response
+    if responder is None:
         try:
             from aiohttp import web
 
