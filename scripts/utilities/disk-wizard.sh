@@ -192,27 +192,10 @@ disk_survey_jsonl() {
   log "Querying Docker disk usage (docker system df; can take a while)..."
   docker_blob="$(disk_docker_df || true)"
   if [[ -n ${docker_blob} ]]; then
-    python3 -c '
-import json,sys
-raw=sys.argv[1].strip()
-if not raw:
-    raise SystemExit(0)
-for line in raw.splitlines():
-    line=line.strip()
-    if not line:
-        continue
-    try:
-        obj=json.loads(line)
-    except json.JSONDecodeError:
-        continue
-    dtype=str(obj.get("type") or obj.get("Type") or obj.get("docker_type") or "")
-    ident=str(obj.get("id") or obj.get("ID") or obj.get("path") or dtype or "docker")
-    size=int(obj.get("size_bytes") or obj.get("Size") or 0)
-    if not dtype:
-        dtype="build-cache"
-    path="docker://"+dtype+"/"+ident
-    print(json.dumps({"path": path, "size_bytes": size, "broken_symlink": False}))
-' "${docker_blob}"
+    # docker answers Size as a human string ("597GB"); docker-rows parses it.
+    printf '%s\n' "${docker_blob}" |
+      python3 "${REPO_ROOT}/scripts/lib/disk_catalog.py" \
+        --catalog "$(disk_catalog_path)" docker-rows
   fi
 }
 

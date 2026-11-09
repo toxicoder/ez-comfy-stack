@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 import time
 from collections.abc import Iterator, Mapping
@@ -13,7 +14,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, TypedDict, cast
 
 if TYPE_CHECKING:
-    from ez_common import Json
+    from ez_common import Json, JsonMap
 
 from operator_log import PREFIX as PROGRESS_PREFIX
 from operator_log import emit as _ol_emit
@@ -65,6 +66,30 @@ SKIP_BASENAMES = frozenset(
     }
 )
 WALK_PROGRESS_EVERY = 500
+
+# Human-readable size suffixes. docker (units.HumanSize) writes SI units
+# ("597GB", base 1000); du -h / ls -h write a bare letter (base 1024).
+_SIZE_SUFFIXES: dict[str, int] = {
+    "": 1,
+    "b": 1,
+    "kb": 1_000,
+    "mb": 1_000**2,
+    "gb": 1_000**3,
+    "tb": 1_000**4,
+    "pb": 1_000**5,
+    "kib": 1_024,
+    "mib": 1_024**2,
+    "gib": 1_024**3,
+    "tib": 1_024**4,
+    "pib": 1_024**5,
+    "k": 1_024,
+    "m": 1_024**2,
+    "g": 1_024**3,
+    "t": 1_024**4,
+    "p": 1_024**5,
+}
+
+_SIZE_RE = re.compile(r"^([+-]?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)\s*([a-z]*)$")
 
 
 class CatalogSignature(TypedDict):
@@ -283,6 +308,100 @@ def rank_score(size_bytes: int, leftover_weight: int, risk: str) -> float:
     if penalty <= 0:
         penalty = 4
     return (max(int(size_bytes), 0) * max(int(leftover_weight), 0)) / float(penalty)
+
+
+def parse_size_bytes(value: Json) -> int:
+    """Coerce a size field to bytes.
+
+    Accepts what the survey sources actually hand over: ints and floats from
+    ``os.path.getsize``, plain numeric strings, and human sizes from
+    ``docker system df --format '{{json .}}'`` (``Size`` is ``"597GB"`` there,
+    which ``int()`` rejects). None and an empty string mean "nothing measured".
+
+    Args:
+        value: Raw size field decoded from JSON.
+
+    Returns:
+        Whole bytes.
+
+    Raises:
+        ValueError: The value cannot be read as a size.
+    """
+    if value is None:
+        return 0
+    if isinstance(value, (int, float)):
+        return int(round(float(value)))
+    if not isinstance(value, str):
+        raise ValueError(f"unparseable size {value!r}")
+    text = value.strip().lower()
+    if not text:
+        return 0
+    match = _SIZE_RE.match(text)
+    if match is None:
+        raise ValueError(f"unparseable size {value!r}")
+    multiplier = _SIZE_SUFFIXES.get(match.group(2))
+    if multiplier is None:
+        raise ValueError(f"unparseable size {value!r}")
+    return int(round(float(match.group(1)) * multiplier))
+
+
+def _size_field(value: Json, *, label: str) -> int:
+    """Parse one survey size field without ever aborting the read-only scan.
+
+    Args:
+        value: Raw size field decoded from JSON.
+        label: What to name on stderr when the size is unreadable.
+
+    Returns:
+        Whole bytes, 0 when the value cannot be read.
+    """
+    try:
+        return parse_size_bytes(value)
+    except ValueError:
+        emit_walk_progress(f"  {label}: unparseable size {value!r} counted as 0")
+        return 0
+
+
+def docker_rows(blob: str) -> Iterator[WalkRow]:
+    """Yield survey rows for ``docker system df --format '{{json .}}'`` output.
+
+    One JSON object per line, from the real daemon or a LAB_MOCK_DOCKER_DF
+    file. Rows that are blank, malformed, or not objects are dropped: the
+    survey stays read-only and never dies on one odd line.
+
+    Args:
+        blob: Whole docker output.
+
+    Yields:
+        JSONL-ready rows with a ``docker://`` synthetic path.
+
+    Returns:
+        Iterator of JSONL-ready row mappings.
+    """
+    for line in blob.splitlines():
+        text = line.strip()
+        if not text:
+            continue
+        try:
+            parsed = json.loads(text)
+        except json.JSONDecodeError:
+            continue
+        if not isinstance(parsed, dict):
+            continue
+        obj: JsonMap = parsed
+        dtype = str(obj.get("type") or obj.get("Type") or obj.get("docker_type") or "")
+        ident = str(
+            obj.get("id") or obj.get("ID") or obj.get("path") or dtype or "docker"
+        )
+        size = _size_field(
+            obj.get("size_bytes", obj.get("Size", obj.get("size"))),
+            label=f"docker {ident}",
+        )
+        yield {
+            "path": f"docker://{dtype or 'build-cache'}/{ident}",
+            "size_bytes": size,
+            "broken_symlink": False,
+        }
 
 
 def _path_matches(
@@ -601,7 +720,7 @@ def _load_keep_refuse(manifest: Path) -> tuple[set[str], list[str]]:
 
 
 def _cli(argv: list[str] | None = None) -> int:
-    """CLI: json | classify | rank | walk.
+    """CLI: json | classify | rank | walk | docker-rows.
 
     Args:
         argv: Optional argument list.
@@ -622,9 +741,14 @@ def _cli(argv: list[str] | None = None) -> int:
     p_walk = sub.add_parser("walk")
     p_walk.add_argument("roots", nargs="+")
     p_walk.add_argument("--max-depth", type=int, default=6)
+    sub.add_parser("docker-rows")
     args = parser.parse_args(argv)
     if args.cmd == "walk":
         walk_roots_to_stdout(list(args.roots), int(args.max_depth))
+        return 0
+    if args.cmd == "docker-rows":
+        for docker_row in docker_rows(sys.stdin.read()):
+            print(json.dumps(docker_row, sort_keys=True))
         return 0
     cat = load_catalog(Path(args.catalog))
     keep: set[str] = set()
@@ -652,7 +776,7 @@ def _cli(argv: list[str] | None = None) -> int:
             continue
         item = json.loads(line)
         path = str(item.get("path") or "")
-        size = int(item.get("size_bytes") or 0)
+        size = _size_field(item.get("size_bytes"), label=path or "row")
         rows.append(
             classify_path(
                 path,

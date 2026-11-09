@@ -79,6 +79,27 @@ teardown() {
   [[ "${stdout}" == *"hf-incomplete"* ]]
 }
 
+@test "disk-wizard --plan parses docker human sizes (regression: 597GB)" {
+  export LAB_MOCK_DOCKER_DF='{"Active":"1","Reclaimable":"591MB","Size":"597GB","TotalCount":"9","Type":"Images"}
+{"Active":"0","Reclaimable":"0B","Size":"1.054kB","TotalCount":"5","Type":"Containers"}
+{"Active":"0","Reclaimable":"0B","Size":"0B","TotalCount":"0","Type":"Build Cache"}'
+  run bash "${DW}" --json
+  [ "${status}" -eq 0 ]
+  [[ "${output}" != *"Traceback"* ]]
+  [[ "${output}" == *"docker://Images/Images"* ]]
+  [[ "${output}" == *"597000000000"* ]]
+  [[ "${output}" == *"docker://Build Cache/Build Cache"* ]]
+}
+
+@test "disk-wizard --plan tolerates a junk docker blob" {
+  export LAB_MOCK_DOCKER_DF='not json at all
+{"Type":"Images","Size":"who knows"}'
+  run bash "${DW}" --json
+  [ "${status}" -eq 0 ]
+  [[ "${output}" != *"Traceback"* ]]
+  [[ "${output}" == *"hf-incomplete"* ]]
+}
+
 @test "disk-wizard --apply without --yes fails" {
   run bash "${DW}" --apply
   [ "${status}" -ne 0 ]

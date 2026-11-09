@@ -73,6 +73,11 @@ bazelisk run //:manage -- disk-wizard restore --from .disk-quarantine/<utc>
 
 `--plan` (and `--json`) print **stderr progress immediately**: start banner, `df`, each allowed root as it is scanned, a heartbeat on large trees, Docker `system df`, then ranking. A full Spark (`~/.cache`, `/tmp`, Docker) can still take a while - it will not sit silent. `--json` keeps a single JSON array on **stdout**; progress stays on stderr. Heartbeat interval: `DISK_WIZARD_PROGRESS_INTERVAL` seconds (default `2`; `0` disables in-root heartbeats, not the per-root lines).
 
+Docker reports its usage as human strings (`"Size":"597GB"` in `docker system df --format '{{json .}}'`),
+so the survey converts them to bytes before ranking: SI (`kB/MB/GB/TB`), IEC (`KiB/MiB/GiB`), and the
+bare `K/M/G` that `du -h` writes. A size it cannot read is named on stderr as `unparseable size ... counted
+as 0` and sinks that row; one odd Docker line never aborts the survey, and malformed lines are dropped.
+
 **Check it worked:** `df -h` shows the reclaim, `${MODELS_DIR}/.disk-wizard.log` records what
 moved, and the lab keep-set is intact (`bazelisk run //:manage -- models-status` still logs every
 lab model present).
