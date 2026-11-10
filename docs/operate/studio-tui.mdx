@@ -49,12 +49,11 @@ keystroke from stopping the machine. The rule behind the GPU gating is
 bazelisk run //:studio-tui
 ```
 
-The same console through the utility runner, or straight from the checkout when
-you want the fastest path over a laggy link:
+The same console through the utility runner, which is the shortest path over a
+laggy link:
 
 ```bash
 bazelisk run //scripts:run-utility -- studio-tui
-./scripts/utilities/studio-tui.sh
 ```
 
 Flags:
@@ -111,11 +110,13 @@ blocker shown as the row's note.
 | --- | --- |
 | `j` / `k`, `Up` / `Down` | Move the cursor |
 | `Enter` | Select, then confirm if the tier demands it |
+| `1` - `0` | Jump straight to a section |
 | `g` | Re-poll the machine |
 | `/` | Palette: fuzzy search across every action |
-| `x` | Detail pane for the selected row |
-| `l` | Follow the compose logs |
-| `S` | Safe stop: stop the stack and park the sidecars, behind one confirm |
+| `a` | Operator log: what this session dispatched |
+| `x` | Toggle the detail pane for the selected row |
+| `d` | Report how dry run was set; it is fixed by `--dry-run` at launch |
+| `S` | Safe stop: arms it, then `y` runs the stop and `n` or `Esc` cancels |
 | `?` | Help |
 | `Esc` | Back one screen |
 | `q` | Quit |

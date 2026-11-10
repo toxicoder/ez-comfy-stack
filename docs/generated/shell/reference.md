@@ -2195,7 +2195,7 @@ disk floors that gate manage.sh start.
 Usage:
   bazelisk run //:studio-tui
   bazelisk run //:studio-tui -- --check
-  bazelisk run //scripts:run-utility -- studio-tui [flags]      (operator escape hatch)
+  bazelisk run //scripts:run-utility -- studio-tui [flags]   (operator escape hatch)
 
 ```
 

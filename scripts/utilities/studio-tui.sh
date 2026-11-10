@@ -16,7 +16,7 @@
 # Usage:
 #   bazelisk run //:studio-tui
 #   bazelisk run //:studio-tui -- --check
-#   ./scripts/utilities/studio-tui.sh [flags]      (operator escape hatch)
+#   bazelisk run //scripts:run-utility -- studio-tui [flags]   (operator escape hatch)
 #
 # Flags:
 #   --check            validate the catalog and guard wiring, print a report, exit
@@ -67,7 +67,7 @@ cmd_help() {
   echo "  Guarded operator console over the studio stack (curses, no new dependency)." >&2
   echo "  --check validates the catalog and the guard wiring without a TTY." >&2
   echo "  Heavy actions keep the CLI's typed confirmations and the headroom floors." >&2
-  echo "  One console at a time: flock on \${COMFY_OUTPUT_DIR}/.studio-tui.lock." >&2
+  echo '  One console at a time: flock on ${COMFY_OUTPUT_DIR}/.studio-tui.lock.' >&2
 }
 
 #######################################
