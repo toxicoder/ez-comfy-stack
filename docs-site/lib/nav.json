@@ -425,6 +425,10 @@
             "path": "reference/config-and-schemas.md"
           },
           {
+            "title": "Declined integrations",
+            "path": "reference/declined-integrations.md"
+          },
+          {
             "title": "studio-ui board",
             "path": "reference/studio-ui.md"
           }
