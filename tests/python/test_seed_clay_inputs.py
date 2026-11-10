@@ -107,6 +107,7 @@ def test_main_default_root(
         return [tmp_path / "ez_house_clay_01.png"]
 
     monkeypatch.setattr(seed, "seed_clay_inputs", _fake_seed)
+    monkeypatch.setattr(seed, "seed_example_input", lambda _p: None)
     assert seed.main() == 0
     assert called["path"] == Path("/inputs")
     assert "plates ready" in capsys.readouterr().out
@@ -135,3 +136,57 @@ def test_module_main_entrypoint(
 def test_clay_copy_name() -> None:
     assert seed.clay_copy_name(0) == "ez_house_clay_01.png"
     assert seed.clay_copy_name(9) == "ez_house_clay_10.png"
+
+
+def test_main_writes_example_plate(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    dest = tmp_path / "in"
+    assert seed.main([str(dest)]) == 0
+    out = capsys.readouterr().out
+    assert "wrote example.png" in out
+    assert seed.png_size(dest / "example.png") == (
+        seed.EXAMPLE_WIDTH,
+        seed.EXAMPLE_HEIGHT,
+    )
+
+
+def test_example_keeps_operator_plate(tmp_path: Path) -> None:
+    dest = tmp_path / "in"
+    dest.mkdir()
+    plate = dest / "example.png"
+    seed.write_solid_png(plate, 64, 64, (1, 2, 3))
+    before = plate.read_bytes()
+    assert seed.seed_example_input(dest) is None
+    assert plate.read_bytes() == before
+
+
+def test_example_replaces_corrupt_file(tmp_path: Path) -> None:
+    dest = tmp_path / "in"
+    dest.mkdir()
+    (dest / "example.png").write_bytes(b"not a png")
+    assert seed.example_png_valid(dest / "example.png") is False  # noqa: SLF001
+    written = seed.seed_example_input(dest)
+    assert written is not None
+    assert seed.png_size(written) == (seed.EXAMPLE_WIDTH, seed.EXAMPLE_HEIGHT)
+
+
+def test_example_refuses_models_dir(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    models = tmp_path / "models"
+    models.mkdir()
+    monkeypatch.delenv("MODELS_DIR", raising=False)
+    monkeypatch.setenv("MODELS_ROOT", str(models))
+    with pytest.raises(ValueError, match="MODELS_DIR"):
+        seed.seed_example_input(models / "blocked")
+
+
+def test_example_pixels_are_deterministic_gradient() -> None:
+    width, height = 8, 8
+    data = seed.example_pixels(width, height)  # noqa: SLF001
+    assert len(data) == width * height * 3
+    top = data[0:3]
+    bottom = data[(height - 1) * width * 3 : (height - 1) * width * 3 + 3]
+    assert top != bottom
+    assert seed.example_pixels(width, height) == data  # noqa: SLF001
