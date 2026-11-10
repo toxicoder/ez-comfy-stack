@@ -322,10 +322,11 @@ def _graph_fps(graph: Mapping[str, Any]) -> float:
             continue
         values = node.get("widgets_values")
         raw = values.get("frame_rate") if isinstance(values, dict) else None
-        try:
-            fps = float(raw)
-        except (TypeError, ValueError):
-            continue
+        if isinstance(raw, (str, int, float)):
+            try:
+                fps = float(raw)
+            except ValueError:
+                continue
     return fps
 
 
@@ -426,7 +427,8 @@ def _format_findings(graph: Mapping[str, Any]) -> list[str]:
         for name, value in (("width", width), ("height", height)):
             if name in linked or not _is_number(value):
                 continue
-            if value < 16 or value > 2048 or value % 16:
+            num = float(str(value))
+            if num < 16 or num > 2048 or num % 16:
                 problems.append(f"node {node_id} ({ntype}): {name} {value} off the 16 px canvas grid")
         if ntype != "EZVideoFormat" or len(values) < 6:
             continue
