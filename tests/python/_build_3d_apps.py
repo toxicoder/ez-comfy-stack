@@ -6,9 +6,10 @@ Run from repo root:
 
 Every graph here is a TRELLIS.2 printer on the ``trellis`` occupancy lane, so
 it shares the model pins and the node primitives of ``_build_trellis_workflow``
-rather than restating them. The chain always ends ``MeshToFile3D -> SaveGLB``:
-MeshToFile3D only converts to GLB bytes in memory, SaveGLB is the output node
-that writes the file.
+rather than restating them. The chain ends on ``SaveGLB``, the only node that
+writes a file. Single-mesh Apps route through ``MeshToFile3D`` first, which
+converts to GLB bytes in memory; a batched App feeds ``SaveGLB`` the MESH
+directly, because ``MeshToFile3D`` keeps only batch item 0.
 """
 
 from __future__ import annotations
@@ -356,8 +357,33 @@ class _Scene:
         self.wire(decode_tex, 0, paint, 1, "VOXEL")
         return paint
 
-    def save(self, mesh: dict[str, Any], prefix: str) -> dict[str, Any]:
-        """Terminate the chain on the only node that writes a .glb."""
+    def save(
+        self, mesh: dict[str, Any], prefix: str, *, batched: bool = False
+    ) -> dict[str, Any]:
+        """Terminate the chain on the only node that writes a .glb.
+
+        A batched chain feeds ``SaveGLB`` the MESH directly: its MESH branch
+        loops the batch and writes one file per item, while ``MeshToFile3D``
+        keeps only the first item and hands over a single File3D.
+
+        Args:
+            mesh: Producer node whose MESH output is saved.
+            prefix: ``filename_prefix`` widget for ``SaveGLB``.
+            batched: Skip ``MeshToFile3D`` so every batch item is written.
+
+        Returns:
+            The ``SaveGLB`` node.
+        """
+        if batched:
+            save = self.add(
+                "SaveGLB",
+                title="Save GLB",
+                inputs=[_in("mesh", "MESH")],
+                widgets=[prefix],
+                size=(280.0, 80.0),
+            )
+            self.wire(mesh, 0, save, 0, "MESH")
+            return save
         glb = self.add(
             "MeshToFile3D",
             title="To GLB bytes",
@@ -539,12 +565,13 @@ def build_prop_variants() -> dict[str, Any]:
             "occupancy session instead of four.",
             "Source: `LoadImage` with a Klein still (`ez_still_*.png` or a clay plate). "
             "`EmptyTrellis2LatentStructure` batch_size is 4 and the batch flows through every "
-            "stage, so SaveGLB writes one .glb per batch item.",
+            "stage, so SaveGLB writes one .glb per batch item. SaveGLB takes the MESH directly "
+            "here: MeshToFile3D keeps only batch item 0, which would silently drop 3 of the 4.",
             MODEL_LINES,
             "Upsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of "
             "128; this graph runs the 1024 floor.",
-            "SaveGLB writes to `output/assets/objects/_lab-variants/prop_NNNNN_.glb` "
-            "- MeshToFile3D only converts in memory. Do not mint an Asset Bible row from this graph.",
+            "SaveGLB writes four files to `output/assets/objects/_lab-variants/prop_NNNNN_.glb`. "
+            "Do not mint an Asset Bible row from this graph.",
             DINO_LINE,
         )
     )
@@ -563,7 +590,7 @@ def build_prop_variants() -> dict[str, Any]:
     voxel = scene.structure(stack, cond, batch_size=4)
     shape_out = scene.shape(stack, cond, voxel, upsample=True, shape_steps=12)
     mesh = scene.texture(stack, shape_out)
-    scene.save(mesh, "assets/objects/_lab-variants/prop")
+    scene.save(mesh, "assets/objects/_lab-variants/prop", batched=True)
     graph = scene.root(
         stem="prop-variants",
         note=note,
