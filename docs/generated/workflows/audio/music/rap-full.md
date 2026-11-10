@@ -457,7 +457,7 @@ Pack tags, lyrics, BPM, key, and duration into ACE conditioning.
 
 !!! warning "Lab notes"
 
-    15 widgets including control_after_generate after seed (see _ace_widgets_contract.py). Vocal graphs language=en; instrumental unknown. generate_audio_codes stays true.
+    15 widgets including control_after_generate after seed (see _ace_widgets_contract.py). Vocal graphs language=en; instrumental unknown. generate_audio_codes stays true except podcast beds, which ship it off on purpose.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -718,7 +718,7 @@ Type `BOOLEAN`. Range / default: true.
 
 Run the ACE LLM that drafts audio codes.
 
-**How it affects generation:** true = higher quality, slower. Off only if you pass a reference timbre (lab graphs do not).
+**How it affects generation:** true = higher quality, slower. Off only if you pass a reference timbre (lab graphs do not). Podcast lanes keep it off on the instrumental beds and the ACE negative encoder - beds sit ducked under speech (test_podcast_ace_encoders_keep_instrumental_codes_off).
 
 **This graph:** `true`
 

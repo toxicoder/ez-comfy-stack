@@ -60,7 +60,7 @@ flowchart LR
   N2["Qwen-Image 2.1 UNET (opt-in)"]
   N3["Qwen3VL-8B TE (opt-in)"]
   N4["Qwen-Image 2.1 VAE"]
-  N5["EZSamplePrompt"]
+  N5["Prompt"]
   N6["Negative enhance (stills)"]
   N7["Prompt + latent (Qwen 2.1)"]
   N8["Sampler (profile steps / CFG)"]
@@ -88,7 +88,7 @@ flowchart LR
 | 2 | Qwen-Image 2.1 UNET (opt-in) | `UNETLoader` | MODEL |
 | 3 | Qwen3VL-8B TE (opt-in) | `CLIPLoader` | MODEL |
 | 4 | Qwen-Image 2.1 VAE | `VAELoader` | MODEL |
-| 5 | EZSamplePrompt | `EZSamplePrompt` | PROMPT |
+| 5 | Prompt | `EZSamplePrompt` | PROMPT |
 | 6 | Negative enhance (stills) | `EZNegativePromptEnhance` | PROMPT |
 | 7 | Prompt + latent (Qwen 2.1) | `TextEncodeQwenImage21` | SETTINGS |
 | 8 | Sampler (profile steps / CFG) | `KSampler` | SETTINGS |

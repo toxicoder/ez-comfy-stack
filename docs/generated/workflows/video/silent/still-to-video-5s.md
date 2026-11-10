@@ -596,7 +596,7 @@ Save prefix.
 
 **How it affects generation:** Lab prefixes start with ez_. Last-frame savers on shot graphs feed concat-shots.
 
-**This graph:** `ez_wan_draft_frames`
+**This graph:** `ez_still_to_video_5s_frames`
 
 ### `VHS_VideoCombine` - VHS Video Combine
 
@@ -642,7 +642,7 @@ Save prefix under the output folder.
 
 **How it affects generation:** Lab prefixes start with ez_. The host file is ${COMFY_OUTPUT_DIR}/<prefix>_*.mp4 (or .gif).
 
-**This graph:** `ez_wan_draft_video`
+**This graph:** `ez_still_to_video_5s_video`
 
 #### `format`
 

@@ -41,7 +41,7 @@ Unload before LTX. Do not Queue this graph and a DCC dump in one session (occupa
 
 Prompt: inventory + look. Motion comes later from the pack. Official clay is Workbench / unshaded, not Cycles beauty.
 
-Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/still-to-mesh (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
+Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/shot-to-prop (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
 
 Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.
 ```
@@ -562,7 +562,7 @@ Unload before LTX. Do not Queue this graph and a DCC dump in one session (occupa
 
 Prompt: inventory + look. Motion comes later from the pack. Official clay is Workbench / unshaded, not Cycles beauty.
 
-Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/still-to-mesh (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
+Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/shot-to-prop (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
 
 Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.
 ```

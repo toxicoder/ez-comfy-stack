@@ -30,7 +30,7 @@ Occupancy **wan**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 ## video/silent/vace-join
 
 Opt-in Wan 2.1 VACE 1.3B Apache join smoke. Not download-models.
-Download: bazelisk run //scripts:run-utility -- download-wan  run --tier vace
+Download: bazelisk run //scripts:run-utility -- download-wan run --tier vace
 Unload LTX first. MagCache is off (never on this graph).
 Frame count is 17 (1+8n, inside 16-24). Even latents crash.
 Models: diffusion_pytorch_model.safetensors (VACE 1.3B) + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.
@@ -737,7 +737,7 @@ Markdown-ish operator note.
 ## video/silent/vace-join
 
 Opt-in Wan 2.1 VACE 1.3B Apache join smoke. Not download-models.
-Download: bazelisk run //scripts:run-utility -- download-wan  run --tier vace
+Download: bazelisk run //scripts:run-utility -- download-wan run --tier vace
 Unload LTX first. MagCache is off (never on this graph).
 Frame count is 17 (1+8n, inside 16-24). Even latents crash.
 Models: diffusion_pytorch_model.safetensors (VACE 1.3B) + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.

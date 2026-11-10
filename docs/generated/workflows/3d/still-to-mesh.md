@@ -60,19 +60,19 @@ flowchart LR
   N5["TRELLIS.2 INT8"]
   N6["Shape VAE"]
   N7["Texture VAE"]
-  N8["Trellis2Conditioning"]
-  N9["EmptyTrellis2LatentStructure"]
+  N8["Trellis2 conditioning"]
+  N9["Empty structure x1"]
   N10["KSampler (structure)"]
-  N11["VaeDecodeStructureTrellis2"]
-  N12["Trellis2ShapeStage"]
+  N11["Decode structure 32"]
+  N12["Shape stage"]
   N13["KSampler (shape)"]
   N14["Upsample 1024"]
   N15["KSampler (1024)"]
-  N16["VaeDecodeShapeTrellis"]
-  N17["Trellis2TextureStage"]
+  N16["Decode shape"]
+  N17["Texture stage"]
   N18["KSampler (texture)"]
-  N19["VaeDecodeTextureTrellis"]
-  N20["PaintMesh"]
+  N19["Decode texture"]
+  N20["Paint mesh"]
   N21["To GLB bytes"]
   N22["Save GLB"]
   N23["Quality"]
@@ -122,19 +122,19 @@ flowchart LR
 | 5 | TRELLIS.2 INT8 | `UNETLoader` | MODEL |
 | 6 | Shape VAE | `VAELoader` | MODEL |
 | 7 | Texture VAE | `VAELoader` | MODEL |
-| 8 | Trellis2Conditioning | `Trellis2Conditioning` | PROMPT |
-| 9 | EmptyTrellis2LatentStructure | `EmptyTrellis2LatentStructure` | SETTINGS |
+| 8 | Trellis2 conditioning | `Trellis2Conditioning` | PROMPT |
+| 9 | Empty structure x1 | `EmptyTrellis2LatentStructure` | SETTINGS |
 | 10 | KSampler (structure) | `KSampler` | SETTINGS |
-| 11 | VaeDecodeStructureTrellis2 | `VaeDecodeStructureTrellis2` | OUTPUT |
-| 12 | Trellis2ShapeStage | `Trellis2ShapeStage` | OUTPUT |
+| 11 | Decode structure 32 | `VaeDecodeStructureTrellis2` | OUTPUT |
+| 12 | Shape stage | `Trellis2ShapeStage` | OUTPUT |
 | 13 | KSampler (shape) | `KSampler` | SETTINGS |
 | 14 | Upsample 1024 | `Trellis2UpsampleStage` | OUTPUT |
 | 15 | KSampler (1024) | `KSampler` | SETTINGS |
-| 16 | VaeDecodeShapeTrellis | `VaeDecodeShapeTrellis` | OUTPUT |
-| 17 | Trellis2TextureStage | `Trellis2TextureStage` | OUTPUT |
+| 16 | Decode shape | `VaeDecodeShapeTrellis` | OUTPUT |
+| 17 | Texture stage | `Trellis2TextureStage` | OUTPUT |
 | 18 | KSampler (texture) | `KSampler` | SETTINGS |
-| 19 | VaeDecodeTextureTrellis | `VaeDecodeTextureTrellis` | OUTPUT |
-| 20 | PaintMesh | `PaintMesh` | OUTPUT |
+| 19 | Decode texture | `VaeDecodeTextureTrellis` | OUTPUT |
+| 20 | Paint mesh | `PaintMesh` | OUTPUT |
 | 21 | To GLB bytes | `MeshToFile3D` | OUTPUT |
 | 22 | Save GLB | `SaveGLB` | OUTPUT |
 | 23 | Quality | `EZQuality` | QUALITY |

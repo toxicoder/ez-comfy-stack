@@ -45,7 +45,6 @@ Disclosure sidecar: This audio is an AI-translated dub. Voices are synthesized f
 Weights: `bazelisk run //:manage -- download-dub --tier asr` then `--tier clone` (pip-installs faster-whisper, the llama-cpp-python CPU wheel, then the Chatterbox V3 GitHub zip --no-deps --force-reinstall so torch 2.14 stays). Queue self-heals a missing llama.cpp wheel (needed for `text_target`). Missing pack is not a doctor failure. On DGX Spark, faster-whisper uses the CPU CTranslate2 wheel.
 
 Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
-Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 ```
 
 ## How to Queue
@@ -453,7 +452,6 @@ Disclosure sidecar: This audio is an AI-translated dub. Voices are synthesized f
 Weights: `bazelisk run //:manage -- download-dub --tier asr` then `--tier clone` (pip-installs faster-whisper, the llama-cpp-python CPU wheel, then the Chatterbox V3 GitHub zip --no-deps --force-reinstall so torch 2.14 stays). Queue self-heals a missing llama.cpp wheel (needed for `text_target`). Missing pack is not a doctor failure. On DGX Spark, faster-whisper uses the CPU CTranslate2 wheel.
 
 Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
-Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 ```
 
 ### `EZModelCheck` - Check models

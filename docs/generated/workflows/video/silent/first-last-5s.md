@@ -31,7 +31,7 @@ Occupancy **wan**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 
 Format / platform sets pixels (Custom uses Width x Height). Quality does not change size.
 
-bazelisk run //scripts:run-utility -- download-wan  run --tier fun-inp
+bazelisk run //scripts:run-utility -- download-wan run --tier fun-inp
 Apache 2.0. Not part of download-models. Occupancy: stop LTX first.
 Load a start frame and an end frame. 121 frames @ 24 fps. MagCache off.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
@@ -589,7 +589,7 @@ Save prefix.
 
 **How it affects generation:** Lab prefixes start with ez_. Last-frame savers on shot graphs feed concat-shots.
 
-**This graph:** `ez_wan_draft_frames`
+**This graph:** `ez_first_last_5s_frames`
 
 ### `VHS_VideoCombine` - VHS Video Combine
 
@@ -635,7 +635,7 @@ Save prefix under the output folder.
 
 **How it affects generation:** Lab prefixes start with ez_. The host file is ${COMFY_OUTPUT_DIR}/<prefix>_*.mp4 (or .gif).
 
-**This graph:** `ez_wan_draft_video`
+**This graph:** `ez_first_last_5s_video`
 
 #### `format`
 
@@ -737,7 +737,7 @@ Markdown-ish operator note.
 
 Format / platform sets pixels (Custom uses Width x Height). Quality does not change size.
 
-bazelisk run //scripts:run-utility -- download-wan  run --tier fun-inp
+bazelisk run //scripts:run-utility -- download-wan run --tier fun-inp
 Apache 2.0. Not part of download-models. Occupancy: stop LTX first.
 Load a start frame and an end frame. 121 frames @ 24 fps. MagCache off.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.

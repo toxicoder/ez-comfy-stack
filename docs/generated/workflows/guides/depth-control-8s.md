@@ -49,7 +49,7 @@ Stop Klein first. After print, stop LTX and run audio-finish / stem-mix (occupan
 
 LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.
 
-Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/still-to-mesh (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
+Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/shot-to-prop (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
 
 Occupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
@@ -694,7 +694,7 @@ Stop Klein first. After print, stop LTX and run audio-finish / stem-mix (occupan
 
 LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.
 
-Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/still-to-mesh (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
+Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/shot-to-prop (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
 
 Occupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
@@ -866,6 +866,7 @@ Rewrite a lazy prompt for LTX-2.5 (present-tense paragraph, audio interleaved).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
+| `context` | in | `STRING` | Bible/research. Ignored when Enhance is off. |
 | `prompt` | out | `STRING` | Paragraph CLIP encodes. |
 
 #### `sample`

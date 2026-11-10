@@ -40,7 +40,7 @@ Prefixes and sizes:
 LoadImage: clay ``first.png``. Each plate scales the clay to its latent. Occupancy: klein.
 Handoff: wan-i2v-5s / wan-shorts-i2v / ltx-iclora-depth-shorts.
 
-Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/still-to-mesh (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
+Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/shot-to-prop (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
 ```
 
 ## How to Queue
@@ -575,7 +575,7 @@ Prefixes and sizes:
 LoadImage: clay ``first.png``. Each plate scales the clay to its latent. Occupancy: klein.
 Handoff: wan-i2v-5s / wan-shorts-i2v / ltx-iclora-depth-shorts.
 
-Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/still-to-mesh (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
+Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/shot-to-prop (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
 ```
 
 ### `LoadImage` - Load Image
