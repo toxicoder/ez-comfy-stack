@@ -30,7 +30,7 @@ Numbered takes under `audio/albums/nill-bye/pardon-flood/`. Queue one track, or 
 
 US-safe rap **72 s diss** take: **pardon flood**. Fictional MC **Nill Bye** (science guy) roasting public-record satire of **Donald Trump**. Trump is a satire target, not a vocal identity. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** - draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
 
-1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
+1. Weights: `bazelisk run //:manage -- download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.
 3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.
 4. Original lyrics only. No 'in the style of <living artist>'. No living-MC names. No famous-hook paraphrases.

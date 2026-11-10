@@ -50,7 +50,7 @@ DRAFT_NOTE = f"""## audio/music/rap-draft
 
 US-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-Step 1.5 turbo AIO. Sequential Queue - do not load Klein + Wan + LTX + ACE-Step together.
 
-1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
+1. Weights: `bazelisk run //:manage -- download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.
 3. **Rap lyrics** owns the bars; ACE-Step Prompt Enhance owns tags. Lyrics are wired into ACE. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.
 4. Original lyrics only. No "in the style of <living artist>". No living-MC names. No famous-hook paraphrases.
@@ -72,7 +72,7 @@ FULL_NOTE = f"""## audio/music/rap-full
 US-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration {demo_full_seconds()} s on the pre-chorus form (4/4, C minor, 88 bpm). Album takes vary form, meter, key, and length.
 
 1. Queue **audio/music/rap-draft** first. Then this graph.
-2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).
+2. Weights: `bazelisk run //:manage -- download-music --tier turbo` (shared AIO with podcast acestep).
 3. Prompt enhance is **off** so the canned bars stay as written. Turn Enhance on only if you want the 4B rewriter. Edit **Rap lyrics** before Queue (wired into ACE). Human rewrite required before any release.
 4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No "in the style of <living artist>".
 5. ACE-Step vocal is an invented timbre, not a clone.
@@ -295,7 +295,7 @@ def _diss_note(ex: DissExample) -> str:
 
 US-safe rap **{duration_s} s {kind}** take: **{ex["title"]}**. {_diss_cast(ex)}. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** - draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
 
-1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
+1. Weights: `bazelisk run //:manage -- download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.
 3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.
 4. Original lyrics only. No "in the style of <living artist>". No living-MC names. No famous-hook paraphrases.
@@ -360,7 +360,7 @@ def _edm_note(ex: EdmExample) -> str:
 
 US-safe EDM **{duration_s} s** take: **{ex["title"]}**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. {score_blurb} {join_blurb}. Queue this graph **on its own** - draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
 
-1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
+1. Weights: `bazelisk run //:manage -- download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and {labels_blurb} stay as written. Turn Enhance on only if you want the 4B rewriter.
 3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. {mode_blurb}
 4. Original arrangements only. No "in the style of <living artist>". No living-DJ names. No famous-hook paraphrases.

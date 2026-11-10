@@ -35,14 +35,14 @@ Occupancy: **ltx**. EZDCCLoadGuideStill ``first`` -> OccupancyGate. EZDCCLoadGui
 
   Templates -> LTX-2.5 -> LTX-2.5_ICLoRA_Union_Control_Distilled.json
 
-Opt-in: ``./scripts/manage.sh download-ltx --tier iclora``. Refuse 19B Union. No 1280x720. Stop Klein first.
+Opt-in: ``bazelisk run //:manage -- download-ltx --tier iclora``. Refuse 19B Union. No 1280x720. Stop Klein first.
 
 LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.
 ```
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **guides/depth-from-loader** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 
@@ -680,7 +680,7 @@ Occupancy: **ltx**. EZDCCLoadGuideStill ``first`` -> OccupancyGate. EZDCCLoadGui
 
   Templates -> LTX-2.5 -> LTX-2.5_ICLoRA_Union_Control_Distilled.json
 
-Opt-in: ``./scripts/manage.sh download-ltx --tier iclora``. Refuse 19B Union. No 1280x720. Stop Klein first.
+Opt-in: ``bazelisk run //:manage -- download-ltx --tier iclora``. Refuse 19B Union. No 1280x720. Stop Klein first.
 
 LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.
 ```

@@ -57,7 +57,7 @@ US-safe two-host-episode episode (Option A). Sequential Queue - do not load Klei
 6. Cover separately: Queue **{COVER_GRAPH}** (prefix `ez_podcast`, 1024^2). Do not embed Klein here.
 7. Loudness: `bazelisk run //scripts:run-utility -- podcast-loudnorm run --in FILE` (-16 LUFS podcast / `--youtube` -14). Comfy cannot loudnorm.
 
-Weights: `./scripts/manage.sh download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).
+Weights: `bazelisk run //:manage -- download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).
 """
 
 AUDIO_NOTE_B = f"""## audio/podcast/radio-drama
@@ -85,7 +85,7 @@ US-safe learning episode (Option C). Sequential Queue - do not load Klein + Wan 
 7. Cover separately: Queue **{COVER_GRAPH}** (prefix `ez_podcast`, 1024^2). Do not embed Klein here.
 8. Loudness: `bazelisk run //scripts:run-utility -- podcast-loudnorm run --in FILE` (-16 LUFS podcast / `--youtube` -14). Comfy cannot loudnorm.
 
-25 min seminar is the slow CPU-TTS path. Weights: `./scripts/manage.sh download-podcast --tier analog` then `--tier acestep`.
+25 min seminar is the slow CPU-TTS path. Weights: `bazelisk run //:manage -- download-podcast --tier analog` then `--tier acestep`.
 """
 
 

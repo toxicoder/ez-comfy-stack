@@ -431,6 +431,13 @@ def test_studio_app_banner_is_dismissable_and_minimizable() -> None:
     assert 'chipState === "closed"' in body
 
 
+def test_studio_app_album_handoff_names_the_bazel_target() -> None:
+    """The card copies the door the lab note names, not the raw script."""
+    body = STUDIO_APP_JS.read_text(encoding="utf-8")
+    assert "bazelisk run //:manage -- album-render --album" in body
+    assert "./scripts/manage.sh" not in body
+
+
 def _model_check_fn(name: str) -> str:
     """Slice one top-level function out of the model-check frontend.
 

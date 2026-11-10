@@ -211,9 +211,9 @@ Ten Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence
 
 Workbench dump (optional, higher quality) - stop Comfy first:
 
-  ./scripts/manage.sh stop
+  bazelisk run //:manage -- stop
   bazelisk run //:manage -- house-views --slug lab-penthouse
-  ./scripts/manage.sh start
+  bazelisk run //:manage -- start
 
 Copy an existing dump without Blender (compose may stay up):
 

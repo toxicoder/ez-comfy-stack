@@ -37,7 +37,10 @@
       "title": "download-models",
       "description": "Default pack only (Klein 4B + Wan 2.2 5B + LTX-2.5 + prompt-enhance GGUF). No --tier. --limit is bandwidth, not quality.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "download-models"
       ],
       "flags": [
@@ -72,7 +75,11 @@
       "title": "download-image --tier",
       "description": "Still UNET pack. fast is the lab default and also pulls TE + flux2-vae companions. Not a video quality ladder. flux3* = FLUX 3 Image Klein opt-in (FLUX Kommunity v1.0, gated, revision-pinned, never in all). qwen-image* = opt-in Qwen-Image 2.1 stills (Qwen RESEARCH LICENSE, ungated, revision-pinned, never in all).",
       "argv": [
-        "./scripts/utilities/download-image.sh",
+        "bazelisk",
+        "run",
+        "//scripts:run-utility",
+        "--",
+        "download-image",
         "run"
       ],
       "flags": [
@@ -179,7 +186,11 @@
       "title": "download-wan --tier",
       "description": "Different Wan graphs, not a quality ladder. all does not include vace or s2v. Unload LTX before Fun InP / VACE / S2V.",
       "argv": [
-        "./scripts/utilities/download-wan.sh",
+        "bazelisk",
+        "run",
+        "//scripts:run-utility",
+        "--",
+        "download-wan",
         "run"
       ],
       "flags": [
@@ -222,7 +233,11 @@
       "title": "download-ltx --tier",
       "description": "LTX generation selector, not 'better'. 2.5 is the lab default. balanced/quality are 2.3 aliases. all is 2.5+2.3+gemma (not iclora).",
       "argv": [
-        "./scripts/utilities/download-ltx.sh",
+        "bazelisk",
+        "run",
+        "//scripts:run-utility",
+        "--",
+        "download-ltx",
         "run"
       ],
       "flags": [
@@ -269,7 +284,10 @@
       "title": "download-podcast --tier",
       "description": "Opt-in audio packs. analog is Kokoro only. acestep shares the ~10 GB AIO with download-music --tier turbo. Missing pack is not a doctor failure.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "download-podcast"
       ],
       "flags": [
@@ -326,7 +344,10 @@
       "title": "download-dub --tier",
       "description": "Opt-in dub packs. asr is Silero VAD + faster-whisper. clone is Chatterbox Multilingual V3 (ve.pt + s3gen.pt + T3 V3 + conds.pt). With the stack up, pip-installs faster-whisper, setuptools<82 (PerTh / pkg_resources), then the Chatterbox V3 GitHub zip --no-deps --force-reinstall (does not pin torch; PyPI 0.1.7 has no t3_model=v3). Missing pack is not a doctor failure.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "download-dub"
       ],
       "flags": [
@@ -375,7 +396,10 @@
       "title": "download-music --tier",
       "description": "Closest thing to a size ladder. turbo shares dest with download-podcast --tier acestep - do not pull the AIO twice. Occupancy: stop LTX/Wan/Klein first.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "download-music"
       ],
       "flags": [
@@ -424,7 +448,10 @@
       "title": "download-3d --tier",
       "description": "Opt-in 3D. da3-large is refused. Unload LTX first. SuperSplat is a host viewer, not this downloader.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "download-3d"
       ],
       "flags": [
@@ -455,7 +482,10 @@
       "title": "download-longcat --tier",
       "description": "Opt-in MIT LongCat. No NCCL in this sample stack.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "download-longcat"
       ],
       "flags": [
@@ -486,7 +516,10 @@
       "title": "download-dreamx --tier",
       "description": "Apache DreamX-Creator only. DreamX-World is refused.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "download-dreamx"
       ],
       "flags": [
@@ -509,7 +542,10 @@
       "title": "download-restore --tier",
       "description": "Post-concat SeedVR2 restore pack. Not part of download-models.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "download-restore"
       ],
       "flags": [
@@ -532,7 +568,10 @@
       "title": "download-llm --tier",
       "description": "Default enhance is the Qwen3-4B prompt-enhance GGUF (already in download-models). qwen36-35b-a3b is the opt-in ~23 GB occupancy llm-desk pack. describe is the opt-in Qwen2.5-VL caption GGUF. Missing 35B or describe is not a doctor failure.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "download-llm"
       ],
       "flags": [
@@ -689,7 +728,10 @@
       "title": "setup-client",
       "description": "Laptop bootstrap: tools, SSH key, Host ez-spark LocalForward. Does not start Comfy.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "setup-client",
         "--host",
         "${SPARK_HOST}",
@@ -705,7 +747,10 @@
       "title": "onboard",
       "description": "Spark: setup. Laptop: setup-client then remote doctor. Never auto-start.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "onboard",
         "--host",
         "${SPARK_HOST}",
@@ -769,7 +814,10 @@
       "title": "start",
       "description": "Type yes. Headroom preflight. Compose restart: no.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "start"
       ],
       "flags": []
@@ -779,7 +827,10 @@
       "title": "stop",
       "description": "Stop containers. Keeps models, outputs, and the comfy-state volume.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "stop"
       ],
       "flags": []
@@ -830,7 +881,10 @@
       "title": "setup",
       "description": ".env, MODELS_DIR, COMFY_OUTPUT_DIR, optional Docker CE, hf CLI, then doctor.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "setup"
       ],
       "flags": [
@@ -860,7 +914,10 @@
       "title": "restart",
       "description": "stop then start. Full yes confirm and headroom again.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "restart"
       ],
       "flags": []
@@ -870,7 +927,10 @@
       "title": "update-stack",
       "description": "Redeploy from the checked-out branch: ff-only pull, branch-matched image lane, then restart or recreate through the normal start path (yes confirm and headroom still run). Refuses a dirty tree, a detached HEAD, and a mismatched image lane.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "update-stack"
       ],
       "flags": [
@@ -947,7 +1007,10 @@
       "title": "download-limit",
       "description": "Throttle Hugging Face pulls. wrap always clears on exit.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "download-limit",
         "status"
       ],
@@ -1128,7 +1191,10 @@
       "title": "blender-install",
       "description": "Host apt install of Ubuntu blender (universe). Never in the Dockerfile. Occupancy does not install Blender.",
       "argv": [
-        "./scripts/manage.sh",
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
         "blender-install"
       ],
       "flags": []

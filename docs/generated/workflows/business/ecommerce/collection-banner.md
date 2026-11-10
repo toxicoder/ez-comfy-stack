@@ -40,7 +40,7 @@ Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, th
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **business/ecommerce/collection-banner** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 

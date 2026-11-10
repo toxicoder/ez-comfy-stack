@@ -146,13 +146,13 @@ def test_render_command_omits_unchecked_bool(cmd: ModuleType, builder: dict[str,
     recipe = cmd.command_by_id("download-models", builder)
     defaults = cmd.default_var_values(builder)
     plain = cmd.render_command(recipe, {"limit": "auto"}, defaults)
-    assert plain == "./scripts/manage.sh download-models --limit auto"
+    assert plain == "bazelisk run //:manage -- download-models --limit auto"
     assert "--drop-incomplete" not in plain
     dropped = cmd.render_command(
         recipe, {"limit": "auto", "drop-incomplete": True}, defaults
     )
     assert dropped == (
-        "./scripts/manage.sh download-models --limit auto --drop-incomplete"
+        "bazelisk run //:manage -- download-models --limit auto --drop-incomplete"
     )
 
 
@@ -163,11 +163,11 @@ def test_render_command_choice_or_int_emits_mbps(cmd: ModuleType, builder: dict[
     auto = cmd.render_command(
         recipe, {"tier": "turbo", "limit": "auto"}, defaults
     )
-    assert auto == "./scripts/manage.sh download-music --tier turbo --limit auto"
+    assert auto == "bazelisk run //:manage -- download-music --tier turbo --limit auto"
     mbps = cmd.render_command(
         recipe, {"tier": "xl", "limit": "80"}, defaults
     )
-    assert mbps == "./scripts/manage.sh download-music --tier xl --limit 80"
+    assert mbps == "bazelisk run //:manage -- download-music --tier xl --limit 80"
     off = cmd.render_command(
         recipe, {"tier": "turbo", "limit": "off"}, defaults
     )
@@ -187,7 +187,7 @@ def test_render_command_required_tier(cmd: ModuleType, builder: dict[str, object
     """Required --tier uses the recipe default when flags omit it."""
     recipe = cmd.command_by_id("download-wan", builder)
     line = cmd.render_command(recipe, {}, cmd.default_var_values(builder))
-    assert line == "./scripts/utilities/download-wan.sh run --tier 5b"
+    assert line == "bazelisk run //scripts:run-utility -- download-wan run --tier 5b"
 
 
 def test_render_ssh_forward_substitutes_host(cmd: ModuleType, builder: dict[str, object]) -> None:

@@ -435,7 +435,7 @@ def status_for_reason(reason: str | None) -> str:
     if not reason:
         return ""
     if reason == REASON_GGUF_MISSING:
-        return "GGUF missing - run ./scripts/manage.sh download-models"
+        return "GGUF missing - bazelisk run //:manage -- download-models"
     if reason == REASON_LLAMA_UNAVAILABLE:
         return llama_cpp_unavailable_status()
     if reason == REASON_LLM_LOAD_FAILED:

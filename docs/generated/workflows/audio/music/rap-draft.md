@@ -31,7 +31,7 @@ Occupancy **audio**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fa
 
 US-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-Step 1.5 turbo AIO. Sequential Queue - do not load Klein + Wan + LTX + ACE-Step together.
 
-1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
+1. Weights: `bazelisk run //:manage -- download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.
 3. **Rap lyrics** owns the bars; ACE-Step Prompt Enhance owns tags. Lyrics are wired into ACE. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.
 4. Original lyrics only. No 'in the style of <living artist>'. No living-MC names. No famous-hook paraphrases.
@@ -52,7 +52,7 @@ Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **audio/music/rap-draft** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 
@@ -979,7 +979,7 @@ Markdown-ish operator note.
 
 US-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-Step 1.5 turbo AIO. Sequential Queue - do not load Klein + Wan + LTX + ACE-Step together.
 
-1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
+1. Weights: `bazelisk run //:manage -- download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.
 3. **Rap lyrics** owns the bars; ACE-Step Prompt Enhance owns tags. Lyrics are wired into ACE. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.
 4. Original lyrics only. No 'in the style of <living artist>'. No living-MC names. No famous-hook paraphrases.

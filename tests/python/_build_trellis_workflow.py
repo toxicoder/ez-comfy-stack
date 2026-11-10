@@ -23,7 +23,7 @@ NOTE = """## 3d/trellis2
 Klein still -> native TRELLIS.2 INT8 mesh (Comfy core nodes).
 
 ```bash
-./scripts/manage.sh download-3d --tier trellis2
+bazelisk run //:manage -- download-3d --tier trellis2
 bazelisk run //:manage -- occupancy enter trellis --yes
 ```
 

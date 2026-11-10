@@ -30,7 +30,7 @@ Occupancy **wan**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 ## video/silent/vace-join
 
 Opt-in Wan 2.1 VACE 1.3B Apache join smoke. Not download-models.
-Download: ./scripts/utilities/download-wan.sh run --tier vace
+Download: bazelisk run //scripts:run-utility -- download-wan  run --tier vace
 Unload LTX first. MagCache is off (never on this graph).
 Frame count is 17 (1+8n, inside 16-24). Even latents crash.
 Models: diffusion_pytorch_model.safetensors (VACE 1.3B) + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.
@@ -44,7 +44,7 @@ Occupancy: wan - stop LTX, podcast, music. One GB10 job.
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **video/silent/vace-join** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 
@@ -731,13 +731,13 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## video/silent/vace-join Opt-in Wan 2.1 VACE 1.3B Apache join smoke. Not download-models. Download: ./scripts/utilities/download-wan.sh run --tier vace Unload LTX first. MagCache is off (never on th...`
+**This graph:** `## video/silent/vace-join Opt-in Wan 2.1 VACE 1.3B Apache join smoke. Not download-models. Download: bazelisk run //scripts:run-utility -- download-wan run --tier vace Unload LTX first. MagCache is o...`
 
 ```text
 ## video/silent/vace-join
 
 Opt-in Wan 2.1 VACE 1.3B Apache join smoke. Not download-models.
-Download: ./scripts/utilities/download-wan.sh run --tier vace
+Download: bazelisk run //scripts:run-utility -- download-wan  run --tier vace
 Unload LTX first. MagCache is off (never on this graph).
 Frame count is 17 (1+8n, inside 16-24). Even latents crash.
 Models: diffusion_pytorch_model.safetensors (VACE 1.3B) + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.

@@ -34,7 +34,7 @@ timeline needs a generated clip. One GB10 job: the graph refuses to render while
 another heavy mode holds occupancy.
 
 Models: ``wan2.2_ti2v_5B_fp16.safetensors`` + ``umt5_xxl_fp8_e4m3fn_scaled.safetensors`` (CLIP type wan) + ``wan2.2_vae.safetensors``.
-Weights: ``./scripts/manage.sh download-wan --tier 5b``.
+Weights: ``bazelisk run //:manage -- download-wan --tier 5b``.
 
 Widgets the agent patches (see ``extra.lab_edit.widgets``):
 - Prompt: the Wan Prompt Enhance ``prompt`` widget - it owns the Positive CLIP,
@@ -58,7 +58,7 @@ Occupancy: wan - stop LTX, podcast, music. One GB10 job.
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **film/generate-cutaway** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 
@@ -152,7 +152,7 @@ timeline needs a generated clip. One GB10 job: the graph refuses to render while
 another heavy mode holds occupancy.
 
 Models: ``wan2.2_ti2v_5B_fp16.safetensors`` + ``umt5_xxl_fp8_e4m3fn_scaled.safetensors`` (CLIP type wan) + ``wan2.2_vae.safetensors``.
-Weights: ``./scripts/manage.sh download-wan --tier 5b``.
+Weights: ``bazelisk run //:manage -- download-wan --tier 5b``.
 
 Widgets the agent patches (see ``extra.lab_edit.widgets``):
 - Prompt: the Wan Prompt Enhance ``prompt`` widget - it owns the Positive CLIP,

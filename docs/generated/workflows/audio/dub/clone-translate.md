@@ -42,7 +42,7 @@ US-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occu
 
 Disclosure sidecar: This audio is an AI-translated dub. Voices are synthesized from the original speakers with the rights-holder's authorization.
 
-Weights: `./scripts/manage.sh download-dub --tier asr` then `--tier clone` (pip-installs faster-whisper, the llama-cpp-python CPU wheel, then the Chatterbox V3 GitHub zip --no-deps --force-reinstall so torch 2.14 stays). Queue self-heals a missing llama.cpp wheel (needed for `text_target`). Missing pack is not a doctor failure. On DGX Spark, faster-whisper uses the CPU CTranslate2 wheel.
+Weights: `bazelisk run //:manage -- download-dub --tier asr` then `--tier clone` (pip-installs faster-whisper, the llama-cpp-python CPU wheel, then the Chatterbox V3 GitHub zip --no-deps --force-reinstall so torch 2.14 stays). Queue self-heals a missing llama.cpp wheel (needed for `text_target`). Missing pack is not a doctor failure. On DGX Spark, faster-whisper uses the CPU CTranslate2 wheel.
 
 Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
@@ -50,7 +50,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **audio/dub/clone-translate** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 
@@ -450,7 +450,7 @@ US-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occu
 
 Disclosure sidecar: This audio is an AI-translated dub. Voices are synthesized from the original speakers with the rights-holder's authorization.
 
-Weights: `./scripts/manage.sh download-dub --tier asr` then `--tier clone` (pip-installs faster-whisper, the llama-cpp-python CPU wheel, then the Chatterbox V3 GitHub zip --no-deps --force-reinstall so torch 2.14 stays). Queue self-heals a missing llama.cpp wheel (needed for `text_target`). Missing pack is not a doctor failure. On DGX Spark, faster-whisper uses the CPU CTranslate2 wheel.
+Weights: `bazelisk run //:manage -- download-dub --tier asr` then `--tier clone` (pip-installs faster-whisper, the llama-cpp-python CPU wheel, then the Chatterbox V3 GitHub zip --no-deps --force-reinstall so torch 2.14 stays). Queue self-heals a missing llama.cpp wheel (needed for `text_target`). Missing pack is not a doctor failure. On DGX Spark, faster-whisper uses the CPU CTranslate2 wheel.
 
 Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.

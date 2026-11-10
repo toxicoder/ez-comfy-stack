@@ -2813,7 +2813,7 @@ def test_command_for_filename_maps_qwen_image_files_without_moving_others() -> N
         cmd = command_for_filename(name)
         assert cmd != CMD_DOWNLOAD_MODELS, name
         assert cmd.startswith(
-            "./scripts/utilities/download-image.sh run --tier qwen-image"
+            "bazelisk run //scripts:run-utility -- download-image run --tier qwen-image"
         ), name
     assert command_for_filename(KLEIN3_TE) == CMD_IMAGE_FLUX3_TE
     assert command_for_filename(KLEIN3_UPSAMPLER) == CMD_IMAGE_FLUX3_PUP

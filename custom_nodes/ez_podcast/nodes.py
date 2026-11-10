@@ -747,8 +747,8 @@ class EZKokoroTTS:
         onnx, voices = resolve_kokoro_paths()
         if not os.path.isfile(onnx) or not os.path.isfile(voices):
             _log(
-                f"Kokoro ONNX missing ({onnx}, {voices}) - run "
-                "./scripts/manage.sh download-podcast --tier analog"
+                f"Kokoro ONNX missing ({onnx}, {voices}) - "
+                "bazelisk run //:manage -- download-podcast --tier analog"
             )
             return None, SAMPLE_RATE_KOKORO
         try:
