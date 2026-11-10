@@ -55,6 +55,19 @@ teardown() {
   [ "${status}" -eq 0 ]
 }
 
+@test "models-manifest refuses declined integration weights" {
+  # Lyra-2.0 is license-blocked for production; Arete-27B is a 54.7 GB text
+  # model with no GGUF. Both must sit in the fail-closed refuse lane.
+  run grep -E '^  - (Lyra-2\.0|Arete-27B)$' "${REPO_ROOT}/config/model-manifest.yaml"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Lyra-2.0"* ]]
+  [[ "${output}" == *"Arete-27B"* ]]
+  run models_default_keep_set
+  [ "${status}" -eq 0 ]
+  [[ "${output}" != *"Lyra"* ]]
+  [[ "${output}" != *"Arete"* ]]
+}
+
 @test "models-manifest includes opt-in flux3 klein packs default false" {
   run cmd_render
   [ "${status}" -eq 0 ]

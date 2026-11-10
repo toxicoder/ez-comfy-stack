@@ -13,6 +13,11 @@ refuse:
   - DA3-LARGE
   - Inria-3DGS
   - Pixal3D-as-default
+  # Lyra-2.0: NVIDIA Internal Scientific R&D Model License forbids deployment
+  # and any production use. See docs/reference/declined-integrations.md.
+  - Lyra-2.0
+  # Arete-27B: 54.7 GB text-only BF16 with no GGUF; the llm lane is CPU GGUF.
+  - Arete-27B
 packs:
   klein-4b-fp8:
     default: true

@@ -94,6 +94,37 @@ def test_banned_and_ltx23() -> None:
     assert old["reclaim"] == "reap-models"
 
 
+def test_declined_integration_weights_are_banned() -> None:
+    """Lyra-2.0 and Arete-27B classify as banned weights, not keep-set rows."""
+    cat = dc.load_catalog(CATALOG)
+    man = mm.load_manifest(MANIFEST)
+    keep, refuse = mm.default_keep_set(man), man["refuse"]
+    assert "Lyra-2.0" in refuse
+    assert "Arete-27B" in refuse
+    for path in (
+        "/mnt/models/nvidia__Lyra-2.0_main/model-00001-of-00032.safetensors",
+        "/mnt/models/NousResearch__Arete-27B/model-00018-of-00018.safetensors",
+    ):
+        row = dc.classify_path(
+            path,
+            cat,
+            keep_set=keep,
+            refuse=refuse,
+            size_bytes=1_000,
+        )
+        assert row["id"] == "banned-weight", path
+    # Matching is a case-insensitive substring, so a tier dir spelled either
+    # way still lands in the refuse lane.
+    lowercase = dc.classify_path(
+        "/mnt/models/nvidia__lyra-2.0/umt5.safetensors",
+        cat,
+        keep_set=keep,
+        refuse=refuse,
+        size_bytes=1_000,
+    )
+    assert lowercase["id"] == "banned-weight"
+
+
 def test_docker_and_vllm_paths() -> None:
     """Synthetic docker ids and vLLM cache paths classify."""
     cat = dc.load_catalog(CATALOG)

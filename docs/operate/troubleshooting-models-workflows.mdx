@@ -91,6 +91,7 @@ the downloader, not the graph: [Downloads and bandwidth](troubleshooting-downloa
 | Fun InP / SeedVR2 filled the box | Opt-in ~47 GB / ~15 GB packs | `reap-models --plan`; `--drop-pack` cannot eat shared VAE. Unload LTX before Fun InP. SeedVR2 is still polish or post-concat; stop Comfy first |
 | LTX Director missing | GPL clone is opt-in | `LAB_ENABLE_LTX_DIRECTOR=1` then restart. Never MiniMax H3 Director |
 | `download-3d --tier da3-large` refused | DA3-LARGE is banned | Use `--tier da3-base`. nvdiffrast / Inria 3DGS / Pixal3D-as-default are also refused |
+| disk-wizard or `reap-models` flags `Lyra-2.0` or `Arete-27B` as a banned weight | Declined integration pulled by hand | These are never fetched by `bazelisk run //:manage -- download-models`. Delete the tier dir under `${MODELS_DIR}` after `bazelisk run //:manage -- stop`. Lyra-2.0's license bars running it in a container; Arete-27B is a 54.7 GB text model with no GGUF. Why: [Declined integrations](../reference/declined-integrations.md) |
 | DreamX-World refused | Wrong pack | `download-dreamx --tier creator` only |
 | Doctor warns `banned MiniMax H3 weight present` | Leftover files from an old `download-h3` run | After `bazelisk run //:manage -- stop`, delete those files under `${MODELS_DIR}/comfy/` (`minimax_h3_*.safetensors`, `qwen3vl_32b_minimax_h3_*.safetensors`). Do not Queue MiniMaxH3 nodes. See [Model licenses](../licenses.md) |
 

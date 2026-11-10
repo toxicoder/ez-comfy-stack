@@ -91,6 +91,7 @@ filegroup(
         "reboot-safety.mdx",
         "reference/config-and-schemas.mdx",
         "reference/custom-nodes.mdx",
+        "reference/declined-integrations.md",
         "reference/studio-ui.mdx",
         "reference/workflow-nodes.md",
         "shorts.mdx",
