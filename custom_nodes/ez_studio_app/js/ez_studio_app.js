@@ -73,6 +73,7 @@ const SAVE_TYPES = new Set([
   "VHS_VideoCombine",
   "SaveAudio",
   "SaveAudioMP3",
+  "SaveGLB",
   "EZFilmConcat",
   "EZClipConcat",
   "EZAlbumPack",
@@ -197,6 +198,16 @@ function stampedLabels() {
 }
 
 /**
+ * Node class, however this frontend names it. Nodes 2.0 hands comfyClass and
+ * leaves type empty, so every class switch has to read both.
+ * @param {EzNode|undefined} node
+ * @returns {string}
+ */
+function nodeClass(node) {
+  return node?.comfyClass || node?.type || "";
+}
+
+/**
  * Apply stamped or generic labels onto a node's widgets.
  * @param {EzNode} node
  * @returns {void}
@@ -206,7 +217,7 @@ function relabelWidgets(node) {
     return;
   }
   const labels = stampedLabels();
-  const ntype = node.comfyClass || node.type || "";
+  const ntype = nodeClass(node);
   for (const widget of node.widgets) {
     const stamped = labels.get(`${node.id}:${widget.name}`);
     if (stamped) {
@@ -240,7 +251,7 @@ function relabelGraph() {
  */
 function countSaveNodes() {
   const nodes = app.graph?.nodes || [];
-  return nodes.filter((n) => SAVE_TYPES.has(n.type)).length;
+  return nodes.filter((n) => SAVE_TYPES.has(nodeClass(n))).length;
 }
 
 /**
@@ -571,7 +582,7 @@ app.registerExtension({
     });
     api.addEventListener("executed", ({ detail }) => {
       const node = app.graph?.getNodeById?.(detail?.node);
-      if (node && SAVE_TYPES.has(node.type)) {
+      if (node && SAVE_TYPES.has(nodeClass(node))) {
         done += 1;
       }
       const total = countSaveNodes();

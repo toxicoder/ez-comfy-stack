@@ -12,7 +12,8 @@ import { api } from "../../scripts/api.js";
  * @typedef {{
  *   name: string,
  *   value?: unknown,
- *   options?: {values?: unknown[]},
+ *   label?: string,
+ *   options?: {values?: unknown[], disabled?: boolean},
  *   callback?: (value: unknown, canvas: unknown, node: unknown) => void
  * }} EzWidget
  */
@@ -37,7 +38,7 @@ import { api } from "../../scripts/api.js";
  *     name: string,
  *     value: unknown,
  *     callback: () => void
- *   ) => void
+ *   ) => EzWidget
  * }} EzNode
  */
 
@@ -181,6 +182,25 @@ async function listOutputs(kind) {
   return Array.isArray(data.items) ? data.items : [];
 }
 
+const NO_OUTPUTS = "No matching files on the output disk yet.";
+const UPLOADING_LABEL = "Uploading...";
+
+/**
+ * Show a line the operator can read in the App's own message surface. Never a
+ * blocking box, never only the console.
+ * @param {string} text Message to announce.
+ * @param {string=} tone "info" reads soft; anything else reads as a failure.
+ * @returns {void}
+ */
+function announce(text, tone) {
+  const toast = app.extensionManager?.toast;
+  if (!toast || typeof toast.addToast !== "function") {
+    return;
+  }
+  const type = tone === "info" ? "info" : "error";
+  toast.addToast({ title: "ez-comfy", detail: text, type, timeout: 6000 });
+}
+
 /**
  * Mount upload + choose-from-outputs buttons on one or more load slots.
  * @param {EzNode} node
@@ -203,24 +223,51 @@ function bindPicker(node, spec) {
   fileInput.style.display = "none";
   document.body.appendChild(fileInput);
   let target = named[0];
+  /** @type {{widget: EzWidget, label: string}[]} */
+  const uploadButtons = [];
+  /**
+   * Grey the Upload media buttons out while a file is in flight, so the
+   * operator cannot queue a second upload against the same slot.
+   * @param {boolean} enabled True to hand the buttons back.
+   * @returns {void}
+   */
+  function setUploadsEnabled(enabled) {
+    fileInput.disabled = !enabled;
+    for (const entry of uploadButtons) {
+      const button = entry.widget;
+      if (!button.options) {
+        button.options = {};
+      }
+      button.options.disabled = !enabled;
+      button.label = enabled ? entry.label : UPLOADING_LABEL;
+    }
+  }
   fileInput.onchange = async () => {
     const file = fileInput.files?.[0];
     fileInput.value = "";
     if (!file) {
       return;
     }
+    setUploadsEnabled(false);
     try {
       await uploadToInput(node, target, file);
     } catch (err) {
+      const message = String(err && err.message ? err.message : err);
       console.error("[ez_image] upload failed", err);
+      announce(`Upload failed - ${message}`);
+    } finally {
+      setUploadsEnabled(true);
     }
   };
   named.forEach((widget, index) => {
     const suffix = named.length > 1 ? ` ${index + 1}` : "";
-    node.addWidget("button", `Upload media${suffix}`, `upload:${widget.name}`, () => {
+    const label = `Upload media${suffix}`;
+    const slot = `upload:${widget.name}`;
+    const uploadButton = node.addWidget("button", label, slot, () => {
       target = widget;
       fileInput.click();
     });
+    uploadButtons.push({ widget: uploadButton, label });
     node.addWidget(
       "button",
       `Choose from outputs${suffix}`,
@@ -230,14 +277,16 @@ function bindPicker(node, spec) {
         try {
           items = await listOutputs(spec.kind);
         } catch (err) {
+          const message = String(err && err.message ? err.message : err);
           console.error("[ez_image] outputs list failed", err);
+          announce(`Could not list the output disk - ${message}`);
           return;
         }
         const names = items
           .map((row) => String(row.rel || row.name || ""))
           .filter(Boolean);
         if (!names.length) {
-          window.alert("No matching files on the output disk yet.");
+          announce(NO_OUTPUTS, "info");
           return;
         }
         const picked = window.prompt(
@@ -251,7 +300,9 @@ function bindPicker(node, spec) {
         try {
           await chooseOutput(node, widget, picked);
         } catch (err) {
+          const message = String(err && err.message ? err.message : err);
           console.error("[ez_image] choose output failed", err);
+          announce(`Could not copy ${picked} into input/ - ${message}`);
         }
       },
     );

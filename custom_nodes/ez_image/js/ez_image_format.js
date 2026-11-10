@@ -494,6 +494,23 @@ function bindAll() {
   }
 }
 
+const CATALOG_UNAVAILABLE =
+  "Format list unavailable - Queue still uses the width/height widgets. " +
+  "Reload the App after pull if this stays.";
+
+/**
+ * Show a line the operator can read in the App's own message surface. Never a
+ * blocking box, never only the console.
+ * @param {string} text Message to announce.
+ * @returns {void}
+ */
+function announce(text) {
+  const toast = app.extensionManager?.toast;
+  if (toast && typeof toast.addToast === "function") {
+    toast.addToast({ title: "ez-comfy", detail: text, type: "error", timeout: 6000 });
+  }
+}
+
 /**
  * Load js/formats.json from this pack's WEB_DIRECTORY.
  * @returns {Promise<void>}
@@ -505,14 +522,18 @@ async function loadCatalog() {
   try {
     const response = await fetch("/extensions/ez_image/formats.json");
     if (!response.ok) {
+      announce(CATALOG_UNAVAILABLE);
       return;
     }
     const payload = await response.json();
     if (payload && Array.isArray(payload.formats)) {
       catalog = payload;
+      return;
     }
+    announce(CATALOG_UNAVAILABLE);
   } catch {
     catalog = { formats: [] };
+    announce(CATALOG_UNAVAILABLE);
   }
 }
 

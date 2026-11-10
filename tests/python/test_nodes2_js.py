@@ -315,6 +315,22 @@ def test_image_mode_queue_hook_stays_sync_and_skips_preview() -> None:
     assert "await" not in hook
 
 
+def test_image_mode_announces_a_missing_mode_catalog() -> None:
+    """A Mode combo left empty by a dead modes.json says so, like preview does."""
+    body = (CUSTOM / "ez_image" / "js" / "ez_image_mode.js").read_text(
+        encoding="utf-8"
+    )
+    assert "window.alert" not in body
+    loader = _fn(body, "async function loadCatalog() {")
+    assert loader.count("announceCatalog()") == 3
+    assert "console.error" not in loader
+    announce = _fn(body, "function announceCatalog() {")
+    assert "CATALOG_UNAVAILABLE" in announce
+    assert "slotWrite(" in announce
+    assert "run_summary" in announce
+    assert "addToast" in announce
+
+
 def test_prompt_enhance_js_syncs_linked_clip_preview() -> None:
     """CLIPTextEncode Positive follows Prompt / Rewrite prompt and Queue."""
     body = (
@@ -378,6 +394,34 @@ def test_media_pick_js_mounts_every_reference_still_slot() -> None:
     assert "onResize" not in body
 
 
+def test_media_pick_js_announces_instead_of_alerting() -> None:
+    """An empty output disk is an announce the App shows, never a blocking box."""
+    body = (CUSTOM / "ez_image" / "js" / "ez_media_pick.js").read_text(encoding="utf-8")
+    assert "window.alert" not in body
+    assert "No matching files on the output disk yet." in body
+    announce = _fn(body, "function announce(text, tone)")
+    assert "addToast" in announce
+    assert "window.alert" not in announce
+    listing = _fn(body, "function bindPicker(node, spec) {")
+    assert "announce(NO_OUTPUTS" in listing
+    assert "Could not list the output disk -" in listing
+    assert "Could not copy ${picked} into input/ -" in listing
+
+
+def test_media_pick_js_upload_disables_and_reports() -> None:
+    """The upload is one in-flight request: buttons off, then a visible failure."""
+    body = (CUSTOM / "ez_image" / "js" / "ez_media_pick.js").read_text(encoding="utf-8")
+    hook = _fn(body, "fileInput.onchange = async () => {", "\n  };\n")
+    assert "setUploadsEnabled(false)" in hook
+    assert "} finally {" in hook
+    assert "setUploadsEnabled(true)" in hook
+    assert "Upload failed - ${message}" in hook
+    disables = _fn(body, "function setUploadsEnabled(enabled) {", "\n  }\n")
+    assert "options.disabled" in disables
+    assert "fileInput.disabled" in disables
+    assert "UPLOADING_LABEL" in disables
+
+
 def test_reference_input_js_is_nodes2_safe() -> None:
     """The reference card obeys the same widget-write and banned-token rules."""
     body = (
@@ -398,6 +442,37 @@ def test_format_js_matches_input_ratio() -> None:
     assert "Match input" in body
     assert "size_mode" in body
     assert "applyMatchInput" in body
+
+
+def _fn(body: str, opener: str, closer: str = "\n}\n") -> str:
+    """Slice one function out of frontend source.
+
+    Args:
+        body: Whole file body.
+        opener: Text the block starts at, e.g. ``function announce(text) {``.
+        closer: End marker; the column-zero brace for a top-level function, the
+            indented one for a function nested inside another.
+
+    Returns:
+        Source from ``opener`` up to (not including) the first ``closer`` after
+        it.
+    """
+    start = body.index(opener)
+    return body[start : body.index(closer, start)]
+
+
+def test_format_js_announces_a_missing_catalog() -> None:
+    """A Format combo with no catalog says so in the App; silent is not a state."""
+    for path in FORMAT_JS:
+        body = path.read_text(encoding="utf-8")
+        assert "CATALOG_UNAVAILABLE" in body, path
+        assert "window.alert" not in body, path
+        loader = _fn(body, "async function loadCatalog() {")
+        assert "announce(CATALOG_UNAVAILABLE)" in loader, path
+        assert "console.error" not in loader, path
+        announce = _fn(body, "function announce(text)")
+        assert "addToast" in announce, path
+        assert "window.alert" not in announce, path
 
 
 def test_video_format_js_writes_ltx_duration() -> None:
@@ -436,6 +511,25 @@ def test_studio_app_album_handoff_names_the_bazel_target() -> None:
     body = STUDIO_APP_JS.read_text(encoding="utf-8")
     assert "bazelisk run //:manage -- album-render --album" in body
     assert "./scripts/manage.sh" not in body
+
+
+def test_studio_app_chip_counts_the_3d_save_node() -> None:
+    """Every 3D app ends in SaveGLB; miss it and the chip says only Running..."""
+    body = STUDIO_APP_JS.read_text(encoding="utf-8")
+    save_types = body.split("const SAVE_TYPES = new Set([", 1)[1].split("]);", 1)[0]
+    assert '"SaveGLB"' in save_types
+
+
+def test_studio_app_reads_the_node_class_one_way() -> None:
+    """Nodes 2.0 hands comfyClass, so counter and relabeller must read it alike."""
+    body = STUDIO_APP_JS.read_text(encoding="utf-8")
+    reader = _fn(body, "function nodeClass(node) {")
+    assert "comfyClass" in reader
+    assert "node?.type" in reader
+    assert "const ntype = nodeClass(node);" in body
+    assert body.count("SAVE_TYPES.has(nodeClass(") == 2
+    assert "SAVE_TYPES.has(n.type)" not in body
+    assert "SAVE_TYPES.has(node.type)" not in body
 
 
 def _model_check_fn(name: str) -> str:
