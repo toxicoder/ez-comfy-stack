@@ -30,6 +30,7 @@ Design rules this file enforces by construction:
 from __future__ import annotations
 
 import enum
+from collections.abc import Mapping
 from dataclasses import dataclass, field
 from typing import Protocol, TypedDict
 
@@ -769,3 +770,177 @@ class SessionState:
     dry_run: bool = False
     read_only: bool = False
     poll_errors: tuple[str, ...] = ()
+
+
+class ScreenId(enum.Enum):
+    """One screen the app loop can show.
+
+    ``views`` builds a :class:`ViewModel` for each of these; ``app`` decides
+    which one is on screen and how a key moves between them.
+    """
+
+    DASHBOARD = "dashboard"
+    """Health, guards, quick actions."""
+
+    GROUP = "group"
+    """A filtered action list for one :class:`Group`."""
+
+    LANES = "lanes"
+    """The nine lab lanes."""
+
+    LANE_GRAPHS = "lane_graphs"
+    """Graphs inside one lane."""
+
+    GRAPH_DETAIL = "graph_detail"
+    """One graph: description, widgets, hand-off actions."""
+
+    PARAM_FORM = "param_form"
+    """Collecting the parameters an action needs."""
+
+    CONFIRM = "confirm"
+    """The typed-token gate."""
+
+    PROGRESS = "progress"
+    """A command is running; its tail streams here."""
+
+    RESULT = "result"
+    """The outcome of the last dispatch."""
+
+    PALETTE = "palette"
+    """Fuzzy search over every action."""
+
+    AUDIT = "audit"
+    """Recent dispatches."""
+
+    LOG_TAIL = "log_tail"
+    """Compose log lines."""
+
+    HELP = "help"
+    """Keys and the safety contract."""
+
+
+@dataclass(frozen=True)
+class Row:
+    """One selectable line in a list view.
+
+    A row is pure presentation of a decision the model already made: whether it
+    is ``enabled`` comes from the guard layer, so a view can never offer a
+    blocked action by accident.
+    """
+
+    key: str
+    """Stable id (an ``action_id``, a lane id, a log index)."""
+
+    label: str
+    """Primary text."""
+
+    badge: str = ""
+    """Right-aligned tag: a risk tier, a state, a count."""
+
+    note: str = ""
+    """Trailing hint: the blocker, the size, the timestamp."""
+
+    enabled: bool = True
+    """False renders it dimmed and refuses selection."""
+
+    style: Style = Style.NORMAL
+    """Drawing intent for the label."""
+
+
+@dataclass(frozen=True)
+class ViewModel:
+    """Everything one screen needs, with no reference to a terminal.
+
+    Views return this and never touch a :class:`Screen`, which is what lets the
+    suite assert on rendered content without a TTY and lets the app own the
+    drawing.
+    """
+
+    screen: ScreenId
+    """Which screen this is."""
+
+    title: str
+    """Header text."""
+
+    rows: tuple[Row, ...] = ()
+    """Selectable rows."""
+
+    detail: tuple[Line, ...] = ()
+    """Read-only pane above or beside the rows."""
+
+    footer: str = ""
+    """Key-hint strip."""
+
+    selected: int = 0
+    """Row index the view wants focused."""
+
+    def row_keys(self) -> tuple[str, ...]:
+        """The keys of the rows, in display order.
+
+        Returns:
+            One key per row.
+        """
+        return tuple(row.key for row in self.rows)
+
+
+_TRUEISH: frozenset[str] = frozenset({"1", "true", "yes", "on", "y"})
+"""Answers that mean a boolean flag is switched on."""
+
+
+def build_argv(
+    action: ActionSpec,
+    answers: Mapping[str, str],
+) -> tuple[str, ...]:
+    """Assemble the exact argv an action will run with.
+
+    The result is always a plain argument list: the console never builds a shell
+    string, so an operator's text can only ever be one argv element.
+
+    Args:
+        action: The catalog entry.
+        answers: Operator answers keyed by :attr:`ParamSpec.name`.
+
+    Returns:
+        ``fixed_args`` followed by each answered parameter in declaration order.
+
+    Raises:
+        ValueError: A required parameter is missing, a choice is not one of the
+            offered values, or an integer answer falls outside its bounds.
+    """
+    argv: list[str] = list(action.fixed_args)
+    for param in action.params:
+        raw = answers.get(param.name, param.default)
+        if not raw:
+            if param.required:
+                raise ValueError(f"{param.name}: {param.label} is required")
+            continue
+        if param.kind is ParamKind.FLAG:
+            if raw not in _TRUEISH:
+                continue
+            if not param.flag:
+                raise ValueError(f"{param.name}: a flag parameter needs a flag")
+            argv.append(param.flag)
+            continue
+        if param.kind is ParamKind.CHOICE:
+            allowed = tuple(choice.value for choice in param.choices)
+            if raw not in allowed:
+                raise ValueError(f"{param.name}: {raw!r} is not one of {allowed}")
+        if param.kind is ParamKind.INT:
+            if not raw.lstrip("-").isdigit():
+                raise ValueError(f"{param.name}: {raw!r} is not a number")
+            value = int(raw)
+            if value < param.low or value > param.high:
+                raise ValueError(
+                    f"{param.name}: {value} is outside {param.low}..{param.high}"
+                )
+        if param.kind is ParamKind.TEXT and ("\x00" in raw or "\n" in raw):
+            raise ValueError(f"{param.name}: no newlines or NUL bytes allowed")
+        if param.kind is ParamKind.CHOICE and not param.flag:
+            raise ValueError(f"{param.name}: a choice parameter needs a flag")
+        if not param.flag:
+            argv.append(raw)
+        elif param.argv_style is ArgvStyle.EQUALS:
+            argv.append(f"{param.flag}={raw}")
+        else:
+            argv.extend([param.flag, raw])
+    return tuple(argv)

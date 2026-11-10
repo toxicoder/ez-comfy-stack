@@ -280,3 +280,164 @@ def test_param_spec_bounds_and_defaults() -> None:
 def test_runner_kinds_cover_the_three_dispatch_shapes() -> None:
     """Every action targets the CLI, a bare utility, or the console itself."""
     assert {member.value for member in c.RunnerKind} == {"manage", "utility", "internal"}
+
+
+def _action(**overrides: object) -> c.ActionSpec:
+    """Build an action, overriding only what a test cares about.
+
+    Args:
+        **overrides: Fields to replace on the default action.
+
+    Returns:
+        A catalog entry for argv tests.
+    """
+    base: dict[str, object] = {
+        "action_id": "models.download_music",
+        "title": "Download music pack",
+        "group": c.Group.MODELS,
+        "summary": "Pull the ACE-Step turbo pack.",
+        "runner": c.RunnerKind.MANAGE,
+        "target": "download-music",
+        "params": (
+            c.ParamSpec(
+                name="tier",
+                label="Tier",
+                kind=c.ParamKind.CHOICE,
+                flag="--tier",
+                choices=(
+                    c.Choice("turbo", "Turbo", "~10 GB"),
+                    c.Choice("xl", "XL", "~30 GB"),
+                ),
+            ),
+            c.ParamSpec(
+                name="limit",
+                label="Cap",
+                kind=c.ParamKind.INT,
+                flag="--limit",
+                argv_style=c.ArgvStyle.EQUALS,
+                required=False,
+                low=1,
+                high=10_000,
+            ),
+            c.ParamSpec(
+                name="drop",
+                label="Drop partials",
+                kind=c.ParamKind.FLAG,
+                flag="--drop-incomplete",
+                required=False,
+            ),
+        ),
+    }
+    base.update(overrides)
+    return c.ActionSpec(**base)  # type: ignore[arg-type]
+
+
+def test_build_argv_is_a_plain_list_with_no_shell_string() -> None:
+    """Flags, equals-styles, and positional args all stay argv elements."""
+    argv = c.build_argv(
+        _action(fixed_args=("download-music",)),
+        {"tier": "turbo", "limit": "50", "drop": "yes"},
+    )
+    assert argv == (
+        "download-music",
+        "--tier",
+        "turbo",
+        "--limit=50",
+        "--drop-incomplete",
+    )
+
+
+def test_build_argv_skips_a_false_flag_and_an_absent_optional() -> None:
+    """An unchecked flag and an empty optional leave no trace in the argv."""
+    argv = c.build_argv(_action(), {"tier": "xl", "drop": "no"})
+    assert argv == ("--tier", "xl")
+
+
+def test_build_argv_keeps_positional_answers_in_order() -> None:
+    """A positional parameter appends its value with no flag."""
+    action = _action(
+        params=(c.ParamSpec(name="film", label="Film", kind=c.ParamKind.TEXT),)
+    )
+    assert c.build_argv(action, {"film": "breakwater"}) == ("breakwater",)
+
+
+def test_build_argv_rejects_a_missing_required_answer() -> None:
+    """An operator cannot dispatch without answering a required prompt."""
+    with pytest.raises(ValueError, match="tier: Tier is required"):
+        c.build_argv(_action(), {})
+
+
+def test_build_argv_rejects_an_answer_outside_the_offered_choices() -> None:
+    """Free text cannot smuggle itself into a parameter with a fixed menu."""
+    with pytest.raises(ValueError, match="not one of"):
+        c.build_argv(_action(), {"tier": "../etc"})
+
+
+def test_build_argv_bounds_an_integer_answer() -> None:
+    """A cap that is not a number, or out of range, is refused before exec."""
+    with pytest.raises(ValueError, match="not a number"):
+        c.build_argv(_action(), {"tier": "turbo", "limit": "auto"})
+    with pytest.raises(ValueError, match="outside 1..10000"):
+        c.build_argv(_action(), {"tier": "turbo", "limit": "999999"})
+
+
+def test_build_argv_refuses_newlines_in_free_text() -> None:
+    """A film slug cannot carry a second command or a NUL byte."""
+    action = _action(
+        params=(c.ParamSpec(name="film", label="Film", kind=c.ParamKind.TEXT),)
+    )
+    with pytest.raises(ValueError, match="newlines"):
+        c.build_argv(action, {"film": "x\nrm -rf /"})
+    with pytest.raises(ValueError, match="newlines"):
+        c.build_argv(action, {"film": "x\x00y"})
+
+
+def test_build_argv_reports_a_misconfigured_catalog_entry() -> None:
+    """A flag parameter with no flag, or a choice with no flag, is a defect."""
+    bad_flag = _action(
+        params=(
+            c.ParamSpec(name="d", label="D", kind=c.ParamKind.FLAG, flag=""),
+        )
+    )
+    with pytest.raises(ValueError, match="needs a flag"):
+        c.build_argv(bad_flag, {"d": "on"})
+    bad_choice = _action(
+        params=(
+            c.ParamSpec(
+                name="t",
+                label="T",
+                kind=c.ParamKind.CHOICE,
+                flag="",
+                choices=(c.Choice("a", "A"),),
+            ),
+        )
+    )
+    with pytest.raises(ValueError, match="choice parameter needs a flag"):
+        c.build_argv(bad_choice, {"t": "a"})
+
+
+def test_view_model_rows_are_addressable_by_key() -> None:
+    """The app moves focus by index and dispatches by key."""
+    model = c.ViewModel(
+        screen=c.ScreenId.GROUP,
+        title="Stack",
+        rows=(
+            c.Row(key="stack.start", label="Start", badge="HEAVY", enabled=False),
+            c.Row(key="stack.status", label="Status", badge="read"),
+        ),
+        detail=(c.Line(text="free 41 GiB", style=c.Style.OK),),
+        footer="enter run  q back",
+        selected=1,
+    )
+    assert model.row_keys() == ("stack.start", "stack.status")
+    assert model.rows[0].enabled is False
+    assert model.rows[0].style is c.Style.NORMAL
+    assert model.detail[0].style is c.Style.OK
+
+
+def test_every_screen_id_is_unique_and_named() -> None:
+    """The app loop switches on these, so none may collide."""
+    values = [member.value for member in c.ScreenId]
+    assert len(values) == len(set(values))
+    assert "confirm" in values and "palette" in values
+
