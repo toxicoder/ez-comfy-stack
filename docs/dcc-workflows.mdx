@@ -139,11 +139,11 @@ Playbook, layout seed, and the language-only door: [Dream-house tours](learn/dre
 | **guides/first-last-from-guide** | wan | Fun InP `first.png` + `last.png`. Opt-in `download-wan --tier fun-inp`. MagCache off. |
 | **guides/guide-still** | klein | In-canvas `EZDCCLoadGuideStill` + occupancy gate. Prefix `ez_guide_hero`. Stay on `:8188`. |
 | **guides/depth-from-loader** | ltx | Envelope from loaders + `depth.mp4` path. MagCache off. Distilled-only. Prefix `ez_iclora_guide`. |
-| **3d/trellis2** | trellis | Klein still via `LoadImage` -> native TRELLIS.2 INT8 textured mesh. `SaveGLB` prefix `3d/trellis2`. Opt-in `download-3d --tier trellis2`. |
+| **3d/trellis2** | trellis | Klein still via `LoadImage` -> native TRELLIS.2 INT8 textured mesh. `SaveGLB` writes `assets/objects/_lab-trellis2/mesh`. Opt-in `download-3d --tier trellis2`. |
 | **3d/still-to-mesh** | trellis | Still pack `plate=mug` via `EZDCCLoadStillPack` -> textured mesh. `SaveGLB` writes `assets/objects/_lab-mug/mesh`. |
 | **3d/blockout-mesh** | trellis | Still pack via `EZDCCLoadStillPack` -> **untextured gray-box blockout**: structure + shape stages only, no upsample, no texture VAE, no `PaintMesh`. The fast layout proxy. `SaveGLB` writes `assets/objects/_lab-blockout/blockout`. |
 | **3d/shot-to-prop** | trellis | DCC guide still via `EZDCCLoadGuideStill` (`slug=go-see`, `shot_id=12`, `layer=first`) -> textured mesh of one hero object, for re-compositing that object into other shots. `SaveGLB` writes `assets/objects/_lab-shot-prop/prop`. |
-| **3d/prop-variants** | trellis | Klein still via `LoadImage` with `EmptyTrellis2LatentStructure` `batch_size=4` -> four candidate meshes from one still in a single occupancy session. `SaveGLB` writes `assets/objects/_lab-variants/prop`. |
+| **3d/prop-variants** | trellis | Klein still via `LoadImage` with `EmptyTrellis2LatentStructure` `batch_size=4` -> four candidate meshes from one still in a single occupancy session. `SaveGLB` writes four files under `assets/objects/_lab-variants/prop`. |
 | **audio/stem-mix** | audio | Stem mix desk. Host `stem-mix.sh`. ACE-Step group stays off. |
 
 Print modes `wan-vace`, `wan-denk-cn`, and `dcc-final` stay valid on `shot.yaml` but are **not** lab printers in this suite (VACE stays 17-frame join; Fun Control / Path A beauty are later).
@@ -162,7 +162,7 @@ All five `3d/*` graphs are lane **3d**, occupancy **trellis** - one heavy 3D job
 | --- | --- |
 | Chain | `Trellis2Conditioning` -> structure -> shape -> upsample -> texture -> `PaintMesh` -> `MeshToFile3D` -> `SaveGLB` |
 | Upsample | `Trellis2UpsampleStage` takes an **INT** `target_resolution`. Legal range is **1024 to 2048, step 128**; default **1024**. There is no 512 and no 256 - a "512 upsample" note is stale |
-| Save | `MeshToFile3D` has **no widgets and writes nothing**. `SaveGLB` is the node that puts the `.glb` on disk, under the output prefix named above |
+| Save | `SaveGLB` is the node that puts the `.glb` on disk, under the output prefix named above. `MeshToFile3D` has **no widgets and writes nothing**, and it keeps **only batch item 0** - so `3d/prop-variants` feeds `SaveGLB` the `PaintMesh` MESH directly and writes all four candidates, while the single-mesh graphs convert through it in memory |
 | Blockout | `3d/blockout-mesh` stops after the shape stage - no upsample, no texture VAE, no `PaintMesh` - so it returns an untextured gray box. Queue it for layout, then re-run the full chain on the take you keep |
 | Variants | `3d/prop-variants` sets `EmptyTrellis2LatentStructure` `batch_size=4`, so four candidates come off one Klein still in a single occupancy session |
 

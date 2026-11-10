@@ -225,7 +225,7 @@ Category `ez-comfy/image`. Size helpers for Klein edit graphs, still and video F
 | `EZDescribeImage` | Describe reference still | `has_image` BOOLEAN, optional IMAGE | `STRING` caption | - | Fail-soft empty caption without VL weights. Lab graphs use `EZImageDescribe` (prompt-enhance pack) instead |
 | `EZVideoFormat` | Format / platform (video) | `family` combo (Wan 5B / LTX-2.5), `format` combo, `width`/`height` INT | `INT` width/height, `STRING` hint/prefix | wan / ltx | Preset sets Spark-safe clip pixels (Wan div16 max 1024, LTX div32 max 1280). Custom snaps 720->704 on LTX. Length stays on the latent. App Mode hides Family. Quality does not change size |
 
-**Reference stills card** (`EZOptionalImage` front-end, Nodes 2.0 safe). Each picker slot shows a thumbnail of what Queue will attach. Fill a slot by dragging a file onto the card's drop zone, by **Upload media**, by **Choose from outputs** (same buttons as the other media pickers), by picking a name already in `input/`, or by wiring an IMAGE into the node. **+ Add reference** reveals the next picker; every filled slot has **Remove**. The status line reads `Reference stills: 2 of 3` while stills are attached, `Reference stills: 2 of 3 plus a wired batch` when a batch is also wired, `Reference stills muted` while the mute is off, and `No reference still - Queue as is` when nothing is picked, which is the text-to-image path. The **Use references** / **References off** toggle is the one-click mute and never clears a pick; a new pick turns it back on. Upload posts to `/upload/image` and stores `subfolder/name`; widget writes use `widget.value`, rebuild `widgets_values`, then dirty the canvas - no LiteGraph `node_widget`.
+**Reference stills card** (`EZOptionalImage` front-end, Nodes 2.0 safe). Each picker slot shows a thumbnail of what Queue will attach. Fill a slot by dragging a file onto the card's drop zone, by **Upload media**, by **Choose from outputs** (same buttons as the other media pickers), by picking a name already in `input/`, or by wiring an IMAGE into the node. **+ Add reference** reveals the next picker; every filled slot has **Remove**. The status line reads `Reference stills: 2 of 3` while stills are attached, `Reference stills: 2 of 3 plus a wired batch` when a batch is also wired, `Reference stills muted` while the mute is off, and `No reference still - Queue as is` when nothing is picked, which is the text-to-image path. The **Use references** / **References off** toggle is the one-click mute and never clears a pick; a new pick turns it back on. Upload posts to `/upload/image` and stores `subfolder/name`; widget writes use `widget.value`, rebuild `widgets_values`, then dirty the canvas - no LiteGraph `node_widget`. While a file is in flight every **Upload media** button is disabled and relabelled `Uploading...`, then restored whatever the upload returns. A failed upload, a failed output listing, or a refused copy into `input/` announces in an `ez-comfy` toast with the reason and never leaves only the console; an empty output disk is a soft toast, not a blocking dialog. The Format / Mode / platform pickers announce the same way when their `/extensions/ez_image/*.json` catalog does not answer, and Queue keeps working off the node's own widgets.
 
 ---
 
@@ -244,7 +244,7 @@ Category `ez-comfy`. One Quality combo and one isolated Check models node on eve
 
 **No Python nodes.** `NODE_CLASS_MAPPINGS` is empty. `WEB_DIRECTORY = ./js`.
 
-`ez_studio_app.js` relabels App widgets and draws an occupancy chip from `extra.lab_app_mode`. Chip "must be stopped" copy:
+`ez_studio_app.js` relabels App widgets and draws an occupancy chip from `extra.lab_app_mode`. The chip's Queue progress counter counts output nodes by class (`comfyClass` first, `type` as the fallback, since Nodes 2.0 leaves `type` empty), and `SaveGLB` is one of them, so a `3d/*` App reads `Done 1 of 1` instead of a bare `Running...`. Chip "must be stopped" copy:
 
 | Graph occupancy | Chip says stop |
 | --- | --- |
@@ -269,6 +269,7 @@ This is **not** [studio-ui](studio-ui.md) and not a second frontend. Widget cata
 - Multi-select (checkbox, Shift-click range, Ctrl/Cmd-click, Select all) and bulk **Delete** / **Copy to input** / **Download** / **Copy paths**
 - Stills use Comfy `/view?preview=webp;80` thumbs; video plays on hover; double-click opens a lightbox
 - **Use as start image** copies into `/inputs` and sets `LoadImage.image` (then `EZOptionalImage.filename`); audio sets `LoadAudio.audio`
+- A **3D** filter chip lists the meshes the `3d/*` Apps write (`.glb` / `.gltf`). No browser tag plays a GLB, so those rows badge as `3D`, the lightbox says so plainly, and their action is **Download** - a mesh is never staged as a LoadImage input (`POST /ez_outputs/to-input` refuses one)
 
 Comfy History is in-memory and empty after `start`; these files persist. Routes: `GET /ez_outputs/list` (`truncated` when the page cap clips; `limit` sets the page), `POST /ez_outputs/delete`, `POST /ez_outputs/to-input`. Bodies accept a single `rel` or a `rels` list. Path traversal and non-media files are refused.
 

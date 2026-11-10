@@ -132,11 +132,11 @@ def trellis_nodes() -> NodeSpecs:
         "SaveGLB": _n(
             "Save 3D Model",
             "Write the .glb under the output folder. Output node; no output sockets.",
-            lab="3d/trellis2 uses prefix 3d/trellis2. The DCC pack graphs use assets/objects/_lab-<name>/<stem>. Needs MeshToFile3D upstream.",
+            lab="Every 3d/* App writes assets/objects/_lab-<name>/<stem>, so the five meshes land in one directory. Needs MeshToFile3D upstream.",
             origin="comfy-extras",
             sockets=[
                 _s("mesh", "MESH", "in", "MultiType socket: accepts MESH or any FILE_3D_* payload. Lab wires MeshToFile3D's model_3d into it."),
             ],
-            widgets=[_w("filename_prefix", index=0, desc="Output stem under the ComfyUI output folder.", gen="3d/trellis2 lands the .glb under <output>/3d/, the DCC pack graphs under <output>/assets/objects/... The directory part of the prefix is created on demand. Hidden prompt and extra_pnginfo are injected by the backend and are not widgets.")],
+            widgets=[_w("filename_prefix", index=0, desc="Output stem under the ComfyUI output folder.", gen="Every 3d/* graph lands the .glb under <output>/assets/objects/... The directory part of the prefix is created on demand. Hidden prompt and extra_pnginfo are injected by the backend and are not widgets.")],
         )
     }

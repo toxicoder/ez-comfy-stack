@@ -541,7 +541,7 @@ function applyDuration(node) {
   const graph = node.graph || app.graph;
   for (const item of graph?.nodes || []) {
     const ntype = item?.comfyClass || item?.type || "";
-    const lengthName = ntype === "LTXVEmptyLatentAudio" ? "length" : "length";
+    const lengthName = ntype === "LTXVEmptyLatentAudio" ? "frames_number" : "length";
     if (
       ntype !== "LTXVImgToVideo" &&
       ntype !== "EmptyLTXVLatentVideo" &&
@@ -549,12 +549,9 @@ function applyDuration(node) {
     ) {
       continue;
     }
-    const widget = widgetByName(item, lengthName) || item.widgets?.[2] || item.widgets?.[0];
-    if (ntype === "LTXVEmptyLatentAudio") {
-      setWidgetValue(item, item.widgets?.[0], frames);
-    } else {
-      setWidgetValue(item, item.widgets?.[2] || widget, frames);
-    }
+    const positional =
+      ntype === "LTXVEmptyLatentAudio" ? item.widgets?.[0] : item.widgets?.[2];
+    setWidgetValue(item, widgetByName(item, lengthName) || positional, frames);
   }
 }
 
@@ -565,6 +562,23 @@ function applyDuration(node) {
 function bindAll() {
   for (const node of app.graph?.nodes || []) {
     bindFormatNode(node);
+  }
+}
+
+const CATALOG_UNAVAILABLE =
+  "Format list unavailable - pick Custom and set the size by hand. " +
+  "Reload the App after pull if this stays.";
+
+/**
+ * Show a line the operator can read in the App's own message surface. Never a
+ * blocking box, never only the console.
+ * @param {string} text Message to announce.
+ * @returns {void}
+ */
+function announce(text) {
+  const toast = app.extensionManager?.toast;
+  if (toast && typeof toast.addToast === "function") {
+    toast.addToast({ title: "ez-comfy", detail: text, type: "error", timeout: 6000 });
   }
 }
 
@@ -579,14 +593,18 @@ async function loadCatalog() {
   try {
     const response = await fetch("/extensions/ez_image/video_formats.json");
     if (!response.ok) {
+      announce(CATALOG_UNAVAILABLE);
       return;
     }
     const payload = await response.json();
     if (payload && Array.isArray(payload.formats)) {
       catalog = payload;
+      return;
     }
+    announce(CATALOG_UNAVAILABLE);
   } catch {
     catalog = { formats: [], families: {} };
+    announce(CATALOG_UNAVAILABLE);
   }
 }
 

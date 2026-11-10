@@ -4,7 +4,9 @@
  * Adaptive explorer: width tiers (compact / cozy / wide) drive a folder rail,
  * a pinned toolbar and footer, auto-fit tiles, list columns, skeletons, and a
  * keyboard cursor. Thumbnail grid / list, multi-select, bulk delete / copy /
- * download. Comfy History is in-memory. Files on COMFY_OUTPUT_DIR persist.
+ * download. 3D meshes (.glb / .gltf) badge, filter, and download like every
+ * other lane, but they have no in-browser preview and never stage a LoadImage
+ * input. Comfy History is in-memory. Files on COMFY_OUTPUT_DIR persist.
  * Nodes 2.0 safe: no LiteGraph widget hooks, no canvas resize. Treat inputEl as
  * optional. Report buttons reach window.EzFeedback lazily at click time and
  * fall back to a prefilled GitHub issues tab when the ez_feedback core is not
@@ -18,7 +20,7 @@ import { app } from "../../scripts/app.js";
  * @typedef {Object} EzOutRow
  * @property {string=} rel Path under the output root.
  * @property {string=} name Filename the row shows.
- * @property {string=} kind Still, video, or audio.
+ * @property {string=} kind Still, video, audio, or 3D mesh.
  * @property {number=} size Bytes on disk, summed into the status line.
  * @property {number=} mtime Unix seconds the file was last written.
  * @property {string=} parent Folder the row belongs to; "" at the root.
@@ -167,6 +169,7 @@ const KIND_LABELS = {
   image: "Still",
   video: "Video",
   audio: "Audio",
+  model3d: "3D",
 };
 
 const FALLBACK_CSS = `
@@ -831,7 +834,10 @@ function mount(el) {
   const storedKind = readPref(PREFS_KIND);
   /** @type {string} */
   let kind =
-    storedKind === "image" || storedKind === "video" || storedKind === "audio"
+    storedKind === "image" ||
+    storedKind === "video" ||
+    storedKind === "audio" ||
+    storedKind === "model3d"
       ? storedKind
       : "all";
   /** @type {string} */
@@ -965,6 +971,7 @@ function mount(el) {
     ["image", "Stills"],
     ["video", "Video"],
     ["audio", "Audio"],
+    ["model3d", "3D"],
   ];
   const kindButtons = kinds.map(([id, label]) => {
     const button = makeButton(label, "ez-out-chip", () => {
@@ -1897,12 +1904,21 @@ function mount(el) {
   }
 
   /**
-   * Media element for a row (img / video / audio placeholder).
+   * Media element for a row (img / video / audio / mesh placeholder).
    * @param {EzOutRow} row
    * @param {boolean} forThumb
    * @returns {HTMLElement}
    */
   function mediaEl(row, forThumb) {
+    if (row.kind === "model3d") {
+      // No in-browser GLB renderer: the card names the file type and the
+      // Download affordance carries the mesh out of the pane.
+      const ph = document.createElement("div");
+      ph.className = "ez-out-mesh-ph";
+      ph.textContent = "3D";
+      ph.setAttribute("aria-hidden", "true");
+      return ph;
+    }
     if (row.kind === "audio") {
       const ph = document.createElement("div");
       ph.className = "ez-out-audio-ph";
@@ -2036,8 +2052,10 @@ function mount(el) {
       wrap.appendChild(meta);
       const actions = document.createElement("div");
       actions.className = "ez-out-row-actions";
-      const useLabel =
-        row.kind === "audio"
+      const isMesh = row.kind === "model3d";
+      const useLabel = isMesh
+        ? "Download"
+        : row.kind === "audio"
           ? "Use as start audio"
           : row.kind === "video"
             ? "Copy to input"
@@ -2045,7 +2063,11 @@ function mount(el) {
       actions.appendChild(
         makeButton(useLabel, "ez-out-btn", (event) => {
           event.stopPropagation();
-          copyRels([row.rel]);
+          if (isMesh) {
+            downloadRels([row.rel]);
+          } else {
+            copyRels([row.rel]);
+          }
         }),
       );
       actions.appendChild(
@@ -2219,7 +2241,15 @@ function mount(el) {
     lightbox.replaceChildren();
     const media = document.createElement("div");
     media.className = "ez-out-lightbox-media";
-    if (row.kind === "image") {
+    if (row.kind === "model3d") {
+      // No browser tag plays a GLB, so the lightbox says so plainly and the
+      // Download button below carries the mesh out of the pane.
+      const note = document.createElement("p");
+      note.className = "ez-out-mesh-note";
+      note.textContent =
+        "3D mesh - no in-browser preview. Download it to open in a DCC viewer.";
+      media.appendChild(note);
+    } else if (row.kind === "image") {
       const img = document.createElement("img");
       img.src = viewUrl(row.rel);
       img.alt = row.name || "";
@@ -2262,17 +2292,19 @@ function mount(el) {
         copyPaths([row.rel]);
       }),
     );
-    const useLabel =
-      row.kind === "audio"
-        ? "Use as start audio"
-        : row.kind === "video"
-          ? "Copy to input"
-          : "Use as start image";
-    bar.appendChild(
-      makeButton(useLabel, "ez-out-btn", () => {
-        copyRels([row.rel]);
-      }),
-    );
+    if (row.kind !== "model3d") {
+      const useLabel =
+        row.kind === "audio"
+          ? "Use as start audio"
+          : row.kind === "video"
+            ? "Copy to input"
+            : "Use as start image";
+      bar.appendChild(
+        makeButton(useLabel, "ez-out-btn", () => {
+          copyRels([row.rel]);
+        }),
+      );
+    }
     bar.appendChild(
       makeButton("Delete", "ez-out-btn", () => {
         deleteRels([row.rel]);

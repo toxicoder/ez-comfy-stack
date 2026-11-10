@@ -1726,7 +1726,7 @@ configure_nunchaku_pack() {
 }
 
 #######################################
-# Seed ez_house_clay_01..10.png into /inputs when missing or wrong size.
+# Seed ez_house_clay_01..10.png and example.png into /inputs when missing.
 # Host start still prefers layout-accurate plates. Fail-soft.
 # Globals:
 #   LAB_INPUTS_MOUNT
@@ -1746,10 +1746,10 @@ seed_clay_inputs_if_missing() {
   fi
   mkdir -p "${dest}"
   if python3 "${script}" "${dest}"; then
-    ep_log "clay plates ready in ${dest}"
+    ep_log "input plates ready in ${dest}"
     return 0
   fi
-  ep_log "WARN: clay seed backstop failed - klein-dream-house-clay LoadImage may be empty"
+  ep_log "WARN: input seed backstop failed - LoadImage defaults (example.png, clay plates) may be empty"
   return 0
 }
 
@@ -1819,7 +1819,7 @@ main() {
   # shellcheck disable=SC1091
   source "${venv}/bin/activate"
 
-  ep_log "phase 2/4: free-memory + unified-memory copy + MagCache + VHS widgetInputs patches (best-effort)"
+  ep_log "phase 2/4: free-memory + unified-memory copy + MagCache + VHS widgetInputs + Save3D dtype patches (best-effort)"
   if [[ -f /opt/ez-comfy/patch_get_free_memory.py ]]; then
     python3 /opt/ez-comfy/patch_get_free_memory.py "${comfy_home}" || true
   fi
@@ -1831,6 +1831,9 @@ main() {
   fi
   if [[ -f /opt/ez-comfy/patch_vhs_widget_inputs.py ]]; then
     python3 /opt/ez-comfy/patch_vhs_widget_inputs.py "${comfy_home}" || true
+  fi
+  if [[ -f /opt/ez-comfy/patch_save_3d_dtype.py ]]; then
+    python3 /opt/ez-comfy/patch_save_3d_dtype.py "${comfy_home}" || true
   fi
 
   ep_log "phase 3/4: install lab workflows and custom nodes"

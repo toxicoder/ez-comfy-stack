@@ -91,7 +91,7 @@ def test_background_swap_is_size_matched_klein_edit() -> None:
     assert "replace only the background" not in prompt.casefold()
     assert _src(graph, enh, "background_cast")["type"] == "EZBackgroundCast"
     desc = next(node for node in graph["nodes"] if node.get("type") == "EZImageDescribe")
-    assert desc["widgets_values"][0] is True
+    assert desc["widgets_values"][0] is False
     assert _src(graph, desc, "image")["type"] == "LoadImage"
     assert _src(graph, enh, "image_desc")["type"] == "EZImageDescribe"
     sampler = next(node for node in graph["nodes"] if node.get("type") == "KSampler")
@@ -131,7 +131,7 @@ def test_background_swap_is_size_matched_klein_edit() -> None:
     assert "illustration" not in neg_text
     note = graph["extra"]["lab_note"].casefold()
     assert "empty flux" in note or "empty klein" in note
-    assert "describe image (default on)" in note
+    assert "describe image is off by default" in note
     assert "block study" in note
     assert "pasted back" in note
     assert "photo-anchored block world (person mask unavailable)" in note

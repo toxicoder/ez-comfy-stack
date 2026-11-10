@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
-"""Backstop LoadImage plates for photos/dream-house-clay.
+"""Backstop the LoadImage plates the lab Apps default to.
 
-Host ``manage.sh start`` still prefers layout-accurate plates via
+Host ``manage.sh start`` still prefers layout-accurate clay plates via
 ``house_layout.py``. This module runs inside the container (stdlib only) when
 ``/inputs/ez_house_clay_NN.png`` are missing or not 1024x1280.
+
+It also guarantees ``/inputs/example.png``. ComfyUI ships that file in its own
+``input/`` directory, but the stack remaps the input dir to the ``/inputs``
+bind-mount and the install excludes ``/input/`` from the prebuilt sync, so a
+fresh box has no ``example.png`` at all. 293 of the 577 ``LoadImage`` widgets
+across the lab Apps sit on that default, and Queue fails on a missing file.
 
 Typical invocation
 ------------------
@@ -23,6 +29,16 @@ PACK_WIDTH = 1024
 PACK_HEIGHT = 1280
 CLAY_COUNT = 10
 CLAY_PREFIX = "ez_house_clay"
+
+# Default LoadImage plate that ComfyUI's own input/ dir would have supplied.
+EXAMPLE_NAME = "example.png"
+EXAMPLE_WIDTH = 1024
+EXAMPLE_HEIGHT = 1024
+EXAMPLE_TOP = (26, 32, 44)
+EXAMPLE_BOTTOM = (96, 108, 126)
+EXAMPLE_SUBJECT = (228, 228, 228)
+EXAMPLE_INSET = 0.18
+"""Fraction of each edge left as backdrop around the subject block."""
 
 
 def clay_copy_name(index: int) -> str:
@@ -136,6 +152,97 @@ def plate_rgb(index: int) -> tuple[int, int, int]:
     return (min(255, 48 + step), min(255, 52 + step // 2), min(255, 56 + step // 3))
 
 
+def _blend(
+    a: tuple[int, int, int], b: tuple[int, int, int], t: float
+) -> tuple[int, int, int]:
+    """Linearly mix two RGB triples.
+
+    Args:
+        a: Color at t=0.
+        b: Color at t=1.
+        t: Mix factor in 0..1.
+
+    Returns:
+        Blended 8-bit RGB triple.
+    """
+    return (
+        int(a[0] + (b[0] - a[0]) * t),
+        int(a[1] + (b[1] - a[1]) * t),
+        int(a[2] + (b[2] - a[2]) * t),
+    )
+
+
+def example_pixels(width: int, height: int) -> bytes:
+    """Deterministic studio-backdrop pixels for the default LoadImage plate.
+
+    A vertical gradient keeps the row write cheap; the centred block gives
+    Klein something with edges to re-render instead of a flat field.
+
+    Args:
+        width: Pixel width.
+        height: Pixel height.
+
+    Returns:
+        ``width * height * 3`` bytes of RGB.
+    """
+    pad_x = max(1, int(width * EXAMPLE_INSET))
+    pad_y = max(1, int(height * EXAMPLE_INSET))
+    subject_w = max(1, width - 2 * pad_x)
+    subject_h = max(1, height - 2 * pad_y)
+    rows = bytearray()
+    for y in range(height):
+        bg = _blend(EXAMPLE_TOP, EXAMPLE_BOTTOM, y / max(1, height - 1))
+        if not pad_y <= y < pad_y + subject_h:
+            rows += bytes(bg) * width
+            continue
+        row = bytearray(bytes(bg) * width)
+        for x in range(pad_x, pad_x + subject_w):
+            shade = 0.35 + 0.5 * (x - pad_x) / max(1, subject_w - 1)
+            row[x * 3 : x * 3 + 3] = bytes(_blend(bg, EXAMPLE_SUBJECT, shade))
+        rows += row
+    return bytes(rows)
+
+
+def example_png_valid(path: Path) -> bool:
+    """True when path already holds a readable PNG of any size.
+
+    A plate the operator uploaded stays put; only a missing or corrupt
+    ``example.png`` is replaced.
+
+    Args:
+        path: Candidate default plate.
+
+    Returns:
+        Whether ``path`` is a file with a readable PNG header.
+    """
+    return path.is_file() and png_size(path) is not None
+
+
+def seed_example_input(input_dir: str | Path) -> Path | None:
+    """Ensure example.png exists so LoadImage defaults can Queue.
+
+    Args:
+        input_dir: Container ``/inputs`` (host ``COMFY_OUTPUT_DIR/input``).
+
+    Returns:
+        The written path, or ``None`` when a usable plate was already there.
+
+    Raises:
+        ValueError: Target is under MODELS_DIR.
+    """
+    target = Path(input_dir)
+    if _under_models_dir(target):
+        raise ValueError(f"refusing MODELS_DIR target {target}")
+    target.mkdir(parents=True, exist_ok=True)
+    dest = target / EXAMPLE_NAME
+    if example_png_valid(dest):
+        return None
+    write_rgb_png(
+        dest, EXAMPLE_WIDTH, EXAMPLE_HEIGHT, example_pixels(EXAMPLE_WIDTH, EXAMPLE_HEIGHT)
+    )
+    return dest
+
+
 def _under_models_dir(path: Path) -> bool:
     """True when path is under MODELS_DIR / MODELS_ROOT.
 
@@ -202,10 +309,12 @@ def main(argv: list[str] | None = None) -> int:
     dest = Path(args[0] if args else "/inputs")
     try:
         written = seed_clay_inputs(dest)
+        example = seed_example_input(dest)
     except (OSError, ValueError) as exc:
         print(f"[seed-clay] failed: {exc}", file=sys.stderr)
         return 1
-    print(f"[seed-clay] {len(written)} plates ready in {dest}")
+    seeded = f"; wrote {EXAMPLE_NAME}" if example is not None else ""
+    print(f"[seed-clay] {len(written)} plates ready in {dest}{seeded}")
     return 0
 
 

@@ -1,8 +1,8 @@
 {
   "id": "prop-variants",
   "revision": 1,
-  "last_node_id": 25,
-  "last_link_id": 41,
+  "last_node_id": 24,
+  "last_link_id": 40,
   "nodes": [
     {
       "id": 1,
@@ -25,7 +25,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "## 3d/prop-variants\n\nKlein still -> four candidate meshes in one queue, so prop exploration costs one occupancy session instead of four.\n\nSource: `LoadImage` with a Klein still (`ez_still_*.png` or a clay plate). `EmptyTrellis2LatentStructure` batch_size is 4 and the batch flows through every stage, so SaveGLB writes one .glb per batch item.\n\nUNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack). Structure decode stays at 32.\n\nUpsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this graph runs the 1024 floor.\n\nSaveGLB writes to `output/assets/objects/_lab-variants/prop_NNNNN_.glb` - MeshToFile3D only converts in memory. Do not mint an Asset Bible row from this graph.\n\nDINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.\n\nOccupancy: trellis - stop Blender desk, LTX, Wan, Klein denoise. One GB10 job.\n"
+        "## 3d/prop-variants\n\nKlein still -> four candidate meshes in one queue, so prop exploration costs one occupancy session instead of four.\n\nSource: `LoadImage` with a Klein still (`ez_still_*.png` or a clay plate). `EmptyTrellis2LatentStructure` batch_size is 4 and the batch flows through every stage, so SaveGLB writes one .glb per batch item. SaveGLB takes the MESH directly here: MeshToFile3D keeps only batch item 0, which would silently drop 3 of the 4.\n\nUNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack). Structure decode stays at 32.\n\nUpsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this graph runs the 1024 floor.\n\nSaveGLB writes four files to `output/assets/objects/_lab-variants/prop_NNNNN_.glb`. Do not mint an Asset Bible row from this graph.\n\nDINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.\n\nOccupancy: trellis - stop Blender desk, LTX, Wan, Klein denoise. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -1014,14 +1014,14 @@
     },
     {
       "id": 22,
-      "type": "MeshToFile3D",
+      "type": "SaveGLB",
       "pos": [
         1472,
         1768
       ],
       "size": [
-        240.0,
-        60.0
+        280.0,
+        80.0
       ],
       "flags": {},
       "order": 21,
@@ -1031,44 +1031,6 @@
           "name": "mesh",
           "type": "MESH",
           "link": 40
-        }
-      ],
-      "outputs": [
-        {
-          "name": "model_3d",
-          "type": "FILE_3D_GLB",
-          "links": [
-            41
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "MeshToFile3D",
-        "cnr_id": "comfy-core"
-      },
-      "widgets_values": [],
-      "title": "To GLB bytes"
-    },
-    {
-      "id": 23,
-      "type": "SaveGLB",
-      "pos": [
-        1472,
-        1900
-      ],
-      "size": [
-        280.0,
-        80.0
-      ],
-      "flags": {},
-      "order": 22,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "mesh",
-          "type": "FILE_3D_GLB",
-          "link": 41
         }
       ],
       "outputs": [],
@@ -1082,7 +1044,7 @@
       "title": "Save GLB"
     },
     {
-      "id": 24,
+      "id": 23,
       "type": "EZQuality",
       "pos": [
         1176,
@@ -1113,7 +1075,7 @@
       "title": "Quality"
     },
     {
-      "id": 25,
+      "id": 24,
       "type": "EZModelCheck",
       "pos": [
         808,
@@ -1457,14 +1419,6 @@
       22,
       0,
       "MESH"
-    ],
-    [
-      41,
-      22,
-      0,
-      23,
-      0,
-      "FILE_3D_GLB"
     ]
   ],
   "groups": [
@@ -1553,7 +1507,7 @@
         1452,
         532,
         340,
-        1492
+        1360
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1562,7 +1516,7 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## 3d/prop-variants\n\nKlein still -> four candidate meshes in one queue, so prop exploration costs one occupancy session instead of four.\n\nSource: `LoadImage` with a Klein still (`ez_still_*.png` or a clay plate). `EmptyTrellis2LatentStructure` batch_size is 4 and the batch flows through every stage, so SaveGLB writes one .glb per batch item.\n\nUNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack). Structure decode stays at 32.\n\nUpsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this graph runs the 1024 floor.\n\nSaveGLB writes to `output/assets/objects/_lab-variants/prop_NNNNN_.glb` - MeshToFile3D only converts in memory. Do not mint an Asset Bible row from this graph.\n\nDINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.\n\nOccupancy: trellis - stop Blender desk, LTX, Wan, Klein denoise. One GB10 job.\n",
+    "lab_note": "## 3d/prop-variants\n\nKlein still -> four candidate meshes in one queue, so prop exploration costs one occupancy session instead of four.\n\nSource: `LoadImage` with a Klein still (`ez_still_*.png` or a clay plate). `EmptyTrellis2LatentStructure` batch_size is 4 and the batch flows through every stage, so SaveGLB writes one .glb per batch item. SaveGLB takes the MESH directly here: MeshToFile3D keeps only batch item 0, which would silently drop 3 of the 4.\n\nUNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack). Structure decode stays at 32.\n\nUpsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this graph runs the 1024 floor.\n\nSaveGLB writes four files to `output/assets/objects/_lab-variants/prop_NNNNN_.glb`. Do not mint an Asset Bible row from this graph.\n\nDINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.\n\nOccupancy: trellis - stop Blender desk, LTX, Wan, Klein denoise. One GB10 job.\n",
     "lab_profile": "3d/prop-variants",
     "lab_description": "Klein still to four textured TRELLIS.2 mesh candidates in one queue.",
     "lab_trellis": {
@@ -1595,7 +1549,7 @@
           "image"
         ],
         [
-          24,
+          23,
           "quality",
           {
             "label": "Quality",
@@ -1604,7 +1558,7 @@
         ]
       ],
       "outputs": [
-        23
+        22
       ]
     },
     "linearMode": true,

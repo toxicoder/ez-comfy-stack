@@ -224,11 +224,11 @@ Block in host Blender (Comfy **down**), then Queue these Apps. Occupancy XOR wit
 | **guides/first-last-from-guide** | wan | Fun InP `first.png` + `last.png` (opt-in `download-wan --tier fun-inp`) |
 | **guides/guide-still** | klein | In-canvas loaders + occupancy gate. Prefix `ez_guide_hero` |
 | **guides/depth-from-loader** | ltx | Envelope from loaders. MagCache off. Prefix `ez_iclora_guide` |
-| **3d/trellis2** | trellis | Klein still via `LoadImage` -> textured TRELLIS.2 INT8 mesh. `SaveGLB` writes the `.glb` under prefix `3d/trellis2` |
+| **3d/trellis2** | trellis | Klein still via `LoadImage` -> textured TRELLIS.2 INT8 mesh. `SaveGLB` writes `assets/objects/_lab-trellis2/mesh` |
 | **3d/still-to-mesh** | trellis | Still pack `mug` via `EZDCCLoadStillPack` -> textured mesh. `SaveGLB` writes `assets/objects/_lab-mug/mesh` |
 | **3d/blockout-mesh** | trellis | Still pack via `EZDCCLoadStillPack` -> **untextured gray-box blockout**: structure + shape stages only, no upsample, no texture VAE, no `PaintMesh`. The fast layout proxy. `SaveGLB` writes `assets/objects/_lab-blockout/blockout` |
 | **3d/shot-to-prop** | trellis | DCC guide still via `EZDCCLoadGuideStill` (`slug=go-see`, `shot_id=12`, `layer=first`) -> textured mesh of one hero object, for re-compositing that object into other shots. `SaveGLB` writes `assets/objects/_lab-shot-prop/prop` |
-| **3d/prop-variants** | trellis | Klein still via `LoadImage`, `EmptyTrellis2LatentStructure` `batch_size=4` -> four candidate meshes from one still in a single occupancy session. `SaveGLB` writes `assets/objects/_lab-variants/prop` |
+| **3d/prop-variants** | trellis | Klein still via `LoadImage`, `EmptyTrellis2LatentStructure` `batch_size=4` -> four candidate meshes from one still in a single occupancy session. `SaveGLB` writes four files under `assets/objects/_lab-variants/prop` |
 
 All five mesh Apps are lane **3d** (`_lab/3d/`) and claim occupancy **trellis** - one heavy 3D job at a time, so stop the previous family before you Queue the next. Each takes an image in (`LoadImage`, `EZDCCLoadStillPack`, or `EZDCCLoadGuideStill`) and emits one `.glb` per batch item on the output disk under the prefix above; `MeshToFile3D` has no widgets and writes nothing, `SaveGLB` is the node that puts the file on disk. `3d/blockout-mesh` stops after the shape stage, so it has no texture VAE and no painted surface - Queue it for layout, then re-run the full chain on the take you keep. The chain and the model pins: [DCC guide pack](dcc-workflows.md#lab-graphs).
 

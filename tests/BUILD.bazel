@@ -91,6 +91,7 @@ filegroup(
         "python/_lab_graph.py",
         "python/_lab_ids.py",
         "python/_lab_layout.py",
+        "python/_lab_node_catalog.py",
         "python/_lab_paths.py",
         "python/_lab_theme.py",
         "python/_long_film_bibles.py",
@@ -190,6 +191,7 @@ filegroup(
         "python/test_ez_modes.py",
         "python/test_ez_music.py",
         "python/test_ez_outputs.py",
+        "python/test_ez_outputs_model3d.py",
         "python/test_ez_podcast.py",
         "python/test_ez_podcast_learn.py",
         "python/test_ez_quality.py",
@@ -213,6 +215,7 @@ filegroup(
         "python/test_lab_layout.py",
         "python/test_lab_model_stack.py",
         "python/test_lab_names.py",
+        "python/test_lab_node_catalog.py",
         "python/test_lab_theme.py",
         "python/test_lab_tree.py",
         "python/test_lettering.py",
@@ -236,6 +239,7 @@ filegroup(
         "python/test_patch_common.py",
         "python/test_patch_get_free_memory.py",
         "python/test_patch_magcache_compat.py",
+        "python/test_patch_save_3d_dtype.py",
         "python/test_patch_unified_memory_copy.py",
         "python/test_patch_vhs_widget_inputs.py",
         "python/test_podcast_workflows.py",
@@ -313,7 +317,7 @@ filegroup(
 )
 
 # The node:test suite. run_js.sh shells out to `node --test tests/js/*.test.mjs`
-# against the checkout, so without this group the five .mjs files were
+# against the checkout, so without this group the .mjs files were
 # undeclared inputs: editing a test or the frontend stub could not invalidate a
 # cached //tests:js pass.
 filegroup(
@@ -323,6 +327,7 @@ filegroup(
         "js/ez_frontend_stub.mjs",
         "js/ez_image_mode.test.mjs",
         "js/ez_outputs.test.mjs",
+        "js/ez_outputs_model3d.test.mjs",
         "js/harness.mjs",
         "js/quality_overlay.test.mjs",
     ],

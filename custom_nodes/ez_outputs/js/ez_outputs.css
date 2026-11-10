@@ -703,6 +703,34 @@
   );
 }
 
+.ez-out-mesh-ph {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--ez-out-muted);
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.06) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+}
+
+/* Shown in the lightbox where a still, clip, or track would otherwise play. */
+.ez-out-mesh-note {
+  margin: 0;
+  max-width: 34ch;
+  text-align: center;
+  font-size: 12px;
+  color: var(--ez-out-muted);
+}
+
 .ez-out-badge {
   position: absolute;
   top: 6px;
@@ -726,6 +754,10 @@
 
 .ez-out-badge-audio {
   background: rgba(196, 110, 22, 0.85);
+}
+
+.ez-out-badge-model3d {
+  background: rgba(52, 116, 176, 0.85);
 }
 
 .ez-out-check {

@@ -25,7 +25,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "## 3d/trellis2\n\nKlein still -> native TRELLIS.2 INT8 mesh (Comfy core nodes).\n\n```bash\nbazelisk run //:manage -- download-3d --tier trellis2\nbazelisk run //:manage -- occupancy enter trellis --yes\n```\n\nLoadImage: a Klein still (`ez_still_*.png` or a clay plate). Unload models first (EZUnloadModels).\nUNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack).\nUpsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this lab\ngraph runs the 1024 floor. Structure decode stays at 32. MeshToFile3D only converts in memory, so\nSaveGLB is the node that writes `output/3d/trellis2_NNNNN_.glb`. TRELLIS-only canvas. Do not mint an\nAsset Bible row from this graph.\n\nDINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.\n\nOccupancy: trellis - stop Blender desk, LTX, Wan, Klein denoise. One GB10 job.\n"
+        "## 3d/trellis2\n\nKlein still -> native TRELLIS.2 INT8 mesh (Comfy core nodes).\n\n```bash\nbazelisk run //:manage -- download-3d --tier trellis2\nbazelisk run //:manage -- occupancy enter trellis --yes\n```\n\nLoadImage: a Klein still (`ez_still_*.png` or a clay plate). Unload models first (EZUnloadModels).\nUNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack).\nUpsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this lab\ngraph runs the 1024 floor. Structure decode stays at 32. MeshToFile3D only converts in memory, so\nSaveGLB is the node that writes `output/assets/objects/_lab-trellis2/mesh_NNNNN_.glb`.\nTRELLIS-only canvas. Do not mint an Asset Bible row from this graph.\n\nDINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.\n\nOccupancy: trellis - stop Blender desk, LTX, Wan, Klein denoise. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -699,7 +699,7 @@
         "simple",
         1
       ],
-      "title": "KSampler (512)"
+      "title": "KSampler (1024)"
     },
     {
       "id": 16,
@@ -1029,7 +1029,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "3d/trellis2"
+        "assets/objects/_lab-trellis2/mesh"
       ],
       "title": "Save GLB"
     },
@@ -1506,14 +1506,14 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## 3d/trellis2\n\nKlein still -> native TRELLIS.2 INT8 mesh (Comfy core nodes).\n\n```bash\nbazelisk run //:manage -- download-3d --tier trellis2\nbazelisk run //:manage -- occupancy enter trellis --yes\n```\n\nLoadImage: a Klein still (`ez_still_*.png` or a clay plate). Unload models first (EZUnloadModels).\nUNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack).\nUpsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this lab\ngraph runs the 1024 floor. Structure decode stays at 32. MeshToFile3D only converts in memory, so\nSaveGLB is the node that writes `output/3d/trellis2_NNNNN_.glb`. TRELLIS-only canvas. Do not mint an\nAsset Bible row from this graph.\n\nDINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.\n\nOccupancy: trellis - stop Blender desk, LTX, Wan, Klein denoise. One GB10 job.\n",
+    "lab_note": "## 3d/trellis2\n\nKlein still -> native TRELLIS.2 INT8 mesh (Comfy core nodes).\n\n```bash\nbazelisk run //:manage -- download-3d --tier trellis2\nbazelisk run //:manage -- occupancy enter trellis --yes\n```\n\nLoadImage: a Klein still (`ez_still_*.png` or a clay plate). Unload models first (EZUnloadModels).\nUNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack).\nUpsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this lab\ngraph runs the 1024 floor. Structure decode stays at 32. MeshToFile3D only converts in memory, so\nSaveGLB is the node that writes `output/assets/objects/_lab-trellis2/mesh_NNNNN_.glb`.\nTRELLIS-only canvas. Do not mint an Asset Bible row from this graph.\n\nDINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.\n\nOccupancy: trellis - stop Blender desk, LTX, Wan, Klein denoise. One GB10 job.\n",
     "lab_profile": "3d/trellis2",
     "lab_description": "Klein still to native TRELLIS.2 INT8 mesh. Upsample 1024. TRELLIS-only.",
     "lab_trellis": {
       "unet": "trellis_2_int8_convrot.safetensors",
       "resolution": 1024,
       "native_only": true,
-      "save_prefix": "3d/trellis2"
+      "save_prefix": "assets/objects/_lab-trellis2/mesh"
     },
     "lab_app_mode": {
       "enabled": true,

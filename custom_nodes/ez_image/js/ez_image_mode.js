@@ -318,6 +318,33 @@ function bindAll() {
   }
 }
 
+const CATALOG_UNAVAILABLE =
+  "Mode list unavailable - Queue still uses the nodes. Reload the App after pull if this stays.";
+
+/**
+ * Tell the operator the Mode combo has no catalog: into the Mode node's status
+ * line when one is on the graph, else the App's own message surface. Never a
+ * blocking box, never only the console.
+ * @returns {void}
+ */
+function announceCatalog() {
+  const modeNode = nodeByType("EZImageMode");
+  const summary = widgetByName(modeNode, "run_summary");
+  if (modeNode && summary) {
+    slotWrite(modeNode, summary, CATALOG_UNAVAILABLE);
+    return;
+  }
+  const toast = app.extensionManager?.toast;
+  if (toast && typeof toast.addToast === "function") {
+    toast.addToast({
+      title: "ez-comfy",
+      detail: CATALOG_UNAVAILABLE,
+      type: "error",
+      timeout: 6000,
+    });
+  }
+}
+
 /**
  * Load js/modes.json from this pack's WEB_DIRECTORY.
  * @returns {Promise<void>}
@@ -330,6 +357,7 @@ async function loadCatalog() {
     const response = await fetch("/extensions/ez_image/modes.json");
     if (!response.ok) {
       catalog = { modes: [], categories: [] };
+      announceCatalog();
       return;
     }
     const payload = await response.json();
@@ -342,8 +370,10 @@ async function loadCatalog() {
       return;
     }
     catalog = { modes: [], categories: [] };
+    announceCatalog();
   } catch {
     catalog = { modes: [], categories: [] };
+    announceCatalog();
   }
 }
 

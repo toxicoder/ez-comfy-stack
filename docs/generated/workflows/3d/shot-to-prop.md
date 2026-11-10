@@ -697,7 +697,7 @@ Write the .glb under the output folder. Output node; no output sockets.
 
 !!! warning "Lab notes"
 
-    3d/trellis2 uses prefix 3d/trellis2. The DCC pack graphs use assets/objects/_lab-<name>/<stem>. Needs MeshToFile3D upstream.
+    Every 3d/* App writes assets/objects/_lab-<name>/<stem>, so the five meshes land in one directory. Needs MeshToFile3D upstream.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -709,7 +709,7 @@ Type `STRING`.
 
 Output stem under the ComfyUI output folder.
 
-**How it affects generation:** 3d/trellis2 lands the .glb under <output>/3d/, the DCC pack graphs under <output>/assets/objects/... The directory part of the prefix is created on demand. Hidden prompt and extra_pnginfo are injected by the backend and are not widgets.
+**How it affects generation:** Every 3d/* graph lands the .glb under <output>/assets/objects/... The directory part of the prefix is created on demand. Hidden prompt and extra_pnginfo are injected by the backend and are not widgets.
 
 **This graph:** `assets/objects/_lab-shot-prop/prop`
 

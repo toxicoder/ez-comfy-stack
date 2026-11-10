@@ -2,7 +2,8 @@
 
 Hermetic: stdlib + the repo's own ``_lab_paths`` helpers over the shipped
 graphs in ``workflows/_lab/3d``. Asserts the Studio App stamp, the exact
-TRELLIS.2 node chain per app, the ``MeshToFile3D -> SaveGLB`` terminal, the
+TRELLIS.2 node chain per app, the ``SaveGLB`` terminal and which node may feed
+it, the
 occupancy guard in the image path, and the catalogued model pins. No network,
 no Docker, no GPU, no ComfyUI import.
 """
@@ -61,12 +62,14 @@ SHARED_CHROME = frozenset(
         "VaeDecodeStructureTrellis2",
         "Trellis2ShapeStage",
         "VaeDecodeShapeTrellis",
-        "MeshToFile3D",
         "SaveGLB",
         "EZQuality",
         "EZModelCheck",
     }
 )
+# MeshToFile3D serializes one batch item only, so a batched App must feed
+# SaveGLB the MESH directly instead of routing through it.
+SINGLE_ITEM_CONVERTER = frozenset({"MeshToFile3D"})
 TEXTURE_PASS = frozenset(
     {
         "Trellis2UpsampleStage",
@@ -76,11 +79,18 @@ TEXTURE_PASS = frozenset(
     }
 )
 EXPECTED_TYPES: dict[str, frozenset[str]] = {
-    "blockout-mesh": SHARED_CHROME | {"EZDCCLoadStillPack"},
+    "blockout-mesh": SHARED_CHROME | SINGLE_ITEM_CONVERTER | {"EZDCCLoadStillPack"},
     "shot-to-prop": SHARED_CHROME
     | TEXTURE_PASS
+    | SINGLE_ITEM_CONVERTER
     | {"EZDCCLoadGuideStill", "EZDCCPreviewGuideLayer"},
     "prop-variants": SHARED_CHROME | TEXTURE_PASS | {"LoadImage"},
+}
+# The batched App writes one .glb per batch item, so it skips MeshToFile3D.
+MESH_PRODUCER = {
+    "blockout-mesh": "MeshToFile3D",
+    "shot-to-prop": "MeshToFile3D",
+    "prop-variants": "PaintMesh",
 }
 SAVE_PREFIX = {
     "blockout-mesh": "assets/objects/_lab-blockout/blockout",
@@ -356,17 +366,27 @@ def test_structure_batch_matches_the_design(stem: str) -> None:
 
 @pytest.mark.parametrize("stem", NEW_APPS)
 def test_chain_ends_on_save_glb(stem: str) -> None:
-    """MeshToFile3D carries no widgets and feeds the SaveGLB output node."""
+    """SaveGLB is the terminal writer, fed by the producer its batch needs.
+
+    A single-item App converts through ``MeshToFile3D``. The batched App must
+    not: that node keeps only batch item 0, so it would silently drop three of
+    the four candidate meshes the App advertises.
+    """
     graph = _graph(stem)
-    to_glb = _only_node(graph, "MeshToFile3D")
-    assert to_glb.get("widgets_values") == []
     save_glb = _only_node(graph, "SaveGLB")
     assert save_glb.get("widgets_values") == [SAVE_PREFIX[stem]]
     link = _input_link(save_glb, "mesh")
     assert link is not None
     origin = _origin_node(graph, link)
-    assert origin["id"] == to_glb["id"]
-    assert origin.get("type") == "MeshToFile3D"
+    assert origin.get("type") == MESH_PRODUCER[stem]
+    to_glb = _nodes_of(graph, "MeshToFile3D")
+    if MESH_PRODUCER[stem] == "MeshToFile3D":
+        assert len(to_glb) == 1
+        assert to_glb[0]["id"] == origin["id"]
+        assert to_glb[0].get("widgets_values") == []
+    else:
+        assert to_glb == []
+        assert graph["extra"]["lab_trellis"]["batch_size"] > 1
     # SaveGLB is the terminal node: nothing reads out of it.
     assert (save_glb.get("outputs") or []) == []
 

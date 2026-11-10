@@ -20,7 +20,7 @@ tags: [troubleshooting, comfyui, docker]
 - **Prompt goal** - a deliverable the Enhancer ignored
 - **Quality combo** - a tier that drops to `custom` and the CLI `--quality` seam
 - **Dub (clone-translate)** - the rows live on the canvas page
-- **Report buttons (ez_feedback)** and **Outputs sidebar (ez_outputs)**
+- **Report buttons (ez_feedback)**, **Outputs sidebar (ez_outputs)**, and **App pickers (ez_image)**
 - **update-stack (redeploy refusals)** - exit 3 guardrails and exit 5 repo root
 - **Logs** and **Reset Comfy install (keeps models)**
 
@@ -61,7 +61,7 @@ symptoms. Each row names what that page covers, so one hop is enough.
 Rows that are not a topic page live here on this page: the Bazel ingress layer, Vlo, the editing
 lane, the Cubic block
 world, the still caption, reference stills, **Goal**, the **Quality** combo, `update-stack`, the
-report buttons, and the Outputs sidebar. Each has its own section below.
+report buttons, the Outputs sidebar, and the App pickers. Each has its own section below.
 
 ---
 
@@ -270,6 +270,24 @@ line rather than an exception. Pack reference: [Custom nodes](reference/custom-n
 | Outputs panel shows `Could not list outputs - ...` and the grid is gone | `GET /ez_outputs/list` did not answer: Compose is down, ComfyUI is still booting, or `custom_nodes/ez_outputs/` did not reach the container so the route is not registered. The stale grid is cleared on purpose - a dead list must not leave rows for files that no longer exist | Click **Retry** once the ComfyUI UI itself loads (`bazelisk run //:manage -- start`, then `bazelisk run //:manage -- doctor` if it will not come up). `bazelisk run //:manage -- restart` recopies `custom_nodes/`, then hard-refresh the Comfy tab. **Report this problem** (beside **Retry**) opens a prefilled issue carrying the failing endpoint, HTTP status, and the active filters |
 | **Copy paths** reports `Clipboard blocked - paths are selected, press Ctrl/Cmd+C` | The browser refused `navigator.clipboard` - usual cause is a plain-`http://` origin that is not `127.0.0.1`, or you denied clipboard permission. Nothing is lost: the fallback textarea already holds the paths and keeps them selected | Press **Ctrl/Cmd+C** while the fallback holds the selection. For a real clipboard write, reach ComfyUI over `https://` or `127.0.0.1`, which is a secure context. **Download** and **Copy to input** never touch the clipboard, so bulk work is unaffected |
 | The folder rail with the per-folder counts is missing | The panel is narrower than 560px. The rail appears only in the **wide** tier; below that the layout is **cozy** (380-559px) or **compact** (under 380px), where the folder control is chips by design | Widen the ComfyUI sidebar past 560px and the rail returns with its counts. Below that width, use the folder chips - `F` focuses the rail when it is showing and the chips when it is not, so the keyboard route works at every width |
+| A `.glb` row shows a placeholder tile with a **3D** badge and no **Copy to input** | Working as designed: a mesh has no in-browser preview and is not a `LoadImage` input, so the row offers **Download** and the lightbox says to open it in a DCC viewer. `POST /ez_outputs/to-input` refuses a mesh outright | Use **Download** (or **Download selected** for a batch) and open the file in Blender. The filter chip **3D** lists meshes only |
+
+---
+
+## App pickers (ez_image)
+
+The Format, Mode, and media-pick widgets read their catalogs from the pack's own
+`/extensions/ez_image/*.json` routes and the Outputs disk. A catalog that does not answer is an
+announce you can read - in the widget's own status line where one exists, else an `ez-comfy` toast -
+and Queue keeps working off the node's own widgets. Pack reference:
+[Custom nodes](reference/custom-nodes.md#ez_image).
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| `Format list unavailable - pick Custom and set the size by hand. ...` or `Mode list unavailable - Queue still uses the nodes. ...` | `GET /extensions/ez_image/formats.json` / `modes.json` did not answer, or answered without the expected `formats` / `modes` array: `custom_nodes/ez_image/` did not reach the container so the route is not registered, or the browser is serving a cached extension bundle | Hard-refresh the ComfyUI tab. `bazelisk run //:manage -- restart` recopies `custom_nodes/`, then refresh again. Nothing is stuck in the meantime: Format falls back to the node's own Width / Height and Mode to the authored widgets, so Queue still sends real values |
+| `No matching files on the output disk yet.` on **Choose from outputs** | Nothing of that kind has been written to `${COMFY_OUTPUT_DIR}` since the disk was last cleared, or the file you expect is a different kind than the slot asks for (a video in an image slot) | Run the App once and open [Outputs sidebar](#outputs-sidebar-ez_outputs), which reads the same disk. A mesh (`3d/*` output) is listed under the **3D** chip and cannot be copied back into `input/` |
+| `Upload failed - upload failed: 415` (or another status) after **Upload media** | `/upload/image` answered with a status other than 200 - the usual causes are a file type ComfyUI will not accept, `input/` not writable, or the request going out while ComfyUI is mid-restart | The toast carries the status, which is the thing to quote in a report. Permission rows: [Host and Docker](operate/troubleshooting-host-docker.md). The buttons are greyed and labelled `Uploading...` only while the request is in flight and are restored when it settles, so a label stuck on `Uploading...` means no response has arrived yet - check `bazelisk run //:manage -- status` |
+| `Could not copy <name> into input/ - ...` | The copy from `${COMFY_OUTPUT_DIR}` into the container's `input/` was refused - the file was removed while the picker was open, or the directory is not writable | Re-run **Choose from outputs** once the run that wrote it has finished. If it repeats, the permission row above owns it |
 
 ---
 

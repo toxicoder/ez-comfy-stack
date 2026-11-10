@@ -31,13 +31,13 @@ Occupancy **trellis**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous 
 
 Klein still -> four candidate meshes in one queue, so prop exploration costs one occupancy session instead of four.
 
-Source: `LoadImage` with a Klein still (`ez_still_*.png` or a clay plate). `EmptyTrellis2LatentStructure` batch_size is 4 and the batch flows through every stage, so SaveGLB writes one .glb per batch item.
+Source: `LoadImage` with a Klein still (`ez_still_*.png` or a clay plate). `EmptyTrellis2LatentStructure` batch_size is 4 and the batch flows through every stage, so SaveGLB writes one .glb per batch item. SaveGLB takes the MESH directly here: MeshToFile3D keeps only batch item 0, which would silently drop 3 of the 4.
 
 UNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack). Structure decode stays at 32.
 
 Upsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this graph runs the 1024 floor.
 
-SaveGLB writes to `output/assets/objects/_lab-variants/prop_NNNNN_.glb` - MeshToFile3D only converts in memory. Do not mint an Asset Bible row from this graph.
+SaveGLB writes four files to `output/assets/objects/_lab-variants/prop_NNNNN_.glb`. Do not mint an Asset Bible row from this graph.
 
 DINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.
 
@@ -77,10 +77,9 @@ flowchart LR
   N19["KSampler (texture)"]
   N20["Decode texture"]
   N21["Paint mesh"]
-  N22["To GLB bytes"]
-  N23["Save GLB"]
-  N24["Quality"]
-  N25["Check models"]
+  N22["Save GLB"]
+  N23["Quality"]
+  N24["Check models"]
   N2 --> N3
   N3 --> N4
   N4 --> N9
@@ -111,7 +110,6 @@ flowchart LR
   N19 --> N20
   N20 --> N21
   N21 --> N22
-  N22 --> N23
 ```
 
 ## Nodes on this graph
@@ -139,10 +137,9 @@ flowchart LR
 | 19 | KSampler (texture) | `KSampler` | SETTINGS |
 | 20 | Decode texture | `VaeDecodeTextureTrellis` | OUTPUT |
 | 21 | Paint mesh | `PaintMesh` | OUTPUT |
-| 22 | To GLB bytes | `MeshToFile3D` | OUTPUT |
-| 23 | Save GLB | `SaveGLB` | OUTPUT |
-| 24 | Quality | `EZQuality` | QUALITY |
-| 25 | Check models | `EZModelCheck` | QUALITY |
+| 22 | Save GLB | `SaveGLB` | OUTPUT |
+| 23 | Quality | `EZQuality` | QUALITY |
+| 24 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 
@@ -171,13 +168,13 @@ Markdown-ish operator note.
 
 Klein still -> four candidate meshes in one queue, so prop exploration costs one occupancy session instead of four.
 
-Source: `LoadImage` with a Klein still (`ez_still_*.png` or a clay plate). `EmptyTrellis2LatentStructure` batch_size is 4 and the batch flows through every stage, so SaveGLB writes one .glb per batch item.
+Source: `LoadImage` with a Klein still (`ez_still_*.png` or a clay plate). `EmptyTrellis2LatentStructure` batch_size is 4 and the batch flows through every stage, so SaveGLB writes one .glb per batch item. SaveGLB takes the MESH directly here: MeshToFile3D keeps only batch item 0, which would silently drop 3 of the 4.
 
 UNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack). Structure decode stays at 32.
 
 Upsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this graph runs the 1024 floor.
 
-SaveGLB writes to `output/assets/objects/_lab-variants/prop_NNNNN_.glb` - MeshToFile3D only converts in memory. Do not mint an Asset Bible row from this graph.
+SaveGLB writes four files to `output/assets/objects/_lab-variants/prop_NNNNN_.glb`. Do not mint an Asset Bible row from this graph.
 
 DINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.
 
@@ -684,28 +681,13 @@ Apply voxel colors onto the mesh.
 
 No widgets. Sockets only.
 
-### `MeshToFile3D` - Mesh to File 3D
-
-Build the GLB payload in memory. No widgets; writes nothing.
-
-!!! warning "Lab notes"
-
-    A graph must end MeshToFile3D -> SaveGLB to get a file on disk: this node only builds the payload, SaveGLB writes it.
-
-| Socket | Dir | Type | What it carries |
-| --- | --- | --- | --- |
-| `mesh` | in | `MESH` | Painted mesh. |
-| `model_3d` | out | `FILE_3D_GLB` | GLB payload for SaveGLB. |
-
-No widgets. Sockets only.
-
 ### `SaveGLB` - Save 3D Model
 
 Write the .glb under the output folder. Output node; no output sockets.
 
 !!! warning "Lab notes"
 
-    3d/trellis2 uses prefix 3d/trellis2. The DCC pack graphs use assets/objects/_lab-<name>/<stem>. Needs MeshToFile3D upstream.
+    Every 3d/* App writes assets/objects/_lab-<name>/<stem>, so the five meshes land in one directory. Needs MeshToFile3D upstream.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -717,7 +699,7 @@ Type `STRING`.
 
 Output stem under the ComfyUI output folder.
 
-**How it affects generation:** 3d/trellis2 lands the .glb under <output>/3d/, the DCC pack graphs under <output>/assets/objects/... The directory part of the prefix is created on demand. Hidden prompt and extra_pnginfo are injected by the backend and are not widgets.
+**How it affects generation:** Every 3d/* graph lands the .glb under <output>/assets/objects/... The directory part of the prefix is created on demand. Hidden prompt and extra_pnginfo are injected by the backend and are not widgets.
 
 **This graph:** `assets/objects/_lab-variants/prop`
 
