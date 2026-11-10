@@ -144,7 +144,57 @@ def test_safety_becomes_admonition(gen: Any) -> None:
     out = gen._format_body(["Safety: type yes on start.", "Usage:", "./scripts/manage.sh start"])
     assert "!!! warning" in out
     assert "```bash" in out
-    assert "./scripts/manage.sh start" in out
+    assert "bazelisk run //:manage -- start" in out
+
+
+def test_usage_line_publishes_the_target(gen: Any) -> None:
+    """The page an operator copies from names the target, not the script.
+
+    The script's own comment keeps the raw invocation (it is the documented
+    escape hatch for the host-mutating verbs); the publisher normalises it.
+    """
+    assert gen.published_command("./scripts/manage.sh start") == "bazelisk run //:manage -- start"
+    assert gen.published_command("  ./scripts/manage.sh stop") == "  bazelisk run //:manage -- stop"
+
+
+def test_usage_line_with_flags_publishes_the_target(gen: Any) -> None:
+    """Flags and tier choices carry over after the verb untouched."""
+    line = "./scripts/manage.sh download-models --limit auto --drop-incomplete"
+    assert gen.published_command(line) == "bazelisk run //:manage -- download-models --limit auto --drop-incomplete"
+
+
+def test_utility_usage_line_publishes_the_target(gen: Any) -> None:
+    """A utility comment becomes the run-utility target with its args kept."""
+    line = "./scripts/utilities/download-wan.sh run --tier 5b"
+    assert gen.published_command(line) == "bazelisk run //scripts:run-utility -- download-wan run --tier 5b"
+
+
+def test_env_prefixed_usage_line_keeps_its_prefix(gen: Any) -> None:
+    """An assignment in front of the command stays in front of the target."""
+    line = "LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start"
+    assert gen.published_command(line) == "LAB_STACK_FORCE_BUILD=1 bazelisk run //:manage -- start"
+
+
+def test_published_command_leaves_other_text_alone(gen: Any) -> None:
+    """Prose, prose that merely mentions the script, and target lines pass through."""
+    for line in (
+        "Run the stack before you Queue.",
+        "see scripts/manage.sh for the verbs",
+        "call ./scripts/manage.sh after the reboot",
+        "  scripts/manage.sh",
+        "bazelisk run //:manage -- doctor",
+    ):
+        assert gen.published_command(line) == line
+
+
+def test_usage_block_loses_the_raw_door_end_to_end(gen: Any) -> None:
+    """No raw script door survives into the rendered body."""
+    out = gen._format_body(
+        ["Usage:", "./scripts/manage.sh update-stack --yes", "./scripts/utilities/download-3d.sh run"]
+    )
+    assert "scripts/manage.sh" not in out
+    assert "scripts/utilities/" not in out
+    assert "bazelisk run //scripts:run-utility -- download-3d run" in out
 
 
 def test_empty_body(gen: Any) -> None:

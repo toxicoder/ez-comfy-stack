@@ -215,6 +215,91 @@ class TestClassify:
         assert found[1] == "bazelisk run //:manage -- status --json"
 
 
+class TestPublishedProseNamesTheTarget:
+    """A page an operator copies from names the target, even for a host verb.
+
+    ``scripts/manage.sh`` is the operator escape hatch, so a script's own usage
+    header and log lines may print the raw door. Published prose does not get
+    that latitude: ``bazelisk run //:manage -- <verb>`` runs the identical
+    script on the host (it passes the client environment through and keeps the
+    interactive ``start`` confirm), so the raw form on a page is a defect and
+    the raw form the page *documents as the fallback* needs its own ``_ALLOW``
+    reason.
+    """
+
+    def test_a_host_verb_in_a_page_is_a_violation(self) -> None:
+        found = bazel_docs.classify("./scripts/manage.sh start", published=True)
+        assert found == ("./scripts/manage.sh start", "bazelisk run //:manage -- start")
+
+    def test_a_download_verb_carries_its_flags(self) -> None:
+        found = bazel_docs.classify("./scripts/manage.sh download-models --limit 1000", published=True)
+        assert found is not None
+        assert found[1] == "bazelisk run //:manage -- download-models --limit 1000"
+
+    def test_a_download_utility_in_a_page_is_a_violation(self) -> None:
+        found = bazel_docs.classify("./scripts/utilities/download-wan.sh run --tier 5b", published=True)
+        assert found is not None
+        assert found[1] == "bazelisk run //scripts:run-utility -- download-wan run --tier 5b"
+
+    def test_a_script_keeps_the_host_door(self) -> None:
+        # The default stays exempt: manage.sh's help text is the escape hatch.
+        assert bazel_docs.classify("./scripts/manage.sh start") is None
+        assert bazel_docs.classify("./scripts/utilities/download-wan.sh run") is None
+
+    def test_an_env_prefix_is_read_past_and_kept_in_the_fix(self) -> None:
+        # `FOO=1 ./scripts/manage.sh ...` is a raw door a reader copies too.
+        found = bazel_docs.classify("HF_LOCK_CLEAR_FORCE=1 ./scripts/manage.sh clear-hf-locks")
+        assert found is not None
+        assert found[1] == "HF_LOCK_CLEAR_FORCE=1 bazelisk run //:manage -- clear-hf-locks"
+
+    def test_an_env_prefix_still_loses_the_host_exemption_in_a_page(self) -> None:
+        found = bazel_docs.classify("LAB_ENABLE_LTX_DIRECTOR=1 ./scripts/manage.sh start", published=True)
+        assert found is not None
+        assert found[1] == "LAB_ENABLE_LTX_DIRECTOR=1 bazelisk run //:manage -- start"
+
+    def test_an_env_prefixed_bazel_command_is_still_silent(self) -> None:
+        assert bazel_docs.classify("LAB_STACK_FORCE_BUILD=1 bazelisk run //:manage -- start") is None
+
+    @pytest.mark.parametrize(
+        ("path", "published"),
+        [
+            ("docs/getting-started.mdx", True),
+            ("docs/operate/daily.mdx", True),
+            ("docs/generated/workflows/photos/thumbnail.md", True),
+            ("README.md", True),
+            ("CONTRIBUTING.md", True),
+            ("scripts/manage.sh", False),
+            ("scripts/lib/common.sh", False),
+            ("tests/python/_build_music_workflows.py", False),
+            ("docs/commands.py", False),
+            ("docs-site/lib/nav.ts", False),
+        ],
+    )
+    def test_only_published_prose_gets_the_rule(self, path: str, published: bool) -> None:
+        assert bazel_docs.is_published_doc(path) is published
+
+    def test_a_page_is_policed_and_a_script_is_not(self, tmp_path: Path) -> None:
+        raw = "./scripts/manage.sh start\n"
+        page = tmp_path / "docs" / "a.mdx"
+        page.parent.mkdir(parents=True)
+        page.write_text(f"```bash\n{raw}```\n", encoding="utf-8")
+        script = tmp_path / "scripts" / "a.sh"
+        script.parent.mkdir(parents=True)
+        script.write_text(f'# say it: {raw.strip()}\necho "{raw.strip()}"\n', encoding="utf-8")
+        problems = bazel_docs.violations(tmp_path, ["docs/a.mdx", "scripts/a.sh"])
+        assert [p for p in problems if p.startswith("docs/")]
+        assert not [p for p in problems if p.startswith("scripts/")]
+
+    def test_an_allowlisted_page_line_keeps_the_raw_door(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        page = tmp_path / "docs" / "fallback.mdx"
+        page.parent.mkdir(parents=True)
+        page.write_text("```bash\n./scripts/manage.sh start\n```\n", encoding="utf-8")
+        monkeypatch.setattr(bazel_docs, "_ALLOW", {"docs/fallback.mdx:2": "the page documents the fallback"})
+        assert bazel_docs.violations(tmp_path, ["docs/fallback.mdx"]) == []
+
+
 class TestAllowed:
     """An exemption is a named decision, not a pattern anybody can widen."""
 
@@ -314,13 +399,19 @@ class TestLabGraphNotes:
         path.write_text(json.dumps(graph), encoding="utf-8")
         assert bazel_docs.violations(tmp_path, [rel]) == []
 
-    def test_a_host_verb_in_a_graph_note_stays_raw(self, tmp_path: Path) -> None:
+    def test_a_host_verb_in_a_graph_note_names_the_target(self, tmp_path: Path) -> None:
+        # ComfyUI renders the note on the canvas, so it is published prose and
+        # the host escape hatch does not exempt it.
         rel = "workflows/_lab/stills/x.json"
         path = tmp_path / rel
         path.parent.mkdir(parents=True, exist_ok=True)
         graph = self._graph("Warm the cache with `./scripts/manage.sh download-models`.")
         path.write_text(json.dumps(graph), encoding="utf-8")
-        assert bazel_docs.violations(tmp_path, [rel]) == []
+        problems = bazel_docs.violations(tmp_path, [rel])
+        # The fixture carries the sentence in both `extra.lab_note` and a Note
+        # node, so the sweep reports the one command once per field.
+        assert len(set(problems)) == 1, problems
+        assert "bazelisk run //:manage -- download-models" in problems[0], problems
 
     def test_broken_and_non_object_json_are_tolerated(self, tmp_path: Path) -> None:
         (tmp_path / "workflows" / "_lab").mkdir(parents=True, exist_ok=True)
@@ -406,14 +497,20 @@ class TestCommandBuilderRecipes:
         assert "bazelisk run //:manage -- doctor" in problems[0]
 
     @pytest.mark.parametrize("verb", ["download-models", "download-podcast", "start", "stop", "setup", "onboard"])
-    def test_a_host_verb_recipe_stays_raw(self, tmp_path: Path, verb: str) -> None:
+    def test_a_host_verb_recipe_names_the_target(self, tmp_path: Path, verb: str) -> None:
+        # The widget's clipboard text is published prose, so the host escape
+        # hatch that a script's own usage header keeps does not apply here.
         rel = self._write(tmp_path, self._builder(self._recipe(verb, ["./scripts/manage.sh", verb])))
-        assert bazel_docs.command_builder_violations(tmp_path, [rel]) == []
+        problems = bazel_docs.command_builder_violations(tmp_path, [rel])
+        assert len(problems) == 1, problems
+        assert f"bazelisk run //:manage -- {verb}" in problems[0], problems
 
-    def test_a_raw_download_utility_recipe_stays_raw(self, tmp_path: Path) -> None:
+    def test_a_raw_download_utility_recipe_names_the_target(self, tmp_path: Path) -> None:
         recipe = self._recipe("download-wan", ["./scripts/utilities/download-wan.sh", "run"])
         rel = self._write(tmp_path, self._builder(recipe))
-        assert bazel_docs.command_builder_violations(tmp_path, [rel]) == []
+        problems = bazel_docs.command_builder_violations(tmp_path, [rel])
+        assert len(problems) == 1, problems
+        assert "bazelisk run //scripts:run-utility -- download-wan run" in problems[0], problems
 
     @pytest.mark.parametrize(
         "argv",
@@ -490,6 +587,231 @@ class TestCommandBuilderRecipes:
         assert len(recipes) >= 50, recipes
         assert all(recipe_id and command for recipe_id, command in recipes), recipes
         assert bazel_docs.command_builder_violations(ROOT, [self.BUILDER_REL]) == []
+
+
+class TestTemplateComments:
+    """Shipped templates are operator text too, and none of them can be fenced.
+
+    ``.env.example``, ``config/*.yaml`` and ``scripts/utilities/*.ps1`` are read
+    by the operator before the first run, and a ``#`` header line is the only
+    place a usage note can go in them. As prose they yield no command position,
+    so the sweep passed straight over the raw door in their headers. They are
+    read as code instead, which reuses the comment rule that already covers a
+    shell script's own usage header.
+    """
+
+    def test_a_template_comment_that_tells_the_operator_to_run_a_script(self, tmp_path: Path) -> None:
+        rel = ".env.example"
+        (tmp_path / rel).write_text(
+            "# Copy and edit: ./scripts/manage.sh setup   (or, by hand: cp it to .env)\n",
+            encoding="utf-8",
+        )
+        problems = bazel_docs.violations(tmp_path, [rel])
+        assert len(problems) == 1, problems
+        assert "bazelisk run //:manage -- setup" in problems[0]
+
+    def test_a_yaml_header_is_read_the_same_way(self, tmp_path: Path) -> None:
+        rel = "config/disk-catalog.yaml"
+        page = tmp_path / rel
+        page.parent.mkdir(parents=True)
+        page.write_text(
+            "# Remeasure the disk budget with\n"
+            "#   ./scripts/manage.sh disk-wizard --refresh\n",
+            encoding="utf-8",
+        )
+        problems = bazel_docs.violations(tmp_path, [rel])
+        assert len(problems) == 1, problems
+        assert "bazelisk run //:manage -- disk-wizard --refresh" in problems[0]
+
+    def test_a_pointer_that_names_the_script_stays_prose(self, tmp_path: Path) -> None:
+        # "operator entry via X" and "the studio. ./scripts/manage.sh setup
+        # copies this" name the door as a sentence subject. Promoting them
+        # would have the gate demand an exemption for prose, so the split sits
+        # on the marks that introduce an instruction only.
+        rel = "config/disk-catalog.yaml"
+        page = tmp_path / rel
+        page.parent.mkdir(parents=True)
+        page.write_text(
+            "# Source of truth: this file (operator entry via "
+            "./scripts/manage.sh disk-wizard)\n"
+            "# read for the one-box studio. ./scripts/manage.sh setup copies this\n",
+            encoding="utf-8",
+        )
+        assert bazel_docs.violations(tmp_path, [rel]) == []
+
+    def test_a_powershell_usage_line_names_the_target_that_exists(self, tmp_path: Path) -> None:
+        # No target dispatches a .ps1, so the raw line is legal here; the test
+        # pins that the pass *sees* the line, which is what forces the named
+        # exemption below rather than silence.
+        rel = "scripts/utilities/setup-client.ps1"
+        page = tmp_path / rel
+        page.parent.mkdir(parents=True)
+        page.write_text("#   ./scripts/manage.sh setup-client\n", encoding="utf-8")
+        assert len(bazel_docs.violations(tmp_path, [rel])) == 1
+
+    def test_an_executed_config_value_stays_implementation(self, tmp_path: Path) -> None:
+        # A compose `command:` is what the container runs, not what a reader
+        # pastes, and reading templates as code must not turn config into prose.
+        rel = "docker/docker-compose.yml"
+        page = tmp_path / rel
+        page.parent.mkdir(parents=True)
+        page.write_text('  command: "./scripts/manage.sh start"\n', encoding="utf-8")
+        assert bazel_docs.violations(tmp_path, [rel]) == []
+
+    def test_a_template_that_only_names_a_script_is_not_a_command(self, tmp_path: Path) -> None:
+        rel = ".env.example"
+        (tmp_path / rel).write_text(
+            "# What this is: every host-side knob ./scripts/manage.sh and docker\n"
+            "#   compose read for the one-box US-safe studio.\n",
+            encoding="utf-8",
+        )
+        assert bazel_docs.violations(tmp_path, [rel]) == []
+
+    def test_the_shipped_templates_name_the_targets(self) -> None:
+        shipped = [
+            ".env.example",
+            "config/spark-farm.example.env",
+            "config/disk-catalog.yaml",
+            "docker/docker-compose.yml",
+            ".github/workflows/ci.yml",
+        ]
+        assert bazel_docs.violations(ROOT, shipped) == []
+
+
+class TestGlossaryProse:
+    """The glossary cards are prose the JSON sweep skips.
+
+    ``docs/glossary.py`` renders each entry's ``short`` and ``long`` onto a
+    published card, so a raw script in a field is the same defect as a raw
+    script in a fenced block. The file carries ``.json``, so ``_SKIP_SUFFIX``
+    keeps it out of the text sweep, and a field is a sentence rather than a
+    command position: the pass reads the clause-initial run of each field,
+    which is where an instruction starts, and lets ``classify`` reject the
+    rest. A field that only names a script stays a file reference.
+    """
+
+    GLOSSARY_REL = "includes/glossary.json"
+
+    def _entry(self, entry_id: str, **fields: object) -> dict[str, object]:
+        """One entry in the shipped shape: id, title, category, short, long."""
+        row: dict[str, object] = {
+            "id": entry_id,
+            "title": entry_id.replace("-", " ").title(),
+            "category": "Ops",
+            "short": f"{entry_id} fixture short",
+            "long": f"{entry_id} fixture long",
+        }
+        row.update(fields)
+        return row
+
+    def _write(self, root: Path, *entries: object) -> str:
+        """Write a glossary payload at its shipped path; return that path."""
+        path = root / self.GLOSSARY_REL
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(list(entries)), encoding="utf-8")
+        return self.GLOSSARY_REL
+
+    def test_a_backticked_command_in_a_field_is_reported_with_its_target(
+        self, tmp_path: Path
+    ) -> None:
+        rel = self._write(
+            tmp_path,
+            self._entry("research-mcp", long="Typed stdio MCP (`./scripts/manage.sh research-mcp`)."),
+        )
+        problems = bazel_docs.glossary_violations(tmp_path, [rel])
+        assert len(problems) == 1, problems
+        assert "bazelisk run //:manage -- research-mcp" in problems[0]
+        assert rel in problems[0]
+
+    def test_a_bare_command_after_a_clause_break_is_reported(self, tmp_path: Path) -> None:
+        # The shipped app-forge card runs the command without backticks, so the
+        # pass cannot read backticked spans alone.
+        rel = self._write(
+            tmp_path,
+            self._entry("app-forge", long="Writes the app. Path D: ./scripts/manage.sh studio-mcp --stdio."),
+        )
+        problems = bazel_docs.glossary_violations(tmp_path, [rel])
+        assert len(problems) == 1, problems
+        assert "bazelisk run //:manage -- studio-mcp --stdio" in problems[0]
+
+    def test_a_host_verb_loses_its_escape_hatch_in_a_field(self, tmp_path: Path) -> None:
+        # The wrapper execs the identical script on the host, so a card that
+        # tells the operator to start the stack by hand teaches the wrong door.
+        rel = self._write(tmp_path, self._entry("studio", long="Bring the stack up: ./scripts/manage.sh start."))
+        problems = bazel_docs.glossary_violations(tmp_path, [rel])
+        assert len(problems) == 1, problems
+        assert "bazelisk run //:manage -- start" in problems[0]
+
+    def test_a_download_utility_field_names_the_run_utility_target(self, tmp_path: Path) -> None:
+        rel = self._write(
+            tmp_path,
+            self._entry("wan", long="Weights: ./scripts/utilities/download-wan.sh run --tier 5b."),
+        )
+        problems = bazel_docs.glossary_violations(tmp_path, [rel])
+        assert len(problems) == 1, problems
+        assert "bazelisk run //scripts:run-utility -- download-wan run --tier 5b" in problems[0]
+
+    def test_a_field_that_only_names_a_script_is_not_a_command(self, tmp_path: Path) -> None:
+        # Both halves of the drift case: a link label, and a sentence whose
+        # subject is the file. Trimming to the command must not reach these.
+        rel = self._write(
+            tmp_path,
+            self._entry("manage", long="See [manage.sh reference](manage-cli.md) for the verbs."),
+            self._entry("router", long="The scripts/manage.sh file routes operator actions."),
+        )
+        assert bazel_docs.glossary_violations(tmp_path, [rel]) == []
+
+    def test_only_the_prose_fields_are_read(self, tmp_path: Path) -> None:
+        # A title or an alias is a name a reader searches for, never a line to
+        # paste; policing them would push a target into a term heading.
+        rel = self._write(
+            tmp_path,
+            self._entry("odd", title="./scripts/manage.sh start", aliases=["./scripts/manage.sh stop"]),
+        )
+        assert bazel_docs.glossary_violations(tmp_path, [rel]) == []
+
+    def test_a_malformed_payload_is_ignored_rather_than_raising(self, tmp_path: Path) -> None:
+        rel = self._write(tmp_path, "not an entry", 7, {"long": 3})
+        assert bazel_docs.glossary_violations(tmp_path, [rel]) == []
+
+    def test_a_payload_that_is_not_a_list_is_ignored(self) -> None:
+        # A future edit could make the file an object of categories, and the
+        # pass must fall silent rather than crash the whole gate.
+        assert bazel_docs.glossary_prose_fields({"klein": {"long": "x"}}) == []
+        assert bazel_docs.glossary_prose_fields("klein") == []
+
+    def test_an_absent_or_unparseable_glossary_is_ignored(self, tmp_path: Path) -> None:
+        # The pass is handed the whole tracked list, so it has to shrug at a
+        # path it was pointed at that is not there, and at a half-written file.
+        absent = self.GLOSSARY_REL
+        assert bazel_docs.glossary_violations(tmp_path, [absent]) == []
+        rel = absent
+        path = tmp_path / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text('[{"long": ', encoding="utf-8")
+        assert bazel_docs.glossary_violations(tmp_path, [rel]) == []
+
+    def test_the_report_names_the_entry_and_field(self, tmp_path: Path) -> None:
+        rel = self._write(tmp_path, self._entry("blender-mcp", long="`./scripts/manage.sh blender-mcp`"))
+        problems = bazel_docs.glossary_violations(tmp_path, [rel])
+        assert len(problems) == 1, problems
+        assert "blender-mcp" in problems[0]
+        assert "long" in problems[0]
+
+    def test_a_line_keyed_exemption_cannot_reach_a_field(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        # A card has no line the reader sees, so only a bare path key can exempt
+        # one; a line key would rot the moment the JSON reflows.
+        rel = self._write(tmp_path, self._entry("research-mcp", long="`./scripts/manage.sh research-mcp`"))
+        monkeypatch.setitem(bazel_docs._ALLOW, f"{self.GLOSSARY_REL}:5", "wrong shape of key")
+        assert len(bazel_docs.glossary_violations(tmp_path, [rel])) == 1
+
+    def test_a_bare_path_key_exempts_a_card(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        rel = self._write(tmp_path, self._entry("research-mcp", long="`./scripts/manage.sh research-mcp`"))
+        monkeypatch.setitem(bazel_docs._ALLOW, self.GLOSSARY_REL, "named exemption")
+        assert bazel_docs.glossary_violations(tmp_path, [rel]) == []
+
+    def test_the_shipped_glossary_names_the_targets(self) -> None:
+        assert bazel_docs.glossary_violations(ROOT, [self.GLOSSARY_REL]) == []
 
 
 class TestDocstringPositions:
@@ -576,9 +898,9 @@ class TestStaleExemptions:
 
 
 class TestCandidateFiles:
-    """Generated pages and media are not the operator's text."""
+    """Media and lockfiles are not the operator's text; generated pages are."""
 
-    def test_generated_and_media_paths_are_dropped(self) -> None:
+    def test_media_and_lockfiles_are_dropped(self) -> None:
         tracked = [
             "docs/generated/shell/reference.md",
             "docs/getting-started.mdx",
@@ -586,7 +908,20 @@ class TestCandidateFiles:
             "docs-site/package-lock.json",
             "docs-site/node_modules/x/index.js",
         ]
-        assert bazel_docs.candidate_files(tracked) == ["docs/getting-started.mdx"]
+        assert bazel_docs.candidate_files(tracked) == [
+            "docs/generated/shell/reference.md",
+            "docs/getting-started.mdx",
+        ]
+
+    def test_a_generated_page_is_policed_like_a_hand_written_one(self, tmp_path: Path) -> None:
+        # //docs:generate writes these, so a raw door here came from a
+        # generator template and has to fail the same way a page does.
+        rel = "docs/generated/workflows/photos/thumbnail.md"
+        page = tmp_path / rel
+        page.parent.mkdir(parents=True)
+        page.write_text("```bash\n./scripts/manage.sh start\n```\n", encoding="utf-8")
+        problems = bazel_docs.violations(tmp_path, [rel])
+        assert any("bazelisk run //:manage -- start" in p for p in problems), problems
 
 
 class TestAgainstTheRealCheckout:

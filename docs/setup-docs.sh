@@ -5,7 +5,7 @@
 #
 # Usage:
 #   bazelisk run //docs-site:install
-#   QUIET=true ./docs/setup-docs.sh
+#   QUIET=true ./docs/setup-docs.sh   # direct fallback; //docs:serve calls it
 #
 # Safety: Installs into docs-site/node_modules. Never publishes.
 
