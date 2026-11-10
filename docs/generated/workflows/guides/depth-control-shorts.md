@@ -1,6 +1,6 @@
 ---
 title: "guides/depth-control-shorts"
-description: "LTX-2.5 IC-LoRA Union Control envelope, 768x1280, 120 frames, depth default Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or fi"
+description: "LTX-2.5 IC-LoRA Union Control envelope, 768x1280, 193 frames, depth default Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or fi"
 tags: [workflows, generated, comfyui, guides]
 ---
 
@@ -575,8 +575,8 @@ Save prefix.
 
 | Instance | Value |
 | --- | --- |
-| Save frames (secondary) | `ez_gosee_b1_s1_ltx_frames` |
-| Save last frame | `ez_gosee_b1_s1_last` |
+| Save frames (secondary) | `ez_depth_shorts_frames` |
+| Save last frame | `ez_depth_shorts_last` |
 
 ### `LTXVEmptyLatentAudio` - Empty LTX Audio Latent
 
@@ -820,7 +820,7 @@ Type `INT`. Range / default: 120 (LTX 121) / 119 (Wan 120).
 
 **How it affects generation:** Must be length-1 for the last frame. Off-by-one here breaks shot continuity.
 
-**This graph:** `119`
+**This graph:** `192`
 
 #### `length`
 

@@ -578,8 +578,8 @@ Save prefix.
 
 | Instance | Value |
 | --- | --- |
-| Save frames (secondary) | `ez_gosee_b1_s1_ltx_frames` |
-| Save last frame | `ez_gosee_b1_s1_last` |
+| Save frames (secondary) | `ez_still_to_shot_ltx_frames` |
+| Save last frame | `ez_still_to_shot_last` |
 
 ### `LTXVEmptyLatentAudio` - Empty LTX Audio Latent
 
@@ -726,7 +726,7 @@ Save prefix under the output folder.
 
 **How it affects generation:** Lab prefixes start with ez_. The host file is ${COMFY_OUTPUT_DIR}/<prefix>_*.mp4 (or .gif).
 
-**This graph:** `ez_gosee_b1_s1_ltx_video`
+**This graph:** `ez_still_to_shot_ltx_video`
 
 #### `format`
 
@@ -1452,7 +1452,7 @@ LTX clip length.
 
 **How it affects generation:** Default 8 seconds (193 frames, 1+8n). Frontend writes latent length. Wan 5B stays 5 seconds. Film printers stay 5 seconds / 121.
 
-**This graph:** `8 seconds`
+**This graph:** `5 seconds`
 
 ### `EZImageDescribe` - Describe image
 

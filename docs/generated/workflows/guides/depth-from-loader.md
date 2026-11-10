@@ -75,7 +75,7 @@ flowchart TB
 | 8 | LTX frame rate cond | `LTXVConditioning` | SETTINGS |
 | 9 | KSampler | `KSampler` | SETTINGS |
 | 10 | VAE Decode | `VAEDecode` | OUTPUT |
-| 12 | Save ez_iclora_guide | `SaveImage` | OUTPUT |
+| 12 | Save frames (secondary) | `SaveImage` | OUTPUT |
 | 13 | LTX-2.5 audio VAE | `VAELoader` | MODEL |
 | 14 | Empty LTX audio latent | `LTXVEmptyLatentAudio` | SETTINGS |
 | 15 | Concat AV latents | `LTXVConcatAVLatent` | SETTINGS |
@@ -83,7 +83,7 @@ flowchart TB
 | 17 | Operator note | `Note` | NOTE |
 | 18 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | OUTPUT |
 | 19 | Last frame | `ImageFromBatch` | OUTPUT |
-| 20 | Save ez_iclora_guide | `SaveImage` | OUTPUT |
+| 20 | Save last frame | `SaveImage` | OUTPUT |
 | 21 | LTX Prompt Enhance | `EZLTXPromptEnhance` | PROMPT |
 | 22 | Audio VAE Decode | `LTXVAudioVAEDecode` | OUTPUT |
 | 23 | LTX AI-media disclosure (end-card) | `EZFilmDisclosure` | OUTPUT |
@@ -588,7 +588,10 @@ Save prefix.
 
 **How it affects generation:** Lab prefixes start with ez_. Last-frame savers on shot graphs feed concat-shots.
 
-**This graph (all 2 instances):** `ez_iclora_guide`
+| Instance | Value |
+| --- | --- |
+| Save frames (secondary) | `ez_iclora_guide_frames` |
+| Save last frame | `ez_iclora_guide_last` |
 
 ### `LTXVEmptyLatentAudio` - Empty LTX Audio Latent
 
@@ -829,7 +832,7 @@ Type `INT`. Range / default: 120 (LTX 121) / 119 (Wan 120).
 
 **How it affects generation:** Must be length-1 for the last frame. Off-by-one here breaks shot continuity.
 
-**This graph:** `119`
+**This graph:** `192`
 
 #### `length`
 
