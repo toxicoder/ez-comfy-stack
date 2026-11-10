@@ -486,7 +486,7 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_gosee_b1_s1_wan_frames"
+        "ez_still_to_shot_wan_frames"
       ],
       "title": "Save frames (secondary)"
     },
@@ -543,7 +543,7 @@
       "widgets_values": {
         "frame_rate": 24,
         "loop_count": 0,
-        "filename_prefix": "ez_gosee_b1_s1_wan_video",
+        "filename_prefix": "ez_still_to_shot_wan_video",
         "format": "video/h264-mp4",
         "pix_fmt": "yuv420p",
         "crf": 18,
@@ -645,7 +645,7 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_gosee_b1_s1_last"
+        "ez_still_to_shot_last"
       ],
       "title": "Save last frame"
     },
@@ -831,7 +831,7 @@
         832,
         480,
         "Match input",
-        "8 seconds"
+        "5 seconds"
       ],
       "title": "Format / platform"
     },

@@ -498,7 +498,7 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_gosee_b1_s1_ltx_frames"
+        "ez_canny_ctrl_frames"
       ],
       "title": "Save frames (secondary)"
     },
@@ -788,7 +788,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        119,
+        192,
         1
       ],
       "title": "Last frame"
@@ -819,7 +819,7 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_gosee_b1_s1_last"
+        "ez_canny_ctrl_last"
       ],
       "title": "Save last frame"
     },
@@ -1428,7 +1428,7 @@
     "lab_ltx_tier": "balanced",
     "lab_note": "## guides/canny-control-8s\n\nLab envelope for Path B **canny**-guided 8.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **193 frames @ 24 fps**. MagCache **off**. Distilled transformer only.\n\nThis tree does **not** vendor Lightricks UUID subgraphs. Queue the official Templates graph:\n\n  Templates -> LTX-2.5 -> LTX-2.5_ICLoRA_Union_Control_Distilled.json\n\nSwitch the annotator to **canny**. Wire ``canny.mp4`` from the guide pack. LoRA (opt-in, not download-models):\n\n  bazelisk run //:manage -- download-ltx --tier iclora\n  ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors\n\nRefuse 19B Union. Do not pair IC-LoRA with a dev transformer.\n\nLoadImage: guide ``first.png``. Stop Klein first. After print, audio-finish / stem-mix.\n\nLTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.\n\nStay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/still-to-mesh (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_ltx_av": true,
-    "lab_description": "LTX-2.5 IC-LoRA Union Control envelope, 120 frames, canny default\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "lab_description": "LTX-2.5 IC-LoRA Union Control envelope, 193 frames, canny default\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
