@@ -40,8 +40,8 @@ LoadImage: a Klein still (`ez_still_*.png` or a clay plate). Unload models first
 UNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack).
 Upsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this lab
 graph runs the 1024 floor. Structure decode stays at 32. MeshToFile3D only converts in memory, so
-SaveGLB is the node that writes `output/3d/trellis2_NNNNN_.glb`. TRELLIS-only canvas. Do not mint an
-Asset Bible row from this graph.
+SaveGLB is the node that writes `output/assets/objects/_lab-trellis2/mesh_NNNNN_.glb`.
+TRELLIS-only canvas. Do not mint an Asset Bible row from this graph.
 
 DINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.
 
@@ -74,7 +74,7 @@ flowchart LR
   N12["Trellis2ShapeStage"]
   N13["KSampler (shape)"]
   N14["Upsample 1024"]
-  N15["KSampler (512)"]
+  N15["KSampler (1024)"]
   N16["VaeDecodeShapeTrellis"]
   N17["Trellis2TextureStage"]
   N18["KSampler (texture)"]
@@ -134,7 +134,7 @@ flowchart LR
 | 12 | Trellis2ShapeStage | `Trellis2ShapeStage` | OUTPUT |
 | 13 | KSampler (shape) | `KSampler` | SETTINGS |
 | 14 | Upsample 1024 | `Trellis2UpsampleStage` | OUTPUT |
-| 15 | KSampler (512) | `KSampler` | SETTINGS |
+| 15 | KSampler (1024) | `KSampler` | SETTINGS |
 | 16 | VaeDecodeShapeTrellis | `VaeDecodeShapeTrellis` | OUTPUT |
 | 17 | Trellis2TextureStage | `Trellis2TextureStage` | OUTPUT |
 | 18 | KSampler (texture) | `KSampler` | SETTINGS |
@@ -181,8 +181,8 @@ LoadImage: a Klein still (`ez_still_*.png` or a clay plate). Unload models first
 UNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack).
 Upsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this lab
 graph runs the 1024 floor. Structure decode stays at 32. MeshToFile3D only converts in memory, so
-SaveGLB is the node that writes `output/3d/trellis2_NNNNN_.glb`. TRELLIS-only canvas. Do not mint an
-Asset Bible row from this graph.
+SaveGLB is the node that writes `output/assets/objects/_lab-trellis2/mesh_NNNNN_.glb`.
+TRELLIS-only canvas. Do not mint an Asset Bible row from this graph.
 
 DINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.
 
@@ -388,7 +388,7 @@ Random seed for the noise tensor.
 | --- | --- |
 | KSampler (structure) | `42` |
 | KSampler (shape) | `42` |
-| KSampler (512) | `42` |
+| KSampler (1024) | `42` |
 | KSampler (texture) | `43` |
 
 #### `control_after_generate`
@@ -432,7 +432,7 @@ Classifier-free guidance scale.
 | --- | --- |
 | KSampler (structure) | `7.5` |
 | KSampler (shape) | `7.5` |
-| KSampler (512) | `7.5` |
+| KSampler (1024) | `7.5` |
 | KSampler (texture) | `1` |
 
 #### `sampler_name`
@@ -507,7 +507,7 @@ How sigmas are spaced across steps.
 | --- | --- |
 | KSampler (structure) | `normal` |
 | KSampler (shape) | `normal` |
-| KSampler (512) | `simple` |
+| KSampler (1024) | `simple` |
 | KSampler (texture) | `normal` |
 
 **Other choices**
@@ -678,7 +678,7 @@ Write the .glb under the output folder. Output node; no output sockets.
 
 !!! warning "Lab notes"
 
-    3d/trellis2 uses prefix 3d/trellis2. The DCC pack graphs use assets/objects/_lab-<name>/<stem>. Needs MeshToFile3D upstream.
+    Every 3d/* App writes assets/objects/_lab-<name>/<stem>, so the five meshes land in one directory. Needs MeshToFile3D upstream.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -690,9 +690,9 @@ Type `STRING`.
 
 Output stem under the ComfyUI output folder.
 
-**How it affects generation:** 3d/trellis2 lands the .glb under <output>/3d/, the DCC pack graphs under <output>/assets/objects/... The directory part of the prefix is created on demand. Hidden prompt and extra_pnginfo are injected by the backend and are not widgets.
+**How it affects generation:** Every 3d/* graph lands the .glb under <output>/assets/objects/... The directory part of the prefix is created on demand. Hidden prompt and extra_pnginfo are injected by the backend and are not widgets.
 
-**This graph:** `3d/trellis2`
+**This graph:** `assets/objects/_lab-trellis2/mesh`
 
 ### `EZQuality` - Quality
 

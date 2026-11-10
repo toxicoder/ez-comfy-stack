@@ -33,7 +33,7 @@ Klein 4B **background swap**. Load a still. Pick a sample place or type a custom
 
 Other characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero.
 
-Do not Queue without a start image. Describe image (default on) captions the source so CLIP can name inventory on ordinary place swaps; Cubic block world skips the caption because the plate has no people. Missing `download-llm --tier describe` fail-softs empty. Upscale (default none) is lanczos after decode.
+Do not Queue without a start image. Describe image is off by default, the node's own default: it loads the opt-in describe GGUF (and can pip the CPU wheel at Queue time), so turn it on deliberately when you want CLIP to name inventory on ordinary place swaps; Missing `download-llm --tier describe` fail-softs empty either way. Cubic block world skips the caption because the plate has no people. Upscale (default none) is lanczos after decode.
 
 The sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is the photo reference for ordinary place swaps. Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.
 Prompt enhance is on by default for bare place names (on-box Qwen3-4B-Instruct-2507). Named samples skip the rewriter so Cubic block world and the place recipes reach CLIP as written. Style is hidden - the source still owns the subject's look.
@@ -526,7 +526,7 @@ Klein 4B **background swap**. Load a still. Pick a sample place or type a custom
 
 Other characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero.
 
-Do not Queue without a start image. Describe image (default on) captions the source so CLIP can name inventory on ordinary place swaps; Cubic block world skips the caption because the plate has no people. Missing `download-llm --tier describe` fail-softs empty. Upscale (default none) is lanczos after decode.
+Do not Queue without a start image. Describe image is off by default, the node's own default: it loads the opt-in describe GGUF (and can pip the CPU wheel at Queue time), so turn it on deliberately when you want CLIP to name inventory on ordinary place swaps; Missing `download-llm --tier describe` fail-softs empty either way. Cubic block world skips the caption because the plate has no people. Upscale (default none) is lanczos after decode.
 
 The sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is the photo reference for ordinary place swaps. Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.
 Prompt enhance is on by default for bare place names (on-box Qwen3-4B-Instruct-2507). Named samples skip the rewriter so Cubic block world and the place recipes reach CLIP as written. Style is hidden - the source still owns the subject's look.
@@ -1121,7 +1121,7 @@ Run the captioner.
 
 **How it affects generation:** Off skips the VLM. On needs download-llm --tier describe, plus the cubic DeepLabV3 person-mask checkpoint for any person to survive the gate.
 
-**This graph:** `true`
+**This graph:** `false`
 
 ### `EZModelCheck` - Check models
 
