@@ -149,7 +149,14 @@ def test_lab_graph_completeness(path: Path) -> None:
                 if isinstance(widgets, dict) and "save_output" in widgets:
                     assert widgets["save_output"] is True, path.name
         elif occupancy == "trellis" or "MeshToFile3D" in types:
-            assert "MeshToFile3D" in types, path.name
+            # SaveGLB is the writer. MeshToFile3D keeps only batch item 0, so a
+            # batched mesh graph must feed SaveGLB the MESH directly.
+            assert "SaveGLB" in types, path.name
+            batch_size = (extra.get("lab_trellis") or {}).get("batch_size") or 1
+            if int(batch_size) > 1:
+                assert "MeshToFile3D" not in types, path.name
+            else:
+                assert "MeshToFile3D" in types, path.name
         elif occupancy == "klein" or "SaveImage" in types:
             assert "SaveImage" in types, path.name
 
