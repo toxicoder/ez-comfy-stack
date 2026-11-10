@@ -16,7 +16,9 @@ from _stamp_app_mode import apply_lab_completeness_flags
 from _stamp_app_mode import ensure_occupancy_note
 from _stamp_app_mode import stamp_app_mode
 
-SAVE_PREFIX = "3d/trellis2"
+# Matches the sibling 3d apps (`assets/objects/_lab-<slug>/<stem>`) so every mesh
+# lands under one output directory that `ez_outputs/catalog.py` walks.
+SAVE_PREFIX = "assets/objects/_lab-trellis2/mesh"
 
 NOTE = """## 3d/trellis2
 
@@ -31,8 +33,8 @@ LoadImage: a Klein still (`ez_still_*.png` or a clay plate). Unload models first
 UNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack).
 Upsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this lab
 graph runs the 1024 floor. Structure decode stays at 32. MeshToFile3D only converts in memory, so
-SaveGLB is the node that writes `output/3d/trellis2_NNNNN_.glb`. TRELLIS-only canvas. Do not mint an
-Asset Bible row from this graph.
+SaveGLB is the node that writes `output/assets/objects/_lab-trellis2/mesh_NNNNN_.glb`.
+TRELLIS-only canvas. Do not mint an Asset Bible row from this graph.
 
 DINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.
 """
