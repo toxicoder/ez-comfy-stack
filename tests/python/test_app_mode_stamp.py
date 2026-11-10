@@ -440,7 +440,8 @@ def test_background_swap_prompt_help_and_describe_default() -> None:
         node for node in graph["nodes"] if node.get("type") == "EZImageDescribe"
     )
     enable = widget_description("enable", desc) or ""
-    assert enable.startswith("On (default)")
+    assert enable.startswith("On:")
+    assert "Off (default)" in enable
     off = widget_description("enable") or ""
     assert "Off (default)" in off
 
