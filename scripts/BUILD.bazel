@@ -37,6 +37,17 @@ _LIB_PY = [
     "lib/quality_apply.py",
     "lib/research_mcp.py",
     "lib/studio_mcp.py",
+    "lib/tui/__init__.py",
+    "lib/tui/app.py",
+    "lib/tui/catalog.py",
+    "lib/tui/cli.py",
+    "lib/tui/contract.py",
+    "lib/tui/guard.py",
+    "lib/tui/lanes.py",
+    "lib/tui/readmodel.py",
+    "lib/tui/runner.py",
+    "lib/tui/screen.py",
+    "lib/tui/views.py",
 ]
 
 _UTILITIES_SH = [
@@ -91,6 +102,7 @@ _UTILITIES_SH = [
     "utilities/spark-timing.sh",
     "utilities/stem-mix.sh",
     "utilities/studio-mcp.sh",
+    "utilities/studio-tui.sh",
     "utilities/take-promote.sh",
     "utilities/update-stack.sh",
 ]
@@ -188,6 +200,26 @@ exec_shell(
     name = "run-utility",
     src = "utilities/runner.sh",
     data = [":utilities"],
+    visibility = ["//visibility:public"],
+)
+
+# The guarded operator console. Its own target rather than a manage.sh verb: the
+# console is the operator surface, so it gets an ingress of its own beside
+# //:manage, and the catalog that backs it is checked for covering every manage.sh
+# verb (tests/python/test_tui_catalog.py), which a self-referential verb would
+# break. The launcher dispatches from the git checkout via bazel_checkout_root,
+# so the runfiles copy is only a fallback; the lab graphs and custom_nodes
+# sources ride along for a checkout that cannot be found.
+exec_shell(
+    name = "studio-tui",
+    src = "utilities/studio-tui.sh",
+    data = [
+        ":utilities",
+        "//config:policy",
+        "//custom_nodes:sources",
+        "//docker:sources",
+        "//workflows:lab_graphs",
+    ],
     visibility = ["//visibility:public"],
 )
 

@@ -78,6 +78,7 @@ filegroup(
         "operate/occupancy-matrix.mdx",
         "operate/quick-reference.md",
         "operate/reporting-issues.mdx",
+        "operate/studio-tui.mdx",
         "operate/troubleshooting-canvas.mdx",
         "operate/troubleshooting-docs-site.mdx",
         "operate/troubleshooting-downloads.mdx",

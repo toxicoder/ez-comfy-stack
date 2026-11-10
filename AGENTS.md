@@ -52,6 +52,8 @@ Bazelisk is the ingress for code, tests, builds, and docs. Make targets are shim
 - one docs generator only: `bazelisk run //docs:generate_shell|generate_workflow|generate_cinema|generate_audio`
 - regenerate derived JS: `bazelisk run //tests:build_quality_js`
 - doctor: `bazelisk run //:manage -- doctor`
+- operator console (TUI over every verb, guard-checked): `bazelisk run //:studio-tui`; headless
+  audit of the catalog: `bazelisk run //:studio-tui -- --check`
 - stack: `bazelisk run //:manage -- setup|download-models|start|stop`; `./scripts/manage.sh <verb>`
   stays the operator escape hatch for those host-mutating verbs (docker, sudo, GPU, `$HOME`)
 - Python tools: `pip install -r tests/requirements.txt`
@@ -62,6 +64,8 @@ Done means `bazelisk run //:validate` is green. Type errors are defects.
 
 - `scripts/manage.sh` - operator CLI. Prefer this over raw docker compose.
 - `scripts/lib/*.sh` - shared shell. Tests: `tests/bats/lib_unit.bats`
+- `scripts/lib/tui/` - operator console (curses confined to `screen.py`). Tests:
+  `tests/python/test_tui_*.py`
 - `scripts/utilities/<name>.sh` - tests: `tests/bats/<name>.bats`
 - `docker/` - Compose + `patch_*.py`. Tests: `tests/python/*`, `tests/bats/safety.bats`
 - `workflows/` - graphs. Lab: `workflows/_lab/<lane>/<id>.json`. Never copy `_lab` into `_user`.

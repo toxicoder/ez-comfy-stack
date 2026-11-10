@@ -2177,6 +2177,50 @@ Usage:
 
 ### Command: studio-mcp
 
+<!-- source: scripts/utilities/studio-tui.sh -->
+## studio-tui
+
+Guarded full-screen operator console for the studio. One curses front end over
+every manage.sh verb and every unmanaged utility: stack lifecycle, model tier
+downloads, occupancy desk, sidecars, film and cut tools, disk reclaim, and the
+lab lane browser.
+
+The console dispatches to the existing scripts. It never builds a docker
+command, never writes .occupancy.json, and never sets LAB_NON_INTERACTIVE or
+LAB_CONFIRM_TOKEN, so require_heavy_confirm and require_delete_confirm still
+run in the child. Heavy actions stay behind the same 28 GiB RAM and 40 GiB
+disk floors that gate manage.sh start.
+
+```bash
+Usage:
+  bazelisk run //:studio-tui
+  bazelisk run //:studio-tui -- --check
+  bazelisk run //scripts:run-utility -- studio-tui [flags]   (operator escape hatch)
+
+```
+
+Flags:
+  --check            validate the catalog and guard wiring, print a report, exit
+  --json             with --check, emit the report as JSON
+  --dry-run          dispatch prints the argv and does not run it
+  --read-only        only observe-only actions may dispatch
+  --no-color         monochrome (also honoured via NO_COLOR)
+  --group NAME       open on one section instead of the dashboard
+  --timeout SECONDS  per-command cap, default 900
+
+Environment:
+  MODELS_DIR, COMFY_OUTPUT_DIR, COMFY_PORT, MEM_LIMIT, DOWNLOAD_LIMIT
+  NO_COLOR, TERM, TERMINFO
+
+!!! warning
+
+    Safety:
+      One console at a time: an flock on ${COMFY_OUTPUT_DIR}/.studio-tui.lock
+      refuses the second copy, which is the mutex the CLI itself never had.
+      Refuses to draw when stdout is not a TTY; --check is the headless path.
+
+### Command: studio-tui
+
 <!-- source: scripts/utilities/take-promote.sh -->
 ## take-promote
 

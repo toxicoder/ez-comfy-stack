@@ -1,0 +1,189 @@
+---
+title: Studio console
+description: One guarded full-screen console over every manage.sh verb, model tier, sidecar, cut tool, and lab lane - built so a remote headless operator cannot take the box down.
+tags: [tui, safety, operate, occupancy, gb10]
+---
+
+# Studio console
+
+**What's on this page**
+
+- **Launch** - the Bazel target, the utility runner, and the operator escape hatch
+- **Sections** - the nine groups, from the dashboard to the disk reclaim pane
+- **Keys** - navigation, search, dispatch, and the one-key safe stop
+- **Risk tiers** - what runs on a keystroke and what asks for a typed word
+- **The guard layer** - the floors and probes that grey an action out
+- **Headless check** - `--check` for CI and for a box you cannot see
+
+**What this enables**
+
+- **Driving** the whole stack from a keyboard over SSH, with no raw shell and no
+  remembered flags
+- **Running** every one of the 57 `manage.sh` verbs and the 8 utilities that never
+  got a verb, from one searchable list
+- **Browsing** all nine lab lanes and their graphs by name and blurb, then cloning
+  one into the live `_user` folder
+- **Refusing** yourself: heavy actions stay behind the same headroom floors and
+  typed confirmations the CLI has always had
+
+<Callout type="error" title="What the console does not weaken">
+  The console is a dispatcher. It never builds a `docker` command, never writes
+  `.occupancy.json`, and never sets `LAB_NON_INTERACTIVE` or `LAB_CONFIRM_TOKEN`.
+  `restart: "no"`, the heavy confirm on start, the 28 GiB / 40 GiB headroom
+  preflight, the occupancy XOR, and download-limit clear-on-exit all still run in
+  the child script. The console adds a single-console lock and a deny-by-default
+  guard on top of them; it removes nothing.
+</Callout>
+
+**Who this is for:** anyone operating the Spark over SSH who should not have to
+remember whether the flag is `--tier` or `--limit`, and who must not be one
+keystroke from stopping the machine. The rule behind the GPU gating is
+[Why one heavy job](../learn/occupancy.md); the mode-by-job lookup stays on
+[Occupancy matrix](operate/occupancy-matrix.md).
+
+---
+
+## Launch
+
+```bash
+bazelisk run //:studio-tui
+```
+
+The same console through the utility runner, which is the shortest path over a
+laggy link:
+
+```bash
+bazelisk run //scripts:run-utility -- studio-tui
+```
+
+Flags:
+
+| Flag | Effect |
+| --- | --- |
+| `--check` | Audit the catalog and guard wiring, print a report, exit. No TTY needed. |
+| `--json` | With `--check`, emit the report as JSON. |
+| `--dry-run` | Dispatch prints the exact argv and does not run it. |
+| `--read-only` | Only observe-only actions may dispatch. |
+| `--no-color` | Monochrome, for a link that mangles colour. |
+| `--group NAME` | Open on one section instead of the dashboard. |
+| `--timeout SECONDS` | Per-command wall-clock cap. Default 900. |
+
+Exit codes are stable: `0` clean, `1` bad flags or a catalog defect, `2` asked to
+draw without a terminal, `3` another console holds the lock.
+
+## Headless check
+
+`--check` is the path for CI and for a box you are operating blind. It proves the
+catalog still covers the dispatcher, that every heavy action carries a
+confirmation, that no action forces `--yes`, and that every utility it names
+exists:
+
+```bash
+bazelisk run //:studio-tui -- --check
+bazelisk run //:studio-tui -- --check --json
+```
+
+A sound catalog prints `catalog sound`. Any defect prints under `DEFECTS:` and
+exits 1.
+
+## Sections
+
+Press the digit to jump. Each section lists only what its guard allows, with the
+blocker shown as the row's note.
+
+| Key | Section | Covers |
+| --- | --- | --- |
+| `1` | Dashboard | Free RAM and disk against the floors, stack state, occupancy desk, bandwidth cap, quick actions |
+| `2` | Stack | Setup, onboard, doctor, start, stop, restart, update-stack, logs |
+| `3` | Lanes | The nine `workflows/_lab` lanes, their graphs, and the clone-to-`_user` hand-off |
+| `4` | Models | Every `download-*` tier menu, the bandwidth cap, HF cache hygiene |
+| `5` | Sidecars | LLM sidecar, agent model, Blender, and the four in-tree MCP servers |
+| `6` | Occupancy | Enter `klein`, `trellis`, `wan`, `ltx`, `blender-desk`, `llm-desk`, or return to `idle` |
+| `7` | Film | Shot printing, film gates, proxies, concat, animatic, stem mix, loudness |
+| `8` | Disk | Model cache bible, reap and disk-wizard plan/apply, stack state cleanup |
+| `9` | Audit | Every command this console ran, with argv and exit code |
+| `0` | Help | Keys and the safety contract |
+
+## Keys
+
+| Key | Action |
+| --- | --- |
+| `j` / `k`, `Up` / `Down` | Move the cursor |
+| `Enter` | Select, then confirm if the tier demands it |
+| `1` - `0` | Jump straight to a section |
+| `g` | Re-poll the machine |
+| `/` | Palette: fuzzy search across every action |
+| `a` | Operator log: what this session dispatched |
+| `x` | Toggle the detail pane for the selected row |
+| `d` | Report how dry run was set; it is fixed by `--dry-run` at launch |
+| `S` | Safe stop: arms it, then `y` runs the stop and `n` or `Esc` cancels |
+| `?` | Help |
+| `Esc` | Back one screen |
+| `q` | Quit |
+
+## Risk tiers
+
+Every action carries a tier. The tier decides what stands between the keystroke
+and the process.
+
+| Tier | Before it runs | Examples |
+| --- | --- | --- |
+| read | Nothing | `status`, `doctor`, `models-status`, lane browsing |
+| write | Nothing beyond the guard | `stop`, `take-promote`, `shot-sheet run` |
+| HEAVY | Type `yes` | `start`, `restart`, `update-stack`, any `download-*`, `setup`, `blender-install` |
+| DELETE | Type `DELETE` | `cleanup`, `reap-models --apply`, `disk-wizard --apply` |
+| REFUSED | Never offered as runnable | `download-h3` and its aliases, with the catalog reason shown |
+
+For a HEAVY or DELETE action the console shows the exact argv, asks you to retype
+the word, and then feeds that word to the child's stdin. The child's own prompt is
+what accepts it, so the confirmation cannot be skipped from the console side.
+
+## The guard layer
+
+An action runs only when the console can prove every precondition it declares.
+Anything it cannot read is treated as unsafe and greys the row out, with the
+reason as the note - the same fail-closed choice `comfy_queue_busy` and
+`host_free_mem_gib` already make in the shell layer.
+
+| Guard | Proves |
+| --- | --- |
+| `headroom_ok` | Free RAM is at or above 28 GiB and free disk at or above 40 GiB |
+| `queue_idle` | ComfyUI has no job in flight |
+| `occupancy_idle` | The occupancy desk reads `idle` |
+| `occupancy_parked` | Comfy is parked, so a sidecar may hold the GPU |
+| `stack_running` / `stack_stopped` | The stack is in the state the action needs |
+| `no_hf_download` | No weights download is mid-flight |
+| `no_llm_sidecar` | The host LLM sidecar is not holding the GPU |
+| `packs_ready` | The model pack the action needs is on disk |
+
+<Callout type="warning" title="Why the floors stay hard">
+  `start` on a Spark with 128 GiB of unified memory is the one action that can
+  make the box unusable. The console blocks it below the same floors
+  `bazelisk run //:manage -- doctor` reports, and it never overrides them. When a
+  floor reads `?` because the probe failed, the action stays blocked until the
+  probe works.
+</Callout>
+
+## One console at a time
+
+The CLI itself has no single-instance mutex, so two operators on the same host
+could race `.occupancy.json` and the traffic-shaping qdisc. The console takes an
+`flock` on `${COMFY_OUTPUT_DIR}/.studio-tui.lock` for its whole life and exits 3
+when another console holds it.
+
+## Browsing the lanes
+
+The Lanes section reads `workflows/_lab` and shows each graph's blurb, expected
+occupancy desk, and hand-off suggestions. Selecting a graph offers the clone into
+the live `_user` folder and the path to load it from in ComfyUI. Queueing stays in
+the ComfyUI canvas: one Queue is one heavy job, and the console keeps that hand-off
+where the operator can see the widgets. The promoted-graph rule is on
+[Workflows](../create/workflows-index.md).
+
+## Where to go next
+
+- [Daily operation](operate/daily.md) - the same verbs, typed
+- [Occupancy desk](occupancy.md) - what the desk modes mean
+- [Download tiers](download-tiers.md) - what each pack pulls
+- [Disk wizard](disk-wizard.md) - the reclaim the Disk section wraps
+- [Troubleshooting](troubleshooting.md) - symptoms and fixes
