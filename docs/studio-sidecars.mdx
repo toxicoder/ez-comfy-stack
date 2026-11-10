@@ -50,7 +50,7 @@ This page owns the full wording of the occupancy rule; the other pages link here
 The rule is **one heavy GPU job at a time** on the single GB10. There are exactly two verbs, and they are not interchangeable:
 
 - **park** - hand the GPU to a desk with `bazelisk run //:manage -- occupancy enter <desk>`. Comfy stays up and unloaded, so you can come straight back. Use it for the Blender Workbench dumps and the host 35B llama-server.
-- **stop** - take the stack down with `./scripts/manage.sh stop` (compose down). Use it before TRELLIS / LTX / Wan work, for SuperSplat, and for any NVENC encode.
+- **stop** - take the stack down with `bazelisk run //:manage -- stop` (compose down). Use it before TRELLIS / LTX / Wan work, for SuperSplat, and for any NVENC encode.
 
 ```mermaid
 flowchart TB
@@ -64,7 +64,7 @@ flowchart TB
 ```bash
 bazelisk run //:manage -- occupancy enter blender-desk   # park Comfy for a host GPU job
 bazelisk run //:manage -- occupancy idle                 # hand the GPU back to Comfy
-./scripts/manage.sh stop                            # compose down for splat / NVENC
+bazelisk run //:manage -- stop                           # compose down for splat / NVENC
 ```
 
 Never `pip install nvdiffrast` / `nvdiffrec`. Never vendor Inria 3DGS or Pixal3D as a default.
@@ -85,9 +85,9 @@ Never `pip install nvdiffrast` / `nvdiffrec`. Never vendor Inria 3DGS or Pixal3D
 Sidecars are host processes you install and run yourself. None of them is a `docker compose` service, none is cloned into the Comfy image, and none is built by `docker/Dockerfile`.
 
 ```bash
-./scripts/manage.sh blender-install              # once; never in Dockerfile
+bazelisk run //:manage -- blender-install              # once; never in Dockerfile
 bazelisk run //:manage -- occupancy enter blender-desk
-./scripts/manage.sh download-3d --tier trellis2   # or da3-base | all
+bazelisk run //:manage -- download-3d --tier trellis2  # or da3-base | all
 bazelisk run //:manage -- blender                      # Workbench; dies if Comfy is heavy
 bazelisk run //:manage -- export-guides --film go-see --shot 12   # same occupancy
 bazelisk run //:manage -- blender-stills --film go-see --plate mug --size 1024x1024
@@ -130,7 +130,7 @@ Page: [Vlo video editor](vlo.md). Chromium-based browser only (File System Acces
 - **The VACE join** (Wan 2.1 1.3B Apache, 17 frames = `1+8n`) is a Comfy graph, not a sidecar:
 
 ```bash
-./scripts/utilities/download-wan.sh run --tier vace
+bazelisk run //scripts:run-utility -- download-wan run --tier vace
 # load workflows/_lab/video/silent/vace-join - MagCache off
 ```
 

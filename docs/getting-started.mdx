@@ -113,14 +113,14 @@ cd ez-comfy-stack
 <Tabs groupId="interactive-non-interactive" items={["Interactive", "Non-interactive"]} persist>
   <Tab value="Interactive">
     ```bash
-    ./scripts/manage.sh setup --install-docker
+    bazelisk run //:manage -- setup --install-docker
     # approve sudo + type yes if prompted; edit .env for HF_TOKEN (step 4)
     ```
   </Tab>
   <Tab value="Non-interactive">
     ```bash
     LAB_NON_INTERACTIVE=1 LAB_CONFIRM_TOKEN=yes SETUP_INSTALL_DOCKER=1 \
-      ./scripts/manage.sh setup
+      bazelisk run //:manage -- setup
     ```
   </Tab>
 </Tabs>
@@ -229,7 +229,7 @@ Download the default pack only: Klein 4B + Wan 2.2 5B + LTX-2.5 + prompt-enhance
     Heartbeats showing `found N incomplete` and `0 MiB/s` mean `hf` is alive but the partial is not growing. **Do not** `HF_LOCK_CLEAR_FORCE=1` while it runs. ++ctrl+c++, then check **Delete stuck \*.incomplete** on the widget, or:
 
     ```bash
-    ./scripts/manage.sh download-models --drop-incomplete --limit 1000
+    bazelisk run //:manage -- download-models --drop-incomplete --limit 1000
     ```
 
     That deletes `*.incomplete` (finished weights stay) and re-pulls. See [Download packs](operate/models-packs.md#resume-cache).
@@ -327,7 +327,7 @@ Next: [Prompting](prompting.md), then the still -> Wan -> LTX loop on [The still
     <Tabs groupId="one-shot-env-persist-in-env" items={["One-shot env", "Persist in .env"]} persist>
       <Tab value="One-shot env">
     ```bash
-    LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start
+    LAB_STACK_FORCE_BUILD=1 bazelisk run //:manage -- start
     # type: yes
     ```
       </Tab>
@@ -336,7 +336,7 @@ Next: [Prompting](prompting.md), then the still -> Wan -> LTX loop on [The still
     # in .env (see .env.example)
     LAB_STACK_FORCE_BUILD=1
 
-    ./scripts/manage.sh start
+    bazelisk run //:manage -- start
     # type: yes
     ```
       </Tab>

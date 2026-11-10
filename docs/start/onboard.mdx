@@ -58,7 +58,7 @@ Safety impact: **none**.
 
 ```bash
 ssh ez-spark
-./scripts/manage.sh start    # type yes
+bazelisk run //:manage -- start    # type yes
 ```
 
 From a laptop, keep a tunnel open in its own terminal:

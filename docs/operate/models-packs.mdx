@@ -37,7 +37,7 @@ set. On every other downloader, `--tier` is **which pack**, not a global quality
 [Download tiers](../download-tiers.md).
 
 ```bash
-./scripts/manage.sh download-models
+bazelisk run //:manage -- download-models
 # Exits non-zero until every lab basename under MODELS_DIR/comfy is present
 # Klein TE + flux2-vae use file-level readiness so a TE-only
 # partial cannot cache-hit skip the VAE.
@@ -148,18 +148,18 @@ Apache Klein 4B stays the recommended still for anything you publish for money; 
 ComfyUI (`COMFYUI_REF=v0.43.0`) loads these graphs natively - Qwen-Image-2.1 support landed
 upstream in v0.37.0. License: [Model licenses](../licenses.md).
 
-Opt-in 35B writing desk (`./scripts/manage.sh download-llm --tier qwen36-35b-a3b`, **not**
+Opt-in 35B writing desk (`bazelisk run //:manage -- download-llm --tier qwen36-35b-a3b`, **not**
 `download-models`):
 
 | File | Comfy folder | Role |
 | --- | --- | --- |
 | `Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf` | `llm/` | Occupancy `llm-desk` host llama-server (~23 GB, Apache) |
 
-Opt-in music (`./scripts/manage.sh download-music --tier turbo`, **not** `download-models`).
+Opt-in music (`bazelisk run //:manage -- download-music --tier turbo`, **not** `download-models`).
 Turbo **reuses** the podcast acestep snapshot - do not pull the ~10 GB AIO twice:
 
 ```bash
-./scripts/manage.sh download-music --tier turbo
+bazelisk run //:manage -- download-music --tier turbo
 bazelisk run //scripts:run-utility -- download-music status --tier turbo --json
 ```
 
@@ -170,7 +170,7 @@ bazelisk run //scripts:run-utility -- download-music status --tier turbo --json
 | `qwen_0.6b_ace15.safetensors` / `qwen_1.7b_ace15.safetensors` | `text_encoders/` | Optional XL text encoders |
 | `ace_1.5_vae.safetensors` | `vae/` | Optional XL VAE |
 
-Opt-in podcast (`./scripts/manage.sh download-podcast`, **not** `download-models`):
+Opt-in podcast (`bazelisk run //:manage -- download-podcast`, **not** `download-models`):
 
 | File | Comfy folder | Role |
 | --- | --- | --- |
@@ -180,7 +180,7 @@ Opt-in podcast (`./scripts/manage.sh download-podcast`, **not** `download-models
 | `t3_turbo_v1.safetensors` | `tts/` | Optional Chatterbox Turbo |
 | `model.safetensors` + `config.json` + text tokenizer + `speech_tokenizer/` | snapshot dir (not flattened `comfy/tts`) | Optional Qwen3-TTS 0.6B Base. Nested 12Hz tokenizer must stay beside the talker weights |
 
-Opt-in dub (`./scripts/manage.sh download-dub`, **not** `download-models`):
+Opt-in dub (`bazelisk run //:manage -- download-dub`, **not** `download-models`):
 
 | File | Comfy folder | Role |
 | --- | --- | --- |
@@ -312,7 +312,7 @@ reports ready at or above the floor above.
     Operators who really want every precision/lora:
 
     ```bash
-    LTX_FULL_REPO=1 ./scripts/utilities/download-ltx.sh run --tier 2.3
+    LTX_FULL_REPO=1 bazelisk run //scripts:run-utility -- download-ltx run --tier 2.3
     ```
 
     After a full-repo mistake, use `cleanup --yes` instead of wiping all of `MODELS_DIR`.
@@ -355,9 +355,9 @@ pull that will not restart: [Downloads and bandwidth](../operate/troubleshooting
 | Volume pin | `COMFY_HOME/.lab-comfyui-ref` - stamp-present refresh reseeds from prebuilt (or git-clones `COMFYUI_REF`) when this lags the runtime pin. Compose passes `COMFYUI_REF` at **runtime**, not only as a build-arg |
 | Weights | Still under `MODELS_DIR` via `download-models` |
 | Publish | `publish-image` on `main` / `development` (docker/**); Buildx **registry** cache (`:buildcache-arm64`) |
-| Local build | Optional: `LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start` builds `docker/Dockerfile` instead of pulling - see [Getting Started](../getting-started.md#ghcr-pull-vs-local-build) |
+| Local build | Optional: `LAB_STACK_FORCE_BUILD=1 bazelisk run //:manage -- start` builds `docker/Dockerfile` instead of pulling - see [Getting Started](../getting-started.md#ghcr-pull-vs-local-build) |
 
-**Check it worked:** `./scripts/manage.sh start` pulls the tag for your branch and the
+**Check it worked:** `bazelisk run //:manage -- start` pulls the tag for your branch and the
 canvas serves at `http://${SPARK_HOST}:${COMFY_PORT}`.
 
 ### Image layer cache (high-velocity rebuilds + pulls)

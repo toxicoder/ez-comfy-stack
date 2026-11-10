@@ -37,7 +37,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 Source: `studio-ui/server.py`. Compose: `docker/docker-compose.yml` service `studio-ui`.
 
 <Callout type="warning" title="Default start skips this profile">
-  `./scripts/manage.sh start` (type **yes**) starts **comfyui** only. studio-ui is `profiles: ["studio-ui"]`. It does not weaken `restart: "no"`, headroom, or occupancy XOR. **No GPU.**
+  `bazelisk run //:manage -- start` (type **yes**) starts **comfyui** only. studio-ui is `profiles: ["studio-ui"]`. It does not weaken `restart: "no"`, headroom, or occupancy XOR. **No GPU.**
 </Callout>
 
 ---

@@ -72,7 +72,7 @@ turns away.
 | **`wan`** | **up** 90g/80g | Wan 5 s silent | - | Same XOR |
 | **`ltx`** | **up** 90g/80g | LTX 5 s AV | - | Same XOR |
 
-Heavy modes **do not start Compose**. If the container is down they error: `./scripts/manage.sh start` (type **yes**).
+Heavy modes **do not start Compose**. If the container is down they error: `bazelisk run //:manage -- start` (type **yes**).
 
 NVENC / `film-proxies` stay XOR with **compose-up** (`refuse_if_comfy_running`). Park is not enough.
 
@@ -95,7 +95,7 @@ flowchart TB
 Park keeps the container and frees the weights; `stop` takes the process down with them. Pick
 park for a Workbench pass, stop for anything that needs the GPU free outright.
 
-| | Park (`occupancy enter blender-desk`) | `./scripts/manage.sh stop` |
+| | Park (`occupancy enter blender-desk`) | `bazelisk run //:manage -- stop` |
 | --- | --- | --- |
 | **Container** | Stays **up** (or already down) | **Down** |
 | **Weights** | `POST /free` `{unload_models, free_memory}` when up | Unloaded with the process |

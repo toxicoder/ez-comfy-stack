@@ -61,7 +61,7 @@ farm, pick NFS over the fabric subnet or run `sync-models`: [Spark farm](../spar
 2. Let one host be the cache owner and run the pull there.
 
    ```bash
-   ./scripts/manage.sh download-models
+   bazelisk run //:manage -- download-models
    ```
 
    Every `hf` pull is throttled by the download-limit wrap, which **always clears on exit**.
@@ -134,7 +134,7 @@ logs `lab models: all expected files present`. `status --json` needs no network.
 | Symptom | Cause | Fix |
 | --- | --- | --- |
 | Comfy says a weight "exists but doesn't link anywhere" | Absolute `/mnt/models/...` file links, valid on the host only | Re-run `download-models` so it rewrites **relative** links, then restart Comfy |
-| `doctor` fails on `MODELS_DIR` | The shared mount is not writable by your user | `./scripts/manage.sh setup` sudo-heals the layout dirs; a root-owned nested `comfy/` is a warning |
+| `doctor` fails on `MODELS_DIR` | The shared mount is not writable by your user | `bazelisk run //:manage -- setup` sudo-heals the layout dirs; a root-owned nested `comfy/` is a warning |
 | The second stack re-downloads tens of GB | The two stacks point at different paths | Set the same `MODELS_DIR` in each `.env` and make one host the cache owner |
 | A shared tree gains a stray root-owned file | Someone ran the pull with `sudo` | Run pulls as the login user; `hf` also has to stay on that PATH |
 | Two writers race during a sync | `sync-models` ran against a tree that was also downloading | Pull on the owner, sync to the replicas |

@@ -24,7 +24,7 @@ tags: [blender, sidecar, occupancy, gb10]
   `blender.sh` **dies** if Compose is up and **not** parked. Park first:
 
   ```bash
-  ./scripts/manage.sh blender-install
+  bazelisk run //:manage -- blender-install
   bazelisk run //:manage -- occupancy enter blender-desk
   bazelisk run //:manage -- blender -- --background
   ```
@@ -36,7 +36,7 @@ tags: [blender, sidecar, occupancy, gb10]
 ## Operator path
 
 ```bash
-./scripts/manage.sh blender-install
+bazelisk run //:manage -- blender-install
 bazelisk run //:manage -- occupancy enter blender-desk
 bazelisk run //:manage -- blender -- --background
 # or: ./scripts/utilities/blender.sh -- /path/to/scene.blend
@@ -48,7 +48,7 @@ bazelisk run //:manage -- blender-stills --film go-see --plate mug --blend /path
 `occupancy enter blender-desk` parks Comfy. It does **not** install Blender. If no host binary is found (`PATH`, `BLENDER_BIN`, or `~/.local/bin/blender`), dumps print an install hint and exit 1:
 
 ```bash
-./scripts/manage.sh blender-install
+bazelisk run //:manage -- blender-install
 # or: sudo apt-get install -y blender
 ```
 

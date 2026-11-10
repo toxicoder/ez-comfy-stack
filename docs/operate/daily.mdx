@@ -44,7 +44,7 @@ confirm on `start`, the headroom preflight, or download-limit **clear-on-exit**.
    **Check it worked:** it prints `Doctor OK`. Missing weights are a warning, not a fail.
    Fail: [Host and Docker](troubleshooting-host-docker.md).
 
-2. `./scripts/manage.sh start` - type **yes**
+2. `bazelisk run //:manage -- start` - type **yes**
 
    **Check it worked:** `bazelisk run //:manage -- status` shows the project up. A headroom refuse
    is a hard fail by design.
@@ -59,7 +59,7 @@ confirm on `start`, the headroom preflight, or download-limit **clear-on-exit**.
 
    **Check it worked:** `bazelisk run //:manage -- occupancy status` names the mode you entered.
 
-5. `./scripts/manage.sh stop` before any reboot -
+5. `bazelisk run //:manage -- stop` before any reboot -
    [Reboot safety](../reboot-safety.md).
 
    **Check it worked:** `bazelisk run //:manage -- status` shows Comfy is not running.

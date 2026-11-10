@@ -77,7 +77,7 @@ bazelisk run //scripts:run-utility -- download-ltx status --tier 2.5 --json
 ```
 
 **Check it worked:** the pack reports ready once the LTX-2.5 files are under `${MODELS_DIR}`.
-`./scripts/manage.sh download-models` exits non-zero until every lab basename is present.
+`bazelisk run //:manage -- download-models` exits non-zero until every lab basename is present.
 
 ---
 

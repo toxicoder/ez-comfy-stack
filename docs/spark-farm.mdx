@@ -101,11 +101,11 @@ Placeholders below match `config/spark-farm.example.env`. Do **not** commit real
    ```bash
    git clone -b __DOCS_GIT_REF__ https://github.com/toxicoder/ez-comfy-stack.git
    cd ez-comfy-stack
-   ./scripts/manage.sh setup
+   bazelisk run //:manage -- setup
    # set MODELS_DIR and HF_TOKEN in .env (same MODELS_DIR on every node)
    bazelisk run //:manage -- doctor
-   ./scripts/manage.sh download-models      # cache owner, or after NFS is up
-   ./scripts/manage.sh start                # type yes
+   bazelisk run //:manage -- download-models      # cache owner, or after NFS is up
+   bazelisk run //:manage -- start                # type yes
    ```
 
 6. **Probe** (does not start compose):
@@ -173,10 +173,10 @@ bazelisk run //scripts:run-utility -- spark-farm run --film go-see
 bazelisk run //scripts:run-utility -- spark-farm dispatch --film go-see
 ```
 
-Start compose yourself on each node (`./scripts/manage.sh start`, type yes). Then dispatch.
+Start compose yourself on each node (`bazelisk run //:manage -- start`, type yes). Then dispatch.
 
 `spark-farm.sh` **never** starts compose remotely. It prints the exact
-`./scripts/manage.sh start` you must run locally (heavy confirm stays on that node).
+`bazelisk run //:manage -- start` you must run locally (heavy confirm stays on that node).
 Containers still use `restart: "no"`.
 
 The `run` subcommand prints a Queue reminder (**video/silent/still-to-shot**, then

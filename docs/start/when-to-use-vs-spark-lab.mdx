@@ -70,7 +70,7 @@ flowchart TB
 
 ## Independent Sparks, still no NCCL
 
-Three boxes can Queue **independent** 5 s Wan/LTX shots against the same `${MODELS_DIR}` (NFS over the 200 GbE fabric, or `spark-farm.sh sync-models` rsync). Each node types **yes** on its own `./scripts/manage.sh start`. `spark-farm.sh` **never** remote-starts Compose.
+Three boxes can Queue **independent** 5 s Wan/LTX shots against the same `${MODELS_DIR}` (NFS over the 200 GbE fabric, or `bazelisk run //scripts:run-utility -- spark-farm sync-models` rsync). Each node types **yes** on its own `bazelisk run //:manage -- start`. `spark-farm.sh` **never** remote-starts Compose.
 
 That is **throughput + one weight copy**, not slicing one sampler across three GB10s. MiniMax H3 is banned ([licenses](../licenses.md)). Runbook: [Spark farm](../spark-farm.md). Occupancy stays per node: [Occupancy desk](../occupancy.md).
 

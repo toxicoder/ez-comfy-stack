@@ -61,7 +61,7 @@ Default on one GB10 is **Path D**: block and MCP on the laptop, rsync `guides/` 
 
 ```bash
 rsync -a guides/go-see/12/ spark-0:/mnt/comfy-output/guides/go-see/12/
-./scripts/manage.sh start
+bazelisk run //:manage -- start
 ```
 
 ---
@@ -149,7 +149,7 @@ Playbook, layout seed, and the language-only door: [Dream-house tours](learn/dre
 Print modes `wan-vace`, `wan-denk-cn`, and `dcc-final` stay valid on `shot.yaml` but are **not** lab printers in this suite (VACE stays 17-frame join; Fun Control / Path A beauty are later).
 
 ```bash
-./scripts/manage.sh download-ltx --tier iclora   # not download-models
+bazelisk run //:manage -- download-ltx --tier iclora   # not download-models
 ```
 
 Official 2.5 Union Control distilled widgets `ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors` onto the **distilled** transformer. Distilled-only. **Refuse 19B Union.** MagCache off.

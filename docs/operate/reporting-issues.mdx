@@ -158,7 +158,7 @@ button opens this same dialog: direct submit with a token, prefilled handoff wit
 ```bash
 # Optional: file from inside ComfyUI instead of opening a tab.
 printf '%s\n' 'EZ_GITHUB_TOKEN=github_pat_...' >> .env
-./scripts/manage.sh stop && ./scripts/manage.sh start
+bazelisk run //:manage -- stop && bazelisk run //:manage -- start
 ```
 
 Read the token back out before you start: it is passed to the container at runtime only,

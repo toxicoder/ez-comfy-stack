@@ -144,14 +144,14 @@ Hosts are **original characters**, not recordings of real people. Operator-owned
 
 ## Download
 
-Podcast weights are **opt-in**. `./scripts/manage.sh download-models` does **not** pull them. `doctor` prints analog JSON and still exits 0 when the pack is absent.
+Podcast weights are **opt-in**. `bazelisk run //:manage -- download-models` does **not** pull them. `doctor` prints analog JSON and still exits 0 when the pack is absent.
 
 ```bash
-./scripts/manage.sh download-podcast --tier analog      # Kokoro ONNX + voices
-./scripts/manage.sh download-podcast --tier acestep     # ace_step_1.5_turbo_aio.safetensors
-# same AIO dest as: ./scripts/manage.sh download-music --tier turbo
-./scripts/manage.sh download-podcast --tier qwen3tts    # complete 0.6B Base + nested 12Hz tokenizer (~3 GB)
-./scripts/manage.sh download-podcast --tier all         # analog + ACE + optional TTS
+bazelisk run //:manage -- download-podcast --tier analog     # Kokoro ONNX + voices
+bazelisk run //:manage -- download-podcast --tier acestep    # ace_step_1.5_turbo_aio.safetensors
+# same AIO dest as: bazelisk run //:manage -- download-music --tier turbo
+bazelisk run //:manage -- download-podcast --tier qwen3tts   # complete 0.6B Base + nested 12Hz tokenizer (~3 GB)
+bazelisk run //:manage -- download-podcast --tier all        # analog + ACE + optional TTS
 # same --limit auto|N|off wrap as download-models (always clears on exit)
 # qwen3tts with compose up: extras then pip install --no-deps qwen-tts
 # (never unconstrained pip install qwen-tts - it pins transformers==4.57.3)
@@ -194,7 +194,7 @@ sequenceDiagram
 
 1. `download-podcast --tier analog` (and `--tier acestep` for beds)
 2. Optional: `pip install kokoro-onnx onnxruntime` in the Comfy venv (runtime; see [Troubleshooting - models and workflows](operate/troubleshooting-models-workflows.md))
-3. `./scripts/manage.sh start` - type **yes**
+3. `bazelisk run //:manage -- start` - type **yes**
 4. Load **audio/podcast/two-host-episode** (authored script) or **audio/podcast/learn-episode** (paste sources, pick Format + Duration). Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_podcast_ep_*.flac` / `ez_learn_ep_*.flac` (plus the matching `*_mix_*.mp3`)
 5. Load **photos/podcast-cover** in a **later** session. Queue `ez_podcast_*.png`
 6. Loudness (ffmpeg; Comfy cannot LUFS):

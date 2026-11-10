@@ -42,8 +42,8 @@ Because `doctor` treats missing weights as a **warning**, not a hard fail. Missi
 
 ```bash
 bazelisk run //:manage -- doctor
-./scripts/manage.sh download-models
-./scripts/manage.sh start   # type: yes
+bazelisk run //:manage -- download-models
+bazelisk run //:manage -- start   # type: yes
 ```
 
 `--limit` follows `${DOWNLOAD_LIMIT}` (default `auto` = 85% of a duration HTTP / speedtest sample, cached 24h on the host, when HTB works). Wrap **always clears on exit**.
@@ -71,7 +71,7 @@ Park when the host tool needs the GPU and you want Compose to stay up. Stop when
 | --- | --- | --- | --- |
 | **`occupancy enter blender-desk`** (park) | **Up** (or already down) | `POST /free` unload when up | Host Workbench dumps without typing **yes** on a full start cycle |
 | **`occupancy enter llm-desk --yes`** | Up or down | Unload when up | Host 35B sidecar **is** the GPU job |
-| **`./scripts/manage.sh stop`** | **Down** | Gone with the container | NVENC, SuperSplat, wedged UI, reboot |
+| **`bazelisk run //:manage -- stop`** | **Down** | Gone with the container | NVENC, SuperSplat, wedged UI, reboot |
 
 Parked Comfy is **not** a second denoise. NVENC still dies if Compose is **up**. Matrix: [Occupancy matrix](../operate/occupancy-matrix.md). Desk: [Occupancy desk](../occupancy.md).
 

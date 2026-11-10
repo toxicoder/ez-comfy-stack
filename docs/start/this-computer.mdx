@@ -32,7 +32,7 @@ Run this page first when you drive the Spark over SSH. Once the Spark is set up,
 | --- | --- |
 | **SSH** | `ssh ez-spark` works |
 | **Forward** | `LocalForward ${COMFY_PORT} 127.0.0.1:${COMFY_PORT}` in `~/.ssh/config` |
-| **Next** | On the Spark, `./scripts/manage.sh start` (type **yes**), then open `http://127.0.0.1:${COMFY_PORT}` |
+| **Next** | On the Spark, `bazelisk run //:manage -- start` (type **yes**), then open `http://127.0.0.1:${COMFY_PORT}` |
 
 Fill the Spark IP, user, and port in the **Your Spark** panel at the top of any docs page, or export them in your shell:
 

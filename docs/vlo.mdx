@@ -23,7 +23,7 @@ tags: [vlo, video-editor, sidecar, browser, agpl, occupancy]
 - **An in-browser alternative** to the Kdenlive / Shotcut OTIO file handoff
 - **Every generation as a normal Queue** you can watch in the Comfy tab or in `manage.sh logs`
 
-**Question this page answers:** how do I cut a timeline on the Spark without a second ComfyUI? Start the studio with `./scripts/manage.sh start`, run the editor on the host, and point it at `${COMFY_PORT}`. For a file handoff instead of a live bridge, export OTIO into Kdenlive / Shotcut: [Host sidecars overview](studio-sidecars.md).
+**Question this page answers:** how do I cut a timeline on the Spark without a second ComfyUI? Start the studio with `bazelisk run //:manage -- start`, run the editor on the host, and point it at `${COMFY_PORT}`. For a file handoff instead of a live bridge, export OTIO into Kdenlive / Shotcut: [Host sidecars overview](studio-sidecars.md).
 
 <Callout type="warning" title="Host app, not a service">
   Vlo (`PxTicks/vlo`, **AGPL-3.0**) is a host-side app you install and run yourself. It is **not** a Compose service, **not** a ComfyUI custom node, **not** cloned into the Comfy image, and **not** a `manage.sh` verb. It brings its own Node.js + Python backend on the host, keeps projects on the host disk, and edits in a Chromium-based browser. Every generation is a normal ComfyUI Queue on the Spark.
@@ -34,8 +34,8 @@ tags: [vlo, video-editor, sidecar, browser, agpl, occupancy]
 ## Operator path
 
 ```bash
-./scripts/manage.sh start     # type yes; ComfyUI on ${COMFY_PORT}
-cd vlo && ./run.sh            # editor on http://127.0.0.1:6332
+bazelisk run //:manage -- start   # type yes; ComfyUI on ${COMFY_PORT}
+cd vlo && ./run.sh                # editor on http://127.0.0.1:6332
 # then: App settings -> Runtime settings -> http://127.0.0.1:${COMFY_PORT}
 ```
 
@@ -45,7 +45,7 @@ Edit on the timeline. Every generation lands as a Queue in ComfyUI at `${COMFY_P
 
 - A **Chromium-based browser** (Chrome, Edge; Opera may work). Firefox and Safari are not supported: the editor needs the File System Access API and WebCodecs, and its media renderer wraps mediabunny
 - `git` on the host. That is the only prerequisite - the installer fetches Node.js, Python, and uv when they are missing
-- ComfyUI from this stack, already up: `./scripts/manage.sh start`
+- ComfyUI from this stack, already up: `bazelisk run //:manage -- start`
 
 ### Install (host)
 
@@ -86,13 +86,13 @@ First launch asks how to use ComfyUI: **Install ComfyUI**, **Choose ComfyUI fold
 ## What this stack owns
 
 <Callout type="error" title="Do not launch ComfyUI from Vlo">
-  Start ComfyUI with `./scripts/manage.sh start`. Do **not** use Vlo's **Launch ComfyUI** button - it is for a folder install Vlo created itself. A second ComfyUI on the Spark means two heavy GPU jobs and a headroom refuse. [Occupancy desk](occupancy.md). The rule and the two verbs, park and stop: [Host sidecars overview](studio-sidecars.md#occupancy-rule).
+  Start ComfyUI with `bazelisk run //:manage -- start`. Do **not** use Vlo's **Launch ComfyUI** button - it is for a folder install Vlo created itself. A second ComfyUI on the Spark means two heavy GPU jobs and a headroom refuse. [Occupancy desk](occupancy.md). The rule and the two verbs, park and stop: [Host sidecars overview](studio-sidecars.md#occupancy-rule).
 </Callout>
 
 | Vlo feature | Use it here? | Why |
 | --- | --- | --- |
-| **Launch ComfyUI** | **No** | `./scripts/manage.sh start` owns the container lifecycle (`restart: "no"`, heavy confirm, headroom preflight) |
-| Vlo model downloads | **No** | Weights stay on `./scripts/manage.sh download-models`. That feature assumes a local `COMFYUI_INSTALL_DIR` folder plus a local ComfyUI URL, which the containerized stack does not expose |
+| **Launch ComfyUI** | **No** | `bazelisk run //:manage -- start` owns the container lifecycle (`restart: "no"`, heavy confirm, headroom preflight) |
+| Vlo model downloads | **No** | Weights stay on `bazelisk run //:manage -- download-models`. That feature assumes a local `COMFYUI_INSTALL_DIR` folder plus a local ComfyUI URL, which the containerized stack does not expose |
 | Timeline, edit, export | **Yes** | Host CPU + browser (WebCodecs). Stop Comfy first if the encode will use the GPU |
 | ComfyUI bridge (Queue) | **Yes** | The whole point: heavy AI compute stays server-side on the Spark |
 

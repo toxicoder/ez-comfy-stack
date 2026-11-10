@@ -38,7 +38,7 @@ The container comes down. `${MODELS_DIR}`, `${COMFY_OUTPUT_DIR}`, and the `ez-co
 volume stay.
 
 ```bash
-./scripts/manage.sh stop
+bazelisk run //:manage -- stop
 ```
 
 **Check it worked:** `bazelisk run //:manage -- status` shows Comfy is not running.
@@ -74,7 +74,7 @@ aside, or stay on them and do not expect these docs to match.
 this checkout. Type **yes**. A headroom refuse is a hard fail.
 
 ```bash
-./scripts/manage.sh start
+bazelisk run //:manage -- start
 ```
 
 ```bash

@@ -150,7 +150,7 @@ delete `COMFY_OUTPUT_DIR`. `status` prints the path.
 
 If the canvas says **Missing Models**, the JSON is fine and the **weights** are not on
 `MODELS_DIR` (or the `comfy/` symlink is broken). Re-run
-`./scripts/manage.sh download-models`, then `doctor`. Do not rewrite the graph to "fix" a
+`bazelisk run //:manage -- download-models`, then `doctor`. Do not rewrite the graph to "fix" a
 missing file.
 
 Prompt Enhance missing? Restart so `custom_nodes/ez_prompt_enhance` is copied. Enhance is
@@ -161,7 +161,7 @@ this pack load fix - Comfy 0.34 does not import sibling packs by folder name.
 
 Errors tab **Missing Node Packs** / **Unknown pack** for `EZImageDescribe` or `EZImageUpscale`
 is the same copy-on-start gap (those classes live in `ez_prompt_enhance` and `ez_image`). Do
-not Manager-install an unknown pack. `./scripts/manage.sh stop` then `start` (type **yes**),
+not Manager-install an unknown pack. `bazelisk run //:manage -- stop` then `start` (type **yes**),
 then hard-refresh. Details:
 [Troubleshooting - models and workflows](../operate/troubleshooting-models-workflows.md).
 

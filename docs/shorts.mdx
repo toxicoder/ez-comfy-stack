@@ -121,7 +121,7 @@ Shot-level resume lives under `${COMFY_OUTPUT_DIR}/films/<slug>/` (`state.json`,
 ```bash
 bazelisk run //scripts:run-utility -- compile-film go-see
 bazelisk run //:manage -- print-shot go-see 12
-./scripts/manage.sh start && ./scripts/manage.sh film-resume go-see
+bazelisk run //:manage -- start && bazelisk run //:manage -- film-resume go-see
 # film-resume skips ok shots whose duration is 5.00 +/- 0.05 s and reprints
 # crashed `running` rows (no MP4) only.
 ```
@@ -142,7 +142,7 @@ bazelisk run //scripts:run-utility -- concat-shots --film "${FILM}" --xfade 10 -
 # OTIO handshake for Kdenlive/Shotcut (host, no GPU; apt notes in studio-sidecars.md):
 bazelisk run //:manage -- film-export-otio go-see
 # NVENC proxies 960x528 ~2 Mbps (Comfy must be stopped):
-./scripts/manage.sh stop
+bazelisk run //:manage -- stop
 bazelisk run //:manage -- film-proxies go-see --yes
 # Promote take 3 of shot 12 into the jobstore master:
 bazelisk run //:manage -- take-promote go-see 12 3
@@ -300,27 +300,27 @@ docker compose --profile studio-ui up studio-ui
 LTX Director is a **GPL** clone into the Comfy volume, not this MIT tree:
 
 ```bash
-LAB_ENABLE_LTX_DIRECTOR=1 ./scripts/manage.sh start
+LAB_ENABLE_LTX_DIRECTOR=1 bazelisk run //:manage -- start
 ```
 
 Refuse MiniMax H3 Director. The timeline editor is host-side **Vlo** - a browser app on its own host backend, no ComfyUI node embedded ([Vlo video editor](vlo.md)). Not Next.js+Postgres.
 
 Official LTX-2.5 quality/control graphs (two-stage DFR, A2V freeze, IC-LoRA) live in Comfy **Templates -> LTX-2.5**. Repo note: `workflows/quality/ltx-2.5/NOTICE.md`. Lab printers stay 5.00 s. Depth-guided hybrid (clay dump -> Klein look -> Union Control): [DCC guide pack](dcc-workflows.md). Opt-in `download-ltx --tier iclora` (not `download-models`).
 
-Optional silent **first-last-frame** draft: `video/silent/first-last-5s` after `./scripts/utilities/download-wan.sh run --tier fun-inp` (~47 GB, Apache). Unload LTX first. MagCache is **draft-only** on `video/silent/still-to-video-5s` (`extra.lab_magcache`; never on LTX heroes).
+Optional silent **first-last-frame** draft: `video/silent/first-last-5s` after `bazelisk run //scripts:run-utility -- download-wan run --tier fun-inp` (~47 GB, Apache). Unload LTX first. MagCache is **draft-only** on `video/silent/still-to-video-5s` (`extra.lab_magcache`; never on LTX heroes).
 
 Post-concat restore (opt-in Apache SeedVR2-3B):
 
 ```bash
-./scripts/manage.sh stop
-./scripts/manage.sh download-restore --tier seedvr2-3b
+bazelisk run //:manage -- stop
+bazelisk run //:manage -- download-restore --tier seedvr2-3b
 # Conservative 1.3-1.5x on the stitched master only. Not download-models.
 ```
 
 Optional 17-frame VACE join (`1+8n`, MagCache **off**). Unload LTX first:
 
 ```bash
-./scripts/utilities/download-wan.sh run --tier vace
+bazelisk run //scripts:run-utility -- download-wan run --tier vace
 # load video/silent/vace-join (Shot A last -> Shot B first)
 ```
 
@@ -329,25 +329,25 @@ Host 3D sidecars (Comfy **must be stopped**): [Host sidecars overview](studio-si
 Wave 4 hero path (opt-in, occupancy: one heavy job):
 
 ```bash
-./scripts/utilities/download-wan.sh run --tier a14b   # A14B FP8 8-step silent hero; MagCache off
+bazelisk run //scripts:run-utility -- download-wan run --tier a14b   # A14B FP8 8-step silent hero; MagCache off
 # load labs/opt-in/still-to-video-a14b - unload 5B first
-./scripts/manage.sh download-longcat --tier video     # MIT; no NCCL
+bazelisk run //:manage -- download-longcat --tier video              # MIT; no NCCL
 # load workflows/_lab/labs/opt-in/longcat-video.json (note, not 90s default)
-./scripts/manage.sh download-dreamx --tier creator    # Apache joint AV; not DreamX-World
+bazelisk run //:manage -- download-dreamx --tier creator             # Apache joint AV; not DreamX-World
 ```
 
 Identity sheet: `photos/identity-sheet` (seed **42**, Enhance **on**, identity mode, 1280x704). Talking-head: `video/av/talking-head` (I2V smoke) or **`video/av/audio-to-video-8s`** (LoadAudio freeze; S2V opt-in `--tier s2v`). DFR two-stage stays in Comfy **Templates -> LTX-2.5**; YAML `print: dfr` selects that path. Lab printers stay 5.00 s. Showcase AV: [Motion graphs](create/workflows-motion.md#showcase-ltx-25).
 
 ```bash
-./scripts/manage.sh stop
-./scripts/manage.sh download-3d --tier trellis2   # or da3-base | all
+bazelisk run //:manage -- stop
+bazelisk run //:manage -- download-3d --tier trellis2   # or da3-base | all
 bazelisk run //:manage -- blender                       # host binary; never in Dockerfile
 ```
 
 NVENC preview encode (Comfy **must be stopped** - encoder contention on GB10):
 
 ```bash
-./scripts/manage.sh stop
+bazelisk run //:manage -- stop
 bazelisk run //scripts:run-utility -- nvenc-preview --in "${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4" \
   --out "${COMFY_OUTPUT_DIR}/ez_gosee_90s_preview.mp4" --yes
 ```

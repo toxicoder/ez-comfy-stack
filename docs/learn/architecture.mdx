@@ -53,7 +53,7 @@ Source of truth: `docker/docker-compose.yml` (operator entry: `bazelisk run //:m
 | **comfyui** (`ez-comfy-studio`) | default | `gpus: all` | `mem_limit` **90g**, `mem_reservation` **80g**, `shm_size` 16gb, `cpus: 16.0` | `"no"` | `${COMFY_PORT}` -> 8188 |
 | **studio-ui** (`ez-comfy-studio-ui`) | `studio-ui` | **none** | `mem_limit` 512m | `"no"` | `${STUDIO_UI_PORT:-8190}` -> 8190 |
 
-Default `./scripts/manage.sh start` starts **comfyui only**. The jobstore board is opt-in:
+Default `bazelisk run //:manage -- start` starts **comfyui only**. The jobstore board is opt-in:
 [studio-ui](../reference/studio-ui.md).
 
 ```mermaid

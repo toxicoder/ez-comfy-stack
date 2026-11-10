@@ -62,15 +62,15 @@ export COMFY_PORT="${COMFY_PORT:-8188}"
 # first boot, once per machine: bazelisk + the lint toolchain the gates shell out to
 bash scripts/setup-host.sh
 
-# laptop (macOS/Linux/WSL): ./scripts/manage.sh setup-client
-# one-shot from the laptop (never auto-starts): ./scripts/manage.sh onboard
-./scripts/manage.sh setup --install-docker
+# laptop (macOS/Linux/WSL): bazelisk run //:manage -- setup-client
+# one-shot from the laptop (never auto-starts): bazelisk run //:manage -- onboard
+bazelisk run //:manage -- setup --install-docker
 bazelisk run //:manage -- doctor
-./scripts/manage.sh download-models   # Klein 4B + Wan 2.2 5B + LTX-2.5
-./scripts/manage.sh start             # type yes
+bazelisk run //:manage -- download-models   # Klein 4B + Wan 2.2 5B + LTX-2.5
+bazelisk run //:manage -- start             # type yes
 # open http://${SPARK_HOST}:${COMFY_PORT}
 # laptop: ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
-./scripts/manage.sh stop              # before reboot
+bazelisk run //:manage -- stop              # before reboot
 ```
 
 Non-host verbs lead with the same ingress as everything else, `bazelisk run //:manage -- <verb>`.

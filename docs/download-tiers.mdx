@@ -31,7 +31,7 @@ pin: [Model packs by family](operate/models-packs.md). Throttle:
 [Download limit](download-limit.md). Gated packs need a token **and** a license click:
 [Hugging Face tokens](operate/models-tokens.md).
 
-`./scripts/manage.sh download-podcast`, `download-dub`, `download-music`, and `download-llm`
+`bazelisk run //:manage -- download-podcast`, `download-dub`, `download-music`, and `download-llm`
 already run the pull. 3D, LongCat, DreamX, and SeedVR2 forward to a utility that defaults to
 a status check, so those commands include the word `run`.
 
@@ -72,7 +72,7 @@ anything you publish for money. Read [Model licenses](licenses.md).
 
 | Pack | What you get | ~size on disk | Command |
 | --- | --- | --- | --- |
-| Default studio | Klein 4B + Wan 2.2 5B + LTX-2.5 + prompt-enhance GGUF. Not podcast, dub, music, 3D, LongCat, DreamX, or SeedVR2 | ~50 GB | `./scripts/manage.sh download-models` |
+| Default studio | Klein 4B + Wan 2.2 5B + LTX-2.5 + prompt-enhance GGUF. Not podcast, dub, music, 3D, LongCat, DreamX, or SeedVR2 | ~50 GB | `bazelisk run //:manage -- download-models` |
 | `fast` | Klein 4B distilled FP8 still, plus the Qwen text encoder and flux2 VAE. Already in the default pack | 3-4 GB + companions | `bazelisk run //scripts:run-utility -- download-image run --tier fast` |
 | `nvfp4` | Optional Klein 4B NVFP4, plus companions | ~2 GB + companions | `bazelisk run //scripts:run-utility -- download-image run --tier nvfp4` |
 | `base` | Optional Klein 4B base FP8, plus companions | ~3 GB + companions | `bazelisk run //scripts:run-utility -- download-image run --tier base` |
@@ -108,29 +108,29 @@ anything you publish for money. Read [Model licenses](licenses.md).
 | `gemma` | Gemma 3 DualCLIP companion for LTX 2.3. Lab 2.5 uses Gemma 4 instead | ~8-9.5 GB | `bazelisk run //scripts:run-utility -- download-ltx run --tier gemma` |
 | `iclora` | LTX Union Control LoRA. Not in LTX `--tier all` | ~1 GB | `bazelisk run //scripts:run-utility -- download-ltx run --tier iclora` |
 | LTX `all` | `2.5` + `2.3` + `gemma`. Does not include `iclora` | sum of those three | `bazelisk run //scripts:run-utility -- download-ltx run --tier all` |
-| `analog` | Podcast Kokoro-82M ONNX and voices. Not in `download-models` | tiny | `./scripts/manage.sh download-podcast --tier analog` |
-| `acestep` | ACE-Step 1.5 turbo AIO for podcast beds. Same file as music `turbo` | ~10 GB | `./scripts/manage.sh download-podcast --tier acestep` |
-| `chatterbox` | Optional Chatterbox Turbo TTS for podcast | small | `./scripts/manage.sh download-podcast --tier chatterbox` |
-| `qwen3tts` | Optional Qwen3-TTS 0.6B Base snapshot | ~3 GB | `./scripts/manage.sh download-podcast --tier qwen3tts` |
-| podcast `all` | `analog` + `acestep` + `chatterbox` + `qwen3tts` | sum | `./scripts/manage.sh download-podcast --tier all` |
-| `asr` | Dub Silero VAD + faster-whisper large-v3 | ~3 GB | `./scripts/manage.sh download-dub --tier asr` |
-| `clone` | Chatterbox Multilingual V3 plus pkuseg. Stack should be up so wheels install | ~4 GB | `./scripts/manage.sh download-dub --tier clone` |
-| dub `all` | `asr` + `clone` | sum | `./scripts/manage.sh download-dub --tier all` |
-| `turbo` | ACE-Step 1.5 turbo AIO for rap. Same file as podcast `acestep`. Do not pull it twice | ~10 GB | `./scripts/manage.sh download-music --tier turbo` |
-| `xl` | Optional ACE-Step XL split weights. Not the default rap bed | larger split files | `./scripts/manage.sh download-music --tier xl` |
-| music `all` | `turbo` + `xl` | sum | `./scripts/manage.sh download-music --tier all` |
-| `trellis2` | Comfy-Org TRELLIS.2 INT8 + DINOv3. No nvdiffrast. `occupancy enter trellis` first | ~12 GB | `./scripts/manage.sh download-3d run --tier trellis2` |
-| `da3-base` | DA3-BASE Apache depth. DA3-LARGE is refused | ~1 GB | `./scripts/manage.sh download-3d run --tier da3-base` |
-| 3D `all` | `trellis2` + `da3-base` | sum | `./scripts/manage.sh download-3d run --tier all` |
-| `video` | LongCat-Video (MIT). No NCCL in this stack | opt-in | `./scripts/manage.sh download-longcat run --tier video` |
-| `avatar` | LongCat-Video-Avatar. No NCCL | opt-in | `./scripts/manage.sh download-longcat run --tier avatar` |
-| LongCat `all` | `video` + `avatar` | opt-in | `./scripts/manage.sh download-longcat run --tier all` |
-| `creator` | DreamX-Creator selective payload. Not DreamX-World. Unload LTX first. The full hub repo is ~54 GB - this command does not pull that | ~8 GB selective | `./scripts/manage.sh download-dreamx run --tier creator` |
-| `seedvr2-3b` | SeedVR2-3B still polish or post-concat restore. Stop Comfy first if it runs on GPU | ~15 GB | `./scripts/manage.sh download-restore run --tier seedvr2-3b` |
-| `enhance` | Qwen3-4B prompt-enhance GGUF. Already in `download-models` | ~3 GB | `./scripts/manage.sh download-llm --tier enhance` |
-| `qwen36-35b-a3b` | Occupancy `llm-desk` GGUF. Not part of `download-models` | ~23 GB | `./scripts/manage.sh download-llm --tier qwen36-35b-a3b` |
-| `describe` | Qwen2.5-VL-3B caption GGUF + mmproj for Describe image | ~4 GB | `./scripts/manage.sh download-llm --tier describe` |
-| LLM `all` | `enhance` + `qwen36-35b-a3b` + `describe` | sum | `./scripts/manage.sh download-llm --tier all` |
+| `analog` | Podcast Kokoro-82M ONNX and voices. Not in `download-models` | tiny | `bazelisk run //:manage -- download-podcast --tier analog` |
+| `acestep` | ACE-Step 1.5 turbo AIO for podcast beds. Same file as music `turbo` | ~10 GB | `bazelisk run //:manage -- download-podcast --tier acestep` |
+| `chatterbox` | Optional Chatterbox Turbo TTS for podcast | small | `bazelisk run //:manage -- download-podcast --tier chatterbox` |
+| `qwen3tts` | Optional Qwen3-TTS 0.6B Base snapshot | ~3 GB | `bazelisk run //:manage -- download-podcast --tier qwen3tts` |
+| podcast `all` | `analog` + `acestep` + `chatterbox` + `qwen3tts` | sum | `bazelisk run //:manage -- download-podcast --tier all` |
+| `asr` | Dub Silero VAD + faster-whisper large-v3 | ~3 GB | `bazelisk run //:manage -- download-dub --tier asr` |
+| `clone` | Chatterbox Multilingual V3 plus pkuseg. Stack should be up so wheels install | ~4 GB | `bazelisk run //:manage -- download-dub --tier clone` |
+| dub `all` | `asr` + `clone` | sum | `bazelisk run //:manage -- download-dub --tier all` |
+| `turbo` | ACE-Step 1.5 turbo AIO for rap. Same file as podcast `acestep`. Do not pull it twice | ~10 GB | `bazelisk run //:manage -- download-music --tier turbo` |
+| `xl` | Optional ACE-Step XL split weights. Not the default rap bed | larger split files | `bazelisk run //:manage -- download-music --tier xl` |
+| music `all` | `turbo` + `xl` | sum | `bazelisk run //:manage -- download-music --tier all` |
+| `trellis2` | Comfy-Org TRELLIS.2 INT8 + DINOv3. No nvdiffrast. `occupancy enter trellis` first | ~12 GB | `bazelisk run //:manage -- download-3d run --tier trellis2` |
+| `da3-base` | DA3-BASE Apache depth. DA3-LARGE is refused | ~1 GB | `bazelisk run //:manage -- download-3d run --tier da3-base` |
+| 3D `all` | `trellis2` + `da3-base` | sum | `bazelisk run //:manage -- download-3d run --tier all` |
+| `video` | LongCat-Video (MIT). No NCCL in this stack | opt-in | `bazelisk run //:manage -- download-longcat run --tier video` |
+| `avatar` | LongCat-Video-Avatar. No NCCL | opt-in | `bazelisk run //:manage -- download-longcat run --tier avatar` |
+| LongCat `all` | `video` + `avatar` | opt-in | `bazelisk run //:manage -- download-longcat run --tier all` |
+| `creator` | DreamX-Creator selective payload. Not DreamX-World. Unload LTX first. The full hub repo is ~54 GB - this command does not pull that | ~8 GB selective | `bazelisk run //:manage -- download-dreamx run --tier creator` |
+| `seedvr2-3b` | SeedVR2-3B still polish or post-concat restore. Stop Comfy first if it runs on GPU | ~15 GB | `bazelisk run //:manage -- download-restore run --tier seedvr2-3b` |
+| `enhance` | Qwen3-4B prompt-enhance GGUF. Already in `download-models` | ~3 GB | `bazelisk run //:manage -- download-llm --tier enhance` |
+| `qwen36-35b-a3b` | Occupancy `llm-desk` GGUF. Not part of `download-models` | ~23 GB | `bazelisk run //:manage -- download-llm --tier qwen36-35b-a3b` |
+| `describe` | Qwen2.5-VL-3B caption GGUF + mmproj for Describe image | ~4 GB | `bazelisk run //:manage -- download-llm --tier describe` |
+| LLM `all` | `enhance` + `qwen36-35b-a3b` + `describe` | sum | `bazelisk run //:manage -- download-llm --tier all` |
 
 Scroll sideways on a narrow window. The header stays pinned.
 

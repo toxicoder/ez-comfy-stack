@@ -61,7 +61,7 @@ App occupancy keys (`none` / `llm` / `klein` / ...) on Prompt Forge and research
 jobs: [Occupancy matrix](operate/occupancy-matrix.md).
 
 ```bash
-./scripts/manage.sh blender-install   # once; occupancy does not install Blender
+bazelisk run //:manage -- blender-install   # once; occupancy does not install Blender
 bazelisk run //:manage -- occupancy enter blender-desk
 bazelisk run //:manage -- blender -- --background
 bazelisk run //:manage -- occupancy enter llm-desk --yes
@@ -70,7 +70,7 @@ bazelisk run //:manage -- occupancy enter trellis --yes
 ```
 
 `occupancy enter` **does not** start Compose. Heavy modes tell you to
-`./scripts/manage.sh start` (type **yes**) when the container is down.
+`bazelisk run //:manage -- start` (type **yes**) when the container is down.
 
 **Check it worked:** `bazelisk run //:manage -- occupancy status` reports the mode you entered, and
 the heavy mode's own message confirms the weights for that job are the only ones loaded.
@@ -80,7 +80,7 @@ the heavy mode's own message confirms the weights for that job are the only ones
 One-time pull (throttled; **not** `download-models`):
 
 ```bash
-./scripts/manage.sh download-llm --tier qwen36-35b-a3b
+bazelisk run //:manage -- download-llm --tier qwen36-35b-a3b
 ```
 
 Host `llama-server` must be on `PATH` (aarch64). A missing binary prints a host-install hint

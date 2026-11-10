@@ -52,7 +52,7 @@ LTX-2.5 is gated. Klein 4B and Wan 5B are Apache and do not need a license click
 1. Create or edit `.env` with `HF_TOKEN=hf_...` (or `hf auth login`)
 2. In a browser, as **that same user**, open https://huggingface.co/Lightricks/LTX-2.5 and click **Agree**
 3. Fine-grained tokens need **gated repo** read
-4. `./scripts/manage.sh download-models` (`hf` is auto-installed; token in `.env` is enough - no extra `hf auth login` if `HF_TOKEN` is set)
+4. `bazelisk run //:manage -- download-models` (`hf` is auto-installed; token in `.env` is enough - no extra `hf auth login` if `HF_TOKEN` is set)
 
 A token in `.env` is **not** the same as accepting the Lightricks license.
 
@@ -223,7 +223,7 @@ Do not download, do not reference in lab graphs, do not pin Comfy for them:
 
 Opt-in local podcast (not in `download-models`): Kokoro-82M Apache TTS, native ACE-Step 1.5 MIT instrumental beds, optional Chatterbox MIT / Qwen3-TTS Apache. See [Local podcast](podcast.md). Opt-in local dub: Silero VAD + faster-whisper large-v3 (MIT) + Chatterbox Multilingual V3 (MIT, PerTh on). See [Local dub](dub.md). Opt-in local rap: same ACE-Step 1.5 turbo AIO via `download-music --tier turbo` (shared dest with `download-podcast --tier acestep`). See [Local music](music.md).
 
-`./scripts/manage.sh download-models` **refuses** MiniMax H3.
+`bazelisk run //:manage -- download-models` **refuses** MiniMax H3.
 
 ---
 
