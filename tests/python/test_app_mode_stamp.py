@@ -51,7 +51,7 @@ def test_klein_still_draft_stamp_keeps_lab_profile_and_note() -> None:
             ("Format / platform", "height"),
             ("KSampler", "seed"),
         ],
-        outputs=["Save"],
+        outputs=["Save PNG"],
         lane="photos",
         occupancy="klein",
         enhance_off_identity=False,
@@ -112,7 +112,7 @@ def test_missing_node_stamp_raises() -> None:
         stamp_app_mode(
             graph,
             inputs=[("No Such Node", "prompt")],
-            outputs=["Save"],
+            outputs=["Save PNG"],
             lane="photos",
             occupancy="klein",
         )
@@ -130,7 +130,7 @@ def test_banned_string_in_label_is_rejected() -> None:
                     {"description": "MiniMax H3 is not allowed"},
                 )
             ],
-            outputs=["Save"],
+            outputs=["Save PNG"],
             lane="photos",
             occupancy="klein",
         )
@@ -138,7 +138,7 @@ def test_banned_string_in_label_is_rejected() -> None:
         stamp_app_mode(
             copy.deepcopy(graph),
             inputs=[("Klein Prompt Enhance", "prompt")],
-            outputs=["Save"],
+            outputs=["Save PNG"],
             lane="photos",
             occupancy="klein",
             handoff=("klein-9b-lab-example",),
@@ -607,7 +607,7 @@ def test_stamped_inputs_survive_frontend_1496_prune() -> None:
             ("Klein Prompt Enhance", "enhance"),
             ("KSampler", "seed"),
         ],
-        outputs=["Save"],
+        outputs=["Save PNG"],
         lane="photos",
         occupancy="klein",
     )

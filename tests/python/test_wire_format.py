@@ -148,7 +148,7 @@ def test_wire_video_links_wan_latent() -> None:
     assert fmt["widgets_values"][0] == "Wan 5B"
     assert fmt["widgets_values"][1] == "Wan - 16:9 YouTube (832x480)"
     assert "Match input" in fmt["widgets_values"]
-    assert "8 seconds" in fmt["widgets_values"]
+    assert "5 seconds" in fmt["widgets_values"]
     _strip_format(graph, "EZVideoFormat")
     assert wire_video_format(graph) is True
 
