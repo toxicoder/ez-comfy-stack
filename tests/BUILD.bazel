@@ -190,6 +190,7 @@ filegroup(
         "python/test_ez_modes.py",
         "python/test_ez_music.py",
         "python/test_ez_outputs.py",
+        "python/test_ez_outputs_model3d.py",
         "python/test_ez_podcast.py",
         "python/test_ez_podcast_learn.py",
         "python/test_ez_quality.py",
@@ -314,7 +315,7 @@ filegroup(
 )
 
 # The node:test suite. run_js.sh shells out to `node --test tests/js/*.test.mjs`
-# against the checkout, so without this group the five .mjs files were
+# against the checkout, so without this group the .mjs files were
 # undeclared inputs: editing a test or the frontend stub could not invalidate a
 # cached //tests:js pass.
 filegroup(
@@ -324,6 +325,7 @@ filegroup(
         "js/ez_frontend_stub.mjs",
         "js/ez_image_mode.test.mjs",
         "js/ez_outputs.test.mjs",
+        "js/ez_outputs_model3d.test.mjs",
         "js/harness.mjs",
         "js/quality_overlay.test.mjs",
     ],

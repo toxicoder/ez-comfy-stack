@@ -178,11 +178,17 @@ EOF
   grep -q 'name = "js_files"' "${REPO_ROOT}/tests/BUILD.bazel"
   grep -q '":js_files"' "${REPO_ROOT}/tests/BUILD.bazel"
   # Explicit srcs: a glob would let a new test file join the suite silently.
-  local f
+  local f declared on_disk
   for f in "${REPO_ROOT}"/tests/js/*.mjs; do
     grep -q "\"js/$(basename "${f}")\"" "${REPO_ROOT}/tests/BUILD.bazel"
   done
-  [ "$(find "${REPO_ROOT}/tests/js" -name '*.mjs' | wc -l)" -eq 6 ]
+  # The group names the same set the lane globs at run time, so the loop above
+  # cannot pass vacuously and a new suite has to be added in both places.
+  declared=$(sed -n '/name = "js_files"/,/^)/p' "${REPO_ROOT}/tests/BUILD.bazel" |
+    grep -cE '^\s*"js/[^"]+\.mjs",$')
+  on_disk=$(find "${REPO_ROOT}/tests/js" -name '*.mjs' | wc -l)
+  [ "${declared}" -ge 1 ]
+  [ "${on_disk}" -eq "${declared}" ]
 }
 
 @test "the css tree is owned by the custom_nodes filegroup" {

@@ -269,6 +269,7 @@ This is **not** [studio-ui](studio-ui.md) and not a second frontend. Widget cata
 - Multi-select (checkbox, Shift-click range, Ctrl/Cmd-click, Select all) and bulk **Delete** / **Copy to input** / **Download** / **Copy paths**
 - Stills use Comfy `/view?preview=webp;80` thumbs; video plays on hover; double-click opens a lightbox
 - **Use as start image** copies into `/inputs` and sets `LoadImage.image` (then `EZOptionalImage.filename`); audio sets `LoadAudio.audio`
+- A **3D** filter chip lists the meshes the `3d/*` Apps write (`.glb` / `.gltf`). No browser tag plays a GLB, so those rows badge as `3D`, the lightbox says so plainly, and their action is **Download** - a mesh is never staged as a LoadImage input (`POST /ez_outputs/to-input` refuses one)
 
 Comfy History is in-memory and empty after `start`; these files persist. Routes: `GET /ez_outputs/list` (`truncated` when the page cap clips; `limit` sets the page), `POST /ez_outputs/delete`, `POST /ez_outputs/to-input`. Bodies accept a single `rel` or a `rels` list. Path traversal and non-media files are refused.
 

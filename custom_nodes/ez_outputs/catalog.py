@@ -33,8 +33,11 @@ VIDEO_SUFFIXES = frozenset({".mp4", ".webm", ".mkv"})
 AUDIO_SUFFIXES = frozenset({".wav", ".flac", ".mp3", ".m4a", ".ogg"})
 """Audio suffixes listed in the Outputs sidebar."""
 
-MEDIA_SUFFIXES = IMAGE_SUFFIXES | VIDEO_SUFFIXES | AUDIO_SUFFIXES
-"""Union of still, video, and audio suffixes."""
+MODEL3D_SUFFIXES = frozenset({".glb", ".gltf"})
+"""3D mesh suffixes listed in the Outputs sidebar."""
+
+MEDIA_SUFFIXES = IMAGE_SUFFIXES | VIDEO_SUFFIXES | AUDIO_SUFFIXES | MODEL3D_SUFFIXES
+"""Union of still, video, audio, and 3D mesh suffixes."""
 
 
 class OutputRow(TypedDict):
@@ -43,7 +46,7 @@ class OutputRow(TypedDict):
     Attributes:
         rel: Path relative to the output root using ``/``.
         name: File name.
-        kind: ``image``, ``video``, or ``audio``.
+        kind: ``image``, ``video``, ``audio``, or ``model3d``.
         size: Byte length.
         mtime: Unix mtime (seconds).
         suffix: Lowercase suffix including the dot.
@@ -132,7 +135,7 @@ def input_root(*, default: Path | None = None) -> Path:
 
 
 def kind_of(suffix: str) -> str | None:
-    """Return ``image`` / ``video`` / ``audio`` for a media suffix.
+    """Return ``image`` / ``video`` / ``audio`` / ``model3d`` for a media suffix.
 
     Args:
         suffix: File suffix including the dot.
@@ -147,6 +150,8 @@ def kind_of(suffix: str) -> str | None:
         return "video"
     if text in AUDIO_SUFFIXES:
         return "audio"
+    if text in MODEL3D_SUFFIXES:
+        return "model3d"
     return None
 
 
@@ -178,7 +183,7 @@ def list_outputs(
 
     Args:
         root: Output directory (``COMFY_OUTPUT_DIR`` / ``/outputs``).
-        kind: ``all``, ``image``, ``video``, or ``audio``.
+        kind: ``all``, ``image``, ``video``, ``audio``, or ``model3d``.
         query: Case-insensitive substring on the relative path.
         limit: Max rows; values below 1 clamp to 1.
 
@@ -347,6 +352,8 @@ def copy_to_input(
 ) -> Path:
     """Copy a media file into the LoadImage input directory.
 
+    A 3D mesh is listed but never staged: no LoadImage input reads a GLB.
+
     Args:
         output_dir: Output root.
         rel: Relative path under ``output_dir``.
@@ -356,9 +363,11 @@ def copy_to_input(
         Destination path.
 
     Raises:
-        CatalogError: same refuses as :func:`resolve_under`.
+        CatalogError: same refuses as :func:`resolve_under`, plus a 3D mesh.
     """
     src = resolve_under(output_dir, rel)
+    if kind_of(src.suffix) == "model3d":
+        raise CatalogError("3D mesh is not a LoadImage input")
     dest_dir = Path(input_dir) if input_dir is not None else input_root()
     dest_dir.mkdir(parents=True, exist_ok=True)
     dest = dest_dir / src.name
@@ -373,6 +382,9 @@ def copy_many_to_input(
     input_dir: Path | None = None,
 ) -> tuple[list[CopyRow], list[BatchError]]:
     """Copy many media files into the LoadImage input directory.
+
+    Each path goes through :func:`copy_to_input`, so a 3D mesh is refused into
+    ``errors`` while the rest of the batch still copies.
 
     Args:
         output_dir: Output root.

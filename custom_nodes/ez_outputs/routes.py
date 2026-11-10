@@ -147,7 +147,8 @@ def handle_list(
     """List media files.
 
     Args:
-        args: Query dict with optional ``kind``, ``q``, ``limit``.
+        args: Query dict with optional ``kind`` (``all``, ``image``, ``video``,
+            ``audio``, ``model3d``), ``q``, ``limit``.
         root: Output root override for tests.
 
     Returns:
@@ -215,6 +216,9 @@ def handle_to_input(
     input_dir: Path | None = None,
 ) -> tuple[int, CopyPayload]:
     """Copy one media file (or many) into the LoadImage input directory.
+
+    A 3D mesh row is refused: LoadImage has no GLB input, so the pane offers
+    Download for those files instead of staging them.
 
     Args:
         args: Body/query with ``rel`` or ``rels``.
