@@ -88,7 +88,10 @@ def enhance_nodes() -> NodeSpecs:
         "Rewrite a lazy prompt for LTX-2.5 (present-tense paragraph, audio interleaved).",
         origin="ez_prompt_enhance",
         lab="Off on 90s films, talking-head, authored showcase. On for generic 8 s printers.",
-        sockets=[_s("prompt", "STRING", "out", "Paragraph CLIP encodes.")],
+        sockets=[
+            _s("context", "STRING", "in", "Bible/research. Ignored when Enhance is off."),
+            _s("prompt", "STRING", "out", "Paragraph CLIP encodes."),
+        ],
         widgets=[
             _w("sample", index=0, typ="COMBO", rng="custom", desc="Sample or Custom.", gen="Custom keeps the textarea."),
             _w("prompt", index=1, desc="Lazy sentence or authored LTX paragraph.", gen="I2V: start image holds look; prompt is motion + world SFX. Dialogue belongs in \"quotes\" only if you asked for speech."),

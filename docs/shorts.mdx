@@ -331,7 +331,7 @@ Wave 4 hero path (opt-in, occupancy: one heavy job):
 ```bash
 bazelisk run //scripts:run-utility -- download-wan run --tier a14b   # A14B FP8 8-step silent hero; MagCache off
 # load labs/opt-in/still-to-video-a14b - unload 5B first
-bazelisk run //:manage -- download-longcat --tier video              # MIT; no NCCL
+bazelisk run //:manage -- download-longcat run --tier video           # MIT; no NCCL
 # load workflows/_lab/labs/opt-in/longcat-video.json (note, not 90s default)
 bazelisk run //:manage -- download-dreamx --tier creator             # Apache joint AV; not DreamX-World
 ```

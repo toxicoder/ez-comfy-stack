@@ -424,7 +424,7 @@ Commands:
                     Mux a still + audio master to YouTube MP4 (host ffmpeg)
   film-accept <film>
                     Fail-closed gate before concat (5.00s, 1280x704, LTX audio)
-  download-longcat [--tier video|avatar|all]
+  download-longcat run [--tier video|avatar|all]
                     Opt-in LongCat-Video MIT (no NCCL; context-parallel flag only)
   download-dreamx [--tier creator]
                     Opt-in DreamX-Creator 1.0 Apache joint AV (not DreamX-World)

@@ -306,7 +306,8 @@
         "Node name for S&R": "Trellis2Conditioning",
         "cnr_id": "comfy-core"
       },
-      "widgets_values": []
+      "widgets_values": [],
+      "title": "Trellis2 conditioning"
     },
     {
       "id": 9,
@@ -339,7 +340,8 @@
       },
       "widgets_values": [
         1
-      ]
+      ],
+      "title": "Empty structure x1"
     },
     {
       "id": 10,
@@ -444,7 +446,8 @@
       },
       "widgets_values": [
         "32"
-      ]
+      ],
+      "title": "Decode structure 32"
     },
     {
       "id": 12,
@@ -509,7 +512,8 @@
         "Node name for S&R": "Trellis2ShapeStage",
         "cnr_id": "comfy-core"
       },
-      "widgets_values": []
+      "widgets_values": [],
+      "title": "Shape stage"
     },
     {
       "id": 13,
@@ -755,7 +759,8 @@
         "Node name for S&R": "VaeDecodeShapeTrellis",
         "cnr_id": "comfy-core"
       },
-      "widgets_values": []
+      "widgets_values": [],
+      "title": "Decode shape"
     },
     {
       "id": 17,
@@ -818,7 +823,8 @@
         "Node name for S&R": "Trellis2TextureStage",
         "cnr_id": "comfy-core"
       },
-      "widgets_values": []
+      "widgets_values": [],
+      "title": "Texture stage"
     },
     {
       "id": 18,
@@ -926,7 +932,8 @@
         "Node name for S&R": "VaeDecodeTextureTrellis",
         "cnr_id": "comfy-core"
       },
-      "widgets_values": []
+      "widgets_values": [],
+      "title": "Decode texture"
     },
     {
       "id": 20,
@@ -968,7 +975,8 @@
         "Node name for S&R": "PaintMesh",
         "cnr_id": "comfy-core"
       },
-      "widgets_values": []
+      "widgets_values": [],
+      "title": "Paint mesh"
     },
     {
       "id": 21,
