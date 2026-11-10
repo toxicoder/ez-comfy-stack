@@ -23,7 +23,7 @@ def _write_graph(
     rel: str | None = None,
     description: str = "",
     occupancy: str = "klein",
-    handoff: list[str] | None = None,
+    handoff: list[object] | None = None,
     raw: str | None = None,
 ) -> Path:
     """Drop one graph file into a throwaway ``_lab`` tree.

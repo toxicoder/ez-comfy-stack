@@ -11,7 +11,7 @@ from __future__ import annotations
 import curses
 import importlib
 import sys
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from typing import cast
 
 import pytest
@@ -431,9 +431,12 @@ def test_the_launcher_sets_the_terminal_up_then_hands_over_one_screen(
     window = cast("_FakeWindow", cast("screen.CursesScreen", handed[0])._win)
     assert window.keypads == [True]
     assert ("start_color",) in curses_stub.calls
-    escdelays = [
-        call[1] for call in curses_stub.calls if call and call[0] == "set_escdelay"
-    ]
+    escdelays: list[int] = []
+    for call in curses_stub.calls:
+        if call and call[0] == "set_escdelay":
+            requested = call[1]
+            assert isinstance(requested, int), "the delay is recorded in milliseconds"
+            escdelays.append(requested)
     assert escdelays, "curses must be told to stop waiting a second on Escape"
     assert escdelays[0] <= 50, (
         "the 1000 ms default makes Escape feel dead on a remote session and "

@@ -15,7 +15,7 @@ import json
 import runpy
 import subprocess
 import sys
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
@@ -511,7 +511,7 @@ def test_launch_wires_the_parts_and_returns_the_loop_code(
             """
             return 7
 
-    def fake_with_screen(on_screen: Any) -> int:
+    def fake_with_screen(on_screen: Callable[[Any], int]) -> int:
         """Run the builder against a stand-in screen.
 
         Args:
@@ -639,7 +639,19 @@ def test_main_passes_the_resolved_flags_into_the_config(
     monkeypatch.setattr(runner.ConsoleLock, "acquire", lambda self: True)
     monkeypatch.setattr(runner.ConsoleLock, "release", lambda self: None)
     monkeypatch.setattr(sys.stdout, "isatty", lambda: True)
-    monkeypatch.setattr(cli, "launch", lambda config: (seen.append(config), 0)[1])
+    def fake_launch(config: c.RunConfig) -> int:
+        """Record the config the operator's flags resolved to.
+
+        Args:
+            config: The config ``main`` built from argv.
+
+        Returns:
+            Zero, the way a console that exited cleanly would.
+        """
+        seen.append(config)
+        return 0
+
+    monkeypatch.setattr(cli, "launch", fake_launch)
     monkeypatch.delenv("NO_COLOR", raising=False)
     assert cli.main(["--dry-run", "--read-only", "--group", "lanes", "--timeout", "5"]) == 0
     config = seen[0]
