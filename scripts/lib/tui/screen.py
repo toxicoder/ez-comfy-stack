@@ -85,6 +85,17 @@ _PRINTABLE_LOW = 32
 _PRINTABLE_HIGH = 126
 """Last key code :func:`normalize_key` returns as itself: a tilde."""
 
+_ESC_DELAY_MS = 25
+"""How long curses may wait for the rest of an escape sequence, in milliseconds.
+
+The 1000 ms default is a local-terminal assumption. This console is driven over
+SSH on a headless box, where a second of silence after Escape reads as a dead
+key, and an Escape pressed a moment before another key arrives bundled with it
+as an unknown sequence. Twenty-five milliseconds still covers the two and
+three-byte arrows this console maps, and it is below human key-repeat, so no
+operator can outrun it.
+"""
+
 
 def init_colors() -> None:
     """Register the color pairs :func:`attr_for` asks for.
@@ -221,6 +232,7 @@ def run_with_screen(on_screen: Callable[[Screen], int]) -> int:
             Whatever the loop returned, which becomes the exit code.
         """
         curses.curs_set(0)
+        curses.set_escdelay(_ESC_DELAY_MS)
         stdscr.keypad(True)
         init_colors()
         return on_screen(CursesScreen(stdscr))

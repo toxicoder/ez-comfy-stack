@@ -106,6 +106,14 @@ class _StubCurses:
         """
         self.calls.append(("curs_set", visibility))
 
+    def set_escdelay(self, milliseconds: int) -> None:
+        """Record how long curses waits to tell Escape from a sequence.
+
+        Args:
+            milliseconds: The escape delay the console asked for.
+        """
+        self.calls.append(("set_escdelay", milliseconds))
+
     def wrapper(self, starter: Callable[[curses.window], int]) -> int:
         """Run the starter against a fake stdscr, the way curses would.
 
@@ -423,6 +431,14 @@ def test_the_launcher_sets_the_terminal_up_then_hands_over_one_screen(
     window = cast("_FakeWindow", cast("screen.CursesScreen", handed[0])._win)
     assert window.keypads == [True]
     assert ("start_color",) in curses_stub.calls
+    escdelays = [
+        call[1] for call in curses_stub.calls if call and call[0] == "set_escdelay"
+    ]
+    assert escdelays, "curses must be told to stop waiting a second on Escape"
+    assert escdelays[0] <= 50, (
+        "the 1000 ms default makes Escape feel dead on a remote session and "
+        "mangles an Escape pressed just before another key"
+    )
 
 
 def test_the_launcher_reports_what_the_loop_returned(
