@@ -105,7 +105,15 @@ def command_argv(
     action: ActionSpec,
     answers: Mapping[str, str],
 ) -> tuple[str, ...]:
-    """Prefix the action's arguments with the script that owns its target.
+    """Put the script that owns the action in front of its own arguments.
+
+    :func:`tui.contract.build_argv` returns what runs after the entry point, and
+    that is what the form and the confirm gate showed the operator, so this
+    function adds the executable and nothing else. A MANAGE verb is already the
+    first element of ``fixed_args``; adding :attr:`~tui.contract.ActionSpec.target`
+    again here would run ``manage.sh start start`` and hand the dispatcher an
+    argument nobody reviewed. A UTILITY name is the executable itself, so its
+    arguments never name it.
 
     Args:
         repo_root: Repository root the scripts live under.
@@ -121,7 +129,7 @@ def command_argv(
     """
     argv = build_argv(action, answers)
     if action.runner is RunnerKind.MANAGE:
-        return (str(repo_root / "scripts" / "manage.sh"), action.target, *argv)
+        return (str(repo_root / "scripts" / "manage.sh"), *argv)
     if action.runner is RunnerKind.UTILITY:
         return (str(repo_root / "scripts" / "utilities" / f"{action.target}.sh"), *argv)
     raise ValueError(f"{action.action_id}: internal actions are dispatched in the console")

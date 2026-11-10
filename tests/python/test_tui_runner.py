@@ -18,6 +18,7 @@ from pathlib import Path
 
 import pytest
 
+from tui import catalog
 from tui import contract as c
 from tui import runner as r
 
@@ -62,6 +63,28 @@ def _action(**overrides: object) -> c.ActionSpec:
     }
     base.update(overrides)
     return c.ActionSpec(**base)  # type: ignore[arg-type]
+
+
+def _answers_for(action: c.ActionSpec) -> dict[str, str]:
+    """Give every parameter of ``action`` an answer that passes validation.
+
+    Args:
+        action: The catalog entry to answer.
+
+    Returns:
+        A mapping suitable for :func:`tui.contract.build_argv`.
+    """
+    answers: dict[str, str] = {}
+    for param in action.params:
+        if param.kind is c.ParamKind.CHOICE:
+            answers[param.name] = param.default if param.default else param.choices[0].value
+        elif param.kind is c.ParamKind.INT:
+            answers[param.name] = str(param.default or param.low)
+        elif param.kind is c.ParamKind.FLAG:
+            continue
+        else:
+            answers[param.name] = param.default or "value"
+    return answers
 
 
 def _recorder(returncode: int = 0, output: str = "ok") -> _SpawnRecorder:
@@ -134,8 +157,12 @@ def _manage_repo(tmp_path: Path) -> Path:
 
 
 def test_a_manage_action_is_prefixed_with_the_cli(tmp_path: Path) -> None:
-    """A CLI verb runs ``scripts/manage.sh <verb> <args...>``."""
-    action = _action(fixed_args=("--now",))
+    """A CLI verb runs ``scripts/manage.sh <verb> <args...>``, the verb once.
+
+    The entry carries its own verb in ``fixed_args``, which is what the form and
+    the confirm gate preview, so the runner adds only the executable.
+    """
+    action = _action(fixed_args=("start", "--now"))
     argv = r.command_argv(tmp_path, action, {})
     assert argv == (str(tmp_path / "scripts" / "manage.sh"), "start", "--now")
 
@@ -145,6 +172,30 @@ def test_a_utility_action_is_prefixed_with_its_script(tmp_path: Path) -> None:
     action = _action(runner=c.RunnerKind.UTILITY, target="tail-log")
     argv = r.command_argv(tmp_path, action, {})
     assert argv == (str(tmp_path / "scripts" / "utilities" / "tail-log.sh"),)
+
+
+@pytest.mark.parametrize("action", catalog.all_actions(), ids=lambda a: a.action_id)
+def test_a_dispatched_verb_is_never_repeated(action: c.ActionSpec, tmp_path: Path) -> None:
+    """No real entry reaches the dispatcher with its entry point named twice.
+
+    The catalog and the runner each used to think they owned the verb, which made
+    every managed action run ``manage.sh start start``. One real entry per case
+    keeps that seam honest on both sides at once.
+
+    Args:
+        action: One real catalog entry.
+        tmp_path: Repository root to prefix with.
+    """
+    if action.runner is c.RunnerKind.INTERNAL or not action.is_runnable():
+        pytest.skip("nothing is executed")
+    argv = r.command_argv(tmp_path, action, _answers_for(action))
+    if action.runner is c.RunnerKind.MANAGE:
+        assert argv[0] == str(tmp_path / "scripts" / "manage.sh")
+        assert argv[1] == action.target
+        assert argv[2:3] != (action.target,), f"{action.action_id}: verb doubled"
+    else:
+        assert argv[0] == str(tmp_path / "scripts" / "utilities" / f"{action.target}.sh")
+        assert argv[1:2] != (action.target,), f"{action.action_id}: name doubled"
 
 
 def test_an_internal_action_has_no_executable() -> None:
@@ -158,7 +209,12 @@ def test_a_dry_run_reports_the_argv_and_starts_nothing(tmp_path: Path) -> None:
     """The operator sees exactly what would have run, and no process exists."""
     spawn = _recorder()
     result = r.run_action(
-        _action(), {}, repo_root=tmp_path, dry_run=True, typed_token="yes", spawn=spawn
+        _action(fixed_args=("start",)),
+        {},
+        repo_root=tmp_path,
+        dry_run=True,
+        typed_token="yes",
+        spawn=spawn,
     )
     assert result.ran is False
     assert result.note == "dry run"
@@ -316,7 +372,7 @@ def test_the_default_spawn_runs_a_real_child_and_merges_the_streams(
     )
     assert result.ran is True
     assert result.returncode == 3
-    assert "out:start status" in result.output
+    assert "out:status" in result.output
     assert "err:" + str(repo_root) in result.output
     assert "piped:yes" in result.output
     assert "confirm:unset" in result.output

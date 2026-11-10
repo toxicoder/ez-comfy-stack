@@ -155,16 +155,24 @@ def test_every_entry_is_presentable(action: ActionSpec) -> None:
 
 @pytest.mark.parametrize("action", k.all_actions(), ids=lambda a: a.action_id)
 def test_every_entry_declares_its_argv_honestly(action: ActionSpec) -> None:
-    """A MANAGE entry runs its own verb and a UTILITY entry names a basename.
+    """The argv the operator previews is the argv the runner execs, minus the script.
+
+    ``runner.command_argv`` puts the entry point in front of what ``build_argv``
+    returns, so a MANAGE entry has to carry its own verb as the first argument
+    (that is what the confirm preview shows and what runs) and a UTILITY entry
+    must not repeat the basename, which is already the executable. An entry that
+    got either wrong would dispatch ``manage.sh start start`` or
+    ``download-image.sh download-image.sh`` behind the operator's back.
 
     Args:
         action: One catalog entry.
     """
     if action.runner is RunnerKind.MANAGE:
-        assert action.fixed_args[0] == action.target
+        assert action.fixed_args[:1] == (action.target,), action.action_id
     else:
         assert "/" not in action.target
         assert not action.target.endswith(".sh")
+        assert action.target not in action.fixed_args, action.action_id
 
 
 @pytest.mark.parametrize("action", k.all_actions(), ids=lambda a: a.action_id)
