@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import Any, Mapping, Sequence
 
 from _lab_paths import ROOT
+from ez_film.ltx_timing import ltx_decoded_frames, ltx_frames_for_duration
 
 # Classes that write a file or a visible preview. Every shipped App needs at
 # least one, or the graph burns GPU time and produces nothing to show. For
@@ -87,6 +88,19 @@ _SAMPLER_RANGES: tuple[tuple[str, int, float, float, bool], ...] = (
     ("cfg", 3, 0.0, 100.0, False),
     ("denoise", 6, 0.0, 1.0, True),
 )
+
+# Pixel-frame length each video latent node stores, by class, per
+# docs/workflow_nodes_*.py. Unlinked widgets only; a linked length is owned
+# by the wiring.
+_FRAME_SOURCES: dict[str, int] = {
+    "EmptyLTXVLatentVideo": 2,
+    "LTXVImgToVideo": 2,
+    "Wan22ImageToVideoLatent": 2,
+}
+_LTX_LATENT_TYPES = frozenset({"EmptyLTXVLatentVideo", "LTXVImgToVideo"})
+_DURATION_CHOICES = (5, 8, 10, 12)
+_DEFAULT_FPS = 24.0
+_PRESET_DIMS = re.compile(r"\((\d+)x(\d+)\)")
 
 
 def _is_number(value: Any) -> bool:
@@ -285,8 +299,207 @@ def _widget_findings(node: Mapping[str, Any]) -> list[str]:
     return problems
 
 
+def _frame_counts(graph: Mapping[str, Any]) -> list[int]:
+    """Authored pixel-frame lengths of every unlinked latent producer."""
+    lengths: list[int] = []
+    for node in graph.get("nodes") or []:
+        index = _FRAME_SOURCES.get(str(node.get("type") or ""))
+        if index is None:
+            continue
+        if "length" in _linked_widget_names(node):
+            continue
+        values = node.get("widgets_values")
+        if isinstance(values, list) and len(values) > index and isinstance(values[index], int):
+            lengths.append(values[index])
+    return lengths
+
+
+def _graph_fps(graph: Mapping[str, Any]) -> float:
+    """Playback fps from the graph's own VHS nodes, defaulting to lab 24."""
+    fps = _DEFAULT_FPS
+    for node in graph.get("nodes") or []:
+        if str(node.get("type") or "") != "VHS_VideoCombine":
+            continue
+        values = node.get("widgets_values")
+        raw = values.get("frame_rate") if isinstance(values, dict) else None
+        try:
+            fps = float(raw)
+        except (TypeError, ValueError):
+            continue
+    return fps
+
+
+def _upstream_lengths(
+    graph: Mapping[str, Any],
+    nodes: Mapping[Any, Mapping[str, Any]],
+    start: Mapping[str, Any],
+) -> list[int]:
+    """Frame lengths reachable upstream through links from one node."""
+    lengths: list[int] = []
+    stack: list[tuple[Any, int]] = [(start, 0)]
+    seen: set[tuple[Any, int]] = set()
+    while stack:
+        node, depth = stack.pop()
+        if (node.get("id"), depth) in seen or depth > 12:
+            continue
+        seen.add((node.get("id"), depth))
+        index = _FRAME_SOURCES.get(str(node.get("type") or ""))
+        if index is not None:
+            values = node.get("widgets_values")
+            if isinstance(values, list) and len(values) > index and isinstance(values[index], int):
+                lengths.append(values[index])
+        for slot in node.get("inputs") or []:
+            row = (graph.get("_lmap") or {}).get(slot.get("link"))
+            if row is not None and row[1] in nodes:
+                stack.append((nodes[row[1]], depth + 1))
+    return lengths
+
+
+def _batch_findings(
+    graph: Mapping[str, Any],
+    nodes: Mapping[Any, Mapping[str, Any]],
+) -> list[str]:
+    """ImageFromBatch indexes must land inside the clip and on its last frame."""
+    problems: list[str] = []
+    for node in graph.get("nodes") or []:
+        if str(node.get("type") or "") != "ImageFromBatch":
+            continue
+        values = node.get("widgets_values")
+        if not isinstance(values, list) or not values or not isinstance(values[0], int):
+            continue
+        index = values[0]
+        lengths = _upstream_lengths(graph, nodes, node)
+        if not lengths:
+            continue
+        clip = max(lengths)
+        if not 0 <= index < clip:
+            problems.append(
+                f"node {node.get('id')} (ImageFromBatch): batch_index {index} "
+                f"outside the {clip}-frame clip"
+            )
+            continue
+        wants_last = "last" in str(node.get("title") or "").lower()
+        for slot in node.get("outputs") or []:
+            for link_id in slot.get("links") or []:
+                row = (graph.get("_lmap") or {}).get(link_id)
+                if row is None or row[3] not in nodes:
+                    continue
+                consumer = nodes[row[3]]
+                if str(consumer.get("type") or "") != "SaveImage":
+                    continue
+                blob = f"{consumer.get('title') or ''} {consumer.get('widgets_values') or ''}".lower()
+                if "last" in blob:
+                    wants_last = True
+        if wants_last and index != clip - 1:
+            problems.append(
+                f"node {node.get('id')} (ImageFromBatch): last-frame pick at {index}, "
+                f"clip holds {clip} frames (last is {clip - 1})"
+            )
+    return problems
+
+
+def _format_findings(graph: Mapping[str, Any]) -> list[str]:
+    """Canvas promises: preset label vs size widgets, grid, duration vs length."""
+    problems: list[str] = []
+    lengths = _frame_counts(graph)
+    fps = _graph_fps(graph)
+    for node in graph.get("nodes") or []:
+        ntype = str(node.get("type") or "")
+        if ntype not in ("EZImageFormat", "EZVideoFormat"):
+            continue
+        values = node.get("widgets_values")
+        if not isinstance(values, list):
+            continue
+        node_id = node.get("id")
+        width = values[2] if len(values) > 2 else None
+        height = values[3] if len(values) > 3 else None
+        linked = _linked_widget_names(node)
+        label = " ".join(str(v) for v in values[:2])
+        match = _PRESET_DIMS.search(label)
+        if match and width is not None and height is not None:
+            want_w, want_h = int(match.group(1)), int(match.group(2))
+            if (width, height) != (want_w, want_h):
+                problems.append(
+                    f"node {node_id} ({ntype}): {width}x{height} contradicts "
+                    f"preset '{str(values[1]).strip()}'"
+                )
+        for name, value in (("width", width), ("height", height)):
+            if name in linked or not _is_number(value):
+                continue
+            if value < 16 or value > 2048 or value % 16:
+                problems.append(f"node {node_id} ({ntype}): {name} {value} off the 16 px canvas grid")
+        if ntype != "EZVideoFormat" or len(values) < 6:
+            continue
+        family = str(values[0])
+        claimed = re.search(r"(\d+)", str(values[5]))
+        if not claimed or "duration_s" in linked:
+            continue
+        seconds = int(claimed.group(1))
+        for length in lengths:
+            if "LTX" in family:
+                if ltx_frames_for_duration(seconds) != ltx_decoded_frames(length):
+                    problems.append(
+                        f"node {node_id} ({ntype}): '{seconds} seconds' does not match "
+                        f"the {length}-frame clip ({ltx_decoded_frames(length)} decoded)"
+                    )
+            elif "Wan" in family and fps > 0:
+                rendered = (length - 1) / fps
+                near = [c for c in _DURATION_CHOICES if abs(c - rendered) <= 0.6]
+                if near and seconds not in near:
+                    problems.append(
+                        f"node {node_id} ({ntype}): '{seconds} seconds' does not match "
+                        f"the rendered {round(rendered, 2)}s clip"
+                    )
+    return problems
+
+
+def _ltx_grid_findings(graph: Mapping[str, Any]) -> list[str]:
+    """LTX latent lengths must be 1+8n or the VAE silently drops frames."""
+    problems: list[str] = []
+    for node in graph.get("nodes") or []:
+        if str(node.get("type") or "") not in _LTX_LATENT_TYPES:
+            continue
+        if "length" in _linked_widget_names(node):
+            continue
+        values = node.get("widgets_values")
+        if not isinstance(values, list) or len(values) < 3 or not isinstance(values[2], int):
+            continue
+        length = values[2]
+        if length % 8 != 1:
+            problems.append(
+                f"node {node.get('id')} ({node.get('type')}): length {length} is not 1+8n; "
+                f"the LTX VAE decodes {ltx_decoded_frames(length)} frames"
+            )
+    return problems
+
+
+def _vhs_findings(graph: Mapping[str, Any]) -> list[str]:
+    """Combine-node playback widgets must be usable values."""
+    problems: list[str] = []
+    for node in graph.get("nodes") or []:
+        if str(node.get("type") or "") != "VHS_VideoCombine":
+            continue
+        values = node.get("widgets_values")
+        if not isinstance(values, dict):
+            continue
+        node_id = node.get("id")
+        fmt = values.get("format")
+        if not (isinstance(fmt, str) and "/" in fmt):
+            problems.append(f"node {node_id} (VHS_VideoCombine): format '{fmt}' is not a mime type")
+        raw = values.get("frame_rate")
+        if raw is not None:
+            try:
+                fps = float(raw)
+            except (TypeError, ValueError):
+                problems.append(f"node {node_id} (VHS_VideoCombine): frame_rate '{raw}' is not a number")
+            else:
+                if not 0 < fps <= 60:
+                    problems.append(f"node {node_id} (VHS_VideoCombine): frame_rate {fps} outside (0, 60]")
+    return problems
+
+
 def wiring_findings(graph: Mapping[str, Any]) -> list[str]:
-    """Check one loaded graph for wiring defects.
+    """Check one loaded graph for wiring and parameter defects.
 
     Args:
         graph: A parsed lab graph dict.
@@ -303,12 +516,17 @@ def wiring_findings(graph: Mapping[str, Any]) -> list[str]:
             problems.append(f"duplicate node id {node_id}")
             continue
         nodes[node_id] = node
+    graph = {**graph, "_lmap": {r[0]: r for r in graph.get("links") or [] if isinstance(r, (list, tuple)) and len(r) == 6}}
     table_findings, table_ids = _link_table_findings(graph, nodes)
     problems.extend(table_findings)
     problems.extend(_slot_bookkeeping_findings(graph, table_ids))
     problems.extend(_required_input_findings(graph))
     for node in graph.get("nodes") or []:
         problems.extend(_widget_findings(node))
+    problems.extend(_batch_findings(graph, nodes))
+    problems.extend(_ltx_grid_findings(graph))
+    problems.extend(_format_findings(graph))
+    problems.extend(_vhs_findings(graph))
     if not any(str(node.get("type") or "") in _terminal_types() for node in graph.get("nodes") or []):
         problems.append("graph has no terminal output node")
     return problems

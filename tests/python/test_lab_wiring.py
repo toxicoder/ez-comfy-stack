@@ -416,6 +416,178 @@ def test_custom_output_nodes_count_as_terminals(tmp_path: Path) -> None:
 # --- shipped graphs ---------------------------------------------------------
 
 
+def _video(
+    *,
+    family: str = "Wan 5B",
+    latent_type: str = "Wan22ImageToVideoLatent",
+    length: int = 121,
+    duration: str = "5 seconds",
+    width: int = 832,
+    height: int = 480,
+    preset: str = "Wan - 16:9 YouTube (832x480)",
+    fps: Any = "24",
+    ifb_index: int | None = None,
+) -> dict[str, Any]:
+    """A KSampler -> VAEDecode -> VHS (+ last-frame SaveImage) video graph.
+
+    Args:
+        family: EZVideoFormat family widget.
+        latent_type: Class of the pixel-frame latent producer.
+        length: Authored ``length`` widget of that producer.
+        duration: EZVideoFormat ``duration_s`` combo value.
+        width: EZVideoFormat width widget.
+        height: EZVideoFormat height widget.
+        preset: EZVideoFormat format combo label.
+        fps: VHS ``frame_rate`` value.
+        ifb_index: When set, add ImageFromBatch -> SaveImage "Save last frame".
+
+    Returns:
+        A graph dict shaped for :func:`wiring_findings`.
+    """
+    nodes = [
+        _node(
+            1,
+            "KSampler",
+            inputs=[
+                _in(name="model", type="MODEL", link=11),
+                _in(name="positive", type="CONDITIONING", link=12),
+                _in(name="negative", type="CONDITIONING", link=13),
+                _in(name="latent_image", type="LATENT", link=14),
+            ],
+            outputs=[_slot(name="LATENT", links=[1])],
+            widgets=[42, "fixed", 20, 5.0, "euler", "simple", 1.0],
+        ),
+        _node(
+            3,
+            "VAEDecode",
+            inputs=[
+                _in(name="samples", type="LATENT", link=1),
+                _in(name="vae", type="VAE", link=2),
+            ],
+            outputs=[_slot(name="IMAGE", type="IMAGE", links=[3] if ifb_index is None else [3, 4])],
+        ),
+        _node(4, "VAELoader", outputs=[_slot(name="VAE", type="VAE", links=[2])], widgets=["vae.safetensors"]),
+        _node(
+            6,
+            latent_type,
+            outputs=[_slot(name="LATENT", links=[14])],
+            widgets=[width, height, length, 1],
+        ),
+        _node(7, "EZVideoFormat", widgets=[family, preset, width, height, "Match input", duration]),
+        _node(
+            10,
+            "VHS_VideoCombine",
+            inputs=[_in(name="images", type="IMAGE", link=3)],
+        ),
+    ]
+    nodes[-1]["widgets_values"] = {
+        "frame_rate": fps,
+        "loop_count": "0",
+        "filename_prefix": "ez_clip",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": "18",
+        "save_metadata": "True",
+        "trim_to_audio": "False",
+        "pingpong": "False",
+        "save_output": "True",
+    }
+    links = [
+        _link(1, 1, 0, 3, 0, "LATENT"),
+        _link(2, 4, 0, 3, 1, "VAE"),
+        _link(3, 3, 0, 10, 0, "IMAGE"),
+        _link(11, 9, 0, 1, 0, "MODEL"),
+        _link(12, 9, 1, 1, 1, "CONDITIONING"),
+        _link(13, 9, 2, 1, 2, "CONDITIONING"),
+        _link(14, 6, 0, 1, 3, "LATENT"),
+    ]
+    nodes.append(
+        _node(
+            9,
+            "Note",
+            outputs=[
+                _slot(name="MODEL", type="MODEL", links=[11]),
+                _slot(name="pos", type="CONDITIONING", links=[12]),
+                _slot(name="neg", type="CONDITIONING", links=[13]),
+            ],
+        )
+    )
+    if ifb_index is not None:
+        nodes.append(
+            _node(
+                8,
+                "ImageFromBatch",
+                inputs=[_in(name="images", type="IMAGE", link=4)],
+                outputs=[_slot(name="IMAGE", type="IMAGE", links=[6])],
+                widgets=[ifb_index, 1],
+            )
+        )
+        nodes.append(
+            _node(
+                12,
+                "SaveImage",
+                inputs=[_in(name="images", type="IMAGE", link=6)],
+                widgets=["ez_clip_last"],
+            )
+        )
+        nodes[-1]["title"] = "Save last frame"
+        links += [_link(4, 3, 0, 8, 0, "IMAGE"), _link(6, 8, 0, 12, 0, "IMAGE")]
+    return {"nodes": nodes, "links": links}
+
+
+def test_a_honest_video_graph_has_no_findings() -> None:
+    assert wiring_findings(_video()) == []
+    assert wiring_findings(_video(family="LTX-2.5", latent_type="EmptyLTXVLatentVideo", length=193, duration="8 seconds")) == []
+
+
+def test_a_wan_mislabelled_duration_is_a_finding() -> None:
+    findings = wiring_findings(_video(duration="8 seconds"))
+    assert "node 7 (EZVideoFormat): '8 seconds' does not match the rendered 5.0s clip" in findings
+
+
+def test_an_ltx_mislabelled_duration_is_a_finding() -> None:
+    graph = _video(family="LTX-2.5", latent_type="EmptyLTXVLatentVideo", length=121, duration="8 seconds")
+    findings = wiring_findings(graph)
+    assert "node 7 (EZVideoFormat): '8 seconds' does not match the 121-frame clip (121 decoded)" in findings
+
+
+def test_an_illegal_ltx_length_is_a_finding() -> None:
+    graph = _video(family="LTX-2.5", latent_type="EmptyLTXVLatentVideo", length=120, duration="5 seconds")
+    findings = wiring_findings(graph)
+    assert any("length 120 is not 1+8n" in f and "decodes 113" in f for f in findings)
+
+
+def test_a_batch_index_outside_the_clip_is_a_finding() -> None:
+    findings = wiring_findings(_video(ifb_index=300))
+    assert "node 8 (ImageFromBatch): batch_index 300 outside the 121-frame clip" in findings
+
+
+def test_a_stale_last_frame_pick_is_a_finding() -> None:
+    findings = wiring_findings(_video(ifb_index=119))
+    assert "node 8 (ImageFromBatch): last-frame pick at 119, clip holds 121 frames (last is 120)" in findings
+    assert wiring_findings(_video(ifb_index=120)) == []
+
+
+def test_a_preset_size_contradiction_is_a_finding() -> None:
+    findings = wiring_findings(_video(height=512))
+    assert "node 7 (EZVideoFormat): 832x512 contradicts preset 'Wan - 16:9 YouTube (832x480)'" in findings
+
+
+def test_an_off_grid_canvas_is_a_finding() -> None:
+    findings = wiring_findings(_video(width=840, preset="Custom"))
+    assert "node 7 (EZVideoFormat): width 840 off the 16 px canvas grid" in findings
+
+
+def test_a_bad_vhs_combine_widget_is_a_finding() -> None:
+    graph = _video(fps="0")
+    assert "node 10 (VHS_VideoCombine): frame_rate 0.0 outside (0, 60]" in wiring_findings(graph)
+    graph = _video(fps="fast")
+    assert "node 10 (VHS_VideoCombine): frame_rate 'fast' is not a number" in wiring_findings(graph)
+    graph = _video()
+    graph["nodes"][5]["widgets_values"]["format"] = "mp4"
+    assert "node 10 (VHS_VideoCombine): format 'mp4' is not a mime type" in wiring_findings(graph)
+
+
 @pytest.mark.parametrize("lab_rel,path,graph", cached_lab_graph_rows())
 def test_shipped_graph_wires_cleanly(
     lab_rel: str,
