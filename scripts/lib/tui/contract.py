@@ -32,6 +32,7 @@ from __future__ import annotations
 import enum
 from collections.abc import Mapping
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Protocol, TypedDict
 
 # ---------------------------------------------------------------------------
@@ -885,6 +886,48 @@ class ViewModel:
 
 _TRUEISH: frozenset[str] = frozenset({"1", "true", "yes", "on", "y"})
 """Answers that mean a boolean flag is switched on."""
+
+
+@dataclass(frozen=True)
+class RunConfig:
+    """Everything the app loop needs to start, resolved by :mod:`tui.cli`.
+
+    Kept as data so the loop can be driven from a test with a fake screen and a
+    temp directory, with no terminal and no real repo.
+
+    Attributes:
+        repo_root: The git checkout the console dispatches from.
+        models_dir: Where model weights live; the disk guard reads it.
+        comfy_output_dir: Where outputs, the occupancy file, and the console
+            lock live.
+        start_group: Section to open on instead of the dashboard.
+        dry_run: Print the argv instead of running it.
+        read_only: Refuse to dispatch anything that is not observe-only.
+        use_color: False renders monochrome.
+        timeout_s: Per-command wall-clock cap.
+    """
+
+    repo_root: Path
+    models_dir: Path
+    comfy_output_dir: Path
+    start_group: Group = Group.DASHBOARD
+    dry_run: bool = False
+    read_only: bool = False
+    use_color: bool = True
+    timeout_s: float = 900.0
+
+
+EXIT_OK = 0
+"""Console exited cleanly, or a headless check passed."""
+
+EXIT_USAGE = 1
+"""Bad flags, or a headless check found a catalog defect."""
+
+EXIT_NO_TTY = 2
+"""Asked to draw without a terminal; ``--check`` is the headless path."""
+
+EXIT_LOCKED = 3
+"""Another console already holds the single-console flock."""
 
 
 def build_argv(

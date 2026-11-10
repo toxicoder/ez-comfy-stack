@@ -38,8 +38,14 @@ _LIB_PY = [
     "lib/research_mcp.py",
     "lib/studio_mcp.py",
     "lib/tui/__init__.py",
+    "lib/tui/catalog.py",
     "lib/tui/contract.py",
+    "lib/tui/guard.py",
     "lib/tui/lanes.py",
+    "lib/tui/readmodel.py",
+    "lib/tui/runner.py",
+    "lib/tui/screen.py",
+    "lib/tui/views.py",
 ]
 
 _UTILITIES_SH = [
