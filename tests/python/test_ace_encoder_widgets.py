@@ -88,6 +88,9 @@ def test_podcast_ace_encoders_keep_instrumental_codes_off() -> None:
             widgets = assert_ace_encoder_widgets(node, where=f"{stem}:{node.get('title')}")
             assert widgets[3] == "fixed"
             assert widgets[6] == "4"
-            assert widgets[7] == "en"
+            # The ACE negative encoder conditions against vocals and stays
+            # en; positive instrumental beds follow the no-vocal contract.
+            expect_lang = "en" if str(node.get("title")) == "ACE negative" else "unknown"
+            assert widgets[7] == expect_lang, (stem, node.get("title"))
             assert widgets[8] == "C major"
             assert widgets[9] is False
