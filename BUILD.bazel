@@ -102,6 +102,18 @@ alias(
     visibility = ["//visibility:public"],
 )
 
+# The guarded operator console: one curses screen over every manage.sh verb,
+# every unmanaged utility, the model tiers, the occupancy desk, the sidecars, and
+# the lab lane browser. Heavy actions keep the CLI's typed confirmations and the
+# headroom floors; the console adds a single-console flock and a deny-by-default
+# guard on top. See docs/operate/studio-tui.mdx.
+#   bazelisk run //:studio-tui
+alias(
+    name = "studio-tui",
+    actual = "//scripts:studio-tui",
+    visibility = ["//visibility:public"],
+)
+
 alias(
     name = "bats",
     actual = "//tests:bats",
