@@ -962,25 +962,19 @@ def audit_view(history: Sequence[CommandResult], selected: int = 0) -> ViewModel
     )
 
 
-def help_view() -> ViewModel:
+def help_view(bindings: tuple[tuple[str, str, str], ...]) -> ViewModel:
     """Build the key reference and the safety contract in plain sentences.
+
+    The loop hands over its own table so the reference can never advertise a
+    key the loop ignores, or go quiet about one it honors.
+
+    Args:
+        bindings: ``(keys, scope, meaning)`` per row, as the loop dispatches them.
 
     Returns:
         A screen that states, in words, what the console will not do without a
         typed confirmation, a green guard, or the operator lock.
     """
-    bindings: tuple[tuple[str, str, str], ...] = (
-        ("up down", "list", "move the cursor"),
-        ("pgup pgdn", "list", "jump a page"),
-        ("home end", "list", "first and last row"),
-        ("enter", "list", "open, or run, the focused row"),
-        ("esc", "anywhere", "back one screen"),
-        ("1 to 0", "anywhere", "jump to a section"),
-        ("/", "anywhere", "open the action palette"),
-        ("r", "anywhere", "re-read the machine"),
-        ("d", "anywhere", "toggle dry run: print the argv, run nothing"),
-        ("q", "anywhere", "quit"),
-    )
     rows = tuple(
         Row(key=keys, label=keys, badge=scope, note=meaning, enabled=False, style=Style.NORMAL)
         for keys, scope, meaning in bindings

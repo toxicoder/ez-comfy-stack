@@ -181,6 +181,26 @@ _YES_KEY = "y"
 _NO_KEY = "n"
 """Key that cancels an armed safe stop."""
 
+_HELP_BINDINGS: tuple[tuple[str, str, str], ...] = (
+    ("j k up down", "list", "move the cursor one row"),
+    ("pgup pgdn", "list", "jump a page"),
+    ("home end", "list", "first and last row"),
+    (Key.ENTER, "list", "open, or run, the focused row"),
+    (Key.ESC, "anywhere", "back one screen"),
+    ("1 to 0", "anywhere", "jump to a section"),
+    (_PALETTE_KEY, "anywhere", "open the action palette"),
+    (_PROBE_KEY, "anywhere", "re-read the machine and its guard verdicts"),
+    (_DETAIL_KEY, "anywhere", "show or hide the detail pane"),
+    (_AUDIT_KEY, "anywhere", "open the operator log"),
+    (_DRY_RUN_KEY, "anywhere", "report how dry run was set at launch"),
+    (_STOP_KEY, "anywhere", "arm the safe stop, then answer it with the next key"),
+    (_YES_KEY, "armed stop", "run the armed safe stop"),
+    (_NO_KEY, "armed stop", "drop the armed safe stop without dispatching"),
+    (_HELP_KEY, "anywhere", "this key list"),
+    (_QUIT_KEY, "anywhere", "quit"),
+)
+"""The key table the help screen renders, spelled from the keys the loop reads."""
+
 _DOWN_KEYS: frozenset[str] = frozenset({"j", Key.DOWN})
 """Keys that move the focus one row down."""
 
@@ -1194,7 +1214,7 @@ class Console:
             return views.graph_detail(self._graph)
         if screen is ScreenId.AUDIT:
             return views.audit_view(self._session.history, pane.selected)
-        return views.help_view()
+        return views.help_view(_HELP_BINDINGS)
 
     def _draw(self) -> None:
         """Render the top pane through the view layer and flush it to the screen.

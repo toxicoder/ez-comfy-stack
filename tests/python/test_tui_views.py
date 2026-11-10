@@ -763,7 +763,7 @@ def test_audit_view_starts_empty() -> None:
 
 def test_help_view_states_the_safety_contract_in_sentences() -> None:
     """An operator can read the rules without reading the source."""
-    model = views.help_view()
+    model = views.help_view((("q", "anywhere", "quit"),))
     detail = _detail_text(model)
     assert model.screen is c.ScreenId.HELP
     assert "type yes" in detail
@@ -773,6 +773,14 @@ def test_help_view_states_the_safety_contract_in_sentences() -> None:
     assert "Dry run" in detail
     assert all(row.enabled is False for row in model.rows)
     assert _row(model, "q").note == "quit"
+
+
+def test_help_view_draws_the_key_table_it_was_handed() -> None:
+    """The loop owns the keymap and the view only renders it, so they cannot drift."""
+    model = views.help_view((("g", "anywhere", "re-read the machine"),))
+    assert [row.key for row in model.rows] == ["g"]
+    assert _row(model, "g").badge == "anywhere"
+    assert _row(model, "g").note == "re-read the machine"
 
 
 def test_render_fits_a_one_row_terminal_without_crashing() -> None:

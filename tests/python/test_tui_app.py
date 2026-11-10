@@ -1187,3 +1187,63 @@ def test_the_guard_is_asked_about_every_action_on_each_poll() -> None:
     """Every action carries a verdict, so no row is ever offered without one."""
     _screen, backend = _run(["g"], _STACK_ACTIONS)
     assert backend.evaluated == ["stack.status", "stack.stop", "stack.start"] * 2
+
+
+def test_the_key_list_names_every_key_the_loop_honors() -> None:
+    """A headless operator reads the keys offline, so a missing row is a dead end."""
+    named = {token for keys, _, _ in app._HELP_BINDINGS for token in keys.split()}
+    for key in (
+        app._QUIT_KEY,
+        app._HELP_KEY,
+        app._PALETTE_KEY,
+        app._PROBE_KEY,
+        app._DETAIL_KEY,
+        app._AUDIT_KEY,
+        app._DRY_RUN_KEY,
+        app._STOP_KEY,
+        app._YES_KEY,
+        app._NO_KEY,
+        c.Key.ENTER,
+        c.Key.ESC,
+        "j",
+        "k",
+    ):
+        assert key in named, f"{key} is bound in the loop but absent from the key list"
+    rows = {keys: (scope, note) for keys, scope, note in app._HELP_BINDINGS}
+    assert app._YES_KEY in rows and app._NO_KEY in rows, (
+        "the safe stop is two keys, and the answer key needs its own row"
+    )
+    assert "safe stop" in rows[app._STOP_KEY][1]
+
+
+def test_the_key_list_invents_no_key_the_loop_ignores() -> None:
+    """A key the key list advertises and the loop drops costs an operator a minute."""
+    honored = {
+        app._QUIT_KEY,
+        app._HELP_KEY,
+        app._PALETTE_KEY,
+        app._PROBE_KEY,
+        app._DETAIL_KEY,
+        app._AUDIT_KEY,
+        app._DRY_RUN_KEY,
+        app._STOP_KEY,
+        app._YES_KEY,
+        app._NO_KEY,
+        c.Key.ENTER,
+        c.Key.ESC,
+        c.Key.UP,
+        c.Key.DOWN,
+        c.Key.PGUP,
+        c.Key.PGDN,
+        c.Key.HOME,
+        c.Key.END,
+        "j",
+        "k",
+        *app._GROUP_BY_HOTKEY,
+    }
+    spelled_out = {"1", "to", "0"}
+    for keys, _scope, _meaning in app._HELP_BINDINGS:
+        for token in keys.split():
+            assert token in honored or token in spelled_out, (
+                f"the key list advertises {token!r}, which no handler reads"
+            )
