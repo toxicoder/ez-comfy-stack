@@ -260,6 +260,10 @@
         "title": "Everyday loop",
         "pages": [
           {
+            "title": "Studio console",
+            "path": "operate/studio-tui.mdx"
+          },
+          {
             "title": "Quick reference",
             "path": "operate/quick-reference.md"
           },

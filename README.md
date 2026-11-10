@@ -77,6 +77,12 @@ Non-host verbs lead with the same ingress as everything else, `bazelisk run //:m
 `./scripts/manage.sh <verb>` stays the documented escape hatch for `setup`, `download-models`,
 `start`, and `stop`, which need docker, sudo, the GPU, or `$HOME`.
 
+On a headless box, `bazelisk run //:studio-tui` opens the operator console instead: one keyboard
+screen over every `manage.sh` verb, the model tiers, the sidecars, the cut tools, and the lab
+lanes, with the headroom, queue, and occupancy guards drawn on the row before you can pick it, and
+the typed confirmations left intact. `bazelisk run //:studio-tui -- --check` audits it headlessly.
+See [the console page](docs/operate/studio-tui.mdx).
+
 Changed something and want the whole sweep in one command? `bazelisk run //:everything` runs the
 host-toolchain probe, the load/analysis pass, every test, and the docs build in order, and names
 the target that failed. Pick a single lane from the table in **The gates** below.
