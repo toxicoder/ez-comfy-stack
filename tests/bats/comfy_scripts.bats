@@ -190,6 +190,10 @@ teardown() {
   [ "${status}" -eq 0 ]
   run grep -F 'patch_vhs_widget_inputs' "${REPO_ROOT}/docker/entrypoint.sh"
   [ "${status}" -eq 0 ]
+  run grep -F 'apply_save_3d_dtype_patch' "${REPO_ROOT}/docker/install-comfy.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'patch_save_3d_dtype' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "${status}" -eq 0 ]
   run grep -F 'configure_nunchaku_pack' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
   [ "${status}" -eq 0 ]
   run grep -F 'LAB_ENABLE_LTX_DIRECTOR' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
@@ -1291,6 +1295,10 @@ PY
   run apply_vhs_widget_inputs_patch
   [ "${status}" -eq 0 ]
   [[ ${output} == *"not found"* || ${output} == *"patch"* || ${output} == *"vhs"* || ${output} == *"widgetInputs"* || -z ${output} ]]
+
+  run apply_save_3d_dtype_patch
+  [ "${status}" -eq 0 ]
+  [[ ${output} == *"not found"* || ${output} == *"patch"* || ${output} == *"save3d"* || -z ${output} ]]
 
   # finalize with mocked strip deps
   run phase_finalize

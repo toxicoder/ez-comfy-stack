@@ -416,6 +416,27 @@ apply_vhs_widget_inputs_patch() {
 }
 
 #######################################
+# Make comfy_extras/nodes_save_3d.py accept bfloat16 mesh attributes.
+# The TRELLIS.2 texture VAE is bf16, so PaintMesh hands save_glb a dtype
+# numpy cannot read and every textured 3d/* App dies at SaveGLB.
+# Globals:
+#   COMFY_HOME
+# Arguments:
+#   None
+# Outputs:
+#   Progress via log/warn
+# Returns:
+#   0 (patch failures are soft)
+#######################################
+apply_save_3d_dtype_patch() {
+  if [[ -f /opt/ez-comfy/patch_save_3d_dtype.py ]]; then
+    python3 /opt/ez-comfy/patch_save_3d_dtype.py "${COMFY_HOME}" || warn "save3d dtype patch failed"
+  else
+    warn "patch_save_3d_dtype.py not found in image"
+  fi
+}
+
+#######################################
 # Copy comfy_api/ from prebuilt when the volume is missing comfy_api/input.
 # Unanchored rsync --exclude input/ used to drop that nested v0.34+ package.
 # No-op when the package is already present or prebuilt lacks it.

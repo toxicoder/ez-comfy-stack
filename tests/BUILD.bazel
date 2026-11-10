@@ -236,6 +236,7 @@ filegroup(
         "python/test_patch_common.py",
         "python/test_patch_get_free_memory.py",
         "python/test_patch_magcache_compat.py",
+        "python/test_patch_save_3d_dtype.py",
         "python/test_patch_unified_memory_copy.py",
         "python/test_patch_vhs_widget_inputs.py",
         "python/test_podcast_workflows.py",

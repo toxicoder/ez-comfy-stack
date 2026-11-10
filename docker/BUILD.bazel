@@ -25,6 +25,7 @@ filegroup(
         "patch_common.py",
         "patch_get_free_memory.py",
         "patch_magcache_compat.py",
+        "patch_save_3d_dtype.py",
         "patch_unified_memory_copy.py",
         "patch_vhs_widget_inputs.py",
         "pythonpath/sitecustomize.py",
