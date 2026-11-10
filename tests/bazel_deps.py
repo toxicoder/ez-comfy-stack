@@ -862,7 +862,7 @@ _SANCTIONED_GLOBS: dict[str, dict[str, str]] = {
     },
     "//workflows:lab_graphs": {
         "_lab/**/*.json": "graphs arrive one file at a time from "
-        "`./scripts/manage.sh promote-workflow`; the tree is the payload and a "
+        "`bazelisk run //:manage -- promote-workflow`; the tree is the payload and a "
         "graph is addressed by its id, not by a BUILD entry",
     },
 }

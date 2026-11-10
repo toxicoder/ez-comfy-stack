@@ -44,7 +44,7 @@ blender-desk fails the gate (park is for dumps). After Queue, overlay-qc. Path D
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **guides/guide-still** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 

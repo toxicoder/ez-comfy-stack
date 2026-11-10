@@ -80,7 +80,7 @@ timeline needs a generated clip. One GB10 job: the graph refuses to render while
 another heavy mode holds occupancy.
 
 Models: ``{WAN_UNET}`` + ``{WAN_CLIP}`` (CLIP type wan) + ``{WAN_VAE}``.
-Weights: ``./scripts/manage.sh download-wan --tier 5b``.
+Weights: ``bazelisk run //:manage -- download-wan --tier 5b``.
 
 Widgets the agent patches (see ``extra.lab_edit.widgets``):
 - Prompt: the Wan Prompt Enhance ``prompt`` widget - it owns the Positive CLIP,

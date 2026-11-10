@@ -31,9 +31,9 @@ type **yes**. `restart: "no"`, headroom, and download-limit clear-on-exit are un
 Stop, pull only `__DOCS_GIT_REF__` (the branch these docs were built from), then start and
 type **yes**.
 
-1. `./scripts/manage.sh stop`
+1. `bazelisk run //:manage -- stop`
 2. `git fetch origin && git checkout __DOCS_GIT_REF__ && git pull --ff-only origin __DOCS_GIT_REF__`
-3. `./scripts/manage.sh start` - type **yes**
+3. `bazelisk run //:manage -- start` - type **yes**
 
 **Check it worked:** `git branch --show-current` prints `__DOCS_GIT_REF__` and
 `bazelisk run //:manage -- doctor` prints `Doctor OK`.
@@ -45,10 +45,10 @@ An update does not re-download weights. Details: [Update the stack](update.md).
 ## Run the studio
 
 1. `bazelisk run //:manage -- doctor` - expect `Doctor OK`
-2. `./scripts/manage.sh start` - type **yes**. Headroom is a hard fail.
+2. `bazelisk run //:manage -- start` - type **yes**. Headroom is a hard fail.
 3. `bazelisk run //:manage -- status` - the project is up
 4. `bazelisk run //:manage -- logs` - read the container log
-5. `./scripts/manage.sh stop` - container down, volumes kept
+5. `bazelisk run //:manage -- stop` - container down, volumes kept
 
 On the Spark, open `http://${SPARK_HOST}:${COMFY_PORT}`. From a laptop, forward the port
 first:
@@ -68,7 +68,7 @@ Default Klein 4B + Wan 2.2 5B + LTX-2.5 + prompt-enhance GGUF. This does not pul
 dub, music, or 3D.
 
 1. `df -h` - confirm free disk before a multi-GB pull
-2. `./scripts/manage.sh download-models` - throttled by `${DOWNLOAD_LIMIT}` (default `auto`)
+2. `bazelisk run //:manage -- download-models` - throttled by `${DOWNLOAD_LIMIT}` (default `auto`)
 3. `bazelisk run //:manage -- models-status` - the lab basenames are on disk
 
 Stuck `*.incomplete` partials only (finished weights stay):

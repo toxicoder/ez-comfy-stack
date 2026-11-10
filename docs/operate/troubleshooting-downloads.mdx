@@ -21,7 +21,7 @@ tags: [troubleshooting, downloads, bandwidth, huggingface, ltx]
 - **Telling** a soft-fail throttle from a real network failure
 
 <Callout type="warning" title="HF_TOKEN is not the LTX license click">
-  `HF_TOKEN` in `.env` only authenticates. Open https://huggingface.co/Lightricks/LTX-2.5 as the **same** Hugging Face user (`hf auth whoami`) and click Agree, then re-run `./scripts/manage.sh download-models`. Klein/Wan can cache-hit while LTX is still missing.
+  `HF_TOKEN` in `.env` only authenticates. Open https://huggingface.co/Lightricks/LTX-2.5 as the **same** Hugging Face user (`hf auth whoami`) and click Agree, then re-run `bazelisk run //:manage -- download-models`. Klein/Wan can cache-hit while LTX is still missing.
 </Callout>
 
 <Callout type="warning" title="Unthrottled wrap can freeze SSH">
@@ -37,7 +37,7 @@ download belongs to [Models and workflows](troubleshooting-models-workflows.md).
 
 Run these three checks in order. Each one decides which section below is yours.
 
-- **Ask the limiter what it thinks.** `./scripts/manage.sh download-limit status` names the applied
+- **Ask the limiter what it thinks.** `bazelisk run //:manage -- download-limit status` names the applied
   cap and the cached measurement. `download-limit clear` removes a half-applied limit.
 - **Ask Hugging Face who you are.** `hf auth whoami` settles gated-repo rows before you touch
   `HF_TOKEN` - the token authenticates, it does not accept a license.
@@ -52,22 +52,22 @@ broken download.
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
 | wondershaper `qdisc kind is unknown` / RTNETLINK | No HTB/IFB (common on DGX Spark) | Expected; wrap uses **gentle HF max-workers** from measured speed (HTTP probe). Not a hard Mbps cap. `DOWNLOAD_LIMIT=off` for full blast |
-| Speedtest failed / always 50 Mbps | CLI missing or probe blocked | Auto-installs `speedtest-cli` when possible; **clears limits before measure**; then duration HTTP probe / live RX. Or skip the probe: `./scripts/manage.sh download-models --limit 40` |
-| Auto cap way below line rate | Old 15 MB completed-file probe, or sivel `speedtest-cli` winning first | Pull latest. Auto uses a **duration** HTTP sample (timeout is valid) then 85%. Remeasure: `./scripts/manage.sh download-limit status --refresh`. Cache is 24h host-local |
-| Auto cap too high / SSH still sluggish | Speedtest over-reads the path you share with SSH, or a stale-high 24h cache after WAN drop | `./scripts/manage.sh download-limit status --refresh` then `--limit N` with a lower Mbps (e.g. 20-40). Persistent: `DOWNLOAD_LIMIT=40` in `.env`. `DOWNLOAD_LIMIT_CACHE_TTL_SEC=0` disables cache |
+| Speedtest failed / always 50 Mbps | CLI missing or probe blocked | Auto-installs `speedtest-cli` when possible; **clears limits before measure**; then duration HTTP probe / live RX. Or skip the probe: `bazelisk run //:manage -- download-models --limit 40` |
+| Auto cap way below line rate | Old 15 MB completed-file probe, or sivel `speedtest-cli` winning first | Pull latest. Auto uses a **duration** HTTP sample (timeout is valid) then 85%. Remeasure: `bazelisk run //:manage -- download-limit status --refresh`. Cache is 24h host-local |
+| Auto cap too high / SSH still sluggish | Speedtest over-reads the path you share with SSH, or a stale-high 24h cache after WAN drop | `bazelisk run //:manage -- download-limit status --refresh` then `--limit N` with a lower Mbps (e.g. 20-40). Persistent: `DOWNLOAD_LIMIT=40` in `.env`. `DOWNLOAD_LIMIT_CACHE_TTL_SEC=0` disables cache |
 | SSH freezes during download | Full-rate HF pull (limit off or soft-fail) | Prefer working `download-limit`; lower fixed Mbps; `download-limit clear` if half-applied |
-| Limits stuck after kill | trap skipped | `./scripts/manage.sh download-limit clear` |
+| Limits stuck after kill | trap skipped | `bazelisk run //:manage -- download-limit clear` |
 
 ### wondershaper / qdisc failures
 
 `download-models` wraps downloads under wondershaper. If the kernel rejects HTB (`qdisc kind is unknown`) or illegal rates, **wrap soft-fails**: it warns and continues **unthrottled** (SSH risk). Persistent `download-limit run` still hard-fails. Set `DOWNLOAD_LIMIT_REQUIRE=1` to hard-fail wrap too.
 
 ```bash
-./scripts/manage.sh download-limit clear
+bazelisk run //:manage -- download-limit clear
 # optional: sudo modprobe sch_htb sch_ingress sch_sfq
-./scripts/manage.sh download-models --limit 40
+bazelisk run //:manage -- download-models --limit 40
 # or skip throttle entirely (SSH risk):
-# DOWNLOAD_LIMIT=off ./scripts/manage.sh download-models
+# DOWNLOAD_LIMIT=off bazelisk run //:manage -- download-models
 ```
 
 `--limit` is bandwidth in Mbps (`auto` / `off` / an integer), never a model selector, and pack ids
@@ -81,8 +81,8 @@ growing. Read the second row before you reach for the FORCE clear.
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
 | ++ctrl+c++ does not stop download | Old tee pipeline orphan | Pull latest; wrap/hf use process groups - Ctrl+C should stop `hf` within seconds |
-| `Still waiting to acquire lock` on `*.lock` | Stale HF locks from killed downloads | `bazelisk run //:manage -- clear-hf-locks` or auto-clear on download-models; if stuck **and no hf is running**: `HF_LOCK_CLEAR_FORCE=1 ./scripts/manage.sh clear-hf-locks` |
-| `v ... 0 MiB/s` + `found N incomplete` + lock still held | Hung **resume** - live `hf` holds the lock, partial not growing | ++ctrl+c++. Do **not** FORCE-clear locks while it runs. Then `bazelisk run //:manage -- reset-hf-partials --yes` and re-run, or `./scripts/manage.sh download-models --drop-incomplete`. Finished `.safetensors` are kept |
+| `Still waiting to acquire lock` on `*.lock` | Stale HF locks from killed downloads | `bazelisk run //:manage -- clear-hf-locks` or auto-clear on download-models; if stuck **and no hf is running**: `HF_LOCK_CLEAR_FORCE=1 bazelisk run //:manage -- clear-hf-locks` |
+| `v ... 0 MiB/s` + `found N incomplete` + lock still held | Hung **resume** - live `hf` holds the lock, partial not growing | ++ctrl+c++. Do **not** FORCE-clear locks while it runs. Then `bazelisk run //:manage -- reset-hf-partials --yes` and re-run, or `bazelisk run //:manage -- download-models --drop-incomplete`. Finished `.safetensors` are kept |
 
 ## CLI, progress, and gated pulls
 

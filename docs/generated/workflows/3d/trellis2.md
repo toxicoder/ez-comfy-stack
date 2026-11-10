@@ -32,7 +32,7 @@ Occupancy **trellis**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous 
 Klein still -> native TRELLIS.2 INT8 mesh (Comfy core nodes).
 
 ```bash
-./scripts/manage.sh download-3d --tier trellis2
+bazelisk run //:manage -- download-3d --tier trellis2
 bazelisk run //:manage -- occupancy enter trellis --yes
 ```
 
@@ -50,7 +50,7 @@ Occupancy: trellis - stop Blender desk, LTX, Wan, Klein denoise. One GB10 job.
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **3d/trellis2** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 
@@ -165,7 +165,7 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## 3d/trellis2 Klein still -> native TRELLIS.2 INT8 mesh (Comfy core nodes). ```bash ./scripts/manage.sh download-3d --tier trellis2 bazelisk run //:manage -- occupancy enter trellis --yes ``` LoadIm...`
+**This graph:** `## 3d/trellis2 Klein still -> native TRELLIS.2 INT8 mesh (Comfy core nodes). ```bash bazelisk run //:manage -- download-3d --tier trellis2 bazelisk run //:manage -- occupancy enter trellis --yes ``` ...`
 
 ````text
 ## 3d/trellis2
@@ -173,7 +173,7 @@ Markdown-ish operator note.
 Klein still -> native TRELLIS.2 INT8 mesh (Comfy core nodes).
 
 ```bash
-./scripts/manage.sh download-3d --tier trellis2
+bazelisk run //:manage -- download-3d --tier trellis2
 bazelisk run //:manage -- occupancy enter trellis --yes
 ```
 

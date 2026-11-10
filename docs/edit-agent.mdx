@@ -25,7 +25,7 @@ tags: [editing, video-editor, agent, mcp, qwen, sidecar, occupancy]
 - **Keeping the lane out of Compose** - nothing in `docker/Dockerfile`, no service, no `restart:` key
 - **Bringing your own laptop tools** into the agent as `local__<server>__<tool>` calls
 
-**Question this page answers:** how do I cut a clip list on the Spark without leaving ComfyUI? Start the studio with `./scripts/manage.sh start`, optionally bring the agent brain up with `bazelisk run //:manage -- agent-model run`, then open **EZ Edit** at `http://127.0.0.1:${COMFY_PORT}`. For a full NLE in a separate tab, use [Vlo](vlo.md); for a file handoff, export OTIO to Kdenlive / Shotcut: [Host sidecars overview](studio-sidecars.md).
+**Question this page answers:** how do I cut a clip list on the Spark without leaving ComfyUI? Start the studio with `bazelisk run //:manage -- start`, optionally bring the agent brain up with `bazelisk run //:manage -- agent-model run`, then open **EZ Edit** at `http://127.0.0.1:${COMFY_PORT}`. For a full NLE in a separate tab, use [Vlo](vlo.md); for a file handoff, export OTIO to Kdenlive / Shotcut: [Host sidecars overview](studio-sidecars.md).
 
 ```bash
 export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
@@ -52,7 +52,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 1. Start the studio (heavy confirm, type **yes**):
 
 ```bash
-./scripts/manage.sh start
+bazelisk run //:manage -- start
 ```
 
 2. Bring up the agent brain - optional, and the only step that touches the GPU:
@@ -84,7 +84,7 @@ of the studio:
 ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
 ```
 
-The panel is one ComfyUI frontend extension - if the button is missing, `./scripts/manage.sh
+The panel is one ComfyUI frontend extension - if the button is missing, `bazelisk run //:manage --
 restart` recopies `custom_nodes/` and a hard refresh reloads the bundle.
 
 ---
@@ -102,7 +102,7 @@ encodes, and therefore which container you get.
     ffmpeg runs on the Spark from the same argv the pack builds for the project (concat, cut,
     trim, fade, wipe, per-clip `volume`). Text overlays and captions are **not** burned in this
     pass - the row appends `; 2 text planes render in client mode` and the video plus audio still
-    render. Stop Comfy first (`./scripts/manage.sh stop`) if the encode is long enough to matter;
+    render. Stop Comfy first (`bazelisk run //:manage -- stop`) if the encode is long enough to matter;
     it is a CPU job, but the box is one box. A row that fails with `ffmpeg not found on PATH`
     means the binary is missing in the container: install it there, or use client mode.
   </Tab>
@@ -306,8 +306,8 @@ the call arguments travel to the Spark.
   Vlo's **Launch ComfyUI** button (and any equivalent in another editor) is for a folder install
   that editor created itself. This stack owns the container lifecycle - `restart: "no"`, the heavy
   confirm, the headroom preflight - so a second ComfyUI means two heavy GPU jobs and a refused
-  start. Start ComfyUI with `./scripts/manage.sh start` only, and keep weights on
-  `./scripts/manage.sh download-models`. Same rule, full wording: [Vlo video editor](vlo.md) and
+  start. Start ComfyUI with `bazelisk run //:manage -- start` only, and keep weights on
+  `bazelisk run //:manage -- download-models`. Same rule, full wording: [Vlo video editor](vlo.md) and
   [Host sidecars overview](studio-sidecars.md#occupancy-rule).
 </Callout>
 

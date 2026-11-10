@@ -65,11 +65,11 @@ TRELLIS.2 is a hero-piece tool, not a walkable house. Do not TRELLIS a full-scen
 Optional Workbench dump (higher quality) - host Blender, then park or stop Comfy:
 
 ```bash
-./scripts/manage.sh blender-install
+bazelisk run //:manage -- blender-install
 bazelisk run //:manage -- occupancy enter blender-desk
 bazelisk run //:manage -- house-views --slug lab-penthouse
 # optional: --layout /path/to/house_layout.yaml
-./scripts/manage.sh start   # type yes
+bazelisk run //:manage -- start   # type yes
 # Queue workflows/_lab/photos/dream-house-clay.json
 ```
 
@@ -91,7 +91,7 @@ Default layout is `schemas/house_layout.yaml` (lab penthouse matching the canned
 | If | Skip |
 | --- | --- |
 | No host Blender | Workbench dump. `start` / `--seed-inputs` still render layout cameras. Language-only tour -> **photos/dream-house**. Do not substitute T2I stills or `example.png` as clay |
-| Compose is up | Blender `house-views` dump (exit 2). `./scripts/manage.sh stop` first. `--install-inputs` and `--seed-inputs` may run while compose is up |
+| Compose is up | Blender `house-views` dump (exit 2). `bazelisk run //:manage -- stop` first. `--install-inputs` and `--seed-inputs` may run while compose is up |
 | You only needed a language bible | Clay dump. Queue **photos/dream-house** |
 
 ---

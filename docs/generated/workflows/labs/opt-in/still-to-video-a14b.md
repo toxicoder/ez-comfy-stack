@@ -30,7 +30,7 @@ Occupancy **wan**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 ## labs/opt-in/still-to-video-a14b
 
 Opt-in Wan 2.2 A14B FP8 silent hero. Not download-models.
-Download: ./scripts/utilities/download-wan.sh run --tier a14b
+Download: bazelisk run //scripts:run-utility -- download-wan  run --tier a14b
 Unload 5B first. MagCache is off. Lightning-style 8 steps (not 4-step TI2V-5B).
 Models: wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors + wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors + wan_2.1_vae.safetensors.
 Both UNETs sit on the canvas. Queue uses the high-noise expert so the graph loads. Dual-expert KSampler split is the full A14B I2V recipe after both weights exist (Comfy Templates / operator).
@@ -41,7 +41,7 @@ Occupancy: wan - stop LTX, podcast, music. One GB10 job.
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **labs/opt-in/still-to-video-a14b** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 
@@ -727,13 +727,13 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## labs/opt-in/still-to-video-a14b Opt-in Wan 2.2 A14B FP8 silent hero. Not download-models. Download: ./scripts/utilities/download-wan.sh run --tier a14b Unload 5B first. MagCache is off. Lightning-...`
+**This graph:** `## labs/opt-in/still-to-video-a14b Opt-in Wan 2.2 A14B FP8 silent hero. Not download-models. Download: bazelisk run //scripts:run-utility -- download-wan run --tier a14b Unload 5B first. MagCache is ...`
 
 ```text
 ## labs/opt-in/still-to-video-a14b
 
 Opt-in Wan 2.2 A14B FP8 silent hero. Not download-models.
-Download: ./scripts/utilities/download-wan.sh run --tier a14b
+Download: bazelisk run //scripts:run-utility -- download-wan  run --tier a14b
 Unload 5B first. MagCache is off. Lightning-style 8 steps (not 4-step TI2V-5B).
 Models: wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors + wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors + wan_2.1_vae.safetensors.
 Both UNETs sit on the canvas. Queue uses the high-noise expert so the graph loads. Dual-expert KSampler split is the full A14B I2V recipe after both weights exist (Comfy Templates / operator).

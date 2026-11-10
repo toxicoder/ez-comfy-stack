@@ -31,7 +31,7 @@ Occupancy **-**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous family
 
 Opt-in LongCat-Video (MIT) prompt preview. Not download-models. No UNET on this canvas.
 
-Download: ./scripts/manage.sh download-longcat --tier video
+Download: bazelisk run //:manage -- download-longcat --tier video
 Context-parallel two-Spark only with LAB_ALLOW_CONTEXT_PARALLEL=1. NCCL is out of this sample - tensor-parallel LLMs belong in nvidia-dgx-spark-lab.
 Unload LTX first. Occupancy: one heavy job when you Queue a real LongCat printer.
 
@@ -42,7 +42,7 @@ Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Enhance of
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **labs/opt-in/longcat-video** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 
@@ -91,14 +91,14 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## labs/opt-in/longcat-video Opt-in LongCat-Video (MIT) prompt preview. Not download-models. No UNET on this canvas. Download: ./scripts/manage.sh download-longcat --tier video Context-parallel two-S...`
+**This graph:** `## labs/opt-in/longcat-video Opt-in LongCat-Video (MIT) prompt preview. Not download-models. No UNET on this canvas. Download: bazelisk run //:manage -- download-longcat --tier video Context-parallel...`
 
 ```text
 ## labs/opt-in/longcat-video
 
 Opt-in LongCat-Video (MIT) prompt preview. Not download-models. No UNET on this canvas.
 
-Download: ./scripts/manage.sh download-longcat --tier video
+Download: bazelisk run //:manage -- download-longcat --tier video
 Context-parallel two-Spark only with LAB_ALLOW_CONTEXT_PARALLEL=1. NCCL is out of this sample - tensor-parallel LLMs belong in nvidia-dgx-spark-lab.
 Unload LTX first. Occupancy: one heavy job when you Queue a real LongCat printer.
 

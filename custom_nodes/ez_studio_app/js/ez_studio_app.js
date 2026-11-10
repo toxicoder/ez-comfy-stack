@@ -506,7 +506,7 @@ function renderBanner(status) {
   const album = extra.lab_album;
   if (album?.role === "album" && album.artist_slug && album.album_slug) {
     lines.push(
-      `Full album: ./scripts/manage.sh album-render --album ${escapeHtml(album.artist_slug)}/${escapeHtml(album.album_slug)} --art skip|upload|generate`,
+      `Full album: bazelisk run //:manage -- album-render --album ${escapeHtml(album.artist_slug)}/${escapeHtml(album.album_slug)} --art skip|upload|generate`,
     );
   }
   el.title = summary || qualityCaption || "";

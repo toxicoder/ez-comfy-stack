@@ -221,7 +221,7 @@ REF_PURITY_MIN_DIM = _speech.REF_PURITY_MIN_DIM
 REF_PURITY_COSINE = _speech.REF_PURITY_COSINE
 CLONE_MISSING_STATUS = (
     "clone engine missing - pip install chatterbox-tts and "
-    "./scripts/manage.sh download-dub --tier clone"
+    "bazelisk run //:manage -- download-dub --tier clone"
 )
 T3_MODEL_STATUS = "chatterbox-tts missing t3_model=v3 - upgrade chatterbox-tts"
 PERTH_STATUS = (
@@ -253,7 +253,7 @@ MISSING_SOURCE_STATUS = (
 _GENERIC_INGEST_STATUS = frozenset({"", "pending", "ok", "ingest"})
 ASR_WHEEL_STATUS = "faster-whisper not installed - pip install faster-whisper"
 ASR_PACK_STATUS = (
-    "ASR pack missing - run ./scripts/manage.sh download-dub --tier asr"
+    "ASR pack missing - bazelisk run //:manage -- download-dub --tier asr"
 )
 CLONE_REQUIRED_FILES = (
     "ve.pt",
@@ -270,10 +270,10 @@ QWEN3_WHEEL_STATUS = (
     "/comfy-state/ComfyUI/.venv/bin/python -m pip install --no-deps qwen-tts"
 )
 QWEN3_PACK_STATUS = (
-    "qwen3tts pack incomplete - ./scripts/manage.sh download-podcast --tier qwen3tts"
+    "qwen3tts pack incomplete - bazelisk run //:manage -- download-podcast --tier qwen3tts"
 )
 QWEN3_TOKENIZER_STATUS = (
-    "qwen3tts tokenizer missing - ./scripts/manage.sh download-podcast --tier qwen3tts"
+    "qwen3tts tokenizer missing - bazelisk run //:manage -- download-podcast --tier qwen3tts"
 )
 QWEN3_BASE_REQUIRED_FILES = (
     "model.safetensors",
@@ -540,7 +540,7 @@ def preflight_clone() -> str:
     if perth_miss:
         return perth_miss
     if clone_ckpt_dir() is None:
-        return "clone pack missing - run ./scripts/manage.sh download-dub --tier clone"
+        return "clone pack missing - bazelisk run //:manage -- download-dub --tier clone"
     return ""
 
 
@@ -1579,7 +1579,7 @@ def _load_chatterbox_model() -> tuple[Any | None, str]:
     if ckpt is None:
         return (
             None,
-            "clone pack missing - run ./scripts/manage.sh download-dub --tier clone",
+            "clone pack missing - bazelisk run //:manage -- download-dub --tier clone",
         )
     loader = getattr(ChatterboxMultilingualTTS, "from_local", None)
     if not callable(loader):

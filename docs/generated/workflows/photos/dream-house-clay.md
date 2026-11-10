@@ -37,9 +37,9 @@ Ten Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence
 
 Workbench dump (optional, higher quality) - stop Comfy first:
 
-  ./scripts/manage.sh stop
+  bazelisk run //:manage -- stop
   bazelisk run //:manage -- house-views --slug lab-penthouse
-  ./scripts/manage.sh start
+  bazelisk run //:manage -- start
 
 Copy an existing dump without Blender (compose may stay up):
 
@@ -60,7 +60,7 @@ Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, th
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **photos/dream-house-clay** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 
@@ -883,9 +883,9 @@ Ten Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence
 
 Workbench dump (optional, higher quality) - stop Comfy first:
 
-  ./scripts/manage.sh stop
+  bazelisk run //:manage -- stop
   bazelisk run //:manage -- house-views --slug lab-penthouse
-  ./scripts/manage.sh start
+  bazelisk run //:manage -- start
 
 Copy an existing dump without Blender (compose may stay up):
 

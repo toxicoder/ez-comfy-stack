@@ -73,17 +73,17 @@ bazelisk run //scripts:run-utility -- download-limit wrap --limit auto [--refres
 Via manage:
 
 ```bash
-./scripts/manage.sh download-limit clear
-./scripts/manage.sh download-models                 # wrap --limit "${DOWNLOAD_LIMIT:-auto}"
-./scripts/manage.sh download-models --limit 40      # fixed 40 Mbps; overrides .env for this run
-./scripts/manage.sh download-models --limit off     # no throttle (SSH risk)
+bazelisk run //:manage -- download-limit clear
+bazelisk run //:manage -- download-models                 # wrap --limit "${DOWNLOAD_LIMIT:-auto}"
+bazelisk run //:manage -- download-models --limit 40      # fixed 40 Mbps; overrides .env for this run
+bazelisk run //:manage -- download-models --limit off     # no throttle (SSH risk)
 ```
 
 `--limit N` is integer **Mbps** (megabits, not megabytes per second). 40 Mbps ~ 5 MB/s. `.env`
 `DOWNLOAD_LIMIT=40` is the persistent default; the flag wins for one invocation. Wrap still
 **clears on exit**.
 
-**Check it worked:** `./scripts/manage.sh download-limit status --json` reports the interface
+**Check it worked:** `bazelisk run //:manage -- download-limit status --json` reports the interface
 and the active limit, and a wrapped pull logs `limit=N Mbps` before its first progress line.
 
 ```mermaid
@@ -219,10 +219,10 @@ If the host still feels "stuck" throttled after a crash:
 ```bash
 bazelisk run //scripts:run-utility -- download-limit clear
 # or:
-./scripts/manage.sh download-limit clear
+bazelisk run //:manage -- download-limit clear
 ```
 
-**Check it worked:** `./scripts/manage.sh download-limit status` reports no active limit and
+**Check it worked:** `bazelisk run //:manage -- download-limit status` reports no active limit and
 SSH is responsive again. Clearing does not drop the speed cache, so the next `auto` run reuses
 the 24h sample.
 

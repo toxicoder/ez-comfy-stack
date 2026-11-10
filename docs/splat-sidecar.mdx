@@ -28,7 +28,7 @@ tags: [splat, supersplat, sidecar, occupancy]
 
 ## Operator path
 
-1. `./scripts/manage.sh stop` - take the stack down so the encoder is not fighting a loaded Comfy job.
+1. `bazelisk run //:manage -- stop` - take the stack down so the encoder is not fighting a loaded Comfy job.
 2. `bazelisk run //:manage -- status` - confirm the stack is down before you open the viewer.
 3. Open SuperSplat on the host (upstream release or local static build).
 4. Load the splat file from disk. Do not point it at the Comfy volume as a live mount while compose is up.

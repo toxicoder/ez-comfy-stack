@@ -1,7 +1,7 @@
 """Resolve required model files for a lab graph + Quality combo.
 
 Hermetic: stdlib only. Disk roots are injectable. Does not download.
-Operator commands are host paths from the repo root (never container paths).
+Operator commands are Bazel targets; paths are host, never container paths.
 """
 
 from __future__ import annotations
@@ -62,43 +62,43 @@ from .presets import (
     normalize_quality,
 )
 
-# Host operator commands (repo root). manage.sh has no download-image/wan/ltx.
-CMD_DOWNLOAD_MODELS = "./scripts/manage.sh download-models"
-CMD_IMAGE_9B = "./scripts/utilities/download-image.sh run --tier 9b"
-CMD_IMAGE_9B_BASE = "./scripts/utilities/download-image.sh run --tier 9b-base"
-CMD_IMAGE_FLUX2_DEV = "./scripts/utilities/download-image.sh run --tier flux2-dev"
-CMD_IMAGE_FLUX3 = "./scripts/utilities/download-image.sh run --tier flux3"
-CMD_IMAGE_FLUX3_BASE = "./scripts/utilities/download-image.sh run --tier flux3-base"
-CMD_IMAGE_FLUX3_NVFP4 = "./scripts/utilities/download-image.sh run --tier flux3-nvfp4"
-CMD_IMAGE_FLUX3_TE = "./scripts/utilities/download-image.sh run --tier flux3-te"
-CMD_IMAGE_FLUX3_PUP = "./scripts/utilities/download-image.sh run --tier flux3-pup"
+# Operator commands (Bazel targets). manage.sh has no download-image/wan/ltx.
+CMD_DOWNLOAD_MODELS = "bazelisk run //:manage -- download-models"
+CMD_IMAGE_9B = "bazelisk run //scripts:run-utility -- download-image run --tier 9b"
+CMD_IMAGE_9B_BASE = "bazelisk run //scripts:run-utility -- download-image run --tier 9b-base"
+CMD_IMAGE_FLUX2_DEV = "bazelisk run //scripts:run-utility -- download-image run --tier flux2-dev"
+CMD_IMAGE_FLUX3 = "bazelisk run //scripts:run-utility -- download-image run --tier flux3"
+CMD_IMAGE_FLUX3_BASE = "bazelisk run //scripts:run-utility -- download-image run --tier flux3-base"
+CMD_IMAGE_FLUX3_NVFP4 = "bazelisk run //scripts:run-utility -- download-image run --tier flux3-nvfp4"
+CMD_IMAGE_FLUX3_TE = "bazelisk run //scripts:run-utility -- download-image run --tier flux3-te"
+CMD_IMAGE_FLUX3_PUP = "bazelisk run //scripts:run-utility -- download-image run --tier flux3-pup"
 # Opt-in Qwen-Image 2.1 packs (Qwen RESEARCH LICENSE AGREEMENT, section 2.b
 # bars commercial use without a paid Qwen license). None is a default, none is
 # in image --tier all, none is in download-models; Klein 4B stays the Apache
 # default still.
-CMD_IMAGE_QWEN = "./scripts/utilities/download-image.sh run --tier qwen-image"
+CMD_IMAGE_QWEN = "bazelisk run //scripts:run-utility -- download-image run --tier qwen-image"
 CMD_IMAGE_QWEN_TURBO = (
-    "./scripts/utilities/download-image.sh run --tier qwen-image-turbo"
+    "bazelisk run //scripts:run-utility -- download-image run --tier qwen-image-turbo"
 )
-CMD_IMAGE_QWEN_NVFP4 = "./scripts/utilities/download-image.sh run --tier qwen-image-nvfp4"
+CMD_IMAGE_QWEN_NVFP4 = "bazelisk run //scripts:run-utility -- download-image run --tier qwen-image-nvfp4"
 CMD_IMAGE_QWEN_TURBO_NVFP4 = (
-    "./scripts/utilities/download-image.sh run --tier qwen-image-turbo-nvfp4"
+    "bazelisk run //scripts:run-utility -- download-image run --tier qwen-image-turbo-nvfp4"
 )
-CMD_IMAGE_QWEN_TE = "./scripts/utilities/download-image.sh run --tier qwen-image-te"
-CMD_IMAGE_QWEN_VAE = "./scripts/utilities/download-image.sh run --tier qwen-image-vae"
-CMD_WAN_FUN = "./scripts/utilities/download-wan.sh run --tier fun-inp"
-CMD_WAN_VACE = "./scripts/utilities/download-wan.sh run --tier vace"
-CMD_WAN_S2V = "./scripts/utilities/download-wan.sh run --tier s2v"
-CMD_LTX_ICLORA = "./scripts/utilities/download-ltx.sh run --tier iclora"
-CMD_LLM_DESCRIBE = "./scripts/utilities/download-llm.sh run --tier describe"
-CMD_LLM_35B = "./scripts/manage.sh download-llm --tier qwen36-35b-a3b"
-CMD_MUSIC = "./scripts/manage.sh download-music --tier turbo"
-CMD_PODCAST = "./scripts/manage.sh download-podcast --tier analog"
-CMD_DUB = "./scripts/manage.sh download-dub --tier all"
-CMD_TRELLIS = "./scripts/manage.sh download-3d --tier trellis2"
-CMD_RESTORE = "./scripts/manage.sh download-restore --tier seedvr2-3b"
-CMD_LONGCAT = "./scripts/manage.sh download-longcat"
-CMD_DREAMX = "./scripts/manage.sh download-dreamx"
+CMD_IMAGE_QWEN_TE = "bazelisk run //scripts:run-utility -- download-image run --tier qwen-image-te"
+CMD_IMAGE_QWEN_VAE = "bazelisk run //scripts:run-utility -- download-image run --tier qwen-image-vae"
+CMD_WAN_FUN = "bazelisk run //scripts:run-utility -- download-wan run --tier fun-inp"
+CMD_WAN_VACE = "bazelisk run //scripts:run-utility -- download-wan run --tier vace"
+CMD_WAN_S2V = "bazelisk run //scripts:run-utility -- download-wan run --tier s2v"
+CMD_LTX_ICLORA = "bazelisk run //scripts:run-utility -- download-ltx run --tier iclora"
+CMD_LLM_DESCRIBE = "bazelisk run //scripts:run-utility -- download-llm run --tier describe"
+CMD_LLM_35B = "bazelisk run //:manage -- download-llm --tier qwen36-35b-a3b"
+CMD_MUSIC = "bazelisk run //:manage -- download-music --tier turbo"
+CMD_PODCAST = "bazelisk run //:manage -- download-podcast --tier analog"
+CMD_DUB = "bazelisk run //:manage -- download-dub --tier all"
+CMD_TRELLIS = "bazelisk run //:manage -- download-3d --tier trellis2"
+CMD_RESTORE = "bazelisk run //:manage -- download-restore --tier seedvr2-3b"
+CMD_LONGCAT = "bazelisk run //:manage -- download-longcat"
+CMD_DREAMX = "bazelisk run //:manage -- download-dreamx"
 CMD_RESTART = "Then restart Comfy so models/* re-link."
 CMD_PERSON_MASK = (
     'mkdir -p "$MODELS_DIR/comfy/ez-person" && '

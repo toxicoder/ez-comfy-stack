@@ -42,7 +42,7 @@ Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/s
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **guides/canny-hero** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 

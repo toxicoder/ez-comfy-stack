@@ -30,9 +30,9 @@
 #
 # What this script never does:
 #   - Never merges, rebases, or resets. The pull is --ff-only only.
-#   - Never calls docker or docker compose for start/stop. It delegates to
-#     ./scripts/manage.sh so the heavy confirm, the headroom preflight, and
-#     the restart: "no" policy all stay in one place.
+#   - Never calls docker or docker compose for start/stop. It delegates the
+#     start and the stop to manage.sh so the heavy confirm, the headroom
+#     preflight, and the restart: "no" policy all stay in one place.
 #   - Never removes volumes and never runs cleanup.
 #   - Never writes the operator's .env file; it only reports missing keys.
 #

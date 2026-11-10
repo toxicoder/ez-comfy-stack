@@ -38,7 +38,7 @@ UPSAMPLE_RESOLUTION = 1024
 STRUCTURE_RESOLUTION = "32"
 
 DOWNLOAD_STANZA = """```bash
-./scripts/manage.sh download-3d --tier trellis2
+bazelisk run //:manage -- download-3d --tier trellis2
 bazelisk run //:manage -- occupancy enter trellis --yes
 ```"""
 

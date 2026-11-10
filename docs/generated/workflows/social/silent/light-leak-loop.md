@@ -42,7 +42,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **social/silent/light-leak-loop** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 

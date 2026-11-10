@@ -35,13 +35,13 @@ Purpose:
 ```bash
 Usage:
   bazelisk run //:manage -- help|doctor|status|logs|cleanup
-  ./scripts/manage.sh setup
-  ./scripts/manage.sh start
-  ./scripts/manage.sh stop
-  ./scripts/manage.sh restart
-  ./scripts/manage.sh download-models [--limit auto|N|off] [--drop-incomplete]|download-podcast [--tier analog|acestep|chatterbox|qwen3tts|all] [--limit auto|N|off]|download-dub [--tier asr|clone|all] [--limit auto|N|off]|download-music [--tier turbo|xl|all] [--limit auto|N|off]|download-llm [--tier enhance|qwen36-35b-a3b|all] [--limit auto|N|off]
+  bazelisk run //:manage -- setup
+  bazelisk run //:manage -- start
+  bazelisk run //:manage -- stop
+  bazelisk run //:manage -- restart
+  bazelisk run //:manage -- download-models [--limit auto|N|off] [--drop-incomplete]|download-podcast [--tier analog|acestep|chatterbox|qwen3tts|all] [--limit auto|N|off]|download-dub [--tier asr|clone|all] [--limit auto|N|off]|download-music [--tier turbo|xl|all] [--limit auto|N|off]|download-llm [--tier enhance|qwen36-35b-a3b|all] [--limit auto|N|off]
   bazelisk run //:manage -- reset-hf-partials [--yes] [--force]
-  ./scripts/manage.sh download-limit status|run|clear|wrap ...
+  bazelisk run //:manage -- download-limit status|run|clear|wrap ...
 
 ```
 
@@ -1058,7 +1058,7 @@ docker/Dockerfile. Occupancy does not install Blender.
 ```bash
 Usage:
   bazelisk run //scripts:run-utility -- blender-install
-  ./scripts/manage.sh blender-install
+  bazelisk run //:manage -- blender-install
 
 ```
 
@@ -2226,13 +2226,9 @@ What this script never does:
 
   - Never merges, rebases, or resets. The pull is --ff-only only.
 
-  - Never calls docker or docker compose for start/stop. It delegates to
-
-```bash
-    ./scripts/manage.sh so the heavy confirm, the headroom preflight, and
-```
-
-    the restart: "no" policy all stay in one place.
+  - Never calls docker or docker compose for start/stop. It delegates the
+    start and the stop to manage.sh so the heavy confirm, the headroom
+    preflight, and the restart: "no" policy all stay in one place.
 
   - Never removes volumes and never runs cleanup.
 
@@ -2241,9 +2237,9 @@ What this script never does:
 ```bash
 Usage:
   bazelisk run //scripts:run-utility -- update-stack --branch development --yes
-  ./scripts/manage.sh update-stack
-  ./scripts/manage.sh update-stack --yes
-  ./scripts/manage.sh update-stack --dry-run
+  bazelisk run //:manage -- update-stack
+  bazelisk run //:manage -- update-stack --yes
+  bazelisk run //:manage -- update-stack --dry-run
   bazelisk run //scripts:update-stack -- --dry-run
 
 ```

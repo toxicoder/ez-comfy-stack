@@ -45,7 +45,7 @@ describe("command-vars", () => {
     const recipe = builder.commands.find((row) => row.id === "download-models");
     expect(recipe).toBeDefined();
     const line = renderCommand(recipe!, {}, defaultVarValues(builder));
-    expect(line).toContain("./scripts/manage.sh");
+    expect(line).toContain("bazelisk run //:manage");
     expect(line).toContain("download-models");
     expect(line).toContain("--limit");
     expect(line).toContain("auto");

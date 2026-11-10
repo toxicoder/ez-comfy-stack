@@ -32,7 +32,7 @@ Occupancy **trellis**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous 
 Still pack plate -> native TRELLIS.2 INT8 mesh (Comfy core nodes). Occupancy: **trellis**.
 
 ```bash
-./scripts/manage.sh download-3d --tier trellis2
+bazelisk run //:manage -- download-3d --tier trellis2
 bazelisk run //:manage -- occupancy enter trellis --yes
 ```
 
@@ -43,7 +43,7 @@ No Preview3D / Load3D / Save3D types in-tree - inspect the GLB with core Load 3D
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **3d/still-to-mesh** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 
@@ -161,7 +161,7 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## 3d/still-to-mesh Still pack plate -> native TRELLIS.2 INT8 mesh (Comfy core nodes). Occupancy: **trellis**. ```bash ./scripts/manage.sh download-3d --tier trellis2 bazelisk run //:manage -- occupa...`
+**This graph:** `## 3d/still-to-mesh Still pack plate -> native TRELLIS.2 INT8 mesh (Comfy core nodes). Occupancy: **trellis**. ```bash bazelisk run //:manage -- download-3d --tier trellis2 bazelisk run //:manage -- ...`
 
 ````text
 ## 3d/still-to-mesh
@@ -169,7 +169,7 @@ Markdown-ish operator note.
 Still pack plate -> native TRELLIS.2 INT8 mesh (Comfy core nodes). Occupancy: **trellis**.
 
 ```bash
-./scripts/manage.sh download-3d --tier trellis2
+bazelisk run //:manage -- download-3d --tier trellis2
 bazelisk run //:manage -- occupancy enter trellis --yes
 ```
 

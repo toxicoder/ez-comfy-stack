@@ -35,7 +35,7 @@ FLUX 3 Image Klein base INT8 (no distillation) still on the Klein still desk. Op
 
 Profile: Quality `flux3-quality` writes UNET `flux3-image-klein-base-int8-convrot.safetensors`, 50 steps, CFG 3.5. This graph ships those same values, so Queue matches with Quality left on lab. Quality never changes pixels - Format / platform does (Custom uses Width x Height).
 Models: flux3-image-klein-base-int8-convrot.safetensors + qwen3vl_4b_int8_convrot.safetensors (CLIP type flux2) + flux2-vae.safetensors.
-Gated pull: black-forest-labs/flux-3-image-klein-comfy on Hugging Face is gated, so accept the FLUX Kommunity License (v1.0) on the model card with the **same HF account as HF_TOKEN** (a token alone is not acceptance), then run `./scripts/utilities/download-image.sh run --tier flux3-base` - it auto-includes the `flux3-te` text encoder. Every pull is pinned to HF revision feef60b0aaf63a4773ace96636ebbcf43b881312.
+Gated pull: black-forest-labs/flux-3-image-klein-comfy on Hugging Face is gated, so accept the FLUX Kommunity License (v1.0) on the model card with the **same HF account as HF_TOKEN** (a token alone is not acceptance), then run `bazelisk run //scripts:run-utility -- download-image  run --tier flux3-base` - it auto-includes the `flux3-te` text encoder. Every pull is pinned to HF revision feef60b0aaf63a4773ace96636ebbcf43b881312.
 License: FLUX Kommunity License (v1.0), not Apache. Monetized output only for qualifying users under $5M gross annualized revenue. Not in `download-models` and not in image `--tier all`.
 Weights missing: click Check models - it names the command, and Queue keeps the authored loaders (nothing swaps in weights you have not accepted).
 Save prefix `ez_still_flux3_quality`. Empty of lettering - composite titles later.
@@ -47,7 +47,7 @@ Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, th
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **labs/opt-in/still-flux3-quality** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 
@@ -556,7 +556,7 @@ FLUX 3 Image Klein base INT8 (no distillation) still on the Klein still desk. Op
 
 Profile: Quality `flux3-quality` writes UNET `flux3-image-klein-base-int8-convrot.safetensors`, 50 steps, CFG 3.5. This graph ships those same values, so Queue matches with Quality left on lab. Quality never changes pixels - Format / platform does (Custom uses Width x Height).
 Models: flux3-image-klein-base-int8-convrot.safetensors + qwen3vl_4b_int8_convrot.safetensors (CLIP type flux2) + flux2-vae.safetensors.
-Gated pull: black-forest-labs/flux-3-image-klein-comfy on Hugging Face is gated, so accept the FLUX Kommunity License (v1.0) on the model card with the **same HF account as HF_TOKEN** (a token alone is not acceptance), then run `./scripts/utilities/download-image.sh run --tier flux3-base` - it auto-includes the `flux3-te` text encoder. Every pull is pinned to HF revision feef60b0aaf63a4773ace96636ebbcf43b881312.
+Gated pull: black-forest-labs/flux-3-image-klein-comfy on Hugging Face is gated, so accept the FLUX Kommunity License (v1.0) on the model card with the **same HF account as HF_TOKEN** (a token alone is not acceptance), then run `bazelisk run //scripts:run-utility -- download-image  run --tier flux3-base` - it auto-includes the `flux3-te` text encoder. Every pull is pinned to HF revision feef60b0aaf63a4773ace96636ebbcf43b881312.
 License: FLUX Kommunity License (v1.0), not Apache. Monetized output only for qualifying users under $5M gross annualized revenue. Not in `download-models` and not in image `--tier all`.
 Weights missing: click Check models - it names the command, and Queue keeps the authored loaders (nothing swaps in weights you have not accepted).
 Save prefix `ez_still_flux3_quality`. Empty of lettering - composite titles later.

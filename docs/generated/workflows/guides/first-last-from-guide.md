@@ -31,7 +31,7 @@ Occupancy **wan**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 
 Silent Fun InP first-last-frame from a DCC guide pack. LoadImage ``first.png`` and ``last.png``. MagCache **off**. Opt-in:
 
-  ./scripts/manage.sh download-wan --tier fun-inp
+  bazelisk run //:manage -- download-wan --tier fun-inp
 
 Unload LTX first. Occupancy: wan. This is a continuity draft, not the LTX AV print.
 
@@ -42,7 +42,7 @@ Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/s
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **guides/first-last-from-guide** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 
@@ -729,14 +729,14 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## guides/first-last-from-guide Silent Fun InP first-last-frame from a DCC guide pack. LoadImage ``first.png`` and ``last.png``. MagCache **off**. Opt-in: ./scripts/manage.sh download-wan --tier fun-...`
+**This graph:** `## guides/first-last-from-guide Silent Fun InP first-last-frame from a DCC guide pack. LoadImage ``first.png`` and ``last.png``. MagCache **off**. Opt-in: bazelisk run //:manage -- download-wan --tie...`
 
 ```text
 ## guides/first-last-from-guide
 
 Silent Fun InP first-last-frame from a DCC guide pack. LoadImage ``first.png`` and ``last.png``. MagCache **off**. Opt-in:
 
-  ./scripts/manage.sh download-wan --tier fun-inp
+  bazelisk run //:manage -- download-wan --tier fun-inp
 
 Unload LTX first. Occupancy: wan. This is a continuity draft, not the LTX AV print.
 

@@ -7,20 +7,23 @@ The guard reads every committed text file, looks only at **command position**
 (a fenced block line or a backticked span, where a reader actually copies from),
 and fails when such a command has a Bazel target.
 
-Two committed formats are JSON, so the text sweep skips them as data and each
+Three committed formats are JSON, so the text sweep skips them as data and each
 gets its own pass over the text an operator really copies: the note fields of
-the lab graphs (ComfyUI renders them on the canvas), and the ``argv`` of the
+the lab graphs (ComfyUI renders them on the canvas), the ``argv`` of the
 site's command-builder recipes (the docs-site widgets join it into the line a
-reader pastes). Both reuse the same ``RULES``, the same host-verb exemption, and
-the same report shape as the text sweep.
+reader pastes), and the ``short`` / ``long`` of the glossary entries
+(``docs/glossary.py`` renders each into a published card). All three reuse the
+same ``RULES``, the same host-verb exemption, and the same report shape as the
+text sweep.
 
 Two escapes exist, both explicit tables rather than a comment a reader can
 forget to delete:
 
 ``_HOST_ESCAPE_HATCH``
     ``./scripts/manage.sh <verb>`` for the verbs that need Docker, ``sudo``, the
-    GPU, or ``$HOME``. Those cannot run hermetically, so the raw form is the
-    documented door and the Bazel wrapper would only hide that.
+    GPU, or ``$HOME``. Those cannot run hermetically, so the raw script stays
+    the documented door *in a script*, where the text is the escape hatch's own
+    usage header and log lines.
 ``_ALLOW``
     Named exemptions for the few places the raw command is correct: the
     bootstrap that installs bazelisk before bazelisk exists, the CI docs build
@@ -30,11 +33,24 @@ forget to delete:
     flagged command, or a bare ``path`` key whose file is gone, is itself a
     failure, so an exemption cannot outlive the sentence it was written for.
 
+Published prose gets no host-verb exemption. ``is_published_doc`` marks the text
+an operator reads and pastes from - the pages under ``docs`` including the ones
+``//docs:generate`` writes, plus ``README.md`` and ``CONTRIBUTING.md`` - and the
+lab-graph notes, the command-builder recipes the widgets copy, and the glossary
+cards ``docs/glossary.py`` renders. There the Bazel
+target is the door even for a host verb: ``bazelisk run //:manage -- <verb>``
+execs the same script on the host, passes the client environment through, and
+keeps the interactive ``start`` confirm, so the raw form on a page teaches the
+wrong door. A page that documents the raw form *as the fallback* keeps it by
+carrying its own ``_ALLOW`` reason.
+
 Deliberately not checked: a bare path in prose ("``scripts/manage.sh`` routes
 operator actions") is a file reference, not an instruction to run it. In source
 files the sweep reads comments, docstrings, and the strings an output helper
 prints, which is the text an operator actually copies, and leaves executed code
-alone.
+alone. A leading ``NAME=value`` assignment is read past, so
+``LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start`` is caught and the fix
+keeps the assignment in front.
 
 Usage:
     bazelisk test //tests:bazel_docs_check
@@ -67,6 +83,16 @@ _CODE_SPAN = re.compile(r"(`+)(.+?)\1", re.S)
 # heredoc. These get read as closely as a Markdown page, because that is where
 # an operator actually meets the command.
 _CODE_SUFFIX = (".sh", ".bash", ".bats", ".py", ".bzl", ".mjs", ".js", ".ts", ".tsx")
+# Shipped templates the operator reads before the first run: an env template, a
+# restricted-YAML catalog, a compose file, a CI workflow, and the PowerShell
+# client installer. None of them can hold a fenced block, so as prose they
+# yielded no command position at all and the sweep passed over the raw door in
+# their headers. Read them as code: their comment syntax is the shell's, so the
+# rule that already covers a script's own usage header covers these too. An
+# executed config value (`command: "./scripts/manage.sh start"`) is still
+# implementation and stays unpoliced, because _code_line_candidates reads
+# quoted strings only where an output helper prints them.
+_TEMPLATE_SUFFIX = (".yml", ".yaml", ".ps1", ".env", ".example")
 # A `#` or `//` comment body.
 _COMMENT = re.compile(r"^\s*(?:#+|//+)\s?(.*)$")
 # A string literal passed to an output helper, in either quote style.
@@ -79,11 +105,22 @@ _HEREDOC = re.compile(r"<<-?\s*['\"]?(\w+)['\"]?")
 _LEAD_NOISE = re.compile(r"^[-*> \t]+")
 # A metavariable like `<verb>`: documents a shape, nothing to copy.
 _PLACEHOLDER = re.compile(r"<[^>]*>")
+# Leading `NAME=value` assignments. `FOO=1 ./scripts/manage.sh start` is the
+# same raw door as the bare form, so the matcher reads past the prefix and the
+# suggestion keeps it.
+_ENV_ASSIGNMENT = re.compile(r"^(?:[A-Za-z_][A-Za-z0-9_]*=\S*\s+)+")
+
+# Text an operator reads and pastes from, where the Bazel target is the door
+# even for a host verb. `docs/generated/` counts: //docs:generate writes it, so
+# a raw door there is a generator template that still needs fixing. The lab
+# graphs and the command-builder recipes are covered by their own passes.
+_PUBLISHED_DOC_DIR = "docs/"
+_PUBLISHED_DOC_FILES = ("README.md", "CONTRIBUTING.md")
+_PUBLISHED_DOC_SUFFIX = (".md", ".mdx")
 
 # Directories whose committed text is operator-facing documentation. Everything
 # tracked is swept except what _SKIP_DIR / _SKIP_SUFFIX say below.
 _SKIP_DIR = (
-    "docs/generated/",
     "docs-site/node_modules/",
     "docs-site/out/",
     "custom_nodes/ez_music/",
@@ -99,6 +136,19 @@ _LAB_DIR = "workflows/_lab"
 # docs-site/lib/command-vars.ts joins each recipe's argv into the line the reader
 # pastes - so the recipes get their own pass over that rendered line.
 _COMMAND_BUILDER_FILE = "includes/command-builder.json"
+# The glossary is the third JSON the site renders as operator text:
+# docs/glossary.py turns each entry's short and long into a published card. A
+# card is a sentence rather than a command position, so the pass below reads
+# the clause-initial run of each field, which is where an instruction starts.
+_GLOSSARY_FILE = "includes/glossary.json"
+_GLOSSARY_PROSE_FIELDS = ("short", "long")
+# A field splits into clauses at a backtick (the shipped cards backtick their
+# commands) and after the two punctuation marks that introduce an instruction.
+# A sentence period is deliberately absent: "the studio. ./scripts/manage.sh
+# setup copies this" is a subject mention in prose, and promoting it would have
+# the gate demand an exemption for a sentence that never asked to be pasted.
+_CLAUSE_BREAK = re.compile(r"(?:^|`+|(?::|;)\s+)")
+_TRAILING_PROSE = ".,;:!?|)]}\"' "
 
 # --------------------------------------------------------------------------
 # The policy
@@ -258,19 +308,18 @@ _ALLOW: dict[str, str] = {
     "scripts/setup-host.sh": "installs bazelisk itself, so no target can be the door",
     ".github/scripts/install-lint-tools.sh": "execs scripts/ci/install-lint-tools.sh; "
     "both are the CI toolchain lane, which runs outside Bazel by design",
-    "scripts/ci/install-lint-tools.sh": "the CI toolchain installer; runs before any "
-    "Bazel invocation in the workflow",
+    "scripts/ci/install-lint-tools.sh": "the CI toolchain installer; "
+    "//scripts:ci_install_lint_tools is a filegroup, not runnable, so the "
+    "workflow execs this source directly",
     "scripts/ci_check_only.sh": "validate.sh execs it under CI as an implementation "
     "detail; it declares no target of its own",
-    "scripts/ci/publish-pages-tree.sh": "run by the deploy workflow after bazelisk "
-    "shutdown, when no target can be consulted",
+    "scripts/ci/publish-pages-tree.sh": "the deploy job execs it from the "
+    "checkout; //scripts:ci_publish_pages_tree is a filegroup, not runnable",
     # The command is the payload of an ssh heredoc sent to a Spark that has no
     # bazelisk yet, and the other is prose explaining why the raw delegation is
     # the policy. Neither is a reader-facing instruction.
     "scripts/utilities/setup-client.sh:79": "inside the 'cat <<EOF' payload piped "
     "to ssh ez-spark: it runs on a fresh Spark with no bazelisk installed yet",
-    "scripts/utilities/update-stack.sh:34": "prose that names the script it "
-    "delegates to; the delegation to the raw escape hatch is the subject",
     "docs/cinema_clip_prompts.py": "author-time prompt helper with no target",
     "docs-site/scripts/gen_nav.py": "the nav generator itself; //docs-site:nav_test "
     "unit-tests this file rather than running it",
@@ -291,6 +340,15 @@ _ALLOW: dict[str, str] = {
     # longer exists.
     "docs/contribute/testing-docs.mdx:134": "CI runs the docs build after "
     "'bazelisk shutdown', so the page has to name the script it really calls",
+    # The page leads with the target and puts the raw form in parentheses as the
+    # fallback, which is the pattern AGENTS.md keeps for a host-mutating verb.
+    "docs/contribute/host-setup.mdx:268": "names the operator escape hatch "
+    "beside the documented target for 'setup --install-docker'",
+    # The header leads with 'bazelisk run //docs-site:install', which is
+    # run_npm.sh install and ignores QUIET. Only the script itself reads that
+    # variable, so the second Usage line has to show the direct call.
+    "docs/setup-docs.sh:8": "shows the QUIET knob the //docs-site:install "
+    "target does not expose; the line above it names that target",
     # MIGRATION.md carries one block headed "Without Bazel". Naming the scripts
     # is the entire point of that block; the Bazel forms are documented above it.
     "MIGRATION.md:70": "inside the page's 'Without Bazel' block, which documents "
@@ -476,28 +534,72 @@ def is_host_verb(verb: str) -> bool:
     return any(verb.startswith(prefix) for prefix in HOST_VERB_PREFIXES)
 
 
-def classify(command: str) -> tuple[str, str] | None:
-    """Match one command against the policy.
+def is_published_doc(path: str) -> bool:
+    """True when ``path`` is prose an operator reads and pastes from.
 
-    Globals: none.
+    Globals: _PUBLISHED_DOC_DIR, _PUBLISHED_DOC_FILES, _PUBLISHED_DOC_SUFFIX.
+    Arguments:
+      path - repo-relative tracked path.
+    Outputs:
+      None (pure).
+    Returns:
+      True for the Markdown pages under ``docs`` (generated ones included, since
+      a raw door there came from a generator template) and the two repo pages.
+      Source files are False: a script's own usage header is the escape hatch
+      that AGENTS.md keeps raw.
+    """
+    if path in _PUBLISHED_DOC_FILES:
+        return True
+    return path.startswith(_PUBLISHED_DOC_DIR) and path.endswith(_PUBLISHED_DOC_SUFFIX)
+
+
+def split_env(command: str) -> tuple[str, str]:
+    """Split a command into its leading ``NAME=value`` prefix and its body.
+
+    Globals: _ENV_ASSIGNMENT.
     Arguments:
       command - the command text from a code span or fenced block.
     Outputs:
       None (pure).
     Returns:
+      ``(prefix, body)`` with the assignments that set the environment for the
+      command in ``prefix`` (empty string when there are none) and the command
+      itself in ``body``. An empty command yields ``("", "")``.
+    """
+    lead = _ENV_ASSIGNMENT.match(command)
+    if lead is None:
+        return "", command.strip()
+    return lead.group(0).strip(), command[lead.end():].strip()
+
+
+def classify(command: str, *, published: bool = False) -> tuple[str, str] | None:
+    """Match one command against the policy.
+
+    Globals: RULES, _IGNORED_COMMANDS.
+    Arguments:
+      command - the command text from a code span or fenced block.
+      published - True for text an operator pastes from, where a host verb loses
+        its escape-hatch exemption because the Bazel wrapper runs the identical
+        script on the host.
+    Outputs:
+      None (pure).
+    Returns:
       ``(violation, suggestion)`` when the command should have been written as a
       Bazel target, or None when it is a Bazel command, an ignored command, a
-      host escape hatch, or not a repo entry point at all.
+      host escape hatch, or not a repo entry point at all. A leading
+      ``NAME=value`` prefix is read past for matching and kept in the suggestion.
     """
     head = command.split()
     if not head:
         return None
-    if command.startswith("bazelisk ") or command.startswith("bazel "):
+    prefix, body = split_env(command)
+    if body.startswith("bazelisk ") or body.startswith("bazel "):
         return None
     if head[0] in _IGNORED_COMMANDS:
         return None
+    lead = f"{prefix} " if prefix else ""
     for pattern, template, kind in RULES:
-        match = pattern.match(command)
+        match = pattern.match(body)
         if match is None:
             continue
         groups = match.groupdict()
@@ -509,20 +611,20 @@ def classify(command: str) -> tuple[str, str] | None:
             verb = rest.split()[0] if rest else ""
             if not verb or _PLACEHOLDER.fullmatch(verb):
                 return None
-            if is_host_verb(verb):
+            if is_host_verb(verb) and not published:
                 return None
         if kind == "utility":
             # A download utility pulls weights into $HOME over the network, so it
             # needs the same host door as the `download-*` verbs of manage.sh.
             name = (groups.get("name") or "").strip()
-            if any(name.startswith(prefix) for prefix in HOST_VERB_PREFIXES):
+            if any(name.startswith(prefix_) for prefix_ in HOST_VERB_PREFIXES) and not published:
                 return None
         name = (groups.get("name") or "").strip()
         try:
             suggestion = template.format(rest=rest, name=name).strip()
         except (KeyError, IndexError):
             suggestion = template
-        return (command, " ".join(suggestion.split()))
+        return (command, " ".join(f"{lead}{suggestion}".split()))
     return None
 
 
@@ -571,11 +673,25 @@ def findings(root: Path, paths: Sequence[str], *, use_allow: bool = True) -> lis
         except (OSError, UnicodeDecodeError):
             continue
         code = path.endswith(_CODE_SUFFIX)
-        positions = command_positions(text, code=code)
+        template = path.endswith(_TEMPLATE_SUFFIX)
+        # A template is pasted from the way a page is, so a host verb gets no
+        # exemption in one: the raw door belongs to the script's own usage
+        # header, not to a config file that only mentions the CLI.
+        published = is_published_doc(path) or template
+        positions = command_positions(text, code=code or template)
+        if template:
+            # A template header is a sentence, not a line to paste, so the
+            # comment body is read the way a glossary card is: the run after a
+            # clause break is where an instruction starts.
+            positions = [
+                (number, candidate)
+                for number, raw in positions
+                for candidate in prose_command_candidates(raw)
+            ]
         if path.endswith(".py"):
             positions += docstring_positions(text)
         for line, command in positions:
-            result = classify(command)
+            result = classify(command, published=published)
             if result is None:
                 continue
             offending, suggestion = result
@@ -681,7 +797,7 @@ def lab_graph_violations(root: Path, paths: Sequence[str]) -> list[str]:
             continue
         for note in lab_note_fields(graph):
             for line, command in command_positions(note, code=False):
-                found = classify(command)
+                found = classify(command, published=True)
                 if found is None:
                     continue
                 offending, suggestion = found
@@ -732,10 +848,10 @@ def command_builder_violations(root: Path, paths: Sequence[str]) -> list[str]:
 
     A recipe's argv is the clipboard text behind every command widget on the
     published pages, so it is operator-facing exactly like a fenced block, and it
-    has to name the same targets the docs name. The host-mutating verbs stay raw
-    here as they do in prose: a recipe for one of them cannot run hermetically,
-    and the widget would otherwise copy a command that cannot work. A recipe whose
-    argv is a plain shell line (an ``ssh`` tunnel, an ``echo`` of a URL, a
+    has to name the same targets the docs name. Host verbs are policed here as
+    they are in prose: the wrapper execs the same script on the host, so a widget
+    that copies the raw door is teaching the wrong one. A recipe whose argv is a
+    plain shell line (an ``ssh`` tunnel, an ``echo`` of a URL, a
     ``docker compose`` call) names no repo entry point, so ``classify`` returns
     None and the recipe is legal as written; if that ever stops being true, the
     exemption belongs in ``_IGNORED_COMMANDS`` with its reason.
@@ -763,7 +879,7 @@ def command_builder_violations(root: Path, paths: Sequence[str]) -> list[str]:
         if not isinstance(builder, Mapping):
             continue
         for recipe_id, command in builder_recipe_commands(builder):
-            found = classify(command)
+            found = classify(command, published=True)
             if found is None:
                 continue
             offending, suggestion = found
@@ -776,15 +892,120 @@ def command_builder_violations(root: Path, paths: Sequence[str]) -> list[str]:
     return problems
 
 
+def prose_command_candidates(text: str) -> list[str]:
+    """The clause-initial runs of one prose field, as candidate commands.
+
+    A fenced block hands ``classify`` a whole line and a code span hands it
+    exactly what was quoted; a glossary card hands it a sentence, where the
+    command is the tail of a clause. Splitting at a backtick or at sentence
+    punctuation puts a copy-me command at the head of a run, which is the shape
+    the ``RULES`` patterns are anchored to, and leaves the narrative runs for
+    ``classify`` to reject. The split never trims into the middle of a
+    reference: a sentence whose subject is a file ("The scripts/manage.sh file
+    routes operator actions") keeps its leading words, so it stays prose.
+
+    Globals: _CLAUSE_BREAK, _LEAD_NOISE, _TRAILING_PROSE.
+    Arguments:
+      text - one prose field, such as a glossary entry's long text.
+    Outputs:
+      None (pure).
+    Returns:
+      Each non-empty clause with its bullet, trailing parenthetical, and
+      sentence punctuation trimmed, in document order. A parenthetical is an
+      aside about the command ("...(or, by hand: cp it to .env)"), so cutting
+      there keeps the suggestion a line the operator could actually paste.
+      Nothing is filtered here; that is ``classify``'s job.
+    """
+    out: list[str] = []
+    for fragment in _CLAUSE_BREAK.split(text):
+        candidate = _LEAD_NOISE.sub("", fragment).strip().split(" (", 1)[0]
+        candidate = candidate.strip().rstrip(_TRAILING_PROSE)
+        if candidate and any(char.isalnum() for char in candidate):
+            out.append(candidate)
+    return out
+
+
+def glossary_prose_fields(glossary: object) -> list[tuple[str, str]]:
+    """The ``(entry label, field text)`` pair for each operator-facing card.
+
+    Globals: _GLOSSARY_PROSE_FIELDS.
+    Arguments:
+      glossary - a parsed includes/glossary.json.
+    Outputs:
+      None; returns the pairs only.
+    Returns:
+      ``("<id>.<field>", text)`` per prose field of every entry that is an
+      object, in document order. A payload that is not a list, an entry that is
+      not an object, and a field that is not a string each yield nothing rather
+      than raising. A field is skipped when empty.
+    """
+    if not isinstance(glossary, list):
+        return []
+    out: list[tuple[str, str]] = []
+    for entry in glossary:
+        if not isinstance(entry, Mapping):
+            continue
+        entry_id = str(entry.get("id", "")).strip() or "(entry with no id)"
+        for field in _GLOSSARY_PROSE_FIELDS:
+            value = entry.get(field)
+            if isinstance(value, str) and value.strip():
+                out.append((f"{entry_id}.{field}", value))
+    return out
+
+
+def glossary_violations(root: Path, paths: Sequence[str]) -> list[str]:
+    """Sweep the glossary cards, which the doc sweep skips as JSON.
+
+    Each entry's ``short`` and ``long`` reach a published page through
+    ``docs/glossary.py``, so a card that tells the operator to run a repo script
+    teaches the wrong door to everyone who reads it, and host verbs are policed
+    here the way they are in prose. A card that only names a script, or links to
+    the manage.sh reference, is a file reference and stays legal.
+
+    Globals: _ALLOW, _GLOSSARY_FILE.
+    Arguments:
+      root - checkout root.
+      paths - repo-relative tracked paths to consider.
+    Outputs:
+      None; returns the violations only.
+    Returns:
+      One string per card field whose text names a repo script directly.
+    """
+    problems: list[str] = []
+    for path in paths:
+        if path != _GLOSSARY_FILE:
+            continue
+        file_path = root / path
+        if not file_path.is_file():
+            continue
+        try:
+            glossary = json.loads(file_path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+            continue
+        for label, text in glossary_prose_fields(glossary):
+            for candidate in prose_command_candidates(text):
+                found = classify(candidate, published=True)
+                if found is None:
+                    continue
+                offending, suggestion = found
+                # A card has no line the reader can see, so only a bare `path`
+                # key in _ALLOW can exempt one; a line key cannot reach this pass.
+                if allowed(path, 0, offending):
+                    continue
+                problems.append(f"{path}: {label}: {offending} -> {suggestion}")
+    return problems
+
+
 def violations(root: Path, paths: Sequence[str] | None = None) -> list[str]:
     """Every command-position script reference that should name a Bazel target."""
     tracked = candidate_files(tracked_files(root)) if paths is None else list(paths)
-    # The two JSON passes read files the prose sweep drops, so they see the
+    # The three JSON passes read files the prose sweep drops, so they see the
     # unfiltered tracked list.
     data_paths = tracked_files(root) if paths is None else list(paths)
     problems: list[str] = []
     problems += lab_graph_violations(root, data_paths)
     problems += command_builder_violations(root, data_paths)
+    problems += glossary_violations(root, data_paths)
     for path, line, offending, suggestion in findings(root, tracked):
         problems.append(f"{path}:{line}: {offending} -> {suggestion}")
     return problems

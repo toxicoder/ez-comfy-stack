@@ -37,7 +37,7 @@ This tree does **not** vendor Lightricks UUID subgraphs. Queue the official Temp
 
 Depth is wired by default. LoRA (opt-in, not download-models):
 
-  ./scripts/manage.sh download-ltx --tier iclora
+  bazelisk run //:manage -- download-ltx --tier iclora
   ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors
   (Lightricks/LTX-2.3-22b-IC-LoRA-Union-Control - official 2.5 graph widgets this 2.3 Union file)
 
@@ -57,7 +57,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **guides/depth-control-8s** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 
@@ -682,7 +682,7 @@ This tree does **not** vendor Lightricks UUID subgraphs. Queue the official Temp
 
 Depth is wired by default. LoRA (opt-in, not download-models):
 
-  ./scripts/manage.sh download-ltx --tier iclora
+  bazelisk run //:manage -- download-ltx --tier iclora
   ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors
   (Lightricks/LTX-2.3-22b-IC-LoRA-Union-Control - official 2.5 graph widgets this 2.3 Union file)
 

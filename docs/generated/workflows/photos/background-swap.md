@@ -43,7 +43,7 @@ Prompt enhance is on by default for bare place names (on-box Qwen3-4B-Instruct-2
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **photos/background-swap** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 

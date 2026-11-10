@@ -31,7 +31,7 @@ Occupancy **wan**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 
 Format / platform sets pixels (Custom uses Width x Height). Quality does not change size.
 
-./scripts/utilities/download-wan.sh run --tier fun-inp
+bazelisk run //scripts:run-utility -- download-wan  run --tier fun-inp
 Apache 2.0. Not part of download-models. Occupancy: stop LTX first.
 Load a start frame and an end frame. 121 frames @ 24 fps. MagCache off.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
@@ -39,7 +39,7 @@ Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, th
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **video/silent/first-last-5s** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 
@@ -730,14 +730,14 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## Fun InP FLF (opt-in) Format / platform sets pixels (Custom uses Width x Height). Quality does not change size. ./scripts/utilities/download-wan.sh run --tier fun-inp Apache 2.0. Not part of downlo...`
+**This graph:** `## Fun InP FLF (opt-in) Format / platform sets pixels (Custom uses Width x Height). Quality does not change size. bazelisk run //scripts:run-utility -- download-wan run --tier fun-inp Apache 2.0. Not...`
 
 ```text
 ## Fun InP FLF (opt-in)
 
 Format / platform sets pixels (Custom uses Width x Height). Quality does not change size.
 
-./scripts/utilities/download-wan.sh run --tier fun-inp
+bazelisk run //scripts:run-utility -- download-wan  run --tier fun-inp
 Apache 2.0. Not part of download-models. Occupancy: stop LTX first.
 Load a start frame and an end frame. 121 frames @ 24 fps. MagCache off.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.

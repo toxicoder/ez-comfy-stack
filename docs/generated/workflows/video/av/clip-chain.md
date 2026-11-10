@@ -60,7 +60,7 @@ LoadImage default example.png; after a still set ez_still_hero_*.png. Match inpu
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **video/av/clip-chain** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 

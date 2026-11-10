@@ -942,7 +942,7 @@ def render_graph_page(
         [
             "## How to Queue",
             "",
-            "1. `./scripts/manage.sh start` so `_lab` is seeded",
+            "1. `bazelisk run //:manage -- start` so `_lab` is seeded",
             f"2. Load **{lab_rel}** from **Apps** or **Workflows**",
             "3. Read the on-canvas Note, change widgets, Queue",
             "",

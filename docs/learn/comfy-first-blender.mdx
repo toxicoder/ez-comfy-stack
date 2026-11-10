@@ -92,7 +92,7 @@ default on one GB10, because it keeps the GPU on Comfy.
 
 ```bash
 rsync -a guides/go-see/12/ spark-0:/mnt/comfy-output/guides/go-see/12/
-./scripts/manage.sh start
+bazelisk run //:manage -- start
 ```
 
 ---

@@ -38,6 +38,19 @@ SUBSECTION_RE = re.compile(r"^#\s*###\s+(.+)$")
 COMMAND_RE = re.compile(r"^#\s*@command\s+(\S+)\s*$")
 FUNCTION_RE = re.compile(r"^#\s*@function\s+(\S+)\s*$")
 COMMENT_LINE_RE = re.compile(r"^#\s?(.*)$")
+
+# Command lines an operator copies out of a rendered Usage block, and the target
+# that replaces them. The script comment keeps the raw invocation - for the
+# host-mutating verbs that is the documented escape hatch, and `manage.sh help`
+# prints what really runs - while the published page names the Bazel target,
+# which execs the same script on the host.
+_ENV_ASSIGNMENT = r"(?:[A-Za-z_][A-Za-z0-9_]*=\S*\s+)*"
+MANAGE_USAGE_RE = re.compile(
+    r"^(?P<indent>\s*)(?P<env>" + _ENV_ASSIGNMENT + r")(?:\./)?scripts/manage\.sh(?:\s+(?P<rest>.*))?$"
+)
+UTILITY_USAGE_RE = re.compile(
+    r"^(?P<indent>\s*)(?P<env>" + _ENV_ASSIGNMENT + r")(?:\./)?scripts/utilities/(?P<name>[\w-]+)\.sh(?P<rest>.*)$"
+)
 HASH_BANNER_RE = re.compile(r"^#{5,}$")
 SEPARATOR_RE = re.compile(r"^(={3,}|-{3,})")
 
@@ -64,6 +77,51 @@ tags: [cli, manage, generated, reference]
 > `bazelisk run //docs:docs`. Do not hand-edit this file.
 
 """
+
+
+def _republish(match: "re.Match[str]", command: str) -> str:
+    """Put a rewritten command back behind the indentation and env prefix.
+
+    Args:
+        match: The usage-line match that supplied ``command``.
+        command: The Bazel-target command text.
+
+    Returns:
+        The line with its original leading whitespace and ``NAME=value``
+        assignments intact, trailing space removed.
+    """
+    return f"{match.group('indent')}{match.group('env')}{command}".rstrip()
+
+
+def published_command(line: str) -> str:
+    """Return the Bazel-target form of an operator-copied usage line.
+
+    Args:
+        line: One rendered line from a script comment body.
+
+    Returns:
+        The line with a leading ``./scripts/manage.sh <verb> ...`` rewritten to
+        ``bazelisk run //:manage -- <verb> ...``, or a leading
+        ``./scripts/utilities/<name>.sh ...`` rewritten to ``bazelisk run
+        //scripts:run-utility -- <name> ...``. Flags, tiers, session variables,
+        leading indentation, and any ``NAME=value`` prefix are preserved. A bare
+        script path with no verb is a file reference and comes back unchanged,
+        and so does prose, a mid-line mention, or a line that already names a
+        target.
+    """
+    manage = MANAGE_USAGE_RE.match(line)
+    if manage is not None:
+        rest = (manage.group("rest") or "").strip()
+        if not rest:
+            return line  # a path with no verb names the file, not a command
+        return _republish(manage, f"bazelisk run //:manage -- {rest}")
+    utility = UTILITY_USAGE_RE.match(line)
+    if utility is not None:
+        rest = (utility.group("rest") or "").strip()
+        name = utility.group("name")
+        target = f"bazelisk run //scripts:run-utility -- {name}"
+        return _republish(utility, f"{target} {rest}".strip() if rest else target)
+    return line
 
 
 def _format_body(body_lines: list[str]) -> str:
@@ -189,7 +247,7 @@ def _format_body(body_lines: list[str]) -> str:
         out.append(line)
         i += 1
 
-    return "\n".join(out).strip()
+    return "\n".join(published_command(item) for item in out).strip()
 
 
 def _collect_doc_body(lines: list[str], start: int) -> tuple[list[str], int]:

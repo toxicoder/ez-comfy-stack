@@ -32,7 +32,7 @@ Occupancy **audio**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fa
 US-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration 153 s on the pre-chorus form (4/4, C minor, 88 bpm). Album takes vary form, meter, key, and length.
 
 1. Queue **audio/music/rap-draft** first. Then this graph.
-2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).
+2. Weights: `bazelisk run //:manage -- download-music --tier turbo` (shared AIO with podcast acestep).
 3. Prompt enhance is **off** so the canned bars stay as written. Turn Enhance on only if you want the 4B rewriter. Edit **Rap lyrics** before Queue (wired into ACE). Human rewrite required before any release.
 4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No 'in the style of <living artist>'.
 5. ACE-Step vocal is an invented timbre, not a clone.
@@ -49,7 +49,7 @@ Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **audio/music/rap-full** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 
@@ -1040,7 +1040,7 @@ Markdown-ish operator note.
 US-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration 153 s on the pre-chorus form (4/4, C minor, 88 bpm). Album takes vary form, meter, key, and length.
 
 1. Queue **audio/music/rap-draft** first. Then this graph.
-2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).
+2. Weights: `bazelisk run //:manage -- download-music --tier turbo` (shared AIO with podcast acestep).
 3. Prompt enhance is **off** so the canned bars stay as written. Turn Enhance on only if you want the 4B rewriter. Edit **Rap lyrics** before Queue (wired into ACE). Human rewrite required before any release.
 4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No 'in the style of <living artist>'.
 5. ACE-Step vocal is an invented timbre, not a clone.

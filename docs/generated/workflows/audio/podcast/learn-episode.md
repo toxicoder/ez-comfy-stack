@@ -40,7 +40,7 @@ US-safe learning episode (Option C). Sequential Queue - do not load Klein + Wan 
 7. Cover separately: Queue **photos/podcast-cover.json** (prefix `ez_podcast`, 1024^2). Do not embed Klein here.
 8. Loudness: `bazelisk run //scripts:run-utility -- podcast-loudnorm run --in FILE` (-16 LUFS podcast / `--youtube` -14). Comfy cannot loudnorm.
 
-25 min seminar is the slow CPU-TTS path. Weights: `./scripts/manage.sh download-podcast --tier analog` then `--tier acestep`.
+25 min seminar is the slow CPU-TTS path. Weights: `bazelisk run //:manage -- download-podcast --tier analog` then `--tier acestep`.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 
 Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
@@ -48,7 +48,7 @@ Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **audio/podcast/learn-episode** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 
@@ -1007,7 +1007,7 @@ US-safe learning episode (Option C). Sequential Queue - do not load Klein + Wan 
 7. Cover separately: Queue **photos/podcast-cover.json** (prefix `ez_podcast`, 1024^2). Do not embed Klein here.
 8. Loudness: `bazelisk run //scripts:run-utility -- podcast-loudnorm run --in FILE` (-16 LUFS podcast / `--youtube` -14). Comfy cannot loudnorm.
 
-25 min seminar is the slow CPU-TTS path. Weights: `./scripts/manage.sh download-podcast --tier analog` then `--tier acestep`.
+25 min seminar is the slow CPU-TTS path. Weights: `bazelisk run //:manage -- download-podcast --tier analog` then `--tier acestep`.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 
 Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.

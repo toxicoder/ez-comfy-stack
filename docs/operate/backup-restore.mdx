@@ -71,19 +71,19 @@ Session vars in this browser (**Your Spark**) are localStorage, not a Spark back
 
 ## Restore in this order
 
-1. **Host dirs** - writable `${MODELS_DIR}` and `${COMFY_OUTPUT_DIR}` (`./scripts/manage.sh setup`).
+1. **Host dirs** - writable `${MODELS_DIR}` and `${COMFY_OUTPUT_DIR}` (`bazelisk run //:manage -- setup`).
 2. **Weights** - restore `${MODELS_DIR}` (or remount NFS). Then `bazelisk run //:manage -- doctor`. Missing files: `download-models` (throttled; `${DOWNLOAD_LIMIT}`).
 3. **Outputs** - restore `${COMFY_OUTPUT_DIR}` (media, `comfy-user/`, occupancy JSON, films, guides).
 4. **Secrets** - put `HF_TOKEN` in `.env` or `hf auth login`. Do not unpack a token from a public backup.
-5. **Compose** - `./scripts/manage.sh start` (type **yes**). Headroom preflight still runs. `restart: "no"` unchanged. If you did **not** restore `ez-comfy-state`, the entrypoint seeds from `/opt/comfy-prebuilt`.
+5. **Compose** - `bazelisk run //:manage -- start` (type **yes**). Headroom preflight still runs. `restart: "no"` unchanged. If you did **not** restore `ez-comfy-state`, the entrypoint seeds from `/opt/comfy-prebuilt`.
 6. **Occupancy** - optional: keep `.occupancy.json` or `occupancy enter idle` and start clean.
 7. **Farm** - each Spark still types **yes** locally. Never remote `compose up`. [Spark farm](../spark-farm.md).
 
 ```bash
-./scripts/manage.sh setup
+bazelisk run //:manage -- setup
 bazelisk run //:manage -- doctor
-./scripts/manage.sh download-models    # only if weights missing
-./scripts/manage.sh start              # type: yes
+bazelisk run //:manage -- download-models    # only if weights missing
+bazelisk run //:manage -- start              # type: yes
 ```
 
 **Check it worked:** doctor prints `Doctor OK`, `bazelisk run //:manage -- models-status` logs every

@@ -98,8 +98,8 @@ Override in `.env` if needed. Prefer a large, durable disk on the Spark.
 <Tabs groupId="preferred-setup-download-models-manual-last-resort-home-path" items={["Preferred (setup / download-models)", "Manual last resort", "Home path"]} persist>
   <Tab value="Preferred (setup / download-models)">
     ```bash
-    ./scripts/manage.sh setup
-    ./scripts/manage.sh download-models
+    bazelisk run //:manage -- setup
+    bazelisk run //:manage -- download-models
     # sudo mkdir -p + chown for MODELS_DIR and MODELS_DIR/comfy when needed
     ```
   </Tab>
@@ -126,8 +126,8 @@ Override in `.env` if needed. Prefer a large, durable disk on the Spark.
 <Tabs groupId="preferred-setup-start-manual-last-resort" items={["Preferred (setup / start)", "Manual last resort"]} persist>
   <Tab value="Preferred (setup / start)">
     ```bash
-    ./scripts/manage.sh setup
-    ./scripts/manage.sh start
+    bazelisk run //:manage -- setup
+    bazelisk run //:manage -- start
     # sudo mkdir -p + chown for COMFY_OUTPUT_DIR layout dirs when needed
     ```
   </Tab>

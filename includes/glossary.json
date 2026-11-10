@@ -914,7 +914,7 @@
     "aliases": ["Research Chat", "research-chat", "labs/assist/research-chat"],
     "category": "Studio",
     "short": "Inspire App: CPU chat + web search + sequential research subagents. Occupancy llm.",
-    "long": "No-UNET creative-process desk (`labs/assist/research-chat`). Queue a Message; read Reply and Sources. Mode research runs a planner plus 1-3 sequential search workers, then a synthesizer brief (prompt ingredients -> Prompt Forge -> Spark Still). Same on-box Qwen3-4B GGUF as Prompt Enhance (`n_gpu_layers=0`). HTTPS search is SSRF-safe. Laptop Path D: `./scripts/manage.sh research-mcp --stdio`. See [ComfyUI Apps](studio-apps.md) and [Occupancy desk](occupancy.md).",
+    "long": "No-UNET creative-process desk (`labs/assist/research-chat`). Queue a Message; read Reply and Sources. Mode research runs a planner plus 1-3 sequential search workers, then a synthesizer brief (prompt ingredients -> Prompt Forge -> Spark Still). Same on-box Qwen3-4B GGUF as Prompt Enhance (`n_gpu_layers=0`). HTTPS search is SSRF-safe. Laptop Path D: `bazelisk run //:manage -- research-mcp --stdio`. See [ComfyUI Apps](studio-apps.md) and [Occupancy desk](occupancy.md).",
     "see_also": ["prompt-enhance", "occupancy", "qwen"]
   },
   {
@@ -923,7 +923,7 @@
     "aliases": ["research-mcp"],
     "category": "Studio",
     "short": "In-tree MCP for chat, web search, research, and lab-app discovery. No execute_code.",
-    "long": "Typed stdio MCP (`./scripts/manage.sh research-mcp`). Tools: occupancy_status, list_lab_apps, describe_app, chat, web_search, research. Does not Queue Comfy, does not refuse a GPU session, does not map idle to blender-desk. No arbitrary URL fetch. Official Comfy Cloud MCP is out of tree. See [Occupancy desk](occupancy.md).",
+    "long": "Typed stdio MCP (`bazelisk run //:manage -- research-mcp`). Tools: occupancy_status, list_lab_apps, describe_app, chat, web_search, research. Does not Queue Comfy, does not refuse a GPU session, does not map idle to blender-desk. No arbitrary URL fetch. Official Comfy Cloud MCP is out of tree. See [Occupancy desk](occupancy.md).",
     "see_also": ["research-chat", "occupancy", "path-d"]
   },
   {
@@ -932,7 +932,7 @@
     "aliases": ["App Forge", "labs/assist/app-forge"],
     "category": "Studio",
     "short": "No-UNET Inspire App that clones a shipped lab graph into live _user/ as a new App.",
-    "long": "Load labs/assist/app-forge. Type a Brief, leave Template on auto (or pin photos/instagram-square), set Slug, Queue. Writes ${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/<slug>.app.json. Occupancy llm for the generator; the result keeps the source occupancy. Does not Queue the clone. Path D: ./scripts/manage.sh studio-mcp --stdio. See [App Forge](create/app-forge.md).",
+    "long": "Load labs/assist/app-forge. Type a Brief, leave Template on auto (or pin photos/instagram-square), set Slug, Queue. Writes ${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/<slug>.app.json. Occupancy llm for the generator; the result keeps the source occupancy. Does not Queue the clone. Path D: bazelisk run //:manage -- studio-mcp --stdio. See [App Forge](create/app-forge.md).",
     "see_also": ["studio-mcp", "app-mode", "prompt-forge", "occupancy"]
   },
   {
@@ -941,7 +941,7 @@
     "aliases": ["studio-mcp", "ez-studio"],
     "category": "Studio",
     "short": "In-tree MCP that clones lab graphs into live _user/. No execute_code. No Queue.",
-    "long": "Typed stdio MCP (`./scripts/manage.sh studio-mcp`). Tools: occupancy_status, search_templates, get_template, apply_slots, validate_workflow, save_workflow, create_app, generate_app. Does not Queue Comfy, does not refuse a GPU session, does not map idle to blender-desk. Official Comfy Cloud MCP is out of tree. See [MCP](operate/mcp.md).",
+    "long": "Typed stdio MCP (`bazelisk run //:manage -- studio-mcp`). Tools: occupancy_status, search_templates, get_template, apply_slots, validate_workflow, save_workflow, create_app, generate_app. Does not Queue Comfy, does not refuse a GPU session, does not map idle to blender-desk. Official Comfy Cloud MCP is out of tree. See [MCP](operate/mcp.md).",
     "see_also": ["app-forge", "research-mcp", "occupancy", "path-d"]
   },
   {
@@ -1040,7 +1040,7 @@
     "aliases": ["promote-workflow"],
     "category": "Studio",
     "short": "manage.sh copies a keeper graph into workflows/_lab/<lane>/. Does not commit.",
-    "long": "`./scripts/manage.sh promote-workflow --from PATH --lane LANE --id STEM` copies a live `_user` graph into `workflows/_lab/<lane>/`. Optional `--subdir`. Does not commit. Refuses MiniMax / Seedance / Kling / `z_image_turbo`, and UNET pins of Klein 9B / FLUX.2-dev. Never copy `_lab` into `_user`. See [manage.sh reference](manage-cli.md) and [Workflow catalog](studio-workflows.md).",
+    "long": "`bazelisk run //:manage -- promote-workflow --from PATH --lane LANE --id STEM` copies a live `_user` graph into `workflows/_lab/<lane>/`. Optional `--subdir`. Does not commit. Refuses MiniMax / Seedance / Kling / `z_image_turbo`, and UNET pins of Klein 9B / FLUX.2-dev. Never copy `_lab` into `_user`. See [manage.sh reference](manage-cli.md) and [Workflow catalog](studio-workflows.md).",
     "see_also": ["workflow", "lab-example", "manage-sh"]
   },
   {
@@ -1445,7 +1445,7 @@
     "aliases": ["blender-mcp"],
     "category": "Studio",
     "short": "In-tree typed Blender MCP. bpy tools need blender-desk. No execute_code.",
-    "long": "`./scripts/manage.sh blender-mcp`. Occupancy blender-desk for dumps. Does not vendor ahujasid. Laptop Path D tunnels stdio. See [MCP](operate/mcp.md).",
+    "long": "`bazelisk run //:manage -- blender-mcp`. Occupancy blender-desk for dumps. Does not vendor ahujasid. Laptop Path D tunnels stdio. See [MCP](operate/mcp.md).",
     "see_also": ["mcp", "blender-desk", "path-d", "blender"]
   },
   {

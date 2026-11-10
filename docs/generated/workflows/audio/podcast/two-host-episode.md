@@ -39,14 +39,14 @@ US-safe two-host-episode episode (Option A). Sequential Queue - do not load Klei
 6. Cover separately: Queue **photos/podcast-cover.json** (prefix `ez_podcast`, 1024^2). Do not embed Klein here.
 7. Loudness: `bazelisk run //scripts:run-utility -- podcast-loudnorm run --in FILE` (-16 LUFS podcast / `--youtube` -14). Comfy cannot loudnorm.
 
-Weights: `./scripts/manage.sh download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).
+Weights: `bazelisk run //:manage -- download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).
 
 Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
 ```
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **audio/podcast/two-host-episode** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 
@@ -949,7 +949,7 @@ US-safe two-host-episode episode (Option A). Sequential Queue - do not load Klei
 6. Cover separately: Queue **photos/podcast-cover.json** (prefix `ez_podcast`, 1024^2). Do not embed Klein here.
 7. Loudness: `bazelisk run //scripts:run-utility -- podcast-loudnorm run --in FILE` (-16 LUFS podcast / `--youtube` -14). Comfy cannot loudnorm.
 
-Weights: `./scripts/manage.sh download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).
+Weights: `bazelisk run //:manage -- download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).
 
 Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
 ```

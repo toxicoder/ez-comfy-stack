@@ -46,7 +46,7 @@ Occupancy: trellis - stop Blender desk, LTX, Wan, Klein denoise. One GB10 job.
 
 ## How to Queue
 
-1. `./scripts/manage.sh start` so `_lab` is seeded
+1. `bazelisk run //:manage -- start` so `_lab` is seeded
 2. Load **3d/prop-variants** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 

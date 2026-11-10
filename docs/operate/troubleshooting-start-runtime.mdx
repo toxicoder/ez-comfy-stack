@@ -23,10 +23,10 @@ tags: [troubleshooting, start, docker, kitchen, comfyui]
 - **Catching** the silent PyTorch attention fallback before you blame the model
 
 <Callout type="error" title="restart: no">
-  Logout is **not** `stop`. Reboot still needs a manual `./scripts/manage.sh start` (type **yes**). Do not weaken headroom preflight. Logs and `cleanup` (keeps `${MODELS_DIR}`): [Troubleshooting](../troubleshooting.md#logs).
+  Logout is **not** `stop`. Reboot still needs a manual `bazelisk run //:manage -- start` (type **yes**). Do not weaken headroom preflight. Logs and `cleanup` (keeps `${MODELS_DIR}`): [Troubleshooting](../troubleshooting.md#logs).
 </Callout>
 
-Open this page when the stack itself will not come up: `./scripts/manage.sh start` refuses, the
+Open this page when the stack itself will not come up: `bazelisk run //:manage -- start` refuses, the
 container is gone from `docker ps` seconds after the build, logs are still pulling torch long after
 `start` returned, a `docker pull ghcr.io/...` is denied, or generations run 5-15x slower than a
 4090. A weight that is missing from the UI, or a node that will not import, belongs to
@@ -50,10 +50,10 @@ The container either never comes up or dies within seconds of the build.
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
 | `start` refused | Headroom check | Free RAM/disk; stop other GPU jobs |
-| `mkdir: .../comfy-user/.../_rescued: Permission denied` then `start` exits | Nested `comfy-user` / `_user` is root-owned; host mkdir of `_rescued` ran without sudo-heal | Pull latest. Re-run `./scripts/manage.sh start` (type **yes**) - start sudo-heals those layout dirs. Details: [Host and Docker](troubleshooting-host-docker.md#comfy_output_dir-nested-permission-denied) |
-| Build OK, `status` empty / not in `docker ps` | Container exited immediately (`restart: "no"`) | Pull latest (workflow no longer mounts into `ComfyUI/` before clone). `bazelisk run //:manage -- logs` or `docker logs ez-comfy-studio`. Reset poisoned volume: `./scripts/manage.sh stop && docker volume rm ez-comfy-state` then `start` again. Stop other GPU containers if needed |
-| `unrecognized arguments: --normalvram` then container exits | Entrypoint still passed `--normalvram`; ComfyUI v0.34+ removed that flag (default VRAM is implied) | Pull latest. `entrypoint.sh` is bind-mounted - no image rebuild. `./scripts/manage.sh stop` then `start`. Confirm logs show Kitchen on :8188, not argparse help |
-| `ModuleNotFoundError: No module named 'comfy_api.input'` then container exit 1 (after Kitchen attention) | Volume seed used unanchored rsync `--exclude input/`, which also dropped ComfyUI v0.34+ `comfy_api/input` | Pull latest (`entrypoint.sh` + `install-comfy` are bind-mounted - no image rebuild). `./scripts/manage.sh stop` then `start` (type **yes**). Stamp-present refresh heals `comfy_api/` from `/opt/comfy-prebuilt`. Do **not** need `LAB_FORCE_COLD_INSTALL`. Last resort: `docker volume rm ez-comfy-state` then start |
+| `mkdir: .../comfy-user/.../_rescued: Permission denied` then `start` exits | Nested `comfy-user` / `_user` is root-owned; host mkdir of `_rescued` ran without sudo-heal | Pull latest. Re-run `bazelisk run //:manage -- start` (type **yes**) - start sudo-heals those layout dirs. Details: [Host and Docker](troubleshooting-host-docker.md#comfy_output_dir-nested-permission-denied) |
+| Build OK, `status` empty / not in `docker ps` | Container exited immediately (`restart: "no"`) | Pull latest (workflow no longer mounts into `ComfyUI/` before clone). `bazelisk run //:manage -- logs` or `docker logs ez-comfy-studio`. Reset poisoned volume: `bazelisk run //:manage -- stop && docker volume rm ez-comfy-state` then `start` again. Stop other GPU containers if needed |
+| `unrecognized arguments: --normalvram` then container exits | Entrypoint still passed `--normalvram`; ComfyUI v0.34+ removed that flag (default VRAM is implied) | Pull latest. `entrypoint.sh` is bind-mounted - no image rebuild. `bazelisk run //:manage -- stop` then `start`. Confirm logs show Kitchen on :8188, not argparse help |
+| `ModuleNotFoundError: No module named 'comfy_api.input'` then container exit 1 (after Kitchen attention) | Volume seed used unanchored rsync `--exclude input/`, which also dropped ComfyUI v0.34+ `comfy_api/input` | Pull latest (`entrypoint.sh` + `install-comfy` are bind-mounted - no image rebuild). `bazelisk run //:manage -- stop` then `start` (type **yes**). Stamp-present refresh heals `comfy_api/` from `/opt/comfy-prebuilt`. Do **not** need `LAB_FORCE_COLD_INSTALL`. Last resort: `docker volume rm ez-comfy-state` then start |
 
 ## Cold start, images, and layer cache
 
@@ -68,7 +68,7 @@ The container is up, but the first run spends minutes or hours on installs, pull
 | First start still runs multi-GB pip | Thin image / no prebuilt / force cold | Check logs for "Seeding ... prebuilt". Rebuild with `EZ_COMFY_PREBUILD=1` or pull GHCR tag. Unset `LAB_FORCE_COLD_INSTALL` |
 | `docker pull` / rebuild re-downloads multi-GB after tiny script edit | Old image with monolithic prebuilt layer, or a real **torch** change | Pull latest split layout: runtime has **venv-torch** (multi-GB), **venv-extra** (Comfy/node pip), and **app**. Ops scripts are late thin layers + compose bind-mounts. Node/source-only changes re-pull **app**; extra pip re-pulls **venv-extra** only; torch pin/index changes re-pull torch. See [Download packs](models-packs.md#image-layer-cache-high-velocity-rebuilds-pulls) |
 | Local script change has no effect | Looking at baked image without restart | Compose mounts `docker/*.sh`, `docker/install-comfy/`, and the patch; restart after edit. To rebake prebuilt tree: [build locally](../getting-started.md#ghcr-pull-vs-local-build) (`LAB_STACK_FORCE_BUILD=1`) |
-| `IndentationError` in `model_management.py` / `mem_free_torch` | Old free-memory patch broke indent | Pull latest (patch is bind-mounted). `./scripts/manage.sh stop && ./scripts/manage.sh start` - auto-repairs via git restore + re-patch. No full image rebuild required |
+| `IndentationError` in `model_management.py` / `mem_free_torch` | Old free-memory patch broke indent | Pull latest (patch is bind-mounted). `bazelisk run //:manage -- stop && bazelisk run //:manage -- start` - auto-repairs via git restore + re-patch. No full image rebuild required |
 | Cold start forever | First PVC/volume pip+git | Wait; `manage.sh logs`; check network |
 
 ## Attention and speed
@@ -88,7 +88,7 @@ backend or the memory patch is not.
 
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
-| SSH drop mid-90s film | `restart: "no"` is correct; no jobstore before this change | `./scripts/manage.sh start && ./scripts/manage.sh film-resume go-see` reprints only failed/crashed shots. Ok clips with duration 5.00 +/- 0.05 s are skipped |
+| SSH drop mid-90s film | `restart: "no"` is correct; no jobstore before this change | `bazelisk run //:manage -- start && bazelisk run //:manage -- film-resume go-see` reprints only failed/crashed shots. Ok clips with duration 5.00 +/- 0.05 s are skipped |
 | SSH drop during `start` / after `start` returns | Compose client used to die with the shell; log-follow used to hold the TTY | `start` ignores hangup during pull/`up -d`, then detaches. Container keeps running after logout. Re-attach: `bazelisk run //:manage -- logs`. Logout is **not** `stop`. Reboot still needs a manual `start` (`restart: "no"`) |
 
 ## Custom-node noise at boot
@@ -102,7 +102,7 @@ working while these are skipped or stubbed.
 | Nunchaku missing | aarch64 wheel unavailable | Fail-soft; seeded Klein / LTX paths still work |
 | `Cannot import .../custom_nodes/_user` / missing `__init__.py` | Empty host bind `${COMFY_OUTPUT_DIR}/custom-nodes-user` | Restart. Entrypoint writes an empty stub `__init__.py` when missing; never overwrites an operator pack |
 | `git clone` into `ComfyUI-VideoHelperSuite` "already exists and is not an empty directory" | Prebuilt strip removes `.git`; refresh used to clone into the leftover tree | Pull latest and restart. Clone is skipped when the pack is already present; pip requirements still run. LTX lab MP4 is unaffected |
-| `[DEPRECATION WARNING] Detected import of deprecated legacy API: /extensions/core/widgetInputs.js` | VideoHelperSuite `VHS.core.js` still imports that internal frontend path | Pull latest. `./scripts/manage.sh stop` then `start` (type **yes**) - `patch_vhs_widget_inputs.py` is bind-mounted, no image rebuild. Lab `ez_*` JS does not import that path. Operator packs under `${COMFY_OUTPUT_DIR}/custom-nodes-user` can still warn |
+| `[DEPRECATION WARNING] Detected import of deprecated legacy API: /extensions/core/widgetInputs.js` | VideoHelperSuite `VHS.core.js` still imports that internal frontend path | Pull latest. `bazelisk run //:manage -- stop` then `start` (type **yes**) - `patch_vhs_widget_inputs.py` is bind-mounted, no image rebuild. Lab `ez_*` JS does not import that path. Operator packs under `${COMFY_OUTPUT_DIR}/custom-nodes-user` can still warn |
 
 A node that is missing from the graph (Missing Node Packs, `IMPORT FAILED`) is a model-pack
 symptom, not a boot symptom: [Models and workflows](troubleshooting-models-workflows.md#missing-nodes-and-failed-imports).

@@ -41,7 +41,7 @@ This tree does **not** vendor Lightricks UUID subgraphs. Queue the official Temp
 
 Depth is wired by default. LoRA (opt-in, not download-models):
 
-  ./scripts/manage.sh download-ltx --tier iclora
+  bazelisk run //:manage -- download-ltx --tier iclora
   ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors
   (Lightricks/LTX-2.3-22b-IC-LoRA-Union-Control - official 2.5 graph widgets this 2.3 Union file)
 
@@ -89,7 +89,7 @@ This tree does **not** vendor Lightricks UUID subgraphs. Queue the official Temp
 
 Switch the annotator to **canny**. Wire ``canny.mp4`` from the guide pack. LoRA (opt-in, not download-models):
 
-  ./scripts/manage.sh download-ltx --tier iclora
+  bazelisk run //:manage -- download-ltx --tier iclora
   ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors
 
 Refuse 19B Union. Do not pair IC-LoRA with a dev transformer.
@@ -116,7 +116,7 @@ WAN_FLF_GUIDE_NOTE = """## guides/first-last-from-guide
 
 Silent Fun InP first-last-frame from a DCC guide pack. LoadImage ``first.png`` and ``last.png``. MagCache **off**. Opt-in:
 
-  ./scripts/manage.sh download-wan --tier fun-inp
+  bazelisk run //:manage -- download-wan --tier fun-inp
 
 Unload LTX first. Occupancy: wan. This is a continuity draft, not the LTX AV print.
 
@@ -161,7 +161,7 @@ Occupancy: **ltx**. EZDCCLoadGuideStill ``first`` -> OccupancyGate. EZDCCLoadGui
 
   Templates -> LTX-2.5 -> LTX-2.5_ICLoRA_Union_Control_Distilled.json
 
-Opt-in: ``./scripts/manage.sh download-ltx --tier iclora``. Refuse 19B Union. No 1280x720. Stop Klein first.
+Opt-in: ``bazelisk run //:manage -- download-ltx --tier iclora``. Refuse 19B Union. No 1280x720. Stop Klein first.
 
 LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.
 """
@@ -171,7 +171,7 @@ TRELLIS_LOADER_NOTE = """## 3d/still-to-mesh
 Still pack plate -> native TRELLIS.2 INT8 mesh (Comfy core nodes). Occupancy: **trellis**.
 
 ```bash
-./scripts/manage.sh download-3d --tier trellis2
+bazelisk run //:manage -- download-3d --tier trellis2
 bazelisk run //:manage -- occupancy enter trellis --yes
 ```
 

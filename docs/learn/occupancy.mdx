@@ -94,7 +94,7 @@ Host file and ffmpeg work is exempt: `overlay-qc`, `film-animatic`, `stem-mix`,
 | **Reboot the Spark** | Always `stop` first. Compose `restart: "no"` will not bring Comfy back |
 
 `occupancy enter` **does not** start Compose and does **not** turn the box into two GPU jobs.
-Heavy modes tell you to run `./scripts/manage.sh start` (type **yes**) when the container is
+Heavy modes tell you to run `bazelisk run //:manage -- start` (type **yes**) when the container is
 down.
 
 This does **not** weaken `restart: "no"`, headroom preflight, or download-limit clear-on-exit.
