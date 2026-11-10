@@ -39,6 +39,7 @@ _LIB_PY = [
     "lib/studio_mcp.py",
     "lib/tui/__init__.py",
     "lib/tui/contract.py",
+    "lib/tui/lanes.py",
 ]
 
 _UTILITIES_SH = [
