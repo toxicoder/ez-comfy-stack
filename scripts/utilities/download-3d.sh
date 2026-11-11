@@ -2,12 +2,14 @@
 #
 # ## download-3d
 #
-# Opt-in 3D packs: native Comfy-Org TRELLIS.2 INT8 (MIT, no nvdiffrast) and
-# DA3-BASE (Apache). Never part of download-models. occupancy enter trellis
-# first (unload LTX). SuperSplat is a host viewer (docs/splat-sidecar.md).
+# Opt-in 3D packs: native Comfy-Org TRELLIS.2 INT8 (MIT, no nvdiffrast),
+# DA3-BASE (Apache), and the BiRefNet matte that preps a photo for image-to-3D
+# (MIT, opt-in, feeds the EZCutout node). Never part of download-models.
+# occupancy enter trellis first (unload LTX). SuperSplat is a host viewer
+# (docs/splat-sidecar.md).
 #
 # Usage:
-#   bazelisk run //scripts:run-utility -- download-3d status|run [--tier trellis2|da3-base|all] [--json]
+#   bazelisk run //scripts:run-utility -- download-3d status|run [--tier trellis2|da3-base|birefnet|all] [--json]
 #
 # Environment:
 #   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD
@@ -46,6 +48,7 @@ tier_repo() {
   case "${1}" in
     trellis2) echo "Comfy-Org/TRELLIS.2" ;;
     da3-base) echo "depth-anything/DA3-BASE" ;;
+    birefnet) echo "ZhengPeng7/BiRefNet" ;;
     *) echo "" ;;
   esac
 }
@@ -73,6 +76,17 @@ tier_include_patterns() {
       ;;
     da3-base)
       printf '%s\n' "model.safetensors" "README.md"
+      ;;
+    birefnet)
+      # The loader needs the remote-code class and its config, not the
+      # weights alone: config.json carries the auto_map that names
+      # birefnet.BiRefNet. README.md is the MIT provenance the card states.
+      printf '%s\n' \
+        "model.safetensors" \
+        "config.json" \
+        "birefnet.py" \
+        "BiRefNet_config.py" \
+        "README.md"
       ;;
   esac
 }
@@ -107,8 +121,8 @@ tier_dir() {
 #######################################
 tiers_to_process() {
   case "${TIER}" in
-    all) echo "trellis2 da3-base" ;;
-    trellis2 | da3-base) echo "${TIER}" ;;
+    all) echo "trellis2 da3-base birefnet" ;;
+    trellis2 | da3-base | birefnet) echo "${TIER}" ;;
     *) echo "${TIER}" ;;
   esac
 }
@@ -158,7 +172,7 @@ parse_args() {
         ;;
       status | run) CMD="${1}" ;;
       -h | --help)
-        echo "Usage: $0 status|run [--tier trellis2|da3-base|all] [--json]" >&2
+        echo "Usage: $0 status|run [--tier trellis2|da3-base|birefnet|all] [--json]" >&2
         echo "  Native Comfy-Org TRELLIS.2 INT8 (MIT, no nvdiffrast). DA3-BASE Apache." >&2
         echo "  occupancy enter trellis first. DA3-LARGE / Pixal3D-as-default refused." >&2
         exit 0
@@ -235,6 +249,9 @@ trellis_comfy_dest() {
 
 #######################################
 # Link weights into native Comfy folders (TRELLIS) or diffusion_models (DA3).
+# BiRefNet is not linked at all: EZCutout loads that pack in place, because
+# config.json's auto_map names birefnet.BiRefNet and the class file has to sit
+# beside the weights.
 # Globals:
 #   MODELS_DIR
 # Arguments:
@@ -251,6 +268,10 @@ link_into_comfy() {
   local dir f base dest
   dir=$(tier_dir "${tier}")
   [[ -d ${dir} ]] || return 0
+  if [[ ${tier} == "birefnet" ]]; then
+    log "birefnet stays in place: EZCutout reads ${dir}"
+    return 0
+  fi
   while IFS= read -r f; do
     [[ -z ${f} ]] && continue
     base="$(basename "${f}")"

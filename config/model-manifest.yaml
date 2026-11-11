@@ -302,6 +302,16 @@ packs:
     files:
       - model.safetensors
     cmd: download-3d --tier da3-base
+  birefnet:
+    default: false
+    min_gb: 2
+    tier_dir: ZhengPeng7__BiRefNet_birefnet
+    files:
+      - model.safetensors
+      - config.json
+      - birefnet.py
+      - BiRefNet_config.py
+    cmd: download-3d --tier birefnet
   wan-vace:
     default: false
     min_gb: 6

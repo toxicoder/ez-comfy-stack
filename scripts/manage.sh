@@ -383,8 +383,9 @@ Commands:
                     Queue one shipped album then zip (compose must already be up)
   download-restore [--tier seedvr2-3b]
                     Opt-in SeedVR2-3B Apache restore pack (post-concat; not download-models)
-  download-3d [--tier trellis2|da3-base|all]
+  download-3d [--tier trellis2|da3-base|birefnet|all]
                     Opt-in Comfy-Org TRELLIS.2 INT8 (MIT, no nvdiffrast) + DA3-BASE (Apache)
+                    + BiRefNet matte (MIT, the EZCutout input-prep weights)
   occupancy status|enter MODE [--yes] [--json]
                     Occupancy desk: park Comfy (POST /free) for blender-desk or
                     llm-desk, or enter klein|trellis|wan|ltx|idle. Does not start Compose.
@@ -1472,7 +1473,7 @@ cmd_download_restore() {
 
 # @command download-3d
 #######################################
-# Opt-in 3D packs (TRELLIS.2 native, DA3-BASE).
+# Opt-in 3D packs (TRELLIS.2 native, DA3-BASE, BiRefNet matte).
 #######################################
 cmd_download_3d() {
   bash "${REPO_ROOT}/scripts/utilities/download-3d.sh" "$@"
