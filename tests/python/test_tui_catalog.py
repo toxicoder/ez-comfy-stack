@@ -232,9 +232,9 @@ def test_missing_verbs_is_empty_against_the_real_dispatcher() -> None:
 
 
 def test_manage_verbs_in_reads_the_real_dispatcher_surface() -> None:
-    """The parser names the 57 verbs the CLI will actually accept."""
+    """The parser names the 58 verbs the CLI will actually accept."""
     verbs = k.manage_verbs_in(_dispatcher_text())
-    assert len(verbs) == 57
+    assert len(verbs) == 58
     assert len(verbs) == len(set(verbs))
     for expected in (
         "help",
