@@ -43,8 +43,13 @@ SKIP_BOOTSTRAP=0
 
 # The gate() hook below is the filing handoff for a failing bazelisk run. The
 # //:everything target ships it in runfiles, so sourcing beside the script
-# works the same way under `bazelisk run` and from a plain checkout.
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# works the same way under `bazelisk run` and from a plain checkout. Derived by
+# expansion, not by `dirname`: a host with no PATH at all is exactly the state
+# this script has to survive long enough to print the //:setup-host repair.
+SCRIPT_DIR="${BASH_SOURCE[0]%/*}"
+if [[ ${SCRIPT_DIR} == "${BASH_SOURCE[0]}" ]]; then
+  SCRIPT_DIR="."
+fi
 # shellcheck source=lib/bug_report.sh disable=SC1091
 source "${SCRIPT_DIR}/lib/bug_report.sh"
 # Committed screenshot baselines for the docs-site visual lane. The lane needs
