@@ -8,6 +8,7 @@ tags: [editing, video-editor, agent, mcp, qwen, sidecar, occupancy]
 
 **What's on this page**
 
+- **The task group** - [Plan a cut](edit/plan-a-cut.md), [Rough cut in the browser](edit/rough-cut.md), [Captions and overlays](edit/captions-and-overlays.md), [Render and hand off](edit/render-and-handoff.md), [Agent and MCP driving](edit/agent-and-mcp.md)
 - **Operator path** - start the studio, run the agent model, open **EZ Edit**
 - **Server or client render** - ffmpeg mp4 on the Spark CPU, or WebCodecs webm in the browser
 - **The agent model sidecar** - `manage.sh agent-model run` on `127.0.0.1:30001`, opt-in
@@ -68,9 +69,12 @@ bazelisk run //:manage -- agent-model run      # opt-in; see "The agent model si
 ```
 
 4. In the panel: **New project** -> **Import** a file that already lives under
-   `${COMFY_OUTPUT_DIR}` -> arrange with the timeline buttons -> **Render server** (or **Render
-   client** with the tab left open). **Send** talks to the agent once a model answers
-   `EZ_AGENT_LLM_URL`.
+   `${COMFY_OUTPUT_DIR}` (with a **Label** and a **Track**) -> click a clip row and use the controls
+   under the Clips table (**Set trim**, **Move earlier** / **Move later**, **Set track**, **Set
+   gain**, **Set transition**, **Remove clip**) -> **Play** to check the cut -> **Render server**
+   (or **Render client** with the tab left open). **Send** talks to the agent once a model answers
+   `EZ_AGENT_LLM_URL`. Every one of those buttons posts the same reducer op the tools post:
+   [Rough cut in the browser](edit/rough-cut.md).
 
 **Check it worked:** the panel status line names the project and the active mode, and a finished
 server job writes `${COMFY_OUTPUT_DIR}/edit/renders/<project_id>-<job_id>.mp4`. With the sidecar
@@ -127,7 +131,7 @@ encodes, and therefore which container you get.
 | Browser tab must stay open | no | **yes** - or the row sits `pending` forever |
 | Machine that does the work | the Spark (CPU encode) | your laptop |
 | Laptop browser | anything | **Chromium-based only** |
-| Output | `${COMFY_OUTPUT_DIR}/edit/renders/<project_id>-<job_id>.mp4` | same dir, `.webm` |
+| Output | `${COMFY_OUTPUT_DIR}/edit/renders/<project_id>-<job_id>.mp4` | your browser's downloads folder, as `<project-slug>-<job_id>.webm` |
 | Needs ComfyUI up | yes (the routes live in Comfy) | yes (same) |
 
 Both modes write their rows under `${COMFY_OUTPUT_DIR}/edit/jobs/` and their projects under
@@ -361,9 +365,11 @@ under `${COMFY_OUTPUT_DIR}` or it is refused.
 | Route | Purpose |
 | --- | --- |
 | `GET /ez_edit/state` | project + job rows for the panel |
+| `GET /ez_edit/projects` | summary row per saved project, newest first |
 | `POST /ez_edit/ops` | apply ordered timeline ops through the reducer |
 | `POST /ez_edit/import` | ffprobe a file under the output dir into a clip |
 | `POST /ez_edit/render`, `GET /ez_edit/job` | start a render, poll a row |
+| `POST /ez_edit/export_edl` | write the project as an EDL (`json` or `cmx`) and return its path |
 | `POST /ez_edit/chat` | one agent turn (tool loop, budgeted steps) |
 | `GET /ez_edit/exec/pending`, `POST /ez_edit/exec/result` | browser executor queue |
 | `POST /ez_edit/local_tools/sync`, `GET .../pending`, `POST .../result` | laptop-local MCP relay |
@@ -378,6 +384,11 @@ renders all live under `${COMFY_OUTPUT_DIR}/edit/`.
 
 | Need | Page |
 | --- | --- |
+| The object model, the fourteen ops, and their guards | [Plan a cut](edit/plan-a-cut.md) |
+| Cutting with the mouse, one recipe per move | [Rough cut in the browser](edit/rough-cut.md) |
+| Lower thirds, captions, and who burns them | [Captions and overlays](edit/captions-and-overlays.md) |
+| Render modes, job rows, and the EDL / CMX handoff | [Render and hand off](edit/render-and-handoff.md) |
+| The typed `edit_*` tools and a worked batch cut | [Agent and MCP driving](edit/agent-and-mcp.md) |
 | The AGPL browser NLE and its bridge | [Vlo video editor](vlo.md) |
 | The host-tools group and the occupancy rule in full | [Host sidecars overview](studio-sidecars.md) |
 | In-tree typed MCP servers and the Path D tunnels | [MCP and SSH tunnels](operate/mcp.md) |
