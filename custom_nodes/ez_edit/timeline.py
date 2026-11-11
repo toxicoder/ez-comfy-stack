@@ -97,6 +97,9 @@ TRIM_KEYS = frozenset({"clip_id", "in_s", "out_s"})
 MOVE_KEYS = frozenset({"clip_id", "index"})
 """Allowed ``move_clip`` args."""
 
+SET_TRACK_KEYS = frozenset({"clip_id", "track"})
+"""Allowed ``set_track`` args."""
+
 TRANSITION_KEYS = frozenset({"clip_id", "kind", "duration_s"})
 """Allowed ``set_transition`` args."""
 
@@ -803,6 +806,30 @@ def _op_move_clip(project: EditProject, args: JsonMap, where: str) -> None:
     clips.insert(index, clips.pop(position))
 
 
+def _op_set_track(project: EditProject, args: JsonMap, where: str) -> None:
+    """Handle ``set_track`` (move a clip to another compositing plane).
+
+    ``move_clip`` only reorders the strip, so without this op a clip's track
+    is fixed for good by the ``add_clip`` that created it.
+
+    Args:
+        project: Project mutated in place.
+        args: Op arguments.
+        where: Human location used in the message.
+
+    Raises:
+        TimelineError: When the id is unknown or the track is not a
+            non-negative integer.
+    """
+    _check_keys(args, SET_TRACK_KEYS, where)
+    clip_id = _as_str(_require(args, "clip_id", where), "clip_id", where)
+    clip = project["clips"][_clip_at(project, clip_id, where)]
+    track = _as_int(_require(args, "track", where), "track", where)
+    if track < 0:
+        raise TimelineError(f"{where}: track must be >= 0 (got {track})")
+    clip["track"] = track
+
+
 def _op_set_transition(
     project: EditProject, args: JsonMap, where: str
 ) -> None:
@@ -969,6 +996,7 @@ HANDLERS: dict[str, Callable[[EditProject, JsonMap, str], None]] = {
     "remove_clip": _op_remove_clip,
     "trim_clip": _op_trim_clip,
     "move_clip": _op_move_clip,
+    "set_track": _op_set_track,
     "set_transition": _op_set_transition,
     "set_gain": _op_set_gain,
     "add_overlay": _op_add_overlay,

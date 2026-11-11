@@ -135,6 +135,15 @@
   font-size: 11px;
 }
 
+.ez-edit-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ez-edit-btn:disabled:hover {
+  border-color: var(--ez-edit-border);
+}
+
 .ez-edit-chip.is-active {
   border-color: var(--ez-edit-accent);
   background: color-mix(in srgb, var(--ez-edit-accent) 26%, transparent);
@@ -230,6 +239,18 @@
 .ez-edit-table th {
   color: var(--ez-edit-muted);
   font-weight: 600;
+}
+
+.ez-edit-table tbody tr[role="button"] {
+  cursor: pointer;
+}
+
+.ez-edit-table tbody tr[role="button"]:hover td {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.ez-edit-table tr.ez-edit-row-selected td {
+  background: color-mix(in srgb, var(--ez-edit-accent) 22%, transparent);
 }
 
 .ez-edit-table .is-empty td {

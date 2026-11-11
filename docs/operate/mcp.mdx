@@ -181,13 +181,14 @@ this stack must be up: the origin is `EZ_EDIT_COMFY_URL`, else `http://127.0.0.1
 | Tool | Args | What |
 | --- | --- | --- |
 | `occupancy_status` | - | Read `${COMFY_OUTPUT_DIR}/.occupancy.json` |
+| `edit_list_projects` | - | Summary row per saved project (id, title, fps, size, clip count, `updated_at`), newest first - find the `project_id` first |
 | `edit_get_state` | optional `project_id` | Project (clips, overlays, captions) + recent jobs; empty id = most recent |
 | `edit_import` | `path` (required), optional `label`, `track` | Import a file already under `${COMFY_OUTPUT_DIR}` as a clip (`ffprobe` for duration) |
 | `edit_apply_ops` | `ops` (required), optional `project_id` | Ordered timeline ops through the reducer; an unknown op or id fails the whole call |
 | `edit_render` | `mode` (required: `server` / `client`), optional `project_id`, `client_id` | Queue a render: ffmpeg mp4 on the Spark, or a browser-executed webm |
 | `edit_job_status` | `job_id` (required) | One jobstore row |
 | `edit_generate_clip` | `prompt` (required), optional `duration_s`, `fps` | Queue the `film/generate-cutaway` graph. **Heavy GPU** - the route refuses unless occupancy allows |
-| `edit_export_edl` | optional `project_id` | EDL JSON under the edit dir, for the Kdenlive / Shotcut handoff |
+| `edit_export_edl` | optional `project_id`, `format` (`json` / `cmx`) | EDL under the edit dir: this lane's own JSON, or CMX 3600 text for the Resolve / Premiere / Kdenlive / Shotcut handoff |
 
 ```bash
 bazelisk run //:manage -- edit-mcp --stdio

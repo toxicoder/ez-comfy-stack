@@ -648,6 +648,42 @@ def project_state(edit_dir: Path | str, project_id: str = "") -> ProjectState:
     }
 
 
+def projects_index(edit_dir: Path | str) -> JsonObject:
+    """One compact row per stored project (the projects route payload).
+
+    An agent that was handed no ``project_id`` has no other way to discover
+    what exists: the state route answers one project at a time.
+
+    Args:
+        edit_dir: ``${COMFY_OUTPUT_DIR}/edit`` directory.
+
+    Returns:
+        ``{projects: [...]}``, newest ``updated_at`` first with ties broken by
+        id, each row ``{id, title, fps, width, height, clips, updated_at}``
+        where ``clips`` is a count rather than the clip list.
+
+    Raises:
+        timeline.TimelineError: A stored project is unparsable or malformed.
+    """
+    stored = timeline.project_index(Path(edit_dir))
+    stored.sort(key=lambda project: project["id"])
+    stored.sort(key=lambda project: project["updated_at"], reverse=True)
+    return {
+        "projects": [
+            {
+                "id": str(project["id"]),
+                "title": str(project["title"]),
+                "fps": float(project["fps"]),
+                "width": int(project["width"]),
+                "height": int(project["height"]),
+                "clips": len(project["clips"]),
+                "updated_at": str(project["updated_at"]),
+            }
+            for project in stored
+        ]
+    }
+
+
 def apply_ops_to(
     edit_dir: Path | str,
     *,
@@ -899,30 +935,59 @@ def _edl_path(edit_dir: Path | str, project_id: str) -> Path:
     return Path(edit_dir) / PROJECTS_SUBDIR / f"{text}.edl.json"
 
 
-def export_edl(edit_dir: Path | str, project_id: str = "") -> JsonObject:
-    """Write the project as an EDL handoff JSON file.
+def _cmx_path(edit_dir: Path | str, project_id: str) -> Path:
+    """``edit/projects/<id>.edl`` CMX 3600 handoff path.
+
+    Args:
+        edit_dir: ``${COMFY_OUTPUT_DIR}/edit`` directory.
+        project_id: Project id.
+
+    Returns:
+        EDL path (not necessarily created).
+
+    Raises:
+        DispatchError: The project id is not a safe file name.
+    """
+    text = _safe_segment(project_id, "project_id")
+    return Path(edit_dir) / PROJECTS_SUBDIR / f"{text}.edl"
+
+
+def export_edl(
+    edit_dir: Path | str, project_id: str = "", fmt: str = "json"
+) -> JsonObject:
+    """Write the project as an EDL handoff file.
 
     Args:
         edit_dir: ``${COMFY_OUTPUT_DIR}/edit`` directory.
         project_id: Project id, or ``""`` for the newest.
+        fmt: ``json`` for this lane's own handoff document, ``cmx`` for CMX
+            3600 text an external NLE imports.
 
     Returns:
-        ``{ok, path, project_id, clips}`` with ``path`` relative to the
-        output root.
+        ``{ok, path, project_id, clips, format}`` with ``path`` relative to
+        the output root.
 
     Raises:
-        edl.EdlError: The project cannot be described.
+        edl.EdlError: The project cannot be described, or ``fmt`` is outside
+            :data:`~ez_edit.edl.CMX_FORMATS`.
         DispatchError: No project, or an unsafe id.
     """
+    if fmt not in edl.CMX_FORMATS:
+        raise edl.EdlError(f"unknown edl format {fmt!r} (want json or cmx)")
     if str(project_id or "").strip():
         _safe_segment(project_id, "project_id")
     project = require_project(edit_dir, project_id)
     payload = edl.edl_payload(project)
-    target = _edl_path(edit_dir, str(project["id"]))
+    if fmt == "cmx":
+        body = edl.cmx_edl(project)
+        target = _cmx_path(edit_dir, str(project["id"]))
+    else:
+        body = json.dumps(payload, indent=2, sort_keys=True) + "\n"
+        target = _edl_path(edit_dir, str(project["id"]))
     root = output_root(edit_dir)
     target.parent.mkdir(parents=True, exist_ok=True)
     tmp = target.with_name(f"{target.name}.tmp")
-    tmp.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    tmp.write_text(body, encoding="utf-8")
     tmp.replace(target)
     relative = target.resolve().relative_to(root).as_posix()
     return {
@@ -930,6 +995,7 @@ def export_edl(edit_dir: Path | str, project_id: str = "") -> JsonObject:
         "path": relative,
         "project_id": str(project["id"]),
         "clips": len(payload["clips"]),
+        "format": fmt,
     }
 
 
@@ -1023,6 +1089,23 @@ def _tool_get_state(edit_dir: Path | str, args: JsonMap, kit: RunnerKit) -> Json
     """
     del kit
     return _done(project_state(edit_dir, _text(args, "project_id")))
+
+
+def _tool_list_projects(
+    edit_dir: Path | str, args: JsonMap, kit: RunnerKit
+) -> JsonObject:
+    """``edit_list_projects``: summary row per stored project.
+
+    Args:
+        edit_dir: Edit dir.
+        args: Tool arguments (none).
+        kit: Seam bundle.
+
+    Returns:
+        Tool result.
+    """
+    del args, kit
+    return _done(projects_index(edit_dir))
 
 
 def _tool_import(edit_dir: Path | str, args: JsonMap, kit: RunnerKit) -> JsonObject:
@@ -1144,7 +1227,7 @@ def _tool_generate_clip(
 
 
 def _tool_export_edl(edit_dir: Path | str, args: JsonMap, kit: RunnerKit) -> JsonObject:
-    """``edit_export_edl``: write the handoff JSON.
+    """``edit_export_edl``: write the handoff JSON or CMX EDL.
 
     Args:
         edit_dir: Edit dir.
@@ -1155,7 +1238,13 @@ def _tool_export_edl(edit_dir: Path | str, args: JsonMap, kit: RunnerKit) -> Jso
         Tool result.
     """
     del kit
-    return _done(export_edl(edit_dir, _text(args, "project_id")))
+    return _done(
+        export_edl(
+            edit_dir,
+            _text(args, "project_id"),
+            _text(args, "format", "json") or "json",
+        )
+    )
 
 
 def _tool_occupancy(
@@ -1179,6 +1268,7 @@ STATIC_TOOLS: dict[
     str, Callable[[Path | str, JsonMap, RunnerKit], JsonObject]
 ] = {
     "edit_get_state": _tool_get_state,
+    "edit_list_projects": _tool_list_projects,
     "edit_import": _tool_import,
     "edit_apply_ops": _tool_apply_ops,
     "edit_render": _tool_render,

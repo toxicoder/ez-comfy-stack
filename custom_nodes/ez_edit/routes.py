@@ -102,6 +102,7 @@ Payload: TypeAlias = tuple[int, dict[str, object]]
 ROUTE_METHODS: dict[str, str] = {
     "/ez_edit/state": "GET",
     "/ez_edit/job": "GET",
+    "/ez_edit/projects": "GET",
     "/ez_edit/exec/pending": "GET",
     "/ez_edit/local_tools/pending": "GET",
     "/ez_edit/ops": "POST",
@@ -341,6 +342,28 @@ def handle_state(args: JsonMap, *, deps: LaneDeps) -> Payload:
     except timeline.TimelineError as exc:
         return _err(str(exc))
     return _ok(project=state["project"], jobs=state["jobs"], enabled=True)
+
+
+def handle_projects(args: JsonMap, *, deps: LaneDeps) -> Payload:
+    """Serve ``GET /ez_edit/projects``.
+
+    Args:
+        args: Query fields (none used).
+        deps: Seam bundle.
+
+    Returns:
+        ``(200, {ok, projects, enabled})`` with one summary row per stored
+        project, or 403 while the lane is disabled, or 400 when a stored
+        project file is malformed.
+    """
+    del args
+    if not lane_enabled(deps.environ):
+        return _disabled()
+    try:
+        index = dispatch.projects_index(deps.edit_dir)
+    except timeline.TimelineError as exc:
+        return _err(str(exc))
+    return _ok(projects=index["projects"], enabled=True)
 
 
 def handle_ops(args: JsonMap, *, deps: LaneDeps) -> Payload:
@@ -691,17 +714,21 @@ def handle_export_edl(args: JsonMap, *, deps: LaneDeps) -> Payload:
     """Serve ``POST /ez_edit/export_edl``.
 
     Args:
-        args: Body fields (``project_id``).
+        args: Body fields (``project_id``, ``format``).
         deps: Seam bundle.
 
     Returns:
-        ``(200, {ok, path, project_id, clips})``, 403 while disabled, or 400
-        when there is nothing to export.
+        ``(200, {ok, path, project_id, clips, format})``, 403 while disabled,
+        or 400 when there is nothing to export or the format is unknown.
     """
     if not lane_enabled(deps.environ):
         return _disabled()
     try:
-        payload = dispatch.export_edl(deps.edit_dir, _text(args, "project_id"))
+        payload = dispatch.export_edl(
+            deps.edit_dir,
+            _text(args, "project_id"),
+            _text(args, "format", "json") or "json",
+        )
     except ValueError as exc:
         return _err(str(exc))
     return _ok(**payload)
@@ -818,6 +845,7 @@ def register_routes(
 
     handlers: dict[str, HandlerFn] = {
         "/ez_edit/state": handle_state,
+        "/ez_edit/projects": handle_projects,
         "/ez_edit/ops": handle_ops,
         "/ez_edit/import": handle_import,
         "/ez_edit/render": handle_render,

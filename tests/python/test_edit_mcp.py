@@ -31,6 +31,7 @@ import edit_mcp as mcp  # noqa: E402
 # Pinned by /tmp/CONTRACTS.md (Host MCP) and the routes table in that file.
 PINNED_ROUTES: dict[str, tuple[str, str]] = {
     "edit_get_state": ("GET", "/ez_edit/state"),
+    "edit_list_projects": ("GET", "/ez_edit/projects"),
     "edit_import": ("POST", "/ez_edit/import"),
     "edit_apply_ops": ("POST", "/ez_edit/ops"),
     "edit_render": ("POST", "/ez_edit/render"),
@@ -41,6 +42,7 @@ PINNED_ROUTES: dict[str, tuple[str, str]] = {
 
 CATALOG_NAMES = [
     "edit_get_state",
+    "edit_list_projects",
     "edit_import",
     "edit_apply_ops",
     "edit_render",
@@ -436,7 +438,25 @@ def test_export_edl_posts(monkeypatch: pytest.MonkeyPatch) -> None:
     stub = _install(monkeypatch, '{"ok": true, "path": "edit/p1.edl.json"}')
     result = mcp.call_tool("edit_export_edl", {"project_id": "p1"})
     assert result["path"] == "edit/p1.edl.json"
-    assert _body(stub.requests[0]) == {"project_id": "p1"}
+    assert _body(stub.requests[0]) == {"project_id": "p1", "format": "json"}
+
+
+def test_export_edl_passes_the_cmx_format(monkeypatch: pytest.MonkeyPatch) -> None:
+    stub = _install(monkeypatch, '{"ok": true, "path": "edit/p1.edl"}')
+    result = mcp.call_tool("edit_export_edl", {"project_id": "p1", "format": "cmx"})
+    assert result["path"] == "edit/p1.edl"
+    assert _body(stub.requests[0]) == {"project_id": "p1", "format": "cmx"}
+
+
+def test_list_projects_gets_the_index(monkeypatch: pytest.MonkeyPatch) -> None:
+    stub = _install(monkeypatch, '{"ok": true, "projects": [{"id": "p1"}]}')
+    result = mcp.call_tool("edit_list_projects", {})
+    rows = result["projects"]
+    assert isinstance(rows, list)
+    row = rows[0]
+    assert isinstance(row, dict)
+    assert row["id"] == "p1"
+    assert stub.requests[0].full_url == "http://127.0.0.1:8188/ez_edit/projects"
 
 
 def test_unreachable_comfy_is_an_error_payload(monkeypatch: pytest.MonkeyPatch) -> None:

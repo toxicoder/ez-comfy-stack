@@ -250,6 +250,31 @@
             "path": "edit-agent.md"
           }
         ]
+      },
+      {
+        "title": "Traditional editing",
+        "pages": [
+          {
+            "title": "Plan a cut",
+            "path": "edit/plan-a-cut.md"
+          },
+          {
+            "title": "Rough cut in the browser",
+            "path": "edit/rough-cut.md"
+          },
+          {
+            "title": "Captions and overlays",
+            "path": "edit/captions-and-overlays.md"
+          },
+          {
+            "title": "Render and hand off",
+            "path": "edit/render-and-handoff.md"
+          },
+          {
+            "title": "Agent and MCP driving",
+            "path": "edit/agent-and-mcp.md"
+          }
+        ]
       }
     ]
   },

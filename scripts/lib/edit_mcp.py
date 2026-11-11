@@ -121,6 +121,12 @@ _TOOL_CATALOG: dict[str, ProtocolCatalogEntry] = {
             },
         },
     },
+    "edit_list_projects": {
+        "description": "List every saved edit project as a summary row "
+        "(id, title, fps, width, height, clip count, updated_at), newest "
+        "first. Use it to find a project_id for the other tools.",
+        "parameters": {"type": "object", "properties": {}},
+    },
     "edit_import": {
         "description": "Import a media file already under the Comfy output "
         "dir as a clip (probes duration with ffprobe). Returns the clip.",
@@ -137,9 +143,10 @@ _TOOL_CATALOG: dict[str, ProtocolCatalogEntry] = {
     "edit_apply_ops": {
         "description": "Apply an ordered list of timeline ops to a project "
         "and return the new project. Ops: project_create, add_clip, "
-        "remove_clip, trim_clip, move_clip, set_transition, set_gain, "
-        "add_overlay, remove_overlay, add_caption, remove_caption, "
-        "set_title, clear. Unknown ops and ids fail the whole call.",
+        "remove_clip, trim_clip, move_clip, set_track, set_transition, "
+        "set_gain, add_overlay, remove_overlay, add_caption, "
+        "remove_caption, set_title, clear. Unknown ops and ids fail the "
+        "whole call.",
         "parameters": {
             "type": "object",
             "properties": {
@@ -187,11 +194,20 @@ _TOOL_CATALOG: dict[str, ProtocolCatalogEntry] = {
         },
     },
     "edit_export_edl": {
-        "description": "Write the project as an EDL JSON file under the "
-        "edit dir (handoff for Kdenlive/Shotcut paths) and return its path.",
+        "description": "Write the project as an edit decision list under "
+        "the edit dir and return its path. format=json is this lane's own "
+        "handoff document; format=cmx writes CMX 3600 text that DaVinci "
+        "Resolve, Premiere, Kdenlive, and Shotcut import.",
         "parameters": {
             "type": "object",
-            "properties": {"project_id": {"type": "string", "default": ""}},
+            "properties": {
+                "project_id": {"type": "string", "default": ""},
+                "format": {
+                    "type": "string",
+                    "enum": ["json", "cmx"],
+                    "default": "json",
+                },
+            },
         },
     },
     "occupancy_status": {
@@ -202,6 +218,7 @@ _TOOL_CATALOG: dict[str, ProtocolCatalogEntry] = {
 
 ROUTES: dict[str, tuple[str, str]] = {
     "edit_get_state": ("GET", "/ez_edit/state"),
+    "edit_list_projects": ("GET", "/ez_edit/projects"),
     "edit_import": ("POST", "/ez_edit/import"),
     "edit_apply_ops": ("POST", "/ez_edit/ops"),
     "edit_render": ("POST", "/ez_edit/render"),
@@ -452,6 +469,19 @@ def tool_edit_get_state(args: ToolArgs) -> ToolResult:
     )
 
 
+def tool_edit_list_projects(args: ToolArgs) -> ToolResult:
+    """MCP tool: summary row for every stored project.
+
+    Args:
+        args: Unused tool arguments.
+
+    Returns:
+        ``{ok, projects, enabled}`` from ``GET /ez_edit/projects``.
+    """
+    del args
+    return _call_route("edit_list_projects", {})
+
+
 def tool_edit_import(args: ToolArgs) -> ToolResult:
     """MCP tool: import an output-dir media file as a clip.
 
@@ -545,13 +575,17 @@ def tool_edit_export_edl(args: ToolArgs) -> ToolResult:
     """MCP tool: write the project EDL for an external editor.
 
     Args:
-        args: ``project_id``.
+        args: ``project_id``, ``format`` (``json`` or ``cmx``).
 
     Returns:
         ``{ok, path}`` from ``POST /ez_edit/export_edl``.
     """
     return _call_route(
-        "edit_export_edl", {"project_id": str(args.get("project_id") or "")}
+        "edit_export_edl",
+        {
+            "project_id": str(args.get("project_id") or ""),
+            "format": str(args.get("format") or "json"),
+        },
     )
 
 
@@ -588,6 +622,7 @@ def _spec(name: str, handler: ToolHandler) -> ToolSpec:
 # Typed MCP tool table: exactly one tool per protocol.TOOL_CATALOG name.
 TOOLS: dict[str, ToolSpec] = {
     "edit_get_state": _spec("edit_get_state", tool_edit_get_state),
+    "edit_list_projects": _spec("edit_list_projects", tool_edit_list_projects),
     "edit_import": _spec("edit_import", tool_edit_import),
     "edit_apply_ops": _spec("edit_apply_ops", tool_edit_apply_ops),
     "edit_render": _spec("edit_render", tool_edit_render),

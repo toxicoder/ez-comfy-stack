@@ -1,0 +1,191 @@
+---
+title: Plan a cut
+description: "The editing-lane model in one place: projects, clips, planes, transitions, overlays, jobs, the fourteen reducer ops, and where every file lands under the output dir."
+tags: [editing, video-editor, timeline, ops, planning]
+---
+
+# Plan a cut
+
+**What's on this page**
+
+- **The six objects** - project, clip, plane, transition, graphic, job, and what each one costs
+- **Where the files live** - projects, renders, and EDLs under `${COMFY_OUTPUT_DIR}/edit/`
+- **The op vocabulary** - all fourteen reducer ops, their arguments, and what each one refuses
+- **Which surface to work in** - the panel, the agent chat, or the MCP server
+- **A planning worksheet** - a 30-second product cut written out as an op script before you touch anything
+- **Refusals you will meet** - the reducer's guardrails and why they exist
+
+**What this enables**
+
+- **One mental model** shared by the browser panel, the agent, and the MCP server: every edit is an op list applied to a saved project
+- **Deciding up front** whether the Spark's CPU or your laptop's browser renders, so the container is not a surprise
+- **Writing the cut down first** as a short op script, which you can then paste to the agent or post to `/ez_edit/ops`
+- **No guesswork about paths** - every artifact the lane writes is under one directory you already mount
+
+**Question this page answers:** what do I need to know before I start cutting, and which file will hold my work? Read the object table, pick a surface, then follow [Rough cut in the browser](rough-cut.md) for the mouse path or [Agent and MCP driving](agent-and-mcp.md) for the scripted one.
+
+<Callout type="info" title="Cutting needs no model">
+  Import, trim, reorder, plane changes, gain, transitions, graphics, and server render are all
+  plain route calls. The optional Qwen3.8-Flash-Next sidecar is only consulted by
+  `/ez_edit/chat` and `edit_generate_clip`. With the sidecar down, every page in this group still
+  works end to end. The lane reference is
+  [Editing lane (agent + in-browser editor)](../edit-agent.md).
+</Callout>
+
+---
+
+## The six objects
+
+The lane keeps a tiny amount of state, and every surface edits that same state.
+
+| Object | What it is | What it decides |
+| --- | --- | --- |
+| Project | One saved timeline: title, fps, width, height, clips, graphics | Which file on disk your work lands in, and the frame grid every timecode is measured on |
+| Clip | One source file with an `in_s` / `out_s` handle and a `gain` | What pixels and audio the shot contributes, and for how long |
+| Plane (`track`) | Compositing order, `0` is the base plane | Which clip paints on top; it has nothing to do with timeline order |
+| Transition | How a clip enters: `cut`, `fade`, or `wipe`, plus `duration_s` | The join between the previous clip and this one; the first clip has none |
+| Graphic | A `text` or `image` overlay, or a caption, at `at_s` for `dur_s` | What is burned into the picture, and by which renderer |
+| Job | A render row: `render_server`, `exec_client`, or `generate_clip` | Who does the work, and whether it is `pending`, `running`, `ok`, or `failed` |
+
+Two of those deserve a second look before you cut anything.
+
+**Timeline order is array order.** Clips play one after another in the order they sit in the
+list. `move_clip` changes that order. `set_track` does not: it only changes who paints on top.
+
+**The base plane is the spine.** A CMX 3600 handoff exports plane `0` only, so keep the shots you
+want an external NLE to see on plane `0` and put inserts, lower thirds, and picture-in-picture on
+planes `1` and up.
+
+---
+
+## Where the files live
+
+Everything the lane writes is under `${COMFY_OUTPUT_DIR}/edit/`, which is the same output root
+ComfyUI serves, so any file in it can be imported back as a clip.
+
+| Path | Written by | Notes |
+| --- | --- | --- |
+| `edit/projects/<project_id>.json` | every op | The project itself; the panel and the agent both read this |
+| `edit/projects/<project_id>.edl.json` | Export EDL, format `json` | This lane's own handoff document, full fidelity |
+| `edit/projects/<project_id>.edl` | Export EDL, format `cmx` | CMX 3600 text an external NLE imports |
+| `edit/renders/<project_id>-<job_id>.mp4` | server render | ffmpeg on the Spark CPU |
+| `edit/renders/<project_id>-<job_id>.webm` | client render | canvas plus `MediaRecorder` in your browser |
+| `edit/imports/` | you, or `manage.sh` downloads | A conventional drop point under the output root |
+
+Every path argument a route accepts is resolved under the output root and refused when it would
+escape it, so an agent cannot read outside the box.
+
+---
+
+## The op vocabulary
+
+One route takes everything: `POST /ez_edit/ops` with `project_id` and an ordered `ops` list. Each
+entry is `{"op": name, "args": {...}}`, applied in order, and the response carries the whole
+rebuilt project. The list runs against a copy of the project, so an op that a guard refuses leaves
+the saved project exactly as it was: a half-applied cut is not a state you can reach.
+
+| Op | Args | Refuses when |
+| --- | --- | --- |
+| `project_create` | `title`, `fps`, `width`, `height` | fps or a dimension is not greater than 0, or a project already exists (start with `clear` instead) |
+| `add_clip` | `id`, `source`, `label`, `in_s`, `out_s`, `track`, `gain` | the source is empty, absolute, uses backslashes, or traverses upward; or the id repeats |
+| `remove_clip` | `clip_id` | no clip carries that id |
+| `trim_clip` | `clip_id`, `in_s`, `out_s` | neither handle is given, `in_s` is negative, or `out_s` does not come after it |
+| `move_clip` | `clip_id`, `index` | the index is off the end of the strip |
+| `set_track` | `clip_id`, `track` | the track is negative |
+| `set_transition` | `clip_id`, `kind`, `duration_s` | the clip is first (nothing enters), `kind` is not `cut` / `fade` / `wipe`, or `duration_s` is not greater than 0 |
+| `set_gain` | `clip_id`, `gain` | the gain is negative |
+| `add_overlay` | `overlay` record: `id`, `kind`, `at_s`, `dur_s`, `text`, `source`, `x`, `y`, `size` | the kind is not `text` or `image`, a `text` graphic has no text or also carries a source, or an `image` graphic has no source |
+| `remove_overlay` | `overlay_id` | no graphic carries that id |
+| `add_caption` | `caption` record: `id`, `at_s`, `dur_s`, `text` | the record has no text, no id, or a `dur_s` of 0 |
+| `remove_caption` | `caption_id` | no caption carries that id |
+| `set_title` | `title` | the title is blank |
+| `clear` | none | never - it empties clips, overlays, and captions and keeps the project |
+
+Anything outside those argument names is refused by an allow-list per op, so a typo in a key name
+fails with that key named in the message rather than silently doing nothing. A list that does not
+start with `project_create` while no project is loaded is refused too, and the message tells you
+to start the list with it.
+
+---
+
+## Which surface to work in
+
+All three drive the same reducer, so pick by how you like to work and by how many clips are
+involved.
+
+| | Panel | Agent chat | MCP server |
+| --- | --- | --- | --- |
+| Where it runs | the ComfyUI tab, **EZ Edit** | the panel's chat box | `bazelisk run //:manage -- edit-mcp --stdio` |
+| Needs the model sidecar | no | yes | no |
+| Good at | one shot at a time, with a preview you can see | describing an edit in a sentence | scripted batches, another desktop agent, CI |
+| Sees | the project it loaded | the project the turn names | any project, listed with `edit_list_projects` |
+| Page | [Rough cut in the browser](rough-cut.md) | [Editing lane](../edit-agent.md) | [Agent and MCP driving](agent-and-mcp.md) |
+
+A reasonable rule: cut with the mouse while you are judging shots, and switch to the op script
+once you know exactly what you want done.
+
+---
+
+## A planning worksheet
+
+Write the cut down before you touch a button. This is a real 30-second product cut, planned as
+ops, then run in whichever surface you chose.
+
+1. The frame grid: 24 fps, 1280 x 720, so every timecode is a multiple of one frame.
+2. The spine on plane `0`: wide shot, product shot, close detail, outro.
+3. One insert on plane `1`: a screen recording over the product shot.
+4. One lower third over the opening wide, and a caption for the spoken tag line.
+5. A fade into every clip after the first, half a second each.
+
+That plan is nine ops, and you can read it as the cut itself:
+
+```json
+{
+  "project_id": "product-30s",
+  "ops": [
+    {"op": "project_create", "args": {"title": "Product 30s", "fps": 24, "width": 1280, "height": 720}},
+    {"op": "add_clip", "args": {"id": "wide", "source": "edit/imports/wide.mp4", "label": "Wide", "in_s": 0, "out_s": 6, "track": 0}},
+    {"op": "add_clip", "args": {"id": "product", "source": "edit/imports/product.mp4", "label": "Product", "in_s": 2, "out_s": 12, "track": 0}},
+    {"op": "add_clip", "args": {"id": "detail", "source": "edit/imports/detail.mp4", "label": "Detail", "in_s": 0, "out_s": 8, "track": 0}},
+    {"op": "add_clip", "args": {"id": "outro", "source": "edit/imports/outro.mp4", "label": "Outro", "in_s": 0, "out_s": 4, "track": 0}},
+    {"op": "add_clip", "args": {"id": "screen", "source": "edit/imports/screen.mp4", "label": "Screen insert", "in_s": 0, "out_s": 5, "track": 1}},
+    {"op": "set_transition", "args": {"clip_id": "product", "kind": "fade", "duration_s": 0.5}},
+    {"op": "set_transition", "args": {"clip_id": "detail", "kind": "fade", "duration_s": 0.5}},
+    {"op": "add_overlay", "args": {"overlay": {"id": "lower-third", "kind": "text", "at_s": 0.5, "dur_s": 3, "text": "Field Kit 12"}}}
+  ]
+}
+```
+
+Two things to notice. The insert is added last, on plane `1`, because it paints over the shots
+that were already placed. And the first clip carries no transition: `set_transition` on it would
+be refused, since there is nothing for it to enter from.
+
+---
+
+## Refusals you will meet
+
+The reducer guards the things that make a timeline unrenderable. None of them are bugs, and the
+message names the argument that caused it.
+
+| Refusal | What to do |
+| --- | --- |
+| `unknown op 'name'` | check the table above; the message names the op it did not recognise |
+| `unknown argument(s) key` | the op takes a fixed set of keys, and the message names the one it rejected |
+| first clip has no entering transition | put the transition on the clip after it |
+| track must be greater than or equal to 0 | planes start at `0`; there is no below-the-base plane |
+| no clip with that id | re-read the project: ids do not survive a `clear` |
+| project has no base-plane clip to export | a CMX export needs at least one plane `0` clip |
+| route refused while the lane is disabled | `EZ_EDIT_ENABLED=0` in the environment |
+
+---
+
+## Related
+
+| Need | Page |
+| --- | --- |
+| The mouse walkthrough, one recipe per cut | [Rough cut in the browser](rough-cut.md) |
+| Lower thirds, captions, and who burns them | [Captions and overlays](captions-and-overlays.md) |
+| Rendering, job rows, and the EDL handoff | [Render and hand off](render-and-handoff.md) |
+| Scripting the same ops through tools | [Agent and MCP driving](agent-and-mcp.md) |
+| The lane's routes, env knobs, and sidecar | [Editing lane](../edit-agent.md) |
+| Which GPU mode allows which job | [Occupancy matrix](../operate/occupancy-matrix.md) |

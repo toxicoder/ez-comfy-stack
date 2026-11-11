@@ -7,7 +7,7 @@ every ``EdlError`` refusal branch. Numbers are fixed; nothing is injected.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 import pytest
 
@@ -16,9 +16,11 @@ from ez_edit.edl import (
     OUTPUT_ARGS,
     SAMPLE_RATE,
     EdlError,
+    cmx_edl,
     edl_payload,
     ffmpeg_command,
 )
+from ez_edit.protocol import EditProject
 
 OUT = "/renders/out.mp4"
 """Fixed destination used in every golden argv."""
@@ -475,3 +477,100 @@ def test_refuses_transition_longer_than_clips() -> None:
 def test_refuses_bad_text_plane_containers() -> None:
     _assert_refused(_project(overlays="oops"), "project overlays must be a list")
     _assert_refused(_project(captions=[3]), "project captions entries must be mappings")
+
+
+# --- CMX 3600 handoff --------------------------------------------------------
+
+
+def _cmx_project(**overrides: Any) -> EditProject:
+    """Build a two-clip base-plane project with one roll title.
+
+    The record is assembled as a plain dict so a test can override any field
+    with a malformed value; the ``cast`` only says the default shape is a
+    project, which is what :func:`ez_edit.edl.cmx_edl` asks for.
+
+    Args:
+        **overrides: Fields to add or replace on the project.
+
+    Returns:
+        Edit project record.
+    """
+    project = _project(
+        clips=[
+            _clip("a", label="A Roll", source="clips/a b.mp4"),
+            _clip(
+                "b",
+                label="",
+                in_s=1.0,
+                out_s=4.0,
+                transition={"kind": "fade", "duration_s": 0.5},
+            ),
+        ]
+    )
+    project.update(overrides)
+    return cast("EditProject", project)
+
+
+def test_cmx_edl_golden_header_and_two_events() -> None:
+    assert cmx_edl(_cmx_project()) == (
+        "TITLE: Demo\n"
+        "FCM: NON-DROP FRAME\n"
+        "\n"
+        "001  A_ROLL    V     C        "
+        "00:00:00:00 00:00:02:00 00:00:00:00 00:00:02:00\n"
+        "* FROM CLIP NAME: A_ROLL\n"
+        "\n"
+        "002  B.MP4     V     D        "
+        "00:00:01:00 00:00:04:00 00:00:01:12 00:00:04:12\n"
+        "* FROM CLIP NAME: B.MP4\n"
+    )
+
+
+def test_cmx_edl_wipe_uses_the_wipe_event_code() -> None:
+    project = _cmx_project(
+        clips=[
+            _clip("a"),
+            _clip("b", transition={"kind": "wipe", "duration_s": 0.5}),
+        ]
+    )
+    events = [line for line in cmx_edl(project).splitlines() if " V     " in line]
+    assert " V     C " in events[0]
+    assert " V     W " in events[1]
+
+
+def test_cmx_edl_carries_frames_into_minutes_and_hours() -> None:
+    project = _cmx_project(clips=[_clip("a", in_s=3661.5, out_s=3662.0)])
+    text = cmx_edl(project)
+    assert "01:01:01:12 01:01:02:00" in text
+
+
+def test_cmx_edl_rounds_half_a_frame_up() -> None:
+    project = _cmx_project(clips=[_clip("a", in_s=24.5 / 24, out_s=25.5 / 24)])
+    assert "00:00:01:01 00:00:01:02" in cmx_edl(project)
+
+
+def test_cmx_edl_skips_clips_above_the_base_plane() -> None:
+    project = _cmx_project(clips=[_clip("a"), _clip("b", track=1)])
+    text = cmx_edl(project)
+    assert text.count(" V     C        ") == 1
+    assert "B.MP4" not in text
+
+
+def test_cmx_edl_folds_unsafe_reel_characters() -> None:
+    project = _cmx_project(clips=[_clip("a", label="", source="clips\\take one.mp4")])
+    assert "* FROM CLIP NAME: TAKE_ONE.MP4" in cmx_edl(project)
+
+
+def test_cmx_edl_collapses_the_title_and_defaults_when_blank() -> None:
+    assert "TITLE: Spring Cut" in cmx_edl(_cmx_project(title=" Spring\n Cut "))
+    assert "TITLE: EZ Edit" in cmx_edl(_cmx_project(title=""))
+
+
+def test_cmx_edl_refuses_a_frame_rate_below_one() -> None:
+    with pytest.raises(EdlError, match="fps must be >= 1 to export CMX"):
+        cmx_edl(_raw(_cmx_project(fps=0.4)))
+
+
+def test_cmx_edl_refuses_a_project_without_a_base_plane() -> None:
+    with pytest.raises(EdlError, match="no base-plane \\(track 0\\) clip"):
+        cmx_edl(_raw(_cmx_project(clips=[_clip("a", track=2)])))

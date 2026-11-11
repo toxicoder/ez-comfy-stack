@@ -1,0 +1,266 @@
+---
+title: Agent and MCP driving
+description: "Drive the editing lane from the other side: the nine typed edit_* tools, a worked batch cut, project discovery with edit_list_projects, and what still works with the model sidecar down."
+tags: [editing, video-editor, mcp, agent, automation, tools]
+---
+
+# Agent and MCP driving
+
+**What's on this page**
+
+- **Three doors, one reducer** - the panel, the chat box, and the stdio MCP server
+- **The tool catalog** - all nine typed tools, their arguments, and which route each one calls
+- **A worked batch cut** - eight tool calls that build, shape, render, and export a piece
+- **Finding a project** - `edit_list_projects` and why an agent needs it first
+- **Running it yourself** - `--stdio`, `--list-tools`, and `--call` for a one-off
+- **The chat box** - what the sidecar adds, and the occupancy etiquette around `generate_clip`
+- **Laptop-local tools** - loopback MCP endpoints surfaced as `local__<server>__<tool>`
+- **Refusals** - the ones the tool layer adds on top of the reducer's
+
+**What this enables**
+
+- **A scripted cut** - the same op list the panel posts, sent from a shell, a CI job, or a desktop
+  agent, with the same guardrails
+- **An agent that can only edit** - typed tools over `/ez_edit` routes, with no `execute_code`, no
+  telemetry, and no arbitrary `fetch_url`
+- **Discovery without guessing ids** - `edit_list_projects` answers "which project did I leave
+  open?" so a second agent can pick up the first one's work
+- **Automation that survives a cold GPU** - every tool except `edit_generate_clip` is a route call
+  and needs no model
+
+**Question this page answers:** how do I drive the edit from an agent or a script instead of the
+mouse? Start the server with `bazelisk run //:manage -- edit-mcp --stdio`, list the projects, then
+send ops. For the mouse path, see [Rough cut in the browser](rough-cut.md).
+
+<Callout type="error" title="Typed tools only">
+  The editing MCP server is `scripts/lib/edit_mcp.py`, launched by `manage.sh edit-mcp`: **one
+  typed tool per catalog name, one HTTP call per tool**, and no business logic in between. There is
+  no `execute_code`, no telemetry, and no arbitrary `fetch_url`. The routes own the reducer, the
+  jobstore, and the occupancy gate. The wider MCP picture, including the Path D SSH tunnels, is on
+  [MCP and SSH tunnels](../operate/mcp.md).
+</Callout>
+
+---
+
+## Three doors, one reducer
+
+| Door | Needs | Reaches | Best for |
+| --- | --- | --- | --- |
+| Panel controls | a browser tab | `/ez_edit/ops` | judging shots one at a time, with a preview |
+| Agent chat | the model sidecar | the agent loop, which calls the tools below | describing an edit in a sentence |
+| `edit-mcp` | ComfyUI up, no model | the same routes, one call per tool | scripts, CI, and your own desktop agent |
+
+The tool layer deliberately holds no logic: `edit_apply_ops` posts to `/ez_edit/ops` and the
+reducer decides. That is why an op that works from the panel works from a script, byte for byte.
+
+---
+
+## The tool catalog
+
+| Tool | Args | Route it calls |
+| --- | --- | --- |
+| `edit_list_projects` | - | `GET /ez_edit/projects` |
+| `edit_get_state` | optional `project_id` | `GET /ez_edit/state` |
+| `edit_import` | `path`, optional `label`, `track` | `POST /ez_edit/import` |
+| `edit_apply_ops` | `ops`, optional `project_id` | `POST /ez_edit/ops` |
+| `edit_render` | `mode` (`server` or `client`), optional `project_id`, `client_id` | `POST /ez_edit/render` |
+| `edit_job_status` | `job_id` | `GET /ez_edit/job` |
+| `edit_export_edl` | optional `project_id`, `format` (`json` or `cmx`) | `POST /ez_edit/export_edl` |
+| `edit_generate_clip` | `prompt`, optional `duration_s`, `fps` | `POST /ez_edit/generate_clip` |
+| `occupancy_status` | - | reads `${COMFY_OUTPUT_DIR}/.occupancy.json` |
+
+Every argument is typed in one place, `custom_nodes/ez_edit/protocol.py`, and the MCP server's copy
+of the catalog is checked against it by a drift test, so a tool cannot quietly disagree with the
+route behind it.
+
+---
+
+## A worked batch cut
+
+This is the 30-second piece from [Plan a cut](plan-a-cut.md), end to end through the tools. Each
+block is one call.
+
+1. Ask what is already on the box, then create the project:
+
+```json
+{"tool": "edit_list_projects", "arguments": {}}
+```
+
+```json
+{
+  "tool": "edit_apply_ops",
+  "arguments": {
+    "project_id": "",
+    "ops": [
+      {"op": "project_create", "args": {"title": "Product 30s", "fps": 24, "width": 1280, "height": 720}}
+    ]
+  }
+}
+```
+
+2. Bring the shots in. `path` is relative to the output root, and `track` is the plane:
+
+```json
+{
+  "tool": "edit_import",
+  "arguments": {"path": "edit/imports/wide.mp4", "label": "Wide", "track": 0}
+}
+```
+
+3. Shape the timeline. One call can carry the whole edit, because the reducer applies the list in
+   order and rejects the lot if one op is bad:
+
+```json
+{
+  "tool": "edit_apply_ops",
+  "arguments": {
+    "project_id": "product-30s",
+    "ops": [
+      {"op": "trim_clip", "args": {"clip_id": "wide", "in_s": 1.5, "out_s": 7}},
+      {"op": "move_clip", "args": {"clip_id": "detail", "index": 1}},
+      {"op": "set_track", "args": {"clip_id": "screen", "track": 1}},
+      {"op": "set_gain", "args": {"clip_id": "screen", "gain": 0.2}},
+      {"op": "set_transition", "args": {"clip_id": "detail", "kind": "fade", "duration_s": 0.5}},
+      {"op": "add_overlay", "args": {"overlay": {"id": "strap", "kind": "text", "at_s": 0.5, "dur_s": 3, "text": "Field Kit 12", "x": 0.06, "y": 0.78, "size": 0.05}}},
+      {"op": "add_caption", "args": {"caption": {"id": "tag", "at_s": 20, "dur_s": 4, "text": "Twelve tools. One case."}}}
+    ]
+  }
+}
+```
+
+4. Read it back, render, and poll:
+
+```json
+{"tool": "edit_get_state", "arguments": {"project_id": "product-30s"}}
+```
+
+```json
+{"tool": "edit_render", "arguments": {"project_id": "product-30s", "mode": "server"}}
+```
+
+```json
+{"tool": "edit_job_status", "arguments": {"job_id": "j-4f2a"}}
+```
+
+5. Hand it off. Both formats, one call each:
+
+```json
+{"tool": "edit_export_edl", "arguments": {"project_id": "product-30s", "format": "json"}}
+```
+
+```json
+{"tool": "edit_export_edl", "arguments": {"project_id": "product-30s", "format": "cmx"}}
+```
+
+The state call is the one to keep in the loop: it answers the rebuilt project after every op list,
+so a script can assert on clip count and timing instead of trusting its own bookkeeping.
+
+---
+
+## Finding a project
+
+`edit_list_projects` returns every saved project, newest first, as summary rows:
+
+```json
+{
+  "ok": true,
+  "projects": [
+    {"id": "product-30s", "title": "Product 30s", "fps": 24.0, "width": 1280, "height": 720, "clips": 5, "updated_at": "2026-11-11T09:14:02+00:00"},
+    {"id": "kitchen-fix", "title": "Kitchen fix", "fps": 30.0, "width": 1920, "height": 1080, "clips": 2, "updated_at": "2026-11-10T18:40:11+00:00"}
+  ]
+}
+```
+
+Reach for it before anything that takes a `project_id`. An empty `project_id` means "the most
+recent project", which is fine when one agent owns the box and wrong the moment two do: list first,
+match on title, then pass the id explicitly on every later call.
+
+---
+
+## Running it yourself
+
+```bash
+bazelisk run //:manage -- edit-mcp --list-tools
+bazelisk run //:manage -- edit-mcp --call edit_list_projects
+bazelisk run //:manage -- edit-mcp --call edit_apply_ops \
+  '{"project_id":"product-30s","ops":[{"op":"set_title","args":{"title":"cold open"}}]}'
+bazelisk run //:manage -- edit-mcp --stdio
+```
+
+`--list-tools` and `--call` answer without a GPU and without the model; `--stdio` is the form a
+desktop MCP client launches, and the server name it announces is `ez-edit`. Point your own agent at
+that stdio command and it gets exactly the nine tools above.
+
+The origin the server talks to is `EZ_EDIT_COMFY_URL`, falling back to
+`http://127.0.0.1:${COMFY_PORT:-8188}`. Keep it loopback; from a laptop, open a Path D tunnel first
+([MCP and SSH tunnels](../operate/mcp.md)).
+
+---
+
+## The chat box
+
+`/ez_edit/chat` is the only editing route that consults a model. It runs a budgeted tool loop -
+`EZ_AGENT_MAX_STEPS` steps, `EZ_AGENT_TIMEOUT_S` seconds - against the same catalog, and the panel
+prints each tool call as a trace line so you can see what the agent actually did.
+
+```bash
+bazelisk run //:manage -- agent-model run     # opt-in; 127.0.0.1:30001
+```
+
+Without it, **Send** reports the model is unreachable and every other control keeps working. The
+sidecar's memory math, licenses, and co-tenant profile live on
+[Editing lane](../edit-agent.md#the-agent-model-sidecar-opt-in).
+
+### The one heavy tool
+
+| Action | GPU? | Allowed when occupancy is |
+| --- | --- | --- |
+| list, state, import, ops, export | no | any mode |
+| server render | no (CPU ffmpeg) | any mode - expect contention |
+| client render | no (your laptop) | any mode |
+| chat turn | yes, co-tenant model | `idle`, unknown, or a desk mode |
+| `edit_generate_clip` | **yes** - a heavy Wan queue | `idle`, unknown, or `llm-desk` only |
+
+`edit_generate_clip` is the lane's only generative tool: it queues the `film/generate-cutaway` graph
+to fill a hole in the cut, and the occupancy gate refuses it while a heavy job holds the Spark. Ask
+for it deliberately - `bazelisk run //:manage -- occupancy status` first, or the `occupancy_status`
+tool.
+
+---
+
+## Laptop-local tools
+
+The panel can also *answer* tool calls rather than only making them. Press **Relay local tools** and
+the tab registers its laptop's MCP endpoints, which the agent sees as `local__<server>__<tool>`; the
+agent dispatches, the tab executes on your machine, and the result posts back.
+
+Only loopback endpoints are contacted from the browser - `127.0.0.1`, `localhost`, and `::1`. A
+`Discover` press that fails has one of three causes: a non-loopback URL, missing CORS for the
+ComfyUI origin, or a server that is not Streamable HTTP.
+
+---
+
+## Refusals
+
+| Message | What it means |
+| --- | --- |
+| `editing lane is disabled` | `EZ_EDIT_ENABLED=0`; every `/ez_edit` route is refusing |
+| `no such route` / `HTTP 404` | ComfyUI is up but the pack is not loaded - `bazelisk run //:manage -- restart` recopies `custom_nodes/` |
+| `connection refused` from `--call` | the origin is wrong; check `EZ_EDIT_COMFY_URL` and `COMFY_PORT` |
+| `no such file under the output dir` | `path` is outside `${COMFY_OUTPUT_DIR}` or missing |
+| `ops[N]: ...` | the reducer refused that op; the prefix names which one, and nothing was saved |
+| `unknown edl format` | `format` is only ever `json` or `cmx` |
+| occupancy refuse on `edit_generate_clip` | a heavy job holds the Spark - check `occupancy_status` |
+
+---
+
+## Related
+
+| Need | Page |
+| --- | --- |
+| The op list every call carries | [Plan a cut](plan-a-cut.md) |
+| The same edit with a mouse | [Rough cut in the browser](rough-cut.md) |
+| Render modes, job rows, and the EDL formats | [Render and hand off](render-and-handoff.md) |
+| Text planes an agent can add | [Captions and overlays](captions-and-overlays.md) |
+| The lane's routes, env knobs, and sidecar | [Editing lane](../edit-agent.md) |
+| Tunnels, the other MCP servers, and the no-`execute_code` rule | [MCP and SSH tunnels](../operate/mcp.md) |
