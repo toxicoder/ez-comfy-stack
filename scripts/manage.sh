@@ -1945,20 +1945,45 @@ cmd_report_bug() {
   while [[ $# -gt 0 ]]; do
     case "$1" in
       --surface)
-        [[ $# -ge 2 ]] || { err "report-bug --surface needs a value"; return 2; }
-        surface="$2"; shift 2 ;;
+        [[ $# -ge 2 ]] || {
+          err "report-bug --surface needs a value"
+          return 2
+        }
+        surface="$2"
+        shift 2
+        ;;
       --command)
-        [[ $# -ge 2 ]] || { err "report-bug --command needs a value"; return 2; }
-        command_text="$2"; shift 2 ;;
+        [[ $# -ge 2 ]] || {
+          err "report-bug --command needs a value"
+          return 2
+        }
+        command_text="$2"
+        shift 2
+        ;;
       --exit)
-        [[ $# -ge 2 ]] || { err "report-bug --exit needs a value"; return 2; }
-        code="$2"; shift 2 ;;
+        [[ $# -ge 2 ]] || {
+          err "report-bug --exit needs a value"
+          return 2
+        }
+        code="$2"
+        shift 2
+        ;;
       --log)
-        [[ $# -ge 2 ]] || { err "report-bug --log needs a value"; return 2; }
-        log_file="$2"; shift 2 ;;
+        [[ $# -ge 2 ]] || {
+          err "report-bug --log needs a value"
+          return 2
+        }
+        log_file="$2"
+        shift 2
+        ;;
       --title)
-        [[ $# -ge 2 ]] || { err "report-bug --title needs a value"; return 2; }
-        title="$2"; shift 2 ;;
+        [[ $# -ge 2 ]] || {
+          err "report-bug --title needs a value"
+          return 2
+        }
+        title="$2"
+        shift 2
+        ;;
       -h | --help)
         cat <<'EOF'
 Usage: manage.sh report-bug [--surface S] [--command CMD] [--exit N]
@@ -1973,10 +1998,12 @@ Usage: manage.sh report-bug [--surface S] [--command CMD] [--exit N]
       --command 'bazelisk test //:test-all' --exit 1 \
       --log /tmp/test-all.log
 EOF
-        return 0 ;;
+        return 0
+        ;;
       *)
         err "Unknown report-bug flag: $1"
-        return 2 ;;
+        return 2
+        ;;
     esac
   done
 
