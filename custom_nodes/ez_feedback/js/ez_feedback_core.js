@@ -161,7 +161,14 @@ const CONTEXT_HEADING = "## Context";
 const ENVIRONMENT_HEADING = "## Environment";
 const ERRORS_HEADING = "## Recent errors";
 const BROWSER_HEADING = "## Browser";
-const DEGRADE_ORDER = [BROWSER_HEADING, ERRORS_HEADING, ENVIRONMENT_HEADING];
+/**
+ * What the URL budget gives up first. Machine trivia goes before diagnosis:
+ * dropping `## Recent errors` ahead of `## Environment` used to trade the
+ * traceback that names the failing op for a viewport line.
+ */
+const DEGRADE_ORDER = [BROWSER_HEADING, ENVIRONMENT_HEADING, ERRORS_HEADING];
+/** Per-error budget tried before `## Recent errors` is dropped whole. */
+export const ERROR_TEXT_FIT = 400;
 const TRACEBACK_LABEL = "Traceback:";
 const ENHANCE_HEADINGS = [
   "## Problem",
@@ -410,9 +417,12 @@ function contextLines(pairs) {
  * Render the `## Recent errors` block from the client ring buffer.
  * @param {Array<EzErrorEntry>|null} entries Ring-buffer entries.
  * @param {string} surface Report surface used when an entry carries none.
+ * @param {number} [budget] Per-entry text budget; `MAX_ERROR_TEXT` unless a
+ *   tighter tier is being tried to keep the section in the URL at all.
  * @returns {string[]} Markdown bullets, newest first as supplied.
  */
-function errorLines(entries, surface) {
+function errorLines(entries, surface, budget) {
+  const max = typeof budget === "number" && budget > 0 ? budget : MAX_ERROR_TEXT;
   const lines = [];
   (Array.isArray(entries) ? entries : []).forEach((entry) => {
     if (!entry || typeof entry !== "object") {
@@ -424,10 +434,10 @@ function errorLines(entries, surface) {
     }
     const stamp = valueText(entry.ts) || "unknown";
     const where = valueText(entry.surface) || valueText(surface) || "global";
-    let line = "- " + stamp + " [" + where + "] " + clip(message, MAX_ERROR_TEXT);
+    let line = "- " + stamp + " [" + where + "] " + clip(message, max);
     const detail = valueText(entry.detail);
     if (detail) {
-      line += " (" + clip(detail, MAX_ERROR_TEXT) + ")";
+      line += " (" + clip(detail, max) + ")";
     }
     lines.push(line);
   });
@@ -576,9 +586,13 @@ export function buildTitle(report) {
  * carries content. A traceback, when supplied, is a fenced block after
  * `## Browser`.
  * @param {EzReportPartial} report Full or partial report.
+ * @param {number} [errorBudget] Per-entry budget for `## Recent errors`;
+ *   defaults to `MAX_ERROR_TEXT`. The URL ladder retries with a tighter tier
+ *   before it drops the section, so a long traceback is clipped rather than
+ *   deleted when the handoff has no room for it.
  * @returns {string} Markdown body without a trailing newline.
  */
-export function buildBody(report) {
+export function buildBody(report, errorBudget) {
   const input = report || {};
   const kind = kindKey(input.kind);
   const surface = String(input.surface || "").trim() || "global";
@@ -595,7 +609,7 @@ export function buildBody(report) {
   });
   blocks.push(section(CONTEXT_HEADING, contextLines(input.context)));
   blocks.push(section(ENVIRONMENT_HEADING, contextLines(input.environment)));
-  blocks.push(section(ERRORS_HEADING, errorLines(input.errors, surface)));
+  blocks.push(section(ERRORS_HEADING, errorLines(input.errors, surface, errorBudget)));
   blocks.push(section(BROWSER_HEADING, browserLines(input.browser)));
   let body = blocks.filter(Boolean).join("\n\n");
   const note = valueText(input.traceback);
@@ -645,51 +659,123 @@ function dropTraceback(body) {
 }
 
 /**
- * Build the `/issues/new` URL, degrading whole sections past `MAX_HREF`.
+ * Build the `/issues/new` URL, degrading the body past `MAX_HREF`.
  *
- * Drop order is `## Browser`, then `## Recent errors`, then `## Environment`,
- * then the traceback. Title and labels never drop.
+ * Order is: try the tighter error budget, then drop `## Browser`, then
+ * `## Environment`, then `## Recent errors`, then the traceback, then cut the
+ * tail. Machine context goes before the operator's own words, which are first
+ * in the body, so a cut never eats what a person typed. Whatever is left out
+ * is named in the body GitHub receives and reported back through `trimmed`,
+ * so a shortened handoff is never silent about being shortened.
  * @param {EzReport} payload Full report shape.
  * @param {string} body Body text to encode.
+ * @param {string} [clippedBody] Same report with a tighter error budget.
  * @returns {string} Prefilled new-issue URL.
  */
-function hrefFor(payload, body) {
+function hrefFor(payload, body, clippedBody) {
   const title = buildTitle(payload);
   const labels = labelsFor(payload.kind).join(",");
   const build = (text) => {
     const params = new URLSearchParams({ title, body: text, labels });
     return ISSUES_NEW + "?" + params.toString();
   };
+  lastDropped = [];
+
+  // Five full tracebacks cost more than the browser and environment blocks
+  // they would be traded for, and 400 characters still carries the line that
+  // names the failing op. Prefer keeping them clipped over dropping them.
+  let working = body;
+  if (typeof clippedBody === "string" && clippedBody !== body && build(body).length > MAX_HREF) {
+    working = clippedBody;
+    if (build(clippedBody).length <= MAX_HREF) {
+      return build(clippedBody);
+    }
+  }
+
+  // Naming what was left out costs a line of its own, so a drop only pays when
+  // the URL really gets shorter. A section of trivia smaller than its own
+  // omission note is kept, and the ladder moves on to the next candidate.
+  const compose = (gone) =>
+    degradationNote(
+      gone.reduce((text, heading) => dropSection(text, heading), working),
+      gone,
+    );
+
   const dropped = [];
-  let href = build(body);
+  let href = build(working);
   for (const heading of DEGRADE_ORDER) {
     if (href.length <= MAX_HREF) {
+      lastDropped = dropped.slice();
       return href;
     }
+    const candidate = dropped.concat([heading]);
+    const candidateHref = build(compose(candidate));
+    if (candidateHref.length >= href.length) {
+      continue;
+    }
     dropped.push(heading);
-    href = build(dropped.reduce((text, gone) => dropSection(text, gone), body));
+    href = candidateHref;
   }
   if (href.length <= MAX_HREF) {
+    lastDropped = dropped.slice();
     return href;
   }
-  const trimmed = dropTraceback(
-    dropped.reduce((text, gone) => dropSection(text, gone), body),
+  // Nothing left to trade: the tail goes too, and the body says both what was
+  // cut and what was dropped, so a short issue is never mistaken for a thin one.
+  lastDropped = dropped.concat(["the report tail"]);
+  const stripped = dropTraceback(
+    dropped.reduce((text, heading) => dropSection(text, heading), working),
   );
-  return build(fit(build, trimmed));
+  return build(fit(build, stripped, omissionNote(dropped)));
 }
 
 /**
- * Build the href and report whether the tail had to be cut.
+ * Say what the URL left out, so the filed issue is honest about its gaps.
+ *
+ * A maintainer reading a report with no `## Recent errors` cannot tell
+ * whether nothing failed or the handoff dropped the block; this line answers
+ * that, and tells the operator where the complete text is. It is kept short on
+ * purpose: the ladder compares the URL with and without it, and a long note
+ * would make cheap sections look too expensive to drop.
+ * @param {string[]} dropped Headings removed to get there.
+ * @returns {string} The bracket line, or "" when nothing was dropped.
+ */
+function omissionNote(dropped) {
+  if (!dropped || !dropped.length) {
+    return "";
+  }
+  return (
+    "\n\n[left out of this URL: " +
+    dropped.join(", ") +
+    ". Full report copied - paste it in.]"
+  );
+}
+
+/**
+ * `omissionNote` appended to a body.
+ * @param {string} text Body after the drops so far.
+ * @param {string[]} dropped Headings removed to get there.
+ * @returns {string} Body, with the note when anything was dropped.
+ */
+function degradationNote(text, dropped) {
+  return text + omissionNote(dropped);
+}
+
+/**
+ * Build the href and report whether the body GitHub received is incomplete.
  *
  * The dialog needs the flag to tell the operator that the prefilled body is
  * shorter than what they typed; `issueHref` keeps its plain-string contract.
+ * Whole-section drops count, not just the tail cut `fit` makes.
  * @param {EzReport} payload Full report shape.
  * @param {string} body Body text to encode.
+ * @param {string} [clippedBody] Same report with a tighter error budget.
  * @returns {{href: string, trimmed: boolean}} Prefilled URL and cut flag.
  */
-function hrefResult(payload, body) {
+function hrefResult(payload, body, clippedBody) {
   lastHrefTrimmed = false;
-  return { href: hrefFor(payload, body), trimmed: lastHrefTrimmed };
+  const href = hrefFor(payload, body, clippedBody);
+  return { href: href, trimmed: lastHrefTrimmed || lastDropped.length > 0 };
 }
 
 const TRUNCATION_NOTE = "\n\n[report trimmed to fit the GitHub URL limit]";
@@ -697,32 +783,60 @@ const TRUNCATION_NOTE = "\n\n[report trimmed to fit the GitHub URL limit]";
 /** Set by `fit` when it cut a body; read by `hrefResult` right after building. */
 let lastHrefTrimmed = false;
 
+/** Headings or blocks the last handoff left out; read by `hrefResult`. */
+let lastDropped = [];
+
+/**
+ * Cut a prefix back to a whole line with no fence left open.
+ *
+ * A raw character cut could stop halfway through a bullet, mid-traceback, or
+ * inside an unterminated code fence, and the fence is the one that eats the
+ * rest of the issue when GitHub renders it.
+ * @param {string} prefix Body prefix to trim.
+ * @returns {string} The prefix, snapped to a line and fence boundary.
+ */
+function cutToLine(prefix) {
+  const cut = prefix.lastIndexOf("\n");
+  const snapped = cut > 0 ? prefix.slice(0, cut) : "";
+  const fences = (snapped.match(/^```/gm) || []).length;
+  if (fences % 2 === 1) {
+    const open = snapped.lastIndexOf("```");
+    return open > 0 ? snapped.slice(0, open).trimEnd() : "";
+  }
+  return snapped;
+}
+
 /**
  * Longest prefix of `body` whose encoded href still fits `MAX_HREF`.
  *
  * The section ladder alone cannot bound the URL when Context carries many long
  * pairs, and GitHub answers a too-long URL with 414 URI Too Long rather than
  * truncating it, so the tail gets cut here instead of shipping a dead link.
+ * The cut always lands on a whole line with no open code fence, so it never
+ * splits a bullet and never leaves a fence that would swallow the rest of the
+ * issue when GitHub renders it.
  * @param {function(string): string} build Encoder from body text to href.
  * @param {string} body Candidate body.
+ * @param {string} [suffix] Omission note kept ahead of the cut marker.
  * @returns {string} A body that fits, noting when it was cut.
  */
-function fit(build, body) {
-  if (build(body).length <= MAX_HREF) {
-    return body;
+function fit(build, body, suffix) {
+  const tail = typeof suffix === "string" ? suffix : "";
+  if (build(body + tail).length <= MAX_HREF) {
+    return body + tail;
   }
   let low = 0;
   let high = body.length;
   while (low < high) {
     const mid = Math.ceil((low + high) / 2);
-    if (build(body.slice(0, mid) + TRUNCATION_NOTE).length <= MAX_HREF) {
+    if (build(cutToLine(body.slice(0, mid)) + tail + TRUNCATION_NOTE).length <= MAX_HREF) {
       low = mid;
     } else {
       high = mid - 1;
     }
   }
   lastHrefTrimmed = true;
-  return body.slice(0, low) + TRUNCATION_NOTE;
+  return cutToLine(body.slice(0, low)) + tail + TRUNCATION_NOTE;
 }
 
 /**
@@ -732,7 +846,7 @@ function fit(build, body) {
  */
 export function issueHref(partial) {
   const payload = reportPayload(partial);
-  return hrefFor(payload, buildBody(payload));
+  return hrefFor(payload, buildBody(payload), buildBody(payload, ERROR_TEXT_FIT));
 }
 
 /**
@@ -748,10 +862,13 @@ export function issueHref(partial) {
  */
 export function issueHrefFor(payload, editedBody) {
   const normalized = reportPayload(payload);
-  const body = typeof editedBody === "string" && editedBody.trim()
-    ? editedBody
-    : buildBody(normalized);
-  return hrefResult(normalized, body);
+  const edited = typeof editedBody === "string" && editedBody.trim();
+  const body = edited ? editedBody : buildBody(normalized);
+  // An edit is the operator's own text: rebuilding it to clip errors would
+  // overwrite what they typed, so the tighter budget only applies to a body
+  // the pack built itself.
+  const clipped = edited ? undefined : buildBody(normalized, ERROR_TEXT_FIT);
+  return hrefResult(normalized, body, clipped);
 }
 
 /**
@@ -845,16 +962,24 @@ async function fetchConfig() {
 
 /**
  * Open the prefilled GitHub issue in a new tab.
+ *
+ * When the URL ladder had to shorten anything, the whole markdown goes to the
+ * clipboard too, which is what the omission note in the body promises.
  * @param {EzReportPartial} partial Report or partial report.
  * @returns {boolean} True when the tab opened.
  */
 export function openHandoff(partial) {
   const payload = reportPayload(partial);
-  const href = hrefFor(payload, buildBody(payload));
+  const body = buildBody(payload);
+  const result = hrefResult(payload, body, buildBody(payload, ERROR_TEXT_FIT));
   if (typeof window === "undefined") {
     return false;
   }
-  return Boolean(window.open(href, "_blank", "noopener"));
+  const opened = Boolean(window.open(result.href, "_blank", "noopener"));
+  if (opened && result.trimmed) {
+    writeToClipboard(body).catch(() => undefined);
+  }
+  return opened;
 }
 
 /**
@@ -977,7 +1102,42 @@ function ensureCss() {
 }
 
 /**
+ * Copy through a temporary textarea.
+ *
+ * The async clipboard API exists only in a secure context, and this studio is
+ * routinely opened as `http://<LAN address>:8188`, where `navigator.clipboard`
+ * is undefined. Without this path the trimmed-handoff promise - "the full
+ * markdown is copied" - silently failed on the main deployment.
+ * @param {string} text Text to copy.
+ * @returns {boolean} True when the browser reports the copy worked.
+ */
+function legacyCopy(text) {
+  if (typeof document === "undefined" || typeof document.execCommand !== "function") {
+    return false;
+  }
+  const area = document.createElement("textarea");
+  area.value = text;
+  area.setAttribute("readonly", "");
+  area.style.position = "fixed";
+  area.style.top = "0";
+  area.style.left = "-9999px";
+  document.body.appendChild(area);
+  area.select();
+  let ok = false;
+  try {
+    ok = document.execCommand("copy") === true;
+  } catch (ignored) {
+    ok = false;
+  }
+  area.remove();
+  return ok;
+}
+
+/**
  * Write text to the clipboard when the browser exposes one.
+ *
+ * Falls back to the selection trick on an insecure origin, and rejects only
+ * when neither path can copy, so callers keep their then/catch contract.
  * @param {string} text Text to copy.
  * @returns {Promise<void>} Resolves when copied; rejects when it cannot.
  */
@@ -986,7 +1146,11 @@ function writeToClipboard(text) {
   if (clipper && typeof clipper.writeText === "function") {
     return clipper.writeText(text);
   }
-  return Promise.reject(new Error("no clipboard"));
+  return Promise.resolve().then(() => {
+    if (!legacyCopy(text)) {
+      throw new Error("no clipboard");
+    }
+  });
 }
 
 /**
@@ -1066,7 +1230,21 @@ export function openReport(partial) {
   const handoff = makeButton("Open on GitHub", "ez-fb-btn ez-fb-btn-primary", { icon: true });
   handoff.addEventListener("click", () => {
     const result = issueHrefFor(payload, body.value);
-    if (typeof window === "undefined" || !window.open(result.href, "_blank", "noopener")) {
+    const opened =
+      typeof window !== "undefined" && window.open(result.href, "_blank", "noopener");
+    if (!opened) {
+      // Nothing reached GitHub: a blocked popup used to return here in
+      // silence, losing the report. The whole markdown is the next best
+      // handoff, so copy it and say what happened instead of doing nothing.
+      writeToClipboard(body.value).then(
+        () => {
+          status.textContent = "Popup blocked - full markdown copied. Paste it on GitHub.";
+        },
+        () => {
+          body.select();
+          status.textContent = "Popup blocked and copy failed; the body is selected.";
+        }
+      );
       return;
     }
     if (!result.trimmed) {
@@ -1207,6 +1385,7 @@ const EZ_FEEDBACK = {
   REPO,
   MAX_HREF,
   MAX_ERROR_TEXT,
+  ERROR_TEXT_FIT,
   clip,
   labelsFor,
   buildTitle,

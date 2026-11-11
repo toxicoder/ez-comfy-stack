@@ -1,8 +1,8 @@
 /**
  * @file Client contract for the ez_feedback core, run under `node --test`.
  *
- * Two operator-visible bugs live here. Both filed reports that said less than
- * the operator had typed.
+ * Four operator-visible bugs live here. Every one of them filed a report that
+ * said less than the operator had typed.
  *
  * 1. A captured execution error was clipped at MAX_FIELD (300), so the ring
  *    buffer line - often the only copy of `exception_message` that survives
@@ -21,6 +21,13 @@
  * render verbatim (no collapse, no clip) and an empty enhancement heading is
  * omitted rather than daring the operator to delete a comment.
  *
+ * The URL ladder is the fourth. Past MAX_HREF it dropped `## Recent errors`
+ * ahead of `## Environment`, deleted sections without saying so, cut the tail
+ * mid-line or mid-code-fence, and promised a clipboard copy that does not exist
+ * on the `http://<LAN address>:8188` origin this studio is normally opened on.
+ * The body GitHub receives is now what the ladder decided, named in the body
+ * itself, and the complete markdown is one paste away on every path.
+ *
  * The core is imported as the real module: it sets no globals and guards every
  * DOM touch, so this file needs no jsdom and no npm dependency.
  */
@@ -30,6 +37,7 @@ import path from "node:path";
 import { describe, test } from "node:test";
 
 import {
+  ERROR_TEXT_FIT,
   MAX_ERROR_TEXT,
   MAX_HREF,
   buildBody,
@@ -38,6 +46,8 @@ import {
   fileDirect,
   githubIcon,
   issueHrefFor,
+  openHandoff,
+  openReport,
   recordError,
   recentErrors,
   reportPayload,
@@ -268,10 +278,10 @@ describe("ez_feedback core without a DOM", () => {
 /**
  * Build one element of the throwaway DOM the panel renders into.
  *
- * Only the members `mountPanel` actually touches exist, so nothing in the
- * panel can lean on a browser feature this file has not modelled: children,
- * attributes (with the `data-*` to dataset mapping the kind toggle reads),
- * listeners, and the input fields.
+ * Only the members the panel and the dialog actually touch exist, so nothing can
+ * lean on a browser feature this file has not modelled: children (with the
+ * parent link `remove()` needs), attributes (with the `data-*` to dataset mapping
+ * the kind toggle reads), listeners, the input fields, and selection.
  * @param {string} tag Element name, for failure messages only.
  * @returns {object} The fake element.
  */
@@ -279,6 +289,7 @@ function makeElement(tag) {
   const el = {
     tagName: tag,
     children: [],
+    parent: null,
     attrs: {},
     dataset: {},
     style: {},
@@ -295,14 +306,34 @@ function makeElement(tag) {
     tabIndex: 0,
     classList: { add() {}, remove() {}, toggle() {} },
     append(...nodes) {
+      nodes.forEach((node) => {
+        if (node) {
+          node.parent = el;
+        }
+      });
       el.children.push(...nodes);
     },
     appendChild(node) {
+      if (node) {
+        node.parent = el;
+      }
       el.children.push(node);
       return node;
     },
     replaceChildren(...nodes) {
       el.children = [...nodes];
+    },
+    remove() {
+      if (el.parent) {
+        el.parent.children = el.parent.children.filter((node) => node !== el);
+        el.parent = null;
+      }
+    },
+    select() {
+      el.selected = true;
+    },
+    focus() {
+      el.focused = true;
     },
     setAttribute(key, value) {
       el.attrs[key] = String(value);
@@ -446,6 +477,326 @@ const STUDIO_PAIRS = [
   ["Workflow", "image-studio"],
   ["Nodes", 9],
 ];
+
+/** The marker `fit` appends when it cut the tail; mirrors the core's constant. */
+const CUT_NOTE = "\n\n[report trimmed to fit the GitHub URL limit]";
+
+/**
+ * Body text the operator would be offered, decoded back out of the href.
+ * @param {{href: string}} result Result from `issueHrefFor`.
+ * @returns {string} The body GitHub would be prefilled with.
+ */
+function bodyOf(result) {
+  return new URL(result.href).searchParams.get("body") || "";
+}
+
+/** The body with the omission note cut off, so a named heading reads as kept. */
+function keptOf(result) {
+  return bodyOf(result).split("\n\n[left out of this URL:")[0];
+}
+
+/** True when `heading` is still a section of the body the URL carries. */
+function keeps(result, heading) {
+  return new RegExp("^" + heading + "$", "m").test(keptOf(result));
+}
+
+/** The headings the body admits it left out, or "" when it left out nothing. */
+function leftOut(result) {
+  const note = bodyOf(result).split("\n\n[left out of this URL:")[1];
+  return note ? note.split("]")[0] : "";
+}
+
+describe("ez_feedback core URL budget", () => {
+  const BUG = { kind: "bug", surface: "app", summary: "KSampler died" };
+
+  test("five long tracebacks are clipped to fit, never dropped whole", () => {
+    const errors = Array.from({ length: 5 }, (_x, i) => ({
+      ts: "2026-11-11T0" + i + ":00:00Z",
+      surface: "app",
+      message: "m".repeat(MAX_ERROR_TEXT),
+    }));
+
+    const result = issueHrefFor({ ...BUG, errors });
+
+    assert.ok(result.href.length <= MAX_HREF, `href ${result.href.length} exceeds ${MAX_HREF}`);
+    assert.equal(result.trimmed, false, "nothing had to be left out, only clipped");
+    assert.ok(keeps(result, "## Recent errors"), "the block that names the failing op survives");
+    assert.ok(
+      !keptOf(result).includes("m".repeat(ERROR_TEXT_FIT + 1)),
+      "each entry came in at the tighter tier instead of the full 2000",
+    );
+  });
+
+  test("the ladder gives up machine trivia first and says what it left out", () => {
+    const huge = "a".repeat(2500);
+    const result = issueHrefFor({
+      ...BUG,
+      narrative: {
+        what_happened: huge,
+        steps: huge,
+        expected: "it should finish",
+        actual: "it died",
+      },
+      context: [["App", "photos/image-studio.json"]],
+      environment: [["GPU", "RTX 4090"], ["VRAM", "24 GiB"], ["Torch", "2.6.0"]],
+      errors: [{ ts: "t", surface: "app", message: "boom", detail: "cuda oom" }],
+      browser: {
+        viewport: "1920x1080",
+        dpr: "2",
+        lang: "en-US",
+        online: "true",
+        ua: "Mozilla/5.0 (X11; Linux x86_64)",
+      },
+    });
+
+    assert.ok(result.href.length <= MAX_HREF, `href ${result.href.length} exceeds ${MAX_HREF}`);
+    assert.equal(result.trimmed, true, "a shortened handoff is never silent");
+    assert.ok(keeps(result, "## Recent errors"), "the traceback outranks the viewport line");
+    assert.ok(keeps(result, "## Context"), "the operator's own pairs outrank it too");
+    assert.ok(!keeps(result, "## Browser"), "the trivia went first");
+    assert.match(leftOut(result), /## Browser/, "and the filed issue admits it");
+  });
+
+  test("a section too small to pay for its own omission note is kept", () => {
+    // This `## Browser` is a third the size of the line that would announce its
+    // absence: dropping it would shorten the URL by less than the note costs.
+    const result = issueHrefFor({
+      ...BUG,
+      narrative: { what_happened: "the sampler stopped", steps: "1. queue" },
+      environment: Array.from({ length: 30 }, (_x, i) => ["Layer " + i, "v".repeat(300)]),
+      browser: { viewport: "1920x1080" },
+    });
+
+    assert.ok(result.href.length <= MAX_HREF, `href ${result.href.length} exceeds ${MAX_HREF}`);
+    assert.ok(keeps(result, "## Browser"), "kept: the note cost more than the section");
+    assert.ok(!keeps(result, "## Environment"), "the fat block is the one that pays");
+    assert.match(leftOut(result), /## Environment/);
+  });
+
+  test("the tail cut lands on a whole line, not mid-bullet", () => {
+    const typed = [
+      "## What happened",
+      "",
+      "the disk wizard divided by zero",
+      "",
+      "Traceback (most recent call last):",
+      "  File \"disk_wizard.py\", line 1, in <module>",
+      "ZeroDivisionError: division by zero",
+      "- step " + "q".repeat(6000),
+    ].join("\n");
+
+    const result = issueHrefFor({ ...BUG }, typed);
+    const body = bodyOf(result);
+
+    assert.ok(result.href.length <= MAX_HREF, `href ${result.href.length} exceeds ${MAX_HREF}`);
+    assert.equal(result.trimmed, true);
+    assert.ok(body.endsWith(CUT_NOTE), "the cut is stated where GitHub will show it");
+    const keptText = body.slice(0, body.length - CUT_NOTE.length);
+    assert.equal(typed.slice(0, keptText.length), keptText, "what survived is a prefix");
+    assert.equal(typed.charAt(keptText.length), "\n", "and it stopped at a line boundary");
+    assert.ok(keptText.includes("ZeroDivisionError"), "the head of the traceback made the cut");
+  });
+
+  test("a tail that would leave a code fence open goes whole", () => {
+    // An unterminated fence is the one cut that eats the rest of the issue once
+    // GitHub renders it, so the block is dropped rather than split.
+    const typed = [
+      "## What happened",
+      "",
+      "the disk wizard divided by zero",
+      "",
+      "```",
+      "Traceback (most recent call last):",
+      "q".repeat(6000),
+      "```",
+    ].join("\n");
+
+    const result = issueHrefFor({ ...BUG }, typed);
+    const body = bodyOf(result);
+    const keptText = body.slice(0, body.length - CUT_NOTE.length);
+
+    assert.ok(result.href.length <= MAX_HREF, `href ${result.href.length} exceeds ${MAX_HREF}`);
+    assert.equal((keptText.match(/^```/gm) || []).length % 2, 0, "no fence left open");
+    assert.equal(typed.slice(0, keptText.length), keptText, "what survived is still a prefix");
+    assert.ok(keptText.includes("the disk wizard divided by zero"), "the prose before it stayed");
+  });
+});
+
+/**
+ * Install the browser surface the real dialog needs.
+ *
+ * The dialog is mounted against the real core, not `fakeCore`: when the URL
+ * could not carry the report, the copy the status line promises is the thing
+ * the operator actually gets, and that promise has to be tested where it is made.
+ * @param {object} [opts] `{open, clipboard, execCommand}` - what the browser
+ *   offers. `clipboard: false` models an insecure origin, where
+ *   `navigator.clipboard` does not exist at all; `open` answers `window.open`.
+ * @returns {object} `{doc, copies, restore}`; `copies` is what reached the clipboard.
+ */
+function mountDialog(opts = {}) {
+  const options = opts || {};
+  const copies = [];
+  const doc = {
+    head: makeElement("head"),
+    body: makeElement("body"),
+    createElement: makeElement,
+    createTextNode: (text) => ({ nodeType: 3, textContent: text }),
+    createElementNS: (_ns, tag) => makeElement(tag),
+    addEventListener() {},
+    removeEventListener() {},
+    getElementById(id) {
+      const all = [doc.head, doc.body].concat(every(doc.head), every(doc.body));
+      return all.find((node) => node && node.id === id) || null;
+    },
+  };
+  if (typeof options.execCommand === "function") {
+    doc.execCommand = (name) => {
+      const picked = every(doc.body).filter((node) => node.selected).pop();
+      copies.push(picked ? picked.value : "");
+      return options.execCommand(name);
+    };
+  }
+
+  const keys = ["document", "window", "navigator", "open", "fetch"];
+  const saved = keys.map((key) => [key, Object.getOwnPropertyDescriptor(globalThis, key)]);
+  Object.defineProperty(globalThis, "document", { configurable: true, writable: true, value: doc });
+  Object.defineProperty(globalThis, "window", { configurable: true, writable: true, value: globalThis });
+  Object.defineProperty(globalThis, "navigator", {
+    configurable: true,
+    writable: true,
+    value: options.clipboard === false
+      ? { userAgent: "node" }
+      : { clipboard: { writeText: async (text) => { copies.push(text); } } },
+  });
+  globalThis.open = typeof options.open === "function" ? options.open : () => ({});
+  globalThis.fetch = async () => ({ ok: false, status: 404, json: async () => ({}) });
+
+  return {
+    doc,
+    copies,
+    restore() {
+      saved.forEach(([key, descriptor]) => {
+        if (descriptor) {
+          Object.defineProperty(globalThis, key, descriptor);
+        } else {
+          delete globalThis[key];
+        }
+      });
+    },
+  };
+}
+
+/** Let the clipboard promise chains the dialog started settle. */
+function flush() {
+  return new Promise((resolve) => {
+    setTimeout(resolve, 0);
+  });
+}
+
+/** What the dialog's status line currently says. */
+function statusText(doc) {
+  const node = find(doc.body, (n) => n.className === "ez-fb-status");
+  return node ? node.textContent : "";
+}
+
+describe("ez_feedback core dialog clipboard", () => {
+  const BUG = { kind: "bug", surface: "app", summary: "KSampler died" };
+
+  test("a handoff the URL had to shorten copies the whole markdown", async () => {
+    const { doc, copies, restore } = mountDialog();
+    try {
+      assert.equal(openReport(BUG), true);
+      const area = find(doc.body, (n) => n.tagName === "textarea");
+      area.value = "q".repeat(9000);
+      find(doc.body, (n) => n.className.includes("ez-fb-btn-primary")).click();
+      await flush();
+
+      assert.equal(copies.length, 1, "the copy the status line promises actually happened");
+      assert.equal(copies[0], area.value, "the whole body, not the one the URL carried");
+      assert.equal(
+        statusText(doc),
+        "Full markdown copied - paste it on GitHub if the prefill was shortened.",
+      );
+    } finally {
+      restore();
+    }
+  });
+
+  test("a blocked popup no longer loses the report", async () => {
+    const { doc, copies, restore } = mountDialog({ open: () => null });
+    try {
+      openReport(BUG);
+      const area = find(doc.body, (n) => n.tagName === "textarea");
+      area.value = "typed words the popup would have eaten";
+      find(doc.body, (n) => n.className.includes("ez-fb-btn-primary")).click();
+      await flush();
+
+      assert.deepEqual(copies, [area.value]);
+      assert.match(statusText(doc), /^Popup blocked - full markdown copied\./);
+    } finally {
+      restore();
+    }
+  });
+
+  test("an insecure origin copies through the selection fallback", async () => {
+    const { doc, copies, restore } = mountDialog({ clipboard: false, execCommand: () => true });
+    try {
+      openReport(BUG);
+      const area = find(doc.body, (n) => n.tagName === "textarea");
+      area.value = "words copied over http://192.168.1.20:8188";
+      find(doc.body, (n) => n.textContent === "Copy markdown").click();
+      await flush();
+
+      assert.deepEqual(copies, [area.value], "execCommand copied the selected text");
+      assert.equal(statusText(doc), "Markdown copied.");
+    } finally {
+      restore();
+    }
+  });
+
+  test("with no clipboard at all the dialog says so and selects the text", async () => {
+    const { doc, copies, restore } = mountDialog({ clipboard: false });
+    try {
+      openReport(BUG);
+      const area = find(doc.body, (n) => n.tagName === "textarea");
+      area.value = "unsendable";
+      find(doc.body, (n) => n.textContent === "Copy markdown").click();
+      await flush();
+
+      assert.equal(copies.length, 0);
+      assert.equal(area.selected, true, "selected for a manual Ctrl+C");
+      assert.equal(statusText(doc), "Copy blocked; the body is selected.");
+    } finally {
+      restore();
+    }
+  });
+
+  test("openHandoff copies the report the URL could not carry", async () => {
+    let href = "";
+    const { copies, restore } = mountDialog({
+      open: (url) => {
+        href = url;
+        return {};
+      },
+    });
+    try {
+      const opened = openHandoff({
+        ...BUG,
+        narrative: { what_happened: "a".repeat(3400), steps: "b".repeat(3400) },
+      });
+      await flush();
+
+      assert.equal(opened, true);
+      assert.ok(href.length <= MAX_HREF, `href ${href.length} exceeds ${MAX_HREF}`);
+      const tail = "b".repeat(3400);
+      assert.ok(!bodyOf({ href }).includes(tail), "the URL had to leave the tail behind");
+      assert.equal(copies.length, 1);
+      assert.ok(copies[0].includes(tail), "the clipboard got the whole report");
+    } finally {
+      restore();
+    }
+  });
+});
 
 describe("ez_feedback panel tab", () => {
   test("registers the sidebar tab the frontend asks for", async () => {

@@ -13,7 +13,7 @@ tags: [feedback, github, troubleshooting, studio-ui, safety, cli]
   models, the load-abort modal
 - **The load-abort modal** - the **Report this error** button on a failed graph load
 - **What each button prepopulates**
-- **How much text survives** - verbatim filing, the error cap, the clipboard fallback
+- **How much text survives** - verbatim filing, the error cap, and the URL ladder's drop order
 - **How a report reaches GitHub** - prefilled tab, or filed directly with a token
 - **From the command line and bazelisk** - the failure hint, `//:manage -- report-bug`,
   and what lands on disk
@@ -140,10 +140,18 @@ does not recognise.
 - **Narratives are never clipped.** The guided sections - Problem, Proposed solution,
   Alternatives, What it unlocks on a feature request - are written out as you typed them.
 - **A handoff that will not fit the URL goes to the clipboard.** A prefilled `issues/new`
-  tab has to stay inside the URL budget GitHub answers with `414 URI Too Long`. When the fit
-  ladder has to cut, the dialog copies the full markdown and reports
-  `Full markdown copied - paste it on GitHub if the prefill was shortened.` Direct submit
-  posts a body, not a URL, so it is never affected.
+  tab has to stay inside the URL budget GitHub answers with `414 URI Too Long`. The ladder
+  gives up in this order, cheapest diagnosis last: captured errors are clipped to 400
+  characters each, then **Browser**, then **Environment**, then **Recent errors** go whole,
+  then the trailing traceback, and only then the tail - cut on a whole line, never inside a
+  code fence. Whatever was left out is named in the body itself
+  (`[left out of this URL: ## Browser]`), so a short issue is never mistaken for a thin one,
+  and the dialog copies the full markdown at the same time and reports
+  `Full markdown copied - paste it on GitHub if the prefill was shortened.` A blocked popup
+  copies too, rather than failing in silence. `navigator.clipboard` exists only in a secure
+  context, so on `http://<LAN address>:8188` the copy falls back to a hidden selected
+  textarea; when even that is refused, the body is left selected for **Ctrl/Cmd+C** and the
+  status line says so. Direct submit posts a body, not a URL, so it is never affected.
 
 ## How a report reaches GitHub
 
@@ -243,10 +251,12 @@ becomes `~`, and `.env` is never read - only the whitelisted keys named above ar
   [Models and workflows](troubleshooting-models-workflows.md). The status line is advisory:
   the panel files without it and keeps your own text.
 - **A very long report got cut.** Prefilled handoffs are trimmed to stay under GitHub's URL
-  limit rather than fail with `414 URI Too Long`. The note
-  `[report trimmed to fit the GitHub URL limit]` means the tail was dropped from the URL;
-  the dialog copies the full markdown to the clipboard at the same time, so paste it in the
-  tab. **File directly** and **Copy markdown** never trim.
+  limit rather than fail with `414 URI Too Long`, and the body says which cut it took.
+  `[left out of this URL: ...]` names whole sections the ladder gave up, in the order it
+  gives them up (Browser, Environment, Recent errors);
+  `[report trimmed to fit the GitHub URL limit]` means the tail was cut as well, on a whole
+  line. Either way the dialog copies the full markdown to the clipboard at the same time, so
+  paste it in the tab. **File directly** and **Copy markdown** never trim.
 
 ## Next
 
