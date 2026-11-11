@@ -151,6 +151,12 @@ bug_report_title() {
   if [[ -z ${title} ]]; then
     title="command failed"
   fi
+  # One bracketed segment, the way the canvas side titles its issues. The
+  # default surface is the CLI itself, so saying `cli:cli` would only stutter.
+  if [[ ${surface} == "cli" ]]; then
+    printf '[cli] %s\n' "${title}"
+    return 0
+  fi
   printf '[cli:%s] %s\n' "${surface}" "${title}"
 }
 

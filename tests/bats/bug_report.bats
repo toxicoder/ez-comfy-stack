@@ -100,6 +100,10 @@ lib_bash() {
   [ "${status}" -eq 0 ]
   [ "${output}" = "[cli:bazel] boom" ]
 
+  run lib_bash 'bug_report_title "boom" "cli"'
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "[cli] boom" ]
+
   run lib_bash 'bug_report_title "[app:stills/x] boom" "cli"'
   [ "${status}" -eq 0 ]
   [ "${output}" = "[app:stills/x] boom" ]
