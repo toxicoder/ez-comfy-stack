@@ -310,6 +310,25 @@ same report. Operator guide: [Reporting issues](operate/reporting-issues.md).
 
 ---
 
+## Command-line and bazelisk bug handoff
+
+A failing `die`, a failing `bazelisk run //:manage` verb, and a failing gate under
+`//:everything` or `//:validate` print a four-line `[ez-comfy][BUG]` handoff: a saved
+template, a prefilled GitHub URL, the re-file command, and this page. Operator guide:
+[Reporting issues](operate/reporting-issues.md).
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| A command failed and no `[ez-comfy][BUG]` lines appeared | The handoff prints only when stderr is a terminal, so a pipe, a `tee`, a log file, and CI stay quiet by design | Re-run with `EZ_BUG_HINT=1` to see it, or file deliberately: `bazelisk run //:manage -- report-bug --surface cli --command '<the command>' --exit 1`. `EZ_BUG_HINT=0` forces it off |
+| `bazelisk run //:everything` or `//:validate` failed a gate and printed no handoff | Two cases, both intentional: the failing gate was the `bazelisk` presence probe (an environment gap with its own repair line), or a handoff already printed for an earlier gate and the sweep does not repeat it | Read the repair line the probe printed (`bazelisk run //:setup-host`). For the repeat case the first handoff is the one that names the failing target |
+| `bazelisk run //:manage -- report-bug` exits 2 | A bad flag, a non-numeric `--exit`, or an `--log` path that is not readable. The verb refuses rather than filing a report that misquotes the failure | Check the `err` line it printed. `--exit` takes the status the command returned; `--log` takes a readable file |
+| The prefilled URL opens an issue whose body is shorter than the template | The body would have pushed the GET URL past its budget, so it was cut at a line boundary and marked `[body shortened to fit the URL ...]`. GitHub answers a too-long URL with `414 URI Too Long`, so a short body beats a dead link | Attach the saved markdown file named on the `Template saved:` line - it holds every line. Move where it lands with `EZ_BUG_REPORT_DIR` |
+| The prefilled URL carries a title and labels but no body at all | `python3` is what percent-encodes and fits the body; without it the URL keeps only the essentials | Install `python3` (`bazelisk run //:setup-host`). The saved file is complete either way, so attach it |
+| `## Environment` is mostly `unavailable` | Each probe is best-effort and time-boxed by `BUG_REPORT_PROBE_TIMEOUT` (5s), so a cold or absent tool reports `unavailable` instead of hanging the failure message | Nothing to fix for the report to be useful. Raise the timeout if the host is genuinely slow: `BUG_REPORT_PROBE_TIMEOUT=20 bazelisk run //:manage -- report-bug` |
+| A token or a home path appears in a report | It should not: token-shaped values become `[redacted]`, `$HOME` becomes `~`, and `.env` is never read - only whitelisted keys are printed | Say so in the report and scrub it on GitHub. Values captured from a log tail go through the same redaction |
+
+---
+
 ## Outputs sidebar (ez_outputs)
 
 The explorer lists `${COMFY_OUTPUT_DIR}` through the pack's own routes and degrades to a status

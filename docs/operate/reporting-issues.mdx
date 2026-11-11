@@ -1,7 +1,7 @@
 ---
 title: Reporting issues
-description: The studio's Report a bug and Request a feature buttons, what each one prepopulates, and the optional token.
-tags: [feedback, github, troubleshooting, studio-ui, safety]
+description: The studio's Report a bug and Request a feature buttons, the command-line and bazelisk bug templates, what each one prepopulates, and the optional token.
+tags: [feedback, github, troubleshooting, studio-ui, safety, cli]
 ---
 
 # Reporting issues
@@ -15,6 +15,8 @@ tags: [feedback, github, troubleshooting, studio-ui, safety]
 - **What each button prepopulates**
 - **How much text survives** - verbatim filing, the error cap, the clipboard fallback
 - **How a report reaches GitHub** - prefilled tab, or filed directly with a token
+- **From the command line and bazelisk** - the failure hint, `//:manage -- report-bug`,
+  and what lands on disk
 - **`EZ_GITHUB_TOKEN`** - the optional upgrade, and its scope
 - **What is never sent**
 
@@ -164,6 +166,54 @@ bazelisk run //:manage -- stop && bazelisk run //:manage -- start
 Read the token back out before you start: it is passed to the container at runtime only,
 never baked into an image layer, never sent to the browser, and never logged. The status
 route reports only whether it is present.
+
+## From the command line and bazelisk
+
+The studio files browser reports; the operator CLI files the same report from a shell failure.
+Every `die` in the stack, every failing `bazelisk run //:manage` verb, and every failing gate
+under `//:everything` and `//:validate` ends with a four-line handoff:
+
+```text
+[ez-comfy][BUG] Template saved: /tmp/ez-comfy-stack-bug-reports/20260301T1442Z-manage-sh-start-exited-1.md
+[ez-comfy][BUG] Open on GitHub: https://github.com/toxicoder/ez-comfy-stack/issues/new?title=...&body=...&labels=bug
+[ez-comfy][BUG] Re-file it: bazelisk run //:manage -- report-bug --surface cli --command manage.sh\ start --exit 1
+[ez-comfy][BUG] Attach the saved file when the URL says the body was shortened.
+```
+
+- **The template is the pack's template** - `## What happened`, `## Steps`, `## Expected`,
+  `## Actual`, `## Environment`, and `## Command output`, so a CLI report reads like one filed
+  from the canvas. Your own prose stays as the `<!-- Replace this line. -->` marker; everything
+  the host can answer is already filled.
+- **`## Environment`** carries OS, kernel, arch, bash, python3, docker, GPU, the `.bazelversion`
+  pin, the git sha and branch, and the models, output, and port settings. Each probe is
+  time-boxed, so a host without a GPU or a cold `nvidia-smi` still gets a report with
+  `unavailable` in the line that could not answer.
+- **Nothing is submitted.** The URL is a handoff; the saved markdown file is the complete
+  artefact and the one to attach when the body was shortened for the URL.
+- **Quiet unless you are watching.** The hint prints only when stderr is a terminal, so a pipe,
+  a log, or CI stays clean. `EZ_BUG_HINT=1` forces it on for a check and `EZ_BUG_HINT=0`
+  forces it off.
+- **Refusals stay quiet.** A banned-model refusal, an unknown verb, and a missing `bazelisk` are
+  operator slips or environment gaps with a stated repair, so they do not offer a defect form.
+
+To file deliberately, name what failed:
+
+```bash
+bazelisk run //:manage -- report-bug \
+  --surface bazel \
+  --command 'bazelisk test //:test-all' \
+  --exit 1 \
+  --log /tmp/test-all.log \
+  --title 'test-all fails on the visual lane'
+```
+
+`--surface` is `cli` (default), `bazel`, `compose`, `download`, or `tui`, and it becomes the
+`[cli:<surface>]` title prefix the way an open app becomes `[app:lane/id]` in the studio. The
+markdown goes to stdout, so `> report.md` works, while the saved path and the URL go to stderr.
+`EZ_BUG_REPORT_DIR` moves where templates land and `EZ_BUG_REPO` retargets the URL for a fork.
+
+The same redaction applies here: token-shaped values become `[redacted]`, the home directory
+becomes `~`, and `.env` is never read - only the whitelisted keys named above are printed.
 
 <Callout type="error" title="What is never sent">
   Report values are redacted before they leave the page or the process: anything shaped

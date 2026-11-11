@@ -34,7 +34,15 @@ else
 fi
 cd "${ROOT}"
 
+# The slice traps below hand a failing bazelisk run to the same bug-report
+# template the operator CLI prints, so a gate failure names the command and
+# leaves a filed-ready markdown behind.
+# shellcheck source=lib/bug_report.sh disable=SC1091
+source "${ROOT}/scripts/lib/bug_report.sh"
+
 BAZEL="${BAZEL:-$(command -v bazelisk 2>/dev/null || command -v bazel 2>/dev/null || true)}"
+# The bazelisk line the failing slice last ran, read by the EXIT trap.
+LAST_BAZEL_CMD=""
 
 RUN_ALL=0
 RUN_CI=0
@@ -89,8 +97,11 @@ done
 
 #######################################
 # Require bazelisk/bazel on PATH.
+#
+# A missing toolchain is a named environment gap with a stated repair, so it
+# claims the one-shot bug-handoff flag instead of offering a defect report.
 # Globals:
-#   BAZEL
+#   BAZEL, EZ_BUG_HINT_SHOWN (set to 1 to suppress the handoff)
 # Arguments:
 #   None
 # Outputs:
@@ -101,6 +112,7 @@ done
 need_bazel() {
   if [[ -z ${BAZEL} ]]; then
     echo "validate: bazelisk or bazel not found in PATH" >&2
+    EZ_BUG_HINT_SHOWN=1
     exit 1
   fi
 }
@@ -346,10 +358,10 @@ check_generated_artifacts() {
 run_core_slice() {
   echo "==> validate: core (build --nobuild, test-fast, lint, key builds)"
   need_bazel
-  "${BAZEL}" build //... --nobuild
-  "${BAZEL}" test //:test-fast
-  "${BAZEL}" test //:lint --test_tag_filters=manual
-  "${BAZEL}" build //:manage //:all
+  run_bazel build //... --nobuild
+  run_bazel test //:test-fast
+  run_bazel test //:lint --test_tag_filters=manual
+  run_bazel build //:manage //:all
 }
 
 #######################################
@@ -366,12 +378,52 @@ run_core_slice() {
 run_docs_slice() {
   need_bazel
   echo "==> validate: docs (Fumadocs gates + generate + export + render-check)"
-  "${BAZEL}" test \
+  run_bazel test \
     //docs:test_docs_site_render \
     //docs-site:suite \
     --test_tag_filters=-visual
-  "${BAZEL}" run //docs:docs
-  "${BAZEL}" run //docs:render-check
+  run_bazel run //docs:docs
+  run_bazel run //docs:render-check
+}
+
+#######################################
+# Run one Bazel invocation and remember it for the failure handoff.
+# Globals:
+#   BAZEL, LAST_BAZEL_CMD (written)
+# Arguments:
+#   $@ - the bazelisk arguments
+# Outputs:
+#   Bazel output
+# Returns:
+#   The Bazel exit status
+#######################################
+run_bazel() {
+  LAST_BAZEL_CMD="${BAZEL} $*"
+  "${BAZEL}" "$@"
+}
+
+#######################################
+# EXIT trap: hand a failing slice to the bug-report template once.
+# Globals:
+#   LAST_BAZEL_CMD, EZ_BUG_HINT_SHOWN
+# Arguments:
+#   $1 - the status the script is exiting with
+# Outputs:
+#   The hint on stderr, when a human is watching
+# Returns:
+#   0 always; the script's exit status is left alone
+#######################################
+_ez_validate_exit_trap() {
+  local rc="${1:-0}"
+  if [[ ${rc} == "0" || -n ${EZ_BUG_HINT_SHOWN:-} ]]; then
+    return 0
+  fi
+  if ! declare -f bug_report_hint >/dev/null 2>&1; then
+    return 0
+  fi
+  EZ_BUG_HINT_SHOWN=1
+  bug_report_hint "bazel" "${LAST_BAZEL_CMD:-}" "${rc}"
+  return 0
 }
 
 #######################################
@@ -403,5 +455,6 @@ main() {
 }
 
 if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then
+  trap '_ez_validate_exit_trap $?' EXIT
   main "$@"
 fi

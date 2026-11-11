@@ -39,6 +39,7 @@ FROZEN_MANAGE_VERBS=(
   stop
   restart
   logs
+  report-bug
   download-models
   download-podcast
   download-dub
@@ -684,4 +685,82 @@ printf 'REPO_ROOT=%s\nSCRIPT_DIR=%s\n' \"\${REPO_ROOT}\" \"\${SCRIPT_DIR}\""
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"compose file: ${REPO_ROOT}/docker/docker-compose.yml"* ]]
   [[ "${output}" != *"bazel-out"* ]]
+}
+
+# ---------------------------------------------------------------------------
+# report-bug: the CLI / bazelisk bug handoff (scripts/lib/bug_report.sh)
+# ---------------------------------------------------------------------------
+
+@test "report-bug prints the markdown template on stdout only" {
+  export EZ_BUG_REPORT_DIR="${TEST_TMP_DIR}/reports"
+  run bash -c "'${MANAGE_SH}' report-bug --surface bazel \
+    --command 'bazelisk test //:validate' --exit 1 2>/dev/null"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == '## What happened'* ]]
+  [[ "${output}" == *'## Environment'* ]]
+  [[ "${output}" == *'bazelisk test //:validate'* ]]
+  [[ "${output}" != *'[ez-comfy][BUG]'* ]]
+}
+
+@test "report-bug names the saved template and the prefilled URL on stderr" {
+  export EZ_BUG_REPORT_DIR="${TEST_TMP_DIR}/reports"
+  run bash -c "'${MANAGE_SH}' report-bug --surface cli \
+    --command 'manage.sh start' --exit 1 2>&1 >/dev/null"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *'[ez-comfy][BUG] Template saved:'* ]]
+  [[ "${output}" == *'Open on GitHub: https://github.com/'*'/issues/new?'* ]]
+  run bash -c "find '${TEST_TMP_DIR}/reports' -name '*.md' -type f | wc -l"
+  [ "${output}" = "1" ]
+}
+
+@test "report-bug puts --title in the URL and the saved file name" {
+  export EZ_BUG_REPORT_DIR="${TEST_TMP_DIR}/reports"
+  run bash -c "'${MANAGE_SH}' report-bug --title 'Disk wizard divides by zero' 2>&1 >/dev/null"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *'Disk+wizard+divides+by+zero'* ]]
+  [[ "${output}" == *'disk-wizard-divides-by-zero.md'* ]]
+}
+
+@test "report-bug rejects a bad flag, a non-numeric exit, and an unreadable log" {
+  run bash "${MANAGE_SH}" report-bug --bogus
+  [ "${status}" -eq 2 ]
+  run bash "${MANAGE_SH}" report-bug --exit not-a-number
+  [ "${status}" -eq 2 ]
+  run bash "${MANAGE_SH}" report-bug --log "${TEST_TMP_DIR}/missing.log"
+  [ "${status}" -eq 2 ]
+}
+
+@test "report-bug attaches a log tail when one is given" {
+  export EZ_BUG_REPORT_DIR="${TEST_TMP_DIR}/reports"
+  printf 'boom line\n' > "${TEST_TMP_DIR}/gate.log"
+  run bash -c "'${MANAGE_SH}' report-bug --log '${TEST_TMP_DIR}/gate.log' 2>/dev/null"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *'## Command output'* ]]
+  [[ "${output}" == *'boom line'* ]]
+}
+
+@test "a failing verb stays quiet when stderr is not a terminal" {
+  run bash -c "'${MANAGE_SH}' download-models --limit bogus 2>&1"
+  [ "${status}" -ne 0 ]
+  [[ "${output}" != *'[ez-comfy][BUG]'* ]]
+}
+
+@test "EZ_BUG_HINT=1 forces the hint even with stderr redirected" {
+  export EZ_BUG_REPORT_DIR="${TEST_TMP_DIR}/reports"
+  run bash -c "EZ_BUG_HINT=1 '${MANAGE_SH}' download-models --limit bogus 2>&1"
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *'[ez-comfy][BUG] Template saved:'* ]]
+  [[ "${output}" == *'Re-file it: bazelisk run //:manage -- report-bug'* ]]
+}
+
+@test "an unknown verb exits 1 without offering a bug template" {
+  run bash -c "EZ_BUG_HINT=1 '${MANAGE_SH}' no-such-verb 2>&1"
+  [ "${status}" -eq 1 ]
+  [[ "${output}" != *'[ez-comfy][BUG]'* ]]
+}
+
+@test "the banned H3 refusal exits 1 without offering a bug template" {
+  run bash -c "EZ_BUG_HINT=1 '${MANAGE_SH}' download-h3 2>&1"
+  [ "${status}" -eq 1 ]
+  [[ "${output}" != *'[ez-comfy][BUG]'* ]]
 }

@@ -168,23 +168,36 @@ err() {
 }
 
 #######################################
-# Log an error and terminate the process with status 1.
+# Log an error, offer a bug-report handoff, terminate with status 1.
+#
+# The handoff is one-shot: EZ_BUG_HINT_SHOWN stops the manage.sh EXIT trap
+# from repeating the same hint for the same failing run, and bug_report_hint
+# stays silent under bats and when stderr is not a terminal.
 # Globals:
-#   None
+#   EZ_BUG_SURFACE (report surface, default "cli")
+#   EZ_CLI_COMMAND (the command line the operator ran, may be empty)
+#   EZ_BUG_HINT_SHOWN (set to 1 here; read by the manage.sh EXIT trap)
 # Arguments:
 #   $@ - Error message fragments passed to err
 # Outputs:
-#   Writes to stderr via err
+#   Writes to stderr via err, then the bug-report hint on stderr
 # Returns:
 #   Does not return; exits 1
 #######################################
 die() {
   err "$@"
+  if [[ -z ${EZ_BUG_HINT_SHOWN:-} ]] && declare -f bug_report_hint >/dev/null 2>&1; then
+    EZ_BUG_HINT_SHOWN=1
+    bug_report_hint "${EZ_BUG_SURFACE:-cli}" "${EZ_CLI_COMMAND:-}" 1
+  fi
   exit 1
 }
 
 # shellcheck source=progress.sh disable=SC1091
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/progress.sh"
+
+# shellcheck source=bug_report.sh disable=SC1091
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/bug_report.sh"
 
 #######################################
 # Load a .env file from a directory if present (best-effort).
@@ -1622,8 +1635,11 @@ EOF
 
 #######################################
 # Refuse MiniMax H3 (US Excluded Territory for weights and outputs).
+#
+# A policy refusal is not a defect, so it claims the one-shot bug-handoff
+# flag and the failing run stays a refusal with no filing hint.
 # Globals:
-#   None
+#   EZ_BUG_HINT_SHOWN (set to 1 to suppress the bug handoff for this run)
 # Arguments:
 #   None
 # Outputs:
@@ -1633,6 +1649,7 @@ EOF
 #######################################
 refuse_minimax_h3() {
   err "MiniMax H3 is banned (US Excluded Territory for weights AND outputs). See docs/licenses.md"
+  EZ_BUG_HINT_SHOWN=1
   return 1
 }
 
