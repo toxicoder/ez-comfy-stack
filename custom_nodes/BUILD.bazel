@@ -76,6 +76,7 @@ filegroup(
         "ez_film/stems.py",
         "ez_image/__init__.py",
         "ez_image/cubic.py",
+        "ez_image/cutout.py",
         "ez_image/formats.py",
         "ez_image/js/ez_image_format.js",
         "ez_image/js/ez_image_mode.js",
