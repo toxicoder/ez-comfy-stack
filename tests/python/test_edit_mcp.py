@@ -451,7 +451,11 @@ def test_export_edl_passes_the_cmx_format(monkeypatch: pytest.MonkeyPatch) -> No
 def test_list_projects_gets_the_index(monkeypatch: pytest.MonkeyPatch) -> None:
     stub = _install(monkeypatch, '{"ok": true, "projects": [{"id": "p1"}]}')
     result = mcp.call_tool("edit_list_projects", {})
-    assert result["projects"][0]["id"] == "p1"
+    rows = result["projects"]
+    assert isinstance(rows, list)
+    row = rows[0]
+    assert isinstance(row, dict)
+    assert row["id"] == "p1"
     assert stub.requests[0].full_url == "http://127.0.0.1:8188/ez_edit/projects"
 
 

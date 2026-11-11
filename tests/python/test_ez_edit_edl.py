@@ -7,7 +7,7 @@ every ``EdlError`` refusal branch. Numbers are fixed; nothing is injected.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 import pytest
 
@@ -20,6 +20,7 @@ from ez_edit.edl import (
     edl_payload,
     ffmpeg_command,
 )
+from ez_edit.protocol import EditProject
 
 OUT = "/renders/out.mp4"
 """Fixed destination used in every golden argv."""
@@ -481,8 +482,12 @@ def test_refuses_bad_text_plane_containers() -> None:
 # --- CMX 3600 handoff --------------------------------------------------------
 
 
-def _cmx_project(**overrides: Any) -> dict[str, Any]:
+def _cmx_project(**overrides: Any) -> EditProject:
     """Build a two-clip base-plane project with one roll title.
+
+    The record is assembled as a plain dict so a test can override any field
+    with a malformed value; the ``cast`` only says the default shape is a
+    project, which is what :func:`ez_edit.edl.cmx_edl` asks for.
 
     Args:
         **overrides: Fields to add or replace on the project.
@@ -503,7 +508,7 @@ def _cmx_project(**overrides: Any) -> dict[str, Any]:
         ]
     )
     project.update(overrides)
-    return project
+    return cast("EditProject", project)
 
 
 def test_cmx_edl_golden_header_and_two_events() -> None:

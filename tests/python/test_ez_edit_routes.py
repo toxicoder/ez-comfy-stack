@@ -1072,14 +1072,44 @@ def test_export_edl_without_a_project(tmp_path: Path) -> None:
     assert status == 400 and payload["ok"] is False
 
 
+def _text_field(payload: dict[str, object], key: str) -> str:
+    """One text field of a route payload.
+
+    Args:
+        payload: Decoded route payload.
+        key: Field name to read.
+
+    Returns:
+        The field, narrowed to text.
+    """
+    value = payload[key]
+    assert isinstance(value, str)
+    return value
+
+
+def _project_rows(payload: dict[str, object]) -> list[dict[str, object]]:
+    """The summary rows a ``GET /ez_edit/projects`` payload carries.
+
+    Args:
+        payload: Decoded project-index payload.
+
+    Returns:
+        Rows, each narrowed to a mapping.
+    """
+    rows = payload["projects"]
+    assert isinstance(rows, list)
+    return [row for row in rows if isinstance(row, dict)]
+
+
 def test_export_edl_writes_cmx_text_when_asked(tmp_path: Path) -> None:
     """``format=cmx`` drops CMX 3600 text beside the JSON handoff."""
     edit_dir = _edit_dir(tmp_path)
     _clip_ready(tmp_path, edit_dir)
     status, payload = routes.handle_export_edl({"format": "cmx"}, deps=_deps(tmp_path))
     assert status == 200 and payload["ok"] is True
-    assert payload["format"] == "cmx" and payload["path"].endswith(".edl")
-    text = (tmp_path / payload["path"]).read_text(encoding="utf-8")
+    assert payload["format"] == "cmx"
+    assert _text_field(payload, "path").endswith(".edl")
+    text = (tmp_path / _text_field(payload, "path")).read_text(encoding="utf-8")
     assert text.startswith("TITLE:") and "FCM: NON-DROP FRAME" in text
 
 
@@ -1090,7 +1120,7 @@ def test_export_edl_refuses_an_unknown_format(tmp_path: Path) -> None:
     status, payload = routes.handle_export_edl(
         {"format": "xmeml"}, deps=_deps(tmp_path)
     )
-    assert status == 400 and "unknown edl format" in payload["error"]
+    assert status == 400 and "unknown edl format" in _text_field(payload, "error")
 
 
 def _stamped_project(edit_dir: Path, project_id: str, stamp: str) -> EditProject:
@@ -1118,8 +1148,9 @@ def test_projects_lists_every_project_newest_first(tmp_path: Path) -> None:
     _stamped_project(edit_dir, "p-new", "2026-02-01T00:00:00+00:00")
     status, payload = routes.handle_projects({}, deps=_deps(tmp_path))
     assert status == 200 and payload["ok"] is True and payload["enabled"] is True
-    assert [row["id"] for row in payload["projects"]] == ["p-new", "p-old"]
-    row = payload["projects"][0]
+    rows = _project_rows(payload)
+    assert [row["id"] for row in rows] == ["p-new", "p-old"]
+    row = rows[0]
     assert row["title"] == "Untitled edit" and row["clips"] == 0
     assert row["fps"] == 24.0 and row["width"] == 1920
 
@@ -1129,8 +1160,8 @@ def test_projects_breaks_an_updated_at_tie_by_id(tmp_path: Path) -> None:
     edit_dir = _edit_dir(tmp_path)
     _stamped_project(edit_dir, "p-b", "2026-01-01T00:00:00+00:00")
     _stamped_project(edit_dir, "p-a", "2026-01-01T00:00:00+00:00")
-    rows = routes.handle_projects({}, deps=_deps(tmp_path))[1]["projects"]
-    assert [row["id"] for row in rows] == ["p-a", "p-b"]
+    payload = routes.handle_projects({}, deps=_deps(tmp_path))[1]
+    assert [row["id"] for row in _project_rows(payload)] == ["p-a", "p-b"]
 
 
 def test_projects_is_empty_before_the_first_project(tmp_path: Path) -> None:
