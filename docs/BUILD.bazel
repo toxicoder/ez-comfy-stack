@@ -52,7 +52,7 @@ filegroup(
         "edit/agent-and-mcp.mdx",
         "edit/captions-and-overlays.mdx",
         "edit/plan-a-cut.mdx",
-        "edit/render-and-handoff.mdx",
+        "edit/render-and-handoff.md",
         "edit/rough-cut.mdx",
         "getting-started.mdx",
         "glossary.mdx",
