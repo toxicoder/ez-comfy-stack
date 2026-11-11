@@ -21,11 +21,12 @@ listed before it begins (the reducer appends B-roll after the clip it covers).
 from __future__ import annotations
 
 import math
+import string
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import TYPE_CHECKING, NamedTuple, TypedDict, get_args
 
-from .protocol import TransitionKind
+from .protocol import EditProject, TransitionKind
 
 if TYPE_CHECKING:
     from ez_common import JsonObject
@@ -693,3 +694,121 @@ def edl_payload(project: Mapping[str, object]) -> EdlDocument:
         "captions": model.captions,
         "client_only": ["overlays", "captions"],
     }
+
+
+# --- CMX 3600 handoff --------------------------------------------------------
+
+CMX_FORMATS: tuple[str, ...] = ("json", "cmx")
+"""Accepted ``edit_export_edl`` formats (``json`` stays the default)."""
+
+CMX_EVENT_KINDS: dict[str, str] = {"fade": "D", "wipe": "W"}
+"""Transition kind -> CMX event code (an absent transition is a ``C`` cut)."""
+
+CMX_REEL_SAFE: frozenset[str] = frozenset(
+    string.ascii_uppercase + string.digits + "._-"
+)
+"""Characters a CMX reel field may carry; anything else folds to ``_``."""
+
+CMX_DEFAULT_TITLE = "EZ Edit"
+"""``TITLE:`` header used when a project carries no title."""
+
+
+def _timecode(seconds: float, fps: int) -> str:
+    """Format one position as CMX 3600 ``HH:MM:SS:FF`` text.
+
+    Rounding rule: the frame count is ``floor(seconds * fps + 0.5)``, so a
+    boundary at exactly 1.0 s on a 24 fps project reads ``00:00:01:00``.
+    Frames carry into seconds, minutes, and hours instead of overflowing the
+    field. Callers pass positions :func:`_prepare` already validated, so a
+    negative here is a bug rather than input to sanitise.
+
+    Args:
+        seconds: Position in seconds.
+        fps: Frames per second the timecode counts (whole number, >= 1).
+
+    Returns:
+        The eleven-character timecode.
+    """
+    frames = int(math.floor(seconds * fps + 0.5))
+    hours, rest = divmod(frames, 3600 * fps)
+    minutes, rest = divmod(rest, 60 * fps)
+    secs, frac = divmod(rest, fps)
+    return f"{hours:02d}:{minutes:02d}:{secs:02d}:{frac:02d}"
+
+
+def _reel_name(clip: EdlClip) -> str:
+    """Derive the CMX reel field for one clip row.
+
+    Args:
+        clip: One EDL clip record from :func:`edl_payload`.
+
+    Returns:
+        The label, or the source basename when the label is blank, uppercased
+        with every character outside :data:`CMX_REEL_SAFE` folded to ``_``, so
+        a space or a slash never lands in the reel field.
+    """
+    raw = clip["label"] or clip["source"].replace("\\", "/").rsplit("/", 1)[-1]
+    return "".join(ch if ch in CMX_REEL_SAFE else "_" for ch in raw.upper())
+
+
+def _header_title(title: str) -> str:
+    """Make a project title safe for the CMX ``TITLE:`` header.
+
+    Args:
+        title: Project title as stored.
+
+    Returns:
+        One-line ASCII title, or :data:`CMX_DEFAULT_TITLE` when blank.
+    """
+    collapsed = " ".join(title.split())
+    return collapsed or CMX_DEFAULT_TITLE
+
+
+def cmx_edl(project: EditProject) -> str:
+    """Build CMX 3600 EDL text for a project, for external NLE handoff.
+
+    The EDL carries the base-plane cut, which is the part an NLE can relink:
+    Resolve, Premiere, Kdenlive, and Shotcut all import this text. Text
+    overlays and captions stay out of it (the browser draws them, and the
+    JSON document already flags them under ``client_only``), and stacked
+    tracks are compositing rather than a cut list.
+
+    Args:
+        project: Edit project record, validated the same way as the JSON
+            handoff.
+
+    Returns:
+        CMX 3600 text: a ``TITLE:`` and ``FCM: NON-DROP FRAME`` header, then
+        one numbered event per base-plane clip followed by its
+        ``* FROM CLIP NAME:`` comment, ending in a single newline.
+
+    Raises:
+        EdlError: The project cannot render (see :func:`_prepare`), its fps is
+            too low to count frames, or it has no base-plane clip to cut.
+    """
+    document = edl_payload(project)
+    fps = round(document["fps"])
+    if fps < 1:
+        raise EdlError("project fps must be >= 1 to export CMX timecode")
+    events = [clip for clip in document["clips"] if clip["track"] == 0]
+    if not events:
+        raise EdlError("project has no base-plane (track 0) clip to export")
+    lines: list[str] = [
+        f"TITLE: {_header_title(document['title'])}",
+        "FCM: NON-DROP FRAME",
+        "",
+    ]
+    for number, clip in enumerate(events, start=1):
+        transition = clip["transition"]
+        kind = "C" if transition is None else CMX_EVENT_KINDS[transition["kind"]]
+        start = clip["timeline_start_s"]
+        reel = _reel_name(clip)
+        lines.append(
+            f"{number:03d}  {reel:<9} V     {kind}        "
+            f"{_timecode(clip['in_s'], fps)} {_timecode(clip['out_s'], fps)} "
+            f"{_timecode(start, fps)} {_timecode(start + clip['duration_s'], fps)}"
+        )
+        lines.append(f"* FROM CLIP NAME: {reel}")
+        lines.append("")
+    return "\n".join(lines)
+

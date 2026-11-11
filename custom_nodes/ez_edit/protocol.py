@@ -80,6 +80,7 @@ OpName = Literal[
     "remove_clip",
     "trim_clip",
     "move_clip",
+    "set_track",
     "set_transition",
     "set_gain",
     "add_overlay",
@@ -269,6 +270,12 @@ TOOL_CATALOG: dict[str, JsonObject] = {
             },
         },
     },
+    "edit_list_projects": {
+        "description": "List every saved edit project as a summary row "
+        "(id, title, fps, width, height, clip count, updated_at), newest "
+        "first. Use it to find a project_id for the other tools.",
+        "parameters": {"type": "object", "properties": {}},
+    },
     "edit_import": {
         "description": "Import a media file already under the Comfy output "
         "dir as a clip (probes duration with ffprobe). Returns the clip.",
@@ -285,9 +292,10 @@ TOOL_CATALOG: dict[str, JsonObject] = {
     "edit_apply_ops": {
         "description": "Apply an ordered list of timeline ops to a project "
         "and return the new project. Ops: project_create, add_clip, "
-        "remove_clip, trim_clip, move_clip, set_transition, set_gain, "
-        "add_overlay, remove_overlay, add_caption, remove_caption, "
-        "set_title, clear. Unknown ops and ids fail the whole call.",
+        "remove_clip, trim_clip, move_clip, set_track, set_transition, "
+        "set_gain, add_overlay, remove_overlay, add_caption, "
+        "remove_caption, set_title, clear. Unknown ops and ids fail the "
+        "whole call.",
         "parameters": {
             "type": "object",
             "properties": {
@@ -335,11 +343,20 @@ TOOL_CATALOG: dict[str, JsonObject] = {
         },
     },
     "edit_export_edl": {
-        "description": "Write the project as an EDL JSON file under the "
-        "edit dir (handoff for Kdenlive/Shotcut paths) and return its path.",
+        "description": "Write the project as an edit decision list under "
+        "the edit dir and return its path. format=json is this lane's own "
+        "handoff document; format=cmx writes CMX 3600 text that DaVinci "
+        "Resolve, Premiere, Kdenlive, and Shotcut import.",
         "parameters": {
             "type": "object",
-            "properties": {"project_id": {"type": "string", "default": ""}},
+            "properties": {
+                "project_id": {"type": "string", "default": ""},
+                "format": {
+                    "type": "string",
+                    "enum": ["json", "cmx"],
+                    "default": "json",
+                },
+            },
         },
     },
     "occupancy_status": {

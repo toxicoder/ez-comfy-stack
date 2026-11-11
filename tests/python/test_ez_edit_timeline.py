@@ -637,6 +637,57 @@ def test_move_clip_errors(args: dict[str, Any], fragment: str) -> None:
         apply_ops(_seeded(3), [{"op": "move_clip", "args": _raw(args)}])
 
 
+# --- set_track --------------------------------------------------------------
+
+
+def test_set_track_moves_a_clip_onto_another_plane() -> None:
+    project = apply_ops(
+        _seeded(2),
+        [{"op": "set_track", "args": {"clip_id": "c1", "track": 2}}],
+        clock=STAMP,
+    )
+    assert [clip["track"] for clip in project["clips"]] == [0, 2]
+
+
+def test_set_track_can_drop_a_clip_back_to_the_base_plane() -> None:
+    raised = apply_ops(
+        _seeded(1),
+        [{"op": "set_track", "args": {"clip_id": "c0", "track": 3}}],
+        clock=STAMP,
+    )
+    lowered = apply_ops(
+        raised, [{"op": "set_track", "args": {"clip_id": "c0", "track": 0}}], clock=STAMP
+    )
+    assert lowered["clips"][0]["track"] == 0
+
+
+def test_set_track_leaves_the_clip_order_alone() -> None:
+    project = apply_ops(
+        _seeded(3),
+        [{"op": "set_track", "args": {"clip_id": "c0", "track": 1}}],
+        clock=STAMP,
+    )
+    assert [clip["id"] for clip in project["clips"]] == ["c0", "c1", "c2"]
+
+
+@pytest.mark.parametrize(
+    ("args", "fragment"),
+    [
+        ({}, "missing argument 'clip_id'"),
+        ({"clip_id": "nope", "track": 1}, "unknown clip id 'nope'"),
+        ({"clip_id": "c0"}, "missing argument 'track'"),
+        ({"clip_id": "c0", "track": -1}, "track must be >= 0"),
+        ({"clip_id": "c0", "track": 1.5}, "track must be an integer"),
+        ({"clip_id": "c0", "track": "1"}, "track must be an integer"),
+        ({"clip_id": "c0", "track": True}, "track must be an integer"),
+        ({"clip_id": "c0", "track": 1, "junk": 0}, "unknown argument"),
+    ],
+)
+def test_set_track_errors(args: dict[str, Any], fragment: str) -> None:
+    with pytest.raises(TimelineError, match=fragment):
+        apply_ops(_seeded(2), [{"op": "set_track", "args": _raw(args)}])
+
+
 # --- set_transition --------------------------------------------------------
 
 

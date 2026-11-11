@@ -476,6 +476,40 @@ def test_export_edl_refuses_an_unsafe_project_id(tmp_path: Path) -> None:
         export_edl(edit_dir, "../escape")
 
 
+def test_dispatch_export_edl_writes_cmx_text(tmp_path: Path) -> None:
+    """``format=cmx`` hands the same cut over as CMX 3600 text."""
+    edit_dir = edit_dir_of(tmp_path)
+    seed_project(edit_dir)
+    media_file(tmp_path)
+    import_clip(edit_dir, path="media/clip.mp4", runner=FakeRunner(stdout="4"), which=lambda _n: FAKE_FFPROBE)
+    handler = build_dispatch(edit_dir, runners=kit())
+    result = tool_result(handler, "edit_export_edl", {"format": "cmx"})
+    assert result["ok"] is True and result["data"]["format"] == "cmx"
+    written = edit_dir / "projects" / f"{result['data']['project_id']}.edl"
+    assert written.read_text(encoding="utf-8").startswith("TITLE:")
+
+
+def test_dispatch_export_edl_refuses_an_unknown_format(tmp_path: Path) -> None:
+    """A format nobody implements fails the call with the name it did not know."""
+    handler = build_dispatch(edit_dir_of(tmp_path), runners=kit())
+    result = tool_result(handler, "edit_export_edl", {"format": "xmeml"})
+    assert result["ok"] is False and "unknown edl format" in result["text"]
+
+
+def test_dispatch_list_projects_returns_summary_rows(tmp_path: Path) -> None:
+    """An agent holding no project id can still discover what exists."""
+    edit_dir = edit_dir_of(tmp_path)
+    seed_project(edit_dir)
+    handler = build_dispatch(edit_dir, runners=kit())
+    result = tool_result(handler, "edit_list_projects", {})
+    assert result["ok"] is True
+    rows = result["data"]["projects"]
+    assert len(rows) == 1 and rows[0]["clips"] == 0
+    assert set(rows[0]) == {
+        "id", "title", "fps", "width", "height", "clips", "updated_at",
+    }
+
+
 def test_dispatch_export_edl_without_a_project(tmp_path: Path) -> None:
     """Nothing to hand off is reported as such."""
     handler = build_dispatch(edit_dir_of(tmp_path), runners=kit())
