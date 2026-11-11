@@ -218,3 +218,100 @@ body text" "bug"'
   [[ ${output} == *'bazelisk test //:validate'* ]]
   [[ ${output} == *'## Environment'* ]]
 }
+
+# ---------------------------------------------------------------------------
+# The private helpers, called directly. The pack-level tests above reach them
+# through bug_report_markdown; these pin the contract each one owes the pack:
+# a slug that is always a file name, a bullet that is always one line, a probe
+# that answers instead of hanging, and a body with no empty headings.
+# ---------------------------------------------------------------------------
+
+@test "_bug_report_slug makes a lowercase file name out of any title" {
+  run lib_bash '_bug_report_slug "  Disk Wizard: divides by ZERO!!  "'
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "disk-wizard-divides-by-zero" ]
+
+  run lib_bash '_bug_report_slug "$(printf "a%.0s" {1..80})"'
+  [ "${#output}" -le 40 ]
+  [[ ! "${output}" == *- ]]
+}
+
+@test "_bug_report_line prints one bullet, redacted, and fills a blank value" {
+  run lib_bash '_bug_report_line "GPU" "NVIDIA GeForce RTX 4090"'
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "- GPU: NVIDIA GeForce RTX 4090" ]
+
+  run lib_bash '_bug_report_line "GPU" ""'
+  [ "${output}" = "- GPU: unavailable" ]
+
+  run lib_bash '_bug_report_line "Token" "ghp_abcdefghijklmnopqrstuvwxyz123456"'
+  [[ ${output} == *"[redacted]"* ]]
+  [[ ${output} != *ghp_* ]]
+}
+
+@test "_bug_report_probe answers unavailable instead of hanging or failing" {
+  run lib_bash '_bug_report_probe "Docker" docker_definitely_not_here --version'
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "- Docker: unavailable" ]
+
+  run lib_bash '_bug_report_probe "Ver" printf "one\\ntwo\\n"'
+  [ "${output}" = "- Ver: one" ]
+}
+
+@test "_bug_report_run swallows a missing command and a failing one" {
+  run lib_bash '_bug_report_run definitely_not_here --version'
+  [ "${status}" -eq 0 ]
+  [ -z "${output}" ]
+
+  run lib_bash '_bug_report_run bash -c "echo out; echo err >&2; exit 3"'
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "out" ]
+}
+
+@test "_bug_report_log_block fences a tail and stays quiet on a bad path" {
+  local log="${BATS_TEST_TMPDIR}/gate.log"
+  printf 'line one\nghp_abcdefghijklmnopqrstuvwxyz123456\nlast line\n' >"${log}"
+  run lib_bash "_bug_report_log_block '${log}'"
+  [ "${status}" -eq 0 ]
+  [ "${output%%$'\n'*}" = '```' ]
+  [[ ${output} == *"last line"* ]]
+  [[ ${output} != *ghp_* ]]
+
+  run lib_bash "_bug_report_log_block '${BATS_TEST_TMPDIR}/absent.log'"
+  [ "${status}" -eq 0 ]
+  [ -z "${output}" ]
+
+  : >"${log}"
+  run lib_bash "_bug_report_log_block '${log}'"
+  [ -z "${output}" ]
+}
+
+@test "_bug_report_add_section skips a blank block and strips carriage returns" {
+  run lib_bash 'BUG_REPORT_BODY=""; _bug_report_add_section "## What happened" "  "; printf "[%s]" "${BUG_REPORT_BODY}"'
+  [ "${output}" = "[]" ]
+
+  run lib_bash 'BUG_REPORT_BODY=""; _bug_report_add_section "## A" "one"; _bug_report_add_section "## B" "$(printf "two\r")"; printf "%s" "${BUG_REPORT_BODY}"'
+  [ "${output}" = $'## A\n\none\n\n## B\n\ntwo' ]
+}
+
+@test "bug_report_redact_stdin scrubs tokens and the home path from a stream" {
+  run bash -c "HOME='${BATS_TEST_TMPDIR}' source '${BUG_LIB}' && printf '%s\n' '/home/x ghp_abcdefghijklmnopqrstuvwxyz123456' | bug_report_redact_stdin"
+  [ "${status}" -eq 0 ]
+  [[ ${output} != *ghp_* ]]
+  [[ ${output} == *"[redacted]"* ]]
+
+  run bash -c "source '${BUG_LIB}'; HOME='${BATS_TEST_TMPDIR}/fake-home'; printf '%s\n' \"prefix \${HOME} suffix\" | bug_report_redact_stdin"
+  [ "${output}" = "prefix ~ suffix" ]
+}
+
+@test "_bug_report_failure_title names the command or the bare status" {
+  run lib_bash '_bug_report_failure_title "" 7'
+  [ "${output}" = "command failed (exit 7)" ]
+
+  run lib_bash '_bug_report_failure_title "bazelisk test //:test-all" 1'
+  [ "${output}" = '"bazelisk test //:test-all" exited 1' ]
+
+  run lib_bash '_bug_report_failure_title "$(printf "b%.0s" {1..90})" 2'
+  [[ ${output} == *"...\" exited 2" ]]
+  [ "${#output}" -le 86 ]
+}

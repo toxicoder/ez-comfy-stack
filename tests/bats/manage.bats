@@ -764,3 +764,43 @@ printf 'REPO_ROOT=%s\nSCRIPT_DIR=%s\n' \"\${REPO_ROOT}\" \"\${SCRIPT_DIR}\""
   [ "${status}" -eq 1 ]
   [[ "${output}" != *'[ez-comfy][BUG]'* ]]
 }
+
+@test "cmd_report_bug is a callable function, not only a dispatcher arm" {
+  export EZ_BUG_REPORT_DIR="${TEST_TMP_DIR}/fn-reports"
+  run bash -c "source '${MANAGE_SH}'; cmd_report_bug --surface tui --title 'TUI paint threw' --exit 3 2>&1 >/dev/null"
+  [ "$status" -eq 0 ]
+  local saved
+  saved="$(printf '%s\n' "${output}" | sed -n 's/.*Template saved: //p' | head -n 1)"
+  [ -n "${saved}" ]
+  [ -f "${saved}" ]
+  [[ "${saved}" == "${EZ_BUG_REPORT_DIR}/"* ]]
+  run cat "${saved}"
+  [[ ${output} == *'exited with status 3'* ]]
+  [[ ${output} == *'## Environment'* ]]
+}
+
+@test "the CLI handoff is wired to the verb and the EXIT trap" {
+  grep -qE '^cmd_report_bug\(\)' "${MANAGE_SH}"
+  grep -qE '^_ez_cli_exit_trap\(\)' "${MANAGE_SH}"
+  grep -qF 'report-bug) cmd_report_bug "$@" ;;' "${MANAGE_SH}"
+  grep -qF "trap '_ez_cli_exit_trap \$?' EXIT" "${MANAGE_SH}"
+}
+
+@test "_ez_cli_exit_trap hints once for a failing status and never for zero" {
+  export EZ_BUG_REPORT_DIR="${TEST_TMP_DIR}/trap-reports"
+  run bash -c "source '${MANAGE_SH}'; EZ_BUG_HINT=1; unset EZ_BUG_HINT_SHOWN; EZ_CLI_COMMAND='manage.sh start'; _ez_cli_exit_trap 4; printf 'rc=%s shown=%s\n' \"\$?\" \"\${EZ_BUG_HINT_SHOWN}\" 2>&1"
+  [[ ${output} == *'[ez-comfy][BUG] Template saved:'* ]]
+  [[ ${output} == *'--surface cli'* ]]
+  [[ ${output} == *'--exit 4'* ]]
+  [[ ${output} == *'shown=1'* ]]
+  local saved
+  saved="$(printf '%s\n' "${output}" | sed -n 's/.*Template saved: //p' | head -n 1)"
+  [ -f "${saved}" ]
+  run cat "${saved}"
+  [[ ${output} == *'manage.sh start'* ]]
+  [[ ${output} == *'exited with status 4'* ]]
+
+  run bash -c "source '${MANAGE_SH}'; EZ_BUG_HINT=1; unset EZ_BUG_HINT_SHOWN; _ez_cli_exit_trap 0; printf 'shown=[%s]\n' \"\${EZ_BUG_HINT_SHOWN:-}\" 2>&1"
+  [[ ${output} != *'[ez-comfy][BUG]'* ]]
+  [[ ${output} == *'shown=[]'* ]]
+}
