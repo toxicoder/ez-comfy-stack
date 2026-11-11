@@ -199,6 +199,7 @@ filegroup(
         "python/test_ez_quality.py",
         "python/test_ez_refs.py",
         "python/test_ez_research.py",
+        "python/test_ez_scene.py",
         "python/test_ez_studio_forge.py",
         "python/test_film_catalog.py",
         "python/test_film_protocols.py",

@@ -17,6 +17,7 @@ filegroup(
         "ez_dcc/occupancy_gate.py",
         "ez_dcc/pack.py",
         "ez_dcc/qc.py",
+        "ez_dcc/scene.py",
         "ez_dub/__init__.py",
         "ez_dub/align.py",
         "ez_dub/audio.py",

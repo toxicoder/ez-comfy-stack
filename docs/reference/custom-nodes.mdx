@@ -52,7 +52,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 | Pack | `NODE_CLASS_MAPPINGS` | Role |
 | --- | --- | --- |
 | `ez_common` | empty | Shared `node_log` / `node_progress` |
-| `ez_dcc` | 6 nodes | Guide-pack loaders + occupancy gate |
+| `ez_dcc` | 7 nodes | Guide-pack loaders + occupancy gate + 3D scene layout |
 | `ez_dub` | 3 nodes | Ingest / translate / clone+mix |
 | `ez_film` | 3 nodes | Unload, 90s concat, LTX disclosure |
 | `ez_feedback` | empty | Report-a-bug / Request-a-feature dialog, guided **Feedback** sidebar panel with an Enhance-with-LLM rewrite, non-blocking error banner, a **Report this error** button on the workflow load-abort modal, report prefill, and the `GET /ez_feedback/config` + `POST /ez_feedback/submit` + `POST /ez_feedback/enhance` routes. No nodes; JS and routes only. [Reporting issues](../operate/reporting-issues.md) |
@@ -95,6 +95,7 @@ Category `ez-comfy/dcc`. Fail-closed pack QC. Depth stills are mist 0-1 (near=wh
 | `EZDCCCameraJson` | Load camera.json | `slug`, `shot_id` | `STRING` camera_json | - | Missing file -> empty string. No CAMERA socket |
 | `EZDCCPreviewGuideLayer` | Preview guide layer | `IMAGE` image, `label` STRING (default `guide`) | `IMAGE` image | - | Identity pass-through |
 | `EZDCCOccupancyGate` | Occupancy gate | `IMAGE` image, `required_mode` combo `klein` `trellis` `wan` `ltx` (default `klein`) | `IMAGE` image | **required_mode** (CLI heavy modes) | Reads `.occupancy.json`. Missing file **passes**. `idle` / `blender-desk` / `llm-desk` / mismatch **fail**. Does **not** start Compose or spawn Blender |
+| `EZSceneLayout` | Compose 3D scene layout | `scene_id` STRING, `assets` STRING (multiline, one slug per line), `camera_pos` STRING, `camera_look` STRING, `camera_fov` INT 10-120 (default `35`), `hdri` STRING (default `none`), `filename` STRING (default `scene`), `overwrite` BOOLEAN (default false) | `STRING` scene, `STRING` summary | - | Writes `scenes/<filename>_NNNNN.json` under `${COMFY_OUTPUT_DIR}` against the `schemas/scene.json` shape. Refuses path traversal, a bad camera, a bad HDRI, and an existing file unless `overwrite`. Instanced `.glb` assets only: this stack mints no gaussian splat |
 
 ---
 

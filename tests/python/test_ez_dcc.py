@@ -96,7 +96,7 @@ def test_pack_imports_without_torch_bpy_comfy() -> None:
     assert not hasattr(ez_dcc, "WEB_DIRECTORY")
 
 
-def test_six_nodes_registered() -> None:
+def test_seven_nodes_registered() -> None:
     expected = {
         "EZDCCLoadGuideStill",
         "EZDCCLoadGuideVideo",
@@ -104,11 +104,16 @@ def test_six_nodes_registered() -> None:
         "EZDCCCameraJson",
         "EZDCCPreviewGuideLayer",
         "EZDCCOccupancyGate",
+        "EZSceneLayout",
     }
-    assert set(NODE_CLASS_MAPPINGS) == expected
-    assert ez_dcc.NODE_CLASS_MAPPINGS == NODE_CLASS_MAPPINGS
+    assert set(NODE_CLASS_MAPPINGS) == expected - {"EZSceneLayout"}
+    assert set(ez_dcc.NODE_CLASS_MAPPINGS) == expected
+    assert ez_dcc.NODE_CLASS_MAPPINGS == {
+        **NODE_CLASS_MAPPINGS,
+        **ez_dcc.scene.NODE_CLASS_MAPPINGS,
+    }
     assert NODE_DISPLAY_NAME_MAPPINGS["EZDCCLoadGuideStill"] == "Load guide still"
-    for cls in NODE_CLASS_MAPPINGS.values():
+    for cls in ez_dcc.NODE_CLASS_MAPPINGS.values():
         assert getattr(cls, "CATEGORY") == "ez-comfy/dcc"
 
 

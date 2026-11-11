@@ -1097,6 +1097,53 @@ Attach the photo latent, or a people-erased block-study latent when the prompt r
 
 No widgets. Sockets only.
 
+### `EZCutout` - Cutout (BiRefNet)
+
+Matte a photo so one character or object can be turned into a 3D model.
+
+!!! warning "Lab notes"
+
+    photos/cutout, ahead of any 3d App. A busy room behind the product teaches the TRELLIS.2 structure stage that the room is part of the object. Fail-soft: no weights, no timm/kornia/einops/transformers, or EZ_CUTOUT=0 passes the input through unchanged with a status line.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Photo to matte - the original, not a crop. |
+| `image` | out | `IMAGE` | Subject on the chosen backdrop, ready for LoadImage in a 3d App. |
+| `matte` | out | `IMAGE` | Grey alpha copy so SaveImage can write the matte. |
+| `mask` | out | `MASK` | Subject mask for anything that composites. |
+
+#### `backdrop`
+
+Type `COMBO`.
+
+What fills the pixels the subject leaves.
+
+**How it affects generation:** white is the lab default: a clean plate reads as one object. keep original changes nothing but the matte and mask.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `white` | Paint the vacated pixels white. |
+| `black` | Paint them black. |
+| `keep original` | Keep every pixel; only matte and mask change. |
+
+#### `dilate`
+
+Type `INT`. Range / default: 0-32.
+
+Grow the matte outward by this many pixels.
+
+**How it affects generation:** 2 keeps thin hair and product edges inside the cut.
+
+#### `feather`
+
+Type `INT`. Range / default: 0-32.
+
+Soften the matte edge over this many pixels.
+
+**How it affects generation:** 2 avoids a hard sticker outline on the cut still.
+
 ### `EZDCCLoadGuideStill` - Load guide still
 
 Load clay/depth/canny/first/last from guides/<slug>/<shot_id>/. Fail-closed QC.
@@ -4151,6 +4198,83 @@ Type `STRING`.
 Catalog id (labs/assist/prompt-forge).
 
 **How it affects generation:** Leave as stamped.
+
+### `EZSceneLayout` - Compose 3D scene layout
+
+Write a validated scene.json shopping list of instanced .glb slugs. No mesh bytes, no splat.
+
+!!! warning "Lab notes"
+
+    Second half of 3d/world-elements: one Queue prints the mesh and this document. Writes output/scenes/<filename>_NNNNN.json and never MODELS_DIR. Bad input returns a summary line instead of raising.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `scene` | out | `STRING` | Path of the scene document; empty when the write was refused. |
+| `summary` | out | `STRING` | One status line: how many instances landed, or why not. |
+
+#### `scene_id`
+
+Type `STRING`.
+
+Lowercase-hyphenated scene id.
+
+**How it affects generation:** Name the set you are dressing, e.g. lab-world. Anything else refuses the write.
+
+#### `assets`
+
+Type `STRING`. Range / default: multiline.
+
+One Asset Bible slug per line, optionally slug:relative/path.glb.
+
+**How it affects generation:** Only slugs the Asset Bible already mints; an unknown slug leaves the file unwritten.
+
+#### `camera_pos`
+
+Type `STRING`.
+
+Camera position as "x, y, z" in metres.
+
+**How it affects generation:** Blank falls back to the camera default in schemas/scene.json.
+
+#### `camera_look`
+
+Type `STRING`.
+
+Camera look-at as "x, y, z".
+
+**How it affects generation:** Blank falls back to the schema default.
+
+#### `camera_fov`
+
+Type `INT`. Range / default: 10-120.
+
+Vertical field of view in degrees.
+
+**How it affects generation:** 35 is the authored default.
+
+#### `hdri`
+
+Type `STRING`.
+
+Lighting reference the DCC loads.
+
+**How it affects generation:** polyhaven:<name> or none.
+
+#### `filename`
+
+Type `STRING`.
+
+Scene basename under output/scenes/.
+
+**How it affects generation:** The file lands as <filename>_NNNNN.json; the suffix keeps a re-Queue from clobbering.
+
+#### `overwrite`
+
+Type `BOOLEAN`. Range / default: false.
+
+Replace an existing scene file.
+
+**How it affects generation:** Off refuses to touch a file that already exists.
 
 ### `EZSnapImage` - Snap image (div 16)
 
