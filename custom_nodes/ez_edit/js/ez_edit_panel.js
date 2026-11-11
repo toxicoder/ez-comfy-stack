@@ -9,9 +9,14 @@
  * right-docked floating aside otherwise, so it survives older frontends.
  *
  * Contract: only the pinned routes are called (/ez_edit/state, /ops, /import,
- * /render, /chat, /exec/pending, /exec/result, /local_tools/*). Every fetch is
- * relative, so it hits the same origin as ComfyUI. Server text is rendered with
- * textContent only - never innerHTML, never eval.
+ * /render, /chat, /exec/pending, /exec/result, /local_tools/*, /export_edl).
+ * Every fetch is relative, so it hits the same origin as ComfyUI. Server text
+ * is rendered with textContent only - never innerHTML, never eval.
+ *
+ * Cutting does not need the agent: the Clips table is selectable and the Clip
+ * and Graphics rows post the same ordered op list the agent and the MCP
+ * server send, so trim, reorder, track, gain, transition, overlay, caption,
+ * and EDL handoff all work with the model sidecar down.
  *
  * The client executor draws the timeline onto a canvas (track stacking,
  * fade/wipe transitions, text/image overlays, captions) and records it with
@@ -43,6 +48,7 @@ import { app } from "../../scripts/app.js";
 /**
  * Text or image overlay the client renderer paints over the timeline.
  * @typedef {Object} EzOverlay
+ * @property {string=} id Overlay id the remove op names.
  * @property {string=} kind text or image.
  * @property {string=} text Words to draw when kind is text.
  * @property {string=} source Output-relative path when kind is image.
@@ -56,6 +62,7 @@ import { app } from "../../scripts/app.js";
 /**
  * One caption line of the caption band.
  * @typedef {Object} EzCaption
+ * @property {string=} id Caption id the remove op names.
  * @property {number=} at_s Timeline second it appears.
  * @property {number=} dur_s Seconds it stays up.
  * @property {string=} text Words to draw.
@@ -192,6 +199,8 @@ import { app } from "../../scripts/app.js";
  * @property {EzToolCall[]=} calls Local tool calls awaiting this browser.
  * @property {EzClip=} clip Clip /ez_edit/import added.
  * @property {EzJob=} job Job /ez_edit/render queued.
+ * @property {string=} path Handoff file /ez_edit/export_edl wrote.
+ * @property {string=} format EDL container /ez_edit/export_edl wrote ("json" or "cmx").
  */
 
 /**
@@ -299,6 +308,21 @@ import { app } from "../../scripts/app.js";
  * @property {HTMLElement=} jobsBody tbody of the jobs table.
  * @property {HTMLElement=} mcpList Local MCP server list.
  * @property {HTMLButtonElement[]=} modeButtons Server/client chips.
+ * @property {HTMLElement=} selectedLine Names the clip the controls act on.
+ * @property {HTMLInputElement=} trimIn Clip in-point field, seconds.
+ * @property {HTMLInputElement=} trimOut Clip out-point field, seconds.
+ * @property {HTMLInputElement=} trackField Compositing plane field.
+ * @property {HTMLInputElement=} gainField Clip audio gain field.
+ * @property {HTMLSelectElement=} transitionKind cut, fade, or wipe.
+ * @property {HTMLInputElement=} transitionDur Transition length, seconds.
+ * @property {HTMLButtonElement=} transitionButton Set transition (never clip 1).
+ * @property {HTMLButtonElement[]=} clipButtons Disabled until a clip is picked.
+ * @property {HTMLInputElement=} graphicsText Overlay or caption text.
+ * @property {HTMLInputElement=} graphicsAt Appears at, seconds.
+ * @property {HTMLInputElement=} graphicsDur Stays up, seconds.
+ * @property {HTMLInputElement=} importLabel Label for the next import.
+ * @property {HTMLInputElement=} importTrack Track for the next import.
+ * @property {HTMLSelectElement=} edlFormat json or cmx handoff.
  */
 
 /**
@@ -325,6 +349,9 @@ import { app } from "../../scripts/app.js";
  * @property {number} tick Poll counter.
  * @property {number} timer Poll interval handle.
  * @property {string} clientId Stable per-tab client id.
+ * @property {string} selectedClipId Clip the clip controls act on, "" none.
+ * @property {string} selectedOverlayId Overlay the graphics controls remove.
+ * @property {string} selectedCaptionId Caption the graphics controls remove.
  * @property {AudioContext=} audioCtx Audio context, made on first render.
  * @property {Set<string>=} seenJobs Job ids already claimed.
  */
@@ -358,6 +385,9 @@ const FALLBACK_CSS = `
 .ez-edit button, .ez-edit input, .ez-edit textarea { font:inherit; }
 .ez-edit-row { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
 .ez-edit-btn { padding:3px 8px; border-radius:6px; border:1px solid rgba(255,255,255,.16); background:rgba(255,255,255,.06); cursor:pointer; }
+.ez-edit-btn:disabled { opacity:.45; cursor:not-allowed; }
+.ez-edit-table tbody tr[role="button"] { cursor:pointer; }
+.ez-edit-table tr.ez-edit-row-selected td { background:rgba(120,170,255,.22); }
 .ez-edit-chip.is-active { outline:1px solid currentColor; }
 .ez-edit-chat { display:flex; flex-direction:column; gap:4px; max-height:220px; overflow:auto; }
 .ez-edit-msg { padding:4px 6px; border-radius:6px; background:rgba(255,255,255,.05); white-space:pre-wrap; }
@@ -398,6 +428,9 @@ const state = {
   tick: 0,
   timer: 0,
   clientId: "",
+  selectedClipId: "",
+  selectedOverlayId: "",
+  selectedCaptionId: "",
 };
 
 /**
@@ -755,6 +788,34 @@ function makeField(label, type, value, placeholder) {
   input.setAttribute("aria-label", label || placeholder || "input");
   row.appendChild(input);
   return { row, input };
+}
+
+/**
+ * Create a labelled select row.
+ * @param {string} label Label text.
+ * @param {string[]} options Values the select may carry.
+ * @param {string} [value] Initial value.
+ * @returns {{row: HTMLElement, input: HTMLSelectElement}} `{row, input}` elements.
+ */
+function makeSelect(label, options, value) {
+  const row = makeEl("div", "ez-edit-row");
+  if (label) {
+    row.appendChild(makeEl("span", "ez-edit-label", label));
+  }
+  const select = document.createElement("select");
+  select.className = "ez-edit-input";
+  options.forEach((option) => {
+    const item = document.createElement("option");
+    item.value = String(option);
+    item.textContent = String(option);
+    select.appendChild(item);
+  });
+  if (value != null) {
+    select.value = String(value);
+  }
+  select.setAttribute("aria-label", label || "select");
+  row.appendChild(select);
+  return { row, input: select };
 }
 
 /**
@@ -1937,7 +1998,7 @@ function pushThread(kind, text) {
  * @param {HTMLElement} body The tbody.
  * @param {Array<string|number>} cells Cell texts.
  * @param {string} [className] Extra class.
- * @returns {void}
+ * @returns {HTMLElement} The row that was appended.
  */
 function appendRow(body, cells, className) {
   const tr = document.createElement("tr");
@@ -1950,6 +2011,39 @@ function appendRow(body, cells, className) {
     tr.appendChild(td);
   });
   body.appendChild(tr);
+  return tr;
+}
+
+/**
+ * Make one table row pickable by mouse and keyboard.
+ *
+ * The row stops its own Enter/Space so the panel-wide shortcut handler does
+ * not also start a preview on the same keystroke.
+ *
+ * @param {HTMLElement} tr Row element built by `appendRow`.
+ * @param {string} rowId Id the pick reports.
+ * @param {boolean} selected Whether this row carries the current selection.
+ * @param {(rowId: string) => void} onPick Called with the id when picked.
+ * @returns {void}
+ */
+function wireRow(tr, rowId, selected, onPick) {
+  if (selected) {
+    tr.classList.add("ez-edit-row-selected");
+  }
+  tr.setAttribute("role", "button");
+  tr.tabIndex = 0;
+  tr.setAttribute("aria-selected", selected ? "true" : "false");
+  const pick = () => {
+    onPick(rowId);
+  };
+  tr.addEventListener("click", pick);
+  tr.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+      pick();
+    }
+  });
 }
 
 /**
@@ -1970,13 +2064,14 @@ function renderTimeline() {
     const transition = clip.transition
       ? String(clip.transition.kind || "cut") + " " + formatSeconds(clip.transition.duration_s)
       : "cut";
-    appendRow(ui.clipsBody, [
+    const tr = appendRow(ui.clipsBody, [
       index + 1,
       clip.label || clip.id || "clip",
       formatSeconds(clip.in_s) + " - " + formatSeconds(clip.out_s),
       "T" + (Number(clip.track) || 0),
       transition,
     ]);
+    wireRow(tr, String(clip.id || ""), String(clip.id || "") === state.selectedClipId, selectClip);
   });
 
   const overlays = project && Array.isArray(project.overlays) ? project.overlays : [];
@@ -1985,11 +2080,20 @@ function renderTimeline() {
     appendRow(ui.overlaysBody, ["none"], "is-empty");
   }
   overlays.forEach((overlay) => {
-    appendRow(ui.overlaysBody, [
+    const tr = appendRow(ui.overlaysBody, [
       overlay.kind || "text",
       overlay.text || overlay.source || "",
       "@" + formatSeconds(overlay.at_s) + " for " + formatSeconds(overlay.dur_s),
     ]);
+    wireRow(
+      tr,
+      String(overlay.id || ""),
+      String(overlay.id || "") === state.selectedOverlayId,
+      (rowId) => {
+        state.selectedOverlayId = rowId;
+        renderTimeline();
+      },
+    );
   });
 
   const captions = project && Array.isArray(project.captions) ? project.captions : [];
@@ -1998,10 +2102,19 @@ function renderTimeline() {
     appendRow(ui.captionsBody, ["none"], "is-empty");
   }
   captions.forEach((caption) => {
-    appendRow(ui.captionsBody, [
+    const tr = appendRow(ui.captionsBody, [
       caption.text || "",
       "@" + formatSeconds(caption.at_s) + " for " + formatSeconds(caption.dur_s),
     ]);
+    wireRow(
+      tr,
+      String(caption.id || ""),
+      String(caption.id || "") === state.selectedCaptionId,
+      (rowId) => {
+        state.selectedCaptionId = rowId;
+        renderTimeline();
+      },
+    );
   });
 }
 
@@ -2088,6 +2201,7 @@ function renderAll() {
   renderChat();
   renderMode();
   renderTimeline();
+  renderClipControls();
   renderJobs();
   renderMcp();
 }
@@ -2123,6 +2237,348 @@ function endAction() {
 }
 
 /**
+ * The clips of the loaded project, defensively.
+ * @returns {EzClip[]} Clips in timeline order.
+ */
+function clipsOf() {
+  const project = state.project;
+  return project && Array.isArray(project.clips) ? project.clips : [];
+}
+
+/**
+ * Position of the selected clip in the strip.
+ * @returns {number} Index, or -1 when nothing is selected or it vanished.
+ */
+function selectedIndex() {
+  if (!state.selectedClipId) {
+    return -1;
+  }
+  return clipsOf().findIndex((clip) => clip && clip.id === state.selectedClipId);
+}
+
+/**
+ * Read a numeric field, falling back when it is blank or junk.
+ * @param {{value: string}|undefined} input The field to read.
+ * @param {number} fallback Value to use when the field does not parse.
+ * @returns {number} The number to send.
+ */
+function numberValue(input, fallback) {
+  const raw = Number(input ? input.value : NaN);
+  return Number.isFinite(raw) ? raw : fallback;
+}
+
+/**
+ * Post one ordered op list through the ops route, then repaint.
+ *
+ * This is the only way the panel mutates a timeline: the same reducer the
+ * agent and the MCP server drive, so a mouse cut and a tool cut agree.
+ *
+ * @param {EzJsonMap[]} ops Ops to apply, in order.
+ * @param {string} label Action label for the busy flag and the status line.
+ * @returns {Promise<void>} Resolves once the state refreshed.
+ */
+async function postOps(ops, label) {
+  if (!Array.isArray(ops) || !ops.length) {
+    return;
+  }
+  if (!allowAction(label)) {
+    return;
+  }
+  try {
+    const data = await postJson("/ez_edit/ops", {
+      project_id: state.projectId,
+      ops: ops,
+    });
+    if (!data || data.ok === false) {
+      throw apiError(data || {}, "/ez_edit/ops");
+    }
+    state.project = data.project || null;
+    setStatus(label + ": done");
+  } catch (err) {
+    setStatus(errLine(err));
+  }
+  endAction();
+  await refreshState({ quiet: true });
+}
+
+/**
+ * Drop any selection whose row is no longer in the project.
+ * @returns {void}
+ */
+function pruneSelection() {
+  const project = state.project || {};
+  const stillThere = (rows, chosen) =>
+    Boolean(chosen) &&
+    Array.isArray(rows) &&
+    rows.some((row) => row && row.id === chosen);
+  if (!stillThere(project.clips, state.selectedClipId)) {
+    state.selectedClipId = "";
+  }
+  if (!stillThere(project.overlays, state.selectedOverlayId)) {
+    state.selectedOverlayId = "";
+  }
+  if (!stillThere(project.captions, state.selectedCaptionId)) {
+    state.selectedCaptionId = "";
+  }
+}
+
+/**
+ * Repaint the clip controls to match the current selection.
+ * @returns {void}
+ */
+function renderClipControls() {
+  if (!ui) {
+    return;
+  }
+  const index = selectedIndex();
+  const clip = index < 0 ? null : clipsOf()[index];
+  if (ui.selectedLine) {
+    ui.selectedLine.textContent = clip
+      ? "Selected: " + String(clip.label || clip.id) + " (#" + String(index + 1) + ")"
+      : "Select a clip row to edit it.";
+  }
+  if (clip) {
+    if (ui.trimIn) {
+      ui.trimIn.value = String(Number(clip.in_s) || 0);
+    }
+    if (ui.trimOut) {
+      ui.trimOut.value = String(Number(clip.out_s) || 0);
+    }
+    if (ui.trackField) {
+      ui.trackField.value = String(Number(clip.track) || 0);
+    }
+    if (ui.gainField) {
+      ui.gainField.value = String(clip.gain == null ? 1 : Number(clip.gain));
+    }
+    if (ui.transitionKind) {
+      ui.transitionKind.value = String((clip.transition && clip.transition.kind) || "cut");
+    }
+    if (ui.transitionDur) {
+      ui.transitionDur.value = String(
+        Number(clip.transition && clip.transition.duration_s) || 0.5,
+      );
+    }
+  }
+  const buttons = Array.isArray(ui.clipButtons) ? ui.clipButtons : [];
+  buttons.forEach((button) => {
+    button.disabled = !clip;
+  });
+  if (ui.transitionButton) {
+    ui.transitionButton.disabled = !clip || index === 0;
+  }
+}
+
+/**
+ * Select a clip and repaint every table and control.
+ * @param {string} clipId Clip id to select.
+ * @returns {void}
+ */
+function selectClip(clipId) {
+  state.selectedClipId = String(clipId || "");
+  renderTimeline();
+  renderClipControls();
+}
+
+/**
+ * Say so when a clip control is used with nothing selected.
+ * @returns {boolean} True when a clip is selected and the caller may proceed.
+ */
+function requireClip() {
+  if (selectedIndex() < 0) {
+    setStatus("Select a clip row first");
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Trim the selected clip to the in and out fields.
+ * @returns {void}
+ */
+function applyTrim() {
+  if (!requireClip()) {
+    return;
+  }
+  const clip = clipsOf()[selectedIndex()];
+  postOps(
+    [
+      {
+        op: "trim_clip",
+        args: {
+          clip_id: String(clip.id),
+          in_s: numberValue(ui && ui.trimIn, Number(clip.in_s) || 0),
+          out_s: numberValue(ui && ui.trimOut, Number(clip.out_s) || 0),
+        },
+      },
+    ],
+    "trim",
+  );
+}
+
+/**
+ * Slide the selected clip earlier or later in the strip.
+ * @param {number} delta -1 for earlier, +1 for later.
+ * @returns {void}
+ */
+function nudgeClip(delta) {
+  if (!requireClip()) {
+    return;
+  }
+  const index = selectedIndex();
+  const target = index + delta;
+  if (target < 0) {
+    setStatus("Already the first clip");
+    return;
+  }
+  if (target >= clipsOf().length) {
+    setStatus("Already the last clip");
+    return;
+  }
+  postOps(
+    [{ op: "move_clip", args: { clip_id: String(clipsOf()[index].id), index: target } }],
+    "move",
+  );
+}
+
+/**
+ * Move the selected clip onto the plane the Track field names.
+ * @returns {void}
+ */
+function applyTrack() {
+  if (!requireClip()) {
+    return;
+  }
+  const clip = clipsOf()[selectedIndex()];
+  postOps(
+    [
+      {
+        op: "set_track",
+        args: { clip_id: String(clip.id), track: numberValue(ui && ui.trackField, 0) },
+      },
+    ],
+    "set track",
+  );
+}
+
+/**
+ * Set the audio gain of the selected clip.
+ * @returns {void}
+ */
+function applyGain() {
+  if (!requireClip()) {
+    return;
+  }
+  const clip = clipsOf()[selectedIndex()];
+  postOps(
+    [
+      {
+        op: "set_gain",
+        args: { clip_id: String(clip.id), gain: numberValue(ui && ui.gainField, 1) },
+      },
+    ],
+    "set gain",
+  );
+}
+
+/**
+ * Set the transition entering the selected clip.
+ * @returns {void}
+ */
+function applyTransition() {
+  if (!requireClip()) {
+    return;
+  }
+  const index = selectedIndex();
+  if (index === 0) {
+    setStatus("The first clip has no entering transition");
+    return;
+  }
+  const clip = clipsOf()[index];
+  const kind = ui && ui.transitionKind ? String(ui.transitionKind.value || "cut") : "cut";
+  postOps(
+    [
+      {
+        op: "set_transition",
+        args: {
+          clip_id: String(clip.id),
+          kind: kind,
+          duration_s: numberValue(ui && ui.transitionDur, 0.5),
+        },
+      },
+    ],
+    "set transition",
+  );
+}
+
+/**
+ * Drop the selected clip from the timeline.
+ * @returns {void}
+ */
+function removeSelectedClip() {
+  if (!requireClip()) {
+    return;
+  }
+  const clip = clipsOf()[selectedIndex()];
+  state.selectedClipId = "";
+  postOps([{ op: "remove_clip", args: { clip_id: String(clip.id) } }], "remove clip");
+}
+
+/**
+ * Add a text overlay or a caption from the graphics fields.
+ * @param {string} kind "overlay" or "caption".
+ * @returns {void}
+ */
+function addGraphics(kind) {
+  if (!state.project) {
+    setStatus("Create a project first");
+    return;
+  }
+  const text = ui && ui.graphicsText ? String(ui.graphicsText.value || "").trim() : "";
+  if (!text) {
+    setStatus("Type the text to put on screen first");
+    return;
+  }
+  const atS = numberValue(ui && ui.graphicsAt, 0);
+  const durS = numberValue(ui && ui.graphicsDur, 3);
+  const id = newId();
+  const ops =
+    kind === "caption"
+      ? [{ op: "add_caption", args: { caption: { id, at_s: atS, dur_s: durS, text } } }]
+      : [
+          {
+            op: "add_overlay",
+            args: { overlay: { id, kind: "text", at_s: atS, dur_s: durS, text } },
+          },
+        ];
+  postOps(ops, kind === "caption" ? "add caption" : "add overlay");
+}
+
+/**
+ * Remove the selected (or last) overlay.
+ * @returns {void}
+ */
+function removeGraphics(kind) {
+  const project = state.project || {};
+  const key = kind === "caption" ? "captions" : "overlays";
+  const rows = Array.isArray(project[key]) ? project[key] : [];
+  const chosen = kind === "caption" ? state.selectedCaptionId : state.selectedOverlayId;
+  const target = rows.find((row) => row && row.id === chosen) || rows[rows.length - 1];
+  if (!target || !target.id) {
+    setStatus("Nothing to remove yet");
+    return;
+  }
+  const op = kind === "caption" ? "remove_caption" : "remove_overlay";
+  const arg = kind === "caption" ? "caption_id" : "overlay_id";
+  const ops = [{ op: op, args: { [arg]: String(target.id) } }];
+  if (kind === "caption") {
+    state.selectedCaptionId = "";
+  } else {
+    state.selectedOverlayId = "";
+  }
+  postOps(ops, op);
+}
+
+/**
  * Load state for the current (or most recent) project.
  * @param {EzRefreshOpts} [opts] `{quiet: true}` keeps the note.
  * @returns {Promise<void>} Resolves once painted.
@@ -2149,6 +2605,7 @@ async function refreshState(opts) {
     if (!quiet) {
       state.note = "";
     }
+    pruneSelection();
     renderAll();
   } catch (err) {
     state.enabled = Number(err && err.status) === 403 ? false : state.enabled;
@@ -2258,9 +2715,11 @@ async function newProject() {
 /**
  * Import a media file under the output dir as a clip.
  * @param {string} rawPath Path as typed.
+ * @param {string} [rawLabel] Label to give the clip; defaults to the basename.
+ * @param {number} [track] Compositing plane to land on.
  * @returns {Promise<void>} Resolves when the state refreshed.
  */
-async function importClip(rawPath) {
+async function importClip(rawPath, rawLabel, track) {
   const path = String(rawPath || "").trim();
   if (!path) {
     setStatus("Type a media path under the Comfy output dir first");
@@ -2269,12 +2728,14 @@ async function importClip(rawPath) {
   if (!allowAction("import")) {
     return;
   }
+  const label = String(rawLabel || "").trim();
+  const plane = Number.isFinite(Number(track)) && track !== undefined ? Number(track) : 0;
   try {
-    const data = await postJson("/ez_edit/import", { path, label: "", track: 0 });
+    const data = await postJson("/ez_edit/import", { path, label, track: plane });
     if (!data || data.ok === false) {
       throw apiError(data || {}, "/ez_edit/import");
     }
-    setStatus("Imported " + String((data.clip && data.clip.label) || path));
+    setStatus("Imported " + String((data.clip && data.clip.label) || path) + " on T" + String(plane));
   } catch (err) {
     setStatus(errLine(err));
   }
@@ -2315,12 +2776,32 @@ async function startRender(mode) {
 }
 
 /**
- * Ask the agent to export the EDL (the EDL handoff lives behind the chat tool).
- * @returns {Promise<void>} Resolves when the agent answers.
+ * Write the EDL handoff file through its own route.
+ *
+ * This does not go through the agent: the export is a file write, and it has
+ * to work with the model sidecar down. `json` is this lane's own handoff
+ * document; `cmx` is CMX 3600 text an external NLE imports.
+ *
+ * @returns {Promise<void>} Resolves when the route answers.
  */
 async function exportEdl() {
-  const name = state.projectId || "the current project";
-  await sendChatTurn("Export the EDL for project " + name + " and tell me the file path.");
+  if (!allowAction("export edl")) {
+    return;
+  }
+  const format = ui && ui.edlFormat ? String(ui.edlFormat.value || "json") : "json";
+  try {
+    const data = await postJson("/ez_edit/export_edl", {
+      project_id: state.projectId,
+      format: format,
+    });
+    if (!data || data.ok === false) {
+      throw apiError(data || {}, "/ez_edit/export_edl");
+    }
+    setStatus("EDL written to " + String(data.path || "?"));
+  } catch (err) {
+    setStatus(errLine(err));
+  }
+  endAction();
 }
 
 /**
@@ -2792,10 +3273,25 @@ function mount(el) {
 
   const importField = makeField("Media path", "text", "", "edit/imports/clip01.mp4");
   timeline.body.appendChild(importField.row);
+  const labelField = makeField("Label", "text", "", "B-roll 1");
+  const trackField = makeField("Track", "number", "0", "0");
+  const importRowAt = makeEl("div", "ez-edit-row");
+  importRowAt.appendChild(labelField.row);
+  importRowAt.appendChild(trackField.row);
+  timeline.body.appendChild(importRowAt);
+  local.importLabel = labelField.input;
+  local.importTrack = trackField.input;
+  const edlFormat = makeSelect("EDL format", ["json", "cmx"], "json");
+  timeline.body.appendChild(edlFormat.row);
+  local.edlFormat = edlFormat.input;
   const importRow = makeEl("div", "ez-edit-row");
   importRow.appendChild(
     makeButton("Import", "ez-edit-btn", () => {
-      importClip(importField.input.value);
+      importClip(
+        importField.input.value,
+        labelField.input.value,
+        Number(trackField.input.value),
+      );
     }),
   );
   importRow.appendChild(
@@ -2831,6 +3327,87 @@ function mount(el) {
   const clips = makeTable("Clips", ["#", "Label", "In / Out", "Track", "Transition"]);
   local.clipsBody = clips.body;
   timeline.body.appendChild(clips.wrap);
+
+  // --- clip actions: the mouse path over the very ops the agent sends ---
+  local.selectedLine = makeEl("p", "ez-edit-hint", "Select a clip row to edit it.");
+  timeline.body.appendChild(local.selectedLine);
+  /** @type {HTMLButtonElement[]} */
+  const clipButtons = [];
+  const addAction = (label, onClick) => {
+    const button = makeButton(label, "ez-edit-btn ez-edit-btn-sm", onClick);
+    button.disabled = true;
+    clipButtons.push(button);
+    return button;
+  };
+
+  const trimIn = makeField("In (s)", "number", "0", "0");
+  const trimOut = makeField("Out (s)", "number", "2", "2");
+  const trimRow = makeEl("div", "ez-edit-row");
+  trimRow.appendChild(trimIn.row);
+  trimRow.appendChild(trimOut.row);
+  trimRow.appendChild(addAction("Set trim", applyTrim));
+  timeline.body.appendChild(trimRow);
+  local.trimIn = trimIn.input;
+  local.trimOut = trimOut.input;
+
+  const clipTrack = makeField("Track", "number", "0", "0");
+  const clipGain = makeField("Gain", "number", "1", "1");
+  const planeRow = makeEl("div", "ez-edit-row");
+  planeRow.appendChild(clipTrack.row);
+  planeRow.appendChild(clipGain.row);
+  planeRow.appendChild(addAction("Set track", applyTrack));
+  planeRow.appendChild(addAction("Set gain", applyGain));
+  timeline.body.appendChild(planeRow);
+  local.trackField = clipTrack.input;
+  local.gainField = clipGain.input;
+
+  const transitionKind = makeSelect("Transition", ["cut", "fade", "wipe"], "cut");
+  const transitionDur = makeField("Dur (s)", "number", "0.5", "0.5");
+  const transitionRow = makeEl("div", "ez-edit-row");
+  transitionRow.appendChild(transitionKind.row);
+  transitionRow.appendChild(transitionDur.row);
+  local.transitionButton = addAction("Set transition", applyTransition);
+  transitionRow.appendChild(local.transitionButton);
+  timeline.body.appendChild(transitionRow);
+  local.transitionKind = transitionKind.input;
+  local.transitionDur = transitionDur.input;
+
+  const moveRow = makeEl("div", "ez-edit-row");
+  moveRow.appendChild(addAction("Move earlier", () => nudgeClip(-1)));
+  moveRow.appendChild(addAction("Move later", () => nudgeClip(1)));
+  moveRow.appendChild(addAction("Remove clip", removeSelectedClip));
+  timeline.body.appendChild(moveRow);
+  local.clipButtons = clipButtons;
+
+  // --- graphics: text planes the client render draws ---
+  const graphicsText = makeField("Text", "text", "", "Lower third");
+  const graphicsAt = makeField("At (s)", "number", "0", "0");
+  const graphicsDur = makeField("For (s)", "number", "3", "3");
+  timeline.body.appendChild(graphicsText.row);
+  const graphicsRow = makeEl("div", "ez-edit-row");
+  graphicsRow.appendChild(graphicsAt.row);
+  graphicsRow.appendChild(graphicsDur.row);
+  graphicsRow.appendChild(
+    makeButton("Add overlay", "ez-edit-btn ez-edit-btn-sm", () => addGraphics("overlay")),
+  );
+  graphicsRow.appendChild(
+    makeButton("Add caption", "ez-edit-btn ez-edit-btn-sm", () => addGraphics("caption")),
+  );
+  graphicsRow.appendChild(
+    makeButton("Remove overlay", "ez-edit-btn ez-edit-btn-sm", () =>
+      removeGraphics("overlay"),
+    ),
+  );
+  graphicsRow.appendChild(
+    makeButton("Remove caption", "ez-edit-btn ez-edit-btn-sm", () =>
+      removeGraphics("caption"),
+    ),
+  );
+  timeline.body.appendChild(graphicsRow);
+  local.graphicsText = graphicsText.input;
+  local.graphicsAt = graphicsAt.input;
+  local.graphicsDur = graphicsDur.input;
+
   const overlays = makeTable("Overlays", ["Kind", "Text / Source", "Timing"]);
   local.overlaysBody = overlays.body;
   timeline.body.appendChild(overlays.wrap);
@@ -2892,6 +3469,24 @@ function mount(el) {
     ),
   );
   el.appendChild(client.section);
+
+  // Space previews and Delete cuts, but only away from a field or a button.
+  el.addEventListener("keydown", (event) => {
+    const target = /** @type {HTMLElement} */ (event.target);
+    const tag = String((target && target.tagName) || "").toUpperCase();
+    if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || tag === "BUTTON") {
+      return;
+    }
+    if (event.key === " ") {
+      event.preventDefault();
+      previewToggle();
+      return;
+    }
+    if (event.key === "Delete" || event.key === "Backspace") {
+      event.preventDefault();
+      removeSelectedClip();
+    }
+  });
 
   ui = local;
   renderAll();

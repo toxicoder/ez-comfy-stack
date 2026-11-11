@@ -329,6 +329,7 @@ filegroup(
 filegroup(
     name = "js_files",
     srcs = [
+        "js/ez_edit_panel.test.mjs",
         "js/ez_feedback.test.mjs",
         "js/ez_frontend_stub.mjs",
         "js/ez_image_mode.test.mjs",
