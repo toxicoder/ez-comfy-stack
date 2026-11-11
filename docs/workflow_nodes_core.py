@@ -346,6 +346,23 @@ def core_nodes() -> NodeSpecs:
             ],
             widgets=[],
         ),
+        "EZCutout": _n(
+            "Cutout (BiRefNet)",
+            "Matte a photo so one character or object can be turned into a 3D model.",
+            origin="ez_image",
+            lab="photos/cutout, ahead of any 3d App. A busy room behind the product teaches the TRELLIS.2 structure stage that the room is part of the object. Fail-soft: no weights, no timm/kornia/einops/transformers, or EZ_CUTOUT=0 passes the input through unchanged with a status line.",
+            sockets=[
+                _s("image", "IMAGE", "in", "Photo to matte - the original, not a crop."),
+                _s("image", "IMAGE", "out", "Subject on the chosen backdrop, ready for LoadImage in a 3d App."),
+                _s("matte", "IMAGE", "out", "Grey alpha copy so SaveImage can write the matte."),
+                _s("mask", "MASK", "out", "Subject mask for anything that composites."),
+            ],
+            widgets=[
+                _w("backdrop", index=0, typ="COMBO", desc="What fills the pixels the subject leaves.", gen="white is the lab default: a clean plate reads as one object. keep original changes nothing but the matte and mask.", choices=[("white", "Paint the vacated pixels white."), ("black", "Paint them black."), ("keep original", "Keep every pixel; only matte and mask change.")]),
+                _w("dilate", index=1, typ="INT", rng="0-32", desc="Grow the matte outward by this many pixels.", gen="2 keeps thin hair and product edges inside the cut."),
+                _w("feather", index=2, typ="INT", rng="0-32", desc="Soften the matte edge over this many pixels.", gen="2 avoids a hard sticker outline on the cut still."),
+            ],
+        ),
         "EZReinsertPeople": _n(
             "Reinsert people",
             "Paste detected people from the source photo onto a cubic rebuild.",

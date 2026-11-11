@@ -2,6 +2,8 @@
 
 from .cubic import NODE_CLASS_MAPPINGS as _CUBIC_MAPPINGS
 from .cubic import NODE_DISPLAY_NAME_MAPPINGS as _CUBIC_DISPLAY
+from .cutout import NODE_CLASS_MAPPINGS as _CUTOUT_MAPPINGS
+from .cutout import NODE_DISPLAY_NAME_MAPPINGS as _CUTOUT_DISPLAY
 from .modes import NODE_CLASS_MAPPINGS as _MODE_MAPPINGS
 from .modes import NODE_DISPLAY_NAME_MAPPINGS as _MODE_DISPLAY
 from .nodes import (
@@ -22,6 +24,7 @@ NODE_CLASS_MAPPINGS = {
     **_MODE_MAPPINGS,
     **_CUBIC_MAPPINGS,
     **_PERSON_MAPPINGS,
+    **_CUTOUT_MAPPINGS,
 }
 """Comfy class-name registry."""
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -30,6 +33,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     **_MODE_DISPLAY,
     **_CUBIC_DISPLAY,
     **_PERSON_DISPLAY,
+    **_CUTOUT_DISPLAY,
 }
 """Comfy display-name registry."""
 

@@ -1,0 +1,1938 @@
+{
+  "id": "world-elements",
+  "revision": 1,
+  "last_node_id": 30,
+  "last_link_id": 45,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Note",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        720.0,
+        360.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "## 3d/world-elements\n\nProp still -> one textured .glb, painted against a ground plate so the asset matches the surface it is going to sit on.\n\nA world in this stack is a set of instanced `.glb` assets plus a `scene.json` layout composed off-line. This graph writes one prop .glb per Run: you instance it and place the instances in that layout. This stack produces no gaussian splat and no captured point cloud - only meshes.\n\nSources: `LoadImage` prop source (structure, shape, and upsample) and `LoadImage` ground plate (the texture pass). Each is gated and unloaded on its own way into the graph, and each runs through its own `Trellis2Conditioning`.\n\nUNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack). Structure decode stays at 32.\n\nUpsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this graph runs the 1024 floor.\n\nBatch stays 1 and the mesh converts through MeshToFile3D, which keeps only batch item 0. SaveGLB writes the mesh to `output/assets/objects/_lab-world/element_NNNNN_.glb`; MeshToFile3D only converts in memory. Do not mint an Asset Bible row from this graph.\n\n`Compose scene layout` is the second half of this Queue: it writes the `scene.json` that instances the `.glb` slugs already in the Asset Bible, with their placement and one camera, under `output/scenes/`. Its `assets` box takes one slug per line, so you place the set once and refine the rows in the DCC. Blender or a host viewer assembles the scene from that document - see the Blender desk.\n\n`3d/set-dressing` is the App on the handoff: it composes the whole set at once, every slug you have printed, with no mesh printed again.\n\nDINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.\n\nOccupancy: trellis - stop Blender desk, LTX, Wan, Klein denoise. One GB10 job.\n"
+      ],
+      "title": "Operator note"
+    },
+    {
+      "id": 2,
+      "type": "CLIPVisionLoader",
+      "pos": [
+        40,
+        604
+      ],
+      "size": [
+        360.0,
+        80.0
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP_VISION",
+          "type": "CLIP_VISION",
+          "links": [
+            3,
+            7
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPVisionLoader",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "dino_v3_vit_l.safetensors"
+      ],
+      "title": "DINOv3 ViT-L"
+    },
+    {
+      "id": 3,
+      "type": "UNETLoader",
+      "pos": [
+        40,
+        756
+      ],
+      "size": [
+        360.0,
+        90.0
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            9,
+            18,
+            26,
+            35
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "trellis_2_int8_convrot.safetensors",
+        "default"
+      ],
+      "title": "TRELLIS.2 INT8"
+    },
+    {
+      "id": 4,
+      "type": "VAELoader",
+      "pos": [
+        40,
+        918
+      ],
+      "size": [
+        360.0,
+        70.0
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            14,
+            25,
+            31
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "trellis_2_shape_vae_bf16.safetensors"
+      ],
+      "title": "Shape VAE"
+    },
+    {
+      "id": 5,
+      "type": "VAELoader",
+      "pos": [
+        40,
+        1060
+      ],
+      "size": [
+        360.0,
+        70.0
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            40
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "trellis_2_texture_vae_bf16.safetensors"
+      ],
+      "title": "Texture VAE"
+    },
+    {
+      "id": 6,
+      "type": "LoadImage",
+      "pos": [
+        448,
+        604
+      ],
+      "size": [
+        320.0,
+        314.0
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            1
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "example.png",
+        "image"
+      ],
+      "title": "Prop source"
+    },
+    {
+      "id": 7,
+      "type": "EZDCCOccupancyGate",
+      "pos": [
+        448,
+        1376
+      ],
+      "size": [
+        280.0,
+        90.0
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            2
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZDCCOccupancyGate",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "trellis"
+      ],
+      "title": "Occupancy gate"
+    },
+    {
+      "id": 8,
+      "type": "EZUnloadModels",
+      "pos": [
+        1144,
+        1168
+      ],
+      "size": [
+        280.0,
+        80.0
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            4
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZUnloadModels",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [],
+      "title": "Unload models (pass IMAGE)"
+    },
+    {
+      "id": 9,
+      "type": "Trellis2Conditioning",
+      "pos": [
+        816,
+        604
+      ],
+      "size": [
+        280.0,
+        90.0
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip_vision_model",
+          "type": "CLIP_VISION",
+          "link": 3
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            10,
+            15
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            11,
+            16
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Trellis2Conditioning",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [],
+      "title": "Conditioning (prop)"
+    },
+    {
+      "id": 10,
+      "type": "LoadImage",
+      "pos": [
+        448,
+        990
+      ],
+      "size": [
+        320.0,
+        314.0
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            5
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "example.png",
+        "image"
+      ],
+      "title": "Ground plate"
+    },
+    {
+      "id": 11,
+      "type": "EZDCCOccupancyGate",
+      "pos": [
+        448,
+        1538
+      ],
+      "size": [
+        280.0,
+        90.0
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 5
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZDCCOccupancyGate",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "trellis"
+      ],
+      "title": "Occupancy gate"
+    },
+    {
+      "id": 12,
+      "type": "EZUnloadModels",
+      "pos": [
+        1144,
+        1320
+      ],
+      "size": [
+        280.0,
+        80.0
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 6
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            8
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZUnloadModels",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [],
+      "title": "Unload models (pass IMAGE)"
+    },
+    {
+      "id": 13,
+      "type": "Trellis2Conditioning",
+      "pos": [
+        816,
+        766
+      ],
+      "size": [
+        280.0,
+        90.0
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip_vision_model",
+          "type": "CLIP_VISION",
+          "link": 7
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 8
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            32
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            33
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Trellis2Conditioning",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [],
+      "title": "Conditioning (ground plate)"
+    },
+    {
+      "id": 14,
+      "type": "EmptyTrellis2LatentStructure",
+      "pos": [
+        1144,
+        604
+      ],
+      "size": [
+        280.0,
+        90.0
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            12
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EmptyTrellis2LatentStructure",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        1
+      ],
+      "title": "Empty structure x1"
+    },
+    {
+      "id": 15,
+      "type": "KSampler",
+      "pos": [
+        1144,
+        1472
+      ],
+      "size": [
+        280.0,
+        270.0
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 9
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 10
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 11
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 12
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            13
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        12,
+        7.5,
+        "euler",
+        "normal",
+        1
+      ],
+      "title": "KSampler (structure)"
+    },
+    {
+      "id": 16,
+      "type": "VaeDecodeStructureTrellis2",
+      "pos": [
+        1552,
+        604
+      ],
+      "size": [
+        280.0,
+        90.0
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 13
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 14
+        }
+      ],
+      "outputs": [
+        {
+          "name": "voxel",
+          "type": "VOXEL",
+          "links": [
+            17
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VaeDecodeStructureTrellis2",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "32"
+      ],
+      "title": "Decode structure 32"
+    },
+    {
+      "id": 17,
+      "type": "Trellis2ShapeStage",
+      "pos": [
+        1552,
+        766
+      ],
+      "size": [
+        280.0,
+        90.0
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 15
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 16
+        },
+        {
+          "name": "voxel",
+          "type": "VOXEL",
+          "link": 17
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            19,
+            22
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            20,
+            23
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            21
+          ],
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Trellis2ShapeStage",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [],
+      "title": "Shape stage"
+    },
+    {
+      "id": 18,
+      "type": "KSampler",
+      "pos": [
+        1144,
+        1814
+      ],
+      "size": [
+        280.0,
+        270.0
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 18
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 19
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 20
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 21
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            24
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        12,
+        7.5,
+        "euler",
+        "normal",
+        1
+      ],
+      "title": "KSampler (shape)"
+    },
+    {
+      "id": 19,
+      "type": "Trellis2UpsampleStage",
+      "pos": [
+        1552,
+        928
+      ],
+      "size": [
+        300.0,
+        130.0
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 22
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 23
+        },
+        {
+          "name": "shape_latent",
+          "type": "LATENT",
+          "link": 24
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 25
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            27
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            28
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            29
+          ],
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Trellis2UpsampleStage",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        1024
+      ],
+      "title": "Upsample 1024"
+    },
+    {
+      "id": 20,
+      "type": "KSampler",
+      "pos": [
+        1144,
+        2156
+      ],
+      "size": [
+        280.0,
+        270.0
+      ],
+      "flags": {},
+      "order": 19,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 26
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 27
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 28
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 29
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            30,
+            34
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        12,
+        7.5,
+        "euler",
+        "simple",
+        1
+      ],
+      "title": "KSampler (1024)"
+    },
+    {
+      "id": 21,
+      "type": "VaeDecodeShapeTrellis",
+      "pos": [
+        1552,
+        1130
+      ],
+      "size": [
+        280.0,
+        90.0
+      ],
+      "flags": {},
+      "order": 20,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 30
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 31
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mesh",
+          "type": "MESH",
+          "links": [
+            42
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "shape_subdivides",
+          "type": "SHAPE_SUBDIVIDES",
+          "links": [
+            41
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VaeDecodeShapeTrellis",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [],
+      "title": "Decode shape"
+    },
+    {
+      "id": 22,
+      "type": "Trellis2TextureStage",
+      "pos": [
+        1552,
+        1292
+      ],
+      "size": [
+        280.0,
+        90.0
+      ],
+      "flags": {},
+      "order": 21,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 32
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 33
+        },
+        {
+          "name": "shape_latent",
+          "type": "LATENT",
+          "link": 34
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            36
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            37
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            38
+          ],
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Trellis2TextureStage",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [],
+      "title": "Texture stage"
+    },
+    {
+      "id": 23,
+      "type": "KSampler",
+      "pos": [
+        1144,
+        2498
+      ],
+      "size": [
+        280.0,
+        270.0
+      ],
+      "flags": {},
+      "order": 22,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 35
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 36
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 37
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 38
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            39
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        43,
+        "fixed",
+        12,
+        1,
+        "euler",
+        "normal",
+        1
+      ],
+      "title": "KSampler (texture)"
+    },
+    {
+      "id": 24,
+      "type": "VaeDecodeTextureTrellis",
+      "pos": [
+        1552,
+        1454
+      ],
+      "size": [
+        280.0,
+        90.0
+      ],
+      "flags": {},
+      "order": 23,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 39
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 40
+        },
+        {
+          "name": "shape_subdivides",
+          "type": "SHAPE_SUBDIVIDES",
+          "link": 41
+        }
+      ],
+      "outputs": [
+        {
+          "name": "voxel_colors",
+          "type": "VOXEL",
+          "links": [
+            43
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VaeDecodeTextureTrellis",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [],
+      "title": "Decode texture"
+    },
+    {
+      "id": 25,
+      "type": "PaintMesh",
+      "pos": [
+        1552,
+        1616
+      ],
+      "size": [
+        240.0,
+        80.0
+      ],
+      "flags": {},
+      "order": 24,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mesh",
+          "type": "MESH",
+          "link": 42
+        },
+        {
+          "name": "voxel_colors",
+          "type": "VOXEL",
+          "link": 43
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mesh",
+          "type": "MESH",
+          "links": [
+            44
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PaintMesh",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [],
+      "title": "Paint mesh"
+    },
+    {
+      "id": 26,
+      "type": "MeshToFile3D",
+      "pos": [
+        1552,
+        1768
+      ],
+      "size": [
+        240.0,
+        60.0
+      ],
+      "flags": {},
+      "order": 25,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mesh",
+          "type": "MESH",
+          "link": 44
+        }
+      ],
+      "outputs": [
+        {
+          "name": "model_3d",
+          "type": "FILE_3D_GLB",
+          "links": [
+            45
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MeshToFile3D",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [],
+      "title": "To GLB bytes"
+    },
+    {
+      "id": 27,
+      "type": "SaveGLB",
+      "pos": [
+        1552,
+        1900
+      ],
+      "size": [
+        280.0,
+        80.0
+      ],
+      "flags": {},
+      "order": 26,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mesh",
+          "type": "FILE_3D_GLB",
+          "link": 45
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveGLB",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "assets/objects/_lab-world/element"
+      ],
+      "title": "Save GLB"
+    },
+    {
+      "id": 28,
+      "type": "EZSceneLayout",
+      "pos": [
+        1144,
+        766
+      ],
+      "size": [
+        360.0,
+        330.0
+      ],
+      "flags": {},
+      "order": 27,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "scene",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        },
+        {
+          "name": "summary",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZSceneLayout",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "lab-world",
+        "hero-olive-jacket\nmug-cobalt-chipped",
+        "2.1, 1.6, 3.4",
+        "0, 1.2, 0",
+        35,
+        "none",
+        "world-elements",
+        false
+      ],
+      "title": "Compose scene layout"
+    },
+    {
+      "id": 29,
+      "type": "EZQuality",
+      "pos": [
+        1176,
+        80
+      ],
+      "size": [
+        320.0,
+        82.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "quality",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZQuality"
+      },
+      "widgets_values": [
+        "lab"
+      ],
+      "title": "Quality"
+    },
+    {
+      "id": 30,
+      "type": "EZModelCheck",
+      "pos": [
+        808,
+        80
+      ],
+      "size": [
+        320.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "EZModelCheck"
+      },
+      "widgets_values": [
+        "Click Check models. Queue does not run this node."
+      ],
+      "title": "Check models"
+    }
+  ],
+  "links": [
+    [
+      1,
+      6,
+      0,
+      7,
+      0,
+      "IMAGE"
+    ],
+    [
+      2,
+      7,
+      0,
+      8,
+      0,
+      "IMAGE"
+    ],
+    [
+      3,
+      2,
+      0,
+      9,
+      0,
+      "CLIP_VISION"
+    ],
+    [
+      4,
+      8,
+      0,
+      9,
+      1,
+      "IMAGE"
+    ],
+    [
+      5,
+      10,
+      0,
+      11,
+      0,
+      "IMAGE"
+    ],
+    [
+      6,
+      11,
+      0,
+      12,
+      0,
+      "IMAGE"
+    ],
+    [
+      7,
+      2,
+      0,
+      13,
+      0,
+      "CLIP_VISION"
+    ],
+    [
+      8,
+      12,
+      0,
+      13,
+      1,
+      "IMAGE"
+    ],
+    [
+      9,
+      3,
+      0,
+      15,
+      0,
+      "MODEL"
+    ],
+    [
+      10,
+      9,
+      0,
+      15,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      11,
+      9,
+      1,
+      15,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      12,
+      14,
+      0,
+      15,
+      3,
+      "LATENT"
+    ],
+    [
+      13,
+      15,
+      0,
+      16,
+      0,
+      "LATENT"
+    ],
+    [
+      14,
+      4,
+      0,
+      16,
+      1,
+      "VAE"
+    ],
+    [
+      15,
+      9,
+      0,
+      17,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      16,
+      9,
+      1,
+      17,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      17,
+      16,
+      0,
+      17,
+      2,
+      "VOXEL"
+    ],
+    [
+      18,
+      3,
+      0,
+      18,
+      0,
+      "MODEL"
+    ],
+    [
+      19,
+      17,
+      0,
+      18,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      20,
+      17,
+      1,
+      18,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      21,
+      17,
+      2,
+      18,
+      3,
+      "LATENT"
+    ],
+    [
+      22,
+      17,
+      0,
+      19,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      23,
+      17,
+      1,
+      19,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      24,
+      18,
+      0,
+      19,
+      2,
+      "LATENT"
+    ],
+    [
+      25,
+      4,
+      0,
+      19,
+      3,
+      "VAE"
+    ],
+    [
+      26,
+      3,
+      0,
+      20,
+      0,
+      "MODEL"
+    ],
+    [
+      27,
+      19,
+      0,
+      20,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      28,
+      19,
+      1,
+      20,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      29,
+      19,
+      2,
+      20,
+      3,
+      "LATENT"
+    ],
+    [
+      30,
+      20,
+      0,
+      21,
+      0,
+      "LATENT"
+    ],
+    [
+      31,
+      4,
+      0,
+      21,
+      1,
+      "VAE"
+    ],
+    [
+      32,
+      13,
+      0,
+      22,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      33,
+      13,
+      1,
+      22,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      34,
+      20,
+      0,
+      22,
+      2,
+      "LATENT"
+    ],
+    [
+      35,
+      3,
+      0,
+      23,
+      0,
+      "MODEL"
+    ],
+    [
+      36,
+      22,
+      0,
+      23,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      37,
+      22,
+      1,
+      23,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      38,
+      22,
+      2,
+      23,
+      3,
+      "LATENT"
+    ],
+    [
+      39,
+      23,
+      0,
+      24,
+      0,
+      "LATENT"
+    ],
+    [
+      40,
+      5,
+      0,
+      24,
+      1,
+      "VAE"
+    ],
+    [
+      41,
+      21,
+      1,
+      24,
+      2,
+      "SHAPE_SUBDIVIDES"
+    ],
+    [
+      42,
+      21,
+      0,
+      25,
+      0,
+      "MESH"
+    ],
+    [
+      43,
+      24,
+      0,
+      25,
+      1,
+      "VOXEL"
+    ],
+    [
+      44,
+      25,
+      0,
+      26,
+      0,
+      "MESH"
+    ],
+    [
+      45,
+      26,
+      0,
+      27,
+      0,
+      "FILE_3D_GLB"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "NOTE",
+      "bounding": [
+        20,
+        8,
+        760,
+        476
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        788,
+        8,
+        728,
+        256
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "MODEL",
+      "bounding": [
+        20,
+        532,
+        400,
+        642
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "INPUT",
+      "bounding": [
+        428,
+        532,
+        360,
+        1140
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "PROMPT",
+      "bounding": [
+        796,
+        532,
+        320,
+        368
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 6,
+      "title": "SETTINGS",
+      "bounding": [
+        1124,
+        532,
+        400,
+        2280
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 7,
+      "title": "OUTPUT",
+      "bounding": [
+        1532,
+        532,
+        340,
+        1492
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "lab_note": "## 3d/world-elements\n\nProp still -> one textured .glb, painted against a ground plate so the asset matches the surface it is going to sit on.\n\nA world in this stack is a set of instanced `.glb` assets plus a `scene.json` layout composed off-line. This graph writes one prop .glb per Run: you instance it and place the instances in that layout. This stack produces no gaussian splat and no captured point cloud - only meshes.\n\nSources: `LoadImage` prop source (structure, shape, and upsample) and `LoadImage` ground plate (the texture pass). Each is gated and unloaded on its own way into the graph, and each runs through its own `Trellis2Conditioning`.\n\nUNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack). Structure decode stays at 32.\n\nUpsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this graph runs the 1024 floor.\n\nBatch stays 1 and the mesh converts through MeshToFile3D, which keeps only batch item 0. SaveGLB writes the mesh to `output/assets/objects/_lab-world/element_NNNNN_.glb`; MeshToFile3D only converts in memory. Do not mint an Asset Bible row from this graph.\n\n`Compose scene layout` is the second half of this Queue: it writes the `scene.json` that instances the `.glb` slugs already in the Asset Bible, with their placement and one camera, under `output/scenes/`. Its `assets` box takes one slug per line, so you place the set once and refine the rows in the DCC. Blender or a host viewer assembles the scene from that document - see the Blender desk.\n\n`3d/set-dressing` is the App on the handoff: it composes the whole set at once, every slug you have printed, with no mesh printed again.\n\nDINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.\n\nOccupancy: trellis - stop Blender desk, LTX, Wan, Klein denoise. One GB10 job.\n",
+    "lab_profile": "3d/world-elements",
+    "lab_description": "Prop still plus a ground plate to one textured TRELLIS.2 .glb for a set.",
+    "lab_trellis": {
+      "unet": "trellis_2_int8_convrot.safetensors",
+      "resolution": 1024,
+      "stages": [
+        "structure",
+        "shape",
+        "upsample",
+        "texture"
+      ],
+      "textured": true,
+      "batch_size": 1,
+      "save_prefix": "assets/objects/_lab-world/element",
+      "native_only": true
+    },
+    "lab_optional_unwired": [
+      "EZSceneLayout"
+    ],
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "3d",
+      "occupancy": "trellis",
+      "enhance_off_identity": true,
+      "handoff": [
+        "3d/set-dressing"
+      ]
+    },
+    "linearData": {
+      "inputs": [
+        [
+          6,
+          "image",
+          {
+            "label": "Prop source",
+            "description": "Still already in input/ (the container inputs folder). The prop whose geometry this Run prints."
+          }
+        ],
+        [
+          10,
+          "image",
+          {
+            "label": "Ground plate",
+            "description": "Still already in input/. The surface the prop will sit on: the texture pass is conditioned on it so the paint matches the real ground."
+          }
+        ],
+        [
+          29,
+          "quality",
+          {
+            "label": "Quality",
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
+          }
+        ],
+        [
+          19,
+          "target_resolution",
+          {
+            "label": "Upsample resolution",
+            "description": "Structure resolution the refined shape stage renders at. ComfyUI accepts only 1024-2048 in steps of 128; 1024 is the floor and the lab default."
+          }
+        ],
+        [
+          23,
+          "steps",
+          {
+            "label": "Texture pass",
+            "description": "Steps on the texture sampler. 12 is the authored pass; 4-6 is a paint draft before you commit the full pass. The mesh geometry does not change."
+          }
+        ],
+        [
+          27,
+          "filename_prefix",
+          {
+            "label": "Save prefix",
+            "description": "Output stem under the ComfyUI output folder. Keep the assets/objects/_lab-... convention so the mesh lands in the one tree the catalog and the Blender exporter walk."
+          }
+        ],
+        [
+          18,
+          "steps",
+          {
+            "label": "Shape steps",
+            "description": "Steps on the structure-refinement sampler. A proxy reads fine at 8; 12 is the authored pass for a deliverable."
+          }
+        ],
+        [
+          28,
+          "assets",
+          {
+            "label": "Scene assets",
+            "description": "One Asset Bible slug per line. The layout document instances these slugs; an unknown slug leaves the file unwritten and the summary line says why."
+          }
+        ],
+        [
+          28,
+          "camera_pos",
+          {
+            "label": "Camera position",
+            "description": "\"x, y, z\" in metres. Blank falls back to the camera default in schemas/scene.json."
+          }
+        ],
+        [
+          28,
+          "hdri",
+          {
+            "label": "HDRI",
+            "description": "polyhaven:<name> or none. The document records the lighting reference the DCC loads; none keeps the viewer's default."
+          }
+        ]
+      ],
+      "outputs": [
+        27,
+        28
+      ]
+    },
+    "linearMode": true,
+    "lab_quality": {
+      "default": "lab"
+    },
+    "lab_rel": "3d/world-elements",
+    "workflowRendererVersion": "Vue-corrected"
+  },
+  "version": 0.4
+}

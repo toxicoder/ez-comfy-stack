@@ -46,6 +46,9 @@ SKIP_SAMPLE_PREFIXES = (
     # TRELLIS graphs condition on CLIP vision over an image; none carries a
     # sample-prompt widget, so a catalog would be dead weight on every one.
     "3d/",
+    # The cutout App takes a photo in and prints a matte out: no CLIP, no text
+    # encoder, no prompt widget anywhere in the graph.
+    "photos/cutout",
     "labs/opt-in/longcat",
     "labs/assist/cinema-rack",
     "labs/assist/audio-rack",

@@ -1657,7 +1657,51 @@
         ],
         [
           2,
-          "shot_id"
+          "slug",
+          {
+            "label": "Shot pack",
+            "description": "Which DCC shot pack the guide still comes out of. Set it with Shot id below, then check the preview before you Queue."
+          }
+        ],
+        [
+          2,
+          "shot_id",
+          {
+            "label": "Shot id",
+            "description": "Shot whose hero object becomes the prop. The guide still of this shot is what TRELLIS.2 conditions on."
+          }
+        ],
+        [
+          2,
+          "layer",
+          {
+            "label": "Guide layer",
+            "description": "Which guide layer of the shot becomes the prop. The preview node draws this same layer before the queue spends GPU."
+          }
+        ],
+        [
+          16,
+          "target_resolution",
+          {
+            "label": "Upsample resolution",
+            "description": "Structure resolution the refined shape stage renders at. ComfyUI accepts only 1024-2048 in steps of 128; 1024 is the floor and the lab default."
+          }
+        ],
+        [
+          20,
+          "steps",
+          {
+            "label": "Texture pass",
+            "description": "Steps on the texture sampler. 12 is the authored pass; 4-6 is a paint draft before you commit the full pass. The mesh geometry does not change."
+          }
+        ],
+        [
+          24,
+          "filename_prefix",
+          {
+            "label": "Save prefix",
+            "description": "Output stem under the ComfyUI output folder. Keep the assets/objects/_lab-... convention so the mesh lands in the one tree the catalog and the Blender exporter walk."
+          }
         ]
       ],
       "outputs": [

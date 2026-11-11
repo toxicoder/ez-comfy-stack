@@ -1,0 +1,1608 @@
+{
+  "id": "character-batch",
+  "revision": 1,
+  "last_node_id": 24,
+  "last_link_id": 40,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Note",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        720.0,
+        360.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "## 3d/character-batch\n\nKlein still -> four textured candidate characters in one queue, so a cast call costs one occupancy session instead of four.\n\nSource: `LoadImage` with a Klein still (`ez_still_*.png` or a clay plate). `EmptyTrellis2LatentStructure` batch_size is 4 and the batch flows through every stage, so SaveGLB writes one .glb per candidate. SaveGLB takes the MESH directly here: MeshToFile3D keeps only batch item 0, which would silently drop 3 of the 4.\n\nUNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack). Structure decode stays at 32.\n\nUpsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this graph runs the 1024 floor.\n\nSaveGLB writes four files to `output/assets/objects/_lab-characters/character_NNNNN_.glb`. Do not mint an Asset Bible row from this graph.\n\nDINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.\n\nOccupancy: trellis - stop Blender desk, LTX, Wan, Klein denoise. One GB10 job.\n"
+      ],
+      "title": "Operator note"
+    },
+    {
+      "id": 2,
+      "type": "LoadImage",
+      "pos": [
+        448,
+        604
+      ],
+      "size": [
+        320.0,
+        314.0
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            1
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "example.png",
+        "image"
+      ],
+      "title": "Character sheet"
+    },
+    {
+      "id": 3,
+      "type": "EZDCCOccupancyGate",
+      "pos": [
+        448,
+        990
+      ],
+      "size": [
+        280.0,
+        90.0
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            2
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZDCCOccupancyGate",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "trellis"
+      ],
+      "title": "Occupancy gate"
+    },
+    {
+      "id": 4,
+      "type": "EZUnloadModels",
+      "pos": [
+        1144,
+        766
+      ],
+      "size": [
+        280.0,
+        80.0
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            4
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZUnloadModels",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [],
+      "title": "Unload models (pass IMAGE)"
+    },
+    {
+      "id": 5,
+      "type": "CLIPVisionLoader",
+      "pos": [
+        40,
+        604
+      ],
+      "size": [
+        360.0,
+        80.0
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP_VISION",
+          "type": "CLIP_VISION",
+          "links": [
+            3
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPVisionLoader",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "dino_v3_vit_l.safetensors"
+      ],
+      "title": "DINOv3 ViT-L"
+    },
+    {
+      "id": 6,
+      "type": "UNETLoader",
+      "pos": [
+        40,
+        756
+      ],
+      "size": [
+        360.0,
+        90.0
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            5,
+            14,
+            22,
+            31
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "trellis_2_int8_convrot.safetensors",
+        "default"
+      ],
+      "title": "TRELLIS.2 INT8"
+    },
+    {
+      "id": 7,
+      "type": "VAELoader",
+      "pos": [
+        40,
+        918
+      ],
+      "size": [
+        360.0,
+        70.0
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            10,
+            21,
+            27
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "trellis_2_shape_vae_bf16.safetensors"
+      ],
+      "title": "Shape VAE"
+    },
+    {
+      "id": 8,
+      "type": "VAELoader",
+      "pos": [
+        40,
+        1060
+      ],
+      "size": [
+        360.0,
+        70.0
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            36
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "trellis_2_texture_vae_bf16.safetensors"
+      ],
+      "title": "Texture VAE"
+    },
+    {
+      "id": 9,
+      "type": "Trellis2Conditioning",
+      "pos": [
+        816,
+        604
+      ],
+      "size": [
+        280.0,
+        90.0
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip_vision_model",
+          "type": "CLIP_VISION",
+          "link": 3
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            6,
+            11
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            7,
+            12
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Trellis2Conditioning",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [],
+      "title": "Trellis2 conditioning"
+    },
+    {
+      "id": 10,
+      "type": "EmptyTrellis2LatentStructure",
+      "pos": [
+        1144,
+        604
+      ],
+      "size": [
+        280.0,
+        90.0
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            8
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EmptyTrellis2LatentStructure",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        4
+      ],
+      "title": "Empty structure x4"
+    },
+    {
+      "id": 11,
+      "type": "KSampler",
+      "pos": [
+        1144,
+        918
+      ],
+      "size": [
+        280.0,
+        270.0
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 5
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 6
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 7
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 8
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            9
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        12,
+        7.5,
+        "euler",
+        "normal",
+        1
+      ],
+      "title": "KSampler (structure)"
+    },
+    {
+      "id": 12,
+      "type": "VaeDecodeStructureTrellis2",
+      "pos": [
+        1472,
+        604
+      ],
+      "size": [
+        280.0,
+        90.0
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 9
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "voxel",
+          "type": "VOXEL",
+          "links": [
+            13
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VaeDecodeStructureTrellis2",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "32"
+      ],
+      "title": "Decode structure 32"
+    },
+    {
+      "id": 13,
+      "type": "Trellis2ShapeStage",
+      "pos": [
+        1472,
+        766
+      ],
+      "size": [
+        280.0,
+        90.0
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 11
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 12
+        },
+        {
+          "name": "voxel",
+          "type": "VOXEL",
+          "link": 13
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            15,
+            18
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            16,
+            19
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            17
+          ],
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Trellis2ShapeStage",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [],
+      "title": "Shape stage"
+    },
+    {
+      "id": 14,
+      "type": "KSampler",
+      "pos": [
+        1144,
+        1260
+      ],
+      "size": [
+        280.0,
+        270.0
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 14
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 15
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 16
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 17
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            20
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        12,
+        7.5,
+        "euler",
+        "normal",
+        1
+      ],
+      "title": "KSampler (shape)"
+    },
+    {
+      "id": 15,
+      "type": "Trellis2UpsampleStage",
+      "pos": [
+        1472,
+        928
+      ],
+      "size": [
+        300.0,
+        130.0
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 18
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 19
+        },
+        {
+          "name": "shape_latent",
+          "type": "LATENT",
+          "link": 20
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 21
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            23,
+            28
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            24,
+            29
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            25
+          ],
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Trellis2UpsampleStage",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        1024
+      ],
+      "title": "Upsample 1024"
+    },
+    {
+      "id": 16,
+      "type": "KSampler",
+      "pos": [
+        1144,
+        1602
+      ],
+      "size": [
+        280.0,
+        270.0
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 22
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 23
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 24
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 25
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            26,
+            30
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        12,
+        7.5,
+        "euler",
+        "simple",
+        1
+      ],
+      "title": "KSampler (1024)"
+    },
+    {
+      "id": 17,
+      "type": "VaeDecodeShapeTrellis",
+      "pos": [
+        1472,
+        1130
+      ],
+      "size": [
+        280.0,
+        90.0
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 26
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 27
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mesh",
+          "type": "MESH",
+          "links": [
+            38
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "shape_subdivides",
+          "type": "SHAPE_SUBDIVIDES",
+          "links": [
+            37
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VaeDecodeShapeTrellis",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [],
+      "title": "Decode shape"
+    },
+    {
+      "id": 18,
+      "type": "Trellis2TextureStage",
+      "pos": [
+        1472,
+        1292
+      ],
+      "size": [
+        280.0,
+        90.0
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 28
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 29
+        },
+        {
+          "name": "shape_latent",
+          "type": "LATENT",
+          "link": 30
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            32
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            33
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            34
+          ],
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Trellis2TextureStage",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [],
+      "title": "Texture stage"
+    },
+    {
+      "id": 19,
+      "type": "KSampler",
+      "pos": [
+        1144,
+        1944
+      ],
+      "size": [
+        280.0,
+        270.0
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 31
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 32
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 33
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 34
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            35
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        43,
+        "fixed",
+        12,
+        1,
+        "euler",
+        "normal",
+        1
+      ],
+      "title": "KSampler (texture)"
+    },
+    {
+      "id": 20,
+      "type": "VaeDecodeTextureTrellis",
+      "pos": [
+        1472,
+        1454
+      ],
+      "size": [
+        280.0,
+        90.0
+      ],
+      "flags": {},
+      "order": 19,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 35
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 36
+        },
+        {
+          "name": "shape_subdivides",
+          "type": "SHAPE_SUBDIVIDES",
+          "link": 37
+        }
+      ],
+      "outputs": [
+        {
+          "name": "voxel_colors",
+          "type": "VOXEL",
+          "links": [
+            39
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VaeDecodeTextureTrellis",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [],
+      "title": "Decode texture"
+    },
+    {
+      "id": 21,
+      "type": "PaintMesh",
+      "pos": [
+        1472,
+        1616
+      ],
+      "size": [
+        240.0,
+        80.0
+      ],
+      "flags": {},
+      "order": 20,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mesh",
+          "type": "MESH",
+          "link": 38
+        },
+        {
+          "name": "voxel_colors",
+          "type": "VOXEL",
+          "link": 39
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mesh",
+          "type": "MESH",
+          "links": [
+            40
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PaintMesh",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [],
+      "title": "Paint mesh"
+    },
+    {
+      "id": 22,
+      "type": "SaveGLB",
+      "pos": [
+        1472,
+        1768
+      ],
+      "size": [
+        280.0,
+        80.0
+      ],
+      "flags": {},
+      "order": 21,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mesh",
+          "type": "MESH",
+          "link": 40
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveGLB",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "assets/objects/_lab-characters/character"
+      ],
+      "title": "Save GLB"
+    },
+    {
+      "id": 23,
+      "type": "EZQuality",
+      "pos": [
+        1176,
+        80
+      ],
+      "size": [
+        320.0,
+        82.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "quality",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZQuality"
+      },
+      "widgets_values": [
+        "lab"
+      ],
+      "title": "Quality"
+    },
+    {
+      "id": 24,
+      "type": "EZModelCheck",
+      "pos": [
+        808,
+        80
+      ],
+      "size": [
+        320.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "EZModelCheck"
+      },
+      "widgets_values": [
+        "Click Check models. Queue does not run this node."
+      ],
+      "title": "Check models"
+    }
+  ],
+  "links": [
+    [
+      1,
+      2,
+      0,
+      3,
+      0,
+      "IMAGE"
+    ],
+    [
+      2,
+      3,
+      0,
+      4,
+      0,
+      "IMAGE"
+    ],
+    [
+      3,
+      5,
+      0,
+      9,
+      0,
+      "CLIP_VISION"
+    ],
+    [
+      4,
+      4,
+      0,
+      9,
+      1,
+      "IMAGE"
+    ],
+    [
+      5,
+      6,
+      0,
+      11,
+      0,
+      "MODEL"
+    ],
+    [
+      6,
+      9,
+      0,
+      11,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      7,
+      9,
+      1,
+      11,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      8,
+      10,
+      0,
+      11,
+      3,
+      "LATENT"
+    ],
+    [
+      9,
+      11,
+      0,
+      12,
+      0,
+      "LATENT"
+    ],
+    [
+      10,
+      7,
+      0,
+      12,
+      1,
+      "VAE"
+    ],
+    [
+      11,
+      9,
+      0,
+      13,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      12,
+      9,
+      1,
+      13,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      13,
+      12,
+      0,
+      13,
+      2,
+      "VOXEL"
+    ],
+    [
+      14,
+      6,
+      0,
+      14,
+      0,
+      "MODEL"
+    ],
+    [
+      15,
+      13,
+      0,
+      14,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      16,
+      13,
+      1,
+      14,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      17,
+      13,
+      2,
+      14,
+      3,
+      "LATENT"
+    ],
+    [
+      18,
+      13,
+      0,
+      15,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      19,
+      13,
+      1,
+      15,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      20,
+      14,
+      0,
+      15,
+      2,
+      "LATENT"
+    ],
+    [
+      21,
+      7,
+      0,
+      15,
+      3,
+      "VAE"
+    ],
+    [
+      22,
+      6,
+      0,
+      16,
+      0,
+      "MODEL"
+    ],
+    [
+      23,
+      15,
+      0,
+      16,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      24,
+      15,
+      1,
+      16,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      25,
+      15,
+      2,
+      16,
+      3,
+      "LATENT"
+    ],
+    [
+      26,
+      16,
+      0,
+      17,
+      0,
+      "LATENT"
+    ],
+    [
+      27,
+      7,
+      0,
+      17,
+      1,
+      "VAE"
+    ],
+    [
+      28,
+      15,
+      0,
+      18,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      29,
+      15,
+      1,
+      18,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      30,
+      16,
+      0,
+      18,
+      2,
+      "LATENT"
+    ],
+    [
+      31,
+      6,
+      0,
+      19,
+      0,
+      "MODEL"
+    ],
+    [
+      32,
+      18,
+      0,
+      19,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      33,
+      18,
+      1,
+      19,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      34,
+      18,
+      2,
+      19,
+      3,
+      "LATENT"
+    ],
+    [
+      35,
+      19,
+      0,
+      20,
+      0,
+      "LATENT"
+    ],
+    [
+      36,
+      8,
+      0,
+      20,
+      1,
+      "VAE"
+    ],
+    [
+      37,
+      17,
+      1,
+      20,
+      2,
+      "SHAPE_SUBDIVIDES"
+    ],
+    [
+      38,
+      17,
+      0,
+      21,
+      0,
+      "MESH"
+    ],
+    [
+      39,
+      20,
+      0,
+      21,
+      1,
+      "VOXEL"
+    ],
+    [
+      40,
+      21,
+      0,
+      22,
+      0,
+      "MESH"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "NOTE",
+      "bounding": [
+        20,
+        8,
+        760,
+        476
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        788,
+        8,
+        728,
+        256
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "MODEL",
+      "bounding": [
+        20,
+        532,
+        400,
+        642
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "INPUT",
+      "bounding": [
+        428,
+        532,
+        360,
+        592
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "PROMPT",
+      "bounding": [
+        796,
+        532,
+        320,
+        206
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 6,
+      "title": "SETTINGS",
+      "bounding": [
+        1124,
+        532,
+        320,
+        1726
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 7,
+      "title": "OUTPUT",
+      "bounding": [
+        1452,
+        532,
+        340,
+        1360
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "lab_note": "## 3d/character-batch\n\nKlein still -> four textured candidate characters in one queue, so a cast call costs one occupancy session instead of four.\n\nSource: `LoadImage` with a Klein still (`ez_still_*.png` or a clay plate). `EmptyTrellis2LatentStructure` batch_size is 4 and the batch flows through every stage, so SaveGLB writes one .glb per candidate. SaveGLB takes the MESH directly here: MeshToFile3D keeps only batch item 0, which would silently drop 3 of the 4.\n\nUNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack). Structure decode stays at 32.\n\nUpsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this graph runs the 1024 floor.\n\nSaveGLB writes four files to `output/assets/objects/_lab-characters/character_NNNNN_.glb`. Do not mint an Asset Bible row from this graph.\n\nDINOv3 is Meta's custom commercial-friendly license - not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.\n\nOccupancy: trellis - stop Blender desk, LTX, Wan, Klein denoise. One GB10 job.\n",
+    "lab_profile": "3d/character-batch",
+    "lab_description": "Klein still to four textured TRELLIS.2 character candidates in one queue.",
+    "lab_trellis": {
+      "unet": "trellis_2_int8_convrot.safetensors",
+      "resolution": 1024,
+      "stages": [
+        "structure",
+        "shape",
+        "upsample",
+        "texture"
+      ],
+      "textured": true,
+      "batch_size": 4,
+      "save_prefix": "assets/objects/_lab-characters/character",
+      "native_only": true
+    },
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "3d",
+      "occupancy": "trellis",
+      "enhance_off_identity": true,
+      "handoff": []
+    },
+    "linearData": {
+      "inputs": [
+        [
+          2,
+          "image",
+          {
+            "label": "Character sheet",
+            "description": "Still already in input/ (the container inputs folder). Every candidate is printed from this one plate, so the four differ by seed, not by source."
+          }
+        ],
+        [
+          23,
+          "quality",
+          {
+            "label": "Quality",
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
+          }
+        ],
+        [
+          10,
+          "batch_size",
+          {
+            "label": "Batch",
+            "description": "Meshes per Queue. SaveGLB writes one .glb per batch item, so the whole set comes off one occupancy session."
+          }
+        ],
+        [
+          15,
+          "target_resolution",
+          {
+            "label": "Upsample resolution",
+            "description": "Structure resolution the refined shape stage renders at. ComfyUI accepts only 1024-2048 in steps of 128; 1024 is the floor and the lab default."
+          }
+        ],
+        [
+          19,
+          "steps",
+          {
+            "label": "Texture pass",
+            "description": "Steps on the texture sampler. 12 is the authored pass; 4-6 is a paint draft before you commit the full pass. The mesh geometry does not change."
+          }
+        ],
+        [
+          22,
+          "filename_prefix",
+          {
+            "label": "Save prefix",
+            "description": "Output stem under the ComfyUI output folder. Keep the assets/objects/_lab-... convention so the mesh lands in the one tree the catalog and the Blender exporter walk."
+          }
+        ]
+      ],
+      "outputs": [
+        22
+      ]
+    },
+    "linearMode": true,
+    "lab_quality": {
+      "default": "lab"
+    },
+    "lab_rel": "3d/character-batch",
+    "workflowRendererVersion": "Vue-corrected"
+  },
+  "version": 0.4
+}

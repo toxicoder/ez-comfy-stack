@@ -121,7 +121,8 @@ anything you publish for money. Read [Model licenses](licenses.md).
 | music `all` | `turbo` + `xl` | sum | `bazelisk run //:manage -- download-music --tier all` |
 | `trellis2` | Comfy-Org TRELLIS.2 INT8 + DINOv3. No nvdiffrast. `occupancy enter trellis` first | ~12 GB | `bazelisk run //:manage -- download-3d run --tier trellis2` |
 | `da3-base` | DA3-BASE Apache depth. DA3-LARGE is refused | ~1 GB | `bazelisk run //:manage -- download-3d run --tier da3-base` |
-| 3D `all` | `trellis2` + `da3-base` | sum | `bazelisk run //:manage -- download-3d run --tier all` |
+| `birefnet` | BiRefNet matte MIT, the weights `EZCutout` loads for image-to-3D input prep. Ships `config.json`, `birefnet.py`, and `BiRefNet_config.py` with the weights, because the loader reads the class by remote code | ~2 GB | `bazelisk run //:manage -- download-3d run --tier birefnet` |
+| 3D `all` | `trellis2` + `da3-base` + `birefnet` | sum | `bazelisk run //:manage -- download-3d run --tier all` |
 | `video` | LongCat-Video (MIT). No NCCL in this stack | opt-in | `bazelisk run //:manage -- download-longcat run --tier video` |
 | `avatar` | LongCat-Video-Avatar. No NCCL | opt-in | `bazelisk run //:manage -- download-longcat run --tier avatar` |
 | LongCat `all` | `video` + `avatar` | opt-in | `bazelisk run //:manage -- download-longcat run --tier all` |

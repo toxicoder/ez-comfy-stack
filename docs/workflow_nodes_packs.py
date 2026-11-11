@@ -292,6 +292,26 @@ def pack_nodes() -> NodeSpecs:
             _w("required_mode", index=0, typ="COMBO", desc="Heavy GPU mode that must already be entered.", gen="klein / wan / ltx / trellis. Pick the family you are about to Queue.", choices=[("klein", "Klein 4B stills."), ("trellis", "TRELLIS.2."), ("wan", "Wan 5B."), ("ltx", "LTX-2.5.")]),
         ],
     )
+    nodes["EZSceneLayout"] = _n(
+        "Compose 3D scene layout",
+        "Write a validated scene.json shopping list of instanced .glb slugs. No mesh bytes, no splat.",
+        origin="ez_dcc",
+        lab="Second half of 3d/world-elements: one Queue prints the mesh and this document. Writes output/scenes/<filename>_NNNNN.json and never MODELS_DIR. Bad input returns a summary line instead of raising.",
+        sockets=[
+            _s("scene", "STRING", "out", "Path of the scene document; empty when the write was refused."),
+            _s("summary", "STRING", "out", "One status line: how many instances landed, or why not."),
+        ],
+        widgets=[
+            _w("scene_id", index=0, desc="Lowercase-hyphenated scene id.", gen="Name the set you are dressing, e.g. lab-world. Anything else refuses the write."),
+            _w("assets", index=1, typ="STRING", rng="multiline", desc="One Asset Bible slug per line, optionally slug:relative/path.glb.", gen="Only slugs the Asset Bible already mints; an unknown slug leaves the file unwritten."),
+            _w("camera_pos", index=2, desc="Camera position as \"x, y, z\" in metres.", gen="Blank falls back to the camera default in schemas/scene.json."),
+            _w("camera_look", index=3, desc="Camera look-at as \"x, y, z\".", gen="Blank falls back to the schema default."),
+            _w("camera_fov", index=4, typ="INT", rng="10-120", desc="Vertical field of view in degrees.", gen="35 is the authored default."),
+            _w("hdri", index=5, desc="Lighting reference the DCC loads.", gen="polyhaven:<name> or none."),
+            _w("filename", index=6, desc="Scene basename under output/scenes/.", gen="The file lands as <filename>_NNNNN.json; the suffix keeps a re-Queue from clobbering."),
+            _w("overwrite", index=7, typ="BOOLEAN", rng="false", desc="Replace an existing scene file.", gen="Off refuses to touch a file that already exists."),
+        ],
+    )
     nodes["EZDCCPreviewGuideLayer"] = _n(
         "Preview guide layer",
         "Identity IMAGE pass-through so a guide layer can sit on the canvas.",

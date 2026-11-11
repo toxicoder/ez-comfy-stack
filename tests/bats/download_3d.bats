@@ -1,6 +1,7 @@
 #!/usr/bin/env bats
 #
-# Cover scripts/utilities/download-3d.sh (TRELLIS.2 native + DA3-BASE).
+# Cover scripts/utilities/download-3d.sh (TRELLIS.2 native + DA3-BASE + the
+# BiRefNet matte pack that feeds EZCutout).
 
 load 'test_helper'
 
@@ -21,6 +22,7 @@ teardown() {
   run bash "${D3}" --help
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"trellis2"* ]]
+  [[ "${output}" == *"birefnet"* ]]
   [[ "${output}" == *"nvdiffrast"* ]]
   [[ "${output}" == *"DA3-LARGE"* ]]
   run bash -c "MODELS_DIR=\"${MODELS_DIR}\" bash \"${D3}\" status --tier trellis2 --json"
@@ -89,4 +91,38 @@ teardown() {
   [ "${status}" -eq 0 ]
   run tier_files_ready trellis2
   [ "${status}" -eq 0 ]
+}
+
+@test "download-3d birefnet tier stages the matte pack in place" {
+  run tier_repo birefnet
+  [[ "${output}" == *"ZhengPeng7/BiRefNet"* ]]
+  run tier_include_patterns birefnet
+  [[ "${output}" == *"model.safetensors"* ]]
+  [[ "${output}" == *"config.json"* ]]
+  [[ "${output}" == *"birefnet.py"* ]]
+  [[ "${output}" == *"BiRefNet_config.py"* ]]
+  run tier_dir birefnet
+  [[ "${output}" == *"ZhengPeng7__BiRefNet_birefnet"* ]]
+  TIER=all
+  run tiers_to_process
+  [[ "${output}" == *"birefnet"* ]]
+  run refuse_banned_3d_tier birefnet
+  [ "${status}" -eq 0 ]
+
+  run bash -c "MODELS_DIR=\"${MODELS_DIR}\" LAB_MOCK_HF_DOWNLOAD=1 bash \"${D3}\" run --tier birefnet"
+  [ "${status}" -eq 0 ]
+  local pack="${MODELS_DIR}/ZhengPeng7__BiRefNet_birefnet"
+  [[ -s ${pack}/model.safetensors ]]
+  [[ -s ${pack}/config.json ]]
+  [[ -s ${pack}/birefnet.py ]]
+  [[ -s ${pack}/BiRefNet_config.py ]]
+  run tier_files_ready birefnet
+  [ "${status}" -eq 0 ]
+  run bash -c "MODELS_DIR=\"${MODELS_DIR}\" bash \"${D3}\" status --tier birefnet --json"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *'"tier":"birefnet"'* ]]
+  [[ "${output}" == *'"ready":true'* ]]
+  # The pack stays whole: EZCutout needs config.json's auto_map next to the
+  # weights, so nothing may be linked out into a Comfy folder on its own.
+  [[ ! -e ${MODELS_DIR}/comfy/3d/model.safetensors ]]
 }

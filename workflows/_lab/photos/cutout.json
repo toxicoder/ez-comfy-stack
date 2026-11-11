@@ -1,0 +1,507 @@
+{
+  "id": "cutout",
+  "revision": 1,
+  "last_node_id": 8,
+  "last_link_id": 8,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Note",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        720.0,
+        360.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "## photos/cutout\n\nBackground removal for image-to-3D. Load a photo of **one** character or object and\nthis graph cuts it out of its backdrop, so the mesh printer downstream is handed a\nclean subject instead of a subject welded to a living room.\n\nEZCutout (first-party, `custom_nodes/ez_image/cutout.py`) runs BiRefNet with its weight\nloaded inside the node and fails soft: no weight, a missing dependency, or EZ_CUTOUT=0\npasses the photo through untouched and says so on the node. Queue writes\n`ez_cutout_NNNNN_.png` (the subject over the Backdrop you picked, white by default) and\n`ez_cutout_matte_NNNNN_.png` (the grey matte that produced it), so a matte you distrust\ncan be repainted by hand and fed back in. The node's MASK slot is there when you want to\nsend the raw alpha somewhere else.\n\nBackdrop is white, black, or keep original. Dilate grows the keep edge outward and\nfeather softens it; the node clamps both to 0-32. This graph ships dilate 6 and feather\n4 so hair, fur, and fur trim survive the cut - drop toward 2 for a hard-edged product.\n\nThere is no UNETLoader, CLIPLoader, or VAELoader in this graph on purpose. The node owns\nits own weight, this is a light pre-pass, and a loader here would make it a two-stack\nApp.\n\nOne subject per Queue. A busy scene, a mirror, a window full of glass, or a subject the\nsame tone as its backdrop is where a matte goes wrong; crop or reshoot first.\n\nHandoff: `photos/multi-view` for the other cameras on this same subject, then\n`3d/hero-from-photos` for the mesh.\n\nOccupancy: none - stop nothing GPU. One GB10 job.\n"
+      ],
+      "title": "Operator note"
+    },
+    {
+      "id": 2,
+      "type": "LoadImage",
+      "pos": [
+        40,
+        604
+      ],
+      "size": [
+        320.0,
+        314.0
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            1
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "example.png",
+        "image"
+      ],
+      "title": "Source photo"
+    },
+    {
+      "id": 3,
+      "type": "EZCutout",
+      "pos": [
+        408,
+        604
+      ],
+      "size": [
+        300.0,
+        150.0
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 1
+        },
+        {
+          "name": "backdrop",
+          "type": "COMBO",
+          "link": null,
+          "widget": {
+            "name": "backdrop"
+          }
+        },
+        {
+          "name": "dilate",
+          "type": "INT",
+          "link": null,
+          "widget": {
+            "name": "dilate"
+          }
+        },
+        {
+          "name": "feather",
+          "type": "INT",
+          "link": null,
+          "widget": {
+            "name": "feather"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            4
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "matte",
+          "type": "IMAGE",
+          "links": [
+            6
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": [],
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZCutout",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "white",
+        6,
+        4
+      ],
+      "title": "BiRefNet cutout"
+    },
+    {
+      "id": 4,
+      "type": "SaveImage",
+      "pos": [
+        756,
+        756
+      ],
+      "size": [
+        280.0,
+        270.0
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 5
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "ez_cutout"
+      ],
+      "title": "Save cutout"
+    },
+    {
+      "id": 5,
+      "type": "SaveImage",
+      "pos": [
+        756,
+        1250
+      ],
+      "size": [
+        280.0,
+        270.0
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 7
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "ez_cutout_matte"
+      ],
+      "title": "Save matte"
+    },
+    {
+      "id": 6,
+      "type": "EZImageUpscale",
+      "pos": [
+        756,
+        604
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            5
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [
+            8
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
+    },
+    {
+      "id": 7,
+      "type": "EZImageUpscale",
+      "pos": [
+        756,
+        1098
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 6
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "link": 8,
+          "widget": {
+            "name": "upscale"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            7
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
+    },
+    {
+      "id": 8,
+      "type": "EZModelCheck",
+      "pos": [
+        808,
+        80
+      ],
+      "size": [
+        320.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "EZModelCheck"
+      },
+      "widgets_values": [
+        "Click Check models. Queue does not run this node."
+      ],
+      "title": "Check models"
+    }
+  ],
+  "links": [
+    [
+      1,
+      2,
+      0,
+      3,
+      0,
+      "IMAGE"
+    ],
+    [
+      4,
+      3,
+      0,
+      6,
+      0,
+      "IMAGE"
+    ],
+    [
+      5,
+      6,
+      0,
+      4,
+      0,
+      "IMAGE"
+    ],
+    [
+      6,
+      3,
+      1,
+      7,
+      0,
+      "IMAGE"
+    ],
+    [
+      7,
+      7,
+      0,
+      5,
+      0,
+      "IMAGE"
+    ],
+    [
+      8,
+      6,
+      1,
+      7,
+      1,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "NOTE",
+      "bounding": [
+        20,
+        8,
+        760,
+        476
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        788,
+        8,
+        360,
+        256
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "INPUT",
+      "bounding": [
+        20,
+        532,
+        360,
+        430
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "SETTINGS",
+      "bounding": [
+        388,
+        532,
+        340,
+        266
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "OUTPUT",
+      "bounding": [
+        736,
+        532,
+        320,
+        1032
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "lab_note": "## photos/cutout\n\nBackground removal for image-to-3D. Load a photo of **one** character or object and\nthis graph cuts it out of its backdrop, so the mesh printer downstream is handed a\nclean subject instead of a subject welded to a living room.\n\nEZCutout (first-party, `custom_nodes/ez_image/cutout.py`) runs BiRefNet with its weight\nloaded inside the node and fails soft: no weight, a missing dependency, or EZ_CUTOUT=0\npasses the photo through untouched and says so on the node. Queue writes\n`ez_cutout_NNNNN_.png` (the subject over the Backdrop you picked, white by default) and\n`ez_cutout_matte_NNNNN_.png` (the grey matte that produced it), so a matte you distrust\ncan be repainted by hand and fed back in. The node's MASK slot is there when you want to\nsend the raw alpha somewhere else.\n\nBackdrop is white, black, or keep original. Dilate grows the keep edge outward and\nfeather softens it; the node clamps both to 0-32. This graph ships dilate 6 and feather\n4 so hair, fur, and fur trim survive the cut - drop toward 2 for a hard-edged product.\n\nThere is no UNETLoader, CLIPLoader, or VAELoader in this graph on purpose. The node owns\nits own weight, this is a light pre-pass, and a loader here would make it a two-stack\nApp.\n\nOne subject per Queue. A busy scene, a mirror, a window full of glass, or a subject the\nsame tone as its backdrop is where a matte goes wrong; crop or reshoot first.\n\nHandoff: `photos/multi-view` for the other cameras on this same subject, then\n`3d/hero-from-photos` for the mesh.\n\nOccupancy: none - stop nothing GPU. One GB10 job.\n",
+    "lab_profile": "photos/cutout",
+    "lab_description": "Cut one character or object out of its backdrop for image-to-3D. EZCutout writes the cut still and the grey matte. No model stack.",
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "photos",
+      "occupancy": "none",
+      "enhance_off_identity": false,
+      "handoff": [
+        "photos/multi-view",
+        "3d/hero-from-photos"
+      ]
+    },
+    "linearData": {
+      "inputs": [
+        [
+          2,
+          "image"
+        ],
+        [
+          3,
+          "backdrop"
+        ],
+        [
+          3,
+          "dilate"
+        ],
+        [
+          3,
+          "feather"
+        ],
+        [
+          6,
+          "upscale"
+        ]
+      ],
+      "outputs": [
+        4,
+        5
+      ]
+    },
+    "linearMode": true,
+    "lab_rel": "photos/cutout",
+    "workflowRendererVersion": "Vue-corrected"
+  },
+  "version": 0.4
+}

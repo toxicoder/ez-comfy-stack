@@ -373,7 +373,7 @@ Returns:
 
 ### Command: download-3d
 
-Opt-in 3D packs (TRELLIS.2 native, DA3-BASE).
+Opt-in 3D packs (TRELLIS.2 native, DA3-BASE, BiRefNet matte).
 
 ### Command: download-llm
 
@@ -1256,13 +1256,15 @@ Usage:
 <!-- source: scripts/utilities/download-3d.sh -->
 ## download-3d
 
-Opt-in 3D packs: native Comfy-Org TRELLIS.2 INT8 (MIT, no nvdiffrast) and
-DA3-BASE (Apache). Never part of download-models. occupancy enter trellis
-first (unload LTX). SuperSplat is a host viewer (docs/splat-sidecar.md).
+Opt-in 3D packs: native Comfy-Org TRELLIS.2 INT8 (MIT, no nvdiffrast),
+DA3-BASE (Apache), and the BiRefNet matte that preps a photo for image-to-3D
+(MIT, opt-in, feeds the EZCutout node). Never part of download-models.
+occupancy enter trellis first (unload LTX). SuperSplat is a host viewer
+(docs/splat-sidecar.md).
 
 ```bash
 Usage:
-  bazelisk run //scripts:run-utility -- download-3d status|run [--tier trellis2|da3-base|all] [--json]
+  bazelisk run //scripts:run-utility -- download-3d status|run [--tier trellis2|da3-base|birefnet|all] [--json]
 
 ```
 
