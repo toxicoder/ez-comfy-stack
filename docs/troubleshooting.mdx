@@ -233,6 +233,50 @@ The **Quality** combo is read back from the widgets, not written and forgotten: 
 
 ---
 
+## Cutout (EZCutout)
+
+**Cutout (BiRefNet)** (`EZCutout`) mattes one character or object out of a photo so an image-to-3D App gets a clean
+subject: **photos/cutout** prints the composited still (`ez_cutout`) and the alpha matte (`ez_cutout_matte`), then
+hands off to **photos/multi-view** and **3d/hero-from-photos**. The BiRefNet pack is opt-in, the model is loaded on
+the CPU, and every failure path is fail-soft: the untouched photo still prints and the card status line names the
+reason. Node row: [Custom nodes](reference/custom-nodes.md#ez_image).
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| The print still has its background and the status reads `no cutout model: image passed through` | One status covers two causes, because the loader answers `None` either way: the opt-in BiRefNet pack is not on disk (the node's own same-file staging also failed or found no writable model root), or a Python dependency is missing (`torch` / `numpy` probe first, then `timm` / `kornia` / `einops` / `transformers` at load) | Stage the weights: `bazelisk run //:manage -- download-3d run --tier birefnet` (opt-in, ~2 GB, lands as `ZhengPeng7__BiRefNet_birefnet/` beside the other 3D packs, and it is not in `download-models`). Point `EZ_CUTOUT_MODEL_DIR` at a pack you staged by hand instead if you keep weights elsewhere. If the pack is there and the status persists, the deps are the cause: `bazelisk run //:manage -- doctor` prints the container Python environment, and the missing module goes into the Comfy venv |
+| Status reads `cutout off: image passed through` | `EZ_CUTOUT` is set to `0`, `off`, `false`, or `no` in the environment, which is the deliberate kill switch | Unset it (or set it to `1`) and `bazelisk run //:manage -- restart`. Nobody sets this by accident, so check the compose environment before you blame the node |
+| Status reads `no subject found: image passed through` | The matte covered less than 0.2% of the pixels, so the node refused to print a cut that would delete the whole frame. Typical of a near-blank photo, a solid-color plate, or a subject that fills a few pixels of a wide shot | Crop or re-frame so the subject is a real fraction of the frame and re-Queue. Re-upload from **Upload media** if the file itself is the problem |
+| You staged the weights, re-Queued, and nothing changed for the next ten minutes | A failed load stamps a 600-second cooldown so one broken pack cannot make every Queue crawl while it retries a download | Wait it out, or `bazelisk run //:manage -- restart` to clear the cached model and the cooldown, then Queue once |
+| The cut ate a strap, an ear, or a hair edge | **Dilate** grew the matte inward relative to a soft edge it should have widened - the default is 2 px with a 2 px **Feather** | Raise **Dilate** (up to 32) to keep more of the subject, then raise **Feather** so the new edge stays soft. Re-Queue with the matte print open beside the composited one |
+| A grey or coloured halo clings to the subject | **Feather** is too narrow for the source edge, or **Backdrop** disagrees with what the next stage expects | Widen **Feather**, and pick **Backdrop** to match the consumer: `white` or `black` for a model trainer that flattens alpha, `keep original` when the downstream node composites the **matte** socket itself |
+| The second print is a black-and-white photo of your subject | Working as intended: `ez_cutout_matte` is the **matte** output, the mask as an image. Wire the **mask** socket instead of printing it when a node wants a MASK | Use **matte** for compositing, **mask** for anything that expects a Comfy MASK (an inpaint, a crop), and the **image** output for the 3D Apps |
+| The cutout took seconds and never touched the GPU | By design: `photos/cutout` claims occupancy **none**, the loader never places BiRefNet on CUDA, so the App runs beside a Klein or Wan Queue instead of parking it | Nothing to fix. Queue it whenever you like; see [Occupancy](studio-apps.md#occupancy) for what does claim the GPU |
+
+---
+
+## Scene layout (EZSceneLayout)
+
+**Compose 3D scene layout** (`EZSceneLayout`) writes one `scene.json` per Queue into
+`${COMFY_OUTPUT_DIR}/scenes/<filename>_NNNNN.json`: an [Asset Bible](asset-bible.md) shopping list of catalog slugs
+plus a camera, validated against repo-root `schemas/scene.json` and reloaded off disk before the node
+calls it done. It mints no geometry, no point cloud, and no GPU time - the meshes come from the `3d/*` Apps, and
+**3d/set-dressing** composes a whole set from the slugs those Apps printed. Node row:
+[Custom nodes](reference/custom-nodes.md#ez_dcc).
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| Status reads `wrote 2 instances to .../scenes/set-dressing_00003.json` and you cannot find the file | The document lands in the Comfy output directory, not the repo: `<output>/scenes/`, and the counter suffix (`_00003`) means the node never overwrites silently | Open the Outputs sidebar, or read the path the status line prints. Pass an absolute path to Comfy's `-o` in your compose override if you moved outputs somewhere unusual |
+| Status reads `scene not written (SceneLayoutError): ... exists; set overwrite to replace it` | **Overwrite** is off and that exact numbered file is already there | Turn **Overwrite** on to replace it, or change **Filename** to keep both drafts. The counter suffix makes a fresh name on every Queue, so this only fires when you are deliberately re-writing a named file |
+| Status reads `scene not written (SceneLayoutError): asset <slug>: path must end .glb, got '...'` | The **assets** box accepts `slug` or `slug:relative/path.glb`, and the path half must be a relative `.glb` with no `..` and no leading `/` | Use the bare `slug` form unless the mesh genuinely lives at a relative path you control - one slug per line |
+| Status reads `scene not written (SceneLayoutError): scene_id must be lowercase-hyphenated, got '...'` | **Scene id** or one slug has uppercase, spaces, underscores, or leading/trailing hyphens; the shape matches `asset_bible._SLUG_RE` | Rewrite it lowercase with hyphens (`lab-set`, `hero-olive-jacket`) |
+| Status reads `scene not written (SceneLayoutError): camera_pos needs three comma-separated numbers, got '...'` (same shape for **camera_look**, including `has a non-numeric part` and `needs finite numbers`) | One of the two camera boxes is not three comma-separated finite numbers - a stray label, a semicolon, or a copied vector in parens | Enter `x, y, z`, e.g. `2.1, 1.6, 3.4` for **Camera pos** and `0, 1.2, 0` for **Camera look at** |
+| Status reads `scene not written (SceneLayoutError): camera_fov must be 10-120, got 200` | **Camera fov** is a whole number inside that range | Put it back in 10..120. 35 is the authored default and matches the blockout Apps |
+| Status reads `scene not written (AssetBibleError): scene.json is N bytes; refuse embedded meshes` | Someone pasted a GLB or a vertex blob into **assets** instead of a slug list. The scene document is a shopping list; a fat file is the tell that it stopped being one | Delete the paste and list slugs, one per line. Print the mesh with a `3d/*` App first, then name the slug it printed |
+| Status reads `scene not written (ImportError): asset_bible is unavailable (scripts/lib miss)` | The node imports the Asset Bible lazily (first from `PYTHONPATH`, then `scripts/lib/asset_bible.py`) so the pack loads without it; a Comfy install whose repo tree was copied without `scripts/lib` has neither | Restore the repo layout, or run Comfy from the stack's container, which puts `scripts/lib` on `PYTHONPATH`. `bazelisk run //:validate` proves the module is where the node looks |
+| You want a gaussian splat or a captured point cloud out of this node | Not this stack's 3D world: a world here is instanced `.glb` assets plus a `scene.json`, assembled off the GPU. Project Lyra and the Inria 3DGS reference code are refused on licence, and SuperSplat is a viewer only | See [Declined integrations](reference/declined-integrations.md) and [Splat sidecar](splat-sidecar.md), then dress the set with **3d/set-dressing** |
+
+---
+
 ## Dub (clone-translate)
 
 The dub lane is owned by the canvas page: ingest rights, wheels, clone CFG, mix loudness, and the
