@@ -10,9 +10,14 @@ from __future__ import annotations
 import sys
 import types
 import urllib.request
+from collections.abc import Callable
 from pathlib import Path
+from typing import TYPE_CHECKING, override
 
 import pytest
+
+if TYPE_CHECKING:
+    from ez_common import Tensor
 
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
@@ -282,7 +287,7 @@ class _FakeResponse:
         return self._payload
 
 
-def _fake_urlopen(payload: bytes):
+def _fake_urlopen(payload: bytes) -> Callable[..., _FakeResponse]:
     """Build a urlopen stub returning ``payload``.
 
     Args:
@@ -458,6 +463,12 @@ def test_load_model_builds_the_remote_code_model(
     built: dict[str, object] = {}
 
     class _Model:
+        """The slice of BiRefNet the node calls: callable, then eval mode."""
+
+        def __call__(self, tensor: Tensor) -> Tensor:
+            """Hand the same tensor back as the subject map."""
+            return tensor
+
         def eval(self) -> None:
             """Mark eval mode."""
             built["evalled"] = True
@@ -699,6 +710,7 @@ def test_segment_subject_swallows_an_inference_error(
     """A model that raises is a missing matte, not a failed Queue."""
 
     class _Boom(_FakeModel):
+        @override
         def __call__(self, _tensor: object) -> list[list[list[float]]]:
             raise RuntimeError("CUDA out of memory")
 
