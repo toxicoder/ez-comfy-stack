@@ -13,8 +13,32 @@
       "kind": "graph"
     },
     {
+      "id": "3d/character-batch",
+      "path": "generated/workflows/3d/character-batch.md",
+      "lane": "3d",
+      "kind": "graph"
+    },
+    {
+      "id": "3d/hero-from-photos",
+      "path": "generated/workflows/3d/hero-from-photos.md",
+      "lane": "3d",
+      "kind": "graph"
+    },
+    {
+      "id": "3d/multi-image-asset",
+      "path": "generated/workflows/3d/multi-image-asset.md",
+      "lane": "3d",
+      "kind": "graph"
+    },
+    {
       "id": "3d/prop-variants",
       "path": "generated/workflows/3d/prop-variants.md",
+      "lane": "3d",
+      "kind": "graph"
+    },
+    {
+      "id": "3d/set-dressing",
+      "path": "generated/workflows/3d/set-dressing.md",
       "lane": "3d",
       "kind": "graph"
     },
@@ -33,6 +57,12 @@
     {
       "id": "3d/trellis2",
       "path": "generated/workflows/3d/trellis2.md",
+      "lane": "3d",
+      "kind": "graph"
+    },
+    {
+      "id": "3d/world-elements",
+      "path": "generated/workflows/3d/world-elements.md",
       "lane": "3d",
       "kind": "graph"
     },
@@ -1669,6 +1699,12 @@
       "kind": "graph"
     },
     {
+      "id": "photos/cutout",
+      "path": "generated/workflows/photos/cutout.md",
+      "lane": "photos",
+      "kind": "graph"
+    },
+    {
       "id": "photos/dream-house-clay",
       "path": "generated/workflows/photos/dream-house-clay.md",
       "lane": "photos",
@@ -1725,6 +1761,12 @@
     {
       "id": "photos/lower-third-bg",
       "path": "generated/workflows/photos/lower-third-bg.md",
+      "lane": "photos",
+      "kind": "graph"
+    },
+    {
+      "id": "photos/multi-view",
+      "path": "generated/workflows/photos/multi-view.md",
       "lane": "photos",
       "kind": "graph"
     },
@@ -2677,8 +2719,8 @@
       "kind": "album"
     }
   ],
-  "graph_count": 696,
-  "page_count": 447,
+  "graph_count": 703,
+  "page_count": 454,
   "lanes": [
     "photos",
     "video",

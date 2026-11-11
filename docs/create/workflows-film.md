@@ -15,7 +15,7 @@ through Klein look-dev into an LTX take. Single clips are on
 **What's on this page**
 
 - **90s shorts** - the three one-title pairs (go-see, still-here, switchyard), the five-act series, and the plate -> print queue order
-- **DCC (clay -> print)** - Klein-from-clay, IC-LoRA envelopes, in-canvas loaders, and the five `_lab/3d/` mesh Apps
+- **DCC (clay -> print)** - Klein-from-clay, IC-LoRA envelopes, in-canvas loaders, and the ten `_lab/3d/` mesh Apps
 - **Related** - what to load after the film lands
 
 **What this enables**
@@ -85,6 +85,11 @@ Full loop: [Short films](../shorts.md). Two apps per film - Queue the **plate**,
 | **[3d/blockout-mesh](../generated/workflows/3d/blockout-mesh.md)** | Still pack via `EZDCCLoadStillPack` -> **untextured gray-box blockout**: structure + shape stages only, no upsample, no texture VAE, no `PaintMesh` - the fast layout proxy. `SaveGLB` writes `assets/objects/_lab-blockout/blockout`. Occupancy **trellis**. |
 | **[3d/shot-to-prop](../generated/workflows/3d/shot-to-prop.md)** | DCC guide still via `EZDCCLoadGuideStill` (`slug=go-see`, `shot_id=12`, `layer=first`) -> textured mesh of one hero object, for re-compositing that object into other shots. `SaveGLB` writes `assets/objects/_lab-shot-prop/prop`. Occupancy **trellis**. |
 | **[3d/prop-variants](../generated/workflows/3d/prop-variants.md)** | Klein still via `LoadImage` with `EmptyTrellis2LatentStructure` `batch_size=4` -> four candidate meshes from one still in a single occupancy session. `SaveGLB` writes `assets/objects/_lab-variants/prop`. Occupancy **trellis**. |
+| **[3d/hero-from-photos](../generated/workflows/3d/hero-from-photos.md)** | One clean plate via `LoadImage` -> one textured hero `.glb` through the full chain at the 1024 upsample floor: the pick-one-take App. App rows: **Hero still**, **Quality**, **Upsample resolution**, **Texture pass**, **Save prefix**. `SaveGLB` writes `assets/objects/_lab-hero/hero`. Occupancy **trellis**. Handoff: `3d/multi-image-asset`. |
+| **[3d/multi-image-asset](../generated/workflows/3d/multi-image-asset.md)** | **Four** views of one subject - **Front view** / **Side view** / **Back view** / **Top-down view**, each its own `LoadImage`, gate, and `Trellis2Conditioning` - fused into one mesh: the front conditions structure, the side the shape stage, the back the upsample, the top-down the texture pass. `SaveGLB` writes `assets/objects/_lab-multiview/asset`. Occupancy **trellis**. Build the plate with `photos/multi-view`. |
+| **[3d/character-batch](../generated/workflows/3d/character-batch.md)** | Character sheet via `LoadImage` with `EmptyTrellis2LatentStructure` `batch_size=4` -> four candidate characters off one plate and one occupancy session, one `.glb` per item straight off `PaintMesh`. `SaveGLB` writes `assets/objects/_lab-characters/character`. Occupancy **trellis**. |
+| **[3d/world-elements](../generated/workflows/3d/world-elements.md)** | Prop source **plus** a ground plate (two `LoadImage`, two `Trellis2Conditioning`) -> one textured `.glb` painted against the surface it will sit on, **and** the `scene.json` for it from the `EZSceneLayout` node in the same graph: one Queue, two files. `SaveGLB` writes `assets/objects/_lab-world/element`; the layout writes `scenes/world-elements_NNNNN.json`. Occupancy **trellis**. Handoff: `3d/set-dressing`. |
+| **[3d/set-dressing](../generated/workflows/3d/set-dressing.md)** | The world half with no GPU: `EZSceneLayout` alone takes Asset Bible slugs (one per line), one camera, and an HDRI and writes `scenes/set-dressing_NNNNN.json` against [`schemas/scene.json`](../../schemas/scene.json). Prints no mesh and loads no model, so it queues beside a running take. Occupancy **none**. |
 | **[audio/stem-mix](../generated/workflows/audio/stem-mix.md)** | Picture-lock stem mix desk. Occupancy **audio**. Host `stem-mix.sh` (duck -15 dB, YouTube loudnorm). |
 
 ---

@@ -1546,7 +1546,11 @@
       "inputs": [
         [
           2,
-          "image"
+          "image",
+          {
+            "label": "Klein still",
+            "description": "Still already in input/ (the container inputs folder). Every batch item is printed from this one plate, so candidates differ by seed, not by source."
+          }
         ],
         [
           23,
@@ -1554,6 +1558,38 @@
           {
             "label": "Quality",
             "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
+          }
+        ],
+        [
+          10,
+          "batch_size",
+          {
+            "label": "Batch",
+            "description": "Meshes per Queue. SaveGLB writes one .glb per batch item, so the whole set comes off one occupancy session."
+          }
+        ],
+        [
+          15,
+          "target_resolution",
+          {
+            "label": "Upsample resolution",
+            "description": "Structure resolution the refined shape stage renders at. ComfyUI accepts only 1024-2048 in steps of 128; 1024 is the floor and the lab default."
+          }
+        ],
+        [
+          19,
+          "steps",
+          {
+            "label": "Texture pass",
+            "description": "Steps on the texture sampler. 12 is the authored pass; 4-6 is a paint draft before you commit the full pass. The mesh geometry does not change."
+          }
+        ],
+        [
+          22,
+          "filename_prefix",
+          {
+            "label": "Save prefix",
+            "description": "Output stem under the ComfyUI output folder. Keep the assets/objects/_lab-... convention so the mesh lands in the one tree the catalog and the Blender exporter walk."
           }
         ]
       ],

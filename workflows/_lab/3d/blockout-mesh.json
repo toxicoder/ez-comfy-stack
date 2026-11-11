@@ -1055,7 +1055,27 @@
         ],
         [
           2,
-          "plate"
+          "plate",
+          {
+            "label": "Plate",
+            "description": "Which plate of the still pack the blockout is printed from. The pack slug and the layer stay on the node."
+          }
+        ],
+        [
+          13,
+          "steps",
+          {
+            "label": "Shape steps",
+            "description": "Steps on the structure-refinement sampler. A proxy reads fine at 8; 12 is the authored pass for a deliverable."
+          }
+        ],
+        [
+          16,
+          "filename_prefix",
+          {
+            "label": "Save prefix",
+            "description": "Output stem under the ComfyUI output folder. Keep the assets/objects/_lab-... convention so the mesh lands in the one tree the catalog and the Blender exporter walk."
+          }
         ]
       ],
       "outputs": [

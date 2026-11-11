@@ -22,10 +22,15 @@ tags: [workflows, generated, comfyui]
 | Graph | Page |
 | --- | --- |
 | `3d/blockout-mesh` | [3d/blockout-mesh.md](3d/blockout-mesh.md) |
+| `3d/character-batch` | [3d/character-batch.md](3d/character-batch.md) |
+| `3d/hero-from-photos` | [3d/hero-from-photos.md](3d/hero-from-photos.md) |
+| `3d/multi-image-asset` | [3d/multi-image-asset.md](3d/multi-image-asset.md) |
 | `3d/prop-variants` | [3d/prop-variants.md](3d/prop-variants.md) |
+| `3d/set-dressing` | [3d/set-dressing.md](3d/set-dressing.md) |
 | `3d/shot-to-prop` | [3d/shot-to-prop.md](3d/shot-to-prop.md) |
 | `3d/still-to-mesh` | [3d/still-to-mesh.md](3d/still-to-mesh.md) |
 | `3d/trellis2` | [3d/trellis2.md](3d/trellis2.md) |
+| `3d/world-elements` | [3d/world-elements.md](3d/world-elements.md) |
 
 ## audio
 
@@ -348,6 +353,7 @@ tags: [workflows, generated, comfyui]
 | `photos/character-draft` | [photos/character-draft.md](photos/character-draft.md) |
 | `photos/character-tweak` | [photos/character-tweak.md](photos/character-tweak.md) |
 | `photos/color-moods` | [photos/color-moods.md](photos/color-moods.md) |
+| `photos/cutout` | [photos/cutout.md](photos/cutout.md) |
 | `photos/dream-house-clay` | [photos/dream-house-clay.md](photos/dream-house-clay.md) |
 | `photos/dream-house` | [photos/dream-house.md](photos/dream-house.md) |
 | `photos/endcard-cta` | [photos/endcard-cta.md](photos/endcard-cta.md) |
@@ -358,6 +364,7 @@ tags: [workflows, generated, comfyui]
 | `photos/instagram-square` | [photos/instagram-square.md](photos/instagram-square.md) |
 | `photos/lighting-trio` | [photos/lighting-trio.md](photos/lighting-trio.md) |
 | `photos/lower-third-bg` | [photos/lower-third-bg.md](photos/lower-third-bg.md) |
+| `photos/multi-view` | [photos/multi-view.md](photos/multi-view.md) |
 | `photos/open-graph` | [photos/open-graph.md](photos/open-graph.md) |
 | `photos/platform-pack` | [photos/platform-pack.md](photos/platform-pack.md) |
 | `photos/podcast-cover` | [photos/podcast-cover.md](photos/podcast-cover.md) |
