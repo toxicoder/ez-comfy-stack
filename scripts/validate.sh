@@ -65,7 +65,8 @@ Usage: validate.sh [--all] [--ci] [--check-only]
 
   (default)   Git-aware: run slices matching changed paths vs merge-base.
   --all       Run every slice regardless of changes.
-  --ci        Use RUN_BAZEL_CORE / RUN_DOCS env (CI paths-filter).
+  --ci        Use RUN_BAZEL_CORE / RUN_DOCS env (CI paths-filter); each accepts
+              1/true to run the slice and anything else to skip it.
   --check-only  With --ci: verify parallel job results only (no heavy re-run).
 EOF
 }
@@ -306,8 +307,19 @@ resolve_slices() {
       RUN_BAZEL_CORE=1
       RUN_DOCS=1
     fi
-    [[ ${RUN_BAZEL_CORE} == "true" ]] && RUN_BAZEL_CORE=1
-    [[ ${RUN_DOCS} == "true" ]] && RUN_DOCS=1
+    # The CI lane hands these over as the words a GitHub Actions boolean
+    # renders to, so both halves have a spelling here. Anything that is not an
+    # explicit yes becomes 0: leaving `false` in place would hand the `-eq`
+    # tests in main a word they read as a variable name, and `set -u` makes
+    # that a hard exit instead of a skipped slice.
+    case ${RUN_BAZEL_CORE} in
+      1 | true) RUN_BAZEL_CORE=1 ;;
+      *) RUN_BAZEL_CORE=0 ;;
+    esac
+    case ${RUN_DOCS} in
+      1 | true) RUN_DOCS=1 ;;
+      *) RUN_DOCS=0 ;;
+    esac
     return 0
   fi
 
