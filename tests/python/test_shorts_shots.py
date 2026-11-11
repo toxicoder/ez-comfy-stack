@@ -442,14 +442,17 @@ def test_shot_graphs_are_five_second_i2v() -> None:
     assert wan_len == 120
     assert ltx_len == 121
     assert audio_len == 121
-    for graph, prefix in ((wan, "ez_gosee_b1_s1_wan_video"), (ltx, "ez_gosee_b1_s1_ltx_video")):
+    for graph, prefix in (
+        (wan, "ez_still_to_shot_wan_video"),
+        (ltx, "ez_still_to_shot_ltx_video"),
+    ):
         vhs = next(n for n in graph["nodes"] if n.get("type") == "VHS_VideoCombine")
         assert vhs["widgets_values"]["format"] == "video/h264-mp4"
         assert float(vhs["widgets_values"]["frame_rate"]) == 24
         assert vhs["widgets_values"]["save_output"] is True
         assert vhs["widgets_values"]["filename_prefix"] == prefix
         last = next(n for n in graph["nodes"] if n.get("title") == "Save last frame")
-        assert last["widgets_values"][0] == "ez_gosee_b1_s1_last"
+        assert last["widgets_values"][0] == "ez_still_to_shot_last"
         batch = next(n for n in graph["nodes"] if n.get("type") == "ImageFromBatch")
         if prefix.endswith("_ltx_video"):
             assert batch["widgets_values"][0] == 120

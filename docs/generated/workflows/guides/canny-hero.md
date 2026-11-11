@@ -37,7 +37,7 @@ Keep the silhouette and camera from the line art. Finish materials and light. Do
 
 Unload before LTX. Occupancy: klein. Handoff: ltx-iclora-canny-5s.
 
-Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/still-to-mesh (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
+Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/shot-to-prop (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
 ```
 
 ## How to Queue
@@ -552,7 +552,7 @@ Keep the silhouette and camera from the line art. Finish materials and light. Do
 
 Unload before LTX. Occupancy: klein. Handoff: ltx-iclora-canny-5s.
 
-Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/still-to-mesh (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
+Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/shot-to-prop (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
 ```
 
 ### `LoadImage` - Load Image

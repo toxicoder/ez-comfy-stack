@@ -63,7 +63,7 @@ flowchart LR
   N6["Latent (wired from Format)"]
   N7["KSampler"]
   N8["VAE Decode"]
-  N9["Save"]
+  N9["Save PNG"]
   N10["Operator note"]
   N11["Klein Prompt Enhance"]
   N12["Negative Prompt Enhance"]
@@ -108,7 +108,7 @@ flowchart LR
 | 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | SETTINGS |
 | 7 | KSampler | `KSampler` | SETTINGS |
 | 8 | VAE Decode | `VAEDecode` | OUTPUT |
-| 9 | Save | `SaveImage` | OUTPUT |
+| 9 | Save PNG | `SaveImage` | OUTPUT |
 | 10 | Operator note | `Note` | NOTE |
 | 11 | Klein Prompt Enhance | `EZKleinPromptEnhance` | PROMPT |
 | 12 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |

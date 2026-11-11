@@ -38,11 +38,6 @@ TEXTURE_VAE = "trellis_2_texture_vae_bf16.safetensors"
 UPSAMPLE_RESOLUTION = 1024
 STRUCTURE_RESOLUTION = "32"
 
-DOWNLOAD_STANZA = """```bash
-bazelisk run //:manage -- download-3d --tier trellis2
-bazelisk run //:manage -- occupancy enter trellis --yes
-```"""
-
 MODEL_LINES = (
     "UNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` "
     "(DINOv3 license, opt-in pack). Structure decode stays at 32."

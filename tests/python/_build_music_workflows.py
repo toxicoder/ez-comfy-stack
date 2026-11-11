@@ -302,7 +302,7 @@ US-safe rap **{duration_s} s {kind}** take: **{ex["title"]}**. {_diss_cast(ex)}.
 5. ACE-Step vocal is an **invented** identity, not a cloned MC.
 6. Sampler: 8 steps, cfg 1, euler, simple. Duration {duration_s} s, bpm {ex["bpm"]}, language en, timesignature {ex["meter"]}, key {ex["keyscale"]}, form {ex["form_id"]}, generate_audio_codes true. Seed {ex["seed"]}.
 7. Saves: `{ex["prefix"]}` FLAC master + 320 kbps MP3 under `${{COMFY_OUTPUT_DIR}}`.
-8. Cover separately: Queue **{COVER_THUMB}** or **{COVER_PODCAST}**. Do not embed Klein here.
+8. Cover separately: Queue **{ex["rel"].rsplit("/", 1)[0] + "/cover.json"}** (its SaveImage writes the `albums/.../cover` prefix that `album-render --art generate` reads). Do not embed Klein here.
 9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).
 10. Do not co-resident with LTX / Wan / Klein on this Spark.
 
@@ -367,7 +367,7 @@ US-safe EDM **{duration_s} s** take: **{ex["title"]}**. Fictional act **Drive-th
 5. ACE-Step timbre is **invented**, not a cloned act.
 6. Sampler: 8 steps, cfg 1, euler, simple. Duration {duration_s} s across {n_passes} passes, bpm {ex["bpm"]}, language {"en" if treat else "unknown"}, timesignature {ex["meter"]}, key {ex["keyscale"]}, form {ex["form_id"]}, generate_audio_codes true. Seed {ex["seed"]}.
 7. Saves: `{ex["prefix"]}` FLAC master + 320 kbps MP3 under `${{COMFY_OUTPUT_DIR}}`.
-8. Cover separately: Queue **{COVER_THUMB}** or **{COVER_PODCAST}**. Do not embed Klein here.
+8. Cover separately: Queue **{ex["rel"].rsplit("/", 1)[0] + "/cover.json"}** (its SaveImage writes the `albums/.../cover` prefix that `album-render --art generate` reads). Do not embed Klein here.
 9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).
 10. Do not co-resident with LTX / Wan / Klein on this Spark.
 """

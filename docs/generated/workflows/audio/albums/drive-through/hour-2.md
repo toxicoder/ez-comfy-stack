@@ -37,7 +37,7 @@ US-safe EDM **325 s** take: **rumble strip**. Fictional act **Drive-through** (h
 5. ACE-Step timbre is **invented**, not a cloned act.
 6. Sampler: 8 steps, cfg 1, euler, simple. Duration 325 s across 5 passes, bpm 165, language unknown, timesignature 4, key D major, form drv-5d2d9ea518, generate_audio_codes true. Seed 271.
 7. Saves: `01 - Rumble Strip` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.
-8. Cover separately: Queue **photos/thumbnail.json** or **photos/podcast-cover.json**. Do not embed Klein here.
+8. Cover separately: Queue **audio/albums/drive-through/hour-2/cover.json** (its SaveImage writes the `albums/.../cover` prefix that `album-render --art generate` reads). Do not embed Klein here.
 9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).
 10. Do not co-resident with LTX / Wan / Klein on this Spark.
 
@@ -11945,7 +11945,7 @@ Pack tags, lyrics, BPM, key, and duration into ACE conditioning.
 
 !!! warning "Lab notes"
 
-    15 widgets including control_after_generate after seed (see _ace_widgets_contract.py). Vocal graphs language=en; instrumental unknown. generate_audio_codes stays true.
+    15 widgets including control_after_generate after seed (see _ace_widgets_contract.py). Vocal graphs language=en; instrumental unknown. generate_audio_codes stays true except podcast beds, which ship it off on purpose.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -12530,7 +12530,7 @@ Type `BOOLEAN`. Range / default: true.
 
 Run the ACE LLM that drafts audio codes.
 
-**How it affects generation:** true = higher quality, slower. Off only if you pass a reference timbre (lab graphs do not).
+**How it affects generation:** true = higher quality, slower. Off only if you pass a reference timbre (lab graphs do not). Podcast lanes keep it off on the instrumental beds and the ACE negative encoder - beds sit ducked under speech (test_podcast_ace_encoders_keep_instrumental_codes_off).
 
 **This graph (all 60 instances):** `true`
 

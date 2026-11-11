@@ -763,6 +763,7 @@ Rewrite a lazy prompt for LTX-2.5 (present-tense paragraph, audio interleaved).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
+| `context` | in | `STRING` | Bible/research. Ignored when Enhance is off. |
 | `prompt` | out | `STRING` | Paragraph CLIP encodes. |
 
 #### `sample`

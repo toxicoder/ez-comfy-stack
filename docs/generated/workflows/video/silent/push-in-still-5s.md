@@ -1335,7 +1335,7 @@ LTX clip length.
 
 **How it affects generation:** Default 8 seconds (193 frames, 1+8n). Frontend writes latent length. Wan 5B stays 5 seconds. Film printers stay 5 seconds / 121.
 
-**This graph:** `8 seconds`
+**This graph:** `5 seconds`
 
 ### `EZImageDescribe` - Describe image
 

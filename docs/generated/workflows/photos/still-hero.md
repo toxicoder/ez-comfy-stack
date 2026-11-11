@@ -1,6 +1,6 @@
 ---
 title: "photos/still-hero"
-description: "Klein 4B hero still, 1280x720, 8 steps"
+description: "Klein 4B hero still, 1280x704, 8 steps"
 tags: [workflows, generated, comfyui, photos]
 ---
 
@@ -33,7 +33,7 @@ Format / platform sets pixels (Custom uses Width x Height). Quality does not cha
 
 HD Klein 4B still (Apache 2.0 distilled FP8). Same prompt and seed as photos/still-draft.
 Models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.
-Widgets: seed 42 fixed - CFG 1.0 - 8 steps - 1280x720 - batch 1.
+Widgets: seed 42 fixed - CFG 1.0 - 8 steps - 1280x704 - batch 1.
 SaveImage prefix: ez_still_hero.
 
 Feed ez_still_hero_*.png into video/silent/still-to-video-5s or video/av/still-to-video-8s.
@@ -63,7 +63,7 @@ flowchart LR
   N6["Latent (wired from Format)"]
   N7["KSampler"]
   N8["VAE Decode"]
-  N9["Save"]
+  N9["Save PNG"]
   N10["Operator note"]
   N11["Draft still (set to ez_still_draft_00001_.png)"]
   N12["Klein Prompt Enhance"]
@@ -109,7 +109,7 @@ flowchart LR
 | 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | SETTINGS |
 | 7 | KSampler | `KSampler` | SETTINGS |
 | 8 | VAE Decode | `VAEDecode` | OUTPUT |
-| 9 | Save | `SaveImage` | OUTPUT |
+| 9 | Save PNG | `SaveImage` | OUTPUT |
 | 10 | Operator note | `Note` | NOTE |
 | 11 | Draft still (set to ez_still_draft_0000... | `LoadImage` | INPUT |
 | 12 | Klein Prompt Enhance | `EZKleinPromptEnhance` | PROMPT |
@@ -554,7 +554,7 @@ Format / platform sets pixels (Custom uses Width x Height). Quality does not cha
 
 HD Klein 4B still (Apache 2.0 distilled FP8). Same prompt and seed as photos/still-draft.
 Models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.
-Widgets: seed 42 fixed - CFG 1.0 - 8 steps - 1280x720 - batch 1.
+Widgets: seed 42 fixed - CFG 1.0 - 8 steps - 1280x704 - batch 1.
 SaveImage prefix: ez_still_hero.
 
 Feed ez_still_hero_*.png into video/silent/still-to-video-5s or video/av/still-to-video-8s.

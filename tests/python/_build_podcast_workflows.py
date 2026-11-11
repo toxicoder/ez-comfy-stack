@@ -94,8 +94,12 @@ def _assert_no_overlap(graph: dict, pad: float = 20) -> None:
     finalize_layout(graph)
 
 
-def _ace_widgets(tags: str, duration: float, seed: int = 42) -> list:
+def _ace_widgets(
+    tags: str, duration: float, seed: int = 42, language: str = "unknown"
+) -> list:
     # seed is followed by control_after_generate (native TextEncodeAceStepAudio1.5).
+    # Instrumental beds take language=unknown (no-vocal contract); the ACE
+    # negative encoder keeps en.
     return [
         tags,
         "",
@@ -104,7 +108,7 @@ def _ace_widgets(tags: str, duration: float, seed: int = 42) -> list:
         90,
         duration,
         "4",
-        "en",
+        language,
         "C major",
         False,
         2.0,
@@ -179,7 +183,7 @@ def build_audio_first() -> dict:
         [40, 620],
         [400, 280],
         "ACE negative",
-        _ace_widgets(ACE_NEG_TAGS, 30.0, seed=7),
+        _ace_widgets(ACE_NEG_TAGS, 30.0, seed=7, language="en"),
         inputs=[g.inp("clip", "CLIP")],
         outputs=[g.out("CONDITIONING", "CONDITIONING", [])],
     )
@@ -364,7 +368,7 @@ def build_radio_drama() -> dict:
         [40, 980],
         [400, 260],
         "ACE negative",
-        _ace_widgets(ACE_NEG_TAGS, 40.0, seed=7),
+        _ace_widgets(ACE_NEG_TAGS, 40.0, seed=7, language="en"),
         inputs=[g.inp("clip", "CLIP")],
         outputs=[g.out("CONDITIONING", "CONDITIONING", [])],
     )
@@ -595,7 +599,7 @@ def build_learn_episode() -> dict:
         [40, 620],
         [400, 280],
         "ACE negative",
-        _ace_widgets(ACE_NEG_TAGS, 30.0, seed=7),
+        _ace_widgets(ACE_NEG_TAGS, 30.0, seed=7, language="en"),
         inputs=[g.inp("clip", "CLIP")],
         outputs=[g.out("CONDITIONING", "CONDITIONING", [])],
     )

@@ -125,7 +125,7 @@ Prefix ``ez_flf_guide``. 832x480, 121 frames (Wan 5B / Fun InP default). The pac
 
 STAY_IN_COMFY = (
     "Stay on :8188 after a dump: guides/guide-still / "
-    "guides/depth-from-loader / 3d/still-to-mesh "
+    "guides/depth-from-loader / 3d/shot-to-prop "
     "(EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path "
     "on this graph still works."
 )

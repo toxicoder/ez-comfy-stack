@@ -37,7 +37,7 @@ Unload LTX first. Occupancy: wan. This is a continuity draft, not the LTX AV pri
 
 Prefix ``ez_flf_guide``. 832x480, 121 frames (Wan 5B / Fun InP default). The pack is 1280x704; the latent node resizes.
 
-Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/still-to-mesh (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
+Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/shot-to-prop (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
 ```
 
 ## How to Queue
@@ -742,7 +742,7 @@ Unload LTX first. Occupancy: wan. This is a continuity draft, not the LTX AV pri
 
 Prefix ``ez_flf_guide``. 832x480, 121 frames (Wan 5B / Fun InP default). The pack is 1280x704; the latent node resizes.
 
-Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/still-to-mesh (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
+Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/shot-to-prop (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
 ```
 
 ### `EZWanPromptEnhance` - Wan Prompt Enhance

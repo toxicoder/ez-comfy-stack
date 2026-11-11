@@ -35,7 +35,7 @@ FLUX 3 Image Klein distilled INT8 still on the Klein still desk. Opt-in, gated, 
 
 Profile: Quality `flux3-fast` writes UNET `flux3-image-klein-int8-convrot.safetensors`, 16 steps, CFG 1.0. This graph ships those same values, so Queue matches with Quality left on lab. Quality never changes pixels - Format / platform does (Custom uses Width x Height).
 Models: flux3-image-klein-int8-convrot.safetensors + qwen3vl_4b_int8_convrot.safetensors (CLIP type flux2) + flux2-vae.safetensors.
-Gated pull: black-forest-labs/flux-3-image-klein-comfy on Hugging Face is gated, so accept the FLUX Kommunity License (v1.0) on the model card with the **same HF account as HF_TOKEN** (a token alone is not acceptance), then run `bazelisk run //scripts:run-utility -- download-image  run --tier flux3` - it auto-includes the `flux3-te` text encoder. Every pull is pinned to HF revision feef60b0aaf63a4773ace96636ebbcf43b881312.
+Gated pull: black-forest-labs/flux-3-image-klein-comfy on Hugging Face is gated, so accept the FLUX Kommunity License (v1.0) on the model card with the **same HF account as HF_TOKEN** (a token alone is not acceptance), then run `bazelisk run //scripts:run-utility -- download-image run --tier flux3` - it auto-includes the `flux3-te` text encoder. Every pull is pinned to HF revision feef60b0aaf63a4773ace96636ebbcf43b881312.
 License: FLUX Kommunity License (v1.0), not Apache. Monetized output only for qualifying users under $5M gross annualized revenue. Not in `download-models` and not in image `--tier all`.
 Weights missing: click Check models - it names the command, and Queue keeps the authored loaders (nothing swaps in weights you have not accepted).
 Save prefix `ez_still_flux3_fast`. Empty of lettering - composite titles later.
@@ -556,7 +556,7 @@ FLUX 3 Image Klein distilled INT8 still on the Klein still desk. Opt-in, gated, 
 
 Profile: Quality `flux3-fast` writes UNET `flux3-image-klein-int8-convrot.safetensors`, 16 steps, CFG 1.0. This graph ships those same values, so Queue matches with Quality left on lab. Quality never changes pixels - Format / platform does (Custom uses Width x Height).
 Models: flux3-image-klein-int8-convrot.safetensors + qwen3vl_4b_int8_convrot.safetensors (CLIP type flux2) + flux2-vae.safetensors.
-Gated pull: black-forest-labs/flux-3-image-klein-comfy on Hugging Face is gated, so accept the FLUX Kommunity License (v1.0) on the model card with the **same HF account as HF_TOKEN** (a token alone is not acceptance), then run `bazelisk run //scripts:run-utility -- download-image  run --tier flux3` - it auto-includes the `flux3-te` text encoder. Every pull is pinned to HF revision feef60b0aaf63a4773ace96636ebbcf43b881312.
+Gated pull: black-forest-labs/flux-3-image-klein-comfy on Hugging Face is gated, so accept the FLUX Kommunity License (v1.0) on the model card with the **same HF account as HF_TOKEN** (a token alone is not acceptance), then run `bazelisk run //scripts:run-utility -- download-image run --tier flux3` - it auto-includes the `flux3-te` text encoder. Every pull is pinned to HF revision feef60b0aaf63a4773ace96636ebbcf43b881312.
 License: FLUX Kommunity License (v1.0), not Apache. Monetized output only for qualifying users under $5M gross annualized revenue. Not in `download-models` and not in image `--tier all`.
 Weights missing: click Check models - it names the command, and Queue keeps the authored loaders (nothing swaps in weights you have not accepted).
 Save prefix `ez_still_flux3_fast`. Empty of lettering - composite titles later.

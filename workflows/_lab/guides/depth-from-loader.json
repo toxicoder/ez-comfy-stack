@@ -504,9 +504,9 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_iclora_guide"
+        "ez_iclora_guide_frames"
       ],
-      "title": "Save ez_iclora_guide"
+      "title": "Save frames (secondary)"
     },
     {
       "id": 13,
@@ -794,7 +794,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        119,
+        192,
         1
       ],
       "title": "Last frame"
@@ -825,9 +825,9 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_iclora_guide"
+        "ez_iclora_guide_last"
       ],
-      "title": "Save ez_iclora_guide"
+      "title": "Save last frame"
     },
     {
       "id": 21,

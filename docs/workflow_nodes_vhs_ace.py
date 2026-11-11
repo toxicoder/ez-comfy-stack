@@ -42,7 +42,7 @@ def vhs_ace_nodes() -> NodeSpecs:
         "TextEncodeAceStepAudio1.5": _n(
             "ACE-Step 1.5 Text Encode",
             "Pack tags, lyrics, BPM, key, and duration into ACE conditioning.",
-            lab="15 widgets including control_after_generate after seed (see _ace_widgets_contract.py). Vocal graphs language=en; instrumental unknown. generate_audio_codes stays true.",
+            lab="15 widgets including control_after_generate after seed (see _ace_widgets_contract.py). Vocal graphs language=en; instrumental unknown. generate_audio_codes stays true except podcast beds, which ship it off on purpose.",
             origin="comfy-extras",
             sockets=[
                 _s("clip", "CLIP", "in", "ACE CLIP from the AIO checkpoint."),
@@ -61,7 +61,7 @@ def vhs_ace_nodes() -> NodeSpecs:
                 _w("timesignature", index=6, typ="COMBO", rng="4", desc="Beats per bar.", gen="Rap Apps stay 4. Album takes may use 2, 3, or 6 when the bed is not a dance grid.", choices=[("2", "2/4."), ("3", "3/4."), ("4", "Lab 4/4."), ("6", "6/8.")]),
                 _w("language", index=7, typ="COMBO", rng="en / unknown", desc="Lyric language.", gen="en for sung English. unknown for instrumental (do not leave en on a no-vocal take).", choices_from="ace_language"),
                 _w("keyscale", index=8, typ="COMBO", rng="C minor", desc="Musical key.", gen="Rap Apps stay C minor. Catalog takes set a key per song (Drive-through walks fifths).", choices_from="ace_keyscale"),
-                _w("generate_audio_codes", index=9, typ="BOOLEAN", rng="true", desc="Run the ACE LLM that drafts audio codes.", gen="true = higher quality, slower. Off only if you pass a reference timbre (lab graphs do not)."),
+                _w("generate_audio_codes", index=9, typ="BOOLEAN", rng="true", desc="Run the ACE LLM that drafts audio codes.", gen="true = higher quality, slower. Off only if you pass a reference timbre (lab graphs do not). Podcast lanes keep it off on the instrumental beds and the ACE negative encoder - beds sit ducked under speech (test_podcast_ace_encoders_keep_instrumental_codes_off)."),
                 _w("cfg_scale", index=10, typ="FLOAT", rng="2.0", desc="Guidance inside audio-code generation.", gen="2.0 is the ACE default. Higher follows tags/lyrics more tightly and can sound rigid."),
                 _w("temperature", index=11, typ="FLOAT", rng="0.85", desc="Sampling temperature for audio codes.", gen="Lower = more deterministic. Higher = wilder fills."),
                 _w("top_p", index=12, typ="FLOAT", rng="0.9", desc="Nucleus sampling.", gen="0.9 is the lab default."),

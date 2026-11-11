@@ -1,6 +1,6 @@
 ---
 title: "guides/depth-control-8s"
-description: "LTX-2.5 IC-LoRA Union Control envelope, 120 frames, depth default Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots)"
+description: "LTX-2.5 IC-LoRA Union Control envelope, 193 frames, depth default Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots)"
 tags: [workflows, generated, comfyui, guides]
 ---
 
@@ -49,7 +49,7 @@ Stop Klein first. After print, stop LTX and run audio-finish / stem-mix (occupan
 
 LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.
 
-Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/still-to-mesh (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
+Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/shot-to-prop (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
 
 Occupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
@@ -587,8 +587,8 @@ Save prefix.
 
 | Instance | Value |
 | --- | --- |
-| Save frames (secondary) | `ez_gosee_b1_s1_ltx_frames` |
-| Save last frame | `ez_gosee_b1_s1_last` |
+| Save frames (secondary) | `ez_depth_ctrl_frames` |
+| Save last frame | `ez_depth_ctrl_last` |
 
 ### `LTXVEmptyLatentAudio` - Empty LTX Audio Latent
 
@@ -694,7 +694,7 @@ Stop Klein first. After print, stop LTX and run audio-finish / stem-mix (occupan
 
 LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.
 
-Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/still-to-mesh (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
+Stay on :8188 after a dump: guides/guide-still / guides/depth-from-loader / 3d/shot-to-prop (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
 
 Occupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
@@ -844,7 +844,7 @@ Type `INT`. Range / default: 120 (LTX 121) / 119 (Wan 120).
 
 **How it affects generation:** Must be length-1 for the last frame. Off-by-one here breaks shot continuity.
 
-**This graph:** `119`
+**This graph:** `192`
 
 #### `length`
 
@@ -866,6 +866,7 @@ Rewrite a lazy prompt for LTX-2.5 (present-tense paragraph, audio interleaved).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
+| `context` | in | `STRING` | Bible/research. Ignored when Enhance is off. |
 | `prompt` | out | `STRING` | Paragraph CLIP encodes. |
 
 #### `sample`

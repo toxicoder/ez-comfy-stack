@@ -58,6 +58,7 @@ def _assert_shared(
     edm_vocal_treat: bool = False,
     meter: str = "4",
     keyscale: str = "C minor",
+    cover_refs: tuple[str, ...] = ("photos/thumbnail", "photos/podcast-cover"),
     pass_seconds: tuple[float, ...] | None = None,
 ) -> None:
     assert graph["id"] == Path(stem).name
@@ -171,8 +172,8 @@ def _assert_shared(
             assert ace_w[0] == tags
         assert widgets[0] == tags
     assert "Note" in {n["type"] for n in graph["nodes"]}
-    assert "photos/thumbnail" in extra["lab_note"]
-    assert "photos/podcast-cover" in extra["lab_note"]
+    for ref in cover_refs:
+        assert ref in extra["lab_note"]
     assert extra.get("lab_album")
     assert extra["lab_album"]["art_mode"] in {"skip", "upload", "generate"}
     assert any(n["type"] == "EZAudioMetadata" for n in graph["nodes"])
@@ -285,6 +286,7 @@ def test_music_rap_nill_bye_diss_graphs() -> None:
             tags=ex["tags"],
             meter=str(ex["meter"]),
             keyscale=str(ex["keyscale"]),
+            cover_refs=(ex["rel"].rsplit("/", 1)[0] + "/cover.json",),
         )
         blob = json.dumps(graph)
         assert "[outro]" in blob
@@ -382,6 +384,7 @@ def test_music_edm_drive_through_graphs() -> None:
             edm_vocal_treat=treat,
             meter=str(ex["meter"]),
             keyscale=str(ex["keyscale"]),
+            cover_refs=(ex["rel"].rsplit("/", 1)[0] + "/cover.json",),
             pass_seconds=tuple(
                 float(value) for value in ex["pass_seconds"]
             ),

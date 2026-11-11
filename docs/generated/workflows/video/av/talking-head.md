@@ -33,7 +33,7 @@ Format / platform sets pixels (Custom uses Width x Height). Quality does not cha
 
 Klein still (LoadImage) -> optional Qwen3-TTS 0.6B (download-podcast --tier qwen3tts) -> LTX-2.5 A2V freeze. Occupancy: ACE-Step 90s bed then stop/unload then this graph.
 Real single-stage freeze is **video/av/audio-to-video-8s** (LoadAudio + encode, mux original wav). Official two-stage A2V lives in Comfy Templates -> LTX-2.5. This canvas Queues the lab 5.00s I2V printer so it loads without missing subgraph nodes.
-Wan S2V-14B is opt-in: bazelisk run //scripts:run-utility -- download-wan  run --tier s2v
+Wan S2V-14B is opt-in: bazelisk run //scripts:run-utility -- download-wan run --tier s2v
 Banned lip-sync OSS packs stay out of this tree.
 Canvas is 1280x704 (divisible by 32). Lab printers stay 5.00 s.
 Prompt enhance is **off** (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
@@ -705,7 +705,7 @@ Format / platform sets pixels (Custom uses Width x Height). Quality does not cha
 
 Klein still (LoadImage) -> optional Qwen3-TTS 0.6B (download-podcast --tier qwen3tts) -> LTX-2.5 A2V freeze. Occupancy: ACE-Step 90s bed then stop/unload then this graph.
 Real single-stage freeze is **video/av/audio-to-video-8s** (LoadAudio + encode, mux original wav). Official two-stage A2V lives in Comfy Templates -> LTX-2.5. This canvas Queues the lab 5.00s I2V printer so it loads without missing subgraph nodes.
-Wan S2V-14B is opt-in: bazelisk run //scripts:run-utility -- download-wan  run --tier s2v
+Wan S2V-14B is opt-in: bazelisk run //scripts:run-utility -- download-wan run --tier s2v
 Banned lip-sync OSS packs stay out of this tree.
 Canvas is 1280x704 (divisible by 32). Lab printers stay 5.00 s.
 Prompt enhance is **off** (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
@@ -844,6 +844,7 @@ Rewrite a lazy prompt for LTX-2.5 (present-tense paragraph, audio interleaved).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
+| `context` | in | `STRING` | Bible/research. Ignored when Enhance is off. |
 | `prompt` | out | `STRING` | Paragraph CLIP encodes. |
 
 #### `sample`
