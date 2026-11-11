@@ -1,0 +1,212 @@
+---
+title: Captions and overlays
+description: "Add lower thirds, timed captions, and image overlays in the EZ Edit panel, and know which renderer burns them: the browser paints text planes, the Spark's ffmpeg pass does not."
+tags: [editing, video-editor, captions, overlays, lower-third, client-render]
+---
+
+# Captions and overlays
+
+**What's on this page**
+
+- **Overlay or caption** - the one decision you make first, and what each one looks like on screen
+- **The fields** - `at_s`, `dur_s`, `text`, `source`, `x`, `y`, `size`, with their defaults and ranges
+- **Who burns them** - client render paints, server render does not, and why that split exists
+- **Five recipes** - lower third, spoken caption, corner logo, picture-in-picture, chapter card
+- **Editing a graphic** - selecting a row, removing the right one, and redoing a timing
+- **Readability checks** - what to confirm before you call a cut finished
+- **When a graphic does not show up** - the six causes and their fixes
+
+**What this enables**
+
+- **Titles without a title tool** - a name strap, a location card, and a caption line, all from the
+  panel's Graphics fields
+- **One source of truth for text** - graphics live in the project JSON, so an agent, a script, and
+  the panel all add and remove the same rows
+- **Text exactly where you want it** - placement is a fraction of the frame, so 720p and 1080p
+  projects keep the same layout
+- **A clean spine for handoff** - because the Spark's ffmpeg pass leaves text out, your plane `0`
+  cut exports to an NLE with no burned-in titles to fight
+
+**Question this page answers:** how do I put text on the picture, and why did my title disappear
+from the mp4? Add it in the Graphics fields, then render with **Render client** to see it burned
+in. For the render modes in full, see [Render and hand off](render-and-handoff.md).
+
+<Callout type="warning" title="Only the browser burns text">
+  The Spark renders with ffmpeg, which stacks planes and applies gain but never draws a text
+  plane. The client render - canvas plus `MediaRecorder` in your own tab - paints overlays and
+  captions into the pixels. If the mp4 has no title and the webm does, that split is the reason,
+  and it is by design: the server pass keeps the picture clean for a handoff.
+</Callout>
+
+---
+
+## Overlay or caption
+
+| | Text overlay | Caption |
+| --- | --- | --- |
+| Placed by you | yes: `x`, `y`, and `size` are all yours | no: centred, at 90 percent of the frame height |
+| Look | white text, left-aligned, with a soft black shadow, size scaled from the frame height | white text on a translucent black band, centred |
+| Image support | yes, with `kind` set to `image` | no |
+| Best for | name straps, location cards, a corner bug, a chapter card | anything being said out loud |
+| Removed with | **Remove overlay** | **Remove caption** |
+
+A caption is the shortcut for the thing you type most often; an overlay is the one you reach for
+when the text has to sit somewhere specific.
+
+---
+
+## The fields
+
+Type the text in **Text**, its start in **At (s)**, and how long it holds in **For (s)**, then
+press **Add overlay** or **Add caption**.
+
+| Field | Range | Default | What it does |
+| --- | --- | --- | --- |
+| `at_s` | 0 or more | `0` | the timeline second the graphic appears |
+| `dur_s` | greater than 0 | `3` | how long it stays; it is visible through `at_s + dur_s` inclusive |
+| `text` | required for a text graphic | none | the words |
+| `source` | required for an image graphic | none | a file under the output dir, served through ComfyUI's `/view` route |
+| `x` | 0 to 1 | `0` | left edge, as a fraction of frame width |
+| `y` | 0 to 1 | `0` | top edge, as a fraction of frame height |
+| `size` | greater than 0 and up to 1 | `0.1` | for text, font height as a fraction of frame height; for an image, width as a fraction of frame width |
+
+Two rules the reducer enforces, because mixing them produces a graphic that silently draws
+nothing: a text graphic must carry `text` and must not carry `source`, and an image graphic must
+carry `source` and must not carry `text`.
+
+The panel's Graphics fields add text graphics. For placement and image sources, send the op
+yourself - the same call the panel makes:
+
+```json
+{
+  "op": "add_overlay",
+  "args": {
+    "overlay": {
+      "id": "strap-1",
+      "kind": "text",
+      "at_s": 0.5,
+      "dur_s": 3,
+      "text": "Dr Ada Nkemelu - Field Lead",
+      "x": 0.06,
+      "y": 0.78,
+      "size": 0.05
+    }
+  }
+}
+```
+
+---
+
+## Five recipes
+
+### A lower third for a name
+
+Post the op above, or type the name in **Text**, set `At (s)` to `0.5`, `For (s)` to `3`, and press
+**Add overlay**. Then press **Play** and read it on the stage: at 720 the strap lands about
+four-fifths of the way down the frame in a 36-pixel face with a soft shadow, which is roughly the
+smallest size that stays readable on a phone.
+
+### A caption for the tag line
+
+Type the line in **Text**, set `At (s)` to where the voice says it, set `For (s)` to how long the
+line takes to read out loud, then press **Add caption**. Keep captions under about eight words:
+the band is centred and one line, so a long sentence runs off the frame.
+
+### A corner logo
+
+```json
+{
+  "op": "add_overlay",
+  "args": {
+    "overlay": {
+      "id": "bug",
+      "kind": "image",
+      "at_s": 0,
+      "dur_s": 30,
+      "source": "edit/imports/logo.png",
+      "x": 0.86,
+      "y": 0.05,
+      "size": 0.12
+    }
+  }
+}
+```
+
+The height follows the image's own aspect ratio. A `source` outside the output dir is refused:
+copy the file under `${COMFY_OUTPUT_DIR}` first, which is also how you keep the project portable.
+
+### Picture-in-picture from a second shot
+
+Put the insert on plane `1` as a clip rather than as an overlay - see
+[Rough cut in the browser](rough-cut.md#lay-an-insert-on-top) - and use an image overlay only for
+still frames, which do not need decoding.
+
+### A chapter card
+
+A full-frame text graphic at the head of a section reads as a card:
+
+```json
+{
+  "op": "add_overlay",
+  "args": {
+    "overlay": {"id": "card-2", "kind": "text", "at_s": 12, "dur_s": 2, "text": "Part two", "x": 0.1, "y": 0.42, "size": 0.12}
+  }
+}
+```
+
+---
+
+## Editing a graphic
+
+Graphics rows are selectable like clips. Click a row in the Overlays or Captions table and the
+next **Remove overlay** or **Remove caption** press targets that id. With nothing selected, the
+press takes the last row, which is the one you usually just added.
+
+There is no in-place edit op: the reducer removes and adds. To move a strap, remove it and post it
+again with the new `at_s`. The id is yours to reuse, so the row keeps its name in your notes.
+
+To see every graphic at once, read the project through the state route or list it with
+`edit_list_projects` and then `edit_get_state`: [Agent and MCP driving](agent-and-mcp.md).
+
+---
+
+## Readability checks
+
+Before you call the cut finished, confirm these on the client render, not on the stage:
+
+- The strap is inside the safe area: keep `x` at or above `0.05` and `y` at or below `0.85`.
+- Text height is at least `0.04` of the frame, which is about 29 pixels at 720 and 43 at 1080.
+- A caption is under eight words and holds at least as long as it takes to read twice.
+- Nothing sits under the caption band at 90 percent height - that is where a lower third should
+  not be.
+- An image overlay is opaque enough to read against the shot; the painter adds no panel behind it.
+
+---
+
+## When a graphic does not show up
+
+| Symptom | Cause and fix |
+| --- | --- |
+| The mp4 has no text, the webm does | expected: only the client render paints graphics |
+| The row is in the table but never appears | `at_s` sits past the end of the timeline - shorten it or lengthen a clip |
+| `text overlays need text` | the record has no `text` |
+| `text overlays must not carry source` | drop `source` from a text graphic |
+| `image overlays need source` | the image graphic has no `source` |
+| The image row exists but draws nothing | the browser could not load `source`; it must resolve under the output dir |
+| `size must be within 0..1` | `size` is a fraction, not a pixel count |
+| A graphic will not be removed | select the row, or check you pressed the caption button for a caption |
+
+A graphic that throws while painting is skipped for that frame rather than stopping the preview, so
+a broken image never takes the whole cut with it.
+
+---
+
+## Related
+
+| Need | Page |
+| --- | --- |
+| Choosing which render burns your graphics | [Render and hand off](render-and-handoff.md) |
+| The mouse path for the Graphics fields | [Rough cut in the browser](rough-cut.md) |
+| Adding graphics from an agent or a script | [Agent and MCP driving](agent-and-mcp.md) |
+| The op vocabulary and every guard | [Plan a cut](plan-a-cut.md) |
+| The lane's routes and env knobs | [Editing lane](../edit-agent.md) |

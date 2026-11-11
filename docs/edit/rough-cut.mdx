@@ -1,0 +1,232 @@
+---
+title: Rough cut in the browser
+description: "Cut a timeline in the EZ Edit panel: create a project, import shots, select a row, trim, reorder, change planes, duck audio, add a transition, and preview, with the exact op each button posts."
+tags: [editing, video-editor, browser, panel, timeline, workflow]
+---
+
+# Rough cut in the browser
+
+**What's on this page**
+
+- **Open the panel** - start the studio, forward the port, find **EZ Edit**
+- **The panel map** - what each section and field is for
+- **Your first cut** - create, import, select, trim, render, in six moves
+- **Seven recipes** - trim, reorder, insert on a plane, duck audio, fade, delete, and preview
+- **Keyboard** - Space previews, Delete cuts, Enter picks a row
+- **What the status line is telling you** - project, mode, clip count, and the last note
+- **When a button says no** - every local refusal and what fixes it
+
+**What this enables**
+
+- **A mouse path over the reducer** - each control posts the same op the agent and the MCP server
+  send, so a hand cut and a scripted cut produce the identical project
+- **No second editor to install** - the panel is one ComfyUI frontend extension, already copied
+  into place by `bazelisk run //:manage -- start`
+- **Cutting with the model sidecar down** - nothing on this page calls `/ez_edit/chat`
+- **A cut you can hand off** - the project is a JSON file under the output dir, and the EDL export
+  turns it into something an NLE imports
+
+**Question this page answers:** how do I actually cut shots in the browser? Open the panel, click a
+clip row, and use the controls under the Clips table. For the op vocabulary behind those buttons,
+see [Plan a cut](plan-a-cut.md); for the render and the handoff, [Render and hand off](render-and-handoff.md).
+
+<Callout type="info" title="No model required">
+  Every button on this page is a route call. The chat box is the only part of the panel that needs
+  the optional agent sidecar, and the lane keeps working without it: **Send** reports the model is
+  unreachable and the rest of the panel behaves the same.
+</Callout>
+
+---
+
+## Open the panel
+
+```bash
+bazelisk run //:manage -- start          # heavy confirm: type yes
+```
+
+Then open `http://127.0.0.1:${COMFY_PORT}` and press the **EZ Edit** button in the topbar. From a
+laptop, forward the port first:
+
+```bash
+ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
+```
+
+The panel docks in the right sidebar. If the button is missing, the frontend bundle is stale:
+`bazelisk run //:manage -- restart` recopies `custom_nodes/`, then hard-refresh the tab.
+
+Use a **Chromium-based browser** for this lane. Preview and client render both decode through the
+browser's media stack, which is the part that differs across engines.
+
+---
+
+## The panel map
+
+| Section | What it holds |
+| --- | --- |
+| Status line | project title and mode, clip count, busy flag, last note |
+| **Agent chat** | transcript, a message box, **Send**, **Clear** (the only part needing the sidecar) |
+| **Timeline** | render-mode chips, **Refresh**, **New project**, the import fields, **Play**, **Export EDL**, the stage |
+| Clips table | `#`, `Label`, `In / Out`, `Track`, `Transition`, one row per clip in play order |
+| Clip controls | the selected clip's `In (s)`, `Out (s)`, `Track`, `Gain`, `Transition`, `Dur (s)` and their buttons |
+| Graphics fields | `Text`, `At (s)`, `For (s)` plus **Add overlay**, **Add caption**, **Remove overlay**, **Remove caption** |
+| Overlays / Captions tables | the graphics you have added, in time order |
+| Jobs table | `Kind`, `State`, `Mode`, `Message` for every render and generation |
+| **This browser** | **Connect executor**, **Relay local tools**, the client id, and the local MCP endpoint list |
+
+---
+
+## Your first cut
+
+1. Press **New project**. Four prompts ask for title, frames per second, width, and height. `24`,
+   `1280`, and `720` are the defaults the prompts offer.
+2. Type a path under the output dir into **Media path** - `edit/imports/clip01.mp4` - a
+   **Label** to remember it by, and the **Track** it should land on (`0` for the spine). Press
+   **Import**. The panel ffprobes the file and appends a clip.
+3. Click the clip's row. The hint above the controls reads `Selected: <label> (#<n>)` and the
+   control buttons stop being greyed out.
+4. Set `In (s)` and `Out (s)` and press **Set trim**. The row's `In / Out` cell follows.
+5. Press **Play** to watch the cut on the stage, or press Space with the panel focused. Press it
+   again to stop.
+6. Pick a render mode with the **Server** or **Client** chip, then press **Render server** (or
+   **Render client** with the tab left open). The Jobs table gets a row.
+
+**Check it worked:** the status line reads `<title> / <mode> | <n> clips | ...` and a finished
+server job appears in the Jobs table as `render_server` / `ok`. The file is
+`${COMFY_OUTPUT_DIR}/edit/renders/<project_id>-<job_id>.mp4`.
+
+---
+
+## Seven recipes
+
+Each recipe names the buttons to press and the op the panel then posts. The op list is what the
+agent and the MCP server would send for the same edit, which is why both paths agree.
+
+### Trim a shot to two seconds
+
+Select the row, type `1` in `In (s)` and `3` in `Out (s)`, press **Set trim**.
+
+```json
+{"op": "trim_clip", "args": {"clip_id": "c1", "in_s": 1, "out_s": 3}}
+```
+
+A handle you leave blank or type junk into falls back to the value the row already carries, so
+changing one handle alone is safe.
+
+### Put a shot later in the strip
+
+Select the row and press **Move later** or **Move earlier**. One press is one position:
+
+```json
+{"op": "move_clip", "args": {"clip_id": "c1", "index": 2}}
+```
+
+The panel tells you `Already the first clip` or `Already the last clip` and posts nothing when the
+move would run off the end.
+
+### Lay an insert on top
+
+Import the insert with **Track** set to `1`, or select it later and set `Track` to `1` and press
+**Set track**. Plane `0` is the spine; anything on plane `1` paints over it.
+
+```json
+{"op": "set_track", "args": {"clip_id": "insert", "track": 1}}
+```
+
+Keep the shots you want an external NLE to see on plane `0`: a CMX export carries that plane only.
+
+### Duck one clip's audio
+
+Select the row, type `0.2` in `Gain`, press **Set gain**. `1` is unity, `0` is silence.
+
+```json
+{"op": "set_gain", "args": {"clip_id": "b-roll", "gain": 0.2}}
+```
+
+### Fade between two shots
+
+Select the *second* clip, choose `fade` (or `wipe`) in `Transition`, set `Dur (s)` to `0.5`, press
+**Set transition**. The transition belongs to the clip being entered, so the first clip's button
+stays greyed out and the panel says `The first clip has no entering transition` if you force it.
+
+```json
+{"op": "set_transition", "args": {"clip_id": "c2", "kind": "fade", "duration_s": 0.5}}
+```
+
+### Delete a shot
+
+Select the row and press **Remove clip**, or press Delete (or Backspace) with the panel focused.
+Either way:
+
+```json
+{"op": "remove_clip", "args": {"clip_id": "c3"}}
+```
+
+Focus matters: a Delete keystroke typed inside a field or a button is left to the browser, so
+erasing text never cuts a shot.
+
+### Preview before you commit
+
+Press **Play** or Space. The stage decodes each clip in turn and paints overlays on top of it. The
+note reads `Preview running - press Play again to stop`. Nothing is written to disk, so preview as
+often as you like.
+
+---
+
+## Keyboard
+
+| Key | Where | What happens |
+| --- | --- | --- |
+| Space | panel focused | start or stop the preview |
+| Delete, Backspace | panel focused | remove the selected clip |
+| Enter, Space | on a clip, overlay, or caption row | select that row (the row keeps the key to itself, so no preview starts) |
+| Enter | chat box | send the message; Shift+Enter adds a line |
+
+A keystroke whose target is an input, textarea, select, or button is ignored by the panel's own
+shortcuts, which is what lets you type a space in a label.
+
+---
+
+## What the status line is telling you
+
+The line joins whatever is currently true, separated by pipes:
+
+| Fragment | Meaning |
+| --- | --- |
+| `editing lane disabled (EZ_EDIT_ENABLED=0)` | every `/ez_edit` route is refusing, and the panel is read-only |
+| `<title> / <mode>` | the loaded project and whether the next render goes to the Spark or this browser |
+| `<n> clips` | clip count in the loaded project |
+| `executor on` | this tab has claimed the browser executor and will take `exec_client` jobs |
+| `mcp relay on` | this tab answers agent-dispatched local tool calls |
+| `busy: chat` / `render` / `relay` / a label | one action is in flight; other actions queue behind it |
+| the trailing note | the last thing that happened, including every refusal above |
+
+---
+
+## When a button says no
+
+| Note | Fix |
+| --- | --- |
+| `Select a clip row first` | the control needs a selection - click a row in the Clips table |
+| `Select a clip row to edit it.` | nothing is selected yet; the controls are armed but greyed |
+| `The first clip has no entering transition` | put the transition on the clip after it |
+| `Already the first clip` / `Already the last clip` | the move would run off the end of the strip |
+| `Type the text to put on screen first` | the graphics `Text` field is blank |
+| `Nothing to remove yet` | that graphic table is empty |
+| `Create a project first` | press **New project**, or **Import** with a path |
+| `Type a media path under the Comfy output dir first` | **Media path** is blank; it is relative to the output root |
+| `Editing lane is disabled (EZ_EDIT_ENABLED=0)` | unset the variable and restart ComfyUI |
+| `Busy: <label>` | the previous action is still running |
+| `no such file under the output dir: ...` | the path is not under `${COMFY_OUTPUT_DIR}`, or it does not exist |
+
+---
+
+## Related
+
+| Need | Page |
+| --- | --- |
+| The object model and every op's guards | [Plan a cut](plan-a-cut.md) |
+| Lower thirds and captions, and who burns them in | [Captions and overlays](captions-and-overlays.md) |
+| Server versus client render, jobs, and EDL export | [Render and hand off](render-and-handoff.md) |
+| Doing the same cut from an agent or a script | [Agent and MCP driving](agent-and-mcp.md) |
+| The lane's routes, env knobs, and sidecar | [Editing lane](../edit-agent.md) |
+| A fuller NLE in another tab | [Vlo video editor](../vlo.md) |
