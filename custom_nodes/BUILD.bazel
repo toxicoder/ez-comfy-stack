@@ -279,6 +279,7 @@ filegroup(
         "ez_quality/nodes.py",
         "ez_quality/presets.py",
         "ez_quality/routes.py",
+        "ez_raster/__init__.py",
         "ez_research/__init__.py",
         "ez_research/js/ez_research.js",
         "ez_research/nodes.py",

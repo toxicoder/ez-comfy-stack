@@ -257,6 +257,7 @@ filegroup(
         "python/test_prompt_samples.py",
         "python/test_quality_apply.py",
         "python/test_quality_parity.py",
+        "python/test_raster_canvas.py",
         "python/test_reference_input_js.py",
         "python/test_remainder_coverage.py",
         "python/test_remaining_protocols.py",
