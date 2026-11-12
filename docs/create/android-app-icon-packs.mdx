@@ -1,0 +1,185 @@
+---
+title: Android app icon packs
+description: "Emit a sellable Android adaptive-icon pack straight from the catalog: adaptive layers for every density, themed and monochrome artwork, the launcher XML, store assets, listing copy, and a compliance gate that mirrors what Play checks."
+tags: [android, icons, adaptive-icons, play-store, design]
+---
+
+# Android app icon packs
+
+**What's on this page**
+
+- **What a build writes** - the Android project one pack ships as
+- **Running it** - `icon-pack`, plus the flags that narrow a build
+- **What the gate checks** - the launcher and Play rules the build is scored against
+- **Adding an app** - the scaffold, the override file, and master art
+- **Selling it** - packaging, the store listing, and what stays your call
+
+**What this enables**
+
+- **Shipping** a launcher icon pack without opening a design tool: 81 apps across 35 categories, drawn
+  from 73 geometric glyph recipes
+- **Covering** what a launcher actually asks for in one run - adaptive layers, the legacy density ladder,
+  themed and monochrome variants, and the mapping XML three launcher families read
+- **Passing** the same checks Play performs before an upload, so a rejection cycle is not the first time
+  you find out
+- **Keeping up** with a newly released app or a major redesign from one JSON row, no Python edit
+
+**Who this is for:** anyone packaging an Android icon pack for a Play listing.
+
+**Question this page answers:** how do I get from a catalog entry to a folder I can build and submit?
+Run one verb.
+
+<Callout type="info" title="No Android SDK and no design tool needed to generate">
+  `icon-pack` writes the project with stdlib Python plus this repo's own raster codec. It does not queue
+  ComfyUI, does not take the GPU, does not touch occupancy, and does not run Gradle. You need the Android
+  SDK only at the end, to build the bundle.
+</Callout>
+
+---
+
+## What a build writes
+
+One Android project under `--out`:
+
+```text
+<out>/
+  app/src/main/AndroidManifest.xml
+  app/src/main/assets/appfilter.xml
+  app/src/main/res/xml/{appfilter,drawable,grayscale_icon_map}.xml
+  app/src/main/res/values/{strings,colors}.xml
+  app/src/main/res/drawable-nodpi/{iconback,iconmask,iconupon,iconunavailable}.png
+  app/src/main/res/drawable-{mdpi,hdpi,xhdpi,xxhdpi,xxxhdpi}/<slug>.png
+  app/src/main/res/drawable-<dpi>/<slug>_{foreground,background,themed}.png
+  app/src/main/res/mipmap-anydpi-v26/ic_launcher{,_round}.xml
+  app/src/main/res/mipmap-<dpi>/ic_launcher{,_round,_foreground,_background,_monochrome}.png
+  store/play-icon.png
+  store/feature-graphic.png
+  manifest.json
+  store-listing.md
+  README.md
+  CHANGELOG.md
+```
+
+Each icon carries four drawables per density bucket: the flattened legacy tile a pre-adaptive launcher
+wants, the foreground and background layers an adaptive launcher masks itself, and a single-colour themed
+variant for launchers that tint icons to the wallpaper. The launcher chrome - backdrop, mask, upon, and
+the unavailable tile - lives once in `drawable-nodpi` instead of being copied per density.
+
+`appfilter.xml` is what makes a pack work: it maps each icon to the `component=` of the app it replaces,
+or to `package=` for the apps that have no stable activity name. It is written twice, in `res/xml` and in
+`assets`, because the ADW-family, Nova, and Smart Launcher readers do not agree on where to look.
+`grayscale_icon_map.xml` is the Android 13 themed-icon map, so a themed launcher finds the monochrome
+layer instead of falling back to the colour artwork.
+
+`manifest.json` records what was emitted - icon count, categories, the Play asset shapes - so a listing
+review can be answered from the artefact and not from a rebuild.
+
+## Running it
+
+```bash
+bazelisk run //:manage -- icon-pack --out /tmp/icon-pack
+```
+
+That writes all 81 catalog icons. Narrow it with `--icon chat-bubble` (repeatable) or `--category music`
+(repeatable) to ship a subset, name the release with `--pack-name` and `--pack-version`, and use
+`--dry-run` to report the file list and byte count without writing anything. The operator console offers
+the same thing under **Lanes > Build an Android icon pack**.
+
+To score a build that already exists:
+
+```bash
+bazelisk run //:manage -- icon-pack --validate-only --out /tmp/icon-pack
+```
+
+A build that fails a rule says so and exits 1 rather than shipping it, and `--validate-only` re-runs the
+same scoring over a folder you kept.
+
+## What the gate checks
+
+The rules a submission is scored against, and the number behind each one:
+
+| Check | Budget |
+| --- | --- |
+| Adaptive canvas | 108 dp sheet with a 72 dp safe zone, so 66.7 % stays visible under a mask |
+| Artwork bounds | glyph drawn between 48 dp and 66 dp, with 2 dp of measurement tolerance |
+| Legacy tile ladder | 48, 72, 96, 144, 192 px across mdpi to xxxhdpi, every bucket present |
+| Adaptive layer ladder | 108, 162, 216, 324, 432 px across the same five buckets |
+| Themed and monochrome layers | present per icon and wired into the adaptive XML |
+| Store icon | 512 x 512, alpha allowed, 1024 KB maximum |
+| Feature graphic | 1024 x 500, 24-bit PNG, no alpha |
+| `appfilter.xml` | parses, and every row carries `component=` or `package=` |
+| Component strings | `ComponentInfo{package/activity}` shape |
+| Resource names | lowercase `[a-z0-9_]`, no two icons mapped to one drawable |
+| Catalog | unique slugs, known glyph ids, package and slug shape |
+
+The gate reports findings with codes rather than prose so a build log can be grepped: `SAFE_ZONE_BLED`,
+`GLYPH_TOO_SMALL`, `MONOCHROME_MISSING`, `DENSITY_MISSING`, `REQUIRED_FILE_MISSING`, `PLAY_ICON_SIZE`,
+`PLAY_ICON_BYTES`, `FEATURE_GRAPHIC_SHAPE`, `FEATURE_GRAPHIC_ALPHA`, `APPFILTER_MALFORMED`,
+`COMPONENT_INVALID`, `XML_MALFORMED`, `MANIFEST_MALFORMED`, `DUPLICATE_SLUG`, `DRAWABLE_COLLISION`,
+`BRAND_NAME_SUSPECT`, `GLYPH_UNKNOWN`, and `ARTWORK_UNREADABLE`. Each finding carries a severity, and
+`error` blocks the build while `warning` asks for a look.
+
+`BRAND_NAME_SUSPECT` is the one worth knowing about before you rename a pack: the catalog holds generated
+geometric recipes only, so a pack name that reads like a trademarked brand gets flagged rather than
+shipped.
+
+## Adding an app
+
+New apps and redesigns are data. Print the row a new app needs, paste it into an override file, and
+merge:
+
+```bash
+bazelisk run //:manage -- icon-pack --scaffold vault-lock --name "Vault Lock" \
+  --package com.sample.vault --glyph lock
+```
+
+That prints a ready row - `slug`, `name`, `package`, `component`, `glyph`, `background`, `palette`,
+`category`, `keywords`, `tags`, `status` - and writes nothing. The console has the same thing as
+**Lanes > Add one app to the icon catalog**. Save rows in a JSON file and build with it:
+
+```bash
+bazelisk run //:manage -- icon-pack --catalog /tmp/my-icons.json --out /tmp/icon-pack
+```
+
+A row that reuses a catalog slug changes only the keys it states, which is how a redesign of a shipping
+icon lands: change `glyph`, `palette`, or `background` and leave the rest alone. A row with a new slug
+adds an app and has to state `slug`, `name`, `package`, and `glyph`. The `status` field is how the catalog
+keeps up with the market - `stable`, `new`, or `redesign` - so a refresh cycle can build just the rows an
+app changed.
+
+To draw an icon by hand instead, drop `<slug>.png` master art in a directory and pass `--art-dir DIR`:
+that art wins over the generated recipe, and every density, layer, and themed variant is rasterized from
+it.
+
+## Selling it
+
+An icon pack is not a loose folder of PNGs. Play takes it as an installed app that a launcher reads, so
+the generated folder is a Gradle project: open it in Android Studio, or run the release bundle task from a
+shell with the Android SDK installed, and upload the resulting `.aab`. The manifest already declares the
+icon-pack activity, the three launcher intent filters, the themed-icon and Smart Launcher meta-data, and
+the launcher name.
+
+`store-listing.md` is drafted from the pack: title, short description, full description, category, the ads
+line, and the data-safety line, each sized to the Play character limit and counted in the file so you can
+see the headroom. A generated pack contains no tracking and collects nothing, which is what makes "Data
+not collected" the honest answer here.
+
+Three things stay your call before a submission:
+
+- **The store assets.** `store/play-icon.png` and `store/feature-graphic.png` are generated from the pack's
+  own geometry. They meet the shape and byte rules; look at them before you upload, because Play rejects a
+  store icon that misrepresents what the app installs.
+- **The copy.** `store-listing.md` is a starting draft. Read it and rewrite the prose. Nothing here should
+  imply endorsement by a launcher vendor or by a device maker.
+- **Originality.** Icons come from this catalog's own recipes and palettes. If you merge master art or an
+  operator catalog, confirm you hold the rights to anything you add, and that no icon reproduces a
+  company's logo or trade dress - an icon pack that ships real logos gets taken down, and the developer
+  account goes with it.
+
+## Related
+
+- [Android Wear watch faces](android-watch-faces.mdx) - the Wear OS lane in this group
+- [Android tones](android-notification-tones.mdx) - the ringtone and notification lane
+- [Audio to MIDI](../audio-to-midi.mdx) - the other generator lane that hands off to human tools
+- [Studio workflows](../studio-workflows.mdx) - where this sits among the operator apps
+- [manage.sh reference](../manage-cli.mdx) - every verb, including `icon-pack`

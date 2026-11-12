@@ -226,6 +226,10 @@
         "title": "Sellable Android assets",
         "pages": [
           {
+            "title": "Android app icon packs",
+            "path": "create/android-app-icon-packs.md"
+          },
+          {
             "title": "Android tones",
             "path": "create/android-notification-tones.md"
           }

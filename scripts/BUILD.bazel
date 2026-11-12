@@ -85,6 +85,7 @@ _UTILITIES_SH = [
     "utilities/film-export-otio.sh",
     "utilities/film-proxies.sh",
     "utilities/house-views.sh",
+    "utilities/icon-pack.sh",
     "utilities/llm-sidecar.sh",
     "utilities/models-manifest.sh",
     "utilities/nvenc-preview.sh",

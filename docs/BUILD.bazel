@@ -31,6 +31,7 @@ filegroup(
         "contribute/security.mdx",
         "contribute/testing-docs.mdx",
         "contribute/typing.md",
+        "create/android-app-icon-packs.mdx",
         "create/android-notification-tones.mdx",
         "create/app-forge.md",
         "create/audio-rack.md",
