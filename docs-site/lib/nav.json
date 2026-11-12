@@ -205,6 +205,10 @@
             "path": "music.md"
           },
           {
+            "title": "Audio to MIDI and DAW hand-off",
+            "path": "audio-to-midi.md"
+          },
+          {
             "title": "RAP-FIRST rap lane",
             "path": "create/music-rap.mdx"
           },

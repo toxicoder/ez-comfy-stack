@@ -21,6 +21,7 @@ filegroup(
     name = "content",
     srcs = [
         "asset-bible.mdx",
+        "audio-to-midi.mdx",
         "blender-gb10-sidecar.mdx",
         "contribute/building-with-bazel.md",
         "contribute/contributing.md",
