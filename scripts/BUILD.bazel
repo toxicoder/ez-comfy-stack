@@ -80,6 +80,7 @@ _UTILITIES_SH = [
     "utilities/download-wan.sh",
     "utilities/dub-fetch.sh",
     "utilities/edit-mcp.sh",
+    "utilities/export-song.sh",
     "utilities/film-accept.sh",
     "utilities/film-animatic.sh",
     "utilities/film-export-otio.sh",
