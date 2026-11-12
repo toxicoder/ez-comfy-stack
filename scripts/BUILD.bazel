@@ -107,6 +107,7 @@ _UTILITIES_SH = [
     "utilities/studio-mcp.sh",
     "utilities/studio-tui.sh",
     "utilities/take-promote.sh",
+    "utilities/tones-pack.sh",
     "utilities/update-stack.sh",
 ]
 
