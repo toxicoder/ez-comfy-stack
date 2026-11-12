@@ -219,6 +219,15 @@
         ]
       },
       {
+        "title": "Sellable Android assets",
+        "pages": [
+          {
+            "title": "Android tones",
+            "path": "create/android-notification-tones.md"
+          }
+        ]
+      },
+      {
         "title": "3D, Blender, and host tools",
         "pages": [
           {

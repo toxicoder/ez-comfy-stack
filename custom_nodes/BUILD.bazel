@@ -300,5 +300,9 @@ filegroup(
         "ez_studio_forge/nodes.py",
         "ez_studio_forge/pipeline.py",
         "ez_studio_forge/prompts/planner.txt",
+        "ez_tones/__init__.py",
+        "ez_tones/catalog.py",
+        "ez_tones/pack.py",
+        "ez_tones/synth.py",
     ],
 )
