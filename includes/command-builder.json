@@ -810,6 +810,48 @@
       "flags": []
     },
     {
+      "id": "report-bug",
+      "title": "report-bug",
+      "description": "Bug template for a failing command line or bazelisk gate. Prints the markdown, saves it under EZ_BUG_REPORT_DIR, and prints the prefilled GitHub URL; nothing is submitted. --command, --exit, --log, and --title are free-form and must be typed on the command line.",
+      "argv": [
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
+        "report-bug"
+      ],
+      "flags": [
+        {
+          "name": "surface",
+          "kind": "choice",
+          "required": false,
+          "default": "cli",
+          "choices": [
+            {
+              "value": "cli",
+              "label": "cli - an operator command (default)"
+            },
+            {
+              "value": "bazel",
+              "label": "bazel - a bazelisk gate (//:validate, //:test-all)"
+            },
+            {
+              "value": "compose",
+              "label": "compose - docker compose up/down/config"
+            },
+            {
+              "value": "download",
+              "label": "download - a model pack pull"
+            },
+            {
+              "value": "tui",
+              "label": "tui - the operator console"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "start",
       "title": "start",
       "description": "Type yes. Headroom preflight. Compose restart: no.",

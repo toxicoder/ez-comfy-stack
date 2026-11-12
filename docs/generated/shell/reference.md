@@ -608,6 +608,27 @@ Outputs:
 Returns:
   0 on success/abort; 1 on hard confirm failure
 
+### Command: report-bug
+
+Print, save, and link a bug report for a CLI or bazelisk failure.
+
+The host twin of the browser pack's Report a bug button: the same section
+headings, filled from what the operator can name instead of from a live
+graph. Nothing is submitted here - the markdown goes to stdout so it can be
+redirected, and the saved path plus the prefilled GitHub URL go to stderr.
+Globals:
+  EZ_BUG_REPO, EZ_BUG_REPORT_DIR (see lib/bug_report.sh)
+Arguments:
+  --surface NAME  cli (default) | bazel | compose | download | tui
+  --command CMD   the failing command line, quoted
+  --exit N        the status it returned (default 1)
+  --log FILE      log whose tail is attached as ## Command output
+  --title TEXT    summary; a [cli:<surface>] prefix is added when absent
+Outputs:
+  Markdown template on stdout; saved path and URL on stderr
+Returns:
+  0 on success; 2 on a bad flag or a non-numeric --exit
+
 <!-- source: scripts/setup-host.sh -->
 ## setup-host - one-time host bootstrap: Bazelisk + the lint toolchain.
 
@@ -708,6 +729,43 @@ Source after scripts/lib/common.sh (uses err). Not executable.
     Safety:
       Does not start Compose. Does not apt-install unless blender-install.sh
       is invoked. Does not weaken restart: "no", headroom, or download-limit.
+
+<!-- source: scripts/lib/bug_report.sh -->
+## bug_report helper
+
+Turns a command-line or bazelisk failure into a bug report the operator can
+file in one click. It is the host twin of the browser pack's "Report a bug"
+button (custom_nodes/ez_feedback/): the same section headings, filled from
+what the host can name without a live graph.
+
+Two ways in:
+
+  - automatic: die() in lib/common.sh, the manage.sh EXIT trap, and the
+    gate()/slice traps in everything.sh and validate.sh call
+    bug_report_hint, which stays quiet unless a human is watching.
+
+  - explicit: `bazelisk run //:manage -- report-bug` prints the template,
+    saves it, and prints the prefilled URL.
+
+Nothing here submits anything. The prefilled URL is a handoff; the saved
+markdown file is the complete artefact and the one to attach when the URL
+says the body was shortened.
+
+### Function `bug_report_hint`
+
+```bash
+Usage:
+```
+
+  source "$(dirname "$0")/lib/bug_report.sh"
+  bug_report_hint "bazel" "bazelisk test //:test-all" 1 /tmp/test-all.log
+
+!!! warning
+
+    Safety: Read-only probes behind a timeout, one 0600 file under
+      EZ_BUG_REPORT_DIR, and a URL string. No network, no sudo, no docker, no
+      GPU, and .env is never read. Only the whitelisted keys below are printed,
+      token-shaped values become [redacted], and $HOME becomes ~.
 
 <!-- source: scripts/lib/check_tool.sh -->
 ## check_tool helper

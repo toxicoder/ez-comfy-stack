@@ -300,13 +300,34 @@ same report. Operator guide: [Reporting issues](operate/reporting-issues.md).
 | Symptom | Cause | Fix |
 | --- | --- | --- |
 | No **Report a bug** / **Request a feature** buttons | `custom_nodes/ez_feedback/` did not load, or the frontend served a cached extension bundle | Hard-reload the browser. Confirm the pack is in the Comfy `custom_nodes` copy and that ComfyUI logged it. |
-| Buttons show but clicking opens nothing | Popup blocker also blocks the prefilled `issues/new` tab | Allow popups for the ComfyUI origin, or use **Copy markdown** and paste into a new issue. |
+| Buttons show but clicking opens nothing | Popup blocker blocked the prefilled `issues/new` tab | The dialog notices and says so: the status line reads `Popup blocked - full markdown copied. Paste it on GitHub.` Paste it into a new issue, or allow popups for the ComfyUI origin and press the button again. |
 | **File directly** never appears | `EZ_GITHUB_TOKEN` unset, or the container was not restarted after it was set | Set it in `.env`, then `bazelisk run //:manage -- stop && bazelisk run //:manage -- start`. Everything else works without a token. |
 | Report body is missing the app name | The graph has no `extra.lab_rel` - true of hand-saved graphs, not lab apps | Name the workflow in the report; surface, environment, and browser facts still arrive. |
 | Body ends with `[report trimmed to fit the GitHub URL limit]` | Context plus traceback exceeded the prefilled-URL budget, which GitHub answers with `414 URI Too Long` | Expected, not a failure. The dialog copies the full markdown to the clipboard at the same time - paste it into the opened tab, or use **Copy markdown**. **File directly** never trims. |
+| Body ends with `[left out of this URL: ## Browser, ...]` | The URL budget ran out, so the ladder gave up machine-generated blocks in that order: **Browser**, then **Environment**, then **Recent errors**. A block smaller than the note that would announce its absence is kept, and the tail is cut on a whole line so no bullet or code fence is split. | Expected, and the body names what went. The full markdown was copied - paste it in. What is never traded away first: your own text, **Context**, and the captured errors. **File directly** never trims. |
+| Status says `Copy blocked; the body is selected.` | Both clipboard paths failed: no `navigator.clipboard` (a plain-`http://` origin that is not `127.0.0.1`) and the browser refused the selection copy as well | Press **Ctrl/Cmd+C** while the body is still selected, or reach ComfyUI over `https://` or `127.0.0.1`, which is a secure context. On `http://<LAN address>:8188` the fallback textarea normally covers this. |
 | No **Feedback** tab in the left dock | The frontend exposes no sidebar tabs, or it is serving a cached extension bundle | Hard-refresh the Comfy tab. A frontend without sidebar tabs registers nothing there and every **Report a bug** / **Request a feature** button still files the same report. |
 | **Enhance with LLM** in the panel says the model is unavailable | Same GGUF and `EZ_LLM_*` knobs as prompt enhancement: GGUF missing, `llama.cpp unavailable`, or the 35B sidecar is down | `bazelisk run //:manage -- download-models` then restart; see [Models and workflows](operate/troubleshooting-models-workflows.md). Fail-soft by design - it writes a status line, keeps your text, and the panel files without it. |
 | No **Report this error** on the `Loading aborted due to error reloading workflow data` modal | Old `ez_feedback/js/` in the container - the button is appended when that modal appears | `bazelisk run //:manage -- restart` so the pack JS recopies, then hard-refresh. The canvas row: [Studio canvas](operate/troubleshooting-canvas.md). |
+
+---
+
+## Command-line and bazelisk bug handoff
+
+A failing `die`, a failing `bazelisk run //:manage` verb, and a failing gate under
+`//:everything` or `//:validate` print a four-line `[ez-comfy][BUG]` handoff: a saved
+template, a prefilled GitHub URL, the re-file command, and this page. Operator guide:
+[Reporting issues](operate/reporting-issues.md).
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| A command failed and no `[ez-comfy][BUG]` lines appeared | The handoff prints only when stderr is a terminal, so a pipe, a `tee`, a log file, and CI stay quiet by design | Re-run with `EZ_BUG_HINT=1` to see it, or file deliberately: `bazelisk run //:manage -- report-bug --surface cli --command '<the command>' --exit 1`. `EZ_BUG_HINT=0` forces it off |
+| `bazelisk run //:everything` or `//:validate` failed a gate and printed no handoff | Two cases, both intentional: the failing gate was the `bazelisk` presence probe (an environment gap with its own repair line), or a handoff already printed for an earlier gate and the sweep does not repeat it | Read the repair line the probe printed (`bazelisk run //:setup-host`). For the repeat case the first handoff is the one that names the failing target |
+| `bazelisk run //:manage -- report-bug` exits 2 | A bad flag, a non-numeric `--exit`, or an `--log` path that is not readable. The verb refuses rather than filing a report that misquotes the failure | Check the `err` line it printed. `--exit` takes the status the command returned; `--log` takes a readable file |
+| The prefilled URL opens an issue whose body is shorter than the template | The body would have pushed the GET URL past its budget, so it was cut at a line boundary and marked `[body shortened to fit the URL ...]`. GitHub answers a too-long URL with `414 URI Too Long`, so a short body beats a dead link | Attach the saved markdown file named on the `Template saved:` line - it holds every line. Move where it lands with `EZ_BUG_REPORT_DIR` |
+| The prefilled URL carries a title and labels but no body at all | `python3` is what percent-encodes and fits the body; without it the URL keeps only the essentials | Install `python3` (`bazelisk run //:setup-host`). The saved file is complete either way, so attach it |
+| `## Environment` is mostly `unavailable` | Each probe is best-effort and time-boxed by `BUG_REPORT_PROBE_TIMEOUT` (5s), so a cold or absent tool reports `unavailable` instead of hanging the failure message | Nothing to fix for the report to be useful. Raise the timeout if the host is genuinely slow: `BUG_REPORT_PROBE_TIMEOUT=20 bazelisk run //:manage -- report-bug` |
+| A token or a home path appears in a report | It should not: token-shaped values become `[redacted]`, `$HOME` becomes `~`, and `.env` is never read - only whitelisted keys are printed | Say so in the report and scrub it on GitHub. Values captured from a log tail go through the same redaction |
 
 ---
 

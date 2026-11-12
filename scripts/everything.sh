@@ -40,6 +40,18 @@ set -euo pipefail
 
 BAZEL="${BAZEL:-$(command -v bazelisk 2>/dev/null || command -v bazel 2>/dev/null || true)}"
 SKIP_BOOTSTRAP=0
+
+# The gate() hook below is the filing handoff for a failing bazelisk run. The
+# //:everything target ships it in runfiles, so sourcing beside the script
+# works the same way under `bazelisk run` and from a plain checkout. Derived by
+# expansion, not by `dirname`: a host with no PATH at all is exactly the state
+# this script has to survive long enough to print the //:setup-host repair.
+SCRIPT_DIR="${BASH_SOURCE[0]%/*}"
+if [[ ${SCRIPT_DIR} == "${BASH_SOURCE[0]}" ]]; then
+  SCRIPT_DIR="."
+fi
+# shellcheck source=lib/bug_report.sh disable=SC1091
+source "${SCRIPT_DIR}/lib/bug_report.sh"
 # Committed screenshot baselines for the docs-site visual lane. The lane needs
 # them plus a container runtime, so their absence is an environment gap the
 # sweep reports as a skip rather than as a failing gate.
@@ -88,8 +100,11 @@ done
 
 #######################################
 # Require bazelisk/bazel on PATH.
+#
+# A missing toolchain is a named environment gap with a stated repair, so it
+# claims the one-shot bug-handoff flag instead of offering a defect report.
 # Globals:
-#   BAZEL
+#   BAZEL, EZ_BUG_HINT_SHOWN (set to 1 to suppress the handoff)
 # Arguments:
 #   None
 # Outputs:
@@ -102,6 +117,7 @@ need_bazel() {
     echo "everything: bazelisk or bazel not found in PATH" >&2
     echo "everything: bootstrap the host with 'bash scripts/setup-host.sh', then re-run" >&2
     echo "everything:   bazelisk run //:setup-host -- --check" >&2
+    EZ_BUG_HINT_SHOWN=1
     exit 2
   fi
 }
@@ -124,6 +140,10 @@ gate() {
   echo "==> //:everything: ${label}"
   if ! "${BAZEL}" "$@"; then
     echo "everything: gate ${label} failed" >&2
+    if [[ -z ${EZ_BUG_HINT_SHOWN:-} ]] && declare -f bug_report_hint >/dev/null 2>&1; then
+      EZ_BUG_HINT_SHOWN=1
+      bug_report_hint "bazel" "${BAZEL} $*" 1
+    fi
     return 1
   fi
 }

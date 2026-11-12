@@ -434,6 +434,8 @@ Commands:
   models-status     Disk bible: keep-set + refuse list (does not delete)
   reap-models       Plan/apply model cache cleanup (default --plan; never cleanup)
   disk-wizard       Guided host reclaim (default --plan; never cleanup / never docker prune -a --volumes)
+  report-bug        Print, save, and link a bug report for a CLI or bazelisk failure
+                    --surface S --command CMD --exit N [--log FILE] [--title T]
 
 Environment: see .env.example (MODELS_DIR, COMFY_OUTPUT_DIR, HF_TOKEN, MEM_LIMIT, DOWNLOAD_LIMIT)
 EOF
@@ -1917,6 +1919,145 @@ cmd_cleanup() {
   stack_cleanup_state
 }
 
+# @command report-bug
+#######################################
+# Print, save, and link a bug report for a CLI or bazelisk failure.
+#
+# The host twin of the browser pack's Report a bug button: the same section
+# headings, filled from what the operator can name instead of from a live
+# graph. Nothing is submitted here - the markdown goes to stdout so it can be
+# redirected, and the saved path plus the prefilled GitHub URL go to stderr.
+# Globals:
+#   EZ_BUG_REPO, EZ_BUG_REPORT_DIR (see lib/bug_report.sh)
+# Arguments:
+#   --surface NAME  cli (default) | bazel | compose | download | tui
+#   --command CMD   the failing command line, quoted
+#   --exit N        the status it returned (default 1)
+#   --log FILE      log whose tail is attached as ## Command output
+#   --title TEXT    summary; a [cli:<surface>] prefix is added when absent
+# Outputs:
+#   Markdown template on stdout; saved path and URL on stderr
+# Returns:
+#   0 on success; 2 on a bad flag or a non-numeric --exit
+#######################################
+cmd_report_bug() {
+  local surface="cli" command_text="" code="1" log_file="" title=""
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --surface)
+        [[ $# -ge 2 ]] || {
+          err "report-bug --surface needs a value"
+          return 2
+        }
+        surface="$2"
+        shift 2
+        ;;
+      --command)
+        [[ $# -ge 2 ]] || {
+          err "report-bug --command needs a value"
+          return 2
+        }
+        command_text="$2"
+        shift 2
+        ;;
+      --exit)
+        [[ $# -ge 2 ]] || {
+          err "report-bug --exit needs a value"
+          return 2
+        }
+        code="$2"
+        shift 2
+        ;;
+      --log)
+        [[ $# -ge 2 ]] || {
+          err "report-bug --log needs a value"
+          return 2
+        }
+        log_file="$2"
+        shift 2
+        ;;
+      --title)
+        [[ $# -ge 2 ]] || {
+          err "report-bug --title needs a value"
+          return 2
+        }
+        title="$2"
+        shift 2
+        ;;
+      -h | --help)
+        cat <<'EOF'
+Usage: manage.sh report-bug [--surface S] [--command CMD] [--exit N]
+                           [--log FILE] [--title TEXT]
+
+  Surfaces: cli (default) | bazel | compose | download | tui
+  Prints the filled markdown template, saves it under EZ_BUG_REPORT_DIR, and
+  prints the prefilled GitHub new-issue URL. Nothing is submitted.
+
+  Example, after a failed gate:
+    bazelisk run //:manage -- report-bug --surface bazel \
+      --command 'bazelisk test //:test-all' --exit 1 \
+      --log /tmp/test-all.log
+EOF
+        return 0
+        ;;
+      *)
+        err "Unknown report-bug flag: $1"
+        return 2
+        ;;
+    esac
+  done
+
+  if [[ ! ${code} =~ ^[0-9]+$ ]]; then
+    err "report-bug --exit must be a number, got: ${code}"
+    return 2
+  fi
+  if [[ -n ${log_file} && ! -r ${log_file} ]]; then
+    err "report-bug --log is not readable: ${log_file}"
+    return 2
+  fi
+
+  local full_title body saved href
+  if [[ -z ${title} && -n ${command_text} ]]; then
+    title="${command_text}"
+  fi
+  full_title="$(bug_report_title "${title}" "${surface}")"
+  body="$(bug_report_markdown "${full_title}" "${surface}" "${command_text}" "${code}" "${log_file}")"
+  printf '%s\n' "${body}"
+
+  saved="$(bug_report_write "${body}" "${full_title}")"
+  href="$(bug_report_url "${full_title}" "${body}" "bug")"
+  printf '%s\n' "[ez-comfy][BUG] Template saved: ${saved}" >&2
+  printf '%s\n' "[ez-comfy][BUG] Open on GitHub: ${href}" >&2
+  printf '%s\n' "[ez-comfy][BUG] Attach ${saved} when the URL says the body was shortened." >&2
+}
+
+#######################################
+# EXIT trap: offer the bug handoff once for a failing operator run.
+#
+# die() sets EZ_BUG_HINT_SHOWN so a verb that dies is not hinted twice.
+# Deliberate refusals and typos set the same flag to opt out.
+# Globals:
+#   EZ_BUG_SURFACE, EZ_CLI_COMMAND, EZ_BUG_HINT_SHOWN
+# Arguments:
+#   $1 - the status the script is exiting with
+# Outputs:
+#   The hint on stderr, when bug_report_hint decides a human is watching
+# Returns:
+#   0 always; the script's exit status is left alone
+#######################################
+_ez_cli_exit_trap() {
+  local rc="${1:-0}"
+  if [[ ${rc} == "0" || -n ${EZ_BUG_HINT_SHOWN:-} ]]; then
+    return 0
+  fi
+  if ! declare -f bug_report_hint >/dev/null 2>&1; then
+    return 0
+  fi
+  EZ_BUG_HINT_SHOWN=1
+  bug_report_hint "${EZ_BUG_SURFACE:-cli}" "${EZ_CLI_COMMAND:-}" "${rc}"
+  return 0
+}
+
 #######################################
 # Thin CLI dispatcher: first argument selects a cmd_* handler.
 # Globals:
@@ -1932,6 +2073,7 @@ cmd_cleanup() {
 main() {
   local cmd="${1:-help}"
   shift || true
+  EZ_CLI_COMMAND="manage.sh ${cmd}${*:+ $*}"
   case "${cmd}" in
     help | -h | --help) cmd_help ;;
     setup) cmd_setup "$@" ;;
@@ -1993,9 +2135,12 @@ main() {
     reap-models) cmd_reap_models "$@" ;;
     disk-wizard) cmd_disk_wizard "$@" ;;
     cleanup) cmd_cleanup ;;
+    report-bug) cmd_report_bug "$@" ;;
     *)
       err "Unknown command: ${cmd}"
       cmd_help
+      # A typo is not a defect: do not offer a bug template for it.
+      EZ_BUG_HINT_SHOWN=1
       exit 1
       ;;
   esac
@@ -2003,5 +2148,6 @@ main() {
 
 # Source guard: allow tests to source this file without executing main.
 if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then
+  trap '_ez_cli_exit_trap $?' EXIT
   main "$@"
 fi

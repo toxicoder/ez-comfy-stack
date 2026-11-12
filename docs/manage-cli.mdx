@@ -58,6 +58,7 @@ Redeploy the stack from the branch you are standing on. The image lane follows t
 | `onboard` | Spark: `setup --install-docker` then doctor. Laptop: `setup-client` then remote clone/setup/doctor. Never auto-start. [One-command onboard](start/onboard.md) | Treat this as `start` |
 | `spark-ui` | Foreground SSH LocalForward to Host ez-spark (stack must already be started) | Bind `0.0.0.0`; start Compose from the laptop |
 | `doctor` | Preflight (docker, GPU, RAM/disk, dirs, `hf` CLI, license one-liner, spark-timing) | Treat missing weights as a hard fail (they are a warning) |
+| `report-bug [--surface S] [--command CMD] [--exit N] [--log FILE] [--title TEXT]` | Print, save, and link a bug template for a failing command line or bazelisk gate: markdown on stdout, saved path plus prefilled GitHub URL on stderr. `S` is `cli` (default), `bazel`, `compose`, `download`, or `tui`. [Reporting issues](operate/reporting-issues.md) | Wait for it to file the issue - nothing is submitted; and when the URL says the body was shortened, attach the saved file |
 | `status [--json]` | Compose project; prints `MODELS_DIR`, `COMFY_OUTPUT_DIR`, port | - |
 | `start` | Type `yes`; headroom; `compose up -d`; returns detached (not tied to this shell). Follow: `logs`. `LAB_STACK_FOLLOW=1` waits for the UI | Weaken confirm or `restart: "no"`; treat logout as stop |
 | `stop` | Stop containers; keep models, outputs, volume | Reboot with the stack up |

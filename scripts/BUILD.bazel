@@ -10,6 +10,7 @@ package(default_visibility = ["//visibility:private"])
 # helper is a deliberate BUILD edit, so no helper can go unmapped.
 _LIB_SH = [
     "lib/blender_host.sh",
+    "lib/bug_report.sh",
     "lib/check_tool.sh",
     "lib/client_os.sh",
     "lib/common.sh",
@@ -234,10 +235,12 @@ sh_binary(
 )
 
 # The full-sweep orchestrator behind //:everything. It shells out to bazelisk
-# only, so it carries no runfiles: every input it needs is a Bazel target.
+# only, so the single lib it carries is the bug-report handoff gate() prints
+# when a bazelisk gate fails.
 exec_shell(
     name = "everything",
     src = "everything.sh",
+    data = ["lib/bug_report.sh"],
     visibility = ["//visibility:public"],
 )
 

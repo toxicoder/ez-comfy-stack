@@ -21,6 +21,7 @@ EXPORTS = (
     "REPO",
     "MAX_HREF",
     "MAX_ERROR_TEXT",
+    "ERROR_TEXT_FIT",
     "clip",
     "labelsFor",
     "buildTitle",
@@ -134,14 +135,23 @@ def test_core_reuses_the_shared_vocabulary() -> None:
 
 
 def test_core_degrades_in_the_pinned_order() -> None:
+    """Machine trivia gives up before diagnosis.
+
+    `## Recent errors` used to be the second thing dropped, so a fat report
+    traded the traceback that names the failing op for a viewport line.
+    """
     body = _core()
     order = body.index("DEGRADE_ORDER = [")
     block = body[order : body.index("];", order)]
-    assert block.index("BROWSER_HEADING") < block.index("ERRORS_HEADING") < block.index(
-        "ENVIRONMENT_HEADING"
+    assert block.index("BROWSER_HEADING") < block.index("ENVIRONMENT_HEADING") < block.index(
+        "ERRORS_HEADING"
     )
     assert "dropTraceback" in body
     assert "Traceback:" in body
+    # Naming what was left out costs a line, so a drop only counts when the URL
+    # really got shorter: a section smaller than its own note is kept.
+    assert "if (candidateHref.length >= href.length)" in body
+    assert "left out of this URL: " in body
 
 
 def test_core_dialog_is_hand_rolled_and_accessibility_shaped() -> None:
@@ -486,13 +496,39 @@ def test_secrets_are_scrubbed_before_leaving_the_page() -> None:
 def test_href_never_outruns_the_github_url_limit() -> None:
     """A fat Context must not ship a 414 URI Too Long link.
 
-    The section ladder cannot bound the URL on its own, so the tail is cut.
+    The section ladder cannot bound the URL on its own, so the tail is cut - on a
+    whole line, with no code fence left open: an unterminated fence swallows the
+    rest of the issue once GitHub renders it. A tighter per-error tier runs before
+    any section is dropped, so five captured tracebacks are clipped (the line
+    naming the op survives) rather than deleted whole.
     """
     body = CORE_JS.read_text(encoding="utf-8")
     assert "[report trimmed to fit the GitHub URL limit]" in body
-    assert "function fit(build, body)" in body
-    assert "return build(fit(build, trimmed));" in body
-    assert "if (build(body).length <= MAX_HREF)" in body
+    assert "function fit(build, body, suffix)" in body
+    assert "return build(fit(build, stripped, omissionNote(dropped)));" in body
+    assert "function cutToLine(prefix)" in body
+    assert 'const fences = (snapped.match(/^```/gm) || []).length;' in body
+    assert "if (build(body + tail).length <= MAX_HREF)" in body
+    assert "buildBody(payload, ERROR_TEXT_FIT)" in body
+
+
+def test_core_copies_without_a_secure_context_or_an_open_popup() -> None:
+    """The copy the handoff promises has to work on the real deployment.
+
+    `navigator.clipboard` is undefined on `http://<LAN address>:8188`, which is
+    how this studio is normally opened, and a blocked popup used to return from
+    the handoff click in silence, losing the report.
+    """
+    body = _core()
+    for needle in (
+        "function legacyCopy(text)",
+        'document.execCommand("copy")',
+        "function writeToClipboard(text)",
+        '"Popup blocked - full markdown copied. Paste it on GitHub."',
+        '"Popup blocked and copy failed; the body is selected."',
+        "writeToClipboard(body).catch(() => undefined)",
+    ):
+        assert needle in body, needle
 
 
 def test_file_direct_never_claims_a_link_it_does_not_have() -> None:

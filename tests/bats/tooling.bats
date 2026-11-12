@@ -251,3 +251,51 @@ teardown() {
   run grep -E 'kubeconform|ansible-lint' "${installer}"
   [ "$status" -ne 0 ]
 }
+
+@test "validate.sh --ci forwards each slice line and reads the CI true/false words" {
+  local stub="${BATS_TEST_TMPDIR}/fake-bazel"
+  printf '#!/usr/bin/env bash\nprintf "%%s\\n" "$*" >> "${STUB_LOG}"\n' >"${stub}"
+  chmod +x "${stub}"
+
+  # The workflow hands RUN_BAZEL_CORE / RUN_DOCS over as the words a GitHub
+  # Actions boolean renders to; `false` used to reach an -eq test and die
+  # under set -u instead of skipping the slice.
+  run env STUB_LOG="${BATS_TEST_TMPDIR}/calls" BAZEL="${stub}" \
+    RUN_BAZEL_CORE=true RUN_DOCS=false bash "${REPO_ROOT}/scripts/validate.sh" --ci
+  [ "$status" -eq 0 ]
+  grep -qF 'build //... --nobuild' "${BATS_TEST_TMPDIR}/calls"
+  grep -qF 'test //:test-fast' "${BATS_TEST_TMPDIR}/calls"
+  grep -qF 'test //:lint --test_tag_filters=manual' "${BATS_TEST_TMPDIR}/calls"
+  grep -qF 'build //:manage //:all' "${BATS_TEST_TMPDIR}/calls"
+  ! grep -qF 'run //docs:docs' "${BATS_TEST_TMPDIR}/calls"
+
+  run env STUB_LOG="${BATS_TEST_TMPDIR}/calls-none" BAZEL="${stub}" \
+    RUN_BAZEL_CORE=false RUN_DOCS=false bash "${REPO_ROOT}/scripts/validate.sh" --ci
+  [ "$status" -eq 0 ]
+  [[ ${output} == *"skip core"* ]]
+  [ ! -s "${BATS_TEST_TMPDIR}/calls-none" ]
+}
+
+@test "validate.sh hands a failing slice to the bug template once" {
+  grep -qE '^run_bazel\(\)' "${REPO_ROOT}/scripts/validate.sh"
+  grep -qE '^_ez_validate_exit_trap\(\)' "${REPO_ROOT}/scripts/validate.sh"
+  grep -qF "trap '_ez_validate_exit_trap \$?' EXIT" "${REPO_ROOT}/scripts/validate.sh"
+
+  local stub="${BATS_TEST_TMPDIR}/failing-bazel"
+  printf '#!/usr/bin/env bash\necho "ERROR: analysis of target failed" >&2\nexit 1\n' >"${stub}"
+  chmod +x "${stub}"
+  run env BAZEL="${stub}" RUN_BAZEL_CORE=true RUN_DOCS=false EZ_BUG_HINT=1 \
+    EZ_BUG_REPORT_DIR="${BATS_TEST_TMPDIR}/reports" \
+    bash "${REPO_ROOT}/scripts/validate.sh" --ci
+  [ "$status" -ne 0 ]
+  [[ ${output} == *'[ez-comfy][BUG] Template saved:'* ]]
+  # The trap reports the slice that died, so the template names that line.
+  local saved hints
+  saved="$(printf '%s\n' "${output}" | sed -n 's/.*Template saved: //p' | head -n 1)"
+  hints="$(printf '%s\n' "${output}" | grep -c '^\[ez-comfy\]\[BUG\] Template saved:' || true)"
+  [ -f "${saved}" ]
+  run cat "${saved}"
+  [[ ${output} == *'build //... --nobuild'* ]]
+  [[ ${output} == *'exited with status 1'* ]]
+  [ "${hints}" -eq 1 ]
+}
