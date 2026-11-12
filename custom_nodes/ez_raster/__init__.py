@@ -60,6 +60,11 @@ _CHANNEL_COUNTS: dict[int, int] = {
 # not defined for the two that already carry an alpha channel.
 _TRNS_SAMPLES: dict[int, int] = {_COLOR_TYPE_GRAY: 1, _COLOR_TYPE_RGB: 3}
 
+# Largest file the stdlib codec will read into memory. Well above any real
+# icon or banner, and far below what a hostile path could hand the process; a
+# PNG over the cap goes to ffmpeg, which streams instead of buffering.
+_MAX_DECODE_BYTES = 64 * 1024 * 1024
+
 # Bytes per pixel this module carries. 32-bit RGBA is what the Play Store and
 # the Android mipmap tree both expect for launcher icons.
 _BYTES_PER_PIXEL = 4
@@ -976,8 +981,9 @@ def _read_frame(path: str) -> _Frame | None:
         path: File to read.
 
     Returns:
-        The decoded frame, or None when the path is absent, unreadable, or not
-        a PNG at all, which leaves the file to the media backend.
+        The decoded frame, or None when the path is absent, unreadable, too
+        large for an in-process read, or not a PNG at all, which leaves the
+        file to the media backend.
 
     Raises:
         RasterError: The file carries the PNG signature and is broken.
@@ -985,10 +991,13 @@ def _read_frame(path: str) -> _Frame | None:
     """
     try:
         with open(path, "rb") as handle:
+            if handle.read(len(_PNG_SIGNATURE)) != _PNG_SIGNATURE:
+                return None
+            if handle.seek(0, os.SEEK_END) > _MAX_DECODE_BYTES:
+                return None
+            handle.seek(0)
             data = handle.read()
     except OSError:
-        return None
-    if len(data) < len(_PNG_SIGNATURE) or not data.startswith(_PNG_SIGNATURE):
         return None
     return _parse_png(data)
 

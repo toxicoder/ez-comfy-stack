@@ -433,6 +433,27 @@ def test_a_keyed_grey_value_is_read_as_transparent(tmp_path: Path) -> None:
     assert decoded.pixel(0, 0) == Rgba(0, 0, 0, 255), "black stays opaque"
 
 
+def test_an_oversized_png_is_left_to_the_media_backend(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The in-process read is bounded, so no file can exhaust the host's memory.
+
+    The cap sits far above any icon or banner a pack ships. Past it the file
+    goes to ffmpeg, which streams rather than buffering the whole thing, which
+    is what the operator got before the codec existed.
+    """
+    canvas = Canvas(8, 8)
+    canvas.fill(BLACK)
+    path = _write(tmp_path, "big.png", canvas.png_bytes())
+    backend = _FakeMedia(stdout=bytes(4 * 4 * 4), probe_size="4x4")
+    monkeypatch.setattr(raster.subprocess, "run", backend.run)
+    monkeypatch.setattr(raster, "_MAX_DECODE_BYTES", 32)
+
+    decode_rgba(path, 4)
+
+    assert backend.asked_for_ffmpeg, "a file over the cap is ffmpeg's to stream"
+
+
 def test_a_file_that_is_not_a_png_still_reaches_the_media_backend(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
