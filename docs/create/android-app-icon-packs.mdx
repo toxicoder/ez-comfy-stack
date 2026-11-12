@@ -149,7 +149,11 @@ app changed.
 
 To draw an icon by hand instead, drop `<slug>.png` master art in a directory and pass `--art-dir DIR`:
 that art wins over the generated recipe, and every density, layer, and themed variant is rasterized from
-it.
+it. Master art is read by the in-tree PNG codec, so an 8-bit non-interlaced truecolour or greyscale PNG
+needs no host binary at all, on a build host or in the compliance gate. JPEG and WebP art, and a 16-bit,
+Adam7-interlaced, or palette PNG, is read by ffmpeg instead, so those formats need it on `PATH`; see
+[Troubleshooting](../troubleshooting.md#creator-asset-apps-export-song-icon-pack-watch-face-tones-pack)
+for the finding that names it.
 
 ## Selling it
 

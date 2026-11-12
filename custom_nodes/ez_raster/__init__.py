@@ -1,16 +1,22 @@
-"""Sellable Android asset packs: raster canvas and a stdlib PNG encoder.
+"""Sellable Android asset packs: raster canvas and a stdlib PNG codec.
 
 The icon and watch-face packs both need the same two things, and neither is
 in the hermetic dependency set: a way to composite RGBA pixels, and a way to
 put the result on disk as a PNG. PIL is not pinned for tests, so this module
 carries both, on ``zlib`` and ``struct`` only.
 
-Decoding is deliberately absent. Master artwork arrives from ComfyUI as a PNG
-or EXR and is handed to ffmpeg, which turns it into raw RGBA bytes far faster
-than a pure-Python filter reconstruction would; :func:`from_rgba_bytes` takes
-that stream. Encoding stays here because the bytes this package writes are
-simple, deterministic, and must be byte-identical between runs so a drift test
-can pin them.
+Decoding lives here too, for the files this package writes and for the 8-bit
+truecolour and greyscale types an icon pack is normally authored as: a pack
+that could only be validated by shelling out to ffmpeg could not be validated
+in the hermetic fast core lane, in the devcontainer, or on a CI runner at all.
+The codec reads chunk framing, all five scanline filters, ``tRNS`` keying, and
+promotes to RGBA8888 on ``zlib`` and ``struct`` alone. 16-bit samples, Adam7
+interlacing, palette, and sub-byte greyscale files are outside its scope and
+fall through to ffmpeg, which reads them where the host has it.
+
+Encoding stays here because the bytes this package writes are simple,
+deterministic, and must be byte-identical between runs so a drift test can pin
+them.
 """
 
 from __future__ import annotations
@@ -30,6 +36,29 @@ _COLOR_TYPE_RGBA = 6
 _COLOR_TYPE_RGB = 2
 _BIT_DEPTH_8 = 8
 _FILTER_NONE = 0
+
+# The rest of the decode side: the transparency chunk, the IHDR body length,
+# the interlace value a non-Adam7 file carries, the four filter types beyond
+# "none", and the colour types whose sample count this codec can promote.
+_CHUNK_T_RNS = b"tRNS"
+_IHDR_BYTES = 13
+_INTERLACE_NONE = 0
+_FILTER_SUB = 1
+_FILTER_UP = 2
+_FILTER_AVERAGE = 3
+_FILTER_PAETH = 4
+_COLOR_TYPE_GRAY = 0
+_COLOR_TYPE_GRAY_ALPHA = 4
+_CHANNEL_COUNTS: dict[int, int] = {
+    _COLOR_TYPE_GRAY: 1,
+    _COLOR_TYPE_RGB: 3,
+    _COLOR_TYPE_GRAY_ALPHA: 2,
+    _COLOR_TYPE_RGBA: 4,
+}
+
+# ``tRNS`` stores one 16-bit sample per channel for these colour types, and is
+# not defined for the two that already carry an alpha channel.
+_TRNS_SAMPLES: dict[int, int] = {_COLOR_TYPE_GRAY: 1, _COLOR_TYPE_RGB: 3}
 
 # Bytes per pixel this module carries. 32-bit RGBA is what the Play Store and
 # the Android mipmap tree both expect for launcher icons.
@@ -63,6 +92,16 @@ PLAY_FEATURE_GRAPHIC_HEIGHT = 500
 
 class RasterError(RuntimeError):
     """Raised when a canvas or an ffmpeg raster step cannot be completed."""
+
+
+class _NeedsMediaBackend(RasterError):
+    """Raised internally when a PNG is valid but outside the stdlib codec.
+
+    16-bit samples, Adam7 interlacing, palette images, and sub-byte greyscale
+    are the variants ffmpeg reads and this module does not. ``decode_rgba``
+    catches this and falls through to the media backend, so a healthy file is
+    never reported as a corrupt one.
+    """
 
 
 @dataclass(frozen=True)
@@ -597,18 +636,388 @@ def from_rgba_bytes(data: bytes, width: int, height: int) -> Canvas:
     return canvas
 
 
-def decode_rgba(path: str, side: int | None = None) -> Canvas:
-    """Decode an image file to RGBA through ffmpeg.
+@dataclass(frozen=True)
+class _Frame:
+    """One PNG frame at its native size, before promotion to RGBA.
+
+    Attributes:
+        width: Frame width in pixels.
+        height: Frame height in pixels.
+        colour_type: The PNG colour type the header declared.
+        channels: Samples per pixel, one of the values in ``_CHANNEL_COUNTS``.
+        samples: Row-major samples as the scanline filters left them.
+        transparent: The ``tRNS`` keyed samples, or None when the file has none.
+    """
+
+    width: int
+    height: int
+    colour_type: int
+    channels: int
+    samples: bytearray
+    transparent: tuple[int, ...] | None
+
+
+def _paeth_predictor(left: int, above: int, above_left: int) -> int:
+    """Return the PNG Paeth predictor for three neighbours.
 
     Args:
-        path: Source image; anything ffmpeg reads.
+        left: Sample to the left in this scanline.
+        above: Sample above, in the previous scanline.
+        above_left: Sample above and to the left.
+
+    Returns:
+        Whichever neighbour is closest to ``left + above - above_left``.
+    """
+    estimate = left + above - above_left
+    distances = (abs(estimate - left), abs(estimate - above), abs(estimate - above_left))
+    return (left, above, above_left)[distances.index(min(distances))]
+
+
+def _unfilter(stream: bytes, width: int, height: int, channels: int) -> bytearray:
+    """Reconstruct scanlines from a filtered image data stream.
+
+    Every filter a conforming encoder may pick is handled here, not just the
+    one this module writes: a PNG from a design tool is free to change filter
+    from row to row, and a validator that read only its own output would call
+    a sellable pack unreadable.
+
+    Args:
+        stream: Inflated bytes, one filter byte then one scanline per row.
+        width: Frame width in pixels.
+        height: Frame height in pixels.
+        channels: Samples per pixel.
+
+    Returns:
+        Row-major samples with the filters removed.
+
+    Raises:
+        RasterError: The stream is short, or names a filter the spec does not
+            define.
+    """
+    stride = width * channels
+    expected = height * (stride + 1)
+    if len(stream) < expected:
+        raise RasterError(
+            f"PNG scanline data is too short: expected {expected} bytes, got {len(stream)}"
+        )
+    pixels = bytearray(height * stride)
+    previous = bytearray(stride)
+    offset = 0
+    for row in range(height):
+        kind = stream[offset]
+        offset += 1
+        line = bytearray(stream[offset : offset + stride])
+        offset += stride
+        if kind == _FILTER_NONE:
+            pass
+        elif kind == _FILTER_SUB:
+            for index in range(stride):
+                left = line[index - channels] if index >= channels else 0
+                line[index] = (line[index] + left) & 0xFF
+        elif kind == _FILTER_UP:
+            for index in range(stride):
+                line[index] = (line[index] + previous[index]) & 0xFF
+        elif kind == _FILTER_AVERAGE:
+            for index in range(stride):
+                left = line[index - channels] if index >= channels else 0
+                line[index] = (line[index] + ((left + previous[index]) >> 1)) & 0xFF
+        elif kind == _FILTER_PAETH:
+            for index in range(stride):
+                left = line[index - channels] if index >= channels else 0
+                above_left = previous[index - channels] if index >= channels else 0
+                line[index] = (
+                    line[index] + _paeth_predictor(left, previous[index], above_left)
+                ) & 0xFF
+        else:
+            raise RasterError(f"PNG scanline filter {kind} is not a defined filter type")
+        base = row * stride
+        pixels[base : base + stride] = line
+        previous = line
+    return pixels
+
+
+def _read_ihdr(payload: bytes, already_seen: bool) -> tuple[int, int, int, int, int]:
+    """Read an IHDR body.
+
+    Args:
+        payload: Chunk body, which should carry ``_IHDR_BYTES`` bytes.
+        already_seen: True when a header has already been parsed.
+
+    Returns:
+        ``(width, height, bit_depth, colour_type, interlace)``.
+
+    Raises:
+        RasterError: The header is a duplicate or too short to measure with.
+    """
+    if already_seen:
+        raise RasterError("PNG file declares its IHDR header twice")
+    if len(payload) < _IHDR_BYTES:
+        raise RasterError("PNG IHDR is too short to measure the frame")
+    width, height, depth, colour, _compression, _filter, interlace = struct.unpack(
+        ">IIBBBBB", payload[:_IHDR_BYTES]
+    )
+    return (width, height, depth, colour, interlace)
+
+
+def _read_trns(
+    payload: bytes, header: tuple[int, int, int, int, int] | None
+) -> tuple[int, ...] | None:
+    """Read the optional transparency chunk.
+
+    Args:
+        payload: Chunk body holding one 16-bit sample per channel.
+        header: The parsed IHDR, or None when it has not arrived yet.
+
+    Returns:
+        The keyed samples, or None for a colour type that has no alpha to key
+        and for a chunk whose length does not match its colour type.
+
+    Raises:
+        RasterError: The chunk arrived before the header that defines its shape.
+    """
+    if header is None:
+        raise RasterError("PNG tRNS chunk arrived before its IHDR header")
+    count = _TRNS_SAMPLES.get(header[3])
+    if count is None or len(payload) != 2 * count:
+        return None
+    return tuple(
+        int.from_bytes(payload[2 * index : 2 * index + 2], "big") for index in range(count)
+    )
+
+
+def _inflate_idat(idat: bytes, expected: int) -> bytes:
+    """Inflate the image data stream, capped at what the frame can use.
+
+    The cap is the reason a 400 KB IDAT claiming a single pixel is refused
+    rather than decompressed: a validator reads files it did not write, and an
+    unbounded inflate is the cheapest way to exhaust the process.
+
+    Args:
+        idat: Concatenated IDAT chunk bodies.
+        expected: Byte count the scanlines need, filter bytes included.
+
+    Returns:
+        The inflated stream, no longer than ``expected``.
+
+    Raises:
+        RasterError: The stream is not inflatable, or is larger than the frame.
+    """
+    try:
+        stream = zlib.decompressobj().decompress(idat, expected + 1)
+    except zlib.error as exc:
+        raise RasterError(f"PNG image data is not a usable zlib stream: {exc}") from exc
+    if len(stream) > expected:
+        raise RasterError(
+            f"PNG image data decompresses to a stream larger than the"
+            f" {expected} bytes the frame needs"
+        )
+    return stream
+
+
+def _parse_png(data: bytes) -> _Frame:
+    """Parse PNG bytes into a frame this module can promote.
+
+    Args:
+        data: Complete file bytes, signature included.
+
+    Returns:
+        The decoded frame at its native size.
+
+    Raises:
+        RasterError: The framing, header, or pixel data of this PNG is broken.
+        _NeedsMediaBackend: The PNG is well formed and outside this codec's
+            scope, so ffmpeg has to read it.
+    """
+    header: tuple[int, int, int, int, int] | None = None
+    idat = bytearray()
+    transparent: tuple[int, ...] | None = None
+    complete = False
+    position = len(_PNG_SIGNATURE)
+    while position + 8 <= len(data):
+        length = int.from_bytes(data[position : position + 4], "big")
+        kind = data[position + 4 : position + 8]
+        body_end = position + 8 + length
+        if body_end + 4 > len(data):
+            raise RasterError("PNG file is truncated inside a chunk")
+        payload = data[position + 8 : body_end]
+        if int.from_bytes(data[body_end : body_end + 4], "big") != (
+            zlib.crc32(kind + payload) & 0xFFFFFFFF
+        ):
+            raise RasterError(f"PNG chunk {kind!r} does not match its CRC")
+        position = body_end + 4
+        if kind == _CHUNK_IHDR:
+            header = _read_ihdr(payload, header is not None)
+        elif kind == _CHUNK_IDAT:
+            idat += payload
+        elif kind == _CHUNK_T_RNS:
+            transparent = _read_trns(payload, header)
+        elif kind == _CHUNK_IEND:
+            complete = True
+            break
+    if header is None:
+        raise RasterError("PNG file has no IHDR header chunk to measure it")
+    if not complete:
+        raise RasterError("PNG file is truncated before its IEND chunk")
+    if not idat:
+        raise RasterError("PNG file has no IDAT image data chunk")
+    width, height, depth, colour, interlace = header
+    if interlace != _INTERLACE_NONE:
+        raise _NeedsMediaBackend("interlaced PNG files need ffmpeg")
+    if depth != _BIT_DEPTH_8:
+        raise _NeedsMediaBackend(f"PNG bit depth {depth} needs ffmpeg")
+    channels = _CHANNEL_COUNTS.get(colour)
+    if channels is None:
+        raise _NeedsMediaBackend(f"PNG colour type {colour} needs ffmpeg")
+    if width * height > _MAX_PIXELS:
+        raise RasterError(
+            f"PNG frame of {width}x{height} is more pixels than this module allows"
+        )
+    stream = _inflate_idat(bytes(idat), height * (width * channels + 1))
+    return _Frame(
+        width,
+        height,
+        colour,
+        channels,
+        _unfilter(stream, width, height, channels),
+        transparent,
+    )
+
+
+def _promote(frame: _Frame) -> bytearray:
+    """Expand a frame's samples to RGBA8888.
+
+    Args:
+        frame: The decoded frame.
+
+    Returns:
+        Four bytes per pixel, with any ``tRNS`` key folded into the alpha
+        channel the same way ffmpeg folds it, so an alpha gate reads the same
+        answer from either path.
+    """
+    if frame.colour_type == _COLOR_TYPE_RGBA:
+        return frame.samples
+    channels = frame.channels
+    keyed = frame.transparent
+    greyscale = frame.colour_type in (_COLOR_TYPE_GRAY, _COLOR_TYPE_GRAY_ALPHA)
+    pixels = bytearray(frame.width * frame.height * _BYTES_PER_PIXEL)
+    for index in range(frame.width * frame.height):
+        source = index * channels
+        if greyscale:
+            sample = frame.samples[source]
+            red = green = blue = sample
+            alpha = frame.samples[source + 1] if channels == 2 else 255
+            if keyed is not None and keyed[0] == sample:
+                alpha = 0
+        else:
+            red = frame.samples[source]
+            green = frame.samples[source + 1]
+            blue = frame.samples[source + 2]
+            keyed_rgb = keyed is not None and keyed == (red, green, blue)
+            alpha = 0 if keyed_rgb else 255
+        target = index * _BYTES_PER_PIXEL
+        pixels[target] = red
+        pixels[target + 1] = green
+        pixels[target + 2] = blue
+        pixels[target + 3] = alpha
+    return pixels
+
+
+def _leading_square(pixels: bytes, width: int, edge: int) -> Canvas:
+    """Crop the leading square out of a decoded frame.
+
+    The ffmpeg path returned the whole raw stream and the wrapper kept its
+    first rows, which is this same top-left crop; a native-size read has to
+    mean the same thing whichever path served it.
+
+    Args:
+        pixels: RGBA bytes at the native size.
+        width: Native width.
+        edge: Square edge to keep.
+
+    Returns:
+        Canvas holding the leading ``edge`` rows and columns.
+    """
+    source_stride = width * _BYTES_PER_PIXEL
+    target_stride = edge * _BYTES_PER_PIXEL
+    crop = bytearray(edge * target_stride)
+    for row in range(edge):
+        crop[row * target_stride : (row + 1) * target_stride] = pixels[
+            row * source_stride : row * source_stride + target_stride
+        ]
+    return from_rgba_bytes(bytes(crop), edge, edge)
+
+
+def _canvas_from_frame(frame: _Frame, side: int | None) -> Canvas:
+    """Wrap a decoded frame in a canvas, scaled the way the caller asked.
+
+    Args:
+        frame: The decoded frame.
+        side: Square edge to resample to, or None to keep the native size.
+
+    Returns:
+        Canvas of RGBA pixels at the requested size.
+    """
+    pixels = bytes(_promote(frame))
+    native = (frame.width, frame.height)
+    if side is not None:
+        if (side, side) == native:
+            return from_rgba_bytes(pixels, side, side)
+        return from_rgba_bytes(pixels, frame.width, frame.height).resampled(side, side)
+    edge = min(frame.width, frame.height)
+    if (edge, edge) == native:
+        return from_rgba_bytes(pixels, edge, edge)
+    return _leading_square(pixels, frame.width, edge)
+
+
+def _read_frame(path: str) -> _Frame | None:
+    """Read a PNG through the stdlib codec.
+
+    Args:
+        path: File to read.
+
+    Returns:
+        The decoded frame, or None when the path is absent, unreadable, or not
+        a PNG at all, which leaves the file to the media backend.
+
+    Raises:
+        RasterError: The file carries the PNG signature and is broken.
+        _NeedsMediaBackend: The file is a PNG variant this codec does not read.
+    """
+    try:
+        with open(path, "rb") as handle:
+            data = handle.read()
+    except OSError:
+        return None
+    if len(data) < len(_PNG_SIGNATURE) or not data.startswith(_PNG_SIGNATURE):
+        return None
+    return _parse_png(data)
+
+
+def decode_rgba(path: str, side: int | None = None) -> Canvas:
+    """Decode an image file to RGBA, using ffmpeg only where it is needed.
+
+    A PNG this module can read is decoded in-process, which is what lets a
+    generated pack validate itself on a host with no media binaries: the fast
+    core lane, the devcontainer, and a CI runner all ship without ffmpeg.
+    Everything else - JPEG and WebP artwork, a 16-bit, interlaced, or palette
+    PNG - goes to ffmpeg, and an operator without it hears the plain reason.
+
+    Args:
+        path: Source image.
         side: Square edge to scale to while decoding, or None for the native
             size.
     Returns:
         Decoded canvas.
     Raises:
-        RasterError: ffmpeg is missing or refused the file.
+        RasterError: The file is a broken PNG, or ffmpeg is missing or refused
+            the file.
     """
+    try:
+        frame = _read_frame(path)
+        if frame is not None:
+            return _canvas_from_frame(frame, side)
+    except _NeedsMediaBackend:
+        pass
     command = ["ffmpeg", "-v", "error", "-i", path]
     if side is not None:
         command += ["-vf", f"scale={side}:{side}:flags=area"]
