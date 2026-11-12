@@ -266,6 +266,22 @@ def test_document_opens_with_the_declaration_and_doctype() -> None:
     assert text.endswith("</score-partwise>\n")
 
 
+def test_a_take_with_no_lanes_still_writes_a_readable_score() -> None:
+    """A silent take must not hand a DAW a document the schema rejects.
+
+    ``score-partwise`` requires at least one ``score-part`` in the part list
+    and one matching ``part``, so a take the transcriber found nothing in
+    still has to arrive as one empty staff rather than an unopenable file.
+    """
+    score = ET.fromstring(score_bytes(_empty_timeline()))
+    declared = score.findall("part-list/score-part")
+    body = score.findall("part")
+    assert len(declared) == 1, f"an empty take still declares one part: {len(declared)}"
+    assert len(body) == 1, f"the document carries the matching part: {len(body)}"
+    assert declared[0].get("id") == body[0].get("id"), "the part id matches its declaration"
+    assert body[0].findall("measure"), "the silent part still carries its measures"
+
+
 def test_quarter_position_uses_the_tempo_map() -> None:
     """Seconds land on the quarter grid the tempo map defines."""
     timeline = _empty_timeline()

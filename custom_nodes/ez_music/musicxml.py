@@ -37,6 +37,15 @@ _VERSION = "4.0"
 # so a sixteenth and a triplet eighth are both exact integers.
 DIVISIONS_PER_QUARTER = 96
 
+_SILENT_TRACK = Track(name="Silence", channel=0, notes=())
+"""Placeholder lane for a take that produced no notes at all.
+
+``score-partwise`` needs at least one ``score-part`` and one matching
+``part``, so the writer falls back to this lane instead of emitting a
+document a sequencer refuses to open. A gated or silent input still
+deserves a score with one empty staff to start from.
+"""
+
 # Step and alteration for each pitch class, spelled with sharps.
 _STEPS: tuple[tuple[str, int], ...] = (
     ("C", 0),
@@ -523,7 +532,8 @@ def score_bytes(
     encoding = ET.SubElement(identification, "encoding")
     ET.SubElement(encoding, "software").text = creator
     part_list = ET.SubElement(score, "part-list")
-    for index, track in enumerate(timeline.tracks):
+    tracks: tuple[Track, ...] = timeline.tracks or (_SILENT_TRACK,)
+    for index, track in enumerate(tracks):
         part_id = f"P{index + 1}"
         score_part = ET.SubElement(part_list, "score-part")
         score_part.set("id", part_id)
@@ -546,7 +556,7 @@ def score_bytes(
                 ET.SubElement(midi_instrument, "midi-unpitched").text = str(unpitched)
             ET.SubElement(midi_instrument, "volume").text = "80"
             ET.SubElement(midi_instrument, "pan").text = "0"
-    for index, track in enumerate(timeline.tracks):
+    for index, track in enumerate(tracks):
         _part_element(score, track, f"P{index + 1}", timeline, beats_per_bar, denominator)
     _prepend_tempo_direction(score, timeline)
     body = ET.tostring(score, encoding="unicode")
