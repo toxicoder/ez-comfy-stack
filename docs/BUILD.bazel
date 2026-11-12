@@ -33,6 +33,7 @@ filegroup(
         "contribute/typing.md",
         "create/android-app-icon-packs.mdx",
         "create/android-notification-tones.mdx",
+        "create/android-watch-faces.mdx",
         "create/app-forge.md",
         "create/audio-rack.md",
         "create/cinema-rack.md",

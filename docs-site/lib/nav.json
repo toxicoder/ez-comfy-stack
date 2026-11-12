@@ -232,6 +232,10 @@
           {
             "title": "Android tones",
             "path": "create/android-notification-tones.md"
+          },
+          {
+            "title": "Android Wear watch faces",
+            "path": "create/android-watch-faces.md"
           }
         ]
       },

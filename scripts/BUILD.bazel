@@ -109,6 +109,7 @@ _UTILITIES_SH = [
     "utilities/take-promote.sh",
     "utilities/tones-pack.sh",
     "utilities/update-stack.sh",
+    "utilities/watch-face.sh",
 ]
 
 _UTILITIES_PS1 = [

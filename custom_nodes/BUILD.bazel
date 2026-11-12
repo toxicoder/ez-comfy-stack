@@ -316,5 +316,10 @@ filegroup(
         "ez_tones/catalog.py",
         "ez_tones/pack.py",
         "ez_tones/synth.py",
+        "ez_watch/__init__.py",
+        "ez_watch/catalog.py",
+        "ez_watch/project.py",
+        "ez_watch/scene.py",
+        "ez_watch/validate.py",
     ],
 )
