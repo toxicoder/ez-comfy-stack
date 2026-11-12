@@ -504,6 +504,59 @@ Outputs:
 Returns:
   audio-still-video.sh status
 
+### Command: export-song
+
+DAW hand-off bundle for one song: MIDI, MusicXML, timeline JSON, stems.
+Globals:
+  REPO_ROOT
+Arguments:
+  $@  export-song.sh flags (AUDIO, OUT_DIR, --title, --beats-per-bar,
+      --no-stems, --no-quantize)
+Outputs:
+  Bundle summary on stdout; files under OUT_DIR/<slug>/
+Returns:
+  export-song.sh status (1 on a bad path or a failed ffprobe)
+
+### Command: icon-pack
+
+Sellable Android adaptive icon pack from the in-tree catalog.
+Globals:
+  REPO_ROOT
+Arguments:
+  $@  icon-pack.sh flags (--out, --catalog, --icon, --category, --art-dir,
+      --pack-name, --pack-version, --validate-only, --scaffold, --name,
+      --package, --glyph, --dry-run)
+Outputs:
+  Build report on stdout; project under --out
+Returns:
+  icon-pack.sh status (1 on a usage error or a failed compliance gate)
+
+### Command: watch-face
+
+Submittable Wear OS watch face project plus the compliance gate.
+Globals:
+  REPO_ROOT
+Arguments:
+  $@  watch-face.sh flags (--out, --face, --style, --catalog, --wff-version,
+      --preview-edge, --size-variants, --validate-only, --dry-run)
+Outputs:
+  One line per face plus every finding on stdout; project under --out
+Returns:
+  watch-face.sh status (1 on a usage error or any error-severity finding)
+
+### Command: tones-pack
+
+Android ringtone, notification, and alarm pack from the tone catalog.
+Globals:
+  REPO_ROOT
+Arguments:
+  $@  tones-pack.sh flags (--out, --kind, --tone, --catalog, --template,
+      --pack-name, --version, --sample-rate, --dry-run)
+Outputs:
+  Build report on stdout; pack under --out
+Returns:
+  tones-pack.sh status (1 on a usage error or a failed encode)
+
 ### Command: download-longcat
 
 Opt-in LongCat-Video (MIT, no NCCL).
@@ -1739,6 +1792,54 @@ The ComfyUI origin is EZ_EDIT_COMFY_URL, else http://127.0.0.1:${COMFY_PORT:-818
 
 ### Command: edit-mcp
 
+<!-- source: scripts/utilities/export-song.sh -->
+## export-song
+
+Hand a generated or imported song over to a human sequencer: MIDI, MusicXML,
+the timeline JSON, per-lane MIDI and band-limited WAV stems, and an import
+guide, all in one bundle folder.
+
+Purpose:
+  The stack prototypes a track with AI. Finishing it needs the notes, not a
+  flattened mix, so this verb runs the stdlib transcriber over one master and
+  writes the whole DAW hand-off at once. CPU only; no GPU, no ComfyUI queue.
+
+```bash
+Usage:
+  bazelisk run //scripts:run-utility -- export-song AUDIO OUT_DIR
+  bazelisk run //scripts:run-utility -- export-song AUDIO OUT_DIR --title NAME
+  bazelisk run //scripts:run-utility -- export-song AUDIO OUT_DIR --no-stems
+  bazelisk run //scripts:run-utility -- export-song AUDIO OUT_DIR --no-quantize
+
+```
+
+Flags:
+  AUDIO              master audio file to convert (wav, flac, mp3, m4a)
+  OUT_DIR            folder the bundle is written into (created if missing)
+  --title NAME       song title, defaulting to the file's tag or filename
+  --beats-per-bar N  bar length used when engraving the MusicXML (default 4)
+  --no-stems         skip the band-limited WAV stems
+  --no-quantize      keep the transcriber's raw note timing
+
+Environment:
+  COMFY_OUTPUT_DIR   suggested parent for OUT_DIR when the operator passes none
+
+Outputs:
+  <OUT_DIR>/<slug>/ with <slug>.mid, <slug>.musicxml, timeline.json,
+  stems/NN-<lane>.{mid,wav}, audio/<master>, project.md, manifest.json.
+
+!!! warning
+
+    Safety:
+      Read-only on the input. Does not start Docker, does not queue ComfyUI, does
+      not touch occupancy, restart: "no", or the headroom preflight. ffmpeg and
+      ffprobe are required on PATH and are the only external commands.
+
+Exit codes:
+  0 bundle written; 1 bad arguments, missing master, or a failed probe.
+
+### Command: export-song
+
 <!-- source: scripts/utilities/film-accept.sh -->
 ## film-accept
 
@@ -1832,6 +1933,64 @@ Exit codes:
   0 success; 1 usage / missing blender / QC fail; 2 compose running
 
 ### Command: house-views
+
+<!-- source: scripts/utilities/icon-pack.sh -->
+## icon-pack
+
+Build a sellable Android adaptive-icon pack from the in-tree catalog: one
+vector foreground plus density-rasterized PNGs per app, the launcher content
+provider JSON, the drawable sets Play requires, and a listing draft.
+
+Purpose:
+  Turning a set of app icons into a shippable pack is mostly compliance
+
+```bash
+  work - adaptive layers, every launcher density, the appfilter XML, the
+```
+
+  512 px store icon. This verb owns that structure; the catalog owns which
+  apps exist and how each glyph is drawn.
+
+```bash
+Usage:
+  bazelisk run //scripts:run-utility -- icon-pack --out DIR
+  bazelisk run //scripts:run-utility -- icon-pack --out DIR --icon SLUG
+  bazelisk run //scripts:run-utility -- icon-pack --out DIR --category NAME
+  bazelisk run //scripts:run-utility -- icon-pack --catalog FILE --out DIR
+  bazelisk run //scripts:run-utility -- icon-pack --validate-only --out DIR
+  bazelisk run //scripts:run-utility -- icon-pack --scaffold new-app-slug
+
+```
+
+Flags:
+  --out DIR           project directory to write
+  --catalog FILE      operator JSON merged over the shipped catalog
+  --icon SLUG         publish only this slug (repeatable)
+  --category NAME     publish only this category (repeatable)
+  --art-dir DIR       directory of <slug>.png master art to prefer
+  --pack-name NAME    pack name for the listing and strings
+  --pack-version VER  pack version for the manifest
+  --validate-only     run the compliance gate over a built pack and report
+  --scaffold SLUG     print the override row a new app needs, then exit
+  --name LABEL        human label used with --scaffold
+  --package ID        application id used with --scaffold
+  --glyph ID          recipe id used with --scaffold
+  --dry-run           report the file list, write nothing
+
+Environment:
+  COMFY_OUTPUT_DIR   suggested parent for --out when the operator passes none
+
+!!! warning
+
+    Safety:
+      Does not start Docker, does not queue ComfyUI, does not touch occupancy or
+      the headroom preflight. Writes only inside --out. Never embeds a trademarked
+      logo: the catalog holds generated geometric recipes only.
+
+Exit codes:
+  0 pack written or gate clean; 1 usage error or a compliance failure.
+
+### Command: icon-pack
 
 <!-- source: scripts/utilities/llm-sidecar.sh -->
 ## llm-sidecar
@@ -2297,6 +2456,54 @@ Environment:
 
 ### Command: take-promote
 
+<!-- source: scripts/utilities/tones-pack.sh -->
+## tones-pack
+
+Render the in-tree tone catalog and package a sellable Android ringtone,
+notification, and alarm pack: WAV masters plus M4A and OGG per tone, the
+manifest a launcher imports, and the store listing copy.
+
+Purpose:
+  A tone pack that sells is a catalog, three codecs per tone, and the loudness
+  discipline that keeps a notification from blowing an ear out. The catalog
+  owns the motifs; this verb owns the encoding and the bundle.
+
+```bash
+Usage:
+  bazelisk run //scripts:run-utility -- tones-pack --out DIR
+  bazelisk run //scripts:run-utility -- tones-pack --out DIR --kind notification
+  bazelisk run //scripts:run-utility -- tones-pack --out DIR --tone glass-two-note
+  bazelisk run //scripts:run-utility -- tones-pack --template FILE
+  bazelisk run //scripts:run-utility -- tones-pack --out DIR --dry-run
+
+```
+
+Flags:
+  --out DIR             pack directory to write
+  --kind KIND           build only this kind; repeatable
+  --tone SLUG           build only this tone; repeatable
+  --catalog FILE        operator catalog JSON merged over the shipped pack
+  --template FILE       write the operator catalog template here and exit
+  --pack-name NAME      name stamped on the pack
+  --version VER         version stamped on the pack
+  --sample-rate HZ      44100 or 48000 for every file
+  --dry-run             print the plan, write nothing
+
+Environment:
+  COMFY_OUTPUT_DIR   suggested parent for --out when the operator passes none
+
+!!! warning
+
+    Safety:
+      Does not start Docker, does not queue ComfyUI, does not touch occupancy or
+      the headroom preflight. Writes only inside --out. ffmpeg is required on
+      PATH and is the only external command.
+
+Exit codes:
+  0 pack written or plan printed; 1 usage error or an encoding failure.
+
+### Command: tones-pack
+
 <!-- source: scripts/utilities/update-stack.sh -->
 ## update-stack
 
@@ -2387,3 +2594,51 @@ Exit codes:
   5 repo root could not be proven
 
 ### Command: update-stack
+
+<!-- source: scripts/utilities/watch-face.sh -->
+## watch-face
+
+Emit submittable Wear OS watch face projects in the Watch Face Format: the
+`res/raw/watchface.xml` scene, the ambient variant that meets the
+illuminated-area rule, previews, the metadata and settings XML, and the
+store listing copy.
+
+Purpose:
+  A sellable Wear face is a strict XML dialect plus a compliance checklist.
+  This verb generates the project and runs the gate over it, so an operator
+  ships a folder that the Play console accepts instead of hand-writing XML.
+
+```bash
+Usage:
+  bazelisk run //scripts:run-utility -- watch-face --out DIR
+  bazelisk run //scripts:run-utility -- watch-face --out DIR --face SLUG
+  bazelisk run //scripts:run-utility -- watch-face --out DIR --style analog
+  bazelisk run //scripts:run-utility -- watch-face --validate-only --out DIR
+
+```
+
+Flags:
+  --out DIR            folder the projects are written into (required)
+  --face SLUG          build one face; repeatable
+  --style NAME         build one style only
+  --catalog FILE       JSON override merged over the shipped catalog
+  --wff-version N      Watch Face Format version to declare, 1 to 4
+  --preview-edge PX    square preview edge, at least the catalog minimum
+  --size-variants      also write the round small and large shapes file
+  --validate-only      build into scratch, run the compliance gate, report
+  --dry-run            compute and report, write nothing
+
+Environment:
+  COMFY_OUTPUT_DIR   suggested parent for --out when the operator passes none
+
+!!! warning
+
+    Safety:
+      Does not start Docker, does not queue ComfyUI, does not touch occupancy or
+      the headroom preflight. Writes only inside --out. The compliance gate is
+      fail-closed: a face that misses the ambient, size, or slot limits exits 1.
+
+Exit codes:
+  0 projects written or gate clean; 1 usage error or a compliance failure.
+
+### Command: watch-face

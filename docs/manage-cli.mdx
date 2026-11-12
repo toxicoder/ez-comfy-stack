@@ -96,6 +96,10 @@ Redeploy the stack from the branch you are standing on. The image lane follows t
 | `film-animatic` | Cheap 90s animatic from clay.mp4 or stills | Treat as a 90s denoise |
 | `stem-mix` | Picture-lock stems; duck -15 dB; YouTube loudnorm | Mix ACE-Step next to LTX |
 | `audio-still-video --audio FILE --image FILE` | Mux a still + audio master to YouTube MP4 (host ffmpeg; compose may stay up) | Treat as a denoise; use NVENC; edit audio lab graphs |
+| `export-song AUDIO OUT_DIR` | DAW hand-off bundle for one song: MIDI, MusicXML, timeline JSON, per-lane MIDI and WAV stems, `project.md` (host ffmpeg; CPU only; compose may stay up) | Treat the chord lane as proofread; hand a human the MIDI, not the mix |
+| `icon-pack --out DIR` | Store-ready Android adaptive icon pack from the catalog, with the launcher appfilter JSON and the 512 px store icon | Ship a trademarked logo; the catalog holds generated geometric recipes only |
+| `watch-face --out DIR` | Submittable Wear OS Watch Face Format project, gated on the ambient, size, and complication-slot limits | Skip `--validate-only`; a face that misses the ambient rule fails review, not the CLI |
+| `tones-pack --out DIR` | Android ringtone, notification, and alarm pack: WAV masters plus M4A and OGG, with the launcher manifest | Assume a duration cap; Android sets none, the loudness tiers are the contract |
 | `album-render --album ARTIST/SLUG [--art skip\|upload\|generate] [--quality TIER]` | Queue one shipped album (optional Klein cover, ACE tracks, zip+m3u). `--quality TIER` (or `EZ_QUALITY=TIER`) overlays the Quality table before each POST, cover and tracks; with neither, the tier the graph records is used. Does not start compose | Co-resident Klein + ACE; skip `/free` after generate |
 | `asset-ls` | Read-only [Asset Bible](asset-bible.md) catalog (`COMFY_OUTPUT_DIR/assets`) | Store assets in `MODELS_DIR` or `guides/` |
 | `film-accept` | Fail-closed 90s gate (duration / 1280x704 / LTX audio; world-only speech-band; 90s master when present; stems LUFS when `audio_policy: stems`) | `--skip-accept` as a habit |

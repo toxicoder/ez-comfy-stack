@@ -752,6 +752,90 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         tier=RiskTier.WRITE,
         keywords=("album", "package", "zip"),
     ),
+    _verb(
+        "lanes.song_export",
+        "Export a song for a DAW",
+        Group.LANES,
+        "Convert one master into a hand-off bundle: MIDI, MusicXML, the timeline "
+        "JSON, and per-lane MIDI and WAV stems. CPU only; no queue.",
+        "export-song",
+        params=(
+            _pos("audio", "Master audio", help_text="audio file to convert"),
+            _pos("out_dir", "Output dir", help_text="bundle parent folder"),
+            _text("title", "Title", "--title", required=False),
+            _flag("no_stems", "Skip stems", "--no-stems", help_text="MIDI only, no WAV stems"),
+        ),
+        tier=RiskTier.WRITE,
+        keywords=("midi", "musicxml", "daw", "stems", "transcribe"),
+    ),
+    _verb(
+        "lanes.icon_pack",
+        "Build an Android icon pack",
+        Group.LANES,
+        "Write a store-ready adaptive icon pack from the catalog, then run the "
+        "compliance gate over it.",
+        "icon-pack",
+        params=(
+            _text("out", "Output dir", "--out"),
+            _flag("validate_only", "Validate only", "--validate-only"),
+            _flag("dry_run", "Dry run", "--dry-run", help_text=_DRY_RUN_HELP),
+        ),
+        tier=RiskTier.WRITE,
+        keywords=("icon", "android", "adaptive", "play store"),
+    ),
+    _verb(
+        "lanes.icon_scaffold",
+        "Add one app to the icon catalog",
+        Group.LANES,
+        "Print the override row a newly released app needs, ready to paste into "
+        "the operator catalog.",
+        "icon-pack",
+        params=(
+            _text("scaffold", "Slug", "--scaffold", help_text="new-app-slug"),
+            _text("name", "Label", "--name", required=False),
+            _text(
+                "package",
+                "Package",
+                "--package",
+                required=False,
+                help_text="com.example.app",
+            ),
+            _text("glyph", "Glyph", "--glyph", required=False),
+        ),
+        tier=RiskTier.READ,
+        keywords=("icon", "scaffold", "new app", "catalog"),
+    ),
+    _verb(
+        "lanes.watch_face",
+        "Build a Wear OS watch face",
+        Group.LANES,
+        "Emit a submittable Watch Face Format project and gate it on the ambient, "
+        "size, and complication-slot limits.",
+        "watch-face",
+        params=(
+            _text("out", "Output dir", "--out"),
+            _text("face", "Face slug", "--face", required=False),
+            _flag("validate_only", "Validate only", "--validate-only"),
+            _flag("dry_run", "Dry run", "--dry-run", help_text=_DRY_RUN_HELP),
+        ),
+        tier=RiskTier.WRITE,
+        keywords=("watch", "wear", "wff", "play store"),
+    ),
+    _verb(
+        "lanes.tones_pack",
+        "Build an Android tone pack",
+        Group.LANES,
+        "Render the tone catalog and package ringtones, notifications, and alarms "
+        "as WAV, M4A, and OGG with the launcher manifest.",
+        "tones-pack",
+        params=(
+            _text("out", "Output dir", "--out"),
+            _text("tone", "Tone slug", "--tone", required=False),
+            _flag("dry_run", "Dry run", "--dry-run", help_text=_DRY_RUN_HELP),
+        ),
+        tier=RiskTier.WRITE,
+        keywords=("ringtone", "notification", "alarm", "tone", "play store"),
+    ),
     # ------------------------------------------------------------------
     # Models: packs, the bandwidth cap, and HF cache hygiene.
     # ------------------------------------------------------------------

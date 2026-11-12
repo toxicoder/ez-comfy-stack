@@ -121,6 +121,17 @@ FROZEN_MANAGE_VERBS=(
   [ "${status}" -eq 0 ]
 }
 
+@test "creator asset verbs dispatch" {
+  run type cmd_export_song
+  [ "${status}" -eq 0 ]
+  run type cmd_icon_pack
+  [ "${status}" -eq 0 ]
+  run type cmd_watch_face
+  [ "${status}" -eq 0 ]
+  run type cmd_tones_pack
+  [ "${status}" -eq 0 ]
+}
+
 @test "manage help lists the frozen verb set (append-only)" {
   run bash "${MANAGE_SH}" help
   [ "${status}" -eq 0 ]

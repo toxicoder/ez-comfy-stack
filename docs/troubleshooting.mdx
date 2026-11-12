@@ -21,6 +21,7 @@ tags: [troubleshooting, comfyui, docker]
 - **Quality combo** - a tier that drops to `custom` and the CLI `--quality` seam
 - **Dub (clone-translate)** - the rows live on the canvas page
 - **Report buttons (ez_feedback)**, **Outputs sidebar (ez_outputs)**, and **App pickers (ez_image)**
+- **Creator asset apps** - `export-song`, `icon-pack`, `watch-face`, and `tones-pack`: missing ffmpeg, a catalog row over its budget, and a compliance finding
 - **update-stack (redeploy refusals)** - exit 3 guardrails and exit 5 repo root
 - **Logs** and **Reset Comfy install (keeps models)**
 
@@ -381,6 +382,28 @@ proven. Flags: [manage.sh reference](manage-cli.md#catalog).
 
 `update-stack` never merges, rebases, resets, removes a volume, or calls `docker` directly. If a row
 above does not match, run `bazelisk run //:manage -- doctor` and read [Start and runtime](operate/troubleshooting-start-runtime.md).
+
+---
+
+## Creator asset apps (export-song, icon-pack, watch-face, tones-pack)
+
+The four sellable-asset verbs are CPU-only and never queue ComfyUI, so a failure here is the tool, the
+catalog row, or a missing host binary - not the stack. Each one reports its own compliance findings
+rather than shipping an artefact that Play would reject, so read the finding code before you suspect the
+generator. Pages: [Audio to MIDI and DAW hand-off](audio-to-midi.md),
+[Android tones](create/android-notification-tones.md),
+[Android Wear watch faces](create/android-watch-faces.md).
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| `ffmpeg is not installed; install it and run the build again`, or `ffmpeg is required for tones-pack (do not skip)` | `tones-pack` and `export-song` shell out to the host ffmpeg and ffprobe. Bazel does not provide them and the verbs refuse instead of quietly skipping the encode | Install ffmpeg on the host, then re-run. `bazelisk run //:setup-host -- --check` also names a tool that is present but below its pin |
+| `no such audio file: <path>` or `ffprobe reported no duration for <path>` from `export-song` | The master path is wrong, or the file is not something ffprobe can read - a truncated render, or a folder passed instead of a file | Point the verb at a real master. Generated albums land under `${COMFY_OUTPUT_DIR}/albums`, and [Local music](music.md) names where each render goes |
+| `unknown tone slug(s): ...` or `unknown face slug or slugs: ...` | A `--tone` or `--face` value is not in the shipped catalog, usually after a rename in an operator catalog | Run the verb without the filter to list what exists, or pass the operator file with `--catalog` on the same command line: an override is merged before the filter is applied |
+| A `tones-pack` build refuses a row that looks fine | The row is outside its kind's budget: a notification over 5 seconds, a ringtone or alarm over 30, or a motif whose rendered length disagrees with its stated duration | Shorten the motif or re-classify the row. The budget is validated on load so the failure happens before an encode, which is why the message names the tone |
+| A `watch-face` build reports `illuminated` above 0.15, or a slot-count finding | The face lights more than 15 % of the dial in ambient, or asks for more than the 8 complication slots the format allows | Dim or thin the lit elements in the catalog row - palette, ticks, markers - and cut slots. Re-check with `bazelisk run //:manage -- watch-face --validate-only`, which scores a build without keeping it |
+| `preview_edge must be at least 384, got <n>` | `--preview-edge` below the smallest screenshot edge Play accepts | Pass 384 or more. The default 450 is what the shipped screenshots use |
+| An `icon-pack` run prints findings such as `MONOCHROME_MISSING`, `SAFE_ZONE_BLED`, or `DENSITY_MISSING` | The pack is missing the monochrome layer adaptive icons need, artwork that reaches outside the safe zone, or a density bucket | Fix the catalog row or the master art named in the finding, then re-run with `--validate-only`. `BRAND_NAME_SUSPECT` is the gate warning that a row copies a trade name - rename the entry |
+| `drawable collision: 'a' and 'b' both map to 'x'` | Two catalog rows collapse onto one resource name, which would make one icon overwrite another in the APK | Give one row a distinct `slug` or glyph. The build stops on purpose: a silent collision ships a pack with a missing icon |
 
 ---
 

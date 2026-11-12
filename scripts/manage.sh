@@ -423,6 +423,24 @@ Commands:
                     Picture-lock stem mix; duck -15 dB; YouTube loudnorm
   audio-still-video --audio FILE --image FILE
                     Mux a still + audio master to YouTube MP4 (host ffmpeg)
+  export-song AUDIO OUT_DIR
+                    DAW hand-off bundle: MIDI + MusicXML + timeline JSON +
+                    per-lane MIDI/WAV stems + project.md (host ffmpeg, CPU only)
+                    [--title NAME] [--beats-per-bar N] [--no-stems] [--no-quantize]
+  icon-pack --out DIR
+                    Sellable Android adaptive icon pack from the catalog
+                    [--catalog FILE] [--icon SLUG] [--category NAME]
+                    [--validate-only] [--dry-run]
+                    [--scaffold SLUG --name LABEL --package PKG --glyph ID]
+                    (adds one new app)
+  watch-face --out DIR
+                    Submittable Wear OS watch face project + compliance gate
+                    [--face SLUG] [--style NAME] [--wff-version N]
+                    [--validate-only] [--dry-run]
+  tones-pack [--out DIR]
+                    Android ringtone / notification / alarm pack (WAV+M4A+OGG)
+                    [--kind K] [--tone SLUG] [--catalog FILE] [--template FILE]
+                    [--sample-rate 44100|48000] [--dry-run]
   film-accept <film>
                     Fail-closed gate before concat (5.00s, 1280x704, LTX audio)
   download-longcat run [--tier video|avatar|all]
@@ -1768,6 +1786,75 @@ cmd_audio_still_video() {
   bash "${REPO_ROOT}/scripts/utilities/audio-still-video.sh" "$@"
 }
 
+# @command export-song
+#######################################
+# DAW hand-off bundle for one song: MIDI, MusicXML, timeline JSON, stems.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  export-song.sh flags (AUDIO, OUT_DIR, --title, --beats-per-bar,
+#       --no-stems, --no-quantize)
+# Outputs:
+#   Bundle summary on stdout; files under OUT_DIR/<slug>/
+# Returns:
+#   export-song.sh status (1 on a bad path or a failed ffprobe)
+#######################################
+cmd_export_song() {
+  bash "${REPO_ROOT}/scripts/utilities/export-song.sh" "$@"
+}
+
+# @command icon-pack
+#######################################
+# Sellable Android adaptive icon pack from the in-tree catalog.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  icon-pack.sh flags (--out, --catalog, --icon, --category, --art-dir,
+#       --pack-name, --pack-version, --validate-only, --scaffold, --name,
+#       --package, --glyph, --dry-run)
+# Outputs:
+#   Build report on stdout; project under --out
+# Returns:
+#   icon-pack.sh status (1 on a usage error or a failed compliance gate)
+#######################################
+cmd_icon_pack() {
+  bash "${REPO_ROOT}/scripts/utilities/icon-pack.sh" "$@"
+}
+
+# @command watch-face
+#######################################
+# Submittable Wear OS watch face project plus the compliance gate.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  watch-face.sh flags (--out, --face, --style, --catalog, --wff-version,
+#       --preview-edge, --size-variants, --validate-only, --dry-run)
+# Outputs:
+#   One line per face plus every finding on stdout; project under --out
+# Returns:
+#   watch-face.sh status (1 on a usage error or any error-severity finding)
+#######################################
+cmd_watch_face() {
+  bash "${REPO_ROOT}/scripts/utilities/watch-face.sh" "$@"
+}
+
+# @command tones-pack
+#######################################
+# Android ringtone, notification, and alarm pack from the tone catalog.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  tones-pack.sh flags (--out, --kind, --tone, --catalog, --template,
+#       --pack-name, --version, --sample-rate, --dry-run)
+# Outputs:
+#   Build report on stdout; pack under --out
+# Returns:
+#   tones-pack.sh status (1 on a usage error or a failed encode)
+#######################################
+cmd_tones_pack() {
+  bash "${REPO_ROOT}/scripts/utilities/tones-pack.sh" "$@"
+}
+
 # @command download-longcat
 #######################################
 # Opt-in LongCat-Video (MIT, no NCCL).
@@ -2128,6 +2215,10 @@ main() {
     film-animatic) cmd_film_animatic "$@" ;;
     stem-mix) cmd_stem_mix "$@" ;;
     audio-still-video) cmd_audio_still_video "$@" ;;
+    export-song) cmd_export_song "$@" ;;
+    icon-pack) cmd_icon_pack "$@" ;;
+    watch-face) cmd_watch_face "$@" ;;
+    tones-pack) cmd_tones_pack "$@" ;;
     download-longcat) cmd_download_longcat "$@" ;;
     download-dreamx) cmd_download_dreamx "$@" ;;
     spark-timing) cmd_spark_timing "$@" ;;
