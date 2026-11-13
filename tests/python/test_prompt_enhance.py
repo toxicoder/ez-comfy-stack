@@ -1220,6 +1220,19 @@ def _write_occupancy(tmp_path: Path, mode: str) -> None:
     (tmp_path / ".occupancy.json").write_text(json.dumps(payload), encoding="utf-8")
 
 
+def _write_desk_occupancy(
+    tmp_path: Path, mode: str, pid_field: str, pid: int, alive: bool
+) -> None:
+    payload = {
+        "version": 1,
+        "mode": mode,
+        "parked": True,
+        pid_field: pid,
+        "pids_alive": {pid_field: alive},
+    }
+    (tmp_path / ".occupancy.json").write_text(json.dumps(payload), encoding="utf-8")
+
+
 def test_n_gpu_layers_occupancy_cpu_force_and_allow_off(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -1235,6 +1248,73 @@ def test_n_gpu_layers_occupancy_cpu_force_and_allow_off(
     assert client._n_gpu_layers() == 0
     monkeypatch.delenv("EZ_LLM_ALLOW_GPU", raising=False)
     assert client._n_gpu_layers() == 99
+
+
+def test_occupancy_mode_missing_and_corrupt_read_unknown(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    monkeypatch.delenv("COMFY_OUTPUT", raising=False)
+    assert client.occupancy_mode() == "unknown"
+    (tmp_path / ".occupancy.json").write_text("{not-json", encoding="utf-8")
+    assert client.occupancy_mode() == "unknown"
+    (tmp_path / ".occupancy.json").write_text("[]", encoding="utf-8")
+    assert client.occupancy_mode() == "unknown"
+
+
+def test_occupancy_mode_without_the_shared_reader_reads_unknown(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A pack installed without ez_common stays up on the CPU path."""
+    monkeypatch.setitem(sys.modules, "ez_common.occupancy", None)
+    assert client.occupancy_mode() == "unknown"
+
+
+def test_orphaned_desk_record_keeps_the_local_4b_on_gpu(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    monkeypatch.delenv("COMFY_OUTPUT", raising=False)
+    monkeypatch.delenv("EZ_LLM_ALLOW_GPU", raising=False)
+    monkeypatch.delenv("EZ_LLM_N_GPU_LAYERS", raising=False)
+    _write_desk_occupancy(tmp_path, "llm-desk", "llm_pid", 4242, alive=False)
+    assert client.occupancy_mode() == "idle"
+    assert client._n_gpu_layers() == client.DEFAULT_SIDECAR_NGL
+    _write_desk_occupancy(tmp_path, "blender-desk", "blender_pid", 4243, alive=False)
+    assert client.occupancy_mode() == "idle"
+    assert client._n_gpu_layers() == client.DEFAULT_SIDECAR_NGL
+
+
+def test_live_desk_record_still_reads_as_the_desk(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    monkeypatch.delenv("COMFY_OUTPUT", raising=False)
+    _write_desk_occupancy(tmp_path, "llm-desk", "llm_pid", 4242, alive=True)
+    assert client.occupancy_mode() == "llm-desk"
+    assert client.sidecar_occupancy_ok() is True
+
+
+def test_live_heavy_record_forces_cpu_and_logs(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    monkeypatch.delenv("COMFY_OUTPUT", raising=False)
+    monkeypatch.delenv("EZ_LLM_ALLOW_GPU", raising=False)
+    monkeypatch.setenv("EZ_LLM_N_GPU_LAYERS", "99")
+    payload = {
+        "version": 1,
+        "mode": "wan",
+        "parked": False,
+        "llm_pid": 4242,
+        "pids_alive": {"llm_pid": True},
+    }
+    (tmp_path / ".occupancy.json").write_text(json.dumps(payload), encoding="utf-8")
+    assert client.occupancy_mode() == "wan"
+    assert client._n_gpu_layers() == 0
+    assert "occupancy wan: CPU 4B (OOM-safe); n_gpu_layers=0" in capsys.readouterr().err
 
 
 def test_sidecar_used_when_occupancy_llm(
