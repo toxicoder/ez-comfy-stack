@@ -259,6 +259,64 @@ def test_occupancy_unreadable_file_is_unknown(tmp_path: Path) -> None:
     assert mcp.occupancy_mode() == "unknown"
 
 
+def test_occupancy_tool_releases_an_orphaned_desk(tmp_path: Path) -> None:
+    """A dead sidecar must not make the agent tell the operator to stop it."""
+    (tmp_path / ".occupancy.json").write_text(
+        json.dumps(
+            {
+                "mode": "blender-desk",
+                "parked": True,
+                "blender_pid": 4242,
+                "mcp_pid": 0,
+                "pids_alive": {"blender_pid": False, "mcp_pid": False},
+            }
+        ),
+        encoding="utf-8",
+    )
+    result = mcp.call_tool("occupancy_status", {})
+    assert result["ok"] is True
+    assert result["mode"] == "idle"
+    assert result["recorded_mode"] == "blender-desk"
+    assert result["orphaned"] is True
+    note = str(result["note"])
+    assert "no live sidecar" in note
+    assert "blender_pid=4242" in note
+
+
+def test_occupancy_tool_keeps_a_live_desk_as_the_desk(tmp_path: Path) -> None:
+    (tmp_path / ".occupancy.json").write_text(
+        json.dumps(
+            {
+                "mode": "blender-desk",
+                "parked": True,
+                "blender_pid": 4242,
+                "pids_alive": {"blender_pid": True},
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert mcp.call_tool("occupancy_status", {}) == {"ok": True, "mode": "blender-desk"}
+
+
+def test_occupancy_tool_survives_a_record_the_reader_rejects(tmp_path: Path) -> None:
+    (tmp_path / ".occupancy.json").write_text("[]", encoding="utf-8")
+    assert mcp.call_tool("occupancy_status", {}) == {"ok": True, "mode": "unknown"}
+    assert mcp._occupancy_read() is None
+
+
+def test_occupancy_read_adds_custom_nodes_to_the_path(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The server runs from the checkout, so it anchors the reader itself."""
+    custom = str(Path(mcp.__file__).resolve().parents[2] / "custom_nodes")
+    monkeypatch.setattr(sys, "path", [entry for entry in sys.path if entry != custom])
+    (tmp_path / ".occupancy.json").write_text('{"mode": "klein"}', encoding="utf-8")
+    state = mcp._occupancy_read()
+    assert state is not None
+    assert state.mode == "klein"
+    assert custom in sys.path
+
+
 def test_occupancy_tool_reflects_fallback(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("COMFY_OUTPUT_DIR", raising=False)
     monkeypatch.setattr(mcp, "occupancy_mode", lambda: "unknown")

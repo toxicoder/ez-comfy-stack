@@ -2,7 +2,9 @@
 """Occupancy-aware Blender MCP (stdlib JSON-RPC). No execute_code, no telemetry.
 
 Tools wrap occupancy.sh and host ``blender --background``. Live bpy tools
-require blender-desk (or compose down). Never in the Docker image.
+require blender-desk (or compose down), and only while that desk has a live
+sidecar - :mod:`ez_common.occupancy` decides, so an orphaned record cannot
+refuse forever. Never in the Docker image.
 """
 
 from __future__ import annotations
@@ -11,6 +13,7 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 from typing import TYPE_CHECKING, NotRequired, TypedDict, cast
 
@@ -30,7 +33,7 @@ from mcp_runtime import (
 )
 
 if TYPE_CHECKING:
-    from ez_common import Json, JsonObject
+    from ez_common import Json, JsonObject, Occupancy
 
 # MCP protocol identity (JSON-RPC initialize.serverInfo).
 PROTOCOL_VERSION = "2024-11-05"
@@ -78,6 +81,10 @@ def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
+_LLM_DESK_MODE = "llm-desk"
+"""Desk mode whose claim is the host llama-server holding the GPU."""
+
+
 def _output_dir() -> Path:
     """Return COMFY_OUTPUT_DIR (host occupancy / asset dump root).
 
@@ -97,6 +104,44 @@ def _occupancy_bin() -> Path:
     if override:
         return Path(override)
     return _repo_root() / "scripts" / "utilities" / "occupancy.sh"
+
+
+def _ensure_custom_nodes_path() -> None:
+    """Prepend ``custom_nodes/`` so the shared occupancy reader resolves."""
+    custom = str(_repo_root() / "custom_nodes")
+    if custom not in sys.path:
+        sys.path.insert(0, custom)
+
+
+def _occupancy_view(state: JsonObject) -> Occupancy:
+    """Read one occupancy mapping through the shared policy.
+
+    The mode string alone cannot tell a live desk from a record its sidecar
+    left behind; :mod:`ez_common.occupancy` is the one reader that weighs the
+    holder PIDs against the liveness map the host stamps into the file.
+
+    Args:
+        state: Mapping from :func:`occupancy_status`.
+
+    Returns:
+        The shared immutable read.
+    """
+    _ensure_custom_nodes_path()
+    from ez_common import occupancy
+
+    return occupancy.parse_state(state)
+
+
+def _desk_recovery_command() -> str:
+    """Build the documented host command that takes the desk.
+
+    Returns:
+        Copy-pasteable ``//:manage`` command naming the verb, not a process.
+    """
+    _ensure_custom_nodes_path()
+    from ez_common import occupancy
+
+    return occupancy.recovery_command("blender-desk")
 
 
 def occupancy_status() -> JsonObject:
@@ -135,24 +180,31 @@ def occupancy_status() -> JsonObject:
         "parked": False,
         "blender_pid": 0,
         "mcp_pid": 0,
+        "llm_pid": 0,
     }
 
 
 def desk_allowed() -> bool:
     """True when bpy tools may run (parked blender-desk, or compose down).
 
+    The decision is taken against the shared reader: a heavy mode owns the GPU,
+    a live ``llm-desk`` sidecar is itself the GPU job, and any other desk claim
+    counts only while its sidecar lives. A record left behind by a killed
+    Blender or a host reboot therefore reads as released instead of refusing
+    forever, while a live holder still refuses.
+
     Returns:
         Whether live bpy tools are allowed.
     """
     state = occupancy_status()
-    mode = str(state.get("mode") or "idle")
+    view = _occupancy_view(state)
+    if view.is_heavy:
+        return False
+    if view.mode == _LLM_DESK_MODE and view.holder_live:
+        return False
     parked = bool(state.get("parked"))
     compose = bool(state.get("compose") or state.get("compose_live"))
-    if mode == "blender-desk" and (parked or not compose):
-        return True
-    if not compose and mode in ("idle", "blender-desk"):
-        return True
-    return False
+    return parked or not compose
 
 
 def _require_desk() -> BlenderRunResult | None:
@@ -165,7 +217,10 @@ def _require_desk() -> BlenderRunResult | None:
         return None
     return {
         "ok": False,
-        "error": "occupancy enter blender-desk first (Comfy is a heavy job)",
+        "error": (
+            "Comfy is a heavy GPU job - take the desk first: "
+            f"{_desk_recovery_command()}"
+        ),
     }
 
 

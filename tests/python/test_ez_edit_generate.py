@@ -798,6 +798,30 @@ def _deps_dir(tmp_path: Path) -> Path:
     return folder
 
 
+def _write_occupancy(
+    root: Path,
+    mode: str,
+    *,
+    holders: dict[str, int] | None = None,
+    pids_alive: dict[str, bool] | None = None,
+) -> None:
+    """Write ``${COMFY_OUTPUT_DIR}/.occupancy.json`` for the queue gate.
+
+    Args:
+        root: Value for ``COMFY_OUTPUT_DIR``.
+        mode: Recorded occupancy mode.
+        holders: Holder PID fields to record (``blender_pid`` / ``mcp_pid`` /
+            ``llm_pid``); a desk with none of them names no live claim.
+        pids_alive: Host-stamped liveness map; ``None`` simulates a record
+            written before the field existed (fail-closed).
+    """
+    payload: dict[str, object] = {"mode": mode}
+    payload.update(holders or {})
+    if pids_alive is not None:
+        payload["pids_alive"] = dict(pids_alive)
+    (root / ".occupancy.json").write_text(json.dumps(payload), encoding="utf-8")
+
+
 def test_generate_clip_lands_an_ok_row(tmp_path: Path) -> None:
     """Happy path: pending row, queue, history, ok row with the artefact."""
     edit_dir = _deps_dir(tmp_path)
@@ -864,6 +888,49 @@ def test_generate_clip_refuses_a_heavy_occupancy_without_queuing(tmp_path: Path)
     assert transport.calls == []
 
 
+def test_generate_clip_refuses_a_live_llm_desk_without_queuing(
+    tmp_path: Path,
+) -> None:
+    """The 35B sidecar is a GPU job of its own: a live one XORs the cutaway out."""
+    edit_dir = _deps_dir(tmp_path)
+    _write_occupancy(tmp_path, "llm-desk", holders={"llm_pid": 4242}, pids_alive={"llm_pid": True})
+    transport = FakeTransport([])
+    row = generate_clip.generate_clip(
+        edit_dir,
+        prompt=PROMPT,
+        base_url="http://h:1",
+        urlopen=transport,
+        graph_file=graph_path(),
+        environ={"COMFY_OUTPUT_DIR": str(tmp_path)},
+    )
+    assert row["state"] == "failed"
+    assert "occupancy is llm-desk" in row["message"]
+    assert "bazelisk run //:manage -- occupancy enter idle --yes" in row["message"]
+    assert transport.calls == []
+
+
+def test_generate_clip_renders_while_an_orphaned_llm_desk_record_remains(
+    tmp_path: Path,
+) -> None:
+    """A sidecar that died leaves a stale record, not a permanent block."""
+    edit_dir = _deps_dir(tmp_path)
+    _write_occupancy(
+        tmp_path, "llm-desk", holders={"llm_pid": 4242}, pids_alive={"llm_pid": False}
+    )
+    transport = FakeTransport([{"prompt_id": "pid-9"}, {"pid-9": {"outputs": {}}}])
+    row = generate_clip.generate_clip(
+        edit_dir,
+        prompt=PROMPT,
+        base_url="http://h:1",
+        urlopen=transport,
+        sleeper=lambda _s: None,
+        graph_file=graph_path(),
+        environ={"COMFY_OUTPUT_DIR": str(tmp_path)},
+    )
+    assert row["state"] == "ok"
+    assert transport.calls[0][0] == "http://h:1/prompt"
+
+
 def test_generate_clip_reads_occupancy_from_the_state_file(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -884,7 +951,11 @@ def test_generate_clip_reads_occupancy_from_the_state_file(
 
 
 def test_generate_clip_degrades_when_the_graph_is_missing(tmp_path: Path) -> None:
-    """A missing graph file is an ok-false row, not a traceback."""
+    """A missing graph file is an ok-false row, not a traceback.
+
+    Occupancy is pinned idle so the row reports the graph, not the XOR gate;
+    the desk-mode XOR itself has its own tests above.
+    """
     edit_dir = _deps_dir(tmp_path)
     transport = FakeTransport([])
     row = generate_clip.generate_clip(
@@ -892,7 +963,7 @@ def test_generate_clip_degrades_when_the_graph_is_missing(tmp_path: Path) -> Non
         prompt=PROMPT,
         base_url="http://h:1",
         urlopen=transport,
-        occupancy=lambda: "llm-desk",
+        occupancy=lambda: "idle",
         graph_file=tmp_path / "graphs" / "generate-cutaway.json",
     )
     assert row["state"] == "failed"

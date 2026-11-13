@@ -64,6 +64,50 @@ def test_desk_allowed_parked_and_refuses_heavy(tmp_path: Path, monkeypatch: pyte
     assert "blender-desk" in blocked["error"]
 
 
+def test_desk_allowed_refuses_a_live_llm_sidecar(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The 35B on the GPU is the job: a parked Compose does not make room for bpy."""
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    (tmp_path / ".occupancy.json").write_text(
+        json.dumps(
+            {
+                "mode": "llm-desk",
+                "parked": True,
+                "compose": True,
+                "llm_pid": 9911,
+                "pids_alive": {"llm_pid": True},
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert mcp.desk_allowed() is False
+
+
+def test_desk_allowed_lets_an_orphaned_llm_record_go(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """A killed sidecar leaves a desk nobody sits at, so bpy may proceed."""
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    (tmp_path / ".occupancy.json").write_text(
+        json.dumps(
+            {
+                "mode": "llm-desk",
+                "parked": True,
+                "compose": True,
+                "llm_pid": 9911,
+                "pids_alive": {"llm_pid": False},
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert mcp.desk_allowed() is True
+
+
+def test_occupancy_view_adds_custom_nodes_to_the_path(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The MCP server runs from the checkout, so it anchors the reader itself."""
+    custom = str(mcp._repo_root() / "custom_nodes")
+    monkeypatch.setattr(sys, "path", [entry for entry in sys.path if entry != custom])
+    assert mcp._occupancy_view({"mode": "klein"}).mode == "klein"
+    assert custom in sys.path
+
+
 def test_create_primitive_rejects_unknown_kind(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     (tmp_path / ".occupancy.json").write_text(

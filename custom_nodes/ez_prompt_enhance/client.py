@@ -877,33 +877,25 @@ def _n_ctx() -> int:
 
 
 def occupancy_mode() -> str:
-    """Read occupancy mode from outputs ``.occupancy.json`` (unknown if missing).
+    """Read the effective occupancy mode through the canonical resolver.
+
+    The mode machine lives in :mod:`ez_common.occupancy`, so a desk record
+    whose sidecar died (an orphan) reads as ``idle`` here instead of pinning
+    the local 4B to CPU forever. Missing and corrupt records both read
+    ``unknown``, which is what a corrupt file yielded before this resolver.
 
     Returns:
-        Occupancy mode string, or ``unknown`` when the file is missing.
+        Effective occupancy mode string, or ``unknown`` when the record is
+        missing, unreadable, or not a JSON object.
     """
-    seen: set[str] = set()
-    candidates: list[Path] = []
-    for raw in (
-        os.environ.get("COMFY_OUTPUT_DIR", "").strip(),
-        "/outputs",
-    ):
-        if not raw or raw in seen:
-            continue
-        seen.add(raw)
-        candidates.append(Path(raw) / ".occupancy.json")
-    for path in candidates:
-        if not path.is_file():
-            continue
-        try:
-            data = json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, UnicodeError, json.JSONDecodeError):
-            continue
-        if not isinstance(data, dict):
-            continue
-        mode = str(data.get("mode") or "").strip()
-        return mode or "unknown"
-    return "unknown"
+    try:
+        from ez_common.occupancy import OccupancyStateError, read_state
+    except ImportError:
+        return "unknown"
+    try:
+        return read_state().effective_mode
+    except (OSError, OccupancyStateError):
+        return "unknown"
 
 
 def sidecar_occupancy_ok(mode: str | None = None) -> bool:

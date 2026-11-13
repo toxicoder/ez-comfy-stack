@@ -28,6 +28,7 @@ _HEALTH = c.Health(
     host_free_gib=64,
     disk_free_gib=200,
     occupancy_mode="idle",
+    occupancy_orphaned=False,
     parked=False,
     queue="idle",
     llm_live=False,

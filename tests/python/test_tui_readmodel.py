@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 from pathlib import Path
 from typing import NamedTuple
 
@@ -38,13 +39,14 @@ OCCUPANCY_JSON = json.dumps(
         "blender_pid": 0,
         "mcp_pid": 0,
         "llm_pid": 0,
+        "pids_alive": {"blender_pid": False, "mcp_pid": False, "llm_pid": False},
         "updated": "2026-01-01T00:00:00Z",
         "compose_live": True,
         "queue": "idle",
         "llm_live": False,
     }
 )
-"""A complete ``occupancy status --json`` payload."""
+"""A complete ``occupancy status --json`` payload, liveness stamp included."""
 
 LIMIT_JSON = json.dumps(
     {
@@ -325,7 +327,7 @@ def test_parse_stack_status_needs_a_usable_state(bad: str) -> None:
 
 
 def test_parse_occupancy_reads_the_live_payload() -> None:
-    """The desk reports mode, parked, queue, and the sidecar together."""
+    """The desk reports mode, parked, queue, the sidecar, and its liveness."""
     payload = readmodel.parse_occupancy(OCCUPANCY_JSON)
     assert payload is not None
     assert payload == {
@@ -333,16 +335,93 @@ def test_parse_occupancy_reads_the_live_payload() -> None:
         "parked": False,
         "queue": "idle",
         "llm_live": False,
+        "blender_pid": 0,
+        "mcp_pid": 0,
+        "llm_pid": 0,
+        "pids_alive": {"blender_pid": False, "mcp_pid": False, "llm_pid": False},
+        "orphaned": False,
     }
 
 
 def test_parse_occupancy_keeps_only_fields_that_are_typed_right() -> None:
     """A string standing in for a bool is dropped, not coerced."""
     payload = readmodel.parse_occupancy(
-        '{"mode":"wan","parked":"yes","queue":0,"llm_live":1}'
+        '{"mode":"wan","parked":"yes","queue":0,"llm_live":1,'
+        '"blender_pid":"x","mcp_pid":true,"llm_pid":null,"pids_alive":"gone"}'
     )
     assert payload is not None
-    assert payload == {"mode": "wan"}
+    assert payload == {"mode": "wan", "orphaned": False}
+
+
+def test_parse_occupancy_releases_a_desk_whose_sidecar_died() -> None:
+    """Issues #380 / #381 for the console: the PIDs decide, not the mode word."""
+    payload = readmodel.parse_occupancy(
+        '{"mode":"blender-desk","parked":true,"compose":true,"blender_pid":4242,'
+        '"mcp_pid":4243,"llm_pid":0,'
+        '"pids_alive":{"blender_pid":false,"mcp_pid":false,"llm_pid":false}}'
+    )
+    assert payload is not None
+    assert payload.get("mode") == "blender-desk"
+    assert payload.get("orphaned") is True
+
+
+def test_parse_occupancy_keeps_a_desk_whose_sidecar_lives() -> None:
+    """One live holder is a real claim, so the console keeps blocking on it."""
+    payload = readmodel.parse_occupancy(
+        '{"mode":"blender-desk","parked":true,"compose":true,"blender_pid":4242,'
+        '"mcp_pid":4243,"llm_pid":0,'
+        '"pids_alive":{"blender_pid":false,"mcp_pid":true,"llm_pid":false}}'
+    )
+    assert payload is not None
+    assert payload.get("orphaned") is False
+
+
+def test_parse_occupancy_fails_closed_without_the_liveness_stamp() -> None:
+    """A record predating ``pids_alive`` is assumed held, never assumed free."""
+    payload = readmodel.parse_occupancy(
+        '{"mode":"llm-desk","parked":true,"compose":true,"llm_pid":991}'
+    )
+    assert payload is not None
+    assert payload.get("orphaned") is False
+    assert payload.get("llm_live") is True
+    assert "pids_alive" not in payload
+
+
+def test_occupancy_view_adds_custom_nodes_to_the_path(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The console runs from the checkout, so it anchors the reader itself."""
+    custom = str(Path(readmodel.__file__).resolve().parents[3] / "custom_nodes")
+    monkeypatch.setattr(sys, "path", [entry for entry in sys.path if entry != custom])
+    assert readmodel._occupancy_view({"mode": "klein"}).mode == "klein"
+    assert custom in sys.path
+
+
+def test_parse_occupancy_answers_the_sidecar_from_the_record_when_the_verb_did_not() -> None:
+    """The state file alone still says whether the 35B is up, off the stamped map."""
+    dead = readmodel.parse_occupancy(
+        '{"mode":"llm-desk","parked":true,"compose":true,"llm_pid":991,'
+        '"pids_alive":{"blender_pid":false,"mcp_pid":false,"llm_pid":false}}'
+    )
+    assert dead is not None
+    assert dead.get("llm_live") is False
+    assert dead.get("orphaned") is True
+    live = readmodel.parse_occupancy(
+        '{"mode":"llm-desk","parked":true,"compose":true,"llm_pid":991,'
+        '"pids_alive":{"blender_pid":false,"mcp_pid":false,"llm_pid":true}}'
+    )
+    assert live is not None
+    assert live.get("llm_live") is True
+    assert live.get("orphaned") is False
+
+
+def test_parse_occupancy_prefers_the_verb_over_the_record_on_the_sidecar() -> None:
+    """A fresh ``kill -0`` from the verb beats the stamp sitting in the file."""
+    payload = readmodel.parse_occupancy(
+        '{"mode":"llm-desk","parked":true,"compose":true,"llm_pid":991,"llm_live":false,'
+        '"pids_alive":{"blender_pid":false,"mcp_pid":false,"llm_pid":true}}'
+    )
+    assert payload is not None
+    assert payload.get("llm_live") is False
+    assert payload.get("orphaned") is False
 
 
 @pytest.mark.parametrize("junk", ["", "not json", "[]", '{"parked":true}'])
@@ -450,7 +529,42 @@ def test_read_occupancy_file_reads_the_desk_state(tmp_path: Path) -> None:
         "parked": False,
         "queue": "idle",
         "llm_live": False,
+        "blender_pid": 0,
+        "mcp_pid": 0,
+        "llm_pid": 0,
+        "pids_alive": {"blender_pid": False, "mcp_pid": False, "llm_pid": False},
+        "orphaned": False,
     }
+
+
+def test_read_occupancy_file_reports_an_orphaned_desk(tmp_path: Path) -> None:
+    """The disk fallback can say so too, which is the only desk evidence left."""
+    path = tmp_path / readmodel.OCCUPANCY_FILENAME
+    path.write_text(
+        json.dumps(
+            {
+                "version": 1,
+                "mode": "blender-desk",
+                "compose": True,
+                "parked": True,
+                "blender_pid": 4242,
+                "mcp_pid": 4243,
+                "llm_pid": 0,
+                "pids_alive": {
+                    "blender_pid": False,
+                    "mcp_pid": False,
+                    "llm_pid": False,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    payload = readmodel.read_occupancy_file(path)
+    assert payload is not None
+    assert payload.get("mode") == "blender-desk"
+    assert payload.get("orphaned") is True
+    assert payload.get("blender_pid") == 4242
+    assert payload.get("mcp_pid") == 4243
 
 
 def test_read_occupancy_file_survives_a_missing_or_rubbish_file(tmp_path: Path) -> None:
@@ -602,6 +716,7 @@ def test_probe_health_is_complete_when_every_probe_answers(
     assert health["host_free_gib"] == 64
     assert health["disk_free_gib"] == 412
     assert health["occupancy_mode"] == "idle"
+    assert health["occupancy_orphaned"] is False
     assert health["parked"] is False
     assert health["queue"] == "idle"
     assert health["llm_live"] is False
@@ -690,6 +805,66 @@ def test_probe_health_falls_back_to_the_occupancy_state_file(
     assert health["occupancy_mode"] == "wan"
     assert health["queue"] == "unmeasured"
     assert any("state file" in line for line in health["errors"])
+
+
+def test_probe_health_falls_back_to_an_orphaned_desk_record(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A dead sidecar reads as no claim even when only the file answered."""
+    outputs = tmp_path / "out"
+    outputs.mkdir()
+    (outputs / readmodel.OCCUPANCY_FILENAME).write_text(
+        json.dumps(
+            {
+                "mode": "llm-desk",
+                "parked": True,
+                "compose": True,
+                "llm_pid": 991,
+                "pids_alive": {
+                    "blender_pid": False,
+                    "mcp_pid": False,
+                    "llm_pid": False,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    payloads = dict(ALL_GOOD)
+    payloads[readmodel.OCCUPANCY_PROBE] = "not json"
+    health = _snapshot(tmp_path, payloads, monkeypatch, comfy_output_dir=outputs)
+    assert health["occupancy_mode"] == "llm-desk"
+    assert health["occupancy_orphaned"] is True
+    assert health["llm_live"] is False
+
+
+def test_probe_health_falls_back_to_a_live_desk_record(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The same record with a stamped-alive sidecar still holds the GPU."""
+    outputs = tmp_path / "out"
+    outputs.mkdir()
+    (outputs / readmodel.OCCUPANCY_FILENAME).write_text(
+        json.dumps(
+            {
+                "mode": "llm-desk",
+                "parked": True,
+                "compose": True,
+                "llm_pid": 991,
+                "pids_alive": {
+                    "blender_pid": False,
+                    "mcp_pid": False,
+                    "llm_pid": True,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    payloads = dict(ALL_GOOD)
+    payloads[readmodel.OCCUPANCY_PROBE] = "not json"
+    health = _snapshot(tmp_path, payloads, monkeypatch, comfy_output_dir=outputs)
+    assert health["occupancy_mode"] == "llm-desk"
+    assert health["occupancy_orphaned"] is False
+    assert health["llm_live"] is True
 
 
 def test_probe_health_says_so_when_neither_occupancy_source_answers(

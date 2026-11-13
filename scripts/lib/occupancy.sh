@@ -128,6 +128,7 @@ occupancy_write() {
     fi
   fi
   local path parked_json compose_flag
+  local blender_alive mcp_alive llm_alive
   path="$(occupancy_state_path)"
   mkdir -p "$(dirname "${path}")" || return 1
   parked_json="false"
@@ -138,8 +139,18 @@ occupancy_write() {
   if compose_is_running; then
     compose_flag="true"
   fi
+  # Liveness is stamped here, on the host, because the Compose container has no
+  # pid: host share and cannot kill -0 a host sidecar. In-canvas readers trust
+  # this map; a record without it stays fail-closed.
+  blender_alive=false
+  mcp_alive=false
+  llm_alive=false
+  occupancy_pid_alive "${blender_pid}" && blender_alive=true
+  occupancy_pid_alive "${mcp_pid}" && mcp_alive=true
+  occupancy_pid_alive "${llm_pid}" && llm_alive=true
   python3 -c 'import json, sys, datetime
 path, mode, parked, blender_pid, mcp_pid, llm_pid, compose_flag = sys.argv[1:8]
+blender_alive, mcp_alive, llm_alive = sys.argv[8:11]
 payload = {
     "version": 1,
     "mode": mode,
@@ -148,12 +159,18 @@ payload = {
     "blender_pid": int(blender_pid or 0),
     "mcp_pid": int(mcp_pid or 0),
     "llm_pid": int(llm_pid or 0),
+    "pids_alive": {
+        "blender_pid": blender_alive == "true",
+        "mcp_pid": mcp_alive == "true",
+        "llm_pid": llm_alive == "true",
+    },
     "updated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
 }
 with open(path, "w", encoding="utf-8") as handle:
     json.dump(payload, handle, indent=2)
     handle.write("\n")
-' "${path}" "${mode}" "${parked_json}" "${blender_pid}" "${mcp_pid}" "${llm_pid}" "${compose_flag}"
+' "${path}" "${mode}" "${parked_json}" "${blender_pid}" "${mcp_pid}" "${llm_pid}" \
+    "${compose_flag}" "${blender_alive}" "${mcp_alive}" "${llm_alive}"
 }
 
 #######################################
@@ -523,6 +540,70 @@ mcp_pid_alive() {
 #######################################
 llm_pid_alive() {
   occupancy_pid_alive "$(occupancy_field llm_pid)"
+}
+
+#######################################
+# True when a desk mode is backed by a sidecar that is actually running.
+# Heavy and idle modes are not desks and report not-held.
+# Globals:
+#   COMFY_OUTPUT_DIR
+# Arguments:
+#   $1  Optional mode (default: current occupancy mode)
+# Outputs:
+#   None
+# Returns:
+#   0 held; 1 orphaned desk or not a desk mode
+#######################################
+occupancy_desk_held() {
+  local mode="${1:-$(occupancy_mode)}"
+  case "${mode}" in
+    blender-desk)
+      if blender_pid_alive || mcp_pid_alive; then
+        return 0
+      fi
+      return 1
+      ;;
+    llm-desk)
+      llm_pid_alive
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+#######################################
+# Release a desk record whose sidecars are all dead.
+# A sidecar killed outright, or a host reboot, leaves mode at blender-desk or
+# llm-desk with dead PIDs. Nothing clears that on its own, and the in-canvas
+# Occupancy gate reads the mode, so every heavy graph then dead-ends telling
+# the operator to stop a Blender that is not running. This zeroes the dead
+# PIDs and refreshes the stamped verdict, and keeps the mode so the record
+# still says which desk was left dangling.
+# Globals:
+#   COMFY_OUTPUT_DIR
+# Arguments:
+#   None
+# Outputs:
+#   Log line on stderr when something was released
+# Returns:
+#   0
+#######################################
+occupancy_reconcile() {
+  local mode
+  mode="$(occupancy_mode)"
+  case "${mode}" in
+    blender-desk | llm-desk) ;;
+    *)
+      return 0
+      ;;
+  esac
+  if occupancy_desk_held "${mode}"; then
+    return 0
+  fi
+  log "occupancy: ${mode} has no live sidecar - releasing the desk record"
+  occupancy_write "${mode}" "$(occupancy_field parked)" 0 0 0
+  return 0
 }
 
 #######################################

@@ -50,16 +50,35 @@ def _install_shot_fixture(tmp_path: Path) -> Path:
     return dest
 
 
-def _write_occupancy(tmp_path: Path, mode: str) -> None:
+def _write_occupancy(
+    tmp_path: Path,
+    mode: str,
+    *,
+    holders: dict[str, int] | None = None,
+    pids_alive: dict[str, bool] | None = None,
+) -> None:
+    """Write an ``.occupancy.json`` record for gate tests.
+
+    Args:
+        tmp_path: Output directory holding the record.
+        mode: Recorded occupancy mode.
+        holders: PID fields to record; absent fields read 0.
+        pids_alive: Host-stamped liveness map; ``None`` simulates a record
+            written before the field existed.
+    """
+    claimed = holders or {}
     payload = {
         "version": 1,
         "mode": mode,
         "compose": False,
         "parked": mode == "blender-desk",
-        "blender_pid": 0,
-        "mcp_pid": 0,
+        "blender_pid": int(claimed.get("blender_pid", 0)),
+        "mcp_pid": int(claimed.get("mcp_pid", 0)),
+        "llm_pid": int(claimed.get("llm_pid", 0)),
         "updated": "",
     }
+    if pids_alive is not None:
+        payload["pids_alive"] = dict(pids_alive)
     (tmp_path / ".occupancy.json").write_text(
         json.dumps(payload, indent=2) + "\n", encoding="utf-8"
     )
@@ -223,9 +242,42 @@ def test_occupancy_missing_file_passes(output_dir: Path) -> None:
     assert og.read_mode(output_dir / ".occupancy.json") == "unknown"
 
 
-def test_occupancy_blender_desk_vs_trellis_raises(output_dir: Path) -> None:
+def test_occupancy_live_blender_desk_vs_trellis_raises(output_dir: Path) -> None:
+    _write_occupancy(
+        output_dir,
+        "blender-desk",
+        holders={"blender_pid": 4242},
+        pids_alive={"blender_pid": True, "mcp_pid": False, "llm_pid": False},
+    )
+    with pytest.raises(OccupancyError, match="blender-desk|Workbench"):
+        EZDCCOccupancyGate().run(object(), "trellis")
+
+
+def test_occupancy_orphan_blender_desk_releases(
+    output_dir: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Issues #380 / #381: a desk nobody is sitting at must not block the Queue."""
+    image = object()
     _write_occupancy(output_dir, "blender-desk")
-    with pytest.raises(OccupancyError, match="blender-desk|dumps"):
+    assert EZDCCOccupancyGate().run(image, "trellis") == (image,)
+    assert "no live sidecar" in capsys.readouterr().err
+
+
+def test_occupancy_dead_pid_blender_desk_releases(output_dir: Path) -> None:
+    _write_occupancy(
+        output_dir,
+        "blender-desk",
+        holders={"blender_pid": 4242, "mcp_pid": 4243},
+        pids_alive={"blender_pid": False, "mcp_pid": False, "llm_pid": False},
+    )
+    image = object()
+    assert EZDCCOccupancyGate().run(image, "trellis") == (image,)
+
+
+def test_occupancy_legacy_blender_desk_fails_closed(output_dir: Path) -> None:
+    """A record predating the liveness stamp keeps the fail-closed answer."""
+    _write_occupancy(output_dir, "blender-desk", holders={"blender_pid": 4242})
+    with pytest.raises(OccupancyError, match="blender-desk"):
         EZDCCOccupancyGate().run(object(), "trellis")
 
 
@@ -247,10 +299,38 @@ def test_occupancy_idle_vs_klein_raises(output_dir: Path) -> None:
         EZDCCOccupancyGate().run(object(), "klein")
 
 
-def test_occupancy_llm_desk_vs_klein_raises(output_dir: Path) -> None:
-    _write_occupancy(output_dir, "llm-desk")
+def test_occupancy_live_llm_desk_vs_klein_raises(output_dir: Path) -> None:
+    _write_occupancy(
+        output_dir,
+        "llm-desk",
+        holders={"llm_pid": 991},
+        pids_alive={"blender_pid": False, "mcp_pid": False, "llm_pid": True},
+    )
     with pytest.raises(OccupancyError, match="llm-desk|sidecar"):
         EZDCCOccupancyGate().run(object(), "klein")
+
+
+def test_occupancy_orphan_llm_desk_releases(output_dir: Path) -> None:
+    _write_occupancy(
+        output_dir,
+        "llm-desk",
+        holders={"llm_pid": 991},
+        pids_alive={"blender_pid": False, "mcp_pid": False, "llm_pid": False},
+    )
+    image = object()
+    assert EZDCCOccupancyGate().run(image, "klein") == (image,)
+
+
+def test_occupancy_live_mcp_only_desk_raises(output_dir: Path) -> None:
+    """The Blender MCP alone is a live desk claim, not just the GUI PID."""
+    _write_occupancy(
+        output_dir,
+        "blender-desk",
+        holders={"mcp_pid": 77},
+        pids_alive={"blender_pid": False, "mcp_pid": True, "llm_pid": False},
+    )
+    with pytest.raises(OccupancyError, match="blender-desk"):
+        EZDCCOccupancyGate().run(object(), "trellis")
 
 
 def test_occupancy_invalid_json_fail_closed(output_dir: Path) -> None:

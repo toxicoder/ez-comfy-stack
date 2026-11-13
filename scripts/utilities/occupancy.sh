@@ -49,10 +49,12 @@ TARGET=""
 cmd_help() {
   echo "Usage: occupancy.sh status [--json]" >&2
   echo "       occupancy.sh enter MODE [--yes]" >&2
+  echo "       occupancy.sh reconcile" >&2
   echo "  Modes: $(occupancy_modes)" >&2
   echo "  blender-desk parks Comfy (POST /free) for host Workbench dumps." >&2
   echo "  llm-desk parks Comfy and starts the host 35B sidecar (127.0.0.1)." >&2
   echo "  Heavy modes stop the Blender desk and the 35B sidecar; they do not start Compose." >&2
+  echo "  reconcile releases a desk record whose sidecar died (killed, or a host reboot)." >&2
   echo "  Graph occupancy label llm is not a CLI mode. See docs/occupancy.md." >&2
   echo "  Never in docker/Dockerfile." >&2
 }
@@ -95,6 +97,7 @@ parse_args() {
         fi
         ;;
       status) CMD="status" ;;
+      reconcile) CMD="reconcile" ;;
       enter)
         CMD="enter"
         if [[ $# -ge 2 && ${2} != --* ]]; then
@@ -121,7 +124,10 @@ parse_args() {
 }
 
 #######################################
-# Print occupancy status (human or JSON).
+# Print occupancy status (human or JSON). Read-only by contract: the operator
+# console probes this on every refresh, and studio-tui.sh promises the console
+# never writes .occupancy.json, so releasing a stale desk is the separate
+# reconcile verb rather than a side effect of looking.
 # Globals:
 #   JSON_FLAG
 # Arguments:
@@ -166,6 +172,21 @@ cmd_enter() {
 }
 
 #######################################
+# Release a desk record whose sidecars are all dead.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   Status on stderr
+# Returns:
+#   0
+#######################################
+cmd_reconcile() {
+  occupancy_reconcile
+}
+
+#######################################
 # CLI dispatcher.
 # Arguments:
 #   $@  CLI args
@@ -175,6 +196,7 @@ main() {
   case "${CMD}" in
     status) cmd_status ;;
     enter) cmd_enter ;;
+    reconcile) cmd_reconcile ;;
     *)
       err "Unknown command: ${CMD}"
       exit 1

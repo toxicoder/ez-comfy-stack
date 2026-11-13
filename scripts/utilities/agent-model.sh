@@ -97,7 +97,8 @@ cmd_help() {
   echo "Usage: agent-model.sh status [--json] | run | stop" >&2
   echo "  Host launcher for the optional Qwen3.8-Flash-Next agent (TensorFold recipe)." >&2
   echo "  Bind 127.0.0.1 only. Heavy confirm (~160 GB download + GPU)." >&2
-  echo "  Refused while occupancy is wan / ltx / trellis / klein. See docs/occupancy.md." >&2
+  echo "  Refused while occupancy is wan / ltx / trellis / klein, or a desk sidecar is live." >&2
+  echo "  An orphaned desk record (sidecar gone) does not refuse. See docs/occupancy.md." >&2
   echo "  Exit: 2 occupancy refuse, 4 preflight refuse, 5 confirm declined." >&2
 }
 
@@ -568,9 +569,14 @@ except Exception:
 }
 
 #######################################
-# Refuse the agent while a heavy GPU occupancy mode owns the Spark.
+# Refuse the agent while a live GPU claim owns the Spark.
+# A heavy mode is a claim on its own; a desk mode is one only while its
+# sidecar process lives, which occupancy_desk_held decides from the recorded
+# PIDs. A desk the operator never shut down (sidecar killed, host rebooted)
+# therefore does not hold agent-model run down forever.
 # Globals:
 #   AGENT_MODEL_HEAVY_MODES
+#   occupancy_desk_held (scripts/lib/occupancy.sh, when sourced)
 # Arguments:
 #   None
 # Outputs:
@@ -588,6 +594,11 @@ agent_refuse_heavy_occupancy() {
       return "${AGENT_MODEL_E_OCCUPANCY}"
     fi
   done
+  if declare -F occupancy_desk_held >/dev/null 2>&1 && occupancy_desk_held "${mode}"; then
+    err "occupancy is ${mode} with a live sidecar - release the desk before agent-model run"
+    err "  bazelisk run //:manage -- occupancy enter idle --yes"
+    return "${AGENT_MODEL_E_OCCUPANCY}"
+  fi
   return 0
 }
 

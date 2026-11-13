@@ -56,6 +56,7 @@ def _health(
         host_free_gib=host_free_gib,
         disk_free_gib=disk_free_gib,
         occupancy_mode=occupancy_mode,
+        occupancy_orphaned=False,
         parked=parked,
         queue=queue,
         llm_live=llm_live,

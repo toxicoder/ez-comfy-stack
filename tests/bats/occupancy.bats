@@ -178,6 +178,8 @@ teardown() {
   [ "${status}" -eq 0 ]
   run type cmd_enter
   [ "${status}" -eq 0 ]
+  run type cmd_reconcile
+  [ "${status}" -eq 0 ]
   run type occupancy_set_llm_pid
   [ "${status}" -eq 0 ]
   run type stop_llm_sidecar
@@ -308,4 +310,128 @@ teardown() {
   [ "${status}" -eq 1 ]
   run bash "${OCC}" nope
   [ "${status}" -eq 1 ]
+}
+
+# --- liveness stamping and orphan release (issues #380 / #381) ---------------
+
+_occ_json_field() {
+  occupancy_read | python3 -c 'import json, sys
+d = json.load(sys.stdin)
+print(json.dumps(d.get(sys.argv[1])))' "${1}"
+}
+
+_spawn_then_reap() {
+  # Print a PID that is guaranteed reaped, so kill -0 answers "dead".
+  local pid
+  sleep 0.05 &
+  pid=$!
+  wait "${pid}" 2>/dev/null || true
+  printf '%s\n' "${pid}"
+}
+
+@test "occupancy_write stamps pids_alive from the host namespace" {
+  local live
+  sleep 30 &
+  live=$!
+  occupancy_write blender-desk false "${live}" 0
+  [ "$(_occ_json_field pids_alive)" = '{"blender_pid": true, "mcp_pid": false, "llm_pid": false}' ]
+  kill -TERM "${live}" 2>/dev/null || true
+  wait "${live}" 2>/dev/null || true
+}
+
+@test "occupancy_desk_held separates a live desk from an orphaned one" {
+  local dead live
+  dead="$(_spawn_then_reap)"
+  occupancy_write blender-desk false "${dead}" 0
+  run occupancy_desk_held blender-desk
+  [ "${status}" -eq 1 ]
+  sleep 30 &
+  live=$!
+  occupancy_write blender-desk false "${live}" 0
+  run occupancy_desk_held blender-desk
+  [ "${status}" -eq 0 ]
+  kill -TERM "${live}" 2>/dev/null || true
+  wait "${live}" 2>/dev/null || true
+}
+
+@test "occupancy_desk_held covers the mcp pid and non-desk modes" {
+  local live
+  sleep 30 &
+  live=$!
+  occupancy_write blender-desk false 0 "${live}"
+  run occupancy_desk_held
+  [ "${status}" -eq 0 ]
+  kill -TERM "${live}" 2>/dev/null || true
+  wait "${live}" 2>/dev/null || true
+  occupancy_write idle false 0 0
+  run occupancy_desk_held idle
+  [ "${status}" -eq 1 ]
+  occupancy_write klein false 0 0
+  run occupancy_desk_held klein
+  [ "${status}" -eq 1 ]
+}
+
+@test "occupancy_desk_held covers the llm sidecar pid" {
+  local dead
+  dead="$(_spawn_then_reap)"
+  occupancy_write llm-desk true 0 0 "${dead}"
+  run occupancy_desk_held llm-desk
+  [ "${status}" -eq 1 ]
+}
+
+@test "occupancy_reconcile releases an orphaned desk and keeps the mode" {
+  local dead
+  dead="$(_spawn_then_reap)"
+  occupancy_write blender-desk true "${dead}" 0
+  run occupancy_reconcile
+  [ "${status}" -eq 0 ]
+  [ "$(occupancy_field blender_pid)" = "0" ]
+  [ "$(occupancy_field mcp_pid)" = "0" ]
+  run occupancy_field mode
+  [ "${output}" = "blender-desk" ]
+  [ "$(occupancy_field parked)" = "true" ]
+  [ "$(_occ_json_field pids_alive)" = '{"blender_pid": false, "mcp_pid": false, "llm_pid": false}' ]
+}
+
+@test "occupancy_reconcile leaves a live desk and non-desk modes alone" {
+  local live
+  sleep 30 &
+  live=$!
+  occupancy_write blender-desk true 0 "${live}"
+  occupancy_reconcile
+  [ "$(occupancy_field mcp_pid)" = "${live}" ]
+  kill -TERM "${live}" 2>/dev/null || true
+  wait "${live}" 2>/dev/null || true
+  occupancy_write trellis false 0 0
+  occupancy_reconcile
+  run occupancy_field mode
+  [ "${output}" = "trellis" ]
+}
+
+@test "occupancy.sh CLI reconcile verb and help" {
+  local dead
+  dead="$(_spawn_then_reap)"
+  run bash "${OCC}" --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"reconcile"* ]]
+  occupancy_write blender-desk false "${dead}" 0
+  run bash "${OCC}" reconcile
+  [ "${status}" -eq 0 ]
+  [ "$(occupancy_field blender_pid)" = "0" ]
+}
+
+@test "occupancy.sh status stays read-only on an orphaned desk" {
+  # The operator console probes `occupancy status --json` on every refresh, and
+  # studio-tui.sh promises the console never writes .occupancy.json, so status
+  # must not reconcile on the side.
+  local dead
+  dead="$(_spawn_then_reap)"
+  occupancy_write llm-desk false 0 0 "${dead}"
+  run bash "${OCC}" status
+  [ "${status}" -eq 0 ]
+  [ "$(occupancy_field llm_pid)" = "${dead}" ]
+  run bash "${OCC}" status --json
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"\"llm_pid\": ${dead}"* ]]
+  [ "$(occupancy_field llm_pid)" = "${dead}" ]
 }
