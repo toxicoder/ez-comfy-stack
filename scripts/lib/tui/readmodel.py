@@ -4,7 +4,7 @@ The console does not reimplement a probe. It runs the same machine-readable
 verbs the operator runs (``manage.sh status --json``,
 ``manage.sh occupancy status --json``, ``manage.sh download-limit status
 --json``, and one ``<download-*.sh> status --json`` per model pack) and folds
-their output into a single :class:`~tui.contract.Health` snapshot. Two rules
+their output into a single :class:`~tui.contract.Health` snapshot. Three rules
 keep this layer honest on a box nobody is standing next to:
 
 * Nothing here spawns a process or touches a terminal. Every command goes
@@ -14,6 +14,10 @@ keep this layer honest on a box nobody is standing next to:
   sentinel (:data:`~tui.contract.UNMEASURED`, ``"unknown"``, ``"unmeasured"``)
   and the failure lands in ``Health["errors"]``, which is what makes
   :mod:`tui.guard` block instead of waving the operator through.
+* A desk mode is judged on its sidecar, never on the mode string. The holder
+  PIDs and the host-stamped ``pids_alive`` map are kept, and the one
+  :mod:`ez_common.occupancy` reader decides whether the desk is still held, so
+  an orphaned record cannot block the console forever.
 
 The argv lives in :data:`PROBE_COMMANDS` as plain argument lists, so there is
 no shell string anywhere near an operator answer.
@@ -23,6 +27,7 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 from collections.abc import Callable
 from pathlib import Path
 from typing import TYPE_CHECKING, TypeAlias
@@ -39,10 +44,39 @@ from tui.contract import (
 )
 
 if TYPE_CHECKING:
-    from ez_common import Json, JsonMap
+    from ez_common import Json, JsonMap, Occupancy
 
 Probe: TypeAlias = Callable[[tuple[str, ...]], str]
 """One machine probe: takes the argv to run, returns its captured stdout."""
+
+
+def _ensure_custom_nodes_path() -> None:
+    """Prepend ``custom_nodes/`` so the shared occupancy reader resolves.
+
+    The console dispatches from the checkout, and the occupancy policy lives
+    with the Comfy packs that own it, so the path is anchored at this module
+    rather than at the working directory.
+    """
+    custom = str(Path(__file__).resolve().parents[3] / "custom_nodes")
+    if custom not in sys.path:
+        sys.path.insert(0, custom)
+
+
+def _occupancy_view(obj: JsonMap) -> Occupancy:
+    """Read one parsed record through the shared occupancy policy.
+
+    Args:
+        obj: Parsed ``.occupancy.json`` object.
+
+    Returns:
+        The shared immutable read, which knows the holder PIDs and the
+        host-stamped liveness map.
+    """
+    _ensure_custom_nodes_path()
+    from ez_common import occupancy
+
+    return occupancy.parse_state(obj)
+
 
 HF_PID_FILENAME = ".hf-download.pid"
 """Pid file the download layer leaves under ``MODELS_DIR``.
@@ -53,6 +87,9 @@ Read by ``disk_hf_pid_present`` in ``scripts/lib/disk_scan.sh`` and by
 
 OCCUPANCY_FILENAME = ".occupancy.json"
 """State file the occupancy desk keeps under ``COMFY_OUTPUT_DIR``."""
+
+_LLM_DESK_MODE = "llm-desk"
+"""Desk mode whose claim is the host llama-server holding the GPU."""
 
 STACK_PROBE = "stack"
 """Probe key for the Compose status payload."""
@@ -239,6 +276,12 @@ def parse_stack_status(text: str) -> StackStatusJson | None:
 def parse_occupancy(text: str) -> OccupancyJson | None:
     """Parse ``manage.sh occupancy status --json`` or the state file.
 
+    The three sidecar PIDs and the host-stamped ``pids_alive`` map are kept so
+    a desk record can be judged on liveness rather than on its mode string
+    alone, and :class:`~ez_common.occupancy.Occupancy` turns that pair into the
+    ``orphaned`` verdict the guard policies against. A record that predates the
+    liveness map keeps the fail-closed answer.
+
     Args:
         text: Occupancy payload as JSON text.
 
@@ -262,6 +305,21 @@ def parse_occupancy(text: str) -> OccupancyJson | None:
     llm_live = obj.get("llm_live")
     if isinstance(llm_live, bool):
         payload["llm_live"] = llm_live
+    blender_pid = _as_int(obj.get("blender_pid"))
+    if blender_pid is not None:
+        payload["blender_pid"] = blender_pid
+    mcp_pid = _as_int(obj.get("mcp_pid"))
+    if mcp_pid is not None:
+        payload["mcp_pid"] = mcp_pid
+    llm_pid = _as_int(obj.get("llm_pid"))
+    if llm_pid is not None:
+        payload["llm_pid"] = llm_pid
+    state = _occupancy_view(obj)
+    if state.pids_alive is not None:
+        payload["pids_alive"] = dict(state.pids_alive)
+    payload["orphaned"] = state.orphaned
+    if llm_live is None and state.mode == _LLM_DESK_MODE:
+        payload["llm_live"] = state.holder_live
     return payload
 
 
@@ -351,8 +409,9 @@ def read_occupancy_file(path: Path) -> OccupancyJson | None:
     """Read the occupancy state file straight off disk.
 
     Used when the occupancy verb is unavailable but the desk still left its
-    state behind. It carries no live queue or sidecar overlay, so a caller
-    that uses it must not treat those readings as fresh.
+    state behind. It carries no live queue reading, and its sidecar readings
+    are the host's last stamped verdict rather than a fresh probe, so a caller
+    must not treat them as taken just now.
 
     Args:
         path: Usually ``COMFY_OUTPUT_DIR/.occupancy.json``.
@@ -464,6 +523,9 @@ def _merge_occupancy(health: Health, source: OccupancyJson) -> None:
     llm_live = source.get("llm_live")
     if isinstance(llm_live, bool):
         health["llm_live"] = llm_live
+    orphaned = source.get("orphaned")
+    if isinstance(orphaned, bool):
+        health["occupancy_orphaned"] = orphaned
 
 
 def _probe_stack(
@@ -522,7 +584,10 @@ def _probe_occupancy(
         errors.append("occupancy: neither the verb nor the state file answered")
         return
     _merge_occupancy(health, on_disk)
-    errors.append("occupancy: read from the state file, so the queue is unknown")
+    errors.append(
+        "occupancy: read from the state file, so the queue is unknown and the "
+        "sidecar reading is the last one the host stamped"
+    )
 
 
 def _probe_limit(

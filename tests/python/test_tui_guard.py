@@ -49,6 +49,7 @@ def _healthy() -> Health:
         host_free_gib=64,
         disk_free_gib=120,
         occupancy_mode="idle",
+        occupancy_orphaned=False,
         parked=True,
         queue="idle",
         llm_live=False,
@@ -233,6 +234,95 @@ def test_a_occupied_desk_blocks_without_being_stale() -> None:
     assert not verdict.allowed
     assert not verdict.stale
     assert verdict.guards_failed == (Guard.OCCUPANCY_IDLE,)
+
+
+def _desk(
+    mode: str,
+    *,
+    orphaned: bool,
+    stack_state: str = "stopped",
+    parked: bool = False,
+    llm_live: bool = False,
+) -> Health:
+    """Build the snapshot of a machine holding one desk record.
+
+    Args:
+        mode: Recorded occupancy mode.
+        orphaned: Whether the read model found no live sidecar behind it.
+        stack_state: Compose state to report.
+        parked: Whether the record says Comfy was parked for the desk.
+        llm_live: What the sidecar reading says.
+
+    Returns:
+        A :class:`Health` carrying that desk record and nothing else odd.
+    """
+    health = _healthy()
+    health["occupancy_mode"] = mode
+    health["occupancy_orphaned"] = orphaned
+    health["stack_state"] = stack_state
+    health["parked"] = parked
+    health["llm_live"] = llm_live
+    return health
+
+
+@pytest.mark.parametrize("mode", ["blender-desk", "llm-desk"])
+def test_an_orphaned_desk_record_does_not_block_a_verb(mode: str) -> None:
+    """Issues #380 / #381 for the console: nobody is at that desk.
+
+    A sidecar killed outright, or a host reboot, leaves ``blender-desk`` or
+    ``llm-desk`` on disk with dead PIDs. The recorded mode alone must not keep
+    the operator from starting a heavy job or a sidecar dump.
+    """
+    health = _desk(mode, orphaned=True)
+    for member in (Guard.OCCUPANCY_IDLE, Guard.OCCUPANCY_PARKED, Guard.NO_LLM_SIDECAR):
+        verdict = guard.evaluate(_action(guards=(member,)), health)
+        assert verdict.allowed, f"{member} blocked an orphaned {mode}: {verdict.reasons}"
+
+
+@pytest.mark.parametrize("mode", ["blender-desk", "llm-desk"])
+def test_a_live_desk_record_still_blocks(mode: str) -> None:
+    """The same record with a live sidecar is a real GPU claim."""
+    health = _desk(mode, orphaned=False)
+    verdict = guard.evaluate(_action(guards=(Guard.OCCUPANCY_IDLE,)), health)
+    assert not verdict.allowed
+    assert not verdict.stale
+    assert verdict.guards_failed == (Guard.OCCUPANCY_IDLE,)
+    parked = guard.evaluate(_action(guards=(Guard.OCCUPANCY_PARKED,)), health)
+    assert not parked.allowed and not parked.stale
+
+
+def test_a_live_llm_sidecar_blocks_after_the_desk_releases() -> None:
+    """Releasing an orphan is not the same as waving a running sidecar through."""
+    orphaned = _desk("llm-desk", orphaned=True, llm_live=True)
+    assert guard.evaluate(
+        _action(guards=(Guard.NO_LLM_SIDECAR,)), orphaned
+    ).allowed
+    live = _desk("llm-desk", orphaned=False, llm_live=True)
+    verdict = guard.evaluate(_action(guards=(Guard.NO_LLM_SIDECAR,)), live)
+    assert not verdict.allowed and not verdict.stale
+    assert verdict.guards_failed == (Guard.NO_LLM_SIDECAR,)
+
+
+def test_the_orphan_flag_only_releases_a_desk_mode() -> None:
+    """A heavy mode, or a sidecar reported live under another mode, still holds."""
+    heavy = _desk("klein", orphaned=True)
+    verdict = guard.evaluate(_action(guards=(Guard.OCCUPANCY_IDLE,)), heavy)
+    assert not verdict.allowed and not verdict.stale
+    assert verdict.guards_failed == (Guard.OCCUPANCY_IDLE,)
+
+    other = _desk("blender-desk", orphaned=True, llm_live=True)
+    blocked = guard.evaluate(_action(guards=(Guard.NO_LLM_SIDECAR,)), other)
+    assert not blocked.allowed
+    assert blocked.guards_failed == (Guard.NO_LLM_SIDECAR,)
+
+
+def test_an_orphaned_desk_keeps_the_park_guard_while_comfy_runs() -> None:
+    """The release is about the dead sidecar, not about parking a running Comfy."""
+    health = _desk("blender-desk", orphaned=True, stack_state="running")
+    verdict = guard.evaluate(_action(guards=(Guard.OCCUPANCY_PARKED,)), health)
+    assert not verdict.allowed
+    assert not verdict.stale
+    assert verdict.guards_failed == (Guard.OCCUPANCY_PARKED,)
 
 
 @pytest.mark.parametrize("queue", ["unmeasured", "unknown", "", "weird"])

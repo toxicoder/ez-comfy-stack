@@ -13,6 +13,10 @@ rather than defaulting to green. That mirrors the shell layer, where
 ``host_free_mem_gib`` reports 0 rather than guessing and
 ``comfy_queue_busy`` refuses to call a queue it cannot reach idle.
 
+A desk mode counts as held only while its sidecar lives: :func:`_orphaned_desk`
+releases a record whose processes are gone, so a killed Blender or a host
+reboot cannot block an operator verb forever.
+
 Machine floors match ``check_host_headroom`` in ``scripts/lib/safety.sh``:
 free RAM against :data:`~tui.contract.MIN_HOST_FREE_GIB`, free disk on the
 models volume against :data:`~tui.contract.MIN_DISK_FREE_GIB`. The console
@@ -46,6 +50,12 @@ _RUNNING = "running"
 
 _DOWN_STATES: frozenset[str] = frozenset({"stopped", "present"})
 """Stack states that prove the stack is not running."""
+
+_LLM_DESK = "llm-desk"
+"""Desk mode whose claim is the host llama-server holding the GPU."""
+
+_DESK_MODES: frozenset[str] = frozenset({"blender-desk", _LLM_DESK})
+"""Modes that park Comfy for a host sidecar, matched to ``occupancy.sh``."""
 
 _UNKNOWN_STRINGS: frozenset[str] = frozenset({"", "unknown", "unmeasured"})
 """Text readings that mean the probe could not establish a value."""
@@ -130,6 +140,55 @@ def _unknown_text(value: str) -> bool:
         True when the text is empty or names the unknown sentinel.
     """
     return value.strip().lower() in _UNKNOWN_STRINGS
+
+
+def _orphaned_desk(health: Health) -> bool:
+    """Whether the record names a desk nobody is sitting at.
+
+    A desk mode is a claim only while its sidecar process lives, and the read
+    model decides that from the holder PIDs and the host-stamped liveness map.
+    A sidecar killed outright, or a host reboot, leaves the mode behind with
+    nothing running; such a record names no GPU work and must not hold a verb
+    open forever.
+
+    Args:
+        health: The snapshot.
+
+    Returns:
+        True only for a desk mode the read model found without a live holder.
+    """
+    return health["occupancy_orphaned"] and health["occupancy_mode"] in _DESK_MODES
+
+
+def _effective_mode(health: Health) -> str:
+    """The mode to policy against, an orphaned desk collapsed to idle.
+
+    Args:
+        health: The snapshot.
+
+    Returns:
+        The recorded mode, or ``idle`` when the desk has no live sidecar.
+    """
+    return _IDLE if _orphaned_desk(health) else health["occupancy_mode"]
+
+
+def _llm_sidecar_live(health: Health) -> bool:
+    """Whether a host llama-server genuinely holds the GPU right now.
+
+    The occupancy verb answers this with a ``kill -0`` probe. A record left by
+    a sidecar that died is a mode string with no process behind it, so it
+    releases; any other mode that reports the sidecar live keeps blocking.
+
+    Args:
+        health: The snapshot.
+
+    Returns:
+        True only when the reading says the sidecar is up and the record is not
+        an orphaned ``llm-desk``.
+    """
+    if not health["llm_live"]:
+        return False
+    return not (health["occupancy_orphaned"] and health["occupancy_mode"] == _LLM_DESK)
 
 
 def _check_headroom(health: Health) -> _Check:
@@ -251,7 +310,7 @@ def _check(guard: Guard, health: Health) -> _Check:
             return _Check(blocked=True, stale=False, reason=guard.explain())
         return _Check(blocked=True, stale=True, reason=_UNKNOWN_REASONS[guard])
     if guard is Guard.OCCUPANCY_IDLE:
-        mode = health["occupancy_mode"]
+        mode = _effective_mode(health)
         if _unknown_text(mode):
             return _Check(blocked=True, stale=True, reason=_UNKNOWN_REASONS[guard])
         if mode != _IDLE:
@@ -259,6 +318,10 @@ def _check(guard: Guard, health: Health) -> _Check:
         return _CLEAN
     if guard is Guard.OCCUPANCY_PARKED:
         if health["parked"]:
+            return _CLEAN
+        if _orphaned_desk(health) and health["stack_state"] in _DOWN_STATES:
+            # Nothing is running to park around, and the record that says a
+            # desk is occupied is itself the stale thing under the operator.
             return _CLEAN
         if _unknown_text(health["occupancy_mode"]):
             return _Check(blocked=True, stale=True, reason=_UNKNOWN_REASONS[guard])
@@ -268,7 +331,7 @@ def _check(guard: Guard, health: Health) -> _Check:
             return _Check(blocked=True, stale=False, reason=guard.explain())
         return _CLEAN
     if guard is Guard.NO_LLM_SIDECAR:
-        if health["llm_live"]:
+        if _llm_sidecar_live(health):
             return _Check(blocked=True, stale=False, reason=guard.explain())
         return _CLEAN
     # Guard.DISK_PLAN_ONLY is a catalog statement about which tier the apply

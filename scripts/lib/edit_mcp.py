@@ -9,10 +9,12 @@ so the lane's business logic (timeline reducer, jobstore, occupancy gates)
 stays in the container and the host agent, the panel, and this server all
 speak one pinned vocabulary.
 
-``_TOOL_CATALOG`` below is a deliberate mirror of the protocol catalog
-(``scripts/lib`` does not import ``custom_nodes``); drift is a pytest failure,
-not a comment. Typed tools only: no execute_code, no telemetry, no arbitrary
-fetch_url. This server never queues a graph itself.
+``_TOOL_CATALOG`` below is a deliberate mirror of the protocol catalog (kept a
+mirror rather than an import); drift is a pytest failure, not a comment. The
+one place this server does consult the packs is the occupancy verdict, which
+:mod:`ez_common.occupancy` owns so no reader decides on the mode string alone.
+Typed tools only: no execute_code, no telemetry, no arbitrary fetch_url. This
+server never queues a graph itself.
 """
 
 from __future__ import annotations
@@ -20,6 +22,7 @@ from __future__ import annotations
 import http.client
 import json
 import os
+import sys
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -27,7 +30,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, TypedDict, cast
 
 if TYPE_CHECKING:
-    from ez_common import Json, JsonObject
+    from ez_common import Json, JsonObject, Occupancy
 
 from mcp_runtime import (
     JsonRpcRequest,
@@ -269,6 +272,38 @@ def occupancy_mode() -> str:
         return UNKNOWN_OCCUPANCY
     mode = str(data.get("mode") or "").strip()
     return mode or UNKNOWN_OCCUPANCY
+
+
+def _ensure_custom_nodes_path() -> None:
+    """Prepend ``custom_nodes/`` so the shared occupancy reader resolves.
+
+    This server runs from the checkout, and the occupancy policy lives with
+    the Comfy packs that own the GPU, so the path is anchored at this file
+    rather than at the working directory.
+    """
+    custom = str(Path(__file__).resolve().parents[2] / "custom_nodes")
+    if custom not in sys.path:
+        sys.path.insert(0, custom)
+
+
+def _occupancy_read() -> Occupancy | None:
+    """Read the record through the shared occupancy policy.
+
+    The mode string alone cannot tell a live desk from a record its sidecar
+    left behind; :mod:`ez_common.occupancy` is the one reader that weighs the
+    holder PIDs against the liveness map the host stamps into the file.
+
+    Returns:
+        The shared immutable read, or ``None`` when there is no record to
+        trust (the caller then reports the raw field read alone).
+    """
+    _ensure_custom_nodes_path()
+    from ez_common import occupancy
+
+    try:
+        return occupancy.read_state(_output_dir() / OCCUPANCY_FILE_NAME)
+    except occupancy.OccupancyStateError:
+        return None
 
 
 def _urlopen(
@@ -592,12 +627,32 @@ def tool_edit_export_edl(args: ToolArgs) -> ToolResult:
 def tool_occupancy_status(_args: ToolArgs) -> ToolResult:
     """MCP tool: read the GPU occupancy mode (no HTTP).
 
+    A desk record whose sidecar died is reported as released, with the reason
+    in the text, so the model never tells the operator to stop a process that
+    already exited (GitHub #380 / #381).
+
     Args:
         _args: Unused tool arguments.
 
     Returns:
-        ``{ok, mode}`` with ``unknown`` when the state file is unreadable.
+        ``{ok, mode}`` with ``unknown`` when the state file is unreadable,
+        plus ``recorded_mode`` / ``orphaned`` / ``note`` for a desk nobody
+        is sitting at.
     """
+    state = _occupancy_read()
+    if state is not None and state.orphaned:
+        holders = ", ".join(f"{name}={pid}" for name, pid in state.holder_pids)
+        return {
+            "ok": True,
+            "mode": state.effective_mode,
+            "recorded_mode": state.mode,
+            "orphaned": True,
+            "note": (
+                f"{state.mode} desk is orphaned - no live sidecar "
+                f"(pids {holders or 'none'}); the GPU is released, so do not "
+                "stop a process that already exited"
+            ),
+        }
     return {"ok": True, "mode": occupancy_mode()}
 
 

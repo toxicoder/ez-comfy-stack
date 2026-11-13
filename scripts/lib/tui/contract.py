@@ -215,7 +215,7 @@ class Guard(enum.Enum):
     """The ComfyUI ``/queue`` is idle or unreachable while the stack is down."""
 
     OCCUPANCY_IDLE = "occupancy_idle"
-    """The occupancy desk reads ``idle``."""
+    """The occupancy desk reads ``idle``, or names a desk nobody is sitting at."""
 
     OCCUPANCY_PARKED = "occupancy_parked"
     """Comfy is parked (``parked`` true) so a sidecar may take the GPU."""
@@ -628,7 +628,13 @@ class StackStatusJson(TypedDict, total=False):
 
 
 class OccupancyJson(TypedDict, total=False):
-    """Raw ``manage.sh occupancy status --json`` payload."""
+    """Raw ``manage.sh occupancy status --json`` payload.
+
+    ``pids_alive`` is the liveness map the host stamps with ``kill -0``; a
+    record written before that field existed carries no map and stays
+    fail-closed. ``orphaned`` is the console's verdict on the record: a desk
+    mode whose sidecars are all gone names no GPU work.
+    """
 
     version: int
     mode: str
@@ -637,6 +643,8 @@ class OccupancyJson(TypedDict, total=False):
     blender_pid: int
     mcp_pid: int
     llm_pid: int
+    pids_alive: dict[str, bool]
+    orphaned: bool
     updated: str
     compose_live: bool
     queue: str
@@ -699,6 +707,14 @@ class Health(TypedDict):
     occupancy_mode: str
     """Occupancy desk mode, or ``unknown``."""
 
+    occupancy_orphaned: bool
+    """Whether the recorded desk has no live sidecar behind it.
+
+    A desk mode is a claim only while its sidecar process lives; this is the
+    console's reading of the host-stamped liveness map, so a record left by a
+    killed Blender or a reboot is not mistaken for a held GPU.
+    """
+
     parked: bool
     """Whether Comfy is parked."""
 
@@ -737,6 +753,7 @@ def empty_health() -> Health:
         host_free_gib=UNMEASURED,
         disk_free_gib=UNMEASURED,
         occupancy_mode="unknown",
+        occupancy_orphaned=False,
         parked=False,
         queue="unmeasured",
         llm_live=False,
