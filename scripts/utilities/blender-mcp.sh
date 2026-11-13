@@ -86,6 +86,17 @@ cmd_run() {
   if ! mcp_occupancy_only "$@"; then
     refuse_if_heavy_gpu "Blender MCP (occupancy)" || return $?
     occupancy_set_mcp_pid $$
+    # Child, not exec: the recorded PID has to be cleared on the way out or the
+    # desk stays claimed after the server is gone and the gate blocks every
+    # heavy graph on a Blender that is no longer running.
+    local pid="" rc=0
+    python3 "${REPO_ROOT}/scripts/lib/blender_mcp.py" "$@" &
+    pid=$!
+    trap 'kill -TERM "${pid}" 2>/dev/null || true' TERM INT
+    wait "${pid}" || rc=$?
+    trap - TERM INT
+    occupancy_set_mcp_pid 0
+    return "${rc}"
   fi
   exec python3 "${REPO_ROOT}/scripts/lib/blender_mcp.py" "$@"
 }

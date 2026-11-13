@@ -47,8 +47,17 @@ teardown() {
   [ "${status}" -eq 2 ]
 }
 
-@test "blender-llm help path-d mock and missing prompt" {
-  # shellcheck disable=SC1090
+@test "blender-mcp clears its recorded MCP PID when the call returns" {
+  occupancy_write blender-desk true 0 0
+  occupancy_set_mcp_pid 4242
+  [ "$(occupancy_field mcp_pid)" = "4242" ]
+  run bash "${MCP}" --call no_such_tool '{}'
+  [ "${status}" -eq 1 ]
+  [[ "${output}" == *"unknown tool"* ]]
+  [ "$(occupancy_field mcp_pid)" = "0" ]
+}
+
+@test "blender-llm help path-d mock and missing prompt" {  # shellcheck disable=SC1090
   source "${LLM}"
   run bash "${LLM}" --help
   [ "${status}" -eq 0 ]

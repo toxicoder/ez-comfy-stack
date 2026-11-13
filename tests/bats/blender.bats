@@ -54,6 +54,22 @@ teardown() {
   [[ "${output}" == *"blender-args:--background --version"* ]]
 }
 
+@test "blender clears its recorded PID when the render exits" {
+  rm -f "${TEST_TMP_DIR}/compose_running"
+  install_mock_bin blender 'echo blender-args:"$*"; exit 0'
+  run cmd_run -- --background --version
+  [ "${status}" -eq 0 ]
+  [ "$(occupancy_field blender_pid)" = "0" ]
+}
+
+@test "blender clears its recorded PID when the render fails" {
+  rm -f "${TEST_TMP_DIR}/compose_running"
+  install_mock_bin blender 'echo blender-args:"$*"; exit 3'
+  run cmd_run -- --background --version
+  [ "${status}" -eq 3 ]
+  [ "$(occupancy_field blender_pid)" = "0" ]
+}
+
 @test "blender execs when compose is parked blender-desk" {
   touch "${TEST_TMP_DIR}/compose_running"
   occupancy_write blender-desk true 0 0

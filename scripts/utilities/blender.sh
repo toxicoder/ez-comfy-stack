@@ -56,7 +56,17 @@ cmd_run() {
     return 1
   fi
   occupancy_set_blender_pid $$
-  exec "${bin}" "$@"
+  # Run as a child rather than exec, so the recorded PID is cleared on the way
+  # out. exec replaced this shell with Blender, which left a dead PID behind on
+  # exit and stranded every heavy graph on the occupancy gate.
+  local pid="" rc=0
+  "${bin}" "$@" &
+  pid=$!
+  trap 'kill -TERM "${pid}" 2>/dev/null || true' TERM INT
+  wait "${pid}" || rc=$?
+  trap - TERM INT
+  occupancy_set_blender_pid 0
+  return "${rc}"
 }
 
 if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then
