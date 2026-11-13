@@ -40,6 +40,19 @@ from .comfy_graph import (
     ui_nodes_by_id,
 )
 from .json_value import Json, JsonArray, JsonList, JsonMap, JsonObject, JsonScalar
+from .occupancy import (
+    DESK_MODES,
+    HEAVY_MODES,
+    UNKNOWN_MODE,
+    VALID_MODES,
+    Occupancy,
+    OccupancyStateError,
+    decide_heavy_queue,
+    parse_state,
+    read_state,
+    recovery_command,
+    state_path,
+)
 from .path import ensure_custom_nodes_path
 from .protocols import (
     ComfyInputTypes,
@@ -182,21 +195,32 @@ def output_root(*, default: str | Path | None = _DEFAULT_OUTPUT) -> Path:
 
 
 __all__ = [
+    "DESK_MODES",
+    "HEAVY_MODES",
+    "NODE_CLASS_MAPPINGS",
+    "NODE_DISPLAY_NAME_MAPPINGS",
+    "UNKNOWN_MODE",
+    "VALID_MODES",
     "ComfyInputTypes",
     "ComfyNode",
     "CompletedProc",
     "FileSystem",
-    "NODE_CLASS_MAPPINGS",
-    "NODE_DISPLAY_NAME_MAPPINGS",
     "NodeLogSink",
     "NullProgress",
+    "Occupancy",
     "OccupancyPolicy",
     "OccupancySource",
+    "OccupancyStateError",
     "ProgressReporter",
     "StatusSink",
     "SubprocessRunner",
+    "decide_heavy_queue",
     "ensure_custom_nodes_path",
     "node_log",
     "node_progress",
     "output_root",
+    "parse_state",
+    "read_state",
+    "recovery_command",
+    "state_path",
 ]

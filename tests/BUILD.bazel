@@ -172,6 +172,7 @@ filegroup(
         "python/test_editor_choice.py",
         "python/test_edm_album.py",
         "python/test_ez_common.py",
+        "python/test_ez_common_occupancy.py",
         "python/test_ez_cutout.py",
         "python/test_ez_dcc.py",
         "python/test_ez_dub.py",
