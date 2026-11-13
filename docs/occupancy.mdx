@@ -13,6 +13,7 @@ tags: [occupancy, blender, trellis, safety, gb10]
 - **The 35B writing desk** - the opt-in host sidecar and its one-time pull
 - **What stays XOR** - NVENC, Cycles CUDA, LTX next to TRELLIS, llm-desk next to blender-desk
 - **Occupancy state** - where `.occupancy.json` lives and what reads it
+- **A desk with nobody at it** - how an orphaned record releases the Queue instead of blocking it
 
 **What this enables**
 
@@ -42,6 +43,34 @@ bazelisk run //:manage -- occupancy status
 tracked PIDs. State lives at `${COMFY_OUTPUT_DIR}/.occupancy.json` (outputs, never
 `${MODELS_DIR}`). The in-canvas **Occupancy gate** (`EZDCCOccupancyGate`) reads that file
 only - it does not start Compose or spawn Blender.
+
+### A desk with nobody at it
+
+A `blender-desk` or `llm-desk` record is a GPU claim only while its sidecar process is
+running. A sidecar killed outright, or a host reboot, can leave the record behind claiming
+a desk that is empty, and every heavy graph then refuses at Queue and tells you to stop a
+Blender that is not running.
+
+The gate checks the recorded PIDs before it refuses, so an empty desk releases the Queue and
+prints one line to the ComfyUI log instead:
+
+```text
+[ez_dcc occupancy] occupancy blender-desk has no live sidecar (pids blender_pid=0,
+mcp_pid=0); released for this Queue
+```
+
+The record itself has an explicit verb:
+
+```bash
+bazelisk run //:manage -- occupancy reconcile
+```
+
+Reconcile zeroes the dead PIDs and keeps the mode, so the record still says which desk was
+left dangling. A **live** sidecar still blocks: the gate never releases a Queue next to a
+Workbench session or a running 35B. The verdict comes from the host, which is where
+`kill -0` can actually see the sidecar - the Compose container shares no PID namespace, so a
+record written before the `pids_alive` field existed stays fail-closed until the next host
+verb restamps it.
 
 ---
 

@@ -273,8 +273,9 @@ class EZDCCOccupancyGate:
     FUNCTION = "run"
     CATEGORY = CATEGORY
     DESCRIPTION = (
-        "Read .occupancy.json. Missing file passes. blender-desk vs a heavy "
-        "mode fails. Does not start Compose or spawn Blender."
+        "Read .occupancy.json. Missing file passes. A live blender-desk or "
+        "llm-desk, or a different heavy mode, fails; a desk whose sidecar died "
+        "releases. Does not start Compose or spawn Blender."
     )
 
     def run(self, image: object, required_mode: str) -> tuple[object]:

@@ -1,18 +1,46 @@
-"""Read-only occupancy XOR for in-canvas Queue (fail-closed)."""
+"""Read-only occupancy XOR for in-canvas Queue (fail-closed).
+
+The mode machine itself lives in :mod:`ez_common.occupancy`, which mirrors
+``scripts/lib/occupancy.sh``. This module is the Comfy-facing wrapper: it turns
+a verdict into an :class:`OccupancyError`, and it never blocks a Queue on a
+desk record whose sidecar is gone.
+"""
 
 from __future__ import annotations
 
-import json
+import sys
 from pathlib import Path
+
+from ez_common.occupancy import (
+    HEAVY_MODES,
+    Occupancy,
+    OccupancyStateError,
+    decide_heavy_queue,
+    read_state,
+)
 
 from .pack import output_directory
 
-# Heavy GPU modes that XOR with blender-desk / llm-desk / idle.
-HEAVY_MODES = ("klein", "trellis", "wan", "ltx")
+__all__ = [
+    "HEAVY_MODES",
+    "OccupancyError",
+    "check_occupancy",
+    "occupancy_path",
+    "read_mode",
+]
 
 
 class OccupancyError(RuntimeError):
     """Occupancy XOR refused this Queue."""
+
+
+def _warn(message: str) -> None:
+    """Surface a non-fatal occupancy note to the ComfyUI log.
+
+    Args:
+        message: Line to print after the pack prefix.
+    """
+    print(f"[ez_dcc occupancy] {message}", file=sys.stderr)
 
 
 def occupancy_path() -> Path:
@@ -24,30 +52,41 @@ def occupancy_path() -> Path:
     return output_directory() / ".occupancy.json"
 
 
-def read_mode(path: Path | None = None) -> str:
-    """Return occupancy mode, or ``unknown`` when the file is missing.
+def _read(path: Path | None = None) -> Occupancy:
+    """Read the record, mapping a corrupt file onto :class:`OccupancyError`.
 
     Args:
-        path: State file. Default: ``occupancy_path()``.
+        path: State file. Default: :func:`occupancy_path`.
+
+    Returns:
+        The immutable read.
+
+    Raises:
+        OccupancyError: File exists but is unreadable or not a JSON object.
+    """
+    try:
+        return read_state(occupancy_path() if path is None else path)
+    except OccupancyStateError as exc:
+        raise OccupancyError(str(exc)) from exc
+
+
+def read_mode(path: Path | None = None) -> str:
+    """Return the recorded occupancy mode, or ``unknown`` when none exists.
+
+    This is the raw record. Policy reads
+    :attr:`ez_common.occupancy.Occupancy.effective_mode`, which reads a desk
+    whose sidecar died as released.
+
+    Args:
+        path: State file. Default: :func:`occupancy_path`.
 
     Returns:
         Mode string.
 
     Raises:
-        OccupancyError: file exists but is unreadable or not a JSON object.
+        OccupancyError: File exists but is unreadable or not a JSON object.
     """
-    state = occupancy_path() if path is None else path
-    if not state.is_file():
-        return "unknown"
-    try:
-        raw = state.read_text(encoding="utf-8")
-        data = json.loads(raw)
-    except (OSError, json.JSONDecodeError, UnicodeError) as exc:
-        raise OccupancyError(f"unreadable occupancy state at {state}: {exc}") from exc
-    if not isinstance(data, dict):
-        raise OccupancyError(f"occupancy state at {state} is not a JSON object")
-    mode = str(data.get("mode") or "").strip()
-    return mode or "unknown"
+    return _read(path).mode
 
 
 def check_occupancy(required_mode: str) -> str:
@@ -56,6 +95,11 @@ def check_occupancy(required_mode: str) -> str:
     Missing file passes as ``unknown`` (first-run / pytest). Does not start
     Compose, does not call Manager unload, does not launch a host DCC.
 
+    A desk mode blocks the Queue only while its sidecar lives. A ``blender-desk``
+    or ``llm-desk`` record left behind by a killed sidecar or a host reboot
+    names no GPU work, so it releases with a log line rather than dead-ending
+    the graph on an instruction the operator cannot carry out.
+
     Args:
         required_mode: Heavy mode this graph needs (klein / trellis / wan / ltx).
 
@@ -63,28 +107,14 @@ def check_occupancy(required_mode: str) -> str:
         Current mode (``unknown`` when the file is missing).
 
     Raises:
-        OccupancyError: idle, blender-desk, llm-desk, or mismatched heavy mode.
+        OccupancyError: idle, a live blender-desk or llm-desk, or a mismatched
+            heavy mode.
     """
     required = str(required_mode or "").strip()
-    mode = read_mode()
-    if mode == "unknown":
-        return mode
-    if mode == required:
-        return mode
-    if mode == "idle":
-        raise OccupancyError(
-            f"occupancy is idle; occupancy enter {required} then start"
-        )
-    if mode == "blender-desk":
-        raise OccupancyError(
-            "occupancy is blender-desk (park is for dumps); "
-            f"stop Blender, occupancy enter {required} --yes"
-        )
-    if mode == "llm-desk":
-        raise OccupancyError(
-            "occupancy is llm-desk (35B sidecar is the GPU job); "
-            f"occupancy enter {required} --yes"
-        )
-    raise OccupancyError(
-        f"occupancy is {mode}, required {required}; unload first"
-    )
+    state = _read()
+    allowed, hint = decide_heavy_queue(required, state)
+    if not allowed:
+        raise OccupancyError(hint)
+    if hint:
+        _warn(hint)
+    return state.mode
