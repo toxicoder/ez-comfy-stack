@@ -426,6 +426,31 @@ make_agent_home() {
   [ "${status}" -eq 0 ]
 }
 
+@test "agent-model refuses a desk whose sidecar lives" {
+  local live
+  sleep 30 &
+  live=$!
+  printf '{"version":1,"mode":"blender-desk","parked":true,"blender_pid":%s,"mcp_pid":0}\n' \
+    "${live}" >"${COMFY_OUTPUT_DIR}/.occupancy.json"
+  run agent_refuse_heavy_occupancy
+  kill -TERM "${live}" 2>/dev/null || true
+  wait "${live}" 2>/dev/null || true
+  [ "${status}" -eq 2 ]
+  [[ "${output}" == *"live sidecar"* ]]
+  [[ "${output}" == *"occupancy enter idle --yes"* ]]
+}
+
+@test "agent-model runs over a desk record whose sidecar is gone" {
+  local dead
+  sleep 0.05 &
+  dead=$!
+  wait "${dead}" 2>/dev/null || true
+  printf '{"version":1,"mode":"llm-desk","parked":true,"llm_pid":%s}\n' \
+    "${dead}" >"${COMFY_OUTPUT_DIR}/.occupancy.json"
+  run agent_refuse_heavy_occupancy
+  [ "${status}" -eq 0 ]
+}
+
 @test "agent-model occupancy mode falls back to the state file" {
   printf '{"version":1,"mode":"ltx"}\n' >"${COMFY_OUTPUT_DIR}/.occupancy.json"
   unset -f occupancy_mode
