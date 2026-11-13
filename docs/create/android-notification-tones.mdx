@@ -1,0 +1,114 @@
+---
+title: Android tones
+description: "Render a sellable Android ringtone, notification, and alarm pack from the tone catalog: WAV, M4A, and OGG per tone, with the store listing copy."
+tags: [android, tones, ringtone, notification, alarm, play-store]
+---
+
+# Android tones
+
+**What's on this page**
+
+- **What a build writes** - three codecs per tone, grouped into Android's own folders
+- **Running it** - `tones-pack`, plus the catalog template for adding your own
+- **The loudness contract** - why a notification, a ringtone, and an alarm sit at different levels
+- **Adding a tone** - edit catalog JSON, not Python
+- **Before you submit** - the listing artefacts and what Play checks
+
+**What this enables**
+
+- **Shipping** a tone pack without a synthesiser or a DAW
+- **Keeping** every file inside the duration and loudness budget its kind needs
+- **Extending** the catalog by dropping in one JSON row per new tone
+- **Reproducing** a pack byte for byte, so a rebuilt version is auditable
+
+**Who this is for:** anyone building a sellable Android sound pack from the studio.
+
+**Question this page answers:** how do I turn the tone catalog into a folder I can submit? Run one verb.
+
+<Callout type="info" title="CPU only">
+  `tones-pack` is own-code synthesis plus host ffmpeg. It does not queue ComfyUI, does not take the
+  GPU, and does not touch occupancy, so Compose can stay up. ffmpeg must be on `PATH`.
+</Callout>
+
+---
+
+## What a build writes
+
+```text
+<out>/
+  ringtones/<slug>.{wav,m4a,ogg}
+  notifications/<slug>.{wav,m4a,ogg}
+  alarms/<slug>.{wav,m4a,ogg}
+  manifest.json
+  store-listing.md
+  README.md
+  CHANGELOG.md
+```
+
+The three folders are the ones `RingtoneManager` scans, so a launcher that offers "add from storage"
+finds the pack without a custom picker. Each tone ships as a WAV master plus AAC in M4A and Vorbis in
+OGG, which covers every Android device a store listing can reach. `manifest.json` carries one row per
+tone with its kind, category, mood, timbre, BPM, duration, sample rate, channel count, loopability,
+loudness target, and the relative path of every encoded file.
+
+The shipped catalog holds 25 tones: 10 notifications, 9 ringtones, and 6 alarms across seven timbres
+(sine, bell, pluck, marimba, glass, woody, synth). Every row is validated on load, so a tone that is
+too long for its kind fails the build instead of shipping.
+
+## Running it
+
+```bash
+bazelisk run //:manage -- tones-pack --out /tmp/tone-pack
+```
+
+Narrow a build with `--kind notification` or `--tone glass-two-note` (both repeatable), set the name
+and version the listing will show with `--pack-name` and `--version`, choose `--sample-rate 44100` or
+`48000`, and use `--dry-run` to see the plan without writing. The operator console offers the same
+thing under **Lanes > Build an Android tone pack**.
+
+## The loudness contract
+
+| Kind | Target | Duration budget | Why |
+| --- | --- | --- | --- |
+| Notification | -23 LUFS | 0.4 - 5 s | Sits under whatever the user is already listening to |
+| Ringtone | -19 LUFS | up to 30 s | Audible in a pocket, without punishing the first call |
+| Alarm | -14 LUFS | up to 30 s | Has to win against a nightstand |
+
+Android sets no mandated loudness or duration limit for these; the numbers above are the engineering
+choices this catalog is built and validated against, so a pack sounds consistent across its own set.
+Every file goes through a linear loudness normalise followed by a limiter, which is what keeps the
+peak from clipping on a phone speaker.
+
+## Adding a tone
+
+Tones are data. Write the template, add a row, and merge it back:
+
+```bash
+bazelisk run //:manage -- tones-pack --template /tmp/my-tones.json
+bazelisk run //:manage -- tones-pack --catalog /tmp/my-tones.json --out /tmp/tone-pack
+```
+
+A row needs `slug`, `name`, `kind`, `category`, `mood`, `timbre`, `bpm`, and either an explicit
+`motif` of `[midi, duration_s, velocity]` steps or a simple `pitches` list with `beat_s`. The template
+file lists every field with its range, and the loader rejects anything outside it before a single byte
+is encoded.
+
+## Before you submit
+
+`store-listing.md` is drafted from the catalog: title, short and long description, and the category
+buckets, sized to the Play character limits. Read it and edit the prose - it is a starting draft, not
+approved copy. `README.md` ships inside the pack for whoever receives it, and `CHANGELOG.md` is seeded
+so versioned releases have somewhere to record what changed.
+
+Two things to check yourself before a submission:
+
+- **Originality.** Every tone here is generated from the catalog's own motifs. If you merge an
+  operator catalog, confirm you hold the rights to anything you add.
+- **Naming.** The pack name and listing copy must not imply endorsement by Google or by any device
+  maker.
+
+## Related
+
+- [Local music](../music.mdx) - the music lane, and its DAW hand-off
+- [Audio to MIDI and DAW hand-off](../audio-to-midi.mdx) - when a tone needs real instrument tracks
+- [manage.sh reference](../manage-cli.mdx) - every verb, including `tones-pack`

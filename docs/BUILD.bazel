@@ -21,6 +21,7 @@ filegroup(
     name = "content",
     srcs = [
         "asset-bible.mdx",
+        "audio-to-midi.mdx",
         "blender-gb10-sidecar.mdx",
         "contribute/building-with-bazel.md",
         "contribute/contributing.md",
@@ -30,6 +31,9 @@ filegroup(
         "contribute/security.mdx",
         "contribute/testing-docs.mdx",
         "contribute/typing.md",
+        "create/android-app-icon-packs.mdx",
+        "create/android-notification-tones.mdx",
+        "create/android-watch-faces.mdx",
         "create/app-forge.md",
         "create/audio-rack.md",
         "create/cinema-rack.md",

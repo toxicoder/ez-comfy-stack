@@ -1,0 +1,167 @@
+---
+title: Android Wear watch faces
+description: "Emit a submittable Wear OS Watch Face Format project per face: the XML scene, drawables, store assets, listing copy, and a compliance gate that mirrors what Play checks."
+tags: [android, wear-os, watch-face, play-store, wearables]
+---
+
+# Android Wear watch faces
+
+**What's on this page**
+
+- **What a build writes** - the source project one face ships as
+- **Running it** - `watch-face`, plus the flags that narrow a build
+- **What the gate checks** - the Play and Watch Face Format rules the build is scored against
+- **Adding a face** - edit catalog JSON, not Python
+- **Selling it** - packaging, the store listing, and what stays your call
+
+**What this enables**
+
+- **Shipping** a Wear OS watch face without writing Watch Face Format XML by hand
+- **Covering** a catalogue in one run: four styles, three shapes, five store categories
+- **Passing** the same checks Play performs before an upload, so a rejection cycle is not the first
+  time you find out
+- **Retuning** a face - colourways, complications, typography - from one JSON row
+
+**Who this is for:** anyone packaging a Wear OS face for a Play listing.
+
+**Question this page answers:** how do I get from an idea to a folder I can build and submit? Run one
+verb.
+
+<Callout type="info" title="No Android SDK needed to generate">
+  `watch-face` writes the source project with stdlib Python plus this repo's own raster codec. It does
+  not queue ComfyUI, does not take the GPU, does not touch occupancy, and does not run Gradle. You need
+  the Android SDK only at the end, to build the bundle.
+</Callout>
+
+---
+
+## What a build writes
+
+One folder per face:
+
+```text
+<out>/<slug>/
+  AndroidManifest.xml
+  build.gradle
+  settings.gradle
+  res/raw/watchface.xml
+  res/xml/watch_face_info.xml
+  res/values/strings.xml
+  res/drawable/preview.png
+  res/drawable/hand_{hour,minute,second}.png
+  store-assets/icon.png
+  store-assets/feature-graphic.png
+  store-assets/screenshots/<slug>-theme-<n>.png
+  manifest.json
+  store-listing.md
+  README.md
+```
+
+`res/raw/watchface.xml` is the whole face: exactly one `Scene`, with the hands and the complications
+drawn last so ambient can drop the layers underneath them. `res/xml/watch_face_info.xml` carries the
+preview, the category, retail availability, multiple-instance support, `Editable`, and flavour support.
+`res/xml/watch_face_shapes.xml` appears only with `--size-variants`. `manifest.json` records what was
+emitted along with the memory estimate and the measured illuminated ratio, so a listing review can be
+answered from the artefact and not from a rebuild.
+
+Nothing here carries code. A bundle that mixes a custom watch face with Wear OS application logic is
+rejected, so each face is its own bundle.
+
+## Running it
+
+```bash
+bazelisk run //:manage -- watch-face --out /tmp/watch-faces
+```
+
+That writes all 13 catalog faces. Narrow it with `--face aurora-analog` (repeatable) or
+`--style analog`, choose the format version with `--wff-version` (1 to 4, default 4), set the square
+preview edge with `--preview-edge` (at least 384), add the round small and large shape file with
+`--size-variants`, and use `--dry-run` to report sizes without writing anything. The operator console
+offers the same thing under **Lanes > Build a Wear OS watch face**.
+
+To score a build without keeping it:
+
+```bash
+bazelisk run //:manage -- watch-face --validate-only
+```
+
+`--validate-only` builds into a scratch folder, runs the compliance gate, and reports findings.
+
+## What the gate checks
+
+`--validate-only` and a normal build both score the emitted folder, and a build that fails a rule says
+so instead of shipping it.
+
+| Check | Budget |
+| --- | --- |
+| Ambient memory footprint | 10 MB across the ambient layers |
+| Interactive memory footprint | 100 MB |
+| Complication slots | 8 or fewer per face |
+| `Scene` elements | exactly one |
+| Design edge | 192 dp minimum, with 227 dp authored too |
+| Store icon | 512 x 512, alpha allowed, 1 MB maximum |
+| Feature graphic | 1024 x 500, 24-bit PNG, no alpha |
+| Screenshots | 1:1, at least 384 px and at most 3840 px, no transparency |
+| Listing copy | title 30, short description 80, full description 4000 characters |
+| `watchface.xml` source | 10 MB maximum |
+| Shape-file faces | 10 entries maximum |
+
+Screenshots are generated per colourway, which is what a customisable face needs: one permutation is
+not enough once the user can change the colour. They are the watch face only, with no device frame, no
+added text, and no transparency.
+
+The one number the gate records rather than enforces is the **ambient illuminated share**. A face built
+here is vector-only and dims through ``Variant`` alpha, so there is no ambient bitmap to measure against
+the 15 % budget. The build measures the share of the default preview and writes it next to that budget in
+``manifest.json``, which is what the ambient rules above - the memory footprint and the ambient variant
+on every droppable layer - are the substitutes for. Read the two numbers together before you submit a
+face that leans bright.
+
+## Adding a face
+
+Faces are data. Write the template, then merge your rows back in:
+
+```bash
+bazelisk run //:manage -- watch-face --catalog /tmp/my-faces.json --out /tmp/watch-faces
+```
+
+There is no separate template flag: the keys a row may state are the ones on a face - `slug`, `name`,
+`style`, `shape`, `palette`, `complications`, `typography`, `design_edge`, `background`, `category`,
+`tags`, `ambient_minimal`, `show_hands`, `show_ticks`, `show_date`, `show_battery`, and
+`show_step_complication`. A row that reuses a catalog slug changes only the keys it states, which is how
+a redesign of a shipping face lands. A row with a new slug adds a face and has to state `slug`, `name`,
+`style`, `shape`, and `palette`.
+
+The catalog holds 13 faces across `analog`, `digital`, `hybrid`, and `complication-forward` styles, in
+`round`, `square`, and `rect` shapes, filed under the store categories Classic, Dashboard, Minimal,
+Retro, and Sport. Each carries 2 to 4 colourways and 2 to 6 complication slots.
+
+## Selling it
+
+A Watch Face Format face is not a loose file. Play takes it inside a normal Android app bundle, so the
+generated folder is a Gradle project: open it in Android Studio, or run the release bundle task from a
+shell with the Android SDK installed, and upload the resulting `.aab` to a Wear OS track in Play
+Console. The manifest already declares the watch hardware feature, `android:hasCode="false"`, the
+standalone meta-data, and the format version property.
+
+`store-listing.md` is drafted from the face: title, short description, full description, category and
+self-tag, the ads line, and the data-safety line, each sized to the Play character limit and counted in
+the file so you can see the headroom. A Watch Face Format face contains no code, so nothing runs,
+nothing is stored, and nothing is shared - which is what makes "Data not collected" the honest answer.
+
+Three things stay your call before a submission:
+
+- **The icon.** The store icon has to accurately represent the face, carry no text or device frame that
+  is not part of the face, and show a centred circular face scaled to touch the outer edges of the
+  asset. The generated icon follows that shape; look at it before you upload.
+- **The copy.** `store-listing.md` is a starting draft. Read it and rewrite the prose. Nothing here
+  should imply endorsement by Google or by a device maker.
+- **Originality.** Faces are generated from this catalog's own geometry and palettes. If you merge an
+  operator catalog, confirm you hold the rights to anything you add, and that a face does not imitate a
+  watch maker's trade dress.
+
+## Related
+
+- [Android tones](android-notification-tones.mdx) - the other sellable asset lane in this group
+- [Studio workflows](../studio-workflows.mdx) - where this sits among the operator apps
+- [manage.sh reference](../manage-cli.mdx) - every verb, including `watch-face`

@@ -205,6 +205,10 @@
             "path": "music.md"
           },
           {
+            "title": "Audio to MIDI and DAW hand-off",
+            "path": "audio-to-midi.md"
+          },
+          {
             "title": "RAP-FIRST rap lane",
             "path": "create/music-rap.mdx"
           },
@@ -215,6 +219,23 @@
           {
             "title": "Music disclosure and QC",
             "path": "create/music-disclosure.md"
+          }
+        ]
+      },
+      {
+        "title": "Sellable Android assets",
+        "pages": [
+          {
+            "title": "Android app icon packs",
+            "path": "create/android-app-icon-packs.md"
+          },
+          {
+            "title": "Android tones",
+            "path": "create/android-notification-tones.md"
+          },
+          {
+            "title": "Android Wear watch faces",
+            "path": "create/android-watch-faces.md"
           }
         ]
       },

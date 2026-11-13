@@ -80,11 +80,13 @@ _UTILITIES_SH = [
     "utilities/download-wan.sh",
     "utilities/dub-fetch.sh",
     "utilities/edit-mcp.sh",
+    "utilities/export-song.sh",
     "utilities/film-accept.sh",
     "utilities/film-animatic.sh",
     "utilities/film-export-otio.sh",
     "utilities/film-proxies.sh",
     "utilities/house-views.sh",
+    "utilities/icon-pack.sh",
     "utilities/llm-sidecar.sh",
     "utilities/models-manifest.sh",
     "utilities/nvenc-preview.sh",
@@ -105,7 +107,9 @@ _UTILITIES_SH = [
     "utilities/studio-mcp.sh",
     "utilities/studio-tui.sh",
     "utilities/take-promote.sh",
+    "utilities/tones-pack.sh",
     "utilities/update-stack.sh",
+    "utilities/watch-face.sh",
 ]
 
 _UTILITIES_PS1 = [

@@ -1372,6 +1372,110 @@
       "flags": []
     },
     {
+      "id": "export-song",
+      "title": "export-song",
+      "description": "DAW hand-off bundle for one song: MIDI, MusicXML, timeline JSON, per-lane MIDI and WAV stems, project.md. CPU only.",
+      "argv": [
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
+        "export-song"
+      ],
+      "flags": [
+        {
+          "name": "no-stems",
+          "kind": "bool",
+          "default": false,
+          "label": "Skip the band-limited WAV stems"
+        },
+        {
+          "name": "no-quantize",
+          "kind": "bool",
+          "default": false,
+          "label": "Keep the transcriber's raw note timing"
+        }
+      ]
+    },
+    {
+      "id": "icon-pack",
+      "title": "icon-pack",
+      "description": "Sellable Android adaptive icon pack from the catalog, with the launcher appfilter JSON and the store icon.",
+      "argv": [
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
+        "icon-pack"
+      ],
+      "flags": [
+        {
+          "name": "validate-only",
+          "kind": "bool",
+          "default": false,
+          "label": "Run the compliance gate and report"
+        },
+        {
+          "name": "dry-run",
+          "kind": "bool",
+          "default": false,
+          "label": "Report the file list, write nothing"
+        }
+      ]
+    },
+    {
+      "id": "watch-face",
+      "title": "watch-face",
+      "description": "Submittable Wear OS Watch Face Format project, gated on the ambient, size, and slot limits.",
+      "argv": [
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
+        "watch-face"
+      ],
+      "flags": [
+        {
+          "name": "validate-only",
+          "kind": "bool",
+          "default": false,
+          "label": "Build into scratch and run the gate"
+        },
+        {
+          "name": "size-variants",
+          "kind": "bool",
+          "default": false,
+          "label": "Write the round small and large shapes file"
+        },
+        {
+          "name": "dry-run",
+          "kind": "bool",
+          "default": false,
+          "label": "Compute and report, write nothing"
+        }
+      ]
+    },
+    {
+      "id": "tones-pack",
+      "title": "tones-pack",
+      "description": "Android ringtone, notification, and alarm pack: WAV masters plus M4A and OGG, with the launcher manifest.",
+      "argv": [
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
+        "tones-pack"
+      ],
+      "flags": [
+        {
+          "name": "dry-run",
+          "kind": "bool",
+          "default": false,
+          "label": "Print the plan, write nothing"
+        }
+      ]
+    },
+    {
       "id": "spark-timing",
       "title": "spark-timing",
       "description": "Kitchen wall-clock table. Do not record on pytorch-fallback.",

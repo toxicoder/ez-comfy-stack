@@ -1,0 +1,124 @@
+---
+title: Audio to MIDI and DAW hand-off
+description: "Turn a generated song into MIDI, MusicXML, a timeline JSON, and per-lane stems so a human can finish it in a conventional sequencer."
+tags: [music, midi, musicxml, daw, stems, export]
+---
+
+# Audio to MIDI and DAW hand-off
+
+**What's on this page**
+
+- **What the bundle contains** - one folder per song, seven kinds of file
+- **Running it** - `export-song` on a master, from the CLI or the console
+- **Working on generated music** - the masters under `COMFY_OUTPUT_DIR/albums`
+- **What each file is for** - MIDI for the sequencer, MusicXML for notation, JSON for tooling
+- **How accurate to expect** - monophonic lanes hold up, chord lanes need a human
+- **Import notes** - per-sequencer steps, also written into `project.md`
+
+**What this enables**
+
+- **Prototyping** a track with AI and finishing it in a professional sequencer
+- **Getting the notes** out of a rendered song: pitch, start, length, and velocity per lane
+- **Splitting** one stereo master into per-lane MIDI plus band-limited WAV stems
+- **Handing** a mixing engineer a self-checking folder instead of a loose WAV
+- **Rebuilding** every export from `timeline.json` without re-listening to the audio
+
+**Who this is for:** anyone who has a finished master from the music or podcast lane and wants the notes under it.
+
+**Question this page answers:** how do I get a generated song into a real sequencer? Run one verb, then open the bundle.
+
+<Callout type="info" title="CPU only">
+  `export-song` uses host ffmpeg and the in-tree transcriber. It does not queue ComfyUI, does not
+  take the GPU, and does not touch occupancy, so Compose can stay up. ffmpeg and ffprobe must be on
+  `PATH`.
+</Callout>
+
+---
+
+## What the bundle contains
+
+One run writes a folder named after the song slug:
+
+```text
+<out>/<slug>/
+  <slug>.mid              multitrack Standard MIDI File, one track per lane
+  <slug>.musicxml         engraved score for notation apps
+  timeline.json           the notes, tempo map, key, and source tags
+  stems/NN-<lane>.mid     that lane alone, for dragging into one instrument
+  stems/NN-<lane>.wav     the same band, filtered out of the master
+  audio/<master>          the AI master, copied in as the reference
+  project.md              the import guide, written per song
+  manifest.json           every file with its SHA-256
+```
+
+The lane set is the analyser's: **Drums** on MIDI channel 10, **Bass**, **Harmony**, and **Melody**.
+Each lane carries its own General MIDI program, so a sequencer that honours program changes loads a
+bass patch on the bass track without you touching anything.
+
+## Running it
+
+From the repo root:
+
+```bash
+bazelisk run //:manage -- export-song /mnt/comfy-output/albums/nill-bye/late-set/01-opener.flac ./exports
+```
+
+Useful flags: `--title NAME` sets the title when the file has no tag, `--beats-per-bar N` changes the
+written bar length, `--no-stems` skips the WAV stems, and `--no-quantize` keeps the transcriber's raw
+timing. The same verb is in the operator console under **Lanes > Export a song for a DAW**:
+
+```bash
+bazelisk run //:studio-tui
+```
+
+## Working on generated music
+
+Masters land under `COMFY_OUTPUT_DIR`, so pass one of those paths straight in. Album renders from the
+music lane keep their ID3 or Vorbis tags, and the exporter reads `artist`, `title`, and `album` from
+them: the title becomes the bundle name, and the tags are written into the score header and
+`manifest.json`. Anything without a tag falls back to its filename.
+
+## What each file is for
+
+| File | Open it with | Why it exists |
+| --- | --- | --- |
+| `<slug>.mid` | Any sequencer | The notes, with velocity and the tempo map. This is the file you actually produce with. |
+| `stems/NN-<lane>.mid` | Any sequencer | One lane at a time, when you only want to replace the bass. |
+| `<slug>.musicxml` | Notation apps | A readable score: spelled pitches, percussion staff, key and time signatures. |
+| `timeline.json` | Your own tooling | The single source every other file here is derived from. |
+| `stems/NN-<lane>.wav` | Any DAW audio track | The band isolated from the master, for A/B against the AI take. |
+| `manifest.json` | Anything | Byte-level proof the bundle survived the trip. |
+
+## How accurate to expect
+
+The transcriber is standard-library DSP: an FFT, spectral-flux onsets, a harmonic sieve for pitch, and
+an autocorrelation tempo tracker with a prior at 120 BPM. There is no trained model in the lane.
+
+- **Tempo and key** are usually right to within a BPM or two, and the octave is pinned by the prior.
+- **Bass and topline** are monophonic lanes and come through cleanly, including phrasing.
+- **Harmony** is read three voices at a time. Expect missing inner voices, occasional doubled octaves,
+  and some bleed from the lanes below it. Thin it out by ear.
+- **Drums** land on the drum map, but ghost notes and hi-hat pedalling are under-detected. Redraw the
+  groove where it has to feel human.
+
+The point is a fast first pass with editable notes, not a proofread score. `project.md` repeats this
+list inside the bundle so it travels with the files.
+
+## Import notes
+
+| Sequencer | How |
+| --- | --- |
+| Ableton Live | Drag the `.mid` in. Every lane arrives on its own MIDI track with the tempo map set. |
+| GarageBand / Logic Pro | Import the `.mid`, then choose one track per MIDI channel and swap the patches. |
+| Reaper | Insert as a media item and answer **No** to stretching, so the embedded tempo map survives. |
+| FL Studio | Drag the `.mid` into the playlist; channels follow the MIDI channels written here. |
+| Notation apps | Open the `.musicxml`. Drums arrive as unpitched notes on a percussion staff. |
+
+MusicXML 4.0 has no per-note velocity element, so dynamics live in the `.mid`. Open the MIDI when the
+touch matters and the score when the notation does.
+
+## Related
+
+- [Local music](music.mdx) - where the masters come from
+- [manage.sh reference](manage-cli.mdx) - every verb, including `export-song`
+- [Troubleshooting](troubleshooting.mdx) - symptoms and fixes
