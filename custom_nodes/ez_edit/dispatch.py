@@ -47,6 +47,7 @@ from .protocol import (
 
 if TYPE_CHECKING:
     from ez_common import Json, JsonList, JsonMap, JsonObject
+    from ez_common.occupancy import Occupancy
 
 DispatchFn: TypeAlias = Callable[[str, "JsonMap"], "JsonObject"]
 """``(name, args) -> {"ok", "text"}`` executor handed to the agent loop."""
@@ -1002,14 +1003,18 @@ def export_edl(
 def read_occupancy(
     kit: RunnerKit, environ: Mapping[str, str] | None = None
 ) -> str:
-    """Current GPU occupancy mode string.
+    """Current effective GPU occupancy mode string.
+
+    An injected seam answers verbatim; otherwise the shared resolver in
+    :mod:`ez_common.occupancy` decides, so a desk record whose sidecar died
+    reports ``idle`` rather than a mode that blocks every tool.
 
     Args:
         kit: Seam bundle; ``occupancy`` overrides the file reader.
         environ: Environ handed to the file reader.
 
     Returns:
-        Mode id (``unknown`` when the state file is missing).
+        Effective mode id (``unknown`` when the state file is missing).
     """
     reader = kit.get("occupancy")
     if callable(reader):
@@ -1018,6 +1023,34 @@ def read_occupancy(
         "Mapping[str, str] | None", kit.get("environ")
     )
     return agent.read_occupancy_mode(environ=env)
+
+
+def _occupancy_state(
+    kit: RunnerKit, environ: Mapping[str, str] | None = None
+) -> "Occupancy | None":
+    """Canonical record behind the mode string, when a record can be judged.
+
+    ``None`` when the ``occupancy`` seam answers (a seam reports a bare mode,
+    so there is nothing to judge) and for a missing or corrupt record.
+
+    Args:
+        kit: Seam bundle; ``occupancy`` overrides the file reader.
+        environ: Environ handed to the file reader.
+
+    Returns:
+        The immutable read, or ``None``.
+    """
+    from ez_common.occupancy import OccupancyStateError
+
+    if callable(kit.get("occupancy")):
+        return None
+    env = environ if environ is not None else cast(
+        "Mapping[str, str] | None", kit.get("environ")
+    )
+    try:
+        return agent.read_occupancy_state(environ=env)
+    except (OSError, OccupancyStateError):
+        return None
 
 
 def _done(value: object) -> JsonObject:
@@ -1250,7 +1283,11 @@ def _tool_export_edl(edit_dir: Path | str, args: JsonMap, kit: RunnerKit) -> Jso
 def _tool_occupancy(
     edit_dir: Path | str, args: JsonMap, kit: RunnerKit
 ) -> JsonObject:
-    """``occupancy_status``: report the GPU mode string.
+    """``occupancy_status``: report the effective GPU mode string.
+
+    A desk record whose sidecar died is reported as released, with the reason
+    in the text, so the model never tells the operator to stop a process that
+    already exited.
 
     Args:
         edit_dir: Edit dir.
@@ -1261,7 +1298,18 @@ def _tool_occupancy(
         Tool result.
     """
     del args, edit_dir
-    return _done({"mode": read_occupancy(kit)})
+    payload: JsonObject = {"mode": read_occupancy(kit)}
+    state = _occupancy_state(kit)
+    if state is not None and state.orphaned:
+        holders = ", ".join(f"{name}={pid}" for name, pid in state.holder_pids)
+        payload["recorded_mode"] = state.mode
+        payload["orphaned"] = True
+        payload["note"] = (
+            f"{state.mode} desk is orphaned - no live sidecar "
+            f"(pids {holders or 'none'}); the GPU is released, so do not stop "
+            "a process that already exited"
+        )
+    return _done(payload)
 
 
 STATIC_TOOLS: dict[

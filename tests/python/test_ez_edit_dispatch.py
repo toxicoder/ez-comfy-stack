@@ -531,6 +531,70 @@ def test_read_occupancy_falls_back_to_the_state_file(tmp_path: Path) -> None:
     assert read_occupancy({"occupancy": lambda: "  "}) == "unknown"
 
 
+def _write_desk_record(
+    root: Path, mode: str, pid_key: str, alive: bool
+) -> None:
+    """Write a desk occupancy record with its host-stamped liveness.
+
+    Args:
+        root: Directory holding ``.occupancy.json``.
+        mode: Desk mode (``blender-desk`` / ``llm-desk``).
+        pid_key: Holder PID field that carries the desk's claim.
+        alive: What the host stamped into ``pids_alive`` for that PID.
+    """
+    (root / ".occupancy.json").write_text(
+        json.dumps({"mode": mode, pid_key: 4242, "pids_alive": {pid_key: alive}}),
+        encoding="utf-8",
+    )
+
+
+def test_read_occupancy_reports_an_orphaned_desk_as_idle(tmp_path: Path) -> None:
+    """The resolver releases a desk whose sidecar died."""
+    _write_desk_record(tmp_path, "llm-desk", "llm_pid", False)
+    assert read_occupancy({}, {"COMFY_OUTPUT_DIR": str(tmp_path)}) == "idle"
+    _write_desk_record(tmp_path, "llm-desk", "llm_pid", True)
+    assert read_occupancy({}, {"COMFY_OUTPUT_DIR": str(tmp_path)}) == "llm-desk"
+
+
+def test_dispatch_occupancy_surfaces_the_orphan_state(tmp_path: Path) -> None:
+    """The report-only tool says the desk is gone instead of naming a live job."""
+    edit_dir = edit_dir_of(tmp_path)
+    _write_desk_record(tmp_path, "llm-desk", "llm_pid", False)
+    handler = build_dispatch(
+        edit_dir, runners=kit(environ={"COMFY_OUTPUT_DIR": str(tmp_path)})
+    )
+    result = tool_result(handler, "occupancy_status", {})
+    assert result["ok"] is True
+    assert result["data"]["mode"] == "idle"
+    assert result["data"]["recorded_mode"] == "llm-desk"
+    assert result["data"]["orphaned"] is True
+    note = result["data"]["note"]
+    assert "llm-desk" in note and "llm_pid=4242" in note
+    assert "already exited" in note
+
+
+def test_dispatch_occupancy_reports_a_live_desk_by_its_mode(tmp_path: Path) -> None:
+    """A desk with its sidecar alive is reported as the mode it is."""
+    edit_dir = edit_dir_of(tmp_path)
+    _write_desk_record(tmp_path, "blender-desk", "blender_pid", True)
+    handler = build_dispatch(
+        edit_dir, runners=kit(environ={"COMFY_OUTPUT_DIR": str(tmp_path)})
+    )
+    assert tool_result(handler, "occupancy_status", {})["data"] == {
+        "mode": "blender-desk"
+    }
+
+
+def test_dispatch_occupancy_tolerates_a_corrupt_record(tmp_path: Path) -> None:
+    """An unparseable record reports unknown rather than inventing an orphan."""
+    edit_dir = edit_dir_of(tmp_path)
+    (tmp_path / ".occupancy.json").write_text("{not json", encoding="utf-8")
+    handler = build_dispatch(
+        edit_dir, runners=kit(environ={"COMFY_OUTPUT_DIR": str(tmp_path)})
+    )
+    assert tool_result(handler, "occupancy_status", {})["data"] == {"mode": "unknown"}
+
+
 def test_dispatch_generate_clip_uses_the_injected_queue(tmp_path: Path) -> None:
     """The generate tool hands the model's args to the queue seam."""
     edit_dir = edit_dir_of(tmp_path)

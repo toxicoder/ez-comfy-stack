@@ -43,6 +43,7 @@ if TYPE_CHECKING:
     from types import TracebackType
 
     from ez_common import Json, JsonMap, JsonObject
+    from ez_common.occupancy import Occupancy
 
 DispatchFn: TypeAlias = Callable[[str, "JsonMap"], "JsonObject"]
 """``(name, args) -> {"ok": bool, "text": str}`` tool executor (injected)."""
@@ -285,16 +286,43 @@ def occupancy_path(
     return Path(root) / filename
 
 
+def read_occupancy_state(
+    path: Path | None = None,
+    *,
+    environ: Mapping[str, str] | None = None,
+) -> "Occupancy":
+    """Canonical occupancy record behind the mode string.
+
+    Readers that need more than the mode (liveness, the raw desk mode) take
+    this; policy still goes against :func:`read_occupancy_mode`.
+
+    Args:
+        path: State file; None uses :func:`occupancy_path`.
+        environ: Injected environ for the default path.
+
+    Returns:
+        The immutable read (``present`` is False when no record exists).
+
+    Raises:
+        OccupancyStateError: File exists but cannot be trusted.
+    """
+    from ez_common.occupancy import read_state
+
+    return read_state(occupancy_path(environ) if path is None else path)
+
+
 def read_occupancy_mode(
     path: Path | None = None,
     *,
     reader: OccupancyReader | None = None,
     environ: Mapping[str, str] | None = None,
 ) -> str:
-    """Occupancy mode string, ``unknown`` when unreadable or missing.
+    """Effective occupancy mode, ``unknown`` when unreadable or missing.
 
-    Mirrors ``ez_prompt_enhance.client.occupancy_mode``: a missing or corrupt
-    file is first-run/pytest and reads as ``unknown`` (allowed).
+    The mode machine lives in :mod:`ez_common.occupancy`, so a desk record
+    whose sidecar died (an orphan) reads as ``idle`` here instead of blocking
+    every ez_edit caller forever. A missing or corrupt file is first-run/pytest
+    and reads as ``unknown`` (allowed), as it did before the resolver.
 
     Args:
         path: State file; None uses :func:`occupancy_path`.
@@ -302,20 +330,18 @@ def read_occupancy_mode(
         environ: Injected environ for the default path.
 
     Returns:
-        Mode id, or ``unknown``.
+        Effective mode id, or ``unknown``.
     """
     state = occupancy_path(environ) if path is None else path
     if reader is not None:
         mode = str(reader(state) or "").strip()
         return mode or "unknown"
+    from ez_common.occupancy import OccupancyStateError
+
     try:
-        data = json.loads(state.read_text(encoding="utf-8"))
-    except (OSError, UnicodeError, ValueError):
+        return read_occupancy_state(state).effective_mode
+    except (OSError, OccupancyStateError):
         return "unknown"
-    if not isinstance(data, dict):
-        return "unknown"
-    mode = str(data.get("mode") or "").strip()
-    return mode or "unknown"
 
 
 def require_occupancy(
@@ -332,16 +358,18 @@ def require_occupancy(
         environ: Injected environ for the default path.
 
     Returns:
-        The allowed occupancy mode.
+        The allowed effective occupancy mode.
 
     Raises:
         AgentRefused: mode is not in :data:`protocol.SIDECAR_OK_OCCUPANCY`.
     """
     mode = read_occupancy_mode(path, reader=reader, environ=environ)
     if mode not in protocol.SIDECAR_OK_OCCUPANCY:
+        from ez_common.occupancy import recovery_command
+
         raise AgentRefused(
             f"occupancy is {mode}; the agent model is a co-tenant, stop the "
-            "heavy job (occupancy enter idle) before chatting"
+            f"heavy job ({recovery_command('idle')}) before chatting"
         )
     return mode
 

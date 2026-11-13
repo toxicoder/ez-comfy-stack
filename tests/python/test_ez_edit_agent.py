@@ -49,12 +49,22 @@ def _isolated_agent_env(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iter
 # --- test doubles -----------------------------------------------------------
 
 
-def _write_occupancy(root: Path, mode: str | None) -> Path:
+def _write_occupancy(
+    root: Path,
+    mode: str | None,
+    *,
+    holders: dict[str, int] | None = None,
+    pids_alive: dict[str, bool] | None = None,
+) -> Path:
     """Write (or remove) ``${COMFY_OUTPUT_DIR}/.occupancy.json``.
 
     Args:
         root: Value for ``COMFY_OUTPUT_DIR``.
         mode: Occupancy mode, or None to leave the file absent.
+        holders: Holder PID fields to record (``blender_pid`` / ``mcp_pid`` /
+            ``llm_pid``); a desk with none of them names no live claim.
+        pids_alive: Host-stamped liveness map; ``None`` simulates a record
+            written before the field existed (fail-closed).
 
     Returns:
         The sidecar path (it may not exist when mode is None).
@@ -62,8 +72,12 @@ def _write_occupancy(root: Path, mode: str | None) -> Path:
     path = root / agent.OCCUPANCY_FILE_NAME
     if mode is None:
         path.unlink(missing_ok=True)
-    else:
-        path.write_text(json.dumps({"mode": mode}), encoding="utf-8")
+        return path
+    payload: dict[str, object] = {"mode": mode}
+    payload.update(holders or {})
+    if pids_alive is not None:
+        payload["pids_alive"] = dict(pids_alive)
+    path.write_text(json.dumps(payload), encoding="utf-8")
     return path
 
 
@@ -379,7 +393,9 @@ def test_occupancy_path(tmp_path: Path) -> None:
 
 def test_read_occupancy_mode_from_file(tmp_path: Path) -> None:
     """Missing, corrupt, and non-object files all read as ``unknown``."""
-    _write_occupancy(tmp_path, "llm-desk")
+    _write_occupancy(
+        tmp_path, "llm-desk", holders={"llm_pid": 4242}, pids_alive={"llm_pid": True}
+    )
     assert agent.read_occupancy_mode() == "llm-desk"
     assert agent.read_occupancy_mode(environ=_env(tmp_path, "idle")) == "idle"
 
@@ -391,6 +407,24 @@ def test_read_occupancy_mode_from_file(tmp_path: Path) -> None:
     assert agent.read_occupancy_mode(sidecar) == "unknown"
     sidecar.write_text(json.dumps({"mode": "   "}), encoding="utf-8")
     assert agent.read_occupancy_mode(sidecar) == "unknown"
+
+
+def test_read_occupancy_mode_collapses_an_orphaned_desk(tmp_path: Path) -> None:
+    """A desk whose sidecars all died is no claim; a live one keeps its mode."""
+    _write_occupancy(
+        tmp_path,
+        "blender-desk",
+        holders={"blender_pid": 4242, "mcp_pid": 4243},
+        pids_alive={"blender_pid": False, "mcp_pid": False},
+    )
+    assert agent.read_occupancy_mode() == "idle"
+    _write_occupancy(
+        tmp_path,
+        "blender-desk",
+        holders={"blender_pid": 4242, "mcp_pid": 0},
+        pids_alive={"blender_pid": True, "mcp_pid": False},
+    )
+    assert agent.read_occupancy_mode() == "blender-desk"
 
 
 def test_read_occupancy_mode_injected_reader() -> None:
@@ -413,8 +447,27 @@ def test_read_occupancy_mode_injected_reader() -> None:
 def test_require_occupancy_allows_sidecar_modes(
     tmp_path: Path, mode: str
 ) -> None:
-    """Desk, idle, and unknown modes let the co-tenant run."""
-    assert agent.require_occupancy(_write_occupancy(tmp_path, mode)) == mode
+    """Desk, idle, and unknown modes let the co-tenant run.
+
+    A PID-less desk record is an orphan the resolver releases to ``idle``, so
+    the assertion is membership of the allow-set rather than the raw mode.
+    """
+    assert agent.require_occupancy(_write_occupancy(tmp_path, mode)) in (
+        protocol.SIDECAR_OK_OCCUPANCY
+    )
+
+
+@pytest.mark.parametrize(
+    ("mode", "pid_key"), [("blender-desk", "blender_pid"), ("llm-desk", "llm_pid")]
+)
+def test_require_occupancy_allows_a_live_desk(
+    tmp_path: Path, mode: str, pid_key: str
+) -> None:
+    """A desk with its sidecar still running keeps its mode and stays allowed."""
+    sidecar = _write_occupancy(
+        tmp_path, mode, holders={pid_key: 4242}, pids_alive={pid_key: True}
+    )
+    assert agent.require_occupancy(sidecar) == mode
 
 
 @pytest.mark.parametrize("mode", ["wan", "ltx", "trellis", "klein", "busy"])
@@ -425,6 +478,7 @@ def test_require_occupancy_refuses_heavy_modes(
     with pytest.raises(AgentRefused) as caught:
         agent.require_occupancy(_write_occupancy(tmp_path, mode))
     assert f"occupancy is {mode}" in str(caught.value)
+    assert "bazelisk run //:manage -- occupancy enter idle --yes" in str(caught.value)
 
 
 def test_require_occupancy_missing_file_passes(tmp_path: Path) -> None:
@@ -1060,6 +1114,37 @@ def test_run_turn_refuses_heavy_occupancy_before_any_completion(
     with pytest.raises(AgentRefused):
         agent.run_turn("go", llm=llm)
     assert llm.seen == []
+
+
+def test_run_turn_runs_while_an_orphaned_blender_desk_record_remains(
+    tmp_path: Path,
+) -> None:
+    """A dead Blender desk no longer dead-ends the chat path."""
+    _write_occupancy(
+        tmp_path,
+        "blender-desk",
+        holders={"blender_pid": 4242, "mcp_pid": 4243},
+        pids_alive={"blender_pid": False, "mcp_pid": False},
+    )
+    llm = FakeLLM([_assistant("cut to the B roll")])
+    out = agent.run_turn("go", llm=llm)
+    assert out["reply"] == "cut to the B roll"
+    assert llm.seen != []
+
+
+def test_run_turn_refuses_a_live_heavy_mode_with_a_runnable_command(
+    tmp_path: Path,
+) -> None:
+    """The refusal names the host command that releases the GPU."""
+    _write_occupancy(
+        tmp_path, "wan", holders={"llm_pid": 4242}, pids_alive={"llm_pid": True}
+    )
+    llm = FakeLLM([_assistant("never")])
+    with pytest.raises(AgentRefused) as caught:
+        agent.run_turn("go", llm=llm)
+    assert llm.seen == []
+    assert "occupancy is wan" in str(caught.value)
+    assert "bazelisk run //:manage -- occupancy enter idle --yes" in str(caught.value)
 
 
 def test_run_turn_uses_agent_llm_when_no_client_is_given(

@@ -8,7 +8,10 @@ text plus the length/frame-rate widgets, POSTs it to the ComfyUI queue, polls
 :data:`~ez_edit.protocol.JobKind` ``generate_clip`` row in the lane jobstore.
 
 Heavy GPU work is XOR with every other tenant, so the queue is refused unless
-occupancy is idle, unknown (first run / pytest), or the llm-desk mode.
+occupancy is idle or unknown (first run / pytest). A live ``llm-desk`` is the
+35B sidecar itself and refuses, per the matrix in ``docs/occupancy.mdx``; a
+desk record whose sidecar died reads as ``idle`` through the shared resolver,
+so a stale desk never blocks a cutaway.
 
 Sockets, sleeps, the clock, the graph file, and the occupancy read are all
 injectable, so the pytest lane never opens a socket, never sleeps, and never
@@ -130,12 +133,18 @@ DEFAULT_POLL_S = 1.0
 DEFAULT_POLL_TIMEOUT_S = 600.0
 """Seconds to wait for the graph to land in history."""
 
-HEAVY_OK_OCCUPANCY = frozenset({"idle", "unknown", "llm-desk"})
-"""Modes in which a heavy generate_clip queue is allowed."""
+HEAVY_OK_OCCUPANCY = frozenset({"idle", "unknown"})
+"""Modes in which a heavy generate_clip queue is allowed.
+
+The cutaway graph is a wan graph, so a live 35B sidecar (``llm-desk``) XORs
+with it exactly as TRELLIS or LTX does - see the matrix in
+``docs/occupancy.mdx``. An orphaned desk is not in this set because it never
+reaches the check: the shared resolver reports it as ``idle``.
+"""
 
 OCCUPANCY_REFUSAL_FMT = (
     "occupancy is {mode}; generate_clip needs the GPU - release the heavy "
-    "job (occupancy enter idle) before generating a cutaway"
+    "job ({release}) before generating a cutaway"
 )
 """Failed-row message when occupancy holds the Spark."""
 
@@ -896,7 +905,8 @@ def generate_clip(
         urlopen: Transport seam.
         sleeper: Sleep seam.
         now: Clock seam.
-        occupancy: Occupancy mode reader; ``None`` reads the state file.
+        occupancy: Occupancy mode reader; ``None`` reads the effective mode
+            from the state file (an orphaned desk reads as ``idle``).
         environ: Injected environ for the origin and the occupancy path.
         graph_file: Graph path override (tests, or a lane-local variant).
         poll_s: Seconds between history polls.
@@ -914,11 +924,15 @@ def generate_clip(
     render_server.write_job(edit_dir, row)
     mode = str(read_mode() or "").strip() or "unknown"
     if mode not in HEAVY_OK_OCCUPANCY:
+        from ez_common.occupancy import recovery_command
+
         return render_server.tick_job(
             edit_dir,
             row["id"],
             state="failed",
-            message=OCCUPANCY_REFUSAL_FMT.format(mode=mode),
+            message=OCCUPANCY_REFUSAL_FMT.format(
+                mode=mode, release=recovery_command("idle")
+            ),
             now=now,
         )
     target = graph_path() if graph_file is None else graph_file
