@@ -2,7 +2,7 @@
   "files": {
     "tests/python/_ace_widgets_contract.py": 1,
     "tests/python/_build_app_workflows.py": 57,
-    "tests/python/_build_audio_finish.py": 1,
+    "tests/python/_build_audio_finish.py": 0,
     "tests/python/_build_clip_chain.py": 1,
     "tests/python/_build_creator_pack3.py": 4,
     "tests/python/_build_creator_video_workflows.py": 25,
@@ -20,7 +20,7 @@
     "tests/python/_stamp_app_mode.py": 36,
     "tests/python/_wire_model_check.py": 1,
     "tests/python/_wire_prompt_enhance.py": 9,
-    "tests/python/_wire_quality.py": 1,
+    "tests/python/_wire_quality.py": 0,
     "tests/python/_wire_upscale.py": 4,
     "tests/python/test_ace_encoder_widgets.py": 2,
     "tests/python/test_album_pack.py": 2,
@@ -68,6 +68,7 @@
     "tests/python/test_podcast_workflows.py": 4,
     "tests/python/test_prompt_enhance.py": 8,
     "tests/python/test_quality_apply.py": 2,
+    "tests/python/test_quality_parity.py": 0,
     "tests/python/test_remainder_coverage.py": 2,
     "tests/python/test_research_mcp.py": 13,
     "tests/python/test_sample_catalog_drift.py": 1,
@@ -82,5 +83,5 @@
     "tests/python/test_wire_optional_ref.py": 1,
     "tests/python/test_workflow_completeness.py": 6
   },
-  "total": 671
+  "total": 669
 }

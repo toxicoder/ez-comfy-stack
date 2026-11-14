@@ -11,7 +11,7 @@
   "custom_nodes/ez_image/js/ez_media_pick.js": 2,
   "custom_nodes/ez_image/js/ez_reference_input.js": 8,
   "custom_nodes/ez_image/js/ez_video_format.js": 1,
-  "custom_nodes/ez_outputs/js/ez_outputs.js": 41,
+  "custom_nodes/ez_outputs/js/ez_outputs.js": 28,
   "custom_nodes/ez_prompt_enhance/js/ez_prompt_enhance.js": 3,
   "custom_nodes/ez_quality/js/ez_model_check.js": 4,
   "custom_nodes/ez_quality/js/ez_quality.js": 1,
