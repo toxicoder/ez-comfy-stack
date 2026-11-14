@@ -13,7 +13,11 @@ if str(PY) not in sys.path:
     sys.path.insert(0, str(PY))
 
 from _lab_paths import lab_graph_paths, lab_rel_of, load_lab_graph  # noqa: E402
-from _wire_upscale import upscale_in_scope, wire_upscale  # noqa: E402
+from _wire_upscale import (  # noqa: E402
+    UPSCALE_COMBO_TYPE,
+    upscale_in_scope,
+    wire_upscale,
+)
 
 
 def test_upscale_scope() -> None:
@@ -117,7 +121,12 @@ def test_wire_upscale_reuses_orphan_between_match_and_save() -> None:
                 "inputs": [{"name": "image", "type": "IMAGE", "link": 2}],
                 "outputs": [
                     {"name": "image", "type": "IMAGE", "links": [], "slot_index": 0},
-                    {"name": "upscale", "type": "STRING", "links": [], "slot_index": 1},
+                    {
+                        "name": "upscale",
+                        "type": list(UPSCALE_COMBO_TYPE),
+                        "links": [],
+                        "slot_index": 1,
+                    },
                 ],
                 "widgets_values": ["none"],
             },
@@ -188,3 +197,80 @@ def test_lab_saves_run_through_upscale() -> None:
             after = [node.get("type") for node in copied.get("nodes") or []]
             assert before == after, rel
     assert misses == [], "upscale not on save path:\n" + "\n".join(misses)
+
+
+def _two_save_graph() -> dict[str, Any]:
+    """Build a decode feeding two saves, the shape that shares one rung.
+
+    Returns:
+        A minimal graph in ``photos/still-draft`` scope, unsaved by the pass.
+    """
+    return {
+        "last_node_id": 3,
+        "last_link_id": 2,
+        "extra": {"lab_rel": "photos/still-draft"},
+        "nodes": [
+            {
+                "id": 1,
+                "type": "VAEDecode",
+                "pos": [0, 0],
+                "inputs": [],
+                "outputs": [
+                    {"name": "IMAGE", "type": "IMAGE", "links": [1, 2], "slot_index": 0}
+                ],
+            },
+            {
+                "id": 2,
+                "type": "SaveImage",
+                "pos": [300, 0],
+                "inputs": [{"name": "images", "type": "IMAGE", "link": 1}],
+                "outputs": [],
+                "widgets_values": ["ez_pair"],
+            },
+            {
+                "id": 3,
+                "type": "SaveImage",
+                "pos": [300, 200],
+                "inputs": [{"name": "images", "type": "IMAGE", "link": 2}],
+                "outputs": [],
+                "widgets_values": ["ez_pair_b"],
+            },
+        ],
+        "links": [
+            [1, 1, 0, 2, 0, "IMAGE"],
+            [2, 1, 0, 3, 0, "IMAGE"],
+        ],
+    }
+
+
+def test_shared_rung_links_under_the_combo_values() -> None:
+    """A rung shared between saves is typed by its values, never by STRING.
+
+    ComfyUI types a combo widget input by the list it accepts, so a link typed
+    ``STRING`` into ``upscale`` is read as an invalid connection and the whole
+    App is blocked from Queueing. The values list has to appear on the producing
+    output slot, the consuming input slot, and the link row.
+    """
+    graph = _two_save_graph()
+    assert wire_upscale(graph, "photos/still-draft") is True
+    upscales = [
+        node for node in graph["nodes"] if node.get("type") == "EZImageUpscale"
+    ]
+    assert len(upscales) == 2, "two saves take one master rung and one clone"
+    master, clone = sorted(upscales, key=lambda node: int(node["id"]))
+    clone_slot = next(
+        slot for slot in clone["inputs"] if slot.get("name") == "upscale"
+    )
+    assert clone_slot["type"] == UPSCALE_COMBO_TYPE
+    assert clone_slot.get("widget") == {"name": "upscale"}
+    master_slot = next(
+        slot for slot in master["outputs"] if slot.get("name") == "upscale"
+    )
+    assert master_slot["type"] == UPSCALE_COMBO_TYPE
+    rows = [
+        row
+        for row in graph["links"]
+        if int(row[1]) == int(master["id"]) and int(row[3]) == int(clone["id"])
+    ]
+    assert len(rows) == 1, "the clone takes exactly one shared rung"
+    assert rows[0][5] == UPSCALE_COMBO_TYPE

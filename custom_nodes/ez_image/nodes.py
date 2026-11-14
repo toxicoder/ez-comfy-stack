@@ -607,8 +607,11 @@ class EZImageUpscale:
             }
         }
 
-    # Comfy node contract.
-    RETURN_TYPES = ("IMAGE", "STRING")
+    # Comfy node contract. The second output is the rung combo itself, not a
+    # STRING, so a graph can link one node's choice into its siblings' upscale
+    # widget and the frontend reads that link as the combo it is. EZImageMode
+    # shares its mode the same way.
+    RETURN_TYPES = ("IMAGE", upscale_combo_labels())
     RETURN_NAMES = ("image", "upscale")
     FUNCTION = "run"
     CATEGORY = CATEGORY

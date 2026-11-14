@@ -22,6 +22,7 @@ from _build_image_prep import BACKDROP, BUILDERS, DILATE, FEATHER, NEGATIVE
 from _lab_families import graph_stacks, stack_violations
 from _lab_layout import ensure_node_spacing, finalize_layout
 from _lab_paths import LAB_ROOT, apply_lab_identity, load_lab_graph
+from _wire_upscale import UPSCALE_COMBO_TYPE
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -286,7 +287,12 @@ def test_cutout_note_names_the_image_to_3d_job() -> None:
 
 @pytest.mark.parametrize("rel", APPS)
 def test_every_save_runs_through_upscale(rel: str) -> None:
-    """A photos App prints the upscaled still, on one shared dropdown."""
+    """A photos App prints the upscaled still, on one shared dropdown.
+
+    The link that shares the rung carries the combo's own values, which is how
+    ComfyUI types a combo widget input; a plain ``STRING`` there reads as an
+    invalid connection and blocks Queue for every save in the App.
+    """
     graph = _load(rel)
     ups = [node for node in graph["nodes"] if node.get("type") == "EZImageUpscale"]
     savers = _savers(graph)
@@ -303,12 +309,12 @@ def test_every_save_runs_through_upscale(rel: str) -> None:
     ]
     assert len(free) == 1, "one App dropdown must drive every save"
     assert free[0]["widgets_values"] == ["none"]
-    rows = {int(row[0]) for row in graph["links"] if row[5] == "STRING"}
+    rung_rows = {int(row[0]) for row in graph["links"] if row[5] == UPSCALE_COMBO_TYPE}
     for node in ups:
         if node is free[0]:
             continue
         slot = next(item for item in node["inputs"] if item["name"] == "upscale")
-        assert int(slot["link"]) in rows
+        assert int(slot["link"]) in rung_rows
 
 
 def test_multi_view_occupancy_and_handoff() -> None:
