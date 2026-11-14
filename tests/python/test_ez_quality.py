@@ -1940,3 +1940,39 @@ def test_write_block_reason_names_a_missing_prompt_slot() -> None:
         False,
         set(),
     ) == ""
+
+
+def test_family_honors_tiers_refuses_a_wan_14b_graph() -> None:
+    """A graph pinned to a 14B Wan transformer ships no Detail row.
+
+    Wan owns a rung ladder and the graph holds samplers, so the two existing
+    tests would both pass - yet the overlay never touches a 14B transformer and
+    the browser and the CLI refuse every rung alike with "Wan 14B is not
+    overlaid". A combo the operator cannot move is the confusion the ladder was
+    built to remove, so the row has to go.
+    """
+    sampler: dict[str, Any] = {
+        "id": 1,
+        "type": "KSampler",
+        "pos": [0, 0],
+        "size": [300, 200],
+        "widgets_values": [0, "fixed", 20, 3.5, "eps", None, None],
+    }
+
+    def _wan_graph(unet: str) -> dict[str, Any]:
+        return {
+            "nodes": [
+                {
+                    "id": 2,
+                    "type": "UNETLoader",
+                    "pos": [0, 0],
+                    "size": [300, 80],
+                    "widgets_values": [unet, "default"],
+                },
+                sampler,
+            ],
+            "extra": {"lab_app_mode": {"occupancy": "wan"}},
+        }
+
+    assert family_honors_tiers(_wan_graph("wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors")) is False
+    assert family_honors_tiers(_wan_graph("wan2.2_ti2v_5B_fp16.safetensors")) is True

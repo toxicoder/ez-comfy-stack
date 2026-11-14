@@ -22,6 +22,7 @@ from _lab_paths import lab_graph_paths
 from ez_quality.presets import (
     OVERLAY_NODE_TYPES,
     QUALITY_STANDARD,
+    graph_has_wan14,
     infer_occupancy,
     is_trellis_guidance_free_stage,
     normalize_quality,
@@ -243,12 +244,20 @@ def family_honors_tiers(graph: dict[str, Any]) -> bool:
     overlay can write. An audio graph with no KSampler and no loader passes the
     first test and fails the second, and every rung on it queues unchanged.
 
+    A third case is narrower and easy to miss: a graph whose loaders pin Wan
+    14B / A14B. That family owns a ladder and the graph holds samplers, yet the
+    overlay never touches a 14B transformer, so the browser and the CLI refuse
+    every rung alike ("Wan 14B is not overlaid"). The row would be a control
+    that cannot be moved.
+
     Args:
         graph: Serialized Comfy graph.
 
     Returns:
         False when every rung would be a no-op, so the row belongs nowhere.
     """
+    if graph_has_wan14(graph):
+        return False
     if not tiers_for_family(infer_occupancy(graph)):
         return False
     family = infer_occupancy(graph)
