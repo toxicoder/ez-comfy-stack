@@ -1,30 +1,29 @@
-"""Family-specific Quality overlays (custom / draft / lab / standard / high /
-Free Commercial Use / ultra / max / flux3-fast / flux3-quality / flux3-nvfp4 /
-qwen-image / qwen-image-turbo / qwen-image-nvfp4 / qwen-image-turbo-nvfp4).
+"""Family-specific Detail rungs (draft / standard / final).
 
-This module is the only definition of what a tier asks for. The frontend reads
+This module is the only definition of what a rung asks for. The frontend reads
 a table generated from it (``export_table`` -> tests/python/_build_quality_js.py
 -> custom_nodes/ez_quality/js/ez_quality_presets.js, via ``bazelisk run
-//tests:build_quality_js``) and derives the combo from
-that table, so no tier number or weight name lives in JS. ``match_tier`` is the
-mirror of the apply: it names the level the widgets currently sit on.
+//tests:build_quality_js``) and derives the combo from that table, so no rung
+number or weight name lives in JS.
 
-Overlays never change width, height, frames, or length. Named qualities may
-swap UNET, CLIP, and VAE when the files are present; a value that cannot be
-written is a failed apply, not a silent skip. ``custom`` keeps whatever the
-widgets currently hold, and ``match_tier`` is what decides that a graph sits
-there. ``lab`` means the widgets still equal the load-time authored values.
-``Free Commercial Use (<$10M)`` is Apache Klein 4B + LTX-2.5 only - never
-Klein 9B or FLUX.2-dev. Wan / audio / trellis are no-ops for that choice.
-The flux3-* profiles apply only to graphs that pin FLUX 3 Image Klein
-weights; on any other graph they are no-ops, and on such a graph the Klein
-ladder is a no-op too rather than a Klein 4B downgrade.
-The qwen-image* profiles apply only to graphs that pin opt-in Qwen-Image 2.1
-weights. Those are the Qwen RESEARCH LICENSE AGREEMENT (section 2.b bars
-commercial use without a separate paid Qwen license), so no qwen tier is a
-default or a recommended profile and Klein 4B stays the Apache still; on any
-other graph they are no-ops, and on such a graph the Klein ladder and the
-flux3-* profiles are no-ops too.
+``standard`` is the rung this App ships tuned for and it writes nothing on
+every family: the graph keeps exactly what it was authored with, so the default
+rung cannot drift and there is no authored-value snapshot left to compare.
+``draft`` is the quick look and ``final`` is the best this App's own stack can
+do. Each of them attempts every write in its row, and an apply where any write
+cannot land is refused whole: nothing is renamed and nothing is substituted for
+a file that is not on disk.
+
+A rung never changes width, height, frames, or length, and never writes
+``EZImageFormat`` or any other size widget. A rung writes only the fields its
+own family owns, so no rung drops another vendor's weights onto a graph. Klein
+9B, FLUX.2-dev, and the ``Free Commercial Use (<$10M)`` size retarget are no
+longer reachable from any rung; the detectors for those filenames stay because
+the checker and the safety lane import them, and a loader that still holds one
+is a swappable source, never a write target.
+
+Old tier ids stay accepted input (saved graphs, ``--quality``, ``EZ_QUALITY``,
+the TUI) and normalize onto the three rungs through ``_QUALITY_NORMALIZE``.
 """
 
 from __future__ import annotations
@@ -33,16 +32,38 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Mapping, Sequence, TypeAlias, cast
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from ez_common import Json, JsonMap, JsonObject, WidgetsValues
 
 QualityGraphNode: TypeAlias = "Mapping[str, Json]"
 """One ``nodes`` row as parsed from a graph document, before any shaping."""
 
-# Quality ids, Klein filenames, family step/CFG overlays, widget indexes.
-QUALITY_CUSTOM = "custom"
+# ---------------------------------------------------------------------------
+# The ladder: three rungs, one default.
+# ---------------------------------------------------------------------------
+
 QUALITY_DRAFT = "draft"
-QUALITY_LAB = "lab"
+"""Quick look: the cheapest rung this family can still show."""
 QUALITY_STANDARD = "standard"
+"""What this App ships tuned for. Writes nothing, on every family."""
+QUALITY_FINAL = "final"
+"""Best this App's own stack can do."""
+QUALITY_DEFAULT = QUALITY_STANDARD
+"""Every App opens here, because this rung needs no state to be correct."""
+
+QUALITY_CHOICES: tuple[str, ...] = (QUALITY_DRAFT, QUALITY_STANDARD, QUALITY_FINAL)
+"""The whole selectable value set. Nothing else is offered anywhere."""
+NAMED_QUALITY_CHOICES: tuple[str, ...] = QUALITY_CHOICES
+"""Rungs that name a level; the combo and the table iterate these."""
+
+# ---------------------------------------------------------------------------
+# Accepted input only: ids that old graphs, ``--quality``, and ``EZ_QUALITY``
+# still carry. None of them is selectable, and no rung writes what they name.
+# ---------------------------------------------------------------------------
+
+QUALITY_CUSTOM = "custom"
+QUALITY_LAB = "lab"
 QUALITY_HIGH = "high"
 QUALITY_FREE_COMMERCIAL = "Free Commercial Use (<$10M)"
 QUALITY_FREE_COMMERCIAL_ALIAS = "free_commercial"
@@ -51,42 +72,18 @@ QUALITY_MAX = "max"
 QUALITY_FLUX3_FAST = "flux3-fast"
 QUALITY_FLUX3_QUALITY = "flux3-quality"
 QUALITY_FLUX3_NVFP4 = "flux3-nvfp4"
-# Opt-in Qwen-Image 2.1 tiers: one combo row per download-image --tier, so the
-# combo, the checker, and the CLI all name the same opt-in pack.
 QUALITY_QWEN_IMAGE = "qwen-image"
 QUALITY_QWEN_IMAGE_TURBO = "qwen-image-turbo"
 QUALITY_QWEN_IMAGE_NVFP4 = "qwen-image-nvfp4"
 QUALITY_QWEN_IMAGE_TURBO_NVFP4 = "qwen-image-turbo-nvfp4"
-QUALITY_CHOICES: tuple[str, ...] = (
-    QUALITY_CUSTOM,
-    QUALITY_DRAFT,
-    QUALITY_LAB,
-    QUALITY_STANDARD,
-    QUALITY_HIGH,
-    QUALITY_FREE_COMMERCIAL,
-    QUALITY_ULTRA,
-    QUALITY_MAX,
-    QUALITY_FLUX3_FAST,
-    QUALITY_FLUX3_QUALITY,
-    QUALITY_FLUX3_NVFP4,
-    QUALITY_QWEN_IMAGE,
-    QUALITY_QWEN_IMAGE_TURBO,
-    QUALITY_QWEN_IMAGE_NVFP4,
-    QUALITY_QWEN_IMAGE_TURBO_NVFP4,
-)
-# casefold(widget value) -> canonical QUALITY_CHOICES entry (incl. alias).
-_QUALITY_NORMALIZE: dict[str, str] = {
-    choice.casefold(): choice for choice in QUALITY_CHOICES
-}
-_QUALITY_NORMALIZE[QUALITY_FREE_COMMERCIAL_ALIAS] = QUALITY_FREE_COMMERCIAL
-# Profiles that only ever write on a graph pinning FLUX 3 Image Klein weights.
+
+# Legacy groups the checker still walks when it reports what an opt-in pack put
+# on disk. They no longer drive a rung.
 FLUX3_QUALITY_CHOICES: tuple[str, ...] = (
     QUALITY_FLUX3_FAST,
     QUALITY_FLUX3_QUALITY,
     QUALITY_FLUX3_NVFP4,
 )
-# Profiles that only ever write on a graph pinning Qwen-Image 2.1 weights.
-# Opt-in only: none of them is a default or a recommended profile.
 QWEN_QUALITY_CHOICES: tuple[str, ...] = (
     QUALITY_QWEN_IMAGE,
     QUALITY_QWEN_IMAGE_TURBO,
@@ -94,7 +91,39 @@ QWEN_QUALITY_CHOICES: tuple[str, ...] = (
     QUALITY_QWEN_IMAGE_TURBO_NVFP4,
 )
 
-# Klein filenames, family step/CFG overlays, widget indexes.
+# casefold(accepted id) -> rung. Anything unrecognised lands on ``standard``,
+# which is the rung that writes nothing, so a stale stamp cannot mislabel a
+# graph the way a substituted weight used to.
+_QUALITY_NORMALIZE: dict[str, str] = {
+    key.casefold(): target
+    for key, target in (
+        (QUALITY_DRAFT, QUALITY_DRAFT),
+        (QUALITY_STANDARD, QUALITY_STANDARD),
+        (QUALITY_FINAL, QUALITY_FINAL),
+        (QUALITY_CUSTOM, QUALITY_STANDARD),
+        (QUALITY_LAB, QUALITY_STANDARD),
+        ("", QUALITY_STANDARD),
+        (QUALITY_HIGH, QUALITY_FINAL),
+        (QUALITY_ULTRA, QUALITY_FINAL),
+        (QUALITY_MAX, QUALITY_FINAL),
+        (QUALITY_FREE_COMMERCIAL, QUALITY_FINAL),
+        (QUALITY_FREE_COMMERCIAL_ALIAS, QUALITY_FINAL),
+        (QUALITY_FLUX3_FAST, QUALITY_DRAFT),
+        (QUALITY_FLUX3_QUALITY, QUALITY_STANDARD),
+        (QUALITY_FLUX3_NVFP4, QUALITY_FINAL),
+        (QUALITY_QWEN_IMAGE, QUALITY_STANDARD),
+        (QUALITY_QWEN_IMAGE_TURBO, QUALITY_DRAFT),
+        (QUALITY_QWEN_IMAGE_NVFP4, QUALITY_FINAL),
+        (QUALITY_QWEN_IMAGE_TURBO_NVFP4, QUALITY_DRAFT),
+    )
+}
+
+# ---------------------------------------------------------------------------
+# Filenames, family step/CFG overlays, widget indexes.
+# ---------------------------------------------------------------------------
+
+# Klein filenames the rungs may name. Klein 9B and FLUX.2-dev stay listed only
+# because the checker reports what is on disk; no rung writes them.
 KLEIN_DISTILLED = "flux-2-klein-4b-fp8.safetensors"
 KLEIN_NVFP4 = "flux-2-klein-4b-nvfp4.safetensors"
 KLEIN_BASE = "flux-2-klein-base-4b-fp8.safetensors"
@@ -102,7 +131,7 @@ KLEIN_9B = "flux-2-klein-9b-fp8.safetensors"
 KLEIN_9B_BASE = "flux-2-klein-base-9b-fp8.safetensors"
 KLEIN_9B_NVFP4 = "flux-2-klein-9b-nvfp4.safetensors"
 FLUX2_DEV = "flux2_dev_fp8mixed.safetensors"
-# FLUX 3 Image Klein (KLEIN3) weights from the official Comfy repo.
+# FLUX 3 Image Klein (KLEIN3) weights from the official Comfy repo. Opt-in.
 KLEIN3_DISTILLED = "flux3-image-klein-int8-convrot.safetensors"
 KLEIN3_BASE = "flux3-image-klein-base-int8-convrot.safetensors"
 KLEIN3_NVFP4 = "flux3-image-klein-base-nvfp4.safetensors"
@@ -128,60 +157,37 @@ QWEN_TE_TURBO_NVFP4 = "qwen3vl_8b_turbo_nvfp4.safetensors"
 
 VAE_FULL = "flux2-vae.safetensors"
 VAE_SMALL = "full_encoder_small_decoder.safetensors"
-# Qwen-Image 2.1 VAE, shared by all four opt-in tiers.
+# Qwen-Image 2.1 VAE, shared by all four opt-in weights.
 QWEN_VAE = "qwen_image_2.1_vae_bf16.safetensors"
 
+# Klein: draft is the NVFP4 quick look, final is the base FP8 recipe BFL
+# publishes for the 4B base weight.
 KLEIN_DRAFT_STEPS = 4
 KLEIN_DRAFT_CFG = 1.0
-KLEIN_STANDARD_STEPS = 8
-KLEIN_STANDARD_CFG = 1.0
-KLEIN_HIGH_DISTILLED_STEPS = 8
-KLEIN_HIGH_DISTILLED_CFG = 1.0
-KLEIN_HIGH_BASE_STEPS = 24
-KLEIN_HIGH_BASE_CFG = 3.5
-KLEIN_9B_STEPS = 4
-KLEIN_9B_CFG = 1.0
-KLEIN_9B_BASE_STEPS = 20
-KLEIN_9B_BASE_CFG = 5.0
-FLUX2_DEV_STEPS = 20
-FLUX2_DEV_CFG = 4.0
-# KLEIN3: distilled is guidance-free (official range 4-16 steps); the base
-# recipe is BFL's own 50 steps at CFG 3.5, and NVFP4 follows the base recipe.
-KLEIN3_FAST_STEPS = 16
-KLEIN3_FAST_CFG = 1.0
-KLEIN3_QUALITY_STEPS = 50
-KLEIN3_QUALITY_CFG = 3.5
-KLEIN3_NVFP4_STEPS = 50
-KLEIN3_NVFP4_CFG = 3.5
-# Qwen-Image 2.1: the Turbo pair is the distilled sibling, so it takes the same
-# guidance-free low-step recipe FLUX 3 fast uses (16 at CFG 1.0); the non-Turbo
-# pair takes FLUX 3's base recipe (50 at CFG 3.5), and each NVFP4 conversion
-# follows the recipe of the INT8 weight it converts.
-QWEN_QUALITY_STEPS = 50
-QWEN_QUALITY_CFG = 3.5
-QWEN_TURBO_STEPS = 16
-QWEN_TURBO_CFG = 1.0
-QWEN_NVFP4_STEPS = 50
-QWEN_NVFP4_CFG = 3.5
-QWEN_TURBO_NVFP4_STEPS = 16
-QWEN_TURBO_NVFP4_CFG = 1.0
+KLEIN_FINAL_STEPS = 24
+KLEIN_FINAL_CFG = 3.5
+# KLEIN3: the distilled weight is guidance-free (official range 4-16 steps);
+# the base recipe is BFL's own 50 steps at CFG 3.5, and NVFP4 follows it.
+KLEIN3_DRAFT_STEPS = 16
+KLEIN3_DRAFT_CFG = 1.0
+KLEIN3_FINAL_STEPS = 50
+KLEIN3_FINAL_CFG = 3.5
+# Qwen-Image 2.1: the Turbo weight is the distilled sibling, so it takes the
+# guidance-free low-step recipe (16 at CFG 1.0); the base weight takes the
+# 50-step CFG 3.5 recipe.
+QWEN_DRAFT_STEPS = 16
+QWEN_DRAFT_CFG = 1.0
+QWEN_FINAL_STEPS = 50
+QWEN_FINAL_CFG = 3.5
 
 WAN_DRAFT_STEPS = 12
-WAN_STANDARD_STEPS = 20
-WAN_HIGH_STEPS = 28
-WAN_MAX_STEPS = 32
+WAN_FINAL_STEPS = 32
 LTX_DRAFT_STEPS = 12
-LTX_STANDARD_STEPS = 20
-LTX_HIGH_STEPS = 28
-LTX_MAX_STEPS = 32
+LTX_FINAL_STEPS = 32
 AUDIO_DRAFT_STEPS = 4
-AUDIO_STANDARD_STEPS = 8
-AUDIO_HIGH_STEPS = 16
-AUDIO_MAX_STEPS = 24
+AUDIO_FINAL_STEPS = 24
 TRELLIS_DRAFT_STEPS = 8
-TRELLIS_STANDARD_STEPS = 12
-TRELLIS_HIGH_STEPS = 20
-TRELLIS_MAX_STEPS = 28
+TRELLIS_FINAL_STEPS = 28
 
 # A TRELLIS stage authored at this CFG runs without guidance: it is the texture
 # pass, not one of the three guided stages. The TRELLIS ladder is tuned against
@@ -192,11 +198,12 @@ KSAMPLER_STEPS_INDEX = 2
 KSAMPLER_CFG_INDEX = 3
 UNET_NAME_INDEX = 0
 CLIP_NAME_INDEX = 0
+CLIP_TYPE_INDEX = 1
 VAE_NAME_INDEX = 0
 
-# The only node types apply_to_graph can write. A graph that carries none of
-# them has nothing for a tier to change, so it gets no Quality combo; keep this
-# in step with the node dispatch in apply_to_graph.
+# The only node types a rung can write. A graph that carries none of them has
+# nothing for a rung to change, so it gets no Detail combo; keep this in step
+# with the node dispatch in _OVERLAY_FIELDS_BY_TYPE.
 OVERLAY_NODE_TYPES: frozenset[str] = frozenset(
     {"KSampler", "UNETLoader", "CLIPLoader", "VAELoader"}
 )
@@ -209,8 +216,35 @@ BANNED_UNET_NEEDLES: tuple[str, ...] = (
 )
 
 _NOOP_OCCUPANCY = frozenset({"llm", "none"})
-_LTX_OCCUPANCY = frozenset({"ltx", "film"})
-_FREEZE_QUALITIES = frozenset({QUALITY_CUSTOM, QUALITY_LAB})
+
+# Widget slot each overlay field lives in, per node type. A field whose slot is
+# past the end of widgets_values has no prompt slot and refuses the apply.
+_OVERLAY_FIELDS_BY_TYPE: dict[str, tuple[str, ...]] = {
+    "KSampler": ("steps", "cfg"),
+    "UNETLoader": ("unet_name",),
+    "CLIPLoader": ("clip_name", "clip_type"),
+    "VAELoader": ("vae_name",),
+}
+_FIELD_SLOT_INDEX: dict[str, int] = {
+    "steps": KSAMPLER_STEPS_INDEX,
+    "cfg": KSAMPLER_CFG_INDEX,
+    "unet_name": UNET_NAME_INDEX,
+    "clip_name": CLIP_NAME_INDEX,
+    "clip_type": CLIP_TYPE_INDEX,
+    "vae_name": VAE_NAME_INDEX,
+}
+
+# Reason text, spelled the way the frontend spells it, so the caption the CLI
+# prints is the caption the browser prints.
+FIELD_WIDGET_NAMES: dict[str, str] = {
+    "steps": "steps",
+    "cfg": "cfg",
+    "unet_name": "unet_name",
+    "clip_name": "clip_name",
+    "vae_name": "vae_name",
+    "clip_type": "type",
+}
+_NO_RUNGS_REASON = " graphs carry no Detail rungs"
 
 
 @dataclass(frozen=True)
@@ -225,8 +259,50 @@ class QualityOverlay:
     clip_type: str | None = None
 
 
+@dataclass(frozen=True)
+class _Target:
+    """One live widget a rung may write, and what it holds now."""
+
+    node_index: int
+    node_type: str
+    current: Json
+    has_slot: bool
+
+
+@dataclass(frozen=True)
+class RungWrite:
+    """One write a plan says will land."""
+
+    node_index: int
+    node_type: str
+    field: str
+    value: int | float | str
+
+
+@dataclass(frozen=True)
+class RungPlan:
+    """What one apply would do, and every reason it must not."""
+
+    family: str
+    rung: str
+    writes: tuple[RungWrite, ...]
+    reasons: tuple[str, ...]
+
+    @property
+    def refused(self) -> bool:
+        """True when any requested write could not land.
+
+        Args:
+            None.
+
+        Returns:
+            True when the whole apply must be refused.
+        """
+        return bool(self.reasons)
+
+
 def normalize_quality(value: Json) -> str:
-    """Return a legal quality id, defaulting to lab.
+    """Return a selectable rung, mapping every accepted id onto one.
 
     Args:
         value: Combo widget value or parsed body value.
@@ -234,8 +310,20 @@ def normalize_quality(value: Json) -> str:
     Returns:
         One of QUALITY_CHOICES.
     """
-    raw = str(value or QUALITY_LAB).strip().casefold()
-    return _QUALITY_NORMALIZE.get(raw, QUALITY_LAB)
+    raw = str(value or "").strip().casefold()
+    return _QUALITY_NORMALIZE.get(raw, QUALITY_STANDARD)
+
+
+def rung_label(rung: str) -> str:
+    """Capitalize one rung the way the caption names it.
+
+    Args:
+        rung: Rung id, any case, or an accepted legacy id.
+
+    Returns:
+        ``Draft``, ``Standard``, or ``Final``.
+    """
+    return RUNG_LABEL[normalize_quality(rung)]
 
 
 def is_banned_unet(name: str) -> bool:
@@ -269,6 +357,9 @@ def is_klein_4b_unet(name: str) -> bool:
 def is_klein_9b_unet(name: str) -> bool:
     """True for Klein 9B filenames (distilled, base, or NVFP4).
 
+    Detector only: no rung writes a 9B weight. It stays because the safety lane
+    and the checker report on these files.
+
     Args:
         name: UNET filename.
 
@@ -282,11 +373,14 @@ def is_klein_9b_unet(name: str) -> bool:
 def is_flux2_dev_unet(name: str) -> bool:
     """True for FLUX.2-dev diffusion filenames.
 
+    Detector only: no rung writes a FLUX.2-dev weight. It stays because the
+    safety lane and the checker report on these files.
+
     Args:
         name: UNET filename.
 
     Returns:
-        True when the name looks like flux2_dev / flux-2-dev.
+        True when the name looks like flux2_dev / flux2-dev.
     """
     blob = name.lower().replace(".", "-")
     return "flux2-dev" in blob or "flux-2-dev" in blob or "flux2_dev" in name.lower()
@@ -429,6 +523,39 @@ def is_flux2_vae(name: str) -> bool:
     return "flux2-vae" in blob or "flux2_vae" in blob or "small_decoder" in blob
 
 
+def _is_swappable_target(field: str, current: str) -> bool:
+    """True when a loader still holds a weight a rung may replace.
+
+    Mirror of ``isSwappableTarget`` in ``ez_quality.js``. Klein 9B and
+    FLUX.2-dev are swappable *away from*, never toward: a rung never names them,
+    and leaving them unswappable would refuse a graph that is asking for the
+    Apache weight back.
+
+    Args:
+        field: Overlay field being written.
+        current: Filename the loader holds now (empty when it holds nothing).
+
+    Returns:
+        True when the current value is one this overlay may replace.
+    """
+    name = str(current or "")
+    if not name:
+        return True
+    if field == "unet_name":
+        return (
+            is_klein_4b_unet(name)
+            or is_klein_9b_unet(name)
+            or is_flux2_dev_unet(name)
+            or is_klein3_unet(name)
+            or is_qwen_image_unet(name)
+        )
+    if field == "clip_name":
+        return is_flux2_clip(name) or is_klein3_clip(name) or is_qwen_image_clip(name)
+    if field == "vae_name":
+        return is_flux2_vae(name) or is_qwen_image_vae(name)
+    return True
+
+
 def _available(available: Sequence[str] | None) -> set[str]:
     """Normalize combo options to a set.
 
@@ -490,6 +617,484 @@ def _pick_file(name: str, available: set[str]) -> str | None:
     return name
 
 
+def _same_value(left: Json, right: Json) -> bool:
+    """Compare two widget values the way the combo and KSampler report them.
+
+    Args:
+        left: Observed widget value.
+        right: Requested overlay value.
+
+    Returns:
+        True when the two hold the same setting.
+    """
+    if left is None or right is None:
+        return left is None and right is None
+    if isinstance(left, (int, float)) or isinstance(right, (int, float)):
+        try:
+            return float(left) == float(right)  # type: ignore[arg-type]
+        except (TypeError, ValueError):
+            return False
+    return str(left) == str(right)
+
+
+def _number_text(value: Json) -> str:
+    """Render a numeric widget value the way the caption reads it.
+
+    ``3`` and ``3.0`` render alike, so the Python caption is byte-identical to
+    what the frontend renders for the same graph.
+
+    Args:
+        value: Observed or requested steps / CFG value.
+
+    Returns:
+        The value as text.
+    """
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return str(value)
+    number = float(value)
+    if number.is_integer():
+        return str(int(number))
+    return str(number)
+
+
+def _field_text(field: str, value: Json) -> str:
+    """Render one overlay value for the caption.
+
+    Args:
+        field: Overlay field name.
+        value: The value to render.
+
+    Returns:
+        A number for steps/cfg, a weight name without its extension otherwise,
+        or ``unset`` when the widget holds nothing.
+    """
+    if field in ("steps", "cfg"):
+        return _number_text(value)
+    name = str(value or "").strip()
+    if not name:
+        return "unset"
+    if field == "unet_name" and name in UNET_STACK_LABEL:
+        return UNET_STACK_LABEL[name]
+    return name.rsplit(".", 1)[0]
+
+
+# ---------------------------------------------------------------------------
+# What the caption says. The caption is the only place truth lives: it is read
+# off the live widgets, never off the rung name.
+# ---------------------------------------------------------------------------
+
+LICENSE_LABEL: dict[str, str] = {
+    "klein": "Apache-2.0",
+    "wan": "Apache-2.0",
+    # LTX-2.5 is gated and capped, and the license page is explicit that the
+    # audio model is not Apache; the film lane renders the same LTX weights.
+    "ltx": "LTX Community License (gated, $10M company cap)",
+    "film": "LTX Community License (gated, $10M company cap)",
+    "audio": "MIT (ACE-Step)",
+    "trellis": "MIT (TRELLIS.2)",
+    "klein3": "FLUX Non-Commercial",
+    "qwen": "Qwen Research license",
+}
+"""One license word per family, stated where the choice is made.
+
+Kept honest against docs/licenses.mdx, which is the policy of record: Klein 4B
+and Wan are Apache, LTX-2.5 is the gated LTX Community License under a company
+revenue cap, and ACE-Step and TRELLIS.2 are MIT.
+"""
+
+STACK_LABEL: dict[str, str] = {
+    "klein": "Klein 4B",
+    "wan": "Wan 2.2 5B",
+    "ltx": "LTX-2.5",
+    "film": "LTX-2.5 film",
+    "audio": "ACE-Step 1.5",
+    "trellis": "TRELLIS.2",
+    "klein3": "FLUX 3 Image Klein",
+    "qwen": "Qwen-Image 2.1",
+}
+"""The <stack> term for a family whose rungs do not name a transformer."""
+
+UNET_STACK_LABEL: dict[str, str] = {
+    KLEIN_NVFP4: "Klein 4B nvfp4",
+    KLEIN_DISTILLED: "Klein 4B distilled",
+    KLEIN_BASE: "Klein 4B base",
+    KLEIN3_DISTILLED: "FLUX 3 Klein int8",
+    KLEIN3_BASE: "FLUX 3 Klein base int8",
+    KLEIN3_NVFP4: "FLUX 3 Klein nvfp4",
+    QWEN_IMAGE_INT8: "Qwen-Image 2.1 int8",
+    QWEN_IMAGE_TURBO_INT8: "Qwen-Image 2.1 turbo int8",
+    QWEN_IMAGE_NVFP4: "Qwen-Image 2.1 nvfp4",
+    QWEN_IMAGE_TURBO_NVFP4: "Qwen-Image 2.1 turbo nvfp4",
+}
+"""The <stack> term when a live loader holds one of these weights."""
+
+RUNG_LABEL: dict[str, str] = {
+    QUALITY_DRAFT: "Draft",
+    QUALITY_STANDARD: "Standard",
+    QUALITY_FINAL: "Final",
+}
+"""How the caption names a rung when it says what that rung sets."""
+
+EDITED_PREFIX = "Edited: "
+"""Prefix for a caption whose live widgets left the rung behind."""
+
+
+def caption_for(family: str, rung: str, live: JsonMap | None = None) -> str:
+    """Render the single truth line for one family, rung, and live widgets.
+
+    The line is ``<stack> - <steps> steps - CFG <cfg> - <license>``, read off
+    what the widgets actually hold rather than off the rung name, so a row can
+    never claim a write the graph does not have. A family whose ladder has no
+    CFG gets no CFG term. When the live widgets differ from what the selected
+    rung asked for (a hand edit, or a partial write that was refused), the line
+    carries the ``Edited: `` prefix and each differing term names what the rung
+    sets, e.g. ``Edited: Klein 4B base - 20 steps (Final sets 24) - CFG 3.5 -
+    Apache-2.0``. ``standard`` writes nothing, so it can never be left behind.
+    A field the caller does not report is not a disagreement: it simply earns no
+    term of its own.
+
+    Args:
+        family: Occupancy id, QUALITY_FAMILY_KLEIN3, or QUALITY_FAMILY_QWEN.
+        rung: Rung id, any case; an accepted legacy id normalizes first.
+        live: Observed value per overlay field name.
+
+    Returns:
+        The caption line, or empty for a family that carries no rungs.
+    """
+    owned = family_owned_fields(family)
+    if not owned:
+        return ""
+    choice = normalize_quality(rung)
+    row = _rung_row(family, choice)
+    state: JsonMap = dict(live) if live else {}
+    owns = set(owned)
+    says = rung_label(choice)
+    edited = False
+    terms: list[str] = [_stack_text(family, owns, state.get("unet_name"))]
+    # A field the caller does not report is not a disagreement, so only a live
+    # value that is actually present can leave the rung behind.
+    if "unet_name" in owns and row.unet_name is not None:
+        unet = state.get("unet_name")
+        if unet is not None and not _same_value(unet, row.unet_name):
+            edited = True
+            terms[0] += f" ({says} sets {_field_text('unet_name', row.unet_name)})"
+    if "steps" in owns and state.get("steps") is not None:
+        steps = state.get("steps")
+        term = f"{_number_text(steps)} steps"
+        if row.steps is not None and not _same_value(steps, row.steps):
+            edited = True
+            term += f" ({says} sets {row.steps})"
+        terms.append(term)
+    if "cfg" in owns and state.get("cfg") is not None:
+        cfg = state.get("cfg")
+        term = f"CFG {_number_text(cfg)}"
+        if row.cfg is not None and not _same_value(cfg, row.cfg):
+            edited = True
+            term += f" ({says} sets {_number_text(row.cfg)})"
+        terms.append(term)
+    for field in ("clip_name", "vae_name", "clip_type"):
+        if field not in owns or state.get(field) is None:
+            continue
+        wanted = getattr(row, field)
+        if wanted is None or _same_value(state.get(field), wanted):
+            continue
+        edited = True
+        observed = _field_text(field, state.get(field))
+        wants = _field_text(field, wanted)
+        name = FIELD_WIDGET_NAMES[field]
+        terms.append(f"{name} {observed} ({says} sets {wants})")
+    license_word = LICENSE_LABEL[family]
+    terms.append(license_word)
+    return (EDITED_PREFIX if edited else "") + " - ".join(terms)
+
+
+def _stack_text(family: str, owns: set[str], live_unet: Json) -> str:
+    """Name the stack the caption opens with.
+
+    Every family with a rung names its own stack and license, so both lookups
+    are keyed by construction on the ladder table.
+
+    Args:
+        family: Rung family.
+        owns: Overlay fields this family's rungs write.
+        live_unet: Filename the UNETLoader holds now, when known.
+
+    Returns:
+        The <stack> term.
+    """
+    default = STACK_LABEL[family]
+    if "unet_name" not in owns:
+        return default
+    return _field_text("unet_name", live_unet) if live_unet else default
+
+
+# ---------------------------------------------------------------------------
+# Family detection and the rung table.
+# ---------------------------------------------------------------------------
+
+# resolve_overlay reports only the widgets a rung actually changes, so the
+# family fixture must classify as the family while differing from every value
+# its rungs request; otherwise a request would be recorded as "no change".
+# These names are branch fixtures only and never appear in a graph.
+_KLEIN_TABLE_UNET = "flux-2-klein-4b-table-sentinel-fp8.safetensors"
+_KLEIN_TABLE_CLIP = "qwen_3_4b_table_sentinel.safetensors"
+_KLEIN_TABLE_VAE = "flux2-vae-table-sentinel.safetensors"
+_KLEIN3_TABLE_UNET = "flux3-image-klein-table-sentinel-int8-convrot.safetensors"
+_QWEN_TABLE_UNET = "qwen_image_2.1_base_int8_convrot.safetensors"
+
+# Transformer each family authors, so a table row is evaluated against the
+# loaders that family really pins. resolve_overlay branches on the pinned
+# weights, so the family fixture is what makes a row mean that family.
+WAN_5B_UNET = "wan2.2_ti2v_5B_fp16.safetensors"
+LTX_UNET = "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors"
+TRELLIS_UNET = "trellis_2_int8_convrot.safetensors"
+
+# Graphs that pin FLUX 3 Image Klein still stamp occupancy "klein", so the
+# table needs a family of its own to record their rungs separately.
+QUALITY_FAMILY_KLEIN3 = "klein3"
+# Opt-in Qwen-Image 2.1 stills stamp occupancy "klein" too, and are opt-in (not
+# Apache), so they get their own family rather than riding the Klein ladder.
+QUALITY_FAMILY_QWEN = "qwen"
+
+QUALITY_FAMILIES: tuple[str, ...] = (
+    "klein",
+    QUALITY_FAMILY_KLEIN3,
+    QUALITY_FAMILY_QWEN,
+    "wan",
+    "ltx",
+    "film",
+    "audio",
+    "trellis",
+    "none",
+    "llm",
+)
+
+_FAMILY_PINNED: dict[str, dict[str, str]] = {
+    "klein": {
+        "unet": _KLEIN_TABLE_UNET,
+        "clip": _KLEIN_TABLE_CLIP,
+        "vae": _KLEIN_TABLE_VAE,
+    },
+    QUALITY_FAMILY_KLEIN3: {
+        "unet": _KLEIN3_TABLE_UNET,
+        "clip": "",
+        "vae": "",
+    },
+    QUALITY_FAMILY_QWEN: {
+        "unet": _QWEN_TABLE_UNET,
+        "clip": "",
+        "vae": "",
+    },
+    "wan": {"unet": WAN_5B_UNET, "clip": "", "vae": ""},
+    "ltx": {"unet": LTX_UNET, "clip": "", "vae": ""},
+    "film": {"unet": LTX_UNET, "clip": "", "vae": ""},
+    "audio": {"unet": "", "clip": "", "vae": ""},
+    "trellis": {"unet": TRELLIS_UNET, "clip": "", "vae": ""},
+    "none": {"unet": "", "clip": "", "vae": ""},
+    "llm": {"unet": "", "clip": "", "vae": ""},
+}
+
+# The six widgets the overlay is allowed to own, in serialization order.
+OVERLAY_FIELDS: tuple[str, ...] = (
+    "steps",
+    "cfg",
+    "unet_name",
+    "clip_name",
+    "vae_name",
+    "clip_type",
+)
+
+# Combo options that mean "everything on disk", so a derived row records what a
+# rung asks for before availability filters it. apply_to_graph filters again.
+_ALL_CATALOG_WEIGHTS: frozenset[str] = frozenset(
+    {
+        KLEIN_DISTILLED,
+        KLEIN_NVFP4,
+        KLEIN_BASE,
+        CLIP_4B,
+        KLEIN3_TE,
+        VAE_FULL,
+        VAE_SMALL,
+        KLEIN3_DISTILLED,
+        KLEIN3_NVFP4,
+        QWEN_IMAGE_INT8,
+        QWEN_IMAGE_TURBO_INT8,
+        WAN_5B_UNET,
+        LTX_UNET,
+        TRELLIS_UNET,
+    }
+)
+
+# The one rung table. ``standard`` is absent on purpose: it writes nothing,
+# everywhere, which is the rule that deleted the lab/custom state machine.
+_RUNG_ROWS: dict[str, dict[str, QualityOverlay]] = {
+    "klein": {
+        QUALITY_DRAFT: QualityOverlay(
+            steps=KLEIN_DRAFT_STEPS,
+            cfg=KLEIN_DRAFT_CFG,
+            unet_name=KLEIN_NVFP4,
+            clip_name=CLIP_4B,
+            vae_name=VAE_SMALL,
+            clip_type=CLIP_TYPE_FLUX2,
+        ),
+        QUALITY_FINAL: QualityOverlay(
+            steps=KLEIN_FINAL_STEPS,
+            cfg=KLEIN_FINAL_CFG,
+            unet_name=KLEIN_BASE,
+            clip_name=CLIP_4B,
+            vae_name=VAE_FULL,
+            clip_type=CLIP_TYPE_FLUX2,
+        ),
+    },
+    QUALITY_FAMILY_KLEIN3: {
+        QUALITY_DRAFT: QualityOverlay(
+            steps=KLEIN3_DRAFT_STEPS,
+            cfg=KLEIN3_DRAFT_CFG,
+            unet_name=KLEIN3_DISTILLED,
+        ),
+        QUALITY_FINAL: QualityOverlay(
+            steps=KLEIN3_FINAL_STEPS,
+            cfg=KLEIN3_FINAL_CFG,
+            unet_name=KLEIN3_NVFP4,
+        ),
+    },
+    QUALITY_FAMILY_QWEN: {
+        QUALITY_DRAFT: QualityOverlay(
+            steps=QWEN_DRAFT_STEPS,
+            cfg=QWEN_DRAFT_CFG,
+            unet_name=QWEN_IMAGE_TURBO_INT8,
+        ),
+        QUALITY_FINAL: QualityOverlay(
+            steps=QWEN_FINAL_STEPS,
+            cfg=QWEN_FINAL_CFG,
+            unet_name=QWEN_IMAGE_INT8,
+        ),
+    },
+    "wan": {
+        QUALITY_DRAFT: QualityOverlay(steps=WAN_DRAFT_STEPS),
+        QUALITY_FINAL: QualityOverlay(steps=WAN_FINAL_STEPS),
+    },
+    "ltx": {
+        QUALITY_DRAFT: QualityOverlay(steps=LTX_DRAFT_STEPS),
+        QUALITY_FINAL: QualityOverlay(steps=LTX_FINAL_STEPS),
+    },
+    "film": {
+        QUALITY_DRAFT: QualityOverlay(steps=LTX_DRAFT_STEPS),
+        QUALITY_FINAL: QualityOverlay(steps=LTX_FINAL_STEPS),
+    },
+    "audio": {
+        QUALITY_DRAFT: QualityOverlay(steps=AUDIO_DRAFT_STEPS),
+        QUALITY_FINAL: QualityOverlay(steps=AUDIO_FINAL_STEPS),
+    },
+    "trellis": {
+        QUALITY_DRAFT: QualityOverlay(steps=TRELLIS_DRAFT_STEPS),
+        QUALITY_FINAL: QualityOverlay(steps=TRELLIS_FINAL_STEPS),
+    },
+}
+
+
+def _rung_row(family: str, rung: str) -> QualityOverlay:
+    """Return the literal values one rung asks of one family.
+
+    Nothing is filtered here: no presence check and no comparison with what the
+    graph holds, so the caller can tell "already set" from "cannot be set".
+
+    Args:
+        family: Occupancy id, QUALITY_FAMILY_KLEIN3, or QUALITY_FAMILY_QWEN.
+        rung: Rung id, any case, or an accepted legacy id.
+
+    Returns:
+        Requested overlay; empty for ``standard`` and for a family with no
+        rungs of its own.
+    """
+    choice = normalize_quality(rung)
+    if choice == QUALITY_STANDARD:
+        return QualityOverlay()
+    return _RUNG_ROWS.get(family, {}).get(choice, QualityOverlay())
+
+
+def family_for(occupancy: str, *, unet_name: str = "", clip_name: str = "") -> str:
+    """Rung family one sampler + loader set belongs to.
+
+    A graph that pins FLUX 3 or opt-in Qwen-Image weights has its own family,
+    so neither the Klein ladder nor the other vendor's ladder can drop its
+    weights onto it.
+
+    Args:
+        occupancy: Graph occupancy id (may be empty).
+        unet_name: Current UNETLoader filename.
+        clip_name: Current CLIPLoader filename.
+
+    Returns:
+        An entry of QUALITY_FAMILIES; ``none`` for anything this table does not
+        cover.
+    """
+    occ = (occupancy or "").strip().lower()
+    if occ in _NOOP_OCCUPANCY:
+        return occ
+    if occ not in QUALITY_FAMILIES:
+        return "none"
+    if is_klein3_unet(unet_name) or is_klein3_clip(clip_name):
+        return QUALITY_FAMILY_KLEIN3
+    if is_qwen_image_unet(unet_name) or is_qwen_image_clip(clip_name):
+        return QUALITY_FAMILY_QWEN
+    return occ
+
+
+def _graph_pins(
+    graph: Mapping[str, Json],
+    unet_test: Callable[[str], bool],
+    clip_test: Callable[[str], bool],
+) -> bool:
+    """True when a live loader holds weights one opt-in family owns.
+
+    Args:
+        graph: Serialized Comfy graph.
+        unet_test: Predicate over a UNETLoader filename.
+        clip_test: Predicate over a CLIPLoader filename.
+
+    Returns:
+        True when any live loader pins the family.
+    """
+    for node in cast("list[QualityGraphNode]", graph.get("nodes") or []):
+        if not _is_live_node(node):
+            continue
+        ntype = node.get("type")
+        values = node.get("widgets_values")
+        name = str(values[0]) if isinstance(values, list) and values else ""
+        if ntype == "UNETLoader" and unet_test(name):
+            return True
+        if ntype == "CLIPLoader" and clip_test(name):
+            return True
+    return False
+
+
+def graph_family(graph: Mapping[str, Json]) -> str:
+    """Rung family a whole graph belongs to.
+
+    Mirror of ``graphFamily`` in ``ez_quality.js``: the occupancy decides, then
+    the loaders a live lane actually pins can pull the graph into the opt-in
+    FLUX 3 or Qwen-Image family.
+
+    Args:
+        graph: Serialized Comfy graph.
+
+    Returns:
+        An entry of QUALITY_FAMILIES; ``none`` for anything this table does not
+        cover.
+    """
+    occ = infer_occupancy(graph)
+    if occ in _NOOP_OCCUPANCY:
+        return occ
+    if occ not in QUALITY_FAMILIES:
+        return "none"
+    if _graph_pins(graph, is_klein3_unet, is_klein3_clip):
+        return QUALITY_FAMILY_KLEIN3
+    if _graph_pins(graph, is_qwen_image_unet, is_qwen_image_clip):
+        return QUALITY_FAMILY_QWEN
+    return occ
+
+
 def resolve_overlay(
     *,
     occupancy: str,
@@ -503,13 +1108,17 @@ def resolve_overlay(
     vae_name: str = "",
     available_vaes: Sequence[str] | None = None,
 ) -> QualityOverlay:
-    """Return the overlay for one sampler + loader set.
+    """Return the overlay one rung asks of one sampler + loader set.
+
+    A rung names absolute values, so the authored step count and CFG no longer
+    feed anything.
 
     Args:
         occupancy: extra.lab_app_mode.occupancy (klein, wan, ltx, ...).
-        quality: quality id.
-        authored_steps: Current KSampler steps.
-        authored_cfg: Current KSampler CFG.
+        quality: Rung id, or an accepted legacy id (it normalizes first).
+        authored_steps: Unused; kept so callers that still read the graph can
+            pass what they read.
+        authored_cfg: Unused; see ``authored_steps``.
         unet_name: Current UNETLoader filename (may be empty).
         available_unets: UNET combo options. Empty/None refuses UNET swaps.
         clip_name: Current CLIPLoader filename.
@@ -520,152 +1129,26 @@ def resolve_overlay(
     Returns:
         Overlay with None for knobs that must stay authored.
     """
-    del authored_cfg
+    del authored_steps, authored_cfg
+    family = family_for(occupancy, unet_name=unet_name, clip_name=clip_name)
     choice = normalize_quality(quality)
-    occ = (occupancy or "").strip().lower()
-    if choice in _FREEZE_QUALITIES or occ in _NOOP_OCCUPANCY:
-        return QualityOverlay()
     if is_wan_14b_unet(unet_name):
         return QualityOverlay()
-    # A graph that pins FLUX 3 Image Klein weights has its own three profiles.
-    # The Klein ladder must never drop Klein 4B weights onto them.
-    if choice not in FLUX3_QUALITY_CHOICES and (
-        is_klein3_unet(unet_name) or is_klein3_clip(clip_name)
-    ):
-        return QualityOverlay()
-    # Same for a graph that pins opt-in Qwen-Image 2.1 weights: neither the
-    # Klein ladder nor the FLUX 3 profiles may drop other vendors' weights
-    # onto them, and the reverse guard below keeps the qwen tiers off them.
-    if choice not in QWEN_QUALITY_CHOICES and (
-        is_qwen_image_unet(unet_name) or is_qwen_image_clip(clip_name)
-    ):
-        return QualityOverlay()
+    row = _rung_row(family, choice)
     available = _available(available_unets)
     clips = _available(available_clips)
     vaes = _available(available_vaes)
-
-    if choice == QUALITY_FREE_COMMERCIAL:
-        return _free_commercial_overlay(
-            occ,
-            authored_steps,
-            unet_name,
-            clip_name,
-            vae_name,
-            available,
-            clips,
-            vaes,
-        )
-
-    if choice in FLUX3_QUALITY_CHOICES:
-        return _flux3_overlay(
-            choice, unet_name, clip_name, vae_name, available, clips, vaes
-        )
-
-    if choice in QWEN_QUALITY_CHOICES:
-        return _qwen_image_overlay(
-            choice, unet_name, clip_name, vae_name, available, clips, vaes
-        )
-
-    if occ == "klein" or is_klein_4b_unet(unet_name) or is_klein_9b_unet(unet_name):
-        return _klein_overlay(
-            choice,
-            authored_steps,
-            unet_name,
-            clip_name,
-            vae_name,
-            available,
-            clips,
-            vaes,
-        )
-    if occ == "wan":
-        return QualityOverlay(steps=_wan_steps(choice))
-    if occ in _LTX_OCCUPANCY:
-        return QualityOverlay(steps=_ltx_steps(choice))
-    if occ == "audio":
-        return QualityOverlay(steps=_audio_steps(choice))
-    if occ == "trellis":
-        return QualityOverlay(steps=_trellis_steps(choice))
-    return QualityOverlay()
-
-
-def _wan_steps(choice: str) -> int | None:
-    """Wan 5B step overlay.
-
-    Args:
-        choice: Named quality (not custom/lab).
-
-    Returns:
-        Step count, or None when Wan has no level by that name.
-    """
-    if choice == QUALITY_DRAFT:
-        return WAN_DRAFT_STEPS
-    if choice == QUALITY_STANDARD:
-        return WAN_STANDARD_STEPS
-    if choice == QUALITY_HIGH:
-        return WAN_HIGH_STEPS
-    if choice == QUALITY_MAX:
-        return WAN_MAX_STEPS
-    return None
-
-
-def _ltx_steps(choice: str) -> int | None:
-    """LTX / film step overlay.
-
-    Args:
-        choice: Named quality.
-
-    Returns:
-        Step count, or None when LTX has no level by that name.
-    """
-    if choice == QUALITY_DRAFT:
-        return LTX_DRAFT_STEPS
-    if choice == QUALITY_STANDARD:
-        return LTX_STANDARD_STEPS
-    if choice == QUALITY_HIGH:
-        return LTX_HIGH_STEPS
-    if choice == QUALITY_MAX:
-        return LTX_MAX_STEPS
-    return None
-
-
-def _audio_steps(choice: str) -> int | None:
-    """ACE / audio step overlay.
-
-    Args:
-        choice: Named quality.
-
-    Returns:
-        Step count, or None when audio has no level by that name.
-    """
-    if choice == QUALITY_DRAFT:
-        return AUDIO_DRAFT_STEPS
-    if choice == QUALITY_STANDARD:
-        return AUDIO_STANDARD_STEPS
-    if choice == QUALITY_HIGH:
-        return AUDIO_HIGH_STEPS
-    if choice == QUALITY_MAX:
-        return AUDIO_MAX_STEPS
-    return None
-
-
-def _trellis_steps(choice: str) -> int | None:
-    """TRELLIS step overlay.
-
-    Args:
-        choice: Named quality.
-
-    Returns:
-        Step count, or None when TRELLIS has no level by that name.
-    """
-    if choice == QUALITY_DRAFT:
-        return TRELLIS_DRAFT_STEPS
-    if choice == QUALITY_STANDARD:
-        return TRELLIS_STANDARD_STEPS
-    if choice == QUALITY_HIGH:
-        return TRELLIS_HIGH_STEPS
-    if choice == QUALITY_MAX:
-        return TRELLIS_MAX_STEPS
-    return None
+    unet = _pick_unet(row.unet_name, available) if row.unet_name else None
+    clip = _pick_file(row.clip_name, clips) if row.clip_name else None
+    vae = _pick_file(row.vae_name, vaes) if row.vae_name else None
+    return QualityOverlay(
+        steps=row.steps,
+        cfg=row.cfg,
+        unet_name=_changed(unet_name, unet),
+        clip_name=_changed(clip_name, clip),
+        vae_name=_changed(vae_name, vae),
+        clip_type=row.clip_type,
+    )
 
 
 def is_trellis_guidance_free_stage(node: Mapping[str, Json], family: str) -> bool:
@@ -674,7 +1157,7 @@ def is_trellis_guidance_free_stage(node: Mapping[str, Json], family: str) -> boo
     The TRELLIS graph runs three guided stages at CFG 7.5 and one texture
     stage at CFG 1.0. The step ladder is tuned against the guided stages, and
     the texture stage's own step count is part of its recipe, so the overlay
-    leaves that sampler alone and reads the tier off the guided stages.
+    leaves that sampler alone and reads the rung off the guided stages.
 
     Args:
         node: One graph node.
@@ -692,298 +1175,6 @@ def is_trellis_guidance_free_stage(node: Mapping[str, Json], family: str) -> boo
     if isinstance(held, bool) or not isinstance(held, (int, float)):
         return False
     return float(held) == TRELLIS_GUIDANCE_FREE_CFG
-
-
-def _free_commercial_overlay(
-    occupancy: str,
-    authored_steps: int,
-    unet_name: str,
-    clip_name: str,
-    vae_name: str,
-    available: set[str],
-    clips: set[str],
-    vaes: set[str],
-) -> QualityOverlay:
-    """Apache Klein 4B stills + LTX-2.5 steps. Never 9B / FLUX.2-dev.
-
-    Wan, audio, trellis, and labs/assist graphs are no-ops. Python never writes size.
-
-    Args:
-        occupancy: Graph occupancy id.
-        authored_steps: Current KSampler steps.
-        unet_name: Current UNET filename.
-        clip_name: Current CLIP filename.
-        vae_name: Current VAE filename.
-        available: UNET combo options.
-        clips: CLIP combo options.
-        vaes: VAE combo options.
-
-    Returns:
-        Overlay for the commercial path, or empty.
-    """
-    if (
-        occupancy == "klein"
-        or is_klein_4b_unet(unet_name)
-        or is_klein_9b_unet(unet_name)
-        or is_flux2_dev_unet(unet_name)
-    ):
-        return _klein_high(
-            authored_steps, unet_name, clip_name, vae_name, available, clips, vaes
-        )
-    if occupancy in _LTX_OCCUPANCY:
-        return QualityOverlay(steps=LTX_HIGH_STEPS)
-    return QualityOverlay()
-
-
-def _flux3_overlay(
-    choice: str,
-    unet_name: str,
-    clip_name: str,
-    vae_name: str,
-    available: set[str],
-    clips: set[str],
-    vaes: set[str],
-) -> QualityOverlay:
-    """FLUX 3 Image Klein profile, or empty when the graph pins other weights.
-
-    Args:
-        choice: One of FLUX3_QUALITY_CHOICES.
-        unet_name: Current UNET filename.
-        clip_name: Current CLIP filename.
-        vae_name: Current VAE filename.
-        available: UNET combo options.
-        clips: CLIP combo options.
-        vaes: VAE combo options.
-
-    Returns:
-        Overlay for the pinned KLEIN3 family, or empty for any other family.
-    """
-    if not (is_klein3_unet(unet_name) or is_klein3_clip(clip_name)):
-        return QualityOverlay()
-    if choice == QUALITY_FLUX3_NVFP4:
-        unet = _pick_unet(KLEIN3_NVFP4, available)
-        steps, cfg = KLEIN3_NVFP4_STEPS, KLEIN3_NVFP4_CFG
-    elif choice == QUALITY_FLUX3_QUALITY:
-        unet = _pick_unet(KLEIN3_BASE, available)
-        steps, cfg = KLEIN3_QUALITY_STEPS, KLEIN3_QUALITY_CFG
-    else:
-        unet = _pick_unet(KLEIN3_DISTILLED, available)
-        steps, cfg = KLEIN3_FAST_STEPS, KLEIN3_FAST_CFG
-    return QualityOverlay(
-        steps=steps,
-        cfg=cfg,
-        unet_name=_changed(unet_name, unet),
-        clip_name=_changed(clip_name, _pick_file(KLEIN3_TE, clips)),
-        vae_name=_changed(vae_name, _pick_file(VAE_FULL, vaes)),
-        clip_type=CLIP_TYPE_FLUX2,
-    )
-
-
-def _qwen_image_overlay(
-    choice: str,
-    unet_name: str,
-    clip_name: str,
-    vae_name: str,
-    available: set[str],
-    clips: set[str],
-    vaes: set[str],
-) -> QualityOverlay:
-    """Qwen-Image 2.1 profile, or empty when the graph pins other weights.
-
-    Opt-in only: these weights are the Qwen RESEARCH LICENSE AGREEMENT
-    (section 2.b bars commercial use without a separate paid Qwen license), so
-    no tier here is a default or a recommended profile and Klein 4B stays the
-    Apache still. The CLIPLoader type is left authored - the graph authors the
-    Qwen3VL type, and this tier has nothing to rewrite it to.
-
-    Args:
-        choice: One of QWEN_QUALITY_CHOICES.
-        unet_name: Current UNET filename.
-        clip_name: Current CLIP filename.
-        vae_name: Current VAE filename.
-        available: UNET combo options.
-        clips: CLIP combo options.
-        vaes: VAE combo options.
-
-    Returns:
-        Overlay for the pinned Qwen-Image family, or empty for any other family.
-    """
-    if not (is_qwen_image_unet(unet_name) or is_qwen_image_clip(clip_name)):
-        return QualityOverlay()
-    if choice == QUALITY_QWEN_IMAGE:
-        unet, te = QWEN_IMAGE_INT8, QWEN_TE
-        steps, cfg = QWEN_QUALITY_STEPS, QWEN_QUALITY_CFG
-    elif choice == QUALITY_QWEN_IMAGE_TURBO:
-        unet, te = QWEN_IMAGE_TURBO_INT8, QWEN_TE
-        steps, cfg = QWEN_TURBO_STEPS, QWEN_TURBO_CFG
-    elif choice == QUALITY_QWEN_IMAGE_NVFP4:
-        unet, te = QWEN_IMAGE_NVFP4, QWEN_TE_NVFP4
-        steps, cfg = QWEN_NVFP4_STEPS, QWEN_NVFP4_CFG
-    else:
-        unet, te = QWEN_IMAGE_TURBO_NVFP4, QWEN_TE_TURBO_NVFP4
-        steps, cfg = QWEN_TURBO_NVFP4_STEPS, QWEN_TURBO_NVFP4_CFG
-    return QualityOverlay(
-        steps=steps,
-        cfg=cfg,
-        unet_name=_changed(unet_name, _pick_unet(unet, available)),
-        clip_name=_changed(clip_name, _pick_file(te, clips)),
-        vae_name=_changed(vae_name, _pick_file(QWEN_VAE, vaes)),
-    )
-
-
-def _klein_overlay(
-    choice: str,
-    authored_steps: int,
-    unet_name: str,
-    clip_name: str,
-    vae_name: str,
-    available: set[str],
-    clips: set[str],
-    vaes: set[str],
-) -> QualityOverlay:
-    """Klein / Flux.2 still overlay for a named quality.
-
-    Args:
-        choice: Named quality (not custom/lab).
-        authored_steps: Current KSampler steps.
-        unet_name: Current UNET filename.
-        clip_name: Current CLIP filename.
-        vae_name: Current VAE filename.
-        available: UNET combo options.
-        clips: CLIP combo options.
-        vaes: VAE combo options.
-
-    Returns:
-        Overlay for Klein occupancy.
-    """
-    if choice == QUALITY_DRAFT:
-        unet = None
-        if is_klein_4b_unet(unet_name) or is_klein_9b_unet(unet_name):
-            unet = _pick_unet(KLEIN_NVFP4, available) or _pick_unet(
-                KLEIN_DISTILLED, available
-            )
-        return QualityOverlay(
-            steps=KLEIN_DRAFT_STEPS,
-            cfg=KLEIN_DRAFT_CFG,
-            unet_name=_changed(unet_name, unet),
-            clip_name=_changed(clip_name, _pick_file(CLIP_4B, clips)),
-            vae_name=_changed(
-                vae_name, _pick_file(VAE_SMALL, vaes) or _pick_file(VAE_FULL, vaes)
-            ),
-            clip_type=CLIP_TYPE_FLUX2,
-        )
-    if choice == QUALITY_STANDARD:
-        return QualityOverlay(
-            steps=KLEIN_STANDARD_STEPS,
-            cfg=KLEIN_STANDARD_CFG,
-            unet_name=_changed(unet_name, _pick_unet(KLEIN_DISTILLED, available)),
-            clip_name=_changed(clip_name, _pick_file(CLIP_4B, clips)),
-            vae_name=_changed(
-                vae_name, _pick_file(VAE_SMALL, vaes) or _pick_file(VAE_FULL, vaes)
-            ),
-            clip_type=CLIP_TYPE_FLUX2,
-        )
-    if choice == QUALITY_HIGH:
-        return _klein_high(
-            authored_steps, unet_name, clip_name, vae_name, available, clips, vaes
-        )
-    if choice == QUALITY_ULTRA:
-        nine = _pick_unet(KLEIN_9B, available) or _pick_unet(KLEIN_9B_NVFP4, available)
-        if nine is not None:
-            return QualityOverlay(
-                steps=KLEIN_9B_STEPS,
-                cfg=KLEIN_9B_CFG,
-                unet_name=_changed(unet_name, nine),
-                clip_name=_changed(clip_name, _pick_file(CLIP_8B, clips)),
-                vae_name=_changed(
-                    vae_name, _pick_file(VAE_SMALL, vaes) or _pick_file(VAE_FULL, vaes)
-                ),
-                clip_type=CLIP_TYPE_FLUX2,
-            )
-        return _klein_high(
-            authored_steps, unet_name, clip_name, vae_name, available, clips, vaes
-        )
-    if choice == QUALITY_MAX:
-        nine_base = _pick_unet(KLEIN_9B_BASE, available)
-        if nine_base is not None:
-            return QualityOverlay(
-                steps=KLEIN_9B_BASE_STEPS,
-                cfg=KLEIN_9B_BASE_CFG,
-                unet_name=_changed(unet_name, nine_base),
-                clip_name=_changed(clip_name, _pick_file(CLIP_8B, clips)),
-                vae_name=_changed(
-                    vae_name, _pick_file(VAE_SMALL, vaes) or _pick_file(VAE_FULL, vaes)
-                ),
-                clip_type=CLIP_TYPE_FLUX2,
-            )
-        dev = _pick_unet(FLUX2_DEV, available)
-        if dev is not None:
-            return QualityOverlay(
-                steps=FLUX2_DEV_STEPS,
-                cfg=FLUX2_DEV_CFG,
-                unet_name=_changed(unet_name, dev),
-                clip_name=_changed(clip_name, _pick_file(CLIP_MISTRAL, clips)),
-                vae_name=_changed(
-                    vae_name, _pick_file(VAE_SMALL, vaes) or _pick_file(VAE_FULL, vaes)
-                ),
-                clip_type=CLIP_TYPE_FLUX2,
-            )
-        return _klein_high(
-            authored_steps, unet_name, clip_name, vae_name, available, clips, vaes
-        )
-    return _klein_high(
-        authored_steps, unet_name, clip_name, vae_name, available, clips, vaes
-    )
-
-
-def _klein_high(
-    authored_steps: int,
-    unet_name: str,
-    clip_name: str,
-    vae_name: str,
-    available: set[str],
-    clips: set[str],
-    vaes: set[str],
-) -> QualityOverlay:
-    """Apache high: 4B base if present, else distilled 8 steps.
-
-    Args:
-        authored_steps: Current KSampler steps.
-        unet_name: Current UNET filename.
-        clip_name: Current CLIP filename.
-        vae_name: Current VAE filename.
-        available: UNET combo options.
-        clips: CLIP combo options.
-        vaes: VAE combo options.
-
-    Returns:
-        High overlay.
-    """
-    base = _pick_unet(KLEIN_BASE, available)
-    clip = _pick_file(CLIP_4B, clips)
-    vae = _pick_file(VAE_SMALL, vaes) or _pick_file(VAE_FULL, vaes)
-    if base is not None and (
-        is_klein_4b_unet(unet_name) or is_klein_9b_unet(unet_name) or not unet_name
-    ):
-        return QualityOverlay(
-            steps=KLEIN_HIGH_BASE_STEPS,
-            cfg=KLEIN_HIGH_BASE_CFG,
-            unet_name=_changed(unet_name, base),
-            clip_name=_changed(clip_name, clip),
-            vae_name=_changed(vae_name, vae),
-            clip_type=CLIP_TYPE_FLUX2,
-        )
-    steps = authored_steps
-    if steps < KLEIN_HIGH_DISTILLED_STEPS:
-        steps = KLEIN_HIGH_DISTILLED_STEPS
-    return QualityOverlay(
-        steps=steps,
-        cfg=KLEIN_HIGH_DISTILLED_CFG,
-        unet_name=_changed(unet_name, _pick_unet(KLEIN_DISTILLED, available)),
-        clip_name=_changed(clip_name, clip),
-        vae_name=_changed(vae_name, vae),
-        clip_type=CLIP_TYPE_FLUX2,
-    )
 
 
 def infer_occupancy(graph: Mapping[str, Json]) -> str:
@@ -1025,27 +1216,23 @@ def infer_occupancy(graph: Mapping[str, Json]) -> str:
     return ""
 
 
-def _first_loader_name(graph: Mapping[str, Json], node_type: str) -> str:
-    """First loader filename of ``node_type``.
+def _is_live_node(node: Mapping[str, Json]) -> bool:
+    """True when a node is in the queued prompt.
+
+    Muted and bypassed lanes drive no write and wear no caption, which is the
+    same rule the frontend applies, so both sides refuse the same applies.
 
     Args:
-        graph: Serialized Comfy graph.
-        node_type: UNETLoader, CLIPLoader, or VAELoader.
+        node: One graph node.
 
     Returns:
-        Filename, or empty string when none is present.
+        True when the node is unmuted and unbypassed.
     """
-    for node in cast("list[QualityGraphNode]", graph.get("nodes") or []):
-        if node.get("type") != node_type:
-            continue
-        values = cast("WidgetsValues", node.get("widgets_values") or [])
-        if values:
-            return str(values[0])
-    return ""
+    return node.get("mode") is None or node.get("mode") == 0
 
 
 def graph_has_wan14(graph: Mapping[str, Json]) -> bool:
-    """True when any UNETLoader is a Wan 14B file.
+    """True when any live UNETLoader is a Wan 14B file.
 
     Args:
         graph: Serialized Comfy graph.
@@ -1054,12 +1241,203 @@ def graph_has_wan14(graph: Mapping[str, Json]) -> bool:
         True when a 14B UNET is present.
     """
     for node in cast("list[QualityGraphNode]", graph.get("nodes") or []):
-        if node.get("type") != "UNETLoader":
+        if node.get("type") != "UNETLoader" or not _is_live_node(node):
             continue
         values = cast("WidgetsValues", node.get("widgets_values") or [])
         if values and is_wan_14b_unet(str(values[0])):
             return True
     return False
+
+
+def _overlay_instances(
+    graph: Mapping[str, Json],
+    family: str,
+) -> dict[str, list[_Target]]:
+    """Collect every live widget a rung may write, per overlay field.
+
+    Mirror of ``collectOverlayInstances`` in ``ez_quality.js``.
+
+    Args:
+        graph: Serialized Comfy graph.
+        family: The family whose overlay is being read.
+
+    Returns:
+        Field name to the live targets for that field.
+    """
+    out: dict[str, list[_Target]] = {field: [] for field in OVERLAY_FIELDS}
+    nodes = cast("list[QualityGraphNode]", graph.get("nodes") or [])
+    for index, node in enumerate(nodes):
+        if not _is_live_node(node) or is_trellis_guidance_free_stage(node, family):
+            continue
+        ntype = str(node.get("type") or "")
+        fields = _OVERLAY_FIELDS_BY_TYPE.get(ntype)
+        if not fields:
+            continue
+        values = node.get("widgets_values")
+        if not isinstance(values, list):
+            continue
+        for field in fields:
+            slot = _FIELD_SLOT_INDEX[field]
+            has_slot = len(values) > slot
+            out[field].append(
+                _Target(
+                    node_index=index,
+                    node_type=ntype,
+                    current=values[slot] if has_slot else None,
+                    has_slot=has_slot,
+                )
+            )
+    return out
+
+
+def _write_block_reason(
+    field: str,
+    target: _Target,
+    wanted: Json,
+    wan14: bool,
+    available: set[str],
+) -> str:
+    """Why one write cannot land, or empty when it can.
+
+    Mirror of ``writeBlockReason`` in ``ez_quality.js``, with the same wording,
+    so a CLI refusal and a browser caption name the same thing. An empty answer
+    means the queued prompt will really hold the rung value.
+
+    Args:
+        field: Overlay field being written.
+        target: The live widget that would receive it.
+        wanted: Value the rung asks for.
+        wan14: True when a live Wan 14B loader pins the graph.
+        available: Combo options for this field; empty means no presence check.
+
+    Returns:
+        Reason text, or empty when the write can land.
+    """
+    if wan14:
+        return "Wan 14B is not overlaid"
+    wanted_text = str(wanted)
+    if field == "unet_name" and is_banned_unet(wanted_text):
+        return f"{wanted_text} is not allowed"
+    current = str(target.current or "")
+    if not _is_swappable_target(field, current):
+        return f"cannot swap {current}"
+    if available and wanted_text not in available:
+        return f"{wanted_text} not installed"
+    if not target.has_slot:
+        return f"{FIELD_WIDGET_NAMES[field]} has no prompt slot"
+    return ""
+
+
+def plan_rung_writes(
+    graph: Mapping[str, Json],
+    rung: str,
+    *,
+    available_unets: Sequence[str] | None = None,
+    available_clips: Sequence[str] | None = None,
+    available_vaes: Sequence[str] | None = None,
+) -> RungPlan:
+    """Decide every write one rung asks of one graph, and what blocks it.
+
+    Mirror of ``planTierWrites`` in ``ez_quality.js``. A rung is write-or-refuse:
+    any write that cannot land refuses the whole apply, and nothing is ever
+    substituted for a weight that is not installed. ``standard`` writes nothing,
+    so it is never refused. The ``type`` widget of a CLIPLoader has no on-disk
+    catalog, so it carries no presence check.
+
+    Args:
+        graph: Serialized Comfy graph.
+        rung: Rung id, any case, or an accepted legacy id.
+        available_unets: UNET combo options; empty/None skips the presence check.
+        available_clips: CLIP combo options.
+        available_vaes: VAE combo options.
+
+    Returns:
+        The writes that would land, plus every reason the apply must be refused.
+    """
+    choice = normalize_quality(rung)
+    family = graph_family(graph)
+    if choice == QUALITY_STANDARD:
+        return RungPlan(family=family, rung=choice, writes=(), reasons=())
+    if not family_owned_fields(family):
+        return RungPlan(
+            family=family,
+            rung=choice,
+            writes=(),
+            reasons=(f"{family}{_NO_RUNGS_REASON}",),
+        )
+    row = _rung_row(family, choice)
+    targets = _overlay_instances(graph, family)
+    wan14 = graph_has_wan14(graph)
+    catalogs = {
+        "unet_name": _available(available_unets),
+        "clip_name": _available(available_clips),
+        "vae_name": _available(available_vaes),
+    }
+    writes: list[RungWrite] = []
+    reasons: list[str] = []
+    for field in OVERLAY_FIELDS:
+        wanted = getattr(row, field)
+        if wanted is None:
+            continue
+        entries = targets[field]
+        if not entries:
+            reason = f"{FIELD_WIDGET_NAMES[field]} widget not on graph"
+            if reason not in reasons:
+                reasons.append(reason)
+            continue
+        for target in entries:
+            if _same_value(target.current, wanted):
+                continue
+            reason = _write_block_reason(
+                field, target, wanted, wan14, catalogs.get(field, set())
+            )
+            if reason:
+                if reason not in reasons:
+                    reasons.append(reason)
+                continue
+            writes.append(
+                RungWrite(
+                    node_index=target.node_index,
+                    node_type=target.node_type,
+                    field=field,
+                    value=wanted,
+                )
+            )
+    return RungPlan(
+        family=family, rung=choice, writes=tuple(writes), reasons=tuple(reasons)
+    )
+
+
+def rung_refusal_reasons(
+    graph: Mapping[str, Json],
+    rung: str,
+    *,
+    available_unets: Sequence[str] | None = None,
+    available_clips: Sequence[str] | None = None,
+    available_vaes: Sequence[str] | None = None,
+) -> tuple[str, ...]:
+    """Return every reason one apply must be refused, in the caption's words.
+
+    The whole list, never a truncated pair: a CLI or a caption that hides the
+    second reason is how a graph ends up labelled with a rung it never had.
+
+    Args:
+        graph: Serialized Comfy graph.
+        rung: Rung id, any case, or an accepted legacy id.
+        available_unets: UNET combo options; empty/None skips the presence check.
+        available_clips: CLIP combo options.
+        available_vaes: VAE combo options.
+
+    Returns:
+        Reason strings, empty when the apply would land.
+    """
+    return plan_rung_writes(
+        graph,
+        rung,
+        available_unets=available_unets,
+        available_clips=available_clips,
+        available_vaes=available_vaes,
+    ).reasons
 
 
 def apply_to_graph(
@@ -1070,228 +1448,42 @@ def apply_to_graph(
     available_clips: Sequence[str] | None = None,
     available_vaes: Sequence[str] | None = None,
 ) -> JsonObject:
-    """Mutate KSampler / loader widgets_values in place.
+    """Write one rung's whole table into KSampler / loader widgets, or refuse it.
 
-    Does not touch latent size or frames. Lab and custom are no-ops.
+    Write-or-refuse, exactly like ``applyQuality`` in ``ez_quality.js``: if any
+    write in the row cannot land, nothing at all is written and no weight is
+    substituted for a file that is missing. ``rung_refusal_reasons`` names why.
+    Does not touch latent size, frames, or any ``EZImageFormat`` widget.
 
     Args:
         graph: Serialized Comfy graph (mutated).
-        quality: quality id.
+        quality: Rung id, or an accepted legacy id (it normalizes first).
         available_unets: Combo options for UNET swaps.
         available_clips: Combo options for CLIP swaps.
         available_vaes: Combo options for VAE swaps.
 
     Returns:
-        The same graph dict.
+        The same graph dict, unchanged when the apply was refused.
     """
-    choice = normalize_quality(quality)
-    if choice in _FREEZE_QUALITIES or graph_has_wan14(graph):
-        return graph
-    occupancy = infer_occupancy(graph)
-    unet_name = _first_loader_name(graph, "UNETLoader")
-    clip_name = _first_loader_name(graph, "CLIPLoader")
-    vae_name = _first_loader_name(graph, "VAELoader")
-    overlay = resolve_overlay(
-        occupancy=occupancy,
-        quality=choice,
-        authored_steps=0,
-        authored_cfg=1.0,
-        unet_name=unet_name,
+    plan = plan_rung_writes(
+        graph,
+        quality,
         available_unets=available_unets,
-        clip_name=clip_name,
         available_clips=available_clips,
-        vae_name=vae_name,
         available_vaes=available_vaes,
     )
-    for node in cast("list[QualityGraphNode]", graph.get("nodes") or []):
-        ntype = node.get("type")
-        values = node.get("widgets_values")
-        if not isinstance(values, list):
-            continue
-        if ntype == "KSampler":
-            if is_trellis_guidance_free_stage(node, occupancy):
-                continue
-            authored_steps = (
-                int(cast("int", values[KSAMPLER_STEPS_INDEX]))
-                if len(values) > KSAMPLER_STEPS_INDEX
-                else 0
-            )
-            authored_cfg = (
-                float(cast("float", values[KSAMPLER_CFG_INDEX]))
-                if len(values) > KSAMPLER_CFG_INDEX
-                else 1.0
-            )
-            local = resolve_overlay(
-                occupancy=occupancy,
-                quality=choice,
-                authored_steps=authored_steps,
-                authored_cfg=authored_cfg,
-                unet_name=unet_name,
-                available_unets=available_unets,
-                clip_name=clip_name,
-                available_clips=available_clips,
-                vae_name=vae_name,
-                available_vaes=available_vaes,
-            )
-            if local.steps is not None and len(values) > KSAMPLER_STEPS_INDEX:
-                values[KSAMPLER_STEPS_INDEX] = local.steps
-            if local.cfg is not None and len(values) > KSAMPLER_CFG_INDEX:
-                values[KSAMPLER_CFG_INDEX] = local.cfg
-        elif ntype == "UNETLoader":
-            if overlay.unet_name is None or len(values) <= UNET_NAME_INDEX:
-                continue
-            if is_banned_unet(overlay.unet_name):
-                continue
-            current = str(values[UNET_NAME_INDEX])
-            if current and not (
-                is_klein_4b_unet(current)
-                or is_klein_9b_unet(current)
-                or is_flux2_dev_unet(current)
-                or is_klein3_unet(current)
-                or is_qwen_image_unet(current)
-            ):
-                continue
-            values[UNET_NAME_INDEX] = overlay.unet_name
-        elif ntype == "CLIPLoader":
-            if overlay.clip_name is None or len(values) <= CLIP_NAME_INDEX:
-                continue
-            current = str(values[CLIP_NAME_INDEX])
-            if current and not (
-                is_flux2_clip(current)
-                or is_klein3_clip(current)
-                or is_qwen_image_clip(current)
-            ):
-                continue
-            values[CLIP_NAME_INDEX] = overlay.clip_name
-            if overlay.clip_type is not None and len(values) > 1:
-                values[1] = overlay.clip_type
-        elif ntype == "VAELoader":
-            if overlay.vae_name is None or len(values) <= VAE_NAME_INDEX:
-                continue
-            current = str(values[VAE_NAME_INDEX])
-            if current and not (is_flux2_vae(current) or is_qwen_image_vae(current)):
-                continue
-            values[VAE_NAME_INDEX] = overlay.vae_name
+    if plan.refused:
+        return graph
+    nodes = cast("list[QualityGraphNode]", graph.get("nodes") or [])
+    for write in plan.writes:
+        values = cast("WidgetsValues", nodes[write.node_index]["widgets_values"])
+        values[_FIELD_SLOT_INDEX[write.field]] = write.value
     return graph
 
 
 # ---------------------------------------------------------------------------
-# Tier table - the one definition the frontend is generated from.
+# Rung table - the one definition the frontend is generated from.
 # ---------------------------------------------------------------------------
-
-# Transformer each family authors, so a table row is evaluated against the
-# loaders that family really pins. resolve_overlay branches on the pinned
-# weights, so the family fixture is what makes a row mean that family.
-WAN_5B_UNET = "wan2.2_ti2v_5B_fp16.safetensors"
-LTX_UNET = "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors"
-TRELLIS_UNET = "trellis_2_int8_convrot.safetensors"
-
-# Graphs that pin FLUX 3 Image Klein still stamp occupancy "klein", so the
-# table needs a family of its own to record their profiles separately.
-QUALITY_FAMILY_KLEIN3 = "klein3"
-# Opt-in Qwen-Image 2.1 stills stamp occupancy "klein" too, and are opt-in (not
-# Apache), so they get their own family rather than riding the Klein ladder.
-QUALITY_FAMILY_QWEN = "qwen"
-
-# resolve_overlay reports only the widgets it would actually change, so the
-# family fixture must classify as the family while differing from every value
-# its tiers request; otherwise a request would be recorded as "no change".
-# These names are branch fixtures only and never appear in a graph.
-_KLEIN_TABLE_UNET = KLEIN_9B_NVFP4
-_KLEIN_TABLE_CLIP = CLIP_MISTRAL
-_KLEIN_TABLE_VAE = VAE_FULL
-_KLEIN3_TABLE_UNET = "flux3-image-klein-distilled-int8-convrot.safetensors"
-_KLEIN3_TABLE_CLIP = "qwen3vl_4b_table_sentinel.safetensors"
-_KLEIN3_TABLE_VAE = VAE_SMALL
-_QWEN_TABLE_UNET = "qwen_image_2.1_base_int8_convrot.safetensors"
-_QWEN_TABLE_CLIP = "qwen3vl_8b_table_sentinel.safetensors"
-_QWEN_TABLE_VAE = VAE_FULL
-
-QUALITY_FAMILIES: tuple[str, ...] = (
-    "klein",
-    QUALITY_FAMILY_KLEIN3,
-    QUALITY_FAMILY_QWEN,
-    "wan",
-    "ltx",
-    "film",
-    "audio",
-    "trellis",
-    "none",
-    "llm",
-)
-
-_FAMILY_PINNED: dict[str, dict[str, str]] = {
-    "klein": {
-        "unet": _KLEIN_TABLE_UNET,
-        "clip": _KLEIN_TABLE_CLIP,
-        "vae": _KLEIN_TABLE_VAE,
-    },
-    QUALITY_FAMILY_KLEIN3: {
-        "unet": _KLEIN3_TABLE_UNET,
-        "clip": _KLEIN3_TABLE_CLIP,
-        "vae": _KLEIN3_TABLE_VAE,
-    },
-    QUALITY_FAMILY_QWEN: {
-        "unet": _QWEN_TABLE_UNET,
-        "clip": _QWEN_TABLE_CLIP,
-        "vae": _QWEN_TABLE_VAE,
-    },
-    "wan": {"unet": WAN_5B_UNET, "clip": "", "vae": ""},
-    "ltx": {"unet": LTX_UNET, "clip": "", "vae": ""},
-    "film": {"unet": LTX_UNET, "clip": "", "vae": ""},
-    "audio": {"unet": "", "clip": "", "vae": ""},
-    "trellis": {"unet": TRELLIS_UNET, "clip": "", "vae": ""},
-    "none": {"unet": "", "clip": "", "vae": ""},
-    "llm": {"unet": "", "clip": "", "vae": ""},
-}
-
-# The six widgets the overlay is allowed to own, in serialization order.
-OVERLAY_FIELDS: tuple[str, ...] = (
-    "steps",
-    "cfg",
-    "unet_name",
-    "clip_name",
-    "vae_name",
-    "clip_type",
-)
-
-# Combo options that mean "everything on disk", so a derived row records what a
-# tier asks for before availability filters it. apply_to_graph filters again.
-_ALL_CATALOG_WEIGHTS: frozenset[str] = frozenset(
-    {
-        KLEIN_DISTILLED,
-        KLEIN_NVFP4,
-        KLEIN_BASE,
-        KLEIN_9B,
-        KLEIN_9B_BASE,
-        KLEIN_9B_NVFP4,
-        FLUX2_DEV,
-        KLEIN3_DISTILLED,
-        KLEIN3_BASE,
-        KLEIN3_NVFP4,
-        CLIP_4B,
-        CLIP_8B,
-        CLIP_MISTRAL,
-        KLEIN3_TE,
-        VAE_FULL,
-        VAE_SMALL,
-        QWEN_IMAGE_INT8,
-        QWEN_IMAGE_TURBO_INT8,
-        QWEN_IMAGE_NVFP4,
-        QWEN_IMAGE_TURBO_NVFP4,
-        QWEN_TE,
-        QWEN_TE_NVFP4,
-        QWEN_TE_TURBO_NVFP4,
-        QWEN_VAE,
-        WAN_5B_UNET,
-        LTX_UNET,
-        TRELLIS_UNET,
-    }
-)
-
-NAMED_QUALITY_CHOICES: tuple[str, ...] = tuple(
-    choice for choice in QUALITY_CHOICES if choice not in _FREEZE_QUALITIES
-)
 
 
 def _profile(
@@ -1311,7 +1503,7 @@ def _profile(
         available_unets: UNET combo options, None for the whole catalog.
         available_clips: CLIP combo options.
         available_vaes: VAE combo options.
-        authored_steps: KSampler steps, used by the Klein high floor.
+        authored_steps: KSampler steps, carried through to resolve_overlay.
 
     Returns:
         Overlay of requested values; None leaves that widget authored.
@@ -1321,11 +1513,7 @@ def _profile(
         return QualityOverlay()
     everything = sorted(_ALL_CATALOG_WEIGHTS)
     return resolve_overlay(
-        occupancy=(
-            "klein"
-            if family in (QUALITY_FAMILY_KLEIN3, QUALITY_FAMILY_QWEN)
-            else family
-        ),
+        occupancy=family,
         quality=quality,
         authored_steps=authored_steps,
         authored_cfg=1.0,
@@ -1347,7 +1535,7 @@ def tier_profile(
     available_vaes: Sequence[str] | None = None,
     authored_steps: int = 0,
 ) -> QualityOverlay:
-    """Return what one tier asks one family to change.
+    """Return what one rung asks one family to change.
 
     Args:
         family: Occupancy id, QUALITY_FAMILY_KLEIN3, or QUALITY_FAMILY_QWEN.
@@ -1355,7 +1543,7 @@ def tier_profile(
         available_unets: UNET combo options, None for the whole catalog.
         available_clips: CLIP combo options.
         available_vaes: VAE combo options.
-        authored_steps: KSampler steps for the Klein high floor.
+        authored_steps: KSampler steps, carried through to resolve_overlay.
 
     Returns:
         Overlay of requested values; None leaves that widget authored.
@@ -1371,10 +1559,11 @@ def tier_profile(
 
 
 def family_owned_fields(family: str) -> tuple[str, ...]:
-    """Return the overlay fields any named tier sets for one family.
+    """Return the overlay fields this family's rungs write.
 
-    Fields no tier in the family ever sets stay authored, so a user edit to
-    one of them does not leave the pre-configured level.
+    Fields no rung in the family ever sets stay authored, so an edit to one of
+    them never leaves the rung's level. ``standard`` writes nothing, so the
+    answer comes from ``draft`` and ``final`` alone.
 
     Args:
         family: Occupancy id, QUALITY_FAMILY_KLEIN3, or QUALITY_FAMILY_QWEN.
@@ -1392,113 +1581,48 @@ def family_owned_fields(family: str) -> tuple[str, ...]:
 
 
 def tiers_for_family(family: str) -> tuple[str, ...]:
-    """Return the named tiers one family can actually honor.
+    """Return the rungs one family can actually carry, in combo order.
 
-    A tier belongs to a family when its profile writes at least one overlay
-    field for that family. A tier whose overlay is all-None changes no widget,
-    yet the combo still stamps it as applied, so those tiers stay out of the
-    family's list and the graph keeps only ``lab`` and ``custom``. That is what
-    keeps a Klein graph from offering the FLUX 3 and Qwen-Image ladders and a
-    Wan graph from offering a weight swap it has no loader for.
+    ``standard`` belongs to every family that has a combo at all, because it
+    writes nothing and therefore always lands. A ``draft`` or ``final`` belongs
+    to the family only when its row writes at least one field: a rung whose
+    overlay is all-None changes no widget, yet the combo still stamps it as
+    applied, so those stay out. That is what keeps a Klein graph from offering
+    the FLUX 3 and Qwen-Image rows and a Wan graph from offering a weight swap
+    it has no loader for.
 
     Args:
         family: Occupancy id, QUALITY_FAMILY_KLEIN3, or QUALITY_FAMILY_QWEN.
 
     Returns:
-        Tier ids in QUALITY_CHOICES order; empty for a no-op family.
+        Rung ids in QUALITY_CHOICES order; empty for a no-op family.
     """
+    if not family_owned_fields(family):
+        return ()
     honored: list[str] = []
-    for choice in NAMED_QUALITY_CHOICES:
+    for choice in QUALITY_CHOICES:
+        if choice == QUALITY_STANDARD:
+            honored.append(choice)
+            continue
         profile = tier_profile(family, choice)
         if any(getattr(profile, field) is not None for field in OVERLAY_FIELDS):
             honored.append(choice)
     return tuple(honored)
 
 
-def _same_value(left: Json, right: Json) -> bool:
-    """Compare two widget values the way the combo and KSampler report them.
-
-    Args:
-        left: Observed widget value.
-        right: Requested overlay value.
-
-    Returns:
-        True when the two hold the same setting.
-    """
-    if left is None or right is None:
-        return left is None and right is None
-    if isinstance(left, (int, float)) or isinstance(right, (int, float)):
-        try:
-            return float(left) == float(right)  # type: ignore[arg-type]
-        except (TypeError, ValueError):
-            return False
-    return str(left) == str(right)
-
-
-def match_tier(
-    observed: JsonMap,
-    *,
-    family: str,
-    authored: JsonMap | None = None,
-    available_unets: Sequence[str] | None = None,
-    available_clips: Sequence[str] | None = None,
-    available_vaes: Sequence[str] | None = None,
-    authored_steps: int = 0,
-) -> str:
-    """Return the quality id that matches the widgets a graph now holds.
-
-    Named tiers win over ``lab`` because the tier names what Queue would send.
-    Only the fields the family owns are compared, so an edit outside the
-    overlay keeps the level. Unowned fields stay whatever the user left them.
-
-    Args:
-        observed: Current value per overlay field name.
-        family: Occupancy id, QUALITY_FAMILY_KLEIN3, or QUALITY_FAMILY_QWEN.
-        authored: Load-time values per overlay field name, when known.
-        available_unets: UNET combo options.
-        available_clips: CLIP combo options.
-        available_vaes: VAE combo options.
-        authored_steps: KSampler steps for the Klein high floor.
-
-    Returns:
-        A named quality, QUALITY_LAB, or QUALITY_CUSTOM.
-    """
-    owned = family_owned_fields(family)
-    if not owned:
-        return QUALITY_LAB
-    for choice in NAMED_QUALITY_CHOICES:
-        profile = _profile(
-            family,
-            choice,
-            available_unets=available_unets,
-            available_clips=available_clips,
-            available_vaes=available_vaes,
-            authored_steps=authored_steps,
-        )
-        if all(
-            _same_value(observed.get(field), getattr(profile, field))
-            for field in owned
-        ):
-            return choice
-    if authored is not None and all(
-        _same_value(observed.get(field), authored.get(field)) for field in owned
-    ):
-        return QUALITY_LAB
-    return QUALITY_CUSTOM
-
-
 def tier_label(family: str, quality: str) -> str:
-    """Describe one tier the way the combo should, weights before steps.
+    """Describe one rung the way the combo should, weights before steps.
 
-    Klein tiers swap weights rather than climbing a step ladder, so the label
-    names the transformer and the sampler settings it pins.
+    Klein rungs swap weights rather than climbing a step ladder, so the label
+    names the transformer and the sampler settings it pins. ``standard`` names
+    nothing, because it writes nothing.
 
     Args:
         family: Occupancy id, QUALITY_FAMILY_KLEIN3, or QUALITY_FAMILY_QWEN.
         quality: Combo value.
 
     Returns:
-        Caption text, empty for a tier that changes nothing.
+        Caption text, empty for a rung that changes nothing.
     """
     profile = tier_profile(family, quality)
     parts: list[str] = []
@@ -1512,35 +1636,31 @@ def tier_label(family: str, quality: str) -> str:
 
 
 def tier_is_honored(family: str, quality: str) -> bool:
-    """True when one family can actually carry one tier.
+    """True when one family can actually carry one rung.
 
-    ``custom`` and ``lab`` always pass: one leaves the graph alone and the other
-    restores what it shipped with. Any other tier must have at least one field
-    the family writes, or applying it changes nothing and the operator would be
-    told a level was reached that the graph never had.
+    A rung the family does not list would write no widget and still stamp the
+    row, so the operator would be told a level was reached that the graph never
+    had. Refusing it is the whole contract: there is no fallback rung.
 
     Args:
         family: Occupancy id, such as ``wan``.
-        quality: Raw tier as typed, any case.
+        quality: Raw rung as typed, any case, or an accepted legacy id.
 
     Returns:
-        True when applying the tier writes something, or it is a freeze tier.
+        True when applying the rung writes something or lands by writing nothing.
     """
-    choice = normalize_quality(quality)
-    if choice in _FREEZE_QUALITIES:
-        return True
-    return choice in tiers_for_family(family)
+    return normalize_quality(quality) in tiers_for_family(family)
 
 
 def export_table() -> dict[str, Json]:
-    """Return the full tier table in JSON-safe form.
+    """Return the full rung table in JSON-safe form.
 
     Args:
         None.
 
     Returns:
-        Mapping with the tier table, owned fields, per-family tier lists,
-        labels, and tier order.
+        Mapping with the rung table, owned fields, per-family rung lists,
+        labels, the caption's license and stack words, and the rung order.
     """
     table: JsonObject = {}
     owned: JsonObject = {}
@@ -1561,6 +1681,7 @@ def export_table() -> dict[str, Json]:
         tiers[family] = list(tiers_for_family(family))
     payload: JsonObject = {
         "choices": list(QUALITY_CHOICES),
+        "default": QUALITY_DEFAULT,
         "named": list(NAMED_QUALITY_CHOICES),
         "families": list(QUALITY_FAMILIES),
         "fields": list(OVERLAY_FIELDS),
@@ -1568,7 +1689,11 @@ def export_table() -> dict[str, Json]:
         "owned": owned,
         "labels": labels,
         "tiers": tiers,
-        "custom": QUALITY_CUSTOM,
-        "lab": QUALITY_LAB,
+        "licenses": dict(LICENSE_LABEL),
+        "stacks": dict(STACK_LABEL),
+        "unet_stacks": dict(UNET_STACK_LABEL),
+        "rung_labels": dict(RUNG_LABEL),
+        "field_names": dict(FIELD_WIDGET_NAMES),
+        "edited_prefix": EDITED_PREFIX,
     }
     return payload

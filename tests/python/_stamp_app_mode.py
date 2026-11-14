@@ -253,7 +253,7 @@ def _graph_hides_sample(graph: Mapping[str, Any]) -> bool:
 
 
 # App Mode widget order: required still first when the graph needs a
-# LoadImage, then Quality, then the thing the user types, then look / Run knobs.
+# LoadImage, then Detail, then the thing the user types, then look / Run knobs.
 # EZDubIngest: ``upload`` is an App button label only. Serialized node
 # widgets_values stay source, have_rights, job_slug, source_url (4-wide).
 WIDGET_ORDER = (
@@ -378,7 +378,7 @@ WIDGET_HEIGHTS = {
     "run_summary": 160,
 }
 GENERIC_LABELS = {
-    "quality": "Quality",
+    "quality": "Detail",
     "sample": "Sample prompt",
     "prompt": "Prompt",
     "other_characters": "Other characters",
@@ -475,9 +475,10 @@ GENERIC_LABELS = {
 }
 DEFAULT_WIDGET_DESCRIPTIONS = {
     "quality": (
-        "Lab default, Draft (faster), High (slower), or Free Commercial Use "
-        "(<$10M: Klein 4B + LTX-2.5, never Non-Commercial stills). "
-        "Family-specific - not --tier."
+        "draft is a quick look. standard is what this App ships tuned for. "
+        "final is the best this App's own stack can do. A rung never changes "
+        "size and never leaves this App's model stack. The caption names the "
+        "steps, CFG, weights, and license Queue actually sends."
     ),
     "sample": "Pick a lab recipe, or Custom to type your own.",
     "prompt": "What to generate. Rewrite prompt expands this for the model.",
@@ -2134,7 +2135,7 @@ def _collect_raw_inputs(
 
 
 def _quality_input_specs(graph: dict, spec: Mapping[str, Any]) -> list[InputSpec]:
-    """App Mode Quality combo, when EZQuality is on the graph."""
+    """App Mode Detail combo, when EZQuality is on the graph."""
     specs: list[InputSpec] = []
     for node in graph.get("nodes") or []:
         if node.get("type") != "EZQuality":

@@ -21,25 +21,26 @@ from _lab_layout import (
 from _lab_paths import lab_graph_paths
 from ez_quality.presets import (
     OVERLAY_NODE_TYPES,
-    QUALITY_LAB,
+    QUALITY_STANDARD,
     infer_occupancy,
     is_trellis_guidance_free_stage,
+    normalize_quality,
     tiers_for_family,
 )
 
 QUALITY_TYPE = "EZQuality"
-QUALITY_TITLE = "Quality"
+QUALITY_TITLE = "Detail"
 QUALITY_WIDGET = "quality"
-QUALITY_DEFAULT = QUALITY_LAB
+QUALITY_DEFAULT = QUALITY_STANDARD
 QUALITY_SIZE = (320.0, 82.0)
 QUALITY_PAD = 20.0
 QUALITY_LABEL = {
-    "label": "Quality",
+    "label": "Detail",
     "description": (
-        "custom freezes the last overlay. lab restores graph defaults. "
-        "Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). "
-        "ultra/max may select opt-in Non-Commercial weights when on disk. "
-        "Family-specific - not --tier."
+        "draft is a quick look. standard is what this App ships tuned for. "
+        "final is the best this App's own stack can do. A rung never changes "
+        "size and never leaves this App's model stack. The caption names the "
+        "steps, CFG, weights, and license Queue actually sends."
     ),
 }
 
@@ -167,13 +168,13 @@ def _quality_insert_index(inputs: list[Any]) -> int:
     """Return the index after any leading LoadImage App widgets.
 
     Required still pickers stay first so Queue cannot hide a missing file.
-    Quality follows those pickers (or index 0 when the graph has none).
+    The Detail row follows those pickers (or index 0 when the graph has none).
 
     Args:
         inputs: ``linearData.inputs`` rows.
 
     Returns:
-        Insertion index for the Quality widget.
+        Insertion index for the Detail widget.
     """
     idx = 0
     for entry in inputs:
@@ -228,18 +229,18 @@ def find_quality_node(graph: dict[str, Any]) -> dict[str, Any] | None:
 
 
 def family_honors_tiers(graph: dict[str, Any]) -> bool:
-    """True when some tier would actually change this graph.
+    """True when some rung would actually change this graph.
 
     Two things have to hold. The family inferred from the graph's loaders has
-    a tier ladder of its own, and the graph carries at least one node type the
+    a rung ladder of its own, and the graph carries at least one node type the
     overlay can write. An audio graph with no KSampler and no loader passes the
-    first test and fails the second, and every tier on it queues unchanged.
+    first test and fails the second, and every rung on it queues unchanged.
 
     Args:
         graph: Serialized Comfy graph.
 
     Returns:
-        False when every tier would be a no-op, so a combo belongs nowhere.
+        False when every rung would be a no-op, so the row belongs nowhere.
     """
     if not tiers_for_family(infer_occupancy(graph)):
         return False
@@ -262,7 +263,7 @@ def strip_quality_node(graph: dict[str, Any]) -> bool:
         graph: Serialized Comfy graph (mutated).
 
     Returns:
-        True when the graph held a Quality node to remove.
+        True when the graph held a Detail node to remove.
     """
     nodes = graph.get("nodes") or []
     kept = [node for node in nodes if node.get("type") != QUALITY_TYPE]
@@ -290,14 +291,42 @@ def strip_quality_node(graph: dict[str, Any]) -> bool:
     return True
 
 
+def _relabel_quality_node(node: dict[str, Any]) -> None:
+    """Bring an existing Detail node onto the current row title and rung.
+
+    Builders stamp graphs that predate the ladder, so a shipped JSON can still
+    carry the retired row title and a retired tier id. The recorded value goes
+    through ``normalize_quality`` so an accepted legacy tier lands on its rung
+    and a value nothing recognizes falls back to the default rung.
+
+    Args:
+        node: The EZQuality node dict (mutated in place).
+
+    Returns:
+        The rung the node now records.
+    """
+    node["title"] = QUALITY_TITLE
+    widgets = node.get("widgets_values")
+    recorded = widgets[0] if isinstance(widgets, list) and widgets else ""
+    rung = normalize_quality(str(recorded)) if recorded else QUALITY_DEFAULT
+    node["widgets_values"] = [rung]
+    named = node.get("widgets_values_named")
+    if isinstance(named, dict):
+        named[QUALITY_WIDGET] = rung
+    return rung
+
+
 def ensure_quality_node(graph: dict[str, Any]) -> dict[str, Any]:
     """Add EZQuality when missing and stamp extra.lab_quality + linearData.
 
-    Idempotent. Does not move an existing Quality node. Does not apply
-    Draft/High overlays (shipped JSON stays Lab). ``linearData`` keeps
-    required still pickers first, then Quality.
+    Idempotent. Does not move an existing Detail node, but does relabel it and
+    pull a retired tier id onto its rung, so re-stamping migrates shipped JSON
+    onto the ladder. No rung is ever *applied* here: standard writes nothing,
+    and a graph authored at another rung keeps that rung. ``linearData`` keeps
+    required still pickers first, then Detail. ``extra.lab_quality`` always
+    agrees with the node's own recorded rung.
 
-    A graph whose family has no tier to write gets the node removed instead:
+    A graph whose family has no rung to write gets the node removed instead:
     see ``strip_quality_node``.
 
     Args:
@@ -310,7 +339,6 @@ def ensure_quality_node(graph: dict[str, Any]) -> dict[str, Any]:
         strip_quality_node(graph)
         return graph
     extra = graph.setdefault("extra", {})
-    extra["lab_quality"] = {"default": QUALITY_DEFAULT}
     existing = find_quality_node(graph)
     if existing is None:
         node_id = _next_node_id(graph)
@@ -318,6 +346,8 @@ def ensure_quality_node(graph: dict[str, Any]) -> dict[str, Any]:
         graph.setdefault("nodes", []).append(_quality_node(node_id, pos))
         graph["last_node_id"] = node_id
         existing = find_quality_node(graph)
+    rung = _relabel_quality_node(existing) if existing is not None else QUALITY_DEFAULT
+    extra["lab_quality"] = {"default": rung}
     if existing is not None:
         _prepend_linear(graph, int(existing["id"]))
     return graph

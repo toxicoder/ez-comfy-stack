@@ -16,40 +16,13 @@ if TYPE_CHECKING:
 
 from .presets import (
     CLIP_4B,
-    CLIP_8B,
-    CLIP_MISTRAL,
-    FLUX2_DEV,
-    FLUX3_QUALITY_CHOICES,
-    KLEIN3_BASE,
-    KLEIN3_DISTILLED,
-    KLEIN3_NVFP4,
-    KLEIN3_TE,
-    KLEIN_9B,
-    KLEIN_9B_BASE,
-    KLEIN_9B_NVFP4,
     KLEIN_DISTILLED,
-    QUALITY_FLUX3_FAST,
-    QUALITY_FLUX3_NVFP4,
-    QUALITY_FLUX3_QUALITY,
-    QUALITY_FREE_COMMERCIAL,
-    QUALITY_LAB,
-    QUALITY_MAX,
-    QUALITY_QWEN_IMAGE,
-    QUALITY_QWEN_IMAGE_NVFP4,
-    QUALITY_QWEN_IMAGE_TURBO,
-    QUALITY_QWEN_IMAGE_TURBO_NVFP4,
-    QUALITY_ULTRA,
-    QWEN_IMAGE_INT8,
-    QWEN_IMAGE_NVFP4,
-    QWEN_IMAGE_TURBO_INT8,
-    QWEN_IMAGE_TURBO_NVFP4,
-    QWEN_QUALITY_CHOICES,
-    QWEN_TE,
-    QWEN_TE_NVFP4,
-    QWEN_TE_TURBO_NVFP4,
-    QWEN_VAE,
+    QUALITY_DEFAULT,
+    QUALITY_DRAFT,
+    QUALITY_FINAL,
     VAE_FULL,
     VAE_SMALL,
+    export_table,
     infer_occupancy,
     is_flux2_dev_unet,
     is_klein3_clip,
@@ -213,7 +186,7 @@ class CheckHints:
 
     lab_rel: str = ""
     occupancy: str = ""
-    quality: str = QUALITY_LAB
+    quality: str = QUALITY_DEFAULT
     types: tuple[str, ...] = ()
     unets: tuple[str, ...] = ()
     clips: tuple[str, ...] = ()
@@ -413,7 +386,7 @@ def hints_from_graph(graph: Mapping[str, Json]) -> CheckHints:
         {**dict(graph), "nodes": cast("Json", safe_nodes)}
     )
     lab_rel = str(extra.get("lab_rel") or graph.get("id") or "").strip()
-    quality = QUALITY_LAB
+    quality = QUALITY_DEFAULT
     types: list[str] = []
     unets: list[str] = []
     clips: list[str] = []
@@ -571,6 +544,96 @@ def _need(pack: str, cmd: str, *files: FileSpec, satisfy: str = "all") -> Need:
     return Need(pack=pack, cmd=cmd, files=files, satisfy=satisfy)
 
 
+# Family ids the ladder addresses by name: a graph whose loaders pin these
+# weights gets that family's rung rows, never the occupancy family's.
+FAMILY_KLEIN3 = "klein3"
+FAMILY_QWEN = "qwen"
+
+# Rung row field -> (models layout, pack name kind).
+_RUNG_FILE_FIELDS: tuple[tuple[str, str, str], ...] = (
+    ("unet_name", SUB_UNET, "unet"),
+    ("clip_name", SUB_CLIP, "te"),
+    ("vae_name", SUB_VAE, "vae"),
+)
+
+
+def rung_family(hints: CheckHints) -> str:
+    """Return the family whose rung table the ladder writes on this graph.
+
+    The occupancy alone cannot answer it: a FLUX 3 Image Klein or Qwen-Image
+    graph reports the klein occupancy, and reading the rung row off that family
+    would ask the disk for Klein 4B weights it never selects.
+
+    Args:
+        hints: Compact graph snapshot.
+
+    Returns:
+        Family id, or the lowercase occupancy for a plain family.
+    """
+    for name in hints.unets:
+        if is_klein3_unet(name):
+            return FAMILY_KLEIN3
+        if is_qwen_image_unet(name):
+            return FAMILY_QWEN
+    for name in hints.clips:
+        if is_klein3_clip(name):
+            return FAMILY_KLEIN3
+        if is_qwen_image_clip(name):
+            return FAMILY_QWEN
+    return (hints.occupancy or "").strip().lower()
+
+
+def rung_row(family: str, rung: str) -> dict[str, Json]:
+    """Return the requested value per overlay field for one rung of one family.
+
+    The row is read from :func:`~.presets.export_table`, the same payload the
+    frontend table is generated from, so the disk check asks for exactly the
+    files the combo writes and no others.
+
+    Args:
+        family: Family id, as :func:`rung_family` returns it.
+        rung: Rung id, as ``normalize_quality`` returns it.
+
+    Returns:
+        Field name to requested value; empty for an unknown family or rung.
+    """
+    table = export_table().get("table")
+    if not isinstance(table, Mapping):
+        return {}
+    rows = table.get(family)
+    if not isinstance(rows, Mapping):
+        return {}
+    row = rows.get(rung)
+    return dict(row) if isinstance(row, Mapping) else {}
+
+
+def rung_needs(family: str, rung: str) -> list[Need]:
+    """Return the packs one rung's own row requires on one family's graph.
+
+    standard writes nothing, so it requires nothing beyond what the App already
+    ships. draft and final require every file their own row pins, each with the
+    command that stages that file.
+
+    Args:
+        family: Family id, as :func:`rung_family` returns it.
+        rung: Rung id, as ``normalize_quality`` returns it.
+
+    Returns:
+        Need rows (empty for standard or an all-null row).
+    """
+    if rung not in (QUALITY_DRAFT, QUALITY_FINAL):
+        return []
+    row = rung_row(family, rung)
+    needs: list[Need] = []
+    for field, subdir, kind in _RUNG_FILE_FIELDS:
+        value = row.get(field)
+        if not isinstance(value, str) or not value:
+            continue
+        pack = f"{family}-{rung}-{kind}"
+        needs.append(_need(pack, command_for_filename(value), FileSpec(subdir, value)))
+    return needs
+
+
 def requirements_for(hints: CheckHints) -> list[Need]:
     """Return packs this graph + Quality must have on disk.
 
@@ -656,127 +719,12 @@ def requirements_for(hints: CheckHints) -> list[Need]:
             _need("llm-qwen3-4b", CMD_DOWNLOAD_MODELS, FileSpec(SUB_LLM, LLM_GGUF))
         )
 
-    if occ == "klein" and quality == QUALITY_ULTRA:
-        needs.append(
-            _need(
-                "klein-9b",
-                CMD_IMAGE_9B,
-                FileSpec(SUB_UNET, KLEIN_9B),
-                FileSpec(SUB_UNET, KLEIN_9B_NVFP4),
-                satisfy="any",
-            )
-        )
-        needs.append(
-            _need("klein-9b-te", CMD_IMAGE_9B, FileSpec(SUB_CLIP, CLIP_8B))
-        )
-    if occ == "klein" and quality == QUALITY_MAX:
-        needs.append(
-            _need(
-                "klein-max-unet",
-                CMD_IMAGE_9B_BASE,
-                FileSpec(SUB_UNET, KLEIN_9B_BASE),
-                FileSpec(SUB_UNET, FLUX2_DEV),
-                satisfy="any",
-            )
-        )
-
-    flux3_pinned = any(is_klein3_unet(name) for name in hints.unets) or any(
-        is_klein3_clip(name) for name in hints.clips
-    )
-    if quality in FLUX3_QUALITY_CHOICES and (occ == "klein" or flux3_pinned):
-        if quality == QUALITY_FLUX3_FAST:
-            needs.append(
-                _need(
-                    "flux3-fast-unet",
-                    CMD_IMAGE_FLUX3,
-                    FileSpec(SUB_UNET, KLEIN3_DISTILLED),
-                )
-            )
-        elif quality == QUALITY_FLUX3_QUALITY:
-            needs.append(
-                _need(
-                    "flux3-quality-unet",
-                    CMD_IMAGE_FLUX3_BASE,
-                    FileSpec(SUB_UNET, KLEIN3_BASE),
-                )
-            )
-        else:
-            needs.append(
-                _need(
-                    "flux3-nvfp4-unet",
-                    CMD_IMAGE_FLUX3_NVFP4,
-                    FileSpec(SUB_UNET, KLEIN3_NVFP4),
-                )
-            )
-        needs.append(
-            _need("flux3-te", CMD_IMAGE_FLUX3_TE, FileSpec(SUB_CLIP, KLEIN3_TE))
-        )
-        needs.append(
-            _need("flux3-vae", CMD_DOWNLOAD_MODELS, FileSpec(SUB_VAE, VAE_FULL))
-        )
-
-    # Opt-in Qwen-Image 2.1: the tier names the pack, so the row is only
-    # required when the operator picked one of the four qwen tiers. The VAE and
-    # the INT8 encoder are companion tiers; each NVFP4 pack ships its own.
-    qwen_pinned = any(is_qwen_image_unet(name) for name in hints.unets) or any(
-        is_qwen_image_clip(name) for name in hints.clips
-    )
-    if quality in QWEN_QUALITY_CHOICES and (occ == "klein" or qwen_pinned):
-        if quality == QUALITY_QWEN_IMAGE:
-            needs.append(
-                _need(
-                    "qwen-image-unet",
-                    CMD_IMAGE_QWEN,
-                    FileSpec(SUB_UNET, QWEN_IMAGE_INT8),
-                )
-            )
-            needs.append(
-                _need("qwen-image-te", CMD_IMAGE_QWEN_TE, FileSpec(SUB_CLIP, QWEN_TE))
-            )
-        elif quality == QUALITY_QWEN_IMAGE_TURBO:
-            needs.append(
-                _need(
-                    "qwen-image-turbo-unet",
-                    CMD_IMAGE_QWEN_TURBO,
-                    FileSpec(SUB_UNET, QWEN_IMAGE_TURBO_INT8),
-                )
-            )
-            needs.append(
-                _need("qwen-image-te", CMD_IMAGE_QWEN_TE, FileSpec(SUB_CLIP, QWEN_TE))
-            )
-        elif quality == QUALITY_QWEN_IMAGE_NVFP4:
-            needs.append(
-                _need(
-                    "qwen-image-nvfp4-unet",
-                    CMD_IMAGE_QWEN_NVFP4,
-                    FileSpec(SUB_UNET, QWEN_IMAGE_NVFP4),
-                )
-            )
-            needs.append(
-                _need(
-                    "qwen-image-nvfp4-te",
-                    CMD_IMAGE_QWEN_NVFP4,
-                    FileSpec(SUB_CLIP, QWEN_TE_NVFP4),
-                )
-            )
-        elif quality == QUALITY_QWEN_IMAGE_TURBO_NVFP4:
-            needs.append(
-                _need(
-                    "qwen-image-turbo-nvfp4-unet",
-                    CMD_IMAGE_QWEN_TURBO_NVFP4,
-                    FileSpec(SUB_UNET, QWEN_IMAGE_TURBO_NVFP4),
-                )
-            )
-            needs.append(
-                _need(
-                    "qwen-image-turbo-nvfp4-te",
-                    CMD_IMAGE_QWEN_TURBO_NVFP4,
-                    FileSpec(SUB_CLIP, QWEN_TE_TURBO_NVFP4),
-                )
-            )
-        needs.append(
-            _need("qwen-image-vae", CMD_IMAGE_QWEN_VAE, FileSpec(SUB_VAE, QWEN_VAE))
-        )
+    # The disk check follows the rung's own row for the graph's own family,
+    # so a rung can never ask for a weight outside that family: a FLUX 3 or
+    # Qwen-Image graph pulls its own unet, encoder, and VAE, and no rung pulls
+    # Klein 9B or FLUX.2-dev anywhere. standard writes nothing, so it needs
+    # nothing beyond what the App already ships.
+    needs.extend(rung_needs(rung_family(hints), quality))
 
     if hints.enhance_on or (types & RESEARCH_TYPES):
         needs.append(
@@ -890,14 +838,6 @@ def requirements_for(hints: CheckHints) -> list[Need]:
                 FileSpec(SUB_CKPT, name),
             )
         )
-    if quality == QUALITY_FREE_COMMERCIAL and occ == "klein":
-        # Free Commercial Use never needs 9B / FLUX.2-dev even if ultra leftovers.
-        needs = [
-            need
-            for need in needs
-            if need.pack
-            not in {"klein-9b", "klein-9b-te", "klein-max-unet", "flux2-dev"}
-        ]
     return needs
 
 
@@ -1088,8 +1028,6 @@ def scan(hints: CheckHints, roots: Sequence[Path]) -> CheckResult:
             ):
                 continue
             missing.append(row)
-    if quality == QUALITY_MAX and hints.occupancy == "klein":
-        _fix_max_clip(hints, roots, present, missing)
     commands = _collapse_commands([row.cmd for row in missing])
     return CheckResult(
         ok=not missing,
@@ -1102,46 +1040,6 @@ def scan(hints: CheckHints, roots: Sequence[Path]) -> CheckResult:
     )
 
 
-def _fix_max_clip(
-    hints: CheckHints,
-    roots: Sequence[Path],
-    present: list[FileRow],
-    missing: list[FileRow],
-) -> None:
-    """Require 8B TE when 9B base is on disk, else Mistral when FLUX.2-dev is.
-
-    Args:
-        hints: Graph snapshot (unused occupancy already klein).
-        roots: Models roots.
-        present: Present rows (mutated).
-        missing: Missing rows (mutated).
-    """
-    del hints
-    has_base = inspect_file(FileSpec(SUB_UNET, KLEIN_9B_BASE), roots) == "present"
-    has_dev = inspect_file(FileSpec(SUB_UNET, FLUX2_DEV), roots) == "present"
-    if has_base:
-        state = inspect_file(FileSpec(SUB_CLIP, CLIP_8B), roots)
-        row = FileRow(name=CLIP_8B, pack="klein-9b-te", cmd=CMD_IMAGE_9B, state=state, subdir=SUB_CLIP)
-        if state == "present":
-            present.append(row)
-        elif not any(item.name == CLIP_8B for item in missing):
-            missing.append(row)
-        return
-    if has_dev:
-        state = inspect_file(FileSpec(SUB_CLIP, CLIP_MISTRAL), roots)
-        row = FileRow(
-            name=CLIP_MISTRAL,
-            pack="flux2-dev",
-            cmd=CMD_IMAGE_FLUX2_DEV,
-            state=state,
-            subdir=SUB_CLIP,
-        )
-        if state == "present":
-            present.append(row)
-        elif not any(item.name == CLIP_MISTRAL for item in missing):
-            missing.append(row)
-
-
 def format_report(result: CheckResult) -> str:
     """Human status for the node widget and App chip.
 
@@ -1152,7 +1050,7 @@ def format_report(result: CheckResult) -> str:
         Multiline operator text.
     """
     label = result.lab_rel or "this App"
-    quality = result.quality or QUALITY_LAB
+    quality = result.quality or QUALITY_DEFAULT
     if result.ok:
         names = ", ".join(row.name for row in result.present[:8] if row.name)
         extra = f"\n{names}." if names else ""

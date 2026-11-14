@@ -1,21 +1,21 @@
-"""ComfyUI node: global Quality combo for lab graphs."""
+"""ComfyUI node: global Detail combo for lab graphs."""
 
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
 from .check import STATUS_DEFAULT
-from .presets import QUALITY_CHOICES, QUALITY_LAB, normalize_quality
+from .presets import QUALITY_DEFAULT, QUALITY_CHOICES, normalize_quality
 
 if TYPE_CHECKING:
     from ez_common import ComfyInputTypes
 
-# Comfy menu category for the Quality node.
+# Comfy menu category for the Detail node.
 CATEGORY = "ez-comfy"
 
 
 class EZQuality:
-    """Hold the workflow-global Quality combo. JS applies family overlays."""
+    """Hold the workflow-global Detail combo. JS applies family rungs."""
 
     @classmethod
     def INPUT_TYPES(cls) -> ComfyInputTypes:
@@ -26,7 +26,7 @@ class EZQuality:
         """
         return {
             "required": {
-                "quality": (list(QUALITY_CHOICES), {"default": QUALITY_LAB}),
+                "quality": (list(QUALITY_CHOICES), {"default": QUALITY_DEFAULT}),
             }
         }
 
@@ -37,36 +37,33 @@ class EZQuality:
     CATEGORY = CATEGORY
     OUTPUT_NODE = True
     DESCRIPTION = (
-        "custom freezes the last overlay. lab restores graph defaults. "
-        "draft / standard / high are Apache Klein 4B. "
-        "Free Commercial Use (<$10M) is Klein 4B stills (never 9B or FLUX.2-dev) "
-        "plus LTX-2.5 steps; Wan / audio / trellis are no-ops. "
-        "ultra is Klein 9B distilled when on disk (FLUX Non-Commercial, not YouTube-ok). "
-        "max is 9B base or FLUX.2-dev when on disk (same NC license). "
-        "flux3-fast / flux3-quality / flux3-nvfp4 are FLUX 3 Image Klein "
-        "profiles (16 steps CFG 1.0, 50 steps CFG 3.5, 50 steps CFG 3.5 on "
-        "the NVFP4 UNET); they only write on graphs that pin KLEIN3 weights. "
-        "qwen-image (50 steps CFG 3.5), qwen-image-turbo (16 steps CFG 1.0), "
-        "qwen-image-nvfp4 (50 steps CFG 3.5) and qwen-image-turbo-nvfp4 "
-        "(16 steps CFG 1.0) are opt-in Qwen-Image 2.1 profiles that only write "
-        "on graphs that pin Qwen-Image 2.1 weights; the Klein ladder stays a "
-        "no-op there. Those are Qwen RESEARCH LICENSE AGREEMENT weights - "
-        "commercial use needs a separate paid Qwen license - so no qwen tier "
-        "is ever the default pick and Klein 4B stays the Apache still. "
-        "Named qualities may swap UNET, CLIP, and VAE. Never changes size. "
-        "Editing Steps / CFG / UNET / CLIP / VAE selects custom so Queue keeps "
-        "those values. Prompt text is not overlaid. "
+        "Three rungs. draft is the quick look, standard is what this App ships "
+        "tuned for, final is the best this App's own stack can do. standard "
+        "writes nothing on any family, so the graph keeps exactly what it was "
+        "authored with. "
+        "Klein: draft 4 steps CFG 1.0 on the NVFP4 UNET, final 24 steps CFG 3.5 "
+        "on the base FP8 UNET - Apache-2.0. Wan / LTX / film / audio / trellis "
+        "write steps only, and trellis writes the guided stages only. "
+        "Never changes size: no rung touches a width, height, frames, length, "
+        "or EZImageFormat widget. "
+        "A rung writes only its own family's weights, and an apply where any "
+        "write cannot land is refused whole - nothing is renamed and no weight "
+        "is substituted. The caption names the live stack, steps, CFG, and "
+        "license, and says Edited when the widgets left the rung behind. "
+        "Opt-in FLUX 3 Image Klein graphs are FLUX Non-Commercial; opt-in "
+        "Qwen-Image 2.1 graphs are the Qwen Research license; standard writes "
+        "nothing on those either. "
         "Not --tier quality."
     )
 
     def report(self, quality: str) -> dict[str, Any]:
-        """Normalize the Quality combo for UI and downstream STRING.
+        """Normalize the Detail combo for UI and downstream STRING.
 
         Args:
-            quality: Lab / Draft / High widget value.
+            quality: Detail widget value, or an accepted legacy tier id.
 
         Returns:
-            Comfy output-node payload with the normalized quality id.
+            Comfy output-node payload with the normalized rung id.
         """
         choice = normalize_quality(quality)
         return {
@@ -128,6 +125,6 @@ NODE_CLASS_MAPPINGS: dict[str, type] = {
     "EZModelCheck": EZModelCheck,
 }
 NODE_DISPLAY_NAME_MAPPINGS: dict[str, str] = {
-    "EZQuality": "Quality",
+    "EZQuality": "Detail",
     "EZModelCheck": "Check models",
 }

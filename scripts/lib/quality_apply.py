@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Overlay the Quality tier into a graph before the CLI POSTs it to /prompt.
+"""Overlay the Detail rung into a graph before the CLI POSTs it to /prompt.
 
-The browser applies the tier table from custom_nodes/ez_quality before Queue,
+The browser applies the rung table from custom_nodes/ez_quality before Queue,
 so a graph under the UI posts overlaid widget values while the CLI submit paths
 posted the authored ones. This module is the submit-path seam: read a
-serialized graph, resolve one Quality tier, hand the graph to
+serialized graph, resolve one Detail rung, hand the graph to
 ez_quality.presets.apply_to_graph (the Python table), and write the result for
 the caller to POST. It is the production caller that keeps the table honest.
 
@@ -18,22 +18,26 @@ Arguments:
 
   --graph      Serialized ComfyUI graph JSON (LiteGraph shape) to read.
   --out        Path to write the overlaid graph to.
-  --quality    Tier id from ez_quality.presets.QUALITY_CHOICES. Empty means
-               take the tier the graph records on its own EZQuality node.
+  --quality    Rung id from ez_quality.presets.QUALITY_CHOICES (draft,
+               standard, final). A legacy tier id is accepted too and resolves
+               onto a rung. Empty means take the tier the graph records on its
+               own EZQuality node.
   --comfy-url  ComfyUI base URL used for the loader combo options. Empty (the
                default) skips the on-disk presence check entirely.
 
 Outputs:
   Nothing on success. One line on stderr when the run fails, and one naming a
-  tier this graph's model family cannot honor.
+  rung this graph's model family cannot honor.
 
 Returns:
   0 when --out holds the overlaid graph; 1 when --graph is missing or is not a
   JSON object, when --quality names an unknown tier, or when --out cannot be
   written.
 
-Tier resolution order: --quality, then the graph's EZQuality widget, then lab.
-An unrecognised EZQuality widget value resolves to lab the way the EZQuality
+Rung resolution order: --quality, then the graph's EZQuality widget, then
+standard. A legacy tier id on either path resolves through
+ez_quality.presets.normalize_quality onto a selectable rung, and an
+unrecognised EZQuality widget value resolves to standard the way the EZQuality
 node normalizes it, so only an explicit --quality is ever refused. The
 object_info lookup never fails the run: an unreachable ComfyUI skips the loader
 presence check instead of blocking the POST.
@@ -50,27 +54,54 @@ from typing import TYPE_CHECKING, Mapping, NamedTuple, cast
 
 from ez_quality.presets import (
     QUALITY_CHOICES,
-    QUALITY_FREE_COMMERCIAL,
-    QUALITY_FREE_COMMERCIAL_ALIAS,
-    QUALITY_LAB,
     apply_to_graph,
     infer_occupancy,
+    normalize_quality,
     tier_is_honored,
 )
 
 if TYPE_CHECKING:
     from ez_common import Json, JsonObject
 
-# Node type plus widget slot that records the graph's own Quality choice.
+# Node type plus widget slot that records the graph's own Detail choice.
 QUALITY_NODE_TYPE = "EZQuality"
 QUALITY_WIDGET_INDEX = 0
 
 # Seconds to wait on ComfyUI object_info before skipping the presence check.
 OBJECT_INFO_TIMEOUT_SECONDS = 2.0
 
-# Accepted --quality spellings, casefolded, plus the free-commercial alias.
-_ACCEPTED_TIERS: dict[str, str] = {choice.casefold(): choice for choice in QUALITY_CHOICES}
-_ACCEPTED_TIERS[QUALITY_FREE_COMMERCIAL_ALIAS.casefold()] = QUALITY_FREE_COMMERCIAL
+# Rung a graph with no usable recorded choice falls back to. Read off the same
+# normalizer the EZQuality node uses, so the CLI and the node never disagree on
+# what "no choice" means.
+DEFAULT_RUNG = normalize_quality("")
+
+# Tier ids that are no longer selectable but stay accepted input: an old saved
+# graph, --quality, EZ_QUALITY, or a console answer may still name one. Where
+# each lands is owned by the table in ez_quality.presets, never by this file.
+LEGACY_TIER_IDS: tuple[str, ...] = (
+    "lab",
+    "custom",
+    "high",
+    "Free Commercial Use (<$10M)",
+    "free_commercial",
+    "ultra",
+    "max",
+    "flux3-fast",
+    "flux3-quality",
+    "flux3-nvfp4",
+    "qwen-image",
+    "qwen-image-turbo",
+    "qwen-image-nvfp4",
+    "qwen-image-turbo-nvfp4",
+)
+
+# Accepted --quality spellings, casefolded, each mapped onto the rung it
+# resolves to. Selectable rungs resolve to themselves; a legacy id resolves
+# through normalize_quality so the stamping below always writes a rung.
+_ACCEPTED_TIERS: dict[str, str] = {
+    spelling.casefold(): normalize_quality(spelling)
+    for spelling in (*QUALITY_CHOICES, *LEGACY_TIER_IDS)
+}
 
 
 class QualityApplyError(Exception):
@@ -194,22 +225,23 @@ def recorded_quality(graph: Mapping[str, Json]) -> str:
 
 
 def canonical_tier(value: str) -> str | None:
-    """Map one spelling onto a canonical tier id.
+    """Map one accepted spelling onto the rung it resolves to.
 
     Globals:
       None
     Args:
-      value: Tier id as typed or as the graph recorded it.
+      value: Rung id or legacy tier id, as typed or as the graph recorded it.
     Outputs:
       None
     Returns:
-      The QUALITY_CHOICES entry, or None when the spelling is unknown.
+      The resolved rung id, or None when the spelling names neither a
+      selectable rung nor a legacy tier id.
     """
     return _ACCEPTED_TIERS.get(str(value or "").strip().casefold())
 
 
 def resolve_quality(graph: Mapping[str, Json], requested: str) -> str:
-    """Pick the tier to overlay: --quality, then the graph, then lab.
+    """Pick the rung to overlay: --quality, then the graph, then standard.
 
     Globals:
       None
@@ -219,7 +251,7 @@ def resolve_quality(graph: Mapping[str, Json], requested: str) -> str:
     Outputs:
       None
     Returns:
-      A canonical tier id.
+      A resolved rung id, so a legacy tier id never reaches the table.
     Raises:
       QualityApplyError: When --quality names a tier the table does not know.
     """
@@ -228,7 +260,7 @@ def resolve_quality(graph: Mapping[str, Json], requested: str) -> str:
         if choice is None:
             raise QualityApplyError(f"unknown quality tier: {requested}")
         return choice
-    return canonical_tier(recorded_quality(graph)) or QUALITY_LAB
+    return canonical_tier(recorded_quality(graph)) or DEFAULT_RUNG
 
 
 def load_graph(path: Path) -> JsonObject:
@@ -291,18 +323,19 @@ def apply_quality_file(
     quality: str,
     comfy_url: str,
 ) -> None:
-    """Overlay one tier into ``graph_path`` and write ``out_path``.
+    """Overlay one rung into ``graph_path`` and write ``out_path``.
 
     Globals:
       None
     Args:
       graph_path: Graph to read.
       out_path: Overlaid graph to write.
-      quality: --quality value, or empty to use the graph's own tier.
+      quality: --quality value (a rung or a legacy tier id), or empty to use
+        the tier the graph records on its own EZQuality node.
       comfy_url: ComfyUI base URL for loader options, or empty to skip.
     Outputs:
       The overlaid graph at ``out_path``. Prints nothing on success, or one line
-      on stderr naming a tier this graph's family cannot honor.
+      on stderr naming a rung this graph's family cannot honor.
     Returns:
       None
     Raises:
@@ -343,7 +376,12 @@ def _cli(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="quality_apply")
     parser.add_argument("--graph", required=True, help="graph JSON to read")
     parser.add_argument("--out", required=True, help="overlaid JSON to write")
-    parser.add_argument("--quality", default="", help="tier id (default: the graph's own)")
+    parser.add_argument(
+        "--quality",
+        default="",
+        help="Detail rung (draft, standard, final); a legacy tier id also"
+        " resolves (default: the graph's own)",
+    )
     parser.add_argument(
         "--comfy-url",
         default="",
