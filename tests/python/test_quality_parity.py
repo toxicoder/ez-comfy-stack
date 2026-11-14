@@ -153,7 +153,11 @@ def _rung_table() -> dict[str, dict[str, dict[str, Any]]]:
     per_family: dict[str, dict[str, dict[str, Any]]] = {}
     for family, rows in table.items():
         assert isinstance(rows, dict)
-        per_family[family] = {rung: dict(row) for rung, row in rows.items()}
+        rungs: dict[str, dict[str, Any]] = {}
+        for rung, row in rows.items():
+            assert isinstance(row, dict)
+            rungs[rung] = dict(row)
+        per_family[family] = rungs
     return per_family
 
 

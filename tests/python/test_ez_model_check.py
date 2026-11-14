@@ -36,11 +36,23 @@ from ez_quality.check import (  # noqa: E402
     CMD_IMAGE_9B,
     CMD_IMAGE_9B_BASE,
     CMD_IMAGE_FLUX2_DEV,
+    CMD_IMAGE_FLUX3,
+    CMD_IMAGE_FLUX3_BASE,
+    CMD_IMAGE_FLUX3_NVFP4,
+    CMD_IMAGE_FLUX3_PUP,
+    CMD_IMAGE_FLUX3_TE,
+    CMD_IMAGE_QWEN,
+    CMD_IMAGE_QWEN_NVFP4,
+    CMD_IMAGE_QWEN_TE,
+    CMD_IMAGE_QWEN_TURBO,
+    CMD_IMAGE_QWEN_TURBO_NVFP4,
+    CMD_IMAGE_QWEN_VAE,
     CMD_LLM_35B,
     CMD_LLM_DESCRIBE,
     CMD_LONGCAT,
     CMD_LTX_ICLORA,
     CMD_MUSIC,
+    CMD_PERSON_MASK,
     CMD_PODCAST,
     CMD_RESTORE,
     CMD_TRELLIS,
@@ -52,11 +64,13 @@ from ez_quality.check import (  # noqa: E402
     LLM_35B,
     LLM_GGUF,
     LTX_ICLORA,
+    PERSON_WEIGHT,
     SEEDVR2,
     STATUS_DEFAULT,
     CheckHints,
     FileSpec,
     SUB_CLIP,
+    SUB_PERSON,
     SUB_UNET,
     WAN_5B,
     _as_bool,
@@ -82,8 +96,11 @@ from ez_quality.presets import (  # noqa: E402
     CLIP_8B,
     CLIP_MISTRAL,
     FLUX2_DEV,
+    KLEIN3_BASE,
+    KLEIN3_DISTILLED,
     KLEIN3_NVFP4,
     KLEIN3_TE,
+    KLEIN3_UPSAMPLER,
     KLEIN_9B,
     KLEIN_9B_BASE,
     KLEIN_9B_NVFP4,
@@ -99,7 +116,14 @@ from ez_quality.presets import (  # noqa: E402
     QUALITY_MAX,
     QUALITY_STANDARD,
     QUALITY_ULTRA,
+    QWEN_IMAGE_INT8,
+    QWEN_IMAGE_NVFP4,
     QWEN_IMAGE_TURBO_INT8,
+    QWEN_IMAGE_TURBO_NVFP4,
+    QWEN_TE,
+    QWEN_TE_NVFP4,
+    QWEN_TE_TURBO_NVFP4,
+    QWEN_VAE,
     VAE_FULL,
     VAE_SMALL,
 )
@@ -180,6 +204,45 @@ def test_command_for_filename_needles() -> None:
     assert command_for_filename("longcat_video.safetensors") == CMD_LONGCAT
     assert command_for_filename(DREAMX_WEIGHTS) == CMD_DREAMX
     assert command_for_filename("mystery.bin") == CMD_DOWNLOAD_MODELS
+
+
+def test_command_for_filename_names_the_opt_in_image_stacks() -> None:
+    """Every FLUX 3 and Qwen-Image weight points at the pack that holds it.
+
+    These two families are opt-in and share the klein occupancy, so the disk
+    check cannot fall back to the generic download command: an operator who is
+    missing one text encoder has to be handed the command that fetches that one
+    file, and the base / turbo / nvfp4 variants are separate packs.
+    """
+    assert command_for_filename(KLEIN3_DISTILLED) == CMD_IMAGE_FLUX3
+    assert command_for_filename(KLEIN3_BASE) == CMD_IMAGE_FLUX3_BASE
+    assert command_for_filename(KLEIN3_NVFP4) == CMD_IMAGE_FLUX3_NVFP4
+    assert command_for_filename(KLEIN3_TE) == CMD_IMAGE_FLUX3_TE
+    assert command_for_filename(KLEIN3_UPSAMPLER) == CMD_IMAGE_FLUX3_PUP
+    assert command_for_filename(QWEN_IMAGE_INT8) == CMD_IMAGE_QWEN
+    assert command_for_filename(QWEN_IMAGE_TURBO_INT8) == CMD_IMAGE_QWEN_TURBO
+    assert command_for_filename(QWEN_IMAGE_NVFP4) == CMD_IMAGE_QWEN_NVFP4
+    assert command_for_filename(QWEN_IMAGE_TURBO_NVFP4) == CMD_IMAGE_QWEN_TURBO_NVFP4
+    assert command_for_filename(QWEN_TE) == CMD_IMAGE_QWEN_TE
+    assert command_for_filename(QWEN_TE_NVFP4) == CMD_IMAGE_QWEN_NVFP4
+    assert command_for_filename(QWEN_TE_TURBO_NVFP4) == CMD_IMAGE_QWEN_TURBO_NVFP4
+    assert command_for_filename(QWEN_VAE) == CMD_IMAGE_QWEN_VAE
+
+
+def test_rung_row_stays_empty_when_the_table_cannot_be_read(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A malformed or unknown table asks the disk for nothing.
+
+    The row comes from the generated payload the frontend reads too. If it is
+    not a mapping, or the family has no rows, the honest answer is an empty
+    row - a partial read must not turn into a needs list that blocks a run.
+    """
+    monkeypatch.setattr("ez_quality.check.export_table", lambda: {"table": ["not-a-mapping"]})
+    assert rung_row("klein", QUALITY_FINAL) == {}
+    monkeypatch.setattr("ez_quality.check.export_table", lambda: {"table": {"klein": "nope"}})
+    assert rung_row("klein", QUALITY_FINAL) == {}
+    assert rung_row("no-such-family", QUALITY_FINAL) == {}
 
 
 def test_coverage_gaps(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -352,6 +415,11 @@ def test_occupancy_packs_and_extras(tmp_path: Path) -> None:
     assert any(need.cmd == CMD_WAN_S2V for need in s2v)
     dub = requirements_for(CheckHints(types=("EZDubRender",)))
     assert any(need.cmd == CMD_DUB for need in dub)
+    people = requirements_for(CheckHints(types=("EZReinsertPeople",)))
+    person = next(need for need in people if need.cmd == CMD_PERSON_MASK)
+    assert person.pack == "person-mask"
+    assert [spec.name for spec in person.files] == [PERSON_WEIGHT]
+    assert [spec.subdir for spec in person.files] == [SUB_PERSON]
     pod = requirements_for(CheckHints(types=("EZKokoroTTS",)))
     assert any(need.cmd == CMD_PODCAST for need in pod)
     longcat = requirements_for(CheckHints(types=("EZLongCatPromptEnhance",)))
@@ -399,6 +467,8 @@ def test_rung_family_follows_the_pinned_weights() -> None:
     assert rung_family(CheckHints(occupancy="klein", unets=("x.safetensors", KLEIN3_NVFP4))) == "klein3"
     assert rung_family(CheckHints(occupancy="klein", clips=(KLEIN3_TE,))) == "klein3"
     assert rung_family(CheckHints(occupancy="klein", unets=(QWEN_IMAGE_TURBO_INT8,))) == "qwen"
+    assert rung_family(CheckHints(occupancy="klein", clips=(QWEN_TE,))) == "qwen"
+    assert rung_family(CheckHints(occupancy="klein", clips=(QWEN_TE_TURBO_NVFP4,))) == "qwen"
     assert rung_family(CheckHints(occupancy="wan", unets=(WAN_5B,))) == "wan"
 
 

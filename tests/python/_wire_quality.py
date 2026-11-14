@@ -197,20 +197,25 @@ def _prepend_linear(graph: dict[str, Any], node_id: int) -> None:
     if not isinstance(linear, dict):
         return
     inputs = list(linear.get("inputs") or [])
-    kept: list[Any] = []
-    for entry in inputs:
-        if (
-            isinstance(entry, (list, tuple))
+    row = [int(node_id), QUALITY_WIDGET, dict(QUALITY_LABEL)]
+    existing = next(
+        (
+            index
+            for index, entry in enumerate(inputs)
+            if isinstance(entry, (list, tuple))
             and len(entry) >= 2
             and entry[1] == QUALITY_WIDGET
-        ):
-            continue
-        kept.append(entry)
-    kept.insert(
-        _quality_insert_index(kept),
-        [int(node_id), QUALITY_WIDGET, dict(QUALITY_LABEL)],
+        ),
+        None,
     )
-    linear["inputs"] = kept
+    # A row that is already on the panel stays where the App put it: image-studio
+    # leads with Iterate so the first Run is predictable, and a stamp that
+    # re-ordered the Detail row above it broke that promise on every re-stamp.
+    if existing is None:
+        inputs.insert(_quality_insert_index(inputs), row)
+    else:
+        inputs[existing] = row
+    linear["inputs"] = inputs
 
 
 def find_quality_node(graph: dict[str, Any]) -> dict[str, Any] | None:
@@ -222,7 +227,9 @@ def find_quality_node(graph: dict[str, Any]) -> dict[str, Any] | None:
     Returns:
         Node dict or None.
     """
-    hits = [n for n in graph.get("nodes") or [] if n.get("type") == QUALITY_TYPE]
+    hits: list[dict[str, Any]] = [
+        n for n in graph.get("nodes") or [] if n.get("type") == QUALITY_TYPE
+    ]
     if not hits:
         return None
     return hits[0]
@@ -291,7 +298,7 @@ def strip_quality_node(graph: dict[str, Any]) -> bool:
     return True
 
 
-def _relabel_quality_node(node: dict[str, Any]) -> None:
+def _relabel_quality_node(node: dict[str, Any]) -> str:
     """Bring an existing Detail node onto the current row title and rung.
 
     Builders stamp graphs that predate the ladder, so a shipped JSON can still

@@ -23,6 +23,7 @@ from typing import Any, Mapping, Sequence
 
 from _enhance_schema import enhance_mode
 from _lab_paths import LANE_REGISTRY
+from _wire_optional_ref import REF_TOGGLE, REF_TOGGLE_DESCRIPTION, REF_TOGGLE_LABEL
 
 FRONTEND_MIN = "1.41.13"
 # The stamped lane must be a real browse lane, so it comes from the one lane
@@ -189,6 +190,7 @@ def stamp_app_mode(
         "enhance_off_identity": bool(enhance_off_identity),
         "handoff": [str(item) for item in handoff],
     }
+    ensure_handoff_note(graph, [str(item) for item in handoff])
     extra["linearData"] = {
         "inputs": linear_inputs,
         "outputs": linear_outputs,
@@ -447,6 +449,7 @@ GENERIC_LABELS = {
     "mode": "Mode",
     "duration_hint": "Duration / framing",
     "value": "Shot card",
+    REF_TOGGLE: REF_TOGGLE_LABEL,
     "seconds": "Duration (seconds)",
     "speaker_a_voice": "Speaker A",
     "speaker_b_voice": "Speaker B",
@@ -557,6 +560,7 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
     "mode": "Rewrite family for this encoder.",
     "duration_hint": "Aspect or duration the rewriter should target.",
     "value": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+    REF_TOGGLE: REF_TOGGLE_DESCRIPTION,
     "seconds": "Length in seconds. Rap draft is a cold open. Full track uses a pre-chorus form. Album takes are 64-210 s.",
     "speaker_a_voice": "Kokoro built-in for Speaker A. Voice-clone refs stay graph-only.",
     "speaker_b_voice": "Kokoro built-in for Speaker B.",
@@ -1064,6 +1068,11 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
             return "Optional research brief or bible. Empty is fine."
         if title == "Seed":
             return DEFAULT_WIDGET_DESCRIPTIONS.get("seed")
+        if title == "Save prefix":
+            return (
+                "Filename prefix for this App's Save node. Lowercase letters, "
+                "digits, and - _ / . only."
+            )
         if title == "Rewrite prompt":
             return DEFAULT_WIDGET_DESCRIPTIONS.get("enhance")
         if title == "Audio notes":
@@ -1544,7 +1553,7 @@ OPTIONAL_UNWIRED: dict[str, tuple[str, ...]] = {
         "EZFilmDisclosure",
         "EZDCCLoadGuideVideo",
     ),
-    "audio/stem-mix": ("SaveAudio", "PrimitiveNode"),
+    "audio/stem-mix": ("SaveAudio",),
     "optional/still-to-video-a14b": ("UNETLoader",),
     "inspire/prompt-forge": (
         "EZKleinPromptEnhance",
@@ -1640,6 +1649,51 @@ def occupancy_stanza(occupancy: str) -> str:
     return f"Occupancy: {occupancy} - stop {stop}. One GB10 job."
 
 
+def handoff_stanza(handoff: Sequence[str]) -> str:
+    ids = ", ".join(str(item) for item in handoff if str(item).strip())
+    if not ids:
+        return ""
+    return f"Handoff: {ids}. Load that graph next - the output is its input."
+
+
+def ensure_handoff_note(graph: dict[str, Any], handoff: Sequence[str]) -> None:
+    """Name the handoff chain in the operator note.
+
+    The App panel shows ``lab_app_mode.handoff`` as "run this next", but the
+    note is the prose the operator actually reads on the canvas. A stamped
+    chain the note never mentions is a chain nobody follows.
+
+    Args:
+        graph: Serialized Comfy graph (mutated).
+        handoff: Downstream app ids from the spec.
+    """
+    stanza = handoff_stanza(handoff)
+    if not stanza:
+        return
+    extra = graph.setdefault("extra", {})
+    note = str(extra.get("lab_note") or "")
+    # Idempotent on the ids, not the word: a note that already names one of the
+    # targets has told the operator where to go next, and re-adding would pile
+    # duplicate lines onto every re-stamp.
+    basenames = [
+        str(item).rsplit("/", 1)[-1].removesuffix(".json").lower()
+        for item in handoff
+        if str(item).strip()
+    ]
+    low = note.lower()
+    if any(name and name in low for name in basenames):
+        return
+    extra["lab_note"] = f"{note.rstrip()}\n\n{stanza}\n" if note.strip() else f"{stanza}\n"
+    for node in graph.get("nodes") or []:
+        if node.get("type") != "Note":
+            continue
+        values = node.get("widgets_values") or [""]
+        text = str(values[0])
+        if not any(name and name in text.lower() for name in basenames):
+            node["widgets_values"] = [f"{text.rstrip()}\n\n{stanza}\n"]
+        break
+
+
 def ensure_occupancy_note(graph: dict, occupancy: str) -> None:
     stanza = occupancy_stanza(occupancy)
     extra = graph.setdefault("extra", {})
@@ -1664,10 +1718,25 @@ def _collect_film_minimal(
     A plate rewrites its identity through ``EZKleinPromptEnhance``. A print
     pass carries no Klein node at all and edits the ``EZSamplePrompt`` that
     feeds every shot enhance's context instead.
+
+    The continuity still an act starts from is an operator choice, not an
+    authored constant: the shot-to-shot ``LoadImage`` and the plate's
+    ``EZOptionalImage`` are wired into the sampler, so they belong on the panel
+    beside the prompt. A picker whose output feeds nothing stays off it, which
+    is what keeps an opt-in bypassed loader from offering a file that changes
+    no pixel.
     """
     raw: list[tuple[NodeRef, str, dict]] = []
     for node in graph.get("nodes") or []:
-        if node.get("type") == "EZKleinPromptEnhance":
+        ntype = node.get("type")
+        if ntype == "LoadImage":
+            if _node_always(node) and _image_output_linked(node):
+                raw.append((node["id"], "image", node))
+        elif ntype == "EZOptionalImage" and _node_always(node):
+            nid = node["id"]
+            raw.append((nid, "filename", node))
+            raw.append((nid, REF_TOGGLE, node))
+        elif node.get("type") == "EZKleinPromptEnhance":
             nid = node["id"]
             if not hide_sample:
                 raw.append((nid, "sample", node))
@@ -1988,6 +2057,12 @@ def _collect_raw_inputs(
             )
         elif ntype == "EZOptionalImage":
             raw.append((nid, "filename", node))
+            # The mute belongs with the picker: without this row the App offers a
+            # file the operator cannot set aside, so a text-to-image Queue has to
+            # clear the widget by hand. _wire_optional_ref adds the same pair when
+            # it creates the node, and the stamper owns the row list, so both
+            # paths have to write both rows.
+            raw.append((nid, REF_TOGGLE, node))
         elif ntype == "EZVideoFormat":
             raw.extend(
                 (
@@ -2509,6 +2584,11 @@ def stamp_all_suite_files(root: Any | None = None) -> None:
             stamp_suite_graph(graph)
             label = "stamped"
         else:
+            # Builder-owned graphs (3d, dcc) stamp their own handoff chain and
+            # carry no STAMP_SPECS row, so the note line is reconciled here from
+            # whatever chain the graph already records.
+            handoff = (graph.get("extra", {}).get("lab_app_mode") or {}).get("handoff")
+            ensure_handoff_note(graph, [str(item) for item in handoff or ()])
             apply_lab_completeness_flags(graph)
             label = "flagged"
         path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")

@@ -21,7 +21,7 @@ import copy
 import json
 import re
 import sys
-from dataclasses import replace
+from dataclasses import asdict, replace
 from pathlib import Path
 from typing import Any
 
@@ -139,9 +139,18 @@ from ez_quality.presets import (  # noqa: E402
     WAN_DRAFT_STEPS,
     WAN_FINAL_STEPS,
     WAN_5B_UNET,
+    _field_text,
+    _graph_pins,
+    _is_swappable_target,
+    _number_text,
+    _overlay_instances,
+    _pick_file,
     _pick_unet,
     _RUNG_ROWS,
+    _same_value,
     _stack_text,
+    _Target,
+    _write_block_reason,
     apply_to_graph,
     caption_for,
     export_table,
@@ -1776,3 +1785,158 @@ def test_every_lab_graph_has_exactly_one_detail_node(path: Path) -> None:
             idx += 1
         assert names[idx] == QUALITY_WIDGET, path
         assert int(inputs[idx][0]) == int(node["id"]), path
+
+
+def test_number_text_matches_what_the_caption_reads() -> None:
+    """The CLI caption renders 3 and 3.0 alike, and leaves a non-number alone.
+
+    The frontend writes the same text off the same widget, so a bool or a string
+    has to fall through as ``str()`` here rather than be read as a number.
+    """
+    assert _number_text(3) == "3"
+    assert _number_text(3.0) == "3"
+    assert _number_text(2.5) == "2.5"
+    assert _number_text(True) == "True"
+    assert _number_text(None) == "None"
+    assert _number_text("4") == "4"
+
+
+def test_field_text_names_a_weight_and_calls_a_number_a_number() -> None:
+    """A steps/CFG field reads as a number; an empty widget reads as ``unset``.
+
+    An empty loader widget is a real state an operator can be in, and the
+    refusal text has to say ``unset`` rather than show them a blank.
+    """
+    assert _field_text("steps", 30) == "30"
+    assert _field_text("cfg", 1.0) == "1"
+    assert _field_text("unet_name", "") == "unset"
+    assert _field_text("unet_name", None) == "unset"
+    assert _field_text("vae_name", f"  {VAE_FULL}  ") == VAE_FULL.rsplit(".", 1)[0]
+    assert _field_text("unet_name", KLEIN_DISTILLED) == UNET_STACK_LABEL[KLEIN_DISTILLED]
+
+
+def test_same_value_reports_equal_settings_across_widget_shapes() -> None:
+    """Two widgets hold the same setting when the rung would see no change.
+
+    The combo reports a filename and the sampler reports a number, so the
+    comparison has to be numeric only when a number is involved, and a value
+    that cannot be read as a number is a mismatch, not a crash.
+    """
+    assert _same_value(None, None) is True
+    assert _same_value(None, 3) is False
+    assert _same_value(3, None) is False
+    assert _same_value(3, "3.0") is True
+    assert _same_value("30", 30) is True
+    assert _same_value("not-a-number", 30) is False
+    assert _same_value(KLEIN_DISTILLED, KLEIN_DISTILLED) is True
+    assert _same_value(KLEIN_DISTILLED, KLEIN_BASE) is False
+
+
+def test_pick_file_and_swappability_guard_every_write() -> None:
+    """Nothing is written that the widget already holds or cannot name.
+
+    An empty combo means the presence check cannot run, so a file stays
+    unwritten; a loader that holds no file yet is always safe to fill.
+    """
+    assert _pick_file(KLEIN_BASE, {KLEIN_BASE}) == KLEIN_BASE
+    assert _pick_file(KLEIN_BASE, set()) is None
+    assert _pick_file(KLEIN_BASE, {KLEIN_DISTILLED}) is None
+    assert _is_swappable_target("unet_name", "") is True
+    assert _is_swappable_target("unet_name", KLEIN_DISTILLED) is True
+    assert _is_swappable_target("unet_name", "wan2.2_ti2v_5b.safetensors") is False
+
+
+def test_graph_pins_reads_the_weights_a_family_owns() -> None:
+    """A live loader that already holds family weights claims the graph.
+
+    A muted loader does not: it drives no queued prompt, so it cannot claim a
+    rung family the operator is not running.
+    """
+    unet_graph = {
+        "nodes": [
+            {"type": "Note", "widgets_values": ["x"]},
+            {"type": "UNETLoader", "widgets_values": [KLEIN3_DISTILLED]},
+        ]
+    }
+    clip_graph = {
+        "nodes": [{"type": "CLIPLoader", "widgets_values": [KLEIN3_TE, "flux"]}]}
+    muted = {"nodes": [{"type": "UNETLoader", "widgets_values": [KLEIN3_DISTILLED], "mode": 4}]}
+    empty: dict[str, Any] = {"nodes": []}
+    assert _graph_pins(unet_graph, is_klein3_unet, is_klein3_clip) is True
+    assert _graph_pins(clip_graph, is_klein3_unet, is_klein3_clip) is True
+    assert _graph_pins(muted, is_klein3_unet, is_klein3_clip) is False
+    assert _graph_pins(unet_graph, is_qwen_image_unet, is_qwen_image_clip) is False
+    assert _graph_pins(empty, is_klein3_unet, is_klein3_clip) is False
+
+
+def test_wan_14b_is_never_overlaid() -> None:
+    """A 14B transformer is a stack the ladder does not own, so it writes nothing.
+
+    The rung rows for Wan cover the 5B lab default. A graph pinned to 14B has
+    to come back with an empty overlay rather than steps the loader cannot run.
+    """
+    blank = resolve_overlay(
+        occupancy="wan",
+        quality=QUALITY_FINAL,
+        authored_steps=30,
+        authored_cfg=3.5,
+        unet_name="wan2.2_14b_transformer.safetensors",
+    )
+    assert asdict(blank) == dict.fromkeys(FIELD_WIDGET_NAMES, None)
+
+
+def test_infer_occupancy_falls_back_to_wan_for_a_silent_video_lane() -> None:
+    """A video lane with neither LTX nor Wan in its loader is still a Wan lane.
+
+    The lab ships silent motion on Wan 2.2, so a graph that saves video and
+    loads something unrecognized belongs to Wan rather than losing its rungs.
+    """
+    nodes: list[dict[str, Any]] = [
+        {"type": "VHS_VideoCombine", "widgets_values": []},
+        {"type": "UNETLoader", "widgets_values": ["something_odd.safetensors"]},
+    ]
+    assert infer_occupancy({"nodes": nodes}) == "wan"
+    del nodes[1]
+    assert infer_occupancy({"nodes": nodes}) == "wan"
+
+
+def test_overlay_instances_skips_a_node_that_holds_no_overlay_field() -> None:
+    """Only the four widget owners a rung can write are collected.
+
+    A sampler's neighbour node shares the graph but owns none of the fields, so
+    it must not show up as a target the rung would write.
+    """
+    graph: dict[str, Any] = {
+        "nodes": [
+            {"type": "KSampler", "widgets_values": [1, "fixed", 20, 3.5]},
+            {"type": "Note", "widgets_values": ["a note"]},
+            {"type": "VAELoader", "widgets_values": [VAE_FULL]},
+            {"type": "CLIPLoader", "mode": 4, "widgets_values": [CLIP_4B, "flux"]},
+            {"type": "VAELoader", "widgets_values": "not-a-list"},
+        ]
+    }
+    targets = _overlay_instances(graph, "klein")
+    assert [t.node_type for t in targets["steps"]] == ["KSampler"]
+    assert [t.node_type for t in targets["vae_name"]] == ["VAELoader"]
+    assert targets["clip_name"] == []
+
+
+def test_write_block_reason_names_a_missing_prompt_slot() -> None:
+    """A widget that is not in the queued prompt cannot receive the rung.
+
+    ``widgets_values`` shorter than the field's slot means the write would be
+    silently dropped, which is the one case where a rung claims success and the
+    queue does not carry the value.
+    """
+    target = _Target(node_index=7, node_type="KSampler", current="", has_slot=False)
+    assert _write_block_reason("steps", target, 20, False, set()) == (
+        f"{FIELD_WIDGET_NAMES['steps']} has no prompt slot"
+    )
+    assert _write_block_reason("steps", target, 20, True, set()) == "Wan 14B is not overlaid"
+    assert _write_block_reason(
+        "unet_name",
+        _Target(node_index=7, node_type="UNETLoader", current="", has_slot=True),
+        KLEIN_DISTILLED,
+        False,
+        set(),
+    ) == ""
