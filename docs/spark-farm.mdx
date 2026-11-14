@@ -117,7 +117,7 @@ Placeholders below match `config/spark-farm.example.env`. Do **not** commit real
    **Check it worked:** every host in `SPARK_HOSTS` answers, and no compose project was
    started by the probe.
 
-7. **Dispatch** `print-shot` (shots **01-06 / 07-12 / 13-18** on three hosts, or an even split on two). SSH-runs **local** `bazelisk run //:manage -- print-shot` only. `dispatch` builds a fixed remote `print-shot <film> <id>`, so it forwards neither `--quality` nor `EZ_QUALITY` - each shot posts at the tier its graph records. To pin a tier across the farm, run local `bazelisk run //:manage -- print-shot <film> <id> --quality TIER` on each Spark instead of `dispatch` ([Short films](shorts.md)):
+7. **Dispatch** `print-shot` (shots **01-06 / 07-12 / 13-18** on three hosts, or an even split on two). SSH-runs **local** `bazelisk run //:manage -- print-shot` only. `dispatch` builds a fixed remote `print-shot <film> <id>`, so it forwards neither `--quality` nor `EZ_QUALITY` - each shot posts at the tier its graph records. To pin a tier across the farm, run local `bazelisk run //:manage -- print-shot <film> <id> --quality RUNG` on each Spark instead of `dispatch` ([Short films](shorts.md)):
 
    ```bash
    bazelisk run //scripts:run-utility -- spark-farm dispatch --film go-see

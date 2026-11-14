@@ -1,4 +1,4 @@
-"""Resolve required model files for a lab graph + Quality combo.
+"""Resolve required model files for a lab graph + the Detail rung in force.
 
 Hermetic: stdlib only. Disk roots are injectable. Does not download.
 Operator commands are Bazel targets; paths are host, never container paths.

@@ -425,7 +425,7 @@ class EZImageFormat:
         "prefix, and Enhance framing. Custom uses the width/height widgets "
         "(snapped to div16). Match input snaps aspect to a provided still. "
         "Look recipe splices a Cinema Rack starter into Enhance context. "
-        "Quality does not change size. Empty of lettering."
+        "Detail does not change size. Empty of lettering."
     )
 
     def run(
@@ -539,7 +539,7 @@ class EZVideoFormat:
         "Format / platform sets width, height, and Enhance framing. Custom "
         "uses the width/height widgets. Match input snaps aspect to a "
         "provided still. Duration is LTX-only (5/8/10/12 s, default 8) and "
-        "writes the latent length in the frontend. Quality does not change "
+        "writes the latent length in the frontend. Detail does not change "
         "size."
     )
 

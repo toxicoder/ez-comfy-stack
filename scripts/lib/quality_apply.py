@@ -14,13 +14,13 @@ Globals:
 
 Arguments:
   python3 scripts/lib/quality_apply.py --graph IN.json --out OUT.json \
-      [--quality TIER] [--comfy-url URL]
+      [--quality RUNG] [--comfy-url URL]
 
   --graph      Serialized ComfyUI graph JSON (LiteGraph shape) to read.
   --out        Path to write the overlaid graph to.
   --quality    Rung id from ez_quality.presets.QUALITY_CHOICES (draft,
                standard, final). A legacy tier id is accepted too and resolves
-               onto a rung. Empty means take the tier the graph records on its
+               onto a rung. Empty means take the rung the graph records on its
                own EZQuality node.
   --comfy-url  ComfyUI base URL used for the loader combo options. Empty (the
                default) skips the on-disk presence check entirely.
@@ -31,7 +31,7 @@ Outputs:
 
 Returns:
   0 when --out holds the overlaid graph; 1 when --graph is missing or is not a
-  JSON object, when --quality names an unknown tier, or when --out cannot be
+  JSON object, when --quality names an unknown rung, or when --out cannot be
   written.
 
 Rung resolution order: --quality, then the graph's EZQuality widget, then
@@ -258,7 +258,7 @@ def resolve_quality(graph: Mapping[str, Json], requested: str) -> str:
     if requested:
         choice = canonical_tier(requested)
         if choice is None:
-            raise QualityApplyError(f"unknown quality tier: {requested}")
+            raise QualityApplyError(f"unknown Detail rung: {requested}")
         return choice
     return canonical_tier(recorded_quality(graph)) or DEFAULT_RUNG
 

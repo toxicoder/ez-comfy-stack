@@ -366,10 +366,10 @@ Commands:
   reset-hf-partials [--yes] [--force]
                     Delete *.incomplete under MODELS_DIR (finished weights kept)
   cleanup           Remove comfy-state volume only (type DELETE; keeps COMFY_OUTPUT_DIR)
-  print-shot <film> <id> [--quality TIER]
+  print-shot <film> <id> [--quality RUNG]
                     Queue one compiled shot (01-18) into films/<slug>/shots/
-                    (tier resolves --quality, then EZ_QUALITY, then the graph)
-  film-resume <film> [--quality TIER]
+                    (the rung resolves --quality, then EZ_QUALITY, then the graph)
+  film-resume <film> [--quality RUNG]
                     Reprint failed/crashed shots only (skip ok with 5.00 +/- 0.05s)
   film-export-otio <film>
                     Write films/<slug>/publish/<slug>.otio from jobstore
@@ -379,7 +379,7 @@ Commands:
                     Copy takes/<id>/tNNN.mp4 to shots/<id>.mp4 and mark ok
   promote-workflow --from PATH --lane LANE --id STEM [--subdir REL]
                     Copy a live _user graph into workflows/_lab/<lane>/ (does not commit)
-  album-render --album ARTIST/SLUG [--art skip|upload|generate] [--quality TIER]
+  album-render --album ARTIST/SLUG [--art skip|upload|generate] [--quality RUNG]
                     Queue one shipped album then zip (compose must already be up)
   download-restore [--tier seedvr2-3b]
                     Opt-in SeedVR2-3B Apache restore pack (post-concat; not download-models)
@@ -1381,7 +1381,7 @@ cmd_download_limit() {
 # Globals:
 #   REPO_ROOT
 # Arguments:
-#   $@  film id [shot id] [--quality TIER]
+#   $@  film id [shot id] [--quality RUNG]
 # Outputs:
 #   print-shot logs
 # Returns:
@@ -1397,7 +1397,7 @@ cmd_print_shot() {
 # Globals:
 #   REPO_ROOT
 # Arguments:
-#   $@  film id [--quality TIER]
+#   $@  film id [--quality RUNG]
 # Outputs:
 #   print-shot logs
 # Returns:

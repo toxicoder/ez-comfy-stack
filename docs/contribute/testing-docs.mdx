@@ -57,7 +57,7 @@ Makefile shims call Bazelisk when present. Canonical commands: [Building with Ba
 | **`bazelisk test //tests:typecheck`** | Pyright (Pylance) + mypy |
 | **`bazelisk run //docs:docs`** | generators then Fumadocs static export (`docs-site/out/`) |
 | **`bazelisk run //docs:generate`** | the four `docs/generate_*.py` generators only; no npm, no export |
-| **`bazelisk run //tests:build_quality_js`** | regenerate the Quality tier JS from `presets.py` |
+| **`bazelisk run //tests:build_quality_js`** | regenerate the Detail ladder JS from `presets.py` |
 | **`bazelisk run //:fix`** | buildifier + `shfmt -w` |
 | **`bazelisk run //:manage -- doctor`** | Host health check (not hermetic) |
 

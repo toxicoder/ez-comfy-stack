@@ -66,7 +66,7 @@ A token in `.env` is **not** the same as accepting the Lightricks license.
 | **Gated** | LTX-2.5 (LTX Community License): token **and** a license click as that Hugging Face user |
 | **Opt-in** | Podcast (Kokoro, ACE-Step), rap AIO, Qwen3.6-35B-A3B GGUF (`download-llm --tier qwen36-35b-a3b`, occupancy `llm-desk`), describe VLM (`download-llm --tier describe`), cubic person mask (DeepLabV3 ResNet50, BSD-3, first Cubic block world Queue, not in `download-models`), Z-Image, Wan A14B, Fun InP, TRELLIS.2, ... |
 | **Banned** | MiniMax H3 (US Excluded Territory for weights **and** outputs), cloud partner APIs, NC TTS packs, Nunchaku 9B |
-| **Opt-in NC** | Klein 9B and FLUX.2-dev: `download-image --tier 9b` / `flux2-dev`. Not YouTube-ok. Not lab UNET pins. |
+| **Opt-in NC** | Klein 9B and FLUX.2-dev: `download-image --tier 9b` / `flux2-dev`. Not YouTube-ok. Not lab UNET pins, and no **Detail** rung can select them. |
 | **Opt-in Kommunity** | FLUX 3 Image Klein: `download-image --tier flux3` / `flux3-base` / `flux3-nvfp4` / `flux3-bf16` / `flux3-te` / `flux3-pup`. **FLUX Kommunity License (v1.0)** - gated, HF revision-pinned, monetized output only under **$5M gross annualized revenue**. Not Apache, never a default; opt-in FLUX 3 lab stills only. **Klein 4B stays the Apache default still.** |
 
 ```mermaid
@@ -192,7 +192,9 @@ US-based casual content creators: YouTube, client shorts, ads under a **small LL
 
 **LTX-2.3:** optional fallback (`download-ltx --tier 2.3`) if 2.5 access or INT8-convrot fails. Not advertised as 30 s / 60 s films.
 
-**Free Commercial Use (\<$10M) quality:** Klein **4B** still at LTX feeder size (`1280x704` / `768x1280`) -> optional Apache SeedVR2 polish on that PNG (not 4K) -> LTX-2.5 I2V (motion + sound; LTX 2x / DFR for resolution). Unload Klein before LTX. The Quality combo of that name never selects Klein 9B or FLUX.2-dev. Wan silent 5 s remains the Apache rehearsal (no company-revenue cap, no native audio).
+**Free-commercial chain (what the Free Commercial Use (\<$10M) row used to stand for):** pick the size yourself on **Format / platform** (LTX feeder size `1280x704` / `768x1280`) - no rung writes a size any more - then Queue a Klein **4B** still, take optional Apache SeedVR2 polish on that PNG (not 4K), then LTX-2.5 I2V (motion + sound; LTX 2x / DFR for resolution). Unload Klein before LTX. Every rung on those Apps stays inside the App's own Apache stack, so no rung can select Klein 9B or FLUX.2-dev. Wan silent 5 s remains the Apache rehearsal (no company-revenue cap, no native audio).
+
+**The rung states the license:** the App **Detail** row (`EZQuality`) offers Draft / Standard / Final, and its caption closes with one license word for that family - `Apache-2.0` on Klein, Wan, LTX, film, audio, and TRELLIS; `FLUX Non-Commercial` on the opt-in FLUX 3 graphs; `Qwen Research license` on the opt-in Qwen graphs. A rung never writes a weight outside its own family, so the Non-Commercial and Qwen Research paths are the opt-in graphs under `workflows/_lab/labs/opt-in/` (`still-flux3-*`, `still-qwen-image`), never rows on an Apache App. Selector: [ComfyUI Apps](studio-apps.md#graph-vs-app).
 
 **90s films:** Klein identity still + 18 x LTX 5.00s print (world audio, no score), stitch with a 90s cap. Do not Queue a 90s latent. See [Short films](shorts.md).
 

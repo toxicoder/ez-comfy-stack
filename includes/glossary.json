@@ -406,11 +406,11 @@
   },
   {
     "id": "quality-widget",
-    "title": "Quality widget",
-    "aliases": ["Quality dropdown", "EZQuality", "Lab / Draft / High", "Free Commercial Use"],
+    "title": "Detail ladder",
+    "aliases": ["Detail ladder", "Detail row", "Detail widget", "EZQuality", "Draft / Standard / Final", "Quality combo", "Quality widget"],
     "category": "Studio",
-    "short": "App-global Lab / Draft / High / Free Commercial Use combo. Family-specific overlays. Not --tier quality.",
-    "long": "Every `_lab` graph has an `EZQuality` combo stamped first in App Mode. **Lab** keeps authored widgets. **Draft** is faster (fewer steps). **High** is slower (more steps; Klein base 4B + CFG 3.5 only when that UNET is on disk). **Free Commercial Use (<$10M)** pins Apache Klein 4B (never 9B or FLUX.2-dev) and LTX-2.5 steps; generic 16:9 / 9:16 still Formats retarget to LTX feeder pixels. Wan / audio / trellis are no-ops. Named qualities may swap UNET, CLIP, and VAE when files are on disk. They never change length. LTX `--tier quality` is a 2.3 download alias, not this widget. See [ComfyUI Apps](studio-apps.md).",
+    "short": "App row with three rungs: Draft / Standard / Final. The caption states the real steps, CFG, weights, and license. Not --tier quality.",
+    "long": "Every `_lab` graph the ladder can write carries an `EZQuality` row offering exactly three rungs. **Standard** (the default) writes nothing - it leaves the graph exactly as this App ships it - so the default cannot drift and it is never refused. **Draft** is the quick look and **Final** the best this App's own stack can do; both are write-or-refuse, so a rung whose writes cannot all land is refused whole and the row keeps its previous rung. No rung changes size, and no rung leaves the App's own model stack: Klein 9B and FLUX.2-dev are unreachable from a rung. The caption is the only truth: `<stack> - <steps> steps - CFG <cfg> - <license>` read off the live widgets, prefixed `Edited: ` when a hand edit left the rung behind. Retired ids (lab, custom, high, ultra, max, Free Commercial Use, flux3-*, qwen-*) are accepted input that normalizes onto a rung, never rows. LTX `--tier quality` is a 2.3 download alias, not this widget. See [ComfyUI Apps](studio-apps.md).",
     "see_also": ["app-mode", "cfg", "download-tier", "sampler"]
   },
   {

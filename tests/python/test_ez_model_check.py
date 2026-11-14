@@ -30,8 +30,6 @@ if str(CUSTOM) not in sys.path:
 from ez_quality.check import (  # noqa: E402
     ACE_TURBO,
     CLIP_4B,
-    CLIP_8B,
-    CLIP_MISTRAL,
     CMD_DOWNLOAD_MODELS,
     CMD_DREAMX,
     CMD_DUB,
@@ -50,16 +48,10 @@ from ez_quality.check import (  # noqa: E402
     CMD_WAN_S2V,
     CMD_WAN_VACE,
     DREAMX_WEIGHTS,
-    FLUX2_DEV,
-    KLEIN_9B,
-    KLEIN_9B_BASE,
     KLEIN_DISTILLED,
     LLM_35B,
     LLM_GGUF,
     LTX_ICLORA,
-    QUALITY_FREE_COMMERCIAL,
-    QUALITY_MAX,
-    QUALITY_ULTRA,
     SEEDVR2,
     STATUS_DEFAULT,
     CheckHints,
@@ -79,10 +71,38 @@ from ez_quality.check import (  # noqa: E402
     inspect_file,
     models_roots,
     requirements_for,
+    rung_family,
+    rung_needs,
+    rung_row,
     run_check,
     scan,
 )
 from ez_quality.nodes import EZModelCheck, EZQuality  # noqa: E402
+from ez_quality.presets import (  # noqa: E402
+    CLIP_8B,
+    CLIP_MISTRAL,
+    FLUX2_DEV,
+    KLEIN3_NVFP4,
+    KLEIN3_TE,
+    KLEIN_9B,
+    KLEIN_9B_BASE,
+    KLEIN_9B_NVFP4,
+    KLEIN_BASE,
+    KLEIN_NVFP4,
+    QUALITY_DRAFT,
+    QUALITY_FAMILIES,
+    QUALITY_FINAL,
+    QUALITY_FREE_COMMERCIAL,
+    QUALITY_FREE_COMMERCIAL_ALIAS,
+    QUALITY_HIGH,
+    QUALITY_LAB,
+    QUALITY_MAX,
+    QUALITY_STANDARD,
+    QUALITY_ULTRA,
+    QWEN_IMAGE_TURBO_INT8,
+    VAE_FULL,
+    VAE_SMALL,
+)
 from ez_quality.routes import handle_check, register_routes, request_json  # noqa: E402
 
 
@@ -172,13 +192,13 @@ def test_coverage_gaps(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     assert empty_type.types == ()
 
     _comfy(tmp_path, "diffusion_models", KLEIN_DISTILLED)
+    _comfy(tmp_path, "diffusion_models", KLEIN_BASE)
+    _comfy(tmp_path, "diffusion_models", KLEIN_NVFP4)
     _comfy(tmp_path, "text_encoders", CLIP_4B)
-    _comfy(tmp_path, "vae", "flux2-vae.safetensors")
-    _comfy(tmp_path, "diffusion_models", KLEIN_9B)
-    _comfy(tmp_path, "diffusion_models", "flux-2-klein-9b-nvfp4.safetensors")
-    _comfy(tmp_path, "text_encoders", CLIP_8B)
+    _comfy(tmp_path, "vae", VAE_FULL)
+    _comfy(tmp_path, "vae", VAE_SMALL)
     both = run_check(
-        {"occupancy": "klein", "quality": QUALITY_ULTRA, "unets": [KLEIN_DISTILLED]},
+        {"occupancy": "klein", "quality": QUALITY_FINAL, "unets": [KLEIN_DISTILLED]},
         roots=(tmp_path,),
     )
     assert both["ok"] is True
@@ -187,10 +207,12 @@ def test_coverage_gaps(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
         roots=(tmp_path / "empty",),
     )
     assert dup_missing["ok"] is False
-    (tmp_path / "comfy" / "diffusion_models" / KLEIN_9B).unlink()
-    (tmp_path / "comfy" / "diffusion_models" / "flux-2-klein-9b-nvfp4.safetensors").unlink()
-    _comfy(tmp_path, "diffusion_models", KLEIN_DISTILLED)
+    # Weights no rung can reach, plus the legacy spellings that used to name
+    # them: they change nothing the checker asks for.
+    _comfy(tmp_path, "diffusion_models", KLEIN_9B)
+    _comfy(tmp_path, "diffusion_models", "flux-2-klein-9b-nvfp4.safetensors")
     _comfy(tmp_path, "diffusion_models", FLUX2_DEV)
+    _comfy(tmp_path, "text_encoders", CLIP_8B)
     _comfy(tmp_path, "text_encoders", CLIP_MISTRAL)
     max_ok = run_check(
         {"occupancy": "klein", "quality": QUALITY_MAX},
@@ -219,22 +241,29 @@ def test_models_roots_env(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> No
     assert fallback[0] == Path("/models")
 
 
-def test_klein_lab_ready_and_ultra_missing(tmp_path: Path) -> None:
+def test_klein_standard_is_ready_and_final_names_its_row(tmp_path: Path) -> None:
+    """The default rung is ready on the shipped stack; final names its own row.
+
+    ``lab`` and ``ultra`` are accepted input only: they normalize onto a rung
+    before anything is read off the table, so the report labels the rung the
+    disk was actually asked about, and no accepted id can ask for a Klein 9B.
+    """
     _comfy(tmp_path, "diffusion_models", KLEIN_DISTILLED)
     _comfy(tmp_path, "text_encoders", CLIP_4B)
-    _comfy(tmp_path, "vae", "flux2-vae.safetensors")
+    _comfy(tmp_path, "vae", VAE_FULL)
     _comfy(tmp_path, "llm", LLM_GGUF)
     lab = run_check(
         {
             "lab_rel": "photos/still-draft",
             "occupancy": "klein",
-            "quality": "lab",
+            "quality": QUALITY_LAB,
             "enhance_on": True,
         },
         roots=(tmp_path,),
     )
     assert lab["ok"] is True
-    assert "Ready for photos/still-draft @ lab" in lab["message"]
+    assert lab["quality"] == QUALITY_STANDARD
+    assert f"Ready for photos/still-draft @ {QUALITY_STANDARD}" in lab["message"]
     ultra = run_check(
         {
             "lab_rel": "photos/still-draft",
@@ -245,40 +274,53 @@ def test_klein_lab_ready_and_ultra_missing(tmp_path: Path) -> None:
         roots=(tmp_path,),
     )
     assert ultra["ok"] is False
-    assert CMD_IMAGE_9B in ultra["commands"]
-    assert any(KLEIN_9B.split(".")[0] in row["name"] or KLEIN_9B in row["name"] for row in ultra["missing"])
+    assert ultra["quality"] == QUALITY_FINAL
+    missing_names = [str(row["name"]) for row in ultra["missing"]]
+    assert KLEIN_BASE in missing_names, ultra["missing"]
+    assert CMD_DOWNLOAD_MODELS in ultra["commands"]
+    for unreachable in (KLEIN_9B, KLEIN_9B_BASE, FLUX2_DEV, CLIP_8B, CLIP_MISTRAL):
+        assert unreachable not in missing_names, unreachable
 
 
-def test_klein_max_clip_and_free_commercial(tmp_path: Path) -> None:
+def test_klein_rung_rows_name_their_own_files(tmp_path: Path) -> None:
+    """Each rung asks the disk for its own row, and the legacy twins ask alike."""
     _comfy(tmp_path, "diffusion_models", KLEIN_DISTILLED)
     _comfy(tmp_path, "text_encoders", CLIP_4B)
-    _comfy(tmp_path, "vae", "full_encoder_small_decoder.safetensors")
-    _comfy(tmp_path, "diffusion_models", KLEIN_9B_BASE)
-    missing_clip = run_check(
-        {"occupancy": "klein", "quality": QUALITY_MAX},
-        roots=(tmp_path,),
+    _comfy(tmp_path, "vae", VAE_FULL)
+    _comfy(tmp_path, "vae", VAE_SMALL)
+
+    draft = run_check({"occupancy": "klein", "quality": QUALITY_DRAFT}, roots=(tmp_path,))
+    assert draft["ok"] is False
+    assert KLEIN_NVFP4 in [row["name"] for row in draft["missing"]]
+    final = run_check({"occupancy": "klein", "quality": QUALITY_FINAL}, roots=(tmp_path,))
+    assert final["ok"] is False
+    assert KLEIN_BASE in [row["name"] for row in final["missing"]]
+    assert draft["missing"] != final["missing"], "the rungs name different rows"
+
+    # The retired high / ultra / max / FCU ids were once separate recipes, two of
+    # them byte-identical; they are accepted spellings of final and must ask for
+    # exactly what final asks for.
+    for legacy in (
+        QUALITY_HIGH,
+        QUALITY_ULTRA,
+        QUALITY_MAX,
+        QUALITY_FREE_COMMERCIAL,
+        QUALITY_FREE_COMMERCIAL_ALIAS,
+    ):
+        same = run_check({"occupancy": "klein", "quality": legacy}, roots=(tmp_path,))
+        assert same["quality"] == QUALITY_FINAL, legacy
+        assert same["missing"] == final["missing"], legacy
+
+    _comfy(tmp_path, "diffusion_models", KLEIN_NVFP4)
+    _comfy(tmp_path, "diffusion_models", KLEIN_BASE)
+    assert (
+        run_check({"occupancy": "klein", "quality": QUALITY_DRAFT}, roots=(tmp_path,))["ok"]
+        is True
     )
-    assert missing_clip["ok"] is False
-    assert CLIP_8B in [row["name"] for row in missing_clip["missing"]]
-    _comfy(tmp_path, "text_encoders", CLIP_8B)
-    ready = run_check(
-        {"occupancy": "klein", "quality": QUALITY_MAX},
-        roots=(tmp_path,),
+    assert (
+        run_check({"occupancy": "klein", "quality": QUALITY_FINAL}, roots=(tmp_path,))["ok"]
+        is True
     )
-    assert ready["ok"] is True
-    (tmp_path / "comfy" / "diffusion_models" / KLEIN_9B_BASE).unlink()
-    _comfy(tmp_path, "diffusion_models", FLUX2_DEV)
-    miss_mistral = run_check(
-        {"occupancy": "klein", "quality": QUALITY_MAX},
-        roots=(tmp_path,),
-    )
-    assert CLIP_MISTRAL in [row["name"] for row in miss_mistral["missing"]]
-    _comfy(tmp_path, "text_encoders", CLIP_MISTRAL)
-    free = run_check(
-        {"occupancy": "klein", "quality": QUALITY_FREE_COMMERCIAL},
-        roots=(tmp_path,),
-    )
-    assert free["ok"] is True
 
 
 def test_occupancy_packs_and_extras(tmp_path: Path) -> None:
@@ -325,6 +367,61 @@ def test_occupancy_packs_and_extras(tmp_path: Path) -> None:
     assert "authored-vae" in packs
     assert "authored-lora" in packs
     assert "authored-ckpt" in packs
+
+
+def _rung_row_files(family: str, rung: str) -> set[str]:
+    """Files one rung row asks a loader to select, off the generated table.
+
+    Args:
+        family: Family id, as :func:`rung_family` returns it.
+        rung: Rung id, as :func:`~ez_quality.presets.normalize_quality` returns it.
+
+    Returns:
+        The filenames the row pins for the three loader fields.
+    """
+    return {
+        value
+        for field, value in rung_row(family, rung).items()
+        if field in ("unet_name", "clip_name", "vae_name")
+        and isinstance(value, str)
+        and value
+    }
+
+
+def test_rung_family_follows_the_pinned_weights() -> None:
+    """A FLUX 3 or Qwen loader pulls the graph into its own rung family.
+
+    Both opt-in families stamp the klein occupancy, so reading the rung row off
+    the occupancy would ask the disk for Klein 4B weights the graph never
+    selects.
+    """
+    assert rung_family(CheckHints(occupancy="klein")) == "klein"
+    assert rung_family(CheckHints(occupancy="klein", unets=("x.safetensors", KLEIN3_NVFP4))) == "klein3"
+    assert rung_family(CheckHints(occupancy="klein", clips=(KLEIN3_TE,))) == "klein3"
+    assert rung_family(CheckHints(occupancy="klein", unets=(QWEN_IMAGE_TURBO_INT8,))) == "qwen"
+    assert rung_family(CheckHints(occupancy="wan", unets=(WAN_5B,))) == "wan"
+
+
+def test_standard_rung_needs_nothing_and_named_rungs_stay_in_family() -> None:
+    """The middle rung asks for no file, and no rung reaches another stack.
+
+    ``standard`` writes nothing, so the disk check must not ask for one more
+    file than the App already ships. Each named rung asks only for the files its
+    own row pins, and Klein 9B / FLUX.2-dev are not a row on any family.
+    """
+    unreachable = {KLEIN_9B, KLEIN_9B_BASE, KLEIN_9B_NVFP4, FLUX2_DEV, CLIP_8B, CLIP_MISTRAL}
+    for family in QUALITY_FAMILIES:
+        assert rung_needs(family, QUALITY_STANDARD) == [], family
+        for rung in (QUALITY_DRAFT, QUALITY_FINAL):
+            needs = rung_needs(family, rung)
+            names = {spec.name for need in needs for spec in need.files}
+            assert names == _rung_row_files(family, rung), (family, rung)
+            assert not names & unreachable, (family, rung, names & unreachable)
+            for need in needs:
+                assert need.cmd, (family, rung, need.pack)
+
+    assert _rung_row_files("klein", QUALITY_FINAL) == {KLEIN_BASE, CLIP_4B, VAE_FULL}
+    assert rung_needs("wan", QUALITY_FINAL) == [], "a steps-only rung names no file"
 
 
 def test_inspect_file_states(tmp_path: Path) -> None:
@@ -421,7 +518,7 @@ def test_hints_from_graph_and_args() -> None:
     }
     hints = hints_from_graph(graph)
     assert hints.occupancy == "klein"
-    assert hints.quality == QUALITY_ULTRA
+    assert hints.quality == QUALITY_FINAL, "the accepted ultra id normalizes onto final"
     assert hints.enhance_on is True
     assert hints.describe_on is True
     assert "iclora" in hints.flags
@@ -482,17 +579,17 @@ def test_hints_from_graph_and_args() -> None:
 
 def test_scan_any_group_and_report(tmp_path: Path) -> None:
     _comfy(tmp_path, "diffusion_models", KLEIN_DISTILLED)
+    _comfy(tmp_path, "diffusion_models", KLEIN_BASE)
     _comfy(tmp_path, "text_encoders", CLIP_4B)
-    _comfy(tmp_path, "vae", "flux2-vae.safetensors")
-    _comfy(tmp_path, "diffusion_models", KLEIN_9B)
-    _comfy(tmp_path, "text_encoders", CLIP_8B)
+    _comfy(tmp_path, "vae", VAE_FULL)
+    _comfy(tmp_path, "vae", VAE_SMALL)
     result = scan(
         CheckHints(lab_rel="photos/hero", occupancy="klein", quality=QUALITY_ULTRA),
         (tmp_path,),
     )
     assert result.ok is True
     text = format_report(result)
-    assert text.startswith("Ready for photos/hero @ ultra")
+    assert text.startswith(f"Ready for photos/hero @ {QUALITY_FINAL}")
     missing = scan(CheckHints(occupancy="audio"), (tmp_path,))
     assert missing.ok is False
     report = format_report(missing)

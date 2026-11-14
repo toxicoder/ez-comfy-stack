@@ -22,7 +22,7 @@ class EZQuality:
         """Return Comfy widget specs for this node.
 
         Returns:
-            Required widget map (quality combo).
+            Required widget map (the Detail rung).
         """
         return {
             "required": {

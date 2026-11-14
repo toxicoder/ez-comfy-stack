@@ -78,34 +78,95 @@ STUDIO_APP_JS = CUSTOM / "ez_studio_app" / "js" / "ez_studio_app.js"
 
 
 def test_quality_js_writes_vue_safe_widget_values_on_the_node_graph() -> None:
+    """One helper moves the widget object and its own prompt slot; nothing else does.
+
+    Nodes 2.0 renders the widget object, LiteGraph serializes widgets_values, so
+    a write that reaches only one of the two leaves the row and the queued prompt
+    disagreeing. The overlay keeps exactly one assignment site for each.
+    """
     body = QUALITY_JS.read_text(encoding="utf-8")
-    assert "function setWidgetValue(node, widget, value)" in body
-    assert "node.widgets_values" in body
-    assert "setDirtyCanvas" in body
-    assert "qualityNode.graph" in body or "node.graph" in body
-    assert "ez-comfy.quality.last" in body
-    assert "defaulted.set(graph" in body or "defaulted.set(" in body
-    assert "lab_quality_caption" in body
+    slot = _fn(body, "function writeWidgetSlot(node, widget, value) {")
+    assert "widget.value = value" in slot
+    assert "node.widgets_values[idx] = value" in slot
+    assert "widgetSlotIndex(node, widget)" in slot
+    assert "idx >= 0" in slot
+    setter = _fn(body, "function setWidgetValue(node, widget, value) {")
+    assert "writeWidgetSlot(node, widget, value)" in setter
+    assert "widget.callback(value, app.canvas, node)" in setter
+    assert "markGraphDirty(node?.graph)" in setter
+    dirty = _fn(body, "function markGraphDirty(graph) {")
+    assert "graph.setDirtyCanvas(true, true)" in dirty
+    assert "graph.change()" in dirty
+    # the row itself is written through the same path, so a second Detail combo
+    # cannot show a rung the serialized prompt does not hold
+    assert "writeWidgetSlot(node, widget, value)" in _fn(
+        body, "function setQualityOnAll(graph, value) {"
+    )
+    assert body.count("widget.value = ") == 1
+    assert body.count("node.widgets_values[") == 1
+    apply = _fn(body, "function applyQuality(choice, qualityNode) {")
+    assert "const graph = qualityNode?.graph || app.graph;" in apply
     assert "applyQuality(value, node)" in body
-    assert "localStorage.setItem" in body
-    assert "localStorage.getItem" in body
+    assert "lab_quality_caption" in body
+    # no browser-global carries a rung from one App into the next
+    assert "localStorage" not in body
+    assert "ez-comfy.quality.last" not in body
     assert "node.widgets.map((item) => item.value)" not in body
-    assert "widgets_values[idx]" in body
 
 
-def test_quality_js_freezes_to_custom_on_overlay_edits() -> None:
-    """User Steps/CFG/UNET edits select custom; overlay writes do not."""
+def test_quality_js_reports_hand_edits_and_keeps_the_rung_on_refusal() -> None:
+    """Steps/CFG/UNET edits are captioned Edited:; a refused apply writes nothing.
+
+    There is no custom state to freeze into any more: an edit chains the prior
+    callback and re-reads the truth line, the row keeps the operator's rung, and an
+    apply that cannot land whole leaves the row on the rung already in force.
+    """
     body = QUALITY_JS.read_text(encoding="utf-8")
-    assert "function freezeQualityToCustom" in body
-    assert "function bindOverlayWidget" in body
-    assert "_ezQualityWatch" in body
-    assert "nodeCreated" in body
-    for name in ("steps", "cfg", "unet_name", "clip_name", "vae_name"):
-        assert f'"{name}"' in body
-    assert "CLIPLoader" in body
-    assert "persistLastQuality" in body
-    assert "applyingByGraph" in body
-    assert "seedingByGraph" in body
+    watcher = _fn(body, "function bindOverlayWidget(node, widget) {")
+    assert "widget._ezQualityWatch" in watcher
+    assert "isOverlayWidget(node, widget)" in watcher
+    assert "prior.apply(this, arguments)" in watcher
+    assert "syncQualityFromGraph(node.graph)" in watcher
+    # an edit re-reads the truth line; it runs no apply and moves no row
+    assert "applyQuality(" not in watcher
+    assert "setQualityOnAll(" not in watcher
+    assert "bindOverlayWatchersForNode(node);" in _fn(
+        body, "function bindOverlayWatchers(graph) {"
+    )
+    assert "nodeCreated(node)" in body
+    assert body.count("bindOverlayWatchersForNode(node)") == 3
+    # the Edited: prefix comes from the live comparison, and states what differs
+    terms = _fn(body, "function rungTerms(graph, family, rung) {")
+    assert "edited = true" in terms
+    assert "App ships ${render(expected[field])}" in terms
+    assert "${who} sets ${render(expected[field])}" in terms
+    caption = _fn(body, "function deriveQualityCaption(graph, family, rung, refusal) {")
+    assert "if (terms.edited)" in caption
+    assert "EZ_QUALITY_EDITED_PREFIX" in caption
+    assert 'reasons.join("; ")' in caption
+    assert "reasons.slice(0" not in body
+    # a refused apply changes no widget and keeps the rung already in force
+    refusal = _fn(body, "function refuseApply(graph, family, apply) {")
+    assert "const settled = rungInForce(graph);" in refusal
+    assert "setQualityOnAll(graph, settled)" in refusal
+    assert "applyOverlayWrite" not in refusal
+    assert "setWidgetValue" not in refusal
+    force = _fn(body, "function rungInForce(graph) {")
+    assert "appliedRungs.get(graph)" in force
+    assert "RUNG_STANDARD" in force
+    # every App opens on the rung that writes nothing, with no stored rung to inherit
+    seed = _fn(body, "function seedStandardOnOpen(graph, widget) {")
+    assert "appliedRungs.set(graph" in seed
+    assert "overlayWrites.set(graph, new Map())" in seed
+    assert "rowMoved.set(graph, false)" in seed
+    assert "seedingByGraph.set(graph, true)" in seed
+    # a caption pass cannot re-enter an apply, and a seed write is not a pick
+    apply = _fn(body, "function applyQuality(choice, qualityNode) {")
+    assert "applyingByGraph.get(graph)" in apply
+    assert "applyingByGraph.set(graph, true)" in apply
+    assert "seedingByGraph.get(node.graph)" in _fn(
+        body, "widget.callback = function (value) {", "\n  };\n"
+    )
 
 
 def test_sample_picker_js_freezes_to_custom_on_prompt_edits() -> None:
@@ -191,19 +252,44 @@ def test_sync_negative_family_writes_widgets_values_slot() -> None:
 
 
 def test_quality_js_keeps_queue_time_user_edits() -> None:
-    """Overlay drift at Queue freezes Quality custom; nothing re-overwrites it."""
+    """At Queue the rung is re-applied only after the row moved; a hand edit survives.
+
+    Frontend 1.52.7 runs widget.beforeQueued synchronously and last, so this hook
+    is the only place the row and the wire can still be reconciled: an unmoved row
+    sends what is on the box, and a re-apply that cannot land stops Queue instead
+    of quietly rewriting what the operator typed.
+    """
     body = QUALITY_JS.read_text(encoding="utf-8")
-    assert "const overlayWrites = new WeakMap()" in body
-    assert "function recordOverlayWrite" in body
-    assert "function hasOverlayEdits" in body
-    assert "function hasSnapshotEdits" in body
-    assert "function applyOverlayWrite" in body
-    assert "custom - kept your edits" in body
-    start = body.index("widget.beforeQueued = function ()")
-    hook = body[start : body.index("\n  };", start)]
+    hook = _fn(body, "widget.beforeQueued = function () {", "\n  };\n")
+    assert "const moved = rowMoved.get(graph) || rungInForce(graph) !== rung;" in hook
+    assert "if (!moved) {" in hook
+    assert "deriveQualityTier(graph, graphFamily(graph)) === rung" in hook
+    assert "!hasOverlayEdits(graph)" in hook
+    assert "!hasSnapshotEdits(graph)" in hook
+    assert "rowMoved.set(graph, false)" in hook
+    assert "planRungApply(graph, family, rung)" in hook
+    assert "refuseApply(graph, family, apply)" in hook
+    assert "throw new Error(" in hook
     assert "applyQuality(widget.value, node)" in hook
-    assert "freezeQualityToCustom(graph)" in hook
+    assert hook.index("if (!apply.ok)") < hook.index("applyQuality(widget.value, node)")
     assert "async" not in hook
+    assert "await" not in hook
+    # the row counts as moved on an operator pick, never on a seed write
+    picked = _fn(body, "widget.callback = function (value) {", "\n  };\n")
+    assert "seedingByGraph.get(node.graph)" in picked
+    assert "rowMoved.set(node.graph, true)" in picked
+    assert "applyQuality(value, node)" in picked
+    # an edit is measured against the value the overlay wrote...
+    record = _fn(body, "function recordOverlayWrite(graph, widget, value) {")
+    assert "map.set(widget, value)" in record
+    overlay = _fn(body, "function hasOverlayEdits(graph) {")
+    assert "sameWidgetValue(entry[0].value, entry[1])" in overlay
+    # ...and against what the App shipped, discounting what the rung wrote itself
+    snap = _fn(body, "function hasSnapshotEdits(graph) {")
+    assert "applied.writes.has(widget)" in snap
+    assert "sameWidgetValue(widget.value, row.value)" in snap
+    assert "applyQuality" not in snap
+    assert "setWidgetValue" not in snap
 
 
 def test_quality_js_overlay_writes_are_node_type_bound() -> None:
@@ -240,46 +326,84 @@ def test_quality_js_overlay_writes_are_node_type_bound() -> None:
 
 
 def test_quality_js_combo_matches_the_queued_prompt() -> None:
-    """Reverse derivation, no silent drops, and one value on every combo."""
+    """The row and the caption state what graphToPrompt will really submit."""
     body = QUALITY_JS.read_text(encoding="utf-8")
-    # the tier is read back out of the live widgets, per instance
-    assert "function deriveQualityTier(graph, family)" in body
+    # the rung is read back out of the live widgets, per instance
     assert "function collectOverlayInstances(graph, family)" in body
     assert "function isTrellisGuidanceFreeStage(node, family)" in body
     assert "function scopeComboToFamily(graph, family)" in body
     assert "function agreeOn(entries, read)" in body
     assert "function overlayValues(graph, family, instances)" in body
-    assert "function planTierWrites(graph, family, tier)" in body
+    assert "function planTierWrites(graph, family, rung)" in body
     assert "function writeBlockReason(" in body
-    # instances of one class that disagree match no tier and are not lab
+    tier = _fn(body, "function deriveQualityTier(graph, family) {")
+    assert "const seen = overlayValues(graph, family, instances);" in tier
+    assert "sameTierValue(seen.observed[field], row[field])" in tier
+    # standard writes nothing, so it can never be read back off the widgets
+    assert "if (rung === RUNG_STANDARD) {" in tier
+    # instances of one class that disagree match no rung
     assert "DIVERGENT" in body
+    assert "return DIVERGENT" in _fn(body, "function agreeOn(entries, read) {")
     for reason in ("not installed", "cannot swap", "widget not on graph"):
         assert reason in body, reason
     assert "Wan 14B is not overlaid" in body
     # a write with no prompt slot is a failed apply, never a shown value
     assert "function widgetSlotIndex(node, widget)" in body
+    assert "if (widgetSlotIndex(entry.node, entry.widget) < 0)" in _fn(
+        body, "function writeBlockReason(field, entry, wanted, refused) {"
+    )
     assert "has no prompt slot" in body
+    slot = _fn(body, "function widgetSlotIndex(node, widget) {")
+    assert "isSerializedWidget(item)" in slot
+    assert "return -1" in slot
     # a widget that was missing retries once on the next configure
     assert "pendingApplies" in body
     assert "retryPendingApply(graph)" in body
+    # an unhonored rung and an unfillable write are refused before a widget moves;
+    # the rung that writes nothing always succeeds and plans no write
+    plan = _fn(body, "function planRungApply(graph, family, rung) {")
+    assert "if (rung === RUNG_STANDARD) {" in plan
+    assert "plan: { writes: [] }" in plan
+    assert "if (!rungIsHonored(family, rung))" in plan
+    assert "ok: !reasons.length" in plan
     # every combo moves together, and muted lanes drive nothing
     assert "function setQualityOnAll(graph, value)" in body
-    assert "setQualityOnAll(graph, EZ_QUALITY_CUSTOM)" in body
+    assert "setQualityOnAll(graph, rung)" in _fn(
+        body, "function performApply(graph, family, rung, apply) {"
+    )
+    assert "setQualityOnAll(graph, settled)" in _fn(
+        body, "function refuseApply(graph, family, apply) {"
+    )
     assert "function isLiveNode(node)" in body
     assert "node.mode === 0" in body
-    # captions name the swap the applied row performs
-    assert "function tierCaption(family, tier)" in body
-    start = body.index("function tierLabelFor(family, tier)")
+    assert "if (!isLiveNode(node)) {" in _fn(
+        body, "function collectOverlayInstances(graph, family) {"
+    )
+    assert "if (qualityNode && !isLiveNode(qualityNode))" in _fn(
+        body, "function applyQuality(choice, qualityNode) {"
+    )
+    # the dropdown cannot hold a rung this family cannot honor
+    scoped = _fn(body, "function scopeComboToFamily(graph, family) {")
+    assert "const allowed = rungsForFamily(family);" in scoped
+    assert "widget.options.values = [...allowed];" in scoped
+    assert "writeWidgetSlot(node, widget, settled);" in scoped
+    # the caption names the live widgets; the rung label is hover text only
+    assert "function deriveQualityCaption(graph, family, rung, refusal)" in body
+    start = body.index("function tierLabelFor(family, rung) {")
     label = body[start : body.index("\n}\n", start)]
     assert "EZ_QUALITY_LABELS[family]" in label
+    assert body.count("tierLabelFor(") == 4
+    stamp = _fn(body, "function stampQualityCaption(graph, caption, tooltip) {")
+    assert "if (!graph || !firstLiveQualityNode(graph))" in stamp
+    assert "graph.extra.lab_quality_caption = caption" in stamp
+    assert "${DETAIL_LABEL} - ${caption}" in stamp
     # re-derived on configure, on graph change, on widget edits, and at Queue
+    assert "afterConfigureGraph()" in body
     assert "graphChanged(graph)" in body
     assert "syncQualityFromGraph(graph)" in body
-    start = body.index("widget.beforeQueued = function ()")
-    hook = body[start : body.index("\n  };", start)]
-    assert "deriveQualityTier(graph, graphFamily(graph))" in hook
-    assert "setQualityOnAll(graph, derived)" in hook
-    assert "freezeQualityToCustom(graph)" in hook
+    hook = _fn(body, "widget.beforeQueued = function () {", "\n  };\n")
+    assert "syncQualityFromGraph(graph)" in hook
+    assert "planRungApply(graph, family, rung)" in hook
     assert "applyQuality(widget.value, node)" in hook
     assert "async" not in hook
     assert "node.widgets.map((item) => item.value)" not in body
@@ -575,13 +699,26 @@ def test_model_check_js_caches_the_last_verdict_for_the_report() -> None:
 
 
 def test_model_check_js_reads_the_tier_off_the_visible_quality_node() -> None:
-    """The check reports the combo the overlay acts on, not the first copy."""
+    """The check reports the combo the overlay acts on, not the first copy.
+
+    A muted (mode 4) Detail lane is not in the queued prompt, so its stale rung
+    must never be what Check models reports or what the report files.
+    """
     check = _model_check_fn("collectHints")
     assert "tierFromGraph(g)" in check
     assert 'ntype === "EZQuality"' not in check
     reader = _model_check_fn("tierFromGraph")
-    assert "EZQuality" in reader
-    assert "node.mode === 0" in reader
+    assert '"EZQuality"' in reader
+    assert "node.type || node.comfyClass" in reader
+    # the class gate and the live gate both precede reading the widget value
+    assert "node.mode != null && node.mode !== 0" in reader
+    read_value = reader.index('widgetValue(node, "quality", 0)')
+    assert reader.index('!== "EZQuality"') < reader.index("node.mode !== 0")
+    assert reader.index("node.mode !== 0") < read_value
+    # with no live combo the report names the rung that writes nothing
+    assert "return DEFAULT_RUNG" in reader
+    ships = 'const DEFAULT_RUNG = "standard";'
+    assert ships in MODEL_CHECK_JS.read_text(encoding="utf-8")
 
 
 def test_model_check_js_reports_on_the_model_check_surface() -> None:

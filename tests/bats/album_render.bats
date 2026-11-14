@@ -149,7 +149,7 @@ PY
   [[ "${output}" == *"--quality"* ]]
   run bash "${sh}" run --album nill-bye/peer-review --quality
   [ "${status}" -ne 0 ]
-  [[ "${output}" == *"--quality needs a tier"* ]]
+  [[ "${output}" == *"--quality needs a rung"* ]]
 }
 
 @test "album_render posts the quality-overlaid track graph" {
@@ -172,7 +172,7 @@ PY
     "${TEST_TMP_DIR}/posted_body.json"
 }
 
-@test "album_render uses the tier the graph records when no flag is given" {
+@test "album_render uses the rung the graph records when no flag is given" {
   local sh graph out status
   sh="${REPO_ROOT}/scripts/utilities/album-render.sh"
   # shellcheck disable=SC1091
@@ -181,11 +181,12 @@ PY
   COMFY_URL="http://127.0.0.1:1"
   QUALITY=""
   graph="${TEST_TMP_DIR}/01-track.json"
+  # Recorded high normalizes onto final, which is 24 steps on the audio ladder.
   write_track_graph "${graph}" high
   out="$(quality_apply_graph "${graph}")"
   status="$(comfy_post_prompt "${out}")"
   [ "${status}" = "track1" ]
-  python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); assert d["nodes"][1]["widgets_values"][2]==16, d["nodes"][1]' \
+  python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); assert d["nodes"][1]["widgets_values"][2]==24, d["nodes"][1]' \
     "${TEST_TMP_DIR}/posted_body.json"
 }
 
@@ -201,6 +202,6 @@ PY
   printf '%s' 'not json at all' >"${graph}"
   run quality_apply_graph "${graph}"
   [ "${status}" -ne 0 ]
-  [[ "${output}" == *"Quality overlay failed"* ]]
+  [[ "${output}" == *"Detail ladder overlay failed"* ]]
   ! grep -q '/prompt' "${TEST_TMP_DIR}/curl_calls.log"
 }
