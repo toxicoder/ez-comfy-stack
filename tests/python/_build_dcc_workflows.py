@@ -341,6 +341,48 @@ def _add_guide_video_node(graph: dict, *, layer: str = "depth") -> dict:
     return node
 
 
+def _ensure_plate_picker(graph: dict, *, title: str) -> dict:
+    """Return the graph's LoadImage, appending a canonical one when it has none.
+
+    Globals:
+        None.
+    Arguments:
+        graph: The guide graph, mutated when it carries no picker.
+        title: The caption the operator reads above the upload box.
+    Outputs:
+        The picker node is appended to ``graph["nodes"]`` when none was present.
+    Returns:
+        The LoadImage the clay plate wiring should hang off. The clay hero once
+        borrowed the one picker its seed still carried; that box fed nothing in
+        the seed, and the catalog gate now refuses an upload no node reads, so
+        the guide owns its own instead of inheriting one.
+    """
+    for node in graph["nodes"]:
+        if node.get("type") == "LoadImage":
+            return node
+    node_id = max(int(node["id"]) for node in graph["nodes"]) + 1
+    picker: dict = {
+        "id": node_id,
+        "type": "LoadImage",
+        "pos": [448, 508],
+        "size": [320, 314],
+        "flags": {},
+        "order": 11,
+        "mode": 0,
+        "inputs": [],
+        "outputs": [
+            {"name": "IMAGE", "type": "IMAGE", "links": [], "slot_index": 0},
+            {"name": "MASK", "type": "MASK", "links": [], "slot_index": 1},
+        ],
+        "properties": {"Node name for S&R": "LoadImage"},
+        "widgets_values": ["first.png", "image"],
+        "title": title,
+    }
+    graph["nodes"].append(picker)
+    graph["last_node_id"] = node_id
+    return picker
+
+
 def build_klein_from_clay() -> dict:
     graph = _load("photos/still-hero.json")
     graph["id"] = "guides/clay-hero"
@@ -394,9 +436,9 @@ def build_klein_from_clay() -> dict:
             node["widgets_values"] = [KLEIN_NOTE]
             node["title"] = "Operator note"
     # Wire LoadImage -> VAEEncode -> ReferenceLatent on the positive CLIP.
+    load = _ensure_plate_picker(graph, title="Clay first.png (guide pack)")
     max_id = max(int(n["id"]) for n in graph["nodes"])
     max_link = max(int(link[0]) for link in graph.get("links") or [ [0] ])
-    load = next(n for n in graph["nodes"] if n.get("type") == "LoadImage")
     vae = next(n for n in graph["nodes"] if n.get("type") == "VAELoader")
     pos = next(n for n in graph["nodes"] if n.get("type") == "CLIPTextEncode" and n.get("title") != "Negative")
     sampler = next(n for n in graph["nodes"] if n.get("type") == "KSampler")
