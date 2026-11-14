@@ -2,14 +2,14 @@
   "id": "pool-still",
   "revision": 5,
   "last_node_id": 20,
-  "last_link_id": 30,
+  "last_link_id": 34,
   "nodes": [
     {
       "id": 1,
       "type": "UNETLoader",
       "pos": [
         40,
-        508
+        524
       ],
       "size": [
         360,
@@ -43,7 +43,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        662
+        678
       ],
       "size": [
         360,
@@ -79,7 +79,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        840
+        856
       ],
       "size": [
         360,
@@ -113,7 +113,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        508
+        524
       ],
       "size": [
         420,
@@ -160,7 +160,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         480,
-        1492
+        1508
       ],
       "size": [
         420,
@@ -207,7 +207,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         1440,
-        1260
+        1276
       ],
       "size": [
         280,
@@ -267,7 +267,7 @@
       "type": "KSampler",
       "pos": [
         1440,
-        508
+        524
       ],
       "size": [
         320,
@@ -327,7 +327,7 @@
       "type": "VAEDecode",
       "pos": [
         1840,
-        508
+        524
       ],
       "size": [
         240,
@@ -369,7 +369,7 @@
       "type": "SaveImage",
       "pos": [
         1840,
-        626
+        642
       ],
       "size": [
         280,
@@ -414,54 +414,16 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## business/fitness-travel/pool-still\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nPool still 16:9. Lab size **1280x704**. Prefix `ez_svc_pool`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## business/fitness-travel/pool-still\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nPool still 16:9. Lab size **1280x704**. Prefix `ez_svc_pool`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
-    },
-    {
-      "id": 11,
-      "type": "LoadImage",
-      "pos": [
-        2548,
-        508
-      ],
-      "size": [
-        320,
-        314
-      ],
-      "flags": {},
-      "order": 11,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [],
-          "slot_index": 0
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": [],
-          "slot_index": 1
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoadImage"
-      },
-      "widgets_values": [
-        "example.png",
-        "image"
-      ],
-      "title": "Draft still (set to ez_still_draft_00001_.png)"
     },
     {
       "id": 12,
       "type": "EZKleinPromptEnhance",
       "pos": [
         480,
-        508
+        524
       ],
       "size": [
         420,
@@ -500,13 +462,13 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "A photoreal still of an unmarked interior, pale plaster and oak, no logos on walls or screens. Empty of lettering. Unmarked pool, palms, no lettering on tiles. Empty of lettering.",
-        true,
         true,
         "t2i",
         "YouTube 16:9 still",
         "none",
-        "photos/still-hero"
+        "business/fitness-travel/pool-still"
       ],
       "title": "Klein Prompt Enhance"
     },
@@ -515,7 +477,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         480,
-        1000
+        1016
       ],
       "size": [
         420,
@@ -578,16 +540,16 @@
         "Node name for S&R": "EZQuality"
       },
       "widgets_values": [
-        "lab"
+        "standard"
       ],
-      "title": "Quality"
+      "title": "Detail"
     },
     {
       "id": 15,
       "type": "EZImageFormat",
       "pos": [
         1440,
-        968
+        984
       ],
       "size": [
         360,
@@ -661,7 +623,7 @@
       "type": "EZOptionalImage",
       "pos": [
         2548,
-        894
+        910
       ],
       "size": [
         360.0,
@@ -677,7 +639,7 @@
           "type": "IMAGE",
           "links": [
             19,
-            30
+            34
           ],
           "slot_index": 0
         },
@@ -712,7 +674,7 @@
       "type": "EZKleinRefCanvas",
       "pos": [
         2548,
-        1248
+        1264
       ],
       "size": [
         360.0,
@@ -773,7 +735,7 @@
       "type": "EZImageUpscale",
       "pos": [
         1848,
-        968
+        984
       ],
       "size": [
         280,
@@ -800,7 +762,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -818,7 +785,7 @@
       "type": "EZImageDescribe",
       "pos": [
         2548,
-        1086
+        1102
       ],
       "size": [
         280,
@@ -839,7 +806,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 30
+          "link": 34
         }
       ],
       "outputs": [
@@ -1063,7 +1030,7 @@
       "STRING"
     ],
     [
-      30,
+      34,
       16,
       0,
       19,
@@ -1103,7 +1070,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        436,
+        452,
         400,
         506
       ],
@@ -1116,7 +1083,7 @@
       "title": "PROMPT",
       "bounding": [
         460,
-        436,
+        452,
         928,
         1260
       ],
@@ -1129,7 +1096,7 @@
       "title": "SETTINGS",
       "bounding": [
         1420,
-        436,
+        452,
         400,
         974
       ],
@@ -1142,7 +1109,7 @@
       "title": "OUTPUT",
       "bounding": [
         1820,
-        436,
+        452,
         328,
         656
       ],
@@ -1155,9 +1122,9 @@
       "title": "INPUT",
       "bounding": [
         2528,
-        436,
+        838,
         400,
-        996
+        610
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1175,7 +1142,7 @@
         0
       ]
     },
-    "lab_note": "## business/fitness-travel/pool-still\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nPool still 16:9. Lab size **1280x704**. Prefix `ez_svc_pool`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## business/fitness-travel/pool-still\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nPool still 16:9. Lab size **1280x704**. Prefix `ez_svc_pool`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_description": "Pool still 16:9",
     "lab_app_mode": {
       "enabled": true,
@@ -1192,8 +1159,8 @@
           14,
           "quality",
           {
-            "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
+            "label": "Detail",
+            "description": "draft is a quick look. standard is what this App ships tuned for. final is the best this App's own stack can do. A rung never changes size and never leaves this App's model stack. The caption names the steps, CFG, weights, and license Queue actually sends."
           }
         ],
         [
@@ -1217,7 +1184,7 @@
           15,
           "format",
           {
-            "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (div16).",
+            "description": "Aspect or named platform job. Sets pixels and Rewrite prompt framing. Custom uses Width x Height (div16); the run keeps the folder this App saves to.",
             "label": "Format / platform"
           }
         ],
@@ -1241,7 +1208,7 @@
           19,
           "enable",
           {
-            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs download-llm --tier describe.",
+            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs bazelisk run //:manage -- download-llm --tier describe.",
             "label": "Describe image"
           }
         ],
@@ -1265,8 +1232,8 @@
           13,
           "enhance",
           {
-            "label": "Rewrite negative",
-            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs."
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs.",
+            "label": "Rewrite negative"
           }
         ],
         [
@@ -1313,8 +1280,8 @@
           16,
           "use_references",
           {
-            "label": "Use reference stills",
-            "description": "Turn off to run text-to-image without clearing your picks. Any new pick turns it back on."
+            "description": "Turn off to run text-to-image without clearing your picks. Any new pick turns it back on.",
+            "label": "Use reference stills"
           }
         ]
       ],
@@ -1323,13 +1290,10 @@
       ]
     },
     "linearMode": true,
-    "lab_optional_unwired": [
-      "LoadImage"
-    ],
     "lab_rel": "business/fitness-travel/pool-still",
     "workflowRendererVersion": "Vue-corrected",
     "lab_quality": {
-      "default": "lab"
+      "default": "standard"
     }
   },
   "version": 0.4

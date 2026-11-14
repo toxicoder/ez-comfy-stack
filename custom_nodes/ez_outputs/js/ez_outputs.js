@@ -4,9 +4,16 @@
  * Adaptive explorer: width tiers (compact / cozy / wide) drive a folder rail,
  * a pinned toolbar and footer, auto-fit tiles, list columns, skeletons, and a
  * keyboard cursor. Thumbnail grid / list, multi-select, bulk delete / copy /
- * download. 3D meshes (.glb / .gltf) badge, filter, and download like every
- * other lane, but they have no in-browser preview and never stage a LoadImage
- * input. Comfy History is in-memory. Files on COMFY_OUTPUT_DIR persist.
+ * download. Every lane says what the file is in words that fit its kind: the
+ * list route probes each row (ez_outputs/probe.py) and the card renders those
+ * lines under a human title derived at render time from the machine slug.
+ * Still, video, audio, 3D mesh (.glb / .gltf), MIDI (.mid), and QC report
+ * (qc.json) all badge, filter, and download like one explorer; meshes, MIDI,
+ * and reports have no in-browser preview and never stage a LoadImage input.
+ * N queued takes of one plate render as one card carrying "N files" with the
+ * takes nested, and the header names the absolute output root once so an
+ * operator can answer "where did my file go" (Copy path takes the absolute
+ * path). Comfy History is in-memory. Files on COMFY_OUTPUT_DIR persist.
  * Nodes 2.0 safe: no LiteGraph widget hooks, no canvas resize. Treat inputEl as
  * optional. Report buttons reach window.EzFeedback lazily at click time and
  * fall back to a prefilled GitHub issues tab when the ez_feedback core is not
@@ -20,11 +27,13 @@ import { app } from "../../scripts/app.js";
  * @typedef {Object} EzOutRow
  * @property {string=} rel Path under the output root.
  * @property {string=} name Filename the row shows.
- * @property {string=} kind Still, video, audio, or 3D mesh.
+ * @property {string=} kind Still, video, audio, 3D mesh, MIDI, or report.
  * @property {number=} size Bytes on disk, summed into the status line.
  * @property {number=} mtime Unix seconds the file was last written.
  * @property {string=} parent Folder the row belongs to; "" at the root.
  * @property {string=} suffix Extension the prefix chips group on.
+ * @property {string[]=} lines Human detail lines the list route probed
+ *   (dimensions, duration, tags, verdict). Absent when nothing was learned.
  */
 
 /**
@@ -41,6 +50,7 @@ import { app } from "../../scripts/app.js";
  * @property {string=} error Message sent with a non-2xx reply.
  * @property {EzOutRow[]=} items Files the list route returned.
  * @property {boolean=} truncated True when the list hit its page cap.
+ * @property {string=} output_root Absolute output directory the list came from.
  * @property {string[]=} deleted Rels the delete route removed.
  * @property {EzErrorRow[]=} errors Per-file the delete route rejected.
  * @property {EzOutRow[]=} copied Rows to-input staged in /inputs.
@@ -118,6 +128,28 @@ import { app } from "../../scripts/app.js";
  * @property {EzGraphHandle=} graph Graph the node belongs to.
  */
 
+/**
+ * The sidebar host, tagged with the listeners it owns so a re-mount can undo
+ * the previous one. LiteGraph hands us a plain element; these three slots are
+ * ours alone and stay optional because the first mount sets none of them.
+ * @typedef {HTMLElement & {
+ *   _ezOutIo?: IntersectionObserver,
+ *   _ezOutRo?: ResizeObserver,
+ *   _ezOutKey?: ((event: KeyboardEvent) => void)
+ * }} EzOwnedElement
+ */
+
+/**
+ * The mount function, tagged with the Queue-bus listener it registered. The
+ * listener hangs off the function so two widgets never share one handle.
+ * @typedef {{(el: EzOwnedElement): void, _onExecuted?: (() => void)}} EzMountFn
+ */
+
+/**
+ * A failed route call, carrying what a catch needs to name the route.
+ * @typedef {Error & {endpoint?: string, status?: number}} EzHttpError
+ */
+
 const TAB_ID = "ez-outputs";
 const STYLE_ID = "ez-outputs-css";
 const PREFS_VIEW = "ez-comfy.outputs.view";
@@ -170,7 +202,31 @@ const KIND_LABELS = {
   video: "Video",
   audio: "Audio",
   model3d: "3D",
+  midi: "MIDI",
+  report: "Report",
 };
+
+// Word fragments a card should keep in caps. The graph slug is machine
+// text, so the card re-reads it for a human and these are the abbreviations
+// nobody wants title-cased.
+const TITLE_ACRONYMS = new Set([
+  "ai",
+  "av",
+  "dj",
+  "edm",
+  "glb",
+  "gltf",
+  "i2i",
+  "i2v",
+  "id",
+  "midi",
+  "qc",
+  "s2v",
+  "srt",
+  "t2i",
+  "t2v",
+  "url",
+]);
 
 const FALLBACK_CSS = `
 .ez-out { --ez-out-thumb: 128px; display:flex; flex-direction:column; height:100%; gap:8px; padding:8px; position:relative; box-sizing:border-box; font:12px/1.4 ui-sans-serif,system-ui,sans-serif; }
@@ -397,6 +453,102 @@ function prefixOf(name) {
 }
 
 /**
+ * Take number a Comfy writer stamped into a file name, 0 when there is none
+ * (ez_still_draft_00012_.png -> 12).
+ * @param {string} name
+ * @returns {number}
+ */
+function takeOf(name) {
+  const match = String(name || "").match(/^.*_(\d{3,})_/);
+  return match ? Number(match[1]) : 0;
+}
+
+/**
+ * Title-case one slug fragment, keeping known abbreviations in caps.
+ * @param {string} part One underscore-separated fragment.
+ * @returns {string}
+ */
+function titleWord(part) {
+  return TITLE_ACRONYMS.has(part.toLowerCase())
+    ? part.toUpperCase()
+    : part.charAt(0).toUpperCase() + part.slice(1);
+}
+
+/**
+ * Human card title for a machine slug. Render-time only: the slug on disk and
+ * in the graph stays exactly as written, because it is the key the batch chips
+ * and the graphs join on. ez_breakwater_b12_s1_ltx_video -> Breakwater B12 S1
+ * Ltx Video.
+ * @param {string} name
+ * @returns {string}
+ */
+function titleOf(name) {
+  const stem = String(name || "").replace(/\.[^.]*$/, "");
+  const words = [];
+  stem.split("_").forEach((part, index) => {
+    if (!part || /^\d+$/.test(part)) {
+      return;
+    }
+    if (index === 0 && part.toLowerCase() === "ez") {
+      return;
+    }
+    words.push(titleWord(part));
+  });
+  return words.length ? words.join(" ") : String(name || "");
+}
+
+/**
+ * Human detail lines a card carries, filtered to non-empty strings.
+ * @param {EzOutRow} row
+ * @returns {string[]}
+ */
+function linesOf(row) {
+  return Array.isArray(row && row.lines)
+    ? row.lines.filter((line) => typeof line === "string" && line.trim() !== "")
+    : [];
+}
+
+/**
+ * Batch key of a row: rows of one plate share folder, SaveImage stem, and kind.
+ * @param {EzOutRow} row
+ * @returns {string} Key, or "" when the name carries no take number.
+ */
+function groupKeyOf(row) {
+  const stem = prefixOf((row && row.name) || "");
+  if (!stem) {
+    return "";
+  }
+  return JSON.stringify([parentOf(row), stem, (row && row.kind) || ""]);
+}
+
+/**
+ * Group N takes of one plate into one card. Rows without a Comfy take number
+ * stand alone, so the pane is unchanged for anything that is not a batch.
+ * @param {EzOutRow[]} rows Sorted rows.
+ * @returns {Array<{lead: EzOutRow, rows: EzOutRow[]}>} One entry per card.
+ */
+function groupRows(rows) {
+  const order = [];
+  const buckets = new Map();
+  rows.forEach((row) => {
+    const key = groupKeyOf(row);
+    if (!key) {
+      order.push({ lead: row, rows: [row] });
+      return;
+    }
+    const bucket = buckets.get(key);
+    if (bucket) {
+      bucket.rows.push(row);
+      return;
+    }
+    const created = { lead: row, rows: [row] };
+    buckets.set(key, created);
+    order.push(created);
+  });
+  return order;
+}
+
+/**
  * Parent directory of a list row.
  * @param {EzOutRow} row
  * @returns {string}
@@ -516,8 +668,10 @@ async function fetchJson(path, init) {
   const response = await fetch(apiUrl(path), init);
   const data = await response.json();
   if (!response.ok) {
-    const error = new Error(data.error || response.statusText);
     // Carry route + status so every catch can report them.
+    const error = /** @type {EzHttpError} */ (
+      new Error(data.error || response.statusText)
+    );
     error.endpoint = path;
     error.status = response.status;
     throw error;
@@ -822,7 +976,7 @@ function skeletonPane(count) {
 
 /**
  * Render the sidebar into el.
- * @param {HTMLElement} el
+ * @param {EzOwnedElement} el
  * @returns {void}
  */
 function mount(el) {
@@ -893,6 +1047,12 @@ function mount(el) {
   let lastFocusRel = "";
   /** @type {HTMLElement|null} */
   let lightboxReturn = null;
+  /** @type {string} */
+  let outputRoot = "";
+  // Card element -> the rels one batch card stands for, so selection can
+  // report a batch without the DOM carrying a joined path list.
+  /** @type {WeakMap<HTMLElement, string[]>} */
+  const groupMembers = new WeakMap();
 
   // Auto is the default; only an explicit stored number pins a fixed size.
   const storedThumb = readPref(PREFS_THUMB);
@@ -972,6 +1132,8 @@ function mount(el) {
     ["video", "Video"],
     ["audio", "Audio"],
     ["model3d", "3D"],
+    ["midi", "MIDI"],
+    ["report", "Reports"],
   ];
   const kindButtons = kinds.map(([id, label]) => {
     const button = makeButton(label, "ez-out-chip", () => {
@@ -1140,6 +1302,11 @@ function mount(el) {
   crumb.setAttribute("aria-label", "Output folder path");
   const summary = document.createElement("span");
   summary.className = "ez-out-summary";
+  // "Where is my file": the absolute output root is named once here so no card
+  // has to repeat it. The list route reports it; nothing echoes a client path.
+  const rootLine = document.createElement("span");
+  rootLine.className = "ez-out-root";
+  rootLine.title = "Absolute output root (COMFY_OUTPUT_DIR)";
   const helpBtn = makeButton("Shortcuts", "ez-out-btn ez-out-help-btn", () => {
     toggleHelp();
   });
@@ -1147,6 +1314,7 @@ function mount(el) {
   helpBtn.title = "Keyboard shortcuts";
   head.appendChild(crumb);
   head.appendChild(summary);
+  head.appendChild(rootLine);
   head.appendChild(helpBtn);
 
   const active = document.createElement("div");
@@ -1662,6 +1830,21 @@ function mount(el) {
         box.checked = on;
       }
     });
+    // A batch card reports its own state: true when every take is chosen,
+    // mixed when only some are. Its nested takes were handled above.
+    scroll.querySelectorAll("[data-group]").forEach((node) => {
+      const rels = groupMembers.get(node) || [];
+      const hit = rels.filter((rel) => selected.has(rel)).length;
+      node.setAttribute(
+        "aria-selected",
+        hit === 0 ? "false" : hit === rels.length ? "true" : "mixed",
+      );
+      const box = node.querySelector(".ez-out-group-check");
+      if (box) {
+        box.checked = hit > 0;
+        box.indeterminate = hit > 0 && hit < rels.length;
+      }
+    });
     const n = selected.size;
     bulk.classList.toggle("is-open", n > 0);
     bulk.setAttribute("aria-hidden", n > 0 ? "false" : "true");
@@ -1694,6 +1877,8 @@ function mount(el) {
     summary.textContent = truncated
       ? "Showing " + items.length + ", page size " + pageSize
       : items.length + " loaded";
+    rootLine.textContent = outputRoot ? "Files in " + outputRoot : "";
+    rootLine.title = outputRoot || "Absolute output root (COMFY_OUTPUT_DIR)";
     paneLabel.textContent =
       view === "list" ? "File list, " + vis.length + " rows" : "File grid, " + vis.length + " tiles";
   }
@@ -1926,6 +2111,16 @@ function mount(el) {
       ph.setAttribute("aria-hidden", "true");
       return ph;
     }
+    if (row.kind === "midi" || row.kind === "report") {
+      // No browser tag plays a .mid and no tag renders a QC report, so the
+      // tile names the format and the card lines say what opens it.
+      const ph = document.createElement("div");
+      ph.className =
+        "ez-out-mesh-ph " + (row.kind === "midi" ? "ez-out-midi-ph" : "ez-out-report-ph");
+      ph.textContent = row.kind === "midi" ? "MIDI" : "QC";
+      ph.setAttribute("aria-hidden", "true");
+      return ph;
+    }
     if (row.kind === "video") {
       const video = document.createElement("video");
       video.className = "ez-out-thumb";
@@ -1968,6 +2163,74 @@ function mount(el) {
       }
     });
     return img;
+  }
+
+  /**
+   * Card text block: human title, take or batch count, probed lines, file facts.
+   *
+   * The title is derived at render time from the machine slug the graph wrote;
+   * the slug on disk is never rewritten, because it is the join key batches and
+   * graphs share.
+   *
+   * @param {EzOutRow} row Row the block describes.
+   * @param {string} label First line the card shows.
+   * @param {string=} batch Batch caption ("4 files"); omit for a single file.
+   * @returns {HTMLElement} The meta block.
+   */
+  function metaEl(row, label, batch) {
+    const meta = document.createElement("div");
+    meta.className = "ez-out-card-meta";
+    const name = document.createElement("span");
+    name.className = "ez-out-name";
+    name.textContent = label;
+    name.title = row.rel || "";
+    meta.appendChild(name);
+    if (batch) {
+      const count = document.createElement("span");
+      count.className = "ez-out-batch";
+      count.textContent = batch;
+      meta.appendChild(count);
+    } else {
+      const take = takeOf(row.name || "");
+      if (take) {
+        const chip = document.createElement("span");
+        chip.className = "ez-out-take-label";
+        chip.textContent = "take " + take;
+        meta.appendChild(chip);
+      }
+    }
+    linesOf(row).forEach((line) => {
+      const lineEl = document.createElement("span");
+      lineEl.className = "ez-out-line";
+      lineEl.textContent = line;
+      meta.appendChild(lineEl);
+    });
+    const sub = document.createElement("span");
+    sub.className = "ez-out-sub";
+    sub.textContent = (metaOn
+      ? [formatSize(row.size), formatTime(row.mtime), row.rel]
+      : [formatSize(row.size)]
+    )
+      .filter(Boolean)
+      .join(" - ");
+    meta.appendChild(sub);
+    if (!metaOn) {
+      meta.classList.add("is-compact");
+    }
+    return meta;
+  }
+
+  /**
+   * Absolute path of one row under the reported output root.
+   * @param {string} rel Path relative to the output root.
+   * @returns {string} Absolute path when the root is known, else the rel.
+   */
+  function absolutePath(rel) {
+    const clean = String(rel || "").replace(/^\/+/, "");
+    if (!outputRoot) {
+      return clean;
+    }
+    return outputRoot.replace(/\/+$/, "") + "/" + clean;
   }
 
   /**
@@ -2014,25 +2277,7 @@ function mount(el) {
       thumbWrap.appendChild(check);
     }
 
-    const meta = document.createElement("div");
-    meta.className = "ez-out-card-meta";
-    const name = document.createElement("span");
-    name.className = "ez-out-name";
-    name.textContent = row.name || row.rel;
-    name.title = row.rel;
-    const sub = document.createElement("span");
-    sub.className = "ez-out-sub";
-    sub.textContent = (metaOn
-      ? [formatSize(row.size), formatTime(row.mtime), row.rel]
-      : [formatSize(row.size)]
-    )
-      .filter(Boolean)
-      .join(" - ");
-    meta.appendChild(name);
-    meta.appendChild(sub);
-    if (!metaOn) {
-      meta.classList.add("is-compact");
-    }
+    const meta = metaEl(row, titleOf(row.name || row.rel));
 
     wrap.addEventListener("click", (event) => {
       if (event.target === check) {
@@ -2053,7 +2298,8 @@ function mount(el) {
       const actions = document.createElement("div");
       actions.className = "ez-out-row-actions";
       const isMesh = row.kind === "model3d";
-      const useLabel = isMesh
+      const noStaging = isMesh || row.kind === "midi" || row.kind === "report";
+      const useLabel = noStaging
         ? "Download"
         : row.kind === "audio"
           ? "Use as start audio"
@@ -2063,11 +2309,17 @@ function mount(el) {
       actions.appendChild(
         makeButton(useLabel, "ez-out-btn", (event) => {
           event.stopPropagation();
-          if (isMesh) {
+          if (noStaging) {
             downloadRels([row.rel]);
           } else {
             copyRels([row.rel]);
           }
+        }),
+      );
+      actions.appendChild(
+        makeButton("Copy path", "ez-out-btn", (event) => {
+          event.stopPropagation();
+          copyPaths([absolutePath(row.rel)]);
         }),
       );
       actions.appendChild(
@@ -2081,6 +2333,162 @@ function mount(el) {
       wrap.appendChild(thumbWrap);
       wrap.appendChild(meta);
     }
+    return wrap;
+  }
+
+  /**
+   * One take nested inside its batch card. It carries the row's data-rel, so
+   * the keyboard cursor and selection work per file inside the batch.
+   * @param {EzOutRow} row Take row.
+   * @returns {HTMLElement} The nested take element.
+   */
+  function takeEl(row) {
+    const line = document.createElement("div");
+    line.className = "ez-out-take";
+    line.dataset.rel = row.rel;
+    line.setAttribute("role", "listitem");
+    line.setAttribute("aria-selected", selected.has(row.rel) ? "true" : "false");
+    line.tabIndex = highlightRel === row.rel ? 0 : -1;
+    line.title = row.rel;
+    const take = takeOf(row.name || "");
+    const label = document.createElement("span");
+    label.className = "ez-out-take-name";
+    label.textContent = take ? "take " + take : String(row.name || row.rel);
+    line.appendChild(label);
+    const facts = document.createElement("span");
+    facts.className = "ez-out-take-facts";
+    facts.textContent = (metaOn
+      ? [formatSize(row.size), formatTime(row.mtime)]
+      : [formatSize(row.size)]
+    )
+      .filter(Boolean)
+      .join(" - ");
+    line.appendChild(facts);
+    linesOf(row).forEach((detail) => {
+      const lineEl = document.createElement("span");
+      lineEl.className = "ez-out-line";
+      lineEl.textContent = detail;
+      line.appendChild(lineEl);
+    });
+    line.addEventListener("click", (event) => {
+      event.stopPropagation();
+      lastFocusRel = row.rel;
+      applyClickSelect(row.rel, event);
+    });
+    line.addEventListener("dblclick", (event) => {
+      event.preventDefault();
+      openLightbox(row.rel);
+    });
+    return line;
+  }
+
+  /**
+   * One card for N takes of the same plate: one thumbnail, one title, one
+   * "N files" caption, and the takes nested underneath instead of N flat rows.
+   * @param {{lead: EzOutRow, rows: EzOutRow[]}} unit Batch unit from groupRows.
+   * @returns {HTMLElement} The batch card.
+   */
+  function groupEl(unit) {
+    const isList = view === "list";
+    const lead = unit.lead;
+    const rels = unit.rows.map((row) => row.rel);
+    const wrap = document.createElement("div");
+    wrap.className = (isList ? "ez-out-row-item " : "ez-out-card ") + "ez-out-group";
+    wrap.dataset.group = groupKeyOf(lead) || lead.rel;
+    wrap.setAttribute("role", isList ? "listitem" : "gridcell");
+    wrap.setAttribute(
+      "aria-selected",
+      rels.every((rel) => selected.has(rel)) ? "true" : "false",
+    );
+    wrap.tabIndex = -1;
+    wrap.title = rels.join("\n");
+
+    const chosen = rels.filter((rel) => selected.has(rel)).length;
+    const check = document.createElement("input");
+    check.type = "checkbox";
+    check.className = "ez-out-check ez-out-group-check";
+    check.checked = chosen > 0;
+    check.title = "Select all " + rels.length + " takes";
+    check.setAttribute("aria-label", "Select " + rels.length + " files");
+    check.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const all = rels.every((rel) => selected.has(rel));
+      rels.forEach((rel) => {
+        if (all) {
+          selected.delete(rel);
+        } else {
+          selected.add(rel);
+        }
+      });
+      anchorRel = lead.rel;
+      highlightRel = lead.rel;
+      paintSelection();
+    });
+
+    const thumbWrap = document.createElement("div");
+    thumbWrap.className = "ez-out-thumb-wrap";
+    thumbWrap.appendChild(mediaEl(lead, true));
+    const badge = document.createElement("span");
+    badge.className = "ez-out-badge ez-out-badge-" + (lead.kind || "image");
+    badge.textContent = KIND_LABELS[lead.kind] || lead.kind || "";
+    thumbWrap.appendChild(badge);
+    if (!isList) {
+      thumbWrap.appendChild(check);
+    }
+
+    const meta = metaEl(lead, titleOf(lead.name || lead.rel), rels.length + " files");
+
+    wrap.addEventListener("click", (event) => {
+      if (event.target === check) {
+        return;
+      }
+      lastFocusRel = lead.rel;
+      applyClickSelect(lead.rel, event);
+    });
+
+    if (isList) {
+      wrap.appendChild(check);
+      wrap.appendChild(thumbWrap);
+      wrap.appendChild(meta);
+      const actions = document.createElement("div");
+      actions.className = "ez-out-row-actions";
+      const noStaging =
+        lead.kind === "model3d" || lead.kind === "midi" || lead.kind === "report";
+      actions.appendChild(
+        makeButton(noStaging ? "Download" : "Copy to input", "ez-out-btn", (event) => {
+          event.stopPropagation();
+          if (noStaging) {
+            downloadRels(rels);
+          } else {
+            copyRels(rels);
+          }
+        }),
+      );
+      actions.appendChild(
+        makeButton("Copy path", "ez-out-btn", (event) => {
+          event.stopPropagation();
+          copyPaths(rels.map((rel) => absolutePath(rel)));
+        }),
+      );
+      actions.appendChild(
+        makeButton("Delete", "ez-out-btn", (event) => {
+          event.stopPropagation();
+          deleteRels(rels);
+        }),
+      );
+      wrap.appendChild(actions);
+    } else {
+      wrap.appendChild(thumbWrap);
+      wrap.appendChild(meta);
+    }
+
+    const takes = document.createElement("div");
+    takes.className = "ez-out-takes";
+    unit.rows.forEach((row) => {
+      takes.appendChild(takeEl(row));
+    });
+    wrap.appendChild(takes);
+    groupMembers.set(wrap, rels);
     return wrap;
   }
 
@@ -2207,8 +2615,10 @@ function mount(el) {
     pane.className = view === "list" ? "ez-out-list" : "ez-out-grid";
     pane.setAttribute("role", view === "list" ? "list" : "grid");
     pane.setAttribute("aria-label", paneText);
-    vis.forEach((row) => {
-      pane.appendChild(itemEl(row));
+    // N takes of one plate render as one card carrying "N files"; every other
+    // row is its own card exactly as before.
+    groupRows(vis).forEach((unit) => {
+      pane.appendChild(unit.rows.length > 1 ? groupEl(unit) : itemEl(unit.lead));
     });
     scroll.appendChild(pane);
     if (truncated) {
@@ -2259,6 +2669,16 @@ function mount(el) {
       audio.controls = true;
       audio.src = viewUrl(row.rel);
       media.appendChild(audio);
+    } else if (row.kind === "midi" || row.kind === "report") {
+      // No browser tag plays a .mid and no tag renders a QC verdict, so the
+      // preview says so plainly and Download carries the file out.
+      const note = document.createElement("p");
+      note.className = "ez-out-mesh-note";
+      note.textContent =
+        row.kind === "midi"
+          ? "MIDI sequence - no in-browser player. Download it to open in a DAW."
+          : "QC report - no in-browser preview. Download it to read every check.";
+      media.appendChild(note);
     } else {
       const video = document.createElement("video");
       video.controls = true;
@@ -2269,9 +2689,15 @@ function mount(el) {
     bar.className = "ez-out-lightbox-bar";
     const title = document.createElement("span");
     title.className = "ez-out-lightbox-title";
-    title.textContent = row.rel;
-    title.title = row.rel;
+    title.textContent = titleOf(row.name || row.rel) + " - " + (row.rel || "");
+    title.title = absolutePath(row.rel);
     bar.appendChild(title);
+    linesOf(row).forEach((line) => {
+      const lineEl = document.createElement("span");
+      lineEl.className = "ez-out-line";
+      lineEl.textContent = line;
+      bar.appendChild(lineEl);
+    });
     bar.appendChild(
       makeButton("Prev", "ez-out-btn", () => {
         stepLightbox(-1);
@@ -2289,19 +2715,25 @@ function mount(el) {
     );
     bar.appendChild(
       makeButton("Copy path", "ez-out-btn", () => {
-        copyPaths([row.rel]);
+        copyPaths([absolutePath(row.rel)]);
       }),
     );
     if (row.kind !== "model3d") {
-      const useLabel =
-        row.kind === "audio"
+      const noStaging = row.kind === "midi" || row.kind === "report";
+      const useLabel = noStaging
+        ? "Download"
+        : row.kind === "audio"
           ? "Use as start audio"
           : row.kind === "video"
             ? "Copy to input"
             : "Use as start image";
       bar.appendChild(
         makeButton(useLabel, "ez-out-btn", () => {
-          copyRels([row.rel]);
+          if (noStaging) {
+            downloadRels([row.rel]);
+          } else {
+            copyRels([row.rel]);
+          }
         }),
       );
     }
@@ -2574,6 +3006,7 @@ function mount(el) {
       );
       items = Array.isArray(data.items) ? data.items : [];
       truncated = Boolean(data.truncated);
+      outputRoot = typeof data.output_root === "string" ? data.output_root : "";
       const live = new Set(items.map((row) => row.rel));
       selected.forEach((rel) => {
         if (!live.has(rel)) {
@@ -2847,11 +3280,12 @@ function mount(el) {
       refresh(true);
     }, EXECUTED_MS);
   }
+  const self = /** @type {EzMountFn} */ (mount);
   if (api && typeof api.addEventListener === "function") {
-    if (mount._onExecuted && typeof api.removeEventListener === "function") {
-      api.removeEventListener("executed", mount._onExecuted);
+    if (self._onExecuted && typeof api.removeEventListener === "function") {
+      api.removeEventListener("executed", self._onExecuted);
     }
-    mount._onExecuted = onExecuted;
+    self._onExecuted = onExecuted;
     api.addEventListener("executed", onExecuted);
   }
   if (el._ezOutIo && typeof el._ezOutIo.disconnect === "function") {

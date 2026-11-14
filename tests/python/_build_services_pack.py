@@ -173,10 +173,19 @@ def _patch_cv_io() -> None:
 
 
 def _set_prompt_klein(graph: dict, prompt: str, *, enhance: bool) -> None:
+    """Author the Klein rewriter's prompt for a service App.
+
+    The node's widget order is ``sample, prompt, enhance, ...``: slot 0 is the
+    recipe combo and slot 1 the textarea. The combo has to read ``custom``,
+    because ``resolve_prompt`` treats any other value as a recipe label, and a
+    miss makes it encode the textarea - so writing the sentence into slot 0
+    would send the literal contents of slot 1 to the CLIP instead.
+    """
     enh = cv._node(graph, "EZKleinPromptEnhance")
     values = list(enh["widgets_values"])
-    values[0] = prompt
-    values[1] = enhance
+    values[0] = "custom"
+    values[1] = prompt
+    values[2] = enhance
     enh["widgets_values"] = values
     cv._node(graph, "CLIPTextEncode", "Positive")["widgets_values"] = [prompt]
 

@@ -34,7 +34,12 @@ def test_vace_join_graph_is_17_frames_magcache_off() -> None:
     assert int(latent["widgets_values"][2]) == 17
     titles = [n.get("title") for n in graph["nodes"]]
     assert "Shot A last frame" in titles
-    assert "Shot B first frame (join)" in titles
+    # The Shot B picker was deleted rather than wired: the join needs
+    # WanVaceToVideo, which this Comfy pin does not expose, so the box fed
+    # nothing while the graph left it live. The note now says so.
+    assert "Shot B first frame (join)" not in titles
+    note = next(n for n in graph["nodes"] if n.get("type") == "Note")
+    assert "WanVaceToVideo" in str(note["widgets_values"][0])
     assert "diffusion_pytorch_model.safetensors" in json.dumps(graph)
     assert "vace" in extra["lab_note"].lower()
 

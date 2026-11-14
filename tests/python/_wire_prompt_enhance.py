@@ -18,6 +18,7 @@ from _lab_layout import (
     node_overlap_hits,
 )
 from _lab_paths import lab_json
+from ez_prompt_enhance.samples import catalog_exists
 
 from _lab_theme import (
     GOSEE_LTX_I2V_01,
@@ -216,6 +217,63 @@ def _catalog_for_graph(graph: dict[str, Any]) -> str:
     return str(extra.get("lab_rel") or graph.get("id") or "")
 
 
+CUSTOM_SAMPLE = "custom"
+"""The recipe-combo value that means "encode the textarea as written"."""
+
+
+def _as_prompt_text(sample: object, prompt: object) -> tuple[str, str]:
+    """Return the recipe label and textarea a prompt slot pair really holds.
+
+    A graph authored against the wrong slot order can carry the sentence in the
+    recipe combo and the enhance flag in the textarea. ``resolve_prompt`` then
+    looks the sentence up as a recipe label, misses, and encodes the textarea
+    instead, so Queue sends the literal word ``True`` as the positive prompt and
+    the App's tuned prompt never reaches the sampler. Reading the pair by type
+    recovers the sentence whatever order it was written in.
+
+    Args:
+        sample: Slot written for the recipe combo.
+        prompt: Slot written for the prompt textarea.
+
+    Returns:
+        A ``(sample, prompt)`` pair of strings, with the combo pinned to
+        ``custom`` whenever the sentence had to be lifted out of it.
+    """
+    if isinstance(prompt, str):
+        combo = sample.strip() if isinstance(sample, str) else ""
+        return (combo or CUSTOM_SAMPLE), prompt
+    sentence = sample.strip() if isinstance(sample, str) else ""
+    if sentence and sentence != CUSTOM_SAMPLE:
+        return CUSTOM_SAMPLE, sentence
+    return CUSTOM_SAMPLE, ""
+
+
+def _as_catalog_slot(cat: object, own_rel: str) -> str:
+    """Return the catalog id an enhance node should read recipes from.
+
+    The hidden ``catalog`` widget picks which recipes the **Sample prompt**
+    dropdown lists and which lane the rewrite goal resolves against. Cloning a
+    graph carried the donor's id along, so 158 service and social stills offered
+    the photos lane's recipes and resolved their goal against the photos lane.
+    The graph's own id wins whenever it names a catalog; a bare catalog id an
+    author typed on purpose survives, and only another graph's ``_lab`` path
+    counts as clone residue.
+
+    Args:
+        cat: The catalog slot the graph currently stores.
+        own_rel: This graph's own ``_lab``-relative id.
+
+    Returns:
+        The catalog id to store.
+    """
+    authored = str(cat or "").strip()
+    if not authored or authored == own_rel:
+        return own_rel
+    if catalog_exists(authored) or "/" not in authored:
+        return authored
+    return own_rel or authored
+
+
 def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
     """Pad enhance-node widgets. Default enhance true. Identity titles use identity mode."""
     graph_id = str((graph.get("extra") or {}).get("lab_rel") or graph.get("id") or "")
@@ -235,6 +293,7 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
                 mode = values[2] if len(values) > 2 else default_mode
                 hint = values[3] if len(values) > 3 else ""
                 style = values[4] if len(values) > 4 else "none"
+            sample, prompt = _as_prompt_text(sample, prompt)
             enhance = _as_enhance_flag(enhance)
             if ntype == "EZKleinPromptEnhance":
                 if "IDENTITY" in title.upper() or mode == "identity":
@@ -270,7 +329,7 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
                 mode,
                 hint,
                 style if style else "none",
-                cat or catalog,
+                _as_catalog_slot(cat, catalog),
             ]
         elif ntype == "EZLTXPromptEnhance":
             if len(values) >= 8:
@@ -283,6 +342,7 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
                 hint = values[3] if len(values) > 3 else "5 seconds, 24 fps"
                 audio = values[4] if len(values) > 4 else ""
                 style = values[5] if len(values) > 5 else "none"
+            sample, prompt = _as_prompt_text(sample, prompt)
             if mode not in ("t2v", "i2v", "iclora"):
                 mode = "t2v"
             node["widgets_values"] = [
@@ -293,7 +353,7 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
                 hint,
                 audio,
                 style if style else "none",
-                cat or catalog,
+                _as_catalog_slot(cat, catalog),
             ]
         elif ntype == "EZLongCatPromptEnhance":
             if len(values) >= 7:
@@ -305,6 +365,7 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
                 mode = values[2] if len(values) > 2 else "t2v"
                 hint = values[3] if len(values) > 3 else "5 seconds, 30 fps"
                 style = values[4] if len(values) > 4 else "none"
+            sample, prompt = _as_prompt_text(sample, prompt)
             if mode not in ("t2v", "i2v", "vc"):
                 mode = "t2v"
             node["widgets_values"] = [
@@ -314,7 +375,7 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
                 mode,
                 hint,
                 style if style else "none",
-                cat or catalog,
+                _as_catalog_slot(cat, catalog),
             ]
         elif ntype == "EZZimagePromptEnhance":
             if len(values) >= 6:
@@ -325,13 +386,14 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
                 enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
                 hint = values[2] if len(values) > 2 else "YouTube 16:9 still"
                 style = values[3] if len(values) > 3 else "none"
+            sample, prompt = _as_prompt_text(sample, prompt)
             node["widgets_values"] = [
                 sample or "custom",
                 prompt,
                 _as_enhance_flag(enhance),
                 hint,
                 style if style else "none",
-                cat or catalog,
+                _as_catalog_slot(cat, catalog),
             ]
         elif ntype == "EZDreamXPromptEnhance":
             if len(values) >= 7:
@@ -343,6 +405,7 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
                 hint = values[2] if len(values) > 2 else "5 seconds, 24 fps"
                 audio = values[3] if len(values) > 3 else ""
                 style = values[4] if len(values) > 4 else "none"
+            sample, prompt = _as_prompt_text(sample, prompt)
             node["widgets_values"] = [
                 sample or "custom",
                 prompt,
@@ -350,7 +413,7 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
                 hint,
                 audio,
                 style if style else "none",
-                cat or catalog,
+                _as_catalog_slot(cat, catalog),
             ]
         elif ntype == "EZAceStepPromptEnhance":
             if len(values) >= 6:
@@ -369,7 +432,7 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
                 lyrics,
                 _as_enhance_flag(enhance),
                 mode,
-                cat or catalog,
+                _as_catalog_slot(cat, catalog),
             ]
         elif ntype == "EZNegativePromptEnhance":
             prompt = values[0] if values else ""
@@ -389,7 +452,7 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
                 sample or "custom",
                 text,
                 _as_enhance_flag(enhance),
-                cat or catalog,
+                _as_catalog_slot(cat, catalog),
             ]
         elif ntype == "EZPodcastScript":
             if len(values) >= 5:
@@ -404,7 +467,7 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
                 text,
                 _as_enhance_flag(enhance),
                 flavor,
-                cat or catalog,
+                _as_catalog_slot(cat, catalog),
             ]
         elif ntype == "EZPodcastLearn":
             if len(values) >= 7:
@@ -426,7 +489,7 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
                 duration or "8 min briefing",
                 bool(fetch_flag),
                 _as_enhance_flag(enhance),
-                cat or catalog,
+                _as_catalog_slot(cat, catalog),
             ]
         elif ntype == "EZCreativeResearch":
             if len(values) >= 7:
@@ -445,7 +508,7 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
                 web,
                 sub,
                 hist,
-                cat or catalog,
+                _as_catalog_slot(cat, catalog),
             ]
         elif ntype == "EZSamplePrompt":
             if len(values) >= 3:
@@ -453,7 +516,8 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
             else:
                 sample, cat = "custom", catalog
                 text = values[0] if values else ""
-            node["widgets_values"] = [sample or "custom", text, cat or catalog]
+            sample, text = _as_prompt_text(sample, text)
+            node["widgets_values"] = [sample or "custom", text, _as_catalog_slot(cat, catalog)]
 
 
 def append_note(graph: dict[str, Any]) -> None:
@@ -1356,6 +1420,38 @@ def _unlink_named(graph: dict[str, Any], node: dict[str, Any], name: str) -> Non
         for link_id in (outputs[slot].get("links") or [])
         if int(link_id) != lid
     ]
+
+
+def drop_named_input(graph: dict[str, Any], node: dict[str, Any], name: str) -> None:
+    """Remove one named input from a node, link and slot bookkeeping included.
+
+    Clearing the link is not enough when the row itself should not exist: an
+    input entry with a null link still reads as a connectable row in App mode, so
+    a graph that cannot honor the value would offer a control it ignores. The
+    producing node's output slot is repaired by :func:`_unlink_named` first.
+
+    Removing a row also moves the rows after it up by one, so every link that
+    names this node by target slot has to follow; a stale slot number points the
+    surviving wire at the neighbour the removed row used to occupy.
+
+    Args:
+        graph: Serialized Comfy graph (mutated).
+        node: The node that loses the input.
+        name: Input name to remove; absent names are a no-op.
+    """
+    inputs = node.get("inputs")
+    if not isinstance(inputs, list):
+        return
+    dropped = [i for i, item in enumerate(inputs) if item.get("name") == name]
+    if not dropped:
+        return
+    index = dropped[0]
+    _unlink_named(graph, node, name)
+    node["inputs"] = [item for item in inputs if item.get("name") != name]
+    node_id = int(node["id"])
+    for link in graph.get("links") or []:
+        if int(link[3]) == node_id and int(link[4]) > index:
+            link[4] = int(link[4]) - 1
 
 
 def _add_typed_link(

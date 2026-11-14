@@ -380,7 +380,7 @@ def core_nodes() -> NodeSpecs:
             "Format / platform",
             "Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack look recipe.",
             origin="ez_image",
-            lab="photos/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size. Match input snaps aspect to a loaded still.",
+            lab="photos/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Detail does not change size. Match input snaps aspect to a loaded still.",
             sockets=[
                 _s("image", "IMAGE", "in", "Optional still used when Output size is Match input."),
                 _s("width", "INT", "out", "Latent width (div16)."),
@@ -391,12 +391,12 @@ def core_nodes() -> NodeSpecs:
                 _s("context", "STRING", "out", "Look-recipe splice for Enhance context."),
             ],
             widgets=[
-                _w("format", index=0, typ="COMBO", rng="16:9 LTX feeder / platform jobs / Custom", desc="Aspect or named platform job.", gen="Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (snapped to div16, max 2048). Does not change Quality, CLIP, or VAE.", choices_from="image_formats"),
+                _w("format", index=0, typ="COMBO", rng="16:9 LTX feeder / platform jobs / Custom", desc="Aspect or named platform job.", gen="Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (snapped to div16, max 2048). Does not change the Detail rung, CLIP, or VAE.", choices_from="image_formats"),
                 _w("look", index=1, typ="COMBO", rng="none", desc="Optional Cinema Rack starter.", gen="none leaves look to Style + Prompt. A pick splices Klein still language into Enhance context. Full 13-axis desk is labs/assist/cinema-rack.", choices_from="cinema_recipes"),
                 _w("width", index=2, typ="INT", rng="16-2048, step 16", desc="Custom width.", gen="Used when Format is Custom. Presets ignore this widget at Queue."),
                 _w("height", index=3, typ="INT", rng="16-2048, step 16", desc="Custom height.", gen="Used when Format is Custom. Presets ignore this widget at Queue."),
                 _w("batch_size", index=4, typ="INT", rng="1-4", desc="How many stills in one Run.", gen="Large canvases stay at 1."),
-                _w("size_mode", index=5, typ="COMBO", rng="Match input / Force format", desc="Match a loaded still's aspect, or keep Format / platform.", gen="Match input (default) picks the nearest aspect catalog row when a still is loaded. Force format keeps the Format pick. No still: authored format. Quality does not change size."),
+                _w("size_mode", index=5, typ="COMBO", rng="Match input / Force format", desc="Match a loaded still's aspect, or keep Format / platform.", gen="Match input picks the nearest aspect catalog row when a still is loaded. Force format keeps the Format pick. No still: authored format. Detail does not change size."),
             ],
         ),
         "EZImageMode": _n(
@@ -471,7 +471,7 @@ def core_nodes() -> NodeSpecs:
             "Format / platform (video)",
             "Pick a Wan or LTX clip canvas (aspect or named platform).",
             origin="ez_image",
-            lab="Wan and LTX printers wire width/height into Wan22ImageToVideoLatent, LTXVImgToVideo, or EmptyLTXVLatentVideo. Hint feeds Enhance duration_hint on non-loop graphs. Duration writes LTX length (default 8 s). Quality does not change size. Match input snaps aspect to a loaded still.",
+            lab="Wan and LTX printers wire width/height into Wan22ImageToVideoLatent, LTXVImgToVideo, or EmptyLTXVLatentVideo. Hint feeds Enhance duration_hint on non-loop graphs. Duration writes LTX length (default 8 s). Detail does not change size. Match input snaps aspect to a loaded still.",
             sockets=[
                 _s("image", "IMAGE", "in", "Optional still used when Output size is Match input."),
                 _s("width", "INT", "out", "Latent width (Wan div16, LTX div32)."),
@@ -481,10 +481,10 @@ def core_nodes() -> NodeSpecs:
             ],
             widgets=[
                 _w("family", index=0, typ="COMBO", rng="Wan 5B / LTX-2.5", desc="Which VAE grid to use.", gen="Wan snaps div16 (max 1024). LTX snaps div32 (max 1280). App Mode hides this - occupancy already picks the model.", choices_from="video_families"),
-                _w("format", index=1, typ="COMBO", rng="16:9 YouTube / 9:16 Shorts / Custom", desc="Aspect or named platform job.", gen="Preset writes pixels and Rewrite prompt framing. Custom uses Width x Height. Does not change Quality, length, CLIP, or VAE.", choices_from="video_formats"),
+                _w("format", index=1, typ="COMBO", rng="16:9 YouTube / 9:16 Shorts / Custom", desc="Aspect or named platform job.", gen="Preset writes pixels and Rewrite prompt framing. Custom uses Width x Height. Does not change the Detail rung, length, CLIP, or VAE.", choices_from="video_formats"),
                 _w("width", index=2, typ="INT", rng="16-1280", desc="Custom width.", gen="Used when Format is Custom. Presets ignore this widget at Queue. LTX Custom snaps 720->704."),
                 _w("height", index=3, typ="INT", rng="16-1280", desc="Custom height.", gen="Used when Format is Custom. Presets ignore this widget at Queue."),
-                _w("size_mode", index=4, typ="COMBO", rng="Match input / Force format", desc="Match a loaded still's aspect, or keep Format / platform.", gen="Match input (default) picks the nearest family aspect row when a still is loaded. Force format keeps the Format pick. Quality does not change size."),
+                _w("size_mode", index=4, typ="COMBO", rng="Match input / Force format", desc="Match a loaded still's aspect, or keep Format / platform.", gen="Match input picks the nearest family aspect row when a still is loaded. Force format keeps the Format pick. No still in the graph: the authored format is what you get. Detail does not change size."),
                 _w("duration_s", index=5, typ="COMBO", rng="5 / 8 / 10 / 12 seconds", desc="LTX clip length.", gen="Default 8 seconds (193 frames, 1+8n). Frontend writes latent length. Wan 5B stays 5 seconds. Film printers stay 5 seconds / 121."),
             ],
         ),

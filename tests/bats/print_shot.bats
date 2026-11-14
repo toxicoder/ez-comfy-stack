@@ -243,6 +243,6 @@ PY
   printf '%s' 'not json at all' >"${COMFY_OUTPUT_DIR}/films/gosee/shots/12.json"
   run bash "${PS}" go-see 12 --quality draft
   [ "${status}" -ne 0 ]
-  [[ "${output}" == *"Quality overlay failed"* ]]
+  [[ "${output}" == *"Detail ladder overlay failed"* ]]
   ! grep -q '/prompt' "${TEST_TMP_DIR}/curl_calls.log"
 }

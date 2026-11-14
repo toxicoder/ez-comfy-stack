@@ -10,6 +10,7 @@ import pytest
 
 from _lab_paths import lab_example_paths, lab_json, load_lab_graph
 from _stamp_app_mode import BANNED, NODE_MODE_BYPASS, linear_input_node_id
+from ez_quality import presets
 
 ROOT = Path(__file__).resolve().parents[2]
 NOTE_TYPES = {"Note", "MarkdownNote"}
@@ -419,7 +420,9 @@ def test_qwen_still_pins_the_weights_its_quality_family_writes() -> None:
         by_type.setdefault(str(node.get("type")), []).append(node)
     assert len(by_type.get("EZQuality", [])) == 1, QWEN_STILL_REL
     assert len(by_type.get("EZModelCheck", [])) == 1, QWEN_STILL_REL
-    assert by_type["EZQuality"][0].get("widgets_values") == ["lab"], QWEN_STILL_REL
+    assert by_type["EZQuality"][0].get("widgets_values") == [
+        presets.QUALITY_DEFAULT
+    ], QWEN_STILL_REL
 
     assert len(by_type.get("UNETLoader", [])) == 1, QWEN_STILL_REL
     assert by_type["UNETLoader"][0]["widgets_values"][0] == QWEN_UNET, QWEN_STILL_REL
@@ -473,7 +476,7 @@ def test_qwen_still_pins_the_weights_its_quality_family_writes() -> None:
 
 @pytest.mark.parametrize("rel", sorted(FLUX3_STILL_PROFILE))
 def test_flux3_stills_pin_gated_weights_and_profile_sampler(rel: str) -> None:
-    """Each FLUX 3 still pins the Kommunity weights its Quality profile writes."""
+    """Each FLUX 3 still pins the Kommunity weights its Detail rung writes."""
     want = FLUX3_STILL_PROFILE[rel]
     graph = _load(lab_json(rel))
     extra = graph.get("extra") or {}
@@ -486,7 +489,9 @@ def test_flux3_stills_pin_gated_weights_and_profile_sampler(rel: str) -> None:
         by_type.setdefault(str(node.get("type")), []).append(node)
     assert len(by_type.get("EZQuality", [])) == 1, rel
     assert len(by_type.get("EZModelCheck", [])) == 1, rel
-    assert by_type["EZQuality"][0].get("widgets_values") == ["lab"], rel
+    assert by_type["EZQuality"][0].get("widgets_values") == [
+        presets.QUALITY_DEFAULT
+    ], rel
     assert "SaveImage" in by_type, rel
 
     assert len(by_type.get("UNETLoader", [])) == 1, rel

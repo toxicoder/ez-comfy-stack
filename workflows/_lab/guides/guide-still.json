@@ -389,7 +389,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## guides/guide-still\n\nKlein 4B **edit** of a guide-pack still loaded in-canvas (no LoadImage / --install-inputs). Enhance **on**. Seed **42**. Size **1280x704**. Prefix ``ez_guide_hero``.\n\nOccupancy: **klein**. Wire: EZDCCLoadGuideStill ``layer=first`` -> OccupancyGate -> Klein envelope. Defaults: slug ``go-see``, shot_id ``12``.\n\n```bash\nbazelisk run //:manage -- occupancy enter blender-desk\nbazelisk run //:manage -- export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth\nbazelisk run //:manage -- occupancy enter klein --yes\n```\n\nblender-desk fails the gate (park is for dumps). After Queue, overlay-qc. Path D: laptop dump, rsync ``guides/``, Spark Comfy. Stay on :8188.\n"
+        "## guides/guide-still\n\nKlein 4B **edit** of a guide-pack still loaded in-canvas (no LoadImage / --install-inputs). Enhance **on**. Seed **42**. Size **1280x704**. Prefix ``ez_guide_hero``.\n\nOccupancy: **klein**. Wire: EZDCCLoadGuideStill ``layer=first`` -> OccupancyGate -> Klein envelope. Defaults: slug ``go-see``, shot_id ``12``.\n\n```bash\nbazelisk run //:manage -- occupancy enter blender-desk\nbazelisk run //:manage -- export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth\nbazelisk run //:manage -- occupancy enter klein --yes\n```\n\nblender-desk fails the gate (park is for dumps). After Queue, overlay-qc. Path D: laptop dump, rsync ``guides/``, Spark Comfy. Stay on :8188.\n\nHandoff: guides/depth-from-loader, 3d/still-to-mesh. Load that graph next - the output is its input.\n"
       ],
       "title": "Operator note"
     },
@@ -672,9 +672,9 @@
         "Node name for S&R": "EZQuality"
       },
       "widgets_values": [
-        "lab"
+        "standard"
       ],
-      "title": "Quality"
+      "title": "Detail"
     },
     {
       "id": 18,
@@ -708,7 +708,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -996,7 +1001,7 @@
         0
       ]
     },
-    "lab_note": "## guides/guide-still\n\nKlein 4B **edit** of a guide-pack still loaded in-canvas (no LoadImage / --install-inputs). Enhance **on**. Seed **42**. Size **1280x704**. Prefix ``ez_guide_hero``.\n\nOccupancy: **klein**. Wire: EZDCCLoadGuideStill ``layer=first`` -> OccupancyGate -> Klein envelope. Defaults: slug ``go-see``, shot_id ``12``.\n\n```bash\nbazelisk run //:manage -- occupancy enter blender-desk\nbazelisk run //:manage -- export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth\nbazelisk run //:manage -- occupancy enter klein --yes\n```\n\nblender-desk fails the gate (park is for dumps). After Queue, overlay-qc. Path D: laptop dump, rsync ``guides/``, Spark Comfy. Stay on :8188.\n",
+    "lab_note": "## guides/guide-still\n\nKlein 4B **edit** of a guide-pack still loaded in-canvas (no LoadImage / --install-inputs). Enhance **on**. Seed **42**. Size **1280x704**. Prefix ``ez_guide_hero``.\n\nOccupancy: **klein**. Wire: EZDCCLoadGuideStill ``layer=first`` -> OccupancyGate -> Klein envelope. Defaults: slug ``go-see``, shot_id ``12``.\n\n```bash\nbazelisk run //:manage -- occupancy enter blender-desk\nbazelisk run //:manage -- export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth\nbazelisk run //:manage -- occupancy enter klein --yes\n```\n\nblender-desk fails the gate (park is for dumps). After Queue, overlay-qc. Path D: laptop dump, rsync ``guides/``, Spark Comfy. Stay on :8188.\n\nHandoff: guides/depth-from-loader, 3d/still-to-mesh. Load that graph next - the output is its input.\n",
     "lab_description": "Klein 4B edit of EZDCCLoadGuideStill first.png. Enhance on. 1280x704. Seed 42.",
     "lab_app_mode": {
       "enabled": true,
@@ -1016,8 +1021,8 @@
           17,
           "quality",
           {
-            "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
+            "label": "Detail",
+            "description": "draft is a quick look. standard is what this App ships tuned for. final is the best this App's own stack can do. A rung never changes size and never leaves this App's model stack. The caption names the steps, CFG, weights, and license Queue actually sends."
           }
         ],
         [
@@ -1093,8 +1098,8 @@
           16,
           "enhance",
           {
-            "label": "Rewrite negative",
-            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs."
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs.",
+            "label": "Rewrite negative"
           }
         ],
         [
@@ -1111,9 +1116,6 @@
       ]
     },
     "linearMode": true,
-    "lab_optional_unwired": [
-      "LoadImage"
-    ],
     "lab_dcc": {
       "enhance": true,
       "mode": "edit",
@@ -1131,7 +1133,7 @@
     "lab_rel": "guides/guide-still",
     "workflowRendererVersion": "Vue-corrected",
     "lab_quality": {
-      "default": "lab"
+      "default": "standard"
     }
   },
   "version": 0.4

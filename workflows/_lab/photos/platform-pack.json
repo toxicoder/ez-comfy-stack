@@ -238,7 +238,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## photos/platform-pack\n\nOne identity, six platform plates (Klein 4B distilled, 4 steps, CFG 1.0, seed 42). Type any subject in PACK IDENTITY. Identity-mode enhance is **on** (camera-free bible). Each plate is independent T2I (own latent, no ReferenceLatent across aspect ratios). Hidden cards are framing only.\n\nPrefixes and sizes (copy of the single-plate graphs):\n- ez_pack_thumb 1280x720\n- ez_pack_ig 1024x1024 (1:1)\n- ez_pack_portrait 1024x1280 (Instagram 4:5)\n- ez_pack_shorts 432x768 (9:16)\n- ez_pack_og 1216x640\n- ez_pack_banner 1536x512 (~3:1)\n\nUnused SHOT groups may be bypassed (Ctrl+B). Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: Spark Still -> this pack -> Silent 5s / Hook AV.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## photos/platform-pack\n\nOne identity, six platform plates (Klein 4B distilled, 4 steps, CFG 1.0, seed 42). Type any subject in PACK IDENTITY. Identity-mode enhance is **on** (camera-free bible). Each plate is independent T2I (own latent, no ReferenceLatent across aspect ratios). Hidden cards are framing only.\n\nPrefixes and sizes (copy of the single-plate graphs):\n- ez_pack_thumb 1280x720\n- ez_pack_ig 1024x1024 (1:1)\n- ez_pack_portrait 1024x1280 (Instagram 4:5)\n- ez_pack_shorts 432x768 (9:16)\n- ez_pack_og 1216x640\n- ez_pack_banner 1536x512 (~3:1)\n\nUnused SHOT groups may be bypassed (Ctrl+B). Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: Spark Still -> this pack -> Silent 5s / Hook AV.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nHandoff: video/silent/still-to-video-5s, video/av/hook-av. Load that graph next - the output is its input.\n"
       ],
       "title": "Operator note"
     },
@@ -1846,9 +1846,9 @@
         "Node name for S&R": "EZQuality"
       },
       "widgets_values": [
-        "lab"
+        "standard"
       ],
-      "title": "Quality"
+      "title": "Detail"
     },
     {
       "id": 48,
@@ -1882,7 +1882,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [
             68,
             71,
@@ -1923,7 +1928,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "link": 68,
           "widget": {
             "name": "upscale"
@@ -1941,7 +1951,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -1976,7 +1991,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "link": 71,
           "widget": {
             "name": "upscale"
@@ -1994,7 +2014,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -2029,7 +2054,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "link": 74,
           "widget": {
             "name": "upscale"
@@ -2047,7 +2077,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -2082,7 +2117,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "link": 77,
           "widget": {
             "name": "upscale"
@@ -2100,7 +2140,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -2135,7 +2180,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "link": 80,
           "widget": {
             "name": "upscale"
@@ -2153,7 +2203,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -3078,7 +3133,12 @@
       1,
       49,
       1,
-      "STRING"
+      [
+        "none",
+        "2x",
+        "4x",
+        "4K"
+      ]
     ],
     [
       69,
@@ -3102,7 +3162,12 @@
       1,
       50,
       1,
-      "STRING"
+      [
+        "none",
+        "2x",
+        "4x",
+        "4K"
+      ]
     ],
     [
       72,
@@ -3126,7 +3191,12 @@
       1,
       51,
       1,
-      "STRING"
+      [
+        "none",
+        "2x",
+        "4x",
+        "4K"
+      ]
     ],
     [
       75,
@@ -3150,7 +3220,12 @@
       1,
       52,
       1,
-      "STRING"
+      [
+        "none",
+        "2x",
+        "4x",
+        "4K"
+      ]
     ],
     [
       78,
@@ -3174,7 +3249,12 @@
       1,
       53,
       1,
-      "STRING"
+      [
+        "none",
+        "2x",
+        "4x",
+        "4K"
+      ]
     ],
     [
       81,
@@ -3494,7 +3574,7 @@
   "extra": {
     "lab_profile": "photos/platform-pack",
     "lab_flux_tier": "fast",
-    "lab_note": "## photos/platform-pack\n\nOne identity, six platform plates (Klein 4B distilled, 4 steps, CFG 1.0, seed 42). Type any subject in PACK IDENTITY. Identity-mode enhance is **on** (camera-free bible). Each plate is independent T2I (own latent, no ReferenceLatent across aspect ratios). Hidden cards are framing only.\n\nPrefixes and sizes (copy of the single-plate graphs):\n- ez_pack_thumb 1280x720\n- ez_pack_ig 1024x1024 (1:1)\n- ez_pack_portrait 1024x1280 (Instagram 4:5)\n- ez_pack_shorts 432x768 (9:16)\n- ez_pack_og 1216x640\n- ez_pack_banner 1536x512 (~3:1)\n\nUnused SHOT groups may be bypassed (Ctrl+B). Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: Spark Still -> this pack -> Silent 5s / Hook AV.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## photos/platform-pack\n\nOne identity, six platform plates (Klein 4B distilled, 4 steps, CFG 1.0, seed 42). Type any subject in PACK IDENTITY. Identity-mode enhance is **on** (camera-free bible). Each plate is independent T2I (own latent, no ReferenceLatent across aspect ratios). Hidden cards are framing only.\n\nPrefixes and sizes (copy of the single-plate graphs):\n- ez_pack_thumb 1280x720\n- ez_pack_ig 1024x1024 (1:1)\n- ez_pack_portrait 1024x1280 (Instagram 4:5)\n- ez_pack_shorts 432x768 (9:16)\n- ez_pack_og 1216x640\n- ez_pack_banner 1536x512 (~3:1)\n\nUnused SHOT groups may be bypassed (Ctrl+B). Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: Spark Still -> this pack -> Silent 5s / Hook AV.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nHandoff: video/silent/still-to-video-5s, video/av/hook-av. Load that graph next - the output is its input.\n",
     "lab_description": "Six Klein platform plates from one identity; independent T2I per aspect",
     "ds": {
       "scale": 1,
@@ -3521,8 +3601,8 @@
           47,
           "quality",
           {
-            "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
+            "label": "Detail",
+            "description": "draft is a quick look. standard is what this App ships tuned for. final is the best this App's own stack can do. A rung never changes size and never leaves this App's model stack. The caption names the steps, CFG, weights, and license Queue actually sends."
           }
         ],
         [
@@ -3570,8 +3650,8 @@
           46,
           "enhance",
           {
-            "label": "Rewrite negative",
-            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs."
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs.",
+            "label": "Rewrite negative"
           }
         ],
         [
@@ -3596,7 +3676,7 @@
     "lab_rel": "photos/platform-pack",
     "workflowRendererVersion": "Vue-corrected",
     "lab_quality": {
-      "default": "lab"
+      "default": "standard"
     }
   },
   "version": 0.4

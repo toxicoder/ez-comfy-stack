@@ -76,7 +76,16 @@ def test_fun_inp_flf_graph() -> None:
     graph = _load("video/silent/first-last-5s.json")
     assert graph["id"] == "first-last-5s"
     titles = [n.get("title") for n in graph["nodes"]]
-    assert "End frame (Fun InP)" in titles
+    assert "First frame" in titles
+    # The lane once shipped a second upload box for the end frame that fed no
+    # node at all: Wan22ImageToVideoLatent has no end_image slot and the Comfy
+    # pin exposes no first-last-frame sampler for this stack. A control that
+    # changes no pixel is worse than no control, so it is gone and the operator
+    # note carries the reason.
+    assert "End frame (Fun InP)" not in titles
+    assert [n for n in graph["nodes"] if n.get("type") == "LoadImage"]
+    note = next(n for n in graph["nodes"] if n.get("type") == "Note")
+    assert "Fun InP FLF sampler" in str(note["widgets_values"][0])
     assert "fun-inp" in graph["extra"]["lab_note"]
     notice = WF / "quality" / "ltx-2.5" / "NOTICE.md"
     assert notice.is_file()

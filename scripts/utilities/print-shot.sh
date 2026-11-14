@@ -8,17 +8,17 @@
 #   POST /prompt for films/<slug>/shots/NN.json, poll /history, copy the
 #   resulting MP4 to shots/NN.mp4, update state.json. film-resume skips
 #   ok shots whose duration is 5.00 +/- 0.05 s. Each POST sends the graph the
-#   Quality table overlaid, so a CLI run posts what the browser would queue.
+#   Detail ladder overlaid, so a CLI run posts what the browser would queue.
 #
 # Usage:
-#   bazelisk run //scripts:run-utility -- print-shot <film> <id> [--quality TIER]
-#   bazelisk run //scripts:run-utility -- print-shot --resume <film> [--quality TIER]
+#   bazelisk run //scripts:run-utility -- print-shot <film> <id> [--quality RUNG]
+#   bazelisk run //scripts:run-utility -- print-shot --resume <film> [--quality RUNG]
 #
 # Environment:
 #   COMFY_OUTPUT_DIR, COMFY_PORT (default 8188), MODELS_DIR
 #   COMFY_URL - override (tests)
-#   EZ_QUALITY - quality tier when --quality is absent (empty = the tier the
-#   graph records, else lab)
+#   EZ_QUALITY - Detail rung (draft|standard|final) when --quality is absent
+#   (empty = the rung the graph records, else standard)
 #
 # Safety:
 #   Does not start compose. Does not Queue the 18-printer canvas.
@@ -105,7 +105,7 @@ parse_args() {
       --resume) RESUME=1 ;;
       --quality)
         if [[ $# -lt 2 ]]; then
-          err "--quality needs a tier"
+          err "--quality needs a rung"
           exit 1
         fi
         QUALITY="${2}"
@@ -113,9 +113,9 @@ parse_args() {
         continue
         ;;
       -h | --help)
-        echo "Usage: $0 <film> <id> [--quality TIER] | $0 --resume <film> [--quality TIER]" >&2
+        echo "Usage: $0 <film> <id> [--quality RUNG] | $0 --resume <film> [--quality RUNG]" >&2
         echo "  film: catalog id   id: 01..N (18 or 90)" >&2
-        echo "  TIER: Quality tier to overlay (default: what the graph records)" >&2
+        echo "  RUNG: Detail rung to overlay (default: what the graph records)" >&2
         exit 0
         ;;
       --*)
@@ -159,7 +159,7 @@ quality_apply_graph() {
     python3 "${REPO_ROOT}/scripts/lib/quality_apply.py" \
     --graph "${graph}" --out "${out}" "${tier_args[@]}" \
     --comfy-url "${COMFY_URL}" || {
-    err "Quality overlay failed for ${graph}"
+    err "Detail ladder overlay failed for ${graph}"
     return 1
   }
   printf '%s\n' "${out}"

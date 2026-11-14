@@ -9,6 +9,7 @@ import copy
 import json
 import re
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -18,10 +19,13 @@ from _stamp_app_mode import (
     HIDDEN_APP_WIDGETS,
     STAMP_SPECS,
     display_label,
+    format_sets_prefix,
     infer_suite_inputs,
+    infer_suite_outputs,
     linear_input_node_id,
     stamp_app_mode,
     suite_json_paths,
+    video_format_runs_wan,
     widget_config,
     widget_description,
 )
@@ -634,3 +638,134 @@ def test_shipped_suite_inputs_survive_frontend_1496_prune() -> None:
         assert kept == inputs, path.name
         for entry in inputs:
             assert linear_input_node_id(entry) in node_ids, (path.name, entry[0])
+
+
+def _canvas_node(**overrides: object) -> dict[str, Any]:
+    """Return an ``EZImageFormat`` row with room to vary one socket.
+
+    Args:
+        **overrides: Fields to replace on the row, such as ``outputs``.
+
+    Returns:
+        A node dict the stamp helpers accept.
+    """
+    node: dict[str, Any] = {
+        "id": 20,
+        "type": "EZImageFormat",
+        "title": "Format / platform",
+        "widgets_values": ["16:9 mid (1024x576)", "none", 1024, 576, 1, "Force format"],
+        "inputs": [],
+        "outputs": [
+            {"name": name, "type": typ, "links": None}
+            for name, typ in (
+                ("width", "INT"),
+                ("height", "INT"),
+                ("batch", "INT"),
+                ("hint", "STRING"),
+                ("prefix", "STRING"),
+                ("context", "STRING"),
+            )
+        ],
+    }
+    node.update(overrides)
+    return node
+
+
+def _video_node(family: str) -> dict[str, Any]:
+    """Return an ``EZVideoFormat`` row authored on one motion family.
+
+    Args:
+        family: Value for the family combo, such as ``Wan 5B``.
+
+    Returns:
+        A node dict the stamp helpers accept.
+    """
+    return {
+        "id": 21,
+        "type": "EZVideoFormat",
+        "title": "Format / platform",
+        "widgets_values": [family, "16:9 YouTube (1280x704)", 1280, 704, "Force format", 8],
+        "inputs": [],
+        "outputs": [],
+    }
+
+
+def test_the_prefix_promise_needs_a_wired_prefix_socket() -> None:
+    """Only a canvas whose prefix output drives a save may promise the move."""
+    wired = _canvas_node(
+        outputs=[
+            {"name": "prefix", "type": "STRING", "links": [12]},
+        ]
+    )
+    assert format_sets_prefix(wired) is True
+    assert format_sets_prefix(_canvas_node()) is False
+    assert format_sets_prefix(None) is False
+
+    promises = "save prefix"
+    assert promises in str(widget_description("format", _canvas_node(outputs=[{"name": "prefix", "type": "STRING", "links": [12]}])))
+    honest = str(widget_description("format", _canvas_node()))
+    assert promises not in honest
+    assert "keeps the folder this App saves to" in honest
+
+
+def test_the_duration_row_names_the_family_that_ignores_it() -> None:
+    """A Wan App says its Duration row is inert instead of implying length."""
+    assert video_format_runs_wan(_video_node("Wan 5B")) is True
+    assert video_format_runs_wan(_video_node("LTX-2.5")) is False
+    assert video_format_runs_wan(None) is False
+
+    wan_copy = str(widget_description("duration_s", _video_node("Wan 5B")))
+    assert "ignores this widget" in wan_copy
+    ltx_copy = str(widget_description("duration_s", _video_node("LTX-2.5")))
+    assert "ignores this widget" not in ltx_copy
+    assert "1+8n" in ltx_copy
+
+
+def test_the_dub_rewrite_row_reads_as_english() -> None:
+    """The dub script's Rewrite row explains itself to an operator."""
+    copy_text = str(
+        widget_description(
+            "enhance", {"type": "EZDubScript", "widgets_values": ["{}", True]}
+        )
+    )
+    for jargon in ("ASR", "GGUF", "diarize"):
+        assert jargon not in copy_text, jargon
+    assert "transcribe" in copy_text
+
+
+def _desk_card(nid: int, links: list[int] | None) -> dict[str, Any]:
+    """One EZLTXPromptEnhance whose prompt output carries ``links``."""
+    return {
+        "id": nid,
+        "type": "EZLTXPromptEnhance",
+        "inputs": [],
+        "outputs": [{"name": "prompt", "type": "STRING", "links": list(links or [])}],
+    }
+
+
+def test_a_desk_card_nothing_reads_is_a_deliverable() -> None:
+    """An unconsumed enhance card is the run's only readable result."""
+    graph = {
+        "nodes": [
+            {"id": 3, "type": "PrimitiveNode", "inputs": [], "outputs": []},
+            {"id": 5, "type": "PrimitiveNode", "inputs": [], "outputs": []},
+            _desk_card(4, []),
+            _desk_card(6, [99]),
+        ]
+    }
+    assert infer_suite_outputs(graph, {"primitive_strings": True}) == [3, 4, 5]
+
+
+def test_the_beat_sheet_panel_shows_the_beat_cards() -> None:
+    """Every beat card the desk generates reaches the App output list."""
+    graph = _load("labs/assist/beat-sheet.json")
+    outputs = set(graph["extra"]["linearData"]["outputs"])
+    cards = [
+        int(node["id"])
+        for node in graph["nodes"]
+        if node.get("type") == "EZLTXPromptEnhance"
+        and not any(slot.get("links") or [] for slot in node.get("outputs") or [])
+    ]
+    assert len(cards) == 18, cards
+    missing = [nid for nid in cards if nid not in outputs]
+    assert not missing, f"beat cards absent from the panel: {missing}"

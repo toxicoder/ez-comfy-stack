@@ -2,14 +2,14 @@
   "id": "still-daily",
   "revision": 8,
   "last_node_id": 19,
-  "last_link_id": 30,
+  "last_link_id": 34,
   "nodes": [
     {
       "id": 1,
       "type": "UNETLoader",
       "pos": [
         40,
-        508
+        524
       ],
       "size": [
         360,
@@ -43,7 +43,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        662
+        678
       ],
       "size": [
         360,
@@ -79,7 +79,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        1112
+        1128
       ],
       "size": [
         360,
@@ -113,7 +113,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        508
+        524
       ],
       "size": [
         420,
@@ -160,7 +160,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        1032
+        1048
       ],
       "size": [
         420,
@@ -207,7 +207,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         1440,
-        1282
+        1298
       ],
       "size": [
         280,
@@ -267,7 +267,7 @@
       "type": "KSampler",
       "pos": [
         1440,
-        508
+        524
       ],
       "size": [
         320,
@@ -327,7 +327,7 @@
       "type": "VAEDecode",
       "pos": [
         1840,
-        508
+        524
       ],
       "size": [
         240,
@@ -369,7 +369,7 @@
       "type": "SaveImage",
       "pos": [
         1840,
-        626
+        642
       ],
       "size": [
         280,
@@ -414,7 +414,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## photos/still-daily\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nDaily Klein 4B still app.\nCLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for every Klein 4B UNET.\n\nQuality is the only weight swap this App offers, and it stays inside the Klein stack: standard = Klein 4B fp8 (8 steps, CFG 1.0), draft = Klein 4B nvfp4 (4 steps, CFG 1.0), high and Free Commercial Use (<$10M) = Klein 4B base (24 steps, CFG 3.5), ultra = Klein 9B distilled, max = Klein 9B base. The App lists no disk models; another stack is a different App.\n\nSETTINGS: width/height on EmptyFlux2LatentImage (default 1024x576 16:9). 1:1 = 768x768. 9:16 = 576x1024. Instagram 4:5 = 1024x1280. Seed, steps, CFG on KSampler.\nSave prefix: ez_still_app.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## photos/still-daily\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nDaily Klein 4B still app.\nCLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for every Klein 4B UNET.\n\nDetail is the only weight swap this App offers, and it stays inside the Klein stack: draft = Klein 4B nvfp4 (4 steps, CFG 1.0), standard = what this App ships tuned for (writes nothing, so it always applies), final = Klein 4B base fp8 (24 steps, CFG 3.5). The App lists no disk models; another stack is a different App.\n\nSETTINGS: width/height on EmptyFlux2LatentImage (default 1024x576 16:9). 1:1 = 768x768. 9:16 = 576x1024. Instagram 4:5 = 1024x1280. Seed, steps, CFG on KSampler.\nSave prefix: ez_still_app.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -423,7 +423,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         480,
-        508
+        524
       ],
       "size": [
         420,
@@ -477,7 +477,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         480,
-        1264
+        1280
       ],
       "size": [
         420,
@@ -540,16 +540,16 @@
         "Node name for S&R": "EZQuality"
       },
       "widgets_values": [
-        "lab"
+        "standard"
       ],
-      "title": "Quality"
+      "title": "Detail"
     },
     {
       "id": 14,
       "type": "EZImageFormat",
       "pos": [
         1440,
-        968
+        984
       ],
       "size": [
         360,
@@ -623,7 +623,7 @@
       "type": "EZOptionalImage",
       "pos": [
         2176,
-        508
+        524
       ],
       "size": [
         360.0,
@@ -639,7 +639,7 @@
           "type": "IMAGE",
           "links": [
             19,
-            30
+            34
           ],
           "slot_index": 0
         },
@@ -674,7 +674,7 @@
       "type": "EZKleinRefCanvas",
       "pos": [
         2176,
-        700
+        716
       ],
       "size": [
         360.0,
@@ -735,7 +735,7 @@
       "type": "EZImageUpscale",
       "pos": [
         1848,
-        968
+        984
       ],
       "size": [
         280,
@@ -762,7 +762,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -780,7 +785,7 @@
       "type": "EZImageDescribe",
       "pos": [
         480,
-        1000
+        1016
       ],
       "size": [
         280,
@@ -801,7 +806,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 30
+          "link": 34
         }
       ],
       "outputs": [
@@ -1025,7 +1030,7 @@
       "STRING"
     ],
     [
-      30,
+      34,
       15,
       0,
       18,
@@ -1065,7 +1070,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        436,
+        452,
         400,
         778
       ],
@@ -1078,7 +1083,7 @@
       "title": "PROMPT",
       "bounding": [
         460,
-        436,
+        452,
         928,
         1292
       ],
@@ -1091,7 +1096,7 @@
       "title": "SETTINGS",
       "bounding": [
         1420,
-        436,
+        452,
         400,
         996
       ],
@@ -1104,7 +1109,7 @@
       "title": "OUTPUT",
       "bounding": [
         1820,
-        436,
+        452,
         328,
         656
       ],
@@ -1117,7 +1122,7 @@
       "title": "INPUT",
       "bounding": [
         2156,
-        436,
+        452,
         400,
         448
       ],
@@ -1137,8 +1142,8 @@
         0
       ]
     },
-    "lab_note": "## photos/still-daily\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nDaily Klein 4B still app.\nCLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for every Klein 4B UNET.\n\nQuality is the only weight swap this App offers, and it stays inside the Klein stack: standard = Klein 4B fp8 (8 steps, CFG 1.0), draft = Klein 4B nvfp4 (4 steps, CFG 1.0), high and Free Commercial Use (<$10M) = Klein 4B base (24 steps, CFG 3.5), ultra = Klein 9B distilled, max = Klein 9B base. The App lists no disk models; another stack is a different App.\n\nSETTINGS: width/height on EmptyFlux2LatentImage (default 1024x576 16:9). 1:1 = 768x768. 9:16 = 576x1024. Instagram 4:5 = 1024x1280. Seed, steps, CFG on KSampler.\nSave prefix: ez_still_app.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n",
-    "lab_description": "Daily Klein 4B still; Quality swaps within the Klein stack",
+    "lab_note": "## photos/still-daily\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nDaily Klein 4B still app.\nCLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for every Klein 4B UNET.\n\nDetail is the only weight swap this App offers, and it stays inside the Klein stack: draft = Klein 4B nvfp4 (4 steps, CFG 1.0), standard = what this App ships tuned for (writes nothing, so it always applies), final = Klein 4B base fp8 (24 steps, CFG 3.5). The App lists no disk models; another stack is a different App.\n\nSETTINGS: width/height on EmptyFlux2LatentImage (default 1024x576 16:9). 1:1 = 768x768. 9:16 = 576x1024. Instagram 4:5 = 1024x1280. Seed, steps, CFG on KSampler.\nSave prefix: ez_still_app.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_description": "Daily Klein 4B still; Detail swaps within the Klein stack",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -1154,8 +1159,8 @@
           13,
           "quality",
           {
-            "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
+            "label": "Detail",
+            "description": "draft is a quick look. standard is what this App ships tuned for. final is the best this App's own stack can do. A rung never changes size and never leaves this App's model stack. The caption names the steps, CFG, weights, and license Queue actually sends."
           }
         ],
         [
@@ -1179,7 +1184,7 @@
           14,
           "format",
           {
-            "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (div16).",
+            "description": "Aspect or named platform job. Sets pixels and Rewrite prompt framing. Custom uses Width x Height (div16); the run keeps the folder this App saves to.",
             "label": "Format / platform"
           }
         ],
@@ -1203,7 +1208,7 @@
           18,
           "enable",
           {
-            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs download-llm --tier describe.",
+            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs bazelisk run //:manage -- download-llm --tier describe.",
             "label": "Describe image"
           }
         ],
@@ -1227,8 +1232,8 @@
           12,
           "enhance",
           {
-            "label": "Rewrite negative",
-            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs."
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs.",
+            "label": "Rewrite negative"
           }
         ],
         [
@@ -1291,8 +1296,8 @@
           15,
           "use_references",
           {
-            "label": "Use reference stills",
-            "description": "Turn off to run text-to-image without clearing your picks. Any new pick turns it back on."
+            "description": "Turn off to run text-to-image without clearing your picks. Any new pick turns it back on.",
+            "label": "Use reference stills"
           }
         ]
       ],
@@ -1304,7 +1309,7 @@
     "lab_rel": "photos/still-daily",
     "workflowRendererVersion": "Vue-corrected",
     "lab_quality": {
-      "default": "lab"
+      "default": "standard"
     }
   },
   "version": 0.4

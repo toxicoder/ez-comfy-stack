@@ -346,7 +346,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## photos/dream-house-clay\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nTen Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence is the 3D cameras - Klein only restyles.\n\n`manage.sh start` seeds ez_house_clay_01.png ... 10.png into COMFY_OUTPUT_DIR/input (container /inputs) so LoadImage can Queue. Seed copies an existing house-views pack when present; otherwise it renders the shipped lab-penthouse layout (no Blender). Reload the App if it was open before seed. Prefix ez_dream_house_clay_01 ... 10.\n\nWorkbench dump (optional, higher quality) - stop Comfy first:\n\n  bazelisk run //:manage -- stop\n  bazelisk run //:manage -- house-views --slug lab-penthouse\n  bazelisk run //:manage -- start\n\nCopy an existing dump without Blender (compose may stay up):\n\n  bazelisk run //:manage -- house-views --slug lab-penthouse --install-inputs\n\nReseed LoadImage plates without Blender (compose may stay up):\n\n  bazelisk run //:manage -- house-views --slug lab-penthouse --seed-inputs\n\nHOUSE IDENTITY is the same camera-free world bible as photos/dream-house. Shot cards are camera stations from place_10 (lens, camera height, a distinct room program, near/far planes, and which room). Prompt Join lock=view. Each shot VAEEncodes its clay plate into ReferenceLatent. Shot cards are not Klein-t2i-enhanced.\n\nLanguage-only tour (no geometry) -> photos/dream-house. Do not substitute T2I stills or example.png as clay. Occupancy XOR: do not Blender-dump while compose is up. Seed/copy-inputs may run while compose is up.\nOptional style dropdown applies to the bible. Unused SHOT groups may be bypassed (Ctrl+B).\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## photos/dream-house-clay\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nTen Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence is the 3D cameras - Klein only restyles.\n\n`manage.sh start` seeds ez_house_clay_01.png ... 10.png into COMFY_OUTPUT_DIR/input (container /inputs) so LoadImage can Queue. Seed copies an existing house-views pack when present; otherwise it renders the shipped lab-penthouse layout (no Blender). Reload the App if it was open before seed. Prefix ez_dream_house_clay_01 ... 10.\n\nWorkbench dump (optional, higher quality) - stop Comfy first:\n\n  bazelisk run //:manage -- stop\n  bazelisk run //:manage -- house-views --slug lab-penthouse\n  bazelisk run //:manage -- start\n\nCopy an existing dump without Blender (compose may stay up):\n\n  bazelisk run //:manage -- house-views --slug lab-penthouse --install-inputs\n\nReseed LoadImage plates without Blender (compose may stay up):\n\n  bazelisk run //:manage -- house-views --slug lab-penthouse --seed-inputs\n\nHOUSE IDENTITY is the same camera-free world bible as photos/dream-house. Shot cards are camera stations from place_10 (lens, camera height, a distinct room program, near/far planes, and which room). Prompt Join lock=view. Each shot VAEEncodes its clay plate into ReferenceLatent. Shot cards are not Klein-t2i-enhanced.\n\nLanguage-only tour (no geometry) -> photos/dream-house. Do not substitute T2I stills or example.png as clay. Occupancy XOR: do not Blender-dump while compose is up. Seed/copy-inputs may run while compose is up.\nOptional style dropdown applies to the bible. Unused SHOT groups may be bypassed (Ctrl+B).\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nHandoff: video/loops/gif-loop, video/loops/bumper-loop, video/loops/sticker-loop. Load that graph next - the output is its input.\n"
       ],
       "title": "Operator note"
     },
@@ -3818,9 +3818,9 @@
         "Node name for S&R": "EZQuality"
       },
       "widgets_values": [
-        "lab"
+        "standard"
       ],
-      "title": "Quality"
+      "title": "Detail"
     },
     {
       "id": 121,
@@ -3854,7 +3854,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [
             152,
             155,
@@ -3899,7 +3904,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "link": 152,
           "widget": {
             "name": "upscale"
@@ -3917,7 +3927,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -3952,7 +3967,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "link": 155,
           "widget": {
             "name": "upscale"
@@ -3970,7 +3990,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -4005,7 +4030,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "link": 158,
           "widget": {
             "name": "upscale"
@@ -4023,7 +4053,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -4058,7 +4093,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "link": 161,
           "widget": {
             "name": "upscale"
@@ -4076,7 +4116,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -4111,7 +4156,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "link": 164,
           "widget": {
             "name": "upscale"
@@ -4129,7 +4179,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -4164,7 +4219,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "link": 167,
           "widget": {
             "name": "upscale"
@@ -4182,7 +4242,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -4217,7 +4282,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "link": 170,
           "widget": {
             "name": "upscale"
@@ -4235,7 +4305,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -4270,7 +4345,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "link": 173,
           "widget": {
             "name": "upscale"
@@ -4288,7 +4368,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -4323,7 +4408,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "link": 176,
           "widget": {
             "name": "upscale"
@@ -4341,7 +4431,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -6194,7 +6289,12 @@
       1,
       122,
       1,
-      "STRING"
+      [
+        "none",
+        "2x",
+        "4x",
+        "4K"
+      ]
     ],
     [
       153,
@@ -6218,7 +6318,12 @@
       1,
       123,
       1,
-      "STRING"
+      [
+        "none",
+        "2x",
+        "4x",
+        "4K"
+      ]
     ],
     [
       156,
@@ -6242,7 +6347,12 @@
       1,
       124,
       1,
-      "STRING"
+      [
+        "none",
+        "2x",
+        "4x",
+        "4K"
+      ]
     ],
     [
       159,
@@ -6266,7 +6376,12 @@
       1,
       125,
       1,
-      "STRING"
+      [
+        "none",
+        "2x",
+        "4x",
+        "4K"
+      ]
     ],
     [
       162,
@@ -6290,7 +6405,12 @@
       1,
       126,
       1,
-      "STRING"
+      [
+        "none",
+        "2x",
+        "4x",
+        "4K"
+      ]
     ],
     [
       165,
@@ -6314,7 +6434,12 @@
       1,
       127,
       1,
-      "STRING"
+      [
+        "none",
+        "2x",
+        "4x",
+        "4K"
+      ]
     ],
     [
       168,
@@ -6338,7 +6463,12 @@
       1,
       128,
       1,
-      "STRING"
+      [
+        "none",
+        "2x",
+        "4x",
+        "4K"
+      ]
     ],
     [
       171,
@@ -6362,7 +6492,12 @@
       1,
       129,
       1,
-      "STRING"
+      [
+        "none",
+        "2x",
+        "4x",
+        "4K"
+      ]
     ],
     [
       174,
@@ -6386,7 +6521,12 @@
       1,
       130,
       1,
-      "STRING"
+      [
+        "none",
+        "2x",
+        "4x",
+        "4K"
+      ]
     ],
     [
       177,
@@ -6899,7 +7039,7 @@
   "extra": {
     "lab_profile": "photos/dream-house-clay",
     "lab_flux_tier": "fast",
-    "lab_note": "## photos/dream-house-clay\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nTen Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence is the 3D cameras - Klein only restyles.\n\n`manage.sh start` seeds ez_house_clay_01.png ... 10.png into COMFY_OUTPUT_DIR/input (container /inputs) so LoadImage can Queue. Seed copies an existing house-views pack when present; otherwise it renders the shipped lab-penthouse layout (no Blender). Reload the App if it was open before seed. Prefix ez_dream_house_clay_01 ... 10.\n\nWorkbench dump (optional, higher quality) - stop Comfy first:\n\n  bazelisk run //:manage -- stop\n  bazelisk run //:manage -- house-views --slug lab-penthouse\n  bazelisk run //:manage -- start\n\nCopy an existing dump without Blender (compose may stay up):\n\n  bazelisk run //:manage -- house-views --slug lab-penthouse --install-inputs\n\nReseed LoadImage plates without Blender (compose may stay up):\n\n  bazelisk run //:manage -- house-views --slug lab-penthouse --seed-inputs\n\nHOUSE IDENTITY is the same camera-free world bible as photos/dream-house. Shot cards are camera stations from place_10 (lens, camera height, a distinct room program, near/far planes, and which room). Prompt Join lock=view. Each shot VAEEncodes its clay plate into ReferenceLatent. Shot cards are not Klein-t2i-enhanced.\n\nLanguage-only tour (no geometry) -> photos/dream-house. Do not substitute T2I stills or example.png as clay. Occupancy XOR: do not Blender-dump while compose is up. Seed/copy-inputs may run while compose is up.\nOptional style dropdown applies to the bible. Unused SHOT groups may be bypassed (Ctrl+B).\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## photos/dream-house-clay\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nTen Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence is the 3D cameras - Klein only restyles.\n\n`manage.sh start` seeds ez_house_clay_01.png ... 10.png into COMFY_OUTPUT_DIR/input (container /inputs) so LoadImage can Queue. Seed copies an existing house-views pack when present; otherwise it renders the shipped lab-penthouse layout (no Blender). Reload the App if it was open before seed. Prefix ez_dream_house_clay_01 ... 10.\n\nWorkbench dump (optional, higher quality) - stop Comfy first:\n\n  bazelisk run //:manage -- stop\n  bazelisk run //:manage -- house-views --slug lab-penthouse\n  bazelisk run //:manage -- start\n\nCopy an existing dump without Blender (compose may stay up):\n\n  bazelisk run //:manage -- house-views --slug lab-penthouse --install-inputs\n\nReseed LoadImage plates without Blender (compose may stay up):\n\n  bazelisk run //:manage -- house-views --slug lab-penthouse --seed-inputs\n\nHOUSE IDENTITY is the same camera-free world bible as photos/dream-house. Shot cards are camera stations from place_10 (lens, camera height, a distinct room program, near/far planes, and which room). Prompt Join lock=view. Each shot VAEEncodes its clay plate into ReferenceLatent. Shot cards are not Klein-t2i-enhanced.\n\nLanguage-only tour (no geometry) -> photos/dream-house. Do not substitute T2I stills or example.png as clay. Occupancy XOR: do not Blender-dump while compose is up. Seed/copy-inputs may run while compose is up.\nOptional style dropdown applies to the bible. Unused SHOT groups may be bypassed (Ctrl+B).\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nHandoff: video/loops/gif-loop, video/loops/bumper-loop, video/loops/sticker-loop. Load that graph next - the output is its input.\n",
     "lab_description": "Ten Instagram 4:5 Klein edits of Blender clay views (3D persistence, AI finish)",
     "ds": {
       "scale": 1,
@@ -6927,8 +7067,8 @@
           119,
           "quality",
           {
-            "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
+            "label": "Detail",
+            "description": "draft is a quick look. standard is what this App ships tuned for. final is the best this App's own stack can do. A rung never changes size and never leaves this App's model stack. The caption names the steps, CFG, weights, and license Queue actually sends."
           }
         ],
         [
@@ -6976,8 +7116,8 @@
           118,
           "enhance",
           {
-            "label": "Rewrite negative",
-            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs."
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs.",
+            "label": "Rewrite negative"
           }
         ],
         [
@@ -7009,7 +7149,7 @@
     "lab_rel": "photos/dream-house-clay",
     "workflowRendererVersion": "Vue-corrected",
     "lab_quality": {
-      "default": "lab"
+      "default": "standard"
     }
   },
   "version": 0.4

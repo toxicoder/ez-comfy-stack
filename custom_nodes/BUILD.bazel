@@ -144,6 +144,7 @@ filegroup(
         "ez_outputs/catalog.py",
         "ez_outputs/js/ez_outputs.css",
         "ez_outputs/js/ez_outputs.js",
+        "ez_outputs/probe.py",
         "ez_outputs/routes.py",
         "ez_podcast/__init__.py",
         "ez_podcast/digest.py",

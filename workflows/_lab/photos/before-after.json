@@ -9,7 +9,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        588
+        1112
       ],
       "size": [
         360,
@@ -44,7 +44,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        944
+        1468
       ],
       "size": [
         360,
@@ -82,7 +82,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        1122
+        1646
       ],
       "size": [
         360,
@@ -117,7 +117,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         40,
-        1394
+        1918
       ],
       "size": [
         420,
@@ -166,7 +166,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         2380,
-        1080
+        1604
       ],
       "size": [
         420,
@@ -214,7 +214,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         2848,
-        880
+        1404
       ],
       "size": [
         280,
@@ -290,7 +290,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## photos/before-after\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nTwo Klein 4B stills of one mug. SHOT BEFORE is the identity plate; AFTER Klein-edits from it. Prefixes `ez_before` and `ez_after`. Do not bypass BEFORE on a cold canvas.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## photos/before-after\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nTwo Klein 4B stills of one mug. SHOT BEFORE is the identity plate; AFTER Klein-edits from it. Prefixes `ez_before` and `ez_after`. Do not bypass BEFORE on a cold canvas.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -299,7 +299,7 @@
       "type": "VAEEncode",
       "pos": [
         1764,
-        908
+        1432
       ],
       "size": [
         240,
@@ -343,7 +343,7 @@
       "type": "ReferenceLatent",
       "pos": [
         2848,
-        1058
+        1582
       ],
       "size": [
         280,
@@ -384,7 +384,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        588
+        1112
       ],
       "size": [
         420,
@@ -426,7 +426,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        588
+        1112
       ],
       "size": [
         360,
@@ -473,7 +473,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        588
+        1112
       ],
       "size": [
         320,
@@ -533,7 +533,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        588
+        1112
       ],
       "size": [
         240,
@@ -576,7 +576,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        588
+        1112
       ],
       "size": [
         280,
@@ -606,7 +606,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1126
+        1650
       ],
       "size": [
         420,
@@ -648,7 +648,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        1126
+        1650
       ],
       "size": [
         360,
@@ -695,7 +695,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        1126
+        1650
       ],
       "size": [
         320,
@@ -755,7 +755,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        1126
+        1650
       ],
       "size": [
         240,
@@ -797,7 +797,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        1126
+        1650
       ],
       "size": [
         280,
@@ -827,7 +827,7 @@
       "type": "ReferenceLatent",
       "pos": [
         988,
-        1358
+        1882
       ],
       "size": [
         240,
@@ -870,7 +870,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         2380,
-        588
+        1112
       ],
       "size": [
         420,
@@ -933,16 +933,16 @@
         "Node name for S&R": "EZQuality"
       },
       "widgets_values": [
-        "lab"
+        "standard"
       ],
-      "title": "Quality"
+      "title": "Detail"
     },
     {
       "id": 24,
       "type": "EZImageFormat",
       "pos": [
         2848,
-        588
+        1112
       ],
       "size": [
         360,
@@ -1007,7 +1007,7 @@
         768,
         432,
         1,
-        "Match input"
+        "Force format"
       ],
       "title": "Format / platform"
     },
@@ -1016,7 +1016,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2052,
-        930
+        1454
       ],
       "size": [
         280,
@@ -1043,7 +1043,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [
             38
           ],
@@ -1063,7 +1068,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        1468
+        1992
       ],
       "size": [
         280,
@@ -1080,7 +1085,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "link": 38,
           "widget": {
             "name": "upscale"
@@ -1098,7 +1108,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -1139,8 +1154,8 @@
       "id": 28,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        3276.0,
-        80.0
+        2380,
+        1836
       ],
       "size": [
         420.0,
@@ -1180,8 +1195,8 @@
       "id": 29,
       "type": "CLIPTextEncode",
       "pos": [
-        3276.0,
-        572.0
+        2380,
+        2328
       ],
       "size": [
         420.0,
@@ -1227,8 +1242,8 @@
       "id": 30,
       "type": "ReferenceLatent",
       "pos": [
-        3276.0,
-        804.0
+        2848,
+        1734
       ],
       "size": [
         280.0,
@@ -1538,7 +1553,12 @@
       1,
       26,
       1,
-      "STRING"
+      [
+        "none",
+        "2x",
+        "4x",
+        "4K"
+      ]
     ],
     [
       39,
@@ -1629,7 +1649,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        516,
+        1040,
         400,
         708
       ],
@@ -1642,7 +1662,7 @@
       "title": "IDENTITY",
       "bounding": [
         20,
-        1322,
+        1846,
         460,
         536
       ],
@@ -1655,7 +1675,7 @@
       "title": "SHOT BEFORE",
       "bounding": [
         500,
-        516,
+        1040,
         1852,
         538
       ],
@@ -1668,7 +1688,7 @@
       "title": "SHOT AFTER",
       "bounding": [
         500,
-        1054,
+        1578,
         1852,
         538
       ],
@@ -1681,9 +1701,9 @@
       "title": "PROMPT",
       "bounding": [
         2360,
-        516,
+        1040,
         460,
-        768
+        1492
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1694,9 +1714,9 @@
       "title": "SETTINGS",
       "bounding": [
         2828,
-        516,
+        1040,
         400,
-        666
+        818
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1706,7 +1726,7 @@
   "config": {},
   "extra": {
     "lab_profile": "photos/before-after",
-    "lab_note": "## photos/before-after\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nTwo Klein 4B stills of one mug. SHOT BEFORE is the identity plate; AFTER Klein-edits from it. Prefixes `ez_before` and `ez_after`. Do not bypass BEFORE on a cold canvas.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_note": "## photos/before-after\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nTwo Klein 4B stills of one mug. SHOT BEFORE is the identity plate; AFTER Klein-edits from it. Prefixes `ez_before` and `ez_after`. Do not bypass BEFORE on a cold canvas.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n",
     "lab_description": "Klein 4B before/after still pair",
     "lab_app_mode": {
       "enabled": true,
@@ -1723,8 +1743,8 @@
           23,
           "quality",
           {
-            "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
+            "label": "Detail",
+            "description": "draft is a quick look. standard is what this App ships tuned for. final is the best this App's own stack can do. A rung never changes size and never leaves this App's model stack. The caption names the steps, CFG, weights, and license Queue actually sends."
           }
         ],
         [
@@ -1748,7 +1768,7 @@
           24,
           "format",
           {
-            "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (div16).",
+            "description": "Aspect or named platform job. Sets pixels and Rewrite prompt framing. Custom uses Width x Height (div16); the run keeps the folder this App saves to.",
             "label": "Format / platform"
           }
         ],
@@ -1788,8 +1808,8 @@
           22,
           "enhance",
           {
-            "label": "Rewrite negative",
-            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs."
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs.",
+            "label": "Rewrite negative"
           }
         ],
         [
@@ -1834,7 +1854,7 @@
     "lab_rel": "photos/before-after",
     "workflowRendererVersion": "Vue-corrected",
     "lab_quality": {
-      "default": "lab"
+      "default": "standard"
     }
   },
   "version": 0.4

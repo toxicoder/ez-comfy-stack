@@ -7,6 +7,8 @@ import shutil
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from ez_outputs.catalog import AUDIO_SUFFIXES, VIDEO_SUFFIXES
+
 from .align import SAMPLE_RATE
 from .jobstore import dub_dir, save_state
 from .rights import require_rights
@@ -14,11 +16,12 @@ from .rights import require_rights
 if TYPE_CHECKING:
     from ez_common.comfy_graph import WidgetValue
 
-# Ingest widgets and media suffixes.
+# Ingest widgets and media suffixes. The suffix sets are the Outputs sidebar's
+# own, so the Dub source combo can only offer a file the explorer also lists;
+# .mov and .aac are not in that set and reach ingest as a bare path or a
+# yt-dlp download instead of a combo pick.
 SOURCE_NONE = "(none)"
-AUDIO_SUFFIXES = (".wav", ".mp3", ".flac", ".ogg", ".m4a", ".aac")
-VIDEO_SUFFIXES = (".mp4", ".mkv", ".mov", ".webm")
-MEDIA_SUFFIXES = AUDIO_SUFFIXES + VIDEO_SUFFIXES
+MEDIA_SUFFIXES = AUDIO_SUFFIXES | VIDEO_SUFFIXES
 
 
 def is_url(source: object) -> bool:

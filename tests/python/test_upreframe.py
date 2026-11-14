@@ -207,7 +207,7 @@ def test_upreframe_layout_keeps_gaps_and_the_header_row() -> None:
     note_x, note_y = node_pos(note)
     assert (note_x, note_y) == (40.0, 80.0)
     header = [node for node in graph["nodes"] if node.get("type") in {QUALITY_TYPE, CHECK_TYPE}]
-    assert {node.get("title") for node in header} == {"Quality", "Check models"}
+    assert {node.get("title") for node in header} == {"Detail", "Check models"}
     for node in header:
         assert node_pos(node)[1] == note_y
         assert node_pos(node)[0] > note_x

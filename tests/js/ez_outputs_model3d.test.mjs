@@ -418,7 +418,7 @@ describe("ez_outputs 3D mesh rows", () => {
     await settle();
     const row = itemFor(el, "trellis/mug_00001_.glb");
     const labels = row.querySelectorAll("button").map((b) => b.textContent.trim());
-    assert.deepEqual(labels, ["Download", "Delete"]);
+    assert.deepEqual(labels, ["Download", "Copy path", "Delete"]);
     row.querySelector("button").click();
     await settle();
     const anchor = built.find(
@@ -432,7 +432,7 @@ describe("ez_outputs 3D mesh rows", () => {
     const imageLabels = imageRow
       .querySelectorAll("button")
       .map((b) => b.textContent.trim());
-    assert.deepEqual(imageLabels, ["Use as start image", "Delete"]);
+    assert.deepEqual(imageLabels, ["Use as start image", "Copy path", "Delete"]);
   });
 
   test("the mesh lightbox shows a note, no tag, and no staging button", async () => {
@@ -468,5 +468,132 @@ describe("ez_outputs 3D mesh rows", () => {
     assert.equal(lightbox.querySelectorAll("img").length, 1);
     const labels = lightbox.querySelectorAll("button").map((b) => b.textContent.trim());
     assert.equal(labels.includes("Use as start image"), true);
+  });
+});
+
+/**
+ * Rows whose kind has no browser preview at all: a mesh, a MIDI sequence, and
+ * a dub QC report. Each carries the server-probed lines the card renders.
+ */
+const DETAIL_ROWS = [
+  {
+    rel: "assets/ez_cup_00001_.glb",
+    name: "ez_cup_00001_.glb",
+    kind: "model3d",
+    size: 4096,
+    mtime: 1700000006,
+    suffix: ".glb",
+    parent: "assets",
+    lines: ["GLB - opens in Blender, no in-browser preview", "from plate.png"],
+  },
+  {
+    rel: "songs/ez_breakwater_theme_00001_.mid",
+    name: "ez_breakwater_theme_00001_.mid",
+    kind: "midi",
+    size: 512,
+    mtime: 1700000005,
+    suffix: ".mid",
+    parent: "songs",
+    lines: ["MIDI sequence - opens in a DAW", "4 tracks"],
+  },
+  {
+    rel: "dubs/ep1/qc.json",
+    name: "qc.json",
+    kind: "report",
+    size: 320,
+    mtime: 1700000004,
+    suffix: ".json",
+    parent: "dubs/ep1",
+    lines: ["QC fail", "mix is not speech-like (drone, hush, or tone)"],
+  },
+];
+
+/**
+ * The rendered text of one card's detail lines.
+ * @param {object} el Panel root.
+ * @param {string} rel Relative path of the file.
+ * @returns {string[]} Line texts.
+ */
+function cardLines(el, rel) {
+  return itemFor(el, rel)
+    .querySelectorAll(".ez-out-line")
+    .map((node) => node.textContent.trim());
+}
+
+describe("ez_outputs kinds without a browser preview", () => {
+  test("the MIDI and Reports chips ask the route for those kinds", async () => {
+    const { el, urls } = await mountOutputs({ items: DETAIL_ROWS });
+    button(el, "MIDI").click();
+    await settle();
+    assert.match(urls[urls.length - 1], /kind=midi/);
+    button(el, "Reports").click();
+    await settle();
+    assert.match(urls[urls.length - 1], /kind=report/);
+  });
+
+  test("a MIDI card badges, says what it is, and never builds a media tag", async () => {
+    const { el } = await mountOutputs({ items: DETAIL_ROWS });
+    const card = itemFor(el, "songs/ez_breakwater_theme_00001_.mid");
+    const tags = card.walk().map((node) => node.tagName);
+    for (const tag of ["IMG", "VIDEO", "AUDIO", "SOURCE"]) {
+      assert.equal(tags.includes(tag), false, `MIDI card built a <${tag.toLowerCase()}>`);
+    }
+    assert.equal(card.querySelector(".ez-out-badge-midi").textContent.trim(), "MIDI");
+    assert.equal(card.querySelectorAll(".ez-out-midi-ph").length, 1);
+    assert.deepEqual(cardLines(el, "songs/ez_breakwater_theme_00001_.mid"), [
+      "MIDI sequence - opens in a DAW",
+      "4 tracks",
+    ]);
+  });
+
+  test("a QC report card renders the verdict text under a Report badge", async () => {
+    const { el } = await mountOutputs({ items: DETAIL_ROWS });
+    const card = itemFor(el, "dubs/ep1/qc.json");
+    assert.equal(card.querySelector(".ez-out-badge-report").textContent.trim(), "Report");
+    assert.equal(card.querySelectorAll(".ez-out-report-ph").length, 1);
+    assert.deepEqual(cardLines(el, "dubs/ep1/qc.json"), [
+      "QC fail",
+      "mix is not speech-like (drone, hush, or tone)",
+    ]);
+  });
+
+  test("the mesh card names Blender instead of an in-browser preview", async () => {
+    const { el } = await mountOutputs({ items: DETAIL_ROWS });
+    assert.deepEqual(cardLines(el, "assets/ez_cup_00001_.glb"), [
+      "GLB - opens in Blender, no in-browser preview",
+      "from plate.png",
+    ]);
+  });
+
+  test("list view downloads the unstageable kinds and always offers Copy path", async () => {
+    const { el } = await mountOutputs({ items: DETAIL_ROWS });
+    button(el, "List").click();
+    await settle();
+    for (const rel of [
+      "assets/ez_cup_00001_.glb",
+      "songs/ez_breakwater_theme_00001_.mid",
+      "dubs/ep1/qc.json",
+    ]) {
+      const labels = itemFor(el, rel)
+        .querySelectorAll("button")
+        .map((b) => b.textContent.trim());
+      assert.deepEqual(labels, ["Download", "Copy path", "Delete"], rel);
+    }
+  });
+
+  test("the MIDI and report lightboxes print a note instead of a dead tag", async () => {
+    const { el } = await mountOutputs({ items: DETAIL_ROWS });
+    itemFor(el, "songs/ez_breakwater_theme_00001_.mid").dispatch("dblclick", {});
+    await settle();
+    let box = el.querySelector(".ez-out-lightbox");
+    let tags = box.walk().map((node) => node.tagName);
+    for (const tag of ["IMG", "VIDEO", "AUDIO", "SOURCE"]) {
+      assert.equal(tags.includes(tag), false, `MIDI lightbox built a <${tag.toLowerCase()}>`);
+    }
+    assert.equal(box.querySelectorAll(".ez-out-mesh-note").length, 1);
+    assert.match(box.textContent, /opens in a DAW/);
+    const labels = box.querySelectorAll("button").map((b) => b.textContent.trim());
+    assert.equal(labels.includes("Use as start audio"), false);
+    assert.equal(labels.includes("Download"), true);
   });
 });

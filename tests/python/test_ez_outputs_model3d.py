@@ -11,6 +11,7 @@ from ez_outputs.catalog import (
     AUDIO_SUFFIXES,
     IMAGE_SUFFIXES,
     MEDIA_SUFFIXES,
+    MIDI_SUFFIXES,
     MODEL3D_SUFFIXES,
     VIDEO_SUFFIXES,
     CatalogError,
@@ -62,6 +63,19 @@ def _pack_js_path(name: str) -> Path:
     return root / "custom_nodes" / "ez_outputs" / "js" / name
 
 
+def _production_source(*parts: str) -> str:
+    """Return one first-party source file, named from the repo root.
+
+    Args:
+        parts: Path components under the repo root.
+
+    Returns:
+        The file's text.
+    """
+    root = Path(__file__).resolve().parents[2]
+    return (root / Path(*parts)).read_text(encoding="utf-8")
+
+
 def _js_slice(body: str, start: str, end: str) -> str:
     """Return the source between two markers, in order.
 
@@ -86,7 +100,11 @@ def _js_slice(body: str, start: str, end: str) -> str:
 def test_kind_of_mesh_suffixes() -> None:
     assert MODEL3D_SUFFIXES == frozenset({".glb", ".gltf"})
     assert MEDIA_SUFFIXES == (
-        IMAGE_SUFFIXES | VIDEO_SUFFIXES | AUDIO_SUFFIXES | MODEL3D_SUFFIXES
+        IMAGE_SUFFIXES
+        | VIDEO_SUFFIXES
+        | AUDIO_SUFFIXES
+        | MODEL3D_SUFFIXES
+        | MIDI_SUFFIXES
     )
     assert kind_of(".glb") == "model3d"
     assert kind_of(".GLB") == "model3d"
@@ -258,9 +276,12 @@ def test_outputs_js_offers_download_instead_of_loadimage_for_meshes() -> None:
     row_actions = _js_slice(
         body, "const isMesh = row.kind ===", 'makeButton("Delete"'
     )
-    assert 'isMesh\n        ? "Download"' in row_actions
+    assert "const noStaging = isMesh ||" in row_actions
+    assert 'noStaging\n        ? "Download"' in row_actions
     assert "downloadRels([row.rel]);" in row_actions
     assert "copyRels([row.rel]);" in row_actions
+    assert 'makeButton("Copy path", "ez-out-btn"' in row_actions
+    assert "copyPaths([absolutePath(row.rel)]);" in row_actions
     # The lightbox keeps its Download button and drops the staging one.
     assert 'if (row.kind !== "model3d") {' in body
     use_button = _js_slice(body, 'if (row.kind !== "model3d") {', 'makeButton("Delete"')
@@ -278,3 +299,46 @@ def test_outputs_css_skins_the_mesh_rows() -> None:
         ".ez-out-badge-model3d {",
     ):
         assert selector in sheet, selector
+
+
+def test_outputs_css_skins_the_midi_and_report_rows() -> None:
+    """MIDI and QC tiles keep the mesh placeholder's hatch, each its own way.
+
+    Neither format has a browser tag, so the tile is the only thing that tells
+    the two lanes apart; they share the mesh block and differ in the hatch.
+    """
+    body = _pack_js_path("ez_outputs.js").read_text(encoding="utf-8")
+    sheet = _pack_js_path("ez_outputs.css").read_text(encoding="utf-8")
+    assert 'if (row.kind === "midi" || row.kind === "report") {' in body
+    assert '"ez-out-mesh-ph " + (row.kind === "midi"' in body
+    assert '"ez-out-midi-ph" : "ez-out-report-ph")' in body
+    for selector in (".ez-out-midi-ph", ".ez-out-report-ph"):
+        assert selector + " {" in sheet, selector
+        rule = sheet.split(selector + " {", 1)[1].split("}", 1)[0]
+        assert "repeating-linear-gradient(" in rule, selector
+        assert "rgba(255, 255, 255," in rule, selector
+
+
+def test_dub_pack_offers_only_what_the_catalog_lists() -> None:
+    """The dub pack borrows the catalog's suffix sets instead of keeping its own.
+
+    ``.mov`` and ``.aac`` were once a dub-only allowance for files the explorer
+    refused to list; the catalog now decides both lanes.
+    """
+    from ez_dub import media, pipeline
+
+    wanted = AUDIO_SUFFIXES | VIDEO_SUFFIXES
+    assert pipeline.MEDIA_SUFFIXES == wanted
+    assert media.MEDIA_SUFFIXES == wanted
+    assert set(pipeline.MEDIA_SUFFIXES) <= set(MEDIA_SUFFIXES)
+    assert {".wav", ".mp3", ".flac", ".ogg", ".m4a", ".mp4", ".webm", ".mkv"} <= set(
+        pipeline.MEDIA_SUFFIXES
+    )
+    for suffix in (".mov", ".aac"):
+        assert suffix not in pipeline.MEDIA_SUFFIXES, suffix
+    # One definition: the pack imports the sets, it does not restate them.
+    source = _production_source("custom_nodes", "ez_dub", "pipeline.py")
+    assert "from ez_outputs.catalog import AUDIO_SUFFIXES, VIDEO_SUFFIXES" in source
+    for restated in ("AUDIO_SUFFIXES = ", "VIDEO_SUFFIXES = "):
+        assert restated not in source, restated
+

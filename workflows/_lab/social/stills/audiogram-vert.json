@@ -9,7 +9,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        508
+        524
       ],
       "size": [
         360,
@@ -43,7 +43,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        662
+        678
       ],
       "size": [
         360,
@@ -79,7 +79,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        840
+        856
       ],
       "size": [
         360,
@@ -112,7 +112,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        508
+        524
       ],
       "size": [
         420,
@@ -159,7 +159,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        942
+        958
       ],
       "size": [
         420,
@@ -206,7 +206,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         1440,
-        1462
+        1478
       ],
       "size": [
         280,
@@ -266,7 +266,7 @@
       "type": "KSampler",
       "pos": [
         1440,
-        508
+        524
       ],
       "size": [
         320,
@@ -326,7 +326,7 @@
       "type": "VAEDecode",
       "pos": [
         1840,
-        1684
+        1700
       ],
       "size": [
         240,
@@ -368,7 +368,7 @@
       "type": "SaveImage",
       "pos": [
         1840,
-        1802
+        1818
       ],
       "size": [
         280,
@@ -421,7 +421,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## social/stills/audiogram-vert\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nAudiogram background 9:16. Lab size **576x1024**. Prefix `ez_ag_vert`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## social/stills/audiogram-vert\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nAudiogram background 9:16. Lab size **576x1024**. Prefix `ez_ag_vert`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     },
@@ -430,7 +430,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         480,
-        508
+        524
       ],
       "size": [
         420,
@@ -464,13 +464,13 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "A photoreal still of a sunlit oak desk with linen, an unmarked notebook, and a ceramic mug. Screens stay empty of logos. Empty of lettering. Vertical audiogram. Quiet lower third for a waveform. Empty of lettering.",
-        true,
         true,
         "t2i",
         "YouTube 16:9 still",
         "none",
-        "photos/still-draft"
+        "social/stills/audiogram-vert"
       ],
       "title": "Klein Prompt Enhance"
     },
@@ -479,7 +479,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         480,
-        1174
+        1190
       ],
       "size": [
         420,
@@ -542,16 +542,16 @@
         "Node name for S&R": "EZQuality"
       },
       "widgets_values": [
-        "lab"
+        "standard"
       ],
-      "title": "Quality"
+      "title": "Detail"
     },
     {
       "id": 14,
       "type": "EZImageFormat",
       "pos": [
         1440,
-        1170
+        1186
       ],
       "size": [
         360,
@@ -618,7 +618,7 @@
         576,
         1024,
         1,
-        "Match input"
+        "Force format"
       ],
       "title": "Format / platform"
     },
@@ -627,7 +627,7 @@
       "type": "EZImageUpscale",
       "pos": [
         1800,
-        2144
+        2160
       ],
       "size": [
         280,
@@ -654,7 +654,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -870,7 +875,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        436,
+        452,
         400,
         506
       ],
@@ -883,7 +888,7 @@
       "title": "PROMPT",
       "bounding": [
         460,
-        436,
+        452,
         928,
         1202
       ],
@@ -896,7 +901,7 @@
       "title": "SETTINGS",
       "bounding": [
         1420,
-        436,
+        452,
         400,
         1176
       ],
@@ -909,7 +914,7 @@
       "title": "OUTPUT",
       "bounding": [
         1780,
-        1612,
+        1628,
         360,
         656
       ],
@@ -929,7 +934,7 @@
         0
       ]
     },
-    "lab_note": "## social/stills/audiogram-vert\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nAudiogram background 9:16. Lab size **576x1024**. Prefix `ez_ag_vert`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## social/stills/audiogram-vert\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nAudiogram background 9:16. Lab size **576x1024**. Prefix `ez_ag_vert`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_description": "Audiogram background 9:16",
     "lab_app_mode": {
       "enabled": true,
@@ -946,8 +951,8 @@
           13,
           "quality",
           {
-            "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
+            "label": "Detail",
+            "description": "draft is a quick look. standard is what this App ships tuned for. final is the best this App's own stack can do. A rung never changes size and never leaves this App's model stack. The caption names the steps, CFG, weights, and license Queue actually sends."
           }
         ],
         [
@@ -1011,8 +1016,8 @@
           12,
           "enhance",
           {
-            "label": "Rewrite negative",
-            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs."
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs.",
+            "label": "Rewrite negative"
           }
         ],
         [
@@ -1056,7 +1061,7 @@
     "lab_rel": "social/stills/audiogram-vert",
     "workflowRendererVersion": "Vue-corrected",
     "lab_quality": {
-      "default": "lab"
+      "default": "standard"
     }
   },
   "version": 0.4

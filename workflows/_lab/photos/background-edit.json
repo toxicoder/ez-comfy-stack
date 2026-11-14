@@ -354,7 +354,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## photos/background-edit\n\nKlein 4B **background edit**. Load a still. Restyle the environment in place: cartoon/cel, add or remove props, weather, grade. Keep the subject. Output PNG matches the source width and height when Upscale is none; 2x, 4x, and 4K lanczos-resize the saved PNG. Prefix `ez_bg_edit`.\n\nOther characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero. Style applies to the environment only.\n\nDo not Queue without a start image. Describe image (default off) captions the source so Rewrite prompt can name wardrobe and props. Upscale (default none) is lanczos after decode.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507).\n"
+        "## photos/background-edit\n\nKlein 4B **background edit**. Load a still. Restyle the environment in place: cartoon/cel, add or remove props, weather, grade. Keep the subject. Output PNG matches the source width and height when Upscale is none; 2x, 4x, and 4K lanczos-resize the saved PNG. Prefix `ez_bg_edit`.\n\nOther characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero. Style applies to the environment only.\n\nDo not Queue without a start image. Describe image (default off) captions the source so Rewrite prompt can name wardrobe and props. Upscale (default none) is lanczos after decode.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507).\n\nHandoff: photos/background-swap, video/silent/still-to-video-5s, video/av/still-to-video-8s, photos/text-swap. Load that graph next - the output is its input.\n"
       ],
       "title": "Operator note"
     },
@@ -527,9 +527,9 @@
         "Node name for S&R": "EZQuality"
       },
       "widgets_values": [
-        "lab"
+        "standard"
       ],
-      "title": "Quality"
+      "title": "Detail"
     },
     {
       "id": 18,
@@ -563,7 +563,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -1154,7 +1159,7 @@
         0
       ]
     },
-    "lab_note": "## photos/background-edit\n\nKlein 4B **background edit**. Load a still. Restyle the environment in place: cartoon/cel, add or remove props, weather, grade. Keep the subject. Output PNG matches the source width and height when Upscale is none; 2x, 4x, and 4K lanczos-resize the saved PNG. Prefix `ez_bg_edit`.\n\nOther characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero. Style applies to the environment only.\n\nDo not Queue without a start image. Describe image (default off) captions the source so Rewrite prompt can name wardrobe and props. Upscale (default none) is lanczos after decode.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507).\n",
+    "lab_note": "## photos/background-edit\n\nKlein 4B **background edit**. Load a still. Restyle the environment in place: cartoon/cel, add or remove props, weather, grade. Keep the subject. Output PNG matches the source width and height when Upscale is none; 2x, 4x, and 4K lanczos-resize the saved PNG. Prefix `ez_bg_edit`.\n\nOther characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero. Style applies to the environment only.\n\nDo not Queue without a start image. Describe image (default off) captions the source so Rewrite prompt can name wardrobe and props. Upscale (default none) is lanczos after decode.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507).\n\nHandoff: photos/background-swap, video/silent/still-to-video-5s, video/av/still-to-video-8s, photos/text-swap. Load that graph next - the output is its input.\n",
     "lab_description": "Klein 4B background edit. LoadImage source still. Snap + ReferenceLatent. Restyle the environment in place. Prefix ez_bg_edit.",
     "lab_app_mode": {
       "enabled": true,
@@ -1184,8 +1189,8 @@
           14,
           "quality",
           {
-            "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
+            "label": "Detail",
+            "description": "draft is a quick look. standard is what this App ships tuned for. final is the best this App's own stack can do. A rung never changes size and never leaves this App's model stack. The caption names the steps, CFG, weights, and license Queue actually sends."
           }
         ],
         [
@@ -1233,7 +1238,7 @@
           19,
           "enable",
           {
-            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs download-llm --tier describe.",
+            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs bazelisk run //:manage -- download-llm --tier describe.",
             "label": "Describe image"
           }
         ],
@@ -1281,7 +1286,7 @@
     "lab_rel": "photos/background-edit",
     "workflowRendererVersion": "Vue-corrected",
     "lab_quality": {
-      "default": "lab"
+      "default": "standard"
     }
   },
   "version": 0.4

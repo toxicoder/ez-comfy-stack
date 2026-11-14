@@ -9,13 +9,14 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping
 
 from _creator_pack3 import PACK3
 from _services_pack import SERVICES
 from _lab_layout import GROUP_TITLE_INSET, finalize_layout, node_pos, set_node_pos
-from _lab_paths import LAB_ROOT, apply_lab_identity, lab_json
+from _lab_paths import LAB_ROOT, apply_lab_identity, lab_graph_paths, lab_json
 from _stamp_app_mode import stamp_suite_graph
+from _wire_optional_ref import OPTIONAL_TYPE
 
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
@@ -25,6 +26,7 @@ if str(CUSTOM) not in sys.path:
 from ez_image.formats import (  # noqa: E402
     CUSTOM_ID,
     SIZE_MODE_CHOICES,
+    SIZE_MODE_FORCE,
     SIZE_MODE_MATCH,
     get_format,
     load_formats,
@@ -41,9 +43,19 @@ from ez_image.video_formats import (  # noqa: E402
 )
 from ez_music.albums import album_rel, shipped_albums  # noqa: E402
 
+LinkType = str | list[str]
+"""A link's declared type: a class name, or a combo's list of values.
+
+ComfyUI types a combo widget input by the values it accepts, so a widget shared
+between two nodes links under that list in all three places a graph records a
+type. ``ENHANCE_MODE_COMBO`` and ``upscale_combo_labels()`` are the two the
+builders share this way; typing either as ``STRING`` makes the frontend flag the
+connection invalid and the App cannot Queue.
+"""
+
 FORMAT_BLURB = (
     "Format / platform sets pixels (Custom uses Width x Height). "
-    "Quality does not change size."
+    "Detail does not change size."
 )
 STILL_FORMAT_TYPE = "EZImageFormat"
 VIDEO_FORMAT_TYPE = "EZVideoFormat"
@@ -273,8 +285,36 @@ def pick_video_format(family: str, width: int, height: int) -> Any:
     return get_video_format(CUSTOM_ID, family=family)
 
 
+RETIRED_BLURBS: tuple[str, ...] = (
+    "Format / platform sets pixels (Custom uses Width x Height). "
+    "Quality does not change size.",
+)
+"""Format sentences an older stamp left in graph notes, newest replacement first.
+
+``_inject_blurb`` only ever appends, so a renamed blurb would otherwise leave
+both sentences side by side on every graph the stamper touches. Retired spellings
+are swapped in place instead of being added to.
+"""
+
+
+def _retire_blurbs(text: str) -> str:
+    """Swap any retired Format sentence for the one the ladder ships now.
+
+    Args:
+        text: Operator note text as stored.
+
+    Returns:
+        The note with each :data:`RETIRED_BLURBS` spelling replaced by
+        :data:`FORMAT_BLURB`, so a re-stamp converges instead of stacking.
+    """
+    for retired in RETIRED_BLURBS:
+        text = text.replace(retired, FORMAT_BLURB)
+    return text
+
+
 def _inject_blurb(text: str) -> str:
     """Insert FORMAT_BLURB after the first paragraph when missing."""
+    text = _retire_blurbs(text)
     if FORMAT_BLURB in text:
         return text
     stripped = text.strip()
@@ -323,7 +363,7 @@ def _append_link(
     src_slot: int,
     dst: int,
     dst_slot: int,
-    ltype: str,
+    ltype: LinkType,
 ) -> int:
     link_id = _next_link_id(graph)
     links = list(graph.get("links") or [])
@@ -359,7 +399,7 @@ def _input_slot(node: dict[str, Any], name: str) -> int | None:
 
 
 def _ensure_widget_input(
-    node: dict[str, Any], name: str, typ: str, link_id: int
+    node: dict[str, Any], name: str, typ: LinkType, link_id: int
 ) -> int:
     """Attach a widget input, or reuse the existing socket.
 
@@ -393,7 +433,7 @@ def _ensure_widget_input(
 
 
 def _ensure_plain_input(
-    node: dict[str, Any], name: str, typ: str, link_id: int
+    node: dict[str, Any], name: str, typ: LinkType, link_id: int
 ) -> int:
     """Attach a non-widget STRING input (Enhance context)."""
     inputs = list(node.get("inputs") or [])
@@ -414,7 +454,7 @@ def _link_out(
     src_slot: int,
     dst: dict[str, Any],
     name: str,
-    ltype: str,
+    ltype: LinkType,
     *,
     widget: bool = True,
 ) -> None:
@@ -527,7 +567,7 @@ def _make_still_node(
             width,
             height,
             batch,
-            SIZE_MODE_MATCH,
+            SIZE_MODE_FORCE,
         ],
         "title": "Format / platform",
     }
@@ -562,7 +602,7 @@ def _make_video_node(
             spec.label,
             width,
             height,
-            SIZE_MODE_MATCH,
+            SIZE_MODE_FORCE,
             DURATION_DEFAULT,
         ],
         "title": "Format / platform",
@@ -576,6 +616,104 @@ def _values_have(values: list[Any], choices: tuple[str, ...]) -> bool:
         if isinstance(item, str) and item.strip().casefold() in wanted:
             return True
     return False
+
+
+FRONTEND_STILL_TYPES: frozenset[str] = frozenset({"LoadImage", OPTIONAL_TYPE})
+"""Node classes whose file widget the format picker JS reads a still from.
+
+``custom_nodes/ez_image/js/ez_image_format.js`` walks the graph for a
+``LoadImage.image`` or ``EZOptionalImage.filename`` value and snaps the Format
+combo to that still's aspect while Output size reads Match input. A graph with
+neither has nothing for the snap to read, in the canvas or at Queue.
+"""
+
+
+def image_feeds(node: Mapping[str, Any]) -> bool:
+    """Return True when a still is linked into this node's optional image input.
+
+    Args:
+        node: One node row.
+
+    Returns:
+        Whether the node has an ``image`` input carrying a link.
+    """
+    for slot in node.get("inputs") or []:
+        if isinstance(slot, dict) and slot.get("name") == "image":
+            if slot.get("link") is not None:
+                return True
+    return False
+
+
+def graph_still_sources(graph: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """Return the live nodes an operator can hand a still to.
+
+    Args:
+        graph: Serialized lab graph.
+
+    Returns:
+        Every non-bypassed ``LoadImage`` or ``EZOptionalImage`` row.
+    """
+    return [
+        node
+        for node in graph.get("nodes") or []
+        if isinstance(node, dict)
+        and str(node.get("type") or "") in FRONTEND_STILL_TYPES
+        and int(node.get("mode") or 0) == 0
+    ]
+
+
+def size_mode_for(node: Mapping[str, Any], graph: Mapping[str, Any]) -> str:
+    """Return the size mode this node can honour in this graph.
+
+    Match input asks for the loaded still's aspect. That is a promise the graph
+    can keep in exactly two shapes: a still linked into the node, or a picker the
+    operator can fill. With neither, both combo values produce the authored
+    format, and shipping Match input as the default would have the panel promise
+    a behaviour no run can deliver.
+
+    Args:
+        node: An ``EZImageFormat`` or ``EZVideoFormat`` node row.
+        graph: The serialized graph that holds it.
+
+    Returns:
+        :data:`SIZE_MODE_MATCH` when a still can reach the canvas, else
+        :data:`SIZE_MODE_FORCE`.
+    """
+    if image_feeds(node) or graph_still_sources(graph):
+        return SIZE_MODE_MATCH
+    return SIZE_MODE_FORCE
+
+
+def align_size_mode(graph: dict[str, Any]) -> int:
+    """Author every format node in this graph to the mode it can honour.
+
+    The App keeps offering **Output size** on every canvas: both values are
+    honest choices once a picker exists, and the row's own help names each one.
+    What must not ship is a graph that defaults to Match input with no still to
+    read anywhere in it.
+
+    Args:
+        graph: Serialized lab graph (mutated).
+
+    Returns:
+        Widgets rewritten. Zero means the graph already holds the invariant, so
+        callers can use the count as a changed flag.
+    """
+    changes = 0
+    for node in graph.get("nodes") or []:
+        if not isinstance(node, dict):
+            continue
+        if node.get("type") not in (STILL_FORMAT_TYPE, VIDEO_FORMAT_TYPE):
+            continue
+        wanted = size_mode_for(node, graph)
+        values = node.get("widgets_values")
+        if isinstance(values, list):
+            for index, item in enumerate(values):
+                if isinstance(item, str) and item.strip() in SIZE_MODE_CHOICES:
+                    if item != wanted:
+                        values[index] = wanted
+                        changes += 1
+    return changes
 
 
 def ensure_format_widgets(graph: dict[str, Any]) -> bool:
@@ -595,12 +733,12 @@ def ensure_format_widgets(graph: dict[str, Any]) -> bool:
             continue
         if ntype == STILL_FORMAT_TYPE:
             if not _values_have(values, SIZE_MODE_CHOICES):
-                values.append(SIZE_MODE_MATCH)
+                values.append(size_mode_for(node, graph))
                 node["widgets_values"] = values
                 changed = True
         elif ntype == VIDEO_FORMAT_TYPE:
             if not _values_have(values, SIZE_MODE_CHOICES):
-                values.append(SIZE_MODE_MATCH)
+                values.append(size_mode_for(node, graph))
                 changed = True
             if not _values_have(values, DURATION_CHOICES):
                 values.append(DURATION_DEFAULT)
@@ -661,6 +799,7 @@ def wire_still_format(graph: dict[str, Any]) -> bool:
     )
     if wire_prefix and saves:
         _link_out(graph, fmt, 4, saves[0], "filename_prefix", "STRING")
+    align_size_mode(graph)
     ensure_format_note(graph)
     return True
 
@@ -711,6 +850,7 @@ def wire_video_format(graph: dict[str, Any]) -> bool:
     enhance = _primary_enhance(graph)
     if enhance is not None and not _is_loop_graph(graph):
         _link_out(graph, fmt, 2, enhance, "duration_hint", "STRING")
+    align_size_mode(graph)
     ensure_format_note(graph)
     return True
 
@@ -746,6 +886,7 @@ def dump_wired_graph(path: Path, graph: dict[str, Any]) -> None:
     apply_lab_identity(graph, rel)
     wire_lab_graph(graph)
     ensure_format_widgets(graph)
+    align_size_mode(graph)
     wire_upscale(graph, rel)
     wire_image_describe(graph)
     stamp_suite_graph(graph)
@@ -773,10 +914,38 @@ def patch_scoped_lab_graphs() -> list[str]:
     return inserted
 
 
+def align_catalog_size_modes(root: Path | None = None) -> int:
+    """Author every shipped format node to the mode its graph can honour.
+
+    Globals:
+        None.
+    Arguments:
+        root: Optional directory holding the graphs; defaults to the shipped
+            ``workflows/_lab`` tree.
+    Outputs:
+        One ``aligned <path>`` line per rewritten graph on stdout.
+    Returns:
+        The number of graphs written.
+    """
+    paths = lab_graph_paths() if root is None else sorted(Path(root).rglob("*.json"))
+    written = 0
+    for path in paths:
+        graph = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(graph, dict):
+            continue
+        if align_size_mode(graph):
+            path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
+            print(f"aligned {path}")
+            written += 1
+    return written
+
+
 def main() -> None:
     """Patch in-scope lab graphs from the repo root."""
     inserted = patch_scoped_lab_graphs()
     print(f"wired format picker on {len(inserted)} graphs")
+    aligned = align_catalog_size_modes()
+    print(f"aligned the size mode on {aligned} graphs")
 
 
 if __name__ == "__main__":

@@ -9,7 +9,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        508
+        524
       ],
       "size": [
         360,
@@ -43,7 +43,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        662
+        678
       ],
       "size": [
         360,
@@ -79,7 +79,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        840
+        856
       ],
       "size": [
         360,
@@ -112,7 +112,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         448,
-        1000
+        1016
       ],
       "size": [
         420,
@@ -159,7 +159,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         448,
-        1724
+        1740
       ],
       "size": [
         420,
@@ -206,7 +206,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         916,
-        800
+        816
       ],
       "size": [
         280,
@@ -266,7 +266,7 @@
       "type": "KSampler",
       "pos": [
         916,
-        978
+        994
       ],
       "size": [
         320,
@@ -326,7 +326,7 @@
       "type": "VAEDecode",
       "pos": [
         1324,
-        508
+        524
       ],
       "size": [
         240,
@@ -368,7 +368,7 @@
       "type": "SaveImage",
       "pos": [
         1324,
-        778
+        794
       ],
       "size": [
         280,
@@ -413,7 +413,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## photos/character-draft\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nKlein 4B character still. Type a character, pick a style, Queue. 1024x1280 (Instagram 4:5), seed 42, Enhance on (t2i so style applies). Prefix `ez_character`.\n\nHandoff: load **photos/character-tweak**, pick `ez_character_*.png`, and prompt the change.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## photos/character-draft\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nKlein 4B character still. Type a character, pick a style, Queue. 1024x1280 (Instagram 4:5), seed 42, Enhance on (t2i so style applies). Prefix `ez_character`.\n\nHandoff: load **photos/character-tweak**, pick `ez_character_*.png`, and prompt the change.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     },
@@ -422,7 +422,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         448,
-        508
+        524
       ],
       "size": [
         420,
@@ -471,7 +471,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         448,
-        1232
+        1248
       ],
       "size": [
         420,
@@ -534,16 +534,16 @@
         "Node name for S&R": "EZQuality"
       },
       "widgets_values": [
-        "lab"
+        "standard"
       ],
-      "title": "Quality"
+      "title": "Detail"
     },
     {
       "id": 14,
       "type": "EZImageFormat",
       "pos": [
         916,
-        508
+        524
       ],
       "size": [
         360,
@@ -608,7 +608,7 @@
         1024,
         1280,
         1,
-        "Match input"
+        "Force format"
       ],
       "title": "Format / platform"
     },
@@ -617,7 +617,7 @@
       "type": "EZImageUpscale",
       "pos": [
         1324,
-        626
+        642
       ],
       "size": [
         280,
@@ -644,7 +644,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -852,7 +857,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        436,
+        452,
         400,
         506
       ],
@@ -865,7 +870,7 @@
       "title": "PROMPT",
       "bounding": [
         428,
-        436,
+        452,
         460,
         1492
       ],
@@ -878,7 +883,7 @@
       "title": "SETTINGS",
       "bounding": [
         896,
-        436,
+        452,
         400,
         848
       ],
@@ -891,7 +896,7 @@
       "title": "OUTPUT",
       "bounding": [
         1304,
-        436,
+        452,
         320,
         656
       ],
@@ -911,7 +916,7 @@
         0
       ]
     },
-    "lab_note": "## photos/character-draft\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nKlein 4B character still. Type a character, pick a style, Queue. 1024x1280 (Instagram 4:5), seed 42, Enhance on (t2i so style applies). Prefix `ez_character`.\n\nHandoff: load **photos/character-tweak**, pick `ez_character_*.png`, and prompt the change.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## photos/character-draft\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nKlein 4B character still. Type a character, pick a style, Queue. 1024x1280 (Instagram 4:5), seed 42, Enhance on (t2i so style applies). Prefix `ez_character`.\n\nHandoff: load **photos/character-tweak**, pick `ez_character_*.png`, and prompt the change.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_description": "Klein 4B character still, 1024x1280, style on, prefix ez_character",
     "lab_app_mode": {
       "enabled": true,
@@ -932,8 +937,8 @@
           13,
           "quality",
           {
-            "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
+            "label": "Detail",
+            "description": "draft is a quick look. standard is what this App ships tuned for. final is the best this App's own stack can do. A rung never changes size and never leaves this App's model stack. The caption names the steps, CFG, weights, and license Queue actually sends."
           }
         ],
         [
@@ -957,7 +962,7 @@
           14,
           "format",
           {
-            "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (div16).",
+            "description": "Aspect or named platform job. Sets pixels and Rewrite prompt framing. Custom uses Width x Height (div16); the run keeps the folder this App saves to.",
             "label": "Format / platform"
           }
         ],
@@ -997,8 +1002,8 @@
           12,
           "enhance",
           {
-            "label": "Rewrite negative",
-            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs."
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs.",
+            "label": "Rewrite negative"
           }
         ],
         [
@@ -1042,7 +1047,7 @@
     "lab_rel": "photos/character-draft",
     "workflowRendererVersion": "Vue-corrected",
     "lab_quality": {
-      "default": "lab"
+      "default": "standard"
     }
   },
   "version": 0.4

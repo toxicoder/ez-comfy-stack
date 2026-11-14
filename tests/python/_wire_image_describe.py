@@ -8,6 +8,7 @@ from __future__ import annotations
 from typing import Any
 
 from _lab_layout import node_pos
+from _wire_describe_ref import SOURCE_TYPES, wire_describe_ref
 from _wire_format import (
     _append_link,
     _link_out,
@@ -202,6 +203,25 @@ def _preferred_still(graph: dict[str, Any]) -> dict[str, Any] | None:
     return None
 
 
+def _still_backs_link(graph: dict[str, Any], link_id: int) -> bool:
+    """True when a link already carries an IMAGE from a node that can source one.
+
+    Args:
+        graph: Serialized graph.
+        link_id: Link id the describe node's image slot holds.
+
+    Returns:
+        Whether the producing node still exists and is an image source.
+    """
+    row = _link_map(graph).get(link_id)
+    if not row:
+        return False
+    producer = _by_id(graph).get(int(row[1]))
+    if producer is None:
+        return False
+    return str(producer.get("type") or "") in SOURCE_TYPES
+
+
 def _retarget_describe_image(graph: dict[str, Any]) -> bool:
     """Point an existing describe node at the preferred still.
 
@@ -221,11 +241,13 @@ def _retarget_describe_image(graph: dict[str, Any]) -> bool:
             (item for item in node.get("inputs") or [] if item.get("name") == "image"),
             None,
         )
-        if img_in is not None and img_in.get("link") is not None:
-            _unlink(graph, int(img_in["link"]))
-            img_in["link"] = None
-            return True
-        return False
+        if img_in is None or img_in.get("link") is None:
+            return False
+        if _still_backs_link(graph, int(img_in["link"])):
+            return False
+        _unlink(graph, int(img_in["link"]))
+        img_in["link"] = None
+        return True
     img_in = next(
         (item for item in node.get("inputs") or [] if item.get("name") == "image"),
         None,
@@ -244,6 +266,13 @@ def _retarget_describe_image(graph: dict[str, Any]) -> bool:
 def wire_image_describe(graph: dict[str, Any]) -> bool:
     """Insert EZImageDescribe and link caption into Enhance.image_desc.
 
+    Every exit converges the graph on the invariant
+    :func:`_wire_describe_ref.wire_describe_ref` owns: a live describe node has a
+    still behind its image slot. The preferred still only ever names a source
+    that already feeds generation, so a graph whose captioner lost its picker -
+    or that never had one to feed a caption - would otherwise ship a toggle
+    Queue cannot satisfy.
+
     Args:
         graph: Serialized lab graph (mutated).
 
@@ -252,6 +281,7 @@ def wire_image_describe(graph: dict[str, Any]) -> bool:
     """
     if _nodes_of(graph, DESCRIBE_TYPE):
         _retarget_describe_image(graph)
+        wire_describe_ref(graph)
         return False
     if not describe_in_scope(graph):
         return False

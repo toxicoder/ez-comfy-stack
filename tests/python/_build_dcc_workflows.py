@@ -11,6 +11,7 @@ import copy
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 from _lab_layout import GROUP_TITLE_INSET, group as _group, finalize_layout
 from _lab_paths import lab_dest, lab_json, write_lab_graph
@@ -253,7 +254,7 @@ def _replace_load_image(
     widgets: list,
 ) -> dict:
     """Swap the first LoadImage for an ez_dcc loader. Keep IMAGE outbound links."""
-    load = next(n for n in graph["nodes"] if n.get("type") == "LoadImage")
+    load: dict[str, Any] = next(n for n in graph["nodes"] if n.get("type") == "LoadImage")
     old_links: list = []
     if load.get("outputs"):
         raw = load["outputs"][0].get("links") or []
@@ -273,9 +274,18 @@ def _replace_load_image(
 
 
 def _insert_occupancy_gate(
-    graph: dict, *, source: dict, required_mode: str
-) -> dict:
-    """Insert EZDCCOccupancyGate on the source IMAGE output."""
+    graph: dict[str, Any],
+    *,
+    source: dict[str, Any],
+    required_mode: str,
+    pos: tuple[int, int] | None = None,
+) -> dict[str, Any]:
+    """Insert EZDCCOccupancyGate on the source IMAGE output.
+
+    ``pos`` pins the card's canvas position. Builders whose graph layout is
+    already staged pass one, because the beside-the-source default can land on
+    a neighbour that a hand-staged layout happens to occupy.
+    """
     max_id, max_link = _max_ids(graph)
     gate_id = max_id + 1
     link_in = max_link + 1
@@ -285,11 +295,13 @@ def _insert_occupancy_gate(
         if int(link[0]) in old_links:
             link[1] = gate_id
             link[2] = 0
-    pos = source.get("pos") or [40, 40]
+    if pos is None:
+        source_pos = source.get("pos") or [40, 40]
+        pos = (int(source_pos[0]) + 360, int(source_pos[1]))
     gate = {
         "id": gate_id,
         "type": "EZDCCOccupancyGate",
-        "pos": [int(pos[0]) + 360, int(pos[1])],
+        "pos": [int(pos[0]), int(pos[1])],
         "size": [280, 90],
         "flags": {},
         "order": gate_id,
@@ -339,6 +351,48 @@ def _add_guide_video_node(graph: dict, *, layer: str = "depth") -> dict:
     graph["nodes"].append(node)
     graph["last_node_id"] = nid
     return node
+
+
+def _ensure_plate_picker(graph: dict, *, title: str) -> dict:
+    """Return the graph's LoadImage, appending a canonical one when it has none.
+
+    Globals:
+        None.
+    Arguments:
+        graph: The guide graph, mutated when it carries no picker.
+        title: The caption the operator reads above the upload box.
+    Outputs:
+        The picker node is appended to ``graph["nodes"]`` when none was present.
+    Returns:
+        The LoadImage the clay plate wiring should hang off. The clay hero once
+        borrowed the one picker its seed still carried; that box fed nothing in
+        the seed, and the catalog gate now refuses an upload no node reads, so
+        the guide owns its own instead of inheriting one.
+    """
+    for node in graph["nodes"]:
+        if node.get("type") == "LoadImage":
+            return node
+    node_id = max(int(node["id"]) for node in graph["nodes"]) + 1
+    picker: dict = {
+        "id": node_id,
+        "type": "LoadImage",
+        "pos": [448, 508],
+        "size": [320, 314],
+        "flags": {},
+        "order": 11,
+        "mode": 0,
+        "inputs": [],
+        "outputs": [
+            {"name": "IMAGE", "type": "IMAGE", "links": [], "slot_index": 0},
+            {"name": "MASK", "type": "MASK", "links": [], "slot_index": 1},
+        ],
+        "properties": {"Node name for S&R": "LoadImage"},
+        "widgets_values": ["first.png", "image"],
+        "title": title,
+    }
+    graph["nodes"].append(picker)
+    graph["last_node_id"] = node_id
+    return picker
 
 
 def build_klein_from_clay() -> dict:
@@ -394,9 +448,9 @@ def build_klein_from_clay() -> dict:
             node["widgets_values"] = [KLEIN_NOTE]
             node["title"] = "Operator note"
     # Wire LoadImage -> VAEEncode -> ReferenceLatent on the positive CLIP.
+    load = _ensure_plate_picker(graph, title="Clay first.png (guide pack)")
     max_id = max(int(n["id"]) for n in graph["nodes"])
     max_link = max(int(link[0]) for link in graph.get("links") or [ [0] ])
-    load = next(n for n in graph["nodes"] if n.get("type") == "LoadImage")
     vae = next(n for n in graph["nodes"] if n.get("type") == "VAELoader")
     pos = next(n for n in graph["nodes"] if n.get("type") == "CLIPTextEncode" and n.get("title") != "Negative")
     sampler = next(n for n in graph["nodes"] if n.get("type") == "KSampler")

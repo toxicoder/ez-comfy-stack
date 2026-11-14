@@ -354,7 +354,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## photos/text-swap\n\nKlein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or \"Replace SALE with OPEN\"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height when Upscale is none (snapped to the Flux.2 div16 grid for denoise, then scaled back). 2x, 4x, and 4K lanczos-resize that saved PNG. Prefix `ez_text_swap`.\n\nDo not Queue without a start image. Short high-contrast lettering holds best. For tiny or dense type, set Quality **High** (Klein base if `download-image --tier base` is on disk). Distilled 4B is best-effort, not a typesetter.\n\nType only the new lettering (HELLO) or a targeting line (Replace SALE with OPEN). The graph always wraps that into a glyph-lock instruction, even when Rewrite prompt is off.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Style is hidden - the source still owns look.\n"
+        "## photos/text-swap\n\nKlein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or \"Replace SALE with OPEN\"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height when Upscale is none (snapped to the Flux.2 div16 grid for denoise, then scaled back). 2x, 4x, and 4K lanczos-resize that saved PNG. Prefix `ez_text_swap`.\n\nDo not Queue without a start image. Short high-contrast lettering holds best. For tiny or dense type, pick Detail **Final** (it needs `flux-2-klein-base-4b-fp8.safetensors` on disk - `download-image --tier base`). Distilled 4B is best-effort, not a typesetter.\n\nType only the new lettering (HELLO) or a targeting line (Replace SALE with OPEN). The graph always wraps that into a glyph-lock instruction, even when Rewrite prompt is off.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Style is hidden - the source still owns look.\n\nHandoff: video/silent/still-to-video-5s. Load that graph next - the output is its input.\n"
       ],
       "title": "Operator note"
     },
@@ -522,9 +522,9 @@
         "Node name for S&R": "EZQuality"
       },
       "widgets_values": [
-        "lab"
+        "standard"
       ],
-      "title": "Quality"
+      "title": "Detail"
     },
     {
       "id": 18,
@@ -723,7 +723,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -1090,7 +1095,7 @@
         0
       ]
     },
-    "lab_note": "## photos/text-swap\n\nKlein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or \"Replace SALE with OPEN\"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height when Upscale is none (snapped to the Flux.2 div16 grid for denoise, then scaled back). 2x, 4x, and 4K lanczos-resize that saved PNG. Prefix `ez_text_swap`.\n\nDo not Queue without a start image. Short high-contrast lettering holds best. For tiny or dense type, set Quality **High** (Klein base if `download-image --tier base` is on disk). Distilled 4B is best-effort, not a typesetter.\n\nType only the new lettering (HELLO) or a targeting line (Replace SALE with OPEN). The graph always wraps that into a glyph-lock instruction, even when Rewrite prompt is off.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Style is hidden - the source still owns look.\n",
+    "lab_note": "## photos/text-swap\n\nKlein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or \"Replace SALE with OPEN\"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height when Upscale is none (snapped to the Flux.2 div16 grid for denoise, then scaled back). 2x, 4x, and 4K lanczos-resize that saved PNG. Prefix `ez_text_swap`.\n\nDo not Queue without a start image. Short high-contrast lettering holds best. For tiny or dense type, pick Detail **Final** (it needs `flux-2-klein-base-4b-fp8.safetensors` on disk - `download-image --tier base`). Distilled 4B is best-effort, not a typesetter.\n\nType only the new lettering (HELLO) or a targeting line (Replace SALE with OPEN). The graph always wraps that into a glyph-lock instruction, even when Rewrite prompt is off.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Style is hidden - the source still owns look.\n\nHandoff: video/silent/still-to-video-5s. Load that graph next - the output is its input.\n",
     "lab_description": "Klein 4B lettering swap. LoadImage source still. Snap + ReferenceLatent. Output matches source size. Prefix ez_text_swap.",
     "lab_app_mode": {
       "enabled": true,
@@ -1117,8 +1122,8 @@
           14,
           "quality",
           {
-            "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
+            "label": "Detail",
+            "description": "draft is a quick look. standard is what this App ships tuned for. final is the best this App's own stack can do. A rung never changes size and never leaves this App's model stack. The caption names the steps, CFG, weights, and license Queue actually sends."
           }
         ],
         [
@@ -1150,7 +1155,7 @@
           23,
           "enable",
           {
-            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs download-llm --tier describe.",
+            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs bazelisk run //:manage -- download-llm --tier describe.",
             "label": "Describe image"
           }
         ],
@@ -1166,8 +1171,8 @@
           13,
           "enhance",
           {
-            "label": "Rewrite negative",
-            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs."
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs.",
+            "label": "Rewrite negative"
           }
         ],
         [
@@ -1190,7 +1195,7 @@
     "lab_rel": "photos/text-swap",
     "workflowRendererVersion": "Vue-corrected",
     "lab_quality": {
-      "default": "lab"
+      "default": "standard"
     }
   },
   "version": 0.4

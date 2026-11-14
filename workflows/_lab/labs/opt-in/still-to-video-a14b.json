@@ -675,37 +675,6 @@
       "title": "Negative Prompt Enhance"
     },
     {
-      "id": 18,
-      "type": "EZQuality",
-      "pos": [
-        1416,
-        80
-      ],
-      "size": [
-        320.0,
-        82.0
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "quality",
-          "type": "STRING",
-          "links": null,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "EZQuality"
-      },
-      "widgets_values": [
-        "lab"
-      ],
-      "title": "Quality"
-    },
-    {
       "id": 19,
       "type": "EZModelCheck",
       "pos": [
@@ -1009,14 +978,6 @@
           }
         ],
         [
-          18,
-          "quality",
-          {
-            "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
-          }
-        ],
-        [
           15,
           "sample",
           {
@@ -1045,8 +1006,8 @@
           17,
           "enhance",
           {
-            "label": "Rewrite negative",
-            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs."
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs.",
+            "label": "Rewrite negative"
           }
         ],
         [
@@ -1067,10 +1028,7 @@
       "UNETLoader"
     ],
     "lab_rel": "labs/opt-in/still-to-video-a14b",
-    "workflowRendererVersion": "Vue-corrected",
-    "lab_quality": {
-      "default": "lab"
-    }
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

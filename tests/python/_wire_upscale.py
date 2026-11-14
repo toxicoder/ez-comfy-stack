@@ -16,10 +16,14 @@ from _wire_format import (
     _nodes_of,
     _push_output_link,
 )
+from ez_image.upscale import upscale_combo_labels
 
 UPSCALE_TYPE = "EZImageUpscale"
 SAVE_TYPE = "SaveImage"
 DEFAULT_UPSCALE = "none"
+
+UPSCALE_COMBO_TYPE: list[str] = upscale_combo_labels()
+"""The rung's own values, which is how a shared rung links between nodes."""
 
 # Produce stills + DCC still plates. Skip audio albums, film acts, VHS.
 UPSCALE_PREFIXES = (
@@ -267,7 +271,7 @@ def _make_upscale(nid: int, pos: list[float], linked_mode: bool) -> dict[str, An
         inputs.append(
             {
                 "name": "upscale",
-                "type": "STRING",
+                "type": list(UPSCALE_COMBO_TYPE),
                 "link": None,
                 "widget": {"name": "upscale"},
             }
@@ -283,7 +287,12 @@ def _make_upscale(nid: int, pos: list[float], linked_mode: bool) -> dict[str, An
         "inputs": inputs,
         "outputs": [
             {"name": "image", "type": "IMAGE", "links": [], "slot_index": 0},
-            {"name": "upscale", "type": "STRING", "links": [], "slot_index": 1},
+            {
+                "name": "upscale",
+                "type": list(UPSCALE_COMBO_TYPE),
+                "links": [],
+                "slot_index": 1,
+            },
         ],
         "properties": {"Node name for S&R": UPSCALE_TYPE},
         "widgets_values": [DEFAULT_UPSCALE],
@@ -359,6 +368,14 @@ def wire_upscale(graph: dict[str, Any], lab_rel: str = "") -> bool:
         if master is None:
             master = node
         elif node is not master and not _upscale_mode_linked(node):
-            _link_out(graph, master, 1, node, "upscale", "STRING", widget=True)
+            _link_out(
+                graph,
+                master,
+                1,
+                node,
+                "upscale",
+                list(UPSCALE_COMBO_TYPE),
+                widget=True,
+            )
         inserted = True
     return inserted

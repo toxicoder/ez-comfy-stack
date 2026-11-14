@@ -142,7 +142,7 @@ Pick a lane from this table; each row runs the whole set for that job.
 | Build the docs: generators plus static export | `bazelisk run //docs:docs` |
 | Run the docs generators on their own | `bazelisk run //docs:generate` |
 | Serve the docs locally | `bazelisk run //docs:serve` |
-| Rebuild derived frontend data (the Quality tier table comes from `custom_nodes/ez_quality/presets.py`, and `bazelisk test //:test-fast` fails if the generated JS drifts) | `bazelisk run //tests:build_quality_js` |
+| Rebuild derived frontend data (the Detail rung table comes from `custom_nodes/ez_quality/presets.py`, and `bazelisk test //:test-fast` fails if the generated JS drifts) | `bazelisk run //tests:build_quality_js` |
 
 ## Safety
 

@@ -1,4 +1,4 @@
-"""ez-comfy global Quality combo plus an isolated Check models node."""
+"""ez-comfy global Detail ladder plus an isolated Check models node."""
 
 from .nodes import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
 from .routes import register_routes

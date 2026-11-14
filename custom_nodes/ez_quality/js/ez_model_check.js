@@ -79,7 +79,7 @@ const ENHANCE = new Set([
  * @typedef {Object} EzCheckHints
  * @property {string=} lab_rel App folder the graph belongs to.
  * @property {string=} occupancy Occupancy the overlay reports.
- * @property {string=} quality Quality tier the overlay reports.
+ * @property {string=} quality Detail rung the live combo reports.
  * @property {Array<string>=} types Every node class on the graph.
  * @property {Array<string>=} unets UNETLoader filenames.
  * @property {Array<string>=} clips CLIPLoader filenames.
@@ -107,7 +107,7 @@ const ENHANCE = new Set([
  * @property {string=} message Report head, painted on the status widget.
  * @property {string=} lab_rel App the scan ran against.
  * @property {string=} occupancy Occupancy the hints carried.
- * @property {string=} quality Quality tier the hints carried.
+ * @property {string=} quality Detail rung the hints carried.
  * @property {Array<EzCheckRow>=} present Rows the box has.
  * @property {Array<EzCheckRow>=} missing Rows the box lacks.
  * @property {Array<string>=} commands Operator commands to run.
@@ -202,29 +202,32 @@ function firstName(node) {
 }
 
 /**
- * Tier the overlay reports, read off the same combo the overlay acts on: the
- * first visible EZQuality. A muted copy drives nothing, so it reports nothing.
+ * Rung the ladder reports when no live Detail combo carries one.
+ */
+const DEFAULT_RUNG = "standard";
+
+/**
+ * Rung the overlay reports, read off the same combo the overlay acts on: the
+ * first EZQuality that is actually in the queued prompt. A muted (mode 4) or
+ * bypassed copy drives nothing, so it reports nothing either, and a parked
+ * duplicate can no longer hand a stale rung to the check.
  * @param {EzGraph} [graph]
  * @returns {string}
  */
 function tierFromGraph(graph) {
-  let fallback = "";
   for (const node of graph?.nodes || []) {
     if ((node.type || node.comfyClass || "") !== "EZQuality") {
       continue;
     }
-    const value = String(widgetValue(node, "quality", 0) || "");
-    if (!value) {
+    if (node.mode != null && node.mode !== 0) {
       continue;
     }
-    if (node.mode == null || node.mode === 0) {
+    const value = String(widgetValue(node, "quality", 0) || "");
+    if (value) {
       return value;
     }
-    if (!fallback) {
-      fallback = value;
-    }
   }
-  return fallback || "lab";
+  return DEFAULT_RUNG;
 }
 
 /**
@@ -389,7 +392,7 @@ function reportSummary(node) {
   const result = node._ezLastCheck || {};
   const hints = node._ezLastHints || {};
   const label = String(result.lab_rel || hints.lab_rel || "this App");
-  const quality = String(result.quality || hints.quality || "lab");
+  const quality = String(result.quality || hints.quality || DEFAULT_RUNG);
   if (!node._ezLastCheck) {
     return `Model check has not run for ${label} @ ${quality}`;
   }

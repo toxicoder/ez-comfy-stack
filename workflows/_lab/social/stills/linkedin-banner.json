@@ -1,15 +1,15 @@
 {
   "id": "linkedin-banner",
   "revision": 8,
-  "last_node_id": 18,
-  "last_link_id": 23,
+  "last_node_id": 19,
+  "last_link_id": 27,
   "nodes": [
     {
       "id": 1,
       "type": "UNETLoader",
       "pos": [
         40,
-        508
+        524
       ],
       "size": [
         360,
@@ -43,7 +43,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        662
+        678
       ],
       "size": [
         360,
@@ -79,7 +79,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        840
+        856
       ],
       "size": [
         360,
@@ -112,7 +112,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        508
+        524
       ],
       "size": [
         420,
@@ -159,7 +159,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        1032
+        1048
       ],
       "size": [
         420,
@@ -206,7 +206,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         1440,
-        1552
+        1568
       ],
       "size": [
         280,
@@ -266,7 +266,7 @@
       "type": "KSampler",
       "pos": [
         1440,
-        508
+        524
       ],
       "size": [
         320,
@@ -326,7 +326,7 @@
       "type": "VAEDecode",
       "pos": [
         1840,
-        1774
+        1790
       ],
       "size": [
         240,
@@ -368,7 +368,7 @@
       "type": "SaveImage",
       "pos": [
         1840,
-        1892
+        1908
       ],
       "size": [
         280,
@@ -421,54 +421,16 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## social/stills/linkedin-banner\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nLinkedIn personal banner 4:1. Lab size **1536x384**. Prefix `ez_li_banner`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## social/stills/linkedin-banner\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nLinkedIn personal banner 4:1. Lab size **1536x384**. Prefix `ez_li_banner`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
-    },
-    {
-      "id": 11,
-      "type": "LoadImage",
-      "pos": [
-        2548,
-        508
-      ],
-      "size": [
-        320,
-        314
-      ],
-      "flags": {},
-      "order": 11,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [],
-          "slot_index": 0
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": [],
-          "slot_index": 1
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoadImage"
-      },
-      "widgets_values": [
-        "example.png",
-        "image"
-      ],
-      "title": "Draft still (set to ez_still_draft_00001_.png)"
     },
     {
       "id": 12,
       "type": "EZKleinPromptEnhance",
       "pos": [
         480,
-        508
+        524
       ],
       "size": [
         420,
@@ -507,13 +469,13 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Ultra-wide 4:1 banner. Subject in the right half; left stays simple.",
-        true,
         true,
         "t2i",
         "YouTube 16:9 still",
         "none",
-        "photos/still-hero"
+        "social/stills/linkedin-banner"
       ],
       "title": "Klein Prompt Enhance"
     },
@@ -522,7 +484,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         480,
-        1264
+        1280
       ],
       "size": [
         420,
@@ -585,16 +547,16 @@
         "Node name for S&R": "EZQuality"
       },
       "widgets_values": [
-        "lab"
+        "standard"
       ],
-      "title": "Quality"
+      "title": "Detail"
     },
     {
       "id": 15,
       "type": "EZImageFormat",
       "pos": [
         1440,
-        1260
+        1276
       ],
       "size": [
         360,
@@ -670,7 +632,7 @@
       "type": "EZImageUpscale",
       "pos": [
         1800,
-        2234
+        2250
       ],
       "size": [
         280,
@@ -697,7 +659,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -715,7 +682,7 @@
       "type": "EZImageDescribe",
       "pos": [
         480,
-        1000
+        1016
       ],
       "size": [
         280,
@@ -736,7 +703,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": null
+          "link": 27
         }
       ],
       "outputs": [
@@ -780,6 +747,54 @@
         "Click Check models. Queue does not run this node."
       ],
       "title": "Check models"
+    },
+    {
+      "id": 19,
+      "type": "EZOptionalImage",
+      "pos": [
+        2168,
+        524
+      ],
+      "size": [
+        360.0,
+        120.0
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            27
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "count",
+          "type": "INT",
+          "links": [],
+          "slot_index": 1
+        },
+        {
+          "name": "has_image",
+          "type": "BOOLEAN",
+          "links": [],
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZOptionalImage"
+      },
+      "widgets_values": [
+        "",
+        true,
+        "",
+        ""
+      ],
+      "title": "Reference still (optional)"
     }
   ],
   "links": [
@@ -934,6 +949,14 @@
       12,
       1,
       "STRING"
+    ],
+    [
+      27,
+      19,
+      0,
+      17,
+      1,
+      "IMAGE"
     ]
   ],
   "groups": [
@@ -968,7 +991,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        436,
+        452,
         400,
         506
       ],
@@ -981,7 +1004,7 @@
       "title": "PROMPT",
       "bounding": [
         460,
-        436,
+        452,
         928,
         1292
       ],
@@ -994,7 +1017,7 @@
       "title": "SETTINGS",
       "bounding": [
         1420,
-        436,
+        452,
         400,
         1266
       ],
@@ -1007,7 +1030,7 @@
       "title": "OUTPUT",
       "bounding": [
         1780,
-        1702,
+        1718,
         360,
         656
       ],
@@ -1019,10 +1042,10 @@
       "id": 7,
       "title": "INPUT",
       "bounding": [
-        2528,
-        436,
-        360,
-        430
+        2148,
+        452,
+        400,
+        236
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1040,7 +1063,7 @@
         0
       ]
     },
-    "lab_note": "## social/stills/linkedin-banner\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nLinkedIn personal banner 4:1. Lab size **1536x384**. Prefix `ez_li_banner`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## social/stills/linkedin-banner\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nLinkedIn personal banner 4:1. Lab size **1536x384**. Prefix `ez_li_banner`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_description": "LinkedIn personal banner 4:1",
     "lab_app_mode": {
       "enabled": true,
@@ -1057,8 +1080,8 @@
           14,
           "quality",
           {
-            "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
+            "label": "Detail",
+            "description": "draft is a quick look. standard is what this App ships tuned for. final is the best this App's own stack can do. A rung never changes size and never leaves this App's model stack. The caption names the steps, CFG, weights, and license Queue actually sends."
           }
         ],
         [
@@ -1106,7 +1129,7 @@
           17,
           "enable",
           {
-            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs download-llm --tier describe.",
+            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs bazelisk run //:manage -- download-llm --tier describe.",
             "label": "Describe image"
           }
         ],
@@ -1130,8 +1153,8 @@
           13,
           "enhance",
           {
-            "label": "Rewrite negative",
-            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs."
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs.",
+            "label": "Rewrite negative"
           }
         ],
         [
@@ -1165,6 +1188,22 @@
             "description": "How many stills in one Run. Large canvases stay at 1.",
             "label": "Batch"
           }
+        ],
+        [
+          19,
+          "filename",
+          {
+            "description": "Upload a still or pick one already on the drive. Describe image captions it so Rewrite prompt can name inventory. Empty is valid - the caption stays off.",
+            "label": "Reference still (optional)"
+          }
+        ],
+        [
+          19,
+          "use_references",
+          {
+            "description": "Turn off to run text-to-image without clearing your picks. Any new pick turns it back on.",
+            "label": "Use reference stills"
+          }
         ]
       ],
       "outputs": [
@@ -1172,13 +1211,10 @@
       ]
     },
     "linearMode": true,
-    "lab_optional_unwired": [
-      "LoadImage"
-    ],
     "lab_rel": "social/stills/linkedin-banner",
     "workflowRendererVersion": "Vue-corrected",
     "lab_quality": {
-      "default": "lab"
+      "default": "standard"
     }
   },
   "version": 0.4

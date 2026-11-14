@@ -58,7 +58,7 @@ Lane B Klein stills (same occupancy **klein**):
 
 | Workflow | Occupancy | What it does |
 | --- | --- | --- |
-| **[photos/still-daily](../generated/workflows/photos/still-daily.md)** | klein | Daily still. Format / platform; Quality swaps Klein 4B fp8 / NVFP4 / base. Prefix `ez_still_app` |
+| **[photos/still-daily](../generated/workflows/photos/still-daily.md)** | klein | Daily still. Format / platform; Detail swaps Klein 4B nvfp4 / base fp8. Prefix `ez_still_app` |
 | **[photos/still-studio](../generated/workflows/photos/still-studio.md)** | klein | Still desk. Format / platform sets pixels + prefix + framing; Style + Rewrite prompt + Look recipe. Prefix follows Format (`ez_still_studio` when Custom) |
 | **[photos/image-studio](../generated/workflows/photos/image-studio.md)** | klein | Universal still desk. 100 creator modes + Format / platform + optional reference. **Iterate** / **This run**. Prefix follows Creator mode (`ez_gen_photoreal` default; `ez_iterate` while Iterate is on) |
 | **[photos/platform-pack](../generated/workflows/photos/platform-pack.md)** | klein | Six plates, one identity (`ez_pack_*`). Independent T2I; Ctrl+B unused groups |
@@ -76,8 +76,8 @@ Same Klein desk on **FLUX 3 Image Klein** weights: gated Hugging Face, **FLUX Ko
 
 | Workflow | Occupancy | What it does |
 | --- | --- | --- |
-| **[labs/opt-in/still-flux3-fast](../generated/workflows/labs/opt-in/still-flux3-fast.md)** | klein | FLUX 3 Klein distilled INT8 (`flux3-image-klein-int8-convrot.safetensors`), **16** steps, CFG **1.0** - the graph ships the Quality `flux3-fast` values. Qwen3VL TE (type `flux2`) + `flux2-vae`. Prefix `ez_still_flux3_fast` |
-| **[labs/opt-in/still-flux3-quality](../generated/workflows/labs/opt-in/still-flux3-quality.md)** | klein | FLUX 3 Klein base INT8 (`flux3-image-klein-base-int8-convrot.safetensors`), **50** steps, CFG **3.5** - the graph ships the Quality `flux3-quality` values. Same gated TE + VAE. Prefix `ez_still_flux3_quality` |
+| **[labs/opt-in/still-flux3-fast](../generated/workflows/labs/opt-in/still-flux3-fast.md)** | klein | FLUX 3 Klein distilled INT8 (`flux3-image-klein-int8-convrot.safetensors`), **16** steps, CFG **1.0** - the graph ships the Detail **draft** values. Qwen3VL TE (type `flux2`) + `flux2-vae`. Prefix `ez_still_flux3_fast` |
+| **[labs/opt-in/still-flux3-quality](../generated/workflows/labs/opt-in/still-flux3-quality.md)** | klein | FLUX 3 Klein base INT8 (`flux3-image-klein-base-int8-convrot.safetensors`), **50** steps, CFG **3.5** - the graph ships the Detail **final** values. Same gated TE + VAE. Prefix `ez_still_flux3_quality` |
 
 Weights missing: **Check models** names the command and Queue keeps the authored loaders (nothing swaps in weights you have not accepted). Both graphs pin `qwen3vl_4b_int8_convrot.safetensors` + `flux2-vae.safetensors`; Format / platform still sets pixels (16:9 mid 1024x576 by default).
 
@@ -85,13 +85,13 @@ Weights missing: **Check models** names the command and Queue keeps the authored
 
 ## Qwen-Image 2.1 still (opt-in, research license)
 
-A different model family, so a different app. Qwen-Image 2.1 cannot ride the Klein desk: it samples from a 64-channel latent at 16x that its own encoder node builds, the Klein `EmptyFlux2LatentImage` (128-channel) is the wrong shape, and the text encoder loads under CLIPLoader type `qwen_image`. One app per family keeps every Quality combo honest.
+A different model family, so a different app. Qwen-Image 2.1 cannot ride the Klein desk: it samples from a 64-channel latent at 16x that its own encoder node builds, the Klein `EmptyFlux2LatentImage` (128-channel) is the wrong shape, and the text encoder loads under CLIPLoader type `qwen_image`. One app per family keeps every Detail ladder honest.
 
 Weights are the **Qwen RESEARCH LICENSE AGREEMENT**: research and personal use only, commercial use needs a separate paid Qwen license, and it is **not** in `download-models`. Pull `bazelisk run //scripts:run-utility -- download-image run --tier qwen-image` from `Comfy-Org/Qwen-Image-2.1` - the tier auto-includes the `qwen-image-te` text encoder and `qwen-image-vae`. Ship the license text plus the NOTICE with the weights, keep "Built with Qwen" in product docs, and do not name a product after Qwen: [Model licenses](../licenses.md).
 
 | Workflow | Occupancy | What it does |
 | --- | --- | --- |
-| **[labs/opt-in/still-qwen-image](../generated/workflows/labs/opt-in/still-qwen-image.md)** | klein | Qwen-Image 2.1 square still (`qwen_image_2.1_int8_convrot.safetensors`), **50** steps, CFG **3.5**, euler / simple. Quality offers only the four Qwen tiers this graph can honor. **Resolution** sets the square side (default 1024, steps of 32) - there is no Format / platform picker. Prefix `ez_still_qwen_image` |
+| **[labs/opt-in/still-qwen-image](../generated/workflows/labs/opt-in/still-qwen-image.md)** | klein | Qwen-Image 2.1 square still (`qwen_image_2.1_int8_convrot.safetensors`), **50** steps, CFG **3.5**, euler / simple. Detail offers the three rungs this graph can honor. **Resolution** sets the square side (default 1024, steps of 32) - there is no Format / platform picker. Prefix `ez_still_qwen_image` |
 
 Quality on this app rewrites the UNET, the Qwen3VL-8B text encoder, the VAE, steps, and CFG. It never swaps to Klein, FLUX 3, or any other family, and it never touches pixels. A wide or tall frame needs a reference image, which is an edit pass rather than this text-to-image app.
 

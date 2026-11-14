@@ -299,7 +299,7 @@ def test_app_mode_stamp_matches_sibling_lane() -> None:
     assert mode["occupancy"] == "wan"
     assert mode["default_view"] == "app"
     assert mode["handoff"] == []
-    assert extra["lab_quality"] == {"default": "lab"}
+    assert extra["lab_quality"] == {"default": "standard"}
     linear = extra["linearData"]
     names = [entry[1] for entry in linear["inputs"]]
     assert names[0] == "quality"

@@ -1512,7 +1512,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [
             59,
             62,
@@ -1551,7 +1556,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "link": 59,
           "widget": {
             "name": "upscale"
@@ -1569,7 +1579,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -1604,7 +1619,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "link": 62,
           "widget": {
             "name": "upscale"
@@ -1622,7 +1642,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -1657,7 +1682,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "link": 65,
           "widget": {
             "name": "upscale"
@@ -1675,7 +1705,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -1982,9 +2017,9 @@
         "Node name for S&R": "EZQuality"
       },
       "widgets_values": [
-        "lab"
+        "standard"
       ],
-      "title": "Quality"
+      "title": "Detail"
     },
     {
       "id": 46,
@@ -2418,7 +2453,12 @@
       1,
       36,
       1,
-      "STRING"
+      [
+        "none",
+        "2x",
+        "4x",
+        "4K"
+      ]
     ],
     [
       60,
@@ -2442,7 +2482,12 @@
       1,
       37,
       1,
-      "STRING"
+      [
+        "none",
+        "2x",
+        "4x",
+        "4K"
+      ]
     ],
     [
       63,
@@ -2466,7 +2511,12 @@
       1,
       38,
       1,
-      "STRING"
+      [
+        "none",
+        "2x",
+        "4x",
+        "4K"
+      ]
     ],
     [
       66,
@@ -2693,8 +2743,8 @@
           45,
           "quality",
           {
-            "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific - not --tier."
+            "label": "Detail",
+            "description": "draft is a quick look. standard is what this App ships tuned for. final is the best this App's own stack can do. A rung never changes size and never leaves this App's model stack. The caption names the steps, CFG, weights, and license Queue actually sends."
           }
         ],
         [
@@ -2739,7 +2789,7 @@
     },
     "linearMode": true,
     "lab_quality": {
-      "default": "lab"
+      "default": "standard"
     },
     "lab_optional_unwired": [
       "LoadImage"

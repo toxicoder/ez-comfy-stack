@@ -50,6 +50,8 @@ Laptop agents: `bazelisk run //:manage -- studio-mcp --stdio` (Path D). Same
 pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
 Does not write `workflows/_lab/`. Keepers: `promote-workflow`.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
+
+Handoff: labs/assist/prompt-forge, photos/still-draft. Load that graph next - the output is its input.
 ```
 
 ## How to Queue
@@ -123,6 +125,8 @@ Laptop agents: `bazelisk run //:manage -- studio-mcp --stdio` (Path D). Same
 pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
 Does not write `workflows/_lab/`. Keepers: `promote-workflow`.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
+
+Handoff: labs/assist/prompt-forge, photos/still-draft. Load that graph next - the output is its input.
 ```
 
 ### `EZAppForge` - App Forge
@@ -209,7 +213,7 @@ Catalog id.
 
 ### `EZModelCheck` - Check models
 
-Manual disk check for occupancy + Quality weights. Queue does not run this node.
+Manual disk check for occupancy + Detail weights. Queue does not run this node.
 
 !!! warning "Lab notes"
 

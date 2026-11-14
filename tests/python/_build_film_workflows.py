@@ -859,7 +859,8 @@ Identity plate ({label}): one Klein 4B still that every print in this series
 starts from.
 
 Models: Klein 4B distilled FP8 - 4-step, Enhance **off**, t2i mode. This app
-loads no LTX model, so the Quality combo moves Klein tiers only.
+loads no LTX model, so the Detail ladder stays inside the Klein stack
+(draft nvfp4, standard writes nothing, final Klein 4B base fp8).
 
 1. Queue **once**. The still lands at `${{COMFY_OUTPUT_DIR}}/ez_{slug}_plate_00001_.png`.
 2. Check the face, the wardrobe, and the location read before you Queue a print

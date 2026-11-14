@@ -7,20 +7,20 @@
 # Purpose:
 #   One-go album: optional Klein cover, then each ACE-Step track, then pack.
 #   Sequential occupancy (klein XOR audio). Does not start compose. Each POST
-#   sends the graph the Quality table overlaid, so a CLI run posts what the
+#   sends the graph the Detail ladder overlaid, so a CLI run posts what the
 #   browser would queue.
 #
 # Usage:
 #   bazelisk run //scripts:run-utility -- album-render status [--json]
 #   bazelisk run //scripts:run-utility -- album-render run --album ARTIST/SLUG
 #       [--art skip|upload|generate] [--image FILE] [--out DIR]
-#       [--quality TIER] [--dry-run]
+#       [--quality RUNG] [--dry-run]
 #   bazelisk run //scripts:run-utility -- album-render pack --album ARTIST/SLUG [--out DIR]
 #
 # Environment:
 #   COMFY_OUTPUT_DIR, COMFY_PORT (default 8188), COMFY_URL, REPO_ROOT
-#   EZ_QUALITY - quality tier when --quality is absent (empty = the tier the
-#   graph records, else lab)
+#   EZ_QUALITY - Detail rung (draft|standard|final) when --quality is absent
+#   (empty = the rung the graph records, else standard)
 #
 # Safety:
 #   Does not start Docker. Does not change restart: "no". Sequential Queue.
@@ -81,10 +81,10 @@ cleanup_temp_files() {
 #   0
 #######################################
 cmd_help() {
-  echo "Usage: album-render.sh status|run|pack --album ARTIST/SLUG [--art skip|upload|generate] [--image FILE] [--out DIR] [--quality TIER] [--dry-run] [--json]" >&2
+  echo "Usage: album-render.sh status|run|pack --album ARTIST/SLUG [--art skip|upload|generate] [--image FILE] [--out DIR] [--quality RUNG] [--dry-run] [--json]" >&2
   echo "  Sequential album Queue on local Comfy. Does not start compose." >&2
   echo "  --art generate queues cover.json (klein) then POST /free then tracks." >&2
-  echo "  --quality TIER overlays the Quality table before each POST" >&2
+  echo "  --quality RUNG overlays the Detail ladder before each POST" >&2
   echo "    (default: what the graph records)." >&2
   return 0
 }
@@ -155,7 +155,7 @@ quality_apply_graph() {
     python3 "${REPO_ROOT}/scripts/lib/quality_apply.py" \
     --graph "${graph}" --out "${out}" "${tier_args[@]}" \
     --comfy-url "${COMFY_URL}" || {
-    err "Quality overlay failed for ${graph}"
+    err "Detail ladder overlay failed for ${graph}"
     return 1
   }
   printf '%s\n' "${out}"
@@ -286,7 +286,7 @@ main() {
         ;;
       --quality)
         if [[ $# -lt 2 ]]; then
-          err "--quality needs a tier"
+          err "--quality needs a rung"
           return 1
         fi
         QUALITY="${2}"

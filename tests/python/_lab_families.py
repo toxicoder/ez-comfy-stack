@@ -1,11 +1,12 @@
 """One model stack per lab graph: the shared vocabulary for the stack gate.
 
 Hermetic: stdlib only. A lab graph is one App on the canvas, and an App may
-drive exactly one model stack. Within a stack the Quality combo swaps weights
-(Klein 4B -> Klein 9B, Qwen-Image -> Qwen-Image turbo); across stacks the answer
-is a second App with the same job, never a combo that reaches both. This module
-names the stacks and reads the ones a graph really pins, so the auditor, the
-pytest gate, and the docs table all agree on what "one stack" means.
+drive exactly one model stack. Within a stack the Detail ladder swaps weights
+(Klein 4B nvfp4 -> Klein 4B base fp8, Qwen-Image turbo -> Qwen-Image base);
+across stacks the answer is a second App with the same job, never a ladder
+that reaches both. This module names the stacks and reads the ones a graph
+really pins, so the auditor, the pytest gate, and the docs table all agree on
+what "one stack" means.
 
 The stack of a graph comes from what it loads, not from what its note claims:
 the loader widgets are the truth and ``extra.lab_app_mode.occupancy`` is the

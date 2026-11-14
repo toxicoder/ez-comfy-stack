@@ -1,30 +1,39 @@
 /**
- * EZQuality frontend: overlay sampler + UNET/CLIP/VAE on named qualities.
+ * EZQuality frontend: overlay sampler + UNET/CLIP/VAE on the Detail ladder.
  *
  * Nodes 2.0: writes widget.value plus the matching widgets_values slot, and
  * fires widget.callback. Every step count, CFG, and weight name comes from
  * ez_quality_presets.js, which presets.py generates; this file holds no tier
  * number and no weight filename of its own.
  *
- * The rule the whole file serves: the combo shows what the queued prompt
- * holds. applyQuality names a tier only when every write it asked for landed,
- * and deriveQualityTier reads the tier back out of the live widgets, so a
- * dropped write, a missing widget, or a hand-edited value cannot leave a tier
- * name painted on the combo. Custom keeps the live values; lab restores the
- * authored snapshot. Prompt widgets are never overlaid.
+ * The ladder is three rungs: draft, standard, final. standard writes nothing
+ * and always succeeds (it means "leave the graph exactly as this App ships
+ * it"), so draft and final are write-or-refuse: one write that cannot land
+ * cancels the whole apply, keeps the rung already in force on the row, and
+ * leaves every reason in the caption. There is no fallback substitution of any
+ * kind, and a rung the family cannot honor is refused before a single widget
+ * moves, so the row can never name a rung that did nothing.
+ *
+ * The caption is the only place truth lives. It is derived from the live
+ * widgets on every pass - never from the rung name - and prefixed ``Edited: ``
+ * when those widgets diverge from what the selected rung wrote. Every App
+ * opens on standard: no browser-global carries a rung from one App to the next.
  */
 import { app } from "../../scripts/app.js";
 import {
   EZ_QUALITY_CHOICES,
-  EZ_QUALITY_CUSTOM,
+  EZ_QUALITY_EDITED_PREFIX,
   EZ_QUALITY_FAMILIES,
   EZ_QUALITY_FIELDS,
   EZ_QUALITY_LABELS,
-  EZ_QUALITY_LAB,
   EZ_QUALITY_OWNED,
   EZ_QUALITY_TABLE,
   EZ_QUALITY_TIERS,
 } from "./ez_quality_presets.js";
+// The ladder above is imported by name; the namespace import reaches only
+// optional tables (the per-family license words) so a presets build that has
+// not grown one yet still links.
+import * as EZ_PRESETS from "./ez_quality_presets.js";
 
 /**
  * Value a widget can hold: combo text, a seeded number, a toggle, or the
@@ -46,8 +55,8 @@ import {
  */
 
 /**
- * One row of the generated quality table: field id to the value the tier pins.
- * @typedef {Object<string, EzWidgetValue>} EzTierRow
+ * One row of the generated ladder table: field id to the value the rung pins.
+ * @typedef {Object<string, EzWidgetValue>} EzRungRow
  */
 
 /**
@@ -56,35 +65,74 @@ import {
  */
 
 /**
- * The two maps presets.match_tier compares for one graph.
+ * The two maps the rung comparison reads for one graph.
  * @typedef {Object} EzOverlayValuePair
  * @property {EzFieldValues=} observed Values the graph holds now.
- * @property {EzFieldValues=} authored Values the overlay last wrote.
+ * @property {EzFieldValues=} authored Values the graph shipped with.
  */
 
 /**
- * One value the overlay wrote, kept so Queue can spot a later user edit.
+ * The values one successful apply wrote, kept so the caption can spot a later
+ * hand edit and Queue can tell a moved row from a settled one.
+ * @typedef {Object} EzAppliedRung
+ * @property {string=} rung Rung those writes carry.
+ * @property {Map<EzWidget, EzWidgetValue>=} writes Widget to value written.
+ */
+
+/**
+ * One value the overlay wrote, kept so the caption can spot a later edit.
  * @typedef {Object} EzSnapshotRow
  * @property {EzNode=} node Node the write landed on.
  * @property {string=} name Widget name the write targeted.
- * @property {EzWidgetValue=} value Value the overlay authored.
+ * @property {EzWidgetValue=} value Value the graph shipped with.
  */
 
 /**
- * One write a tier asks for, resolved to its node and widget.
+ * One write a rung asks for, resolved to its node and widget.
  * @typedef {Object} EzOverlayWrite
  * @property {EzNode=} node Node to write.
  * @property {EzWidget=} widget Widget to write.
  * @property {string=} field Field id the write carries.
- * @property {EzWidgetValue=} value Value the tier pins.
+ * @property {EzWidgetValue=} value Value the rung pins.
  */
 
 /**
- * Everything one tier apply decides, writes plus what stood in the way.
+ * A file a rung wants that the loader cannot offer, with the field that owns
+ * it, so the caption can name the command that stages it.
+ * @typedef {Object} EzBlockedFile
+ * @property {string=} field Field id the loader holds.
+ * @property {EzWidgetValue=} value Filename the rung wants.
+ */
+
+/**
+ * Everything one rung apply decides: writes plus what stood in the way.
  * @typedef {Object} EzWritePlan
  * @property {Array<EzOverlayWrite>=} writes Writes the overlay performs.
  * @property {Array<string>=} failures Reasons a write cannot land.
  * @property {Array<string>=} missing Fields with no live instance.
+ * @property {Array<EzBlockedFile>=} blockedFiles Files a loader cannot offer.
+ * @property {Array<{widget: EzWidget, value: EzWidgetValue}>=} pinned Every
+ * widget the rung pins, written or already equal, which is what the caption
+ * compares the live values against.
+ */
+
+/**
+ * Outcome of one rung apply: refuses, or carries the writes to perform.
+ * @typedef {Object} EzRungApply
+ * @property {boolean=} ok False when the apply is refused outright.
+ * @property {Array<string>=} reasons Every reason, in full, for the caption.
+ * @property {Array<string>=} commands Host commands that stage what is absent.
+ * @property {EzWritePlan=} plan The planned writes.
+ */
+
+/**
+ * Terms of one truth line, already annotated where they diverge.
+ * @typedef {Object} EzCaptionTerms
+ * @property {string=} stack Readable name of the stack the loaders hold.
+ * @property {string=} steps Steps term, empty for a family with no steps.
+ * @property {string=} cfg CFG term, empty for a family with no CFG.
+ * @property {Array<string>=} extra Divergences the base line cannot carry.
+ * @property {boolean=} edited True when a live widget left what was written.
  */
 
 /**
@@ -99,12 +147,38 @@ import {
  * @property {string=} name Node class the hook matches.
  */
 
-// Combo ids this build still has to accept from saved graphs. The option list
-// itself and every value behind it come from the generated table.
-const QUALITY_FREE_COMMERCIAL = "Free Commercial Use (<$10M)";
-const QUALITY_FREE_COMMERCIAL_ALIAS = "free_commercial";
+// The three rungs, in the order the row lists them. standard is the rung that
+// writes nothing and the one every App opens on.
+const RUNG_DRAFT = "draft";
+const RUNG_STANDARD = "standard";
+const RUNG_FINAL = "final";
+const RUNGS = [RUNG_DRAFT, RUNG_STANDARD, RUNG_FINAL];
+// Row label and caption prefix for the ladder (was Quality).
+const DETAIL_LABEL = "Detail";
 
-// Family ids that carry no tier at all, so an unknown occupancy is a no-op.
+// Saved graphs, --quality, EZ_QUALITY, and the TUI still send retired ids.
+// This mirrors presets._QUALITY_NORMALIZE so the row and the submit path fold
+// the same input onto the same rung.
+const RUNG_ALIASES = {
+  "": RUNG_STANDARD,
+  custom: RUNG_STANDARD,
+  lab: RUNG_STANDARD,
+  standard: RUNG_STANDARD,
+  high: RUNG_FINAL,
+  ultra: RUNG_FINAL,
+  max: RUNG_FINAL,
+  free_commercial: RUNG_FINAL,
+  "free commercial use (<$10m)": RUNG_FINAL,
+  "flux3-quality": RUNG_STANDARD,
+  "qwen-image": RUNG_STANDARD,
+  "flux3-fast": RUNG_DRAFT,
+  "qwen-image-turbo": RUNG_DRAFT,
+  "qwen-image-turbo-nvfp4": RUNG_DRAFT,
+  "flux3-nvfp4": RUNG_FINAL,
+  "qwen-image-nvfp4": RUNG_FINAL,
+};
+
+// Family ids that carry no rung at all, so an unknown occupancy is a no-op.
 const FAMILY_NOOP = "none";
 const FAMILY_LLM = "llm";
 const FAMILY_KLEIN3 = "klein3";
@@ -112,25 +186,58 @@ const FAMILY_KLEIN3 = "klein3";
 // profiles cannot drop their weights onto a Qwen graph. Never a default.
 const FAMILY_QWEN = "qwen";
 
-const CLIP_16_9_LABEL = "16:9 LTX feeder (1280x704)";
-const CLIP_9_16_LABEL = "9:16 LTX feeder (768x1280)";
-const GENERIC_16_9 = [
-  "aspect_16_9_draft",
-  "16:9 draft (768x432)",
-  "aspect_16_9",
-  "16:9 (1280x720)",
-  "aspect_16_9_mid",
-  "16:9 mid (1024x576)",
-];
-const GENERIC_9_16 = [
-  "aspect_9_16_draft",
-  "9:16 draft (432x768)",
-  "aspect_9_16",
-  "9:16 (576x1024)",
-];
-
-// Catalog policy, not tier data: these families are never lawful on this box.
+// Catalog policy, not rung data: these families are never lawful on this box.
 const BANNED = ["minimax", "seedance", "kling", "z_image_turbo"];
+
+// License word per family: the caption states it where the choice is made, so
+// a Non-Commercial or Research stack cannot read as an Apache one. Used only
+// when the generated table carries no license table of its own.
+const LICENSE_WORDS = {
+  klein: "Apache-2.0",
+  klein3: "FLUX Non-Commercial",
+  qwen: "Qwen Research license",
+  wan: "Apache-2.0",
+  ltx: "Apache-2.0",
+  film: "Apache-2.0",
+  audio: "Apache-2.0",
+  trellis: "Apache-2.0",
+};
+
+// Readable stack names for a graph whose loaders hold nothing to read. Same
+// policy-not-tier-data rule as the license words: no filename appears here.
+const FAMILY_STACK_NAMES = {
+  klein: "Klein 4B",
+  klein3: "FLUX 3 Klein",
+  qwen: "Qwen-Image 2.1",
+  wan: "Wan 2.2",
+  ltx: "LTX-2.5",
+  film: "LTX-2.5 film",
+  audio: "Ace Step",
+  trellis: "TRELLIS 2",
+};
+
+// Host command that stages the weights one family's ladder selects, by rung
+// and loader field. Operator command text, not tier data: the filenames
+// themselves stay in the generated table, and check.py prints the same
+// commands per file under Check models.
+const CMD_DOWNLOAD_MODELS = "bazelisk run //:manage -- download-models";
+const STAGING_COMMANDS = {
+  klein: {
+    draft: { unet_name: CMD_DOWNLOAD_MODELS, clip_name: CMD_DOWNLOAD_MODELS, vae_name: CMD_DOWNLOAD_MODELS },
+    final: { unet_name: CMD_DOWNLOAD_MODELS, clip_name: CMD_DOWNLOAD_MODELS, vae_name: CMD_DOWNLOAD_MODELS },
+  },
+  klein3: {
+    draft: { unet_name: "bazelisk run //scripts:run-utility -- download-image run --tier flux3", clip_name: "bazelisk run //scripts:run-utility -- download-image run --tier flux3-te", vae_name: CMD_DOWNLOAD_MODELS },
+    final: { unet_name: "bazelisk run //scripts:run-utility -- download-image run --tier flux3-nvfp4", clip_name: "bazelisk run //scripts:run-utility -- download-image run --tier flux3-te", vae_name: CMD_DOWNLOAD_MODELS },
+  },
+  qwen: {
+    draft: { unet_name: "bazelisk run //scripts:run-utility -- download-image run --tier qwen-image-turbo", clip_name: "bazelisk run //scripts:run-utility -- download-image run --tier qwen-image-te", vae_name: "bazelisk run //scripts:run-utility -- download-image run --tier qwen-image-vae" },
+    final: { unet_name: "bazelisk run //scripts:run-utility -- download-image run --tier qwen-image", clip_name: "bazelisk run //scripts:run-utility -- download-image run --tier qwen-image-te", vae_name: "bazelisk run //scripts:run-utility -- download-image run --tier qwen-image-vae" },
+  },
+};
+
+// File fields, in the order the caption appends their divergences.
+const FILE_FIELDS = ["unet_name", "clip_name", "vae_name", "clip_type"];
 
 /**
  * Overlay field -> widget name on its owning node type. The overlay field
@@ -156,6 +263,14 @@ const OVERLAY_FIELDS_BY_TYPE = {
   VAELoader: ["vae_name"],
 };
 
+// Human term each file field carries in a caption divergence.
+const FIELD_CAPTION_TERMS = {
+  unet_name: "UNET",
+  clip_name: "CLIP",
+  vae_name: "VAE",
+  clip_type: "CLIP type",
+};
+
 // Value no field comparison accepts: the targeted instances of one field
 // disagree, so the graph holds no single value for it.
 const DIVERGENT = Symbol("ez-quality-divergent");
@@ -165,11 +280,15 @@ const applyingByGraph = new WeakMap();
 const syncingByGraph = new WeakMap();
 const defaulted = new WeakMap();
 const seedingByGraph = new WeakMap();
-// graph -> Map(widget -> value the overlay last wrote); lets Queue spot user edits.
+// graph -> Map(widget -> value the rung in force wrote); the caption compares
+// the live widgets against exactly this record.
 const overlayWrites = new WeakMap();
-// graph -> {choice, fields, attempts}; a tier a missing widget blocked, retried once.
+// graph -> EzAppliedRung; the last apply that landed whole.
+const appliedRungs = new WeakMap();
+// graph -> true once the operator moves the row past the last successful write.
+const rowMoved = new WeakMap();
+// graph -> {rung, fields, attempts}; a rung a missing widget blocked, retried once.
 const pendingApplies = new WeakMap();
-const LAST_QUALITY_KEY = "ez-comfy.quality.last";
 
 /**
  * Find a widget by name on a node.
@@ -191,7 +310,7 @@ function nodeType(node) {
 }
 
 /**
- * True for the Quality combo node.
+ * True for the Detail combo node.
  * @param {EzNode|undefined} node
  * @returns {boolean}
  */
@@ -210,7 +329,7 @@ function isLiveNode(node) {
 }
 
 /**
- * First Quality combo the overlay should act on, ignoring muted copies.
+ * First Detail combo the overlay should act on, ignoring muted copies.
  * @param {EzGraph|undefined} graph
  * @returns {EzNode|null}
  */
@@ -316,7 +435,7 @@ function qwenBlob(name) {
 
 /**
  * True when a UNET filename is an opt-in Qwen-Image 2.1 weight (INT8/NVFP4,
- * both twins). Qwen research-licensed, so no tier here is ever a default.
+ * both twins). Qwen research-licensed, so no rung here is ever a default.
  * @param {string} name
  * @returns {boolean}
  */
@@ -409,7 +528,8 @@ function isFlux2Vae(name) {
 
 /**
  * True when a loader still holds a weight the overlay may replace, the same
- * swap guard presets.apply_to_graph applies server-side.
+ * swap guard presets.apply_to_graph applies server-side. It is also what keeps
+ * a rung from writing over a weight its family does not own.
  * @param {string} field
  * @param {EzWidgetValue} current
  * @returns {boolean}
@@ -504,59 +624,37 @@ function graphHasQwenWeights(graph) {
 }
 
 /**
- * Return a combo value this build knows, defaulting to lab.
+ * Fold any accepted input onto one of the three rungs. Retired ids land on the
+ * rung the contract maps them to; anything unknown, including a frozen custom
+ * or lab left by an old graph, lands on the rung that writes nothing.
  * @param {EzWidgetValue} value
  * @returns {string}
  */
-function normalizeQuality(value) {
-  const folded = String(value || EZ_QUALITY_LAB)
-    .trim()
-    .toLowerCase();
-  if (folded === QUALITY_FREE_COMMERCIAL_ALIAS) {
-    return QUALITY_FREE_COMMERCIAL;
+function normalizeRung(value) {
+  const folded = String(value || "").trim().toLowerCase();
+  if (RUNGS.includes(folded)) {
+    return folded;
   }
-  const known = EZ_QUALITY_CHOICES.find((item) => item.toLowerCase() === folded);
-  return known || EZ_QUALITY_LAB;
+  if (Object.prototype.hasOwnProperty.call(RUNG_ALIASES, folded)) {
+    return RUNG_ALIASES[folded];
+  }
+  const known = (Array.isArray(EZ_QUALITY_CHOICES) ? EZ_QUALITY_CHOICES : []).find(
+    (item) => String(item).toLowerCase() === folded,
+  );
+  return known && RUNGS.includes(String(known).toLowerCase())
+    ? String(known).toLowerCase()
+    : RUNG_STANDARD;
 }
 
 /**
- * True when a format combo value is in a generic aspect list.
- * @param {string} value
- * @param {string[]} ids
- * @returns {boolean}
+ * Rung name as the caption writes it: capitalized, so a note reads
+ * "(Final sets 24)" rather than "(final sets 24)".
+ * @param {string} rung
+ * @returns {string}
  */
-function formatMatches(value, ids) {
-  const folded = String(value || "")
-    .trim()
-    .toLowerCase();
-  return ids.some((item) => item.toLowerCase() === folded);
-}
-
-/**
- * Snap generic 16:9 / 9:16 still formats to LTX feeder sizes.
- * Named platform jobs, Custom, and already-feeder rows stay put.
- * @param {EzGraph|undefined} graph
- * @returns {void}
- */
-function retargetClipFormat(graph) {
-  const g = graph || app.graph;
-  if (occupancy(g) !== "klein") {
-    return;
-  }
-  for (const node of g?.nodes || []) {
-    if (nodeType(node) !== "EZImageFormat") {
-      continue;
-    }
-    const widget = widgetByName(node, "format");
-    if (!widget) {
-      continue;
-    }
-    if (formatMatches(widget.value, GENERIC_16_9)) {
-      setWidgetValue(node, widget, CLIP_16_9_LABEL);
-    } else if (formatMatches(widget.value, GENERIC_9_16)) {
-      setWidgetValue(node, widget, CLIP_9_16_LABEL);
-    }
-  }
+function rungLabel(rung) {
+  const text = String(rung || "");
+  return text ? `${text.charAt(0).toUpperCase()}${text.slice(1)}` : "";
 }
 
 /**
@@ -603,7 +701,7 @@ function occupancy(graph) {
 }
 
 /**
- * Tier family the graph belongs to: its occupancy, Klein 3 or opt-in Qwen when
+ * Rung family the graph belongs to: its occupancy, Klein 3 or opt-in Qwen when
  * its weights say so, and a no-op family for anything this table does not
  * cover.
  * @param {EzGraph|undefined} graph
@@ -625,7 +723,8 @@ function graphFamily(graph) {
 }
 
 /**
- * Fields one family's tiers ever set; an edit outside this list keeps the level.
+ * Fields one family's rungs ever set; an edit outside this list cannot make a
+ * rung claim a widget it never owns.
  * @param {string} family
  * @returns {string[]}
  */
@@ -635,87 +734,162 @@ function ownedFields(family) {
 }
 
 /**
- * The tiers one family can actually honor, in the order the combo lists them.
+ * The three-rung ladder one family offers, in table order.
  *
- * A tier outside this list has an all-null overlay row for the family, so
- * offering it would let the operator pick a level that changes nothing and
- * still stamps as applied. ``custom`` and ``lab`` are always offered: one keeps
- * whatever is live, the other restores what the graph shipped with.
+ * A family whose rungs own no writable field gets no ladder at all: the lab
+ * wiring strips its node and row (tests/python/_wire_quality.py), and a combo
+ * left behind here must not offer a rung that queues unchanged.
  * @param {string} family
  * @returns {string[]}
  */
-function tiersForFamily(family) {
-  const honored = new Set(
-    Array.isArray(EZ_QUALITY_TIERS[family]) ? EZ_QUALITY_TIERS[family].map(String) : [],
+function rungsForFamily(family) {
+  const honored = (Array.isArray(EZ_QUALITY_TIERS[family]) ? EZ_QUALITY_TIERS[family] : []).map(
+    String,
   );
-  return EZ_QUALITY_CHOICES.filter(
-    (choice) =>
-      choice === EZ_QUALITY_CUSTOM || choice === EZ_QUALITY_LAB || honored.has(choice),
-  );
+  if (!honored.length && !ownedFields(family).length) {
+    return [];
+  }
+  const listed = (Array.isArray(EZ_QUALITY_CHOICES) ? EZ_QUALITY_CHOICES : [])
+    .map(String)
+    .filter((choice) => RUNGS.includes(choice.toLowerCase()));
+  return listed.length === RUNGS.length ? listed : RUNGS.slice();
 }
 
 /**
- * Named tiers only, for matching observed widget values against a tier row.
+ * Requested value per overlay field for one rung, or null for an unknown row.
  * @param {string} family
- * @returns {string[]}
+ * @param {string} rung
+ * @returns {EzRungRow|null}
  */
-function namedTiersForFamily(family) {
-  return tiersForFamily(family).filter(
-    (choice) => choice !== EZ_QUALITY_CUSTOM && choice !== EZ_QUALITY_LAB,
-  );
+function tierRow(family, rung) {
+  return EZ_QUALITY_TABLE[family]?.[rung] || null;
 }
 
 /**
- * Narrow every Quality combo in the graph to what this family can honor.
+ * True when one family can actually carry one rung.
  *
- * The combo is built once from the global tier list, so without this a Klein
- * tier sits in the dropdown of a Wan graph and reading it across writes nothing.
- * @param {EzGraph|undefined} graph
+ * standard is honored on every ladder family because writing nothing is what
+ * it means. Any other rung must have at least one field the family writes: a
+ * rung whose row is all-null for this family would stamp its name on the row
+ * while changing no widget, which is the failure this guard closes.
  * @param {string} family
- * @returns {void}
+ * @param {string} rung
+ * @returns {boolean}
  */
-function scopeComboToFamily(graph, family) {
-  if (!graph) {
-    return;
+function rungIsHonored(family, rung) {
+  if (!rungsForFamily(family).map((item) => item.toLowerCase()).includes(rung)) {
+    return false;
   }
-  const allowed = tiersForFamily(family);
-  for (const node of graph.nodes || []) {
-    if (!isQualityNode(node)) {
-      continue;
-    }
-    const widget = /** @type {EzWidget} */ (widgetByName(node, "quality"));
-    if (!widget?.options) {
-      continue;
-    }
-    const current = comboValues(widget);
-    if (
-      current.length === allowed.length &&
-      current.every((value, index) => value === allowed[index])
-    ) {
-      continue;
-    }
-    widget.options.values = [...allowed];
+  if (rung === RUNG_STANDARD) {
+    return true;
   }
+  const row = tierRow(family, rung);
+  const owned = ownedFields(family);
+  return !!row && owned.some((field) => row[field] != null);
 }
 
 /**
- * Requested value per overlay field for one tier, or null for an unknown row.
+ * Caption naming the swap a rung performs, for the row tooltip only. The truth
+ * line is derived from the live widgets, never from this text.
  * @param {string} family
- * @param {string} tier
- * @returns {EzTierRow|null}
- */
-function tierRow(family, tier) {
-  return EZ_QUALITY_TABLE[family]?.[tier] || null;
-}
-
-/**
- * Caption naming the swap a tier performs, empty when it changes nothing.
- * @param {string} family
- * @param {string} tier
+ * @param {string} rung
  * @returns {string}
  */
-function tierLabelFor(family, tier) {
-  return String(EZ_QUALITY_LABELS[family]?.[tier] || "");
+function tierLabelFor(family, rung) {
+  return String(EZ_QUALITY_LABELS[family]?.[rung] || "");
+}
+
+/**
+ * License word for one family, from the generated table when it carries one.
+ * @param {string} family
+ * @returns {string}
+ */
+function licenseWord(family) {
+  for (const key of ["EZ_QUALITY_LICENSE_LABELS", "EZ_QUALITY_LICENSES", "EZ_QUALITY_LICENSE"]) {
+    const table = EZ_PRESETS[key];
+    const word = table && table[family];
+    if (typeof word === "string" && word) {
+      return word;
+    }
+  }
+  return String(LICENSE_WORDS[family] || "");
+}
+
+/**
+ * Host command that stages the file one rung's loader field wants.
+ * @param {string} family
+ * @param {string} rung
+ * @param {string} field
+ * @returns {string}
+ */
+function stagingCommand(family, rung, field) {
+  if (!FILE_FIELDS.includes(field)) {
+    return "";
+  }
+  const byField = STAGING_COMMANDS[family]?.[rung];
+  return String((byField && byField[field]) || "");
+}
+
+/**
+ * Basename without its extension, for a caption that names a weight without
+ * quoting the whole filename.
+ * @param {EzWidgetValue} value
+ * @returns {string}
+ */
+function fileStem(value) {
+  const text = String(value == null ? "" : value).split("/").pop() || "";
+  const cut = text.lastIndexOf(".");
+  return cut > 0 ? text.slice(0, cut) : text;
+}
+
+/**
+ * Readable name for the stack the loaders actually hold, read off the live
+ * UNET filename and falling back to the family when the graph has none.
+ * @param {string} family
+ * @param {EzWidgetValue} unetName
+ * @returns {string}
+ */
+function stackLabel(family, unetName) {
+  const raw = String(unetName == null ? "" : unetName).trim();
+  if (!raw) {
+    return String(FAMILY_STACK_NAMES[family] || family || "");
+  }
+  const stem = fileStem(raw);
+  const blob = klein3Blob(stem);
+  const base = blob.includes("base") ? " base" : "";
+  const quant = blob.includes("nvfp4")
+    ? " NVFP4"
+    : blob.includes("int8") || blob.includes("convrot")
+      ? " INT8"
+      : "";
+  if (isKlein3Unet(stem)) {
+    return `FLUX 3 Klein${base}${quant}`;
+  }
+  if (isQwenImageUnet(stem)) {
+    return `Qwen-Image 2.1${blob.includes("turbo") ? " turbo" : ""}${quant}`;
+  }
+  if (isKlein9b(stem)) {
+    return `Klein 9B${base}${quant}`;
+  }
+  if (isKlein4b(stem)) {
+    return `Klein 4B${base}${quant}`;
+  }
+  if (isFlux2Dev(stem)) {
+    return "FLUX.2-dev";
+  }
+  if (blob.includes("wan")) {
+    return `Wan${base}${quant}`;
+  }
+  if (blob.includes("ltx")) {
+    return `LTX-2.5${quant}`;
+  }
+  if (blob.includes("trellis")) {
+    return "TRELLIS 2";
+  }
+  if (blob.includes("ace")) {
+    return "Ace Step";
+  }
+  return stem;
 }
 
 /**
@@ -738,7 +912,7 @@ function sameWidgetValue(a, b) {
 }
 
 /**
- * Compare an observed widget value with a tier value the way presets.match_tier
+ * Compare an observed widget value with a rung value the way presets.match_tier
  * does: numbers numerically, everything else as text, null equal only to null.
  * @param {EzWidgetValue} left
  * @param {EzWidgetValue} right
@@ -841,9 +1015,9 @@ function agreeOn(entries, read) {
 }
 
 /**
- * observed / authored pair per owned field, the two maps presets.match_tier
- * compares. A field its instances disagree on matches nothing, so a graph
- * whose samplers contradict each other is custom rather than a tier.
+ * observed / authored pair per owned field, the two maps the rung comparison
+ * reads. A field its instances disagree on matches nothing, so a graph whose
+ * samplers contradict each other belongs to no rung.
  * @param {EzGraph} graph
  * @param {string} family
  * @param {EzOverlayInstances} instances
@@ -864,53 +1038,56 @@ function overlayValues(graph, family, instances) {
 }
 
 /**
- * Derive the quality the widgets actually hold.
- *
- * Named tiers win in table order, because the tier names what Queue would send.
- * Widgets still at their authored values read as lab; anything else, including
- * instances that contradict each other, is custom, so a graph that never
- * matched a tier cannot keep displaying one.
+ * The rung the live widgets actually hold: the rung whose row every owned field
+ * matches. Empty when no rung describes the graph, which is the honest answer
+ * for a hand-edited one; the row keeps what the operator picked and the caption
+ * says Edited.
  * @param {EzGraph|undefined} graph
  * @param {string} family
- * @returns {string}
+ * @returns {string} rung id, or "" when none matches
  */
 function deriveQualityTier(graph, family) {
   if (!graph) {
-    return EZ_QUALITY_LAB;
+    return "";
   }
   const owned = ownedFields(family);
   if (!owned.length) {
-    return EZ_QUALITY_LAB;
+    return "";
   }
   const instances = collectOverlayInstances(graph, family);
   const seen = overlayValues(graph, family, instances);
-  for (const tier of namedTiersForFamily(family)) {
-    const row = tierRow(family, tier);
+  for (const rung of rungsForFamily(family)) {
+    // standard writes nothing, so it can never be read back off the widgets.
+    if (rung === RUNG_STANDARD) {
+      continue;
+    }
+    const row = tierRow(family, rung);
     if (row && owned.every((field) => sameTierValue(seen.observed[field], row[field]))) {
-      return tier;
+      return rung;
     }
   }
-  if (
-    snapHasValues(seen.authored) &&
-    owned.every((field) => sameTierValue(seen.observed[field], seen.authored[field]))
-  ) {
-    return EZ_QUALITY_LAB;
-  }
-  return EZ_QUALITY_CUSTOM;
+  return "";
 }
 
 /**
- * True when the load-time snapshot covers every field it was asked about.
- * @param {EzFieldValues} authored
- * @returns {boolean}
+ * Value the rung in force last wrote on one widget, or undefined when it wrote
+ * nothing there.
+ * @param {EzGraph|undefined} graph
+ * @param {string} rung
+ * @param {EzWidget|undefined} widget
+ * @returns {EzWidgetValue|undefined}
  */
-function snapHasValues(authored) {
-  return Object.values(authored).every((value) => value !== undefined);
+function writtenValueOf(graph, rung, widget) {
+  const applied = graph && appliedRungs.get(graph);
+  if (!applied || applied.rung !== rung || !widget || !(applied.writes instanceof Map)) {
+    return undefined;
+  }
+  return applied.writes.get(widget);
 }
 
 /**
  * Why one write cannot land, or empty when it can. An empty answer means the
- * queued prompt will really hold the tier value.
+ * queued prompt will really hold the rung value.
  * @param {string} field
  * @param {EzOverlayEntry} entry
  * @param {EzWidgetValue} wanted
@@ -938,19 +1115,21 @@ function writeBlockReason(field, entry, wanted, refused) {
 }
 
 /**
- * Decide every write one tier asks for, and record what cannot land.
+ * Decide every write one rung asks for, and record what cannot land.
  * @param {EzGraph} graph
  * @param {string} family
- * @param {string} tier
- * @returns {EzWritePlan} writes, failures, and missing fields
+ * @param {string} rung
+ * @returns {EzWritePlan} writes, failures, missing fields, blocked files
  */
-function planTierWrites(graph, family, tier) {
-  const row = tierRow(family, tier);
+function planTierWrites(graph, family, rung) {
+  const row = tierRow(family, rung);
   const instances = collectOverlayInstances(graph, family);
   const refused = graphHasWan14(graph);
   const writes = [];
   const failures = [];
   const missing = [];
+  const blockedFiles = [];
+  const pinned = [];
   for (const field of ownedFields(family)) {
     const wanted = row ? row[field] : null;
     if (wanted == null) {
@@ -962,6 +1141,9 @@ function planTierWrites(graph, family, tier) {
       continue;
     }
     for (const entry of targets) {
+      // A field the rung pins counts as rung-authored even when the widget
+      // already held the value, so the caption compares against the rung.
+      pinned.push({ widget: entry.widget, value: wanted });
       if (sameTierValue(entry.widget.value, wanted)) {
         continue;
       }
@@ -970,12 +1152,54 @@ function planTierWrites(graph, family, tier) {
         if (!failures.includes(reason)) {
           failures.push(reason);
         }
+        if (reason.endsWith("not installed")) {
+          blockedFiles.push({ field, value: wanted });
+        }
         continue;
       }
       writes.push({ node: entry.node, widget: entry.widget, field, value: wanted });
     }
   }
-  return { writes, failures, missing };
+  return { writes, failures, missing, blockedFiles, pinned };
+}
+
+/**
+ * Plan one rung apply: the writes it performs, or every reason it is refused.
+ * @param {EzGraph} graph
+ * @param {string} family
+ * @param {string} rung
+ * @returns {EzRungApply}
+ */
+function planRungApply(graph, family, rung) {
+  if (rung === RUNG_STANDARD) {
+    return { ok: true, reasons: [], commands: [], plan: { writes: [] } };
+  }
+  if (!rungIsHonored(family, rung)) {
+    return {
+      ok: false,
+      reasons: [`${rungLabel(rung)} writes nothing on a ${family} graph`],
+      commands: [],
+      plan: { writes: [] },
+    };
+  }
+  const plan = planTierWrites(graph, family, rung);
+  const reasons = plan.failures.slice();
+  for (const field of plan.missing) {
+    reasons.push(`${FIELD_WIDGET_NAMES[field]} widget not on graph`);
+  }
+  const commands = [];
+  for (const blocked of plan.blockedFiles) {
+    const cmd = stagingCommand(family, rung, blocked.field);
+    if (cmd && !commands.includes(cmd)) {
+      commands.push(cmd);
+    }
+  }
+  return {
+    ok: !reasons.length,
+    reasons,
+    commands,
+    plan,
+  };
 }
 
 /**
@@ -1079,7 +1303,7 @@ function setWidgetValue(node, widget, value) {
 }
 
 /**
- * Remember the value the overlay wrote so Queue can spot later user edits.
+ * Remember the value the overlay wrote so the caption can spot a later edit.
  * @param {EzGraph|undefined} graph
  * @param {EzWidget|undefined} widget
  * @param {EzWidgetValue} value
@@ -1098,7 +1322,7 @@ function recordOverlayWrite(graph, widget, value) {
 }
 
 /**
- * Forget overlay-write records for widgets being (re)written or restored.
+ * Forget overlay-write records for widgets being (re)written.
  * @param {EzGraph|undefined} graph
  * @param {Array<EzWidget>} widgets
  * @returns {void}
@@ -1161,9 +1385,10 @@ function snapshotValueOf(snap, node, name) {
 }
 
 /**
- * True when a widget now holds a value the user typed over the authored one.
- * Lab restores this snapshot at Queue, so an edit that skipped the widget
- * callback (App Mode panel writes) must freeze Quality instead.
+ * True when a widget now holds a value the user typed over what the graph
+ * shipped with. App Mode panel writes can skip the widget callback, so the
+ * caption compares the live values as well as the overlay's own records. A
+ * value the rung in force wrote itself is not a hand edit.
  * @param {EzGraph|undefined} graph
  * @returns {boolean}
  */
@@ -1172,9 +1397,16 @@ function hasSnapshotEdits(graph) {
   if (!snap || !snap.length) {
     return false;
   }
+  const applied = graph && appliedRungs.get(graph);
   for (const row of snap) {
     const widget = widgetByName(row.node, row.name);
-    if (widget && !sameWidgetValue(widget.value, row.value)) {
+    if (!widget) {
+      continue;
+    }
+    if (applied && applied.writes instanceof Map && applied.writes.has(widget)) {
+      continue;
+    }
+    if (!sameWidgetValue(widget.value, row.value)) {
       return true;
     }
   }
@@ -1182,132 +1414,173 @@ function hasSnapshotEdits(graph) {
 }
 
 /**
- * Owned fields whose live widgets no longer hold what the overlay or the author
- * last put there. Names what diverged, for the custom caption.
- * @param {EzGraph|undefined} graph
+ * Expected value per owned field: what the selected rung wrote where it wrote,
+ * otherwise what the graph shipped with. Undefined means no baseline exists, so
+ * the field cannot be called edited.
+ * @param {EzGraph} graph
  * @param {string} family
- * @returns {string[]}
+ * @param {string} rung
+ * @param {EzOverlayInstances} instances
+ * @returns {EzFieldValues} field -> expected value
  */
-function divergedFields(graph, family) {
-  const out = [];
-  if (!graph) {
-    return out;
-  }
+function expectedValues(graph, family, rung, instances) {
   const snap = snapshots.get(graph);
-  const writes = overlayWrites.get(graph);
-  const instances = collectOverlayInstances(graph, family);
+  const out = {};
   for (const field of ownedFields(family)) {
     const name = FIELD_WIDGET_NAMES[field];
-    const dirty = (instances[field] || []).some((entry) => {
-      if (writes && writes.has(entry.widget)) {
-        // Overlay-authored: only a value past the last write is a user edit.
-        return !sameWidgetValue(entry.widget.value, writes.get(entry.widget));
-      }
-      const authored = snapshotValueOf(snap, entry.node, name);
-      return authored !== undefined && !sameWidgetValue(entry.widget.value, authored);
-    });
-    if (dirty) {
-      out.push(field);
+    const entries = instances[field] || [];
+    const written = agreeOn(
+      entries.filter((entry) => writtenValueOf(graph, rung, entry.widget) !== undefined),
+      (entry) => writtenValueOf(graph, rung, entry.widget),
+    );
+    if (written !== null) {
+      out[field] = written;
+      continue;
     }
+    out[field] = snap
+      ? agreeOn(entries, (entry) => snapshotValueOf(snap, entry.node, name))
+      : undefined;
   }
   return out;
 }
 
 /**
- * Caption for a tier whose writes all landed: the swap its table row performs.
+ * Build the truth line's terms from the live widgets, annotating every term
+ * whose widget left what the selected rung wrote.
+ * @param {EzGraph} graph
  * @param {string} family
- * @param {string} tier
- * @returns {string}
+ * @param {string} rung
+ * @returns {EzCaptionTerms}
  */
-function tierCaption(family, tier) {
-  if (tier === EZ_QUALITY_LAB) {
-    return `${EZ_QUALITY_LAB} - authored defaults`;
+function rungTerms(graph, family, rung) {
+  const owned = ownedFields(family);
+  const instances = collectOverlayInstances(graph, family);
+  const observed = overlayValues(graph, family, instances).observed;
+  const expected = expectedValues(graph, family, rung, instances);
+  const who = rungLabel(rung);
+  let edited = false;
+
+  /**
+   * True when the instances of one class contradict each other, so the graph
+   * holds no single value to print.
+   * @param {EzWidgetValue} value
+   * @returns {boolean}
+   */
+  const mixed = (value) => value === DIVERGENT;
+  /**
+   * Printable form of a live value that may be the DIVERGENT sentinel.
+   * @param {EzWidgetValue} value
+   * @returns {string}
+   */
+  const text = (value) => (mixed(value) ? "mixed" : widgetValueText(value));
+  /**
+   * Printable stem of a live filename that may be the DIVERGENT sentinel.
+   * @param {EzWidgetValue} value
+   * @returns {string}
+   */
+  const stem = (value) => (mixed(value) ? "mixed" : fileStem(value));
+
+  /**
+   * Annotate one term with what the rung wanted where the live value differs.
+   * @param {string} field
+   * @param {string} term
+   * @param {function} render renders the wanted value for the note
+   * @returns {string}
+   */
+  const note = (field, term, render) => {
+    if (expected[field] === undefined || sameTierValue(observed[field], expected[field])) {
+      return term;
+    }
+    edited = true;
+    // standard writes nothing, so its baseline is what the App ships, not
+    // something the rung set.
+    const says = rung === RUNG_STANDARD ? `App ships ${render(expected[field])}` : `${who} sets ${render(expected[field])}`;
+    return `${term} (${says})`;
+  };
+
+  const stackTerm = mixed(observed.unet_name) ? "mixed UNET" : stackLabel(family, observed.unet_name);
+  const stack = note("unet_name", stackTerm, fileStem);
+  const steps =
+    owned.includes("steps") && observed.steps != null
+      ? note("steps", mixed(observed.steps) ? "mixed steps" : `${text(observed.steps)} steps`, widgetValueText)
+      : "";
+  const cfg =
+    owned.includes("cfg") && observed.cfg != null
+      ? note("cfg", mixed(observed.cfg) ? "CFG mixed" : `CFG ${text(observed.cfg)}`, widgetValueText)
+      : "";
+  const extra = [];
+  for (const field of FILE_FIELDS) {
+    if (field === "unet_name" || !owned.includes(field)) {
+      continue;
+    }
+    // No baseline for the field means nothing was ever written there, so it
+    // cannot be called a divergence; a field that still holds its value is not
+    // one either.
+    if (expected[field] === undefined || sameTierValue(observed[field], expected[field])) {
+      continue;
+    }
+    extra.push(note(field, `${FIELD_CAPTION_TERMS[field] || field} ${stem(observed[field])}`, fileStem));
   }
-  const label = tierLabelFor(family, tier);
-  return label ? `${tier} - ${label}` : String(tier);
+  return { stack, steps, cfg, extra, edited };
 }
 
 /**
- * Caption for a custom state, naming what stopped the overlay. Never a tier
- * name: nothing here claims a write that did not land.
- * @param {string[]} reasons
- * @returns {string}
- */
-function customCaption(reasons) {
-  const bits = (reasons || []).filter(Boolean).slice(0, 2);
-  if (!bits.length) {
-    return `${EZ_QUALITY_CUSTOM} - last overlay frozen`;
-  }
-  return `${EZ_QUALITY_CUSTOM} - ${bits.join("; ")}`;
-}
-
-/**
- * Caption for custom chosen because the widgets left the tier behind.
- * @param {EzGraph|undefined} graph
+ * The one-line caption: the truth line read off the live widgets, prefixed
+ * Edited: where they left what the rung wrote, and followed by the full reason
+ * list plus the command that stages what is absent when an apply was refused.
+ * @param {EzGraph} graph
  * @param {string} family
+ * @param {string} rung
+ * @param {EzRungApply=} refusal refused apply whose reasons and commands to print
  * @returns {string}
  */
-function keptEditsCaption(graph, family) {
-  const fields = divergedFields(graph, family);
-  const tail = fields.length ? ` (${fields.join(", ")})` : "";
-  return `custom - kept your edits${tail}`;
+function deriveQualityCaption(graph, family, rung, refusal) {
+  const terms = rungTerms(graph, family, rung);
+  const bits = [terms.stack, terms.steps, terms.cfg];
+  for (const term of terms.extra) {
+    bits.push(term);
+  }
+  const license = licenseWord(family);
+  if (license) {
+    bits.push(license);
+  }
+  let text = bits.filter(Boolean).join(" - ");
+  if (terms.edited) {
+    text = `${EZ_QUALITY_EDITED_PREFIX}${text}`;
+  }
+  const reasons = (refusal && refusal.reasons) || [];
+  if (reasons.length) {
+    text += ` - ${reasons.join("; ")}`;
+  }
+  const commands = (refusal && refusal.commands) || [];
+  if (commands.length) {
+    text += ` - Run: ${commands.join(" && ")}`;
+  }
+  return text;
 }
 
 /**
- * Remember a tier that missed a widget so the next graph configure retries once.
+ * Rung currently in force: the last apply that landed whole, else the rung
+ * every App opens on.
  * @param {EzGraph|undefined} graph
- * @param {string} choice
- * @param {string[]} fields
- * @returns {void}
+ * @returns {string}
  */
-function recordPendingApply(graph, choice, fields) {
-  if (!graph) {
-    return;
-  }
-  const prior = pendingApplies.get(graph);
-  const attempts = prior && prior.choice === choice ? prior.attempts : 0;
-  pendingApplies.set(graph, { choice, fields: fields.slice(), attempts });
+function rungInForce(graph) {
+  const applied = graph && appliedRungs.get(graph);
+  const rung = String((applied && applied.rung) || RUNG_STANDARD);
+  return RUNGS.includes(rung) ? rung : RUNG_STANDARD;
 }
 
 /**
- * Drop the retry record once a tier has fully landed.
- * @param {EzGraph|undefined} graph
- * @returns {void}
- */
-function clearPendingApply(graph) {
-  if (graph) {
-    pendingApplies.delete(graph);
-  }
-}
-
-/**
- * Retry once a tier that was blocked by a widget that did not exist yet.
- * @param {EzGraph|undefined} graph
- * @returns {boolean} true when a retry ran
- */
-function retryPendingApply(graph) {
-  const pending = graph && pendingApplies.get(graph);
-  if (!pending || pending.attempts > 0 || !pending.fields.length) {
-    return false;
-  }
-  const node = firstLiveQualityNode(graph);
-  if (!node) {
-    return false;
-  }
-  pending.attempts = 1;
-  applyQuality(pending.choice, node);
-  return true;
-}
-
-/**
- * Stamp a live Quality caption onto the graph extra and every visible combo.
- * With no visible Quality combo there is nothing to caption, so a muted lane
+ * Stamp a live Detail caption onto the graph extra and every visible combo.
+ * With no visible Detail combo there is nothing to caption, so a muted lane
  * cannot leave a stamp on the graph either.
  * @param {EzGraph|undefined} graph
  * @param {string} caption
+ * @param {string} [tooltip] what the selected rung would do, for the hover text
  * @returns {void}
  */
-function stampQualityCaption(graph, caption) {
+function stampQualityCaption(graph, caption, tooltip) {
   if (!graph || !firstLiveQualityNode(graph)) {
     return;
   }
@@ -1319,14 +1592,17 @@ function stampQualityCaption(graph, caption) {
     }
     const widget = widgetByName(node, "quality");
     if (widget) {
-      widget.label = caption ? `Quality - ${caption}` : "Quality";
+      widget.label = caption ? `${DETAIL_LABEL} - ${caption}` : DETAIL_LABEL;
+      if (tooltip) {
+        widget.title = tooltip;
+      }
     }
   }
 }
 
 /**
- * Put one value on every Quality combo, so a second combo cannot keep showing a
- * tier another one dropped. The combo callback stays quiet; the caller decides
+ * Put one value on every Detail combo, so a second combo cannot keep showing a
+ * rung another one refused. The combo callback stays quiet; the caller decides
  * whether to apply, so setting the value cannot re-enter the overlay.
  * @param {EzGraph|undefined} graph
  * @param {string} value
@@ -1354,63 +1630,107 @@ function setQualityOnAll(graph, value) {
 }
 
 /**
- * Snapshot authored steps/cfg/loader names so lab can restore them.
+ * Narrow every Detail combo in the graph to the ladder this family can honor.
+ *
+ * The combo is built once from the global rung list, so without this a Klein
+ * rung sits in the dropdown of a Wan graph and reading it across writes
+ * nothing. A combo left holding a retired id is folded onto the rung in force.
  * @param {EzGraph|undefined} graph
+ * @param {string} family
  * @returns {void}
  */
-function snapshotGraph(graph) {
-  const g = graph || app.graph;
-  const snap = [];
-  for (const node of g?.nodes || []) {
-    if (!node?.widgets) {
-      continue;
-    }
-    for (const widget of node.widgets) {
-      if (
-        widget.name === "steps" ||
-        widget.name === "cfg" ||
-        widget.name === "unet_name" ||
-        widget.name === "clip_name" ||
-        widget.name === "vae_name" ||
-        widget.name === "type"
-      ) {
-        snap.push({ node, name: widget.name, value: widget.value });
-      }
-    }
-  }
-  snapshots.set(g, snap);
-  overlayWrites.set(g, new Map());
-}
-
-/**
- * Restore the last authored snapshot onto one graph.
- * @param {EzGraph|undefined} graph
- * @returns {void}
- */
-function restoreSnapshot(graph) {
-  const snap = snapshots.get(graph);
-  if (!snap) {
+function scopeComboToFamily(graph, family) {
+  if (!graph) {
     return;
   }
-  const restored = [];
-  for (const row of snap) {
-    const widget = widgetByName(row.node, row.name);
-    setWidgetValue(row.node, widget, row.value);
-    if (widget) {
-      restored.push(widget);
+  const allowed = rungsForFamily(family);
+  const settled = rungInForce(graph);
+  for (const node of graph.nodes || []) {
+    if (!isQualityNode(node)) {
+      continue;
+    }
+    const widget = /** @type {EzWidget} */ (widgetByName(node, "quality"));
+    if (!widget?.options) {
+      continue;
+    }
+    const current = comboValues(widget);
+    if (
+      !(current.length === allowed.length && current.every((value, index) => value === allowed[index]))
+    ) {
+      widget.options.values = [...allowed];
+    }
+    if (allowed.length && !allowed.map((value) => value.toLowerCase()).includes(normalizeRung(widget.value))) {
+      writeWidgetSlot(node, widget, settled);
     }
   }
-  // Lab restores authored values; those are not user edits.
-  clearOverlayWrites(graph, restored);
 }
 
 /**
- * Apply or restore a quality overlay across sampler/loader widgets.
+ * Perform the writes one apply planned and record them as that rung's.
+ * @param {EzGraph} graph
+ * @param {string} family
+ * @param {string} rung
+ * @param {EzRungApply} apply
+ * @returns {void}
+ */
+function performApply(graph, family, rung, apply) {
+  const writes = (apply.plan && apply.plan.writes) || [];
+  // A fresh record: a widget this rung does not write is not its business, so
+  // it must not carry an edit record from the rung that was in force before.
+  clearOverlayWrites(
+    graph,
+    Array.from((overlayWrites.get(graph) || new Map()).keys()),
+  );
+  const wrote = new Map();
+  for (const write of writes) {
+    applyOverlayWrite(graph, write.node, write.widget, write.value);
+    wrote.set(write.widget, write.value);
+  }
+  // A pinned field the widget already held needs no write but still belongs to
+  // this rung, so the caption measures it against the rung, not the author.
+  for (const entry of (apply.plan && apply.plan.pinned) || []) {
+    if (entry && entry.widget) {
+      wrote.set(entry.widget, entry.value);
+      recordOverlayWrite(graph, entry.widget, entry.value);
+    }
+  }
+  appliedRungs.set(graph, { rung, writes: wrote });
+  rowMoved.set(graph, false);
+  clearPendingApply(graph);
+  setQualityOnAll(graph, rung);
+  stampQualityCaption(
+    graph,
+    deriveQualityCaption(graph, family, rung),
+    tierLabelFor(family, rung),
+  );
+}
+
+/**
+ * Refuse an apply: change no widget, keep the rung already in force on every
+ * combo, and put the whole reason list in the caption.
+ * @param {EzGraph} graph
+ * @param {string} family
+ * @param {EzRungApply} apply
+ * @returns {string} the caption the refusal left behind
+ */
+function refuseApply(graph, family, apply) {
+  const settled = rungInForce(graph);
+  setQualityOnAll(graph, settled);
+  const caption = deriveQualityCaption(graph, family, settled, apply);
+  stampQualityCaption(graph, caption, tierLabelFor(family, settled));
+  return caption;
+}
+
+/**
+ * Apply a rung across sampler/loader widgets, write-or-refuse.
  *
- * A tier is named on the combo only when every write it asked for landed. Any
- * field it cannot write (widget not on the graph, weight not installed, a
- * loader holding a weight the overlay may not replace, a Wan 14B graph, no
- * prompt slot) fails the apply to custom with a caption saying what diverged.
+ * standard writes nothing and always succeeds. draft and final attempt every
+ * write their table row asks for; if any single write cannot land (widget not
+ * on the graph, weight not installed, a loader holding a weight the overlay may
+ * not replace, a Wan 14B graph, no prompt slot) the apply is refused whole:
+ * nothing is renamed and the row keeps the rung already in force. A rung the
+ * family cannot honor is refused the same way before a widget moves, so the
+ * row can never name a rung that performed no write.
  * @param {string} choice
  * @param {EzNode|undefined} qualityNode
  * @returns {void}
@@ -1421,57 +1741,37 @@ function applyQuality(choice, qualityNode) {
     return;
   }
   if (qualityNode && !isLiveNode(qualityNode)) {
-    // A muted Quality lane is not in the queued prompt; it drives nothing.
+    // A muted Detail lane is not in the queued prompt; it drives nothing.
     return;
   }
   applyingByGraph.set(graph, true);
   try {
-    const normalized = normalizeQuality(choice);
     const family = graphFamily(graph);
-    if (normalized === EZ_QUALITY_CUSTOM) {
-      stampQualityCaption(graph, customCaption([]));
-      return;
-    }
-    if (normalized === EZ_QUALITY_LAB) {
-      restoreSnapshot(graph);
-      clearPendingApply(graph);
-      stampQualityCaption(graph, `${EZ_QUALITY_LAB} - authored defaults`);
-      return;
-    }
-    const plan = planTierWrites(graph, family, normalized);
-    if (plan.missing.length) {
-      recordPendingApply(graph, normalized, plan.missing);
-    } else {
-      clearPendingApply(graph);
-    }
-    if (plan.failures.length || plan.missing.length) {
-      const reasons = plan.failures.slice();
-      for (const field of plan.missing) {
-        reasons.push(`${FIELD_WIDGET_NAMES[field]} widget not on graph`);
+    const rung = normalizeRung(choice);
+    const apply = planRungApply(graph, family, rung);
+    if (!apply.ok) {
+      const missing = (apply.plan && apply.plan.missing) || [];
+      if (missing.length) {
+        recordPendingApply(graph, rung, missing);
       }
-      setQualityOnAll(graph, EZ_QUALITY_CUSTOM);
-      stampQualityCaption(graph, customCaption(reasons));
+      refuseApply(graph, family, apply);
       return;
     }
-    clearOverlayWrites(
-      graph,
-      plan.writes.map((write) => write.widget),
-    );
-    for (const write of plan.writes) {
-      applyOverlayWrite(graph, write.node, write.widget, write.value);
+    const pending = pendingApplies.get(graph);
+    if (!(pending && pending.rung === rung)) {
+      clearPendingApply(graph);
     }
-    if (normalized === QUALITY_FREE_COMMERCIAL) {
-      retargetClipFormat(graph);
-    }
-    setQualityOnAll(graph, normalized);
-    stampQualityCaption(graph, tierCaption(family, normalized));
+    performApply(graph, family, rung, apply);
   } finally {
     applyingByGraph.set(graph, false);
   }
 }
 
 /**
- * Read the tier back out of the live widgets and show it on every combo.
+ * Read the rung back off the live widgets and caption it on every combo.
+ *
+ * The row is the operator's selection, so this never moves it: a graph whose
+ * widgets drifted says so in the caption instead of silently renaming the row.
  * @param {EzGraph|undefined} graph
  * @returns {void}
  */
@@ -1486,70 +1786,66 @@ function syncQualityFromGraph(graph) {
   try {
     const family = graphFamily(graph);
     scopeComboToFamily(graph, family);
-    const tier = deriveQualityTier(graph, family);
-    setQualityOnAll(graph, tier);
-    if (tier === EZ_QUALITY_CUSTOM) {
-      stampQualityCaption(graph, customEditCaption(graph));
+    if (!rungsForFamily(family).length) {
+      // No ladder family, no truth to state: the lab wiring strips this row.
+      stampQualityCaption(graph, "");
       return;
     }
-    stampQualityCaption(graph, tierCaption(family, tier));
+    const rung = rungInForce(graph);
+    stampQualityCaption(graph, deriveQualityCaption(graph, family, rung), tierLabelFor(family, rung));
   } finally {
     syncingByGraph.set(graph, false);
   }
 }
 
 /**
- * Caption for a freeze: name the fields the operator moved, else say plainly
- * that no tier describes this graph.
+ * Remember a rung that missed a widget so the next graph configure retries once.
  * @param {EzGraph|undefined} graph
- * @returns {string}
- */
-function customEditCaption(graph) {
-  const edited = hasOverlayEdits(graph) || hasSnapshotEdits(graph);
-  if (!edited) {
-    return `${EZ_QUALITY_CUSTOM} - no tier matches this graph`;
-  }
-  return keptEditsCaption(graph, graphFamily(graph));
-}
-
-/**
- * True when the graph carries a Quality combo at all.
- * @param {EzGraph|undefined} graph
- * @returns {boolean}
- */
-function hasQualityNode(graph) {
-  for (const node of graph?.nodes || []) {
-    if (isQualityNode(node) && widgetByName(node, "quality")) {
-      return true;
-    }
-  }
-  return false;
-}
-
-/**
- * Select Quality custom on every combo so Queue keeps live overlay-widget
- * values. Skips overlay/seed writes. Does not persist custom as last named.
- * @param {EzGraph|undefined} graph
- * @param {string[]} [reasons] what stopped the overlay, for the caption
+ * @param {string} choice
+ * @param {string[]} fields
  * @returns {void}
  */
-function freezeQualityToCustom(graph, reasons) {
-  if (!graph || applyingByGraph.get(graph) || seedingByGraph.get(graph)) {
+function recordPendingApply(graph, choice, fields) {
+  if (!graph) {
     return;
   }
-  if (!hasQualityNode(graph)) {
-    return;
-  }
-  setQualityOnAll(graph, EZ_QUALITY_CUSTOM);
-  if (reasons && reasons.length) {
-    stampQualityCaption(graph, customCaption(reasons));
-    return;
-  }
-  stampQualityCaption(graph, customEditCaption(graph));
+  const prior = pendingApplies.get(graph);
+  const attempts = prior && prior.rung === choice ? prior.attempts : 0;
+  pendingApplies.set(graph, { rung: choice, fields: fields.slice(), attempts });
 }
 
 /**
- * True when this widget is a Quality overlay field on this node.
+ * Drop the retry record once a rung has fully landed.
+ * @param {EzGraph|undefined} graph
+ * @returns {void}
+ */
+function clearPendingApply(graph) {
+  if (graph) {
+    pendingApplies.delete(graph);
+  }
+}
+
+/**
+ * Retry once a rung that was blocked by a widget that did not exist yet.
+ * @param {EzGraph|undefined} graph
+ * @returns {boolean} true when a retry ran
+ */
+function retryPendingApply(graph) {
+  const pending = graph && pendingApplies.get(graph);
+  if (!pending || pending.attempts > 0 || !pending.fields.length) {
+    return false;
+  }
+  const node = firstLiveQualityNode(graph);
+  if (!node) {
+    return false;
+  }
+  pending.attempts = 1;
+  applyQuality(pending.rung, node);
+  return true;
+}
+
+/**
+ * True when this widget is a Detail overlay field on this node.
  * @param {EzNode} node
  * @param {EzWidget|undefined} widget
  * @returns {boolean}
@@ -1567,7 +1863,8 @@ function isOverlayWidget(node, widget) {
 }
 
 /**
- * Chain a user-edit callback so an overlay-widget edit re-reads the tier.
+ * Chain a user-edit callback so an overlay-widget edit re-derives the caption.
+ * The row keeps the operator's rung; only the truth line moves.
  * @param {EzNode} node
  * @param {EzWidget|undefined} widget
  * @returns {void}
@@ -1579,7 +1876,7 @@ function bindOverlayWidget(node, widget) {
   widget._ezQualityWatch = true;
   const prior = widget.callback;
   /**
-   * Chain the prior callback then derive the tier the widgets now hold.
+   * Chain the prior callback then re-read the live widgets for the caption.
    * @returns {void}
    */
   widget.callback = function () {
@@ -1616,8 +1913,7 @@ function bindOverlayWatchers(graph) {
 }
 
 /**
- * Bind the quality combo once so changes and Queue keep it in step with the
- * widgets.
+ * Bind the Detail combo once so changes and Queue keep the caption honest.
  * @param {EzNode} node
  * @returns {void}
  */
@@ -1627,10 +1923,11 @@ function bindQualityNode(node) {
     return;
   }
   widget._ezQualityBound = true;
-  widget.label = "Quality";
+  widget.label = DETAIL_LABEL;
   const prior = widget.callback;
   /**
-   * Chain the prior callback then overlay the chosen quality.
+   * Chain the prior callback then overlay the chosen rung. A seed write is not
+   * an operator pick, so it must not mark the row moved or run an apply.
    * @param {EzWidgetValue} value
    * @returns {void}
    */
@@ -1638,73 +1935,49 @@ function bindQualityNode(node) {
     if (typeof prior === "function") {
       prior.apply(this, arguments);
     }
-    if (!seedingByGraph.get(node.graph)) {
-      persistLastQuality(value);
+    if (seedingByGraph.get(node.graph)) {
+      return;
     }
+    rowMoved.set(node.graph, true);
     applyQuality(value, node);
   };
   /**
-   * Before Queue: the combo must say what the prompt holds. Custom re-reads the
-   * widgets (they may have been moved back onto a tier by hand); a named tier
-   * re-applies, because the App Mode panel can write the combo without firing
-   * its callback and leave the widgets authored. Only widget.beforeQueued fires
-   * in the pinned frontend, and only synchronously, so this is the last line.
+   * Before Queue: the prompt must hold the rung the row names. The rung is
+   * re-applied only after the operator moved the row, a hand edit is never
+   * overwritten, and a re-apply that would be refused stops Queue with the
+   * caption text. Only widget.beforeQueued fires in the pinned frontend, and
+   * only synchronously, so this is the last line.
    * @returns {void}
    */
   widget.beforeQueued = function () {
     const graph = node.graph || app.graph;
-    const choice = normalizeQuality(widget.value);
-    if (choice === EZ_QUALITY_CUSTOM) {
-      const derived = deriveQualityTier(graph, graphFamily(graph));
-      if (derived === EZ_QUALITY_LAB) {
-        syncQualityFromGraph(graph);
-        return;
-      }
-      if (derived !== EZ_QUALITY_CUSTOM) {
-        setQualityOnAll(graph, derived);
-        applyQuality(derived, node);
-        return;
-      }
-      freezeQualityToCustom(graph);
+    if (!graph) {
       return;
     }
-    const diverged =
-      choice === EZ_QUALITY_LAB ? hasSnapshotEdits(graph) : hasOverlayEdits(graph);
-    if (diverged) {
-      freezeQualityToCustom(graph);
+    const family = graphFamily(graph);
+    const rung = normalizeRung(widget.value);
+    const moved = rowMoved.get(graph) || rungInForce(graph) !== rung;
+    if (!moved) {
+      // Nothing moved since the last write that landed: send what is on the box.
+      syncQualityFromGraph(graph);
       return;
+    }
+    if (
+      deriveQualityTier(graph, graphFamily(graph)) === rung &&
+      !hasOverlayEdits(graph) &&
+      !hasSnapshotEdits(graph)
+    ) {
+      rowMoved.set(graph, false);
+      syncQualityFromGraph(graph);
+      return;
+    }
+    const apply = planRungApply(graph, family, rung);
+    if (!apply.ok) {
+      const caption = refuseApply(graph, family, apply);
+      throw new Error(`Detail ${rungLabel(rung)} cannot be applied: ${caption}`);
     }
     applyQuality(widget.value, node);
   };
-}
-
-/**
- * Persist the last named quality for newly opened Apps.
- * @param {EzWidgetValue} value
- * @returns {void}
- */
-function persistLastQuality(value) {
-  const normalized = normalizeQuality(value);
-  if (normalized === EZ_QUALITY_CUSTOM) {
-    return;
-  }
-  try {
-    localStorage.setItem(LAST_QUALITY_KEY, normalized);
-  } catch {
-    // private mode / blocked storage
-  }
-}
-
-/**
- * Last named quality chosen in this browser, or empty.
- * @returns {string}
- */
-function readLastQuality() {
-  try {
-    return String(localStorage.getItem(LAST_QUALITY_KEY) || "");
-  } catch {
-    return "";
-  }
 }
 
 /**
@@ -1724,41 +1997,38 @@ function isNewlyOpenedGraph(graph) {
 }
 
 /**
- * Apply last-chosen quality to a newly opened App still at lab, else current.
+ * Open a newly loaded App on standard: the rung that writes nothing, so the
+ * graph queues exactly as this App ships it. No browser-global selects a rung.
  * @param {EzGraph} graph
- * @param {EzNode} node
  * @param {EzWidget|undefined} widget
- * @returns {boolean} true when an overlay ran
+ * @returns {boolean} true when the row was seeded
  */
-function applyDefaultOrCurrent(graph, node, widget) {
+function seedStandardOnOpen(graph, widget) {
   if (!widget) {
     return false;
   }
-  const last = readLastQuality();
-  const current = normalizeQuality(widget.value);
-  if (
-    current === EZ_QUALITY_LAB &&
-    last &&
-    last !== EZ_QUALITY_LAB &&
-    last !== EZ_QUALITY_CUSTOM
-  ) {
-    seedingByGraph.set(graph, true);
-    try {
-      setWidgetValue(node, widget, last);
-    } finally {
-      seedingByGraph.set(graph, false);
-    }
-    return true;
+  const family = graphFamily(graph);
+  const ladder = rungsForFamily(family);
+  const rung = ladder.map((item) => item.toLowerCase()).includes(RUNG_STANDARD)
+    ? RUNG_STANDARD
+    : String(ladder[0] || "");
+  appliedRungs.set(graph, { rung: rung || RUNG_STANDARD, writes: new Map() });
+  overlayWrites.set(graph, new Map());
+  rowMoved.set(graph, false);
+  if (!rung) {
+    return false;
   }
-  if (current !== EZ_QUALITY_LAB && current !== EZ_QUALITY_CUSTOM) {
-    applyQuality(current, node);
-    return true;
+  seedingByGraph.set(graph, true);
+  try {
+    setQualityOnAll(graph, rung);
+  } finally {
+    seedingByGraph.set(graph, false);
   }
-  return false;
+  return true;
 }
 
 /**
- * Snapshot the graph and bind every Quality combo.
+ * Snapshot the graph and bind every Detail combo.
  * @returns {void}
  */
 function bindAll() {
@@ -1781,14 +2051,44 @@ function bindAll() {
     return;
   }
   if (fresh) {
-    if (!applyDefaultOrCurrent(graph, driver, widgetByName(driver, "quality"))) {
-      syncQualityFromGraph(graph);
+    seedStandardOnOpen(graph, widgetByName(driver, "quality"));
+  } else {
+    retryPendingApply(graph);
+  }
+  syncQualityFromGraph(graph);
+}
+
+/**
+ * Snapshot what the graph shipped with, so the caption can tell an authored
+ * widget from a hand-edited one under the rung that writes nothing.
+ * @param {EzGraph|undefined} graph
+ * @returns {void}
+ */
+function snapshotGraph(graph) {
+  const g = graph || app.graph;
+  const snap = [];
+  for (const node of g?.nodes || []) {
+    if (!node?.widgets) {
+      continue;
     }
-    return;
+    for (const widget of node.widgets) {
+      if (
+        widget.name === "steps" ||
+        widget.name === "cfg" ||
+        widget.name === "unet_name" ||
+        widget.name === "clip_name" ||
+        widget.name === "vae_name" ||
+        widget.name === "type"
+      ) {
+        snap.push({ node, name: widget.name, value: widget.value });
+      }
+    }
   }
-  if (!retryPendingApply(graph)) {
-    syncQualityFromGraph(graph);
-  }
+  snapshots.set(g, snap);
+  overlayWrites.set(g, new Map());
+  appliedRungs.delete(g);
+  rowMoved.set(g, false);
+  pendingApplies.delete(g);
 }
 
 app.registerExtension({
@@ -1805,7 +2105,7 @@ app.registerExtension({
     }
     const onNodeCreated = nodeTypeArg.prototype.onNodeCreated;
     /**
-     * Bind the quality combo when the node is created.
+     * Bind the Detail combo when the node is created.
      * @returns {void}
      */
     nodeTypeArg.prototype.onNodeCreated = function () {
@@ -1815,7 +2115,7 @@ app.registerExtension({
     };
   },
   /**
-   * Re-read the tier after a graph load, retrying a tier a lazy widget blocked.
+   * Re-read the graph after a load, retrying a rung a lazy widget blocked.
    * @returns {Promise<void>}
    */
   async afterConfigureGraph() {
@@ -1831,7 +2131,7 @@ app.registerExtension({
     syncQualityFromGraph(node?.graph);
   },
   /**
-   * Keep the combo honest while the operator edits the graph.
+   * Keep the caption honest while the operator edits the graph.
    * @param {EzGraph} graph
    * @returns {void}
    */

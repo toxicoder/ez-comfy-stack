@@ -29,7 +29,7 @@ bazelisk run //:manage -- download-3d --tier trellis2
 bazelisk run //:manage -- occupancy enter trellis --yes
 ```
 
-LoadImage: a Klein still (`ez_still_*.png` or a clay plate). Unload models first (EZUnloadModels).
+LoadImage: a Klein still (`ez_still_*.png` or a clay plate). OccupancyGate -> EZUnloadModels first.
 UNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack).
 Upsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this lab
 graph runs the 1024 floor. Structure decode stays at 32. MeshToFile3D only converts in memory, so
@@ -479,6 +479,13 @@ def build_trellis() -> dict[str, Any]:
         },
         "version": 0.4,
     }
+    # Fail-closed on the occupancy XOR like every other mesh printer in the
+    # lane: the gate is a pass-through IMAGE that raises before the Queue.
+    from _build_dcc_workflows import _insert_occupancy_gate
+
+    _insert_occupancy_gate(
+        graph, source=load, required_mode="trellis", pos=(448, 990)
+    )
     ensure_occupancy_note(graph, "trellis")
     stamp_app_mode(
         graph,

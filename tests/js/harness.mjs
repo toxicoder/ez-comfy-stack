@@ -307,9 +307,12 @@ export function qualityCaption(graph, qualityNode) {
     return stamp;
   }
   const label = qualityNode?.widgets?.find((w) => w.name === "quality")?.label;
-  const prefix = "Quality - ";
-  if (typeof label === "string" && label.startsWith(prefix)) {
-    return label.slice(prefix.length);
+  // The row-label mirror is "<row title> - <caption>". Graphs stamped before the
+  // ladder rename still carry the retired title, so both prefixes are read.
+  for (const prefix of ["Detail - ", "Quality - "]) {
+    if (typeof label === "string" && label.startsWith(prefix)) {
+      return label.slice(prefix.length);
+    }
   }
   return "";
 }
@@ -361,7 +364,7 @@ export function makeStudioGraph(spec = {}) {
   const authored = spec.authored || {};
   const samplers = spec.samplers ?? 1;
   const loaders = spec.loaders ?? 1;
-  const qualities = spec.qualities || ["lab"];
+  const qualities = spec.qualities || ["standard"];
   const drop = spec.drop || {};
 
   const unetCatalog = without(

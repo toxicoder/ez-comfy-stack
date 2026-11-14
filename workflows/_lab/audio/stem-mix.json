@@ -1,8 +1,8 @@
 {
   "id": "stem-mix",
-  "revision": 3,
-  "last_node_id": 9,
-  "last_link_id": 0,
+  "revision": 1,
+  "last_node_id": 4,
+  "last_link_id": 1,
   "nodes": [
     {
       "id": 1,
@@ -13,7 +13,7 @@
       ],
       "size": [
         1340,
-        420.0
+        460.0
       ],
       "flags": {},
       "order": 0,
@@ -24,7 +24,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## audio/stem-mix\n\nPicture-lock stem mix. Occupancy **audio** - stop Klein / Wan / LTX first. ACE-Step\nscore is a later session if `score: acestep-instrumental`.\n\nThis canvas does not denoise video. Mix on the host:\n\n  bazelisk run //:manage -- stem-mix --film <slug> --shot <id> --bg PATH [--dx PATH]\n\nStems: BG = demuxed LTX world bed, FX = optional Templates LTX-2.5 T2A (same distilled\ntransformer; not a vendored subgraph), DX = Kokoro / Qwen3-TTS, MX = ACE-Step\ninstrumental. Duck beds -15 dB under DX. YouTube loudnorm I=-14.\n\nA2V lock (talking-head): mix DX first, then Templates -> LTX-2.5 A2V freeze. Mouths will\nnot match (banned lip-sync OSS stays out). Foley V2A LoRA is not in v1.\n\nDo not start Docker. Do not co-resident ACE-Step with LTX.\n\nOccupancy: audio - stop Klein / Wan / LTX session. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## audio/stem-mix\n\nPicture-lock stem mix. Occupancy **audio** - stop Klein / Wan / LTX first. ACE-Step\nscore is a later session if `score: acestep-instrumental`.\n\nThis canvas has no audio source: SaveAudio's audio slot stays empty on purpose, so\nQueue is not how this App is run and an empty Queue writes nothing. The mix is a host\nffmpeg verb. Run it from a repo shell:\n\n  bazelisk run //:manage -- stem-mix --film go-see --shot 01 --bg PATH [--dx PATH] [--fx PATH] [--mx PATH] [--video PATH]\n\n`--film` and `--shot` are required (the verb stops without them) and `--bg` is the bed\nits usage line asks for. The stems are file paths the verb opens, not switches on this\ncanvas: --bg is the demuxed LTX world bed, --dx is Kokoro / Qwen3-TTS dialogue, --fx is\nthe optional Templates LTX-2.5 T2A pass (same distilled transformer; not a vendored\nsubgraph), and --mx is the ACE-Step instrumental. There is no Include DX / FX / MX row\nany more - a yes/no box cannot name a path, so those rows could only ever have lied.\n\nThe one row the App panel shows, Save prefix, is wired into SaveAudio's filename_prefix\nand ships as ez_stem_mix_gosee_01: the film slug and the shot id, lowercase and\npath-safe. Keep it matching --film / --shot so the canvas master and the host mix at\nfilms/<slug>/stems/<id>/mix.m4a (mix.mp4 with --video) name the same cut. Duck beds\n-15 dB under DX. YouTube loudnorm I=-14.\n\nA2V lock (talking-head): mix DX first, then Templates -> LTX-2.5 A2V freeze. Mouths will\nnot match (banned lip-sync OSS stays out). Foley V2A LoRA is not in v1.\n\nDo not start Docker. Do not co-resident ACE-Step with LTX.\n\nOccupancy: audio - stop Klein / Wan / LTX session. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -33,10 +33,10 @@
       "type": "PrimitiveNode",
       "pos": [
         40,
-        648
+        704
       ],
       "size": [
-        300.0,
+        320.0,
         120.0
       ],
       "flags": {},
@@ -47,7 +47,9 @@
         {
           "name": "STRING",
           "type": "STRING",
-          "links": null,
+          "links": [
+            1
+          ],
           "widget": {
             "name": "value"
           },
@@ -58,170 +60,38 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "go-see",
+        "ez_stem_mix_gosee_01",
         "fixed"
       ],
-      "title": "Film slug"
+      "title": "Save prefix"
     },
     {
       "id": 3,
-      "type": "PrimitiveNode",
-      "pos": [
-        388,
-        648
-      ],
-      "size": [
-        300.0,
-        120.0
-      ],
-      "flags": {},
-      "order": 2,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "STRING",
-          "type": "STRING",
-          "links": null,
-          "widget": {
-            "name": "value"
-          },
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "PrimitiveNode"
-      },
-      "widgets_values": [
-        "01",
-        "fixed"
-      ],
-      "title": "Shot id"
-    },
-    {
-      "id": 4,
-      "type": "PrimitiveNode",
-      "pos": [
-        736,
-        648
-      ],
-      "size": [
-        300.0,
-        120.0
-      ],
-      "flags": {},
-      "order": 3,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "STRING",
-          "type": "STRING",
-          "links": null,
-          "widget": {
-            "name": "value"
-          },
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "PrimitiveNode"
-      },
-      "widgets_values": [
-        "no",
-        "fixed"
-      ],
-      "title": "Include DX"
-    },
-    {
-      "id": 5,
-      "type": "PrimitiveNode",
-      "pos": [
-        1084,
-        648
-      ],
-      "size": [
-        300.0,
-        120.0
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "STRING",
-          "type": "STRING",
-          "links": null,
-          "widget": {
-            "name": "value"
-          },
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "PrimitiveNode"
-      },
-      "widgets_values": [
-        "no",
-        "fixed"
-      ],
-      "title": "Include FX"
-    },
-    {
-      "id": 6,
-      "type": "PrimitiveNode",
-      "pos": [
-        1432,
-        648
-      ],
-      "size": [
-        300.0,
-        120.0
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "STRING",
-          "type": "STRING",
-          "links": null,
-          "widget": {
-            "name": "value"
-          },
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "PrimitiveNode"
-      },
-      "widgets_values": [
-        "no",
-        "fixed"
-      ],
-      "title": "Include MX"
-    },
-    {
-      "id": 7,
       "type": "SaveAudio",
       "pos": [
-        1780,
-        648
+        408,
+        704
       ],
       "size": [
         320,
-        80
+        100
       ],
       "flags": {},
-      "order": 6,
+      "order": 2,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
           "link": null
+        },
+        {
+          "name": "filename_prefix",
+          "type": "STRING",
+          "link": 1,
+          "widget": {
+            "name": "filename_prefix"
+          }
         }
       ],
       "outputs": [],
@@ -229,12 +99,12 @@
         "Node name for S&R": "SaveAudio"
       },
       "widgets_values": [
-        "ez_stem_mix"
+        "ez_stem_mix_gosee_01"
       ],
       "title": "Save stem mix (host stem-mix.sh)"
     },
     {
-      "id": 9,
+      "id": 4,
       "type": "EZModelCheck",
       "pos": [
         1428,
@@ -258,7 +128,16 @@
       "title": "Check models"
     }
   ],
-  "links": [],
+  "links": [
+    [
+      1,
+      2,
+      0,
+      3,
+      1,
+      "STRING"
+    ]
+  ],
   "groups": [
     {
       "id": 1,
@@ -267,7 +146,7 @@
         20,
         8,
         1380,
-        536
+        576
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -279,7 +158,7 @@
       "bounding": [
         1408,
         8,
-        728,
+        360,
         256
       ],
       "color": "#a1309b",
@@ -291,21 +170,8 @@
       "title": "STEMS",
       "bounding": [
         20,
-        576,
-        1732,
-        236
-      ],
-      "color": "#3f789e",
-      "font_size": 24,
-      "flags": {}
-    },
-    {
-      "id": 4,
-      "title": "OUTPUT",
-      "bounding": [
-        1760,
-        576,
-        360,
+        632,
+        728,
         386
       ],
       "color": "#3f789e",
@@ -316,8 +182,8 @@
   "config": {},
   "extra": {
     "lab_profile": "audio/stem-mix",
-    "lab_note": "## audio/stem-mix\n\nPicture-lock stem mix. Occupancy **audio** - stop Klein / Wan / LTX first. ACE-Step\nscore is a later session if `score: acestep-instrumental`.\n\nThis canvas does not denoise video. Mix on the host:\n\n  bazelisk run //:manage -- stem-mix --film <slug> --shot <id> --bg PATH [--dx PATH]\n\nStems: BG = demuxed LTX world bed, FX = optional Templates LTX-2.5 T2A (same distilled\ntransformer; not a vendored subgraph), DX = Kokoro / Qwen3-TTS, MX = ACE-Step\ninstrumental. Duck beds -15 dB under DX. YouTube loudnorm I=-14.\n\nA2V lock (talking-head): mix DX first, then Templates -> LTX-2.5 A2V freeze. Mouths will\nnot match (banned lip-sync OSS stays out). Foley V2A LoRA is not in v1.\n\nDo not start Docker. Do not co-resident ACE-Step with LTX.\n\nOccupancy: audio - stop Klein / Wan / LTX session. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
-    "lab_description": "Picture-lock stem mix desk. Occupancy audio. Mix via stem-mix.sh.",
+    "lab_note": "## audio/stem-mix\n\nPicture-lock stem mix. Occupancy **audio** - stop Klein / Wan / LTX first. ACE-Step\nscore is a later session if `score: acestep-instrumental`.\n\nThis canvas has no audio source: SaveAudio's audio slot stays empty on purpose, so\nQueue is not how this App is run and an empty Queue writes nothing. The mix is a host\nffmpeg verb. Run it from a repo shell:\n\n  bazelisk run //:manage -- stem-mix --film go-see --shot 01 --bg PATH [--dx PATH] [--fx PATH] [--mx PATH] [--video PATH]\n\n`--film` and `--shot` are required (the verb stops without them) and `--bg` is the bed\nits usage line asks for. The stems are file paths the verb opens, not switches on this\ncanvas: --bg is the demuxed LTX world bed, --dx is Kokoro / Qwen3-TTS dialogue, --fx is\nthe optional Templates LTX-2.5 T2A pass (same distilled transformer; not a vendored\nsubgraph), and --mx is the ACE-Step instrumental. There is no Include DX / FX / MX row\nany more - a yes/no box cannot name a path, so those rows could only ever have lied.\n\nThe one row the App panel shows, Save prefix, is wired into SaveAudio's filename_prefix\nand ships as ez_stem_mix_gosee_01: the film slug and the shot id, lowercase and\npath-safe. Keep it matching --film / --shot so the canvas master and the host mix at\nfilms/<slug>/stems/<id>/mix.m4a (mix.mp4 with --video) name the same cut. Duck beds\n-15 dB under DX. YouTube loudnorm I=-14.\n\nA2V lock (talking-head): mix DX first, then Templates -> LTX-2.5 A2V freeze. Mouths will\nnot match (banned lip-sync OSS stays out). Foley V2A LoRA is not in v1.\n\nDo not start Docker. Do not co-resident ACE-Step with LTX.\n\nOccupancy: audio - stop Klein / Wan / LTX session. One GB10 job.\n",
+    "lab_description": "Picture-lock stem mix desk. Occupancy audio. Mix via stem-mix.sh; the Save prefix row names the master.",
     "ds": {
       "scale": 1,
       "offset": [
@@ -325,6 +191,8 @@
         0
       ]
     },
+    "lab_rel": "audio/stem-mix",
+    "workflowRendererVersion": "Vue-corrected",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -340,59 +208,20 @@
           2,
           "value",
           {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-            "label": "Film slug",
-            "height": 72
-          }
-        ],
-        [
-          3,
-          "value",
-          {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-            "label": "Shot id",
-            "height": 72
-          }
-        ],
-        [
-          4,
-          "value",
-          {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-            "label": "Include DX",
-            "height": 72
-          }
-        ],
-        [
-          5,
-          "value",
-          {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-            "label": "Include FX",
-            "height": 72
-          }
-        ],
-        [
-          6,
-          "value",
-          {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-            "label": "Include MX",
+            "description": "Filename prefix for this App's Save node. Lowercase letters, digits, and - _ / . only.",
+            "label": "Save prefix",
             "height": 72
           }
         ]
       ],
       "outputs": [
-        7
+        3
       ]
     },
     "linearMode": true,
     "lab_optional_unwired": [
-      "PrimitiveNode",
       "SaveAudio"
-    ],
-    "lab_rel": "audio/stem-mix",
-    "workflowRendererVersion": "Vue-corrected"
+    ]
   },
   "version": 0.4
 }
