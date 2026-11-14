@@ -45,11 +45,17 @@ What the gate proves, one test per invariant:
     ``IMAGE`` slot waiting for it - no other shape of dead upload box ships.
 21. An image picker that is live and wired has an App row, so every still the
     graph reads is one the operator can actually choose.
+22. Operator-facing copy - node titles, string widgets, and the ``lab_*`` prose -
+    never names the retired Quality combo, because the control the operator
+    actually has is Detail (:data:`RETIRED_CONTROL_PHRASES`).
 
 Nothing here hardcodes a rung name, a tier name, or a model family: the ladder
 comes from ``ez_quality.presets``, the occupancy slots and the banned needles
 from ``_stamp_app_mode``, the widget table from the node encyclopedia, and the
 per-family node signature from the catalog itself (see :func:`_type_home`).
+The one list this file writes out by hand is :data:`RETIRED_CONTROL_PHRASES`,
+which names a control the repo has already removed, so there is nothing left to
+read it from.
 
 Every rule runs strict on every shipped graph: nothing here is xfailed,
 skipped, or narrowed to a lane. What the first pass of this gate reported is
@@ -1739,3 +1745,113 @@ def test_one_quality_node_recording_a_ladder_rung(
         f"{lab_rel}: EZQuality {node.get('id')} records {rung!r}, which family "
         f"{family!r} does not honor ({tiers})"
     )
+
+
+RETIRED_CONTROL_PHRASES: tuple[str, ...] = (
+    "Quality combo",
+    "Quality ladder",
+    "Quality tiers",
+    "Quality tier",
+    "Quality profile",
+    "Quality does not change size",
+    "Quality never changes pixels",
+    "Quality never swaps",
+    "Quality swaps",
+    "Quality left on",
+    "Quality cannot drive",
+    "set Quality",
+    "Quality **High**",
+    "Quality **Ultra**",
+    "Quality **Max**",
+    "Quality ultra/max",
+    "(Quality flux3",
+)
+"""Sentences the retired Quality combo left behind in operator-facing copy.
+
+The control is Detail. Any copy that names Quality is teaching an operator a
+widget that no longer exists, and the ladder has no rung named high, ultra, max,
+lab, or custom either.
+"""
+
+CONTENT_WIDGET_TYPES: frozenset[str] = frozenset(
+    {
+        "EZRapLyrics",
+        "EZAceStepPromptEnhance",
+        "TextEncodeAceStepAudio1.5",
+    }
+)
+"""Node types whose string widgets hold authored content, not UI copy.
+
+A lyric that happens to rhyme the word "quality" is a lyric, not an instruction
+to an operator, so these types are out of scope for this rule.
+"""
+
+OPERATOR_EXTRA_KEYS: tuple[str, ...] = ("lab_description", "lab_note", "lab_graph_note")
+"""The ``extra`` entries the Apps panel renders as prose."""
+
+
+def _operator_copy(graph: Mapping[str, Any]) -> list[tuple[str, str]]:
+    """Return every string an operator reads in this graph, with its origin.
+
+    Covers the node titles the canvas shows, the string widgets the App panel
+    fills, and the ``lab_*`` prose the Apps panel prints. Authored content on
+    :data:`CONTENT_WIDGET_TYPES` nodes is skipped: those strings are the work
+    the App makes, not instructions to the operator.
+
+    Args:
+        graph: Parsed lab JSON.
+
+    Returns:
+        ``(where, text)`` pairs, ``where`` naming the node class and id, or the
+        ``extra.`` key, for each string found.
+    """
+    found: list[tuple[str, str]] = []
+    for node in _nodes(graph):
+        ntype = str(node.get("type") or "")
+        node_id = node.get("id")
+        for field in ("title", "title_mode"):
+            value = node.get(field)
+            if isinstance(value, str):
+                found.append((f"{ntype} {node_id} {field}", value))
+        if ntype in CONTENT_WIDGET_TYPES:
+            continue
+        values = node.get("widgets_values")
+        if isinstance(values, list):
+            for index, value in enumerate(values):
+                if isinstance(value, str):
+                    found.append((f"{ntype} {node_id} widgets_values[{index}]", value))
+        elif isinstance(values, Mapping):
+            for key, value in values.items():
+                if isinstance(value, str):
+                    found.append((f"{ntype} {node_id} widgets_values[{key!r}]", value))
+    extra = _extra(graph)
+    for key in OPERATOR_EXTRA_KEYS:
+        value = extra.get(key)
+        if isinstance(value, str):
+            found.append((f"extra.{key}", value))
+    return found
+
+
+@pytest.mark.parametrize(PYTEST_PARAM, GRAPHS, ids=GRAPH_IDS)
+def test_operator_text_never_names_the_retired_combo(
+    lab_rel: str, graph: dict[str, Any]
+) -> None:
+    """No copy the operator reads names the combo this repo retired.
+
+    The control the Apps panel offers is Detail; its rungs are whatever
+    ``ez_quality.presets`` honors for the family. Graph Notes, node titles, and
+    ``extra.lab_description`` still carry sentences the Quality combo wrote, and
+    an operator who reads "set Quality **High**" looks for a widget that is gone.
+    The match is case-sensitive on purpose: "quality of the still" is English,
+    "Quality" as a control name is the defect.
+
+    Args:
+        lab_rel: ``_lab``-relative graph id.
+        graph: Parsed lab JSON.
+    """
+    for where, text in _operator_copy(graph):
+        for phrase in RETIRED_CONTROL_PHRASES:
+            assert phrase not in text, (
+                f"{lab_rel}: {where} names the retired Quality combo "
+                f"({phrase!r}): {text[:160]!r}"
+            )

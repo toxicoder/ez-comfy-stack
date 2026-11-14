@@ -164,6 +164,40 @@ def fix_dead_picker_notes(graph: dict[str, Any], lab_rel: str) -> int:
     return changed
 
 
+def prune_stale_opt_in(graph: dict[str, Any]) -> int:
+    """Drop opt-in declarations whose node is gone.
+
+    Args:
+        graph: Serialized Comfy graph, mutated in place.
+
+    Returns:
+        Number of entries removed from ``extra.lab_optional_unwired``. A picker
+        this pass deleted left its declaration behind, and a graph that claims an
+        optional upload it no longer contains teaches the next author a shape the
+        catalog gate would refuse anyway. Only :data:`PICKER_TYPES` are pruned, so
+        a declaration for some other node class is nobody's business here.
+    """
+    extra = graph.get("extra")
+    if not isinstance(extra, dict):
+        return 0
+    declared = extra.get("lab_optional_unwired")
+    if not isinstance(declared, list):
+        return 0
+    live = {str(node.get("type") or "") for node in graph.get("nodes") or []}
+    kept = [
+        entry
+        for entry in declared
+        if str(entry) not in PICKER_TYPES or str(entry) in live
+    ]
+    removed = len(declared) - len(kept)
+    if removed:
+        if kept:
+            extra["lab_optional_unwired"] = kept
+        else:
+            del extra["lab_optional_unwired"]
+    return removed
+
+
 def strip_dead_pickers(graph: dict[str, Any], lab_rel: str = "") -> int:
     """Delete this graph's dead pickers and stale copy.
 
@@ -172,15 +206,16 @@ def strip_dead_pickers(graph: dict[str, Any], lab_rel: str = "") -> int:
         lab_rel: Lab id used to look up :data:`NOTE_FIXES`; empty skips copy.
 
     Returns:
-        Number of nodes deleted plus Note widgets rewritten. The copy repair
-        runs whether or not this pass deleted anything, so a graph whose node
-        went away in an earlier run still gets its stale sentence fixed.
+        Number of nodes deleted, Note widgets rewritten, and stale opt-in
+        declarations dropped. The copy repair runs whether or not this pass
+        deleted anything, so a graph whose node went away in an earlier run still
+        gets its stale sentence and its orphan declaration fixed.
     """
     removed = 0
     for node_id in dead_pickers(graph):
         remove_node(graph, node_id)
         removed += 1
-    return removed + fix_dead_picker_notes(graph, lab_rel)
+    return removed + fix_dead_picker_notes(graph, lab_rel) + prune_stale_opt_in(graph)
 
 
 def strip_all(root: Path | None = None) -> int:

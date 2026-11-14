@@ -195,3 +195,41 @@ def test_the_shipped_catalog_ships_no_dead_picker() -> None:
         if dead_pickers(graph):
             dead.append(str(path))
     assert dead == []
+
+
+def test_a_declaration_whose_picker_is_gone_is_dropped() -> None:
+    """An App must not advertise an upload box it no longer contains."""
+    graph = _graph(_consumer(2), optional=["LoadImage"])
+    assert strip_dead_pickers(graph) == 1
+    assert "lab_optional_unwired" not in graph["extra"]
+
+
+def test_a_declaration_whose_picker_survives_is_kept() -> None:
+    graph = _graph(
+        _picker(1, "EZOptionalImage", mode=4), _consumer(2), optional=["EZOptionalImage"]
+    )
+    assert strip_dead_pickers(graph) == 0
+    assert graph["extra"]["lab_optional_unwired"] == ["EZOptionalImage"]
+
+
+def test_a_non_picker_declaration_is_nobody_s_business() -> None:
+    """Only picker classes are pruned; another node's contract is left alone."""
+    graph = _graph(_consumer(2), optional=["SaveAudio"])
+    assert strip_dead_pickers(graph) == 0
+    assert graph["extra"]["lab_optional_unwired"] == ["SaveAudio"]
+
+
+def test_the_dead_declaration_leaves_and_the_live_one_stays() -> None:
+    graph = _graph(
+        _picker(1, "EZOptionalImage", mode=4),
+        _consumer(2),
+        optional=["EZOptionalImage", "LoadImage"],
+    )
+    assert strip_dead_pickers(graph) == 1
+    assert graph["extra"]["lab_optional_unwired"] == ["EZOptionalImage"]
+
+
+def test_a_graph_with_no_extra_block_is_left_alone() -> None:
+    """The prune tolerates a graph that never declared anything."""
+    graph: dict[str, Any] = {"nodes": [_consumer(2)], "links": []}
+    assert strip_dead_pickers(graph) == 0
