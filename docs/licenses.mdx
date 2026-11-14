@@ -1,7 +1,7 @@
 ---
 title: Model licenses
-description: US self-host license policy for Klein 4B, Wan 2.2, and LTX-2.5, with the defaults, gated pulls, and bans. Not legal advice.
-tags: [license, apache, ltx, wan, klein, youtube, us]
+description: US self-host license policy for Klein 4B, Wan 2.2, and LTX-2.5, with the defaults, gated pulls, the opt-in NVIDIA research lane, and the bans. Not legal advice.
+tags: [license, apache, ltx, wan, klein, youtube, us, nvidia, research-lane]
 ---
 
 # Model licenses
@@ -10,7 +10,8 @@ tags: [license, apache, ltx, wan, klein, youtube, us]
 
 - **Decide before you run `download-models`** - the three questions you answer first
 - **Accept the gated cards** - `HF_TOKEN`, the Lightricks click, and the FLUX 3 click
-- **Defaults vs gated vs banned** - the six buckets, then the shape of the policy
+- **Defaults vs gated vs banned** - the seven buckets, then the shape of the policy
+- **NVIDIA research lane** - what the opt-in experimentation set permits and what it forbids
 - **Canonical table** - every model, repo, license, and default flag
 - **Who this policy covers** - US casual commercial, local weights only
 - **Why these defaults** - the reasoning per lane
@@ -68,6 +69,7 @@ A token in `.env` is **not** the same as accepting the Lightricks license.
 | **Banned** | MiniMax H3 (US Excluded Territory for weights **and** outputs), cloud partner APIs, NC TTS packs, Nunchaku 9B |
 | **Opt-in NC** | Klein 9B and FLUX.2-dev: `download-image --tier 9b` / `flux2-dev`. Not YouTube-ok. Not lab UNET pins, and no **Detail** rung can select them. |
 | **Opt-in Kommunity** | FLUX 3 Image Klein: `download-image --tier flux3` / `flux3-base` / `flux3-nvfp4` / `flux3-bf16` / `flux3-te` / `flux3-pup`. **FLUX Kommunity License (v1.0)** - gated, HF revision-pinned, monetized output only under **$5M gross annualized revenue**. Not Apache, never a default; opt-in FLUX 3 lab stills only. **Klein 4B stays the Apache default still.** |
+| **Opt-in research (NVIDIA)** | Local experimentation only, and it carries a **non-commercial trap**: 3DGRUT, ArtiFixer, Fixer, Lyra-1, Lyra-2.0, PixelUMM, GEN3C, LuxDiT, InfiniCube, Cosmos-Drive-Dreams, DVLT. You pull each one by hand - `download-models` never fetches one and the keep-set never protects one. Most of the set bars commercial output, so it is **not** monetized-YouTube material, not a supported catalog, and never a promoted graph pin. Per-model terms: [Declined integrations](reference/declined-integrations.md) |
 
 ```mermaid
 flowchart LR
@@ -75,6 +77,41 @@ flowchart LR
   G["LTX Community - gated"] --> AV["AV hero"]
   B["H3 / APIs"] --> No["Not in this lab"]
 ```
+
+---
+
+## NVIDIA research lane
+
+The manifest keeps a `research:` lane for NVIDIA research models. It is **opt-in experimentation, not a
+supported catalog**: `bazelisk run //:manage -- download-models` never fetches one of these, the keep-set
+never protects one, and no promoted lab graph pins one. You pull the weights by hand from the upstream repo
+or the Hugging Face card, and `reap-models` / disk-wizard will not defend them for you.
+
+**What the lane permits**
+
+- **Local experimentation** - run it on your own Spark, offline, to see what it actually does
+- **Evaluation** - measure it against the Apache catalog on quality, memory, and time
+- **Learning the tech** - read the pipeline, the sampler, the scene prep
+
+**What the lane forbids**
+
+- **Shipping non-commercial output to monetized YouTube, ads, or client work.** ArtiFixer and PixelUMM are
+  under the **NVIDIA One-Way Noncommercial License**, LuxDiT under the **NVIDIA OneWay Noncommercial
+  License**, the DVLT checkpoint under its own non-commercial NVIDIA grant, and the InfiniCube weights under
+  the **Waymo Dataset License Agreement for Non-Commercial Use** (they are a Waymo Open Dataset derivative
+  and the card states commercial use of the weights is prohibited). In those texts "non-commercial" means
+  research or evaluation use - not a video that earns money.
+- **Deploying a non-production-licensed checkpoint.** Lyra-2.0 is the **NVIDIA Internal Scientific Research
+  and Development Model License**: internal scientific R&D in a non-production environment only, with no
+  deployment, no redistribution, no works for sale or distribution.
+- **Assuming `download-models` fetched any of it.** If you did not pull it by hand, it is not on the box.
+
+The three **NVIDIA Open Model License** rows (Fixer, Lyra-1, GEN3C) are the only ones whose cards state
+commercial use is allowed, and the stack still does not promote them into a lab graph. Cosmos-Drive-Dreams
+is Apache-2.0 **code** sitting on Cosmos checkpoints that carry their own NVIDIA terms - confirm that card
+before any commercial use of an output. 3DGRUT ships no checkpoint at all (per-scene training, plain
+Apache-2.0). Per-model terms, and why the rest of the NVIDIA set is declined outright:
+[Declined integrations](reference/declined-integrations.md). **Not legal advice** - read each card.
 
 ---
 
@@ -154,6 +191,18 @@ Columns: model | HF repo | license name | US self-host OK? | monetized YouTube O
 | Higgs Boson | Higgs v2/v3 | community/commercial traps | No | No | n/a | n/a | n/a | No |
 | TTS-Audio-Suite | diodiogod/TTS-Audio-Suite | mixed NC / research pack | No | No | n/a | n/a | n/a | No |
 | OldTimeRadio | jbrick2070/ComfyUI-OldTimeRadio | H3 / FLUX-dev / NC opt-in lanes | No | No | n/a | n/a | n/a | No |
+| ArtiFixer (research lane, opt-in) | nvidia/ArtiFixer | NVIDIA One-Way Noncommercial License | Yes (research and personal use only) | No | n/a - no commercial grant stated for the checkpoint | follow card; keep the license text with the weights | none stated - the non-commercial grant is the binding limit | No |
+| Fixer (research lane, opt-in) | nvidia/Fixer | NVIDIA Open Model License | Yes (card: commercial use OK) | Yes per card - not a promoted lab pick | none per card | follow card | card | No |
+| Lyra-1 (research lane, opt-in) | nvidia/Lyra | NVIDIA Open Model License | Yes (card: commercial use OK) | Yes per card - not a promoted lab pick | none per card | follow card | card | No |
+| Lyra-2.0 (research lane, opt-in) | nvidia/Lyra-2.0 | NVIDIA Internal Scientific Research and Development Model License | Yes (non-production internal R&D only) | No | n/a - internal R&D grant only | ship the license text with the weights | no deployment, no redistribution, no works for sale or distribution | No |
+| PixelUMM (research lane, opt-in) | nvidia/PixelUMM | NVIDIA One-Way Noncommercial License (one source file keeps a CC BY-NC 4.0 notice) | Yes (research and personal use only) | No | n/a - no commercial grant stated for the checkpoint | follow card; keep the license text with the weights | none stated - the non-commercial grant is the binding limit | No |
+| GEN3C (research lane, opt-in) | nvidia/GEN3C-Cosmos-7B | NVIDIA Open Model License | Yes (card: commercial use OK) | Yes per card - not a promoted lab pick | none per card | follow card | card | No |
+| LuxDiT (research lane, opt-in) | nvidia/LuxDiT | NVIDIA OneWay Noncommercial License | Yes (research and personal use only) | No | n/a - no commercial grant stated for the checkpoint | follow card; keep the license text with the weights | none stated - the non-commercial grant is the binding limit | No |
+| InfiniCube (research lane, opt-in) | yifanlu/InfiniCube-checkpoints | Waymo Dataset License Agreement for Non-Commercial Use (weights are a Waymo Open Dataset derivative) | Yes (non-commercial only) | No - the card states commercial use of the weights is prohibited | n/a - no commercial grant for the weights | follow the Waymo card | none stated - the non-commercial grant is the binding limit | No |
+| Cosmos-Drive-Dreams (research lane, opt-in) | nvidia/Cosmos-Drive-Dreams | Apache-2.0 code; Cosmos checkpoints carry their own NVIDIA terms - confirm before use | Yes (confirm the Cosmos card first) | No - confirm the Cosmos card before you monetize | confirm per the Cosmos card | follow the Cosmos card | confirm per the Cosmos card | No |
+| DVLT (research lane, opt-in) | nvidia/dvlt | NVIDIA License (non-commercial) on the checkpoint - the repo Apache-2.0 grant excludes the weights | Yes (research and personal use only) | No | n/a - no commercial grant stated for the checkpoint | follow card; keep the license text with the weights | none stated - the non-commercial grant is the binding limit | No |
+
+NVIDIA research-lane footnote: `3DGRUT` (`nv-tlabs/3dgrut`) ships no checkpoint - it trains per scene under plain Apache-2.0, so it gets this footnote rather than a table row. The ten rows above marked `(research lane, opt-in)` (ArtiFixer, Fixer, Lyra-1, Lyra-2.0, PixelUMM, GEN3C, LuxDiT, InfiniCube, Cosmos-Drive-Dreams, DVLT) are **research-lane only**: never fetched by `download-models`, never keep-set protected, never pinned in a promoted workflow. The operator pulls them by hand for local experimentation, evaluation, and learning the tech. The promoted catalog that remains is Klein 4B stills, Wan 2.2 silent motion, LTX-2.5 AV, TRELLIS.2, and TripoSplat. Most of the lane is non-commercial, so its output stays off monetized YouTube, ads, and client work. Per-model terms, and why the rest of the NVIDIA set is declined outright: [Declined integrations](reference/declined-integrations.md). Not legal advice.
 
 TRELLIS.2 footnote: download `Comfy-Org/TRELLIS.2` (`trellis_2_int8_convrot` + shape/texture VAEs + `dino_v3_vit_l`). Original research weights: microsoft/TRELLIS.2. Companion encoder DINOv3 (Meta custom license, commercial-friendly) is not a default download - it ships inside opt-in `download-3d --tier trellis2`. Native TRELLIS Comfy basenames such as `trellis_2_int8_convrot` are opt-in via `download-3d` only - do not treat them as `download-models`.
 
