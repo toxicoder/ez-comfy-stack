@@ -280,3 +280,138 @@ def test_load_manifest_skips_orphan_lines(tmp_path: Path) -> None:
     assert pack["cmd"] == "echo"
     assert mm.keep_set(man) == {"keep-me.safetensors"}
     assert mm.default_keep_set(man) == {"keep-me.safetensors"}
+
+
+RESEARCH_TOKENS = (
+    "3DGRUT",
+    "ArtiFixer",
+    "Fixer",
+    "Lyra-1",
+    "Lyra-2.0",
+    "PixelUMM",
+    "GEN3C",
+    "LuxDiT",
+    "InfiniCube",
+    "Cosmos-Drive-Dreams",
+    "DVLT",
+)
+
+# Tokens that stay fail-closed. None of these are NVIDIA, and none of them
+# earned a research lane: MiniMax is US-excluded for weights and outputs,
+# Arete-27B is a text model with no media lane.
+STILL_REFUSED = (
+    "MiniMax-H3",
+    "DA3-LARGE",
+    "Inria-3DGS",
+    "Pixal3D-as-default",
+    "Arete-27B",
+)
+
+
+def test_research_lane_lists_every_candidate() -> None:
+    """The NVIDIA candidates the operator may keep for exploration are listed."""
+    man = mm.load_manifest(MANIFEST)
+    assert man["schema"] == 2
+    assert tuple(mm.research_tokens(man)) == RESEARCH_TOKENS
+
+
+def test_research_lane_states_license_and_permitted_use() -> None:
+    """Every research row names its license and what the output may be used for.
+
+    The lane exists so an operator can tell, before a 90 GB download, whether
+    they may publish what it prints. A row with a blank ``use`` would let a
+    non-commercial checkpoint into the stack with no warning attached.
+    """
+    man = mm.load_manifest(MANIFEST)
+    for token, row in man["research"].items():
+        assert row["upstream"].startswith("https://github.com/"), token
+        assert row["weights"], token
+        assert row["license"], token
+        assert row["use"], token
+        assert row["gb10"] in {"plausible", "marginal", "blocked"}, token
+
+
+def test_research_lane_marks_the_non_commercial_ones() -> None:
+    """Non-commercial rows say so in their use text; the clean ones do not."""
+    man = mm.load_manifest(MANIFEST)
+    non_commercial = ("ArtiFixer", "Lyra-2.0", "PixelUMM", "LuxDiT", "InfiniCube", "DVLT")
+    for token in non_commercial:
+        use = man["research"][token]["use"].lower()
+        assert any(w in use for w in ("not", "non-commercial", "prohibited", "no ")), token
+    for token in ("3DGRUT", "Fixer", "Lyra-1", "GEN3C"):
+        assert "commercial use" in man["research"][token]["use"].lower(), token
+
+
+def test_research_tokens_stay_out_of_refuse_and_the_keep_set() -> None:
+    """The lane is a disclosure list, not a download list.
+
+    A token in both ``refuse:`` and ``research:`` would be ambiguous, and a
+    research token reaching either keep-set would mean the stack treats an
+    operator's own research pull as catalog it promised to protect.
+    """
+    man = mm.load_manifest(MANIFEST)
+    assert set(man["research"]).isdisjoint(man["refuse"])
+    keep = mm.keep_set(man)
+    default_keep = mm.default_keep_set(man)
+    for token in man["research"]:
+        assert token not in keep, token
+        assert token not in default_keep, token
+    # The promote guard: the default pack is still the pinned catalog only.
+    assert "flux-2-klein-4b-fp8.safetensors" in default_keep
+
+
+def test_still_refused_tokens_are_untouched() -> None:
+    """Relaxing the NVIDIA set did not relax anything else."""
+    man = mm.load_manifest(MANIFEST)
+    for token in STILL_REFUSED:
+        assert token in man["refuse"], token
+
+
+def test_cli_research() -> None:
+    assert mm._cli(["--manifest", str(MANIFEST), "research"]) == 0  # noqa: SLF001
+
+
+def test_load_manifest_parses_research_rows(tmp_path: Path) -> None:
+    """A research block parses field by field, and an unknown key is dropped."""
+    path = tmp_path / "man.yaml"
+    path.write_text(
+        "\n".join(
+            [
+                "schema: 2",
+                "refuse:",
+                "  - BannedTok",
+                "research:",
+                "  DemoModel:",
+                "    upstream: https://github.com/nv-tlabs/demo",
+                "    weights: nvidia/DemoModel",
+                '    license: "NVIDIA One-Way Noncommercial License"',
+                "    use: research only; no sale",
+                "    gb10: marginal",
+                "    bogus: dropped",
+                "  EmptyModel:",
+                "    upstream: https://github.com/nv-tlabs/empty",
+                "packs:",
+                "  demo:",
+                "    default: false",
+                "    files:",
+                "      - demo.safetensors",
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    man = mm.load_manifest(path)
+    assert man["schema"] == 2
+    assert man["refuse"] == ["BannedTok"]
+    assert list(man["research"]) == ["DemoModel", "EmptyModel"]
+    row = man["research"]["DemoModel"]
+    assert row["upstream"] == "https://github.com/nv-tlabs/demo"
+    assert row["weights"] == "nvidia/DemoModel"
+    assert row["license"] == "NVIDIA One-Way Noncommercial License"
+    assert row["use"] == "research only; no sale"
+    assert row["gb10"] == "marginal"
+    assert "bogus" not in row
+    assert man["research"]["EmptyModel"]["use"] == ""
+    assert mm.research_tokens(man) == ["DemoModel", "EmptyModel"]
+    # Research rows never reach the keep-set, even with files nearby.
+    assert mm.keep_set(man) == {"demo.safetensors"}
