@@ -36,7 +36,7 @@ bazelisk run //:manage -- download-3d --tier trellis2
 bazelisk run //:manage -- occupancy enter trellis --yes
 ```
 
-LoadImage: a Klein still (`ez_still_*.png` or a clay plate). Unload models first (EZUnloadModels).
+LoadImage: a Klein still (`ez_still_*.png` or a clay plate). OccupancyGate -> EZUnloadModels first.
 UNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack).
 Upsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this lab
 graph runs the 1024 floor. Structure decode stays at 32. MeshToFile3D only converts in memory, so
@@ -86,7 +86,8 @@ flowchart LR
   N22["Save GLB"]
   N23["Detail"]
   N24["Check models"]
-  N2 --> N3
+  N25["Occupancy gate (trellis)"]
+  N2 --> N25
   N3 --> N8
   N4 --> N8
   N5 --> N10
@@ -116,6 +117,7 @@ flowchart LR
   N19 --> N20
   N20 --> N21
   N21 --> N22
+  N25 --> N3
 ```
 
 ## Nodes on this graph
@@ -146,6 +148,7 @@ flowchart LR
 | 22 | Save GLB | `SaveGLB` | OUTPUT |
 | 23 | Detail | `EZQuality` | QUALITY |
 | 24 | Check models | `EZModelCheck` | QUALITY |
+| 25 | Occupancy gate (trellis) | `EZDCCOccupancyGate` | INPUT |
 
 ## Node parameter reference
 
@@ -179,7 +182,7 @@ bazelisk run //:manage -- download-3d --tier trellis2
 bazelisk run //:manage -- occupancy enter trellis --yes
 ```
 
-LoadImage: a Klein still (`ez_still_*.png` or a clay plate). Unload models first (EZUnloadModels).
+LoadImage: a Klein still (`ez_still_*.png` or a clay plate). OccupancyGate -> EZUnloadModels first.
 UNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack).
 Upsample `target_resolution` is an int and ComfyUI only accepts 1024-2048 in steps of 128; this lab
 graph runs the 1024 floor. Structure decode stays at 32. MeshToFile3D only converts in memory, so
@@ -745,3 +748,35 @@ Last check result.
 **How it affects generation:** JS overwrites after Check models. Queue ignores this node.
 
 **This graph:** `Click Check models. Queue does not run this node.`
+
+### `EZDCCOccupancyGate` - Occupancy gate
+
+Pass-through IMAGE that fail-closes on occupancy XOR. Does not start Compose.
+
+!!! warning "Lab notes"
+
+    Missing .occupancy.json passes. idle / blender-desk / llm-desk / mismatch fail.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Still to gate. |
+| `image` | out | `IMAGE` | Same still if occupancy matches. |
+
+#### `required_mode`
+
+Type `COMBO`.
+
+Heavy GPU mode that must already be entered.
+
+**How it affects generation:** klein / wan / ltx / trellis. Pick the family you are about to Queue.
+
+**This graph:** `trellis`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `klein` | Klein 4B stills. |
+| `trellis` | TRELLIS.2. |
+| `wan` | Wan 5B. |
+| `ltx` | LTX-2.5. |

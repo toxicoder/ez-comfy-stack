@@ -2369,3 +2369,35 @@ def test_a_desk_surfaces_every_card_nothing_reads(
             "the graph writes no file, so the App panel is the only place the "
             "operator could read the result - list them in linearData.outputs"
         )
+
+
+@pytest.mark.parametrize(PYTEST_PARAM, GRAPHS, ids=GRAPH_IDS)
+def test_a_mesh_printer_gates_its_occupancy(lab_rel: str, graph: dict[str, Any]) -> None:
+    """**3d** Apps fail closed on the occupancy XOR from inside the graph.
+
+    The lane holds the only GB10 job that cannot share the card with itself: a
+    TRELLIS.2 Queue while the Blender desk or another heavy family is loaded
+    OOMs mid-run, after the operator has waited for the shape stage. The
+    in-canvas gate is the lane's convention (every mesh printer but one carried
+    it) - a pass-through IMAGE that raises before the samplers start. A graph
+    that claims a heavy occupancy without one asks the operator to remember a
+    CLI command instead of being refused.
+
+    Args:
+        lab_rel: ``_lab``-relative graph id.
+        graph: Parsed lab JSON.
+    """
+    if not lab_rel.startswith("3d/"):
+        pytest.skip(f"{lab_rel}: the gate is the 3d lane's convention")
+    occupancy = str((_app_mode(graph) or {}).get("occupancy") or "")
+    if occupancy in ("", "none"):
+        pytest.skip(f"{lab_rel}: {occupancy or 'no'} occupancy shares the card")
+    if any(
+        str(node.get("type") or "") == "EZDCCOccupancyGate" for node in _nodes(graph)
+    ):
+        return
+    pytest.fail(
+        f"{lab_rel}: claims {occupancy!r} occupancy and runs no "
+        "EZDCCOccupancyGate, so a Queue that overlaps another heavy job is "
+        "left to the operator's memory instead of failing closed"
+    )

@@ -94,6 +94,25 @@ def test_klein_trellis2_graph_contract() -> None:
     assert "occupancy enter trellis" in extra["lab_note"]
 
 
+def test_the_mesh_printer_fails_closed_on_occupancy() -> None:
+    """The graph refuses an overlapped Queue instead of OOMing mid-run.
+
+    Every other mesh printer in the lane gates its occupancy in-canvas; this one
+    asked the operator to remember the CLI. The gate is a pass-through IMAGE, so
+    the chain has to read LoadImage -> gate -> EZUnloadModels for the refusal to
+    land before the shape stage costs the operator a minute of GPU.
+    """
+    graph: dict[str, Any] = json.loads(lab_json("3d/trellis2.json").read_text(encoding="utf-8"))
+    gates = [n for n in graph["nodes"] if n.get("type") == "EZDCCOccupancyGate"]
+    assert len(gates) == 1, [n.get("id") for n in gates]
+    gate = gates[0]
+    assert gate.get("widgets_values") == ["trellis"], gate.get("widgets_values")
+    assert _link_origin(graph, int(gate["inputs"][0]["link"])).get("type") == "LoadImage"
+    unload = next(n for n in graph["nodes"] if n.get("type") == "EZUnloadModels")
+    assert _link_origin(graph, int(unload["inputs"][0]["link"]))["id"] == gate["id"]
+    assert "OccupancyGate" in graph["extra"]["lab_note"]
+
+
 def _save_glb_prefix(graph: dict[str, Any]) -> str:
     """The single ``filename_prefix`` widget on the graph's only SaveGLB node.
 

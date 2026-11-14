@@ -273,9 +273,14 @@ def _replace_load_image(
 
 
 def _insert_occupancy_gate(
-    graph: dict, *, source: dict, required_mode: str
+    graph: dict, *, source: dict, required_mode: str, pos: tuple[int, int] | None = None
 ) -> dict:
-    """Insert EZDCCOccupancyGate on the source IMAGE output."""
+    """Insert EZDCCOccupancyGate on the source IMAGE output.
+
+    ``pos`` pins the card's canvas position. Builders whose graph layout is
+    already staged pass one, because the beside-the-source default can land on
+    a neighbour that a hand-staged layout happens to occupy.
+    """
     max_id, max_link = _max_ids(graph)
     gate_id = max_id + 1
     link_in = max_link + 1
@@ -285,11 +290,13 @@ def _insert_occupancy_gate(
         if int(link[0]) in old_links:
             link[1] = gate_id
             link[2] = 0
-    pos = source.get("pos") or [40, 40]
+    if pos is None:
+        source_pos = source.get("pos") or [40, 40]
+        pos = (int(source_pos[0]) + 360, int(source_pos[1]))
     gate = {
         "id": gate_id,
         "type": "EZDCCOccupancyGate",
-        "pos": [int(pos[0]) + 360, int(pos[1])],
+        "pos": [int(pos[0]), int(pos[1])],
         "size": [280, 90],
         "flags": {},
         "order": gate_id,
