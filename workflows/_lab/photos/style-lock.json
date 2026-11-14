@@ -1330,7 +1330,7 @@
         768,
         960,
         1,
-        "Match input"
+        "Force format"
       ],
       "title": "Format / platform"
     },
@@ -1366,7 +1366,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [
             52,
             55,
@@ -1405,7 +1410,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "link": 52,
           "widget": {
             "name": "upscale"
@@ -1423,7 +1433,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -1458,7 +1473,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "link": 55,
           "widget": {
             "name": "upscale"
@@ -1476,7 +1496,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -1511,7 +1536,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "link": 58,
           "widget": {
             "name": "upscale"
@@ -1529,7 +1559,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -2182,7 +2217,12 @@
       1,
       37,
       1,
-      "STRING"
+      [
+        "none",
+        "2x",
+        "4x",
+        "4K"
+      ]
     ],
     [
       53,
@@ -2206,7 +2246,12 @@
       1,
       38,
       1,
-      "STRING"
+      [
+        "none",
+        "2x",
+        "4x",
+        "4K"
+      ]
     ],
     [
       56,
@@ -2230,7 +2275,12 @@
       1,
       39,
       1,
-      "STRING"
+      [
+        "none",
+        "2x",
+        "4x",
+        "4K"
+      ]
     ],
     [
       59,
@@ -2514,7 +2564,7 @@
           35,
           "format",
           {
-            "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (div16).",
+            "description": "Aspect or named platform job. Sets pixels and Rewrite prompt framing. Custom uses Width x Height (div16); the run keeps the folder this App saves to.",
             "label": "Format / platform"
           }
         ],

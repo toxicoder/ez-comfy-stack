@@ -82,7 +82,7 @@ flowchart TB
 | `audio/albums/drive-through/hour-1/14-heart-lane` | 38 | audio |
 | `audio/albums/drive-through/hour-1/15-dawn-receipt` | 31 | audio |
 | `audio/albums/drive-through/hour-1/album` | 3 | none |
-| `audio/albums/drive-through/hour-1/cover` | 17 | klein |
+| `audio/albums/drive-through/hour-1/cover` | 18 | klein |
 
 ## `01-night-window`
 
@@ -10180,7 +10180,7 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | 3 | `t2i` |
 | 4 | `YouTube 16:9 still` |
 | 5 | `none` |
-| 6 | `photos/instagram-square` |
+| 6 | `audio/albums/drive-through/hour-1/cover` |
 
 ```text
 square album cover, graphic print, night highway overpass, warped neon bass, wet asphalt, fictional act Drive-through, album Hour 1, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
@@ -10236,6 +10236,15 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | Slot | Value |
 | --- | --- |
 | 0 | `Click Check models. Queue does not run this node.` |
+
+**Reference still (optional)** (`EZOptionalImage`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `-` |
+| 1 | `true` |
+| 2 | `-` |
+| 3 | `-` |
 
 ## Node parameter reference
 
@@ -12668,7 +12677,7 @@ Sample-catalog id (graph stem).
 
 **How it affects generation:** Internal. Leave as stamped so sample dropdowns resolve.
 
-**This graph:** `photos/instagram-square`
+**This graph:** `audio/albums/drive-through/hour-1/cover`
 
 ### `EZNegativePromptEnhance` - Negative Prompt Enhance
 
@@ -12914,7 +12923,7 @@ Type `COMBO`. Range / default: Match input / Force format.
 
 Match a loaded still's aspect, or keep Format / platform.
 
-**How it affects generation:** Match input (default) picks the nearest aspect catalog row when a still is loaded. Force format keeps the Format pick. No still: authored format. Detail does not change size.
+**How it affects generation:** Match input picks the nearest aspect catalog row when a still is loaded. Force format keeps the Format pick. No still: authored format. Detail does not change size.
 
 **This graph:** `Match input`
 
@@ -12973,3 +12982,52 @@ Run the captioner.
 **How it affects generation:** Off skips the VLM. On needs download-llm --tier describe, plus the cubic DeepLabV3 person-mask checkpoint for any person to survive the gate.
 
 **This graph:** `false`
+
+### `EZOptionalImage` - Optional reference stills
+
+Optional example or reference stills. Empty is valid - Queue without a file.
+
+!!! warning "Lab notes"
+
+    Klein T2I Apps attach a present still via EZKleinRefCanvas. Three upload pickers plus one wired batch; every one of them may stay empty.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Optional wired still or batch, for an upstream node instead of a picked file. |
+| `image` | out | `IMAGE` | Every present still as one batch, or empty. |
+| `count` | out | `INT` | How many stills are present. A wired batch counts its batch size. |
+| `has_image` | out | `BOOLEAN` | True when at least one still is present and references are not muted. |
+
+#### `filename`
+
+Type `COMBO`. Range / default: empty / input stills.
+
+First still. Upload, drop, or pick one already on the drive. Empty is valid.
+
+**How it affects generation:** Empty Queues a T2I. A pick loads from input/. Choose from outputs copies a durable file into input/. The reference card shows a thumbnail per slot.
+
+#### `use_references`
+
+Type `BOOLEAN`. Range / default: true.
+
+Use references / References off.
+
+**How it affects generation:** The mute. Off sends nothing to the model and queues text-to-image while keeping every pick, so the same setup can be A/B run. Any new pick turns it back on.
+
+**This graph:** `true`
+
+#### `filename_2`
+
+Type `COMBO`. Range / default: empty / input stills.
+
+Second still. Same picker as the first.
+
+**How it affects generation:** Filled slots pass hidden ones. The App reveals this slot with + Add reference. Duplicate filenames are counted once.
+
+#### `filename_3`
+
+Type `COMBO`. Range / default: empty / input stills.
+
+Third still. Same picker as the first.
+
+**How it affects generation:** Revealed by + Add reference. Readable or missing files fail soft to text-to-image.

@@ -1256,7 +1256,7 @@ Type `COMBO`. Range / default: Match input / Force format.
 
 Match a loaded still's aspect, or keep Format / platform.
 
-**How it affects generation:** Match input (default) picks the nearest aspect catalog row when a still is loaded. Force format keeps the Format pick. No still: authored format. Detail does not change size.
+**How it affects generation:** Match input picks the nearest aspect catalog row when a still is loaded. Force format keeps the Format pick. No still: authored format. Detail does not change size.
 
 **This graph:** `Match input`
 

@@ -1382,9 +1382,9 @@ Type `COMBO`. Range / default: Match input / Force format.
 
 Match a loaded still's aspect, or keep Format / platform.
 
-**How it affects generation:** Match input (default) picks the nearest family aspect row when a still is loaded. Force format keeps the Format pick. Detail does not change size.
+**How it affects generation:** Match input picks the nearest family aspect row when a still is loaded. Force format keeps the Format pick. No still in the graph: the authored format is what you get. Detail does not change size.
 
-**This graph:** `Match input`
+**This graph:** `Force format`
 
 #### `duration_s`
 

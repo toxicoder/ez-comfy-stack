@@ -464,13 +464,13 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "A photoreal still of a sunlit oak desk with linen, an unmarked notebook, and a ceramic mug. Screens stay empty of logos. Empty of lettering. Vertical audiogram. Quiet lower third for a waveform. Empty of lettering.",
-        true,
         true,
         "t2i",
         "YouTube 16:9 still",
         "none",
-        "photos/still-draft"
+        "social/stills/audiogram-vert"
       ],
       "title": "Klein Prompt Enhance"
     },
@@ -618,7 +618,7 @@
         576,
         1024,
         1,
-        "Match input"
+        "Force format"
       ],
       "title": "Format / platform"
     },
@@ -654,7 +654,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }

@@ -2,7 +2,7 @@
   "id": "talking-head",
   "revision": 7,
   "last_node_id": 26,
-  "last_link_id": 44,
+  "last_link_id": 47,
   "nodes": [
     {
       "id": 1,
@@ -129,7 +129,7 @@
           "type": "IMAGE",
           "links": [
             5,
-            44
+            47
           ],
           "slot_index": 0
         },
@@ -1028,7 +1028,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -1067,7 +1072,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 44
+          "link": 47
         }
       ],
       "outputs": [
@@ -1363,7 +1368,7 @@
       "STRING"
     ],
     [
-      44,
+      47,
       4,
       0,
       25,
@@ -1544,7 +1549,7 @@
           23,
           "duration_s",
           {
-            "description": "LTX clip length: 5, 8 (default), 10, or 12 seconds at 24 fps. Writes a legal 1+8n frame count. Wan 5B stays 5 seconds.",
+            "description": "LTX clip length: 5, 8 (default), 10, or 12 seconds at 24 fps. Writes a legal 1+8n frame count.",
             "label": "Duration"
           }
         ],
@@ -1560,7 +1565,7 @@
           25,
           "enable",
           {
-            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs download-llm --tier describe.",
+            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs bazelisk run //:manage -- download-llm --tier describe.",
             "label": "Describe image"
           }
         ],

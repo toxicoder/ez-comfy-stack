@@ -2,7 +2,7 @@
   "id": "image-studio",
   "revision": 7,
   "last_node_id": 20,
-  "last_link_id": 37,
+  "last_link_id": 40,
   "nodes": [
     {
       "id": 1,
@@ -676,7 +676,7 @@
           "links": [
             21,
             35,
-            37
+            40
           ],
           "slot_index": 0
         },
@@ -870,7 +870,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -909,7 +914,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 37
+          "link": 40
         }
       ],
       "outputs": [
@@ -1188,7 +1193,7 @@
       "BOOLEAN"
     ],
     [
-      37,
+      40,
       15,
       0,
       19,
@@ -1364,7 +1369,7 @@
           14,
           "format",
           {
-            "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (div16).",
+            "description": "Aspect or named platform job. Sets pixels and Rewrite prompt framing. Custom uses Width x Height (div16); the run keeps the folder this App saves to.",
             "label": "Format / platform"
           }
         ],
@@ -1388,7 +1393,7 @@
           19,
           "enable",
           {
-            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs download-llm --tier describe.",
+            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs bazelisk run //:manage -- download-llm --tier describe.",
             "label": "Describe image"
           }
         ],

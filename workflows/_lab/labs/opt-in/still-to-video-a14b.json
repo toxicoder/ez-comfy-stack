@@ -675,37 +675,6 @@
       "title": "Negative Prompt Enhance"
     },
     {
-      "id": 18,
-      "type": "EZQuality",
-      "pos": [
-        1416,
-        80
-      ],
-      "size": [
-        320.0,
-        82.0
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "quality",
-          "type": "STRING",
-          "links": null,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "EZQuality"
-      },
-      "widgets_values": [
-        "standard"
-      ],
-      "title": "Detail"
-    },
-    {
       "id": 19,
       "type": "EZModelCheck",
       "pos": [
@@ -1009,14 +978,6 @@
           }
         ],
         [
-          18,
-          "quality",
-          {
-            "label": "Detail",
-            "description": "draft is a quick look. standard is what this App ships tuned for. final is the best this App's own stack can do. A rung never changes size and never leaves this App's model stack. The caption names the steps, CFG, weights, and license Queue actually sends."
-          }
-        ],
-        [
           15,
           "sample",
           {
@@ -1067,10 +1028,7 @@
       "UNETLoader"
     ],
     "lab_rel": "labs/opt-in/still-to-video-a14b",
-    "workflowRendererVersion": "Vue-corrected",
-    "lab_quality": {
-      "default": "standard"
-    }
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

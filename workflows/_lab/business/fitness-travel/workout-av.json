@@ -2,7 +2,7 @@
   "id": "workout-av",
   "revision": 3,
   "last_node_id": 25,
-  "last_link_id": 42,
+  "last_link_id": 45,
   "nodes": [
     {
       "id": 1,
@@ -129,7 +129,7 @@
           "type": "IMAGE",
           "links": [
             5,
-            42
+            45
           ],
           "slot_index": 0
         },
@@ -1022,7 +1022,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 42
+          "link": 45
         }
       ],
       "outputs": [
@@ -1310,7 +1310,7 @@
       "STRING"
     ],
     [
-      42,
+      45,
       4,
       0,
       24,
@@ -1482,7 +1482,7 @@
           23,
           "duration_s",
           {
-            "description": "LTX clip length: 5, 8 (default), 10, or 12 seconds at 24 fps. Writes a legal 1+8n frame count. Wan 5B stays 5 seconds.",
+            "description": "LTX clip length: 5, 8 (default), 10, or 12 seconds at 24 fps. Writes a legal 1+8n frame count.",
             "label": "Duration"
           }
         ],
@@ -1490,7 +1490,7 @@
           24,
           "enable",
           {
-            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs download-llm --tier describe.",
+            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs bazelisk run //:manage -- download-llm --tier describe.",
             "label": "Describe image"
           }
         ],

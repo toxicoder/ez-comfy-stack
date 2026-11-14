@@ -2,7 +2,7 @@
   "id": "zoom-punch",
   "revision": 7,
   "last_node_id": 20,
-  "last_link_id": 29,
+  "last_link_id": 32,
   "nodes": [
     {
       "id": 1,
@@ -132,7 +132,7 @@
           "type": "IMAGE",
           "links": [
             6,
-            29
+            32
           ],
           "slot_index": 0
         },
@@ -789,7 +789,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 29
+          "link": 32
         }
       ],
       "outputs": [
@@ -997,7 +997,7 @@
       "STRING"
     ],
     [
-      29,
+      32,
       4,
       0,
       19,
@@ -1199,7 +1199,7 @@
           18,
           "duration_s",
           {
-            "description": "LTX clip length: 5, 8 (default), 10, or 12 seconds at 24 fps. Writes a legal 1+8n frame count. Wan 5B stays 5 seconds.",
+            "description": "This App runs Wan 5B, and the node ignores this widget at Queue - the clip is as long as the graph's latent authors. The row only does something on the LTX-2.5 family.",
             "label": "Duration"
           }
         ],
@@ -1207,7 +1207,7 @@
           19,
           "enable",
           {
-            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs download-llm --tier describe.",
+            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs bazelisk run //:manage -- download-llm --tier describe.",
             "label": "Describe image"
           }
         ],

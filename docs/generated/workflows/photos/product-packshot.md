@@ -69,6 +69,7 @@ flowchart LR
   N16["Upscale still"]
   N17["Describe image"]
   N18["Check models"]
+  N19["Reference still (optional)"]
   N1 --> N7
   N2 --> N4
   N2 --> N5
@@ -85,6 +86,7 @@ flowchart LR
   N15 --> N12
   N16 --> N9
   N17 --> N12
+  N19 --> N17
 ```
 
 ## Nodes on this graph
@@ -108,6 +110,7 @@ flowchart LR
 | 16 | Upscale still | `EZImageUpscale` | OUTPUT |
 | 17 | Describe image | `EZImageDescribe` | INPUT |
 | 18 | Check models | `EZModelCheck` | QUALITY |
+| 19 | Reference still (optional) | `EZOptionalImage` | INPUT |
 
 ## Node parameter reference
 
@@ -1229,7 +1232,7 @@ Type `COMBO`. Range / default: Match input / Force format.
 
 Match a loaded still's aspect, or keep Format / platform.
 
-**How it affects generation:** Match input (default) picks the nearest aspect catalog row when a still is loaded. Force format keeps the Format pick. No still: authored format. Detail does not change size.
+**How it affects generation:** Match input picks the nearest aspect catalog row when a still is loaded. Force format keeps the Format pick. No still: authored format. Detail does not change size.
 
 **This graph:** `Match input`
 
@@ -1306,3 +1309,52 @@ Last check result.
 **How it affects generation:** JS overwrites after Check models. Queue ignores this node.
 
 **This graph:** `Click Check models. Queue does not run this node.`
+
+### `EZOptionalImage` - Optional reference stills
+
+Optional example or reference stills. Empty is valid - Queue without a file.
+
+!!! warning "Lab notes"
+
+    Klein T2I Apps attach a present still via EZKleinRefCanvas. Three upload pickers plus one wired batch; every one of them may stay empty.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Optional wired still or batch, for an upstream node instead of a picked file. |
+| `image` | out | `IMAGE` | Every present still as one batch, or empty. |
+| `count` | out | `INT` | How many stills are present. A wired batch counts its batch size. |
+| `has_image` | out | `BOOLEAN` | True when at least one still is present and references are not muted. |
+
+#### `filename`
+
+Type `COMBO`. Range / default: empty / input stills.
+
+First still. Upload, drop, or pick one already on the drive. Empty is valid.
+
+**How it affects generation:** Empty Queues a T2I. A pick loads from input/. Choose from outputs copies a durable file into input/. The reference card shows a thumbnail per slot.
+
+#### `use_references`
+
+Type `BOOLEAN`. Range / default: true.
+
+Use references / References off.
+
+**How it affects generation:** The mute. Off sends nothing to the model and queues text-to-image while keeping every pick, so the same setup can be A/B run. Any new pick turns it back on.
+
+**This graph:** `true`
+
+#### `filename_2`
+
+Type `COMBO`. Range / default: empty / input stills.
+
+Second still. Same picker as the first.
+
+**How it affects generation:** Filled slots pass hidden ones. The App reveals this slot with + Add reference. Duplicate filenames are counted once.
+
+#### `filename_3`
+
+Type `COMBO`. Range / default: empty / input stills.
+
+Third still. Same picker as the first.
+
+**How it affects generation:** Revealed by + Add reference. Readable or missing files fail soft to text-to-image.

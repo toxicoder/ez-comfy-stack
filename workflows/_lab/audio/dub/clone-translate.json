@@ -438,7 +438,7 @@
           2,
           "enhance",
           {
-            "description": "On: diarize + ASR + GGUF translate. Off: pin this JSON.",
+            "description": "On: find the speakers, transcribe, then translate each line on-box. Off: dub the JSON you pinned above.",
             "label": "Rewrite translation"
           }
         ],

@@ -464,13 +464,13 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "A photoreal still of a cream ceramic mug with a hairline chip on the rim, unmarked, on honey-oak beside a dark window. Soft studio key, gentle contact shadow. Empty of lettering. Lifestyle still of an unmarked ceramic mug in use on a sunlit table. No cyclorama.",
-        true,
         true,
         "t2i",
         "YouTube 16:9 still",
         "none",
-        "photos/still-draft"
+        "social/stills/product-lifestyle"
       ],
       "title": "Klein Prompt Enhance"
     },
@@ -618,7 +618,7 @@
         1024,
         1280,
         1,
-        "Match input"
+        "Force format"
       ],
       "title": "Format / platform"
     },
@@ -654,7 +654,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }

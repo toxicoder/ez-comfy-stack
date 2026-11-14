@@ -67,7 +67,6 @@ flowchart LR
   N14["Operator note"]
   N15["Wan Prompt Enhance"]
   N17["Negative Prompt Enhance"]
-  N18["Detail"]
   N19["Check models"]
   N1 --> N9
   N2 --> N6
@@ -107,7 +106,6 @@ flowchart LR
 | 14 | Operator note | `Note` | NOTE |
 | 15 | Wan Prompt Enhance | `EZWanPromptEnhance` | PROMPT |
 | 17 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |
-| 18 | Detail | `EZQuality` | QUALITY |
 | 19 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
@@ -1196,36 +1194,6 @@ Which negative family.
 | `longcat` | LongCat-Video. |
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
-
-### `EZQuality` - Detail
-
-Per-graph Detail ladder. Three rungs (Draft / Standard / Final); JS writes family-specific sampler, UNET, CLIP, and VAE widgets, or refuses the apply.
-
-!!! warning "Lab notes"
-
-    Per-graph Detail ladder. presets.py is the only rung definition and the frontend reads a table generated from it. Every family that has a ladder offers the same three rungs, and standard writes nothing - it means leaving the graph exactly as this App ships it - so it is the default and is never refused. Draft and final are write-or-refuse: any write that cannot land (weight not in that loader's options, widget not built, a graph of another family, a banned weight) refuses the whole apply, the row keeps its previous rung, and the caption names every reason plus the host command that stages the missing file. Nothing is substituted for a weight that is not on disk, and the Python and JS paths refuse the same set. The caption is DERIVED from the live widgets, never from the rung name: <stack> - <steps> steps - CFG <cfg> - <license>, with the CFG term omitted on a family whose ladder has no CFG. When the widgets do not hold what the rung wrote the line is prefixed 'Edited: ' and each differing term says what the rung sets. At Queue the rung is re-applied only when the row moved since the last successful write, so a hand edit is never silently overwritten; a refused re-apply refuses Queue with the same caption. A rung never writes size (no EZImageFormat or width / height / format widget) and never writes a weight outside its own family, so Klein 9B and FLUX.2-dev are unreachable from a rung. A graph the ladder cannot write - no sampler and no loader to reach, or a family with no rungs (llm, none, Wan 14B) - carries no row at all, and a node whose mode is nonzero is ignored. Retired ids (lab, custom, high, ultra, max, Free Commercial Use (<$10M), flux3-*, qwen-*) stay accepted input and normalize onto a rung; none is selectable. An explicit --quality that nothing recognizes is refused and named; an unrecognized value a graph recorded falls back to standard. Never --tier quality.
-
-| Socket | Dir | Type | What it carries |
-| --- | --- | --- | --- |
-| `quality` | out | `STRING` | Selected rung id. |
-
-#### `quality`
-
-Type `COMBO`. Range / default: standard.
-
-Selected rung. The App row label mirrors the caption as Detail - <caption>, so the row states the steps, CFG, weights, and license Queue sends.
-
-**How it affects generation:** Draft and final write steps, CFG where the family owns it, and the UNETLoader / CLIPLoader / VAELoader names on every sampler and loader instance the family reaches in the graph; standard writes nothing. Any write that cannot land refuses the apply whole rather than claiming a swap the prompt does not contain. A rung never touches the Width / Height or Duration widgets and never writes a weight outside its own family (Klein 9B and FLUX.2-dev are unreachable). On Klein, draft is the nvfp4 4B build at 4 steps / CFG 1.0 and final is the base 4B fp8 at 24 steps / CFG 3.5. Wan / LTX / film / audio / trellis move steps only, never CFG or weights, and the trellis ladder writes the three guided stages, leaving the unguided texture stage (CFG 1) on its authored steps. The opt-in FLUX 3 graphs (labs/opt-in/still-flux3-*) step 16 / 50 at CFG 1.0 / 3.5 across their INT8 and NVFP4 builds (gated pull: download-image --tier flux3 / flux3-base / flux3-nvfp4), and the opt-in Qwen graph (labs/opt-in/still-qwen-image) does the same across its turbo and base INT8 builds (download-image --tier qwen-image*); neither ladder reaches outside its own family.
-
-**This graph:** `standard`
-
-**Other choices**
-
-| Choice | What it does |
-| --- | --- |
-| `draft` | Quick look. Klein 4B nvfp4, 4 steps, CFG 1.0. Steps 12 on Wan / LTX / film, 4 on audio, 8 on the guided TRELLIS stages. |
-| `standard` | What this App ships tuned for. Writes nothing, everywhere, so it always applies and is never refused. |
-| `final` | Best this App's own stack can do. Klein 4B base fp8, 24 steps, CFG 3.5. Steps 32 on Wan / LTX / film, 24 on audio, 28 on the guided TRELLIS stages. |
 
 ### `EZModelCheck` - Check models
 

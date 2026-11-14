@@ -2,7 +2,7 @@
   "id": "listing-bedroom",
   "revision": 5,
   "last_node_id": 20,
-  "last_link_id": 31,
+  "last_link_id": 34,
   "nodes": [
     {
       "id": 1,
@@ -462,13 +462,13 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "A photoreal still of an unmarked interior, pale plaster and oak, no logos on walls or screens. Empty of lettering. Unmarked bedroom, linen bedding, quiet window. Empty of lettering.",
-        true,
         true,
         "t2i",
         "YouTube 16:9 still",
         "none",
-        "photos/still-hero"
+        "business/real-estate/listing-bedroom"
       ],
       "title": "Klein Prompt Enhance"
     },
@@ -639,7 +639,7 @@
           "type": "IMAGE",
           "links": [
             19,
-            31
+            34
           ],
           "slot_index": 0
         },
@@ -762,7 +762,12 @@
         },
         {
           "name": "upscale",
-          "type": "STRING",
+          "type": [
+            "none",
+            "2x",
+            "4x",
+            "4K"
+          ],
           "links": [],
           "slot_index": 1
         }
@@ -801,7 +806,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 31
+          "link": 34
         }
       ],
       "outputs": [
@@ -1025,7 +1030,7 @@
       "STRING"
     ],
     [
-      31,
+      34,
       16,
       0,
       19,
@@ -1117,9 +1122,9 @@
       "title": "INPUT",
       "bounding": [
         2528,
-        452,
+        838,
         400,
-        996
+        610
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1179,7 +1184,7 @@
           15,
           "format",
           {
-            "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (div16).",
+            "description": "Aspect or named platform job. Sets pixels and Rewrite prompt framing. Custom uses Width x Height (div16); the run keeps the folder this App saves to.",
             "label": "Format / platform"
           }
         ],
@@ -1203,7 +1208,7 @@
           19,
           "enable",
           {
-            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs download-llm --tier describe.",
+            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs bazelisk run //:manage -- download-llm --tier describe.",
             "label": "Describe image"
           }
         ],

@@ -946,7 +946,7 @@
         "LTX - 16:9 YouTube (1280x704)",
         1280,
         704,
-        "Match input",
+        "Force format",
         "8 seconds"
       ],
       "title": "Format / platform"
@@ -1329,7 +1329,7 @@
           22,
           "duration_s",
           {
-            "description": "LTX clip length: 5, 8 (default), 10, or 12 seconds at 24 fps. Writes a legal 1+8n frame count. Wan 5B stays 5 seconds.",
+            "description": "LTX clip length: 5, 8 (default), 10, or 12 seconds at 24 fps. Writes a legal 1+8n frame count.",
             "label": "Duration"
           }
         ],

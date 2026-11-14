@@ -48,6 +48,21 @@ What the gate proves, one test per invariant:
 22. Operator-facing copy - node titles, string widgets, and the ``lab_*`` prose -
     never names the retired Quality combo, because the control the operator
     actually has is Detail (:data:`RETIRED_CONTROL_PHRASES`).
+23. A live Describe image toggle has a still linked into its lazy ``image``
+    slot, so Queue can answer the request the toggle makes.
+24. A combo widget shared between nodes - the Upscale rung - is typed by the
+    values it accepts in all three places a graph records a type, because a
+    ``STRING`` there is an invalid connection the frontend refuses to Queue.
+25. A canvas node's **Output size** defaults to a mode the graph can honour: no
+    App ships Match input when nothing in it can hand the canvas a still.
+26. The App's output list is exactly the set of file-writing nodes the graph
+    runs: every live deliverable is named, and nothing muted or absent is.
+27. Every documented widget slot holds a value of the type that widget accepts,
+    so a slot written one place off center cannot silently swap a prompt for a
+    checkbox.
+28. Row copy that promises a control moves the save folder is only written when
+    that control's prefix output really reaches a save node.
+29. No App ships a **Detail** row on a graph whose every rung the ladder refuses.
 
 Nothing here hardcodes a rung name, a tier name, or a model family: the ladder
 comes from ``ez_quality.presets``, the occupancy slots and the banned needles
@@ -87,13 +102,25 @@ from _lab_paths import ROOT, cached_lab_graph_rows
 from _lab_wiring import REQUIRED_INPUTS, TERMINAL_TYPES, custom_output_node_types
 from _stamp_app_mode import (
     BANNED,
+    NODE_MODE_ALWAYS,
     NODE_MODE_BYPASS,
     OCCUPANCIES,
+    OUTPUT_TYPES,
     STAMP_SPECS,
     display_label,
+    format_sets_prefix,
     linear_input_node_id,
 )
 from _strip_dead_pickers import dead_pickers
+from _wire_quality import QUALITY_TYPE, QUALITY_WIDGET
+from _wire_format import (
+    STILL_FORMAT_TYPE,
+    VIDEO_FORMAT_TYPE,
+    graph_still_sources,
+    size_mode_for,
+)
+from ez_image.formats import SIZE_MODE_CHOICES
+from ez_image.upscale import upscale_combo_labels
 from ez_quality import presets
 from workflow_nodes import encyclopedia
 
@@ -1855,3 +1882,445 @@ def test_operator_text_never_names_the_retired_combo(
                 f"{lab_rel}: {where} names the retired Quality combo "
                 f"({phrase!r}): {text[:160]!r}"
             )
+
+
+DESCRIBE_TYPE = "EZImageDescribe"
+"""The captioner whose lazy IMAGE the App panel has to be able to fill."""
+
+
+@pytest.mark.parametrize(PYTEST_PARAM, GRAPHS, ids=GRAPH_IDS)
+def test_describe_toggle_reaches_a_still(lab_rel: str, graph: dict[str, Any]) -> None:
+    """An operator who turns Describe image on has a still to caption.
+
+    ``EZImageDescribe`` takes ``image`` lazily and asks ComfyUI for it the
+    moment ``enable`` is on, so an unlinked slot behind a live toggle is a
+    control with nothing behind it: Queue demands a source the graph never
+    carried and the panel has no box to fill it. Every graph that shows the
+    toggle therefore links an upload box into that slot, which is the shape the
+    graphs that kept their picker already had.
+
+    Args:
+        lab_rel: ``_lab``-relative graph id.
+        graph: Parsed lab JSON.
+    """
+    if _app_mode(graph) is None:
+        pytest.skip(f"{lab_rel}: not an App graph")
+    toggled = set()
+    for entry in _linear_rows(graph)[0]:
+        if len(entry) < 2 or entry[1] != "enable":
+            continue
+        try:
+            toggled.add(linear_input_node_id(entry))
+        except ValueError:
+            continue
+    for node in _nodes(graph):
+        if str(node.get("type") or "") != DESCRIBE_TYPE or _is_bypassed(node):
+            continue
+        if node.get("id") not in toggled:
+            continue
+        slot = next(
+            (s for s in (node.get("inputs") or []) if s.get("name") == "image"),
+            None,
+        )
+        assert slot is not None and slot.get("link") is not None, (
+            f"{lab_rel}: the App offers Describe image on {DESCRIBE_TYPE} "
+            f"{node.get('id')}, but its image slot carries no link, so Queue "
+            "demands a still the operator has no way to choose"
+        )
+
+
+COMBO_LINK_SLOTS: Mapping[str, Mapping[str, Sequence[str]]] = {
+    "EZImageUpscale": {"upscale": upscale_combo_labels()},
+}
+"""Widget inputs a graph may share between nodes, and the values they accept.
+
+ComfyUI types a combo widget input by its list of values, so a link into one
+carries that list in every place a graph records a type: the producing output
+slot, the consuming input slot, and the link row. ``EZImageMode`` set the
+precedent with ``ENHANCE_MODE_COMBO``. A shared rung typed ``STRING`` is flagged
+invalid by the frontend, and an App whose every save carries one is then an App
+that cannot Queue at all.
+"""
+
+
+def _slot_name(node: Mapping[str, Any], index: Any, *, inputs: bool) -> str:
+    """Return the name of one node slot, or ``""`` when the index is unusable.
+
+    Args:
+        node: One node row.
+        index: Slot index as stored on a link row.
+        inputs: Read ``inputs`` when True, ``outputs`` when False.
+
+    Returns:
+        The slot name, or ``""`` for a missing or out-of-range index.
+    """
+    slots = node.get("inputs" if inputs else "outputs") or []
+    if not isinstance(index, int) or not 0 <= index < len(slots):
+        return ""
+    return str(slots[index].get("name") or "")
+
+
+@pytest.mark.parametrize(PYTEST_PARAM, GRAPHS, ids=GRAPH_IDS)
+def test_shared_combo_link_carries_the_combo_values(
+    lab_rel: str, graph: dict[str, Any]
+) -> None:
+    """A rung shared between nodes is typed by its values, not by STRING.
+
+    Args:
+        lab_rel: ``_lab``-relative graph id.
+        graph: Parsed lab JSON.
+    """
+    nodes = _node_index(graph)
+    for row in graph.get("links") or []:
+        if not isinstance(row, list) or len(row) < 6:
+            continue
+        _link_id, src_id, src_slot, dst_id, dst_slot, link_type = row[:6]
+        dst = nodes.get(int(dst_id)) if isinstance(dst_id, int) else None
+        if dst is None:
+            continue
+        accepted = COMBO_LINK_SLOTS.get(str(dst.get("type") or ""))
+        if not accepted:
+            continue
+        dst_name = _slot_name(dst, dst_slot, inputs=True)
+        if dst_name not in accepted:
+            continue
+        expected = list(accepted[dst_name])
+        src = nodes.get(int(src_id)) if isinstance(src_id, int) else None
+        problems = []
+        if link_type != expected:
+            problems.append(f"link {row[0]} is typed {link_type!r}")
+        dst_slots = dst.get("inputs") or []
+        if isinstance(dst_slot, int) and 0 <= dst_slot < len(dst_slots):
+            if dst_slots[dst_slot].get("type") != expected:
+                problems.append(f"input slot is typed {dst_slots[dst_slot].get('type')!r}")
+        if src is not None:
+            src_slots = src.get("outputs") or []
+            if isinstance(src_slot, int) and 0 <= src_slot < len(src_slots):
+                if src_slots[src_slot].get("type") != expected:
+                    problems.append(
+                        f"output slot {src_slots[src_slot].get('name')!r} on "
+                        f"{src.get('type')} {src.get('id')} is typed "
+                        f"{src_slots[src_slot].get('type')!r}"
+                    )
+        assert not problems, (
+            f"{lab_rel}: {dst.get('type')} {dst.get('id')} shares its "
+            f"{dst_name!r} combo over a link the frontend reads as invalid "
+            f"(expected {expected!r}): {'; '.join(problems)}"
+        )
+
+
+CANVAS_FORMAT_TYPES = (STILL_FORMAT_TYPE, VIDEO_FORMAT_TYPE)
+"""The two nodes that own an App canvas and carry an Output size widget."""
+
+
+@pytest.mark.parametrize(PYTEST_PARAM, GRAPHS, ids=GRAPH_IDS)
+def test_canvas_size_mode_promises_only_what_the_graph_can_deliver(
+    lab_rel: str, graph: dict[str, Any]
+) -> None:
+    """**Output size** never defaults to a still this graph cannot supply.
+
+    Match input asks for the loaded still's aspect: at Queue the canvas node
+    reads its ``image`` input, and in the App the format picker JS snaps the
+    Format combo to a file the operator chose in a ``LoadImage`` or
+    ``EZOptionalImage`` box. A graph with neither has nothing for either path to
+    read, so both combo values produce the authored format and an App that
+    defaults to Match input opens with a promise its own run cannot keep.
+
+    Args:
+        lab_rel: ``_lab``-relative graph id.
+        graph: Parsed lab JSON.
+    """
+    if not any(
+        str(node.get("type") or "") in CANVAS_FORMAT_TYPES for node in _nodes(graph)
+    ):
+        pytest.skip(f"{lab_rel}: no canvas format node")
+    for node in _nodes(graph):
+        if str(node.get("type") or "") not in CANVAS_FORMAT_TYPES:
+            continue
+        wanted = size_mode_for(node, graph)
+        for value in node.get("widgets_values") or []:
+            if not isinstance(value, str) or value.strip() not in SIZE_MODE_CHOICES:
+                continue
+            assert value == wanted, (
+                f"{lab_rel}: {node.get('type')} {node.get('id')} authors "
+                f"{value!r}, but "
+                + (
+                    "no still reaches its canvas - nothing in the graph links "
+                    "to its image input and it owns no upload box an operator "
+                    "could fill, so the App would open promising a follow that "
+                    "never happens"
+                    if wanted == "Force format"
+                    else "the graph does carry a still to follow"
+                )
+            )
+
+
+DELIVERABLE_TYPES = frozenset(OUTPUT_TYPES)
+"""Node classes that land a file the operator queued the App to get."""
+
+
+@pytest.mark.parametrize(PYTEST_PARAM, GRAPHS, ids=GRAPH_IDS)
+def test_app_output_lists_every_file_the_graph_writes(
+    lab_rel: str, graph: dict[str, Any]
+) -> None:
+    """The App's output list is the set of files this run actually writes.
+
+    ``linearData.outputs`` is what ComfyUI's App Mode panel renders after a
+    Queue, so the list is the operator's receipt. A deliverable left out is a
+    file that only exists on disk: the film Apps listed 36 per-shot stills and
+    omitted the 90-second act MP4 everyone queued for, and a stub still has to
+    open the node to find it. A node that is muted, bypassed, or no longer in
+    the graph holds a card that can never fill.
+
+    Text-deliverable Apps (research, forge, beat sheet) list the node that
+    prints their result and are covered by rule 18; this rule constrains only
+    the file writers in :data:`DELIVERABLE_TYPES`.
+
+    Args:
+        lab_rel: ``_lab``-relative graph id.
+        graph: Parsed lab JSON.
+    """
+    if _app_mode(graph) is None:
+        pytest.skip(f"{lab_rel}: not an App graph")
+    nodes = _node_index(graph)
+    _inputs, outputs = _linear_rows(graph)
+    listed: set[int] = set()
+    for entry in outputs:
+        try:
+            node_id = int(str(entry))
+        except (TypeError, ValueError):
+            pytest.fail(f"{lab_rel}: linearData output {entry!r} is not a node id")
+        listed.add(node_id)
+        node = nodes[node_id]
+        assert _mode(node) == NODE_MODE_ALWAYS, (
+            f"{lab_rel}: linearData output {node_id} "
+            f"({node.get('type')} {node.get('title')!r}) runs in mode "
+            f"{_mode(node)}, so it writes nothing this Queue and the App panel "
+            "would show a card that never fills"
+        )
+    wanted = {
+        int(node["id"])
+        for node in _nodes(graph)
+        if str(node.get("type") or "") in DELIVERABLE_TYPES
+        and _mode(node) == NODE_MODE_ALWAYS
+    }
+    missing = sorted(wanted - listed)
+    assert not missing, (
+        f"{lab_rel}: "
+        + ", ".join(
+            f"{i} ({nodes[i].get('type')} {nodes[i].get('title')!r})"
+            for i in missing
+        )
+        + " writes a deliverable this App never lists, so the operator has to "
+        "find the file by hand"
+    )
+
+
+DOCUMENTED_VALUE_TYPES: Mapping[str, tuple[type, ...]] = {
+    "STRING": (str,),
+    "BOOLEAN": (bool,),
+    "INT": (int,),
+    "FLOAT": (int, float),
+    "COMBO": (str,),
+}
+"""Python types the encyclopedia's widget ``type`` admits for a stored value."""
+
+
+def _documented_types_at(widgets: Sequence[Mapping[str, Any]], index: int) -> set[str]:
+    """Return every documented widget type stored at one positional slot.
+
+    Args:
+        widgets: Documented widget rows for one node class, variants included.
+        index: Positional ``widgets_values`` slot to inspect.
+
+    Returns:
+        The documented ``type`` names, empty when nothing documents that slot.
+    """
+    found: set[str] = set()
+    for widget in widgets:
+        if widget.get("index") != index:
+            continue
+        if str(widget.get("storage") or "") != "list":
+            continue
+        name = widget.get("type")
+        if not isinstance(name, str) or not name:
+            continue
+        found.update(part.strip() for part in name.split("|") if part.strip())
+    return found
+
+
+def _admits(value: Any, names: set[str]) -> bool:
+    """Whether one stored widget value fits any documented type at its slot.
+
+    Args:
+        value: The value the graph keeps at that slot.
+        names: Documented widget types for the slot, union members split out.
+
+    Returns:
+        True when the value is absent, when no name in the set is a value type
+        the check understands, or when the value fits at least one documented
+        type. A bool never satisfies a numeric slot, and None is left alone
+        because the frontend stores it for a widget the operator never touched.
+    """
+    if value is None:
+        return True
+    checked = False
+    for name in names:
+        allowed = DOCUMENTED_VALUE_TYPES.get(name)
+        if not allowed:
+            continue
+        checked = True
+        if not isinstance(value, allowed):
+            continue
+        if name in ("INT", "FLOAT") and isinstance(value, bool):
+            continue
+        return True
+    return not checked
+
+
+def _slot_types(node: Mapping[str, Any], widgets: Sequence[Mapping[str, Any]], index: int) -> set[str]:
+    """Return every widget type one node's slot may hold.
+
+    ``PrimitiveNode`` mirrors whatever its first output socket declares, so its
+    single value widget legitimately holds a float, an int, a bool, or a string
+    depending on how the graph wired it. The encyclopedia documents the default
+    layout only, so the node's own output row is the authority for that class.
+
+    Args:
+        node: One node row.
+        widgets: Documented widget rows for the node's class, variants included.
+        index: Positional ``widgets_values`` slot to inspect.
+
+    Returns:
+        The accepted documented type names, empty when nothing documents the
+        slot and the node declares nothing for it either.
+    """
+    names = _documented_types_at(widgets, index)
+    if str(node.get("type") or "") != "PrimitiveNode":
+        return names
+    outputs = node.get("outputs") or []
+    if not outputs or not isinstance(outputs[0], Mapping):
+        return names
+    declared = str(outputs[0].get("type") or "")
+    if declared in DOCUMENTED_VALUE_TYPES:
+        return names | {declared}
+    return names
+
+
+@pytest.mark.parametrize(PYTEST_PARAM, GRAPHS, ids=GRAPH_IDS)
+def test_widget_values_fit_their_documented_slot_type(
+    lab_rel: str, graph: dict[str, Any]
+) -> None:
+    """Each widget slot holds what that widget accepts.
+
+    ``widgets_values`` is positional, so an authoring slip that writes one slot
+    off center is invisible to a length check: 143 service Apps carried their
+    tuned prompt in the **Sample prompt** combo and the enhance checkbox in the
+    **Prompt** textarea. The panel then loaded a paragraph into a dropdown and a
+    boolean into a textarea, and ``resolve_prompt`` - finding no recipe by that
+    name - encoded the textarea, so Queue sent the literal word ``True`` to the
+    CLIP and the App's own prompt never reached the sampler.
+
+    Args:
+        lab_rel: ``_lab``-relative graph id.
+        graph: Parsed lab JSON.
+    """
+    for node in _nodes(graph):
+        ntype = str(node.get("type") or "")
+        widgets = _documented_widgets(ntype)
+        values = node.get("widgets_values")
+        if not widgets or not isinstance(values, list):
+            continue
+        for index, value in enumerate(values):
+            names = _slot_types(node, widgets, index)
+            if not names or _admits(value, names):
+                continue
+            shown = str(value)[:40]
+            pytest.fail(
+                f"{lab_rel}: {ntype} {node.get('id')} stores "
+                f"{type(value).__name__} {shown!r} at slot {index}, which the "
+                f"encyclopedia documents as {'/'.join(sorted(names))} - the "
+                "slots are written off center"
+            )
+
+
+PROMISES_PREFIX = "sets pixels, save prefix"
+"""Row copy that promises a platform pick moves the output folder."""
+
+
+@pytest.mark.parametrize(PYTEST_PARAM, GRAPHS, ids=GRAPH_IDS)
+def test_a_row_that_promises_a_save_prefix_drives_one(
+    lab_rel: str, graph: dict[str, Any]
+) -> None:
+    """Copy that says a control moves the file is only written when it does.
+
+    ``EZImageFormat`` offers a prefix socket, and the Apps that wire it into a
+    save really do move the deliverable's folder when the operator switches
+    platform. The Klein service stills left that socket dangling in all 91 of
+    them while their row still read "Sets pixels, save prefix, and Rewrite
+    prompt framing", so an operator moving from an Instagram square to a YouTube
+    banner watched every file land in the same folder and had no way to tell the
+    copy had been a promise the graph never kept.
+
+    Args:
+        lab_rel: ``_lab``-relative graph id.
+        graph: Parsed lab JSON.
+    """
+    if _app_mode(graph) is None:
+        pytest.skip(f"{lab_rel}: not an App graph")
+    nodes = _node_index(graph)
+    inputs, _outputs = _linear_rows(graph)
+    for entry in inputs:
+        node = nodes.get(linear_input_node_id(entry))
+        if node is None or str(node.get("type") or "") not in CANVAS_FORMAT_TYPES:
+            continue
+        description = str(_row_config(entry).get("description") or "")
+        if PROMISES_PREFIX not in description.lower():
+            continue
+        assert format_sets_prefix(node), (
+            f"{lab_rel}: {node.get('type')} {node.get('id')} row "
+            f"{entry[1]!r} promises it sets the save prefix, but its prefix "
+            "output links to nothing, so the run keeps the authored folder"
+        )
+
+
+@pytest.mark.parametrize(PYTEST_PARAM, GRAPHS, ids=GRAPH_IDS)
+def test_no_detail_row_where_the_ladder_refuses_every_rung(
+    lab_rel: str, graph: dict[str, Any]
+) -> None:
+    """**Detail** appears only where moving it would change the run.
+
+    The ladder writes steps, CFG, and weight names on the samplers and loaders a
+    family owns. A graph whose loaders pin a Wan 14B / A14B transformer is the
+    case the family check alone misses: Wan owns a ladder and the graph holds
+    samplers, yet the overlay never touches a 14B file, so the browser and the
+    CLI both refuse every rung with "Wan 14B is not overlaid". The row then
+    looks like a control, costs the operator a Queue to learn it is not, and is
+    exactly the confusion the three-rung ladder replaced the old combo to end.
+
+    Args:
+        lab_rel: ``_lab``-relative graph id.
+        graph: Parsed lab JSON.
+    """
+    if not presets.graph_has_wan14(graph):
+        pytest.skip(f"{lab_rel}: no Wan 14B loader pins the graph")
+    for node in _nodes(graph):
+        if str(node.get("type") or "") != QUALITY_TYPE or _is_bypassed(node):
+            continue
+        pytest.fail(
+            f"{lab_rel}: {QUALITY_TYPE} {node.get('id')} offers a Detail row, "
+            "but a live Wan 14B loader pins this graph and the ladder refuses "
+            "every rung on it, so the operator cannot move the control"
+        )
+    nodes = _node_index(graph)
+    inputs, _outputs = _linear_rows(graph)
+    for entry in inputs:
+        node = nodes.get(linear_input_node_id(entry))
+        if node is None or str(node.get("type") or "") != QUALITY_TYPE:
+            continue
+        if str(entry[1]) != QUALITY_WIDGET:
+            continue
+        pytest.fail(
+            f"{lab_rel}: the App panel still carries a "
+            f"{QUALITY_WIDGET!r} row on a graph the ladder refuses outright"
+        )

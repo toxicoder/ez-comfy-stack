@@ -576,11 +576,7 @@ Lab sample prompt or Custom.
 
 **How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 30 recipes plus Custom (place recipes such as Cliff villa on photos/dream-house).
 
-**This graph:** `A photoreal still of a cream ceramic mug with a hairline chip on the rim, unmarked, on honey-oak beside a dark window. Soft studio key, gentle contact shadow. Empty of lettering. Clean product, soft ...`
-
-```text
-A photoreal still of a cream ceramic mug with a hairline chip on the rim, unmarked, on honey-oak beside a dark window. Soft studio key, gentle contact shadow. Empty of lettering. Clean product, soft key, unmarked seamless. Readable at small sizes. Empty of lettering.
-```
+**This graph:** `custom`
 
 #### `prompt`
 
@@ -590,7 +586,11 @@ Lazy sentence or authored still prompt.
 
 **How it affects generation:** When Enhance is on, the GGUF expands this into Klein-native sentences.
 
-**This graph:** `true`
+**This graph:** `A photoreal still of a cream ceramic mug with a hairline chip on the rim, unmarked, on honey-oak beside a dark window. Soft studio key, gentle contact shadow. Empty of lettering. Clean product, soft ...`
+
+```text
+A photoreal still of a cream ceramic mug with a hairline chip on the rim, unmarked, on honey-oak beside a dark window. Soft studio key, gentle contact shadow. Empty of lettering. Clean product, soft key, unmarked seamless. Readable at small sizes. Empty of lettering.
+```
 
 #### `enhance`
 
@@ -957,7 +957,7 @@ Sample-catalog id (graph stem).
 
 **How it affects generation:** Internal. Leave as stamped so sample dropdowns resolve.
 
-**This graph:** `photos/still-hero`
+**This graph:** `business/ecommerce/marketplace-square`
 
 ### `EZNegativePromptEnhance` - Negative Prompt Enhance
 
@@ -1233,7 +1233,7 @@ Type `COMBO`. Range / default: Match input / Force format.
 
 Match a loaded still's aspect, or keep Format / platform.
 
-**How it affects generation:** Match input (default) picks the nearest aspect catalog row when a still is loaded. Force format keeps the Format pick. No still: authored format. Detail does not change size.
+**How it affects generation:** Match input picks the nearest aspect catalog row when a still is loaded. Force format keeps the Format pick. No still: authored format. Detail does not change size.
 
 **This graph:** `Match input`
 
