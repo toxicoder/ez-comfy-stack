@@ -20,6 +20,7 @@ from _stamp_app_mode import (
     display_label,
     format_sets_prefix,
     infer_suite_inputs,
+    infer_suite_outputs,
     linear_input_node_id,
     stamp_app_mode,
     suite_json_paths,
@@ -729,3 +730,41 @@ def test_the_dub_rewrite_row_reads_as_english() -> None:
     for jargon in ("ASR", "GGUF", "diarize"):
         assert jargon not in copy_text, jargon
     assert "transcribe" in copy_text
+
+
+def _desk_card(nid: int, links: list[int] | None) -> dict:
+    """One EZLTXPromptEnhance whose prompt output carries ``links``."""
+    return {
+        "id": nid,
+        "type": "EZLTXPromptEnhance",
+        "inputs": [],
+        "outputs": [{"name": "prompt", "type": "STRING", "links": list(links or [])}],
+    }
+
+
+def test_a_desk_card_nothing_reads_is_a_deliverable() -> None:
+    """An unconsumed enhance card is the run's only readable result."""
+    graph = {
+        "nodes": [
+            {"id": 3, "type": "PrimitiveNode", "inputs": [], "outputs": []},
+            {"id": 5, "type": "PrimitiveNode", "inputs": [], "outputs": []},
+            _desk_card(4, []),
+            _desk_card(6, [99]),
+        ]
+    }
+    assert infer_suite_outputs(graph, {"primitive_strings": True}) == [3, 4, 5]
+
+
+def test_the_beat_sheet_panel_shows_the_beat_cards() -> None:
+    """Every beat card the desk generates reaches the App output list."""
+    graph = _load("labs/assist/beat-sheet.json")
+    outputs = set(graph["extra"]["linearData"]["outputs"])
+    cards = [
+        int(node["id"])
+        for node in graph["nodes"]
+        if node.get("type") == "EZLTXPromptEnhance"
+        and not any(slot.get("links") or [] for slot in node.get("outputs") or [])
+    ]
+    assert len(cards) == 18, cards
+    missing = [nid for nid in cards if nid not in outputs]
+    assert not missing, f"beat cards absent from the panel: {missing}"

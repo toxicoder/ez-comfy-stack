@@ -102,6 +102,7 @@ from _lab_paths import ROOT, cached_lab_graph_rows
 from _lab_wiring import REQUIRED_INPUTS, TERMINAL_TYPES, custom_output_node_types
 from _stamp_app_mode import (
     BANNED,
+    ENHANCE_TYPES,
     NODE_MODE_ALWAYS,
     NODE_MODE_BYPASS,
     OCCUPANCIES,
@@ -2323,4 +2324,48 @@ def test_no_detail_row_where_the_ladder_refuses_every_rung(
         pytest.fail(
             f"{lab_rel}: the App panel still carries a "
             f"{QUALITY_WIDGET!r} row on a graph the ladder refuses outright"
+        )
+
+
+@pytest.mark.parametrize(PYTEST_PARAM, GRAPHS, ids=GRAPH_IDS)
+def test_a_desk_surfaces_every_card_nothing_reads(
+    lab_rel: str, graph: dict[str, Any]
+) -> None:
+    """**Outputs** lists each generated card a desk App produces on-screen.
+
+    A desk graph writes no file, so the App panel is the only place a result can
+    be read. An enhance card whose prompt output feeds a CLIP node is an
+    intermediate and belongs on the graph. A card whose output goes nowhere is
+    the deliverable: it executes (these classes are ``OUTPUT_NODE``) and then
+    goes unreported, so the operator sees the prompts they typed and never the
+    text the run produced. The beat desk was the case in the catalog.
+
+    Args:
+        lab_rel: ``_lab``-relative graph id.
+        graph: Parsed lab JSON.
+    """
+    nodes = _nodes(graph)
+    if any(
+        str(node.get("type") or "") in DELIVERABLE_TYPES for node in nodes
+    ):
+        pytest.skip(f"{lab_rel}: the graph writes files, so the panel is not the deliverable")
+    cards = [
+        node
+        for node in nodes
+        if str(node.get("type") or "") in ENHANCE_TYPES
+        and not _is_bypassed(node)
+        and not any(slot.get("links") or [] for slot in node.get("outputs") or [])
+    ]
+    if not cards:
+        pytest.skip(f"{lab_rel}: every card feeds a downstream node")
+    _inputs, outputs = _linear_rows(graph)
+    listed = {int(str(entry)) for entry in outputs}
+    missing = sorted(
+        int(node["id"]) for node in cards if int(node["id"]) not in listed
+    )
+    if missing:
+        pytest.fail(
+            f"{lab_rel}: {missing} generate text nothing downstream reads, and "
+            "the graph writes no file, so the App panel is the only place the "
+            "operator could read the result - list them in linearData.outputs"
         )

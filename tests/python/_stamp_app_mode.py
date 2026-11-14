@@ -2537,6 +2537,32 @@ def stamp_rewrite_negative(graph: dict[str, Any]) -> bool:
     return True
 
 
+def _dangling_enhance_ids(graph: dict) -> list[int]:
+    """Ids of desk nodes whose generated text nothing downstream reads.
+
+    A desk App writes no file, so the App panel is the only place the operator
+    can read what the run produced. An enhance card whose prompt output feeds a
+    CLIP node is an intermediate and stays off the panel; a card whose output
+    goes nowhere is the deliverable itself, and listing it is the difference
+    between reading the 18 beat cards and reading only the 18 prompts typed
+    into them.
+
+    Globals / Arguments: ``graph`` is a parsed Comfy workflow.
+
+    Outputs: node ids, ascending. Returns [] when every card is consumed.
+
+    Returns: list[int]
+    """
+    return [
+        int(node["id"])
+        for node in graph.get("nodes") or []
+        if node.get("type") in ENHANCE_TYPES
+        and not any(
+            slot.get("links") or [] for slot in node.get("outputs") or []
+        )
+    ]
+
+
 def infer_suite_outputs(graph: dict, spec: Mapping[str, Any] | None = None) -> list[int]:
     spec = spec or {}
     if spec.get("clip_chain_widgets"):
@@ -2569,11 +2595,12 @@ def infer_suite_outputs(graph: dict, spec: Mapping[str, Any] | None = None) -> l
             if node.get("type") in ENHANCE_TYPES
         ]
     if spec.get("primitive_strings"):
-        return [
+        found = [
             int(node["id"])
             for node in graph.get("nodes") or []
             if node.get("type") == "PrimitiveNode"
         ]
+        return sorted(found + _dangling_enhance_ids(graph))
     return []
 
 
