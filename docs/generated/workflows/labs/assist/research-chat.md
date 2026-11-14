@@ -214,7 +214,7 @@ Catalog id.
 
 ### `EZModelCheck` - Check models
 
-Manual disk check for occupancy + Quality weights. Queue does not run this node.
+Manual disk check for occupancy + Detail weights. Queue does not run this node.
 
 !!! warning "Lab notes"
 

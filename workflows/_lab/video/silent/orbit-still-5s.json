@@ -2,14 +2,14 @@
   "id": "orbit-still-5s",
   "revision": 8,
   "last_node_id": 20,
-  "last_link_id": 28,
+  "last_link_id": 29,
   "nodes": [
     {
       "id": 1,
       "type": "UNETLoader",
       "pos": [
         40,
-        548
+        564
       ],
       "size": [
         360,
@@ -44,7 +44,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        702
+        718
       ],
       "size": [
         360,
@@ -81,7 +81,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        884
+        900
       ],
       "size": [
         360,
@@ -116,7 +116,7 @@
       "type": "LoadImage",
       "pos": [
         40,
-        1058
+        1074
       ],
       "size": [
         320,
@@ -132,7 +132,7 @@
           "type": "IMAGE",
           "links": [
             6,
-            28
+            29
           ],
           "slot_index": 0
         },
@@ -158,7 +158,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         3116,
-        1040
+        1056
       ],
       "size": [
         420,
@@ -206,7 +206,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         3116,
-        1764
+        1780
       ],
       "size": [
         420,
@@ -254,7 +254,7 @@
       "type": "Wan22ImageToVideoLatent",
       "pos": [
         3584,
-        930
+        946
       ],
       "size": [
         280,
@@ -319,7 +319,7 @@
       "type": "ModelSamplingSD3",
       "pos": [
         3584,
-        800
+        816
       ],
       "size": [
         210,
@@ -359,7 +359,7 @@
       "type": "KSampler",
       "pos": [
         3584,
-        1152
+        1168
       ],
       "size": [
         320,
@@ -420,7 +420,7 @@
       "type": "VAEDecode",
       "pos": [
         3992,
-        548
+        564
       ],
       "size": [
         240,
@@ -464,7 +464,7 @@
       "type": "SaveImage",
       "pos": [
         3992,
-        1158
+        1174
       ],
       "size": [
         280,
@@ -494,7 +494,7 @@
       "type": "VHS_VideoCombine",
       "pos": [
         3992,
-        666
+        682
       ],
       "size": [
         320,
@@ -573,7 +573,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## video/silent/orbit-still-5s\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nSilent Wan 5B I2V slow orbit (~5 s). LoadImage: packshot or still (`ez_packshot_*.png`).\nPrefix `ez_orbit_video`.\n\nAfter Queue, click **Save video (MP4) - open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nOccupancy: wan - stop LTX, podcast, music. One GB10 job.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
+        "## video/silent/orbit-still-5s\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nSilent Wan 5B I2V slow orbit (~5 s). LoadImage: packshot or still (`ez_packshot_*.png`).\nPrefix `ez_orbit_video`.\n\nAfter Queue, click **Save video (MP4) - open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nOccupancy: wan - stop LTX, podcast, music. One GB10 job.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
       ],
       "title": "Operator note"
     },
@@ -582,7 +582,7 @@
       "type": "EZWanPromptEnhance",
       "pos": [
         3116,
-        548
+        564
       ],
       "size": [
         420,
@@ -636,7 +636,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         3116,
-        1272
+        1288
       ],
       "size": [
         420,
@@ -708,7 +708,7 @@
       "type": "EZVideoFormat",
       "pos": [
         3584,
-        548
+        564
       ],
       "size": [
         360,
@@ -768,7 +768,7 @@
       "type": "EZImageDescribe",
       "pos": [
         2788,
-        548
+        564
       ],
       "size": [
         280,
@@ -789,7 +789,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 28
+          "link": 29
         }
       ],
       "outputs": [
@@ -997,7 +997,7 @@
       "STRING"
     ],
     [
-      28,
+      29,
       4,
       0,
       19,
@@ -1037,7 +1037,7 @@
       "title": "Load models",
       "bounding": [
         20,
-        476,
+        492,
         400,
         510
       ],
@@ -1050,7 +1050,7 @@
       "title": "For i2v, LoadImage enabled (bypass for t2v)",
       "bounding": [
         20,
-        986,
+        1002,
         360,
         430
       ],
@@ -1063,7 +1063,7 @@
       "title": "INPUT",
       "bounding": [
         2768,
-        476,
+        492,
         320,
         206
       ],
@@ -1076,7 +1076,7 @@
       "title": "PROMPT",
       "bounding": [
         3096,
-        476,
+        492,
         460,
         1492
       ],
@@ -1089,7 +1089,7 @@
       "title": "SETTINGS",
       "bounding": [
         3564,
-        476,
+        492,
         400,
         982
       ],
@@ -1102,7 +1102,7 @@
       "title": "OUTPUT",
       "bounding": [
         3972,
-        476,
+        492,
         360,
         996
       ],
@@ -1113,7 +1113,7 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## video/silent/orbit-still-5s\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nSilent Wan 5B I2V slow orbit (~5 s). LoadImage: packshot or still (`ez_packshot_*.png`).\nPrefix `ez_orbit_video`.\n\nAfter Queue, click **Save video (MP4) - open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nOccupancy: wan - stop LTX, podcast, music. One GB10 job.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "lab_note": "## video/silent/orbit-still-5s\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nSilent Wan 5B I2V slow orbit (~5 s). LoadImage: packshot or still (`ez_packshot_*.png`).\nPrefix `ez_orbit_video`.\n\nAfter Queue, click **Save video (MP4) - open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nOccupancy: wan - stop LTX, podcast, music. One GB10 job.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_profile": "video/silent/orbit-still-5s",
     "lab_description": "Wan 5B silent orbit I2V ~5s\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "ds": {

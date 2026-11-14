@@ -9,7 +9,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        588
+        1112
       ],
       "size": [
         360,
@@ -46,7 +46,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        944
+        1468
       ],
       "size": [
         360,
@@ -88,7 +88,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        1122
+        1646
       ],
       "size": [
         360,
@@ -125,7 +125,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         40,
-        1394
+        1918
       ],
       "size": [
         420,
@@ -176,7 +176,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         2380,
-        588
+        1112
       ],
       "size": [
         420,
@@ -224,7 +224,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         2848,
-        880
+        1404
       ],
       "size": [
         280,
@@ -302,7 +302,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## photos/color-moods\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nFour color moods, shared identity (Klein 4B). Type any subject in IDENTITY. SHOT WARM is the identity plate. Queue the whole graph; 02-04 Klein-edit from 01. Do not bypass WARM on a cold canvas.\nPrefixes `ez_mood_01`...`04`. Change only grade / mood.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## photos/color-moods\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nFour color moods, shared identity (Klein 4B). Type any subject in IDENTITY. SHOT WARM is the identity plate. Queue the whole graph; 02-04 Klein-edit from 01. Do not bypass WARM on a cold canvas.\nPrefixes `ez_mood_01`...`04`. Change only grade / mood.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -311,7 +311,7 @@
       "type": "VAEEncode",
       "pos": [
         1764,
-        908
+        1432
       ],
       "size": [
         240,
@@ -359,7 +359,7 @@
       "type": "ReferenceLatent",
       "pos": [
         2848,
-        1058
+        1582
       ],
       "size": [
         280,
@@ -400,7 +400,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        588
+        1112
       ],
       "size": [
         420,
@@ -442,7 +442,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        588
+        1112
       ],
       "size": [
         360,
@@ -489,7 +489,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        588
+        1112
       ],
       "size": [
         320,
@@ -549,7 +549,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        588
+        1112
       ],
       "size": [
         240,
@@ -592,7 +592,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        588
+        1112
       ],
       "size": [
         280,
@@ -622,7 +622,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1126
+        1650
       ],
       "size": [
         420,
@@ -664,7 +664,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        1126
+        1650
       ],
       "size": [
         360,
@@ -711,7 +711,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        1126
+        1650
       ],
       "size": [
         320,
@@ -771,7 +771,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        1126
+        1650
       ],
       "size": [
         240,
@@ -813,7 +813,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        1126
+        1650
       ],
       "size": [
         280,
@@ -843,7 +843,7 @@
       "type": "ReferenceLatent",
       "pos": [
         988,
-        1358
+        1882
       ],
       "size": [
         240,
@@ -886,7 +886,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1664
+        2188
       ],
       "size": [
         420,
@@ -928,7 +928,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        1664
+        2188
       ],
       "size": [
         360,
@@ -975,7 +975,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        1664
+        2188
       ],
       "size": [
         320,
@@ -1035,7 +1035,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        1664
+        2188
       ],
       "size": [
         240,
@@ -1077,7 +1077,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        1664
+        2188
       ],
       "size": [
         280,
@@ -1107,7 +1107,7 @@
       "type": "ReferenceLatent",
       "pos": [
         988,
-        1896
+        2420
       ],
       "size": [
         240,
@@ -1150,7 +1150,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        2202
+        2726
       ],
       "size": [
         420,
@@ -1192,7 +1192,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        2202
+        2726
       ],
       "size": [
         360,
@@ -1239,7 +1239,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        2202
+        2726
       ],
       "size": [
         320,
@@ -1299,7 +1299,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        2202
+        2726
       ],
       "size": [
         240,
@@ -1341,7 +1341,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        2202
+        2726
       ],
       "size": [
         280,
@@ -1371,7 +1371,7 @@
       "type": "ReferenceLatent",
       "pos": [
         988,
-        2452
+        2976
       ],
       "size": [
         240,
@@ -1414,7 +1414,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         508,
-        2454
+        2978
       ],
       "size": [
         420,
@@ -1486,7 +1486,7 @@
       "type": "EZImageFormat",
       "pos": [
         2848,
-        588
+        1112
       ],
       "size": [
         360,
@@ -1560,7 +1560,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2052,
-        930
+        1454
       ],
       "size": [
         280,
@@ -1609,7 +1609,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        1468
+        1992
       ],
       "size": [
         280,
@@ -1662,7 +1662,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        2006
+        2530
       ],
       "size": [
         280,
@@ -1715,7 +1715,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        2544
+        3068
       ],
       "size": [
         280,
@@ -1791,8 +1791,8 @@
       "id": 42,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        3276.0,
-        80.0
+        2380,
+        1344
       ],
       "size": [
         420.0,
@@ -1832,8 +1832,8 @@
       "id": 43,
       "type": "CLIPTextEncode",
       "pos": [
-        3276.0,
-        572.0
+        2380,
+        2820
       ],
       "size": [
         420.0,
@@ -1879,8 +1879,8 @@
       "id": 44,
       "type": "ReferenceLatent",
       "pos": [
-        3276.0,
-        804.0
+        2848,
+        1734
       ],
       "size": [
         280.0,
@@ -1922,8 +1922,8 @@
       "id": 45,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        3276.0,
-        956.0
+        2380,
+        1836
       ],
       "size": [
         420.0,
@@ -1963,8 +1963,8 @@
       "id": 46,
       "type": "CLIPTextEncode",
       "pos": [
-        3276.0,
-        1448.0
+        2380,
+        3052
       ],
       "size": [
         420.0,
@@ -2010,8 +2010,8 @@
       "id": 47,
       "type": "ReferenceLatent",
       "pos": [
-        3276.0,
-        1680.0
+        2848,
+        1886
       ],
       "size": [
         280.0,
@@ -2053,8 +2053,8 @@
       "id": 48,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        3276.0,
-        1832.0
+        2380,
+        2328
       ],
       "size": [
         420.0,
@@ -2094,8 +2094,8 @@
       "id": 49,
       "type": "CLIPTextEncode",
       "pos": [
-        3276.0,
-        2324.0
+        2380,
+        3284
       ],
       "size": [
         420.0,
@@ -2141,8 +2141,8 @@
       "id": 50,
       "type": "ReferenceLatent",
       "pos": [
-        3276.0,
-        2556.0
+        2848,
+        2038
       ],
       "size": [
         280.0,
@@ -2847,7 +2847,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        516,
+        1040,
         400,
         708
       ],
@@ -2860,7 +2860,7 @@
       "title": "IDENTITY",
       "bounding": [
         20,
-        1322,
+        1846,
         460,
         536
       ],
@@ -2873,7 +2873,7 @@
       "title": "SHOT WARM",
       "bounding": [
         500,
-        516,
+        1040,
         1852,
         538
       ],
@@ -2886,7 +2886,7 @@
       "title": "SHOT COOL",
       "bounding": [
         500,
-        1054,
+        1578,
         1852,
         538
       ],
@@ -2899,7 +2899,7 @@
       "title": "SHOT MUTED",
       "bounding": [
         500,
-        1592,
+        2116,
         1852,
         538
       ],
@@ -2912,7 +2912,7 @@
       "title": "SHOT HIGH KEY",
       "bounding": [
         488,
-        2130,
+        2654,
         1864,
         788
       ],
@@ -2925,9 +2925,9 @@
       "title": "PROMPT",
       "bounding": [
         2360,
-        516,
+        1040,
         460,
-        276
+        2448
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -2938,9 +2938,9 @@
       "title": "SETTINGS",
       "bounding": [
         2828,
-        516,
+        1040,
         400,
-        666
+        1122
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2950,7 +2950,7 @@
   "config": {},
   "extra": {
     "lab_profile": "photos/color-moods",
-    "lab_note": "## photos/color-moods\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nFour color moods, shared identity (Klein 4B). Type any subject in IDENTITY. SHOT WARM is the identity plate. Queue the whole graph; 02-04 Klein-edit from 01. Do not bypass WARM on a cold canvas.\nPrefixes `ez_mood_01`...`04`. Change only grade / mood.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_note": "## photos/color-moods\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nFour color moods, shared identity (Klein 4B). Type any subject in IDENTITY. SHOT WARM is the identity plate. Queue the whole graph; 02-04 Klein-edit from 01. Do not bypass WARM on a cold canvas.\nPrefixes `ez_mood_01`...`04`. Change only grade / mood.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n",
     "lab_description": "Klein 4B four-mood color pack",
     "lab_app_mode": {
       "enabled": true,

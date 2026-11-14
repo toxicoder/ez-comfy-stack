@@ -2,14 +2,14 @@
   "id": "still-to-shot",
   "revision": 14,
   "last_node_id": 27,
-  "last_link_id": 43,
+  "last_link_id": 44,
   "nodes": [
     {
       "id": 1,
       "type": "UNETLoader",
       "pos": [
         40,
-        648
+        664
       ],
       "size": [
         520,
@@ -43,7 +43,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        802
+        818
       ],
       "size": [
         360,
@@ -77,7 +77,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        932
+        948
       ],
       "size": [
         400,
@@ -113,7 +113,7 @@
       "type": "LoadImage",
       "pos": [
         608,
-        648
+        664
       ],
       "size": [
         320,
@@ -129,7 +129,7 @@
           "type": "IMAGE",
           "links": [
             5,
-            43
+            44
           ],
           "slot_index": 0
         },
@@ -154,7 +154,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         976,
-        1140
+        1156
       ],
       "size": [
         420,
@@ -201,7 +201,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         976,
-        1864
+        1880
       ],
       "size": [
         420,
@@ -248,7 +248,7 @@
       "type": "LTXVImgToVideo",
       "pos": [
         1444,
-        1102
+        1118
       ],
       "size": [
         320,
@@ -337,7 +337,7 @@
       "type": "LTXVConditioning",
       "pos": [
         1444,
-        1512
+        1528
       ],
       "size": [
         280,
@@ -389,7 +389,7 @@
       "type": "KSampler",
       "pos": [
         1444,
-        1666
+        1682
       ],
       "size": [
         320,
@@ -449,7 +449,7 @@
       "type": "VAEDecode",
       "pos": [
         1852,
-        648
+        664
       ],
       "size": [
         240,
@@ -493,7 +493,7 @@
       "type": "SaveImage",
       "pos": [
         1852,
-        1396
+        1412
       ],
       "size": [
         280,
@@ -523,7 +523,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        1114
+        1130
       ],
       "size": [
         360,
@@ -557,7 +557,7 @@
       "type": "LTXVEmptyLatentAudio",
       "pos": [
         1444,
-        900
+        916
       ],
       "size": [
         300,
@@ -598,7 +598,7 @@
       "type": "LTXVConcatAVLatent",
       "pos": [
         1444,
-        1374
+        1390
       ],
       "size": [
         280,
@@ -640,7 +640,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         1444,
-        2000
+        2016
       ],
       "size": [
         280,
@@ -700,7 +700,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## video/av/still-to-shot\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) - open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nUS-safe 5.00s AV I2V print (121 frames = 1+8n @ 24 fps) with last-frame SaveImage.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot (CLIP ltxv) + ltx-2.5-video-vae-bf16 + ltx-2.5-audio-vae-bf16.\nLTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n\nDo not Queue a 90s denoise. US-safe local pack only. No score.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\n90s films: Queue **film/<slug>/00-plate** once (Klein identity still), then **film/<slug>/act-01** or **film/<slug>/feature** - that pair prints the 18 beats and stitches them. To iterate one beat here, paste its `ltx_i2v` / `wan_i2v` paragraph from `{film}.shots.yaml`, keep the VHS prefix ez_<slug>_bN_sM_<engine>_video, and stitch on the host with bazelisk run //scripts:run-utility -- concat-shots --film <slug> --yes.\n"
+        "## video/av/still-to-shot\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) - open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nUS-safe 5.00s AV I2V print (121 frames = 1+8n @ 24 fps) with last-frame SaveImage.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot (CLIP ltxv) + ltx-2.5-video-vae-bf16 + ltx-2.5-audio-vae-bf16.\nLTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n\nDo not Queue a 90s denoise. US-safe local pack only. No score.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\n90s films: Queue **film/<slug>/00-plate** once (Klein identity still), then **film/<slug>/act-01** or **film/<slug>/feature** - that pair prints the 18 beats and stitches them. To iterate one beat here, paste its `ltx_i2v` / `wan_i2v` paragraph from `{film}.shots.yaml`, keep the VHS prefix ez_<slug>_bN_sM_<engine>_video, and stitch on the host with bazelisk run //scripts:run-utility -- concat-shots --film <slug> --yes.\n"
       ],
       "title": "Operator note"
     },
@@ -709,7 +709,7 @@
       "type": "VHS_VideoCombine",
       "pos": [
         1852,
-        904
+        920
       ],
       "size": [
         320,
@@ -773,7 +773,7 @@
       "type": "ImageFromBatch",
       "pos": [
         1852,
-        1738
+        1754
       ],
       "size": [
         240,
@@ -814,7 +814,7 @@
       "type": "SaveImage",
       "pos": [
         1852,
-        1890
+        1906
       ],
       "size": [
         280,
@@ -844,7 +844,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         976,
-        648
+        664
       ],
       "size": [
         420,
@@ -899,7 +899,7 @@
       "type": "LTXVAudioVAEDecode",
       "pos": [
         1852,
-        766
+        782
       ],
       "size": [
         320,
@@ -941,7 +941,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         976,
-        1372
+        1388
       ],
       "size": [
         420,
@@ -1013,7 +1013,7 @@
       "type": "EZVideoFormat",
       "pos": [
         1444,
-        648
+        664
       ],
       "size": [
         360,
@@ -1073,7 +1073,7 @@
       "type": "EZImageDescribe",
       "pos": [
         608,
-        1034
+        1050
       ],
       "size": [
         280,
@@ -1094,7 +1094,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 43
+          "link": 44
         }
       ],
       "outputs": [
@@ -1398,7 +1398,7 @@
       "STRING"
     ],
     [
-      43,
+      44,
       4,
       0,
       26,
@@ -1438,7 +1438,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        576,
+        592,
         560,
         640
       ],
@@ -1451,7 +1451,7 @@
       "title": "INPUT",
       "bounding": [
         588,
-        576,
+        592,
         360,
         592
       ],
@@ -1464,7 +1464,7 @@
       "title": "PROMPT",
       "bounding": [
         956,
-        576,
+        592,
         460,
         1492
       ],
@@ -1477,7 +1477,7 @@
       "title": "SETTINGS",
       "bounding": [
         1424,
-        576,
+        592,
         400,
         1534
       ],
@@ -1490,7 +1490,7 @@
       "title": "OUTPUT",
       "bounding": [
         1832,
-        576,
+        592,
         360,
         1628
       ],
@@ -1503,7 +1503,7 @@
   "extra": {
     "lab_profile": "video/av/still-to-shot",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## video/av/still-to-shot\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) - open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nUS-safe 5.00s AV I2V print (121 frames = 1+8n @ 24 fps) with last-frame SaveImage.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot (CLIP ltxv) + ltx-2.5-video-vae-bf16 + ltx-2.5-audio-vae-bf16.\nLTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n\nDo not Queue a 90s denoise. US-safe local pack only. No score.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\n90s films: Queue **film/<slug>/00-plate** once (Klein identity still), then **film/<slug>/act-01** or **film/<slug>/feature** - that pair prints the 18 beats and stitches them. To iterate one beat here, paste its `ltx_i2v` / `wan_i2v` paragraph from `{film}.shots.yaml`, keep the VHS prefix ez_<slug>_bN_sM_<engine>_video, and stitch on the host with bazelisk run //scripts:run-utility -- concat-shots --film <slug> --yes.\n",
+    "lab_note": "## video/av/still-to-shot\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) - open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nUS-safe 5.00s AV I2V print (121 frames = 1+8n @ 24 fps) with last-frame SaveImage.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot (CLIP ltxv) + ltx-2.5-video-vae-bf16 + ltx-2.5-audio-vae-bf16.\nLTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n\nDo not Queue a 90s denoise. US-safe local pack only. No score.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\n90s films: Queue **film/<slug>/00-plate** once (Klein identity still), then **film/<slug>/act-01** or **film/<slug>/feature** - that pair prints the 18 beats and stitches them. To iterate one beat here, paste its `ltx_i2v` / `wan_i2v` paragraph from `{film}.shots.yaml`, keep the VHS prefix ez_<slug>_bN_sM_<engine>_video, and stitch on the host with bazelisk run //scripts:run-utility -- concat-shots --film <slug> --yes.\n",
     "lab_ltx_av": true,
     "lab_description": "LTX-2.5 concat-safe AV I2V print, 121 frames (1+8n) + last frame",
     "lab_app_mode": {

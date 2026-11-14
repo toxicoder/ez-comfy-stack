@@ -2,14 +2,14 @@
   "id": "still-draft",
   "revision": 11,
   "last_node_id": 19,
-  "last_link_id": 30,
+  "last_link_id": 31,
   "nodes": [
     {
       "id": 1,
       "type": "UNETLoader",
       "pos": [
         40,
-        508
+        524
       ],
       "size": [
         360,
@@ -43,7 +43,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        662
+        678
       ],
       "size": [
         360,
@@ -79,7 +79,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        840
+        856
       ],
       "size": [
         360,
@@ -113,7 +113,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         856,
-        1000
+        1016
       ],
       "size": [
         420,
@@ -160,7 +160,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         856,
-        1724
+        1740
       ],
       "size": [
         420,
@@ -207,7 +207,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         1324,
-        800
+        816
       ],
       "size": [
         280,
@@ -267,7 +267,7 @@
       "type": "KSampler",
       "pos": [
         1324,
-        978
+        994
       ],
       "size": [
         320,
@@ -327,7 +327,7 @@
       "type": "VAEDecode",
       "pos": [
         1732,
-        508
+        524
       ],
       "size": [
         240,
@@ -369,7 +369,7 @@
       "type": "SaveImage",
       "pos": [
         1732,
-        778
+        794
       ],
       "size": [
         280,
@@ -414,7 +414,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## photos/still-draft\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nFirst-run Klein 4B still (Apache 2.0 distilled FP8).\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed - CFG 1.0 - 4 steps - 768x432 - batch 2.\nSaveImage prefix: ez_still_draft.\n\nQueue this first. Then open photos/still-hero with the same seed for 1280x720.\nAspect widgets: YouTube 16:9 default; Shorts 9:16 = 432x768; 1:1 = 768x768.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## photos/still-draft\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nFirst-run Klein 4B still (Apache 2.0 distilled FP8).\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed - CFG 1.0 - 4 steps - 768x432 - batch 2.\nSaveImage prefix: ez_still_draft.\n\nQueue this first. Then open photos/still-hero with the same seed for 1280x720.\nAspect widgets: YouTube 16:9 default; Shorts 9:16 = 432x768; 1:1 = 768x768.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -423,7 +423,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         856,
-        508
+        524
       ],
       "size": [
         420,
@@ -477,7 +477,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         856,
-        1232
+        1248
       ],
       "size": [
         420,
@@ -549,7 +549,7 @@
       "type": "EZImageFormat",
       "pos": [
         1324,
-        508
+        524
       ],
       "size": [
         360,
@@ -623,7 +623,7 @@
       "type": "EZOptionalImage",
       "pos": [
         448,
-        508
+        524
       ],
       "size": [
         360.0,
@@ -639,7 +639,7 @@
           "type": "IMAGE",
           "links": [
             19,
-            30
+            31
           ],
           "slot_index": 0
         },
@@ -674,7 +674,7 @@
       "type": "EZKleinRefCanvas",
       "pos": [
         448,
-        862
+        878
       ],
       "size": [
         360.0,
@@ -735,7 +735,7 @@
       "type": "EZImageUpscale",
       "pos": [
         1732,
-        626
+        642
       ],
       "size": [
         280,
@@ -780,7 +780,7 @@
       "type": "EZImageDescribe",
       "pos": [
         448,
-        700
+        716
       ],
       "size": [
         280,
@@ -801,7 +801,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 30
+          "link": 31
         }
       ],
       "outputs": [
@@ -1025,7 +1025,7 @@
       "STRING"
     ],
     [
-      30,
+      31,
       15,
       0,
       18,
@@ -1065,7 +1065,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        436,
+        452,
         400,
         506
       ],
@@ -1078,7 +1078,7 @@
       "title": "INPUT",
       "bounding": [
         428,
-        436,
+        452,
         400,
         610
       ],
@@ -1091,7 +1091,7 @@
       "title": "PROMPT",
       "bounding": [
         836,
-        436,
+        452,
         460,
         1492
       ],
@@ -1104,7 +1104,7 @@
       "title": "SETTINGS",
       "bounding": [
         1304,
-        436,
+        452,
         400,
         848
       ],
@@ -1117,7 +1117,7 @@
       "title": "OUTPUT",
       "bounding": [
         1712,
-        436,
+        452,
         320,
         656
       ],
@@ -1137,7 +1137,7 @@
         0
       ]
     },
-    "lab_note": "## photos/still-draft\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nFirst-run Klein 4B still (Apache 2.0 distilled FP8).\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed - CFG 1.0 - 4 steps - 768x432 - batch 2.\nSaveImage prefix: ez_still_draft.\n\nQueue this first. Then open photos/still-hero with the same seed for 1280x720.\nAspect widgets: YouTube 16:9 default; Shorts 9:16 = 432x768; 1:1 = 768x768.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_note": "## photos/still-draft\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nFirst-run Klein 4B still (Apache 2.0 distilled FP8).\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed - CFG 1.0 - 4 steps - 768x432 - batch 2.\nSaveImage prefix: ez_still_draft.\n\nQueue this first. Then open photos/still-hero with the same seed for 1280x720.\nAspect widgets: YouTube 16:9 default; Shorts 9:16 = 432x768; 1:1 = 768x768.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n",
     "lab_description": "Klein 4B draft still, 768x432, 4 steps, batch 2",
     "lab_app_mode": {
       "enabled": true,
@@ -1273,6 +1273,14 @@
           {
             "description": "Upload a still or pick one already on the drive (input/ or Outputs). Empty is valid - Queue without a file. When set, Klein uses it as a native reference.",
             "label": "Example / reference (optional)"
+          }
+        ],
+        [
+          15,
+          "use_references",
+          {
+            "description": "Turn off to run text-to-image without clearing your picks. Any new pick turns it back on.",
+            "label": "Use reference stills"
           }
         ]
       ],

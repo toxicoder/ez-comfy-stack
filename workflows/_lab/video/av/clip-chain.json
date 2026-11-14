@@ -9,7 +9,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        748
+        764
       ],
       "size": [
         520,
@@ -46,7 +46,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        906
+        922
       ],
       "size": [
         360,
@@ -86,7 +86,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        1044
+        1060
       ],
       "size": [
         400,
@@ -128,7 +128,7 @@
       "type": "LoadImage",
       "pos": [
         620,
-        748
+        764
       ],
       "size": [
         320,
@@ -168,7 +168,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        1240
+        1256
       ],
       "size": [
         360,
@@ -205,7 +205,7 @@
       "type": "LTXVEmptyLatentAudio",
       "pos": [
         40,
-        1370
+        1386
       ],
       "size": [
         300,
@@ -264,7 +264,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## video/av/clip-chain\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nFour LTX AV beats share one UNET / video VAE / audio VAE / CLIP. Last frame of beat N starts beat N+1. EZClipConcat stitches the four MP4s (hard cut). Primary output: `${COMFY_OUTPUT_DIR}/ez_clip_chain.mp4` plus per-beat VHS (`ez_clip_b0N_ltx_video`) and last-frame PNG (`ez_clip_b0N_last`). No full-batch SaveImage.\n\n**8 seconds, 24 fps** (193 frames = 1+8n) chain-wide. Duration combo stays 5/8/10/12; mixed per-beat lengths are unsupported. Four x 8 s sequential prints are tens of minutes on GB10 - not a hang. Headroom preflight still applies at `start`.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job. Occupancy ltx XOR. `occupancy enter ltx` before Queue. No Klein identity on this canvas.\n\nDuplicate Beat groups on canvas for beats 5-24:\n\n1. Duplicate the last Beat group.\n2. Set `VHS_VideoCombine.filename_prefix` to `ez_clip_b05_ltx_video` (then b06...).\n3. Set last-frame SaveImage prefix to `ez_clip_b05_last`.\n4. Wire previous `EZClipLastFrame.last_frame` -> new `LTXVImgToVideo.image`.\n5. Wire new `VHS_VideoCombine.Filenames` -> the next free `EZClipConcat.clip_0N` (`clip_05` for the fifth beat).\n6. Keep the shared UNET / VAE / CLIP / Format / Seed / Rewrite / Audio notes wires (do not duplicate loaders).\n7. Save under `_user/` if you want a personal App; shipped `_lab` stays 4 beats.\n\nPast 24 stems: host `bazelisk run //scripts:run-utility -- concat-shots --files a.mp4,b.mp4 --cap-seconds <sum> --yes` (default `--files` cap is 90 s).\n\nLTX-2.5 distilled AV. LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown is hidden on I2V.\n\nLoadImage default example.png; after a still set ez_still_hero_*.png. Match input Format. MagCache off.\n"
+        "## video/av/clip-chain\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nFour LTX AV beats share one UNET / video VAE / audio VAE / CLIP. Last frame of beat N starts beat N+1. EZClipConcat stitches the four MP4s (hard cut). Primary output: `${COMFY_OUTPUT_DIR}/ez_clip_chain.mp4` plus per-beat VHS (`ez_clip_b0N_ltx_video`) and last-frame PNG (`ez_clip_b0N_last`). No full-batch SaveImage.\n\n**8 seconds, 24 fps** (193 frames = 1+8n) chain-wide. Duration combo stays 5/8/10/12; mixed per-beat lengths are unsupported. Four x 8 s sequential prints are tens of minutes on GB10 - not a hang. Headroom preflight still applies at `start`.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job. Occupancy ltx XOR. `occupancy enter ltx` before Queue. No Klein identity on this canvas.\n\nDuplicate Beat groups on canvas for beats 5-24:\n\n1. Duplicate the last Beat group.\n2. Set `VHS_VideoCombine.filename_prefix` to `ez_clip_b05_ltx_video` (then b06...).\n3. Set last-frame SaveImage prefix to `ez_clip_b05_last`.\n4. Wire previous `EZClipLastFrame.last_frame` -> new `LTXVImgToVideo.image`.\n5. Wire new `VHS_VideoCombine.Filenames` -> the next free `EZClipConcat.clip_0N` (`clip_05` for the fifth beat).\n6. Keep the shared UNET / VAE / CLIP / Format / Seed / Rewrite / Audio notes wires (do not duplicate loaders).\n7. Save under `_user/` if you want a personal App; shipped `_lab` stays 4 beats.\n\nPast 24 stems: host `bazelisk run //scripts:run-utility -- concat-shots --files a.mp4,b.mp4 --cap-seconds <sum> --yes` (default `--files` cap is 90 s).\n\nLTX-2.5 distilled AV. LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown is hidden on I2V.\n\nLoadImage default example.png; after a still set ez_still_hero_*.png. Match input Format. MagCache off.\n"
       ],
       "title": "Operator note - clip chain"
     },
@@ -304,7 +304,7 @@
       "type": "EZVideoFormat",
       "pos": [
         620,
-        2122
+        2138
       ],
       "size": [
         360,
@@ -373,7 +373,7 @@
       "type": "EZImageDescribe",
       "pos": [
         620,
-        1188
+        1204
       ],
       "size": [
         280,
@@ -394,7 +394,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 2
+          "link": null
         }
       ],
       "outputs": [
@@ -420,7 +420,7 @@
       "type": "EZDCCOccupancyGate",
       "pos": [
         988,
-        748
+        764
       ],
       "size": [
         280,
@@ -441,7 +441,6 @@
           "name": "image",
           "type": "IMAGE",
           "links": [
-            2,
             13
           ],
           "slot_index": 0
@@ -460,7 +459,7 @@
       "type": "PrimitiveNode",
       "pos": [
         620,
-        1350
+        1366
       ],
       "size": [
         320,
@@ -500,7 +499,7 @@
       "type": "PrimitiveNode",
       "pos": [
         620,
-        1504
+        1520
       ],
       "size": [
         320,
@@ -540,7 +539,7 @@
       "type": "PrimitiveNode",
       "pos": [
         620,
-        1658
+        1674
       ],
       "size": [
         420,
@@ -580,7 +579,7 @@
       "type": "PrimitiveNode",
       "pos": [
         620,
-        1890
+        1906
       ],
       "size": [
         420,
@@ -620,7 +619,7 @@
       "type": "EZClipConcat",
       "pos": [
         40,
-        4768
+        4784
       ],
       "size": [
         420,
@@ -782,7 +781,7 @@
       "type": "EZFilmDisclosure",
       "pos": [
         508,
-        4768
+        4784
       ],
       "size": [
         420,
@@ -815,7 +814,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         1480,
-        748
+        764
       ],
       "size": [
         420,
@@ -891,7 +890,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         1948,
-        748
+        764
       ],
       "size": [
         420,
@@ -938,7 +937,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         1480,
-        1240
+        1256
       ],
       "size": [
         420,
@@ -979,7 +978,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         1948,
-        1336
+        1352
       ],
       "size": [
         420,
@@ -1026,7 +1025,7 @@
       "type": "LTXVImgToVideo",
       "pos": [
         2416,
-        748
+        764
       ],
       "size": [
         320,
@@ -1115,7 +1114,7 @@
       "type": "LTXVConditioning",
       "pos": [
         2400,
-        1044
+        1060
       ],
       "size": [
         280,
@@ -1167,7 +1166,7 @@
       "type": "LTXVConcatAVLatent",
       "pos": [
         2400,
-        1198
+        1214
       ],
       "size": [
         280,
@@ -1209,7 +1208,7 @@
       "type": "KSampler",
       "pos": [
         2784,
-        748
+        764
       ],
       "size": [
         320,
@@ -1277,7 +1276,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         2760,
-        1082
+        1098
       ],
       "size": [
         280,
@@ -1322,7 +1321,7 @@
       "type": "VAEDecode",
       "pos": [
         3152,
-        748
+        764
       ],
       "size": [
         240,
@@ -1365,7 +1364,7 @@
       "type": "LTXVAudioVAEDecode",
       "pos": [
         3152,
-        1240
+        1256
       ],
       "size": [
         320,
@@ -1407,7 +1406,7 @@
       "type": "VHS_VideoCombine",
       "pos": [
         3440,
-        748
+        764
       ],
       "size": [
         320,
@@ -1473,7 +1472,7 @@
       "type": "EZClipLastFrame",
       "pos": [
         3152,
-        1378
+        1394
       ],
       "size": [
         280,
@@ -1511,7 +1510,7 @@
       "type": "SaveImage",
       "pos": [
         3520,
-        1280
+        1296
       ],
       "size": [
         280,
@@ -1541,7 +1540,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         1480,
-        1776
+        1792
       ],
       "size": [
         420,
@@ -1612,7 +1611,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         1948,
-        1776
+        1792
       ],
       "size": [
         420,
@@ -1659,7 +1658,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         1480,
-        2268
+        2284
       ],
       "size": [
         420,
@@ -1700,7 +1699,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         1948,
-        2364
+        2380
       ],
       "size": [
         420,
@@ -1747,7 +1746,7 @@
       "type": "LTXVImgToVideo",
       "pos": [
         2416,
-        1776
+        1792
       ],
       "size": [
         320,
@@ -1836,7 +1835,7 @@
       "type": "LTXVConditioning",
       "pos": [
         2400,
-        2072
+        2088
       ],
       "size": [
         280,
@@ -1888,7 +1887,7 @@
       "type": "LTXVConcatAVLatent",
       "pos": [
         2400,
-        2226
+        2242
       ],
       "size": [
         280,
@@ -1930,7 +1929,7 @@
       "type": "KSampler",
       "pos": [
         2784,
-        1776
+        1792
       ],
       "size": [
         320,
@@ -1998,7 +1997,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         2760,
-        2110
+        2126
       ],
       "size": [
         280,
@@ -2043,7 +2042,7 @@
       "type": "VAEDecode",
       "pos": [
         3152,
-        1776
+        1792
       ],
       "size": [
         240,
@@ -2086,7 +2085,7 @@
       "type": "LTXVAudioVAEDecode",
       "pos": [
         3152,
-        2268
+        2284
       ],
       "size": [
         320,
@@ -2128,7 +2127,7 @@
       "type": "VHS_VideoCombine",
       "pos": [
         3440,
-        1776
+        1792
       ],
       "size": [
         320,
@@ -2194,7 +2193,7 @@
       "type": "EZClipLastFrame",
       "pos": [
         3152,
-        2406
+        2422
       ],
       "size": [
         280,
@@ -2232,7 +2231,7 @@
       "type": "SaveImage",
       "pos": [
         3520,
-        2308
+        2324
       ],
       "size": [
         280,
@@ -2262,7 +2261,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         1480,
-        2804
+        2820
       ],
       "size": [
         420,
@@ -2333,7 +2332,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         1948,
-        2804
+        2820
       ],
       "size": [
         420,
@@ -2380,7 +2379,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         1480,
-        3296
+        3312
       ],
       "size": [
         420,
@@ -2421,7 +2420,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         1948,
-        3392
+        3408
       ],
       "size": [
         420,
@@ -2468,7 +2467,7 @@
       "type": "LTXVImgToVideo",
       "pos": [
         2416,
-        2804
+        2820
       ],
       "size": [
         320,
@@ -2557,7 +2556,7 @@
       "type": "LTXVConditioning",
       "pos": [
         2400,
-        3100
+        3116
       ],
       "size": [
         280,
@@ -2609,7 +2608,7 @@
       "type": "LTXVConcatAVLatent",
       "pos": [
         2400,
-        3254
+        3270
       ],
       "size": [
         280,
@@ -2651,7 +2650,7 @@
       "type": "KSampler",
       "pos": [
         2784,
-        2804
+        2820
       ],
       "size": [
         320,
@@ -2719,7 +2718,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         2760,
-        3138
+        3154
       ],
       "size": [
         280,
@@ -2764,7 +2763,7 @@
       "type": "VAEDecode",
       "pos": [
         3152,
-        2804
+        2820
       ],
       "size": [
         240,
@@ -2807,7 +2806,7 @@
       "type": "LTXVAudioVAEDecode",
       "pos": [
         3152,
-        3296
+        3312
       ],
       "size": [
         320,
@@ -2849,7 +2848,7 @@
       "type": "VHS_VideoCombine",
       "pos": [
         3440,
-        2804
+        2820
       ],
       "size": [
         320,
@@ -2915,7 +2914,7 @@
       "type": "EZClipLastFrame",
       "pos": [
         3152,
-        3434
+        3450
       ],
       "size": [
         280,
@@ -2953,7 +2952,7 @@
       "type": "SaveImage",
       "pos": [
         3520,
-        3336
+        3352
       ],
       "size": [
         280,
@@ -2983,7 +2982,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         1480,
-        3832
+        3848
       ],
       "size": [
         420,
@@ -3054,7 +3053,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         1948,
-        3832
+        3848
       ],
       "size": [
         420,
@@ -3101,7 +3100,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         1480,
-        4324
+        4340
       ],
       "size": [
         420,
@@ -3142,7 +3141,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         1948,
-        4420
+        4436
       ],
       "size": [
         420,
@@ -3189,7 +3188,7 @@
       "type": "LTXVImgToVideo",
       "pos": [
         2416,
-        3832
+        3848
       ],
       "size": [
         320,
@@ -3278,7 +3277,7 @@
       "type": "LTXVConditioning",
       "pos": [
         2400,
-        4128
+        4144
       ],
       "size": [
         280,
@@ -3330,7 +3329,7 @@
       "type": "LTXVConcatAVLatent",
       "pos": [
         2400,
-        4282
+        4298
       ],
       "size": [
         280,
@@ -3372,7 +3371,7 @@
       "type": "KSampler",
       "pos": [
         2784,
-        3832
+        3848
       ],
       "size": [
         320,
@@ -3440,7 +3439,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         2760,
-        4166
+        4182
       ],
       "size": [
         280,
@@ -3485,7 +3484,7 @@
       "type": "VAEDecode",
       "pos": [
         3152,
-        3832
+        3848
       ],
       "size": [
         240,
@@ -3528,7 +3527,7 @@
       "type": "LTXVAudioVAEDecode",
       "pos": [
         3152,
-        4324
+        4340
       ],
       "size": [
         320,
@@ -3570,7 +3569,7 @@
       "type": "VHS_VideoCombine",
       "pos": [
         3440,
-        3832
+        3848
       ],
       "size": [
         320,
@@ -3636,7 +3635,7 @@
       "type": "EZClipLastFrame",
       "pos": [
         3152,
-        4462
+        4478
       ],
       "size": [
         280,
@@ -3673,7 +3672,7 @@
       "type": "SaveImage",
       "pos": [
         3520,
-        4364
+        4380
       ],
       "size": [
         280,
@@ -3730,14 +3729,6 @@
       0,
       30,
       0,
-      "IMAGE"
-    ],
-    [
-      2,
-      30,
-      0,
-      24,
-      1,
       "IMAGE"
     ],
     [
@@ -4885,7 +4876,7 @@
       "title": "1. LTX models",
       "bounding": [
         20,
-        676,
+        692,
         560,
         868
       ],
@@ -4898,7 +4889,7 @@
       "title": "2. Start / occupancy / format",
       "bounding": [
         600,
-        676,
+        692,
         688,
         1670
       ],
@@ -4911,7 +4902,7 @@
       "title": "3. Beat 1 (8.00s LTX)",
       "bounding": [
         1460,
-        676,
+        692,
         2360,
         1028
       ],
@@ -4924,7 +4915,7 @@
       "title": "4. Beat 2 (8.00s LTX)",
       "bounding": [
         1460,
-        1704,
+        1720,
         2360,
         1028
       ],
@@ -4937,7 +4928,7 @@
       "title": "5. Beat 3 (8.00s LTX)",
       "bounding": [
         1460,
-        2732,
+        2748,
         2360,
         1028
       ],
@@ -4950,7 +4941,7 @@
       "title": "6. Beat 4 (8.00s LTX)",
       "bounding": [
         1460,
-        3760,
+        3776,
         2360,
         1028
       ],
@@ -4963,7 +4954,7 @@
       "title": "7. Publish clip chain",
       "bounding": [
         20,
-        4696,
+        4712,
         928,
         396
       ],
@@ -4976,7 +4967,7 @@
   "extra": {
     "lab_profile": "video/av/clip-chain",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## video/av/clip-chain\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nFour LTX AV beats share one UNET / video VAE / audio VAE / CLIP. Last frame of beat N starts beat N+1. EZClipConcat stitches the four MP4s (hard cut). Primary output: `${COMFY_OUTPUT_DIR}/ez_clip_chain.mp4` plus per-beat VHS (`ez_clip_b0N_ltx_video`) and last-frame PNG (`ez_clip_b0N_last`). No full-batch SaveImage.\n\n**8 seconds, 24 fps** (193 frames = 1+8n) chain-wide. Duration combo stays 5/8/10/12; mixed per-beat lengths are unsupported. Four x 8 s sequential prints are tens of minutes on GB10 - not a hang. Headroom preflight still applies at `start`.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job. Occupancy ltx XOR. `occupancy enter ltx` before Queue. No Klein identity on this canvas.\n\nDuplicate Beat groups on canvas for beats 5-24:\n\n1. Duplicate the last Beat group.\n2. Set `VHS_VideoCombine.filename_prefix` to `ez_clip_b05_ltx_video` (then b06...).\n3. Set last-frame SaveImage prefix to `ez_clip_b05_last`.\n4. Wire previous `EZClipLastFrame.last_frame` -> new `LTXVImgToVideo.image`.\n5. Wire new `VHS_VideoCombine.Filenames` -> the next free `EZClipConcat.clip_0N` (`clip_05` for the fifth beat).\n6. Keep the shared UNET / VAE / CLIP / Format / Seed / Rewrite / Audio notes wires (do not duplicate loaders).\n7. Save under `_user/` if you want a personal App; shipped `_lab` stays 4 beats.\n\nPast 24 stems: host `bazelisk run //scripts:run-utility -- concat-shots --files a.mp4,b.mp4 --cap-seconds <sum> --yes` (default `--files` cap is 90 s).\n\nLTX-2.5 distilled AV. LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown is hidden on I2V.\n\nLoadImage default example.png; after a still set ez_still_hero_*.png. Match input Format. MagCache off.\n",
+    "lab_note": "## video/av/clip-chain\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nFour LTX AV beats share one UNET / video VAE / audio VAE / CLIP. Last frame of beat N starts beat N+1. EZClipConcat stitches the four MP4s (hard cut). Primary output: `${COMFY_OUTPUT_DIR}/ez_clip_chain.mp4` plus per-beat VHS (`ez_clip_b0N_ltx_video`) and last-frame PNG (`ez_clip_b0N_last`). No full-batch SaveImage.\n\n**8 seconds, 24 fps** (193 frames = 1+8n) chain-wide. Duration combo stays 5/8/10/12; mixed per-beat lengths are unsupported. Four x 8 s sequential prints are tens of minutes on GB10 - not a hang. Headroom preflight still applies at `start`.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job. Occupancy ltx XOR. `occupancy enter ltx` before Queue. No Klein identity on this canvas.\n\nDuplicate Beat groups on canvas for beats 5-24:\n\n1. Duplicate the last Beat group.\n2. Set `VHS_VideoCombine.filename_prefix` to `ez_clip_b05_ltx_video` (then b06...).\n3. Set last-frame SaveImage prefix to `ez_clip_b05_last`.\n4. Wire previous `EZClipLastFrame.last_frame` -> new `LTXVImgToVideo.image`.\n5. Wire new `VHS_VideoCombine.Filenames` -> the next free `EZClipConcat.clip_0N` (`clip_05` for the fifth beat).\n6. Keep the shared UNET / VAE / CLIP / Format / Seed / Rewrite / Audio notes wires (do not duplicate loaders).\n7. Save under `_user/` if you want a personal App; shipped `_lab` stays 4 beats.\n\nPast 24 stems: host `bazelisk run //scripts:run-utility -- concat-shots --files a.mp4,b.mp4 --cap-seconds <sum> --yes` (default `--files` cap is 90 s).\n\nLTX-2.5 distilled AV. LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown is hidden on I2V.\n\nLoadImage default example.png; after a still set ez_still_hero_*.png. Match input Format. MagCache off.\n",
     "lab_ltx_av": true,
     "lab_description": "Four LTX AV beats with last-frame continuity, 8.00 s / 193 each",
     "lab_app_mode": {

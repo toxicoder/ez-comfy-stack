@@ -2,7 +2,7 @@
   "id": "00-plate",
   "revision": 13,
   "last_node_id": 19,
-  "last_link_id": 466,
+  "last_link_id": 467,
   "nodes": [
     {
       "id": 1,
@@ -266,8 +266,8 @@
       "id": 7,
       "type": "KSampler",
       "pos": [
-        1324,
-        1486
+        2528,
+        524
       ],
       "size": [
         320,
@@ -353,7 +353,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            466
+            467
           ],
           "slot_index": 0
         }
@@ -382,7 +382,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 466
+          "link": 467
         }
       ],
       "outputs": [],
@@ -414,7 +414,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## film/switchyard/00-plate\n\nIdentity plate (night freight yard): one Klein 4B still that every print in this series\nstarts from.\n\nModels: Klein 4B distilled FP8 - 4-step, Enhance **off**, t2i mode. This app\nloads no LTX model, so the Quality combo moves Klein tiers only.\n\n1. Queue **once**. The still lands at `${COMFY_OUTPUT_DIR}/ez_switchyard_plate_00001_.png`.\n2. Check the face, the wardrobe, and the location read before you Queue a print\n   pass. Re-Queue here until the plate is right; it is 4 steps and cheap.\n3. Next: **film/switchyard/feature**. Its LoadImage reads `ez_switchyard_plate.png`, so change\n   the seed here and re-Queue the plate before you re-Queue a print.\n4. Optional still-only iterate: **photos/still-draft**. Optional silent\n   rehearsal: **video/silent/still-to-shot**.\n\nUS-safe local pack only. Klein 4B stills are the promoted image family.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## film/switchyard/00-plate\n\nIdentity plate (night freight yard): one Klein 4B still that every print in this series\nstarts from.\n\nModels: Klein 4B distilled FP8 - 4-step, Enhance **off**, t2i mode. This app\nloads no LTX model, so the Detail ladder stays inside the Klein stack\n(draft nvfp4, standard writes nothing, final Klein 4B base fp8).\n\n1. Queue **once**. The still lands at `${COMFY_OUTPUT_DIR}/ez_switchyard_plate_00001_.png`.\n2. Check the face, the wardrobe, and the location read before you Queue a print\n   pass. Re-Queue here until the plate is right; it is 4 steps and cheap.\n3. Next: **film/switchyard/feature**. Its LoadImage reads `ez_switchyard_plate.png`, so change\n   the seed here and re-Queue the plate before you re-Queue a print.\n4. Optional still-only iterate: **photos/still-draft**. Optional silent\n   rehearsal: **video/silent/still-to-shot**.\n\nUS-safe local pack only. Klein 4B stills are the promoted image family.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note - identity plate"
     },
@@ -565,7 +565,7 @@
           "type": "IMAGE",
           "links": [
             19,
-            30
+            31
           ],
           "slot_index": 0
         },
@@ -682,7 +682,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 30
+          "link": 31
         }
       ],
       "outputs": [
@@ -858,7 +858,7 @@
       "STRING"
     ],
     [
-      30,
+      31,
       15,
       0,
       18,
@@ -866,7 +866,7 @@
       "IMAGE"
     ],
     [
-      466,
+      467,
       8,
       0,
       9,
@@ -908,7 +908,7 @@
         20,
         452,
         2012,
-        1340
+        1260
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -926,12 +926,25 @@
       "color": "#3f789e",
       "font_size": 24,
       "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "SETTINGS",
+      "bounding": [
+        2508,
+        452,
+        360,
+        378
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
     }
   ],
   "config": {},
   "extra": {
     "lab_profile": "film/switchyard",
-    "lab_note": "## film/switchyard/00-plate\n\nIdentity plate (night freight yard): one Klein 4B still that every print in this series\nstarts from.\n\nModels: Klein 4B distilled FP8 - 4-step, Enhance **off**, t2i mode. This app\nloads no LTX model, so the Quality combo moves Klein tiers only.\n\n1. Queue **once**. The still lands at `${COMFY_OUTPUT_DIR}/ez_switchyard_plate_00001_.png`.\n2. Check the face, the wardrobe, and the location read before you Queue a print\n   pass. Re-Queue here until the plate is right; it is 4 steps and cheap.\n3. Next: **film/switchyard/feature**. Its LoadImage reads `ez_switchyard_plate.png`, so change\n   the seed here and re-Queue the plate before you re-Queue a print.\n4. Optional still-only iterate: **photos/still-draft**. Optional silent\n   rehearsal: **video/silent/still-to-shot**.\n\nUS-safe local pack only. Klein 4B stills are the promoted image family.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_note": "## film/switchyard/00-plate\n\nIdentity plate (night freight yard): one Klein 4B still that every print in this series\nstarts from.\n\nModels: Klein 4B distilled FP8 - 4-step, Enhance **off**, t2i mode. This app\nloads no LTX model, so the Detail ladder stays inside the Klein stack\n(draft nvfp4, standard writes nothing, final Klein 4B base fp8).\n\n1. Queue **once**. The still lands at `${COMFY_OUTPUT_DIR}/ez_switchyard_plate_00001_.png`.\n2. Check the face, the wardrobe, and the location read before you Queue a print\n   pass. Re-Queue here until the plate is right; it is 4 steps and cheap.\n3. Next: **film/switchyard/feature**. Its LoadImage reads `ez_switchyard_plate.png`, so change\n   the seed here and re-Queue the plate before you re-Queue a print.\n4. Optional still-only iterate: **photos/still-draft**. Optional silent\n   rehearsal: **video/silent/still-to-shot**.\n\nUS-safe local pack only. Klein 4B stills are the promoted image family.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n",
     "lab_description": "Klein identity plate for night freight yard\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_film": "switchyard",
     "lab_slug": "switchyard",
@@ -1012,6 +1025,22 @@
           {
             "description": "Fix to iterate; randomize to explore.",
             "label": "Seed"
+          }
+        ],
+        [
+          15,
+          "filename",
+          {
+            "description": "Upload a still or pick one already on the drive (input/ or Outputs). Empty is valid - Queue without a file. When set, Klein uses it as a native reference.",
+            "label": "Example / reference (optional)"
+          }
+        ],
+        [
+          15,
+          "use_references",
+          {
+            "description": "Turn off to run text-to-image without clearing your picks. Any new pick turns it back on.",
+            "label": "Use reference stills"
           }
         ]
       ],

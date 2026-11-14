@@ -9,7 +9,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        588
+        1112
       ],
       "size": [
         360,
@@ -52,7 +52,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        944
+        1468
       ],
       "size": [
         360,
@@ -106,7 +106,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        1122
+        1646
       ],
       "size": [
         360,
@@ -148,7 +148,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         40,
-        1482
+        2006
       ],
       "size": [
         420,
@@ -205,7 +205,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         2380,
-        588
+        1112
       ],
       "size": [
         420,
@@ -252,7 +252,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         2848,
-        880
+        1404
       ],
       "size": [
         280,
@@ -336,7 +336,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## photos/dream-house\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nTen Instagram 4:5 stills: a virtual tour of **one place** (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). Type any place in HOUSE IDENTITY - the default placeholder is the lab penthouse.\nHOUSE IDENTITY is a camera-free world bible (rooms, furniture, outdoor lamps, sky, surroundings, time of day). Enhance extracts only the rooms and furniture you named - name lounge, kitchen, dining, bath, bedroom, terrace, study, and outdoor lamps so the tour can enter them. Name each room's backdrop in the bible (which wall or opening that room faces). Hidden SHOT cards are camera stations (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study): lens, camera height, a distinct room program (entrance hall, living hall, cook line, dining hall, sleep chamber, wet room, open-air terrace, writing room), near/far planes, and which room - not a penthouse template and not one volume restyled. They do not name dusk, materials, or architecture. Prompt Join lock=view front-loads the shot and closes with 'this still is only the room and backdrop the shot names.' Shots 02-10 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.\nIdentity-mode enhance is **on**. Shot cards are not Klein-t2i-enhanced - a per-shot rewrite would mutate the bible. Optional style dropdown applies to the bible.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Dawn / noon / night of one camera belong on klein-time-of-day, not this tour.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## photos/dream-house\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nTen Instagram 4:5 stills: a virtual tour of **one place** (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). Type any place in HOUSE IDENTITY - the default placeholder is the lab penthouse.\nHOUSE IDENTITY is a camera-free world bible (rooms, furniture, outdoor lamps, sky, surroundings, time of day). Enhance extracts only the rooms and furniture you named - name lounge, kitchen, dining, bath, bedroom, terrace, study, and outdoor lamps so the tour can enter them. Name each room's backdrop in the bible (which wall or opening that room faces). Hidden SHOT cards are camera stations (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study): lens, camera height, a distinct room program (entrance hall, living hall, cook line, dining hall, sleep chamber, wet room, open-air terrace, writing room), near/far planes, and which room - not a penthouse template and not one volume restyled. They do not name dusk, materials, or architecture. Prompt Join lock=view front-loads the shot and closes with 'this still is only the room and backdrop the shot names.' Shots 02-10 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.\nIdentity-mode enhance is **on**. Shot cards are not Klein-t2i-enhanced - a per-shot rewrite would mutate the bible. Optional style dropdown applies to the bible.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Dawn / noon / night of one camera belong on klein-time-of-day, not this tour.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nHandoff: video/loops/gif-loop, video/loops/bumper-loop, video/loops/sticker-loop. Load that graph next - the output is its input.\n"
       ],
       "title": "Operator note"
     },
@@ -345,7 +345,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        588
+        1112
       ],
       "size": [
         420,
@@ -387,7 +387,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        588
+        1112
       ],
       "size": [
         360,
@@ -434,7 +434,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        588
+        1112
       ],
       "size": [
         320,
@@ -494,7 +494,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        588
+        1112
       ],
       "size": [
         240,
@@ -536,7 +536,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        588
+        1112
       ],
       "size": [
         280,
@@ -566,7 +566,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1160
+        1684
       ],
       "size": [
         420,
@@ -608,7 +608,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        1160
+        1684
       ],
       "size": [
         360,
@@ -655,7 +655,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        1160
+        1684
       ],
       "size": [
         320,
@@ -715,7 +715,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        1160
+        1684
       ],
       "size": [
         240,
@@ -757,7 +757,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        1160
+        1684
       ],
       "size": [
         280,
@@ -787,7 +787,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1698
+        2222
       ],
       "size": [
         420,
@@ -829,7 +829,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        1698
+        2222
       ],
       "size": [
         360,
@@ -876,7 +876,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        1698
+        2222
       ],
       "size": [
         320,
@@ -936,7 +936,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        1698
+        2222
       ],
       "size": [
         240,
@@ -978,7 +978,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        1698
+        2222
       ],
       "size": [
         280,
@@ -1008,7 +1008,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        2236
+        2760
       ],
       "size": [
         420,
@@ -1050,7 +1050,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        2236
+        2760
       ],
       "size": [
         360,
@@ -1097,7 +1097,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        2236
+        2760
       ],
       "size": [
         320,
@@ -1157,7 +1157,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        2236
+        2760
       ],
       "size": [
         240,
@@ -1199,7 +1199,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        2236
+        2760
       ],
       "size": [
         280,
@@ -1229,7 +1229,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        2774
+        3298
       ],
       "size": [
         420,
@@ -1271,7 +1271,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        2774
+        3298
       ],
       "size": [
         360,
@@ -1318,7 +1318,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        2774
+        3298
       ],
       "size": [
         320,
@@ -1378,7 +1378,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        2774
+        3298
       ],
       "size": [
         240,
@@ -1420,7 +1420,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        2774
+        3298
       ],
       "size": [
         280,
@@ -1450,7 +1450,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        3312
+        3836
       ],
       "size": [
         420,
@@ -1492,7 +1492,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        3312
+        3836
       ],
       "size": [
         360,
@@ -1539,7 +1539,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        3312
+        3836
       ],
       "size": [
         320,
@@ -1599,7 +1599,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        3312
+        3836
       ],
       "size": [
         240,
@@ -1641,7 +1641,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        3312
+        3836
       ],
       "size": [
         280,
@@ -1671,7 +1671,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        3850
+        4374
       ],
       "size": [
         420,
@@ -1713,7 +1713,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        3850
+        4374
       ],
       "size": [
         360,
@@ -1760,7 +1760,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        3850
+        4374
       ],
       "size": [
         320,
@@ -1820,7 +1820,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        3850
+        4374
       ],
       "size": [
         240,
@@ -1862,7 +1862,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        3850
+        4374
       ],
       "size": [
         280,
@@ -1892,7 +1892,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        4388
+        4912
       ],
       "size": [
         420,
@@ -1934,7 +1934,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        4388
+        4912
       ],
       "size": [
         360,
@@ -1981,7 +1981,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        4388
+        4912
       ],
       "size": [
         320,
@@ -2041,7 +2041,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        4388
+        4912
       ],
       "size": [
         240,
@@ -2083,7 +2083,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        4388
+        4912
       ],
       "size": [
         280,
@@ -2113,7 +2113,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        4926
+        5450
       ],
       "size": [
         420,
@@ -2155,7 +2155,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        4926
+        5450
       ],
       "size": [
         360,
@@ -2202,7 +2202,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        4926
+        5450
       ],
       "size": [
         320,
@@ -2262,7 +2262,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        4926
+        5450
       ],
       "size": [
         240,
@@ -2304,7 +2304,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        4926
+        5450
       ],
       "size": [
         280,
@@ -2334,7 +2334,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        5464
+        5988
       ],
       "size": [
         420,
@@ -2376,7 +2376,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        5464
+        5988
       ],
       "size": [
         360,
@@ -2423,7 +2423,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        5464
+        5988
       ],
       "size": [
         320,
@@ -2483,7 +2483,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        5464
+        5988
       ],
       "size": [
         240,
@@ -2525,7 +2525,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        5464
+        5988
       ],
       "size": [
         280,
@@ -2555,7 +2555,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         480,
-        5716
+        6240
       ],
       "size": [
         420,
@@ -2627,7 +2627,7 @@
       "type": "EZImageFormat",
       "pos": [
         2848,
-        588
+        1112
       ],
       "size": [
         360,
@@ -2701,7 +2701,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        930
+        1454
       ],
       "size": [
         280,
@@ -2756,7 +2756,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        1502
+        2026
       ],
       "size": [
         280,
@@ -2809,7 +2809,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        2040
+        2564
       ],
       "size": [
         280,
@@ -2862,7 +2862,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        2578
+        3102
       ],
       "size": [
         280,
@@ -2915,7 +2915,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        3116
+        3640
       ],
       "size": [
         280,
@@ -2968,7 +2968,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        3654
+        4178
       ],
       "size": [
         280,
@@ -3021,7 +3021,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        4192
+        4716
       ],
       "size": [
         280,
@@ -3074,7 +3074,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        4730
+        5254
       ],
       "size": [
         280,
@@ -3127,7 +3127,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        5268
+        5792
       ],
       "size": [
         280,
@@ -3180,7 +3180,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        5806
+        6330
       ],
       "size": [
         280,
@@ -3256,8 +3256,8 @@
       "id": 74,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        3276.0,
-        80.0
+        2380,
+        1344
       ],
       "size": [
         420.0,
@@ -3297,8 +3297,8 @@
       "id": 75,
       "type": "CLIPTextEncode",
       "pos": [
-        3276.0,
-        572.0
+        2380,
+        5772
       ],
       "size": [
         420.0,
@@ -3344,8 +3344,8 @@
       "id": 76,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        3276.0,
-        804.0
+        2380,
+        1836
       ],
       "size": [
         420.0,
@@ -3385,8 +3385,8 @@
       "id": 77,
       "type": "CLIPTextEncode",
       "pos": [
-        3276.0,
-        1296.0
+        2380,
+        6004
       ],
       "size": [
         420.0,
@@ -3432,8 +3432,8 @@
       "id": 78,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        3276.0,
-        1528.0
+        2380,
+        2328
       ],
       "size": [
         420.0,
@@ -3473,8 +3473,8 @@
       "id": 79,
       "type": "CLIPTextEncode",
       "pos": [
-        3276.0,
-        2020.0
+        2380,
+        6236
       ],
       "size": [
         420.0,
@@ -3520,8 +3520,8 @@
       "id": 80,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        3276.0,
-        2252.0
+        2380,
+        2820
       ],
       "size": [
         420.0,
@@ -3561,8 +3561,8 @@
       "id": 81,
       "type": "CLIPTextEncode",
       "pos": [
-        3276.0,
-        2744.0
+        2380,
+        6468
       ],
       "size": [
         420.0,
@@ -3608,8 +3608,8 @@
       "id": 82,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        3276.0,
-        2976.0
+        2380,
+        3312
       ],
       "size": [
         420.0,
@@ -3649,8 +3649,8 @@
       "id": 83,
       "type": "CLIPTextEncode",
       "pos": [
-        3276.0,
-        3468.0
+        2380,
+        6700
       ],
       "size": [
         420.0,
@@ -3696,8 +3696,8 @@
       "id": 84,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        3276.0,
-        3700.0
+        2380,
+        3804
       ],
       "size": [
         420.0,
@@ -3737,8 +3737,8 @@
       "id": 85,
       "type": "CLIPTextEncode",
       "pos": [
-        3276.0,
-        4192.0
+        2380,
+        6932
       ],
       "size": [
         420.0,
@@ -3784,8 +3784,8 @@
       "id": 86,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        3276.0,
-        4424.0
+        2380,
+        4296
       ],
       "size": [
         420.0,
@@ -3825,8 +3825,8 @@
       "id": 87,
       "type": "CLIPTextEncode",
       "pos": [
-        3276.0,
-        4916.0
+        2380,
+        7164
       ],
       "size": [
         420.0,
@@ -3872,8 +3872,8 @@
       "id": 88,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        3276.0,
-        5148.0
+        2380,
+        4788
       ],
       "size": [
         420.0,
@@ -3913,8 +3913,8 @@
       "id": 89,
       "type": "CLIPTextEncode",
       "pos": [
-        3276.0,
-        5640.0
+        2380,
+        7396
       ],
       "size": [
         420.0,
@@ -3960,8 +3960,8 @@
       "id": 90,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        3276.0,
-        5872.0
+        2380,
+        5280
       ],
       "size": [
         420.0,
@@ -4001,8 +4001,8 @@
       "id": 91,
       "type": "CLIPTextEncode",
       "pos": [
-        3276.0,
-        6364.0
+        2380,
+        7628
       ],
       "size": [
         420.0,
@@ -5303,7 +5303,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        516,
+        1040,
         400,
         708
       ],
@@ -5316,7 +5316,7 @@
       "title": "HOUSE IDENTITY",
       "bounding": [
         20,
-        1410,
+        1934,
         460,
         536
       ],
@@ -5329,7 +5329,7 @@
       "title": "SHOT 01 tower",
       "bounding": [
         500,
-        516,
+        1040,
         1852,
         538
       ],
@@ -5342,7 +5342,7 @@
       "title": "SHOT 02 foyer",
       "bounding": [
         500,
-        1088,
+        1612,
         1852,
         538
       ],
@@ -5355,7 +5355,7 @@
       "title": "SHOT 03 lounge",
       "bounding": [
         500,
-        1626,
+        2150,
         1852,
         538
       ],
@@ -5368,7 +5368,7 @@
       "title": "SHOT 04 kitchen",
       "bounding": [
         500,
-        2164,
+        2688,
         1852,
         538
       ],
@@ -5381,7 +5381,7 @@
       "title": "SHOT 05 dining",
       "bounding": [
         500,
-        2702,
+        3226,
         1852,
         538
       ],
@@ -5394,7 +5394,7 @@
       "title": "SHOT 06 bedroom",
       "bounding": [
         500,
-        3240,
+        3764,
         1852,
         538
       ],
@@ -5407,7 +5407,7 @@
       "title": "SHOT 07 bath",
       "bounding": [
         500,
-        3778,
+        4302,
         1852,
         538
       ],
@@ -5420,7 +5420,7 @@
       "title": "SHOT 08 terrace",
       "bounding": [
         500,
-        4316,
+        4840,
         1852,
         538
       ],
@@ -5433,7 +5433,7 @@
       "title": "SHOT 09 drone",
       "bounding": [
         500,
-        4854,
+        5378,
         1852,
         538
       ],
@@ -5446,7 +5446,7 @@
       "title": "SHOT 10 study",
       "bounding": [
         460,
-        5392,
+        5916,
         1892,
         788
       ],
@@ -5459,9 +5459,9 @@
       "title": "PROMPT",
       "bounding": [
         2360,
-        516,
+        1040,
         460,
-        276
+        6792
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -5472,7 +5472,7 @@
       "title": "SETTINGS",
       "bounding": [
         2828,
-        516,
+        1040,
         400,
         514
       ],
@@ -5485,7 +5485,7 @@
   "extra": {
     "lab_profile": "photos/dream-house",
     "lab_flux_tier": "fast",
-    "lab_note": "## photos/dream-house\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nTen Instagram 4:5 stills: a virtual tour of **one place** (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). Type any place in HOUSE IDENTITY - the default placeholder is the lab penthouse.\nHOUSE IDENTITY is a camera-free world bible (rooms, furniture, outdoor lamps, sky, surroundings, time of day). Enhance extracts only the rooms and furniture you named - name lounge, kitchen, dining, bath, bedroom, terrace, study, and outdoor lamps so the tour can enter them. Name each room's backdrop in the bible (which wall or opening that room faces). Hidden SHOT cards are camera stations (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study): lens, camera height, a distinct room program (entrance hall, living hall, cook line, dining hall, sleep chamber, wet room, open-air terrace, writing room), near/far planes, and which room - not a penthouse template and not one volume restyled. They do not name dusk, materials, or architecture. Prompt Join lock=view front-loads the shot and closes with 'this still is only the room and backdrop the shot names.' Shots 02-10 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.\nIdentity-mode enhance is **on**. Shot cards are not Klein-t2i-enhanced - a per-shot rewrite would mutate the bible. Optional style dropdown applies to the bible.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Dawn / noon / night of one camera belong on klein-time-of-day, not this tour.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## photos/dream-house\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nTen Instagram 4:5 stills: a virtual tour of **one place** (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). Type any place in HOUSE IDENTITY - the default placeholder is the lab penthouse.\nHOUSE IDENTITY is a camera-free world bible (rooms, furniture, outdoor lamps, sky, surroundings, time of day). Enhance extracts only the rooms and furniture you named - name lounge, kitchen, dining, bath, bedroom, terrace, study, and outdoor lamps so the tour can enter them. Name each room's backdrop in the bible (which wall or opening that room faces). Hidden SHOT cards are camera stations (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study): lens, camera height, a distinct room program (entrance hall, living hall, cook line, dining hall, sleep chamber, wet room, open-air terrace, writing room), near/far planes, and which room - not a penthouse template and not one volume restyled. They do not name dusk, materials, or architecture. Prompt Join lock=view front-loads the shot and closes with 'this still is only the room and backdrop the shot names.' Shots 02-10 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.\nIdentity-mode enhance is **on**. Shot cards are not Klein-t2i-enhanced - a per-shot rewrite would mutate the bible. Optional style dropdown applies to the bible.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Dawn / noon / night of one camera belong on klein-time-of-day, not this tour.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nHandoff: video/loops/gif-loop, video/loops/bumper-loop, video/loops/sticker-loop. Load that graph next - the output is its input.\n",
     "lab_description": "Ten Instagram 4:5 Klein stills: virtual tour of one place (outside, rooms, terrace, drone)",
     "ds": {
       "scale": 1,

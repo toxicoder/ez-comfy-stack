@@ -1,6 +1,6 @@
 ---
 title: "audio/stem-mix"
-description: "Picture-lock stem mix desk. Occupancy audio. Mix via stem-mix.sh."
+description: "Picture-lock stem mix desk. Occupancy audio. Mix via stem-mix.sh; the Save prefix row names the master."
 tags: [workflows, generated, comfyui, audio]
 ---
 
@@ -32,13 +32,24 @@ Occupancy **audio**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fa
 Picture-lock stem mix. Occupancy **audio** - stop Klein / Wan / LTX first. ACE-Step
 score is a later session if `score: acestep-instrumental`.
 
-This canvas does not denoise video. Mix on the host:
+This canvas has no audio source: SaveAudio's audio slot stays empty on purpose, so
+Queue is not how this App is run and an empty Queue writes nothing. The mix is a host
+ffmpeg verb. Run it from a repo shell:
 
-  bazelisk run //:manage -- stem-mix --film <slug> --shot <id> --bg PATH [--dx PATH]
+  bazelisk run //:manage -- stem-mix --film go-see --shot 01 --bg PATH [--dx PATH] [--fx PATH] [--mx PATH] [--video PATH]
 
-Stems: BG = demuxed LTX world bed, FX = optional Templates LTX-2.5 T2A (same distilled
-transformer; not a vendored subgraph), DX = Kokoro / Qwen3-TTS, MX = ACE-Step
-instrumental. Duck beds -15 dB under DX. YouTube loudnorm I=-14.
+`--film` and `--shot` are required (the verb stops without them) and `--bg` is the bed
+its usage line asks for. The stems are file paths the verb opens, not switches on this
+canvas: --bg is the demuxed LTX world bed, --dx is Kokoro / Qwen3-TTS dialogue, --fx is
+the optional Templates LTX-2.5 T2A pass (same distilled transformer; not a vendored
+subgraph), and --mx is the ACE-Step instrumental. There is no Include DX / FX / MX row
+any more - a yes/no box cannot name a path, so those rows could only ever have lied.
+
+The one row the App panel shows, Save prefix, is wired into SaveAudio's filename_prefix
+and ships as ez_stem_mix_gosee_01: the film slug and the shot id, lowercase and
+path-safe. Keep it matching --film / --shot so the canvas master and the host mix at
+films/<slug>/stems/<id>/mix.m4a (mix.mp4 with --video) name the same cut. Duck beds
+-15 dB under DX. YouTube loudnorm I=-14.
 
 A2V lock (talking-head): mix DX first, then Templates -> LTX-2.5 A2V freeze. Mouths will
 not match (banned lip-sync OSS stays out). Foley V2A LoRA is not in v1.
@@ -46,7 +57,6 @@ not match (banned lip-sync OSS stays out). Foley V2A LoRA is not in v1.
 Do not start Docker. Do not co-resident ACE-Step with LTX.
 
 Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
-Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 ```
 
 ## How to Queue
@@ -62,13 +72,10 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 ```mermaid
 flowchart LR
   N1["Operator note"]
-  N2["Film slug"]
-  N3["Shot id"]
-  N4["Include DX"]
-  N5["Include FX"]
-  N6["Include MX"]
-  N7["Save stem mix (host stem-mix.sh)"]
-  N9["Check models"]
+  N2["Save prefix"]
+  N3["Save stem mix (host stem-mix.sh)"]
+  N4["Check models"]
+  N2 --> N3
 ```
 
 ## Nodes on this graph
@@ -76,13 +83,9 @@ flowchart LR
 | Id | Title | Type | Group |
 | --- | --- | --- | --- |
 | 1 | Operator note | `Note` | NOTE |
-| 2 | Film slug | `PrimitiveNode` | STEMS |
-| 3 | Shot id | `PrimitiveNode` | STEMS |
-| 4 | Include DX | `PrimitiveNode` | STEMS |
-| 5 | Include FX | `PrimitiveNode` | STEMS |
-| 6 | Include MX | `PrimitiveNode` | STEMS |
-| 7 | Save stem mix (host stem-mix.sh) | `SaveAudio` | OUTPUT |
-| 9 | Check models | `EZModelCheck` | QUALITY |
+| 2 | Save prefix | `PrimitiveNode` | STEMS |
+| 3 | Save stem mix (host stem-mix.sh) | `SaveAudio` | STEMS |
+| 4 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 
@@ -104,7 +107,7 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## audio/stem-mix Picture-lock stem mix. Occupancy **audio** - stop Klein / Wan / LTX first. ACE-Step score is a later session if `score: acestep-instrumental`. This canvas does not denoise video. Mi...`
+**This graph:** `## audio/stem-mix Picture-lock stem mix. Occupancy **audio** - stop Klein / Wan / LTX first. ACE-Step score is a later session if `score: acestep-instrumental`. This canvas has no audio source: SaveA...`
 
 ```text
 ## audio/stem-mix
@@ -112,13 +115,24 @@ Markdown-ish operator note.
 Picture-lock stem mix. Occupancy **audio** - stop Klein / Wan / LTX first. ACE-Step
 score is a later session if `score: acestep-instrumental`.
 
-This canvas does not denoise video. Mix on the host:
+This canvas has no audio source: SaveAudio's audio slot stays empty on purpose, so
+Queue is not how this App is run and an empty Queue writes nothing. The mix is a host
+ffmpeg verb. Run it from a repo shell:
 
-  bazelisk run //:manage -- stem-mix --film <slug> --shot <id> --bg PATH [--dx PATH]
+  bazelisk run //:manage -- stem-mix --film go-see --shot 01 --bg PATH [--dx PATH] [--fx PATH] [--mx PATH] [--video PATH]
 
-Stems: BG = demuxed LTX world bed, FX = optional Templates LTX-2.5 T2A (same distilled
-transformer; not a vendored subgraph), DX = Kokoro / Qwen3-TTS, MX = ACE-Step
-instrumental. Duck beds -15 dB under DX. YouTube loudnorm I=-14.
+`--film` and `--shot` are required (the verb stops without them) and `--bg` is the bed
+its usage line asks for. The stems are file paths the verb opens, not switches on this
+canvas: --bg is the demuxed LTX world bed, --dx is Kokoro / Qwen3-TTS dialogue, --fx is
+the optional Templates LTX-2.5 T2A pass (same distilled transformer; not a vendored
+subgraph), and --mx is the ACE-Step instrumental. There is no Include DX / FX / MX row
+any more - a yes/no box cannot name a path, so those rows could only ever have lied.
+
+The one row the App panel shows, Save prefix, is wired into SaveAudio's filename_prefix
+and ships as ez_stem_mix_gosee_01: the film slug and the shot id, lowercase and
+path-safe. Keep it matching --film / --shot so the canvas master and the host mix at
+films/<slug>/stems/<id>/mix.m4a (mix.mp4 with --video) name the same cut. Duck beds
+-15 dB under DX. YouTube loudnorm I=-14.
 
 A2V lock (talking-head): mix DX first, then Templates -> LTX-2.5 A2V freeze. Mouths will
 not match (banned lip-sync OSS stays out). Foley V2A LoRA is not in v1.
@@ -126,7 +140,6 @@ not match (banned lip-sync OSS stays out). Foley V2A LoRA is not in v1.
 Do not start Docker. Do not co-resident ACE-Step with LTX.
 
 Occupancy: audio - stop Klein / Wan / LTX session. One GB10 job.
-Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 ```
 
 ### `PrimitiveNode` - Primitive
@@ -149,13 +162,7 @@ The constant.
 
 **How it affects generation:** FLOAT seconds drive ACE latent length. STRING context is bible/research for Enhance.
 
-| Instance | Value |
-| --- | --- |
-| Film slug | `go-see` |
-| Shot id | `01` |
-| Include DX | `no` |
-| Include FX | `no` |
-| Include MX | `no` |
+**This graph:** `ez_stem_mix_gosee_01`
 
 #### `control_after_generate`
 
@@ -165,7 +172,7 @@ Whether the primitive mutates after Queue.
 
 **How it affects generation:** fixed keeps duration/context pinned.
 
-**This graph (all 5 instances):** `fixed`
+**This graph:** `fixed`
 
 **Other choices**
 
@@ -196,11 +203,11 @@ Save stem.
 
 **How it affects generation:** Album tracks use NN - Song Title. Tags come from EZAudioMetadata.
 
-**This graph:** `ez_stem_mix`
+**This graph:** `ez_stem_mix_gosee_01`
 
 ### `EZModelCheck` - Check models
 
-Manual disk check for occupancy + Quality weights. Queue does not run this node.
+Manual disk check for occupancy + Detail weights. Queue does not run this node.
 
 !!! warning "Lab notes"
 

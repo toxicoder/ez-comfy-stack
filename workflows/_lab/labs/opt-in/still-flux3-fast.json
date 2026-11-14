@@ -2,7 +2,7 @@
   "id": "still-flux3-fast",
   "revision": 1,
   "last_node_id": 19,
-  "last_link_id": 31,
+  "last_link_id": 32,
   "nodes": [
     {
       "id": 1,
@@ -414,7 +414,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## labs/opt-in/still-flux3-fast\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nFLUX 3 Image Klein distilled INT8 still on the Klein still desk. Opt-in, gated, Kommunity - Klein 4B (photos/still-draft) stays the Apache default still.\n\nProfile: Quality `flux3-fast` writes UNET `flux3-image-klein-int8-convrot.safetensors`, 16 steps, CFG 1.0. This graph ships those same values, so Queue matches with Quality left on lab. Quality never changes pixels - Format / platform does (Custom uses Width x Height).\nModels: flux3-image-klein-int8-convrot.safetensors + qwen3vl_4b_int8_convrot.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nGated pull: black-forest-labs/flux-3-image-klein-comfy on Hugging Face is gated, so accept the FLUX Kommunity License (v1.0) on the model card with the **same HF account as HF_TOKEN** (a token alone is not acceptance), then run `bazelisk run //scripts:run-utility -- download-image run --tier flux3` - it auto-includes the `flux3-te` text encoder. Every pull is pinned to HF revision feef60b0aaf63a4773ace96636ebbcf43b881312.\nLicense: FLUX Kommunity License (v1.0), not Apache. Monetized output only for qualifying users under $5M gross annualized revenue. Not in `download-models` and not in image `--tier all`.\nWeights missing: click Check models - it names the command, and Queue keeps the authored loaders (nothing swaps in weights you have not accepted).\nSave prefix `ez_still_flux3_fast`. Empty of lettering - composite titles later.\nHandoff: video/silent/still-to-video-5s, video/av/still-to-video-8s, photos/text-swap.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## labs/opt-in/still-flux3-fast\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nFLUX 3 Image Klein distilled INT8 still on the Klein still desk. Opt-in, gated, Kommunity - Klein 4B (photos/still-draft) stays the Apache default still.\n\nProfile: Detail **draft** writes UNET `flux3-image-klein-int8-convrot.safetensors`, 16 steps, CFG 1.0. This graph ships those same values, so Queue matches with Detail left on **standard**. Detail never changes pixels - Format / platform does (Custom uses Width x Height).\nModels: flux3-image-klein-int8-convrot.safetensors + qwen3vl_4b_int8_convrot.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nGated pull: black-forest-labs/flux-3-image-klein-comfy on Hugging Face is gated, so accept the FLUX Kommunity License (v1.0) on the model card with the **same HF account as HF_TOKEN** (a token alone is not acceptance), then run `bazelisk run //scripts:run-utility -- download-image run --tier flux3` - it auto-includes the `flux3-te` text encoder. Every pull is pinned to HF revision feef60b0aaf63a4773ace96636ebbcf43b881312.\nLicense: FLUX Kommunity License (v1.0), not Apache. Monetized output only for qualifying users under $5M gross annualized revenue. Not in `download-models` and not in image `--tier all`.\nWeights missing: click Check models - it names the command, and Queue keeps the authored loaders (nothing swaps in weights you have not accepted).\nSave prefix `ez_still_flux3_fast`. Empty of lettering - composite titles later.\nHandoff: video/silent/still-to-video-5s, video/av/still-to-video-8s, photos/text-swap.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     },
@@ -639,7 +639,7 @@
           "type": "IMAGE",
           "links": [
             19,
-            31
+            32
           ],
           "slot_index": 0
         },
@@ -801,7 +801,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 31
+          "link": 32
         }
       ],
       "outputs": [
@@ -1025,7 +1025,7 @@
       "STRING"
     ],
     [
-      31,
+      32,
       15,
       0,
       18,
@@ -1137,8 +1137,8 @@
         0
       ]
     },
-    "lab_note": "## labs/opt-in/still-flux3-fast\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nFLUX 3 Image Klein distilled INT8 still on the Klein still desk. Opt-in, gated, Kommunity - Klein 4B (photos/still-draft) stays the Apache default still.\n\nProfile: Quality `flux3-fast` writes UNET `flux3-image-klein-int8-convrot.safetensors`, 16 steps, CFG 1.0. This graph ships those same values, so Queue matches with Quality left on lab. Quality never changes pixels - Format / platform does (Custom uses Width x Height).\nModels: flux3-image-klein-int8-convrot.safetensors + qwen3vl_4b_int8_convrot.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nGated pull: black-forest-labs/flux-3-image-klein-comfy on Hugging Face is gated, so accept the FLUX Kommunity License (v1.0) on the model card with the **same HF account as HF_TOKEN** (a token alone is not acceptance), then run `bazelisk run //scripts:run-utility -- download-image run --tier flux3` - it auto-includes the `flux3-te` text encoder. Every pull is pinned to HF revision feef60b0aaf63a4773ace96636ebbcf43b881312.\nLicense: FLUX Kommunity License (v1.0), not Apache. Monetized output only for qualifying users under $5M gross annualized revenue. Not in `download-models` and not in image `--tier all`.\nWeights missing: click Check models - it names the command, and Queue keeps the authored loaders (nothing swaps in weights you have not accepted).\nSave prefix `ez_still_flux3_fast`. Empty of lettering - composite titles later.\nHandoff: video/silent/still-to-video-5s, video/av/still-to-video-8s, photos/text-swap.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
-    "lab_description": "Gated FLUX 3 Klein distilled still; 16 steps, CFG 1.0 (Quality flux3-fast). Klein 4B stays the Apache default",
+    "lab_note": "## labs/opt-in/still-flux3-fast\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nFLUX 3 Image Klein distilled INT8 still on the Klein still desk. Opt-in, gated, Kommunity - Klein 4B (photos/still-draft) stays the Apache default still.\n\nProfile: Detail **draft** writes UNET `flux3-image-klein-int8-convrot.safetensors`, 16 steps, CFG 1.0. This graph ships those same values, so Queue matches with Detail left on **standard**. Detail never changes pixels - Format / platform does (Custom uses Width x Height).\nModels: flux3-image-klein-int8-convrot.safetensors + qwen3vl_4b_int8_convrot.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nGated pull: black-forest-labs/flux-3-image-klein-comfy on Hugging Face is gated, so accept the FLUX Kommunity License (v1.0) on the model card with the **same HF account as HF_TOKEN** (a token alone is not acceptance), then run `bazelisk run //scripts:run-utility -- download-image run --tier flux3` - it auto-includes the `flux3-te` text encoder. Every pull is pinned to HF revision feef60b0aaf63a4773ace96636ebbcf43b881312.\nLicense: FLUX Kommunity License (v1.0), not Apache. Monetized output only for qualifying users under $5M gross annualized revenue. Not in `download-models` and not in image `--tier all`.\nWeights missing: click Check models - it names the command, and Queue keeps the authored loaders (nothing swaps in weights you have not accepted).\nSave prefix `ez_still_flux3_fast`. Empty of lettering - composite titles later.\nHandoff: video/silent/still-to-video-5s, video/av/still-to-video-8s, photos/text-swap.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_description": "Gated FLUX 3 Klein distilled still; 16 steps, CFG 1.0 (Detail draft). Klein 4B stays the Apache default",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -1289,6 +1289,14 @@
           {
             "description": "Upload a still or pick one already on the drive (input/ or Outputs). Empty is valid - Queue without a file. When set, Klein uses it as a native reference.",
             "label": "Example / reference (optional)"
+          }
+        ],
+        [
+          15,
+          "use_references",
+          {
+            "description": "Turn off to run text-to-image without clearing your picks. Any new pick turns it back on.",
+            "label": "Use reference stills"
           }
         ]
       ],

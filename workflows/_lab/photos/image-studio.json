@@ -2,14 +2,14 @@
   "id": "image-studio",
   "revision": 7,
   "last_node_id": 20,
-  "last_link_id": 36,
+  "last_link_id": 37,
   "nodes": [
     {
       "id": 1,
       "type": "UNETLoader",
       "pos": [
         40,
-        508
+        524
       ],
       "size": [
         360,
@@ -36,14 +36,14 @@
         "flux-2-klein-4b-fp8.safetensors",
         "default"
       ],
-      "title": "Image model - Quality swaps within the Klein stack"
+      "title": "Image model - Detail swaps within the Klein stack"
     },
     {
       "id": 2,
       "type": "CLIPLoader",
       "pos": [
         40,
-        662
+        678
       ],
       "size": [
         360,
@@ -79,7 +79,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        840
+        856
       ],
       "size": [
         360,
@@ -113,7 +113,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        508
+        524
       ],
       "size": [
         420,
@@ -160,7 +160,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        1032
+        1048
       ],
       "size": [
         420,
@@ -207,7 +207,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         948,
-        1264
+        1280
       ],
       "size": [
         280,
@@ -267,7 +267,7 @@
       "type": "KSampler",
       "pos": [
         1440,
-        508
+        524
       ],
       "size": [
         320,
@@ -327,7 +327,7 @@
       "type": "VAEDecode",
       "pos": [
         1840,
-        508
+        524
       ],
       "size": [
         240,
@@ -369,7 +369,7 @@
       "type": "SaveImage",
       "pos": [
         1840,
-        626
+        642
       ],
       "size": [
         280,
@@ -422,7 +422,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## photos/image-studio\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nUniversal Klein 4B still desk with 100 creator modes (background swap, change text, change ratio, face lock, packshot, ...).\nPick Mode category then Creator mode. The mode sets Rewrite prompt mode (t2i / edit / text_swap / identity / background_swap / background_edit), save prefix, and a locked instruction spliced into Enhance context.\nFormat / platform still sets pixels and Look recipe. Custom uses Width x Height (snapped to div16, max 2048). Quality does not change size.\nExample / reference is optional - Queue without a file. When present, Klein attaches it as a native Flux.2 reference. Modes never error if the still is empty. Face swap is original characters only.\nAuthored models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors. Apache-2.0.\nQuality ultra/max may select opt-in Non-Commercial weights when those files are on disk (gated, not YouTube-ok). Lab default stays 4B. Do not pin those filenames on this graph.\nSave prefix follows Creator mode (`ez_gen_photoreal` for Photoreal still). Empty of lettering unless the mode is a text job.\nIterate is the first App control (off by default). On: the first Run is text-to-image with prefix `ez_iterate`. The saved still is copied into the reference and the next Run edits that file. Clear the reference to start from text again. This run lists the mode, prompt, size, prefix, and sampler values Queue will send. Creator mode is not used while Iterate is on.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.\nQuality is the only weight swap this App offers, and it stays inside the Klein stack: standard = Klein 4B fp8 (8 steps, CFG 1.0), draft = Klein 4B nvfp4 (4 steps, CFG 1.0), high and Free Commercial Use (<$10M) = Klein 4B base (24 steps, CFG 3.5), ultra = Klein 9B distilled, max = Klein 9B base. The App lists no disk models; another stack is a different App.\nHandoff: video/silent/still-to-video-5s, video/av/still-to-video-8s, photos/text-swap, photos/still-studio.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## photos/image-studio\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nUniversal Klein 4B still desk with 100 creator modes (background swap, change text, change ratio, face lock, packshot, ...).\nPick Mode category then Creator mode. The mode sets Rewrite prompt mode (t2i / edit / text_swap / identity / background_swap / background_edit), save prefix, and a locked instruction spliced into Enhance context.\nFormat / platform still sets pixels and Look recipe. Custom uses Width x Height (snapped to div16, max 2048). Detail does not change size.\nExample / reference is optional - Queue without a file. When present, Klein attaches it as a native Flux.2 reference. Modes never error if the still is empty. Face swap is original characters only.\nAuthored models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors. Apache-2.0.\nNo rung reaches the opt-in Non-Commercial weights (gated, not YouTube-ok). Lab default stays 4B. Do not pin those filenames on this graph.\nSave prefix follows Creator mode (`ez_gen_photoreal` for Photoreal still). Empty of lettering unless the mode is a text job.\nIterate is the first App control (off by default). On: the first Run is text-to-image with prefix `ez_iterate`. The saved still is copied into the reference and the next Run edits that file. Clear the reference to start from text again. This run lists the mode, prompt, size, prefix, and sampler values Queue will send. Creator mode is not used while Iterate is on.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.\nDetail is the only weight swap this App offers, and it stays inside the Klein stack: draft = Klein 4B nvfp4 (4 steps, CFG 1.0), standard = what this App ships tuned for (writes nothing, so it always applies), final = Klein 4B base fp8 (24 steps, CFG 3.5). The App lists no disk models; another stack is a different App.\nHandoff: video/silent/still-to-video-5s, video/av/still-to-video-8s, photos/text-swap, photos/still-studio.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -431,7 +431,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         480,
-        508
+        524
       ],
       "size": [
         420,
@@ -505,7 +505,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         480,
-        1442
+        1458
       ],
       "size": [
         420,
@@ -577,7 +577,7 @@
       "type": "EZImageFormat",
       "pos": [
         1440,
-        1400
+        1416
       ],
       "size": [
         360,
@@ -659,7 +659,7 @@
       "type": "EZOptionalImage",
       "pos": [
         2176,
-        508
+        524
       ],
       "size": [
         360.0,
@@ -675,8 +675,8 @@
           "type": "IMAGE",
           "links": [
             21,
-            34,
-            35
+            35,
+            37
           ],
           "slot_index": 0
         },
@@ -712,7 +712,7 @@
       "type": "EZKleinRefCanvas",
       "pos": [
         2176,
-        700
+        716
       ],
       "size": [
         360.0,
@@ -773,7 +773,7 @@
       "type": "EZImageMode",
       "pos": [
         1440,
-        968
+        984
       ],
       "size": [
         360,
@@ -843,7 +843,7 @@
       "type": "EZImageUpscale",
       "pos": [
         1848,
-        968
+        984
       ],
       "size": [
         280,
@@ -888,7 +888,7 @@
       "type": "EZImageDescribe",
       "pos": [
         480,
-        1000
+        1016
       ],
       "size": [
         280,
@@ -909,7 +909,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 34
+          "link": 37
         }
       ],
       "outputs": [
@@ -1172,14 +1172,6 @@
       "STRING"
     ],
     [
-      34,
-      15,
-      0,
-      19,
-      1,
-      "IMAGE"
-    ],
-    [
       35,
       15,
       0,
@@ -1194,6 +1186,14 @@
       17,
       1,
       "BOOLEAN"
+    ],
+    [
+      37,
+      15,
+      0,
+      19,
+      1,
+      "IMAGE"
     ]
   ],
   "groups": [
@@ -1228,7 +1228,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        436,
+        452,
         400,
         506
       ],
@@ -1241,7 +1241,7 @@
       "title": "PROMPT",
       "bounding": [
         460,
-        436,
+        452,
         928,
         1470
       ],
@@ -1254,9 +1254,9 @@
       "title": "FORMAT",
       "bounding": [
         1420,
-        436,
+        452,
         400,
-        1236
+        1228
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1267,7 +1267,7 @@
       "title": "OUTPUT",
       "bounding": [
         1820,
-        436,
+        452,
         328,
         656
       ],
@@ -1280,7 +1280,7 @@
       "title": "INPUT",
       "bounding": [
         2156,
-        436,
+        452,
         400,
         448
       ],
@@ -1300,7 +1300,7 @@
         0
       ]
     },
-    "lab_note": "## photos/image-studio\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nUniversal Klein 4B still desk with 100 creator modes (background swap, change text, change ratio, face lock, packshot, ...).\nPick Mode category then Creator mode. The mode sets Rewrite prompt mode (t2i / edit / text_swap / identity / background_swap / background_edit), save prefix, and a locked instruction spliced into Enhance context.\nFormat / platform still sets pixels and Look recipe. Custom uses Width x Height (snapped to div16, max 2048). Quality does not change size.\nExample / reference is optional - Queue without a file. When present, Klein attaches it as a native Flux.2 reference. Modes never error if the still is empty. Face swap is original characters only.\nAuthored models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors. Apache-2.0.\nQuality ultra/max may select opt-in Non-Commercial weights when those files are on disk (gated, not YouTube-ok). Lab default stays 4B. Do not pin those filenames on this graph.\nSave prefix follows Creator mode (`ez_gen_photoreal` for Photoreal still). Empty of lettering unless the mode is a text job.\nIterate is the first App control (off by default). On: the first Run is text-to-image with prefix `ez_iterate`. The saved still is copied into the reference and the next Run edits that file. Clear the reference to start from text again. This run lists the mode, prompt, size, prefix, and sampler values Queue will send. Creator mode is not used while Iterate is on.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.\nQuality is the only weight swap this App offers, and it stays inside the Klein stack: standard = Klein 4B fp8 (8 steps, CFG 1.0), draft = Klein 4B nvfp4 (4 steps, CFG 1.0), high and Free Commercial Use (<$10M) = Klein 4B base (24 steps, CFG 3.5), ultra = Klein 9B distilled, max = Klein 9B base. The App lists no disk models; another stack is a different App.\nHandoff: video/silent/still-to-video-5s, video/av/still-to-video-8s, photos/text-swap, photos/still-studio.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_note": "## photos/image-studio\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nUniversal Klein 4B still desk with 100 creator modes (background swap, change text, change ratio, face lock, packshot, ...).\nPick Mode category then Creator mode. The mode sets Rewrite prompt mode (t2i / edit / text_swap / identity / background_swap / background_edit), save prefix, and a locked instruction spliced into Enhance context.\nFormat / platform still sets pixels and Look recipe. Custom uses Width x Height (snapped to div16, max 2048). Detail does not change size.\nExample / reference is optional - Queue without a file. When present, Klein attaches it as a native Flux.2 reference. Modes never error if the still is empty. Face swap is original characters only.\nAuthored models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors. Apache-2.0.\nNo rung reaches the opt-in Non-Commercial weights (gated, not YouTube-ok). Lab default stays 4B. Do not pin those filenames on this graph.\nSave prefix follows Creator mode (`ez_gen_photoreal` for Photoreal still). Empty of lettering unless the mode is a text job.\nIterate is the first App control (off by default). On: the first Run is text-to-image with prefix `ez_iterate`. The saved still is copied into the reference and the next Run edits that file. Clear the reference to start from text again. This run lists the mode, prompt, size, prefix, and sampler values Queue will send. Creator mode is not used while Iterate is on.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.\nDetail is the only weight swap this App offers, and it stays inside the Klein stack: draft = Klein 4B nvfp4 (4 steps, CFG 1.0), standard = what this App ships tuned for (writes nothing, so it always applies), final = Klein 4B base fp8 (24 steps, CFG 3.5). The App lists no disk models; another stack is a different App.\nHandoff: video/silent/still-to-video-5s, video/av/still-to-video-8s, photos/text-swap, photos/still-studio.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n",
     "lab_description": "Klein 4B universal still desk: 100 creator modes, format/platform, optional ref, iterate",
     "lab_app_mode": {
       "enabled": true,
@@ -1319,14 +1319,6 @@
     "linearData": {
       "inputs": [
         [
-          13,
-          "quality",
-          {
-            "label": "Detail",
-            "description": "draft is a quick look. standard is what this App ships tuned for. final is the best this App's own stack can do. A rung never changes size and never leaves this App's model stack. The caption names the steps, CFG, weights, and license Queue actually sends."
-          }
-        ],
-        [
           17,
           "iterate",
           {
@@ -1341,6 +1333,14 @@
             "description": "Values Queue will send: pass, Enhance mode, prompt, style, size, prefix, steps, CFG, model, and seed. Rewrite on means the prompt is the rewriter source, not the CLIP text.",
             "label": "This run",
             "height": 160
+          }
+        ],
+        [
+          13,
+          "quality",
+          {
+            "label": "Detail",
+            "description": "draft is a quick look. standard is what this App ships tuned for. final is the best this App's own stack can do. A rung never changes size and never leaves this App's model stack. The caption names the steps, CFG, weights, and license Queue actually sends."
           }
         ],
         [
@@ -1494,6 +1494,14 @@
           {
             "description": "Upload a still or pick one already on the drive (input/ or Outputs). Empty is valid - Queue without a file. When set, Klein uses it as a native reference.",
             "label": "Example / reference (optional)"
+          }
+        ],
+        [
+          15,
+          "use_references",
+          {
+            "description": "Turn off to run text-to-image without clearing your picks. Any new pick turns it back on.",
+            "label": "Use reference stills"
           }
         ]
       ],

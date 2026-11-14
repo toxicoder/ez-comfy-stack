@@ -29,7 +29,7 @@ Occupancy **klein**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fa
 ```text
 ## business/ecommerce/pdp-pack-back
 
-Format / platform sets pixels (Custom uses Width x Height). Quality does not change size.
+Format / platform sets pixels (Custom uses Width x Height). Detail does not change size.
 
 PDP pack-back still 1:1. Lab size **1024x1024**. Prefix `ez_svc_pdp_back`.
 Empty of lettering. Add titles in your editor, not in the prompt.
@@ -60,10 +60,9 @@ flowchart LR
   N8["VAE Decode"]
   N9["Save PNG"]
   N10["Operator note"]
-  N11["Draft still (set to ez_still_draft_00001_.png)"]
   N12["Klein Prompt Enhance"]
   N13["Negative Prompt Enhance"]
-  N14["Quality"]
+  N14["Detail"]
   N15["Format / platform"]
   N16["Example / reference (optional)"]
   N17["Optional Klein ref"]
@@ -106,10 +105,9 @@ flowchart LR
 | 8 | VAE Decode | `VAEDecode` | OUTPUT |
 | 9 | Save PNG | `SaveImage` | OUTPUT |
 | 10 | Operator note | `Note` | NOTE |
-| 11 | Draft still (set to ez_still_draft_0000... | `LoadImage` | INPUT |
 | 12 | Klein Prompt Enhance | `EZKleinPromptEnhance` | PROMPT |
 | 13 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |
-| 14 | Quality | `EZQuality` | QUALITY |
+| 14 | Detail | `EZQuality` | QUALITY |
 | 15 | Format / platform | `EZImageFormat` | SETTINGS |
 | 16 | Example / reference (optional) | `EZOptionalImage` | INPUT |
 | 17 | Optional Klein ref | `EZKleinRefCanvas` | INPUT |
@@ -540,12 +538,12 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## business/ecommerce/pdp-pack-back Format / platform sets pixels (Custom uses Width x Height). Quality does not change size. PDP pack-back still 1:1. Lab size **1024x1024**. Prefix `ez_svc_pdp_back`...`
+**This graph:** `## business/ecommerce/pdp-pack-back Format / platform sets pixels (Custom uses Width x Height). Detail does not change size. PDP pack-back still 1:1. Lab size **1024x1024**. Prefix `ez_svc_pdp_back`....`
 
 ```text
 ## business/ecommerce/pdp-pack-back
 
-Format / platform sets pixels (Custom uses Width x Height). Quality does not change size.
+Format / platform sets pixels (Custom uses Width x Height). Detail does not change size.
 
 PDP pack-back still 1:1. Lab size **1024x1024**. Prefix `ez_svc_pdp_back`.
 Empty of lettering. Add titles in your editor, not in the prompt.
@@ -553,39 +551,6 @@ Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.
 Handoff: none.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 ```
-
-### `LoadImage` - Load Image
-
-Load a still from Comfy input/ (or upload).
-
-!!! warning "Lab notes"
-
-    I2V / edit graphs default example.png until you pick ez_still_*.png. App Mode shows Start image only when this node is wired.
-
-| Socket | Dir | Type | What it carries |
-| --- | --- | --- | --- |
-| `IMAGE` | out | `IMAGE` | RGB still. |
-| `MASK` | out | `MASK` | Alpha if present. |
-
-#### `image`
-
-Type `STRING`.
-
-Filename in input/.
-
-**How it affects generation:** Point at the Klein still you just saved (ez_still_draft_*.png, ez_character_*.png, first.png).
-
-**This graph:** `example.png`
-
-#### `upload`
-
-Type `COMBO`. Range / default: image.
-
-Upload widget type.
-
-**How it affects generation:** Leave image. This is the choose-file control, not a generation knob.
-
-**This graph:** `image`
 
 ### `EZKleinPromptEnhance` - Klein Prompt Enhance
 
@@ -1049,43 +1014,35 @@ Which negative family.
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
 
-### `EZQuality` - Quality
+### `EZQuality` - Detail
 
-Per-graph quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
+Per-graph Detail ladder. Three rungs (Draft / Standard / Final); JS writes family-specific sampler, UNET, CLIP, and VAE widgets, or refuses the apply.
 
 !!! warning "Lab notes"
 
-    Per-graph quality combo. presets.py is the only tier definition and the frontend reads a table generated from it. The combo lists only the tiers this graph's family can honor (presets.tiers_for_family) plus lab and custom, so a Klein graph never offers the FLUX 3 or Qwen-Image rows and a Wan graph never offers a weight swap it has no loader for; a graph with no sampler and no loader to write carries no combo at all. The combo is DERIVED from the widgets, not typed: it names the tier whose owned parameters the widgets actually hold, lab when they match the load-time authored values, custom otherwise, and it re-derives on load, graph change, widget edit, and Queue. custom is not absorbing - putting the owned widgets back on a tier's values re-derives that tier. A tier value that cannot be written (weight not installed, widget not built, a tier outside the family) is a FAILED apply: the combo drops to custom and the caption names what diverged, and the CLI states the refusal on stderr and writes the graph unchanged. Writes resolve per node instance, so every sampler and loader the family reaches in a graph is written. Only parameters the family's tiers own are compared, so a CFG edit on a steps-only family keeps the level. A combo whose node mode is nonzero is ignored. Never --tier quality.
+    Per-graph Detail ladder. presets.py is the only rung definition and the frontend reads a table generated from it. Every family that has a ladder offers the same three rungs, and standard writes nothing - it means leaving the graph exactly as this App ships it - so it is the default and is never refused. Draft and final are write-or-refuse: any write that cannot land (weight not in that loader's options, widget not built, a graph of another family, a banned weight) refuses the whole apply, the row keeps its previous rung, and the caption names every reason plus the host command that stages the missing file. Nothing is substituted for a weight that is not on disk, and the Python and JS paths refuse the same set. The caption is DERIVED from the live widgets, never from the rung name: <stack> - <steps> steps - CFG <cfg> - <license>, with the CFG term omitted on a family whose ladder has no CFG. When the widgets do not hold what the rung wrote the line is prefixed 'Edited: ' and each differing term says what the rung sets. At Queue the rung is re-applied only when the row moved since the last successful write, so a hand edit is never silently overwritten; a refused re-apply refuses Queue with the same caption. A rung never writes size (no EZImageFormat or width / height / format widget) and never writes a weight outside its own family, so Klein 9B and FLUX.2-dev are unreachable from a rung. A graph the ladder cannot write - no sampler and no loader to reach, or a family with no rungs (llm, none, Wan 14B) - carries no row at all, and a node whose mode is nonzero is ignored. Retired ids (lab, custom, high, ultra, max, Free Commercial Use (<$10M), flux3-*, qwen-*) stay accepted input and normalize onto a rung; none is selectable. An explicit --quality that nothing recognizes is refused and named; an unrecognized value a graph recorded falls back to standard. Never --tier quality.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
-| `quality` | out | `STRING` | Selected quality id. |
+| `quality` | out | `STRING` | Selected rung id. |
 
 #### `quality`
 
-Type `COMBO`. Range / default: lab.
+Type `COMBO`. Range / default: standard.
 
-Derived from the widgets: the named tier they match, lab for the authored values, custom otherwise.
+Selected rung. The App row label mirrors the caption as Detail - <caption>, so the row states the steps, CFG, weights, and license Queue sends.
 
-**How it affects generation:** Named qualities may swap UNET, CLIP, and VAE, per node instance. A tier value that cannot be written is a failed apply, so the combo drops to custom rather than claiming a swap the prompt does not contain. The combo lists only the tiers this family can honor, so a tier that would write no widget here is never offered. Quality does not touch the Width / Height or Duration widgets; the one size effect is Free Commercial Use (<$10M) on Klein stills, where a generic 16:9 / 9:16 Format row retargets to the LTX feeder size (1280x704 / 768x1280). On Klein, high and Free Commercial Use (<$10M) are the same profile (Apache Klein 4B base, 24 steps, CFG 3.5 - never 9B / FLUX.2-dev) and ultra/max swap in Klein 9B or FLUX.2-dev when those files are on disk (FLUX Non-Commercial, not YouTube-ok); ultra/max are not offered on audio and trellis. Wan / LTX / film / audio / trellis tiers set steps only, never CFG or weights, and the trellis ladder writes the three guided stages, leaving the unguided texture stage (CFG 1) on its authored steps. flux3-* need the gated FLUX 3 pull (download-image --tier flux3 / flux3-base / flux3-nvfp4) and are the only tiers that write on a graph pinning FLUX 3 Klein weights.
+**How it affects generation:** Draft and final write steps, CFG where the family owns it, and the UNETLoader / CLIPLoader / VAELoader names on every sampler and loader instance the family reaches in the graph; standard writes nothing. Any write that cannot land refuses the apply whole rather than claiming a swap the prompt does not contain. A rung never touches the Width / Height or Duration widgets and never writes a weight outside its own family (Klein 9B and FLUX.2-dev are unreachable). On Klein, draft is the nvfp4 4B build at 4 steps / CFG 1.0 and final is the base 4B fp8 at 24 steps / CFG 3.5. Wan / LTX / film / audio / trellis move steps only, never CFG or weights, and the trellis ladder writes the three guided stages, leaving the unguided texture stage (CFG 1) on its authored steps. The opt-in FLUX 3 graphs (labs/opt-in/still-flux3-*) step 16 / 50 at CFG 1.0 / 3.5 across their INT8 and NVFP4 builds (gated pull: download-image --tier flux3 / flux3-base / flux3-nvfp4), and the opt-in Qwen graph (labs/opt-in/still-qwen-image) does the same across its turbo and base INT8 builds (download-image --tier qwen-image*); neither ladder reaches outside its own family.
 
-**This graph:** `lab`
+**This graph:** `standard`
 
 **Other choices**
 
 | Choice | What it does |
 | --- | --- |
-| `custom` | Widgets match no tier, so they queue as they are. No overlay. |
-| `draft` | Faster Apache Klein 4B (NVFP4 if on disk). |
-| `lab` | Authored lab widgets. Default. |
-| `standard` | Distilled 4B, 8 steps, CFG 1.0. |
-| `high` | Klein base 4B + CFG 3.5 when on disk; else extra distilled steps at CFG 1.0. |
-| `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
-| `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
-| `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
-| `flux3-fast` | FLUX 3 Image Klein distilled INT8 (flux3-image-klein-int8-convrot.safetensors), 16 steps, CFG 1.0. Gated FLUX Kommunity; writes only on a FLUX 3 graph. |
-| `flux3-quality` | FLUX 3 Image Klein base INT8 (flux3-image-klein-base-int8-convrot.safetensors), 50 steps, CFG 3.5. Gated FLUX Kommunity; writes only on a FLUX 3 graph. |
-| `flux3-nvfp4` | FLUX 3 Image Klein base NVFP4 (flux3-image-klein-base-nvfp4.safetensors), 50 steps, CFG 3.5. Gated FLUX Kommunity; writes only on a FLUX 3 graph. |
+| `draft` | Quick look. Klein 4B nvfp4, 4 steps, CFG 1.0. Steps 12 on Wan / LTX / film, 4 on audio, 8 on the guided TRELLIS stages. |
+| `standard` | What this App ships tuned for. Writes nothing, everywhere, so it always applies and is never refused. |
+| `final` | Best this App's own stack can do. Klein 4B base fp8, 24 steps, CFG 3.5. Steps 32 on Wan / LTX / film, 24 on audio, 28 on the guided TRELLIS stages. |
 
 ### `EZImageFormat` - Format / platform
 
@@ -1093,7 +1050,7 @@ Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack
 
 !!! warning "Lab notes"
 
-    photos/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size. Match input snaps aspect to a loaded still.
+    photos/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Detail does not change size. Match input snaps aspect to a loaded still.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1111,7 +1068,7 @@ Type `COMBO`. Range / default: 16:9 LTX feeder / platform jobs / Custom.
 
 Aspect or named platform job.
 
-**How it affects generation:** Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (snapped to div16, max 2048). Does not change Quality, CLIP, or VAE.
+**How it affects generation:** Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (snapped to div16, max 2048). Does not change the Detail rung, CLIP, or VAE.
 
 **This graph:** `1:1 square (1024x1024)`
 
@@ -1276,7 +1233,7 @@ Type `COMBO`. Range / default: Match input / Force format.
 
 Match a loaded still's aspect, or keep Format / platform.
 
-**How it affects generation:** Match input (default) picks the nearest aspect catalog row when a still is loaded. Force format keeps the Format pick. No still: authored format. Quality does not change size.
+**How it affects generation:** Match input (default) picks the nearest aspect catalog row when a still is loaded. Force format keeps the Format pick. No still: authored format. Detail does not change size.
 
 **This graph:** `Match input`
 
@@ -1424,7 +1381,7 @@ Run the captioner.
 
 ### `EZModelCheck` - Check models
 
-Manual disk check for occupancy + Quality weights. Queue does not run this node.
+Manual disk check for occupancy + Detail weights. Queue does not run this node.
 
 !!! warning "Lab notes"
 

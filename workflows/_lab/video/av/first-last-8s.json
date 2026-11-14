@@ -9,7 +9,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        588
+        604
       ],
       "size": [
         520,
@@ -43,7 +43,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        742
+        758
       ],
       "size": [
         360,
@@ -78,7 +78,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        872
+        888
       ],
       "size": [
         400,
@@ -114,7 +114,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         976,
-        1080
+        1096
       ],
       "size": [
         420,
@@ -161,7 +161,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         976,
-        1804
+        1820
       ],
       "size": [
         420,
@@ -208,7 +208,7 @@
       "type": "EmptyLTXVLatentVideo",
       "pos": [
         1444,
-        840
+        856
       ],
       "size": [
         300,
@@ -260,7 +260,7 @@
       "type": "LTXVConditioning",
       "pos": [
         1444,
-        1748
+        1764
       ],
       "size": [
         280,
@@ -313,7 +313,7 @@
       "type": "KSampler",
       "pos": [
         1444,
-        2040
+        2056
       ],
       "size": [
         320,
@@ -373,7 +373,7 @@
       "type": "VAEDecode",
       "pos": [
         1852,
-        726
+        742
       ],
       "size": [
         240,
@@ -415,7 +415,7 @@
       "type": "SaveImage",
       "pos": [
         1852,
-        1336
+        1352
       ],
       "size": [
         280,
@@ -445,7 +445,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        1054
+        1070
       ],
       "size": [
         360,
@@ -479,7 +479,7 @@
       "type": "LTXVEmptyLatentAudio",
       "pos": [
         1444,
-        1042
+        1058
       ],
       "size": [
         300,
@@ -520,7 +520,7 @@
       "type": "LTXVConcatAVLatent",
       "pos": [
         1444,
-        1902
+        1918
       ],
       "size": [
         280,
@@ -562,7 +562,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         1444,
-        2374
+        2390
       ],
       "size": [
         280,
@@ -622,7 +622,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## video/av/first-last-8s\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) - open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **first-last-frame** AV (~8 s). Two Klein stills (hero 1280x704) pin start and end via `LTXVAddGuide` on the **video** latent, then audio concat. LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\nGuides are cropped after sample. Load **First frame** / **Last frame** (`ez_still_hero_*.png`). Same aspect. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\nOfficial FLF2V subgraph stays in Comfy **Templates -> LTX-2.5**.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\n"
+        "## video/av/first-last-8s\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) - open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **first-last-frame** AV (~8 s). Two Klein stills (hero 1280x704) pin start and end via `LTXVAddGuide` on the **video** latent, then audio concat. LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\nGuides are cropped after sample. Load **First frame** / **Last frame** (`ez_still_hero_*.png`). Same aspect. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\nOfficial FLF2V subgraph stays in Comfy **Templates -> LTX-2.5**.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\n"
       ],
       "title": "Operator note - video output"
     },
@@ -631,7 +631,7 @@
       "type": "VHS_VideoCombine",
       "pos": [
         1852,
-        844
+        860
       ],
       "size": [
         320,
@@ -695,7 +695,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         976,
-        588
+        604
       ],
       "size": [
         420,
@@ -745,7 +745,7 @@
       "type": "LTXVAudioVAEDecode",
       "pos": [
         1852,
-        588
+        604
       ],
       "size": [
         320,
@@ -787,7 +787,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         976,
-        1312
+        1328
       ],
       "size": [
         420,
@@ -827,7 +827,7 @@
       "type": "LoadImage",
       "pos": [
         608,
-        588
+        604
       ],
       "size": [
         320,
@@ -867,7 +867,7 @@
       "type": "LoadImage",
       "pos": [
         608,
-        974
+        990
       ],
       "size": [
         320,
@@ -907,7 +907,7 @@
       "type": "LTXVAddGuide",
       "pos": [
         1444,
-        1244
+        1260
       ],
       "size": [
         320,
@@ -983,7 +983,7 @@
       "type": "LTXVAddGuide",
       "pos": [
         1444,
-        1496
+        1512
       ],
       "size": [
         320,
@@ -1059,7 +1059,7 @@
       "type": "LTXVCropGuides",
       "pos": [
         1444,
-        2512
+        2528
       ],
       "size": [
         280,
@@ -1150,7 +1150,7 @@
       "type": "EZVideoFormat",
       "pos": [
         1444,
-        588
+        604
       ],
       "size": [
         360,
@@ -1568,7 +1568,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        516,
+        532,
         560,
         640
       ],
@@ -1581,7 +1581,7 @@
       "title": "INPUT",
       "bounding": [
         588,
-        516,
+        532,
         360,
         816
       ],
@@ -1594,7 +1594,7 @@
       "title": "PROMPT",
       "bounding": [
         956,
-        516,
+        532,
         460,
         1492
       ],
@@ -1607,7 +1607,7 @@
       "title": "SETTINGS",
       "bounding": [
         1424,
-        516,
+        532,
         400,
         2126
       ],
@@ -1620,7 +1620,7 @@
       "title": "OUTPUT",
       "bounding": [
         1832,
-        516,
+        532,
         360,
         1134
       ],
@@ -1633,7 +1633,7 @@
   "extra": {
     "lab_profile": "video/av/first-last-8s",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## video/av/first-last-8s\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) - open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **first-last-frame** AV (~8 s). Two Klein stills (hero 1280x704) pin start and end via `LTXVAddGuide` on the **video** latent, then audio concat. LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\nGuides are cropped after sample. Load **First frame** / **Last frame** (`ez_still_hero_*.png`). Same aspect. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\nOfficial FLF2V subgraph stays in Comfy **Templates -> LTX-2.5**.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\n",
+    "lab_note": "## video/av/first-last-8s\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) - open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **first-last-frame** AV (~8 s). Two Klein stills (hero 1280x704) pin start and end via `LTXVAddGuide` on the **video** latent, then audio concat. LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\nGuides are cropped after sample. Load **First frame** / **Last frame** (`ez_still_hero_*.png`). Same aspect. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\nOfficial FLF2V subgraph stays in Comfy **Templates -> LTX-2.5**.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\n",
     "lab_ltx_av": true,
     "lab_description": "LTX-2.5 first-last-frame AV using core AddGuide nodes\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_app_mode": {

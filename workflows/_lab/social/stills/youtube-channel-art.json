@@ -9,7 +9,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        508
+        524
       ],
       "size": [
         360,
@@ -43,7 +43,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        662
+        678
       ],
       "size": [
         360,
@@ -79,7 +79,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        840
+        856
       ],
       "size": [
         360,
@@ -112,7 +112,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        508
+        524
       ],
       "size": [
         420,
@@ -159,7 +159,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        1032
+        1048
       ],
       "size": [
         420,
@@ -206,7 +206,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         1440,
-        1552
+        1568
       ],
       "size": [
         280,
@@ -266,7 +266,7 @@
       "type": "KSampler",
       "pos": [
         1440,
-        508
+        524
       ],
       "size": [
         320,
@@ -326,7 +326,7 @@
       "type": "VAEDecode",
       "pos": [
         1840,
-        1774
+        1790
       ],
       "size": [
         240,
@@ -368,7 +368,7 @@
       "type": "SaveImage",
       "pos": [
         1840,
-        1892
+        1908
       ],
       "size": [
         280,
@@ -421,54 +421,16 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## social/stills/youtube-channel-art\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nYouTube channel art 16:9 with a mobile-safe center band. Lab size **1536x864**. Prefix `ez_yt_art`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## social/stills/youtube-channel-art\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nYouTube channel art 16:9 with a mobile-safe center band. Lab size **1536x864**. Prefix `ez_yt_art`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
-    },
-    {
-      "id": 11,
-      "type": "LoadImage",
-      "pos": [
-        2548,
-        508
-      ],
-      "size": [
-        320,
-        314
-      ],
-      "flags": {},
-      "order": 11,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [],
-          "slot_index": 0
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": [],
-          "slot_index": 1
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoadImage"
-      },
-      "widgets_values": [
-        "example.png",
-        "image"
-      ],
-      "title": "Draft still (set to ez_still_draft_00001_.png)"
     },
     {
       "id": 12,
       "type": "EZKleinPromptEnhance",
       "pos": [
         480,
-        508
+        524
       ],
       "size": [
         420,
@@ -522,7 +484,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         480,
-        1264
+        1280
       ],
       "size": [
         420,
@@ -594,7 +556,7 @@
       "type": "EZImageFormat",
       "pos": [
         1440,
-        1260
+        1276
       ],
       "size": [
         360,
@@ -670,7 +632,7 @@
       "type": "EZImageUpscale",
       "pos": [
         1800,
-        2234
+        2250
       ],
       "size": [
         280,
@@ -715,7 +677,7 @@
       "type": "EZImageDescribe",
       "pos": [
         480,
-        1000
+        1016
       ],
       "size": [
         280,
@@ -968,7 +930,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        436,
+        452,
         400,
         506
       ],
@@ -981,7 +943,7 @@
       "title": "PROMPT",
       "bounding": [
         460,
-        436,
+        452,
         928,
         1292
       ],
@@ -994,7 +956,7 @@
       "title": "SETTINGS",
       "bounding": [
         1420,
-        436,
+        452,
         400,
         1266
       ],
@@ -1007,7 +969,7 @@
       "title": "OUTPUT",
       "bounding": [
         1780,
-        1702,
+        1718,
         360,
         656
       ],
@@ -1020,7 +982,7 @@
       "title": "INPUT",
       "bounding": [
         2528,
-        436,
+        452,
         360,
         430
       ],
@@ -1040,7 +1002,7 @@
         0
       ]
     },
-    "lab_note": "## social/stills/youtube-channel-art\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nYouTube channel art 16:9 with a mobile-safe center band. Lab size **1536x864**. Prefix `ez_yt_art`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## social/stills/youtube-channel-art\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nYouTube channel art 16:9 with a mobile-safe center band. Lab size **1536x864**. Prefix `ez_yt_art`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_description": "YouTube channel art 16:9 with a mobile-safe center band",
     "lab_app_mode": {
       "enabled": true,
@@ -1172,9 +1134,6 @@
       ]
     },
     "linearMode": true,
-    "lab_optional_unwired": [
-      "LoadImage"
-    ],
     "lab_rel": "social/stills/youtube-channel-art",
     "workflowRendererVersion": "Vue-corrected",
     "lab_quality": {

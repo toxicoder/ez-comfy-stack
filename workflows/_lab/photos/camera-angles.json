@@ -9,7 +9,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        588
+        1112
       ],
       "size": [
         360,
@@ -45,7 +45,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        944
+        1468
       ],
       "size": [
         360,
@@ -85,7 +85,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        1122
+        1646
       ],
       "size": [
         360,
@@ -120,7 +120,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         40,
-        1394
+        1918
       ],
       "size": [
         420,
@@ -170,7 +170,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         2380,
-        1080
+        1604
       ],
       "size": [
         420,
@@ -217,7 +217,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         2848,
-        880
+        1404
       ],
       "size": [
         280,
@@ -294,7 +294,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## photos/camera-angles\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nWide / medium / close of one subject (Klein 4B, lock=view). Type any subject in IDENTITY. Prefixes `ez_angle_wide`, `ez_angle_med`, `ez_angle_close`. Independent T2I, same seed - new lens and framing, not copies of MEDIUM.\n\nIdentity-mode enhance is on for the bible (camera-free).\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## photos/camera-angles\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nWide / medium / close of one subject (Klein 4B, lock=view). Type any subject in IDENTITY. Prefixes `ez_angle_wide`, `ez_angle_med`, `ez_angle_close`. Independent T2I, same seed - new lens and framing, not copies of MEDIUM.\n\nIdentity-mode enhance is on for the bible (camera-free).\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     },
@@ -303,7 +303,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        588
+        1112
       ],
       "size": [
         420,
@@ -345,7 +345,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        588
+        1112
       ],
       "size": [
         360,
@@ -392,7 +392,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        588
+        1112
       ],
       "size": [
         320,
@@ -452,7 +452,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        588
+        1112
       ],
       "size": [
         240,
@@ -494,7 +494,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        588
+        1112
       ],
       "size": [
         280,
@@ -524,7 +524,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1126
+        1650
       ],
       "size": [
         420,
@@ -566,7 +566,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        1126
+        1650
       ],
       "size": [
         360,
@@ -613,7 +613,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        1126
+        1650
       ],
       "size": [
         320,
@@ -673,7 +673,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        1126
+        1650
       ],
       "size": [
         240,
@@ -715,7 +715,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        1126
+        1650
       ],
       "size": [
         280,
@@ -745,7 +745,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1664
+        2188
       ],
       "size": [
         420,
@@ -787,7 +787,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        1664
+        2188
       ],
       "size": [
         360,
@@ -834,7 +834,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        1664
+        2188
       ],
       "size": [
         320,
@@ -894,7 +894,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        1664
+        2188
       ],
       "size": [
         240,
@@ -936,7 +936,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        1664
+        2188
       ],
       "size": [
         280,
@@ -966,7 +966,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         2380,
-        588
+        1112
       ],
       "size": [
         420,
@@ -1038,7 +1038,7 @@
       "type": "EZImageFormat",
       "pos": [
         2848,
-        588
+        1112
       ],
       "size": [
         360,
@@ -1112,7 +1112,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        930
+        1454
       ],
       "size": [
         280,
@@ -1160,7 +1160,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        1468
+        1992
       ],
       "size": [
         280,
@@ -1213,7 +1213,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        2006
+        2530
       ],
       "size": [
         280,
@@ -1289,8 +1289,8 @@
       "id": 34,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        3276.0,
-        80.0
+        2380,
+        1836
       ],
       "size": [
         420.0,
@@ -1330,8 +1330,8 @@
       "id": 35,
       "type": "CLIPTextEncode",
       "pos": [
-        3276.0,
-        572.0
+        2380,
+        2820
       ],
       "size": [
         420.0,
@@ -1377,8 +1377,8 @@
       "id": 36,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        3276.0,
-        804.0
+        2380,
+        2328
       ],
       "size": [
         420.0,
@@ -1418,8 +1418,8 @@
       "id": 37,
       "type": "CLIPTextEncode",
       "pos": [
-        3276.0,
-        1296.0
+        2380,
+        3052
       ],
       "size": [
         420.0,
@@ -1880,7 +1880,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        516,
+        1040,
         400,
         708
       ],
@@ -1893,7 +1893,7 @@
       "title": "IDENTITY",
       "bounding": [
         20,
-        1322,
+        1846,
         460,
         536
       ],
@@ -1906,7 +1906,7 @@
       "title": "SHOT MEDIUM",
       "bounding": [
         500,
-        516,
+        1040,
         1852,
         538
       ],
@@ -1919,7 +1919,7 @@
       "title": "SHOT WIDE",
       "bounding": [
         500,
-        1054,
+        1578,
         1852,
         538
       ],
@@ -1932,7 +1932,7 @@
       "title": "SHOT CLOSE",
       "bounding": [
         500,
-        1592,
+        2116,
         1852,
         538
       ],
@@ -1945,9 +1945,9 @@
       "title": "PROMPT",
       "bounding": [
         2360,
-        516,
+        1040,
         460,
-        768
+        2216
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1958,7 +1958,7 @@
       "title": "SETTINGS",
       "bounding": [
         2828,
-        516,
+        1040,
         400,
         514
       ],
@@ -1970,7 +1970,7 @@
   "config": {},
   "extra": {
     "lab_profile": "photos/camera-angles",
-    "lab_note": "## photos/camera-angles\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nWide / medium / close of one subject (Klein 4B, lock=view). Type any subject in IDENTITY. Prefixes `ez_angle_wide`, `ez_angle_med`, `ez_angle_close`. Independent T2I, same seed - new lens and framing, not copies of MEDIUM.\n\nIdentity-mode enhance is on for the bible (camera-free).\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## photos/camera-angles\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nWide / medium / close of one subject (Klein 4B, lock=view). Type any subject in IDENTITY. Prefixes `ez_angle_wide`, `ez_angle_med`, `ez_angle_close`. Independent T2I, same seed - new lens and framing, not copies of MEDIUM.\n\nIdentity-mode enhance is on for the bible (camera-free).\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_description": "Klein 4B wide/medium/close angle pack, new cameras",
     "lab_app_mode": {
       "enabled": true,

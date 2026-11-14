@@ -2,14 +2,14 @@
   "id": "fabric-twirl-av",
   "revision": 3,
   "last_node_id": 25,
-  "last_link_id": 41,
+  "last_link_id": 42,
   "nodes": [
     {
       "id": 1,
       "type": "UNETLoader",
       "pos": [
         40,
-        588
+        604
       ],
       "size": [
         520,
@@ -43,7 +43,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        742
+        758
       ],
       "size": [
         360,
@@ -77,7 +77,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        872
+        888
       ],
       "size": [
         400,
@@ -113,7 +113,7 @@
       "type": "LoadImage",
       "pos": [
         608,
-        588
+        604
       ],
       "size": [
         320,
@@ -129,7 +129,7 @@
           "type": "IMAGE",
           "links": [
             5,
-            41
+            42
           ],
           "slot_index": 0
         },
@@ -154,7 +154,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         976,
-        1080
+        1096
       ],
       "size": [
         420,
@@ -201,7 +201,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         976,
-        1804
+        1820
       ],
       "size": [
         420,
@@ -248,7 +248,7 @@
       "type": "LTXVImgToVideo",
       "pos": [
         1444,
-        1042
+        1058
       ],
       "size": [
         320,
@@ -337,7 +337,7 @@
       "type": "LTXVConditioning",
       "pos": [
         1444,
-        1452
+        1468
       ],
       "size": [
         280,
@@ -389,7 +389,7 @@
       "type": "KSampler",
       "pos": [
         1444,
-        1606
+        1622
       ],
       "size": [
         320,
@@ -449,7 +449,7 @@
       "type": "VAEDecode",
       "pos": [
         1852,
-        588
+        604
       ],
       "size": [
         240,
@@ -492,7 +492,7 @@
       "type": "SaveImage",
       "pos": [
         1852,
-        1336
+        1352
       ],
       "size": [
         280,
@@ -522,7 +522,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        1054
+        1070
       ],
       "size": [
         360,
@@ -556,7 +556,7 @@
       "type": "LTXVEmptyLatentAudio",
       "pos": [
         1444,
-        840
+        856
       ],
       "size": [
         300,
@@ -597,7 +597,7 @@
       "type": "LTXVConcatAVLatent",
       "pos": [
         1444,
-        1314
+        1330
       ],
       "size": [
         280,
@@ -639,7 +639,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         1444,
-        1940
+        1956
       ],
       "size": [
         280,
@@ -699,7 +699,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## business/fashion-beauty/fabric-twirl-av\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nFabric-twirl AV 9:16. Lab size **768x1280**. Prefix `ez_svc_twirl`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) - open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nLTX canvas 768x1280 (width/height must be divisible by 32; 720 and 1080 are invalid). Disclose AI-generated media. No score. Mouths will not match.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## business/fashion-beauty/fabric-twirl-av\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nFabric-twirl AV 9:16. Lab size **768x1280**. Prefix `ez_svc_twirl`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) - open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nLTX canvas 768x1280 (width/height must be divisible by 32; 720 and 1080 are invalid). Disclose AI-generated media. No score. Mouths will not match.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note - video output"
     },
@@ -708,7 +708,7 @@
       "type": "VHS_VideoCombine",
       "pos": [
         1852,
-        844
+        860
       ],
       "size": [
         320,
@@ -772,7 +772,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         976,
-        588
+        604
       ],
       "size": [
         420,
@@ -827,7 +827,7 @@
       "type": "LTXVAudioVAEDecode",
       "pos": [
         1852,
-        706
+        722
       ],
       "size": [
         320,
@@ -869,7 +869,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         976,
-        1312
+        1328
       ],
       "size": [
         420,
@@ -941,7 +941,7 @@
       "type": "EZVideoFormat",
       "pos": [
         1444,
-        588
+        604
       ],
       "size": [
         360,
@@ -1001,7 +1001,7 @@
       "type": "EZImageDescribe",
       "pos": [
         608,
-        974
+        990
       ],
       "size": [
         280,
@@ -1022,7 +1022,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 41
+          "link": 42
         }
       ],
       "outputs": [
@@ -1310,7 +1310,7 @@
       "STRING"
     ],
     [
-      41,
+      42,
       4,
       0,
       24,
@@ -1350,7 +1350,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        516,
+        532,
         560,
         640
       ],
@@ -1363,7 +1363,7 @@
       "title": "INPUT",
       "bounding": [
         588,
-        516,
+        532,
         360,
         592
       ],
@@ -1376,7 +1376,7 @@
       "title": "PROMPT",
       "bounding": [
         956,
-        516,
+        532,
         460,
         1492
       ],
@@ -1389,7 +1389,7 @@
       "title": "SETTINGS",
       "bounding": [
         1424,
-        516,
+        532,
         400,
         1534
       ],
@@ -1402,7 +1402,7 @@
       "title": "OUTPUT",
       "bounding": [
         1832,
-        516,
+        532,
         360,
         1134
       ],
@@ -1415,7 +1415,7 @@
   "extra": {
     "lab_profile": "business/fashion-beauty/fabric-twirl-av",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## business/fashion-beauty/fabric-twirl-av\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nFabric-twirl AV 9:16. Lab size **768x1280**. Prefix `ez_svc_twirl`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) - open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nLTX canvas 768x1280 (width/height must be divisible by 32; 720 and 1080 are invalid). Disclose AI-generated media. No score. Mouths will not match.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## business/fashion-beauty/fabric-twirl-av\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nFabric-twirl AV 9:16. Lab size **768x1280**. Prefix `ez_svc_twirl`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) - open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nLTX canvas 768x1280 (width/height must be divisible by 32; 720 and 1080 are invalid). Disclose AI-generated media. No score. Mouths will not match.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_ltx_av": true,
     "lab_description": "Fabric-twirl AV 9:16",
     "lab_app_mode": {

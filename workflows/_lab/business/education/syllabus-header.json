@@ -2,14 +2,14 @@
   "id": "syllabus-header",
   "revision": 5,
   "last_node_id": 20,
-  "last_link_id": 30,
+  "last_link_id": 31,
   "nodes": [
     {
       "id": 1,
       "type": "UNETLoader",
       "pos": [
         40,
-        508
+        524
       ],
       "size": [
         360,
@@ -43,7 +43,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        662
+        678
       ],
       "size": [
         360,
@@ -79,7 +79,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        840
+        856
       ],
       "size": [
         360,
@@ -113,7 +113,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        508
+        524
       ],
       "size": [
         420,
@@ -160,7 +160,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         480,
-        1492
+        1508
       ],
       "size": [
         420,
@@ -207,7 +207,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         1440,
-        1260
+        1276
       ],
       "size": [
         280,
@@ -267,7 +267,7 @@
       "type": "KSampler",
       "pos": [
         1440,
-        508
+        524
       ],
       "size": [
         320,
@@ -327,7 +327,7 @@
       "type": "VAEDecode",
       "pos": [
         1840,
-        508
+        524
       ],
       "size": [
         240,
@@ -369,7 +369,7 @@
       "type": "SaveImage",
       "pos": [
         1840,
-        626
+        642
       ],
       "size": [
         280,
@@ -414,54 +414,16 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## business/education/syllabus-header\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nSyllabus header 16:9. Lab size **1536x864**. Prefix `ez_svc_syl`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## business/education/syllabus-header\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nSyllabus header 16:9. Lab size **1536x864**. Prefix `ez_svc_syl`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
-    },
-    {
-      "id": 11,
-      "type": "LoadImage",
-      "pos": [
-        2548,
-        508
-      ],
-      "size": [
-        320,
-        314
-      ],
-      "flags": {},
-      "order": 11,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [],
-          "slot_index": 0
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": [],
-          "slot_index": 1
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoadImage"
-      },
-      "widgets_values": [
-        "example.png",
-        "image"
-      ],
-      "title": "Draft still (set to ez_still_draft_00001_.png)"
     },
     {
       "id": 12,
       "type": "EZKleinPromptEnhance",
       "pos": [
         480,
-        508
+        524
       ],
       "size": [
         420,
@@ -515,7 +477,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         480,
-        1000
+        1016
       ],
       "size": [
         420,
@@ -587,7 +549,7 @@
       "type": "EZImageFormat",
       "pos": [
         1440,
-        968
+        984
       ],
       "size": [
         360,
@@ -661,7 +623,7 @@
       "type": "EZOptionalImage",
       "pos": [
         2548,
-        894
+        910
       ],
       "size": [
         360.0,
@@ -677,7 +639,7 @@
           "type": "IMAGE",
           "links": [
             19,
-            30
+            31
           ],
           "slot_index": 0
         },
@@ -712,7 +674,7 @@
       "type": "EZKleinRefCanvas",
       "pos": [
         2548,
-        1248
+        1264
       ],
       "size": [
         360.0,
@@ -773,7 +735,7 @@
       "type": "EZImageUpscale",
       "pos": [
         1848,
-        968
+        984
       ],
       "size": [
         280,
@@ -818,7 +780,7 @@
       "type": "EZImageDescribe",
       "pos": [
         2548,
-        1086
+        1102
       ],
       "size": [
         280,
@@ -839,7 +801,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 30
+          "link": 31
         }
       ],
       "outputs": [
@@ -1063,7 +1025,7 @@
       "STRING"
     ],
     [
-      30,
+      31,
       16,
       0,
       19,
@@ -1103,7 +1065,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        436,
+        452,
         400,
         506
       ],
@@ -1116,7 +1078,7 @@
       "title": "PROMPT",
       "bounding": [
         460,
-        436,
+        452,
         928,
         1260
       ],
@@ -1129,7 +1091,7 @@
       "title": "SETTINGS",
       "bounding": [
         1420,
-        436,
+        452,
         400,
         974
       ],
@@ -1142,7 +1104,7 @@
       "title": "OUTPUT",
       "bounding": [
         1820,
-        436,
+        452,
         328,
         656
       ],
@@ -1155,7 +1117,7 @@
       "title": "INPUT",
       "bounding": [
         2528,
-        436,
+        452,
         400,
         996
       ],
@@ -1175,7 +1137,7 @@
         0
       ]
     },
-    "lab_note": "## business/education/syllabus-header\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nSyllabus header 16:9. Lab size **1536x864**. Prefix `ez_svc_syl`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## business/education/syllabus-header\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nSyllabus header 16:9. Lab size **1536x864**. Prefix `ez_svc_syl`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: none.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_description": "Syllabus header 16:9",
     "lab_app_mode": {
       "enabled": true,
@@ -1308,6 +1270,14 @@
             "description": "Upload a still or pick one already on the drive (input/ or Outputs). Empty is valid - Queue without a file. When set, Klein uses it as a native reference.",
             "label": "Example / reference (optional)"
           }
+        ],
+        [
+          16,
+          "use_references",
+          {
+            "description": "Turn off to run text-to-image without clearing your picks. Any new pick turns it back on.",
+            "label": "Use reference stills"
+          }
         ]
       ],
       "outputs": [
@@ -1315,9 +1285,6 @@
       ]
     },
     "linearMode": true,
-    "lab_optional_unwired": [
-      "LoadImage"
-    ],
     "lab_rel": "business/education/syllabus-header",
     "workflowRendererVersion": "Vue-corrected",
     "lab_quality": {

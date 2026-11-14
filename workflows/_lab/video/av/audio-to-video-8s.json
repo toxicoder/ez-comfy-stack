@@ -2,14 +2,14 @@
   "id": "audio-to-video-8s",
   "revision": 14,
   "last_node_id": 27,
-  "last_link_id": 45,
+  "last_link_id": 46,
   "nodes": [
     {
       "id": 1,
       "type": "UNETLoader",
       "pos": [
         40,
-        588
+        604
       ],
       "size": [
         520,
@@ -43,7 +43,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        742
+        758
       ],
       "size": [
         360,
@@ -77,7 +77,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        872
+        888
       ],
       "size": [
         400,
@@ -113,7 +113,7 @@
       "type": "LoadImage",
       "pos": [
         608,
-        588
+        604
       ],
       "size": [
         320,
@@ -129,7 +129,7 @@
           "type": "IMAGE",
           "links": [
             5,
-            45
+            46
           ],
           "slot_index": 0
         },
@@ -154,7 +154,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         976,
-        1080
+        1096
       ],
       "size": [
         420,
@@ -201,7 +201,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         976,
-        1804
+        1820
       ],
       "size": [
         420,
@@ -248,7 +248,7 @@
       "type": "LTXVImgToVideo",
       "pos": [
         1444,
-        978
+        994
       ],
       "size": [
         320,
@@ -337,7 +337,7 @@
       "type": "LTXVConditioning",
       "pos": [
         1444,
-        1388
+        1404
       ],
       "size": [
         280,
@@ -389,7 +389,7 @@
       "type": "KSampler",
       "pos": [
         1444,
-        1542
+        1558
       ],
       "size": [
         320,
@@ -449,7 +449,7 @@
       "type": "VAEDecode",
       "pos": [
         1852,
-        588
+        604
       ],
       "size": [
         240,
@@ -492,7 +492,7 @@
       "type": "SaveImage",
       "pos": [
         1852,
-        1198
+        1214
       ],
       "size": [
         280,
@@ -522,7 +522,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        1054
+        1070
       ],
       "size": [
         360,
@@ -555,7 +555,7 @@
       "type": "LTXVConcatAVLatent",
       "pos": [
         1444,
-        1250
+        1266
       ],
       "size": [
         280,
@@ -597,7 +597,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         1444,
-        1876
+        1892
       ],
       "size": [
         280,
@@ -655,7 +655,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## video/av/audio-to-video-8s\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) - open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **audio-to-video freeze** (~8 s). Drop a ~8 s wav/mp3 in `${COMFY_OUTPUT_DIR}/input` as `ez_a2v_bed.wav` (or pick it on **Audio file**). Optional start still locks look. LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\nAudio VAE **encodes** the clip into the joint latent. The MP4 muxes the **original** waveform (no `LTXVAudioVAEDecode`). Residual denoise on the audio latent is possible; picture still follows the bed. Mouths will not match. Banned lip-sync OSS stays out.\nTwo-stage A2V with frozen tokens in both stages lives in Comfy **Templates -> LTX-2.5**. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n\nHandoff from **video/av/talking-head** or any Klein still. ACE-Step bed: stop/unload music occupancy first.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\n"
+        "## video/av/audio-to-video-8s\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) - open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **audio-to-video freeze** (~8 s). Drop a ~8 s wav/mp3 in `${COMFY_OUTPUT_DIR}/input` as `ez_a2v_bed.wav` (or pick it on **Audio file**). Optional start still locks look. LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\nAudio VAE **encodes** the clip into the joint latent. The MP4 muxes the **original** waveform (no `LTXVAudioVAEDecode`). Residual denoise on the audio latent is possible; picture still follows the bed. Mouths will not match. Banned lip-sync OSS stays out.\nTwo-stage A2V with frozen tokens in both stages lives in Comfy **Templates -> LTX-2.5**. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n\nHandoff from **video/av/talking-head** or any Klein still. ACE-Step bed: stop/unload music occupancy first.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\n"
       ],
       "title": "Operator note - video output"
     },
@@ -664,7 +664,7 @@
       "type": "VHS_VideoCombine",
       "pos": [
         1852,
-        706
+        722
       ],
       "size": [
         320,
@@ -728,7 +728,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         976,
-        588
+        604
       ],
       "size": [
         420,
@@ -783,7 +783,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         976,
-        1312
+        1328
       ],
       "size": [
         420,
@@ -823,7 +823,7 @@
       "type": "LoadAudio",
       "pos": [
         608,
-        974
+        990
       ],
       "size": [
         320,
@@ -857,7 +857,7 @@
       "type": "LTXVAudioVAEEncode",
       "pos": [
         1444,
-        840
+        856
       ],
       "size": [
         300,
@@ -931,7 +931,7 @@
       "type": "EZVideoFormat",
       "pos": [
         1444,
-        588
+        604
       ],
       "size": [
         360,
@@ -991,7 +991,7 @@
       "type": "EZImageDescribe",
       "pos": [
         608,
-        1128
+        1144
       ],
       "size": [
         280,
@@ -1012,7 +1012,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 45
+          "link": 46
         }
       ],
       "outputs": [
@@ -1292,7 +1292,7 @@
       "STRING"
     ],
     [
-      45,
+      46,
       4,
       0,
       26,
@@ -1332,7 +1332,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        516,
+        532,
         560,
         640
       ],
@@ -1345,7 +1345,7 @@
       "title": "INPUT",
       "bounding": [
         588,
-        516,
+        532,
         360,
         746
       ],
@@ -1358,7 +1358,7 @@
       "title": "PROMPT",
       "bounding": [
         956,
-        516,
+        532,
         460,
         1492
       ],
@@ -1371,7 +1371,7 @@
       "title": "SETTINGS",
       "bounding": [
         1424,
-        516,
+        532,
         400,
         1470
       ],
@@ -1384,7 +1384,7 @@
       "title": "OUTPUT",
       "bounding": [
         1832,
-        516,
+        532,
         360,
         996
       ],
@@ -1397,7 +1397,7 @@
   "extra": {
     "lab_profile": "video/av/audio-to-video-8s",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## video/av/audio-to-video-8s\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) - open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **audio-to-video freeze** (~8 s). Drop a ~8 s wav/mp3 in `${COMFY_OUTPUT_DIR}/input` as `ez_a2v_bed.wav` (or pick it on **Audio file**). Optional start still locks look. LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\nAudio VAE **encodes** the clip into the joint latent. The MP4 muxes the **original** waveform (no `LTXVAudioVAEDecode`). Residual denoise on the audio latent is possible; picture still follows the bed. Mouths will not match. Banned lip-sync OSS stays out.\nTwo-stage A2V with frozen tokens in both stages lives in Comfy **Templates -> LTX-2.5**. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n\nHandoff from **video/av/talking-head** or any Klein still. ACE-Step bed: stop/unload music occupancy first.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\n",
+    "lab_note": "## video/av/audio-to-video-8s\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) - open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **audio-to-video freeze** (~8 s). Drop a ~8 s wav/mp3 in `${COMFY_OUTPUT_DIR}/input` as `ez_a2v_bed.wav` (or pick it on **Audio file**). Optional start still locks look. LTX Community License - not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\nAudio VAE **encodes** the clip into the joint latent. The MP4 muxes the **original** waveform (no `LTXVAudioVAEDecode`). Residual denoise on the audio latent is possible; picture still follows the bed. Mouths will not match. Banned lip-sync OSS stays out.\nTwo-stage A2V with frozen tokens in both stages lives in Comfy **Templates -> LTX-2.5**. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n\nHandoff from **video/av/talking-head** or any Klein still. ACE-Step bed: stop/unload music occupancy first.\n\nOccupancy: ltx - stop Wan, podcast, music, other LTX. One GB10 job.\n",
     "lab_ltx_av": true,
     "lab_description": "LTX-2.5 A2V freeze: encode bed, mux original waveform\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_app_mode": {

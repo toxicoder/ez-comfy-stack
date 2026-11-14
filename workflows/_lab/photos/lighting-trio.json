@@ -9,7 +9,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        588
+        1112
       ],
       "size": [
         360,
@@ -45,7 +45,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        944
+        1468
       ],
       "size": [
         360,
@@ -85,7 +85,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        1122
+        1646
       ],
       "size": [
         360,
@@ -121,7 +121,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         40,
-        1394
+        1918
       ],
       "size": [
         420,
@@ -171,7 +171,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         2380,
-        1080
+        1604
       ],
       "size": [
         420,
@@ -219,7 +219,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         2848,
-        880
+        1404
       ],
       "size": [
         280,
@@ -296,7 +296,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## photos/lighting-trio\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nSame subject under three lights (Klein 4B). Type any subject in IDENTITY. SHOT KEY is the identity plate. Queue the whole graph; 02-03 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.\nPrefixes `ez_light_01`...`03` (key / window / night lamp). Change only the light.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## photos/lighting-trio\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nSame subject under three lights (Klein 4B). Type any subject in IDENTITY. SHOT KEY is the identity plate. Queue the whole graph; 02-03 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.\nPrefixes `ez_light_01`...`03` (key / window / night lamp). Change only the light.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -305,7 +305,7 @@
       "type": "VAEEncode",
       "pos": [
         1764,
-        908
+        1432
       ],
       "size": [
         240,
@@ -351,7 +351,7 @@
       "type": "ReferenceLatent",
       "pos": [
         2848,
-        1058
+        1582
       ],
       "size": [
         280,
@@ -392,7 +392,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        588
+        1112
       ],
       "size": [
         420,
@@ -434,7 +434,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        588
+        1112
       ],
       "size": [
         360,
@@ -481,7 +481,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        588
+        1112
       ],
       "size": [
         320,
@@ -541,7 +541,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        588
+        1112
       ],
       "size": [
         240,
@@ -584,7 +584,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        588
+        1112
       ],
       "size": [
         280,
@@ -614,7 +614,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1126
+        1650
       ],
       "size": [
         420,
@@ -656,7 +656,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        1126
+        1650
       ],
       "size": [
         360,
@@ -703,7 +703,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        1126
+        1650
       ],
       "size": [
         320,
@@ -763,7 +763,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        1126
+        1650
       ],
       "size": [
         240,
@@ -805,7 +805,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        1126
+        1650
       ],
       "size": [
         280,
@@ -835,7 +835,7 @@
       "type": "ReferenceLatent",
       "pos": [
         988,
-        1358
+        1882
       ],
       "size": [
         240,
@@ -878,7 +878,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1664
+        2188
       ],
       "size": [
         420,
@@ -920,7 +920,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        1664
+        2188
       ],
       "size": [
         360,
@@ -967,7 +967,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        1664
+        2188
       ],
       "size": [
         320,
@@ -1027,7 +1027,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        1664
+        2188
       ],
       "size": [
         240,
@@ -1069,7 +1069,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        1664
+        2188
       ],
       "size": [
         280,
@@ -1099,7 +1099,7 @@
       "type": "ReferenceLatent",
       "pos": [
         988,
-        1896
+        2420
       ],
       "size": [
         240,
@@ -1142,7 +1142,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         2380,
-        588
+        1112
       ],
       "size": [
         420,
@@ -1214,7 +1214,7 @@
       "type": "EZImageFormat",
       "pos": [
         2848,
-        588
+        1112
       ],
       "size": [
         360,
@@ -1288,7 +1288,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2052,
-        930
+        1454
       ],
       "size": [
         280,
@@ -1336,7 +1336,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        1468
+        1992
       ],
       "size": [
         280,
@@ -1389,7 +1389,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        2006
+        2530
       ],
       "size": [
         280,
@@ -1465,8 +1465,8 @@
       "id": 35,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        3276.0,
-        80.0
+        2380,
+        1836
       ],
       "size": [
         420.0,
@@ -1506,8 +1506,8 @@
       "id": 36,
       "type": "CLIPTextEncode",
       "pos": [
-        3276.0,
-        572.0
+        2380,
+        2820
       ],
       "size": [
         420.0,
@@ -1553,8 +1553,8 @@
       "id": 37,
       "type": "ReferenceLatent",
       "pos": [
-        3276.0,
-        804.0
+        2848,
+        1734
       ],
       "size": [
         280.0,
@@ -1596,8 +1596,8 @@
       "id": 38,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        3276.0,
-        956.0
+        2380,
+        2328
       ],
       "size": [
         420.0,
@@ -1637,8 +1637,8 @@
       "id": 39,
       "type": "CLIPTextEncode",
       "pos": [
-        3276.0,
-        1448.0
+        2380,
+        3052
       ],
       "size": [
         420.0,
@@ -1684,8 +1684,8 @@
       "id": 40,
       "type": "ReferenceLatent",
       "pos": [
-        3276.0,
-        1680.0
+        2848,
+        1886
       ],
       "size": [
         280.0,
@@ -2238,7 +2238,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        516,
+        1040,
         400,
         708
       ],
@@ -2251,7 +2251,7 @@
       "title": "IDENTITY",
       "bounding": [
         20,
-        1322,
+        1846,
         460,
         536
       ],
@@ -2264,7 +2264,7 @@
       "title": "SHOT KEY",
       "bounding": [
         500,
-        516,
+        1040,
         1852,
         538
       ],
@@ -2277,7 +2277,7 @@
       "title": "SHOT WINDOW",
       "bounding": [
         500,
-        1054,
+        1578,
         1852,
         538
       ],
@@ -2290,7 +2290,7 @@
       "title": "SHOT NIGHT LAMP",
       "bounding": [
         500,
-        1592,
+        2116,
         1852,
         538
       ],
@@ -2303,9 +2303,9 @@
       "title": "PROMPT",
       "bounding": [
         2360,
-        516,
+        1040,
         460,
-        768
+        2216
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2316,9 +2316,9 @@
       "title": "SETTINGS",
       "bounding": [
         2828,
-        516,
+        1040,
         400,
-        666
+        970
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -2328,7 +2328,7 @@
   "config": {},
   "extra": {
     "lab_profile": "photos/lighting-trio",
-    "lab_note": "## photos/lighting-trio\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nSame subject under three lights (Klein 4B). Type any subject in IDENTITY. SHOT KEY is the identity plate. Queue the whole graph; 02-03 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.\nPrefixes `ez_light_01`...`03` (key / window / night lamp). Change only the light.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_note": "## photos/lighting-trio\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nSame subject under three lights (Klein 4B). Type any subject in IDENTITY. SHOT KEY is the identity plate. Queue the whole graph; 02-03 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.\nPrefixes `ez_light_01`...`03` (key / window / night lamp). Change only the light.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.\n",
     "lab_description": "Klein 4B three-light study of one subject",
     "lab_app_mode": {
       "enabled": true,

@@ -2,14 +2,14 @@
   "id": "talking-head",
   "revision": 7,
   "last_node_id": 26,
-  "last_link_id": 43,
+  "last_link_id": 44,
   "nodes": [
     {
       "id": 1,
       "type": "UNETLoader",
       "pos": [
         40,
-        588
+        604
       ],
       "size": [
         520,
@@ -43,7 +43,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        742
+        758
       ],
       "size": [
         360,
@@ -77,7 +77,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        872
+        888
       ],
       "size": [
         400,
@@ -113,7 +113,7 @@
       "type": "LoadImage",
       "pos": [
         608,
-        588
+        604
       ],
       "size": [
         320,
@@ -129,7 +129,7 @@
           "type": "IMAGE",
           "links": [
             5,
-            43
+            44
           ],
           "slot_index": 0
         },
@@ -154,7 +154,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         976,
-        1080
+        1096
       ],
       "size": [
         420,
@@ -201,7 +201,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         976,
-        1804
+        1820
       ],
       "size": [
         420,
@@ -248,7 +248,7 @@
       "type": "LTXVImgToVideo",
       "pos": [
         1444,
-        1042
+        1058
       ],
       "size": [
         320,
@@ -337,7 +337,7 @@
       "type": "LTXVConditioning",
       "pos": [
         1444,
-        1452
+        1468
       ],
       "size": [
         280,
@@ -389,7 +389,7 @@
       "type": "KSampler",
       "pos": [
         1444,
-        1606
+        1622
       ],
       "size": [
         320,
@@ -449,7 +449,7 @@
       "type": "VAEDecode",
       "pos": [
         1852,
-        588
+        604
       ],
       "size": [
         240,
@@ -492,7 +492,7 @@
       "type": "SaveImage",
       "pos": [
         1852,
-        1488
+        1504
       ],
       "size": [
         280,
@@ -522,7 +522,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        1054
+        1070
       ],
       "size": [
         360,
@@ -556,7 +556,7 @@
       "type": "LTXVEmptyLatentAudio",
       "pos": [
         1444,
-        840
+        856
       ],
       "size": [
         300,
@@ -597,7 +597,7 @@
       "type": "LTXVConcatAVLatent",
       "pos": [
         1444,
-        1314
+        1330
       ],
       "size": [
         280,
@@ -639,7 +639,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         1444,
-        1940
+        1956
       ],
       "size": [
         280,
@@ -699,7 +699,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## video/av/talking-head\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nKlein still (LoadImage) -> optional Qwen3-TTS 0.6B (download-podcast --tier qwen3tts) -> LTX-2.5 A2V freeze. Occupancy: ACE-Step 90s bed then stop/unload then this graph.\nReal single-stage freeze is **video/av/audio-to-video-8s** (LoadAudio + encode, mux original wav). Official two-stage A2V lives in Comfy Templates -> LTX-2.5. This canvas Queues the lab 5.00s I2V printer so it loads without missing subgraph nodes.\nWan S2V-14B is opt-in: bazelisk run //scripts:run-utility -- download-wan run --tier s2v\nBanned lip-sync OSS packs stay out of this tree.\nCanvas is 1280x704 (divisible by 32). Lab printers stay 5.00 s.\nPrompt enhance is **off** (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## video/av/talking-head\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nKlein still (LoadImage) -> optional Qwen3-TTS 0.6B (download-podcast --tier qwen3tts) -> LTX-2.5 A2V freeze. Occupancy: ACE-Step 90s bed then stop/unload then this graph.\nReal single-stage freeze is **video/av/audio-to-video-8s** (LoadAudio + encode, mux original wav). Official two-stage A2V lives in Comfy Templates -> LTX-2.5. This canvas Queues the lab 5.00s I2V printer so it loads without missing subgraph nodes.\nWan S2V-14B is opt-in: bazelisk run //scripts:run-utility -- download-wan run --tier s2v\nBanned lip-sync OSS packs stay out of this tree.\nCanvas is 1280x704 (divisible by 32). Lab printers stay 5.00 s.\nPrompt enhance is **off** (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note - video output"
     },
@@ -708,7 +708,7 @@
       "type": "VHS_VideoCombine",
       "pos": [
         1852,
-        844
+        860
       ],
       "size": [
         320,
@@ -772,7 +772,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         976,
-        588
+        604
       ],
       "size": [
         420,
@@ -827,7 +827,7 @@
       "type": "LTXVAudioVAEDecode",
       "pos": [
         1852,
-        706
+        722
       ],
       "size": [
         320,
@@ -869,7 +869,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         976,
-        1312
+        1328
       ],
       "size": [
         420,
@@ -941,7 +941,7 @@
       "type": "EZVideoFormat",
       "pos": [
         1444,
-        588
+        604
       ],
       "size": [
         360,
@@ -1001,7 +1001,7 @@
       "type": "EZImageUpscale",
       "pos": [
         1852,
-        1336
+        1352
       ],
       "size": [
         280,
@@ -1046,7 +1046,7 @@
       "type": "EZImageDescribe",
       "pos": [
         608,
-        974
+        990
       ],
       "size": [
         280,
@@ -1067,7 +1067,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 43
+          "link": 44
         }
       ],
       "outputs": [
@@ -1363,7 +1363,7 @@
       "STRING"
     ],
     [
-      43,
+      44,
       4,
       0,
       25,
@@ -1403,7 +1403,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        516,
+        532,
         560,
         640
       ],
@@ -1416,7 +1416,7 @@
       "title": "INPUT",
       "bounding": [
         588,
-        516,
+        532,
         360,
         592
       ],
@@ -1429,7 +1429,7 @@
       "title": "PROMPT",
       "bounding": [
         956,
-        516,
+        532,
         460,
         1492
       ],
@@ -1442,7 +1442,7 @@
       "title": "SETTINGS",
       "bounding": [
         1424,
-        516,
+        532,
         400,
         1534
       ],
@@ -1455,7 +1455,7 @@
       "title": "OUTPUT",
       "bounding": [
         1832,
-        516,
+        532,
         360,
         1286
       ],
@@ -1468,7 +1468,7 @@
   "extra": {
     "lab_profile": "video/av/talking-head",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## video/av/talking-head\n\nFormat / platform sets pixels (Custom uses Width x Height). Quality does not change size.\n\nKlein still (LoadImage) -> optional Qwen3-TTS 0.6B (download-podcast --tier qwen3tts) -> LTX-2.5 A2V freeze. Occupancy: ACE-Step 90s bed then stop/unload then this graph.\nReal single-stage freeze is **video/av/audio-to-video-8s** (LoadAudio + encode, mux original wav). Official two-stage A2V lives in Comfy Templates -> LTX-2.5. This canvas Queues the lab 5.00s I2V printer so it loads without missing subgraph nodes.\nWan S2V-14B is opt-in: bazelisk run //scripts:run-utility -- download-wan run --tier s2v\nBanned lip-sync OSS packs stay out of this tree.\nCanvas is 1280x704 (divisible by 32). Lab printers stay 5.00 s.\nPrompt enhance is **off** (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## video/av/talking-head\n\nFormat / platform sets pixels (Custom uses Width x Height). Detail does not change size.\n\nKlein still (LoadImage) -> optional Qwen3-TTS 0.6B (download-podcast --tier qwen3tts) -> LTX-2.5 A2V freeze. Occupancy: ACE-Step 90s bed then stop/unload then this graph.\nReal single-stage freeze is **video/av/audio-to-video-8s** (LoadAudio + encode, mux original wav). Official two-stage A2V lives in Comfy Templates -> LTX-2.5. This canvas Queues the lab 5.00s I2V printer so it loads without missing subgraph nodes.\nWan S2V-14B is opt-in: bazelisk run //scripts:run-utility -- download-wan run --tier s2v\nBanned lip-sync OSS packs stay out of this tree.\nCanvas is 1280x704 (divisible by 32). Lab printers stay 5.00 s.\nPrompt enhance is **off** (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_ltx_av": true,
     "lab_description": "Talking-head: Klein still + LTX A2V freeze smoke. MagCache off. S2V opt-in.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_app_mode": {

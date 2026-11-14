@@ -389,7 +389,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## guides/guide-still\n\nKlein 4B **edit** of a guide-pack still loaded in-canvas (no LoadImage / --install-inputs). Enhance **on**. Seed **42**. Size **1280x704**. Prefix ``ez_guide_hero``.\n\nOccupancy: **klein**. Wire: EZDCCLoadGuideStill ``layer=first`` -> OccupancyGate -> Klein envelope. Defaults: slug ``go-see``, shot_id ``12``.\n\n```bash\nbazelisk run //:manage -- occupancy enter blender-desk\nbazelisk run //:manage -- export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth\nbazelisk run //:manage -- occupancy enter klein --yes\n```\n\nblender-desk fails the gate (park is for dumps). After Queue, overlay-qc. Path D: laptop dump, rsync ``guides/``, Spark Comfy. Stay on :8188.\n"
+        "## guides/guide-still\n\nKlein 4B **edit** of a guide-pack still loaded in-canvas (no LoadImage / --install-inputs). Enhance **on**. Seed **42**. Size **1280x704**. Prefix ``ez_guide_hero``.\n\nOccupancy: **klein**. Wire: EZDCCLoadGuideStill ``layer=first`` -> OccupancyGate -> Klein envelope. Defaults: slug ``go-see``, shot_id ``12``.\n\n```bash\nbazelisk run //:manage -- occupancy enter blender-desk\nbazelisk run //:manage -- export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth\nbazelisk run //:manage -- occupancy enter klein --yes\n```\n\nblender-desk fails the gate (park is for dumps). After Queue, overlay-qc. Path D: laptop dump, rsync ``guides/``, Spark Comfy. Stay on :8188.\n\nHandoff: guides/depth-from-loader, 3d/still-to-mesh. Load that graph next - the output is its input.\n"
       ],
       "title": "Operator note"
     },
@@ -996,7 +996,7 @@
         0
       ]
     },
-    "lab_note": "## guides/guide-still\n\nKlein 4B **edit** of a guide-pack still loaded in-canvas (no LoadImage / --install-inputs). Enhance **on**. Seed **42**. Size **1280x704**. Prefix ``ez_guide_hero``.\n\nOccupancy: **klein**. Wire: EZDCCLoadGuideStill ``layer=first`` -> OccupancyGate -> Klein envelope. Defaults: slug ``go-see``, shot_id ``12``.\n\n```bash\nbazelisk run //:manage -- occupancy enter blender-desk\nbazelisk run //:manage -- export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth\nbazelisk run //:manage -- occupancy enter klein --yes\n```\n\nblender-desk fails the gate (park is for dumps). After Queue, overlay-qc. Path D: laptop dump, rsync ``guides/``, Spark Comfy. Stay on :8188.\n",
+    "lab_note": "## guides/guide-still\n\nKlein 4B **edit** of a guide-pack still loaded in-canvas (no LoadImage / --install-inputs). Enhance **on**. Seed **42**. Size **1280x704**. Prefix ``ez_guide_hero``.\n\nOccupancy: **klein**. Wire: EZDCCLoadGuideStill ``layer=first`` -> OccupancyGate -> Klein envelope. Defaults: slug ``go-see``, shot_id ``12``.\n\n```bash\nbazelisk run //:manage -- occupancy enter blender-desk\nbazelisk run //:manage -- export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth\nbazelisk run //:manage -- occupancy enter klein --yes\n```\n\nblender-desk fails the gate (park is for dumps). After Queue, overlay-qc. Path D: laptop dump, rsync ``guides/``, Spark Comfy. Stay on :8188.\n\nHandoff: guides/depth-from-loader, 3d/still-to-mesh. Load that graph next - the output is its input.\n",
     "lab_description": "Klein 4B edit of EZDCCLoadGuideStill first.png. Enhance on. 1280x704. Seed 42.",
     "lab_app_mode": {
       "enabled": true,
@@ -1111,9 +1111,6 @@
       ]
     },
     "linearMode": true,
-    "lab_optional_unwired": [
-      "LoadImage"
-    ],
     "lab_dcc": {
       "enhance": true,
       "mode": "edit",
