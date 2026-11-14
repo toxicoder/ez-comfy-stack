@@ -66,7 +66,7 @@ US-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engin
 
 - Writer flavor `radio_drama` (enhance **off** so Speaker A/B / Announcer labels stay parser input). Announcer + two Kokoro stock voices.
 - ACE-Step sting + bed, instrumental only, empty lyrics. Script STRING is wired into both ACE enhance nodes as context. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).
-- Wan silent bumper and LTX 5s hook are **separate apps** - Queue **video/loops/bumper-loop** / **video/av/hook-av** in a later session - not a one-graph film. They load Wan and LTX UNETs, which this audio graph's Quality cannot drive, so they are not parked on this canvas.
+- Wan silent bumper and LTX 5s hook are **separate apps** - Queue **video/loops/bumper-loop** / **video/av/hook-av** in a later session - not a one-graph film. They load Wan and LTX UNETs, which this audio graph's Detail ladder cannot drive, so they are not parked on this canvas.
 - Cover: Queue **{COVER_GRAPH}** separately.
 
 {DISCLOSURE_TEXT}

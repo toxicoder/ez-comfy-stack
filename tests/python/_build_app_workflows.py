@@ -6,6 +6,7 @@ Not imported by pytest (leading underscore). Run from repo root:
 
 from __future__ import annotations
 
+import copy
 import json
 import sys
 from pathlib import Path
@@ -33,7 +34,7 @@ from _stamp_app_mode import stamp_suite_graph
 from _wire_format import wire_lab_graph
 from _wire_background_cast import wire_background_cast
 from _wire_image_describe import wire_image_describe
-from _wire_prompt_enhance import append_note
+from _wire_prompt_enhance import append_note, drop_named_input
 from _wire_upscale import wire_upscale
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -47,9 +48,9 @@ from ez_image.modes import (  # noqa: E402
 )
 from ez_prompt_enhance.client import join_prompt, load_view_pack  # noqa: E402
 from ez_quality.presets import (  # noqa: E402
+    QWEN_FINAL_CFG,
+    QWEN_FINAL_STEPS,
     QWEN_IMAGE_INT8,
-    QWEN_QUALITY_CFG,
-    QWEN_QUALITY_STEPS,
     QWEN_TE,
     QWEN_VAE,
 )
@@ -71,10 +72,10 @@ GIF_NEG = (
 STUDIO_NOTE = """## photos/still-studio
 
 Klein 4B still desk. Pick Format / platform for pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (snapped to div16, max 2048).
-Look recipe is an optional Cinema Rack starter (Enhance context). Style stays on Rewrite prompt. Quality does not change size.
+Look recipe is an optional Cinema Rack starter (Enhance context). Style stays on Rewrite prompt. Detail does not change size.
 Default canvas: 1280x704 (LTX I2V feeder). 1280x720 platform rows are stills-only - scale in an editor if a host wants more pixels.
 Models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.
-Quality is the only weight swap this App offers, and it stays inside the Klein stack: standard = Klein 4B fp8 (8 steps, CFG 1.0), draft = Klein 4B nvfp4 (4 steps, CFG 1.0), high and Free Commercial Use (<$10M) = Klein 4B base (24 steps, CFG 3.5), ultra = Klein 9B distilled, max = Klein 9B base. The App lists no disk models; another stack is a different App.
+Detail is the only weight swap this App offers, and it stays inside the Klein stack: draft = Klein 4B nvfp4 (4 steps, CFG 1.0), standard = what this App ships tuned for (writes nothing, so it always applies), final = Klein 4B base fp8 (24 steps, CFG 3.5). No rung changes size and none reaches a Non-Commercial weight outside this App's own stack. The caption states the real steps, CFG, weights, and license. The App lists no disk models; another stack is a different App.
 Save prefix follows Format (Custom keeps ez_still_studio). Empty of lettering - composite titles later.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.
 Handoff: video/silent/still-to-video-5s, video/av/still-to-video-8s, photos/text-swap.
@@ -84,10 +85,10 @@ IMAGE_STUDIO_NOTE = """## photos/image-studio
 
 Universal Klein 4B still desk with 100 creator modes (background swap, change text, change ratio, face lock, packshot, ...).
 Pick Mode category then Creator mode. The mode sets Rewrite prompt mode (t2i / edit / text_swap / identity / background_swap / background_edit), save prefix, and a locked instruction spliced into Enhance context.
-Format / platform still sets pixels and Look recipe. Custom uses Width x Height (snapped to div16, max 2048). Quality does not change size.
+Format / platform still sets pixels and Look recipe. Custom uses Width x Height (snapped to div16, max 2048). Detail does not change size.
 Example / reference is optional - Queue without a file. When present, Klein attaches it as a native Flux.2 reference. Modes never error if the still is empty. Face swap is original characters only.
 Authored models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors. Apache-2.0.
-Quality ultra/max may select opt-in Non-Commercial weights when those files are on disk (gated, not YouTube-ok). Lab default stays 4B. Do not pin those filenames on this graph.
+Detail is the only weight swap this App offers, and it stays inside the Klein stack: draft = Klein 4B nvfp4 (4 steps, CFG 1.0), standard = what this App ships tuned for (writes nothing, so it always applies), final = Klein 4B base fp8 (24 steps, CFG 3.5). No rung changes size and none reaches the opt-in Non-Commercial weights (gated, not YouTube-ok). The caption states the real steps, CFG, weights, and license. Lab default stays 4B. Do not pin those filenames on this graph.
 Save prefix follows Creator mode (`ez_gen_photoreal` for Photoreal still). Empty of lettering unless the mode is a text job.
 Iterate is the first App control (off by default). On: the first Run is text-to-image with prefix `ez_iterate`. The saved still is copied into the reference and the next Run edits that file. Clear the reference to start from text again. This run lists the mode, prompt, size, prefix, and sampler values Queue will send. Creator mode is not used while Iterate is on.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.
@@ -99,7 +100,7 @@ STILL_NOTE = """## photos/still-daily
 Daily Klein 4B still app.
 CLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for every Klein 4B UNET.
 
-Quality is the only weight swap this App offers, and it stays inside the Klein stack: standard = Klein 4B fp8 (8 steps, CFG 1.0), draft = Klein 4B nvfp4 (4 steps, CFG 1.0), high and Free Commercial Use (<$10M) = Klein 4B base (24 steps, CFG 3.5), ultra = Klein 9B distilled, max = Klein 9B base. The App lists no disk models; another stack is a different App.
+Detail is the only weight swap this App offers, and it stays inside the Klein stack: draft = Klein 4B nvfp4 (4 steps, CFG 1.0), standard = what this App ships tuned for (writes nothing, so it always applies), final = Klein 4B base fp8 (24 steps, CFG 3.5). No rung changes size and none reaches a Non-Commercial weight outside this App's own stack. The caption states the real steps, CFG, weights, and license. The App lists no disk models; another stack is a different App.
 
 SETTINGS: Format / platform sets pixels (default 1024x576 16:9 mid). Custom uses Width x Height. Seed, steps, CFG on KSampler.
 Save prefix: ez_still_app.
@@ -117,7 +118,7 @@ FLUX3_HANDOFF = (
 )
 
 # Qwen-Image 2.1 opt-in stills. The weight names come from ez_quality.presets so
-# the graph and the Quality ladder can never drift apart.
+# the graph and the Detail ladder can never drift apart.
 QWEN_HF_REPO = "Comfy-Org/Qwen-Image-2.1"
 QWEN_CLIP_TYPE = "qwen_image"
 """CLIPLoader type that maps the Qwen3VL-8B TE onto the Qwen-Image 2.1 encoder."""
@@ -140,7 +141,7 @@ def _qwen_note(rel: str, *, prefix: str) -> str:
 Qwen-Image 2.1 square still. Opt-in only - Qwen RESEARCH LICENSE AGREEMENT, so Klein 4B (photos/still-draft) stays the Apache default still and this graph is never in `download-models`.
 
 Pixels: `Resolution` sets one square side (default {QWEN_RESOLUTION}, steps of 32). The Qwen 2.1 encoder builds the latent itself from that one number, so this app has **no Format / platform picker** - a wide or tall frame needs a reference image, which is an edit pass and a different app.
-Quality: the combo offers only the four Qwen tiers this graph can honor - {QWEN_IMAGE_INT8} plus the turbo, NVFP4, and turbo-NVFP4 twins. It rewrites the UNET, the Qwen3VL text encoder, the VAE, steps, and CFG. It never touches pixels. Quality never swaps to Klein, FLUX 3, or any other family: those live in their own apps.
+Detail: three rungs, all inside Qwen-Image. draft = 16 steps, CFG 1.0 (the turbo build); standard = what this graph ships tuned for (writes nothing, so it always applies); final = 50 steps, CFG 3.5 (the base INT8 build {QWEN_IMAGE_INT8}). A rung rewrites only what this graph already pins - the UNET, the Qwen3VL text encoder, the VAE, steps, and CFG. It never touches pixels. Detail never swaps to Klein, FLUX 3, or any other family: those live in their own apps.
 Models: {QWEN_IMAGE_INT8} + {QWEN_TE} (CLIP type {QWEN_CLIP_TYPE}) + {QWEN_VAE}.
 Pull: `bazelisk run //scripts:run-utility -- download-image run --tier qwen-image` - it auto-includes the `qwen-image-te` text encoder and `qwen-image-vae`. The weights come from `{QWEN_HF_REPO}` on Hugging Face (the NVFP4 twins from the community quantization repos under `--tier qwen-image-nvfp4` / `--tier qwen-image-turbo-nvfp4`).
 License: Qwen RESEARCH LICENSE AGREEMENT, not Apache. Research and personal use only; commercial use needs a separate paid Qwen license. Ship the license text plus the NOTICE with the weights, keep "Built with Qwen" in product docs, and do not name a product after Qwen.
@@ -167,7 +168,7 @@ def _flux3_note(
 
 FLUX 3 Image Klein {weights} still on the Klein still desk. Opt-in, gated, Kommunity - Klein 4B (photos/still-draft) stays the Apache default still.
 
-Profile: Quality `{profile}` writes UNET `{unet}`, {steps} steps, CFG {cfg}. This graph ships those same values, so Queue matches with Quality left on lab. Quality never changes pixels - Format / platform does (Custom uses Width x Height).
+Profile: Detail **{profile}** writes UNET `{unet}`, {steps} steps, CFG {cfg}. This graph ships those same values, so Queue matches with Detail left on **standard**. Detail never changes pixels - Format / platform does (Custom uses Width x Height).
 Models: {unet} + {FLUX3_TE} (CLIP type flux2) + {FLUX3_VAE}.
 Gated pull: {FLUX3_HF_REPO} on Hugging Face is gated, so accept the FLUX Kommunity License (v1.0) on the model card with the **same HF account as HF_TOKEN** (a token alone is not acceptance), then run `bazelisk run //scripts:run-utility -- download-image run --tier {tier}` - it auto-includes the `flux3-te` text encoder. Every pull is pinned to HF revision {FLUX3_REVISION}.
 License: FLUX Kommunity License (v1.0), not Apache. Monetized output only for qualifying users under $5M gross annualized revenue. Not in `download-models` and not in image `--tier all`.
@@ -251,7 +252,7 @@ TEXT_SWAP_NOTE = """## photos/text-swap
 
 Klein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or "Replace SALE with OPEN"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height when Upscale is none (snapped to the Flux.2 div16 grid for denoise, then scaled back). 2x, 4x, and 4K lanczos-resize that saved PNG. Prefix `ez_text_swap`.
 
-Do not Queue without a start image. Short high-contrast lettering holds best. For tiny or dense type, set Quality **High** (Klein base if `download-image --tier base` is on disk). Distilled 4B is best-effort, not a typesetter.
+Do not Queue without a start image. Short high-contrast lettering holds best. For tiny or dense type, pick Detail **Final** (needs `flux-2-klein-base-4b-fp8.safetensors` on disk - `download-image --tier base`). Distilled 4B is best-effort, not a typesetter.
 
 Type only the new lettering (HELLO) or a targeting line (Replace SALE with OPEN). The graph always wraps that into a glyph-lock instruction, even when Rewrite prompt is off.
 
@@ -270,7 +271,7 @@ Do not Queue without a start image. Describe image is off by default, the node's
 The sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is the photo reference for ordinary place swaps. Occupancy: klein - stop Wan, LTX, podcast, music. One GB10 job.
 Prompt enhance is on by default for bare place names (on-box Qwen3-4B-Instruct-2507). Named samples skip the rewriter so Cubic block world and the place recipes reach CLIP as written. Style is hidden - the source still owns the subject's look.
 
-**Cubic block world** does not edit the photograph in place. The source people are erased from a coarse block study of this photo (same camera and layout, cube faces), so Klein rebuilds an empty block world - no figures, no silhouettes, no person-shaped blocks. The people from the photo are pasted back at full resolution from the original still (every person the mask catches; animals stay cubed), dilated ~2 px and feathered ~6 px so each keeps its full silhouette with soft edges. Other / background character toggles still apply to the other place samples. The person segmenter is BSD-3 DeepLabV3, optional, under `${MODELS_DIR}/comfy/ez-person/` (not part of `download-models`). When the segmenter cannot run - weights missing, torch/torchvision missing, or `EZ_PERSON_MASK=off` - the swap keeps the people photoreal instead: the encoded photograph is the reference, nothing is erased or pasted, and the Enhance status reads `photo-anchored block world (person mask unavailable)`. People are never silently deleted. Set `EZ_PERSON_MASK=off` to select that people-kept mode deliberately. The ~165 MB checkpoint auto-downloads on the first cubic Queue into `${MODELS_DIR}/comfy/ez-person/` on the host, and **Check models** lists a `person-mask` row with its curl command. If the plate is only the flat study, set Quality **High** (Klein base if `download-image --tier base` is on disk).
+**Cubic block world** does not edit the photograph in place. The source people are erased from a coarse block study of this photo (same camera and layout, cube faces), so Klein rebuilds an empty block world - no figures, no silhouettes, no person-shaped blocks. The people from the photo are pasted back at full resolution from the original still (every person the mask catches; animals stay cubed), dilated ~2 px and feathered ~6 px so each keeps its full silhouette with soft edges. Other / background character toggles still apply to the other place samples. The person segmenter is BSD-3 DeepLabV3, optional, under `${MODELS_DIR}/comfy/ez-person/` (not part of `download-models`). When the segmenter cannot run - weights missing, torch/torchvision missing, or `EZ_PERSON_MASK=off` - the swap keeps the people photoreal instead: the encoded photograph is the reference, nothing is erased or pasted, and the Enhance status reads `photo-anchored block world (person mask unavailable)`. People are never silently deleted. Set `EZ_PERSON_MASK=off` to select that people-kept mode deliberately. The ~165 MB checkpoint auto-downloads on the first cubic Queue into `${MODELS_DIR}/comfy/ez-person/` on the host, and **Check models** lists a `person-mask` row with its curl command. If the plate is only the flat study, pick Detail **Final** (needs `flux-2-klein-base-4b-fp8.safetensors` on disk - `download-image --tier base`).
 """
 
 BACKGROUND_EDIT_NOTE = """## photos/background-edit
@@ -395,7 +396,7 @@ def build_still_app() -> dict:
     graph["id"] = "photos/still-daily"
     graph["revision"] = 1
     unet = _node(graph, "UNETLoader")
-    unet["title"] = "Image model - Quality swaps within the Klein stack"
+    unet["title"] = "Image model - Detail swaps within the Klein stack"
     latent = _node(graph, "EmptyFlux2LatentImage")
     latent["widgets_values"] = [1024, 576, 1]
     latent["title"] = "Size (width x height x batch)"
@@ -409,7 +410,7 @@ def build_still_app() -> dict:
     note["widgets_values"] = [STILL_NOTE]
     graph["extra"]["lab_profile"] = "photos/still-daily"
     graph["extra"]["lab_note"] = STILL_NOTE
-    graph["extra"]["lab_description"] = "Daily Klein 4B still; Quality swaps within the Klein stack"
+    graph["extra"]["lab_description"] = "Daily Klein 4B still; Detail swaps within the Klein stack"
     enh = _node(graph, "EZKleinPromptEnhance")
     enh["widgets_values"][0] = KLEIN_STILL_DAILY
     enh["widgets_values"][1] = True
@@ -468,14 +469,54 @@ def _add_widget_input(node: dict, name: str, typ: str, link_id: int) -> int:
     return len(inputs) - 1
 
 
+def _wire_once(
+    graph: dict[str, Any],
+    src: dict[str, Any],
+    slot: int,
+    dst: dict[str, Any],
+    dest_name: str,
+    typ: str,
+    *,
+    widget: bool,
+) -> None:
+    """Wire ``src`` slot into ``dst.dest_name`` once, leaving a live wire alone.
+
+    A builder that starts from a shipped graph inherits whatever that graph already
+    connects, so wiring has to be an ensure rather than an append: appending a second
+    row with the same name gives the node two slots for one value, and LiteGraph then
+    picks a winner at its own convenience while the App shows the operator two rows.
+
+    Args:
+        graph: Serialized Comfy graph (mutated).
+        src: Producing node.
+        slot: Index of the producing output slot.
+        dst: Receiving node.
+        dest_name: Input name on the receiver.
+        typ: Link type.
+        widget: Whether the row converts a widget, which is what puts the
+            ``widget`` key on the input entry.
+    """
+    inputs = dst.setdefault("inputs", [])
+    row = next((item for item in inputs if item.get("name") == dest_name), None)
+    if row is None:
+        row = {"name": dest_name, "type": typ, "link": None}
+        if widget:
+            row["widget"] = {"name": dest_name}
+        inputs.append(row)
+    if row.get("link") is not None:
+        return
+    link_id = _append_link(graph, int(src["id"]), slot, int(dst["id"]),
+                           inputs.index(row), typ)
+    row["link"] = link_id
+    _push_output_link(src, slot, link_id)
+
+
 def build_still_studio() -> dict:
     graph = json.loads(lab_json("photos/still-draft.json").read_text(encoding="utf-8"))
     apply_lab_identity(graph, "photos/still-studio")
-    nid = int(graph.get("last_node_id") or 0) + 1
-    graph["last_node_id"] = nid
     graph["revision"] = 1
     unet = _node(graph, "UNETLoader")
-    unet["title"] = "Image model - Quality swaps within the Klein stack"
+    unet["title"] = "Image model - Detail swaps within the Klein stack"
     latent = _node(graph, "EmptyFlux2LatentImage")
     latent["widgets_values"] = [1280, 704, 1]
     latent["title"] = "Latent (wired from Format)"
@@ -495,54 +536,24 @@ def build_still_studio() -> dict:
     enh["widgets_values"] = enh_values
     note = _node(graph, "Note")
     note["widgets_values"] = [STUDIO_NOTE]
-    fmt = {
-        "id": nid,
-        "type": "EZImageFormat",
-        "pos": [1440, 414],
-        "size": [360, 220],
-        "flags": {},
-        "order": 11,
-        "mode": 0,
-        "inputs": [],
-        "outputs": [
-            {"name": "width", "type": "INT", "links": [], "slot_index": 0},
-            {"name": "height", "type": "INT", "links": [], "slot_index": 1},
-            {"name": "batch", "type": "INT", "links": [], "slot_index": 2},
-            {"name": "hint", "type": "STRING", "links": [], "slot_index": 3},
-            {"name": "prefix", "type": "STRING", "links": [], "slot_index": 4},
-            {"name": "context", "type": "STRING", "links": [], "slot_index": 5},
-        ],
-        "properties": {"Node name for S&R": "EZImageFormat"},
-        "widgets_values": [
-            "16:9 LTX feeder (1280x704)",
-            "none",
-            1280,
-            704,
-            1,
-        ],
-        "title": "Format / platform",
-    }
-    graph["nodes"].append(fmt)
-    w_link = _append_link(graph, nid, 0, int(latent["id"]), 0, "INT")
-    _add_widget_input(latent, "width", "INT", w_link)
-    _push_output_link(fmt, 0, w_link)
-    h_link = _append_link(graph, nid, 1, int(latent["id"]), 1, "INT")
-    _add_widget_input(latent, "height", "INT", h_link)
-    _push_output_link(fmt, 1, h_link)
-    b_link = _append_link(graph, nid, 2, int(latent["id"]), 2, "INT")
-    _add_widget_input(latent, "batch_size", "INT", b_link)
-    _push_output_link(fmt, 2, b_link)
-    hint_link = _append_link(graph, nid, 3, int(enh["id"]), 0, "STRING")
-    _add_widget_input(enh, "duration_hint", "STRING", hint_link)
-    _push_output_link(fmt, 3, hint_link)
-    prefix_link = _append_link(graph, nid, 4, int(save["id"]), 1, "STRING")
-    _add_widget_input(save, "filename_prefix", "STRING", prefix_link)
-    _push_output_link(fmt, 4, prefix_link)
-    ctx_link = _append_link(graph, nid, 5, int(enh["id"]), 1, "STRING")
-    enh_inputs = list(enh.get("inputs") or [])
-    enh_inputs.append({"name": "context", "type": "STRING", "link": ctx_link})
-    enh["inputs"] = enh_inputs
-    _push_output_link(fmt, 5, ctx_link)
+    # still-draft already ships the Format / platform picker and already wires it to
+    # the latent, so this App retunes that node. Appending a second one left the
+    # latent with two width rows and the enhance node with two duration_hint rows,
+    # and the operator's Format pick lost the coin flip to the other node.
+    fmt = _node(graph, "EZImageFormat")
+    fmt_values = list(fmt.get("widgets_values") or [])
+    fmt_values[0] = "16:9 LTX feeder (1280x704)"
+    fmt_values[2] = 1280
+    fmt_values[3] = 704
+    fmt_values[4] = 1
+    fmt["widgets_values"] = fmt_values
+    fmt["title"] = "Format / platform"
+    _wire_once(graph, fmt, 0, latent, "width", "INT", widget=True)
+    _wire_once(graph, fmt, 1, latent, "height", "INT", widget=True)
+    _wire_once(graph, fmt, 2, latent, "batch_size", "INT", widget=True)
+    _wire_once(graph, fmt, 3, enh, "duration_hint", "STRING", widget=True)
+    _wire_once(graph, fmt, 4, save, "filename_prefix", "STRING", widget=True)
+    _wire_once(graph, fmt, 5, enh, "context", "STRING", widget=False)
     graph["extra"]["lab_profile"] = "photos/still-studio"
     graph["extra"]["lab_note"] = STUDIO_NOTE
     graph["extra"]["lab_description"] = (
@@ -572,8 +583,20 @@ def _drop_output_link(node: dict, slot: int, link_id: int) -> None:
     node["outputs"] = outputs
 
 
-def build_image_studio() -> dict:
-    graph = json.loads(lab_json("photos/still-studio.json").read_text(encoding="utf-8"))
+def build_image_studio(base: dict[str, Any]) -> dict[str, Any]:
+    """Build photos/image-studio on top of the photos/still-studio graph in hand.
+
+    Args:
+        base: The freshly built photos/still-studio graph. It is copied, never
+            mutated. The base arrives as an argument rather than being read from
+            disk because main() builds every graph before it writes any, so a disk
+            read here would hand this builder the previous run's still-studio and
+            leave the derived App one regeneration behind its parent.
+
+    Returns:
+        The serialized image-studio graph.
+    """
+    graph = copy.deepcopy(base)
     apply_lab_identity(graph, "photos/image-studio")
     nid = int(graph.get("last_node_id") or 0) + 1
     graph["last_node_id"] = nid
@@ -626,20 +649,23 @@ def build_image_studio() -> dict:
     ctx_row[4] = 0
     mode_inputs[0]["link"] = ctx_link_id
     _push_output_link(fmt, 5, ctx_link_id)
-    mode_ctx = _append_link(graph, nid, 0, enh_id, 1, "STRING")
+    ctx_slot = (enh.get("inputs") or []).index(ctx_in)
+    mode_ctx = _append_link(graph, nid, 0, enh_id, ctx_slot, "STRING")
     ctx_in["link"] = mode_ctx
     _push_output_link(mode, 0, mode_ctx)
-    mode_enh = _append_link(graph, nid, 1, enh_id, 2, ENHANCE_MODE_COMBO)
     enh_inputs = list(enh.get("inputs") or [])
-    enh_inputs.append(
-        {
-            "name": "mode",
-            "type": ENHANCE_MODE_COMBO,
-            "link": mode_enh,
-            "widget": {"name": "mode"},
-        }
-    )
+    mode_row: dict[str, Any] = {
+        "name": "mode",
+        "type": ENHANCE_MODE_COMBO,
+        "link": None,
+        "widget": {"name": "mode"},
+    }
+    enh_inputs.append(mode_row)
     enh["inputs"] = enh_inputs
+    mode_enh = _append_link(
+        graph, nid, 1, enh_id, enh_inputs.index(mode_row), ENHANCE_MODE_COMBO
+    )
+    mode_row["link"] = mode_enh
     _push_output_link(mode, 1, mode_enh)
     prefix_in = _input_named(save, "filename_prefix")
     prefix_link_id = int(prefix_in["link"])
@@ -692,6 +718,10 @@ def build_gif_loop() -> dict:
     save = _node(graph, "SaveImage")
     save["widgets_values"] = ["ez_gif_loop_frames"]
     enh = _node(graph, "EZWanPromptEnhance")
+    # The GIF is 49 frames pinned at 12 fps, so the duration text cannot follow a
+    # Format pick. Drop the hint link inherited from still-to-video-5s and the
+    # slot with it, the way bumper-loop and sticker-loop ship.
+    drop_named_input(graph, enh, "duration_hint")
     enh["widgets_values"] = [GIF_MOTION, False, "i2v", "4 seconds, 12 fps, looping GIF", "none"]
     motion = _node(graph, "CLIPTextEncode", "Motion / prompt")
     motion["widgets_values"] = [GIF_MOTION]
@@ -2377,12 +2407,12 @@ def _build_flux3_still(
 
 
 def build_still_flux3_fast() -> dict:
-    """FLUX 3 Klein distilled still: 16 steps, CFG 1.0 (Quality flux3-fast)."""
+    """FLUX 3 Klein distilled still: 16 steps, CFG 1.0 (Detail draft)."""
     return _build_flux3_still(
         rel="labs/opt-in/still-flux3-fast",
         unet=FLUX3_DISTILLED_UNET,
         unet_title="FLUX 3 Klein distilled INT8 (gated)",
-        profile="flux3-fast",
+        profile="draft",
         weights="distilled INT8",
         steps=16,
         cfg=1.0,
@@ -2390,18 +2420,18 @@ def build_still_flux3_fast() -> dict:
         prefix="ez_still_flux3_fast",
         description=(
             "Gated FLUX 3 Klein distilled still; 16 steps, CFG 1.0 "
-            "(Quality flux3-fast). Klein 4B stays the Apache default"
+            "(Detail draft). Klein 4B stays the Apache default"
         ),
     )
 
 
 def build_still_flux3_quality() -> dict:
-    """FLUX 3 Klein base still: 50 steps, CFG 3.5 (Quality flux3-quality)."""
+    """FLUX 3 Klein base still: 50 steps, CFG 3.5 (Detail final)."""
     return _build_flux3_still(
         rel="labs/opt-in/still-flux3-quality",
         unet=FLUX3_BASE_UNET,
         unet_title="FLUX 3 Klein base INT8 (gated)",
-        profile="flux3-quality",
+        profile="final",
         weights="base INT8 (no distillation)",
         steps=50,
         cfg=3.5,
@@ -2409,13 +2439,13 @@ def build_still_flux3_quality() -> dict:
         prefix="ez_still_flux3_quality",
         description=(
             "Gated FLUX 3 Klein base still; 50 steps, CFG 3.5 "
-            "(Quality flux3-quality). Klein 4B stays the Apache default"
+            "(Detail final). Klein 4B stays the Apache default"
         ),
     )
 
 
 def build_still_qwen_image() -> dict[str, Any]:
-    """Opt-in Qwen-Image 2.1 square still on the weights the qwen Quality tiers write.
+    """Opt-in Qwen-Image 2.1 square still on the weights the Detail rungs write.
 
     Built from scratch rather than cloned off the Klein desk: Qwen 2.1 samples from
     a 64-channel / 16x latent that ``TextEncodeQwenImage21`` builds itself, so the
@@ -2506,7 +2536,7 @@ def build_still_qwen_image() -> dict[str, Any]:
         [1400, 420],
         [340, 300],
         "Sampler (profile steps / CFG)",
-        [42, "fixed", QWEN_QUALITY_STEPS, QWEN_QUALITY_CFG, "euler", "simple", 1.0],
+        [42, "fixed", QWEN_FINAL_STEPS, QWEN_FINAL_CFG, "euler", "simple", 1.0],
         inputs=[
             g.inp("model", "MODEL"),
             g.inp("positive", "CONDITIONING"),
@@ -2560,7 +2590,7 @@ def build_still_qwen_image() -> dict[str, Any]:
             "lab_note": _qwen_note(rel, prefix=prefix),
             "lab_description": (
                 "Opt-in Qwen-Image 2.1 square still; the only graph the Qwen "
-                "Quality tiers can honor. Klein 4B stays the Apache default"
+                "Detail rungs can honor. Klein 4B stays the Apache default"
             ),
             "lab_qwen_image": True,
             "ds": {"scale": 1, "offset": [0, 0]},
@@ -2578,7 +2608,7 @@ def build_still_qwen_image() -> dict[str, Any]:
 def main() -> None:
     still = build_still_app()
     studio = build_still_studio()
-    image_studio = build_image_studio()
+    image_studio = build_image_studio(studio)
     gif = build_gif_loop()
     house = build_dream_house()
     house_clay = build_dream_house_clay()

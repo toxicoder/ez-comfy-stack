@@ -1358,6 +1358,38 @@ def _unlink_named(graph: dict[str, Any], node: dict[str, Any], name: str) -> Non
     ]
 
 
+def drop_named_input(graph: dict[str, Any], node: dict[str, Any], name: str) -> None:
+    """Remove one named input from a node, link and slot bookkeeping included.
+
+    Clearing the link is not enough when the row itself should not exist: an
+    input entry with a null link still reads as a connectable row in App mode, so
+    a graph that cannot honor the value would offer a control it ignores. The
+    producing node's output slot is repaired by :func:`_unlink_named` first.
+
+    Removing a row also moves the rows after it up by one, so every link that
+    names this node by target slot has to follow; a stale slot number points the
+    surviving wire at the neighbour the removed row used to occupy.
+
+    Args:
+        graph: Serialized Comfy graph (mutated).
+        node: The node that loses the input.
+        name: Input name to remove; absent names are a no-op.
+    """
+    inputs = node.get("inputs")
+    if not isinstance(inputs, list):
+        return
+    dropped = [i for i, item in enumerate(inputs) if item.get("name") == name]
+    if not dropped:
+        return
+    index = dropped[0]
+    _unlink_named(graph, node, name)
+    node["inputs"] = [item for item in inputs if item.get("name") != name]
+    node_id = int(node["id"])
+    for link in graph.get("links") or []:
+        if int(link[3]) == node_id and int(link[4]) > index:
+            link[4] = int(link[4]) - 1
+
+
 def _add_typed_link(
     graph: dict[str, Any],
     src: dict[str, Any],

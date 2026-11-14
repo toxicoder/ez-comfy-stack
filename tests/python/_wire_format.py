@@ -43,7 +43,7 @@ from ez_music.albums import album_rel, shipped_albums  # noqa: E402
 
 FORMAT_BLURB = (
     "Format / platform sets pixels (Custom uses Width x Height). "
-    "Quality does not change size."
+    "Detail does not change size."
 )
 STILL_FORMAT_TYPE = "EZImageFormat"
 VIDEO_FORMAT_TYPE = "EZVideoFormat"
@@ -273,8 +273,36 @@ def pick_video_format(family: str, width: int, height: int) -> Any:
     return get_video_format(CUSTOM_ID, family=family)
 
 
+RETIRED_BLURBS: tuple[str, ...] = (
+    "Format / platform sets pixels (Custom uses Width x Height). "
+    "Quality does not change size.",
+)
+"""Format sentences an older stamp left in graph notes, newest replacement first.
+
+``_inject_blurb`` only ever appends, so a renamed blurb would otherwise leave
+both sentences side by side on every graph the stamper touches. Retired spellings
+are swapped in place instead of being added to.
+"""
+
+
+def _retire_blurbs(text: str) -> str:
+    """Swap any retired Format sentence for the one the ladder ships now.
+
+    Args:
+        text: Operator note text as stored.
+
+    Returns:
+        The note with each :data:`RETIRED_BLURBS` spelling replaced by
+        :data:`FORMAT_BLURB`, so a re-stamp converges instead of stacking.
+    """
+    for retired in RETIRED_BLURBS:
+        text = text.replace(retired, FORMAT_BLURB)
+    return text
+
+
 def _inject_blurb(text: str) -> str:
     """Insert FORMAT_BLURB after the first paragraph when missing."""
+    text = _retire_blurbs(text)
     if FORMAT_BLURB in text:
         return text
     stripped = text.strip()
