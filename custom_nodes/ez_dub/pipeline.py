@@ -12,6 +12,8 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Callable, cast
 
+from ez_outputs.catalog import AUDIO_SUFFIXES, VIDEO_SUFFIXES
+
 if TYPE_CHECKING:
     from ez_common.comfy_graph import WidgetValue
     from ez_common.protocols import ProgressReporter
@@ -120,9 +122,11 @@ LANG_CODES = tuple(LANG_NAMES.keys())
 SOURCE_LANG_WIDGET = ("auto",) + LANG_CODES
 TARGET_LANG_WIDGET = LANG_CODES
 SOURCE_NONE = "(none)"
-AUDIO_SUFFIXES = (".wav", ".mp3", ".flac", ".ogg", ".m4a", ".aac")
-VIDEO_SUFFIXES = (".mp4", ".mkv", ".mov", ".webm")
-MEDIA_SUFFIXES = AUDIO_SUFFIXES + VIDEO_SUFFIXES
+# One definition: the Outputs sidebar's own suffix sets (see
+# ``ez_outputs.catalog``), so the dub never admits a file the explorer will not
+# list. ``.mov`` and ``.aac`` are outside that set and reach ingest as a bare
+# path or a yt-dlp download instead of a combo pick.
+MEDIA_SUFFIXES = AUDIO_SUFFIXES | VIDEO_SUFFIXES
 
 # Tests inject these (a ``lambda *a, **k`` satisfies each Protocol). Production
 # stays None, which is the fail-soft path.
