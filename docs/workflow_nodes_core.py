@@ -391,7 +391,7 @@ def core_nodes() -> NodeSpecs:
                 _s("context", "STRING", "out", "Look-recipe splice for Enhance context."),
             ],
             widgets=[
-                _w("format", index=0, typ="COMBO", rng="16:9 LTX feeder / platform jobs / Custom", desc="Aspect or named platform job.", gen="Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (snapped to div16, max 2048). Does not change Quality, CLIP, or VAE.", choices_from="image_formats"),
+                _w("format", index=0, typ="COMBO", rng="16:9 LTX feeder / platform jobs / Custom", desc="Aspect or named platform job.", gen="Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (snapped to div16, max 2048). Does not change the Detail rung, CLIP, or VAE.", choices_from="image_formats"),
                 _w("look", index=1, typ="COMBO", rng="none", desc="Optional Cinema Rack starter.", gen="none leaves look to Style + Prompt. A pick splices Klein still language into Enhance context. Full 13-axis desk is labs/assist/cinema-rack.", choices_from="cinema_recipes"),
                 _w("width", index=2, typ="INT", rng="16-2048, step 16", desc="Custom width.", gen="Used when Format is Custom. Presets ignore this widget at Queue."),
                 _w("height", index=3, typ="INT", rng="16-2048, step 16", desc="Custom height.", gen="Used when Format is Custom. Presets ignore this widget at Queue."),
@@ -481,7 +481,7 @@ def core_nodes() -> NodeSpecs:
             ],
             widgets=[
                 _w("family", index=0, typ="COMBO", rng="Wan 5B / LTX-2.5", desc="Which VAE grid to use.", gen="Wan snaps div16 (max 1024). LTX snaps div32 (max 1280). App Mode hides this - occupancy already picks the model.", choices_from="video_families"),
-                _w("format", index=1, typ="COMBO", rng="16:9 YouTube / 9:16 Shorts / Custom", desc="Aspect or named platform job.", gen="Preset writes pixels and Rewrite prompt framing. Custom uses Width x Height. Does not change Quality, length, CLIP, or VAE.", choices_from="video_formats"),
+                _w("format", index=1, typ="COMBO", rng="16:9 YouTube / 9:16 Shorts / Custom", desc="Aspect or named platform job.", gen="Preset writes pixels and Rewrite prompt framing. Custom uses Width x Height. Does not change the Detail rung, length, CLIP, or VAE.", choices_from="video_formats"),
                 _w("width", index=2, typ="INT", rng="16-1280", desc="Custom width.", gen="Used when Format is Custom. Presets ignore this widget at Queue. LTX Custom snaps 720->704."),
                 _w("height", index=3, typ="INT", rng="16-1280", desc="Custom height.", gen="Used when Format is Custom. Presets ignore this widget at Queue."),
                 _w("size_mode", index=4, typ="COMBO", rng="Match input / Force format", desc="Match a loaded still's aspect, or keep Format / platform.", gen="Match input (default) picks the nearest family aspect row when a still is loaded. Force format keeps the Format pick. Detail does not change size."),

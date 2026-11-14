@@ -2101,7 +2101,7 @@ Type `COMBO`. Range / default: 16:9 LTX feeder / platform jobs / Custom.
 
 Aspect or named platform job.
 
-**How it affects generation:** Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (snapped to div16, max 2048). Does not change Quality, CLIP, or VAE.
+**How it affects generation:** Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width x Height (snapped to div16, max 2048). Does not change the Detail rung, CLIP, or VAE.
 
 **Other choices**
 
@@ -4335,7 +4335,7 @@ Type `COMBO`. Range / default: 16:9 YouTube / 9:16 Shorts / Custom.
 
 Aspect or named platform job.
 
-**How it affects generation:** Preset writes pixels and Rewrite prompt framing. Custom uses Width x Height. Does not change Quality, length, CLIP, or VAE.
+**How it affects generation:** Preset writes pixels and Rewrite prompt framing. Custom uses Width x Height. Does not change the Detail rung, length, CLIP, or VAE.
 
 **Other choices**
 
