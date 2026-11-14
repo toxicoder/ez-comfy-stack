@@ -224,9 +224,15 @@ OUTPUT_TYPES = (
     "EZDubRender",
     "EZAlbumPack",
     "EZAudioMetadata",
-    "MeshToFile3D",
+    # MeshToFile3D is deliberately absent: it converts a mesh to GLB bytes in
+    # memory and writes nothing, so App Mode would render an empty card for it.
+    # SaveGLB below is the node that lands the file.
     "SaveGLB",
     "EZClipConcat",
+    # The act MP4 is the film App's deliverable: an outputs list that names the
+    # 36 per-shot stills and not the cut leaves the operator hunting for the
+    # file they queued for. EZClipConcat has been listed this way all along.
+    "EZFilmConcat",
 )
 
 ENHANCE_TYPES = (
@@ -518,7 +524,8 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
     ),
     "enable": (
         "On: caption the source still so Rewrite prompt can name inventory. "
-        "Off (default) skips the describe GGUF. Needs download-llm --tier describe."
+        "Off (default) skips the describe GGUF. Needs "
+        "bazelisk run //:manage -- download-llm --tier describe."
     ),
     "other_characters": (
         "On: treat companions and group members as part of the background "
@@ -641,6 +648,106 @@ def _primitive_widget_name(node: Mapping[str, Any]) -> str | None:
     return None
 
 
+OPTIONAL_PICKER_LABEL = "Example / reference (optional)"
+"""App row label for an ``EZOptionalImage`` file box in its reference role."""
+
+OPTIONAL_PICKER_DESCRIPTION = (
+    "Upload a still or pick one already on the drive (input/ or Outputs). "
+    "Empty is valid - Queue without a file. When set, Klein uses it as a "
+    "native reference."
+)
+"""App row help for that box when a Klein node reads the still."""
+
+CAPTION_PICKER_TITLE = "Reference still (optional)"
+"""Canvas title marking an optional picker as the caption source's still.
+
+:mod:`_wire_describe_ref` sets it on the picker whose only consumer is an
+``EZImageDescribe``. The stamp reads it back, so re-stamping a graph keeps the
+copy that names the captioner instead of quietly reverting to the Klein text.
+"""
+
+CAPTION_PICKER_LABEL = CAPTION_PICKER_TITLE
+"""App row label for that box when it feeds the captioner."""
+
+CAPTION_PICKER_DESCRIPTION = (
+    "Upload a still or pick one already on the drive. Describe image captions "
+    "it so Rewrite prompt can name inventory. Empty is valid - the caption "
+    "stays off."
+)
+"""App row help for that box when it feeds the captioner."""
+
+
+def picker_panel_copy(node: Mapping[str, Any] | None) -> tuple[str, str]:
+    """Return the ``(label, description)`` an optional picker's file box shows.
+
+    One picker can serve both jobs, and the canvas title is what says which: the
+    stamp and the wiring passes read the same two pairs from here, so a row
+    cannot drift from what a re-stamp would write.
+
+    Args:
+        node: The picker node row, or None for a generic widget.
+
+    Returns:
+        The App panel label and help text for its ``filename`` widget.
+    """
+    if str((node or {}).get("title") or "").strip() == CAPTION_PICKER_TITLE:
+        return CAPTION_PICKER_LABEL, CAPTION_PICKER_DESCRIPTION
+    return OPTIONAL_PICKER_LABEL, OPTIONAL_PICKER_DESCRIPTION
+
+
+FORMAT_PREFIX_OUTPUT = "prefix"
+"""The ``EZImageFormat`` socket that would carry a platform's save prefix."""
+
+
+def format_sets_prefix(node: Mapping[str, Any] | None) -> bool:
+    """Whether a canvas node's prefix output actually drives a save.
+
+    ``EZImageFormat`` offers width, height, batch, a framing hint, a save
+    prefix, and a context string. Wiring the prefix socket into a save node's
+    ``filename_prefix`` is what makes a platform pick move the output folder;
+    most Apps keep the authored prefix and leave that socket dangling, so their
+    row copy has to stop promising the move.
+
+    Args:
+        node: The canvas format node row, or None when the graph has none.
+
+    Returns:
+        True when the prefix socket carries at least one link.
+    """
+    for output in (node or {}).get("outputs") or []:
+        if not isinstance(output, Mapping):
+            continue
+        if str(output.get("name") or "") == FORMAT_PREFIX_OUTPUT:
+            return bool(output.get("links"))
+    return False
+
+
+VIDEO_FAMILY_SLOT = 0
+"""``EZVideoFormat`` slot that names the motion family the clip runs on."""
+
+WAN_FAMILY_MARK = "wan"
+"""Marker a family value must contain to be the Wan 5B family."""
+
+
+def video_format_runs_wan(node: Mapping[str, Any] | None) -> bool:
+    """Whether a video canvas node is authored on the Wan 5B family.
+
+    ``EZVideoFormat`` carries a **Duration** combo that only the LTX-2.5 family
+    reads; the node documents that Wan ignores it at Queue. An App pinned to Wan
+    still shows the row, so its help has to say the row changes nothing here.
+
+    Args:
+        node: The ``EZVideoFormat`` row, or None when the graph has none.
+
+    Returns:
+        True when the family widget names Wan.
+    """
+    values = (node or {}).get("widgets_values") or []
+    if len(values) <= VIDEO_FAMILY_SLOT:
+        return False
+    return WAN_FAMILY_MARK in str(values[VIDEO_FAMILY_SLOT] or "").lower()
+
+
 def display_label(
     node: Mapping[str, Any] | None,
     name: str,
@@ -703,7 +810,7 @@ def display_label(
             "run_summary": "This run",
         }.get(name, generic)
     if ntype == "EZOptionalImage" and name == "filename":
-        return "Example / reference (optional)"
+        return picker_panel_copy(node)[0]
     if ntype == "EZVideoFormat":
         return {
             "format": "Format / platform",
@@ -945,16 +1052,16 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
             ),
         }.get(name)
     if ntype == "EZOptionalImage" and name == "filename":
-        return (
-            "Upload a still or pick one already on the drive (input/ or "
-            "Outputs). Empty is valid - Queue without a file. When set, "
-            "Klein uses it as a native reference."
-        )
+        return picker_panel_copy(node)[1]
     if ntype == "EZImageFormat":
         return {
             "format": (
                 "Aspect or named platform job. Sets pixels, save prefix, and "
                 "Rewrite prompt framing. Custom uses Width x Height (div16)."
+                if format_sets_prefix(node)
+                else "Aspect or named platform job. Sets pixels and Rewrite "
+                "prompt framing. Custom uses Width x Height (div16); the run "
+                "keeps the folder this App saves to."
             ),
             "size_mode": (
                 "Match input uses a loaded still's aspect (nearest catalog "
@@ -983,7 +1090,11 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
             ),
             "duration_s": (
                 "LTX clip length: 5, 8 (default), 10, or 12 seconds at 24 fps. "
-                "Writes a legal 1+8n frame count. Wan 5B stays 5 seconds."
+                "Writes a legal 1+8n frame count."
+                if not video_format_runs_wan(node)
+                else "This App runs Wan 5B, and the node ignores this widget "
+                "at Queue - the clip is as long as the graph's latent authors. "
+                "The row only does something on the LTX-2.5 family."
             ),
             "width": "Latent width in pixels. Used when Format is Custom; otherwise the preset wins.",
             "height": "Latent height in pixels. Used when Format is Custom; otherwise the preset wins.",
@@ -1012,8 +1123,8 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
         off_bit = "Off (default)" if not on_default else "Off"
         return (
             f"{on_bit}: caption the source still so Rewrite prompt can name "
-            f"inventory. {off_bit} skips the describe GGUF. Needs "
-            "download-llm --tier describe."
+            f"inventory. {off_bit} skips the describe GGUF. Needs bazelisk run "
+            "//:manage -- download-llm --tier describe."
         )
     if ntype == "EZBackgroundCast":
         return {
@@ -1059,7 +1170,10 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
             "filter still runs."
         )
     if name == "enhance" and ntype == "EZDubScript":
-        return "On: diarize + ASR + GGUF translate. Off: pin this JSON."
+        return (
+            "On: find the speakers, transcribe, then translate each line "
+            "on-box. Off: dub the JSON you pinned above."
+        )
     if ntype == "PrimitiveNode" and name == "value":
         title = str((node or {}).get("title") or "")
         if title == "Prompt":
