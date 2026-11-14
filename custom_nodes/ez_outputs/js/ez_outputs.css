@@ -286,6 +286,24 @@
   text-overflow: ellipsis;
 }
 
+/* "Files in /outputs": the absolute root, reported once under the breadcrumb.
+ * It takes the full width of the head so it gets its own line, and ellipsizes
+ * rather than pushing the shortcut button out when the bind path is long. */
+.ez-out-root {
+  flex: 1 1 100%;
+  min-width: 0;
+  color: var(--ez-out-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ez-out-root:empty {
+  display: none;
+}
+
 .ez-out-help-btn {
   flex: 0 0 auto;
   margin-left: auto;
@@ -722,6 +740,32 @@
   );
 }
 
+/* MIDI and QC report tiles. No browser tag plays a .mid or renders a report, so
+ * they borrow the mesh tile and differ only in the hatch and the caption
+ * tracking: staff lines run one way, a printed report the other. Same neutrals
+ * as the mesh and audio placeholders. */
+.ez-out-midi-ph {
+  letter-spacing: 0.12em;
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.05),
+    rgba(255, 255, 255, 0.05) 7px,
+    transparent 7px,
+    transparent 14px
+  );
+}
+
+.ez-out-report-ph {
+  letter-spacing: 0.04em;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.05),
+    rgba(255, 255, 255, 0.05) 3px,
+    transparent 3px,
+    transparent 9px
+  );
+}
+
 /* Shown in the lightbox where a still, clip, or track would otherwise play. */
 .ez-out-mesh-note {
   margin: 0;
@@ -786,6 +830,10 @@
   font-size: 10px;
 }
 
+.ez-out-card-meta.is-compact .ez-out-line {
+  font-size: 10px;
+}
+
 .ez-out-name {
   display: block;
   font-weight: 600;
@@ -802,6 +850,43 @@
   text-overflow: ellipsis;
   font-size: 11px;
   font-variant-numeric: tabular-nums;
+}
+
+/* Probed detail lines (dimensions, duration and rate, seed, prompt quote, QC
+ * verdict, "from hero.jpg"). One line each and ellipsized like the file facts
+ * under them, so a 140-char prompt cannot grow a card past its neighbours.
+ * In a flex parent (a take row, the lightbox bar) it is one item per line. */
+.ez-out-line {
+  display: block;
+  min-width: 0;
+  margin-top: 1px;
+  color: var(--ez-out-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Batch caption ("4 files") and the "take 3" chip: captions the card carries,
+ * not buttons. Same pill shape as the filter chips, muted like a fact. */
+.ez-out-batch,
+.ez-out-take-label {
+  display: inline-block;
+  max-width: 100%;
+  margin-top: 2px;
+  padding: 0 7px;
+  border: 1px solid var(--ez-out-border);
+  border-radius: 999px;
+  background: var(--ez-out-well);
+  color: var(--ez-out-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* List mode: header plus rows */
@@ -895,6 +980,65 @@
   flex-wrap: wrap;
   gap: 4px;
   justify-content: flex-end;
+}
+
+/* --- Batch card: N takes of one plate ------------------------------------ */
+
+/* One thumbnail, title, and caption for the whole plate, with the takes hung
+ * under the card body as a list. In list mode the card is a grid, so the list
+ * spans every column instead of landing in an implicit fifth one. */
+.ez-out-group .ez-out-takes {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  grid-column: 1 / -1;
+  margin: 4px 0 0;
+  padding: 3px 0 1px;
+  border-top: 1px solid var(--ez-out-border);
+}
+
+/* One take inside that list. The indent is an em of the card font, so it tracks
+ * the tier and the theme rather than a fixed pixel width. */
+.ez-out-take {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 8px;
+  align-items: baseline;
+  min-width: 0;
+  margin-left: 1.25em;
+  padding: 2px 4px;
+  border-radius: var(--ez-out-radius-sm);
+  cursor: pointer;
+}
+
+.ez-out-take:hover {
+  background: color-mix(in srgb, var(--ez-out-accent) 8%, transparent);
+}
+
+.ez-out-take[aria-selected="true"] {
+  background: color-mix(in srgb, var(--ez-out-accent) 14%, transparent);
+}
+
+.ez-out-take-name {
+  flex: 0 1 auto;
+  min-width: 0;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ez-out-take-facts {
+  flex: 0 0 auto;
+  color: var(--ez-out-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Probed lines of a take get the line under the name, not the column beside
+ * it, so three facts stay readable in a narrow sidebar. */
+.ez-out-take .ez-out-line {
+  flex: 1 1 100%;
 }
 
 /* Loading skeleton */
@@ -1220,6 +1364,7 @@
 
 .ez-out-card:focus-visible,
 .ez-out-row-item:focus-visible,
+.ez-out-take:focus-visible,
 .ez-out-card.is-focus,
 .ez-out-row-item.is-focus {
   outline: 2px solid var(--ez-out-accent);
@@ -1280,6 +1425,7 @@
 
   .ez-out-card,
   .ez-out-row-item,
+  .ez-out-take,
   .ez-out-btn,
   .ez-out-chip,
   .ez-out-pill,
@@ -1326,6 +1472,7 @@
 
   .ez-out-card,
   .ez-out-row-item,
+  .ez-out-take,
   .ez-out-btn,
   .ez-out-chip,
   .ez-out-pill,
@@ -1362,6 +1509,7 @@
 
   .ez-out-card[aria-selected="true"],
   .ez-out-row-item[aria-selected="true"],
+  .ez-out-take[aria-selected="true"],
   .ez-out-card.is-focus,
   .ez-out-row-item.is-focus {
     outline: 2px solid Highlight;

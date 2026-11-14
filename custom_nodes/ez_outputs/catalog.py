@@ -9,7 +9,7 @@ from __future__ import annotations
 import os
 import shutil
 from pathlib import Path
-from typing import TypedDict
+from typing import NotRequired, TypedDict
 
 LIST_CAP = 500
 """Newest-first cap for :func:`list_outputs`."""
@@ -36,8 +36,28 @@ AUDIO_SUFFIXES = frozenset({".wav", ".flac", ".mp3", ".m4a", ".ogg"})
 MODEL3D_SUFFIXES = frozenset({".glb", ".gltf"})
 """3D mesh suffixes listed in the Outputs sidebar."""
 
-MEDIA_SUFFIXES = IMAGE_SUFFIXES | VIDEO_SUFFIXES | AUDIO_SUFFIXES | MODEL3D_SUFFIXES
-"""Union of still, video, audio, and 3D mesh suffixes."""
+MIDI_SUFFIXES = frozenset({".mid", ".midi"})
+"""MIDI sequence suffixes listed in the Outputs sidebar."""
+
+REPORT_FILENAMES = frozenset({"qc.json"})
+"""Report file names listed in the Outputs sidebar.
+
+Only these JSON files are cards. Every other JSON under the root is machine
+state (``state.json``, ``scene.json``, workflow dumps, ``*.meta.json``
+sidecars) and stays invisible.
+"""
+
+MEDIA_SUFFIXES = (
+    IMAGE_SUFFIXES | VIDEO_SUFFIXES | AUDIO_SUFFIXES | MODEL3D_SUFFIXES | MIDI_SUFFIXES
+)
+"""Union of still, video, audio, 3D mesh, and MIDI suffixes."""
+
+NOT_INPUT_KINDS = {
+    "model3d": "3D mesh",
+    "midi": "MIDI sequence",
+    "report": "QC report",
+}
+"""Kinds the pane lists but never stages into the LoadImage input directory."""
 
 
 class OutputRow(TypedDict):
@@ -46,11 +66,15 @@ class OutputRow(TypedDict):
     Attributes:
         rel: Path relative to the output root using ``/``.
         name: File name.
-        kind: ``image``, ``video``, ``audio``, or ``model3d``.
+        kind: ``image``, ``video``, ``audio``, ``model3d``, ``midi``, or
+            ``report``.
         size: Byte length.
         mtime: Unix mtime (seconds).
         suffix: Lowercase suffix including the dot.
         parent: Parent directory relative to the root, or ``""`` at root.
+        lines: Human detail lines for the card (dimensions, duration, verdict).
+            Added by :func:`ez_outputs.routes.handle_list`, which is the only
+            caller that pays for a probe.
     """
 
     rel: str
@@ -60,6 +84,7 @@ class OutputRow(TypedDict):
     mtime: float
     suffix: str
     parent: str
+    lines: NotRequired[list[str]]
 
 
 class BatchError(TypedDict):
@@ -135,7 +160,7 @@ def input_root(*, default: Path | None = None) -> Path:
 
 
 def kind_of(suffix: str) -> str | None:
-    """Return ``image`` / ``video`` / ``audio`` / ``model3d`` for a media suffix.
+    """Return ``image`` / ``video`` / ``audio`` / ``model3d`` / ``midi`` for a suffix.
 
     Args:
         suffix: File suffix including the dot.
@@ -152,7 +177,38 @@ def kind_of(suffix: str) -> str | None:
         return "audio"
     if text in MODEL3D_SUFFIXES:
         return "model3d"
+    if text in MIDI_SUFFIXES:
+        return "midi"
     return None
+
+
+def report_kind_of(name: str) -> str | None:
+    """Return ``report`` for a file name the sidebar shows as a report card.
+
+    Only :data:`REPORT_FILENAMES` qualifies, so machine JSON (job
+    ``state.json``, ``scene.json``, workflow dumps, ``*.meta.json`` tag
+    sidecars) never becomes a card.
+
+    Args:
+        name: File name (no directory).
+
+    Returns:
+        ``report``, or ``None``.
+    """
+    return "report" if name.lower() in REPORT_FILENAMES else None
+
+
+def classify(name: str, suffix: str) -> str | None:
+    """Return the sidebar kind for one file name, or ``None`` when unlisted.
+
+    Args:
+        name: File name (no directory).
+        suffix: File suffix including the dot.
+
+    Returns:
+        The kind token from :func:`kind_of` or :func:`report_kind_of`.
+    """
+    return kind_of(suffix) or report_kind_of(name)
 
 
 def _skip_parts(path: Path, root: Path) -> bool:
@@ -183,7 +239,8 @@ def list_outputs(
 
     Args:
         root: Output directory (``COMFY_OUTPUT_DIR`` / ``/outputs``).
-        kind: ``all``, ``image``, ``video``, ``audio``, or ``model3d``.
+        kind: ``all``, ``image``, ``video``, ``audio``, ``model3d``, ``midi``,
+            or ``report``.
         query: Case-insensitive substring on the relative path.
         limit: Max rows; values below 1 clamp to 1.
 
@@ -209,7 +266,7 @@ def list_outputs(
         if _skip_parts(path, base):
             continue
         suffix = path.suffix.lower()
-        media_kind = kind_of(suffix)
+        media_kind = classify(path.name, suffix)
         if media_kind is None:
             continue
         if want != "all" and media_kind != want:
@@ -266,7 +323,7 @@ def resolve_under(root: Path, rel: str) -> Path:
         raise CatalogError("refusing skipped directory")
     if not path.is_file():
         raise CatalogError("missing output file")
-    if kind_of(path.suffix) is None:
+    if classify(path.name, path.suffix) is None:
         raise CatalogError("not a media file")
     return path
 
@@ -352,7 +409,8 @@ def copy_to_input(
 ) -> Path:
     """Copy a media file into the LoadImage input directory.
 
-    A 3D mesh is listed but never staged: no LoadImage input reads a GLB.
+    A 3D mesh, a MIDI sequence, and a QC report are listed but never staged:
+    no LoadImage / LoadAudio input reads any of them.
 
     Args:
         output_dir: Output root.
@@ -363,11 +421,13 @@ def copy_to_input(
         Destination path.
 
     Raises:
-        CatalogError: same refuses as :func:`resolve_under`, plus a 3D mesh.
+        CatalogError: same refuses as :func:`resolve_under`, plus a kind no
+            input node can read.
     """
     src = resolve_under(output_dir, rel)
-    if kind_of(src.suffix) == "model3d":
-        raise CatalogError("3D mesh is not a LoadImage input")
+    kind = classify(src.name, src.suffix)
+    if kind in NOT_INPUT_KINDS:
+        raise CatalogError(f"{NOT_INPUT_KINDS[kind]} is not a LoadImage input")
     dest_dir = Path(input_dir) if input_dir is not None else input_root()
     dest_dir.mkdir(parents=True, exist_ok=True)
     dest = dest_dir / src.name
@@ -383,8 +443,8 @@ def copy_many_to_input(
 ) -> tuple[list[CopyRow], list[BatchError]]:
     """Copy many media files into the LoadImage input directory.
 
-    Each path goes through :func:`copy_to_input`, so a 3D mesh is refused into
-    ``errors`` while the rest of the batch still copies.
+    Each path goes through :func:`copy_to_input`, so a row no input node can
+    read is refused into ``errors`` while the rest of the batch still copies.
 
     Args:
         output_dir: Output root.

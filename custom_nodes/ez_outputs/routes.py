@@ -3,15 +3,20 @@
 Hermetic import: aiohttp / ``server.PromptServer`` are optional. Tests call
 :func:`handle_list`, :func:`handle_delete`, and :func:`handle_to_input`
 with plain dicts. Delete and copy accept a single ``rel`` or a ``rels`` list.
+The list route also probes each row it returns (see :mod:`ez_outputs.probe`)
+and names the absolute output root once, so the pane can answer "where did my
+file go" without a second round trip.
 """
 
 from __future__ import annotations
 
 import inspect
+import os
 from collections.abc import Mapping
 from pathlib import Path
 from typing import TYPE_CHECKING, Protocol, TypedDict, TypeVar
 
+from . import probe
 from .catalog import (
     BatchError,
     CatalogError,
@@ -34,13 +39,16 @@ class ListPayload(TypedDict):
     """Body for ``GET /ez_outputs/list``."""
 
     items: list[OutputRow]
-    """Newest-first media rows within the cap."""
+    """Newest-first media rows within the cap, each with its detail lines."""
 
     truncated: bool
     """True when more rows existed than the cap allowed."""
 
     count: int
     """Rows returned."""
+
+    output_root: str
+    """Absolute output directory, so the pane can answer "where is my file"."""
 
 
 class DeletePayload(TypedDict, total=False):
@@ -144,15 +152,19 @@ def rels_from_args(args: Mapping[str, Json]) -> list[str]:
 def handle_list(
     args: Mapping[str, Json], *, root: Path | None = None
 ) -> tuple[int, ListPayload]:
-    """List media files.
+    """List media files and probe each row the page returns.
+
+    Probing is the last step and is bounded to the clipped page: a probe that
+    raises, times out, or cannot find ``ffprobe`` costs that card its detail
+    lines and nothing else, so the list itself always answers.
 
     Args:
         args: Query dict with optional ``kind`` (``all``, ``image``, ``video``,
-            ``audio``, ``model3d``), ``q``, ``limit``.
+            ``audio``, ``model3d``, ``midi``, ``report``), ``q``, ``limit``.
         root: Output root override for tests.
 
     Returns:
-        ``(200, {items, truncated, count})``.
+        ``(200, {items, truncated, count, output_root})``.
     """
     base = output_directory() if root is None else root
     kind = str(args.get("kind") or "all")
@@ -166,10 +178,13 @@ def handle_list(
     items = list_outputs(base, kind=kind, query=query, limit=cap + 1)
     truncated = len(items) > cap
     clipped = items[:cap]
+    for row in clipped:
+        row["lines"] = probe.detail_lines(base, row)
     body: ListPayload = {
         "items": clipped,
         "truncated": truncated,
         "count": len(clipped),
+        "output_root": os.path.abspath(str(base)),
     }
     return _json_ok(body)
 
@@ -217,8 +232,9 @@ def handle_to_input(
 ) -> tuple[int, CopyPayload]:
     """Copy one media file (or many) into the LoadImage input directory.
 
-    A 3D mesh row is refused: LoadImage has no GLB input, so the pane offers
-    Download for those files instead of staging them.
+    Rows no input node can read are refused: LoadImage has no GLB input and no
+    MIDI or JSON input, so the pane offers Download for those files instead of
+    staging them.
 
     Args:
         args: Body/query with ``rel`` or ``rels``.

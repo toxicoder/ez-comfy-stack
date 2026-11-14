@@ -290,6 +290,7 @@ async function settle() {
  * @param {object} [opts] Options.
  * @param {Array<object>} [opts.items] Rows the first page returns.
  * @param {boolean} [opts.truncated] Whether the page was clipped.
+ * @param {string} [opts.outputRoot] Absolute output root the route reports.
  * @param {number} [opts.width] Panel width in px, which picks the tier.
  * @param {boolean} [opts.fail] Answer every request with a 500.
  * @param {boolean} [opts.defer] Hold the response until `release()`.
@@ -299,6 +300,7 @@ async function mountOutputs(opts = {}) {
   const {
     items = makeRows(12),
     truncated = false,
+    outputRoot = "/outputs",
     width = 800,
     fail = false,
     defer = false,
@@ -312,7 +314,7 @@ async function mountOutputs(opts = {}) {
   });
   const urls = [];
   /** @type {Array<object>} */
-  const pages = [{ items, truncated, count: items.length }];
+  const pages = [{ items, truncated, count: items.length, output_root: outputRoot }];
   let responseIndex = 0;
   /** @type {Array<Function>} */
   const waiting = [];
@@ -748,5 +750,167 @@ describe("ez_outputs states", () => {
     button(el, "Show details").click();
     assert.equal(localStorage.getItem("ez-comfy.outputs.meta"), "off");
     assert.ok(el.querySelector(".ez-out-card-meta.is-compact"));
+  });
+});
+
+/**
+ * Rows that carry server-probed detail lines: three takes of one plate, a
+ * still with its producing prompt, and a song master with its album tags.
+ * @returns {Array<object>} Catalog-shaped rows.
+ */
+function detailRows() {
+  const takes = [1, 2, 3].map((n) => ({
+    rel: `film/ez_breakwater_b12_s1_ltx_video_${String(n).padStart(5, "0")}_.mp4`,
+    name: `ez_breakwater_b12_s1_ltx_video_${String(n).padStart(5, "0")}_.mp4`,
+    kind: "video",
+    size: 4096,
+    mtime: 1700000000 + n,
+    suffix: ".mp4",
+    parent: "film",
+    lines: ["1280 x 720", "5.0 s at 24 fps", "silent - no audio track"],
+  }));
+  return [
+    ...takes,
+    {
+      rel: "ez_still_hero_00001_.png",
+      name: "ez_still_hero_00001_.png",
+      kind: "image",
+      size: 2048,
+      mtime: 1700000010,
+      suffix: ".png",
+      parent: "",
+      lines: ["1024 x 768", "seed 4611686018427387904", '"a lighthouse at dawn"'],
+    },
+    {
+      rel: "albums/Beatwater/Drift/01 - Drift.mp3",
+      name: "01 - Drift.mp3",
+      kind: "audio",
+      size: 8192,
+      mtime: 1700000009,
+      suffix: ".mp3",
+      parent: "albums/Beatwater/Drift",
+      lines: ["3:02", "44.1 kHz", "Beatwater - Drift - Drift"],
+    },
+  ];
+}
+
+/**
+ * The rendered card or row for one rel.
+ * @param {object} el Panel root.
+ * @param {string} rel Relative path.
+ * @returns {object} The item element.
+ */
+function cardFor(el, rel) {
+  const found = el
+    .querySelectorAll(".ez-out-card, .ez-out-row-item, .ez-out-take")
+    .find((node) => node.dataset.rel === rel);
+  assert.ok(found, `no pane item rendered for ${rel}`);
+  return found;
+}
+
+describe("ez_outputs results that fit the output type", () => {
+  test("the header names the absolute output root once", async () => {
+    const { el } = await mountOutputs({ items: detailRows() });
+    const roots = el.querySelectorAll(".ez-out-root");
+    assert.equal(roots.length, 1, "the root is printed once, not per card");
+    assert.equal(roots[0].textContent.trim(), "Files in /outputs");
+    assert.equal(roots[0].title, "/outputs");
+  });
+
+  test("a card renders a human title and keeps the slug in the facts line", async () => {
+    const { el } = await mountOutputs({ items: detailRows() });
+    const card = cardFor(el, "ez_still_hero_00001_.png");
+    const title = card.querySelector(".ez-out-name").textContent.trim();
+    assert.equal(title, "Still Hero");
+    assert.equal(card.querySelectorAll(".ez-out-take-label").length, 1);
+    assert.equal(card.querySelector(".ez-out-take-label").textContent.trim(), "take 1");
+    assert.match(card.querySelector(".ez-out-sub").textContent, /ez_still_hero_00001_\.png/);
+  });
+
+  test("a card renders the probed lines for still, video, and audio", async () => {
+    const { el } = await mountOutputs({ items: detailRows() });
+    assert.deepEqual(
+      cardFor(el, "ez_still_hero_00001_.png")
+        .querySelectorAll(".ez-out-line")
+        .map((node) => node.textContent.trim()),
+      ["1024 x 768", "seed 4611686018427387904", '"a lighthouse at dawn"'],
+    );
+    assert.deepEqual(
+      cardFor(el, "albums/Beatwater/Drift/01 - Drift.mp3")
+        .querySelectorAll(".ez-out-line")
+        .map((node) => node.textContent.trim()),
+      ["3:02", "44.1 kHz", "Beatwater - Drift - Drift"],
+    );
+  });
+
+  test("N takes of one plate render as one card carrying N files", async () => {
+    const { el } = await mountOutputs({ items: detailRows() });
+    const tiles = el.querySelectorAll(".ez-out-card");
+    assert.equal(tiles.length, 3, "three takes collapse into one batch card");
+    const batch = tiles.find((node) => node.classList.contains("ez-out-group"));
+    assert.ok(batch, "the takes render as a batch card");
+    assert.equal(batch.querySelector(".ez-out-batch").textContent.trim(), "3 files");
+    assert.equal(batch.querySelector(".ez-out-name").textContent.trim(), "Breakwater B12 S1 Ltx Video");
+    const takes = batch.querySelectorAll(".ez-out-take");
+    assert.deepEqual(
+      takes.map((node) => node.querySelector(".ez-out-take-name").textContent.trim()),
+      ["take 3", "take 2", "take 1"],
+    );
+    assert.deepEqual(
+      takes.map((node) => node.getAttribute("data-rel")),
+      [
+        "film/ez_breakwater_b12_s1_ltx_video_00003_.mp4",
+        "film/ez_breakwater_b12_s1_ltx_video_00002_.mp4",
+        "film/ez_breakwater_b12_s1_ltx_video_00001_.mp4",
+      ],
+    );
+  });
+
+  test("the batch checkbox selects every take it stands for", async () => {
+    const { el } = await mountOutputs({ items: detailRows() });
+    const batch = el
+      .querySelectorAll(".ez-out-card")
+      .find((node) => node.classList.contains("ez-out-group"));
+    batch.querySelector("input[type=\"checkbox\"]").click();
+    assert.equal(el.querySelector(".ez-out-bulk-count").textContent, "3 files selected");
+    assert.equal(batch.getAttribute("aria-selected"), "true");
+    batch.querySelector("input[type=\"checkbox\"]").click();
+    assert.equal(el.querySelector(".ez-out-bulk-count").textContent, "0 files selected");
+    assert.equal(batch.getAttribute("aria-selected"), "false");
+  });
+
+  test("one take inside a batch selects alone and keeps one tab stop", async () => {
+    const { el } = await mountOutputs({ items: detailRows() });
+    const take = cardFor(el, "film/ez_breakwater_b12_s1_ltx_video_00002_.mp4");
+    take.click();
+    assert.equal(el.querySelector(".ez-out-bulk-count").textContent, "1 file selected");
+    const stops = el.querySelectorAll("[data-rel]").filter((node) => node.tabIndex === 0);
+    assert.equal(stops.length, 1, "the cursor stays a single tab stop");
+    assert.equal(stops[0], take);
+  });
+
+  test("copy path copies the file under the reported output root", async () => {
+    const { el } = await mountOutputs({ items: detailRows() });
+    key(el, "l");
+    const written = [];
+    Object.defineProperty(globalThis, "navigator", {
+      configurable: true,
+      writable: true,
+      value: { clipboard: { writeText: async (text) => written.push(text) } },
+    });
+    const row = cardFor(el, "ez_still_hero_00001_.png");
+    row
+      .querySelectorAll("button")
+      .find((node) => node.textContent.trim() === "Copy path")
+      .click();
+    await settle();
+    assert.deepEqual(written, ["/outputs/ez_still_hero_00001_.png"]);
+    assert.match(el.querySelector(".ez-out-status").textContent, /Copied 1 path/);
+  });
+
+  test("a row with no probed lines still renders without them", async () => {
+    const { el } = await mountOutputs({ items: makeRows(3) });
+    assert.equal(el.querySelectorAll(".ez-out-line").length, 0);
+    assert.equal(el.querySelectorAll(".ez-out-card").length, 3);
   });
 });
