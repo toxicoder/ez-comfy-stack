@@ -78,10 +78,10 @@
     "tests/python/test_studio_mcp.py": 7,
     "tests/python/test_wave1_graphs.py": 2,
     "tests/python/test_wave4_hero.py": 1,
-    "tests/python/test_wire_format.py": 1,
+    "tests/python/test_wire_format.py": 0,
     "tests/python/test_wire_image_describe.py": 2,
     "tests/python/test_wire_optional_ref.py": 1,
     "tests/python/test_workflow_completeness.py": 6
   },
-  "total": 669
+  "total": 668
 }

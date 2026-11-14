@@ -153,7 +153,7 @@ def test_note_copy_that_promised_a_dead_control_is_rewritten() -> None:
     """The sentence telling the operator to use a control goes with the node."""
     lab_rel = next(iter(NOTE_FIXES))
     needle, replacement = NOTE_FIXES[lab_rel][0]
-    graph = {
+    graph: dict[str, Any] = {
         "nodes": [
             {"id": 9, "type": "Note", "widgets_values": [f"Intro. {needle} Trailing."]},
             {"id": 10, "type": "MarkdownNote", "widgets_values": [{"text": "not a string"}]},

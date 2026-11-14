@@ -2316,8 +2316,8 @@ def test_no_detail_row_where_the_ladder_refuses_every_rung(
     nodes = _node_index(graph)
     inputs, _outputs = _linear_rows(graph)
     for entry in inputs:
-        node = nodes.get(linear_input_node_id(entry))
-        if node is None or str(node.get("type") or "") != QUALITY_TYPE:
+        row_node = nodes.get(linear_input_node_id(entry))
+        if row_node is None or str(row_node.get("type") or "") != QUALITY_TYPE:
             continue
         if str(entry[1]) != QUALITY_WIDGET:
             continue

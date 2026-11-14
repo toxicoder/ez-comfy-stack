@@ -36,7 +36,8 @@ from ez_image.formats import SIZE_MODE_FORCE, SIZE_MODE_MATCH  # noqa: E402
 
 
 def _load(rel: str) -> dict[str, Any]:
-    return json.loads(lab_json(rel).read_text(encoding="utf-8"))
+    graph: dict[str, Any] = json.loads(lab_json(rel).read_text(encoding="utf-8"))
+    return graph
 
 
 def _by_id(graph: dict[str, Any]) -> dict[int, dict[str, Any]]:
@@ -217,7 +218,7 @@ LINKED_APP = "photos/upscale-reframe"
 
 def _format_node(graph: dict[str, Any]) -> dict[str, Any]:
     """The graph's single canvas-format node."""
-    hits = [
+    hits: list[dict[str, Any]] = [
         node
         for node in graph["nodes"]
         if node.get("type") in (STILL_FORMAT_TYPE, VIDEO_FORMAT_TYPE)

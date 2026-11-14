@@ -11,6 +11,7 @@ import copy
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 from _lab_layout import GROUP_TITLE_INSET, group as _group, finalize_layout
 from _lab_paths import lab_dest, lab_json, write_lab_graph
@@ -253,7 +254,7 @@ def _replace_load_image(
     widgets: list,
 ) -> dict:
     """Swap the first LoadImage for an ez_dcc loader. Keep IMAGE outbound links."""
-    load = next(n for n in graph["nodes"] if n.get("type") == "LoadImage")
+    load: dict[str, Any] = next(n for n in graph["nodes"] if n.get("type") == "LoadImage")
     old_links: list = []
     if load.get("outputs"):
         raw = load["outputs"][0].get("links") or []
@@ -273,8 +274,12 @@ def _replace_load_image(
 
 
 def _insert_occupancy_gate(
-    graph: dict, *, source: dict, required_mode: str, pos: tuple[int, int] | None = None
-) -> dict:
+    graph: dict[str, Any],
+    *,
+    source: dict[str, Any],
+    required_mode: str,
+    pos: tuple[int, int] | None = None,
+) -> dict[str, Any]:
     """Insert EZDCCOccupancyGate on the source IMAGE output.
 
     ``pos`` pins the card's canvas position. Builders whose graph layout is

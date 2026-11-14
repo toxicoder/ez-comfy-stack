@@ -2537,7 +2537,7 @@ def stamp_rewrite_negative(graph: dict[str, Any]) -> bool:
     return True
 
 
-def _dangling_enhance_ids(graph: dict) -> list[int]:
+def _dangling_enhance_ids(graph: dict[str, Any]) -> list[int]:
     """Ids of desk nodes whose generated text nothing downstream reads.
 
     A desk App writes no file, so the App panel is the only place the operator

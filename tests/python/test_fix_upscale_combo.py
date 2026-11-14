@@ -45,7 +45,8 @@ def _graph(stem: str) -> dict[str, Any]:
     Returns:
         The parsed graph, owned by the caller.
     """
-    return json.loads(lab_json(stem).read_text(encoding="utf-8"))
+    graph: dict[str, Any] = json.loads(lab_json(stem).read_text(encoding="utf-8"))
+    return graph
 
 
 def _rung_nodes(graph: dict[str, Any]) -> list[dict[str, Any]]:

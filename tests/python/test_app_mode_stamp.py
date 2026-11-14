@@ -9,6 +9,7 @@ import copy
 import json
 import re
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -639,7 +640,7 @@ def test_shipped_suite_inputs_survive_frontend_1496_prune() -> None:
             assert linear_input_node_id(entry) in node_ids, (path.name, entry[0])
 
 
-def _canvas_node(**overrides: object) -> dict:
+def _canvas_node(**overrides: object) -> dict[str, Any]:
     """Return an ``EZImageFormat`` row with room to vary one socket.
 
     Args:
@@ -648,7 +649,7 @@ def _canvas_node(**overrides: object) -> dict:
     Returns:
         A node dict the stamp helpers accept.
     """
-    node: dict = {
+    node: dict[str, Any] = {
         "id": 20,
         "type": "EZImageFormat",
         "title": "Format / platform",
@@ -670,7 +671,7 @@ def _canvas_node(**overrides: object) -> dict:
     return node
 
 
-def _video_node(family: str) -> dict:
+def _video_node(family: str) -> dict[str, Any]:
     """Return an ``EZVideoFormat`` row authored on one motion family.
 
     Args:
@@ -732,7 +733,7 @@ def test_the_dub_rewrite_row_reads_as_english() -> None:
     assert "transcribe" in copy_text
 
 
-def _desk_card(nid: int, links: list[int] | None) -> dict:
+def _desk_card(nid: int, links: list[int] | None) -> dict[str, Any]:
     """One EZLTXPromptEnhance whose prompt output carries ``links``."""
     return {
         "id": nid,

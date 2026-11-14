@@ -27,6 +27,7 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 from _lab_paths import lab_graph_paths
 
@@ -204,7 +205,7 @@ def retired_phrases(text: str) -> tuple[str, ...]:
     return tuple(retired for retired, _ in RETIRED_COPY if retired in text)
 
 
-def copy_surfaces(node: dict) -> list[tuple[str, str]]:
+def copy_surfaces(node: dict[str, Any]) -> list[tuple[str, str]]:
     """Return the ``(field, text)`` pairs an operator reads on one node.
 
     Globals:
@@ -238,7 +239,7 @@ def copy_surfaces(node: dict) -> list[tuple[str, str]]:
     return surfaces
 
 
-def retired_copy(graph: dict) -> list[str]:
+def retired_copy(graph: dict[str, Any]) -> list[str]:
     """Return every retired sentence a graph still shows an operator.
 
     Globals:
@@ -265,7 +266,7 @@ def retired_copy(graph: dict) -> list[str]:
     return found
 
 
-def retire_combo_copy(graph: dict) -> int:
+def retire_combo_copy(graph: dict[str, Any]) -> int:
     """Rewrite retired combo copy in one graph, in place.
 
     Globals:
@@ -301,7 +302,7 @@ def retire_combo_copy(graph: dict) -> int:
     return changed
 
 
-def _set_widget(node: dict, label: str, value: str) -> None:
+def _set_widget(node: dict[str, Any], label: str, value: str) -> None:
     """Write one string widget by the label :func:`copy_surfaces` produced.
 
     Globals:
