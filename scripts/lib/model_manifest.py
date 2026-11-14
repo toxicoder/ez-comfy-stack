@@ -231,7 +231,7 @@ def default_keep_set(manifest: Manifest) -> set[str]:
 
 
 def _cli(argv: list[str] | None = None) -> int:
-    """CLI: keep-set | default-keep-set | refuse | research | json | pack.
+    """CLI: keep-set | default-keep-set | refuse | research | research-detail | json | pack.
 
     Args:
         argv: Optional argument list (defaults to ``sys.argv[1:]``).
@@ -246,6 +246,7 @@ def _cli(argv: list[str] | None = None) -> int:
     sub.add_parser("default-keep-set")
     sub.add_parser("refuse")
     sub.add_parser("research")
+    sub.add_parser("research-detail")
     sub.add_parser("json")
     p_pack = sub.add_parser("pack")
     p_pack.add_argument("name")
@@ -266,6 +267,10 @@ def _cli(argv: list[str] | None = None) -> int:
     if args.cmd == "research":
         for name in research_tokens(man):
             print(name)
+        return 0
+    if args.cmd == "research-detail":
+        for token, row in man["research"].items():
+            print(f"{token}\t{row['license']}\t{row['use']}")
         return 0
     if args.cmd == "json":
         print(json.dumps(man))

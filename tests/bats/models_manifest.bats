@@ -91,6 +91,30 @@ teardown() {
   [[ "${output}" != *"artifixer"* ]]
 }
 
+@test "models-manifest status discloses the research lane license" {
+  # The point of the lane is that the operator sees the license and the
+  # permitted use before downloading, so status must print both.
+  run cmd_status
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"research (opt-in, never fetched by download-models):"* ]]
+  [[ "${output}" == *"Lyra-2.0: NVIDIA Internal Scientific Research and Development Model License"* ]]
+  [[ "${output}" == *"non-production environment"* ]]
+  [[ "${output}" == *"ArtiFixer: NVIDIA One-Way Noncommercial License"* ]]
+  run models_research_list
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"3DGRUT"* ]]
+  [[ "${output}" == *"DVLT"* ]]
+  # Refused tokens must never appear in the research listing.
+  [[ "${output}" != *"MiniMax-H3"* ]]
+  [[ "${output}" != *"Arete-27B"* ]]
+  run models_research_detail
+  [ "${status}" -eq 0 ]
+  # token<TAB>license<TAB>use, so three fields per row.
+  while IFS= read -r line; do
+    [ "$(printf '%s\n' "${line}" | awk -F'\t' '{print NF}')" -eq 3 ]
+  done <<< "${output}"
+}
+
 @test "models-manifest includes opt-in flux3 klein packs default false" {
   run cmd_render
   [ "${status}" -eq 0 ]

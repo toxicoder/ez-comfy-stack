@@ -70,6 +70,38 @@ models_refuse_list() {
 }
 
 #######################################
+# Research-lane tokens the operator may keep for local experimentation.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   None
+# Outputs:
+#   one token per line
+# Returns:
+#   0
+#######################################
+models_research_list() {
+  python3 "${REPO_ROOT}/scripts/lib/model_manifest.py" \
+    --manifest "$(models_manifest_path)" research
+}
+
+#######################################
+# Research lane with its license and permitted use, for operator disclosure.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   None
+# Outputs:
+#   tab-separated token, weights license, permitted use
+# Returns:
+#   0
+#######################################
+models_research_detail() {
+  python3 "${REPO_ROOT}/scripts/lib/model_manifest.py" \
+    --manifest "$(models_manifest_path)" research-detail
+}
+
+#######################################
 # True if basename is in the keep-set.
 # Arguments:
 #   $1  basename

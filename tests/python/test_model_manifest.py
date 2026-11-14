@@ -367,8 +367,29 @@ def test_still_refused_tokens_are_untouched() -> None:
         assert token in man["refuse"], token
 
 
-def test_cli_research() -> None:
+def test_cli_research(capsys: pytest.CaptureFixture[str]) -> None:
     assert mm._cli(["--manifest", str(MANIFEST), "research"]) == 0  # noqa: SLF001
+    tokens = capsys.readouterr().out.split()
+    assert tokens == list(RESEARCH_TOKENS)
+
+
+def test_cli_research_detail_discloses_license_and_use(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """research-detail prints the license and permitted use for each row.
+
+    ``models-status`` renders its disclosure from this line, so a row that
+    printed an empty license or use would show the operator a blank where the
+    warning should be.
+    """
+    assert mm._cli(["--manifest", str(MANIFEST), "research-detail"]) == 0  # noqa: SLF001
+    lines = capsys.readouterr().out.strip().splitlines()
+    assert len(lines) == len(RESEARCH_TOKENS)
+    for line in lines:
+        token, license_name, use = line.split("\t")
+        assert token in RESEARCH_TOKENS, token
+        assert license_name.strip(), token
+        assert use.strip(), token
 
 
 def test_load_manifest_parses_research_rows(tmp_path: Path) -> None:
