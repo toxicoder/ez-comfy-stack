@@ -8,8 +8,8 @@
       "id": 1,
       "type": "7c3e9b10-6a21-4f0a-9c11-00000000aa03",
       "pos": [
-        100,
-        100
+        40,
+        220
       ],
       "size": [
         280,
@@ -65,7 +65,21 @@
     }
   ],
   "links": [],
-  "groups": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "SETTINGS",
+      "bounding": [
+        20,
+        148,
+        320,
+        276
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
   "definitions": {
     "subgraphs": [
       {

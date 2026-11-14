@@ -8,8 +8,8 @@
       "id": 1,
       "type": "7c3e9b10-6a21-4f0a-9c11-00000000aa01",
       "pos": [
-        100,
-        100
+        40,
+        220
       ],
       "size": [
         280,
@@ -70,7 +70,21 @@
     }
   ],
   "links": [],
-  "groups": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "SETTINGS",
+      "bounding": [
+        20,
+        148,
+        320,
+        276
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
   "definitions": {
     "subgraphs": [
       {
@@ -115,7 +129,7 @@
             "title": "MODEL",
             "bounding": [
               20,
-              436,
+              452,
               400,
               506
             ],
@@ -128,7 +142,7 @@
             "title": "INPUT",
             "bounding": [
               428,
-              436,
+              452,
               400,
               610
             ],
@@ -141,7 +155,7 @@
             "title": "PROMPT",
             "bounding": [
               836,
-              436,
+              452,
               460,
               1492
             ],
@@ -154,7 +168,7 @@
             "title": "SETTINGS",
             "bounding": [
               1304,
-              436,
+              452,
               400,
               848
             ],
@@ -167,7 +181,7 @@
             "title": "OUTPUT",
             "bounding": [
               1712,
-              436,
+              452,
               320,
               656
             ],
@@ -219,7 +233,7 @@
             "type": "UNETLoader",
             "pos": [
               40,
-              508
+              524
             ],
             "size": [
               360,
@@ -253,7 +267,7 @@
             "type": "CLIPLoader",
             "pos": [
               40,
-              662
+              678
             ],
             "size": [
               360,
@@ -289,7 +303,7 @@
             "type": "VAELoader",
             "pos": [
               40,
-              840
+              856
             ],
             "size": [
               360,
@@ -323,7 +337,7 @@
             "type": "CLIPTextEncode",
             "pos": [
               856,
-              1000
+              1016
             ],
             "size": [
               420,
@@ -370,7 +384,7 @@
             "type": "CLIPTextEncode",
             "pos": [
               856,
-              1724
+              1740
             ],
             "size": [
               420,
@@ -417,7 +431,7 @@
             "type": "EmptyFlux2LatentImage",
             "pos": [
               1324,
-              800
+              816
             ],
             "size": [
               280,
@@ -477,7 +491,7 @@
             "type": "KSampler",
             "pos": [
               1324,
-              978
+              994
             ],
             "size": [
               320,
@@ -537,7 +551,7 @@
             "type": "VAEDecode",
             "pos": [
               1732,
-              508
+              524
             ],
             "size": [
               240,
@@ -579,7 +593,7 @@
             "type": "SaveImage",
             "pos": [
               1732,
-              778
+              794
             ],
             "size": [
               280,
@@ -633,7 +647,7 @@
             "type": "EZKleinPromptEnhance",
             "pos": [
               856,
-              508
+              524
             ],
             "size": [
               420,
@@ -687,7 +701,7 @@
             "type": "EZNegativePromptEnhance",
             "pos": [
               856,
-              1232
+              1248
             ],
             "size": [
               420,
@@ -759,7 +773,7 @@
             "type": "EZImageFormat",
             "pos": [
               1324,
-              508
+              524
             ],
             "size": [
               360,
@@ -833,7 +847,7 @@
             "type": "EZOptionalImage",
             "pos": [
               448,
-              508
+              524
             ],
             "size": [
               360.0,
@@ -884,7 +898,7 @@
             "type": "EZKleinRefCanvas",
             "pos": [
               448,
-              862
+              878
             ],
             "size": [
               360.0,
@@ -945,7 +959,7 @@
             "type": "EZImageUpscale",
             "pos": [
               1732,
-              626
+              642
             ],
             "size": [
               280,
@@ -990,7 +1004,7 @@
             "type": "EZImageDescribe",
             "pos": [
               448,
-              700
+              716
             ],
             "size": [
               280,
