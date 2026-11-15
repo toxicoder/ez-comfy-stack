@@ -671,8 +671,8 @@ class _DeviceImage:
         """Carry the device the matte should land on, plus readable pixels."""
         self.device = "cuda"
 
-    def tolist(self) -> list[list[list[list[float]]]]:
-        """Return one small BHWC batch."""
+    def tolist(self) -> list[list[list[float]]]:
+        """Return one small HWC image for the matte maths to read."""
         return _image()
 
 
