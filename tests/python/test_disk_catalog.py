@@ -95,15 +95,14 @@ def test_banned_and_ltx23() -> None:
 
 
 def test_declined_integration_weights_are_banned() -> None:
-    """Lyra-2.0 and Arete-27B classify as banned weights, not keep-set rows."""
+    """Arete-27B classifies as a banned weight, not a keep-set row."""
     cat = dc.load_catalog(CATALOG)
     man = mm.load_manifest(MANIFEST)
     keep, refuse = mm.default_keep_set(man), man["refuse"]
-    assert "Lyra-2.0" in refuse
     assert "Arete-27B" in refuse
     for path in (
-        "/mnt/models/nvidia__Lyra-2.0_main/model-00001-of-00032.safetensors",
         "/mnt/models/NousResearch__Arete-27B/model-00018-of-00018.safetensors",
+        "/mnt/models/Inria-3DGS/scene.ply",
     ):
         row = dc.classify_path(
             path,
@@ -116,13 +115,40 @@ def test_declined_integration_weights_are_banned() -> None:
     # Matching is a case-insensitive substring, so a tier dir spelled either
     # way still lands in the refuse lane.
     lowercase = dc.classify_path(
-        "/mnt/models/nvidia__lyra-2.0/umt5.safetensors",
+        "/mnt/models/nousresearch__arete-27b/model-00001-of-00018.safetensors",
         cat,
         keep_set=keep,
         refuse=refuse,
         size_bytes=1_000,
     )
     assert lowercase["id"] == "banned-weight"
+
+
+def test_research_lane_weights_are_not_banned() -> None:
+    """NVIDIA research-lane checkpoints are operator-permitted, not banned.
+
+    Moving Lyra-2.0 out of ``refuse:`` is the point of the research lane, so
+    the disk wizard must stop calling it a banned weight. This is the test that
+    catches a future edit quietly re-adding a research token to ``refuse:``.
+    """
+    cat = dc.load_catalog(CATALOG)
+    man = mm.load_manifest(MANIFEST)
+    keep, refuse = mm.default_keep_set(man), man["refuse"]
+    for token in mm.research_tokens(man):
+        assert token not in refuse, token
+    for path in (
+        "/mnt/models/nvidia__Lyra-2.0_main/model-00001-of-00032.safetensors",
+        "/mnt/models/nvidia__artifixer_main/artifixer-14b.pt",
+        "/mnt/models/nvidia__dvlt_main/model.safetensors",
+    ):
+        row = dc.classify_path(
+            path,
+            cat,
+            keep_set=keep,
+            refuse=refuse,
+            size_bytes=1_000,
+        )
+        assert row["id"] != "banned-weight", path
 
 
 def test_docker_and_vllm_paths() -> None:

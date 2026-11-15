@@ -58,6 +58,14 @@ cmd_status() {
   models_refuse_list | while IFS= read -r f; do
     log "  ${f}"
   done
+  # Research lane is operator-fetched for experimentation only. Print the
+  # license and the permitted use next to each name so the disclosure lands
+  # before someone downloads 90 GB, not after.
+  log "research (opt-in, never fetched by download-models):"
+  models_research_detail | while IFS=$'\t' read -r token license use; do
+    log "  ${token}: ${license}"
+    log "    use: ${use}"
+  done
 }
 
 #######################################

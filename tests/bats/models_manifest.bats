@@ -55,17 +55,64 @@ teardown() {
   [ "${status}" -eq 0 ]
 }
 
-@test "models-manifest refuses declined integration weights" {
-  # Lyra-2.0 is license-blocked for production; Arete-27B is a 54.7 GB text
-  # model with no GGUF. Both must sit in the fail-closed refuse lane.
-  run grep -E '^  - (Lyra-2\.0|Arete-27B)$' "${REPO_ROOT}/config/model-manifest.yaml"
+@test "models-manifest refuses the declined weights that stay banned" {
+  # Arete-27B is a 54.7 GB text model with no GGUF and no media lane;
+  # MiniMax-H3 is US-excluded for weights and outputs. Both stay in the
+  # fail-closed refuse lane. NVIDIA research models moved out of it into the
+  # research lane, so they must not appear here.
+  run grep -E '^  - (Arete-27B|MiniMax-H3|Inria-3DGS|DA3-LARGE|Pixal3D-as-default)$' "${REPO_ROOT}/config/model-manifest.yaml"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Arete-27B"* ]]
+  [[ "${output}" == *"MiniMax-H3"* ]]
+  [[ "${output}" != *"Lyra"* ]]
+  run models_default_keep_set
+  [ "${status}" -eq 0 ]
+  [[ "${output}" != *"Arete"* ]]
+}
+
+@test "models-manifest lists NVIDIA research candidates without downloading them" {
+  # The research lane is a disclosure list: it tells the operator the license
+  # and the permitted use, and it must never feed a download or the keep-set.
+  run grep -E '^  (Lyra-2\.0|ArtiFixer|3DGRUT|DVLT):$' "${REPO_ROOT}/config/model-manifest.yaml"
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"Lyra-2.0"* ]]
-  [[ "${output}" == *"Arete-27B"* ]]
+  [[ "${output}" == *"ArtiFixer"* ]]
+  # Every research row states what the output may be used for.
+  run grep -c '^    use: ' "${REPO_ROOT}/config/model-manifest.yaml"
+  [ "${status}" -eq 0 ]
+  [ "${lines[0]}" -ge 11 ]
+  run grep -c '^    license: ' "${REPO_ROOT}/config/model-manifest.yaml"
+  [ "${status}" -eq 0 ]
+  [ "${lines[0]}" -ge 11 ]
+  # And none of it reaches download-models.
   run models_default_keep_set
   [ "${status}" -eq 0 ]
   [[ "${output}" != *"Lyra"* ]]
-  [[ "${output}" != *"Arete"* ]]
+  [[ "${output}" != *"artifixer"* ]]
+}
+
+@test "models-manifest status discloses the research lane license" {
+  # The point of the lane is that the operator sees the license and the
+  # permitted use before downloading, so status must print both.
+  run cmd_status
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"research (opt-in, never fetched by download-models):"* ]]
+  [[ "${output}" == *"Lyra-2.0: NVIDIA Internal Scientific Research and Development Model License"* ]]
+  [[ "${output}" == *"non-production environment"* ]]
+  [[ "${output}" == *"ArtiFixer: NVIDIA One-Way Noncommercial License"* ]]
+  run models_research_list
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"3DGRUT"* ]]
+  [[ "${output}" == *"DVLT"* ]]
+  # Refused tokens must never appear in the research listing.
+  [[ "${output}" != *"MiniMax-H3"* ]]
+  [[ "${output}" != *"Arete-27B"* ]]
+  run models_research_detail
+  [ "${status}" -eq 0 ]
+  # token<TAB>license<TAB>use, so three fields per row.
+  while IFS= read -r line; do
+    [ "$(printf '%s\n' "${line}" | awk -F'\t' '{print NF}')" -eq 3 ]
+  done <<< "${output}"
 }
 
 @test "models-manifest includes opt-in flux3 klein packs default false" {

@@ -44,6 +44,31 @@ class PackRecord(TypedDict):
     """Cleanup note, or empty."""
 
 
+class ResearchRecord(TypedDict):
+    """One research-lane row from the restricted model-manifest schema.
+
+    Research rows are operator-run exploration candidates. They are never
+    fetched by ``download-models`` and never enter the keep-set: only
+    ``packs:`` rows feed those, so a token listed here cannot become a
+    default download by construction.
+    """
+
+    upstream: str
+    """Canonical upstream URL, or empty."""
+
+    weights: str
+    """Hugging Face repo for the weights, ``none``, or empty."""
+
+    license: str
+    """Governing license for the weights, as the vendor names it."""
+
+    use: str
+    """What the operator may do with outputs. Required, never empty."""
+
+    gb10: str
+    """Whether it runs on one GB10: plausible, marginal, or blocked."""
+
+
 class Manifest(TypedDict):
     """Parsed config/model-manifest.yaml."""
 
@@ -52,6 +77,9 @@ class Manifest(TypedDict):
 
     refuse: list[str]
     """Tokens that must never appear in a reap plan."""
+
+    research: dict[str, ResearchRecord]
+    """Operator-run exploration rows keyed by token."""
 
     packs: dict[str, PackRecord]
     """Pack rows keyed by pack id."""
@@ -64,10 +92,11 @@ def load_manifest(path: Path) -> Manifest:
         path: Path to ``config/model-manifest.yaml``.
 
     Returns:
-        Mapping with schema, refuse tokens, and packs.
+        Mapping with schema, refuse tokens, research tokens, and packs.
     """
     text = path.read_text(encoding="utf-8")
     refuse: list[str] = []
+    research: dict[str, ResearchRecord] = {}
     packs: dict[str, PackRecord] = {}
     section = ""
     pack = ""
@@ -85,6 +114,11 @@ def load_manifest(path: Path) -> Manifest:
             pack = ""
             list_key = ""
             continue
+        if line == "research:":
+            section = "research"
+            pack = ""
+            list_key = ""
+            continue
         if line == "packs:":
             section = "packs"
             pack = ""
@@ -92,6 +126,23 @@ def load_manifest(path: Path) -> Manifest:
             continue
         if section == "refuse" and line.strip().startswith("- "):
             refuse.append(line.strip()[2:].strip())
+            continue
+        if section == "research":
+            if line.startswith("  ") and not line.startswith("    ") and line.strip().endswith(":"):
+                pack = line.strip()[:-1]
+                research[pack] = {
+                    "upstream": "",
+                    "weights": "",
+                    "license": "",
+                    "use": "",
+                    "gb10": "",
+                }
+                continue
+            if pack and ":" in line:
+                key, _, val = line.strip().partition(":")
+                fields = cast("dict[str, Json]", research[pack])
+                if key.strip() in fields:
+                    fields[key.strip()] = val.strip().strip('"').strip("'")
             continue
         if section == "packs" and line.startswith("  ") and not line.startswith("    ") and line.strip().endswith(":"):
             pack = line.strip()[:-1]
@@ -133,7 +184,19 @@ def load_manifest(path: Path) -> Manifest:
             elif key in packs[pack]:
                 fields = cast("dict[str, Json]", packs[pack])
                 fields[key] = val
-    return {"schema": schema, "refuse": refuse, "packs": packs}
+    return {"schema": schema, "refuse": refuse, "research": research, "packs": packs}
+
+
+def research_tokens(manifest: Manifest) -> list[str]:
+    """Tokens the operator may keep on disk for local exploration.
+
+    Args:
+        manifest: Parsed manifest mapping.
+
+    Returns:
+        Research tokens in manifest order.
+    """
+    return list(manifest.get("research") or {})
 
 
 def keep_set(manifest: Manifest) -> set[str]:
@@ -168,7 +231,7 @@ def default_keep_set(manifest: Manifest) -> set[str]:
 
 
 def _cli(argv: list[str] | None = None) -> int:
-    """CLI: keep-set | default-keep-set | refuse | json | pack.
+    """CLI: keep-set | default-keep-set | refuse | research | research-detail | json | pack.
 
     Args:
         argv: Optional argument list (defaults to ``sys.argv[1:]``).
@@ -182,6 +245,8 @@ def _cli(argv: list[str] | None = None) -> int:
     sub.add_parser("keep-set")
     sub.add_parser("default-keep-set")
     sub.add_parser("refuse")
+    sub.add_parser("research")
+    sub.add_parser("research-detail")
     sub.add_parser("json")
     p_pack = sub.add_parser("pack")
     p_pack.add_argument("name")
@@ -198,6 +263,14 @@ def _cli(argv: list[str] | None = None) -> int:
     if args.cmd == "refuse":
         for name in man["refuse"]:
             print(name)
+        return 0
+    if args.cmd == "research":
+        for name in research_tokens(man):
+            print(name)
+        return 0
+    if args.cmd == "research-detail":
+        for token, row in man["research"].items():
+            print(f"{token}\t{row['license']}\t{row['use']}")
         return 0
     if args.cmd == "json":
         print(json.dumps(man))
