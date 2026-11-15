@@ -259,7 +259,11 @@ class RepoContractTests(unittest.TestCase):
             if not {"generated", "includes", "assets", "tests", "__pycache__"}
             & set(path.relative_to(docs).parts)
         }
-        generated = {"generated/shell/reference.md", "generated/dashboard-api/README.md"}
+        generated = {
+            "generated/shell/reference.md",
+            "generated/dashboard-api/README.md",
+            "generated/nvidia-lab/tier.md",
+        }
         # nav.json transcribed the MkDocs nav, which names pages by their pre-migration
         # `.md` path; pages that needed JSX were renamed, so compare without the suffix.
         strip = lambda names: {re.sub(r"\.mdx?$", "", name) for name in names}

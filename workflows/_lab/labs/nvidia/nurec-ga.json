@@ -1,0 +1,246 @@
+{
+  "id": "nurec-ga",
+  "revision": 0,
+  "last_node_id": 5,
+  "last_link_id": 0,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Note",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        720.0,
+        460.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "## labs/nvidia/nurec-ga\n\nOmniverse NuRec GA (NGC nre-ga) - Trains and serves Gaussian-Neural 3DGRT and 3DGUT scenes over gRPC and renders novel views from them.\n\nStatus: deferred. Install: docker-pull. Artifact: container-image. Arm64: partial. GB10: unverified. Comfy shape: sidecar.\nInput: real-world sensor logs or a trained scene\nOutput: rendered novel views and a USD scene\nLicenses: code Apache-2.0 (the open SDK at github.com/NVIDIA/NuRec). Weights not published; the container itself is under the NGC license, whose text is not reachable without an NGC session. Commercial use unknown.\nFootprint: 48 GB VRAM, 60 GB disk. Weights: none.\nArtifact ref: nvcr.io/nvidia/nre/nurec-ga\nUpstream: https://catalog.ngc.nvidia.com/orgs/nvidia/nre/containers/nre-ga\nAlso: https://docs.nvidia.com/nurec/release-notes/index.html, https://docs.nvidia.com/nurec/basics/hardware.html\nSources: https://docs.nvidia.com/nurec/release-notes/index.html, https://docs.nvidia.com/nurec/basics/hardware.html, https://docs.nvidia.com/nurec/basics/software.html\n\nNothing in this graph touches the GPU. The row's work runs outside the Comfy process through the operator CLI, so the App claims no occupancy and stops no heavy job: the one-heavy-job rule is the CLI's to enforce, next to the heavy confirm and the headroom preflight.\n\nOperator verbs (host shell):\n  bazelisk run //:manage -- nvidia-lab status\n  bazelisk run //:manage -- nvidia-lab plan nurec-ga\n\nCanvas:\n1. Preflight prints whether this Spark could run the row today - the catalog row, an aarch64 host, the binary that row's install kind needs, and the artifact ref.\n2. The verdict card prints the blocking reason and the sentence that would reopen the row.\n3. The tier table prints all 18 rows with their status and licenses.\n\nGate notes: The catalog row the operator linked is the pre-rename name: NVIDIA renamed nre/nre-ga and nre/nre-tools-ga to nre/nurec-ga and nre/nurec-tools-ga. NVIDIA states general Linux aarch64 is not a supported user platform and that Grace-Blackwell enablement reaches you only through the -arm64 or -multiarch tags, which build as non-gating nightly or on-demand jobs and may not exist for a given release. Container security scanning covers x86_64 only, the floor is more than 24 GB with 48 GB recommended on an R580 driver or newer, and the container license text plus any NGC entitlement requirement could not be confirmed from a public page.\nReopen: Re-test when NVIDIA publishes a gated -arm64 or -multiarch tag for a release-branch build and states the container license and entitlement terms in public.\nVerify: bazelisk test //tests:bats_nvidia_lab_test\n\nOccupancy: none - stop nothing GPU. One GB10 job.\n"
+      ],
+      "title": "Operator note"
+    },
+    {
+      "id": 2,
+      "type": "EZNvidiaLabPreflight",
+      "pos": [
+        40,
+        704
+      ],
+      "size": [
+        360.0,
+        130.0
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "report",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        },
+        {
+          "name": "ok",
+          "type": "BOOLEAN",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNvidiaLabPreflight"
+      },
+      "widgets_values": [
+        "nurec-ga"
+      ],
+      "title": "Preflight"
+    },
+    {
+      "id": 3,
+      "type": "EZNvidiaLabVerdict",
+      "pos": [
+        40,
+        906
+      ],
+      "size": [
+        380.0,
+        150.0
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "verdict",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNvidiaLabVerdict"
+      },
+      "widgets_values": [
+        "nurec-ga"
+      ],
+      "title": "Verdict"
+    },
+    {
+      "id": 4,
+      "type": "EZNvidiaLabCatalog",
+      "pos": [
+        40,
+        1128
+      ],
+      "size": [
+        760.0,
+        230.0
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "report",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNvidiaLabCatalog"
+      },
+      "widgets_values": [
+        "table"
+      ],
+      "title": "Tier table"
+    },
+    {
+      "id": 5,
+      "type": "EZModelCheck",
+      "pos": [
+        808,
+        80
+      ],
+      "size": [
+        320.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "EZModelCheck"
+      },
+      "widgets_values": [
+        "Click Check models. Queue does not run this node."
+      ],
+      "title": "Check models"
+    }
+  ],
+  "links": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "NOTE",
+      "bounding": [
+        20,
+        8,
+        760,
+        576
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        788,
+        8,
+        360,
+        256
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "SETTINGS",
+      "bounding": [
+        20,
+        632,
+        800,
+        770
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "lab_note": "## labs/nvidia/nurec-ga\n\nOmniverse NuRec GA (NGC nre-ga) - Trains and serves Gaussian-Neural 3DGRT and 3DGUT scenes over gRPC and renders novel views from them.\n\nStatus: deferred. Install: docker-pull. Artifact: container-image. Arm64: partial. GB10: unverified. Comfy shape: sidecar.\nInput: real-world sensor logs or a trained scene\nOutput: rendered novel views and a USD scene\nLicenses: code Apache-2.0 (the open SDK at github.com/NVIDIA/NuRec). Weights not published; the container itself is under the NGC license, whose text is not reachable without an NGC session. Commercial use unknown.\nFootprint: 48 GB VRAM, 60 GB disk. Weights: none.\nArtifact ref: nvcr.io/nvidia/nre/nurec-ga\nUpstream: https://catalog.ngc.nvidia.com/orgs/nvidia/nre/containers/nre-ga\nAlso: https://docs.nvidia.com/nurec/release-notes/index.html, https://docs.nvidia.com/nurec/basics/hardware.html\nSources: https://docs.nvidia.com/nurec/release-notes/index.html, https://docs.nvidia.com/nurec/basics/hardware.html, https://docs.nvidia.com/nurec/basics/software.html\n\nNothing in this graph touches the GPU. The row's work runs outside the Comfy process through the operator CLI, so the App claims no occupancy and stops no heavy job: the one-heavy-job rule is the CLI's to enforce, next to the heavy confirm and the headroom preflight.\n\nOperator verbs (host shell):\n  bazelisk run //:manage -- nvidia-lab status\n  bazelisk run //:manage -- nvidia-lab plan nurec-ga\n\nCanvas:\n1. Preflight prints whether this Spark could run the row today - the catalog row, an aarch64 host, the binary that row's install kind needs, and the artifact ref.\n2. The verdict card prints the blocking reason and the sentence that would reopen the row.\n3. The tier table prints all 18 rows with their status and licenses.\n\nGate notes: The catalog row the operator linked is the pre-rename name: NVIDIA renamed nre/nre-ga and nre/nre-tools-ga to nre/nurec-ga and nre/nurec-tools-ga. NVIDIA states general Linux aarch64 is not a supported user platform and that Grace-Blackwell enablement reaches you only through the -arm64 or -multiarch tags, which build as non-gating nightly or on-demand jobs and may not exist for a given release. Container security scanning covers x86_64 only, the floor is more than 24 GB with 48 GB recommended on an R580 driver or newer, and the container license text plus any NGC entitlement requirement could not be confirmed from a public page.\nReopen: Re-test when NVIDIA publishes a gated -arm64 or -multiarch tag for a release-branch build and states the container license and entitlement terms in public.\nVerify: bazelisk test //tests:bats_nvidia_lab_test\n\nOccupancy: none - stop nothing GPU. One GB10 job.\n",
+    "lab_profile": "labs/nvidia/nurec-ga",
+    "lab_description": "Omniverse NuRec GA (NGC nre-ga) (deferred) - Trains and serves Gaussian-Neural 3DGRT and 3DGUT scenes over gRPC and renders novel views from them. NVIDIA lab card: preflight, the verdict card, and the whole tier table on one canvas.",
+    "lab_rel": "labs/nvidia/nurec-ga",
+    "workflowRendererVersion": "Vue-corrected",
+    "lab_optional_unwired": [
+      "EZNvidiaLabCatalog",
+      "EZNvidiaLabPreflight",
+      "EZNvidiaLabVerdict"
+    ],
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "labs",
+      "occupancy": "none",
+      "enhance_off_identity": false,
+      "handoff": []
+    },
+    "linearData": {
+      "inputs": [
+        [
+          4,
+          "detail",
+          {
+            "label": "Tier detail",
+            "description": "table prints one aligned line per row. list prints a block per row with arm64, GB10, install, and footprint."
+          }
+        ],
+        [
+          3,
+          "tool_id",
+          {
+            "label": "Row id",
+            "description": "Catalog row this card answers for. Pinned to nurec-ga; another id prints that row's verdict instead."
+          }
+        ]
+      ],
+      "outputs": [
+        3,
+        4
+      ]
+    },
+    "linearMode": true
+  },
+  "version": 0.4
+}

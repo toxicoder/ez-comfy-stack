@@ -17,7 +17,7 @@ and how to word the prompt lives on [Prompting](prompting.md).
 - **Choose a graph** - the need-to-lane decision, then the filename
 - **Catalogs by job family** - the six graph catalogs, one table family each
 - **Where the graphs live** - the `_lab/<lane>/` tree after `start`, plus `_user/`
-- **Labs (Lane A)** - the no-UNET desks
+- **Labs (Lane A)** - the no-UNET desks and the NVIDIA lab tier cards
 - **Shared lab-graph rules** - outputs, seeds, occupancy, sizes, and Queue rules
 - **Notes on every lab graph** - the on-canvas Note, MP4 output, the reference pair, optional A14B
 
@@ -78,6 +78,7 @@ flowchart TB
 - **A mesh or turntable from a still** - [Blender + ComfyUI](dcc-workflows.md) (`3d/`)
 - **A depth, canny, or clay pass to steer a run** - [Control guides](dcc-workflows.md) (`guides/`)
 - **A prompt, rack, beat sheet, or an opt-in model** - [Labs](#labs-lane-a) (`labs/`)
+- **A Gaussian-splat, world-model, or relighting row to check or run** - [NVIDIA lab tier](#nvidia-lab-tier-opt-in) (`labs/nvidia/`)
 
 ---
 
@@ -173,6 +174,7 @@ user/default/workflows/
     labs/      "Labs" - writers' room tools, and opt-in model families you add on purpose
       assist/  prompt-forge, cinema-rack, audio-rack, research-chat, app-forge, beat-sheet
       opt-in/  still-to-video-a14b, longcat-video, still-flux3-fast, still-flux3-quality
+      nvidia/  eighteen NVIDIA lab tier cards - preflight, job or verdict, tier table
   _user/       your graphs (never overwritten; `_rescued/` holds explicit in-place lab Saves, not catalog updates)
 ```
 
@@ -192,6 +194,39 @@ No UNET still. Occupancy **llm** or **none**. Full Apps Lane A Klein stills: [St
 | **[labs/assist/research-chat](generated/workflows/labs/assist/research-chat.md)** | Creative-process chat + web search + research subagents (occupancy **llm**). Handoff Prompt Forge |
 | **[labs/assist/app-forge](generated/workflows/labs/assist/app-forge.md)** | No UNET. Clone a lab graph into live `_user/` (occupancy **llm**). [App Forge](create/app-forge.md) |
 | **[labs/assist/beat-sheet](generated/workflows/labs/assist/beat-sheet.md)** | Script desk. Logline + audio policy + 18 cards. `shot-sheet` writes `films/<slug>/shots.yaml` (occupancy **none**) |
+
+### NVIDIA lab tier (opt-in)
+
+One card per row of the [NVIDIA lab tier](nvidia-lab.md). No UNET and no GPU
+work inside Comfy: each graph prints the row's preflight, its job or verdict
+card, and the whole tier table, and the row's real work runs outside the Comfy
+process through the operator CLI (`bazelisk run //:manage -- nvidia-lab`).
+Occupancy **none** on all eighteen - the CLI holds the one-heavy-job rule, not
+the graph. The status in each line is the catalog's; the licenses, the
+footprint, and the sentence that reopens a blocked row live on
+[NVIDIA lab tier](nvidia-lab.md) and its
+[generated reference](generated/nvidia-lab/tier.md).
+
+| Workflow | What it does |
+| --- | --- |
+| **[labs/nvidia/3dgrut](generated/workflows/labs/nvidia/3dgrut.md)** | 3DGRUT (3DGRT + 3DGUT) (opt-in). Trains and renders ray-traced and unscented-transform Gaussian particle scenes from a capture. |
+| **[labs/nvidia/3dgrut-artifixer-fork](generated/workflows/labs/nvidia/3dgrut-artifixer-fork.md)** | 3DGRUT-ArtiFixer (pinned fork) (opt-in). The ArtiFixer-maintained fork of 3DGRUT that the ArtiFixer app vendors as thirdparty/3DGRUT-ArtiFixer. |
+| **[labs/nvidia/artifixer](generated/workflows/labs/nvidia/artifixer.md)** | ArtiFixer (opt-in). Repairs and extends under-observed regions of a Gaussian-Neural scene with an autoregressive video-diffusion prior. |
+| **[labs/nvidia/asset-harvester](generated/workflows/labs/nvidia/asset-harvester.md)** | Asset Harvester (deferred). Generates simulatable autonomous-vehicle assets for simulation. |
+| **[labs/nvidia/cosmos-drive-dreams](generated/workflows/labs/nvidia/cosmos-drive-dreams.md)** | Cosmos Drive Dreams (blocked-platform). Generates synthetic multi-view autonomous-vehicle video and LiDAR from HD map, bounding box, and LiDAR conditions. |
+| **[labs/nvidia/dlss5-enhancer](generated/workflows/labs/nvidia/dlss5-enhancer.md)** | ComfyUI DLSS 5 Enhancer (blocked-platform). Pushes RGBA frames and estimated motion vectors through the DLSS 5 neural renderer and returns reconstructed frames. |
+| **[labs/nvidia/dvlt](generated/workflows/labs/nvidia/dvlt.md)** | dvlt (Deja View) (blocked-license). Reconstructs multi-view geometry as pointmaps, depth, and camera poses with a looping transformer. |
+| **[labs/nvidia/gamma-world](generated/workflows/labs/nvidia/gamma-world.md)** | Gamma-World (deferred). Rolls out synchronized future observations and actions for several agents in one interactive world model. |
+| **[labs/nvidia/gen3c](generated/workflows/labs/nvidia/gen3c.md)** | GEN3C (opt-in). Generates a world-consistent video from one or more images plus a camera trajectory. |
+| **[labs/nvidia/infinicube](generated/workflows/labs/nvidia/infinicube.md)** | InfiniCube (blocked-license). Generates an unbounded voxel world with video and dynamic Gaussians for driving scenes. |
+| **[labs/nvidia/instant-nurec](generated/workflows/labs/nvidia/instant-nurec.md)** | Instant NuRec (deferred). Reconstructs a simulatable multi-camera driving world in one feed-forward pass, no per-scene training. |
+| **[labs/nvidia/luxdit](generated/workflows/labs/nvidia/luxdit.md)** | LuxDiT (blocked-license). Estimates image-based lighting from a single photo or video with a video diffusion transformer. |
+| **[labs/nvidia/lyra-1](generated/workflows/labs/nvidia/lyra-1.md)** | Project Lyra 1.x (opt-in). Generates a camera-controlled walkthrough video of a 3D-consistent world from one image. |
+| **[labs/nvidia/lyra-2](generated/workflows/labs/nvidia/lyra-2.md)** | Project Lyra 2.0 (blocked-license). Builds an explorable long-horizon 3D-consistent world from one image with a Wan-based video DiT. |
+| **[labs/nvidia/nurec-ga](generated/workflows/labs/nvidia/nurec-ga.md)** | Omniverse NuRec GA (NGC nre-ga) (deferred). Trains and serves Gaussian-Neural 3DGRT and 3DGUT scenes over gRPC and renders novel views from them. |
+| **[labs/nvidia/pixelumm](generated/workflows/labs/nvidia/pixelumm.md)** | PixelUMM (deferred). Encoder-free unified image and video understanding and generation in one model. |
+| **[labs/nvidia/splatpainting](generated/workflows/labs/nvidia/splatpainting.md)** | SplatPainting (blocked-license). Paints and edits a Gaussian Splat scene interactively with a brush. |
+| **[labs/nvidia/vk-gaussian-splatting](generated/workflows/labs/nvidia/vk-gaussian-splatting.md)** | Vulkan Gaussian Splatting viewer (opt-in). Renders Gaussian Splat and 3DGRT particle scenes natively over Vulkan. |
 
 ---
 

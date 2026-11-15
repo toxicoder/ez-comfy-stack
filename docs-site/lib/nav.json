@@ -362,6 +362,10 @@
           {
             "title": "Sharing MODELS_DIR",
             "path": "operate/models-sharing.md"
+          },
+          {
+            "title": "NVIDIA lab tier",
+            "path": "nvidia-lab.md"
           }
         ]
       },
@@ -443,6 +447,10 @@
           {
             "title": "Generated shell reference",
             "path": "generated/shell/reference.md"
+          },
+          {
+            "title": "NVIDIA lab tier reference",
+            "path": "generated/nvidia-lab/tier.md"
           },
           {
             "title": "Occupancy matrix",

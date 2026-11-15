@@ -184,6 +184,16 @@ Columns: model | HF repo | license name | US self-host OK? | monetized YouTube O
 | Qwen3-TTS 0.6B | Qwen/Qwen3-TTS-12Hz-0.6B-Base | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
 | faster-whisper large-v3 | Systran/faster-whisper-large-v3 | MIT | Yes | Yes | none | MIT | No extra ban beyond MIT | No |
 | Silero VAD | snakers4/silero-vad | MIT | Yes | Yes | none | MIT | No extra ban beyond MIT | No |
+| ArtiFixer 1.3B (nvidia-lab tier, opt-in host job) | nvidia/ArtiFixer | NVIDIA Open Model License | Yes | Yes | none | follow card | none stated | No |
+| GEN3C Cosmos 7B (nvidia-lab tier, opt-in host job) | nvidia/GEN3C-Cosmos-7B | NVIDIA Open Model License | Yes | Yes | none | follow card | none stated | No |
+| Lyra 1.x adapters (nvidia-lab tier, opt-in host job) | nvidia/Lyra | NVIDIA Open Model License | Yes | Yes | none | follow card | none stated | No |
+| Lyra 2.0 | nvidia/Lyra-2.0 | NVIDIA Internal Scientific Research and Development Model License | No - bars deployment and production use | No | n/a | n/a | n/a | No |
+| LuxDiT | nvidia/LuxDiT | NVIDIA OneWay Noncommercial (code); card license:other (weights) | No - non-commercial | No | n/a | n/a | n/a | No |
+| InfiniCube | yifanlu/InfiniCube-checkpoints | research and educational only; commercial use prohibited | No | No | n/a | Waymo Open Dataset ToS | n/a | No |
+| dvlt (Deja View) | nvidia/dvlt | NVIDIA non-commercial research and evaluation; VGGT License on derived files | No | No | n/a | n/a | n/a | No |
+| PixelUMM | nvidia/PixelUMM | card license:other, terms not published | Unknown | No | n/a | n/a | n/a | No |
+| NuRec GA container | nvcr.io/nvidia/nre/nurec-ga | NGC container license, text not public | Unknown | No | n/a | n/a | n/a | No |
+| SplatPainting | nv-tlabs/SplatPainting | Apache 2.0 except vendored Inria / MPII deps | No as a build | No | n/a | n/a | n/a | No |
 | F5-TTS official weights | SWivid/F5-TTS | CC-BY-NC-4.0 | No | No | n/a | n/a | n/a | No |
 | Coqui XTTS v2 | coqui/XTTS-v2 | CPML | No | No | n/a | n/a | n/a | No |
 | Echo-TTS | (Echo-TTS card) | CC-BY-NC-SA | No | No | n/a | n/a | n/a | No |
@@ -216,6 +226,17 @@ Compose service, or a promoted graph, and the checkpoint is never pinned beside 
 The engine is Apache-2.0; the checkpoint carries the NVIDIA Open Model License / Qwen Community
 License 1.0 and the card states commercial use is OK - verify there before you monetize. Download
 and memory sizing (both the authors' measurements): [Editing lane](edit-agent.md#memory-math).
+
+NVIDIA lab footnote: the opt-in `nvidia-lab` tier is **evaluated upstream code, not a lab
+model set**. `bazelisk run //:manage -- nvidia-lab list` reads a catalog of 18 NVIDIA and
+NVIDIA-adjacent 3D, world-model, and relighting candidates; `install` is the only verb that
+touches the network, it refuses any row that is not `opt-in`, and it clones into
+`${HOME}/.ez-comfy/nvidia-lab/<id>` on the host. Nothing in the tier enters
+`download-models`, `config/model-manifest.yaml`, `docker/Dockerfile`, a Compose service, or a
+promoted graph, and no tier checkpoint is ever pinned beside Klein / Wan / LTX. Four rows are
+installable under a license that permits product use (ArtiFixer, GEN3C, Lyra 1.x, and the
+Vulkan viewer); the rest are recorded with the gate that refuses them, and that verdict is the
+point of the row. [NVIDIA lab](nvidia-lab.md)
 
 ---
 

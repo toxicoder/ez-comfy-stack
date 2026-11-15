@@ -82,6 +82,7 @@ generate_code_docs() {
   python3 "${REPO_ROOT}/docs/generate_workflow_docs.py"
   python3 "${REPO_ROOT}/docs/generate_cinema_docs.py"
   python3 "${REPO_ROOT}/docs/generate_audio_docs.py"
+  python3 "${REPO_ROOT}/docs/generate_nvidia_lab_docs.py"
 }
 
 #######################################
@@ -115,7 +116,7 @@ docs_generate() {
 docs_generate_one() {
   local name="${1:-}"
   case "${name}" in
-    generate_shell_docs | generate_workflow_docs | generate_cinema_docs | generate_audio_docs) ;;
+    generate_shell_docs | generate_workflow_docs | generate_cinema_docs | generate_audio_docs | generate_nvidia_lab_docs) ;;
     *)
       echo "docs/manage-docs.sh: unknown generator: ${name} (try generate_shell_docs)" >&2
       exit 2
@@ -310,7 +311,7 @@ case "${CMD}" in
     ;;
   -h | --help | help)
     echo "Usage: bazelisk run //docs:docs | //docs:generate | //docs:serve | //docs:status | //docs:clean | //docs:preview"
-    echo "       one generator only: bazelisk run //docs:generate_shell | //docs:generate_workflow | //docs:generate_cinema | //docs:generate_audio"
+    echo "       one generator only: bazelisk run //docs:generate_shell | //docs:generate_workflow | //docs:generate_cinema | //docs:generate_audio | //docs:generate_nvidia_lab"
     echo "       raw: docs/manage-docs.sh build|generate|generate-one|serve|status|clean|preview|typecheck|test"
     ;;
   *)

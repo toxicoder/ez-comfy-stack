@@ -52,6 +52,10 @@ SKIP_SAMPLE_PREFIXES = (
     "labs/opt-in/longcat",
     "labs/assist/cinema-rack",
     "labs/assist/audio-rack",
+    # The NVIDIA lab cards print a preflight, a job or verdict card, and the
+    # tier table. No card on them carries a sample-prompt widget, so a catalog
+    # would be dead weight on all eighteen.
+    "labs/nvidia/",
     "film/tide-table/",
     "film/night-oven/",
     "film/glasshouse/",

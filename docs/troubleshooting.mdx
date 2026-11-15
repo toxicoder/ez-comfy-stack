@@ -22,6 +22,7 @@ tags: [troubleshooting, comfyui, docker]
 - **Dub (clone-translate)** - the rows live on the canvas page
 - **Report buttons (ez_feedback)**, **Outputs sidebar (ez_outputs)**, and **App pickers (ez_image)**
 - **Creator asset apps** - `export-song`, `icon-pack`, `watch-face`, and `tones-pack`: missing ffmpeg, a catalog row over its budget, and a compliance finding
+- **NVIDIA lab (opt-in tier)** - a row that will not install, the GPU busy, a clone target that is not where you looked, and a missing arm64 tag
 - **update-stack (redeploy refusals)** - exit 3 guardrails and exit 5 repo root
 - **Logs** and **Reset Comfy install (keeps models)**
 
@@ -61,7 +62,8 @@ symptoms. Each row names what that page covers, so one hop is enough.
 
 Rows that are not a topic page live here on this page: the Bazel ingress layer, Vlo, the editing
 lane, the Cubic block
-world, the still caption, reference stills, **Goal**, the **Detail** ladder, `update-stack`, the
+world, the still caption, reference stills, **Goal**, the **Detail** ladder, the NVIDIA lab tier,
+`update-stack`, the
 report buttons, the Outputs sidebar, and the App pickers. Each has its own section below.
 
 ---
@@ -378,6 +380,25 @@ in-canvas Queue that needs the GPU while a host desk holds it fails closed on th
 | Queue dies on **Occupancy gate** with `occupancy is blender-desk (Workbench Blender holds the GPU); bazelisk run //:manage -- occupancy enter trellis --yes stops the desk first` | Workbench Blender (or the 35B sidecar on `llm-desk`) is the declared GPU job and this graph is the other heavy one, so the XOR refuses rather than letting both allocate | Run the command the error prints, verbatim - it stops the desk and takes the mode in one step - then Queue again. The command is the documented host form, not a typo: `occupancy` alone is not on your `PATH` |
 | The error names a bare `occupancy enter <mode> --yes` with nothing in front of it | The `ez_dcc` pack in the container predates the wording that prints the full host command | `bazelisk run //:manage -- restart` recopies `custom_nodes/`; hard-refresh the ComfyUI tab. Until then run `bazelisk run //:manage -- occupancy enter <mode> --yes` |
 | You were refused and never opened Blender | The record still names a desk a previous run declared while its sidecar is still up, or another heavy graph is holding the mode. A record whose sidecar died is read as released and never blocks, so a refusal always means a live holder | `bazelisk run //:manage -- occupancy status` prints the mode and the holder pids. Close the holder, take the mode with the printed command, or clear a desk you already shut with `bazelisk run //:manage -- occupancy idle` |
+
+---
+
+## NVIDIA lab (opt-in tier)
+
+The NVIDIA lab tier is a catalog plus a host verb: eighteen evaluated NVIDIA research rows, off by
+default, none of them installed, none of them a Compose service, none of them fetched by
+`download-models`. `install` and `run` ask for **yes**, run the host headroom preflight, and refuse
+while a heavy occupancy mode holds the GPU. Rows, statuses, footprints, and reopen sentences:
+[NVIDIA lab](nvidia-lab.md).
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| `bazelisk run //:manage -- nvidia-lab install <id>` refuses with `refusing to install: status is blocked-license` (or `blocked-platform`, `deferred`) and `row <id> is <status> - the tier keeps it as a card, not an install path` | Only a row whose status is `opt-in` has an install path. A refused row keeps its catalog row so the verdict and the evidence stay readable, and it carries `gate_notes` plus a `reopen` sentence instead of an artifact. The graph's job node refuses on the same rule | Read the two lines the refusal prints: `gate_notes:` is the blocking fact and `reopen:` is what would clear it, then the whole row on [NVIDIA lab](nvidia-lab.md). The wall is upstream's to lift - a weight term or a missing `linux_aarch64` artifact - so do not edit `custom_nodes/ez_nvidia_lab/catalog.json` to make an install pass. `bazelisk test //tests:bats_nvidia_lab_test` is what keeps a status honest |
+| `install` or `run` stops with `occupancy is wan - one heavy GPU job at a time; finish it before nvidia-lab install <id>`, or `occupancy is <mode> with a live sidecar - unified memory is busy before ...` | This tier's GPU work runs on the same GB10 but outside the Comfy process, so the one-heavy-job XOR gates it: a heavy mode blocks outright and a desk mode blocks while its sidecar lives. The headroom preflight runs first and can refuse on its own with `host headroom preflight failed` | Run the command the refusal prints, verbatim - `bazelisk run //:manage -- occupancy enter idle --yes` - then the verb again. Confirm who holds it with `bazelisk run //:manage -- occupancy status`. Nothing in the tier overrides either gate; see [GPU occupancy](occupancy.md) and [NVIDIA lab](nvidia-lab.md) |
+| A lab checkout turned up under `workflows/` or `custom_nodes/`, or `uninstall` refuses with `refusing to remove <path>: it is not the lab-home checkout of <id>` | A `git-clone` row always clones into `${EZ_NVIDIA_LAB_HOME:-$HOME/.ez-comfy/nvidia-lab}/<id>`: the verb takes no path argument and never targets the repo or a Comfy bind, and `uninstall` deletes only that exact directory so a mistyped `EZ_NVIDIA_LAB_HOME` cannot remove a mounted tree. Those two directories are what compose mounts, so a checkout inside one came from a hand-run `git clone`, not from this CLI | Read the `target:` line before you install: `bazelisk run //:manage -- nvidia-lab plan <id>`. Move the stray checkout out of the bind by hand, leave `EZ_NVIDIA_LAB_HOME` at its default, then `bazelisk run //:manage -- nvidia-lab uninstall <id>` for the checkout the verb does own. `bazelisk run //:manage -- restart` recopies `custom_nodes/` so the container has the shipped pack again |
+| A lab graph reports the tool is not there: `install docker-pull: docker not on PATH`, `install git-clone: git not on PATH`, `cannot start <cli>`, or a job row ending `exited <code>` | The four nodes read the catalog, preflight the host, and shell out to the operator CLI. They install nothing and spawn nothing of their own, so a row you never installed has no artifact on this host - the tier installs nothing by default. `docker` is what a `docker-pull` row needs, `git` what a `git-clone` row needs | `bazelisk run //:manage -- nvidia-lab status <id>`, then `plan <id>` to see the artifact and the target, then `install <id>`. Expect `run` to print its command without executing it: the tier is unverified on GB10, so it runs only with `EZ_NVIDIA_LAB_EXECUTE=1`. Rows and verbs: [NVIDIA lab](nvidia-lab.md) |
+| A `docker-pull` row fails at `docker pull` with `no matching manifest for linux/arm64/v8` | That row's `arm64` value is not `published`. `absent` means the vendor ships x86_64 only, `partial` means an arm64 tag exists only as a non-gating build. The tier reports the value; it does not proxy the registry, so the mismatch surfaces at the pull | Read the row's `arm64` and `gb10` on the [generated tier reference](generated/nvidia-lab/tier.md) before you install, and `bazelisk run //:manage -- nvidia-lab plan <id>` for the artifact, the target, and the footprint. Only a `published` row pulls on this box, and an x86_64 ref does not belong in the catalog to make an install go through |
+| `nvcr.io/nvidia/nre/nurec-ga:<release>-arm64` (or the `-multiarch` tag) answers `manifest unknown` for the release you want | NVIDIA builds the `-arm64` and `-multiarch` tags for nurec-ga as non-gating nightly or on-demand jobs, so a release branch may have none, and states that general Linux aarch64 is not a supported user platform. Container scanning covers x86_64 only, and neither the container license text nor the NGC entitlement question is answered in public - which is why the tier parks `nurec-ga` as deferred | Don't chase the tag. `bazelisk run //:manage -- nvidia-lab plan nurec-ga` prints the status, the gate notes, and the sentence that reopens the row, and the row's `sources` list names the release notes that say which tags exist. Until a gated `-arm64` tag lands on a release-branch build, the `3dgrut` row is the splat path here. See [NVIDIA lab](nvidia-lab.md) |
 
 ---
 

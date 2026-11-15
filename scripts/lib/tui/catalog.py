@@ -140,6 +140,15 @@ _PLAN_ONLY: tuple[Guard, ...] = (Guard.DISK_PLAN_ONLY,)
 _APPLY_SAFE: tuple[Guard, ...] = (Guard.NO_HF_DOWNLOAD,)
 """Guards for a delete or apply under ``MODELS_DIR``."""
 
+_LAB_HEAVY: tuple[Guard, ...] = (Guard.HEADROOM_OK, Guard.OCCUPANCY_IDLE)
+"""Guards for an NVIDIA lab row that puts work on the one GB10.
+
+Mirrors the two preflights the operator CLI itself runs before it fetches or
+executes a tier row: the host headroom floor, and the refusal while occupancy
+holds a heavy GPU mode. The console is stricter than the shell on occupancy,
+because a mode it cannot read blocks rather than guesses.
+"""
+
 
 def _flag(
     name: str,
@@ -1217,6 +1226,109 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         ("status",),
         params=(_flag("as_json", "JSON", "--json", help_text=_JSON_HELP),),
         keywords=("pack", "ready", "dreamx"),
+    ),
+    # ------------------------------------------------------------------
+    # NVIDIA lab: the opt-in tier catalog, and the rows an operator chose.
+    # ------------------------------------------------------------------
+    _verb(
+        "models.nvidia_lab_list",
+        "List the NVIDIA lab rows",
+        Group.MODELS,
+        "Print every evaluated NVIDIA lab row with its status and licenses. "
+        "Reads the catalog only; installs nothing and pulls nothing.",
+        "nvidia-lab",
+        ("list",),
+        keywords=("nvidia", "lab", "tier", "opt-in", "catalog", "splat"),
+    ),
+    _verb(
+        "models.nvidia_lab_check",
+        "Check the NVIDIA lab catalog",
+        Group.MODELS,
+        "Validate the tier catalog through its reader and print the verdict. "
+        "A row outside the declared values is reported, not silently dropped.",
+        "nvidia-lab",
+        ("check",),
+        keywords=("nvidia", "lab", "catalog", "schema", "validate"),
+    ),
+    _verb(
+        "models.nvidia_lab_status",
+        "Show one NVIDIA lab row",
+        Group.MODELS,
+        "Print the catalog status of one tier row by id.",
+        "nvidia-lab",
+        ("status",),
+        params=(_pos("tool_id", "Row id", help_text="the catalog row id"),),
+        keywords=("nvidia", "lab", "tier", "status", "row"),
+    ),
+    _verb(
+        "models.nvidia_lab_plan",
+        "Plan an NVIDIA lab row fetch",
+        Group.MODELS,
+        "Print what install would place on the host for one row: the ref or "
+        "clone target, and the VRAM and disk envelope. Fetches nothing.",
+        "nvidia-lab",
+        ("plan",),
+        params=(_pos("tool_id", "Row id", help_text="the catalog row id"),),
+        keywords=("nvidia", "lab", "tier", "plan", "fetch", "dry run"),
+    ),
+    _verb(
+        "models.nvidia_lab_install",
+        "Install an NVIDIA lab row",
+        Group.MODELS,
+        "Pull or clone one opt-in row into the lab home under the typed "
+        "confirmation. A row that is not opt-in refuses with its gate notes, "
+        "and artifacts never land in the repo or a Comfy bind.",
+        "nvidia-lab",
+        ("install",),
+        params=(_pos("tool_id", "Row id", help_text="the catalog row id"),),
+        tier=RiskTier.HEAVY,
+        confirm=ConfirmKind.YES,
+        guards=_LAB_HEAVY,
+        keywords=("nvidia", "lab", "tier", "install", "clone", "docker pull"),
+    ),
+    _verb(
+        "models.nvidia_lab_run",
+        "Run an NVIDIA lab row",
+        Group.MODELS,
+        "Run one opt-in row's own command on the host against an input file, "
+        "under the typed confirmation. The tier is unverified on GB10, so the "
+        "CLI prints the command and executes it only when the host exports its "
+        "execute opt-in; from the console this reports what would run.",
+        "nvidia-lab",
+        ("run",),
+        params=(
+            _pos("tool_id", "Row id", help_text="the catalog row id"),
+            _text(
+                "input_path",
+                "Input path",
+                "--input",
+                help_text="host file the row reads",
+            ),
+            _text(
+                "params_json",
+                "Parameters JSON",
+                "--params",
+                required=False,
+                help_text="one-line JSON of row parameters",
+            ),
+        ),
+        tier=RiskTier.HEAVY,
+        confirm=ConfirmKind.YES,
+        guards=_LAB_HEAVY,
+        keywords=("nvidia", "lab", "tier", "run", "execute", "gb10", "unverified"),
+    ),
+    _verb(
+        "models.nvidia_lab_uninstall",
+        "Remove an NVIDIA lab checkout",
+        Group.MODELS,
+        "Delete one opt-in row's checkout under the lab home. Install puts it "
+        "back. A pulled image is shared on the host, so the CLI refuses to "
+        "remove it and says so.",
+        "nvidia-lab",
+        ("uninstall",),
+        params=(_pos("tool_id", "Row id", help_text="the catalog row id"),),
+        tier=RiskTier.WRITE,
+        keywords=("nvidia", "lab", "tier", "uninstall", "remove", "checkout"),
     ),
     # ------------------------------------------------------------------
     # Sidecars: host LLM, agent, Blender, and the in-tree MCP servers.
