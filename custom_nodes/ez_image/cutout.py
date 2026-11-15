@@ -25,7 +25,15 @@ from .person_mask import dilate_mask, feather_mask
 if TYPE_CHECKING:
     from types import ModuleType
 
-    from ez_common import ComfyInputTypes, ImageTensor, Json, JsonList, NodeRegistry, Tensor
+    from ez_common import (
+        ComfyInputTypes,
+        ImageTensor,
+        Json,
+        JsonList,
+        MaskTensor,
+        NodeRegistry,
+        Tensor,
+    )
     from ez_image.cubic import Bhwc, PixelTree
 
 CATEGORY = "ez-comfy/image"
@@ -615,10 +623,10 @@ def _matte_image(mask: MaskGrid) -> Frame:
 
 
 def _save_mask(mask: MaskGrid, backdrop: str) -> MaskGrid:
-    """Return the alpha ``SaveImage`` should write for ``backdrop``.
+    """Return the alpha the graph should key ``backdrop`` against.
 
-    A painted backdrop is already opaque, so saving the real alpha would key it
-    straight back out; only a transparent backdrop keeps the matte.
+    A painted backdrop is already opaque, so handing on the real alpha would
+    key it straight back out; only a transparent backdrop keeps the matte.
 
     Args:
         mask: HW alpha in 0..1.
@@ -631,6 +639,33 @@ def _save_mask(mask: MaskGrid, backdrop: str) -> MaskGrid:
     if backdrop == BACKDROP_TRANSPARENT:
         return mask
     return [[1.0] * len(row) for row in mask]
+
+
+def write_mask(mask: MaskGrid, like: CutoutImage) -> MaskTensor | MaskGrid:
+    """Return ``mask`` as an HW float tensor when ``like`` is a tensor.
+
+    Stock ``InvertMask`` does ``1.0 - mask`` and ``JoinImageWithAlpha`` calls
+    ``alpha.to(image)``, so the nested lists this module works in would raise
+    at Queue. ComfyUI hands no MASK through any coercion at the pinned tag, so
+    the node converts here the way :func:`ez_image.cubic.write_bhwc` does for
+    IMAGE.
+
+    Args:
+        mask: HW alpha in 0..1.
+        like: The IMAGE the node was handed; supplies the device.
+
+    Returns:
+        Torch float32 tensor when torch and a device are present, otherwise the
+        lists unchanged, which is what the hermetic tests read.
+    """
+    try:
+        import torch
+    except Exception:  # noqa: BLE001 - hermetic tests / missing torch
+        return mask
+    device = getattr(like, "device", None)
+    if device is None:
+        return mask
+    return torch.tensor(mask, dtype=torch.float32, device=device)
 
 
 def remove_background(
@@ -720,7 +755,7 @@ def _subject_ratio(mask: MaskGrid) -> float:
 
 
 class EZCutout:
-    """Remove a photo background so one subject can become a 3D model."""
+    """Remove a photo background so one subject can be reused or meshed."""
 
     @classmethod
     def INPUT_TYPES(cls) -> ComfyInputTypes:
@@ -747,14 +782,15 @@ class EZCutout:
     CATEGORY = CATEGORY
     OUTPUT_NODE = False
     DESCRIPTION = (
-        "photos/cutout. BiRefNet matte for image-to-3D input prep: keeps one "
-        "character or object and drops the room behind it. Outputs the cut "
-        "still, a grey matte for SaveImage, the raw MASK, and the MASK "
-        "SaveImage should key the still against (the real matte only for the "
-        "transparent backdrop, opaque otherwise). Backdrop: white, black, "
-        "grey, green, blue, transparent, or keep original. Fail-soft: missing "
-        "weights, missing timm/kornia/einops/transformers, or EZ_CUTOUT=0 "
-        "pass the input through unchanged."
+        "photos/cutout and photos/background-removal. BiRefNet matte that keeps "
+        "one character or object and drops the room behind it. Outputs the cut "
+        "still, a grey matte for SaveImage, the raw MASK, and save_mask - the "
+        "MASK to feed InvertMask ahead of JoinImageWithAlpha (the real matte "
+        "only for a transparent backdrop, opaque otherwise, so a painted colour "
+        "stays opaque). Backdrop: white, black, grey, green, blue, transparent, "
+        "or keep original. Fail-soft: missing weights, missing "
+        "timm/kornia/einops/transformers, or EZ_CUTOUT=0 pass the input through "
+        "unchanged."
     )
 
     def run(
@@ -777,9 +813,10 @@ class EZCutout:
             ``(image, matte, mask, save_mask)``.
         """
         cut, matte, mask, status = remove_background(image, backdrop, dilate, feather)
+        alpha = _save_mask(mask, backdrop)
         return {
             "ui": {"text": (status,)},
-            "result": (cut, matte, mask, _save_mask(mask, backdrop)),
+            "result": (cut, matte, write_mask(mask, image), write_mask(alpha, image)),
         }
 
 

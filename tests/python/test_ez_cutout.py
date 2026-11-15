@@ -630,9 +630,11 @@ class _FakeTorch:
     def __init__(self) -> None:
         self.no_grad_calls = 0
 
-    def tensor(self, data: object, dtype: object = None) -> "_FakeTensor":
+    def tensor(
+        self, data: object, dtype: object = None, device: object = None
+    ) -> "_FakeTensor":
         """Wrap a list as a fake tensor."""
-        return _FakeTensor(data, dtype)
+        return _FakeTensor(data, dtype, device)
 
     class _NoGrad:
         def __enter__(self) -> None:
@@ -650,15 +652,28 @@ class _FakeTorch:
 class _FakeTensor:
     """Fake tensor with a ``to``."""
 
-    def __init__(self, data: object, dtype: object) -> None:
+    def __init__(self, data: object, dtype: object, device: object = None) -> None:
         self.data = data
         self.dtype = dtype
+        self.device = device
         self.on_device = False
 
     def to(self, _device: object) -> "_FakeTensor":
         """Mark it as moved."""
         self.on_device = True
         return self
+
+
+class _DeviceImage:
+    """Stand-in for the Comfy IMAGE tensor a Queue hands the node."""
+
+    def __init__(self) -> None:
+        """Carry the device the matte should land on, plus readable pixels."""
+        self.device = "cuda"
+
+    def tolist(self) -> list[list[list[list[float]]]]:
+        """Return one small BHWC batch."""
+        return _image()
 
 
 class _FakeModel:
@@ -812,6 +827,49 @@ def test_save_mask_hands_the_real_matte_to_the_transparent_backdrop() -> None:
 def test_save_mask_of_an_empty_alpha_stays_empty() -> None:
     """The zero-pixel path keeps both MASK sockets the same shape."""
     assert cutout._save_mask([], cutout.BACKDROP_WHITE) == []
+
+
+def test_write_mask_moves_the_alpha_onto_the_image_device(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A tensor image gets a tensor matte, which is what the stock nodes need."""
+    monkeypatch.setitem(sys.modules, "torch", _FakeTorch())
+    out = cutout.write_mask([[0.0, 1.0]], _DeviceImage())
+    assert isinstance(out, _FakeTensor)
+    assert out.data == [[0.0, 1.0]]
+    assert out.dtype == "float32"
+
+
+def test_write_mask_keeps_lists_when_the_source_has_no_device(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The hermetic path hands plain lists and stays plain lists."""
+    monkeypatch.setitem(sys.modules, "torch", _FakeTorch())
+    grid = [[0.0, 1.0]]
+    assert cutout.write_mask(grid, grid) is grid
+
+
+def test_write_mask_keeps_lists_without_torch(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A host without torch still gets the lists rather than a crash."""
+    monkeypatch.setitem(sys.modules, "torch", None)
+    grid = [[0.0, 1.0]]
+    assert cutout.write_mask(grid, _DeviceImage()) is grid
+
+
+def test_run_hands_both_mask_sockets_to_the_stock_nodes_as_tensors(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """``InvertMask`` subtracts and ``JoinImageWithAlpha`` calls ``.to()``.
+
+    Either one raises on a nested list, and ComfyUI coerces nothing at the
+    pinned tag, so both MASK sockets must leave as tensors.
+    """
+    monkeypatch.setitem(sys.modules, "torch", _FakeTorch())
+    out = cutout.EZCutout().run(_DeviceImage())
+    for socket in out["result"][2:]:
+        assert isinstance(socket, _FakeTensor)
 
 
 def test_remove_background_passes_through_when_off(
