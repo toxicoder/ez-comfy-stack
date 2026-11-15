@@ -1,4 +1,4 @@
-"""photos-lane image-prep Apps: the cutout and the four-view plate.
+"""photos-lane image-prep Apps: the cutout, the extractor, and the view plate.
 
 Hermetic: stdlib + the repo's own ``_lab_paths`` helpers over the shipped
 graphs in ``workflows/_lab/photos``. Asserts the Studio App stamp, the exact
@@ -13,6 +13,7 @@ no ComfyUI import.
 from __future__ import annotations
 
 import json
+from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
@@ -22,15 +23,17 @@ from _build_image_prep import BACKDROP, BUILDERS, DILATE, FEATHER, NEGATIVE
 from _lab_families import graph_stacks, stack_violations
 from _lab_layout import ensure_node_spacing, finalize_layout
 from _lab_paths import LAB_ROOT, apply_lab_identity, load_lab_graph
-from _wire_upscale import UPSCALE_COMBO_TYPE
+from _wire_upscale import UPSCALE_COMBO_TYPE, wire_upscale
 
 ROOT = Path(__file__).resolve().parents[2]
 
 CUTOUT_REL = "photos/cutout"
+BG_REL = "photos/background-removal"
 MULTI_VIEW_REL = "photos/multi-view"
-APPS = (CUTOUT_REL, MULTI_VIEW_REL)
+APPS = (CUTOUT_REL, BG_REL, MULTI_VIEW_REL)
 VIEWS = ("FRONT", "SIDE", "BACK", "TOP-DOWN")
 VIEW_PREFIXES = ("ez_multiview_front", "ez_multiview_side", "ez_multiview_back", "ez_multiview_topdown")
+BG_PREFIXES = ("ez_bgremove", "ez_bgremove_matte")
 
 # The Klein still stack the photos lane pins, read out of photos/identity-sheet.
 KLEIN_UNET = "flux-2-klein-4b-fp8.safetensors"
@@ -315,6 +318,154 @@ def test_every_save_runs_through_upscale(rel: str) -> None:
             continue
         slot = next(item for item in node["inputs"] if item["name"] == "upscale")
         assert int(slot["link"]) in rung_rows
+
+
+def test_background_removal_occupancy_and_handoff() -> None:
+    """The extractor is a CPU pre-pass that hands the subject to the still Apps."""
+    mode = _load(BG_REL)["extra"]["lab_app_mode"]
+    assert mode["occupancy"] == "none"
+    assert mode["handoff"] == ["photos/thumbnail", "photos/banner-wide"]
+
+
+def test_background_removal_carries_no_model_stack() -> None:
+    """EZCutout owns its weight, so the extractor stays a one-stack App."""
+    graph = _load(BG_REL)
+    types = {node.get("type") for node in graph["nodes"]}
+    assert "EZCutout" in types
+    assert not types & LOADER_TYPES, sorted(types & LOADER_TYPES)
+    assert graph_stacks(graph) == set()
+    assert stack_violations(graph) == []
+
+
+def test_background_removal_socket_set_matches_the_node_contract() -> None:
+    """The cutter is coded against the four sockets EZCutout now returns."""
+    node = _titled(_load(BG_REL), "EZCutout", "Subject cutter")
+    assert [slot["name"] for slot in node["inputs"]] == ["image", "backdrop", "dilate", "feather"]
+    assert [slot["type"] for slot in node["inputs"]] == ["IMAGE", "COMBO", "INT", "INT"]
+    assert [slot["name"] for slot in node["outputs"]] == ["image", "matte", "mask", "save_mask"]
+    assert [slot["type"] for slot in node["outputs"]] == ["IMAGE", "IMAGE", "MASK", "MASK"]
+    assert node["widgets_values"] == [BACKDROP, DILATE, FEATHER]
+
+
+def test_background_removal_prints_a_still_and_a_matte() -> None:
+    """The subject still and the matte that produced it are both printed."""
+    graph = _load(BG_REL)
+    cutter = _titled(graph, "EZCutout", "Subject cutter")
+    load = _src(graph, cutter, "image")
+    assert load["type"] == "LoadImage"
+    assert load["widgets_values"][0] == "example.png"
+    savers = _savers(graph)
+    assert [node["widgets_values"][0] for node in savers] == list(BG_PREFIXES)
+    for node in savers:
+        rung = _src(graph, node, "images")
+        assert rung["type"] == "EZImageUpscale"
+    assert _src(graph, _src(graph, savers[0], "images"), "image")["type"] == (
+        "JoinImageWithAlpha"
+    )
+    assert _src(graph, _src(graph, savers[1], "images"), "image") is cutter
+
+
+def test_background_removal_joins_the_alpha_with_the_stock_pair() -> None:
+    """``SaveImage`` has no mask input at the pinned tag, so stock nodes write RGBA.
+
+    ``JoinImageWithAlpha`` subtracts what it is handed from 1, so the matte is
+    inverted on the way in and ``save_mask`` keeps its plain "1 = subject"
+    meaning. The join precedes the rung so the fourth channel scales with the
+    still instead of drifting off it.
+    """
+    graph = _load(BG_REL)
+    cutter = _titled(graph, "EZCutout", "Subject cutter")
+    invert = _titled(graph, "InvertMask", "Invert matte")
+    join = _titled(graph, "JoinImageWithAlpha", "Join alpha")
+    still = _titled(graph, "SaveImage", "Save still")
+    matte = _titled(graph, "SaveImage", "Save matte")
+    assert [slot["name"] for slot in join["inputs"]] == ["image", "alpha"]
+    assert _src(graph, invert, "mask") is cutter
+    assert _src(graph, join, "alpha") is invert
+    assert _src(graph, join, "image") is cutter
+    assert _src(graph, _src(graph, still, "images"), "image") is join
+    assert not cutter["outputs"][2]["links"], "the raw mask has no consumer here"
+    mask_rows = [row for row in graph["links"] if row[5] == "MASK"]
+    assert [(row[1], row[2], row[3], row[4]) for row in mask_rows] == [
+        (cutter["id"], 3, invert["id"], 0),
+        (invert["id"], 0, join["id"], 1),
+    ], mask_rows
+    for rung in [node for node in graph["nodes"] if node.get("type") == "EZImageUpscale"]:
+        assert not [slot for slot in rung["inputs"] if str(slot.get("type")) == "MASK"]
+    matte_rung = _src(graph, matte, "images")
+    matte_rows = [
+        row for row in graph["links"] if row[1] == cutter["id"] and row[3] == matte_rung["id"]
+    ]
+    assert [(row[2], row[5]) for row in matte_rows] == [(1, "IMAGE")]
+
+
+def test_background_removal_shares_one_rung_between_both_prints() -> None:
+    """One App dropdown scales the still and the matte together."""
+    graph = _load(BG_REL)
+    rungs = [node for node in graph["nodes"] if node.get("type") == "EZImageUpscale"]
+    assert [node["title"] for node in rungs] == ["Scale still", "Scale matte"]
+    free = [
+        node
+        for node in rungs
+        if not any(
+            slot.get("name") == "upscale" and slot.get("link") is not None
+            for slot in node.get("inputs") or []
+        )
+    ]
+    assert len(free) == 1
+    assert free[0]["widgets_values"] == ["none"]
+    rows = _load(BG_REL)["extra"]["linearData"]["inputs"]
+    assert [entry[0] for entry in rows if entry[1] == "upscale"] == [int(free[0]["id"])]
+
+
+def test_background_removal_saves_stay_wired_as_the_builder_left_them() -> None:
+    """The builder pre-wires both saves, so the upscale pass must not fire.
+
+    ``wire_upscale`` inserts a rung for any photos save that does not arrive
+    through one; a True here means the authored graph and the shipped one
+    disagree.
+    """
+    graph = _load(BG_REL)
+    for node in _savers(graph):
+        assert _src(graph, node, "images")["type"] == "EZImageUpscale"
+    assert wire_upscale(deepcopy(graph), BG_REL) is False
+
+
+def test_background_removal_app_row_leads_with_the_photo() -> None:
+    """The sidebar asks for the still, then the backdrop and edge knobs, then Detail."""
+    extra = _load(BG_REL)["extra"]
+    assert [entry[1] for entry in extra["linearData"]["inputs"]] == [
+        "image",
+        "backdrop",
+        "dilate",
+        "feather",
+        "upscale",
+    ]
+    by_id = _by_id(_load(BG_REL))
+    assert [by_id[int(node_id)]["title"] for node_id in extra["linearData"]["outputs"]] == [
+        "Save still",
+        "Save matte",
+    ]
+
+
+def test_background_removal_note_sells_the_extractor_not_the_3d_prep() -> None:
+    """The note answers how this differs from the cutout and what each file holds."""
+    note = _load(BG_REL)["extra"]["lab_note"].casefold()
+    assert "photos/cutout" in note
+    assert "image-to-3d" in note
+    assert "character or object" in note
+    assert "ez_bgremove_matte" in note
+    assert "birefnet" in note
+    assert "fails soft" in note
+    assert "welded to a living room" not in note, "cutout boilerplate"
+    for needle in ("timm", "kornia", "einops", "transformers", "ez_cutout=0"):
+        assert needle in note, needle
+    assert "real alpha" in note
+    assert "painted backdrop" in note
+    assert "one subject per queue" in note
+    assert "photos/thumbnail" in note
+    assert "photos/banner-wide" in note
+    assert "occupancy: none" in note
 
 
 def test_multi_view_occupancy_and_handoff() -> None:

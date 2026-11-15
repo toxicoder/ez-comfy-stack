@@ -41,9 +41,14 @@ passes the photo through untouched and says so on the node. Queue writes
 can be repainted by hand and fed back in. The node's MASK slot is there when you want to
 send the raw alpha somewhere else.
 
-Backdrop is white, black, or keep original. Dilate grows the keep edge outward and
-feather softens it; the node clamps both to 0-32. This graph ships dilate 6 and feather
-4 so hair, fur, and fur trim survive the cut - drop toward 2 for a hard-edged product.
+Backdrop is white, black, grey, green, blue, transparent, or keep original. The first
+five paint a colour into the pixels the subject leaves and keep original changes only
+the matte. transparent asks for the alpha path instead of a colour, and this graph has
+no alpha node to consume it, so its print stays the untouched photo - a subject you want
+to reuse with real emptiness behind it belongs on `photos/background-removal`. A plate
+going to the mesh printer wants a painted colour. Dilate grows the keep edge outward and feather softens it;
+the node clamps both to 0-32. This graph ships dilate 6 and feather 4 so hair, fur, and
+fur trim survive the cut - drop toward 2 for a hard-edged product.
 
 There is no UNETLoader, CLIPLoader, or VAELoader in this graph on purpose. The node owns
 its own weight, this is a light pre-pass, and a loader here would make it a two-stack
@@ -136,9 +141,14 @@ passes the photo through untouched and says so on the node. Queue writes
 can be repainted by hand and fed back in. The node's MASK slot is there when you want to
 send the raw alpha somewhere else.
 
-Backdrop is white, black, or keep original. Dilate grows the keep edge outward and
-feather softens it; the node clamps both to 0-32. This graph ships dilate 6 and feather
-4 so hair, fur, and fur trim survive the cut - drop toward 2 for a hard-edged product.
+Backdrop is white, black, grey, green, blue, transparent, or keep original. The first
+five paint a colour into the pixels the subject leaves and keep original changes only
+the matte. transparent asks for the alpha path instead of a colour, and this graph has
+no alpha node to consume it, so its print stays the untouched photo - a subject you want
+to reuse with real emptiness behind it belongs on `photos/background-removal`. A plate
+going to the mesh printer wants a painted colour. Dilate grows the keep edge outward and feather softens it;
+the node clamps both to 0-32. This graph ships dilate 6 and feather 4 so hair, fur, and
+fur trim survive the cut - drop toward 2 for a hard-edged product.
 
 There is no UNETLoader, CLIPLoader, or VAELoader in this graph on purpose. The node owns
 its own weight, this is a light pre-pass, and a loader here would make it a two-stack
@@ -188,18 +198,19 @@ Upload widget type.
 
 ### `EZCutout` - Cutout (BiRefNet)
 
-Matte a photo so one character or object can be turned into a 3D model.
+Matte a photo so one character or object can be reused: painted onto a backdrop, or lifted out with real alpha.
 
 !!! warning "Lab notes"
 
-    photos/cutout, ahead of any 3d App. A busy room behind the product teaches the TRELLIS.2 structure stage that the room is part of the object. Fail-soft: no weights, no timm/kornia/einops/transformers, or EZ_CUTOUT=0 passes the input through unchanged with a status line.
+    photos/cutout, ahead of any 3d App, and photos/background-removal, which is the extract-into-an-asset graph. A busy room behind the product teaches the TRELLIS.2 structure stage that the room is part of the object. transparent is the only backdrop that writes genuine emptiness; every painted backdrop keeps save_mask opaque so the plate cannot key itself back out. Fail-soft: no weights, no timm/kornia/einops/transformers, or EZ_CUTOUT=0 passes the input through unchanged with a status line.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `image` | in | `IMAGE` | Photo to matte - the original, not a crop. |
 | `image` | out | `IMAGE` | Subject on the chosen backdrop, ready for LoadImage in a 3d App. |
 | `matte` | out | `IMAGE` | Grey alpha copy so SaveImage can write the matte. |
-| `mask` | out | `MASK` | Subject mask for anything that composites. |
+| `mask` | out | `MASK` | Raw grown subject mask for anything that composites. |
+| `save_mask` | out | `MASK` | Alpha to feed InvertMask ahead of JoinImageWithAlpha: the real matte under transparent, an opaque grid under any painte... |
 
 #### `backdrop`
 
@@ -207,7 +218,7 @@ Type `COMBO`.
 
 What fills the pixels the subject leaves.
 
-**How it affects generation:** white is the lab default: a clean plate reads as one object. keep original changes nothing but the matte and mask.
+**How it affects generation:** white is the lab default: a clean plate reads as one object. grey is a neutral plate. green (#00B140) and blue (#0047BB) are chroma keys a compositor downstream pulls. transparent leaves the pixels alone so the joined alpha carries the emptiness - the only pick that writes real transparency, and only in a graph that wires save_mask through InvertMask and JoinImageWithAlpha. keep original changes nothing but the matte and mask. An unrecognised name blends as white.
 
 **This graph:** `white`
 
@@ -217,6 +228,10 @@ What fills the pixels the subject leaves.
 | --- | --- |
 | `white` | Paint the vacated pixels white. |
 | `black` | Paint them black. |
+| `grey` | Paint them mid grey. |
+| `green` | Chroma green #00B140. |
+| `blue` | Chroma blue #0047BB. |
+| `transparent` | Keep the pixels; the alpha carries the emptiness. |
 | `keep original` | Keep every pixel; only matte and mask change. |
 
 #### `dilate`

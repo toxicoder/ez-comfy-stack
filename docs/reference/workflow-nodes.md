@@ -1099,18 +1099,19 @@ No widgets. Sockets only.
 
 ### `EZCutout` - Cutout (BiRefNet)
 
-Matte a photo so one character or object can be turned into a 3D model.
+Matte a photo so one character or object can be reused: painted onto a backdrop, or lifted out with real alpha.
 
 !!! warning "Lab notes"
 
-    photos/cutout, ahead of any 3d App. A busy room behind the product teaches the TRELLIS.2 structure stage that the room is part of the object. Fail-soft: no weights, no timm/kornia/einops/transformers, or EZ_CUTOUT=0 passes the input through unchanged with a status line.
+    photos/cutout, ahead of any 3d App, and photos/background-removal, which is the extract-into-an-asset graph. A busy room behind the product teaches the TRELLIS.2 structure stage that the room is part of the object. transparent is the only backdrop that writes genuine emptiness; every painted backdrop keeps save_mask opaque so the plate cannot key itself back out. Fail-soft: no weights, no timm/kornia/einops/transformers, or EZ_CUTOUT=0 passes the input through unchanged with a status line.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `image` | in | `IMAGE` | Photo to matte - the original, not a crop. |
 | `image` | out | `IMAGE` | Subject on the chosen backdrop, ready for LoadImage in a 3d App. |
 | `matte` | out | `IMAGE` | Grey alpha copy so SaveImage can write the matte. |
-| `mask` | out | `MASK` | Subject mask for anything that composites. |
+| `mask` | out | `MASK` | Raw grown subject mask for anything that composites. |
+| `save_mask` | out | `MASK` | Alpha to feed InvertMask ahead of JoinImageWithAlpha: the real matte under transparent, an opaque grid under any painte... |
 
 #### `backdrop`
 
@@ -1118,7 +1119,7 @@ Type `COMBO`.
 
 What fills the pixels the subject leaves.
 
-**How it affects generation:** white is the lab default: a clean plate reads as one object. keep original changes nothing but the matte and mask.
+**How it affects generation:** white is the lab default: a clean plate reads as one object. grey is a neutral plate. green (#00B140) and blue (#0047BB) are chroma keys a compositor downstream pulls. transparent leaves the pixels alone so the joined alpha carries the emptiness - the only pick that writes real transparency, and only in a graph that wires save_mask through InvertMask and JoinImageWithAlpha. keep original changes nothing but the matte and mask. An unrecognised name blends as white.
 
 **Other choices**
 
@@ -1126,6 +1127,10 @@ What fills the pixels the subject leaves.
 | --- | --- |
 | `white` | Paint the vacated pixels white. |
 | `black` | Paint them black. |
+| `grey` | Paint them mid grey. |
+| `green` | Chroma green #00B140. |
+| `blue` | Chroma blue #0047BB. |
+| `transparent` | Keep the pixels; the alpha carries the emptiness. |
 | `keep original` | Keep every pixel; only matte and mask change. |
 
 #### `dilate`
@@ -5449,6 +5454,37 @@ Crop mode.
 | --- | --- |
 | `center` | Center crop after resize. Lab plates. |
 | `disabled` | No crop. May letterbox or stretch depending on the node. |
+
+### `InvertMask` - Invert Mask
+
+Flip a MASK: out = 1.0 - mask. No widgets.
+
+!!! warning "Lab notes"
+
+    photos/background-removal puts it between EZCutout.save_mask and JoinImageWithAlpha, which keys on the inverse of what you hand it. Keeping the flip in a node named Invert is deliberate - the polarity quirk stays visible on the canvas instead of hiding inside the first-party cut.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `mask` | in | `MASK` | MASK to flip - 1 means keep. |
+| `MASK` | out | `MASK` | 1.0 - mask at the same HxW. |
+
+No widgets. Sockets only.
+
+### `JoinImageWithAlpha` - Join Image with Alpha
+
+Attach a MASK as the alpha channel of an IMAGE, returning a 4-channel tensor. No widgets.
+
+!!! warning "Lab notes"
+
+    photos/background-removal, ahead of the EZImageUpscale rung so one Upscale pick scales RGB and alpha together. It computes alpha = 1.0 - mask, so feed it an InvertMask output, not the matte directly, and it bilinear-resizes the mask to the image's own size, so a matte can never arrive at the wrong HxW. Stock SaveImage has no mask input at the pinned tag - the (H, W, 4) tensor is what makes Pillow write RGBA.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | RGB still that carries the alpha. |
+| `alpha` | in | `MASK` | Inverted matte (1 = transparent). Resized to image HxW by this node. |
+| `IMAGE` | out | `IMAGE` | 4-channel tensor. SaveImage writes it as RGBA. |
+
+No widgets. Sockets only.
 
 ### `KSampler` - KSampler
 

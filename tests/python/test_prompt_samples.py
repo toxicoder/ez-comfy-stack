@@ -49,6 +49,9 @@ SKIP_SAMPLE_PREFIXES = (
     # The cutout App takes a photo in and prints a matte out: no CLIP, no text
     # encoder, no prompt widget anywhere in the graph.
     "photos/cutout",
+    # Same shape as photos/cutout: one photo in, one isolated subject out. The
+    # backdrop combo and the edge knobs are the only widgets, so no catalog fits.
+    "photos/background-removal",
     "labs/opt-in/longcat",
     "labs/assist/cinema-rack",
     "labs/assist/audio-rack",

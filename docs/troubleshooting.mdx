@@ -248,7 +248,9 @@ The **Detail** row (`EZQuality`) offers three rungs - **Draft**, **Standard** (t
 
 **Cutout (BiRefNet)** (`EZCutout`) mattes one character or object out of a photo so an image-to-3D App gets a clean
 subject: **photos/cutout** prints the composited still (`ez_cutout`) and the alpha matte (`ez_cutout_matte`), then
-hands off to **photos/multi-view** and **3d/hero-from-photos**. The BiRefNet pack is opt-in, the model is loaded on
+hands off to **photos/multi-view** and **3d/hero-from-photos**. **photos/background-removal** is the same node on the
+other job: it lifts the subject out as an asset the other Apps reuse, printing `ez_bgremove` (real alpha only under
+**Backdrop** `transparent`) beside `ez_bgremove_matte`. The BiRefNet pack is opt-in, the model is loaded on
 the CPU, and every failure path is fail-soft: the untouched photo still prints and the card status line names the
 reason. Node row: [Custom nodes](reference/custom-nodes.md#ez_image).
 
@@ -261,6 +263,7 @@ reason. Node row: [Custom nodes](reference/custom-nodes.md#ez_image).
 | The cut ate a strap, an ear, or a hair edge | **Dilate** grew the matte inward relative to a soft edge it should have widened - the default is 2 px with a 2 px **Feather** | Raise **Dilate** (up to 32) to keep more of the subject, then raise **Feather** so the new edge stays soft. Re-Queue with the matte print open beside the composited one |
 | A grey or coloured halo clings to the subject | **Feather** is too narrow for the source edge, or **Backdrop** disagrees with what the next stage expects | Widen **Feather**, and pick **Backdrop** to match the consumer: `white` or `black` for a model trainer that flattens alpha, `keep original` when the downstream node composites the **matte** socket itself |
 | The second print is a black-and-white photo of your subject | Working as intended: `ez_cutout_matte` is the **matte** output, the mask as an image. Wire the **mask** socket instead of printing it when a node wants a MASK | Use **matte** for compositing, **mask** for anything that expects a Comfy MASK (an inpaint, a crop), and the **image** output for the 3D Apps |
+| The **photos/background-removal** still came out fully transparent when you wanted a colour, or the colour you picked keyed itself back out | Only `transparent` puts the real matte on `save_mask`; a painted backdrop must hand the save path an opaque grid or its own paint gets keyed away. The graph wires `Subject cutter.save_mask` -> `Invert matte` -> `Join alpha.alpha`, and `JoinImageWithAlpha` inverts again (`alpha = 1.0 - mask`), so a join wired off the raw **mask** socket leaves a painted plate empty behind the subject | Pick **Backdrop** for what you want behind the subject and re-Queue: `white` / `black` / `grey` for a flat plate, `green` / `blue` for a chroma key a compositor pulls, `transparent` only when you want genuine emptiness. On the canvas the join takes **save_mask** (slot 3) through **Invert Mask** - the raw **mask** socket (slot 2) is for nodes that composite, never for the save path |
 | The cutout took seconds and never touched the GPU | By design: `photos/cutout` claims occupancy **none**, the loader never places BiRefNet on CUDA, so the App runs beside a Klein or Wan Queue instead of parking it | Nothing to fix. Queue it whenever you like; see [Occupancy](studio-apps.md#occupancy) for what does claim the GPU |
 
 ---
