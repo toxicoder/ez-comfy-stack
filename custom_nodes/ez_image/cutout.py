@@ -77,10 +77,10 @@ class CutoutUiText(TypedDict):
 
 
 class CutoutResult(TypedDict):
-    """Comfy OUTPUT payload: status plus the three sockets."""
+    """Comfy OUTPUT payload: status plus the four sockets."""
 
     ui: CutoutUiText
-    result: tuple[CutoutImage, CutoutImage, MaskGrid]
+    result: tuple[CutoutImage, CutoutImage, MaskGrid, MaskGrid]
 
 REASON_DISABLED = "cutout off: image passed through"
 """UI status when ``EZ_CUTOUT`` turns the node off."""
@@ -123,10 +123,29 @@ BACKDROP_WHITE = "white"
 """Keep the subject and paint the vacated pixels white."""
 BACKDROP_BLACK = "black"
 """Keep the subject and paint the vacated pixels black."""
+BACKDROP_GREY = "grey"
+"""Keep the subject and paint the vacated pixels mid grey."""
+BACKDROP_GREEN = "green"
+"""Keep the subject and paint the vacated pixels chroma green."""
+BACKDROP_BLUE = "blue"
+"""Keep the subject and paint the vacated pixels chroma blue."""
+BACKDROP_TRANSPARENT = "transparent"
+"""Keep the subject and let the alpha carry the emptiness to ``SaveImage``."""
 BACKDROP_KEEP = "keep original"
 """Keep every pixel: only the matte and mask are useful in this mode."""
-BACKDROPS: tuple[str, ...] = (BACKDROP_WHITE, BACKDROP_BLACK, BACKDROP_KEEP)
+BACKDROPS: tuple[str, ...] = (
+    BACKDROP_WHITE, BACKDROP_BLACK, BACKDROP_GREY,
+    BACKDROP_GREEN, BACKDROP_BLUE, BACKDROP_TRANSPARENT, BACKDROP_KEEP,
+)
 """What replaces the removed background."""
+BACKDROP_RGB: dict[str, tuple[float, float, float]] = {
+    BACKDROP_WHITE: (1.0, 1.0, 1.0),
+    BACKDROP_BLACK: (0.0, 0.0, 0.0),
+    BACKDROP_GREY: (0.5, 0.5, 0.5),
+    BACKDROP_GREEN: (0.0, 0.694, 0.251),   # chroma green #00B140
+    BACKDROP_BLUE: (0.0, 0.278, 0.733),    # chroma blue  #0047BB
+}
+"""RGB each solid backdrop paints with; see :func:`_blend`."""
 DEFAULT_BACKDROP = BACKDROP_WHITE
 """White keeps a cutout legible on the light App thumbnails."""
 
@@ -552,6 +571,11 @@ def _blend(
 ) -> Frame:
     """Composite one subject over ``backdrop`` using an HW alpha.
 
+    A solid backdrop blends each channel toward its own RGB; ``keep original``
+    and ``transparent`` hand the source pixels back untouched, because the
+    alpha carries the transparency from here. An unrecognised combo name blends
+    as white.
+
     Args:
         pixels: HWC floats in 0..1.
         mask: HW alpha in 0..1.
@@ -560,7 +584,7 @@ def _blend(
     Returns:
         HWC floats with the background replaced.
     """
-    floor = 1.0 if backdrop == BACKDROP_WHITE else 0.0
+    rgb = BACKDROP_RGB.get(backdrop, BACKDROP_RGB[BACKDROP_WHITE])
     painted: Frame = []
     for y, row in enumerate(pixels):
         line: list[list[float]] = []
@@ -569,10 +593,10 @@ def _blend(
             out: list[float] = []
             for channel in range(3):
                 source = pixel[channel] if channel < len(pixel) else 0.0
-                if backdrop == BACKDROP_KEEP:
+                if backdrop in (BACKDROP_KEEP, BACKDROP_TRANSPARENT):
                     out.append(source)
                 else:
-                    out.append(source * alpha + floor * (1.0 - alpha))
+                    out.append(source * alpha + rgb[channel] * (1.0 - alpha))
             line.append(out)
         painted.append(line)
     return painted
@@ -588,6 +612,25 @@ def _matte_image(mask: MaskGrid) -> Frame:
         HWC floats where every channel is the alpha.
     """
     return [[[value, value, value] for value in row] for row in mask]
+
+
+def _save_mask(mask: MaskGrid, backdrop: str) -> MaskGrid:
+    """Return the alpha ``SaveImage`` should write for ``backdrop``.
+
+    A painted backdrop is already opaque, so saving the real alpha would key it
+    straight back out; only a transparent backdrop keeps the matte.
+
+    Args:
+        mask: HW alpha in 0..1.
+        backdrop: One of :data:`BACKDROPS`.
+
+    Returns:
+        ``mask`` itself when transparent, otherwise an opaque grid of the same
+        shape.
+    """
+    if backdrop == BACKDROP_TRANSPARENT:
+        return mask
+    return [[1.0] * len(row) for row in mask]
 
 
 def remove_background(
@@ -684,7 +727,9 @@ class EZCutout:
         """Return Comfy sockets.
 
         Returns:
-            Required image plus the backdrop and matte-edge controls.
+            Required image plus the seven-value backdrop combo (white, black,
+            grey, green, blue, transparent, keep original) and the matte-edge
+            controls.
         """
         return {
             "required": {
@@ -696,15 +741,18 @@ class EZCutout:
         }
 
     # Comfy node contract.
-    RETURN_TYPES = ("IMAGE", "IMAGE", "MASK")
-    RETURN_NAMES = ("image", "matte", "mask")
+    RETURN_TYPES = ("IMAGE", "IMAGE", "MASK", "MASK")
+    RETURN_NAMES = ("image", "matte", "mask", "save_mask")
     FUNCTION = "run"
     CATEGORY = CATEGORY
     OUTPUT_NODE = False
     DESCRIPTION = (
         "photos/cutout. BiRefNet matte for image-to-3D input prep: keeps one "
         "character or object and drops the room behind it. Outputs the cut "
-        "still, a grey matte for SaveImage, and the MASK. Fail-soft: missing "
+        "still, a grey matte for SaveImage, the raw MASK, and the MASK "
+        "SaveImage should key the still against (the real matte only for the "
+        "transparent backdrop, opaque otherwise). Backdrop: white, black, "
+        "grey, green, blue, transparent, or keep original. Fail-soft: missing "
         "weights, missing timm/kornia/einops/transformers, or EZ_CUTOUT=0 "
         "pass the input through unchanged."
     )
@@ -726,10 +774,13 @@ class EZCutout:
 
         Returns:
             ``ui.text`` is the operator-visible status; ``result`` is
-            ``(image, matte, mask)``.
+            ``(image, matte, mask, save_mask)``.
         """
         cut, matte, mask, status = remove_background(image, backdrop, dilate, feather)
-        return {"ui": {"text": (status,)}, "result": (cut, matte, mask)}
+        return {
+            "ui": {"text": (status,)},
+            "result": (cut, matte, mask, _save_mask(mask, backdrop)),
+        }
 
 
 NODE_CLASS_MAPPINGS: NodeRegistry = {
