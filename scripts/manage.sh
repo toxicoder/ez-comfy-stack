@@ -449,7 +449,7 @@ Commands:
                     Opt-in DreamX-Creator 1.0 Apache joint AV (not DreamX-World)
   spark-timing show|record --klein N --wan N --ltx N
                     Kitchen wall-clock table (writes COMFY_OUTPUT_DIR/spark-timing.json)
-  models-status     Disk bible: keep-set + refuse list (does not delete)
+  models-status     Disk bible: keep-set, refuse list, research lane + its license (does not delete)
   reap-models       Plan/apply model cache cleanup (default --plan; never cleanup)
   disk-wizard       Guided host reclaim (default --plan; never cleanup / never docker prune -a --volumes)
   report-bug        Print, save, and link a bug report for a CLI or bazelisk failure

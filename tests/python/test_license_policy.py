@@ -160,6 +160,29 @@ REQUIRED_SNIPPETS = (
     "Higgs Boson",
     "TTS-Audio-Suite",
     "OldTimeRadio",
+    # NVIDIA research lane: the four license names, the bars, and the footnote.
+    "NVIDIA One-Way Noncommercial License",
+    "NVIDIA OneWay Noncommercial License",
+    "NVIDIA Open Model License",
+    "NVIDIA Internal Scientific Research and Development Model License",
+    "Waymo Dataset License Agreement for Non-Commercial Use",
+    "no deployment, no redistribution, no works for sale or distribution",
+    "commercial use of the weights is prohibited",
+    "confirm before use",
+    "NVIDIA research-lane footnote",
+    "research-lane only",
+    "never fetched by `download-models`, never keep-set protected, never pinned in a promoted workflow",
+    "Klein 4B stills, Wan 2.2 silent motion, LTX-2.5 AV, TRELLIS.2, and TripoSplat",
+    "nvidia/ArtiFixer",
+    "nvidia/Fixer",
+    "nvidia/Lyra",
+    "nvidia/Lyra-2.0",
+    "nvidia/PixelUMM",
+    "nvidia/GEN3C-Cosmos-7B",
+    "nvidia/LuxDiT",
+    "yifanlu/InfiniCube-checkpoints",
+    "nvidia/Cosmos-Drive-Dreams",
+    "nvidia/dvlt",
     "Not legal advice",
 )
 
@@ -226,6 +249,42 @@ DEFAULT_NO_MODELS = (
     "Qwen3VL-8B text encoder (Qwen-Image 2.1 companion)",
     "Qwen-Image 2.1 VAE BF16",
 )
+
+# Research-lane rows: opt-in NVIDIA exploration the operator pulls by hand. Every row is
+# a non-default, and column 3 is the license name grepped before a download.
+RESEARCH_LANE_MODELS = (
+    "ArtiFixer",
+    "Fixer",
+    "Lyra-1",
+    "Lyra-2.0",
+    "PixelUMM",
+    "GEN3C",
+    "LuxDiT",
+    "InfiniCube",
+    "Cosmos-Drive-Dreams",
+    "DVLT",
+)
+
+RESEARCH_ROW_LABEL = "(research lane, opt-in)"
+
+RESEARCH_LANE_LICENSES = {
+    "ArtiFixer": "NVIDIA One-Way Noncommercial License",
+    "Fixer": "NVIDIA Open Model License",
+    "Lyra-1": "NVIDIA Open Model License",
+    "Lyra-2.0": "NVIDIA Internal Scientific Research and Development Model License",
+    "PixelUMM": "NVIDIA One-Way Noncommercial License",
+    "GEN3C": "NVIDIA Open Model License",
+    "LuxDiT": "NVIDIA OneWay Noncommercial License",
+    "InfiniCube": "Waymo Dataset License Agreement for Non-Commercial Use",
+    "Cosmos-Drive-Dreams": "Apache-2.0 code; Cosmos checkpoints carry their own NVIDIA terms",
+    "DVLT": "NVIDIA License (non-commercial)",
+}
+
+# Weights with no commercial grant: their output never goes to monetized YouTube.
+NONCOMMERCIAL_RESEARCH_MODELS = ("ArtiFixer", "PixelUMM", "LuxDiT", "DVLT")
+
+# Cards that state commercial use is allowed; the stack still does not promote them.
+OPEN_MODEL_RESEARCH_MODELS = ("Fixer", "Lyra-1", "GEN3C")
 
 
 def _read(path: Path) -> str:
@@ -382,3 +441,96 @@ def test_minimax_h3_us_excluded() -> None:
                 assert cells[3].startswith("No"), row
                 assert cells[4] == "No", row
                 assert cells[8] == "No", row
+
+
+def _research_rows(text: str) -> dict[str, list[str]]:
+    """Research-lane table rows keyed by the bare model name."""
+    rows: dict[str, list[str]] = {}
+    for row in _table_rows(text):
+        cells = [c.strip() for c in row.strip("|").split("|")]
+        if len(cells) == 9 and cells[0].endswith(RESEARCH_ROW_LABEL):
+            rows[cells[0][: -len(RESEARCH_ROW_LABEL)].strip()] = cells
+    return rows
+
+
+def test_nvidia_research_rows_exist_and_are_never_defaults() -> None:
+    for path in (LICENSE_ROOT, LICENSE_DOCS):
+        rows = _research_rows(_read(path))
+        for name in RESEARCH_LANE_MODELS:
+            assert name in rows, f"{path.name} missing research row {name!r}"
+            assert rows[name][8] == "No", f"{path.name} research row {name!r} must not be a default"
+
+
+def test_nvidia_research_rows_state_the_governing_license() -> None:
+    for path in (LICENSE_ROOT, LICENSE_DOCS):
+        rows = _research_rows(_read(path))
+        for name, license_name in RESEARCH_LANE_LICENSES.items():
+            assert license_name in rows[name][2], f"{path.name} {name!r} license={rows[name][2]!r}"
+
+
+def test_nvidia_research_noncommercial_rows_bar_monetized_output() -> None:
+    """A row whose weights carry no commercial grant never says Yes to monetized YouTube."""
+    for path in (LICENSE_ROOT, LICENSE_DOCS):
+        rows = _research_rows(_read(path))
+        for name in NONCOMMERCIAL_RESEARCH_MODELS:
+            cells = rows[name]
+            assert cells[3] == "Yes (research and personal use only)", cells
+            assert cells[4] == "No", cells
+
+
+def test_nvidia_research_open_model_rows_cite_the_card() -> None:
+    for path in (LICENSE_ROOT, LICENSE_DOCS):
+        rows = _research_rows(_read(path))
+        for name in OPEN_MODEL_RESEARCH_MODELS:
+            cells = rows[name]
+            assert cells[3].startswith("Yes"), cells
+            assert cells[4].startswith("Yes per card"), cells
+            assert "not a promoted lab pick" in cells[4], cells
+
+
+def test_lyra_2_is_internal_rd_only() -> None:
+    for path in (LICENSE_ROOT, LICENSE_DOCS):
+        cells = _research_rows(_read(path))["Lyra-2.0"]
+        assert cells[3] == "Yes (non-production internal R&D only)", cells
+        assert cells[4] == "No", cells
+        assert cells[7] == "no deployment, no redistribution, no works for sale or distribution", cells
+
+
+def test_infinicube_and_cosmos_drive_dreams_are_confirm_before_use() -> None:
+    for path in (LICENSE_ROOT, LICENSE_DOCS):
+        rows = _research_rows(_read(path))
+        infinicube = rows["InfiniCube"]
+        assert "Waymo Open Dataset derivative" in infinicube[2], infinicube
+        assert infinicube[4].startswith("No"), infinicube
+        assert "commercial use of the weights is prohibited" in infinicube[4], infinicube
+        cosmos = rows["Cosmos-Drive-Dreams"]
+        assert "Apache-2.0 code" in cosmos[2], cosmos
+        assert "confirm before use" in cosmos[2], cosmos
+        assert cosmos[4].startswith("No"), cosmos
+        assert "confirm" in cosmos[4].lower(), cosmos
+
+
+def test_research_lane_footnote_names_the_promoted_catalog() -> None:
+    for path in (LICENSE_ROOT, LICENSE_DOCS):
+        text = _read(path)
+        assert "NVIDIA research-lane footnote" in text, path
+        assert "3DGRUT" in text, path
+        assert "ships no checkpoint" in text, path
+        assert "research-lane only" in text, path
+        assert (
+            "never fetched by `download-models`, never keep-set protected, "
+            "never pinned in a promoted workflow" in text
+        ), path
+        assert (
+            "Klein 4B stills, Wan 2.2 silent motion, LTX-2.5 AV, TRELLIS.2, and TripoSplat" in text
+        ), path
+
+
+def test_docs_research_bucket_links_the_declined_list() -> None:
+    """The operator page buckets the lane and points at the declined-integrations page."""
+    text = _read(LICENSE_DOCS)
+    assert "| **Opt-in research (NVIDIA)** |" in text, LICENSE_DOCS
+    assert "reference/declined-integrations.md" in text, LICENSE_DOCS
+    lower = text.lower()
+    assert "local experimentation" in lower, LICENSE_DOCS
+    assert "not legal advice" in lower, LICENSE_DOCS

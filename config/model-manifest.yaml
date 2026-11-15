@@ -1,23 +1,96 @@
 # Purpose:
-#   Disk bible for MODELS_DIR keep-set packs and refuse list (MiniMax-H3, ...).
+#   Disk bible for MODELS_DIR keep-set packs, the refuse list (MiniMax-H3, ...),
+#   and the research lane (operator-run NVIDIA exploration, never auto-fetched).
 # Source of truth: this file (LICENSE-MODELS.md stays the license bible)
-# Schema: restricted YAML, scripts/lib/model_manifest.py (schema 1)
+# Schema: restricted YAML, scripts/lib/model_manifest.py (schema 2)
 # Safety:
 #   Refuse list is fail-closed for banned weights. cleanup (manage.sh) does not
 #   delete MODELS_DIR - reap-models / disk-wizard default to --plan.
+#   Research rows are never fetched and never keep-set protected: only packs:
+#   rows feed download-models and the keep-set, so no research token can become
+#   a default by construction.
 # Disk bible for MODELS_DIR. LICENSE-MODELS.md stays the license bible.
-# schema 1 - restricted YAML parsed by scripts/lib/model_manifest.py
-schema: 1
+# schema 2 - restricted YAML parsed by scripts/lib/model_manifest.py
+schema: 2
 refuse:
   - MiniMax-H3
   - DA3-LARGE
   - Inria-3DGS
   - Pixal3D-as-default
-  # Lyra-2.0: NVIDIA Internal Scientific R&D Model License forbids deployment
-  # and any production use. See docs/reference/declined-integrations.md.
-  - Lyra-2.0
   # Arete-27B: 54.7 GB text-only BF16 with no GGUF; the llm lane is CPU GGUF.
   - Arete-27B
+# Research lane: NVIDIA models the operator may keep on disk and run locally for
+# experimentation. Every row states the governing license and what the operator
+# may do with the outputs; tests/python/test_model_manifest.py fails a row whose
+# use is blank. Nothing here is fetched by download-models or pinned in a
+# promoted workflow. See docs/reference/declined-integrations.md.
+research:
+  3DGRUT:
+    upstream: https://github.com/nv-tlabs/3dgrut
+    weights: none
+    license: Apache-2.0 (per-scene training, no published checkpoint)
+    use: commercial use allowed; outputs are yours
+    gb10: plausible
+  ArtiFixer:
+    upstream: https://github.com/nv-tlabs/ArtiFixer
+    weights: nvidia/ArtiFixer
+    license: NVIDIA One-Way Noncommercial License (card: research and development only)
+    use: local research and evaluation only; outputs may not be sold or monetized
+    gb10: plausible
+  Fixer:
+    upstream: https://github.com/nv-tlabs/Fixer
+    weights: nvidia/Fixer
+    license: NVIDIA Open Model License (card: ready for commercial/non-commercial use)
+    use: commercial use of outputs allowed
+    gb10: marginal
+  Lyra-1:
+    upstream: https://github.com/nv-tlabs/lyra
+    weights: nvidia/Lyra
+    license: NVIDIA Open Model License
+    use: commercial use of outputs allowed
+    gb10: marginal
+  Lyra-2.0:
+    upstream: https://github.com/nv-tlabs/lyra
+    weights: nvidia/Lyra-2.0
+    license: NVIDIA Internal Scientific Research and Development Model License
+    use: internal R&D in a non-production environment only; no deployment, redistribution, or works for sale
+    gb10: marginal
+  PixelUMM:
+    upstream: https://github.com/nv-tlabs/PixelUMM
+    weights: nvidia/PixelUMM
+    license: NVIDIA One-Way Noncommercial License (one source file stays CC BY-NC 4.0)
+    use: local research and evaluation only; outputs may not be sold or monetized
+    gb10: blocked
+  GEN3C:
+    upstream: https://github.com/nv-tlabs/GEN3C
+    weights: nvidia/GEN3C-Cosmos-7B
+    license: NVIDIA Open Model License (card: ready for commercial use)
+    use: commercial use of outputs allowed
+    gb10: blocked
+  LuxDiT:
+    upstream: https://github.com/nv-tlabs/LuxDiT
+    weights: nvidia/LuxDiT
+    license: NVIDIA OneWay Noncommercial License
+    use: research or evaluation only; outputs may not be sold or monetized
+    gb10: marginal
+  InfiniCube:
+    upstream: https://github.com/nv-tlabs/InfiniCube
+    weights: yifanlu/InfiniCube-checkpoints
+    license: Waymo Dataset License Agreement for Non-Commercial Use (weights are a Waymo derivative)
+    use: non-commercial only; the card states commercial use of the weights is prohibited
+    gb10: blocked
+  Cosmos-Drive-Dreams:
+    upstream: https://github.com/nv-tlabs/Cosmos-Drive-Dreams
+    weights: nvidia/Cosmos-Drive-Dreams
+    license: Apache-2.0 code; Cosmos checkpoints carry their own NVIDIA terms
+    use: confirm the Cosmos card before any commercial use of outputs
+    gb10: blocked
+  DVLT:
+    upstream: https://github.com/nv-tlabs/dvlt
+    weights: nvidia/dvlt
+    license: NVIDIA non-commercial license (the checkpoint is excluded from the repo Apache grant)
+    use: local research and evaluation only; outputs may not be sold or monetized
+    gb10: blocked
 packs:
   klein-4b-fp8:
     default: true
