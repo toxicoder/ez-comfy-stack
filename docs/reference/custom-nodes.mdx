@@ -8,7 +8,7 @@ tags: [custom-nodes, comfyui, occupancy, qc]
 
 **What's on this page**
 
-- **Pack index** - all 16 packs under `custom_nodes/` and their `NODE_CLASS_MAPPINGS` counts
+- **Pack index** - all 17 packs under `custom_nodes/` and their `NODE_CLASS_MAPPINGS` counts
 - **Per-pack node tables** - class, display name, inputs, outputs, occupancy, QC / rights
 - **Helpers and runtime patches** - `ez_common`, `ez_ltx_spatial`, and their empty mappings
 - **Frontend JS** under Nodes 2.0 (preview `widget.value`, no LiteGraph `inputEl` / `node_widget`)
@@ -58,6 +58,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 | `ez_feedback` | empty | Report-a-bug / Request-a-feature dialog, guided **Feedback** sidebar panel with an Enhance-with-LLM rewrite, non-blocking error banner, a **Report this error** button on the workflow load-abort modal, report prefill, and the `GET /ez_feedback/config` + `POST /ez_feedback/submit` + `POST /ez_feedback/enhance` routes. No nodes; JS and routes only. [Reporting issues](../operate/reporting-issues.md) |
 | `ez_ltx_spatial` | empty | Runtime snap of LTX spatial dims |
 | `ez_music` | 4 nodes | Rap lyrics, album tags, beat-join, zip |
+| `ez_nvidia_lab` | 4 nodes | Opt-in NVIDIA lab tier: catalog, preflight, job, verdict |
 | `ez_podcast` | 5 nodes | Script, learn, loop bed, disclosure, Kokoro TTS |
 | `ez_prompt_enhance` | 16 nodes | Describe still; Klein / Wan / LTX / Z-Image / LongCat / DreamX / negative / prompt bundle / join / context join / ACE-Step / sample prompt / cinema rack / audio rack |
 | `ez_image` | 13 nodes | Snap / match / optional upscale; still and video Format / platform; optional reference stills (3 pickers + mute); Creator mode; BiRefNet cutout |
@@ -143,6 +144,24 @@ Category `ez-comfy/music`. [Local music](../music.md).
 | `EZAudioMetadata` | Album metadata | `AUDIO` audio, `artist` `album` `title` STRING, `track` INT 1-99, `tracktotal` INT 1-99, `year` INT 1900-2100 (default 2026), `art_mode` combo `skip` `upload` `generate` (default `skip`), `prefix` STRING; optional `IMAGE` cover | `AUDIO` audio | graph **audio** | Copies ACE SaveAudio masters into `albums/<Artist>/<Album>/` and writes tags |
 | `EZAudioBeatJoin` | Beat-join passes | `AUDIO` audio_01, `bpm` INT 40-300, `overlap_bars` STRING, `crossover_hz` FLOAT 40-500; optional `AUDIO` audio_02..audio_08 | `AUDIO` audio | graph **audio** | Stitches the ACE passes of one multi-pass take on the bar grid. Whole-bar seams, sub-808 hand-off never stacks or nulls, crossfade never clicks. The master is one joined mono waveform, 1 x 1 x N, that SaveAudio, MP3, and metadata read |
 | `EZAlbumPack` | Pack album zip | `artist` STRING, `album` STRING | `STRING` zip_path | graph **audio** | Writes `<Album>.m3u` and `<Album>.zip`. CPU only |
+
+---
+
+## ez_nvidia_lab
+
+Category `EZ Comfy/NVIDIA Lab`. The in-canvas face of the opt-in **NVIDIA lab** tier: it reads
+`custom_nodes/ez_nvidia_lab/catalog.json` through the shared reader and shells out to the operator
+CLI (`bazelisk run //:manage -- nvidia-lab run <id> --input <path>`) for the one node that does
+anything. Nothing here installs, downloads, or starts a Compose service. Tier prose:
+[NVIDIA lab tier](../nvidia-lab.md); the row-by-row render:
+[NVIDIA lab tier reference](../generated/nvidia-lab/tier.md).
+
+| Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
+| --- | --- | --- | --- | --- | --- |
+| `EZNvidiaLabCatalog` | NVIDIA lab catalog | `detail` combo `list` `table` (default `table`) | `STRING` report | - | Output node. Renders every catalog row with its status, code license, and weights license. A bad catalog is an error line in the report, never a raise |
+| `EZNvidiaLabPreflight` | NVIDIA lab preflight | `tool_id` STRING (default `artifixer`) | `STRING` report, `BOOLEAN` ok | - | Checks the row exists, the host is `aarch64`, the binary that row's install kind needs (`docker` or `git`) is on PATH, the artifact ref is shaped like a pull spec or a clone URL, and the GB10 value. A missing upstream is a reason line, not an exception |
+| `EZNvidiaLabJob` | NVIDIA lab job | `tool_id` STRING (default `artifixer`), `input_path` STRING, `params_json` STRING multiline (default `{}`) | `STRING` report, `BOOLEAN` ok | none in Comfy - the CLI holds the one-heavy-job XOR | Shells the row out to the operator CLI through the injectable `SubprocessRunner`. **Refuses** any row whose status is not `opt-in` before anything runs, plus an empty or missing input path and malformed `params_json`. The CLI owns the heavy confirm, the headroom preflight, and the occupancy refusal; this node spawns nothing of its own and touches no Compose file, restart policy, or memory limit |
+| `EZNvidiaLabVerdict` | NVIDIA lab verdict | `tool_id` STRING (default `nurec-ga`) | `STRING` verdict | - | Output node. Prints the blocking reason, the `reopen` sentence, the gate notes, and the verify line for one row. Reads only, installs nothing |
 
 ---
 
@@ -336,3 +355,4 @@ US-safe weights only (Klein 4B / Wan 2.2 5B / LTX-2.5 distilled). 90s film lab g
 | All node types across `_lab`, including upstream ones | [Workflow node parameters](workflow-nodes.md) |
 | Which heavy job each mode allows | [Occupancy matrix](../operate/occupancy-matrix.md) |
 | The MCP twins of `ez_research` and `ez_studio_forge` | [MCP](../operate/mcp.md) |
+| The opt-in tier these four nodes read | [NVIDIA lab tier](../nvidia-lab.md) |

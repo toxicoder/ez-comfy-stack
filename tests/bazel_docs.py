@@ -266,6 +266,11 @@ RULES: tuple[tuple[re.Pattern[str], str, str], ...] = (
         "plain",
     ),
     (
+        re.compile(r"^(?:bash\s+|sh\s+|python3?\s+)(?:\./)?docs/generate_nvidia_lab_docs\.py\b.*$"),
+        "bazelisk run //docs:generate_nvidia_lab",
+        "plain",
+    ),
+    (
         re.compile(r"^(?:bash\s+|sh\s+|python3?\s+)(?:\./)?docs/generate_audio_docs\.py\b.*$"),
         "bazelisk run //docs:generate_audio",
         "plain",

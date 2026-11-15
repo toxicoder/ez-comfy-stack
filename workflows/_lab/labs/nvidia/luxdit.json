@@ -1,0 +1,246 @@
+{
+  "id": "luxdit",
+  "revision": 0,
+  "last_node_id": 5,
+  "last_link_id": 0,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Note",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        720.0,
+        460.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "## labs/nvidia/luxdit\n\nLuxDiT - Estimates image-based lighting from a single photo or video with a video diffusion transformer.\n\nStatus: blocked-license. Install: none. Artifact: source-build. Arm64: unknown. GB10: unverified. Comfy shape: none.\nInput: one image or a video\nOutput: an environment light estimate for relighting\nLicenses: code NVIDIA OneWay Noncommercial License. Weights Hugging Face card tagged license:other. Commercial use non-commercial.\nFootprint: 24 GB VRAM, 40 GB disk. Weights: nvidia/LuxDiT/luxdit_image/@11.74.\nArtifact ref: https://github.com/nv-tlabs/LuxDiT.git\nUpstream: https://github.com/nv-tlabs/LuxDiT\nAlso: https://huggingface.co/nvidia/LuxDiT\nSources: https://github.com/nv-tlabs/LuxDiT\n\nNothing in this graph touches the GPU. The row's work runs outside the Comfy process through the operator CLI, so the App claims no occupancy and stops no heavy job: the one-heavy-job rule is the CLI's to enforce, next to the heavy confirm and the headroom preflight.\n\nOperator verbs (host shell):\n  bazelisk run //:manage -- nvidia-lab status\n  bazelisk run //:manage -- nvidia-lab plan luxdit\n\nCanvas:\n1. Preflight prints whether this Spark could run the row today - the catalog row, an aarch64 host, the binary that row's install kind needs, and the artifact ref.\n2. The verdict card prints the blocking reason and the sentence that would reopen the row.\n3. The tier table prints all 18 rows with their status and licenses.\n\nGate notes: The repository ships the NVIDIA OneWay Noncommercial License, so the code itself, not only the weights, bars use in a product container. This is the relighting capability the 3D lane does not have, which is why the card is worth keeping.\nReopen: NVIDIA relicense the code away from the OneWay Noncommercial terms.\nVerify: bazelisk test //tests:bats_nvidia_lab_test\n\nOccupancy: none - stop nothing GPU. One GB10 job.\n"
+      ],
+      "title": "Operator note"
+    },
+    {
+      "id": 2,
+      "type": "EZNvidiaLabPreflight",
+      "pos": [
+        40,
+        704
+      ],
+      "size": [
+        360.0,
+        130.0
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "report",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        },
+        {
+          "name": "ok",
+          "type": "BOOLEAN",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNvidiaLabPreflight"
+      },
+      "widgets_values": [
+        "luxdit"
+      ],
+      "title": "Preflight"
+    },
+    {
+      "id": 3,
+      "type": "EZNvidiaLabVerdict",
+      "pos": [
+        40,
+        906
+      ],
+      "size": [
+        380.0,
+        150.0
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "verdict",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNvidiaLabVerdict"
+      },
+      "widgets_values": [
+        "luxdit"
+      ],
+      "title": "Verdict"
+    },
+    {
+      "id": 4,
+      "type": "EZNvidiaLabCatalog",
+      "pos": [
+        40,
+        1128
+      ],
+      "size": [
+        760.0,
+        230.0
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "report",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNvidiaLabCatalog"
+      },
+      "widgets_values": [
+        "table"
+      ],
+      "title": "Tier table"
+    },
+    {
+      "id": 5,
+      "type": "EZModelCheck",
+      "pos": [
+        808,
+        80
+      ],
+      "size": [
+        320.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "EZModelCheck"
+      },
+      "widgets_values": [
+        "Click Check models. Queue does not run this node."
+      ],
+      "title": "Check models"
+    }
+  ],
+  "links": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "NOTE",
+      "bounding": [
+        20,
+        8,
+        760,
+        576
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        788,
+        8,
+        360,
+        256
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "SETTINGS",
+      "bounding": [
+        20,
+        632,
+        800,
+        770
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "lab_note": "## labs/nvidia/luxdit\n\nLuxDiT - Estimates image-based lighting from a single photo or video with a video diffusion transformer.\n\nStatus: blocked-license. Install: none. Artifact: source-build. Arm64: unknown. GB10: unverified. Comfy shape: none.\nInput: one image or a video\nOutput: an environment light estimate for relighting\nLicenses: code NVIDIA OneWay Noncommercial License. Weights Hugging Face card tagged license:other. Commercial use non-commercial.\nFootprint: 24 GB VRAM, 40 GB disk. Weights: nvidia/LuxDiT/luxdit_image/@11.74.\nArtifact ref: https://github.com/nv-tlabs/LuxDiT.git\nUpstream: https://github.com/nv-tlabs/LuxDiT\nAlso: https://huggingface.co/nvidia/LuxDiT\nSources: https://github.com/nv-tlabs/LuxDiT\n\nNothing in this graph touches the GPU. The row's work runs outside the Comfy process through the operator CLI, so the App claims no occupancy and stops no heavy job: the one-heavy-job rule is the CLI's to enforce, next to the heavy confirm and the headroom preflight.\n\nOperator verbs (host shell):\n  bazelisk run //:manage -- nvidia-lab status\n  bazelisk run //:manage -- nvidia-lab plan luxdit\n\nCanvas:\n1. Preflight prints whether this Spark could run the row today - the catalog row, an aarch64 host, the binary that row's install kind needs, and the artifact ref.\n2. The verdict card prints the blocking reason and the sentence that would reopen the row.\n3. The tier table prints all 18 rows with their status and licenses.\n\nGate notes: The repository ships the NVIDIA OneWay Noncommercial License, so the code itself, not only the weights, bars use in a product container. This is the relighting capability the 3D lane does not have, which is why the card is worth keeping.\nReopen: NVIDIA relicense the code away from the OneWay Noncommercial terms.\nVerify: bazelisk test //tests:bats_nvidia_lab_test\n\nOccupancy: none - stop nothing GPU. One GB10 job.\n",
+    "lab_profile": "labs/nvidia/luxdit",
+    "lab_description": "LuxDiT (blocked-license) - Estimates image-based lighting from a single photo or video with a video diffusion transformer. NVIDIA lab card: preflight, the verdict card, and the whole tier table on one canvas.",
+    "lab_rel": "labs/nvidia/luxdit",
+    "workflowRendererVersion": "Vue-corrected",
+    "lab_optional_unwired": [
+      "EZNvidiaLabCatalog",
+      "EZNvidiaLabPreflight",
+      "EZNvidiaLabVerdict"
+    ],
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "labs",
+      "occupancy": "none",
+      "enhance_off_identity": false,
+      "handoff": []
+    },
+    "linearData": {
+      "inputs": [
+        [
+          4,
+          "detail",
+          {
+            "label": "Tier detail",
+            "description": "table prints one aligned line per row. list prints a block per row with arm64, GB10, install, and footprint."
+          }
+        ],
+        [
+          3,
+          "tool_id",
+          {
+            "label": "Row id",
+            "description": "Catalog row this card answers for. Pinned to luxdit; another id prints that row's verdict instead."
+          }
+        ]
+      ],
+      "outputs": [
+        3,
+        4
+      ]
+    },
+    "linearMode": true
+  },
+  "version": 0.4
+}

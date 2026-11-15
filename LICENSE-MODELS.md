@@ -68,6 +68,16 @@ Policy: US-based casual creators (YouTube, client shorts, ads under a small LLC)
 | Qwen3-TTS 0.6B | Qwen/Qwen3-TTS-12Hz-0.6B-Base | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
 | faster-whisper large-v3 | Systran/faster-whisper-large-v3 | MIT | Yes | Yes | none | MIT | No extra ban beyond MIT | No |
 | Silero VAD | snakers4/silero-vad | MIT | Yes | Yes | none | MIT | No extra ban beyond MIT | No |
+| ArtiFixer 1.3B (nvidia-lab tier, opt-in host job) | nvidia/ArtiFixer | NVIDIA Open Model License | Yes | Yes | none | follow card | none stated | No |
+| GEN3C Cosmos 7B (nvidia-lab tier, opt-in host job) | nvidia/GEN3C-Cosmos-7B | NVIDIA Open Model License | Yes | Yes | none | follow card | none stated | No |
+| Lyra 1.x adapters (nvidia-lab tier, opt-in host job) | nvidia/Lyra | NVIDIA Open Model License | Yes | Yes | none | follow card | none stated | No |
+| Lyra 2.0 | nvidia/Lyra-2.0 | NVIDIA Internal Scientific Research and Development Model License | No - bars deployment and production use | No | n/a | n/a | n/a | No |
+| LuxDiT | nvidia/LuxDiT | NVIDIA OneWay Noncommercial (code); card license:other (weights) | No - non-commercial | No | n/a | n/a | n/a | No |
+| InfiniCube | yifanlu/InfiniCube-checkpoints | research and educational only; commercial use prohibited | No | No | n/a | Waymo Open Dataset ToS | n/a | No |
+| dvlt (Deja View) | nvidia/dvlt | NVIDIA non-commercial research and evaluation; VGGT License on derived files | No | No | n/a | n/a | n/a | No |
+| PixelUMM | nvidia/PixelUMM | card license:other, terms not published | Unknown | No | n/a | n/a | n/a | No |
+| NuRec GA container | nvcr.io/nvidia/nre/nurec-ga | NGC container license, text not public | Unknown | No | n/a | n/a | n/a | No |
+| SplatPainting | nv-tlabs/SplatPainting | Apache 2.0 except vendored Inria / MPII deps | No as a build | No | n/a | n/a | n/a | No |
 | F5-TTS official weights | SWivid/F5-TTS | CC-BY-NC-4.0 | No | No | n/a | n/a | n/a | No |
 | Coqui XTTS v2 | coqui/XTTS-v2 | CPML | No | No | n/a | n/a | n/a | No |
 | Echo-TTS | (Echo-TTS card) | CC-BY-NC-SA | No | No | n/a | n/a | n/a | No |

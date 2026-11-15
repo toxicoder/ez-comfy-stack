@@ -3816,6 +3816,111 @@ Which negative family.
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
 
+### `EZNvidiaLabCatalog` - NVIDIA lab catalog
+
+Print every NVIDIA lab row with its status, code license, weights license, and commercial-use verdict.
+
+!!! warning "Lab notes"
+
+    Category EZ Comfy/NVIDIA Lab. Reads the pack's own catalog.json with stdlib json, so a missing or malformed catalog prints the reason instead of failing the Queue. Nothing is installed and nothing is downloaded. An output node: the report shows on the canvas after Queue. A footprint of 0 in the catalog is not a size, it is the pack's way of saying upstream publishes no figure, so the list view prints 'vram not published' rather than 0 GB.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `report` | out | `STRING` | The tier report: one aligned line per row on table, one labelled block per row on list. |
+
+#### `detail`
+
+Type `COMBO`. Range / default: table (lab).
+
+Report shape.
+
+**How it affects generation:** table is one aligned line per row (id, status, code license, weights license, commercial). list adds arm64, GB10, install, artifact, footprint, weights, and graph per row.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `list` | One block per row with arm64, gb10, install, footprint, graph. |
+| `table` | One aligned line per row (lab default). |
+
+### `EZNvidiaLabJob` - NVIDIA lab job
+
+Run one opt-in catalog row through the operator CLI's nvidia-lab verb.
+
+!!! warning "Lab notes"
+
+    Category EZ Comfy/NVIDIA Lab. Refuses a row whose status is not opt-in before anything runs, and refuses an empty input_path or malformed params_json. The CLI (scripts/utilities/nvidia-lab.sh via ./scripts/manage.sh) does the heavy confirm, the headroom preflight, and the occupancy XOR; this node spawns nothing of its own and touches no Compose, restart policy, or memory limit. Exit code and the tail of stdout/stderr come back as the report. The graphs in labs/nvidia leave input_path blank on purpose, so the panel never queues a job with no input.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `report` | out | `STRING` | The argv, the output tails, and a verdict of ok or refused. |
+| `ok` | out | `BOOLEAN` | True only when the CLI exited 0. |
+
+#### `tool_id`
+
+Type `STRING`. Range / default: artifixer.
+
+Catalog row id to run.
+
+**How it affects generation:** Must name a row whose status is opt-in; a blocked-license, blocked-platform, or deferred row is refused before the CLI starts.
+
+#### `input_path`
+
+Type `STRING`. Range / default: existing file path.
+
+Input file handed to the tool.
+
+**How it affects generation:** The node refuses an empty path or one that is not a readable file. Authored blank in the lab graphs: it is the operator's to type in graph view.
+
+#### `params_json`
+
+Type `STRING`. Range / default: JSON object, lab {}.
+
+Parameters passed through to the CLI.
+
+**How it affects generation:** Multiline JSON box. Malformed JSON is refused with the parser's line and message. Dynamic prompts are off so a brace in the blob is never read as a prompt slot.
+
+### `EZNvidiaLabPreflight` - NVIDIA lab preflight
+
+Answer whether one catalog row could run on this Spark today.
+
+!!! warning "Lab notes"
+
+    Category EZ Comfy/NVIDIA Lab. Checks the catalog row exists, the host is aarch64, the binary that row's install verb needs is on PATH (docker for docker-pull, git for git-clone), the artifact ref is shaped like a pull spec or a clone URL, and what upstream says about GB10. There is no network probe: the container has no egress guarantee, so 'reachable' is the shape of the ref. Missing tooling is ok=False plus a reason, never an error. Installs nothing. An unverified GB10 is a note, not a blocker; unsupported is.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `report` | out | `STRING` | Every check with its verdict line and each blocking reason. |
+| `ok` | out | `BOOLEAN` | False whenever a reason exists. |
+
+#### `tool_id`
+
+Type `STRING`. Range / default: artifixer.
+
+Catalog row id to check.
+
+**How it affects generation:** kebab-case id from catalog.json. An empty id or one no row carries is a reason, not a crash. The opt-in rows are the only install paths; every other row is a card.
+
+### `EZNvidiaLabVerdict` - NVIDIA lab verdict
+
+Print why one row is off the install path, the sentence that would reopen it, and the command that re-checks it.
+
+!!! warning "Lab notes"
+
+    Category EZ Comfy/NVIDIA Lab. Reads the catalog only and runs nothing, so a blocked row is answerable on a host that cannot install it. An opt-in row says nothing blocks it. An output node: the verdict shows on the canvas after Queue.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `verdict` | out | `STRING` | The row's gate notes, its reopen line, and its verify command. |
+
+#### `tool_id`
+
+Type `STRING`. Range / default: nurec-ga.
+
+Catalog row id to answer for.
+
+**How it affects generation:** kebab-case id from catalog.json. The lab graphs pin it to the graph's own row; another id prints that row's verdict instead.
+
 ### `EZOptionalImage` - Optional reference stills
 
 Optional example or reference stills. Empty is valid - Queue without a file.

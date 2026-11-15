@@ -386,6 +386,12 @@ Commands:
   download-3d [--tier trellis2|da3-base|birefnet|all]
                     Opt-in Comfy-Org TRELLIS.2 INT8 (MIT, no nvdiffrast) + DA3-BASE (Apache)
                     + BiRefNet matte (MIT, the EZCutout input-prep weights)
+  nvidia-lab VERB [args]
+                    Opt-in NVIDIA lab tier (off by default, downloads nothing):
+                    list | status | plan ID | install ID | uninstall ID |
+                    run ID --input PATH [--params JSON] | check.
+                    Refuses any row that is not opt-in, and refuses install/run
+                    while a heavy occupancy mode holds the GPU.
   occupancy status|enter MODE [--yes] [--json]
                     Occupancy desk: park Comfy (POST /free) for blender-desk or
                     llm-desk, or enter klein|trellis|wan|ltx|idle. Does not start Compose.
@@ -1463,6 +1469,20 @@ cmd_promote_workflow() {
   bash "${REPO_ROOT}/scripts/utilities/promote-workflow.sh" "$@"
 }
 
+# @command nvidia-lab
+#######################################
+# Query or install one opt-in NVIDIA lab row. Never pulls into the image.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  nvidia-lab flags
+# Returns:
+#   nvidia-lab status
+#######################################
+cmd_nvidia_lab() {
+  bash "${REPO_ROOT}/scripts/utilities/nvidia-lab.sh" "$@"
+}
+
 # @command album-render
 #######################################
 # Queue a shipped music album then zip the output folder.
@@ -2224,6 +2244,7 @@ main() {
     spark-timing) cmd_spark_timing "$@" ;;
     models-status) cmd_models_status "$@" ;;
     reap-models) cmd_reap_models "$@" ;;
+    nvidia-lab) cmd_nvidia_lab "$@" ;;
     disk-wizard) cmd_disk_wizard "$@" ;;
     cleanup) cmd_cleanup ;;
     report-bug) cmd_report_bug "$@" ;;

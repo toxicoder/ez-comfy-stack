@@ -1621,6 +1621,114 @@
       "kind": "graph"
     },
     {
+      "id": "labs/nvidia/3dgrut-artifixer-fork",
+      "path": "generated/workflows/labs/nvidia/3dgrut-artifixer-fork.md",
+      "lane": "labs",
+      "kind": "graph"
+    },
+    {
+      "id": "labs/nvidia/3dgrut",
+      "path": "generated/workflows/labs/nvidia/3dgrut.md",
+      "lane": "labs",
+      "kind": "graph"
+    },
+    {
+      "id": "labs/nvidia/artifixer",
+      "path": "generated/workflows/labs/nvidia/artifixer.md",
+      "lane": "labs",
+      "kind": "graph"
+    },
+    {
+      "id": "labs/nvidia/asset-harvester",
+      "path": "generated/workflows/labs/nvidia/asset-harvester.md",
+      "lane": "labs",
+      "kind": "graph"
+    },
+    {
+      "id": "labs/nvidia/cosmos-drive-dreams",
+      "path": "generated/workflows/labs/nvidia/cosmos-drive-dreams.md",
+      "lane": "labs",
+      "kind": "graph"
+    },
+    {
+      "id": "labs/nvidia/dlss5-enhancer",
+      "path": "generated/workflows/labs/nvidia/dlss5-enhancer.md",
+      "lane": "labs",
+      "kind": "graph"
+    },
+    {
+      "id": "labs/nvidia/dvlt",
+      "path": "generated/workflows/labs/nvidia/dvlt.md",
+      "lane": "labs",
+      "kind": "graph"
+    },
+    {
+      "id": "labs/nvidia/gamma-world",
+      "path": "generated/workflows/labs/nvidia/gamma-world.md",
+      "lane": "labs",
+      "kind": "graph"
+    },
+    {
+      "id": "labs/nvidia/gen3c",
+      "path": "generated/workflows/labs/nvidia/gen3c.md",
+      "lane": "labs",
+      "kind": "graph"
+    },
+    {
+      "id": "labs/nvidia/infinicube",
+      "path": "generated/workflows/labs/nvidia/infinicube.md",
+      "lane": "labs",
+      "kind": "graph"
+    },
+    {
+      "id": "labs/nvidia/instant-nurec",
+      "path": "generated/workflows/labs/nvidia/instant-nurec.md",
+      "lane": "labs",
+      "kind": "graph"
+    },
+    {
+      "id": "labs/nvidia/luxdit",
+      "path": "generated/workflows/labs/nvidia/luxdit.md",
+      "lane": "labs",
+      "kind": "graph"
+    },
+    {
+      "id": "labs/nvidia/lyra-1",
+      "path": "generated/workflows/labs/nvidia/lyra-1.md",
+      "lane": "labs",
+      "kind": "graph"
+    },
+    {
+      "id": "labs/nvidia/lyra-2",
+      "path": "generated/workflows/labs/nvidia/lyra-2.md",
+      "lane": "labs",
+      "kind": "graph"
+    },
+    {
+      "id": "labs/nvidia/nurec-ga",
+      "path": "generated/workflows/labs/nvidia/nurec-ga.md",
+      "lane": "labs",
+      "kind": "graph"
+    },
+    {
+      "id": "labs/nvidia/pixelumm",
+      "path": "generated/workflows/labs/nvidia/pixelumm.md",
+      "lane": "labs",
+      "kind": "graph"
+    },
+    {
+      "id": "labs/nvidia/splatpainting",
+      "path": "generated/workflows/labs/nvidia/splatpainting.md",
+      "lane": "labs",
+      "kind": "graph"
+    },
+    {
+      "id": "labs/nvidia/vk-gaussian-splatting",
+      "path": "generated/workflows/labs/nvidia/vk-gaussian-splatting.md",
+      "lane": "labs",
+      "kind": "graph"
+    },
+    {
       "id": "labs/opt-in/longcat-video",
       "path": "generated/workflows/labs/opt-in/longcat-video.md",
       "lane": "labs",
@@ -2719,8 +2827,8 @@
       "kind": "album"
     }
   ],
-  "graph_count": 703,
-  "page_count": 454,
+  "graph_count": 721,
+  "page_count": 472,
   "lanes": [
     "photos",
     "video",

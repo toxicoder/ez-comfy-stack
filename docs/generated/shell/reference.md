@@ -351,6 +351,16 @@ Arguments:
 Returns:
   promote-workflow status
 
+### Command: nvidia-lab
+
+Query or install one opt-in NVIDIA lab row. Never pulls into the image.
+Globals:
+  REPO_ROOT
+Arguments:
+  $@  nvidia-lab flags
+Returns:
+  nvidia-lab status
+
 ### Command: album-render
 
 Queue a shipped music album then zip the output folder.
@@ -2055,6 +2065,72 @@ Exit codes:
   0 success / dry-run; 1 usage or refuse; 2 compose running
 
 ### Command: nvenc-preview
+
+<!-- source: scripts/utilities/nvidia-lab.sh -->
+## nvidia-lab
+
+Operator CLI for the opt-in NVIDIA lab tier (one Spark, GB10 unverified).
+
+Purpose:
+  The tier is a catalog of NVIDIA lab rows (ArtiFixer, 3DGRUT, Lyra, GEN3C,
+  NuRec, ...) that are off by default and download nothing at boot. This CLI
+  is the only host door for that catalog: it lists rows, prints the verdict
+  for a row, plans the artifact fetch, and installs or runs a row the operator
+  opted into. Every catalog read goes through the Python reader in
+  scripts/lib/nvidia_lab.py, which owns schema validation; this script never
+  parses the catalog JSON itself.
+
+Audience:
+  Operators of a remotely managed DGX Spark. Wired into manage.sh as the
+  nvidia-lab verb; also sourced by tests/bats/nvidia_lab.bats.
+
+```bash
+Usage:
+  bazelisk run //:manage -- nvidia-lab list
+  bazelisk run //:manage -- nvidia-lab status ID
+  bazelisk run //:manage -- nvidia-lab plan ID
+  bazelisk run //:manage -- nvidia-lab install ID
+  bazelisk run //:manage -- nvidia-lab uninstall ID
+  bazelisk run //:manage -- nvidia-lab run ID --input PATH [--params JSON]
+  bazelisk run //:manage -- nvidia-lab check
+
+```
+
+Invariants:
+
+  - install / uninstall / run refuse any row whose status is not opt-in, and
+    print that row's status, gate_notes, and reopen sentence.
+
+  - install and run require the heavy confirm (require_heavy_confirm) and the
+    host headroom preflight (check_host_headroom), and refuse while occupancy
+    holds a heavy GPU mode or a live desk sidecar. These rows put work on the
+    same GB10 outside the Comfy process, so the one-heavy-GPU-job XOR holds.
+
+  - install runs only the row's own cmd when it is non-empty; otherwise it
+    pulls artifact_ref (docker-pull) or clones artifact_ref into the lab home
+    (git-clone). pip-install and none rows refuse with a stated reason.
+
+  - Artifacts land under ${EZ_NVIDIA_LAB_HOME:-$HOME/.ez-comfy/nvidia-lab}/ID:
+    never in the repo, never in a Comfy bind.
+
+  - run prints the exact command it would execute and executes it only when
+    EZ_NVIDIA_LAB_EXECUTE=1. The tier is unverified on GB10 and stays honest
+    about that.
+
+  - Nothing here touches docker-compose, the restart policy, mem_limit, the
+    headroom thresholds, or the download-limit trap.
+
+Test hooks:
+  EZ_NVIDIA_LAB_CATALOG - catalog JSON path handed to the reader as --catalog
+  EZ_NVIDIA_LAB_EXECUTE - 1 lets run execute the command it printed
+  EZ_NVIDIA_LAB_HOME    - clone root (default $HOME/.ez-comfy/nvidia-lab)
+
+Exit codes:
+  0 ok; 1 usage or reader failure; 2 refuse (unknown or non-opt-in row,
+  occupancy busy, headroom short, install kind this CLI will not run);
+  5 heavy confirm declined.
+
+### Command: nvidia-lab
 
 <!-- source: scripts/utilities/occupancy.sh -->
 ## occupancy

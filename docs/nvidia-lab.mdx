@@ -1,0 +1,250 @@
+---
+title: NVIDIA lab tier
+description: "The opt-in NVIDIA lab tier: eighteen evaluated rows that are off by default, download nothing, add no Compose service, and stay outside the Comfy process until you install one."
+tags: [nvidia, opt-in, splat, world-models, relight, occupancy, license]
+---
+
+# NVIDIA lab tier
+
+**What's on this page**
+
+- **What the tier is** - evaluated NVIDIA research rows, off by default, none of them installed
+- **The four gates** - license, `linux_aarch64` artifact, single-Spark footprint, media lane
+- **See and install a row** - the `nvidia-lab` verbs, in the Bazel form
+- **What the tier never does** - no download, no Compose service, no image change
+- **Occupancy** - the GPU work runs outside Comfy, so the one-heavy-job rule still holds
+- **GB10** - a row is unverified until it says `verified`
+- **Families** - splatting, world models, relighting, and the eighteen rows
+
+**What this enables**
+
+- **Reading** a verdict before you spend a day on a clone and a checkpoint pull
+- **Installing** one row deliberately, with the heavy confirm and the headroom preflight in front of it
+- **Keeping** `docker/Dockerfile`, the Compose profile, and `download-models` untouched
+- **Knowing** which rows still need a GB10 run before anyone calls them working
+
+**Question this page answers:** NVIDIA ships real splatting, world-model, and relighting code - what does this stack do with it? It keeps every row in one catalog, off by default, and hands you a verb to look at the verdict and one to install a row that cleared the gates.
+
+<Callout type="warning" title="Off by default">
+  Nothing in this tier is installed, downloaded, queued, or referenced by a promoted graph. `download-models` never touches it, and no row is a Compose service. A row runs only after you install it yourself with `bazelisk run //:manage -- nvidia-lab install <id>`, which asks for **yes** first.
+</Callout>
+
+---
+
+## What the tier is
+
+The **NVIDIA lab** tier is the stack's evaluation shelf for NVIDIA research
+repositories: Gaussian splatting and 3DGRT/3DGUT scenes, generative world models,
+relighting, and the viewers around them. Eighteen rows live in
+`custom_nodes/ez_nvidia_lab/catalog.json`, and each row carries its status, its
+code and weight licenses, its artifact and platform, its VRAM and disk envelope,
+the gate that refuses it, and the sentence that would reopen it.
+
+Three statuses, and each row carries exactly one:
+
+- **opt-in** - cleared the gates; you install it, on the host, when you want it
+- **blocked** - something outside this repo refuses it today (`blocked-license`
+  or `blocked-platform`), and the row records what
+- **deferred** - not refused by a fact, but not answerable yet: a license nobody
+  has published, a footprint nobody has measured, or a domain no lane serves
+
+The single source of truth is the catalog, and the generated reference renders
+it row by row: [NVIDIA lab tier reference](generated/nvidia-lab/tier.md).
+
+---
+
+## The four gates
+
+A candidate has to clear all four at once, and one is enough to decline it. The
+same gates and the evidence behind them are on
+[Declined integrations](reference/declined-integrations.md); the tier applies them
+to the NVIDIA research shelf:
+
+1. **License** - the terms permit running the code *and* the weights inside a
+   product container. A card tagged Apache-2.0 next to a non-commercial weight
+   license is a block, not a maybe.
+2. **Artifact** - a `linux_aarch64` artifact that actually installs on GB10. A
+   `win_arm64` wheel or an x86_64-only NGC image does not count.
+3. **Footprint** - a memory and disk envelope that fits one Spark beside the
+   pinned catalog, not a training cluster.
+4. **Lane** - a modality that serves an image, video, or audio lane this stack
+   actually runs. Driving logs and AV assets do not.
+
+Re-running the evaluation against the primary source is the whole of
+[Reopening an evaluation](reference/declined-integrations.md#reopening-an-evaluation).
+When a vendor ships new artifacts, re-check the card before you spend a day.
+
+---
+
+## See and install a row
+
+`status` is the page you read first: every row, its status, and the reason.
+
+```bash
+bazelisk run //:manage -- nvidia-lab status
+bazelisk run //:manage -- nvidia-lab list
+```
+
+Then work one row before you touch it:
+
+```bash
+bazelisk run //:manage -- nvidia-lab plan artifixer
+bazelisk run //:manage -- nvidia-lab install artifixer
+bazelisk run //:manage -- nvidia-lab run artifixer --input /mnt/comfy-output/scene
+bazelisk run //:manage -- nvidia-lab uninstall artifixer
+bazelisk run //:manage -- nvidia-lab check
+```
+
+`plan` prints what would happen; `install` and `run` refuse until you type
+**yes**, run the host headroom preflight first, and refuse outright while a
+heavy occupancy mode holds the GPU. `install` and `run` also refuse any row that
+is not **opt-in** - a blocked or deferred row has no install path, only a
+verdict, which `check` and the reference page print for you.
+
+The generated reference is the long form of the same data:
+[NVIDIA lab tier reference](generated/nvidia-lab/tier.md). Regenerate it after a
+catalog edit:
+
+```bash
+bazelisk run //docs:generate_nvidia_lab
+```
+
+---
+
+## What the tier never does
+
+The tier is a catalogue plus a host verb, and it stops there:
+
+- **It downloads nothing.** No checkpoint enters `${MODELS_DIR}`, nothing is
+  added to `download-models`, and no row is a manifest pack. Weights move only
+  when you run an `install` for an opt-in row, on the host, into that row's own
+  directory.
+- **It adds no Compose service.** No new container in the profile, no port, no
+  volume, no `restart:` policy, no `mem_limit` change. The
+  [reboot-safety and headroom guards](reboot-safety.md) are untouched.
+- **It does not touch the image.** `docker/Dockerfile` gains no CUDA toolkit,
+  no Vulkan loader, no source-built kernel tree. Rows that need a build build on
+  the host, the way the [Blender sidecar](blender-gb10-sidecar.md) does.
+- **It mints no lab graph of its own.** The four nodes in the pack read the
+  catalog, preflight a row, hand one job to the operator CLI, and state a
+  verdict; the GPU work itself runs outside Comfy.
+
+---
+
+## Occupancy: still one heavy job
+
+The tools in this tier run **outside the Comfy process** - a container pull, a
+source build, a host CLI - so Comfy never loads them and no App holds a model
+while they run. That does not make them free: they still take GB10.
+
+So the XOR rule stands. One heavy GPU job at a time, exactly as
+[Host sidecars](studio-sidecars.md#occupancy-rule) and
+[GPU occupancy](occupancy.md) state it. `nvidia-lab install` and `nvidia-lab run`
+refuse while `occupancy` holds a heavy mode, and the row's own App carries
+occupancy `none` because the work is not in the Comfy process. Unload Klein, Wan,
+or LTX before you start a splat train or a walkthrough, the same way you would
+before [SuperSplat](splat-sidecar.md) opens a file.
+
+---
+
+## GB10: unverified is the honest default
+
+**Nothing in this tier is verified on GB10 unless its row says `verified`.** The
+`gb10` column reads `verified`, `unverified`, or `unsupported`, and today no row
+says `verified`: upstream reports come from H100, A100, GB200, and GB300, which
+are not this machine. `unsupported` means someone already measured a wall - a
+missing architecture, a Windows-only runtime.
+
+An opt-in status is a license-and-artifact verdict, not a benchmark. Treat the
+first run of any row as the measurement, and say so when you have one: the
+`gate_notes` on the row are where a GB10 result belongs.
+
+---
+
+## Splatting
+
+The splat rows are the reason the tier exists: `3dgrut` trains and renders
+ray-traced and unscented-transform Gaussian scenes from a capture (Apache-2.0 and
+no weights at all, because you train per scene, with the CUDA kernels compiled on
+the host), `artifixer` repairs and extends under-observed regions of a scene with
+a published linux/arm64 CUDA 13 image and ungated weights, and
+`3dgrut-artifixer-fork` is the pinned 3DGRUT fork ArtiFixer vendors, so you
+install it through the `artifixer` row rather than on its own.
+`vk-gaussian-splatting` renders those scenes natively over Vulkan - the only
+viewer here, and a host viewer beside Comfy on the same rule that keeps SuperSplat
+out of the image. `splatpainting` is the brush, and it stays a
+**blocked-license** card: the repository is Apache-2.0 except the vendored
+`deps/gsplats` tree, which carries Inria and MPII research licenses, so a build
+that links it is not clean for a product image.
+
+---
+
+## World models
+
+The world-model rows generate explorable or camera-controlled scenes, and the
+license decides which ones you may run. `lyra-1` is opt-in - Apache-2.0 code,
+NVIDIA Open Model License weights, one image in and a walkthrough clip out, with
+an offload-dominated runtime on this box. `gen3c` is the one generative row whose
+weights permit commercial use outright, about 43 GB at peak with full offload.
+`lyra-2` is **blocked-license**: its checkpoints bar distribution, deployment, and
+production use, which is what running it in a product container is, and it is
+roughly 98 GB on top. `infinicube` is **blocked-license** too - the weights forbid
+commercial use, sit on a personal Hugging Face account, and bind to the Waymo
+dataset terms. `instant-nurec`, `nurec-ga`, `gamma-world`, `pixelumm`, and
+`asset-harvester` are **deferred**: an unstated weight license, an arm64 tag that
+only exists as a non-gating nightly build, no published checkpoint host or memory
+envelope, a 121.6 GB checkpoint set behind a seven-GPU training path, or a
+driving-and-AV domain no lane here produces.
+
+---
+
+## Relighting
+
+`luxdit` estimates image-based lighting from one photo or a video, which is the
+capability the 3D lane does not have. It is **blocked-license** and stays a card:
+the repository itself ships the NVIDIA OneWay Noncommercial License, so it is the
+code, not only the weights, that bars a product container. Nothing in the
+promoted stack relights a shot today - the [3D lane](learn/pipeline.md) goes image
+to mesh with TRELLIS.2, and the [Asset Bible](asset-bible.md) records those
+outputs. The row stays so the next evaluation starts from the gate notes instead
+of from zero.
+
+---
+
+## The eighteen rows
+
+One line each. Full footprint, links, and sources are on the
+[generated reference](generated/nvidia-lab/tier.md).
+
+| Row | Status | Why |
+| --- | --- | --- |
+| `artifixer` | opt-in | Apache-2.0 code, ungated NVIDIA Open Model License weights, and a published linux/arm64 CUDA 13 image |
+| `3dgrut` | opt-in | Apache-2.0 with no weights to license; kernels compile on the host, and the 3DGUT path avoids the RT-core requirement |
+| `3dgrut-artifixer-fork` | opt-in | The pinned fork ArtiFixer vendors - installable, but through the `artifixer` row rather than on its own |
+| `vk-gaussian-splatting` | opt-in | Vulkan, so it sidesteps the CUDA and aarch64 wheels entirely; a host viewer, not an image dependency |
+| `lyra-1` | opt-in | Apache-2.0 code and NVIDIA Open Model License weights; the long run and the Cosmos backbone are the cost, not the license |
+| `gen3c` | opt-in | The only generative row whose weights permit commercial use outright, at about 43 GB peak with full offload |
+| `lyra-2` | blocked-license | The checkpoint terms bar distribution, deployment, and production use, and the set is about 98 GB |
+| `luxdit` | blocked-license | The code itself ships the NVIDIA OneWay Noncommercial License |
+| `infinicube` | blocked-license | Weights forbid commercial use, are hosted on a personal account, and bind to the Waymo dataset terms |
+| `dvlt` | blocked-license | Weights and the VGGT-derived files are both non-commercial, which is the only thing refusing the best hardware fit here |
+| `splatpainting` | blocked-license | The vendored `deps/gsplats` tree carries Inria and MPII research licenses |
+| `cosmos-drive-dreams` | blocked-platform | x86_64-only NGC images and prebuilt CUDA wheels, for an AV-sensor domain no lane produces |
+| `dlss5-enhancer` | blocked-platform | A Windows D3D12 worker hosting NVIDIA NGX behind `nvngx.dll`; there is no Linux path at all |
+| `nurec-ga` | deferred | The arm64 tags are non-gating nightly builds and the container license and NGC entitlement are unpublished |
+| `instant-nurec` | deferred | The weight license is not stated and the input domain is multi-camera driving logs |
+| `pixelumm` | deferred | 121.6 GB of distributed checkpoints behind a documented seven-GPU path, on a card tagged `license:other` |
+| `gamma-world` | deferred | No named checkpoint host, no published weight license, and no memory envelope to size a Spark against |
+| `asset-harvester` | deferred | An AV-asset domain no lane serves, with the weight license and GPU class unpublished |
+
+---
+
+## Related
+
+- [NVIDIA lab tier reference](generated/nvidia-lab/tier.md) - the generated per-row page
+- [Declined integrations](reference/declined-integrations.md) - the four gates and the evidence behind them
+- [Model licenses](licenses.md) - the pinned catalog this tier sits beside
+- [Host sidecars overview](studio-sidecars.md) - the host-tools group and the occupancy rule
+- [GPU occupancy](occupancy.md) - entering and leaving a heavy mode
+- [Splat sidecar](splat-sidecar.md) - the MIT viewer that stays out of the image
+- [manage.sh reference](manage-cli.md) - every verb, including `nvidia-lab`

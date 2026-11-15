@@ -77,6 +77,7 @@ filegroup(
         "manage-cli.mdx",
         "models-and-cache.mdx",
         "music.mdx",
+        "nvidia-lab.mdx",
         "occupancy.mdx",
         "operate/backup-restore.mdx",
         "operate/daily.mdx",
@@ -133,6 +134,7 @@ _DOCS_COMMON_DATA = [
     "generate_cinema_docs.py",
     "cinema_clip_prompts.py",
     "generate_audio_docs.py",
+    "generate_nvidia_lab_docs.py",
     "glossary.py",
     "page_brief.py",
     "commands.py",
@@ -168,7 +170,7 @@ sh_binary(
 )
 
 # Generators only: fills docs/generated/ with no npm install and no webpack
-# export. The four docs/generate_*.py scripts were reachable only through the
+# export. The five docs/generate_*.py scripts were reachable only through the
 # full site build, so the cheap "I edited a shell function, refresh the
 # reference" loop meant running python3 by hand.
 sh_binary(
@@ -221,6 +223,17 @@ sh_binary(
     args = [
         "generate-one",
         "generate_audio_docs",
+    ],
+    data = _DOCS_COMMON_DATA,
+    visibility = ["//visibility:public"],
+)
+
+sh_binary(
+    name = "generate_nvidia_lab",
+    srcs = ["manage-docs.sh"],
+    args = [
+        "generate-one",
+        "generate_nvidia_lab_docs",
     ],
     data = _DOCS_COMMON_DATA,
     visibility = ["//visibility:public"],

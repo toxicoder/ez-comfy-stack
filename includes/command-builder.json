@@ -1150,6 +1150,20 @@
       "flags": []
     },
     {
+      "id": "nvidia-lab",
+      "title": "nvidia-lab list",
+      "description": "List the opt-in NVIDIA lab tier with each row's status and license verdict. Reads the catalog only; downloads nothing.",
+      "argv": [
+        "bazelisk",
+        "run",
+        "//:manage",
+        "--",
+        "nvidia-lab",
+        "list"
+      ],
+      "flags": []
+    },
+    {
       "id": "promote-workflow",
       "title": "promote-workflow",
       "description": "Copy a live _user graph into workflows/_lab/<lane>/. Does not commit.",

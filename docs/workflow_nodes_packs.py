@@ -1,4 +1,4 @@
-"""ez_* pack encyclopedia rows (podcast, dub, film, DCC).
+"""ez_* pack encyclopedia rows (podcast, dub, film, DCC, NVIDIA lab).
 
 Helpers and combo catalogs live in :mod:`workflow_nodes_lib`.
 """
@@ -9,7 +9,7 @@ from __future__ import annotations
 from workflow_nodes_lib import NodeSpecs, _n, _s, _w
 
 def pack_nodes() -> NodeSpecs:
-    """Podcast, dub, film, DCC, research, quality, forge.
+    """Podcast, dub, film, DCC, research, quality, forge, NVIDIA lab.
 
     Returns:
         Node specs keyed by type.
@@ -392,6 +392,58 @@ def pack_nodes() -> NodeSpecs:
             _w("as_app", index=4, typ="BOOLEAN", rng="true", desc="Write an App.", gen="true writes *.app.json for the Apps sidebar."),
             _w("overwrite", index=5, typ="BOOLEAN", rng="false", desc="Replace existing.", gen="false refuses an existing _user file."),
             _w("catalog", index=6, desc="Catalog id.", gen="Leave as stamped."),
+        ],
+    )
+    nodes["EZNvidiaLabCatalog"] = _n(
+        "NVIDIA lab catalog",
+        "Print every NVIDIA lab row with its status, code license, weights license, and commercial-use verdict.",
+        origin="ez_nvidia_lab",
+        lab="Category EZ Comfy/NVIDIA Lab. Reads the pack's own catalog.json with stdlib json, so a missing or malformed catalog prints the reason instead of failing the Queue. Nothing is installed and nothing is downloaded. An output node: the report shows on the canvas after Queue. A footprint of 0 in the catalog is not a size, it is the pack's way of saying upstream publishes no figure, so the list view prints 'vram not published' rather than 0 GB.",
+        sockets=[
+            _s("report", "STRING", "out", "The tier report: one aligned line per row on table, one labelled block per row on list."),
+        ],
+        widgets=[
+            _w("detail", index=0, typ="COMBO", rng="table (lab)", desc="Report shape.", gen="table is one aligned line per row (id, status, code license, weights license, commercial). list adds arm64, GB10, install, artifact, footprint, weights, and graph per row.", choices=[("list", "One block per row with arm64, gb10, install, footprint, graph."), ("table", "One aligned line per row (lab default).")]),
+        ],
+    )
+    nodes["EZNvidiaLabPreflight"] = _n(
+        "NVIDIA lab preflight",
+        "Answer whether one catalog row could run on this Spark today.",
+        origin="ez_nvidia_lab",
+        lab="Category EZ Comfy/NVIDIA Lab. Checks the catalog row exists, the host is aarch64, the binary that row's install verb needs is on PATH (docker for docker-pull, git for git-clone), the artifact ref is shaped like a pull spec or a clone URL, and what upstream says about GB10. There is no network probe: the container has no egress guarantee, so 'reachable' is the shape of the ref. Missing tooling is ok=False plus a reason, never an error. Installs nothing. An unverified GB10 is a note, not a blocker; unsupported is.",
+        sockets=[
+            _s("report", "STRING", "out", "Every check with its verdict line and each blocking reason."),
+            _s("ok", "BOOLEAN", "out", "False whenever a reason exists."),
+        ],
+        widgets=[
+            _w("tool_id", index=0, rng="artifixer", desc="Catalog row id to check.", gen="kebab-case id from catalog.json. An empty id or one no row carries is a reason, not a crash. The opt-in rows are the only install paths; every other row is a card."),
+        ],
+    )
+    nodes["EZNvidiaLabJob"] = _n(
+        "NVIDIA lab job",
+        "Run one opt-in catalog row through the operator CLI's nvidia-lab verb.",
+        origin="ez_nvidia_lab",
+        lab="Category EZ Comfy/NVIDIA Lab. Refuses a row whose status is not opt-in before anything runs, and refuses an empty input_path or malformed params_json. The CLI (scripts/utilities/nvidia-lab.sh via ./scripts/manage.sh) does the heavy confirm, the headroom preflight, and the occupancy XOR; this node spawns nothing of its own and touches no Compose, restart policy, or memory limit. Exit code and the tail of stdout/stderr come back as the report. The graphs in labs/nvidia leave input_path blank on purpose, so the panel never queues a job with no input.",
+        sockets=[
+            _s("report", "STRING", "out", "The argv, the output tails, and a verdict of ok or refused."),
+            _s("ok", "BOOLEAN", "out", "True only when the CLI exited 0."),
+        ],
+        widgets=[
+            _w("tool_id", index=0, rng="artifixer", desc="Catalog row id to run.", gen="Must name a row whose status is opt-in; a blocked-license, blocked-platform, or deferred row is refused before the CLI starts."),
+            _w("input_path", index=1, rng="existing file path", desc="Input file handed to the tool.", gen="The node refuses an empty path or one that is not a readable file. Authored blank in the lab graphs: it is the operator's to type in graph view."),
+            _w("params_json", index=2, rng="JSON object, lab {}", desc="Parameters passed through to the CLI.", gen="Multiline JSON box. Malformed JSON is refused with the parser's line and message. Dynamic prompts are off so a brace in the blob is never read as a prompt slot."),
+        ],
+    )
+    nodes["EZNvidiaLabVerdict"] = _n(
+        "NVIDIA lab verdict",
+        "Print why one row is off the install path, the sentence that would reopen it, and the command that re-checks it.",
+        origin="ez_nvidia_lab",
+        lab="Category EZ Comfy/NVIDIA Lab. Reads the catalog only and runs nothing, so a blocked row is answerable on a host that cannot install it. An opt-in row says nothing blocks it. An output node: the verdict shows on the canvas after Queue.",
+        sockets=[
+            _s("verdict", "STRING", "out", "The row's gate notes, its reopen line, and its verify command."),
+        ],
+        widgets=[
+            _w("tool_id", index=0, rng="nurec-ga", desc="Catalog row id to answer for.", gen="kebab-case id from catalog.json. The lab graphs pin it to the graph's own row; another id prints that row's verdict instead."),
         ],
     )
     return nodes
