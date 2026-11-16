@@ -229,6 +229,43 @@ def test_resize_fails_without_comfy_or_torch(monkeypatch: pytest.MonkeyPatch) ->
         _resize_bhwc(_FakeImg(8, 8), 16, 16)
 
 
+def test_upscale_keeps_the_joined_alpha_channel(monkeypatch: pytest.MonkeyPatch) -> None:
+    """``photos/background-removal`` feeds the rung a 4-channel joined still.
+
+    Truncating to three channels anywhere on this path would quietly throw the
+    transparency away at every rung above ``none``, and the still would come
+    back opaque with no error to show for it.
+    """
+
+    class _FourChannel(_FakeImg):
+        """BHWC fake that carries the channel count it was built with."""
+
+        def __init__(self, height: int, width: int, channels: int = 4) -> None:
+            super().__init__(height, width)
+            self.shape = (1, height, width, channels)
+
+    seen: dict[str, int] = {}
+
+    def upscale(
+        nchw: _FourChannel,
+        width: int,
+        height: int,
+        method: str,
+        crop: str,
+    ) -> _FourChannel:
+        del method, crop
+        seen["channels"] = nchw.shape[3]
+        return _FourChannel(height, width, nchw.shape[3])
+
+    utils = types.SimpleNamespace(common_upscale=upscale)
+    monkeypatch.setitem(sys.modules, "comfy", types.SimpleNamespace(utils=utils))
+    monkeypatch.setitem(sys.modules, "comfy.utils", utils)
+    out, kind = EZImageUpscale().run(_FourChannel(8, 8), "2x")
+    assert kind == "2x"
+    assert seen["channels"] == 4
+    assert out.shape[-1] == 4
+
+
 def test_snap_and_match_run_resize_paths(monkeypatch: pytest.MonkeyPatch) -> None:
     seen: list[tuple[int, int]] = []
 

@@ -4,7 +4,9 @@
 Run from repo root:
   python3 tests/python/_build_image_prep.py
 
-Two Apps, both front doors to the 3d lane. ``photos/cutout`` is a light CPU
+Three Apps. ``photos/cutout`` and ``photos/multi-view`` are front doors to the 3d
+lane; ``photos/background-removal`` isolates one subject so any other App can reuse
+it. ``photos/cutout`` is a light CPU
 pre-pass: one ``EZCutout`` (BiRefNet loaded inside the node) on one
 ``LoadImage``, so the graph carries no loader at all. A UNETLoader here would
 make it a two-stack App and ``_lab_families.stack_violations`` fails that.
@@ -29,7 +31,9 @@ from _lab_paths import write_lab_graph
 from _stamp_app_mode import apply_lab_completeness_flags
 from _stamp_app_mode import ensure_occupancy_note
 from _stamp_app_mode import stamp_app_mode
+from _wire_format import _link_out
 from _wire_prompt_enhance import repair_negative_sources
+from _wire_upscale import UPSCALE_COMBO_TYPE
 from _wire_upscale import wire_upscale
 
 # Copied verbatim from the shipped photos graphs (photos/identity-sheet).
@@ -439,9 +443,14 @@ passes the photo through untouched and says so on the node. Queue writes
 can be repainted by hand and fed back in. The node's MASK slot is there when you want to
 send the raw alpha somewhere else.
 
-Backdrop is white, black, or keep original. Dilate grows the keep edge outward and
-feather softens it; the node clamps both to 0-32. This graph ships dilate 6 and feather
-4 so hair, fur, and fur trim survive the cut - drop toward 2 for a hard-edged product.
+Backdrop is white, black, grey, green, blue, transparent, or keep original. The first
+five paint a colour into the pixels the subject leaves and keep original changes only
+the matte. transparent asks for the alpha path instead of a colour, and this graph has
+no alpha node to consume it, so its print stays the untouched photo - a subject you want
+to reuse with real emptiness behind it belongs on `photos/background-removal`. A plate
+going to the mesh printer wants a painted colour. Dilate grows the keep edge outward and feather softens it;
+the node clamps both to 0-32. This graph ships dilate 6 and feather 4 so hair, fur, and
+fur trim survive the cut - drop toward 2 for a hard-edged product.
 
 There is no UNETLoader, CLIPLoader, or VAELoader in this graph on purpose. The node owns
 its own weight, this is a light pre-pass, and a loader here would make it a two-stack
@@ -452,6 +461,49 @@ same tone as its backdrop is where a matte goes wrong; crop or reshoot first.
 
 Handoff: `photos/multi-view` for the other cameras on this same subject, then
 `3d/hero-from-photos` for the mesh.
+"""
+
+BACKGROUND_REMOVAL_NOTE = """## photos/background-removal
+
+Isolate ONE focal character or object from a photo and keep it as an asset the other
+Apps can reuse. Load a photo, pick what fills the space the subject leaves, Queue once.
+
+This is not `photos/cutout`. That graph preps a subject for the image-to-3D printers:
+it hands over a grey matte a person can repaint before the mesh stage. This one is the
+extractor - it drops an isolated subject into the still Apps, and it is the only cutout
+graph in the lane that can write a file with genuine emptiness behind the edge.
+
+EZCutout (first-party, `custom_nodes/ez_image/cutout.py`) runs BiRefNet with its weight
+loaded inside the node, so this canvas carries no UNETLoader, CLIPLoader, or VAELoader:
+one stack, not two, and no GPU session. It fails soft - no BiRefNet weights, a missing
+timm / kornia / einops / transformers, or EZ_CUTOUT=0 passes the photo through untouched
+and says which one on the node.
+
+Backdrop is the decision that matters. white, black, grey, green, and blue paint that
+colour into the vacated pixels and the still stays fully opaque; green and blue are the
+chroma keys a compositor downstream pulls. transparent is the only pick that writes real
+alpha, so the PNG is genuinely empty behind the subject. keep original changes no pixel
+at all - read the matte with it, never key with it.
+
+Queue writes `ez_bgremove_NNNNN_.png` (the subject on its backdrop) and
+`ez_bgremove_matte_NNNNN_.png` (the grey matte that produced it, printed so you can
+repair an edge by hand). The alpha is stock ComfyUI: the node's save_mask runs through
+Invert Mask into Join Image with Alpha, which is the node that actually writes the fourth
+channel, and the joined still is what goes to disk. save_mask carries the real alpha under
+transparent and an opaque grid under every painted backdrop, which is what stops a painted
+plate from keying itself back out. The join sits ahead of **Upscale**, and one dropdown
+drives both prints, so the alpha grows with the still instead of drifting off it.
+
+Dilate grows the keep edge outward and feather softens it, both clamped to 0-32; this
+graph ships 6 and 4 so hair, fur, and fur trim survive the cut. Pull both toward 2 for a
+hard-edged product shot.
+
+One subject per Queue is the contract. BiRefNet answers with one focal thing, so a group
+shot, a cluttered street, or a subject wearing the colour of its wall wants a crop or a
+reshoot first.
+
+Handoff: `photos/thumbnail` and `photos/banner-wide` both take the isolated subject as
+their start still.
 """
 
 MULTI_VIEW_NOTE = """## photos/multi-view
@@ -546,6 +598,131 @@ def build_cutout() -> dict[str, Any]:
         outputs=["Save cutout", "Save matte"],
         occupancy="none",
         handoff=("photos/multi-view", "3d/hero-from-photos"),
+    )
+
+
+def _scale_rung(canvas: _Canvas, *, title: str) -> dict[str, Any]:
+    """Append one Detail rung the builder wires itself.
+
+    Both saves hang off a rung the builder placed, so the ``_finish`` pass finds
+    nothing to insert and ``wire_upscale`` stays a no-op on this graph. The
+    combo output is typed by the rung's own values, which is how one App
+    dropdown drives every print.
+
+    Args:
+        canvas: The canvas being built.
+        title: Canvas title; both rungs carry one, the way the pass names them.
+
+    Returns:
+        The ``EZImageUpscale`` node.
+    """
+    return canvas.add(
+        "EZImageUpscale",
+        title=title,
+        inputs=[_in("image", "IMAGE")],
+        outputs=[
+            _out("image", "IMAGE"),
+            {"name": "upscale", "type": UPSCALE_COMBO_TYPE, "links": [], "slot_index": 1},
+        ],
+        widgets=[DEFAULT_UPSCALE],
+        size=(280.0, 80.0),
+    )
+
+
+def build_background_removal() -> dict[str, Any]:
+    """Isolate one subject out of a photo so any other App can reuse it.
+
+    Returns:
+        A serialized graph for ``photos/background-removal``.
+    """
+    canvas = _Canvas()
+    canvas.note(BACKGROUND_REMOVAL_NOTE)
+    source = canvas.load_image("Source photo")
+    cutter = canvas.add(
+        "EZCutout",
+        title="Subject cutter",
+        inputs=[
+            _in("image", "IMAGE"),
+            _widget_in("backdrop", "COMBO"),
+            _widget_in("dilate", "INT"),
+            _widget_in("feather", "INT"),
+        ],
+        outputs=[
+            _out("image", "IMAGE"),
+            _out("matte", "IMAGE", slot=1),
+            _out("mask", "MASK", slot=2),
+            _out("save_mask", "MASK", slot=3),
+        ],
+        widgets=[BACKDROP, DILATE, FEATHER],
+        size=(300.0, 150.0),
+    )
+    canvas.wire(source, 0, cutter, 0, "IMAGE")
+    # Stock ComfyUI does the alpha: SaveImage has no mask input at COMFYUI_REF, and
+    # JoinImageWithAlpha writes the fourth channel. It subtracts what it is handed from
+    # 1, so the matte is inverted on the way in and save_mask keeps its plain
+    # "1 = subject" meaning on the node.
+    invert = canvas.add(
+        "InvertMask",
+        title="Invert matte",
+        inputs=[_in("mask", "MASK")],
+        outputs=[_out("MASK", "MASK")],
+        size=(210.0, 60.0),
+    )
+    join = canvas.add(
+        "JoinImageWithAlpha",
+        title="Join alpha",
+        inputs=[_in("image", "IMAGE"), _in("alpha", "MASK")],
+        outputs=[_out("IMAGE", "IMAGE")],
+        size=(240.0, 80.0),
+    )
+    # save_mask, not mask: a painted backdrop must reach the file opaque, or the colour
+    # it was just painted with keys itself back out.
+    canvas.wire(cutter, 3, invert, 0, "MASK")
+    canvas.wire(invert, 0, join, 1, "MASK")
+    canvas.wire(cutter, 0, join, 0, "IMAGE")
+    rung = _scale_rung(canvas, title="Scale still")
+    matte_rung = _scale_rung(canvas, title="Scale matte")
+    canvas.wire(join, 0, rung, 0, "IMAGE")
+    canvas.wire(cutter, 1, matte_rung, 0, "IMAGE")
+    save_still = canvas.add(
+        "SaveImage",
+        title="Save still",
+        inputs=[_in("images", "IMAGE")],
+        widgets=["ez_bgremove"],
+        size=(280.0, 270.0),
+    )
+    canvas.wire(rung, 0, save_still, 0, "IMAGE")
+    save_matte = canvas.add(
+        "SaveImage",
+        title="Save matte",
+        inputs=[_in("images", "IMAGE")],
+        widgets=["ez_bgremove_matte"],
+        size=(280.0, 270.0),
+    )
+    canvas.wire(matte_rung, 0, save_matte, 0, "IMAGE")
+    graph = canvas.root(
+        rel="photos/background-removal",
+        note=BACKGROUND_REMOVAL_NOTE,
+        description=(
+            "Isolate one character or object out of a photo for any other App to "
+            "reuse. Seven backdrops, real alpha on transparent, one shared rung. "
+            "No model stack."
+        ),
+    )
+    _link_out(graph, rung, 1, matte_rung, "upscale", UPSCALE_COMBO_TYPE, widget=True)
+    return _finish(
+        graph,
+        rel="photos/background-removal",
+        inputs=[
+            ("Source photo", "image"),
+            ("Subject cutter", "backdrop"),
+            ("Subject cutter", "dilate"),
+            ("Subject cutter", "feather"),
+            (UPSCALE_REF, "upscale"),
+        ],
+        outputs=["Save still", "Save matte"],
+        occupancy="none",
+        handoff=("photos/thumbnail", "photos/banner-wide"),
     )
 
 
@@ -726,12 +903,13 @@ def _finish(
 
 BUILDERS = {
     "photos/cutout": build_cutout,
+    "photos/background-removal": build_background_removal,
     "photos/multi-view": build_multi_view,
 }
 
 
 def main() -> None:
-    """Regenerate both image-prep Apps and print what was written."""
+    """Regenerate every image-prep App and print what was written."""
     for rel, builder in BUILDERS.items():
         dest = lab_dest(rel, lane="photos")
         graph = builder()

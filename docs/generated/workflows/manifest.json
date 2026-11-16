@@ -1765,6 +1765,12 @@
       "kind": "graph"
     },
     {
+      "id": "photos/background-removal",
+      "path": "generated/workflows/photos/background-removal.md",
+      "lane": "photos",
+      "kind": "graph"
+    },
+    {
       "id": "photos/background-swap",
       "path": "generated/workflows/photos/background-swap.md",
       "lane": "photos",
@@ -2827,8 +2833,8 @@
       "kind": "album"
     }
   ],
-  "graph_count": 721,
-  "page_count": 472,
+  "graph_count": 722,
+  "page_count": 473,
   "lanes": [
     "photos",
     "video",

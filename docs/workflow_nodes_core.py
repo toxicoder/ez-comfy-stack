@@ -348,17 +348,18 @@ def core_nodes() -> NodeSpecs:
         ),
         "EZCutout": _n(
             "Cutout (BiRefNet)",
-            "Matte a photo so one character or object can be turned into a 3D model.",
+            "Matte a photo so one character or object can be reused: painted onto a backdrop, or lifted out with real alpha.",
             origin="ez_image",
-            lab="photos/cutout, ahead of any 3d App. A busy room behind the product teaches the TRELLIS.2 structure stage that the room is part of the object. Fail-soft: no weights, no timm/kornia/einops/transformers, or EZ_CUTOUT=0 passes the input through unchanged with a status line.",
+            lab="photos/cutout, ahead of any 3d App, and photos/background-removal, which is the extract-into-an-asset graph. A busy room behind the product teaches the TRELLIS.2 structure stage that the room is part of the object. transparent is the only backdrop that writes genuine emptiness; every painted backdrop keeps save_mask opaque so the plate cannot key itself back out. Fail-soft: no weights, no timm/kornia/einops/transformers, or EZ_CUTOUT=0 passes the input through unchanged with a status line.",
             sockets=[
                 _s("image", "IMAGE", "in", "Photo to matte - the original, not a crop."),
                 _s("image", "IMAGE", "out", "Subject on the chosen backdrop, ready for LoadImage in a 3d App."),
                 _s("matte", "IMAGE", "out", "Grey alpha copy so SaveImage can write the matte."),
-                _s("mask", "MASK", "out", "Subject mask for anything that composites."),
+                _s("mask", "MASK", "out", "Raw grown subject mask for anything that composites."),
+                _s("save_mask", "MASK", "out", "Alpha to feed InvertMask ahead of JoinImageWithAlpha: the real matte under transparent, an opaque grid under any painted colour. Wire this into the alpha path, never mask."),
             ],
             widgets=[
-                _w("backdrop", index=0, typ="COMBO", desc="What fills the pixels the subject leaves.", gen="white is the lab default: a clean plate reads as one object. keep original changes nothing but the matte and mask.", choices=[("white", "Paint the vacated pixels white."), ("black", "Paint them black."), ("keep original", "Keep every pixel; only matte and mask change.")]),
+                _w("backdrop", index=0, typ="COMBO", desc="What fills the pixels the subject leaves.", gen="white is the lab default: a clean plate reads as one object. grey is a neutral plate. green (#00B140) and blue (#0047BB) are chroma keys a compositor downstream pulls. transparent leaves the pixels alone so the joined alpha carries the emptiness - the only pick that writes real transparency, and only in a graph that wires save_mask through InvertMask and JoinImageWithAlpha. keep original changes nothing but the matte and mask. An unrecognised name blends as white.", choices=[("white", "Paint the vacated pixels white."), ("black", "Paint them black."), ("grey", "Paint them mid grey."), ("green", "Chroma green #00B140."), ("blue", "Chroma blue #0047BB."), ("transparent", "Keep the pixels; the alpha carries the emptiness."), ("keep original", "Keep every pixel; only matte and mask change.")]),
                 _w("dilate", index=1, typ="INT", rng="0-32", desc="Grow the matte outward by this many pixels.", gen="2 keeps thin hair and product edges inside the cut."),
                 _w("feather", index=2, typ="INT", rng="0-32", desc="Soften the matte edge over this many pixels.", gen="2 avoids a hard sticker outline on the cut still."),
             ],
@@ -515,6 +516,27 @@ def core_nodes() -> NodeSpecs:
                 _w("batch_index", index=0, typ="INT", rng="120 (LTX 121) / 119 (Wan 120)", desc="0-based frame index.", gen="Must be length-1 for the last frame. Off-by-one here breaks shot continuity."),
                 _w("length", index=1, typ="INT", rng="1", desc="How many frames to take.", gen="Stay 1 (one still)."),
             ],
+        ),
+        "InvertMask": _n(
+            "Invert Mask",
+            "Flip a MASK: out = 1.0 - mask. No widgets.",
+            lab="photos/background-removal puts it between EZCutout.save_mask and JoinImageWithAlpha, which keys on the inverse of what you hand it. Keeping the flip in a node named Invert is deliberate - the polarity quirk stays visible on the canvas instead of hiding inside the first-party cut.",
+            sockets=[
+                _s("mask", "MASK", "in", "MASK to flip - 1 means keep."),
+                _s("MASK", "MASK", "out", "1.0 - mask at the same HxW."),
+            ],
+            widgets=[],
+        ),
+        "JoinImageWithAlpha": _n(
+            "Join Image with Alpha",
+            "Attach a MASK as the alpha channel of an IMAGE, returning a 4-channel tensor. No widgets.",
+            lab="photos/background-removal, ahead of the EZImageUpscale rung so one Upscale pick scales RGB and alpha together. It computes alpha = 1.0 - mask, so feed it an InvertMask output, not the matte directly, and it bilinear-resizes the mask to the image's own size, so a matte can never arrive at the wrong HxW. Stock SaveImage has no mask input at the pinned tag - the (H, W, 4) tensor is what makes Pillow write RGBA.",
+            sockets=[
+                _s("image", "IMAGE", "in", "RGB still that carries the alpha."),
+                _s("alpha", "MASK", "in", "Inverted matte (1 = transparent). Resized to image HxW by this node."),
+                _s("IMAGE", "IMAGE", "out", "4-channel tensor. SaveImage writes it as RGBA."),
+            ],
+            widgets=[],
         ),
         "PrimitiveNode": _n(
             "Primitive",

@@ -65,8 +65,8 @@ def _clean_state(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_node_contract_matches_the_pack_convention() -> None:
     """Sockets, returns, and registries are what Comfy and the gates expect."""
     node = cutout.EZCutout
-    assert node.RETURN_TYPES == ("IMAGE", "IMAGE", "MASK")
-    assert node.RETURN_NAMES == ("image", "matte", "mask")
+    assert node.RETURN_TYPES == ("IMAGE", "IMAGE", "MASK", "MASK")
+    assert node.RETURN_NAMES == ("image", "matte", "mask", "save_mask")
     assert node.FUNCTION == "run"
     assert node.CATEGORY == "ez-comfy/image"
     assert node.OUTPUT_NODE is False
@@ -74,6 +74,20 @@ def test_node_contract_matches_the_pack_convention() -> None:
     required = node.INPUT_TYPES()["required"]
     assert list(required) == ["image", "backdrop", "dilate", "feather"]
     assert required["backdrop"][0] == list(cutout.BACKDROPS)
+    assert cutout.BACKDROPS == (
+        "white",
+        "black",
+        "grey",
+        "green",
+        "blue",
+        "transparent",
+        "keep original",
+    )
+    assert set(cutout.BACKDROP_RGB) == set(cutout.BACKDROPS) - {
+        cutout.BACKDROP_TRANSPARENT,
+        cutout.BACKDROP_KEEP,
+    }
+    assert all(len(rgb) == 3 for rgb in cutout.BACKDROP_RGB.values())
     assert cutout.NODE_CLASS_MAPPINGS == {"EZCutout": cutout.EZCutout}
     assert cutout.NODE_DISPLAY_NAME_MAPPINGS == {
         "EZCutout": "Cut out subject (BiRefNet)"
@@ -88,13 +102,14 @@ def test_ez_image_pack_exports_the_cutout_class() -> None:
     assert "EZCutout" in ez_image.NODE_DISPLAY_NAME_MAPPINGS
 
 
-def test_run_reports_status_and_three_results() -> None:
-    """``run`` returns ui.text plus the (image, matte, mask) triple."""
+def test_run_reports_status_and_four_results() -> None:
+    """``run`` returns ui.text plus the (image, matte, mask, save_mask) tuple."""
     image = _image()
     out = cutout.EZCutout().run(image)
     assert out["ui"]["text"] == (cutout.REASON_NO_MODEL,)
-    assert len(out["result"]) == 3
+    assert len(out["result"]) == 4
     assert out["result"][0] is image
+    assert out["result"][3] == [[1.0] * 4 for _ in range(3)]
 
 
 # ---------------------------------------------------------------------------
@@ -615,9 +630,11 @@ class _FakeTorch:
     def __init__(self) -> None:
         self.no_grad_calls = 0
 
-    def tensor(self, data: object, dtype: object = None) -> "_FakeTensor":
+    def tensor(
+        self, data: object, dtype: object = None, device: object = None
+    ) -> "_FakeTensor":
         """Wrap a list as a fake tensor."""
-        return _FakeTensor(data, dtype)
+        return _FakeTensor(data, dtype, device)
 
     class _NoGrad:
         def __enter__(self) -> None:
@@ -635,15 +652,28 @@ class _FakeTorch:
 class _FakeTensor:
     """Fake tensor with a ``to``."""
 
-    def __init__(self, data: object, dtype: object) -> None:
+    def __init__(self, data: object, dtype: object, device: object = None) -> None:
         self.data = data
         self.dtype = dtype
+        self.device = device
         self.on_device = False
 
     def to(self, _device: object) -> "_FakeTensor":
         """Mark it as moved."""
         self.on_device = True
         return self
+
+
+class _DeviceImage:
+    """Stand-in for the Comfy IMAGE tensor a Queue hands the node."""
+
+    def __init__(self) -> None:
+        """Carry the device the matte should land on, plus readable pixels."""
+        self.device = "cuda"
+
+    def tolist(self) -> list[list[list[float]]]:
+        """Return one small HWC image for the matte maths to read."""
+        return _image()
 
 
 class _FakeModel:
@@ -736,6 +766,32 @@ def test_blend_over_white_black_and_original() -> None:
     assert kept == pytest.approx([0.2, 0.4, 0.6])
 
 
+def test_blend_paints_the_grey_and_chroma_backdrops() -> None:
+    """Grey, green, and blue each blend toward their own RGB triple."""
+    pixels = [[[0.2, 0.4, 0.6]]]
+    mask = [[0.5]]
+    grey = cutout._blend(pixels, mask, cutout.BACKDROP_GREY)[0][0]
+    assert grey == pytest.approx([0.35, 0.45, 0.55])
+    green = cutout._blend(pixels, mask, cutout.BACKDROP_GREEN)[0][0]
+    assert green == pytest.approx([0.1, 0.547, 0.4255])
+    blue = cutout._blend(pixels, mask, cutout.BACKDROP_BLUE)[0][0]
+    assert blue == pytest.approx([0.1, 0.339, 0.6665])
+
+
+def test_blend_leaves_the_pixels_for_the_alpha_to_key() -> None:
+    """Transparent hands the source back like keep original: alpha does the work."""
+    pixels = [[[0.2, 0.4, 0.6]]]
+    keyed = cutout._blend(pixels, [[0.0]], cutout.BACKDROP_TRANSPARENT)[0][0]
+    assert keyed == pytest.approx([0.2, 0.4, 0.6])
+
+
+def test_blend_falls_back_to_white_on_an_unknown_name() -> None:
+    """A name no longer in the combo paints white rather than raising."""
+    pixels = [[[0.2, 0.4, 0.6]]]
+    unknown = cutout._blend(pixels, [[0.5]], "chartreuse")[0][0]
+    assert unknown == pytest.approx([0.6, 0.7, 0.8])
+
+
 def test_blend_tolerates_a_short_mask_and_short_pixel() -> None:
     """A mask smaller than the image reads as background, not IndexError."""
     wide = [[[0.2, 0.4, 0.6]]]
@@ -752,6 +808,68 @@ def test_blend_tolerates_a_short_mask_and_short_pixel() -> None:
 def test_matte_image_greys_the_alpha() -> None:
     """The matte is a 3-channel copy so stock SaveImage can write it."""
     assert cutout._matte_image([[0.25, 0.75]]) == [[[0.25, 0.25, 0.25], [0.75, 0.75, 0.75]]]
+
+
+def test_save_mask_is_opaque_over_a_painted_backdrop() -> None:
+    """A still already painted over a colour must not be keyed out by the save."""
+    assert cutout._save_mask([[0.0, 1.0], [1.0, 0.0]], cutout.BACKDROP_GREEN) == [
+        [1.0, 1.0],
+        [1.0, 1.0],
+    ]
+
+
+def test_save_mask_hands_the_real_matte_to_the_transparent_backdrop() -> None:
+    """Only a transparent backdrop saves the alpha the cutter produced."""
+    grid = [[0.0, 1.0], [1.0, 0.0]]
+    assert cutout._save_mask(grid, cutout.BACKDROP_TRANSPARENT) is grid
+
+
+def test_save_mask_of_an_empty_alpha_stays_empty() -> None:
+    """The zero-pixel path keeps both MASK sockets the same shape."""
+    assert cutout._save_mask([], cutout.BACKDROP_WHITE) == []
+
+
+def test_write_mask_moves_the_alpha_onto_the_image_device(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A tensor image gets a tensor matte, which is what the stock nodes need."""
+    monkeypatch.setitem(sys.modules, "torch", _FakeTorch())
+    out = cutout.write_mask([[0.0, 1.0]], _DeviceImage())
+    assert isinstance(out, _FakeTensor)
+    assert out.data == [[0.0, 1.0]]
+    assert out.dtype == "float32"
+
+
+def test_write_mask_keeps_lists_when_the_source_has_no_device(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The hermetic path hands plain lists and stays plain lists."""
+    monkeypatch.setitem(sys.modules, "torch", _FakeTorch())
+    grid = [[0.0, 1.0]]
+    assert cutout.write_mask(grid, grid) is grid
+
+
+def test_write_mask_keeps_lists_without_torch(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A host without torch still gets the lists rather than a crash."""
+    monkeypatch.setitem(sys.modules, "torch", None)
+    grid = [[0.0, 1.0]]
+    assert cutout.write_mask(grid, _DeviceImage()) is grid
+
+
+def test_run_hands_both_mask_sockets_to_the_stock_nodes_as_tensors(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """``InvertMask`` subtracts and ``JoinImageWithAlpha`` calls ``.to()``.
+
+    Either one raises on a nested list, and ComfyUI coerces nothing at the
+    pinned tag, so both MASK sockets must leave as tensors.
+    """
+    monkeypatch.setitem(sys.modules, "torch", _FakeTorch())
+    out = cutout.EZCutout().run(_DeviceImage())
+    for socket in out["result"][2:]:
+        assert isinstance(socket, _FakeTensor)
 
 
 def test_remove_background_passes_through_when_off(
@@ -842,6 +960,36 @@ def test_passthrough_sizes_the_matte_to_the_subject() -> None:
     assert cut is image and status == "status"
     assert len(mask) == 2 and len(mask[0]) == 3
     assert matte[0][0][0] == [1.0, 1.0, 1.0]
+
+
+def test_run_writes_a_real_matte_only_for_a_transparent_backdrop(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A painted still saves an opaque alpha; a transparent one keys on the matte."""
+    monkeypatch.setattr(cutout, "segment_subject", lambda _i: [[1.0, 0.0], [0.0, 1.0]])
+    image = _image(height=2, width=2)
+    painted = cutout.EZCutout().run(image, backdrop=cutout.BACKDROP_GREEN)["result"]
+    assert painted[3] == [[1.0, 1.0], [1.0, 1.0]]
+    keyed = cutout.EZCutout().run(image, backdrop=cutout.BACKDROP_TRANSPARENT)["result"]
+    assert keyed[3] is keyed[2]
+    assert len(keyed[3]) == len(image) and len(keyed[3][0]) == len(image[0])
+
+
+def test_run_keeps_save_mask_opaque_on_a_disabled_pass_through(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """With the kill switch off there is no matte to key on, even when asked."""
+    monkeypatch.setenv("EZ_CUTOUT", "off")
+    image = _image(height=2, width=3)
+    result = cutout.EZCutout().run(image, backdrop=cutout.BACKDROP_TRANSPARENT)["result"]
+    assert result[2] == [[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]
+    assert result[3] == result[2]
+
+
+def test_run_on_an_empty_batch_leaves_both_masks_empty() -> None:
+    """No pixels means neither MASK socket gains a row."""
+    result = cutout.EZCutout().run([])["result"]
+    assert result[2] == [] and result[3] == []
 
 
 def test_the_matte_never_claims_the_gpu_lane() -> None:

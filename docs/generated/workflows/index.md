@@ -364,6 +364,7 @@ tags: [workflows, generated, comfyui]
 | Graph | Page |
 | --- | --- |
 | `photos/background-edit` | [photos/background-edit.md](photos/background-edit.md) |
+| `photos/background-removal` | [photos/background-removal.md](photos/background-removal.md) |
 | `photos/background-swap` | [photos/background-swap.md](photos/background-swap.md) |
 | `photos/banner-wide` | [photos/banner-wide.md](photos/banner-wide.md) |
 | `photos/before-after` | [photos/before-after.md](photos/before-after.md) |
