@@ -56,7 +56,93 @@ const LABELS = {
   engine: "Clone engine",
   keep_bed: "Keep original bed",
   spoken_disclosure: "Spoken disclosure",
+  // First-party widgets that used to render as their raw snake_case name.
+  act: "Act",
+  assets: "Assets",
+  bpm: "Tempo (BPM)",
+  brief: "Brief",
+  camera_fov: "Camera FOV",
+  camera_look: "Camera look-at",
+  camera_pos: "Camera position",
+  cap_seconds: "Max length (seconds)",
+  catalog: "Catalog",
+  cfg_weight: "Guidance (CFG)",
+  context: "Context",
+  crossover_hz: "Crossover (Hz)",
+  dilate: "Matte expand (px)",
+  disclosure: "Disclosure",
+  enable: "Describe image",
+  exaggeration: "Exaggeration",
+  feather: "Matte feather (px)",
+  fetch_links: "Follow links",
+  filename: "Choose image",
+  has_image: "Use image",
+  hdri: "HDRI lighting",
+  identity: "Identity",
+  input_path: "Input file",
+  inventory: "Inventory",
+  iterate: "Repeat",
+  job_id: "Job id",
+  label: "Guide label",
+  label_a: "Context label A",
+  label_b: "Context label B",
+  label_c: "Context label C",
+  label_d: "Context label D",
+  max_refs: "Max reference stills",
+  overlap_bars: "Beat overlap (bars)",
+  overwrite: "Overwrite existing",
+  params_json: "Parameters (JSON)",
+  plate: "Plate still",
+  positive: "Positive prompt",
+  prefix: "Filename prefix",
+  run_summary: "Run summary",
+  scene_id: "Scene id",
+  script: "Script",
+  shot: "Shot",
+  shot_id: "Shot id",
+  slug: "Slug",
+  sources: "Source files",
+  speaker_a_ref: "Speaker A reference WAV",
+  speaker_b_ref: "Speaker B reference WAV",
+  status: "Model status",
+  subject: "Subject",
+  text: "Text",
+  tool_id: "Tool",
+  use_references: "Use reference stills",
+  xfade_cs: "Crossfade (centiseconds)",
+  // Core ComfyUI and VHS widgets the graphs leave unlabelled.
+  sampler_name: "Sampler",
+  scheduler: "Scheduler",
+  denoise: "Denoise",
+  ckpt_name: "Model checkpoint",
+  clip_name: "Text encoder",
+  vae_name: "VAE",
+  noise_seed: "Seed",
+  filename_prefix: "Output filename",
+  frame_rate: "Frame rate",
+  loop_count: "Loop count",
+  pingpong: "Ping-pong loop",
+  save_metadata: "Save metadata",
+  bitrate: "Bitrate",
+  images: "Images",
 };
+
+/**
+ * Fallback titles for node classes the shipped graphs leave unnamed or name
+ * with the raw class name. Measured over workflows/_lab: `KSampler` is the only
+ * type that wears its class name (880 nodes), and `VAEDecode` plus
+ * `LTXVConditioning` are the only types with no title at all. A title a graph
+ * already carries always wins, so a type listed here stays untouched in any
+ * graph that authors one, and an entry here is only a fallback.
+ */
+const NODE_TITLES = {
+  KSampler: "Sampling",
+  VAEDecode: "Decode latent to pixels",
+  LTXVConditioning: "Motion conditioning",
+};
+
+/** Where the last title this chrome applied is cached, so a repaint is idempotent. */
+const EZ_APPLIED_TITLE = "__ezStudioAppliedTitle";
 
 const OCCUPANCY_STOP = {
   none: "nothing GPU",
@@ -236,12 +322,80 @@ function relabelWidgets(node) {
 }
 
 /**
+ * Write a title onto a node, keeping this chrome out of the way of a title
+ * someone else owns. LiteGraph's setTitle repaints; plain assignment is the
+ * fallback for a node that does not expose it.
+ * @param {EzNode} node
+ * @param {string} next Title to apply, or "" to restore the class default
+ * @returns {void}
+ */
+function writeTitle(node, next) {
+  if (node[EZ_APPLIED_TITLE] === next) {
+    return;
+  }
+  node[EZ_APPLIED_TITLE] = next;
+  if (typeof node.setTitle === "function") {
+    node.setTitle(next);
+    return;
+  }
+  node.title = next;
+}
+
+/**
+ * Give a node a human title when its graph left it wearing the class name.
+ * Authored titles win, and two fallbacks of the same class are numbered so a
+ * two-pass graph reads "Sampling" and "Sampling - pass 2".
+ * @param {EzNode} node
+ * @param {Map<string, number>=} seen Fallback titles applied per class so far; when
+ *   omitted the count is taken from the nodes already carrying this fallback
+ * @returns {void}
+ */
+function relabelTitle(node, seen) {
+  if (!node) {
+    return;
+  }
+  const ntype = nodeClass(node);
+  const authored = node.title && node.title !== ntype ? node.title : "";
+  if (authored) {
+    if (node[EZ_APPLIED_TITLE] === undefined || node[EZ_APPLIED_TITLE] === "") {
+      // Never rewrote it, or restored it already: leave the author's words alone.
+      node[EZ_APPLIED_TITLE] = authored;
+    }
+    return;
+  }
+  const base = NODE_TITLES[ntype];
+  if (!base) {
+    if (node[EZ_APPLIED_TITLE]) {
+      writeTitle(node, "");
+    }
+    return;
+  }
+  if (!seen) {
+    // A node created after load: count the siblings already wearing this title.
+    seen = new Map();
+    for (const other of app.graph?.nodes || []) {
+      if (other === node || typeof other[EZ_APPLIED_TITLE] !== "string") {
+        continue;
+      }
+      if (other[EZ_APPLIED_TITLE] === base || other[EZ_APPLIED_TITLE].startsWith(`${base} - pass `)) {
+        seen.set(ntype, (seen.get(ntype) || 0) + 1);
+      }
+    }
+  }
+  const count = (seen.get(ntype) || 0) + 1;
+  seen.set(ntype, count);
+  writeTitle(node, count === 1 ? base : `${base} - pass ${count}`);
+}
+
+/**
  * Relabel every node on the live graph.
  * @returns {void}
  */
 function relabelGraph() {
+  const seen = new Map();
   for (const node of app.graph?.nodes || []) {
     relabelWidgets(node);
+    relabelTitle(node, seen);
   }
 }
 
@@ -545,6 +699,7 @@ app.registerExtension({
    */
   async nodeCreated(node) {
     relabelWidgets(node);
+    relabelTitle(node);
   },
   /**
    * Mount the occupancy chip and subscribe to graph/execution events.
