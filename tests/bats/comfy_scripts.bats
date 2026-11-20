@@ -1536,6 +1536,58 @@ PY
   [[ ${TORCH_INDEX_URL} == *cu130* ]]
 }
 
+@test "every COMFYUI_REF pin site matches the Dockerfile ARG" {
+  # The check above only fences the v0.* shape, so a bump that moves some sites
+  # and misses others still passes. The Dockerfile ARG is authoritative; every
+  # other site must carry that exact value. Nothing here hardcodes the tag, so
+  # the fence survives the next bump untouched.
+  local df="${REPO_ROOT}/docker/Dockerfile"
+  local compose="${REPO_ROOT}/docker/docker-compose.yml"
+  local ref
+  run grep -E '^ARG COMFYUI_REF=' "${df}"
+  [ "${status}" -eq 0 ]
+  [ "${#lines[@]}" -eq 1 ]
+  ref="${lines[0]#ARG COMFYUI_REF=}"
+  [[ -n ${ref} ]]
+  [[ ${ref} == v0.* ]]
+
+  # Compose carries the pin twice: the build: build-args entry and the runtime
+  # environment: entry the stamp-present refresh compares the volume against.
+  run grep -cF 'COMFYUI_REF:' "${compose}"
+  if [[ ${output} != "2" ]]; then
+    echo "pin drift: docker/docker-compose.yml has ${output} COMFYUI_REF sites, want 2" >&2
+    grep -F 'COMFYUI_REF:' "${compose}" | head -4 >&2 || true
+    return 1
+  fi
+  run grep -cF "COMFYUI_REF: \${COMFYUI_REF:-${ref}}" "${compose}"
+  if [[ ${output} != "2" ]]; then
+    echo "pin drift: docker/docker-compose.yml has ${output} sites at ${ref}, want 2" >&2
+    grep -F 'COMFYUI_REF:' "${compose}" | head -4 >&2 || true
+    return 1
+  fi
+
+  # rel|needle (grep -F) for the remaining sites.
+  local -a sites=(
+    "docker/install-comfy/common.sh|COMFYUI_REF=\"\${COMFYUI_REF:-${ref}}\""
+    "docker/install-comfy/phase-comfy.sh|COMFYUI_REF=\"\${COMFYUI_REF:-${ref}}\""
+    "docker/entrypoint.sh|want=\"\${COMFYUI_REF:-${ref}}\""
+    "docker/install-comfy.sh|default ${ref}"
+    ".env.example|# COMFYUI_REF=${ref}"
+    ".github/workflows/publish-image.yml|COMFYUI_REF=${ref}"
+  )
+  local case rel needle
+  for case in "${sites[@]}"; do
+    rel="${case%%|*}"
+    needle="${case#*|}"
+    run grep -F "${needle}" "${REPO_ROOT}/${rel}"
+    if [[ ${status} -ne 0 ]]; then
+      echo "pin drift: ${rel} lacks the Dockerfile pin ${ref} (wanted \"${needle}\")" >&2
+      grep -F 'COMFYUI_REF' "${REPO_ROOT}/${rel}" | head -4 >&2 || true
+      return 1
+    fi
+  done
+}
+
 @test "install-comfy modules exist for Docker phase COPY contract" {
   [[ -f ${REPO_ROOT}/docker/install-comfy/core.sh ]]
   [[ -f ${REPO_ROOT}/docker/install-comfy/common.sh ]]
