@@ -11,7 +11,7 @@ from _lab_paths import lab_json
 
 ROOT = Path(__file__).resolve().parents[2]
 BANNED = ("Pixal3D", "pixal3d", "MiniMax", "MagCache")
-# ComfyUI v0.43.0 Trellis2UpsampleStage: target_resolution is an INT bounded
+# Trellis2UpsampleStage: target_resolution is an INT bounded
 # 1024-2048 in steps of 128. 512 and 256 are not accepted values at all.
 UPSAMPLE_TARGET_RESOLUTION = 1024
 # MeshToFile3D has no widgets and is not an output node; SaveGLB is the node

@@ -21,11 +21,11 @@ tags: [workflows, generated, comfyui, reference]
 
 > Generated from `docs/workflow_nodes.py`. Do not hand-edit this file.
 
-ComfyUI pin **v0.43.0**. MiniMax is banned. Klein 9B / FLUX.2-dev are opt-in NC, not lab defaults.
+ComfyUI pin **v0.45.0**. MiniMax is banned. Klein 9B / FLUX.2-dev are opt-in NC, not lab defaults.
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.43.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.45.0 / lab `INPUT_TYPES` - not SD1.5 folklore.
 
 ### `AudioAdjustVolume` - Audio Adjust Volume
 

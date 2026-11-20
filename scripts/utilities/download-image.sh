@@ -13,7 +13,7 @@
 #   Opt-in Qwen Image 2.1 (Qwen Research License, public ungated repos, revision-pinned):
 #   qwen-image / qwen-image-turbo / qwen-image-nvfp4 / qwen-image-turbo-nvfp4 plus the
 #   shared companions qwen-image-te / qwen-image-vae. Klein 4B stays the Apache default;
-#   the pinned ComfyUI (v0.43.0) loads these natively (upstream support landed in v0.37.0).
+#   the pinned ComfyUI (v0.45.0) loads these natively (upstream support landed in v0.37.0).
 #
 # Audience:
 #   Operators on the Spark host. Prefer manage.sh download-models.

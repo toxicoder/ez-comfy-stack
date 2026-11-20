@@ -1310,6 +1310,15 @@ comfy_exec_args() {
     --bf16-vae \
     --bf16-text-enc \
     --disable-mmap
+  # Upstream flipped both to True after v0.43.0. The server only publishes them to
+  # the browser, so pinning them off here is what stops the UI offering Cloud sign-in
+  # and queueing partner-node API calls on this self-hosted single-box studio. There
+  # is no environment variable for either key; --feature-flag is the only way to set them.
+  printf '%s\n' \
+    --feature-flag \
+    local_web_sso=false \
+    --feature-flag \
+    partner_node_token=false
 }
 
 #######################################
@@ -1784,7 +1793,7 @@ main() {
     ${install_cmd}
   elif [[ -f ${stamp} && -x ${venv}/bin/python ]]; then
     vol_pin="$(tr -d '\n' <"${comfy_home}/.lab-comfyui-ref" 2>/dev/null || true)"
-    want="${COMFYUI_REF:-v0.43.0}"
+    want="${COMFYUI_REF:-v0.45.0}"
     if [[ ${vol_pin} != "${want}" ]]; then
       ep_log "Comfy pin needs sync (${vol_pin:-unset} -> ${want})"
       if prebuilt_ready; then

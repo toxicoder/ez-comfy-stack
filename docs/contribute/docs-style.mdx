@@ -54,7 +54,7 @@ Author those two lists as **bold + bullets** in source. The Fumadocs remark plug
 
 **Inverted pyramid:** outcome and commands first; theory later. Prefer relative links inside `docs/`.
 
-**Workflow details:** `bazelisk run //docs:generate` (single-generator form: `bazelisk run //docs:generate_workflow`) writes `docs/generated/workflows/` and `docs/reference/workflow-nodes.md` from `workflows/_lab/**/*.json` plus `docs/workflow_nodes.py`. Do not hand-edit those generated pages. Combo lists must match ComfyUI v0.43.0 / lab `INPUT_TYPES`. `docs-site/lib/nav.ts` injects the pages under Reference -> Workflow details from `manifest.json`.
+**Workflow details:** `bazelisk run //docs:generate` (single-generator form: `bazelisk run //docs:generate_workflow`) writes `docs/generated/workflows/` and `docs/reference/workflow-nodes.md` from `workflows/_lab/**/*.json` plus `docs/workflow_nodes.py`. Do not hand-edit those generated pages. Combo lists must match ComfyUI v0.45.0 / lab `INPUT_TYPES`. `docs-site/lib/nav.ts` injects the pages under Reference -> Workflow details from `manifest.json`.
 
 **Cinema catalogs:** `bazelisk run //docs:generate` (single-generator form: `bazelisk run //docs:generate_cinema`) writes `docs/generated/cinema/` from `custom_nodes/ez_prompt_enhance/cinema/*.json`. Illustration clips live at `docs/assets/cinema/<axis_id>/<technique_id>.mp4` (Git LFS) with a JPEG poster; the generator links them when both files exist. Compress with `bazelisk run //scripts:run-utility -- compress-cinema-clip`. Prompt recipes: `python3 docs/cinema_clip_prompts.py --axis camera_movement` (no Bazel target; it prints prompts for the clip render, it does not write a page). Playbook: [Cinema Rack](../create/cinema-rack.md).
 
